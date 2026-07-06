@@ -1,0 +1,642 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[left=18mm,right=18mm,top=18mm,bottom=20mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx, booktabs, longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F3F5F5}
+\definecolor{lightaccent}{HTML}{E6F2F2}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkaccent,
+    urlcolor=darkaccent
+}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Чек-лист}
+\fancyhead[R]{\small Системы и совокупности условий}
+\fancyfoot[C]{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+\setlist[itemize]{leftmargin=1.2cm,itemsep=2pt,topsep=4pt}
+\setlist[enumerate]{leftmargin=1.2cm,itemsep=4pt,topsep=4pt}
+
+\newcommand{\important}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\ruleline}{\vspace{2mm}{\color{accent}\hrule height 0.5pt}\vspace{2mm}}
+\newcommand{\blank}{\underline{\hspace{3cm}}}
+
+\newcommand{\intervalaxis}{
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+    \draw[->, color=textgray] (-3.2,0) -- (4.2,0);
+    \foreach \x/\lab in {-2/$-2$,0/$0$,3/$3$,4/$8$}
+        \draw[color=textgray] (\x,0.08) -- (\x,-0.08) node[below] {\small \lab};
+    \draw[line width=1.6pt, color=accent] (-2,0.23) -- (4,0.23);
+    \filldraw[fill=white, draw=accent, line width=1pt] (-2,0.23) circle (2pt);
+    \filldraw[fill=accent, draw=accent] (4,0.23) circle (2pt);
+    \draw[line width=1.6pt, color=darkaccent] (3,0.48) -- (4,0.48);
+    \filldraw[fill=white, draw=darkaccent, line width=1pt] (3,0.48) circle (2pt);
+    \filldraw[fill=darkaccent, draw=darkaccent] (4,0.48) circle (2pt);
+    \node[above, color=accent] at (1,0.25) {\small $-2\le x\le 8$};
+    \node[above, color=darkaccent] at (3.5,0.55) {\small $x>3$};
+\end{tikzpicture}
+\end{center}
+}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{2.2cm}
+
+{\Large \textcolor{accent}{\textbf{Чек-лист}}}
+
+\vspace{8mm}
+
+{\huge \textbf{Когда появляется совокупность условий}}
+
+\vspace{4mm}
+
+{\Large \textbf{Системы, совокупности и логика выбора}}
+
+\vspace{18mm}
+
+{\large ЕГЭ}
+
+\vspace{22mm}
+
+{\large Лёвин Артём Александрович эксклюзивно для Николь Саркисянц}
+
+\vspace{8mm}
+
+{\large \today}
+
+\vfill
+
+\begin{tikzpicture}[remember picture, overlay]
+    \draw[line width=1.1pt, color=accent]
+        ([xshift=2.3cm,yshift=2.2cm]current page.south west)
+        .. controls ([xshift=6.0cm,yshift=3.3cm]current page.south west)
+        and ([xshift=-6.0cm,yshift=1.3cm]current page.south east)
+        .. ([xshift=-2.3cm,yshift=2.4cm]current page.south east);
+    \draw[line width=0.5pt, color=darkaccent]
+        ([xshift=3.0cm,yshift=1.55cm]current page.south west)
+        .. controls ([xshift=7.4cm,yshift=2.25cm]current page.south west)
+        and ([xshift=-7.0cm,yshift=2.7cm]current page.south east)
+        .. ([xshift=-3.0cm,yshift=1.65cm]current page.south east);
+\end{tikzpicture}
+
+\vspace*{1.2cm}
+\end{center}
+\end{titlepage}
+
+\section*{1. Главная идея}
+
+\important{Система} условий означает, что должны выполняться \important{все} условия одновременно. В записи это часто изображают фигурной скобкой:
+\[
+\begin{cases}
+A,\\
+B.
+\end{cases}
+\]
+Математически это означает пересечение множеств:
+\[
+A\cap B.
+\]
+
+\important{Совокупность} условий означает, что достаточно выполнения \important{хотя бы одного} условия. В школьной записи это часто изображают квадратной скобкой:
+\[
+\left[
+\begin{array}{l}
+A,\\
+B.
+\end{array}
+\right.
+\]
+Математически это означает объединение множеств:
+\[
+A\cup B.
+\]
+
+\section*{2. Короткое правило выбора}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{>{\bfseries}p{0.28\linewidth}X}
+\toprule
+Ситуация & Что использовать \\
+\midrule
+ОДЗ: логарифм, корень чётной степени, знаменатель дроби & Система: ограничения должны выполняться одновременно с основным условием. \\
+Модуль раскрывается по случаям & Совокупность или разбиение на случаи: подходит один из вариантов. \\
+Произведение равно нулю & Совокупность: хотя бы один множитель равен нулю. \\
+Дробь равна нулю & Система внутри случая: числитель равен нулю, знаменатель не равен нулю. \\
+Квадратное уравнение разложено на множители & Совокупность: каждый множитель может дать свой корень. \\
+Уравнение с чётной степенью & Часто возникает совокупность: например, $u^2=a^2 \Rightarrow u=a$ или $u=-a$. \\
+Неравенство с несколькими ограничениями & Обычно система: все ограничения нужно пересечь с решением неравенства. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section*{3. Система: когда нужны все условия}
+
+Система появляется тогда, когда решение должно удовлетворять сразу нескольким требованиям.
+
+\subsection*{Пример с логарифмом}
+
+Рассмотрим условия:
+\[
+\begin{cases}
+|x-3|\le 5,\\
+x-3>0.
+\end{cases}
+\]
+
+Первое условие:
+\[
+|x-3|\le 5
+\quad\Longleftrightarrow\quad
+-5\le x-3\le 5
+\quad\Longleftrightarrow\quad
+-2\le x\le 8.
+\]
+
+Второе условие:
+\[
+x-3>0
+\quad\Longleftrightarrow\quad
+x>3.
+\]
+
+Так как это система, берём пересечение:
+\[
+[-2;8]\cap(3;+\infty)=(3;8].
+\]
+
+\intervalaxis
+
+\[
+\boxed{x\in(3;8]}
+\]
+
+\important{Вывод.} Если одно условие пришло из ОДЗ, а другое из самого уравнения или неравенства, то почти всегда нужно пересекать ответы.
+
+\section*{4. Совокупность: когда достаточно одного варианта}
+
+Совокупность появляется тогда, когда условие может выполниться разными независимыми способами.
+
+\subsection*{Случай 1. Модуль равен числу}
+
+\[
+|x-3|=5.
+\]
+
+Модуль равен $5$, если выражение под модулем равно $5$ или $-5$:
+\[
+\left[
+\begin{array}{l}
+x-3=5,\\
+x-3=-5.
+\end{array}
+\right.
+\]
+
+Отсюда:
+\[
+\left[
+\begin{array}{l}
+x=8,\\
+x=-2.
+\end{array}
+\right.
+\]
+
+Ответ:
+\[
+\boxed{x\in\{-2;8\}}.
+\]
+
+\important{Почему это совокупность?} Число подходит, если выполняется хотя бы одно из двух равенств.
+
+\subsection*{Случай 2. Произведение равно нулю}
+
+\[
+(x-4)(x+7)=0.
+\]
+
+Произведение равно нулю, если хотя бы один множитель равен нулю:
+\[
+\left[
+\begin{array}{l}
+x-4=0,\\
+x+7=0.
+\end{array}
+\right.
+\]
+
+\[
+\left[
+\begin{array}{l}
+x=4,\\
+x=-7.
+\end{array}
+\right.
+\]
+
+Ответ:
+\[
+\boxed{x\in\{-7;4\}}.
+\]
+
+\important{Ловушка.} Нельзя писать систему:
+\[
+\begin{cases}
+x-4=0,\\
+x+7=0.
+\end{cases}
+\]
+Такая система потребовала бы, чтобы $x$ одновременно равнялся $4$ и $-7$, что невозможно.
+
+\subsection*{Случай 3. Квадратное уравнение после разложения}
+
+\[
+x^2-5x+6=0.
+\]
+
+Разложим:
+\[
+x^2-5x+6=(x-2)(x-3).
+\]
+
+Получаем:
+\[
+(x-2)(x-3)=0.
+\]
+
+Значит:
+\[
+\left[
+\begin{array}{l}
+x-2=0,\\
+x-3=0.
+\end{array}
+\right.
+\]
+
+Ответ:
+\[
+\boxed{x\in\{2;3\}}.
+\]
+
+\subsection*{Случай 4. Чётная степень}
+
+\[
+(x-1)^2=16.
+\]
+
+Так как $16=4^2$, получаем:
+\[
+x-1=4
+\quad\text{или}\quad
+x-1=-4.
+\]
+
+Записываем совокупность:
+\[
+\left[
+\begin{array}{l}
+x-1=4,\\
+x-1=-4.
+\end{array}
+\right.
+\]
+
+\[
+\left[
+\begin{array}{l}
+x=5,\\
+x=-3.
+\end{array}
+\right.
+\]
+
+Ответ:
+\[
+\boxed{x\in\{-3;5\}}.
+\]
+
+\section*{5. Смешанные ситуации: совокупность внутри системы}
+
+В задачах ЕГЭ часто встречаются смешанные случаи: сначала появляется совокупность, но каждый её вариант должен ещё пройти проверку ОДЗ.
+
+\subsection*{Пример}
+
+\[
+\frac{(x-2)(x+5)}{x-2}=0.
+\]
+
+Сначала записываем ОДЗ:
+\[
+x-2\ne0
+\quad\Longleftrightarrow\quad
+x\ne2.
+\]
+
+Дробь равна нулю, когда числитель равен нулю, а знаменатель не равен нулю:
+\[
+\begin{cases}
+(x-2)(x+5)=0,\\
+x-2\ne0.
+\end{cases}
+\]
+
+Внутри числителя появляется совокупность:
+\[
+\left[
+\begin{array}{l}
+x-2=0,\\
+x+5=0.
+\end{array}
+\right.
+\]
+
+Кандидаты:
+\[
+x=2,\qquad x=-5.
+\]
+
+Проверяем ОДЗ:
+\[
+x=2 \quad \text{не подходит, так как знаменатель равен нулю;}
+\]
+\[
+x=-5 \quad \text{подходит.}
+\]
+
+Ответ:
+\[
+\boxed{x=-5}.
+\]
+
+\important{Ключевой вывод.} Совокупность даёт кандидатов, а система с ОДЗ отсекает лишние значения.
+
+\section*{6. Модуль: равенство, неравенство и случаи}
+
+\subsection*{Модуль равен положительному числу}
+
+\[
+|A|=b,\qquad b>0.
+\]
+
+Тогда:
+\[
+\left[
+\begin{array}{l}
+A=b,\\
+A=-b.
+\end{array}
+\right.
+\]
+
+Это совокупность, потому что подходят два независимых варианта.
+
+\subsection*{Модуль меньше или равен числу}
+
+\[
+|A|\le b,\qquad b\ge0.
+\]
+
+Тогда:
+\[
+-b\le A\le b.
+\]
+
+Это двойное неравенство, то есть фактически система:
+\[
+\begin{cases}
+A\ge -b,\\
+A\le b.
+\end{cases}
+\]
+
+\subsection*{Модуль больше или равен числу}
+
+\[
+|A|\ge b,\qquad b\ge0.
+\]
+
+Тогда:
+\[
+\left[
+\begin{array}{l}
+A\ge b,\\
+A\le -b.
+\end{array}
+\right.
+\]
+
+Это совокупность, потому что выражение может быть либо достаточно большим положительным, либо достаточно большим отрицательным.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{p{0.25\linewidth}p{0.35\linewidth}X}
+\toprule
+Вид & Переход & Логика \\
+\midrule
+$|A|=b$, $b>0$ & $A=b$ или $A=-b$ & Совокупность \\
+$|A|\le b$, $b\ge0$ & $-b\le A\le b$ & Пересечение \\
+$|A|\ge b$, $b\ge0$ & $A\ge b$ или $A\le -b$ & Совокупность \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section*{7. Типовые ошибки}
+
+\begin{enumerate}
+    \item \important{Путать систему и совокупность.}
+
+    Неверно:
+    \[
+    (x-1)(x-4)=0
+    \quad\Rightarrow\quad
+    \begin{cases}
+    x-1=0,\\
+    x-4=0.
+    \end{cases}
+    \]
+    Верно:
+    \[
+    (x-1)(x-4)=0
+    \quad\Rightarrow\quad
+    \left[
+    \begin{array}{l}
+    x-1=0,\\
+    x-4=0.
+    \end{array}
+    \right.
+    \]
+
+    \item \important{Забывать ОДЗ.}
+
+    В выражении
+    \[
+    \log_2(x-3)
+    \]
+    обязательно:
+    \[
+    x-3>0.
+    \]
+
+    \item \important{Сокращать дробь без учёта запрещённых значений.}
+
+    Если
+    \[
+    \frac{(x-2)(x+1)}{x-2}=0,
+    \]
+    то значение $x=2$ запрещено, даже если множитель сократился.
+
+    \item \important{Неверно раскрывать модуль.}
+
+    Для равенства $|A|=b$ нужна совокупность, а для $|A|\le b$ нужен промежуток от $-b$ до $b$.
+
+    \item \important{Не проверять кандидаты.}
+
+    После совокупности всегда полезно проверить найденные значения в исходном выражении, особенно если были дроби, корни, логарифмы или возведение в квадрат.
+\end{enumerate}
+
+\section*{8. Мини-алгоритм решения}
+
+\begin{enumerate}
+    \item Найдите ОДЗ, если есть логарифмы, знаменатели, корни чётной степени.
+    \item Решите основное уравнение или неравенство.
+    \item Определите, где нужна система, а где совокупность.
+    \item Если появились несколько ветвей, решите каждую ветвь отдельно.
+    \item Объедините ответы из совокупности.
+    \item Пересеките полученный результат с ОДЗ.
+    \item Проверьте спорные значения в исходном выражении.
+\end{enumerate}
+
+\newpage
+
+\section*{Тренировочный блок}
+
+\textbf{Инструкция.} Решите упражнения. В каждом задании отдельно отметьте, где нужна система, а где совокупность. Ответы запишите в виде числа, множества или промежутка.
+
+\subsection*{Средний уровень}
+
+\begin{enumerate}
+    \item Решите уравнение:
+    \[
+    |x-4|=7.
+    \]
+
+    \item Решите уравнение:
+    \[
+    (x-5)(x+2)=0.
+    \]
+
+    \item Решите систему условий:
+    \[
+    \begin{cases}
+    |x-1|\le 4,\\
+    x-1>0.
+    \end{cases}
+    \]
+\end{enumerate}
+
+\subsection*{Выше среднего уровня}
+
+\begin{enumerate}[resume]
+    \item Решите уравнение:
+    \[
+    (x-3)^2=25.
+    \]
+
+    \item Решите неравенство:
+    \[
+    |x+2|\ge 6.
+    \]
+
+    \item Решите уравнение:
+    \[
+    \frac{(x-4)(x+1)}{x-4}=0.
+    \]
+
+    \item Решите уравнение:
+    \[
+    \sqrt{x+6}=x.
+    \]
+
+    \item Решите неравенство:
+    \[
+    \log_2(x-1)\le 3.
+    \]
+
+    \item Решите уравнение:
+    \[
+    \frac{x^2-9}{x-3}=0.
+    \]
+\end{enumerate}
+
+\subsection*{Сложный уровень}
+
+\begin{enumerate}[resume]
+    \item Решите неравенство:
+    \[
+    \log_3|x-2|\le 2.
+    \]
+\end{enumerate}
+
+\newpage
+
+\section*{Ответы для самопроверки}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\linewidth}{>{\bfseries}p{0.14\linewidth}X}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $x\in\{-3;11\}$ \\
+2 & $x\in\{-2;5\}$ \\
+3 & $x\in(1;5]$ \\
+4 & $x\in\{-2;8\}$ \\
+5 & $x\in(-\infty;-8]\cup[4;+\infty)$ \\
+6 & $x=-1$ \\
+7 & $x=3$ \\
+8 & $x\in(1;9]$ \\
+9 & $x=-3$ \\
+10 & $x\in[-7;2)\cup(2;11]$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\end{document}

@@ -1,0 +1,298 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[left=18mm,right=18mm,top=18mm,bottom=20mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F3F6F6}
+
+\providecommand{\tg}{\operatorname{tg}}
+\providecommand{\ctg}{\operatorname{ctg}}
+\providecommand{\arctg}{\operatorname{arctg}}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\important}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{textgray}{Логарифмические неравенства}}
+\rhead{\textcolor{textgray}{ЕГЭ}}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+\onehalfspacing
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.25em}
+\setlist[enumerate]{leftmargin=1.6em,itemsep=0.35em}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{0.18\textheight}
+
+{\Huge\bfseries\textcolor{darkaccent}{Чек-лист}\par}
+\vspace{0.8em}
+{\LARGE Логарифмические неравенства: ОДЗ, модули, замена\par}
+
+\vspace{2.5em}
+{\large Лёвин Артём Александрович эксклюзивно для Николь\par}
+
+\vspace{1.2em}
+{\large \today\par}
+
+\vfill
+
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent,line width=1.2pt]
+  (-5.5,0) .. controls (-3.2,1.0) and (-1.1,-0.8) .. (1.2,0.15)
+  .. controls (2.8,0.8) and (4.2,-0.35) .. (5.5,0.25);
+\draw[darkaccent,line width=0.4pt]
+  (-5.5,-0.25) .. controls (-2.8,0.55) and (1.8,-0.9) .. (5.5,-0.1);
+\end{tikzpicture}
+\end{titlepage}
+
+\section*{1. Главная идея темы}
+
+Логарифмические неравенства почти всегда решаются не одной формулой, а цепочкой аккуратных действий:
+\[
+\text{ОДЗ} \quad \longrightarrow \quad
+\text{приведение логарифмов} \quad \longrightarrow \quad
+\text{равносильный переход} \quad \longrightarrow \quad
+\text{метод интервалов / замена}.
+\]
+
+Ключевой принцип: \important{нельзя механически «отбрасывать» логарифмы}, пока не учтены основание, подлогарифмические выражения и знак монотонности.
+
+\section*{2. ОДЗ для логарифмов}
+
+Для выражения
+\[
+\log_a f(x)
+\]
+обязательно:
+\[
+a>0,\qquad a\ne1,\qquad f(x)>0.
+\]
+
+Если основание является числом, например \(2\), \(4\), \(\frac14\), то условия на основание часто выполняются автоматически. Но условие \(f(x)>0\) проверяется всегда.
+
+\subsection*{Автоматически выполняющиеся ограничения}
+
+Иногда одно ограничение следует из другого условия. Например, если после перехода получено
+\[
+3-x\ge \frac{|x-2|}{x+1}
+\]
+и уже известно, что
+\[
+\frac{|x-2|}{x+1}>0,
+\]
+то \(3-x>0\) выполняется автоматически. В таком случае лишнее ограничение можно не решать отдельно.
+
+\section*{3. Основание логарифма и смена знака}
+
+Если \(a>1\), то логарифмическая функция возрастает:
+\[
+\log_a f(x)\ge \log_a g(x)
+\quad \Longleftrightarrow \quad
+f(x)\ge g(x),
+\]
+при \(f(x)>0,\ g(x)>0\).
+
+Если \(0<a<1\), то логарифмическая функция убывает:
+\[
+\log_a f(x)\ge \log_a g(x)
+\quad \Longleftrightarrow \quad
+f(x)\le g(x).
+\]
+
+\important{При основании меньше единицы знак неравенства меняется.}
+
+\section*{4. Модуль внутри неравенства}
+
+\subsection*{Базовые переходы}
+
+Если \(G(x)>0\), то:
+\[
+|F(x)|>G(x)
+\quad \Longleftrightarrow \quad
+\left[
+\begin{array}{l}
+F(x)>G(x),\\
+F(x)<-G(x).
+\end{array}
+\right.
+\]
+Это \important{совокупность}, поэтому после решения двух неравенств берётся объединение.
+
+Если \(G(x)\ge0\), то:
+\[
+|F(x)|\le G(x)
+\quad \Longleftrightarrow \quad
+-G(x)\le F(x)\le G(x).
+\]
+Это система, поэтому берётся пересечение условий.
+
+\subsection*{Раскрытие модуля по областям}
+
+Если модуль не раскрывается одинаково на всей ОДЗ, нужно рассмотреть случаи:
+\[
+|x-2|=
+\begin{cases}
+2-x, & x<2,\\
+x-2, & x\ge2.
+\end{cases}
+\]
+
+Если по ОДЗ точка \(x=2\) исключена, это учитывается в итоговом пересечении.
+
+\section*{5. Метод интервалов}
+
+После преобразований часто получается рациональное неравенство. Алгоритм:
+
+\begin{enumerate}
+\item Перенести всё в одну сторону.
+\item Привести к общему знаменателю.
+\item Разложить числитель и знаменатель на множители.
+\item Отметить на оси нули числителя и нули знаменателя.
+\item Нули знаменателя всегда выколоты.
+\item Расставить знаки на промежутках.
+\item Выбрать промежутки по знаку неравенства и пересечь с ОДЗ.
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}[x=1.35cm,y=1cm]
+\draw[->,line width=0.8pt] (-3.2,0) -- (3.4,0) node[right] {$x$};
+\foreach \x/\lab/\type in {-2/$-2$/fill,0/$0$/draw,2/$2$/fill}{
+  \ifx\type\fill
+    \filldraw[darkaccent] (\x,0) circle (2pt);
+  \else
+    \draw[darkaccent,line width=0.9pt,fill=white] (\x,0) circle (2pt);
+  \fi
+  \node[below] at (\x,-0.05) {\lab};
+}
+\node[above] at (-2.6,0.18) {$+$};
+\node[above] at (-1,0.18) {$-$};
+\node[above] at (1,0.18) {$+$};
+\node[above] at (2.7,0.18) {$-$};
+\end{tikzpicture}
+\end{center}
+
+\section*{6. Приведение логарифмов к одному виду}
+
+Перед заменой логарифмы должны стать одинаковыми. Полезные формулы:
+\[
+\log_a uv=\log_a u+\log_a v,
+\qquad
+\log_a \frac{u}{v}=\log_a u-\log_a v,
+\]
+\[
+\log_{a^m} b=\frac{1}{m}\log_a b,
+\qquad
+\log_a b=\frac{1}{\log_b a}.
+\]
+
+Пример:
+\[
+\log_{\frac14} A=-\log_4 A.
+\]
+
+Если встречается
+\[
+\log_4(3^x-1)
+\]
+несколько раз, удобно сделать замену:
+\[
+t=\log_4(3^x-1).
+\]
+
+\section*{7. Чётная степень под логарифмом}
+
+Критически важное правило:
+\[
+\log_a(x^2)=2\log_a|x|.
+\]
+
+Модуль нужен, потому что \(x^2>0\) при \(x\ne0\), но сам \(x\) может быть отрицательным. Без модуля можно получить незаконный логарифм от отрицательного числа.
+
+Более общий вид:
+\[
+\log_a\bigl(F(x)^{2n}\bigr)=2n\log_a|F(x)|.
+\]
+
+\section*{8. Типичные ошибки}
+
+\begin{itemize}
+\item Забыть поменять знак при основании \(0<a<1\).
+\item Заменить совокупность системой при переходе от \(|F|>G\).
+\item Не выколоть нули знаменателя.
+\item Потерять ОДЗ логарифма.
+\item При вынесении чётной степени из логарифма забыть модуль.
+\item Делать замену \(t=\log_a f(x)\), но забыть затем вернуться к \(x\).
+\item Писать десятичные приближения там, где лучше оставить дроби или корни.
+\end{itemize}
+
+\newpage
+
+\section*{Тренировочный блок}
+
+Решите неравенства. Ответы запишите в виде промежутков.
+
+\begin{enumerate}
+\item \(\log_2(x-1)\le3\).
+\item \(\log_{\frac13}(x+2)>1\).
+\item \(|2x-1|\ge3\).
+\item \(\log_2(x^2-5x+6)\ge0\).
+\item \(\log_{\frac12}\frac{x-1}{x+2}\le0\).
+\item \(\log_3(x-1)+\log_3(x-3)\le1\).
+\item \(\log_4(3^x-1)\le\frac12\).
+\item \(\log_{\frac14}(2-x)\ge \log_{\frac14}(x+1)\).
+\item \(\log_5\bigl((x-1)^2\bigr)\le2\).
+\item \(\log_4(3^x-1)\bigl(2-\log_4(3^x-1)\bigr)\le\frac34\).
+\end{enumerate}
+
+\newpage
+
+\section*{Ответы}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & \((1;9]\) \\
+2 & \((-2;-\frac53)\) \\
+3 & \((-\infty;-1]\cup[2;+\infty)\) \\
+4 & \(\left(-\infty;\frac{5-\sqrt5}{2}\right]\cup\left[\frac{5+\sqrt5}{2};+\infty\right)\) \\
+5 & \((-\infty;-2)\) \\
+6 & \((3;4]\) \\
+7 & \((0;1]\) \\
+8 & \(\left[\frac12;2\right)\) \\
+9 & \([-4;1)\cup(1;6]\) \\
+10 & \((0;1]\cup[2;+\infty)\) \\
+\bottomrule
+\end{tabularx}
+
+\end{document}
