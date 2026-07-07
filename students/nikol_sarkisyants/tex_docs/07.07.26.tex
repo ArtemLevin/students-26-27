@@ -1,0 +1,743 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[left=18mm,right=18mm,top=18mm,bottom=20mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx, booktabs, longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F3F5F5}
+\definecolor{lightaccent}{HTML}{E6F2F2}
+
+\providecommand{\tg}{\mathop{\mathrm{tg}}\nolimits}
+\providecommand{\ctg}{\mathop{\mathrm{ctg}}\nolimits}
+\providecommand{\arctg}{\mathop{\mathrm{arctg}}\nolimits}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkaccent,
+    urlcolor=darkaccent
+}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Чек-лист}
+\fancyhead[R]{\small Тригонометрия и логарифмические неравенства}
+\fancyfoot[C]{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+\setlist[itemize]{leftmargin=1.2cm,itemsep=2pt,topsep=4pt}
+\setlist[enumerate]{leftmargin=1.2cm,itemsep=4pt,topsep=4pt}
+
+\newcommand{\important}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\ruleline}{\vspace{2mm}{\color{accent}\hrule height 0.5pt}\vspace{2mm}}
+
+\newcommand{\signaxis}{
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+    \draw[->, color=textgray] (-4.2,0) -- (4.8,0);
+    \foreach \x/\lab in {-2/$-2$,0/$0$,3/$4$}
+        \draw[color=textgray] (\x,0.08) -- (\x,-0.08) node[below=3pt] {\small \lab};
+    \filldraw[fill=accent, draw=accent] (-2,0) circle (2pt);
+    \filldraw[fill=white, draw=darkaccent, line width=1pt] (0,0) circle (2pt);
+    \filldraw[fill=accent, draw=accent] (3,0) circle (2pt);
+    \node[above] at (-3.1,0.2) {\small $-$};
+    \node[above] at (-1.0,0.2) {\small $+$};
+    \node[above] at (1.5,0.2) {\small $-$};
+    \node[above] at (3.9,0.2) {\small $+$};
+    \draw[line width=1.4pt, color=accent] (-4.0,0.35) -- (-2,0.35);
+    \draw[line width=1.4pt, color=accent] (0,0.35) -- (3,0.35);
+    \node[above, color=darkaccent] at (-3.0,0.45) {\small берём};
+    \node[above, color=darkaccent] at (1.5,0.45) {\small берём};
+\end{tikzpicture}
+\end{center}
+}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{2.2cm}
+
+{\Large \textcolor{accent}{\textbf{Чек-лист}}}
+
+\vspace{8mm}
+
+{\huge \textbf{Комплексное повторение ЕГЭ}}
+
+\vspace{4mm}
+
+{\Large \textbf{Тригонометрические уравнения и логарифмические неравенства}}
+
+\vspace{18mm}
+
+{\large Формулы, однородные уравнения, отбор корней, ОДЗ и метод интервалов}
+
+\vspace{22mm}
+
+{\large Лёвин Артём Александрович эксклюзивно для Николь Саркисьянц}
+
+\vspace{8mm}
+
+{\large \today}
+
+\vfill
+
+\begin{tikzpicture}[remember picture, overlay]
+    \draw[line width=1.1pt, color=accent]
+        ([xshift=2.3cm,yshift=2.2cm]current page.south west)
+        .. controls ([xshift=6.0cm,yshift=3.3cm]current page.south west)
+        and ([xshift=-6.0cm,yshift=1.3cm]current page.south east)
+        .. ([xshift=-2.3cm,yshift=2.4cm]current page.south east);
+    \draw[line width=0.5pt, color=darkaccent]
+        ([xshift=3.0cm,yshift=1.55cm]current page.south west)
+        .. controls ([xshift=7.4cm,yshift=2.25cm]current page.south west)
+        and ([xshift=-7.0cm,yshift=2.7cm]current page.south east)
+        .. ([xshift=-3.0cm,yshift=1.65cm]current page.south east);
+\end{tikzpicture}
+
+\vspace*{1.2cm}
+\end{center}
+\end{titlepage}
+
+\section*{1. Главная идея занятия}
+
+В комплексном повторении важно не просто знать формулы, а понимать, \important{зачем} они применяются.
+
+\important{Главный принцип в тригонометрии:} если в выражении есть разные углы или квадраты, нужно искать формулу, которая приведёт выражение к более простому виду и, по возможности, к одинаковым углам.
+
+\important{Главный принцип в неравенствах:} к уравнению, корням числителя и методу интервалов переходят только после того, как выражение приведено к нормальному виду:
+\[
+\frac{P(x)}{Q(x)}\le 0,
+\qquad
+\frac{P(x)}{Q(x)}\ge 0,
+\qquad
+\frac{P(x)}{Q(x)}<0,
+\qquad
+\frac{P(x)}{Q(x)}>0.
+\]
+
+\important{Отдельная привычка для самопроверки:} после каждого раскрытия скобок проверяйте знаки. Ошибка в одном минусе может полностью изменить ответ.
+
+\section*{2. Формулы, которые чаще всего спасают тригонометрию}
+
+\subsection*{Формулы понижения степени}
+
+Если в задаче появились квадраты синуса или косинуса, почти всегда нужно вспомнить:
+\[
+\sin^2\alpha=\frac{1-\cos 2\alpha}{2},
+\qquad
+\cos^2\alpha=\frac{1+\cos 2\alpha}{2}.
+\]
+
+\important{Зачем это нужно?} Эти формулы убирают квадрат и переводят задачу к углу $2\alpha$.
+
+\subsection*{Формулы разности}
+
+\[
+\cos(\alpha-\beta)=\cos\alpha\cos\beta+\sin\alpha\sin\beta,
+\]
+\[
+\sin(\alpha-\beta)=\sin\alpha\cos\beta-\cos\alpha\sin\beta.
+\]
+
+\important{Полезный пример:}
+\[
+\sin^2\left(x-\frac{\pi}{4}\right)
+=
+\frac{1-\cos\left(2x-\frac{\pi}{2}\right)}{2}.
+\]
+
+Так как
+\[
+\cos\left(2x-\frac{\pi}{2}\right)
+=
+\cos 2x\cdot \cos\frac{\pi}{2}
++
+\sin 2x\cdot \sin\frac{\pi}{2}
+=
+\sin 2x,
+\]
+то
+\[
+\boxed{
+\sin^2\left(x-\frac{\pi}{4}\right)=\frac{1-\sin 2x}{2}.
+}
+\]
+
+\subsection*{Формулы двойного угла}
+
+\[
+\cos 2x=\cos^2 x-\sin^2 x,
+\]
+\[
+\sin 2x=2\sin x\cos x.
+\]
+
+\subsection*{Основное тригонометрическое тождество}
+
+\[
+\sin^2 x+\cos^2 x=1.
+\]
+
+\important{Важная идея.} Иногда единицу полезно заменить на тригонометрическое выражение:
+\[
+1=\sin^2 x+\cos^2 x.
+\]
+
+Это помогает получить однородное уравнение.
+
+\section*{3. Образцовый тригонометрический пример}
+
+Рассмотрим уравнение:
+\[
+\cos^2x+\sin^2\left(x-\frac{\pi}{4}\right)=\frac12.
+\]
+
+По формулам понижения степени:
+\[
+\cos^2x=\frac{1+\cos2x}{2},
+\]
+\[
+\sin^2\left(x-\frac{\pi}{4}\right)=\frac{1-\sin2x}{2}.
+\]
+
+Подставляем:
+\[
+\frac{1+\cos2x}{2}
++
+\frac{1-\sin2x}{2}
+=
+\frac12.
+\]
+
+Домножаем на $2$:
+\[
+1+\cos2x+1-\sin2x=1.
+\]
+
+Получаем:
+\[
+\cos2x-\sin2x=-1.
+\]
+
+Теперь раскрываем через формулы двойного угла:
+\[
+\cos^2x-\sin^2x-2\sin x\cos x
+=
+-\left(\sin^2x+\cos^2x\right).
+\]
+
+Переносим всё влево:
+\[
+\cos^2x-\sin^2x-2\sin x\cos x+\sin^2x+\cos^2x=0.
+\]
+
+Приводим подобные:
+\[
+2\cos^2x-2\sin x\cos x=0.
+\]
+
+Выносим общий множитель:
+\[
+2\cos x(\cos x-\sin x)=0.
+\]
+
+Получаем совокупность:
+\[
+\left[
+\begin{array}{l}
+\cos x=0,\\
+\cos x-\sin x=0.
+\end{array}
+\right.
+\]
+
+Отсюда:
+\[
+x=\frac{\pi}{2}+\pi k,
+\qquad k\in\mathbb Z,
+\]
+или
+\[
+\tg x=1
+\quad\Longleftrightarrow\quad
+x=\frac{\pi}{4}+\pi k,
+\qquad k\in\mathbb Z.
+\]
+
+Ответ:
+\[
+\boxed{
+x=\frac{\pi}{2}+\pi k
+\quad\text{или}\quad
+x=\frac{\pi}{4}+\pi k,
+\qquad k\in\mathbb Z.
+}
+\]
+
+\section*{4. Однородные тригонометрические уравнения}
+
+\subsection*{Однородное уравнение первого порядка}
+
+Типичный вид:
+\[
+a\sin x+b\cos x=0.
+\]
+
+Пример:
+\[
+\cos x-\sin x=0.
+\]
+
+Если $\cos x=0$, то равенство не выполняется. Значит, можно делить на $\cos x$:
+\[
+\frac{\cos x}{\cos x}-\frac{\sin x}{\cos x}=0.
+\]
+
+Получаем:
+\[
+1-\tg x=0,
+\]
+\[
+\tg x=1,
+\]
+\[
+x=\frac{\pi}{4}+\pi k,\qquad k\in\mathbb Z.
+\]
+
+\important{Почему важно проверить деление?} Делить на выражение можно только тогда, когда оно не равно нулю на рассматриваемой ветви решения.
+
+\subsection*{Однородное уравнение второго порядка}
+
+Типичный вид:
+\[
+a\sin^2x+b\sin x\cos x+c\cos^2x=0.
+\]
+
+Пример:
+\[
+\sin^2x-3\sin x\cos x+2\cos^2x=0.
+\]
+
+Если $\cos x=0$, то левая часть равна $\sin^2x=1$, значит, это не корень. Поэтому можно делить на $\cos^2x$:
+\[
+\tg^2x-3\tg x+2=0.
+\]
+
+Дальше решается обычное квадратное уравнение относительно $\tg x$.
+
+\important{Неоднородное уравнение} нельзя решать таким же делением. Например:
+\[
+3+\sin x+5\cos x=0
+\]
+не является однородным, потому что слева есть отдельное число $3$.
+
+\section*{5. Отбор корней на промежутке}
+
+Если в условии дан промежуток, например
+\[
+x\in[3\pi;4\pi],
+\]
+то после нахождения общих корней нужно отобрать подходящие.
+
+\subsection*{Пример отбора}
+
+Пусть
+\[
+x=\frac{\pi}{2}+\pi k,
+\qquad k\in\mathbb Z,
+\]
+и нужно отобрать корни на промежутке:
+\[
+3\pi\le x\le 4\pi.
+\]
+
+Подставляем формулу корня:
+\[
+3\pi\le \frac{\pi}{2}+\pi k\le 4\pi.
+\]
+
+Домножаем на $2$:
+\[
+6\pi\le \pi+2\pi k\le 8\pi.
+\]
+
+Вычитаем $\pi$:
+\[
+5\pi\le 2\pi k\le 7\pi.
+\]
+
+Делим на $2\pi$:
+\[
+\frac52\le k\le \frac72.
+\]
+
+Так как $k\in\mathbb Z$, подходит только:
+\[
+k=3.
+\]
+
+Тогда:
+\[
+x=\frac{\pi}{2}+3\pi=\frac{7\pi}{2}.
+\]
+
+\important{Практическое правило.} Отбор через двойное неравенство медленнее, чем по окружности, но он очень надёжен и хорошо защищает от ошибок невнимательности.
+
+\section*{6. Логарифмические неравенства: ОДЗ, замена и метод интервалов}
+
+\subsection*{Обязательные ограничения}
+
+Для логарифма:
+\[
+\log_a f(x)
+\]
+должны выполняться условия:
+\[
+a>0,\qquad a\ne1,\qquad f(x)>0.
+\]
+
+Если логарифм стоит в знаменателе, дополнительно:
+\[
+\log_a f(x)\ne0.
+\]
+
+\subsection*{Ключевые свойства логарифмов}
+
+\[
+\log_a\frac{u}{v}=\log_a u-\log_a v,
+\qquad u>0,\quad v>0.
+\]
+
+\[
+\log_a u^m=m\log_a|u|.
+\]
+
+\important{Осторожно с модулем:}
+\[
+\log_a x^2=2\log_a|x|.
+\]
+
+Если по ОДЗ уже известно, что $x>0$, то:
+\[
+|x|=x,
+\]
+и поэтому:
+\[
+\log_a x^2=2\log_a x.
+\]
+
+\subsection*{Образцовый логарифмический пример}
+
+Рассмотрим неравенство:
+\[
+\frac{9}{\log_3x}-\log_3\frac{9}{x}
+\le
+\frac{34}{\log_3x^2}.
+\]
+
+ОДЗ:
+\[
+x>0,
+\qquad
+\log_3x\ne0.
+\]
+
+То есть:
+\[
+x>0,
+\qquad
+x\ne1.
+\]
+
+Преобразуем логарифмы:
+\[
+\log_3\frac{9}{x}
+=
+\log_39-\log_3x
+=
+2-\log_3x.
+\]
+
+Так как $x>0$:
+\[
+\log_3x^2=2\log_3x.
+\]
+
+Подставляем:
+\[
+\frac{9}{\log_3x}
+-
+\left(2-\log_3x\right)
+\le
+\frac{34}{2\log_3x}.
+\]
+
+Сокращаем справа:
+\[
+\frac{9}{\log_3x}
+-
+\left(2-\log_3x\right)
+\le
+\frac{17}{\log_3x}.
+\]
+
+Вводим замену:
+\[
+t=\log_3x,
+\qquad t\ne0.
+\]
+
+Получаем:
+\[
+\frac9t-(2-t)-\frac{17}{t}\le0.
+\]
+
+Приводим к общему знаменателю:
+\[
+\frac{9-2t+t^2-17}{t}\le0.
+\]
+
+То есть:
+\[
+\frac{t^2-2t-8}{t}\le0.
+\]
+
+Разложим числитель:
+\[
+t^2-2t-8=(t-4)(t+2).
+\]
+
+Получаем рациональное неравенство:
+\[
+\frac{(t-4)(t+2)}{t}\le0.
+\]
+
+Критические точки:
+\[
+t=-2,\qquad t=0,\qquad t=4.
+\]
+
+Точка $t=0$ выколота, потому что стоит в знаменателе.
+
+\signaxis
+
+Отсюда:
+\[
+t\in(-\infty;-2]\cup(0;4].
+\]
+
+Возвращаемся к замене:
+\[
+\log_3x\le -2
+\quad\text{или}\quad
+0<\log_3x\le4.
+\]
+
+Так как основание $3>1$, знак неравенства не меняется:
+\[
+0<x\le\frac19
+\quad\text{или}\quad
+1<x\le81.
+\]
+
+Ответ:
+\[
+\boxed{
+x\in\left(0;\frac19\right]\cup(1;81].
+}
+\]
+
+\section*{7. Типовые ошибки}
+
+\begin{enumerate}
+    \item \important{Переходить к уравнению слишком рано.}
+
+    Сначала нужно привести неравенство к нормальному виду, раскрыть скобки, привести подобные и общий знаменатель. Только потом можно искать нули числителя и знаменателя.
+
+    \item \important{Домножать неравенство на переменную без учёта знака.}
+
+    Нельзя просто домножить неравенство на $t$, если неизвестно, положительно оно или отрицательно. Надёжный путь:
+    \[
+    \text{привести к общему знаменателю и решить методом интервалов.}
+    \]
+
+    \item \important{Забывать модуль в формуле $\log_a x^2$.}
+
+    Корректно:
+    \[
+    \log_a x^2=2\log_a|x|.
+    \]
+
+    Без модуля можно писать только после анализа ОДЗ.
+
+    \item \important{Забывать запрещённые значения.}
+
+    Если переменная стоит в знаменателе, соответствующая точка всегда выколота.
+
+    \item \important{Терять знак при раскрытии скобок.}
+
+    Особенно опасно:
+    \[
+    -\left(2-\log_3x\right)=-2+\log_3x.
+    \]
+
+    \item \important{Не проверять деление в однородных уравнениях.}
+
+    Перед делением на $\cos x$ или $\cos^2x$ нужно понимать, не теряются ли корни.
+\end{enumerate}
+
+\section*{8. Мини-алгоритмы}
+
+\subsection*{Тригонометрическое уравнение}
+
+\begin{enumerate}
+    \item Посмотрите, что мешает: квадраты, разные углы, сумма синуса и косинуса.
+    \item Подберите формулу: понижение степени, разность, двойной угол.
+    \item Добейтесь одинаковых углов или более простого выражения.
+    \item Если появилось произведение, переходите к совокупности.
+    \item Если уравнение однородное, проверьте возможность деления.
+    \item Найдите общие корни.
+    \item Если дан промежуток, выполните отбор через двойное неравенство.
+\end{enumerate}
+
+\subsection*{Логарифмическое неравенство}
+
+\begin{enumerate}
+    \item Выпишите ОДЗ.
+    \item Разложите логарифмы по свойствам.
+    \item Если возможно, введите замену.
+    \item Не домножайте на переменную неизвестного знака.
+    \item Приведите выражение к рациональному неравенству.
+    \item Решите методом интервалов.
+    \item Вернитесь к исходной переменной.
+    \item Пересеките ответ с ОДЗ.
+\end{enumerate}
+
+\newpage
+
+\section*{Тренировочный блок}
+
+\textbf{Инструкция.} Решите задания. В тригонометрии отдельно отмечайте, какую формулу Вы применяете. В логарифмических неравенствах обязательно выписывайте ОДЗ.
+
+\subsection*{Средний уровень}
+
+\begin{enumerate}
+    \item Упростите выражение:
+    \[
+    \sin^2\left(x-\frac{\pi}{4}\right).
+    \]
+
+    \item Решите уравнение:
+    \[
+    2\cos x(\cos x-\sin x)=0.
+    \]
+
+    \item Решите рациональное неравенство:
+    \[
+    \frac{(t-4)(t+2)}{t}\le0.
+    \]
+\end{enumerate}
+
+\subsection*{Выше среднего уровня}
+
+\begin{enumerate}[resume]
+    \item Решите тригонометрическое уравнение:
+    \[
+    \cos^2x+\sin^2\left(x-\frac{\pi}{4}\right)=\frac12.
+    \]
+
+    \item Отберите корни формулы
+    \[
+    x=\frac{\pi}{4}+\pi k,\qquad k\in\mathbb Z,
+    \]
+    на промежутке:
+    \[
+    x\in\left[\frac{13\pi}{2};\frac{15\pi}{2}\right].
+    \]
+
+    \item Решите уравнение при условии $x>0$:
+    \[
+    \log_3x^2=4.
+    \]
+
+    \item Решите логарифмическое неравенство:
+    \[
+    \frac{9}{\log_3x}-\log_3\frac{9}{x}
+    \le
+    \frac{34}{\log_3x^2}.
+    \]
+
+    \item Решите однородное тригонометрическое уравнение:
+    \[
+    \sin^2x-3\sin x\cos x+2\cos^2x=0.
+    \]
+
+    \item Решите логарифмическое неравенство:
+    \[
+    \log_3|x-2|\le2.
+    \]
+\end{enumerate}
+
+\subsection*{Сложный уровень}
+
+\begin{enumerate}[resume]
+    \item Решите уравнение и выполните отбор корней на указанном промежутке:
+    \[
+    \cos^2x+\sin^2\left(x-\frac{\pi}{4}\right)=\frac12,
+    \qquad
+    x\in\left[\frac{13\pi}{2};\frac{15\pi}{2}\right].
+    \]
+\end{enumerate}
+
+\newpage
+
+\section*{Ответы для самопроверки}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\linewidth}{>{\bfseries}p{0.12\linewidth}X}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $\displaystyle \frac{1-\sin2x}{2}$ \\
+2 & $\displaystyle x=\frac{\pi}{2}+\pi k$ или $\displaystyle x=\frac{\pi}{4}+\pi k,\quad k\in\mathbb Z$ \\
+3 & $\displaystyle t\in(-\infty;-2]\cup(0;4]$ \\
+4 & $\displaystyle x=\frac{\pi}{2}+\pi k$ или $\displaystyle x=\frac{\pi}{4}+\pi k,\quad k\in\mathbb Z$ \\
+5 & $\displaystyle k=7,\quad x=\frac{29\pi}{4}$ \\
+6 & $\displaystyle x=9$ \\
+7 & $\displaystyle x\in\left(0;\frac19\right]\cup(1;81]$ \\
+8 & $\displaystyle x=\frac{\pi}{4}+\pi k$ или $\displaystyle x=\arctg2+\pi k,\quad k\in\mathbb Z$ \\
+9 & $\displaystyle x\in[-7;11]\setminus\{2\}$ \\
+10 & $\displaystyle x\in\left\{\frac{13\pi}{2};\frac{29\pi}{4};\frac{15\pi}{2}\right\}$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\end{document}
