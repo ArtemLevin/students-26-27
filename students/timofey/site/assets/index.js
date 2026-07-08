@@ -8,8 +8,8 @@ if (grid) {
       <p>${lesson.subtitle}</p>
       <div class="material__links">
         <a class="button button--accent" href="lessons/${lesson.id}.html">Открыть страницу</a>
-        ${lesson.sourcePdf ? `<a class="button" href="${lesson.sourcePdf}">PDF</a>` : ''}
-        ${lesson.sourceTex ? `<a class="button" href="${lesson.sourceTex}">TeX</a>` : ''}
+        ${lesson.sourcePdf ? `<a class="button" href="${lesson.sourcePdf}" download>PDF</a>` : ''}
+        ${lesson.sourceTex ? `<a class="button" href="${lesson.sourceTex}" download>TeX</a>` : ''}
       </div>
     </article>
   `).join('');
