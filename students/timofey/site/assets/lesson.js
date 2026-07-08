@@ -5,12 +5,28 @@ const root = document.getElementById('lessonRoot');
 const title = (text) => String(text || '').replace(/[&<>]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]));
 const lessonPath = (path) => path ? path.replace(/^\.\.\//, '../../') : '';
 
+function isMathLike(text) {
+  return /[=→±√π∈ℤ²³⁴αβφ≤≥≠∞]|\b(sin|cos|tg|ctg|arcsin|arccos|arctg|log)\b|\^|\//i.test(String(text || ''));
+}
+
+function mathText(text, display = 'inline') {
+  return `<math xmlns="http://www.w3.org/1998/Math/MathML" display="${display}"><mtext>${title(text)}</mtext></math>`;
+}
+
+function renderText(text) {
+  return isMathLike(text) ? mathText(text, 'inline') : title(text);
+}
+
+function formulaItem(text) {
+  return `<div class="formula">${mathText(text, 'block')}</div>`;
+}
+
 function list(items) {
-  return `<ul>${(items || []).map((item) => `<li>${title(item)}</li>`).join('')}</ul>`;
+  return `<ul>${(items || []).map((item) => `<li>${renderText(item)}</li>`).join('')}</ul>`;
 }
 
 function formulas(items) {
-  return (items || []).map((item) => `<div class="formula">${title(item)}</div>`).join('');
+  return (items || []).map((item) => formulaItem(item)).join('');
 }
 
 function allFormulas() {
@@ -48,8 +64,6 @@ function buildSelfCheck() {
   const t = lesson.training || [];
   const s0 = sections[0] || {h:'основной раздел', p:[], f:[]};
   const s1 = sections[1] || s0;
-  const s2 = sections[2] || s1;
-  const s3 = sections[3] || s2;
   const ex0 = e[0] || {title:'разобранный пример', steps:[], answer:''};
   const ex1 = e[1] || ex0;
   return [
@@ -76,7 +90,7 @@ function renderSelfCheck() {
         ${questions.map((item, index) => `
           <button class="self-question" data-answer="${index}" type="button">
             <span>${index + 1}</span>
-            <strong>${title(item.q)}</strong>
+            <strong>${renderText(item.q)}</strong>
           </button>
         `).join('')}
       </div>
@@ -107,7 +121,7 @@ function renderLesson() {
         ${(lesson.sections || []).map((section) => `
           <article class="lesson-panel">
             <h2>${title(section.h)}</h2>
-            ${(section.p || []).map((p) => `<p>${title(p)}</p>`).join('')}
+            ${(section.p || []).map((p) => `<p>${renderText(p)}</p>`).join('')}
             ${formulas(section.f)}
           </article>
         `).join('')}
@@ -116,14 +130,14 @@ function renderLesson() {
           ${(lesson.examples || []).map((example) => `
             <section class="example">
               <h3>${title(example.title)}</h3>
-              <div class="step-list">${(example.steps || []).map((step) => `<div class="step">${title(step)}</div>`).join('')}</div>
-              <div class="formula">Ответ: ${title(example.answer)}</div>
+              <div class="step-list">${(example.steps || []).map((step) => `<div class="step">${renderText(step)}</div>`).join('')}</div>
+              <div class="formula"><span class="formula-label">Ответ:</span> ${mathText(example.answer, 'block')}</div>
             </section>
           `).join('')}
         </article>
         <article class="lesson-panel"><h2>Типичные ошибки</h2><div class="warn">${list(lesson.mistakes)}</div></article>
-        <article class="lesson-panel"><h2>Тренировочный блок</h2><div class="training">${(lesson.training || []).map((task, i) => `<div class="task"><b>${i + 1}.</b> ${title(task)}</div>`).join('')}</div></article>
-        <article class="lesson-panel" id="quizBox"><h2>Мини-квиз</h2><p>${title(lesson.quiz.q)}</p>${lesson.quiz.a.map((answer, index) => `<button class="quiz-option" data-index="${index}">${title(answer)}</button>`).join('')}<p class="muted" id="quizResult">Выберите ответ.</p></article>
+        <article class="lesson-panel"><h2>Тренировочный блок</h2><div class="training">${(lesson.training || []).map((task, i) => `<div class="task"><b>${i + 1}.</b> ${mathText(task, 'inline')}</div>`).join('')}</div></article>
+        <article class="lesson-panel" id="quizBox"><h2>Мини-квиз</h2><p>${renderText(lesson.quiz.q)}</p>${lesson.quiz.a.map((answer, index) => `<button class="quiz-option" data-index="${index}">${renderText(answer)}</button>`).join('')}<p class="muted" id="quizResult">Выберите ответ.</p></article>
         ${renderSelfCheck()}
       </main>
       <aside class="visual-card">
@@ -181,8 +195,8 @@ function setupSelfCheck() {
   document.querySelectorAll('.self-question').forEach((button) => {
     button.addEventListener('click', () => {
       const item = questions[Number(button.dataset.answer)];
-      answerTitle.textContent = item.q;
-      answerText.textContent = item.a;
+      answerTitle.innerHTML = renderText(item.q);
+      answerText.innerHTML = renderText(item.a);
       overlay.classList.add('open');
       overlay.setAttribute('aria-hidden', 'false');
     });
@@ -244,11 +258,11 @@ function drawAllCircles() {
 function drawCircle(canvas, angle, outId, valuesId) {
   if (!canvas) return;
   const out = document.getElementById(outId);
-  if (out) out.textContent = `${angle}°`;
+  if (out) out.innerHTML = mathText(`${angle}°`, 'inline');
   const rad = angle * Math.PI / 180;
   const sin = Math.sin(rad);
   const cos = Math.cos(rad);
-  if (valuesId) document.getElementById(valuesId).textContent = `sin x ≈ ${sin.toFixed(2)}, cos x ≈ ${cos.toFixed(2)}`;
+  if (valuesId) document.getElementById(valuesId).innerHTML = mathText(`sin x ≈ ${sin.toFixed(2)}, cos x ≈ ${cos.toFixed(2)}`, 'block');
   const ctx = canvas.getContext('2d');
   const w = canvas.width;
   const h = canvas.height;
