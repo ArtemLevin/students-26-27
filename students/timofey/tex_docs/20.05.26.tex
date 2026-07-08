@@ -1,0 +1,674 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx, booktabs, longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\geometry{left=18mm,right=18mm,top=18mm,bottom=20mm}
+\onehalfspacing
+\setlist[itemize]{leftmargin=1.4em, itemsep=0.2em, topsep=0.2em}
+\setlist[enumerate]{leftmargin=1.6em, itemsep=0.35em, topsep=0.35em}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F4F6F6}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkaccent,
+    urlcolor=darkaccent
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{textgray}{Чек-лист}}
+\rhead{\textcolor{textgray}{Тригонометрические уравнения}}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\topic}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\important}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{28mm}
+
+{\Huge\bfseries Чек-лист\par}
+\vspace{6mm}
+{\Large\bfseries Первые тригонометрические уравнения\par}
+\vspace{3mm}
+{\large\bfseries Единичная окружность, базовые случаи и формулы преобразования\par}
+
+\vspace{22mm}
+
+{\large Лёвин Артём Александрович эксклюзивно для Тимофея Васильченко\par}
+
+\vspace{10mm}
+
+{\large \today\par}
+
+\vfill
+
+\begin{tikzpicture}[remember picture, overlay]
+    \draw[accent, line width=1.2pt]
+        ([xshift=25mm,yshift=25mm]current page.south west)
+        .. controls ([xshift=65mm,yshift=42mm]current page.south west)
+        and ([xshift=-65mm,yshift=8mm]current page.south east)
+        .. ([xshift=-25mm,yshift=28mm]current page.south east);
+    \draw[darkaccent, line width=0.5pt]
+        ([xshift=35mm,yshift=18mm]current page.south west)
+        .. controls ([xshift=78mm,yshift=32mm]current page.south west)
+        and ([xshift=-78mm,yshift=18mm]current page.south east)
+        .. ([xshift=-35mm,yshift=20mm]current page.south east);
+\end{tikzpicture}
+
+\vspace*{18mm}
+
+\end{titlepage}
+
+\section*{1. Главная идея}
+
+Тригонометрические уравнения часто сводятся к простым уравнениям вида
+\[
+    \sin x = -1,\quad \sin x=0,\quad \sin x=1,
+\]
+\[
+    \cos x=-1,\quad \cos x=0,\quad \cos x=1.
+\]
+
+\topic{Ключевой принцип:} сначала упростить выражение с помощью формул, затем решить базовое тригонометрическое уравнение на единичной окружности.
+
+\section*{2. Единичная окружность}
+
+На единичной окружности точка, соответствующая углу \(x\), имеет координаты
+\[
+    (\cos x;\sin x).
+\]
+
+Значит:
+\[
+    \cos x \text{ --- это } x\text{-координата точки},
+\]
+\[
+    \sin x \text{ --- это } y\text{-координата точки}.
+\]
+
+\begin{center}
+\begin{tikzpicture}[scale=1.15]
+    \draw[->, textgray] (-1.45,0) -- (1.55,0) node[right] {\(x\)};
+    \draw[->, textgray] (0,-1.45) -- (0,1.55) node[above] {\(y\)};
+    \draw[accent, line width=1pt] (0,0) circle (1);
+    \fill[darkaccent] (1,0) circle (1.7pt) node[below right] {\(0\)};
+    \fill[darkaccent] (0,1) circle (1.7pt) node[above right] {\(\frac{\pi}{2}\)};
+    \fill[darkaccent] (-1,0) circle (1.7pt) node[below left] {\(\pi\)};
+    \fill[darkaccent] (0,-1) circle (1.7pt) node[below right] {\(-\frac{\pi}{2}\)};
+    \draw[->, darkaccent, line width=0.8pt] (0.35,0) arc (0:65:0.35);
+    \node[darkaccent] at (0.45,0.32) {\(x\)};
+    \node[textgray] at (0,-1.85) {один полный оборот равен \(2\pi\)};
+\end{tikzpicture}
+\end{center}
+
+\topic{Важно:} окружность можно обходить сколько угодно раз. Поэтому в ответах появляется добавка:
+\[
+    2\pi n,\qquad n\in\Z.
+\]
+
+\section*{3. Базовые уравнения для синуса}
+
+\renewcommand{\arraystretch}{1.45}
+\begin{table}[h!]
+\caption{Частные случаи для синуса}
+\centering
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+\textbf{Уравнение} & \textbf{Общее решение} \\
+\midrule
+\(\sin x=1\) &
+\[
+    x=\frac{\pi}{2}+2\pi n,\qquad n\in\Z
+\]
+\\
+\(\sin x=-1\) &
+\[
+    x=-\frac{\pi}{2}+2\pi n,\qquad n\in\Z
+\]
+\\
+\(\sin x=0\) &
+\[
+    x=\pi n,\qquad n\in\Z
+\]
+\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\topic{Почему для \(\sin x=0\) можно писать \(x=\pi n\)?}
+
+Потому что подходят две точки окружности:
+\[
+    x=0+2\pi n
+\]
+и
+\[
+    x=\pi+2\pi n.
+\]
+Обе серии объединяются в одну:
+\[
+    x=\pi n,\qquad n\in\Z.
+\]
+
+\section*{4. Базовые уравнения для косинуса}
+
+\begin{table}[h!]
+\caption{Частные случаи для косинуса}
+\centering
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+\textbf{Уравнение} & \textbf{Общее решение} \\
+\midrule
+\(\cos x=1\) &
+\[
+    x=2\pi n,\qquad n\in\Z
+\]
+\\
+\(\cos x=-1\) &
+\[
+    x=\pi+2\pi n,\qquad n\in\Z
+\]
+\\
+\(\cos x=0\) &
+\[
+    x=\frac{\pi}{2}+\pi n,\qquad n\in\Z
+\]
+\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\topic{Почему для \(\cos x=0\) можно писать \(x=\frac{\pi}{2}+\pi n\)?}
+
+Подходят две точки:
+\[
+    x=\frac{\pi}{2}+2\pi n
+\]
+и
+\[
+    x=-\frac{\pi}{2}+2\pi n.
+\]
+Они объединяются в одну серию:
+\[
+    x=\frac{\pi}{2}+\pi n,\qquad n\in\Z.
+\]
+
+\section*{5. Формулы сложения и вычитания}
+
+Формулы нужно знать наизусть: без них трудно увидеть способ преобразования.
+
+\[
+    \sin(\alpha+\beta)=\sin\alpha\cos\beta+\cos\alpha\sin\beta,
+\]
+\[
+    \sin(\alpha-\beta)=\sin\alpha\cos\beta-\cos\alpha\sin\beta.
+\]
+
+\[
+    \cos(\alpha+\beta)=\cos\alpha\cos\beta-\sin\alpha\sin\beta,
+\]
+\[
+    \cos(\alpha-\beta)=\cos\alpha\cos\beta+\sin\alpha\sin\beta.
+\]
+
+\topic{Главная идея:} если в уравнении есть произведения вида
+\[
+    \cos\alpha\cos\beta+\sin\alpha\sin\beta,
+\]
+то нужно увидеть формулу:
+\[
+    \cos(\alpha-\beta).
+\]
+
+А если есть
+\[
+    \cos\alpha\cos\beta-\sin\alpha\sin\beta,
+\]
+то это
+\[
+    \cos(\alpha+\beta).
+\]
+
+\section*{6. Пример с формулой косинуса разности}
+
+Решим уравнение:
+\[
+    1-\cos 3x\cos 2x=\sin 3x\sin 2x.
+\]
+
+Переносим всё влево:
+\[
+    1-\cos 3x\cos 2x-\sin 3x\sin 2x=0.
+\]
+
+Выносим минус перед суммой:
+\[
+    1-(\cos 3x\cos 2x+\sin 3x\sin 2x)=0.
+\]
+
+По формуле
+\[
+    \cos(\alpha-\beta)=\cos\alpha\cos\beta+\sin\alpha\sin\beta
+\]
+получаем:
+\[
+    1-\cos(3x-2x)=0.
+\]
+
+Значит,
+\[
+    1-\cos x=0,
+\]
+\[
+    \cos x=1.
+\]
+
+Ответ:
+\[
+    \boxed{x=2\pi n,\qquad n\in\Z.}
+\]
+
+\section*{7. Пример с раскрытием \(\sin\left(\frac{\pi}{4}-x\right)\)}
+
+Решим уравнение:
+\[
+    2\sin\left(\frac{\pi}{4}-x\right)+\sqrt2\sin x=-\sqrt2.
+\]
+
+Раскрываем синус разности:
+\[
+    \sin\left(\frac{\pi}{4}-x\right)
+    =
+    \sin\frac{\pi}{4}\cos x-\cos\frac{\pi}{4}\sin x.
+\]
+
+Так как
+\[
+    \sin\frac{\pi}{4}=\cos\frac{\pi}{4}=\frac{\sqrt2}{2},
+\]
+то
+\[
+    \sin\left(\frac{\pi}{4}-x\right)
+    =
+    \frac{\sqrt2}{2}\cos x-\frac{\sqrt2}{2}\sin x.
+\]
+
+Подставляем:
+\[
+    2\left(\frac{\sqrt2}{2}\cos x-\frac{\sqrt2}{2}\sin x\right)+\sqrt2\sin x=-\sqrt2.
+\]
+
+Получаем:
+\[
+    \sqrt2\cos x-\sqrt2\sin x+\sqrt2\sin x=-\sqrt2.
+\]
+
+Слагаемые с \(\sin x\) сокращаются:
+\[
+    \sqrt2\cos x=-\sqrt2.
+\]
+
+Делим на \(\sqrt2\):
+\[
+    \cos x=-1.
+\]
+
+Ответ:
+\[
+    \boxed{x=\pi+2\pi n,\qquad n\in\Z.}
+\]
+
+\section*{8. Формулы двойного угла}
+
+\[
+    \sin 2\alpha=2\sin\alpha\cos\alpha.
+\]
+
+\[
+    \cos 2\alpha=\cos^2\alpha-\sin^2\alpha.
+\]
+
+\topic{Особенно важно:}
+если есть произведение
+\[
+    2\sin\alpha\cos\alpha,
+\]
+его можно заменить на
+\[
+    \sin 2\alpha.
+\]
+
+Если есть разность квадратов:
+\[
+    \cos^2\alpha-\sin^2\alpha,
+\]
+её можно заменить на
+\[
+    \cos 2\alpha.
+\]
+
+\section*{9. Пример с разностью четвёртых степеней}
+
+Решим уравнение:
+\[
+    \cos^4 5x-\sin^4 5x=0.
+\]
+
+Используем формулу разности квадратов:
+\[
+    a^2-b^2=(a-b)(a+b).
+\]
+
+Получаем:
+\[
+    \cos^4 5x-\sin^4 5x
+    =
+    (\cos^2 5x-\sin^2 5x)(\cos^2 5x+\sin^2 5x).
+\]
+
+По основному тригонометрическому тождеству:
+\[
+    \cos^2 5x+\sin^2 5x=1.
+\]
+
+Значит:
+\[
+    \cos^2 5x-\sin^2 5x=0.
+\]
+
+Используем формулу:
+\[
+    \cos 2\alpha=\cos^2\alpha-\sin^2\alpha.
+\]
+
+При \(\alpha=5x\):
+\[
+    \cos 10x=0.
+\]
+
+Тогда:
+\[
+    10x=\frac{\pi}{2}+\pi n,\qquad n\in\Z.
+\]
+
+Делим на \(10\):
+\[
+    \boxed{x=\frac{\pi}{20}+\frac{\pi n}{10},\qquad n\in\Z.}
+\]
+
+\section*{10. Пример с формулой \(\sin 2\alpha\)}
+
+Решим уравнение:
+\[
+    8\sin 2x\cos 2x=4.
+\]
+
+Представим коэффициент \(8\) как \(4\cdot2\):
+\[
+    4\cdot 2\sin 2x\cos 2x=4.
+\]
+
+По формуле
+\[
+    2\sin\alpha\cos\alpha=\sin 2\alpha
+\]
+при \(\alpha=2x\):
+\[
+    2\sin 2x\cos 2x=\sin 4x.
+\]
+
+Получаем:
+\[
+    4\sin 4x=4.
+\]
+
+Делим на \(4\):
+\[
+    \sin 4x=1.
+\]
+
+Тогда:
+\[
+    4x=\frac{\pi}{2}+2\pi n,\qquad n\in\Z.
+\]
+
+Ответ:
+\[
+    \boxed{x=\frac{\pi}{8}+\frac{\pi n}{2},\qquad n\in\Z.}
+\]
+
+\section*{11. Формулы понижения степени}
+
+Формулы понижения степени позволяют убрать квадрат у синуса или косинуса.
+
+\[
+    \cos^2\alpha=\frac{1+\cos 2\alpha}{2}.
+\]
+
+\[
+    \sin^2\alpha=\frac{1-\cos 2\alpha}{2}.
+\]
+
+\topic{Важно:} угол увеличивается в \(2\) раза, но степень исчезает.
+
+\section*{12. Пример с понижением степени}
+
+Решим уравнение:
+\[
+    1-2\sin^2 2x=0.
+\]
+
+Используем формулу:
+\[
+    \sin^2\alpha=\frac{1-\cos 2\alpha}{2}.
+\]
+
+При \(\alpha=2x\):
+\[
+    \sin^2 2x=\frac{1-\cos 4x}{2}.
+\]
+
+Подставляем:
+\[
+    1-2\cdot \frac{1-\cos 4x}{2}=0.
+\]
+
+Сокращаем:
+\[
+    1-(1-\cos 4x)=0.
+\]
+
+Раскрываем скобки:
+\[
+    \cos 4x=0.
+\]
+
+Тогда:
+\[
+    4x=\frac{\pi}{2}+\pi n,\qquad n\in\Z.
+\]
+
+Ответ:
+\[
+    \boxed{x=\frac{\pi}{8}+\frac{\pi n}{4},\qquad n\in\Z.}
+\]
+
+\section*{13. Алгоритм решения}
+
+\begin{enumerate}
+    \item \important{Определите тип уравнения.} Есть ли базовый случай, формула сложения, двойной угол или квадрат?
+    \item \important{Сделайте углы одинаковыми или проще.} В тригонометрии часто нужно привести выражение к одному углу.
+    \item \important{Примените подходящую формулу.} Не пропускайте скобки при подстановке.
+    \item \important{Сведите к базовому уравнению.}
+    \[
+        \sin u=a \quad \text{или} \quad \cos u=a.
+    \]
+    \item \important{Решите базовое уравнение.} Не забудьте параметр:
+    \[
+        n\in\Z.
+    \]
+    \item \important{Разделите обе части на коэффициент при \(x\).} Например, из
+    \[
+        4x=\frac{\pi}{2}+2\pi n
+    \]
+    получаем
+    \[
+        x=\frac{\pi}{8}+\frac{\pi n}{2}.
+    \]
+\end{enumerate}
+
+\section*{14. Типичные ошибки}
+
+\begin{enumerate}
+    \item \important{Забыть \(n\in\Z\).} Это обязательная часть общего ответа.
+    \item \important{Писать градусы вместо радиан.} В ЕГЭ по тригонометрии чаще используют радианы.
+    \item \important{Потерять вторую точку на окружности.} Особенно в уравнениях \(\sin x=0\) и \(\cos x=0\).
+    \item \important{Ошибиться в формуле косинуса суммы.}
+    \[
+        \cos(\alpha+\beta)=\cos\alpha\cos\beta-\sin\alpha\sin\beta.
+    \]
+    \item \important{Не поставить скобки при подстановке.} Например:
+    \[
+        1-2\sin^2 2x
+        =
+        1-2\left(\frac{1-\cos4x}{2}\right).
+    \]
+    \item \important{Неправильно делить общий ответ.} Если
+    \[
+        10x=\frac{\pi}{2}+\pi n,
+    \]
+    то
+    \[
+        x=\frac{\pi}{20}+\frac{\pi n}{10}.
+    \]
+    \item \important{Пытаться складывать неподобные слагаемые.} Например, \(\frac{\pi}{12}\) и \(\frac{\pi n}{6}\) нельзя объединить в одно число без учёта параметра \(n\).
+\end{enumerate}
+
+\section*{15. Краткая памятка}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{table}[h!]
+\caption{Формулы и базовые решения}
+\centering
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+\textbf{Ситуация} & \textbf{Что использовать} \\
+\midrule
+\(\sin x=1\) & \(x=\dfrac{\pi}{2}+2\pi n,\ n\in\Z\) \\
+\(\sin x=-1\) & \(x=-\dfrac{\pi}{2}+2\pi n,\ n\in\Z\) \\
+\(\sin x=0\) & \(x=\pi n,\ n\in\Z\) \\
+\(\cos x=1\) & \(x=2\pi n,\ n\in\Z\) \\
+\(\cos x=-1\) & \(x=\pi+2\pi n,\ n\in\Z\) \\
+\(\cos x=0\) & \(x=\dfrac{\pi}{2}+\pi n,\ n\in\Z\) \\
+\(\cos^2\alpha-\sin^2\alpha\) & \(\cos 2\alpha\) \\
+\(2\sin\alpha\cos\alpha\) & \(\sin 2\alpha\) \\
+\(\sin^2\alpha\) & \(\dfrac{1-\cos2\alpha}{2}\) \\
+\(\cos^2\alpha\) & \(\dfrac{1+\cos2\alpha}{2}\) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\newpage
+
+\section*{Тренировочный блок}
+
+\textbf{Выполните упражнения без решений.} Задачи расположены по нарастающей сложности.
+
+\subsection*{Средний уровень}
+
+\begin{enumerate}
+    \item Решите уравнение:
+    \[
+        \sin x=-1.
+    \]
+
+    \item Решите уравнение:
+    \[
+        \cos x=0.
+    \]
+
+    \item Решите уравнение:
+    \[
+        1-\cos 5x\cos 2x=\sin 5x\sin 2x.
+    \]
+\end{enumerate}
+
+\subsection*{Уровень выше среднего}
+
+\begin{enumerate}[resume]
+    \item Решите уравнение:
+    \[
+        2\sin\left(\frac{\pi}{4}-x\right)+\sqrt2\sin x=-\sqrt2.
+    \]
+
+    \item Решите уравнение:
+    \[
+        \cos^4 3x-\sin^4 3x=0.
+    \]
+
+    \item Решите уравнение:
+    \[
+        6\sin 5x\cos 5x=3.
+    \]
+
+    \item Решите уравнение:
+    \[
+        1-2\sin^2 3x=0.
+    \]
+
+    \item Решите уравнение:
+    \[
+        2\cos^2 2x-1=0.
+    \]
+
+    \item Решите уравнение:
+    \[
+        \cos 4x\cos x+\sin 4x\sin x=1.
+    \]
+\end{enumerate}
+
+\subsection*{Сложный уровень}
+
+\begin{enumerate}[resume]
+    \item Решите уравнение:
+    \[
+        4\sin\left(\frac{\pi}{6}+2x\right)
+        =
+        2\cos 2x+2\sqrt3\sin 2x.
+    \]
+\end{enumerate}
+
+
+\end{document}

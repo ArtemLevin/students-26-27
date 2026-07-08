@@ -1,0 +1,735 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx, booktabs, longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\geometry{left=18mm,right=18mm,top=18mm,bottom=20mm}
+\onehalfspacing
+
+\setlist[itemize]{leftmargin=1.2em,itemsep=0.25em,topsep=0.25em}
+\setlist[enumerate]{leftmargin=1.4em,itemsep=0.35em,topsep=0.35em}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F2F4F4}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkaccent,
+    urlcolor=darkaccent
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{textgray}{Тригонометрические уравнения}}
+\rhead{\textcolor{textgray}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\sectionline}{\vspace{0.2em}\textcolor{accent}{\hrule height 0.8pt}\vspace{0.7em}}
+\newcommand{\important}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\tg}{\mathop{\mathrm{tg}}\nolimits}
+\newcommand{\ctg}{\mathop{\mathrm{ctg}}\nolimits}
+\newcommand{\arctg}{\mathop{\mathrm{arctg}}\nolimits}
+\newcommand{\arcctg}{\mathop{\mathrm{arcctg}}\nolimits}
+
+\tkzSetUpLine[line width=1pt, color=accent]
+\tkzSetUpPoint[color=accent, fill=accent, size=3]
+\tkzSetUpLabel[color=black, font=\small]
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{30mm}
+
+{\Huge\bfseries Чек-лист\par}
+\vspace{8mm}
+{\Large\bfseries Тригонометрические уравнения\par}
+\vspace{4mm}
+{\large Общие формулы решений, аркфункции, приведение углов и замена переменной\par}
+
+\vspace{22mm}
+
+{\large Лёвин Артём Александрович эксклюзивно для Тимофея Васильченко\par}
+
+\vspace{12mm}
+
+{\large \today\par}
+
+\vfill
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent, line width=1.2pt]
+    ([xshift=25mm,yshift=22mm]current page.south west)
+    .. controls ([xshift=65mm,yshift=38mm]current page.south west)
+    and ([xshift=-70mm,yshift=10mm]current page.south east)
+    .. ([xshift=-25mm,yshift=28mm]current page.south east);
+\draw[darkaccent, line width=0.6pt]
+    ([xshift=38mm,yshift=15mm]current page.south west)
+    .. controls ([xshift=90mm,yshift=28mm]current page.south west)
+    and ([xshift=-95mm,yshift=40mm]current page.south east)
+    .. ([xshift=-38mm,yshift=18mm]current page.south east);
+\end{tikzpicture}
+
+\end{titlepage}
+
+\section*{1. Главная идея занятия}
+\sectionline
+
+При решении тригонометрических уравнений важно добиться двух вещей:
+
+\begin{enumerate}
+    \item \important{углы должны стать одинаковыми;}
+    \item \important{тригонометрические функции желательно привести к одной функции.}
+\end{enumerate}
+
+Если в уравнении встречаются разные углы, например \(2x\) и \(x+\frac{3\pi}{2}\), то сначала применяют тригонометрические формулы. После этого уравнение часто сводится к алгебраическому уравнению относительно \(\sin x\), \(\cos x\), \(\tg x\) или \(\ctg x\).
+
+\section*{2. Что такое арксинус, арккосинус и арктангенс}
+\sectionline
+
+\subsection*{Смысл аркфункций}
+
+Аркфункция помогает записать угол, если значение тригонометрической функции известно.
+
+\begin{itemize}
+    \item \(\arcsin a\) --- это угол, синус которого равен \(a\).
+    \item \(\arccos a\) --- это угол, косинус которого равен \(a\).
+    \item \(\arctg a\) --- это угол, тангенс которого равен \(a\).
+\end{itemize}
+
+Например:
+\[
+\arcsin \frac12=\frac{\pi}{6},
+\qquad
+\arcsin \frac{\sqrt2}{2}=\frac{\pi}{4},
+\qquad
+\arcsin \frac{\sqrt3}{2}=\frac{\pi}{3}.
+\]
+
+Если значение нетабличное, например
+\[
+\arccos \frac{1}{\sqrt{10}},
+\]
+то его оставляют в таком виде.
+
+\subsection*{Области значений аркфункций}
+
+Для корректной записи решений важно помнить стандартные промежутки:
+
+\[
+\arcsin a\in\left[-\frac{\pi}{2};\frac{\pi}{2}\right],
+\qquad
+\arccos a\in[0;\pi],
+\qquad
+\arctg a\in\left(-\frac{\pi}{2};\frac{\pi}{2}\right).
+\]
+
+\section*{3. Общие формулы для простейших уравнений}
+\sectionline
+
+\subsection*{Уравнение \(\sin x=a\)}
+
+Если \(-1\le a\le 1\), то:
+\[
+x=(-1)^n\arcsin a+\pi n,\qquad n\in\Z.
+\]
+
+Также можно использовать раздельную запись:
+\[
+x=\arcsin a+2\pi n
+\quad \text{или} \quad
+x=\pi-\arcsin a+2\pi n,
+\qquad n\in\Z.
+\]
+
+Если \(a>0\), это выглядит особенно наглядно:
+\[
+\sin x=a
+\quad\Longrightarrow\quad
+\begin{cases}
+x=\arcsin a+2\pi n,\\
+x=\pi-\arcsin a+2\pi n,
+\end{cases}
+\qquad n\in\Z.
+\]
+
+Если \(a>0\), то:
+\[
+\sin x=-a
+\quad\Longrightarrow\quad
+\begin{cases}
+x=-\arcsin a+2\pi n,\\
+x=\pi+\arcsin a+2\pi n,
+\end{cases}
+\qquad n\in\Z.
+\]
+
+\subsection*{Уравнение \(\cos x=a\)}
+
+Если \(-1\le a\le 1\), то:
+\[
+x=\pm\arccos a+2\pi n,\qquad n\in\Z.
+\]
+
+Если \(a>0\), то:
+\[
+\cos x=a
+\quad\Longrightarrow\quad
+x=\pm\arccos a+2\pi n,\qquad n\in\Z.
+\]
+
+Если \(a>0\), то:
+\[
+\cos x=-a
+\quad\Longrightarrow\quad
+x=\pi\pm\arccos a+2\pi n,\qquad n\in\Z.
+\]
+
+\subsection*{Уравнение \(\tg x=a\)}
+
+\[
+\tg x=a
+\quad\Longrightarrow\quad
+x=\arctg a+\pi n,\qquad n\in\Z.
+\]
+
+Если \(a>0\), то:
+\[
+\tg x=-a
+\quad\Longrightarrow\quad
+x=-\arctg a+\pi n,\qquad n\in\Z.
+\]
+
+\subsection*{Уравнение \(\ctg x=a\)}
+
+\[
+\ctg x=a
+\quad\Longrightarrow\quad
+x=\arcctg a+\pi n,\qquad n\in\Z.
+\]
+
+Для ЕГЭ часто удобнее сводить уравнения с котангенсом к тангенсу:
+\[
+\ctg x=a
+\quad\Longleftrightarrow\quad
+\tg x=\frac{1}{a},
+\qquad a\ne 0.
+\]
+
+\section*{4. Табличные значения}
+\sectionline
+
+\begin{center}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\linewidth}{@{}cXXXX@{}}
+\toprule
+\textbf{Угол} & \(0\) & \(\frac{\pi}{6}\) & \(\frac{\pi}{4}\) & \(\frac{\pi}{3}\) \\
+\midrule
+\(\sin x\) & \(0\) & \(\frac12\) & \(\frac{\sqrt2}{2}\) & \(\frac{\sqrt3}{2}\) \\
+\(\cos x\) & \(1\) & \(\frac{\sqrt3}{2}\) & \(\frac{\sqrt2}{2}\) & \(\frac12\) \\
+\(\tg x\) & \(0\) & \(\frac{\sqrt3}{3}\) & \(1\) & \(\sqrt3\) \\
+\(\ctg x\) & не определён & \(\sqrt3\) & \(1\) & \(\frac{\sqrt3}{3}\) \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Дополнительно:
+\[
+\sin\frac{\pi}{2}=1,
+\qquad
+\cos\frac{\pi}{2}=0,
+\qquad
+\tg\frac{\pi}{2}\ \text{не определён},
+\qquad
+\ctg\frac{\pi}{2}=0.
+\]
+
+\section*{5. Простейшие примеры}
+\sectionline
+
+\subsection*{Пример 1}
+
+Решить уравнение:
+\[
+\sin x=\frac{\sqrt3}{2}.
+\]
+
+Так как
+\[
+\arcsin\frac{\sqrt3}{2}=\frac{\pi}{3},
+\]
+получаем:
+\[
+x=\frac{\pi}{3}+2\pi n
+\quad \text{или} \quad
+x=\pi-\frac{\pi}{3}+2\pi n.
+\]
+Ответ:
+\[
+x=\frac{\pi}{3}+2\pi n
+\quad \text{или} \quad
+x=\frac{2\pi}{3}+2\pi n,
+\qquad n\in\Z.
+\]
+
+\subsection*{Пример 2}
+
+Решить уравнение:
+\[
+\cos x=-\frac{\sqrt3}{2}.
+\]
+
+Так как
+\[
+\arccos\frac{\sqrt3}{2}=\frac{\pi}{6},
+\]
+то:
+\[
+x=\pi\pm\frac{\pi}{6}+2\pi n.
+\]
+Ответ:
+\[
+x=\frac{5\pi}{6}+2\pi n
+\quad \text{или} \quad
+x=\frac{7\pi}{6}+2\pi n,
+\qquad n\in\Z.
+\]
+
+\section*{6. Формулы, которые чаще всего нужны для усложнения уравнений}
+\sectionline
+
+\subsection*{Формулы сложения}
+
+\[
+\cos(\alpha+\beta)=\cos\alpha\cos\beta-\sin\alpha\sin\beta.
+\]
+
+\[
+\sin(\alpha+\beta)=\sin\alpha\cos\beta+\cos\alpha\sin\beta.
+\]
+
+\[
+\cos(\alpha-\beta)=\cos\alpha\cos\beta+\sin\alpha\sin\beta.
+\]
+
+\[
+\sin(\alpha-\beta)=\sin\alpha\cos\beta-\cos\alpha\sin\beta.
+\]
+
+\subsection*{Формулы двойного угла}
+
+\[
+\sin 2x=2\sin x\cos x.
+\]
+
+\[
+\cos 2x=\cos^2x-\sin^2x.
+\]
+
+\[
+\cos 2x=1-2\sin^2x.
+\]
+
+\[
+\cos 2x=2\cos^2x-1.
+\]
+
+Выбор формы зависит от того, какая функция уже есть в уравнении. Если рядом стоит \(\sin x\), часто удобно использовать:
+\[
+\cos 2x=1-2\sin^2x.
+\]
+Если рядом стоит \(\cos x\), часто удобно использовать:
+\[
+\cos 2x=2\cos^2x-1.
+\]
+
+\subsection*{Основное тригонометрическое тождество}
+
+\[
+\sin^2x+\cos^2x=1.
+\]
+
+Отсюда:
+\[
+\sin^2x=1-\cos^2x,
+\qquad
+\cos^2x=1-\sin^2x.
+\]
+
+\section*{7. Алгоритм решения более сложного тригонометрического уравнения}
+\sectionline
+
+\begin{enumerate}
+    \item Посмотрите, одинаковые ли углы в уравнении.
+    \item Если углы разные, примените формулы сложения, приведения или двойного угла.
+    \item Постарайтесь привести всё к одной функции: только к \(\sin x\), только к \(\cos x\), только к \(\tg x\) и т.д.
+    \item Если появляется повторяющийся элемент, например \(\sin x\), сделайте замену:
+    \[
+    t=\sin x.
+    \]
+    \item Обязательно запишите ограничение:
+    \[
+    -1\le t\le 1
+    \quad \text{для } t=\sin x \text{ или } t=\cos x.
+    \]
+    \item Решите полученное алгебраическое уравнение.
+    \item Отбросьте значения \(t\), которые не попадают в допустимый промежуток.
+    \item Сделайте обратную замену и решите простейшее тригонометрическое уравнение.
+\end{enumerate}
+
+\section*{8. Пример с заменой переменной}
+\sectionline
+
+Решить уравнение:
+\[
+\cos 2x-\cos\left(\frac{3\pi}{2}+x\right)+2=0.
+\]
+
+Сначала раскроем второй косинус:
+\[
+\cos\left(\frac{3\pi}{2}+x\right)
+=
+\cos\frac{3\pi}{2}\cos x-\sin\frac{3\pi}{2}\sin x.
+\]
+Так как
+\[
+\cos\frac{3\pi}{2}=0,
+\qquad
+\sin\frac{3\pi}{2}=-1,
+\]
+получаем:
+\[
+\cos\left(\frac{3\pi}{2}+x\right)=\sin x.
+\]
+
+Тогда исходное уравнение принимает вид:
+\[
+\cos2x-\sin x+2=0.
+\]
+
+Используем формулу:
+\[
+\cos2x=1-2\sin^2x.
+\]
+Получаем:
+\[
+1-2\sin^2x-\sin x+2=0.
+\]
+\[
+-2\sin^2x-\sin x+3=0.
+\]
+Умножим на \(-1\):
+\[
+2\sin^2x+\sin x-3=0.
+\]
+
+Сделаем замену:
+\[
+t=\sin x,
+\qquad
+-1\le t\le 1.
+\]
+Тогда:
+\[
+2t^2+t-3=0.
+\]
+
+Дискриминант:
+\[
+D=1-4\cdot2\cdot(-3)=25.
+\]
+
+Корни:
+\[
+t_1=\frac{-1+5}{4}=1,
+\qquad
+t_2=\frac{-1-5}{4}=-\frac32.
+\]
+
+Корень \(t_2=-\frac32\) не подходит, так как
+\[
+-\frac32<-1.
+\]
+
+Остаётся:
+\[
+\sin x=1.
+\]
+Ответ:
+\[
+x=\frac{\pi}{2}+2\pi n,
+\qquad n\in\Z.
+\]
+
+\section*{9. Как проверять корни после замены}
+\sectionline
+
+Если сделана замена
+\[
+t=\sin x
+\quad \text{или} \quad
+t=\cos x,
+\]
+то обязательно:
+\[
+-1\le t\le 1.
+\]
+
+Например, если получен корень
+\[
+t=\frac{7+\sqrt{33}}{4},
+\]
+то он не подходит, так как
+\[
+\frac{7+\sqrt{33}}{4}>1.
+\]
+Действительно:
+\[
+\frac{7+\sqrt{33}}{4}>1
+\quad\Longleftrightarrow\quad
+7+\sqrt{33}>4
+\quad\Longleftrightarrow\quad
+\sqrt{33}>-3,
+\]
+что верно. Значит, число больше \(1\).
+
+Если получен корень
+\[
+t=\frac{7-\sqrt{33}}{4},
+\]
+то нужно проверить, что он лежит в промежутке \([-1;1]\). Так как \(\sqrt{33}<7\), число положительно. Достаточно проверить, что оно меньше \(1\):
+\[
+\frac{7-\sqrt{33}}{4}<1
+\quad\Longleftrightarrow\quad
+7-\sqrt{33}<4
+\quad\Longleftrightarrow\quad
+3<\sqrt{33}
+\quad\Longleftrightarrow\quad
+9<33.
+\]
+Значит,
+\[
+0<\frac{7-\sqrt{33}}{4}<1.
+\]
+
+\section*{10. Типичные ошибки}
+\sectionline
+
+\begin{enumerate}
+    \item \important{Пишут \(2\pi n\) вместо \(\pi n\) для тангенса.}  
+    Для \(\tg x=a\) период равен \(\pi\), поэтому:
+    \[
+    x=\arctg a+\pi n.
+    \]
+
+    \item \important{Забывают второй корень у синуса или косинуса.}  
+    Уравнения \(\sin x=a\) и \(\cos x=a\) обычно дают две серии решений на периоде \(2\pi\).
+
+    \item \important{Не проверяют ограничение после замены.}  
+    Если \(t=\sin x\) или \(t=\cos x\), то корень \(t\) обязан лежать в \([-1;1]\).
+
+    \item \important{Меняют знак неравенства неправильно.}  
+    При умножении или делении неравенства на отрицательное число знак меняется на противоположный.
+
+    \item \important{Не приводят углы к одинаковому виду.}  
+    Если в уравнении есть \(2x\), \(x+\frac{3\pi}{2}\), \(x\), сначала нужно использовать формулы.
+
+    \item \important{Используют не ту формулу двойного угла.}  
+    Формула выбирается под нужную функцию. Если требуется перейти к \(\sin x\), используйте
+    \[
+    \cos2x=1-2\sin^2x.
+    \]
+
+    \item \important{Теряют условие \(n\in\Z\).}  
+    В ответе к тригонометрическому уравнению обязательно указывать:
+    \[
+    n\in\Z.
+    \]
+\end{enumerate}
+
+\section*{11. Короткая памятка}
+\sectionline
+
+\begin{itemize}
+    \item \(\sin x=a\): две серии решений, если \(-1<a<1\).
+    \item \(\cos x=a\): удобно писать \(x=\pm\arccos a+2\pi n\).
+    \item \(\tg x=a\): период \(\pi\), а не \(2\pi\).
+    \item Разные углы нужно привести к одинаковым через формулы.
+    \item После замены \(t=\sin x\) или \(t=\cos x\) проверяйте \(-1\le t\le1\).
+    \item Если значение табличное, аркфункцию можно заменить конкретным углом.
+    \item Если значение нетабличное, аркфункцию оставляют в ответе.
+\end{itemize}
+
+\newpage
+
+\section*{Тренировочный блок}
+\sectionline
+
+\textbf{Решите уравнения.} Ответы запишите с указанием \(n\in\Z\). Задачи расположены по нарастающей сложности.
+
+\begin{enumerate}
+    \item Решите уравнение:
+    \[
+    \sin x=\frac{\sqrt3}{2}.
+    \]
+
+    \item Решите уравнение:
+    \[
+    \cos x=-\frac{\sqrt2}{2}.
+    \]
+
+    \item Решите уравнение:
+    \[
+    \tg x=-\sqrt3.
+    \]
+
+    \item Решите уравнение:
+    \[
+    \sin x=-\frac12.
+    \]
+
+    \item Решите уравнение:
+    \[
+    \cos x=\frac{1}{\sqrt{10}}.
+    \]
+
+    \item Решите уравнение:
+    \[
+    \cos 2x-\sin x+2=0.
+    \]
+
+    \item Решите уравнение:
+    \[
+    \cos 2x+\cos x-2=0.
+    \]
+
+    \item Решите уравнение:
+    \[
+    \cos\left(\frac{3\pi}{2}+x\right)+2\sin^2x-3\sin x=0.
+    \]
+
+    \item Решите уравнение:
+    \[
+    2\cos^2x-3\cos x+1=0.
+    \]
+
+    \item Решите уравнение:
+    \[
+    \sin\left(x+\frac{\pi}{2}\right)+\cos2x=0.
+    \]
+\end{enumerate}
+
+\newpage
+
+\section*{Ответы}
+\sectionline
+
+\begin{center}
+\renewcommand{\arraystretch}{1.55}
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+1 &
+\[
+x=\frac{\pi}{3}+2\pi n
+\quad \text{или} \quad
+x=\frac{2\pi}{3}+2\pi n,\quad n\in\Z.
+\]
+\\
+
+2 &
+\[
+x=\frac{3\pi}{4}+2\pi n
+\quad \text{или} \quad
+x=\frac{5\pi}{4}+2\pi n,\quad n\in\Z.
+\]
+\\
+
+3 &
+\[
+x=-\frac{\pi}{3}+\pi n,\quad n\in\Z.
+\]
+\\
+
+4 &
+\[
+x=-\frac{\pi}{6}+2\pi n
+\quad \text{или} \quad
+x=\frac{7\pi}{6}+2\pi n,\quad n\in\Z.
+\]
+\\
+
+5 &
+\[
+x=\pm\arccos\frac{1}{\sqrt{10}}+2\pi n,\quad n\in\Z.
+\]
+\\
+
+6 &
+\[
+x=\frac{\pi}{2}+2\pi n,\quad n\in\Z.
+\]
+\\
+
+7 &
+\[
+x=2\pi n,\quad n\in\Z.
+\]
+\\
+
+8 &
+\[
+x=\frac{\pi}{2}+2\pi n
+\quad \text{или} \quad
+x=\frac{7\pi}{6}+2\pi n
+\quad \text{или} \quad
+x=\frac{11\pi}{6}+2\pi n,\quad n\in\Z.
+\]
+\\
+
+9 &
+\[
+x=2\pi n
+\quad \text{или} \quad
+x=\pm\frac{\pi}{3}+2\pi n,\quad n\in\Z.
+\]
+\\
+
+10 &
+\[
+x=\frac{\pi}{3}+2\pi n
+\quad \text{или} \quad
+x=\frac{5\pi}{3}+2\pi n,\quad n\in\Z.
+\]
+\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\end{document}

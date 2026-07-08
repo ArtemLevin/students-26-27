@@ -1,0 +1,832 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx, booktabs, longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{titlesec}
+
+\geometry{left=18mm,right=18mm,top=18mm,bottom=20mm}
+\hypersetup{hidelinks}
+\onehalfspacing
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F4F6F6}
+
+\color{textgray}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Тригонометрические уравнения}
+\fancyhead[R]{\small Тимофей Васильченко}
+\fancyfoot[C]{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+\titleformat{\section}
+  {\Large\bfseries\color{darkaccent}}
+  {\thesection}{0.8em}{}
+
+\titleformat{\subsection}
+  {\large\bfseries\color{accent}}
+  {\thesubsection}{0.8em}{}
+
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.25em,topsep=0.25em}
+\setlist[enumerate]{leftmargin=1.7em,itemsep=0.35em,topsep=0.35em}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\ans}[1]{\(\displaystyle #1\)}
+\newcommand{\arcctg}{\operatorname{arcctg}}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+
+\vspace*{2.1cm}
+
+{\color{accent}\rule{0.75\linewidth}{0.8pt}\par}
+\vspace{1.2cm}
+
+{\Huge\bfseries\color{darkaccent} Чек-лист\par}
+\vspace{0.5cm}
+
+{\Large\bfseries Тригонометрические уравнения\par}
+\vspace{0.25cm}
+{\large Корни, равносильные переходы, модули и отбор решений\par}
+
+\vspace{1.8cm}
+
+{\large ЕГЭ\par}
+
+\vfill
+
+{\large Лёвин Артём Александрович\\[0.2cm]
+эксклюзивно для Тимофея Васильченко\par}
+
+\vspace{0.8cm}
+
+{\large \today\par}
+
+\vspace*{1.5cm}
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent,line width=1.1pt]
+    ([xshift=2.0cm,yshift=2.1cm]current page.south west)
+    .. controls ([xshift=5.2cm,yshift=3.0cm]current page.south west)
+    and ([xshift=-5.2cm,yshift=1.2cm]current page.south east)
+    .. ([xshift=-2.0cm,yshift=2.3cm]current page.south east);
+  \draw[darkaccent,line width=0.55pt]
+    ([xshift=2.8cm,yshift=1.55cm]current page.south west)
+    .. controls ([xshift=6.5cm,yshift=2.0cm]current page.south west)
+    and ([xshift=-6.0cm,yshift=3.1cm]current page.south east)
+    .. ([xshift=-2.8cm,yshift=1.65cm]current page.south east);
+\end{tikzpicture}
+
+\end{titlepage}
+
+\section{Главная идея}
+
+В уравнениях с корнями, модулями и тригонометрическими функциями нельзя просто механически возводить обе части в квадрат или раскрывать модуль. Каждый такой переход должен быть равносильным.
+
+Главная задача решения:
+
+\[
+\text{не потерять корни и не добавить лишние.}
+\]
+
+Для этого нужно:
+
+\begin{itemize}
+  \item записывать ограничения перед возведением в квадрат;
+  \item раскрывать модуль по определению;
+  \item проверять найденные значения тригонометрических функций;
+  \item отбирать решения на тригонометрической окружности;
+  \item аккуратно работать с отрицательными значениями в формулах для \(\cos x\), \(\sin x\), \(\tg x\).
+\end{itemize}
+
+\section{Уравнение вида \(\sqrt{f(x)}=g(x)\)}
+
+\subsection{Равносильный переход}
+
+Если слева корень, а справа выражение без корня, то используем переход:
+
+\[
+\sqrt{f(x)}=g(x)
+\quad\Longleftrightarrow\quad
+\begin{cases}
+g(x)\ge 0,\\
+f(x)=g^2(x).
+\end{cases}
+\]
+
+Ограничение ставится именно на правую часть \(g(x)\), потому что корень чётной степени не может быть отрицательным.
+
+Условие \(f(x)\ge0\) отдельно писать не требуется: из равенства
+
+\[
+f(x)=g^2(x)
+\]
+
+автоматически следует, что \(f(x)\ge0\).
+
+\subsection{Пример}
+
+Решим уравнение:
+
+\[
+\sqrt{\cos^2 x}=\frac12-\cos x.
+\]
+
+Так как \(\sqrt{\cos^2 x}=|\cos x|\), можно решить через модуль. Но для демонстрации равносильного перехода рассмотрим именно схему с корнем:
+
+\[
+\sqrt{\cos^2 x}=\frac12-\cos x
+\quad\Longleftrightarrow\quad
+\begin{cases}
+\frac12-\cos x\ge0,\\
+\cos^2x=\left(\frac12-\cos x\right)^2.
+\end{cases}
+\]
+
+Первое условие:
+
+\[
+\cos x\le\frac12.
+\]
+
+Второе условие:
+
+\[
+\cos^2x=\frac14-\cos x+\cos^2x.
+\]
+
+Сокращаем \(\cos^2x\):
+
+\[
+0=\frac14-\cos x,
+\]
+
+\[
+\cos x=\frac14.
+\]
+
+Теперь проверяем ограничение:
+
+\[
+\frac14\le\frac12.
+\]
+
+Ограничение выполнено, значит:
+
+\[
+\cos x=\frac14.
+\]
+
+Ответ:
+
+\[
+x=\pm\arccos\frac14+2\pi n,\qquad n\in\Z.
+\]
+
+\section{Когда нужно сравнивать полученное число}
+
+Иногда после замены получается значение, которое нужно сравнить с ограничением.
+
+Например, если получено
+
+\[
+\cos x=2-\sqrt2,
+\]
+
+а ограничение требует
+
+\[
+\cos x\le\frac12,
+\]
+
+то нужно проверить:
+
+\[
+2-\sqrt2\stackrel{?}{\le}\frac12.
+\]
+
+Сравним:
+
+\[
+2-\sqrt2\le\frac12
+\quad\Longleftrightarrow\quad
+-\sqrt2\le-\frac32.
+\]
+
+Домножаем на \(-1\), знак меняется:
+
+\[
+\sqrt2\ge\frac32.
+\]
+
+Возводим обе части в квадрат:
+
+\[
+2\ge\frac94.
+\]
+
+Это неверно, значит
+
+\[
+2-\sqrt2>\frac12.
+\]
+
+Такое значение не подходит под ограничение \(\cos x\le\frac12\).
+
+\section{Уравнение вида \(\sqrt{f(x)}=\sqrt{g(x)}\)}
+
+\subsection{Равносильный переход}
+
+Если корни стоят с обеих сторон, то достаточно записать неотрицательность одной части и приравнять подкоренные выражения:
+
+\[
+\sqrt{f(x)}=\sqrt{g(x)}
+\quad\Longleftrightarrow\quad
+\begin{cases}
+f(x)\ge0,\\
+f(x)=g(x).
+\end{cases}
+\]
+
+Можно также писать:
+
+\[
+\sqrt{f(x)}=\sqrt{g(x)}
+\quad\Longleftrightarrow\quad
+\begin{cases}
+g(x)\ge0,\\
+f(x)=g(x).
+\end{cases}
+\]
+
+Обычно выбирают то ограничение, которое проще отбирать.
+
+\subsection{Пример}
+
+Решим уравнение:
+
+\[
+\sqrt{\sin x}=\sqrt{\cos x}.
+\]
+
+Переходим к системе:
+
+\[
+\begin{cases}
+\sin x\ge0,\\
+\sin x=\cos x.
+\end{cases}
+\]
+
+Из уравнения:
+
+\[
+\sin x=\cos x.
+\]
+
+Так как \(\cos x\ne0\) для решений этого уравнения, делим на \(\cos x\):
+
+\[
+\tg x=1.
+\]
+
+Отсюда:
+
+\[
+x=\frac{\pi}{4}+\pi n,\qquad n\in\Z.
+\]
+
+Теперь отбираем по условию \(\sin x\ge0\). На окружности подходят точки в верхней полуплоскости.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.15,>=Stealth]
+  \draw[->] (-1.35,0)--(1.45,0) node[right] {\(\cos x\)};
+  \draw[->] (0,-1.35)--(0,1.45) node[above] {\(\sin x\)};
+  \draw[darkaccent,line width=0.9pt] (0,0) circle (1);
+  \draw[accent,line width=2pt] (1,0) arc (0:180:1);
+
+  \coordinate (A) at ({cos(45)},{sin(45)});
+  \coordinate (B) at ({cos(225)},{sin(225)});
+
+  \fill[accent] (A) circle (2pt);
+  \fill[textgray] (B) circle (1.8pt);
+
+  \draw[accent,dashed] (0,0)--(A);
+  \draw[textgray,dashed] (0,0)--(B);
+
+  \node[above right] at (A) {\(\frac{\pi}{4}\)};
+  \node[below left] at (B) {\(\frac{5\pi}{4}\)};
+  \node[above left] at (-0.95,0.1) {\small \(\sin x\ge0\)};
+\end{tikzpicture}
+\end{center}
+
+Ответ:
+
+\[
+x=\frac{\pi}{4}+2\pi n,\qquad n\in\Z.
+\]
+
+\section{Как решать уравнение после возведения в квадрат}
+
+После равносильного перехода часто появляется квадратное уравнение относительно \(\sin x\) или \(\cos x\).
+
+\subsection{Замена}
+
+Если уравнение содержит только \(\cos x\), удобно сделать замену:
+
+\[
+t=\cos x,\qquad -1\le t\le1.
+\]
+
+Если уравнение содержит только \(\sin x\), удобно сделать замену:
+
+\[
+t=\sin x,\qquad -1\le t\le1.
+\]
+
+Ограничение \(-1\le t\le1\) обязательно помнить, потому что синус и косинус не могут быть больше \(1\) или меньше \(-1\).
+
+\subsection{Пример}
+
+Пусть после преобразований получено:
+
+\[
+2\sin^2x+2\sin x-1=0.
+\]
+
+Делаем замену:
+
+\[
+t=\sin x,\qquad -1\le t\le1.
+\]
+
+Получаем:
+
+\[
+2t^2+2t-1=0.
+\]
+
+Дискриминант:
+
+\[
+D=2^2-4\cdot2\cdot(-1)=12.
+\]
+
+\[
+t_{1,2}=\frac{-2\pm\sqrt{12}}{4}
+=\frac{-2\pm2\sqrt3}{4}
+=\frac{-1\pm\sqrt3}{2}.
+\]
+
+Проверяем значения:
+
+\[
+t_1=\frac{-1+\sqrt3}{2}\in[-1;1],
+\]
+
+\[
+t_2=\frac{-1-\sqrt3}{2}<-1.
+\]
+
+Значит, второе значение не подходит, а первое даёт:
+
+\[
+\sin x=\frac{\sqrt3-1}{2}.
+\]
+
+\section{Отбор корней по ограничению}
+
+Если ограничение записано для одной функции, а после решения получена другая функция, нужно отбирать решения на окружности.
+
+Например, если получено:
+
+\[
+\sin x=a,\qquad 0<a<1,
+\]
+
+а ограничение:
+
+\[
+\cos x\le0,
+\]
+
+то из двух решений за период нужно взять то, которое лежит во второй четверти.
+
+\[
+x=\arcsin a+2\pi n
+\]
+
+лежит в первой четверти и не подходит, потому что там \(\cos x>0\).
+
+\[
+x=\pi-\arcsin a+2\pi n
+\]
+
+лежит во второй четверти и подходит, потому что там \(\cos x<0\).
+
+\begin{center}
+\begin{tikzpicture}[scale=1.15,>=Stealth]
+  \draw[->] (-1.35,0)--(1.45,0) node[right] {\(\cos x\)};
+  \draw[->] (0,-1.35)--(0,1.45) node[above] {\(\sin x\)};
+  \draw[darkaccent,line width=0.9pt] (0,0) circle (1);
+  \draw[accent,line width=2pt] (0,1) arc (90:270:1);
+
+  \coordinate (A) at ({cos(35)},{sin(35)});
+  \coordinate (B) at ({cos(145)},{sin(145)});
+
+  \draw[textgray,dashed] (0,0)--(A);
+  \draw[accent,dashed] (0,0)--(B);
+
+  \fill[textgray] (A) circle (1.8pt);
+  \fill[accent] (B) circle (2pt);
+
+  \node[above right] at (A) {\(\arcsin a\)};
+  \node[above left] at (B) {\(\pi-\arcsin a\)};
+  \node[left] at (-1.2,-0.2) {\small \(\cos x\le0\)};
+\end{tikzpicture}
+\end{center}
+
+\section{Уравнения с отрицательным значением косинуса}
+
+Если получено:
+
+\[
+\cos x=-a,\qquad 0<a<1,
+\]
+
+то лучше сначала вынести минус отдельно:
+
+\[
+\cos x=-a.
+\]
+
+Тогда решения можно записать так:
+
+\[
+x=\pm\arccos(-a)+2\pi n,\qquad n\in\Z.
+\]
+
+Но часто удобнее использовать положительное число \(a\):
+
+\[
+\cos x=-a
+\quad\Longleftrightarrow\quad
+x=\pi\pm\arccos a+2\pi n,\qquad n\in\Z.
+\]
+
+Например:
+
+\[
+\cos x=\frac{2-\sqrt{26}}{2}.
+\]
+
+Это число отрицательно, потому что \(\sqrt{26}>2\). Выносим минус:
+
+\[
+\frac{2-\sqrt{26}}{2}
+=
+-\frac{\sqrt{26}-2}{2}.
+\]
+
+Значит:
+
+\[
+\cos x=-\frac{\sqrt{26}-2}{2}.
+\]
+
+Ответ записываем через положительное число:
+
+\[
+x=\pi\pm\arccos\frac{\sqrt{26}-2}{2}+2\pi n,\qquad n\in\Z.
+\]
+
+\section{Уравнения с модулем}
+
+\subsection{Определение модуля}
+
+Модуль раскрывается по правилу:
+
+\[
+|A|=
+\begin{cases}
+A, & A\ge0,\\
+-A, & A<0.
+\end{cases}
+\]
+
+Поэтому уравнение с модулем обычно разбивается на две системы.
+
+\subsection{Пример}
+
+Решим уравнение:
+
+\[
+|\sin x|=\cos x.
+\]
+
+Раскрываем модуль по определению:
+
+\[
+\begin{cases}
+\sin x\ge0,\\
+\sin x=\cos x
+\end{cases}
+\quad\text{или}\quad
+\begin{cases}
+\sin x<0,\\
+-\sin x=\cos x.
+\end{cases}
+\]
+
+Первая система:
+
+\[
+\sin x=\cos x
+\quad\Longleftrightarrow\quad
+\tg x=1.
+\]
+
+\[
+x=\frac{\pi}{4}+\pi n,\qquad n\in\Z.
+\]
+
+С учётом \(\sin x\ge0\) подходит:
+
+\[
+x=\frac{\pi}{4}+2\pi n.
+\]
+
+Вторая система:
+
+\[
+-\sin x=\cos x
+\quad\Longleftrightarrow\quad
+\tg x=-1.
+\]
+
+\[
+x=-\frac{\pi}{4}+\pi n,\qquad n\in\Z.
+\]
+
+С учётом \(\sin x<0\) подходит:
+
+\[
+x=\frac{7\pi}{4}+2\pi n.
+\]
+
+Ответ:
+
+\[
+x=\frac{\pi}{4}+2\pi n
+\quad\text{или}\quad
+x=\frac{7\pi}{4}+2\pi n,\qquad n\in\Z.
+\]
+
+\section{Когда вместо корней лучше использовать понижение степени}
+
+Если в уравнении появляется \(\sin^2x\) или \(\cos^2x\), иногда лучше не извлекать квадратный корень, а использовать формулы понижения степени.
+
+\[
+\sin^2x=\frac{1-\cos2x}{2},
+\qquad
+\cos^2x=\frac{1+\cos2x}{2}.
+\]
+
+Например:
+
+\[
+\sin^2x=\frac12.
+\]
+
+Можно записать:
+
+\[
+\frac{1-\cos2x}{2}=\frac12.
+\]
+
+Отсюда:
+
+\[
+1-\cos2x=1,
+\]
+
+\[
+\cos2x=0.
+\]
+
+Тогда:
+
+\[
+2x=\frac{\pi}{2}+\pi n,
+\]
+
+\[
+x=\frac{\pi}{4}+\frac{\pi n}{2},\qquad n\in\Z.
+\]
+
+Это короче, чем отдельно решать
+
+\[
+\sin x=\frac1{\sqrt2}
+\quad\text{и}\quad
+\sin x=-\frac1{\sqrt2}.
+\]
+
+\section{Оформление решения на ЕГЭ}
+
+\begin{itemize}
+  \item Не пишите сразу только один подходящий корень, если перед этим уравнение даёт два корня. Сначала покажите оба, затем объясните отбор.
+  \item Не используйте неясную запись \(\pm\), если она скрывает разные случаи отбора.
+  \item Если делите на \(\sin x\) или \(\cos x\), сначала объясните, почему делитель не равен нулю.
+  \item Если получаете значение вида \(\frac{\sqrt5-1}{2}\), отдельно проверьте, что оно лежит в промежутке \([-1;1]\).
+  \item Если значение отрицательное и записывается через корень, удобно вынести минус и работать с положительным числом.
+  \item Пишите решение в столбик: так ясно видно, что из чего следует.
+\end{itemize}
+
+\section{Типичные ошибки}
+
+\begin{enumerate}
+  \item \textbf{Возвести в квадрат без ограничения.}
+
+  Нельзя переходить от \(\sqrt{f(x)}=g(x)\) сразу к \(f(x)=g^2(x)\). Нужно добавить \(g(x)\ge0\).
+
+  \item \textbf{Поставить ограничение не на ту часть.}
+
+  В уравнении \(\sqrt{f(x)}=g(x)\) основное ограничение ставится на \(g(x)\), а не на \(f(x)\).
+
+  \item \textbf{Забыть диапазон синуса и косинуса.}
+
+  Значения \(\sin x\) и \(\cos x\) лежат только в промежутке \([-1;1]\).
+
+  \item \textbf{Не отобрать корни по ограничению.}
+
+  Если после возведения в квадрат получено тригонометрическое уравнение, его корни нужно проверить по системе.
+
+  \item \textbf{Потерять ветку при раскрытии модуля.}
+
+  Модуль раскрывается двумя случаями, а не одним.
+
+  \item \textbf{Делить на \(\sin x\) или \(\cos x\) без проверки.}
+
+  Деление на ноль недопустимо. Нужно заранее исключить нулевой случай.
+
+  \item \textbf{Неверно записать ответ при отрицательном значении косинуса.}
+
+  Для \(\cos x=-a\), где \(0<a<1\), удобно писать
+  \[
+  x=\pi\pm\arccos a+2\pi n.
+  \]
+
+  \item \textbf{Считать, что найденное число ``очевидно'' подходит.}
+
+  Для выражений с корнями нужно строго сравнивать с \(1\), \(-1\), \(0\) или другим ограничением.
+\end{enumerate}
+
+\section{Короткий чек-лист перед ответом}
+
+Перед записью ответа проверьте:
+
+\begin{itemize}
+  \item все ограничения записаны до возведения в квадрат;
+  \item после замены \(t=\sin x\) или \(t=\cos x\) учтено \(-1\le t\le1\);
+  \item все найденные значения проверены по ограничениям;
+  \item при модуле рассмотрены оба случая;
+  \item если была тригонометрическая окружность, выбран правильный сектор;
+  \item если значение отрицательное, ответ записан корректно;
+  \item в ответе указано \(n\in\Z\).
+\end{itemize}
+
+\newpage
+
+\section*{Тренировочный блок}
+
+Решите уравнения. Ответы запишите в общем виде.
+
+\subsection*{Средний уровень}
+
+\begin{enumerate}
+  \item
+  \[
+  \sqrt{\sin x}=\sqrt{\cos x}.
+  \]
+
+  \item
+  \[
+  \sqrt{\cos^2x}=\cos x.
+  \]
+
+  \item
+  \[
+  |\sin x|=\sin x.
+  \]
+\end{enumerate}
+
+\subsection*{Выше среднего уровня}
+
+\begin{enumerate}[resume]
+  \item
+  \[
+  \sqrt{\sin x}=-\cos x.
+  \]
+
+  \item
+  \[
+  \sqrt{\cos x}=\sin x.
+  \]
+
+  \item
+  \[
+  \sqrt{\sin^2x}=\frac12.
+  \]
+
+  \item
+  \[
+  |\cos x|=\sin x.
+  \]
+
+  \item
+  \[
+  \sqrt{2\sin x+1}=\cos x.
+  \]
+
+  \item
+  \[
+  \sqrt{\cos^2x}=\frac12-\cos x.
+  \]
+\end{enumerate}
+
+\subsection*{Сложный уровень}
+
+\begin{enumerate}[resume]
+  \item
+  \[
+  \sqrt{1+\sin x}=|\cos x|.
+  \]
+\end{enumerate}
+
+\newpage
+
+\section*{Ответы}
+
+\renewcommand{\arraystretch}{1.45}
+
+\begin{table}[h!]
+\centering
+\caption{Ответы к тренировочному блоку}
+\begin{tabularx}{\linewidth}{cY}
+\toprule
+№ & Ответ \\
+\midrule
+1 & \ans{x=\frac{\pi}{4}+2\pi n,\quad n\in\Z} \\
+
+2 & \ans{x\in\left[-\frac{\pi}{2}+2\pi n;\frac{\pi}{2}+2\pi n\right],\quad n\in\Z} \\
+
+3 & \ans{x\in[2\pi n;\pi+2\pi n],\quad n\in\Z} \\
+
+4 & \ans{x=\frac{3\pi}{4}+2\pi n,\quad n\in\Z} \\
+
+5 & \ans{x=\frac{\pi}{6}+2\pi n,\quad n\in\Z} \\
+
+6 & \ans{x=\frac{\pi}{6}+\pi n\quad\text{или}\quad x=\frac{5\pi}{6}+\pi n,\quad n\in\Z} \\
+
+7 & \ans{x=\frac{\pi}{4}+2\pi n\quad\text{или}\quad x=\frac{3\pi}{4}+2\pi n,\quad n\in\Z} \\
+
+8 & \ans{x=2\pi n\quad\text{или}\quad x=\pi-\arcsin\frac{\sqrt5-1}{2}+2\pi n,\quad n\in\Z} \\
+
+9 & \ans{x=\pm\arccos\frac14+2\pi n,\quad n\in\Z} \\
+
+10 & \ans{x=2\pi n,\quad n\in\Z} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\end{document}
