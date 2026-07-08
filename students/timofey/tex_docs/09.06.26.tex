@@ -1,0 +1,720 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx, booktabs, longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\geometry{left=18mm,right=18mm,top=18mm,bottom=20mm}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{linegray}{HTML}{B8C8C8}
+\definecolor{softgray}{HTML}{F3F7F7}
+
+\hypersetup{hidelinks}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{darkaccent}{Тригонометрические уравнения}}
+\rhead{\textcolor{darkaccent}{Тимофей Васильченко}}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{linegray}\leaders\hrule height \headrulewidth\hfill}}
+
+\setlist[itemize]{leftmargin=1.15cm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=1.1cm,itemsep=3pt,topsep=3pt}
+
+\newcommand{\sectionline}{\vspace{2mm}{\color{linegray}\hrule height 0.5pt}\vspace{2mm}}
+\newcommand{\important}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{28mm}
+
+{\Large \textcolor{darkaccent}{\textbf{Чек-лист}}}
+
+\vspace{6mm}
+
+{\huge \textbf{Тригонометрические уравнения}}\\[2mm]
+{\Large \textbf{формулы преобразования и специальные замены}}
+
+\vspace{18mm}
+
+{\large Лёвин Артём Александрович}\\[1mm]
+{\large эксклюзивно для Тимофея Васильченко}
+
+\vspace{12mm}
+
+{\large \today}
+
+\vfill
+
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent,line width=1.1pt]
+  (-5.7,0) .. controls (-3.8,0.9) and (-2.1,-0.8) .. (-0.3,0.15)
+  .. controls (1.6,1.05) and (3.5,-0.65) .. (5.7,0.2);
+\draw[linegray,line width=0.6pt]
+  (-5.2,-0.35) .. controls (-3.0,0.25) and (-1.4,-0.5) .. (0.4,-0.2)
+  .. controls (2.4,0.2) and (3.7,-0.3) .. (5.2,-0.1);
+\end{tikzpicture}
+
+\vspace{12mm}
+\end{center}
+\end{titlepage}
+
+\setcounter{page}{2}
+
+\section*{\textcolor{darkaccent}{1. Главная цель преобразований}}
+
+В тригонометрических уравнениях почти всегда нужно добиться двух вещей:
+
+\[
+\boxed{\text{одинаковые углы}}
+\qquad\text{и}\qquad
+\boxed{\text{одинаковые функции}}.
+\]
+
+Если в уравнении стоят разные углы, например
+\[
+\cos x,\qquad \cos 2x,\qquad \cos 5x,
+\]
+то обычное раскрытие двойного угла может не помочь. Тогда нужно искать формулы, которые меняют сумму, разность или произведение тригонометрических функций.
+
+\important{Главная мысль.} Если стандартная формула не приводит к одинаковым углам, ищем специальную формулу.
+
+\sectionline
+
+\section*{\textcolor{darkaccent}{2. Алгоритм поиска идеи в новой строке}}
+
+Каждую новую строку решения удобно проверять по одному и тому же порядку.
+
+\begin{enumerate}
+\item Можно ли что-то \important{вынести}?
+\item Можно ли применить \important{формулы сокращённого умножения}?
+\item Если есть дроби: можно ли привести к \important{общему знаменателю}?
+\item Можно ли сделать \important{замену}?
+\item Если слагаемых четыре: возможны ли \important{группировка и двойное вынесение}?
+\item Если ничего не сработало: ищем \important{специальную тригонометрическую формулу}.
+\item Если и это не сработало: думаем о \important{специальном методе}: ограниченность, монотонность, область значений, нестандартная замена.
+\end{enumerate}
+
+\important{Важно.} Анализируем не только всё задание целиком, но и каждую новую строку решения.
+
+\sectionline
+
+\section*{\textcolor{darkaccent}{3. Формулы суммы и разности}}
+
+Эти формулы нужны, когда в уравнении встречаются суммы или разности синусов и косинусов с разными углами.
+
+\[
+\sin \alpha+\sin \beta
+=
+2\sin\frac{\alpha+\beta}{2}\cos\frac{\alpha-\beta}{2}.
+\]
+
+\[
+\sin \alpha-\sin \beta
+=
+2\cos\frac{\alpha+\beta}{2}\sin\frac{\alpha-\beta}{2}.
+\]
+
+\[
+\cos \alpha+\cos \beta
+=
+2\cos\frac{\alpha+\beta}{2}\cos\frac{\alpha-\beta}{2}.
+\]
+
+\[
+\cos \alpha-\cos \beta
+=
+-2\sin\frac{\alpha+\beta}{2}\sin\frac{\alpha-\beta}{2}.
+\]
+
+\important{Как выбирать пару углов.} Надо пробовать такие пары, после которых появится угол, уже имеющийся в уравнении.
+
+\subsection*{\textcolor{darkaccent}{Пример}}
+
+Решим уравнение:
+\[
+\cos x+\cos 5x+\cos 2x=0.
+\]
+
+Сложим первый и второй косинусы:
+\[
+\cos x+\cos 5x
+=
+2\cos 3x\cos(-2x).
+\]
+
+Так как $\cos(-2x)=\cos 2x$, получаем:
+\[
+2\cos 3x\cos 2x+\cos 2x=0.
+\]
+
+Выносим общий множитель:
+\[
+\cos 2x(2\cos 3x+1)=0.
+\]
+
+Отсюда:
+\[
+\cos 2x=0
+\qquad\text{или}\qquad
+2\cos 3x+1=0.
+\]
+
+\[
+2x=\frac{\pi}{2}+\pi k
+\quad\Longrightarrow\quad
+x=\frac{\pi}{4}+\frac{\pi k}{2},
+\quad k\in\Z.
+\]
+
+\[
+\cos 3x=-\frac12
+\quad\Longrightarrow\quad
+3x=\pm\frac{2\pi}{3}+2\pi k.
+\]
+
+\[
+x=\pm\frac{2\pi}{9}+\frac{2\pi k}{3},
+\quad k\in\Z.
+\]
+
+Ответ:
+\[
+\boxed{
+x=\frac{\pi}{4}+\frac{\pi k}{2}
+\quad\text{или}\quad
+x=\pm\frac{2\pi}{9}+\frac{2\pi k}{3},
+\quad k\in\Z
+}.
+\]
+
+\sectionline
+
+\section*{\textcolor{darkaccent}{4. Формулы произведения}}
+
+Эти формулы применяются, когда в уравнении есть произведение тригонометрических функций.
+
+\[
+\sin \alpha\cos \beta
+=
+\frac12\left(\sin(\alpha+\beta)+\sin(\alpha-\beta)\right).
+\]
+
+\[
+\cos \alpha\cos \beta
+=
+\frac12\left(\cos(\alpha+\beta)+\cos(\alpha-\beta)\right).
+\]
+
+\[
+\sin \alpha\sin \beta
+=
+\frac12\left(\cos(\alpha-\beta)-\cos(\alpha+\beta)\right).
+\]
+
+\important{Зачем это нужно.} Произведение может превратиться в сумму, где углы станут удобнее для сравнения, вынесения или замены.
+
+\subsection*{\textcolor{darkaccent}{Пример}}
+
+\[
+2\sin 3x\cos x-\sin 4x=0.
+\]
+
+Применяем формулу произведения:
+\[
+2\sin 3x\cos x
+=
+\sin 4x+\sin 2x.
+\]
+
+Тогда:
+\[
+\sin 4x+\sin 2x-\sin 4x=0.
+\]
+
+\[
+\sin 2x=0.
+\]
+
+\[
+2x=\pi k
+\quad\Longrightarrow\quad
+\boxed{x=\frac{\pi k}{2},\quad k\in\Z}.
+\]
+
+\sectionline
+
+\section*{\textcolor{darkaccent}{5. Формулы понижения степени}}
+
+Формулы понижения степени нужны, когда встречаются квадраты или четвёртые степени.
+
+\[
+\sin^2 x=\frac{1-\cos 2x}{2},
+\qquad
+\cos^2 x=\frac{1+\cos 2x}{2}.
+\]
+
+\[
+\sin^4 x=\left(\sin^2 x\right)^2
+=
+\left(\frac{1-\cos 2x}{2}\right)^2.
+\]
+
+\[
+\cos^4 x=\left(\cos^2 x\right)^2
+=
+\left(\frac{1+\cos 2x}{2}\right)^2.
+\]
+
+\important{При четвёртой степени} сначала представляем её как квадрат квадрата:
+\[
+\sin^4 x=(\sin^2 x)^2.
+\]
+
+Затем применяем формулу понижения степени.
+
+\subsection*{\textcolor{darkaccent}{Пример}}
+
+\[
+\sin^4 x+\sin^4\left(x+\frac{\pi}{4}\right)+\sin^4\left(x-\frac{\pi}{4}\right)=1.
+\]
+
+Преобразуем каждое слагаемое.
+
+\[
+\sin^4 x
+=
+\left(\frac{1-\cos 2x}{2}\right)^2
+=
+\frac{1-2\cos 2x+\cos^2 2x}{4}.
+\]
+
+\[
+\sin^4\left(x+\frac{\pi}{4}\right)
+=
+\left(
+\frac{1-\cos\left(2x+\frac{\pi}{2}\right)}{2}
+\right)^2.
+\]
+
+Так как
+\[
+\cos\left(2x+\frac{\pi}{2}\right)=-\sin 2x,
+\]
+то
+\[
+\sin^4\left(x+\frac{\pi}{4}\right)
+=
+\frac{1+2\sin 2x+\sin^2 2x}{4}.
+\]
+
+\[
+\sin^4\left(x-\frac{\pi}{4}\right)
+=
+\left(
+\frac{1-\cos\left(2x-\frac{\pi}{2}\right)}{2}
+\right)^2.
+\]
+
+Так как
+\[
+\cos\left(2x-\frac{\pi}{2}\right)=\sin 2x,
+\]
+то
+\[
+\sin^4\left(x-\frac{\pi}{4}\right)
+=
+\frac{1-2\sin 2x+\sin^2 2x}{4}.
+\]
+
+После сложения:
+\[
+\frac{3-2\cos 2x+\cos^2 2x+2\sin^2 2x}{4}=1.
+\]
+
+Домножаем на $4$:
+\[
+3-2\cos 2x+\cos^2 2x+2\sin^2 2x=4.
+\]
+
+Используем
+\[
+\sin^2 2x=1-\cos^2 2x.
+\]
+
+Получаем уравнение только через $\cos 2x$:
+\[
+3-2\cos 2x+\cos^2 2x+2(1-\cos^2 2x)=4.
+\]
+
+\[
+\cos^2 2x+2\cos 2x-1=0.
+\]
+
+Дальше выполняется замена:
+\[
+t=\cos 2x,\qquad -1\le t\le1.
+\]
+
+\important{Главное.} После понижения степени задача часто сводится к квадратному уравнению относительно одной тригонометрической функции.
+
+\sectionline
+
+\section*{\textcolor{darkaccent}{6. Почему нельзя делить на переменную}}
+
+В уравнении нельзя просто делить на выражение, которое может быть равно нулю.
+
+Например, если получено:
+\[
+\cos 2x(2\cos 3x+1)=0,
+\]
+нельзя делить на $\cos 2x$.
+
+Правильно:
+\[
+\cos 2x=0
+\qquad\text{или}\qquad
+2\cos 3x+1=0.
+\]
+
+\important{Причина.} Если $\cos 2x=0$, то деление на $\cos 2x$ уничтожит целую часть решений.
+
+\sectionline
+
+\section*{\textcolor{darkaccent}{7. Нестандартная замена \texorpdfstring{$\sin x+\cos x$}{sin x + cos x}}}
+
+Если в уравнении одновременно встречаются
+\[
+\sin x+\cos x
+\qquad\text{и}\qquad
+\sin x\cos x,
+\]
+может помочь замена:
+\[
+t=\sin x+\cos x.
+\]
+
+Тогда:
+\[
+t^2=(\sin x+\cos x)^2.
+\]
+
+\[
+t^2=\sin^2 x+2\sin x\cos x+\cos^2 x.
+\]
+
+Так как
+\[
+\sin^2 x+\cos^2 x=1,
+\]
+получаем:
+\[
+t^2=1+2\sin x\cos x.
+\]
+
+Отсюда:
+\[
+2\sin x\cos x=t^2-1.
+\]
+
+\important{Область значений замены:}
+\[
+-\sqrt2\le \sin x+\cos x\le \sqrt2.
+\]
+
+Значит:
+\[
+t\in[-\sqrt2;\sqrt2].
+\]
+
+\subsection*{\textcolor{darkaccent}{Пример}}
+
+\[
+\sin x+\cos x-2\sin x\cos x=0.
+\]
+
+Делаем замену:
+\[
+t=\sin x+\cos x,\qquad t\in[-\sqrt2;\sqrt2].
+\]
+
+Тогда:
+\[
+2\sin x\cos x=t^2-1.
+\]
+
+Получаем:
+\[
+t-(t^2-1)=0.
+\]
+
+\[
+-t^2+t+1=0.
+\]
+
+\[
+t^2-t-1=0.
+\]
+
+\[
+t=\frac{1\pm\sqrt5}{2}.
+\]
+
+Проверяем область значений:
+\[
+\frac{1+\sqrt5}{2}>\sqrt2,
+\]
+поэтому этот корень не подходит.
+
+Остаётся:
+\[
+t=\frac{1-\sqrt5}{2}.
+\]
+
+Возвращаемся:
+\[
+\sin x+\cos x=\frac{1-\sqrt5}{2}.
+\]
+
+\[
+\sqrt2\sin\left(x+\frac{\pi}{4}\right)=\frac{1-\sqrt5}{2}.
+\]
+
+\[
+\sin\left(x+\frac{\pi}{4}\right)=\frac{1-\sqrt5}{2\sqrt2}.
+\]
+
+Это обычное тригонометрическое уравнение.
+
+\sectionline
+
+\section*{\textcolor{darkaccent}{8. Общая оценка выражения \texorpdfstring{$a\sin x+b\cos x$}{a sin x + b cos x}}}
+
+Для любого выражения вида
+\[
+a\sin x+b\cos x
+\]
+выполняется оценка:
+\[
+-\sqrt{a^2+b^2}
+\le
+a\sin x+b\cos x
+\le
+\sqrt{a^2+b^2}.
+\]
+
+Частный случай:
+\[
+-\sqrt2\le \sin x+\cos x\le\sqrt2.
+\]
+
+\important{Зачем это нужно.}
+Так проверяют допустимые значения новой переменной. Если после замены получен корень, не входящий в область значений, его нужно отбросить.
+
+\sectionline
+
+\section*{\textcolor{darkaccent}{9. Типичные ошибки}}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\linewidth}{@{}p{0.45\linewidth}X@{}}
+\toprule
+Ошибка & Как правильно \\
+\midrule
+Пропустить деление общего решения на коэффициент при $x$ &
+Если $2x=\frac{\pi}{2}+\pi k$, то $x=\frac{\pi}{4}+\frac{\pi k}{2}$. \\
+
+Поделить на $\cos 2x$ или $\sin x$ без проверки &
+Нужно выносить множитель и приравнивать каждый множитель к нулю. \\
+
+Применять формулу двойного угла, хотя она не делает углы одинаковыми &
+Если стандартная формула не помогает, ищем формулы суммы, разности или произведения. \\
+
+Сделать замену и забыть область значений &
+Для $t=\cos x$: $-1\le t\le1$. Для $t=\sin x+\cos x$: $-\sqrt2\le t\le\sqrt2$. \\
+
+Неверно раскрыть $\sin^4 x$ &
+Нужно писать $\sin^4 x=(\sin^2 x)^2=\left(\frac{1-\cos 2x}{2}\right)^2$. \\
+
+Забыть, что $\cos(-x)=\cos x$ &
+Косинус чётный: $\cos(-x)=\cos x$. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\newpage
+
+\section*{\textcolor{darkaccent}{Тренировочный блок}}
+
+Решите уравнения. Упражнения расположены по нарастающей сложности.
+
+\begin{enumerate}
+\item
+\[
+\cos x+\cos 5x+\cos 2x=0.
+\]
+
+\item
+\[
+\sin 5x-\sin x=0.
+\]
+
+\item
+\[
+2\sin 3x\cos x-\sin 4x=0.
+\]
+
+\item
+\[
+\sin 7x+\sin 3x-\sin 5x=0.
+\]
+
+\item
+\[
+\cos 4x+\cos 2x-\cos x=0.
+\]
+
+\item
+\[
+\sin^2 x=\frac12.
+\]
+
+\item
+\[
+\cos^2 x-\sin^2 x=\frac12.
+\]
+
+\item
+\[
+\sin^4 x+\sin^4\left(x+\frac{\pi}{4}\right)+\sin^4\left(x-\frac{\pi}{4}\right)=1.
+\]
+
+\item
+\[
+\sin x+\cos x-2\sin x\cos x=0.
+\]
+
+\item
+\[
+2\sin x\cos x+3(\sin x+\cos x)-2=0.
+\]
+\end{enumerate}
+
+\newpage
+
+\section*{\textcolor{darkaccent}{Ответы}}
+
+Везде $k\in\Z$.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 &
+\[
+x=\frac{\pi}{4}+\frac{\pi k}{2}
+\quad\text{или}\quad
+x=\pm\frac{2\pi}{9}+\frac{2\pi k}{3}
+\]
+\\
+
+2 &
+\[
+x=\frac{\pi k}{2}
+\quad\text{или}\quad
+x=\frac{\pi}{3}+\frac{\pi k}{3}
+\]
+\\
+
+3 &
+\[
+x=\frac{\pi k}{2}
+\]
+\\
+
+4 &
+\[
+x=\frac{\pi k}{2}
+\quad\text{или}\quad
+x=\pm\frac{\pi}{12}+\frac{\pi k}{2}
+\]
+\\
+
+5 &
+\[
+x=\pm\frac{\pi}{9}+\frac{2\pi k}{3}
+\quad\text{или}\quad
+x=\pm\frac{2\pi}{9}+\frac{2\pi k}{3}
+\]
+\\
+
+6 &
+\[
+x=\frac{\pi}{4}+\frac{\pi k}{2}
+\quad\text{или}\quad
+x=-\frac{\pi}{4}+\frac{\pi k}{2}
+\]
+\\
+
+7 &
+\[
+x=\pm\frac{\pi}{6}+\pi k
+\]
+\\
+
+8 &
+\[
+x=\frac{k\pi}{2}
+\quad\text{или}\quad
+x=\pm\frac12\arccos(\sqrt2-1)+\pi k
+\]
+\\
+
+9 &
+\[
+\sin\left(x+\frac{\pi}{4}\right)=\frac{1-\sqrt5}{2\sqrt2}
+\]
+\\
+
+10 &
+\[
+\sin x+\cos x=\frac{-3+\sqrt{21}}{2}
+\]
+\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\end{document}
