@@ -1,0 +1,682 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx, booktabs, longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\geometry{
+  a4paper,
+  left=18mm,
+  right=18mm,
+  top=18mm,
+  bottom=20mm
+}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F2F5F5}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=darkaccent
+}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.2em, itemsep=0.2em, topsep=0.3em}
+\setlist[enumerate]{leftmargin=1.4em, itemsep=0.3em, topsep=0.3em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{textgray}{Чек-лист: неравенства}}
+\rhead{\textcolor{textgray}{ЕГЭ}}
+\cfoot{\textcolor{textgray}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\sectiontitle}[1]{%
+  \vspace{0.6em}
+  {\Large\bfseries\textcolor{darkaccent}{#1}}\par
+  \vspace{0.25em}
+  {\color{accent}\rule{\linewidth}{0.5pt}}
+  \vspace{0.4em}
+}
+
+\newcommand{\subsectiontitle}[1]{%
+  \vspace{0.5em}
+  {\large\bfseries\textcolor{darkaccent}{#1}}\par
+  \vspace{0.15em}
+}
+
+\newcommand{\important}[1]{\textbf{\textcolor{darkaccent}{#1}}}
+
+\newcommand{\openpoint}[2]{\draw[accent, line width=0.8pt, fill=white] (#1,0) circle (2.2pt) node[below=6pt, text=black] {$#2$};}
+\newcommand{\closedpoint}[2]{\filldraw[accent] (#1,0) circle (2.2pt) node[below=6pt, text=black] {$#2$};}
+
+\newcommand{\axisbase}[2]{%
+\begin{tikzpicture}[scale=0.82, baseline=-0.5ex]
+  \draw[->, line width=0.6pt] (#1,0)--(#2,0) node[right] {$x$};
+  \foreach \x in {#1,...,#2} {
+    \draw[black!35] (\x,0.06)--(\x,-0.06);
+  }
+}
+
+\newcommand{\axisend}{\end{tikzpicture}}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{28mm}
+
+{\Huge\bfseries\textcolor{darkaccent}{Чек-лист}}\par
+\vspace{6mm}
+{\LARGE\bfseries Неравенства: запись промежутков, линейные неравенства и метод интервалов}\par
+
+\vspace{18mm}
+
+{\Large Лёвин Артём Александрович}\par
+\vspace{2mm}
+{\Large эксклюзивно для Тимофея Васильченко}\par
+
+\vspace{12mm}
+
+{\large ЕГЭ}\par
+\vspace{4mm}
+{\large \today}
+
+\vfill
+
+\begin{tikzpicture}[remember picture, overlay]
+  \draw[accent, line width=1.1pt]
+    ([xshift=18mm,yshift=24mm]current page.south west)
+    .. controls ([xshift=55mm,yshift=48mm]current page.south west)
+    and ([xshift=-65mm,yshift=8mm]current page.south east)
+    .. ([xshift=-18mm,yshift=31mm]current page.south east);
+  \draw[darkaccent, line width=0.6pt]
+    ([xshift=30mm,yshift=17mm]current page.south west)
+    .. controls ([xshift=72mm,yshift=35mm]current page.south west)
+    and ([xshift=-92mm,yshift=46mm]current page.south east)
+    .. ([xshift=-28mm,yshift=18mm]current page.south east);
+\end{tikzpicture}
+
+\end{center}
+\end{titlepage}
+
+\sectiontitle{1. Азбука неравенств и промежутков}
+
+\subsectiontitle{1.1. Как читать простые неравенства}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}c X X@{}}
+\toprule
+Запись & Как читать & Промежуток \\
+\midrule
+$x\ge 5$ & $x$ не меньше $5$; подходят $5$ и все числа больше $5$ & $[5;+\infty)$ \\
+$x>5$ & $x$ больше $5$; сама точка $5$ не подходит & $(5;+\infty)$ \\
+$x\le 5$ & $x$ не больше $5$; подходят $5$ и все числа меньше $5$ & $(-\infty;5]$ \\
+$x<5$ & $x$ меньше $5$; сама точка $5$ не подходит & $(-\infty;5)$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\important{Главная идея.}
+Если неравенство нестрогое, то граничная точка входит в ответ: точка закрашена, скобка квадратная.  
+Если неравенство строгое, то граничная точка не входит в ответ: точка выколота, скобка круглая.
+
+\subsectiontitle{1.2. Как это выглядит на числовой прямой}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}c X@{}}
+\toprule
+Неравенство & Числовая прямая \\
+\midrule
+$x\ge 5$ &
+\axisbase{2}{8}
+  \draw[accent, line width=1.8pt, ->] (5,0)--(8,0);
+  \closedpoint{5}{5}
+\axisend
+\\[1.4em]
+$x>5$ &
+\axisbase{2}{8}
+  \draw[accent, line width=1.8pt, ->] (5,0)--(8,0);
+  \openpoint{5}{5}
+\axisend
+\\[1.4em]
+$x\le 5$ &
+\axisbase{2}{8}
+  \draw[accent, line width=1.8pt, <-] (2,0)--(5,0);
+  \closedpoint{5}{5}
+\axisend
+\\[1.4em]
+$x<5$ &
+\axisbase{2}{8}
+  \draw[accent, line width=1.8pt, <-] (2,0)--(5,0);
+  \openpoint{5}{5}
+\axisend
+\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\important{Обязательная привычка.}
+Ось нужно подписывать: $x$, $t$, $a$ или другая переменная. В задачах повышенной сложности могут встречаться разные оси.
+
+\sectiontitle{2. Линейные неравенства}
+
+\subsectiontitle{2.1. Что называется линейным неравенством}
+
+Линейное неравенство — это неравенство, которое после упрощения содержит переменную только в первой степени:
+\[
+ax+b>0,\qquad ax+b\ge 0,\qquad ax+b<0,\qquad ax+b\le 0.
+\]
+
+Здесь нет квадратов, корней, логарифмов, дробей с переменной в знаменателе и других усложнений.
+
+\subsectiontitle{2.2. Главное правило про отрицательное число}
+
+\[
+\boxed{\text{При умножении или делении неравенства на отрицательное число знак меняется.}}
+\]
+
+Например:
+\[
+-2x-1\ge 0.
+\]
+Переносим $-1$ вправо:
+\[
+-2x\ge 1.
+\]
+Делим на $-2$, поэтому знак меняется:
+\[
+x\le -\frac12.
+\]
+
+\important{Типичная ошибка.}
+Ученик делит на отрицательное число, но оставляет знак неравенства прежним. Это сразу меняет ответ на противоположный.
+
+\subsectiontitle{2.3. Алгоритм решения линейного неравенства}
+
+\begin{enumerate}
+  \item Раскройте скобки, если они есть.
+  \item Перенесите все слагаемые с переменной в одну сторону, числа — в другую.
+  \item Приведите подобные.
+  \item Уедините переменную.
+  \item Если делите или умножаете на отрицательное число, поменяйте знак неравенства.
+  \item Запишите ответ промежутком и, если нужно, изобразите его на оси.
+\end{enumerate}
+
+\subsectiontitle{2.4. Пример}
+
+Решим неравенство:
+\[
+-2x+3\ge 4(x+5).
+\]
+Раскрываем скобки:
+\[
+-2x+3\ge 4x+20.
+\]
+Переносим всё влево:
+\[
+-2x-4x+3-20\ge 0.
+\]
+Получаем:
+\[
+-6x-17\ge 0.
+\]
+Тогда
+\[
+-6x\ge 17.
+\]
+Делим на $-6$ и меняем знак:
+\[
+x\le -\frac{17}{6}.
+\]
+Ответ:
+\[
+x\in\left(-\infty;-\frac{17}{6}\right].
+\]
+
+\sectiontitle{3. Нормализованный вид неравенства}
+
+Перед применением метода интервалов неравенство желательно привести к виду:
+\[
+F(x)\ge 0,\qquad F(x)>0,\qquad F(x)\le 0,\qquad F(x)<0.
+\]
+
+\important{Нормализованный вид} — это форма, где справа стоит $0$, а слева находится выражение, с которым дальше удобно работать.
+
+\subsectiontitle{Важно}
+
+\begin{itemize}
+  \item Подстановку для определения знака делают именно в левую часть нормализованного неравенства.
+  \item Нельзя писать конструкции вида
+  \[
+  F(x)<0=0.
+  \]
+  Это математически бессмысленная запись.
+  \item После нормализации неравенство временно заменяют уравнением $F(x)=0$, чтобы найти граничные точки.
+\end{itemize}
+
+\sectiontitle{4. Метод интервалов}
+
+\subsectiontitle{4.1. Когда нужен метод интервалов}
+
+Метод интервалов нужен, когда неравенство уже не является линейным или приводится к произведению множителей:
+\[
+(x-a)(x-b)(x-c)\ge 0,
+\]
+а также в более сложных алгебраических неравенствах.
+
+В этом чек-листе рассматривается базовая версия метода интервалов для многочленов и произведений линейных множителей.
+
+\subsectiontitle{4.2. Алгоритм метода интервалов}
+
+\begin{enumerate}
+  \item Приведите неравенство к нормализованному виду: справа должен быть $0$.
+  \item Замените неравенство уравнением:
+  \[
+  F(x)=0.
+  \]
+  \item Найдите корни уравнения.
+  \item Отметьте корни на числовой прямой в порядке возрастания.
+  \item Закрасьте точку, если неравенство нестрогое: $\ge$ или $\le$.
+  \item Выколите точку, если неравенство строгое: $>$ или $<$.
+  \item Возьмите удобную пробную точку из одного интервала.
+  \item Подставьте её в $F(x)$ и определите знак.
+  \item Расставьте знаки на остальных интервалах.
+  \item Выберите интервалы, соответствующие знаку исходного неравенства.
+\end{enumerate}
+
+\subsectiontitle{4.3. Пример: квадратное неравенство}
+
+Решим:
+\[
+x^2-x-6\ge 0.
+\]
+Заменяем неравенство уравнением:
+\[
+x^2-x-6=0.
+\]
+Раскладываем на множители:
+\[
+(x-3)(x+2)=0.
+\]
+Корни:
+\[
+x=-2,\qquad x=3.
+\]
+
+Так как неравенство нестрогое, точки $-2$ и $3$ закрашены.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \draw[->, line width=0.6pt] (-4.5,0)--(5.2,0) node[right] {$x$};
+  \closedpoint{-2}{-2}
+  \closedpoint{3}{3}
+  \node[above=6pt] at (-3.3,0) {$+$};
+  \node[above=6pt] at (0.5,0) {$-$};
+  \node[above=6pt] at (4.2,0) {$+$};
+  \draw[accent, line width=1.5pt] (-4.4,0.18)--(-2,0.18);
+  \draw[accent, line width=1.5pt] (3,0.18)--(5.0,0.18);
+\end{tikzpicture}
+\end{center}
+
+Нам нужны значения, при которых левая часть неотрицательна:
+\[
+x^2-x-6\ge 0.
+\]
+Значит, выбираем интервалы со знаком $+$ и сами корни:
+\[
+x\in(-\infty;-2]\cup[3;+\infty).
+\]
+
+\subsectiontitle{4.4. Пример: произведение четырёх множителей}
+
+Решим:
+\[
+(x+10)(x-3)(x+2)(x-15)<0.
+\]
+Находим корни:
+\[
+x=-10,\qquad x=-2,\qquad x=3,\qquad x=15.
+\]
+
+Неравенство строгое, поэтому все точки выколоты.
+
+Возьмём $x=0$:
+\[
+(0+10)(0-3)(0+2)(0-15)>0,
+\]
+потому что знаки множителей:
+\[
+(+)\cdot(-)\cdot(+)\cdot(-)=+.
+\]
+
+Дальше знаки чередуются:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.82]
+  \draw[->, line width=0.6pt] (-11.5,0)--(16.5,0) node[right] {$x$};
+  \openpoint{-10}{-10}
+  \openpoint{-2}{-2}
+  \openpoint{3}{3}
+  \openpoint{15}{15}
+  \node[above=6pt] at (-10.9,0) {$+$};
+  \node[above=6pt] at (-6,0) {$-$};
+  \node[above=6pt] at (0.5,0) {$+$};
+  \node[above=6pt] at (9,0) {$-$};
+  \node[above=6pt] at (15.8,0) {$+$};
+  \draw[accent, line width=1.5pt] (-10,0.18)--(-2,0.18);
+  \draw[accent, line width=1.5pt] (3,0.18)--(15,0.18);
+\end{tikzpicture}
+\end{center}
+
+Нужны отрицательные значения, поэтому:
+\[
+x\in(-10;-2)\cup(3;15).
+\]
+
+\sectiontitle{5. Если уравнение не имеет корней}
+
+Рассмотрим неравенство:
+\[
+x^2-x+6>0.
+\]
+Связанное уравнение:
+\[
+x^2-x+6=0.
+\]
+Дискриминант:
+\[
+D=(-1)^2-4\cdot1\cdot6=1-24=-23<0.
+\]
+Корней нет.
+
+Но это не значит, что неравенство не имеет решений. Нужно продолжить рассуждение.
+
+Так как корней нет, знак выражения на всей числовой прямой один и тот же. Проверим, например, $x=0$:
+\[
+0^2-0+6=6>0.
+\]
+Значит, выражение положительно при всех $x$.
+
+\[
+x^2-x+6>0
+\quad\Rightarrow\quad
+x\in(-\infty;+\infty).
+\]
+
+Если бы было:
+\[
+x^2-x+6\le 0,
+\]
+то решений не было бы:
+\[
+x\in\emptyset.
+\]
+
+\important{Ключевая мысль.}
+Отсутствие корней у уравнения $F(x)=0$ не означает автоматически отсутствие решений у неравенства. Нужно определить знак $F(x)$ на всей оси.
+
+\sectiontitle{6. Кратность корня и смена знака}
+
+\subsectiontitle{6.1. Что такое кратность корня}
+
+Если множитель повторяется несколько раз, корень имеет кратность.
+
+Например:
+\[
+(x-2)^2=(x-2)(x-2).
+\]
+Корень $x=2$ встречается два раза. Значит, это корень чётной кратности.
+
+А в выражении
+\[
+(x+3)^3
+\]
+корень $x=-3$ встречается три раза. Значит, это корень нечётной кратности.
+
+\subsectiontitle{6.2. Правило смены знака}
+
+\[
+\boxed{
+\begin{array}{l}
+\text{Если корень имеет нечётную кратность, знак при переходе через него меняется.}\\
+\text{Если корень имеет чётную кратность, знак при переходе через него не меняется.}
+\end{array}
+}
+\]
+
+\subsectiontitle{6.3. Пример с чётной кратностью}
+
+Решим:
+\[
+(x-2)^2(x+3)\ge 0.
+\]
+
+Корни:
+\[
+x=2 \quad \text{кратности }2,\qquad x=-3 \quad \text{кратности }1.
+\]
+
+Точка $-3$ имеет нечётную кратность, поэтому знак через неё меняется.  
+Точка $2$ имеет чётную кратность, поэтому знак через неё не меняется.
+
+Проверим знак на правом интервале, например при $x=3$:
+\[
+(3-2)^2(3+3)>0.
+\]
+
+Схема знаков:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \draw[->, line width=0.6pt] (-5,0)--(4.5,0) node[right] {$x$};
+  \closedpoint{-3}{-3}
+  \closedpoint{2}{2}
+  \node[above=6pt] at (-4.1,0) {$-$};
+  \node[above=6pt] at (-0.5,0) {$+$};
+  \node[above=6pt] at (3.2,0) {$+$};
+  \draw[accent, line width=1.5pt] (-3,0.18)--(4.3,0.18);
+  \draw[accent, line width=0.9pt, dashed] (2,0.32) arc[start angle=180,end angle=0,x radius=0.35,y radius=0.25];
+\end{tikzpicture}
+\end{center}
+
+Ответ:
+\[
+x\in[-3;+\infty).
+\]
+
+\subsectiontitle{6.4. Пример с большой степенью}
+
+Рассмотрим:
+\[
+(x-2)^{1000}(x+3)^{1001}\le 0.
+\]
+
+Корни:
+\[
+x=2 \quad \text{кратности }1000,
+\qquad
+x=-3 \quad \text{кратности }1001.
+\]
+
+\begin{itemize}
+  \item $1000$ — чётное число, значит, при переходе через $2$ знак не меняется.
+  \item $1001$ — нечётное число, значит, при переходе через $-3$ знак меняется.
+\end{itemize}
+
+Проверим знак справа от всех корней, например при $x=4$:
+\[
+(4-2)^{1000}(4+3)^{1001}>0.
+\]
+
+Тогда схема знаков:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \draw[->, line width=0.6pt] (-5,0)--(4.5,0) node[right] {$x$};
+  \closedpoint{-3}{-3}
+  \closedpoint{2}{2}
+  \node[above=6pt] at (-4.1,0) {$-$};
+  \node[above=6pt] at (-0.5,0) {$+$};
+  \node[above=6pt] at (3.2,0) {$+$};
+  \draw[accent, line width=1.5pt] (-5,0.18)--(-3,0.18);
+  \filldraw[accent] (2,0) circle (2.2pt);
+\end{tikzpicture}
+\end{center}
+
+Так как нужно $\le 0$, берём отрицательный интервал и точки, где выражение равно нулю:
+\[
+x\in(-\infty;-3]\cup\{2\}.
+\]
+
+\important{Почему $2$ записана отдельно?}
+Возле $2$ знак положительный с обеих сторон, но в самой точке выражение равно нулю. Поэтому $2$ подходит только как отдельная точка.
+
+\sectiontitle{7. Типичные ошибки}
+
+\begin{enumerate}
+  \item \important{Не подписывать ось.} В задачах могут быть оси $x$, $t$, $a$ и другие.
+  \item \important{Путать строгие и нестрогие неравенства.} Знак $>$ или $<$ даёт выколотую точку; знак $\ge$ или $\le$ даёт закрашенную.
+  \item \important{Забывать менять знак при делении на отрицательное число.}
+  \item \important{Подставлять пробную точку не в то выражение.} Подстановка делается в левую часть нормализованного неравенства.
+  \item \important{Думать, что если уравнение не имеет корней, то неравенство тоже не имеет решений.} Это неверно.
+  \item \important{Всегда чередовать знаки без учёта кратности.} При чётной кратности знак не меняется.
+  \item \important{Брать $0$ как пробную точку, если $0$ является корнем.} В этом случае нужно взять другое удобное число.
+  \item \important{Неверно записывать одиночную точку.} Отдельная точка записывается через фигурные скобки, например $\{2\}$.
+\end{enumerate}
+
+\sectiontitle{8. Мини-чек-лист перед ответом}
+
+Перед тем как записать ответ, проверьте:
+
+\begin{itemize}
+  \item справа действительно стоит $0$;
+  \item все корни найдены;
+  \item корни расположены на оси в порядке возрастания;
+  \item точки закрашены или выколоты в соответствии со знаком неравенства;
+  \item кратности корней учтены;
+  \item знак выбран именно тот, который требует неравенство;
+  \item ответ записан промежутками корректно;
+  \item бесконечности записаны только с круглыми скобками.
+\end{itemize}
+
+\newpage
+
+\sectiontitle{Тренировочный блок}
+
+Решите неравенства. Ответы запишите промежутками.
+
+\subsectiontitle{Средний уровень}
+
+\begin{enumerate}
+  \item Решите неравенство:
+  \[
+  7x-14\ge 0.
+  \]
+
+  \item Решите неравенство:
+  \[
+  -5x+20<0.
+  \]
+
+  \item Решите неравенство:
+  \[
+  3(x-2)\le 2x+5.
+  \]
+\end{enumerate}
+
+\subsectiontitle{Выше среднего уровня}
+
+\begin{enumerate}[resume]
+  \item Решите неравенство:
+  \[
+  x^2-5x+6\ge 0.
+  \]
+
+  \item Решите неравенство:
+  \[
+  -x^2+3x+4>0.
+  \]
+
+  \item Решите неравенство:
+  \[
+  (x+4)(x-1)(x-6)<0.
+  \]
+
+  \item Решите неравенство:
+  \[
+  (x-3)^2(x+1)\ge 0.
+  \]
+
+  \item Решите неравенство:
+  \[
+  x^2+2x+5\le 0.
+  \]
+
+  \item Решите неравенство:
+  \[
+  (x+2)^4(x-5)^3>0.
+  \]
+\end{enumerate}
+
+\subsectiontitle{Сложный уровень}
+
+\begin{enumerate}[resume]
+  \item Решите неравенство:
+  \[
+  (x+3)^2(x-1)^5(x-4)^4\le 0.
+  \]
+\end{enumerate}
+
+\newpage
+
+\sectiontitle{Ответы к тренировочному блоку}
+
+\begin{table}[h!]
+\centering
+\caption{Ответы}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\linewidth}{@{}c X@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $x\in[2;+\infty)$ \\
+2 & $x\in(4;+\infty)$ \\
+3 & $x\in(-\infty;11]$ \\
+4 & $x\in(-\infty;2]\cup[3;+\infty)$ \\
+5 & $x\in(-1;4)$ \\
+6 & $x\in(-\infty;-4)\cup(1;6)$ \\
+7 & $x\in[-1;+\infty)$ \\
+8 & $x\in\emptyset$ \\
+9 & $x\in(5;+\infty)$ \\
+10 & $x\in[-3;1]$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\end{document}

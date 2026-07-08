@@ -1,0 +1,1609 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Наглядная математика: неравенства и метод интервалов</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23091318'/%3E%3Cpath d='M14 25h36M14 39h36' stroke='%2347f0d8' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M42 17l10 8-10 8M22 31l-10 8 10 8' fill='none' stroke='%23ffb85c' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%23ffffff'/%3E%3C/svg%3E">
+  <style>
+    :root{
+      --bg:#0a1118;
+      --bg2:#101b25;
+      --panel:#111d28;
+      --panel2:#162535;
+      --text:#ecf6f4;
+      --muted:#b6c7c3;
+      --soft:#78908c;
+      --accent:#42e8d4;
+      --accent2:#ffb85c;
+      --danger:#ff6b7a;
+      --ok:#9effa8;
+      --border:rgba(255,255,255,.12);
+      --shadow:0 24px 80px rgba(0,0,0,.35);
+      --radius:22px;
+      --math-bg:rgba(66,232,212,.08);
+      --step-hover:rgba(66,232,212,.14);
+      --grid:rgba(255,255,255,.08);
+    }
+    [data-theme="light"]{
+      --bg:#f5efe4;
+      --bg2:#fff8ea;
+      --panel:#fffaf1;
+      --panel2:#f6ead7;
+      --text:#1f2527;
+      --muted:#4d585b;
+      --soft:#687176;
+      --accent:#006c67;
+      --accent2:#9a3f2f;
+      --danger:#a5263a;
+      --ok:#287d37;
+      --border:rgba(39,32,27,.16);
+      --shadow:0 20px 60px rgba(93,67,38,.18);
+      --math-bg:rgba(154,63,47,.08);
+      --step-hover:rgba(154,63,47,.10);
+      --grid:rgba(47,39,31,.10);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(66,232,212,.18), transparent 28rem),
+        radial-gradient(circle at 90% 5%, rgba(255,184,92,.13), transparent 26rem),
+        linear-gradient(135deg,var(--bg),var(--bg2));
+      min-height:100vh;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.20;
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size:34px 34px;
+      mask-image:linear-gradient(to bottom, rgba(0,0,0,.75), transparent 80%);
+    }
+    a{color:var(--accent)}
+    button, select, input{font:inherit}
+    .page{
+      position:relative;
+      max-width:1440px;
+      margin:0 auto;
+      padding:28px;
+    }
+    header.hero{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:18px;
+      align-items:start;
+      margin-bottom:22px;
+    }
+    .eyebrow{
+      color:var(--accent2);
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:.78rem;
+      margin-bottom:8px;
+    }
+    h1{
+      margin:0;
+      font-size:clamp(2rem,5vw,4.25rem);
+      line-height:1.02;
+      letter-spacing:-.055em;
+    }
+    .subtitle{
+      max-width:820px;
+      color:var(--muted);
+      font-size:1.08rem;
+      line-height:1.55;
+      margin-top:14px;
+    }
+    .toolbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .btn, .select, .range-wrap{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.025));
+      color:var(--text);
+      border-radius:999px;
+      padding:10px 14px;
+      box-shadow:none;
+    }
+    .btn{
+      cursor:pointer;
+      transition:.18s ease;
+      font-weight:750;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:42px;
+    }
+    .btn:hover, .btn:focus-visible{
+      transform:translateY(-1px);
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(66,232,212,.12);
+      outline:none;
+    }
+    .btn.primary{
+      background:linear-gradient(135deg,var(--accent),rgba(66,232,212,.55));
+      color:#061215;
+      border-color:transparent;
+    }
+    .btn.warning{
+      background:linear-gradient(135deg,var(--accent2),rgba(255,184,92,.45));
+      color:#130b02;
+      border-color:transparent;
+    }
+    .select{
+      min-height:42px;
+      cursor:pointer;
+      max-width:100%;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.04fr) minmax(420px,.74fr);
+      gap:22px;
+      align-items:start;
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.035));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      backdrop-filter:blur(10px);
+    }
+    .card-inner{padding:22px}
+    .tabs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:9px;
+      margin:0 0 16px;
+    }
+    .tab{
+      border:1px solid var(--border);
+      color:var(--muted);
+      background:rgba(255,255,255,.035);
+      border-radius:999px;
+      padding:10px 13px;
+      cursor:pointer;
+      font-weight:800;
+    }
+    .tab.active{
+      color:#061215;
+      background:var(--accent);
+      border-color:transparent;
+    }
+    .idea{
+      border:1px solid rgba(66,232,212,.35);
+      background:linear-gradient(135deg,rgba(66,232,212,.12),rgba(255,184,92,.07));
+      border-radius:18px;
+      padding:16px 18px;
+      margin-bottom:18px;
+    }
+    .idea h2, .section-title{
+      margin:0 0 10px;
+      font-size:1.3rem;
+      letter-spacing:-.03em;
+    }
+    .idea ul{margin:.2rem 0 0 1.1rem; padding:0}
+    .idea li{margin:.38rem 0; color:var(--text); line-height:1.45}
+    .solution-controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      margin:14px 0 18px;
+      padding:12px;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--border);
+      border-radius:18px;
+    }
+    .steps{display:grid; gap:12px}
+    .step{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px 17px;
+      background:rgba(255,255,255,.045);
+      transition:.16s ease;
+      scroll-margin-top:16px;
+    }
+    .step.locked{
+      opacity:.42;
+      filter:saturate(.65);
+    }
+    .step.active, .step:hover, .step.linked{
+      background:var(--step-hover);
+      border-color:rgba(66,232,212,.45);
+      transform:translateX(2px);
+    }
+    .step h3{
+      margin:0 0 9px;
+      font-size:1.08rem;
+      display:flex;
+      gap:9px;
+      align-items:center;
+    }
+    .badge{
+      display:inline-grid;
+      place-items:center;
+      width:28px;height:28px;
+      border-radius:50%;
+      background:var(--accent);
+      color:#061215;
+      font-weight:900;
+      flex:none;
+    }
+    .step p, .step li{
+      color:var(--muted);
+      line-height:1.55;
+      margin:.4rem 0;
+    }
+    .step ul{margin:.35rem 0 0 1.15rem; padding:0}
+    .mathline{
+      display:block;
+      width:max-content;
+      max-width:100%;
+      margin:9px 0;
+      padding:8px 10px;
+      border-radius:12px;
+      background:var(--math-bg);
+      overflow-x:auto;
+      color:var(--text);
+    }
+    math{font-size:1.05em}
+    .viz-column{
+      position:sticky;
+      top:18px;
+      max-height:calc(100vh - 36px);
+      overflow:auto;
+    }
+    .viz-head{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:start;
+      margin-bottom:12px;
+    }
+    .viz-head h2{margin:0;font-size:1.25rem}
+    .viz-head p{margin:.25rem 0 0;color:var(--muted);font-size:.92rem;line-height:1.4}
+    .canvas-shell{
+      border:1px solid var(--border);
+      border-radius:20px;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(66,232,212,.16), transparent 18rem),
+        rgba(0,0,0,.18);
+      position:relative;
+    }
+    canvas{
+      width:100%;
+      height:390px;
+      display:block;
+      cursor:grab;
+      touch-action:none;
+    }
+    canvas:active{cursor:grabbing}
+    .canvas-note{
+      position:absolute;
+      left:14px;
+      bottom:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(0,0,0,.42);
+      color:white;
+      font-size:.78rem;
+      border:1px solid rgba(255,255,255,.15);
+      pointer-events:none;
+    }
+    .viz-controls{
+      display:grid;
+      gap:10px;
+      padding-top:13px;
+    }
+    .control-row{
+      display:flex;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:9px;
+    }
+    .range-wrap{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      border-radius:16px;
+      width:100%;
+    }
+    .range-wrap label{
+      color:var(--muted);
+      font-size:.9rem;
+      min-width:110px;
+    }
+    input[type="range"]{
+      width:100%;
+      accent-color:var(--accent);
+    }
+    .switches{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+    .check{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:9px 10px;
+      color:var(--muted);
+      background:rgba(255,255,255,.04);
+      user-select:none;
+    }
+    .check input{accent-color:var(--accent)}
+    .legend{
+      display:grid;
+      gap:8px;
+      margin-top:12px;
+      color:var(--muted);
+      font-size:.93rem;
+    }
+    .legend-item{display:flex;gap:8px;align-items:center}
+    .dot{width:12px;height:12px;border-radius:50%;background:var(--accent);display:inline-block}
+    .dot.open{background:transparent;border:2px solid var(--accent)}
+    .dot.orange{background:var(--accent2)}
+    .generator, .quiz, .errors, .print-box{
+      margin-top:18px;
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:18px;
+      background:rgba(255,255,255,.045);
+    }
+    .generator h2, .quiz h2, .errors h2, .print-box h2{margin:0 0 10px;font-size:1.25rem}
+    .gen-output{
+      margin-top:12px;
+      padding:14px;
+      border-radius:16px;
+      background:rgba(66,232,212,.08);
+      border:1px dashed rgba(66,232,212,.35);
+    }
+    .quiz-card{
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+    .quiz-options{
+      display:grid;
+      gap:8px;
+    }
+    .option{
+      text-align:left;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:11px 12px;
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      cursor:pointer;
+    }
+    .option.correct{border-color:var(--ok);background:rgba(158,255,168,.12)}
+    .option.wrong{border-color:var(--danger);background:rgba(255,107,122,.12)}
+    .selfcheck{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:8px;
+      margin-top:10px;
+    }
+    .selfcheck label{
+      padding:10px;
+      border:1px solid var(--border);
+      border-radius:13px;
+      color:var(--muted);
+      background:rgba(255,255,255,.035);
+    }
+    .footer{
+      color:var(--muted);
+      text-align:center;
+      padding:24px 0 6px;
+      font-weight:750;
+    }
+
+    .hint-trigger{
+      position:relative;
+      display:inline-grid;
+      place-items:center;
+      width:26px;height:26px;
+      border-radius:50%;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#061215;
+      font-weight:900;
+      cursor:help;
+      animation:hintPulse 2.4s infinite;
+      border:none;
+    }
+    @keyframes hintPulse{
+      0%{box-shadow:0 0 0 0 rgba(66,232,212,.45)}
+      70%{box-shadow:0 0 0 12px rgba(66,232,212,0)}
+      100%{box-shadow:0 0 0 0 rgba(66,232,212,0)}
+    }
+    @keyframes hintBounce{
+      0%{transform:scale(.88)}
+      55%{transform:scale(1.08)}
+      100%{transform:scale(1)}
+    }
+    @keyframes borderGlow{
+      0%,100%{box-shadow:0 0 0 0 rgba(66,232,212,.0)}
+      50%{box-shadow:0 0 0 4px rgba(66,232,212,.18)}
+    }
+    .glow{animation:borderGlow 1.5s ease-in-out 2}
+    .tooltip{
+      position:fixed;
+      z-index:1000;
+      width:min(340px, calc(100vw - 24px));
+      padding:14px 14px 12px;
+      border-radius:16px;
+      border:1px solid transparent;
+      background:
+        linear-gradient(var(--panel),var(--panel)) padding-box,
+        linear-gradient(135deg,var(--accent),var(--accent2)) border-box;
+      color:var(--text);
+      box-shadow:var(--shadow);
+      transform:translateY(8px);
+      opacity:0;
+      pointer-events:none;
+      transition:.18s ease;
+    }
+    .tooltip.show{
+      opacity:1;
+      transform:translateY(0);
+      pointer-events:auto;
+      animation:hintBounce .22s ease-out;
+    }
+    .tooltip h3{margin:0 0 6px;font-size:1rem}
+    .tooltip p{margin:.35rem 0;color:var(--muted);line-height:1.45;font-size:.92rem}
+    .tooltip-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .tooltip .mini{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.07);
+      color:var(--text);
+      border-radius:999px;
+      padding:7px 9px;
+      cursor:pointer;
+      font-weight:750;
+      font-size:.84rem;
+    }
+    .tip-close{
+      position:absolute;
+      top:7px;right:8px;
+      border:none;background:transparent;color:var(--muted);font-size:1.1rem;cursor:pointer;
+    }
+
+    .overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.72);
+      z-index:900;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+    .overlay.open{display:flex}
+    .modal{
+      width:min(1120px,100%);
+      max-height:92vh;
+      overflow:auto;
+      border-radius:24px;
+      border:1px solid var(--border);
+      background:var(--panel);
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .modal-head{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      margin-bottom:12px;
+    }
+    .modal-head h2{margin:0;font-size:1.25rem}
+    .close{
+      border:1px solid var(--border);
+      border-radius:50%;
+      width:42px;height:42px;
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      cursor:pointer;
+      font-size:1.4rem;
+    }
+    .modal canvas{height:560px}
+    .modal-controls{margin-top:12px}
+
+    .hidden{display:none!important}
+    .only-deep, .only-standard{display:initial}
+    [data-detail="short"] .only-deep,
+    [data-detail="short"] .only-standard{display:none}
+    [data-detail="standard"] .only-deep{display:none}
+    [data-detail="deep"] .only-deep,
+    [data-detail="deep"] .only-standard{display:initial}
+
+    @media (max-width:1050px){
+      .grid{grid-template-columns:1fr}
+      .viz-column{position:relative;top:0;max-height:none}
+      header.hero{grid-template-columns:1fr}
+      .toolbar{justify-content:flex-start}
+      .selfcheck{grid-template-columns:1fr}
+    }
+    @media (max-width:640px){
+      .page{padding:16px}
+      .card-inner{padding:16px}
+      canvas{height:320px}
+      .switches{grid-template-columns:1fr}
+      .tab{width:100%;text-align:left}
+      .modal canvas{height:420px}
+      .range-wrap{display:grid}
+      .range-wrap label{min-width:0}
+    }
+    @media print{
+      body{background:white;color:#111}
+      body::before,.toolbar,.viz-controls,.hint-trigger,.overlay,.tabs .tab:not(.active){display:none!important}
+      .page{max-width:none;padding:0}
+      .grid{display:block}
+      .card{box-shadow:none;border:1px solid #ccc;margin-bottom:12px;break-inside:avoid}
+      .viz-column{position:relative;max-height:none;overflow:visible}
+      .step.locked{opacity:1;filter:none}
+      .btn,.select{display:none}
+      .canvas-note{display:none}
+      .generator,.quiz{break-inside:avoid}
+      header.hero{display:block}
+    }
+  </style>
+</head>
+<body data-theme="dark" data-detail="standard">
+  <div class="page">
+    <header class="hero">
+      <div>
+        <div class="eyebrow">ЕГЭ • алгебра • неравенства</div>
+        <h1>Неравенства и метод интервалов</h1>
+        <p class="subtitle">
+          Интерактивная страница для повторения: строгие и нестрогие точки, линейные неравенства,
+          нормализованный вид, корни, знаки на промежутках и кратность корня.
+        </p>
+      </div>
+      <div class="toolbar" aria-label="Основные настройки страницы">
+        <button class="btn" id="themeBtn" type="button">☀︎ / ◐ тема</button>
+        <button class="btn" id="printBtn" type="button">Печать</button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card" aria-label="Пошаговое решение">
+        <div class="card-inner">
+          <div class="tabs" role="tablist" aria-label="Темы разбора">
+            <button class="tab active" data-topic="quadratic" role="tab" type="button">Метод интервалов</button>
+            <button class="tab" data-topic="linear" role="tab" type="button">Линейное неравенство</button>
+            <button class="tab" data-topic="noroot" role="tab" type="button">Нет корней</button>
+            <button class="tab" data-topic="multiplicity" role="tab" type="button">Кратность корня</button>
+          </div>
+
+          <section class="idea" id="ideaBox"></section>
+
+          <div class="solution-controls">
+            <label>
+              Уровень объяснения:
+              <select class="select" id="detailSelect" aria-label="Уровень объяснения">
+                <option value="short">кратко</option>
+                <option value="standard" selected>стандартно</option>
+                <option value="deep">очень подробно</option>
+              </select>
+            </label>
+            <button class="hint-trigger" type="button" data-hint="detail" aria-label="Подсказка про уровень объяснения">?</button>
+            <button class="btn primary" id="nextStep" type="button">Открыть следующий шаг</button>
+            <button class="btn" id="resetSteps" type="button">Свернуть разбор</button>
+          </div>
+
+          <div class="steps" id="steps"></div>
+
+          <section class="errors">
+            <h2>Типичные ошибки</h2>
+            <ul id="errorsList"></ul>
+          </section>
+
+          <section class="generator">
+            <h2>Генератор похожей задачи</h2>
+            <p style="color:var(--muted);line-height:1.5">
+              Генератор создаёт безопасную похожую задачу того же типа и сразу обновляет числовую ось.
+            </p>
+            <div class="control-row">
+              <button class="btn warning" id="genBtn" type="button">Сгенерировать задачу</button>
+              <button class="hint-trigger" type="button" data-hint="generate" aria-label="Подсказка про генератор">!</button>
+            </div>
+            <div class="gen-output" id="genOutput" aria-live="polite">
+              Нажмите кнопку, чтобы получить одну похожую задачу с ответом и краткой идеей.
+            </div>
+          </section>
+
+          <section class="quiz">
+            <h2>Мини-квиз</h2>
+            <div class="quiz-card" id="quizBox"></div>
+
+            <h2 style="margin-top:18px">Самопроверка</h2>
+            <div class="selfcheck">
+              <label><input type="checkbox"> Я привёл неравенство к виду с нулём справа.</label>
+              <label><input type="checkbox"> Я отметил корни на оси в порядке возрастания.</label>
+              <label><input type="checkbox"> Я различил строгие и нестрогие точки.</label>
+              <label><input type="checkbox"> Я проверил кратность корней и смену знака.</label>
+            </div>
+          </section>
+
+          <section class="print-box">
+            <h2>Печатная версия</h2>
+            <p style="color:var(--muted);line-height:1.5">
+              Используйте кнопку «Печать»: страница адаптирована так, чтобы сохранить основные шаги,
+              визуализацию и блок самопроверки без лишних элементов интерфейса.
+            </p>
+          </section>
+        </div>
+      </section>
+
+      <aside class="card viz-column" aria-label="Интерактивная визуализация">
+        <div class="card-inner">
+          <div class="viz-head">
+            <div>
+              <h2 id="vizTitle">Числовая ось</h2>
+              <p id="vizSubtitle">Кликните по canvas, чтобы открыть увеличенную копию. Потяните мышью, чтобы сдвинуть схему.</p>
+            </div>
+            <button class="hint-trigger" type="button" data-hint="canvas" aria-label="Подсказка про схему">i</button>
+          </div>
+
+          <div class="canvas-shell">
+            <canvas id="mainCanvas" width="900" height="520" aria-label="Интерактивная числовая ось"></canvas>
+            <div class="canvas-note">клик — увеличить • drag — двигать • колесо — zoom</div>
+          </div>
+
+          <div class="viz-controls" id="mainControls">
+            <div class="control-row">
+              <button class="btn" data-zoom="out" type="button">−</button>
+              <button class="btn" data-zoom="reset" type="button">сброс</button>
+              <button class="btn" data-zoom="in" type="button">+</button>
+              <span style="color:var(--muted)" id="zoomLabel">100%</span>
+            </div>
+            <div class="range-wrap">
+              <label for="zoomRange">Масштаб</label>
+              <input id="zoomRange" type="range" min="0.65" max="2.2" step="0.01" value="1">
+            </div>
+            <div class="range-wrap">
+              <label for="probeRange">Пробная точка</label>
+              <input id="probeRange" type="range" min="-8" max="8" step="0.1" value="0">
+              <span id="probeValue">0</span>
+            </div>
+            <div class="switches">
+              <label class="check"><input id="showSigns" type="checkbox" checked> показывать знаки</label>
+              <label class="check"><input id="showAnswer" type="checkbox" checked> подсветить ответ</label>
+              <label class="check"><input id="showProbe" type="checkbox" checked> пробная точка</label>
+              <label class="check"><input id="showGrid" type="checkbox" checked> деления оси</label>
+            </div>
+          </div>
+
+          <div class="legend" id="legend"></div>
+        </div>
+      </aside>
+    </main>
+
+    <div class="footer">Лёвин Артём Александрович эксклюзивно для Тимофея Васильченко</div>
+  </div>
+
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div>
+          <h2 id="modalTitle">Увеличенная схема</h2>
+          <p style="margin:.25rem 0 0;color:var(--muted)">Состояние синхронизировано с основной схемой.</p>
+        </div>
+        <button class="close" id="closeModal" type="button" aria-label="Закрыть">×</button>
+      </div>
+      <div class="canvas-shell">
+        <canvas id="modalCanvas" width="1200" height="640" aria-label="Увеличенная интерактивная числовая ось"></canvas>
+      </div>
+      <div class="viz-controls modal-controls">
+        <div class="control-row">
+          <button class="btn" data-zoom="out" type="button">−</button>
+          <button class="btn" data-zoom="reset" type="button">сброс</button>
+          <button class="btn" data-zoom="in" type="button">+</button>
+          <span style="color:var(--muted)" id="zoomLabelModal">100%</span>
+        </div>
+        <div class="range-wrap">
+          <label for="zoomRangeModal">Масштаб</label>
+          <input id="zoomRangeModal" type="range" min="0.65" max="2.2" step="0.01" value="1">
+        </div>
+        <div class="range-wrap">
+          <label for="probeRangeModal">Пробная точка</label>
+          <input id="probeRangeModal" type="range" min="-8" max="8" step="0.1" value="0">
+          <span id="probeValueModal">0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tooltip" id="tooltip" role="tooltip" aria-hidden="true">
+    <button class="tip-close" id="tipClose" type="button" aria-label="Закрыть подсказку">×</button>
+    <div id="tipContent"></div>
+  </div>
+
+  <script>
+  (() => {
+    "use strict";
+
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    const root = document.documentElement;
+    const body = document.body;
+
+    const M = {
+      mi: t => `<mi>${t}</mi>`,
+      mn: t => `<mn>${t}</mn>`,
+      mo: t => `<mo>${t}</mo>`,
+      mrow: t => `<mrow>${t}</mrow>`,
+      sup: (a,b) => `<msup>${a}${b}</msup>`,
+      frac: (a,b) => `<mfrac>${a}${b}</mfrac>`,
+      text: t => `<mtext>${t}</mtext>`,
+      math: t => `<math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">${t}</math>`,
+      block: t => `<span class="mathline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block">${t}</math></span>`
+    };
+
+    function exprFactor(rootValue, power=1){
+      const sign = rootValue >= 0 ? "−" : "+";
+      const abs = Math.abs(rootValue);
+      const base = `<mrow><mo>(</mo><mi>x</mi><mo>${sign}</mo><mn>${abs}</mn><mo>)</mo></mrow>`;
+      return power === 1 ? base : `<msup>${base}<mn>${power}</mn></msup>`;
+    }
+
+    function intervalText(intervals){
+      return intervals.map(int => {
+        if(int.point !== undefined) return `{${fmt(int.point)}}`;
+        const l = int.left === -Infinity ? "−∞" : fmt(int.left);
+        const r = int.right === Infinity ? "+∞" : fmt(int.right);
+        return `${int.leftClosed ? "[" : "("}${l}; ${r}${int.rightClosed ? "]" : ")"}`;
+      }).join(" ∪ ");
+    }
+
+    function fmt(x){
+      if (x === Infinity) return "+∞";
+      if (x === -Infinity) return "−∞";
+      if (Math.abs(x + 17/6) < .001) return "−17/6";
+      if (Number.isInteger(x)) return String(x).replace("-", "−");
+      return String(Math.round(x*10)/10).replace("-", "−");
+    }
+
+    const topics = {
+      quadratic: {
+        title:"Метод интервалов",
+        subtitle:"Базовая схема для квадратного неравенства",
+        formula:"x² − x − 6 ≥ 0",
+        kind:"polynomial",
+        strict:false,
+        need:"positive",
+        roots:[{x:-2,m:1,closed:true,key:"roots"},{x:3,m:1,closed:true,key:"roots"}],
+        intervals:[
+          {left:-Infinity,right:-2,sign:1,leftClosed:false,rightClosed:true,answer:true},
+          {left:-2,right:3,sign:-1,leftClosed:true,rightClosed:true,answer:false},
+          {left:3,right:Infinity,sign:1,leftClosed:true,rightClosed:false,answer:true}
+        ],
+        probeDefault:0,
+        answer:"(−∞; −2] ∪ [3; +∞)",
+        idea:[
+          "Сначала переносим всё к виду с нулём справа.",
+          "Затем решаем уравнение, чтобы найти границы промежутков.",
+          "Корни делят ось на интервалы; на каждом интервале знак выражения постоянен.",
+          "Так как нужно неотрицательное значение, берём интервалы со знаком плюс и сами корни."
+        ],
+        steps:[
+          ["Дано", "Решаем неравенство: " + M.block(`${M.sup(M.mi("x"),M.mn("2"))}<mo>−</mo>${M.mi("x")}<mo>−</mo><mn>6</mn><mo>≥</mo><mn>0</mn>`) + "<p>Это уже нормализованный вид: справа стоит ноль, слева — выражение от переменной.</p>", "given"],
+          ["Что означает условие", "<p>Нужно найти все значения переменной, при которых выражение неотрицательно.</p>" + M.block(`${M.sup(M.mi("x"),M.mn("2"))}<mo>−</mo>${M.mi("x")}<mo>−</mo><mn>6</mn><mo>≥</mo><mn>0</mn>`) + '<p class="only-standard only-deep">Знак «≥» означает: подходят и положительные значения выражения, и случаи равенства нулю.</p>', "condition"],
+          ["Алгебраическая интерпретация", "<p>Заменяем неравенство уравнением, чтобы найти граничные точки.</p>" + M.block(`${M.sup(M.mi("x"),M.mn("2"))}<mo>−</mo>${M.mi("x")}<mo>−</mo><mn>6</mn><mo>=</mo><mn>0</mn>`) + M.block(`<mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>3</mn><mo>)</mo></mrow><mo>=</mo><mn>0</mn>`), "roots"],
+          ["Ключевая идея", "<p>Корни −2 и 3 разбивают числовую ось на три промежутка. На каждом промежутке знак выражения постоянен.</p><p class='only-deep'>Поэтому не нужно подставлять много чисел: достаточно найти знак на одном промежутке, а затем использовать чередование знаков.</p>", "intervals"],
+          ["Пошаговое доведение до ответа", "<p>Берём пробную точку 0 из центрального промежутка:</p>" + M.block(`${M.sup(M.mn("0"),M.mn("2"))}<mo>−</mo><mn>0</mn><mo>−</mo><mn>6</mn><mo>=</mo><mo>−</mo><mn>6</mn><mo>&lt;</mo><mn>0</mn>`) + "<p>В центре знак минус, по бокам — плюс.</p>", "probe"],
+          ["Финальная проверка", "<p>Для неравенства со знаком «≥» выбираем плюсы и нули. Значит, точки −2 и 3 включаются в ответ.</p>" + M.block(`${M.mi("x")}<mo>∈</mo><mrow><mo>(</mo><mo>−∞</mo><mo>;</mo><mo>−</mo><mn>2</mn><mo>]</mo></mrow><mo>∪</mo><mrow><mo>[</mo><mn>3</mn><mo>;</mo><mo>+∞</mo><mo>)</mo></mrow>`), "answer"],
+          ["Краткий вывод", "<p>Метод интервалов превращает неравенство в задачу о знаках на промежутках. Главная дисциплина — правильно отметить точки и выбрать нужный знак.</p>", "summary"]
+        ],
+        errors:["Подставлять пробную точку не в нормализованное выражение.", "Выколоть точки при знаке «≥».", "Записать центральный отрицательный промежуток вместо положительных.", "Не подписать числовую ось.", "Забыть, что бесконечность всегда записывается с круглой скобкой."],
+        quiz:{
+          q:"Что выбираем в ответе для x² − x − 6 ≥ 0?",
+          options:["Только промежуток между корнями", "Промежутки со знаком плюс и сами корни", "Только корни", "Все числа"],
+          correct:1
+        }
+      },
+      linear: {
+        title:"Линейное неравенство",
+        subtitle:"Главное правило: деление на отрицательное число меняет знак",
+        formula:"−2x + 3 ≥ 4(x + 5)",
+        kind:"linear",
+        strict:false,
+        need:"left",
+        roots:[{x:-17/6,m:1,closed:true,key:"answer"}],
+        intervals:[
+          {left:-Infinity,right:-17/6,sign:1,leftClosed:false,rightClosed:true,answer:true},
+          {left:-17/6,right:Infinity,sign:-1,leftClosed:true,rightClosed:false,answer:false}
+        ],
+        probeDefault:-4,
+        answer:"(−∞; −17/6]",
+        idea:[
+          "Раскрываем скобки и переносим всё с переменной в одну сторону.",
+          "Получаем линейное неравенство с отрицательным коэффициентом при x.",
+          "При делении на отрицательное число знак неравенства обязательно меняется.",
+          "Ответ записываем промежутком."
+        ],
+        steps:[
+          ["Дано", "Решаем неравенство: " + M.block(`<mo>−</mo><mn>2</mn><mi>x</mi><mo>+</mo><mn>3</mn><mo>≥</mo><mn>4</mn><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>5</mn><mo>)</mo></mrow>`), "given"],
+          ["Что означает условие", "<p>Нужно оставить переменную в одной части неравенства и получить простое ограничение на x.</p>", "condition"],
+          ["Алгебраическая интерпретация", "<p>Раскрываем скобки и переносим всё влево.</p>" + M.block(`<mo>−</mo><mn>2</mn><mi>x</mi><mo>+</mo><mn>3</mn><mo>≥</mo><mn>4</mn><mi>x</mi><mo>+</mo><mn>20</mn>`) + M.block(`<mo>−</mo><mn>6</mn><mi>x</mi><mo>−</mo><mn>17</mn><mo>≥</mo><mn>0</mn>`), "normalize"],
+          ["Ключевая идея", "<p>Теперь нужно уединить x. Опасное место — деление на отрицательное число.</p>", "negative"],
+          ["Пошаговое доведение до ответа", M.block(`<mo>−</mo><mn>6</mn><mi>x</mi><mo>≥</mo><mn>17</mn>`) + "<p>Делим на −6, поэтому знак «≥» превращается в «≤».</p>" + M.block(`${M.mi("x")}<mo>≤</mo><mo>−</mo>${M.frac(M.mn("17"),M.mn("6"))}`), "answer"],
+          ["Финальная проверка", "<p>Возьмём число левее границы, например −3. Оно должно подходить. Число правее границы, например 0, не подходит.</p><p class='only-standard only-deep'>Это согласуется с ответом на числовой оси.</p>", "probe"],
+          ["Краткий вывод", "<p>В линейных неравенствах главная ловушка — знак при делении или умножении на отрицательное число.</p>", "summary"]
+        ],
+        errors:["Не поменять знак при делении на −6.", "Потерять минус при переносе 17.", "Записать круглую скобку вместо квадратной.", "Перепутать направление луча на числовой оси."],
+        quiz:{
+          q:"Что происходит со знаком неравенства при делении на отрицательное число?",
+          options:["Он не меняется", "Он меняется на противоположный", "Неравенство становится уравнением", "Ответ всегда пустой"],
+          correct:1
+        }
+      },
+      noroot: {
+        title:"Если уравнение не имеет корней",
+        subtitle:"Корней нет — это ещё не значит, что решений нет",
+        formula:"x² − x + 6 > 0",
+        kind:"noroot",
+        strict:true,
+        need:"positive",
+        roots:[],
+        intervals:[
+          {left:-Infinity,right:Infinity,sign:1,leftClosed:false,rightClosed:false,answer:true}
+        ],
+        probeDefault:0,
+        answer:"(−∞; +∞)",
+        idea:[
+          "Решаем связанное уравнение и видим, что корней нет.",
+          "Если корней нет, ось не делится на несколько промежутков.",
+          "Знак выражения одинаков на всей оси.",
+          "Остаётся проверить знак в одной удобной точке."
+        ],
+        steps:[
+          ["Дано", "Решаем неравенство: " + M.block(`${M.sup(M.mi("x"),M.mn("2"))}<mo>−</mo>${M.mi("x")}<mo>+</mo><mn>6</mn><mo>&gt;</mo><mn>0</mn>`), "given"],
+          ["Что означает условие", "<p>Нужно понять, бывает ли выражение положительным, отрицательным или равным нулю.</p>", "condition"],
+          ["Алгебраическая интерпретация", "<p>Решаем связанное уравнение.</p>" + M.block(`${M.sup(M.mi("x"),M.mn("2"))}<mo>−</mo>${M.mi("x")}<mo>+</mo><mn>6</mn><mo>=</mo><mn>0</mn>`) + M.block(`${M.mi("D")}<mo>=</mo><mn>1</mn><mo>−</mo><mn>24</mn><mo>=</mo><mo>−</mo><mn>23</mn><mo>&lt;</mo><mn>0</mn>`), "roots"],
+          ["Ключевая идея", "<p>Корней нет, значит выражение не меняет знак на всей числовой оси.</p><p class='only-deep'>Для квадратичной функции с положительным старшим коэффициентом и отрицательным дискриминантом весь график расположен выше оси.</p>", "intervals"],
+          ["Пошаговое доведение до ответа", "<p>Проверяем знак в точке 0.</p>" + M.block(`${M.sup(M.mn("0"),M.mn("2"))}<mo>−</mo><mn>0</mn><mo>+</mo><mn>6</mn><mo>=</mo><mn>6</mn><mo>&gt;</mo><mn>0</mn>`), "probe"],
+          ["Финальная проверка", "<p>Знак положительный на всей оси. Неравенство строгое, но нулей нет, поэтому подходят все числа.</p>" + M.block(`${M.mi("x")}<mo>∈</mo><mrow><mo>(</mo><mo>−∞</mo><mo>;</mo><mo>+∞</mo><mo>)</mo></mrow>`), "answer"],
+          ["Краткий вывод", "<p>Фраза «уравнение не имеет корней» не равна фразе «неравенство не имеет решений».</p>", "summary"]
+        ],
+        errors:["Остановиться после D < 0 и написать пустое множество.", "Не проверить знак выражения в пробной точке.", "Забыть, что знак не меняется без корней.", "Перепутать случаи > 0 и ≤ 0."],
+        quiz:{
+          q:"Если у x² − x + 6 = 0 нет корней, что нужно сделать для неравенства?",
+          options:["Сразу написать пустое множество", "Проверить знак выражения в одной точке", "Разделить на x", "Взять только x = 0"],
+          correct:1
+        }
+      },
+      multiplicity: {
+        title:"Кратность корня",
+        subtitle:"Чётная кратность сохраняет знак, нечётная меняет",
+        formula:"(x − 2)²(x + 3) ≥ 0",
+        kind:"polynomial",
+        strict:false,
+        need:"positive",
+        roots:[{x:-3,m:1,closed:true,key:"roots"},{x:2,m:2,closed:true,key:"multiplicity"}],
+        intervals:[
+          {left:-Infinity,right:-3,sign:-1,leftClosed:false,rightClosed:true,answer:false},
+          {left:-3,right:2,sign:1,leftClosed:true,rightClosed:true,answer:true},
+          {left:2,right:Infinity,sign:1,leftClosed:true,rightClosed:false,answer:true}
+        ],
+        probeDefault:3,
+        answer:"[−3; +∞)",
+        idea:[
+          "Повторяющийся множитель даёт корень с кратностью.",
+          "Через корень нечётной кратности знак меняется.",
+          "Через корень чётной кратности знак не меняется.",
+          "Нестрогое неравенство включает сами корни."
+        ],
+        steps:[
+          ["Дано", "Решаем неравенство: " + M.block(`<msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>2</mn><mo>)</mo></mrow><mn>2</mn></msup><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>3</mn><mo>)</mo></mrow><mo>≥</mo><mn>0</mn>`), "given"],
+          ["Что означает условие", "<p>Нужно найти, где произведение неотрицательно: положительно или равно нулю.</p>", "condition"],
+          ["Алгебраическая интерпретация", "<p>Находим корни каждого множителя.</p>" + M.block(`<mrow><mi>x</mi><mo>−</mo><mn>2</mn></mrow><mo>=</mo><mn>0</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>2</mn>`) + M.block(`<mrow><mi>x</mi><mo>+</mo><mn>3</mn></mrow><mo>=</mo><mn>0</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mo>−</mo><mn>3</mn>`), "roots"],
+          ["Ключевая идея", "<p>Корень 2 появляется дважды, потому что множитель возведён в квадрат. Значит, при переходе через 2 знак не меняется.</p><p>Корень −3 имеет кратность 1, поэтому через него знак меняется.</p>", "multiplicity"],
+          ["Пошаговое доведение до ответа", "<p>Справа, например при x = 3, произведение положительно. Через 2 знак не меняется, через −3 меняется.</p>" + M.block(`<msup><mrow><mo>(</mo><mn>3</mn><mo>−</mo><mn>2</mn><mo>)</mo></mrow><mn>2</mn></msup><mrow><mo>(</mo><mn>3</mn><mo>+</mo><mn>3</mn><mo>)</mo></mrow><mo>&gt;</mo><mn>0</mn>`), "probe"],
+          ["Финальная проверка", "<p>Нужны плюсы и нули. Получаем все числа от −3 вправо.</p>" + M.block(`${M.mi("x")}<mo>∈</mo><mrow><mo>[</mo><mo>−</mo><mn>3</mn><mo>;</mo><mo>+∞</mo><mo>)</mo></mrow>`), "answer"],
+          ["Краткий вывод", "<p>Кратность корня — главный регулятор смены знака в методе интервалов.</p>", "summary"]
+        ],
+        errors:["Механически чередовать знаки через каждый корень.", "Не заметить квадрат у множителя x − 2.", "Выколоть корни при знаке «≥».", "Записать отдельно точку 2, хотя весь промежуток справа тоже подходит."],
+        quiz:{
+          q:"Что происходит со знаком через корень чётной кратности?",
+          options:["Знак меняется", "Знак не меняется", "Корень удаляется из ответа", "Ответ всегда пустой"],
+          correct:1
+        }
+      }
+    };
+
+    let state = {
+      topic:"quadratic",
+      step:2,
+      detail:"standard",
+      zoom:1,
+      probe:0,
+      pan:0,
+      showSigns:true,
+      showAnswer:true,
+      showProbe:true,
+      showGrid:true,
+      hoverKey:null,
+      hoverRoot:null,
+      generated:null,
+      useGenerated:false
+    };
+
+    const mainCanvas = $("#mainCanvas");
+    const modalCanvas = $("#modalCanvas");
+    const mainCtx = mainCanvas.getContext("2d");
+    const modalCtx = modalCanvas.getContext("2d");
+
+    function currentTopic(){
+      return state.useGenerated && state.generated ? state.generated : topics[state.topic];
+    }
+
+    function renderAll(){
+      renderText();
+      syncControls();
+      drawAll();
+      renderLegend();
+      renderQuiz();
+    }
+
+    function renderText(){
+      const t = currentTopic();
+      $("#vizTitle").textContent = t.title;
+      $("#vizSubtitle").textContent = t.subtitle;
+      $("#ideaBox").innerHTML = `
+        <h2>Идея решения</h2>
+        <ul>${t.idea.map(x => `<li>${x}</li>`).join("")}</ul>
+      `;
+      const steps = $("#steps");
+      steps.innerHTML = t.steps.map((s, idx) => `
+        <article class="step ${idx > state.step ? "locked" : ""}" data-key="${s[2]}" data-step="${idx}">
+          <h3><span class="badge">${idx+1}</span>${s[0]}</h3>
+          ${idx <= state.step ? s[1] : "<p>Шаг пока скрыт. Откройте его кнопкой выше.</p>"}
+        </article>
+      `).join("");
+      $$(".step").forEach(el => {
+        el.addEventListener("mouseenter", () => { state.hoverKey = el.dataset.key; drawAll(); });
+        el.addEventListener("mouseleave", () => { state.hoverKey = null; drawAll(); });
+      });
+      $("#errorsList").innerHTML = t.errors.map(e => `<li>${e}</li>`).join("");
+      body.dataset.detail = state.detail;
+    }
+
+    function renderLegend(){
+      const t = currentTopic();
+      $("#legend").innerHTML = `
+        <div class="legend-item"><span class="dot"></span> закрашенная точка — граница входит в ответ</div>
+        <div class="legend-item"><span class="dot open"></span> выколотая точка — граница не входит в ответ</div>
+        <div class="legend-item"><span class="dot orange"></span> бордово-оранжевая подсветка — выбранные промежутки</div>
+        <div class="legend-item">Текущий ответ: <strong>${t.answer}</strong></div>
+      `;
+    }
+
+    function renderQuiz(){
+      const t = currentTopic();
+      const q = t.quiz;
+      $("#quizBox").innerHTML = `
+        <p style="color:var(--muted);margin:0">${q.q}</p>
+        <div class="quiz-options">
+          ${q.options.map((o,i)=>`<button class="option" type="button" data-i="${i}">${o}</button>`).join("")}
+        </div>
+        <div id="quizResult" style="color:var(--muted);min-height:1.4em"></div>
+      `;
+      $$(".option", $("#quizBox")).forEach(btn => {
+        btn.addEventListener("click", () => {
+          const i = Number(btn.dataset.i);
+          $$(".option", $("#quizBox")).forEach(b => b.classList.remove("correct","wrong"));
+          if(i === q.correct){
+            btn.classList.add("correct");
+            $("#quizResult").textContent = "Верно. Отлично: это ключевой смысл данного случая.";
+          } else {
+            btn.classList.add("wrong");
+            $(`.option[data-i="${q.correct}"]`, $("#quizBox")).classList.add("correct");
+            $("#quizResult").textContent = "Проверьте правило ещё раз: правильный вариант подсвечен зелёным.";
+          }
+        });
+      });
+    }
+
+    function syncControls(){
+      $("#detailSelect").value = state.detail;
+      $("#zoomRange").value = state.zoom;
+      $("#zoomRangeModal").value = state.zoom;
+      $("#zoomLabel").textContent = Math.round(state.zoom*100) + "%";
+      $("#zoomLabelModal").textContent = Math.round(state.zoom*100) + "%";
+      $("#probeRange").value = state.probe;
+      $("#probeRangeModal").value = state.probe;
+      $("#probeValue").textContent = fmt(Number(state.probe));
+      $("#probeValueModal").textContent = fmt(Number(state.probe));
+      $("#showSigns").checked = state.showSigns;
+      $("#showAnswer").checked = state.showAnswer;
+      $("#showProbe").checked = state.showProbe;
+      $("#showGrid").checked = state.showGrid;
+      $$(".tab").forEach(tab => tab.classList.toggle("active", !state.useGenerated && tab.dataset.topic === state.topic));
+    }
+
+    function cssVar(name){
+      return getComputedStyle(body).getPropertyValue(name).trim();
+    }
+
+    function setupCanvas(canvas, ctx, modal=false){
+      let dragging = false;
+      let startX = 0;
+      let startPan = 0;
+      let moved = 0;
+      canvas.addEventListener("pointerdown", e => {
+        dragging = true;
+        startX = e.clientX;
+        startPan = state.pan;
+        moved = 0;
+        canvas.setPointerCapture(e.pointerId);
+      });
+      canvas.addEventListener("pointermove", e => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const mathX = screenToMath(canvas, x);
+        updateHoverRoot(mathX);
+        if(dragging){
+          const dx = e.clientX - startX;
+          moved = Math.max(moved, Math.abs(dx));
+          state.pan = startPan + dx / (46 * state.zoom);
+          drawAll();
+        }
+      });
+      canvas.addEventListener("pointerup", e => {
+        dragging = false;
+        if(!modal && moved < 4) openModal();
+      });
+      canvas.addEventListener("pointerleave", () => {
+        state.hoverRoot = null;
+        state.hoverKey = null;
+        drawAll();
+      });
+      canvas.addEventListener("wheel", e => {
+        e.preventDefault();
+        const factor = e.deltaY < 0 ? 1.08 : .92;
+        state.zoom = clamp(state.zoom * factor, .65, 2.2);
+        syncControls();
+        drawAll();
+      }, {passive:false});
+    }
+
+    function updateHoverRoot(mathX){
+      const t = currentTopic();
+      let found = null;
+      for(const r of t.roots){
+        if(Math.abs(mathX - r.x) < .22 / state.zoom){
+          found = r;
+          break;
+        }
+      }
+      state.hoverRoot = found;
+      state.hoverKey = found ? (found.key || "roots") : null;
+      $$(".step").forEach(el => el.classList.toggle("linked", state.hoverKey && el.dataset.key === state.hoverKey));
+      drawAll();
+    }
+
+    function screenToMath(canvas, sx){
+      const w = canvas.width;
+      const scale = 46 * state.zoom;
+      return (sx - w/2) / scale - state.pan;
+    }
+
+    function mathToScreen(canvas, x){
+      const w = canvas.width;
+      const scale = 46 * state.zoom;
+      return w/2 + (x + state.pan) * scale;
+    }
+
+    function drawAll(){
+      draw(mainCanvas, mainCtx);
+      if($("#overlay").classList.contains("open")) draw(modalCanvas, modalCtx);
+    }
+
+    function draw(canvas, ctx){
+      const t = currentTopic();
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0,0,w,h);
+      const bg = cssVar("--panel2");
+      const text = cssVar("--text");
+      const muted = cssVar("--muted");
+      const accent = cssVar("--accent");
+      const accent2 = cssVar("--accent2");
+      const danger = cssVar("--danger");
+      const grid = cssVar("--grid");
+      const y = Math.round(h * .52);
+
+      const grad = ctx.createLinearGradient(0,0,w,h);
+      grad.addColorStop(0, "rgba(66,232,212,.12)");
+      grad.addColorStop(1, "rgba(255,184,92,.08)");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0,0,w,h);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0,0,w,h);
+
+      ctx.save();
+      ctx.font = "700 28px Arial";
+      ctx.fillStyle = text;
+      ctx.fillText(t.formula, 28, 48);
+      ctx.font = "16px Arial";
+      ctx.fillStyle = muted;
+      ctx.fillText("Перемещайте схему мышью. Наведите на корень, чтобы подсветить связанный шаг.", 28, 75);
+      ctx.restore();
+
+      if(state.showGrid){
+        ctx.strokeStyle = grid;
+        ctx.lineWidth = 1;
+        for(let i=-20;i<=20;i++){
+          const x = mathToScreen(canvas, i);
+          ctx.beginPath();
+          ctx.moveTo(x, 100);
+          ctx.lineTo(x, h-44);
+          ctx.stroke();
+        }
+      }
+
+      // answer intervals
+      if(state.showAnswer){
+        ctx.lineWidth = 14;
+        ctx.strokeStyle = accent2;
+        ctx.lineCap = "round";
+        t.intervals.filter(i=>i.answer && i.point === undefined).forEach(i => {
+          const left = i.left === -Infinity ? 30 : mathToScreen(canvas, i.left);
+          const right = i.right === Infinity ? w-30 : mathToScreen(canvas, i.right);
+          ctx.beginPath();
+          ctx.moveTo(clamp(left, -100, w+100), y-24);
+          ctx.lineTo(clamp(right, -100, w+100), y-24);
+          ctx.stroke();
+          if(i.left === -Infinity){
+            arrow(ctx, left+6, y-24, left-22, y-24, accent2);
+          }
+          if(i.right === Infinity){
+            arrow(ctx, right-6, y-24, right+22, y-24, accent2);
+          }
+        });
+      }
+
+      // axis
+      ctx.strokeStyle = text;
+      ctx.lineWidth = 3;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(34,y);
+      ctx.lineTo(w-34,y);
+      ctx.stroke();
+      arrow(ctx,w-52,y,w-24,y,text);
+      ctx.fillStyle = text;
+      ctx.font = "700 22px Arial";
+      ctx.fillText("x", w-28, y-14);
+
+      // ticks
+      const minX = Math.floor(screenToMath(canvas, 0)) - 1;
+      const maxX = Math.ceil(screenToMath(canvas, w)) + 1;
+      ctx.font = "14px Arial";
+      ctx.textAlign = "center";
+      ctx.fillStyle = muted;
+      ctx.strokeStyle = muted;
+      ctx.lineWidth = 1.5;
+      for(let x=minX; x<=maxX; x++){
+        const sx = mathToScreen(canvas, x);
+        if(sx < 20 || sx > w-20) continue;
+        ctx.beginPath();
+        ctx.moveTo(sx, y-8);
+        ctx.lineTo(sx, y+8);
+        ctx.stroke();
+        if(x % 2 === 0) ctx.fillText(String(x).replace("-", "−"), sx, y+29);
+      }
+
+      // signs
+      if(state.showSigns){
+        ctx.font = "900 25px Arial";
+        t.intervals.forEach(i => {
+          if(i.point !== undefined) return;
+          const mid = finiteMid(i.left, i.right, canvas);
+          const sx = mathToScreen(canvas, mid);
+          if(sx < 38 || sx > w-38) return;
+          ctx.fillStyle = i.sign > 0 ? accent : danger;
+          ctx.fillText(i.sign > 0 ? "+" : "−", sx, y-58);
+        });
+      }
+
+      // roots
+      t.roots.forEach(r => {
+        const sx = mathToScreen(canvas, r.x);
+        if(sx < -30 || sx > w+30) return;
+        const highlighted = (state.hoverRoot && state.hoverRoot.x === r.x) || (state.hoverKey && state.hoverKey === r.key);
+        if(highlighted){
+          ctx.beginPath();
+          ctx.arc(sx, y, 22, 0, Math.PI*2);
+          ctx.fillStyle = "rgba(66,232,212,.20)";
+          ctx.fill();
+          ctx.strokeStyle = accent;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+        ctx.beginPath();
+        ctx.arc(sx, y, 9, 0, Math.PI*2);
+        ctx.fillStyle = r.closed ? accent : bg;
+        ctx.strokeStyle = accent;
+        ctx.lineWidth = 3;
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = text;
+        ctx.font = "800 18px Arial";
+        ctx.fillText(fmt(r.x), sx, y+49);
+
+        if(r.m > 1){
+          ctx.fillStyle = accent2;
+          ctx.font = "800 15px Arial";
+          ctx.fillText("кратн. " + r.m, sx, y-86);
+          ctx.strokeStyle = accent2;
+          ctx.lineWidth = 2;
+          ctx.setLineDash([5,5]);
+          ctx.beginPath();
+          ctx.arc(sx, y-28, 20, Math.PI, 0);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      });
+
+      // probe point
+      if(state.showProbe){
+        const px = mathToScreen(canvas, Number(state.probe));
+        if(px > 24 && px < w-24){
+          const sign = evalSign(t, Number(state.probe));
+          ctx.strokeStyle = sign >= 0 ? accent : danger;
+          ctx.fillStyle = sign >= 0 ? accent : danger;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(px, 108);
+          ctx.lineTo(px, y+18);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(px, y, 6, 0, Math.PI*2);
+          ctx.fill();
+          ctx.font = "800 16px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("проба " + fmt(Number(state.probe)), px, 104);
+          ctx.fillText(sign >= 0 ? "знак +" : "знак −", px, 128);
+        }
+      }
+
+      // answer label
+      ctx.textAlign = "left";
+      ctx.fillStyle = text;
+      ctx.font = "800 20px Arial";
+      ctx.fillText("Ответ: " + t.answer, 28, h-26);
+    }
+
+    function finiteMid(left, right, canvas){
+      if(left === -Infinity && right === Infinity) return -state.pan;
+      if(left === -Infinity) return right - 2.4;
+      if(right === Infinity) return left + 2.4;
+      return (left+right)/2;
+    }
+
+    function evalSign(t, x){
+      if(t.kind === "linear"){
+        return (-6*x - 17) >= 0 ? 1 : -1;
+      }
+      if(t.kind === "noroot"){
+        return (x*x - x + 6) > 0 ? 1 : -1;
+      }
+      if(t.generatedEval){
+        const v = t.generatedEval(x);
+        return v > 0 ? 1 : v < 0 ? -1 : 0;
+      }
+      if(t.topicEval){
+        const v = t.topicEval(x);
+        return v > 0 ? 1 : v < 0 ? -1 : 0;
+      }
+      // topic-specific fallback
+      if(state.topic === "multiplicity"){
+        const v = Math.pow(x-2,2)*(x+3);
+        return v > 0 ? 1 : v < 0 ? -1 : 0;
+      }
+      const v = x*x - x - 6;
+      return v > 0 ? 1 : v < 0 ? -1 : 0;
+    }
+
+    function arrow(ctx,x1,y1,x2,y2,color){
+      const ang = Math.atan2(y2-y1,x2-x1);
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(x1,y1);
+      ctx.lineTo(x2,y2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x2,y2);
+      ctx.lineTo(x2-10*Math.cos(ang-Math.PI/7), y2-10*Math.sin(ang-Math.PI/7));
+      ctx.lineTo(x2-10*Math.cos(ang+Math.PI/7), y2-10*Math.sin(ang+Math.PI/7));
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function clamp(x,a,b){ return Math.max(a, Math.min(b, x)); }
+
+    function openModal(){
+      const o = $("#overlay");
+      o.classList.add("open");
+      o.setAttribute("aria-hidden","false");
+      $("#closeModal").focus();
+      drawAll();
+    }
+
+    function closeModal(){
+      const o = $("#overlay");
+      o.classList.remove("open");
+      o.setAttribute("aria-hidden","true");
+    }
+
+    function setTopic(topic){
+      state.topic = topic;
+      state.useGenerated = false;
+      state.step = 2;
+      state.probe = topics[topic].probeDefault;
+      state.pan = 0;
+      renderAll();
+    }
+
+    $$(".tab").forEach(tab => tab.addEventListener("click", () => setTopic(tab.dataset.topic)));
+
+    $("#detailSelect").addEventListener("change", e => {
+      state.detail = e.target.value;
+      renderText();
+      syncControls();
+      showTipFor("detail", e.target);
+    });
+
+    $("#nextStep").addEventListener("click", () => {
+      const total = currentTopic().steps.length;
+      state.step = Math.min(total-1, state.step+1);
+      renderText();
+      const el = $(`.step[data-step="${state.step}"]`);
+      if(el) el.scrollIntoView({behavior:"smooth", block:"nearest"});
+    });
+    $("#resetSteps").addEventListener("click", () => { state.step = 0; renderText(); });
+
+    $("#themeBtn").addEventListener("click", () => {
+      const next = body.dataset.theme === "dark" ? "light" : "dark";
+      body.dataset.theme = next;
+      drawAll();
+    });
+    $("#printBtn").addEventListener("click", () => window.print());
+
+    function bindRange(id, prop){
+      $(id).addEventListener("input", e => {
+        state[prop] = Number(e.target.value);
+        syncControls();
+        drawAll();
+      });
+    }
+    bindRange("#zoomRange","zoom");
+    bindRange("#zoomRangeModal","zoom");
+    bindRange("#probeRange","probe");
+    bindRange("#probeRangeModal","probe");
+
+    ["#showSigns","#showAnswer","#showProbe","#showGrid"].forEach(sel => {
+      $(sel).addEventListener("change", e => {
+        const map = {showSigns:"showSigns", showAnswer:"showAnswer", showProbe:"showProbe", showGrid:"showGrid"};
+        state[map[e.target.id]] = e.target.checked;
+        drawAll();
+      });
+    });
+
+    $$("[data-zoom]").forEach(btn => btn.addEventListener("click", () => {
+      const z = btn.dataset.zoom;
+      if(z === "in") state.zoom = clamp(state.zoom + .12, .65, 2.2);
+      if(z === "out") state.zoom = clamp(state.zoom - .12, .65, 2.2);
+      if(z === "reset") { state.zoom = 1; state.pan = 0; }
+      syncControls();
+      drawAll();
+    }));
+
+    $("#overlay").addEventListener("click", e => {
+      if(e.target.id === "overlay") closeModal();
+    });
+    $("#closeModal").addEventListener("click", closeModal);
+    window.addEventListener("keydown", e => {
+      if(e.key === "Escape"){
+        closeModal();
+        hideTip();
+      }
+    });
+
+    setupCanvas(mainCanvas, mainCtx, false);
+    setupCanvas(modalCanvas, modalCtx, true);
+
+    // Generator
+    $("#genBtn").addEventListener("click", () => {
+      const generated = makeGenerated();
+      state.generated = generated;
+      state.useGenerated = true;
+      state.step = 2;
+      state.probe = generated.probeDefault;
+      state.pan = 0;
+      $("#genOutput").innerHTML = `
+        <strong>Новая задача:</strong>
+        ${generated.problemHtml}
+        <p><strong>Ответ:</strong> ${generated.answer}</p>
+        <p style="color:var(--muted)"><strong>Идея:</strong> ${generated.idea[0]} ${generated.idea[1]}</p>
+      `;
+      $("#genBtn").classList.add("glow");
+      setTimeout(()=>$("#genBtn").classList.remove("glow"), 1600);
+      renderAll();
+      showTipFor("generated", $("#genBtn"));
+    });
+
+    function makeGenerated(){
+      let a = randInt(-6,0), b = randInt(1,7);
+      if(a === 0) a = -2;
+      if(b === 0 || b === a) b = 3;
+      if(a > b) [a,b] = [b,a];
+      const ge = Math.random() > .5;
+      const sign = ge ? "≥" : "<";
+      const answer = ge ? `(−∞; ${fmt(a)}] ∪ [${fmt(b)}; +∞)` : `(${fmt(a)}; ${fmt(b)})`;
+      const intervals = ge
+        ? [
+          {left:-Infinity,right:a,sign:1,leftClosed:false,rightClosed:true,answer:true},
+          {left:a,right:b,sign:-1,leftClosed:true,rightClosed:true,answer:false},
+          {left:b,right:Infinity,sign:1,leftClosed:true,rightClosed:false,answer:true}
+        ]
+        : [
+          {left:-Infinity,right:a,sign:1,leftClosed:false,rightClosed:false,answer:false},
+          {left:a,right:b,sign:-1,leftClosed:false,rightClosed:false,answer:true},
+          {left:b,right:Infinity,sign:1,leftClosed:false,rightClosed:false,answer:false}
+        ];
+      const htmlFormula = `${exprFactor(a)}${exprFactor(b)}<mo>${ge ? "≥" : "&lt;"}</mo><mn>0</mn>`;
+      return {
+        title:"Похожая задача",
+        subtitle:"Сгенерированная задача того же метода",
+        formula:`(x ${a>=0?"− "+a:"+ "+Math.abs(a)})(x ${b>=0?"− "+b:"+ "+Math.abs(b)}) ${sign} 0`.replaceAll("-","−"),
+        kind:"polynomial",
+        strict:!ge,
+        need: ge ? "positive" : "negative",
+        roots:[{x:a,m:1,closed:ge,key:"roots"},{x:b,m:1,closed:ge,key:"roots"}],
+        intervals,
+        probeDefault:0 > a && 0 < b ? 0 : a + .5,
+        answer,
+        generatedEval:x => (x-a)*(x-b),
+        problemHtml:M.block(htmlFormula),
+        idea:[
+          "Найдите корни каждого множителя.",
+          "Расставьте знаки на промежутках и выберите знак, указанный в неравенстве.",
+          "Строгость знака определяет, включаются ли корни в ответ."
+        ],
+        steps:[
+          ["Дано", "Сгенерированная задача:" + M.block(htmlFormula), "given"],
+          ["Что означает условие", `<p>Нужно выбрать те промежутки, где произведение имеет знак «${sign} 0».</p>`, "condition"],
+          ["Алгебраическая интерпретация", `<p>Корни множителей: ${fmt(a)} и ${fmt(b)}. Они делят ось на три промежутка.</p>`, "roots"],
+          ["Ключевая идея", "<p>Оба корня простой нечётной кратности, поэтому знаки при переходе через каждый корень чередуются.</p>", "intervals"],
+          ["Пошаговое доведение до ответа", "<p>На правом промежутке произведение положительно. Дальше знаки чередуются.</p>", "probe"],
+          ["Финальная проверка", `<p>Ответ: <strong>${answer}</strong>.</p>`, "answer"],
+          ["Краткий вывод", "<p>Это тот же метод интервалов: корни → ось → знаки → выбор нужных промежутков.</p>", "summary"]
+        ],
+        errors:["Перепутать строгие и нестрогие точки.", "Не упорядочить корни на оси.", "Начать выбирать промежутки до определения знака.", "Забыть, что при простых корнях знаки чередуются."],
+        quiz:{
+          q:"Что первым делом нужно сделать в сгенерированной задаче?",
+          options:["Выбрать ответ наугад", "Найти корни множителей", "Поделить на x", "Стереть знак неравенства"],
+          correct:1
+        }
+      };
+    }
+
+    function randInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+
+    // Tooltip system
+    const tipTexts = {
+      detail: `
+        <h3>Уровень объяснения</h3>
+        <p>Переключатель меняет глубину текста, но не меняет математическую логику решения.</p>
+        ${M.block(`${M.mi("F")}<mo>(</mo>${M.mi("x")}<mo>)</mo><mo>≥</mo><mn>0</mn>`)}
+        <div class="tooltip-actions"><button class="mini" data-action="deep">Сделать подробнее</button><button class="mini" data-action="short">Сделать кратко</button></div>
+      `,
+      generate: `
+        <h3>Генератор похожих задач</h3>
+        <p>Кнопка создаёт новую задачу без вырожденных корней и применяет её к той же числовой оси.</p>
+        ${M.block(`<mrow><mo>(</mo><mi>x</mi><mo>−</mo><mi>a</mi><mo>)</mo></mrow><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mi>b</mi><mo>)</mo></mrow><mo>≥</mo><mn>0</mn>`)}
+        <div class="tooltip-actions"><button class="mini" data-action="generate">Сгенерировать сейчас</button></div>
+      `,
+      canvas: `
+        <h3>Интерактивная ось</h3>
+        <p>Клик открывает увеличенную схему. Потяните мышью, чтобы двигаться по оси. Колесо мыши меняет масштаб.</p>
+        ${M.block(`${M.mi("x")}<mo>∈</mo><mtext>выбранный промежуток</mtext>`)}
+        <div class="tooltip-actions"><button class="mini" data-action="zoom">Увеличить</button><button class="mini" data-action="resetZoom">Сбросить</button></div>
+      `,
+      generated: `
+        <h3>Задача обновлена</h3>
+        <p>Числовая ось, ответ, квиз и шаги теперь относятся к новой похожей задаче.</p>
+      `
+    };
+    let tipTimer = null;
+
+    function showTipFor(kind, anchor){
+      const tip = $("#tooltip");
+      $("#tipContent").innerHTML = tipTexts[kind] || "";
+      tip.setAttribute("aria-hidden","false");
+      tip.classList.add("show");
+      positionTip(anchor || document.body);
+      clearTimeout(tipTimer);
+      tipTimer = setTimeout(hideTip, 15000);
+      $$(".mini", tip).forEach(btn => btn.addEventListener("click", () => {
+        const a = btn.dataset.action;
+        if(a === "deep" || a === "short"){
+          state.detail = a;
+          renderText();
+          syncControls();
+        }
+        if(a === "generate") $("#genBtn").click();
+        if(a === "zoom"){
+          state.zoom = clamp(state.zoom + .2,.65,2.2);
+          syncControls(); drawAll();
+        }
+        if(a === "resetZoom"){
+          state.zoom = 1; state.pan = 0;
+          syncControls(); drawAll();
+        }
+        hideTip();
+      }));
+    }
+    function positionTip(anchor){
+      const tip = $("#tooltip");
+      const r = anchor.getBoundingClientRect ? anchor.getBoundingClientRect() : {left:20,top:20,bottom:40,width:0};
+      const tw = Math.min(340, window.innerWidth-24);
+      let left = clamp(r.left + r.width/2 - tw/2, 12, window.innerWidth - tw - 12);
+      let top = r.bottom + 12;
+      if(top + 220 > window.innerHeight) top = Math.max(12, r.top - 230);
+      tip.style.left = left + "px";
+      tip.style.top = top + "px";
+    }
+    function hideTip(){
+      const tip = $("#tooltip");
+      tip.classList.remove("show");
+      tip.setAttribute("aria-hidden","true");
+      clearTimeout(tipTimer);
+    }
+    $$(".hint-trigger").forEach(btn => {
+      btn.addEventListener("mouseenter", () => showTipFor(btn.dataset.hint, btn));
+      btn.addEventListener("focus", () => showTipFor(btn.dataset.hint, btn));
+      btn.addEventListener("click", () => showTipFor(btn.dataset.hint, btn));
+    });
+    document.addEventListener("click", e => {
+      const tip = $("#tooltip");
+      if(tip.classList.contains("show") && !tip.contains(e.target) && !e.target.classList.contains("hint-trigger")) hideTip();
+    });
+    $("#tipClose").addEventListener("click", hideTip);
+
+    setTimeout(() => {
+      if(!sessionStorage.getItem("ineqFirstHint")){
+        sessionStorage.setItem("ineqFirstHint","1");
+        showTipFor("canvas", $("[data-hint='canvas']"));
+      }
+    }, 3000);
+
+    renderAll();
+  })();
+  </script>
+</body>
+</html>
