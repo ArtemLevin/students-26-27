@@ -3,6 +3,7 @@ const id = document.body.dataset.lesson;
 const lesson = LESSONS.find((item) => item.id === id) || LESSONS[0];
 const root = document.getElementById('lessonRoot');
 const title = (text) => String(text || '').replace(/[&<>]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]));
+const lessonPath = (path) => path ? path.replace(/^\.\.\//, '../../') : '';
 
 function list(items) {
   return `<ul>${(items || []).map((item) => `<li>${title(item)}</li>`).join('')}</ul>`;
@@ -22,8 +23,8 @@ function renderLesson() {
         <h1>${title(lesson.title)}</h1>
         <p class="lesson-lead">${title(lesson.subtitle)}</p>
         <div class="lesson-meta">
-          ${lesson.sourcePdf ? `<a class="pill" href="${lesson.sourcePdf}">Открыть PDF</a>` : ''}
-          ${lesson.sourceTex ? `<a class="pill" href="${lesson.sourceTex}">Открыть TeX</a>` : ''}
+          ${lesson.sourcePdf ? `<a class="pill" href="${lessonPath(lesson.sourcePdf)}">Открыть PDF</a>` : ''}
+          ${lesson.sourceTex ? `<a class="pill" href="${lessonPath(lesson.sourceTex)}">Открыть TeX</a>` : ''}
           <button class="pill" id="printPage" type="button">Печать</button>
         </div>
       </div>
