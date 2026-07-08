@@ -258,7 +258,7 @@ function drawAllCircles() {
 function drawCircle(canvas, angle, outId, valuesId) {
   if (!canvas) return;
   const out = document.getElementById(outId);
-  if (out) out.textContent = `${angle}°`;
+  if (out) out.innerHTML = mathText(`${angle}°`, 'inline');
   const rad = angle * Math.PI / 180;
   const sin = Math.sin(rad);
   const cos = Math.cos(rad);
