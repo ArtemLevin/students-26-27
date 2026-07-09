@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Наглядная математика: текстовые задачи</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f172a'/%3E%3Cpath d='M10 42h44' stroke='%2322d3ee' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M18 34l9-16h19' fill='none' stroke='%23f59e0b' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='24' cy='46' r='4' fill='%23e5e7eb'/%3E%3Ccircle cx='44' cy='46' r='4' fill='%23e5e7eb'/%3E%3C/svg%3E">
+  <style>
+    :root{
+      --bg:#07111f;--paper:#0f1b2d;--paper2:#13243b;--ink:#e8eef8;--muted:#9fb2ca;--line:#233a59;
+      --accent:#22d3ee;--accent2:#14b8a6;--gold:#f59e0b;--danger:#fb7185;--ok:#34d399;
+      --shadow:0 24px 70px rgba(0,0,0,.34);--radius:22px;--mono:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    body[data-theme="light"]{
+      --bg:#f3efe5;--paper:#fffdf8;--paper2:#f8f2e6;--ink:#172033;--muted:#5f6f84;--line:#d9cdbd;
+      --accent:#0f6f8c;--accent2:#187b69;--gold:#a96500;--danger:#b91c1c;--ok:#047857;--shadow:0 20px 48px rgba(78,58,31,.14);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(circle at top left,rgba(34,211,238,.14),transparent 30%),var(--bg);color:var(--ink);font-family:Inter,Segoe UI,Arial,sans-serif;line-height:1.62}
+    button,input,select{font:inherit;color:inherit}
+    .topbar{position:sticky;top:0;z-index:30;backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 88%,transparent);border-bottom:1px solid var(--line)}
+    .topbar-inner{max-width:1480px;margin:auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.02em}.brand-badge{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04111f;box-shadow:0 0 26px color-mix(in srgb,var(--accent) 45%,transparent)}
+    .top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.btn,.chip{border:1px solid var(--line);background:linear-gradient(180deg,var(--paper2),var(--paper));border-radius:999px;padding:9px 13px;cursor:pointer;transition:.18s transform,.18s border-color,.18s box-shadow}.btn:hover,.chip:hover{transform:translateY(-1px);border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 16%,transparent)}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04111f;border-color:transparent;font-weight:800}.btn.small{font-size:.9rem;padding:7px 10px}.btn:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+    .hero{max-width:1480px;margin:0 auto;padding:42px 20px 24px;display:grid;grid-template-columns:1.1fr .9fr;gap:26px;align-items:end}.hero h1{font-size:clamp(2.15rem,5vw,5rem);line-height:1;margin:0 0 14px}.hero p{font-size:1.12rem;color:var(--muted);margin:0;max-width:75ch}.hero-card{background:linear-gradient(180deg,color-mix(in srgb,var(--paper2) 82%,transparent),var(--paper));border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+    .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.stat{border:1px solid var(--line);border-radius:16px;padding:14px;background:color-mix(in srgb,var(--paper) 78%,transparent)}.stat b{display:block;font-size:1.5rem;color:var(--accent)}.stat span{color:var(--muted);font-size:.94rem}
+    .layout{max-width:1480px;margin:0 auto 48px;padding:0 20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(390px,520px);gap:22px;align-items:start}.left{min-width:0}.right{position:sticky;top:74px;align-self:start;max-height:calc(100vh - 88px);display:flex;flex-direction:column;gap:12px}
+    .panel,.paper{background:linear-gradient(180deg,color-mix(in srgb,var(--paper2) 52%,transparent),var(--paper));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.paper{padding:26px}.paper h2{font-size:clamp(1.65rem,2.8vw,2.6rem);margin:0 0 12px}.paper h3{font-size:1.24rem;margin:26px 0 10px;color:var(--accent)}.paper h4{margin:18px 0 8px;color:var(--gold)}.muted{color:var(--muted)}.lead{font-size:1.1rem;color:var(--muted)}
+    .topic-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}.topic-tabs .chip.active{background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 28%,var(--paper2)),var(--paper));border-color:var(--accent);color:var(--ink);font-weight:800}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0}.toolbar label{display:flex;gap:8px;align-items:center;color:var(--muted)}select,input[type=range],input[type=number]{accent-color:var(--accent);background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:8px 10px;color:var(--ink)}input[type=number]{width:86px}.toggle-row{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}.toggle-row label{border:1px solid var(--line);padding:8px 10px;border-radius:12px;background:color-mix(in srgb,var(--paper2) 66%,transparent);cursor:pointer}
+    .idea{border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line));background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 14%,transparent),transparent);border-radius:18px;padding:16px 18px;margin:18px 0}.idea strong{color:var(--accent)}
+    .step{display:none;border-left:3px solid var(--line);padding:14px 0 14px 18px;margin:12px 0}.step.visible{display:block}.step[data-linked]:hover{border-left-color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,transparent);border-radius:0 14px 14px 0}.step-title{display:flex;align-items:center;gap:9px;font-weight:800}.step-num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#06111f;font-weight:900}.extra,.standard{display:none}body[data-detail="standard"] .standard,body[data-detail="extra"] .standard,body[data-detail="extra"] .extra{display:block}
+    .formula{overflow-x:auto;display:flex;justify-content:center;align-items:center;margin:14px 0;padding:12px;border:1px solid var(--line);border-radius:16px;background:color-mix(in srgb,var(--paper2) 62%,transparent)}math{font-size:1.1em}.formula math{font-size:1.35rem}mtext{font-family:Inter,Segoe UI,Arial,sans-serif}.answer{border:1px solid color-mix(in srgb,var(--ok) 60%,var(--line));background:color-mix(in srgb,var(--ok) 12%,transparent);border-radius:16px;padding:14px 16px;margin:16px 0}.warn{border:1px solid color-mix(in srgb,var(--danger) 60%,var(--line));background:color-mix(in srgb,var(--danger) 10%,transparent);border-radius:16px;padding:14px 16px;margin:16px 0}
+    .math-table{width:100%;border-collapse:collapse;margin:16px 0;overflow:hidden;border-radius:16px;border:1px solid var(--line)}.math-table th,.math-table td{border-bottom:1px solid var(--line);padding:10px;text-align:center}.math-table th{background:color-mix(in srgb,var(--accent) 16%,var(--paper2));color:var(--ink)}.math-table tr:last-child td{border-bottom:none}.math-table td:first-child,.math-table th:first-child{text-align:left}
+    .visual-panel{padding:14px;min-height:0}.visual-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}.visual-head h2{font-size:1.16rem;margin:0}.visual-head p{margin:0;color:var(--muted);font-size:.9rem}.control-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:10px}.control-grid label{font-size:.88rem;color:var(--muted);display:grid;gap:4px}.svg-wrap{height:min(48vh,460px);min-height:260px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:linear-gradient(180deg,color-mix(in srgb,var(--paper2) 72%,#000),color-mix(in srgb,var(--paper) 86%,#000));position:relative;cursor:grab}.svg-wrap:active{cursor:grabbing}.svg-wrap svg{width:100%;height:100%;display:block;touch-action:none}.visual-note{font-size:.88rem;color:var(--muted);margin-top:8px}.legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}.legend div{font-size:.88rem;border:1px solid var(--line);border-radius:12px;padding:8px;background:color-mix(in srgb,var(--paper2) 60%,transparent)}.swatch{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}.accent{background:var(--accent)}.gold{background:var(--gold)}.danger{background:var(--danger)}.ok{background:var(--ok)}
+    .modal{position:fixed;inset:0;z-index:80;display:none;background:rgba(0,0,0,.72);padding:24px}.modal.open{display:grid;place-items:center}.modal-card{width:min(1180px,96vw);height:min(820px,92vh);background:var(--paper);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);display:grid;grid-template-rows:auto auto minmax(0,1fr);overflow:hidden}.modal-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}.modal-controls{padding:10px 16px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:center}.modal-svg{min-height:0;border-radius:0;border:0;height:100%}.modal-svg.svg-wrap{height:100%;min-height:0}
+    .hint-trigger{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#03131b;font-weight:900;cursor:help;animation:hintPulse 2.2s infinite;position:relative;border:0}.hint-pop{position:fixed;z-index:100;max-width:320px;background:#081421;color:#ecfeff;border:1px solid transparent;border-radius:16px;padding:14px 16px;box-shadow:0 18px 60px rgba(0,0,0,.44);background-image:linear-gradient(#081421,#081421),linear-gradient(135deg,#22d3ee,#14b8a6,#f59e0b);background-origin:border-box;background-clip:padding-box,border-box;transform:translateY(8px);opacity:0;pointer-events:none;transition:.18s}.hint-pop.open{opacity:1;transform:translateY(0);pointer-events:auto;animation:hintBounce .34s ease}.hint-pop button{margin-top:8px}.hint-close{float:right;background:transparent;border:0;color:#e0f2fe;font-size:1.1rem;cursor:pointer}@keyframes hintPulse{0%{box-shadow:0 0 0 0 rgba(34,211,238,.45)}70%{box-shadow:0 0 0 10px rgba(34,211,238,0)}100%{box-shadow:0 0 0 0 rgba(34,211,238,0)}}@keyframes hintBounce{0%{transform:scale(.96) translateY(8px)}60%{transform:scale(1.02) translateY(-2px)}100%{transform:scale(1) translateY(0)}}.glow{animation:borderGlow 1.1s ease 1}@keyframes borderGlow{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 30%,transparent)}}
+    .quiz,.generator,.errors{margin-top:20px;border:1px solid var(--line);border-radius:18px;padding:16px;background:color-mix(in srgb,var(--paper2) 46%,transparent)}.quiz-options{display:grid;gap:8px}.quiz-options label{padding:10px;border:1px solid var(--line);border-radius:12px;cursor:pointer}.result{margin-top:10px;font-weight:800}.nav-actions{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.print-only{display:none}
+    .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);border:0}
+    @media(max-width:1050px){.hero{grid-template-columns:1fr}.layout{grid-template-columns:1fr}.right{position:relative;top:auto;max-height:none}.svg-wrap{height:420px}.visual-panel{order:-1}.control-grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.paper{padding:18px}.topbar-inner{align-items:flex-start;flex-direction:column}.hero{padding-top:24px}.stats{grid-template-columns:1fr}.control-grid,.legend{grid-template-columns:1fr}.modal{padding:10px}.modal-card{height:94vh}.formula{justify-content:flex-start}.svg-wrap{height:350px}}
+    @media print{body{background:#fff;color:#000}.topbar,.right,.toolbar,.topic-tabs,.nav-actions,.generator,.quiz,.hint-trigger,.modal{display:none!important}.layout,.hero{display:block;max-width:none}.paper,.hero-card{box-shadow:none;border:0;background:#fff}.step{display:block!important}.extra,.standard{display:block!important}.print-only{display:block}}
+  </style>
+</head>
+<body data-theme="dark" data-detail="extra">
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="brand-badge">∑</span><span>Наглядная математика: текстовые задачи</span></div>
+    <div class="top-actions">
+      <button class="btn small" id="themeBtn" type="button">Светлая тема</button>
+      <button class="btn small" onclick="window.print()" type="button">Печать</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div>
+    <h1>Текстовые задачи: теория и тренажёр</h1>
+    <p>Интерактивная страница по мотивам пособия для Софии Кальней: средняя скорость, протяжённые объекты, догон и перегон, производительность. Материал рассчитан на подготовку к ОГЭ и объяснение с нуля в очень подробном режиме.</p>
+  </div>
+  <div class="hero-card">
+    <div class="stats">
+      <div class="stat"><b>4</b><span>темы внутри страницы</span></div>
+      <div class="stat"><b>ОГЭ</b><span>уровень подготовки</span></div>
+      <div class="stat"><b>SVG</b><span>динамическая визуализация</span></div>
+      <div class="stat"><b>MathML</b><span>формулы без raw LaTeX</span></div>
+    </div>
+  </div>
+</section>
+
+<main class="layout">
+  <section class="left">
+    <article class="paper" id="contentPaper">
+      <div class="topic-tabs" id="topicTabs" aria-label="Переключение тем"></div>
+      <div class="toolbar">
+        <label>Подробность
+          <select id="detailSelect" aria-label="Уровень подробности">
+            <option value="short">кратко</option>
+            <option value="standard">стандартно</option>
+            <option value="extra" selected>очень подробно</option>
+          </select>
+        </label>
+        <button class="btn primary" id="nextStepBtn" type="button">Показать следующий шаг</button>
+        <button class="btn" id="showAllBtn" type="button">Показать всё</button>
+        <button class="btn" id="resetStepsBtn" type="button">Свернуть</button>
+      </div>
+      <div id="topicContent"></div>
+    </article>
+  </section>
+
+  <aside class="right">
+    <section class="panel visual-panel" aria-label="Интерактивная визуализация">
+      <div class="visual-head">
+        <div><h2 id="visualTitle">Модель</h2><p id="visualSubtitle">Перетащите схему мышью. Клик по рисунку откроет увеличение.</p></div>
+        <button class="hint-trigger" data-hint="viz" aria-label="Подсказка по визуализации" type="button">?</button>
+      </div>
+      <div class="control-grid" id="paramControls"></div>
+      <div class="toolbar" style="margin:0 0 10px">
+        <button class="btn small" id="zoomOut" type="button">−</button>
+        <label style="flex:1">Зум <input id="zoomRange" type="range" min="0.6" max="2.4" step="0.05" value="1"></label>
+        <button class="btn small" id="zoomIn" type="button">+</button>
+        <button class="btn small" id="zoomReset" type="button">Сброс</button>
+        <button class="hint-trigger" data-hint="zoom" aria-label="Подсказка по зуму" type="button">i</button>
+      </div>
+      <div class="svg-wrap" id="svgWrap" title="Клик — открыть увеличенную схему">
+        <svg id="mainSvg" viewBox="0 0 900 560" role="img" aria-label="Интерактивная схема"></svg>
+      </div>
+      <div id="visualFormula" class="formula"></div>
+      <div class="legend" id="legend"></div>
+      <p class="visual-note">Схемы сохраняют ключевые математические отношения; отдельные размеры могут быть изображены не в масштабе.</p>
+    </section>
+  </aside>
+</main>
+
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-label="Увеличенная визуализация">
+    <div class="modal-head"><strong id="modalTitle">Увеличенная модель</strong><button class="btn small" id="closeModal" type="button">× Закрыть</button></div>
+    <div class="modal-controls">
+      <button class="btn small" id="modalZoomOut" type="button">−</button>
+      <label>Зум <input id="modalZoomRange" type="range" min="0.6" max="2.4" step="0.05" value="1"></label>
+      <button class="btn small" id="modalZoomIn" type="button">+</button>
+      <button class="btn small" id="modalZoomReset" type="button">Сброс</button>
+      <span class="muted">Параметры синхронизированы с основной схемой.</span>
+    </div>
+    <div class="svg-wrap modal-svg" id="modalSvgWrap"><svg id="modalSvg" viewBox="0 0 900 560" role="img" aria-label="Увеличенная интерактивная схема"></svg></div>
+  </div>
+</div>
+
+<div class="hint-pop" id="hintPop" role="tooltip" aria-hidden="true"></div>
+
+<script>
+  const M = {
+    row:(...xs)=>`<mrow>${xs.join('')}</mrow>`, mi:x=>`<mi>${x}</mi>`, mn:x=>`<mn>${x}</mn>`, mo:x=>`<mo>${x}</mo>`, mt:x=>`<mtext>${x}</mtext>`,
+    frac:(a,b)=>`<mfrac>${a}${b}</mfrac>`, sub:(a,b)=>`<msub>${a}${b}</msub>`, sup:(a,b)=>`<msup>${a}${b}</msup>`, sqrt:a=>`<msqrt>${a}</msqrt>`,
+    math:(x,display=true)=>`<math ${display?'display="block"':''}>${x}</math>`
+  };
+  const topics = {
+    avg:{
+      title:'Средняя скорость', short:'Половина времени и половина пути дают разные модели.',
+      color:'#22d3ee', default:{mode:'time',v1:84,v2:56,zoom:1,panX:0,panY:0},
+      quiz:{q:'Когда средняя скорость равна обычному среднему арифметическому скоростей?', options:['Когда равны пути','Когда равны времена движения','Всегда','Только при одинаковых скоростях'], ok:1, explain:'Если равны именно времена, общий путь равен сумме v₁t и v₂t при одинаковых t, поэтому получается среднее арифметическое.'}
+    },
+    trains:{
+      title:'Протяжённые объекты', short:'Поезд, платформа и пешеход требуют учёта длины объекта.',
+      color:'#f59e0b', default:{kind:'pole',train:500,platform:450,speed:72,otherSpeed:6,time:20,zoom:1,panX:0,panY:0},
+      quiz:{q:'Почему в задаче «поезд проходит мимо столба» длина столба берётся равной нулю?', options:['Потому что столб движется','Потому что длина столба вдоль пути поезда не учитывается','Потому что поезд стоит','Потому что скорость столба отрицательная'], ok:1, explain:'Вдоль направления движения столб практически является точкой, поэтому поезд должен пройти только собственную длину.'}
+    },
+    overtake:{
+      title:'Догон и перегон', short:'К сумме длин добавляются путь догона и путь перегона.',
+      color:'#fb7185', default:{shortLen:40,longLen:60,catchDist:200,passDist:300,timeMin:18,zoom:1,panX:0,panY:0},
+      quiz:{q:'Что нужно добавить к сумме длин барж в задаче на перегон?', options:['Только время','Путь догона и путь перегона','Среднюю скорость','Ничего не нужно'], ok:1, explain:'Короткая баржа сначала догоняет отставание, затем проходит длины обеих барж и дополнительно перегоняет на заданное расстояние.'}
+    },
+    work:{
+      title:'Производительность', short:'В совместной работе складываются производительности, а не времена.',
+      color:'#34d399', default:{mode:'masters',a:3,b:6,p1:6,p2:7,delay:20,zoom:1,panX:0,panY:0},
+      quiz:{q:'Что складывается, если два мастера работают вместе?', options:['Времена работы','Производительности','Ответы','Длины участков'], ok:1, explain:'Каждый исполнитель выполняет часть работы за единицу времени. Поэтому общий темп равен сумме производительностей.'}
+    }
+  };
+  let current='avg';
+  let params=structuredClone(topics[current].default);
+  let stepCount=1;
+  const stateByTopic={};
+
+  function mathAvgFormula(){return M.math(M.row(M.sub(M.mi('v'),M.mt('ср')),M.mo('='),M.frac(M.sub(M.mi('S'),M.mt('общ')),M.sub(M.mi('t'),M.mt('общ')))));}
+  function mathTrainFormula(){return M.math(M.row(M.mi('t'),M.mo('='),M.frac(M.row(M.sub(M.mi('S'),M.mn('1')),M.mo('+'),M.sub(M.mi('S'),M.mn('2'))),M.sub(M.mi('v'),M.mt('отн')))));}
+  function mathOvertakeFormula(){return M.math(M.row(M.mi('t'),M.mo('='),M.frac(M.row(M.sub(M.mi('S'),M.mn('1')),M.mo('+'),M.sub(M.mi('S'),M.mn('2')),M.mo('+'),M.sub(M.mi('S'),M.mt('дог')),M.mo('+'),M.sub(M.mi('S'),M.mt('пер'))),M.row(M.sub(M.mi('v'),M.mt('быстр')),M.mo('−'),M.sub(M.mi('v'),M.mt('медл'))))))}
+  function mathWorkFormula(){return M.math(M.row(M.mi('A'),M.mo('='),M.mi('p'),M.mo('·'),M.mi('t')))}
+
+  function setTopic(id){
+    stateByTopic[current]=structuredClone(params);
+    current=id;
+    params=structuredClone(stateByTopic[id]||topics[id].default);
+    stepCount=1;
+    renderAll();
+    toastHint('mode','Тема переключена: модель, решение и мини-квиз обновлены.');
+  }
+
+  function renderTabs(){
+    const box=document.getElementById('topicTabs');
+    box.innerHTML=Object.entries(topics).map(([id,t])=>`<button class="chip ${id===current?'active':''}" type="button" onclick="setTopic('${id}')">${t.title}</button>`).join('') + '<button class="hint-trigger" data-hint="topic" aria-label="Подсказка по темам" type="button">?</button>';
+  }
+
+  function setParam(key,val){
+    if(typeof topics[current].default[key]==='number') val=Number(val);
+    params[key]=val;
+    syncControls();
+    renderTopicContent();
+    renderViz();
+  }
+  function syncControls(){
+    document.getElementById('zoomRange').value=params.zoom||1;
+    document.getElementById('modalZoomRange').value=params.zoom||1;
+    document.querySelectorAll('[data-param]').forEach(el=>{const k=el.dataset.param;if(params[k]!==undefined && document.activeElement!==el) el.value=params[k];});
+  }
+  function controlsHTML(){
+    if(current==='avg') return `
+        <label>Тип задачи <select data-param="mode" onchange="setParam('mode',this.value)"><option value="time">половина времени</option><option value="distance">половина пути</option></select></label>
+        <label>Скорость 1 <input data-param="v1" type="number" min="10" max="160" onchange="setParam('v1',this.value)"></label>
+        <label>Скорость 2 <input data-param="v2" type="number" min="10" max="160" onchange="setParam('v2',this.value)"></label>`;
+    if(current==='trains') return `
+        <label>Ситуация <select data-param="kind" onchange="setParam('kind',this.value)"><option value="pole">мимо столба</option><option value="platform">мимо платформы</option><option value="walker">пешеход навстречу</option><option value="twotrains">два поезда</option></select></label>
+        <label>Скорость поезда <input data-param="speed" type="number" min="20" max="140" onchange="setParam('speed',this.value)"></label>
+        <label>Длина/платформа, м <input data-param="platform" type="number" min="0" max="1200" onchange="setParam('platform',this.value)"></label>
+        <label>Время, с <input data-param="time" type="number" min="5" max="180" onchange="setParam('time',this.value)"></label>`;
+    if(current==='overtake') return `
+        <label>Короткая, м <input data-param="shortLen" type="number" min="10" max="160" onchange="setParam('shortLen',this.value)"></label>
+        <label>Длинная, м <input data-param="longLen" type="number" min="10" max="220" onchange="setParam('longLen',this.value)"></label>
+        <label>Догон, м <input data-param="catchDist" type="number" min="0" max="800" onchange="setParam('catchDist',this.value)"></label>
+        <label>Перегон, м <input data-param="passDist" type="number" min="0" max="800" onchange="setParam('passDist',this.value)"></label>`;
+    return `
+        <label>Тип <select data-param="mode" onchange="setParam('mode',this.value)"><option value="masters">два мастера</option><option value="test">вопросы в тесте</option><option value="pipes">трубы</option></select></label>
+        <label>Число A <input data-param="a" type="number" min="1" max="80" onchange="setParam('a',this.value)"></label>
+        <label>Число B <input data-param="b" type="number" min="1" max="80" onchange="setParam('b',this.value)"></label>
+        <label>Разница, мин <input data-param="delay" type="number" min="1" max="120" onchange="setParam('delay',this.value)"></label>`;
+  }
+
+  function topicHTML(){
+    if(current==='avg') return avgContent();
+    if(current==='trains') return trainsContent();
+    if(current==='overtake') return overtakeContent();
+    return workContent();
+  }
+  function commonBlocks(){
+    const q=topics[current].quiz;
+    return `<section class="errors"><h3>Типичные ошибки</h3>${errorsHTML()}</section>
+      <section class="generator"><h3>Генерация похожей задачи <button class="hint-trigger" data-hint="gen" aria-label="Подсказка по генерации" type="button">!</button></h3><p class="muted">Нажмите кнопку: появится одна корректная похожая задача с ответом и краткой идеей.</p><button class="btn primary" id="genBtn" type="button">Сгенерировать задачу</button><div id="generatedTask"></div></section>
+      <section class="quiz"><h3>Мини-квиз и самопроверка</h3><p><strong>${q.q}</strong></p><div class="quiz-options">${q.options.map((o,i)=>`<label><input type="radio" name="quiz" value="${i}"> ${o}</label>`).join('')}</div><button class="btn" id="quizBtn" type="button">Проверить</button><div id="quizResult" class="result"></div></section>`;
+  }
+  function solutionShell(title,lead,idea,steps,answer){
+    return `<h2>${title}</h2><p class="lead">${lead}</p><div class="idea"><strong>Идея решения.</strong><ul>${idea.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+      <h3>Пошаговый разбор</h3>${steps.map((s,i)=>`<section class="step ${i<stepCount?'visible':''}" data-linked="${s.link||''}"><div class="step-title"><span class="step-num">${i+1}</span><span>${s.title}</span></div>${s.body}</section>`).join('')}
+      <div class="answer"><strong>Итог.</strong> ${answer}</div>${commonBlocks()}`;
+  }
+  function avgContent(){
+    const v1=params.v1, v2=params.v2, isTime=params.mode==='time';
+    const ans=isTime?((v1+v2)/2):(2*v1*v2/(v1+v2));
+    const caseText=isTime?'равны времена движения':'равны пройденные пути';
+    const formula=isTime?M.math(M.row(M.sub(M.mi('v'),M.mt('ср')),M.mo('='),M.frac(M.row(M.mi('v'),M.mn('1'),M.mo('+'),M.mi('v'),M.mn('2')),M.mn('2')))):M.math(M.row(M.sub(M.mi('v'),M.mt('ср')),M.mo('='),M.frac(M.row(M.mn('2'),M.mi('v'),M.mn('1'),M.mi('v'),M.mn('2')),M.row(M.mi('v'),M.mn('1'),M.mo('+'),M.mi('v'),M.mn('2')))));
+    return solutionShell('Средняя скорость','Разбираем, почему средняя скорость считается через общий путь и общее время, а не всегда через обычное среднее арифметическое.',[
+      'Сначала определяем, что именно поделено пополам: время или путь.',
+      'Заполняем таблицу «скорость — время — путь».',
+      'Подставляем общий путь и общее время в формулу средней скорости.'
+    ],[
+      {title:'Что дано',link:'segments',body:`<p>Есть два участка движения. Скорости равны <math><mn>${v1}</mn><mtext> км/ч</mtext></math> и <math><mn>${v2}</mn><mtext> км/ч</mtext></math>. В выбранной модели ${caseText}.</p>`},
+      {title:'Что означает условие',link:'segments',body:isTime?`<p>Если равна половина времени, то оба участка длятся одинаково:</p><div class="formula">${M.math(M.row(M.sub(M.mi('t'),M.mn('1')),M.mo('='),M.sub(M.mi('t'),M.mn('2')),M.mo('='),M.frac(M.mi('t'),M.mn('2'))))}</div><p class="standard">Поэтому путь каждого участка находится умножением скорости на одинаковое время.</p>`:`<p>Если равна половина пути, то расстояния на участках одинаковы:</p><div class="formula">${M.math(M.row(M.sub(M.mi('S'),M.mn('1')),M.mo('='),M.sub(M.mi('S'),M.mn('2')),M.mo('='),M.frac(M.mi('S'),M.mn('2'))))}</div><p class="standard">Время на каждом участке считаем делением пути на скорость.</p>`},
+      {title:'Ключевая формула',link:'formula',body:`<div class="formula">${mathAvgFormula()}</div><p>Этот шаг нужен для того, чтобы не перепутать среднюю скорость с обычным средним арифметическим.</p><div class="extra">${formula}</div>`},
+      {title:'Вычисление',link:'answer',body:`<p>Подставляем данные в модель и получаем:</p><div class="formula">${M.math(M.row(M.sub(M.mi('v'),M.mt('ср')),M.mo('='),M.mn(Number(ans.toFixed(2)).toString().replace('.',','))))}</div><p class="extra">Здесь важно заметить: если равны пути, ответ обычно меньше обычного среднего арифметического, потому что медленный участок занимает больше времени.</p>`},
+      {title:'Проверка',link:'answer',body:`<p>Ответ положительный и лежит между двумя скоростями, значит он согласуется с физическим смыслом задачи.</p>`}
+    ],`Средняя скорость равна <math><mn>${Number(ans.toFixed(2)).toString().replace('.',',')}</mn><mtext> км/ч</mtext></math>.`);
+  }
+  function trainsContent(){
+    const kind=params.kind, v=params.speed, t=params.time;
+    let title='Поезд проходит мимо столба', s2=0, rel=v, ans=v*t/3.6;
+    if(kind==='platform'){title='Поезд проходит мимо платформы';s2=params.platform;ans=v*t/3.6-s2;}
+    if(kind==='walker'){title='Поезд и пешеход движутся навстречу';rel=v+params.otherSpeed;ans=rel*t/3.6;}
+    if(kind==='twotrains'){title='Два поезда движутся навстречу';s2=params.platform;rel=v+90;ans=rel*t/3.6-s2;}
+    return solutionShell('Протяжённые объекты','Учимся учитывать длину поезда, платформы или второго состава. В таких задачах поезд не является точкой.',[
+      'Определяем, какие длины должен пройти передний край объекта до полного прохождения.',
+      'Выбираем относительную скорость: при встречном движении складываем, при догоне вычитаем.',
+      'Следим за единицами: секунды переводим в часы, метры — в километры или наоборот.'
+    ],[
+      {title:'Что дано',link:'train',body:`<p>Ситуация: ${title.toLowerCase()}. Скорость основного поезда: <math><mn>${v}</mn><mtext> км/ч</mtext></math>. Время: <math><mn>${t}</mn><mtext> с</mtext></math>.</p>`},
+      {title:'Что означает «прошёл мимо»',link:'train',body:`<p>Поезд должен полностью миновать объект. Поэтому учитывается сумма длин:</p><div class="formula">${M.math(M.row(M.sub(M.mi('S'),M.mn('1')),M.mo('+'),M.sub(M.mi('S'),M.mn('2'))))}</div><p class="standard">Если второй объект — столб или человек, его длину вдоль направления движения можно считать равной нулю.</p>`},
+      {title:'Относительная скорость',link:'speed',body:`<p>В выбранной модели относительная скорость равна:</p><div class="formula">${M.math(M.row(M.sub(M.mi('v'),M.mt('отн')),M.mo('='),M.mn(rel)))}</div><p class="extra">При встречном движении скорости складываются, потому что объекты сближаются быстрее.</p>`},
+      {title:'Основная формула',link:'formula',body:`<div class="formula">${mathTrainFormula()}</div><p>Теперь из этой формулы можно найти неизвестную длину или время.</p>`},
+      {title:'Ответ и проверка',link:'answer',body:`<p>Расчёт даёт неизвестную длину:</p><div class="formula">${M.math(M.row(M.mi('x'),M.mo('='),M.mn(Math.max(0,Math.round(ans)))))}</div><p>Полученная длина положительна; значит, выбранные параметры дают корректную задачу.</p>`}
+    ],`Искомая длина равна <math><mn>${Math.max(0,Math.round(ans))}</mn><mtext> м</mtext></math>.`);
+  }
+  function overtakeContent(){
+    const total=params.shortLen+params.longLen+params.catchDist+params.passDist;
+    const speed=(total/1000)/(params.timeMin/60);
+    return solutionShell('Догон и перегон протяжённых объектов','Разбираем расширенную модель: одна баржа не только догоняет другую, но и перегоняет её на заданное расстояние.',[
+      'Складываем длины обоих протяжённых объектов.',
+      'Добавляем начальное отставание и путь перегона.',
+      'Делим общий относительный путь на время и получаем разность скоростей.'
+    ],[
+      {title:'Что дано',link:'barge',body:`<p>Короткая баржа: <math><mn>${params.shortLen}</mn><mtext> м</mtext></math>, длинная баржа: <math><mn>${params.longLen}</mn><mtext> м</mtext></math>. Отставание: <math><mn>${params.catchDist}</mn><mtext> м</mtext></math>. Перегон: <math><mn>${params.passDist}</mn><mtext> м</mtext></math>.</p>`},
+      {title:'Какой путь считается',link:'barge',body:`<p>Относительно длинной баржи короткая должна пройти четыре части:</p><div class="formula">${M.math(M.row(M.sub(M.mi('S'),M.mt('отн')),M.mo('='),M.sub(M.mi('S'),M.mn('1')),M.mo('+'),M.sub(M.mi('S'),M.mn('2')),M.mo('+'),M.sub(M.mi('S'),M.mt('дог')),M.mo('+'),M.sub(M.mi('S'),M.mt('пер'))))}</div>`},
+      {title:'Подстановка',link:'formula',body:`<p>Суммарный относительный путь:</p><div class="formula">${M.math(M.row(M.sub(M.mi('S'),M.mt('отн')),M.mo('='),M.mn(total)))}</div><p class="standard">В метрах это удобно сложить сразу, а затем перевести в километры.</p>`},
+      {title:'Разность скоростей',link:'speed',body:`<div class="formula">${mathOvertakeFormula()}</div><p>Так как спрашивают именно, насколько одна скорость больше другой, отдельные скорости искать не нужно.</p>`},
+      {title:'Финальная проверка',link:'answer',body:`<p>Время положительно, относительный путь положителен, поэтому разность скоростей тоже положительна.</p><div class="formula">${M.math(M.row(M.mi('Δv'),M.mo('='),M.mn(speed.toFixed(2).replace('.',','))))}</div>`}
+    ],`Скорость короткой баржи больше на <math><mn>${speed.toFixed(2).replace('.',',')}</mn><mtext> км/ч</mtext></math>.`);
+  }
+  function workContent(){
+    let ans=2, lead='';
+    if(params.mode==='masters'){ans=(params.a*params.b)/(params.a+params.b);lead=`Первый мастер выполняет заказ за ${params.a} ч, второй — за ${params.b} ч.`}
+    if(params.mode==='test'){ans=params.delay/60/(1/params.a-1/params.b);lead=`Петя решает ${params.a} вопросов в час, Ваня — ${params.b} вопросов в час.`}
+    if(params.mode==='pipes'){ans=(params.a*params.b)/(params.a+params.b);lead=`Две трубы наполняют один объём за ${params.a} и ${params.b} минут по отдельности.`}
+    return solutionShell('Производительность','Производительность — это скорость выполнения работы. В задачах на совместную работу складываются производительности.',[
+      'Выбираем результат: один заказ, один тест или один бассейн.',
+      'Находим производительность каждого участника.',
+      'Составляем уравнение по производительности или по времени.'
+    ],[
+      {title:'Что дано',link:'work',body:`<p>${lead}</p>`},
+      {title:'Смысл производительности',link:'work',body:`<p>Производительность показывает, какая часть работы выполняется за единицу времени.</p><div class="formula">${mathWorkFormula()}</div>`},
+      {title:'Совместная работа',link:'formula',body:`<p>Если два исполнителя работают вместе, складываются их производительности:</p><div class="formula">${M.math(M.row(M.sub(M.mi('p'),M.mt('общ')),M.mo('='),M.sub(M.mi('p'),M.mn('1')),M.mo('+'),M.sub(M.mi('p'),M.mn('2'))))}</div>`},
+      {title:'Вычисление',link:'answer',body:`<p>Для выбранных параметров итоговое значение:</p><div class="formula">${M.math(M.row(M.mi('x'),M.mo('='),M.mn(Number(ans.toFixed(2)).toString().replace('.',','))))}</div>`},
+      {title:'Проверка',link:'answer',body:`<p>Если работа совместная, итоговое время должно быть меньше времени каждого исполнителя по отдельности. Это условие проверяется по полученному ответу.</p>`}
+    ],`Итоговое значение: <math><mn>${Number(ans.toFixed(2)).toString().replace('.',',')}</mn></math>.`);
+  }
+  function errorsHTML(){
+    const lists={
+      avg:['Считать среднюю скорость как среднее арифметическое всегда.','Перепутать половину времени и половину пути.','Забыть, что средняя скорость — это общий путь, делённый на общее время.'],
+      trains:['Не учесть длину поезда или платформы.','Не перевести секунды в часы при скорости в километрах в час.','Сложить скорости при догоне вместо вычитания.'],
+      overtake:['Сложить только длины барж и забыть путь догона.','Забыть путь перегона после обгона.','Искать обе скорости отдельно, хотя нужна только их разность.'],
+      work:['Складывать времена вместо производительностей.','Не понять, что «6 вопросов в час» — это производительность.','Перевести минуты не в те единицы, в которых дана производительность.']
+    };
+    return `<ol>${lists[current].map(x=>`<li>${x}</li>`).join('')}</ol>`;
+  }
+  function renderTopicContent(){
+    document.getElementById('topicContent').innerHTML=topicHTML();
+    attachQuiz();attachGenerator();attachHoverLinks();
+  }
+  function attachHoverLinks(){
+    document.querySelectorAll('[data-linked]').forEach(el=>{
+      el.addEventListener('mouseenter',()=>highlightViz(el.dataset.link));
+      el.addEventListener('mouseleave',()=>highlightViz(null));
+    });
+  }
+  function highlightViz(key){
+    document.querySelectorAll('.viz-part').forEach(g=>g.classList.toggle('highlight', key && g.dataset.key===key));
+  }
+  function attachQuiz(){
+    const btn=document.getElementById('quizBtn'); if(!btn) return;
+    btn.onclick=()=>{const checked=document.querySelector('input[name="quiz"]:checked');const out=document.getElementById('quizResult'); if(!checked){out.textContent='Выберите вариант ответа.';return} const q=topics[current].quiz; out.textContent=Number(checked.value)===q.ok?'Верно. '+q.explain:'Пока нет. '+q.explain; out.style.color=Number(checked.value)===q.ok?'var(--ok)':'var(--danger)'};
+  }
+  function attachGenerator(){
+    const btn=document.getElementById('genBtn'); if(!btn) return;
+    btn.onclick=()=>{document.getElementById('generatedTask').innerHTML=generateTask();renderViz();};
+  }
+  function generateTask(){
+    if(current==='avg'){
+      const a=60+Math.floor(Math.random()*5)*6, b=72+Math.floor(Math.random()*5)*6; params.v1=a;params.v2=b;syncControls();
+      const ans=params.mode==='time'?((a+b)/2):(2*a*b/(a+b));
+      return `<div class="answer"><strong>Похожая задача.</strong> Один участок движения имеет скорость ${a} км/ч, второй — ${b} км/ч. Тип: ${params.mode==='time'?'равные времена':'равные пути'}. <br><strong>Ответ:</strong> ${ans.toFixed(2).replace('.',',')} км/ч. <br><strong>Идея:</strong> примените формулу средней скорости через общий путь и общее время.</div>`;
+    }
+    if(current==='trains'){
+      const v=54+[0,18,36][Math.floor(Math.random()*3)], t=20+Math.floor(Math.random()*4)*10; params.speed=v;params.time=t;syncControls();
+      const ans=Math.round(v*t/3.6);
+      return `<div class="answer"><strong>Похожая задача.</strong> Поезд со скоростью ${v} км/ч проходит мимо столба за ${t} с. <br><strong>Ответ:</strong> ${ans} м. <br><strong>Идея:</strong> длина столба равна 0, поэтому длина поезда равна скорости, умноженной на время.</div>`;
+    }
+    if(current==='overtake'){
+      const c=100+Math.floor(Math.random()*4)*50, p=200+Math.floor(Math.random()*4)*50; params.catchDist=c;params.passDist=p;syncControls();
+      const total=params.shortLen+params.longLen+c+p; const ans=(total/1000)/(params.timeMin/60);
+      return `<div class="answer"><strong>Похожая задача.</strong> Отставание ${c} м, перегон ${p} м, длины барж ${params.shortLen} м и ${params.longLen} м, время ${params.timeMin} мин. <br><strong>Ответ:</strong> ${ans.toFixed(2).replace('.',',')} км/ч. <br><strong>Идея:</strong> сложите все четыре части относительного пути и разделите на время.</div>`;
+    }
+    const a=4+Math.floor(Math.random()*5)*2, b=a*2; params.a=a;params.b=b;params.mode='masters';syncControls();
+    const ans=a*b/(a+b);
+    return `<div class="answer"><strong>Похожая задача.</strong> Один мастер выполняет заказ за ${a} ч, другой — за ${b} ч. <br><strong>Ответ:</strong> ${ans.toFixed(2).replace('.',',')} ч. <br><strong>Идея:</strong> сложите производительности одного и второго мастера.</div>`;
+  }
+  function renderAll(){renderTabs();document.getElementById('paramControls').innerHTML=controlsHTML();syncControls();renderTopicContent();renderViz();bindHints();}
+
+  function svgBase(svg){
+    const accent=getComputedStyle(document.body).getPropertyValue('--accent').trim();
+    const gold=getComputedStyle(document.body).getPropertyValue('--gold').trim();
+    const danger=getComputedStyle(document.body).getPropertyValue('--danger').trim();
+    const ok=getComputedStyle(document.body).getPropertyValue('--ok').trim();
+    const ink=getComputedStyle(document.body).getPropertyValue('--ink').trim();
+    const muted=getComputedStyle(document.body).getPropertyValue('--muted').trim();
+    svg.innerHTML=`<defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><style>.viz-part.highlight{filter:url(#glow)} .label{font:700 18px Inter,Arial;fill:${ink}} .muted{font:500 15px Inter,Arial;fill:${muted}} .thin{stroke:${muted};stroke-width:2}.main{stroke:${accent};stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round}.gold{stroke:${gold};stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round}.danger{stroke:${danger};stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round}.ok{stroke:${ok};stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round}</style><rect width="900" height="560" fill="transparent"/><g id="panZoom" transform="translate(${params.panX||0} ${params.panY||0}) scale(${params.zoom||1})"></g>`;
+    return svg.querySelector('#panZoom');
+  }
+  function drawRoad(g){g.insertAdjacentHTML('beforeend',`<line class="thin" x1="95" y1="300" x2="805" y2="300"/><path class="main viz-part" data-key="segments" d="M110 298 C230 250, 330 250, 445 298"/><path class="gold viz-part" data-key="segments" d="M455 302 C570 350, 675 350, 790 302"/><text class="label" x="190" y="245">участок 1</text><text class="label" x="595" y="385">участок 2</text><circle cx="110" cy="300" r="8" fill="${topics[current].color}"/><circle cx="445" cy="300" r="8" fill="${topics[current].color}"/><circle cx="790" cy="300" r="8" fill="${topics[current].color}"/>`)}
+  function renderViz(){
+    const svgs=[document.getElementById('mainSvg'),document.getElementById('modalSvg')];
+    svgs.forEach(svg=>{const g=svgBase(svg); if(current==='avg')drawAvg(g); if(current==='trains')drawTrains(g); if(current==='overtake')drawOvertake(g); if(current==='work')drawWork(g);});
+    document.getElementById('visualTitle').textContent=topics[current].title;document.getElementById('visualSubtitle').textContent=topics[current].short;document.getElementById('modalTitle').textContent=topics[current].title+' — увеличенная модель';
+    document.getElementById('visualFormula').innerHTML=current==='avg'?mathAvgFormula():current==='trains'?mathTrainFormula():current==='overtake'?mathOvertakeFormula():mathWorkFormula();
+    document.getElementById('legend').innerHTML=`<div><span class="swatch accent"></span>ключевой путь</div><div><span class="swatch gold"></span>вторая величина</div><div><span class="swatch ok"></span>результат</div><div><span class="swatch danger"></span>опасное место</div>`;
+  }
+  function drawAvg(g){
+    drawRoad(g); const isTime=params.mode==='time';
+    g.insertAdjacentHTML('beforeend',`<g class="viz-part" data-key="formula"><rect x="185" y="80" width="530" height="92" rx="20" fill="rgba(34,211,238,.10)" stroke="${topics.avg.color}"/><text class="label" x="225" y="118">Средняя скорость = общий путь / общее время</text><text class="muted" x="225" y="150">${isTime?'половины времени равны':'половины пути равны'}</text></g><g class="viz-part" data-key="answer"><rect x="280" y="420" width="340" height="70" rx="18" fill="rgba(52,211,153,.13)" stroke="var(--ok)"/><text class="label" x="310" y="462">проверка: ответ между скоростями</text></g>`);
+  }
+  function trainShape(x,y,w,h,label){return `<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="rgba(34,211,238,.12)" stroke="${topics.trains.color}" stroke-width="4"/><circle cx="${x+w*.22}" cy="${y+h+14}" r="12" fill="${topics.trains.color}"/><circle cx="${x+w*.78}" cy="${y+h+14}" r="12" fill="${topics.trains.color}"/><text class="label" x="${x+w*.22}" y="${y-12}">${label}</text></g>`}
+  function drawTrains(g){
+    g.insertAdjacentHTML('beforeend',`<line class="thin" x1="70" y1="370" x2="830" y2="370"/>`+trainShape(120,260,300,78,'поезд')+`<g class="viz-part" data-key="train"><line class="main" x1="120" y1="405" x2="420" y2="405"/><text class="muted" x="210" y="435">длина поезда</text></g>`);
+    if(params.kind==='platform') g.insertAdjacentHTML('beforeend',`<g class="viz-part" data-key="train"><rect x="500" y="350" width="270" height="22" fill="rgba(245,158,11,.22)" stroke="${topics.trains.color}"/><text class="label" x="570" y="333">платформа</text></g>`);
+    else if(params.kind==='walker') g.insertAdjacentHTML('beforeend',`<g class="viz-part" data-key="speed"><circle cx="650" cy="330" r="22" fill="rgba(245,158,11,.2)" stroke="${topics.trains.color}" stroke-width="4"/><line class="gold" x1="620" y1="330" x2="560" y2="330"/><text class="label" x="605" y="295">пешеход</text></g>`);
+    else if(params.kind==='twotrains') g.insertAdjacentHTML('beforeend',trainShape(560,260,230,78,'поезд 2')+`<g class="viz-part" data-key="speed"><path class="main" d="M435 305 L515 305"/><path class="gold" d="M545 305 L485 305"/><text class="muted" x="430" y="235">навстречу: скорости складываются</text></g>`);
+    else g.insertAdjacentHTML('beforeend',`<g class="viz-part" data-key="train"><line x1="650" y1="245" x2="650" y2="370" stroke="${topics.trains.color}" stroke-width="5"/><text class="label" x="620" y="225">столб</text></g>`);
+    g.insertAdjacentHTML('beforeend',`<g class="viz-part" data-key="formula"><rect x="190" y="80" width="520" height="82" rx="18" fill="rgba(245,158,11,.12)" stroke="${topics.trains.color}"/><text class="label" x="230" y="130">учитываем сумму длин и относительную скорость</text></g>`);
+  }
+  function drawOvertake(g){
+    g.insertAdjacentHTML('beforeend',`<line class="thin" x1="60" y1="305" x2="840" y2="305"/><g class="viz-part" data-key="barge"><rect x="150" y="250" width="155" height="50" rx="15" fill="rgba(251,113,133,.16)" stroke="${topics.overtake.color}" stroke-width="4"/><rect x="480" y="242" width="230" height="58" rx="16" fill="rgba(245,158,11,.16)" stroke="var(--gold)" stroke-width="4"/><text class="label" x="165" y="235">короткая</text><text class="label" x="525" y="225">длинная</text><line class="danger" x1="305" y1="275" x2="480" y2="275"/><text class="muted" x="342" y="255">догон</text></g><g class="viz-part" data-key="formula"><rect x="150" y="380" width="590" height="76" rx="18" fill="rgba(251,113,133,.12)" stroke="${topics.overtake.color}"/><text class="label" x="185" y="426">длины + догон + перегон = относительный путь</text></g><g class="viz-part" data-key="speed"><path class="ok" d="M225 155 C380 105, 545 105, 690 155"/><text class="label" x="330" y="105">разность скоростей</text></g>`);
+  }
+  function drawWork(g){
+    g.insertAdjacentHTML('beforeend',`<g class="viz-part" data-key="work"><rect x="130" y="130" width="220" height="120" rx="22" fill="rgba(52,211,153,.14)" stroke="${topics.work.color}" stroke-width="4"/><rect x="550" y="130" width="220" height="120" rx="22" fill="rgba(245,158,11,.14)" stroke="var(--gold)" stroke-width="4"/><text class="label" x="180" y="198">исполнитель 1</text><text class="label" x="600" y="198">исполнитель 2</text><path class="main" d="M350 190 L540 190"/><text class="muted" x="390" y="165">работают вместе</text></g><g class="viz-part" data-key="formula"><rect x="210" y="340" width="480" height="95" rx="20" fill="rgba(34,211,238,.10)" stroke="var(--accent)"/><text class="label" x="255" y="390">общая производительность = сумма</text></g><g class="viz-part" data-key="answer"><circle cx="450" cy="285" r="26" fill="rgba(52,211,153,.2)" stroke="${topics.work.color}" stroke-width="4"/><text class="label" x="438" y="292">A</text></g>`);
+  }
+
+  function zoom(delta){params.zoom=Math.max(.6,Math.min(2.4,(params.zoom||1)+delta));syncControls();renderViz();}
+  document.getElementById('zoomIn').onclick=()=>zoom(.1);document.getElementById('zoomOut').onclick=()=>zoom(-.1);document.getElementById('zoomReset').onclick=()=>{params.zoom=1;params.panX=0;params.panY=0;syncControls();renderViz();};document.getElementById('zoomRange').oninput=e=>{params.zoom=Number(e.target.value);syncControls();renderViz();};
+  document.getElementById('modalZoomIn').onclick=()=>zoom(.1);document.getElementById('modalZoomOut').onclick=()=>zoom(-.1);document.getElementById('modalZoomReset').onclick=()=>{params.zoom=1;params.panX=0;params.panY=0;syncControls();renderViz();};document.getElementById('modalZoomRange').oninput=e=>{params.zoom=Number(e.target.value);syncControls();renderViz();};
+  function enablePan(wrap,svg){let down=false,start=null,moved=false;wrap.addEventListener('pointerdown',e=>{down=true;moved=false;start={x:e.clientX,y:e.clientY,px:params.panX||0,py:params.panY||0};wrap.setPointerCapture(e.pointerId)});wrap.addEventListener('pointermove',e=>{if(!down)return;const dx=e.clientX-start.x,dy=e.clientY-start.y;if(Math.abs(dx)+Math.abs(dy)>5)moved=true;params.panX=start.px+dx;params.panY=start.py+dy;renderViz();});wrap.addEventListener('pointerup',e=>{if(!down)return;down=false;if(!moved && wrap.id==='svgWrap')openModal();});wrap.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY<0?.08:-.08)},{passive:false});}
+  enablePan(document.getElementById('svgWrap'),document.getElementById('mainSvg'));enablePan(document.getElementById('modalSvgWrap'),document.getElementById('modalSvg'));
+  function openModal(){document.getElementById('modal').classList.add('open');document.getElementById('modal').setAttribute('aria-hidden','false');renderViz();}
+  function closeModal(){document.getElementById('modal').classList.remove('open');document.getElementById('modal').setAttribute('aria-hidden','true')}
+  document.getElementById('closeModal').onclick=closeModal;document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();hideHint();}});
+
+  document.getElementById('nextStepBtn').onclick=()=>{stepCount=Math.min(stepCount+1,document.querySelectorAll('.step').length);renderTopicContent();};document.getElementById('showAllBtn').onclick=()=>{stepCount=99;renderTopicContent();};document.getElementById('resetStepsBtn').onclick=()=>{stepCount=1;renderTopicContent();};
+  document.getElementById('detailSelect').onchange=e=>{document.body.dataset.detail=e.target.value};document.getElementById('themeBtn').onclick=()=>{const light=document.body.dataset.theme!=='light';document.body.dataset.theme=light?'light':'dark';document.getElementById('themeBtn').textContent=light?'Тёмная тема':'Светлая тема';renderViz();};
+
+  const hintText={
+    topic:'Переключайте темы: каждая тема меняет теорию, пошаговый разбор, схему, генератор и мини-квиз.',
+    gen:'Генератор создаёт одну похожую корректную задачу. Она использует тот же метод решения и обновляет параметры модели.',
+    viz:'Схему можно перетаскивать мышью. Короткий клик по области рисунка открывает увеличенную копию в модальном окне.',
+    zoom:'Зум работает ползунком, кнопками и колесом мыши прямо на схеме. Основное окно и модальное окно синхронизированы.',
+    mode:'Изменение применено к тексту, схеме и проверочным блокам.'
+  };
+  function bindHints(){document.querySelectorAll('.hint-trigger').forEach(btn=>{btn.onmouseenter=()=>showHint(btn.dataset.hint,btn);btn.onfocus=()=>showHint(btn.dataset.hint,btn);btn.onclick=e=>{e.stopPropagation();showHint(btn.dataset.hint,btn,true)}})}
+  function showHint(key,el,lock=false){const pop=document.getElementById('hintPop');const r=el.getBoundingClientRect();pop.innerHTML=`<button class="hint-close" onclick="hideHint()">×</button><strong>Подсказка</strong><p>${hintText[key]||key}</p><button class="btn small primary" onclick="hideHint()">Понятно</button>`;pop.style.left=Math.min(window.innerWidth-340,Math.max(12,r.left-120))+'px';pop.style.top=Math.min(window.innerHeight-180,r.bottom+10)+'px';pop.classList.add('open');pop.setAttribute('aria-hidden','false');clearTimeout(window.hintTimer);window.hintTimer=setTimeout(hideHint,15000);el.classList.add('glow');setTimeout(()=>el.classList.remove('glow'),1100)}
+  function toastHint(key,msg){hintText[key]=msg;const el=document.querySelector('[data-hint="topic"]')||document.body;showHint(key,el)}
+  function hideHint(){const pop=document.getElementById('hintPop');pop.classList.remove('open');pop.setAttribute('aria-hidden','true')}
+  document.addEventListener('click',e=>{if(!e.target.closest('.hint-pop')&&!e.target.closest('.hint-trigger'))hideHint()});
+  setTimeout(()=>{if(!sessionStorage.getItem('visualMathHint')){sessionStorage.setItem('visualMathHint','1');const el=document.querySelector('[data-hint="viz"]');if(el)showHint('viz',el)}},3000);
+  renderAll();
+</script>
+</body>
+</html>
