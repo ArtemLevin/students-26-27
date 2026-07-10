@@ -1,0 +1,397 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx, booktabs, longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\geometry{
+  a4paper,
+  left=18mm,
+  right=18mm,
+  top=18mm,
+  bottom=20mm
+}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{6E7777}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=darkaccent
+}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.25em, itemsep=0.25em, topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.45em, itemsep=0.35em, topsep=0.35em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{textgray}{Метод интервалов}}
+\rhead{\textcolor{textgray}{10 класс}}
+\cfoot{\textcolor{textgray}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\sectiontitle}[1]{%
+  \vspace{0.65em}
+  {\Large\bfseries\textcolor{darkaccent}{#1}}\par
+  \vspace{0.25em}
+  {\color{accent}\rule{\linewidth}{0.5pt}}
+  \vspace{0.45em}
+}
+
+\newcommand{\subsectiontitle}[1]{%
+  \vspace{0.5em}
+  {\large\bfseries\textcolor{darkaccent}{#1}}\par
+  \vspace{0.2em}
+}
+
+\newcommand{\important}[1]{\textbf{\textcolor{darkaccent}{#1}}}
+\newcommand{\R}{\mathbb{R}}
+
+\newcommand{\openpoint}[2]{%
+  \draw[accent, line width=0.9pt, fill=white] (#1,0) circle (2.4pt)
+    node[below=7pt, text=black] {$#2$};
+}
+\newcommand{\closedpoint}[2]{%
+  \filldraw[accent] (#1,0) circle (2.4pt)
+    node[below=7pt, text=black] {$#2$};
+}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{28mm}
+
+{\Huge\bfseries\textcolor{darkaccent}{Чек-лист}}\par
+\vspace{6mm}
+{\LARGE\bfseries Метод интервалов: кратность корней и рациональные неравенства}\par
+
+\vspace{18mm}
+
+{\Large Лёвин Артём Александрович}\par
+\vspace{2mm}
+{\Large эксклюзивно для Тимофея Васильченко}\par
+
+\vspace{12mm}
+{\large 10 класс}\par
+\vspace{4mm}
+{\large \today}
+
+\vfill
+
+\begin{tikzpicture}[remember picture, overlay]
+  \draw[accent, line width=1.1pt]
+    ([xshift=18mm,yshift=24mm]current page.south west)
+    .. controls ([xshift=55mm,yshift=48mm]current page.south west)
+    and ([xshift=-65mm,yshift=8mm]current page.south east)
+    .. ([xshift=-18mm,yshift=31mm]current page.south east);
+  \draw[darkaccent, line width=0.6pt]
+    ([xshift=30mm,yshift=17mm]current page.south west)
+    .. controls ([xshift=72mm,yshift=35mm]current page.south west)
+    and ([xshift=-92mm,yshift=46mm]current page.south east)
+    .. ([xshift=-28mm,yshift=18mm]current page.south east);
+\end{tikzpicture}
+
+\end{center}
+\end{titlepage}
+
+\sectiontitle{1. Каркас метода интервалов}
+
+Метод интервалов применяется к неравенствам, в которых слева стоит произведение или дробь, а справа --- ноль:
+\[
+F(x)\ge 0,\qquad F(x)>0,\qquad F(x)\le 0,\qquad F(x)<0.
+\]
+
+\important{Нормализованный вид:} все выражения перенесены в левую часть, справа стоит $0$, множители разложены настолько, насколько это возможно.
+
+\subsectiontitle{Алгоритм}
+
+\begin{enumerate}
+  \item Приведите неравенство к нормализованному виду.
+  \item Разложите числитель и знаменатель на множители.
+  \item Найдите нули каждого множителя.
+  \item Отдельно отметьте нули знаменателя: они запрещены при любом знаке неравенства.
+  \item Расположите все критические точки на числовой прямой по возрастанию.
+  \item Определите знак выражения на одном удобном интервале.
+  \item При переходе через каждую точку учитывайте её кратность.
+  \item Выберите интервалы с нужным знаком и расставьте скобки.
+\end{enumerate}
+
+\important{Калибровочное значение} выбирают внутри интервала, а затем подставляют в исходную левую часть. Значение выражения целиком вычислять необязательно: достаточно надёжно установить его знак.
+
+\sectiontitle{2. Кратность корня и чередование знаков}
+
+Если множитель имеет вид $(x-a)^m$, то $a$ --- корень кратности $m$.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X X@{}}
+\toprule
+Кратность & Что происходит со знаком & Как двигаться по оси \\
+\midrule
+Нечётная: $1,3,5,\ldots$ & Знак выражения меняется & При переходе через точку меняем $+$ на $-$ или $-$ на $+$ \\
+Чётная: $2,4,6,\ldots$ & Знак выражения сохраняется & При переходе через точку оставляем прежний знак \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\important{Короткое правило:} нечётная кратность --- знак меняется; чётная кратность --- знак сохраняется.
+
+\subsectiontitle{Пример 1. Чётный и нечётный корни}
+
+Решим неравенство
+\[
+(2x+1)^2(x-1)^3\ge 0.
+\]
+
+Критические точки:
+\[
+2x+1=0 \Rightarrow x=-\frac12 \quad (\text{кратность }2),
+\qquad
+x-1=0 \Rightarrow x=1 \quad (\text{кратность }3).
+\]
+
+На интервале $\left(-\frac12;1\right)$ удобно взять $x=0$:
+\[
+(2\cdot0+1)^2(0-1)^3=-1<0.
+\]
+
+Через $x=1$ знак меняется, через $x=-\frac12$ сохраняется:
+
+\begin{center}
+\begin{tikzpicture}[x=2.15cm,y=1cm]
+  \draw[->,line width=0.7pt] (-2.25,0)--(2.35,0) node[right] {$x$};
+  \closedpoint{-0.75}{-\frac12}
+  \closedpoint{1.05}{1}
+  \node[darkaccent,above=7pt] at (-1.5,0) {$-$};
+  \node[darkaccent,above=7pt] at (0.15,0) {$-$};
+  \node[darkaccent,above=7pt] at (1.7,0) {$+$};
+  \node[softgray,above=24pt] at (-0.75,0) {чётная};
+  \node[softgray,above=24pt] at (1.05,0) {нечётная};
+\end{tikzpicture}
+\end{center}
+
+Поскольку неравенство нестрогое, оба допустимых нуля включаются:
+\[
+\boxed{x\in\left\{-\frac12\right\}\cup[1;+\infty)}.
+\]
+
+\subsectiontitle{Как меняется ответ при другом знаке}
+
+Для того же выражения получаем:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\linewidth}{@{}c X@{}}
+\toprule
+Неравенство & Ответ \\
+\midrule
+$(2x+1)^2(x-1)^3\ge0$ & $\left\{-\frac12\right\}\cup[1;+\infty)$ \\
+$(2x+1)^2(x-1)^3>0$ & $(1;+\infty)$ \\
+$(2x+1)^2(x-1)^3\le0$ & $(-\infty;1]$ \\
+$(2x+1)^2(x-1)^3<0$ & $(-\infty;-\frac12)\cup\left(-\frac12;1\right)$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\important{Будьте внимательны:} при строгом неравенстве корень чётной кратности исчезает из ответа и может разрезать один знакопостоянный промежуток на два.
+
+\sectiontitle{3. Точки, которых знак не заставляет чередоваться}
+
+Рассмотрим выражение
+\[
+(x+3)^{10}(4x-3)^{11}.
+\]
+
+Точка $x=-3$ имеет чётную кратность $10$, а точка $x=\frac34$ --- нечётную кратность $11$. При $x=0$ выражение отрицательно. Поэтому знак не меняется при переходе через $-3$ и меняется при переходе через $\frac34$.
+
+Например,
+\[
+(x+3)^{10}(4x-3)^{11}\ge0
+\quad\Longrightarrow\quad
+x\in\{-3\}\cup\left[\frac34;+\infty\right).
+\]
+
+Если заменить показатель $11$ на $10$, обе кратности станут чётными. Тогда произведение неотрицательно при всех $x$:
+\[
+(x+3)^{10}(4x-3)^{10}\ge0
+\quad\Longrightarrow\quad
+x\in\R.
+\]
+
+\important{Вывод:} правило механического чередования знаков работает только для точек нечётной кратности. Кратность каждого корня нужно определять до расстановки знаков.
+
+\sectiontitle{4. Рациональные неравенства}
+
+Для дроби
+\[
+\frac{P(x)}{Q(x)}\mathrel{\gtreqless}0
+\]
+критические точки дают и числитель, и знаменатель:
+\[
+P(x)=0,\qquad Q(x)=0.
+\]
+
+\begin{center}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X X@{}}
+\toprule
+Источник точки & Можно ли включить & Отметка на оси \\
+\midrule
+Нуль числителя & Да, если знак $\ge$ или $\le$ & Закрашенная точка при нестрогом неравенстве \\
+Нуль знаменателя & Никогда: дробь не определена & Всегда выколотая точка \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsectiontitle{Пример 2. Простейшая дробь}
+
+Решим:
+\[
+\frac{x+2}{x-3}\ge0.
+\]
+
+Числитель обращается в ноль при $x=-2$. Знаменатель обращается в ноль при $x=3$, поэтому
+\[
+x\ne3.
+\]
+
+При $x=0$ дробь отрицательна. Обе критические точки имеют нечётную кратность, поэтому знак при переходе через каждую из них меняется:
+
+\begin{center}
+\begin{tikzpicture}[x=1.55cm,y=1cm]
+  \draw[->,line width=0.7pt] (-3.0,0)--(3.2,0) node[right] {$x$};
+  \closedpoint{-1.15}{-2}
+  \openpoint{1.35}{3}
+  \node[darkaccent,above=7pt] at (-2.05,0) {$+$};
+  \node[darkaccent,above=7pt] at (0.1,0) {$-$};
+  \node[darkaccent,above=7pt] at (2.3,0) {$+$};
+  \node[softgray,above=24pt] at (-1.15,0) {числитель};
+  \node[softgray,above=24pt] at (1.35,0) {знаменатель};
+\end{tikzpicture}
+\end{center}
+
+Ответ:
+\[
+\boxed{x\in(-\infty;-2]\cup(3;+\infty)}.
+\]
+
+\sectiontitle{5. Особые случаи и контроль ошибок}
+
+\subsectiontitle{5.1. У числителя нет действительных корней}
+
+Отсутствие нулей числителя не означает отсутствие решений. Например, $x^2+1>0$ при всех $x$, поэтому знак дроби
+\[
+\frac{x^2+1}{x(3x+5)}
+\]
+полностью определяется знаком знаменателя. Для неравенства
+\[
+\frac{x^2+1}{x(3x+5)}<0
+\]
+получаем
+\[
+\boxed{x\in\left(-\frac53;0\right)}.
+\]
+
+\subsectiontitle{5.2. Сокращение множителей}
+
+При сокращении одинакового множителя исходное ограничение сохраняется. Например,
+\[
+\frac{(x+2)^2(x-1)}{(x+2)(x-3)}
+=\frac{(x+2)(x-1)}{x-3},
+\qquad x\ne-2,\quad x\ne3.
+\]
+
+Точка $x=-2$ остаётся выколотой, хотя после сокращения знаменатель в ней уже не обращается в ноль.
+
+\subsectiontitle{5.3. Финальный чек-лист}
+
+\begin{itemize}
+  \item Справа стоит $0$.
+  \item Все множители разложены и все критические точки найдены.
+  \item Точки записаны по возрастанию.
+  \item Для каждой точки определены источник и кратность.
+  \item Нули знаменателя выколоты при любом знаке неравенства.
+  \item При чётной кратности знак сохранён, при нечётной --- изменён.
+  \item При строгом неравенстве все нули исключены.
+  \item Ответ записан объединением промежутков в порядке слева направо.
+\end{itemize}
+
+\newpage
+\sectiontitle{Тренировочный блок}
+
+Решите неравенства методом интервалов. В ответе укажите объединение промежутков или конечное множество.
+
+\subsectiontitle{Средний уровень}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item $(x-2)^2(x+1)^3\ge0$.
+  \item $(3x+2)^4(x-5)^3<0$.
+  \item $\dfrac{x+4}{x-1}\le0$.
+\end{enumerate}
+
+\subsectiontitle{Выше среднего}
+\begin{enumerate}[label=\textbf{\arabic*.},start=4]
+  \item $(x-3)^2(x+2)^5\le0$.
+  \item $(2x-1)^6(x+3)^2>0$.
+  \item $\dfrac{x^2-5x+6}{(x-1)(x+4)}\ge0$.
+  \item $\dfrac{(x+1)^2(x-4)}{(x-2)^3}\le0$.
+  \item $\dfrac{x^2+1}{x(3x+5)}<0$.
+  \item $\dfrac{(x-1)^4(x+2)}{(x-3)^2}\ge0$.
+\end{enumerate}
+
+\subsectiontitle{Сложный уровень}
+\begin{enumerate}[label=\textbf{\arabic*.},start=10]
+  \item $\dfrac{(x-1)^3(x+2)^2}{(x+2)(x-3)^2(x+4)}\le0$.
+\end{enumerate}
+
+\newpage
+\sectiontitle{Ответы к тренировочному блоку}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}c X@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $[-1;+\infty)$ \\
+2 & $(-\infty;-\frac23)\cup(-\frac23;5)$ \\
+3 & $[-4;1)$ \\
+4 & $(-\infty;-2]\cup\{3\}$ \\
+5 & $\R\setminus\left\{-3;\frac12\right\}$ \\
+6 & $(-\infty;-4)\cup(1;2]\cup[3;+\infty)$ \\
+7 & $\{-1\}\cup(2;4]$ \\
+8 & $\left(-\frac53;0\right)$ \\
+9 & $[-2;3)\cup(3;+\infty)$ \\
+10 & $(-\infty;-4)\cup(-2;1]$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+
+\end{document}
