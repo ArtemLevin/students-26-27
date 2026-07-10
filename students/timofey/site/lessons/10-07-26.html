@@ -1,144 +1,165 @@
 <!doctype html>
 <html lang="ru" data-theme="dark" data-detail="full">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Интерактивное пособие по методу интервалов, кратности корней и рациональным неравенствам для Тимофея Васильченко.">
-    <title>Метод интервалов: кратность корней и рациональные неравенства</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23081118'/%3E%3Cpath d='M10 34h44' stroke='%2347ead2' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='23' cy='34' r='6' fill='%23ffb65b'/%3E%3Ccircle cx='42' cy='34' r='6' fill='%23081118' stroke='%23ffb65b' stroke-width='4'/%3E%3Ctext x='21' y='23' font-size='17' font-family='Arial' font-weight='700' fill='%23f5fbfa'%3E%E2%88%92%3C/text%3E%3Ctext x='43' y='23' font-size='17' font-family='Arial' font-weight='700' fill='%2347ead2'%3E%2B%3C/text%3E%3C/svg%3E">
-    <style>
-        :root{
-            --bg:#071118;--bg2:#0d1b24;--panel:#10212c;--panel2:#162c39;
-            --text:#eef8f6;--muted:#aec5c0;--soft:#78918d;--accent:#47ead2;
-            --accent2:#ffb65b;--danger:#ff7080;--ok:#9df6aa;--line:rgba(255,255,255,.13);
-            --shadow:0 24px 80px rgba(0,0,0,.34);--radius:22px;--grid:rgba(255,255,255,.075);
-        }
-        [data-theme="light"]{
-            --bg:#f5efe3;--bg2:#fff9ed;--panel:#fffaf0;--panel2:#f3e7d5;
-            --text:#202729;--muted:#4f5d5e;--soft:#6d7779;--accent:#006f69;
-            --accent2:#973f31;--danger:#a72e43;--ok:#28793b;--line:rgba(38,32,27,.17);
-            --shadow:0 20px 65px rgba(88,61,34,.18);--grid:rgba(44,36,30,.09);
-        }
-        *{box-sizing:border-box}
-        html{scroll-behavior:smooth}
-        body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at 12% 4%,rgba(71,234,210,.16),transparent 28rem),radial-gradient(circle at 92% 2%,rgba(255,182,91,.13),transparent 24rem),linear-gradient(135deg,var(--bg),var(--bg2))}
-        body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to bottom,#000,transparent 82%)}
-        a{color:var(--accent)} button,select,input{font:inherit}
-        .page{position:relative;max-width:1480px;margin:auto;padding:26px}
-        .topline{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:20px}
-        .back{color:var(--muted);text-decoration:none;font-weight:800}.back:hover{color:var(--accent)}
-        .toolbar,.controls,.button-row,.switches{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
-        .btn,.select,.range-shell{min-height:42px;border:1px solid var(--line);border-radius:999px;padding:9px 13px;color:var(--text);background:rgba(255,255,255,.055)}
-        .btn{cursor:pointer;font-weight:800}.btn:hover,.btn:focus-visible{border-color:var(--accent);box-shadow:0 0 0 4px rgba(71,234,210,.12);outline:none}.btn.primary{background:linear-gradient(135deg,var(--accent),rgba(71,234,210,.52));color:#061416;border-color:transparent}.btn.warm{background:linear-gradient(135deg,var(--accent2),rgba(255,182,91,.45));color:#190d03;border-color:transparent}
-        .hero{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:end;margin-bottom:22px}.eyebrow{color:var(--accent2);font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;font-weight:900}.hero h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.7rem);line-height:1;letter-spacing:-.055em}.lead{color:var(--muted);max-width:900px;font-size:1.08rem;line-height:1.55}.stamp{border:1px solid var(--line);border-radius:18px;padding:14px 16px;background:rgba(255,255,255,.045);color:var(--muted);min-width:210px}.stamp b{display:block;color:var(--accent);font-size:1.08rem;margin-bottom:4px}
-        .topic-tabs{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}.topic-tab{border:1px solid var(--line);border-radius:999px;padding:10px 14px;background:rgba(255,255,255,.045);color:var(--muted);cursor:pointer;font-weight:850}.topic-tab.active{background:var(--accent);color:#061416;border-color:transparent}
-        .layout{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(420px,.72fr);gap:22px;align-items:start}
-        .card{border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035));box-shadow:var(--shadow);backdrop-filter:blur(10px)}.card-inner{padding:22px}
-        .idea{border:1px solid rgba(71,234,210,.38);border-radius:18px;padding:17px 18px;background:linear-gradient(135deg,rgba(71,234,210,.12),rgba(255,182,91,.07));margin-bottom:16px}.idea h2,.section-title{margin:0 0 10px;font-size:1.28rem}.idea ul{margin:.25rem 0 0 1.1rem;padding:0}.idea li{margin:.38rem 0;line-height:1.45}
-        .solution-controls{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:12px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.035);margin-bottom:14px}.steps{display:grid;gap:11px}.step{border:1px solid var(--line);border-radius:17px;padding:15px 16px;background:rgba(255,255,255,.04);transition:.18s}.step.locked{display:none}.step:hover,.step.linked{border-color:rgba(71,234,210,.52);background:rgba(71,234,210,.09);transform:translateX(2px)}.step h3{margin:0 0 8px;display:flex;gap:9px;align-items:center;font-size:1.04rem}.badge{display:inline-grid;place-items:center;width:29px;height:29px;border-radius:50%;background:var(--accent);color:#061416;font-weight:950;flex:none}.step p,.step li{color:var(--muted);line-height:1.52;margin:.38rem 0}.step ul{margin:.3rem 0 0 1.15rem;padding:0}
-        math{font-family:Cambria Math,STIX Two Math,serif}.mathline{display:block;width:max-content;max-width:100%;overflow:auto;margin:9px 0;padding:8px 11px;border-radius:12px;background:rgba(71,234,210,.08)}
-        [data-detail="brief"] .detail-standard,[data-detail="brief"] .detail-full{display:none}[data-detail="standard"] .detail-full{display:none}
-        .viz{position:sticky;top:18px}.viz-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}.viz-head h2{margin:0;font-size:1.25rem}.canvas-shell{position:relative;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:linear-gradient(180deg,rgba(71,234,210,.075),rgba(255,182,91,.035));cursor:grab}.canvas-shell.dragging{cursor:grabbing}.canvas-shell canvas{display:block;width:100%;height:340px}.canvas-hint{position:absolute;right:10px;bottom:9px;padding:6px 9px;border-radius:999px;background:rgba(4,11,16,.75);color:#dff8f3;font-size:.76rem;pointer-events:none}.range-shell{display:flex;align-items:center;gap:8px}.range-shell input{width:130px;accent-color:var(--accent)}.control-grid{display:grid;gap:10px;margin-top:12px}.switch{display:flex;gap:7px;align-items:center;color:var(--muted);font-size:.92rem}.switch input{accent-color:var(--accent)}.legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.88rem}.dot{width:11px;height:11px;border-radius:50%;display:inline-block;margin-right:5px}.dot.closed{background:var(--accent2)}.dot.open{border:2px solid var(--accent2);background:var(--panel)}
-        .panel{margin-top:18px}.panel h2{margin:0 0 12px}.mistakes{display:grid;gap:9px}.mistake{border-left:4px solid var(--danger);padding:10px 12px;background:rgba(255,112,128,.075);border-radius:0 13px 13px 0;color:var(--muted)}
-        .generator{display:grid;gap:12px}.generated{min-height:90px;border:1px dashed var(--line);border-radius:16px;padding:14px;background:rgba(255,255,255,.035)}.answer{display:none;margin-top:10px;color:var(--ok);font-weight:800}.answer.show{display:block}
-        .quiz-options{display:grid;gap:8px}.quiz-option{text-align:left;border:1px solid var(--line);border-radius:13px;padding:10px 12px;background:var(--panel2);color:var(--text);cursor:pointer}.quiz-option.good{border-color:var(--ok);background:rgba(157,246,170,.12)}.quiz-option.bad{border-color:var(--danger);background:rgba(255,112,128,.1)}.feedback{min-height:24px;color:var(--muted);margin-top:8px}.checks label{display:block;margin:9px 0;color:var(--muted)}.checks input{accent-color:var(--accent)}
-        .hint-trigger{display:inline-grid;place-items:center;width:27px;height:27px;border-radius:50%;border:1px solid var(--accent);background:rgba(71,234,210,.1);color:var(--accent);font-weight:950;cursor:pointer;animation:hintPulse 2s infinite}.hint-trigger:focus{outline:3px solid rgba(71,234,210,.2)}.tooltip{position:fixed;z-index:120;max-width:330px;border:1px solid transparent;border-radius:17px;padding:14px 38px 14px 14px;background-image:linear-gradient(#071118,#071118),linear-gradient(135deg,#47ead2,#ffb65b);background-origin:border-box;background-clip:padding-box,border-box;color:#eef8f6;box-shadow:0 18px 55px rgba(0,0,0,.42);opacity:0;transform:translateY(7px);pointer-events:none;transition:.18s}.tooltip.show{opacity:1;transform:none;pointer-events:auto;animation:hintBounce .35s}.tooltip button{position:absolute;right:8px;top:7px;border:0;background:transparent;color:#fff;font-size:20px;cursor:pointer}.tooltip p{margin:.25rem 0;line-height:1.4}.glow{animation:borderGlow 1.5s ease 2}
-        .overlay{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.76)}.overlay.show{display:flex}.modal{width:min(1180px,96vw);max-height:94vh;overflow:auto;border:1px solid var(--line);border-radius:24px;background:var(--panel);box-shadow:var(--shadow);padding:16px}.modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}.modal-head h2{margin:0}.modal canvas{width:100%;height:min(68vh,650px);display:block;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(71,234,210,.07),rgba(255,182,91,.03));cursor:grab}.close{border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--text);padding:8px 11px;cursor:pointer;font-weight:900}
-        footer{max-width:1480px;margin:24px auto 0;padding:22px 26px 42px;color:var(--muted);border-top:1px solid var(--line)}
-        @keyframes hintPulse{0%{box-shadow:0 0 0 0 rgba(71,234,210,.45)}70%{box-shadow:0 0 0 11px rgba(71,234,210,0)}100%{box-shadow:0 0 0 0 rgba(71,234,210,0)}}@keyframes hintBounce{50%{transform:translateY(-3px)}}@keyframes borderGlow{50%{box-shadow:0 0 0 4px rgba(71,234,210,.2)}}
-        @media(max-width:1050px){.layout{grid-template-columns:1fr}.viz{position:relative;top:auto}.hero{grid-template-columns:1fr}.stamp{max-width:340px}}
-        @media(max-width:650px){.page{padding:14px}.topline{align-items:flex-start;flex-direction:column}.hero h1{font-size:2.55rem}.card-inner{padding:15px}.canvas-shell canvas{height:285px}.modal canvas{height:55vh}.toolbar{justify-content:flex-start}.range-shell input{width:95px}.tooltip{left:12px!important;right:12px!important;max-width:none}}
-        @media print{body{background:#fff;color:#111}.topline,.toolbar,.topic-tabs,.viz,.solution-controls,.generator .button-row,.hint-trigger,.overlay,.quiz-options{display:none!important}.layout{display:block}.card{box-shadow:none;border:1px solid #bbb;break-inside:avoid}.step.locked{display:block}.page{max-width:none;padding:0}.panel{break-before:page}footer{color:#333}}
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Интерактивное пособие по методу интервалов, кратности корней и рациональным неравенствам для Тимофея Васильченко.">
+  <title>Метод интервалов: кратность корней и рациональные неравенства</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23081118'/%3E%3Cpath d='M10 34h44' stroke='%2347ead2' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='23' cy='34' r='6' fill='%23ffb65b'/%3E%3Ccircle cx='42' cy='34' r='6' fill='%23081118' stroke='%23ffb65b' stroke-width='4'/%3E%3Ctext x='21' y='23' font-size='17' font-family='Arial' font-weight='700' fill='%23f5fbfa'%3E%E2%88%92%3C/text%3E%3Ctext x='43' y='23' font-size='17' font-family='Arial' font-weight='700' fill='%2347ead2'%3E%2B%3C/text%3E%3C/svg%3E">
+  <style>
+    :root{
+      --bg:#071118;--bg2:#0d1b24;--panel:#10212c;--panel2:#162c39;
+      --text:#eef8f6;--muted:#aec5c0;--soft:#78918d;--accent:#47ead2;
+      --accent2:#ffb65b;--danger:#ff7080;--ok:#9df6aa;--line:rgba(255,255,255,.13);
+      --shadow:0 24px 80px rgba(0,0,0,.34);--radius:22px;--grid:rgba(255,255,255,.075);
+    }
+    [data-theme="light"]{
+      --bg:#f5efe3;--bg2:#fff9ed;--panel:#fffaf0;--panel2:#f3e7d5;
+      --text:#202729;--muted:#4f5d5e;--soft:#6d7779;--accent:#006f69;
+      --accent2:#973f31;--danger:#a72e43;--ok:#28793b;--line:rgba(38,32,27,.17);
+      --shadow:0 20px 65px rgba(88,61,34,.18);--grid:rgba(44,36,30,.09);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at 12% 4%,rgba(71,234,210,.16),transparent 28rem),radial-gradient(circle at 92% 2%,rgba(255,182,91,.13),transparent 24rem),linear-gradient(135deg,var(--bg),var(--bg2))}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.2;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to bottom,#000,transparent 82%)}
+    a{color:var(--accent)} button,select,input{font:inherit}
+    .page{position:relative;max-width:1480px;margin:auto;padding:26px}
+    .topline{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:20px}
+    .back{color:var(--muted);text-decoration:none;font-weight:800}.back:hover{color:var(--accent)}
+    .toolbar,.controls,.button-row,.switches{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+    .btn,.select,.range-shell{min-height:42px;border:1px solid var(--line);border-radius:999px;padding:9px 13px;color:var(--text);background:rgba(255,255,255,.055)}
+    .btn{cursor:pointer;font-weight:800}.btn:hover,.btn:focus-visible{border-color:var(--accent);box-shadow:0 0 0 4px rgba(71,234,210,.12);outline:none}.btn.primary{background:linear-gradient(135deg,var(--accent),rgba(71,234,210,.52));color:#061416;border-color:transparent}.btn.warm{background:linear-gradient(135deg,var(--accent2),rgba(255,182,91,.45));color:#190d03;border-color:transparent}
+    .hero{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:end;margin-bottom:22px}.eyebrow{color:var(--accent2);font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;font-weight:900}.hero h1{margin:8px 0 10px;font-size:clamp(2.2rem,5vw,4.7rem);line-height:1;letter-spacing:-.055em}.lead{color:var(--muted);max-width:900px;font-size:1.08rem;line-height:1.55}.stamp{border:1px solid var(--line);border-radius:18px;padding:14px 16px;background:rgba(255,255,255,.045);color:var(--muted);min-width:210px}.stamp b{display:block;color:var(--accent);font-size:1.08rem;margin-bottom:4px}
+    .topic-tabs{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}.topic-tab,.topic-link{border:1px solid var(--line);border-radius:999px;padding:10px 14px;background:rgba(255,255,255,.045);color:var(--muted);cursor:pointer;font-weight:850;text-decoration:none}.topic-tab.active{background:var(--accent);color:#061416;border-color:transparent}.topic-link:hover{border-color:var(--accent);color:var(--accent)}
+    .layout{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(420px,.72fr);gap:22px;align-items:start}
+    .card{border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035));box-shadow:var(--shadow);backdrop-filter:blur(10px)}.card-inner{padding:22px}
+    .idea{border:1px solid rgba(71,234,210,.38);border-radius:18px;padding:17px 18px;background:linear-gradient(135deg,rgba(71,234,210,.12),rgba(255,182,91,.07));margin-bottom:16px}.idea h2,.section-title{margin:0 0 10px;font-size:1.28rem}.idea ul{margin:.25rem 0 0 1.1rem;padding:0}.idea li{margin:.38rem 0;line-height:1.45}
+    .solution-controls{display:flex;gap:9px;flex-wrap:wrap;align-items:center;padding:12px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.035);margin-bottom:14px}.steps{display:grid;gap:11px}.step{border:1px solid var(--line);border-radius:17px;padding:15px 16px;background:rgba(255,255,255,.04);transition:.18s}.step.locked{display:none}.step:hover,.step.linked{border-color:rgba(71,234,210,.52);background:rgba(71,234,210,.09);transform:translateX(2px)}.step h3{margin:0 0 8px;display:flex;gap:9px;align-items:center;font-size:1.04rem}.badge{display:inline-grid;place-items:center;width:29px;height:29px;border-radius:50%;background:var(--accent);color:#061416;font-weight:950;flex:none}.step p,.step li{color:var(--muted);line-height:1.52;margin:.38rem 0}.step ul{margin:.3rem 0 0 1.15rem;padding:0}
+    math{font-family:Cambria Math,STIX Two Math,serif}.mathline{display:block;width:max-content;max-width:100%;overflow:auto;margin:9px 0;padding:8px 11px;border-radius:12px;background:rgba(71,234,210,.08)}
+    [data-detail="brief"] .detail-standard,[data-detail="brief"] .detail-full{display:none}[data-detail="standard"] .detail-full{display:none}
+    .viz{position:sticky;top:18px}.viz-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}.viz-head h2{margin:0;font-size:1.25rem}.canvas-shell{position:relative;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:linear-gradient(180deg,rgba(71,234,210,.075),rgba(255,182,91,.035));cursor:grab}.canvas-shell.dragging{cursor:grabbing}.canvas-shell canvas{display:block;width:100%;height:340px}.canvas-hint{position:absolute;right:10px;bottom:9px;padding:6px 9px;border-radius:999px;background:rgba(4,11,16,.75);color:#dff8f3;font-size:.76rem;pointer-events:none}.range-shell{display:flex;align-items:center;gap:8px}.range-shell input{width:130px;accent-color:var(--accent)}.control-grid{display:grid;gap:10px;margin-top:12px}.switch{display:flex;gap:7px;align-items:center;color:var(--muted);font-size:.92rem}.switch input{accent-color:var(--accent)}.legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.88rem}.dot{width:11px;height:11px;border-radius:50%;display:inline-block;margin-right:5px}.dot.closed{background:var(--accent2)}.dot.open{border:2px solid var(--accent2);background:var(--panel)}
+    .panel{margin-top:18px}.panel h2{margin:0 0 12px}.mistakes{display:grid;gap:9px}.mistake{border-left:4px solid var(--danger);padding:10px 12px;background:rgba(255,112,128,.075);border-radius:0 13px 13px 0;color:var(--muted)}
+    .generator{display:grid;gap:12px}.generated{min-height:90px;border:1px dashed var(--line);border-radius:16px;padding:14px;background:rgba(255,255,255,.035)}.answer{display:none;margin-top:10px;color:var(--ok);font-weight:800}.answer.show{display:block}
+    .training-groups{display:grid;gap:18px}.training-level{border-top:1px solid var(--line);padding-top:14px}.training-level:first-child{border-top:0;padding-top:0}.training-level h3{margin:0 0 10px;color:var(--accent2)}.task-list{display:grid;gap:9px;counter-reset:task var(--task-start,0)}.training-task{display:grid;grid-template-columns:34px minmax(0,1fr);gap:9px;align-items:start;padding:11px 12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035)}.training-task::before{counter-increment:task;content:counter(task) ".";font-weight:900;color:var(--accent)}.training-task math{overflow:auto;max-width:100%}.answer-sheet{margin-top:16px;border:1px solid rgba(71,234,210,.34);border-radius:18px;padding:16px;background:rgba(71,234,210,.07)}.answer-sheet[hidden]{display:none}.answer-table{width:100%;border-collapse:collapse}.answer-table th,.answer-table td{padding:9px 8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}.answer-table th{color:var(--accent)}.answer-table tr:last-child td{border-bottom:0}.self-code{text-align:center;color:var(--accent2);font-weight:900;letter-spacing:.08em;margin:16px 0 0}
+    .quiz-options{display:grid;gap:8px}.quiz-option{text-align:left;border:1px solid var(--line);border-radius:13px;padding:10px 12px;background:var(--panel2);color:var(--text);cursor:pointer}.quiz-option.good{border-color:var(--ok);background:rgba(157,246,170,.12)}.quiz-option.bad{border-color:var(--danger);background:rgba(255,112,128,.1)}.feedback{min-height:24px;color:var(--muted);margin-top:8px}.checks label{display:block;margin:9px 0;color:var(--muted)}.checks input{accent-color:var(--accent)}
+    .hint-trigger{display:inline-grid;place-items:center;width:27px;height:27px;border-radius:50%;border:1px solid var(--accent);background:rgba(71,234,210,.1);color:var(--accent);font-weight:950;cursor:pointer;animation:hintPulse 2s infinite}.hint-trigger:focus{outline:3px solid rgba(71,234,210,.2)}.tooltip{position:fixed;z-index:120;max-width:330px;border:1px solid transparent;border-radius:17px;padding:14px 38px 14px 14px;background-image:linear-gradient(#071118,#071118),linear-gradient(135deg,#47ead2,#ffb65b);background-origin:border-box;background-clip:padding-box,border-box;color:#eef8f6;box-shadow:0 18px 55px rgba(0,0,0,.42);opacity:0;transform:translateY(7px);pointer-events:none;transition:.18s}.tooltip.show{opacity:1;transform:none;pointer-events:auto;animation:hintBounce .35s}.tooltip button{position:absolute;right:8px;top:7px;border:0;background:transparent;color:#fff;font-size:20px;cursor:pointer}.tooltip p{margin:.25rem 0;line-height:1.4}.glow{animation:borderGlow 1.5s ease 2}
+    .overlay{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.76)}.overlay.show{display:flex}.modal{width:min(1180px,96vw);max-height:94vh;overflow:auto;border:1px solid var(--line);border-radius:24px;background:var(--panel);box-shadow:var(--shadow);padding:16px}.modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}.modal-head h2{margin:0}.modal canvas{width:100%;height:min(68vh,650px);display:block;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,rgba(71,234,210,.07),rgba(255,182,91,.03));cursor:grab}.close{border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--text);padding:8px 11px;cursor:pointer;font-weight:900}
+    footer{max-width:1480px;margin:24px auto 0;padding:22px 26px 42px;color:var(--muted);border-top:1px solid var(--line)}
+    @keyframes hintPulse{0%{box-shadow:0 0 0 0 rgba(71,234,210,.45)}70%{box-shadow:0 0 0 11px rgba(71,234,210,0)}100%{box-shadow:0 0 0 0 rgba(71,234,210,0)}}@keyframes hintBounce{50%{transform:translateY(-3px)}}@keyframes borderGlow{50%{box-shadow:0 0 0 4px rgba(71,234,210,.2)}}
+    @media(max-width:1050px){.layout{grid-template-columns:1fr}.viz{position:relative;top:auto}.hero{grid-template-columns:1fr}.stamp{max-width:340px}}
+    @media(max-width:650px){.page{padding:14px}.topline{align-items:flex-start;flex-direction:column}.hero h1{font-size:2.55rem}.card-inner{padding:15px}.canvas-shell canvas{height:285px}.modal canvas{height:55vh}.toolbar{justify-content:flex-start}.range-shell input{width:95px}.tooltip{left:12px!important;right:12px!important;max-width:none}}
+    @media print{body{background:#fff;color:#111}.topline,.toolbar,.topic-tabs,.viz,.solution-controls,.generator .button-row,.hint-trigger,.overlay,.quiz-options,.answer-controls{display:none!important}.layout{display:block}.card{box-shadow:none;border:1px solid #bbb;break-inside:avoid}.step.locked{display:block}.answer-sheet[hidden]{display:block}.page{max-width:none;padding:0}.panel{break-before:page}footer{color:#333}}
+  </style>
 </head>
 <body>
 <main class="page">
-    <div class="topline">
-        <a class="back" href="../index.html">← К материалам Тимофея</a>
-        <div class="toolbar">
-            <label class="select">Подробность
-                <select id="detailSelect" aria-label="Уровень подробности">
-                    <option value="brief">Кратко</option><option value="standard">Стандартно</option><option value="full" selected>Очень подробно</option>
-                </select>
-            </label>
-            <button class="btn" id="themeBtn">Светлая тема</button>
-            <button class="btn" onclick="window.print()">Печать</button>
-        </div>
+  <div class="topline">
+    <a class="back" href="../index.html">← К материалам Тимофея</a>
+    <div class="toolbar">
+      <label class="select">Подробность
+        <select id="detailSelect" aria-label="Уровень подробности">
+          <option value="brief">Кратко</option><option value="standard">Стандартно</option><option value="full" selected>Очень подробно</option>
+        </select>
+      </label>
+      <button class="btn" id="themeBtn">Светлая тема</button>
+      <button class="btn" onclick="window.print()">Печать</button>
     </div>
+  </div>
 
-    <header class="hero">
-        <div>
-            <div class="eyebrow">Наглядная математика · 10.07.26</div>
-            <h1>Метод интервалов</h1>
-            <p class="lead">Кратность корней, исключения из чередования знаков и рациональные неравенства. Меняйте модель, раскрывайте решение по шагам и сверяйте каждый переход с числовой осью.</p>
-        </div>
-        <aside class="stamp"><b>Тимофей Васильченко</b><span>Лёвин Артём Александрович<br>10 класс</span></aside>
-    </header>
-
-    <nav class="topic-tabs" aria-label="Темы страницы">
-        <button class="topic-tab active" data-topic="multiplicity">Кратность корней</button>
-        <button class="topic-tab" data-topic="signs">Четыре знака</button>
-        <button class="topic-tab" data-topic="rational">Рациональная дробь</button>
-    </nav>
-
-    <div class="layout">
-        <section class="card">
-            <div class="card-inner">
-                <article class="idea">
-                    <h2>Идея решения</h2>
-                    <ul id="ideaList"></ul>
-                </article>
-                <div class="solution-controls">
-                    <button class="btn primary" id="nextStep">Открыть следующий шаг</button>
-                    <button class="btn" id="showAll">Показать всё</button>
-                    <button class="btn" id="resetSteps">Свернуть</button>
-                    <span class="hint-trigger" tabindex="0" role="button" aria-label="Подсказка о пошаговом режиме" data-tip="steps">?</span>
-                </div>
-                <div class="steps" id="steps"></div>
-            </div>
-        </section>
-
-        <aside class="card viz" id="vizCard">
-            <div class="card-inner">
-                <div class="viz-head"><h2>Интерактивная числовая ось</h2><span class="hint-trigger" tabindex="0" role="button" aria-label="Подсказка о визуализации" data-tip="canvas">i</span></div>
-                <div class="canvas-shell" id="mainShell"><canvas id="mainCanvas" width="760" height="460" aria-label="Интерактивная схема метода интервалов"></canvas><span class="canvas-hint">Клик — увеличить · перетаскивание — сдвиг</span></div>
-                <div class="control-grid">
-                    <div class="controls">
-                        <label class="range-shell">Масштаб <input id="zoomMain" type="range" min="70" max="180" value="100"></label>
-                        <button class="btn" data-zoom="out">−</button><button class="btn" data-zoom="in">+</button><button class="btn" data-zoom="reset">Сброс</button>
-                        <span class="hint-trigger" tabindex="0" role="button" aria-label="Подсказка о масштабе" data-tip="zoom">?</span>
-                    </div>
-                    <div class="switches">
-                        <label class="switch"><input id="showSigns" type="checkbox" checked> Показывать знаки</label>
-                        <label class="switch"><input id="showLabels" type="checkbox" checked> Показывать подписи</label>
-                    </div>
-                    <div class="legend"><span><i class="dot closed"></i> допустимый нуль</span><span><i class="dot open"></i> запрещённая точка</span></div>
-                </div>
-            </div>
-        </aside>
+  <header class="hero">
+    <div>
+      <div class="eyebrow">Наглядная математика · 10.07.26</div>
+      <h1>Метод интервалов</h1>
+      <p class="lead">Кратность корней, исключения из чередования знаков и рациональные неравенства. Меняйте модель, раскрывайте решение по шагам и сверяйте каждый переход с числовой осью.</p>
     </div>
+    <aside class="stamp"><b>Тимофей Васильченко</b><span>Лёвин Артём Александрович<br>10 класс</span></aside>
+  </header>
 
-    <section class="card panel"><div class="card-inner"><h2>Типичные ошибки</h2><div class="mistakes" id="mistakes"></div></div></section>
+  <nav class="topic-tabs" aria-label="Темы страницы">
+    <button class="topic-tab active" data-topic="algorithm">Алгоритм</button>
+    <button class="topic-tab" data-topic="multiplicity">Кратность корней</button>
+    <button class="topic-tab" data-topic="signs">Четыре знака</button>
+    <button class="topic-tab" data-topic="rational">Рациональная дробь</button>
+    <button class="topic-tab" data-topic="special">Особые случаи</button>
+    <a class="topic-link" href="#trainingBlock">10 упражнений</a>
+  </nav>
 
-    <section class="card panel"><div class="card-inner generator">
-        <h2>Похожая задача</h2>
-        <p class="lead">Генератор выбирает корректную задачу того же типа без совпадающих критических точек и вырожденных случаев.</p>
-        <div class="button-row"><button class="btn warm" id="generateBtn">Сгенерировать задачу</button><span class="hint-trigger" tabindex="0" role="button" aria-label="Подсказка о генераторе" data-tip="generator">!</span></div>
-        <div class="generated" id="generatedTask">Нажмите кнопку, чтобы получить одну задачу с ответом.</div>
-    </div></section>
+  <div class="layout">
+    <section class="card">
+      <div class="card-inner">
+        <article class="idea">
+          <h2>Идея решения</h2>
+          <ul id="ideaList"></ul>
+        </article>
+        <div class="solution-controls">
+          <button class="btn primary" id="nextStep">Открыть следующий шаг</button>
+          <button class="btn" id="showAll">Показать всё</button>
+          <button class="btn" id="resetSteps">Свернуть</button>
+          <span class="hint-trigger" tabindex="0" role="button" aria-label="Подсказка о пошаговом режиме" data-tip="steps">?</span>
+        </div>
+        <div class="steps" id="steps"></div>
+      </div>
+    </section>
 
-    <section class="card panel"><div class="card-inner">
-        <h2>Мини-квиз</h2><p id="quizQuestion"></p><div class="quiz-options" id="quizOptions"></div><div class="feedback" id="quizFeedback" aria-live="polite"></div>
-    </div></section>
+    <aside class="card viz" id="vizCard">
+      <div class="card-inner">
+        <div class="viz-head"><h2>Интерактивная числовая ось</h2><span class="hint-trigger" tabindex="0" role="button" aria-label="Подсказка о визуализации" data-tip="canvas">i</span></div>
+        <div class="canvas-shell" id="mainShell"><canvas id="mainCanvas" width="760" height="460" aria-label="Интерактивная схема метода интервалов"></canvas><span class="canvas-hint">Клик — увеличить · перетаскивание — сдвиг</span></div>
+        <div class="control-grid">
+          <div class="controls">
+            <label class="range-shell">Масштаб <input id="zoomMain" type="range" min="70" max="180" value="100"></label>
+            <button class="btn" data-zoom="out">−</button><button class="btn" data-zoom="in">+</button><button class="btn" data-zoom="reset">Сброс</button>
+            <span class="hint-trigger" tabindex="0" role="button" aria-label="Подсказка о масштабе" data-tip="zoom">?</span>
+          </div>
+          <div class="switches">
+            <label class="switch"><input id="showSigns" type="checkbox" checked> Показывать знаки</label>
+            <label class="switch"><input id="showLabels" type="checkbox" checked> Показывать подписи</label>
+          </div>
+          <div class="legend"><span><i class="dot closed"></i> допустимый нуль</span><span><i class="dot open"></i> запрещённая точка</span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
 
-    <section class="card panel"><div class="card-inner checks">
-        <h2>Самопроверка</h2>
-        <label><input type="checkbox"> Я привёл неравенство к виду с нулём справа.</label>
-        <label><input type="checkbox"> Я выписал критические точки по возрастанию.</label>
-        <label><input type="checkbox"> Я отметил источник и кратность каждой точки.</label>
-        <label><input type="checkbox"> Я выколол все нули знаменателя.</label>
-        <label><input type="checkbox"> Я проверил строгие и нестрогие границы ответа.</label>
-    </div></section>
+  <section class="card panel"><div class="card-inner"><h2>Типичные ошибки</h2><div class="mistakes" id="mistakes"></div></div></section>
+
+  <section class="card panel"><div class="card-inner generator">
+    <h2>Похожая задача</h2>
+    <p class="lead">Генератор выбирает корректную задачу того же типа без совпадающих критических точек и вырожденных случаев.</p>
+    <div class="button-row"><button class="btn warm" id="generateBtn">Сгенерировать задачу</button><span class="hint-trigger" tabindex="0" role="button" aria-label="Подсказка о генераторе" data-tip="generator">!</span></div>
+    <div class="generated" id="generatedTask">Нажмите кнопку, чтобы получить одну задачу с ответом.</div>
+  </div></section>
+
+  <section class="card panel" id="trainingBlock"><div class="card-inner">
+    <h2>Тренировочный блок: 10 упражнений</h2>
+    <p class="lead">Задачи расположены по нарастающей сложности. Сначала решите их методом интервалов, затем откройте общую таблицу ответов.</p>
+    <div class="training-groups" id="trainingGroups"></div>
+    <div class="button-row answer-controls">
+      <button class="btn primary" id="toggleAnswers" aria-expanded="false">Показать таблицу ответов</button>
+    </div>
+    <div class="answer-sheet" id="answerSheet" hidden>
+      <h3>Ответы к тренировочному блоку</h3>
+      <div style="overflow:auto"><table class="answer-table"><thead><tr><th>№</th><th>Ответ</th></tr></thead><tbody id="trainingAnswers"></tbody></table></div>
+      <p class="self-code">Код самопроверки: ИНТЕРВАЛ</p>
+    </div>
+  </div></section>
+
+  <section class="card panel"><div class="card-inner">
+    <h2>Мини-квиз</h2><p id="quizQuestion"></p><div class="quiz-options" id="quizOptions"></div><div class="feedback" id="quizFeedback" aria-live="polite"></div>
+  </div></section>
+
+  <section class="card panel"><div class="card-inner checks">
+    <h2>Самопроверка</h2>
+    <label><input type="checkbox"> Справа стоит ноль.</label>
+    <label><input type="checkbox"> Все выражения разложены на множители, все критические точки найдены.</label>
+    <label><input type="checkbox"> Критические точки записаны по возрастанию.</label>
+    <label><input type="checkbox"> Для каждой точки определены источник и кратность.</label>
+    <label><input type="checkbox"> Все нули знаменателя выколоты.</label>
+    <label><input type="checkbox"> При чётной кратности знак сохранён, при нечётной — изменён.</label>
+    <label><input type="checkbox"> При строгом неравенстве все нули произведения или числителя исключены.</label>
+    <label><input type="checkbox"> Ответ записан объединением промежутков слева направо.</label>
+  </div></section>
 </main>
 
 <footer>Лёвин Артём Александрович · эксклюзивно для Тимофея Васильченко</footer>
@@ -146,146 +167,216 @@
 <div class="tooltip" id="tooltip" role="tooltip" aria-hidden="true"><button aria-label="Закрыть подсказку">×</button><div id="tooltipBody"></div></div>
 
 <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <div class="modal-head"><h2 id="modalTitle">Увеличенная числовая ось</h2><div class="controls"><label class="range-shell">Масштаб <input id="zoomModal" type="range" min="70" max="180" value="100"></label><button class="close" id="closeModal">Закрыть ×</button></div></div>
-        <canvas id="modalCanvas" width="1280" height="700" aria-label="Увеличенная интерактивная схема"></canvas>
-    </div>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head"><h2 id="modalTitle">Увеличенная числовая ось</h2><div class="controls"><label class="range-shell">Масштаб <input id="zoomModal" type="range" min="70" max="180" value="100"></label><button class="close" id="closeModal">Закрыть ×</button></div></div>
+    <canvas id="modalCanvas" width="1280" height="700" aria-label="Увеличенная интерактивная схема"></canvas>
+  </div>
 </div>
 
 <script>
-    const M={
-        ge:'<math><mo>≥</mo></math>', le:'<math><mo>≤</mo></math>', gt:'<math><mo>&gt;</mo></math>', lt:'<math><mo>&lt;</mo></math>',
-        example:'<math display="block"><msup><mrow><mo>(</mo><mn>2</mn><mi>x</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mn>2</mn></msup><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow><mn>3</mn></msup><mo>≥</mo><mn>0</mn></math>',
-        fraction:'<math display="block"><mfrac><mrow><mi>x</mi><mo>+</mo><mn>2</mn></mrow><mrow><mi>x</mi><mo>−</mo><mn>3</mn></mrow></mfrac><mo>≥</mo><mn>0</mn></math>'
-    };
+const M={
+  ge:'<math><mo>≥</mo></math>', le:'<math><mo>≤</mo></math>', gt:'<math><mo>&gt;</mo></math>', lt:'<math><mo>&lt;</mo></math>',
+  normal:'<math display="block"><mi>F</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>≥</mo><mn>0</mn><mo>,</mo><mspace width="1em"/><mi>F</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>&gt;</mo><mn>0</mn><mo>,</mo><mspace width="1em"/><mi>F</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>≤</mo><mn>0</mn><mo>,</mo><mspace width="1em"/><mi>F</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>&lt;</mo><mn>0</mn></math>',
+  example:'<math display="block"><msup><mrow><mo>(</mo><mn>2</mn><mi>x</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mn>2</mn></msup><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow><mn>3</mn></msup><mo>≥</mo><mn>0</mn></math>',
+  fraction:'<math display="block"><mfrac><mrow><mi>x</mi><mo>+</mo><mn>2</mn></mrow><mrow><mi>x</mi><mo>−</mo><mn>3</mn></mrow></mfrac><mo>≥</mo><mn>0</mn></math>',
+  specialFraction:'<math display="block"><mfrac><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn></mrow><mrow><mi>x</mi><mo>(</mo><mn>3</mn><mi>x</mi><mo>+</mo><mn>5</mn><mo>)</mo></mrow></mfrac><mo>&lt;</mo><mn>0</mn></math>',
+  cancellation:'<math display="block"><mfrac><mrow><msup><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow><mn>2</mn></msup><mo>(</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>−</mo><mn>3</mn><mo>)</mo></mrow></mfrac><mo>=</mo><mfrac><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow><mrow><mi>x</mi><mo>−</mo><mn>3</mn></mrow></mfrac><mo>,</mo><mspace width="1em"/><mi>x</mi><mo>≠</mo><mo>−</mo><mn>2</mn><mo>,</mo><mspace width=".5em"/><mi>x</mi><mo>≠</mo><mn>3</mn></math>',
+  highMultiplicity:'<math display="block"><msup><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>3</mn><mo>)</mo></mrow><mn>10</mn></msup><msup><mrow><mo>(</mo><mn>4</mn><mi>x</mi><mo>−</mo><mn>3</mn><mo>)</mo></mrow><mn>11</mn></msup><mo>≥</mo><mn>0</mn><mo>⇒</mo><mi>x</mi><mo>∈</mo><mo>{</mo><mo>−</mo><mn>3</mn><mo>}</mo><mo>∪</mo><mo>[</mo><mfrac><mn>3</mn><mn>4</mn></mfrac><mo>;</mo><mo>+</mo><mi>∞</mi><mo>)</mo></math>',
+  bothEven:'<math display="block"><msup><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>3</mn><mo>)</mo></mrow><mn>10</mn></msup><msup><mrow><mo>(</mo><mn>4</mn><mi>x</mi><mo>−</mo><mn>3</mn><mo>)</mo></mrow><mn>10</mn></msup><mo>≥</mo><mn>0</mn><mo>⇒</mo><mi>x</mi><mo>∈</mo><mi>ℝ</mi></math>'
+};
 
-    const topics={
-        multiplicity:{
-            points:[{x:-.5,label:'−1/2',kind:'zero',mult:2},{x:1,label:'1',kind:'zero',mult:3}], signs:['−','−','+'],
-            idea:['Найдите корни каждого множителя и их кратности.','Нечётная кратность меняет знак, чётная сохраняет.','Для нестрогого неравенства допустимые нули входят в ответ.'],
-            steps:[
-                ['Что дано',M.example,'Произведение уже разложено на множители, справа стоит ноль.'],
-                ['Что означает условие','Нужно найти все значения переменной, при которых произведение неотрицательно.','Знак '+M.ge+' разрешает включить нули произведения.'],
-                ['Алгебраическая интерпретация','<math display="block"><mn>2</mn><mi>x</mi><mo>+</mo><mn>1</mn><mo>=</mo><mn>0</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>;</mo><mspace width="1em"/><mi>x</mi><mo>−</mo><mn>1</mn><mo>=</mo><mn>0</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>1</mn></math>','Первая точка имеет кратность 2, вторая — кратность 3.'],
-                ['Ключевая идея','<math display="block"><mtext>чётная кратность</mtext><mo>⇒</mo><mtext>знак сохраняется</mtext><mo>;</mo><mspace width="1em"/><mtext>нечётная кратность</mtext><mo>⇒</mo><mtext>знак меняется</mtext></math>','Это исключение из механического чередования знаков.'],
-                ['Пошаговое доведение','Возьмём калибровочное значение на среднем интервале: <math><mi>x</mi><mo>=</mo><mn>0</mn></math>.','Получаем отрицательный знак. Через <math><mi>x</mi><mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></math> знак сохраняется, через <math><mi>x</mi><mo>=</mo><mn>1</mn></math> меняется.'],
-                ['Проверка ответа','Обе критические точки являются нулями числителя и допустимы при нестрогом знаке.','На правом интервале произведение положительно; на двух левых — отрицательно.'],
-                ['Вывод','<math display="block"><mi>x</mi><mo>∈</mo><mrow><mo>{</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>}</mo></mrow><mo>∪</mo><mo>[</mo><mn>1</mn><mo>;</mo><mo>+</mo><mi>∞</mi><mo>)</mo></math>','Корень чётной кратности может войти в ответ как отдельная точка.']
-            ],
-            mistakes:['Механически чередовать знаки через корень чётной кратности.','Потерять отдельную точку, в которой выражение равно нулю.','Включить нуль при строгом знаке.','Подставить калибровочное значение в ненормализованное выражение.'],
-            quiz:{q:'Что происходит со знаком при переходе через корень чётной кратности?',a:['Сохраняется','Обязательно меняется','Всегда становится положительным'],correct:0}
-        },
-        signs:{
-            points:[{x:-.5,label:'−1/2',kind:'zero',mult:2},{x:1,label:'1',kind:'zero',mult:3}],signs:['−','−','+'],
-            idea:['Сначала составьте единственную таблицу знаков выражения.','Затем выберите плюс или минус по знаку исходного неравенства.','Строгость определяет включение нулей.'],
-            steps:[
-                ['Что дано',M.example,'Левая часть одна и та же; меняется только знак сравнения.'],
-                ['Что означает каждый знак','<math display="block"><mo>≥</mo><mo>,</mo><mo>≤</mo><mo>:</mo><mspace width=".5em"/><mtext>нули разрешены</mtext><mo>;</mo><mspace width="1em"/><mo>&gt;</mo><mo>,</mo><mo>&lt;</mo><mo>:</mo><mspace width=".5em"/><mtext>нули исключены</mtext></math>','Интервалы выбираются по плюсам или минусам.'],
-                ['Интерпретация','Таблица знаков остаётся <math><mo>−</mo><mo>;</mo><mo>−</mo><mo>;</mo><mo>+</mo></math>.','Чётный корень делит два отрицательных интервала, но знак не меняет.'],
-                ['Ключевая идея','Одну таблицу знаков можно использовать для четырёх неравенств.','Достаточно отдельно проверить включение границ.'],
-                ['Четыре ответа','<math display="block"><mtable columnalign="left"><mtr><mtd><mo>≥</mo><mn>0</mn></mtd><mtd><mo>:</mo><mspace width=".5em"/><mrow><mo>{</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>}</mo></mrow><mo>∪</mo><mo>[</mo><mn>1</mn><mo>;</mo><mo>+</mo><mi>∞</mi><mo>)</mo></mtd></mtr><mtr><mtd><mo>&gt;</mo><mn>0</mn></mtd><mtd><mo>:</mo><mspace width=".5em"/><mo>(</mo><mn>1</mn><mo>;</mo><mo>+</mo><mi>∞</mi><mo>)</mo></mtd></mtr><mtr><mtd><mo>≤</mo><mn>0</mn></mtd><mtd><mo>:</mo><mspace width=".5em"/><mo>(</mo><mo>−</mo><mi>∞</mi><mo>;</mo><mn>1</mn><mo>]</mo></mtd></mtr><mtr><mtd><mo>&lt;</mo><mn>0</mn></mtd><mtd><mo>:</mo><mspace width=".5em"/><mo>(</mo><mo>−</mo><mi>∞</mi><mo>;</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>)</mo><mo>∪</mo><mo>(</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>;</mo><mn>1</mn><mo>)</mo></mtd></mtr></mtable></math>','Порядок точек в ответе идёт слева направо.'],
-                ['Проверка','Подстановка любого числа из выбранного интервала должна давать требуемый знак.','При строгом неравенстве ни один корень в ответ не входит.'],
-                ['Вывод','Знаки выражения и строгие границы отвечают за разные части решения.','Сначала таблица знаков, затем оформление ответа.']
-            ],
-            mistakes:['Перестраивать таблицу знаков для каждого знака сравнения.','Считать, что знак ≥ означает выбор всех точек справа.','Оставить корень в ответе при строгом неравенстве.','Соединить интервалы через исключённую точку.'],
-            quiz:{q:'Какие точки исключаются при строгом неравенстве?',a:['Все нули выражения','Только отрицательные корни','Только корни нечётной кратности'],correct:0}
-        },
-        rational:{
-            points:[{x:-2,label:'−2',kind:'zero',mult:1},{x:3,label:'3',kind:'hole',mult:1}],signs:['+','−','+'],
-            idea:['Нули числителя и знаменателя являются критическими точками.','Нуль знаменателя всегда остаётся выколотым.','После сокращения множителя исходное ограничение сохраняется.'],
-            steps:[
-                ['Что дано',M.fraction,'Слева одна дробь, справа ноль: форма уже подходит для метода интервалов.'],
-                ['Что означает условие','Нужно выбрать области, где числитель и знаменатель имеют одинаковые знаки, либо числитель равен нулю.','Знаменатель равняться нулю не может.'],
-                ['Алгебраическая интерпретация','<math display="block"><mi>x</mi><mo>+</mo><mn>2</mn><mo>=</mo><mn>0</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mo>−</mo><mn>2</mn><mo>;</mo><mspace width="1em"/><mi>x</mi><mo>−</mo><mn>3</mn><mo>=</mo><mn>0</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>3</mn></math>','Точка <math><mi>x</mi><mo>=</mo><mn>3</mn></math> запрещена.'],
-                ['Ключевая идея','Закрашенность нуля числителя определяется строгим или нестрогим знаком.','Нуль знаменателя остаётся выколотым всегда.'],
-                ['Пошаговое доведение','При <math><mi>x</mi><mo>=</mo><mn>0</mn></math> дробь отрицательна. Обе точки имеют нечётную кратность, поэтому знаки чередуются.','Получаем последовательность <math><mo>+</mo><mo>;</mo><mo>−</mo><mo>;</mo><mo>+</mo></math>.'],
-                ['Проверка ответа','При <math><mi>x</mi><mo>=</mo><mo>−</mo><mn>2</mn></math> дробь равна нулю и точка допустима.','При <math><mi>x</mi><mo>=</mo><mn>3</mn></math> выражение не определено.'],
-                ['Вывод','<math display="block"><mi>x</mi><mo>∈</mo><mo>(</mo><mo>−</mo><mi>∞</mi><mo>;</mo><mo>−</mo><mn>2</mn><mo>]</mo><mo>∪</mo><mo>(</mo><mn>3</mn><mo>;</mo><mo>+</mo><mi>∞</mi><mo>)</mo></math>','Запрещённая точка не включается даже при знаке ≥.']
-            ],
-            mistakes:['Закрасить нуль знаменателя при нестрогом знаке.','Искать только нули числителя.','После сокращения забыть исходную запрещённую точку.','Решить уравнение числителя и объявить его корни полным ответом.'],
-            quiz:{q:'Какие точки никогда не входят в ответ рационального неравенства?',a:['Нули знаменателя','Нули числителя','Корни чётной кратности'],correct:0}
-        }
-    };
+const topics={
+  algorithm:{
+    points:[{x:-.5,label:'−1/2',kind:'zero',mult:2},{x:1,label:'1',kind:'zero',mult:3}],signs:['−','−','+'],
+    idea:['Сначала приведите неравенство к виду с нулём справа.','Найдите все критические точки и подпишите их источник.','Определите знак на одном интервале и переносите его с учётом кратности.','Выберите промежутки с нужным знаком и проверьте границы.'],
+    steps:[
+      ['Что дано',M.normal,'Метод интервалов применяется к произведениям и рациональным выражениям, приведённым к нормализованному виду.'],
+      ['Что означает условие','<math display="block"><mtext>нужны интервалы, на которых</mtext><mspace width=".5em"/><mi>F</mi><mo>(</mo><mi>x</mi><mo>)</mo><mspace width=".5em"/><mtext>имеет требуемый знак</mtext></math>','Строгость неравенства определяет включение допустимых нулей.'],
+      ['Полный алгоритм','<ol><li>Перенесите всё в левую часть, справа оставьте ноль.</li><li>Разложите числитель и знаменатель на множители.</li><li>Найдите нули каждого множителя.</li><li>Отдельно отметьте нули знаменателя.</li><li>Расположите критические точки по возрастанию.</li><li>Определите знак на одном удобном интервале.</li><li>Переносите знак через точки с учётом кратности.</li><li>Выберите нужные интервалы и расставьте скобки.</li></ol>','У каждого шага есть своя проверка; пропуск одного шага часто меняет ответ.'],
+      ['Ключевая идея','<math display="block"><mtext>нечётная кратность</mtext><mo>⇒</mo><mtext>смена знака</mtext><mo>;</mo><mspace width="1em"/><mtext>чётная кратность</mtext><mo>⇒</mo><mtext>знак сохраняется</mtext></math>','Калибровочное значение выбирают внутри интервала. Достаточно надёжно установить знак всего выражения.'],
+      ['Пошаговое доведение',M.example,'Для среднего интервала удобно взять ноль: значение отрицательно. Через корень кратности 2 знак сохраняется, через корень кратности 3 меняется.'],
+      ['Проверка ответа','<math display="block"><mi>x</mi><mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>;</mo><mspace width="1em"/><mi>x</mi><mo>=</mo><mn>1</mn></math>','Обе точки являются допустимыми нулями произведения, поэтому при нестрогом знаке их можно включить.'],
+      ['Вывод','<math display="block"><mtext>ноль справа</mtext><mo>→</mo><mtext>множители</mtext><mo>→</mo><mtext>точки</mtext><mo>→</mo><mtext>знаки</mtext><mo>→</mo><mtext>ответ</mtext></math>','Записывайте промежутки слева направо и отдельно контролируйте каждую исключённую точку.']
+    ],
+    mistakes:['Оставить выражения в обеих частях неравенства.','Искать только нули числителя рационального выражения.','Механически чередовать знаки без учёта кратности.','Включить нуль знаменателя в ответ.','Перепутать строгие и нестрогие границы.'],
+    quiz:{q:'Что нужно сделать до нанесения точек на числовую ось?',a:['Привести неравенство к виду с нулём справа и разложить выражение','Сразу выбрать положительные интервалы','Подставить любую граничную точку'],correct:0}
+  },
+  multiplicity:{
+    points:[{x:-.5,label:'−1/2',kind:'zero',mult:2},{x:1,label:'1',kind:'zero',mult:3}], signs:['−','−','+'],
+    idea:['Найдите корни каждого множителя и их кратности.','Нечётная кратность меняет знак, чётная сохраняет.','Для нестрогого неравенства допустимые нули входят в ответ.'],
+    steps:[
+      ['Что дано',M.example,'Произведение уже разложено на множители, справа стоит ноль.'],
+      ['Что означает условие','Нужно найти все значения переменной, при которых произведение неотрицательно.','Знак '+M.ge+' разрешает включить нули произведения.'],
+      ['Алгебраическая интерпретация','<math display="block"><mn>2</mn><mi>x</mi><mo>+</mo><mn>1</mn><mo>=</mo><mn>0</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>;</mo><mspace width="1em"/><mi>x</mi><mo>−</mo><mn>1</mn><mo>=</mo><mn>0</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>1</mn></math>','Первая точка имеет кратность 2, вторая — кратность 3.'],
+      ['Ключевая идея','<math display="block"><mtext>чётная кратность</mtext><mo>⇒</mo><mtext>знак сохраняется</mtext><mo>;</mo><mspace width="1em"/><mtext>нечётная кратность</mtext><mo>⇒</mo><mtext>знак меняется</mtext></math>','Это исключение из механического чередования знаков.'],
+      ['Пошаговое доведение','Возьмём калибровочное значение на среднем интервале: <math><mi>x</mi><mo>=</mo><mn>0</mn></math>.','Получаем отрицательный знак. Через <math><mi>x</mi><mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></math> знак сохраняется, через <math><mi>x</mi><mo>=</mo><mn>1</mn></math> меняется.'],
+      ['Проверка ответа','Обе критические точки являются нулями произведения и допустимы при нестрогом знаке.','На правом интервале произведение положительно; на двух левых — отрицательно.'],
+      ['Вывод','<math display="block"><mi>x</mi><mo>∈</mo><mrow><mo>{</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>}</mo></mrow><mo>∪</mo><mo>[</mo><mn>1</mn><mo>;</mo><mo>+</mo><mi>∞</mi><mo>)</mo></math>','Корень чётной кратности может войти в ответ как отдельная точка.',M.highMultiplicity+M.bothEven+'В первом дополнительном примере знак сохраняется при переходе через корень кратности 10 и меняется через корень кратности 11. Если обе кратности чётные, произведение неотрицательно при всех действительных значениях.']
+    ],
+    mistakes:['Механически чередовать знаки через корень чётной кратности.','Потерять отдельную точку, в которой выражение равно нулю.','Включить нуль при строгом знаке.','Подставить калибровочное значение в ненормализованное выражение.'],
+    quiz:{q:'Что происходит со знаком при переходе через корень чётной кратности?',a:['Сохраняется','Обязательно меняется','Всегда становится положительным'],correct:0}
+  },
+  signs:{
+    points:[{x:-.5,label:'−1/2',kind:'zero',mult:2},{x:1,label:'1',kind:'zero',mult:3}],signs:['−','−','+'],
+    idea:['Сначала составьте единственную таблицу знаков выражения.','Затем выберите плюс или минус по знаку исходного неравенства.','Строгость определяет включение нулей.'],
+    steps:[
+      ['Что дано',M.example,'Левая часть одна и та же; меняется только знак сравнения.'],
+      ['Что означает каждый знак','<math display="block"><mo>≥</mo><mo>,</mo><mo>≤</mo><mo>:</mo><mspace width=".5em"/><mtext>нули разрешены</mtext><mo>;</mo><mspace width="1em"/><mo>&gt;</mo><mo>,</mo><mo>&lt;</mo><mo>:</mo><mspace width=".5em"/><mtext>нули исключены</mtext></math>','Интервалы выбираются по плюсам или минусам.'],
+      ['Интерпретация','Таблица знаков остаётся <math><mo>−</mo><mo>;</mo><mo>−</mo><mo>;</mo><mo>+</mo></math>.','Чётный корень делит два отрицательных интервала, но знак не меняет.'],
+      ['Ключевая идея','Одну таблицу знаков можно использовать для четырёх неравенств.','Достаточно отдельно проверить включение границ.'],
+      ['Четыре ответа','<math display="block"><mtable columnalign="left"><mtr><mtd><mo>≥</mo><mn>0</mn></mtd><mtd><mo>:</mo><mspace width=".5em"/><mrow><mo>{</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>}</mo></mrow><mo>∪</mo><mo>[</mo><mn>1</mn><mo>;</mo><mo>+</mo><mi>∞</mi><mo>)</mo></mtd></mtr><mtr><mtd><mo>&gt;</mo><mn>0</mn></mtd><mtd><mo>:</mo><mspace width=".5em"/><mo>(</mo><mn>1</mn><mo>;</mo><mo>+</mo><mi>∞</mi><mo>)</mo></mtd></mtr><mtr><mtd><mo>≤</mo><mn>0</mn></mtd><mtd><mo>:</mo><mspace width=".5em"/><mo>(</mo><mo>−</mo><mi>∞</mi><mo>;</mo><mn>1</mn><mo>]</mo></mtd></mtr><mtr><mtd><mo>&lt;</mo><mn>0</mn></mtd><mtd><mo>:</mo><mspace width=".5em"/><mo>(</mo><mo>−</mo><mi>∞</mi><mo>;</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>)</mo><mo>∪</mo><mo>(</mo><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>;</mo><mn>1</mn><mo>)</mo></mtd></mtr></mtable></math>','Порядок точек в ответе идёт слева направо.'],
+      ['Проверка','Подстановка любого числа из выбранного интервала должна давать требуемый знак.','При строгом неравенстве ни один корень в ответ не входит.'],
+      ['Вывод','Знаки выражения и строгие границы отвечают за разные части решения.','Сначала таблица знаков, затем оформление ответа.']
+    ],
+    mistakes:['Перестраивать таблицу знаков для каждого знака сравнения.','Считать, что знак '+M.ge+' означает выбор всех точек справа.','Оставить корень в ответе при строгом неравенстве.','Соединить интервалы через исключённую точку.'],
+    quiz:{q:'Какие точки исключаются при строгом неравенстве?',a:['Все нули выражения','Только отрицательные корни','Только корни нечётной кратности'],correct:0}
+  },
+  rational:{
+    points:[{x:-2,label:'−2',kind:'zero',mult:1},{x:3,label:'3',kind:'hole',mult:1}],signs:['+','−','+'],
+    idea:['Нули числителя и знаменателя являются критическими точками.','Нуль знаменателя всегда остаётся выколотым.','После сокращения множителя исходное ограничение сохраняется.'],
+    steps:[
+      ['Что дано',M.fraction,'Слева одна дробь, справа ноль: форма уже подходит для метода интервалов.'],
+      ['Что означает условие','Нужно выбрать области, где числитель и знаменатель имеют одинаковые знаки, либо числитель равен нулю.','Знаменатель равняться нулю не может.'],
+      ['Алгебраическая интерпретация','<math display="block"><mi>x</mi><mo>+</mo><mn>2</mn><mo>=</mo><mn>0</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mo>−</mo><mn>2</mn><mo>;</mo><mspace width="1em"/><mi>x</mi><mo>−</mo><mn>3</mn><mo>=</mo><mn>0</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>3</mn></math>','Точка <math><mi>x</mi><mo>=</mo><mn>3</mn></math> запрещена.'],
+      ['Ключевая идея','Закрашенность нуля числителя определяется строгим или нестрогим знаком.','Нуль знаменателя остаётся выколотым всегда.'],
+      ['Пошаговое доведение','При <math><mi>x</mi><mo>=</mo><mn>0</mn></math> дробь отрицательна. Обе точки имеют нечётную кратность, поэтому знаки чередуются.','Получаем последовательность <math><mo>+</mo><mo>;</mo><mo>−</mo><mo>;</mo><mo>+</mo></math>.'],
+      ['Проверка ответа','При <math><mi>x</mi><mo>=</mo><mo>−</mo><mn>2</mn></math> дробь равна нулю и точка допустима.','При <math><mi>x</mi><mo>=</mo><mn>3</mn></math> выражение не определено.'],
+      ['Вывод','<math display="block"><mi>x</mi><mo>∈</mo><mo>(</mo><mo>−</mo><mi>∞</mi><mo>;</mo><mo>−</mo><mn>2</mn><mo>]</mo><mo>∪</mo><mo>(</mo><mn>3</mn><mo>;</mo><mo>+</mo><mi>∞</mi><mo>)</mo></math>','Запрещённая точка не включается даже при нестрогом неравенстве.']
+    ],
+    mistakes:['Закрасить нуль знаменателя при нестрогом знаке.','Искать только нули числителя.','После сокращения забыть исходную запрещённую точку.','Решить уравнение числителя и объявить его корни полным ответом.'],
+    quiz:{q:'Какие точки никогда не входят в ответ рационального неравенства?',a:['Нули знаменателя','Нули числителя','Корни чётной кратности'],correct:0}
+  },
+  special:{
+    points:[{x:-5/3,label:'−5/3',kind:'hole',mult:1},{x:0,label:'0',kind:'hole',mult:1}],signs:['+','−','+'],
+    idea:['Отсутствие корней числителя не означает отсутствие решений всего неравенства.','Если числитель всегда положителен, знак дроби определяется знаменателем.','После сокращения общего множителя исходная запрещённая точка сохраняется.'],
+    steps:[
+      ['Что дано',M.specialFraction,'Числитель не имеет действительных нулей, но знаменатель обращается в ноль в двух точках.'],
+      ['Что означает условие','<math display="block"><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn><mo>&gt;</mo><mn>0</mn><mspace width="1em"/><mtext>при всех действительных</mtext><mspace width=".4em"/><mi>x</mi></math>','Поэтому знак всей дроби совпадает со знаком знаменателя.'],
+      ['Алгебраическая интерпретация','<math display="block"><mi>x</mi><mo>(</mo><mn>3</mn><mi>x</mi><mo>+</mo><mn>5</mn><mo>)</mo><mo>=</mo><mn>0</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mo>−</mo><mfrac><mn>5</mn><mn>3</mn></mfrac><mo>;</mo><mspace width="1em"/><mi>x</mi><mo>=</mo><mn>0</mn></math>','Обе точки являются нулями знаменателя и всегда остаются выколотыми.'],
+      ['Ключевая идея','<math display="block"><mtext>положительный числитель</mtext><mo>⇒</mo><mtext>исследуем знак знаменателя</mtext></math>','Между двумя простыми корнями знаменатель отрицателен.'],
+      ['Пошаговое доведение','<math display="block"><mi>x</mi><mo>∈</mo><mo>(</mo><mo>−</mo><mfrac><mn>5</mn><mn>3</mn></mfrac><mo>;</mo><mn>0</mn><mo>)</mo></math>','Это единственный промежуток, на котором дробь отрицательна.'],
+      ['Сокращение множителей',M.cancellation,'Точка, запрещённая исходным знаменателем, остаётся запрещённой после сокращения.'],
+      ['Вывод','<math display="block"><mtext>сократили множитель</mtext><mo>⇒</mo><mtext>сохранили исходные ограничения</mtext></math>','Перед сокращением всегда выписывайте все нули исходного знаменателя.']
+    ],
+    mistakes:['Сделать вывод об отсутствии решений из-за отсутствия нулей числителя.','Включить нуль знаменателя при нестрогом знаке.','Забыть запрещённую точку после сокращения множителя.','Определять знак только по числителю.'],
+    quiz:{q:'Что происходит с запрещённой точкой после сокращения общего множителя?',a:['Она остаётся запрещённой','Она автоматически входит в ответ','Её кратность всегда становится чётной'],correct:0}
+  }
+};
 
-    const state={topic:'multiplicity',zoom:1,pan:0,showSigns:true,showLabels:true,highlight:-1,revealed:1,drag:false,startX:0,startPan:0,moved:false};
-    const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const state={topic:'algorithm',zoom:1,pan:0,showSigns:true,showLabels:true,highlight:-1,revealed:1,drag:false,startX:0,startPan:0,moved:false,generated:null};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const activeModel=()=>state.generated||topics[state.topic];
 
-    function renderTopic(){
-        const t=topics[state.topic];
-        $('#ideaList').innerHTML=t.idea.map(x=>`<li>${x}</li>`).join('');
-        $('#steps').innerHTML=t.steps.map((s,i)=>`<article class="step ${i>=state.revealed?'locked':''}" data-step="${i}"><h3><span class="badge">${i+1}</span>${s[0]}</h3><div class="mathline">${s[1]}</div><p class="detail-standard">${s[2]}</p>${s[3]?`<p class="detail-full">${s[3]}</p>`:''}</article>`).join('');
-        $('#mistakes').innerHTML=t.mistakes.map(x=>`<div class="mistake">${x}</div>`).join('');
-        $('#quizQuestion').textContent=t.quiz.q; $('#quizFeedback').textContent='';
-        $('#quizOptions').innerHTML=t.quiz.a.map((x,i)=>`<button class="quiz-option" data-answer="${i}">${x}</button>`).join('');
-        $$('.step').forEach(el=>{el.addEventListener('mouseenter',()=>{state.highlight=+el.dataset.step;drawAll()});el.addEventListener('mouseleave',()=>{state.highlight=-1;drawAll()})});
-        $$('.quiz-option').forEach(el=>el.addEventListener('click',answerQuiz));
-        drawAll();
-    }
+function renderTopic(){
+  const t=topics[state.topic];
+  $('#ideaList').innerHTML=t.idea.map(x=>`<li>${x}</li>`).join('');
+  $('#steps').innerHTML=t.steps.map((s,i)=>`<article class="step ${i>=state.revealed?'locked':''}" data-step="${i}"><h3><span class="badge">${i+1}</span>${s[0]}</h3><div class="mathline">${s[1]}</div><p class="detail-standard">${s[2]}</p>${s[3]?`<p class="detail-full">${s[3]}</p>`:''}</article>`).join('');
+  $('#mistakes').innerHTML=t.mistakes.map(x=>`<div class="mistake">${x}</div>`).join('');
+  $('#quizQuestion').textContent=t.quiz.q; $('#quizFeedback').textContent='';
+  $('#quizOptions').innerHTML=t.quiz.a.map((x,i)=>`<button class="quiz-option" data-answer="${i}">${x}</button>`).join('');
+  $$('.step').forEach(el=>{el.addEventListener('mouseenter',()=>{state.highlight=+el.dataset.step;drawAll()});el.addEventListener('mouseleave',()=>{state.highlight=-1;drawAll()})});
+  $$('.quiz-option').forEach(el=>el.addEventListener('click',answerQuiz));
+  drawAll();
+}
 
-    function answerQuiz(e){const t=topics[state.topic],n=+e.currentTarget.dataset.answer;$$('.quiz-option').forEach((b,i)=>{b.disabled=true;b.classList.add(i===t.quiz.correct?'good':i===n?'bad':'')});$('#quizFeedback').textContent=n===t.quiz.correct?'Верно. Ключевое правило применено правильно.':'Проверьте источник точки и её кратность.'}
+function answerQuiz(e){const t=topics[state.topic],n=+e.currentTarget.dataset.answer;$$('.quiz-option').forEach((b,i)=>{b.disabled=true;b.classList.add(i===t.quiz.correct?'good':i===n?'bad':'')});$('#quizFeedback').textContent=n===t.quiz.correct?'Верно. Ключевое правило применено правильно.':'Проверьте источник точки и её кратность.'}
 
-    function openNext(){const total=topics[state.topic].steps.length;if(state.revealed<total)state.revealed++;renderTopic()}
-    $('#nextStep').onclick=openNext;$('#showAll').onclick=()=>{state.revealed=99;renderTopic()};$('#resetSteps').onclick=()=>{state.revealed=1;renderTopic()};
-    $$('.topic-tab').forEach(b=>b.onclick=()=>{state.topic=b.dataset.topic;state.revealed=1;state.pan=0;$$('.topic-tab').forEach(x=>x.classList.toggle('active',x===b));renderTopic();flash($('#vizCard'))});
+function openNext(){const total=topics[state.topic].steps.length;if(state.revealed<total)state.revealed++;renderTopic()}
+$('#nextStep').onclick=openNext;$('#showAll').onclick=()=>{state.revealed=99;renderTopic()};$('#resetSteps').onclick=()=>{state.revealed=1;renderTopic()};
+$$('.topic-tab').forEach(b=>b.onclick=()=>{state.topic=b.dataset.topic;state.generated=null;state.revealed=1;state.pan=0;$$('.topic-tab').forEach(x=>x.classList.toggle('active',x===b));renderTopic();flash($('#vizCard'))});
 
-    function draw(canvas){
-        const ctx=canvas.getContext('2d'),dpr=window.devicePixelRatio||1,rect=canvas.getBoundingClientRect();
-        const w=Math.max(320,rect.width),h=Math.max(260,rect.height);canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
-        const css=getComputedStyle(document.documentElement),text=css.getPropertyValue('--text').trim(),muted=css.getPropertyValue('--muted').trim(),accent=css.getPropertyValue('--accent').trim(),warm=css.getPropertyValue('--accent2').trim(),line=css.getPropertyValue('--line').trim();
-        const t=topics[state.topic],axisY=h*.56,cx=w/2+state.pan,scale=Math.min(w/8.5,100)*state.zoom;
-        ctx.lineCap='round';ctx.strokeStyle=line;ctx.lineWidth=1;
-        for(let i=1;i<7;i++){ctx.beginPath();ctx.moveTo(20,i*h/7);ctx.lineTo(w-20,i*h/7);ctx.stroke()}
-        ctx.strokeStyle=text;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(34,axisY);ctx.lineTo(w-38,axisY);ctx.stroke();ctx.beginPath();ctx.moveTo(w-38,axisY);ctx.lineTo(w-52,axisY-8);ctx.moveTo(w-38,axisY);ctx.lineTo(w-52,axisY+8);ctx.stroke();
-        ctx.font='700 16px Inter,Arial';ctx.fillStyle=text;ctx.fillText('x',w-30,axisY+5);
-        const bounds=[-Infinity,...t.points.map(p=>p.x),Infinity];
-        if(state.showSigns){ctx.font='900 23px Inter,Arial';ctx.textAlign='center';for(let i=0;i<t.signs.length;i++){const left=bounds[i],right=bounds[i+1];let x;if(!isFinite(left))x=cx+(right-1.25)*scale;else if(!isFinite(right))x=cx+(left+1.25)*scale;else x=cx+(left+right)/2*scale;ctx.fillStyle=t.signs[i]==='+'?accent:warm;ctx.fillText(t.signs[i],x,axisY-44)}}
-        t.points.forEach((p,i)=>{const x=cx+p.x*scale;ctx.strokeStyle=warm;ctx.fillStyle=p.kind==='hole'?css.getPropertyValue('--panel').trim():warm;ctx.lineWidth=4;ctx.beginPath();ctx.arc(x,axisY,8,0,Math.PI*2);ctx.fill();ctx.stroke();if(state.showLabels){ctx.fillStyle=text;ctx.font='800 16px Inter,Arial';ctx.textAlign='center';ctx.fillText(p.label,x,axisY+31);ctx.fillStyle=muted;ctx.font='700 13px Inter,Arial';ctx.fillText(p.kind==='hole'?'запрет':`кратность ${p.mult}`,x,axisY+52)}});
-        const title=state.topic==='rational'?'Нули числителя и знаменателя':state.topic==='signs'?'Одна таблица — четыре ответа':'Чётная и нечётная кратность';ctx.fillStyle=text;ctx.font='900 20px Inter,Arial';ctx.textAlign='left';ctx.fillText(title,22,34);
-        ctx.fillStyle=muted;ctx.font='600 14px Inter,Arial';ctx.fillText('Перетаскивайте ось и меняйте масштаб',22,58);
-        if(state.highlight>=0){ctx.fillStyle='rgba(71,234,210,.09)';ctx.fillRect(12,78,w-24,h-102);ctx.fillStyle=accent;ctx.font='800 15px Inter,Arial';ctx.fillText(`Подсвечен шаг ${state.highlight+1}`,22,102)}
-    }
-    function drawAll(){draw($('#mainCanvas'));draw($('#modalCanvas'))}
-    window.addEventListener('resize',drawAll);
+function draw(canvas){
+  const ctx=canvas.getContext('2d'),dpr=window.devicePixelRatio||1,rect=canvas.getBoundingClientRect();
+  const w=Math.max(320,rect.width),h=Math.max(260,rect.height);canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+  const css=getComputedStyle(document.documentElement),text=css.getPropertyValue('--text').trim(),muted=css.getPropertyValue('--muted').trim(),accent=css.getPropertyValue('--accent').trim(),warm=css.getPropertyValue('--accent2').trim(),line=css.getPropertyValue('--line').trim();
+  const t=activeModel(),axisY=h*.56,cx=w/2+state.pan,scale=Math.min(w/8.5,100)*state.zoom;
+  ctx.lineCap='round';ctx.strokeStyle=line;ctx.lineWidth=1;
+  for(let i=1;i<7;i++){ctx.beginPath();ctx.moveTo(20,i*h/7);ctx.lineTo(w-20,i*h/7);ctx.stroke()}
+  ctx.strokeStyle=text;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(34,axisY);ctx.lineTo(w-38,axisY);ctx.stroke();ctx.beginPath();ctx.moveTo(w-38,axisY);ctx.lineTo(w-52,axisY-8);ctx.moveTo(w-38,axisY);ctx.lineTo(w-52,axisY+8);ctx.stroke();
+  ctx.font='700 16px Inter,Arial';ctx.fillStyle=text;ctx.fillText('x',w-30,axisY+5);
+  const bounds=[-Infinity,...t.points.map(p=>p.x),Infinity];
+  if(state.showSigns){ctx.font='900 23px Inter,Arial';ctx.textAlign='center';for(let i=0;i<t.signs.length;i++){const left=bounds[i],right=bounds[i+1];let x;if(!isFinite(left))x=cx+(right-1.25)*scale;else if(!isFinite(right))x=cx+(left+1.25)*scale;else x=cx+(left+right)/2*scale;ctx.fillStyle=t.signs[i]==='+'?accent:warm;ctx.fillText(t.signs[i],x,axisY-44)}}
+  t.points.forEach((p,i)=>{const x=cx+p.x*scale;ctx.strokeStyle=warm;ctx.fillStyle=p.kind==='hole'?css.getPropertyValue('--panel').trim():warm;ctx.lineWidth=4;ctx.beginPath();ctx.arc(x,axisY,8,0,Math.PI*2);ctx.fill();ctx.stroke();if(state.showLabels){ctx.fillStyle=text;ctx.font='800 16px Inter,Arial';ctx.textAlign='center';ctx.fillText(p.label,x,axisY+31);ctx.fillStyle=muted;ctx.font='700 13px Inter,Arial';ctx.fillText(p.kind==='hole'?'запрет':`кратность ${p.mult}`,x,axisY+52)}});
+  const titles={algorithm:'Алгоритм метода интервалов',multiplicity:'Чётная и нечётная кратность',signs:'Одна таблица — четыре ответа',rational:'Нули числителя и знаменателя',special:'Особые случаи'};
+  const title=state.generated?'Сгенерированная задача':titles[state.topic];ctx.fillStyle=text;ctx.font='900 20px Inter,Arial';ctx.textAlign='left';ctx.fillText(title,22,34);
+  ctx.fillStyle=muted;ctx.font='600 14px Inter,Arial';ctx.fillText('Перетаскивайте ось и меняйте масштаб',22,58);
+  if(state.highlight>=0){ctx.fillStyle='rgba(71,234,210,.09)';ctx.fillRect(12,78,w-24,h-102);ctx.fillStyle=accent;ctx.font='800 15px Inter,Arial';ctx.fillText(`Подсвечен шаг ${state.highlight+1}`,22,102)}
+}
+function drawAll(){draw($('#mainCanvas'));draw($('#modalCanvas'))}
+window.addEventListener('resize',drawAll);
 
-    function syncZoom(v){state.zoom=Number(v)/100;$('#zoomMain').value=v;$('#zoomModal').value=v;drawAll()}
-    $('#zoomMain').oninput=e=>syncZoom(e.target.value);$('#zoomModal').oninput=e=>syncZoom(e.target.value);
-    $$('[data-zoom]').forEach(b=>b.onclick=()=>{if(b.dataset.zoom==='reset'){state.pan=0;syncZoom(100)}else syncZoom(Math.max(70,Math.min(180,Math.round((state.zoom+(b.dataset.zoom==='in'?.1:-.1))*100))))});
-    $('#showSigns').onchange=e=>{state.showSigns=e.target.checked;drawAll()};$('#showLabels').onchange=e=>{state.showLabels=e.target.checked;drawAll()};
+function syncZoom(v){state.zoom=Number(v)/100;$('#zoomMain').value=v;$('#zoomModal').value=v;drawAll()}
+$('#zoomMain').oninput=e=>syncZoom(e.target.value);$('#zoomModal').oninput=e=>syncZoom(e.target.value);
+$$('[data-zoom]').forEach(b=>b.onclick=()=>{if(b.dataset.zoom==='reset'){state.pan=0;syncZoom(100)}else syncZoom(Math.max(70,Math.min(180,Math.round((state.zoom+(b.dataset.zoom==='in'?.1:-.1))*100))))});
+$('#showSigns').onchange=e=>{state.showSigns=e.target.checked;drawAll()};$('#showLabels').onchange=e=>{state.showLabels=e.target.checked;drawAll()};
 
-    function bindCanvas(canvas,shell){
-        canvas.addEventListener('pointerdown',e=>{state.drag=true;state.moved=false;state.startX=e.clientX;state.startPan=state.pan;canvas.setPointerCapture(e.pointerId);shell?.classList.add('dragging')});
-        canvas.addEventListener('pointermove',e=>{if(!state.drag)return;const dx=e.clientX-state.startX;if(Math.abs(dx)>4)state.moved=true;state.pan=state.startPan+dx;drawAll()});
-        canvas.addEventListener('pointerup',e=>{state.drag=false;shell?.classList.remove('dragging');canvas.releasePointerCapture(e.pointerId);if(!state.moved&&canvas.id==='mainCanvas')openModal()});
-        canvas.addEventListener('wheel',e=>{e.preventDefault();syncZoom(Math.max(70,Math.min(180,Math.round(state.zoom*100+(e.deltaY<0?10:-10)))));},{passive:false});
-    }
-    bindCanvas($('#mainCanvas'),$('#mainShell'));bindCanvas($('#modalCanvas'));
+function bindCanvas(canvas,shell){
+  canvas.addEventListener('pointerdown',e=>{state.drag=true;state.moved=false;state.startX=e.clientX;state.startPan=state.pan;canvas.setPointerCapture(e.pointerId);shell?.classList.add('dragging')});
+  canvas.addEventListener('pointermove',e=>{if(!state.drag)return;const dx=e.clientX-state.startX;if(Math.abs(dx)>4)state.moved=true;state.pan=state.startPan+dx;drawAll()});
+  canvas.addEventListener('pointerup',e=>{state.drag=false;shell?.classList.remove('dragging');canvas.releasePointerCapture(e.pointerId);if(!state.moved&&canvas.id==='mainCanvas')openModal()});
+  canvas.addEventListener('wheel',e=>{e.preventDefault();syncZoom(Math.max(70,Math.min(180,Math.round(state.zoom*100+(e.deltaY<0?10:-10)))));},{passive:false});
+}
+bindCanvas($('#mainCanvas'),$('#mainShell'));bindCanvas($('#modalCanvas'));
 
-    const overlay=$('#overlay');function openModal(){overlay.classList.add('show');overlay.setAttribute('aria-hidden','false');setTimeout(drawAll,0)}function closeModal(){overlay.classList.remove('show');overlay.setAttribute('aria-hidden','true')}
-    $('#closeModal').onclick=closeModal;overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();hideTip()}});
+const overlay=$('#overlay');function openModal(){overlay.classList.add('show');overlay.setAttribute('aria-hidden','false');setTimeout(drawAll,0)}function closeModal(){overlay.classList.remove('show');overlay.setAttribute('aria-hidden','true')}
+$('#closeModal').onclick=closeModal;overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();hideTip()}});
 
-    const tasks=[
-        ['<math display="block"><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>2</mn><mo>)</mo></mrow><mn>2</mn></msup><msup><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mn>3</mn></msup><mo>≥</mo><mn>0</mn></math>','<math><mi>x</mi><mo>∈</mo><mo>[</mo><mo>−</mo><mn>1</mn><mo>;</mo><mo>+</mo><mi>∞</mi><mo>)</mo></math>'],
-        ['<math display="block"><msup><mrow><mo>(</mo><mn>3</mn><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow><mn>4</mn></msup><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>5</mn><mo>)</mo></mrow><mn>3</mn></msup><mo>&lt;</mo><mn>0</mn></math>','<math><mi>x</mi><mo>∈</mo><mo>(</mo><mo>−</mo><mi>∞</mi><mo>;</mo><mo>−</mo><mfrac><mn>2</mn><mn>3</mn></mfrac><mo>)</mo><mo>∪</mo><mo>(</mo><mo>−</mo><mfrac><mn>2</mn><mn>3</mn></mfrac><mo>;</mo><mn>5</mn><mo>)</mo></math>'],
-        ['<math display="block"><mfrac><mrow><mi>x</mi><mo>+</mo><mn>4</mn></mrow><mrow><mi>x</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mo>≤</mo><mn>0</mn></math>','<math><mi>x</mi><mo>∈</mo><mo>[</mo><mo>−</mo><mn>4</mn><mo>;</mo><mn>1</mn><mo>)</mo></math>'],
-        ['<math display="block"><mfrac><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn></mrow><mrow><mi>x</mi><mo>(</mo><mn>3</mn><mi>x</mi><mo>+</mo><mn>5</mn><mo>)</mo></mrow></mfrac><mo>&lt;</mo><mn>0</mn></math>','<math><mi>x</mi><mo>∈</mo><mo>(</mo><mo>−</mo><mfrac><mn>5</mn><mn>3</mn></mfrac><mo>;</mo><mn>0</mn><mo>)</mo></math>']
-    ];
-    let lastTask=-1;$('#generateBtn').onclick=()=>{let n;do{n=Math.floor(Math.random()*tasks.length)}while(n===lastTask&&tasks.length>1);lastTask=n;$('#generatedTask').innerHTML=`<div>${tasks[n][0]}</div><button class="btn" id="answerBtn">Показать ответ</button><div class="answer" id="taskAnswer">Ответ: ${tasks[n][1]}<br><small>Идея: найдите критические точки, подпишите их источник и кратность, затем расставьте знаки.</small></div>`;$('#answerBtn').onclick=()=>$('#taskAnswer').classList.toggle('show');flash($('#generatedTask'))};
+const tasks=[
+  {formula:'<math display="block"><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>2</mn><mo>)</mo></mrow><mn>2</mn></msup><msup><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mn>3</mn></msup><mo>≥</mo><mn>0</mn></math>',answer:'<math><mi>x</mi><mo>∈</mo><mo>[</mo><mo>−</mo><mn>1</mn><mo>;</mo><mo>+</mo><mi>∞</mi><mo>)</mo></math>',model:{points:[{x:-1,label:'−1',kind:'zero',mult:3},{x:2,label:'2',kind:'zero',mult:2}],signs:['−','+','+']}},
+  {formula:'<math display="block"><msup><mrow><mo>(</mo><mn>3</mn><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow><mn>4</mn></msup><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>5</mn><mo>)</mo></mrow><mn>3</mn></msup><mo>&lt;</mo><mn>0</mn></math>',answer:'<math><mi>x</mi><mo>∈</mo><mo>(</mo><mo>−</mo><mi>∞</mi><mo>;</mo><mo>−</mo><mfrac><mn>2</mn><mn>3</mn></mfrac><mo>)</mo><mo>∪</mo><mo>(</mo><mo>−</mo><mfrac><mn>2</mn><mn>3</mn></mfrac><mo>;</mo><mn>5</mn><mo>)</mo></math>',model:{points:[{x:-2/3,label:'−2/3',kind:'zero',mult:4},{x:5,label:'5',kind:'zero',mult:3}],signs:['−','−','+']}},
+  {formula:'<math display="block"><mfrac><mrow><mi>x</mi><mo>+</mo><mn>4</mn></mrow><mrow><mi>x</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mo>≤</mo><mn>0</mn></math>',answer:'<math><mi>x</mi><mo>∈</mo><mo>[</mo><mo>−</mo><mn>4</mn><mo>;</mo><mn>1</mn><mo>)</mo></math>',model:{points:[{x:-4,label:'−4',kind:'zero',mult:1},{x:1,label:'1',kind:'hole',mult:1}],signs:['+','−','+']}},
+  {formula:'<math display="block"><mfrac><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn></mrow><mrow><mi>x</mi><mo>(</mo><mn>3</mn><mi>x</mi><mo>+</mo><mn>5</mn><mo>)</mo></mrow></mfrac><mo>&lt;</mo><mn>0</mn></math>',answer:'<math><mi>x</mi><mo>∈</mo><mo>(</mo><mo>−</mo><mfrac><mn>5</mn><mn>3</mn></mfrac><mo>;</mo><mn>0</mn><mo>)</mo></math>',model:{points:[{x:-5/3,label:'−5/3',kind:'hole',mult:1},{x:0,label:'0',kind:'hole',mult:1}],signs:['+','−','+']}}
+];
+let lastTask=-1;$('#generateBtn').onclick=()=>{let n;do{n=Math.floor(Math.random()*tasks.length)}while(n===lastTask&&tasks.length>1);lastTask=n;const task=tasks[n];state.generated=task.model;state.pan=0;drawAll();$('#generatedTask').innerHTML=`<div>${task.formula}</div><button class="btn" id="answerBtn">Показать ответ</button><div class="answer" id="taskAnswer">Ответ: ${task.answer}<br><small>Модель на оси уже обновлена. Найдите критические точки, подпишите их источник и кратность, затем расставьте знаки.</small></div>`;$('#answerBtn').onclick=()=>$('#taskAnswer').classList.toggle('show');flash($('#generatedTask'));flash($('#vizCard'))};
 
-    const tips={
-        steps:'<p><b>Пошаговый режим</b></p><p>Открывайте по одному этапу: от условия до проверки ответа. Кнопка «Показать всё» подходит для повторения.</p>',
-        canvas:'<p><b>Связь с решением</b></p><p>Критические точки и знаки меняются вместе с выбранной темой. Клик откроет увеличенную копию.</p>',
-        zoom:'<p><b>Масштаб и сдвиг</b></p><p>Ползунок, кнопки и колесо мыши синхронно изменяют обе схемы. Ось можно перетаскивать.</p>',
-        generator:'<p><b>Безопасная генерация</b></p><p>Вы получите одну проверенную задачу того же метода. Ответ раскрывается отдельной кнопкой.</p>'
-    };
-    const tooltip=$('#tooltip'),tipBody=$('#tooltipBody');let tipTimer;
-    function showTip(trigger){clearTimeout(tipTimer);tipBody.innerHTML=tips[trigger.dataset.tip];const r=trigger.getBoundingClientRect();tooltip.style.left=Math.min(innerWidth-350,Math.max(12,r.left))+'px';tooltip.style.top=Math.min(innerHeight-190,r.bottom+10)+'px';tooltip.classList.add('show');tooltip.setAttribute('aria-hidden','false');tipTimer=setTimeout(hideTip,15000)}function hideTip(){tooltip.classList.remove('show');tooltip.setAttribute('aria-hidden','true')}
-    $$('.hint-trigger').forEach(t=>{t.addEventListener('mouseenter',()=>showTip(t));t.addEventListener('focus',()=>showTip(t));t.addEventListener('click',()=>showTip(t))});tooltip.querySelector('button').onclick=hideTip;document.addEventListener('click',e=>{if(!tooltip.contains(e.target)&&!e.target.closest('.hint-trigger'))hideTip()});
-    if(!sessionStorage.getItem('interval-tip-seen'))setTimeout(()=>{const t=$('[data-tip="canvas"]');showTip(t);sessionStorage.setItem('interval-tip-seen','1')},3000);
+const trainingGroups=[
+  {title:'Средний уровень',start:0,tasks:[
+    {formula:'<math display="block"><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>2</mn><mo>)</mo></mrow><mn>2</mn></msup><msup><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mn>3</mn></msup><mo>≥</mo><mn>0</mn></math>',answer:'<math><mo>[</mo><mo>−</mo><mn>1</mn><mo>;</mo><mo>+</mo><mi>∞</mi><mo>)</mo></math>'},
+    {formula:'<math display="block"><msup><mrow><mo>(</mo><mn>3</mn><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow><mn>4</mn></msup><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>5</mn><mo>)</mo></mrow><mn>3</mn></msup><mo>&lt;</mo><mn>0</mn></math>',answer:'<math><mo>(</mo><mo>−</mo><mi>∞</mi><mo>;</mo><mo>−</mo><mfrac><mn>2</mn><mn>3</mn></mfrac><mo>)</mo><mo>∪</mo><mo>(</mo><mo>−</mo><mfrac><mn>2</mn><mn>3</mn></mfrac><mo>;</mo><mn>5</mn><mo>)</mo></math>'},
+    {formula:'<math display="block"><mfrac><mrow><mi>x</mi><mo>+</mo><mn>4</mn></mrow><mrow><mi>x</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mo>≤</mo><mn>0</mn></math>',answer:'<math><mo>[</mo><mo>−</mo><mn>4</mn><mo>;</mo><mn>1</mn><mo>)</mo></math>'}
+  ]},
+  {title:'Выше среднего',start:3,tasks:[
+    {formula:'<math display="block"><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>3</mn><mo>)</mo></mrow><mn>2</mn></msup><msup><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow><mn>5</mn></msup><mo>≤</mo><mn>0</mn></math>',answer:'<math><mo>(</mo><mo>−</mo><mi>∞</mi><mo>;</mo><mo>−</mo><mn>2</mn><mo>]</mo><mo>∪</mo><mo>{</mo><mn>3</mn><mo>}</mo></math>'},
+    {formula:'<math display="block"><msup><mrow><mo>(</mo><mn>2</mn><mi>x</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow><mn>6</mn></msup><msup><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>3</mn><mo>)</mo></mrow><mn>2</mn></msup><mo>&gt;</mo><mn>0</mn></math>',answer:'<math><mi>ℝ</mi><mo>∖</mo><mo>{</mo><mo>−</mo><mn>3</mn><mo>;</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>}</mo></math>'},
+    {formula:'<math display="block"><mfrac><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>5</mn><mi>x</mi><mo>+</mo><mn>6</mn></mrow><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>+</mo><mn>4</mn><mo>)</mo></mrow></mfrac><mo>≥</mo><mn>0</mn></math>',answer:'<math><mo>(</mo><mo>−</mo><mi>∞</mi><mo>;</mo><mo>−</mo><mn>4</mn><mo>)</mo><mo>∪</mo><mo>(</mo><mn>1</mn><mo>;</mo><mn>2</mn><mo>]</mo><mo>∪</mo><mo>[</mo><mn>3</mn><mo>;</mo><mo>+</mo><mi>∞</mi><mo>)</mo></math>'},
+    {formula:'<math display="block"><mfrac><mrow><msup><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mn>2</mn></msup><mo>(</mo><mi>x</mi><mo>−</mo><mn>4</mn><mo>)</mo></mrow><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>2</mn><mo>)</mo></mrow><mn>3</mn></msup></mfrac><mo>≤</mo><mn>0</mn></math>',answer:'<math><mo>{</mo><mo>−</mo><mn>1</mn><mo>}</mo><mo>∪</mo><mo>(</mo><mn>2</mn><mo>;</mo><mn>4</mn><mo>]</mo></math>'},
+    {formula:'<math display="block"><mfrac><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn></mrow><mrow><mi>x</mi><mo>(</mo><mn>3</mn><mi>x</mi><mo>+</mo><mn>5</mn><mo>)</mo></mrow></mfrac><mo>&lt;</mo><mn>0</mn></math>',answer:'<math><mo>(</mo><mo>−</mo><mfrac><mn>5</mn><mn>3</mn></mfrac><mo>;</mo><mn>0</mn><mo>)</mo></math>'},
+    {formula:'<math display="block"><mfrac><mrow><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow><mn>4</mn></msup><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>3</mn><mo>)</mo></mrow><mn>2</mn></msup></mfrac><mo>≥</mo><mn>0</mn></math>',answer:'<math><mo>[</mo><mo>−</mo><mn>2</mn><mo>;</mo><mn>3</mn><mo>)</mo><mo>∪</mo><mo>(</mo><mn>3</mn><mo>;</mo><mo>+</mo><mi>∞</mi><mo>)</mo></math>'}
+  ]},
+  {title:'Сложный уровень',start:9,tasks:[
+    {formula:'<math display="block"><mfrac><mrow><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow><mn>3</mn></msup><msup><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow><mn>2</mn></msup></mrow><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo><msup><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>3</mn><mo>)</mo></mrow><mn>2</mn></msup><mo>(</mo><mi>x</mi><mo>+</mo><mn>4</mn><mo>)</mo></mrow></mfrac><mo>≤</mo><mn>0</mn></math>',answer:'<math><mo>(</mo><mo>−</mo><mi>∞</mi><mo>;</mo><mo>−</mo><mn>4</mn><mo>)</mo><mo>∪</mo><mo>(</mo><mo>−</mo><mn>2</mn><mo>;</mo><mn>1</mn><mo>]</mo></math>'}
+  ]}
+];
 
-    function flash(el){el.classList.remove('glow');void el.offsetWidth;el.classList.add('glow')}
-    $('#detailSelect').onchange=e=>document.documentElement.dataset.detail=e.target.value;
-    const savedTheme=localStorage.getItem('timofey-interval-theme')||'dark';document.documentElement.dataset.theme=savedTheme;$('#themeBtn').textContent=savedTheme==='dark'?'Светлая тема':'Тёмная тема';$('#themeBtn').onclick=()=>{const next=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=next;localStorage.setItem('timofey-interval-theme',next);$('#themeBtn').textContent=next==='dark'?'Светлая тема':'Тёмная тема';drawAll()};
-    renderTopic();
+function renderTraining(){
+  let number=0;
+  $('#trainingGroups').innerHTML=trainingGroups.map(group=>`<section class="training-level"><h3>${group.title}</h3><div class="task-list" style="--task-start:${group.start}">${group.tasks.map(task=>`<article class="training-task">${task.formula}</article>`).join('')}</div></section>`).join('');
+  $('#trainingAnswers').innerHTML=trainingGroups.flatMap(group=>group.tasks).map(task=>`<tr><td>${++number}</td><td>${task.answer}</td></tr>`).join('');
+}
+
+$('#toggleAnswers').onclick=()=>{
+  const sheet=$('#answerSheet'),willShow=sheet.hidden;
+  sheet.hidden=!willShow;
+  $('#toggleAnswers').setAttribute('aria-expanded',String(willShow));
+  $('#toggleAnswers').textContent=willShow?'Скрыть таблицу ответов':'Показать таблицу ответов';
+};
+
+const tips={
+  steps:'<p><b>Пошаговый режим</b></p><p>Открывайте по одному этапу: от условия до проверки ответа. Кнопка «Показать всё» подходит для повторения.</p>',
+  canvas:'<p><b>Связь с решением</b></p><p>Критические точки и знаки меняются вместе с выбранной темой. Клик откроет увеличенную копию.</p>',
+  zoom:'<p><b>Масштаб и сдвиг</b></p><p>Ползунок, кнопки и колесо мыши синхронно изменяют обе схемы. Ось можно перетаскивать.</p>',
+  generator:'<p><b>Безопасная генерация</b></p><p>Вы получите одну проверенную задачу того же метода. Её критические точки и знаки сразу появятся на числовой оси, а ответ раскроется отдельной кнопкой.</p>'
+};
+const tooltip=$('#tooltip'),tipBody=$('#tooltipBody');let tipTimer;
+function showTip(trigger){clearTimeout(tipTimer);tipBody.innerHTML=tips[trigger.dataset.tip];const r=trigger.getBoundingClientRect();tooltip.style.left=Math.min(innerWidth-350,Math.max(12,r.left))+'px';tooltip.style.top=Math.min(innerHeight-190,r.bottom+10)+'px';tooltip.classList.add('show');tooltip.setAttribute('aria-hidden','false');tipTimer=setTimeout(hideTip,15000)}function hideTip(){tooltip.classList.remove('show');tooltip.setAttribute('aria-hidden','true')}
+$$('.hint-trigger').forEach(t=>{t.addEventListener('mouseenter',()=>showTip(t));t.addEventListener('focus',()=>showTip(t));t.addEventListener('click',()=>showTip(t))});tooltip.querySelector('button').onclick=hideTip;document.addEventListener('click',e=>{if(!tooltip.contains(e.target)&&!e.target.closest('.hint-trigger'))hideTip()});
+if(!sessionStorage.getItem('interval-tip-seen'))setTimeout(()=>{const t=$('[data-tip="canvas"]');showTip(t);sessionStorage.setItem('interval-tip-seen','1')},3000);
+
+function flash(el){el.classList.remove('glow');void el.offsetWidth;el.classList.add('glow')}
+$('#detailSelect').onchange=e=>document.documentElement.dataset.detail=e.target.value;
+const savedTheme=localStorage.getItem('timofey-interval-theme')||'dark';document.documentElement.dataset.theme=savedTheme;$('#themeBtn').textContent=savedTheme==='dark'?'Светлая тема':'Тёмная тема';$('#themeBtn').onclick=()=>{const next=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=next;localStorage.setItem('timofey-interval-theme',next);$('#themeBtn').textContent=next==='dark'?'Светлая тема':'Тёмная тема';drawAll()};
+renderTraining();
+renderTopic();
 </script>
 </body>
 </html>
