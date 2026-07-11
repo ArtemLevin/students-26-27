@@ -32,6 +32,7 @@ body[data-theme="light"]{
   const $ = (s, root=document)=>root.querySelector(s);
   const $$ = (s, root=document)=>Array.from(root.querySelectorAll(s));
   const body=document.body;
+  localStorage.setItem('xenia-last-lesson','models');
   const savedTheme=localStorage.getItem('xenia-site-theme')||'dark';body.dataset.theme=savedTheme;
   const themeBtn=$('#themeBtn'); if(themeBtn){themeBtn.addEventListener('click',()=>{body.dataset.theme=body.dataset.theme==='dark'?'light':'dark';localStorage.setItem('xenia-site-theme',body.dataset.theme);drawAll();});}
   const state={
@@ -66,7 +67,14 @@ body[data-theme="light"]{
   steps.forEach(el=>el.addEventListener('mouseenter',()=>{const f=el.dataset.focus;if(f){const sel=$('#modeSelect'); const opt=selects[0]?.querySelector(`option[value="${f}"]`); if(opt){state.mode=f;setRanges();drawAll();}}}));
   function flash(msg){const live=$('#flash'); if(!live)return; live.textContent=msg; live.classList.add('glow'); setTimeout(()=>live.classList.remove('glow'),1600)}
   $('#generateTask')?.addEventListener('click',()=>{const tasks=cfg.tasks||[]; const t=tasks[Math.floor(Math.random()*tasks.length)]; if(!t)return; $('#taskText').innerHTML=t.text; $('#taskAnswer').innerHTML=t.answer; if(t.mode){state.mode=t.mode; setRanges(); drawAll();} flash('Сгенерирована похожая задача');});
-  $$('[data-quiz] .quiz-option').forEach(opt=>opt.addEventListener('click',()=>{const box=opt.closest('[data-quiz]'); $$('.quiz-option',box).forEach(o=>o.classList.remove('correct','wrong')); const ok=opt.dataset.correct==='true'; opt.classList.add(ok?'correct':'wrong'); $('.quiz-result',box).textContent=ok?'Верно. Это именно тот смысл, который нужен в решении.':'Пока нет. Сравните с формулой и физическим смыслом.';}));
+  function recordCompetency(ok){
+    const key='xenia-competence-map-v1';
+    let map={}; try{map=JSON.parse(localStorage.getItem(key)||'{}')}catch{}
+    const ids=["graph","root_selection","constraints","quadratic"];
+    ids.forEach((id,index)=>{const current=Number(map[id]??2); map[id]=ok?Math.min(4,current+(index===0?1:0)):Math.min(current,index===0?1:2);});
+    localStorage.setItem(key,JSON.stringify(map));
+  }
+  $('[data-quiz] .quiz-option').forEach(opt=>opt.addEventListener('click',()=>{const box=opt.closest('[data-quiz]'); $$('.quiz-option',box).forEach(o=>o.classList.remove('correct','wrong')); const ok=opt.dataset.correct==='true'; recordCompetency(ok); opt.classList.add(ok?'correct':'wrong'); $('.quiz-result',box).textContent=ok?'Верно. Это именно тот смысл, который нужен в решении.':'Пока нет. Сравните с формулой и физическим смыслом.';}));
   let tipEl=null, tipTimer=null; function ensureTip(){if(tipEl)return tipEl; tipEl=document.createElement('div');tipEl.className='tooltip';tipEl.setAttribute('role','tooltip');tipEl.setAttribute('aria-hidden','true');document.body.appendChild(tipEl);return tipEl} function showTip(target){const el=ensureTip(); el.innerHTML='<button class="close-tip" aria-label="Закрыть подсказку">×</button>'+target.dataset.hint; const r=target.getBoundingClientRect(); const pos=target.dataset.pos||'bottom'; let x=r.left,y=r.bottom+10; if(pos==='left'){x=r.left-360;y=r.top-10}else if(pos==='right'){x=r.right+10;y=r.top-10}else if(pos==='top'){x=r.left;y=r.top-10} el.style.left=Math.max(12,Math.min(window.innerWidth-370,x))+'px'; el.style.top=Math.max(12,y)+'px'; el.classList.add('show'); el.setAttribute('aria-hidden','false'); target.style.animation='hintBounce .6s'; clearTimeout(tipTimer); tipTimer=setTimeout(hideTip,15000); $('.close-tip',el)?.addEventListener('click',hideTip); $$('[data-tip-action]',el).forEach(b=>b.addEventListener('click',()=>{const a=b.dataset.tipAction;if(a==='generate')$('#generateTask')?.click(); if(a==='switch'){const idx=Math.max(0,selects[0]?.selectedIndex||0); const opts=[...selects[0].options]; state.mode=opts[(idx+1)%opts.length].value; setRanges(); drawAll();} if(a==='example')document.getElementById('practice')?.scrollIntoView({behavior:'smooth'}); hideTip();}));}
   function hideTip(){if(tipEl){tipEl.classList.remove('show');tipEl.setAttribute('aria-hidden','true')}} $$('[data-hint]').forEach(h=>{h.setAttribute('tabindex','0');h.setAttribute('aria-label','Интерактивная подсказка');h.addEventListener('mouseenter',()=>showTip(h));h.addEventListener('focus',()=>showTip(h));}); document.addEventListener('click',e=>{if(tipEl&&!tipEl.contains(e.target)&&!e.target.matches('[data-hint]'))hideTip();}); if(!sessionStorage.getItem('xeniaImportantHintShown')){setTimeout(()=>{const h=$('[data-hint]'); if(h)showTip(h); sessionStorage.setItem('xeniaImportantHintShown','1');},3000)}
   setRanges(); applySteps(); content?.classList.add('details-standard'); drawAll(); window.addEventListener('resize',drawAll);
