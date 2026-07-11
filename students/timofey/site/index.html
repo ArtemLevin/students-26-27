@@ -3,94 +3,772 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Тимофей Васильченко — учебные материалы</title>
-  <meta name="description" content="Интерактивные учебные страницы по тригонометрии для подготовки к ЕГЭ.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230b1020'/%3E%3Ccircle cx='32' cy='32' r='19' fill='none' stroke='%2322d3ee' stroke-width='5'/%3E%3Cpath d='M16 38c10-19 22-19 32 0' fill='none' stroke='%23f59e0b' stroke-width='5' stroke-linecap='round'/%3E%3Ctext x='31' y='38' text-anchor='middle' font-size='19' font-family='Arial' fill='white'%3Ex%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="assets/site.css">
+  <meta name="description" content="Персональный учебный навигатор Тимофея Васильченко для подготовки к ЕГЭ по математике.">
+  <title>Тимофей Васильченко · траектория подготовки к ЕГЭ</title>
   <script defer src="assets/lesson-data.js"></script>
   <script defer src="assets/index.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231c3151'/%3E%3Cpath d='M14 44h36M17 39c8-27 22-27 30 0' fill='none' stroke='%23f3a683' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='24' cy='28' r='4' fill='%238bd3c7'/%3E%3Ccircle cx='40' cy='28' r='4' fill='%23fff7eb'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f1e8;
+      --surface: #fffdf8;
+      --surface-2: #f0e9dd;
+      --ink: #1c3151;
+      --muted: #667184;
+      --line: #ded6ca;
+      --navy: #1c3151;
+      --teal: #287f7a;
+      --teal-soft: #d8eee8;
+      --coral: #e77b5e;
+      --coral-soft: #f9ded4;
+      --gold: #d99b36;
+      --gold-soft: #f8e9c8;
+      --shadow: 0 18px 50px rgba(40, 50, 65, .09);
+      --radius: 24px;
+      --max: 1320px;
+      --heat-0: #e8e3dc;
+      --heat-1: #f4b5a4;
+      --heat-2: #f1cf7c;
+      --heat-3: #9dd8ca;
+      --heat-4: #287f7a;
+    }
+    body[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #101b2d;
+      --surface: #17263c;
+      --surface-2: #20314a;
+      --ink: #f7f1e8;
+      --muted: #afbac9;
+      --line: #33465f;
+      --navy: #f7f1e8;
+      --teal: #80cfc2;
+      --teal-soft: #1e4d4c;
+      --coral: #f39b82;
+      --coral-soft: #58392f;
+      --gold: #efbd64;
+      --gold-soft: #514326;
+      --shadow: 0 18px 50px rgba(0, 0, 0, .25);
+      --heat-0: #344258;
+      --heat-1: #8f5147;
+      --heat-2: #846c35;
+      --heat-3: #39756e;
+      --heat-4: #80cfc2;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 8% 0, rgba(231, 123, 94, .12), transparent 30rem),
+        radial-gradient(circle at 92% 8%, rgba(40, 127, 122, .12), transparent 32rem),
+        var(--bg);
+      color: var(--ink);
+      font: 16px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; text-decoration: none; }
+    .skip {
+      position: fixed; left: 12px; top: -80px; z-index: 1000;
+      padding: 10px 14px; border-radius: 12px; background: var(--ink); color: var(--surface);
+    }
+    .skip:focus { top: 12px; }
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 82%, transparent);
+      background: color-mix(in srgb, var(--bg) 84%, transparent);
+      backdrop-filter: blur(18px);
+    }
+    .nav {
+      max-width: var(--max); margin: auto; min-height: 68px; padding: 10px 22px;
+      display: flex; align-items: center; gap: 18px;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 850; letter-spacing: -.02em; }
+    .brand-mark {
+      width: 40px; height: 40px; border-radius: 14px; display: grid; place-items: center;
+      color: #fff; background: var(--navy); box-shadow: inset 0 0 0 1px rgba(255,255,255,.16);
+    }
+    .nav-links { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+    .nav-links a, .icon-btn {
+      border: 0; border-radius: 12px; padding: 9px 11px; background: transparent;
+      color: var(--muted); cursor: pointer; font-weight: 700;
+    }
+    .nav-links a:hover, .nav-links a:focus-visible, .icon-btn:hover, .icon-btn:focus-visible {
+      color: var(--ink); background: var(--surface-2); outline: none;
+    }
+    .icon-btn { border: 1px solid var(--line); min-width: 42px; color: var(--ink); }
+    .shell { max-width: var(--max); margin: auto; padding: 32px 22px 72px; }
+    .eyebrow {
+      margin: 0 0 10px; color: var(--teal); font-size: .78rem; font-weight: 900;
+      letter-spacing: .13em; text-transform: uppercase;
+    }
+    .hero {
+      display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(310px, .65fr);
+      gap: 22px; align-items: stretch;
+    }
+    .hero-copy, .continue-card, .panel, .lesson-card {
+      border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .hero-copy { padding: clamp(26px, 5vw, 58px); position: relative; overflow: hidden; }
+    .hero-copy::after {
+      content: ""; position: absolute; width: 280px; height: 280px; right: -95px; bottom: -120px;
+      border: 48px solid var(--teal-soft); border-radius: 50%; opacity: .75; pointer-events: none;
+    }
+    h1 {
+      max-width: 840px; margin: 0; font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.45rem, 6vw, 5.5rem); line-height: .98; letter-spacing: -.045em;
+    }
+    .lead { max-width: 720px; margin: 22px 0 0; color: var(--muted); font-size: clamp(1.03rem, 2vw, 1.22rem); }
+    .continue-card { padding: 26px; display: flex; flex-direction: column; gap: 18px; }
+    .continue-card h2 { margin: 0; font-size: 1.45rem; }
+    .continue-card p { margin: 0; color: var(--muted); }
+    .continue-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px;
+      border-radius: 999px; background: var(--surface-2); color: var(--muted); font-size: .83rem; font-weight: 750;
+    }
+    .btn {
+      border: 1px solid var(--line); border-radius: 14px; padding: 11px 15px;
+      background: var(--surface); color: var(--ink); cursor: pointer; font-weight: 800;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn:hover, .btn:focus-visible { transform: translateY(-1px); border-color: var(--teal); outline: none; }
+    .btn.primary { background: var(--navy); color: var(--surface); border-color: var(--navy); }
+    body[data-theme="dark"] .btn.primary { color: #142239; }
+    .continue-card .btn { margin-top: auto; align-self: flex-start; }
+    .stats {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 18px 0 0;
+    }
+    .stat { padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+    .stat b { display: block; font: 750 clamp(1.45rem, 3vw, 2.15rem)/1 Georgia, serif; }
+    .stat span { display: block; margin-top: 7px; color: var(--muted); font-size: .86rem; }
+    .section-head {
+      margin: 54px 0 18px; display: flex; align-items: end; justify-content: space-between; gap: 18px;
+    }
+    .section-head h2 { margin: 0; font: 750 clamp(1.8rem, 4vw, 3rem)/1.05 Georgia, serif; letter-spacing: -.025em; }
+    .section-head p { max-width: 650px; margin: 7px 0 0; color: var(--muted); }
+    .heatmap-panel { padding: 22px; }
+    .heat-toolbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      margin-bottom: 18px; flex-wrap: wrap;
+    }
+    .filters { display: flex; gap: 7px; flex-wrap: wrap; }
+    .filter {
+      border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px;
+      background: transparent; color: var(--muted); cursor: pointer; font-weight: 760;
+    }
+    .filter[aria-pressed="true"] { background: var(--navy); color: var(--surface); border-color: var(--navy); }
+    body[data-theme="dark"] .filter[aria-pressed="true"] { color: #142239; }
+    .legend { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: .8rem; }
+    .legend-cell { width: 21px; height: 21px; border-radius: 6px; border: 1px solid rgba(0,0,0,.05); }
+    .radial-layout {
+      display: grid; grid-template-columns: minmax(520px, 1.25fr) minmax(280px, .75fr);
+      gap: 22px; align-items: center;
+    }
+    .radial-stage {
+      position: relative; width: min(100%, 760px); aspect-ratio: 1; margin: auto;
+      border-radius: 50%; background: radial-gradient(circle, var(--surface) 0 22%, transparent 22.5%);
+    }
+    .radial-map { width: 100%; height: 100%; display: block; overflow: visible; }
+    .radial-cell {
+      cursor: pointer; stroke: var(--surface); stroke-width: 2;
+      transition: opacity .18s ease, filter .18s ease, transform .18s ease;
+      transform-box: fill-box; transform-origin: center;
+    }
+    .radial-cell:hover, .radial-cell:focus {
+      filter: drop-shadow(0 6px 6px rgba(28,49,81,.24)); outline: none; transform: scale(1.025);
+    }
+    .radial-cell.is-muted { opacity: .12; }
+    .radial-group-arc { fill: var(--navy); stroke: var(--surface); stroke-width: 3; cursor: pointer; }
+    .radial-group-label {
+      fill: var(--ink); font-size: 14px; font-weight: 850; text-anchor: middle;
+      pointer-events: none;
+    }
+    .radial-ring-label { fill: var(--muted); font-size: 11px; text-anchor: middle; pointer-events: none; }
+    .radial-center {
+      position: absolute; inset: 35%; display: grid; place-content: center; text-align: center;
+      border-radius: 50%; padding: 18px; pointer-events: none;
+    }
+    .radial-center b { font: 750 clamp(1.45rem, 3vw, 2.4rem)/1 Georgia, serif; }
+    .radial-center span { margin-top: 7px; color: var(--muted); font-size: .78rem; }
+    .topic-index { display: grid; gap: 7px; max-height: 650px; overflow: auto; padding-right: 5px; }
+    .topic-group {
+      border: 1px solid var(--line); border-radius: 16px; background: var(--surface); overflow: hidden;
+    }
+    .topic-group summary {
+      list-style: none; padding: 12px 14px; cursor: pointer; display: flex;
+      align-items: center; justify-content: space-between; gap: 10px; font-weight: 850;
+    }
+    .topic-group summary::-webkit-details-marker { display: none; }
+    .topic-group summary::after { content: "+"; color: var(--teal); font-size: 1.15rem; }
+    .topic-group[open] summary::after { content: "−"; }
+    .topic-group small { color: var(--muted); font-weight: 650; }
+    .topic-list { display: grid; gap: 1px; padding: 0 7px 7px; }
+    .topic-row {
+      width: 100%; border: 0; border-radius: 10px; padding: 8px 9px; background: transparent;
+      color: var(--ink); text-align: left; cursor: pointer; display: grid;
+      grid-template-columns: 13px 1fr auto; gap: 8px; align-items: center; font-size: .82rem;
+    }
+    .topic-row:hover, .topic-row:focus-visible { background: var(--surface-2); outline: none; }
+    .topic-dot { width: 11px; height: 11px; border-radius: 4px; }
+    .topic-level { color: var(--muted); font-size: .72rem; }
+    .map-source { margin: 15px 0 0; color: var(--muted); font-size: .78rem; text-align: center; }
+    .map-source a { color: var(--teal); text-decoration: underline; text-underline-offset: 3px; }
+    .recommendation {
+      margin-top: 16px; padding: 18px; border-radius: 18px; background: var(--coral-soft);
+      display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px;
+    }
+    .recommendation-icon {
+      width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center;
+      background: var(--coral); color: #fff; font-weight: 900;
+    }
+    .recommendation b, .recommendation span { display: block; }
+    .recommendation span { color: var(--muted); font-size: .87rem; margin-top: 3px; }
+    .routes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .lesson-card { padding: 22px; display: flex; flex-direction: column; min-height: 310px; }
+    .lesson-card:nth-child(1) { border-top: 5px solid var(--teal); }
+    .lesson-card:nth-child(2) { border-top: 5px solid var(--coral); }
+    .lesson-card:nth-child(3) { border-top: 5px solid var(--gold); }
+    .lesson-number {
+      display: flex; justify-content: space-between; align-items: center; color: var(--muted);
+      font-size: .8rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .lesson-card h3 { margin: 28px 0 10px; font: 750 1.55rem/1.1 Georgia, serif; }
+    .lesson-card p { color: var(--muted); margin: 0; }
+    .skills { display: flex; flex-wrap: wrap; gap: 6px; margin: 18px 0; }
+    .lesson-card .btn { margin-top: auto; align-self: flex-start; }
+    .lesson-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+    .lesson-actions .btn { margin-top: 0; }
+    .resource-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+    .resource-row {
+      padding: 12px; border: 1px solid var(--line); border-radius: 14px;
+      display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;
+    }
+    .resource-row b { display: block; font-size: .86rem; }
+    .resource-row small { color: var(--muted); }
+    .resource-links { display: flex; gap: 6px; }
+    .resource-links a {
+      min-width: 42px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 9px;
+      text-align: center; font-size: .72rem; font-weight: 850;
+    }
+    .resource-links a:hover { border-color: var(--teal); background: var(--teal-soft); }
+    .materials {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .materials .panel { padding: 22px; }
+    .materials h3 { margin: 0 0 7px; }
+    .materials p { margin: 0 0 15px; color: var(--muted); }
+    .file-list { display: grid; gap: 8px; }
+    .file-link {
+      padding: 10px 12px; border: 1px solid var(--line); border-radius: 13px;
+      display: flex; justify-content: space-between; gap: 14px; font-size: .88rem;
+    }
+    .file-link:hover { border-color: var(--teal); background: var(--teal-soft); }
+    .footer {
+      border-top: 1px solid var(--line); padding: 24px 22px 38px; color: var(--muted); text-align: center; font-size: .88rem;
+    }
+    .dialog {
+      width: min(600px, calc(100vw - 28px)); border: 1px solid var(--line); border-radius: 24px;
+      padding: 0; background: var(--surface); color: var(--ink); box-shadow: 0 30px 90px rgba(0,0,0,.28);
+    }
+    .dialog::backdrop { background: rgba(9, 18, 32, .6); backdrop-filter: blur(5px); }
+    .dialog-inner { padding: 24px; }
+    .dialog-head { display: flex; justify-content: space-between; gap: 14px; align-items: start; }
+    .dialog h2 { margin: 5px 0 0; font: 750 1.75rem/1.08 Georgia, serif; }
+    .close-btn {
+      width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 12px;
+      background: transparent; color: var(--ink); cursor: pointer; font-size: 1.3rem;
+    }
+    .dialog-description { color: var(--muted); }
+    .level-picker { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; margin: 20px 0; }
+    .level-btn {
+      min-height: 62px; padding: 7px 4px; border: 2px solid transparent; border-radius: 13px;
+      cursor: pointer; color: #24344d; font-size: .72rem; font-weight: 850;
+    }
+    .level-btn[data-level="0"] { background: var(--heat-0); color: var(--muted); }
+    .level-btn[data-level="1"] { background: var(--heat-1); }
+    .level-btn[data-level="2"] { background: var(--heat-2); }
+    .level-btn[data-level="3"] { background: var(--heat-3); }
+    .level-btn[data-level="4"] { background: var(--heat-4); color: #fff; }
+    .level-btn[aria-pressed="true"] { border-color: var(--ink); transform: translateY(-2px); }
+    .dialog-actions { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+    .dialog-note {
+      margin: 18px 0; padding: 14px; border-radius: 15px; background: var(--surface-2); color: var(--muted); font-size: .88rem;
+    }
+    [hidden] { display: none !important; }
+    @media (max-width: 1000px) {
+      .hero { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .radial-layout { grid-template-columns: 1fr; }
+      .topic-index { max-height: none; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+      .routes { grid-template-columns: 1fr; }
+      .lesson-card { min-height: 0; }
+    }
+    @media (max-width: 720px) {
+      .nav { padding-inline: 14px; }
+      .nav-links a { display: none; }
+      .shell { padding: 20px 13px 54px; }
+      .hero-copy, .continue-card { padding: 22px; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .heatmap-panel { padding: 14px; }
+      .radial-stage { width: min(100%, 620px); }
+      .topic-index { grid-template-columns: 1fr; }
+      .recommendation { grid-template-columns: auto 1fr; }
+      .recommendation .btn { grid-column: 1 / -1; }
+      .materials { grid-template-columns: 1fr; }
+      .resource-grid { grid-template-columns: 1fr; }
+      .section-head { margin-top: 42px; align-items: start; flex-direction: column; }
+    }
+    @media (max-width: 420px) {
+      .stats { grid-template-columns: 1fr; }
+      .radial-group-label { font-size: 11px; }
+      .level-picker { grid-template-columns: 1fr; }
+      .level-btn { min-height: 44px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+    }
+    @media print {
+      .topbar, .filters, .icon-btn, .btn, .dialog, .recommendation { display: none !important; }
+      body { background: #fff; }
+      .shell { max-width: none; padding: 0; }
+      .hero-copy, .continue-card, .panel, .lesson-card, .stat { box-shadow: none; }
+      .radial-cell { print-color-adjust: exact; }
+    }
+  </style>
 </head>
-<body>
-<header class="topbar">
-  <div class="wrap topbar__inner">
-    <a class="brand" href="index.html">
-      <span class="brand__logo">∿</span>
-      <span><strong>Тригонометрия ЕГЭ</strong><small>материалы для Тимофея Васильченко</small></span>
-    </a>
-    <nav class="topnav"><a href="#materials">Материалы</a><a href="#route">Маршрут</a></nav>
-  </div>
-</header>
-<main>
-  <section class="hero">
-    <div class="wrap hero__grid">
-      <div class="hero__text">
-        <p class="eyebrow">персональный учебный сайт</p>
-        <h1>Разборы, формулы и тренировка по тригонометрии</h1>
-        <p>Каждая страница — это веб-версия отдельного пособия: теория, опорные формулы, пошаговые примеры, типичные ошибки, тренировка и самопроверка.</p>
-        <div class="hero__actions"><a class="button button--accent" href="lessons/20-05-26.html">Начать с первого занятия</a><a class="button" href="#materials">Выбрать материал</a></div>
+<body data-theme="light">
+  <a class="skip" href="#main">Перейти к содержанию</a>
+  <header class="topbar">
+    <nav class="nav" aria-label="Основная навигация">
+      <a class="brand" href="index.html" aria-label="На главную">
+        <span class="brand-mark" aria-hidden="true">Σ</span>
+        <span>Тимофей · ЕГЭ</span>
+      </a>
+      <div class="nav-links">
+        <a href="#competencies">Компетенции</a>
+        <a href="#lessons">Занятия</a>
+        <a href="#materials">Материалы</a>
+        <button class="icon-btn" id="printBtn" type="button" aria-label="Распечатать карту">⎙</button>
+        <button class="icon-btn" id="themeBtn" type="button" aria-label="Переключить тему">◐</button>
       </div>
-      <aside class="hero__card" aria-label="Визуальная иконка курса по тригонометрии" style="display:grid;place-items:center;min-height:360px;overflow:hidden;position:relative;">
-        <svg width="100%" height="100%" viewBox="0 0 520 420" role="img" aria-label="Современная иконка единичной окружности, графика синуса и учебного маршрута" style="max-width:520px;min-height:320px;">
-          <defs>
-            <radialGradient id="g1" cx="50%" cy="42%" r="62%">
-              <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.34"/>
-              <stop offset="48%" stop-color="#14b8a6" stop-opacity="0.14"/>
-              <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
-            </radialGradient>
-            <linearGradient id="line" x1="60" y1="330" x2="460" y2="90">
-              <stop offset="0%" stop-color="#22d3ee"/>
-              <stop offset="55%" stop-color="#34d399"/>
-              <stop offset="100%" stop-color="#f59e0b"/>
-            </linearGradient>
-            <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
-              <feGaussianBlur stdDeviation="7" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-          <rect x="24" y="24" width="472" height="372" rx="42" fill="url(#g1)" stroke="rgba(148,163,184,.28)"/>
-          <g transform="translate(260 202)">
-            <circle r="118" fill="rgba(15,23,42,.24)" stroke="#22d3ee" stroke-width="7" filter="url(#glow)"/>
-            <line x1="-156" y1="0" x2="156" y2="0" stroke="rgba(244,248,255,.62)" stroke-width="3" stroke-linecap="round"/>
-            <line x1="0" y1="156" x2="0" y2="-156" stroke="rgba(244,248,255,.62)" stroke-width="3" stroke-linecap="round"/>
-            <path d="M -118 0 C -84 -78 -42 -78 0 0 S 84 78 118 0" fill="none" stroke="#f59e0b" stroke-width="8" stroke-linecap="round"/>
-            <path d="M 0 0 L 77 -90" stroke="#34d399" stroke-width="7" stroke-linecap="round"/>
-            <path d="M 77 -90 L 77 0" stroke="#22d3ee" stroke-width="6" stroke-linecap="round" stroke-dasharray="10 9"/>
-            <path d="M 0 0 L 77 0" stroke="#f59e0b" stroke-width="6" stroke-linecap="round"/>
-            <circle cx="77" cy="-90" r="12" fill="#22d3ee" stroke="#f8fafc" stroke-width="4"/>
-            <text x="96" y="-98" fill="#f8fafc" font-size="24" font-family="Inter, Arial, sans-serif" font-weight="800">P</text>
-            <text x="-138" y="-134" fill="#22d3ee" font-size="26" font-family="Inter, Arial, sans-serif" font-weight="900">sin</text>
-            <text x="98" y="132" fill="#f59e0b" font-size="26" font-family="Inter, Arial, sans-serif" font-weight="900">cos</text>
-          </g>
-          <g opacity=".92">
-            <circle cx="92" cy="88" r="12" fill="#22d3ee"/>
-            <circle cx="428" cy="92" r="12" fill="#34d399"/>
-            <circle cx="426" cy="330" r="12" fill="#f59e0b"/>
-            <path d="M 104 88 C 178 48 338 52 416 92" fill="none" stroke="url(#line)" stroke-width="5" stroke-linecap="round" stroke-dasharray="12 12"/>
-            <path d="M 426 104 C 470 170 470 250 426 318" fill="none" stroke="url(#line)" stroke-width="5" stroke-linecap="round" stroke-dasharray="12 12"/>
-          </g>
-        </svg>
+    </nav>
+  </header>
+
+  <main class="shell" id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Персональная траектория подготовки</p>
+        <h1 id="hero-title">Тимофей, продолжаем движение к ЕГЭ</h1>
+        <p class="lead">Здесь собраны занятия, интерактивные модели и карта навыков. Выбирайте следующий шаг по текущему уровню освоения.</p>
+      </div>
+      <aside class="continue-card" aria-labelledby="continue-title">
+        <div>
+          <p class="eyebrow">Следующий шаг</p>
+          <h2 id="continue-title">Отбор физически значимого корня</h2>
+        </div>
+        <p id="continueText">Повторите связь между графиком, областью допустимых значений и смыслом найденного ответа.</p>
+        <div class="continue-meta">
+          <span class="chip">≈ 15 минут</span>
+          <span class="chip">графики</span>
+          <span class="chip">самопроверка</span>
+        </div>
+        <a class="btn primary" id="continueLink" href="lessons/20-05-26.html">Продолжить →</a>
       </aside>
-    </div>
-  </section>
-  <section class="section" id="materials">
-    <div class="wrap">
-      <div class="section__head"><h2>Материалы по занятиям</h2><p>Выберите страницу. Материалы расположены в хронологическом порядке.</p></div>
-      <div class="material-grid" id="materialGrid"></div>
-    </div>
-  </section>
-  <section class="section" id="route">
-    <div class="wrap route-card">
-      <h2>Маршрут повторения</h2>
-      <div class="route">
-        <div><b>1</b><span>Единичная окружность и базовые ответы</span></div>
-        <div><b>2</b><span>Аркфункции и общие формулы</span></div>
-        <div><b>3</b><span>Формулы приведения и двойной угол</span></div>
-        <div><b>4</b><span>Разложение, группировка, специальные формулы</span></div>
-        <div><b>5</b><span>ОДЗ, модули, корни и логарифмы</span></div>
+    </section>
+
+    <section class="stats" aria-label="Сводка прогресса">
+      <article class="stat"><b id="masteredCount">0</b><span>компетенций освоено</span></article>
+      <article class="stat"><b id="averageScore">0%</b><span>средний уровень карты</span></article>
+      <article class="stat"><b id="repeatCount">0</b><span>тем ждут диагностики или повторения</span></article>
+      <article class="stat"><b id="lessonCount">0</b><span>занятий в траектории</span></article>
+    </section>
+
+    <section id="competencies" aria-labelledby="competencies-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Диагностика</p>
+          <h2 id="competencies-title">Тепловая карта компетенций</h2>
+          <p>Круг охватывает всю программу профильной математики ЕГЭ-2026: от вычислений и уравнений до геометрии, вероятности и задач высокого уровня. Каждый сектор — тематический блок, каждое кольцо — отдельная тема.</p>
+        </div>
+        <button class="btn" id="resetMap" type="button">Сбросить карту</button>
+      </div>
+      <div class="panel heatmap-panel">
+        <div class="heat-toolbar">
+          <div class="filters" role="group" aria-label="Фильтр компетенций">
+            <button class="filter" data-filter="all" aria-pressed="true">Все</button>
+            <button class="filter" data-filter="repeat" aria-pressed="false">Повторить</button>
+            <button class="filter" data-filter="progress" aria-pressed="false">В процессе</button>
+            <button class="filter" data-filter="mastered" aria-pressed="false">Освоено</button>
+          </div>
+          <div class="legend" aria-label="Шкала уровней">
+            <span>начало</span>
+            <i class="legend-cell" style="background:var(--heat-0)"></i>
+            <i class="legend-cell" style="background:var(--heat-1)"></i>
+            <i class="legend-cell" style="background:var(--heat-2)"></i>
+            <i class="legend-cell" style="background:var(--heat-3)"></i>
+            <i class="legend-cell" style="background:var(--heat-4)"></i>
+            <span>уверенно</span>
+          </div>
+        </div>
+        <div class="radial-layout">
+          <div>
+            <div class="radial-stage">
+              <svg class="radial-map" id="radialMap" viewBox="0 0 800 800" role="img" aria-labelledby="radialTitle radialDescription">
+                <title id="radialTitle">Круговая тепловая карта компетенций ЕГЭ</title>
+                <desc id="radialDescription">Десять тематических секторов и пять колец, показывающих уровень освоения отдельных тем.</desc>
+              </svg>
+              <div class="radial-center"><b id="radialPercent">0%</b><span>общая готовность<br><span id="radialTopicCount">0 тем</span></span></div>
+            </div>
+            <p class="map-source">Структура сверена с <a href="https://fipi.ru/ege/demoversii-specifikacii-kodifikatory" target="_blank" rel="noopener">документами ФИПИ ЕГЭ-2026</a>.</p>
+          </div>
+          <div class="topic-index" id="topicIndex" aria-label="Список всех тем ЕГЭ"></div>
+        </div>
+        <div class="recommendation" id="recommendation" aria-live="polite">
+          <div class="recommendation-icon">↗</div>
+          <div><b id="recommendationTitle">Рекомендация формируется</b><span id="recommendationText"></span></div>
+          <a class="btn" id="recommendationLink" href="lessons/20-05-26.html">Открыть тему</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="lessons" aria-labelledby="lessons-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Учебный маршрут</p>
+          <h2 id="lessons-title">Занятия и тренажёры</h2>
+          <p>Каждый модуль включает теорию, разобранные примеры, интерактивную модель, тренировку и мини-квиз.</p>
+        </div>
+      </div>
+      <div class="routes" id="materialGrid" aria-live="polite"></div>
+    </section>
+
+    <section id="materials" aria-labelledby="materials-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Библиотека</p>
+          <h2 id="materials-title">Материалы занятий</h2>
+        </div>
+      </div>
+      <div class="panel">
+        <p>Веб-урок, PDF и редактируемый TeX собраны по датам. Отсутствующий файл автоматически скрывается.</p>
+        <div class="resource-grid" id="resourceGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">Лёвин Артём Александрович · персональная траектория подготовки Тимофея Васильченко</footer>
+
+  <dialog class="dialog" id="competencyDialog">
+    <div class="dialog-inner">
+      <div class="dialog-head">
+        <div><p class="eyebrow" id="dialogGroup"></p><h2 id="dialogTitle"></h2></div>
+        <button class="close-btn" id="closeDialog" type="button" aria-label="Закрыть">×</button>
+      </div>
+      <p class="dialog-description" id="dialogDescription"></p>
+      <div class="dialog-note" id="dialogEvidence"></div>
+      <p><b>Текущий уровень</b></p>
+      <div class="level-picker" id="levelPicker" role="group" aria-label="Выбор уровня">
+        <button class="level-btn" data-level="0">0<br>ещё не изучено</button>
+        <button class="level-btn" data-level="1">1<br>нужна помощь</button>
+        <button class="level-btn" data-level="2">2<br>в процессе</button>
+        <button class="level-btn" data-level="3">3<br>почти уверенно</button>
+        <button class="level-btn" data-level="4">4<br>освоено</button>
+      </div>
+      <div class="dialog-actions">
+        <a class="btn primary" id="dialogLink" href="#">Перейти к материалу</a>
+        <button class="btn" id="markRepeat" type="button">Добавить в повторение</button>
       </div>
     </div>
-  </section>
-</main>
-<footer class="footer"><div class="wrap">Лёвин Артём Александрович · учебные материалы по математике</div></footer>
+  </dialog>
+
+  <script>
+    (() => {
+      const STORAGE_KEY = "timofey-competence-map-v1";
+      const THEME_KEY = "timofey-site-theme";
+      const LAST_LESSON_KEY = "timofey-last-lesson";
+      const levels = ["Не изучено", "Нужна помощь", "В процессе", "Почти уверенно", "Освоено"];
+      const topic = (id, title, level, description, evidence, link = "index.html#lessons") =>
+        ({ id, title, level, description, evidence, link });
+      const groups = [
+        {
+          id: "numbers", short: "Числа", title: "Числа и выражения", subtitle: "задания 7, 9 и база всей работы",
+          items: [
+            topic("arithmetic", "Числа, дроби и проценты", 0, "Действия с рациональными и действительными числами, долями, отношениями и процентами.", "Диагностика пока не проводилась."),
+            topic("powers", "Степени и корни", 2, "Свойства степеней, квадратные, кубические и корни более высоких степеней.", "Корни и равносильные переходы изучались 25.06.26.", "lessons/25-06-26.html"),
+            topic("logs", "Логарифмы", 1, "Определение логарифма, свойства и преобразование логарифмических выражений.", "Логарифмы включены в занятие 27.06.26.", "lessons/27-06-26.html"),
+            topic("trig_expr", "Тригонометрические выражения", 3, "Значения функций, формулы приведения и преобразования тригонометрических выражений.", "Системно отрабатывались в десяти занятиях.", "lessons/02-06-26.html"),
+            topic("transform", "Преобразование выражений", 3, "Алгебраические преобразования, формулы сокращённого умножения и работа с дробями.", "Разложение, группировка и специальные замены изучались 05–20.06.26.", "lessons/05-06-26.html")
+          ]
+        },
+        {
+          id: "equations", short: "Уравнения", title: "Уравнения и системы", subtitle: "задания 6, 9, 10, 13, 16, 18",
+          items: [
+            topic("rational_eq", "Рациональные уравнения", 0, "Линейные, дробно-рациональные и сводящиеся к ним уравнения.", "Диагностика пока не проводилась."),
+            topic("quadratic", "Квадратные уравнения", 1, "Квадратные уравнения, разложение на множители и теорема Виета.", "Встречались как вспомогательный инструмент; отдельная диагностика требуется."),
+            topic("irrational_eq", "Иррациональные уравнения", 2, "Уравнения с корнями, ОДЗ и контроль посторонних корней.", "Корни и равносильные переходы изучались 25.06.26.", "lessons/25-06-26.html"),
+            topic("exp_log_eq", "Показательные и логарифмические", 0, "Уравнения со степенями, показательной функцией и логарифмами.", "Материал ещё не добавлен."),
+            topic("trig_eq", "Тригонометрические уравнения", 3, "Простейшие и комбинированные уравнения, общие решения и отбор корней.", "Основной маршрут занятий 20.05–20.06.26.", "lessons/20-05-26.html")
+          ]
+        },
+        {
+          id: "inequalities", short: "Неравенства", title: "Неравенства", subtitle: "задания 15, 16 и 18",
+          items: [
+            topic("rational_ineq", "Рациональные неравенства", 2, "Метод интервалов, знаки множителей и кратность корней.", "Разобрано на занятиях 08.07 и 10.07.26.", "lessons/10-07-26.html"),
+            topic("irrational_ineq", "Иррациональные неравенства", 0, "Равносильные переходы, условия существования и системы ограничений.", "Материал ещё не добавлен."),
+            topic("exponential_ineq", "Показательные неравенства", 0, "Сравнение степеней, замена переменной и свойства основания.", "Материал ещё не добавлен."),
+            topic("logarithmic_ineq", "Логарифмические неравенства", 0, "ОДЗ, монотонность логарифма и рационализация.", "Материал ещё не добавлен."),
+            topic("mixed_ineq", "Смешанные и системы", 1, "Комбинации модулей, степеней, логарифмов и тригонометрии.", "Начальная работа с модулями, корнями и ограничениями проведена.", "lessons/08-07-26.html")
+          ]
+        },
+        {
+          id: "functions", short: "Функции", title: "Функции и анализ", subtitle: "задания 8, 11, 12 и 18",
+          items: [
+            topic("graph", "Графики и свойства функций", 1, "Область определения, нули, промежутки знакопостоянства и чтение графика.", "Графическая интерпретация использовалась в тригонометрии и методе интервалов.", "lessons/08-07-26.html"),
+            topic("graph_transform", "Преобразования графиков", 0, "Сдвиги, растяжения, отражения и композиции графиков.", "Диагностика пока не проводилась."),
+            topic("derivative", "Производная и касательная", 0, "Геометрический и физический смысл производной, правила дифференцирования.", "Материал ещё не добавлен."),
+            topic("extrema", "Исследование и экстремумы", 0, "Монотонность, критические точки, максимум и минимум функции.", "Материал ещё не добавлен."),
+            topic("integral", "Первообразная и интеграл", 0, "Первообразные, площадь криволинейной трапеции и определённый интеграл.", "Материал ещё не добавлен.")
+          ]
+        },
+        {
+          id: "models", short: "Модели", title: "Текстовые и прикладные задачи", subtitle: "задания 9, 10 и 16",
+          items: [
+            topic("motion_work", "Движение и работа", 0, "Скорость, время, путь, совместная работа и производительность.", "Диагностика пока не проводилась."),
+            topic("mixtures", "Смеси, сплавы и проценты", 0, "Концентрации, доли вещества и процентные изменения.", "Материал ещё не добавлен."),
+            topic("formula", "Прикладные формулы", 0, "Подстановка в физические и практические формулы, выражение искомой величины.", "Диагностика пока не проводилась."),
+            topic("units", "Единицы и оценка", 0, "Перевод единиц, научная запись, округление и оценка порядка результата.", "Диагностика пока не проводилась."),
+            topic("root_selection", "Отбор ответа по смыслу", 2, "Ограничения, ОДЗ и выбор допустимого корня.", "Отбор корней и равносильность изучались 25.06.26.", "lessons/25-06-26.html")
+          ]
+        },
+        {
+          id: "finance", short: "Финансы", title: "Финансовая математика", subtitle: "задание 16",
+          items: [
+            topic("simple_percent", "Проценты и вклады", 0, "Последовательные процентные изменения, вклады и рост величины.", "Диагностика пока не проводилась."),
+            topic("loans", "Кредиты и остаток долга", 0, "Долг, начисление процентов, выплаты и график уменьшения задолженности.", "Материал ещё не добавлен."),
+            topic("annuity", "Аннуитетные платежи", 0, "Равные платежи и связь между долгом, ставкой и сроком.", "Материал ещё не добавлен."),
+            topic("differentiated", "Дифференцированные платежи", 0, "Равномерное уменьшение долга и сумма начисленных процентов.", "Материал ещё не добавлен."),
+            topic("business", "Бизнес-модели и оптимизация", 0, "Цена, спрос, выручка, прибыль и выбор выгодного режима.", "Диагностика пока не проводилась.")
+          ]
+        },
+        {
+          id: "probability", short: "Вероятность", title: "Вероятность и статистика", subtitle: "задания 4 и 5",
+          items: [
+            topic("classic_probability", "Классическая вероятность", 0, "Равновозможные исходы и отношение благоприятных исходов ко всем исходам.", "Диагностика пока не проводилась."),
+            topic("events", "События и противоположность", 0, "Противоположные, совместные и несовместные события.", "Материал ещё не добавлен."),
+            topic("sum_product", "Сложение и умножение вероятностей", 0, "Независимость, условная вероятность и деревья событий.", "Материал ещё не добавлен."),
+            topic("combinatorics", "Комбинаторика", 0, "Правила суммы и произведения, перестановки, размещения и сочетания.", "Диагностика пока не проводилась."),
+            topic("statistics", "Статистика и характеристики", 0, "Среднее, медиана, разброс, таблицы, диаграммы и интерпретация данных.", "Материал ещё не добавлен.")
+          ]
+        },
+        {
+          id: "planimetry", short: "Планиметрия", title: "Планиметрия", subtitle: "задания 1 и 17",
+          items: [
+            topic("triangles", "Треугольники", 0, "Подобие, теоремы синусов и косинусов, площади и замечательные точки.", "Диагностика пока не проводилась."),
+            topic("quadrilaterals", "Четырёхугольники", 0, "Параллелограмм, трапеция, ромб, прямоугольник и их свойства.", "Материал ещё не добавлен."),
+            topic("circle", "Окружность", 0, "Вписанные углы, касательные, хорды и окружности, связанные с многоугольниками.", "Материал ещё не добавлен."),
+            topic("plane_vectors", "Координаты и векторы", 0, "Векторы на плоскости, координатный метод, расстояния и уравнения линий.", "Диагностика пока не проводилась."),
+            topic("geometry_proof", "Доказательство и комбинации", 0, "Доказательство утверждений и конфигурации из нескольких геометрических объектов.", "Материал ещё не добавлен.")
+          ]
+        },
+        {
+          id: "stereometry", short: "Стереометрия", title: "Стереометрия", subtitle: "задания 2, 3 и 14",
+          items: [
+            topic("prisms", "Призмы и параллелепипеды", 0, "Площади, объёмы, диагонали и элементы многогранников.", "Диагностика пока не проводилась."),
+            topic("pyramids", "Пирамиды", 0, "Сечения, высоты, объёмы и подобие в пространственных конфигурациях.", "Материал ещё не добавлен."),
+            topic("round_bodies", "Тела вращения", 0, "Цилиндр, конус, шар и комбинации пространственных тел.", "Материал ещё не добавлен."),
+            topic("space_angles", "Углы и расстояния", 0, "Угол между прямыми и плоскостями, расстояния в пространстве.", "Диагностика пока не проводилась."),
+            topic("sections_coordinates", "Сечения, координаты и векторы", 0, "Построение сечений и координатно-векторный метод решения.", "Материал ещё не добавлен.")
+          ]
+        },
+        {
+          id: "advanced", short: "Высокий уровень", title: "Задачи высокого уровня", subtitle: "задания 13–19",
+          items: [
+            topic("parameters", "Задачи с параметром", 0, "Число решений, взаимное расположение графиков и аналитический разбор случаев.", "Материал ещё не добавлен."),
+            topic("number_theory", "Делимость и теория чисел", 0, "Делители, остатки, разложения и целочисленные условия.", "Диагностика пока не проводилась."),
+            topic("sequences", "Последовательности и прогрессии", 0, "Арифметическая и геометрическая прогрессии, рекуррентные зависимости.", "Материал ещё не добавлен."),
+            topic("proof_estimates", "Оценки и доказательства", 0, "Неравенства, оценки, экстремальные значения и обоснование результата.", "Материал ещё не добавлен."),
+            topic("task19", "Комбинаторные конструкции №19", 0, "Наборы чисел, операции, инварианты и доказательство оптимальности.", "Диагностика пока не проводилась.")
+          ]
+        }
+      ];
+      const allItems = groups.flatMap(group => group.items.map(item => ({ ...item, groupId: group.id, groupTitle: group.title })));
+      let state = loadState();
+      let activeId = null;
+      let currentFilter = "all";
+
+      const $ = selector => document.querySelector(selector);
+      const $$ = selector => [...document.querySelectorAll(selector)];
+
+      function loadState() {
+        const defaults = Object.fromEntries(allItems.map(item => [item.id, item.level]));
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+          return { ...defaults, ...saved };
+        } catch {
+          return defaults;
+        }
+      }
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+      function itemState(item) {
+        return Math.max(0, Math.min(4, Number(state[item.id] ?? item.level)));
+      }
+      function matchesFilter(level) {
+        if (currentFilter === "repeat") return level <= 1;
+        if (currentFilter === "progress") return level === 2 || level === 3;
+        if (currentFilter === "mastered") return level === 4;
+        return true;
+      }
+      function polar(radius, angle) {
+        const radians = (angle - 90) * Math.PI / 180;
+        return { x: 400 + radius * Math.cos(radians), y: 400 + radius * Math.sin(radians) };
+      }
+      function arcPath(innerRadius, outerRadius, startAngle, endAngle) {
+        const outerStart = polar(outerRadius, startAngle);
+        const outerEnd = polar(outerRadius, endAngle);
+        const innerEnd = polar(innerRadius, endAngle);
+        const innerStart = polar(innerRadius, startAngle);
+        const large = endAngle - startAngle > 180 ? 1 : 0;
+        return [
+          `M ${outerStart.x} ${outerStart.y}`,
+          `A ${outerRadius} ${outerRadius} 0 ${large} 1 ${outerEnd.x} ${outerEnd.y}`,
+          `L ${innerEnd.x} ${innerEnd.y}`,
+          `A ${innerRadius} ${innerRadius} 0 ${large} 0 ${innerStart.x} ${innerStart.y}`,
+          "Z"
+        ].join(" ");
+      }
+      function renderHeatmap() {
+        const svg = $("#radialMap");
+        const sectorSize = 360 / groups.length;
+        const innerRadius = 145;
+        const ringWidth = 43;
+        const sectorGap = 1.5;
+        let svgContent = "";
+        groups.forEach((group, groupIndex) => {
+          const start = groupIndex * sectorSize + sectorGap;
+          const end = (groupIndex + 1) * sectorSize - sectorGap;
+          const groupTarget = [...group.items].sort((a, b) => itemState(a) - itemState(b))[0];
+          svgContent += `<path class="radial-group-arc" data-id="${groupTarget.id}" d="${arcPath(112, 137, start, end)}" tabindex="0"><title>${group.title}</title></path>`;
+          group.items.forEach((item, itemIndex) => {
+            const level = itemState(item);
+            const ringInner = innerRadius + itemIndex * ringWidth;
+            const ringOuter = ringInner + ringWidth - 4;
+            const muted = matchesFilter(level) ? "" : " is-muted";
+            svgContent += `<path class="radial-cell${muted}" data-id="${item.id}" data-level="${level}" fill="var(--heat-${level})" d="${arcPath(ringInner, ringOuter, start, end)}" tabindex="0" role="button" aria-label="${item.title}: ${levels[level]}"><title>${group.title} · ${item.title}: ${levels[level]}</title></path>`;
+          });
+          const labelPoint = polar(382, start + (end - start) / 2);
+          svgContent += `<text class="radial-group-label" x="${labelPoint.x}" y="${labelPoint.y}" dy=".35em">${group.short}</text>`;
+        });
+        [1, 2, 3, 4, 5].forEach((ring, index) => {
+          const point = polar(innerRadius + index * ringWidth + ringWidth / 2, 0);
+          svgContent += `<text class="radial-ring-label" x="${point.x}" y="${point.y}" dy=".35em">${ring}</text>`;
+        });
+        svg.innerHTML = `<title id="radialTitle">Круговая тепловая карта компетенций ЕГЭ</title><desc id="radialDescription">Десять тематических секторов и пять колец с пятьюдесятью темами.</desc>${svgContent}`;
+        $("#topicIndex").innerHTML = groups.map((group, index) => `
+          <details class="topic-group" ${index === 4 ? "open" : ""}>
+            <summary><span>${group.title}</span><small>${group.items.length} тем</small></summary>
+            <div class="topic-list">
+              ${group.items.map(item => {
+                const level = itemState(item);
+                return `<button class="topic-row" data-id="${item.id}" ${matchesFilter(level) ? "" : "hidden"}>
+                  <i class="topic-dot" style="background:var(--heat-${level})"></i>
+                  <span>${item.title}</span><span class="topic-level">${level}/4</span>
+                </button>`;
+              }).join("")}
+            </div>
+          </details>
+        `).join("");
+        $$(".radial-cell, .radial-group-arc, .topic-row").forEach(cell => {
+          cell.addEventListener("click", () => openCompetency(cell.dataset.id));
+          cell.addEventListener("keydown", event => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              openCompetency(cell.dataset.id);
+            }
+          });
+        });
+        updateSummary();
+      }
+      function updateSummary() {
+        const values = allItems.map(itemState);
+        const mastered = values.filter(value => value === 4).length;
+        const repeat = values.filter(value => value <= 1).length;
+        const average = Math.round(values.reduce((sum, value) => sum + value, 0) / (values.length * 4) * 100);
+        $("#masteredCount").textContent = `${mastered} / ${values.length}`;
+        $("#averageScore").textContent = `${average}%`;
+        $("#repeatCount").textContent = repeat;
+        $("#radialPercent").textContent = `${average}%`;
+        $("#radialTopicCount").textContent = `${values.length} тем`;
+        const started = allItems.filter(item => itemState(item) > 0);
+        const weakest = [...(started.length ? started : allItems)].sort((a, b) => itemState(a) - itemState(b))[0];
+        $("#recommendationTitle").textContent = `Следующий фокус: ${weakest.title}`;
+        $("#recommendationText").textContent = weakest.description;
+        $("#recommendationLink").href = weakest.link;
+        $("#continue-title").textContent = weakest.title;
+        $("#continueText").textContent = weakest.description;
+        $("#continueLink").href = weakest.link;
+      }
+      function openCompetency(id) {
+        const item = allItems.find(candidate => candidate.id === id);
+        if (!item) return;
+        activeId = id;
+        $("#dialogGroup").textContent = item.groupTitle;
+        $("#dialogTitle").textContent = item.title;
+        $("#dialogDescription").textContent = item.description;
+        $("#dialogEvidence").textContent = item.evidence;
+        $("#dialogLink").href = item.link;
+        updateLevelPicker();
+        $("#competencyDialog").showModal();
+      }
+      function updateLevelPicker() {
+        $$(".level-btn").forEach(button => {
+          button.setAttribute("aria-pressed", String(Number(button.dataset.level) === itemState({ id: activeId, level: 0 })));
+        });
+      }
+      $$(".level-btn").forEach(button => button.addEventListener("click", () => {
+        if (!activeId) return;
+        state[activeId] = Number(button.dataset.level);
+        saveState();
+        updateLevelPicker();
+        renderHeatmap();
+      }));
+      $("#markRepeat").addEventListener("click", () => {
+        if (!activeId) return;
+        state[activeId] = 1;
+        saveState();
+        updateLevelPicker();
+        renderHeatmap();
+      });
+      $("#closeDialog").addEventListener("click", () => $("#competencyDialog").close());
+      $("#competencyDialog").addEventListener("click", event => {
+        if (event.target === $("#competencyDialog")) $("#competencyDialog").close();
+      });
+      $$(".filter").forEach(button => button.addEventListener("click", () => {
+        currentFilter = button.dataset.filter;
+        $$(".filter").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+        renderHeatmap();
+      }));
+      $("#resetMap").addEventListener("click", () => {
+        if (!confirm("Вернуть исходную оценку всех компетенций?")) return;
+        localStorage.removeItem(STORAGE_KEY);
+        state = loadState();
+        renderHeatmap();
+      });
+      $$(".lesson-link").forEach(link => link.addEventListener("click", () => {
+        localStorage.setItem(LAST_LESSON_KEY, link.dataset.lesson);
+      }));
+      $("#themeBtn").addEventListener("click", () => {
+        document.body.dataset.theme = document.body.dataset.theme === "dark" ? "light" : "dark";
+        localStorage.setItem(THEME_KEY, document.body.dataset.theme);
+      });
+      $("#printBtn").addEventListener("click", () => window.print());
+      document.body.dataset.theme = localStorage.getItem(THEME_KEY) || "light";
+      renderHeatmap();
+    })();
+  </script>
 </body>
 </html>
