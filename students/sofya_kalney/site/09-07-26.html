@@ -338,7 +338,8 @@
   }
   function attachQuiz(){
     const btn=document.getElementById('quizBtn'); if(!btn) return;
-    btn.onclick=()=>{const checked=document.querySelector('input[name="quiz"]:checked');const out=document.getElementById('quizResult'); if(!checked){out.textContent='Выберите вариант ответа.';return} const q=topics[current].quiz; out.textContent=Number(checked.value)===q.ok?'Верно. '+q.explain:'Пока нет. '+q.explain; out.style.color=Number(checked.value)===q.ok?'var(--ok)':'var(--danger)'};
+    function recordOgeCompetency(ok){localStorage.setItem('sofya-last-lesson','mixed-text');const key='sofya-competence-map-v1';let map={};try{map=JSON.parse(localStorage.getItem(key)||'{}')}catch{}['average_speed','extended_objects','work','motion'].forEach((id,index)=>{const current=Number(map[id]??2);map[id]=ok?Math.min(4,current+(index===0?1:0)):Math.min(current,index===0?1:2)});localStorage.setItem(key,JSON.stringify(map));}
+    btn.onclick=()=>{const checked=document.querySelector('input[name="quiz"]:checked');const out=document.getElementById('quizResult'); if(!checked){out.textContent='Выберите вариант ответа.';return} const q=topics[current].quiz;const ok=Number(checked.value)===q.ok;recordOgeCompetency(ok);out.textContent=ok?'Верно. '+q.explain:'Пока нет. '+q.explain;out.style.color=ok?'var(--ok)':'var(--danger)'};
   }
   function attachGenerator(){
     const btn=document.getElementById('genBtn'); if(!btn) return;
