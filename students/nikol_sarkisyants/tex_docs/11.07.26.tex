@@ -1,0 +1,857 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\geometry{
+  a4paper,
+  left=18mm,
+  right=18mm,
+  top=18mm,
+  bottom=20mm
+}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{6E7777}
+\definecolor{lightaccent}{HTML}{DCECEC}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=accent,
+  pdfauthor={Лёвин Артём Александрович},
+  pdftitle={Смешанные уравнения и неравенства}
+}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlist[itemize]{leftmargin=7mm,itemsep=3pt,topsep=4pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=5pt,topsep=4pt}
+\renewcommand{\arraystretch}{1.35}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{textgray}{Уравнения и неравенства}}
+\rhead{\textcolor{textgray}{Николь Саркисьянц}}
+\cfoot{\textcolor{softgray}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{%
+  \hbox to\headwidth{%
+    \color{lightaccent}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\checkitem}{\item[$\square$]}
+\newcommand{\important}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\newcommand{\sectionrule}{%
+  \vspace{-2mm}
+  {\color{lightaccent}\hrule height 1pt}
+  \vspace{3mm}
+}
+
+\begin{document}
+
+%----------------------------------------------------------------------
+% Титульный лист
+%----------------------------------------------------------------------
+
+\begin{titlepage}
+\thispagestyle{empty}
+
+\begin{center}
+
+\vspace*{25mm}
+
+{\color{accent}\rule{34mm}{1.2pt}}
+
+\vspace{12mm}
+
+{\Large\textcolor{softgray}{ЧЕК-ЛИСТ}}
+
+\vspace{8mm}
+
+{\Huge\bfseries\textcolor{darkaccent}{Смешанные уравнения\\[3mm]
+и неравенства}}
+
+\vspace{7mm}
+
+{\Large
+ОДЗ, рационализация, метод интервалов\\
+и замена переменной}
+
+\vspace{25mm}
+
+{\large
+Лёвин Артём Александрович\\[2mm]
+эксклюзивно для Николь Саркисьянц}
+
+\vfill
+
+{\large\today}
+
+\vspace{18mm}
+
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[color=lightaccent,line width=5pt]
+    (-6,0)
+    .. controls (-4.1,1.2) and (-2.3,-1.1) .. (0,0)
+    .. controls (2.2,1.1) and (4.0,-1.0) .. (6,0);
+  \draw[color=accent,line width=1.2pt]
+    (-6,0)
+    .. controls (-4.1,1.2) and (-2.3,-1.1) .. (0,0)
+    .. controls (2.2,1.1) and (4.0,-1.0) .. (6,0);
+\end{tikzpicture}
+
+\vspace{6mm}
+
+\end{center}
+\end{titlepage}
+
+%----------------------------------------------------------------------
+% Основной чек-лист
+%----------------------------------------------------------------------
+
+\section*{\textcolor{darkaccent}{1. Главная стратегия}}
+\sectionrule
+
+Смешанная задача может одновременно содержать логарифмы, степени,
+тригонометрические функции и многочлены. Решение строится
+последовательно: сначала ограничения, затем упрощение структуры,
+после этого стандартный метод.
+
+\begin{enumerate}
+  \item \important{Выпишите ОДЗ} всех логарифмов, знаменателей и корней.
+  \item \important{Определите внешнюю структуру}: логарифмическую,
+        показательную, рациональную или тригонометрическую.
+  \item \important{Упростите выражение} с помощью формул.
+  \item \important{Сведите задачу} к знакомому уравнению, неравенству
+        или системе.
+  \item \important{Решите полученную задачу} методом интервалов,
+        заменой переменной или отбором на окружности.
+  \item \important{Сверьте результат с ОДЗ}.
+\end{enumerate}
+
+\begin{itemize}
+  \checkitem Я сначала ищу ограничения, если вижу логарифм.
+  \checkitem Я не сокращаю выражения до проверки возможности деления на ноль.
+  \checkitem После обратной замены я решаю задачу относительно исходной переменной.
+  \checkitem При решении системы нахожу пересечение всех полученных множеств.
+\end{itemize}
+
+%----------------------------------------------------------------------
+
+\section*{\textcolor{darkaccent}{2. Границы промежутков}}
+\sectionrule
+
+От вида неравенства зависит, включается ли граничная точка в ответ.
+
+\[
+\begin{aligned}
+6\le n\le 7
+&\quad\Longrightarrow\quad n\in[6;7],\\
+6<n<7
+&\quad\Longrightarrow\quad n\in(6;7),\\
+6<n\le 7
+&\quad\Longrightarrow\quad n\in(6;7].
+\end{aligned}
+\]
+
+Если дополнительно известно, что \(n\in\Z\), то:
+
+\[
+n\in[6;7]\cap\Z
+\quad\Longrightarrow\quad
+n\in\{6,7\}.
+\]
+
+\begin{itemize}
+  \checkitem При знаках \(\le\) и \(\ge\) допустимая граница включается.
+  \checkitem При знаках \(<\) и \(>\) граница исключается.
+  \checkitem Выколотая по ОДЗ точка не включается даже при нестрогом неравенстве.
+\end{itemize}
+
+%----------------------------------------------------------------------
+
+\section*{\textcolor{darkaccent}{3. Область допустимых значений логарифма}}
+\sectionrule
+
+Выражение
+\[
+\log_{a(x)} b(x)
+\]
+определено при одновременном выполнении условий
+\[
+\boxed{
+a(x)>0,\qquad
+a(x)\ne1,\qquad
+b(x)>0.
+}
+\]
+
+Для дроби
+\[
+\frac{f(x)}{\log_{a(x)}b(x)}
+\]
+добавляется условие
+\[
+\log_{a(x)}b(x)\ne0
+\quad\Longleftrightarrow\quad
+b(x)\ne1.
+\]
+
+Некоторые ограничения выполняются автоматически. Например,
+\[
+4+x^2>0
+\]
+при любом \(x\in\R\), поскольку \(x^2\ge0\). Аналогично,
+\[
+9\cdot3^x>0
+\]
+при всех действительных \(x\).
+
+\begin{itemize}
+  \checkitem Подлогарифмическое выражение всегда строго положительно.
+  \checkitem Основание логарифма строго положительно и отлично от единицы.
+  \checkitem Если логарифм находится в знаменателе, его значение отлично от нуля.
+  \checkitem Я проверяю, не выполняется ли часть ОДЗ автоматически.
+\end{itemize}
+
+%----------------------------------------------------------------------
+
+\section*{\textcolor{darkaccent}{4. Равенство логарифмов}}
+\sectionrule
+
+При фиксированном основании
+\[
+a>0,\qquad a\ne1
+\]
+функция \(y=\log_a x\) взаимно однозначна. Поэтому на ОДЗ
+\[
+\log_a f(x)=\log_a g(x)
+\quad\Longleftrightarrow\quad
+f(x)=g(x).
+\]
+
+\subsection*{\textcolor{accent}{Пример: логарифмическое уравнение с тригонометрией}}
+
+Решим уравнение
+\[
+\log_2(\sin2x)=\log_2(\sqrt2\cos x).
+\]
+
+Сначала выпишем ОДЗ:
+\[
+\sin2x>0,\qquad \sqrt2\cos x>0.
+\]
+
+На ОДЗ аргументы логарифмов равны:
+\[
+\sin2x=\sqrt2\cos x.
+\]
+
+Поскольку
+\[
+\sin2x=2\sin x\cos x,
+\]
+получаем
+\[
+2\sin x\cos x-\sqrt2\cos x=0,
+\]
+\[
+\cos x\left(2\sin x-\sqrt2\right)=0.
+\]
+
+Первая ветвь,
+\[
+\cos x=0,
+\]
+противоречит условию \(\cos x>0\). Остаётся
+\[
+\sin x=\frac{\sqrt2}{2}.
+\]
+
+Отсюда
+\[
+x=\frac{\pi}{4}+2\pi n
+\quad\text{или}\quad
+x=\frac{3\pi}{4}+2\pi n,
+\qquad n\in\Z.
+\]
+
+Условию \(\cos x>0\) соответствует только первая серия:
+\[
+\boxed{x=\frac{\pi}{4}+2\pi n,\qquad n\in\Z.}
+\]
+
+\begin{itemize}
+  \checkitem Я не отбрасываю логарифмы до записи ОДЗ.
+  \checkitem Если аргументы логарифмов равны, одно из одинаковых по смыслу
+        ограничений можно считать следствием другого.
+  \checkitem Перед делением на \(\cos x\) я отдельно рассматриваю случай
+        \(\cos x=0\).
+  \checkitem Найденные серии корней проверяю по ОДЗ.
+\end{itemize}
+
+%----------------------------------------------------------------------
+
+\section*{\textcolor{darkaccent}{5. Рационализация логарифмических неравенств}}
+\sectionrule
+
+Для
+\[
+a(x)>0,\qquad a(x)\ne1,\qquad f(x)>0
+\]
+справедлива равносильность
+\[
+\boxed{
+\log_{a(x)}f(x)>0
+\quad\Longleftrightarrow\quad
+\bigl(a(x)-1\bigr)\bigl(f(x)-1\bigr)>0.
+}
+\]
+
+Аналогично,
+\[
+\boxed{
+\log_{a(x)}f(x)<0
+\quad\Longleftrightarrow\quad
+\bigl(a(x)-1\bigr)\bigl(f(x)-1\bigr)<0.
+}
+\]
+
+Для сравнения двух логарифмов с одинаковым переменным основанием:
+\[
+\log_{a(x)}f(x)>\log_{a(x)}g(x)
+\]
+на ОДЗ равносильно
+\[
+\boxed{
+\bigl(a(x)-1\bigr)\bigl(f(x)-g(x)\bigr)>0.
+}
+\]
+
+Множитель \(a(x)-1\) кодирует поведение логарифмической функции:
+
+\begin{itemize}
+  \item при \(a(x)>1\) функция возрастает;
+  \item при \(0<a(x)<1\) функция убывает.
+\end{itemize}
+
+Поэтому при переменном основании нельзя просто сравнить аргументы
+и сохранить знак неравенства.
+
+\subsection*{\textcolor{accent}{Обязательная формулировка перехода}}
+
+Корректная запись в решении:
+
+\[
+\text{«На ОДЗ знак исходного выражения совпадает со знаком }
+\bigl(a(x)-1\bigr)\bigl(f(x)-g(x)\bigr)\text{».}
+\]
+
+\begin{itemize}
+  \checkitem Перед рационализацией я полностью выписываю ОДЗ.
+  \checkitem Я учитываю множитель \(a(x)-1\).
+  \checkitem Я сохраняю все выколотые точки после перехода к рациональному выражению.
+  \checkitem После рационализации применяю метод интервалов.
+\end{itemize}
+
+%----------------------------------------------------------------------
+
+\section*{\textcolor{darkaccent}{6. Логарифмические дроби}}
+\sectionrule
+
+Для дроби
+\[
+\frac{\log_a f(x)}{\log_a g(x)}
+\]
+нужно проверить:
+\[
+f(x)>0,\qquad
+g(x)>0,\qquad
+g(x)\ne1.
+\]
+
+При фиксированном основании \(a>1\) знаки логарифмов определяются так:
+\[
+\log_a u
+\begin{cases}
+<0,&0<u<1,\\
+=0,&u=1,\\
+>0,&u>1.
+\end{cases}
+\]
+
+При \(0<a<1\) знаки меняются на противоположные.
+
+\important{Типичная ошибка:}
+\[
+\log_a(uv)\ne\log_a u\cdot\log_a v.
+\]
+
+Верная формула:
+\[
+\boxed{\log_a(uv)=\log_a u+\log_a v}
+\]
+при \(u>0\) и \(v>0\).
+
+Также:
+\[
+\log_a\frac{u}{v}=\log_a u-\log_a v,
+\qquad
+\log_a(u^k)=k\log_a u.
+\]
+
+\begin{itemize}
+  \checkitem Знаменатель дроби не может равняться нулю.
+  \checkitem Я не превращаю логарифм произведения в произведение логарифмов.
+  \checkitem При переходе к рациональному выражению сохраняю исходное ОДЗ.
+\end{itemize}
+
+%----------------------------------------------------------------------
+
+\section*{\textcolor{darkaccent}{7. Метод интервалов}}
+\sectionrule
+
+Для решения рационального неравенства:
+
+\begin{enumerate}
+  \item Перенесите всё в одну сторону.
+  \item Разложите числитель и знаменатель на множители.
+  \item Найдите нули числителя и знаменателя.
+  \item Отметьте критические точки на числовой прямой.
+  \item Определите знак на каждом промежутке.
+  \item Выберите промежутки нужного знака.
+  \item Учтите строгость неравенства и ОДЗ.
+\end{enumerate}
+
+Если корень множителя имеет нечётную кратность, знак при переходе
+через него меняется. При чётной кратности знак сохраняется.
+
+\[
+\sqrt2\approx1{,}41,\qquad
+\sqrt3\approx1{,}73,\qquad
+\sqrt5\approx2{,}24.
+\]
+
+Эти приближения помогают быстро расположить числа на оси. Например,
+\[
+3-\sqrt2>0,
+\]
+поскольку \(\sqrt2<3\).
+
+\begin{center}
+\begin{tikzpicture}[x=1.35cm,y=1cm]
+  \draw[->,color=textgray,line width=0.8pt] (-3.3,0)--(3.5,0)
+    node[right] {$x$};
+
+  \foreach \x/\lab in {-2/{-\sqrt2},0/0,2/{\sqrt2}} {
+    \draw[color=textgray] (\x,0.10)--(\x,-0.10);
+    \node[below=3pt] at (\x,0) {$\lab$};
+  }
+
+  \node[color=darkaccent] at (-2.7,0.45) {$+$};
+  \node[color=darkaccent] at (-1,0.45) {$-$};
+  \node[color=darkaccent] at (1,0.45) {$-$};
+  \node[color=darkaccent] at (2.7,0.45) {$+$};
+\end{tikzpicture}
+\end{center}
+
+\important{Правило системы:} если точка исключена хотя бы одним
+условием системы, она не входит в итоговое пересечение.
+
+%----------------------------------------------------------------------
+
+\section*{\textcolor{darkaccent}{8. Показательные уравнения}}
+\sectionrule
+
+Если основания равны и удовлетворяют условиям
+\[
+a>0,\qquad a\ne1,
+\]
+то
+\[
+a^{f(x)}=a^{g(x)}
+\quad\Longleftrightarrow\quad
+f(x)=g(x).
+\]
+
+\subsection*{\textcolor{accent}{Пример}}
+
+Решим уравнение
+\[
+7^{2\cos x}=49^{\sin2x}.
+\]
+
+Представим \(49\) как \(7^2\):
+\[
+7^{2\cos x}
+=
+\left(7^2\right)^{\sin2x}
+=
+7^{2\sin2x}.
+\]
+
+Следовательно,
+\[
+2\cos x=2\sin2x,
+\]
+\[
+\cos x=\sin2x=2\sin x\cos x.
+\]
+
+Получаем
+\[
+\cos x(1-2\sin x)=0.
+\]
+
+Отсюда
+\[
+\cos x=0
+\quad\text{или}\quad
+\sin x=\frac12.
+\]
+
+Ответ:
+\[
+\boxed{
+x=\frac{\pi}{2}+\pi k
+\quad\text{или}\quad
+x=\frac{\pi}{6}+2\pi n
+\quad\text{или}\quad
+x=\frac{5\pi}{6}+2\pi n,
+\quad k,n\in\Z.
+}
+\]
+
+Альтернативный путь состоит в логарифмировании обеих частей.
+Поскольку обе части положительны, можно применить \(\log_7\):
+\[
+\log_7\left(7^{2\cos x}\right)
+=
+\log_7\left(49^{\sin2x}\right).
+\]
+Результат будет тем же:
+\[
+2\cos x=2\sin2x.
+\]
+
+\begin{itemize}
+  \checkitem Сначала пытаюсь привести обе части к одному основанию.
+  \checkitem При возведении степени в степень перемножаю показатели:
+        \((a^m)^n=a^{mn}\).
+  \checkitem Логарифмирование допустимо, когда обе части уравнения положительны.
+  \checkitem Разные корректные способы должны приводить к одному множеству корней.
+\end{itemize}
+
+%----------------------------------------------------------------------
+
+\section*{\textcolor{darkaccent}{9. Замена переменной}}
+\sectionrule
+
+Если выражение содержит \(x^4\) и \(x^2\), полезна замена
+\[
+t=x^2.
+\]
+
+Обязательно фиксируем ограничение:
+\[
+\boxed{t\ge0.}
+\]
+
+Равенство \(t=0\) допустимо, поскольку при \(x=0\) имеем \(x^2=0\).
+
+\subsection*{\textcolor{accent}{Пример с логарифмической степенью}}
+
+Решим неравенство
+\[
+2^{\log_2(4+x^2)}+x^4-10\ge0.
+\]
+
+Аргумент логарифма положителен автоматически:
+\[
+4+x^2>0.
+\]
+
+Используем формулу
+\[
+a^{\log_a u}=u
+\quad
+(a>0,\ a\ne1,\ u>0).
+\]
+
+Тогда
+\[
+4+x^2+x^4-10\ge0,
+\]
+\[
+x^4+x^2-6\ge0.
+\]
+
+Выполним замену
+\[
+t=x^2,\qquad t\ge0.
+\]
+
+Получаем
+\[
+t^2+t-6\ge0,
+\]
+\[
+(t+3)(t-2)\ge0.
+\]
+
+Для квадратного неравенства:
+\[
+t\le-3
+\quad\text{или}\quad
+t\ge2.
+\]
+
+Ветка \(t\le-3\) противоречит условию \(t\ge0\). Следовательно,
+\[
+t\ge2.
+\]
+
+Возвращаемся к переменной \(x\):
+\[
+x^2\ge2.
+\]
+
+Итог:
+\[
+\boxed{
+x\in(-\infty;-\sqrt2]\cup[\sqrt2;+\infty).
+}
+\]
+
+\begin{itemize}
+  \checkitem При замене \(t=x^2\) я пишу \(t\ge0\).
+  \checkitem Я нахожу все корни уравнения относительно \(t\).
+  \checkitem Корни, противоречащие условию \(t\ge0\), исключаю с пояснением.
+  \checkitem После решения относительно \(t\) выполняю обратную замену.
+\end{itemize}
+
+%----------------------------------------------------------------------
+
+\section*{\textcolor{darkaccent}{10. Критические ошибки}}
+\sectionrule
+
+\begin{tabularx}{\linewidth}{@{}p{0.35\linewidth}X@{}}
+\toprule
+\textbf{\textcolor{darkaccent}{Ошибка}} &
+\textbf{\textcolor{darkaccent}{Корректное действие}}\\
+\midrule
+
+Отбросить логарифмы до записи ОДЗ &
+Сначала выписать все ограничения, затем выполнить равносильный переход.\\
+
+Записать \(\log_a(uv)=\log_a u\cdot\log_a v\) &
+Использовать формулу
+\(\log_a(uv)=\log_a u+\log_a v\).\\
+
+Разделить на \(\cos x\) &
+Сначала отдельно рассмотреть случай \(\cos x=0\).\\
+
+При \(t=x^2\) написать \(t>0\) &
+Записать \(t\ge0\), поскольку \(x\) может равняться нулю.\\
+
+Сравнить аргументы при переменном основании &
+Учесть знак множителя \(a(x)-1\).\\
+
+Включить нуль знаменателя в ответ &
+Все нули знаменателя всегда исключаются.\\
+
+Забыть вернуться к \(x\) после замены &
+Выполнить обратную замену и решить полученное условие относительно \(x\).\\
+
+Механически чередовать знаки &
+Проверить кратность каждого корня.\\
+
+\bottomrule
+\end{tabularx}
+
+%----------------------------------------------------------------------
+% Тренировочный блок
+%----------------------------------------------------------------------
+
+\clearpage
+\section*{\textcolor{darkaccent}{Тренировочный блок}}
+\sectionrule
+
+Выполните упражнения, обязательно записывая ОДЗ и обоснования
+равносильных переходов.
+
+\subsection*{\textcolor{accent}{Средний уровень}}
+
+\begin{enumerate}
+  \item Решите уравнение
+  \[
+  \log_3(x+2)=\log_3(2x-1).
+  \]
+
+  \item Решите показательное уравнение
+  \[
+  5^{x-1}=25.
+  \]
+
+  \item Решите неравенство
+  \[
+  x^4-5x^2+4\ge0.
+  \]
+\end{enumerate}
+
+\subsection*{\textcolor{accent}{Уровень выше среднего}}
+
+\begin{enumerate}[resume]
+  \item Решите уравнение
+  \[
+  \log_2(\sin2x)=\log_2(\cos x).
+  \]
+
+  \item Решите неравенство
+  \[
+  \log_{x+2}(x^2-1)>0.
+  \]
+
+  \item Решите неравенство
+  \[
+  \frac{\log_2(x-1)}{\log_2(x+1)}\le0.
+  \]
+
+  \item Решите уравнение
+  \[
+  3^{2\cos x}=9^{\sin x}.
+  \]
+
+  \item Решите неравенство
+  \[
+  2^{\log_2(x^2+1)}+x^4-7\ge0.
+  \]
+
+  \item Решите неравенство
+  \[
+  \log_{x+1}(x^2-3x+3)\le0.
+  \]
+\end{enumerate}
+
+\subsection*{\textcolor{accent}{Сложный уровень}}
+
+\begin{enumerate}[resume]
+  \item Решите неравенство
+  \[
+  \frac{\log_2(x^2-1)}{\log_2(x+2)}\le0.
+  \]
+\end{enumerate}
+
+\clearpage
+\section*{\textcolor{darkaccent}{Ответы}}
+\sectionrule
+
+\begin{longtable}{@{}p{0.08\linewidth}p{0.86\linewidth}@{}}
+\toprule
+\textbf{\textcolor{darkaccent}{№}} &
+\textbf{\textcolor{darkaccent}{Ответ}}\\
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{\textcolor{darkaccent}{№}} &
+\textbf{\textcolor{darkaccent}{Ответ}}\\
+\midrule
+\endhead
+
+1 &
+\[
+x=3.
+\]
+\\
+
+2 &
+\[
+x=3.
+\]
+\\
+
+3 &
+\[
+x\in(-\infty;-2]\cup[-1;1]\cup[2;+\infty).
+\]
+\\
+
+4 &
+\[
+x=\frac{\pi}{6}+2\pi n,\qquad n\in\Z.
+\]
+\\
+
+5 &
+\[
+x\in(-\sqrt2;-1)\cup(\sqrt2;+\infty).
+\]
+\\
+
+6 &
+\[
+x\in(1;2].
+\]
+\\
+
+7 &
+\[
+x=\frac{\pi}{4}+\pi n,\qquad n\in\Z.
+\]
+\\
+
+8 &
+\[
+x\in(-\infty;-\sqrt2]\cup[\sqrt2;+\infty).
+\]
+\\
+
+9 &
+\[
+x\in(-1;0)\cup[1;2].
+\]
+\\
+
+10 &
+\[
+x\in(-2;-\sqrt2]\cup(1;\sqrt2].
+\]
+\\
+
+\bottomrule
+\end{longtable}
+
+\vfill
+
+\begin{center}
+\textcolor{softgray}{%
+Проверяйте ОДЗ до преобразований и после получения ответа.}
+\end{center}
+
+\end{document}
