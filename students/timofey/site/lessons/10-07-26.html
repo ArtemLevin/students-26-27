@@ -281,7 +281,19 @@ function renderTopic(){
   drawAll();
 }
 
-function answerQuiz(e){const t=topics[state.topic],n=+e.currentTarget.dataset.answer;$$('.quiz-option').forEach((b,i)=>{b.disabled=true;b.classList.add(i===t.quiz.correct?'good':i===n?'bad':'')});$('#quizFeedback').textContent=n===t.quiz.correct?'Верно. Ключевое правило применено правильно.':'Проверьте источник точки и её кратность.'}
+
+function recordEgeCompetency(ok){
+  localStorage.setItem('timofey-last-lesson','10-07-26');
+  const key='timofey-competence-map-v1';
+  let map={}; try{map=JSON.parse(localStorage.getItem(key)||'{}')}catch{}
+  ['rational_ineq','mixed_ineq'].forEach((id,index)=>{
+    const current=Number(map[id]??2);
+    map[id]=ok?Math.min(4,current+(index===0?1:0)):Math.min(current,index===0?1:2);
+  });
+  localStorage.setItem(key,JSON.stringify(map));
+}
+
+function answerQuiz(e){const t=topics[state.topic],n=+e.currentTarget.dataset.answer;recordEgeCompetency(n===t.quiz.correct);$$('.quiz-option').forEach((b,i)=>{b.disabled=true;b.classList.add(i===t.quiz.correct?'good':i===n?'bad':'')});$('#quizFeedback').textContent=n===t.quiz.correct?'Верно. Ключевое правило применено правильно.':'Проверьте источник точки и её кратность.'}
 
 function openNext(){const total=topics[state.topic].steps.length;if(state.revealed<total)state.revealed++;renderTopic()}
 $('#nextStep').onclick=openNext;$('#showAll').onclick=()=>{state.revealed=99;renderTopic()};$('#resetSteps').onclick=()=>{state.revealed=1;renderTopic()};

@@ -1,6 +1,24 @@
 const LESSONS = window.TIMOFEY_LESSONS || window['TIMOF\u0415Y_LESSONS'] || [];
 const id = document.body.dataset.lesson;
 const lesson = LESSONS.find((item) => item.id === id) || LESSONS[0];
+localStorage.setItem('timofey-last-lesson', id);
+const COMPETENCY_KEY = 'timofey-competence-map-v1';
+const LESSON_COMPETENCIES = {
+  '20-05-26':['trig_eq'], '27-05-26':['trig_eq'], '30-05-26':['trig_eq'],
+  '02-06-26':['trig_expr','trig_eq'], '05-06-26':['transform','trig_eq'],
+  '09-06-26':['trig_expr','transform'], '14-06-26':['trig_expr'],
+  '20-06-26':['trig_expr','trig_eq'], '25-06-26':['irrational_eq','powers','root_selection'],
+  '27-06-26':['trig_expr','logs']
+};
+function recordCompetency(ok) {
+  let map = {};
+  try { map = JSON.parse(localStorage.getItem(COMPETENCY_KEY) || '{}'); } catch {}
+  (LESSON_COMPETENCIES[id] || []).forEach((competency, index) => {
+    const current = Number(map[competency] ?? 2);
+    map[competency] = ok ? Math.min(4, current + (index === 0 ? 1 : 0)) : Math.min(current, index === 0 ? 1 : 2);
+  });
+  localStorage.setItem(COMPETENCY_KEY, JSON.stringify(map));
+}
 const root = document.getElementById('lessonRoot');
 const title = (text) => String(text || '').replace(/[&<>]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]));
 const lessonPath = (path) => path ? path.replace(/^\.\.\//, '../../') : '';
@@ -181,6 +199,7 @@ function setupQuiz() {
     button.addEventListener('click', () => {
       document.querySelectorAll('.quiz-option').forEach((item) => item.classList.remove('correct', 'wrong'));
       const ok = Number(button.dataset.index) === lesson.quiz.correct;
+      recordCompetency(ok);
       button.classList.add(ok ? 'correct' : 'wrong');
       document.getElementById('quizResult').textContent = ok ? 'Верно.' : 'Пока нет. Вернитесь к разделу с идеей решения.';
     });
