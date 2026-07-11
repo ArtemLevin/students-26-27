@@ -1,69 +1,768 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>София Кальней — веб-пособия по задачам на движение</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b1220'/%3E%3Cpath d='M10 42h44' stroke='%2322d3ee' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M14 39c9-18 23-18 36 0' fill='none' stroke='%23a7f3d0' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='20' cy='42' r='4' fill='%23facc15'/%3E%3Ccircle cx='44' cy='42' r='4' fill='%23facc15'/%3E%3C/svg%3E">
-<style>
-:root{
-  --bg:#07111f; --panel:#0d1b2f; --panel2:#10243b; --text:#e8f4ff; --muted:#9fb4c8;
-  --accent:#22d3ee; --accent2:#14b8a6; --warn:#facc15; --danger:#fb7185; --ok:#34d399;
-  --border:rgba(148,163,184,.28); --shadow:0 24px 80px rgba(0,0,0,.38); --radius:22px;
-  --canvas:#081525; --grid:rgba(148,163,184,.18);
-}
-body[data-theme="light"]{
-  --bg:#f7fbff; --panel:#ffffff; --panel2:#eef7ff; --text:#102033; --muted:#4f647a;
-  --accent:#0891b2; --accent2:#0f766e; --warn:#b45309; --danger:#be123c; --ok:#047857;
-  --border:rgba(15,23,42,.14); --shadow:0 20px 50px rgba(15,23,42,.12); --canvas:#f8fcff; --grid:rgba(15,23,42,.13);
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:radial-gradient(circle at top left,rgba(34,211,238,.18),transparent 34%),var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-a{color:inherit;text-decoration:none}.skip{position:absolute;left:-999px}.skip:focus{left:16px;top:16px;background:var(--panel);padding:10px;border-radius:10px;z-index:99}
-.topbar{position:sticky;top:0;z-index:30;background:rgba(7,17,31,.8);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-body[data-theme="light"] .topbar{background:rgba(247,251,255,.84)}
-.nav{max-width:1440px;margin:auto;display:flex;align-items:center;gap:14px;padding:12px 20px}.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.2px}.brand-mark{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#06101c;font-weight:900}.navlinks{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}.navlinks a,.pill,.button{border:1px solid var(--border);border-radius:999px;padding:9px 13px;background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;font-weight:700}.navlinks a:hover,.button:hover,.pill:hover{border-color:var(--accent);box-shadow:0 0 0 3px rgba(34,211,238,.12)}
-.hero{max-width:1440px;margin:auto;padding:48px 20px 20px;display:grid;grid-template-columns:1.05fr .95fr;gap:22px}.hero h1{font-size:clamp(32px,5vw,62px);line-height:1.05;margin:0 0 16px}.lead{font-size:clamp(18px,2vw,22px);color:var(--muted);max-width:900px}.tagrow{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}.tag{padding:8px 11px;border:1px solid var(--border);border-radius:999px;background:linear-gradient(135deg,rgba(34,211,238,.12),rgba(20,184,166,.08));color:var(--text);font-weight:700;font-size:14px}.hero-card{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}.hero-card h2{margin-top:0}.meta-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.meta{border:1px solid var(--border);border-radius:16px;padding:12px;background:rgba(255,255,255,.04)}.meta b{display:block;color:var(--accent);font-size:13px;text-transform:uppercase;letter-spacing:.08em}
-.layout{max-width:1440px;margin:auto;padding:24px 20px 60px;display:grid;grid-template-columns:minmax(0,1fr) minmax(380px,520px);gap:24px;align-items:start}.content{min-width:0}.visual{position:sticky;top:74px;align-self:start;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}.canvas-wrap{position:relative;border:1px solid var(--border);border-radius:18px;overflow:hidden;background:var(--canvas);cursor:grab}.canvas-wrap:active{cursor:grabbing}.canvas-wrap canvas{width:100%;display:block;min-height:320px}.visual-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.visual-title h2{margin:0;font-size:20px}.controls{display:grid;gap:10px;margin-top:12px}.control-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.control-row label{color:var(--muted);font-size:14px}.control-row input[type="range"]{width:100%}.button-row{display:flex;gap:8px;flex-wrap:wrap}.button{font-size:14px}.select,input,textarea{width:100%;background:var(--panel2);color:var(--text);border:1px solid var(--border);border-radius:14px;padding:10px 12px}.switcher{display:flex;gap:8px;flex-wrap:wrap}.switcher button[aria-pressed="true"],.button.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06101c;border-color:transparent}.legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;color:var(--muted);font-size:13px}.legend span{display:inline-flex;align-items:center;gap:6px}.dot{width:10px;height:10px;border-radius:50%;background:var(--accent);display:inline-block}.dot.alt{background:var(--warn)}.dot.ok{background:var(--ok)}
-.card{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin:0 0 18px;box-shadow:0 10px 34px rgba(0,0,0,.12)}.card h2,.card h3{margin-top:0}.idea{border-left:5px solid var(--accent);background:linear-gradient(90deg,rgba(34,211,238,.12),transparent);padding:16px;border-radius:16px;margin:16px 0}.step{position:relative}.step:hover{outline:2px solid rgba(34,211,238,.32);outline-offset:4px}.step.hidden-step{display:none}.stage{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);font-weight:900}.mathline{margin:12px 0;padding:12px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.04);overflow:auto}math{font-family:system-ui,Segoe UI,Arial,sans-serif;font-size:1.06em}.table{width:100%;border-collapse:collapse;margin:14px 0;overflow:hidden;border-radius:16px}.table th,.table td{border:1px solid var(--border);padding:10px;text-align:left}.table th{background:rgba(34,211,238,.10);color:var(--accent)}.note{color:var(--muted)}.ok{color:var(--ok);font-weight:800}.warn{color:var(--warn);font-weight:800}.danger{color:var(--danger);font-weight:800}.details-standard [data-detail="brief-only"],.details-brief [data-detail="standard"],.details-brief [data-detail="extended"],.details-standard [data-detail="extended"]{display:none}.details-full [data-detail="brief-only"]{display:none}.topic-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 22px}.topic-tabs a{padding:8px 12px;border:1px solid var(--border);border-radius:999px;color:var(--muted)}.topic-tabs a:hover{color:var(--text);border-color:var(--accent)}
-.generator,.quiz{display:grid;gap:12px}.answer-box{border:1px dashed var(--border);border-radius:16px;padding:14px;background:rgba(255,255,255,.035);min-height:54px}.quiz-option{display:block;margin:8px 0;padding:10px;border:1px solid var(--border);border-radius:14px;cursor:pointer}.quiz-option.correct{border-color:var(--ok);background:rgba(52,211,153,.12)}.quiz-option.wrong{border-color:var(--danger);background:rgba(251,113,133,.12)}
-.hint-trigger{display:inline-grid;place-items:center;width:25px;height:25px;border-radius:50%;border:1px solid var(--accent);color:var(--accent);font-weight:900;cursor:pointer;margin-left:6px;animation:hintPulse 2.2s infinite;vertical-align:middle;background:rgba(34,211,238,.08)}@keyframes hintPulse{0%{box-shadow:0 0 0 0 rgba(34,211,238,.35)}70%{box-shadow:0 0 0 12px rgba(34,211,238,0)}100%{box-shadow:0 0 0 0 rgba(34,211,238,0)}}@keyframes hintBounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-4px)}}@keyframes borderGlow{0%,100%{box-shadow:0 0 0 0 rgba(34,211,238,.05)}50%{box-shadow:0 0 0 4px rgba(34,211,238,.20)}}.glow{animation:borderGlow 1.6s ease-in-out 2}.tooltip{position:fixed;z-index:1000;max-width:340px;background:#07111f;color:#e8f4ff;border:1px solid transparent;border-radius:18px;padding:14px;box-shadow:0 18px 60px rgba(0,0,0,.45);background-image:linear-gradient(#07111f,#07111f),linear-gradient(135deg,#22d3ee,#14b8a6);background-origin:border-box;background-clip:padding-box,border-box;opacity:0;transform:translateY(8px);pointer-events:none;transition:.18s}.tooltip.show{opacity:1;transform:translateY(0);pointer-events:auto}.tooltip .close-tip{float:right;background:transparent;border:0;color:#e8f4ff;font-size:20px;cursor:pointer}.tip-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.tip-actions button{background:rgba(34,211,238,.14);border:1px solid rgba(34,211,238,.4);color:#e8f4ff;border-radius:999px;padding:7px 10px;cursor:pointer}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:22px;z-index:200}.overlay.show{display:flex}.modal{width:min(1120px,96vw);max-height:94vh;overflow:auto;background:var(--panel);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow);padding:16px}.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.close{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:12px;padding:8px 11px;cursor:pointer;font-weight:900}.modal canvas{width:100%;min-height:520px;background:var(--canvas);border-radius:18px;border:1px solid var(--border)}
-.footer{max-width:1440px;margin:auto;padding:24px 20px 42px;color:var(--muted);border-top:1px solid var(--border)}
-@media (max-width:1080px){.hero,.layout{grid-template-columns:1fr}.visual{position:relative;top:auto}.nav{align-items:flex-start}.navlinks{margin-left:0}.hero{padding-top:28px}.meta-grid{grid-template-columns:1fr 1fr}}@media (max-width:640px){body{font-size:15px}.nav{flex-direction:column}.hero,.layout{padding-left:12px;padding-right:12px}.card,.visual,.hero-card{padding:14px;border-radius:18px}.meta-grid{grid-template-columns:1fr}.canvas-wrap canvas{min-height:260px}.button-row{display:grid;grid-template-columns:1fr 1fr}.tooltip{left:12px!important;right:12px!important;max-width:none}.modal canvas{min-height:360px}}
-@media print{.topbar,.visual,.button-row,.controls,.topic-tabs,.hint-trigger,.overlay,.generator .button,.quiz .button{display:none!important}body{background:#fff;color:#111}.hero,.layout{display:block;padding:0}.card,.hero-card{box-shadow:none;border:1px solid #bbb;break-inside:avoid}a{text-decoration:none;color:#111}.footer{border-top:1px solid #bbb}}
-
-.index-grid{max-width:1440px;margin:auto;padding:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.big-card{min-height:320px;display:flex;flex-direction:column;justify-content:space-between}.big-card h2{font-size:clamp(26px,3vw,38px)}.route{height:150px;border:1px solid var(--border);border-radius:20px;background:var(--canvas);position:relative;overflow:hidden}.route:before{content:"";position:absolute;left:8%;right:8%;top:72px;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px}.car{position:absolute;top:55px;width:36px;height:22px;border-radius:10px;background:var(--warn);box-shadow:0 0 24px rgba(250,204,21,.35)}.car.one{left:14%;animation:drive1 4s infinite ease-in-out}.car.two{right:14%;background:var(--accent);animation:drive2 4s infinite ease-in-out}@keyframes drive1{50%{left:45%}}@keyframes drive2{50%{right:45%}}.resource-card{background:linear-gradient(180deg,rgba(34,211,238,.10),rgba(20,184,166,.05));position:relative;overflow:hidden}.resource-card:before{content:"";position:absolute;right:-70px;top:-70px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(250,204,21,.22),transparent 68%)}.resource-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.button.secondary{background:rgba(255,255,255,.06)}@media(max-width:900px){.index-grid{grid-template-columns:1fr}}</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Персональный учебный навигатор Софии Кальней для подготовки к ОГЭ по математике.">
+  <title>София Кальней · траектория подготовки к ОГЭ</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231c3151'/%3E%3Cpath d='M14 44h36M17 39c8-27 22-27 30 0' fill='none' stroke='%23f3a683' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='24' cy='28' r='4' fill='%238bd3c7'/%3E%3Ccircle cx='40' cy='28' r='4' fill='%23fff7eb'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f1e8;
+      --surface: #fffdf8;
+      --surface-2: #f0e9dd;
+      --ink: #1c3151;
+      --muted: #667184;
+      --line: #ded6ca;
+      --navy: #1c3151;
+      --teal: #287f7a;
+      --teal-soft: #d8eee8;
+      --coral: #e77b5e;
+      --coral-soft: #f9ded4;
+      --gold: #d99b36;
+      --gold-soft: #f8e9c8;
+      --shadow: 0 18px 50px rgba(40, 50, 65, .09);
+      --radius: 24px;
+      --max: 1320px;
+      --heat-0: #e8e3dc;
+      --heat-1: #f4b5a4;
+      --heat-2: #f1cf7c;
+      --heat-3: #9dd8ca;
+      --heat-4: #287f7a;
+    }
+    body[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #101b2d;
+      --surface: #17263c;
+      --surface-2: #20314a;
+      --ink: #f7f1e8;
+      --muted: #afbac9;
+      --line: #33465f;
+      --navy: #f7f1e8;
+      --teal: #80cfc2;
+      --teal-soft: #1e4d4c;
+      --coral: #f39b82;
+      --coral-soft: #58392f;
+      --gold: #efbd64;
+      --gold-soft: #514326;
+      --shadow: 0 18px 50px rgba(0, 0, 0, .25);
+      --heat-0: #344258;
+      --heat-1: #8f5147;
+      --heat-2: #846c35;
+      --heat-3: #39756e;
+      --heat-4: #80cfc2;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 8% 0, rgba(231, 123, 94, .12), transparent 30rem),
+        radial-gradient(circle at 92% 8%, rgba(40, 127, 122, .12), transparent 32rem),
+        var(--bg);
+      color: var(--ink);
+      font: 16px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; text-decoration: none; }
+    .skip {
+      position: fixed; left: 12px; top: -80px; z-index: 1000;
+      padding: 10px 14px; border-radius: 12px; background: var(--ink); color: var(--surface);
+    }
+    .skip:focus { top: 12px; }
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 82%, transparent);
+      background: color-mix(in srgb, var(--bg) 84%, transparent);
+      backdrop-filter: blur(18px);
+    }
+    .nav {
+      max-width: var(--max); margin: auto; min-height: 68px; padding: 10px 22px;
+      display: flex; align-items: center; gap: 18px;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 850; letter-spacing: -.02em; }
+    .brand-mark {
+      width: 40px; height: 40px; border-radius: 14px; display: grid; place-items: center;
+      color: #fff; background: var(--navy); box-shadow: inset 0 0 0 1px rgba(255,255,255,.16);
+    }
+    .nav-links { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+    .nav-links a, .icon-btn {
+      border: 0; border-radius: 12px; padding: 9px 11px; background: transparent;
+      color: var(--muted); cursor: pointer; font-weight: 700;
+    }
+    .nav-links a:hover, .nav-links a:focus-visible, .icon-btn:hover, .icon-btn:focus-visible {
+      color: var(--ink); background: var(--surface-2); outline: none;
+    }
+    .icon-btn { border: 1px solid var(--line); min-width: 42px; color: var(--ink); }
+    .shell { max-width: var(--max); margin: auto; padding: 32px 22px 72px; }
+    .eyebrow {
+      margin: 0 0 10px; color: var(--teal); font-size: .78rem; font-weight: 900;
+      letter-spacing: .13em; text-transform: uppercase;
+    }
+    .hero {
+      display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(310px, .65fr);
+      gap: 22px; align-items: stretch;
+    }
+    .hero-copy, .continue-card, .panel, .lesson-card {
+      border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .hero-copy { padding: clamp(26px, 5vw, 58px); position: relative; overflow: hidden; }
+    .hero-copy::after {
+      content: ""; position: absolute; width: 280px; height: 280px; right: -95px; bottom: -120px;
+      border: 48px solid var(--teal-soft); border-radius: 50%; opacity: .75; pointer-events: none;
+    }
+    h1 {
+      max-width: 840px; margin: 0; font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.45rem, 6vw, 5.5rem); line-height: .98; letter-spacing: -.045em;
+    }
+    .lead { max-width: 720px; margin: 22px 0 0; color: var(--muted); font-size: clamp(1.03rem, 2vw, 1.22rem); }
+    .continue-card { padding: 26px; display: flex; flex-direction: column; gap: 18px; }
+    .continue-card h2 { margin: 0; font-size: 1.45rem; }
+    .continue-card p { margin: 0; color: var(--muted); }
+    .continue-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px;
+      border-radius: 999px; background: var(--surface-2); color: var(--muted); font-size: .83rem; font-weight: 750;
+    }
+    .btn {
+      border: 1px solid var(--line); border-radius: 14px; padding: 11px 15px;
+      background: var(--surface); color: var(--ink); cursor: pointer; font-weight: 800;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn:hover, .btn:focus-visible { transform: translateY(-1px); border-color: var(--teal); outline: none; }
+    .btn.primary { background: var(--navy); color: var(--surface); border-color: var(--navy); }
+    body[data-theme="dark"] .btn.primary { color: #142239; }
+    .continue-card .btn { margin-top: auto; align-self: flex-start; }
+    .stats {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 18px 0 0;
+    }
+    .stat { padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+    .stat b { display: block; font: 750 clamp(1.45rem, 3vw, 2.15rem)/1 Georgia, serif; }
+    .stat span { display: block; margin-top: 7px; color: var(--muted); font-size: .86rem; }
+    .section-head {
+      margin: 54px 0 18px; display: flex; align-items: end; justify-content: space-between; gap: 18px;
+    }
+    .section-head h2 { margin: 0; font: 750 clamp(1.8rem, 4vw, 3rem)/1.05 Georgia, serif; letter-spacing: -.025em; }
+    .section-head p { max-width: 650px; margin: 7px 0 0; color: var(--muted); }
+    .heatmap-panel { padding: 22px; }
+    .heat-toolbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      margin-bottom: 18px; flex-wrap: wrap;
+    }
+    .filters { display: flex; gap: 7px; flex-wrap: wrap; }
+    .filter {
+      border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px;
+      background: transparent; color: var(--muted); cursor: pointer; font-weight: 760;
+    }
+    .filter[aria-pressed="true"] { background: var(--navy); color: var(--surface); border-color: var(--navy); }
+    body[data-theme="dark"] .filter[aria-pressed="true"] { color: #142239; }
+    .legend { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: .8rem; }
+    .legend-cell { width: 21px; height: 21px; border-radius: 6px; border: 1px solid rgba(0,0,0,.05); }
+    .radial-layout {
+      display: grid; grid-template-columns: minmax(520px, 1.25fr) minmax(280px, .75fr);
+      gap: 22px; align-items: center;
+    }
+    .radial-stage {
+      position: relative; width: min(100%, 760px); aspect-ratio: 1; margin: auto;
+      border-radius: 50%; background: radial-gradient(circle, var(--surface) 0 22%, transparent 22.5%);
+    }
+    .radial-map { width: 100%; height: 100%; display: block; overflow: visible; }
+    .radial-cell {
+      cursor: pointer; stroke: var(--surface); stroke-width: 2;
+      transition: opacity .18s ease, filter .18s ease, transform .18s ease;
+      transform-box: fill-box; transform-origin: center;
+    }
+    .radial-cell:hover, .radial-cell:focus {
+      filter: drop-shadow(0 6px 6px rgba(28,49,81,.24)); outline: none; transform: scale(1.025);
+    }
+    .radial-cell.is-muted { opacity: .12; }
+    .radial-group-arc { fill: var(--navy); stroke: var(--surface); stroke-width: 3; cursor: pointer; }
+    .radial-group-label {
+      fill: var(--ink); font-size: 14px; font-weight: 850; text-anchor: middle;
+      pointer-events: none;
+    }
+    .radial-ring-label { fill: var(--muted); font-size: 11px; text-anchor: middle; pointer-events: none; }
+    .radial-center {
+      position: absolute; inset: 35%; display: grid; place-content: center; text-align: center;
+      border-radius: 50%; padding: 18px; pointer-events: none;
+    }
+    .radial-center b { font: 750 clamp(1.45rem, 3vw, 2.4rem)/1 Georgia, serif; }
+    .radial-center span { margin-top: 7px; color: var(--muted); font-size: .78rem; }
+    .topic-index { display: grid; gap: 7px; max-height: 650px; overflow: auto; padding-right: 5px; }
+    .topic-group {
+      border: 1px solid var(--line); border-radius: 16px; background: var(--surface); overflow: hidden;
+    }
+    .topic-group summary {
+      list-style: none; padding: 12px 14px; cursor: pointer; display: flex;
+      align-items: center; justify-content: space-between; gap: 10px; font-weight: 850;
+    }
+    .topic-group summary::-webkit-details-marker { display: none; }
+    .topic-group summary::after { content: "+"; color: var(--teal); font-size: 1.15rem; }
+    .topic-group[open] summary::after { content: "−"; }
+    .topic-group small { color: var(--muted); font-weight: 650; }
+    .topic-list { display: grid; gap: 1px; padding: 0 7px 7px; }
+    .topic-row {
+      width: 100%; border: 0; border-radius: 10px; padding: 8px 9px; background: transparent;
+      color: var(--ink); text-align: left; cursor: pointer; display: grid;
+      grid-template-columns: 13px 1fr auto; gap: 8px; align-items: center; font-size: .82rem;
+    }
+    .topic-row:hover, .topic-row:focus-visible { background: var(--surface-2); outline: none; }
+    .topic-dot { width: 11px; height: 11px; border-radius: 4px; }
+    .topic-level { color: var(--muted); font-size: .72rem; }
+    .map-source { margin: 15px 0 0; color: var(--muted); font-size: .78rem; text-align: center; }
+    .map-source a { color: var(--teal); text-decoration: underline; text-underline-offset: 3px; }
+    .recommendation {
+      margin-top: 16px; padding: 18px; border-radius: 18px; background: var(--coral-soft);
+      display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px;
+    }
+    .recommendation-icon {
+      width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center;
+      background: var(--coral); color: #fff; font-weight: 900;
+    }
+    .recommendation b, .recommendation span { display: block; }
+    .recommendation span { color: var(--muted); font-size: .87rem; margin-top: 3px; }
+    .routes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .lesson-card { padding: 22px; display: flex; flex-direction: column; min-height: 310px; }
+    .lesson-card:nth-child(1) { border-top: 5px solid var(--teal); }
+    .lesson-card:nth-child(2) { border-top: 5px solid var(--coral); }
+    .lesson-card:nth-child(3) { border-top: 5px solid var(--gold); }
+    .lesson-number {
+      display: flex; justify-content: space-between; align-items: center; color: var(--muted);
+      font-size: .8rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .lesson-card h3 { margin: 28px 0 10px; font: 750 1.55rem/1.1 Georgia, serif; }
+    .lesson-card p { color: var(--muted); margin: 0; }
+    .skills { display: flex; flex-wrap: wrap; gap: 6px; margin: 18px 0; }
+    .lesson-card .btn { margin-top: auto; align-self: flex-start; }
+    .lesson-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; }
+    .lesson-actions .btn { margin-top: 0; }
+    .resource-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+    .resource-row {
+      padding: 12px; border: 1px solid var(--line); border-radius: 14px;
+      display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;
+    }
+    .resource-row b { display: block; font-size: .86rem; }
+    .resource-row small { color: var(--muted); }
+    .resource-links { display: flex; gap: 6px; }
+    .resource-links a {
+      min-width: 42px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 9px;
+      text-align: center; font-size: .72rem; font-weight: 850;
+    }
+    .resource-links a:hover { border-color: var(--teal); background: var(--teal-soft); }
+    .materials {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .materials .panel { padding: 22px; }
+    .materials h3 { margin: 0 0 7px; }
+    .materials p { margin: 0 0 15px; color: var(--muted); }
+    .file-list { display: grid; gap: 8px; }
+    .file-link {
+      padding: 10px 12px; border: 1px solid var(--line); border-radius: 13px;
+      display: flex; justify-content: space-between; gap: 14px; font-size: .88rem;
+    }
+    .file-link:hover { border-color: var(--teal); background: var(--teal-soft); }
+    .footer {
+      border-top: 1px solid var(--line); padding: 24px 22px 38px; color: var(--muted); text-align: center; font-size: .88rem;
+    }
+    .dialog {
+      width: min(600px, calc(100vw - 28px)); border: 1px solid var(--line); border-radius: 24px;
+      padding: 0; background: var(--surface); color: var(--ink); box-shadow: 0 30px 90px rgba(0,0,0,.28);
+    }
+    .dialog::backdrop { background: rgba(9, 18, 32, .6); backdrop-filter: blur(5px); }
+    .dialog-inner { padding: 24px; }
+    .dialog-head { display: flex; justify-content: space-between; gap: 14px; align-items: start; }
+    .dialog h2 { margin: 5px 0 0; font: 750 1.75rem/1.08 Georgia, serif; }
+    .close-btn {
+      width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 12px;
+      background: transparent; color: var(--ink); cursor: pointer; font-size: 1.3rem;
+    }
+    .dialog-description { color: var(--muted); }
+    .level-picker { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; margin: 20px 0; }
+    .level-btn {
+      min-height: 62px; padding: 7px 4px; border: 2px solid transparent; border-radius: 13px;
+      cursor: pointer; color: #24344d; font-size: .72rem; font-weight: 850;
+    }
+    .level-btn[data-level="0"] { background: var(--heat-0); color: var(--muted); }
+    .level-btn[data-level="1"] { background: var(--heat-1); }
+    .level-btn[data-level="2"] { background: var(--heat-2); }
+    .level-btn[data-level="3"] { background: var(--heat-3); }
+    .level-btn[data-level="4"] { background: var(--heat-4); color: #fff; }
+    .level-btn[aria-pressed="true"] { border-color: var(--ink); transform: translateY(-2px); }
+    .dialog-actions { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+    .dialog-note {
+      margin: 18px 0; padding: 14px; border-radius: 15px; background: var(--surface-2); color: var(--muted); font-size: .88rem;
+    }
+    [hidden] { display: none !important; }
+    @media (max-width: 1000px) {
+      .hero { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .radial-layout { grid-template-columns: 1fr; }
+      .topic-index { max-height: none; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+      .routes { grid-template-columns: 1fr; }
+      .lesson-card { min-height: 0; }
+    }
+    @media (max-width: 720px) {
+      .nav { padding-inline: 14px; }
+      .nav-links a { display: none; }
+      .shell { padding: 20px 13px 54px; }
+      .hero-copy, .continue-card { padding: 22px; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .heatmap-panel { padding: 14px; }
+      .radial-stage { width: min(100%, 620px); }
+      .topic-index { grid-template-columns: 1fr; }
+      .recommendation { grid-template-columns: auto 1fr; }
+      .recommendation .btn { grid-column: 1 / -1; }
+      .materials { grid-template-columns: 1fr; }
+      .resource-grid { grid-template-columns: 1fr; }
+      .section-head { margin-top: 42px; align-items: start; flex-direction: column; }
+    }
+    @media (max-width: 420px) {
+      .stats { grid-template-columns: 1fr; }
+      .radial-group-label { font-size: 11px; }
+      .level-picker { grid-template-columns: 1fr; }
+      .level-btn { min-height: 44px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+    }
+    @media print {
+      .topbar, .filters, .icon-btn, .btn, .dialog, .recommendation { display: none !important; }
+      body { background: #fff; }
+      .shell { max-width: none; padding: 0; }
+      .hero-copy, .continue-card, .panel, .lesson-card, .stat { box-shadow: none; }
+      .radial-cell { print-color-adjust: exact; }
+    }
+  </style>
 </head>
-<body class="details-standard" data-theme="dark">
-<a class="skip" href="#main">К содержанию</a>
-<header class="topbar"><nav class="nav"><a class="brand" href="index.html"><span class="brand-mark">S</span><span>София Кальней · движение</span></a><div class="navlinks"><a href="motion-basic.html">Базовые модели</a><a href="motion-advanced.html">Продвинутые модели</a><a href="09-07-26.html">09.07.26</a><button class="button" data-theme-toggle>Светлая/тёмная тема</button></div></nav></header>
-<section class="hero" id="main"><div><h1>Навигатор по веб‑пособиям</h1><p class="lead">Многостраничный веб‑эквивалент двух пособий по текстовым задачам на движение. Страницы рассчитаны на уверенный уровень ученика, но объясняют материал с нуля и максимально наглядно.</p><div class="tagrow"><span class="tag">ОГЭ</span><span class="tag">только школьные методы</span><span class="tag">наглядные формулы</span><span class="tag">интерактивные схемы</span><span class="tag">печать</span></div></div><div class="hero-card"><h2>Как пользоваться</h2><p>Выберите пособие ниже. На каждой странице есть пошаговое раскрытие решения, интерактивная модель, зум, подсказки, генератор похожей задачи, мини‑квиз и самопроверка.</p><div class="route"><span class="car one"></span><span class="car two"></span></div></div></section>
-<main class="index-grid">
-<article class="card big-card"><div><span class="stage">Пособие 1</span><h2>Базовые задачи на движение</h2><p>Движение навстречу, задержка старта, движение вдогонку, расстояние между объектами, путь до точки и обратно, задачи с догонкой и разным временем прибытия.</p><div class="mathline"><math display="block"><mrow><mi>S</mi><mo>=</mo><mi>v</mi><mi>t</mi><mo>,</mo><mspace width="1em"/><msub><mi>v</mi><mtext>сбл</mtext></msub><mo>=</mo><msub><mi>v</mi><mn>1</mn></msub><mo>+</mo><msub><mi>v</mi><mn>2</mn></msub></mrow></math></div></div><a class="button primary" href="motion-basic.html">Открыть страницу</a></article>
-<article class="card big-card"><div><span class="stage">Пособие 2</span><h2>Продвинутые модели движения</h2><p>Разность времён, дробно‑рациональные уравнения, две ситуации и система, круговая трасса, противоположные точки, течение, плот и стоянка.</p><div class="mathline"><math display="block"><mrow><msub><mi>t</mi><mtext>медл</mtext></msub><mo>−</mo><msub><mi>t</mi><mtext>быстр</mtext></msub><mo>=</mo><mi>Δt</mi><mo>,</mo><mspace width="1em"/><msub><mi>v</mi><mtext>по теч.</mtext></msub><mo>=</mo><mi>x</mi><mo>+</mo><mi>u</mi></mrow></math></div></div><a class="button primary" href="motion-advanced.html">Открыть страницу</a></article>
-<article class="card big-card resource-card"><div><span class="stage">Материал 09.07.26</span><h2>Теория и тренажёр: смешанные текстовые задачи</h2><p>Отдельная интерактивная страница с темами про среднюю скорость, протяжённые объекты, догон и перегон, а также производительность. Внутри доступны наглядная схема, подробные шаги и раскрывающаяся иллюстрация для повторения материала.</p><div class="mathline"><math display="block"><mrow><msub><mi>v</mi><mtext>ср</mtext></msub><mo>=</mo><mfrac><msub><mi>S</mi><mtext>общ</mtext></msub><msub><mi>t</mi><mtext>общ</mtext></msub></mfrac><mo>,</mo><mspace width="1em"/><mi>A</mi><mo>=</mo><mi>p</mi><mo>·</mo><mi>t</mi></mrow></math></div></div><div class="resource-actions"><a class="button primary" href="09-07-26.html">Открыть страницу</a><a class="button secondary" href="../pdf_docs/09.07.26.pdf" download>Скачать конспект</a><a class="button secondary" href="../tex_docs/08.09.26.tex" download>Скачать редактируемый вариант</a></div></article>
-</main>
-<footer class="footer">Автор: Лёвин Артём Александрович. Учебный сайт для Софии Кальней.</footer>
-<section class="layout"><section class="content"><article class="card download-panel"><h2>Скачать материалы</h2><p class="note">Здесь собраны готовые конспекты и редактируемые варианты занятий для повторения и подготовки.</p><div class="download-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start"><div><h3>Редактируемые материалы</h3><ul><li><a href="../tex_docs/02.07.26.tex" download>02.07.26 — базовые задачи на движение</a></li><li><a href="../tex_docs/06.07.26.tex" download>06.07.26 — продвинутые модели движения</a></li><li><a href="../tex_docs/08.09.26.tex" download>09.07.26 — средняя скорость, протяженные тела, производительность</a></li></ul></div><div><h3>Готовые конспекты</h3><ul><li><a href="../pdf_docs/02.07.26.pdf" download>02.07.26 — базовые задачи на движение</a></li><li><a href="../pdf_docs/06.07.26.pdf" download>06.07.26 — продвинутые модели движения</a></li><li><a href="../pdf_docs/09.07.26.pdf" download>09.07.26 — средняя скорость, протяженные тела, производительность</a></li></ul></div></div></article></section></section><script>
-function byId(id){return document.getElementById(id)}
-function q(sel,root=document){return root.querySelector(sel)}
-function qa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
-function setTheme(t){document.body.dataset.theme=t;localStorage.setItem('sofya-theme',t)}
-function initTheme(){setTheme(localStorage.getItem('sofya-theme')||'dark');qa('[data-theme-toggle]').forEach(b=>b.addEventListener('click',()=>setTheme(document.body.dataset.theme==='dark'?'light':'dark')))}
-function initDetails(){const root=document.body;function apply(v){root.classList.remove('details-brief','details-standard','details-full');root.classList.add(v==='brief'?'details-brief':v==='full'?'details-full':'details-standard');qa('[data-detail-mode]').forEach(s=>s.value=v)}qa('[data-detail-mode]').forEach(s=>s.addEventListener('change',e=>apply(e.target.value)));apply('standard')}
-function initSteps(){let visible=1;const steps=qa('.step');function render(){steps.forEach((s,i)=>s.classList.toggle('hidden-step',i>=visible));byId('stepCounter')&&(byId('stepCounter').textContent=Math.min(visible,steps.length)+' / '+steps.length)}q('[data-next-step]')?.addEventListener('click',()=>{visible=Math.min(steps.length,visible+1);render()});q('[data-all-steps]')?.addEventListener('click',()=>{visible=steps.length;render()});q('[data-reset-steps]')?.addEventListener('click',()=>{visible=1;render();steps[0]?.scrollIntoView({behavior:'smooth',block:'center'})});render()}
-function initHints(){let active=null,timer=null;const tip=document.createElement('div');tip.className='tooltip';tip.setAttribute('role','tooltip');tip.setAttribute('aria-hidden','true');document.body.appendChild(tip);function hide(){tip.classList.remove('show');tip.setAttribute('aria-hidden','true');active=null;clearTimeout(timer)}function show(el){clearTimeout(timer);active=el;tip.innerHTML='<button class="close-tip" aria-label="Закрыть подсказку">×</button>'+el.dataset.hint;const r=el.getBoundingClientRect();let left=r.left,top=r.bottom+10;if(el.dataset.pos==='left'){left=r.left-340;top=r.top-6}else if(el.dataset.pos==='right'){left=r.right+10;top=r.top-6}else if(el.dataset.pos==='top'){top=r.top-10-tip.offsetHeight}tip.style.left=Math.max(12,Math.min(left,window.innerWidth-360))+'px';tip.style.top=Math.max(12,top)+'px';tip.classList.add('show');tip.setAttribute('aria-hidden','false');el.style.animation='hintBounce .45s';setTimeout(()=>el.style.animation='',500);timer=setTimeout(hide,15000);tip.querySelector('.close-tip').onclick=hide;qa('[data-tip-action]',tip).forEach(b=>b.onclick=()=>{const action=b.dataset.tipAction;if(action==='generate') byId('generateTask')?.click(); if(action==='example') document.querySelector('.step')?.scrollIntoView({behavior:'smooth'}); if(action==='switch') byId('modeSelect')&&(byId('modeSelect').selectedIndex=(byId('modeSelect').selectedIndex+1)%byId('modeSelect').options.length, byId('modeSelect').dispatchEvent(new Event('change')));hide()})}
-qa('.hint-trigger').forEach(el=>{el.tabIndex=0;el.setAttribute('aria-label','Интерактивная подсказка');el.addEventListener('mouseenter',()=>show(el));el.addEventListener('focus',()=>show(el));el.addEventListener('click',e=>{e.stopPropagation();show(el)})});document.addEventListener('click',e=>{if(!tip.contains(e.target)&&!e.target.classList.contains('hint-trigger'))hide()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){hide();closeModal()}});if(!sessionStorage.getItem('sofya-first-hint')){sessionStorage.setItem('sofya-first-hint','1');setTimeout(()=>{const h=q('.hint-trigger');h&&show(h)},3000)}}
-function drawGrid(ctx,w,h,state){ctx.clearRect(0,0,w,h);ctx.fillStyle=getComputedStyle(document.body).getPropertyValue('--canvas');ctx.fillRect(0,0,w,h);ctx.save();ctx.translate(state.panX,state.panY);ctx.scale(state.zoom,state.zoom);ctx.strokeStyle=getComputedStyle(document.body).getPropertyValue('--grid');ctx.lineWidth=1/state.zoom;for(let x=-w;x<w*2;x+=40){ctx.beginPath();ctx.moveTo(x,-h);ctx.lineTo(x,h*2);ctx.stroke()}for(let y=-h;y<h*2;y+=40){ctx.beginPath();ctx.moveTo(-w,y);ctx.lineTo(w*2,y);ctx.stroke()}ctx.restore()}
-function arrow(ctx,x1,y1,x2,y2,color,label){ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();const a=Math.atan2(y2-y1,x2-x1);ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-12*Math.cos(a-.45),y2-12*Math.sin(a-.45));ctx.lineTo(x2-12*Math.cos(a+.45),y2-12*Math.sin(a+.45));ctx.closePath();ctx.fill();if(label){ctx.font='700 15px system-ui';ctx.fillText(label,(x1+x2)/2-20,(y1+y2)/2-12)}}
-function label(ctx,text,x,y,color){ctx.fillStyle=color;ctx.font='800 16px system-ui';ctx.fillText(text,x,y)}
-function point(ctx,x,y,color,txt){ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,7,0,Math.PI*2);ctx.fill();ctx.font='800 16px system-ui';ctx.fillText(txt,x-8,y+28)}
-function attachPanZoom(canvas,state,redraw){let down=false,last=null;canvas.addEventListener('pointerdown',e=>{down=true;last=[e.clientX,e.clientY];canvas.setPointerCapture(e.pointerId)});canvas.addEventListener('pointermove',e=>{if(!down)return;state.panX+=e.clientX-last[0];state.panY+=e.clientY-last[1];last=[e.clientX,e.clientY];redraw()});canvas.addEventListener('pointerup',()=>down=false);canvas.addEventListener('wheel',e=>{e.preventDefault();state.zoom=Math.max(.55,Math.min(2.6,state.zoom+(e.deltaY<0?.08:-.08)));syncControls();redraw()},{passive:false})}
-function openModal(){byId('modalOverlay')?.classList.add('show');syncControls();drawAll()}
-function closeModal(){byId('modalOverlay')?.classList.remove('show')}
-function initQuiz(){qa('[data-quiz]').forEach(box=>{qa('.quiz-option',box).forEach(o=>o.addEventListener('click',()=>{qa('.quiz-option',box).forEach(x=>x.classList.remove('correct','wrong'));o.classList.add(o.dataset.correct==='true'?'correct':'wrong');q('.quiz-result',box).textContent=o.dataset.correct==='true'?'Верно: выбран ход, который соответствует модели.' :'Почти: проверь, какая величина в задаче больше и что именно спрашивают.'}))})}
-initTheme();initDetails();initSteps();initHints();initQuiz();
-</script>
-</body></html>
+<body data-theme="light">
+  <a class="skip" href="#main">Перейти к содержанию</a>
+  <header class="topbar">
+    <nav class="nav" aria-label="Основная навигация">
+      <a class="brand" href="index.html" aria-label="На главную">
+        <span class="brand-mark" aria-hidden="true">Σ</span>
+        <span>София · ОГЭ</span>
+      </a>
+      <div class="nav-links">
+        <a href="#competencies">Компетенции</a>
+        <a href="#lessons">Занятия</a>
+        <a href="#materials">Материалы</a>
+        <button class="icon-btn" id="printBtn" type="button" aria-label="Распечатать карту">⎙</button>
+        <button class="icon-btn" id="themeBtn" type="button" aria-label="Переключить тему">◐</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="shell" id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Персональная траектория подготовки</p>
+        <h1 id="hero-title">София, продолжаем движение к ОГЭ</h1>
+        <p class="lead">Здесь собраны занятия, интерактивные модели и карта навыков. Выбирайте следующий шаг по текущему уровню освоения.</p>
+      </div>
+      <aside class="continue-card" aria-labelledby="continue-title">
+        <div>
+          <p class="eyebrow">Следующий шаг</p>
+          <h2 id="continue-title">Отбор физически значимого корня</h2>
+        </div>
+        <p id="continueText">Повторите связь между графиком, областью допустимых значений и смыслом найденного ответа.</p>
+        <div class="continue-meta">
+          <span class="chip">≈ 15 минут</span>
+          <span class="chip">графики</span>
+          <span class="chip">самопроверка</span>
+        </div>
+        <a class="btn primary" id="continueLink" href="motion-basic.html">Продолжить →</a>
+      </aside>
+    </section>
+
+    <section class="stats" aria-label="Сводка прогресса">
+      <article class="stat"><b id="masteredCount">0</b><span>компетенций освоено</span></article>
+      <article class="stat"><b id="averageScore">0%</b><span>средний уровень карты</span></article>
+      <article class="stat"><b id="repeatCount">0</b><span>тем ждут диагностики или повторения</span></article>
+      <article class="stat"><b>3</b><span>интерактивных модуля</span></article>
+    </section>
+
+    <section id="competencies" aria-labelledby="competencies-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Диагностика</p>
+          <h2 id="competencies-title">Тепловая карта компетенций</h2>
+          <p>Круг охватывает всю программу математики ОГЭ-2026: от вычислений и уравнений до геометрии, вероятности и задач высокого уровня. Каждый сектор — тематический блок, каждое кольцо — отдельная тема.</p>
+        </div>
+        <button class="btn" id="resetMap" type="button">Сбросить карту</button>
+      </div>
+      <div class="panel heatmap-panel">
+        <div class="heat-toolbar">
+          <div class="filters" role="group" aria-label="Фильтр компетенций">
+            <button class="filter" data-filter="all" aria-pressed="true">Все</button>
+            <button class="filter" data-filter="repeat" aria-pressed="false">Повторить</button>
+            <button class="filter" data-filter="progress" aria-pressed="false">В процессе</button>
+            <button class="filter" data-filter="mastered" aria-pressed="false">Освоено</button>
+          </div>
+          <div class="legend" aria-label="Шкала уровней">
+            <span>начало</span>
+            <i class="legend-cell" style="background:var(--heat-0)"></i>
+            <i class="legend-cell" style="background:var(--heat-1)"></i>
+            <i class="legend-cell" style="background:var(--heat-2)"></i>
+            <i class="legend-cell" style="background:var(--heat-3)"></i>
+            <i class="legend-cell" style="background:var(--heat-4)"></i>
+            <span>уверенно</span>
+          </div>
+        </div>
+        <div class="radial-layout">
+          <div>
+            <div class="radial-stage">
+              <svg class="radial-map" id="radialMap" viewBox="0 0 800 800" role="img" aria-labelledby="radialTitle radialDescription">
+                <title id="radialTitle">Круговая тепловая карта компетенций ОГЭ</title>
+                <desc id="radialDescription">Десять тематических секторов и пять колец, показывающих уровень освоения отдельных тем.</desc>
+              </svg>
+              <div class="radial-center"><b id="radialPercent">0%</b><span>общая готовность<br><span id="radialTopicCount">0 тем</span></span></div>
+            </div>
+            <p class="map-source">Структура сверена с <a href="https://fipi.ru/oge/demoversii-specifikacii-kodifikatory" target="_blank" rel="noopener">документами ФИПИ ОГЭ-2026</a>.</p>
+          </div>
+          <div class="topic-index" id="topicIndex" aria-label="Список всех тем ОГЭ"></div>
+        </div>
+        <div class="recommendation" id="recommendation" aria-live="polite">
+          <div class="recommendation-icon">↗</div>
+          <div><b id="recommendationTitle">Рекомендация формируется</b><span id="recommendationText"></span></div>
+          <a class="btn" id="recommendationLink" href="motion-basic.html">Открыть тему</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="lessons" aria-labelledby="lessons-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Учебный маршрут</p>
+          <h2 id="lessons-title">Занятия и тренажёры</h2>
+          <p>Каждый модуль включает теорию, разобранные примеры, интерактивную модель, тренировку и мини-квиз.</p>
+        </div>
+      </div>
+      <div class="routes">
+        <article class="lesson-card">
+          <div class="lesson-number"><span>Модуль 01</span><span>02.07.26</span></div>
+          <h3>Базовые задачи на движение</h3>
+          <p>Встреча, задержка старта, догонка, путь до точки и обратно, расстояние между объектами.</p>
+          <div class="skills"><span class="chip">S = vt</span><span class="chip">движение</span></div>
+          <div class="lesson-actions"><a class="btn primary lesson-link" data-lesson="motion-basic" href="motion-basic.html">Открыть модуль</a></div>
+        </article>
+        <article class="lesson-card">
+          <div class="lesson-number"><span>Модуль 02</span><span>06.07.26</span></div>
+          <h3>Продвинутые модели движения</h3>
+          <p>Разность времён, движение по кругу, собственная скорость, течение и дробные уравнения.</p>
+          <div class="skills"><span class="chip">уравнения</span><span class="chip">течение</span></div>
+          <div class="lesson-actions"><a class="btn primary lesson-link" data-lesson="motion-advanced" href="motion-advanced.html">Открыть модуль</a></div>
+        </article>
+        <article class="lesson-card">
+          <div class="lesson-number"><span>Модуль 03</span><span>09.07.26</span></div>
+          <h3>Смешанные текстовые задачи</h3>
+          <p>Средняя скорость, протяжённые объекты, догон и перегон, совместная работа.</p>
+          <div class="skills"><span class="chip">средняя скорость</span><span class="chip">работа</span></div>
+          <div class="lesson-actions"><a class="btn primary lesson-link" data-lesson="mixed-text" href="09-07-26.html">Открыть модуль</a></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="materials" aria-labelledby="materials-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Библиотека</p>
+          <h2 id="materials-title">Материалы занятий</h2>
+        </div>
+      </div>
+      <div class="panel">
+        <p>Веб-уроки, готовые PDF и редактируемые TeX собраны по датам занятий.</p>
+        <div class="resource-grid">
+          <div class="resource-row"><div><b>02.07.26</b><small>Базовые задачи на движение</small></div><div class="resource-links"><a href="../pdf_docs/02.07.26.pdf" download>PDF</a><a href="../tex_docs/02.07.26.tex" download>TeX</a></div></div>
+          <div class="resource-row"><div><b>06.07.26</b><small>Продвинутые модели движения</small></div><div class="resource-links"><a href="../pdf_docs/06.07.26.pdf" download>PDF</a><a href="../tex_docs/06.07.26.tex" download>TeX</a></div></div>
+          <div class="resource-row"><div><b>09.07.26</b><small>Смешанные текстовые задачи</small></div><div class="resource-links"><a href="../pdf_docs/09.07.26.pdf" download>PDF</a><a href="../tex_docs/08.09.26.tex" download>TeX</a></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">Лёвин Артём Александрович · персональная траектория подготовки Софии Кальней</footer>
+
+  <dialog class="dialog" id="competencyDialog">
+    <div class="dialog-inner">
+      <div class="dialog-head">
+        <div><p class="eyebrow" id="dialogGroup"></p><h2 id="dialogTitle"></h2></div>
+        <button class="close-btn" id="closeDialog" type="button" aria-label="Закрыть">×</button>
+      </div>
+      <p class="dialog-description" id="dialogDescription"></p>
+      <div class="dialog-note" id="dialogEvidence"></div>
+      <p><b>Текущий уровень</b></p>
+      <div class="level-picker" id="levelPicker" role="group" aria-label="Выбор уровня">
+        <button class="level-btn" data-level="0">0<br>ещё не изучено</button>
+        <button class="level-btn" data-level="1">1<br>нужна помощь</button>
+        <button class="level-btn" data-level="2">2<br>в процессе</button>
+        <button class="level-btn" data-level="3">3<br>почти уверенно</button>
+        <button class="level-btn" data-level="4">4<br>освоено</button>
+      </div>
+      <div class="dialog-actions">
+        <a class="btn primary" id="dialogLink" href="#">Перейти к материалу</a>
+        <button class="btn" id="markRepeat" type="button">Добавить в повторение</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    (() => {
+      const STORAGE_KEY = "sofya-competence-map-v1";
+      const THEME_KEY = "sofya-site-theme";
+      const LAST_LESSON_KEY = "sofya-last-lesson";
+      const levels = ["Не изучено", "Нужна помощь", "В процессе", "Почти уверенно", "Освоено"];
+      const topic = (id, title, level, description, evidence, link = "index.html#lessons") =>
+        ({ id, title, level, description, evidence, link });
+      const groups = [
+        {id:"numbers",short:"Числа",title:"Числа и вычисления",subtitle:"арифметика и координатная прямая",items:[
+          topic("natural_integer","Натуральные и целые числа",0,"Арифметические действия, делимость, признаки делимости и порядок действий.","Диагностика пока не проводилась."),
+          topic("fractions","Обыкновенные и десятичные дроби",1,"Действия с дробями, сравнение и переход между формами записи.","Используются в задачах на скорость; нужна отдельная диагностика.","motion-basic.html"),
+          topic("percent","Проценты и пропорции",1,"Процент от числа, изменение величины, отношения и пропорции.","Встречаются в смешанных текстовых задачах.","09-07-26.html"),
+          topic("powers_roots","Степени и квадратные корни",0,"Свойства степеней, стандартный вид числа и арифметический квадратный корень.","Диагностика пока не проводилась."),
+          topic("number_line","Координатная прямая и модуль",0,"Сравнение чисел, промежутки, расстояние между точками и модуль.","Материал ещё не добавлен.")
+        ]},
+        {id:"expressions",short:"Выражения",title:"Алгебраические выражения",subtitle:"преобразования и последовательности",items:[
+          topic("monomials","Одночлены и степени",0,"Стандартный вид одночлена, умножение и возведение в степень.","Диагностика пока не проводилась."),
+          topic("polynomials","Многочлены и формулы",0,"Сложение, умножение и формулы сокращённого умножения.","Материал ещё не добавлен."),
+          topic("factorization","Разложение на множители",0,"Вынесение общего множителя, группировка и применение формул.","Диагностика пока не проводилась."),
+          topic("algebraic_fractions","Алгебраические дроби",2,"ОДЗ, сокращение дробей и преобразование дробно-рациональных выражений.","Применяются в продвинутых моделях движения.","motion-advanced.html"),
+          topic("progressions","Последовательности и прогрессии",0,"Арифметическая и геометрическая прогрессии, формула n-го члена.","Материал ещё не добавлен.")
+        ]},
+        {id:"equations",short:"Уравнения",title:"Уравнения и системы",subtitle:"алгебраическая модель задачи",items:[
+          topic("linear_eq","Линейные уравнения",2,"Решение линейных уравнений и проверка найденного значения.","Используются в базовых задачах на движение.","motion-basic.html"),
+          topic("quadratic_eq","Квадратные уравнения",0,"Дискриминант, корни и теорема Виета.","Диагностика пока не проводилась."),
+          topic("rational_eq","Дробно-рациональные уравнения",2,"ОДЗ, общий знаменатель и проверка корней.","Разность времён приводит к дробным уравнениям.","motion-advanced.html"),
+          topic("systems_eq","Системы уравнений",2,"Решение систем и составление нескольких условий модели.","Системы применяются в продвинутых задачах движения.","motion-advanced.html"),
+          topic("equation_models","Составление уравнения по условию",3,"Перевод текста на язык переменных, формул и уравнений.","Основной навык всех трёх модулей.","09-07-26.html")
+        ]},
+        {id:"inequalities",short:"Неравенства",title:"Неравенства",subtitle:"числовые промежутки и системы",items:[
+          topic("linear_ineq","Линейные неравенства",0,"Равносильные преобразования и запись ответа промежутком.","Диагностика пока не проводилась."),
+          topic("quadratic_ineq","Квадратные неравенства",0,"Парабола, корни и промежутки знакопостоянства.","Материал ещё не добавлен."),
+          topic("rational_ineq","Рациональные неравенства",0,"Метод интервалов, нули числителя и знаменателя.","Диагностика пока не проводилась."),
+          topic("systems_ineq","Системы неравенств",0,"Пересечение решений и совместное выполнение ограничений.","Материал ещё не добавлен."),
+          topic("intervals","Числовые промежутки",0,"Скобки, объединение и пересечение промежутков.","Диагностика пока не проводилась.")
+        ]},
+        {id:"functions",short:"Функции",title:"Функции и графики",subtitle:"формулы и графическая информация",items:[
+          topic("linear_function","Линейная функция",1,"Коэффициенты, график прямой, нули и промежутки знака.","Нужна отдельная диагностика."),
+          topic("quadratic_function","Квадратичная функция",0,"Парабола, вершина, ось симметрии и пересечения с осями.","Материал ещё не добавлен."),
+          topic("inverse_function","Обратная пропорциональность",1,"Гипербола и зависимость величин вида y=k/x.","Связана с зависимостью времени от скорости.","motion-advanced.html"),
+          topic("graph_reading","Чтение графиков",1,"Извлечение значений, сравнение и интерпретация графической зависимости.","Визуальные модели присутствуют в уроках движения.","motion-basic.html"),
+          topic("graph_transform","Формула ↔ график",0,"Распознавание графика по формуле и свойствам функции.","Диагностика пока не проводилась.")
+        ]},
+        {id:"practical",short:"Практика 1–5",title:"Практико-ориентированные задачи",subtitle:"единый сюжет заданий 1–5",items:[
+          topic("plans","Планы, схемы и участки",0,"Чтение плана, расстояния, площади и расположение объектов.","Материал ещё не добавлен."),
+          topic("tariffs","Тарифы, покупки и чеки",0,"Сравнение вариантов, стоимость и процентные изменения.","Диагностика пока не проводилась."),
+          topic("tables","Таблицы и диаграммы",1,"Извлечение данных и выполнение вычислений по таблице или диаграмме.","Нужна отдельная диагностика."),
+          topic("units_scale","Единицы и масштаб",2,"Перевод единиц длины и времени, масштаб и согласование величин.","Системно применяется в задачах движения.","motion-basic.html"),
+          topic("practical_choice","Выбор и оптимизация",0,"Сравнение условий и выбор наиболее выгодного или допустимого варианта.","Материал ещё не добавлен.")
+        ]},
+        {id:"word",short:"Текстовые",title:"Текстовые задачи",subtitle:"движение, работа, смеси",items:[
+          topic("motion","Движение",3,"Встреча, догонка, путь туда и обратно, течение и движение по кругу.","Основное направление двух больших модулей.","motion-basic.html"),
+          topic("average_speed","Средняя скорость",3,"Общий путь, общее время и средняя скорость на нескольких участках.","Разобрано в тренажёре 09.07.26.","09-07-26.html"),
+          topic("extended_objects","Протяжённые объекты",2,"Поезда, платформы и относительная скорость при прохождении объектов.","Разобрано в тренажёре 09.07.26.","09-07-26.html"),
+          topic("work","Работа и производительность",2,"Индивидуальная и совместная производительность, время выполнения.","Разобрано в тренажёре 09.07.26.","09-07-26.html"),
+          topic("mixtures","Смеси, сплавы и концентрации",0,"Масса вещества, концентрация и процентные соотношения.","Материал ещё не добавлен.")
+        ]},
+        {id:"probability",short:"Данные",title:"Вероятность и статистика",subtitle:"случайные события и анализ данных",items:[
+          topic("classic_prob","Классическая вероятность",0,"Равновозможные исходы и вероятность события.","Диагностика пока не проводилась."),
+          topic("counting","Перебор и комбинаторика",0,"Организованный перебор вариантов и правило умножения.","Материал ещё не добавлен."),
+          topic("statistics","Среднее, медиана и размах",0,"Основные статистические характеристики набора данных.","Диагностика пока не проводилась."),
+          topic("charts","Таблицы и диаграммы данных",0,"Столбчатые, круговые диаграммы и частотные таблицы.","Материал ещё не добавлен."),
+          topic("data_analysis","Интерпретация данных",0,"Выводы по выборке, сравнение показателей и проверка утверждений.","Диагностика пока не проводилась.")
+        ]},
+        {id:"geometry",short:"Геометрия",title:"Основы планиметрии",subtitle:"фигуры и измерения",items:[
+          topic("triangles","Треугольники",0,"Углы, признаки равенства, площади и замечательные линии.","Диагностика пока не проводилась."),
+          topic("quadrilaterals","Четырёхугольники",0,"Параллелограмм, трапеция, ромб и прямоугольник.","Материал ещё не добавлен."),
+          topic("circle","Окружность и круг",0,"Хорды, касательные, вписанные и центральные углы.","Диагностика пока не проводилась."),
+          topic("coordinates_vectors","Координаты и векторы",0,"Координаты точек, расстояния, векторы и скалярное произведение.","Материал ещё не добавлен."),
+          topic("areas","Площади и периметры",0,"Измерение геометрических величин и применение формул.","Диагностика пока не проводилась.")
+        ]},
+        {id:"advanced_geometry",short:"Геометрия 2",title:"Геометрия повышенного уровня",subtitle:"задачи 23–25",items:[
+          topic("right_triangle","Прямоугольный треугольник",0,"Теорема Пифагора, катеты, высота и метрические соотношения.","Диагностика пока не проводилась."),
+          topic("similarity","Подобие",0,"Признаки подобия и отношения соответствующих элементов.","Материал ещё не добавлен."),
+          topic("trig_geometry","Тригонометрия в геометрии",0,"Синус, косинус, тангенс и решение треугольников.","Диагностика пока не проводилась."),
+          topic("proofs","Геометрические доказательства",0,"Логическое доказательство утверждений и построение цепочки аргументов.","Материал ещё не добавлен."),
+          topic("high_geometry","Задача №25",0,"Комбинированная планиметрическая задача высокого уровня.","Диагностика пока не проводилась.")
+        ]}
+      ];
+      const allItems = groups.flatMap(group => group.items.map(item => ({ ...item, groupId: group.id, groupTitle: group.title })));
+      let state = loadState();
+      let activeId = null;
+      let currentFilter = "all";
+
+      const $ = selector => document.querySelector(selector);
+      const $$ = selector => [...document.querySelectorAll(selector)];
+
+      function loadState() {
+        const defaults = Object.fromEntries(allItems.map(item => [item.id, item.level]));
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+          return { ...defaults, ...saved };
+        } catch {
+          return defaults;
+        }
+      }
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+      function itemState(item) {
+        return Math.max(0, Math.min(4, Number(state[item.id] ?? item.level)));
+      }
+      function matchesFilter(level) {
+        if (currentFilter === "repeat") return level <= 1;
+        if (currentFilter === "progress") return level === 2 || level === 3;
+        if (currentFilter === "mastered") return level === 4;
+        return true;
+      }
+      function polar(radius, angle) {
+        const radians = (angle - 90) * Math.PI / 180;
+        return { x: 400 + radius * Math.cos(radians), y: 400 + radius * Math.sin(radians) };
+      }
+      function arcPath(innerRadius, outerRadius, startAngle, endAngle) {
+        const outerStart = polar(outerRadius, startAngle);
+        const outerEnd = polar(outerRadius, endAngle);
+        const innerEnd = polar(innerRadius, endAngle);
+        const innerStart = polar(innerRadius, startAngle);
+        const large = endAngle - startAngle > 180 ? 1 : 0;
+        return [
+          `M ${outerStart.x} ${outerStart.y}`,
+          `A ${outerRadius} ${outerRadius} 0 ${large} 1 ${outerEnd.x} ${outerEnd.y}`,
+          `L ${innerEnd.x} ${innerEnd.y}`,
+          `A ${innerRadius} ${innerRadius} 0 ${large} 0 ${innerStart.x} ${innerStart.y}`,
+          "Z"
+        ].join(" ");
+      }
+      function renderHeatmap() {
+        const svg = $("#radialMap");
+        const sectorSize = 360 / groups.length;
+        const innerRadius = 145;
+        const ringWidth = 43;
+        const sectorGap = 1.5;
+        let svgContent = "";
+        groups.forEach((group, groupIndex) => {
+          const start = groupIndex * sectorSize + sectorGap;
+          const end = (groupIndex + 1) * sectorSize - sectorGap;
+          const groupTarget = [...group.items].sort((a, b) => itemState(a) - itemState(b))[0];
+          svgContent += `<path class="radial-group-arc" data-id="${groupTarget.id}" d="${arcPath(112, 137, start, end)}" tabindex="0"><title>${group.title}</title></path>`;
+          group.items.forEach((item, itemIndex) => {
+            const level = itemState(item);
+            const ringInner = innerRadius + itemIndex * ringWidth;
+            const ringOuter = ringInner + ringWidth - 4;
+            const muted = matchesFilter(level) ? "" : " is-muted";
+            svgContent += `<path class="radial-cell${muted}" data-id="${item.id}" data-level="${level}" fill="var(--heat-${level})" d="${arcPath(ringInner, ringOuter, start, end)}" tabindex="0" role="button" aria-label="${item.title}: ${levels[level]}"><title>${group.title} · ${item.title}: ${levels[level]}</title></path>`;
+          });
+          const labelPoint = polar(382, start + (end - start) / 2);
+          svgContent += `<text class="radial-group-label" x="${labelPoint.x}" y="${labelPoint.y}" dy=".35em">${group.short}</text>`;
+        });
+        [1, 2, 3, 4, 5].forEach((ring, index) => {
+          const point = polar(innerRadius + index * ringWidth + ringWidth / 2, 0);
+          svgContent += `<text class="radial-ring-label" x="${point.x}" y="${point.y}" dy=".35em">${ring}</text>`;
+        });
+        svg.innerHTML = `<title id="radialTitle">Круговая тепловая карта компетенций ОГЭ</title><desc id="radialDescription">Десять тематических секторов и пять колец с пятьюдесятью темами.</desc>${svgContent}`;
+        $("#topicIndex").innerHTML = groups.map((group, index) => `
+          <details class="topic-group" ${index === 4 ? "open" : ""}>
+            <summary><span>${group.title}</span><small>${group.items.length} тем</small></summary>
+            <div class="topic-list">
+              ${group.items.map(item => {
+                const level = itemState(item);
+                return `<button class="topic-row" data-id="${item.id}" ${matchesFilter(level) ? "" : "hidden"}>
+                  <i class="topic-dot" style="background:var(--heat-${level})"></i>
+                  <span>${item.title}</span><span class="topic-level">${level}/4</span>
+                </button>`;
+              }).join("")}
+            </div>
+          </details>
+        `).join("");
+        $$(".radial-cell, .radial-group-arc, .topic-row").forEach(cell => {
+          cell.addEventListener("click", () => openCompetency(cell.dataset.id));
+          cell.addEventListener("keydown", event => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              openCompetency(cell.dataset.id);
+            }
+          });
+        });
+        updateSummary();
+      }
+      function updateSummary() {
+        const values = allItems.map(itemState);
+        const mastered = values.filter(value => value === 4).length;
+        const repeat = values.filter(value => value <= 1).length;
+        const average = Math.round(values.reduce((sum, value) => sum + value, 0) / (values.length * 4) * 100);
+        $("#masteredCount").textContent = `${mastered} / ${values.length}`;
+        $("#averageScore").textContent = `${average}%`;
+        $("#repeatCount").textContent = repeat;
+        $("#radialPercent").textContent = `${average}%`;
+        $("#radialTopicCount").textContent = `${values.length} тем`;
+        const started = allItems.filter(item => itemState(item) > 0);
+        const weakest = [...(started.length ? started : allItems)].sort((a, b) => itemState(a) - itemState(b))[0];
+        $("#recommendationTitle").textContent = `Следующий фокус: ${weakest.title}`;
+        $("#recommendationText").textContent = weakest.description;
+        $("#recommendationLink").href = weakest.link;
+        $("#continue-title").textContent = weakest.title;
+        $("#continueText").textContent = weakest.description;
+        $("#continueLink").href = weakest.link;
+      }
+      function openCompetency(id) {
+        const item = allItems.find(candidate => candidate.id === id);
+        if (!item) return;
+        activeId = id;
+        $("#dialogGroup").textContent = item.groupTitle;
+        $("#dialogTitle").textContent = item.title;
+        $("#dialogDescription").textContent = item.description;
+        $("#dialogEvidence").textContent = item.evidence;
+        $("#dialogLink").href = item.link;
+        updateLevelPicker();
+        $("#competencyDialog").showModal();
+      }
+      function updateLevelPicker() {
+        $$(".level-btn").forEach(button => {
+          button.setAttribute("aria-pressed", String(Number(button.dataset.level) === itemState({ id: activeId, level: 0 })));
+        });
+      }
+      $$(".level-btn").forEach(button => button.addEventListener("click", () => {
+        if (!activeId) return;
+        state[activeId] = Number(button.dataset.level);
+        saveState();
+        updateLevelPicker();
+        renderHeatmap();
+      }));
+      $("#markRepeat").addEventListener("click", () => {
+        if (!activeId) return;
+        state[activeId] = 1;
+        saveState();
+        updateLevelPicker();
+        renderHeatmap();
+      });
+      $("#closeDialog").addEventListener("click", () => $("#competencyDialog").close());
+      $("#competencyDialog").addEventListener("click", event => {
+        if (event.target === $("#competencyDialog")) $("#competencyDialog").close();
+      });
+      $$(".filter").forEach(button => button.addEventListener("click", () => {
+        currentFilter = button.dataset.filter;
+        $$(".filter").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+        renderHeatmap();
+      }));
+      $("#resetMap").addEventListener("click", () => {
+        if (!confirm("Вернуть исходную оценку всех компетенций?")) return;
+        localStorage.removeItem(STORAGE_KEY);
+        state = loadState();
+        renderHeatmap();
+      });
+      $$(".lesson-link").forEach(link => link.addEventListener("click", () => {
+        localStorage.setItem(LAST_LESSON_KEY, link.dataset.lesson);
+      }));
+      $("#themeBtn").addEventListener("click", () => {
+        document.body.dataset.theme = document.body.dataset.theme === "dark" ? "light" : "dark";
+        localStorage.setItem(THEME_KEY, document.body.dataset.theme);
+      });
+      $("#printBtn").addEventListener("click", () => window.print());
+      document.body.dataset.theme = localStorage.getItem(THEME_KEY) || "light";
+      renderHeatmap();
+    })();
+  </script>
+</body>
+</html>
