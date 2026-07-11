@@ -161,32 +161,59 @@
     body[data-theme="dark"] .filter[aria-pressed="true"] { color: #142239; }
     .legend { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: .8rem; }
     .legend-cell { width: 21px; height: 21px; border-radius: 6px; border: 1px solid rgba(0,0,0,.05); }
-    .heat-groups { display: grid; gap: 18px; }
-    .heat-group { display: grid; grid-template-columns: 190px 1fr; gap: 14px; align-items: start; }
-    .heat-group-title { padding: 12px 0; }
-    .heat-group-title b { display: block; font-size: .93rem; }
-    .heat-group-title span { color: var(--muted); font-size: .78rem; }
-    .heat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
-    .heat-cell {
-      position: relative; min-height: 108px; padding: 13px; border: 0; border-radius: 16px;
-      color: #24344d; cursor: pointer; text-align: left; transition: transform .18s, box-shadow .18s;
+    .radial-layout {
+      display: grid; grid-template-columns: minmax(520px, 1.25fr) minmax(280px, .75fr);
+      gap: 22px; align-items: center;
     }
-    .heat-cell:hover, .heat-cell:focus-visible {
-      transform: translateY(-2px); box-shadow: 0 12px 24px rgba(32, 45, 62, .15); outline: 3px solid var(--surface);
+    .radial-stage {
+      position: relative; width: min(100%, 760px); aspect-ratio: 1; margin: auto;
+      border-radius: 50%; background: radial-gradient(circle, var(--surface) 0 22%, transparent 22.5%);
     }
-    .heat-cell[data-level="0"] { background: var(--heat-0); color: var(--muted); }
-    .heat-cell[data-level="1"] { background: var(--heat-1); }
-    .heat-cell[data-level="2"] { background: var(--heat-2); }
-    .heat-cell[data-level="3"] { background: var(--heat-3); }
-    .heat-cell[data-level="4"] { background: var(--heat-4); color: #fff; }
-    body[data-theme="dark"] .heat-cell:not([data-level="4"]) { color: #fff5ed; }
-    body[data-theme="dark"] .heat-cell[data-level="0"] { color: #c5ceda; }
-    .heat-cell b { display: block; padding-right: 28px; font-size: .9rem; line-height: 1.25; }
-    .heat-cell small { display: block; margin-top: 9px; opacity: .82; font-size: .72rem; }
-    .heat-score {
-      position: absolute; right: 10px; top: 10px; width: 25px; height: 25px; display: grid; place-items: center;
-      border-radius: 50%; background: rgba(255,255,255,.46); font-size: .72rem; font-weight: 900;
+    .radial-map { width: 100%; height: 100%; display: block; overflow: visible; }
+    .radial-cell {
+      cursor: pointer; stroke: var(--surface); stroke-width: 2;
+      transition: opacity .18s ease, filter .18s ease, transform .18s ease;
+      transform-box: fill-box; transform-origin: center;
     }
+    .radial-cell:hover, .radial-cell:focus {
+      filter: drop-shadow(0 6px 6px rgba(28,49,81,.24)); outline: none; transform: scale(1.025);
+    }
+    .radial-cell.is-muted { opacity: .12; }
+    .radial-group-arc { fill: var(--navy); stroke: var(--surface); stroke-width: 3; cursor: pointer; }
+    .radial-group-label {
+      fill: var(--ink); font-size: 14px; font-weight: 850; text-anchor: middle;
+      pointer-events: none;
+    }
+    .radial-ring-label { fill: var(--muted); font-size: 11px; text-anchor: middle; pointer-events: none; }
+    .radial-center {
+      position: absolute; inset: 35%; display: grid; place-content: center; text-align: center;
+      border-radius: 50%; padding: 18px; pointer-events: none;
+    }
+    .radial-center b { font: 750 clamp(1.45rem, 3vw, 2.4rem)/1 Georgia, serif; }
+    .radial-center span { margin-top: 7px; color: var(--muted); font-size: .78rem; }
+    .topic-index { display: grid; gap: 7px; max-height: 650px; overflow: auto; padding-right: 5px; }
+    .topic-group {
+      border: 1px solid var(--line); border-radius: 16px; background: var(--surface); overflow: hidden;
+    }
+    .topic-group summary {
+      list-style: none; padding: 12px 14px; cursor: pointer; display: flex;
+      align-items: center; justify-content: space-between; gap: 10px; font-weight: 850;
+    }
+    .topic-group summary::-webkit-details-marker { display: none; }
+    .topic-group summary::after { content: "+"; color: var(--teal); font-size: 1.15rem; }
+    .topic-group[open] summary::after { content: "−"; }
+    .topic-group small { color: var(--muted); font-weight: 650; }
+    .topic-list { display: grid; gap: 1px; padding: 0 7px 7px; }
+    .topic-row {
+      width: 100%; border: 0; border-radius: 10px; padding: 8px 9px; background: transparent;
+      color: var(--ink); text-align: left; cursor: pointer; display: grid;
+      grid-template-columns: 13px 1fr auto; gap: 8px; align-items: center; font-size: .82rem;
+    }
+    .topic-row:hover, .topic-row:focus-visible { background: var(--surface-2); outline: none; }
+    .topic-dot { width: 11px; height: 11px; border-radius: 4px; }
+    .topic-level { color: var(--muted); font-size: .72rem; }
+    .map-source { margin: 15px 0 0; color: var(--muted); font-size: .78rem; text-align: center; }
+    .map-source a { color: var(--teal); text-decoration: underline; text-underline-offset: 3px; }
     .recommendation {
       margin-top: 16px; padding: 18px; border-radius: 18px; background: var(--coral-soft);
       display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px;
@@ -257,8 +284,8 @@
     @media (max-width: 1000px) {
       .hero { grid-template-columns: 1fr; }
       .stats { grid-template-columns: repeat(2, 1fr); }
-      .heat-group { grid-template-columns: 1fr; }
-      .heat-group-title { padding-bottom: 0; }
+      .radial-layout { grid-template-columns: 1fr; }
+      .topic-index { max-height: none; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
       .routes { grid-template-columns: 1fr; }
       .lesson-card { min-height: 0; }
     }
@@ -269,8 +296,8 @@
       .hero-copy, .continue-card { padding: 22px; }
       .stats { grid-template-columns: 1fr 1fr; }
       .heatmap-panel { padding: 14px; }
-      .heat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .heat-cell { min-height: 100px; }
+      .radial-stage { width: min(100%, 620px); }
+      .topic-index { grid-template-columns: 1fr; }
       .recommendation { grid-template-columns: auto 1fr; }
       .recommendation .btn { grid-column: 1 / -1; }
       .materials { grid-template-columns: 1fr; }
@@ -278,7 +305,7 @@
     }
     @media (max-width: 420px) {
       .stats { grid-template-columns: 1fr; }
-      .heat-grid { grid-template-columns: 1fr; }
+      .radial-group-label { font-size: 11px; }
       .level-picker { grid-template-columns: 1fr; }
       .level-btn { min-height: 44px; }
     }
@@ -290,7 +317,7 @@
       body { background: #fff; }
       .shell { max-width: none; padding: 0; }
       .hero-copy, .continue-card, .panel, .lesson-card, .stat { box-shadow: none; }
-      .heat-cell { border: 1px solid #999; print-color-adjust: exact; }
+      .radial-cell { print-color-adjust: exact; }
     }
   </style>
 </head>
@@ -337,7 +364,7 @@
     <section class="stats" aria-label="Сводка прогресса">
       <article class="stat"><b id="masteredCount">0</b><span>компетенций освоено</span></article>
       <article class="stat"><b id="averageScore">0%</b><span>средний уровень карты</span></article>
-      <article class="stat"><b id="repeatCount">0</b><span>тем требуют повторения</span></article>
+      <article class="stat"><b id="repeatCount">0</b><span>тем ждут диагностики или повторения</span></article>
       <article class="stat"><b>3</b><span>занятия в траектории</span></article>
     </section>
 
@@ -346,7 +373,7 @@
         <div>
           <p class="eyebrow">Диагностика</p>
           <h2 id="competencies-title">Тепловая карта компетенций</h2>
-          <p>Карта охватывает навыки, которые встречаются в прикладных заданиях ЕГЭ. Нажмите на ячейку, чтобы уточнить уровень и открыть связанный материал.</p>
+          <p>Круг охватывает всю программу профильной математики ЕГЭ-2026: от вычислений и уравнений до геометрии, вероятности и задач высокого уровня. Каждый сектор — тематический блок, каждое кольцо — отдельная тема.</p>
         </div>
         <button class="btn" id="resetMap" type="button">Сбросить карту</button>
       </div>
@@ -368,7 +395,19 @@
             <span>уверенно</span>
           </div>
         </div>
-        <div class="heat-groups" id="heatGroups"></div>
+        <div class="radial-layout">
+          <div>
+            <div class="radial-stage">
+              <svg class="radial-map" id="radialMap" viewBox="0 0 800 800" role="img" aria-labelledby="radialTitle radialDescription">
+                <title id="radialTitle">Круговая тепловая карта компетенций ЕГЭ</title>
+                <desc id="radialDescription">Десять тематических секторов и пять колец, показывающих уровень освоения отдельных тем.</desc>
+              </svg>
+              <div class="radial-center"><b id="radialPercent">0%</b><span>общая готовность<br><span id="radialTopicCount">0 тем</span></span></div>
+            </div>
+            <p class="map-source">Структура сверена с <a href="https://fipi.ru/ege/demoversii-specifikacii-kodifikatory" target="_blank" rel="noopener">документами ФИПИ ЕГЭ-2026</a>.</p>
+          </div>
+          <div class="topic-index" id="topicIndex" aria-label="Список всех тем ЕГЭ"></div>
+        </div>
         <div class="recommendation" id="recommendation" aria-live="polite">
           <div class="recommendation-icon">↗</div>
           <div><b id="recommendationTitle">Рекомендация формируется</b><span id="recommendationText"></span></div>
@@ -471,32 +510,107 @@
       const THEME_KEY = "xenia-site-theme";
       const LAST_LESSON_KEY = "xenia-last-lesson";
       const levels = ["Не изучено", "Нужна помощь", "В процессе", "Почти уверенно", "Освоено"];
+      const topic = (id, title, level, description, evidence, link = "index.html#lessons") =>
+        ({ id, title, level, description, evidence, link });
       const groups = [
         {
-          id: "model", title: "Математическая модель", subtitle: "текст → зависимости → формула",
+          id: "numbers", short: "Числа", title: "Числа и выражения", subtitle: "задания 7, 9 и база всей работы",
           items: [
-            { id: "variables", title: "Выделение величин", level: 3, description: "Определять известные и неизвестные величины, обозначать их и связывать условием.", evidence: "Отрабатывается во всех трёх модулях.", link: "applied-formulas.html#given" },
-            { id: "formula", title: "Выбор формулы", level: 3, description: "Выбирать подходящую формулу по смыслу условия и проверять назначение каждого параметра.", evidence: "Тепловое расширение, выручка, высота и физические формулы.", link: "applied-formulas.html#solve" },
-            { id: "units", title: "Единицы измерения", level: 2, description: "Приводить величины к согласованным единицам до подстановки.", evidence: "Требует отдельной самопроверки перед вычислениями.", link: "applied-formulas.html#given" },
-            { id: "constraints", title: "Ограничения модели", level: 2, description: "Учитывать время, длину, цену, массу и другие физические ограничения.", evidence: "Ключевой навык при отборе корней.", link: "ege-models.html#check" }
+            topic("arithmetic", "Числа, дроби и проценты", 0, "Действия с рациональными и действительными числами, долями, отношениями и процентами.", "Диагностика пока не проводилась."),
+            topic("powers", "Степени и корни", 2, "Свойства степеней, квадратные, кубические и корни более высоких степеней.", "Изучалось 06.07.26.", "powers-physics.html#cube"),
+            topic("logs", "Логарифмы", 0, "Определение логарифма, свойства и преобразование логарифмических выражений.", "Материал ещё не добавлен."),
+            topic("trig_expr", "Тригонометрические выражения", 0, "Значения функций, формулы приведения и преобразования тригонометрических выражений.", "Диагностика пока не проводилась."),
+            topic("transform", "Преобразование выражений", 2, "Алгебраические преобразования, формулы сокращённого умножения и работа с дробями.", "Частично отрабатывается в прикладных формулах.", "applied-formulas.html#solve")
           ]
         },
         {
-          id: "algebra", title: "Алгебра решения", subtitle: "преобразования → уравнение → корни",
+          id: "equations", short: "Уравнения", title: "Уравнения и системы", subtitle: "задания 6, 9, 10, 13, 16, 18",
           items: [
-            { id: "substitution", title: "Подстановка данных", level: 3, description: "Аккуратно подставлять значения со скобками и сохранять порядок действий.", evidence: "Каскад подстановок в прикладных формулах.", link: "ege-models.html#economy" },
-            { id: "transform", title: "Выражение переменной", level: 2, description: "Выполнять равносильные преобразования и изолировать искомую величину.", evidence: "Температура, длина, время и параметры физических моделей.", link: "applied-formulas.html#solve" },
-            { id: "quadratic", title: "Квадратные уравнения", level: 3, description: "Находить корни квадратного уравнения и контролировать вычисления.", evidence: "Экономика, кинематика и вытекание воды.", link: "ege-models.html#kinematics" },
-            { id: "powers", title: "Степени и корни", level: 2, description: "Работать с кубами, четвёртыми степенями и обратными операциями.", evidence: "Отдельный модуль 06.07.26.", link: "powers-physics.html#cube" }
+            topic("rational_eq", "Рациональные уравнения", 0, "Линейные, дробно-рациональные и сводящиеся к ним уравнения.", "Диагностика пока не проводилась."),
+            topic("quadratic", "Квадратные уравнения", 3, "Квадратные уравнения, разложение на множители и теорема Виета.", "Применялось в задачах про движение и экономику.", "ege-models.html#kinematics"),
+            topic("irrational_eq", "Иррациональные уравнения", 0, "Уравнения с корнями, ОДЗ и контроль посторонних корней.", "Материал ещё не добавлен."),
+            topic("exp_log_eq", "Показательные и логарифмические", 0, "Уравнения со степенями, показательной функцией и логарифмами.", "Материал ещё не добавлен."),
+            topic("trig_eq", "Тригонометрические уравнения", 0, "Простейшие и комбинированные уравнения, общие решения и отбор корней.", "Диагностика пока не проводилась.")
           ]
         },
         {
-          id: "meaning", title: "Интерпретация ответа", subtitle: "график → допустимость → проверка",
+          id: "inequalities", short: "Неравенства", title: "Неравенства", subtitle: "задания 15, 16 и 18",
           items: [
-            { id: "graph", title: "Чтение графика", level: 2, description: "Связывать точки пересечения графиков с решениями уравнения и условия задачи.", evidence: "Интерактивные модели экономики и движения.", link: "ege-models.html#kinematics" },
-            { id: "root_selection", title: "Отбор корня", level: 1, description: "Выбирать корень по физическому смыслу, промежутку времени и ограничениям модели.", evidence: "Главная зона ближайшего повторения.", link: "ege-models.html#check" },
-            { id: "scientific", title: "Научная запись", level: 2, description: "Переносить запятую и согласованно изменять показатель степени десяти.", evidence: "Модуль по степеням и большим числам.", link: "powers-physics.html#notation" },
-            { id: "verification", title: "Проверка результата", level: 2, description: "Проверять знак, порядок величины, единицы и соответствие вопросу задачи.", evidence: "Финальный этап каждого прикладного решения.", link: "applied-formulas.html#roots" }
+            topic("rational_ineq", "Рациональные неравенства", 0, "Метод интервалов, знаки множителей и кратность корней.", "Материал ещё не добавлен."),
+            topic("irrational_ineq", "Иррациональные неравенства", 0, "Равносильные переходы, условия существования и системы ограничений.", "Материал ещё не добавлен."),
+            topic("exponential_ineq", "Показательные неравенства", 0, "Сравнение степеней, замена переменной и свойства основания.", "Материал ещё не добавлен."),
+            topic("logarithmic_ineq", "Логарифмические неравенства", 0, "ОДЗ, монотонность логарифма и рационализация.", "Материал ещё не добавлен."),
+            topic("mixed_ineq", "Смешанные и системы", 0, "Комбинации модулей, степеней, логарифмов и тригонометрии.", "Диагностика пока не проводилась.")
+          ]
+        },
+        {
+          id: "functions", short: "Функции", title: "Функции и анализ", subtitle: "задания 8, 11, 12 и 18",
+          items: [
+            topic("graph", "Графики и свойства функций", 2, "Область определения, нули, промежутки знакопостоянства и чтение графика.", "Частично изучалось в прикладных моделях.", "ege-models.html#kinematics"),
+            topic("graph_transform", "Преобразования графиков", 0, "Сдвиги, растяжения, отражения и композиции графиков.", "Диагностика пока не проводилась."),
+            topic("derivative", "Производная и касательная", 0, "Геометрический и физический смысл производной, правила дифференцирования.", "Материал ещё не добавлен."),
+            topic("extrema", "Исследование и экстремумы", 0, "Монотонность, критические точки, максимум и минимум функции.", "Материал ещё не добавлен."),
+            topic("integral", "Первообразная и интеграл", 0, "Первообразные, площадь криволинейной трапеции и определённый интеграл.", "Материал ещё не добавлен.")
+          ]
+        },
+        {
+          id: "models", short: "Модели", title: "Текстовые и прикладные задачи", subtitle: "задания 9, 10 и 16",
+          items: [
+            topic("motion_work", "Движение и работа", 2, "Скорость, время, путь, совместная работа и производительность.", "Кинематические модели изучались 04.07.26.", "ege-models.html#kinematics"),
+            topic("mixtures", "Смеси, сплавы и проценты", 0, "Концентрации, доли вещества и процентные изменения.", "Материал ещё не добавлен."),
+            topic("formula", "Прикладные формулы", 3, "Подстановка в физические и практические формулы, выражение искомой величины.", "Основная тема занятия 30.06.26.", "applied-formulas.html#solve"),
+            topic("units", "Единицы и оценка", 2, "Перевод единиц, научная запись, округление и оценка порядка результата.", "Отрабатывалось 30.06.26 и 06.07.26.", "powers-physics.html#notation"),
+            topic("root_selection", "Отбор ответа по смыслу", 1, "Физические ограничения, временные интервалы и выбор допустимого корня.", "Приоритетная зона повторения.", "ege-models.html#check")
+          ]
+        },
+        {
+          id: "finance", short: "Финансы", title: "Финансовая математика", subtitle: "задание 16",
+          items: [
+            topic("simple_percent", "Проценты и вклады", 0, "Последовательные процентные изменения, вклады и рост величины.", "Диагностика пока не проводилась."),
+            topic("loans", "Кредиты и остаток долга", 0, "Долг, начисление процентов, выплаты и график уменьшения задолженности.", "Материал ещё не добавлен."),
+            topic("annuity", "Аннуитетные платежи", 0, "Равные платежи и связь между долгом, ставкой и сроком.", "Материал ещё не добавлен."),
+            topic("differentiated", "Дифференцированные платежи", 0, "Равномерное уменьшение долга и сумма начисленных процентов.", "Материал ещё не добавлен."),
+            topic("business", "Бизнес-модели и оптимизация", 2, "Цена, спрос, выручка, прибыль и выбор выгодного режима.", "Изучалось в моделях выручки.", "ege-models.html#economy")
+          ]
+        },
+        {
+          id: "probability", short: "Вероятность", title: "Вероятность и статистика", subtitle: "задания 4 и 5",
+          items: [
+            topic("classic_probability", "Классическая вероятность", 0, "Равновозможные исходы и отношение благоприятных исходов ко всем исходам.", "Диагностика пока не проводилась."),
+            topic("events", "События и противоположность", 0, "Противоположные, совместные и несовместные события.", "Материал ещё не добавлен."),
+            topic("sum_product", "Сложение и умножение вероятностей", 0, "Независимость, условная вероятность и деревья событий.", "Материал ещё не добавлен."),
+            topic("combinatorics", "Комбинаторика", 0, "Правила суммы и произведения, перестановки, размещения и сочетания.", "Диагностика пока не проводилась."),
+            topic("statistics", "Статистика и характеристики", 0, "Среднее, медиана, разброс, таблицы, диаграммы и интерпретация данных.", "Материал ещё не добавлен.")
+          ]
+        },
+        {
+          id: "planimetry", short: "Планиметрия", title: "Планиметрия", subtitle: "задания 1 и 17",
+          items: [
+            topic("triangles", "Треугольники", 0, "Подобие, теоремы синусов и косинусов, площади и замечательные точки.", "Диагностика пока не проводилась."),
+            topic("quadrilaterals", "Четырёхугольники", 0, "Параллелограмм, трапеция, ромб, прямоугольник и их свойства.", "Материал ещё не добавлен."),
+            topic("circle", "Окружность", 0, "Вписанные углы, касательные, хорды и окружности, связанные с многоугольниками.", "Материал ещё не добавлен."),
+            topic("plane_vectors", "Координаты и векторы", 0, "Векторы на плоскости, координатный метод, расстояния и уравнения линий.", "Диагностика пока не проводилась."),
+            topic("geometry_proof", "Доказательство и комбинации", 0, "Доказательство утверждений и конфигурации из нескольких геометрических объектов.", "Материал ещё не добавлен.")
+          ]
+        },
+        {
+          id: "stereometry", short: "Стереометрия", title: "Стереометрия", subtitle: "задания 2, 3 и 14",
+          items: [
+            topic("prisms", "Призмы и параллелепипеды", 0, "Площади, объёмы, диагонали и элементы многогранников.", "Диагностика пока не проводилась."),
+            topic("pyramids", "Пирамиды", 0, "Сечения, высоты, объёмы и подобие в пространственных конфигурациях.", "Материал ещё не добавлен."),
+            topic("round_bodies", "Тела вращения", 0, "Цилиндр, конус, шар и комбинации пространственных тел.", "Материал ещё не добавлен."),
+            topic("space_angles", "Углы и расстояния", 0, "Угол между прямыми и плоскостями, расстояния в пространстве.", "Диагностика пока не проводилась."),
+            topic("sections_coordinates", "Сечения, координаты и векторы", 0, "Построение сечений и координатно-векторный метод решения.", "Материал ещё не добавлен.")
+          ]
+        },
+        {
+          id: "advanced", short: "Высокий уровень", title: "Задачи высокого уровня", subtitle: "задания 13–19",
+          items: [
+            topic("parameters", "Задачи с параметром", 0, "Число решений, взаимное расположение графиков и аналитический разбор случаев.", "Материал ещё не добавлен."),
+            topic("number_theory", "Делимость и теория чисел", 0, "Делители, остатки, разложения и целочисленные условия.", "Диагностика пока не проводилась."),
+            topic("sequences", "Последовательности и прогрессии", 0, "Арифметическая и геометрическая прогрессии, рекуррентные зависимости.", "Материал ещё не добавлен."),
+            topic("proof_estimates", "Оценки и доказательства", 0, "Неравенства, оценки, экстремальные значения и обоснование результата.", "Материал ещё не добавлен."),
+            topic("task19", "Комбинаторные конструкции №19", 0, "Наборы чисел, операции, инварианты и доказательство оптимальности.", "Диагностика пока не проводилась.")
           ]
         }
       ];
@@ -529,24 +643,74 @@
         if (currentFilter === "mastered") return level === 4;
         return true;
       }
+      function polar(radius, angle) {
+        const radians = (angle - 90) * Math.PI / 180;
+        return { x: 400 + radius * Math.cos(radians), y: 400 + radius * Math.sin(radians) };
+      }
+      function arcPath(innerRadius, outerRadius, startAngle, endAngle) {
+        const outerStart = polar(outerRadius, startAngle);
+        const outerEnd = polar(outerRadius, endAngle);
+        const innerEnd = polar(innerRadius, endAngle);
+        const innerStart = polar(innerRadius, startAngle);
+        const large = endAngle - startAngle > 180 ? 1 : 0;
+        return [
+          `M ${outerStart.x} ${outerStart.y}`,
+          `A ${outerRadius} ${outerRadius} 0 ${large} 1 ${outerEnd.x} ${outerEnd.y}`,
+          `L ${innerEnd.x} ${innerEnd.y}`,
+          `A ${innerRadius} ${innerRadius} 0 ${large} 0 ${innerStart.x} ${innerStart.y}`,
+          "Z"
+        ].join(" ");
+      }
       function renderHeatmap() {
-        const root = $("#heatGroups");
-        root.innerHTML = groups.map(group => {
-          const cells = group.items.map(item => {
+        const svg = $("#radialMap");
+        const sectorSize = 360 / groups.length;
+        const innerRadius = 145;
+        const ringWidth = 43;
+        const sectorGap = 1.5;
+        let svgContent = "";
+        groups.forEach((group, groupIndex) => {
+          const start = groupIndex * sectorSize + sectorGap;
+          const end = (groupIndex + 1) * sectorSize - sectorGap;
+          const groupTarget = [...group.items].sort((a, b) => itemState(a) - itemState(b))[0];
+          svgContent += `<path class="radial-group-arc" data-id="${groupTarget.id}" d="${arcPath(112, 137, start, end)}" tabindex="0"><title>${group.title}</title></path>`;
+          group.items.forEach((item, itemIndex) => {
             const level = itemState(item);
-            return `<button class="heat-cell" data-id="${item.id}" data-level="${level}" ${matchesFilter(level) ? "" : "hidden"} aria-label="${item.title}: ${levels[level]}">
-              <span class="heat-score">${level}</span><b>${item.title}</b><small>${levels[level]}</small>
-            </button>`;
-          }).join("");
-          return `<section class="heat-group" data-group="${group.id}">
-            <div class="heat-group-title"><b>${group.title}</b><span>${group.subtitle}</span></div>
-            <div class="heat-grid">${cells}</div>
-          </section>`;
-        }).join("");
-        $$(".heat-group").forEach(group => {
-          group.hidden = ![...group.querySelectorAll(".heat-cell")].some(cell => !cell.hidden);
+            const ringInner = innerRadius + itemIndex * ringWidth;
+            const ringOuter = ringInner + ringWidth - 4;
+            const muted = matchesFilter(level) ? "" : " is-muted";
+            svgContent += `<path class="radial-cell${muted}" data-id="${item.id}" data-level="${level}" fill="var(--heat-${level})" d="${arcPath(ringInner, ringOuter, start, end)}" tabindex="0" role="button" aria-label="${item.title}: ${levels[level]}"><title>${group.title} · ${item.title}: ${levels[level]}</title></path>`;
+          });
+          const labelPoint = polar(382, start + (end - start) / 2);
+          svgContent += `<text class="radial-group-label" x="${labelPoint.x}" y="${labelPoint.y}" dy=".35em">${group.short}</text>`;
         });
-        $$(".heat-cell").forEach(cell => cell.addEventListener("click", () => openCompetency(cell.dataset.id)));
+        [1, 2, 3, 4, 5].forEach((ring, index) => {
+          const point = polar(innerRadius + index * ringWidth + ringWidth / 2, 0);
+          svgContent += `<text class="radial-ring-label" x="${point.x}" y="${point.y}" dy=".35em">${ring}</text>`;
+        });
+        svg.innerHTML = `<title id="radialTitle">Круговая тепловая карта компетенций ЕГЭ</title><desc id="radialDescription">Десять тематических секторов и пять колец с пятьюдесятью темами.</desc>${svgContent}`;
+        $("#topicIndex").innerHTML = groups.map((group, index) => `
+          <details class="topic-group" ${index === 4 ? "open" : ""}>
+            <summary><span>${group.title}</span><small>${group.items.length} тем</small></summary>
+            <div class="topic-list">
+              ${group.items.map(item => {
+                const level = itemState(item);
+                return `<button class="topic-row" data-id="${item.id}" ${matchesFilter(level) ? "" : "hidden"}>
+                  <i class="topic-dot" style="background:var(--heat-${level})"></i>
+                  <span>${item.title}</span><span class="topic-level">${level}/4</span>
+                </button>`;
+              }).join("")}
+            </div>
+          </details>
+        `).join("");
+        $$(".radial-cell, .radial-group-arc, .topic-row").forEach(cell => {
+          cell.addEventListener("click", () => openCompetency(cell.dataset.id));
+          cell.addEventListener("keydown", event => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              openCompetency(cell.dataset.id);
+            }
+          });
+        });
         updateSummary();
       }
       function updateSummary() {
@@ -557,7 +721,10 @@
         $("#masteredCount").textContent = `${mastered} / ${values.length}`;
         $("#averageScore").textContent = `${average}%`;
         $("#repeatCount").textContent = repeat;
-        const weakest = [...allItems].sort((a, b) => itemState(a) - itemState(b))[0];
+        $("#radialPercent").textContent = `${average}%`;
+        $("#radialTopicCount").textContent = `${values.length} тем`;
+        const started = allItems.filter(item => itemState(item) > 0);
+        const weakest = [...(started.length ? started : allItems)].sort((a, b) => itemState(a) - itemState(b))[0];
         $("#recommendationTitle").textContent = `Следующий фокус: ${weakest.title}`;
         $("#recommendationText").textContent = weakest.description;
         $("#recommendationLink").href = weakest.link;
@@ -625,4 +792,3 @@
   </script>
 </body>
 </html>
-
