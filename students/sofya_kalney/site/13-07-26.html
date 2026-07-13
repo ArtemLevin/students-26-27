@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Интерактивное пособие ОГЭ: растворы, смеси, сплавы, сушка и процентные изменения.">
+  <title>Растворы, смеси, сплавы и проценты — София Кальней</title>
+  <style>
+    :root {
+      --paper:#f6f0e5; --paper-2:#fffaf0; --ink:#252322; --muted:#6d655e;
+      --wine:#7d342d; --wine-2:#a65347; --gold:#c69a55; --teal:#2f7770;
+      --line:#d8c9b7; --shadow:0 18px 55px rgba(72,45,28,.12);
+      --success:#357a58; --danger:#a34539; --canvas:#efe2ce;
+    }
+    body[data-theme="dark"] {
+      --paper:#181716; --paper-2:#23201d; --ink:#f5eee4; --muted:#bdb1a5;
+      --wine:#d98274; --wine-2:#e9a094; --gold:#d9b878; --teal:#76b9ae;
+      --line:#504940; --shadow:0 18px 55px rgba(0,0,0,.28); --canvas:#2e2924;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.65 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; transition:.2s background,.2s color; }
+    button, input { font:inherit; }
+    button, a { -webkit-tap-highlight-color:transparent; }
+    a { color:inherit; }
+    .shell { width:min(1180px, calc(100% - 32px)); margin:auto; }
+    .topbar { position:sticky; top:0; z-index:30; border-bottom:1px solid var(--line); background:color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter:blur(16px); }
+    .topbar-inner { min-height:66px; display:flex; align-items:center; justify-content:space-between; gap:18px; }
+    .brand { display:flex; align-items:center; gap:11px; font-weight:800; text-decoration:none; }
+    .brand-mark { display:grid; place-items:center; width:36px; height:36px; border-radius:50%; color:#fff; background:var(--wine); }
+    .nav-actions { display:flex; align-items:center; gap:8px; }
+    .btn, .icon-btn, .tab, .mode-btn, .hint-btn, .answer-btn { border:1px solid var(--line); border-radius:999px; background:var(--paper-2); color:var(--ink); padding:10px 15px; cursor:pointer; text-decoration:none; transition:.18s transform,.18s border-color,.18s background; }
+    .btn:hover, .icon-btn:hover, .tab:hover, .mode-btn:hover, .hint-btn:hover, .answer-btn:hover { transform:translateY(-1px); border-color:var(--wine); }
+    .icon-btn { width:42px; height:42px; padding:0; }
+    .primary { border-color:var(--wine); background:var(--wine); color:#fff; }
+    .hero { padding:70px 0 42px; display:grid; grid-template-columns:1.35fr .65fr; gap:28px; align-items:stretch; }
+    .hero-main, .hero-side, .card, .visual-panel, .exercise, .quiz, details.poster { border:1px solid var(--line); border-radius:24px; background:var(--paper-2); box-shadow:var(--shadow); }
+    .hero-main { padding:clamp(28px,5vw,62px); position:relative; overflow:hidden; }
+    .hero-main::after { content:"%"; position:absolute; right:-18px; bottom:-78px; font:900 15rem/1 Georgia,serif; color:color-mix(in srgb,var(--wine) 9%,transparent); transform:rotate(-9deg); }
+    .eyebrow { margin:0 0 10px; color:var(--wine); font-weight:850; text-transform:uppercase; letter-spacing:.12em; font-size:.76rem; }
+    h1,h2,h3 { font-family:Georgia,"Times New Roman",serif; line-height:1.08; }
+    h1 { max-width:810px; margin:0; font-size:clamp(2.65rem,7vw,6.5rem); letter-spacing:-.055em; }
+    h2 { margin:0 0 12px; font-size:clamp(2rem,4vw,3.5rem); letter-spacing:-.035em; }
+    h3 { margin:0 0 10px; font-size:1.4rem; }
+    .lead { max-width:760px; margin:24px 0 0; color:var(--muted); font-size:1.12rem; }
+    .hero-side { padding:28px; display:flex; flex-direction:column; justify-content:space-between; background:var(--wine); color:#fff; }
+    .hero-side .eyebrow { color:#f5d7cd; }
+    .hero-side p { color:#f5e9e5; }
+    .formula-pill { padding:18px; border-radius:18px; background:rgba(255,255,255,.12); font-size:1.4rem; text-align:center; }
+    .toolbar { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px; margin:0 0 32px; }
+    .tabs, .view-modes, .mode-switch { display:flex; flex-wrap:wrap; gap:8px; }
+    .tab[aria-selected="true"], .mode-btn[aria-pressed="true"] { background:var(--wine); border-color:var(--wine); color:#fff; }
+    .section { padding:42px 0; scroll-margin-top:82px; }
+    .section-head { display:flex; justify-content:space-between; gap:20px; align-items:end; margin-bottom:22px; }
+    .section-head p { max-width:680px; margin:0; color:var(--muted); }
+    .content-grid { display:grid; grid-template-columns:minmax(0,1fr) 430px; gap:24px; align-items:start; }
+    .lesson-stack { display:grid; gap:18px; }
+    .card { padding:clamp(22px,4vw,34px); box-shadow:none; }
+    .card p:last-child { margin-bottom:0; }
+    .formula { margin:18px 0; padding:18px; border-left:5px solid var(--wine); border-radius:0 16px 16px 0; background:color-mix(in srgb,var(--wine) 8%,var(--paper-2)); overflow-x:auto; text-align:center; font-size:1.25rem; }
+    math { font-size:1.15em; }
+    .note { padding:15px 17px; border-radius:16px; background:color-mix(in srgb,var(--teal) 10%,var(--paper-2)); border:1px solid color-mix(in srgb,var(--teal) 38%,var(--line)); }
+    .warning { background:color-mix(in srgb,var(--gold) 16%,var(--paper-2)); border-color:color-mix(in srgb,var(--gold) 50%,var(--line)); }
+    .compact-only, body[data-view="standard"] .detailed-only, body[data-view="compact"] .detailed-only, body[data-view="compact"] .standard-only { display:none; }
+    body[data-view="standard"] .standard-only, body[data-view="compact"] .compact-only { display:block; }
+    .steps { counter-reset:step; display:grid; gap:12px; padding:0; list-style:none; }
+    .steps li { position:relative; min-height:46px; padding:10px 12px 10px 58px; border-bottom:1px dashed var(--line); }
+    .steps li::before { counter-increment:step; content:counter(step); position:absolute; left:4px; top:7px; display:grid; place-items:center; width:36px; height:36px; border-radius:50%; background:var(--wine); color:#fff; font-weight:800; }
+    .mix-table { width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border:1px solid var(--line); border-radius:16px; }
+    .mix-table th,.mix-table td { padding:11px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); text-align:center; }
+    .mix-table tr:last-child td { border-bottom:0; }
+    .mix-table th:last-child,.mix-table td:last-child { border-right:0; }
+    .mix-table th { background:color-mix(in srgb,var(--wine) 8%,var(--paper-2)); }
+    .visual-wrap { position:sticky; top:86px; }
+    .visual-panel { padding:18px; }
+    .visual-toolbar { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:12px; }
+    .visual-toolbar .mode-btn { padding:7px 11px; font-size:.86rem; }
+    canvas { display:block; width:100%; aspect-ratio:4/3; border:1px solid var(--line); border-radius:18px; background:var(--canvas); cursor:grab; touch-action:none; }
+    canvas:active { cursor:grabbing; }
+    .controls { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
+    .control { padding:12px; border-radius:14px; border:1px solid var(--line); }
+    .control label { display:flex; justify-content:space-between; gap:8px; font-size:.87rem; color:var(--muted); }
+    input[type="range"] { width:100%; accent-color:var(--wine); }
+    .result-box { margin-top:14px; padding:14px; border-radius:15px; background:var(--wine); color:#fff; text-align:center; }
+    .canvas-actions { display:flex; gap:8px; margin-top:10px; }
+    .hint-wrap { display:inline-block; position:relative; }
+    .hint-btn { padding:4px 9px; font-size:.78rem; color:var(--wine); }
+    .tooltip { position:fixed; z-index:80; width:min(290px,calc(100vw - 24px)); padding:12px 14px; border-radius:14px; background:var(--ink); color:var(--paper-2); box-shadow:var(--shadow); font-size:.9rem; pointer-events:none; opacity:0; transform:translateY(4px); transition:.15s; }
+    .tooltip.show { opacity:1; transform:none; }
+    .examples { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+    .example-answer { padding:12px 15px; border-radius:14px; border:1px dashed var(--wine); color:var(--wine); font-weight:750; }
+    details.poster { overflow:hidden; }
+    details.poster summary { padding:22px 26px; cursor:pointer; font-weight:800; list-style:none; display:flex; justify-content:space-between; gap:18px; }
+    details.poster summary::after { content:"＋"; color:var(--wine); }
+    details.poster[open] summary::after { content:"−"; }
+    .poster-inner { padding:0 20px 22px; }
+    .poster-inner img { display:block; max-width:720px; width:100%; margin:auto; border-radius:18px; border:1px solid var(--line); cursor:zoom-in; }
+    .training-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .exercise { padding:20px; box-shadow:none; }
+    .exercise .num { display:grid; place-items:center; width:36px; height:36px; border-radius:50%; background:var(--wine); color:#fff; font-weight:850; margin-bottom:12px; }
+    .answer { display:none; margin-top:12px; padding:11px; border-radius:12px; background:color-mix(in srgb,var(--teal) 12%,var(--paper-2)); }
+    .answer.show { display:block; }
+    .generator { display:grid; grid-template-columns:1fr auto; gap:16px; align-items:center; padding:24px; border-radius:22px; background:var(--wine); color:#fff; margin-bottom:20px; }
+    .generator p { margin:6px 0 0; color:#f3dfda; }
+    .generator .btn { background:#fff; color:var(--wine); }
+    .generator-answer { grid-column:1/-1; display:none; padding:12px 14px; border-radius:14px; background:rgba(255,255,255,.13); }
+    .generator-answer.show { display:block; }
+    .quiz { padding:clamp(24px,5vw,42px); }
+    .quiz-option { display:block; width:100%; margin:9px 0; padding:13px 15px; border:1px solid var(--line); border-radius:14px; background:var(--paper); color:var(--ink); text-align:left; cursor:pointer; }
+    .quiz-option.correct { border-color:var(--success); background:color-mix(in srgb,var(--success) 14%,var(--paper)); }
+    .quiz-option.wrong { border-color:var(--danger); background:color-mix(in srgb,var(--danger) 12%,var(--paper)); }
+    .quiz-feedback { min-height:30px; color:var(--muted); font-weight:700; }
+    .checklist { columns:2; padding-left:21px; }
+    .checklist li { break-inside:avoid; margin:7px 0; }
+    .footer { padding:42px 16px 60px; color:var(--muted); text-align:center; }
+    dialog { width:min(940px,calc(100% - 24px)); max-height:90vh; padding:0; border:0; border-radius:22px; background:var(--paper-2); color:var(--ink); box-shadow:0 30px 90px rgba(0,0,0,.35); }
+    dialog::backdrop { background:rgba(20,14,11,.72); backdrop-filter:blur(5px); }
+    .dialog-head { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid var(--line); }
+    .dialog-body { padding:12px; overflow:auto; }
+    .dialog-body img { width:100%; display:block; transform-origin:center; }
+    @media (max-width:900px) { .hero,.content-grid { grid-template-columns:1fr; } .visual-wrap { position:relative; top:auto; } .examples { grid-template-columns:1fr; } }
+    @media (max-width:640px) { .shell { width:min(100% - 20px,1180px); } .topbar-inner { min-height:58px; } .brand span:last-child { display:none; } .hero { padding-top:32px; } .hero-main,.hero-side { border-radius:20px; } .training-grid { grid-template-columns:1fr; } .controls { grid-template-columns:1fr; } .checklist { columns:1; } .section-head { display:block; } .generator { grid-template-columns:1fr; } }
+    @media print { .topbar,.toolbar,.visual-wrap,.btn,.answer-btn,.hint-btn,.generator,dialog { display:none!important; } body { background:#fff; color:#111; } .hero { grid-template-columns:1fr; padding:20px 0; } .hero-main,.hero-side,.card,.exercise,.quiz,details.poster { box-shadow:none; break-inside:avoid; } .hero-side { background:#eee; color:#111; } .hero-side p { color:#333; } .section { padding:22px 0; } .answer { display:block!important; } details.poster { display:none; } }
+  </style>
+</head>
+<body data-theme="light" data-view="detailed">
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="index.html"><span class="brand-mark">СК</span><span>Навигатор Софии</span></a>
+      <div class="nav-actions">
+        <a class="btn" href="index.html#lessons">Все занятия</a>
+        <button class="icon-btn" id="printBtn" type="button" aria-label="Распечатать">⎙</button>
+        <button class="icon-btn" id="themeBtn" type="button" aria-label="Переключить тему">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-main">
+        <p class="eyebrow">ОГЭ · модуль 04 · 13.07.26</p>
+        <h1>Растворы, смеси, сплавы и проценты</h1>
+        <p class="lead">Учимся выбирать сохраняющуюся величину, переводить проценты в доли и строить модель, которая одинаково хорошо работает для растворов, сплавов, сушки и изменения цены.</p>
+      </div>
+      <aside class="hero-side">
+        <div><p class="eyebrow">Главная идея</p><h2>Сначала масса вещества</h2><p>Концентрацию смеси вычисляем после того, как учтены массы всех компонентов.</p></div>
+        <div class="formula-pill"><math><mi>ω</mi><mo>=</mo><mfrac><msub><mi>m</mi><mi>вещества</mi></msub><msub><mi>m</mi><mi>смеси</mi></msub></mfrac></math></div>
+      </aside>
+    </section>
+
+    <div class="toolbar" aria-label="Настройки пособия">
+      <div class="tabs" role="tablist">
+        <button class="tab" data-target="basics" aria-selected="true">Основы</button>
+        <button class="tab" data-target="models" aria-selected="false">Модели</button>
+        <button class="tab" data-target="percent" aria-selected="false">Проценты</button>
+        <button class="tab" data-target="training" aria-selected="false">Тренировка</button>
+      </div>
+      <div class="view-modes" role="group" aria-label="Подробность">
+        <button class="mode-btn" data-view="compact" aria-pressed="false">Кратко</button>
+        <button class="mode-btn" data-view="standard" aria-pressed="false">Стандарт</button>
+        <button class="mode-btn" data-view="detailed" aria-pressed="true">Подробно</button>
+      </div>
+    </div>
+
+    <section class="section" id="basics">
+      <div class="section-head"><div><p class="eyebrow">01 · Основа</p><h2>Массовая доля</h2></div><p>Все задачи этой темы держатся на одной связи: часть равна целому, умноженному на долю.</p></div>
+      <div class="content-grid">
+        <div class="lesson-stack">
+          <article class="card">
+            <h3>Три записи одной идеи <span class="hint-wrap"><button class="hint-btn" data-hint="Доля 15% записывается как 0,15. Делите число процентов на 100.">подсказка</button></span></h3>
+            <div class="formula"><math display="block"><mi>ω</mi><mo>=</mo><mfrac><msub><mi>m</mi><mi>вещества</mi></msub><msub><mi>m</mi><mi>смеси</mi></msub></mfrac><mo>,</mo><mspace width="1em"/><msub><mi>m</mi><mi>вещества</mi></msub><mo>=</mo><msub><mi>m</mi><mi>смеси</mi></msub><mo>·</mo><mi>ω</mi></math></div>
+            <p class="compact-only">Переведи проценты в долю, найди массу вещества, составь баланс.</p>
+            <p class="standard-only">При концентрации 15% в каждом килограмме раствора находится 0,15 кг нужного вещества.</p>
+            <div class="detailed-only">
+              <p>Массовая доля показывает, какая часть общей массы приходится на выбранный компонент. Если требуется ответ в процентах, найденную долю умножают на 100%.</p>
+              <div class="note">Однородная проба сохраняет концентрацию исходного раствора: в любой взятой части отношение масс остаётся тем же.</div>
+            </div>
+          </article>
+          <article class="card">
+            <h3>Универсальная таблица</h3>
+            <table class="mix-table">
+              <thead><tr><th>Величина</th><th>Смесь 1</th><th>Смесь 2</th><th>Итог</th></tr></thead>
+              <tbody>
+                <tr><td>масса смеси</td><td><math><msub><mi>m</mi><mn>1</mn></msub></math></td><td><math><msub><mi>m</mi><mn>2</mn></msub></math></td><td><math><msub><mi>m</mi><mn>1</mn></msub><mo>+</mo><msub><mi>m</mi><mn>2</mn></msub></math></td></tr>
+                <tr><td>доля вещества</td><td><math><msub><mi>ω</mi><mn>1</mn></msub></math></td><td><math><msub><mi>ω</mi><mn>2</mn></msub></math></td><td><math><msub><mi>ω</mi><mi>итог</mi></msub></math></td></tr>
+                <tr><td>масса вещества</td><td><math><msub><mi>m</mi><mn>1</mn></msub><msub><mi>ω</mi><mn>1</mn></msub></math></td><td><math><msub><mi>m</mi><mn>2</mn></msub><msub><mi>ω</mi><mn>2</mn></msub></math></td><td>сумма</td></tr>
+              </tbody>
+            </table>
+            <div class="formula"><math><msub><mi>ω</mi><mi>итог</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>m</mi><mn>1</mn></msub><msub><mi>ω</mi><mn>1</mn></msub><mo>+</mo><msub><mi>m</mi><mn>2</mn></msub><msub><mi>ω</mi><mn>2</mn></msub></mrow><mrow><msub><mi>m</mi><mn>1</mn></msub><mo>+</mo><msub><mi>m</mi><mn>2</mn></msub></mrow></mfrac></math></div>
+          </article>
+          <article class="card detailed-only">
+            <h3>Алгоритм решения</h3>
+            <ol class="steps">
+              <li>Определи, что входит в смесь и какой компонент отслеживается.</li>
+              <li>Приведи все массы к одним единицам.</li>
+              <li>Переведи проценты в десятичные доли.</li>
+              <li>Найди массу выбранного вещества в каждой части.</li>
+              <li>Запиши баланс общей массы.</li>
+              <li>Запиши баланс массы выбранного вещества.</li>
+              <li>Реши получившееся уравнение или систему.</li>
+              <li>Проверь ограничения и здравый смысл результата.</li>
+              <li>Запиши ответ с единицами или знаком процента.</li>
+            </ol>
+          </article>
+        </div>
+
+        <aside class="visual-wrap" aria-label="Интерактивная модель">
+          <div class="visual-panel">
+            <div class="visual-toolbar">
+              <button class="mode-btn visual-mode" data-mode="mix" aria-pressed="true">Смешивание</button>
+              <button class="mode-btn visual-mode" data-mode="water" aria-pressed="false">Вода</button>
+              <button class="mode-btn visual-mode" data-mode="dry" aria-pressed="false">Сушка</button>
+              <button class="mode-btn visual-mode" data-mode="change" aria-pressed="false">Изменение</button>
+            </div>
+            <canvas id="modelCanvas" width="800" height="600" aria-label="Визуальная модель задачи"></canvas>
+            <div class="controls" id="mixControls">
+              <div class="control"><label>Масса 1 <b id="m1Out">4 кг</b></label><input id="m1" type="range" min="1" max="12" value="4"></div>
+              <div class="control"><label>Доля 1 <b id="w1Out">15%</b></label><input id="w1" type="range" min="0" max="60" value="15"></div>
+              <div class="control"><label>Масса 2 <b id="m2Out">6 кг</b></label><input id="m2" type="range" min="1" max="12" value="6"></div>
+              <div class="control"><label>Доля 2 <b id="w2Out">25%</b></label><input id="w2" type="range" min="0" max="60" value="25"></div>
+            </div>
+            <div class="result-box" id="canvasResult">Итог: 10 кг раствора, концентрация 21%</div>
+            <div class="canvas-actions"><button class="btn" id="labelsBtn" type="button">Подписи: вкл.</button><button class="btn" id="zoomBtn" type="button">Увеличить</button></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="models">
+      <div class="section-head"><div><p class="eyebrow">02 · Модели</p><h2>Смешивание, вода, сплав, сушка</h2></div><p>Форма условия меняется, сохраняющаяся величина подсказывает короткий путь.</p></div>
+      <div class="examples">
+        <article class="card">
+          <h3>Два раствора <span class="hint-wrap"><button class="hint-btn" data-hint="Сначала найдите 4·0,15 и 6·0,25. Полученные массы вещества можно складывать.">ход решения</button></span></h3>
+          <p>Смешали 4 кг 15%-го и 6 кг 25%-го раствора.</p>
+          <div class="formula"><math><mfrac><mrow><mn>4</mn><mo>·</mo><mn>0,15</mn><mo>+</mo><mn>6</mn><mo>·</mo><mn>0,25</mn></mrow><mrow><mn>4</mn><mo>+</mo><mn>6</mn></mrow></mfrac><mo>=</mo><mn>0,21</mn></math></div>
+          <div class="example-answer">Ответ: 21%.</div>
+        </article>
+        <article class="card">
+          <h3>Добавили воду <span class="hint-wrap"><button class="hint-btn" data-hint="У воды доля отслеживаемого вещества равна нулю; масса вещества остаётся прежней.">что сохраняется?</button></span></h3>
+          <p>К 8 кг 15%-го раствора добавили 4 кг воды.</p>
+          <div class="formula"><math><mfrac><mrow><mn>8</mn><mo>·</mo><mn>0,15</mn></mrow><mrow><mn>8</mn><mo>+</mo><mn>4</mn></mrow></mfrac><mo>=</mo><mn>0,10</mn></math></div>
+          <div class="example-answer">Ответ: 10%.</div>
+        </article>
+        <article class="card detailed-only">
+          <h3>Два сплава</h3>
+          <p>100 кг нового сплава с 11% никеля получили из сплавов с 20% и 5% никеля. Пусть их массы равны <math><mi>x</mi></math> и <math><mi>y</mi></math>.</p>
+          <div class="formula"><math display="block"><mfenced open="{" close=""><mtable><mtr><mtd><mi>x</mi><mo>+</mo><mi>y</mi><mo>=</mo><mn>100</mn></mtd></mtr><mtr><mtd><mn>0,20</mn><mi>x</mi><mo>+</mo><mn>0,05</mn><mi>y</mi><mo>=</mo><mn>11</mn></mtd></mtr></mtable></mfenced></math></div>
+          <div class="example-answer">40 кг и 60 кг; разность масс 20 кг.</div>
+        </article>
+        <article class="card">
+          <h3>Виноград и изюм <span class="hint-wrap"><button class="hint-btn" data-hint="При сушке уходит вода. Масса сухого вещества сохраняется: 10% свежего продукта равны 95% высушенного.">главный инвариант</button></span></h3>
+          <p>Виноград содержит 90% воды, изюм — 5%. Сколько винограда требуется для 20 кг изюма?</p>
+          <div class="formula"><math><mn>0,10</mn><mi>x</mi><mo>=</mo><mn>20</mn><mo>·</mo><mn>0,95</mn></math></div>
+          <div class="example-answer">Ответ: 190 кг винограда.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="percent">
+      <div class="section-head"><div><p class="eyebrow">03 · Проценты</p><h2>Изменение величины</h2></div><p>Знаменатель формулы всегда содержит исходное значение — то, с чем сравниваем.</p></div>
+      <div class="examples">
+        <article class="card">
+          <h3>На сколько процентов?</h3>
+          <div class="formula"><math display="block"><mfrac><mrow><mo>|</mo><msub><mi>a</mi><mi>новое</mi></msub><mo>−</mo><msub><mi>a</mi><mi>старое</mi></msub><mo>|</mo></mrow><msub><mi>a</mi><mi>старое</mi></msub></mfrac><mo>·</mo><mn>100</mn><mo>%</mo></math></div>
+          <p>Число 20 больше числа 12 на <math><mfrac><mrow><mn>20</mn><mo>−</mo><mn>12</mn></mrow><mn>12</mn></mfrac><mo>·</mo><mn>100</mn><mo>%</mo><mo>=</mo><mn>66</mn><mfrac><mn>2</mn><mn>3</mn></mfrac><mo>%</mo></math>.</p>
+        </article>
+        <article class="card">
+          <h3>Последовательные изменения</h3>
+          <p>Рост на 8%, затем на 9% считается от обновлённой величины.</p>
+          <div class="formula"><math display="block"><mn>40 000</mn><mo>·</mo><mn>1,08</mn><mo>·</mo><mn>1,09</mn><mo>=</mo><mn>47 088</mn></math></div>
+          <div class="note warning">Проценты последовательных изменений обычно не складываются: множители перемножаются.</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="poster-title">
+      <details class="poster">
+        <summary id="poster-title"><span>Учебный постер по теме</span><span>развернуть</span></summary>
+        <div class="poster-inner"><img id="posterImage" src="13.07.26.png" alt="Постер: растворы, смеси, сплавы и проценты"></div>
+      </details>
+    </section>
+
+    <section class="section" id="training">
+      <div class="section-head"><div><p class="eyebrow">04 · Практика</p><h2>Тренировочный блок</h2></div><p>Задания расположены от прямого применения формулы до составной модели.</p></div>
+      <div class="generator">
+        <div><h3>Генератор примеров</h3><p id="generatedTask">Нажмите кнопку — появится новое задание по текущей теме.</p></div>
+        <button class="btn" id="generateBtn" type="button">Новое задание</button>
+        <button class="btn" id="generatedAnswerBtn" type="button">Показать ответ</button>
+        <div class="generator-answer" id="generatedAnswer"></div>
+      </div>
+      <div class="training-grid" id="trainingGrid">
+        <article class="exercise"><span class="num">1</span><p>В 300 г 12%-го раствора сколько граммов вещества?</p><button class="answer-btn">Показать ответ</button><div class="answer">36 г.</div></article>
+        <article class="exercise"><span class="num">2</span><p>Смешали 5 кг 10%-го и 3 кг 30%-го раствора. Найдите концентрацию.</p><button class="answer-btn">Показать ответ</button><div class="answer">17,5%.</div></article>
+        <article class="exercise"><span class="num">3</span><p>К 6 кг 20%-го раствора добавили 2 кг воды. Найдите новую концентрацию.</p><button class="answer-btn">Показать ответ</button><div class="answer">15%.</div></article>
+        <article class="exercise"><span class="num">4</span><p>Смешали равные массы 18%-го и 32%-го растворов. Найдите концентрацию смеси.</p><button class="answer-btn">Показать ответ</button><div class="answer">25%.</div></article>
+        <article class="exercise"><span class="num">5</span><p>К 10 кг 8%-го раствора добавляют чистое вещество до концентрации 20%. Сколько добавили?</p><button class="answer-btn">Показать ответ</button><div class="answer">1,5 кг.</div></article>
+        <article class="exercise"><span class="num">6</span><p>Из сплавов с 30% и 10% компонента получили 80 кг сплава с 18%. Найдите массы исходных сплавов и их разность.</p><button class="answer-btn">Показать ответ</button><div class="answer">32 кг и 48 кг; разность 16 кг.</div></article>
+        <article class="exercise"><span class="num">7</span><p>Свежие ягоды содержат 84% воды, сушёные — 20%. Сколько свежих ягод нужно для 12 кг сушёных?</p><button class="answer-btn">Показать ответ</button><div class="answer">60 кг.</div></article>
+        <article class="exercise"><span class="num">8</span><p>Цена снизилась с 2400 ₽ до 1980 ₽. На сколько процентов?</p><button class="answer-btn">Показать ответ</button><div class="answer">На 17,5%.</div></article>
+        <article class="exercise"><span class="num">9</span><p>Сумма 50 000 ₽ выросла на 6%, затем уменьшилась на 4%. Найдите итог и общее изменение.</p><button class="answer-btn">Показать ответ</button><div class="answer">50 880 ₽; рост на 1,76%.</div></article>
+        <article class="exercise"><span class="num">10</span><p>Из 12 кг 25%-го раствора выпарили воду, затем добавили 2 кг чистого вещества. Получили 40%-й раствор. Сколько воды выпарили?</p><button class="answer-btn">Показать ответ</button><div class="answer">1,5 кг воды.</div></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="quiz" id="quiz">
+        <p class="eyebrow">Мини-квиз</p>
+        <h2>Проверка модели</h2>
+        <div id="quizQuestion"></div>
+        <div id="quizOptions"></div>
+        <p class="quiz-feedback" id="quizFeedback" aria-live="polite"></p>
+        <button class="btn primary" id="nextQuiz" type="button">Следующий вопрос</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <article class="card">
+        <p class="eyebrow">Финальная проверка</p><h2>Чек-лист решения</h2>
+        <ul class="checklist">
+          <li>Понятно, какой компонент отслеживается.</li><li>Все единицы согласованы.</li><li>Проценты переведены в доли.</li><li>Найдены массы вещества.</li><li>Записан баланс общей массы.</li><li>Записан баланс компонента.</li><li>Учтено, что у воды доля 0%.</li><li>При сушке сохранено сухое вещество.</li><li>Последовательные проценты записаны множителями.</li><li>Ответ проверен по смыслу и единицам.</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">Артём Александрович Лёвин · эксклюзивно для Софии Кальней · 13.07.26</footer>
+  <div class="tooltip" id="tooltip" role="tooltip"></div>
+  <dialog id="posterDialog"><div class="dialog-head"><b>Учебный постер</b><button class="icon-btn" id="closePoster" type="button" aria-label="Закрыть">×</button></div><div class="dialog-body"><img id="posterZoom" src="13.07.26.png" alt="Увеличенный учебный постер"></div></dialog>
+
+  <script>
+    (() => {
+      const THEME_KEY = "sofya-1307-theme";
+      const VIEW_KEY = "sofya-1307-view";
+      const MAP_KEY = "sofya-competence-map-v1";
+      const body = document.body;
+      const $ = s => document.querySelector(s);
+      const $$ = s => [...document.querySelectorAll(s)];
+
+      body.dataset.theme = localStorage.getItem(THEME_KEY) || "light";
+      body.dataset.view = localStorage.getItem(VIEW_KEY) || "detailed";
+      $("#themeBtn").addEventListener("click", () => { body.dataset.theme = body.dataset.theme === "dark" ? "light" : "dark"; localStorage.setItem(THEME_KEY, body.dataset.theme); draw(); });
+      $("#printBtn").addEventListener("click", () => window.print());
+      $$(".mode-btn[data-view]").forEach(btn => {
+        btn.setAttribute("aria-pressed", String(btn.dataset.view === body.dataset.view));
+        btn.addEventListener("click", () => { body.dataset.view = btn.dataset.view; localStorage.setItem(VIEW_KEY, btn.dataset.view); $$(".mode-btn[data-view]").forEach(b => b.setAttribute("aria-pressed", String(b === btn))); });
+      });
+      $$(".tab").forEach(tab => tab.addEventListener("click", () => { $$(".tab").forEach(t => t.setAttribute("aria-selected", String(t === tab))); document.getElementById(tab.dataset.target).scrollIntoView({behavior:"smooth"}); }));
+
+      const tooltip = $("#tooltip");
+      $$("[data-hint]").forEach(btn => {
+        const show = () => { const r=btn.getBoundingClientRect(); tooltip.textContent=btn.dataset.hint; tooltip.style.left=Math.min(innerWidth-302,Math.max(12,r.left))+'px'; tooltip.style.top=Math.min(innerHeight-100,r.bottom+8)+'px'; tooltip.classList.add("show"); };
+        btn.addEventListener("mouseenter",show); btn.addEventListener("focus",show); btn.addEventListener("click",show);
+        btn.addEventListener("mouseleave",()=>tooltip.classList.remove("show")); btn.addEventListener("blur",()=>tooltip.classList.remove("show"));
+      });
+
+      const canvas=$("#modelCanvas"), ctx=canvas.getContext("2d");
+      const inputs=["m1","w1","m2","w2"].map(id=>$("#"+id));
+      let visualMode="mix", showLabels=true, scale=1, panX=0, panY=0, drag=null;
+      function values(){ return {m1:+$("#m1").value,w1:+$("#w1").value,m2:+$("#m2").value,w2:+$("#w2").value}; }
+      function rounded(n,d=1){ return Number(n.toFixed(d)).toLocaleString("ru-RU"); }
+      function fit(){ const dpr=Math.min(devicePixelRatio||1,2), r=canvas.getBoundingClientRect(); canvas.width=Math.max(600,Math.round(r.width*dpr)); canvas.height=Math.round(canvas.width*.75); ctx.setTransform(1,0,0,1,0,0); }
+      function bar(x,y,w,h,p,color,label){ ctx.fillStyle="rgba(255,255,255,.46)"; ctx.fillRect(x,y,w,h); ctx.fillStyle=color; ctx.fillRect(x,y+h*(1-p),w,h*p); ctx.strokeStyle=getComputedStyle(body).getPropertyValue("--ink"); ctx.lineWidth=2; ctx.strokeRect(x,y,w,h); if(showLabels){ctx.fillStyle=getComputedStyle(body).getPropertyValue("--ink");ctx.font="700 24px system-ui";ctx.textAlign="center";ctx.fillText(label,x+w/2,y+h+34);} }
+      function draw(){ fit(); const {m1,w1,m2,w2}=values(); ["m1","w1","m2","w2"].forEach(id=>$("#"+id+"Out").textContent=$("#"+id).value+(id[0]==="m"?" кг":"%")); const cs=getComputedStyle(body), wine=cs.getPropertyValue("--wine"), teal=cs.getPropertyValue("--teal"), ink=cs.getPropertyValue("--ink"); ctx.clearRect(0,0,canvas.width,canvas.height); const sx=canvas.width/800,sy=canvas.height/600; ctx.save();ctx.scale(sx*scale,sy*scale);ctx.translate(panX,panY);ctx.fillStyle=ink;ctx.textAlign="center";ctx.font="800 28px Georgia";
+        if(visualMode==="mix"||visualMode==="water") { const second=visualMode==="water"?0:w2, total=(m1*w1+m2*second)/(m1+m2); ctx.fillText(visualMode==="water"?"Разбавление водой":"Смешивание растворов",400,54); bar(80,130,165,270,w1/100,wine,`${m1} кг · ${w1}%`); bar(317,130,165,270,second/100,teal,`${m2} кг · ${second}%`); ctx.font="700 46px system-ui";ctx.fillText("→",532,285);bar(585,100,165,300,total/100,wine,`${m1+m2} кг · ${rounded(total)}%`); $("#canvasResult").textContent=`Итог: ${m1+m2} кг раствора, концентрация ${rounded(total)}%`; }
+        if(visualMode==="dry") { const freshDry=Math.max(1,100-w1), dryDry=Math.max(freshDry,100-w2), result=m2*dryDry/freshDry; ctx.fillText("Сушка: сохраняется сухое вещество",400,54);bar(130,120,200,300,freshDry/100,teal,`свежее: ${freshDry}% сухого`);ctx.font="700 46px system-ui";ctx.fillText("→",400,285);bar(470,120,200,300,dryDry/100,wine,`сухое: ${dryDry}% сухого`);$("#canvasResult").textContent=`Для ${m2} кг сушёного продукта нужно ${rounded(result)} кг свежего`; }
+        if(visualMode==="change") { const old=m1*1000, up=w1, down=w2, result=old*(1+up/100)*(1-down/100), delta=(result/old-1)*100; ctx.fillText("Последовательные процентные изменения",400,54);ctx.strokeStyle=wine;ctx.lineWidth=18;ctx.beginPath();ctx.moveTo(100,390);ctx.lineTo(360,180);ctx.lineTo(700,300);ctx.stroke();ctx.fillStyle=ink;ctx.font="700 24px system-ui";ctx.fillText(`${old.toLocaleString("ru-RU")} ₽`,110,430);ctx.fillText(`+${up}%`,350,150);ctx.fillText(`−${down}%`,670,270);ctx.fillText(`${rounded(result,0)} ₽`,690,345);$("#canvasResult").textContent=`Итог: ${rounded(result,0)} ₽; общее изменение ${delta>=0?"+":""}${rounded(delta,2)}%`; } ctx.restore(); }
+      inputs.forEach(input=>input.addEventListener("input",draw));
+      $$(".visual-mode").forEach(btn=>btn.addEventListener("click",()=>{visualMode=btn.dataset.mode;$$(".visual-mode").forEach(b=>b.setAttribute("aria-pressed",String(b===btn)));draw();}));
+      $("#labelsBtn").addEventListener("click",()=>{showLabels=!showLabels;$("#labelsBtn").textContent=`Подписи: ${showLabels?"вкл.":"выкл."}`;draw();});
+      canvas.addEventListener("wheel",e=>{e.preventDefault();scale=Math.max(.8,Math.min(1.8,scale+(e.deltaY<0?.1:-.1)));draw();},{passive:false});
+      canvas.addEventListener("pointerdown",e=>{drag={x:e.clientX,y:e.clientY,px:panX,py:panY};canvas.setPointerCapture(e.pointerId);});
+      canvas.addEventListener("pointermove",e=>{if(!drag)return;panX=drag.px+(e.clientX-drag.x)*.5;panY=drag.py+(e.clientY-drag.y)*.5;draw();});
+      canvas.addEventListener("pointerup",()=>drag=null);
+      $("#zoomBtn").addEventListener("click",()=>{scale=scale===1?1.35:1;panX=panY=0;draw();});
+      addEventListener("resize",draw); draw();
+
+      $$(".answer-btn").forEach(btn=>btn.addEventListener("click",()=>{const a=btn.nextElementSibling;a.classList.toggle("show");btn.textContent=a.classList.contains("show")?"Скрыть ответ":"Показать ответ";}));
+      const generated=[
+        {task:"Смешали 2 кг 20%-го и 3 кг 10%-го раствора. Найдите концентрацию смеси.",answer:"14%."},
+        {task:"К 5 кг 24%-го раствора добавили 3 кг воды. Найдите концентрацию.",answer:"15%."},
+        {task:"Цена 3200 ₽ выросла на 5%, затем снизилась на 10%. Найдите итог.",answer:"3024 ₽."},
+        {task:"Сушёный продукт содержит 75% сухого вещества, свежий — 15%. Сколько свежего продукта нужно для 9 кг сушёного?",answer:"45 кг."}
+      ]; let generatedIndex=-1;
+      $("#generateBtn").addEventListener("click",()=>{generatedIndex=(generatedIndex+1)%generated.length;$("#generatedTask").textContent=generated[generatedIndex].task;$("#generatedAnswer").textContent=generated[generatedIndex].answer;$("#generatedAnswer").classList.remove("show");});
+      $("#generatedAnswerBtn").addEventListener("click",()=>{if(generatedIndex<0)$("#generateBtn").click();$("#generatedAnswer").classList.toggle("show");});
+
+      const quiz=[
+        {q:"Что сохраняется при высушивании продукта?",options:["Масса воды","Масса сухого вещества","Общая масса"],correct:1,skill:"mixtures"},
+        {q:"Как записать увеличение на 8%?",options:["умножить на 0,08","прибавить 8","умножить на 1,08"],correct:2,skill:"percent"},
+        {q:"Какова доля вещества в чистой воде при разбавлении?",options:["0%","1%","100%"],correct:0,skill:"mixtures"},
+        {q:"Какая система описывает смесь двух сплавов?",options:["Только сумма концентраций","Баланс общей массы и массы компонента","Только разность масс"],correct:1,skill:"systems_eq"}
+      ]; let qi=0, quizLocked=false;
+      function renderQuiz(){quizLocked=false;const item=quiz[qi];$("#quizQuestion").innerHTML=`<h3>${qi+1}. ${item.q}</h3>`;$("#quizOptions").innerHTML=item.options.map((o,i)=>`<button class="quiz-option" data-i="${i}">${o}</button>`).join("");$("#quizFeedback").textContent="";$$(".quiz-option").forEach(b=>b.addEventListener("click",()=>answerQuiz(+b.dataset.i)));}
+      function updateMap(skill,correct){try{const state=JSON.parse(localStorage.getItem(MAP_KEY)||"{}");const current=Number(state[skill]||0);state[skill]=Math.max(0,Math.min(4,current+(correct?1:0)));state.equation_models=Math.max(Number(state.equation_models||0),correct?3:2);localStorage.setItem(MAP_KEY,JSON.stringify(state));}catch{}}
+      function answerQuiz(choice){if(quizLocked)return;quizLocked=true;const item=quiz[qi],correct=choice===item.correct;$$(".quiz-option").forEach((b,i)=>b.classList.add(i===item.correct?"correct":i===choice?"wrong":""));$("#quizFeedback").textContent=correct?"Верно. Карта компетенций обновлена.":`Верный ответ: ${item.options[item.correct]}.`;updateMap(item.skill,correct);}
+      $("#nextQuiz").addEventListener("click",()=>{qi=(qi+1)%quiz.length;renderQuiz();});renderQuiz();
+
+      const posterDialog=$("#posterDialog");$("#posterImage").addEventListener("click",()=>posterDialog.showModal());$("#closePoster").addEventListener("click",()=>posterDialog.close());posterDialog.addEventListener("click",e=>{if(e.target===posterDialog)posterDialog.close();});
+    })();
+  </script>
+</body>
+</html>
