@@ -1,0 +1,423 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T2A]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage[russian]{babel}
+  \usepackage{helvet}
+  \usepackage{microtype}
+\else
+  \usepackage{fontspec}
+  \setmainfont{DejaVu Sans}[AutoFakeSlant=0.18]
+  \setsansfont{DejaVu Sans}[AutoFakeSlant=0.18]
+  \renewcommand{\today}{15 июля 2026 г.}
+\fi
+\renewcommand{\familydefault}{\sfdefault}
+\renewcommand{\contentsname}{Содержание}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{icomma}
+\usepackage[a4paper,left=18mm,right=18mm,top=18mm,bottom=20mm]{geometry}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{array}
+
+\definecolor{accent}{HTML}{7B3142}
+\definecolor{darkaccent}{HTML}{4E2430}
+\definecolor{textgray}{HTML}{30343B}
+\definecolor{softgray}{HTML}{6E7279}
+\definecolor{paper}{HTML}{F5EFE5}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=accent}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{3em}
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=4pt,topsep=4pt}
+\renewcommand{\arraystretch}{1.35}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{textgray}{Показательные неравенства}}
+\rhead{\textcolor{textgray}{15.07.26}}
+\cfoot{\textcolor{softgray}{\thepage}}
+\setlength{\headheight}{15pt}
+
+\newcommand{\key}[1]{\textcolor{accent}{\textbf{#1}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  \vspace*{24mm}
+  {\Large\textcolor{accent}{ЧЕК-ЛИСТ}\par}
+  \vspace{8mm}
+  {\fontsize{30}{36}\selectfont\bfseries Показательные\\[2mm] неравенства\par}
+  \vspace{8mm}
+  {\large Общее основание, замена переменной\\и логарифмический переход\par}
+  \vfill
+  {\large Лёвин Артём Александрович\\эксклюзивно для Тимофея Васильченко\par}
+  \vspace{8mm}
+  {\large \today\par}
+  \vfill
+  \begin{tikzpicture}[remember picture,overlay]
+    \draw[accent,line width=2pt]
+      ([xshift=22mm,yshift=24mm]current page.south west)
+      .. controls +(38mm,22mm) and +(-35mm,-10mm) ..
+      ([xshift=-22mm,yshift=35mm]current page.south east);
+    \draw[darkaccent,line width=.8pt]
+      ([xshift=32mm,yshift=18mm]current page.south west)
+      .. controls +(45mm,28mm) and +(-48mm,-14mm) ..
+      ([xshift=-30mm,yshift=28mm]current page.south east);
+  \end{tikzpicture}
+\end{titlepage}
+
+\tableofcontents
+\thispagestyle{fancy}
+\newpage
+
+\section{Что нужно узнать сразу}
+
+\key{Показательное неравенство} содержит переменную в показателе степени, например
+\[
+2^x\ge 16,\qquad
+\left(\frac13\right)^{2x-1}<\frac1{27}.
+\]
+
+Для показательной функции требуется
+\[
+a>0,\qquad a\ne1.
+\]
+При этих условиях значение $a^x$ определено и строго положительно для любого $x\in\R$.
+
+\subsection{Монотонность определяет знак}
+
+\begin{table}[ht]
+\centering
+\caption{Равносильные переходы для одинакового основания}
+\begin{tabularx}{\linewidth}{>{\bfseries}p{35mm} X X}
+\toprule
+Основание & Поведение функции & Переход \\
+\midrule
+$a>1$ & $a^x$ возрастает & $a^{f(x)}\gtreqless a^{g(x)}\iff f(x)\gtreqless g(x)$ \\
+$0<a<1$ & $a^x$ убывает & $a^{f(x)}\gtreqless a^{g(x)}\iff f(x)\lesseqgtr g(x)$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\key{Главная проверка перед сравнением показателей:} основания должны быть одинаковыми, положительными и отличными от единицы. Слагаемые и лишние множители рядом со степенью сначала устраняют пре\-об\-ра\-зо\-ва\-ни\-я\-ми.
+
+\subsection{Степенная запись}
+
+\[
+\sqrt[n]{a^m}=a^{m/n},\qquad
+a^m a^n=a^{m+n},\qquad
+\frac{a^m}{a^n}=a^{m-n},\qquad
+(a^m)^n=a^{mn}.
+\]
+
+Полезные представления:
+\[
+4=2^2,\quad 8=2^3,\quad \sqrt[3]{16}=2^{4/3},
+\quad 0{,}2=\frac15=5^{-1},\quad 0{,}25=\frac14=2^{-2}.
+\]
+
+\section{Метод 1. Приведение к общему основанию}
+
+\subsection{Простейшие случаи}
+
+\[
+2^x\ge2^1\iff x\ge1.
+\]
+Основание $2>1$, поэтому знак сохраняется.
+
+\[
+\left(\frac15\right)^x\ge\left(\frac15\right)^1\iff x\le1.
+\]
+Основание лежит между нулём и единицей, поэтому знак меняется.
+
+\subsection{Пример с составными числами и корнем}
+
+Решим
+\[
+4^x\cdot8<\sqrt[3]{16}.
+\]
+Приведём всё к основанию $2$:
+\[
+2^{2x}\cdot2^3<2^{4/3}
+\iff
+2^{2x+3}<2^{4/3}.
+\]
+Так как $2>1$,
+\[
+2x+3<\frac43
+\iff 2x<-\frac53
+\iff x<-\frac56.
+\]
+
+\subsection{Пример с корнями в обеих частях}
+
+\[
+\sqrt2\cdot8^x\ge\frac4{\sqrt[5]{16}}.
+\]
+Перепишем каждый объект как степень двойки:
+\[
+2^{1/2}\cdot2^{3x}\ge\frac{2^2}{2^{4/5}}
+\iff
+2^{3x+1/2}\ge2^{6/5}.
+\]
+Следовательно,
+\[
+3x+\frac12\ge\frac65
+\iff 3x\ge\frac7{10}
+\iff x\ge\frac7{30}.
+\]
+
+\subsection{Дробь в показателе}
+
+Рассмотрим
+\[
+\left(\frac15\right)^{\frac{2x+3}{x-2}}>5.
+\]
+Сначала фиксируем ограничение $x\ne2$ и заменяем основание:
+\[
+5^{-\frac{2x+3}{x-2}}>5^1
+\iff
+-\frac{2x+3}{x-2}>1.
+\]
+После нормализации:
+\[
+\frac{3x+1}{x-2}<0.
+\]
+Метод интервалов даёт
+\[
+\boxed{x\in\left(-\frac13;2\right)}.
+\]
+
+\section{Метод 2. Замена \texorpdfstring{\(t=a^x\)}{t равно a в степени x}}
+
+\subsection{Когда нужна замена}
+
+Если в неравенстве повторяются $a^x$, $a^{2x}$, $a^{3x}$ или дроби с такими выражениями, вводят
+\[
+t=a^x,\qquad t>0.
+\]
+Ограничение $t>0$ обязательно: показательная функция не принимает нулевых и отрицательных значений.
+
+\subsection{Квадратное неравенство после замены}
+
+\[
+9^x-10\cdot3^x+9\le0.
+\]
+Положим $t=3^x>0$. Тогда $9^x=(3^x)^2=t^2$:
+\[
+t^2-10t+9\le0
+\iff
+(t-1)(t-9)\le0.
+\]
+Отсюда $1\le t\le9$. Возвращаемся к $x$:
+\[
+1\le3^x\le9
+\iff
+3^0\le3^x\le3^2
+\iff
+\boxed{x\in[0;2]}.
+\]
+
+\subsection{Полный пример экзаменационного уровня}
+
+Решим
+\[
+\frac7{9^x-2}\ge\frac2{3^x-1}.
+\]
+
+\key{1. Ограничения.}
+\[
+9^x\ne2,\qquad 3^x\ne1.
+\]
+
+\key{2. Замена.} Пусть $t=3^x>0$. Тогда $9^x=t^2$:
+\[
+\frac7{t^2-2}\ge\frac2{t-1}.
+\]
+
+\key{3. Нормализация.}
+\[
+\frac{7(t-1)-2(t^2-2)}{(t^2-2)(t-1)}\ge0,
+\]
+\[
+\frac{-2t^2+7t-3}{(t^2-2)(t-1)}\ge0
+\iff
+\frac{2t^2-7t+3}{(t^2-2)(t-1)}\le0.
+\]
+
+\key{4. Критические точки.}
+\[
+2t^2-7t+3=0
+\iff t=\frac12\ \text{или}\ t=3.
+\]
+Знаменатель обращается в ноль при $t=1$ и $t=\pm\sqrt2$. С учётом $t>0$ на оси остаются
+\[
+\frac12,\quad1,\quad\sqrt2,\quad3.
+\]
+Точки $1$ и $\sqrt2$ выколоты.
+
+\key{5. Метод интервалов.}
+\[
+t\in\left[\frac12;1\right)\cup(\sqrt2;3].
+\]
+
+\key{6. Обратная замена.}
+\[
+\begin{cases}
+\dfrac12\le3^x<1,
+\end{cases}
+\qquad\text{или}\qquad
+\begin{cases}
+\sqrt2<3^x\le3.
+\end{cases}
+\]
+Так как основание $3>1$,
+\[
+\boxed{
+x\in\left[\log_3\frac12;0\right)
+\cup
+\left(\frac12\log_3 2;1\right].
+}
+\]
+
+\section{Логарифмический переход}
+
+Если $a^x$ сравнивается с положительным числом $b$, которое не удаётся представить степенью основания $a$, используйте логарифм:
+\[
+a^x\gtreqless b.
+\]
+При $a>1$:
+\[
+x\gtreqless\log_a b.
+\]
+При $0<a<1$ знак меняется:
+\[
+x\lesseqgtr\log_a b.
+\]
+
+Например,
+\[
+3^x>\sqrt2
+\iff x>\log_3\sqrt2
+\iff x>\frac12\log_3 2.
+\]
+
+Ещё один пример:
+\[
+5^{2x+1}\le10.
+\]
+Так как $5>1$, логарифмирование сохраняет знак:
+\[
+2x+1\le\log_5 10
+\iff
+\boxed{x\le\frac{\log_5 10-1}{2}}.
+\]
+
+\section{Универсальный алгоритм}
+
+\begin{enumerate}
+  \item Проверьте, что основания степеней положительны и отличны от единицы.
+  \item Выпишите ограничения из знаменателей и других потенциально опасных выражений.
+  \item Перепишите составные числа, дроби и корни в степенном виде.
+  \item Попробуйте получить одинаковые основания в обеих частях.
+  \item Если повторяется $a^x$, выполните замену $t=a^x$ и сразу запишите $t>0$.
+  \item Приведите полученное неравенство к виду с нулём справа.
+  \item Решите алгебраическое неравенство, сохраняя выколотые точки знаменателя.
+  \item Выполните обратную замену. Каждый полученный промежуток для $t$ запишите отдельной системой.
+  \item Сравните степени по монотонности основания или примените ло\-га\-риф\-ми\-че\-ский переход.
+  \item Проверьте строгие границы, ограничения и объедините все подходящие промежутки.
+\end{enumerate}
+
+\section{Типичные ошибки}
+
+\begin{itemize}
+  \item \key{Отбросить разные основания.} Сравнивать показатели напрямую разрешено только при одинаковом основании.
+  \item \key{Забыть сменить знак.} При $0<a<1$ показательная функция убывает.
+  \item \key{Потерять условие \(t>0\).} Оно исключает лишнюю часть решения алгебраического неравенства.
+  \item \key{Раскрыть знаменатель без необходимости.} Факторизованный знаменатель удобнее для метода интервалов.
+  \item \key{Включить нуль знаменателя.} Запрещённая точка остаётся выколотой при любом знаке неравенства.
+  \item \key{Поставить скобки неверно.} При вычитании дроби весь её числитель заключается в скобки.
+  \item \key{Домножить на минус и сохранить знак.} При умножении на от\-ри\-ца\-тель\-но\-е число знак меняется.
+  \item \key{Смешать системы и совокупности.} Один промежуток задаётся системой условий; несколько альтернативных промежутков объединяются совокупностью.
+  \item \key{Получить десятичное приближение слишком рано.} Ответы вида $\log_a b$ сохраняют точность.
+\end{itemize}
+
+\section{Итоговый чек-лист}
+
+\begin{itemize}
+  \item[$\square$] Я узнаю показательное неравенство по переменной в показателе.
+  \item[$\square$] Я проверяю условия $a>0$ и $a\ne1$.
+  \item[$\square$] Я определяю, возрастает или убывает показательная функция.
+  \item[$\square$] Я умею представлять корни, дроби и составные числа как степени.
+  \item[$\square$] Я сравниваю показатели только после получения одинакового основания.
+  \item[$\square$] Я ввожу $t=a^x$ вместе с условием $t>0$.
+  \item[$\square$] Я сохраняю все ограничения знаменателя.
+  \item[$\square$] Я решаю рациональное неравенство методом интервалов.
+  \item[$\square$] Я выполняю обратную замену отдельными системами.
+  \item[$\square$] Я применяю логарифм, когда общее основание получить неудобно.
+  \item[$\square$] Я проверяю границы и записываю объединение промежутков.
+\end{itemize}
+
+\clearpage
+\section{Тренировочный блок}
+
+\textit{Решите неравенства. Первые три задания имеют средний уровень, задания 4--9 --- уровень выше среднего, задание 10 --- сложный уровень.}
+
+\begin{enumerate}
+  \item $2^x\ge16$.
+  \item $\left(\dfrac13\right)^{2x-1}<\dfrac1{27}$.
+  \item $4^x\cdot8<\sqrt[3]{16}$.
+  \item $\sqrt2\cdot8^x\ge\dfrac4{\sqrt[5]{16}}$.
+  \item $\left(\dfrac15\right)^{\frac{2x+3}{x-2}}>5$.
+  \item $\left(\dfrac12\right)^{\frac{x}{x+1}}\le2$.
+  \item $9^x-10\cdot3^x+9\le0$.
+  \item $4^x-5\cdot2^x+4>0$.
+  \item $\dfrac7{9^x-2}\ge\dfrac2{3^x-1}$.
+  \item $\dfrac{5^{2x}-26\cdot5^x+25}{5^x-5}\ge0$.
+\end{enumerate}
+
+\clearpage
+\section{Ответы}
+
+\begin{longtable}{>{\bfseries}p{12mm}p{0.78\linewidth}}
+\toprule
+№ & Ответ \\
+\midrule
+\endhead
+1 & $[4;+\infty)$ \\
+2 & $(2;+\infty)$ \\
+3 & $\left(-\infty;-\dfrac56\right)$ \\
+4 & $\left[\dfrac7{30};+\infty\right)$ \\
+5 & $\left(-\dfrac13;2\right)$ \\
+6 & $(-\infty;-1)\cup\left[-\dfrac12;+\infty\right)$ \\
+7 & $[0;2]$ \\
+8 & $(-\infty;0)\cup(2;+\infty)$ \\
+9 & $\left[\log_3\dfrac12;0\right)\cup\left(\dfrac12\log_3 2;1\right]$ \\
+10 & $[0;1)\cup[2;+\infty)$ \\
+\bottomrule
+\end{longtable}
+
+\vfill
+\begin{center}
+\textcolor{softgray}{Код самопроверки: \textbf{3152}}
+\end{center}
+
+\end{document}
