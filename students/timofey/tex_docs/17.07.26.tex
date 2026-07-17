@@ -1,0 +1,350 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T2A]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage[russian]{babel}
+  \usepackage{helvet}
+  \usepackage{microtype}
+\else
+  \usepackage{fontspec}
+  \setmainfont{DejaVu Sans}[AutoFakeSlant=0.18]
+  \setsansfont{DejaVu Sans}[AutoFakeSlant=0.18]
+\fi
+\renewcommand{\familydefault}{\sfdefault}
+\renewcommand{\today}{17 июля 2026 г.}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{icomma}
+\usepackage[a4paper,left=18mm,right=18mm,top=18mm,bottom=20mm]{geometry}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable,array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{7B3142}
+\definecolor{darkaccent}{HTML}{4E2430}
+\definecolor{textgray}{HTML}{30343B}
+\definecolor{softgray}{HTML}{6E7279}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=accent}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{3em}
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=4pt,topsep=4pt}
+\renewcommand{\arraystretch}{1.35}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{textgray}{Показательные неравенства: уровень выше}}
+\rhead{\textcolor{textgray}{17.07.26}}
+\cfoot{\textcolor{softgray}{\thepage}}
+\setlength{\headheight}{15pt}
+
+\newcommand{\key}[1]{\textcolor{accent}{\textbf{#1}}}
+\newcommand{\R}{\mathbb{R}}
+
+\begin{document}
+\sloppy
+
+\begin{titlepage}
+  \centering
+  \vspace*{25mm}
+  {\Large\textcolor{accent}{ЧЕК-ЛИСТ}\par}
+  \vspace{9mm}
+  {\fontsize{29}{35}\selectfont\bfseries Показательные неравенства:\\[2mm] уровень выше\par}
+  \vspace{8mm}
+  {\large Модуль, системы и совокупности,\\группировка и разность степеней\par}
+  \vfill
+  {\large Лёвин Артём Александрович\\эксклюзивно для Тимофея Васильченко\par}
+  \vspace{8mm}
+  {\large \today\par}
+  \vfill
+  \begin{tikzpicture}[remember picture,overlay]
+    \draw[accent,line width=2pt]
+      ([xshift=22mm,yshift=24mm]current page.south west)
+      .. controls +(38mm,22mm) and +(-35mm,-10mm) ..
+      ([xshift=-22mm,yshift=35mm]current page.south east);
+    \draw[darkaccent,line width=.8pt]
+      ([xshift=32mm,yshift=18mm]current page.south west)
+      .. controls +(45mm,28mm) and +(-48mm,-14mm) ..
+      ([xshift=-30mm,yshift=28mm]current page.south east);
+  \end{tikzpicture}
+\end{titlepage}
+
+\section{Карта занятия}
+
+На прошлом занятии были освоены общее основание и замена переменной. Теперь задача --- распознавать более сложную структуру: модуль в показателе, четыре слагаемых, произведение разностей степеней и деление на показательное выражение.
+
+\begin{enumerate}[itemsep=1pt]
+  \item привести обе части к одинаковому основанию или к сравнению с единицей;
+  \item установить, возрастает или убывает показательная функция;
+  \item снять показатель и решить полученное алгебраическое неравенство;
+  \item при четырёх слагаемых проверить группировку и двойное вынесение;
+  \item делить только на выражение с заранее известным знаком;
+  \item проверить строгие границы, ОДЗ и запись объединения промежутков.
+\end{enumerate}
+
+\section{Основание и сравнение с единицей}
+
+Для $a>0$, $a\ne1$ справедливо
+\[
+ a^{f(x)}\gtreqless a^{g(x)}
+ \iff
+ \begin{cases}
+ f(x)\gtreqless g(x),&a>1,\\
+ f(x)\lesseqgtr g(x),&0<a<1.
+ \end{cases}
+\]
+
+Особенно полезно представление $1=a^0$. Перед снятием основания обязательно установите, по какую сторону от единицы находится $a$.
+
+\begin{table}[ht]
+\centering
+\caption{Что происходит со знаком неравенства}
+\begin{tabularx}{\linewidth}{>{\bfseries}p{31mm} X X}
+\toprule
+Основание & Монотонность & Действие \\
+\midrule
+$a>1$ & функция $a^x$ возрастает & знак между показателями сохраняется \\
+$0<a<1$ & функция $a^x$ убывает & знак между показателями меняется \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Пример с модулем в показателе}
+
+Решим
+\[
+\left(\frac{\pi}{3}\right)^{|x^2-x|-3}\ge1.
+\]
+Поскольку $\pi>3$, имеем $\pi/3>1$, поэтому знак сохраняется:
+\[
+|x^2-x|-3\ge0\iff |x^2-x|\ge3.
+\]
+Раскрываем модуль как \key{совокупность}:
+\[
+\left[
+\begin{aligned}
+x^2-x&\ge3,\\
+x^2-x&\le-3.
+\end{aligned}
+\right.
+\]
+Первое неравенство даёт
+\[
+x^2-x-3\ge0,qquad
+x\in\left(-\infty;\frac{1-\sqrt{13}}2\right]
+\cup
+\left[\frac{1+\sqrt{13}}2;+\infty\right).
+\]
+У второго неравенства $x^2-x+3\le0$ дискриминант равен $-11$, а квадратный трёхчлен положителен при всех $x$. Поэтому решений оно не имеет. Итог:
+\[
+\boxed{x\in\left(-\infty;\frac{1-\sqrt{13}}2\right]
+\cup
+\left[\frac{1+\sqrt{13}}2;+\infty\right)}.
+\]
+
+\section{Модуль: система или совокупность}
+
+После изоляции модуля используйте равносильный переход, соответствующий знаку.
+\[
+|f(x)|\ge g(x)
+\iff
+\left[
+\begin{aligned}
+f(x)&\ge g(x),\\
+f(x)&\le-g(x),
+\end{aligned}
+\right.
+\]
+\[
+|f(x)|\le g(x)
+\iff
+\begin{cases}
+f(x)\le g(x),\\
+f(x)\ge-g(x).
+\end{cases}
+\]
+Для строгих знаков $>$ и $<$ строгими остаются обе ветви. Совокупность объединяет решения хотя бы одной ветви; система берёт их пересечение.
+
+\subsection{Два коротких примера}
+
+\[
+|x+1|-3x+5\ge0
+\iff |x+1|\ge3x-5
+\iff
+\left[
+\begin{aligned}
+x+1&\ge3x-5,\\
+x+1&\le-3x+5.
+\end{aligned}
+\right.
+\]
+Отсюда $x\le3$ или $x\le1$, то есть $\boxed{x\le3}$.
+
+\[
+|x+1|-3x+5<0
+\iff |x+1|<3x-5
+\iff
+\begin{cases}
+x+1<3x-5,\\
+x+1>-3x+5.
+\end{cases}
+\]
+Получаем $x>3$ и $x>1$, следовательно $\boxed{x>3}$.
+
+\key{Самопроверка:} если справа от модуля получилось отрицательное число, то неравенство вида $|f(x)|\le g(x)$ решений не имеет, а $|f(x)|\ge g(x)$ выполняется автоматически. При переменном $g(x)$ это нужно учитывать через систему или совокупность, а не отдельной догадкой.
+
+\section{Группировка и двойное вынесение}
+
+Четыре слагаемых часто являются сигналом к группировке. Разберём пример занятия:
+\[
+25\cdot2^x-10^x+5^x-25>0.
+\]
+Так как $10^x=2^x5^x$, группируем:
+\begin{align*}
+25\cdot2^x-2^x5^x+5^x-25
+&=2^x(25-5^x)-(25-5^x)\\
+&=(25-5^x)(2^x-1).
+\end{align*}
+
+Это и есть \key{двойное вынесение}: сначала общий множитель появляется внутри каждой группы, затем одинаковая скобка выносится из всего выражения.
+
+\section{Разность степеней и её знак}
+
+Если $a>0$, $a\ne1$, то
+\[
+\operatorname{sgn}\bigl(a^u-a^v\bigr)
+=\operatorname{sgn}\bigl((a-1)(u-v)\bigr).
+\]
+Это правило применимо именно к разности двух степеней одного основания. Дополнительное слагаемое или знак плюса внутри скобки разрушает эту структуру.
+
+В предыдущем примере
+\[
+\operatorname{sgn}(25-5^x)=\operatorname{sgn}(2-x),
+\qquad
+\operatorname{sgn}(2^x-1)=\operatorname{sgn}(x).
+\]
+Следовательно,
+\[
+(25-5^x)(2^x-1)>0
+\iff x(2-x)>0
+\iff\boxed{x\in(0;2)}.
+\]
+
+\begin{center}
+\begin{tikzpicture}[x=2.1cm,y=1cm]
+  \draw[->,textgray] (-2.3,0)--(3.3,0);
+  \fill[accent] (0,0) circle (2pt) node[below=5pt] {$0$};
+  \fill[accent] (2,0) circle (2pt) node[below=5pt] {$2$};
+  \node[above] at (-1.1,0) {$-$};
+  \node[above] at (1,0) {$+$};
+  \node[above] at (2.65,0) {$-$};
+  \draw[accent,line width=2pt] (0.03,0.15)--(1.97,0.15);
+\end{tikzpicture}
+\end{center}
+
+\section{Когда разрешено делить неравенство}
+
+Деление на выражение с переменной допустимо только после установления его знака. Если делитель положителен, знак сохраняется; если отрицателен, меняется; если может обращаться в нуль, нужно рассматривать случаи.
+
+В показательных задачах полезен факт
+\[
+a^x>0\qquad\text{для всех }x\in\R\text{ при }a>0.
+\]
+Поэтому на $C\,a^{f(x)}$ можно делить без смены знака, если $C>0$. Это обоснование следует написать до деления.
+
+{\small\setstretch{1.15}
+\section{Типичные ошибки}
+
+\begin{enumerate}
+  \item Снимать разные основания, не приведя их к одной базе.
+  \item Не проверять, больше или меньше единицы основание.
+  \item Записывать систему вместо совокупности при $|f(x)|\ge g(x)$.
+  \item Считать, что отрицательный дискриминант автоматически означает отсутствие решений неравенства.
+  \item Делить на выражение с переменной без проверки его знака и возможности нуля.
+  \item Применять правило разности степеней к сумме или к выражению с лишним слагаемым.
+  \item После группировки потерять минус перед второй скобкой.
+  \item Включать граничные точки в ответ при строгом неравенстве.
+\end{enumerate}
+
+\section{Итоговый чек-лист}
+
+\begin{itemize}[label=$\square$,itemsep=1pt]
+  \item Я привёл сравниваемые степени к одинаковому основанию.
+  \item Я установил: $a>1$ или $0<a<1$.
+  \item Я корректно сохранил или изменил знак неравенства.
+  \item Я изолировал модуль перед равносильным переходом.
+  \item Я различаю систему и совокупность.
+  \item При четырёх слагаемых я проверил возможность группировки.
+  \item Я применяю правило разности степеней только к $a^u-a^v$.
+  \item Перед делением я доказал знак делителя.
+  \item Я проверил границы, ОДЗ и скобки в ответе.
+\end{itemize}
+}
+
+\newpage
+\section{Тренировочный блок}
+
+\textbf{Средний уровень}
+\begin{enumerate}
+  \item $\left(\dfrac32\right)^{|x|-4}\ge1$.
+  \item $\left(\dfrac23\right)^{x^2-5x+6}\ge1$.
+  \item $|x+1|-3x+5\ge0$.
+\end{enumerate}
+
+\textbf{Уровень выше среднего}
+\begin{enumerate}[resume]
+  \item $|x+1|-3x+5<0$.
+  \item $16\cdot3^x-12^x+4^x-16>0$.
+  \item $9\cdot2^x-6^x+3^x-9\ge0$.
+  \item $(5^x-25)(7^x-1)\le0$.
+  \item $\dfrac{2^x-4}{3^x-1}>0$.
+  \item $\left(\dfrac73\right)^{x-1}\ge1$.
+\end{enumerate}
+
+\textbf{Сложный уровень}
+\begin{enumerate}[resume]
+  \item $81\cdot2^x-18^x+9^x-81\le0$.
+\end{enumerate}
+
+\newpage
+\section{Ответы}
+
+\begin{table}[ht]
+\centering
+\caption{Ответы к тренировочному блоку}
+\begin{tabularx}{\linewidth}{>{\bfseries}p{12mm} X}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $(-\infty;-4]\cup[4;+\infty)$ \\
+2 & $[2;3]$ \\
+3 & $(-\infty;3]$ \\
+4 & $(3;+\infty)$ \\
+5 & $(0;2)$ \\
+6 & $[0;2]$ \\
+7 & $[0;2]$ \\
+8 & $(-\infty;0)\cup(2;+\infty)$ \\
+9 & $[1;+\infty)$ \\
+10 & $(-\infty;0]\cup[2;+\infty)$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\vfill
+\begin{center}
+\textcolor{softgray}{Сначала восстановите структуру выражения, затем выполняйте вычисления.}
+\end{center}
+
+\end{document}
