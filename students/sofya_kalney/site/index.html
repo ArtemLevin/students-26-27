@@ -221,6 +221,63 @@
     .topic-level { color: var(--muted); font-size: .72rem; }
     .map-source { margin: 15px 0 0; color: var(--muted); font-size: .78rem; text-align: center; }
     .map-source a { color: var(--teal); text-decoration: underline; text-underline-offset: 3px; }
+
+    .study-tools {
+      display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr);
+      gap: 16px; margin-top: 16px;
+    }
+    .study-panel {
+      border: 1px solid var(--line); border-radius: 18px; padding: 18px; background: var(--surface);
+    }
+    .study-panel-head {
+      display: flex; align-items: start; justify-content: space-between; gap: 12px; margin-bottom: 13px;
+    }
+    .study-panel h3 { margin: 0; font: 750 1.2rem/1.1 Georgia, serif; }
+    .study-panel-head p, .dependency-overview p { margin: 5px 0 0; color: var(--muted); font-size: .82rem; }
+    .queue-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 11px; }
+    .queue-tab {
+      border: 1px solid var(--line); border-radius: 999px; padding: 7px 10px;
+      background: transparent; color: var(--muted); cursor: pointer; font-size: .76rem; font-weight: 820;
+    }
+    .queue-tab[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: var(--surface); }
+    body[data-theme="dark"] .queue-tab[aria-pressed="true"] { color: #142239; }
+    .queue-list, .dependency-focus-list { display: grid; gap: 7px; }
+    .queue-item, .dependency-focus-item {
+      width: 100%; border: 1px solid var(--line); border-radius: 13px; padding: 10px 11px;
+      background: var(--surface-2); color: var(--ink); text-align: left; cursor: pointer;
+      display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 9px; align-items: center;
+    }
+    .queue-item:hover, .queue-item:focus-visible, .dependency-focus-item:hover, .dependency-focus-item:focus-visible {
+      border-color: var(--teal); outline: none; transform: translateY(-1px);
+    }
+    .queue-rank {
+      width: 27px; height: 27px; border-radius: 9px; display: grid; place-items: center;
+      background: var(--teal-soft); color: var(--teal); font-size: .72rem; font-weight: 900;
+    }
+    .queue-copy { min-width: 0; }
+    .queue-copy b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .82rem; }
+    .queue-copy small { display: block; color: var(--muted); font-size: .7rem; margin-top: 2px; }
+    .queue-score { color: var(--muted); font-size: .7rem; font-weight: 850; }
+    .queue-empty { margin: 0; padding: 15px; border-radius: 13px; background: var(--teal-soft); color: var(--teal); font-size: .82rem; }
+    .dependency-metric {
+      display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center;
+      margin: 12px 0; padding: 12px; border-radius: 14px; background: var(--gold-soft);
+    }
+    .dependency-metric b { font: 750 1.65rem/1 Georgia, serif; }
+    .dependency-metric span { color: var(--muted); font-size: .76rem; }
+    .dependency-box {
+      margin: 16px 0; padding: 14px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface-2);
+    }
+    .dependency-box > div:first-child { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+    .dependency-box > div:first-child span { color: var(--muted); font-size: .76rem; text-align: right; }
+    .dependency-list { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+    .dependency-btn {
+      border: 1px solid var(--line); border-radius: 11px; padding: 8px 9px; background: var(--surface);
+      color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 7px; text-align: left;
+      font-size: .76rem; font-weight: 760;
+    }
+    .dependency-btn:hover, .dependency-btn:focus-visible { border-color: var(--teal); outline: none; }
+    .dependency-level { min-width: 25px; height: 20px; border-radius: 6px; display: grid; place-items: center; font-size: .66rem; }
     .recommendation {
       margin-top: 16px; padding: 18px; border-radius: 18px; background: var(--coral-soft);
       display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px;
@@ -335,6 +392,7 @@
       .radial-stage { width: min(100%, 620px); }
       .topic-index { grid-template-columns: 1fr; }
       .recommendation { grid-template-columns: auto 1fr; }
+      .study-tools { grid-template-columns: 1fr; }
       .recommendation .btn { grid-column: 1 / -1; }
       .materials { grid-template-columns: 1fr; }
       .resource-grid { grid-template-columns: 1fr; }
@@ -451,6 +509,27 @@
           <div><b id="recommendationTitle">Рекомендация формируется</b><span id="recommendationText"></span></div>
           <a class="btn" id="recommendationLink" href="motion-basic.html">Открыть тему</a>
         </div>
+
+        <div class="study-tools">
+          <section class="study-panel review-panel" aria-labelledby="reviewQueueTitle">
+            <div class="study-panel-head">
+              <div><h3 id="reviewQueueTitle">Персональная очередь повторения</h3><p>Приоритет обновляется вместе с картой и учитывает зависимые темы.</p></div>
+              <span class="chip" id="queueTotal">0 тем</span>
+            </div>
+            <div class="queue-tabs" role="group" aria-label="Период повторения">
+              <button class="queue-tab" data-queue="today" aria-pressed="true">Сегодня · <span id="queueTodayCount">0</span></button>
+              <button class="queue-tab" data-queue="week" aria-pressed="false">На неделе · <span id="queueWeekCount">0</span></button>
+              <button class="queue-tab" data-queue="control" aria-pressed="false">Контроль · <span id="queueControlCount">0</span></button>
+              <button class="queue-tab" data-queue="stable" aria-pressed="false">Стабильно · <span id="queueStableCount">0</span></button>
+            </div>
+            <div class="queue-list" id="reviewQueue" aria-live="polite"></div>
+          </section>
+          <aside class="study-panel dependency-overview" aria-labelledby="dependencyTitle">
+            <div class="study-panel-head"><div><h3 id="dependencyTitle">Связи между навыками</h3><p>Базовые темы, которые открывают больше всего следующих рубрик.</p></div></div>
+            <div class="dependency-metric"><b id="blockedCount">0</b><span>тем сейчас опираются на навыки, требующие укрепления</span></div>
+            <div class="dependency-focus-list" id="dependencyFocusList"></div>
+          </aside>
+        </div>
       </div>
     </section>
 
@@ -536,6 +615,10 @@
         <div><b>Чек-лист навыка</b><span id="dialogPractice"></span></div>
         <div class="catalog-detail"><b>Рубрика экзамена</b><span id="dialogCatalog"></span></div>
       </div>
+      <section class="dependency-box" id="dependencyBox">
+        <div><b>Что повторить сначала</b><span id="dependencyHint"></span></div>
+        <div class="dependency-list" id="dialogDependencies"></div>
+      </section>
       <div class="dialog-note" id="dialogEvidence"></div>
       <p><b>Текущий уровень</b></p>
       <div class="level-picker" id="levelPicker" role="group" aria-label="Выбор уровня">
@@ -557,6 +640,33 @@
       const STORAGE_KEY = "sofya-competence-map-v1";
       const THEME_KEY = "sofya-site-theme";
       const LAST_LESSON_KEY = "sofya-last-lesson";
+      const REVIEW_META_KEY = "sofya-review-meta-v1";
+      const DAY = 24 * 60 * 60 * 1000;
+      const groupDependencies = {
+        task_1: ["task_6", "task_7", "task_12", "task_15", "task_18"],
+        task_2: ["task_6", "task_8", "task_12", "task_15", "task_18"],
+        task_3: ["task_6", "task_7", "task_8", "task_12"],
+        task_4: ["task_6", "task_9", "task_12", "task_13"],
+        task_5: ["task_6", "task_9", "task_12", "task_13"],
+        task_8: ["task_6", "task_7"],
+        task_9: ["task_6", "task_8"],
+        task_10: ["task_6", "task_7"],
+        task_11: ["task_7", "task_8", "task_9"],
+        task_12: ["task_6", "task_8", "task_9"],
+        task_13: ["task_7", "task_9"],
+        task_14: ["task_6", "task_8"],
+        task_15: ["task_6", "task_7"],
+        task_16: ["task_15"],
+        task_17: ["task_15", "task_16"],
+        task_18: ["task_15", "task_17"],
+        task_19: ["task_15", "task_16", "task_17", "task_18"],
+        task_20: ["task_8", "task_9", "task_13"],
+        task_21: ["task_6", "task_9", "task_12"],
+        task_22: ["task_8", "task_9", "task_11", "task_13"],
+        task_23: ["task_15", "task_16", "task_17", "task_18", "task_19"],
+        task_24: ["task_15", "task_16", "task_17", "task_18", "task_19", "task_23"],
+        task_25: ["task_15", "task_16", "task_17", "task_18", "task_19", "task_23", "task_24"]
+      };
       const levels = ["Не изучено", "Нужна помощь", "В процессе", "Почти уверенно", "Освоено"];
       const groups = [
         {
@@ -4827,9 +4937,13 @@
         }
 ];
       const allItems = groups.flatMap(group => group.items.map((item, itemIndex) => ({ ...item, ring: itemIndex + 1, groupId: group.id, groupTitle: group.title })));
+      const itemById = new Map(allItems.map(item => [item.id, item]));
+      const dependencyCache = new Map();
       let state = loadState();
+      let reviewMeta = loadReviewMeta();
       let activeId = null;
       let currentFilter = "all";
+      let currentQueue = "today";
 
       const $ = selector => document.querySelector(selector);
       const $$ = selector => [...document.querySelectorAll(selector)];
@@ -4849,6 +4963,24 @@
       function saveState() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       }
+      function loadReviewMeta() {
+        try {
+          return JSON.parse(localStorage.getItem(REVIEW_META_KEY) || "{}");
+        } catch {
+          return {};
+        }
+      }
+      function saveReviewMeta() {
+        localStorage.setItem(REVIEW_META_KEY, JSON.stringify(reviewMeta));
+      }
+      function touchReview(id, manualRepeat = false) {
+        reviewMeta[id] = {
+          ...(reviewMeta[id] || {}),
+          updatedAt: Date.now(),
+          manualRepeat: Boolean(manualRepeat)
+        };
+        saveReviewMeta();
+      }
       function itemState(item) {
         return Math.max(0, Math.min(4, Number(state[item.id] ?? item.level)));
       }
@@ -4857,6 +4989,137 @@
         if (currentFilter === "progress") return level === 2 || level === 3;
         if (currentFilter === "mastered") return level === 4;
         return true;
+      }
+
+      function skillTokens(text) {
+        const ignored = new Set(["задачи", "задача", "задание", "вычисление", "проверяется", "умение", "применить", "использовать"]);
+        return new Set((text.toLowerCase().replace(/ё/g, "е").match(/[а-яa-z]{5,}/g) || []).filter(token => !ignored.has(token)));
+      }
+      function dependenciesFor(item) {
+        if (dependencyCache.has(item.id)) return dependencyCache.get(item.id);
+        const prerequisiteGroups = groupDependencies[item.groupId] || [];
+        if (!prerequisiteGroups.length) {
+          dependencyCache.set(item.id, []);
+          return [];
+        }
+        const sourceTokens = skillTokens(`${item.title} ${item.catalog} ${item.description}`);
+        const candidates = prerequisiteGroups.map(groupId => {
+          const candidatesInGroup = allItems.filter(candidate => candidate.groupId === groupId);
+          return candidatesInGroup
+            .map(candidate => {
+              const candidateTokens = skillTokens(`${candidate.title} ${candidate.catalog} ${candidate.description}`);
+              let score = 0;
+              sourceTokens.forEach(token => { if (candidateTokens.has(token)) score += 3; });
+              if (candidate.catalog === item.catalog) score += 4;
+              return { candidate, score };
+            })
+            .sort((a, b) => b.score - a.score)[0];
+        }).filter(Boolean);
+        const result = candidates.sort((a, b) => b.score - a.score).slice(0, 3).map(entry => entry.candidate);
+        dependencyCache.set(item.id, result);
+        return result;
+      }
+      function dependencyPressure(item) {
+        return allItems.reduce((count, candidate) => {
+          if (itemState(candidate) >= 4) return count;
+          return count + (dependenciesFor(candidate).some(dependency => dependency.id === item.id) ? 1 : 0);
+        }, 0);
+      }
+      function reviewAgeDays(item) {
+        const updatedAt = reviewMeta[item.id]?.updatedAt;
+        return updatedAt ? Math.floor((Date.now() - updatedAt) / DAY) : Infinity;
+      }
+      function reviewScore(item) {
+        const level = itemState(item);
+        const base = [105, 86, 61, 34, 6][level];
+        const age = reviewAgeDays(item);
+        const ageBonus = age === Infinity ? 18 : age >= 30 ? 24 : age >= 14 ? 15 : age >= 7 ? 7 : 0;
+        const manualBonus = reviewMeta[item.id]?.manualRepeat ? 45 : 0;
+        const dependencyBonus = Math.min(30, dependencyPressure(item) * 5);
+        return base + ageBonus + manualBonus + dependencyBonus;
+      }
+      function buildReviewPlan() {
+        const ranked = [...allItems].sort((a, b) => reviewScore(b) - reviewScore(a));
+        const today = [
+          ...ranked.filter(item => reviewMeta[item.id]?.manualRepeat),
+          ...ranked.filter(item => !reviewMeta[item.id]?.manualRepeat && itemState(item) <= 1)
+        ].filter((item, index, list) => list.findIndex(candidate => candidate.id === item.id) === index).slice(0, 12);
+        const todayIds = new Set(today.map(item => item.id));
+        const week = ranked.filter(item => !todayIds.has(item.id) && itemState(item) <= 2).slice(0, 18);
+        const weekIds = new Set(week.map(item => item.id));
+        const control = ranked.filter(item => {
+          if (todayIds.has(item.id) || weekIds.has(item.id)) return false;
+          return itemState(item) === 3 || (itemState(item) === 4 && reviewAgeDays(item) >= 21);
+        }).slice(0, 12);
+        const used = new Set([...today, ...week, ...control].map(item => item.id));
+        const stable = ranked.filter(item => !used.has(item.id) && itemState(item) === 4);
+        return { today, week, control, stable };
+      }
+      function reviewReason(item) {
+        const reasons = [];
+        const level = itemState(item);
+        const pressure = dependencyPressure(item);
+        if (reviewMeta[item.id]?.manualRepeat) reasons.push("добавлено вручную");
+        if (level === 0) reasons.push("нужна первичная диагностика");
+        else if (level === 1) reasons.push("нужна помощь");
+        else if (level === 2) reasons.push("тема в процессе");
+        else if (level === 3) reasons.push("нужна контрольная попытка");
+        else reasons.push("уровень подтверждён");
+        if (pressure) reasons.push(`основа для ${pressure} тем`);
+        const age = reviewAgeDays(item);
+        if (age === Infinity) reasons.push("нет свежей отметки");
+        else if (age >= 14) reasons.push(`без проверки ${age} дн.`);
+        return reasons.slice(0, 2).join(" · ");
+      }
+      function renderReviewQueue() {
+        const plan = buildReviewPlan();
+        const counts = Object.fromEntries(Object.entries(plan).map(([category, items]) => [category, items.length]));
+        $("#queueTodayCount").textContent = counts.today;
+        $("#queueWeekCount").textContent = counts.week;
+        $("#queueControlCount").textContent = counts.control;
+        $("#queueStableCount").textContent = counts.stable;
+        $("#queueTotal").textContent = `${counts.today + counts.week + counts.control} тем`;
+        const items = plan[currentQueue].slice(0, 8);
+        $("#reviewQueue").innerHTML = items.length ? items.map((item, index) => `
+          <button class="queue-item" type="button" data-id="${item.id}">
+            <span class="queue-rank">${index + 1}</span>
+            <span class="queue-copy"><b>${item.title}</b><small>${item.exam} · ${reviewReason(item)}</small></span>
+            <span class="queue-score">приоритет ${Math.round(reviewScore(item))}</span>
+          </button>
+        `).join("") : '<p class="queue-empty">В этой категории сейчас нет тем.</p>';
+        $(".queue-item").forEach(button => button.addEventListener("click", () => openCompetency(button.dataset.id)));
+      }
+      function renderDependencyOverview() {
+        const blocked = allItems.filter(item => itemState(item) < 4 && dependenciesFor(item).some(dependency => itemState(dependency) <= 1));
+        $("#blockedCount").textContent = blocked.length;
+        const foundations = allItems
+          .map(item => ({ item, pressure: dependencyPressure(item) }))
+          .filter(entry => entry.pressure > 0)
+          .sort((a, b) => b.pressure - a.pressure || itemState(a.item) - itemState(b.item))
+          .slice(0, 5);
+        $("#dependencyFocusList").innerHTML = foundations.map(({ item, pressure }) => `
+          <button class="dependency-focus-item" type="button" data-id="${item.id}">
+            <span class="queue-rank">${itemState(item)}/4</span>
+            <span class="queue-copy"><b>${item.title}</b><small>${item.exam} · открывает ${pressure} следующих тем</small></span>
+            <span class="queue-score">база</span>
+          </button>
+        `).join("");
+        $(".dependency-focus-item").forEach(button => button.addEventListener("click", () => openCompetency(button.dataset.id)));
+      }
+      function renderDialogDependencies(item) {
+        const dependencies = dependenciesFor(item).sort((a, b) => itemState(a) - itemState(b));
+        const weak = dependencies.filter(dependency => itemState(dependency) < 3).length;
+        $("#dependencyHint").textContent = dependencies.length
+          ? weak ? `${weak} из ${dependencies.length} требуют укрепления` : "базовые навыки готовы"
+          : "обязательных предшествующих тем нет";
+        $("#dialogDependencies").innerHTML = dependencies.length ? dependencies.map(dependency => {
+          const level = itemState(dependency);
+          return `<button class="dependency-btn" type="button" data-id="${dependency.id}">
+            <span class="dependency-level" style="background:var(--heat-${level})">${level}/4</span>
+            <span>${dependency.title} · ${dependency.exam}</span>
+          </button>`;
+        }).join("") : '<span class="chip">Можно изучать как базовую тему</span>';
+        $("#dialogDependencies .dependency-btn").forEach(button => button.addEventListener("click", () => openCompetency(button.dataset.id)));
       }
       function polar(radius, angle) {
         const radians = (angle - 90) * Math.PI / 180;
@@ -4931,6 +5194,8 @@
           });
         });
         updateSummary();
+        renderReviewQueue();
+        renderDependencyOverview();
       }
       function updateSummary() {
         const values = allItems.map(itemState);
@@ -4963,10 +5228,11 @@
         $("#dialogExamDetail").textContent = `Связь с экзаменом: ${item.exam}. ${item.description}`;
         $("#dialogPractice").textContent = item.practice;
         $("#dialogCatalog").textContent = item.catalog;
+        renderDialogDependencies(item);
         $("#dialogEvidence").textContent = item.evidence;
         $("#dialogLink").href = item.link;
         updateLevelPicker();
-        $("#competencyDialog").showModal();
+        if (!$("#competencyDialog").open) $("#competencyDialog").showModal();
       }
       function updateLevelPicker() {
         $$(".level-btn").forEach(button => {
@@ -4976,6 +5242,7 @@
       $$(".level-btn").forEach(button => button.addEventListener("click", () => {
         if (!activeId) return;
         state[activeId] = Number(button.dataset.level);
+        touchReview(activeId);
         saveState();
         updateLevelPicker();
         renderHeatmap();
@@ -4983,10 +5250,16 @@
       $("#markRepeat").addEventListener("click", () => {
         if (!activeId) return;
         state[activeId] = 1;
+        touchReview(activeId, true);
         saveState();
         updateLevelPicker();
         renderHeatmap();
       });
+      $(".queue-tab").forEach(button => button.addEventListener("click", () => {
+        currentQueue = button.dataset.queue;
+        $(".queue-tab").forEach(tab => tab.setAttribute("aria-pressed", String(tab === button)));
+        renderReviewQueue();
+      }));
       $("#closeDialog").addEventListener("click", () => $("#competencyDialog").close());
       $("#competencyDialog").addEventListener("click", event => {
         if (event.target === $("#competencyDialog")) $("#competencyDialog").close();
@@ -4999,7 +5272,9 @@
       $("#resetMap").addEventListener("click", () => {
         if (!confirm("Вернуть исходную оценку всех компетенций?")) return;
         localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(REVIEW_META_KEY);
         state = loadState();
+        reviewMeta = loadReviewMeta();
         renderHeatmap();
       });
       $$(".lesson-link").forEach(link => link.addEventListener("click", () => {
