@@ -1,0 +1,366 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T2A]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage[russian]{babel}
+\else
+  \usepackage{fontspec}
+  \setmainfont{DejaVu Sans}
+  \usepackage{polyglossia}
+  \setdefaultlanguage{russian}
+\fi
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{icomma}
+\usepackage[a4paper,margin=1.65cm,headheight=16pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{multicol}
+
+\definecolor{accent}{HTML}{287F7A}
+\definecolor{darkaccent}{HTML}{1C3151}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softteal}{HTML}{E4F3EF}
+\definecolor{softcoral}{HTML}{FBE4DC}
+\definecolor{coral}{HTML}{E77B5E}
+\definecolor{softgold}{HTML}{F8EDCF}
+\definecolor{softblue}{HTML}{E8EEF6}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=accent}
+\setlist[itemize]{leftmargin=1.5em,itemsep=0.25em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.35em,topsep=0.35em}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Графики функций}
+\rhead{Ксения Клыкова}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\today}{20 июля 2026 г.}
+
+\newtcolorbox{keybox}[1][]{enhanced,breakable,colback=softteal,colframe=accent,boxrule=0.8pt,arc=3mm,left=4mm,right=4mm,top=3mm,bottom=3mm,title=#1,fonttitle=\bfseries,coltitle=darkaccent}
+\newtcolorbox{warnbox}[1][]{enhanced,breakable,colback=softcoral,colframe=orange!70!red,boxrule=0.8pt,arc=3mm,left=4mm,right=4mm,top=3mm,bottom=3mm,title=#1,fonttitle=\bfseries,coltitle=darkaccent}
+\newtcolorbox{examplebox}[1][]{enhanced,breakable,colback=softblue,colframe=darkaccent,boxrule=0.8pt,arc=3mm,left=4mm,right=4mm,top=3mm,bottom=3mm,title=#1,fonttitle=\bfseries,coltitle=darkaccent}
+\newcommand{\point}[2]{\left(#1;#2\right)}
+
+\begin{document}
+\begin{titlepage}
+\centering
+\vspace*{2.3cm}
+{\color{accent}\Large\bfseries ЧЕК-ЛИСТ\par}
+\vspace{0.45cm}
+{\color{darkaccent}\fontsize{31}{36}\selectfont\bfseries Графики функций:\\метод узловых точек\par}
+\vspace{0.9cm}
+{\large Прямая, парабола, гипербола и точки пересечения\par}
+\vfill
+{\Large\bfseries Лёвин Артём Александрович\\[0.2cm]эксклюзивно для Ксении Клыковой\par}
+\vspace{0.8cm}
+{\large \today\par}
+\vfill
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent,line width=2.2pt] (-7,-1.2) .. controls (-4,1.2) and (-1,-2.2) .. (1.2,0.2)
+    .. controls (3.2,2.2) and (5.1,-0.8) .. (7,0.8);
+  \fill[accent!35] (-6.1,-0.35) circle (3pt);
+  \fill[accent!60] (0.2,-0.35) circle (3pt);
+  \fill[accent!85] (6.2,0.25) circle (3pt);
+\end{tikzpicture}
+\end{titlepage}
+
+\section*{1. Главная идея урока}
+\begin{keybox}[Метод узловых точек]
+Если формула графика содержит неизвестные коэффициенты, выберите на графике точки с точно читаемыми координатами и подставьте их координаты в формулу. Полученная система уравнений позволяет восстановить коэффициенты.
+\end{keybox}
+
+\begin{center}
+\begin{tikzpicture}[node distance=8mm and 12mm,>=stealth,every node/.style={font=\small,align=center,text width=5.2cm,minimum height=1.05cm}]
+\node[draw,rounded corners=3mm,fill=softgold] (a) {Неизвестные коэффициенты};
+\node[draw,rounded corners=3mm,fill=softteal,right=of a] (b) {Столько же узловых точек};
+\node[draw,rounded corners=3mm,fill=softblue,below=of a] (c) {Система уравнений};
+\node[draw,rounded corners=3mm,fill=softcoral,right=of c] (d) {Формула и ответ};
+\draw[->,thick,accent] (a)--(b); \draw[->,thick,accent] (b)--(d); \draw[->,thick,accent] (d)--(c);
+\end{tikzpicture}
+\end{center}
+
+\subsection*{Сколько точек брать?}
+\begin{itemize}
+\item В формуле $y=kx+b$ неизвестны два коэффициента $k$ и $b$ --- нужны две точки.
+\item В формуле $y=2x^2+bx+c$ неизвестны $b$ и $c$ --- также нужны две точки.
+\item В формуле $y=\dfrac{k}{x}$ неизвестен только $k$ --- достаточно одной точки.
+\item Выбирайте точки с целыми координатами; среди них удобнее те, чьи координаты ближе к нулю.
+\end{itemize}
+
+\section*{2. Как читать координаты и обозначения}
+\begin{multicols}{2}
+\begin{keybox}[Координаты точки]
+Точка $A(x;y)$ записывается в порядке:
+\[
+\begin{aligned}
+&\text{сначала абсцисса }x,\\
+&\text{затем ордината }y.
+\end{aligned}
+\]
+Для точки $A(-1;-3)$ подставляем $x=-1$ и $y=-3$.
+\end{keybox}
+
+\begin{keybox}[Два разных вопроса]
+\[
+f(-5)\quad\text{и}\quad f(x)=-5
+\]
+--- не одно и то же.
+\begin{itemize}
+\item $f(-5)$: подставить $x=-5$ и найти значение функции.
+\item $f(x)=-5$: приравнять формулу к $-5$ и найти $x$.
+\end{itemize}
+\end{keybox}
+\end{multicols}
+
+\section*{3. Прямая: восстановление формулы}
+\begin{examplebox}[Разобранный пример]
+Пусть прямая $f(x)=kx+b$ проходит через точки $A(-1;-3)$ и $B(3;4)$. Найдём $f(-5)$.
+
+Подставим координаты обеих точек:
+\[
+\begin{cases}
+-3=-k+b,\\
+4=3k+b.
+\end{cases}
+\]
+Из первого уравнения $b=k-3$. Подставим во второе:
+\[
+3k+k-3=4 \quad\Longrightarrow\quad 4k=7 \quad\Longrightarrow\quad k=\frac74.
+\]
+Тогда
+\[
+b=\frac74-3=-\frac54.
+\]
+Формула прямой:
+\[
+f(x)=\frac74x-\frac54.
+\]
+Теперь вычислим значение функции:
+\[
+f(-5)=\frac74\cdot(-5)-\frac54=-\frac{40}{4}=-10.
+\]
+\textbf{Ответ: $-10$.}
+\end{examplebox}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+width=12.5cm,height=7.1cm,axis lines=middle,unit vector ratio=1 1,
+xmin=-6,xmax=4.5,ymin=-12,ymax=6,samples=200,grid=both,
+minor tick num=1,clip=false,xlabel={$x$},ylabel={$y$},
+legend style={at={(0.03,0.97)},anchor=north west,draw=none,fill=white,fill opacity=.8,text opacity=1}]
+\addplot[domain=-6:4.5,accent,very thick]{7*x/4-5/4};
+\addlegendentry{$f(x)=\frac74x-\frac54$}
+\addplot[only marks,mark=*,mark size=2.5pt,darkaccent] coordinates {(-1,-3) (3,4) (-5,-10)};
+\node[anchor=south east] at (axis cs:-1,-3) {$A(-1;-3)$};
+\node[anchor=south west] at (axis cs:3,4) {$B(3;4)$};
+\node[anchor=north east] at (axis cs:-5,-10) {$(-5;-10)$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection*{Универсальный алгоритм для прямой}
+\begin{enumerate}
+\item Выберите две узловые точки.
+\item Выпишите их координаты в порядке $(x;y)$.
+\item Для каждой точки подставьте $x$ и $y$ в $y=kx+b$.
+\item Решите систему относительно $k$ и $b$.
+\item Запишите восстановленную формулу.
+\item Выполните действие из вопроса: вычислите $f(a)$ или решите $f(x)=a$.
+\item Проверьте подстановкой одной из исходных точек.
+\end{enumerate}
+
+\section*{4. Парабола: метод тот же}
+\begin{examplebox}[Два неизвестных коэффициента]
+Парабола имеет вид
+\[
+y=2x^2+bx+c
+\]
+и проходит через точки $A(-2;-2)$ и $B(1;1)$.
+
+Подставляем координаты:
+\[
+\begin{cases}
+-2=2\cdot(-2)^2-2b+c,\\
+1=2\cdot1^2+b+c.
+\end{cases}
+\quad\Longrightarrow\quad
+\begin{cases}
+-2b+c=-10,\\
+b+c=-1.
+\end{cases}
+\]
+Вычитая второе уравнение из первого, получаем $-3b=-9$, поэтому $b=3$, а $c=-4$.
+
+Искомая формула:
+\[
+y=2x^2+3x-4.
+\]
+\end{examplebox}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+width=12cm,height=7.2cm,axis lines=middle,unit vector ratio=1 1,
+xmin=-4,xmax=3,ymin=-7,ymax=9,samples=220,grid=both,minor tick num=1,clip=false,xlabel={$x$},ylabel={$y$}]
+\addplot[domain=-4:3,coral!85!black,very thick]{2*x^2+3*x-4};
+\addplot[only marks,mark=*,mark size=2.5pt,darkaccent] coordinates {(-2,-2) (1,1)};
+\node[anchor=north east] at (axis cs:-2,-2) {$A(-2;-2)$};
+\node[anchor=south west] at (axis cs:1,1) {$B(1;1)$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\section*{5. Гипербола и пересечение графиков}
+\subsection*{Как восстановить гиперболу}
+Для функции
+\[
+f(x)=\frac{k}{x},\qquad x\ne0,
+\]
+достаточно одной точки. Например, если график проходит через $(1;2)$, то
+\[
+2=\frac{k}{1}\quad\Longrightarrow\quad k=2,
+\]
+следовательно, $f(x)=\dfrac2x$.
+
+\subsection*{Условие пересечения}
+В точке пересечения двух графиков их значения равны:
+\[
+f(x)=g(x).
+\]
+Это равенство действует именно для общих точек графиков.
+
+\begin{examplebox}[Гипербола и прямая]
+Пусть
+\[
+f(x)=\frac2x,\qquad g(x)=5x-9.
+\]
+Найдём абсциссы точек пересечения.
+\[
+\frac2x=5x-9,\qquad x\ne0.
+\]
+Домножим на $x$ с обязательным указанием ограничения:
+\[
+2=5x^2-9x \quad\Longrightarrow\quad 5x^2-9x-2=0.
+\]
+\[
+D=(-9)^2-4\cdot5\cdot(-2)=121,
+\]
+\[
+x_{1,2}=\frac{9\pm11}{10},\qquad x_1=2,\quad x_2=-\frac15=-0{,}2.
+\]
+Если точка $B$ расположена между $-1$ и $0$, выбираем $x_B=-0{,}2$.
+\end{examplebox}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+width=12.8cm,height=8cm,axis lines=middle,unit vector ratio=1 1,
+xmin=-3,xmax=4,ymin=-12,ymax=10,samples=260,grid=both,minor tick num=1,clip=false,xlabel={$x$},ylabel={$y$},
+legend style={at={(0.03,0.97)},anchor=north west,draw=none,fill=white,fill opacity=.85,text opacity=1}]
+\addplot[domain=-3:-0.08,accent,very thick]{2/x};
+\addplot[domain=0.08:4,accent,very thick]{2/x};
+\addlegendentry{$f(x)=\frac2x$}
+\addplot[domain=-3:4,coral!85!black,very thick]{5*x-9};
+\addlegendentry{$g(x)=5x-9$}
+\addplot[only marks,mark=*,mark size=2.7pt,darkaccent] coordinates {(2,1) (-0.2,-10)};
+\node[anchor=south west] at (axis cs:2,1) {$A(2;1)$};
+\node[anchor=north east] at (axis cs:-0.2,-10) {$B(-0{,}2;-10)$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\section*{6. Типичные ошибки}
+\begin{warnbox}[Контроль внимательности]
+\begin{enumerate}
+\item Перепутать порядок координат и вместо $(x;y)$ записать $(y;x)$.
+\item Подставить только $x$, забыв, что $y=f(x)$ тоже берётся из точки.
+\item Ошибиться при переносе: например, перенос $-4$ вправо даёт $+4$.
+\item Неверно сложить дроби: $-\frac13+1=\frac23$, а не $-\frac43$.
+\item Домножить уравнение с $\dfrac{k}{x}$ на $x$, не указав $x\ne0$.
+\item В задаче о точке пересечения выписать оба корня, хотя рисунок однозначно указывает нужную точку.
+\item Брать неудобные точки с дробными координатами, когда на графике есть целочисленные узлы.
+\end{enumerate}
+\end{warnbox}
+
+\section*{7. Итоговый чек-лист}
+\begin{keybox}[Перед записью ответа]
+\begin{itemize}
+\item Я определила вид функции и неизвестные коэффициенты.
+\item Я взяла столько узловых точек, сколько коэффициентов неизвестно.
+\item Я записала координаты в порядке $(x;y)$.
+\item Я корректно подставила координаты и решила систему.
+\item Я различила вопросы $f(a)$ и $f(x)=a$.
+\item Для пересечения графиков я приравняла формулы.
+\item При работе с гиперболой я записала $x\ne0$.
+\item Я выбрала корень, соответствующий нужной точке на рисунке.
+\item Я проверила знаки, дроби и одну исходную точку.
+\end{itemize}
+\end{keybox}
+
+\clearpage
+\section*{Тренировочный блок}
+\textit{Решения здесь не приводятся. Сначала выполните задания самостоятельно, затем сверяйтесь с таблицей ответов на следующей странице.}
+
+\subsection*{Средний уровень}
+\begin{enumerate}
+\item Прямая $f(x)=kx+b$ проходит через точки $(0;2)$ и $(3;8)$. Найдите $f(-2)$.
+\item Прямая проходит через точки $(-2;5)$ и $(2;-3)$. Найдите $x$, если $f(x)=1$.
+\item Прямая $f(x)=kx+b$ проходит через точки $(-1;-4)$ и $(2;5)$. Найдите $f(4)$.
+\end{enumerate}
+
+\subsection*{Уровень выше среднего}
+\begin{enumerate}[resume]
+\item Парабола $f(x)=x^2+bx+c$ проходит через точки $(0;-3)$ и $(2;3)$. Найдите $f(-2)$.
+\item Парабола $f(x)=2x^2+bx+c$ проходит через точки $(-2;-2)$ и $(1;1)$. Найдите $f(0)$.
+\item Гипербола $f(x)=\dfrac{k}{x}$ проходит через точку $(2;3)$. Найдите $f(-3)$.
+\item Найдите обе абсциссы точек пересечения графиков $y=\dfrac2x$ и $y=5x-9$.
+\item Найдите абсциссу точки пересечения графиков $y=\dfrac2x$ и $y=5x-9$, лежащую в интервале $(-1;0)$.
+\item Гипербола $f(x)=\dfrac{k}{x}$ проходит через точку $(-4;2)$. Найдите $x$, если $f(x)=-1$.
+\end{enumerate}
+
+\subsection*{Сложный уровень}
+\begin{enumerate}[resume]
+\item Прямая $f(x)=kx+b$ проходит через точки $(1;4)$ и $(4;-2)$. Найдите абсциссу точки её пересечения с осью $Ox$ и объясните, почему в этой точке $f(x)=0$.
+\end{enumerate}
+
+\clearpage
+\section*{Ответы для самопроверки}
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{0.88\textwidth}{>{\bfseries}c X}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $-2$ \\
+2 & $0$ \\
+3 & $11$ \\
+4 & $-1$ \\
+5 & $-4$ \\
+6 & $-2$ \\
+7 & $2$ и $-0{,}2$ \\
+8 & $-0{,}2$ \\
+9 & $8$ \\
+10 & $3$; в точке пересечения с осью $Ox$ ордината равна нулю. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vfill
+\begin{keybox}[Как использовать ответы]
+Если ответ не совпал, сначала проверьте порядок координат, знаки при переносе, арифметику дробей и соответствие выбранного корня положению точки на графике.
+\end{keybox}
+
+\end{document}
