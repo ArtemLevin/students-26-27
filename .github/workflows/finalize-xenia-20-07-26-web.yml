@@ -1,0 +1,97 @@
+name: Finalize Xenia 20.07.26 web equivalent
+
+on:
+  push:
+    branches:
+      - agent/xenia-graphs-20-07-26
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore autonomous HTML
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64, gzip
+          parts = sorted(Path('.web-build/xenia-20-07-26').glob('*.part'))
+          if len(parts) != 2:
+              raise SystemExit(f'Expected 2 payload parts, got {len(parts)}')
+          payload = ''.join(p.read_text(encoding='utf-8') for p in parts)
+          html = gzip.decompress(base64.b64decode(payload))
+          Path('students/xenia_klykova/site/20-07-26.html').write_bytes(html)
+          PY
+
+      - name: Static content validation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          import re
+
+          path = Path('students/xenia_klykova/site/20-07-26.html')
+          text = path.read_text(encoding='utf-8')
+          required = [
+              '<canvas class="graph-canvas" id="mainCanvas"',
+              '<canvas class="graph-canvas" id="modalCanvas"',
+              'id="answerToggle"',
+              'id="generateBtn"',
+              'data-hint="steps"',
+              'data-hint="visual"',
+              'data-hint="zoom"',
+              'data-hint="generator"',
+              '../images/20.07.26.png',
+              '../pdf_docs/20.07.26.pdf',
+              '../tex_docs/20.07.26.tex',
+          ]
+          missing = [item for item in required if item not in text]
+          if missing:
+              raise SystemExit(f'Missing required fragments: {missing}')
+          if len(re.findall(r'class="practice-card"', text)) != 10:
+              raise SystemExit('Expected exactly 10 exercises')
+          answer_block = text.split('id="answers"', 1)[1].split('</table>', 1)[0]
+          if len(re.findall(r'<tr><td>\d+</td>', answer_block)) != 10:
+              raise SystemExit('Expected exactly 10 answer rows')
+          if text.count('<math') < 100:
+              raise SystemExit('MathML coverage is unexpectedly low')
+          if '<script src=' in text or 'http://' in text or 'https://' in text:
+              raise SystemExit('External dependency detected')
+          if any(token in text for token in ('\\frac', '\\begin{', '\\boxed')):
+              raise SystemExit('Raw LaTeX command detected in HTML')
+
+          class Parser(HTMLParser):
+              pass
+          Parser().feed(text)
+          print('Static validation passed')
+          PY
+
+      - name: JavaScript syntax validation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          text = Path('students/xenia_klykova/site/20-07-26.html').read_text(encoding='utf-8')
+          scripts = re.findall(r'<script>(.*?)</script>', text, flags=re.S)
+          if len(scripts) != 1:
+              raise SystemExit(f'Expected one inline script, got {len(scripts)}')
+          Path('/tmp/xenia-20-07-26.js').write_text(scripts[0], encoding='utf-8')
+          PY
+          node --check /tmp/xenia-20-07-26.js
+
+      - name: Commit finalized page
+        run: |
+          rm -rf .web-build/xenia-20-07-26
+          rm -f .github/workflows/finalize-xenia-20-07-26-web.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Довести web-эквивалент урока Ксении до полного покрытия'
+          git push origin HEAD:agent/xenia-graphs-20-07-26
