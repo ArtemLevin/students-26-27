@@ -1,0 +1,396 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T2A]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage[russian]{babel}
+\else
+  \usepackage{fontspec}
+  \setmainfont{DejaVu Sans}
+  \usepackage{polyglossia}
+  \setdefaultlanguage{russian}
+\fi
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{icomma}
+\usepackage[a4paper,margin=1.65cm,headheight=16pt]{geometry}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,calc}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{multicol}
+
+\definecolor{accent}{HTML}{287F7A}
+\definecolor{darkaccent}{HTML}{1C3151}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softteal}{HTML}{E4F3EF}
+\definecolor{softcoral}{HTML}{FBE4DC}
+\definecolor{coral}{HTML}{E77B5E}
+\definecolor{softgold}{HTML}{F8EDCF}
+\definecolor{softblue}{HTML}{E8EEF6}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=accent}
+\setlist[itemize]{leftmargin=1.5em,itemsep=0.25em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.35em,topsep=0.35em}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Комплексное повторение ЕГЭ}
+\rhead{Николь Саркисьянц}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\today}{21 июля 2026 г.}
+
+\newtcolorbox{keybox}[1][]{enhanced,breakable,colback=softteal,colframe=accent,boxrule=0.8pt,arc=3mm,left=4mm,right=4mm,top=3mm,bottom=3mm,title=#1,fonttitle=\bfseries,coltitle=darkaccent}
+\newtcolorbox{warnbox}[1][]{enhanced,breakable,colback=softcoral,colframe=coral,boxrule=0.8pt,arc=3mm,left=4mm,right=4mm,top=3mm,bottom=3mm,title=#1,fonttitle=\bfseries,coltitle=darkaccent}
+\newtcolorbox{examplebox}[1][]{enhanced,breakable,colback=softblue,colframe=darkaccent,boxrule=0.8pt,arc=3mm,left=4mm,right=4mm,top=3mm,bottom=3mm,title=#1,fonttitle=\bfseries,coltitle=darkaccent}
+\newcommand{\R}{\mathbb{R}}
+
+\begin{document}
+\begin{titlepage}
+\centering
+\vspace*{2.1cm}
+{\color{accent}\Large\bfseries ЧЕК-ЛИСТ\par}
+\vspace{0.45cm}
+{\color{darkaccent}\fontsize{29}{34}\selectfont\bfseries Комплексное повторение\\тестовой части ЕГЭ\par}
+\vspace{0.8cm}
+{\large Финансы, геометрия, векторы, вероятность, степени, логарифмы и текстовые задачи\par}
+\vfill
+{\Large\bfseries Лёвин Артём Александрович\\[0.2cm]эксклюзивно для Николь Саркисьянц\par}
+\vspace{0.8cm}
+{\large \today\par}
+\vfill
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent,line width=2.2pt] (-7,-1.1) .. controls (-4.6,1.1) and (-2,-2.0) .. (0.1,0.05)
+    .. controls (2.2,2.0) and (4.8,-0.9) .. (7,0.75);
+  \fill[accent!35] (-6.0,-0.30) circle (3pt);
+  \fill[accent!60] (0.15,-0.12) circle (3pt);
+  \fill[accent!85] (6.15,0.20) circle (3pt);
+\end{tikzpicture}
+\end{titlepage}
+
+\section*{1. Главная стратегия повторительного варианта}
+\begin{keybox}[Единый алгоритм]
+\begin{enumerate}
+\item Определите тип задачи и выпишите известные данные.
+\item Выберите формулу или модель, которая непосредственно связывает данные с вопросом.
+\item Переведите слова условия в математические знаки: ``сняли'' означает минус, ``больше'' --- строгую границу, ``не менее'' --- включённую границу.
+\item Выполните преобразования без скачков: каждый процент считайте от суммы на начало соответствующего периода.
+\item Проверьте знак, единицы измерения, область допустимых значений и смысл ответа.
+\end{enumerate}
+\end{keybox}
+
+\begin{center}
+\begin{tikzpicture}[node distance=7mm and 8mm,>=Stealth,every node/.style={font=\small,align=center,rounded corners=2.5mm,minimum height=9mm}]
+\node[draw,fill=softgold,text width=3.2cm] (a) {Прочитать условие};
+\node[draw,fill=softteal,text width=3.2cm,right=of a] (b) {Выбрать модель};
+\node[draw,fill=softblue,text width=3.2cm,right=of b] (c) {Вычислить};
+\node[draw,fill=softcoral,text width=3.2cm,right=of c] (d) {Проверить смысл};
+\draw[->,thick,accent] (a)--(b);
+\draw[->,thick,accent] (b)--(c);
+\draw[->,thick,accent] (c)--(d);
+\end{tikzpicture}
+\end{center}
+
+\section*{2. Вклады и проценты}
+\begin{keybox}[Два принципа]
+\begin{itemize}
+\item Если деньги снимают со счёта, операция записывается со знаком минус.
+\item Процент очередного года начисляется на сумму, которая находится на счёте в начале этого года.
+\end{itemize}
+\end{keybox}
+
+\begin{examplebox}[Ставки по годам]
+После двух лет на счёте:
+\[
+S_2=1{,}1^2S.
+\]
+После третьего года:
+\[
+S_3=1{,}1^2S+1{,}1^2S\cdot\frac{x}{100}
+=1{,}1^2S\left(1+\frac{x}{100}\right).
+\]
+Степень $3$ у множителя $1{,}1$ здесь не появляется: ставка третьего года равна $x\%$, а не $10\%$.
+\end{examplebox}
+
+\begin{warnbox}[Типичная ошибка]
+Нельзя считать третий процент от первоначальной суммы $S$. База начисления --- текущая сумма $1{,}1^2S$.
+\end{warnbox}
+
+\section*{3. Планиметрия: равнобедренный треугольник}
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+\tkzDefPoint(-3,0){A}
+\tkzDefPoint(3,0){B}
+\tkzDefPoint(0,4){C}
+\tkzDefPoint(4.4,0){D}
+\tkzDrawPolygon[thick,color=darkaccent](A,B,C)
+\tkzDrawSegment[thick,color=coral](B,D)
+\tkzMarkSegments[mark=|,color=accent](A,C B,C)
+\tkzMarkAngle[size=0.65,color=coral,mark=none](C,B,D)
+\tkzLabelAngle[pos=1.0,color=coral](C,B,D){$107^\circ$}
+\tkzLabelPoints[below](A,B,D)
+\tkzLabelPoints[above](C)
+\end{tikzpicture}
+\end{center}
+
+Если $AC=BC$, то углы при основании равны. Внешний угол при $B$ равен $107^\circ$, поэтому внутренний угол
+\[
+\angle CBA=180^\circ-107^\circ=73^\circ.
+\]
+Следовательно, $\angle CAB=73^\circ$, а
+\[
+\angle ACB=180^\circ-73^\circ-73^\circ=34^\circ.
+\]
+
+\section*{4. Векторы}
+\begin{keybox}[Координаты и скалярное произведение]
+Если $\vec a=(a_x;a_y)$ и $\vec b=(b_x;b_y)$, то
+\[
+\vec a\cdot\vec b=a_xb_x+a_yb_y.
+\]
+Одновременно
+\[
+\vec a\cdot\vec b=|\vec a|\,|\vec b|\cos\varphi,
+\qquad
+|\vec a|=\sqrt{a_x^2+a_y^2}.
+\]
+Отсюда
+\[
+\cos\varphi=
+\frac{a_xb_x+a_yb_y}
+{\sqrt{a_x^2+a_y^2}\sqrt{b_x^2+b_y^2}}.
+\]
+\end{keybox}
+
+\begin{examplebox}[По клеткам координатной плоскости]
+Пусть $\vec a=(2;3)$, $\vec b=(2;-1)$. Тогда
+\[
+\vec a\cdot\vec b=2\cdot2+3\cdot(-1)=1.
+\]
+Знак координаты по вертикали определяется направлением: движение вниз даёт отрицательную координату.
+\end{examplebox}
+
+\begin{warnbox}[Выбор формулы]
+Формула $|\vec a||\vec b|\cos\varphi$ неудобна, если неизвестны длины и угол. При известных координатах начинайте с координатной формулы.
+\end{warnbox}
+
+\section*{5. Вероятность: вложенные события}
+Пусть $X$ --- число решённых задач. Если
+\[
+P(X>4)=0{,}73,\qquad P(X>3)=0{,}86,
+\]
+то событие $\{X>4\}$ вложено в $\{X>3\}$, поэтому
+\[
+P(X=4)=P(X>3)-P(X>4)=0{,}86-0{,}73=0{,}13.
+\]
+
+\begin{center}
+\begin{tikzpicture}[x=1.15cm,y=1cm]
+\draw[->,thick] (0,0)--(10.2,0);
+\foreach \x in {0,...,9} {\draw (\x,0.12)--(\x,-0.12) node[below=3pt]{\small \x};}
+\draw[line width=7pt,coral!55,line cap=round] (4,0.55)--(9.6,0.55);
+\draw[line width=7pt,accent!70,line cap=round] (5,0.9)--(9.6,0.9);
+\node[anchor=west] at (0,0.9) {\small $X>4$};
+\node[anchor=west] at (0,0.55) {\small $X>3$};
+\end{tikzpicture}
+\end{center}
+
+\begin{keybox}[Перевод слов]
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+Формулировка & Для целого $X$ \\
+\midrule
+больше $8$ & $X\ge 9$ \\
+не менее $8$ & $X\ge 8$ \\
+меньше $8$ & $X\le 7$ \\
+не более $8$ & $X\le 8$ \\
+\bottomrule
+\end{tabularx}
+\end{keybox}
+
+\section*{6. Степени и логарифмы}
+\begin{examplebox}[Показательное уравнение]
+Если
+\[
+3^{x-8}=\frac1{81}=3^{-4},
+\]
+то основания одинаковы и положительны, поэтому
+\[
+x-8=-4,\qquad x=4.
+\]
+\end{examplebox}
+
+\begin{examplebox}[Разность логарифмов]
+\[
+\log_2 56-\log_2 7
+=\log_2\frac{56}{7}
+=\log_2 8=3.
+\]
+Объединять логарифмы можно при одинаковых основаниях и отсутствии дополнительных коэффициентов перед ними.
+\end{examplebox}
+
+\section*{7. Прикладные формулы и текстовые задачи}
+\begin{warnbox}[Буква не равна цифре]
+В формуле внимательно различайте обозначения. Например, $L$ --- пройденный путь, а не цифра $1$. Перед подстановкой подпишите смысл каждой переменной и её единицы.
+\end{warnbox}
+
+\subsection*{Задача на движение}
+Два велосипедиста проходят по $190$ км. Быстрый едет со скоростью $x$ км/ч, медленный --- $(x-9)$ км/ч. Первый прибывает на $9$ часов раньше:
+\[
+\frac{190}{x-9}-\frac{190}{x}=9,\qquad x>9.
+\]
+После умножения на $x(x-9)$:
+\[
+190x-190(x-9)=9x(x-9),
+\]
+\[
+x^2-9x-190=0.
+\]
+\[
+D=81+760=841=29^2,\qquad x=\frac{9+29}{2}=19.
+\]
+Отрицательный корень не удовлетворяет смыслу задачи. Ответ: $19$ км/ч.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{0.84\linewidth}{@{}lXXX@{}}
+\toprule
+& Скорость & Время & Путь \\
+\midrule
+Первый & $x$ & $\dfrac{190}{x}$ & $190$ \\
+Второй & $x-9$ & $\dfrac{190}{x-9}$ & $190$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section*{8. Как извлекать корень из большого квадрата}
+\begin{keybox}[Оценка по десяткам и последней цифре]
+\begin{enumerate}
+\item Найдите соседние круглые квадраты: например, $70^2$ и $80^2$.
+\item Определите десяток искомого корня.
+\item По последней цифре подберите две возможные цифры единиц.
+\item Сравните число с ближайшим круглым квадратом и проверьте кандидата.
+\end{enumerate}
+\end{keybox}
+
+\begin{examplebox}[Пример]
+\[
+70^2=4900<5329<6400=80^2.
+\]
+Корень имеет вид $7\Box$. Число оканчивается на $9$, поэтому кандидаты --- $73$ и $77$. Число ближе к $4900$, проверяем:
+\[
+73^2=5329,\qquad \sqrt{5329}=73.
+\]
+Аналогично:
+\[
+\sqrt{7569}=87,\qquad \sqrt{1764}=42.
+\]
+\end{examplebox}
+
+\section*{9. Фрагмент рабочей таблицы занятия}
+\IfFileExists{../table.png}{
+\begin{center}
+\includegraphics[width=\linewidth,height=0.52\textheight,keepaspectratio]{../table.png}
+\end{center}
+}{
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}lXX@{}}
+\toprule
+Блок & Главный инструмент & Проверка \\
+\midrule
+Финансы & коэффициент роста и знаки операций & процент от текущей суммы \\
+Векторы & координатная формула & знак вертикальной координаты \\
+Вероятность & вложенные события & разность большего и меньшего события \\
+Движение & таблица $v,t,s$ & положительность скорости \\
+Корни & оценка между квадратами & возведение кандидата в квадрат \\
+\bottomrule
+\end{tabularx}
+\end{center}
+}
+
+\section*{10. Типичные ошибки}
+\begin{warnbox}
+\begin{itemize}
+\item Снятие денег записано со знаком плюс.
+\item Процент вычислен от первоначальной, а не от текущей суммы.
+\item Внешний угол принят за внутренний.
+\item Вектор, направленный вниз, получил положительную $y$-координату.
+\item Вероятности вычитаются без проверки вложенности событий.
+\item Слова ``больше'' и ``не менее'' считаются равнозначными.
+\item Буква $L$ прочитана как цифра $1$.
+\item В задаче на движение не учтено условие $x>9$.
+\item Квадратный корень угадывается без итоговой проверки.
+\end{itemize}
+\end{warnbox}
+
+\section*{11. Итоговый чек-лист}
+\begin{itemize}[label=$\square$]
+\item Я различаю пополнение и снятие по знаку.
+\item Я начисляю процент на сумму начала текущего периода.
+\item Я умею перейти от внешнего угла к внутреннему.
+\item Я читаю координаты вектора по горизонтальному и вертикальному смещению.
+\item Я знаю обе формулы скалярного произведения и длину вектора.
+\item Я вычитаю вероятности только для вложенных событий.
+\item Я точно перевожу формулировки ``больше'', ``не менее'', ``меньше'', ``не более''.
+\item Я свожу степени к одинаковому основанию.
+\item Я применяю свойства логарифмов только при выполнении условий.
+\item Я подписываю смысл букв в прикладной формуле.
+\item Я строю таблицу скорость--время--путь и проверяю ограничения.
+\item Я извлекаю корень оценкой и проверяю кандидата.
+\end{itemize}
+
+\clearpage
+\section*{Тренировочный блок}
+\subsection*{Средний уровень}
+\begin{enumerate}
+\item В равнобедренном треугольнике боковые стороны равны, внешний угол при основании равен $116^\circ$. Найдите угол при вершине.
+\item Даны $\vec a=(3;-2)$ и $\vec b=(1;4)$. Найдите $\vec a\cdot\vec b$.
+\item $P(X>5)=0{,}62$, $P(X>4)=0{,}79$. Найдите $P(X=5)$.
+\end{enumerate}
+
+\subsection*{Уровень выше среднего}
+\begin{enumerate}[resume]
+\item Найдите косинус угла между $\vec a=(1;2)$ и $\vec b=(2;-1)$.
+\item Решите уравнение $5^{x-2}=\dfrac1{125}$.
+\item Вычислите $\log_3 54-\log_3 2$.
+\item Два велосипедиста проходят $240$ км. Скорость первого на $10$ км/ч больше, и он прибывает на $2$ часа раньше. Найдите скорость первого.
+\item На счёте было $100\,000$ рублей. После начисления $8\%$ сняли $5\,000$ рублей. Сколько осталось?
+\item Найдите $\sqrt{6241}$ методом оценки.
+\end{enumerate}
+
+\subsection*{Сложный уровень}
+\begin{enumerate}[resume]
+\item Вклад $S$ два года рос на $10\%$ ежегодно, а в третий год --- на $x\%$. После третьего года сумма стала равна $1{,}452S$. Найдите $x$.
+\end{enumerate}
+
+\clearpage
+\section*{Ответы}
+\renewcommand{\arraystretch}{1.45}
+\begin{longtable}{@{}cl@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $52^\circ$ \\
+2 & $-5$ \\
+3 & $0{,}17$ \\
+4 & $0$ \\
+5 & $-1$ \\
+6 & $3$ \\
+7 & $40$ км/ч \\
+8 & $103\,000$ рублей \\
+9 & $79$ \\
+10 & $20\%$ \\
+\bottomrule
+\end{longtable}
+
+\end{document}
