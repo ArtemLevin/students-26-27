@@ -1,0 +1,65 @@
+name: Build Nikol 21 July materials in PR
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.head_ref == 'agent/nikol-210726-materials'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/nikol-210726-materials
+          fetch-depth: 0
+
+      - name: Install document toolchain
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            latexmk texlive-latex-extra texlive-lang-cyrillic texlive-pictures \
+            python3-pil fonts-dejavu-core
+
+      - name: Generate poster and update index
+        run: python tools/build_nikol_210726.py
+
+      - name: Compile PDF handbook
+        run: |
+          cd students/nikol_sarkisyants/tex_docs
+          latexmk -pdf -interaction=nonstopmode -halt-on-error 21.07.26.tex
+          mkdir -p ../pdf_docs
+          cp 21.07.26.pdf ../pdf_docs/21.07.26.pdf
+          latexmk -C 21.07.26.tex
+
+      - name: Validate PDF and links
+        shell: python
+        run: |
+          from pathlib import Path
+          root = Path('students/nikol_sarkisyants')
+          pdf = root / 'pdf_docs' / '21.07.26.pdf'
+          html = (root / 'site' / '21-07-26.html').read_text(encoding='utf-8')
+          index = (root / 'site' / 'index.html').read_text(encoding='utf-8')
+          assert pdf.exists() and pdf.stat().st_size > 10000
+          assert '../pdf_docs/21.07.26.pdf' in html
+          assert '../tex_docs/21.07.26.tex' in html
+          assert 'data-lesson="review-21-07-26"' in index
+          assert '<b>21.07.26</b>' in index
+
+      - name: Commit generated files and remove builders
+        run: |
+          rm -f .github/workflows/build-nikol-210726.yml
+          rm -f .github/workflows/build-nikol-210726-pr.yml
+          rm -f students/nikol_sarkisyants/.build-210726
+          rm -f tools/build_nikol_210726.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Build Nikol 21 July materials"
+          git push origin agent/nikol-210726-materials
