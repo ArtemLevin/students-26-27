@@ -1,0 +1,57 @@
+name: Fix Nikol lesson interactivity
+
+on:
+  push:
+    branches:
+      - fix/nikol-210726-interactivity
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: ${{ !contains(github.event.head_commit.message, '[interactive-fix]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/nikol-210726-interactivity
+          fetch-depth: 0
+      - name: Patch initialization order
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('students/nikol_sarkisyants/site/21-07-26.html')
+          text=path.read_text(encoding='utf-8')
+          old="function setTheme(t){document.documentElement.dataset.theme=t;localStorage.setItem('nikol-210726-theme',t);theme.textContent=t==='dark'?'☀ Светлая тема':'☾ Тёмная тема';drawAll()}setTheme(localStorage.getItem('nikol-210726-theme')||'dark');theme.onclick=()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');"
+          new="function setTheme(t){document.documentElement.dataset.theme=t;localStorage.setItem('nikol-210726-theme',t);theme.textContent=t==='dark'?'☀ Светлая тема':'☾ Тёмная тема'}setTheme(localStorage.getItem('nikol-210726-theme')||'dark');theme.onclick=()=>{setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');drawAll()};"
+          if text.count(old)!=1:
+              raise SystemExit('Expected Nikol initialization block was not found exactly once')
+          path.write_text(text.replace(old,new),encoding='utf-8')
+          PY
+      - name: Validate interactive script
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          text=Path('students/nikol_sarkisyants/site/21-07-26.html').read_text(encoding='utf-8')
+          scripts=re.findall(r'<script>(.*?)</script>',text,flags=re.S)
+          assert scripts
+          Path('/tmp/nikol-script.js').write_text(scripts[-1],encoding='utf-8')
+          for marker in ['id="map"','id="mapBig"','id="generate"','id="theme"','data-tab="finance"']:
+              assert marker in text, marker
+          prefix=text.split('function setTheme(t){',1)[1].split('}',1)[0]
+          assert 'drawAll()' not in prefix
+          PY
+          node --check /tmp/nikol-script.js
+      - name: Commit clean fix
+        shell: bash
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          rm -f .github/workflows/fix-nikol-interactivity.yml
+          git add students/nikol_sarkisyants/site/21-07-26.html .github/workflows/fix-nikol-interactivity.yml
+          git commit -m "[interactive-fix] Restore Nikol lesson controls and model"
+          git push
