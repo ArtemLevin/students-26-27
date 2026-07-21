@@ -1,0 +1,99 @@
+name: Build Timofey materials 21.07.26
+
+on:
+  push:
+    branches:
+      - agent/timofey-21-07-26
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: ${{ !contains(github.event.head_commit.message, '[materials-output]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install document tools
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            texlive-latex-base texlive-latex-recommended texlive-latex-extra \
+            texlive-lang-cyrillic texlive-pictures latexmk poppler-utils fonts-dejavu-core
+          python3 -m pip install --quiet --break-system-packages pillow beautifulsoup4
+
+      - name: Restore prepared sources
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64
+          import zlib
+
+          payloads = {
+              Path('students/timofey/tex_docs/21.07.26.tex'):
+                  Path('.tmp/payload_tex_210726.b64').read_text(encoding='utf-8'),
+              Path('students/timofey/site/lessons/21-07-26.html'):
+                  Path('.tmp/payload_html_210726_part1.b64').read_text(encoding='utf-8')
+                  + Path('.tmp/payload_html_210726_part2.b64').read_text(encoding='utf-8'),
+              Path('.tmp/build_timofey_210726.py'):
+                  Path('.tmp/payload_script_210726.b64').read_text(encoding='utf-8'),
+          }
+          for path, encoded in payloads.items():
+              path.parent.mkdir(parents=True, exist_ok=True)
+              path.write_bytes(zlib.decompress(base64.b64decode(encoded)))
+          PY
+
+      - name: Generate poster and integrate lesson
+        shell: bash
+        run: python3 .tmp/build_timofey_210726.py
+
+      - name: Compile and verify PDF
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd students/timofey/tex_docs
+          pdflatex -interaction=batchmode -halt-on-error 21.07.26.tex
+          pdflatex -interaction=batchmode -halt-on-error 21.07.26.tex
+          mkdir -p ../pdf_docs
+          cp 21.07.26.pdf ../pdf_docs/21.07.26.pdf
+          pdfinfo ../pdf_docs/21.07.26.pdf | grep -q 'Pages:'
+          rm -f 21.07.26.aux 21.07.26.log 21.07.26.out 21.07.26.fls 21.07.26.fdb_latexmk 21.07.26.pdf
+
+      - name: Validate web material
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+
+          page = Path('students/timofey/site/lessons/21-07-26.html')
+          html = page.read_text(encoding='utf-8')
+          soup = BeautifulSoup(html, 'html.parser')
+          assert len(soup.select('.tab')) == 6
+          assert len(soup.select('.tab-panel')) == 6
+          assert len(soup.select('.exercise')) == 10
+          assert len(soup.find_all('math')) >= 20
+          assert not any(token in html.lower() for token in ('cdn.', 'unpkg', 'jsdelivr'))
+          assert Path('students/timofey/images/21.07.26.png').stat().st_size > 100000
+          assert Path('students/timofey/pdf_docs/21.07.26.pdf').stat().st_size > 100000
+          assert "id:'21-07-26'" in Path('students/timofey/site/assets/lesson-data.js').read_text(encoding='utf-8')
+          assert 'data-fallback-lesson="21-07-26"' in Path('students/timofey/site/index.html').read_text(encoding='utf-8')
+          PY
+
+      - name: Remove temporary files and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .tmp/timofey-inspection
+          rm -f .tmp/payload_tex_210726.b64
+          rm -f .tmp/payload_html_210726_part1.b64 .tmp/payload_html_210726_part2.b64
+          rm -f .tmp/payload_script_210726.b64 .tmp/build_timofey_210726.py
+          rm -f .github/workflows/timofey-materials-build.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git commit -m '[materials-output] Add Timofey logarithmic inequalities materials'
+          git push
