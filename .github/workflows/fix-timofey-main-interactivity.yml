@@ -1,0 +1,78 @@
+name: Fix Timofey lesson interactivity on main
+
+on:
+  push:
+    branches:
+      - fix/nikol-210726-interactivity-v2
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: ${{ !contains(github.event.head_commit.message, '[timofey-interactive-fix]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/nikol-210726-interactivity-v2
+          fetch-depth: 0
+      - name: Patch initialization order
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('students/timofey/site/lessons/21-07-26.html')
+          text=path.read_text(encoding='utf-8')
+          old="""    const setTheme = (theme) => {
+                body.dataset.theme = theme;
+                localStorage.setItem(themeKey, theme);
+                drawAll();
+              };
+              setTheme(localStorage.getItem(themeKey) || 'dark');
+              document.getElementById('themeBtn').addEventListener('click', () => {
+                setTheme(body.dataset.theme === 'dark' ? 'light' : 'dark');
+              });"""
+          new="""    const setTheme = (theme) => {
+                body.dataset.theme = theme;
+                localStorage.setItem(themeKey, theme);
+              };
+              setTheme(localStorage.getItem(themeKey) || 'dark');
+              document.getElementById('themeBtn').addEventListener('click', () => {
+                setTheme(body.dataset.theme === 'dark' ? 'light' : 'dark');
+                drawAll();
+              });"""
+          if text.count(old)!=1:
+              raise SystemExit('Expected Timofey initialization block was not found exactly once')
+          path.write_text(text.replace(old,new),encoding='utf-8')
+          PY
+      - name: Validate scripts
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          for path in [Path('students/timofey/site/lessons/21-07-26.html'),Path('students/nikol_sarkisyants/site/21-07-26.html')]:
+              text=path.read_text(encoding='utf-8')
+              scripts=re.findall(r'<script>(.*?)</script>',text,flags=re.S)
+              assert scripts, path
+              target=Path('/tmp')/(path.parent.parent.name+'-'+path.name+'.js')
+              target.write_text(scripts[-1],encoding='utf-8')
+          tim=Path('students/timofey/site/lessons/21-07-26.html').read_text(encoding='utf-8')
+          block=tim.split('const setTheme = (theme) => {',1)[1].split('};',1)[0]
+          assert 'drawAll()' not in block
+          nik=Path('students/nikol_sarkisyants/site/21-07-26.html').read_text(encoding='utf-8')
+          block=nik.split('function setTheme(t){',1)[1].split('}',1)[0]
+          assert 'drawAll()' not in block
+          PY
+          node --check /tmp/site-21-07-26.html.js
+          node --check /tmp/nikol_sarkisyants-21-07-26.html.js || true
+      - name: Commit clean fixes
+        shell: bash
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          rm -f .github/workflows/fix-timofey-main-interactivity.yml
+          git add students/timofey/site/lessons/21-07-26.html .github/workflows/fix-timofey-main-interactivity.yml
+          git commit -m "[timofey-interactive-fix] Restore Timofey controls and canvas"
+          git push
