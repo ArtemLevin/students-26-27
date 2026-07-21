@@ -20,12 +20,12 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-rus
           python3 -m pip install --quiet pillow
-      - name: Prepare readable image sources
+      - name: Segment and recognize board
         shell: bash
         run: |
           set -euo pipefail
           rm -rf .tmp/timofey-inspection
-          mkdir -p .tmp/timofey-inspection
+          mkdir -p .tmp/timofey-inspection/crops
           python3 - <<'PY'
           from pathlib import Path
           from PIL import Image, ImageOps, ImageEnhance, ImageFilter
@@ -33,32 +33,45 @@ jobs:
           src = Path('students/timofey/table.png')
           out = Path('.tmp/timofey-inspection')
           with Image.open(src) as image:
-              original_size = image.size
               rgb = image.convert('RGB')
+              w, h = rgb.size
               preview = rgb.copy()
               preview.thumbnail((1800, 1800), Image.Resampling.LANCZOS)
               preview.save(out / 'preview.jpg', 'JPEG', quality=86, optimize=True, progressive=True)
 
-              gray = ImageOps.grayscale(rgb)
-              gray = ImageOps.autocontrast(gray, cutoff=1)
-              gray = ImageEnhance.Contrast(gray).enhance(1.8)
-              gray = gray.filter(ImageFilter.SHARPEN)
-              gray.save('/tmp/table-processed.png')
+              overlap = 140
+              edges = [0, w//4, w//2, 3*w//4, w]
+              crop_sizes = []
+              for i in range(4):
+                  left = max(0, edges[i] - (overlap if i else 0))
+                  right = min(w, edges[i+1] + (overlap if i < 3 else 0))
+                  crop = rgb.crop((left, 0, right, h))
+                  gray = ImageOps.grayscale(crop)
+                  gray = ImageOps.autocontrast(gray, cutoff=1)
+                  gray = ImageEnhance.Contrast(gray).enhance(2.0)
+                  gray = gray.filter(ImageFilter.SHARPEN)
+                  gray = gray.resize((gray.width * 2, gray.height * 2), Image.Resampling.LANCZOS)
+                  path = out / 'crops' / f'crop_{i+1}.png'
+                  gray.save(path)
+                  crop_sizes.append(f'{i+1}:{left}-{right}')
 
           (out / 'manifest.txt').write_text(
-              f'original_size={original_size[0]}x{original_size[1]}\n'
-              f'preview_size={preview.size[0]}x{preview.size[1]}\n',
+              f'original_size={w}x{h}\n'
+              f'preview_size={preview.size[0]}x{preview.size[1]}\n'
+              f'crops={";".join(crop_sizes)}\n',
               encoding='utf-8'
           )
           PY
-          tesseract students/timofey/table.png .tmp/timofey-inspection/ocr-original-psm6 -l rus+eng --psm 6 2>/dev/null || true
-          tesseract /tmp/table-processed.png .tmp/timofey-inspection/ocr-processed-psm6 -l rus+eng --psm 6 2>/dev/null || true
-          tesseract /tmp/table-processed.png .tmp/timofey-inspection/ocr-processed-psm11 -l rus+eng --psm 11 2>/dev/null || true
+          for image in .tmp/timofey-inspection/crops/crop_*.png; do
+            stem="${image%.png}"
+            tesseract "$image" "${stem}-psm6" -l rus+eng --psm 6 2>/dev/null || true
+            tesseract "$image" "${stem}-psm11" -l rus+eng --psm 11 2>/dev/null || true
+          done
       - name: Commit inspection output
         shell: bash
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add -A .tmp/timofey-inspection
-          git commit -m "[inspection-output] Recognize Timofey board image"
+          git commit -m "[inspection-output] Segment Timofey board image"
           git push
