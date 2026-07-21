@@ -45,9 +45,10 @@ jobs:
                 setTheme(body.dataset.theme === 'dark' ? 'light' : 'dark');
                 drawAll();
               });"""
-          if text.count(old)!=1:
-              raise SystemExit('Expected Timofey initialization block was not found exactly once')
-          path.write_text(text.replace(old,new),encoding='utf-8')
+          if old in text:
+              path.write_text(text.replace(old,new),encoding='utf-8')
+          elif new not in text:
+              raise SystemExit('Neither old nor corrected Timofey initialization block was found')
           PY
       - name: Validate scripts
         shell: bash
@@ -65,19 +66,23 @@ jobs:
               assert scripts, path
               Path(f'/tmp/lesson-{index}.js').write_text(scripts[-1],encoding='utf-8')
           tim=files[0].read_text(encoding='utf-8')
-          assert 'drawAll();\n    };\n    setTheme' not in tim
+          block=tim.split('const setTheme = (theme) => {',1)[1].split('};',1)[0]
+          assert 'drawAll()' not in block
           nik=files[1].read_text(encoding='utf-8')
           block=nik.split('function setTheme(t){',1)[1].split('}',1)[0]
           assert 'drawAll()' not in block
           PY
           node --check /tmp/lesson-0.js
           node --check /tmp/lesson-1.js
-      - name: Commit clean fixes
+      - name: Commit HTML fix
         shell: bash
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          rm -f .github/workflows/fix-timofey-main-interactivity.yml
-          git add students/timofey/site/lessons/21-07-26.html .github/workflows/fix-timofey-main-interactivity.yml
-          git commit -m "[timofey-interactive-fix] Restore Timofey controls and canvas"
-          git push
+          git add students/timofey/site/lessons/21-07-26.html
+          if git diff --cached --quiet; then
+            echo "Timofey HTML is already corrected"
+          else
+            git commit -m "[timofey-interactive-fix] Restore Timofey controls and canvas"
+            git push
+          fi
