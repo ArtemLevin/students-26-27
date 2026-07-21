@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   build:
-    if: ${{ !contains(github.event.head_commit.message || '', '[materials-output]') }}
+    if: ${{ !contains(github.event.head_commit.message || '', '[materials-output]') && !contains(github.event.head_commit.message || '', '[compile-diagnostic]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -69,7 +69,7 @@ jobs:
           with Image.open(source) as image:
               image = image.convert('RGB')
               image.thumbnail((2400, 1600), Image.Resampling.LANCZOS)
-              image.save(target, 'JPEG', quality=88, optimize=True, progressive=True)
+              image.save(target, 'JPEG', quality=88, optimize=True, progressive=False)
 
           tex = Path('students/timofey/tex_docs/21.07.26.tex')
           text = tex.read_text(encoding='utf-8').replace('../table.png', '../images/21.07.26-board.jpg')
@@ -77,24 +77,39 @@ jobs:
           PY
 
       - name: Compile and verify PDF
+        id: compile
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
           cd students/timofey/tex_docs
-          if ! pdflatex -interaction=batchmode -halt-on-error 21.07.26.tex; then
-            tail -120 21.07.26.log
-            exit 1
-          fi
-          if ! pdflatex -interaction=batchmode -halt-on-error 21.07.26.tex; then
-            tail -120 21.07.26.log
-            exit 1
-          fi
+          pdflatex -interaction=nonstopmode -halt-on-error 21.07.26.tex
+          pdflatex -interaction=nonstopmode -halt-on-error 21.07.26.tex
           mkdir -p ../pdf_docs
           cp 21.07.26.pdf ../pdf_docs/21.07.26.pdf
           pdfinfo ../pdf_docs/21.07.26.pdf | grep -q 'Pages:'
           rm -f 21.07.26.aux 21.07.26.log 21.07.26.out 21.07.26.fls 21.07.26.fdb_latexmk 21.07.26.pdf
 
+      - name: Save compile diagnostics
+        if: steps.compile.outcome == 'failure'
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo '=== pdflatex log tail ==='
+            tail -220 students/timofey/tex_docs/21.07.26.log 2>/dev/null || true
+            echo '=== generated files ==='
+            find students/timofey -maxdepth 3 -type f -printf '%p %s bytes\n' | sort
+          } > .tmp/pdflatex-error.txt
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add .tmp/pdflatex-error.txt
+          git commit -m '[compile-diagnostic] Save Timofey PDF error'
+          git push origin HEAD:agent/timofey-21-07-26
+          exit 1
+
       - name: Validate web material
+        if: steps.compile.outcome == 'success'
         shell: bash
         run: |
           python3 - <<'PY'
@@ -117,6 +132,7 @@ jobs:
           PY
 
       - name: Remove temporary files and commit
+        if: steps.compile.outcome == 'success'
         shell: bash
         run: |
           set -euo pipefail
@@ -124,6 +140,7 @@ jobs:
           rm -f .tmp/payload_tex_210726.b64
           rm -f .tmp/payload_html_210726_part1.b64 .tmp/payload_html_210726_part2.b64
           rm -f .tmp/payload_script_210726.b64 .tmp/build_timofey_210726.py
+          rm -f .tmp/pdflatex-error.txt
           rm -f .github/workflows/timofey-materials-build.yml
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
