@@ -46,14 +46,15 @@ jobs:
               image.save(preview, 'JPEG', quality=82, optimize=True, progressive=True)
 
           data = base64.b64encode(preview.read_bytes()).decode('ascii')
-          size = 100000
+          size = 18000
           for i in range(0, len(data), size):
               (out / 'image' / f'part_{i//size+1:03d}.txt').write_text(data[i:i+size], encoding='ascii')
           (out / 'manifest.txt').write_text(
               f'transcript_chars={len(text)}\n'
               f'original_size={original_size[0]}x{original_size[1]}\n'
               f'preview_size={preview_size[0]}x{preview_size[1]}\n'
-              f'preview_base64_chars={len(data)}\n',
+              f'preview_base64_chars={len(data)}\n'
+              f'preview_parts={(len(data)+size-1)//size}\n',
               encoding='utf-8'
           )
           PY
