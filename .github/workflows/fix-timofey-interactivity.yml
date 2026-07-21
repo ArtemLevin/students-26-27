@@ -1,0 +1,80 @@
+name: Fix Timofey lesson interactivity
+
+on:
+  push:
+    branches:
+      - agent/timofey-21-07-26
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: ${{ !contains(github.event.head_commit.message, '[interactive-fix]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/timofey-21-07-26
+          fetch-depth: 0
+
+      - name: Patch initialization order
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('students/timofey/site/lessons/21-07-26.html')
+          text = path.read_text(encoding='utf-8')
+          old = """    const setTheme = (theme) => {
+                body.dataset.theme = theme;
+                localStorage.setItem(themeKey, theme);
+                drawAll();
+              };
+              setTheme(localStorage.getItem(themeKey) || 'dark');
+              document.getElementById('themeBtn').addEventListener('click', () => {
+                setTheme(body.dataset.theme === 'dark' ? 'light' : 'dark');
+              });"""
+          new = """    const setTheme = (theme) => {
+                body.dataset.theme = theme;
+                localStorage.setItem(themeKey, theme);
+              };
+              setTheme(localStorage.getItem(themeKey) || 'dark');
+              document.getElementById('themeBtn').addEventListener('click', () => {
+                setTheme(body.dataset.theme === 'dark' ? 'light' : 'dark');
+                drawAll();
+              });"""
+          if text.count(old) != 1:
+              raise SystemExit('Expected Timofey initialization block was not found exactly once')
+          path.write_text(text.replace(old, new), encoding='utf-8')
+          PY
+
+      - name: Validate script and controls
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('students/timofey/site/lessons/21-07-26.html')
+          text = path.read_text(encoding='utf-8')
+          scripts = re.findall(r'<script>(.*?)</script>', text, flags=re.S)
+          assert scripts, 'Inline script not found'
+          Path('/tmp/timofey-script.js').write_text(scripts[-1], encoding='utf-8')
+          required = ['themeBtn', 'generateBtn', 'logCanvas', 'openCanvas', 'data-tab="domain"']
+          for marker in required:
+              assert marker in text, f'Missing interactive marker: {marker}'
+          set_theme = text.split('const setTheme = (theme) => {', 1)[1].split('};', 1)[0]
+          assert 'drawAll()' not in set_theme, 'Canvas is still called before initialization'
+          PY
+          node --check /tmp/timofey-script.js
+
+      - name: Commit clean fix
+        shell: bash
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          rm -f .github/workflows/fix-timofey-interactivity.yml
+          git add students/timofey/site/lessons/21-07-26.html .github/workflows/fix-timofey-interactivity.yml
+          git commit -m "[interactive-fix] Restore Timofey lesson controls and canvas"
+          git push
