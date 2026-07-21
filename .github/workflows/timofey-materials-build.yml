@@ -56,17 +56,39 @@ jobs:
               path.write_bytes(zlib.decompress(base64.b64decode(encoded)))
           PY
 
-      - name: Generate poster and integrate lesson
+      - name: Generate visual assets and integrate lesson
         shell: bash
-        run: python3 .tmp/build_timofey_210726.py
+        run: |
+          python3 .tmp/build_timofey_210726.py
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          source = Path('students/timofey/table.png')
+          target = Path('students/timofey/images/21.07.26-board.jpg')
+          with Image.open(source) as image:
+              image = image.convert('RGB')
+              image.thumbnail((2400, 1600), Image.Resampling.LANCZOS)
+              image.save(target, 'JPEG', quality=88, optimize=True, progressive=True)
+
+          tex = Path('students/timofey/tex_docs/21.07.26.tex')
+          text = tex.read_text(encoding='utf-8').replace('../table.png', '../images/21.07.26-board.jpg')
+          tex.write_text(text, encoding='utf-8')
+          PY
 
       - name: Compile and verify PDF
         shell: bash
         run: |
           set -euo pipefail
           cd students/timofey/tex_docs
-          pdflatex -interaction=batchmode -halt-on-error 21.07.26.tex
-          pdflatex -interaction=batchmode -halt-on-error 21.07.26.tex
+          if ! pdflatex -interaction=batchmode -halt-on-error 21.07.26.tex; then
+            tail -120 21.07.26.log
+            exit 1
+          fi
+          if ! pdflatex -interaction=batchmode -halt-on-error 21.07.26.tex; then
+            tail -120 21.07.26.log
+            exit 1
+          fi
           mkdir -p ../pdf_docs
           cp 21.07.26.pdf ../pdf_docs/21.07.26.pdf
           pdfinfo ../pdf_docs/21.07.26.pdf | grep -q 'Pages:'
@@ -88,6 +110,7 @@ jobs:
           assert len(soup.find_all('math')) >= 20
           assert not any(token in html.lower() for token in ('cdn.', 'unpkg', 'jsdelivr'))
           assert Path('students/timofey/images/21.07.26.png').stat().st_size > 100000
+          assert Path('students/timofey/images/21.07.26-board.jpg').stat().st_size > 50000
           assert Path('students/timofey/pdf_docs/21.07.26.pdf').stat().st_size > 100000
           assert "id:'21-07-26'" in Path('students/timofey/site/assets/lesson-data.js').read_text(encoding='utf-8')
           assert 'data-fallback-lesson="21-07-26"' in Path('students/timofey/site/index.html').read_text(encoding='utf-8')
