@@ -1,0 +1,48 @@
+name: Restore Timofey web lesson
+
+on:
+  push:
+    branches:
+      - agent/timofey-21-07-26
+
+permissions:
+  contents: write
+
+jobs:
+  restore-html:
+    if: ${{ !contains(github.event.head_commit.message, '[html-output]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/timofey-21-07-26
+          fetch-depth: 0
+      - name: Restore checked HTML payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          for part in \
+            .tmp/payload_html_210726_part1.b64 \
+            .tmp/payload_html_210726_part2.b64; do
+            deletion_commit="$(git log -n 1 --format=%H -- "$part")"
+            test -n "$deletion_commit"
+            git show "${deletion_commit}^:${part}" > "/tmp/$(basename "$part")"
+          done
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64
+          import zlib
+
+          encoded = Path('/tmp/payload_html_210726_part1.b64').read_text(encoding='utf-8') + Path('/tmp/payload_html_210726_part2.b64').read_text(encoding='utf-8')
+          page = Path('students/timofey/site/lessons/21-07-26.html')
+          page.parent.mkdir(parents=True, exist_ok=True)
+          page.write_bytes(zlib.decompress(base64.b64decode(encoded)))
+          assert page.stat().st_size > 40000
+          PY
+          git add -f students/timofey/site/lessons/21-07-26.html
+          rm -f .github/workflows/timofey-force-html.yml
+          git add -A .github/workflows/timofey-force-html.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git commit -m '[html-output] Add Timofey interactive web lesson'
+          git push origin HEAD:agent/timofey-21-07-26
