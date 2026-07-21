@@ -1,16 +1,19 @@
 name: Fix Timofey lesson interactivity on main
 
 on:
-  push:
+  pull_request:
     branches:
-      - fix/nikol-210726-interactivity-v2
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 permissions:
   contents: write
 
 jobs:
   fix:
-    if: ${{ !contains(github.event.head_commit.message, '[timofey-interactive-fix]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -52,21 +55,23 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import re
-          for path in [Path('students/timofey/site/lessons/21-07-26.html'),Path('students/nikol_sarkisyants/site/21-07-26.html')]:
+          files=[
+              Path('students/timofey/site/lessons/21-07-26.html'),
+              Path('students/nikol_sarkisyants/site/21-07-26.html'),
+          ]
+          for index,path in enumerate(files):
               text=path.read_text(encoding='utf-8')
               scripts=re.findall(r'<script>(.*?)</script>',text,flags=re.S)
               assert scripts, path
-              target=Path('/tmp')/(path.parent.parent.name+'-'+path.name+'.js')
-              target.write_text(scripts[-1],encoding='utf-8')
-          tim=Path('students/timofey/site/lessons/21-07-26.html').read_text(encoding='utf-8')
-          block=tim.split('const setTheme = (theme) => {',1)[1].split('};',1)[0]
-          assert 'drawAll()' not in block
-          nik=Path('students/nikol_sarkisyants/site/21-07-26.html').read_text(encoding='utf-8')
+              Path(f'/tmp/lesson-{index}.js').write_text(scripts[-1],encoding='utf-8')
+          tim=files[0].read_text(encoding='utf-8')
+          assert 'drawAll();\n    };\n    setTheme' not in tim
+          nik=files[1].read_text(encoding='utf-8')
           block=nik.split('function setTheme(t){',1)[1].split('}',1)[0]
           assert 'drawAll()' not in block
           PY
-          node --check /tmp/site-21-07-26.html.js
-          node --check /tmp/nikol_sarkisyants-21-07-26.html.js || true
+          node --check /tmp/lesson-0.js
+          node --check /tmp/lesson-1.js
       - name: Commit clean fixes
         shell: bash
         run: |
