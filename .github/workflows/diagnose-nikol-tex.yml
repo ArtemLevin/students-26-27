@@ -1,0 +1,42 @@
+name: Diagnose Nikol LaTeX build
+
+on:
+  pull_request:
+    branches: [main]
+    types: [synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    if: github.head_ref == 'agent/nikol-210726-materials'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/nikol-210726-materials
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            latexmk texlive-latex-extra texlive-lang-cyrillic texlive-pictures
+      - name: Capture compiler output
+        shell: bash
+        run: |
+          set +e
+          cd students/nikol_sarkisyants/tex_docs
+          latexmk -pdf -interaction=nonstopmode -halt-on-error 21.07.26.tex > ../../build-210726-output.txt 2>&1
+          status=$?
+          if [ -f 21.07.26.log ]; then cp 21.07.26.log ../../build-210726-latex.log; fi
+          echo "$status" > ../../build-210726-status.txt
+          exit 0
+      - name: Commit diagnostics
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/nikol_sarkisyants/build-210726-output.txt \
+                  students/nikol_sarkisyants/build-210726-latex.log \
+                  students/nikol_sarkisyants/build-210726-status.txt
+          git commit -m "Capture Nikol LaTeX diagnostics"
+          git push origin agent/nikol-210726-materials
