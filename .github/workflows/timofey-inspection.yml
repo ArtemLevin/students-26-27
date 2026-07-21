@@ -14,55 +14,51 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Prepare readable source fragments
+      - name: Install recognition tools
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-rus
+          python3 -m pip install --quiet pillow
+      - name: Prepare readable image sources
         shell: bash
         run: |
           set -euo pipefail
           rm -rf .tmp/timofey-inspection
-          mkdir -p .tmp/timofey-inspection/transcript .tmp/timofey-inspection/image
-          git show 2984626044117135b5d3db3fcac2728b0b9d2d56:students/timofey/tr.txt > /tmp/timofey-tr.txt
-          python3 -m pip install --quiet pillow
+          mkdir -p .tmp/timofey-inspection
           python3 - <<'PY'
           from pathlib import Path
-          from PIL import Image
-          import base64, re
-
-          out = Path('.tmp/timofey-inspection')
-          text = Path('/tmp/timofey-tr.txt').read_text(encoding='utf-8')
-          text = re.sub(r'\s+(?=\[(?:П|У)\])', '\n', text)
-          size = 12000
-          for i in range(0, len(text), size):
-              (out / 'transcript' / f'part_{i//size+1:02d}.txt').write_text(text[i:i+size], encoding='utf-8')
+          from PIL import Image, ImageOps, ImageEnhance, ImageFilter
 
           src = Path('students/timofey/table.png')
+          out = Path('.tmp/timofey-inspection')
           with Image.open(src) as image:
               original_size = image.size
-              image = image.convert('RGB')
-              image.thumbnail((1600, 1600), Image.Resampling.LANCZOS)
-              preview_size = image.size
-              preview = Path('/tmp/timofey-table-preview.jpg')
-              image.save(preview, 'JPEG', quality=82, optimize=True, progressive=True)
+              rgb = image.convert('RGB')
+              preview = rgb.copy()
+              preview.thumbnail((1800, 1800), Image.Resampling.LANCZOS)
+              preview.save(out / 'preview.jpg', 'JPEG', quality=86, optimize=True, progressive=True)
 
-          data = base64.b64encode(preview.read_bytes()).decode('ascii')
-          size = 18000
-          for i in range(0, len(data), size):
-              (out / 'image' / f'part_{i//size+1:03d}.txt').write_text(data[i:i+size], encoding='ascii')
+              gray = ImageOps.grayscale(rgb)
+              gray = ImageOps.autocontrast(gray, cutoff=1)
+              gray = ImageEnhance.Contrast(gray).enhance(1.8)
+              gray = gray.filter(ImageFilter.SHARPEN)
+              gray.save('/tmp/table-processed.png')
+
           (out / 'manifest.txt').write_text(
-              f'transcript_chars={len(text)}\n'
               f'original_size={original_size[0]}x{original_size[1]}\n'
-              f'preview_size={preview_size[0]}x{preview_size[1]}\n'
-              f'preview_base64_chars={len(data)}\n'
-              f'preview_parts={(len(data)+size-1)//size}\n',
+              f'preview_size={preview.size[0]}x{preview.size[1]}\n',
               encoding='utf-8'
           )
           PY
+          tesseract students/timofey/table.png .tmp/timofey-inspection/ocr-original-psm6 -l rus+eng --psm 6 2>/dev/null || true
+          tesseract /tmp/table-processed.png .tmp/timofey-inspection/ocr-processed-psm6 -l rus+eng --psm 6 2>/dev/null || true
+          tesseract /tmp/table-processed.png .tmp/timofey-inspection/ocr-processed-psm11 -l rus+eng --psm 11 2>/dev/null || true
       - name: Commit inspection output
         shell: bash
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add -A .tmp/timofey-inspection
-          git commit -m "[inspection-output] Refresh Timofey source fragments"
+          git commit -m "[inspection-output] Recognize Timofey board image"
           git push
