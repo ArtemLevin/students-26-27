@@ -2,6 +2,8 @@ name: Build Nikol 28-07 material
 on:
   push:
     branches: [agent/nikol-28-07-credit-schemes]
+  pull_request:
+    branches: [main]
 permissions:
   contents: write
 jobs:
@@ -10,6 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
       - name: Restore lesson files and update navigation
         run: python .automation/nikol-28-07/bootstrap.py
@@ -29,9 +32,10 @@ jobs:
       - name: Commit finished lesson bundle
         shell: bash
         run: |
+          BRANCH="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git diff --cached --quiet && exit 0
           git commit -m "Добавить занятие Николь от 28.07.26"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          git push origin "HEAD:${BRANCH}"
