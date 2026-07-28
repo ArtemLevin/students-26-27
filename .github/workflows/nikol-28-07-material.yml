@@ -1,0 +1,37 @@
+name: Build Nikol 28-07 material
+on:
+  push:
+    branches: [agent/nikol-28-07-credit-schemes]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore lesson files and update navigation
+        run: python .automation/nikol-28-07/bootstrap.py
+      - name: Render images and printable PDF
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq librsvg2-bin
+          rsvg-convert -w 1800 -h 1120 students/nikol_sarkisyants/images/28.07.26.svg -o students/nikol_sarkisyants/images/28.07.26.png
+          rsvg-convert -w 1500 -h 900 students/nikol_sarkisyants/images/table.svg -o students/nikol_sarkisyants/images/table.png
+          CHROME="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium)"
+          test -n "$CHROME"
+          "$CHROME" --headless --no-sandbox --disable-gpu --virtual-time-budget=2500 --print-to-pdf="$(pwd)/students/nikol_sarkisyants/pdf_docs/28.07.26.pdf" --print-to-pdf-no-header "file://$(pwd)/students/nikol_sarkisyants/site/28-07-26.html"
+          rm students/nikol_sarkisyants/images/28.07.26.svg students/nikol_sarkisyants/images/table.svg
+          rm -rf .automation/nikol-28-07
+          rm -f .github/workflows/nikol-28-07-material.yml
+      - name: Commit finished lesson bundle
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "Добавить занятие Николь от 28.07.26"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
