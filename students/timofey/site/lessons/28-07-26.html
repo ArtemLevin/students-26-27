@@ -1,0 +1,5734 @@
+<!doctype html>
+<html lang="ru" data-theme="dark" data-detail="standard">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="Интерактивное пособие по вкладам, сложным процентам и промежуточным операциям для подготовки к ЕГЭ.">
+  <title>Вклады и сложные проценты — Тимофей Васильченко</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238b3038'/%3E%3Cpath d='M15 45h34M20 41V26m8 15V26m8 15V26m8 15V26M17 23l15-9 15 9z' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='49' cy='15' r='9' fill='%2317c7c7'/%3E%3Ctext x='49' y='19' text-anchor='middle' font-size='12' font-family='Arial' font-weight='700' fill='%230b1520'%3E%25%3C/text%3E%3C/svg%3E">
+
+  <style>
+    :root {
+      --bg: #0b1017;
+      --bg2: #101823;
+      --card: #151d28;
+      --card2: #1b2633;
+      --card3: #202e3d;
+      --text: #eef4f8;
+      --muted: #9fb0bf;
+      --line: #314253;
+      --red: #bb4e59;
+      --red2: #8b3038;
+      --cyan: #25d5d5;
+      --teal: #16a9a9;
+      --gold: #e8c36f;
+      --green: #54c493;
+      --bad: #ef737d;
+      --blue: #6eb8ff;
+      --orange: #f0a65c;
+      --shadow: 0 18px 60px #0007;
+      --focus: #83ffff;
+      --planned: #65baff;
+      --actual: #e7bd69;
+      --withdraw: #ef737d;
+      --deposit: #54c493;
+      --radius: 22px;
+      --sticky-top: 82px;
+    }
+
+    html[data-theme="light"] {
+      --bg: #f2ece3;
+      --bg2: #eee5d8;
+      --card: #fffdf8;
+      --card2: #f8f0e6;
+      --card3: #f3e7da;
+      --text: #272323;
+      --muted: #6d6761;
+      --line: #d7c9ba;
+      --red: #8b3038;
+      --red2: #6f2028;
+      --cyan: #087f86;
+      --teal: #0c7474;
+      --gold: #8c641f;
+      --green: #267a58;
+      --bad: #a12c36;
+      --blue: #176aa6;
+      --orange: #9b561c;
+      --shadow: 0 18px 50px #59401f20;
+      --focus: #007b83;
+      --planned: #176aa6;
+      --actual: #8c641f;
+      --withdraw: #a12c36;
+      --deposit: #267a58;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--text);
+      background:
+      radial-gradient(
+      circle at 92% -10%,
+      color-mix(in srgb, var(--red) 28%, transparent),
+      transparent 34%
+      ),
+      radial-gradient(
+      circle at -8% 28%,
+      color-mix(in srgb, var(--cyan) 11%, transparent),
+      transparent 26%
+      ),
+      linear-gradient(180deg, var(--bg), var(--bg2));
+      font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    button,
+    select,
+    input {
+      font: inherit;
+    }
+
+    button,
+    select {
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .wrap {
+      max-width: 1540px;
+      margin: auto;
+      padding: 22px;
+    }
+
+    .hero,
+    .card,
+    .visual-card,
+    .panel-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, var(--card), var(--card2));
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 30px;
+      padding: clamp(25px, 4vw, 50px);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      right: -90px;
+      top: -140px;
+      width: 410px;
+      height: 410px;
+      border-radius: 50%;
+      border: 66px solid color-mix(in srgb, var(--red) 18%, transparent);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: 75px;
+      bottom: -120px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      border: 30px solid color-mix(in srgb, var(--cyan) 10%, transparent);
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-weight: 900;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.15;
+    }
+
+    .hero h1 {
+      position: relative;
+      z-index: 1;
+      margin: 0.35rem 0 0.8rem;
+      font-size: clamp(2.35rem, 5.4vw, 5.2rem);
+      letter-spacing: -0.05em;
+      max-width: 950px;
+    }
+
+    .hero h1 span {
+      color: var(--red);
+    }
+
+    .hero p {
+      position: relative;
+      z-index: 1;
+      max-width: 920px;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.8vw, 1.18rem);
+    }
+
+    .meta,
+    .toolbar,
+    .tabs,
+    .inline-controls,
+    .legend,
+    .step-actions,
+    .quiz-actions {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .meta span {
+      position: relative;
+      z-index: 1;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 12px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      background: color-mix(in srgb, var(--card) 72%, transparent);
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      margin: 15px 0;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(16px);
+    }
+
+    .toolbar button,
+    .toolbar select,
+    .tab,
+    .btn,
+    .ghost,
+    .primary,
+    .secondary {
+      min-height: 43px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 9px 13px;
+      background: var(--card);
+      color: var(--text);
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .toolbar .grow {
+      flex: 1;
+    }
+
+    .primary {
+      border-color: var(--red);
+      background: var(--red);
+      color: #fff;
+    }
+
+    .secondary {
+      background: var(--card2);
+    }
+
+    .ghost {
+      background: transparent;
+    }
+
+    .tabs {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding: 0 1px 12px;
+      scrollbar-width: thin;
+    }
+
+    .tab {
+      white-space: nowrap;
+      border-radius: 999px;
+      color: var(--muted);
+    }
+
+    .tab.on {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.42fr) minmax(390px, 0.78fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      display: none;
+    }
+
+    .panel.on {
+      display: block;
+    }
+
+    .card,
+    .panel-card,
+    .visual-card {
+      border-radius: var(--radius);
+      padding: clamp(18px, 2.8vw, 31px);
+      margin-bottom: 16px;
+    }
+
+    .card h2,
+    .panel-card h2,
+    .visual-card h2 {
+      font-size: clamp(1.55rem, 2.6vw, 2.35rem);
+      margin: 0 0 14px;
+    }
+
+    .card h3,
+    .panel-card h3,
+    .visual-card h3 {
+      font-size: 1.17rem;
+      margin: 22px 0 9px;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 1.04rem;
+    }
+
+    .grid-2,
+    .grid-3,
+    .metrics,
+    .error-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .metrics {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin: 14px 0;
+    }
+
+    .tile,
+    .metric,
+    .error,
+    .callout,
+    .idea-item,
+    .exercise,
+    .check-item,
+    .result-box {
+      border: 1px solid var(--line);
+      background: var(--card2);
+      border-radius: 15px;
+      padding: 15px;
+      min-width: 0;
+    }
+
+    .tile strong,
+    .metric strong {
+      color: var(--gold);
+    }
+
+    .metric b {
+      display: block;
+      font-size: 1.3rem;
+      color: var(--text);
+      overflow-wrap: anywhere;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .callout {
+      border-left: 4px solid var(--red);
+      border-radius: 0 15px 15px 0;
+      background: color-mix(in srgb, var(--red) 12%, var(--card2));
+      margin: 14px 0;
+    }
+
+    .callout.info {
+      border-left-color: var(--cyan);
+      background: color-mix(in srgb, var(--cyan) 9%, var(--card2));
+    }
+
+    .callout.good {
+      border-left-color: var(--green);
+      background: color-mix(in srgb, var(--green) 9%, var(--card2));
+    }
+
+    .idea-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .idea-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .idea-item span {
+      flex: 0 0 32px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--red);
+      color: #fff;
+      font-weight: 900;
+    }
+
+    math {
+      font-family: "Cambria Math", "STIX Two Math", serif;
+      font-size: 1.08em;
+      max-width: 100%;
+    }
+
+    math[display="block"] {
+      display: block;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.25rem 0;
+      margin: 0.7rem 0;
+    }
+
+    .math-wrap {
+      overflow-x: auto;
+      max-width: 100%;
+    }
+
+    .formula-line {
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--card3);
+      margin: 9px 0;
+      overflow-x: auto;
+    }
+
+    .step-shell {
+      display: grid;
+      gap: 10px;
+    }
+
+    .solution-step {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card2);
+      overflow: hidden;
+      transition:
+      border-color 0.2s,
+      box-shadow 0.2s,
+      transform 0.2s;
+    }
+
+    .solution-step.linked,
+    .solution-step:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--cyan) 24%, transparent);
+    }
+
+    .step-head {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      text-align: left;
+      padding: 14px;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .step-no {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--red);
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .step-head strong {
+      font-size: 1.02rem;
+    }
+
+    .chev {
+      color: var(--gold);
+      font-size: 1.2rem;
+      transition: transform 0.2s;
+    }
+
+    .solution-step.open .chev {
+      transform: rotate(180deg);
+    }
+
+    .step-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.3s ease;
+    }
+
+    .step-body > div {
+      overflow: hidden;
+    }
+
+    .solution-step.open .step-body {
+      grid-template-rows: 1fr;
+    }
+
+    .step-content {
+      padding: 0 16px 17px 64px;
+      color: var(--muted);
+    }
+
+    .step-content b,
+    .step-content strong {
+      color: var(--text);
+    }
+
+    .detail-standard,
+    .detail-full {
+      margin-top: 8px;
+    }
+
+    html[data-detail="brief"] .detail-standard,
+    html[data-detail="brief"] .detail-full,
+    html[data-detail="standard"] .detail-full {
+      display: none !important;
+    }
+
+    .step-actions {
+      margin: 12px 0;
+    }
+
+    .inline-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 9px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .error-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .error strong {
+      color: var(--bad);
+    }
+
+    .sticky {
+      position: sticky;
+      top: var(--sticky-top);
+    }
+
+    .visual-card {
+      padding: 18px;
+    }
+
+    .visual-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .visual-head h2 {
+      margin: 0.15rem 0 0.4rem;
+      font-size: 1.65rem;
+    }
+
+    .canvasbox {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      overflow: hidden;
+      background:
+      linear-gradient(
+      color-mix(in srgb, var(--line) 22%, transparent) 1px,
+      transparent 1px
+      ),
+      linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--line) 22%, transparent) 1px,
+      transparent 1px
+      ),
+      var(--card2);
+      background-size: 28px 28px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: clamp(360px, 46vh, 520px);
+      touch-action: none;
+      cursor: grab;
+    }
+
+    canvas:active {
+      cursor: grabbing;
+    }
+
+    .canvas-note {
+      position: absolute;
+      left: 12px;
+      bottom: 10px;
+      max-width: 72%;
+      padding: 7px 10px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.8rem;
+      pointer-events: none;
+    }
+
+    .legend {
+      margin: 10px 0;
+    }
+
+    .legend button {
+      border: 1px solid var(--line);
+      background: var(--card2);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+    }
+
+    .legend button.off {
+      opacity: 0.45;
+      text-decoration: line-through;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 6px;
+      background: var(--planned);
+    }
+
+    .dot.actual {
+      background: var(--actual);
+    }
+
+    .dot.withdraw {
+      background: var(--withdraw);
+    }
+
+    .dot.deposit {
+      background: var(--deposit);
+    }
+
+    .control-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 11px;
+    }
+
+    .control {
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 10px;
+      background: var(--card2);
+    }
+
+    .control label {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .control output {
+      color: var(--text);
+      font-weight: 850;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--red);
+    }
+
+    .zoom-row {
+      display: grid;
+      grid-template-columns: auto 1fr repeat(4, 42px);
+      gap: 7px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .zoom-row span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .zoom-row button {
+      height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--card2);
+      color: var(--text);
+      font-weight: 900;
+    }
+
+    .switches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .switch {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 10px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      background: var(--card2);
+    }
+
+    .switch input {
+      accent-color: var(--red);
+    }
+
+    .dynamic-summary {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--card3);
+      color: var(--muted);
+    }
+
+    .dynamic-summary strong {
+      color: var(--gold);
+    }
+
+    .hint-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .hint-trigger {
+      width: 31px;
+      height: 31px;
+      padding: 0;
+      border: 1px solid var(--cyan);
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--card2) 82%, transparent);
+      color: var(--cyan);
+      font-weight: 950;
+      animation: hintPulse 2.4s infinite;
+    }
+
+    .hint-pop {
+      position: absolute;
+      z-index: 80;
+      width: min(330px, 82vw);
+      padding: 14px 14px 12px;
+      border-radius: 15px;
+      background: #081019;
+      color: #edf7fa;
+      border: 1px solid transparent;
+      background-image:
+      linear-gradient(#081019, #081019),
+      linear-gradient(120deg, var(--cyan), var(--teal), var(--red));
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+      box-shadow: 0 16px 50px #000a;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-6px) scale(0.97);
+      transition: 0.2s;
+      animation: borderGlow 2.4s linear infinite;
+    }
+
+    .hint-pop.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .hint-pop[data-position="bottom"] {
+      top: 42px;
+      left: 50%;
+      transform-origin: top left;
+    }
+
+    .hint-pop[data-position="left"] {
+      right: 42px;
+      top: 0;
+      transform-origin: right top;
+    }
+
+    .hint-pop[data-position="right"] {
+      left: 42px;
+      top: 0;
+      transform-origin: left top;
+    }
+
+    .hint-pop[data-position="top"] {
+      bottom: 42px;
+      left: 0;
+      transform-origin: left bottom;
+    }
+
+    .hint-pop::before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #081019;
+      border-left: 1px solid var(--cyan);
+      border-top: 1px solid var(--cyan);
+      transform: rotate(45deg);
+    }
+
+    .hint-pop[data-position="bottom"]::before {
+      top: -7px;
+      left: 20px;
+    }
+
+    .hint-pop[data-position="left"]::before {
+      right: -7px;
+      top: 14px;
+      transform: rotate(135deg);
+    }
+
+    .hint-pop[data-position="right"]::before {
+      left: -7px;
+      top: 14px;
+      transform: rotate(-45deg);
+    }
+
+    .hint-pop[data-position="top"]::before {
+      bottom: -7px;
+      left: 20px;
+      transform: rotate(225deg);
+    }
+
+    .hint-pop p {
+      margin: 0.2rem 0 0.65rem;
+      color: #bed0da;
+      font-size: 0.9rem;
+    }
+
+    .hint-close {
+      float: right;
+      border: 0;
+      background: none;
+      color: #fff;
+      font-size: 1.15rem;
+      padding: 0 0 5px 10px;
+    }
+
+    .hint-action {
+      border: 1px solid #3edddd;
+      background: #10303a;
+      color: #dff;
+      padding: 7px 9px;
+      border-radius: 9px;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    @keyframes hintPulse {
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 #25d5d555;
+      }
+
+      50% {
+        box-shadow: 0 0 0 10px #25d5d500;
+      }
+    }
+
+    @keyframes borderGlow {
+      0%,
+      100% {
+        filter: drop-shadow(0 0 0 #25d5d500);
+      }
+
+      50% {
+        filter: drop-shadow(0 0 8px #25d5d566);
+      }
+    }
+
+    @keyframes hintBounce {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-4px);
+      }
+    }
+
+    .hint-trigger.attention {
+      animation:
+      hintPulse 1.45s infinite,
+      hintBounce 1.3s infinite;
+    }
+
+    .generator-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      background: var(--card2);
+    }
+
+    .generator-box h3 {
+      margin-top: 0;
+    }
+
+    .generated-task {
+      min-height: 92px;
+      padding: 13px;
+      border-radius: 12px;
+      background: var(--card3);
+      border: 1px dashed var(--line);
+    }
+
+    .generated-answer {
+      display: none;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--green) 10%, var(--card3));
+      border: 1px solid color-mix(in srgb, var(--green) 45%, var(--line));
+    }
+
+    .generated-answer.show {
+      display: block;
+    }
+
+    .quiz button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      text-align: left;
+      border: 1px solid var(--line);
+      background: var(--card2);
+      color: var(--text);
+      padding: 12px;
+      border-radius: 12px;
+    }
+
+    .quiz button.good {
+      border-color: var(--green);
+      background: color-mix(in srgb, var(--green) 12%, var(--card2));
+    }
+
+    .quiz button.bad {
+      border-color: var(--bad);
+      background: color-mix(in srgb, var(--bad) 10%, var(--card2));
+    }
+
+    .feedback {
+      min-height: 31px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .check-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin: 8px 0;
+    }
+
+    .check-item input {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--green);
+      flex: 0 0 auto;
+      margin-top: 2px;
+    }
+
+    .progress {
+      height: 9px;
+      background: var(--line);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      transition: width 0.25s;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: #000d;
+      padding: clamp(10px, 3vw, 34px);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-dialog {
+      width: min(1280px, 100%);
+      max-height: 96vh;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 6px 10px;
+    }
+
+    .modal-head h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .modal-close {
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 2rem;
+      line-height: 1;
+      padding: 6px;
+    }
+
+    .modal canvas {
+      height: min(61vh, 650px);
+    }
+
+    .modal-controls {
+      padding: 10px 4px 2px;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 30px 10px 12px;
+    }
+
+    .print-only {
+      display: none;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 1120px) {
+      .layout {
+        grid-template-columns: minmax(0, 1.25fr) minmax(350px, 0.75fr);
+      }
+
+      .metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 940px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sticky {
+        position: static;
+      }
+
+      .visual-card {
+        padding: 16px;
+      }
+
+      canvas {
+        height: min(58vh, 500px);
+      }
+
+      .toolbar {
+        position: static;
+      }
+
+      .hero::before {
+        opacity: 0.5;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .wrap {
+        padding: 11px;
+      }
+
+      .hero {
+        border-radius: 20px;
+      }
+
+      .toolbar > * {
+        flex: 1 1 auto;
+      }
+
+      .toolbar .grow {
+        display: none;
+      }
+
+      .grid-2,
+      .grid-3,
+      .error-grid,
+      .control-grid,
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .card,
+      .panel-card {
+        border-radius: 16px;
+        padding: 17px;
+      }
+
+      .step-content {
+        padding: 0 13px 15px;
+      }
+
+      .step-head {
+        grid-template-columns: 34px 1fr auto;
+        padding: 12px;
+      }
+
+      .zoom-row {
+        grid-template-columns: auto 1fr repeat(2, 42px);
+      }
+
+      .hint-pop[data-position] {
+        position: fixed;
+        left: 12px !important;
+        right: 12px !important;
+        top: auto !important;
+        bottom: 12px !important;
+        width: auto;
+        transform-origin: bottom center;
+      }
+
+      .hint-pop::before {
+        display: none;
+      }
+
+      .meta span {
+        font-size: 0.78rem;
+      }
+
+      canvas {
+        height: 430px;
+      }
+
+      .canvas-note {
+        max-width: 88%;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .hero h1 {
+        font-size: 2.25rem;
+      }
+
+      .toolbar button,
+      .toolbar select {
+        width: 100%;
+      }
+
+      .tabs {
+        margin-inline: -2px;
+      }
+
+      .visual-head {
+        align-items: center;
+      }
+
+      .control {
+        padding: 9px;
+      }
+
+      .zoom-row {
+        grid-template-columns: 1fr 1fr 42px 42px;
+      }
+
+      .zoom-row span {
+        grid-column: 1 / -1;
+      }
+
+      .zoom-row input {
+        grid-column: 1 / 3;
+      }
+
+      .canvas-note {
+        font-size: 0.72rem;
+      }
+
+      .step-actions > * {
+        flex: 1;
+      }
+
+      .legend {
+        gap: 5px;
+      }
+
+      .legend button {
+        font-size: 0.74rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    @media print {
+      @page {
+      size: A4;
+      margin: 14mm;
+      }
+
+      * {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+
+      html {
+        --bg: #fff;
+        --bg2: #fff;
+        --card: #fff;
+        --card2: #fff;
+        --card3: #f7f7f7;
+        --text: #111;
+        --muted: #333;
+        --line: #bbb;
+        --shadow: none;
+      }
+
+      body {
+        background: #fff;
+        font-size: 10.5pt;
+      }
+
+      .wrap {
+        max-width: none;
+        padding: 0;
+      }
+
+      .hero {
+        box-shadow: none;
+        border: 0;
+        padding: 0 0 12mm;
+      }
+
+      .hero::before,
+      .hero::after,
+      .toolbar,
+      .tabs,
+      .hint-wrap,
+      .step-actions,
+      .generator-controls,
+      .quiz,
+      .switches,
+      .zoom-row,
+      .control-grid,
+      .canvas-note,
+      .modal {
+        display: none !important;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      .sticky {
+        position: static;
+      }
+
+      .panel {
+        display: block !important;
+      }
+
+      .panel:not(:first-child) {
+        break-before: page;
+      }
+
+      .card,
+      .panel-card,
+      .visual-card {
+        box-shadow: none;
+        break-inside: avoid;
+        margin: 0 0 7mm;
+        padding: 5mm;
+      }
+
+      .solution-step {
+        break-inside: avoid;
+      }
+
+      .step-body {
+        grid-template-rows: 1fr !important;
+      }
+
+      .step-content {
+        padding: 0 4mm 4mm 14mm;
+      }
+
+      .detail-standard,
+      .detail-full {
+        display: block !important;
+      }
+
+      .visual-card {
+        break-before: page;
+      }
+
+      .visual-card canvas {
+        height: 150mm;
+      }
+
+      .print-only {
+        display: block;
+      }
+
+      .footer {
+        padding-top: 8mm;
+      }
+
+      .generated-answer {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">Интерактивное пособие · ЕГЭ · объяснение с нуля</div>
+    <h1>Вклады и <span>сложные проценты</span></h1>
+    <p>
+      Как переводить текст финансовой задачи в таблицу, сравнивать два
+      сценария и видеть влияние каждого снятия или взноса на итоговую сумму.
+    </p>
+    <div class="meta">
+      <span>Тимофей Васильченко</span>
+      <span>Лёвин Артём Александрович</span>
+      <span>Уверенный уровень</span>
+      <span>Только школьные методы</span>
+    </div>
+  </header>
+
+  <nav class="toolbar" aria-label="Настройки пособия">
+    <button type="button" id="backBtn" aria-label="Вернуться к материалам">
+      ← К материалам
+    </button>
+
+    <label class="sr-only" for="detailSelect">
+      Подробность объяснения
+    </label>
+
+    <select id="detailSelect" aria-label="Подробность объяснения">
+      <option value="brief">Кратко</option>
+      <option value="standard" selected>Стандартно</option>
+      <option value="full">Очень подробно</option>
+    </select>
+
+    <span class="hint-wrap">
+      <button
+              class="hint-trigger"
+              type="button"
+              aria-label="Подсказка о выборе подробности"
+              aria-expanded="false"
+      >?</button>
+
+      <span
+              class="hint-pop"
+              data-position="bottom"
+              role="tooltip"
+              aria-hidden="true"
+      >
+        <button
+                class="hint-close"
+                type="button"
+                aria-label="Закрыть подсказку"
+        >×</button>
+
+        <strong>Регулируйте объём объяснения</strong>
+        <p>
+          Краткий режим оставляет опорные шаги, а подробный показывает смысл
+          преобразований и проверку знаков.
+        </p>
+        <button
+                class="hint-action"
+                type="button"
+                data-hint-action="detail-example"
+        >
+          Показать пример
+        </button>
+      </span>
+    </span>
+
+    <span class="grow"></span>
+
+    <button type="button" id="themeBtn">☀ Светлая тема</button>
+    <button type="button" id="printBtn">⎙ Печать</button>
+  </nav>
+
+  <nav class="tabs" role="tablist" aria-label="Разделы пособия">
+    <button
+            class="tab on"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            data-tab="case"
+    >
+      Главный разбор
+    </button>
+
+    <button
+            class="tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-tab="theory"
+    >
+      Теория и модель
+    </button>
+
+    <button
+            class="tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-tab="growth"
+    >
+      Срок роста
+    </button>
+
+    <button
+            class="tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            data-tab="practice"
+    >
+      Практика
+    </button>
+  </nav>
+
+  <div class="layout">
+    <main>
+      <section
+              id="case"
+              class="panel on"
+              data-viz="comparison"
+              aria-labelledby="caseTitle"
+      >
+        <article class="card">
+          <div class="eyebrow">Экзаменационная модель</div>
+          <h2 id="caseTitle">Снятие и возврат одинаковой суммы</h2>
+
+          <p class="lead">
+            Вклад открыт на
+            <strong><span data-dyn="years">3</span> года</strong>
+            под
+            <strong><span data-dyn="rate">10</span>% годовых</strong>.
+            После первого начисления процентов вкладчик снял
+            <strong><span data-dyn="withdrawText">2 000</span> ₽</strong>,
+            после второго внёс
+            <strong><span data-dyn="depositText">2 000</span> ₽</strong>.
+            На сколько рублей итоговая сумма меньше суммы без промежуточных
+            операций?
+          </p>
+
+          <div class="metrics">
+            <div class="metric">
+              <span>Коэффициент роста</span>
+              <b data-dyn="rText">1,10</b>
+            </div>
+
+            <div class="metric">
+              <span>Сумма без операций</span>
+              <b data-dyn="plannedText">133 100 ₽</b>
+            </div>
+
+            <div class="metric">
+              <span>Сумма с операциями</span>
+              <b data-dyn="actualText">132 880 ₽</b>
+            </div>
+
+            <div class="metric">
+              <span>Потеря</span>
+              <b data-dyn="deltaText">220 ₽</b>
+            </div>
+          </div>
+
+          <div class="callout info">
+            Первоначальная сумма нужна для рисунка, но в разности она
+            сократится. Именно поэтому ответ не зависит от размера исходного
+            вклада.
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Идея решения</h2>
+
+          <div class="idea-list">
+            <div class="idea-item" data-link="timeline">
+              <span>1</span>
+              <div>
+                <strong>Зафиксировать порядок.</strong><br>
+                Сначала начисляются проценты, затем происходит снятие или
+                взнос.
+              </div>
+            </div>
+
+            <div class="idea-item" data-link="planned">
+              <span>2</span>
+              <div>
+                <strong>Построить два сценария.</strong><br>
+                Без операций и с реальными операциями вкладчика.
+              </div>
+            </div>
+
+            <div class="idea-item" data-link="impact">
+              <span>3</span>
+              <div>
+                <strong>Сравнить не суммы, а влияние операций.</strong><br>
+                Снятые деньги перестают приносить проценты раньше, чем
+                возвращённые начинают работать.
+              </div>
+            </div>
+
+            <div class="idea-item" data-link="delta">
+              <span>4</span>
+              <div>
+                <strong>Вычесть фактический итог из планового.</strong><br>
+                Общий вклад сократится, останется только эффект операций.
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="visual-head">
+            <div>
+              <div class="eyebrow">Пошаговое раскрытие</div>
+              <h2>Полное решение</h2>
+            </div>
+            <span class="inline-tag" id="stepCounter">Открыто: 1 из 7</span>
+          </div>
+
+          <div class="step-actions">
+            <button class="primary" type="button" id="nextStepBtn">
+              Открыть следующий шаг
+            </button>
+
+            <button class="secondary" type="button" id="allStepsBtn">
+              Показать всё
+            </button>
+
+            <button class="ghost" type="button" id="resetStepsBtn">
+              Свернуть
+            </button>
+          </div>
+
+          <div class="step-shell" id="solutionSteps">
+            <article class="solution-step open" data-link="given">
+              <button
+                      class="step-head"
+                      type="button"
+                      aria-expanded="true"
+              >
+                <span class="step-no">1</span>
+                <strong>Что дано</strong>
+                <span class="chev">⌄</span>
+              </button>
+
+              <div class="step-body">
+                <div>
+                  <div class="step-content">
+                    <p>
+                      Годовая ставка равна
+                      <strong><span data-dyn="rate">10</span>%</strong>,
+                      срок —
+                      <strong><span data-dyn="years">3</span> года</strong>.
+                      После первого года снимают
+                      <strong>
+                        <span data-dyn="withdrawText">2 000</span> ₽
+                      </strong>,
+                      после второго года вносят
+                      <strong>
+                        <span data-dyn="depositText">2 000</span> ₽
+                      </strong>.
+                    </p>
+
+                    <div class="formula-line">
+                      <math display="block">
+                        <mrow>
+                          <mi>p</mi>
+                          <mo>=</mo>
+                          <mfrac>
+                            <mi>P</mi>
+                            <mn>100</mn>
+                          </mfrac>
+                          <mo>,</mo>
+                          <mspace width="1em"/>
+                          <mi>r</mi>
+                          <mo>=</mo>
+                          <mn>1</mn>
+                          <mo>+</mo>
+                          <mi>p</mi>
+                          <mo>=</mo>
+                          <mn data-dyn="rMath">1,10</mn>
+                        </mrow>
+                      </math>
+                    </div>
+
+                    <p class="detail-standard">
+                      Пусть первоначальная сумма равна
+                      <math>
+                        <msub>
+                          <mi>S</mi>
+                          <mn>0</mn>
+                        </msub>
+                      </math>.
+                      Для наглядной модели справа сейчас используется
+                      <strong>
+                        <span data-dyn="initialText">100 000</span> ₽
+                      </strong>.
+                    </p>
+
+                    <p class="detail-full">
+                      Размер
+                      <math>
+                        <msub>
+                          <mi>S</mi>
+                          <mn>0</mn>
+                        </msub>
+                      </math>
+                      положителен, поэтому при необходимости на него можно
+                      делить. В этой задаче деление не понадобится:
+                      одинаковые части сократятся при вычитании.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="solution-step" data-link="timeline">
+              <button
+                      class="step-head"
+                      type="button"
+                      aria-expanded="false"
+              >
+                <span class="step-no">2</span>
+                <strong>Что означает каждое условие</strong>
+                <span class="chev">⌄</span>
+              </button>
+
+              <div class="step-body">
+                <div>
+                  <div class="step-content">
+                    <p>Внутри каждого года действует один порядок:</p>
+
+                    <div class="formula-line">
+                      <math display="block">
+                        <mrow>
+                          <mtext>сумма в начале года</mtext>
+                          <mo>→</mo>
+                          <mtext>начисление процентов</mtext>
+                          <mo>→</mo>
+                          <mtext>операция</mtext>
+                        </mrow>
+                      </math>
+                    </div>
+
+                    <p>
+                      Снятие записывается со знаком минус, внесение — со
+                      знаком плюс.
+                    </p>
+
+                    <div class="formula-line">
+                      <math display="block">
+                        <mrow>
+                          <msub>
+                            <mi>x</mi>
+                            <mn>1</mn>
+                          </msub>
+                          <mo>=</mo>
+                          <mo>−</mo>
+                          <mn data-dyn="withdrawMath">2000</mn>
+                          <mo>,</mo>
+                          <mspace width="1em"/>
+                          <msub>
+                            <mi>x</mi>
+                            <mn>2</mn>
+                          </msub>
+                          <mo>=</mo>
+                          <mn data-dyn="depositMath">2000</mn>
+                        </mrow>
+                      </math>
+                    </div>
+
+                    <p class="detail-full">
+                      Сумма, внесённая после второго начисления, не получает
+                      проценты за второй год. Она начнёт работать только в
+                      третьем году.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="solution-step" data-link="model">
+              <button
+                      class="step-head"
+                      type="button"
+                      aria-expanded="false"
+              >
+                <span class="step-no">3</span>
+                <strong>
+                  Алгебраическая и графическая интерпретация
+                </strong>
+                <span class="chev">⌄</span>
+              </button>
+
+              <div class="step-body">
+                <div>
+                  <div class="step-content">
+                    <p>
+                      Каждый год — один переход по рекуррентной формуле:
+                    </p>
+
+                    <div class="formula-line">
+                      <math display="block">
+                        <mrow>
+                          <msub>
+                            <mi>S</mi>
+                            <mi>k</mi>
+                          </msub>
+                          <mo>=</mo>
+                          <msub>
+                            <mi>S</mi>
+                            <mrow>
+                              <mi>k</mi>
+                              <mo>−</mo>
+                              <mn>1</mn>
+                            </mrow>
+                          </msub>
+                          <mi>r</mi>
+                          <mo>+</mo>
+                          <msub>
+                            <mi>x</mi>
+                            <mi>k</mi>
+                          </msub>
+                        </mrow>
+                      </math>
+                    </div>
+
+                    <p class="detail-standard">
+                      На графике синяя линия показывает плановый рост,
+                      золотая — фактический. Красная стрелка уменьшает
+                      капитал после первого года, зелёная увеличивает его
+                      после второго.
+                    </p>
+
+                    <p class="detail-full">
+                      Вертикальный разрыв между линиями — накопленный эффект
+                      операций. После снятия разрыв растёт вместе с
+                      процентами; поздний взнос сокращает его, но не успевает
+                      полностью компенсировать потерянный год начисления.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="solution-step" data-link="impact">
+              <button
+                      class="step-head"
+                      type="button"
+                      aria-expanded="false"
+              >
+                <span class="step-no">4</span>
+                <strong>Ключевая идея</strong>
+                <span class="chev">⌄</span>
+              </button>
+
+              <div class="step-body">
+                <div>
+                  <div class="step-content">
+                    <p>
+                      Снятые после первого года деньги не работают ещё
+                      <strong>
+                        <span data-dyn="withdrawYears">2</span> года
+                      </strong>,
+                      поэтому их влияние к финалу равно:
+                    </p>
+
+                    <div class="formula-line">
+                      <math display="block">
+                        <mrow>
+                          <mn data-dyn="withdrawMath">2000</mn>
+                          <mo>·</mo>
+                          <msup>
+                            <mi>r</mi>
+                            <mn data-dyn="withdrawPower">2</mn>
+                          </msup>
+                        </mrow>
+                      </math>
+                    </div>
+
+                    <p>
+                      Возвращённые после второго года деньги работают только
+                      <strong>
+                        <span data-dyn="depositYears">1</span> год
+                      </strong>:
+                    </p>
+
+                    <div class="formula-line">
+                      <math display="block">
+                        <mrow>
+                          <mn data-dyn="depositMath">2000</mn>
+                          <mo>·</mo>
+                          <msup>
+                            <mi>r</mi>
+                            <mn data-dyn="depositPower">1</mn>
+                          </msup>
+                        </mrow>
+                      </math>
+                    </div>
+
+                    <div class="callout">
+                      Равные суммы не дают нулевой эффект, потому что
+                      находятся на вкладе разное количество времени.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="solution-step" data-link="delta">
+              <button
+                      class="step-head"
+                      type="button"
+                      aria-expanded="false"
+              >
+                <span class="step-no">5</span>
+                <strong>Пошаговое доведение до ответа</strong>
+                <span class="chev">⌄</span>
+              </button>
+
+              <div class="step-body">
+                <div>
+                  <div class="step-content">
+                    <p><strong>Сценарий без операций:</strong></p>
+
+                    <div class="formula-line">
+                      <math display="block">
+                        <mrow>
+                          <msub>
+                            <mi>S</mi>
+                            <mtext>план</mtext>
+                          </msub>
+                          <mo>=</mo>
+                          <msub>
+                            <mi>S</mi>
+                            <mn>0</mn>
+                          </msub>
+                          <msup>
+                            <mi>r</mi>
+                            <mn data-dyn="years">3</mn>
+                          </msup>
+                        </mrow>
+                      </math>
+                    </div>
+
+                    <p><strong>Сценарий с операциями:</strong></p>
+
+                    <div class="formula-line">
+                      <math display="block">
+                        <mrow>
+                          <msub>
+                            <mi>S</mi>
+                            <mn>1</mn>
+                          </msub>
+                          <mo>=</mo>
+                          <msub>
+                            <mi>S</mi>
+                            <mn>0</mn>
+                          </msub>
+                          <mi>r</mi>
+                          <mo>−</mo>
+                          <mn data-dyn="withdrawMath">2000</mn>
+                        </mrow>
+                      </math>
+                    </div>
+
+                    <div class="formula-line">
+                      <math display="block">
+                        <mrow>
+                          <msub>
+                            <mi>S</mi>
+                            <mn>2</mn>
+                          </msub>
+                          <mo>=</mo>
+                          <mo>(</mo>
+                          <msub>
+                            <mi>S</mi>
+                            <mn>0</mn>
+                          </msub>
+                          <mi>r</mi>
+                          <mo>−</mo>
+                          <mn data-dyn="withdrawMath">2000</mn>
+                          <mo>)</mo>
+                          <mi>r</mi>
+                          <mo>+</mo>
+                          <mn data-dyn="depositMath">2000</mn>
+                        </mrow>
+                      </math>
+                    </div>
+
+                    <div class="formula-line detail-standard">
+                      <math display="block">
+                        <mrow>
+                          <msub>
+                            <mi>S</mi>
+                            <mtext>факт</mtext>
+                          </msub>
+                          <mo>=</mo>
+                          <msub>
+                            <mi>S</mi>
+                            <mn>0</mn>
+                          </msub>
+                          <msup>
+                            <mi>r</mi>
+                            <mn data-dyn="years">3</mn>
+                          </msup>
+                          <mo>−</mo>
+                          <mn data-dyn="withdrawMath">2000</mn>
+                          <msup>
+                            <mi>r</mi>
+                            <mn data-dyn="withdrawPower">2</mn>
+                          </msup>
+                          <mo>+</mo>
+                          <mn data-dyn="depositMath">2000</mn>
+                          <msup>
+                            <mi>r</mi>
+                            <mn data-dyn="depositPower">1</mn>
+                          </msup>
+                        </mrow>
+                      </math>
+                    </div>
+
+                    <p><strong>Разность:</strong></p>
+
+                    <div class="formula-line">
+                      <math display="block">
+                        <mrow>
+                          <mi>Δ</mi>
+                          <mo>=</mo>
+                          <msub>
+                            <mi>S</mi>
+                            <mtext>план</mtext>
+                          </msub>
+                          <mo>−</mo>
+                          <msub>
+                            <mi>S</mi>
+                            <mtext>факт</mtext>
+                          </msub>
+                          <mo>=</mo>
+                          <mn data-dyn="withdrawMath">2000</mn>
+                          <msup>
+                            <mi>r</mi>
+                            <mn data-dyn="withdrawPower">2</mn>
+                          </msup>
+                          <mo>−</mo>
+                          <mn data-dyn="depositMath">2000</mn>
+                          <msup>
+                            <mi>r</mi>
+                            <mn data-dyn="depositPower">1</mn>
+                          </msup>
+                        </mrow>
+                      </math>
+                    </div>
+
+                    <div class="formula-line detail-standard">
+                      <math display="block">
+                        <mrow>
+                          <mi>Δ</mi>
+                          <mo>=</mo>
+                          <mn data-dyn="deltaMath">220</mn>
+                          <mspace width=".35em"/>
+                          <mtext>руб.</mtext>
+                        </mrow>
+                      </math>
+                    </div>
+
+                    <div class="result-box">
+                      <strong>
+                        Ответ: <span data-dyn="deltaText">220 ₽</span>.
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="solution-step" data-link="check">
+              <button
+                      class="step-head"
+                      type="button"
+                      aria-expanded="false"
+              >
+                <span class="step-no">6</span>
+                <strong>Финальная проверка ответа</strong>
+                <span class="chev">⌄</span>
+              </button>
+
+              <div class="step-body">
+                <div>
+                  <div class="step-content">
+                    <p>
+                      Подставим параметры в оба сценария при исходной сумме
+                      <strong>
+                        <span data-dyn="initialText">100 000</span> ₽
+                      </strong>:
+                    </p>
+
+                    <div class="grid-2">
+                      <div class="tile">
+                        <strong>Без операций</strong><br>
+                        <span data-dyn="plannedText">133 100 ₽</span>
+                      </div>
+
+                      <div class="tile">
+                        <strong>С операциями</strong><br>
+                        <span data-dyn="actualText">132 880 ₽</span>
+                      </div>
+                    </div>
+
+                    <div class="formula-line">
+                      <math display="block">
+                        <mrow>
+                          <mn data-dyn="plannedMath">133100</mn>
+                          <mo>−</mo>
+                          <mn data-dyn="actualMath">132880</mn>
+                          <mo>=</mo>
+                          <mn data-dyn="deltaMath">220</mn>
+                        </mrow>
+                      </math>
+                    </div>
+
+                    <p>
+                      <strong>Почему других значений нет:</strong>
+                      порядок начислений задан однозначно, а каждый год
+                      описывается единственной формулой
+                      <math>
+                        <mrow>
+                          <msub>
+                            <mi>S</mi>
+                            <mi>k</mi>
+                          </msub>
+                          <mo>=</mo>
+                          <msub>
+                            <mi>S</mi>
+                            <mrow>
+                              <mi>k</mi>
+                              <mo>−</mo>
+                              <mn>1</mn>
+                            </mrow>
+                          </msub>
+                          <mi>r</mi>
+                          <mo>+</mo>
+                          <msub>
+                            <mi>x</mi>
+                            <mi>k</mi>
+                          </msub>
+                        </mrow>
+                      </math>.
+                      Поэтому оба итога и их разность определяются
+                      единственным образом.
+                    </p>
+
+                    <p class="detail-full">
+                      Положительная разность подтверждает формулировку
+                      «получил меньше». Если параметры изменить так, что
+                      поздний взнос окажется слишком большим, разность может
+                      стать отрицательной — модель справа это сразу покажет.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="solution-step" data-link="conclusion">
+              <button
+                      class="step-head"
+                      type="button"
+                      aria-expanded="false"
+              >
+                <span class="step-no">7</span>
+                <strong>Краткий вывод</strong>
+                <span class="chev">⌄</span>
+              </button>
+
+              <div class="step-body">
+                <div>
+                  <div class="step-content">
+                    <p>
+                      Снятие влияет на итог столько лет, сколько деньги
+                      отсутствуют на счёте. Поздний возврат компенсирует
+                      только часть потери. Для решения достаточно построить
+                      два сценария и вычесть их.
+                    </p>
+
+                    <div class="callout good">
+                      <strong>Главная формула урока:</strong>
+                      <math>
+                        <mrow>
+                          <msub>
+                            <mi>S</mi>
+                            <mi>k</mi>
+                          </msub>
+                          <mo>=</mo>
+                          <msub>
+                            <mi>S</mi>
+                            <mrow>
+                              <mi>k</mi>
+                              <mo>−</mo>
+                              <mn>1</mn>
+                            </mrow>
+                          </msub>
+                          <mi>r</mi>
+                          <mo>+</mo>
+                          <msub>
+                            <mi>x</mi>
+                            <mi>k</mi>
+                          </msub>
+                        </mrow>
+                      </math>.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Типичные ошибки</h2>
+
+          <div class="error-grid">
+            <div class="error">
+              <strong>Начислить процент на старую сумму.</strong><br>
+              Каждый новый процент считается от актуального остатка.
+            </div>
+
+            <div class="error">
+              <strong>Перепутать момент операции.</strong><br>
+              Взнос после начисления процентов не работает в текущем году.
+            </div>
+
+            <div class="error">
+              <strong>Потерять знак снятия.</strong><br>
+              Снятие входит в модель как отрицательное значение.
+            </div>
+
+            <div class="error">
+              <strong>
+                Считать равные операции взаимно уничтожающимися.
+              </strong><br>
+              Одинаковые суммы могут работать разное число лет.
+            </div>
+
+            <div class="error">
+              <strong>Вычесть суммы в обратном порядке.</strong><br>
+              «Насколько меньше» означает: план минус факт.
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section
+              id="theory"
+              class="panel"
+              data-viz="timeline"
+              aria-labelledby="theoryTitle"
+      >
+        <article class="card">
+          <div class="eyebrow">Опорная теория</div>
+          <h2 id="theoryTitle">От процента к коэффициенту</h2>
+
+          <div class="grid-3">
+            <div class="tile">
+              <strong>Годовая ставка</strong>
+              <math display="block">
+                <mrow>
+                  <mi>P</mi>
+                  <mo>%</mo>
+                </mrow>
+              </math>
+            </div>
+
+            <div class="tile">
+              <strong>Десятичная ставка</strong>
+              <math display="block">
+                <mrow>
+                  <mi>p</mi>
+                  <mo>=</mo>
+                  <mfrac>
+                    <mi>P</mi>
+                    <mn>100</mn>
+                  </mfrac>
+                </mrow>
+              </math>
+            </div>
+
+            <div class="tile">
+              <strong>Коэффициент роста</strong>
+              <math display="block">
+                <mrow>
+                  <mi>r</mi>
+                  <mo>=</mo>
+                  <mn>1</mn>
+                  <mo>+</mo>
+                  <mi>p</mi>
+                </mrow>
+              </math>
+            </div>
+          </div>
+
+          <div class="callout">
+            При ставке <span data-dyn="rate">10</span>% коэффициент равен
+            <strong data-dyn="rText">1,10</strong>: сумма после начисления
+            составляет
+            <strong data-dyn="rateMultiplierText">110%</strong>
+            от суммы в начале года.
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Таблица как математическая модель</h2>
+
+          <div class="math-wrap">
+            <table
+                    style="
+                width: 100%;
+                border-collapse: collapse;
+                min-width: 650px;
+              "
+            >
+              <thead>
+              <tr>
+                <th
+                        style="
+                    padding: 10px;
+                    border-bottom: 1px solid var(--line);
+                    text-align: left;
+                  "
+                >
+                  Год
+                </th>
+
+                <th
+                        style="
+                    padding: 10px;
+                    border-bottom: 1px solid var(--line);
+                    text-align: left;
+                  "
+                >
+                  Начало
+                </th>
+
+                <th
+                        style="
+                    padding: 10px;
+                    border-bottom: 1px solid var(--line);
+                    text-align: left;
+                  "
+                >
+                  Начислено
+                </th>
+
+                <th
+                        style="
+                    padding: 10px;
+                    border-bottom: 1px solid var(--line);
+                    text-align: left;
+                  "
+                >
+                  Операция
+                </th>
+
+                <th
+                        style="
+                    padding: 10px;
+                    border-bottom: 1px solid var(--line);
+                    text-align: left;
+                  "
+                >
+                  Конец
+                </th>
+              </tr>
+              </thead>
+
+              <tbody>
+              <tr>
+                <td
+                        style="
+                    padding: 10px;
+                    border-bottom: 1px solid var(--line);
+                  "
+                >
+                  <math><mn>k</mn></math>
+                </td>
+
+                <td
+                        style="
+                    padding: 10px;
+                    border-bottom: 1px solid var(--line);
+                  "
+                >
+                  <math>
+                    <msub>
+                      <mi>S</mi>
+                      <mrow>
+                        <mi>k</mi>
+                        <mo>−</mo>
+                        <mn>1</mn>
+                      </mrow>
+                    </msub>
+                  </math>
+                </td>
+
+                <td
+                        style="
+                    padding: 10px;
+                    border-bottom: 1px solid var(--line);
+                  "
+                >
+                  <math>
+                    <mrow>
+                      <msub>
+                        <mi>S</mi>
+                        <mrow>
+                          <mi>k</mi>
+                          <mo>−</mo>
+                          <mn>1</mn>
+                        </mrow>
+                      </msub>
+                      <mi>p</mi>
+                    </mrow>
+                  </math>
+                </td>
+
+                <td
+                        style="
+                    padding: 10px;
+                    border-bottom: 1px solid var(--line);
+                  "
+                >
+                  <math>
+                    <msub>
+                      <mi>x</mi>
+                      <mi>k</mi>
+                    </msub>
+                  </math>
+                </td>
+
+                <td
+                        style="
+                    padding: 10px;
+                    border-bottom: 1px solid var(--line);
+                  "
+                >
+                  <math>
+                    <msub>
+                      <mi>S</mi>
+                      <mi>k</mi>
+                    </msub>
+                  </math>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="formula-line">
+            <math display="block">
+              <mrow>
+                <msub>
+                  <mi>S</mi>
+                  <mi>k</mi>
+                </msub>
+                <mo>=</mo>
+                <msub>
+                  <mi>S</mi>
+                  <mrow>
+                    <mi>k</mi>
+                    <mo>−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                </msub>
+                <mo>+</mo>
+                <msub>
+                  <mi>S</mi>
+                  <mrow>
+                    <mi>k</mi>
+                    <mo>−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                </msub>
+                <mi>p</mi>
+                <mo>+</mo>
+                <msub>
+                  <mi>x</mi>
+                  <mi>k</mi>
+                </msub>
+              </mrow>
+            </math>
+          </div>
+
+          <div class="formula-line">
+            <math display="block">
+              <mrow>
+                <msub>
+                  <mi>S</mi>
+                  <mi>k</mi>
+                </msub>
+                <mo>=</mo>
+                <msub>
+                  <mi>S</mi>
+                  <mrow>
+                    <mi>k</mi>
+                    <mo>−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                </msub>
+                <mi>r</mi>
+                <mo>+</mo>
+                <msub>
+                  <mi>x</mi>
+                  <mi>k</mi>
+                </msub>
+              </mrow>
+            </math>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Без операций: сложные проценты</h2>
+
+          <div class="formula-line">
+            <math display="block">
+              <mrow>
+                <msub>
+                  <mi>S</mi>
+                  <mn>1</mn>
+                </msub>
+                <mo>=</mo>
+                <msub>
+                  <mi>S</mi>
+                  <mn>0</mn>
+                </msub>
+                <mi>r</mi>
+                <mo>,</mo>
+                <mspace width="1em"/>
+
+                <msub>
+                  <mi>S</mi>
+                  <mn>2</mn>
+                </msub>
+                <mo>=</mo>
+                <msub>
+                  <mi>S</mi>
+                  <mn>0</mn>
+                </msub>
+                <msup>
+                  <mi>r</mi>
+                  <mn>2</mn>
+                </msup>
+                <mo>,</mo>
+                <mspace width="1em"/>
+
+                <msub>
+                  <mi>S</mi>
+                  <mn>3</mn>
+                </msub>
+                <mo>=</mo>
+                <msub>
+                  <mi>S</mi>
+                  <mn>0</mn>
+                </msub>
+                <msup>
+                  <mi>r</mi>
+                  <mn>3</mn>
+                </msup>
+              </mrow>
+            </math>
+          </div>
+
+          <div class="formula-line">
+            <math display="block">
+              <mrow>
+                <msub>
+                  <mi>S</mi>
+                  <mi>n</mi>
+                </msub>
+                <mo>=</mo>
+                <msub>
+                  <mi>S</mi>
+                  <mn>0</mn>
+                </msub>
+                <msup>
+                  <mi>r</mi>
+                  <mi>n</mi>
+                </msup>
+              </mrow>
+            </math>
+          </div>
+
+          <p class="lead">
+            Степень показывает количество полных начислений. Проценты
+            каждого года присоединяются к капиталу и сами начинают
+            приносить проценты.
+          </p>
+        </article>
+
+        <article class="card">
+          <h2>С операциями: вклад каждого действия</h2>
+
+          <div class="formula-line">
+            <math display="block">
+              <mrow>
+                <msub>
+                  <mi>S</mi>
+                  <mi>n</mi>
+                </msub>
+                <mo>=</mo>
+
+                <msub>
+                  <mi>S</mi>
+                  <mn>0</mn>
+                </msub>
+                <msup>
+                  <mi>r</mi>
+                  <mi>n</mi>
+                </msup>
+
+                <mo>+</mo>
+
+                <msub>
+                  <mi>x</mi>
+                  <mn>1</mn>
+                </msub>
+                <msup>
+                  <mi>r</mi>
+                  <mrow>
+                    <mi>n</mi>
+                    <mo>−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                </msup>
+
+                <mo>+</mo>
+
+                <msub>
+                  <mi>x</mi>
+                  <mn>2</mn>
+                </msub>
+                <msup>
+                  <mi>r</mi>
+                  <mrow>
+                    <mi>n</mi>
+                    <mo>−</mo>
+                    <mn>2</mn>
+                  </mrow>
+                </msup>
+
+                <mo>+</mo>
+                <mo>…</mo>
+                <mo>+</mo>
+
+                <msub>
+                  <mi>x</mi>
+                  <mi>n</mi>
+                </msub>
+              </mrow>
+            </math>
+          </div>
+
+          <div class="grid-2">
+            <div class="tile">
+              <strong>Ранний взнос</strong><br>
+              Умножается на более высокую степень
+              <math><mi>r</mi></math>
+              и работает дольше.
+            </div>
+
+            <div class="tile">
+              <strong>Поздний взнос</strong><br>
+              Успевает пройти меньше начислений.
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section
+              id="growth"
+              class="panel"
+              data-viz="growth"
+              aria-labelledby="growthTitle"
+      >
+        <article class="card">
+          <div class="eyebrow">Типовая логарифмическая задача</div>
+          <h2 id="growthTitle">Через сколько лет вклад удвоится?</h2>
+
+          <p class="lead">
+            Пусть ставка равна
+            <strong><span data-growth="rate">9</span>%</strong>,
+            дополнительных операций нет, а вклад должен увеличиться в
+            <strong><span data-growth="factor">2</span> раза</strong>.
+          </p>
+
+          <div class="control-grid" style="margin: 14px 0">
+            <div class="control">
+              <label>
+                Ставка
+                <output data-growth-output="rate">9%</output>
+              </label>
+              <input
+                      type="range"
+                      min="3"
+                      max="20"
+                      step="1"
+                      value="9"
+                      data-growth-control="rate"
+              >
+            </div>
+
+            <div class="control">
+              <label>
+                Во сколько раз
+                <output data-growth-output="factor">2</output>
+              </label>
+              <input
+                      type="range"
+                      min="1.5"
+                      max="4"
+                      step="0.5"
+                      value="2"
+                      data-growth-control="factor"
+              >
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Идея решения</h2>
+
+          <div class="idea-list">
+            <div class="idea-item">
+              <span>1</span>
+              <div>
+                Записать сумму через
+                <math><mi>n</mi></math>
+                лет по формуле сложных процентов.
+              </div>
+            </div>
+
+            <div class="idea-item">
+              <span>2</span>
+              <div>
+                Приравнять её к требуемому числу первоначальных вкладов.
+              </div>
+            </div>
+
+            <div class="idea-item">
+              <span>3</span>
+              <div>
+                Логарифмированием опустить показатель степени.
+              </div>
+            </div>
+
+            <div class="idea-item">
+              <span>4</span>
+              <div>
+                Округлить вверх, если нужны полные годы и гарантированное
+                достижение цели.
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h2>Пошаговое решение</h2>
+
+          <div class="formula-line">
+            <math display="block">
+              <mrow>
+                <msub>
+                  <mi>S</mi>
+                  <mn>0</mn>
+                </msub>
+                <msup>
+                  <mi>r</mi>
+                  <mi>n</mi>
+                </msup>
+                <mo>=</mo>
+                <mi>k</mi>
+                <msub>
+                  <mi>S</mi>
+                  <mn>0</mn>
+                </msub>
+              </mrow>
+            </math>
+          </div>
+
+          <p>
+            Так как
+            <math>
+              <mrow>
+                <msub>
+                  <mi>S</mi>
+                  <mn>0</mn>
+                </msub>
+                <mo>&gt;</mo>
+                <mn>0</mn>
+              </mrow>
+            </math>,
+            делим обе части на первоначальную сумму:
+          </p>
+
+          <div class="formula-line">
+            <math display="block">
+              <mrow>
+                <msup>
+                  <mi>r</mi>
+                  <mi>n</mi>
+                </msup>
+                <mo>=</mo>
+                <mi>k</mi>
+              </mrow>
+            </math>
+          </div>
+
+          <p>Логарифмируем обе положительные части:</p>
+
+          <div class="formula-line">
+            <math display="block">
+              <mrow>
+                <mi>n</mi>
+                <mo>=</mo>
+                <mfrac>
+                  <mrow>
+                    <mi>lg</mi>
+                    <mi>k</mi>
+                  </mrow>
+                  <mrow>
+                    <mi>lg</mi>
+                    <mi>r</mi>
+                  </mrow>
+                </mfrac>
+              </mrow>
+            </math>
+          </div>
+
+          <div class="result-box">
+            <strong>Расчёт:</strong>
+            <span data-growth="calculation">
+              n ≈ 8,04; минимально 9 полных лет.
+            </span>
+          </div>
+
+          <div class="callout good">
+            <strong>Проверка:</strong>
+            <span data-growth="check">
+              после 8 лет цель ещё не достигнута, после 9 лет — достигнута.
+            </span>
+          </div>
+
+          <p>
+            <strong>Почему других значений нет:</strong>
+            при положительной ставке последовательность
+            <math>
+              <mrow>
+                <msub>
+                  <mi>S</mi>
+                  <mn>0</mn>
+                </msub>
+                <msup>
+                  <mi>r</mi>
+                  <mi>n</mi>
+                </msup>
+              </mrow>
+            </math>
+            строго возрастает по целому
+            <math><mi>n</mi></math>.
+            Поэтому минимальный подходящий год единственный.
+          </p>
+        </article>
+      </section>
+
+      <section
+              id="practice"
+              class="panel"
+              data-viz="comparison"
+              aria-labelledby="practiceTitle"
+      >
+        <article class="card">
+          <div class="eyebrow">Закрепление</div>
+          <h2 id="practiceTitle">Похожая задача</h2>
+
+          <div class="generator-box">
+            <div class="visual-head">
+              <h3>Генератор проверенных условий</h3>
+
+              <span class="hint-wrap">
+                <button
+                        class="hint-trigger"
+                        type="button"
+                        aria-label="Подсказка о генераторе"
+                        aria-expanded="false"
+                >i</button>
+
+                <span
+                        class="hint-pop"
+                        data-position="left"
+                        role="tooltip"
+                        aria-hidden="true"
+                >
+                  <button
+                          class="hint-close"
+                          type="button"
+                          aria-label="Закрыть подсказку"
+                  >×</button>
+
+                  <strong>Метод решения не меняется</strong>
+
+                  <p>
+                    Генератор выбирает только корректные параметры:
+                    снятие после первого года, взнос после второго и
+                    сравнение с плановым вкладом.
+                  </p>
+
+                  <button
+                          class="hint-action"
+                          type="button"
+                          data-hint-action="generate"
+                  >
+                    Сгенерировать сейчас
+                  </button>
+                </span>
+              </span>
+            </div>
+
+            <div class="generated-task" id="generatedTask">
+              Нажмите «Сгенерировать задачу». Новое условие сразу применится
+              к интерактивной модели.
+            </div>
+
+            <div
+                    class="generator-controls quiz-actions"
+                    style="margin-top: 10px"
+            >
+              <button class="primary" type="button" id="generateBtn">
+                Сгенерировать задачу
+              </button>
+
+              <button
+                      class="secondary"
+                      type="button"
+                      id="showGeneratedAnswerBtn"
+              >
+                Показать ответ
+              </button>
+            </div>
+
+            <div class="generated-answer" id="generatedAnswer"></div>
+          </div>
+        </article>
+
+        <article class="card quiz" data-quiz="q1">
+          <h2>Мини-квиз</h2>
+
+          <p>
+            После начисления процентов вкладчик внёс деньги. Когда этот
+            взнос впервые принесёт проценты?
+          </p>
+
+          <button type="button">В текущем году</button>
+          <button type="button" data-ok="1">
+            При следующем начислении
+          </button>
+          <button type="button">Только через два года</button>
+
+          <div class="feedback" aria-live="polite"></div>
+        </article>
+
+        <article class="card quiz" data-quiz="q2">
+          <h2>Мини-квиз: формула</h2>
+
+          <p>Как записать переход к сумме после очередного года?</p>
+
+          <button type="button">
+            <math>
+              <mrow>
+                <msub>
+                  <mi>S</mi>
+                  <mi>k</mi>
+                </msub>
+                <mo>=</mo>
+                <msub>
+                  <mi>S</mi>
+                  <mrow>
+                    <mi>k</mi>
+                    <mo>−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                </msub>
+                <mo>+</mo>
+                <mi>r</mi>
+                <mo>+</mo>
+                <msub>
+                  <mi>x</mi>
+                  <mi>k</mi>
+                </msub>
+              </mrow>
+            </math>
+          </button>
+
+          <button type="button" data-ok="1">
+            <math>
+              <mrow>
+                <msub>
+                  <mi>S</mi>
+                  <mi>k</mi>
+                </msub>
+                <mo>=</mo>
+                <msub>
+                  <mi>S</mi>
+                  <mrow>
+                    <mi>k</mi>
+                    <mo>−</mo>
+                    <mn>1</mn>
+                  </mrow>
+                </msub>
+                <mi>r</mi>
+                <mo>+</mo>
+                <msub>
+                  <mi>x</mi>
+                  <mi>k</mi>
+                </msub>
+              </mrow>
+            </math>
+          </button>
+
+          <button type="button">
+            <math>
+              <mrow>
+                <msub>
+                  <mi>S</mi>
+                  <mi>k</mi>
+                </msub>
+                <mo>=</mo>
+                <msub>
+                  <mi>S</mi>
+                  <mn>0</mn>
+                </msub>
+                <mo>+</mo>
+                <mi>k</mi>
+                <mi>r</mi>
+              </mrow>
+            </math>
+          </button>
+
+          <div class="feedback" aria-live="polite"></div>
+        </article>
+
+        <article class="card">
+          <h2>Самопроверка</h2>
+
+          <div class="progress" aria-hidden="true">
+            <span id="progressBar"></span>
+          </div>
+
+          <p id="progressText">Отмечено: 0 из 8</p>
+          <div id="checklist"></div>
+        </article>
+      </section>
+    </main>
+
+    <aside class="sticky" aria-label="Интерактивная визуализация">
+      <article class="visual-card">
+        <div class="visual-head">
+          <div>
+            <div class="eyebrow">Живая модель</div>
+            <h2 id="vizTitle">Сравнение сценариев</h2>
+          </div>
+
+          <span class="hint-wrap">
+            <button
+                    class="hint-trigger attention"
+                    type="button"
+                    aria-label="Подсказка об интерактивной модели"
+                    aria-expanded="false"
+            >!</button>
+
+            <span
+                    class="hint-pop"
+                    data-position="left"
+                    role="tooltip"
+                    aria-hidden="true"
+            >
+              <button
+                      class="hint-close"
+                      type="button"
+                      aria-label="Закрыть подсказку"
+              >×</button>
+
+              <strong>Двигайте и масштабируйте</strong>
+
+              <p>
+                Перетаскивайте схему, крутите колесо мыши, меняйте ставку и
+                суммы. Нажатие без перетаскивания откроет большую версию.
+              </p>
+
+              <button
+                      class="hint-action"
+                      type="button"
+                      data-hint-action="reset-viz"
+              >
+                Показать пример
+              </button>
+            </span>
+          </span>
+        </div>
+
+        <div class="canvasbox" id="mainCanvasBox">
+          <canvas
+                  id="mainCanvas"
+                  width="760"
+                  height="520"
+                  tabindex="0"
+                  aria-label="Интерактивная модель вклада. Можно перетаскивать и масштабировать."
+          ></canvas>
+
+          <div class="canvas-note" id="canvasNote">
+            Наведите на линию, операцию или итоговый разрыв — связанный шаг
+            решения подсветится.
+          </div>
+        </div>
+
+        <div class="legend" aria-label="Легенда модели">
+          <button type="button" data-toggle-series="planned">
+            <span class="dot"></span>Без операций
+          </button>
+
+          <button type="button" data-toggle-series="actual">
+            <span class="dot actual"></span>С операциями
+          </button>
+
+          <button type="button" data-toggle-series="operations">
+            <span class="dot withdraw"></span>Операции
+          </button>
+
+          <button type="button" data-toggle-series="impact">
+            <span class="dot deposit"></span>Влияние
+          </button>
+        </div>
+
+        <div class="control-grid">
+          <div class="control">
+            <label>
+              Начальная сумма
+              <output data-output="initial">100 000 ₽</output>
+            </label>
+            <input
+                    type="range"
+                    min="20000"
+                    max="300000"
+                    step="5000"
+                    value="100000"
+                    data-control="initial"
+            >
+          </div>
+
+          <div class="control">
+            <label>
+              Ставка
+              <output data-output="rate">10%</output>
+            </label>
+            <input
+                    type="range"
+                    min="1"
+                    max="25"
+                    step="1"
+                    value="10"
+                    data-control="rate"
+            >
+          </div>
+
+          <div class="control">
+            <label>
+              Снятие после 1-го года
+              <output data-output="withdraw">2 000 ₽</output>
+            </label>
+            <input
+                    type="range"
+                    min="500"
+                    max="15000"
+                    step="500"
+                    value="2000"
+                    data-control="withdraw"
+            >
+          </div>
+
+          <div class="control">
+            <label>
+              Взнос после 2-го года
+              <output data-output="deposit">2 000 ₽</output>
+            </label>
+            <input
+                    type="range"
+                    min="500"
+                    max="15000"
+                    step="500"
+                    value="2000"
+                    data-control="deposit"
+            >
+          </div>
+
+          <div class="control">
+            <label>
+              Срок
+              <output data-output="years">3 года</output>
+            </label>
+            <input
+                    type="range"
+                    min="3"
+                    max="7"
+                    step="1"
+                    value="3"
+                    data-control="years"
+            >
+          </div>
+
+          <div class="control">
+            <label>
+              Масштаб модели
+              <output data-output="zoom">100%</output>
+            </label>
+            <input
+                    type="range"
+                    min="0.65"
+                    max="2.8"
+                    step="0.05"
+                    value="1"
+                    data-control="zoom"
+            >
+          </div>
+        </div>
+
+        <div class="zoom-row" aria-label="Управление масштабом">
+          <span>Зум</span>
+
+          <input
+                  type="range"
+                  min="0.65"
+                  max="2.8"
+                  step="0.05"
+                  value="1"
+                  data-control="zoom"
+                  aria-label="Масштаб визуализации"
+          >
+
+          <button
+                  type="button"
+                  data-zoom-act="out"
+                  aria-label="Уменьшить"
+          >−</button>
+
+          <button
+                  type="button"
+                  data-zoom-act="in"
+                  aria-label="Увеличить"
+          >+</button>
+
+          <button
+                  type="button"
+                  data-zoom-act="reset"
+                  aria-label="Сбросить масштаб"
+          >↺</button>
+
+          <button
+                  type="button"
+                  data-zoom-act="open"
+                  aria-label="Открыть увеличенную модель"
+          >⛶</button>
+        </div>
+
+        <div class="switches">
+          <label class="switch">
+            <input type="checkbox" checked data-layer="values">
+            значения
+          </label>
+
+          <label class="switch">
+            <input type="checkbox" checked data-layer="grid">
+            сетка
+          </label>
+
+          <label class="switch">
+            <input type="checkbox" checked data-layer="formula">
+            формула влияния
+          </label>
+
+          <label class="switch">
+            <input type="checkbox" checked data-layer="hover">
+            связь с текстом
+          </label>
+        </div>
+
+        <div
+                class="dynamic-summary"
+                id="dynamicSummary"
+                aria-live="polite"
+        ></div>
+      </article>
+    </aside>
+  </div>
+
+  <footer class="footer">
+    Лёвин Артём Александрович · эксклюзивно для Тимофея Васильченко
+  </footer>
+</div>
+
+<div
+        class="modal"
+        id="vizModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+        aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-head">
+      <h2 id="modalTitle">Увеличенная интерактивная модель</h2>
+
+      <button
+              class="modal-close"
+              type="button"
+              aria-label="Закрыть"
+      >×</button>
+    </div>
+
+    <div class="canvasbox">
+      <canvas
+              id="modalCanvas"
+              width="1240"
+              height="690"
+              tabindex="0"
+              aria-label="Увеличенная интерактивная модель вклада"
+      ></canvas>
+    </div>
+
+    <div class="modal-controls">
+      <div class="control-grid">
+        <div class="control">
+          <label>
+            Начальная сумма
+            <output data-output="initial">100 000 ₽</output>
+          </label>
+          <input
+                  type="range"
+                  min="20000"
+                  max="300000"
+                  step="5000"
+                  value="100000"
+                  data-control="initial"
+          >
+        </div>
+
+        <div class="control">
+          <label>
+            Ставка
+            <output data-output="rate">10%</output>
+          </label>
+          <input
+                  type="range"
+                  min="1"
+                  max="25"
+                  step="1"
+                  value="10"
+                  data-control="rate"
+          >
+        </div>
+
+        <div class="control">
+          <label>
+            Снятие
+            <output data-output="withdraw">2 000 ₽</output>
+          </label>
+          <input
+                  type="range"
+                  min="500"
+                  max="15000"
+                  step="500"
+                  value="2000"
+                  data-control="withdraw"
+          >
+        </div>
+
+        <div class="control">
+          <label>
+            Взнос
+            <output data-output="deposit">2 000 ₽</output>
+          </label>
+          <input
+                  type="range"
+                  min="500"
+                  max="15000"
+                  step="500"
+                  value="2000"
+                  data-control="deposit"
+          >
+        </div>
+
+        <div class="control">
+          <label>
+            Срок
+            <output data-output="years">3 года</output>
+          </label>
+          <input
+                  type="range"
+                  min="3"
+                  max="7"
+                  step="1"
+                  value="3"
+                  data-control="years"
+          >
+        </div>
+
+        <div class="control">
+          <label>
+            Масштаб
+            <output data-output="zoom">100%</output>
+          </label>
+          <input
+                  type="range"
+                  min="0.65"
+                  max="2.8"
+                  step="0.05"
+                  value="1"
+                  data-control="zoom"
+          >
+        </div>
+      </div>
+
+      <div class="zoom-row">
+        <span>Синхронный зум</span>
+
+        <input
+                type="range"
+                min="0.65"
+                max="2.8"
+                step="0.05"
+                value="1"
+                data-control="zoom"
+                aria-label="Масштаб увеличенной модели"
+        >
+
+        <button
+                type="button"
+                data-zoom-act="out"
+                aria-label="Уменьшить"
+        >−</button>
+
+        <button
+                type="button"
+                data-zoom-act="in"
+                aria-label="Увеличить"
+        >+</button>
+
+        <button
+                type="button"
+                data-zoom-act="reset"
+                aria-label="Сбросить"
+        >↺</button>
+
+        <button
+                type="button"
+                data-modal-close
+                aria-label="Закрыть"
+        >×</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    "use strict";
+
+    const root = document.documentElement;
+    const $ = (selector, scope = document) => scope.querySelector(selector);
+    const $$ = (selector, scope = document) => [
+      ...scope.querySelectorAll(selector)
+    ];
+
+    const formatNumber = value =>
+    new Intl.NumberFormat("ru-RU", {
+      maximumFractionDigits: 2
+    }).format(value);
+
+    const formatMoney = value => `${formatNumber(value)} ₽`;
+
+    const formatMathNumber = value =>
+    new Intl.NumberFormat("ru-RU", {
+      maximumFractionDigits: 4,
+      useGrouping: false
+    }).format(value);
+
+    const clamp = (value, min, max) =>
+    Math.min(max, Math.max(min, value));
+
+    const css = name =>
+    getComputedStyle(root).getPropertyValue(name).trim();
+
+    const pluralYears = n => {
+      if (n % 10 === 1 && n % 100 !== 11) {
+        return "год";
+      }
+
+      if (
+      n % 10 >= 2 &&
+      n % 10 <= 4 &&
+      !(n % 100 >= 12 && n % 100 <= 14)
+      ) {
+        return "года";
+      }
+
+      return "лет";
+    };
+
+    const state = {
+      initial: 100000,
+      rate: 10,
+      withdraw: 2000,
+      deposit: 2000,
+      years: 3,
+      zoom: 1,
+      panX: 0,
+      panY: 0,
+      activeTab: "case",
+      vizMode: "comparison",
+      highlight: null,
+      hoverKey: null,
+      series: {
+        planned: true,
+        actual: true,
+        operations: true,
+        impact: true
+      },
+      layers: {
+        values: true,
+        grid: true,
+        formula: true,
+        hover: true
+      }
+    };
+
+    const growthState = {
+      rate: 9,
+      factor: 2
+    };
+
+    const mainCanvas = $("#mainCanvas");
+    const modalCanvas = $("#modalCanvas");
+    const modal = $("#vizModal");
+    const canvasNote = $("#canvasNote");
+
+    let hitRegions = [];
+    let collectHits = true;
+
+    let pointer = {
+      dragging: false,
+      moved: false,
+      lastX: 0,
+      lastY: 0,
+      canvas: null
+    };
+
+    function balances() {
+      const r = 1 + state.rate / 100;
+      const planned = [state.initial];
+      const actual = [state.initial];
+
+      for (let year = 1; year <= state.years; year += 1) {
+        planned.push(planned[year - 1] * r);
+
+        let value = actual[year - 1] * r;
+
+        if (year === 1) {
+          value -= state.withdraw;
+        }
+
+        if (year === 2) {
+          value += state.deposit;
+        }
+
+        actual.push(value);
+      }
+
+      const delta = planned.at(-1) - actual.at(-1);
+
+      return {
+        r,
+        planned,
+        actual,
+        delta
+      };
+    }
+
+    function updateDynamicContent() {
+      const {
+        r,
+        planned,
+        actual,
+        delta
+      } = balances();
+
+      const setText = (key, value) => {
+        $$(`[data-dyn="${key}"]`).forEach(element => {
+          element.textContent = value;
+        });
+      };
+
+      setText("years", state.years);
+      setText("rate", state.rate);
+      setText("withdrawText", formatNumber(state.withdraw));
+      setText("depositText", formatNumber(state.deposit));
+      setText("initialText", formatNumber(state.initial));
+      setText("rText", formatMathNumber(r));
+      setText("rMath", formatMathNumber(r));
+      setText("rateMultiplierText", `${formatNumber(r * 100)}%`);
+      setText("withdrawMath", formatMathNumber(state.withdraw));
+      setText("depositMath", formatMathNumber(state.deposit));
+      setText("withdrawPower", state.years - 1);
+      setText("depositPower", state.years - 2);
+      setText("withdrawYears", state.years - 1);
+      setText("depositYears", state.years - 2);
+      setText("plannedText", formatMoney(planned.at(-1)));
+      setText("actualText", formatMoney(actual.at(-1)));
+      setText("deltaText", formatMoney(delta));
+      setText("plannedMath", formatMathNumber(planned.at(-1)));
+      setText("actualMath", formatMathNumber(actual.at(-1)));
+      setText("deltaMath", formatMathNumber(delta));
+
+      $$('[data-output="initial"]').forEach(element => {
+        element.textContent = formatMoney(state.initial);
+      });
+
+      $$('[data-output="rate"]').forEach(element => {
+        element.textContent = `${state.rate}%`;
+      });
+
+      $$('[data-output="withdraw"]').forEach(element => {
+        element.textContent = formatMoney(state.withdraw);
+      });
+
+      $$('[data-output="deposit"]').forEach(element => {
+        element.textContent = formatMoney(state.deposit);
+      });
+
+      $$('[data-output="years"]').forEach(element => {
+        element.textContent =
+        `${state.years} ${pluralYears(state.years)}`;
+      });
+
+      $$('[data-output="zoom"]').forEach(element => {
+        element.textContent = `${Math.round(state.zoom * 100)}%`;
+      });
+
+      $$("[data-control]").forEach(input => {
+        input.value = state[input.dataset.control];
+      });
+
+      const absDelta = Math.abs(delta);
+
+      if (delta === 0) {
+        $("#dynamicSummary").innerHTML =
+        "<strong>Вывод:</strong> при выбранных параметрах операции " +
+        "полностью компенсировали друг друга.";
+        return;
+      }
+
+      const relation = delta > 0 ? "меньше" : "больше";
+
+      $("#dynamicSummary").innerHTML =
+      `<strong>Вывод:</strong> фактическая сумма ${relation} ` +
+      `плановой на <strong>${formatMoney(absDelta)}</strong>. ` +
+      `Снятие влияет ${state.years - 1} ` +
+      `${pluralYears(state.years - 1)}, а взнос — ` +
+      `${state.years - 2} ${pluralYears(state.years - 2)}.`;
+    }
+
+    function syncControls() {
+      $$("[data-control]").forEach(input => {
+        input.value = state[input.dataset.control];
+      });
+
+      $$("[data-layer]").forEach(input => {
+        input.checked = state.layers[input.dataset.layer];
+      });
+
+      $$("[data-toggle-series]").forEach(button => {
+        button.classList.toggle(
+          "off",
+          !state.series[button.dataset.toggleSeries]
+        );
+      });
+
+      updateDynamicContent();
+    }
+
+    function roundedRect(context, x, y, width, height, radius) {
+      const safeRadius = Math.min(radius, width / 2, height / 2);
+
+      context.beginPath();
+      context.moveTo(x + safeRadius, y);
+      context.arcTo(
+        x + width,
+        y,
+        x + width,
+        y + height,
+        safeRadius
+      );
+      context.arcTo(
+        x + width,
+        y + height,
+        x,
+        y + height,
+        safeRadius
+      );
+      context.arcTo(
+        x,
+        y + height,
+        x,
+        y,
+        safeRadius
+      );
+      context.arcTo(
+        x,
+        y,
+        x + width,
+        y,
+        safeRadius
+      );
+      context.closePath();
+    }
+
+    function addHit(key, x, y, width, height, label) {
+      if (!collectHits) {
+        return;
+      }
+
+      hitRegions.push({
+        key,
+        x,
+        y,
+        width,
+        height,
+        label
+      });
+    }
+
+    function transformPoint(x, y, width, height) {
+      return {
+        x:
+        width / 2 +
+        (x - width / 2) * state.zoom +
+        state.panX,
+        y:
+        height / 2 +
+        (y - height / 2) * state.zoom +
+        state.panY
+      };
+    }
+
+    function withSceneTransform(context, width, height, draw) {
+      context.save();
+      context.translate(
+        width / 2 + state.panX,
+        height / 2 + state.panY
+      );
+      context.scale(state.zoom, state.zoom);
+      context.translate(-width / 2, -height / 2);
+      draw();
+      context.restore();
+    }
+
+    function drawGrid(context, width, height) {
+      if (!state.layers.grid) {
+        return;
+      }
+
+      context.save();
+      context.strokeStyle = css("--line");
+      context.globalAlpha = 0.24;
+      context.lineWidth = 1;
+
+      for (let x = 20; x < width; x += 40) {
+        context.beginPath();
+        context.moveTo(x, 0);
+        context.lineTo(x, height);
+        context.stroke();
+      }
+
+      for (let y = 20; y < height; y += 40) {
+        context.beginPath();
+        context.moveTo(0, y);
+        context.lineTo(width, y);
+        context.stroke();
+      }
+
+      context.restore();
+    }
+
+    function drawComparison(context, width, height) {
+      const {
+        r,
+        planned,
+        actual,
+        delta
+      } = balances();
+
+      const padding = {
+        left: 58,
+        right: 28,
+        top: 54,
+        bottom: 88
+      };
+
+      const chartBottom = Math.max(210, height * 0.58);
+      const minimum = Math.min(...actual, ...planned) * 0.985;
+      const maximum = Math.max(...actual, ...planned) * 1.015;
+      const valueSpan = Math.max(1, maximum - minimum);
+
+      const x = year =>
+      padding.left +
+      year *
+      (width - padding.left - padding.right) /
+      state.years;
+
+      const y = value =>
+      padding.top +
+      (maximum - value) *
+      (chartBottom - padding.top - 24) /
+      valueSpan;
+
+      context.fillStyle = css("--text");
+      context.font = "800 16px system-ui";
+      context.fillText(
+        "Рост капитала по годам",
+        padding.left,
+        30
+      );
+
+      context.fillStyle = css("--muted");
+      context.font = "12px system-ui";
+      context.fillText(
+        `r = ${formatMathNumber(r)} · операции после начисления процентов`,
+        padding.left,
+        48
+      );
+
+      context.strokeStyle = css("--line");
+      context.lineWidth = 1.5;
+      context.beginPath();
+      context.moveTo(padding.left, chartBottom);
+      context.lineTo(width - padding.right, chartBottom);
+      context.stroke();
+
+      for (let year = 0; year <= state.years; year += 1) {
+        context.beginPath();
+        context.moveTo(x(year), chartBottom - 5);
+        context.lineTo(x(year), chartBottom + 5);
+        context.stroke();
+
+        context.fillStyle = css("--muted");
+        context.textAlign = "center";
+        context.font = "12px system-ui";
+        context.fillText(
+          year === 0 ? "старт" : `${year} г.`,
+          x(year),
+          chartBottom + 22
+        );
+      }
+
+      context.textAlign = "left";
+
+      const drawLine = (values, color, key, label) => {
+        if (!state.series[key]) {
+          return;
+        }
+
+        const highlighted =
+        state.highlight === key ||
+        state.hoverKey === key;
+
+        context.save();
+        context.strokeStyle = color;
+        context.lineWidth = highlighted ? 5 : 3;
+        context.shadowColor = color;
+        context.shadowBlur = highlighted ? 14 : 0;
+        context.beginPath();
+
+        values.forEach((value, index) => {
+          if (index === 0) {
+            context.moveTo(x(index), y(value));
+          } else {
+            context.lineTo(x(index), y(value));
+          }
+        });
+
+        context.stroke();
+        context.restore();
+
+        values.forEach((value, index) => {
+          context.beginPath();
+          context.arc(
+            x(index),
+            y(value),
+            highlighted ? 7 : 5,
+            0,
+            Math.PI * 2
+          );
+          context.fillStyle = color;
+          context.fill();
+
+          if (state.layers.values) {
+            context.fillStyle = css("--text");
+            context.font = "700 11px system-ui";
+            context.textAlign = "center";
+            context.fillText(
+              formatNumber(value),
+              x(index),
+              y(value) - 11
+            );
+          }
+        });
+
+        const first = transformPoint(
+          padding.left,
+          padding.top,
+          width,
+          height
+        );
+
+        const second = transformPoint(
+          width - padding.right,
+          chartBottom,
+          width,
+          height
+        );
+
+        addHit(
+          key,
+          Math.min(first.x, second.x),
+          Math.min(first.y, second.y),
+          Math.abs(second.x - first.x),
+          Math.abs(second.y - first.y),
+          label
+        );
+      };
+
+      drawLine(
+        planned,
+        css("--planned"),
+        "planned",
+        "Сценарий без операций"
+      );
+
+      drawLine(
+        actual,
+        css("--actual"),
+        "actual",
+        "Сценарий с операциями"
+      );
+
+      if (state.series.operations) {
+        const operations = [
+          {
+            year: 1,
+            amount: -state.withdraw,
+            color: css("--withdraw"),
+            label: `−${formatMoney(state.withdraw)}`
+          },
+          {
+            year: 2,
+            amount: state.deposit,
+            color: css("--deposit"),
+            label: `+${formatMoney(state.deposit)}`
+          }
+        ];
+
+        operations.forEach((operation, index) => {
+          if (operation.year > state.years) {
+            return;
+          }
+
+          const pointX = x(operation.year);
+          const pointY = y(actual[operation.year]);
+          const direction = operation.amount < 0 ? 1 : -1;
+          const highlighted =
+          state.highlight === "timeline" ||
+          state.hoverKey === "timeline";
+
+          context.save();
+          context.strokeStyle = operation.color;
+          context.fillStyle = operation.color;
+          context.lineWidth = highlighted ? 5 : 3;
+
+          context.beginPath();
+          context.moveTo(
+            pointX,
+            pointY - direction * 52
+          );
+          context.lineTo(
+            pointX,
+            pointY - direction * 10
+          );
+          context.stroke();
+
+          context.beginPath();
+          context.moveTo(pointX, pointY);
+          context.lineTo(
+            pointX - 7,
+            pointY - direction * 12
+          );
+          context.lineTo(
+            pointX + 7,
+            pointY - direction * 12
+          );
+          context.closePath();
+          context.fill();
+
+          roundedRect(
+            context,
+            pointX - 52,
+            pointY - direction * 78 - 13,
+            104,
+            30,
+            10
+          );
+
+          context.globalAlpha = 0.22;
+          context.fill();
+          context.globalAlpha = 1;
+          context.strokeStyle = operation.color;
+          context.stroke();
+
+          context.fillStyle = css("--text");
+          context.font = "800 12px system-ui";
+          context.textAlign = "center";
+          context.fillText(
+            operation.label,
+            pointX,
+            pointY - direction * 78 + 7
+          );
+
+          context.restore();
+
+          const region = transformPoint(
+            pointX - 58,
+            pointY - 100,
+            width,
+            height
+          );
+
+          addHit(
+            "timeline",
+            region.x,
+            region.y,
+            116 * state.zoom,
+            120 * state.zoom,
+            index === 0
+            ? "Снятие после первого года"
+            : "Взнос после второго года"
+          );
+        });
+      }
+
+      const impactTop = chartBottom + 47;
+
+      const lost =
+      state.withdraw *
+      Math.pow(r, state.years - 1);
+
+      const restored =
+      state.deposit *
+      Math.pow(r, state.years - 2);
+
+      const maximumImpact = Math.max(
+        1,
+        lost,
+        restored,
+        Math.abs(delta)
+      );
+
+      const impactScale =
+      (width - padding.left - padding.right - 40) /
+      maximumImpact;
+
+      if (state.series.impact) {
+        context.fillStyle = css("--muted");
+        context.font = "800 13px system-ui";
+        context.textAlign = "left";
+        context.fillText(
+          "Влияние операций к концу срока",
+          padding.left,
+          impactTop - 12
+        );
+
+        const drawImpactBar = (
+        value,
+        yPosition,
+        color,
+        label,
+        key
+        ) => {
+          const barWidth = Math.max(
+            3,
+            value * impactScale
+          );
+
+          roundedRect(
+            context,
+            padding.left,
+            yPosition,
+            barWidth,
+            22,
+            8
+          );
+
+          context.save();
+          context.fillStyle = color;
+          context.globalAlpha = 0.22;
+          context.fill();
+          context.globalAlpha = 1;
+          context.strokeStyle = color;
+          context.lineWidth = 2;
+          context.stroke();
+          context.restore();
+
+          context.fillStyle = css("--text");
+          context.font = "700 11px system-ui";
+          context.fillText(
+            `${label}: ${formatMoney(value)}`,
+            padding.left + 8,
+            yPosition + 15
+          );
+
+          const region = transformPoint(
+            padding.left,
+            yPosition,
+            width,
+            height
+          );
+
+          addHit(
+            key,
+            region.x,
+            region.y,
+            Math.max(70, barWidth * state.zoom),
+            22 * state.zoom,
+            label
+          );
+        };
+
+        drawImpactBar(
+          lost,
+          impactTop,
+          css("--withdraw"),
+          "Потеря от снятия",
+          "impact"
+        );
+
+        drawImpactBar(
+          restored,
+          impactTop + 32,
+          css("--deposit"),
+          "Компенсация взносом",
+          "impact"
+        );
+
+        context.fillStyle =
+        delta >= 0
+        ? css("--red")
+        : css("--green");
+
+        context.font = "900 14px system-ui";
+        context.fillText(
+          `Итоговая разность: ${formatMoney(delta)}`,
+          padding.left,
+          impactTop + 86
+        );
+
+        const region = transformPoint(
+          padding.left,
+          impactTop + 67,
+          width,
+          height
+        );
+
+        addHit(
+          "delta",
+          region.x,
+          region.y,
+          Math.min(
+            width - padding.left - padding.right,
+            290
+          ) * state.zoom,
+          28 * state.zoom,
+          "Итоговая разность"
+        );
+      }
+
+      if (state.layers.formula) {
+        const formula =
+        `Δ = ${formatNumber(state.withdraw)}·` +
+        `${formatMathNumber(r)}^${state.years - 1} − ` +
+        `${formatNumber(state.deposit)}·` +
+        `${formatMathNumber(r)}^${state.years - 2}`;
+
+        context.fillStyle = css("--muted");
+        context.font = '12px "Cambria Math", serif';
+        context.textAlign = "right";
+        context.fillText(
+          formula,
+          width - padding.right,
+          height - 18
+        );
+      }
+    }
+
+    function drawTimeline(context, width, height) {
+      const {
+        r,
+        actual
+      } = balances();
+
+      const padding = 54;
+      const axisY = height * 0.47;
+
+      const x = year =>
+      padding +
+      year *
+      (width - 2 * padding) /
+      state.years;
+
+      context.fillStyle = css("--text");
+      context.font = "800 17px system-ui";
+      context.fillText(
+        "Табличная модель одного перехода",
+        padding,
+        31
+      );
+
+      context.strokeStyle = css("--line");
+      context.lineWidth = 3;
+      context.beginPath();
+      context.moveTo(padding, axisY);
+      context.lineTo(width - padding, axisY);
+      context.stroke();
+
+      for (let year = 0; year <= state.years; year += 1) {
+        const pointX = x(year);
+
+        context.beginPath();
+        context.arc(
+          pointX,
+          axisY,
+          10,
+          0,
+          Math.PI * 2
+        );
+        context.fillStyle =
+        year === 0
+        ? css("--planned")
+        : css("--actual");
+        context.fill();
+
+        context.fillStyle = css("--text");
+        context.font = "800 12px system-ui";
+        context.textAlign = "center";
+        context.fillText(
+          year === 0
+          ? "S₀"
+          : `S${toSubscript(year)}`,
+          pointX,
+          axisY - 22
+        );
+
+        if (state.layers.values) {
+          context.fillText(
+            formatNumber(actual[year]),
+            pointX,
+            axisY + 33
+          );
+        }
+
+        if (year < state.years) {
+          const middle =
+          (pointX + x(year + 1)) / 2;
+
+          context.fillStyle = css("--card3");
+          roundedRect(
+            context,
+            middle - 54,
+            axisY - 72,
+            108,
+            38,
+            11
+          );
+          context.fill();
+
+          context.strokeStyle = css("--cyan");
+          context.lineWidth = 1.5;
+          context.stroke();
+
+          context.fillStyle = css("--text");
+          context.font = "700 13px system-ui";
+          context.fillText(
+            `× ${formatMathNumber(r)}`,
+            middle,
+            axisY - 48
+          );
+
+          context.strokeStyle = css("--cyan");
+          context.lineWidth = 2;
+          context.beginPath();
+          context.moveTo(pointX + 14, axisY);
+          context.lineTo(x(year + 1) - 14, axisY);
+          context.stroke();
+        }
+      }
+
+      if (state.series.operations) {
+        [
+          [1, -state.withdraw, css("--withdraw")],
+          [2, state.deposit, css("--deposit")]
+        ].forEach(([year, amount, color]) => {
+          if (year > state.years) {
+            return;
+          }
+
+          const pointX = x(year);
+
+          context.strokeStyle = color;
+          context.fillStyle = color;
+          context.lineWidth = 4;
+          context.beginPath();
+          context.moveTo(pointX, axisY + 12);
+          context.lineTo(pointX, axisY + 84);
+          context.stroke();
+
+          context.beginPath();
+          context.arc(
+            pointX,
+            axisY + 84,
+            7,
+            0,
+            Math.PI * 2
+          );
+          context.fill();
+
+          context.fillStyle = css("--text");
+          context.font = "800 12px system-ui";
+          context.fillText(
+            `${amount < 0 ? "−" : "+"}` +
+            `${formatNumber(Math.abs(amount))} ₽`,
+            pointX,
+            axisY + 108
+          );
+        });
+      }
+
+      context.textAlign = "left";
+      context.fillStyle = css("--muted");
+      context.font = "14px system-ui";
+
+      const lines = [
+        "1. Берём сумму в начале периода.",
+        "2. Умножаем её на коэффициент роста.",
+        "3. После начисления прибавляем операцию: взнос со знаком +, снятие со знаком −."
+      ];
+
+      lines.forEach((line, index) => {
+        context.fillText(
+          line,
+          padding,
+          height - 105 + index * 26
+        );
+      });
+
+      const region = transformPoint(
+        padding,
+        axisY - 90,
+        width,
+        height
+      );
+
+      addHit(
+        "model",
+        region.x,
+        region.y,
+        (width - 2 * padding) * state.zoom,
+        215 * state.zoom,
+        "Рекуррентная схема"
+      );
+    }
+
+    function drawGrowth(context, width, height) {
+      const rate = growthState.rate;
+      const factor = growthState.factor;
+      const r = 1 + rate / 100;
+
+      const exact =
+      Math.log(factor) /
+      Math.log(r);
+
+      const minimumYear =
+      Math.ceil(exact - 1e-12);
+
+      const maximumYear =
+      Math.max(12, minimumYear + 3);
+
+      const padding = {
+        left: 52,
+        right: 30,
+        top: 52,
+        bottom: 58
+      };
+
+      const x = year =>
+      padding.left +
+      year *
+      (width - padding.left - padding.right) /
+      maximumYear;
+
+      const maximumY = Math.max(
+        factor * 1.2,
+        Math.pow(r, maximumYear)
+      );
+
+      const y = value =>
+      height -
+      padding.bottom -
+      (value - 1) *
+      (height - padding.top - padding.bottom) /
+      (maximumY - 1);
+
+      context.fillStyle = css("--text");
+      context.font = "800 17px system-ui";
+      context.fillText(
+        "Рост относительно первоначальной суммы",
+        padding.left,
+        30
+      );
+
+      context.strokeStyle = css("--line");
+      context.lineWidth = 1.5;
+      context.beginPath();
+      context.moveTo(padding.left, height - padding.bottom);
+      context.lineTo(width - padding.right, height - padding.bottom);
+      context.moveTo(padding.left, padding.top);
+      context.lineTo(padding.left, height - padding.bottom);
+      context.stroke();
+
+      context.setLineDash([7, 6]);
+      context.strokeStyle = css("--red");
+      context.beginPath();
+      context.moveTo(padding.left, y(factor));
+      context.lineTo(width - padding.right, y(factor));
+      context.stroke();
+      context.setLineDash([]);
+
+      context.fillStyle = css("--red");
+      context.font = "800 12px system-ui";
+      context.fillText(
+        `цель ×${formatNumber(factor)}`,
+        padding.left + 7,
+        y(factor) - 8
+      );
+
+      context.strokeStyle = css("--planned");
+      context.lineWidth = 4;
+      context.beginPath();
+
+      for (let year = 0; year <= maximumYear; year += 1) {
+        const pointX = x(year);
+        const pointY = y(Math.pow(r, year));
+
+        if (year === 0) {
+          context.moveTo(pointX, pointY);
+        } else {
+          context.lineTo(pointX, pointY);
+        }
+      }
+
+      context.stroke();
+
+      for (let year = 0; year <= maximumYear; year += 1) {
+        const value = Math.pow(r, year);
+        const pointX = x(year);
+        const pointY = y(value);
+
+        context.beginPath();
+        context.arc(
+          pointX,
+          pointY,
+          year === minimumYear ? 7 : 4,
+          0,
+          Math.PI * 2
+        );
+        context.fillStyle =
+        year === minimumYear
+        ? css("--green")
+        : css("--planned");
+        context.fill();
+
+        if (
+        year === minimumYear ||
+        year === minimumYear - 1
+        ) {
+          context.fillStyle = css("--text");
+          context.font = "800 11px system-ui";
+          context.textAlign = "center";
+          context.fillText(
+            `${year} г.: ×${formatNumber(value)}`,
+            pointX,
+            pointY - 12
+          );
+        }
+      }
+
+      context.textAlign = "left";
+      context.fillStyle = css("--muted");
+      context.font = "13px system-ui";
+      context.fillText(
+        `n = lg(${formatNumber(factor)}) / ` +
+        `lg(${formatMathNumber(r)}) ≈ ${formatNumber(exact)}`,
+        padding.left,
+        height - 23
+      );
+
+      const region = transformPoint(
+        x(minimumYear) - 30,
+        y(factor) - 40,
+        width,
+        height
+      );
+
+      addHit(
+        "growth",
+        region.x,
+        region.y,
+        90 * state.zoom,
+        90 * state.zoom,
+        "Первый год достижения цели"
+      );
+    }
+
+    function toSubscript(value) {
+      return String(value)
+        .replace(/0/g, "₀")
+        .replace(/1/g, "₁")
+        .replace(/2/g, "₂")
+        .replace(/3/g, "₃")
+        .replace(/4/g, "₄")
+        .replace(/5/g, "₅")
+        .replace(/6/g, "₆")
+        .replace(/7/g, "₇")
+        .replace(/8/g, "₈")
+        .replace(/9/g, "₉");
+    }
+
+    function drawCanvas(canvas) {
+      const rectangle = canvas.getBoundingClientRect();
+
+      if (!rectangle.width || !rectangle.height) {
+        return;
+      }
+
+      const pixelRatio =
+      Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width =
+      Math.round(rectangle.width * pixelRatio);
+
+      canvas.height =
+      Math.round(rectangle.height * pixelRatio);
+
+      const context = canvas.getContext("2d");
+
+      context.setTransform(
+        pixelRatio,
+        0,
+        0,
+        pixelRatio,
+        0,
+        0
+      );
+
+      context.clearRect(
+        0,
+        0,
+        rectangle.width,
+        rectangle.height
+      );
+
+      drawGrid(
+        context,
+        rectangle.width,
+        rectangle.height
+      );
+
+      collectHits = canvas === mainCanvas;
+
+      if (collectHits) {
+        hitRegions = [];
+      }
+
+      withSceneTransform(
+        context,
+        rectangle.width,
+        rectangle.height,
+        () => {
+          if (state.vizMode === "timeline") {
+            drawTimeline(
+              context,
+              rectangle.width,
+              rectangle.height
+            );
+            return;
+          }
+
+          if (state.vizMode === "growth") {
+            drawGrowth(
+              context,
+              rectangle.width,
+              rectangle.height
+            );
+            return;
+          }
+
+          drawComparison(
+            context,
+            rectangle.width,
+            rectangle.height
+          );
+        }
+      );
+    }
+
+    function redraw() {
+      drawCanvas(mainCanvas);
+
+      if (modal.classList.contains("show")) {
+        drawCanvas(modalCanvas);
+      }
+    }
+
+    function setHighlight(key, source = "text") {
+      state.highlight = key;
+
+      $$(".solution-step, .idea-item").forEach(element => {
+        element.classList.toggle(
+          "linked",
+          element.dataset.link === key
+        );
+      });
+
+      if (source === "canvas" && key) {
+        const labels = {
+          planned: "Синяя линия: сумма без операций.",
+          actual: "Золотая линия: сумма с операциями.",
+          timeline:
+          "Операции выполняются после начисления процентов.",
+          impact:
+          "Раннее снятие и поздний взнос работают разное число лет.",
+          delta:
+          "Разность двух сценариев — искомый ответ.",
+          model:
+          "Каждый год повторяется один и тот же табличный переход.",
+          growth:
+          "Это первый полный год, когда цель достигнута."
+        };
+
+        canvasNote.textContent =
+        labels[key] || "Связанный элемент выделен.";
+      } else if (!key) {
+        canvasNote.textContent =
+        "Наведите на линию, операцию или итоговый разрыв — " +
+        "связанный шаг решения подсветится.";
+      }
+
+      redraw();
+    }
+
+    $$("[data-link]").forEach(element => {
+      element.addEventListener("mouseenter", () => {
+        setHighlight(element.dataset.link);
+      });
+
+      element.addEventListener("mouseleave", () => {
+        setHighlight(null);
+      });
+
+      element.addEventListener("focusin", () => {
+        setHighlight(element.dataset.link);
+      });
+
+      element.addEventListener("focusout", () => {
+        setHighlight(null);
+      });
+    });
+
+    function canvasPoint(event, canvas) {
+      const rectangle = canvas.getBoundingClientRect();
+
+      return {
+        x: event.clientX - rectangle.left,
+        y: event.clientY - rectangle.top
+      };
+    }
+
+    function pointerDown(event, canvas) {
+      pointer = {
+        dragging: true,
+        moved: false,
+        lastX: event.clientX,
+        lastY: event.clientY,
+        canvas
+      };
+
+      canvas.setPointerCapture?.(event.pointerId);
+    }
+
+    function pointerMove(event, canvas) {
+      const point = canvasPoint(event, canvas);
+
+      if (
+      pointer.dragging &&
+      pointer.canvas === canvas
+      ) {
+        const differenceX =
+        event.clientX - pointer.lastX;
+
+        const differenceY =
+        event.clientY - pointer.lastY;
+
+        if (Math.hypot(differenceX, differenceY) > 2) {
+          pointer.moved = true;
+        }
+
+        state.panX += differenceX;
+        state.panY += differenceY;
+        pointer.lastX = event.clientX;
+        pointer.lastY = event.clientY;
+
+        redraw();
+        return;
+      }
+
+      if (
+      canvas !== mainCanvas ||
+      !state.layers.hover
+      ) {
+        return;
+      }
+
+      const hit = [...hitRegions]
+        .reverse()
+        .find(region =>
+      point.x >= region.x &&
+      point.x <= region.x + region.width &&
+      point.y >= region.y &&
+      point.y <= region.y + region.height
+      );
+
+      const key = hit?.key || null;
+
+      if (key !== state.hoverKey) {
+        state.hoverKey = key;
+        setHighlight(key, "canvas");
+      }
+    }
+
+    function pointerUp(event, canvas) {
+      if (
+      !pointer.dragging ||
+      pointer.canvas !== canvas
+      ) {
+        return;
+      }
+
+      const shouldOpen =
+      !pointer.moved &&
+      canvas === mainCanvas;
+
+      pointer.dragging = false;
+      pointer.canvas = null;
+
+      if (shouldOpen) {
+        openModal();
+      }
+    }
+
+    function wheelZoom(event) {
+      event.preventDefault();
+
+      const factor =
+      event.deltaY < 0
+      ? 1.1
+      : 0.9;
+
+      state.zoom = clamp(
+        state.zoom * factor,
+        0.65,
+        2.8
+      );
+
+      syncControls();
+      redraw();
+    }
+
+    [mainCanvas, modalCanvas].forEach(canvas => {
+      canvas.addEventListener(
+        "pointerdown",
+        event => pointerDown(event, canvas)
+      );
+
+      canvas.addEventListener(
+        "pointermove",
+        event => pointerMove(event, canvas)
+      );
+
+      canvas.addEventListener(
+        "pointerup",
+        event => pointerUp(event, canvas)
+      );
+
+      canvas.addEventListener(
+        "pointercancel",
+        () => {
+          pointer.dragging = false;
+          pointer.canvas = null;
+        }
+      );
+
+      canvas.addEventListener(
+        "pointerleave",
+        () => {
+          if (
+          canvas === mainCanvas &&
+          !pointer.dragging
+          ) {
+            state.hoverKey = null;
+            setHighlight(null);
+          }
+        }
+      );
+
+      canvas.addEventListener(
+        "wheel",
+        wheelZoom,
+        {
+          passive: false
+        }
+      );
+    });
+
+    function openModal() {
+      modal.classList.add("show");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+
+      requestAnimationFrame(redraw);
+      $(".modal-close").focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove("show");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      mainCanvas.focus?.();
+      redraw();
+    }
+
+    $(".modal-close").addEventListener(
+      "click",
+      closeModal
+    );
+
+    $("[data-modal-close]").addEventListener(
+      "click",
+      closeModal
+    );
+
+    modal.addEventListener("click", event => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    $$("[data-control]").forEach(input => {
+      input.addEventListener("input", event => {
+        const key = event.target.dataset.control;
+        state[key] = Number(event.target.value);
+
+        if (key === "zoom") {
+          state.zoom = clamp(
+            state.zoom,
+            0.65,
+            2.8
+          );
+        }
+
+        syncControls();
+        redraw();
+      });
+    });
+
+    $$("[data-zoom-act]").forEach(button => {
+      button.addEventListener("click", () => {
+        const action = button.dataset.zoomAct;
+
+        if (action === "in") {
+          state.zoom = clamp(
+            state.zoom + 0.15,
+            0.65,
+            2.8
+          );
+        }
+
+        if (action === "out") {
+          state.zoom = clamp(
+            state.zoom - 0.15,
+            0.65,
+            2.8
+          );
+        }
+
+        if (action === "reset") {
+          state.zoom = 1;
+          state.panX = 0;
+          state.panY = 0;
+        }
+
+        if (action === "open") {
+          openModal();
+        }
+
+        syncControls();
+        redraw();
+      });
+    });
+
+    $$("[data-layer]").forEach(input => {
+      input.addEventListener("change", () => {
+        state.layers[input.dataset.layer] =
+        input.checked;
+        redraw();
+      });
+    });
+
+    $$("[data-toggle-series]").forEach(button => {
+      button.addEventListener("click", () => {
+        const key = button.dataset.toggleSeries;
+        state.series[key] = !state.series[key];
+
+        button.classList.toggle(
+          "off",
+          !state.series[key]
+        );
+
+        redraw();
+      });
+    });
+
+    $$(".tab").forEach(button => {
+      button.addEventListener("click", () => {
+        $$(".tab").forEach(tab => {
+          const selected = tab === button;
+
+          tab.classList.toggle("on", selected);
+          tab.setAttribute(
+            "aria-selected",
+            selected ? "true" : "false"
+          );
+        });
+
+        $$(".panel").forEach(panel => {
+          panel.classList.toggle(
+            "on",
+            panel.id === button.dataset.tab
+          );
+        });
+
+        state.activeTab = button.dataset.tab;
+        state.vizMode =
+        $(`#${state.activeTab}`).dataset.viz;
+
+        state.zoom = 1;
+        state.panX = 0;
+        state.panY = 0;
+        state.highlight = null;
+
+        $("#vizTitle").textContent =
+        state.vizMode === "growth"
+        ? "График достижения цели"
+        : state.vizMode === "timeline"
+        ? "Таблица во времени"
+        : "Сравнение сценариев";
+
+        syncControls();
+        redraw();
+        showModeHint(button.textContent.trim());
+      });
+    });
+
+    $("#detailSelect").addEventListener(
+      "change",
+      event => {
+        root.dataset.detail = event.target.value;
+
+        showModeHint(
+          `Подробность: ${
+          event.target.options[
+            event.target.selectedIndex
+          ].text
+        }`
+        );
+      }
+    );
+
+    $("#backBtn").addEventListener(
+      "click",
+      () => {
+        if (history.length > 1) {
+          history.back();
+        } else {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+        }
+      }
+    );
+
+    $("#printBtn").addEventListener(
+      "click",
+      () => window.print()
+    );
+
+    const themeButton = $("#themeBtn");
+
+    let theme =
+    localStorage.getItem("finance-theme") ||
+    "dark";
+
+    function applyTheme() {
+      root.dataset.theme = theme;
+
+      themeButton.textContent =
+      theme === "dark"
+      ? "☀ Светлая тема"
+      : "☾ Тёмная тема";
+
+      requestAnimationFrame(redraw);
+    }
+
+    themeButton.addEventListener("click", () => {
+      theme =
+      theme === "dark"
+      ? "light"
+      : "dark";
+
+      localStorage.setItem(
+        "finance-theme",
+        theme
+      );
+
+      applyTheme();
+    });
+
+    applyTheme();
+
+    const steps = $$(".solution-step");
+
+    function updateStepCounter() {
+      const count = steps.filter(step =>
+      step.classList.contains("open")
+      ).length;
+
+      $("#stepCounter").textContent =
+      `Открыто: ${count} из ${steps.length}`;
+    }
+
+    steps.forEach(step => {
+      $(".step-head", step).addEventListener(
+        "click",
+        () => {
+          step.classList.toggle("open");
+
+          $(".step-head", step).setAttribute(
+            "aria-expanded",
+            step.classList.contains("open")
+            ? "true"
+            : "false"
+          );
+
+          updateStepCounter();
+
+          if (step.classList.contains("open")) {
+            setHighlight(step.dataset.link);
+          }
+        }
+      );
+    });
+
+    $("#nextStepBtn").addEventListener(
+      "click",
+      () => {
+        const next = steps.find(step =>
+        !step.classList.contains("open")
+        );
+
+        if (next) {
+          next.classList.add("open");
+
+          $(".step-head", next).setAttribute(
+            "aria-expanded",
+            "true"
+          );
+
+          next.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+
+          setHighlight(next.dataset.link);
+        }
+
+        updateStepCounter();
+      }
+    );
+
+    $("#allStepsBtn").addEventListener(
+      "click",
+      () => {
+        steps.forEach(step => {
+          step.classList.add("open");
+
+          $(".step-head", step).setAttribute(
+            "aria-expanded",
+            "true"
+          );
+        });
+
+        updateStepCounter();
+      }
+    );
+
+    $("#resetStepsBtn").addEventListener(
+      "click",
+      () => {
+        steps.forEach((step, index) => {
+          step.classList.toggle(
+            "open",
+            index === 0
+          );
+
+          $(".step-head", step).setAttribute(
+            "aria-expanded",
+            index === 0
+            ? "true"
+            : "false"
+          );
+        });
+
+        updateStepCounter();
+
+        steps[0].scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }
+    );
+
+    $$("[data-growth-control]").forEach(input => {
+      input.addEventListener("input", event => {
+        growthState[
+        event.target.dataset.growthControl
+        ] = Number(event.target.value);
+
+        updateGrowth();
+        redraw();
+      });
+    });
+
+    function updateGrowth() {
+      const r =
+      1 + growthState.rate / 100;
+
+      const exact =
+      Math.log(growthState.factor) /
+      Math.log(r);
+
+      const year =
+      Math.ceil(exact - 1e-12);
+
+      const previous =
+      Math.pow(r, year - 1);
+
+      const current =
+      Math.pow(r, year);
+
+      $$('[data-growth="rate"]').forEach(element => {
+        element.textContent = growthState.rate;
+      });
+
+      $$('[data-growth="factor"]').forEach(element => {
+        element.textContent =
+        formatNumber(growthState.factor);
+      });
+
+      $$('[data-growth-output="rate"]').forEach(element => {
+        element.textContent =
+        `${growthState.rate}%`;
+      });
+
+      $$('[data-growth-output="factor"]').forEach(element => {
+        element.textContent =
+        formatNumber(growthState.factor);
+      });
+
+      $('[data-growth="calculation"]').textContent =
+      `n ≈ ${formatNumber(exact)}; минимально ` +
+      `${year} полных ${pluralYears(year)}.`;
+
+      $('[data-growth="check"]').textContent =
+      `после ${year - 1} ${pluralYears(year - 1)} ` +
+      `множитель равен ${formatNumber(previous)} и цели не достигает; ` +
+      `после ${year} ${pluralYears(year)} множитель равен ` +
+      `${formatNumber(current)} и условие выполнено.`;
+    }
+
+    updateGrowth();
+
+    const generatedVariants = [
+      {
+        rate: 8,
+        years: 4,
+        withdraw: 3000,
+        deposit: 3000,
+        initial: 90000
+      },
+      {
+        rate: 12,
+        years: 3,
+        withdraw: 5000,
+        deposit: 2500,
+        initial: 120000
+      },
+      {
+        rate: 7,
+        years: 5,
+        withdraw: 4000,
+        deposit: 6000,
+        initial: 80000
+      },
+      {
+        rate: 15,
+        years: 3,
+        withdraw: 2500,
+        deposit: 1500,
+        initial: 70000
+      },
+      {
+        rate: 9,
+        years: 4,
+        withdraw: 6000,
+        deposit: 4500,
+        initial: 150000
+      }
+    ];
+
+    let lastVariant = -1;
+
+    function generateTask() {
+      let index;
+
+      do {
+        index =
+        Math.floor(
+          Math.random() *
+          generatedVariants.length
+        );
+      } while (
+      index === lastVariant &&
+      generatedVariants.length > 1
+      );
+
+      lastVariant = index;
+
+      const variant =
+      generatedVariants[index];
+
+      Object.assign(
+        state,
+        variant,
+        {
+          zoom: 1,
+          panX: 0,
+          panY: 0
+        }
+      );
+
+      const {
+        r,
+        delta
+      } = balances();
+
+      $("#generatedTask").innerHTML =
+      `Вклад открыт на <strong>${variant.years} ` +
+      `${pluralYears(variant.years)}</strong> под ` +
+      `<strong>${variant.rate}% годовых</strong>. ` +
+      `После первого начисления процентов сняли ` +
+      `<strong>${formatMoney(variant.withdraw)}</strong>, ` +
+      `после второго внесли ` +
+      `<strong>${formatMoney(variant.deposit)}</strong>. ` +
+      `На сколько рублей итог отличается от суммы без операций?`;
+
+      $("#generatedAnswer").innerHTML =
+      `<strong>Ответ: ${formatMoney(delta)}.</strong><br>` +
+      `Идея: сравните два влияния: ` +
+      `<math>` +
+      `<mrow>` +
+      `<mn>${formatMathNumber(variant.withdraw)}</mn>` +
+      `<mo>·</mo>` +
+      `<msup>` +
+      `<mi>r</mi>` +
+      `<mn>${variant.years - 1}</mn>` +
+      `</msup>` +
+      `<mo>−</mo>` +
+      `<mn>${formatMathNumber(variant.deposit)}</mn>` +
+      `<mo>·</mo>` +
+      `<msup>` +
+      `<mi>r</mi>` +
+      `<mn>${variant.years - 2}</mn>` +
+      `</msup>` +
+      `<mo>=</mo>` +
+      `<mn>${formatMathNumber(delta)}</mn>` +
+      `</mrow>` +
+      `</math>.`;
+
+      $("#generatedAnswer").classList.remove("show");
+
+      $("#showGeneratedAnswerBtn").textContent =
+      "Показать ответ";
+
+      syncControls();
+      redraw();
+    }
+
+    $("#generateBtn").addEventListener(
+      "click",
+      generateTask
+    );
+
+    $("#showGeneratedAnswerBtn").addEventListener(
+      "click",
+      () => {
+        const box = $("#generatedAnswer");
+
+        box.classList.toggle("show");
+
+        $("#showGeneratedAnswerBtn").textContent =
+        box.classList.contains("show")
+        ? "Скрыть ответ"
+        : "Показать ответ";
+      }
+    );
+
+    $$(".quiz").forEach(quiz => {
+      quiz.addEventListener("click", event => {
+        const button =
+        event.target.closest("button");
+
+        if (
+        !button ||
+        button.classList.contains("hint-trigger")
+        ) {
+          return;
+        }
+
+        $$("button", quiz).forEach(option => {
+          option.classList.remove(
+            "good",
+            "bad"
+          );
+        });
+
+        const correct =
+        button.dataset.ok === "1";
+
+        button.classList.add(
+          correct ? "good" : "bad"
+        );
+
+        $(".feedback", quiz).textContent =
+        correct
+        ? "Верно. Вы учитываете порядок операций."
+        : "Проверьте, в какой момент начисляются проценты и как устроен переход между годами.";
+      });
+    });
+
+    const checklistItems = [
+      "Перевёл ставку " +
+      "<math><mrow><mi>P</mi><mo>%</mo></mrow></math> " +
+      "в " +
+      "<math><mrow><mi>p</mi><mo>=</mo>" +
+      "<mfrac><mi>P</mi><mn>100</mn></mfrac>" +
+      "</mrow></math>.",
+
+      "Записал коэффициент " +
+      "<math><mrow><mi>r</mi><mo>=</mo><mn>1</mn>" +
+      "<mo>+</mo><mi>p</mi></mrow></math>.",
+
+      "Зафиксировал порядок: проценты, затем операция.",
+      "Снятие записал со знаком минус.",
+      "Перенёс конечную сумму года в начало следующего.",
+      "Сравнил сценарии в правильном порядке: план минус факт.",
+      "Проверил числовой ответ подстановкой.",
+      "Объяснил, почему других значений нет."
+    ];
+
+    const checklist = $("#checklist");
+
+    checklist.innerHTML =
+    checklistItems
+      .map(
+      (item, index) =>
+      `<label class="check-item">` +
+      `<input type="checkbox" data-check="${index}">` +
+      `<span>${item}</span>` +
+      `</label>`
+    )
+      .join("");
+
+    const checkboxes = $$("[data-check]");
+
+    checkboxes.forEach(input => {
+      input.checked =
+      localStorage.getItem(
+        `finance-check-${input.dataset.check}`
+      ) === "1";
+
+      input.addEventListener("change", () => {
+        localStorage.setItem(
+          `finance-check-${input.dataset.check}`,
+          input.checked ? "1" : "0"
+        );
+
+        updateProgress();
+      });
+    });
+
+    function updateProgress() {
+      const completed =
+      checkboxes.filter(input =>
+      input.checked
+      ).length;
+
+      $("#progressBar").style.width =
+      `${100 * completed / checkboxes.length}%`;
+
+      $("#progressText").textContent =
+      `Отмечено: ${completed} из ${checkboxes.length}`;
+    }
+
+    updateProgress();
+
+    let activeHint = null;
+    let hideTimer = null;
+
+    function hideHint(popover) {
+      if (!popover) {
+        return;
+      }
+
+      popover.classList.remove("show");
+      popover.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+      const trigger =
+      popover.previousElementSibling;
+
+      if (trigger) {
+        trigger.setAttribute(
+          "aria-expanded",
+          "false"
+        );
+      }
+
+      if (activeHint === popover) {
+        activeHint = null;
+      }
+
+      clearTimeout(hideTimer);
+    }
+
+    function showHint(popover) {
+      if (!popover) {
+        return;
+      }
+
+      if (
+      activeHint &&
+      activeHint !== popover
+      ) {
+        hideHint(activeHint);
+      }
+
+      popover.classList.add("show");
+      popover.setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+      const trigger =
+      popover.previousElementSibling;
+
+      if (trigger) {
+        trigger.setAttribute(
+          "aria-expanded",
+          "true"
+        );
+      }
+
+      activeHint = popover;
+
+      clearTimeout(hideTimer);
+
+      hideTimer = setTimeout(
+        () => hideHint(popover),
+        15000
+      );
+    }
+
+    $$(".hint-trigger").forEach(trigger => {
+      const popover =
+      trigger.nextElementSibling;
+
+      ["mouseenter", "focus"].forEach(type => {
+        trigger.addEventListener(
+          type,
+          () => showHint(popover)
+        );
+      });
+
+      trigger.addEventListener(
+        "click",
+        event => {
+          event.stopPropagation();
+
+          if (popover.classList.contains("show")) {
+            hideHint(popover);
+          } else {
+            showHint(popover);
+          }
+        }
+      );
+    });
+
+    $$(".hint-pop").forEach(popover => {
+      popover.addEventListener(
+        "mouseenter",
+        () => clearTimeout(hideTimer)
+      );
+
+      popover.addEventListener(
+        "mouseleave",
+        () => {
+          hideTimer = setTimeout(
+            () => hideHint(popover),
+            15000
+          );
+        }
+      );
+
+      $(".hint-close", popover).addEventListener(
+        "click",
+        event => {
+          event.stopPropagation();
+          hideHint(popover);
+        }
+      );
+    });
+
+    document.addEventListener(
+      "click",
+      event => {
+        if (
+        activeHint &&
+        !activeHint.contains(event.target) &&
+        !activeHint.previousElementSibling.contains(event.target)
+        ) {
+          hideHint(activeHint);
+        }
+      }
+    );
+
+    document.addEventListener(
+      "keydown",
+      event => {
+        if (event.key !== "Escape") {
+          return;
+        }
+
+        hideHint(activeHint);
+
+        if (modal.classList.contains("show")) {
+          closeModal();
+        }
+      }
+    );
+
+    $$("[data-hint-action]").forEach(button => {
+      button.addEventListener(
+        "click",
+        event => {
+          event.stopPropagation();
+
+          const action =
+          button.dataset.hintAction;
+
+          if (action === "detail-example") {
+            root.dataset.detail = "full";
+            $("#detailSelect").value = "full";
+
+            steps[4].classList.add("open");
+
+            $(".step-head", steps[4]).setAttribute(
+              "aria-expanded",
+              "true"
+            );
+
+            steps[4].scrollIntoView({
+              behavior: "smooth",
+              block: "center"
+            });
+          }
+
+          if (action === "reset-viz") {
+            Object.assign(
+              state,
+              {
+                initial: 100000,
+                rate: 10,
+                withdraw: 2000,
+                deposit: 2000,
+                years: 3,
+                zoom: 1,
+                panX: 0,
+                panY: 0
+              }
+            );
+
+            syncControls();
+            redraw();
+          }
+
+          if (action === "generate") {
+            if (state.activeTab !== "practice") {
+              $('[data-tab="practice"]').click();
+            }
+
+            generateTask();
+          }
+
+          hideHint(
+            button.closest(".hint-pop")
+          );
+        }
+      );
+    });
+
+    function showModeHint(label) {
+      const popover =
+      $(".visual-card .hint-pop");
+
+      const paragraph =
+      $("p", popover);
+
+      paragraph.textContent =
+      `Режим «${label}» включён. ` +
+      "Визуализация и пояснения синхронизированы с выбранным разделом.";
+
+      showHint(popover);
+
+      setTimeout(
+        () => {
+          paragraph.textContent =
+          "Перетаскивайте схему, крутите колесо мыши, " +
+          "меняйте ставку и суммы. Нажатие без перетаскивания " +
+          "откроет большую версию.";
+        },
+        1700
+      );
+    }
+
+    if (
+    !sessionStorage.getItem(
+      "finance-important-hint-shown"
+    )
+    ) {
+      setTimeout(
+        () => {
+          const trigger =
+          $(".visual-card .hint-trigger");
+
+          trigger.classList.add("attention");
+          showHint(trigger.nextElementSibling);
+
+          sessionStorage.setItem(
+            "finance-important-hint-shown",
+            "1"
+          );
+
+          setTimeout(
+            () => trigger.classList.remove("attention"),
+            5000
+          );
+        },
+        3000
+      );
+    }
+
+    window.addEventListener(
+      "resize",
+      redraw
+    );
+
+    window.addEventListener(
+      "beforeprint",
+      () => {
+        steps.forEach(step => {
+          step.classList.add("open");
+        });
+
+        redraw();
+      }
+    );
+
+    syncControls();
+    updateStepCounter();
+    requestAnimationFrame(redraw);
+  })();
+</script>
+</body>
+</html>
