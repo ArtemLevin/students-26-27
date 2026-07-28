@@ -18,10 +18,15 @@ chunks = []
 errors = []
 for index, part in enumerate(parts, start=1):
     expected_length = 3320 if index == len(parts) else 4000
-    text = part.read_text(encoding="ascii")[:expected_length]
+    corrections = sorted(root.glob(f"fix.{index:02d}.*.b64"))
+    if corrections:
+        text = "".join(item.read_text(encoding="ascii") for item in corrections)
+    else:
+        text = part.read_text(encoding="ascii")
+    text = text[:expected_length]
     digest = hashlib.sha256(text.encode("ascii")).hexdigest()
     if len(text) != expected_length or digest != expected_hashes[index - 1]:
-        errors.append(f"{part.name}: length={len(text)}, sha256={digest}")
+        errors.append(f"block {index:02d}: length={len(text)}, sha256={digest}")
     chunks.append(text)
 if errors:
     raise RuntimeError("Повреждены блоки:\n" + "\n".join(errors))
