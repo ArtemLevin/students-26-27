@@ -15,7 +15,19 @@ jobs:
           ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
       - name: Restore lesson files and update navigation
-        run: python .automation/nikol-28-07/bootstrap.py
+        id: restore
+        continue-on-error: true
+        shell: bash
+        run: python .automation/nikol-28-07/bootstrap.py > .automation/nikol-28-07/build.log 2>&1
+      - name: Upload build diagnostics
+        if: steps.restore.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nikol-build-log
+          path: .automation/nikol-28-07/build.log
+      - name: Stop after restore failure
+        if: steps.restore.outcome == 'failure'
+        run: exit 1
       - name: Render images and printable PDF
         shell: bash
         run: |
