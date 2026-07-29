@@ -1,0 +1,40 @@
+name: Build Sofia 29.07.26
+
+on:
+  push:
+    branches:
+      - agent/sofya-29-07-26-interactive
+    paths:
+      - tools/build_sofya_2907.py
+      - tools/sofya_2907_payload_*.txt
+      - .github/workflows/build-sofya-2907.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/sofya-29-07-26-interactive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install build dependencies
+        run: python -m pip install --disable-pip-version-check pillow reportlab
+      - name: Generate lesson files
+        run: python tools/build_sofya_2907.py
+      - name: Check embedded JavaScript
+        run: node --check .tmp-sofya-2907.js
+      - name: Remove temporary validation file
+        run: rm -f .tmp-sofya-2907.js
+      - name: Commit generated lesson
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/sofya_kalney
+          git diff --cached --quiet && exit 0
+          git commit -m "Добавить занятие Софии от 29.07.26"
+          git push origin HEAD:agent/sofya-29-07-26-interactive
