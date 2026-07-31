@@ -1,0 +1,41 @@
+name: Materialize Xenia 31.07.26 assets
+
+on:
+  push:
+    branches:
+      - feat/xenia-31-07-26-math
+    paths:
+      - scripts/materialize_xenia_310726.py
+      - .github/workflows/materialize-xenia-310726.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/xenia-31-07-26-math
+          fetch-depth: 0
+      - name: Prepare Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install render dependencies
+        run: python -m pip install --disable-pip-version-check pillow reportlab
+      - name: Generate PNG and PDF materials
+        run: python scripts/materialize_xenia_310726.py
+      - name: Commit generated assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/xenia_klykova/images/31.07.26.png \
+                  students/xenia_klykova/images/table.png \
+                  students/xenia_klykova/pdf_docs/31.07.26.pdf
+          git diff --cached --quiet && exit 0
+          git commit -m "assets(xenia): add materials for 31.07.26"
+          git push origin HEAD:feat/xenia-31-07-26-math
