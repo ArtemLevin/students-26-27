@@ -1,0 +1,75 @@
+name: Unpack Sofya 31.07.26 module
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Replace compressed loader with direct HTML
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          import base64
+          import gzip
+          import re
+
+          target = Path('students/sofya_kalney/site/31.07.26.html')
+          wrapper = target.read_text(encoding='utf-8')
+          match = re.search(r"const payload=\[\s*(.*?)\s*\]\.join\(''\);", wrapper, re.S)
+          if match is None:
+              raise SystemExit('Compressed payload was not found')
+
+          chunks = re.findall(r"'([A-Za-z0-9+/=]+)'", match.group(1))
+          if not chunks:
+              raise SystemExit('Base64 chunks were not found')
+
+          html = gzip.decompress(base64.b64decode(''.join(chunks))).decode('utf-8')
+          if 'DecompressionStream' in html:
+              raise SystemExit('Unexpected compressed loader in unpacked HTML')
+          if not html.lstrip().lower().startswith('<!doctype html>'):
+              raise SystemExit('Unpacked content is not an HTML document')
+
+          class Parser(HTMLParser):
+              pass
+
+          Parser().feed(html)
+          target.write_text(html, encoding='utf-8', newline='\n')
+          print(f'Wrote {len(html.encode("utf-8"))} bytes to {target}')
+          PY
+
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          source = Path('students/sofya_kalney/site/31.07.26.html').read_text(encoding='utf-8')
+          scripts = re.findall(r'<script(?:\s[^>]*)?>(.*?)</script>', source, re.S | re.I)
+          Path('/tmp/sofya-31-07-26.js').write_text('\n'.join(scripts), encoding='utf-8')
+          print(f'Extracted {len(scripts)} inline script block(s)')
+          PY
+          node --check /tmp/sofya-31-07-26.js
+
+      - name: Commit repaired module and remove workflow
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/unpack-sofya-31-07-26.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/sofya_kalney/site/31.07.26.html .github/workflows/unpack-sofya-31-07-26.yml
+          git commit -m "fix: open Sofya parabola module locally"
+          git push origin HEAD:${GITHUB_REF_NAME}
