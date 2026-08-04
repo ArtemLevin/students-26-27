@@ -1,0 +1,28 @@
+name: Fix Nikol loader
+
+on:
+  push:
+    branches:
+      - fix/nikol-loader-firefox
+
+permissions:
+  contents: write
+
+jobs:
+  fix-loader:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Generate compatible loader
+        run: python scripts/fix_nikol_loader.py
+      - name: Commit generated fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "fix(nikol): support Firefox and local opening"
+          git push
