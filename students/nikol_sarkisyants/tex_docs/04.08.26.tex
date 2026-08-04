@@ -1,0 +1,712 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=2.2cm,headheight=25pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{titlesec}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{EFF4F4}
+\definecolor{linegray}{HTML}{AAB8B8}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=accent,
+  citecolor=darkaccent
+}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.35}
+\emergencystretch=2em
+\raggedbottom
+
+\titleformat{\section}
+  {\Large\bfseries\color{darkaccent}}
+  {\thesection.}{0.55em}{}
+\titleformat{\subsection}
+  {\large\bfseries\color{accent}}
+  {\thesubsection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.4em}{0.65em}
+\titlespacing*{\subsection}{0pt}{1.1em}{0.45em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Дифференцированная схема кредитования}
+\fancyhead[R]{\small Николь Саркисьянц}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{%
+  \hbox to\headwidth{%
+    \color{linegray}\leaders\hrule height \headrulewidth\hfill
+  }%
+}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcommand{\rub}{\,\text{руб.}}
+\newcommand{\mln}{\,\text{млн руб.}}
+\newcommand{\thousand}{\,\text{тыс. руб.}}
+\newcommand{\Total}{A_{\text{общ}}}
+\newcommand{\Over}{A_{\text{пер}}}
+
+\begin{document}
+
+\begin{titlepage}
+  \thispagestyle{empty}
+  \centering
+  \vspace*{2.6cm}
+
+  {\Large\bfseries\color{accent} ЧЕК-ЛИСТ\par}
+  \vspace{0.8cm}
+
+  {\Huge\bfseries\color{darkaccent}
+  Дифференцированная схема кредитования\par}
+
+  \vspace{0.55cm}
+
+  {\Large
+  Кредитные задачи ЕГЭ: таблица, формулы, прогрессия, переплата\par}
+
+  \vspace{2.2cm}
+
+  {\large Лёвин Артём Александрович\par}
+  \vspace{0.25cm}
+  {\large эксклюзивно для Николь Саркисьянц\par}
+
+  \vfill
+
+  {\large \today\par}
+  \vspace{1.3cm}
+
+  \begin{tikzpicture}
+    \draw[accent!58,line width=1.15pt]
+      (0,0)
+      .. controls (2.2,0.55) and (4.1,-0.25) .. (6.2,0.15)
+      .. controls (8.2,0.52) and (10.5,-0.18) .. (12.4,0.18)
+      .. controls (13.7,0.42) and (14.6,0.25) .. (15.2,0.05);
+  \end{tikzpicture}
+
+  \vspace*{0.7cm}
+\end{titlepage}
+
+\section{Суть дифференцированной схемы}
+
+В дифференцированной схеме тело кредита погашается равными частями.
+Проценты каждого периода начисляются на остаток долга к началу этого
+периода. Остаток постепенно уменьшается, поэтому платежи образуют
+убывающую арифметическую прогрессию.
+
+\subsection{Обозначения}
+
+\begin{table}[ht]
+\centering
+\caption{Основные величины}
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+Обозначение & Смысл \\
+\midrule
+$S$ & первоначальная сумма кредита, $S>0$; \\
+$n$ & количество платежных периодов, $n\in\mathbb{N}$; \\
+$p$ & процентная ставка за один период, записанная десятичной дробью; \\
+$r$ & та же ставка в процентах, поэтому
+      $p=\dfrac{r}{100}$; \\
+$P_k$ & платеж в конце $k$-го периода,
+        $k=1,2,\ldots,n$; \\
+$B_k$ & остаток долга после $k$-го платежа;
+        $B_0=S$, $B_n=0$. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+За каждый период погашается одна и та же часть тела кредита:
+\[
+\boxed{\frac{S}{n}}.
+\]
+
+\subsection{Порядок операций в каждом периоде}
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=9mm and 7mm,
+  every node/.style={font=\small,align=center},
+  stage/.style={
+    draw=accent!65,
+    rounded corners=2pt,
+    inner sep=6pt,
+    minimum height=12mm
+  },
+  arr/.style={
+    -{Latex[length=2.5mm]},
+    line width=0.8pt,
+    color=darkaccent
+  }
+]
+\node[stage] (b0) {остаток долга\\в начале периода};
+\node[stage,right=of b0] (int) {начисление\\процентов};
+\node[stage,right=of int] (debt) {общая\\задолженность};
+\node[stage,right=of debt] (pay) {платеж};
+\node[stage,right=of pay] (b1) {новый остаток\\долга};
+
+\draw[arr] (b0) -- (int);
+\draw[arr] (int) -- (debt);
+\draw[arr] (debt) -- (pay);
+\draw[arr] (pay) -- (b1);
+\end{tikzpicture}
+\end{center}
+
+Очередность особенно важна в задачах с датами: сначала проценты
+увеличивают долг, затем заемщик вносит платеж.
+
+\section{Абстрактная таблица кредита}
+
+К началу $k$-го периода уже погашено $k-1$ равных частей тела кредита.
+Поэтому начальный долг этого периода равен
+\[
+S-\frac{(k-1)S}{n}
+=
+\frac{S(n-k+1)}{n}.
+\]
+
+\begin{table}[ht]
+\centering
+\caption{Математическая модель дифференцированной схемы}
+\small
+\begin{tabularx}{\linewidth}{@{}cYYYY@{}}
+\toprule
+Период
+&
+Долг в начале
+&
+Начисленные проценты
+&
+Платеж
+&
+Остаток после платежа
+\\
+\midrule
+$1$
+&
+$S$
+&
+$Sp$
+&
+$Sp+\dfrac{S}{n}$
+&
+$\dfrac{S(n-1)}{n}$
+\\[2mm]
+
+$2$
+&
+$\dfrac{S(n-1)}{n}$
+&
+$\dfrac{S(n-1)}{n}p$
+&
+$\dfrac{S(n-1)}{n}p+\dfrac{S}{n}$
+&
+$\dfrac{S(n-2)}{n}$
+\\[2mm]
+
+$k$
+&
+$\dfrac{S(n-k+1)}{n}$
+&
+$\dfrac{S(n-k+1)}{n}p$
+&
+$\dfrac{S(n-k+1)}{n}p+\dfrac{S}{n}$
+&
+$\dfrac{S(n-k)}{n}$
+\\[2mm]
+
+$n$
+&
+$\dfrac{S}{n}$
+&
+$\dfrac{Sp}{n}$
+&
+$\dfrac{Sp}{n}+\dfrac{S}{n}$
+&
+$0$
+\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Формулы остатка}
+
+После $k$-го платежа остается
+\[
+\boxed{B_k=\frac{S(n-k)}{n}},
+\qquad
+k=0,1,\ldots,n.
+\]
+
+К началу $k$-го периода остаток равен $B_{k-1}$:
+\[
+\boxed{B_{k-1}=\frac{S(n-k+1)}{n}}.
+\]
+
+Полезная проверка крайних случаев:
+\[
+B_0=S,
+\qquad
+B_n=0.
+\]
+
+\section{Платежи и арифметическая прогрессия}
+
+\subsection{Платеж в произвольном периоде}
+
+Платеж складывается из начисленных процентов и постоянной части тела
+кредита:
+\[
+\boxed{
+P_k=
+\frac{S(n-k+1)}{n}p+\frac{S}{n}
+}.
+\]
+
+Равносильная форма:
+\[
+P_k=
+\frac{S}{n}\bigl(1+p(n-k+1)\bigr).
+\]
+
+Первый и последний платежи:
+\[
+\boxed{P_1=Sp+\frac{S}{n}},
+\qquad
+\boxed{P_n=\frac{S}{n}(1+p)}.
+\]
+
+Последний платеж является наименьшим при $p>0$.
+
+\subsection{Разность соседних платежей}
+
+\begin{align*}
+P_{k+1}-P_k
+&=
+\left(
+\frac{S(n-k)}{n}p+\frac{S}{n}
+\right)
+-
+\left(
+\frac{S(n-k+1)}{n}p+\frac{S}{n}
+\right)
+\\
+&=
+-\frac{Sp}{n}.
+\end{align*}
+
+Следовательно, платежи образуют убывающую арифметическую прогрессию
+с постоянной разностью
+\[
+\boxed{d=-\frac{Sp}{n}}.
+\]
+
+Каждый следующий платеж меньше предыдущего на
+\[
+\boxed{\frac{Sp}{n}}.
+\]
+
+\section{Общая сумма выплат и переплата}
+
+\subsection{Вывод через сумму процентов}
+
+Сумма всех погашенных частей тела кредита равна $S$:
+\[
+\underbrace{
+\frac{S}{n}+\frac{S}{n}+\cdots+\frac{S}{n}
+}_{n\text{ раз}}
+=
+S.
+\]
+
+Сумма начисленных процентов:
+\begin{align*}
+Sp
++\frac{S(n-1)}{n}p
++\frac{S(n-2)}{n}p
++\cdots
++\frac{Sp}{n}
+&=
+\frac{Sp}{n}
+\bigl(n+(n-1)+\cdots+1\bigr)
+\\
+&=
+\frac{Sp}{n}\cdot\frac{n(n+1)}{2}
+\\
+&=
+\frac{Sp(n+1)}{2}.
+\end{align*}
+
+Отсюда получаем ключевые формулы.
+
+\subsection{Основные формулы}
+
+Общая сумма выплат банку:
+\[
+\boxed{
+\Total=S+\frac{Sp(n+1)}{2}
+}
+\]
+или
+\[
+\boxed{
+\Total=
+S\left(1+\frac{p(n+1)}{2}\right)
+}.
+\]
+
+Переплата:
+\[
+\boxed{
+\Over=
+\Total-S=
+\frac{Sp(n+1)}{2}
+}.
+\]
+
+Процент переплаты относительно первоначальной суммы кредита:
+\[
+\boxed{
+q=
+\frac{\Over}{S}\cdot100\%
+=
+\frac{p(n+1)}{2}\cdot100\%
+}.
+\]
+
+При ставке $r\%$ за период формула упрощается:
+\[
+\boxed{
+q=\frac{r(n+1)}{2}\%
+}.
+\]
+
+Первоначальная сумма $S$ сокращается, поэтому процент переплаты зависит
+от ставки и количества периодов.
+
+\subsection{Второй способ: сумма арифметической прогрессии}
+
+Поскольку $P_1,P_2,\ldots,P_n$ образуют арифметическую прогрессию,
+\[
+\Total=
+\frac{P_1+P_n}{2}\cdot n.
+\]
+
+Эта формула особенно полезна, когда известны первый платеж, последний
+платеж и общая сумма выплат.
+
+\section{Как распознать схему по условию}
+
+Признаки дифференцированной схемы:
+\begin{itemize}[leftmargin=1.5em,itemsep=0.25em]
+  \item долг уменьшается каждый период на одну и ту же величину;
+  \item основная сумма долга погашается равными долями;
+  \item платежи постепенно уменьшаются;
+  \item проценты начисляются на остаток долга;
+  \item наименьший платеж приходится на последний период.
+\end{itemize}
+
+Формулировка «выплаты осуществляются равными платежами» указывает
+на аннуитетную схему.
+
+\section{Алгоритм решения кредитной задачи}
+
+\begin{enumerate}[
+  leftmargin=1.8em,
+  label=\arabic*.,
+  itemsep=0.35em
+]
+  \item Определите единицу периода: месяц, год или другой указанный
+        промежуток.
+
+  \item Введите обозначения $S$, $n$, $p$ и при необходимости
+        $P_k$, $B_k$.
+
+  \item Переведите процентную ставку в десятичную дробь:
+        $p=r/100$.
+
+  \item Зафиксируйте равную часть тела кредита $S/n$.
+
+  \item Запишите минимум строки для первого, второго и последнего
+        периодов либо строку для произвольного $k$.
+
+  \item Выразите требуемую величину: остаток, платеж, общую сумму,
+        переплату или процент переплаты.
+
+  \item Используйте арифметическую прогрессию, когда требуется сумма
+        платежей или сумма остатков.
+
+  \item Решите полученное уравнение и проверьте ограничения:
+        $S>0$, $n\in\mathbb{N}$, $p\ge0$.
+
+  \item Проверьте размерность ответа и смысл результата.
+\end{enumerate}
+
+\section{Минимальное оформление развернутого решения}
+
+Для полноценного обоснования на экзамене достаточно компактной
+математической модели:
+\begin{enumerate}[
+  leftmargin=1.8em,
+  label=\arabic*.,
+  itemsep=0.3em
+]
+  \item обозначения $S$, $n$, $p$;
+  \item строки таблицы для периодов $1$, $2$, $n$ либо общая строка
+        для $k$;
+  \item формула платежа $P_k$;
+  \item указание на арифметическую прогрессию;
+  \item вывод нужной формулы;
+  \item числовая подстановка и ответ.
+\end{enumerate}
+
+Готовую формулу следует сопровождать выводом из модели кредита.
+Это делает решение проверяемым и логически завершенным.
+
+\section{Типичные ошибки}
+
+\begin{itemize}[leftmargin=1.5em,itemsep=0.3em]
+  \item Начисление процентов на первоначальную сумму $S$ во всех
+        периодах. Основа начисления меняется вместе с остатком долга.
+
+  \item Использование остатка после $k$-го платежа при расчете
+        процентов за $k$-й период. Нужен остаток к началу периода
+        $B_{k-1}$.
+
+  \item Подстановка $r$ вместо $p$. При $r=12\%$ в формулах
+        используется $p=0{,}12$.
+
+  \item Смешение общей суммы выплат и переплаты:
+        $\Over=\Total-S$.
+
+  \item Потеря множителя $n$ в формуле суммы арифметической
+        прогрессии.
+
+  \item Ошибка в числе слагаемых: последовательность
+        $1+2+\cdots+n$ содержит ровно $n$ членов.
+
+  \item Неверный индекс остатка: после $k$ платежей остается
+        $S(n-k)/n$.
+
+  \item Получение дробного значения $n$ без анализа. Количество
+        платежных периодов должно быть натуральным числом.
+
+  \item Отсутствие проверки последнего остатка. После $n$-го платежа
+        долг обязан стать равным нулю.
+\end{itemize}
+
+\section{Короткие примеры}
+
+\subsection*{Пример 1. Процент переплаты}
+
+Кредит погашается за $9$ месяцев по ставке $12\%$ в месяц. Тогда
+\[
+q=
+\frac{12(9+1)}{2}\%
+=
+60\%.
+\]
+
+\subsection*{Пример 2. Последний платеж}
+
+При $S=3\mln$, $p=0{,}2$ и $n=15$:
+\[
+P_{15}
+=
+\frac{3}{15}(1+0{,}2)
+=
+0{,}24\mln.
+\]
+
+\subsection*{Пример 3. Остаток после нескольких платежей}
+
+При $S=1{,}2\mln$, $n=12$ после пятого платежа:
+\[
+B_5
+=
+\frac{1{,}2(12-5)}{12}
+=
+0{,}7\mln.
+\]
+
+\clearpage
+
+\section*{Тренировочный блок}
+
+Во всех задачах проценты начисляются на остаток долга, после чего
+вносится платеж. Ответы запишите с указанными единицами измерения.
+
+\subsection*{Средний уровень}
+
+\begin{enumerate}[
+  leftmargin=1.8em,
+  label=\textbf{\arabic*.},
+  itemsep=0.9em
+]
+  \item Кредит $900\thousand$ погашается дифференцированными платежами
+        за $9$ месяцев. Ставка составляет $2\%$ в месяц. Найдите
+        постоянную часть тела кредита, первый платеж, последний платеж,
+        общую сумму выплат и процент переплаты.
+
+  \item Кредит $1{,}2\mln$ выдан на $12$ месяцев под $1\%$ в месяц.
+        Найдите пятый платеж и остаток долга после пятого платежа.
+
+  \item Сергей взял кредит на $9$ месяцев. В конце каждого месяца долг
+        сначала увеличивается на $12\%$, затем уменьшается на внесенный
+        платеж. Остаток долга каждый месяц уменьшается на одну и ту же
+        величину. Сколько процентов от суммы кредита составит
+        переплата?
+\end{enumerate}
+
+\subsection*{Уровень выше среднего}
+
+\begin{enumerate}[
+  leftmargin=1.8em,
+  label=\textbf{\arabic*.},
+  start=4,
+  itemsep=0.9em
+]
+  \item Кредит $3\mln$ выдан на $n$ лет под $20\%$ годовых.
+        Погашение происходит по дифференцированной схеме. Наименьший
+        платеж равен $240\thousand$. Найдите $n$, общую сумму выплат
+        и переплату.
+
+  \item Кредит погашается за $10$ лет под $20\%$ годовых.
+        Последний платеж равен $180\thousand$. Найдите первоначальную
+        сумму кредита, первый платеж и общую сумму выплат.
+
+  \item Кредит $1{,}6\mln$ погашается за $5$ лет. Общая сумма выплат
+        составила $2{,}08\mln$. Найдите годовую процентную ставку
+        и третий платеж.
+\end{enumerate}
+
+\clearpage
+
+\subsection*{Уровень выше среднего --- продолжение}
+
+\begin{enumerate}[
+  leftmargin=1.8em,
+  label=\textbf{\arabic*.},
+  start=7,
+  itemsep=0.9em
+]
+  \item Кредит погашается за $24$ месяца. Переплата составляет
+        $18{,}75\%$ от первоначальной суммы. Найдите месячную
+        процентную ставку.
+
+  \item Кредит $2{,}4\mln$ погашается за $12$ месяцев под $1{,}5\%$
+        в месяц. На сколько рублей уменьшается каждый следующий платеж?
+        Найдите сумму платежей с четвертого по восьмой месяц
+        включительно.
+
+  \item Кредит погашается за $10$ лет под $10\%$ годовых. Общая сумма
+        выплат равна $1{,}55\mln$. Найдите первоначальную сумму кредита
+        и седьмой платеж.
+\end{enumerate}
+
+\subsection*{Сложный уровень}
+
+\begin{enumerate}[
+  leftmargin=1.8em,
+  label=\textbf{\arabic*.},
+  start=10,
+  itemsep=0.9em
+]
+  \item В дифференцированной схеме первый платеж равен
+        $420\thousand$, последний платеж равен $150\thousand$,
+        а общая сумма выплат равна $2{,}85\mln$. Найдите количество
+        платежей, первоначальную сумму кредита, процентную ставку
+        за период и процент переплаты.
+\end{enumerate}
+
+\clearpage
+
+\section*{Ответы к тренировочному блоку}
+
+\begin{table}[ht]
+\centering
+\caption{Краткие ответы}
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 &
+$100\thousand$;
+$118\thousand$;
+$102\thousand$;
+$990\thousand$;
+$10\%$.
+\\
+
+2 &
+$108\thousand$;
+$700\thousand$.
+\\
+
+3 &
+$60\%$.
+\\
+
+4 &
+$n=15$;
+$7{,}8\mln$;
+$4{,}8\mln$.
+\\
+
+5 &
+$1{,}5\mln$;
+$450\thousand$;
+$3{,}15\mln$.
+\\
+
+6 &
+$10\%$ годовых;
+$416\thousand$.
+\\
+
+7 &
+$1{,}5\%$ в месяц.
+\\
+
+8 &
+На $3\thousand$;
+$1{,}105\mln$.
+\\
+
+9 &
+$1\mln$;
+$140\thousand$.
+\\
+
+10 &
+$n=10$;
+$S=1{,}2\mln$;
+$25\%$ за период;
+$137{,}5\%$.
+\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\end{document}
