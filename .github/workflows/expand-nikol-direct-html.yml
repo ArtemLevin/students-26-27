@@ -1,0 +1,76 @@
+name: Expand Nikol direct HTML
+
+on:
+  push:
+    branches:
+      - fix/nikol-direct-html
+
+permissions:
+  contents: write
+
+jobs:
+  expand-page:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Replace loader with direct HTML
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64
+          import gzip
+          import re
+
+          target = Path('students/nikol_sarkisyants/site/04.08.26.html')
+          source = target.read_text(encoding='utf-8')
+          match = re.search(r"const b=\[(.*?)\]\.join\(''\)", source, re.S)
+          if not match:
+              raise SystemExit('Embedded payload was not found')
+
+          chunks = re.findall(r"'([A-Za-z0-9+/=]+)'", match.group(1))
+          if not chunks:
+              raise SystemExit('Base64 chunks were not found')
+
+          payload = ''.join(chunks)
+          if len(payload) % 4:
+              raise SystemExit(f'Invalid base64 length: {len(payload)}')
+
+          packed = base64.b64decode(payload, validate=True)
+          html = gzip.decompress(packed).decode('utf-8')
+
+          required = [
+              '<!doctype html>',
+              'Дифференцированная схема кредитования',
+              '../pdf_docs/04.08.26.pdf',
+              '../tex_docs/04.08.26.tex',
+              '../images/04.08.26.png',
+              '../images/table.png',
+          ]
+          missing = [item for item in required if item not in html]
+          if missing:
+              raise SystemExit(f'Missing required content: {missing}')
+
+          forbidden = ['DecompressionStream', 'atob(', 'function gunzip', "const b=['H4sI"]
+          present = [item for item in forbidden if item in html]
+          if present:
+              raise SystemExit(f'Loader fragments remain: {present}')
+
+          target.write_text(html, encoding='utf-8', newline='\n')
+          print(f'Expanded direct HTML: {len(html.encode("utf-8"))} bytes')
+          PY
+
+      - name: Commit direct HTML and remove one-time workflow
+        shell: bash
+        run: |
+          rm .github/workflows/expand-nikol-direct-html.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "fix(nikol): publish lesson as direct HTML"
+          git push
