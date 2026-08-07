@@ -345,7 +345,7 @@
       .radial-cell { print-color-adjust: exact; }
     }
   </style>
-</head>
+<script id="xenia-storage-guard">(()=>{if(window.__xeniaStorage)return;window.__xeniaStorage={get:(area,key)=>{try{return window[area].getItem(key)}catch(_){return null}},set:(area,key,value)=>{try{window[area].setItem(key,value)}catch(_){}},remove:(area,key)=>{try{window[area].removeItem(key)}catch(_){}}};})();</script></head>
 <body data-theme="light">
   <a class="skip" href="#main">Перейти к содержанию</a>
   <header class="topbar">
@@ -5026,7 +5026,7 @@
       function loadState() {
         const defaults = Object.fromEntries(allItems.map(item => [item.id, item.level]));
         try {
-          const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+          const saved = JSON.parse(__xeniaStorage.get('localStorage',STORAGE_KEY) || "{}");
           return Object.fromEntries(allItems.map(item => [
             item.id,
             saved[item.id] ?? (item.legacyId ? saved[item.legacyId] : undefined) ?? defaults[item.id]
@@ -5036,7 +5036,7 @@
         }
       }
       function saveState() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        __xeniaStorage.set('localStorage',STORAGE_KEY, JSON.stringify(state));
       }
       function itemState(item) {
         return Math.max(0, Math.min(4, Number(state[item.id] ?? item.level)));
@@ -5187,19 +5187,19 @@
       }));
       $("#resetMap").addEventListener("click", () => {
         if (!confirm("Вернуть исходную оценку всех компетенций?")) return;
-        localStorage.removeItem(STORAGE_KEY);
+        __xeniaStorage.remove('localStorage',STORAGE_KEY);
         state = loadState();
         renderHeatmap();
       });
       $$(".lesson-link").forEach(link => link.addEventListener("click", () => {
-        localStorage.setItem(LAST_LESSON_KEY, link.dataset.lesson);
+        __xeniaStorage.set('localStorage',LAST_LESSON_KEY, link.dataset.lesson);
       }));
       $("#themeBtn").addEventListener("click", () => {
         document.body.dataset.theme = document.body.dataset.theme === "dark" ? "light" : "dark";
-        localStorage.setItem(THEME_KEY, document.body.dataset.theme);
+        __xeniaStorage.set('localStorage',THEME_KEY, document.body.dataset.theme);
       });
       $("#printBtn").addEventListener("click", () => window.print());
-      document.body.dataset.theme = localStorage.getItem(THEME_KEY) || "light";
+      document.body.dataset.theme = __xeniaStorage.get('localStorage',THEME_KEY) || "light";
       renderHeatmap();
     })();
   </script>
