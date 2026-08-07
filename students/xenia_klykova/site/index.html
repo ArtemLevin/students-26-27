@@ -9,7 +9,7 @@
 <style>
 :root{--bg:#f6f1e8;--s:#fffdf8;--ink:#1c3151;--muted:#667184;--line:#ded6ca;--teal:#287f7a;--coral:#e77b5e;--wine:#8b3038;--shadow:0 18px 50px #28324117}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}a{text-decoration:none;color:inherit}.fallback{max-width:1320px;margin:22px auto;padding:0 22px}.notice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.notice{border:1px solid var(--line);border-top:5px solid var(--coral);border-radius:24px;background:var(--s);box-shadow:var(--shadow);padding:24px;display:flex;flex-direction:column;gap:16px}.notice.math{border-top-color:var(--teal)}.notice.motion{border-top-color:var(--wine)}.notice h1,.notice h2{margin:0 0 8px;font:750 clamp(1.5rem,3vw,2.35rem)/1.05 Georgia,serif}.notice p{margin:0;color:var(--muted)}.eyebrow{color:var(--teal);font-weight:900;text-transform:uppercase;letter-spacing:.1em;font-size:.78rem}.notice.motion .eyebrow{color:var(--wine)}.notice:not(.math):not(.motion) .eyebrow{color:var(--coral)}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}.btn{border:1px solid var(--line);border-radius:14px;padding:11px 15px;background:var(--s);font-weight:800}.btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}iframe{display:block;width:100%;min-height:100vh;border:0;background:var(--bg)}@media(max-width:760px){.fallback{padding:0 12px}.notice-grid{grid-template-columns:1fr}.buttons .btn{flex:1;text-align:center}}
 </style>
-</head>
+<script id="xenia-storage-guard">(()=>{if(window.__xeniaStorage)return;window.__xeniaStorage={get:(area,key)=>{try{return window[area].getItem(key)}catch(_){return null}},set:(area,key,value)=>{try{window[area].setItem(key,value)}catch(_){}},remove:(area,key)=>{try{window[area].removeItem(key)}catch(_){}}};})();</script></head>
 <body>
 <section class="fallback" id="fallback">
   <div class="notice-grid">
@@ -94,20 +94,39 @@
   function syncEvidence(){
     try{
       let state={};
-      try{state=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')||{}}catch(_){state={}}
+      try{state=JSON.parse(__xeniaStorage.get('localStorage',STORAGE_KEY)||'{}')||{}}catch(_){state={}}
       Object.entries(evidence).forEach(([id,item])=>{state[id]=item.level});
-      localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+      __xeniaStorage.set('localStorage',STORAGE_KEY,JSON.stringify(state));
     }catch(_){/* localStorage может быть недоступен в приватном режиме */}
   }
   window.__xeniaCompetenceEvidence=evidence;
   window.__syncXeniaCompetence=syncEvidence;
   window.__xeniaCompetenceStorageKey=STORAGE_KEY;
   try{
-    if(localStorage.getItem(VERSION_KEY)!==VERSION||!localStorage.getItem(STORAGE_KEY)){
+    if(__xeniaStorage.get('localStorage',VERSION_KEY)!==VERSION||!__xeniaStorage.get('localStorage',STORAGE_KEY)){
       syncEvidence();
-      localStorage.setItem(VERSION_KEY,VERSION);
+      __xeniaStorage.set('localStorage',VERSION_KEY,VERSION);
     }
   }catch(_){syncEvidence()}
+})();
+</script>
+
+<script id="xenia-legacy-competency-migration">
+(()=>{
+  const key='xenia-competence-map-v1';
+  const map={"quadratic":["t6_linear_quad","t6_factor","t6_biquadratic"],"transform":["t7_algebra"],"powers":["t7_power_values","t7_natural_power"],"formula":["t9_linear","t9_power","t9_rational","t9_radical","t9_exponential","t9_logarithmic","t9_trig","t9_table","t9_formula_transform"],"root_selection":["t9_other","t9_units","t9_rounding","t10_validation"],"units":["t9_units"],"graph":["t11_radical"]};
+  try{
+    const state=JSON.parse(__xeniaStorage.get('localStorage',key)||'{}')||{};
+    let changed=false;
+    Object.entries(map).forEach(([legacy,ids])=>{
+      if(state[legacy]===undefined)return;
+      const value=Math.max(0,Math.min(4,Number(state[legacy])));
+      ids.forEach(id=>{state[id]=value});
+      delete state[legacy];
+      changed=true;
+    });
+    if(changed)__xeniaStorage.set('localStorage',key,JSON.stringify(state));
+  }catch(_){ }
 })();
 </script>
 <iframe id="base" src="index-base-2026-07-29.html" title="Учебный навигатор Ксении Клыковой"></iframe>
@@ -149,6 +168,20 @@
       const newest=r.querySelector('[data-added-lesson="math-07-08-26"]');
       if(newest)r.prepend(newest);
 
+      // xeniaIframeNavigationRepair: keep lesson navigation out of the wrapper iframe.
+      d.addEventListener('click',event=>{
+        const a=event.target.closest&&event.target.closest('a[href]');
+        if(!a)return;
+        const raw=a.getAttribute('href')||'';
+        if(raw==='index.html#lessons'||raw.endsWith('/index.html#lessons')){
+          event.preventDefault();
+          d.getElementById('lessons')?.scrollIntoView({behavior:'smooth',block:'start'});
+          return;
+        }
+        if(raw&&!raw.startsWith('#')&&!/^(?:https?:|mailto:|tel:|data:)/i.test(raw)){
+          a.setAttribute('target','_top');
+        }
+      },true);
       const evidence=window.__xeniaCompetenceEvidence||{};
       const competenceCopy=d.querySelector('#competencies-title + p');
       if(competenceCopy)competenceCopy.textContent='Состояние карты синхронизировано 07.08.26 по восьми математическим TeX-пособиям Ксении: уровни отражают подтверждённые на занятиях темы, а отсутствующие в материалах рубрики сохранены на стартовом уровне.';
@@ -163,13 +196,31 @@
           const note=d.getElementById('dialogEvidence');
           const link=d.getElementById('dialogLink');
           if(note)note.textContent=item.evidence;
-          if(link)link.href=item.link;
+          if(link){link.setAttribute('href',item.link==='index.html#lessons'?'#lessons':item.link);if(item.link==='index.html#lessons')link.removeAttribute('target');else link.setAttribute('target','_top');}
+        },0);
+      },true);
+
+      // xeniaEvidenceKeyboardRepair
+      d.addEventListener('keydown',event=>{
+        if(event.key!=='Enter'&&event.key!==' ')return;
+        const target=event.target.closest&&event.target.closest('[data-id]');
+        if(!target)return;
+        const item=evidence[target.dataset.id];
+        if(!item)return;
+        setTimeout(()=>{
+          const note=d.getElementById('dialogEvidence');
+          const link=d.getElementById('dialogLink');
+          if(note)note.textContent=item.evidence;
+          if(link){
+            link.setAttribute('href',item.link==='index.html#lessons'?'#lessons':item.link);
+            if(item.link==='index.html#lessons')link.removeAttribute('target');else link.setAttribute('target','_top');
+          }
         },0);
       },true);
       const reset=d.getElementById('resetMap');
       if(reset)reset.addEventListener('click',()=>setTimeout(()=>{
         try{
-          if(localStorage.getItem(window.__xeniaCompetenceStorageKey)===null){
+          if(__xeniaStorage.get('localStorage',window.__xeniaCompetenceStorageKey)===null){
             window.__syncXeniaCompetence();
             frame.contentWindow.location.reload();
           }

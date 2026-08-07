@@ -19,7 +19,7 @@ dialog{border:0;padding:0;background:transparent;color:var(--ink);width:min(94vw
 @media(max-width:850px){.meta,.grid,.grid.four,.train,.downloads{grid-template-columns:1fr 1fr}.lesson{grid-template-columns:1fr}.visual{position:static}}@media(max-width:560px){.meta,.grid,.grid.four,.train,.downloads{grid-template-columns:1fr}.hero h1{font-size:2.7rem}.wrap{width:min(calc(100% - 20px),1220px)}}
 @media print{html{color-scheme:light}body{background:#fff;color:#111}.top,.tabs,.tools,.quiz button,.generator button{display:none!important}.panel{display:block!important;break-before:page}.panel:first-of-type{break-before:auto}.extra,.standard,.answers[hidden]{display:block!important}.visual{position:static}.card,.step,.visual,.train article,details{box-shadow:none;background:#fff;break-inside:avoid}.poster details:not([open])>*:not(summary){display:block}.poster img{max-height:700px;width:auto}}
 </style>
-</head>
+<script id="xenia-storage-guard">(()=>{if(window.__xeniaStorage)return;window.__xeniaStorage={get:(area,key)=>{try{return window[area].getItem(key)}catch(_){return null}},set:(area,key,value)=>{try{window[area].setItem(key,value)}catch(_){}},remove:(area,key)=>{try{window[area].removeItem(key)}catch(_){}}};})();</script></head>
 <body>
 <header class="top"><div class="wrap"><a class="back" href="index.html">← Все материалы</a><select id="detail" aria-label="Подробность"><option value="short">Кратко</option><option value="standard">Стандартно</option><option value="full">Очень подробно</option></select><button id="theme">☀ Тема</button><button onclick="print()">🖨 Печать</button></div></header>
 <main>
@@ -75,8 +75,8 @@ dialog{border:0;padding:0;background:transparent;color:var(--ink);width:min(94vw
 <dialog id="modal"><div class="modal"><header><h2>Карта решения</h2><button id="close" aria-label="Закрыть">×</button></header><canvas id="large" width="1000" height="650"></canvas></div></dialog>
 <script>
 (()=>{const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],root=document.documentElement;
-const detail=$("#detail");detail.value=localStorage.getItem("xenia-detail")||"full";root.dataset.detail=detail.value;detail.onchange=()=>{root.dataset.detail=detail.value;localStorage.setItem("xenia-detail",detail.value)};
-root.dataset.theme=localStorage.getItem("xenia-theme")||"dark";$("#theme").onclick=()=>{root.dataset.theme=root.dataset.theme==="dark"?"light":"dark";localStorage.setItem("xenia-theme",root.dataset.theme);drawAll()};
+const detail=$("#detail");detail.value=__xeniaStorage.get('localStorage',"xenia-detail")||"full";root.dataset.detail=detail.value;detail.onchange=()=>{root.dataset.detail=detail.value;__xeniaStorage.set('localStorage',"xenia-detail",detail.value)};
+root.dataset.theme=__xeniaStorage.get('localStorage',"xenia-theme")||"dark";$("#theme").onclick=()=>{root.dataset.theme=root.dataset.theme==="dark"?"light":"dark";__xeniaStorage.set('localStorage',"xenia-theme",root.dataset.theme);drawAll()};
 const models={algorithm:["Вопрос","Дано","Перевод","Формулы","Выразить","Расчёт","Проверка"],translation:["Фраза","Связь","Формула","Подстановка","Ответ"],powers:["Основания","Показатели","Множители","Сокращение","Корень"],dependence:["Искомое","Обратная дробь","Направление","Граница","Проверка"],practice:["Решить","Сверить","Исправить","Повторить"]};let active="algorithm",zoom=1,off={x:0,y:0},labels=true,drag=false,moved=false,start,current=null,generatedNodes=null;
 $$(".tab").forEach(b=>b.onclick=()=>{active=b.dataset.tab;$$(".tab").forEach(x=>x.setAttribute("aria-selected",x===b));$$(".panel").forEach(p=>p.classList.toggle("active",p.id===active));generatedNodes=null;reset()});
 const map=$("#map"),large=$("#large"),modal=$("#modal");
