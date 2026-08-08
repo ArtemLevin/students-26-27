@@ -17,22 +17,36 @@ const isCovered=id=>EVIDENCE.has(id)||state[id]>=2;
 function status(id){if(isRepeat(id))return'repeat';if(isCovered(id))return'covered';return'neutral'}
 function statusText(id){const s=status(id);return s==='repeat'?'Пора повторить':s==='covered'?'Пройдено':'Ещё не проходили'}
 function matches(item){const s=status(item.id),filterOk=filter==='all'||filter===s||(filter==='unseen'&&s==='neutral'),q=!query||item.title.toLowerCase().includes(query)||item.group.title.toLowerCase().includes(query);return filterOk&&q}
-function groupSize(n){if(n>=16)return'wide';if(n>=13)return'medium';return''}
+function polar(r,a){const x=(a-90)*Math.PI/180;return{x:400+r*Math.cos(x),y:400+r*Math.sin(x)}}
+function arcPath(innerRadius,outerRadius,startAngle,endAngle){
+ const outerStart=polar(outerRadius,startAngle),outerEnd=polar(outerRadius,endAngle),innerEnd=polar(innerRadius,endAngle),innerStart=polar(innerRadius,startAngle),large=endAngle-startAngle>180?1:0;
+ return[`M ${outerStart.x} ${outerStart.y}`,`A ${outerRadius} ${outerRadius} 0 ${large} 1 ${outerEnd.x} ${outerEnd.y}`,`L ${innerEnd.x} ${innerEnd.y}`,`A ${innerRadius} ${innerRadius} 0 ${large} 0 ${innerStart.x} ${innerStart.y}`,'Z'].join(' ')
+}
 const tooltip=$('#mapTooltip');
-function positionTip(x,y){if(!tooltip)return;const pad=12,w=tooltip.offsetWidth||320,h=tooltip.offsetHeight||70;tooltip.style.left=Math.max(pad,Math.min(innerWidth-w-pad,x+14))+'px';tooltip.style.top=Math.max(pad,Math.min(innerHeight-h-pad,y+14))+'px'}
-function showTip(item,x,y){if(!tooltip)return;tooltip.innerHTML=`<b>${item.title}</b><span>${item.group.title} · ${statusText(item.id)}</span>`;tooltip.classList.add('show');tooltip.setAttribute('aria-hidden','false');positionTip(x,y)}
+function positionTip(x,y){if(!tooltip)return;const pad=12,w=tooltip.offsetWidth||330,h=tooltip.offsetHeight||72;tooltip.style.left=Math.max(pad,Math.min(innerWidth-w-pad,x+14))+'px';tooltip.style.top=Math.max(pad,Math.min(innerHeight-h-pad,y+14))+'px'}
+function showTip(item,x,y){if(!tooltip)return;tooltip.innerHTML=`<b>${item.title}</b><span>${item.group.short} · ${item.group.title}<br>${statusText(item.id)}</span>`;tooltip.classList.add('show');tooltip.setAttribute('aria-hidden','false');positionTip(x,y)}
 function hideTip(){if(!tooltip)return;tooltip.classList.remove('show');tooltip.setAttribute('aria-hidden','true')}
+function bindCell(path,item){
+ path.addEventListener('click',()=>openSkill(item.id));
+ path.addEventListener('mouseenter',e=>showTip(item,e.clientX,e.clientY));
+ path.addEventListener('mousemove',e=>positionTip(e.clientX,e.clientY));
+ path.addEventListener('mouseleave',hideTip);
+ path.addEventListener('focus',()=>{const r=path.getBoundingClientRect();showTip(item,r.left+r.width/2,r.top+r.height/2)});
+ path.addEventListener('blur',hideTip);
+ path.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openSkill(item.id)}})
+}
 function renderMap(){
- const host=$('#curriculumMap');host.innerHTML='';
- GROUPS.forEach(g=>{
-   const section=document.createElement('section');section.className='map-group '+groupSize(g.items.length);section.dataset.group=g.id;
-   const covered=g.items.filter(i=>isCovered(i.id)&&!isRepeat(i.id)).length,rep=g.items.filter(i=>isRepeat(i.id)).length;
-   const head=document.createElement('div');head.className='map-group-head';head.innerHTML=`<h3>${g.short} · ${g.title}</h3><span>${g.items.length} тем · ${covered} пройдено${rep?' · '+rep+' повторить':''}</span>`;section.appendChild(head);
-   const grid=document.createElement('div');grid.className='cell-grid';
-   g.items.forEach(item0=>{
-     const item={...item0,group:g},s=status(item.id),b=document.createElement('button');b.type='button';b.className='topic-cell '+s+(s==='covered'&&state[item.id]>=4?' strong':'')+(matches(item)?'':' dimmed')+(query&&item.title.toLowerCase().includes(query)?' search-match':'');b.title=item.title;b.setAttribute('aria-label',`${g.title}. ${item.title}. ${statusText(item.id)}. Уровень ${state[item.id]} из 4.`);b.addEventListener('click',()=>openSkill(item.id));b.addEventListener('mouseenter',e=>showTip(item,e.clientX,e.clientY));b.addEventListener('mousemove',e=>positionTip(e.clientX,e.clientY));b.addEventListener('mouseleave',hideTip);b.addEventListener('focus',()=>{const r=b.getBoundingClientRect();showTip(item,r.left+r.width/2,r.bottom)});b.addEventListener('blur',hideTip);grid.appendChild(b)
+ const svg=$('#radialMap'),old=svg.querySelectorAll('.dynamic');old.forEach(n=>n.remove());
+ const sectorSize=360/GROUPS.length,innerRadius=145,maxRings=Math.max(...GROUPS.map(g=>g.items.length)),ringWidth=(380-innerRadius)/maxRings,ringGap=Math.max(1.5,ringWidth*.14),sectorGap=1.4;
+ GROUPS.forEach((g,gi)=>{
+   const start=gi*sectorSize+sectorGap,end=(gi+1)*sectorSize-sectorGap;
+   const groupTarget=[...g.items].sort((a,b)=>state[a.id]-state[b.id])[0];
+   const arc=document.createElementNS('http://www.w3.org/2000/svg','path');arc.setAttribute('d',arcPath(112,137,start,end));arc.setAttribute('class','radial-group-arc dynamic');arc.setAttribute('tabindex','0');arc.setAttribute('role','button');arc.setAttribute('aria-label',g.title);arc.addEventListener('click',()=>openSkill(groupTarget.id));arc.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openSkill(groupTarget.id)}});const at=document.createElementNS('http://www.w3.org/2000/svg','title');at.textContent=g.title;arc.appendChild(at);svg.appendChild(arc);
+   g.items.forEach((item0,ii)=>{
+     const item={...item0,group:g},ringInner=innerRadius+ii*ringWidth,ringOuter=ringInner+ringWidth-ringGap,s=status(item.id);
+     const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',arcPath(ringInner,ringOuter,start,end));path.setAttribute('class',`radial-cell dynamic ${s}${matches(item)?'':' is-muted'}${query&&item.title.toLowerCase().includes(query)?' search-match':''}`);path.setAttribute('tabindex','0');path.setAttribute('role','button');path.setAttribute('aria-label',`${g.title}. ${item.title}. ${statusText(item.id)}. Уровень ${state[item.id]} из 4.`);const title=document.createElementNS('http://www.w3.org/2000/svg','title');title.textContent=`${item.title} · ${statusText(item.id)}`;path.appendChild(title);bindCell(path,item);svg.appendChild(path)
    });
-   section.appendChild(grid);host.appendChild(section)
+   const p=polar(391,start+(end-start)/2),label=document.createElementNS('http://www.w3.org/2000/svg','text');label.setAttribute('x',p.x);label.setAttribute('y',p.y);label.setAttribute('dy','.35em');label.setAttribute('class','radial-group-label dynamic');label.textContent=g.short;svg.appendChild(label)
  });
 }
 function renderIndex(){
@@ -40,24 +54,24 @@ function renderIndex(){
  GROUPS.forEach((g,gi)=>{
    const details=document.createElement('details');details.className='topic-group';if(gi<3||query)details.open=true;
    const visible=g.items.filter(i=>matches({...i,group:g}));if(!visible.length&&(query||filter!=='all'))details.hidden=true;
-   const covered=g.items.filter(i=>isCovered(i.id)&&!isRepeat(i.id)).length;
-   const sum=document.createElement('summary');sum.innerHTML=`<span>${g.short} · ${g.title}</span><small>${covered}/${g.items.length}</small>`;details.appendChild(sum);
+   const covered=g.items.filter(i=>isCovered(i.id)&&!isRepeat(i.id)).length,rep=g.items.filter(i=>isRepeat(i.id)).length;
+   const sum=document.createElement('summary');sum.innerHTML=`<span>${g.short} · ${g.title}</span><small>${covered}/${g.items.length}${rep?' · ↺ '+rep:''}</small>`;details.appendChild(sum);
    const list=document.createElement('div');list.className='topic-list';
    g.items.forEach(item=>{const wrapped={...item,group:g};if(!matches(wrapped))return;const s=status(item.id),b=document.createElement('button');b.type='button';b.className='topic-row';const dot=s==='repeat'?'var(--cell-repeat)':s==='covered'?'var(--cell-covered)':'var(--cell-neutral)';b.innerHTML=`<i class="dot" style="background:${dot}"></i><span>${item.title}</span><span class="level">${statusText(item.id)}</span>`;b.addEventListener('click',()=>openSkill(item.id));list.appendChild(b)});
    details.appendChild(list);host.appendChild(details)
- });
+ })
 }
 function updateStats(){
  const covered=all.filter(i=>isCovered(i.id)&&!isRepeat(i.id)).length,rep=all.filter(i=>isRepeat(i.id)).length,coverage=Math.round((covered+rep)/all.length*100);
- $('#masteredCount').textContent=covered;$('#averageScore').textContent=coverage+'%';$('#repeatCount').textContent=rep;$('#evidenceCount').textContent=all.length;
- const next=all.find(i=>isRepeat(i.id))||all.find(i=>!isCovered(i.id))||all.find(i=>state[i.id]<4)||all[0];
- $('#recommendTitle').textContent=next.title;$('#recommendText').textContent=`Раздел «${next.group.title}». ${isRepeat(next.id)?'Тема отмечена для повторения.':next.group.diagnostic}`;$('#continueTitle').textContent=next.title;$('#continueText').textContent=isRepeat(next.id)?`Эту тему из раздела «${next.group.title}» пора повторить.`:`Следующая тема для прохождения в разделе «${next.group.title}».`;const lesson=EVIDENCE.has(next.id);$('#recommendLink').href=lesson?'08.08.26.html':'#route';$('#recommendLink').textContent=lesson?'Открыть занятие':'Как работать с темой';$('#continueLink').href=lesson?'08.08.26.html':'#competencies'
+ $('#masteredCount').textContent=covered;$('#averageScore').textContent=coverage+'%';$('#repeatCount').textContent=rep;$('#evidenceCount').textContent=all.length;$('#radialPercent').textContent=coverage+'%';$('#radialTopicCount').textContent=all.length+' тем';
+ const next=all.find(i=>isRepeat(i.id))||all.find(i=>!isCovered(i.id))||all.find(i=>state[i.id]<4)||all[0],lesson=EVIDENCE.has(next.id);
+ $('#recommendTitle').textContent=next.title;$('#recommendText').textContent=`Раздел «${next.group.title}». ${isRepeat(next.id)?'Тема отмечена для повторения.':next.group.diagnostic}`;$('#continueTitle').textContent=next.title;$('#continueText').textContent=isRepeat(next.id)?`Эту тему из раздела «${next.group.title}» пора повторить.`:`Следующая тема для прохождения в разделе «${next.group.title}».`;$('#recommendLink').href=lesson?'08.08.26.html':'#route';$('#recommendLink').textContent=lesson?'Открыть занятие':'Как работать с темой';$('#continueLink').href=lesson?'08.08.26.html':'#competencies'
 }
 function render(){renderMap();renderIndex();updateStats()}
 function openSkill(id){
  current=byId.get(id);const l=state[id],g=current.group,s=status(id);
  $('#dialogGroup').textContent=g.short+' · '+g.title;$('#dialogTitle').textContent=current.title;$('#dialogLevel').textContent=l+'/4 · '+LEVELS[l];$('#dialogSector').textContent=g.title;$('#dialogDescription').textContent=g.summary+' Тема: '+current.title+'.';$('#dialogDiagnostic').textContent=g.diagnostic;
- if(EVIDENCE.has(id))$('#dialogEvidence').textContent='Тема пройдена в пособии «Повторение вычислений» от 08.08.26 и отмечена на карте как изучавшаяся.';else if(s==='repeat')$('#dialogEvidence').textContent='Тема отмечена для повторения.';else if(s==='covered')$('#dialogEvidence').textContent='Тема отмечена как пройденная по результатам диагностики.';else $('#dialogEvidence').textContent='Связанного занятия или результата диагностики пока нет; ячейка остаётся нейтральной.';
+ if(EVIDENCE.has(id))$('#dialogEvidence').textContent='Тема пройдена в пособии «Повторение вычислений» от 08.08.26 и выделена на карте.';else if(s==='repeat')$('#dialogEvidence').textContent='Тема отмечена для повторения.';else if(s==='covered')$('#dialogEvidence').textContent='Тема отмечена как пройденная по результатам диагностики.';else $('#dialogEvidence').textContent='Связанного занятия или результата диагностики пока нет; ячейка остаётся нейтральной.';
  $$('.level-btn').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.level)===l)));$('#markRepeat').textContent=repeat.has(id)?'Убрать из повторения':'Добавить в повторение';$('#dialogLink').href=EVIDENCE.has(id)?'08.08.26.html':'#route';$('#dialogLink').textContent=EVIDENCE.has(id)?'Открыть занятие 08.08.26':'Открыть алгоритм работы';$('#skillDialog').showModal()
 }
 $$('.level-btn').forEach(b=>b.addEventListener('click',()=>{if(!current)return;state[current.id]=Number(b.dataset.level);save();$('#skillDialog').close();render();openSkill(current.id)}));
