@@ -12,7 +12,7 @@
 
 ---
 
-## релевантный файл: pipline/relevant_docs/relevant.html
+## релевантный файл: pipeline/relevant_docs/relevant.html
 ## Роль
 
 Ты — ведущий методист по математике, редактор учебных материалов, математический верификатор и senior frontend-разработчик.
