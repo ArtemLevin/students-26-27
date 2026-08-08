@@ -7,10 +7,194 @@
 <style>
 :root{color-scheme:dark;--bg:#07111d;--card:#122438;--text:#edf7fb;--muted:#a8bac7;--line:#2a455b;--teal:#58d6cf;--burg:#b85767}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 90% 0,#b8576728,transparent 30rem),var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{width:min(1220px,calc(100% - 28px));margin:auto}.hero{padding:48px 0 22px}.eyebrow{color:var(--teal);font-size:.78rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}h1{margin:.3rem 0;font:800 clamp(2.3rem,6vw,4.7rem)/1 Georgia,serif}.lead{max-width:800px;color:var(--muted)}.modules{display:grid;gap:18px}.module{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:24px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,var(--card),#172c40);box-shadow:0 18px 50px #0007}.module.current{border-color:#b8576788;background:linear-gradient(145deg,#18293c,#332532)}.icon{display:grid;place-items:center;min-height:120px;border-radius:18px;background:#58d6cf18;color:var(--teal);font:700 3.4rem Georgia}.current .icon{background:#b8576720;color:#e6a6af}.module h2{margin:0 0 8px}.chips,.actions{display:flex;gap:9px;flex-wrap:wrap}.chip{padding:5px 10px;border:1px solid var(--line);border-radius:99px;color:var(--muted)}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 14px;border:1px solid var(--line);border-radius:12px;background:#0d1c2b;color:var(--text);text-decoration:none}.btn.primary{border-color:var(--teal);background:#58d6cf20}.current .btn.primary{border-color:#d77a88;background:#b8576733}.btn:hover,.btn:focus-visible{box-shadow:0 0 0 3px #58d6cf22;outline:none}.old{margin:28px 0 50px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff}.oldhead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;background:var(--card)}iframe{display:block;width:100%;height:900px;border:0;background:#fff}@media(max-width:720px){.module{grid-template-columns:1fr}.icon{min-height:80px;font-size:3rem}iframe{height:760px}.oldhead{align-items:flex-start;flex-direction:column}}@media print{body{background:#fff;color:#111}.old{display:none}.module{box-shadow:none;background:#fff}.btn{display:none}}
 </style>
+<script>
+(()=>{
+  const STORAGE_KEY='nikol-competence-map-v1';
+  const VERSION_KEY='nikol-competence-evidence-version';
+  const VERSION='2026-08-07-tex-docs-v2';
+  const evidence={
+    t1_isosceles:{level:3,evidence:'Равнобедренный треугольник и внешний угол подробно разобраны 21.07 и повторены 01.08.',link:'01.08.26.html'},
+
+    t2_coordinates:{level:3,evidence:'Координаты вектора отрабатывались 21.07 и 01.08, включая знак вертикальной координаты.',link:'01.08.26.html'},
+    t2_length:{level:3,evidence:'Длина вектора по координатам разбиралась 21.07 и повторялась 01.08.',link:'01.08.26.html'},
+    t2_operations:{level:3,evidence:'Линейные операции с координатами векторов систематизированы 01.08.',link:'01.08.26.html'},
+    t2_dot:{level:2,evidence:'Скалярное произведение по координатам и через длины разобрано 21.07.',link:'21-07-26.html'},
+    t2_angle:{level:2,evidence:'Косинус угла между векторами через скалярное произведение разобран 21.07.',link:'21-07-26.html'},
+
+    t4_classic:{level:3,evidence:'Равновозможные исходы и построение пространства исходов подробно повторены 01.08.',link:'01.08.26.html'},
+    t4_coins:{level:2,evidence:'Двухэтапная модель с четырьмя равновозможными исходами разобрана 01.08.',link:'01.08.26.html'},
+    t4_complement:{level:3,evidence:'Противоположное событие и формула 1−P(A) подробно разобраны 01.08.',link:'01.08.26.html'},
+    t4_enumeration:{level:2,evidence:'Организованный перебор равновозможных исходов использован в вероятностной модели 01.08.',link:'01.08.26.html'},
+    t5_sum:{level:3,evidence:'Объединение и пересечение событий, включая P(A∪B), подробно разобраны 01.08.',link:'01.08.26.html'},
+    t5_complement:{level:3,evidence:'Противоположное событие использовано совместно с объединением событий 01.08.',link:'01.08.26.html'},
+
+    t6_linear_quad:{level:3,evidence:'Сведение к квадратному уравнению и отбор допустимого корня применялись в текстовых и смешанных задачах 21.07 и 01.08.',link:'01.08.26.html'},
+    t6_rational:{level:2,evidence:'Рациональная структура, ОДЗ и преобразование дробных уравнений входят в смешанный блок 11.07 и текстовую модель 21.07.',link:'11.07.26.html'},
+    t6_exponential:{level:3,evidence:'Показательные уравнения повторялись 21.07 и 01.08 и использовались в финансовых моделях.',link:'01.08.26.html'},
+    t6_logarithmic:{level:3,evidence:'Логарифмы и ограничения проходились 07.07, 11.07, 21.07 и 01.08.',link:'11.07.26.html'},
+    t6_trigonometric:{level:3,evidence:'Тригонометрические уравнения и серии корней отрабатывались 07.07, 11.07 и 01.08.',link:'01.08.26.html'},
+    t6_factor:{level:3,evidence:'Свойство нулевого произведения и вынесение общего множителя применены в показательно-тригонометрической задаче 01.08.',link:'01.08.26.html'},
+    t6_power:{level:3,evidence:'Степенные преобразования и приведение оснований регулярно использовались в июльских и августовских пособиях.',link:'01.08.26.html'},
+    t6_log_properties:{level:3,evidence:'Свойства логарифмов систематизированы 01.08 и использовались в предыдущих занятиях.',link:'01.08.26.html'},
+    t6_trig_special:{level:3,evidence:'Простейшие серии для sin и cos повторены 07.07 и 01.08.',link:'01.08.26.html'},
+
+    t7_rational_num:{level:3,evidence:'Точные дробные и процентные вычисления являются сквозным навыком финансового блока 14.07–07.08.',link:'07.08.26.html'},
+    t7_algebra:{level:2,evidence:'ОДЗ и преобразование алгебраических дробей входят в смешанный блок 11.07.',link:'11.07.26.html'},
+    t7_power_values:{level:3,evidence:'Значения степенных выражений и переход к одинаковому основанию многократно повторялись.',link:'01.08.26.html'},
+    t7_power_actions:{level:3,evidence:'Свойства степеней подробно систематизированы 01.08 и используются в финансовых формулах.',link:'01.08.26.html'},
+    t7_radical_num:{level:3,evidence:'Числовые корни и точное извлечение корня отрабатывались 21.07 и 01.08.',link:'01.08.26.html'},
+    t7_radical_var:{level:2,evidence:'Связь степени и корня и условия существования корней повторены 01.08.',link:'01.08.26.html'},
+    t7_log_num:{level:3,evidence:'Числовые логарифмы и основные тождества повторялись в нескольких занятиях.',link:'01.08.26.html'},
+    t7_log_var:{level:3,evidence:'Условия существования и буквенные свойства логарифмов систематизированы 01.08.',link:'01.08.26.html'},
+    t7_trig_values:{level:3,evidence:'Табличные значения тригонометрических функций и серии решений повторены 07.07 и 01.08.',link:'01.08.26.html'},
+    t7_trig_num:{level:3,evidence:'Формулы двойного угла, разности и понижения степени отрабатывались 07.07 и 01.08.',link:'01.08.26.html'},
+    t7_trig_var:{level:3,evidence:'Буквенные тригонометрические преобразования использовались при сведении уравнений 07.07 и 01.08.',link:'01.08.26.html'},
+    t7_integers:{level:3,evidence:'Точные арифметические действия и отбор целых значений регулярно применяются, особенно в финансовом блоке.',link:'07.08.26.html'},
+    t7_fractions:{level:3,evidence:'Дроби, проценты и процентные множители систематически используются во всех финансовых занятиях.',link:'07.08.26.html'},
+    t7_natural_power:{level:3,evidence:'Натуральные степени и их свойства повторены 01.08 и используются в формулах сложных процентов.',link:'01.08.26.html'},
+    t7_integer_power:{level:3,evidence:'Отрицательный и нулевой показатели подробно повторены 01.08.',link:'01.08.26.html'},
+    t7_nth_root:{level:3,evidence:'Корень степени n и связь с дробным показателем подробно повторены 01.08.',link:'01.08.26.html'},
+    t7_rational_power:{level:3,evidence:'Связь рациональной степени и корня используется в блоке степеней 01.08.',link:'01.08.26.html'},
+    t7_radians:{level:2,evidence:'Радианная запись и серии тригонометрических решений регулярно используются в занятиях 07.07 и 01.08.',link:'01.08.26.html'},
+    t7_reduction:{level:2,evidence:'Формулы приведения входят в тригонометрический блок 07.07; требуется дальнейшее закрепление.',link:'trig-log-checklist.html'},
+    t7_sum_difference:{level:3,evidence:'Формулы суммы и разности подробно использовались в тригонометрическом занятии 07.07.',link:'trig-log-checklist.html'},
+    t7_double_angle:{level:3,evidence:'Формулы двойного угла отрабатывались 07.07 и повторены 01.08.',link:'01.08.26.html'},
+    t7_log_definition:{level:3,evidence:'Определение, ОДЗ и основные свойства логарифма повторялись многократно.',link:'01.08.26.html'},
+
+    t9_exponential:{level:3,evidence:'Сложные проценты и показательная функция дали несколько прикладных экспоненциальных моделей 14.07–01.08.',link:'01.08.26.html'},
+    t9_logarithmic:{level:2,evidence:'Логарифм использовался для поиска срока и ставки в финансовых моделях 14.07.',link:'14-07-26.html'},
+    t9_other:{level:3,evidence:'Проверка смысла, знака, диапазона и допустимости ответа является сквозной частью пособий.',link:'07.08.26.html'},
+    t9_units:{level:3,evidence:'Контроль единиц и смысл букв отдельно подчёркивались 21.07 и в финансовых задачах.',link:'21-07-26.html'},
+    t9_rounding:{level:3,evidence:'Направление округления срока и ставки разобрано в финансовом блоке; 07.08 отдельно закреплён точный отбор целых.',link:'07.08.26.html'},
+    t9_table:{level:3,evidence:'Табличная модель стала основным инструментом задач о вкладах и кредитах 14.07–07.08.',link:'07.08.26.html'},
+    t9_formula_transform:{level:3,evidence:'Выражение неизвестной из готовой модели многократно применяется во вкладах и кредитах.',link:'07.08.26.html'},
+
+    t10_line:{level:2,evidence:'Задача на движение по прямой с таблицей S–v–t подробно разобрана 21.07.',link:'21-07-26.html'},
+    t10_work:{level:3,evidence:'Совместная работа, производительность и таблица работа–время–производительность подробно разобраны 01.08.',link:'01.08.26.html'},
+    t10_progression:{level:3,evidence:'Геометрическая прогрессия используется в аннуитетной модели, арифметическая — в дифференцированной схеме 28.07–04.08.',link:'04.08.26.html'},
+    t10_validation:{level:3,evidence:'Проверка ограничений, единиц и смысла ответа систематически выполняется в текстовых и финансовых задачах.',link:'07.08.26.html'},
+    t10_pipes:{level:2,evidence:'Модель сложения и вычитания производительностей освоена на задачах совместной работы 01.08; перенос на трубы требует практики.',link:'01.08.26.html'},
+    t10_percent_change:{level:3,evidence:'Последовательные процентные изменения и произведение процентных множителей многократно отработаны в финансовом блоке.',link:'14-07-26.html'},
+
+    t11_exp_log:{level:2,evidence:'Показательная функция подробно разобрана по точке графика 01.08; логарифмическая функция как график требует отдельного повторения.',link:'01.08.26.html'},
+
+    t13_exp:{level:3,evidence:'Показательные уравнения повторены в простом и смешанном формате, включая переход к тригонометрическому уравнению 01.08.',link:'01.08.26.html'},
+    t13_log:{level:3,evidence:'ОДЗ и логарифмические преобразования отрабатывались 07.07, 11.07 и 01.08.',link:'11.07.26.html'},
+    t13_trig_homogeneous:{level:3,evidence:'Однородные тригонометрические конструкции и безопасное деление подробно разбирались 07.07.',link:'trig-log-checklist.html'},
+    t13_trig_factor:{level:3,evidence:'Разложение тригонометрического выражения на множители и совокупность уравнений повторены 01.08.',link:'01.08.26.html'},
+    t13_trig_domain:{level:3,evidence:'Контроль ОДЗ и запрещённых значений является сквозным правилом тригонометрических задач 07.07–01.08.',link:'11.07.26.html'},
+    t13_trig_other:{level:2,evidence:'Смешанные показательно-тригонометрические конструкции разобраны 01.08.',link:'01.08.26.html'},
+    t13_mixed:{level:2,evidence:'Смешанные уравнения разных классов являются центральной темой занятия 11.07.',link:'11.07.26.html'},
+    t13_selection:{level:3,evidence:'Отбор тригонометрических корней и сохранение всех серий отрабатывались 07.07 и 01.08.',link:'trig-log-checklist.html'},
+    t13_period_intersection:{level:3,evidence:'Пересечение периодических серий с ограничениями входило в блок отбора корней 07.07.',link:'trig-log-checklist.html'},
+    t13_equivalence:{level:3,evidence:'Контроль деления на выражение с переменной, ОДЗ и равносильности систематически подчёркивался 07.07, 11.07 и 01.08.',link:'11.07.26.html'},
+
+    t15_rational:{level:3,evidence:'Рациональные неравенства и метод интервалов входят в системный блок 07.07–11.07.',link:'11.07.26.html'},
+    t15_exp:{level:3,evidence:'Показательные неравенства и сведение к стандартным моделям входят в комплексный блок 11.07.',link:'11.07.26.html'},
+    t15_exp_rational:{level:3,evidence:'Замена переменной и рациональная структура относительно экспоненты отрабатывались в комплексном блоке.',link:'11.07.26.html'},
+    t15_log_basic:{level:3,evidence:'Логарифмические неравенства, ОДЗ и интервалы подробно разбирались 07.07 и 11.07.',link:'11.07.26.html'},
+    t15_log_rational:{level:3,evidence:'Рациональная структура относительно логарифма входит в комплексный блок неравенств.',link:'11.07.26.html'},
+    t15_variable_base:{level:3,evidence:'Переменное основание и контроль направления неравенства входят в логарифмический блок.',link:'11.07.26.html'},
+    t15_rationalization:{level:3,evidence:'Рационализация является одной из центральных стратегий занятия 11.07.',link:'11.07.26.html'},
+    t15_log_other:{level:2,evidence:'Смешанные логарифмические конструкции разбирались 11.07; требуется дальнейшее нарешивание.',link:'11.07.26.html'},
+    t15_intervals:{level:3,evidence:'Метод интервалов систематически использовался в логарифмических и рациональных неравенствах 07.07–11.07.',link:'11.07.26.html'},
+    t15_systems_log:{level:3,evidence:'Системы ограничений и логарифмических неравенств входили в комплексный блок 11.07.',link:'11.07.26.html'},
+    t15_systems_mixed:{level:2,evidence:'Смешанные системы уравнений и неравенств разбирались 11.07.',link:'11.07.26.html'},
+    t15_equivalence:{level:3,evidence:'Равносильные переходы, ОДЗ и контроль границ систематически подчёркивались в занятиях 07.07 и 11.07.',link:'11.07.26.html'},
+    t15_answer:{level:3,evidence:'Строгие и нестрогие границы, объединение и пересечение промежутков регулярно отрабатывались.',link:'11.07.26.html'},
+
+    t16_deposits:{level:3,evidence:'Вклады, сложные проценты и дополнительные операции подробно изучались 14.07 и 18.07.',link:'14-07-26.html'},
+    t16_credits:{level:3,evidence:'Кредиты последовательно изучались 25.07, 28.07, 04.08 и 07.08.',link:'07.08.26.html'},
+    t16_diff:{level:3,evidence:'Дифференцированная схема введена 28.07 и подробно закреплена отдельным занятием 04.08.',link:'04.08.26.html'},
+    t16_annuity:{level:3,evidence:'Аннуитетная схема подробно изучалась 25.07 и сравнивалась с дифференцированной 28.07.',link:'28-07-26.html'},
+    t16_variable:{level:3,evidence:'Неравные и смешанные графики платежей являются центральной темой занятия 07.08.',link:'07.08.26.html'},
+    t16_optimal:{level:2,evidence:'Отбор наибольшего или наименьшего целого параметра при финансовых ограничениях отрабатывался 07.08.',link:'07.08.26.html'},
+    t16_other:{level:3,evidence:'Полная финансовая модель, проверка условий и обоснование ответа систематически применяются с 14.07 по 07.08.',link:'07.08.26.html'},
+    t16_debt_table:{level:3,evidence:'Таблица долг → проценты → задолженность → платёж → остаток стала основным инструментом кредитного блока.',link:'07.08.26.html'},
+    t16_payment_sum:{level:3,evidence:'Общая сумма выплат, переплата и процент переплаты отрабатывались 25.07–07.08.',link:'07.08.26.html'},
+    t16_equal_reduction:{level:3,evidence:'Равное уменьшение тела кредита и арифметическая прогрессия остатков подробно закреплены 04.08.',link:'04.08.26.html'},
+    t16_deposit_contrib:{level:3,evidence:'Вклады с пополнениями и снятиями и рекуррентная модель разобраны 14.07 и 18.07.',link:'14-07-26.html'},
+    t16_model_equation:{level:3,evidence:'Уравнение финансовой модели и условие полного погашения систематически применялись во всех кредитных занятиях.',link:'07.08.26.html'}
+  };
+  function syncStorage(store){
+    let state={};
+    try{state=JSON.parse(store.getItem(STORAGE_KEY)||'{}')||{}}catch(_){state={}}
+    Object.entries(evidence).forEach(([id,item])=>{state[id]=item.level});
+    store.setItem(STORAGE_KEY,JSON.stringify(state));
+  }
+  function syncHere(){try{syncStorage(localStorage);localStorage.setItem(VERSION_KEY,VERSION)}catch(_){}}
+  window.__nikolCompetenceEvidence=evidence;
+  window.__nikolCompetenceStorageKey=STORAGE_KEY;
+  window.__nikolCompetenceEvidenceVersion=VERSION;
+  window.__syncNikolCompetence=syncHere;
+  try{
+    if(localStorage.getItem(VERSION_KEY)!==VERSION||!localStorage.getItem(STORAGE_KEY))syncHere();
+  }catch(_){}
+})();
+</script>
 </head>
 <body><main class="wrap"><section class="hero"><div class="eyebrow">Персональный учебный маршрут</div><h1>Николь Саркисьянц</h1><p class="lead">Теория, интерактивные модели и материалы занятий в одном локальном навигаторе.</p></section>
 <section class="modules" aria-label="Последние занятия">
-<article class="module current"><div class="icon" aria-hidden="true">₽</div><div><div class="eyebrow">Модуль 12 · 04.08.26</div><h2>Дифференцированная схема кредитования</h2><p>Равные доли тела кредита, таблица остатков, убывающие платежи, арифметическая прогрессия, общая сумма выплат и переплата. Внутри: динамическая модель, десять задач, пошаговые решения, мини-квиз и самопроверка.</p><div class="chips"><span class="chip">кредиты ЕГЭ</span><span class="chip">MathML</span><span class="chip">динамическая модель</span><span class="chip">печать</span></div><p class="actions"><a class="btn primary" href="04.08.26.html">Открыть занятие</a><a class="btn" href="../pdf_docs/04.08.26.pdf">PDF</a><a class="btn" href="../tex_docs/04.08.26.tex">TeX</a></p></div></article>
+<article class="module current"><div class="icon" aria-hidden="true">₽</div><div><div class="eyebrow">Модуль 13 · 07.08.26</div><h2>Смешанные схемы кредитования</h2><p>Таблица долга, восстановление платежей по остаткам, переплата, неизвестная ставка, строгие и нестрогие условия, отбор целых значений и платежи через одну переменную. Внутри: динамическая модель кредита, 10 задач, генератор, мини-квиз и самопроверка.</p><div class="chips"><span class="chip">кредиты ЕГЭ</span><span class="chip">MathML</span><span class="chip">динамика долга</span><span class="chip">генератор</span><span class="chip">печать</span></div><p class="actions"><a class="btn primary" href="07.08.26.html">Открыть занятие</a><a class="btn" href="../pdf_docs/07.08.26.pdf">PDF</a><a class="btn" href="../tex_docs/07.08.26.tex">TeX</a></p></div></article>
+<article class="module"><div class="icon" aria-hidden="true">₽</div><div><div class="eyebrow">Модуль 12 · 04.08.26</div><h2>Дифференцированная схема кредитования</h2><p>Равные доли тела кредита, таблица остатков, убывающие платежи, арифметическая прогрессия, общая сумма выплат и переплата. Внутри: динамическая модель, десять задач, пошаговые решения, мини-квиз и самопроверка.</p><div class="chips"><span class="chip">кредиты ЕГЭ</span><span class="chip">MathML</span><span class="chip">динамическая модель</span><span class="chip">печать</span></div><p class="actions"><a class="btn primary" href="04.08.26.html">Открыть занятие</a><a class="btn" href="../pdf_docs/04.08.26.pdf">PDF</a><a class="btn" href="../tex_docs/04.08.26.tex">TeX</a></p></div></article>
 <article class="module"><div class="icon" aria-hidden="true">Σ</div><div><div class="eyebrow">Модуль 11 · 01.08.26</div><h2>Комплексное повторение: формулы и связи</h2><p>Геометрия, векторы, вероятность, степени, логарифмы, задачи на работу, показательная функция и тригонометрия. Внутри: пошаговые решения, синхронизированная визуализация, мини-квиз и самопроверка.</p><div class="chips"><span class="chip">повторение</span><span class="chip">MathML</span><span class="chip">интерактивность</span><span class="chip">печать</span></div><p class="actions"><a class="btn primary" href="01.08.26.html">Открыть занятие</a><a class="btn" href="../pdf_docs/01.08.26.pdf">PDF</a><a class="btn" href="../tex_docs/01.08.26.tex">TeX</a></p></div></article>
 </section>
-<section class="old"><div class="oldhead"><div><b>Все предыдущие занятия</b><div style="color:var(--muted)">Исходный навигатор сохранён полностью.</div></div><a class="btn" href="index-original.html">Открыть отдельно</a></div><iframe src="index-original.html" title="Предыдущие учебные модули Николь Саркисьянц"></iframe></section></main></body></html>
+<section class="old"><div class="oldhead"><div><b>Тепловая карта компетенций и архив</b><div style="color:var(--muted)">Состояние обновлено 07.08.26 по 10 TeX-пособиям. Уровень 4 сохранён для подтверждённого освоения.</div></div><a class="btn" href="index-original.html">Открыть отдельно</a></div><iframe id="base" src="index-original.html" title="Тепловая карта компетенций и предыдущие учебные модули Николь Саркисьянц"></iframe></section></main>
+<script>
+(()=>{
+  const frame=document.getElementById('base');
+  const evidence=window.__nikolCompetenceEvidence||{};
+  const STORAGE_KEY=window.__nikolCompetenceStorageKey||'nikol-competence-map-v1';
+  const VERSION_KEY='nikol-competence-evidence-version';
+  const VERSION=window.__nikolCompetenceEvidenceVersion||'2026-08-07-tex-docs-v2';
+  function syncStore(store){
+    let state={};
+    try{state=JSON.parse(store.getItem(STORAGE_KEY)||'{}')||{}}catch(_){state={}}
+    Object.entries(evidence).forEach(([id,item])=>{state[id]=item.level});
+    store.setItem(STORAGE_KEY,JSON.stringify(state));
+    store.setItem(VERSION_KEY,VERSION);
+  }
+  function patchDialog(doc,id){
+    const item=evidence[id];
+    if(!item)return;
+    setTimeout(()=>{
+      const note=doc.getElementById('dialogEvidence');
+      const link=doc.getElementById('dialogLink');
+      if(note)note.textContent=item.evidence;
+      if(link&&item.link)link.href=item.link;
+    },0);
+  }
+  frame.addEventListener('load',()=>{
+    let doc,win;
+    try{doc=frame.contentDocument;win=frame.contentWindow;if(!doc||!win)return}catch(_){return}
+    try{
+      const store=win.localStorage;
+      if(store.getItem(VERSION_KEY)!==VERSION||!store.getItem(STORAGE_KEY)){
+        syncStore(store);
+        win.location.reload();
+        return;
+      }
+    }catch(_){}
+    doc.addEventListener('click',event=>{
+      const cell=event.target.closest&&event.target.closest('.radial-cell,.topic-row');
+      if(cell)patchDialog(doc,cell.dataset.id);
+    });
+    doc.addEventListener('keydown',event=>{
+      if(event.key!=='Enter'&&event.key!==' ')return;
+      const cell=event.target.closest&&event.target.closest('.radial-cell,.topic-row');
+      if(cell)patchDialog(doc,cell.dataset.id);
+    });
+    const reset=doc.getElementById('resetMap');
+    if(reset)reset.addEventListener('click',()=>setTimeout(()=>{
+      try{
+        const store=win.localStorage;
+        if(!store.getItem(STORAGE_KEY)){
+          syncStore(store);
+          win.location.reload();
+        }
+      }catch(_){}
+    },120),true);
+  });
+})();
+</script>
+</body></html>
