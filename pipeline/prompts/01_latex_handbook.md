@@ -1082,6 +1082,6 @@ clip=false, если есть риск обрезания подписей;
 
 никаких пояснений вне кода.
 
-## важно: опирайтесь на релевантный документ pipline/relevant_docs/relevant.tex
+## важно: опирайтесь на релевантный документ pipeline/relevant_docs/relevant.tex
 
 Выводите код в code block

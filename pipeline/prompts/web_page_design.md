@@ -14,7 +14,7 @@ STUDENT_DIR/DATE.html
 
 В качестве структурного и технического референса используйте:
 
-pipline/relevant_docs/relevant.html
+pipeline/relevant_docs/relevant.html
 
 Содержимое пособия и чек-листа из контекста текущего чата является единственным источником учебного материала.
 
@@ -1850,7 +1850,7 @@ prefers-reduced-motion;
 
 Изучить пособие и чек-лист из контекста текущего чата.
 
-Изучить pipline/relevant_docs/relevant.html.
+Изучить pipeline/relevant_docs/relevant.html.
 
 Изучить STUDENT_DIR/index.html.
 
