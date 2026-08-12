@@ -1,0 +1,70 @@
+name: Patch Sofya 12.08.26 index
+
+on:
+  push:
+    branches:
+      - agent/sofya-kalney-12-08-26-web
+
+permissions:
+  contents: write
+
+jobs:
+  patch-index:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/sofya-kalney-12-08-26-web
+          fetch-depth: 0
+      - name: Patch existing navigator safely
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('students/sofya_kalney/site/index.html')
+          text = path.read_text(encoding='utf-8')
+
+          old_stat = '<article class="stat"><b>8</b><span>интерактивных модулей</span></article>'
+          new_stat = '<article class="stat"><b>9</b><span>интерактивных модулей</span></article>'
+          if old_stat not in text and new_stat not in text:
+              raise SystemExit('Module counter marker not found')
+          text = text.replace(old_stat, new_stat, 1)
+
+          module_marker = '''        <article class="lesson-card" style="border-top:5px solid var(--gold)">
+          <div class="lesson-number"><span>Модуль 08</span><span>07.08.26</span></div><h3>Графики функций с модулем</h3>
+          <p>Кусочная запись, сдвиги графика, сохранение ОДЗ после сокращения, выколотые точки и параметр y = kx.</p>
+          <div class="skills"><span class="chip">модуль и ветви</span><span class="chip">ОДЗ</span><span class="chip">параметр k</span><span class="chip">интерактивный график</span></div>
+          <div class="lesson-actions"><a class="btn primary lesson-link" data-lesson="modulus-graphs" href="07.08.26.html">Открыть модуль</a><a class="btn" href="../pdf_docs/07.08.26.pdf" download>PDF</a><a class="btn" href="../tex_docs/07.08.26.tex" download>TeX</a></div>
+        </article>
+'''
+          new_module = '''        <article class="lesson-card" style="border-top:5px solid var(--gold)">
+          <div class="lesson-number"><span>Модуль 09</span><span>12.08.26</span></div><h3>Комплексное повторение алгебры</h3>
+          <p>Уравнения, метод интервалов, системы и совокупности, текстовые модели и кусочно заданные функции с параметром.</p>
+          <div class="skills"><span class="chip">выбор метода</span><span class="chip">ОДЗ и интервалы</span><span class="chip">текстовые модели</span><span class="chip">графики</span></div>
+          <div class="lesson-actions"><a class="btn primary lesson-link" data-lesson="algebra-review" href="12.08.26.html">Открыть модуль</a><a class="btn" href="../pdf_docs/12.08.26.pdf" download>PDF</a><a class="btn" href="../tex_docs/12.08.26.tex" download>TeX</a></div>
+        </article>
+'''
+          if 'data-lesson="algebra-review"' not in text:
+              if module_marker not in text:
+                  raise SystemExit('Module 08 marker not found')
+              text = text.replace(module_marker, module_marker + new_module, 1)
+
+          resource_marker = '''          <div class="resource-row"><div><b>07.08.26</b><small>Графики функций с модулем</small></div><div class="resource-links"><a href="07.08.26.html">Web</a><a href="../pdf_docs/07.08.26.pdf" download>PDF</a><a href="../tex_docs/07.08.26.tex" download>TeX</a></div></div>
+'''
+          new_resource = '''          <div class="resource-row"><div><b>12.08.26</b><small>Комплексное повторение алгебры</small></div><div class="resource-links"><a href="12.08.26.html">Web</a><a href="../pdf_docs/12.08.26.pdf" download>PDF</a><a href="../tex_docs/12.08.26.tex" download>TeX</a></div></div>
+'''
+          if '<b>12.08.26</b><small>Комплексное повторение алгебры</small>' not in text:
+              if resource_marker not in text:
+                  raise SystemExit('07.08.26 resource marker not found')
+              text = text.replace(resource_marker, resource_marker + new_resource, 1)
+
+          path.write_text(text, encoding='utf-8')
+      - name: Commit index patch and remove temporary workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/patch-sofya-120826-index.yml
+          git add students/sofya_kalney/site/index.html
+          git commit -m "feat(sofya): register 12.08.26 algebra review module"
+          git push origin HEAD:agent/sofya-kalney-12-08-26-web
