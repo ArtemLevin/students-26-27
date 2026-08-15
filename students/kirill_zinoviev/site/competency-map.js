@@ -1,6 +1,15 @@
 (()=>{
 'use strict';
-const RAW=window.KIRILL_GRADE7_GROUPS||[],EVIDENCE=new Set(window.KIRILL_GRADE7_EVIDENCE||[]);
+const RAW=window.KIRILL_GRADE7_GROUPS||[],BASE_EVIDENCE=window.KIRILL_GRADE7_EVIDENCE||[];
+const LESSONS=[
+ {date:'08.08.26',title:'Повторение вычислений',href:'08.08.26.html',ids:BASE_EVIDENCE},
+ {date:'12.08.26',title:'Проценты',href:'12.08.26.html',ids:['percent_8','percent_9','percent_11','percent_12','percent_14','models_12']},
+ {date:'15.08.26',title:'Текстовые задачи на движение',href:'15.08.26.html',ids:['expr_5','expr_6','equations_4','equations_5','equations_6','equations_12','models_1','models_2','models_3','models_4','models_5','models_6','models_7','models_8','models_14']}
+];
+const EVIDENCE=new Set(LESSONS.flatMap(l=>l.ids));
+const SOURCES=new Map();
+LESSONS.forEach(lesson=>lesson.ids.forEach(id=>{if(!SOURCES.has(id))SOURCES.set(id,[]);SOURCES.get(id).push(lesson)}));
+const lessonSources=id=>SOURCES.get(id)||[],latestLesson=id=>{const a=lessonSources(id);return a[a.length-1]||null};
 const GROUPS=RAW.map(([short,id,title,summary,diagnostic,items])=>({short,id,title,summary,diagnostic,items:items.split('|').map((title,i)=>({id:`${id}_${i+1}`,title}))}));
 const LEVELS=['Ещё не изучено','Нужна помощь','В процессе','Почти уверенно','Освоено'];
 const STORAGE='kirill-competence-map-v2',REPEAT='kirill-competence-repeat-v1',THEME='kirill-site-theme';
@@ -9,7 +18,13 @@ const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},se
 const all=GROUPS.flatMap(g=>g.items.map(i=>({...i,group:g}))),byId=new Map(all.map(i=>[i.id,i]));
 const baseline=Object.fromEntries(all.map(i=>[i.id,EVIDENCE.has(i.id)?2:0]));
 let state={...baseline},repeat=new Set(),current=null,filter='all',query='';
-try{const saved=JSON.parse(store.get(STORAGE)||'{}');for(const id in saved)if(byId.has(id))state[id]=Math.max(0,Math.min(4,Number(saved[id])||0))}catch(e){}
+try{
+ const saved=JSON.parse(store.get(STORAGE)||'{}');
+ for(const id in saved)if(byId.has(id)){
+   const value=Math.max(0,Math.min(4,Number(saved[id])||0));
+   state[id]=EVIDENCE.has(id)&&value===0?2:value;
+ }
+}catch(e){}
 try{repeat=new Set(JSON.parse(store.get(REPEAT)||'[]').filter(id=>byId.has(id)))}catch(e){repeat=new Set()}
 const save=()=>{store.set(STORAGE,JSON.stringify(state));store.set(REPEAT,JSON.stringify([...repeat]))};
 const isRepeat=id=>repeat.has(id)||state[id]===1;
@@ -24,7 +39,7 @@ function arcPath(innerRadius,outerRadius,startAngle,endAngle){
 }
 const tooltip=$('#mapTooltip');
 function positionTip(x,y){if(!tooltip)return;const pad=12,w=tooltip.offsetWidth||330,h=tooltip.offsetHeight||72;tooltip.style.left=Math.max(pad,Math.min(innerWidth-w-pad,x+14))+'px';tooltip.style.top=Math.max(pad,Math.min(innerHeight-h-pad,y+14))+'px'}
-function showTip(item,x,y){if(!tooltip)return;tooltip.innerHTML=`<b>${item.title}</b><span>${item.group.short} · ${item.group.title}<br>${statusText(item.id)}</span>`;tooltip.classList.add('show');tooltip.setAttribute('aria-hidden','false');positionTip(x,y)}
+function showTip(item,x,y){if(!tooltip)return;const lesson=latestLesson(item.id),source=lesson?`<br>Последнее занятие: ${lesson.date}`:'';tooltip.innerHTML=`<b>${item.title}</b><span>${item.group.short} · ${item.group.title}<br>${statusText(item.id)}${source}</span>`;tooltip.classList.add('show');tooltip.setAttribute('aria-hidden','false');positionTip(x,y)}
 function hideTip(){if(!tooltip)return;tooltip.classList.remove('show');tooltip.setAttribute('aria-hidden','true')}
 function bindCell(path,item){
  path.addEventListener('click',()=>openSkill(item.id));
@@ -64,22 +79,22 @@ function renderIndex(){
 function updateStats(){
  const covered=all.filter(i=>isCovered(i.id)&&!isRepeat(i.id)).length,rep=all.filter(i=>isRepeat(i.id)).length,coverage=Math.round((covered+rep)/all.length*100);
  $('#masteredCount').textContent=covered;$('#averageScore').textContent=coverage+'%';$('#repeatCount').textContent=rep;$('#evidenceCount').textContent=all.length;$('#radialPercent').textContent=coverage+'%';$('#radialTopicCount').textContent=all.length+' тем';
- const next=all.find(i=>isRepeat(i.id))||all.find(i=>!isCovered(i.id))||all.find(i=>state[i.id]<4)||all[0],lesson=EVIDENCE.has(next.id);
- $('#recommendTitle').textContent=next.title;$('#recommendText').textContent=`Раздел «${next.group.title}». ${isRepeat(next.id)?'Тема отмечена для повторения.':next.group.diagnostic}`;$('#continueTitle').textContent=next.title;$('#continueText').textContent=isRepeat(next.id)?`Эту тему из раздела «${next.group.title}» пора повторить.`:`Следующая тема для прохождения в разделе «${next.group.title}».`;$('#recommendLink').href=lesson?'08.08.26.html':'#route';$('#recommendLink').textContent=lesson?'Открыть занятие':'Как работать с темой';$('#continueLink').href=lesson?'08.08.26.html':'#competencies'
+ const next=all.find(i=>isRepeat(i.id))||all.find(i=>!isCovered(i.id))||all.find(i=>state[i.id]<4)||all[0],lesson=latestLesson(next.id);
+ $('#recommendTitle').textContent=next.title;$('#recommendText').textContent=`Раздел «${next.group.title}». ${isRepeat(next.id)?'Тема отмечена для повторения.':next.group.diagnostic}`;$('#continueTitle').textContent=next.title;$('#continueText').textContent=isRepeat(next.id)?`Эту тему из раздела «${next.group.title}» пора повторить.`:`Следующая тема для прохождения в разделе «${next.group.title}».`;$('#recommendLink').href=lesson?lesson.href:'#route';$('#recommendLink').textContent=lesson?`Открыть занятие ${lesson.date}`:'Как работать с темой';$('#continueLink').href=lesson?lesson.href:'#competencies'
 }
 function render(){renderMap();renderIndex();updateStats()}
 function openSkill(id){
- current=byId.get(id);const l=state[id],g=current.group,s=status(id);
+ current=byId.get(id);const l=state[id],g=current.group,s=status(id),sources=lessonSources(id),lesson=latestLesson(id);
  $('#dialogGroup').textContent=g.short+' · '+g.title;$('#dialogTitle').textContent=current.title;$('#dialogLevel').textContent=l+'/4 · '+LEVELS[l];$('#dialogSector').textContent=g.title;$('#dialogDescription').textContent=g.summary+' Тема: '+current.title+'.';$('#dialogDiagnostic').textContent=g.diagnostic;
- if(EVIDENCE.has(id))$('#dialogEvidence').textContent='Тема пройдена в пособии «Повторение вычислений» от 08.08.26 и выделена на карте.';else if(s==='repeat')$('#dialogEvidence').textContent='Тема отмечена для повторения.';else if(s==='covered')$('#dialogEvidence').textContent='Тема отмечена как пройденная по результатам диагностики.';else $('#dialogEvidence').textContent='Связанного занятия или результата диагностики пока нет; ячейка остаётся нейтральной.';
- $$('.level-btn').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.level)===l)));$('#markRepeat').textContent=repeat.has(id)?'Убрать из повторения':'Добавить в повторение';$('#dialogLink').href=EVIDENCE.has(id)?'08.08.26.html':'#route';$('#dialogLink').textContent=EVIDENCE.has(id)?'Открыть занятие 08.08.26':'Открыть алгоритм работы';$('#skillDialog').showModal()
+ if(sources.length){const names=sources.map(x=>`${x.date} «${x.title}»`).join('; ');$('#dialogEvidence').textContent=`Тема подтверждена материалами занятий: ${names}.`;}else if(s==='repeat')$('#dialogEvidence').textContent='Тема отмечена для повторения.';else if(s==='covered')$('#dialogEvidence').textContent='Тема отмечена как пройденная по результатам диагностики.';else $('#dialogEvidence').textContent='Связанного занятия или результата диагностики пока нет; ячейка остаётся нейтральной.';
+ $$('.level-btn').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.level)===l)));$('#markRepeat').textContent=repeat.has(id)?'Убрать из повторения':'Добавить в повторение';$('#dialogLink').href=lesson?lesson.href:'#route';$('#dialogLink').textContent=lesson?`Открыть занятие ${lesson.date}`:'Открыть алгоритм работы';$('#skillDialog').showModal()
 }
 $$('.level-btn').forEach(b=>b.addEventListener('click',()=>{if(!current)return;state[current.id]=Number(b.dataset.level);save();$('#skillDialog').close();render();openSkill(current.id)}));
 $('#markRepeat').addEventListener('click',()=>{if(!current)return;repeat.has(current.id)?repeat.delete(current.id):repeat.add(current.id);save();$('#skillDialog').close();render();openSkill(current.id)});
 $('#dialogClose').addEventListener('click',()=>$('#skillDialog').close());$('#skillDialog').addEventListener('click',e=>{if(e.target===$('#skillDialog'))$('#skillDialog').close()});
 $$('.filter').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;$$('.filter').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));render()}));
 $('#search').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();render()});
-$('#resetMap').addEventListener('click',()=>{if(confirm('Вернуть карту к состоянию, подтверждённому материалами 08.08.26?')){state={...baseline};repeat.clear();save();filter='all';query='';$('#search').value='';$$('.filter').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===0)));render()}});
+$('#resetMap').addEventListener('click',()=>{if(confirm('Вернуть карту к состоянию, подтверждённому материалами занятий?')){state={...baseline};repeat.clear();save();filter='all';query='';$('#search').value='';$$('.filter').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===0)));render()}});
 const themeBtn=$('#themeBtn');root.dataset.theme=store.get(THEME)||'dark';themeBtn.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';store.set(THEME,root.dataset.theme)});$('#printBtn').addEventListener('click',()=>print());
 render();
 })();
