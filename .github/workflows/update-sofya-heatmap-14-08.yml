@@ -18,109 +18,13 @@ jobs:
           ref: agent/update-sofya-heatmap-14-08
           fetch-depth: 0
 
-      - name: Update heatmap defaults and migration
+      - name: Patch heatmap
         shell: bash
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          import json
-          import re
+          echo 'ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBqc29uCmltcG9ydCByZQoKcGF0aCA9IFBhdGgoInN0dWRlbnRzL3NvZnlhX2thbG5leS9zaXRlL2luZGV4Lmh0bWwiKQp0ZXh0ID0gcGF0aC5yZWFkX3RleHQoZW5jb2Rpbmc9InV0Zi04IikKCnVwZGF0ZXMgPSB7CiAgICAib2dlXzExXzNfMSI6ICgzLCAi0J/QvtC00YLQstC10YDQttC00LXQvdC+INC30LDQvdGP0YLQuNC10LwgMTQuMDguMjY6INCy0YvQtNC10LvQtdC90LjQtSDQstC10YLQstC10Lkg0LTRgNC+0LHQvdC+LdGA0LDRhtC40L7QvdCw0LvRjNC90L7QuSDRhNGD0L3QutGG0LjQuCwg0L/QvtC40YHQuiDQsNGB0LjQvNC/0YLQvtGCINC4INGF0LDRgNCw0LrRgtC10YDQvdGL0YUg0YLQvtGH0LXQui4iKSwKICAgICJvZ2VfMTFfM18yIjogKDMsICLQn9C+0LTRgtCy0LXRgNC20LTQtdC90L4g0LfQsNC90Y/RgtC40LXQvCAxNC4wOC4yNjog0L/RgNC10L7QsdGA0LDQt9C+0LLQsNC90LjQtSDQtNGA0L7QsdC90L4t0YDQsNGG0LjQvtC90LDQu9GM0L3QvtC5INGE0YPQvdC60YbQuNC4INC6INCz0LjQv9C10YDQsdC+0LvQtSDQuCDQv9C+0YHRgtGA0L7QtdC90LjQtSDQv9C+INCw0YHQuNC80L/RgtC+0YLQsNC8LiIpLAogICAgIm9nZV8xMV80XzEiOiAoMywgItCf0L7QtNGC0LLQtdGA0LbQtNC10L3QviDQt9Cw0L3Rj9GC0LjQtdC8IDE0LjA4LjI2OiDQvdGD0LvQuCDQv9C+0LTQvNC+0LTRg9C70YzQvdGL0YUg0LLRi9GA0LDQttC10L3QuNC5LCDRgtC+0YfQutC4INGB0LzQtdC90Ysg0YTQvtGA0LzRg9C70Ysg0Lgg0YXRh9C40Y8g0YLQvtGH0LXQuiDQs9GA0LDRhNC40LrQsC4iKSwKICAgICJvZ2VfMTFfNF8yIjogKDMsICLQn9C+0LTRgtCy0LXRgNC20LTQtdC90L4g0LfQsNC90Y/RgtC40LXQvCAxNC4wOC4yNjog0LrRg9GB0L7Rh9C90LDRjyDQt9Cw0L/QuNGB0YwsINC90LXRgdC60L7Qu9GM0LrQviDQvNC+0LTRg9C70LXQuSDQuCDQv9GA0LXQvtCx0YDQsNC30L7QstCw0L3QuNGPINGD0L3QutGG0LjQuSDRgSDQvNC+0LTRg9C70LXQvC4iKSwKICAgICJvZ2VfMjBfMV8yIjogKDMsICLQn9C+0LTRgtCy0LXRgNC20LTQtdC90L4g0LfQsNC90Y/RgtC40LXQvCAxNC4wOC4yNjog0J7QlNCXINC40YHRhdC+0LTQvdC+0Lkg0LTRgNC+0LHQuCDRhNC40LrRgdC40YDRg9C10YLRgdGPINC00L4g0L/RgNC10L7QsdGA0LDQt9C+0LLQsNC90LjQuSDQuCDRgdC+0YXRgNCw0L3Rj9C10YLRgdGPINC/0L7RgdC70LUg0YHQvtC60YDQsNGJ0LXQvdC40Y8uIiksCiAgICAib2dlXzIwXzFfNSI6ICgzLCAi0J/QvtC00YLQstC10YDQttC00LXQvdC+INC30LDQvdGP0YLQuNC10LwgMTQuMDguMjY6INC/0L7RgdC70LUg0YPQv9GA0L7RidC10L3QuNGPINGB0L7RhdGA0LDQvdGP0Y7RgtGB0Y8g0LjRgdGF0L7QtNC90YvQtSDQvtCz0YDQsNC90LjRh9C10L3QuNGPINGC0L7Rh9C60Lgg0Lgg0LLRi9C60L7Qu9C+0YLRi9C1INGC0L7Rh9C60LguIiksCiAgICAib2dlXzIyXzJfMSI6ICgzLCAi0J/QvtC00YLQstC10YDQttC00LXQvdC+INC30LDQvdGP0YLQuNC10LwgMTQuMDguMjY6INGA0LDQsdC+0YfQuNC5INCw0LvQs9C+0YDQuNGC0Lwg0L/QvtGB0YLRgNC+0LXQvdC40Y8g0LTRgNC+0LHQvdC+LdGA0LDRhtC40L7QvdCw0LvRjNC90L7QuSDRhNGD0L3QutGG0LjQuCDRh9C10YDQtdC3INCw0YHQuNC80L/RgtC+0YLRiyDQuCDQvtC/0L7RgNC90YvQtSDRgtC+0YfQutC4LiIpLAogICAgIm9nZV8yMl8yXzIiOiAoMywgItCf0L7QtNGC0LLQtdGA0LbQtNC10L3QviDQt9Cw0L3Rj9GC0LjQtdC8IDE0LjA4LjI2OiDQntCU0Jcg0LTRgNC+0LHQvdC+LdGA0LDRhtC40L7QvdCw0LvRjNC90L7QuSDRhNGD0L3QutGG0LjQuCDQvtC/0YDQtdC00LXQu9GP0LXRgtGB0Y8g0LTQviDRgdC+0LrRgNCw0YnQtdC90LjRjy4iKSwKICAgICJvZ2VfMjJfMl8zIjogKDMsICLQn9C+0LTRgtCy0LXRgNC20LTQtdC90L4g0LfQsNC90Y/RgtC40LXQvCAxNC4wOC4yNjog0LDRgdC40LzQv9GC0L7RgtGLLCDQvdGD0LvQuCwg0L/QtdGA0LXRgdC10YfQtdC90LjRjyDQuCDQstGL0LrQvtC70L7RgtGL0LUg0YLQvtGH0LrQuCDRg9GH0LjRgtGL0LLQsNGO0YLRgdGPINC60LDQuiDQvtGB0L7QsdGL0LUg0YLQvtGH0LrQuCDQs9GA0LDRhNC40LrQsC4iKSwKICAgICJvZ2VfMjJfMl80IjogKDMsICLQn9C+0LTRgtCy0LXRgNC20LTQtdC90L4g0LfQsNC90Y/RgtC40LXQvCAxNC4wOC4yNjog0YHQstC+0LnRgdGC0LLQsCDQs9C40L/QtdGA0LHQvtC70Ysg0YfQuNGC0LDRjtGC0YHRjyDQv9C+INCy0LXRgtCy0Y/QvCwg0LDRgdC40LzQv9GC0L7RgtCw0Lwg0Lgg0L7QsdC70LDRgdGC0Lgg0LfQvdCw0YfQtdC90LjQuS4iKSwKICAgICJvZ2VfMjJfMl81IjogKDMsICLQn9C+0LTRgtCy0LXRgNC20LTQtdC90L4g0LfQsNC90Y/RgtC40LXQvCAxNC4wOC4yNjog0YfQuNGB0LvQviDQvtCx0YnQuNGFINGC0L7Rh9C10Log0YEg0LPQvtGA0LjQt9C+0L3RgtCw0LvRjNC90L7QuSDQv9GA0Y/QvNC+0Lkg0L7Qv9GA0LXQtNC10LvRj9C10YLRgdGPINC/0L4g0LPRgNCw0YTQuNC60YMg0Lgg0L7QsdC70LDRgdGC0Lgg0LfQvdCw0YfQtdC90LjQuS4iKSwKICAgICJvZ2VfMjJfM18xIjogKDMsICLQn9C+0LTRgtCy0LXRgNC20LTQtdC90L4g0LfQsNC90Y/RgtC40LXQvCAxNC4wOC4yNjog0LrRg9GB0L7Rh9C90LDRjyDRhNC+0YDQvNGD0LvQsCDRgdGC0YDQvtC40YLRgdGPINC/0L7RgdC70LUg0YDQsNC30LHQuNC10L3QuNGPINGB0Lgg0L3Rg9C70Y/QvNC4INCy0YHQtdGFINC/0L7QtNC80L7QtNGD0LvRjNC90YvRhSDQstGL0YDQsNC20LXQvdC40LkuIiksCiAgICAib2dlXzIyXzNfMiI6ICgzLCAi0J/QvtC00YLQstC10YDQttC00LXQvdC+INC30LDQvdGP0YLQuNC10LwgMTQuMDguMjY6INC00LvRjyDQutGD0YHQvtGH0L3Ri9GFINC4INC00YDQvtC10L3Qvi3RgNCw0YbQuNC+0L3QsNC70YzQvdGL0YUg0YTRg9C90LrRhtC40Lkg0L7RgtC00LXQu9GM0L3QviDQutC+0L3RgtGA0L7Qu9C40YDRg9C10YLRgdGPINC+0LHQu9Cw0YHRgtGMINC+0L/RgNC10LTQtdC70LXQvdC40Y8g0LrQsNC20LTQvtC5INCy0LXRgtCy0LguIiksCiAgICAib2dlXzIyXzNfMyI6ICgzLCAi0J/QvtC00YLQstC10YDQttC00LXQvdC+INC30LDQvdGP0YLQuNC10LwgMTQuMDguMjY6INGC0L7Rh9C60Lgg0YHQvNC10L3RiyDRhNC+0YDQvNGD0LvRiywg0LPRgNCw0L3QuNGG0Ysg0LLQtdGC0LLQtdC5INC4INCy0YvQutC+0LvQvtGC0YvQtSDRgtC+0YfQutC4INC+0YLQvNC10YfQsNGO0YLRgdGPINGP0LLQvdC+LiIpLAogICAgIm9nZV8yMl8zXzQiOiAoMywgItCf0L7QtNGC0LLQtdGA0LbQtNC10L3QviDQt9Cw0L3Rj9GC0LjQtdC8IDE0LjA4LjI2OiDQvNC90L7QttC10YHRgtCy0L4g0LfQvdCw0YfQtdC90LjQuSDQuCDQv9C+0LLQtdC00LXQvdC40LUg0LrRg9GB0L7Rh9C90L7QuSDRhNGD0L3QutGG0LjQuCDQvtC/0YDQtdC00LXQu9GP0Y7RgtGB0Y8g0L/QviDQstGB0LXQvCDQstC10YLQstGP0Lwg0LPRgNCw0YTQuNC60LAuIiksCiAgICAib2dlXzIyXzNfNSI6ICgzLCAi0J/QvtC00YLQstC10YDQttC00LXQvdC+INC30LDQvdGP0YLQuNC10LwgMTQuMDguMjY6INCz0L7RgNC40LfQvtC90YLQsNC70YzQvdCw0Y8g0L/RgNGP0LzQsNGPINC40YHQv9C+0LvRjNC30YPQtdGC0YHRjyDQtNC70Y8g0LDQvdCw0LvQuNC30LAg0YfQuNGB0LvQsCDQv9C10YDQtdGB0LXRh9C10L3QuNC5INC4INC80L3QvtC20LXRgdGC0LLQsCDQt9C90LDRh9C10L3QuNC5LiIpLAp9CgpkZWYgcGF0Y2hfaXRlbShzb3VyY2UsIGl0ZW1faWQsIGxldmVsLCBldmlkZW5jZSk6CiAgICBtYXJrZXIgPSBmJyJpZCI6ICJ7aXRlbV9pZH0iJwogICAgc3RhcnQgPSBzb3VyY2UuZmluZChtYXJrZXIpCiAgICBpZiBzdGFydCA8IDA6CiAgICAgICAgcmFpc2UgUnVudGltZUVycm9yKGYiSXRlbSBub3QgZm91bmQ6IHtpdGVtX2lkfSIpCiAgICBuZXh0X2l0ZW0gPSBzb3VyY2UuZmluZCgnXG4gICAgICAgICAgICAgICAgICAgICAgICB7XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICJpZCI6Jywgc3RhcnQgKyBsZW4obWFya2VyKSkKICAgIGdyb3VwX2VuZCA9IHNvdXJjZS5maW5kKCJcbiAgICAgICAgICAgICAgICBdIiwgc3RhcnQgKyBsZW4obWFya2VyKSkKICAgIGNhbmRpZGF0ZXMgPSBbcCBmb3IgcCBpbiAobmV4dF9pdGVtLCBncm91cF9lbmQpIGlmIHAgPj0gMF0KICAgIGVuZCA9IG1pbihjYW5kaWRhdGVzKSBpZiBjYW5kaWRhdGVzIGVsc2UgbGVuKHNvdXJjZSkKICAgIGJsb2NrID0gc291cmNlW3N0YXJ0OmVuZF0KICAgIGJsb2NrLCBuMSA9IHJlLnN1Ym4ocicoImxldmVsIjpcXHMqKVxcZCsnLCByZidcXGdcPDF7bGV2ZWx9JywgYmxvY2ssIGNvdW50PTEpCiAgICBibG9jaywgbjIgPSByZS5zdWJuKHInKCJldmlkZW5jZSI6XFxzKikiW14iXSonLCBsYW1iZGEgbTogbS5ncm91cCgxKSArIGpzb24uZHVtcHMoZXZpZGVuY2UsIGVuc3VyZV9hc2NpaT1GYWxzZSksIGJsb2NrLCBjb3VudD0xKQogICAgYmxvY2ssIG4zID0gcmUuc3VibihyJygi bGluayI6XFxzKikiW14iXSonLCByJ1xcZzwxPiIxNC4wOC4yNi5odG1sIicsIGJsb2NrLCBjb3VudD0xKQogICAgaWYgbm90IChuMSBhbmQgbjIgYW5kIG4zKToKICAgICAgICByYWlzZSBSdW50aW1lRXJyb3IoZiJQYXRjaCBpbmNvbXBsZXRlIGZvciB7aXRlbV9pZH06IHtuMX0sIHtuMn0sIHtuM30iKQogICAgcmV0dXJuIHNvdXJjZVs6c3RhcnRdICsgYmxvY2sgKyBzb3VyY2VbZW5kOl0KCmZvciBpdGVtX2lkLCAobGV2ZWwsIGV2aWRlbmNlKSBpbiB1cGRhdGVzLml0ZW1zKCk6CiAgICB0ZXh0ID0gcGF0Y2hfaXRlbSh0ZXh0LCBpdGVtX2lkLCBsZXZlbCwgZXZpZGVuY2UpCgpyZXZpc2lvbiA9ICJzb2Z5YS1oZWF0bWFwLXRleC0yMDI2LTA4LTE0LXYxIgppZiByZXZpc2lvbiBub3QgaW4gdGV4dDoKICAgIG1pZ3JhdGlvbiA9IHInJycKPHNjcmlwdD4KKCgpPT57CmNvbnN0IGhlYXRtYXBSZXZpc2lvbj0nc29meWEtaGVhdG1hcC10ZXgtMjAyNi0wOC0xNC12MSc7CmNvbnN0IGhlYXRtYXBVcGRhdGVzPVsKICBbJ29nZV8xMV8zXzEnLDNdLFsnb2dlXzExXzNfMicsM10sWydvZ2VfMTFfNF8xJywzXSxbJ29nZV8xMV80XzInLDNdLAogIFsnb2dlXzIwXzFfMicsM10sWydvZ2VfMjBfMV81JywzXSwKICBbJ29nZV8yMl8yXzEnLDNdLFsnb2dlXzIyXzJfMicsM10sWydvZ2VfMjJfMl8zJywzXSxbJ29nZV8yMl8yXzQnLDNdLFsnb2dlXzIyXzJfNScsM10sCiAgWydvZ2VfMjJfM18xJywzXSxbJ29nZV8yMl8zXzInLDNdLFsnb2dlXzIyXzNfMycsM10sWydvZ2VfMjJfM180JywzXSxbJ29nZV8yMl8zXzUnLDNdCl07CmNvbnN0IGhlYXRtYXBFdmlkZW5jZT17fTsKY29uc3QgZXZpZGVuY2U9KGlkcyx0ZXh0LGxpbmspPT5pZHMuZm9yRWFjaChpZD0+aGVhdG1hcEV2aWRlbmNlW2lkXT17dGV4dCxsaW5rfSk7CmV2aWRlbmNlKFsnb2dlXzExXzNfMScsJ29nZV8xMV8zXzInXSwn0J/QvtC00YLQstC10YDQttC00LXQvdC+INC30LDQvdGP0YLQuNC10LwgMTQuMDguMjY6INC00YDQvtCx0L3Qvi3RgNCw0YbQuNC+0L3QsNC70YzQvdGL0LUg0YTRg9C90LrRhtC40LgsINCy0LXRgtCy0Lgg0LPQuNC/0LXRgNCx0L7Qu9GLLCDQsNGB0LjQvNC/0YLQvtGC0Ysg0Lgg0YXRh9Cw0YDQsNC60YLQtdGA0L3Ri9C1INGC0L7Rh9C60LguJywnMTQuMDguMjYuaHRtbCcpOwpldmlkZW5jZShbJ29nZV8xMV80XzEnLCdvZ2VfMTFfNF8yJ10sJ9Cf0L7QtNGC0LLQtdGA0LbQtNC10L3QviDQt9Cw0L3Rj9GC0LjQtdC8IDE0LjA4LjI2OiDQutGD0YHQvtGH0L3QsNGPINGCINC30LDQv9C40YHRjCwg0L3QtdGB0LrQvtC70YzQutC+INC80L7QtNGD0LvQtdC5LCDRgtC+0YfQutC4INGB0LzQtdC90Ysg0YTQvtGA0LzRg9C70Ysg0Lgg0L/RgNC10L7QsdGA0LDQt9C+0LLQsNC90LjRjyDQs9GA0LDRhNC40LrQsC4nLCcxNC4wOC4yNi5odG1sJyk7CmV2aWRlbmNlKFsnb2dlXzIwXzFfMicsJ29nZV8yMF8xXzUnXSwn0J/QvtC00YLQstC10YDQttC00LXQvdC+INC30LDQvdGP0YLQuNC10LwgMTQuMDguMjY6INCe0JTQlSDQuNGB0YXQvtC00L3QvtC5INC00YDQvtCx0Lgg0YHQvtGF0YDQsNC90Y/QtdGC0YHRjyDQv9C+0YHQu9C1INGB0L7QutGA0LDRidC10L3QuNGPOyDQuNGB0LrQu9GO0YfQtdC90L3Ri9C1INGC0L7Rh9C60Lgg0L7RgdGC0LDRjtGC0YHRjyDQstGL0LrQvtC70L7RgtGL0LzQuC4nLCcxNC4wOC4yNi5odG1sJyk7CmV2aWRlbmNlKFsnb2dlXzIyXzJfMScsJ29nZV8yMl8yXzInLCdvZ2VfMjJfMl8zJyw nb2dlXzIyXzJfNCcsJ29nZV8yMl8yXzUnXSwn0J/QvtC00YLQstC10YDQttC00LXQvdC+INC30LDQvdGP0YLQuNC10LwgMTQuMDguMjY6INC/0L7Qu9C90YvQuSDQsNC70LPQvtGA0LjRgtC8INCz0LjQv9C10YDQsdC+0LvRiyDigJQg0J7QlNCXLCDQsNGB0LjQvNC/0YLQvtGC0YssINC+0L/QvtGA0L3Ri9C1INC4INC+0YHQvtCx0YvQtSDRgtC+0YfQutC4LCDRgdCy0L7QudGB0YLQstCwINC4INC/0LXRgNC10YHQtdGH0LXQvdC40Y8uJywnMTQuMDguMjYuaHRtbCcpOwpldmlkZW5jZShbJ29nZV8yMl8zXzEnLCdvZ2VfMjJfM18yJyw nb2dlXzIyXzNfMycsJ29nZV8yMl8zXzQnLCdvZ2VfMjJfM181J10sJ9Cf0L7QtNGC0LLQtdGA0LbQtNC10L3QviDQt9Cw0L3Rj9GC0LjQtdC8IDE0LjA4LjI2OiDQutGD0YHQvtGH0L3QsNGPINGE0L7RgNC80YPQu9CwLCDQvdC10YHQutC+0LvRjNC60L4g0LzQvtC00YPQu9C10LksINCz0YDQsNC90LjRhtGLINCy0LXRgtCy0LXQuSwg0LzQvdC+0LbQtdGB0YLQstC+INC30L3QsNGH0LXQvdC40Lkg0Lgg0LDQvdCw0LvQuNC3INCz0L7RgNC40LfQvtC90YLQsNC70YzQvdC+0Lkg0L/RgNGP0LzQvtC5LicsJzE0LjA4LjI2Lmh0bWwnKTsKdHJ5ewogIGNvbnN0IGtleT0nc29meWEtY29tcGV0ZW5jZS1tYXAtdjEnOwogIGlmKGxvY2FsU3RvcmFnZS5nZXRJdGVtKGhlYXRtYXBSZXZpc2lvbikhPT0nMScpewogICAgY29uc3Qgc2F2ZWQ9SlNPTi5wYXJzZShsb2NhbFN0b3JhZ2UuZ2V0SXRlbShrZXkpfHwn e30nKTsKICAgIGhlYXRtYXBVcGRhdGVzLmZvckVhY2goKFtpZCxsZXZlbF0pPT5zYXZlZFtpZF09TWF0aC5tYXgoTnVtYmVyKHNhdmVkW2lkXT8/MCksbGV2ZWwpKTsKICAgIGxvY2FsU3RvcmFnZS5zZXRJdGVtKGtleSxKU09OLnN0cmluZ2lmeShzYXZlZCkpOwogICAgbG9jYWxTdG9yYWdlLnNldEl0ZW0oaGVhdG1hcFJldmlzaW9uLCcxJyk7CiAgICBsb2NhdGlvbi5yZWxvYWQoKTsKICAgIHJldHVybjsKICB9Cn1jYXRjaChfKXt9CmRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoJ2NsaWNrJyxldmVudD0+ewogIGNvbnN0IGlkPWV2ZW50LnRhcmdldC5jbG9zZXN0Py4oJ1tkYXRhLWlkXScpPy5kYXRhc2V0LmlkOwogIGNvbnN0IGluZm89aGVhdG1hcEV2aWRlbmNlW2lkXTsKICBpZighaW5mbylyZXR1cm47CiAgc2V0VGltZW91dCgoKT0+ewogICAgY29uc3QgZGlhbG9nPWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdjb21wZXRlbmN5RGlhbG9nJyk7CiAgICBpZighZGlhbG9nPy5vcGVuKXJldHVybjsKICAgIGNvbnN0IGV2aWRlbmNlTm9kZT1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnZGlhbG9nRXZpZGVuY2UnKTsKICAgIGNvbnN0IGxpbmtOb2RlPWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdkaWFsb2dMaW5rJyk7CiAgICBpZihldmlkZW5jZU5vZGUpZXZpZGVuY2VOb2RlLnRleHRDb250ZW50PWluZm8udGV4dDsKICAgIGlmKGxpbmtOb2RlKWxpbmtOb2RlLmhyZWY9aW5mby5saW5rOwogIH0sMCk7Cn0pOwp9KSgpOwo8L3NjcmlwdD4KJycnCiAgICB0ZXh0ID0gdGV4dC5yZXBsYWNlKCJcbjwvYm9keT4iLCBtaWdyYXRpb24gKyAiXG48L2JvZHk+IiwgMSkKCnBhdGgud3JpdGVfdGV4dCh0ZXh0LCBlbmNvZGluZz0idXRmLTgiKQpwcmludChmIlVwZGF0ZWQge2xlbih1cGRhdGVzKX0gY29tcGV0ZW5jaWVzIGluIHtwYXRofSIpCg==' | base64 -d > /tmp/patch_heatmap.py
+          python /tmp/patch_heatmap.py
 
-          path = Path('students/sofya_kalney/site/index.html')
-          text = path.read_text(encoding='utf-8')
-
-          updates = {
-              'oge_11_3_1': (3, 'Подтверждено занятием 14.08.26: выделение ветвей дробно-рациональной функции, поиск асимптот и характерных точек.'),
-              'oge_11_3_2': (3, 'Подтверждено занятием 14.08.26: преобразование дробно-рациональной функции к гиперболе и построение по асимптотам.'),
-              'oge_11_4_1': (3, 'Подтверждено занятием 14.08.26: нули подмодульных выражений, точки смены формулы и характерные точки графика.'),
-              'oge_11_4_2': (3, 'Подтверждено занятием 14.08.26: кусочная запись, несколько модулей и преобразования графиков функций с модулем.'),
-              'oge_20_1_2': (3, 'Подтверждено занятием 14.08.26: ОДЗ исходной дроби фиксируется до преобразований и сохраняется после сокращения.'),
-              'oge_20_1_5': (3, 'Подтверждено занятием 14.08.26: после упрощения сохраняются исходные ограничения и выколотые точки.'),
-              'oge_22_2_1': (3, 'Подтверждено занятием 14.08.26: рабочий алгоритм построения дробно-рациональной функции через асимптоты и опорные точки.'),
-              'oge_22_2_2': (3, 'Подтверждено занятием 14.08.26: ОДЗ дробно-рациональной функции определяется до сокращения.'),
-              'oge_22_2_3': (3, 'Подтверждено занятием 14.08.26: асимптоты, нули, пересечения и выколотые точки учитываются как особые точки графика.'),
-              'oge_22_2_4': (3, 'Подтверждено занятием 14.08.26: свойства гиперболы читаются по ветвям, асимптотам и области значений.'),
-              'oge_22_2_5': (3, 'Подтверждено занятием 14.08.26: число общих точек с горизонтальной прямой определяется по графику и области значений.'),
-              'oge_22_3_1': (3, 'Подтверждено занятием 14.08.26: кусочная формула строится после разбиения оси нулями всех подмодульных выражений.'),
-              'oge_22_3_2': (3, 'Подтверждено занятием 14.08.26: для кусочных и дробно-рациональных функций отдельно контролируется область определения каждой ветви.'),
-              'oge_22_3_3': (3, 'Подтверждено занятием 14.08.26: точки смены формулы, границы ветвей и выколотые точки отмечаются явно.'),
-              'oge_22_3_4': (3, 'Подтверждено занятием 14.08.26: множество значений и поведение кусочной функции определяются по всем ветвям графика.'),
-              'oge_22_3_5': (3, 'Подтверждено занятием 14.08.26: горизонтальная прямая используется для анализа числа пересечений и множества значений.'),
-          }
-
-          def patch_item(source, item_id, level, evidence):
-              marker = f'"id": "{item_id}"'
-              start = source.find(marker)
-              if start < 0:
-                  raise RuntimeError(f'Item not found: {item_id}')
-              next_item = source.find('\n                        {\n                                "id":', start + len(marker))
-              group_end = source.find('\n                ]', start + len(marker))
-              candidates = [p for p in (next_item, group_end) if p >= 0]
-              end = min(candidates) if candidates else len(source)
-              block = source[start:end]
-              block, n1 = re.subn(r'("level":\s*)\d+', rf'\g<1>{level}', block, count=1)
-              block, n2 = re.subn(r'("evidence":\s*)"[^"]*"', lambda m: m.group(1) + json.dumps(evidence, ensure_ascii=False), block, count=1)
-              block, n3 = re.subn(r'("link":\s*)"[^"]*"', r'\g<1>"14.08.26.html"', block, count=1)
-              if not (n1 and n2 and n3):
-                  raise RuntimeError(f'Patch incomplete for {item_id}: {n1}, {n2}, {n3}')
-              return source[:start] + block + source[end:]
-
-          for item_id, (level, evidence) in updates.items():
-              text = patch_item(text, item_id, level, evidence)
-
-          revision = 'sofya-heatmap-tex-2026-08-14-v1'
-          if revision not in text:
-              migration = r'''
-<script>
-(()=>{
-const heatmapRevision='sofya-heatmap-tex-2026-08-14-v1';
-const heatmapUpdates=[
-  ['oge_11_3_1',3],['oge_11_3_2',3],['oge_11_4_1',3],['oge_11_4_2',3],
-  ['oge_20_1_2',3],['oge_20_1_5',3],
-  ['oge_22_2_1',3],['oge_22_2_2',3],['oge_22_2_3',3],['oge_22_2_4',3],['oge_22_2_5',3],
-  ['oge_22_3_1',3],['oge_22_3_2',3],['oge_22_3_3',3],['oge_22_3_4',3],['oge_22_3_5',3]
-];
-const heatmapEvidence={};
-const evidence=(ids,text,link)=>ids.forEach(id=>heatmapEvidence[id]={text,link});
-evidence(['oge_11_3_1','oge_11_3_2'],'Подтверждено занятием 14.08.26: дробно-рациональные функции, ветви гиперболы, асимптоты и характерные точки.','14.08.26.html');
-evidence(['oge_11_4_1','oge_11_4_2'],'Подтверждено занятием 14.08.26: кусочная запись, несколько модулей, точки смены формулы и преобразования графика.','14.08.26.html');
-evidence(['oge_20_1_2','oge_20_1_5'],'Подтверждено занятием 14.08.26: ОДЗ исходной дроби сохраняется после сокращения; исключённые точки остаются выколотыми.','14.08.26.html');
-evidence(['oge_22_2_1','oge_22_2_2','oge_22_2_3','oge_22_2_4','oge_22_2_5'],'Подтверждено занятием 14.08.26: полный алгоритм гиперболы — ОДЗ, асимптоты, опорные и особые точки, свойства и пересечения.','14.08.26.html');
-evidence(['oge_22_3_1','oge_22_3_2','oge_22_3_3','oge_22_3_4','oge_22_3_5'],'Подтверждено занятием 14.08.26: кусочная формула, несколько модулей, границы ветвей, множество значений и анализ горизонтальной прямой.','14.08.26.html');
-try{
-  const key='sofya-competence-map-v1';
-  if(localStorage.getItem(heatmapRevision)!=='1'){
-    const saved=JSON.parse(localStorage.getItem(key)||'{}');
-    heatmapUpdates.forEach(([id,level])=>saved[id]=Math.max(Number(saved[id]??0),level));
-    localStorage.setItem(key,JSON.stringify(saved));
-    localStorage.setItem(heatmapRevision,'1');
-    location.reload();
-    return;
-  }
-}catch(_){}
-document.addEventListener('click',event=>{
-  const id=event.target.closest?.('[data-id]')?.dataset.id;
-  const info=heatmapEvidence[id];
-  if(!info)return;
-  setTimeout(()=>{
-    const dialog=document.getElementById('competencyDialog');
-    if(!dialog?.open)return;
-    const evidenceNode=document.getElementById('dialogEvidence');
-    const linkNode=document.getElementById('dialogLink');
-    if(evidenceNode)evidenceNode.textContent=info.text;
-    if(linkNode)linkNode.href=info.link;
-  },0);
-});
-})();
-</script>
-'''
-              text = text.replace('\n</body>', migration + '\n</body>', 1)
-
-          path.write_text(text, encoding='utf-8')
-          print(f'Updated {len(updates)} competencies in {path}')
-          PY
-
-      - name: Commit patched heatmap
+      - name: Commit heatmap update
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
