@@ -1,0 +1,134 @@
+name: One-shot Sofya heatmap update 14.08.26
+
+on:
+  push:
+    branches:
+      - agent/update-sofya-heatmap-14-08
+
+permissions:
+  contents: write
+
+jobs:
+  patch-heatmap:
+    if: github.event.head_commit.message == 'Bootstrap Sofya heatmap 14.08 patch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/update-sofya-heatmap-14-08
+          fetch-depth: 0
+
+      - name: Update heatmap defaults and migration
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('students/sofya_kalney/site/index.html')
+          text = path.read_text(encoding='utf-8')
+
+          updates = {
+              'oge_11_3_1': (3, 'Подтверждено занятием 14.08.26: выделение ветвей дробно-рациональной функции, поиск асимптот и характерных точек.'),
+              'oge_11_3_2': (3, 'Подтверждено занятием 14.08.26: преобразование дробно-рациональной функции к гиперболе и построение по асимптотам.'),
+              'oge_11_4_1': (3, 'Подтверждено занятием 14.08.26: нули подмодульных выражений, точки смены формулы и характерные точки графика.'),
+              'oge_11_4_2': (3, 'Подтверждено занятием 14.08.26: кусочная запись, несколько модулей и преобразования графиков функций с модулем.'),
+              'oge_20_1_2': (3, 'Подтверждено занятием 14.08.26: ОДЗ исходной дроби фиксируется до преобразований и сохраняется после сокращения.'),
+              'oge_20_1_5': (3, 'Подтверждено занятием 14.08.26: после упрощения сохраняются исходные ограничения и выколотые точки.'),
+              'oge_22_2_1': (3, 'Подтверждено занятием 14.08.26: рабочий алгоритм построения дробно-рациональной функции через асимптоты и опорные точки.'),
+              'oge_22_2_2': (3, 'Подтверждено занятием 14.08.26: ОДЗ дробно-рациональной функции определяется до сокращения.'),
+              'oge_22_2_3': (3, 'Подтверждено занятием 14.08.26: асимптоты, нули, пересечения и выколотые точки учитываются как особые точки графика.'),
+              'oge_22_2_4': (3, 'Подтверждено занятием 14.08.26: свойства гиперболы читаются по ветвям, асимптотам и области значений.'),
+              'oge_22_2_5': (3, 'Подтверждено занятием 14.08.26: число общих точек с горизонтальной прямой определяется по графику и области значений.'),
+              'oge_22_3_1': (3, 'Подтверждено занятием 14.08.26: кусочная формула строится после разбиения оси нулями всех подмодульных выражений.'),
+              'oge_22_3_2': (3, 'Подтверждено занятием 14.08.26: для кусочных и дробно-рациональных функций отдельно контролируется область определения каждой ветви.'),
+              'oge_22_3_3': (3, 'Подтверждено занятием 14.08.26: точки смены формулы, границы ветвей и выколотые точки отмечаются явно.'),
+              'oge_22_3_4': (3, 'Подтверждено занятием 14.08.26: множество значений и поведение кусочной функции определяются по всем ветвям графика.'),
+              'oge_22_3_5': (3, 'Подтверждено занятием 14.08.26: горизонтальная прямая используется для анализа числа пересечений и множества значений.'),
+          }
+
+          def patch_item(source, item_id, level, evidence):
+              marker = f'"id": "{item_id}"'
+              start = source.find(marker)
+              if start < 0:
+                  raise RuntimeError(f'Item not found: {item_id}')
+              next_item = source.find('\n                        {\n                                "id":', start + len(marker))
+              group_end = source.find('\n                ]', start + len(marker))
+              candidates = [p for p in (next_item, group_end) if p >= 0]
+              end = min(candidates) if candidates else len(source)
+              block = source[start:end]
+              block, n1 = re.subn(r'("level":\s*)\d+', rf'\g<1>{level}', block, count=1)
+              block, n2 = re.subn(r'("evidence":\s*)"[^"]*"', lambda m: m.group(1) + repr(evidence).replace("'", '"'), block, count=1)
+              block, n3 = re.subn(r'("link":\s*)"[^"]*"', r'\g<1>"14.08.26.html"', block, count=1)
+              if not (n1 and n2 and n3):
+                  raise RuntimeError(f'Patch incomplete for {item_id}: {n1}, {n2}, {n3}')
+              return source[:start] + block + source[end:]
+
+          for item_id, (level, evidence) in updates.items():
+              text = patch_item(text, item_id, level, evidence)
+
+          revision = 'sofya-heatmap-tex-2026-08-14-v1'
+          if revision not in text:
+              migration = r'''
+<script>
+(()=>{
+const heatmapRevision='sofya-heatmap-tex-2026-08-14-v1';
+const heatmapUpdates=[
+  ['oge_11_3_1',3],['oge_11_3_2',3],['oge_11_4_1',3],['oge_11_4_2',3],
+  ['oge_20_1_2',3],['oge_20_1_5',3],
+  ['oge_22_2_1',3],['oge_22_2_2',3],['oge_22_2_3',3],['oge_22_2_4',3],['oge_22_2_5',3],
+  ['oge_22_3_1',3],['oge_22_3_2',3],['oge_22_3_3',3],['oge_22_3_4',3],['oge_22_3_5',3]
+];
+const heatmapEvidence={};
+const evidence=(ids,text,link)=>ids.forEach(id=>heatmapEvidence[id]={text,link});
+evidence(['oge_11_3_1','oge_11_3_2'],'Подтверждено занятием 14.08.26: дробно-рациональные функции, ветви гиперболы, асимптоты и характерные точки.','14.08.26.html');
+evidence(['oge_11_4_1','oge_11_4_2'],'Подтверждено занятием 14.08.26: кусочная запись, несколько модулей, точки смены формулы и преобразования графика.','14.08.26.html');
+evidence(['oge_20_1_2','oge_20_1_5'],'Подтверждено занятием 14.08.26: ОДЗ исходной дроби сохраняется после сокращения; исключённые точки остаются выколотыми.','14.08.26.html');
+evidence(['oge_22_2_1','oge_22_2_2','oge_22_2_3','oge_22_2_4','oge_22_2_5'],'Подтверждено занятием 14.08.26: полный алгоритм гиперболы — ОДЗ, асимптоты, опорные и особые точки, свойства и пересечения.','14.08.26.html');
+evidence(['oge_22_3_1','oge_22_3_2','oge_22_3_3','oge_22_3_4','oge_22_3_5'],'Подтверждено занятием 14.08.26: кусочная формула, несколько модулей, границы ветвей, множество значений и анализ горизонтальной прямой.','14.08.26.html');
+try{
+  const key='sofya-competence-map-v1';
+  if(localStorage.getItem(heatmapRevision)!=='1'){
+    const saved=JSON.parse(localStorage.getItem(key)||'{}');
+    heatmapUpdates.forEach(([id,level])=>saved[id]=Math.max(Number(saved[id]??0),level));
+    localStorage.setItem(key,JSON.stringify(saved));
+    localStorage.setItem(heatmapRevision,'1');
+    location.reload();
+    return;
+  }
+}catch(_){}
+document.addEventListener('click',event=>{
+  const id=event.target.closest?.('[data-id]')?.dataset.id;
+  const info=heatmapEvidence[id];
+  if(!info)return;
+  setTimeout(()=>{
+    const dialog=document.getElementById('competencyDialog');
+    if(!dialog?.open)return;
+    const evidenceNode=document.getElementById('dialogEvidence');
+    const linkNode=document.getElementById('dialogLink');
+    if(evidenceNode)evidenceNode.textContent=info.text;
+    if(linkNode)linkNode.href=info.link;
+  },0);
+});
+})();
+</script>
+'''
+              text = text.replace('\n</body>', migration + '\n</body>', 1)
+
+          path.write_text(text, encoding='utf-8')
+          print(f'Updated {len(updates)} competencies in {path}')
+          PY
+
+      - name: Commit patched heatmap
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/sofya_kalney/site/index.html
+          if git diff --cached --quiet; then
+            echo "No heatmap changes to commit"
+            exit 0
+          fi
+          git commit -m "Update Sofya heatmap for 14.08.26"
+          git push origin HEAD:agent/update-sofya-heatmap-14-08
