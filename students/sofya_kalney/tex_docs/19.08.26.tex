@@ -1,0 +1,934 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+
+\usepackage[
+  a4paper,
+  left=20mm,
+  right=20mm,
+  top=20mm,
+  bottom=22mm
+]{geometry}
+
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F2F4F4}
+
+\providecommand{\tg}{\mathop{\rm tg}\nolimits}
+\providecommand{\ctg}{\mathop{\rm ctg}\nolimits}
+\providecommand{\arctg}{\mathop{\rm arctg}\nolimits}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=darkaccent
+}
+
+\color{textgray}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{3em}
+\raggedbottom
+
+\setlist[itemize]{
+  leftmargin=1.6em,
+  itemsep=0.28em,
+  topsep=0.35em
+}
+
+\setlist[enumerate]{
+  leftmargin=*,
+  itemsep=0.7em,
+  topsep=0.4em
+}
+
+\newcommand{\checkitem}{\item[\textcolor{accent}{$\square$}]}
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+
+\newcommand{\sectionrule}{%
+  \par\vspace{-0.35em}%
+  {\color{accent!60}\rule{\linewidth}{0.7pt}}%
+  \vspace{0.35em}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{textgray}{Прямоугольный треугольник}}
+\fancyhead[R]{\small\textcolor{textgray}{София Кальней}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{accent!55}\leaders\hrule height \headrulewidth\hfill}}
+
+\tkzSetUpLine[line width=1pt,color=darkaccent]
+\tkzSetUpPoint[color=darkaccent,fill=darkaccent,size=3]
+\tkzSetUpLabel[color=black,font=\small]
+
+\begin{document}
+
+% =========================================================
+% TITLE PAGE
+% =========================================================
+\begin{titlepage}
+\thispagestyle{empty}
+
+\vspace*{2.5cm}
+
+\begin{center}
+
+{\Large\textcolor{accent}{ОГЭ · геометрия}\par}
+
+\vspace{1.1cm}
+
+{\Huge\bfseries Чек-лист\par}
+
+\vspace{0.6cm}
+
+{\LARGE\bfseries
+Прямоугольный треугольник:\par}
+
+\vspace{0.15cm}
+
+{\LARGE
+медиана, высота, площадь\\
+и тригонометрия\par}
+
+\vspace{1.3cm}
+
+{\color{accent!70}\rule{0.58\linewidth}{1pt}}
+
+\vspace{1.3cm}
+
+{\large
+Лёвин Артём Александрович\\[0.25em]
+\textbf{эксклюзивно для Софии Кальней}
+\par}
+
+\vspace{0.9cm}
+
+{\large \today\par}
+
+\vfill
+
+{\small\textcolor{textgray}{
+Ключевые свойства, алгоритмы и типовые конструкции
+для решения геометрических задач
+}\par}
+
+\end{center}
+
+\vfill
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[
+  accent!55,
+  line width=1.1pt
+]
+([xshift=1.5cm,yshift=1.45cm]current page.south west)
+.. controls
+([xshift=5.0cm,yshift=2.05cm]current page.south west)
+and
+([xshift=-5.0cm,yshift=0.95cm]current page.south east)
+..
+([xshift=-1.5cm,yshift=1.45cm]current page.south east);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% =========================================================
+% CHECKLIST
+% =========================================================
+\section*{\textcolor{darkaccent}{1. Базовая конструкция: медиана в прямоугольном треугольнике}}
+\sectionrule
+
+Пусть в треугольнике \(ABC\)
+\[
+\angle ACB=90^\circ,
+\]
+а \(CM\) --- медиана, проведённая к гипотенузе \(AB\).
+
+\begin{itemize}
+  \checkitem Медиана делит гипотенузу пополам:
+  \[
+  AM=MB=\frac{AB}{2}.
+  \]
+
+  \checkitem В прямоугольном треугольнике середина гипотенузы равноудалена
+  от всех трёх вершин:
+  \[
+  \boxed{AM=BM=CM=\frac{AB}{2}}.
+  \]
+
+  \checkitem Следовательно, точка \(M\) является центром описанной окружности,
+  а радиус этой окружности равен
+  \[
+  R=\frac{AB}{2}.
+  \]
+
+  \checkitem Треугольники \(AMC\) и \(BMC\) равнобедренные:
+  \[
+  AM=CM,\qquad BM=CM.
+  \]
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \tkzDefPoint(0,0){C}
+  \tkzDefPoint(0,3){A}
+  \tkzDefPoint(4,0){B}
+  \tkzDefMidPoint(A,B)
+  \tkzGetPoint{M}
+
+  \tkzDrawSegments(A,B B,C C,A C,M)
+  \tkzMarkRightAngle[size=0.28](A,C,B)
+
+  \tkzLabelPoints[above](A)
+  \tkzLabelPoints[right](B)
+  \tkzLabelPoints[below left](C)
+  \tkzLabelPoints[above right](M)
+\end{tikzpicture}
+\end{center}
+
+\key{Обратное утверждение.}
+Если в треугольнике медиана, проведённая к стороне \(AB\), удовлетворяет
+\[
+CM=\frac{AB}{2},
+\]
+то
+\[
+\angle ACB=90^\circ.
+\]
+
+Иными словами, равенство
+\[
+CM=AM=BM
+\]
+позволяет распознать прямоугольный треугольник.
+
+% =========================================================
+\section*{\textcolor{darkaccent}{2. Диаметр и прямой угол}}
+\sectionrule
+
+Если вершина \(C\) лежит на окружности, а \(AB\) является диаметром, то
+\[
+\boxed{\angle ACB=90^\circ}.
+\]
+
+Это теорема о вписанном угле, опирающемся на диаметр.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+  \tkzDefPoint(0,0){O}
+  \tkzDefPoint(-2,0){A}
+  \tkzDefPoint(2,0){B}
+  \tkzDefPoint(0,2){C}
+
+  \tkzDrawCircle(O,A)
+  \tkzDrawSegments(A,B A,C B,C)
+  \tkzMarkRightAngle[size=0.28](A,C,B)
+
+  \tkzLabelPoints[left](A)
+  \tkzLabelPoints[right](B)
+  \tkzLabelPoints[above](C)
+  \tkzLabelPoints[below](O)
+\end{tikzpicture}
+\end{center}
+
+\key{Полезная связь.}
+В прямоугольном треугольнике середина гипотенузы является центром
+описанной окружности. Поэтому свойства медианы и свойства диаметра ---
+два взгляда на одну и ту же конструкцию.
+
+% =========================================================
+\section*{\textcolor{darkaccent}{3. Если прямой угол разделён в отношении \(1:2\)}}
+\sectionrule
+
+Если некоторый луч делит прямой угол на части в отношении \(1:2\), то
+\[
+x+2x=90^\circ,
+\]
+откуда
+\[
+x=30^\circ.
+\]
+
+Следовательно, получаются углы
+\[
+30^\circ\quad\text{и}\quad60^\circ.
+\]
+
+Для прямоугольного треугольника с углами
+\(30^\circ,60^\circ,90^\circ\):
+\[
+\boxed{
+\text{катет напротив }30^\circ
+:
+\text{катет напротив }60^\circ
+:
+\text{гипотенуза}
+=
+1:\sqrt3:2
+}.
+\]
+
+\textbf{Типовой пример.}
+Медиана к гипотенузе равна \(m\) и делит прямой угол в отношении \(1:2\).
+
+Так как медиана к гипотенузе равна половине гипотенузы,
+\[
+AB=2m.
+\]
+Углы равны \(30^\circ\) и \(60^\circ\), поэтому стороны треугольника:
+\[
+\boxed{m,\quad \sqrt3\,m,\quad 2m}.
+\]
+
+% =========================================================
+\section*{\textcolor{darkaccent}{4. Теорема Пифагора и тригонометрия}}
+\sectionrule
+
+Для прямоугольного треугольника \(ABC\), где
+\(\angle C=90^\circ\),
+\[
+\boxed{AB^2=AC^2+BC^2}.
+\]
+
+Если \(\alpha=\angle A\), то
+\[
+\sin\alpha=\frac{BC}{AB},
+\qquad
+\cos\alpha=\frac{AC}{AB},
+\]
+\[
+\tg\alpha=\frac{BC}{AC},
+\qquad
+\ctg\alpha=\frac{AC}{BC}.
+\]
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{0.88\linewidth}{@{}lX@{}}
+\toprule
+\textbf{Функция} & \textbf{Что сравниваем} \\
+\midrule
+\(\sin\alpha\) &
+противолежащий катет и гипотенузу \\
+
+\(\cos\alpha\) &
+прилежащий катет и гипотенузу \\
+
+\(\tg\alpha\) &
+противолежащий и прилежащий катеты \\
+
+\(\ctg\alpha\) &
+прилежащий и противолежащий катеты \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\key{Самопроверка:}
+для острого угла прямоугольного треугольника
+\[
+0<\sin\alpha<1,
+\qquad
+0<\cos\alpha<1.
+\]
+
+% =========================================================
+\section*{\textcolor{darkaccent}{5. Площадь треугольника}}
+\sectionrule
+
+Основные формулы:
+\[
+\boxed{S=\frac12 ah_a},
+\]
+где \(h_a\) --- высота, проведённая к стороне \(a\).
+
+Для прямоугольного треугольника с катетами \(a\) и \(b\):
+\[
+\boxed{S=\frac12 ab}.
+\]
+
+Если \(c\) --- гипотенуза, а \(h\) --- высота к гипотенузе, то
+\[
+\frac12 ab=\frac12 ch,
+\]
+поэтому
+\[
+\boxed{h=\frac{ab}{c}}.
+\]
+
+\subsection*{\textcolor{accent}{Формула Герона}}
+
+Для треугольника со сторонами \(a,b,c\)
+\[
+p=\frac{a+b+c}{2},
+\]
+\[
+\boxed{
+S=\sqrt{p(p-a)(p-b)(p-c)}
+}.
+\]
+
+Перед применением формулы необходимо проверить существование треугольника:
+\[
+a+b>c,\qquad
+a+c>b,\qquad
+b+c>a.
+\]
+
+% =========================================================
+\section*{\textcolor{darkaccent}{6. Типовая задача: известны периметры двух частей}}
+\sectionrule
+
+Медиана прямоугольного треугольника, проведённая к гипотенузе,
+разбивает его на два треугольника с периметрами \(8\) и \(9\).
+
+Пусть
+\[
+CM=m.
+\]
+Тогда
+\[
+AM=BM=m,\qquad AB=2m.
+\]
+
+Обозначим катеты через \(x\) и \(y\). Из периметров:
+\[
+x+2m=8,
+\qquad
+y+2m=9.
+\]
+Следовательно,
+\[
+x=8-2m,
+\qquad
+y=9-2m.
+\]
+
+По теореме Пифагора:
+\[
+(8-2m)^2+(9-2m)^2=(2m)^2.
+\]
+
+После упрощения:
+\[
+(2m-5)(2m-29)=0.
+\]
+
+Получаем два алгебраических значения:
+\[
+m=\frac52
+\qquad\text{или}\qquad
+m=\frac{29}{2}.
+\]
+
+Второе значение невозможно, так как при нём катеты
+\(8-2m\) и \(9-2m\) отрицательны. Поэтому
+\[
+m=\frac52.
+\]
+
+Тогда
+\[
+x=3,\qquad y=4,\qquad AB=5.
+\]
+
+\[
+\boxed{\text{Стороны треугольника: }3,\ 4,\ 5.}
+\]
+
+\key{Важно.}
+В геометрической задаче недостаточно получить корень уравнения.
+Все длины должны быть положительными и согласованными с условием.
+
+% =========================================================
+\section*{\textcolor{darkaccent}{7. Медиана и высота в одном треугольнике}}
+\sectionrule
+
+Рассмотрим треугольник \(ABC\). К стороне \(AC\) проведены:
+
+\begin{itemize}
+  \item медиана \(BM\);
+  \item высота \(BK\).
+\end{itemize}
+
+Пусть
+\[
+AM=BM,\qquad AB=1,\qquad BC=2.
+\]
+
+Так как \(BM\) --- медиана,
+\[
+AM=MC.
+\]
+По условию \(AM=BM\), следовательно
+\[
+AM=BM=CM.
+\]
+
+Точка \(M\) равноудалена от \(A,B,C\), поэтому \(AC\) является диаметром
+описанной окружности и
+\[
+\angle ABC=90^\circ.
+\]
+
+По теореме Пифагора:
+\[
+AC=\sqrt{1^2+2^2}=\sqrt5.
+\]
+
+Следовательно,
+\[
+BM=\frac{AC}{2}=\frac{\sqrt5}{2}.
+\]
+
+Площадь:
+\[
+S_{ABC}
+=
+\frac12\cdot AB\cdot BC
+=
+1.
+\]
+
+С другой стороны,
+\[
+S_{ABC}
+=
+\frac12\cdot AC\cdot BK,
+\]
+поэтому
+\[
+\frac12\sqrt5\cdot BK=1,
+\qquad
+BK=\frac{2}{\sqrt5}.
+\]
+
+Треугольник \(BKM\) прямоугольный при \(K\), поэтому
+\[
+\cos\angle KBM
+=
+\frac{BK}{BM}
+=
+\frac{2/\sqrt5}{\sqrt5/2}
+=
+\boxed{\frac45}.
+\]
+
+% =========================================================
+\section*{\textcolor{darkaccent}{8. Внешние квадраты на катетах}}
+\sectionrule
+
+Пусть \(ABC\) --- прямоугольный треугольник,
+\[
+\angle ACB=90^\circ,
+\qquad
+AC=a,\quad BC=b,\quad AB=c.
+\]
+
+На катетах \(AC\) и \(BC\) снаружи построены квадраты
+\(ACDE\) и \(BCFG\).
+Медиана \(CM\) продолжена до пересечения с прямой \(DF\) в точке \(N\).
+
+\begin{center}
+\begin{tikzpicture}[scale=0.72]
+  \tkzDefPoint(0,0){C}
+  \tkzDefPoint(0,4){A}
+  \tkzDefPoint(1,0){B}
+
+  \tkzDefPoint(-4,0){D}
+  \tkzDefPoint(-4,4){E}
+
+  \tkzDefPoint(0,-1){F}
+  \tkzDefPoint(1,-1){G}
+
+  \tkzDefMidPoint(A,B)
+  \tkzGetPoint{M}
+
+  \tkzInterLL(C,M)(D,F)
+  \tkzGetPoint{N}
+
+  \tkzDrawSegments(A,B B,C C,A)
+  \tkzDrawPolygon(A,C,D,E)
+  \tkzDrawPolygon(B,C,F,G)
+  \tkzDrawSegment(D,F)
+  \tkzDrawSegment(M,N)
+
+  \tkzMarkRightAngle[size=0.25](A,C,B)
+  \tkzMarkRightAngle[size=0.22](D,C,F)
+  \tkzMarkRightAngle[size=0.22](D,N,C)
+
+  \tkzLabelPoints[above](A,E)
+  \tkzLabelPoints[right](B,G,M)
+  \tkzLabelPoints[below](F,N)
+  \tkzLabelPoints[left](D)
+  \tkzLabelPoints[above left](C)
+\end{tikzpicture}
+\end{center}
+
+Треугольники \(DCF\) и \(ACB\) имеют равные пары катетов:
+\[
+DC=AC=a,
+\qquad
+CF=CB=b,
+\]
+и прямые углы при \(C\). Поэтому
+\[
+\triangle DCF\cong\triangle ACB
+\]
+и
+\[
+DF=AB=c.
+\]
+
+Из угловых соотношений в равнобедренных треугольниках,
+возникающих благодаря свойству медианы к гипотенузе,
+получаем
+\[
+CN\perp DF.
+\]
+
+Следовательно, площадь \(\triangle DCF\) можно вычислить двумя способами:
+\[
+S_{DCF}
+=
+\frac12 ab
+=
+\frac12 DF\cdot CN.
+\]
+
+Так как \(DF=c\),
+\[
+\boxed{
+CN=\frac{ab}{c}
+}.
+\]
+
+По теореме Пифагора
+\[
+c=\sqrt{a^2+b^2},
+\]
+поэтому
+\[
+\boxed{
+CN=\frac{ab}{\sqrt{a^2+b^2}}
+}.
+\]
+
+Для катетов \(1\) и \(4\):
+\[
+CN=
+\frac{1\cdot4}{\sqrt{1^2+4^2}}
+=
+\boxed{\frac{4}{\sqrt{17}}}
+=
+\boxed{\frac{4\sqrt{17}}{17}}.
+\]
+
+Заметим, что полученная величина совпадает с высотой прямоугольного
+треугольника, проведённой к гипотенузе.
+
+% =========================================================
+\section*{\textcolor{darkaccent}{9. Универсальный алгоритм решения}}
+\sectionrule
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item \key{Отметьте конструкцию.}
+  Найдите прямой угол, гипотенузу, медиану, высоту и середины сторон.
+
+  \item \key{Переведите геометрию в равенства.}
+  Например,
+  \[
+  M\text{ --- середина }AB
+  \quad\Longrightarrow\quad
+  AM=BM.
+  \]
+
+  \item \key{Проверьте, можно ли применить свойство медианы.}
+  Только после установления прямоугольности допустимо писать
+  \[
+  CM=\frac{AB}{2}.
+  \]
+
+  \item \key{Выберите основной инструмент:}
+  \[
+  \text{Пифагор}
+  \quad\text{или}\quad
+  \text{тригонометрия}
+  \quad\text{или}\quad
+  \text{площадь}.
+  \]
+
+  \item Если в задаче известны три стороны общего треугольника,
+  рассмотрите \key{формулу Герона}.
+
+  \item Если получено уравнение, решите его и обязательно
+  \key{проверьте геометрический смысл корней}.
+
+  \item В конце выполните быструю проверку:
+  длины положительны, гипотенуза --- наибольшая сторона,
+  а найденные синус и косинус принадлежат интервалу \((0;1)\).
+\end{enumerate}
+
+% =========================================================
+\section*{\textcolor{darkaccent}{10. Типичные ошибки}}
+\sectionrule
+
+\begin{itemize}
+  \checkitem Писать
+  \[
+  CM=\frac{AB}{2}
+  \]
+  для произвольного треугольника. Это свойство относится к медиане,
+  проведённой к \textbf{гипотенузе прямоугольного треугольника}.
+
+  \checkitem Путать медиану и высоту:
+  медиана делит сторону пополам, высота образует угол \(90^\circ\).
+
+  \checkitem Из равенства \(AM=BM\) сразу делать вывод о прямом угле,
+  не используя дополнительно тот факт, что \(M\) --- середина стороны.
+
+  \checkitem При отношении углов \(1:2\) забывать, что их сумма равна
+  именно \(90^\circ\), если они составляют прямой угол.
+
+  \checkitem В формулах \(\sin\) и \(\cos\) выбирать катет
+  безотносительно рассматриваемого угла.
+
+  \checkitem При вычислении площади использовать высоту,
+  проведённую не к той стороне, которая выбрана основанием.
+
+  \checkitem Сохранять алгебраический корень, дающий отрицательную
+  или нулевую длину.
+
+  \checkitem Применять формулу Герона, не проверив неравенства треугольника.
+
+  \checkitem В сложной конфигурации считать отрезки равными
+  только по внешнему виду рисунка, без доказанного свойства.
+\end{itemize}
+
+% =========================================================
+% TRAINING
+% =========================================================
+\clearpage
+\section*{\textcolor{darkaccent}{Тренировочный блок}}
+\sectionrule
+
+Выполните задания без подсказок. По возможности сначала сделайте
+схематический чертёж и отметьте на нём все известные равенства.
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+
+\item[]
+\textcolor{accent}{\textbf{Средний уровень}}
+
+\item
+В прямоугольном треугольнике гипотенуза равна \(14\).
+Найдите медиану, проведённую к гипотенузе.
+
+\item
+Медиана, проведённая к гипотенузе прямоугольного треугольника,
+равна \(5\) и делит прямой угол в отношении \(1:2\).
+Найдите все стороны треугольника.
+
+\item
+Катеты прямоугольного треугольника равны \(6\) и \(8\).
+Найдите:
+\[
+\text{а) гипотенузу;}
+\qquad
+\text{б) медиану к гипотенузе;}
+\]
+\[
+\text{в) синус меньшего острого угла.}
+\]
+
+\item[]
+\textcolor{accent}{\textbf{Выше среднего}}
+
+\item
+Медиана прямоугольного треугольника, проведённая к гипотенузе,
+разбивает его на два треугольника с периметрами \(16\) и \(18\).
+Найдите стороны исходного треугольника.
+
+\item
+В треугольнике \(ABC\) к стороне \(AC\) проведены высота \(BK\)
+и медиана \(BM\). Известно, что
+\[
+AM=BM,\qquad AB=6,\qquad BC=8.
+\]
+Найдите
+\[
+\cos\angle KBM.
+\]
+
+\item
+Точки \(A\) и \(B\) --- концы диаметра окружности,
+\[
+AB=10.
+\]
+Точка \(C\) лежит на окружности, причём
+\[
+AC=6.
+\]
+Найдите \(BC\) и медиану \(CM\), проведённую к стороне \(AB\).
+
+\item
+Стороны треугольника равны
+\[
+13,\qquad14,\qquad15.
+\]
+Найдите площадь треугольника и высоту, проведённую к стороне \(14\).
+
+\item
+Один из острых углов прямоугольного треугольника равен \(30^\circ\),
+а площадь треугольника равна
+\[
+9\sqrt3.
+\]
+Найдите все его стороны.
+
+\item
+Вне прямоугольного треугольника \(ABC\) на катетах \(AC\) и \(BC\)
+построены квадраты \(ACDE\) и \(BCFG\).
+Продолжение медианы \(CM\) пересекает прямую \(DF\) в точке \(N\).
+Найдите \(CN\), если катеты исходного треугольника равны
+\[
+5\quad\text{и}\quad12.
+\]
+
+\item[]
+\textcolor{accent}{\textbf{Сложный уровень}}
+
+\item
+Медиана \(CM\) прямоугольного треугольника \(ABC\),
+проведённая к гипотенузе, разбивает его на два треугольника
+с периметрами \(16\) и \(18\).
+
+Вне треугольника на катетах \(AC\) и \(BC\) построены квадраты
+\(ACDE\) и \(BCFG\).
+Продолжение медианы \(CM\) пересекает прямую \(DF\) в точке \(N\).
+
+Найдите длину \(CN\).
+
+\end{enumerate}
+
+% =========================================================
+% ANSWERS
+% =========================================================
+\clearpage
+\section*{\textcolor{darkaccent}{Ответы к тренировочному блоку}}
+\sectionrule
+
+\begin{table}[ht]
+\centering
+\caption{Ответы для самопроверки}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+
+1 &
+\[
+7
+\]
+\\
+
+2 &
+\[
+5,\qquad5\sqrt3,\qquad10
+\]
+\\
+
+3 &
+\[
+\text{а) }10;
+\qquad
+\text{б) }5;
+\qquad
+\text{в) }\frac35
+\]
+\\
+
+4 &
+\[
+6,\qquad8,\qquad10
+\]
+\\
+
+5 &
+\[
+\frac{24}{25}
+\]
+\\
+
+6 &
+\[
+BC=8,\qquad CM=5
+\]
+\\
+
+7 &
+\[
+S=84,\qquad h=12
+\]
+\\
+
+8 &
+\[
+3\sqrt2,\qquad3\sqrt6,\qquad6\sqrt2
+\]
+\\
+
+9 &
+\[
+CN=\frac{60}{13}
+\]
+\\
+
+10 &
+\[
+CN=\frac{24}{5}
+\]
+\\
+
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\vfill
+
+\begin{center}
+{\color{accent!65}\rule{0.62\linewidth}{0.8pt}}
+
+\vspace{0.5em}
+
+\small
+Перед проверкой ответа убедитесь, что использованное свойство
+действительно применимо к данной конфигурации.
+\end{center}
+
+\end{document}
