@@ -4,7 +4,8 @@ const RAW=window.KIRILL_GRADE7_GROUPS||[],BASE_EVIDENCE=window.KIRILL_GRADE7_EVI
 const LESSONS=[
  {date:'08.08.26',title:'Повторение вычислений',href:'08.08.26.html',ids:BASE_EVIDENCE},
  {date:'12.08.26',title:'Проценты',href:'12.08.26.html',ids:['percent_8','percent_9','percent_11','percent_12','percent_14','models_12']},
- {date:'15.08.26',title:'Текстовые задачи на движение',href:'15.08.26.html',ids:['expr_5','expr_6','equations_4','equations_5','equations_6','equations_12','models_1','models_2','models_3','models_4','models_5','models_6','models_7','models_8','models_14']}
+ {date:'15.08.26',title:'Текстовые задачи на движение',href:'15.08.26.html',ids:['expr_5','expr_6','equations_4','equations_5','equations_6','equations_12','models_1','models_2','models_3','models_4','models_5','models_6','models_7','models_8','models_14']},
+ {date:'19.08.26',title:'Производительность и совместная работа',href:'19.08.26.html',ids:['expr_5','expr_6','expr_7','equations_2','equations_3','equations_4','equations_5','equations_6','equations_8','equations_12','models_1','models_2','models_3','models_4','models_5','models_9','models_10','models_14']}
 ];
 const EVIDENCE=new Set(LESSONS.flatMap(l=>l.ids));
 const SOURCES=new Map();
