@@ -6,6 +6,10 @@ on:
       - sofya-19-08-26-geometry
     paths:
       - .github/workflows/patch-sofya-19-08.yml
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -29,11 +33,9 @@ jobs:
           text = path.read_text(encoding='utf-8')
           marker = 'sofya-heatmap-tex-2026-08-19-v1'
 
-          # Keep the dashboard counter aligned with the new lesson card.
           text = text.replace('<article class="stat"><b>8</b><span>интерактивных модулей</span></article>',
                               '<article class="stat"><b>9</b><span>интерактивных модулей</span></article>')
 
-          # Add the new lesson after Module 08, without rewriting unrelated modules.
           module08 = '''        <article class="lesson-card" style="border-top:5px solid var(--gold)">
           <div class="lesson-number"><span>Модуль 08</span><span>07.08.26</span></div><h3>Графики функций с модулем</h3>
           <p>Кусочная запись, сдвиги графика, сохранение ОДЗ после сокращения, выколотые точки и параметр y = kx.</p>
@@ -50,7 +52,6 @@ jobs:
           if 'href="19.08.26.html"' not in text and module08 in text:
               text = text.replace(module08, module08 + module09, 1)
 
-          # Add the source to the materials library.
           resource07 = '''          <div class="resource-row"><div><b>07.08.26</b><small>Графики функций с модулем</small></div><div class="resource-links"><a href="07.08.26.html">Web</a><a href="../pdf_docs/07.08.26.pdf" download>PDF</a><a href="../tex_docs/07.08.26.tex" download>TeX</a></div></div>'''
           resource19 = '''
           <div class="resource-row"><div><b>19.08.26</b><small>Прямоугольный треугольник: медиана, высота, площадь и тригонометрия</small></div><div class="resource-links"><a href="19.08.26.html">Web</a><a href="../tex_docs/19.08.26.tex" download>TeX</a></div></div>'''
