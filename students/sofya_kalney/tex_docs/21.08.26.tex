@@ -1,0 +1,1121 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=2.1cm,headheight=25pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F1F4F4}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\setlist[itemize]{leftmargin=1.45em,itemsep=0.25em,topsep=0.25em}
+\setlist[enumerate]{leftmargin=1.7em,itemsep=0.55em,topsep=0.35em}
+\emergencystretch=2em
+\raggedbottom
+
+\tkzSetUpLine[line width=1pt,color=accent]
+\tkzSetUpPoint[color=accent,fill=accent,size=3]
+\tkzSetUpLabel[color=black,font=\small]
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{textgray}Геометрия: медиана в треугольнике}
+\fancyhead[R]{\small\color{textgray}София Кальней}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\headrule}{%
+  \hbox to\headwidth{%
+    \color{accent!55}\leaders\hrule height \headrulewidth\hfill
+  }%
+}
+
+\newcommand{\topic}[1]{%
+  \vspace{0.35em}%
+  {\large\bfseries\color{darkaccent}#1\par}%
+  \vspace{0.15em}%
+  {\color{accent!70}\rule{\linewidth}{0.45pt}}%
+  \vspace{0.35em}%
+}
+
+\newcommand{\subtopic}[1]{%
+  \vspace{0.2em}%
+  {\bfseries\color{darkaccent}#1}\par
+}
+
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+
+\newcommand{\formula}[1]{%
+  \[
+    \boxed{\displaystyle #1}
+  \]
+}
+
+\begin{document}
+
+% ============================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% ============================================================
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{2.2cm}
+
+{\color{darkaccent}\rule{0.22\linewidth}{1.1pt}}\par
+
+\vspace{0.8cm}
+
+{\Huge\bfseries Чек-лист\par}
+
+\vspace{0.55cm}
+
+{\LARGE\bfseries\color{darkaccent}
+Медиана в треугольнике\par}
+
+\vspace{0.2cm}
+
+{\Large
+Свойства, теорема Аполлония и задачи на площадь\par}
+
+\vspace{1.4cm}
+
+{\large
+София Кальней \textbullet{} ОГЭ\par}
+
+\vfill
+
+{\large
+Лёвин Артём Александрович\par}
+
+\vspace{0.15cm}
+
+{\normalsize
+эксклюзивно для Софии Кальней\par}
+
+\vspace{0.55cm}
+
+{\normalsize
+\today\par}
+
+\vfill
+
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[
+    accent!55,
+    line width=1.15pt
+  ]
+  (0,0)
+    .. controls (2.3,0.55) and (5.0,-0.45) .. (7.1,0.05)
+    .. controls (9.2,0.55) and (11.7,-0.35) .. (14.2,0.10);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% ============================================================
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% ============================================================
+
+\topic{1. Медиана: что нужно узнавать сразу}
+
+\key{Определение.}
+Медиана треугольника соединяет вершину с серединой
+противоположной стороны.
+
+Если $AM$ --- медиана треугольника $ABC$, то
+
+\[
+BM=MC=\frac{BC}{2}.
+\]
+
+\key{Равные площади.}
+Треугольники $ABM$ и $ACM$ имеют общую высоту,
+проведённую из $A$ к прямой $BC$, и равные основания
+$BM$ и $MC$.
+
+Поэтому
+
+\formula{
+S_{ABM}=S_{ACM}=\frac12 S_{ABC}.
+}
+
+\subtopic{Быстрая проверка условия}
+
+Если в условии фигурируют медиана и равенство вида
+$AM=BM$, сразу используйте факт $BM=MC$.
+
+Часто после этого возникают три равных отрезка,
+что позволяет увидеть окружность с центром в точке $M$.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.82]
+
+  \tkzDefPoint(0,0){B}
+  \tkzDefPoint(6,0){C}
+  \tkzDefPoint(2.1,3.2){A}
+  \tkzDefPoint(3,0){M}
+
+  \tkzDrawPolygon[
+    line width=0.9pt,
+    color=textgray
+  ](A,B,C)
+
+  \tkzDrawSegment[
+    line width=1.15pt,
+    color=accent
+  ](A,M)
+
+  \tkzDrawPoints(A,B,C,M)
+
+  \tkzLabelPoints[above](A)
+  \tkzLabelPoints[below](B,M,C)
+
+\end{tikzpicture}
+\end{center}
+
+% ------------------------------------------------------------
+
+\topic{2. Медиана к гипотенузе прямоугольного треугольника}
+
+Пусть $\angle ABC=90^\circ$, а $BM$ --- медиана
+к гипотенузе $AC$.
+
+Тогда середина гипотенузы равноудалена от всех трёх
+вершин:
+
+\formula{
+BM=AM=CM=\frac{AC}{2}.
+}
+
+Верно и обратное утверждение.
+
+Если $BM$ --- медиана к стороне $AC$ и
+
+\[
+BM=AM=CM,
+\]
+
+то точки $A$, $B$, $C$ лежат на окружности
+с центром $M$, а $AC$ является диаметром.
+
+По теореме Фалеса
+
+\[
+\angle ABC=90^\circ.
+\]
+
+\subtopic{Связь с высотой к гипотенузе}
+
+Если катеты прямоугольного треугольника равны
+$a$ и $b$, гипотенуза равна $c$, а высота
+к гипотенузе равна $h$, то
+
+\[
+S=\frac12 ab
+\]
+
+и одновременно
+
+\[
+S=\frac12 ch.
+\]
+
+Следовательно,
+
+\formula{
+h=\frac{ab}{c}.
+}
+
+\subtopic{Пример: $AB=6$, $BC=8$, $BM$ --- медиана, $BK$ --- высота}
+
+Из условия $AM=BM$ и свойства медианы имеем
+
+\[
+AM=BM=CM.
+\]
+
+Следовательно, треугольник $ABC$ прямоугольный
+при вершине $B$.
+
+По теореме Пифагора
+
+\[
+AC=\sqrt{6^2+8^2}=10.
+\]
+
+Тогда
+
+\[
+BM=\frac{AC}{2}=5.
+\]
+
+Высота к гипотенузе:
+
+\[
+BK=\frac{AB\cdot BC}{AC}
+   =\frac{6\cdot8}{10}
+   =\frac{24}{5}.
+\]
+
+Треугольник $BKM$ прямоугольный при $K$,
+а его гипотенуза --- $BM$.
+
+Поэтому
+
+\formula{
+\cos\angle KBM
+=
+\frac{BK}{BM}
+=
+\frac{24}{25}
+=
+0{,}96.
+}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(5,0){C}
+  \tkzDefPoint(1.8,2.4){B}
+  \tkzDefPoint(2.5,0){M}
+  \tkzDefPoint(1.8,0){K}
+
+  \tkzDrawPolygon[
+    line width=0.9pt,
+    color=textgray
+  ](A,B,C)
+
+  \tkzDrawSegment[
+    line width=1.15pt,
+    color=accent
+  ](B,M)
+
+  \tkzDrawSegment[
+    line width=1pt,
+    color=darkaccent
+  ](B,K)
+
+  \tkzMarkRightAngle[
+    size=0.25,
+    draw=darkaccent
+  ](A,B,C)
+
+  \tkzMarkRightAngle[
+    size=0.22,
+    draw=darkaccent
+  ](B,K,C)
+
+  \tkzDrawPoints(A,B,C,M,K)
+
+  \tkzLabelPoints[below](A,K,M,C)
+  \tkzLabelPoints[above](B)
+
+\end{tikzpicture}
+\end{center}
+
+% ------------------------------------------------------------
+
+\topic{3. Продление медианы: превращаем треугольник в параллелограмм}
+
+Пусть $AM$ --- медиана треугольника $ABC$.
+
+Продлим $AM$ за точку $M$ до точки $F$ так,
+чтобы
+
+\[
+AM=MF.
+\]
+
+Поскольку
+
+\[
+BM=MC
+\]
+
+и
+
+\[
+AM=MF,
+\]
+
+диагонали $AF$ и $BC$ четырёхугольника $ABFC$
+делятся точкой $M$ пополам.
+
+Следовательно, $ABFC$ --- параллелограмм.
+
+Отсюда
+
+\[
+AF=2AM,
+\qquad
+FC=AB,
+\qquad
+BF=AC.
+\]
+
+Каждая диагональ параллелограмма делит его
+на два равновеликих треугольника.
+
+Поэтому
+
+\formula{
+S_{ABC}=S_{AFC}.
+}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.82]
+
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(1,2.5){B}
+  \tkzDefPoint(5,0){C}
+  \tkzDefPoint(6,2.5){F}
+  \tkzDefPoint(3,1.25){M}
+
+  \tkzDrawPolygon[
+    line width=0.9pt,
+    color=textgray
+  ](A,B,F,C)
+
+  \tkzDrawSegment[
+    line width=1.15pt,
+    color=accent
+  ](A,F)
+
+  \tkzDrawSegment[
+    line width=1pt,
+    color=darkaccent
+  ](B,C)
+
+  \tkzDrawPoints(A,B,C,F,M)
+
+  \tkzLabelPoints[below](A,C)
+  \tkzLabelPoints[above](B,F)
+  \tkzLabelPoints[right](M)
+
+\end{tikzpicture}
+\end{center}
+
+\key{Зачем нужна конструкция.}
+
+Если известны две стороны
+
+\[
+AB=c,
+\qquad
+AC=b
+\]
+
+и медиана
+
+\[
+AM=m,
+\]
+
+то в треугольнике $AFC$ известны все три стороны:
+
+\[
+AC=b,
+\qquad
+FC=c,
+\qquad
+AF=2m.
+\]
+
+Значит, его площадь можно найти по формуле Герона.
+Полученная площадь совпадает с площадью исходного
+треугольника.
+
+% ------------------------------------------------------------
+
+\topic{4. Теорема Аполлония для медианы}
+
+Пусть
+
+\[
+a=BC,
+\qquad
+b=CA,
+\qquad
+c=AB,
+\]
+
+а
+
+\[
+m_a=AM
+\]
+
+--- медиана к стороне $a$.
+
+Для параллелограмма $ABFC$ выполняется тождество
+
+\[
+AF^2+BC^2
+=
+2\bigl(AB^2+AC^2\bigr).
+\]
+
+Поскольку
+
+\[
+AF=2m_a,
+\]
+
+получаем
+
+\[
+4m_a^2+a^2=2b^2+2c^2.
+\]
+
+Отсюда
+
+\formula{
+m_a=
+\frac12
+\sqrt{2b^2+2c^2-a^2}.
+}
+
+Если требуется найти сторону, удобно записать формулу
+в виде
+
+\formula{
+a^2=2b^2+2c^2-4m_a^2.
+}
+
+\key{Контроль здравого смысла.}
+
+Подкоренное выражение должно быть положительным,
+а найденные стороны должны удовлетворять
+неравенствам треугольника.
+
+% ------------------------------------------------------------
+
+\topic{5. Площадь по двум сторонам и медиане}
+
+Если известны стороны $b$, $c$ и медиана $m$,
+проведённая к третьей стороне, используйте
+конструкцию с продлением медианы.
+
+Получается треугольник со сторонами
+
+\[
+b,
+\qquad
+c,
+\qquad
+2m.
+\]
+
+Его полупериметр
+
+\[
+p=\frac{b+c+2m}{2}.
+\]
+
+По формуле Герона
+
+\formula{
+S=
+\sqrt{
+p(p-b)(p-c)(p-2m)
+}.
+}
+
+Для существования такой конфигурации необходимо
+
+\[
+|b-c|<2m<b+c.
+\]
+
+\subtopic{Пример: стороны $27$ и $29$, медиана к третьей стороне равна $26$}
+
+Продлеваем медиану вдвое.
+
+Получаем треугольник со сторонами
+
+\[
+27,
+\qquad
+29,
+\qquad
+52.
+\]
+
+Его полупериметр
+
+\[
+p=
+\frac{27+29+52}{2}
+=
+54.
+\]
+
+Тогда
+
+\begin{align*}
+S
+&=
+\sqrt{
+54(54-27)(54-29)(54-52)
+}
+\\
+&=
+\sqrt{
+54\cdot27\cdot25\cdot2
+}
+\\
+&=
+270.
+\end{align*}
+
+Следовательно,
+
+\formula{
+S_{ABC}=270.
+}
+
+Для проверки можно применить теорему Аполлония:
+
+\begin{align*}
+BC^2
+&=
+2\cdot27^2
++
+2\cdot29^2
+-
+4\cdot26^2
+\\
+&=
+436.
+\end{align*}
+
+Отсюда
+
+\[
+BC=2\sqrt{109}.
+\]
+
+% ------------------------------------------------------------
+
+\topic{6. Квадраты на катетах: как увидеть скрытую высоту}
+
+Пусть $ABC$ --- прямоугольный треугольник,
+
+\[
+\angle ACB=90^\circ.
+\]
+
+На катетах $AC$ и $BC$ снаружи построены квадраты
+$ACDE$ и $BCFG$.
+
+Медиана $CM$, проведённая к гипотенузе $AB$,
+продолжена до пересечения с $DF$ в точке $N$.
+
+Обозначим
+
+\[
+AC=a,
+\qquad
+BC=b,
+\qquad
+AB=c.
+\]
+
+По теореме Пифагора
+
+\[
+c=\sqrt{a^2+b^2}.
+\]
+
+Из свойств квадратов
+
+\[
+DC=a,
+\qquad
+CF=b,
+\]
+
+а также
+
+\[
+DC\parallel BC,
+\qquad
+CF\parallel AC.
+\]
+
+Поскольку $M$ --- середина гипотенузы,
+
+\[
+CM=AM=BM.
+\]
+
+Рассмотрим углы.
+
+Пусть
+
+\[
+\angle ACM=\alpha.
+\]
+
+Тогда в равнобедренном треугольнике $ACM$
+
+\[
+\angle CAM=\alpha.
+\]
+
+Так как
+
+\[
+\angle ACB=90^\circ,
+\]
+
+имеем
+
+\[
+\angle MCB=90^\circ-\alpha.
+\]
+
+Из параллельности сторон квадратов соответствующие
+острые углы в треугольнике $DCF$ совпадают
+с острыми углами исходного прямоугольного
+треугольника.
+
+Поэтому
+
+\[
+\angle DNC=90^\circ.
+\]
+
+Следовательно,
+
+\[
+CN\perp DF.
+\]
+
+Значит, в прямоугольном треугольнике $DCF$
+отрезок $CN$ является высотой к гипотенузе $DF$.
+
+При этом
+
+\[
+DF
+=
+\sqrt{DC^2+CF^2}
+=
+\sqrt{a^2+b^2}
+=
+c.
+\]
+
+Из двух формул площади треугольника $DCF$:
+
+\[
+S_{DCF}
+=
+\frac12 ab
+\]
+
+и
+
+\[
+S_{DCF}
+=
+\frac12\,DF\cdot CN
+\]
+
+получаем
+
+\formula{
+CN=\frac{ab}{c}.
+}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.68]
+
+  \tkzDefPoint(0,0){C}
+  \tkzDefPoint(0,3){A}
+  \tkzDefPoint(4,0){B}
+
+  \tkzDefPoint(-3,0){D}
+  \tkzDefPoint(-3,3){E}
+
+  \tkzDefPoint(0,-4){F}
+  \tkzDefPoint(4,-4){G}
+
+  \tkzDefPoint(2,1.5){M}
+  \tkzDefPoint(-1.92,-1.44){N}
+
+  \tkzDrawPolygon[
+    line width=0.9pt,
+    color=textgray
+  ](A,C,B)
+
+  \tkzDrawPolygon[
+    line width=0.8pt,
+    color=accent
+  ](A,C,D,E)
+
+  \tkzDrawPolygon[
+    line width=0.8pt,
+    color=accent
+  ](B,C,F,G)
+
+  \tkzDrawSegment[
+    line width=1pt,
+    color=darkaccent
+  ](D,F)
+
+  \tkzDrawSegment[
+    line width=1.15pt,
+    color=accent
+  ](N,M)
+
+  \tkzMarkRightAngle[
+    size=0.22,
+    draw=darkaccent
+  ](A,C,B)
+
+  \tkzMarkRightAngle[
+    size=0.18,
+    draw=darkaccent
+  ](D,N,C)
+
+  \tkzDrawPoints(A,B,C,D,E,F,G,M,N)
+
+  \tkzLabelPoints[above](A,E,M)
+  \tkzLabelPoints[right](B,G)
+  \tkzLabelPoints[below](D,N,F)
+  \tkzLabelPoints[above right](C)
+
+\end{tikzpicture}
+\end{center}
+
+Например, если
+
+\[
+a=5,
+\qquad
+b=12,
+\]
+
+то
+
+\[
+c=13
+\]
+
+и
+
+\[
+CN
+=
+\frac{5\cdot12}{13}
+=
+\frac{60}{13}.
+\]
+
+% ------------------------------------------------------------
+
+\topic{7. Типичные ошибки и контроль решения}
+
+\begin{itemize}
+
+  \item
+  Медиана в общем треугольнике не обязана быть
+  высотой или биссектрисой.
+
+  \item
+  Равенство медианы половине противоположной стороны
+  даёт прямой угол только при корректно указанной
+  медиане к этой стороне.
+
+  \item
+  В прямоугольном треугольнике сначала определите
+  гипотенузу: она лежит напротив прямого угла.
+
+  \item
+  В формуле Аполлония коэффициент при $m_a^2$
+  равен $4$:
+
+  \[
+  a^2+4m_a^2=2b^2+2c^2.
+  \]
+
+  \item
+  При продлении медианы новая сторона равна $2m$.
+  Именно эта длина используется в формуле Герона.
+
+  \item
+  В формуле Герона
+
+  \[
+  p=\frac{a+b+c}{2}
+  \]
+
+  является полупериметром.
+
+  \item
+  После нахождения неизвестной стороны проверьте
+  положительность подкоренных выражений и
+  неравенства треугольника.
+
+  \item
+  При вычислении косинуса в прямоугольном
+  треугольнике сначала определите гипотенузу
+  рассматриваемого малого треугольника.
+
+\end{itemize}
+
+% ============================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% ============================================================
+
+\clearpage
+
+\begin{center}
+
+{\LARGE\bfseries\color{darkaccent}
+Тренировочный блок\par}
+
+\vspace{0.15cm}
+
+{\normalsize
+10 задач по нарастающей сложности\par}
+
+\end{center}
+
+\vspace{0.35cm}
+
+\subtopic{Средний уровень}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+
+  \item
+  В треугольнике $ABC$ отрезок $AM$ --- медиана
+  к стороне $BC$.
+
+  Известно, что
+
+  \[
+  BC=18.
+  \]
+
+  Найдите $BM$.
+
+  \item
+  В прямоугольном треугольнике $ABC$
+  угол $B$ прямой,
+
+  \[
+  AB=9,
+  \qquad
+  BC=12.
+  \]
+
+  Медиана $BM$ проведена к гипотенузе $AC$.
+  Найдите $BM$.
+
+  \item
+  В прямоугольном треугольнике $ABC$
+  угол $B$ прямой,
+
+  \[
+  AB=5,
+  \qquad
+  BC=12.
+  \]
+
+  $BM$ --- медиана к $AC$,
+  $BK$ --- высота к $AC$.
+
+  Найдите
+
+  \[
+  \cos\angle KBM.
+  \]
+
+\end{enumerate}
+
+\subtopic{Выше среднего}
+
+\begin{enumerate}[label=\textbf{\arabic*.},start=4]
+
+  \item
+  В треугольнике $ABC$
+
+  \[
+  AB=13,
+  \qquad
+  AC=15,
+  \qquad
+  BC=14.
+  \]
+
+  Найдите медиану $AM$, проведённую к стороне $BC$.
+
+  \item
+  В треугольнике $ABC$
+
+  \[
+  AB=17,
+  \qquad
+  AC=10,
+  \]
+
+  а медиана $AM$ к стороне $BC$ равна $11$.
+
+  Найдите $BC$.
+
+  \item
+  Две стороны треугольника равны $13$ и $15$,
+  а медиана, проведённая к третьей стороне,
+  равна $7$.
+
+  Найдите площадь треугольника.
+
+  \item
+  В прямоугольном треугольнике $ABC$
+  угол $C$ прямой,
+
+  \[
+  AC=8,
+  \qquad
+  BC=15.
+  \]
+
+  На катетах снаружи построены квадраты
+  $ACDE$ и $BCFG$.
+
+  Точка $M$ --- середина $AB$,
+  а прямая $CM$ пересекает $DF$ в точке $N$.
+
+  Найдите $CN$.
+
+  \item
+  В треугольнике $ABC$
+
+  \[
+  AB=10,
+  \qquad
+  AC=24,
+  \]
+
+  а медиана $AM$ к стороне $BC$ равна $13$.
+
+  Определите вид треугольника по углам
+  и найдите его площадь.
+
+  \item
+  Две стороны треугольника равны $13$ и $15$,
+  а медиана к третьей стороне равна $10$.
+
+  Найдите площадь треугольника.
+
+\end{enumerate}
+
+\subtopic{Сложная задача}
+
+\begin{enumerate}[label=\textbf{\arabic*.},start=10]
+
+  \item
+  Две стороны треугольника равны $25$ и $39$,
+  а медиана, проведённая к третьей стороне,
+  равна $28$.
+
+  Найдите третью сторону и площадь треугольника.
+
+\end{enumerate}
+
+% ============================================================
+% ОТВЕТЫ
+% ============================================================
+
+\clearpage
+
+\begin{center}
+
+{\LARGE\bfseries\color{darkaccent}
+Ответы\par}
+
+\vspace{0.2cm}
+
+{\small
+Используйте таблицу после самостоятельной попытки.\par}
+
+\end{center}
+
+\vspace{0.5cm}
+
+\renewcommand{\arraystretch}{1.4}
+
+\begin{table}[h!]
+\centering
+
+\caption{Ответы к тренировочному блоку}
+
+\begin{tabularx}{0.78\linewidth}{@{}cX@{}}
+
+\toprule
+
+\textbf{№} & \textbf{Ответ} \\
+
+\midrule
+
+1 & $9$ \\
+
+2 & $\dfrac{15}{2}$ \\
+
+3 & $\dfrac{120}{169}$ \\
+
+4 & $2\sqrt{37}$ \\
+
+5 & $7\sqrt{6}$ \\
+
+6 & $84$ \\
+
+7 & $\dfrac{120}{17}$ \\
+
+8 & $\angle A=90^\circ$; $S=120$ \\
+
+9 & $12\sqrt{66}$ \\
+
+10 & третья сторона $34$; $S=420$ \\
+
+\bottomrule
+
+\end{tabularx}
+\end{table}
+
+\vfill
+
+{\small\color{textgray}
+Финальная самопроверка:
+определили, к какой стороне проведена медиана;
+выбрали нужное свойство;
+проверили длины, радикалы и неравенства треугольника;
+записали ответ в требуемом виде.
+}
+
+\end{document}
