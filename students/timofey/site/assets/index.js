@@ -18,6 +18,15 @@
       sourcePdf: '../pdf_docs/18.08.26.pdf',
       sourceTex: '../tex_docs/18.08.26.tex',
       href: '18.08.26.html'
+    },
+    {
+      id: '21-08-26',
+      date: '21.08.26',
+      title: 'Повторение алгебры: ключевые модели ЕГЭ',
+      subtitle: 'Степени и корни, иррациональные и логарифмические уравнения, тригонометрия и производная',
+      sourcePdf: null,
+      sourceTex: '../tex_docs/21.08.26.tex',
+      href: '21.08.26.html'
     }
   ];
   const LESSONS = [...BASE_LESSONS, ...ADDITIONAL_LESSONS];
@@ -28,7 +37,7 @@
 
   const MAP_KEY = 'timofey-competence-map-v1';
   const MAP_VERSION_KEY = 'timofey-competence-evidence-version';
-  const MAP_VERSION = '2026-08-18-geometry-vectors-solids-v1';
+  const MAP_VERSION = '2026-08-21-algebra-review-v1';
   const LESSON_HREF = '18.08.26.html';
   const MAP_LEVELS = {
     t1_right: 3,
@@ -45,7 +54,16 @@
     t3_pyramid: 3,
     t3_cylinder: 3,
     t3_scale: 2,
-    t3_composite_volume: 2
+    t3_composite_volume: 2,
+    t6_exponential: 3,
+    t6_power: 3,
+    t6_irrational: 3,
+    t6_logarithmic: 3,
+    t6_log_properties: 3,
+    t7_double_angle: 3,
+    t8_geometric: 3,
+    t8_derivative_graph: 3,
+    t8_extrema: 3
   };
   const MAP_EVIDENCE = {
     t1_right: '18.08 повторены свойства прямоугольного треугольника: медиана к гипотенузе, высота и связь острых углов; выполнены тренировочные задачи.',
@@ -62,7 +80,27 @@
     t3_pyramid: '18.08 закреплена формула V = Sh/3, связь Vпир = Vпар/3 и выполнена тренировочная задача.',
     t3_cylinder: '18.08 повторены V = πr²h, отношения объёмов и переливание жидкости; выполнены две тренировочные задачи.',
     t3_scale: '18.08 повторено влияние изменения радиуса цилиндра на объём через квадрат коэффициента масштаба.',
-    t3_composite_volume: '18.08 отработано сравнение объёмов тел с общими основанием и высотой на паре «параллелепипед — пирамида».'
+    t3_composite_volume: '18.08 отработано сравнение объёмов тел с общими основанием и высотой на паре «параллелепипед — пирамида».',
+    t6_exponential: '21.08 повторено приведение показательных выражений к одному основанию и сравнение показателей; разобраны уравнение 4^(x−7)=1/64 и преобразование корней в дробные степени.',
+    t6_power: '21.08 повторены отрицательные и дробные показатели, переход 1/a^n=a^(−n), корни как степени и правило (a^m)^n=a^(mn).',
+    t6_irrational: '21.08 закреплена равносильная схема √f(x)=g(x): условие g(x)≥0, возведение в квадрат и обязательная фильтрация лишних корней.',
+    t6_logarithmic: '21.08 повторено определение log_a b=c ⇔ b=a^c и решение базовых логарифмических уравнений с проверкой ОДЗ.',
+    t6_log_properties: '21.08 повторены условия существования логарифма и сворачивание разности логарифмов; отдельно разобрана проверка аргументов.',
+    t7_double_angle: '21.08 повторены sin 2α=2 sin α cos α и три формы cos 2α; выполнены вычисления с приведением угла и контролем знака.',
+    t8_geometric: '21.08 закреплён геометрический смысл производной: f′(x0)=tg α=Δy/Δx и обязательный контроль знака наклона касательной.',
+    t8_derivative_graph: '21.08 повторено чтение графика f′: знак производной определяет возрастание и убывание исходной функции; выполнены графические задания.',
+    t8_extrema: '21.08 закреплены экстремумы по смене знака производной: +→− максимум, −→+ минимум; отдельно отмечено, что f′(x0)=0 без смены знака экстремума не гарантирует.'
+  };
+  const MAP_LINKS = {
+    t6_exponential: '21.08.26.html',
+    t6_power: '21.08.26.html',
+    t6_irrational: '21.08.26.html',
+    t6_logarithmic: '21.08.26.html',
+    t6_log_properties: '21.08.26.html',
+    t7_double_angle: '21.08.26.html',
+    t8_geometric: '21.08.26.html',
+    t8_derivative_graph: '21.08.26.html',
+    t8_extrema: '21.08.26.html'
   };
 
   function syncMapState() {
@@ -89,7 +127,7 @@
 
   const needsReload = syncMapState();
   if (needsReload) {
-    const guard = 'timofey-map-reload-180826';
+    const guard = 'timofey-map-reload-210826';
     try {
       if (sessionStorage.getItem(guard) !== '1') {
         sessionStorage.setItem(guard, '1');
@@ -112,6 +150,7 @@
     if (/тригоном|синус|косинус|арк/.test(text)) tags.push('тригонометрия');
     if (/неравен|интервал/.test(text)) tags.push('неравенства');
     if (/логариф/.test(text)) tags.push('логарифмы');
+    if (/производн|касательн|экстрем/.test(text)) tags.push('производная');
     if (/корн|модул|одз|огранич/.test(text)) tags.push('ОДЗ и корни');
     if (/формул|преобраз|разлож|групп/.test(text)) tags.push('преобразования');
     if (/вклад|процент|банк|эконом/.test(text)) tags.push('экономическая задача');
@@ -176,7 +215,7 @@
         const evidence = document.getElementById('dialogEvidence');
         const dialogLink = document.getElementById('dialogLink');
         if (evidence) evidence.textContent = MAP_EVIDENCE[id];
-        if (dialogLink) dialogLink.href = LESSON_HREF;
+        if (dialogLink) dialogLink.href = MAP_LINKS[id] || LESSON_HREF;
       }, 0);
     }
   });
@@ -190,7 +229,7 @@
       const evidence = document.getElementById('dialogEvidence');
       const dialogLink = document.getElementById('dialogLink');
       if (evidence) evidence.textContent = MAP_EVIDENCE[id];
-      if (dialogLink) dialogLink.href = LESSON_HREF;
+      if (dialogLink) dialogLink.href = MAP_LINKS[id] || LESSON_HREF;
     }, 0);
   });
 
