@@ -6,6 +6,27 @@
     throw new Error('COMPETENCY_MAP_DATA is unavailable or invalid.');
   }
 
+  function respectfulDiagnosticLead(value) {
+    return String(value)
+      .replace(/^Объясни\b/, 'Объясните')
+      .replace(/^Реши\b/, 'Решите')
+      .replace(/^Определи\b/, 'Определите')
+      .replace(/^Собери\b/, 'Составьте')
+      .replace(/^Построй\b/, 'Постройте')
+      .replace(/^Составь\b/, 'Составьте')
+      .replace(/^Выполни\b/, 'Выполните')
+      .replace(/\bвыполни\b/g, 'выполните')
+      .replace(/\bпоясни\b/g, 'поясните')
+      .replace(/\bзапиши\b/g, 'запишите')
+      .replace(/\bобъясни\b/g, 'объясните')
+      .replace(/\bсвяжи\b/g, 'свяжите')
+      .replace(/\bвыбери\b/g, 'выберите')
+      .replace(/\bпримени\b/g, 'примените')
+      .replace(/\bполучи вывод\b/g, 'сформулируйте вывод')
+      .replace('направление/причину', 'направление или причину')
+      .replace('график/формулу', 'график или формулу');
+  }
+
   const NS = DATA.storageNamespace;
   const LEVELS_KEY = `${NS}-competency-map`;
   const REPEAT_KEY = `${NS}-repeat`;
@@ -279,8 +300,8 @@
     document.getElementById('dialogGroup').textContent = `${group.code} · ${group.title}`;
     document.getElementById('dialogTitle').textContent = topic.title;
     document.getElementById('dialogLevel').textContent = `${levelOf(id)} / 4 · ${levelLabels[levelOf(id)]}`;
-    document.getElementById('dialogDescription').textContent = `${group.description} Конкретный фокус: ${topic.title}.`;
-    document.getElementById('dialogDiagnostic').textContent = `${group.diagnosticLead} «${topic.title}».`;
+    document.getElementById('dialogDescription').textContent = `${group.description} Тема: ${topic.title}.`;
+    document.getElementById('dialogDiagnostic').textContent = `${respectfulDiagnosticLead(group.diagnosticLead)} «${topic.title}».`;
 
     const history = document.getElementById('dialogHistory');
     const material = document.getElementById('dialogMaterial');
@@ -289,7 +310,7 @@
     if (evidence.length) {
       history.textContent = evidence.join(' ');
     } else {
-      history.textContent = 'Диагностических данных и подтверждённых материалов пока нет.';
+      history.textContent = 'По этой теме пока нет результатов диагностики.';
     }
     if (topicMaterial && topicMaterial.href) {
       material.href = topicMaterial.href;
@@ -363,18 +384,18 @@
 
   function pickNextFocus() {
     const repeated = allTopics.find(topic => repeatTopics.has(topic.id));
-    if (repeated) return { topic: repeated, reason: 'Повторение имеет максимальный приоритет: вернись к теме и проведи короткую контрольную диагностику.' };
+    if (repeated) return { topic: repeated, reason: 'Эту тему стоит повторить в первую очередь. Вернитесь к ней и выполните короткую контрольную диагностику.' };
 
     const ahead = allTopics.find(topic => levelOf(topic.id) === 0);
-    if (ahead) return { topic: ahead, reason: 'Следующая ещё не затронутая компетенция. Сначала проверь базовое понимание, затем зафиксируй уровень.' };
+    if (ahead) return { topic: ahead, reason: 'Эта тема ещё не изучалась. Проверьте базовое понимание и определите текущий уровень освоения.' };
 
     const low = allTopics.find(topic => levelOf(topic.id) <= 2);
-    if (low) return { topic: low, reason: 'Тема уже встречалась, однако текущий уровень требует дополнительной опоры или контрольной диагностики.' };
+    if (low) return { topic: low, reason: 'Тема уже встречалась на занятиях. Полезно закрепить её с дополнительной опорой или выполнить контрольную диагностику.' };
 
     const check = allTopics.find(topic => levelOf(topic.id) === 3);
-    if (check) return { topic: check, reason: 'Почти уверенный уровень: короткая самостоятельная проверка поможет подтвердить освоение.' };
+    if (check) return { topic: check, reason: 'Тема почти освоена. Короткая самостоятельная проверка поможет подтвердить результат.' };
 
-    return { topic: allTopics[0], reason: 'Вся карта освоена на высоком уровне. Используй смешанную контрольную диагностику для поддержания результата.' };
+    return { topic: allTopics[0], reason: 'Все темы отмечены как хорошо освоенные. Используйте смешанную контрольную диагностику для поддержания результата.' };
   }
 
   function renderFocus() {
@@ -417,18 +438,6 @@
     if (searchQuery) {
       document.querySelectorAll('.topic-group').forEach(details => { details.open = true; });
     }
-  });
-
-  document.getElementById('resetProgress').addEventListener('click', () => {
-    const confirmed = window.confirm('Удалить ручные изменения уровней и список повторения и вернуть подтверждённые статусы из материалов?');
-    if (!confirmed) return;
-    levels = { ...baseLevels };
-    repeatTopics = new Set(baseRepeat);
-    try {
-      localStorage.removeItem(LEVELS_KEY);
-      localStorage.removeItem(REPEAT_KEY);
-    } catch (_) {}
-    refresh();
   });
 
   function preferredTheme() {
