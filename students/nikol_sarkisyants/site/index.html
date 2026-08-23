@@ -7,6 +7,7 @@
   <title>Учебный кабинет — Николь Саркисьянц</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23081725'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='34' fill='%2358d6cf'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="competence-map.css">
   <script src="dashboard-data.js"></script>
 </head>
 <body>
@@ -80,13 +81,12 @@
         <a class="nav-row" href="../review_docs/review_23.08.26.pdf" target="_blank" rel="noopener"><span class="nav-icon">✎</span><span>Ревью преподавателя</span></a>
         <a class="nav-row" href="../pdf_docs/23.08.26.pdf"><span class="nav-icon">PDF</span><span>Последний PDF</span></a>
         <a class="nav-row" href="../tex_docs/23.08.26.tex"><span class="nav-icon">TₑX</span><span>Последний TeX</span></a>
-        <a class="nav-row" href="index-original.html" target="_blank" rel="noopener"><span class="nav-icon">↗</span><span>Карта в отдельном окне</span></a>
       </section>
     </nav>
 
     <div class="sidebar-foot">
       <button class="theme-button" id="themeToggle" type="button"><span>◐</span><span>Переключить тему</span></button>
-      <div class="sidebar-state"><span><b id="confidentCount">79</b> уверенно</span><span><b id="processCount">20</b> в процессе</span></div>
+      <div class="sidebar-state"><span><b id="confidentCount">—</b> уверенно</span><span><b id="processCount">—</b> в процессе</span></div>
     </div>
   </aside>
 
@@ -123,9 +123,10 @@
           <h2 id="map-title">Карта компетенций</h2>
         </div>
         <div class="map-stats" aria-label="Сводка карты">
-          <span><b id="trackedCount">99</b><small>навыков</small></span>
-          <span><b id="confidentCountMain">79</b><small>уверенно</small></span>
-          <span><b id="processCountMain">20</b><small>в процессе</small></span>
+          <span><b id="totalCount">—</b><small>всего</small></span>
+          <span><b id="evaluatedCount">—</b><small>оценено</small></span>
+          <span><b id="confidentCountMain">—</b><small>уверенно</small></span>
+          <span><b id="processCountMain">—</b><small>в процессе</small></span>
         </div>
       </header>
 
@@ -133,13 +134,39 @@
         <div class="legend" aria-label="Легенда">
           <span><i class="dot l2"></i>2 · в процессе</span>
           <span><i class="dot l3"></i>3 · уверенно</span>
-          <span><i class="dot l4"></i>4 · подтверждено</span>
+          <span><i class="dot l4"></i>4 · освоено</span>
         </div>
-        <span class="map-note">Нажмите на навык, чтобы увидеть подтверждение и связанное занятие.</span>
+        <span class="map-note">Нажмите на сектор или тему, чтобы открыть подробности и изменить уровень.</span>
       </div>
 
-      <div class="map-frame">
-        <iframe id="base" src="index-original.html#competencies" title="Интерактивная карта компетенций Николь Саркисьянц"></iframe>
+      <div class="competence-map-shell" id="competenceMap">
+        <div class="map-controls">
+          <div class="filters" role="group" aria-label="Фильтр компетенций">
+            <button class="filter" type="button" data-filter="all" aria-pressed="true">Все</button>
+            <button class="filter" type="button" data-filter="repeat" aria-pressed="false">Повторить</button>
+            <button class="filter" type="button" data-filter="progress" aria-pressed="false">В процессе</button>
+            <button class="filter" type="button" data-filter="mastered" aria-pressed="false">Освоено</button>
+          </div>
+          <button class="reset-map" id="resetMap" type="button">Сбросить карту</button>
+        </div>
+
+        <div class="native-map-panel">
+          <div class="radial-layout">
+            <div>
+              <div class="radial-stage">
+                <svg class="radial-map" id="radialMap" viewBox="0 0 800 800" role="img" aria-labelledby="radialTitle radialDescription">
+                  <title id="radialTitle">Круговая тепловая карта компетенций ЕГЭ</title>
+                  <desc id="radialDescription">Карта загружается.</desc>
+                </svg>
+                <div class="radial-center"><b id="radialPercent">—</b><span>общая готовность<br><span id="radialTopicCount">загрузка…</span></span></div>
+              </div>
+            </div>
+            <div class="topic-index" id="topicIndex" aria-label="Список компетенций"></div>
+          </div>
+        </div>
+
+        <div class="map-load-status" id="mapLoadStatus" role="status" aria-live="polite">Загружаю каталог компетенций…</div>
+        <p class="map-fallback" id="mapFallback" hidden>Интерактивный каталог временно недоступен. <a href="index-original.html#competencies">Открыть резервную карту</a>.</p>
       </div>
     </section>
 
@@ -149,6 +176,36 @@
     </footer>
   </main>
 
+  <dialog class="competency-dialog" id="competencyDialog">
+    <div class="dialog-inner">
+      <div class="dialog-head">
+        <div><p class="eyebrow" id="dialogGroup"></p><h2 id="dialogTitle"></h2></div>
+        <button class="dialog-close" id="closeDialog" type="button" aria-label="Закрыть">×</button>
+      </div>
+      <div class="competency-meta"><span class="chip" id="dialogRing"></span><span class="chip" id="dialogExam"></span></div>
+      <p class="dialog-description" id="dialogDescription"></p>
+      <div class="competency-detail">
+        <div><b>Что проверяется</b><span id="dialogExamDetail"></span></div>
+        <div><b>Чек-лист решения</b><span id="dialogPractice"></span></div>
+        <div class="catalog-detail"><b>Рубрика экзамена</b><span id="dialogCatalog"></span></div>
+      </div>
+      <div class="dialog-note" id="dialogEvidence"></div>
+      <p><b>Текущий уровень</b></p>
+      <div class="level-picker" id="levelPicker" role="group" aria-label="Выбор уровня">
+        <button class="level-btn" type="button" data-level="0">0<br>не изучено</button>
+        <button class="level-btn" type="button" data-level="1">1<br>нужна помощь</button>
+        <button class="level-btn" type="button" data-level="2">2<br>в процессе</button>
+        <button class="level-btn" type="button" data-level="3">3<br>уверенно</button>
+        <button class="level-btn" type="button" data-level="4">4<br>освоено</button>
+      </div>
+      <div class="dialog-actions">
+        <a class="dialog-action primary" id="dialogLink" href="#" hidden>Открыть подтверждающее занятие</a>
+        <button class="dialog-action" id="markRepeat" type="button">Добавить в повторение</button>
+      </div>
+    </div>
+  </dialog>
+
   <script src="dashboard.js"></script>
+  <script type="module" src="competence-map.js"></script>
 </body>
 </html>
