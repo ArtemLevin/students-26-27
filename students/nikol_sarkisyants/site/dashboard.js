@@ -104,6 +104,16 @@
       if(!doc||!win)return;
       if(window.__nikolSync)window.__nikolSync(win.localStorage);
     }catch(_){return;}
+
+    // The legacy document contains a complete site. Always align the iframe viewport
+    // to the competencies section so the embedded surface starts on the actual map.
+    const competencies=doc.getElementById('competencies');
+    if(competencies){
+      const alignToMap=()=>competencies.scrollIntoView({block:'start'});
+      if(typeof win.requestAnimationFrame==='function')win.requestAnimationFrame(alignToMap);
+      else setTimeout(alignToMap,0);
+    }
+
     const handleCell=(target)=>{
       const cell=target.closest&&target.closest('.radial-cell,.topic-row');
       if(cell)patchEvidence(doc,cell.dataset.id);
