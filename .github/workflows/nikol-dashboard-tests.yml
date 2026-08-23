@@ -1,0 +1,39 @@
+name: Nikol dashboard tests
+
+on:
+  pull_request:
+    paths:
+      - 'students/nikol_sarkisyants/site/**'
+      - '.github/workflows/nikol-dashboard-tests.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'students/nikol_sarkisyants/site/**'
+      - '.github/workflows/nikol-dashboard-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  p0-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check JavaScript syntax
+        working-directory: students/nikol_sarkisyants/site
+        run: |
+          node --check dashboard-data.js
+          node --check dashboard.js
+
+      - name: Run dashboard P0 regression tests
+        working-directory: students/nikol_sarkisyants/site
+        run: node --test tests/dashboard-p0.test.mjs
