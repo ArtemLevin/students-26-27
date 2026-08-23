@@ -1,25 +1,24 @@
 (() => {
-  const levels=window.__nikolLevels||{};
-  const evidence=window.__nikolEvidence||{};
   const THEME_KEY='nikol-dashboard-theme-v1';
-
-  const values=Object.values(levels);
-  const tracked=values.length;
-  const confident=values.filter(v=>v>=3).length;
-  const process=values.filter(v=>v===2).length;
   const setText=(id,value)=>{const node=document.getElementById(id);if(node)node.textContent=value;};
-  setText('trackedCount',tracked);
-  setText('confidentCount',confident);
-  setText('confidentCountMain',confident);
-  setText('processCount',process);
-  setText('processCountMain',process);
 
-  const applyTheme=(theme)=>{
-    if(theme==='light') document.body.dataset.theme='light';
+  const updateCompetenceSummary=summary=>{
+    if(!summary)return;
+    setText('totalCount',summary.total);
+    setText('evaluatedCount',summary.evaluated);
+    setText('confidentCount',summary.confident);
+    setText('confidentCountMain',summary.confident);
+    setText('processCount',summary.process);
+    setText('processCountMain',summary.process);
+  };
+  window.addEventListener('nikol:competence-summary',event=>updateCompetenceSummary(event.detail));
+
+  const applyTheme=theme=>{
+    if(theme==='light')document.body.dataset.theme='light';
     else delete document.body.dataset.theme;
     localStorage.setItem(THEME_KEY,theme);
   };
-  if(localStorage.getItem(THEME_KEY)==='light') document.body.dataset.theme='light';
+  if(localStorage.getItem(THEME_KEY)==='light')document.body.dataset.theme='light';
   document.querySelectorAll('#themeToggle,#mobileThemeToggle').forEach(button=>{
     button.addEventListener('click',()=>applyTheme(document.body.dataset.theme==='light'?'dark':'light'));
   });
@@ -27,14 +26,14 @@
   const menuButton=document.getElementById('menuButton');
   const sidebarClose=document.getElementById('sidebarClose');
   const sidebarBackdrop=document.getElementById('sidebarBackdrop');
-  const setSidebar=(open)=>{
+  const setSidebar=open=>{
     document.body.classList.toggle('sidebar-open',open);
-    if(menuButton) menuButton.setAttribute('aria-expanded',String(open));
-    if(sidebarBackdrop) sidebarBackdrop.hidden=!open;
+    if(menuButton)menuButton.setAttribute('aria-expanded',String(open));
+    if(sidebarBackdrop)sidebarBackdrop.hidden=!open;
   };
-  if(menuButton) menuButton.addEventListener('click',()=>setSidebar(!document.body.classList.contains('sidebar-open')));
-  if(sidebarClose) sidebarClose.addEventListener('click',()=>setSidebar(false));
-  if(sidebarBackdrop) sidebarBackdrop.addEventListener('click',()=>setSidebar(false));
+  if(menuButton)menuButton.addEventListener('click',()=>setSidebar(!document.body.classList.contains('sidebar-open')));
+  if(sidebarClose)sidebarClose.addEventListener('click',()=>setSidebar(false));
+  if(sidebarBackdrop)sidebarBackdrop.addEventListener('click',()=>setSidebar(false));
   document.addEventListener('keydown',event=>{if(event.key==='Escape')setSidebar(false);});
   document.querySelectorAll('.sidebar a').forEach(link=>link.addEventListener('click',()=>{
     if(window.matchMedia('(max-width:900px)').matches)setSidebar(false);
@@ -83,51 +82,6 @@
     archiveToggle.setAttribute('aria-expanded',String(!expanded));
     archiveMore.hidden=expanded;
   });
-  if(archivePrev)archivePrev.addEventListener('click',()=>{if(pageIndex>0){pageIndex--;renderArchive();}});
-  if(archiveNext)archiveNext.addEventListener('click',()=>{if(pageIndex<pageCount-1){pageIndex++;renderArchive();}});
-
-  const frame=document.getElementById('base');
-  const patchEvidence=(doc,id)=>{
-    if(!evidence[id])return;
-    setTimeout(()=>{
-      const note=doc.getElementById('dialogEvidence');
-      const link=doc.getElementById('dialogLink');
-      if(note)note.textContent=evidence[id].text;
-      if(link)link.href=evidence[id].href;
-    },0);
-  };
-  if(frame)frame.addEventListener('load',()=>{
-    let doc,win;
-    try{
-      doc=frame.contentDocument;
-      win=frame.contentWindow;
-      if(!doc||!win)return;
-      if(window.__nikolSync)window.__nikolSync(win.localStorage);
-    }catch(_){return;}
-
-    // The legacy document contains a complete site. Always align the iframe viewport
-    // to the competencies section so the embedded surface starts on the actual map.
-    const competencies=doc.getElementById('competencies');
-    if(competencies){
-      const alignToMap=()=>competencies.scrollIntoView({block:'start'});
-      if(typeof win.requestAnimationFrame==='function')win.requestAnimationFrame(alignToMap);
-      else setTimeout(alignToMap,0);
-    }
-
-    const handleCell=(target)=>{
-      const cell=target.closest&&target.closest('.radial-cell,.topic-row');
-      if(cell)patchEvidence(doc,cell.dataset.id);
-    };
-    doc.addEventListener('click',event=>handleCell(event.target));
-    doc.addEventListener('keydown',event=>{
-      if(event.key==='Enter'||event.key===' ')handleCell(event.target);
-    });
-    const reset=doc.getElementById('resetMap');
-    if(reset)reset.addEventListener('click',()=>setTimeout(()=>{
-      try{
-        if(window.__nikolSync)window.__nikolSync(win.localStorage);
-        win.location.reload();
-      }catch(_){}
-    },120),true);
-  });
+  if(archivePrev)archivePrev.addEventListener('click',()=>{if(pageIndex>0){pageIndex-=1;renderArchive();}});
+  if(archiveNext)archiveNext.addEventListener('click',()=>{if(pageIndex<pageCount-1){pageIndex+=1;renderArchive();}});
 })();
