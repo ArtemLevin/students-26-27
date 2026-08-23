@@ -1,0 +1,14 @@
+(()=>{
+const groups=window.KIRILL_GRADE7_GROUPS||[];
+const lessons=[
+{date:'08.08.26',href:'08.08.26.html',ids:window.KIRILL_GRADE7_EVIDENCE||[]},
+{date:'12.08.26',href:'12.08.26.html',ids:['percent_8','percent_9','percent_11','percent_12','percent_14','models_12']},
+{date:'15.08.26',href:'15.08.26.html',ids:['expr_5','expr_6','equations_4','equations_5','equations_6','equations_12','models_1','models_2','models_3','models_4','models_5','models_6','models_7','models_8','models_14']},
+{date:'19.08.26',href:'19.08.26.html',ids:['expr_5','expr_6','expr_7','equations_2','equations_3','equations_4','equations_5','equations_6','equations_8','equations_12','models_1','models_2','models_3','models_4','models_5','models_9','models_10','models_14']},
+{date:'22.08.26',href:'22.08.26.html',ids:['fractions_14','fractions_15','fractions_16','percent_8','percent_9','percent_11','percent_12','percent_14','expr_1','expr_2','expr_3','models_1','models_2','models_3','models_4','models_5','models_12','models_14']}
+];
+const teacherSeed={},evidence={};for(const lesson of lessons)for(const id of lesson.ids){teacherSeed[id]=Math.max(teacherSeed[id]||0,2);evidence[id]={text:`Тема подтверждена материалом занятия ${lesson.date}.`,href:lesson.href};}
+try{const state=JSON.parse(localStorage.getItem('kirill-competence-map-v2')||'{}')||{},repeat=JSON.parse(localStorage.getItem('kirill-competence-repeat-v1')||'[]');let changed=false;for(const id of repeat){if(state[id]!==1){state[id]=1;changed=true;}}if(changed)localStorage.setItem('kirill-competence-map-v2',JSON.stringify(state));}catch(_){}
+const source=URL.createObjectURL(new Blob([`const groups=${JSON.stringify(groups)};`],{type:'text/javascript'}));
+window.STUDENT_COMPETENCE_CONFIG={storageKey:'kirill-competence-map-v2',baselineKey:'kirill-competence-teacher-baseline-v1',legacyStorageKeys:[],legacyUrl:source,fallbackHref:'competency-map-data.js',catalogNames:['groups'],summaryEvent:'kirill:competence-summary',teacherSeed,evidence};
+})();

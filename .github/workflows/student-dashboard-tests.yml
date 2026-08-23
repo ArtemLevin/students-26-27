@@ -1,0 +1,58 @@
+name: Student dashboard regression
+
+on:
+  push:
+    paths:
+      - 'students/**'
+      - 'shared/student-dashboard/**'
+      - '.github/workflows/student-dashboard-tests.yml'
+  pull_request:
+    paths:
+      - 'students/**'
+      - 'shared/student-dashboard/**'
+      - '.github/workflows/student-dashboard-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  dashboard:
+    name: dashboard / ${{ matrix.student }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - student: kirill_zinoviev
+            test: node students/kirill_zinoviev/site/tests/dashboard-regression.mjs
+          - student: sofya_kalney
+            test: node students/sofya_kalney/site/tests/dashboard-regression.mjs
+          - student: timofey
+            test: node students/timofey/site/tests/dashboard-regression.mjs
+          - student: volodia_khachaturian
+            test: node students/volodia_khachaturian/site/tests/dashboard-regression.mjs
+          - student: xenia_klykova
+            test: node students/xenia_klykova/site/tests/dashboard-regression.mjs
+          - student: nikol_sarkisyants
+            test: node students/nikol_sarkisyants/site/tests/dashboard-p0.test.mjs && node students/nikol_sarkisyants/site/tests/dashboard-p1.test.mjs && node students/nikol_sarkisyants/site/tests/dashboard-p2.test.mjs
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check dashboard modules
+        shell: bash
+        run: |
+          if [ -f "students/${{ matrix.student }}/site/dashboard.js" ]; then
+            node --check "students/${{ matrix.student }}/site/dashboard.js"
+          fi
+          if [ -f "students/${{ matrix.student }}/site/lesson-registry.js" ]; then
+            node --check "students/${{ matrix.student }}/site/lesson-registry.js"
+          fi
+          if [ -f "students/${{ matrix.student }}/site/competence-config.js" ]; then
+            node --check "students/${{ matrix.student }}/site/competence-config.js"
+          fi
+          node --check shared/student-dashboard/dashboard-core.js
+          node --check shared/student-dashboard/legacy-competence-map.js
+      - name: Run regression suite
+        run: ${{ matrix.test }}
