@@ -1,0 +1,1 @@
+window.STUDENT_COMPETENCE_CONFIG={storageKey:'timofey-competence-map-v1',baselineKey:'timofey-competence-teacher-baseline-v1',legacyStorageKeys:[],legacyUrl:'index-legacy.html',fallbackHref:'index-legacy.html#competencies',catalogNames:['groups','GROUPS'],summaryEvent:'timofey:competence-summary',teacherSeed:{},evidence:{}};
