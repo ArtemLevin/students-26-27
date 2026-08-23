@@ -88,7 +88,7 @@ test('dashboard imports lesson registry and has no independent hardcoded archive
 test('mobile drawer uses inert isolation, focus trap, restore focus and viewport normalization',()=>{
   assert.match(dashboardSource,/FOCUSABLE_SELECTOR/);
   assert.match(dashboardSource,/\.inert=Boolean\(value\)/);
-  assert.match(dashboardSource,/event\.key==='Tab'/);
+  assert.match(dashboardSource,/event\.key!==\s*'Tab'/);
   assert.match(dashboardSource,/event\.key==='Escape'/);
   assert.match(dashboardSource,/opener=document\.activeElement/);
   assert.match(dashboardSource,/target\.focus\(\)/);
