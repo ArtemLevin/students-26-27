@@ -154,7 +154,7 @@ test('generic legacy lesson anchors are suppressed while concrete lessons surviv
 test('active dashboard contains a native map and no iframe bridge',()=>{
   assert.match(indexHtml,/id="competenceMap"/);
   assert.match(indexHtml,/id="radialMap"/);
-  assert.match(indexHtml,/type="module" src="competence-map\.js\?v=20260824-2"/);
+  assert.match(indexHtml,/type="module" src="competence-map\.js\?v=20260824-3"/);
   assert.doesNotMatch(indexHtml,/<iframe\b/i);
   assert.doesNotMatch(indexHtml,/id="base"/);
   assert.doesNotMatch(dashboardScript,/contentDocument|contentWindow|__nikolSync/);
@@ -171,7 +171,7 @@ test('live summary event replaces static 99-skill counters',()=>{
 test('native map inherits dashboard theme and has no legacy theme storage',()=>{
   assert.doesNotMatch(componentSource,/nikol-site-theme/);
   assert.doesNotMatch(componentSource,/dataset\.theme\s*=/);
-  assert.match(indexHtml,/href="competence-map\.css\?v=20260824-2"/);
+  assert.match(indexHtml,/href="competence-map\.css\?v=20260824-3"/);
 });
 
 test('active map code does not expose stale #lessons navigation',()=>{
