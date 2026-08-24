@@ -2,9 +2,16 @@ const LEGACY_STORAGE_KEY='nikol-competence-map-v1';
 const STORAGE_KEY='nikol-competence-state-v2';
 const STATE_SCHEMA_VERSION=2;
 const CATALOG_URL='index-original.html';
-const LEVEL_LABELS=['Не изучено','Нужна помощь','В процессе','Почти уверенно','Освоено'];
+const LEVEL_LABELS=['Не изучено','Нужна помощь','В процессе','Уверенно','Освоено'];
+const LEVEL_DESCRIPTIONS=[
+  'Тема ещё не проходилась',
+  'Решение выполняется с подсказкой',
+  'Алгоритм понятен, остаются ошибки',
+  'Типовые задачи решаются самостоятельно',
+  'Навык устойчив в смешанных задачах'
+];
 
-export {LEGACY_STORAGE_KEY, STORAGE_KEY, STATE_SCHEMA_VERSION, CATALOG_URL, LEVEL_LABELS};
+export {LEGACY_STORAGE_KEY, STORAGE_KEY, STATE_SCHEMA_VERSION, CATALOG_URL, LEVEL_LABELS, LEVEL_DESCRIPTIONS};
 
 export function extractGroupsFromLegacy(html){
   if(typeof html!=='string')throw new TypeError('Legacy catalog source must be text');
@@ -135,7 +142,9 @@ export function updateReviewQueue(reviewQueue,id,active,addedAt=new Date().toISO
 export function matchesCompetencyFilter(filter,itemId,level,reviewQueue={}){
   if(filter==='repeat')return isInReviewQueue(reviewQueue,itemId);
   if(filter==='unseen')return level===0;
-  if(filter==='progress')return level===2||level===3;
+  if(filter==='help')return level===1;
+  if(filter==='progress')return level===2;
+  if(filter==='confident')return level===3;
   if(filter==='mastered')return level===4;
   return true;
 }
@@ -150,13 +159,15 @@ export function computeSummary(groups,studentLevels,reviewQueue={}){
   const items=flattenGroups(groups);
   const values=items.map(item=>clampLevel(studentLevels[item.id]??item.level??0));
   const total=values.length;
+  const unseen=values.filter(value=>value===0).length;
   const evaluated=values.filter(value=>value>0).length;
-  const confident=values.filter(value=>value>=3).length;
+  const help=values.filter(value=>value===1).length;
   const process=values.filter(value=>value===2).length;
+  const confident=values.filter(value=>value===3).length;
   const repeat=items.filter(item=>isInReviewQueue(reviewQueue,item.id)).length;
   const mastered=values.filter(value=>value===4).length;
   const average=total?Math.round(values.reduce((sum,value)=>sum+value,0)/(total*4)*100):0;
-  return {total,evaluated,confident,process,repeat,mastered,average};
+  return {total,unseen,evaluated,help,process,confident,mastered,repeat,average};
 }
 
 export function normalizeMaterialLink(link){
@@ -272,7 +283,8 @@ class CompetenceMapController{
         const muted=this.matchesFilter(item,level)?'':' is-muted';
         const reviewClass=inReview?' is-review':'';
         const reviewLabel=inReview?' В повторении.':'';
-        content+=`<path class="radial-cell${muted}${reviewClass}" data-id="${item.id}" data-level="${level}" data-review="${inReview}" fill="var(--heat-${level})" d="${arcPath(ringInner,ringOuter,start,end)}" tabindex="0" role="button" aria-label="Кольцо ${itemIndex+1}. ${item.title}. ${item.exam}. Уровень: ${LEVEL_LABELS[level]}.${reviewLabel}"><title>Кольцо ${itemIndex+1} · ${group.title} · ${item.title} · ${item.exam} · ${LEVEL_LABELS[level]}${inReview?' · в повторении':''}</title></path>`;
+        const levelDescription=`Уровень ${level}: ${LEVEL_LABELS[level]}. ${LEVEL_DESCRIPTIONS[level]}.`;
+        content+=`<path class="radial-cell${muted}${reviewClass}" data-id="${item.id}" data-level="${level}" data-review="${inReview}" fill="var(--heat-${level})" d="${arcPath(ringInner,ringOuter,start,end)}" tabindex="0" role="button" aria-label="Кольцо ${itemIndex+1}. ${item.title}. ${item.exam}. ${levelDescription}${reviewLabel}"><title>Кольцо ${itemIndex+1} · ${group.title} · ${item.title} · ${item.exam} · ${level}: ${LEVEL_LABELS[level]} · ${LEVEL_DESCRIPTIONS[level]}${inReview?' · в повторении':''}</title></path>`;
       });
       const labelPoint=polar(382,start+(end-start)/2);
       content+=`<text class="radial-group-label" x="${labelPoint.x}" y="${labelPoint.y}" dy=".35em">${group.short}</text>`;
@@ -301,11 +313,12 @@ class CompetenceMapController{
           ${group.items.map((item,itemIndex)=>{
             const level=this.itemState(item);
             const inReview=this.isInReviewQueue(item.id);
-            return `<button class="topic-row${inReview?' is-review':''}" type="button" data-id="${item.id}" data-review="${inReview}" ${this.matchesFilter(item,level)?'':'hidden'}>
+            const levelDescription=`Уровень ${level}: ${LEVEL_LABELS[level]}. ${LEVEL_DESCRIPTIONS[level]}.`;
+            return `<button class="topic-row${inReview?' is-review':''}" type="button" data-id="${item.id}" data-review="${inReview}" aria-label="${item.title}. ${item.exam}. ${levelDescription}${inReview?' В повторении.':''}" ${this.matchesFilter(item,level)?'':'hidden'}>
               <i class="topic-dot" style="background:var(--heat-${level})" aria-hidden="true"></i>
               <span class="topic-label"><span>${item.title}</span><small>${item.exam}</small></span>
               <span class="ring-badge" title="Кольцо ${itemIndex+1}${inReview?' · в повторении':''}">${inReview?'↻ ':''}К${itemIndex+1}</span>
-              <span class="topic-level">${level}/4</span>
+              <span class="topic-level" title="${LEVEL_LABELS[level]} — ${LEVEL_DESCRIPTIONS[level]}">${level}/4</span>
             </button>`;
           }).join('')}
         </div>
@@ -363,8 +376,13 @@ class CompetenceMapController{
     if(!this.activeId||!this.dialog)return;
     const current=clampLevel(this.state.studentLevels[this.activeId]??0);
     this.dialog.querySelectorAll('.level-btn').forEach(button=>{
-      button.setAttribute('aria-pressed',String(Number(button.dataset.level)===current));
+      const level=clampLevel(button.dataset.level);
+      const description=`Уровень ${level}: ${LEVEL_LABELS[level]}. ${LEVEL_DESCRIPTIONS[level]}`;
+      button.setAttribute('aria-pressed',String(level===current));
+      button.setAttribute('aria-label',description);
+      button.title=description;
     });
+    this.setDialogText('levelExplanation',`${LEVEL_LABELS[current]} — ${LEVEL_DESCRIPTIONS[current]}.`);
   }
 
   updateReviewButton(){
