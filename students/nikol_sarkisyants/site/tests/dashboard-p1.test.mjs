@@ -79,6 +79,27 @@ test('repeat filter is independent from low mastery levels',()=>{
   assert.equal(component.matchesCompetencyFilter('unseen','t1_areas',4,reviewQueue),false);
 });
 
+test('level filters map one-to-one to the unified 0–4 scale',()=>{
+  assert.equal(component.matchesCompetencyFilter('help','skill',1),true);
+  assert.equal(component.matchesCompetencyFilter('help','skill',2),false);
+  assert.equal(component.matchesCompetencyFilter('progress','skill',2),true);
+  assert.equal(component.matchesCompetencyFilter('progress','skill',3),false);
+  assert.equal(component.matchesCompetencyFilter('confident','skill',3),true);
+  assert.equal(component.matchesCompetencyFilter('confident','skill',4),false);
+  assert.equal(component.matchesCompetencyFilter('mastered','skill',4),true);
+});
+
+test('level names and criteria define the complete shared scale',()=>{
+  assert.deepEqual(component.LEVEL_LABELS,['Не изучено','Нужна помощь','В процессе','Уверенно','Освоено']);
+  assert.deepEqual(component.LEVEL_DESCRIPTIONS,[
+    'Тема ещё не проходилась',
+    'Решение выполняется с подсказкой',
+    'Алгоритм понятен, остаются ошибки',
+    'Типовые задачи решаются самостоятельно',
+    'Навык устойчив в смешанных задачах'
+  ]);
+});
+
 test('summary counts only explicitly queued competencies as repeat items',()=>{
   const levels=Object.fromEntries(items.map(item=>[item.id,0]));
   levels[items[0].id]=2;
@@ -91,11 +112,13 @@ test('summary counts only explicitly queued competencies as repeat items',()=>{
   const summary=component.computeSummary(groups,levels,reviewQueue);
   assert.deepEqual(summary,{
     total:284,
+    unseen:281,
     evaluated:3,
-    confident:2,
+    help:0,
     process:1,
-    repeat:2,
+    confident:1,
     mastered:1,
+    repeat:2,
     average:1
   });
 });
@@ -107,6 +130,18 @@ test('active UI exposes independent repeat and unseen filters',()=>{
   assert.match(indexHtml,/id="markRepeat"[^>]*aria-pressed="false"/);
   assert.match(componentSource,/toggleReviewQueue/);
   assert.doesNotMatch(componentSource,/markRepeat[^\n]*setActiveLevel\(1\)/);
+});
+
+test('active UI uses the complete scale in filters, legend, statistics and dialog help',()=>{
+  for(const filter of ['unseen','help','progress','confident','mastered']){
+    assert.match(indexHtml,new RegExp(`data-filter="${filter}"`));
+  }
+  for(const level of [0,1,2,3,4])assert.match(indexHtml,new RegExp(`class="dot l${level}"`));
+  assert.match(indexHtml,/id="masteredCountMain">—/);
+  assert.match(indexHtml,/id="masteredCount">—/);
+  assert.match(indexHtml,/id="levelExplanation"[^>]*aria-live="polite"/);
+  assert.match(componentSource,/LEVEL_DESCRIPTIONS\[level\]/);
+  assert.match(dashboardScript,/masteredCountMain/);
 });
 
 test('generic legacy lesson anchors are suppressed while concrete lessons survive',()=>{
