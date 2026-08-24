@@ -3,154 +3,32 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Персональный учебный навигатор Володи Хачатуряна для подготовки к ОГЭ по физике.">
-  <title>Володя Хачатурян · ОГЭ по физике</title>
-  <link rel="stylesheet" href="competency-map.css?v=20260822-3">
+  <meta name="description" content="Переход в обновлённый учебный кабинет Володи Хачатуряна по физике.">
+  <meta http-equiv="refresh" content="0; url=site/index.html">
+  <link rel="canonical" href="site/index.html">
+  <title>Володя Хачатурян · обновлённый кабинет</title>
+  <style>
+    :root{color-scheme:dark;--bg:#07111d;--surface:#0e1c2b;--text:#edf7fb;--muted:#aebfca;--line:#345269;--accent:#58d6cf;--focus:#ffd166}
+    *{box-sizing:border-box}
+    body{min-height:100vh;margin:0;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 80% 10%,#b8576726,transparent 30rem),var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+    main{width:min(640px,100%);padding:clamp(24px,5vw,44px);border:1px solid var(--line);border-radius:24px;background:var(--surface);box-shadow:0 22px 60px #0006}
+    p{color:var(--muted)}
+    a{min-height:48px;display:inline-flex;align-items:center;justify-content:center;padding:11px 17px;border:1px solid var(--accent);border-radius:12px;background:#58d6cf1d;color:var(--text);font-weight:800;text-decoration:none}
+    a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+  </style>
+  <script>
+    (()=>{
+      const anchors={'#competency-map':'#map','#focus':'#map','#materials':'#lesson','#top':'#content'};
+      const target=`site/index.html${anchors[location.hash]||location.hash||''}`;
+      location.replace(target);
+    })();
+  </script>
 </head>
 <body>
-  <a class="skip" href="#competency-map">К карте компетенций</a>
-  <header class="topbar">
-    <nav class="nav" aria-label="Основная навигация">
-      <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">φ</span><span>Володя · физика</span></a>
-      <div class="nav-links">
-        <a href="#competency-map">Карта</a>
-        <a href="#focus">Следующий шаг</a>
-        <a href="#materials">Материалы</a>
-        <button class="icon-btn" id="themeToggle" type="button" aria-label="Переключить цветовую тему" title="Переключить тему">◐</button>
-      </div>
-    </nav>
-  </header>
-
-  <main class="shell" id="top">
-    <section class="hero" aria-labelledby="page-title">
-      <div class="hero-copy">
-        <p class="eyebrow">Персональная траектория · ОГЭ по физике</p>
-        <h1 id="page-title">Володя Хачатурян</h1>
-        <p class="lead">Вся программа собрана в одной карте: от измерений и механики до электричества, оптики, атомной физики и экспериментальных навыков. Наведите курсор на ячейку, чтобы увидеть название темы, и откройте её для подробной информации о текущем уровне.</p>
-        <div class="hero-tags">
-          <span class="chip">381 компетенция</span>
-          <span class="chip">12 разделов</span>
-          <span class="chip">ФИПИ · ОГЭ-2026</span>
-        </div>
-      </div>
-      <aside class="continue-card" aria-labelledby="continue-title">
-        <div>
-          <p class="eyebrow">Следующий шаг</p>
-          <h2 id="continue-title">Первый шаг — диагностика</h2>
-        </div>
-        <p id="heroNext">Начните с короткой диагностики базовых измерений и механики.</p>
-        <div class="continue-meta"><span class="chip">уровень освоения 0–4</span><span class="chip">темы для повторения</span></div>
-        <a class="btn primary" href="#focus">Перейти к следующему шагу</a>
-      </aside>
-    </section>
-
-    <section class="stats" aria-label="Сводка прогресса">
-      <article class="stat"><b id="statCovered">0</b><span>Пройдено</span></article>
-      <article class="stat"><b id="statCoverage">0%</b><span>Изучено программы</span></article>
-      <article class="stat"><b id="statRepeat">0</b><span>Пора повторить</span></article>
-      <article class="stat"><b id="statTotal">381</b><span>Всего тем</span></article>
-    </section>
-
-    <section id="competency-map" aria-labelledby="map-title">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Карта компетенций</p>
-          <h2 id="map-title">Вся программа ОГЭ по физике</h2>
-          <p>Каждая ячейка соответствует конкретной теме или навыку. Цвет помогает увидеть, что уже пройдено, что предстоит изучить и к чему стоит вернуться для повторения.</p>
-        </div>
-      </div>
-
-      <button id="resetProgress" type="button" hidden aria-hidden="true" tabindex="-1">Восстановить</button>
-
-      <div class="panel heatmap-panel">
-        <div class="heat-toolbar">
-          <div class="toolbar-stack">
-            <div class="filters" role="group" aria-label="Фильтр карты">
-              <button class="filter" type="button" data-filter="all" aria-pressed="true">Вся программа</button>
-              <button class="filter" type="button" data-filter="covered" aria-pressed="false">Пройдено</button>
-              <button class="filter" type="button" data-filter="repeat" aria-pressed="false">Пора повторить</button>
-              <button class="filter" type="button" data-filter="ahead" aria-pressed="false">Ещё впереди</button>
-            </div>
-            <label class="search-wrap">
-              <span class="sr-only">Найти тему</span>
-              <input id="topicSearch" type="search" placeholder="Найти тему…" autocomplete="off">
-              <span aria-hidden="true">⌕</span>
-            </label>
-          </div>
-          <div class="legend" aria-label="Легенда карты">
-            <span><i class="legend-cell ahead"></i>впереди</span>
-            <span><i class="legend-cell covered"></i>пройдено</span>
-            <span><i class="legend-cell repeat"></i>повторить</span>
-          </div>
-        </div>
-
-        <div class="radial-layout">
-          <div class="radial-stage">
-            <svg id="radialMap" class="radial-map" viewBox="0 0 800 800" role="img" aria-labelledby="radialTitle radialDesc">
-              <title id="radialTitle">Круговая тепловая карта программы ОГЭ по физике</title>
-              <desc id="radialDesc">Карта включает двенадцать тематических разделов и 381 тему. Для выбора темы с клавиатуры используйте Tab, Enter или пробел.</desc>
-            </svg>
-            <div class="radial-center" aria-hidden="true">
-              <b id="centerCoverage">0%</b>
-              <span>программы изучено</span>
-              <small id="centerCount">381 тем</small>
-            </div>
-          </div>
-
-          <aside class="topic-index" id="topicIndex" aria-label="Каталог тем"></aside>
-        </div>
-        <p class="map-source">Структура программы составлена на основе материалов ФИПИ для ОГЭ по физике 2026 года.</p>
-      </div>
-    </section>
-
-    <section id="focus" class="focus-section" aria-labelledby="focus-title">
-      <div class="section-head">
-        <div><p class="eyebrow">Рекомендация</p><h2 id="focus-title">Следующий шаг</h2></div>
-      </div>
-      <article class="panel focus-card" id="focusCard"></article>
-    </section>
-
-    <section id="materials" aria-labelledby="materials-title">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Учебные материалы</p>
-          <h2 id="materials-title">Занятия и конспекты</h2>
-          <p>В этом разделе будут собраны конспекты, памятки и другие материалы занятий.</p>
-        </div>
-      </div>
-      <div class="panel materials-panel" id="materialsList">
-        <p class="empty-state">Материалы занятий будут появляться здесь по мере обучения.</p>
-      </div>
-    </section>
-
-    <footer class="footer">
-      <span>Лёвин Артём Александрович</span>
-      <span>Персональный учебный навигатор · ОГЭ по физике</span>
-    </footer>
+  <main aria-labelledby="page-title">
+    <h1 id="page-title">Кабинет Володи обновлён</h1>
+    <p>Сейчас откроется единый кабинет с занятиями, картой компетенций, независимым списком повторения и доступной навигацией с клавиатуры.</p>
+    <a href="site/index.html">Перейти в учебный кабинет →</a>
   </main>
-
-  <div class="tooltip" id="mapTooltip" role="tooltip" hidden></div>
-
-  <dialog id="competencyDialog" class="topic-dialog" aria-labelledby="dialogTitle">
-    <form method="dialog" class="dialog-shell">
-      <button class="dialog-close" value="close" aria-label="Закрыть карточку">×</button>
-      <p class="eyebrow" id="dialogGroup"></p>
-      <h2 id="dialogTitle"></h2>
-      <p class="dialog-level" id="dialogLevel"></p>
-      <div class="dialog-grid">
-        <section><h3>Что входит в тему</h3><p id="dialogDescription"></p></section>
-        <section><h3>Короткая диагностика</h3><p id="dialogDiagnostic"></p></section>
-        <section><h3>Прогресс по теме</h3><p id="dialogHistory"></p><a class="inline-link" id="dialogMaterial" hidden>Открыть материал →</a></section>
-      </div>
-      <fieldset class="level-picker">
-        <legend>Уровень освоения</legend>
-        <div id="levelButtons" class="level-buttons"></div>
-      </fieldset>
-      <button class="btn repeat-toggle" id="repeatToggle" type="button"></button>
-    </form>
-  </dialog>
-
-  <script src="competency-map-data.js?v=20260822-3"></script>
-  <script src="competency-map.js?v=20260822-3"></script>
 </body>
 </html>

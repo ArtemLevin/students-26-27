@@ -1,4 +1,5 @@
 window.STUDENT_COMPETENCE_CONFIG={
+  stateKey:'sofya-competence-state-v2',
   storageKey:'sofya-competence-map-v1',
   baselineKey:'sofya-competence-teacher-baseline-v1',
   legacyStorageKeys:[],
