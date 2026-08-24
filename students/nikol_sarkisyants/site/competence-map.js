@@ -13,6 +13,16 @@ const LEVEL_DESCRIPTIONS=[
 
 export {LEGACY_STORAGE_KEY, STORAGE_KEY, STATE_SCHEMA_VERSION, CATALOG_URL, LEVEL_LABELS, LEVEL_DESCRIPTIONS};
 
+export function getNextRovingIndex(currentIndex,length,key){
+  if(!Number.isInteger(length)||length<1)return -1;
+  if(key==='Home')return 0;
+  if(key==='End')return length-1;
+  const safeIndex=Number.isInteger(currentIndex)&&currentIndex>=0&&currentIndex<length?currentIndex:0;
+  if(key==='ArrowRight'||key==='ArrowDown')return (safeIndex+1)%length;
+  if(key==='ArrowLeft'||key==='ArrowUp')return (safeIndex-1+length)%length;
+  return safeIndex;
+}
+
 export function extractGroupsFromLegacy(html){
   if(typeof html!=='string')throw new TypeError('Legacy catalog source must be text');
   const marker=/\bconst\s+groups\s*=\s*/g;
@@ -211,6 +221,8 @@ class CompetenceMapController{
     this.state=mergeCompetencyState(groups,storage,teacherSeed,now);
     this.currentFilter='all';
     this.activeId=null;
+    this.radialFocusId=null;
+    this.dialogTrigger=null;
 
     this.svg=root.querySelector('#radialMap');
     this.topicIndex=root.querySelector('#topicIndex');
@@ -265,6 +277,10 @@ class CompetenceMapController{
     const ringWidth=(380-innerRadius)/maxRings;
     const ringGap=Math.max(1.5,ringWidth*.14);
     const sectorGap=1.5;
+    const focusableItems=this.items.filter(item=>this.matchesFilter(item));
+    if(!focusableItems.some(item=>item.id===this.radialFocusId)){
+      this.radialFocusId=focusableItems[0]?.id||null;
+    }
     let content='';
 
     this.groups.forEach((group,groupIndex)=>{
@@ -274,17 +290,19 @@ class CompetenceMapController{
       const matchingTarget=sortedItems.find(item=>this.matchesFilter(item));
       const groupTarget=matchingTarget||sortedItems[0];
       const groupMuted=matchingTarget?'':' is-muted';
-      content+=`<path class="radial-group-arc${groupMuted}" data-id="${groupTarget.id}" d="${arcPath(112,137,start,end)}" tabindex="${matchingTarget?'0':'-1'}" role="button" aria-disabled="${!matchingTarget}" aria-label="${group.title}${matchingTarget?'':' · нет совпадений'}"><title>${group.title}${matchingTarget?'':' · нет совпадений'}</title></path>`;
+      content+=`<path class="radial-group-arc${groupMuted}" data-id="${groupTarget.id}" d="${arcPath(112,137,start,end)}" tabindex="-1" aria-hidden="true"><title>${group.title}${matchingTarget?'':' · нет совпадений'}</title></path>`;
       group.items.forEach((item,itemIndex)=>{
         const level=this.itemState(item);
         const inReview=this.isInReviewQueue(item.id);
+        const matches=this.matchesFilter(item,level);
         const ringInner=innerRadius+itemIndex*ringWidth;
         const ringOuter=ringInner+ringWidth-ringGap;
-        const muted=this.matchesFilter(item,level)?'':' is-muted';
+        const muted=matches?'':' is-muted';
         const reviewClass=inReview?' is-review':'';
         const reviewLabel=inReview?' В повторении.':'';
         const levelDescription=`Уровень ${level}: ${LEVEL_LABELS[level]}. ${LEVEL_DESCRIPTIONS[level]}.`;
-        content+=`<path class="radial-cell${muted}${reviewClass}" data-id="${item.id}" data-level="${level}" data-review="${inReview}" fill="var(--heat-${level})" d="${arcPath(ringInner,ringOuter,start,end)}" tabindex="0" role="button" aria-label="Кольцо ${itemIndex+1}. ${item.title}. ${item.exam}. ${levelDescription}${reviewLabel}"><title>Кольцо ${itemIndex+1} · ${group.title} · ${item.title} · ${item.exam} · ${level}: ${LEVEL_LABELS[level]} · ${LEVEL_DESCRIPTIONS[level]}${inReview?' · в повторении':''}</title></path>`;
+        const tabIndex=matches&&item.id===this.radialFocusId?'0':'-1';
+        content+=`<path class="radial-cell${muted}${reviewClass}" data-id="${item.id}" data-level="${level}" data-review="${inReview}" fill="var(--heat-${level})" d="${arcPath(ringInner,ringOuter,start,end)}" tabindex="${tabIndex}" role="button" aria-hidden="${!matches}" aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown Home End Enter Space" aria-label="Кольцо ${itemIndex+1}. ${item.title}. ${item.exam}. ${levelDescription}${reviewLabel}"><title>Кольцо ${itemIndex+1} · ${group.title} · ${item.title} · ${item.exam} · ${level}: ${LEVEL_LABELS[level]} · ${LEVEL_DESCRIPTIONS[level]}${inReview?' · в повторении':''}</title></path>`;
       });
       const labelPoint=polar(382,start+(end-start)/2);
       content+=`<text class="radial-group-label" x="${labelPoint.x}" y="${labelPoint.y}" dy=".35em">${group.short}</text>`;
@@ -329,8 +347,20 @@ class CompetenceMapController{
 
   bindDynamicCells(container){
     container.querySelectorAll('[data-id]').forEach(cell=>{
-      cell.addEventListener('click',()=>this.openCompetency(cell.dataset.id));
+      const isRadialCell=cell.classList.contains('radial-cell');
+      cell.addEventListener('click',()=>{
+        if(isRadialCell)this.setRadialFocus(cell.dataset.id);
+        this.openCompetency(cell.dataset.id);
+      });
+      if(isRadialCell){
+        cell.addEventListener('focus',()=>this.setRadialFocus(cell.dataset.id));
+      }
       cell.addEventListener('keydown',event=>{
+        if(isRadialCell&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(event.key)){
+          event.preventDefault();
+          this.moveRadialFocus(cell.dataset.id,event.key);
+          return;
+        }
         if(event.key==='Enter'||event.key===' '){
           event.preventDefault();
           this.openCompetency(cell.dataset.id);
@@ -339,9 +369,28 @@ class CompetenceMapController{
     });
   }
 
+  setRadialFocus(id,{focus=false}={}){
+    if(!this.svg)return;
+    const cells=[...this.svg.querySelectorAll('.radial-cell:not(.is-muted)')];
+    const target=cells.find(cell=>cell.dataset.id===id);
+    if(!target)return;
+    this.radialFocusId=id;
+    cells.forEach(cell=>cell.setAttribute('tabindex',cell===target?'0':'-1'));
+    if(focus)target.focus();
+  }
+
+  moveRadialFocus(id,key){
+    if(!this.svg)return;
+    const cells=[...this.svg.querySelectorAll('.radial-cell:not(.is-muted)')];
+    const currentIndex=cells.findIndex(cell=>cell.dataset.id===id);
+    const nextIndex=getNextRovingIndex(currentIndex,cells.length,key);
+    if(nextIndex>=0)this.setRadialFocus(cells[nextIndex].dataset.id,{focus:true});
+  }
+
   openCompetency(id){
     const item=this.items.find(candidate=>candidate.id===id);
     if(!item||!this.dialog)return;
+    this.dialogTrigger=document.activeElement&&document.activeElement!==document.body?document.activeElement:null;
     this.activeId=id;
     const override=this.evidence[id];
     const evidenceText=override?.text||item.evidence||'Подтверждение пока не добавлено.';
@@ -365,6 +414,24 @@ class CompetenceMapController{
     this.updateLevelPicker();
     this.updateReviewButton();
     this.dialog.showModal();
+    this.dialog.querySelector('#closeDialog')?.focus();
+  }
+
+  restoreDialogFocus(){
+    const trigger=this.dialogTrigger;
+    this.dialogTrigger=null;
+    if(trigger?.isConnected&&typeof trigger.focus==='function'){
+      trigger.focus();
+      return;
+    }
+    const replacement=[...this.root.querySelectorAll('.radial-cell:not(.is-muted),.topic-row:not([hidden])')]
+      .find(cell=>cell.dataset.id===this.activeId);
+    if(replacement){
+      if(replacement.classList.contains('radial-cell'))this.setRadialFocus(replacement.dataset.id);
+      replacement.focus();
+      return;
+    }
+    this.root.querySelector('.filter[aria-pressed="true"]')?.focus();
   }
 
   setDialogText(id,value){
@@ -447,6 +514,7 @@ class CompetenceMapController{
       this.dialog.querySelector('#markRepeat')?.addEventListener('click',()=>this.toggleReviewQueue());
       this.dialog.querySelector('#closeDialog')?.addEventListener('click',()=>this.dialog.close());
       this.dialog.addEventListener('click',event=>{if(event.target===this.dialog)this.dialog.close();});
+      this.dialog.addEventListener('close',()=>this.restoreDialogFocus());
     }
   }
 
