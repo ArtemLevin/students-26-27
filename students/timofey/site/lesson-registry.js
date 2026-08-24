@@ -1,0 +1,23 @@
+export const RECENT_LIMIT=3;
+export const ARCHIVE_PAGE_SIZE=10;
+export const LESSONS=[
+{date:'2026-08-21',href:'21.08.26.html',title:'Занятие 21.08.26',navTitle:'Занятие 21.08',navSubtitle:'профильный ЕГЭ · математика',summary:'Последнее занятие Тимофея в персональной траектории подготовки к профильному ЕГЭ. Карта компетенций связывает материал урока с экзаменационными навыками.',topics:['профильный ЕГЭ','разбор задач','проверка решения'],outcomes:[{label:'Разбор ключевых приёмов занятия',level:3,tone:'good'},{label:'Самостоятельное применение алгоритма',level:2,tone:'process'}],materials:{pdf:'../pdf_docs/21.08.26.pdf',tex:'../tex_docs/21.08.26.tex'}},
+{date:'2026-08-18',href:'18.08.26.html',title:'Занятие 18.08.26',navTitle:'Занятие 18.08',navSubtitle:'профильный ЕГЭ · математика'},
+{date:'2026-08-02',href:'02.08.26.html',title:'Занятие 02.08.26',navTitle:'Занятие 02.08',navSubtitle:'профильный ЕГЭ · математика'},
+{date:'2026-07-28',href:'lessons/28-07-26.html',title:'Занятие 28.07.26',navTitle:'Занятие 28.07',navSubtitle:'профильный ЕГЭ'},
+{date:'2026-07-21',href:'lessons/21-07-26.html',title:'Логарифмические неравенства',navTitle:'Логарифмические неравенства',navSubtitle:'ОДЗ и монотонность'},
+{date:'2026-07-17',href:'lessons/17-07-26.html',title:'Занятие 17.07.26',navTitle:'Занятие 17.07',navSubtitle:'профильный ЕГЭ'},
+{date:'2026-07-15',href:'lessons/15-07-26.html',title:'Занятие 15.07.26',navTitle:'Занятие 15.07',navSubtitle:'профильный ЕГЭ'},
+{date:'2026-07-10',href:'lessons/10-07-26.html',title:'Занятие 10.07.26',navTitle:'Занятие 10.07',navSubtitle:'профильный ЕГЭ'},
+{date:'2026-07-08',href:'lessons/08-07-26.html',title:'Занятие 08.07.26',navTitle:'Занятие 08.07',navSubtitle:'профильный ЕГЭ'},
+{date:'2026-06-27',href:'lessons/27-06-26.html',title:'Занятие 27.06.26',navTitle:'Занятие 27.06',navSubtitle:'профильный ЕГЭ'},
+{date:'2026-06-25',href:'lessons/25-06-26.html',title:'Занятие 25.06.26',navTitle:'Занятие 25.06',navSubtitle:'профильный ЕГЭ'},
+{date:'2026-06-20',href:'lessons/20-06-26.html',title:'Занятие 20.06.26',navTitle:'Занятие 20.06',navSubtitle:'профильный ЕГЭ'},
+{date:'2026-06-14',href:'lessons/14-06-26.html',title:'Занятие 14.06.26',navTitle:'Занятие 14.06',navSubtitle:'профильный ЕГЭ'},
+{date:'2026-06-09',href:'lessons/09-06-26.html',title:'Занятие 09.06.26',navTitle:'Занятие 09.06',navSubtitle:'профильный ЕГЭ'},
+{date:'2026-06-05',href:'lessons/05-06-26.html',title:'Занятие 05.06.26',navTitle:'Занятие 05.06',navSubtitle:'профильный ЕГЭ'},
+{date:'2026-06-02',href:'lessons/02-06-26.html',title:'Занятие 02.06.26',navTitle:'Занятие 02.06',navSubtitle:'профильный ЕГЭ'},
+{date:'2026-05-30',href:'lessons/30-05-26.html',title:'Закрепление тригонометрических уравнений',navTitle:'Тригонометрические уравнения',navSubtitle:'закрепление'},
+{date:'2026-05-27',href:'lessons/27-05-26.html',title:'Общие формулы решений и аркфункции',navTitle:'Аркфункции',navSubtitle:'общие формулы решений'},
+{date:'2026-05-20',href:'lessons/20-05-26.html',title:'Первые тригонометрические уравнения',navTitle:'Тригонометрические уравнения',navSubtitle:'единичная окружность'}
+];
