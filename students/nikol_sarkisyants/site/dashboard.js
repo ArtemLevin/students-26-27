@@ -24,6 +24,8 @@ function updateCompetenceSummary(summary){
   setText('confidentCountMain',summary.confident);
   setText('processCount',summary.process);
   setText('processCountMain',summary.process);
+  setText('masteredCount',summary.mastered);
+  setText('masteredCountMain',summary.mastered);
 }
 window.addEventListener('nikol:competence-summary',event=>updateCompetenceSummary(event.detail));
 
