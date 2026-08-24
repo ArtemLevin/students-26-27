@@ -71,7 +71,7 @@ test('active HTML exposes data-driven lesson shells and an explicit latest-lesso
   assert.match(indexHtml,/id="latestLessonCta"/);
   assert.match(indexHtml,/id="lessonTopics"/);
   assert.match(indexHtml,/id="latestLessonStatus"/);
-  assert.match(indexHtml,/type="module" src="dashboard\.js\?v=20260824-2"/);
+  assert.match(indexHtml,/type="module" src="dashboard\.js\?v=20260824-3"/);
   assert.doesNotMatch(indexHtml,/href="23\.08\.26\.html"/);
   assert.doesNotMatch(indexHtml,/href="18\.08\.26\.html"/);
   assert.doesNotMatch(indexHtml,/href="15\.08\.26\.html"/);
