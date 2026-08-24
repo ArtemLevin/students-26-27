@@ -1,0 +1,14 @@
+export const RECENT_LIMIT=3;
+export const ARCHIVE_PAGE_SIZE=10;
+export const LESSONS=[
+{date:'2026-08-21',href:'21.08.26.html',title:'Медиана в треугольнике',navTitle:'Медиана в треугольнике',navSubtitle:'Аполлоний, Герон и площадь',summary:'Свойства медианы, равные площади, медиана к гипотенузе, продление медианы, теорема Аполлония, формула Герона и задачи на площадь.',topics:['медиана','теорема Аполлония','формула Герона','площадь'],outcomes:[{label:'Свойства медианы в конфигурации',level:3,tone:'good'},{label:'Медиана к гипотенузе',level:3,tone:'good'},{label:'Выбор формулы площади',level:2,tone:'process'}],materials:{pdf:'../pdf_docs/21.08.26.pdf',tex:'../tex_docs/21.08.26.tex'}},
+{date:'2026-08-19',href:'19.08.26.html',title:'Прямоугольный треугольник',navTitle:'Прямоугольный треугольник',navSubtitle:'медиана, высота и площадь'},
+{date:'2026-08-14',href:'14.08.26.html',title:'Занятие 14.08.26',navTitle:'Занятие 14.08',navSubtitle:'математика ОГЭ'},
+{date:'2026-08-12',href:'12.08.26.html',title:'Занятие 12.08.26',navTitle:'Занятие 12.08',navSubtitle:'математика ОГЭ'},
+{date:'2026-08-07',href:'07.08.26.html',title:'Графики функций с модулем',navTitle:'Графики с модулем',navSubtitle:'кусочная запись и ОДЗ'},
+{date:'2026-07-31',href:'31.07.26.html',title:'Занятие 31.07.26',navTitle:'Занятие 31.07',navSubtitle:'математика ОГЭ'},
+{date:'2026-07-29',href:'29.07.26.html',title:'Занятие 29.07.26',navTitle:'Занятие 29.07',navSubtitle:'математика ОГЭ'},
+{date:'2026-07-16',href:'16-07-26.html',title:'Занятие 16.07.26',navTitle:'Занятие 16.07',navSubtitle:'математика ОГЭ'},
+{date:'2026-07-13',href:'13-07-26.html',title:'Занятие 13.07.26',navTitle:'Занятие 13.07',navSubtitle:'математика ОГЭ'},
+{date:'2026-07-09',href:'09-07-26.html',title:'Занятие 09.07.26',navTitle:'Занятие 09.07',navSubtitle:'математика ОГЭ'}
+];
