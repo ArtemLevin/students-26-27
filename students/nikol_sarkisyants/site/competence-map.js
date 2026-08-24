@@ -1,8 +1,10 @@
-const STORAGE_KEY='nikol-competence-map-v1';
+const LEGACY_STORAGE_KEY='nikol-competence-map-v1';
+const STORAGE_KEY='nikol-competence-state-v2';
+const STATE_SCHEMA_VERSION=2;
 const CATALOG_URL='index-original.html';
 const LEVEL_LABELS=['Не изучено','Нужна помощь','В процессе','Почти уверенно','Освоено'];
 
-export {STORAGE_KEY, CATALOG_URL, LEVEL_LABELS};
+export {LEGACY_STORAGE_KEY, STORAGE_KEY, STATE_SCHEMA_VERSION, CATALOG_URL, LEVEL_LABELS};
 
 export function extractGroupsFromLegacy(html){
   if(typeof html!=='string')throw new TypeError('Legacy catalog source must be text');
@@ -70,22 +72,72 @@ function readObject(storage,key){
   }
 }
 
-export function mergeCompetencyState(groups,storage,seedOverrides={}){
+function hasOwn(object,key){
+  return Object.prototype.hasOwnProperty.call(object,key);
+}
+
+function createSeededLevels(groups,saved={},seedOverrides={}){
   const allItems=flattenGroups(groups);
-  const saved=readObject(storage,STORAGE_KEY);
   const merged={...saved};
-  let changed=storage.getItem(STORAGE_KEY)===null;
 
   for(const item of allItems){
-    if(Object.prototype.hasOwnProperty.call(merged,item.id))continue;
+    if(hasOwn(merged,item.id)){
+      merged[item.id]=clampLevel(merged[item.id]);
+      continue;
+    }
     const aliases=item.legacyIds||(item.legacyId?[item.legacyId]:[]);
     const migrated=aliases.map(alias=>saved[alias]).find(value=>value!==undefined);
-    merged[item.id]=migrated??seedOverrides[item.id]??item.level??0;
-    changed=true;
+    merged[item.id]=clampLevel(migrated??seedOverrides[item.id]??item.level??0);
   }
 
-  if(changed)storage.setItem(STORAGE_KEY,JSON.stringify(merged));
   return merged;
+}
+
+function normalizeReviewQueue(queue){
+  if(!queue||typeof queue!=='object'||Array.isArray(queue))return {};
+  return Object.fromEntries(Object.entries(queue).filter(([,entry])=>Boolean(entry)).map(([id,entry])=>[
+    id,
+    typeof entry==='object'&&!Array.isArray(entry)?{...entry}:{addedAt:null}
+  ]));
+}
+
+export function migrateCompetencyState(groups,storage,seedOverrides={},now=()=>new Date().toISOString()){
+  const stored=readObject(storage,STORAGE_KEY);
+  const hasV2=stored.schemaVersion===STATE_SCHEMA_VERSION&&stored.studentLevels&&typeof stored.studentLevels==='object'&&!Array.isArray(stored.studentLevels);
+  const legacyLevels=readObject(storage,LEGACY_STORAGE_KEY);
+  const sourceLevels=hasV2?stored.studentLevels:legacyLevels;
+  const state={
+    schemaVersion:STATE_SCHEMA_VERSION,
+    studentLevels:createSeededLevels(groups,sourceLevels,seedOverrides),
+    reviewQueue:normalizeReviewQueue(hasV2?stored.reviewQueue:{}),
+    updatedAt:hasV2&&typeof stored.updatedAt==='string'?stored.updatedAt:now()
+  };
+
+  storage.setItem(STORAGE_KEY,JSON.stringify(state));
+  return state;
+}
+
+export function mergeCompetencyState(groups,storage,seedOverrides={},now){
+  return migrateCompetencyState(groups,storage,seedOverrides,now);
+}
+
+export function isInReviewQueue(reviewQueue,id){
+  return Boolean(reviewQueue&&reviewQueue[id]);
+}
+
+export function updateReviewQueue(reviewQueue,id,active,addedAt=new Date().toISOString()){
+  const next=normalizeReviewQueue(reviewQueue);
+  if(active)next[id]={addedAt};
+  else delete next[id];
+  return next;
+}
+
+export function matchesCompetencyFilter(filter,itemId,level,reviewQueue={}){
+  if(filter==='repeat')return isInReviewQueue(reviewQueue,itemId);
+  if(filter==='unseen')return level===0;
+  if(filter==='progress')return level===2||level===3;
+  if(filter==='mastered')return level===4;
+  return true;
 }
 
 export function clampLevel(value){
@@ -94,14 +146,14 @@ export function clampLevel(value){
   return Math.max(0,Math.min(4,Math.round(numeric)));
 }
 
-export function computeSummary(groups,state){
+export function computeSummary(groups,studentLevels,reviewQueue={}){
   const items=flattenGroups(groups);
-  const values=items.map(item=>clampLevel(state[item.id]??item.level??0));
+  const values=items.map(item=>clampLevel(studentLevels[item.id]??item.level??0));
   const total=values.length;
   const evaluated=values.filter(value=>value>0).length;
   const confident=values.filter(value=>value>=3).length;
   const process=values.filter(value=>value===2).length;
-  const repeat=values.filter(value=>value<=1).length;
+  const repeat=items.filter(item=>isInReviewQueue(reviewQueue,item.id)).length;
   const mastered=values.filter(value=>value===4).length;
   const average=total?Math.round(values.reduce((sum,value)=>sum+value,0)/(total*4)*100):0;
   return {total,evaluated,confident,process,repeat,mastered,average};
@@ -137,14 +189,15 @@ function arcPath(innerRadius,outerRadius,startAngle,endAngle){
 }
 
 class CompetenceMapController{
-  constructor(root,groups,{storage=localStorage,teacherSeed={},evidence={}}={}){
+  constructor(root,groups,{storage=localStorage,teacherSeed={},evidence={},now=()=>new Date().toISOString()}={}){
     this.root=root;
     this.groups=groups;
     this.items=flattenGroups(groups);
     this.storage=storage;
     this.teacherSeed=teacherSeed;
     this.evidence=evidence;
-    this.state=mergeCompetencyState(groups,storage,teacherSeed);
+    this.now=now;
+    this.state=mergeCompetencyState(groups,storage,teacherSeed,now);
     this.currentFilter='all';
     this.activeId=null;
 
@@ -157,30 +210,37 @@ class CompetenceMapController{
   }
 
   itemState(item){
-    return clampLevel(this.state[item.id]??this.teacherSeed[item.id]??item.level??0);
+    return clampLevel(this.state.studentLevels[item.id]??this.teacherSeed[item.id]??item.level??0);
   }
 
-  matchesFilter(level){
-    if(this.currentFilter==='repeat')return level<=1;
-    if(this.currentFilter==='progress')return level===2||level===3;
-    if(this.currentFilter==='mastered')return level===4;
-    return true;
+  isInReviewQueue(id){
+    return isInReviewQueue(this.state.reviewQueue,id);
+  }
+
+  matchesFilter(item,level=this.itemState(item)){
+    return matchesCompetencyFilter(this.currentFilter,item.id,level,this.state.reviewQueue);
   }
 
   save(){
+    this.state.updatedAt=this.now();
     this.storage.setItem(STORAGE_KEY,JSON.stringify(this.state));
   }
 
   render(){
     this.renderRadial();
     this.renderIndex();
-    const summary=computeSummary(this.groups,this.state);
+    const summary=computeSummary(this.groups,this.state.studentLevels,this.state.reviewQueue);
     const percent=this.root.querySelector('#radialPercent');
     const count=this.root.querySelector('#radialTopicCount');
+    const repeatFilter=this.root.querySelector('[data-filter="repeat"]');
+    const visibleCount=this.items.filter(item=>this.matchesFilter(item)).length;
     if(percent)percent.textContent=`${summary.average}%`;
     if(count)count.textContent=`${summary.total} компетенций`;
+    if(repeatFilter)repeatFilter.textContent=`В повторении · ${summary.repeat}`;
     if(this.status){
-      this.status.textContent=`Карта готова: ${summary.total} компетенций, оценено ${summary.evaluated}.`;
+      this.status.textContent=this.currentFilter==='all'
+        ?`Карта готова: ${summary.total} компетенций, оценено ${summary.evaluated}.`
+        :`По выбранному фильтру: ${visibleCount} из ${summary.total} компетенций.`;
       this.status.dataset.state='ready';
     }
     this.publishSummary(summary);
@@ -199,14 +259,20 @@ class CompetenceMapController{
     this.groups.forEach((group,groupIndex)=>{
       const start=groupIndex*sectorSize+sectorGap;
       const end=(groupIndex+1)*sectorSize-sectorGap;
-      const groupTarget=[...group.items].sort((a,b)=>this.itemState(a)-this.itemState(b))[0];
-      content+=`<path class="radial-group-arc" data-id="${groupTarget.id}" d="${arcPath(112,137,start,end)}" tabindex="0" role="button" aria-label="${group.title}"><title>${group.title}</title></path>`;
+      const sortedItems=[...group.items].sort((a,b)=>this.itemState(a)-this.itemState(b));
+      const matchingTarget=sortedItems.find(item=>this.matchesFilter(item));
+      const groupTarget=matchingTarget||sortedItems[0];
+      const groupMuted=matchingTarget?'':' is-muted';
+      content+=`<path class="radial-group-arc${groupMuted}" data-id="${groupTarget.id}" d="${arcPath(112,137,start,end)}" tabindex="${matchingTarget?'0':'-1'}" role="button" aria-disabled="${!matchingTarget}" aria-label="${group.title}${matchingTarget?'':' · нет совпадений'}"><title>${group.title}${matchingTarget?'':' · нет совпадений'}</title></path>`;
       group.items.forEach((item,itemIndex)=>{
         const level=this.itemState(item);
+        const inReview=this.isInReviewQueue(item.id);
         const ringInner=innerRadius+itemIndex*ringWidth;
         const ringOuter=ringInner+ringWidth-ringGap;
-        const muted=this.matchesFilter(level)?'':' is-muted';
-        content+=`<path class="radial-cell${muted}" data-id="${item.id}" data-level="${level}" fill="var(--heat-${level})" d="${arcPath(ringInner,ringOuter,start,end)}" tabindex="0" role="button" aria-label="Кольцо ${itemIndex+1}. ${item.title}. ${item.exam}. Уровень: ${LEVEL_LABELS[level]}"><title>Кольцо ${itemIndex+1} · ${group.title} · ${item.title} · ${item.exam} · ${LEVEL_LABELS[level]}</title></path>`;
+        const muted=this.matchesFilter(item,level)?'':' is-muted';
+        const reviewClass=inReview?' is-review':'';
+        const reviewLabel=inReview?' В повторении.':'';
+        content+=`<path class="radial-cell${muted}${reviewClass}" data-id="${item.id}" data-level="${level}" data-review="${inReview}" fill="var(--heat-${level})" d="${arcPath(ringInner,ringOuter,start,end)}" tabindex="0" role="button" aria-label="Кольцо ${itemIndex+1}. ${item.title}. ${item.exam}. Уровень: ${LEVEL_LABELS[level]}.${reviewLabel}"><title>Кольцо ${itemIndex+1} · ${group.title} · ${item.title} · ${item.exam} · ${LEVEL_LABELS[level]}${inReview?' · в повторении':''}</title></path>`;
       });
       const labelPoint=polar(382,start+(end-start)/2);
       content+=`<text class="radial-group-label" x="${labelPoint.x}" y="${labelPoint.y}" dy=".35em">${group.short}</text>`;
@@ -223,21 +289,28 @@ class CompetenceMapController{
 
   renderIndex(){
     if(!this.topicIndex)return;
-    this.topicIndex.innerHTML=this.groups.map((group,index)=>`
-      <details class="topic-group" ${index===0?'open':''}>
+    let firstVisibleGroup=true;
+    this.topicIndex.innerHTML=this.groups.map(group=>{
+      const hasMatches=group.items.some(item=>this.matchesFilter(item));
+      const open=hasMatches&&firstVisibleGroup;
+      if(hasMatches)firstVisibleGroup=false;
+      return `
+      <details class="topic-group" ${open?'open':''} ${hasMatches?'':'hidden'}>
         <summary><span>${group.title}</span><small>${group.items.length} колец</small></summary>
         <div class="topic-list">
           ${group.items.map((item,itemIndex)=>{
             const level=this.itemState(item);
-            return `<button class="topic-row" type="button" data-id="${item.id}" ${this.matchesFilter(level)?'':'hidden'}>
+            const inReview=this.isInReviewQueue(item.id);
+            return `<button class="topic-row${inReview?' is-review':''}" type="button" data-id="${item.id}" data-review="${inReview}" ${this.matchesFilter(item,level)?'':'hidden'}>
               <i class="topic-dot" style="background:var(--heat-${level})" aria-hidden="true"></i>
               <span class="topic-label"><span>${item.title}</span><small>${item.exam}</small></span>
-              <span class="ring-badge" title="Кольцо ${itemIndex+1}">К${itemIndex+1}</span>
+              <span class="ring-badge" title="Кольцо ${itemIndex+1}${inReview?' · в повторении':''}">${inReview?'↻ ':''}К${itemIndex+1}</span>
               <span class="topic-level">${level}/4</span>
             </button>`;
           }).join('')}
         </div>
-      </details>`).join('');
+      </details>`;
+    }).join('');
     this.bindDynamicCells(this.topicIndex);
   }
 
@@ -277,6 +350,7 @@ class CompetenceMapController{
       if(materialLink)link.href=materialLink;
     }
     this.updateLevelPicker();
+    this.updateReviewButton();
     this.dialog.showModal();
   }
 
@@ -287,15 +361,47 @@ class CompetenceMapController{
 
   updateLevelPicker(){
     if(!this.activeId||!this.dialog)return;
-    const current=clampLevel(this.state[this.activeId]??0);
+    const current=clampLevel(this.state.studentLevels[this.activeId]??0);
     this.dialog.querySelectorAll('.level-btn').forEach(button=>{
       button.setAttribute('aria-pressed',String(Number(button.dataset.level)===current));
     });
   }
 
+  updateReviewButton(){
+    if(!this.activeId||!this.dialog)return;
+    const button=this.dialog.querySelector('#markRepeat');
+    if(!button)return;
+    const active=this.isInReviewQueue(this.activeId);
+    button.textContent=active?'Убрать из повторения':'Добавить в повторение';
+    button.setAttribute('aria-pressed',String(active));
+    button.dataset.active=String(active);
+  }
+
+  addToReviewQueue(id=this.activeId){
+    if(!id)return;
+    this.state.reviewQueue=updateReviewQueue(this.state.reviewQueue,id,true,this.now());
+    this.save();
+    this.render();
+    this.updateReviewButton();
+  }
+
+  removeFromReviewQueue(id=this.activeId){
+    if(!id)return;
+    this.state.reviewQueue=updateReviewQueue(this.state.reviewQueue,id,false,this.now());
+    this.save();
+    this.render();
+    this.updateReviewButton();
+  }
+
+  toggleReviewQueue(id=this.activeId){
+    if(!id)return;
+    if(this.isInReviewQueue(id))this.removeFromReviewQueue(id);
+    else this.addToReviewQueue(id);
+  }
+
   setActiveLevel(level){
     if(!this.activeId)return;
-    this.state[this.activeId]=clampLevel(level);
+    this.state.studentLevels[this.activeId]=clampLevel(level);
     this.save();
     this.updateLevelPicker();
     this.render();
@@ -312,14 +418,15 @@ class CompetenceMapController{
     if(reset)reset.addEventListener('click',()=>{
       if(!window.confirm('Вернуть опубликованную исходную оценку компетенций?'))return;
       this.storage.removeItem(STORAGE_KEY);
-      this.state=mergeCompetencyState(this.groups,this.storage,this.teacherSeed);
+      this.storage.removeItem(LEGACY_STORAGE_KEY);
+      this.state=mergeCompetencyState(this.groups,this.storage,this.teacherSeed,this.now);
       this.render();
       if(this.dialog?.open)this.dialog.close();
     });
 
     if(this.dialog){
       this.dialog.querySelectorAll('.level-btn').forEach(button=>button.addEventListener('click',()=>this.setActiveLevel(button.dataset.level)));
-      this.dialog.querySelector('#markRepeat')?.addEventListener('click',()=>this.setActiveLevel(1));
+      this.dialog.querySelector('#markRepeat')?.addEventListener('click',()=>this.toggleReviewQueue());
       this.dialog.querySelector('#closeDialog')?.addEventListener('click',()=>this.dialog.close());
       this.dialog.addEventListener('click',event=>{if(event.target===this.dialog)this.dialog.close();});
     }
