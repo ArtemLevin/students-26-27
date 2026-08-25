@@ -28,6 +28,10 @@ function loadCore(){
 
 const GeoCore=loadCore();
 
+test('complete simulator JavaScript parses successfully',()=>{
+  assert.doesNotThrow(()=>new vm.Script(modelSource));
+});
+
 test('lesson keeps local simulator assets and offline references',()=>{
   assert.match(html,/href="25\.08\.26\.css\?v=20260825-2"/);
   assert.match(html,/src="25\.08\.26-model\.js\?v=20260825-2"/);
