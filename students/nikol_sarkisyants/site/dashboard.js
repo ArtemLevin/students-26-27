@@ -7,7 +7,7 @@ import {
   paginateArchive,
   formatShortDate,
   formatLongDateRu
-} from './lesson-registry.js';
+} from './lesson-registry.js?v=20260825-1';
 
 const THEME_KEY='nikol-dashboard-theme-v1';
 const MOBILE_QUERY='(max-width:900px)';
