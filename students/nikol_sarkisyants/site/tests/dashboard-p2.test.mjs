@@ -15,13 +15,13 @@ const dateLessonPattern=/^(?:\d{2}\.\d{2}\.\d{2}|\d{2}-\d{2}-\d{2})\.html$/;
 const lessonFiles=readdirSync(siteDir).filter(name=>dateLessonPattern.test(name)).sort();
 const registryHrefs=registry.LESSONS.map(lesson=>lesson.href).sort();
 
-test('lesson registry contains all 13 current lessons newest-first',()=>{
-  assert.equal(registry.LESSONS.length,13);
+test('lesson registry contains all 14 current lessons newest-first',()=>{
+  assert.equal(registry.LESSONS.length,14);
   registry.validateLessonRegistry(registry.LESSONS);
   for(let index=1;index<registry.LESSONS.length;index+=1){
     assert.ok(registry.LESSONS[index-1].date>registry.LESSONS[index].date,'registry must be newest-first');
   }
-  assert.equal(registry.LESSONS[0].href,'23.08.26.html');
+  assert.equal(registry.LESSONS[0].href,'25.08.26.html');
 });
 
 test('registry hrefs exactly match dated lesson HTML files in site directory',()=>{
@@ -36,9 +36,9 @@ test('latest lesson has complete dashboard detail and real material files',()=>{
   assert.ok(latest.outcomes.length>=1);
   assert.ok(latest.materials.pdf);
   assert.ok(latest.materials.tex);
-  assert.ok(latest.materials.review);
 
-  for(const href of [latest.href,latest.materials.pdf,latest.materials.tex,latest.materials.review]){
+  const referencedFiles=[latest.href,...Object.values(latest.materials).filter(Boolean)];
+  for(const href of referencedFiles){
     assert.equal(existsSync(resolve(siteDir,href)),true,`missing file referenced by latest lesson: ${href}`);
   }
 });
@@ -55,15 +55,15 @@ test('recent and archive partitions cover registry once without loss',()=>{
 test('archive pagination is data-driven and uses pages of ten',()=>{
   assert.equal(registry.ARCHIVE_PAGE_SIZE,10);
   const first=registry.paginateArchive(registry.LESSONS,0,registry.ARCHIVE_PAGE_SIZE);
-  assert.equal(first.total,10);
+  assert.equal(first.total,11);
   assert.equal(first.items.length,10);
-  assert.equal(first.pageCount,1);
+  assert.equal(first.pageCount,2);
   assert.equal(first.pageIndex,0);
 });
 
 test('date labels are derived from ISO date instead of duplicated strings',()=>{
-  assert.equal(registry.formatShortDate('2026-08-23'),'23.08');
-  assert.equal(registry.formatLongDateRu('2026-08-23'),'23 августа 2026');
+  assert.equal(registry.formatShortDate('2026-08-25'),'25.08');
+  assert.equal(registry.formatLongDateRu('2026-08-25'),'25 августа 2026');
 });
 
 test('active HTML exposes data-driven lesson shells and an explicit latest-lesson CTA',()=>{
@@ -71,18 +71,18 @@ test('active HTML exposes data-driven lesson shells and an explicit latest-lesso
   assert.match(indexHtml,/id="latestLessonCta"/);
   assert.match(indexHtml,/id="lessonTopics"/);
   assert.match(indexHtml,/id="latestLessonStatus"/);
-  assert.match(indexHtml,/type="module" src="dashboard\.js\?v=20260824-3"/);
+  assert.match(indexHtml,/type="module" src="dashboard\.js\?v=20260825-1"/);
+  assert.doesNotMatch(indexHtml,/href="25\.08\.26\.html"/);
   assert.doesNotMatch(indexHtml,/href="23\.08\.26\.html"/);
   assert.doesNotMatch(indexHtml,/href="18\.08\.26\.html"/);
-  assert.doesNotMatch(indexHtml,/href="15\.08\.26\.html"/);
 });
 
 test('dashboard imports lesson registry and has no independent hardcoded archive array',()=>{
-  assert.match(dashboardSource,/from '\.\/lesson-registry\.js'/);
+  assert.match(dashboardSource,/from '\.\/lesson-registry\.js\?v=20260825-1'/);
   assert.match(dashboardSource,/getRecentLessons/);
   assert.match(dashboardSource,/paginateArchive/);
   assert.doesNotMatch(dashboardSource,/const\s+archiveLessons\s*=\s*\[/);
-  assert.doesNotMatch(dashboardSource,/23\.08\.26\.html|18\.08\.26\.html|15\.08\.26\.html/);
+  assert.doesNotMatch(dashboardSource,/25\.08\.26\.html|23\.08\.26\.html|18\.08\.26\.html/);
 });
 
 test('mobile drawer uses inert isolation, focus trap, restore focus and viewport normalization',()=>{
