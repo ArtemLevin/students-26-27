@@ -3,11 +3,11 @@ const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelect
 const root=document.documentElement;
 const safeStore={
   get(k,f=null){try{return localStorage.getItem(k)??f}catch(_){return f}},
-  set(k,v){try{localStorage.setItem(k,v)}catch(_){}}
+  set(k,v){try{localStorage.setItem(k,v)}catch(_){} }
 };
 const safeSession={
   get(k,f=null){try{return sessionStorage.getItem(k)??f}catch(_){return f}},
-  set(k,v){try{sessionStorage.setItem(k,v)}catch(_){}}
+  set(k,v){try{sessionStorage.setItem(k,v)}catch(_){} }
 };
 const sectionIndicator=$("#sectionIndicator");
 
