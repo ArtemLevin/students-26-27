@@ -38,5 +38,15 @@ for(const [id,[base,rate,value]] of Object.entries(expected)){
 const executableScripts=[...html.matchAll(/<script(?![^>]*application\/json)[^>]*>([\s\S]*?)<\/script>/g)].map(match=>match[1]).filter(Boolean);
 assert.ok(executableScripts.length>=1,'inline lesson script is missing');
 for(const [index,script] of executableScripts.entries()) assert.doesNotThrow(()=>new vm.Script(script,{filename:`26.08.26-inline-${index}.js`}));
+
+for(const runtimeMarker of [
+  "$('#challengeLoad').addEventListener('click',loadChallenge)",
+  "$('#challengeCheck').addEventListener('click',checkChallenge)",
+  "renderTicks();pushHistory();progress();render();",
+  "if(state.rate===0&&state.mode!=='base')",
+  'Деление на 0 не используется.'
+]) assert.ok(html.includes(runtimeMarker),`percentage lab runtime guard is missing: ${runtimeMarker}`);
+assert.ok(!html.includes("forEach(btn=>btn.onclick"),'lab initialization must not depend on a prediction click');
+assert.ok(!html.includes('/ 0 = 0 / 0'),'zero-percent state must never display a 0/0 proportion');
 assert.ok(!/<script[^>]+src=["']https?:/i.test(html),'lesson must remain autonomous without remote scripts');
 assert.ok(!/<link[^>]+href=["']https?:/i.test(html),'lesson must remain autonomous without remote styles');
