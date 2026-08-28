@@ -1,0 +1,1092 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,left=20mm,right=20mm,top=19mm,bottom=20mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{6B7280}
+\definecolor{rulegray}{HTML}{D8DEDE}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=darkaccent,
+  pdfauthor={Лёвин Артём Александрович},
+  pdftitle={Чек-лист: медианы треугольника}
+}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.25em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.7em,itemsep=0.45em,topsep=0.4em}
+\raggedbottom
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{softgray}ОГЭ · Геометрия}
+\fancyhead[R]{\small\color{softgray}Медианы треугольника}
+\fancyfoot[C]{\small\color{softgray}\thepage}
+\setlength{\headheight}{25pt}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{%
+  \hbox to\headwidth{%
+    \color{rulegray}\leaders\hrule height \headrulewidth\hfill
+  }%
+}
+
+\tkzSetUpLine[line width=0.9pt,color=accent]
+\tkzSetUpPoint[color=darkaccent,fill=darkaccent,size=3]
+\tkzSetUpLabel[color=black,font=\small]
+
+\newcommand{\checksection}[1]{%
+  \vspace{0.7em}%
+  {\Large\bfseries\color{darkaccent}#1}\par
+  \vspace{0.25em}
+  {\color{rulegray}\rule{\linewidth}{0.6pt}}\par
+  \vspace{0.5em}
+}
+
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\SABC}{S_{ABC}}
+
+\begin{document}
+
+% ============================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% ============================================================
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{28mm}
+
+{\Large\color{softgray}Чек-лист\par}
+
+\vspace{5mm}
+
+{\Huge\bfseries\color{darkaccent}
+Медианы треугольника\par}
+
+\vspace{3mm}
+
+{\LARGE\color{textgray}
+площади, центр тяжести, удвоение медианы, подобие\par}
+
+\vspace{18mm}
+
+{\large ОГЭ · геометрия\par}
+
+\vfill
+
+{\large\bfseries
+Лёвин Артём Александрович\par}
+
+\vspace{2mm}
+
+{\large
+эксклюзивно для Софии Кальней\par}
+
+\vspace{7mm}
+
+{\normalsize \today\par}
+
+\vspace{18mm}
+
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[color=accent,line width=1.1pt]
+    (-7,0)
+    .. controls (-4.3,0.8) and (-2.2,-0.55) .. (0,0.05)
+    .. controls (2.6,0.75) and (4.5,-0.55) .. (7,0.1);
+\end{tikzpicture}
+
+\vspace*{3mm}
+
+\end{titlepage}
+
+% ============================================================
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% ============================================================
+
+\checksection{1. Что нужно знать о медиане}
+
+\key{Медиана треугольника} --- отрезок, соединяющий вершину
+треугольника с серединой противоположной стороны.
+
+Пусть в $\triangle ABC$ точки $A_1$, $B_1$, $C_1$ ---
+середины сторон $BC$, $CA$, $AB$. Тогда
+\[
+AA_1,\qquad BB_1,\qquad CC_1
+\]
+--- медианы треугольника.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+
+  \tkzDefPoint(0,4){A}
+  \tkzDefPoint(-3,0){B}
+  \tkzDefPoint(4,0){C}
+
+  \tkzDefMidPoint(B,C)
+  \tkzGetPoint{A1}
+
+  \tkzDefMidPoint(C,A)
+  \tkzGetPoint{B1}
+
+  \tkzDefMidPoint(A,B)
+  \tkzGetPoint{C1}
+
+  \tkzInterLL(A,A1)(B,B1)
+  \tkzGetPoint{O}
+
+  \tkzDrawPolygon(A,B,C)
+  \tkzDrawSegments(A,A1 B,B1 C,C1)
+
+  \tkzDrawPoints(A,B,C,A1,B1,C1,O)
+
+  \tkzLabelPoints[above](A)
+  \tkzLabelPoints[below left](B)
+  \tkzLabelPoints[below right](C)
+  \tkzLabelPoints[below](A1)
+  \tkzLabelPoints[right](B1)
+  \tkzLabelPoints[left](C1)
+  \tkzLabelPoint[above right](O){$O$}
+
+\end{tikzpicture}
+\end{center}
+
+\key{Главное свойство точки пересечения медиан.}
+
+Все три медианы пересекаются в одной точке $O$ и делятся
+этой точкой в отношении $2:1$, считая от вершины:
+\[
+AO:OA_1
+=
+BO:OB_1
+=
+CO:OC_1
+=
+2:1.
+\]
+
+Следовательно,
+\[
+AO=\frac23 AA_1,
+\qquad
+OA_1=\frac13 AA_1,
+\]
+и аналогично для двух других медиан.
+
+\textbf{Контрольная мысль.}
+Вся медиана состоит из трёх одинаковых долей.
+От вершины до точки пересечения медиан приходится две доли,
+от точки пересечения до середины стороны --- одна.
+
+% ------------------------------------------------------------
+
+\checksection{2. Медианы и площади}
+
+\key{Одна медиана делит треугольник на две равновеликие части.}
+
+Если $AA_1$ --- медиана, то
+\[
+S_{ABA_1}=S_{ACA_1}=\frac12\SABC.
+\]
+
+Причина: у треугольников $ABA_1$ и $ACA_1$ общая высота,
+проведённая к прямой $BC$, а основания
+\[
+BA_1=A_1C.
+\]
+
+\key{Три медианы делят треугольник на шесть равновеликих
+треугольников.}
+
+Площадь каждого малого треугольника равна
+\[
+\boxed{\frac16\SABC}.
+\]
+
+Важно: эти шесть треугольников гарантированно
+\emph{равны по площади}. Их равенство как геометрических фигур
+из этого свойства не следует.
+
+Полезное следствие:
+\[
+S_{AOB}=S_{BOC}=S_{COA}
+=
+\frac13\SABC,
+\]
+поскольку каждый из этих треугольников состоит из двух малых
+треугольников площади $\frac16\SABC$.
+
+% ------------------------------------------------------------
+
+\checksection{3. Удвоение медианы: главное дополнительное построение}
+
+Пусть $AD$ --- медиана $\triangle ABC$.
+Продлим её за точку $D$ до точки $K$ так, чтобы
+\[
+AD=DK.
+\]
+
+Точка $D$ является серединой отрезка $BC$ и серединой отрезка
+$AK$. Следовательно, диагонали четырёхугольника $ABKC$
+делятся пополам.
+
+Отсюда
+\[
+\boxed{ABKC\text{ --- параллелограмм}.}
+\]
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+
+  \tkzDefPoint(-2.5,0){A}
+  \tkzDefPoint(1.5,0.5){B}
+  \tkzDefPoint(-0.3,3.5){C}
+  \tkzDefPoint(0.6,2){D}
+  \tkzDefPoint(3.7,4){K}
+
+  \tkzDrawPolygon(A,B,C)
+  \tkzDrawSegments(A,K B,K C,K)
+
+  \tkzDrawPoints(A,B,C,D,K)
+
+  \tkzLabelPoints[below left](A)
+  \tkzLabelPoints[below right](B)
+  \tkzLabelPoints[above left](C)
+  \tkzLabelPoints[above right](K)
+  \tkzLabelPoint[right](D){$D$}
+
+\end{tikzpicture}
+\end{center}
+
+Из свойств параллелограмма получаем
+\[
+AB=CK,
+\qquad
+AC=BK,
+\]
+\[
+AB\parallel CK,
+\qquad
+AC\parallel BK.
+\]
+
+\key{Зачем это нужно.}
+
+Удвоение медианы позволяет перейти к параллельным прямым,
+равным отрезкам, подобным и прямоугольным треугольникам.
+Это один из основных приёмов решения задач повышенной
+сложности на медианы.
+
+% ------------------------------------------------------------
+
+\checksection{4. Задача-эталон: медианы равны $3$, $4$, $5$}
+
+\textbf{Задача.}
+Найдите площадь треугольника, медианы которого равны
+$3$, $4$ и $5$.
+
+Обозначим точку пересечения медиан через $O$.
+
+Отрезок от вершины до точки $O$ составляет $\frac23$
+соответствующей медианы. После удвоения подходящего отрезка
+получается треугольник $OCF$ со сторонами
+\[
+OC=\frac23\cdot5=\frac{10}{3},
+\]
+\[
+CF=\frac23\cdot3=2,
+\]
+\[
+OF=\frac23\cdot4=\frac83.
+\]
+
+\begin{center}
+\begin{tikzpicture}[scale=1.15]
+
+  \tkzDefPoint(0,0){F}
+  \tkzDefPoint(2,0){C}
+  \tkzDefPoint(0,2.6667){O}
+
+  \tkzDefMidPoint(O,F)
+  \tkzGetPoint{B1}
+
+  \tkzDrawPolygon(O,C,F)
+  \tkzDrawSegment(C,B1)
+
+  \tkzDrawPoints(O,C,F,B1)
+
+  \tkzMarkRightAngle[size=0.28](C,F,O)
+
+  \tkzLabelPoints[above](O)
+  \tkzLabelPoints[right](C)
+  \tkzLabelPoints[below left](F)
+  \tkzLabelPoint[left](B1){$B_1$}
+
+  \tkzLabelSegment[above right](O,C){$\frac{10}{3}$}
+  \tkzLabelSegment[below](F,C){$2$}
+  \tkzLabelSegment[left](O,F){$\frac83$}
+
+\end{tikzpicture}
+\end{center}
+
+Полупериметр треугольника $OCF$:
+\[
+p=
+\frac{
+\frac{10}{3}+2+\frac83
+}{2}
+=4.
+\]
+
+По формуле Герона
+\[
+S_{OCF}
+=
+\sqrt{
+4
+\left(4-\frac{10}{3}\right)
+(4-2)
+\left(4-\frac83\right)
+}.
+\]
+
+Получаем
+\[
+S_{OCF}
+=
+\sqrt{
+4\cdot
+\frac23\cdot
+2\cdot
+\frac43
+}
+=
+\frac83.
+\]
+
+Отрезок $CB_1$ является медианой $\triangle OCF$, поэтому
+\[
+S_{OCB_1}
+=
+\frac12S_{OCF}
+=
+\frac43.
+\]
+
+Треугольник $OCB_1$ является одним из шести равновеликих
+треугольников исходного треугольника. Следовательно,
+\[
+\SABC
+=
+6\cdot\frac43
+=
+\boxed{8}.
+\]
+
+% ------------------------------------------------------------
+
+\checksection{5. Треугольник, построенный на медианах}
+
+Пусть стороны некоторого нового треугольника равны трём
+медианам исходного $\triangle ABC$.
+
+Обозначим площадь такого треугольника через $S_m$.
+
+После удвоения медианы возникает треугольник, каждая сторона
+которого равна $\frac23$ соответствующей медианы исходного
+треугольника.
+
+Следовательно, этот треугольник подобен треугольнику,
+построенному на медианах, с коэффициентом
+\[
+k=\frac23.
+\]
+
+Площади подобных треугольников относятся как квадраты
+коэффициента подобия:
+\[
+S_{OCF}
+=
+\left(\frac23\right)^2S_m
+=
+\frac49S_m.
+\]
+
+При этом треугольник $OCF$ состоит из двух малых треугольников,
+каждый из которых имеет площадь $\frac16\SABC$. Поэтому
+\[
+S_{OCF}
+=
+2\cdot\frac16\SABC
+=
+\frac13\SABC.
+\]
+
+Получаем
+\[
+\frac49S_m
+=
+\frac13\SABC.
+\]
+
+Отсюда
+\[
+\boxed{S_m=\frac34\SABC}.
+\]
+
+Обратная формула:
+\[
+\boxed{\SABC=\frac43S_m}.
+\]
+
+\textbf{Практический смысл.}
+
+Если известны три медианы исходного треугольника, можно:
+
+\begin{enumerate}
+  \item построить мысленно обычный треугольник с такими сторонами;
+  \item найти его площадь;
+  \item умножить полученную площадь на $\frac43$.
+\end{enumerate}
+
+% ------------------------------------------------------------
+
+\checksection{6. Подобие и прямоугольные треугольники}
+
+В сложной геометрической задаче полезно выполнять два
+автоматических поиска.
+
+\begin{itemize}
+
+  \item
+  \key{Прямоугольные треугольники.}
+  Высота создаёт прямой угол. После этого можно применять
+  теорему Пифагора и другие свойства прямоугольного
+  треугольника.
+
+  \item
+  \key{Подобные треугольники.}
+  Особенно внимательно проверяйте вертикальные углы и углы
+  при параллельных прямых, появившихся после дополнительного
+  построения.
+
+\end{itemize}
+
+\textbf{Типовая конфигурация.}
+
+Пусть в равнобедренном $\triangle ABC$
+\[
+AB=BC.
+\]
+
+Медиана $AD$ и высота $CE$ пересекаются в точке $P$.
+Удвоим медиану $AD$ до точки $K$.
+
+Тогда
+\[
+ABKC
+\]
+--- параллелограмм и
+\[
+CK=AB.
+\]
+
+\begin{center}
+\begin{tikzpicture}[scale=0.62]
+
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(8.75,0){B}
+  \tkzDefPoint(3.5,7){C}
+  \tkzDefPoint(6.125,3.5){D}
+  \tkzDefPoint(3.5,0){E}
+  \tkzDefPoint(3.5,2){P}
+  \tkzDefPoint(12.25,7){K}
+
+  \tkzDrawPolygon(A,B,C)
+  \tkzDrawSegments(A,K C,E B,K C,K)
+
+  \tkzDrawPoints(A,B,C,D,E,P,K)
+
+  \tkzMarkRightAngle[size=0.33](C,E,B)
+
+  \tkzLabelPoints[below](A,E,B)
+  \tkzLabelPoints[above](C,K)
+  \tkzLabelPoint[above right](D){$D$}
+  \tkzLabelPoint[left](P){$P$}
+
+\end{tikzpicture}
+\end{center}
+
+Рассмотрим треугольники
+\[
+\triangle APE
+\quad\text{и}\quad
+\triangle KPC.
+\]
+
+Они подобны:
+
+\begin{itemize}
+  \item
+  \[
+  \angle APE=\angle KPC
+  \]
+  как вертикальные;
+
+  \item
+  \[
+  AE\parallel KC,
+  \]
+  поэтому соответствующие углы равны.
+\end{itemize}
+
+Следовательно,
+\[
+\frac{AE}{KC}
+=
+\frac{PE}{PC}.
+\]
+
+Пусть
+\[
+AB=BC=x.
+\]
+
+Так как $ABKC$ --- параллелограмм,
+\[
+KC=x.
+\]
+
+Поэтому отношение
+\[
+\frac{PE}{PC}
+\]
+позволяет выразить $AE$ через $x$, а затем найти
+\[
+BE=AB-AE.
+\]
+
+После этого применяется теорема Пифагора в прямоугольном
+$\triangle BEC$.
+
+\textbf{Пример.}
+
+Пусть
+\[
+PC=5,
+\qquad
+PE=2.
+\]
+
+Тогда
+\[
+CE=PC+PE=7.
+\]
+
+Из подобия:
+\[
+\frac{AE}{x}
+=
+\frac25.
+\]
+
+Следовательно,
+\[
+AE=\frac25x,
+\qquad
+BE=x-\frac25x=\frac35x.
+\]
+
+В прямоугольном $\triangle BEC$:
+\[
+BC^2=BE^2+CE^2.
+\]
+
+Получаем
+\[
+x^2
+=
+\left(\frac35x\right)^2
++
+7^2.
+\]
+
+Следовательно,
+\[
+x^2
+=
+\frac9{25}x^2+49,
+\]
+\[
+\frac{16}{25}x^2=49,
+\]
+\[
+x^2=\frac{1225}{16},
+\]
+\[
+x=\frac{35}{4}.
+\]
+
+Так как $CE$ --- высота к стороне $AB$,
+\[
+S_{ABC}
+=
+\frac12\cdot AB\cdot CE.
+\]
+
+Поэтому
+\[
+S_{ABC}
+=
+\frac12
+\cdot
+\frac{35}{4}
+\cdot
+7
+=
+\boxed{\frac{245}{8}}.
+\]
+
+% ------------------------------------------------------------
+
+\checksection{7. Формулы, которые должны быть на автомате}
+
+\renewcommand{\arraystretch}{1.35}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.34\linewidth}X@{}}
+
+\toprule
+Ситуация & Что использовать \\
+\midrule
+
+Точка пересечения медиан
+&
+$AO=\frac23AA_1$,
+$OA_1=\frac13AA_1$
+\\
+
+Одна медиана
+&
+Делит площадь исходного треугольника пополам
+\\
+
+Три медианы
+&
+Шесть равновеликих треугольников,
+каждый площади $\frac16S$
+\\
+
+Удвоение медианы
+&
+Получение параллелограмма через взаимное деление
+диагоналей пополам
+\\
+
+Площади подобных треугольников
+&
+$\displaystyle \frac{S_1}{S_2}=k^2$
+\\
+
+Треугольник на медианах
+&
+$S_m=\frac34S$,
+\quad
+$S=\frac43S_m$
+\\
+
+Три известные стороны
+&
+Формула Герона:
+$\displaystyle
+S=\sqrt{p(p-a)(p-b)(p-c)}
+$
+\\
+
+Высота и основание
+&
+$\displaystyle S=\frac12ah_a$
+\\
+
+Прямоугольный треугольник
+&
+Теорема Пифагора
+\\
+
+\bottomrule
+
+\end{tabularx}
+\end{center}
+
+% ------------------------------------------------------------
+
+\checksection{8. Типичные ошибки}
+
+\begin{itemize}
+
+  \item
+  Путать отношение $2:1$ с отношением $1:2$.
+  Две части медианы лежат со стороны вершины.
+
+  \item
+  Записывать
+  \[
+  AO=\frac23OA_1.
+  \]
+  Верные соотношения:
+  \[
+  AO=2\,OA_1,
+  \qquad
+  AO=\frac23AA_1.
+  \]
+
+  \item
+  Считать шесть малых треугольников равными как фигуры.
+  Гарантируется равенство их площадей.
+
+  \item
+  После удвоения медианы использовать свойства
+  параллелограмма до проверки того, что его диагонали
+  делятся пополам.
+
+  \item
+  Сопоставлять стороны подобных треугольников только по
+  внешнему виду чертежа. Соответствие сторон определяется
+  соответствием углов.
+
+  \item
+  Забывать возвести коэффициент подобия в квадрат при
+  сравнении площадей.
+
+  \item
+  Применять формулу Герона без предварительного вычисления
+  полупериметра
+  \[
+  p=\frac{a+b+c}{2}.
+  \]
+
+  \item
+  На последнем шаге забывать, площадь какого именно
+  треугольника была найдена: малого, дополнительного,
+  треугольника на медианах или исходного.
+
+\end{itemize}
+
+% ------------------------------------------------------------
+
+\checksection{9. Универсальный алгоритм решения}
+
+\begin{enumerate}
+
+  \item
+  Отметьте середины сторон и все данные о медианах.
+
+  \item
+  Если медианы пересекаются, сразу запишите отношение
+  \[
+  2:1.
+  \]
+
+  \item
+  Если речь идёт о площадях, проверьте возможность
+  использовать доли
+  \[
+  \frac12,\qquad
+  \frac13,\qquad
+  \frac16.
+  \]
+
+  \item
+  Если дана медиана и исходная конфигурация неудобна,
+  рассмотрите её удвоение.
+
+  \item
+  После дополнительного построения выпишите равные и
+  параллельные стороны полученного параллелограмма.
+
+  \item
+  Найдите прямоугольные треугольники.
+
+  \item
+  Найдите пары подобных треугольников.
+  В первую очередь проверяйте вертикальные углы и углы
+  при параллельных прямых.
+
+  \item
+  Переведите геометрические связи в отношения,
+  уравнения и формулы площадей.
+
+  \item
+  Выполните вычисления.
+
+  \item
+  Проверьте, во сколько раз найденная площадь отличается
+  от требуемой.
+
+\end{enumerate}
+
+% ============================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% ============================================================
+
+\newpage
+
+\thispagestyle{fancy}
+
+\begin{center}
+{\LARGE\bfseries\color{darkaccent}
+Тренировочный блок · Путь А\par}
+
+\vspace{2mm}
+
+{\color{softgray}
+10 задач по нарастающей сложности\par}
+\end{center}
+
+\vspace{4mm}
+
+\textbf{Средний уровень}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+
+  \item
+  В $\triangle ABC$ медиана
+  \[
+  AA_1=12.
+  \]
+  Точка $O$ --- точка пересечения медиан.
+  Найдите $AO$ и $OA_1$.
+
+  \item
+  Площадь треугольника равна $54$.
+  Проведены все три медианы.
+  Найдите площадь каждого из шести малых треугольников.
+
+  \item
+  Медиана $AD$ делит $\triangle ABC$ на два треугольника.
+  Известно, что
+  \[
+  S_{ABD}=17.
+  \]
+  Найдите $S_{ABC}$.
+
+\end{enumerate}
+
+\vspace{2mm}
+
+\textbf{Уровень выше среднего}
+
+\begin{enumerate}[label=\textbf{\arabic*.},resume]
+
+  \item
+  Медианы треугольника равны
+  \[
+  6,\qquad 8,\qquad 10.
+  \]
+  Найдите площадь исходного треугольника.
+
+  \item
+  Медианы треугольника равны
+  \[
+  5,\qquad 5,\qquad 6.
+  \]
+  Найдите площадь исходного треугольника.
+
+  \item
+  Площадь исходного треугольника равна $120$.
+  Найдите площадь треугольника, стороны которого равны
+  медианам исходного треугольника.
+
+  \item
+  В $\triangle ABC$ медиана $AD$ продолжена до точки $K$
+  так, что
+  \[
+  AD=DK.
+  \]
+  Известно:
+  \[
+  AB=7,
+  \qquad
+  AC=9.
+  \]
+  Найдите $CK$ и $BK$.
+
+  \item
+  Площадь $\triangle ABC$ равна $90$.
+  Все три медианы пересекаются в точке $O$.
+  Найдите площади треугольников
+  \[
+  AOB,\qquad BOC,\qquad COA.
+  \]
+
+  \item
+  В равнобедренном $\triangle ABC$
+  \[
+  AB=BC.
+  \]
+  Медиана $AD$ и высота $CE$ пересекаются в точке $P$.
+  Известно:
+  \[
+  PC=6,
+  \qquad
+  PE=2.
+  \]
+  Найдите площадь $\triangle ABC$.
+
+\end{enumerate}
+
+\vspace{2mm}
+
+\textbf{Сложная задача}
+
+\begin{enumerate}[label=\textbf{\arabic*.},resume]
+
+  \item
+  В равнобедренном $\triangle ABC$
+  \[
+  AB=BC.
+  \]
+  Медиана $AD$ к стороне $BC$ и высота $CE$ к стороне
+  $AB$ пересекаются в точке $P$.
+
+  Известно:
+  \[
+  PC=9,
+  \qquad
+  PE=3.
+  \]
+
+  Найдите площадь $\triangle ABC$.
+
+\end{enumerate}
+
+% ============================================================
+% ОТВЕТЫ
+% ============================================================
+
+\newpage
+
+\thispagestyle{fancy}
+
+\begin{center}
+{\LARGE\bfseries\color{darkaccent}
+Ответы к тренировочному блоку\par}
+
+\vspace{2mm}
+
+{\color{softgray}
+Сверяйтесь после самостоятельной попытки.\par}
+\end{center}
+
+\vspace{6mm}
+
+\begin{table}[h]
+
+\centering
+
+\caption{Ответы}
+
+\renewcommand{\arraystretch}{1.45}
+
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+
+1
+&
+$AO=8$, \quad $OA_1=4$
+\\
+
+2
+&
+$9$
+\\
+
+3
+&
+$34$
+\\
+
+4
+&
+$32$
+\\
+
+5
+&
+$16$
+\\
+
+6
+&
+$90$
+\\
+
+7
+&
+$CK=7$, \quad $BK=9$
+\\
+
+8
+&
+$S_{AOB}=S_{BOC}=S_{COA}=30$
+\\
+
+9
+&
+$\displaystyle \frac{96\sqrt5}{5}$
+\\
+
+10
+&
+$\displaystyle \frac{216\sqrt5}{5}$
+\\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table}
+
+\vfill
+
+\begin{center}
+{\small\color{softgray}
+Ключевой маршрут:
+теория о медианах
+$\to$
+площади
+$\to$
+удвоение медианы
+$\to$
+параллелограмм
+$\to$
+подобие и прямоугольные треугольники.
+}
+\end{center}
+
+\end{document}
