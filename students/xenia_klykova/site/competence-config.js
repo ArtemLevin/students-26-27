@@ -24,3 +24,22 @@ window.STUDENT_COMPETENCE_CONFIG={
     t10_percent:{text:'07.08 изучены растворы; 10.08 метод баланса компонента перенесён на сплавы.',href:'10.08.26.html'}
   }
 };
+
+(()=>{
+  const config=window.STUDENT_COMPETENCE_CONFIG;
+  const migrationKey='xenia-competence-teacher-seed-applied-20260828';
+  if(!config||localStorage.getItem(migrationKey))return;
+  try{
+    const state=JSON.parse(localStorage.getItem(config.stateKey)||'null');
+    if(state&&state.schemaVersion===2&&state.studentLevels&&typeof state.studentLevels==='object'){
+      for(const id of ['t5_sum','t5_product','t5_complement','t5_bernoulli','t5_combinatorics']){
+        const seeded=Number(config.teacherSeed[id]||0);
+        const current=Number(state.studentLevels[id]||0);
+        state.studentLevels[id]=Math.max(current,seeded);
+      }
+      state.updatedAt=new Date().toISOString();
+      localStorage.setItem(config.stateKey,JSON.stringify(state));
+    }
+    localStorage.setItem(migrationKey,'1');
+  }catch(_){/* localStorage может быть недоступен; карта применит teacherSeed при инициализации */}
+})();
