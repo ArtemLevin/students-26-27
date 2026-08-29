@@ -7,6 +7,13 @@ import path from 'node:path';
 const here=path.dirname(fileURLToPath(import.meta.url));
 const html=fs.readFileSync(path.join(here,'..','29.08.26.html'),'utf8');
 
+const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)].map(match=>match[1]);
+assert.ok(scripts.length>0,'inline script must exist');
+for(const source of scripts)new vm.Script(source,{filename:'29.08.26.inline.js'});
+
+const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(match=>match[1]);
+assert.equal(new Set(ids).size,ids.length,'HTML ids must be unique');
+
 const coreMatch=html.match(/\/\* MODEL_CORE_START \*\/([\s\S]*?)\/\* MODEL_CORE_END \*\//);
 assert.ok(coreMatch,'kinematics model core marker must exist');
 const sandbox={};
@@ -49,6 +56,7 @@ const {motionAt,targetTime,screenDirection}=sandbox.api;
 {
   const m={mode:'turn',x0:-5,v1:3,tTurn:4,v2:-1.25,duration:8};
   const turn=motionAt(m,4);
+  const afterTurn=motionAt(m,5);
   const end=motionAt(m,8);
   assert.equal(turn.x,7);
   assert.equal(turn.s,12);
@@ -56,6 +64,9 @@ const {motionAt,targetTime,screenDirection}=sandbox.api;
   assert.equal(end.dx,7);
   assert.equal(end.absDx,7);
   assert.equal(end.s,17);
+  assert.ok(afterTurn.s>turn.s,'path must keep increasing after reversal');
+  assert.ok(end.s>afterTurn.s,'path must remain monotonic');
+  assert.ok(end.absDx<afterTurn.absDx,'displacement modulus must fall while returning toward start');
   assert.ok(end.s>end.absDx);
 }
 
