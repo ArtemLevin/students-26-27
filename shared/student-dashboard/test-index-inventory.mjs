@@ -13,6 +13,8 @@ const root=process.cwd();
 const indexes=walk(path.join(root,'students')).filter(file=>path.basename(file)==='index.html').map(file=>path.relative(root,file).replaceAll('\\','/')).sort();
 assert.deepEqual(indexes,[
   'students/kirill_zinoviev/site/index.html',
+  'students/nastya_pavlova/index.html',
+  'students/nastya_pavlova/site/index.html',
   'students/nikol_sarkisyants/site/index.html',
   'students/sofya_kalney/site/index.html',
   'students/timofey/site/index.html',
@@ -22,7 +24,7 @@ assert.deepEqual(indexes,[
   'students/xenia_klykova/site/index.html'
 ]);
 
-const dashboardPaths=indexes.filter(file=>file.endsWith('/site/index.html')&&!file.includes('/chemistry/')&&!file.includes('/nikol_sarkisyants/'));
+const dashboardPaths=indexes.filter(file=>file.endsWith('/site/index.html')&&!file.includes('/chemistry/')&&!file.includes('/nikol_sarkisyants/')&&!file.includes('/nastya_pavlova/'));
 for(const file of dashboardPaths){
   const html=fs.readFileSync(path.join(root,file),'utf8');
   for(const token of ['data-filter="repeat"','data-filter="unseen"','data-filter="help"','data-filter="progress"','data-filter="confident"','data-filter="mastered"','id="levelExplanation"','aria-labelledby="radialTitle radialDescription"']){
