@@ -1,3 +1,4 @@
+import {resolveActivationPolicy} from './activation-policy.js';
 import {appendPracticeEvent,activateCompetency,normalizePracticeState,saveSession,syncLessonActivations} from './practice-state.js';
 import {LocalStoragePracticeStorage} from './practice-storage.js';
 import {buildExerciseSeed,stableHash} from './random.js';
@@ -32,7 +33,7 @@ export class PracticeEngine{
   today(){return this.todayProvider();}
   persist(){this.storage.save(this.state);return this.state;}
   activateConfigured(){
-    for(const [id,mapping] of Object.entries(this.config.competencies||{}))if(mapping.active===true)this.state=activateCompetency(this.state,id,{today:this.today(),now:this.now});
+    for(const [id,mapping] of Object.entries(this.config.competencies||{}))if(resolveActivationPolicy(mapping)==='always')this.state=activateCompetency(this.state,id,{today:this.today(),now:this.now});
   }
   updateCompetenceSnapshot(snapshot={}){this.competenceSnapshot={studentLevels:snapshot.studentLevels||{},reviewQueue:snapshot.reviewQueue||{}};return this.preview();}
   selection(){return selectDailyCompetencies({config:this.config,state:this.state,studentLevels:this.competenceSnapshot.studentLevels,reviewQueue:this.competenceSnapshot.reviewQueue,today:this.today()});}
@@ -101,6 +102,7 @@ export class PracticeEngine{
   }
   startFocused(competencyId){
     const mapping=this.config.competencies[competencyId];if(!mapping)throw new Error('This competency has no exercise generator');
+    if(resolveActivationPolicy(mapping)==='disabled')throw new Error('This competency is disabled for practice');
     this.state=activateCompetency(this.state,competencyId,{today:this.today(),now:this.now});let session=this.currentSession();
     if(!session)session=this.startSession();
     this.updateSession(current=>{

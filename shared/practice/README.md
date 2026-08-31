@@ -4,6 +4,7 @@
 
 ## Состав
 
+- `activation-policy.js` — единый contract `lesson | always | manual | disabled`, calendar-date validation и legacy aliases;
 - `practice-state.js` — PracticeState v1, миграция, capped sessions/events;
 - `practice-storage.js` — adapter для `localStorage` и memory adapter для тестов;
 - `practice-scheduler.js` — интервалы `[1, 3, 7, 14, 30, 60, 120]`;
@@ -39,11 +40,20 @@ Mastery хранится в существующем competence state v2. Practi
 
 Storage adapter позволяет позднее добавить API с optimistic concurrency без изменения scheduler, генераторов и UI.
 
-## Интеграция уроков
+## Интеграция уроков и activation policy
 
-Outcome может содержать optional `competencyId`. `lessonAutoActivation` активирует только ID, который одновременно существует в student config. Повторный sync сохраняет накопленный интервал и историю.
+Каждый новый practice mapping явно указывает `activation`:
 
-Ручная `reviewQueue` имеет высший приоритет и может активировать configured skill даже при mastery level 0. Сам scheduler уровень 0–4 не меняет.
+- `lesson` — skill активируется после наступления даты урока с matching `competencyId`;
+- `always` — migration/фундаментальный skill активируется при инициализации;
+- `manual` — skill входит в daily selection только через `reviewQueue`, при этом `startFocused()` также разрешён;
+- `disabled` — mapping сохраняется, daily selection и `startFocused()` выключены.
+
+Если `activation` отсутствует, новый default — `lesson`. Для backward compatibility runtime продолжает принимать deprecated aliases `active:true → always` и `active:false → lesson`. Семь подключённых student configs уже мигрированы на explicit `activation`; central validation запрещает возврат deprecated boolean в них.
+
+`lessonAutoActivation` использует только валидные calendar-date `YYYY-MM-DD`. Будущий lesson record может находиться в registry, однако его outcomes не активируются до фактической даты урока. Повторный sync сохраняет `dueAt`, interval step, attempts, lapses, sessions/events и mastery-state.
+
+Ручная `reviewQueue` имеет высший приоритет среди selectable skills и может активировать configured `lesson`/`always`/`manual` skill даже при mastery level 0. Scheduler уровень 0–4 не меняет.
 
 ## Legacy dashboard plan
 
@@ -61,6 +71,6 @@ Outcome может содержать optional `competencyId`. `lessonAutoActiva
 ```bash
 node --test shared/practice/test/*.test.mjs
 node shared/practice/validate-configs.mjs
-node shared/student-dashboard/test-dashboard.mjs
+node --test pipeline/practice/test/*.test.mjs
 node shared/student-dashboard/test-index-inventory.mjs
 ```

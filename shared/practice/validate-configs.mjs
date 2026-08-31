@@ -3,6 +3,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import {pathToFileURL} from 'node:url';
 import {extractArrayExpression,evaluateCatalogExpression,flattenGroups,normalizeGroups,validateCatalog} from '../student-dashboard/legacy-competence-map.js';
+import {resolveActivationPolicy,validateLessonDates} from './activation-policy.js';
 import {GeneratorRegistry,validatePracticeConfig} from './generator-registry.js';
 import {ALL_GENERATORS} from './generators/index.js';
 
@@ -28,12 +29,18 @@ export async function validateAllPracticeConfigs(){
   for(const [student,spec] of Object.entries(SPECS)){
     const groups=loadGroups(spec);validateCatalog(groups);const ids=new Set(flattenGroups(groups).map(item=>item.id));
     const configUrl=pathToFileURL(path.join(ROOT,'students',student,'site','practice-config.js')).href,lessonUrl=pathToFileURL(path.join(ROOT,'students',student,'site','lesson-registry.js')).href;
-    const {PRACTICE_CONFIG}=await import(configUrl),{LESSONS}=await import(lessonUrl);validatePracticeConfig(PRACTICE_CONFIG,registry,{competencyIds:ids});
+    const {PRACTICE_CONFIG}=await import(configUrl),{LESSONS}=await import(lessonUrl);validatePracticeConfig(PRACTICE_CONFIG,registry,{competencyIds:ids});validateLessonDates(LESSONS);
     if(storageKeys.has(PRACTICE_CONFIG.storageKey))throw new Error(`Duplicate practice storageKey: ${PRACTICE_CONFIG.storageKey}`);storageKeys.add(PRACTICE_CONFIG.storageKey);
+    const policies={lesson:0,always:0,manual:0,disabled:0};
+    for(const [id,mapping] of Object.entries(PRACTICE_CONFIG.competencies||{})){
+      if(mapping.activation===undefined)throw new Error(`${student}: ${id} must declare explicit activation after Track B migration`);
+      if(Object.prototype.hasOwnProperty.call(mapping,'active'))throw new Error(`${student}: ${id} still uses deprecated active boolean`);
+      policies[resolveActivationPolicy(mapping)]+=1;
+    }
     for(const lesson of LESSONS)for(const outcome of lesson.outcomes||[])if(outcome.competencyId&&!ids.has(outcome.competencyId))throw new Error(`${student}: unknown lesson competencyId ${outcome.competencyId}`);
-    report.push({student,competencies:Object.keys(PRACTICE_CONFIG.competencies).length,lessons:LESSONS.length});
+    report.push({student,competencies:Object.keys(PRACTICE_CONFIG.competencies).length,lessons:LESSONS.length,policies});
   }
   return report;
 }
 
-if(import.meta.url===pathToFileURL(process.argv[1]||'').href){const report=await validateAllPracticeConfigs();for(const item of report)console.log(`✓ ${item.student}: ${item.competencies} practice mappings, ${item.lessons} lessons`);}
+if(import.meta.url===pathToFileURL(process.argv[1]||'').href){const report=await validateAllPracticeConfigs();for(const item of report)console.log(`✓ ${item.student}: ${item.competencies} practice mappings, ${item.lessons} lessons, activation ${JSON.stringify(item.policies)}`);}

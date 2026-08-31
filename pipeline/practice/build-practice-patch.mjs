@@ -51,7 +51,7 @@ export function buildPracticePatch(validation,contracts){
     const mapping={
       generator:outcome.generatorKey,
       difficulty:[...outcome.difficulty],
-      active:false,
+      activation:'lesson',
       group:`${outcome.generatorKey.split('.').slice(0,2).join('-')}`
     };
     if(!existing)mappings.push({competencyId:outcome.competencyId,mapping});
