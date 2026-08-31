@@ -7,6 +7,8 @@ on:
       - 'shared/student-dashboard/**'
       - 'shared/practice/**'
       - 'pipeline/prompts/04_spaced_practice.md'
+      - 'pipeline/practice/**'
+      - 'pipeline/schemas/spaced-practice-stage-v1.schema.json'
       - '.github/workflows/student-dashboard-tests.yml'
   pull_request:
     paths:
@@ -14,6 +16,8 @@ on:
       - 'shared/student-dashboard/**'
       - 'shared/practice/**'
       - 'pipeline/prompts/04_spaced_practice.md'
+      - 'pipeline/practice/**'
+      - 'pipeline/schemas/spaced-practice-stage-v1.schema.json'
       - '.github/workflows/student-dashboard-tests.yml'
 
 permissions:
@@ -93,3 +97,19 @@ jobs:
         run: node shared/practice/validate-configs.mjs
       - name: Run scheduler, generator and integration tests
         run: node --test shared/practice/test/*.test.mjs
+
+  stage-04:
+    name: post-lesson Stage 04
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check Stage 04 modules
+        shell: bash
+        run: find pipeline/practice -type f -name '*.mjs' -print0 | xargs -0 -n1 node --check
+      - name: Parse Stage 04 JSON Schema
+        run: node -e "JSON.parse(require('node:fs').readFileSync('pipeline/schemas/spaced-practice-stage-v1.schema.json','utf8')); console.log('Stage 04 schema OK')"
+      - name: Run Stage 04 regression suite
+        run: node --test pipeline/practice/test/*.test.mjs
