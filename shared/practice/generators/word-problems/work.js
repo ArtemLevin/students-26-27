@@ -1,4 +1,4 @@
-import {context,numberSpec} from '../_shared.js';
+import {context,numberSpec} from '../shared.js';
 const IDS=['models_9','models_10','oge_21_4_2','t10_work','t10_pipes'];
 export const workGenerator={key:'word-problems.work',version:1,title:'Производительность и работа',competencyIds:IDS,generate(args){return context(this,args,(random,difficulty,options)=>{
   const mode=options.mode||'rate',time=random.int(2,5+difficulty),rate=random.int(3,8+difficulty*2),work=rate*time;

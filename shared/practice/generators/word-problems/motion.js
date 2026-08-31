@@ -1,4 +1,4 @@
-import {context,numberSpec} from '../_shared.js';
+import {context,numberSpec} from '../shared.js';
 const IDS=['models_6','models_7','models_8','oge_21_2_2','t10_line','t10_trains','t10_average_speed','kin_06','kin_07','kin_08','kin_15','kin_16'];
 export const motionGenerator={key:'word-problems.motion',version:1,title:'Задачи на движение',competencyIds:IDS,generate(args){return context(this,args,(random,difficulty,options)=>{
   const mode=options.mode||random.pick(['path','time','meeting']),speed=random.int(3,8+difficulty*3)*5,time=random.int(2,3+difficulty);

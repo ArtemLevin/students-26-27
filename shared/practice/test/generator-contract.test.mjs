@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {GeneratorRegistry,validateExercise} from '../generator-registry.js';
 import {ALL_GENERATORS} from '../generators/index.js';
 import {referenceAnswerForSpec,validateAnswer} from '../answer-engine.js';
-import {combination} from '../generators/_shared.js';
+import {combination} from '../generators/shared.js';
 
 test('all generators satisfy the contract across 1000 seeds',()=>{
   const registry=new GeneratorRegistry(ALL_GENERATORS);assert.equal(registry.list().length,19);
