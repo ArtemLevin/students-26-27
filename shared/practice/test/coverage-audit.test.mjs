@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {auditStudentCoverage,classifyCoverageOutcome} from '../audit-lesson-coverage.mjs';
+import {auditRepositoryCoverage,auditStudentCoverage,classifyCoverageOutcome} from '../audit-lesson-coverage.mjs';
 import {PRACTICE_DISPOSITIONS,outcomeCoverageKey,validatePracticeGap} from '../coverage-policy.js';
 
 const generator={key:'algebra.demo',competencyIds:['skill']};
@@ -60,4 +60,10 @@ test('resolved historical baseline entries must be removed in the same change',(
 test('broken explicit generator mapping is reported as a concrete gap status',()=>{
   const result=audit([{label:'Broken',competencyId:'unmapped',practiceDisposition:'generator'}]);
   assert.equal(result.ok,false);assert.equal(result.outcomes[0].status,'missing-practice-mapping');assert.ok(result.violations.some(item=>item.type==='broken-explicit-coverage'));
+});
+
+test('repository baseline ratchet matches all seven current student registries',async()=>{
+  const result=await auditRepositoryCoverage();
+  assert.equal(result.students.length,7);
+  assert.equal(result.ok,true,result.students.flatMap(report=>report.violations.map(item=>`${report.student}: ${item.message}`)).join('\n'));
 });
