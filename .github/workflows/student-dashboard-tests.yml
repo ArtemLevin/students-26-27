@@ -5,11 +5,15 @@ on:
     paths:
       - 'students/**'
       - 'shared/student-dashboard/**'
+      - 'shared/practice/**'
+      - 'pipeline/prompts/04_spaced_practice.md'
       - '.github/workflows/student-dashboard-tests.yml'
   pull_request:
     paths:
       - 'students/**'
       - 'shared/student-dashboard/**'
+      - 'shared/practice/**'
+      - 'pipeline/prompts/04_spaced_practice.md'
       - '.github/workflows/student-dashboard-tests.yml'
 
 permissions:
@@ -52,6 +56,9 @@ jobs:
           if [ -f "students/${{ matrix.student }}/site/competence-config.js" ]; then
             node --check "students/${{ matrix.student }}/site/competence-config.js"
           fi
+          if [ -f "students/${{ matrix.student }}/site/practice-config.js" ]; then
+            node --check "students/${{ matrix.student }}/site/practice-config.js"
+          fi
           node --check shared/student-dashboard/dashboard-core.js
           node --check shared/student-dashboard/legacy-competence-map.js
       - name: Run regression suite
@@ -67,3 +74,20 @@ jobs:
           node-version: '22'
       - name: Verify every student index entry point
         run: node shared/student-dashboard/test-index-inventory.mjs
+
+  practice:
+    name: shared practice engine
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check practice modules
+        shell: bash
+        run: |
+          find shared/practice -type f \( -name '*.js' -o -name '*.mjs' \) -print0 | xargs -0 -n1 node --check
+      - name: Validate student mappings
+        run: node shared/practice/validate-configs.mjs
+      - name: Run scheduler, generator and integration tests
+        run: node --test shared/practice/test/*.test.mjs
