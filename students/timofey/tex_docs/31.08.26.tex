@@ -1,0 +1,763 @@
+\documentclass[a4paper,12pt]{article}
+
+% ---------- Минимальная стабильная преамбула ----------
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{icomma}
+\usepackage[a4paper,left=18mm,right=18mm,top=18mm,bottom=20mm]{geometry}
+\usepackage{xcolor}
+\usepackage{array,booktabs}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% ---------- Оформление ----------
+\renewcommand{\familydefault}{\sfdefault}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\linespread{1.12}
+\emergencystretch=2em
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{softgray}{HTML}{666666}
+\definecolor{lightaccent}{HTML}{DDEEEE}
+
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\sepLine}{\par\vspace{2mm}{\color{lightaccent}\rule{\linewidth}{0.8pt}}\vspace{2mm}}
+
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=2pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=4pt,topsep=3pt}
+
+% ---------- Единый стиль графиков ----------
+\pgfplotsset{
+  schoolaxis/.style={
+    axis lines=middle,
+    unit vector ratio=1 1,
+    width=11.5cm,
+    height=6.6cm,
+    grid=major,
+    xlabel={$x$},
+    ylabel={$y$},
+    samples=220,
+    clip=false,
+    xticklabels={},
+    yticklabels={},
+    tick style={draw=none},
+    label style={font=\small}
+  },
+  maincurve/.style={accent,line width=1.2pt},
+  secondcurve/.style={darkaccent,line width=1.2pt,dashed},
+  knot/.style={only marks,mark=*,mark size=2.5pt,darkaccent}
+}
+
+\begin{document}
+
+% ==================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% ==================================================
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{30mm}
+
+{\Large\textcolor{softgray}{\textbf{ЧЕК-ЛИСТ}}}
+
+\vspace{10mm}
+
+{\Huge\textbf{\textcolor{darkaccent}{Графики функций}}}
+
+\vspace{5mm}
+
+{\Large\textbf{Метод узловых точек}}
+
+\vspace{5mm}
+
+{\large Линейная функция, парабола, гипербола\par
+и основные графики школьного курса}
+
+\vspace{18mm}
+
+{\color{lightaccent}\rule{0.65\linewidth}{1pt}}
+
+\vspace{18mm}
+
+{\large
+\textbf{Лёвин Артём Александрович}\\[2mm]
+эксклюзивно для Тимофея Васильченко}
+
+\vfill
+
+{\large \today}
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent,line width=1pt]
+([xshift=18mm,yshift=15mm]current page.south west)
+.. controls
+([xshift=65mm,yshift=27mm]current page.south west)
+and
+([xshift=-65mm,yshift=6mm]current page.south east)
+..
+([xshift=-18mm,yshift=16mm]current page.south east);
+\end{tikzpicture}
+\end{titlepage}
+
+% ==================================================
+\section*{\textcolor{darkaccent}{1. Что нужно помнить}}
+
+Вы должны уметь:
+
+\begin{itemize}
+  \item узнавать основные типы функций;
+  \item восстанавливать формулу по узловым точкам;
+  \item находить $f(a)$ и решать уравнение $f(x)=c$;
+  \item находить координаты точек пересечения графиков;
+  \item проверять ответ по смыслу и рисунку.
+\end{itemize}
+
+\sepLine
+
+% ==================================================
+\section*{\textcolor{darkaccent}{2. Основные понятия}}
+
+Для точки
+\[
+A(x_A;y_A)
+\]
+координата $x_A$ называется \key{абсциссой}, а $y_A$ --- \key{ординатой}.
+
+\[
+\boxed{\text{абсцисса}=x},
+\qquad
+\boxed{\text{ордината}=y}.
+\]
+
+Запись
+\[
+f(a)
+\]
+означает: подставить $a$ вместо $x$.
+
+Запись
+\[
+f(x)=c
+\]
+означает: решить уравнение относительно $x$.
+
+\sepLine
+
+% ==================================================
+\section*{\textcolor{darkaccent}{3. Формулы основных функций}}
+
+Формулы стандартных графиков полезно знать наизусть.
+
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}p{0.31\linewidth}p{0.31\linewidth}p{0.31\linewidth}@{}}
+\toprule
+\textbf{Функция} & \textbf{Формула} & \textbf{Главное} \\
+\midrule
+Постоянная & $y=c$ & горизонтальная прямая \\
+Прямая пропорциональность & $y=kx$ & проходит через $(0;0)$ \\
+Линейная & $y=kx+b$ & $k$ --- наклон, $b$ --- сдвиг \\
+Квадратичная & $y=ax^2+bx+c$ & парабола, $a\ne0$ \\
+Кубическая & $y=x^3$ & нечётная функция \\
+Степенная & $y=x^n$ & вид зависит от $n$ \\
+Обратная пропорциональность & $y=\dfrac{k}{x}$ & $x\ne0$ \\
+Сдвинутая гипербола & $y=\dfrac{k}{x-a}+b$ & асимптоты $x=a$, $y=b$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}p{0.31\linewidth}p{0.31\linewidth}p{0.31\linewidth}@{}}
+\toprule
+\textbf{Функция} & \textbf{Формула} & \textbf{Главное} \\
+\midrule
+Модуль & $y=|x|$ & V-образный график \\
+Корень & $y=\sqrt{x}$ & $x\ge0$ \\
+Экспонента & $y=a^x$ & $a>0$, $a\ne1$ \\
+Логарифм & $y=\log_a x$ & $x>0$ \\
+Синус & $y=\sin x$ & период $2\pi$ \\
+Косинус & $y=\cos x$ & период $2\pi$ \\
+Тангенс & $y=\tg x$ & период $\pi$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Сдвиги стандартных графиков}
+
+Если известен график $y=f(x)$, то:
+
+\[
+f(x)+a
+\quad\text{--- вертикальный перенос,}
+\]
+
+\[
+f(x-a)
+\quad\text{--- горизонтальный перенос,}
+\]
+
+\[
+-f(x)
+\quad\text{--- отражение относительно }Ox,
+\]
+
+\[
+f(-x)
+\quad\text{--- отражение относительно }Oy.
+\]
+
+\clearpage
+
+% ==================================================
+\section*{\textcolor{darkaccent}{4. Метод узловых точек}}
+
+\key{Узловые точки} --- точки графика, координаты которых легко и точно считываются.
+
+Главный принцип:
+
+\[
+\boxed{
+\text{число независимых условий}
+=
+\text{число неизвестных коэффициентов}
+}
+\]
+
+Например:
+
+\[
+f(x)=kx+b
+\]
+содержит два неизвестных коэффициента, поэтому обычно достаточно двух точек.
+
+Для
+\[
+f(x)=2x^2+bx+c
+\]
+неизвестны $b$ и $c$, поэтому также достаточно двух точек.
+
+\subsection*{Какие точки выбирать}
+
+Лучше брать точки:
+
+\begin{itemize}
+  \item с целыми координатами;
+  \item с координатами, близкими к нулю;
+  \item с $x=0$ или $y=0$, если такие точки доступны;
+  \item приводящие к простым вычислениям.
+\end{itemize}
+
+\sepLine
+
+% ==================================================
+\section*{\textcolor{darkaccent}{5. Универсальный алгоритм}}
+
+\begin{enumerate}
+  \item Определите тип функции.
+  \item Запишите её общую формулу.
+  \item Посчитайте неизвестные коэффициенты.
+  \item Выберите нужное число узловых точек.
+  \item Считайте координаты точек в порядке $(x;y)$.
+  \item Подставьте координаты в формулу.
+  \item Решите полученную систему.
+  \item Соберите формулу функции.
+  \item Выполните требуемое действие.
+  \item Проверьте результат по рисунку.
+\end{enumerate}
+
+\sepLine
+
+% ==================================================
+\section*{\textcolor{darkaccent}{6. Пример: прямая}}
+
+Пусть прямая проходит через точки
+\[
+A(-1;-3),
+\qquad
+B(3;4).
+\]
+
+Для
+\[
+f(x)=kx+b
+\]
+получаем
+\[
+\begin{cases}
+-k+b=-3,\\
+3k+b=4.
+\end{cases}
+\]
+
+Отсюда
+\[
+k=\frac74,
+\qquad
+b=-\frac54.
+\]
+
+Значит,
+\[
+\boxed{f(x)=\frac74x-\frac54}.
+\]
+
+Например,
+\[
+\boxed{f(-5)=-10}.
+\]
+
+\subsection*{Быстрый способ найти наклон}
+
+Если известны точки $(x_1;y_1)$ и $(x_2;y_2)$, то
+\[
+\boxed{k=\frac{y_2-y_1}{x_2-x_1}},
+\qquad x_1\ne x_2.
+\]
+
+Также
+\[
+k=\tg\alpha.
+\]
+
+\sepLine
+
+% ==================================================
+\section*{\textcolor{darkaccent}{7. Пересечение графиков}}
+
+В точке пересечения значения функций совпадают:
+
+\[
+\boxed{f(x)=g(x)}.
+\]
+
+Найдя $x$, подставьте его в любую функцию и получите $y$.
+
+\sepLine
+
+% ==================================================
+\section*{\textcolor{darkaccent}{8. Парабола}}
+
+Для
+\[
+f(x)=2x^2+bx+c
+\]
+точка с $x=0$ особенно удобна, потому что
+\[
+f(0)=c.
+\]
+
+Если график проходит через $(0;-4)$ и $(1;1)$, то
+\[
+c=-4,
+\qquad
+1=2+b-4,
+\]
+поэтому
+\[
+b=3.
+\]
+
+Следовательно,
+\[
+\boxed{f(x)=2x^2+3x-4}.
+\]
+
+\sepLine
+
+% ==================================================
+\section*{\textcolor{darkaccent}{9. Гипербола}}
+
+Для функции
+\[
+f(x)=\frac{k}{x}+a
+\]
+обязательно
+\[
+\boxed{x\ne0}.
+\]
+
+Если график проходит через $(-3;0)$ и $(1;4)$, то
+\[
+\begin{cases}
+0=-\dfrac{k}{3}+a,\\
+4=k+a.
+\end{cases}
+\]
+
+Отсюда
+\[
+a=1,
+\qquad
+k=3,
+\]
+поэтому
+\[
+\boxed{f(x)=\frac3x+1},
+\qquad x\ne0.
+\]
+
+\sepLine
+
+% ==================================================
+\section*{\textcolor{darkaccent}{10. Частые ошибки}}
+
+\begin{enumerate}
+  \item Путают $x$ и $y$ в координатах точки.
+  \item Путают $f(a)$ и $f(x)=a$.
+  \item Теряют знак при переносе.
+  \item Выбирают слишком неудобные узловые точки.
+  \item Забывают ОДЗ у дробей, корней и логарифмов.
+  \item Не проверяют полученный ответ по рисунку.
+\end{enumerate}
+
+% ==================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% ==================================================
+\clearpage
+\section*{\textcolor{darkaccent}{Тренировочный блок}}
+
+Во всех задачах координаты узловых точек нужно считать непосредственно с графика.
+
+\subsection*{Средний уровень}
+
+\begin{enumerate}[label=\textbf{\arabic*)}]
+
+% --------------------------------------------------
+\item
+На рисунке изображён график
+\[
+f(x)=kx+b.
+\]
+Восстановите формулу и найдите $f(6)$.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  schoolaxis,
+  xmin=-4,xmax=4,
+  ymin=-2,ymax=7,
+  xtick distance=1,
+  ytick distance=1
+]
+\addplot[maincurve,domain=-4:4]{x+3};
+\addplot[knot] coordinates {(-2,1) (2,5)};
+\node[above left] at (axis cs:-2,1) {$A$};
+\node[above right] at (axis cs:2,5) {$B$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+% --------------------------------------------------
+\item
+На рисунке изображён график
+\[
+f(x)=kx+b.
+\]
+Восстановите формулу и найдите $f(0)$.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  schoolaxis,
+  xmin=-5,xmax=3,
+  ymin=-6,ymax=6,
+  xtick distance=1,
+  ytick distance=1
+]
+\addplot[maincurve,domain=-4:2]{-2*x-2};
+\addplot[knot] coordinates {(-3,4) (1,-4)};
+\node[above left] at (axis cs:-3,4) {$A$};
+\node[below right] at (axis cs:1,-4) {$B$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% --------------------------------------------------
+\item
+На рисунке изображена парабола
+\[
+f(x)=x^2+bx+c.
+\]
+Восстановите формулу и найдите $f(-1)$.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  schoolaxis,
+  xmin=-4,xmax=4,
+  ymin=-5,ymax=8,
+  xtick distance=1,
+  ytick distance=1
+]
+\addplot[maincurve,domain=-3.5:3]{x^2+x-3};
+\addplot[knot] coordinates {(0,-3) (2,3)};
+\node[below right] at (axis cs:0,-3) {$A$};
+\node[above right] at (axis cs:2,3) {$B$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection*{Выше среднего}
+
+% --------------------------------------------------
+\item
+На рисунке изображены две прямые $y=f(x)$ и $y=g(x)$.
+Восстановите обе формулы и найдите абсциссу точки пересечения.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  schoolaxis,
+  xmin=-3,xmax=4,
+  ymin=-2,ymax=10,
+  xtick distance=1,
+  ytick distance=1
+]
+\addplot[maincurve,domain=-2.5:2.8]{2*x+4};
+\addplot[secondcurve,domain=-1:4]{-2*x+7};
+\addplot[knot] coordinates {(-1,2) (2,8) (0,7) (3,1)};
+\node[below left] at (axis cs:-1,2) {$A$};
+\node[above left] at (axis cs:2,8) {$B$};
+\node[above right] at (axis cs:0,7) {$C$};
+\node[below right] at (axis cs:3,1) {$D$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% --------------------------------------------------
+\item
+На рисунке изображён график
+\[
+f(x)=\frac{k}{x}+a.
+\]
+Восстановите формулу и найдите $f(4)$.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  schoolaxis,
+  xmin=-5,xmax=5,
+  ymin=-6,ymax=8,
+  xtick distance=1,
+  ytick distance=1
+]
+\addplot[maincurve,domain=-5:-0.5]{4/x+1};
+\addplot[maincurve,domain=0.5:5]{4/x+1};
+\addplot[knot] coordinates {(-2,-1) (1,5)};
+\node[below left] at (axis cs:-2,-1) {$A$};
+\node[above right] at (axis cs:1,5) {$B$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+% --------------------------------------------------
+\item
+На рисунке изображена парабола
+\[
+f(x)=2x^2+bx+c.
+\]
+Восстановите формулу и найдите $f(3)$.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  schoolaxis,
+  xmin=-4,xmax=2,
+  ymin=-1,ymax=12,
+  xtick distance=1,
+  ytick distance=1
+]
+\addplot[maincurve,domain=-3.4:1.2]{2*x^2+5*x+5};
+\addplot[knot] coordinates {(0,5) (-2,3)};
+\node[above right] at (axis cs:0,5) {$A$};
+\node[above left] at (axis cs:-2,3) {$B$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% --------------------------------------------------
+\item
+На рисунке изображена прямая
+\[
+f(x)=kx+b.
+\]
+Восстановите формулу и найдите абсциссу точки пересечения с осью $Ox$.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  schoolaxis,
+  xmin=-6,xmax=4,
+  ymin=-8,ymax=6,
+  xtick distance=1,
+  ytick distance=1
+]
+\addplot[maincurve,domain=-5.5:3]{-1.5*x-3};
+\addplot[knot] coordinates {(-4,3) (2,-6)};
+\node[above left] at (axis cs:-4,3) {$A$};
+\node[below right] at (axis cs:2,-6) {$B$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+% --------------------------------------------------
+\item
+На рисунке изображён график
+\[
+f(x)=\frac{k}{x}+a.
+\]
+Восстановите формулу и найдите $x$, если $f(x)=0,2$.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  schoolaxis,
+  xmin=-8,xmax=6,
+  ymin=-5,ymax=6,
+  xtick distance=1,
+  ytick distance=1
+]
+\addplot[maincurve,domain=-8:-0.6]{4/x+1};
+\addplot[maincurve,domain=0.6:6]{4/x+1};
+\addplot[knot] coordinates {(-4,0) (2,3)};
+\node[below left] at (axis cs:-4,0) {$A$};
+\node[above right] at (axis cs:2,3) {$B$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% --------------------------------------------------
+\item
+На рисунке изображены графики
+\[
+f(x)=x^2+bx+c,
+\qquad
+g(x)=mx+n.
+\]
+Восстановите обе функции и найдите все абсциссы точек пересечения.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  schoolaxis,
+  xmin=-5,xmax=3,
+  ymin=-6,ymax=9,
+  xtick distance=1,
+  ytick distance=1
+]
+\addplot[maincurve,domain=-4.3:2]{x^2+3*x-2};
+\addplot[secondcurve,domain=-3.5:3]{2*x+2};
+\addplot[knot] coordinates {(0,-2) (1,2) (-1,0) (1,4)};
+\node[below right] at (axis cs:0,-2) {$A$};
+\node[below right] at (axis cs:1,2) {$B$};
+\node[above left] at (axis cs:-1,0) {$C$};
+\node[above right] at (axis cs:1,4) {$D$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection*{Сложный уровень}
+
+% --------------------------------------------------
+\item
+На рисунке изображены
+\[
+f(x)=\frac{k}{x}+a,
+\qquad
+g(x)=mx+n.
+\]
+
+\begin{enumerate}[label=\arabic*)]
+  \item восстановите обе формулы;
+  \item найдите абсциссы точек пересечения;
+  \item найдите координаты точек пересечения.
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  schoolaxis,
+  xmin=-5,xmax=5,
+  ymin=-5,ymax=6,
+  xtick distance=1,
+  ytick distance=1
+]
+\addplot[maincurve,domain=-5:-0.45]{2/x};
+\addplot[maincurve,domain=0.45:5]{2/x};
+\addplot[secondcurve,domain=-5:4.5]{x+1};
+\addplot[knot] coordinates {(-1,-2) (2,1) (-2,-1) (2,3)};
+\node[below left] at (axis cs:-1,-2) {$A$};
+\node[below right] at (axis cs:2,1) {$B$};
+\node[above left] at (axis cs:-2,-1) {$C$};
+\node[above right] at (axis cs:2,3) {$D$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\end{enumerate}
+
+% ==================================================
+% ОТВЕТЫ
+% ==================================================
+\clearpage
+\section*{\textcolor{darkaccent}{Ответы}}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}c p{0.82\linewidth}@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+1 & $f(x)=x+3$, \quad $f(6)=9$. \\
+2 & $f(x)=-2x-2$, \quad $f(0)=-2$. \\
+3 & $f(x)=x^2+x-3$, \quad $f(-1)=-3$. \\
+4 & $f(x)=2x+4$, $g(x)=-2x+7$, \quad $x=\dfrac34$. \\
+5 & $f(x)=\dfrac4x+1$, \quad $f(4)=2$. \\
+6 & $f(x)=2x^2+5x+5$, \quad $f(3)=38$. \\
+7 & $f(x)=-\dfrac32x-3$, \quad $x=-2$. \\
+8 & $f(x)=\dfrac4x+1$, \quad $x=-5$. \\
+9 & $f(x)=x^2+3x-2$, $g(x)=2x+2$, \quad $x_{1,2}=\dfrac{-1\pm\sqrt{17}}2$. \\
+10 & $f(x)=\dfrac2x$, $g(x)=x+1$; точки пересечения: $(-2;-1)$ и $(1;2)$. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vfill
+
+\begin{center}
+\textcolor{darkaccent}{\textbf{Главная схема}}
+
+\[
+\boxed{
+\text{график}
+\longrightarrow
+\text{узловые точки}
+\longrightarrow
+\text{система}
+\longrightarrow
+\text{формула}
+\longrightarrow
+\text{ответ}
+}
+\]
+\end{center}
+
+\end{document}
