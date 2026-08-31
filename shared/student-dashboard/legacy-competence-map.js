@@ -184,6 +184,7 @@ class MapController{
     const repeatFilter=this.root.querySelector('[data-filter="repeat"]');if(repeatFilter)repeatFilter.textContent=`В повторении · ${summary.repeat}`;
     const status=this.root.querySelector('#mapLoadStatus');if(status)status.textContent=this.filter==='all'?`Карта готова: ${summary.total} компетенций, оценено ${summary.evaluated}.`:`По выбранному фильтру: ${visible} из ${summary.total} компетенций.`;
     dispatchEvent(new CustomEvent(this.config.summaryEvent,{detail:summary}));
+    dispatchEvent(new CustomEvent('student:competence-state',{detail:{state:this.state,config:this.config,summary}}));
   }
   renderMap(){
     if(!this.svg)return;
@@ -232,7 +233,7 @@ class MapController{
     const evidence=this.config.evidence?.[id],text=evidence?.text||evidence?.evidence||item.evidence||'Подтверждение пока не добавлено.',href=normalizeLink(evidence?.href||evidence?.link||item.link);
     this.setDialogText('dialogGroup',item.groupTitle);this.setDialogText('dialogTitle',item.title);this.setDialogText('dialogRing',`Кольцо ${item.ring} из ${this.groups.find(group=>group.id===item.groupId).items.length}`);this.setDialogText('dialogExam',item.exam||'');this.setDialogText('dialogDescription',item.description||item.catalog||'');this.setDialogText('dialogExamDetail',[item.exam,item.description].filter(Boolean).join('. '));this.setDialogText('dialogPractice',item.practice||'');this.setDialogText('dialogCatalog',item.catalog||'');this.setDialogText('dialogEvidence',text);
     const link=this.dialog.querySelector('#dialogLink');if(link){link.hidden=!href;if(href)link.href=href;else link.removeAttribute('href');}
-    this.updatePicker();this.updateReviewButton();this.dialog.showModal?.();this.dialog.querySelector('#closeDialog')?.focus();
+    this.updatePicker();this.updateReviewButton();this.dialog.showModal?.();dispatchEvent(new CustomEvent('student:competency-open',{detail:{competencyId:id,level:this.level(item),inReview:this.inReview(id)}}));this.dialog.querySelector('#closeDialog')?.focus();
   }
   setDialogText(id,value){const node=this.dialog?.querySelector(`#${id}`);if(node)node.textContent=value||'';}
   updatePicker(){
