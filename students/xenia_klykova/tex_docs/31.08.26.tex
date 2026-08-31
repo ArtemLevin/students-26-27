@@ -1,0 +1,841 @@
+\documentclass[a4paper,12pt]{article}
+
+% ---------- Кодировка и язык ----------
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+% ---------- Математика ----------
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{icomma}
+
+% ---------- Шрифт и типографика ----------
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{parskip}
+
+% ---------- Страница ----------
+\usepackage[
+  a4paper,
+  left=18mm,
+  right=18mm,
+  top=20mm,
+  bottom=20mm
+]{geometry}
+
+% ---------- Графика ----------
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% ---------- Таблицы ----------
+\usepackage{tabularx,booktabs,longtable,array}
+
+% ---------- Списки ----------
+\usepackage{enumitem}
+
+% ---------- Служебное ----------
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+
+% ---------- Палитра ----------
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{6B7373}
+\definecolor{lightaccent}{HTML}{E8F2F2}
+
+% ---------- Общие настройки ----------
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\headheight}{15pt}
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.28}
+\emergencystretch=2em
+\raggedbottom
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=darkaccent,
+  citecolor=darkaccent,
+  pdfauthor={Лёвин Артём Александрович},
+  pdftitle={Чек-лист. Основы стереометрии: обозначения и первые две аксиомы}
+}
+
+\setlist[itemize]{
+  leftmargin=7mm,
+  itemsep=2pt,
+  topsep=3pt
+}
+
+\setlist[enumerate,1]{
+  leftmargin=8mm,
+  itemsep=5pt,
+  topsep=4pt,
+  label=\arabic*.
+}
+
+\setlist[enumerate,2]{
+  leftmargin=8mm,
+  itemsep=2pt,
+  topsep=2pt,
+  label=\arabic*)
+}
+
+% ---------- Колонтитулы ----------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{softgray}{Основы стереометрии}}
+\fancyhead[R]{\small\textcolor{softgray}{Ксения Клыкова}}
+\fancyfoot[C]{\small\textcolor{softgray}{\thepage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{
+  \hbox to\headwidth{\color{accent!45}\leaders\hrule height \headrulewidth\hfill}
+}
+
+% ---------- Вспомогательные команды ----------
+\newcommand{\term}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\important}[1]{\textbf{\textcolor{darkaccent}{#1}}}
+\newcommand{\plane}[1]{(#1)}
+\newcommand{\Axiom}[1]{\textcolor{darkaccent}{\textbf{Аксиома #1.}}}
+\newcommand{\solutionmark}{\hfill$\square$}
+
+\begin{document}
+
+% =========================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% =========================================================
+
+\begin{titlepage}
+\thispagestyle{empty}
+
+\centering
+
+\vspace*{25mm}
+
+{\Large\textcolor{softgray}{ЧЕК-ЛИСТ}\par}
+
+\vspace{10mm}
+
+{\fontsize{26}{31}\selectfont
+\bfseries
+\textcolor{darkaccent}{
+Основы стереометрии
+}\par}
+
+\vspace{3mm}
+
+{\Large
+Обозначения и первые две аксиомы
+\par}
+
+\vspace{14mm}
+
+{\color{accent!70}\rule{0.46\linewidth}{0.8pt}\par}
+
+\vspace{14mm}
+
+{\large
+Краткая система обозначений,\\
+условия задания плоскости,\\
+работа с принадлежностью и доказательствами
+\par}
+
+\vfill
+
+{\large
+\textbf{Лёвин Артём Александрович}\\[2mm]
+эксклюзивно для Ксении Клыковой
+\par}
+
+\vspace{8mm}
+
+{\large \today\par}
+
+\vfill
+
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[
+    accent!55,
+    line width=1.1pt
+  ]
+  (0,0)
+  .. controls (2.2,0.55) and (4.1,0.65) .. (6.0,0.18)
+  .. controls (8.2,-0.35) and (10.2,-0.15) .. (12.0,0.28)
+  .. controls (13.3,0.58) and (14.2,0.38) .. (15.0,0.08);
+\end{tikzpicture}
+
+\vspace{4mm}
+
+\end{titlepage}
+
+% =========================================================
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% =========================================================
+
+\section*{\textcolor{darkaccent}{1. Язык стереометрии}}
+
+Стереометрия изучает геометрические объекты в пространстве. На первом этапе особенно важно уверенно различать \term{точку}, \term{прямую} и \term{плоскость} и правильно записывать отношения между ними.
+
+\subsection*{\textcolor{accent}{Основные обозначения}}
+
+\begin{table}[h!]
+\centering
+\caption{Базовые объекты и их обозначения}
+\begin{tabularx}{\linewidth}{@{}p{0.20\linewidth}p{0.28\linewidth}X@{}}
+\toprule
+\textbf{Объект} & \textbf{Обозначение} & \textbf{Комментарий} \\
+\midrule
+Точка
+&
+$A$, $B$, $C$, $M$
+&
+Обозначается заглавной латинской буквой.
+\\
+
+Прямая
+&
+$a$, $b$, $c$ или $AB$
+&
+Обычно используется строчная латинская буква. Прямую также можно задавать двумя различными точками.
+\\
+
+Плоскость
+&
+$\alpha$, $\beta$, $\gamma$ или $\plane{ABC}$
+&
+Обычно обозначается строчной греческой буквой. Запись $\plane{ABC}$ допустима, если точки $A$, $B$, $C$ не лежат на одной прямой.
+\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection*{\textcolor{accent}{Как изображать плоскость}}
+
+Плоскость бесконечна. На чертеже показывается только условный конечный фрагмент плоскости. Чаще всего используется параллелограмм: он помогает передать пространственное расположение объекта.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \tkzSetUpLine[line width=0.9pt,color=accent]
+  \tkzSetUpPoint[color=darkaccent,fill=darkaccent,size=3]
+  \tkzSetUpLabel[color=black,font=\small]
+
+  \tkzDefPoint(0,0){P}
+  \tkzDefPoint(5.4,0.4){Q}
+  \tkzDefPoint(6.5,2.8){R}
+  \tkzDefPoint(1.1,2.4){S}
+
+  \tkzDefPoint(2.0,0.85){A}
+  \tkzDefPoint(4.2,1.15){B}
+  \tkzDefPoint(3.2,2.0){C}
+  \tkzDefPoint(6.15,2.25){L}
+
+  \tkzFillPolygon[fill=accent!7](P,Q,R,S)
+  \tkzDrawSegments(P,Q Q,R R,S S,P)
+
+  \tkzDrawPoints(A,B,C)
+  \tkzLabelPoint[below](A){$A$}
+  \tkzLabelPoint[below right](B){$B$}
+  \tkzLabelPoint[above](C){$C$}
+  \tkzLabelPoint[right](L){$\alpha$}
+\end{tikzpicture}
+\end{center}
+
+\important{Важно:} форма нарисованного фрагмента плоскости не является её свойством. Параллелограмм, овал или иной аккуратный контур служат только условным изображением бесконечной плоскости.
+
+% ---------------------------------------------------------
+
+\section*{\textcolor{darkaccent}{2. Принадлежность и пересечение}}
+
+\subsection*{\textcolor{accent}{Точка и прямая}}
+
+Если точка $A$ лежит на прямой $a$, записывают
+\[
+A\in a.
+\]
+
+Если точка $C$ на прямой $a$ не лежит:
+\[
+C\notin a.
+\]
+
+\subsection*{\textcolor{accent}{Точка и плоскость}}
+
+Если точка $A$ лежит в плоскости $\alpha$:
+\[
+A\in\alpha.
+\]
+
+Если точка $D$ не лежит в этой плоскости:
+\[
+D\notin\alpha.
+\]
+
+\subsection*{\textcolor{accent}{Прямая и плоскость}}
+
+Если вся прямая $a$ лежит в плоскости $\alpha$, записывают
+\[
+a\subset\alpha.
+\]
+
+Знаки $\in$ и $\subset$ имеют разный смысл:
+
+\begin{itemize}
+  \item $A\in\alpha$ --- \textbf{точка} принадлежит плоскости;
+  \item $a\subset\alpha$ --- \textbf{прямая целиком} лежит в плоскости.
+\end{itemize}
+
+\important{Типичная ошибка:}
+\[
+A\subset\alpha
+\]
+для точки $A$ писать не следует. Для точки используется знак $\in$.
+
+\subsection*{\textcolor{accent}{Пересечение}}
+
+Если прямая $a$ имеет с плоскостью $\alpha$ ровно одну общую точку $A$, удобно записать
+\[
+a\cap\alpha=\{A\}.
+\]
+
+Если две прямые пересекаются в точке $J$:
+\[
+a\cap b=\{J\}.
+\]
+
+Если две различные плоскости пересекаются по прямой $AB$:
+\[
+\alpha\cap\beta=AB.
+\]
+
+Если две плоскости совпадают:
+\[
+\alpha=\beta.
+\]
+
+Если они различны:
+\[
+\alpha\ne\beta.
+\]
+
+% =========================================================
+
+\section*{\textcolor{darkaccent}{3. Первая аксиома стереометрии}}
+
+\Axiom{1}
+\important{Через любые три точки, не лежащие на одной прямой, проходит плоскость, и притом только одна.}
+
+Иначе говоря, три \term{неколлинеарные} точки однозначно задают плоскость.
+
+\[
+A,\ B,\ C\ \text{не лежат на одной прямой}
+\quad\Longrightarrow\quad
+\exists!\,\plane{ABC}.
+\]
+
+Знак $\exists!$ означает: \textit{существует ровно один объект}.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \tkzSetUpLine[line width=0.9pt,color=accent]
+  \tkzSetUpPoint[color=darkaccent,fill=darkaccent,size=3]
+  \tkzSetUpLabel[color=black,font=\small]
+
+  \tkzDefPoint(0,0){P}
+  \tkzDefPoint(5.3,0.45){Q}
+  \tkzDefPoint(6.2,2.8){R}
+  \tkzDefPoint(0.9,2.35){S}
+
+  \tkzDefPoint(1.65,0.8){A}
+  \tkzDefPoint(4.55,1.0){B}
+  \tkzDefPoint(3.0,2.0){C}
+  \tkzDefPoint(5.85,2.25){L}
+
+  \tkzFillPolygon[fill=accent!7](P,Q,R,S)
+  \tkzDrawSegments(P,Q Q,R R,S S,P)
+
+  \tkzDrawSegments[thin,color=softgray](A,B B,C C,A)
+
+  \tkzDrawPoints(A,B,C)
+  \tkzLabelPoint[below left](A){$A$}
+  \tkzLabelPoint[below right](B){$B$}
+  \tkzLabelPoint[above](C){$C$}
+  \tkzLabelPoint[right](L){$\alpha$}
+\end{tikzpicture}
+\end{center}
+
+\subsection*{\textcolor{accent}{Что означает «не лежат на одной прямой»}}
+
+Точки $A$, $B$, $C$ должны быть расположены так, чтобы \textbf{не существовало одной прямой}, содержащей сразу все три точки.
+
+При этом любые две различные точки всегда определяют некоторую прямую. Это не мешает применению аксиомы.
+
+\subsection*{\textcolor{accent}{Критически важное уточнение}}
+
+Если три точки $A$, $B$, $C$ лежат на одной прямой, неверно говорить, что через них нельзя провести плоскость.
+
+На самом деле:
+
+\[
+A,B,C\in a
+\quad\Longrightarrow\quad
+\text{через }A,B,C\text{ проходит бесконечно много плоскостей}.
+\]
+
+Все эти плоскости содержат одну и ту же прямую $a$.
+
+Следовательно, три коллинеарные точки \important{не задают плоскость однозначно}.
+
+% ---------------------------------------------------------
+
+\subsection*{\textcolor{accent}{Пример 1. Вершины треугольника}}
+
+Дан треугольник $ABC$.
+
+По определению его вершины не лежат на одной прямой. Поэтому по первой аксиоме существует единственная плоскость
+\[
+\plane{ABC}.
+\]
+
+Следовательно, вершины любого невырожденного треугольника однозначно задают плоскость.
+
+% ---------------------------------------------------------
+
+\subsection*{\textcolor{accent}{Пример 2. Точка на стороне треугольника}}
+
+Пусть $M\in AB$, $M\ne A$, а $ABC$ --- треугольник.
+
+Точки $A$ и $M$ лежат на прямой $AB$, но точка $C$ на этой прямой не лежит. Поэтому точки $A$, $M$, $C$ неколлинеарны.
+
+Следовательно, существует единственная плоскость
+\[
+\plane{AMC}.
+\]
+
+% ---------------------------------------------------------
+
+\subsection*{\textcolor{accent}{Пример 3. Совпадение двух плоскостей}}
+
+Пусть плоскости $\alpha$ и $\beta$ содержат одни и те же три неколлинеарные точки:
+\[
+A,B,C\in\alpha,
+\qquad
+A,B,C\in\beta.
+\]
+
+По первой аксиоме через $A$, $B$, $C$ проходит \textbf{единственная} плоскость.
+
+Следовательно,
+\[
+\boxed{\alpha=\beta}.
+\]
+
+\important{Ключ к рассуждению:} слово «единственная» в первой аксиоме позволяет доказывать совпадение плоскостей.
+
+% =========================================================
+
+\section*{\textcolor{darkaccent}{4. Доказательство от противного}}
+
+В задачах по стереометрии часто удобно использовать \term{метод доказательства от противного}.
+
+\subsection*{\textcolor{accent}{Алгоритм}}
+
+\begin{enumerate}
+  \item Предположите противоположное тому, что требуется доказать.
+  \item Выведите из предположения необходимые следствия.
+  \item Получите противоречие с условием задачи, определением или аксиомой.
+  \item Сделайте вывод, что первоначальное предположение было неверным.
+\end{enumerate}
+
+\subsection*{\textcolor{accent}{Пример}}
+
+Даны точки $A$, $B$, $C$, $D$, причём никакие три из них не лежат на одной прямой и
+\[
+D\notin\plane{ABC}.
+\]
+
+Докажем:
+\[
+\plane{ABC}\ne\plane{ABD}.
+\]
+
+\textbf{Доказательство.}
+
+Предположим противное:
+\[
+\plane{ABC}=\plane{ABD}.
+\]
+
+Но точка $D$ принадлежит плоскости $\plane{ABD}$. При совпадении плоскостей тогда должно выполняться
+\[
+D\in\plane{ABC}.
+\]
+
+Это противоречит условию
+\[
+D\notin\plane{ABC}.
+\]
+
+Следовательно,
+\[
+\boxed{\plane{ABC}\ne\plane{ABD}}.
+\]
+\solutionmark
+
+% =========================================================
+
+\section*{\textcolor{darkaccent}{5. Вторая аксиома стереометрии}}
+
+\Axiom{2}
+\important{Если две точки прямой принадлежат плоскости, то вся прямая принадлежит этой плоскости.}
+
+Пусть $A$ и $B$ --- две различные точки прямой $a$. Если
+\[
+A\in\alpha,
+\qquad
+B\in\alpha,
+\]
+то
+\[
+\boxed{a\subset\alpha}.
+\]
+
+Если прямая задана точками $A$ и $B$, можно записать:
+\[
+A\in\alpha,\quad B\in\alpha
+\quad\Longrightarrow\quad
+AB\subset\alpha.
+\]
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \tkzSetUpLine[line width=0.9pt,color=accent]
+  \tkzSetUpPoint[color=darkaccent,fill=darkaccent,size=3]
+  \tkzSetUpLabel[color=black,font=\small]
+
+  \tkzDefPoint(0,0){P}
+  \tkzDefPoint(5.5,0.4){Q}
+  \tkzDefPoint(6.4,2.9){R}
+  \tkzDefPoint(0.9,2.5){S}
+
+  \tkzDefPoint(0.8,0.72){U}
+  \tkzDefPoint(2.0,1.20){A}
+  \tkzDefPoint(4.0,2.00){B}
+  \tkzDefPoint(5.6,2.64){V}
+  \tkzDefPoint(6.02,2.27){L}
+
+  \tkzFillPolygon[fill=accent!7](P,Q,R,S)
+  \tkzDrawSegments(P,Q Q,R R,S S,P)
+
+  \tkzDrawSegment[line width=1.2pt,color=darkaccent](U,V)
+
+  \tkzDrawPoints(A,B)
+  \tkzLabelPoint[below](A){$A$}
+  \tkzLabelPoint[above](B){$B$}
+  \tkzLabelPoint[right](L){$\alpha$}
+\end{tikzpicture}
+\end{center}
+
+\subsection*{\textcolor{accent}{Следствие для любой точки прямой}}
+
+Если уже доказано, что
+\[
+a\subset\alpha,
+\]
+то для любой точки $C\in a$ автоматически выполняется
+\[
+C\in\alpha.
+\]
+
+Схема рассуждения:
+\[
+A,B\in\alpha
+\overset{\text{аксиома 2}}{\Longrightarrow}
+a\subset\alpha,
+\qquad
+C\in a
+\Longrightarrow
+C\in\alpha.
+\]
+
+\subsection*{\textcolor{accent}{Пример}}
+
+Пусть
+\[
+A\in\alpha,\qquad B\in\alpha,\qquad C\in AB.
+\]
+
+Тогда по аксиоме 2:
+\[
+AB\subset\alpha.
+\]
+
+Поскольку $C\in AB$, получаем
+\[
+\boxed{C\in\alpha}.
+\]
+
+% =========================================================
+
+\section*{\textcolor{darkaccent}{6. Как связывать две аксиомы}}
+
+В задачах часто требуется использовать аксиомы последовательно.
+
+\subsection*{\textcolor{accent}{Типовая схема}}
+
+Пусть $ABC$ --- треугольник, $M\in AB$.
+
+\begin{enumerate}
+  \item Точки $A$, $B$, $C$ неколлинеарны, поэтому по аксиоме 1 существует единственная плоскость $\plane{ABC}$.
+  \item Точки $A$ и $B$ принадлежат этой плоскости:
+  \[
+  A,B\in\plane{ABC}.
+  \]
+  \item По аксиоме 2:
+  \[
+  AB\subset\plane{ABC}.
+  \]
+  \item Так как $M\in AB$, получаем:
+  \[
+  M\in\plane{ABC}.
+  \]
+  \item Точки $A$, $M$, $C$ неколлинеарны, поэтому они определяют единственную плоскость.
+  \item Плоскость $\plane{ABC}$ уже содержит все три точки $A$, $M$, $C$. Следовательно,
+  \[
+  \boxed{\plane{AMC}=\plane{ABC}}.
+  \]
+\end{enumerate}
+
+% =========================================================
+
+\section*{\textcolor{darkaccent}{7. Типичные ошибки}}
+
+\begin{enumerate}
+  \item \textbf{Перепутать $\in$ и $\subset$.}
+
+  Для точки:
+  \[
+  A\in\alpha.
+  \]
+
+  Для прямой:
+  \[
+  a\subset\alpha.
+  \]
+
+  \item \textbf{Забыть условие неколлинеарности в аксиоме 1.}
+
+  Трёх точек недостаточно. Требуется, чтобы они не лежали на одной прямой.
+
+  \item \textbf{Считать, что три коллинеарные точки не принадлежат никакой плоскости.}
+
+  Они принадлежат бесконечному числу плоскостей, содержащих их общую прямую.
+
+  \item \textbf{Считать, что одной точки прямой достаточно для принадлежности всей прямой плоскости.}
+
+  Из
+  \[
+  A\in a,\qquad A\in\alpha
+  \]
+  нельзя сделать вывод
+  \[
+  a\subset\alpha.
+  \]
+
+  Для применения аксиомы 2 нужны \important{две различные точки} прямой.
+
+  \item \textbf{Не ссылаться на аксиому в доказательстве.}
+
+  Лучше писать:
+  \[
+  A,B\in\alpha
+  \overset{\text{аксиома 2}}{\Longrightarrow}
+  AB\subset\alpha.
+  \]
+
+  \item \textbf{Путать рисунок с математическим фактом.}
+
+  По расположению объектов на плоском чертеже нельзя делать вывод о принадлежности или пересечении без условия задачи либо доказательства.
+
+  \item \textbf{Использовать доказательство от противного без явного предположения.}
+
+  Начинайте формулировкой:
+  \[
+  \text{«Предположим противное: \ldots»}
+  \]
+\end{enumerate}
+
+% =========================================================
+
+\section*{\textcolor{darkaccent}{8. Быстрый алгоритм перед решением задачи}}
+
+Перед доказательством задайте себе пять вопросов.
+
+\begin{enumerate}
+  \item Какие объекты даны: точки, прямые, плоскости?
+  \item Какие принадлежности известны?
+  \item Есть ли три неколлинеарные точки, позволяющие применить аксиому 1?
+  \item Есть ли две точки одной прямой, принадлежащие плоскости, чтобы применить аксиому 2?
+  \item Нужно ли доказать равенство или различие плоскостей? Поможет ли единственность плоскости или метод от противного?
+\end{enumerate}
+
+\subsection*{\textcolor{accent}{Минимум, который нужно помнить наизусть}}
+
+\begin{table}[h!]
+\centering
+\caption{Главные факты занятия}
+\begin{tabularx}{\linewidth}{@{}p{0.23\linewidth}X@{}}
+\toprule
+\textbf{Элемент} & \textbf{Формулировка} \\
+\midrule
+Аксиома 1
+&
+Через три точки, не лежащие на одной прямой, проходит единственная плоскость.
+\\
+
+Аксиома 2
+&
+Если две точки прямой принадлежат плоскости, то вся прямая принадлежит этой плоскости.
+\\
+
+Точка в плоскости
+&
+$A\in\alpha$.
+\\
+
+Прямая в плоскости
+&
+$a\subset\alpha$.
+\\
+
+Совпадение плоскостей
+&
+Если две плоскости содержат одни и те же три неколлинеарные точки, они совпадают.
+\\
+
+Метод от противного
+&
+Предположить отрицание требуемого утверждения и получить противоречие.
+\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% =========================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% =========================================================
+
+\newpage
+
+\section*{\textcolor{darkaccent}{Тренировочный блок --- Путь А}}
+
+\textcolor{softgray}{
+10 упражнений по нарастающей сложности. Решения сначала выполните самостоятельно.
+}
+
+\subsection*{\textcolor{accent}{Средний уровень}}
+
+\begin{enumerate}
+  \item
+  Точки $A$, $B$, $C$ не лежат на одной прямой.
+
+  Сколько плоскостей проходит через все три точки? Назовите эту плоскость.
+
+  \item
+  Дан треугольник $PQR$.
+
+  Можно ли однозначно задать плоскость его вершинами? Обоснуйте ответ ссылкой на аксиому.
+
+  \item
+  Точки $A$ и $B$ принадлежат плоскости $\alpha$, причём $A\ne B$.
+
+  Какой вывод можно сделать о прямой $AB$?
+\end{enumerate}
+
+\subsection*{\textcolor{accent}{Уровень выше среднего}}
+
+\begin{enumerate}[resume]
+  \item
+  Точки $A$, $B$, $C$ лежат на одной прямой.
+
+  Сколько плоскостей может проходить одновременно через все три точки?
+
+  \item
+  Известно:
+  \[
+  A\in\alpha,\qquad
+  B\in\alpha,\qquad
+  M\in AB.
+  \]
+
+  Докажите:
+  \[
+  M\in\alpha.
+  \]
+
+  \item
+  Плоскости $\alpha$ и $\beta$ содержат точки $P$, $Q$, $R$, которые не лежат на одной прямой.
+
+  Докажите:
+  \[
+  \alpha=\beta.
+  \]
+
+  \item
+  Дан треугольник $ABC$, точка $M$ лежит на стороне $AB$, причём $M\ne A$.
+
+  Докажите:
+  \[
+  \plane{AMC}=\plane{ABC}.
+  \]
+
+  \item
+  Даны четыре точки $A$, $B$, $C$, $D$. Никакие три из них не лежат на одной прямой и
+  \[
+  D\notin\plane{ABC}.
+  \]
+
+  Докажите:
+  \[
+  \plane{ABC}\ne\plane{ABD}.
+  \]
+
+  \item
+  Плоскости $\alpha$ и $\beta$ различны. Известно, что
+  \[
+  A\in\alpha,\qquad
+  B\in\alpha,\qquad
+  A\in\beta,\qquad
+  B\in\beta,
+  \qquad A\ne B.
+  \]
+
+  Что можно утверждать о прямой $AB$?
+\end{enumerate}
+
+\subsection*{\textcolor{accent}{Сложное упражнение}}
+
+\begin{enumerate}[resume]
+  \item
+  Точки $A$, $B$, $C$ не лежат на одной прямой, а
+  \[
+  D\notin\plane{ABC}.
+  \]
+
+  Точка $M$ лежит на прямой $CD$, причём
+  \[
+  M\ne C,\qquad M\ne D.
+  \]
+
+  Докажите методом от противного:
+  \[
+  M\notin\plane{ABC}.
+  \]
+\end{enumerate}
+\end{document}
