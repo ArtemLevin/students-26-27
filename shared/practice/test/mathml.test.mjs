@@ -34,7 +34,7 @@ test('renders standalone numerical answers as MathML',()=>{
 
 test('keeps prose outside MathML and escapes HTML-sensitive input',()=>{
   const html=renderMathText('Подсказка <b>важно</b>: x=2.');
-  assert.match(html,/Подсказка &lt;б/u);
+  assert.match(html,/Подсказка &lt;b&gt;важно&lt;\/b&gt;:/u);
   assert.doesNotMatch(html,/<b>/u);
   assert.match(html,/<math[^>]*aria-label="x=2"/u);
 });
