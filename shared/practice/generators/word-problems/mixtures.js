@@ -1,4 +1,4 @@
-import {context,numberSpec} from '../_shared.js';
+import {context,numberSpec} from '../shared.js';
 const IDS=['oge_21_1_2','t10_percent','t10_alloys'];
 export const mixturesGenerator={key:'word-problems.mixtures',version:1,title:'Смеси и сплавы',competencyIds:IDS,generate(args){return context(this,args,(random,difficulty)=>{
   const concentration=random.pick(difficulty===1?[10,20,25]:[5,10,15,20,25,30,40]),mass=random.int(2,8+difficulty*3)*20,substance=mass*concentration/100;

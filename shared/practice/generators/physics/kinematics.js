@@ -1,4 +1,4 @@
-import {context,numberSpec,signed} from '../_shared.js';
+import {context,numberSpec,signed} from '../shared.js';
 const IDS=['kin_04','kin_06','kin_07','kin_08','kin_12','kin_13','kin_14'];
 export const kinematicsGenerator={key:'physics.kinematics',version:1,title:'Кинематика',competencyIds:IDS,generate(args){return context(this,args,(random,difficulty,options)=>{
   const mode=options.mode||random.pick(['coordinate','displacement','path']),x0=random.int(-8,8),velocity=(random.int(1,4+difficulty))*(random.bool()?1:-1),time=random.int(2,4+difficulty),x=x0+velocity*time,displacement=velocity*time;
