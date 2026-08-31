@@ -1,9 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {PRACTICE_DISPOSITIONS,validatePracticeGap} from '../../shared/practice/coverage-policy.js';
 import {isCalendarDate} from './discover-student-contracts.mjs';
 
-export const DISPOSITIONS=new Set(['generator','curated','manual','none','coverage-gap','competency-gap','ambiguous']);
+export const DISPOSITIONS=new Set(PRACTICE_DISPOSITIONS);
 export const CONFIDENCE=new Set(['exact','high','medium','low','unknown']);
 const SCHEMA_PATH=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../schemas/spaced-practice-stage-v1.schema.json');
 
@@ -21,7 +22,6 @@ export function loadStageSchema(schemaPath=SCHEMA_PATH){
 
 function strings(value){return Array.isArray(value)&&value.every(item=>typeof item==='string');}
 function validDifficulty(value){return Array.isArray(value)&&value.length>0&&new Set(value).size===value.length&&value.every(item=>Number.isInteger(item)&&item>=1&&item<=3);}
-function own(object,key){return Object.prototype.hasOwnProperty.call(object,key);}
 
 export function validateStageResult(input,contracts,{expectedStudentId=contracts?.studentId,expectedLessonDate=contracts?.lessonDate}={}){
   loadStageSchema();
@@ -51,6 +51,7 @@ export function validateStageResult(input,contracts,{expectedStudentId=contracts
     if(!strings(outcome.evidence))errors.push(`${prefix}.evidence must be an array of strings`);
     if(typeof outcome.reason!=='string')errors.push(`${prefix}.reason must be a string`);
     if(outcome.level!==undefined&&(!Number.isInteger(outcome.level)||outcome.level<0||outcome.level>4))errors.push(`${prefix}.level is invalid`);
+    if(outcome.practiceGap!==undefined){const waiver=validatePracticeGap(outcome.practiceGap);for(const error of waiver.errors)errors.push(`${prefix}.${error}`);}
 
     const id=outcome.competencyId;
     if(id&&contracts&&!contracts.competencyIds.has(id))errors.push(`${prefix}: unknown competencyId ${id}`);
