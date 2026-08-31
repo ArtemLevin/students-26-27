@@ -72,7 +72,7 @@ test('text patcher updates only registry/config contracts and is stable on gener
   assert.match(nextLessons,/2026-08-31/);
   assert.match(nextConfig,/t5_product/);
   assert.match(nextConfig,/probability\.independent-product/);
-  assert.match(nextConfig,/activation:'lesson'/);
+  assert.match(nextConfig,/"activation":"lesson"/);
   assert.equal(replaceLessonRegistrySource(nextLessons,patch.lesson),nextLessons);
 });
 
