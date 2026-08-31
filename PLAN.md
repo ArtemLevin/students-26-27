@@ -1,1845 +1,1350 @@
-# PLAN — система интервального повторения и генерации упражнений
+# PLAN — post-MVP развитие интервального повторения
 
-Статус: **реализовано в полном объёме для migrated dashboards**
+Статус: **MVP Practice Engine реализован; следующий этап — автоматический жизненный цикл новых уроков, серверная синхронизация и педагогическая аналитика**
 
-Ветка реализации: `feature/spaced-practice-engine`
+Дата актуализации: 2026-08-31  
+Базовое состояние при перепланировании: `main@a948d9e421a6b40fce3a91271503521c8cfe19de`
 
-Базовое состояние репозитория при планировании: `main@7fb2220f5e955fe467fb4d2faa839abdb8d33a6c`  
-Дата планирования: 2026-08-31
-
-## 0. Результат реализации — 2026-08-31
-
-Реализованы Phase 0–8 и необходимое для текущих активных тем расширение Phase 10. Practice Engine подключён к пяти migrated dashboards: `kirill_zinoviev`, `sofya_kalney`, `timofey`, `volodia_khachaturian`, `xenia_klykova`.
-
-Phase 9 закрыта согласованным migration/adapter plan в `shared/practice/README.md`: legacy-кабинеты не получили дублированную бизнес-логику. Функции из раздела «Осознанно не входит в MVP» по-прежнему остаются за границами реализации.
-
-Проверяемые результаты:
-
-- PracticeState v1, bounded storage, scheduler, selector и deterministic seed contract;
-- безопасный Answer Engine и 19 централизованных generators;
-- общий daily-session UI с reload, hints, rating, remediation и competency dialog status;
-- lesson outcome linking, pipeline prompt и central config validation;
-- rollout без изменения mastery state v2, `reviewQueue`, URL и lesson history;
-- 23 practice tests, 1000 seeds на каждый generator и полная существующая dashboard regression matrix;
-- отдельный GitHub Actions quality gate.
+Этот документ заменяет первоначальный implementation-plan MVP актуальным operational roadmap. Подробности реализованного MVP сохраняются в Git history до этой ревизии.
 
 ---
 
-## 1. Цель
+## 0. Текущее состояние
 
-Создать общую систему интервального повторения для персональных кабинетов учеников в `students/<student>/site/index.html`, которая:
+К 31.08.2026 в репозитории уже существует рабочий общий Practice Engine:
 
-1. определяет, какие компетенции ученику пора повторить;
-2. формирует короткую ежедневную тренировочную сессию;
-3. генерирует новый вариант упражнения для выбранной компетенции;
-4. проверяет ответ там, где это возможно детерминированно;
-5. учитывает результат, подсказки и субъективную сложность;
-6. рассчитывает следующую дату повторения;
-7. сохраняет состояние независимо от существующего уровня освоения 0–4;
-8. учитывает ручную очередь `reviewQueue`, уже используемую картой компетенций;
-9. интегрируется с общим `shared/student-dashboard` без копирования бизнес-логики по каталогам учеников;
-10. допускает последующую замену `localStorage` на backend-хранилище без переделки scheduler/UI;
-11. допускает последующую замену простого интервального алгоритма на FSRS-подобную модель без миграции UI и генераторов.
+- отдельный `PracticeState v1`;
+- scheduler с интервалами `[1, 3, 7, 14, 30, 60, 120]`;
+- daily selector с due/overdue/manual priority и interleaving;
+- deterministic generators и seed contract;
+- Answer Engine;
+- hints, rating, remediation, stable daily session и reload recovery;
+- отдельные storage keys на ученика;
+- `lessonAutoActivation`;
+- `reviewQueue` как teacher/manual override;
+- central validation student config → competency catalog → generator registry;
+- native MathML renderer для математического контента Practice UI;
+- GitHub Actions regression matrix;
+- Practice Engine подключён к семи основным кабинетам: `kirill_zinoviev`, `sofya_kalney`, `timofey`, `volodia_khachaturian`, `xenia_klykova`, `nastya_pavlova`, `nikol_sarkisyants`.
 
-Ключевой пользовательский результат: `index.html` становится ежедневной точкой входа ученика — открыть кабинет, выполнить 5–7 релевантных упражнений за 5–15 минут, получить мгновенную обратную связь, обновить очередь повторения.
+Текущая граница автоматизации проходит после создания материалов урока. `pipeline/prompts/04_spaced_practice.md` описывает безопасную привязку, однако исполняемого обязательного Stage 04 пока нет. Новый урок может появиться в `tex_docs` и других материалах без обновления `lesson-registry.js`, без machine-readable `competencyId` и без generator coverage.
 
----
+Коммит `Xenia 31 08 26` является полезным реальным regression-case: новый материал занятия появился в репозитории, а `students/xenia_klykova/site/lesson-registry.js` на момент планирования заканчивается уроком 28.08.2026. Будущий Stage 04 должен автоматически обнаруживать такую рассинхронизацию.
 
-## 2. Текущее состояние, на которое опирается план
-
-### 2.1. Общий dashboard
-
-В `shared/student-dashboard/` уже существуют:
-
-- `dashboard-core.js`;
-- `dashboard-shell.css`;
-- `legacy-competence-map.js`;
-- `test-dashboard.mjs`;
-- `test-index-inventory.mjs`.
-
-`dashboard-core.js` отвечает за lesson registry, сайдбар, архив занятий, тему, summary heatmap и shell-поведение.
-
-`legacy-competence-map.js` содержит доменную модель карты компетенций:
-
-- `STATE_SCHEMA_VERSION=2`;
-- уровни 0–4;
-- миграцию legacy state;
-- `studentLevels`;
-- `reviewQueue`;
-- teacher seed;
-- фильтры;
-- summary;
-- UI карты и диалога компетенции.
-
-### 2.2. Student adapters
-
-Для мигрированных кабинетов используется тонкий локальный adapter. Например, у Ксении `students/xenia_klykova/site/dashboard.js` только импортирует `LESSONS` и `initStudentDashboard(...)`.
-
-Это архитектурно подходящая точка для подключения общего Practice Engine: общая логика должна жить в `shared/`, а student-specific конфигурация — рядом с `competence-config.js` / `lesson-registry.js`.
-
-### 2.3. Компетенции
-
-Уже есть устойчивые `competencyId`, например:
-
-- `t5_product`;
-- `t5_sum`;
-- `t5_complement`;
-- `t5_bernoulli`;
-- `t5_combinatorics`;
-- `t2_coordinates`;
-- `t2_length`;
-- `t10_work`;
-- `t10_trains` и т. д.
-
-Эти ID должны стать главным foreign key для системы повторения.
-
-### 2.4. Ручная очередь
-
-`reviewQueue` уже существует отдельно от `studentLevels`, что следует сохранить. Он будет использоваться как teacher/manual priority override поверх автоматического scheduler.
-
-### 2.5. CI
-
-Основной workflow `.github/workflows/student-dashboard-tests.yml` использует Node 22 и запускает:
-
-- syntax check dashboard modules;
-- student-specific dashboard regression suites;
-- `shared/student-dashboard/test-index-inventory.mjs`.
-
-Система интервального повторения должна быть добавлена в этот quality gate.
+Текущее PracticeState хранится в `localStorage`. Поэтому история повторения остаётся привязанной к конкретному браузеру и устройству. Teacher analytics пока не имеет централизованного источника событий.
 
 ---
 
-## 3. Основные архитектурные решения
+## 1. Целевой operational flow
 
-### ADR-1. Mastery и scheduling — разные состояния
-
-`studentLevels` отвечает на вопрос «насколько навык освоен».
-
-Practice state отвечает на вопрос «когда и как проверить навык снова».
-
-Не расширять семантику уровня 0–4 до scheduling-состояния.
-
-Причины:
-
-- mastery и forgetting curve меняются независимо;
-- навык уровня 4 всё равно должен периодически проверяться;
-- ошибка на повторении не должна автоматически превращать уровень 4 в уровень 1;
-- scheduler можно заменять без миграции heatmap state.
-
-### ADR-2. Расписание строится по competencyId, а не по конкретным заданиям
-
-SRS хранит состояние компетенции. При наступлении `dueAt` Exercise Engine создаёт новый вариант задачи.
-
-Следствие: одна компетенция может быть проверена сотнями разных задач без разрастания schedule state.
-
-### ADR-3. Runtime-генерация первой версии детерминированная
-
-MVP не использует внешний LLM API в браузере.
-
-Причины:
-
-- воспроизводимость;
-- отсутствие API-ключей;
-- отсутствие сетевой зависимости;
-- предсказуемая математическая корректность;
-- возможность unit/property tests;
-- GitHub Pages остаётся статическим.
-
-LLM может использоваться offline/pipeline для подготовки curated bank или generator templates, но runtime engine должен уметь работать полностью локально.
-
-### ADR-4. Seed обязателен
-
-Каждое упражнение генерируется по детерминированному seed.
-
-Минимальные входы seed:
-
-- student namespace;
-- competencyId;
-- session date;
-- attempt ordinal;
-- generator version.
-
-Это позволяет воспроизвести конкретное упражнение преподавателю и тестам.
-
-### ADR-5. Storage через adapter
-
-Practice Engine не должен напрямую зависеть от `localStorage` в бизнес-логике.
-
-Интерфейс:
-
-- `load()`;
-- `save(state)`;
-- при необходимости `clear()`.
-
-Первая реализация: `LocalStoragePracticeStorage`.
-
-Будущий adapter: HTTP/API storage в `tutor-assistant-web`.
-
-### ADR-6. Первый алгоритм — простой и прозрачный
-
-Не внедрять FSRS в первом релизе.
-
-Использовать дискретные интервальные ступени с корректировкой по результату. Состояние проектировать так, чтобы позднее можно было добавить stability/difficulty без изменения UI.
-
-### ADR-7. Генераторы регистрируются централизованно
-
-Student config хранит ссылку на generator key, но сам generator находится только в `shared/practice/generators/`.
-
-Это исключает копирование генераторов между учениками.
-
-### ADR-8. Ручная очередь сильнее автоматической даты
-
-Если преподаватель включил competencyId в `reviewQueue`, она имеет повышенный приоритет при формировании ближайшей тренировочной сессии независимо от обычного `dueAt`.
-
-### ADR-9. Уровень 0 не активируется автоматически
-
-Компетенция со `studentLevel=0` не должна появляться в spaced practice до явной активации через урок/config/manual override.
-
-Причина: повторение не должно знакомить ученика с ещё не изученной темой случайно.
-
-### ADR-10. Первая пилотная интеграция — один migrated dashboard
-
-Пилот: `students/xenia_klykova/site/index.html`.
-
-Причины:
-
-- shared dashboard уже используется;
-- competence config содержит хорошо оформленные teacherSeed/evidence;
-- есть свежий кластер вероятностных компетенций;
-- генераторы вероятности хорошо поддаются детерминированной генерации и автопроверке.
-
-После успешного пилота engine распространяется на остальные migrated dashboards.
-
----
-
-## 4. Предлагаемая структура файлов
+После завершения этого roadmap жизненный цикл занятия должен выглядеть так:
 
 ```text
-shared/
-├── student-dashboard/
-│   ├── dashboard-core.js
-│   ├── dashboard-shell.css
-│   ├── legacy-competence-map.js
-│   ├── test-dashboard.mjs
-│   └── test-index-inventory.mjs
-│
-└── practice/
-    ├── practice-engine.js
-    ├── practice-state.js
-    ├── practice-scheduler.js
-    ├── practice-selector.js
-    ├── practice-storage.js
-    ├── practice-ui.js
-    ├── practice.css
-    ├── random.js
-    ├── generator-registry.js
-    ├── answer-engine.js
-    ├── test/
-    │   ├── state.test.mjs
-    │   ├── scheduler.test.mjs
-    │   ├── selector.test.mjs
-    │   ├── random.test.mjs
-    │   ├── answer-engine.test.mjs
-    │   ├── generator-contract.test.mjs
-    │   └── integration.test.mjs
-    └── generators/
-        ├── probability/
-        │   ├── classical.js
-        │   ├── independent-product.js
-        │   ├── disjoint-sum.js
-        │   ├── complement.js
-        │   ├── bernoulli.js
-        │   └── combinatorics.js
-        ├── vectors/
-        │   ├── coordinates.js
-        │   ├── length.js
-        │   ├── operations.js
-        │   └── dot-product.js
-        ├── algebra/
-        │   ├── powers.js
-        │   ├── radicals.js
-        │   ├── linear-equations.js
-        │   └── quadratic-equations.js
-        └── word-problems/
-            ├── motion.js
-            ├── work.js
-            └── mixtures.js
+проведено занятие
+    ↓
+созданы transcript / lesson JSON / TeX / PDF / web-материалы
+    ↓
+Stage 04 автоматически анализирует результаты урока
+    ↓
+lesson outcomes получают проверенные competencyId
+    ↓
+каждый practice-eligible outcome классифицируется:
+    generator | curated bank | manual | no-practice | coverage-gap
+    ↓
+lesson-registry и practice-config получают migration-safe update
+    ↓
+CI проверяет lesson → competency → practice coverage
+    ↓
+после даты урока competency активируется в Practice Engine
+    ↓
+ученик проходит ежедневные повторения
+    ↓
+Practice events синхронизируются с сервером
+    ↓
+retention aggregates и teacher analytics обновляются
+    ↓
+следующее занятие начинается с актуального pre-lesson brief
 ```
 
-Student-specific additions:
-
-```text
-students/xenia_klykova/site/
-├── competence-config.js
-├── lesson-registry.js
-├── practice-config.js        # новый
-├── dashboard.js
-└── index.html
-```
-
-После стабилизации допускается объединить `practice-config.js` с `competence-config.js`, если это не ухудшает поддержку. Для MVP отдельный файл предпочтительнее, поскольку снижает риск регрессий карты компетенций.
+Ключевая эксплуатационная цель: **рост банка занятий не создаёт пропорционально растущую ручную работу по сопровождению интервального повторения**.
 
 ---
 
-## 5. Data contracts
+## 2. Архитектурные инварианты
 
-## 5.1. PracticeState v1
+Следующие решения остаются обязательными во всех пяти направлениях.
 
-Предлагаемая схема:
+### 2.1. `competencyId` — главный foreign key
 
-```js
-{
-  schemaVersion: 1,
-  updatedAt: '2026-08-31T12:00:00.000Z',
-  competencies: {
-    t5_bernoulli: {
-      status: 'active',
-      activatedAt: '2026-08-28T00:00:00.000Z',
-      dueAt: '2026-09-01',
-      intervalStep: 2,
-      intervalDays: 3,
-      attempts: 4,
-      correct: 3,
-      streak: 2,
-      lapses: 1,
-      hintsUsedTotal: 2,
-      lastAttemptAt: '2026-08-31T09:12:00.000Z',
-      lastRating: 'good',
-      lastOutcome: 'correct',
-      lastExerciseSeed: '...',
-      lastGeneratorKey: 'probability.bernoulli',
-      lastGeneratorVersion: 1
-    }
-  },
-  sessions: {
-    '2026-08-31': {
-      startedAt: '...',
-      completedAt: '...',
-      status: 'completed',
-      exerciseIds: ['...'],
-      correct: 4,
-      total: 5
-    }
-  }
-}
+Связь уроков, heatmap, practice schedule, generators, curated banks, server state и analytics строится вокруг стабильного `competencyId`.
+
+Новый ID создаётся только в каталоге компетенций. Stage 04 не генерирует произвольные идентификаторы.
+
+### 2.2. Mastery и retention/scheduling остаются разными состояниями
+
+`studentLevels` 0–4 остаётся педагогической оценкой освоения. Practice events и интервалы описывают сохранность навыка во времени.
+
+Practice Engine не меняет heatmap level автоматически. Teacher analytics может формировать рекомендацию на пересмотр mastery, решение остаётся отдельным педагогическим действием.
+
+### 2.3. Runtime generators остаются deterministic
+
+Упражнение воспроизводится по `studentId + competencyId + date + ordinal + generatorVersion`.
+
+Runtime LLM не требуется для ежедневной сессии. LLM допускается в offline/pipeline для классификации содержания урока и подготовки curated material при обязательной deterministic validation.
+
+### 2.4. Student-specific code остаётся конфигурационным
+
+Scheduler, selector, sync, coverage audit, MathML, analytics contracts и generator registry живут в shared/backend слоях. Каталоги учеников содержат lesson registry, competence data и mapping/config.
+
+### 2.5. Локальная работа сохраняется при недоступности API
+
+Server sync расширяет persistence. Practice session должна продолжать работать при временной сетевой ошибке. Локальный durable cache остаётся обязательным.
+
+### 2.6. Любая автоматизация должна быть идемпотентной
+
+Повторный запуск Stage 04, lesson activation, sync или analytics aggregation на одинаковых входах не создаёт дублей и не сбрасывает интервалы.
+
+---
+
+# TRACK A — обязательный автоматический Stage 04 после каждого занятия
+
+## 3. Цель Track A
+
+Перевести `pipeline/prompts/04_spaced_practice.md` из advisory prompt в обязательный исполняемый post-lesson stage.
+
+Stage 04 отвечает только за metadata/integration. Историю попыток, текущие интервалы, `studentLevels` и `reviewQueue` он не редактирует.
+
+## 4. Новый machine-readable контракт Stage 04
+
+Добавить JSON Schema:
+
+```text
+pipeline/schemas/spaced-practice-stage-v1.schema.json
 ```
 
-### Ограничения
+Предлагаемый результат:
 
-- `schemaVersion` обязателен;
-- неизвестные поля должны безопасно игнорироваться для forward compatibility;
-- отсутствующие поля нормализуются default-функцией;
-- некорректный JSON не должен ломать dashboard;
-- state migration должна быть идемпотентной;
-- запись нового practice state не должна менять competence state v2.
-
-## 5.2. Practice config
-
-```js
-export const PRACTICE_CONFIG = {
-  studentId: 'xenia_klykova',
-  storageKey: 'xenia-practice-state-v1',
-  dailyTarget: 5,
-  dailyMax: 7,
-  maxPerGroup: 2,
-  competencies: {
-    t5_product: {
-      generator: 'probability.independent-product',
-      difficulty: [1, 2],
-      active: true
-    },
-    t5_sum: {
-      generator: 'probability.disjoint-sum',
-      difficulty: [1, 2],
-      active: true
-    },
-    t5_complement: {
-      generator: 'probability.complement',
-      difficulty: [1, 2, 3],
-      active: true
-    },
-    t5_bernoulli: {
-      generator: 'probability.bernoulli',
-      difficulty: [1, 2, 3],
-      active: true
-    },
-    t5_combinatorics: {
-      generator: 'probability.combinatorics',
-      difficulty: [1, 2],
-      active: true
+```json
+{
+  "schemaVersion": 1,
+  "studentId": "xenia_klykova",
+  "lessonDate": "2026-08-31",
+  "lessonHref": "31.08.26.html",
+  "outcomes": [
+    {
+      "label": "Обозначения стереометрии",
+      "practiceDisposition": "generator",
+      "competencyId": "...",
+      "generatorKey": "...",
+      "confidence": "exact",
+      "evidence": ["..."],
+      "reason": "..."
     }
-  }
-};
-```
-
-## 5.3. Generator contract
-
-```js
-{
-  key: 'probability.bernoulli',
-  version: 1,
-  competencyIds: ['t5_bernoulli'],
-  generate({seed, difficulty, locale}) => Exercise
-}
-```
-
-`Exercise`:
-
-```js
-{
-  exerciseId: 'probability.bernoulli:v1:<seed>',
-  competencyId: 't5_bernoulli',
-  generatorKey: 'probability.bernoulli',
-  generatorVersion: 1,
-  seed: '...',
-  difficulty: 2,
-  prompt: '...',
-  answerSpec: {...},
-  hints: [
-    {level: 1, text: '...'},
-    {level: 2, text: '...'},
-    {level: 3, text: '...'}
   ],
-  solution: [...],
-  metadata: {
-    topic: 'Схема Бернулли',
-    expectedSeconds: 120
-  }
+  "gaps": [],
+  "warnings": []
 }
 ```
 
-Generator не изменяет storage и не обращается к DOM.
+Допустимые `practiceDisposition`:
 
-## 5.4. AnswerSpec
+- `generator` — существует точный competency и registered generator;
+- `curated` — competency существует, procedural generator педагогически нежелателен, требуется curated bank;
+- `manual` — навык проверяется преподавателем/развёрнутым решением;
+- `none` — outcome информационный или организационный и не требует spaced practice;
+- `coverage-gap` — practice уместен, однако подходящего generator/bank пока нет;
+- `competency-gap` — в каталоге отсутствует точный competency;
+- `ambiguous` — несколько допустимых соответствий, auto-apply запрещён.
 
-Первая поддерживаемая матрица:
+`confidence=exact` является единственным режимом, разрешающим автоматическое изменение mapping.
 
-```text
-number
-integer
-fraction
-choice
-multi-choice
-ordered-pair
-vector
-```
+## 5. Исполняемый Stage 04
 
-Следующая очередь:
+Добавить:
 
 ```text
-expression
-set
-interval
-inequality
+pipeline/practice/
+├── run-stage-04.mjs
+├── validate-stage-result.mjs
+├── build-practice-patch.mjs
+├── apply-practice-patch.mjs
+├── discover-student-contracts.mjs
+└── test/
 ```
 
-Пример fraction:
+CLI:
+
+```bash
+node pipeline/practice/run-stage-04.mjs \
+  --student xenia_klykova \
+  --date 2026-08-31 \
+  --analysis path/to/stage-04-result.json
+```
+
+### 5.1. Inputs
+
+Stage runner загружает:
+
+1. lesson artifact/lesson JSON текущего занятия;
+2. `students/<student>/site/lesson-registry.js`;
+3. полный competency catalog ученика;
+4. `students/<student>/site/practice-config.js`;
+5. `shared/practice/generators/index.js`;
+6. registry curated banks;
+7. текущий `pipeline/prompts/04_spaced_practice.md`.
+
+### 5.2. Deterministic validation перед apply
+
+Для каждого предложенного outcome проверяется:
+
+- competency ID существует в каталоге ученика;
+- generator key существует в registry;
+- generator декларирует данный competency ID;
+- difficulty contract валиден;
+- lesson date валидна;
+- существующий mapping не заменяется несовместимым generator без явной migration directive;
+- существующая lesson metadata не теряется;
+- state/storage files не затронуты.
+
+### 5.3. Auto-apply policy
+
+Автоматически разрешены только изменения следующих классов:
+
+- добавление `competencyId` к outcome при `confidence=exact`;
+- добавление нового mapping в `practice-config.js`, когда generator уже зарегистрирован и declares competency;
+- добавление lesson record в `lesson-registry.js` из уже созданного lesson artifact;
+- добавление explicit `practiceDisposition` для CI audit.
+
+`coverage-gap`, `competency-gap`, `ambiguous`, новая geometry/chemistry generator logic и смена generator существующей competency формируют отчёт для ручного решения.
+
+### 5.4. Idempotence
+
+Повторный запуск на одинаковом уроке должен давать zero diff.
+
+Уникальность урока задаётся `studentId + lessonDate`. При повторной генерации с тем же `lessonDate` stage обновляет только разрешённые metadata-поля существующей записи.
+
+## 6. Интеграция Stage 04 в production lesson workflow
+
+Добавить единую точку входа:
+
+```text
+pipeline/practice/post-lesson-practice.mjs
+```
+
+Она должна запускаться после появления финального lesson metadata и до публикации/merge student dashboard.
+
+Если текущий внешний pipeline запускается из другого приложения, этот script становится обязательным contract endpoint: внешний orchestrator передаёт student/date/result и получает `applied | blocked | gaps`.
+
+Exit codes:
+
+- `0` — stage валиден, apply выполнен или изменений нет;
+- `2` — обнаружен coverage gap, публикация допускается только при explicit waiver policy;
+- `3` — structural contract error, публикация блокируется;
+- `4` — ambiguous mapping, требуется review.
+
+## 7. Acceptance criteria Track A
+
+- новый lesson artifact невозможно тихо опубликовать без Stage 04 result;
+- реальный сценарий `Xenia 31.08.26 material exists / registry missing` обнаруживается автоматически;
+- exact mapping обновляется без ручного редактирования двух файлов;
+- повторный запуск не создаёт diff;
+- arbitrary competency ID отклоняется;
+- existing practice state byte-for-byte не участвует в patch;
+- CI тестирует schema и patch builder.
+
+---
+
+# TRACK B — activation-by-lesson и future-date guard
+
+## 8. Цель Track B
+
+Новые skills должны становиться активными в интервальном повторении после фактической даты изучения. Legacy `active:true` постепенно остаётся только для явных always-on/migration cases.
+
+## 9. Исправление future-date bug
+
+В `syncLessonActivations(...)` добавить обязательный guard:
+
+```js
+if (!lesson.date || lesson.date > today) continue;
+```
+
+Дополнительные правила:
+
+- malformed date отклоняется validation до runtime;
+- timezone сравнение выполняется на calendar-date `YYYY-MM-DD`;
+- будущий lesson record может присутствовать в registry для планирования, его outcomes до даты урока не активируются;
+- наступление даты урока приводит к idempotent activation при следующей инициализации.
+
+Unit tests:
+
+1. yesterday lesson activates;
+2. today lesson activates;
+3. tomorrow lesson stays inactive;
+4. repeated sync preserves `dueAt`, attempts и interval step;
+5. переход injected `todayProvider` с D-1 на D активирует skill ровно один раз.
+
+## 10. Явная activation policy
+
+Расширить mapping contract без резкого breaking change:
 
 ```js
 {
-  type: 'fraction',
-  numerator: 5,
-  denominator: 16,
-  acceptDecimal: true,
-  tolerance: 1e-9
+  generator: 'algebra.powers',
+  difficulty: [1, 2],
+  activation: 'lesson'
 }
 ```
 
-Нормализация должна принимать эквивалентные формы, например `5/16`, `10/32`, `0.3125`.
+Режимы:
 
----
+- `lesson` — стандарт для новых mappings;
+- `always` — migration/always-on skill;
+- `manual` — только `reviewQueue` или explicit `startFocused`;
+- `disabled` — mapping существует, selection выключен.
 
-## 6. Scheduler v1
-
-## 6.1. Базовые интервалы
-
-Базовая последовательность:
-
-```js
-[1, 3, 7, 14, 30, 60, 120]
-```
-
-## 6.2. Rating
-
-UI предоставляет четыре машинных результата:
-
-- `again` — ошибка или почти полная зависимость от подсказок;
-- `hard` — верно с существенным затруднением/подсказками;
-- `good` — верно самостоятельно в ожидаемом режиме;
-- `easy` — верно быстро и уверенно.
-
-Фактическое отображение для ученика можно сделать более педагогичным:
-
-- «Повторить»;
-- «Было сложно»;
-- «Нормально»;
-- «Легко».
-
-## 6.3. Переходы
-
-MVP:
+Backward compatibility:
 
 ```text
-again -> step 0 / due +1 день / lapses +1 / streak=0
-hard  -> интервал примерно max(1, current*1.5), без перескока более чем на 1 step
-good  -> следующий step
-easy  -> +2 steps, но не выше последнего
+active:true  → legacy alias activation:'always'
+active:false → legacy alias activation:'lesson' до завершения миграции
 ```
 
-Округление интервалов должно быть детерминированным.
+После миграции всех семи кабинетов boolean `active` помечается deprecated, удаление возможно только в следующей major schema revision.
 
-## 6.4. Mastery multiplier
+## 11. Миграция существующих кабинетов
 
-Mastery влияет только на начальный/минимальный интервал и выбор difficulty, но не перезаписывается scheduler автоматически.
+Миграция выполняется student-by-student.
 
-Базовая политика:
+### 11.1. Перед переключением на `activation:'lesson'`
 
-```text
-level 0 -> не активировать автоматически
-level 1 -> старт 1 день, difficulty 1
-level 2 -> старт 1 день, difficulty 1–2
-level 3 -> старт 3 дня, difficulty 2
-level 4 -> старт 7 дней, difficulty 2–3
-```
+Для каждого mapping определить:
 
-Если ученик проваливает несколько повторений подряд, Practice Engine создаёт сигнал/метрику `repeatedLapse`, но автоматическое снижение heatmap level в MVP не выполняется.
+- существует ли исторический lesson outcome с этим competencyId;
+- существует ли current PracticeState entry, уже активированная ранее;
+- является ли skill фундаментальным always-on навыком;
+- есть ли legacy lesson без machine-readable outcomes, который требуется backfill.
 
-## 6.5. Даты и timezone
+### 11.2. Правило сохранения истории
 
-Scheduler оперирует учебной локальной календарной датой `YYYY-MM-DD`, а timestamps хранит в ISO.
+Уже активированная competency остаётся активной при смене config policy. Накопленные `dueAt`, `intervalStep`, `attempts`, `lapses`, sessions/events сохраняются.
 
-Требование: выбор due-items не должен зависеть от UTC-перехода около полуночи.
+### 11.3. Migration order
 
-Для статического MVP `todayProvider` должен инъектироваться и получать локальную дату браузера. Тесты используют фиксированный provider.
+1. Xenia — наиболее развитый lesson registry и probability mappings;
+2. Nastya — один свежий lesson с точными `calc_*` outcomes;
+3. Nikol — сначала backfill точных historical outcomes, потому что часть уроков содержит labels без competencyId;
+4. Timofey;
+5. Sofya;
+6. Kirill;
+7. Volodia.
 
----
+Migration commit каждого ученика проходит central coverage audit до merge.
 
-## 7. Daily Selector
+## 12. Activation provenance
 
-Цель: сформировать 5–7 заданий, обеспечивая retrieval practice и interleaving.
-
-## 7.1. Кандидаты
-
-Порядок формирования candidate pool:
-
-1. manual `reviewQueue`;
-2. overdue competencies;
-3. due today;
-4. слабые активные навыки уровня 1–2, давно не проверявшиеся;
-5. контрольные навыки уровня 3–4, давно не проверявшиеся;
-6. optional fresh practice после урока, если session quota ещё не набрана.
-
-## 7.2. Приоритет
-
-Предлагаемый score:
-
-```text
-manual review override             +1000
-overdue days                        +10 * days (cap)
-level 1                             +80
-level 2                             +50
-level 3                             +20
-level 4                             +10
-recent lapse                        +60
-not practiced before                +40
-same group already selected         -penalty
-same competency already selected    forbidden
-```
-
-Конкретные числа должны быть вынесены в scheduler config и покрыты tests, а не разбросаны по UI.
-
-## 7.3. Interleaving constraints
-
-- максимум 2 упражнения из одной competency group в daily session;
-- одна competencyId не повторяется в одной обычной сессии;
-- исключение: после ошибки optional immediate remediation может дать второе упражнение той же компетенции, но с новым seed;
-- remediation не должна бесконечно удлинять session;
-- hard cap упражнений за одну сессию: `dailyMax + remediationMax`.
-
-## 7.4. Stable daily session
-
-Если пользователь обновляет страницу в середине сессии, список упражнений текущего дня не должен случайно изменяться.
-
-Поэтому при старте сессии фиксируются:
-
-- выбранные competencyIds;
-- seed каждого упражнения;
-- generator version;
-- порядок.
-
-Reload восстанавливает незавершённую session.
-
----
-
-## 8. Exercise Engine
-
-## 8.1. Registry
+Для будущей analytics желательно добавить в PracticeState следующей schema revision:
 
 ```js
-registerGenerator(generator)
-getGenerator(key)
-validateRegistry()
-```
-
-Startup validation:
-
-- key unique;
-- version integer > 0;
-- `generate` function;
-- competency mapping valid;
-- config не ссылается на отсутствующий generator.
-
-## 8.2. Random API
-
-Нельзя использовать `Math.random()` внутри генераторов.
-
-Создать seeded PRNG utility:
-
-```js
-createRandom(seed)
-random.int(min, max)
-random.pick(array)
-random.shuffle(array)
-random.bool(probability)
-```
-
-Property: одинаковый seed + generator version => одинаковое упражнение.
-
-## 8.3. Generator invariants
-
-Каждый generator обязан удовлетворять:
-
-- задача имеет решение;
-- решение однозначно в рамках answerSpec либо явно содержит множество допустимых ответов;
-- числа попадают в указанный difficulty-range;
-- denominator != 0;
-- невозможные физические/математические комбинации не генерируются;
-- текст и answerSpec согласованы;
-- hint/solution вычисляются из тех же исходных параметров, а не из отдельной копии логики.
-
-## 8.4. Первые генераторы пилота
-
-### Probability
-
-1. `probability.independent-product`
-   - независимые события;
-   - серия одинаковых испытаний;
-   - простые дроби;
-   - контексты: монета, кубик, стрельба, контроль качества.
-
-2. `probability.disjoint-sum`
-   - сумма несовместимых сценариев;
-   - ровно одна позиция успеха;
-   - короткий организованный перебор.
-
-3. `probability.complement`
-   - «хотя бы один»;
-   - `1 - P(ни одного)`;
-   - контроль диапазона ответа `[0,1]`.
-
-4. `probability.bernoulli`
-   - `n`, `k`, `p`;
-   - `C_n^k p^k(1-p)^(n-k)`;
-   - ограничивать значения, чтобы ответ оставался вычислимым школьными средствами.
-
-5. `probability.combinatorics`
-   - факториалы;
-   - `C_n^k`;
-   - сокращение близких факториалов.
-
-После пилота:
-
-### Vectors
-
-- coordinates;
-- length;
-- operations;
-- dot product;
-- angle (с контролируемыми значениями).
-
-### Algebra
-
-- powers;
-- radicals;
-- linear/quadratic equations;
-- рациональные вычисления.
-
-### Word problems
-
-- motion;
-- relative speed;
-- work;
-- mixtures/alloys.
-
----
-
-## 9. Answer Engine
-
-## 9.1. API
-
-```js
-validateAnswer(spec, rawInput) => {
-  status: 'correct' | 'incorrect' | 'invalid',
-  normalizedInput,
-  expectedDisplay,
-  diagnostics
+activation: {
+  source: 'lesson' | 'manual' | 'config',
+  lessonDate: '2026-08-31' | null,
+  firstActivatedAt: '...'
 }
 ```
 
-`invalid` используется для синтаксически непонятного ввода и не считается учебной ошибкой до явной отправки допустимого ответа.
+Это поле не используется scheduler для расчёта интервалов. Оно обеспечивает аудит происхождения skill и объяснимость teacher UI.
 
-## 9.2. Безопасность
+## 13. Acceptance criteria Track B
 
-Нельзя использовать `eval`, `Function` или произвольное выполнение ученического выражения.
-
-Expression parser, если будет добавлен, должен быть ограниченным математическим parser с whitelist operators/functions.
-
-## 9.3. Числовые ответы
-
-- locale-friendly decimal comma;
-- ведущие/хвостовые пробелы;
-- дроби;
-- reduced/non-reduced fractions;
-- tolerance только там, где это явно разрешено spec.
-
-## 9.4. Ошибки
-
-Answer Engine не должен показывать полный solution сразу после первого неправильного ответа.
-
-Предлагаемый flow:
-
-1. первая ошибка — короткий диагностический hint;
-2. вторая ошибка — hint level 2;
-3. третья ошибка / «показать решение» — полный разбор;
-4. scheduling rating учитывает число попыток и hints.
+- future lesson никогда не создаёт due item раньше даты занятия;
+- новые mappings по умолчанию используют lesson activation;
+- миграция config не сбрасывает существующую историю;
+- manual queue продолжает иметь максимальный приоритет;
+- legacy dashboards работают через тот же shared contract;
+- tests покрывают date boundary и idempotence.
 
 ---
 
-## 10. Practice UI
+# TRACK C — CI-аудит `lesson → competency → generator coverage`
 
-## 10.1. Placement
+## 14. Цель Track C
 
-Для migrated dashboard новый блок размещается между `lesson-summary` и `map-section`.
+CI должен отвечать на два разных вопроса:
 
-Порядок страницы:
+1. **структурная корректность** — все ссылки существуют и совместимы;
+2. **педагогическое покрытие** — каждый новый practice-eligible outcome имеет generator/curated/manual disposition либо explicit waiver.
 
-```text
-Последнее занятие
-↓
-Повторение на сегодня
-↓
-Карта компетенций
-↓
-footer
-```
+Существующий `validate-configs.mjs` сохраняется как structural validator и расширяется отдельным coverage layer.
 
-## 10.2. Collapsed card
+## 15. Coverage audit utility
 
-Минимальный вид:
+Добавить:
 
 ```text
-Повторение на сегодня
-5 заданий · ~8 минут
-2 просрочено · 2 слабых навыка · 1 контрольное
-[Начать тренировку]
+shared/practice/audit-lesson-coverage.mjs
+shared/practice/coverage-policy.js
+shared/practice/test/coverage-audit.test.mjs
 ```
 
-Если due=0:
+CLI:
+
+```bash
+node shared/practice/audit-lesson-coverage.mjs
+node shared/practice/audit-lesson-coverage.mjs --student xenia_klykova --format json
+```
+
+## 16. Coverage model
+
+Для каждого outcome формируется статус:
+
+- `covered-generator`;
+- `covered-curated`;
+- `manual-assessment`;
+- `excluded-explicitly`;
+- `missing-competency`;
+- `missing-practice-mapping`;
+- `missing-generator`;
+- `generator-does-not-declare-competency`;
+- `ambiguous`.
+
+Отчёт ученика:
 
 ```text
-На сегодня всё ✓
-Следующая проверка: <дата>
+Xenia
+lessons: 11
+practice-eligible outcomes: 24
+generator-covered: 18
+curated-covered: 2
+manual: 2
+gaps: 2
+coverage: 91.7%
 ```
 
-Не генерировать искусственные упражнения только ради заполнения UI, если активных компетенций недостаточно.
+Процент используется как observability metric. Merge gate опирается на конкретные gap statuses.
 
-## 10.3. Session view
+## 17. Policy для старой и новой истории
 
-Показывать по одному упражнению:
+Полный historical backfill может выполняться постепенно. Поэтому CI вводится через ratchet policy.
 
-- progress `2 / 5`;
-- название компетенции;
-- prompt;
-- answer input;
-- submit;
-- hint;
-- feedback;
-- после проверки — rating;
-- `Следующее`.
+### 17.1. Hard gate для нового урока
 
-Не раскрывать ответ до завершения попытки.
+У самого свежего добавленного/изменённого lesson каждый outcome обязан иметь один из explicit dispositions:
 
-## 10.4. Completion view
+```text
+generator | curated | manual | none
+```
 
-Показывать:
-
-- `correct / total`;
-- использованные подсказки;
-- competency needing attention;
-- следующую ближайшую due-date;
-- CTA к карте компетенций.
-
-## 10.5. Competency dialog integration
-
-В существующий dialog карты добавить сведения:
-
-- `В повторении: сегодня / через N дней / не активно`;
-- `Последняя попытка`;
-- `Последний результат`;
-- `Решить сейчас` при наличии generator.
-
-Текущая кнопка `Добавить в повторение` сохраняется и остаётся teacher/manual override.
-
-## 10.6. Accessibility
-
-Обязательные требования:
-
-- keyboard complete;
-- корректные labels;
-- `aria-live` только для существенного feedback;
-- focus после перехода к следующему упражнению переводится на heading/prompt;
-- hint не должен неожиданно менять focus;
-- dialog/focus trap existing behavior не ломается;
-- status нельзя кодировать только цветом;
-- reduced-motion friendly;
-- mobile width >= 320px.
-
----
-
-## 11. Lesson → competency → practice activation
-
-## 11.1. Расширение lesson registry
-
-Добавить optional machine-readable связи:
+Статус `coverage-gap` допустим только с отдельным machine-readable waiver, например:
 
 ```js
-outcomes: [
-  {
-    competencyId: 't5_bernoulli',
-    label: 'Схема Бернулли',
-    level: 2,
-    tone: 'process'
-  }
-]
+practiceGap: {
+  reason: 'generator-missing',
+  issue: 'planned:geometry-curated-bank'
+}
 ```
 
-Backward compatibility: `competencyId` optional, старые lesson records продолжают работать.
+### 17.2. Historical baseline
 
-## 11.2. Activation
+Существующие gaps фиксируются baseline-report и постепенно уменьшаются. PR не может увеличивать количество unexplained historical gaps.
 
-При инициализации Practice Engine:
+После backfill конкретного ученика baseline для него переводится в strict mode.
 
-- прочитать configured competencies;
-- найти lesson outcomes с competencyId;
-- определить первую известную дату изучения;
-- активировать только configured competency;
-- не перезаписывать существующий progress;
-- activation migration должна быть идемпотентной.
+## 18. GitHub Actions integration
 
-Для MVP допустимо первоначальное explicit `active:true` в `practice-config.js`; lesson auto-activation вводить отдельной фазой после подтверждения contracts.
-
-## 11.3. Pipeline
-
-Добавить `pipeline/prompts/04_spaced_practice.md` после существующих content/web stages.
-
-Назначение prompt:
-
-- извлечь реально затронутые competency IDs;
-- запрещать создавать несуществующие IDs;
-- предложить generator mapping только из registry;
-- обновлять lesson outcome metadata;
-- не изменять practice history;
-- не изменять mastery без evidence;
-- выводить migration-safe patch plan.
-
-Автоматическое изменение production practice config pipeline-ом вводить только после статической validation.
-
----
-
-## 12. Storage и миграции
-
-## 12.1. Key namespace
-
-Не использовать один общий key для всех учеников.
-
-Примеры:
+В `.github/workflows/student-dashboard-tests.yml` добавить отдельный job:
 
 ```text
-xenia-practice-state-v1
-timofey-practice-state-v1
-sofya-practice-state-v1
+practice coverage audit
 ```
 
-## 12.2. Failure mode localStorage unavailable
+Шаги:
 
-Practice UI должен деградировать безопасно:
+1. validate configs;
+2. validate lesson outcome schema;
+3. run coverage audit;
+4. fail on structural error;
+5. fail on uncovered new outcome without waiver;
+6. записать Markdown summary в GitHub Actions job summary;
+7. при необходимости сохранять JSON report как artifact.
 
-- задача может быть показана;
-- persistence warning без блокировки всего dashboard;
-- heatmap и lessons продолжают работать;
-- не падать при SecurityError/QuotaExceededError.
+CI должен запускаться при изменениях:
 
-## 12.3. Corrupted state
+- `students/**/lesson-registry.js`;
+- `students/**/practice-config.js`;
+- competency catalogs;
+- `shared/practice/generators/**`;
+- curated banks;
+- Stage 04 schema/policy.
 
-При некорректном JSON:
+## 19. Coverage audit в developer workflow
 
-- не уничтожать competence state;
-- восстановить нормализованный practice state;
-- желательно сохранить diagnostic marker в памяти/console только в development context;
-- не показывать технический stack trace ученику.
-
-## 12.4. Future backend migration
-
-Storage interface должен позволить:
-
-```text
-LocalStoragePracticeStorage
-       ↓
-ApiPracticeStorage
-```
-
-Будущий server-side state должен иметь optimistic concurrency/version field, чтобы избежать silent overwrite между телефоном и ПК.
-
-В текущем статическом MVP синхронизация между устройствами отсутствует и должна быть явно зафиксирована как ограничение.
-
----
-
-## 13. Тестовая стратегия
-
-## 13.1. Unit — scheduler
-
-Проверить:
-
-- новый уровень 1 получает due +1;
-- новый level 4 получает более длинный стартовый интервал;
-- `again` сбрасывает streak;
-- `again` увеличивает lapse;
-- `good` двигает step;
-- `easy` перескакивает допустимое число ступеней;
-- max interval clamp;
-- due date не зависит от времени суток;
-- deterministic today provider;
-- malformed state normalization.
-
-## 13.2. Unit — selector
-
-Проверить:
-
-- manual review выше обычного due;
-- overdue выше future;
-- future competency не выбирается без override;
-- level 0 не выбирается автоматически;
-- maxPerGroup;
-- duplicate competency запрещён;
-- quota работает при недостатке кандидатов;
-- deterministic order при одинаковом seed/date;
-- repeated lapse повышает priority.
-
-## 13.3. Unit/property — PRNG
-
-- одинаковый seed => одинаковая последовательность;
-- разные seed статистически дают разные варианты;
-- range boundaries соблюдаются;
-- pick не возвращает элемент вне массива.
-
-## 13.4. Generator contract tests
-
-Для каждого generator прогнать минимум 500–1000 seed в CI или разделить fast/full suites.
-
-Проверки:
-
-- генерация не throws;
-- answerSpec valid;
-- validator принимает эталонный ответ;
-- denominator nonzero;
-- finite numbers;
-- prompt nonempty;
-- solution nonempty;
-- competencyId declared;
-- generator key/version stable.
-
-## 13.5. Mathematical regression tests
-
-Probability:
-
-- Bernoulli formula cross-check независимой реализацией test helper;
-- probability in `[0,1]`;
-- combinatorial coefficients integer;
-- complement = `1 - none`;
-- sum/product templates соответствуют условию.
-
-Vectors:
-
-- coordinates = end-start;
-- length >=0;
-- dot product exact;
-- generated angle cases domain-safe.
-
-Word problems:
-
-- positive speed/time/distance;
-- no division by zero;
-- generated scenario physically coherent.
-
-## 13.6. Answer Engine
-
-Проверить:
-
-- decimal comma;
-- equivalent fractions;
-- whitespace;
-- invalid input;
-- tolerance boundaries;
-- malformed fraction;
-- zero denominator rejected;
-- negative values where allowed;
-- no executable JS evaluation.
-
-## 13.7. Storage/migration
-
-- empty storage;
-- valid v1;
-- corrupted JSON;
-- missing fields;
-- unknown future fields;
-- repeated migration idempotent;
-- storage write failure;
-- competence state untouched.
-
-## 13.8. UI integration
-
-Static/DOM regression должна проверить:
-
-- practice section существует в migrated pilot;
-- required IDs/classes unique;
-- modules resolve;
-- start/submit/hint/rating controls;
-- no inline duplicated engine;
-- accessibility labels;
-- index still contains map and lesson shells;
-- dashboard init failure в practice не должен ломать lessons/map.
-
-## 13.9. Existing regression suite
-
-После каждой фазы должны продолжать проходить существующие:
+Добавить одну команду проверки перед commit/merge:
 
 ```bash
-node shared/student-dashboard/test-dashboard.mjs
-node shared/student-dashboard/test-index-inventory.mjs
-node students/xenia_klykova/site/tests/dashboard-regression.mjs
-```
-
-А на полном rollout — matrix всех student dashboard tests из GitHub Actions.
-
----
-
-## 14. CI plan
-
-Расширить `.github/workflows/student-dashboard-tests.yml`.
-
-Добавить syntax checks:
-
-```bash
-node --check shared/practice/practice-engine.js
-node --check shared/practice/practice-state.js
-node --check shared/practice/practice-scheduler.js
-node --check shared/practice/practice-selector.js
-node --check shared/practice/practice-storage.js
-node --check shared/practice/practice-ui.js
-node --check shared/practice/answer-engine.js
-node --check shared/practice/generator-registry.js
-```
-
-Добавить tests:
-
-```bash
+node shared/practice/validate-configs.mjs && \
+node shared/practice/audit-lesson-coverage.mjs && \
 node --test shared/practice/test/*.test.mjs
 ```
 
-Если Node wildcard поведение окажется неодинаковым, перечислить suite через shell glob в bash или создать единый `run-tests.mjs`.
+Опционально создать `npm`/`make`-подобный wrapper script, если в репозитории появится общий task runner.
 
-Workflow paths расширить:
+## 20. Acceptance criteria Track C
 
-```yaml
-- 'shared/practice/**'
-- 'pipeline/prompts/04_spaced_practice.md'
+- новая тема не может исчезнуть из Practice lifecycle без явного статуса;
+- CI различает отсутствие competency и отсутствие generator;
+- intentional manual/none outcome не создаёт ложную ошибку;
+- historical gaps видимы и ratchet не допускает ухудшения;
+- coverage report понятен без чтения source code;
+- Stage 04 и CI используют один schema/policy module.
+
+---
+
+# TRACK D — серверная синхронизация PracticeState
+
+## 21. Цель Track D
+
+Сделать историю повторения устойчивой к смене браузера/устройства и создать центральный источник данных для teacher analytics.
+
+Рекомендуемый backend: существующий `ArtemLevin/tutor-assistant-web`.
+
+Он уже содержит:
+
+- FastAPI;
+- SQLAlchemy;
+- PostgreSQL driver;
+- Alembic;
+- identity module с ролями `student`, `parent`, `tutor`, `admin`;
+- student domain/module;
+- audit infrastructure;
+- production deployment/CI контур.
+
+Это позволяет реализовать sync как отдельный доменный модуль без появления второго backend-проекта.
+
+## 22. Cross-repo boundary
+
+`students-26-27` остаётся владельцем:
+
+- scheduler rules;
+- generator registry;
+- browser Practice Engine;
+- lesson/competency metadata;
+- local fallback;
+- client sync contract tests.
+
+`tutor-assistant-web` становится владельцем:
+
+- authentication/authorization;
+- canonical remote persistence;
+- event ingestion;
+- optimistic concurrency;
+- teacher analytics aggregation/API/UI;
+- server audit trail.
+
+Создать версионированный контракт `practice-sync-v1` и fixture tests в обоих репозиториях.
+
+## 23. Backend module
+
+В `tutor-assistant-web` добавить:
+
+```text
+src/tutor_assistant_web/modules/practice/
+├── __init__.py
+├── module.py
+├── models.py
+├── schemas.py
+├── repository.py
+├── application.py
+├── routes.py
+└── analytics.py
 ```
 
-После rollout добавить проверки каждого student `practice-config.js`:
+Плюс Alembic migration и tests.
 
-- syntax;
-- competency IDs существуют в catalog;
-- generator keys существуют в registry;
-- нет duplicate mapping;
-- storageKey уникален.
+## 24. Data model v1
 
----
+### 24.1. `practice_profiles`
 
-## 15. Реализация по фазам
+Одна canonical snapshot на student:
 
-# Phase 0 — Contracts and regression baseline
-
-### Цель
-
-Зафиксировать существующие contracts перед изменением UI.
-
-### Изменения
-
-1. Добавить `shared/practice/` skeleton.
-2. Зафиксировать data schemas в code comments/tests.
-3. Добавить contract validation helper.
-4. Не менять ни один student index.
-5. Расширить CI paths/checks.
-
-### Acceptance criteria
-
-- существующие dashboard tests проходят без изменений поведения;
-- practice modules импортируются в Node;
-- отсутствует side effect при import;
-- schemas покрыты unit tests.
-
----
-
-# Phase 1 — State + Scheduler + Selector
-
-### Цель
-
-Получить полностью протестированную бизнес-логику без DOM.
-
-### Изменения
-
-- `practice-state.js`;
-- `practice-storage.js`;
-- `practice-scheduler.js`;
-- `practice-selector.js`;
-- `random.js`.
-
-### Acceptance criteria
-
-- deterministic tests;
-- manual review priority;
-- due/overdue selection;
-- interleaving constraints;
-- reload-safe session model;
-- corrupted storage recovery;
-- competence state isolation.
-
----
-
-# Phase 2 — Generator framework + Answer Engine
-
-### Цель
-
-Создать безопасный детерминированный генераторный framework.
-
-### Изменения
-
-- registry;
-- generator contract validator;
-- answer engine;
-- 5 probability generators;
-- mass-seed regression tests.
-
-### Acceptance criteria
-
-- 1000 seed на generator без invalid exercise;
-- reference answer всегда принимается validator;
-- одинаковый seed полностью воспроизводим;
-- нет `Math.random()` в generators;
-- нет `eval`/`Function` для answer parsing.
-
----
-
-# Phase 3 — Pilot config: Xenia
-
-### Цель
-
-Связать существующие `t5_*` competency IDs с generators.
-
-### Изменения
-
-Создать:
-
-`students/xenia_klykova/site/practice-config.js`
-
-Первые competencies:
-
-- `t5_product`;
-- `t5_sum`;
-- `t5_complement`;
-- `t5_bernoulli`;
-- `t5_combinatorics`.
-
-### Acceptance criteria
-
-- все IDs реально присутствуют в catalog;
-- all generator mappings resolve;
-- no change to heatmap levels;
-- existing evidence links remain intact.
-
----
-
-# Phase 4 — Practice UI pilot
-
-### Цель
-
-Добавить рабочую daily session в Xenia `index.html`.
-
-### Изменения
-
-- practice section markup;
-- shared `practice.css`;
-- `practice-ui.js`;
-- adapter init в student `dashboard.js` или новом `practice.js`;
-- status linkage к competence map.
-
-Предпочтительный startup:
-
-```js
-initStudentDashboard(...)
-initPracticeDashboard(...)
+```text
+id
+organization_id
+student_id
+schema_version
+revision
+state_jsonb
+created_at
+updated_at
 ```
 
-Два init должны быть изолированы: ошибка practice init не должна ломать основной dashboard.
+Unique constraint:
 
-### Acceptance criteria
+```text
+(organization_id, student_id)
+```
 
-- 5 упражнений формируются;
-- reload продолжает session;
-- ответ проверяется;
-- hint flow работает;
-- rating обновляет scheduler;
-- completion summary показывается;
-- storage state воспроизводим;
-- keyboard/mobile accessibility.
+`revision` увеличивается при каждом accepted mutation.
 
----
+### 24.2. `practice_events`
 
-# Phase 5 — Competency dialog integration
+Immutable/queryable event log:
 
-### Цель
+```text
+id
+event_id              unique idempotency key
+organization_id
+student_id
+session_id
+exercise_id
+competency_id
+generator_key
+generator_version
+difficulty
+attempt_count
+hints_used
+outcome
+rating
+duration_ms
+occurred_at
+received_at
+client_instance_id
+payload_version
+```
 
-Сделать heatmap и practice единой learning map.
+Indexes минимум:
 
-### Изменения
+```text
+(student_id, occurred_at desc)
+(student_id, competency_id, occurred_at desc)
+(student_id, outcome, occurred_at desc)
+(event_id unique)
+```
 
-В карточку компетенции добавить:
+### 24.3. Почему нужны snapshot + events
 
-- schedule status;
-- last attempt;
-- next due;
-- practice CTA.
+Snapshot обеспечивает быстрый bootstrap daily practice. Event log обеспечивает idempotent sync, teacher analytics, аудит и будущую миграцию scheduler/retention model.
 
-### Acceptance criteria
+## 25. PracticeState v2 для sync
 
-- существующий level picker работает без изменений;
-- `reviewQueue` semantics сохранена;
-- ручной override немедленно отражается в practice candidate pool;
-- нет circular import между map и practice modules.
-
----
-
-# Phase 6 — Lesson outcome linking
-
-### Цель
-
-Убрать ручное дублирование активации новых изученных компетенций.
-
-### Изменения
-
-- добавить optional `competencyId` в lesson outcomes;
-- registry validation;
-- activation helper;
-- idempotent sync.
-
-### Acceptance criteria
-
-- старые lesson records остаются валидными;
-- новая связь machine-readable;
-- повторный запуск sync не сбрасывает interval progress;
-- удаление старого lesson record не уничтожает history.
-
----
-
-# Phase 7 — Pipeline support
-
-### Цель
-
-Связать post-lesson content pipeline с practice metadata.
-
-### Изменения
-
-- `pipeline/prompts/04_spaced_practice.md`;
-- validation utility для generated mappings;
-- documentation rules.
-
-### Acceptance criteria
-
-- pipeline не создаёт arbitrary competency IDs;
-- generator keys валидируются;
-- generated config patch не трогает history;
-- manual review before applying remains possible.
-
----
-
-# Phase 8 — Rollout to migrated dashboards
-
-Целевые кабинеты по текущему inventory:
-
-- `kirill_zinoviev`;
-- `sofya_kalney`;
-- `timofey`;
-- `volodia_khachaturian`;
-- `xenia_klykova`.
-
-Для каждого:
-
-1. определить релевантные competency IDs;
-2. добавить practice config;
-3. подключить shared practice UI;
-4. добавить initial generator mappings;
-5. прогнать student regression;
-6. проверить mobile/keyboard manually или e2e при появлении браузерного harness.
-
-### Acceptance criteria
-
-- shared engine один;
-- student-specific code содержит только config/adaptation;
-- storageKey unique;
-- no copied generator code.
-
----
-
-# Phase 9 — Legacy dashboards
-
-Отдельно спланировать миграцию:
-
-- `nikol_sarkisyants` — собственная dashboard architecture/test suite;
-- `nastya_pavlova` — неполная/иная миграция;
-- `xenia_klykova/chemistry` — отдельный предметный кабинет.
-
-Не внедрять Practice Engine туда через ad-hoc duplicated UI.
-
-Сначала либо:
-
-1. мигрировать dashboard shell на общий contract;
-
-либо
-
-2. создать официально поддерживаемый adapter interface.
-
-Решение принять после pilot + migrated rollout.
-
----
-
-# Phase 10 — Generator coverage expansion
-
-Приоритет генераторов выбирать по фактическим competence maps и частоте уроков.
-
-Предлагаемый порядок:
-
-1. probability;
-2. vectors;
-3. powers/radicals;
-4. linear/quadratic equations;
-5. motion/work/mixtures;
-6. basic graph reading;
-7. inequalities;
-8. geometry curated bank;
-9. physics;
-10. chemistry.
-
-Не ставить цель «генератор для каждой компетенции» до появления качественного answer contract.
-
-Для геометрии и сложных доказательных задач использовать curated bank раньше полного procedural generator.
-
----
-
-## 16. Curated bank contract
-
-Для задач, которые трудно безопасно генерировать алгоритмически:
+Добавить additive fields:
 
 ```js
 {
-  bankKey: 'geometry.right-triangle.circumradius',
-  version: 1,
-  competencyIds: [...],
-  items: [
+  schemaVersion: 2,
+  revision: 17,
+  clientInstanceId: 'uuid',
+  competencies: {...},
+  sessions: {...},
+  events: [
     {
-      id: '...',
-      prompt: '...',
-      answerSpec: {...},
-      hints: [...],
-      solution: [...],
-      difficulty: 2
+      eventVersion: 2,
+      eventId: 'uuid-or-stable-id',
+      ...
     }
   ]
 }
 ```
 
-Selector выбирает item детерминированно по seed и избегает недавних повторов.
+Migration `v1 → v2`:
 
-Bank data должен проходить schema validation в CI.
+- сохраняет competencies/sessions;
+- существующим локальным events присваивает deterministic migration IDs;
+- повторная миграция идемпотентна;
+- storage key можно оставить прежним при корректной schema migration либо перейти на `*-practice-state-v2` через explicit migration; предпочтительно сохранить key и мигрировать содержимое.
 
----
+## 26. API contract v1
 
-## 17. Difficulty model
-
-MVP difficulty: integer `1..3`.
-
-### Difficulty 1
-
-- один основной навык;
-- простые числа;
-- минимум вычислительного шума;
-- прямое применение правила.
-
-### Difficulty 2
-
-- один навык + интерпретация условия;
-- более разнообразные числа;
-- 2–4 вычислительных шага.
-
-### Difficulty 3
-
-- mixed/subtle version;
-- необходимость выбора метода;
-- дополнительные distractors/условия;
-- остаётся в рамках competency contract.
-
-Выбор difficulty:
+Предпочтительные endpoints:
 
 ```text
-level 1 -> mostly 1
-level 2 -> 1–2
-level 3 -> mostly 2
-level 4 -> 2–3
-recent lapse -> -1 difficulty for remediation
-streak/easy -> optional +1
+GET  /api/v1/practice/me/bootstrap
+POST /api/v1/practice/me/events:batch
+PUT  /api/v1/practice/me/state
+GET  /api/v1/practice/me/state
 ```
 
-Difficulty не должна расти бесконтрольно только из-за длинного интервала.
+Teacher endpoints добавляются Track E.
 
----
+### 26.1. Bootstrap
 
-## 18. Pedagogical event model
+Response:
 
-Каждая завершённая попытка формирует event:
-
-```js
+```json
 {
-  eventVersion: 1,
-  timestamp: '...',
-  sessionId: '...',
-  exerciseId: '...',
-  competencyId: '...',
-  generatorKey: '...',
-  generatorVersion: 1,
-  seed: '...',
-  difficulty: 2,
-  attemptCount: 2,
-  hintsUsed: 1,
-  outcome: 'correct',
-  rating: 'hard',
-  durationMs: 84000
+  "contractVersion": 1,
+  "studentId": "...",
+  "revision": 17,
+  "state": {...},
+  "serverTime": "..."
 }
 ```
 
-Для MVP не обязательно хранить бесконечный event log в localStorage. Возможные стратегии:
+### 26.2. Event batch
 
-- хранить последние N events;
-- агрегировать counters;
-- сохранять последний event per competency.
+- принимает до bounded N events;
+- `eventId` обеспечивает idempotence;
+- повторная доставка одинакового batch безопасна;
+- неизвестный student/tenant отклоняется server-side;
+- payload validation запрещает произвольные fields вне версии контракта.
 
-Рекомендуемый MVP: capped history 100–200 events + aggregate state.
+### 26.3. Optimistic snapshot update
 
-Причина: пригодится для диагностики scheduler и будущей backend migration без unbounded localStorage growth.
+Client отправляет `baseRevision`. Несовпадение возвращает `409 Conflict` и canonical latest snapshot.
 
----
+## 27. Client architecture: local-first sync
 
-## 19. Resource limits
-
-Practice Engine должен иметь bounded state.
-
-Ограничить:
-
-- sessions history;
-- event history;
-- generated exercise cache;
-- remediation attempts;
-- daily exercise count.
-
-Не сохранять полный HTML prompt/solution в history, если exercise воспроизводится по generator version + seed.
-
-Сохранять только идентификаторы и результат.
-
----
-
-## 20. Security / privacy
-
-Репозиторий и GitHub Pages статические; student data в текущей модели находится в browser storage.
-
-Требования:
-
-- не добавлять секреты/API keys;
-- не отправлять ответы ученика внешним сервисам в MVP;
-- не использовать third-party analytics без отдельного решения;
-- user input выводить через `textContent`, а не `innerHTML`;
-- generator prompt может содержать trusted static markup только через контролируемый renderer;
-- answer parser без eval;
-- future backend должен обеспечивать authz/tenant isolation server-side.
-
-При backend rollout персональные результаты не должны попадать в публичный Git repository.
-
----
-
-## 21. Reliability / error isolation
-
-Practice Engine не является причиной недоступности основного учебного кабинета.
-
-Инициализация должна иметь boundary:
+Синхронный API текущего `PracticeEngine` сохраняется. Async network logic выносится рядом:
 
 ```text
-lesson/dashboard shell — работает
-competence map         — работает
-practice               — при ошибке показывает локальный fallback
+shared/practice/practice-sync.js
+shared/practice/practice-sync-merge.js
+shared/practice/practice-sync-client.js
 ```
 
-Ошибки generator registry/config должны обнаруживаться CI. Runtime fallback нужен для corrupted local state/storage/environment failure.
+Flow:
+
+1. кабинет мгновенно загружает local state;
+2. sync coordinator запрашивает remote bootstrap;
+3. remote/local state reconciliation выполняется pure function;
+4. engine получает reconciled snapshot/state через controlled rehydrate path;
+5. новые completed events складываются в local outbox;
+6. outbox отправляется batch-ами с retry/backoff;
+7. accepted revision сохраняется локально;
+8. offline session продолжает работать.
+
+Никакой network request не выполняется внутри generators/scheduler.
+
+## 28. Conflict policy
+
+Merge должен быть детерминированным и покрытым property tests.
+
+### 28.1. Events
+
+Union по `eventId`.
+
+### 28.2. Competency schedule
+
+Canonical server state имеет приоритет после успешного event replay. Если реализуется snapshot merge до server replay, более свежий `lastAttemptAt` побеждает только при совместимой event ancestry.
+
+### 28.3. Sessions
+
+- `completed` имеет приоритет над `active` той же даты;
+- одинаковый `exerciseIds` допускает merge progress;
+- разные exercise lists для одной даты считаются conflict, canonical server session сохраняется, локальный вариант остаётся diagnostic record до ack;
+- ни одна completed attempt не удаляется из event log.
+
+### 28.4. Clock
+
+Ordering опирается на server revision/event receipt плюс `occurredAt` как учебный metadata. Клиентское время не является единственным источником истины.
+
+## 29. Authentication and hosting decision
+
+Секреты нельзя встраивать в публичный `students-26-27`.
+
+Предпочтительный production topology: student dashboard доступен через authenticated `tutor-assistant-web` portal/same-origin route либо через контролируемый portal handoff с short-lived scoped credential.
+
+Для первого production rollout рекомендуется same-origin путь, потому что в `tutor-assistant-web` уже существует student login/session model. Это упрощает HttpOnly session, CSRF/CORS policy и tenant isolation.
+
+Если GitHub Pages остаётся отдельным origin на переходном этапе, требуется отдельный security review для token handoff. Long-lived bearer token в repository source запрещён.
+
+## 30. LocalStorage migration rollout
+
+Порядок для каждого student:
+
+1. backend profile отсутствует;
+2. client обнаруживает local PracticeState;
+3. authenticated first sync создаёт remote profile из local snapshot + events;
+4. server возвращает revision;
+5. client помечает migration complete;
+6. далее local storage используется как cache/outbox;
+7. teacher analytics включается только после успешной server binding.
+
+Rollback: feature flag `serverSync:false` возвращает local-only режим без потери локальной истории.
+
+## 31. Reliability и observability Track D
+
+Metrics/logging:
+
+- sync success/failure count;
+- conflict rate;
+- outbox size;
+- bootstrap latency;
+- event ingestion duplicates;
+- schema validation failures;
+- last successful sync per student;
+- profiles with stale sync > policy threshold.
+
+Server audit должен фиксировать administrative access/export, при этом обычные practice events остаются в domain event table.
+
+## 32. Acceptance criteria Track D
+
+- один student открывает кабинет на двух устройствах и видит одну canonical history;
+- offline completion позже синхронизируется без потери events;
+- duplicate batch не увеличивает attempts дважды;
+- 409 conflict восстанавливается автоматически или показывает безопасный retry state;
+- tenant isolation тестируется server-side;
+- local-only fallback сохраняется;
+- corrupted remote payload не ломает student dashboard;
+- migration v1 → v2 сохраняет интервалы и history;
+- backend backup/restore включает practice tables.
 
 ---
 
-## 22. Backward compatibility
+# TRACK E — retention + teacher analytics
 
-Обязательные сохранённые контракты:
+## 33. Цель Track E
 
-- существующие student URLs;
-- lesson page URLs;
-- heatmap levels 0–4;
-- current competence state v2;
-- `reviewQueue`;
-- teacherSeed;
-- evidence links;
-- old lesson registry records;
-- theme storage keys;
-- dashboard accessibility behavior.
+Сделать накопленные practice events полезными для подготовки преподавателя к следующему занятию и для оценки устойчивости навыков во времени.
 
-Запрещено в рамках feature:
+Analytics использует server event log после Track D. Локальные diagnostics остаются вспомогательными.
 
-- массово переименовывать competency IDs;
-- менять смысл уровня 0–4;
-- сбрасывать current localStorage;
-- удалять legacy fallback pages;
-- заменять student dashboard architecture одновременно с Practice Engine rollout.
+## 34. Терминология
 
----
+Ввести два отдельных показателя:
 
-## 23. Rollout strategy
+### `masteryLevel`
 
-### Stage A — hidden engine
+Педагогическая оценка 0–4 из competence map.
 
-- business logic + tests;
-- UI ещё не подключён.
+### `retentionIndex`
 
-### Stage B — Xenia pilot
+Операционный индекс устойчивости retrieval practice 0–100. Он не называется вероятностью воспоминания и не подменяет mastery.
 
-- visible practice card;
-- probability only;
-- localStorage only.
+Индекс используется для сортировки рисков и trend analytics.
 
-### Stage C — stabilization
+## 35. Retention Index v1
 
-- исправление реальных generator/scheduler проблем;
-- подтверждение reload/session persistence;
-- UX polishing.
+Первую версию делать прозрачной и детерминированной. Inputs per competency:
 
-### Stage D — migrated dashboards
+- последние N practice events;
+- correctness;
+- attempts;
+- hints;
+- rating;
+- duration relative to expected time, если generator предоставляет baseline;
+- current interval step/days;
+- lapses и repeated lapse;
+- overdue status.
 
-- подключение общего UI;
-- добавление generator mappings по текущим темам.
+Предлагаемая decomposition:
 
-### Stage E — lesson pipeline automation
-
-- competency mapping from lesson registry;
-- prompt support.
-
-### Stage F — legacy/other subjects
-
-- Nikol/Nastya/chemistry после архитектурной унификации.
-
-### Stage G — backend sync
-
-- только при реальной потребности в multi-device history/teacher analytics.
-
----
-
-## 24. Feature flags
-
-Для безопасного rollout student config должен иметь:
-
-```js
-enabled: true | false
+```text
+retrievalSuccess   0..1
+independence       0..1
+spacingStrength    0..1
+lapsePenalty       0..1
 ```
 
-Дополнительно:
+Стартовая формула должна жить в отдельном pure module и иметь version:
+
+```text
+retentionIndexVersion = 1
+```
+
+Пример весов для пилота:
+
+```text
+45% retrieval success
+25% independence from hints/retries
+20% spacing strength
+10% lapse/overdue adjustment
+```
+
+Конкретные коэффициенты утверждаются только вместе с unit tests и real-data review. Изменение весов требует version bump, чтобы historical charts оставались объяснимыми.
+
+## 36. Retention categories
+
+Teacher UI показывает также категорию, чтобы число 0–100 не воспринималось как абсолютная истина:
+
+```text
+stable      — устойчиво
+watch       — стоит проверить
+fragile     — высокий риск забывания
+rebuild     — повторные провалы
+insufficient-data — мало наблюдений
+```
+
+Минимум 2–3 retrieval events рекомендуется до показа числового индекса; до этого выводится `insufficient-data`.
+
+## 37. Analytics aggregates
+
+На ученика:
+
+- due today;
+- overdue count;
+- overdue days distribution;
+- repeated lapses;
+- fragile competencies;
+- hint dependence;
+- first-attempt accuracy;
+- completion rate daily sessions;
+- median/percentile duration;
+- practice consistency по календарным дням;
+- generator coverage gaps;
+- last successful sync;
+- retention trend 7/30 practice events или calendar window.
+
+На competency:
+
+- mastery 0–4;
+- retention category/index;
+- current due date;
+- current interval;
+- attempts/correct/lapses/streak;
+- last N outcomes;
+- hints/retries trend;
+- average duration;
+- source lesson/date;
+- current generator/bank;
+- recommended teacher action.
+
+## 38. Teacher action rules v1
+
+Rules должны быть explainable:
+
+```text
+repeatedLapse >= 2
+→ «Разобрать навык на ближайшем занятии»
+
+overdueDays >= 7
+→ «Вернуть в обязательный короткий блок»
+
+masteryLevel >= 3 + retention fragile
+→ «Проверить сохранность: уровень освоения высокий, retrieval просел»
+
+masteryLevel <= 2 + retention stable
+→ «Есть положительная динамика, рассмотреть teacher reassessment»
+
+high hint dependence
+→ «Проверить самостоятельность решения»
+```
+
+Rules формируют recommendation, heatmap level автоматически не изменяется.
+
+## 39. Teacher UI в `tutor-assistant-web`
+
+Добавить student page section:
+
+```text
+/students/{student_id}/practice
+```
+
+Блоки:
+
+1. **Сегодня** — due/overdue/backlog;
+2. **Требуют внимания** — repeated lapse/fragile;
+3. **Устойчивые навыки** — контрольные long-interval skills;
+4. **Последние сессии**;
+5. **Retention × Mastery matrix**;
+6. **Generator coverage**;
+7. **Sync health**.
+
+## 40. Pre-lesson brief
+
+Отдельный aggregate endpoint/service:
+
+```text
+build_pre_lesson_practice_brief(student_id)
+```
+
+Результат содержит максимум педагогически полезной информации без длинного event log:
+
+```text
+3 skills requiring attention
+2 overdue
+1 repeated lapse
+1 mastery/retention mismatch
+last practice session summary
+recommended warm-up competencies
+```
+
+Позднее этот brief может использоваться desktop Tutor Assistant или lesson generation pipeline.
+
+## 41. Privacy / access control analytics
+
+- student видит только собственные practice data;
+- parent — только связанных students согласно существующей identity model;
+- tutor/admin — students своей organization;
+- raw answer strings по возможности не сохраняются server-side, достаточно normalized event metadata;
+- public Git repository не содержит personal practice history;
+- export/delete policy добавляется вместе с backend module.
+
+## 42. Acceptance criteria Track E
+
+- teacher page строится из canonical server data;
+- retentionIndex versioned и deterministic;
+- mastery/retention отображаются как разные оси;
+- рекомендация объясняет, какие события её вызвали;
+- insufficient-data корректно обрабатывается;
+- analytics не требует чтения raw student input;
+- pre-lesson brief покрыт snapshot tests;
+- изменение retention formula не переписывает historical event log.
+
+---
+
+## 43. Общая последовательность реализации
+
+Порядок выбран по зависимостям и blast radius.
+
+### Milestone 1 — Lesson automation foundation
+
+1. future-date guard + tests;
+2. Stage 04 JSON schema;
+3. Stage 04 validator/patch builder;
+4. executable post-lesson entrypoint;
+5. Xenia 31.08 regression fixture.
+
+**Gate:** новый урок проходит end-to-end metadata update idempotently.
+
+### Milestone 2 — Activation migration
+
+1. `activation` policy contract;
+2. backward compatibility aliases;
+3. Xenia/Nastya pilot migration;
+4. Nikol historical outcome backfill;
+5. остальные кабинеты;
+6. deprecation warning для new `active:true` mappings.
+
+**Gate:** future lessons safe, новые skills активируются по фактической дате.
+
+### Milestone 3 — Coverage quality gate
+
+1. coverage audit utility;
+2. dispositions/waivers contract;
+3. historical baseline;
+4. GitHub Actions job;
+5. strict latest-lesson rule;
+6. ratchet to strict per student.
+
+**Gate:** CI исключает silent practice coverage drift.
+
+### Milestone 4 — Practice sync contract/backend
+
+Работа затрагивает два репозитория.
+
+`students-26-27`:
+
+- PracticeState v2;
+- event IDs;
+- sync client/coordinator;
+- merge/outbox tests;
+- feature flag.
+
+`tutor-assistant-web`:
+
+- practice module;
+- DB migration;
+- API contract;
+- authz;
+- event idempotence;
+- optimistic concurrency;
+- backup/restore coverage.
+
+**Gate:** multi-device test и offline replay проходят.
+
+### Milestone 5 — Retention & teacher analytics
+
+1. analytics aggregation layer;
+2. retentionIndex v1;
+3. teacher student-practice page;
+4. pre-lesson brief;
+5. mastery/retention mismatch rules;
+6. trend/coverage/sync health.
+
+**Gate:** преподаватель перед занятием получает короткий объяснимый список skills requiring attention.
+
+---
+
+## 44. Предлагаемая серия PR
+
+Чтобы review оставался локальным и понятным:
+
+1. `practice: guard lesson activation by lesson date`
+2. `pipeline: define spaced-practice stage result schema`
+3. `pipeline: add deterministic stage-04 validator and patch builder`
+4. `pipeline: require post-lesson practice stage`
+5. `practice: introduce explicit activation policy`
+6. `students: migrate lesson-based activation in pilot dashboards`
+7. `students: complete activation migration across dashboards`
+8. `practice: add lesson coverage audit`
+9. `ci: enforce new-lesson practice coverage`
+10. `practice: add state-v2 event identity and sync contracts`
+11. `practice: add local-first sync coordinator`
+12. cross-repo `tutor-assistant-web: add practice persistence API`
+13. cross-repo `practice: enable authenticated server sync pilot`
+14. cross-repo `practice: roll out sync to students`
+15. `tutor-assistant-web: add retention aggregates`
+16. `tutor-assistant-web: add teacher practice analytics`
+17. `practice: add pre-lesson brief integration`
+
+Каждый PR должен сохранять green current dashboard matrix.
+
+---
+
+## 45. Test strategy
+
+### 45.1. Stage 04
+
+- valid exact mapping;
+- unknown competency;
+- unknown generator;
+- generator competency mismatch;
+- ambiguous mapping;
+- curated/manual/none dispositions;
+- repeated run zero diff;
+- lesson exists, registry entry missing;
+- registry entry exists, metadata partial;
+- state/history files untouched.
+
+### 45.2. Activation
+
+- past/today/future boundary;
+- timezone-independent calendar date;
+- migration preserving interval;
+- manual override;
+- existing active state with new lesson policy;
+- future planned lesson.
+
+### 45.3. Coverage
+
+- strict current lesson;
+- historical baseline ratchet;
+- explicit waiver;
+- curated coverage;
+- intentional no-practice;
+- unknown ID hard failure;
+- report deterministic ordering.
+
+### 45.4. Sync
+
+- v1→v2 migration;
+- eventId idempotence;
+- duplicate batch;
+- offline outbox;
+- device A/device B bootstrap;
+- 409 reconciliation;
+- same-day session conflict;
+- server unavailable;
+- auth expired;
+- tenant isolation;
+- corrupted payload;
+- retry/backoff bounded;
+- local session remains usable.
+
+### 45.5. Analytics
+
+- empty history;
+- insufficient data;
+- stable skill;
+- repeated lapse;
+- hint dependence;
+- mastery/retention mismatch;
+- versioned retention calculation;
+- aggregate timezone boundaries;
+- teacher authz;
+- pre-lesson brief deterministic ranking.
+
+---
+
+## 46. CI architecture after roadmap
+
+`students-26-27` minimum jobs:
+
+```text
+student dashboard regression
+shared practice engine
+practice config validation
+lesson practice coverage audit
+pipeline Stage 04 contract tests
+MathML contract tests
+index inventory
+```
+
+`tutor-assistant-web` minimum additions:
+
+```text
+practice API unit/integration tests
+Alembic migration test
+practice authz tests
+idempotency/concurrency tests
+analytics tests
+cross-repo contract fixtures
+```
+
+Cross-repo contract version mismatch должен обнаруживаться fixture/schema tests до production deployment.
+
+---
+
+## 47. Rollout flags
+
+Student config/shared config должен позволять независимое включение:
 
 ```js
 features: {
   remediation: true,
   competencyDialogStatus: true,
-  lessonAutoActivation: false
+  lessonAutoActivation: true,
+  serverSync: false,
+  retentionStudentView: false
 }
 ```
 
-Это позволит включать функции поэтапно без ветвления shared code.
-
----
-
-## 25. Observability без внешней аналитики
-
-MVP может иметь локальный debug summary, доступный разработчику через pure function:
-
-```js
-getPracticeDiagnostics(state, config)
-```
-
-Возвращает:
-
-- active count;
-- due count;
-- overdue count;
-- invalid config count;
-- last session;
-- storage schema version.
-
-Не выводить подробный debug UI ученику.
-
----
-
-## 26. Отдельные quality gates перед rollout
-
-### Gate 1 — Scheduler correctness
-
-Все state/scheduler/selector unit tests green.
-
-### Gate 2 — Generator correctness
-
-Mass-seed tests green, reference answer validation green.
-
-### Gate 3 — Existing dashboard compatibility
-
-Current dashboard matrix green.
-
-### Gate 4 — Pilot UI
-
-Xenia regression + accessibility/static checks green.
-
-### Gate 5 — Persistence
-
-Manual/browser check reload/reopen session.
-
-### Gate 6 — Multi-student rollout
-
-Каждый config validated against catalog + registry.
-
----
-
-## 27. Browser/manual verification checklist
-
-Для пилота проверить минимум:
-
-1. первый вход без practice state;
-2. начало сессии;
-3. правильный ответ;
-4. неправильный ответ;
-5. hint 1/2/3;
-6. rating;
-7. переход следующего упражнения;
-8. reload на упражнении 3/5;
-9. reload после submit до rating;
-10. завершение session;
-11. повторное открытие в тот же день;
-12. наступление следующего due date через injected/test date;
-13. manual reviewQueue override;
-14. localStorage unavailable simulation;
-15. corrupted state;
-16. mobile layout;
-17. keyboard-only;
-18. light/dark theme;
-19. dialog карты компетенций;
-20. existing lesson navigation/archive.
-
----
-
-## 28. Proposed implementation commits
-
-Предпочтительно маленькие проверяемые commits:
-
-1. `practice: add state and storage contracts`
-2. `practice: add scheduler and daily selector`
-3. `practice: add seeded random and generator registry`
-4. `practice: add answer validation engine`
-5. `practice: add probability generators`
-6. `ci: run shared practice regression suite`
-7. `xenia: add spaced-practice configuration`
-8. `practice: add shared daily session UI`
-9. `xenia: integrate daily practice into dashboard`
-10. `practice: expose schedule state in competency dialog`
-11. `lessons: link outcomes to competency ids`
-12. `pipeline: add spaced-practice metadata stage`
-13. `practice: roll out shared UI to migrated dashboards`
-14. `docs: document practice architecture and operations`
-
-Не объединять generator framework, UI и multi-student rollout в один огромный commit.
-
----
-
-## 29. Definition of Done для MVP
-
-MVP считается завершённым, когда:
-
-- [ ] shared Practice Engine существует отдельно от student pages;
-- [ ] PracticeState v1 имеет migration/normalization tests;
-- [ ] scheduler deterministic;
-- [ ] selector учитывает due/overdue/manual review/interleaving;
-- [ ] seeded generator framework работает;
-- [ ] answer engine не использует executable parsing;
-- [ ] минимум 5 probability generators покрыты массовыми tests;
-- [ ] Xenia `index.html` показывает daily practice;
-- [ ] session восстанавливается после reload;
-- [ ] rating обновляет next due;
-- [ ] practice state не меняет mastery state;
-- [ ] heatmap продолжает работать;
-- [ ] manual reviewQueue влияет на daily selection;
-- [ ] existing dashboard tests green;
-- [ ] new practice tests включены в GitHub Actions;
-- [ ] corrupted/unavailable storage не ломает dashboard;
-- [ ] mobile + keyboard flow проверен;
-- [ ] документированы ограничения localStorage/multi-device;
-- [ ] diff self-review выполнен;
-- [ ] CI на feature branch green.
-
----
-
-## 30. Definition of Done для полного rollout
-
-- [ ] Practice Engine подключён ко всем migrated dashboards;
-- [ ] student configs проходят central validation;
-- [ ] достаточное покрытие generators для текущих активных тем;
-- [ ] lesson outcomes используют competencyId там, где есть точное соответствие;
-- [ ] pipeline умеет безопасно предлагать practice mappings;
-- [ ] legacy dashboards имеют согласованный migration/adapter plan;
-- [ ] CI запускает specialized practice/generator tests;
-- [ ] отсутствует duplicated core practice code в student directories;
-- [ ] state schema и storage keys документированы;
-- [ ] rollout не изменил публичные URL и старые материалы.
-
----
-
-## 31. Риски и меры
-
-### Риск: математически некорректный генератор
-
-Меры:
-
-- deterministic pure generator;
-- mass-seed tests;
-- independent test oracle;
-- bounded parameter domains;
-- curated bank для сложных типов.
-
-### Риск: scheduler слишком агрессивен
-
-Меры:
-
-- короткая прозрачная interval table;
-- configurable policy;
-- max daily quota;
-- mastery-sensitive start interval;
-- real-use review после pilot.
-
-### Риск: ученику надоедают однотипные формулировки
-
-Меры:
-
-- surface-context variants;
-- generator template pools;
-- interleaving;
-- curated items;
-- duplicate-seed avoidance.
-
-### Риск: localStorage теряется / разные устройства
-
-Меры:
-
-- storage adapter abstraction;
-- явно документировать MVP limit;
-- не делать localStorage schema несовместимой с future backend event model.
-
-### Риск: смешение teacher mastery и student self-rating
-
-Меры:
-
-- scheduler не меняет `studentLevels` автоматически;
-- rating влияет только на practice state;
-- отдельный teacher decision может обновлять mastery позже.
-
-### Риск: чрезмерный scope
-
-Меры:
-
-- pilot only probability;
-- без runtime LLM;
-- без backend;
-- без geometry procedural generation в MVP;
-- legacy dashboards позже.
-
-### Риск: CI даёт ложную уверенность
-
-Меры:
-
-- practice suite отдельным обязательным step;
-- generator mass-seed test;
-- existing student matrix не заменяется;
-- specialized model/lab tests должны позднее быть включены в общий quality gate независимо от этой feature.
-
----
-
-## 32. Осознанно не входит в MVP
-
-- облачная синхронизация прогресса;
-- аккаунты/авторизация;
-- teacher analytics dashboard;
-- push/email reminders;
-- runtime LLM generation;
-- автоматическая оценка доказательств/развёрнутых решений;
-- полный symbolic algebra CAS;
-- FSRS parameters optimization;
-- автоматическое снижение/повышение heatmap mastery;
-- глобальная миграция Nikol/Nastya/chemistry;
-- gamification/streak badges как самостоятельная система.
-
-Эти функции должны добавляться только после подтверждения полезности базового daily practice.
-
----
-
-## 33. Следующий инженерный шаг
-
-После принятия этого плана начать Phase 0–2 без изменения student UI:
+Backend/teacher analytics feature flags:
 
 ```text
-inspect current shared dashboard contracts
-→ add practice state/storage
-→ add scheduler/selector
-→ add deterministic random
-→ add generator registry
-→ add answer engine
-→ add probability generators
-→ focused tests
-→ full existing dashboard tests
-→ diff review
+PRACTICE_SYNC_ENABLED
+PRACTICE_ANALYTICS_ENABLED
+PRACTICE_RETENTION_INDEX_VERSION
 ```
 
-Только после зелёных core tests переходить к пилотной интеграции в `students/xenia_klykova/site/index.html`.
+Это обеспечивает rollback одного слоя без отключения daily Practice Engine.
 
-Такой порядок ограничивает blast radius и позволяет локализовать ошибки business logic до изменения пользовательского кабинета.
+---
+
+## 48. Risks and mitigations
+
+### Риск: Stage 04 ошибочно связывает outcome с похожим skill
+
+Меры:
+
+- auto-apply только `confidence=exact`;
+- существующие IDs/registry как whitelist;
+- ambiguous status;
+- evidence в stage result;
+- CI structural validation.
+
+### Риск: planned future lesson активирует задания заранее
+
+Меры:
+
+- calendar-date guard в shared activation function;
+- dedicated future-date tests;
+- config policy `activation:'lesson'`.
+
+### Риск: historical lesson data неполно
+
+Меры:
+
+- baseline + ratchet;
+- strict policy сначала для новых уроков;
+- student-by-student backfill;
+- explicit manual/none dispositions.
+
+### Риск: две версии состояния на разных устройствах
+
+Меры:
+
+- event IDs;
+- canonical server revision;
+- local outbox;
+- deterministic conflict policy;
+- immutable event ingestion.
+
+### Риск: сервер становится single point of failure
+
+Меры:
+
+- local-first session;
+- cached state;
+- retry/backoff;
+- feature-flag rollback;
+- backend backup/restore.
+
+### Риск: retentionIndex воспринимается как абсолютная педагогическая оценка
+
+Меры:
+
+- отдельный термин `retentionIndex`;
+- category + explanation;
+- `insufficient-data`;
+- mastery остаётся отдельной teacher-owned величиной;
+- versioned formula.
+
+### Риск: cross-repo contract drift
+
+Меры:
+
+- versioned contract;
+- shared JSON fixtures/schema;
+- compatibility tests в обоих CI;
+- API versioning.
+
+---
+
+## 49. Definition of Done всего post-MVP roadmap
+
+### Lesson lifecycle
+
+- [ ] каждый новый урок проходит mandatory Stage 04;
+- [ ] exact mappings применяются idempotently;
+- [ ] gaps классифицируются machine-readably;
+- [ ] future lesson guard покрыт tests;
+- [ ] new mappings используют lesson activation;
+- [ ] семь основных кабинетов мигрированы без потери history.
+
+### Coverage
+
+- [ ] CI показывает coverage per student;
+- [ ] новый practice-eligible outcome не может остаться unexplained;
+- [ ] historical gaps имеют baseline/waiver;
+- [ ] generator/curated/manual/none различаются явно.
+
+### Sync
+
+- [ ] PracticeState v2 мигрирует v1 без потерь;
+- [ ] server profile и immutable events реализованы;
+- [ ] duplicate delivery idempotent;
+- [ ] optimistic concurrency работает;
+- [ ] offline outbox работает;
+- [ ] multi-device сценарий протестирован;
+- [ ] local fallback сохраняется;
+- [ ] security/tenant isolation tests green.
+
+### Analytics
+
+- [ ] retentionIndex v1 versioned;
+- [ ] teacher analytics page доступна по student;
+- [ ] mastery и retention отображаются раздельно;
+- [ ] repeated lapses/overdue/hint dependence видны;
+- [ ] pre-lesson brief генерируется автоматически;
+- [ ] recommendations объяснимы по underlying events.
+
+### Operations
+
+- [ ] оба репозитория имеют совместимые contract tests;
+- [ ] backup/restore включает practice persistence;
+- [ ] observability показывает sync health;
+- [ ] feature flags позволяют безопасный rollback;
+- [ ] документация отражает фактический production flow.
+
+---
+
+## 50. Что остаётся за пределами этого roadmap
+
+После выполнения пяти tracks отдельно рассматриваются:
+
+- FSRS или другая calibrated memory model;
+- push/email reminders;
+- gamification;
+- автоматическая symbolic проверка сложных доказательств;
+- runtime LLM exercise generation;
+- автоматическое изменение mastery level по practice events;
+- глобальная оптимизация scheduler parameters по cohort data.
+
+Эти направления не требуются для того, чтобы система уже сейчас масштабировалась вместе с растущим банком уроков.
+
+---
+
+## 51. Следующий инженерный шаг
+
+Начать с одного небольшого correctness PR:
+
+```text
+future-date guard
+→ unit tests past/today/future
+→ activation policy contract tests
+→ full shared Practice Engine suite
+→ full student dashboard matrix
+```
+
+После зелёного gate переходить к Stage 04 schema/runner. Так сначала устраняется известная runtime-ошибка, затем строится автоматизация поверх исправленного activation contract.
