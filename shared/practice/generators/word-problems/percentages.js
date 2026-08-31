@@ -1,4 +1,4 @@
-import {context,numberSpec} from '../_shared.js';
+import {context,numberSpec} from '../shared.js';
 const IDS=['percent_11','percent_12','percent_13','percent_14'];
 export const percentagesGenerator={key:'word-problems.percentages',version:1,title:'Процентные задачи',competencyIds:IDS,generate(args){return context(this,args,(random,difficulty,options)=>{
   const mode=options.mode||random.pick(['part','whole','ratio','change']),percent=random.pick(difficulty===1?[10,20,25,50]:[5,12,15,20,25,30,40,60,75]),unit=random.int(2,10+difficulty*4)*20;

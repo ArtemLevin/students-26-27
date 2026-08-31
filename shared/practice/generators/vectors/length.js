@@ -1,4 +1,4 @@
-import {context,numberSpec} from '../_shared.js';
+import {context,numberSpec} from '../shared.js';
 const PAIRS=[[3,4,5],[5,12,13],[6,8,10],[8,15,17],[7,24,25]];
 export const vectorLengthGenerator={key:'vectors.length',version:1,title:'Длина вектора',competencyIds:['t2_length'],generate(args){return context(this,args,(random,difficulty)=>{
   const [a,b,length]=random.pick(PAIRS.slice(0,2+difficulty)),x=random.bool()?a:-a,y=random.bool()?b:-b;

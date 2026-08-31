@@ -1,4 +1,4 @@
-import {context,fractionSpec} from '../_shared.js';
+import {context,fractionSpec} from '../shared.js';
 const IDS=['t5_product'];
 export const independentProductGenerator={key:'probability.independent-product',version:1,title:'Произведение вероятностей',competencyIds:IDS,generate(args){return context(this,args,(random,difficulty)=>{
   const denominators=difficulty===1?[2,3,4]:[3,4,5,6],denominator=random.pick(denominators),numerator=random.int(1,denominator-1),trials=random.int(2,difficulty+2);
