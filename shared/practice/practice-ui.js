@@ -3,6 +3,7 @@ import {expectedAnswerDisplay} from './answer-engine.js';
 import {calendarDayDifference} from './practice-scheduler.js';
 
 const byId=id=>document.getElementById(id);
+const practiceDialog=()=>byId('competencyDialog')||byId('topicDialog')||document.querySelector('[data-practice-dialog]');
 const element=(tag,className,text)=>{const node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;};
 const formatDate=value=>value?new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long'}).format(new Date(`${value}T12:00:00`)):'после первой попытки';
 
@@ -72,21 +73,21 @@ class PracticeDashboardController{
   }
   focusPrompt(){requestAnimationFrame(()=>byId('practicePrompt')?.focus());}
   ensureDialog(){
-    const dialog=byId('competencyDialog');if(!dialog||byId('dialogPracticeSchedule'))return;
+    const dialog=practiceDialog();if(!dialog||byId('dialogPracticeSchedule'))return;
     const box=element('div','dialog-practice');box.id='dialogPracticeSchedule';box.hidden=true;const title=element('b','','Интервальное повторение'),status=element('p','');status.id='dialogPracticeStatus';
-    const button=this.button('Решить сейчас','practice-button secondary');button.id='dialogPracticeNow';box.append(title,status,button);dialog.querySelector('.lesson-actions')?.before(box);
+    const button=this.button('Решить сейчас','practice-button secondary');button.id='dialogPracticeNow';box.append(title,status,button);const actions=dialog.querySelector('.lesson-actions,.dialog-actions,[data-practice-actions]');if(actions)actions.before(box);else dialog.firstElementChild?.append(box);
   }
   renderDialog(competencyId){
     const box=byId('dialogPracticeSchedule'),button=byId('dialogPracticeNow'),status=byId('dialogPracticeStatus'),mapping=this.engine.config.competencies[competencyId];if(!box||!button||!status)return;
     box.hidden=!mapping;if(!mapping)return;const entry=this.engine.scheduleFor(competencyId),today=this.engine.today();
     if(!entry?.dueAt)status.textContent='Навык доступен для первой тренировки.';
     else{const delta=calendarDayDifference(today,entry.dueAt);status.textContent=delta<0?'Повторение просрочено.':delta===0?'Повторение запланировано на сегодня.':`Следующее повторение через ${delta} дн. — ${formatDate(entry.dueAt)}.`;}
-    button.onclick=()=>{this.engine.startFocused(competencyId);byId('competencyDialog')?.close?.();this.emit();this.render();byId('practiceSection')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});this.focusPrompt();};
+    button.onclick=()=>{this.engine.startFocused(competencyId);practiceDialog()?.close?.();this.emit();this.render();byId('practiceSection')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});this.focusPrompt();};
   }
 }
 
-export function initPracticeDashboard({config,lessons=[]}={}){
+export function initPracticeDashboard({config,lessons=[],competenceSnapshot=null}={}){
   const root=byId('practiceRoot'),section=byId('practiceSection');if(!root||!config?.enabled){if(section)section.hidden=true;return null;}
-  try{const engine=new PracticeEngine({config,lessons}),controller=new PracticeDashboardController(root,engine);window.__studentPractice=controller;return controller;}
+  try{const engine=new PracticeEngine({config,lessons,competenceSnapshot:competenceSnapshot||window.__studentCompetenceState||null}),controller=new PracticeDashboardController(root,engine);window.__studentPractice=controller;return controller;}
   catch(error){console.error('Failed to initialize practice dashboard',error);root.replaceChildren(element('p','practice-warning','Тренировка временно недоступна. Остальные материалы кабинета продолжают работать.'));return null;}
 }

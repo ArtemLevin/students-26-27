@@ -32,12 +32,20 @@ for(const file of dashboardPaths){
   }
 }
 
+const adapterPaths=['students/nastya_pavlova/site/index.html','students/nikol_sarkisyants/site/index.html'];
+for(const file of adapterPaths){
+  const html=fs.readFileSync(path.join(root,file),'utf8');
+  for(const token of ['id="practiceSection"','id="practiceRoot"','shared/practice/practice.css'])assert.ok(html.includes(token),`${file}: missing ${token}`);
+}
+
 const redirect=fs.readFileSync(path.join(root,'students/volodia_khachaturian/index.html'),'utf8');
 assert.ok(redirect.includes('url=site/index.html'));
 assert.ok(redirect.includes("'#competency-map':'#map'"));
+assert.ok(redirect.includes("'#practice':'#practiceSection'"));
+assert.ok(redirect.includes('site/index.html#practiceSection'));
 assert.ok(redirect.includes('location.replace'));
 
 const chemistry=fs.readFileSync(path.join(root,'students/xenia_klykova/chemistry/site/index.html'),'utf8');
 for(const token of ['class="skip"','href="#content"','aria-labelledby="page-title"','min-height:44px','focus-visible','prefers-reduced-motion','Последнее занятие'])assert.ok(chemistry.includes(token),`chemistry index: missing ${token}`);
 
-console.log(`✓ index inventory: ${indexes.length} entry pages covered, ${dashboardPaths.length} shared dashboards migrated`);
+console.log(`✓ index inventory: ${indexes.length} entry pages covered, ${dashboardPaths.length} shared dashboards migrated, ${adapterPaths.length} practice adapters`);

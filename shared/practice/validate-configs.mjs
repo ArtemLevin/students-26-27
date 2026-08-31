@@ -12,7 +12,9 @@ const SPECS={
   sofya_kalney:{kind:'html',path:'students/sofya_kalney/site/index-19.08.26-base.html'},
   timofey:{kind:'html',path:'students/timofey/site/index-legacy.html'},
   volodia_khachaturian:{kind:'window',path:'students/volodia_khachaturian/competency-map-data.js',global:'COMPETENCY_MAP_DATA'},
-  xenia_klykova:{kind:'html',path:'students/xenia_klykova/site/index-base-2026-07-29.html'}
+  xenia_klykova:{kind:'html',path:'students/xenia_klykova/site/index-base-2026-07-29.html'},
+  nastya_pavlova:{kind:'window',path:'students/nastya_pavlova/competency-map-data.js',global:'COMPETENCY_MAP_DATA'},
+  nikol_sarkisyants:{kind:'html',path:'students/nikol_sarkisyants/site/index-original.html'}
 };
 
 function loadGroups(spec){
