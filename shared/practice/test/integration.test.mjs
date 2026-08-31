@@ -6,12 +6,13 @@ import {PracticeEngine} from '../practice-engine.js';
 import {MemoryPracticeStorage} from '../practice-storage.js';
 import {referenceAnswerForSpec} from '../answer-engine.js';
 import {PRACTICE_CONFIG as XENIA} from '../../../students/xenia_klykova/site/practice-config.js';
+import {LESSONS as XENIA_LESSONS} from '../../../students/xenia_klykova/site/lesson-registry.js';
 
 const today=()=> '2026-08-31',now=()=> '2026-08-31T12:00:00.000Z',levels={t5_product:3,t5_sum:2,t5_complement:2,t5_bernoulli:2,t5_combinatorics:2};
 test('session selection, persistence, checking and scheduling work end to end',()=>{
-  const storage=new MemoryPracticeStorage(null,now),engine=new PracticeEngine({config:XENIA,storage,todayProvider:today,now,competenceSnapshot:{studentLevels:levels,reviewQueue:{}}});
+  const storage=new MemoryPracticeStorage(null,now),engine=new PracticeEngine({config:XENIA,lessons:XENIA_LESSONS,storage,todayProvider:today,now,competenceSnapshot:{studentLevels:levels,reviewQueue:{}}});
   const session=engine.startSession();assert.equal(session.items.length,5);const identity=session.items.map(item=>[item.competencyId,item.seed]);
-  const reloaded=new PracticeEngine({config:XENIA,storage,todayProvider:today,now,competenceSnapshot:{studentLevels:levels,reviewQueue:{}}});assert.deepEqual(reloaded.currentSession().items.map(item=>[item.competencyId,item.seed]),identity);
+  const reloaded=new PracticeEngine({config:XENIA,lessons:XENIA_LESSONS,storage,todayProvider:today,now,competenceSnapshot:{studentLevels:levels,reviewQueue:{}}});assert.deepEqual(reloaded.currentSession().items.map(item=>[item.competencyId,item.seed]),identity);
   reloaded.beginCurrent();const exercise=reloaded.exerciseFor(),answer=referenceAnswerForSpec(exercise.answerSpec),check=reloaded.submitAnswer(answer);assert.equal(check.status,'correct');
   const masterySnapshot=structuredClone(levels),rated=reloaded.rate('good');assert.ok(rated.scheduled.dueAt>'2026-08-31');assert.deepEqual(levels,masterySnapshot);assert.equal(reloaded.state.events.length,1);
 });
