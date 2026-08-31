@@ -24,28 +24,31 @@ export function loadCompetencyGroups(spec,root=ROOT){
   const sandbox={window:{}};vm.createContext(sandbox);vm.runInContext(source,sandbox,{timeout:1500});const value=sandbox.window[spec.global];return normalizeGroups(value.groups||value);
 }
 
-export async function loadPracticeStudentContracts(student,{root=ROOT,registry=new GeneratorRegistry(ALL_GENERATORS)}={}){
+export async function loadPracticeStudentContracts(student,{root=ROOT,registry=new GeneratorRegistry(ALL_GENERATORS),validate=true}={}){
   const spec=PRACTICE_STUDENT_SPECS[student];
   if(!spec)throw new Error(`Unknown practice student: ${student}`);
   const groups=loadCompetencyGroups(spec,root);validateCatalog(groups);const competencyIds=new Set(flattenGroups(groups).map(item=>item.id));
   const configUrl=pathToFileURL(path.join(root,'students',student,'site','practice-config.js')).href;
   const lessonUrl=pathToFileURL(path.join(root,'students',student,'site','lesson-registry.js')).href;
   const {PRACTICE_CONFIG}=await import(configUrl),{LESSONS}=await import(lessonUrl);
-  validatePracticeConfig(PRACTICE_CONFIG,registry,{competencyIds});validateLessonDates(LESSONS);
+  validateLessonDates(LESSONS);
   const policies={lesson:0,always:0,manual:0,disabled:0};
   for(const [id,mapping] of Object.entries(PRACTICE_CONFIG.competencies||{})){
-    if(mapping.activation===undefined)throw new Error(`${student}: ${id} must declare explicit activation after Track B migration`);
-    if(Object.prototype.hasOwnProperty.call(mapping,'active'))throw new Error(`${student}: ${id} still uses deprecated active boolean`);
-    policies[resolveActivationPolicy(mapping)]+=1;
+    if(validate&&mapping.activation===undefined)throw new Error(`${student}: ${id} must declare explicit activation after Track B migration`);
+    if(validate&&Object.prototype.hasOwnProperty.call(mapping,'active'))throw new Error(`${student}: ${id} still uses deprecated active boolean`);
+    try{policies[resolveActivationPolicy(mapping)]+=1;}catch(error){if(validate)throw error;}
   }
-  for(const lesson of LESSONS)for(const outcome of lesson.outcomes||[])if(outcome.competencyId&&!competencyIds.has(outcome.competencyId))throw new Error(`${student}: unknown lesson competencyId ${outcome.competencyId}`);
+  if(validate){
+    validatePracticeConfig(PRACTICE_CONFIG,registry,{competencyIds});
+    for(const lesson of LESSONS)for(const outcome of lesson.outcomes||[])if(outcome.competencyId&&!competencyIds.has(outcome.competencyId))throw new Error(`${student}: unknown lesson competencyId ${outcome.competencyId}`);
+  }
   return {student,groups,competencyIds,PRACTICE_CONFIG,LESSONS,registry,policies};
 }
 
 export async function validateAllPracticeConfigs(){
   const registry=new GeneratorRegistry(ALL_GENERATORS),storageKeys=new Set(),report=[];
   for(const student of Object.keys(PRACTICE_STUDENT_SPECS)){
-    const contracts=await loadPracticeStudentContracts(student,{registry});
+    const contracts=await loadPracticeStudentContracts(student,{registry,validate:true});
     if(storageKeys.has(contracts.PRACTICE_CONFIG.storageKey))throw new Error(`Duplicate practice storageKey: ${contracts.PRACTICE_CONFIG.storageKey}`);storageKeys.add(contracts.PRACTICE_CONFIG.storageKey);
     report.push({student,competencies:Object.keys(contracts.PRACTICE_CONFIG.competencies).length,lessons:contracts.LESSONS.length,policies:contracts.policies});
   }
