@@ -1,12 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {MAX_PRACTICE_EVENTS,PRACTICE_SCHEMA_VERSION,activateCompetency,appendPracticeEvent,createEmptyPracticeState,normalizePracticeState,syncLessonActivations} from '../practice-state.js';
+import {MAX_PRACTICE_EVENTS,PRACTICE_SCHEMA_VERSION,activateCompetency,acknowledgePracticeEvents,appendPracticeEvent,createEmptyPracticeState,normalizePracticeState,syncLessonActivations} from '../practice-state.js';
 import {LocalStoragePracticeStorage} from '../practice-storage.js';
 
 class Storage{constructor(seed={}){this.map=new Map(Object.entries(seed));}getItem(key){return this.map.get(key)??null;}setItem(key,value){this.map.set(key,String(value));}removeItem(key){this.map.delete(key);}}
 const now=()=> '2026-08-31T12:00:00.000Z';
 const lessonConfig={features:{lessonAutoActivation:true},competencies:{skill:{generator:'x',activation:'lesson'}}};
 const lesson=date=>[{date,outcomes:[{competencyId:'skill'}]}];
+const event=(index=0)=>({timestamp:`2026-08-31T12:${String(index%60).padStart(2,'0')}:00.000Z`,sessionId:'s',exerciseId:`e${index}`,competencyId:'skill',generatorKey:'test.generator',generatorVersion:1,seed:String(index),difficulty:1,attemptCount:1,hintsUsed:0,outcome:'correct',rating:'good',durationMs:1});
 
 test('state normalization is idempotent and forward-compatible',()=>{
   const raw={schemaVersion:99,unknown:'safe',competencies:{skill:{status:'active',attempts:'3',futureField:true}},sessions:{},events:[]};
@@ -14,11 +15,18 @@ test('state normalization is idempotent and forward-compatible',()=>{
   assert.deepEqual(second,first);assert.equal(first.schemaVersion,PRACTICE_SCHEMA_VERSION);assert.equal(first.competencies.skill.attempts,3);assert.equal('unknown' in first,false);
 });
 
+test('PracticeState v1 migrates to v2 losslessly and deterministic event IDs are idempotent',()=>{
+  const raw={schemaVersion:1,updatedAt:now(),competencies:{skill:{status:'active',attempts:3,dueAt:'2026-09-03'}},sessions:{'2026-08-31':{sessionId:'s',date:'2026-08-31',status:'completed',items:[]}},events:[event(1)]};
+  const first=normalizePracticeState(raw,now),second=normalizePracticeState(first,now);
+  assert.equal(first.schemaVersion,2);assert.equal(first.revision,0);assert.ok(first.clientInstanceId);assert.equal(first.competencies.skill.attempts,3);assert.equal(first.sessions['2026-08-31'].status,'completed');assert.equal(first.events[0].eventVersion,2);assert.ok(first.events[0].eventId.startsWith('migrated-'));assert.equal(first.sync.outbox.length,1);assert.deepEqual(second,first);
+  const acked=acknowledgePracticeEvents(first,[first.events[0].eventId],now),again=normalizePracticeState(acked,now);assert.equal(again.sync.outbox.length,0);assert.equal(again.events.length,1);
+});
+
 test('storage recovers corrupted JSON and reports unavailable writes',()=>{
   const backend=new Storage({practice:'{broken'}),storage=new LocalStoragePracticeStorage({key:'practice',storage:backend,now});
-  assert.equal(storage.load().schemaVersion,1);assert.equal(storage.diagnostics().recovered,true);
+  assert.equal(storage.load().schemaVersion,PRACTICE_SCHEMA_VERSION);assert.equal(storage.diagnostics().recovered,true);
   const failing=new LocalStoragePracticeStorage({key:'practice',storage:{getItem(){throw new DOMException('blocked','SecurityError');},setItem(){throw new DOMException('blocked','SecurityError');}},now});
-  assert.equal(failing.load().schemaVersion,1);assert.equal(failing.save(createEmptyPracticeState(now)),false);assert.equal(failing.diagnostics().available,false);
+  assert.equal(failing.load().schemaVersion,PRACTICE_SCHEMA_VERSION);assert.equal(failing.save(createEmptyPracticeState(now)),false);assert.equal(failing.diagnostics().available,false);
 });
 
 test('yesterday lesson activates',()=>{
@@ -62,8 +70,8 @@ test('legacy activation remains idempotent without touching mastery',()=>{
   const activated=activateCompetency(first,'skill',{today:'2026-09-01',now});assert.equal(activated.competencies.skill.activatedAt,'2026-08-28T12:00:00.000Z');
 });
 
-test('event history is bounded',()=>{
+test('event history is bounded while unacked outbox remains durable',()=>{
   let state=createEmptyPracticeState(now);
-  for(let index=0;index<MAX_PRACTICE_EVENTS+20;index+=1)state=appendPracticeEvent(state,{timestamp:`2026-08-31T12:${String(index%60).padStart(2,'0')}:00.000Z`,sessionId:'s',exerciseId:`e${index}`,competencyId:'skill',generatorKey:'test.generator',generatorVersion:1,seed:String(index),difficulty:1,attemptCount:1,hintsUsed:0,outcome:'correct',rating:'good',durationMs:1},now);
-  assert.equal(state.events.length,MAX_PRACTICE_EVENTS);assert.equal(state.events.at(-1).exerciseId,`e${MAX_PRACTICE_EVENTS+19}`);
+  for(let index=0;index<MAX_PRACTICE_EVENTS+20;index+=1)state=appendPracticeEvent(state,event(index),now);
+  assert.equal(state.events.length,MAX_PRACTICE_EVENTS);assert.equal(state.events.at(-1).exerciseId,`e${MAX_PRACTICE_EVENTS+19}`);assert.equal(state.sync.outbox.length,MAX_PRACTICE_EVENTS+20);
 });
