@@ -98,6 +98,44 @@ jobs:
       - name: Run scheduler, generator and integration tests
         run: node --test shared/practice/test/*.test.mjs
 
+  practice-coverage:
+    name: practice coverage audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate structural practice contracts
+        run: node shared/practice/validate-configs.mjs
+      - name: Run lesson coverage ratchet
+        shell: bash
+        run: |
+          set -o pipefail
+          node shared/practice/audit-lesson-coverage.mjs \
+            --format markdown \
+            --json-output practice-coverage-report.json \
+            | tee practice-coverage-report.md
+      - name: Publish coverage summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f practice-coverage-report.md ]; then
+            cat practice-coverage-report.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '## Practice coverage audit' >> "$GITHUB_STEP_SUMMARY"
+            echo 'Coverage report was not generated.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: practice-coverage-report
+          path: |
+            practice-coverage-report.json
+            practice-coverage-report.md
+          if-no-files-found: warn
+
   stage-04:
     name: post-lesson Stage 04
     runs-on: ubuntu-latest

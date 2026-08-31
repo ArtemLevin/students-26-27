@@ -7,8 +7,8 @@ import {resolveActivationPolicy,validateLessonDates} from './activation-policy.j
 import {GeneratorRegistry,validatePracticeConfig} from './generator-registry.js';
 import {ALL_GENERATORS} from './generators/index.js';
 
-const ROOT=path.resolve(path.dirname(new URL(import.meta.url).pathname),'../..');
-const SPECS={
+export const ROOT=path.resolve(path.dirname(new URL(import.meta.url).pathname),'../..');
+export const PRACTICE_STUDENT_SPECS={
   kirill_zinoviev:{kind:'window',path:'students/kirill_zinoviev/site/competency-map-data.js',global:'KIRILL_GRADE7_GROUPS'},
   sofya_kalney:{kind:'html',path:'students/sofya_kalney/site/index-19.08.26-base.html'},
   timofey:{kind:'html',path:'students/timofey/site/index-legacy.html'},
@@ -18,27 +18,39 @@ const SPECS={
   nikol_sarkisyants:{kind:'html',path:'students/nikol_sarkisyants/site/index-original.html'}
 };
 
-function loadGroups(spec){
-  const source=fs.readFileSync(path.join(ROOT,spec.path),'utf8');
+export function loadCompetencyGroups(spec,root=ROOT){
+  const source=fs.readFileSync(path.join(root,spec.path),'utf8');
   if(spec.kind==='html')return normalizeGroups(evaluateCatalogExpression(extractArrayExpression(source)));
   const sandbox={window:{}};vm.createContext(sandbox);vm.runInContext(source,sandbox,{timeout:1500});const value=sandbox.window[spec.global];return normalizeGroups(value.groups||value);
 }
 
+export async function loadPracticeStudentContracts(student,{root=ROOT,registry=new GeneratorRegistry(ALL_GENERATORS),validate=true}={}){
+  const spec=PRACTICE_STUDENT_SPECS[student];
+  if(!spec)throw new Error(`Unknown practice student: ${student}`);
+  const groups=loadCompetencyGroups(spec,root);validateCatalog(groups);const competencyIds=new Set(flattenGroups(groups).map(item=>item.id));
+  const configUrl=pathToFileURL(path.join(root,'students',student,'site','practice-config.js')).href;
+  const lessonUrl=pathToFileURL(path.join(root,'students',student,'site','lesson-registry.js')).href;
+  const {PRACTICE_CONFIG}=await import(configUrl),{LESSONS}=await import(lessonUrl);
+  validateLessonDates(LESSONS);
+  const policies={lesson:0,always:0,manual:0,disabled:0};
+  for(const [id,mapping] of Object.entries(PRACTICE_CONFIG.competencies||{})){
+    if(validate&&mapping.activation===undefined)throw new Error(`${student}: ${id} must declare explicit activation after Track B migration`);
+    if(validate&&Object.prototype.hasOwnProperty.call(mapping,'active'))throw new Error(`${student}: ${id} still uses deprecated active boolean`);
+    try{policies[resolveActivationPolicy(mapping)]+=1;}catch(error){if(validate)throw error;}
+  }
+  if(validate){
+    validatePracticeConfig(PRACTICE_CONFIG,registry,{competencyIds});
+    for(const lesson of LESSONS)for(const outcome of lesson.outcomes||[])if(outcome.competencyId&&!competencyIds.has(outcome.competencyId))throw new Error(`${student}: unknown lesson competencyId ${outcome.competencyId}`);
+  }
+  return {student,groups,competencyIds,PRACTICE_CONFIG,LESSONS,registry,policies};
+}
+
 export async function validateAllPracticeConfigs(){
   const registry=new GeneratorRegistry(ALL_GENERATORS),storageKeys=new Set(),report=[];
-  for(const [student,spec] of Object.entries(SPECS)){
-    const groups=loadGroups(spec);validateCatalog(groups);const ids=new Set(flattenGroups(groups).map(item=>item.id));
-    const configUrl=pathToFileURL(path.join(ROOT,'students',student,'site','practice-config.js')).href,lessonUrl=pathToFileURL(path.join(ROOT,'students',student,'site','lesson-registry.js')).href;
-    const {PRACTICE_CONFIG}=await import(configUrl),{LESSONS}=await import(lessonUrl);validatePracticeConfig(PRACTICE_CONFIG,registry,{competencyIds:ids});validateLessonDates(LESSONS);
-    if(storageKeys.has(PRACTICE_CONFIG.storageKey))throw new Error(`Duplicate practice storageKey: ${PRACTICE_CONFIG.storageKey}`);storageKeys.add(PRACTICE_CONFIG.storageKey);
-    const policies={lesson:0,always:0,manual:0,disabled:0};
-    for(const [id,mapping] of Object.entries(PRACTICE_CONFIG.competencies||{})){
-      if(mapping.activation===undefined)throw new Error(`${student}: ${id} must declare explicit activation after Track B migration`);
-      if(Object.prototype.hasOwnProperty.call(mapping,'active'))throw new Error(`${student}: ${id} still uses deprecated active boolean`);
-      policies[resolveActivationPolicy(mapping)]+=1;
-    }
-    for(const lesson of LESSONS)for(const outcome of lesson.outcomes||[])if(outcome.competencyId&&!ids.has(outcome.competencyId))throw new Error(`${student}: unknown lesson competencyId ${outcome.competencyId}`);
-    report.push({student,competencies:Object.keys(PRACTICE_CONFIG.competencies).length,lessons:LESSONS.length,policies});
+  for(const student of Object.keys(PRACTICE_STUDENT_SPECS)){
+    const contracts=await loadPracticeStudentContracts(student,{registry,validate:true});
+    if(storageKeys.has(contracts.PRACTICE_CONFIG.storageKey))throw new Error(`Duplicate practice storageKey: ${contracts.PRACTICE_CONFIG.storageKey}`);storageKeys.add(contracts.PRACTICE_CONFIG.storageKey);
+    report.push({student,competencies:Object.keys(contracts.PRACTICE_CONFIG.competencies).length,lessons:contracts.LESSONS.length,policies:contracts.policies});
   }
   return report;
 }
