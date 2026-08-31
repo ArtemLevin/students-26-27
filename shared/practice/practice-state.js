@@ -1,3 +1,5 @@
+import {isCalendarDate,resolveActivationPolicy} from './activation-policy.js';
+
 export const PRACTICE_SCHEMA_VERSION=1;
 export const MAX_PRACTICE_EVENTS=200;
 export const MAX_PRACTICE_SESSIONS=60;
@@ -5,7 +7,7 @@ export const MAX_PRACTICE_SESSIONS=60;
 const object=value=>value&&typeof value==='object'&&!Array.isArray(value)?value:{};
 const integer=(value,fallback=0,min=0)=>value!==null&&value!==''&&Number.isInteger(Number(value))?Math.max(min,Number(value)):fallback;
 const iso=value=>typeof value==='string'&&Number.isFinite(Date.parse(value))?value:null;
-const date=value=>typeof value==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(value)?value:null;
+const date=value=>isCalendarDate(value)?value:null;
 const text=value=>typeof value==='string'?value:null;
 
 export function createEmptyPracticeState(now=()=>new Date().toISOString()){
@@ -115,15 +117,17 @@ export function activateCompetency(state,competencyId,{today,now=()=>new Date().
 
 export function syncLessonActivations(state,lessons=[],config={},today,now=()=>new Date().toISOString()){
   let next=normalizePracticeState(state,now);
-  if(!config.features?.lessonAutoActivation)return next;
-  const configured=new Set(Object.keys(config.competencies||{}));
+  if(!config.features?.lessonAutoActivation||!isCalendarDate(today))return next;
+  const mappings=config.competencies||{};
   const ordered=[...lessons].sort((a,b)=>String(a.date).localeCompare(String(b.date)));
   for(const lesson of ordered){
+    if(!isCalendarDate(lesson?.date)||lesson.date>today)continue;
     for(const outcome of lesson.outcomes||[]){
-      if(!outcome?.competencyId||!configured.has(outcome.competencyId))continue;
+      const mapping=outcome?.competencyId?mappings[outcome.competencyId]:null;
+      if(!mapping||resolveActivationPolicy(mapping)!=='lesson')continue;
       const existed=next.competencies[outcome.competencyId];
       next=activateCompetency(next,outcome.competencyId,{today,now});
-      if(!existed&&lesson.date)next.competencies[outcome.competencyId].activatedAt=`${lesson.date}T12:00:00.000Z`;
+      if(!existed)next.competencies[outcome.competencyId].activatedAt=`${lesson.date}T12:00:00.000Z`;
     }
   }
   return next;
