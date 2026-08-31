@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import path from 'node:path';
 import {PracticeEngine} from '../practice-engine.js';
 import {MemoryPracticeStorage} from '../practice-storage.js';
 import {referenceAnswerForSpec} from '../answer-engine.js';
@@ -24,5 +25,13 @@ test('all migrated indexes use shared practice UI without copied engine code',()
     const html=fs.readFileSync(`students/${student}/site/index.html`,'utf8'),dashboard=fs.readFileSync(`students/${student}/site/dashboard.js`,'utf8');
     for(const marker of ['id="practiceSection"','id="practiceRoot"','shared/practice/practice.css'])assert.ok(html.includes(marker),`${student}: ${marker}`);
     assert.ok(dashboard.includes('practice-ui.js'));assert.ok(dashboard.includes('initStudentDashboard'));assert.ok(fs.existsSync(`students/${student}/site/practice-config.js`));
+  }
+});
+test('published practice modules avoid Jekyll-private underscore paths',()=>{
+  const walk=directory=>fs.readdirSync(directory,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?walk(path.join(directory,entry.name)):[path.join(directory,entry.name)]);
+  for(const file of walk('shared/practice').filter(file=>file.endsWith('.js'))){
+    const relative=path.relative('shared/practice',file),segments=relative.split(path.sep);
+    assert.ok(segments.every(segment=>!segment.startsWith('_')),`${relative} will be excluded by GitHub Pages`);
+    assert.doesNotMatch(fs.readFileSync(file,'utf8'),/from\s+['"][^'"]*\/_/u,`${relative} imports a Jekyll-private path`);
   }
 });
