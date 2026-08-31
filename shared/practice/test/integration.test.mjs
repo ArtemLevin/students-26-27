@@ -24,7 +24,7 @@ test('all migrated indexes use shared practice UI without copied engine code',()
   for(const student of ['kirill_zinoviev','sofya_kalney','timofey','volodia_khachaturian','xenia_klykova']){
     const html=fs.readFileSync(`students/${student}/site/index.html`,'utf8'),dashboard=fs.readFileSync(`students/${student}/site/dashboard.js`,'utf8');
     for(const marker of ['id="practiceSection"','id="practiceRoot"','shared/practice/practice.css'])assert.ok(html.includes(marker),`${student}: ${marker}`);
-    assert.ok(dashboard.includes('practice-ui.js'));assert.ok(dashboard.includes('initStudentDashboard'));assert.ok(fs.existsSync(`students/${student}/site/practice-config.js`));
+    assert.ok(dashboard.includes('practice-ui.js?v=20260831-practice-2'));assert.ok(dashboard.includes('initStudentDashboard'));assert.ok(fs.existsSync(`students/${student}/site/practice-config.js`));
   }
 });
 test('published practice modules avoid Jekyll-private underscore paths',()=>{
