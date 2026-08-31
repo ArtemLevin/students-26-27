@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {loadStageSchema,validateStageResult,stageExitCode,Stage04ValidationError} from '../validate-stage-result.mjs';
+import {PRACTICE_DISPOSITIONS} from '../../../shared/practice/coverage-policy.js';
+import {loadStageSchema,validateStageResult,stageExitCode,Stage04ValidationError,DISPOSITIONS} from '../validate-stage-result.mjs';
 import {buildPracticePatch} from '../build-practice-patch.mjs';
 import {replaceLessonRegistrySource,replacePracticeConfigSource} from '../apply-practice-patch.mjs';
 
@@ -25,11 +26,12 @@ function analysis(overrides={}){
   };
 }
 
-test('Stage 04 JSON Schema exposes every disposition',()=>{
-  const schema=loadStageSchema();
+test('Stage 04 JSON Schema and validator use the shared disposition policy',()=>{
+  const schema=loadStageSchema(),schemaDispositions=schema.properties.outcomes.items.properties.practiceDisposition.enum;
   assert.equal(schema.properties.schemaVersion.const,1);
-  assert.ok(schema.properties.outcomes.items.properties.practiceDisposition.enum.includes('coverage-gap'));
-  assert.ok(schema.properties.outcomes.items.properties.practiceDisposition.enum.includes('ambiguous'));
+  assert.deepEqual([...DISPOSITIONS],PRACTICE_DISPOSITIONS);
+  assert.deepEqual(schemaDispositions,PRACTICE_DISPOSITIONS);
+  assert.ok(schema.properties.outcomes.items.properties.practiceGap);
 });
 
 test('arbitrary competencyId is rejected before patch building',()=>{
@@ -84,6 +86,20 @@ test('second semantic run becomes zero diff',()=>{
   assert.equal(second.status,'noop');
   assert.equal(second.changed,false);
   assert.deepEqual(second.operations,[]);
+});
+
+test('machine-readable gap waiver survives Stage 04 patching',()=>{
+  const practiceGap={reason:'generator-missing',issue:'planned:probability-extension'};
+  const gap=analysis({outcomes:[{label:'Новый навык',practiceDisposition:'coverage-gap',confidence:'exact',evidence:['урок'],reason:'генератора нет',practiceGap}],gaps:[]});
+  const validation=validateStageResult(gap,contracts());
+  const patch=buildPracticePatch(validation,contracts());
+  assert.equal(stageExitCode(validation),2);
+  assert.deepEqual(patch.lesson.outcomes[0].practiceGap,practiceGap);
+});
+
+test('malformed machine-readable waiver is rejected structurally',()=>{
+  const bad=analysis({outcomes:[{label:'Новый навык',practiceDisposition:'coverage-gap',confidence:'exact',evidence:['урок'],reason:'генератора нет',practiceGap:{reason:'missing'}}],gaps:[]});
+  assert.throws(()=>validateStageResult(bad,contracts()),error=>error instanceof Stage04ValidationError&&error.details.some(item=>item.includes('practiceGap.issue')));
 });
 
 test('coverage gaps return exit 2 and ambiguous mappings return exit 4',()=>{
