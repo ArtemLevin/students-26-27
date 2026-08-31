@@ -136,8 +136,8 @@ function trimRun(raw){
   return {leading,body,trailing};
 }
 
-export function renderMathText(value){
-  const source=String(value??'');let result='',last=0;
+function renderMathRuns(source){
+  let result='',last=0;
   for(const match of source.matchAll(MATH_RUN)){
     const start=match.index??0;result+=escapeHtml(source.slice(last,start));
     const {leading,body,trailing}=trimRun(match[0]);result+=escapeHtml(leading);
@@ -145,6 +145,14 @@ export function renderMathText(value){
     result+=escapeHtml(trailing);last=start+match[0].length;
   }
   result+=escapeHtml(source.slice(last));return result;
+}
+
+export function renderMathText(value){
+  const source=String(value??'');let result='',last=0;
+  for(const match of source.matchAll(/<[^>]*>/gu)){
+    const start=match.index??0;result+=renderMathRuns(source.slice(last,start));result+=escapeHtml(match[0]);last=start+match[0].length;
+  }
+  result+=renderMathRuns(source.slice(last));return result;
 }
 
 export function setMathText(element,value){
