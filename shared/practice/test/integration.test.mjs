@@ -22,7 +22,7 @@ test('manual review override enters selection and remediation is bounded',()=>{
   engine.beginCurrent();engine.revealSolution();engine.rate('again');assert.ok(engine.currentSession().items.length<=2);
 });
 test('all migrated indexes use shared practice UI without copied engine code',()=>{
-  const dashboardCacheKeys={xenia_klykova:'dashboard.js?v=20260831-stereometry-1'};
+  const dashboardCacheKeys={xenia_klykova:'dashboard.js?v=20260831-stereometry-1',timofey:'dashboard.js?v=20260831-graphs'};
   for(const student of ['kirill_zinoviev','sofya_kalney','timofey','volodia_khachaturian','xenia_klykova']){
     const html=fs.readFileSync(`students/${student}/site/index.html`,'utf8'),dashboard=fs.readFileSync(`students/${student}/site/dashboard.js`,'utf8');
     for(const marker of ['id="practiceSection"','id="practiceRoot"','shared/practice/practice.css'])assert.ok(html.includes(marker),`${student}: ${marker}`);
