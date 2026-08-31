@@ -27,6 +27,18 @@ test('all migrated indexes use shared practice UI without copied engine code',()
     assert.ok(html.includes('dashboard.js?v=20260831-practice-3'),`${student}: dashboard cache key`);
     assert.ok(dashboard.includes('practice-ui.js?v=20260831-practice-2'));assert.ok(dashboard.includes('initStudentDashboard'));assert.ok(fs.existsSync(`students/${student}/site/practice-config.js`));
   }
+  const nikolHtml=fs.readFileSync('students/nikol_sarkisyants/site/index.html','utf8'),nikolDashboard=fs.readFileSync('students/nikol_sarkisyants/site/dashboard.js','utf8');
+  for(const marker of ['id="practiceSection"','id="practiceRoot"','shared/practice/practice.css'])assert.ok(nikolHtml.includes(marker),`nikol_sarkisyants: ${marker}`);
+  assert.ok(nikolDashboard.includes('practice-ui.js?v=20260831-practice-4'));
+  assert.ok(fs.existsSync('students/nikol_sarkisyants/site/practice-config.js'));
+
+  for(const index of ['students/nastya_pavlova/index.html','students/nastya_pavlova/site/index.html']){
+    const html=fs.readFileSync(index,'utf8');
+    for(const marker of ['id="practiceSection"','id="practiceRoot"','shared/practice/practice.css','practice-bootstrap.js?v=20260831-practice-4'])assert.ok(html.includes(marker),`${index}: ${marker}`);
+  }
+  const bootstrap=fs.readFileSync('students/nastya_pavlova/practice-bootstrap.js','utf8');
+  assert.ok(bootstrap.includes('practice-ui.js?v=20260831-practice-4'));
+  assert.ok(fs.existsSync('students/nastya_pavlova/site/practice-config.js'));
 });
 test('published practice modules avoid Jekyll-private underscore paths',()=>{
   const walk=directory=>fs.readdirSync(directory,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?walk(path.join(directory,entry.name)):[path.join(directory,entry.name)]);

@@ -18,3 +18,22 @@ test('all generators satisfy the contract across 1000 seeds',()=>{
 test('same generator seed reproduces the complete exercise',()=>{
   const registry=new GeneratorRegistry(ALL_GENERATORS);for(const generator of registry.list()){const args={seed:'fixed',difficulty:2,competencyId:generator.competencyIds[0]};assert.deepEqual(registry.generate(generator.key,args),registry.generate(generator.key,args));}
 });
+test('competency-specific algebra modes stay semantically aligned',()=>{
+  const registry=new GeneratorRegistry(ALL_GENERATORS);
+  const powerCases=[
+    ['calc_01','meaning','Смысл степени'],
+    ['calc_03','product','Умножение степеней'],
+    ['calc_04','quotient','Деление степеней'],
+    ['calc_07','power','Степень степени'],
+    ['calc_08','negative','Отрицательный показатель степени'],
+    ['calc_12','common-base','Приведение к общему основанию']
+  ];
+  for(const [competencyId,mode,topic] of powerCases){
+    const exercise=registry.generate('algebra.powers',{seed:`mode:${mode}`,difficulty:2,competencyId,options:{mode}});
+    assert.equal(exercise.metadata.topic,topic);assert.equal(validateAnswer(exercise.answerSpec,referenceAnswerForSpec(exercise.answerSpec)).status,'correct');
+  }
+  for(const [competencyId,mode,topic] of [['calc_10','root-as-power','Корень как дробная степень'],['calc_11','fractional-power','Дробный показатель степени']]){
+    const exercise=registry.generate('algebra.radicals',{seed:`mode:${mode}`,difficulty:2,competencyId,options:{mode}});
+    assert.equal(exercise.metadata.topic,topic);assert.equal(validateAnswer(exercise.answerSpec,referenceAnswerForSpec(exercise.answerSpec)).status,'correct');
+  }
+});

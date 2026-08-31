@@ -407,6 +407,22 @@
     renderNextFocus();
     updateFilterButtons();
     if (state.activeId && els.dialog.open) populateDialog(itemById.get(state.activeId));
+    publishCompetenceState();
+  }
+
+  function competenceSnapshot() {
+    return {
+      studentLevels: Object.fromEntries(items.map(item => [item.id, getLevel(item)])),
+      reviewQueue: Object.fromEntries([...state.repeat].map(id => [id, { addedAt: null }]))
+    };
+  }
+
+  function publishCompetenceState() {
+    const snapshot = competenceSnapshot();
+    window.__studentCompetenceState = snapshot;
+    if (typeof window.CustomEvent === "function") {
+      window.dispatchEvent(new CustomEvent("student:competence-state", { detail: { state: snapshot } }));
+    }
   }
 
   function updateFilterButtons() {
@@ -423,6 +439,9 @@
     populateDialog(item);
     if (!els.dialog.open) els.dialog.showModal();
     els.dialog._trigger = trigger;
+    if (typeof window.CustomEvent === "function") {
+      window.dispatchEvent(new CustomEvent("student:competency-open", { detail: { competencyId: id } }));
+    }
     requestAnimationFrame(() => els.closeDialog.focus());
   }
 

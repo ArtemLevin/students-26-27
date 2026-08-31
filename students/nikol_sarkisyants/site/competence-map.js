@@ -267,6 +267,7 @@ class CompetenceMapController{
       this.status.dataset.state='ready';
     }
     this.publishSummary(summary);
+    this.publishState();
   }
 
   renderRadial(){
@@ -414,6 +415,7 @@ class CompetenceMapController{
     this.updateLevelPicker();
     this.updateReviewButton();
     this.dialog.showModal();
+    if(typeof window.CustomEvent==='function')window.dispatchEvent(new CustomEvent('student:competency-open',{detail:{competencyId:id}}));
     this.dialog.querySelector('#closeDialog')?.focus();
   }
 
@@ -521,6 +523,13 @@ class CompetenceMapController{
   publishSummary(summary){
     if(typeof window==='undefined'||typeof window.CustomEvent!=='function')return;
     window.dispatchEvent(new CustomEvent('nikol:competence-summary',{detail:summary}));
+  }
+
+  publishState(){
+    if(typeof window==='undefined')return;
+    const snapshot={studentLevels:{...this.state.studentLevels},reviewQueue:{...this.state.reviewQueue}};
+    window.__studentCompetenceState=snapshot;
+    if(typeof window.CustomEvent==='function')window.dispatchEvent(new CustomEvent('student:competence-state',{detail:{state:snapshot}}));
   }
 }
 
