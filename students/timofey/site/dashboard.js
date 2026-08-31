@@ -1,4 +1,4 @@
-import {LESSONS} from './lesson-registry.js';
+import {LESSONS} from './lesson-registry.js?v=20260831-graphs';
 import {initStudentDashboard} from '../../../shared/student-dashboard/dashboard-core.js';
 import {PRACTICE_CONFIG} from './practice-config.js';
 initStudentDashboard({lessons:LESSONS,themeKey:'timofey-dashboard-theme-v1',summaryEvent:'timofey:competence-summary'});
