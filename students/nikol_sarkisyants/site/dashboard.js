@@ -8,6 +8,7 @@ import {
   formatShortDate,
   formatLongDateRu
 } from './lesson-registry.js?v=20260825-1';
+import {PRACTICE_CONFIG} from './practice-config.js';
 
 const THEME_KEY='nikol-dashboard-theme-v1';
 const MOBILE_QUERY='(max-width:900px)';
@@ -312,3 +313,4 @@ renderLatestLesson();
 renderRecentLessons();
 bindArchive();
 setupMobileDrawer();
+import('../../../shared/practice/practice-ui.js?v=20260831-practice-4').then(({initPracticeDashboard})=>initPracticeDashboard({config:PRACTICE_CONFIG,lessons:LESSONS})).catch(error=>{console.error('Practice module unavailable',error);const root=document.getElementById('practiceRoot');if(root)root.textContent='Тренировка временно недоступна. Остальные материалы кабинета продолжают работать.';});
