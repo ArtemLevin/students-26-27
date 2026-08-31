@@ -1,0 +1,21 @@
+import independentProductGenerator from './probability/independent-product.js';
+import disjointSumGenerator from './probability/disjoint-sum.js';
+import complementGenerator from './probability/complement.js';
+import bernoulliGenerator from './probability/bernoulli.js';
+import combinatoricsGenerator from './probability/combinatorics.js';
+import vectorCoordinatesGenerator from './vectors/coordinates.js';
+import vectorLengthGenerator from './vectors/length.js';
+import vectorOperationsGenerator from './vectors/operations.js';
+import dotProductGenerator from './vectors/dot-product.js';
+import powersGenerator from './algebra/powers.js';
+import radicalsGenerator from './algebra/radicals.js';
+import linearEquationsGenerator from './algebra/linear-equations.js';
+import quadraticEquationsGenerator from './algebra/quadratic-equations.js';
+import linearSystemsGenerator from './algebra/linear-systems.js';
+import percentagesGenerator from './word-problems/percentages.js';
+import motionGenerator from './word-problems/motion.js';
+import workGenerator from './word-problems/work.js';
+import mixturesGenerator from './word-problems/mixtures.js';
+import kinematicsGenerator from './physics/kinematics.js';
+
+export const ALL_GENERATORS=[independentProductGenerator,disjointSumGenerator,complementGenerator,bernoulliGenerator,combinatoricsGenerator,vectorCoordinatesGenerator,vectorLengthGenerator,vectorOperationsGenerator,dotProductGenerator,powersGenerator,radicalsGenerator,linearEquationsGenerator,quadraticEquationsGenerator,linearSystemsGenerator,percentagesGenerator,motionGenerator,workGenerator,mixturesGenerator,kinematicsGenerator];

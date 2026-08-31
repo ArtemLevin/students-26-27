@@ -9,6 +9,10 @@ export function assertRegistry(lessons){
   let previous=Infinity;
   for(const lesson of lessons){
     if(!lesson?.date||!lesson?.href||!lesson?.title) throw new Error('Invalid lesson registry record');
+    for(const outcome of lesson.outcomes||[]){
+      if(!outcome?.label||!Number.isFinite(Number(outcome.level)))throw new Error(`Invalid lesson outcome: ${lesson.date}`);
+      if(outcome.competencyId!==undefined&&!/^[a-z0-9][a-z0-9_-]*$/i.test(outcome.competencyId))throw new Error(`Invalid competencyId in lesson ${lesson.date}`);
+    }
     const stamp=Date.parse(`${lesson.date}T00:00:00Z`);
     if(!Number.isFinite(stamp)||stamp>previous) throw new Error('LESSONS must be newest-first');
     previous=stamp;
