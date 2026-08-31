@@ -40,7 +40,7 @@ export const LESSONS=Object.freeze([
       {label:'Логарифмические уравнения',level:3,tone:'good'},
       {label:'Иррациональные уравнения',level:2,tone:'process'},
       {label:'Базовая планиметрия',level:2,tone:'process'},
-      {label:'Преобразования радикалов',level:2,tone:'alert'}
+      {competencyId:'t7_radical_num',label:'Преобразования радикалов',level:2,tone:'alert'}
     ],
     materials:{
       pdf:'../pdf_docs/23.08.26.pdf',

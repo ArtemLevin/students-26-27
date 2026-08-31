@@ -50,6 +50,8 @@ test('Xenia 31.08 style material/registry drift produces an automatic lesson ups
   assert.equal(patch.lesson.date,'2026-08-31');
   assert.equal(patch.lesson.outcomes[0].competencyId,'t5_product');
   assert.equal(patch.lesson.outcomes[0].practiceDisposition,'generator');
+  assert.equal(patch.mappings[0].mapping.activation,'lesson');
+  assert.equal('active' in patch.mappings[0].mapping,false);
 });
 
 test('exact patch preserves existing lesson mastery metadata',()=>{
@@ -70,6 +72,7 @@ test('text patcher updates only registry/config contracts and is stable on gener
   assert.match(nextLessons,/2026-08-31/);
   assert.match(nextConfig,/t5_product/);
   assert.match(nextConfig,/probability\.independent-product/);
+  assert.match(nextConfig,/"activation":"lesson"/);
   assert.equal(replaceLessonRegistrySource(nextLessons,patch.lesson),nextLessons);
 });
 

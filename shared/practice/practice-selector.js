@@ -1,3 +1,4 @@
+import {resolveActivationPolicy} from './activation-policy.js';
 import {stableHash} from './random.js';
 import {isDue,overdueDays} from './practice-scheduler.js';
 
@@ -16,9 +17,10 @@ function candidateScore({id,mapping,entry,level,manual,today,weights,tieSeed}){
 export function selectDailyCompetencies({config,state,studentLevels={},reviewQueue={},today,target=config.dailyTarget||5,weights={...DEFAULT_SELECTOR_WEIGHTS,...(config.selectorWeights||{})},seed=`${config.studentId}:${today}`}={}){
   const candidates=[];
   for(const [id,mapping] of Object.entries(config.competencies||{})){
-    const entry=state.competencies?.[id],level=Math.max(0,Math.min(4,Math.round(Number(studentLevels[id]??mapping.masteryLevel??0)))),manual=Boolean(reviewQueue[id]);
-    if(mapping.active===false&&!manual)continue;
-    const active=entry?.status==='active'||mapping.active===true||manual;
+    const policy=resolveActivationPolicy(mapping),entry=state.competencies?.[id],level=Math.max(0,Math.min(4,Math.round(Number(studentLevels[id]??mapping.masteryLevel??0)))),manual=Boolean(reviewQueue[id]);
+    if(policy==='disabled')continue;
+    if(policy==='manual'&&!manual)continue;
+    const active=entry?.status==='active'||policy==='always'||manual;
     if(!active||(!manual&&level===0&&!entry?.activatedAt))continue;
     if(!manual&&!isDue(entry,today))continue;
     candidates.push(candidateScore({id,mapping,entry,level,manual,today,weights,tieSeed:seed}));
