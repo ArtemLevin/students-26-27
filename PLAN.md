@@ -1,9 +1,27 @@
 # PLAN — система интервального повторения и генерации упражнений
 
-Статус: **детальное планирование, реализация не начата**  
-Целевая ветка разработки: отдельная feature-ветка после согласования плана  
+Статус: **реализовано в полном объёме для migrated dashboards**
+
+Ветка реализации: `feature/spaced-practice-engine`
+
 Базовое состояние репозитория при планировании: `main@7fb2220f5e955fe467fb4d2faa839abdb8d33a6c`  
 Дата планирования: 2026-08-31
+
+## 0. Результат реализации — 2026-08-31
+
+Реализованы Phase 0–8 и необходимое для текущих активных тем расширение Phase 10. Practice Engine подключён к пяти migrated dashboards: `kirill_zinoviev`, `sofya_kalney`, `timofey`, `volodia_khachaturian`, `xenia_klykova`.
+
+Phase 9 закрыта согласованным migration/adapter plan в `shared/practice/README.md`: legacy-кабинеты не получили дублированную бизнес-логику. Функции из раздела «Осознанно не входит в MVP» по-прежнему остаются за границами реализации.
+
+Проверяемые результаты:
+
+- PracticeState v1, bounded storage, scheduler, selector и deterministic seed contract;
+- безопасный Answer Engine и 19 централизованных generators;
+- общий daily-session UI с reload, hints, rating, remediation и competency dialog status;
+- lesson outcome linking, pipeline prompt и central config validation;
+- rollout без изменения mastery state v2, `reviewQueue`, URL и lesson history;
+- 23 practice tests, 1000 seeds на каждый generator и полная существующая dashboard regression matrix;
+- отдельный GitHub Actions quality gate.
 
 ---
 

@@ -1,0 +1,10 @@
+import {context,numberSpec} from '../_shared.js';
+const IDS=['percent_11','percent_12','percent_13','percent_14'];
+export const percentagesGenerator={key:'word-problems.percentages',version:1,title:'Процентные задачи',competencyIds:IDS,generate(args){return context(this,args,(random,difficulty,options)=>{
+  const mode=options.mode||random.pick(['part','whole','ratio','change']),percent=random.pick(difficulty===1?[10,20,25,50]:[5,12,15,20,25,30,40,60,75]),unit=random.int(2,10+difficulty*4)*20;
+  if(mode==='whole'){const part=unit*percent/100;return {topic:'Число по его проценту',prompt:`${percent}% некоторого числа равны ${part}. Найдите это число.`,answerSpec:numberSpec(unit),hints:['Обозначьте число через x.',`Составьте ${percent}/100·x=${part}.`,'Разделите известную часть на долю.'],solution:[`x=${part}:${percent/100}=${unit}.`],parameters:{mode,percent,part,unit}};}
+  if(mode==='ratio'){const part=unit*percent/100;return {topic:'Процентное отношение',prompt:`Сколько процентов составляет ${part} от ${unit}?`,answerSpec:numberSpec(percent),hints:['Разделите часть на целое.','Переведите полученную долю в проценты.','Умножьте отношение на 100%.'],solution:[`${part}/${unit}·100%=${percent}%.`],parameters:{mode,percent,part,unit}};}
+  if(mode==='change'){const base=unit,result=base*(100+percent)/100;return {topic:'Увеличение на процент',prompt:`Число ${base} увеличили на ${percent}%. Какое число получили?`,answerSpec:numberSpec(result),hints:['Найдите величину прибавки.',`${percent}% от ${base} — это ${base*percent/100}.`,'Прибавьте найденную часть к исходному числу.'],solution:[`${base}+${base}·${percent}/100=${result}.`],parameters:{mode,percent,base,result}};}
+  const part=unit*percent/100;return {topic:'Процент от числа',prompt:`Найдите ${percent}% от числа ${unit}.`,answerSpec:numberSpec(part),hints:['Переведите проценты в десятичную дробь.',`${percent}%=${percent/100}.`,'Умножьте число на долю.'],solution:[`${unit}·${percent}/100=${part}.`],parameters:{mode:'part',percent,part,unit}};
+  });}};
+export default percentagesGenerator;
