@@ -1,0 +1,9 @@
+import {context,numberSpec} from '../_shared.js';
+const IDS=['models_6','models_7','models_8','oge_21_2_2','t10_line','t10_trains','t10_average_speed','kin_06','kin_07','kin_08','kin_15','kin_16'];
+export const motionGenerator={key:'word-problems.motion',version:1,title:'Задачи на движение',competencyIds:IDS,generate(args){return context(this,args,(random,difficulty,options)=>{
+  const mode=options.mode||random.pick(['path','time','meeting']),speed=random.int(3,8+difficulty*3)*5,time=random.int(2,3+difficulty);
+  if(mode==='time'){const distance=speed*time;return {topic:'Время движения',prompt:`Тело прошло ${distance} км со скоростью ${speed} км/ч. Сколько часов оно было в пути?`,answerSpec:numberSpec(time),hints:['Используйте t=S/v.','Разделите расстояние на скорость.','Проверьте единицы: км : (км/ч) = ч.'],solution:[`t=${distance}/${speed}=${time} ч.`],parameters:{mode,speed,time,distance}};}
+  if(mode==='meeting'){const other=random.int(2,6+difficulty*2)*5,distance=(speed+other)*time;return {topic:'Встречное движение',prompt:`Два участника вышли навстречу друг другу со скоростями ${speed} и ${other} км/ч. Между ними ${distance} км. Через сколько часов они встретятся?`,answerSpec:numberSpec(time),hints:['При встречном движении скорости складываются.',`Скорость сближения ${speed+other} км/ч.`,'Разделите начальное расстояние на скорость сближения.'],solution:[`t=${distance}/(${speed}+${other})=${time} ч.`],parameters:{mode,speed,other,time,distance}};}
+  const distance=speed*time;return {topic:'Путь',prompt:`Тело двигалось ${time} ч со скоростью ${speed} км/ч. Какой путь оно прошло?`,answerSpec:numberSpec(distance),hints:['Используйте S=vt.','Перемножьте скорость и время.','Проверьте: (км/ч)·ч=км.'],solution:[`S=${speed}·${time}=${distance} км.`],parameters:{mode:'path',speed,time,distance}};
+  });}};
+export default motionGenerator;
