@@ -25,6 +25,8 @@ Mastery хранится в существующем competence state v2. Practi
 | Тимофей | `timofey-practice-state-v1` |
 | Володя | `volodia-practice-state-v1` |
 | Ксения | `xenia-practice-state-v1` |
+| Настя | `nastya-practice-state-v1` |
+| Николь | `nikol-practice-state-v1` |
 
 Сохраняются агрегаты компетенции, не более 60 daily sessions и 200 педагогических событий. Prompt и solution восстанавливаются по generator version + seed и в history не дублируются.
 
@@ -45,7 +47,9 @@ Outcome может содержать optional `competencyId`. `lessonAutoActiva
 
 ## Legacy dashboard plan
 
-`nikol_sarkisyants`, `nastya_pavlova` и `xenia_klykova/chemistry` остаются вне ad-hoc rollout. Для них требуется один из двух поддерживаемых путей:
+`nikol_sarkisyants` и `nastya_pavlova` подключены через официальный событийный adapter, который сохраняет их существующие карты и storage-контракты. `xenia_klykova/chemistry` остаётся вне rollout до появления отдельного химического набора генераторов.
+
+Для последующих legacy-кабинетов поддерживаются два пути:
 
 1. миграция shell/map на общий `student-dashboard` contract;
 2. официальный adapter, публикующий события `student:competence-state` и `student:competency-open`.

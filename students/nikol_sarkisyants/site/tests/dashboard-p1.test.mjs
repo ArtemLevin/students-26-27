@@ -154,7 +154,7 @@ test('generic legacy lesson anchors are suppressed while concrete lessons surviv
 test('active dashboard contains a native map and no iframe bridge',()=>{
   assert.match(indexHtml,/id="competenceMap"/);
   assert.match(indexHtml,/id="radialMap"/);
-  assert.match(indexHtml,/type="module" src="competence-map\.js\?v=20260825-1"/);
+  assert.match(indexHtml,/type="module" src="competence-map\.js\?v=20260831-practice-4"/);
   assert.doesNotMatch(indexHtml,/<iframe\b/i);
   assert.doesNotMatch(indexHtml,/id="base"/);
   assert.doesNotMatch(dashboardScript,/contentDocument|contentWindow|__nikolSync/);
