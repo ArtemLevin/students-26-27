@@ -2,6 +2,7 @@ function autoOutcomeMetadata(outcome){
   const metadata={practiceDisposition:outcome.practiceDisposition};
   if(outcome.confidence==='exact'&&outcome.competencyId)metadata.competencyId=outcome.competencyId;
   if(outcome.confidence==='exact'&&outcome.practiceDisposition==='curated'&&outcome.bankKey)metadata.curatedBankKey=outcome.bankKey;
+  if(outcome.practiceGap)metadata.practiceGap=structuredClone(outcome.practiceGap);
   return metadata;
 }
 

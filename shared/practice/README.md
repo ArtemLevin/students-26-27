@@ -5,6 +5,9 @@
 ## Состав
 
 - `activation-policy.js` — единый contract `lesson | always | manual | disabled`, calendar-date validation и legacy aliases;
+- `coverage-policy.js` — единый contract Stage 04/CI для `practiceDisposition`, gap waiver и coverage statuses;
+- `audit-lesson-coverage.mjs` — педагогический аудит `lesson → competency → practice provider`;
+- `coverage-baseline-v1.json` — ratchet baseline исторических implicit outcomes;
 - `practice-state.js` — PracticeState v1, миграция, capped sessions/events;
 - `practice-storage.js` — adapter для `localStorage` и memory adapter для тестов;
 - `practice-scheduler.js` — интервалы `[1, 3, 7, 14, 30, 60, 120]`;
@@ -55,6 +58,43 @@ Storage adapter позволяет позднее добавить API с optimi
 
 Ручная `reviewQueue` имеет высший приоритет среди selectable skills и может активировать configured `lesson`/`always`/`manual` skill даже при mastery level 0. Scheduler уровень 0–4 не меняет.
 
+## Track C: lesson coverage audit
+
+Structural validation и педагогическое coverage разделены. `validate-configs.mjs` проверяет существование и совместимость каталогов, mappings, generators и activation policy. `audit-lesson-coverage.mjs` отвечает на вопрос, что происходит с каждым lesson outcome в Practice lifecycle.
+
+Статусы coverage:
+
+- `covered-generator`;
+- `covered-curated`;
+- `manual-assessment`;
+- `excluded-explicitly`;
+- `missing-competency`;
+- `missing-practice-mapping`;
+- `missing-generator`;
+- `generator-does-not-declare-competency`;
+- `ambiguous`.
+
+Новый outcome обязан явно указывать `practiceDisposition: generator | curated | manual | none`. `coverage-gap` и `competency-gap` допускаются только с machine-readable waiver:
+
+```js
+practiceGap:{
+  reason:'generator-missing',
+  issue:'planned:geometry-curated-bank'
+}
+```
+
+`coverage-baseline-v1.json` содержит только исторические outcomes, созданные до обязательного `practiceDisposition`. Новый implicit outcome отсутствует в baseline и блокирует CI. Когда исторический outcome получает явный disposition или удаляется, соответствующую baseline-запись требуется удалить в том же изменении. Так baseline может только сокращаться и не маскирует новые пробелы.
+
+CLI:
+
+```bash
+node shared/practice/audit-lesson-coverage.mjs
+node shared/practice/audit-lesson-coverage.mjs --student xenia_klykova --format json
+node shared/practice/audit-lesson-coverage.mjs --format markdown --json-output practice-coverage-report.json
+```
+
+Coverage percentage — observability metric. Merge gate опирается на конкретные violations/gap statuses, поэтому intentional `manual`/`none` не создают ложной ошибки, а machine-waived gap остаётся видимым в отчёте.
+
 ## Legacy dashboard plan
 
 `nikol_sarkisyants` и `nastya_pavlova` подключены через официальный событийный adapter, который сохраняет их существующие карты и storage-контракты. `xenia_klykova/chemistry` остаётся вне rollout до появления отдельного химического набора генераторов.
@@ -68,9 +108,17 @@ Storage adapter позволяет позднее добавить API с optimi
 
 ## Проверка
 
+Перед commit/merge основной contract:
+
 ```bash
-node --test shared/practice/test/*.test.mjs
-node shared/practice/validate-configs.mjs
+node shared/practice/validate-configs.mjs && \
+node shared/practice/audit-lesson-coverage.mjs && \
+node --test shared/practice/test/*.test.mjs && \
 node --test pipeline/practice/test/*.test.mjs
+```
+
+Дополнительно:
+
+```bash
 node shared/student-dashboard/test-index-inventory.mjs
 ```
