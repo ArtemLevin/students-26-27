@@ -1,10 +1,11 @@
 import {PracticeEngine} from './practice-engine.js';
-import {expectedAnswerDisplay} from './answer-engine.js';
 import {calendarDayDifference} from './practice-scheduler.js';
+import {setMathText} from './mathml.js';
 
 const byId=id=>document.getElementById(id);
 const practiceDialog=()=>byId('competencyDialog')||byId('topicDialog')||document.querySelector('[data-practice-dialog]');
 const element=(tag,className,text)=>{const node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;};
+const richElement=(tag,className,text)=>setMathText(element(tag,className),text);
 const formatDate=value=>value?new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long'}).format(new Date(`${value}T12:00:00`)):'после первой попытки';
 
 class PracticeDashboardController{
@@ -34,13 +35,13 @@ class PracticeDashboardController{
     const session=this.engine.currentSession(),item=this.engine.currentItem(),exercise=this.engine.exerciseFor(item);if(!item||!exercise){this.renderCompletion(session);return;}
     if(!item.startedAt)this.engine.beginCurrent();
     const wrapper=element('div','practice-session'),top=element('div','practice-progress');top.append(element('span','',`Задание ${session.currentIndex+1} из ${session.items.length}`),element('span','',item.remediation?'Повторная попытка':exercise.metadata.topic));
-    const title=element('h3','practice-prompt',exercise.prompt);title.id='practicePrompt';title.tabIndex=-1;
+    const title=richElement('h3','practice-prompt',exercise.prompt);title.id='practicePrompt';title.tabIndex=-1;
     const form=element('form','practice-answer'),label=element('label','','Ваш ответ');label.htmlFor='practiceAnswer';
     const input=element('input','practice-input');input.id='practiceAnswer';input.name='answer';input.autocomplete='off';input.inputMode=['integer','number','fraction'].includes(exercise.answerSpec.type)?'decimal':'text';input.setAttribute('aria-describedby','practiceFeedback');
     const submit=this.button('Проверить');submit.type='submit';form.append(label,input,submit);form.addEventListener('submit',event=>{event.preventDefault();this.check(input.value);});
     const actions=element('div','practice-actions'),hint=this.button('Подсказка','practice-button secondary'),reveal=this.button('Показать решение','practice-button ghost');hint.id='practiceHint';reveal.id='practiceReveal';
     hint.addEventListener('click',()=>{const value=this.engine.useHint();this.hintText=value?.text||'';this.emit();this.render();});reveal.addEventListener('click',()=>{this.solution=this.engine.revealSolution();this.feedback='Решение открыто. Оцените попытку и запланируйте повторение.';this.emit();this.render();});actions.append(hint,reveal);
-    const feedback=element('div','practice-feedback',this.feedback);feedback.id='practiceFeedback';feedback.setAttribute('role','status');feedback.setAttribute('aria-live','polite');
+    const feedback=richElement('div','practice-feedback',this.feedback);feedback.id='practiceFeedback';feedback.setAttribute('role','status');feedback.setAttribute('aria-live','polite');
     wrapper.append(top,title,form,actions,feedback);
     if(this.hintText)wrapper.append(this.note('Подсказка',this.hintText));
     if(this.solution.length)wrapper.append(this.note('Решение',this.solution.join(' ')));
@@ -51,7 +52,7 @@ class PracticeDashboardController{
     }
     this.root.append(wrapper);
   }
-  note(title,text){const note=element('div','practice-note');note.append(element('b','',title),element('p','',text));return note;}
+  note(title,text){const note=element('div','practice-note');note.append(element('b','',title),richElement('p','',text));return note;}
   check(raw){
     const result=this.engine.submitAnswer(raw);
     if(result.status==='invalid'){this.feedback=result.diagnostics||'Проверьте формат ответа.';this.render();byId('practiceAnswer')?.focus();return;}
