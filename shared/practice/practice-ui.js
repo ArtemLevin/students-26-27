@@ -1,5 +1,6 @@
 import {PracticeEngine} from './practice-engine.js';
 import {calendarDayDifference} from './practice-scheduler.js';
+import {PracticeSyncCoordinator,PracticeSyncHttpTransport} from './practice-sync.js';
 import {setMathText} from './mathml.js';
 
 const byId=id=>document.getElementById(id);
@@ -9,13 +10,15 @@ const richElement=(tag,className,text)=>setMathText(element(tag,className),text)
 const formatDate=value=>value?new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long'}).format(new Date(`${value}T12:00:00`)):'после первой попытки';
 
 class PracticeDashboardController{
-  constructor(root,engine){this.root=root;this.engine=engine;this.feedback='';this.hintText='';this.solution=[];this.bindExternal();this.render();}
+  constructor(root,engine){this.root=root;this.engine=engine;this.feedback='';this.hintText='';this.solution=[];this.sync=null;this.syncPending=false;this.syncStatus='local-only';this.bindExternal();this.render();}
   bindExternal(){
     addEventListener('student:competence-state',event=>{this.engine.updateCompetenceSnapshot(event.detail?.state||{});this.render();});
     addEventListener('student:competency-open',event=>this.renderDialog(event.detail?.competencyId));
     this.ensureDialog();
   }
-  emit(){dispatchEvent(new CustomEvent('student:practice-state',{detail:{state:this.engine.state,config:this.engine.config}}));}
+  attachSync(coordinator){this.sync=coordinator;this.syncStatus='connecting';return coordinator.bootstrap().then(result=>{this.syncStatus=result.status;this.render();return result;});}
+  queueSync(){if(!this.sync||this.syncPending)return;this.syncPending=true;queueMicrotask(async()=>{try{const result=await this.sync.syncNow();this.syncStatus=result.status;}catch(error){console.warn('Practice sync failed; local state remains authoritative for this device',error);this.syncStatus='offline';}finally{this.syncPending=false;}});}
+  emit(){dispatchEvent(new CustomEvent('student:practice-state',{detail:{state:this.engine.state,config:this.engine.config,syncStatus:this.syncStatus}}));this.queueSync();}
   clear(){this.root.replaceChildren();}
   button(label,className='practice-button'){const button=element('button',className,label);button.type='button';return button;}
   render(){
@@ -29,7 +32,7 @@ class PracticeDashboardController{
     if(!items.length){copy.append(element('h3','','На сегодня всё ✓'),element('p','','Активных заданий с наступившей датой повторения сейчас нет.'));card.append(copy);this.root.append(card);return;}
     const minutes=Math.max(5,Math.min(15,Math.round(items.length*1.7))),manual=items.filter(item=>item.manual).length,weak=items.filter(item=>item.masteryLevel<=2).length;
     copy.append(element('h3','',`${items.length} заданий · около ${minutes} минут`),element('p','',`${manual?`${manual} из ручной очереди · `:''}${weak} навыков требуют закрепления. Порядок сохранится при обновлении страницы.`));
-    const start=this.button('Начать тренировку');start.id='practiceStart';start.addEventListener('click',()=>{this.engine.startSession();this.engine.beginCurrent();this.render();this.focusPrompt();});card.append(copy,start);this.root.append(card);
+    const start=this.button('Начать тренировку');start.id='practiceStart';start.addEventListener('click',()=>{this.engine.startSession();this.engine.beginCurrent();this.emit();this.render();this.focusPrompt();});card.append(copy,start);this.root.append(card);
   }
   renderExercise(){
     const session=this.engine.currentSession(),item=this.engine.currentItem(),exercise=this.engine.exerciseFor(item);if(!item||!exercise){this.renderCompletion(session);return;}
@@ -87,8 +90,18 @@ class PracticeDashboardController{
   }
 }
 
+function practiceCsrfToken(){return document.querySelector('meta[name="csrf-token"]')?.content||window.__studentPracticeCsrf||null;}
+
 export function initPracticeDashboard({config,lessons=[],competenceSnapshot=null}={}){
   const root=byId('practiceRoot'),section=byId('practiceSection');if(!root||!config?.enabled){if(section)section.hidden=true;return null;}
-  try{const engine=new PracticeEngine({config,lessons,competenceSnapshot:competenceSnapshot||window.__studentCompetenceState||null}),controller=new PracticeDashboardController(root,engine);window.__studentPractice=controller;return controller;}
+  try{
+    const engine=new PracticeEngine({config,lessons,competenceSnapshot:competenceSnapshot||window.__studentCompetenceState||null}),controller=new PracticeDashboardController(root,engine);
+    window.__studentPractice=controller;
+    if(config.features?.serverSync===true){
+      const transport=new PracticeSyncHttpTransport({baseUrl:config.syncBaseUrl||'',csrfToken:practiceCsrfToken}),coordinator=new PracticeSyncCoordinator({storage:engine.storage,transport,enabled:true,rehydrate:state=>{engine.state=state;engine.activateConfigured();engine.persist();controller.render();}});
+      controller.attachSync(coordinator).catch(error=>console.warn('Practice sync bootstrap failed; local practice remains available',error));
+    }
+    return controller;
+  }
   catch(error){console.error('Failed to initialize practice dashboard',error);root.replaceChildren(element('p','practice-warning','Тренировка временно недоступна. Остальные материалы кабинета продолжают работать.'));return null;}
 }
