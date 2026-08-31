@@ -1,3 +1,5 @@
+import {validateActivationMapping} from './activation-policy.js';
+
 const KEY=/^[a-z][a-z0-9-]*(?:\.[a-z][a-z0-9-]*)+$/;
 
 export function validateGenerator(generator){
@@ -41,6 +43,7 @@ export function validatePracticeConfig(config,registry,{competencyIds=null}={}){
     if(!registry.has(mapping.generator))errors.push(`Unknown generator key for ${id}: ${mapping.generator}`);
     else if(!registry.get(mapping.generator).competencyIds.includes(id))errors.push(`Generator ${mapping.generator} does not declare ${id}`);
     if(!Array.isArray(mapping.difficulty)||mapping.difficulty.some(value=>!Number.isInteger(value)||value<1||value>3))errors.push(`Invalid difficulty for ${id}`);
+    try{validateActivationMapping(mapping,id);}catch(error){errors.push(error.message);}
   }
   if(errors.length)throw new Error(errors.join('\n'));
   return true;
