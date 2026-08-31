@@ -21,10 +21,11 @@ test('manual review override enters selection and remediation is bounded',()=>{
   engine.beginCurrent();engine.revealSolution();engine.rate('again');assert.ok(engine.currentSession().items.length<=2);
 });
 test('all migrated indexes use shared practice UI without copied engine code',()=>{
+  const dashboardCacheKeys={xenia_klykova:'dashboard.js?v=20260831-stereometry-1'};
   for(const student of ['kirill_zinoviev','sofya_kalney','timofey','volodia_khachaturian','xenia_klykova']){
     const html=fs.readFileSync(`students/${student}/site/index.html`,'utf8'),dashboard=fs.readFileSync(`students/${student}/site/dashboard.js`,'utf8');
     for(const marker of ['id="practiceSection"','id="practiceRoot"','shared/practice/practice.css'])assert.ok(html.includes(marker),`${student}: ${marker}`);
-    assert.ok(html.includes('dashboard.js?v=20260831-practice-3'),`${student}: dashboard cache key`);
+    assert.ok(html.includes(dashboardCacheKeys[student]||'dashboard.js?v=20260831-practice-3'),`${student}: dashboard cache key`);
     assert.ok(dashboard.includes('practice-ui.js?v=20260831-practice-2'));assert.ok(dashboard.includes('initStudentDashboard'));assert.ok(fs.existsSync(`students/${student}/site/practice-config.js`));
   }
   const nikolHtml=fs.readFileSync('students/nikol_sarkisyants/site/index.html','utf8'),nikolDashboard=fs.readFileSync('students/nikol_sarkisyants/site/dashboard.js','utf8');
