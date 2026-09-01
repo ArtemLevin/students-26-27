@@ -25,10 +25,16 @@ function coverageFor(mapping,sourceOutcome){
   return null;
 }
 
-function catalogItems(groups,config){
+function catalogItems(groups,config,lessons){
   const visual=flattenGroups(groups||[]);
   if(visual.length)return visual;
-  return Object.keys(config?.competencies||{}).sort().map(id=>({id,title:id,groupTitle:'',level:0}));
+  const items=new Map();
+  for(const id of Object.keys(config?.competencies||{}))items.set(id,{id,title:id,groupTitle:'',level:0});
+  for(const lesson of lessons||[])for(const outcome of lesson.outcomes||[]){
+    const id=outcome?.competencyId;if(!id||items.has(id))continue;
+    items.set(id,{id,title:String(outcome.label||id),groupTitle:'',level:0});
+  }
+  return [...items.values()].sort((a,b)=>a.id.localeCompare(b.id));
 }
 
 export function buildPracticeAnalyticsMetadata({
@@ -41,7 +47,7 @@ export function buildPracticeAnalyticsMetadata({
   generatedAt=()=>new Date().toISOString()
 }={}){
   if(typeof studentId!=='string'||!studentId.trim())throw new TypeError('studentId is required');
-  const competencies=catalogItems(groups,config).map(item=>{
+  const competencies=catalogItems(groups,config,lessons).map(item=>{
     const source=latestSource(lessons,item.id),outcome=outcomeFor(source,item.id),mapping=config.competencies?.[item.id]||null;
     return {
       competencyId:item.id,
