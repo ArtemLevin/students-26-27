@@ -77,12 +77,13 @@ export class PracticeSyncHttpTransport{
   state(){return this.request('/api/v1/practice/me/state');}
   eventsBatch(payload){return this.request('/api/v1/practice/me/events:batch',{method:'POST',body:payload});}
   putState(payload){return this.request('/api/v1/practice/me/state',{method:'PUT',body:payload});}
+  putMetadata(payload){return this.request('/api/v1/practice/me/metadata',{method:'PUT',body:payload});}
 }
 
 export class PracticeSyncCoordinator{
-  constructor({storage,transport,enabled=false,rehydrate=()=>{},now=()=>new Date().toISOString(),batchSize=100}={}){
+  constructor({storage,transport,enabled=false,rehydrate=()=>{},metadataProvider=null,now=()=>new Date().toISOString(),batchSize=100}={}){
     if(!storage)throw new TypeError('Practice storage is required');if(!transport)throw new TypeError('Practice sync transport is required');
-    this.storage=storage;this.transport=transport;this.enabled=Boolean(enabled);this.rehydrate=rehydrate;this.now=now;this.batchSize=Math.max(1,Math.min(100,Number(batchSize)||100));
+    this.storage=storage;this.transport=transport;this.enabled=Boolean(enabled);this.rehydrate=rehydrate;this.metadataProvider=metadataProvider;this.now=now;this.batchSize=Math.max(1,Math.min(100,Number(batchSize)||100));
   }
   load(){return normalizePracticeState(this.storage.load(),this.now);}
   save(state,{rehydrate=true}={}){const next=normalizePracticeState(state,this.now);this.storage.save(next);if(rehydrate)this.rehydrate(next);return next;}
@@ -123,9 +124,16 @@ export class PracticeSyncCoordinator{
       this.markFailure(local,error);if(error instanceof PracticeSyncAuthError)return {status:'auth-expired',state:this.load(),error};return {status:'offline',state:this.load(),error};
     }
   }
+  async syncMetadata(){
+    if(!this.enabled||typeof this.metadataProvider!=='function'||typeof this.transport.putMetadata!=='function')return {status:'skipped'};
+    const payload=this.metadataProvider();if(!payload)return {status:'skipped'};
+    const response=await this.transport.putMetadata(payload);return {status:'synced',response};
+  }
   async syncNow(){
     const boot=await this.bootstrap();if(boot.status!=='synced')return boot;
     const flushed=await this.flushOutbox();if(flushed.status!=='synced')return flushed;
-    return this.pushState();
+    const pushed=await this.pushState();if(pushed.status!=='synced')return pushed;
+    try{return {...pushed,analyticsMetadata:await this.syncMetadata()};}
+    catch(error){return {...pushed,analyticsMetadata:{status:'failed',error}};}
   }
 }
