@@ -25,6 +25,12 @@ function coverageFor(mapping,sourceOutcome){
   return null;
 }
 
+function catalogItems(groups,config){
+  const visual=flattenGroups(groups||[]);
+  if(visual.length)return visual;
+  return Object.keys(config?.competencies||{}).sort().map(id=>({id,title:id,groupTitle:'',level:0}));
+}
+
 export function buildPracticeAnalyticsMetadata({
   studentId,
   groups=[],
@@ -35,7 +41,7 @@ export function buildPracticeAnalyticsMetadata({
   generatedAt=()=>new Date().toISOString()
 }={}){
   if(typeof studentId!=='string'||!studentId.trim())throw new TypeError('studentId is required');
-  const competencies=flattenGroups(groups).map(item=>{
+  const competencies=catalogItems(groups,config).map(item=>{
     const source=latestSource(lessons,item.id),outcome=outcomeFor(source,item.id),mapping=config.competencies?.[item.id]||null;
     return {
       competencyId:item.id,
