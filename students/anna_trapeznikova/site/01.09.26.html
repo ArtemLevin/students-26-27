@@ -16,8 +16,11 @@
       --text: #17243a;
       --muted: #667083;
       --line: #d8ccbd;
+      --line-strong: #a89a88;
       --navy: #172b49;
+      --ink: var(--navy);
       --teal: #287f7a;
+      --teal-strong: #17645f;
       --teal-soft: #d7eee8;
       --coral: #c85e50;
       --coral-soft: #f6ddd5;
@@ -36,8 +39,11 @@
       --text: #f5eddf;
       --muted: #b0bac8;
       --line: #344862;
+      --line-strong: #61748d;
       --navy: #e8f1f6;
+      --ink: var(--navy);
       --teal: #80cfc2;
+      --teal-strong: #a0e4da;
       --teal-soft: #193d40;
       --coral: #df8172;
       --coral-soft: #492a30;
@@ -125,7 +131,7 @@
     .poster-button { width: 100%; padding: 0; border: 0; border-radius: 1rem; background: transparent; }
     .poster-image { display: block; width: min(100%, 980px); max-height: 78vh; object-fit: contain; margin: auto; border: 1px solid var(--line); border-radius: 1rem; background: var(--surface-soft); }
 
-    .layout { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(330px, .75fr); gap: 1rem; align-items: start; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.42fr) minmax(420px, .88fr); gap: 1rem; align-items: start; }
     .panel { display: none; }
     .panel.active { display: block; animation: panel-in .22s ease both; }
     @keyframes panel-in { from { opacity: 0; transform: translateY(5px); } }
@@ -167,26 +173,82 @@
     html[data-detail="brief"] .full-detail,
     html[data-detail="standard"] .full-detail { display: none !important; }
 
-    .sticky { position: sticky; top: 5.7rem; }
-    .visual-card { padding: 1rem; }
+    .sticky { position: sticky; top: 5.7rem; max-height: calc(100vh - 6.3rem); overflow: auto; scrollbar-width: thin; }
+    .visual-card { padding: 1rem; box-shadow: 0 22px 58px rgba(21, 35, 49, .16); }
     .visual-head { display: flex; justify-content: space-between; gap: 1rem; align-items: start; }
-    .visual-head h2 { margin: .1rem 0 .25rem; }
-    .visual-modes { display: grid; grid-template-columns: repeat(2, 1fr); gap: .45rem; margin: .85rem 0; }
-    .mode-button { min-height: 44px; padding: .5rem; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface); color: var(--text); font-weight: 750; }
-    .mode-button[aria-pressed="true"] { border-color: var(--teal); background: var(--teal-soft); color: var(--navy); }
-    .model-select { width: 100%; min-height: 44px; margin-bottom: .6rem; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface); color: var(--text); }
-    .model-shell { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 1rem; background: var(--surface-soft); }
-    .model-shell svg { display: block; width: 100%; height: auto; min-height: 300px; touch-action: none; cursor: grab; }
+    .visual-head h2 { margin: .1rem 0 .15rem; font-size: clamp(1.4rem, 2.1vw, 2rem); }
+    .lab-kicker { display: inline-flex; align-items: center; gap: .4rem; color: var(--success); font-size: .78rem; font-weight: 850; }
+    .lab-kicker::before { content: ""; width: .55rem; height: .55rem; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 4px color-mix(in srgb, var(--success) 18%, transparent); }
+    .visual-modes { display: grid; grid-template-columns: repeat(4, 1fr); gap: .35rem; margin: .8rem 0; }
+    .mode-button { min-height: 44px; padding: .45rem .25rem; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface); color: var(--muted); font-size: .78rem; font-weight: 800; }
+    .mode-button[aria-pressed="true"] { border-color: var(--teal); background: var(--teal); color: #fff; box-shadow: 0 6px 16px color-mix(in srgb, var(--teal) 24%, transparent); }
+    .scenario-row { display: grid; grid-template-columns: 1fr auto; gap: .45rem; margin-bottom: .55rem; }
+    .model-select, .lab-input, .lab-speed { width: 100%; min-height: 44px; padding: .55rem .65rem; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface); color: var(--text); }
+    .sandbox-button { min-height: 44px; padding: .5rem .7rem; border: 1px solid var(--teal); border-radius: .7rem; background: var(--teal-soft); color: var(--navy); font-weight: 850; }
+    .sandbox-button[aria-pressed="true"] { background: var(--coral); border-color: var(--coral); color: #fff; }
+    .lab-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem; margin-bottom: .55rem; }
+    .control-card { min-width: 0; padding: .55rem .65rem; border: 1px solid var(--line); border-radius: .8rem; background: color-mix(in srgb, var(--surface-soft) 62%, var(--surface)); }
+    .control-card label, .control-card .control-label { display: flex; justify-content: space-between; gap: .45rem; color: var(--muted); font-size: .78rem; font-weight: 750; }
+    .control-card output { color: var(--teal); font-weight: 900; }
+    .control-card input[type="range"] { width: 100%; min-height: 30px; accent-color: var(--teal); }
+    .control-card input[type="number"], .control-card input[type="text"], .control-card select { width: 100%; min-height: 38px; margin-top: .3rem; padding: .35rem .45rem; border: 1px solid var(--line); border-radius: .55rem; background: var(--surface); color: var(--text); }
+    .control-card.wide { grid-column: 1 / -1; }
+    .metric-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .35rem; margin: .55rem 0; }
+    .metric { min-width: 0; padding: .48rem .4rem; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface); text-align: center; }
+    .metric span { display: block; overflow: hidden; color: var(--muted); font-size: .66rem; letter-spacing: .03em; text-overflow: ellipsis; white-space: nowrap; }
+    .metric strong { display: block; overflow: hidden; color: var(--navy); font-size: .92rem; text-overflow: ellipsis; white-space: nowrap; }
+    .model-shell { position: relative; overflow: hidden; border: 1px solid color-mix(in srgb, var(--teal) 35%, var(--line)); border-radius: 1rem; background: var(--surface-soft); box-shadow: inset 0 0 0 1px color-mix(in srgb, #fff 35%, transparent); }
+    .model-shell svg { display: block; width: 100%; aspect-ratio: 760 / 500; min-height: 330px; touch-action: none; cursor: grab; }
     .model-shell svg:active { cursor: grabbing; }
-    .model-shell::after { content: "Нажмите для увеличения"; position: absolute; right: .55rem; bottom: .45rem; padding: .25rem .45rem; border-radius: .45rem; background: color-mix(in srgb, var(--surface) 88%, transparent); color: var(--muted); font-size: .7rem; pointer-events: none; }
-    .model-control-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .4rem; margin-top: .55rem; }
-    .model-control-row button { min-height: 44px; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface); color: var(--text); font-weight: 800; }
-    .zoom-row { display: flex; align-items: center; gap: .6rem; margin-top: .6rem; color: var(--muted); font-size: .88rem; }
-    .zoom-row input { flex: 1; accent-color: var(--teal); }
-    .view-toggles { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: .55rem; color: var(--muted); font-size: .9rem; }
-    .view-toggles label { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; }
-    .view-toggles input { width: 1.15rem; height: 1.15rem; accent-color: var(--teal); }
-    .visual-note { min-height: 4.2rem; margin: .7rem 0 0; padding: .75rem; border-radius: .75rem; background: var(--teal-soft); color: var(--navy); }
+    .model-shell g[data-drag]:focus-visible > circle:last-of-type,
+    .dialog-model g[data-drag]:focus-visible > circle:last-of-type { stroke: var(--focus); stroke-width: 6; }
+    .model-shell::after { content: "Тяните маркеры · колёсико — масштаб"; position: absolute; right: .45rem; bottom: .35rem; padding: .18rem .38rem; border-radius: .4rem; background: color-mix(in srgb, var(--surface) 91%, transparent); color: var(--muted); font-size: .66rem; pointer-events: none; }
+    .timeline { display: grid; grid-template-columns: auto auto auto 1fr auto; gap: .35rem; align-items: center; margin-top: .5rem; }
+    .timeline button, .lab-action { min-width: 44px; min-height: 44px; border: 1px solid var(--line); border-radius: .65rem; background: var(--surface); color: var(--text); font-weight: 850; }
+    .timeline .play-button { background: var(--teal); border-color: var(--teal); color: #fff; }
+    .timeline input { width: 100%; accent-color: var(--teal); }
+    .timeline output { min-width: 3rem; color: var(--muted); font-size: .75rem; text-align: right; }
+    .cause-strip { display: grid; grid-template-columns: 1fr auto 1fr; gap: .45rem; align-items: stretch; margin-top: .55rem; }
+    .cause-box { padding: .55rem; border-radius: .7rem; background: var(--gold-soft); color: var(--text); font-size: .78rem; }
+    .cause-box.result { background: var(--teal-soft); }
+    .cause-arrow { display: grid; place-items: center; color: var(--coral); font-weight: 900; }
+    .visual-note { min-height: 3.6rem; margin: .55rem 0 0; padding: .65rem .75rem; border-left: .25rem solid var(--teal); border-radius: .65rem; background: var(--teal-soft); color: var(--navy); font-size: .86rem; }
+    .discovery { display: none; margin-top: .5rem; padding: .6rem .7rem; border: 1px solid color-mix(in srgb, var(--coral) 45%, var(--line)); border-radius: .7rem; background: var(--coral-soft); color: var(--text); font-size: .82rem; }
+    .discovery.show { display: block; animation: discovery-in .24s ease both; }
+    @keyframes discovery-in { from { opacity: 0; transform: translateY(4px); } }
+    .interactive-legend { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .55rem; }
+    .legend-button { min-height: 38px; display: inline-flex; align-items: center; gap: .35rem; padding: .3rem .5rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--muted); font-size: .72rem; }
+    .legend-button i { width: .65rem; height: .65rem; border-radius: 50%; background: var(--legend-color, var(--teal)); }
+    .legend-button:hover, .legend-button:focus-visible, .legend-button.active { border-color: var(--legend-color, var(--teal)); color: var(--text); }
+    .active-learning { display: grid; gap: .5rem; margin-top: .6rem; }
+    .learning-card { padding: .65rem; border: 1px solid var(--line); border-radius: .8rem; background: color-mix(in srgb, var(--surface-soft) 70%, var(--surface)); }
+    .learning-card h3 { margin: 0 0 .25rem; font: 850 .82rem/1.3 system-ui, sans-serif; color: var(--navy); }
+    .learning-card p { margin: 0 0 .45rem; color: var(--muted); font-size: .8rem; }
+    .prediction-options { display: flex; gap: .35rem; flex-wrap: wrap; }
+    .prediction-options button, .learning-card button { min-height: 40px; padding: .35rem .55rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--surface); color: var(--text); font-weight: 750; font-size: .78rem; }
+    .prediction-options button.selected { border-color: var(--teal); background: var(--teal-soft); }
+    .learning-feedback { min-height: 1.35rem; margin-top: .35rem !important; color: var(--teal) !important; font-weight: 750; }
+    .challenge-progress { display: flex; align-items: center; gap: .5rem; }
+    .challenge-progress span { flex: 1; height: .45rem; overflow: hidden; border-radius: 99px; background: var(--surface-strong); }
+    .challenge-progress i { display: block; width: 0; height: 100%; background: var(--success); transition: width .2s; }
+    .lab-details { margin-top: .55rem; border-top: 1px solid var(--line); }
+    .lab-details summary { min-height: 44px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: var(--muted); font-size: .8rem; font-weight: 800; }
+    .advanced-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .45rem; padding-top: .35rem; }
+    .advanced-grid label { display: flex; align-items: center; gap: .4rem; min-height: 40px; color: var(--muted); font-size: .8rem; }
+    .advanced-grid input[type="checkbox"] { width: 1.1rem; height: 1.1rem; accent-color: var(--teal); }
+    .zoom-row { grid-column: 1 / -1; display: flex; align-items: center; gap: .45rem; color: var(--muted); font-size: .78rem; }
+    .zoom-row input { min-width: 0; flex: 1; accent-color: var(--teal); }
+    .snapshot-actions { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: .35rem; }
+    .snapshot-actions button { min-height: 40px; border: 1px solid var(--line); border-radius: .6rem; background: var(--surface); color: var(--text); font-size: .75rem; font-weight: 800; }
+    .comparison { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; }
+    .snapshot { min-height: 4rem; padding: .5rem; border: 1px dashed var(--line); border-radius: .65rem; color: var(--muted); font-size: .72rem; }
+    .snapshot strong { display: block; color: var(--text); font-size: .8rem; }
+    .comparison-bars { grid-column: 1 / -1; display: grid; gap: .28rem; }
+    .comparison-bar { display: grid; grid-template-columns: 1rem 1fr auto; gap: .35rem; align-items: center; color: var(--muted); font-size: .7rem; }
+    .comparison-bar span { height: .45rem; border-radius: 99px; background: var(--surface-strong); overflow: hidden; }
+    .comparison-bar i { display: block; height: 100%; width: 0; background: var(--bar-color, var(--teal)); }
+    .model-control-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .35rem; margin-top: .45rem; }
+    .model-control-row button { min-height: 44px; border: 1px solid var(--line); border-radius: .65rem; background: var(--surface); color: var(--text); font-weight: 800; }
     .hint-trigger { width: 2rem; height: 2rem; display: inline-grid; place-items: center; padding: 0; border: 1px solid var(--teal); border-radius: 50%; background: var(--surface); color: var(--teal); font-weight: 900; }
     .hint-pulse { animation: hint-pulse 1.25s 2; }
     @keyframes hint-pulse { 50% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--teal) 0%, transparent); border-color: var(--gold); transform: translateY(-2px); } }
@@ -237,7 +299,7 @@
     @media (max-width: 960px) {
       .hero { grid-template-columns: 1fr; min-height: auto; }
       .layout { grid-template-columns: 1fr; }
-      .sticky { position: static; order: -1; }
+      .sticky { position: static; order: -1; max-height: none; overflow: visible; }
       .visual-card { margin-bottom: 1rem; }
       .model-shell svg { min-height: 360px; }
     }
@@ -253,18 +315,24 @@
       .card { border-radius: 1rem; }
       .model-control-row { grid-template-columns: repeat(2, 1fr); }
       .model-shell svg { min-height: 300px; }
+      .metric-grid { grid-template-columns: repeat(2, 1fr); }
+      .timeline { grid-template-columns: auto auto auto 1fr; }
+      .timeline output { grid-column: 1 / -1; text-align: left; }
       .footer { flex-direction: column; }
     }
     @media (max-width: 370px) {
       .wrap { padding: .45rem; }
       .hero, .card, .visual-card { padding: 1rem; }
-      .visual-modes { grid-template-columns: 1fr; }
+      .visual-modes { grid-template-columns: 1fr 1fr; }
+      .lab-controls, .advanced-grid { grid-template-columns: 1fr; }
+      .scenario-row { grid-template-columns: 1fr; }
+      .sandbox-button { width: 100%; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     }
     @media print {
-      :root, html[data-theme="dark"] { --bg: #fff; --surface: #fff; --surface-soft: #fff; --surface-strong: #eee; --text: #111; --muted: #333; --line: #aaa; --shadow: none; --navy: #111; --teal: #135f5c; --teal-soft: #edf7f4; --coral-soft: #fff3ef; --gold-soft: #fff8e6; }
+      :root, html[data-theme="dark"] { --bg: #fff; --surface: #fff; --surface-soft: #fff; --surface-strong: #eee; --text: #111; --muted: #333; --line: #aaa; --line-strong: #777; --shadow: none; --navy: #111; --teal: #135f5c; --teal-strong: #084b48; --teal-soft: #edf7f4; --coral-soft: #fff3ef; --gold-soft: #fff8e6; }
       body { background: white; font-size: 11pt; }
       .wrap { width: 100%; padding: 0; }
       .hero { display: block; min-height: 0; padding: 0 0 12mm; border: 0; box-shadow: none; }
@@ -645,39 +713,108 @@
       <aside class="sticky" aria-label="Интерактивная модель">
         <article class="visual-card">
           <div class="visual-head">
-            <div><p class="eyebrow">Живая лаборатория</p><h2 id="modelTitle">Деление с остатком</h2></div>
-            <button class="hint-trigger" type="button" data-hint-title="Режимы модели" data-hint="Переключайте четыре представления: деление, устройство периода, множества и упрощение корней." aria-label="Подсказка о режимах модели">i</button>
+            <div>
+              <p class="eyebrow">Лаборатория чисел</p>
+              <h2 id="modelTitle">Орбита остатков</h2>
+              <span class="lab-kicker" id="labModeLabel">управляемый сценарий</span>
+            </div>
+            <button class="hint-trigger" type="button" data-hint-title="Исследовательский цикл" data-hint="Измените параметр, сделайте прогноз, запустите шаги и сравните результат со снимком." aria-label="Подсказка о лаборатории">i</button>
           </div>
           <div class="visual-modes" role="group" aria-label="Режим визуализации">
-            <button class="mode-button" type="button" data-mode="decimal" aria-pressed="true">Деление</button>
-            <button class="mode-button" type="button" data-mode="period">Период → дробь</button>
-            <button class="mode-button" type="button" data-mode="sets">Множества</button>
-            <button class="mode-button" type="button" data-mode="radical">Корни</button>
+            <button class="mode-button" type="button" data-mode="decimal" aria-pressed="true">Остатки</button>
+            <button class="mode-button" type="button" data-mode="period" aria-pressed="false">Период</button>
+            <button class="mode-button" type="button" data-mode="sets" aria-pressed="false">Множества</button>
+            <button class="mode-button" type="button" data-mode="radical" aria-pressed="false">Корни</button>
           </div>
-          <label>
-            <span class="visually-hidden">Выберите пример</span>
-            <select class="model-select" id="modelSelect" aria-label="Выберите пример для визуализации"></select>
-          </label>
+          <div class="scenario-row">
+            <label>
+              <span class="visually-hidden">Выберите исследовательский сценарий</span>
+              <select class="model-select" id="scenarioSelect" aria-label="Исследовательский сценарий"></select>
+            </label>
+            <button class="sandbox-button" id="sandboxToggle" type="button" aria-pressed="false">Исследовать самому</button>
+          </div>
+
+          <div class="lab-controls" id="labControls" aria-label="Параметры эксперимента"></div>
+
+          <div class="metric-grid" id="stateMetrics" aria-label="Текущее состояние модели"></div>
+
           <div class="model-shell">
-            <svg id="modelSvg" viewBox="0 0 640 420" role="button" tabindex="0" aria-label="Интерактивная модель. Нажмите Enter для увеличения"></svg>
+            <svg id="modelSvg" viewBox="0 0 760 500" role="application" tabindex="0" aria-label="Интерактивная лаборатория. Перетаскивайте выделенные маркеры; Enter открывает крупный режим"></svg>
           </div>
-          <div class="zoom-row">
-            <span>Масштаб</span>
-            <input id="zoomRange" type="range" min="0.75" max="2.5" step="0.05" value="1" aria-label="Масштаб модели">
-            <output id="zoomOutput">100%</output>
-            <button class="hint-trigger" type="button" data-hint-title="Масштаб и перемещение" data-hint="Используйте колесо или ползунок. Перетаскивание сдвигает модель; кнопка «Сброс» возвращает исходный вид." aria-label="Подсказка о масштабе">?</button>
+
+          <div class="timeline" aria-label="Пошаговое управление экспериментом">
+            <button type="button" data-lab-action="prev" aria-label="Предыдущий шаг">←</button>
+            <button class="play-button" type="button" data-lab-action="play" aria-label="Запустить эксперимент">▶</button>
+            <button type="button" data-lab-action="next" aria-label="Следующий шаг">→</button>
+            <input id="timelineRange" type="range" min="0" max="1" step="1" value="0" aria-label="Шаг эксперимента">
+            <output id="timelineOutput">0 / 1</output>
           </div>
-          <div class="view-toggles" aria-label="Видимость элементов модели">
-            <label><input id="labelsToggle" type="checkbox" checked> подписи</label>
-            <label><input id="guidesToggle" type="checkbox" checked> связи</label>
+
+          <div class="cause-strip" aria-label="Причина и результат">
+            <div class="cause-box" id="causeValue">Изменяем: числитель и знаменатель</div>
+            <div class="cause-arrow" aria-hidden="true">→</div>
+            <div class="cause-box result" id="effectValue">Получаем: десятичную запись</div>
           </div>
-          <div class="model-control-row">
-            <button type="button" data-model-action="out" aria-label="Уменьшить модель">−</button>
-            <button type="button" data-model-action="in" aria-label="Увеличить модель">+</button>
-            <button type="button" data-model-action="reset">Сброс</button>
-            <button type="button" data-model-action="open">Развернуть</button>
-          </div>
+
           <p class="visual-note" id="modelNote" aria-live="polite"></p>
+          <div class="discovery" id="discoveryNote" role="status" aria-live="polite"></div>
+
+          <div class="interactive-legend" id="interactiveLegend" aria-label="Интерактивная легенда"></div>
+
+          <div class="active-learning">
+            <section class="learning-card" aria-labelledby="predictionTitle">
+              <h3 id="predictionTitle">Предскажи результат</h3>
+              <p id="predictionQuestion">Какой будет десятичная запись?</p>
+              <div class="prediction-options" id="predictionOptions"></div>
+              <p class="learning-feedback" id="predictionFeedback" aria-live="polite"></p>
+            </section>
+            <section class="learning-card" aria-labelledby="challengeTitle">
+              <h3 id="challengeTitle">Исследовательский вызов</h3>
+              <p id="challengeText"></p>
+              <div class="challenge-progress"><span><i id="challengeBar"></i></span><strong id="challengeScore">0/4</strong></div>
+              <button type="button" id="checkChallenge">Проверить состояние</button>
+              <p class="learning-feedback" id="challengeFeedback" aria-live="polite"></p>
+            </section>
+          </div>
+
+          <details class="lab-details">
+            <summary>Подробнее: вид, скорость и сравнение <span aria-hidden="true">⌄</span></summary>
+            <div class="advanced-grid">
+              <label><input id="labelsToggle" type="checkbox" checked> подписи</label>
+              <label><input id="guidesToggle" type="checkbox" checked> связи</label>
+              <label>Скорость
+                <select class="lab-speed" id="speedSelect" aria-label="Скорость эксперимента">
+                  <option value="0.6">медленно</option>
+                  <option value="1" selected>обычно</option>
+                  <option value="1.8">быстро</option>
+                </select>
+              </label>
+              <button class="lab-action" type="button" data-lab-action="restart">↺ Сначала</button>
+              <div class="zoom-row">
+                <span>Масштаб</span>
+                <input id="zoomRange" type="range" min="0.85" max="1.5" step="0.05" value="1" aria-label="Масштаб модели">
+                <output id="zoomOutput">100%</output>
+                <button class="hint-trigger" type="button" data-hint-title="Прямое управление" data-hint="Бирюзовые маркеры можно тянуть мышью или пальцем. Ползунки рядом дают доступную клавиатурную альтернативу." aria-label="Подсказка о прямом управлении">?</button>
+              </div>
+              <div class="snapshot-actions">
+                <button type="button" data-snapshot="A">Сохранить A</button>
+                <button type="button" data-snapshot="B">Сохранить B</button>
+                <button type="button" id="clearSnapshots">Очистить</button>
+              </div>
+              <div class="comparison" id="comparisonPanel">
+                <div class="snapshot" id="snapshotA"><strong>Снимок A</strong>пока пуст</div>
+                <div class="snapshot" id="snapshotB"><strong>Снимок B</strong>пока пуст</div>
+                <div class="comparison-bars" id="comparisonBars"></div>
+              </div>
+            </div>
+          </details>
+
+          <div class="model-control-row">
+            <button type="button" data-lab-action="out" aria-label="Уменьшить модель">−</button>
+            <button type="button" data-lab-action="in" aria-label="Увеличить модель">+</button>
+            <button type="button" data-lab-action="reset">Сброс</button>
+            <button type="button" data-lab-action="open">Развернуть</button>
+          </div>
         </article>
       </aside>
     </div>
@@ -695,10 +832,22 @@
 
   <dialog id="modelDialog" aria-labelledby="modelDialogTitle">
     <div class="dialog-shell">
-      <header class="dialog-head"><h2 id="modelDialogTitle">Увеличенная модель</h2><button class="dialog-close" type="button" data-close-dialog="modelDialog" aria-label="Закрыть модель">×</button></header>
-      <div class="dialog-model"><svg id="modelSvgLarge" viewBox="0 0 900 570" role="img" aria-label="Увеличенная интерактивная модель"></svg></div>
+      <header class="dialog-head">
+        <div><p class="eyebrow">Крупный исследовательский режим</p><h2 id="modelDialogTitle">Орбита остатков</h2></div>
+        <button class="dialog-close" type="button" data-close-dialog="modelDialog" aria-label="Закрыть модель">×</button>
+      </header>
+      <div class="metric-grid" id="modalMetrics" aria-label="Текущее состояние увеличенной модели"></div>
+      <div class="dialog-model"><svg id="modelSvgLarge" viewBox="0 0 760 500" role="application" tabindex="0" aria-label="Увеличенная интерактивная лаборатория"></svg></div>
+      <div class="timeline" aria-label="Пошаговое управление увеличенной моделью">
+        <button type="button" data-lab-action="prev" aria-label="Предыдущий шаг">←</button>
+        <button class="play-button" type="button" data-lab-action="play" aria-label="Запустить эксперимент">▶</button>
+        <button type="button" data-lab-action="next" aria-label="Следующий шаг">→</button>
+        <input id="modalTimelineRange" type="range" min="0" max="1" step="1" value="0" aria-label="Шаг увеличенной модели">
+        <output id="modalTimelineOutput">0 / 1</output>
+      </div>
+      <p class="visual-note" id="modalModelNote" aria-live="polite"></p>
       <div class="model-control-row">
-        <button type="button" data-model-action="out">−</button><button type="button" data-model-action="in">+</button><button type="button" data-model-action="reset">Сброс</button><button type="button" data-close-dialog="modelDialog">Закрыть</button>
+        <button type="button" data-lab-action="out">−</button><button type="button" data-lab-action="in">+</button><button type="button" data-lab-action="reset">Сброс</button><button type="button" data-close-dialog="modelDialog">Закрыть</button>
       </div>
     </div>
   </dialog>
@@ -710,6 +859,7 @@
     </div>
   </dialog>
 
+  <script src="01.09.26-lab.js"></script>
   <script>
     (() => {
       'use strict';
@@ -741,7 +891,7 @@
         root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
         safeStorage.set(STORAGE.theme, root.dataset.theme);
         syncThemeLabel();
-        renderModel();
+        renderLab();
       });
       $('#printButton').addEventListener('click', () => window.print());
 
@@ -815,233 +965,30 @@
       }
       $$('.step-solution').forEach(setupSolution);
 
-      const modelExamples = {
-        decimal: [
-          { label: '2/3 → 0,(6)', numerator: 2, denominator: 3, result: '0,(6)', note: 'Остаток 2 повторяется, поэтому цифра 6 образует период.' },
-          { label: '8/11 → 0,(72)', numerator: 8, denominator: 11, result: '0,(72)', note: 'Остаток 8 возвращается после двух шагов: период состоит из цифр 72.' },
-          { label: '3/5 → 0,6', numerator: 3, denominator: 5, result: '0,6', note: 'Остаток стал равен нулю, поэтому десятичная дробь конечна.' },
-          { label: '−3/4 → −0,75', numerator: -3, denominator: 4, result: '−0,75', note: 'Знак сохраняется, а деление 3 на 4 завершается остатком 0.' },
-          { label: '5/18 → 0,2(7)', numerator: 5, denominator: 18, result: '0,2(7)', note: 'После первой цифры остаток 14 повторяется: непериодическая часть 2, период 7.' },
-          { label: '7/12 → 0,58(3)', numerator: 7, denominator: 12, result: '0,58(3)', note: 'После цифр 58 повторяется остаток 4, поэтому период равен 3.' }
-        ],
-        period: [
-          { label: '0,(15) → 5/33', prefix: '', period: '15', whole: '15', before: '0', denominator: '99', result: '5/33', note: 'Две цифры периода дают две девятки. Дробь 15/99 сокращается до 5/33.' },
-          { label: '0,(123) → 41/333', prefix: '', period: '123', whole: '123', before: '0', denominator: '999', result: '41/333', note: 'Три цифры периода дают три девятки. После сокращения получаем 41/333.' },
-          { label: '0,(27) → 3/11', prefix: '', period: '27', whole: '27', before: '0', denominator: '99', result: '3/11', note: 'Период 27 имеет длину 2; 27/99 сокращается до 3/11.' },
-          { label: '0,2(3) → 7/30', prefix: '2', period: '3', whole: '23', before: '2', denominator: '90', result: '7/30', note: 'Одна девятка для периода и один ноль для цифры 2 до периода.' },
-          { label: '0,14(6) → 11/75', prefix: '14', period: '6', whole: '146', before: '14', denominator: '900', result: '11/75', note: 'Одна девятка и два нуля; (146 − 14)/900 сокращается до 11/75.' },
-          { label: '0,23(18) → 51/220', prefix: '23', period: '18', whole: '2318', before: '23', denominator: '9900', result: '51/220', note: 'Две девятки и два нуля; (2318 − 23)/9900 = 51/220.' },
-          { label: '1,2(34) → 611/495', prefix: '2', period: '34', whole: '1234', before: '12', denominator: '990', result: '611/495', note: 'Учитываем целую часть: (1234 − 12)/990 = 611/495.' }
-        ],
-        sets: [
-          { label: '7', smallest: 'N', note: '7 — натуральное число; одновременно оно целое, рациональное и действительное.' },
-          { label: '−5', smallest: 'Z', note: '−5 — целое число и принадлежит также ℚ и ℝ.' },
-          { label: '2/7', smallest: 'Q', note: '2/7 — рациональное число: это отношение целых чисел с ненулевым знаменателем.' },
-          { label: '√2', smallest: 'I', note: '√2 — иррациональное действительное число, то есть принадлежит ℝ ∖ ℚ.' },
-          { label: '0', smallest: 'Z', note: 'В принятой договорённости 0 не входит в ℕ; наименьшее множество — ℤ.' },
-          { label: '0,(37)', smallest: 'Q', note: 'Периодическая десятичная запись означает рациональность.' }
-        ],
-        radical: [
-          { label: '(√8−3)(√8+3)', stages: ['(√8−3)(√8+3)', '(√8)²−3²', '8−9', '−1 ∈ ℚ'], note: 'Формула разности квадратов полностью устраняет корень.' },
-          { label: '(√3−1)²+2√3', stages: ['(√3−1)²+2√3', '3−2√3+1+2√3', '4−2√3+2√3', '4 ∈ ℕ'], note: 'Противоположные слагаемые с √3 сокращаются.' },
-          { label: '√18−3√2', stages: ['√18−3√2', '3√2−3√2', '0 ∈ ℤ'], note: 'После вынесения множителя из-под корня значение равно нулю.' },
-          { label: '√12+√3', stages: ['√12+√3', '2√3+√3', '3√3 ∈ ℝ∖ℚ'], note: 'Подобные радикалы складываются, корень остаётся: значение иррационально.' },
-          { label: '(√5+1)(√5−1)', stages: ['(√5+1)(√5−1)', '5−1', '4 ∈ ℕ'], note: 'Сопряжённые множители дают разность квадратов.' },
-          { label: '√50/√2', stages: ['√50/√2', '√25', '5 ∈ ℕ'], note: 'Частное корней упрощается до √25 = 5.' }
-        ]
-      };
-      const modelTitles = { decimal: 'Деление с остатком', period: 'Период → дробь', sets: 'Вложенность множеств', radical: 'Упрощение корней' };
-      let modelState = { mode: 'decimal', index: 0, zoom: 1, panX: 0, panY: 0, activeLink: '', labels: true, guides: true };
-      const modelSelect = $('#modelSelect');
-      const modelSvg = $('#modelSvg');
-      const modelSvgLarge = $('#modelSvgLarge');
-
-      function css(name) { return getComputedStyle(root).getPropertyValue(name).trim(); }
-      function esc(value) { return String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char])); }
-      function setMode(mode, preferredIndex = 0) {
-        if (!modelExamples[mode]) return;
-        modelState.mode = mode;
-        modelState.index = Math.max(0, Math.min(modelExamples[mode].length - 1, preferredIndex));
-        modelState.panX = 0;
-        modelState.panY = 0;
-        $$('.mode-button').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.mode === mode)));
-        $('#modelTitle').textContent = modelTitles[mode];
-        $('#modelDialogTitle').textContent = modelTitles[mode];
-        modelSelect.innerHTML = modelExamples[mode].map((item, index) => `<option value="${index}">${esc(item.label)}</option>`).join('');
-        modelSelect.value = String(modelState.index);
-        renderModel();
-      }
-
-      function longDivisionData(numerator, denominator) {
-        const negative = numerator < 0;
-        let remainder = Math.abs(numerator) % denominator;
-        const seen = new Map();
-        const steps = [];
-        let position = 0;
-        while (remainder && !seen.has(remainder) && position < 8) {
-          seen.set(remainder, position);
-          const before = remainder;
-          const scaled = remainder * 10;
-          const digit = Math.floor(scaled / denominator);
-          remainder = scaled % denominator;
-          steps.push({ before, scaled, digit, after: remainder });
-          position += 1;
+      const labApp = window.AnnaLearningLab.create({
+        openDialog(dialog, trigger) {
+          openDialog(dialog, trigger);
         }
-        return { negative, steps, repeatAt: remainder ? seen.get(remainder) : -1 };
-      }
-
-      function decimalMarkup(example, large) {
-        const data = longDivisionData(example.numerator, example.denominator);
-        const width = large ? 900 : 640;
-        const gap = data.steps.length > 4 ? 135 : 150;
-        const startX = Math.max(70, (width - Math.max(1, data.steps.length) * gap) / 2 + 45);
-        const cards = data.steps.map((step, index) => {
-          const x = startX + index * gap;
-          const repeated = index === data.repeatAt;
-          const nextX = startX + (index + 1) * gap;
-          const arrow = index < data.steps.length - 1 ? `<path class="model-guide" d="M${x + 48} 194 H${nextX - 53}" stroke="${css('--muted')}" stroke-width="2" marker-end="url(#arrow)"/>` : '';
-          return `${arrow}<g data-link="decimal-step-${index}" tabindex="0" role="button"><rect x="${x - 48}" y="140" width="96" height="108" rx="16" fill="${repeated ? css('--coral-soft') : css('--surface')}" stroke="${repeated ? css('--coral') : css('--line')}" stroke-width="${repeated ? 3 : 1.5}"/><text class="model-helper" x="${x}" y="171" text-anchor="middle" fill="${css('--muted')}" font-size="14">${step.before} × 10</text><text x="${x}" y="205" text-anchor="middle" fill="${css('--teal')}" font-size="28" font-weight="800">${step.digit}</text><text class="model-helper" x="${x}" y="231" text-anchor="middle" fill="${css('--text')}" font-size="13">остаток ${step.after}</text></g>`;
-        }).join('');
-        const cycle = data.repeatAt >= 0 ? `<path class="model-guide" d="M${startX + (data.steps.length - 1) * gap} 260 C${startX + data.steps.length * gap} 330 ${startX + data.repeatAt * gap - 70} 330 ${startX + data.repeatAt * gap} 260" fill="none" stroke="${css('--coral')}" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#arrowCoral)"/><text class="model-helper" x="${width / 2}" y="342" text-anchor="middle" fill="${css('--coral')}" font-size="15" font-weight="700">остаток повторился — начинается период</text>` : `<text class="model-helper" x="${width / 2}" y="320" text-anchor="middle" fill="${css('--success')}" font-size="16" font-weight="700">остаток 0 — деление завершилось</text>`;
-        return `<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="${css('--muted')}"/></marker><marker id="arrowCoral" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="${css('--coral')}"/></marker></defs><text x="${width / 2}" y="54" text-anchor="middle" fill="${css('--text')}" font-size="26" font-weight="800">${esc(example.label)}</text><text class="model-helper" x="${width / 2}" y="91" text-anchor="middle" fill="${css('--muted')}" font-size="15">каждая карточка: остаток → цифра → новый остаток</text>${cards}${cycle}`;
-      }
-
-      function periodMarkup(example, large) {
-        const width = large ? 900 : 640;
-        const center = width / 2;
-        const prefix = example.prefix || '∅';
-        const numerator = example.before === '0' ? example.whole : `${example.whole} − ${example.before}`;
-        return `<text x="${center}" y="52" text-anchor="middle" fill="${css('--text')}" font-size="28" font-weight="800">${esc(example.label)}</text>
-          <g data-link="period-prefix" tabindex="0"><rect x="${center - 205}" y="100" width="170" height="96" rx="18" fill="${css('--gold-soft')}" stroke="${css('--gold')}"/><text class="model-helper" x="${center - 120}" y="131" text-anchor="middle" fill="${css('--muted')}" font-size="14">до периода</text><text x="${center - 120}" y="174" text-anchor="middle" fill="${css('--gold')}" font-size="32" font-weight="800">${esc(prefix)}</text></g>
-          <g data-link="period-cycle" tabindex="0"><rect x="${center + 35}" y="100" width="170" height="96" rx="18" fill="${css('--teal-soft')}" stroke="${css('--teal')}"/><text class="model-helper" x="${center + 120}" y="131" text-anchor="middle" fill="${css('--muted')}" font-size="14">период</text><text x="${center + 120}" y="174" text-anchor="middle" fill="${css('--teal')}" font-size="32" font-weight="800">${esc(example.period)}</text></g>
-          <path class="model-guide" d="M${center - 120} 211 V250 H${center - 82}" fill="none" stroke="${css('--gold')}" stroke-width="3"/><path class="model-guide" d="M${center + 120} 211 V250 H${center + 82}" fill="none" stroke="${css('--teal')}" stroke-width="3"/>
-          <g data-link="period-formula" tabindex="0"><rect x="${center - 235}" y="250" width="470" height="105" rx="22" fill="${css('--surface')}" stroke="${css('--line')}"/><text x="${center}" y="291" text-anchor="middle" fill="${css('--text')}" font-size="25" font-weight="800">(${esc(numerator)}) / ${esc(example.denominator)}</text><text x="${center}" y="327" text-anchor="middle" fill="${css('--teal')}" font-size="23">= ${esc(example.result)}</text></g>
-          <text class="model-helper" x="${center}" y="392" text-anchor="middle" fill="${css('--muted')}" font-size="14">девятки — период · нули — цифры до периода</text>`;
-      }
-
-      function setsMarkup(example, large) {
-        const width = large ? 900 : 640;
-        const center = width / 2;
-        const selected = example.smallest;
-        const stroke = (id) => selected === id ? css('--coral') : css('--teal');
-        const sw = (id) => selected === id ? 6 : 2;
-        return `<text x="${center}" y="42" text-anchor="middle" fill="${css('--text')}" font-size="28" font-weight="800">Наименьшее множество для ${esc(example.label)}</text>
-          <g data-link="set-R" tabindex="0"><ellipse cx="${center}" cy="235" rx="${large ? 330 : 240}" ry="165" fill="${css('--surface')}" stroke="${stroke('I')}" stroke-width="${sw('I')}"/><text x="${center - (large ? 280 : 200)}" y="115" fill="${css('--text')}" font-size="23" font-weight="800">ℝ</text><text class="model-helper" x="${center - (large ? 267 : 187)}" y="145" fill="${css('--muted')}" font-size="14">иррациональные: √2</text></g>
-          <g data-link="set-Q" tabindex="0"><ellipse cx="${center + 45}" cy="247" rx="${large ? 245 : 175}" ry="125" fill="${css('--teal-soft')}" stroke="${stroke('Q')}" stroke-width="${sw('Q')}"/><text x="${center + (large ? 225 : 158)}" y="178" fill="${css('--teal')}" font-size="24" font-weight="800">ℚ</text></g>
-          <g data-link="set-Z" tabindex="0"><ellipse cx="${center + 25}" cy="258" rx="${large ? 155 : 110}" ry="84" fill="${css('--gold-soft')}" stroke="${stroke('Z')}" stroke-width="${sw('Z')}"/><text x="${center + (large ? 132 : 93)}" y="229" fill="${css('--gold')}" font-size="24" font-weight="800">ℤ</text></g>
-          <g data-link="set-N" tabindex="0"><ellipse cx="${center}" cy="267" rx="${large ? 76 : 54}" ry="44" fill="${css('--coral-soft')}" stroke="${stroke('N')}" stroke-width="${sw('N')}"/><text x="${center}" y="275" text-anchor="middle" fill="${css('--coral')}" font-size="25" font-weight="800">ℕ</text></g>
-          <rect x="${center - 90}" y="365" width="180" height="42" rx="21" fill="${css('--navy')}"/><text x="${center}" y="393" text-anchor="middle" fill="${css('--bg')}" font-size="19" font-weight="800">${esc(example.label)} → ${selected === 'I' ? 'ℝ ∖ ℚ' : selected === 'N' ? 'ℕ' : selected === 'Z' ? 'ℤ' : 'ℚ'}</text>`;
-      }
-
-      function radicalMarkup(example, large) {
-        const width = large ? 900 : 640;
-        const center = width / 2;
-        const gap = large ? 122 : 92;
-        const startY = 92;
-        return `<text x="${center}" y="46" text-anchor="middle" fill="${css('--text')}" font-size="25" font-weight="800">Упростить → классифицировать</text>` + example.stages.map((stage, index) => {
-          const y = startY + index * gap;
-          const final = index === example.stages.length - 1;
-          return `${index ? `<path class="model-guide" d="M${center} ${y - 43} V${y - 18}" stroke="${css('--muted')}" stroke-width="3"/><path class="model-guide" d="M${center - 6} ${y - 25} L${center} ${y - 17} L${center + 6} ${y - 25}" fill="none" stroke="${css('--muted')}" stroke-width="3"/>` : ''}<g data-link="radical-stage-${index}" tabindex="0"><rect x="${center - (large ? 270 : 215)}" y="${y - 16}" width="${large ? 540 : 430}" height="56" rx="18" fill="${final ? css('--teal-soft') : css('--surface')}" stroke="${final ? css('--teal') : css('--line')}" stroke-width="${final ? 3 : 1.5}"/><text x="${center}" y="${y + 20}" text-anchor="middle" fill="${final ? css('--teal') : css('--text')}" font-size="${large ? 24 : 20}" font-weight="${final ? 800 : 650}">${esc(stage)}</text></g>`;
-        }).join('');
-      }
-
-      function markupFor(example, large) {
-        if (modelState.mode === 'decimal') return decimalMarkup(example, large);
-        if (modelState.mode === 'period') return periodMarkup(example, large);
-        if (modelState.mode === 'sets') return setsMarkup(example, large);
-        return radicalMarkup(example, large);
-      }
-      function renderInto(svg, large = false) {
-        const example = modelExamples[modelState.mode][modelState.index];
-        const base = large ? '0 0 900 570' : '0 0 640 420';
-        svg.setAttribute('viewBox', base);
-        svg.innerHTML = `<style>.labels-off .model-helper{display:none}.guides-off .model-guide{display:none}</style><g class="${modelState.labels ? '' : 'labels-off'} ${modelState.guides ? '' : 'guides-off'}" transform="translate(${modelState.panX} ${modelState.panY}) scale(${modelState.zoom})">${markupFor(example, large)}</g>`;
-        svg.querySelectorAll('[data-link]').forEach((node) => {
-          if (node.dataset.link === modelState.activeLink) node.setAttribute('opacity', '1');
-          node.addEventListener('mouseenter', () => setActiveLink(node.dataset.link));
-          node.addEventListener('focus', () => setActiveLink(node.dataset.link));
-        });
-      }
-      function renderModel() {
-        const example = modelExamples[modelState.mode][modelState.index];
-        $('#modelNote').textContent = example.note;
-        $('#zoomRange').value = modelState.zoom;
-        $('#zoomOutput').textContent = `${Math.round(modelState.zoom * 100)}%`;
-        renderInto(modelSvg, false);
-        if ($('#modelDialog').open) renderInto(modelSvgLarge, true);
-      }
-      modelSelect.addEventListener('change', () => { modelState.index = Number(modelSelect.value) || 0; renderModel(); });
-      $('#labelsToggle').addEventListener('change', (event) => { modelState.labels = event.target.checked; renderModel(); });
-      $('#guidesToggle').addEventListener('change', (event) => { modelState.guides = event.target.checked; renderModel(); });
-      $$('.mode-button').forEach((button) => button.addEventListener('click', () => setMode(button.dataset.mode)));
-      $('#zoomRange').addEventListener('input', (event) => { modelState.zoom = Number(event.target.value); renderModel(); });
-      $$('[data-model-action]').forEach((button) => button.addEventListener('click', () => {
-        const action = button.dataset.modelAction;
-        if (action === 'in') modelState.zoom = Math.min(2.5, modelState.zoom + .15);
-        if (action === 'out') modelState.zoom = Math.max(.75, modelState.zoom - .15);
-        if (action === 'reset') Object.assign(modelState, { zoom: 1, panX: 0, panY: 0 });
-        if (action === 'open') openDialog($('#modelDialog'), modelSvg);
-        renderModel();
-      }));
-
-      let pointer = null;
-      function bindPanZoom(svg, canOpen) {
-        svg.addEventListener('pointerdown', (event) => {
-          pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, moved: false };
-          svg.setPointerCapture(event.pointerId);
-        });
-        svg.addEventListener('pointermove', (event) => {
-          if (!pointer || pointer.id !== event.pointerId) return;
-          const dx = event.clientX - pointer.x;
-          const dy = event.clientY - pointer.y;
-          if (Math.abs(dx) + Math.abs(dy) > 3) pointer.moved = true;
-          modelState.panX += dx / modelState.zoom;
-          modelState.panY += dy / modelState.zoom;
-          pointer.x = event.clientX;
-          pointer.y = event.clientY;
-          renderModel();
-        });
-        svg.addEventListener('pointerup', (event) => {
-          const shouldOpen = pointer && !pointer.moved && canOpen;
-          pointer = null;
-          if (shouldOpen) openDialog($('#modelDialog'), svg);
-        });
-        svg.addEventListener('wheel', (event) => {
-          event.preventDefault();
-          modelState.zoom = Math.max(.75, Math.min(2.5, modelState.zoom + (event.deltaY < 0 ? .1 : -.1)));
-          renderModel();
-        }, { passive: false });
-      }
-      bindPanZoom(modelSvg, true);
-      bindPanZoom(modelSvgLarge, false);
-      modelSvg.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openDialog($('#modelDialog'), modelSvg); }
       });
+
+      function setMode(mode) {
+        labApp.setMode(mode);
+      }
+
+      function renderLab() {
+        labApp.render();
+      }
 
       function setActiveLink(link) {
-        modelState.activeLink = link || '';
-        $$('.linked').forEach((node) => node.classList.toggle('link-active', node.dataset.link === link));
-        [modelSvg, modelSvgLarge].forEach((svg) => {
-          const nodes = $$('[data-link]', svg);
-          const hasMatch = nodes.some((node) => node.dataset.link === link);
-          nodes.forEach((node) => {
-            node.style.opacity = link && hasMatch && node.dataset.link !== link ? '.28' : '1';
-          });
-        });
+        labApp.setActiveLink(link);
       }
-      $$('.linked').forEach((node) => {
-        node.addEventListener('mouseenter', () => setActiveLink(node.dataset.link));
-        node.addEventListener('focusin', () => setActiveLink(node.dataset.link));
-        node.addEventListener('mouseleave', () => setActiveLink(''));
-        node.addEventListener('focusout', () => setActiveLink(''));
-      });
 
       let dialogTrigger = null;
       function openDialog(dialog, trigger) {
         dialogTrigger = trigger || document.activeElement;
         dialog.showModal();
         document.body.classList.add('modal-open');
-        if (dialog.id === 'modelDialog') renderModel();
+        if (dialog.id === 'modelDialog') renderLab();
         $('.dialog-close', dialog)?.focus();
       }
       function closeDialog(dialog) {
