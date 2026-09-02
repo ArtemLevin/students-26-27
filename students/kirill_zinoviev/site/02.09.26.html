@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивное занятие Кирилла Зиновьева: буквенные выражения, проценты, дроби и простейшие неравенства">
+<title>Выражения, проценты, дроби и неравенства — Кирилл Зиновьев</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23004D4D'/%3E%3Cpath d='M14 18h36M14 32h22M14 46h36' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f4efe6;--paper:#fffdf8;--paper2:#f8f2e8;--text:#252827;--muted:#68706d;
+  --line:#d9d4ca;--accent:#006f6f;--accent2:#004d4d;--accent-soft:#dceeed;
+  --good:#2f7a59;--good-soft:#e3f1e9;--warn:#9b4a42;--warn-soft:#f6e7e3;
+  --sand:#f3e6c8;--blue:#466e8b;--shadow:0 18px 50px rgba(42,54,49,.10)
+}
+html[data-theme="dark"]{
+  --bg:#101716;--paper:#17211f;--paper2:#1d2926;--text:#eef4f1;--muted:#a9b6b0;
+  --line:#34423e;--accent:#64c8c3;--accent2:#9adbd7;--accent-soft:#173d3a;
+  --good:#7ac69d;--good-soft:#193b2c;--warn:#e39488;--warn-soft:#452925;
+  --sand:#413b2d;--blue:#8bb5d3;--shadow:0 18px 55px rgba(0,0,0,.28)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:
+  radial-gradient(circle at 92% 0,rgba(0,111,111,.08),transparent 28%),
+  linear-gradient(180deg,var(--bg),var(--bg));
+  color:var(--text);font:16px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif
+}
+button,a{font:inherit}
+a{color:inherit}
+button{cursor:pointer}
+math{font-family:"Cambria Math","STIX Two Math",serif;font-size:1.08em}
+.wrap{width:min(1120px,calc(100% - 28px));margin:0 auto;padding:22px 0 56px}
+.hero,.card,.training-card,.quiz-card,.self-card{
+  border:1px solid var(--line);background:linear-gradient(145deg,var(--paper),var(--paper2));box-shadow:var(--shadow)
+}
+.hero{position:relative;overflow:hidden;border-radius:30px;padding:clamp(26px,5vw,54px);margin-bottom:14px}
+.hero:after{
+  content:"";position:absolute;width:280px;height:280px;right:-95px;top:-115px;border:48px solid rgba(0,111,111,.08);border-radius:50%
+}
+.eyebrow{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:900}
+h1,h2,h3{letter-spacing:-.025em}
+h1{font-size:clamp(2.25rem,6vw,5rem);line-height:1.02;margin:.35rem 0 1rem;max-width:900px}
+.hero .lead{max-width:800px;font-size:1.08rem;color:var(--muted);margin-bottom:18px}
+.meta,.chips,.toolbar,.jumpbar{display:flex;flex-wrap:wrap;gap:8px}
+.meta span,.chip{border:1px solid var(--line);border-radius:999px;padding:7px 11px;color:var(--muted);background:color-mix(in srgb,var(--paper) 86%,transparent)}
+.toolbar{
+  position:sticky;top:8px;z-index:20;border:1px solid var(--line);background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(14px);border-radius:16px;padding:9px;margin-bottom:14px;box-shadow:var(--shadow)
+}
+.toolbar a,.toolbar button,.jumpbar a{
+  border:1px solid var(--line);background:var(--paper2);color:var(--text);padding:9px 12px;border-radius:11px;text-decoration:none;font-weight:750
+}
+.toolbar a:hover,.toolbar button:hover,.jumpbar a:hover{border-color:var(--accent);color:var(--accent2)}
+.toolbar .grow{flex:1}
+.route{border:1px solid var(--line);border-radius:22px;padding:18px;background:var(--paper);margin-bottom:15px}
+.route h2{margin:0 0 12px;font-size:1.25rem}
+.jumpbar{gap:7px}
+.jumpbar a{font-size:.9rem;padding:8px 10px}
+.section{scroll-margin-top:88px}
+.card{border-radius:24px;padding:clamp(20px,4vw,34px);margin-bottom:15px}
+.card h2{margin:0 0 8px;font-size:clamp(1.55rem,3vw,2.25rem)}
+.card h3{margin:20px 0 8px;font-size:1.05rem}
+.section-num{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--accent);color:white;font-size:1rem;margin-right:7px;vertical-align:4px}
+.intro{color:var(--muted);max-width:820px}
+.grid2,.grid3{display:grid;gap:11px}
+.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tile,.step,.example,.warning,.success,.formula-card{
+  border:1px solid var(--line);border-radius:16px;padding:15px;background:var(--paper2)
+}
+.tile strong,.formula-card strong{color:var(--accent2)}
+.example{border-left:4px solid var(--accent);background:var(--accent-soft)}
+.warning{border-left:4px solid var(--warn);background:var(--warn-soft)}
+.success{border-left:4px solid var(--good);background:var(--good-soft)}
+.tag{display:inline-block;font-size:.72rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.mathline{font:600 1.13rem/1.55 "Cambria Math","Times New Roman",serif;overflow-x:auto;white-space:nowrap;padding:4px 0}
+.steps{counter-reset:s;display:grid;gap:9px}
+.step{position:relative;padding-left:55px}
+.step:before{
+  counter-increment:s;content:counter(s);position:absolute;left:15px;top:15px;width:27px;height:27px;border-radius:50%;
+  display:grid;place-items:center;background:var(--accent);color:white;font-weight:900
+}
+.area-model{display:grid;grid-template-columns:minmax(210px,300px) 1fr;gap:22px;align-items:center}
+.square{aspect-ratio:1;border:3px solid var(--accent2);position:relative;background:var(--accent-soft);border-radius:4px;overflow:hidden}
+.square .cut{position:absolute;left:0;right:0;bottom:0;height:34%;background:var(--sand);border-top:3px dashed var(--warn)}
+.square .label-a{position:absolute;top:45%;left:8px;font-weight:900}
+.square .label-b{position:absolute;bottom:10%;left:8px;font-weight:900}
+.square .remaining{position:absolute;top:28%;left:50%;transform:translate(-50%,-50%);font-weight:900;color:var(--accent2)}
+.numberline{border:1px solid var(--line);border-radius:16px;background:var(--paper2);padding:12px}
+.numberline svg{width:100%;height:auto;display:block}
+details.solution{border:1px solid var(--line);border-radius:14px;background:var(--paper2);margin-top:10px;overflow:hidden}
+details.solution summary{cursor:pointer;padding:11px 14px;font-weight:800;list-style:none}
+details.solution summary::-webkit-details-marker{display:none}
+details.solution summary:after{content:"＋";float:right;color:var(--accent)}
+details.solution[open] summary:after{content:"−"}
+.solution-body{padding:0 14px 14px;color:var(--muted)}
+.training-head{margin:34px 0 13px}
+.training-head h2{font-size:clamp(1.8rem,4vw,2.8rem);margin:0}
+.training-head p{color:var(--muted);margin:.3rem 0}
+.training-list{display:grid;gap:12px}
+.training-card{border-radius:18px;padding:18px}
+.training-card h3{margin:0 0 8px;font-size:1.03rem}
+.level{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;font-weight:900;color:var(--accent)}
+.quiz-card,.self-card{border-radius:22px;padding:22px;margin-top:15px}
+.quiz-q{border-top:1px solid var(--line);padding:15px 0}
+.quiz-q:first-of-type{border-top:0}
+.quiz-options{display:grid;gap:7px;margin-top:8px}
+.quiz-options button{border:1px solid var(--line);border-radius:12px;padding:10px 12px;text-align:left;background:var(--paper2);color:var(--text)}
+.quiz-options button.good{border-color:var(--good);background:var(--good-soft)}
+.quiz-options button.bad{border-color:var(--warn);background:var(--warn-soft)}
+.feedback{min-height:25px;color:var(--muted);margin-top:7px}
+.check{display:flex;align-items:flex-start;gap:10px;padding:9px 0}
+.check input{width:20px;height:20px;margin-top:3px;accent-color:var(--accent)}
+.progress{height:9px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:12px}
+.progress span{display:block;width:0;height:100%;background:var(--good);transition:width .25s}
+.footer{text-align:center;color:var(--muted);padding:34px 10px 10px}
+@media(max-width:760px){
+  .wrap{width:min(100% - 18px,1120px);padding-top:10px}
+  .toolbar{position:static}
+  .toolbar .grow{display:none}
+  .toolbar>*{flex:1 1 auto}
+  .grid2,.grid3,.area-model{grid-template-columns:1fr}
+  .square{width:min(260px,80%);margin:auto}
+  .hero{border-radius:22px}
+  .card{border-radius:18px}
+}
+@media print{
+  :root,html[data-theme="dark"]{--bg:#fff;--paper:#fff;--paper2:#fff;--text:#111;--muted:#333;--line:#bbb;--accent:#004d4d;--accent2:#004d4d;--accent-soft:#fff;--good-soft:#fff;--warn-soft:#fff;--sand:#f5f0e7;--shadow:none}
+  body{background:white}
+  .wrap{width:100%;padding:0}
+  .toolbar,.route,.quiz-card{display:none!important}
+  .hero,.card,.training-card,.self-card{box-shadow:none;break-inside:avoid}
+  .hero{border:0;padding:0 0 16pt}
+  details.solution{break-inside:avoid}
+  details.solution .solution-body{display:block!important}
+  details.solution summary{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Интерактивное пособие · математика · 7 класс</div>
+  <h1>Выражения, проценты, дроби и простейшие неравенства</h1>
+  <p class="lead">Комплексное повторение: как распознать тип задачи, выбрать короткий школьный приём и аккуратно довести решение до ответа.</p>
+  <div class="meta">
+    <span>Кирилл Зиновьев</span>
+    <span>Лёвин Артём Александрович</span>
+    <span>2 сентября 2026</span>
+    <span>7 ключевых приёмов</span>
+  </div>
+</header>
+
+<nav class="toolbar" aria-label="Инструменты занятия">
+  <a href="index.html">← В кабинет</a>
+  <a href="../pdf_docs/02.09.26.pdf">PDF</a>
+  <a href="../tex_docs/02.09.26.tex">TeX</a>
+  <span class="grow"></span>
+  <button type="button" id="themeBtn">◐ Тема</button>
+  <button type="button" onclick="window.print()">⎙ Печать</button>
+</nav>
+
+<section class="route">
+  <h2>Маршрут занятия</h2>
+  <div class="jumpbar">
+    <a href="#substitution">1 · Подстановка</a>
+    <a href="#block">2 · Выражение целиком</a>
+    <a href="#model">3 · Буквенная модель</a>
+    <a href="#percent">4 · Проценты</a>
+    <a href="#fractions">5 · Общий знаменатель</a>
+    <a href="#factor">6 · Общий множитель</a>
+    <a href="#inequality">7 · Неравенства</a>
+    <a href="#training">Тренировка</a>
+  </div>
+</section>
+
+<section class="card section" id="substitution">
+  <h2><span class="section-num">1</span>Подстановка чисел в буквенное выражение</h2>
+  <p class="intro">Если значения букв известны, замените каждую букву своим числом и затем считайте по обычному порядку действий.</p>
+  <div class="grid2">
+    <div class="tile"><span class="tag">Что дано</span><br><strong>Выражение</strong> <span class="mathline">23a − 7b − 2c</span><br><strong>Значения</strong> a = 0,2; b = 5,4; c = 6,2.</div>
+    <div class="tile"><span class="tag">Смысл условия</span><br>Каждая буква — место для конкретного числа. Знаки между слагаемыми сохраняются.</div>
+  </div>
+  <h3>Идея решения</h3>
+  <div class="steps">
+    <div class="step"><b>Замените буквы числами.</b></div>
+    <div class="step"><b>Сохраните все знаки.</b></div>
+    <div class="step"><b>Выполняйте действия последовательно.</b></div>
+  </div>
+  <div class="example">
+    <span class="tag">Подстановка</span>
+    <div class="mathline">23a − 7b − 2c → 23·0,2 − 7·5,4 − 2·6,2</div>
+  </div>
+  <div class="warning"><b>Типичная ошибка.</b> При подстановке отрицательного числа его удобно заключать в скобки: при x = −3 выражение 5x² превращается в 5·(−3)².</div>
+</section>
+
+<section class="card section" id="block">
+  <h2><span class="section-num">2</span>Если известно значение выражения целиком</h2>
+  <p class="intro">Иногда отдельные переменные неизвестны, зато известна целая комбинация. Тогда воспринимайте её как один готовый блок.</p>
+  <div class="grid2">
+    <div class="tile"><span class="tag">Что дано</span><div class="mathline">3xy − 2z = 4</div></div>
+    <div class="tile"><span class="tag">Что требуется</span><div class="mathline">1 / (3xy − 2z)</div></div>
+  </div>
+  <h3>Идея решения</h3>
+  <div class="steps">
+    <div class="step"><b>Узнайте повторяющийся блок:</b> 3xy − 2z.</div>
+    <div class="step"><b>Подставьте его значение целиком:</b> 4.</div>
+    <div class="step"><b>Вычислите:</b> 1/4 = 0,25.</div>
+  </div>
+  <div class="success"><b>Вывод.</b> Значения x, y и z отдельно искать не требуется.</div>
+  <div class="warning"><b>Ограничение.</b> Знаменатель дроби обязан быть ненулевым. Здесь 3xy − 2z = 4 ≠ 0.</div>
+</section>
+
+<section class="card section" id="model">
+  <h2><span class="section-num">3</span>Перевод условия в буквенную модель</h2>
+  <p class="intro">Сначала восстановите смысл ситуации, затем запишите его формулой. Рисунок помогает увидеть неизвестный размер через уже известные величины.</p>
+  <div class="area-model">
+    <div class="square" aria-label="Квадрат со стороной a и отрезанной полосой высоты b">
+      <span class="label-a">a</span>
+      <span class="label-b">b</span>
+      <span class="remaining">a − b</span>
+      <div class="cut"></div>
+    </div>
+    <div>
+      <div class="tile"><span class="tag">Что дано</span><br>Квадрат со стороной a. Отрезана прямоугольная полоса со сторонами a и b, причём 0 &lt; b &lt; a.</div>
+      <div class="tile" style="margin-top:10px"><span class="tag">Смысл условий</span><br>У оставшейся части одна сторона равна a, вторая — a − b.</div>
+    </div>
+  </div>
+  <div class="formula-card" style="margin-top:12px">
+    <strong>Площадь оставшейся части:</strong>
+    <div class="mathline">S = a(a − b) = a² − ab</div>
+  </div>
+  <div class="success"><b>Главный приём.</b> Неизвестный размер сначала выразите через известные буквы.</div>
+</section>
+
+<section class="card section" id="percent">
+  <h2><span class="section-num">4</span>Проценты: найти число по его проценту</h2>
+  <p class="intro">Если p% некоторого числа x равны A, всё число соответствует 100%. Удобный школьный способ — пропорция.</p>
+  <div class="grid3">
+    <div class="tile"><strong>100%</strong><br>всё число x</div>
+    <div class="tile"><strong>7%</strong><br>равны 28</div>
+    <div class="tile"><strong>Цель</strong><br>найти x</div>
+  </div>
+  <h3>Алгоритм</h3>
+  <div class="steps">
+    <div class="step"><b>Поставьте соответствующие величины друг напротив друга.</b></div>
+    <div class="step"><b>Составьте пропорцию:</b> 7/100 = 28/x.</div>
+    <div class="step"><b>Перемножьте крест-накрест:</b> 7x = 28·100.</div>
+    <div class="step"><b>Получите ответ:</b> x = 400.</div>
+  </div>
+  <div class="example"><b>Мини-проверка смысла.</b> 7% от 400 действительно равны 28.</div>
+</section>
+
+<section class="card section" id="fractions">
+  <h2><span class="section-num">5</span>Общий знаменатель и отрицательные дроби</h2>
+  <p class="intro">Чтобы сравнивать дроби со знаменателями 4, 6 и 7, удобно привести их к общему знаменателю 84.</p>
+  <div class="grid2">
+    <div class="formula-card">
+      <strong>Общий знаменатель</strong>
+      <div class="mathline">НОК(4, 6, 7) = 84</div>
+      <div class="mathline">84 = 2²·3·7</div>
+    </div>
+    <div class="formula-card">
+      <strong>Дополнительные множители</strong>
+      <div>для 7: 12</div>
+      <div>для 6: 14</div>
+      <div>для 4: 21</div>
+    </div>
+  </div>
+  <div class="example" style="margin-top:12px">
+    <div class="mathline">−5/4 = −105/84</div>
+    <div class="mathline">−7/6 = −98/84</div>
+    <div class="mathline">−8/7 = −96/84</div>
+  </div>
+  <div class="success"><b>Итоговый порядок:</b> −5/4 &lt; −7/6 &lt; −8/7.</div>
+  <div class="warning"><b>Частая ошибка.</b> Среди отрицательных чисел меньше то, у которого модуль больше: −105 &lt; −98 &lt; −96.</div>
+</section>
+
+<section class="card section" id="factor">
+  <h2><span class="section-num">6</span>Вынесение общего множителя</h2>
+  <p class="intro">Если в слагаемых повторяется один и тот же множитель, вынесите его за скобки. Это часто превращает длинное вычисление в короткое.</p>
+  <div class="example">
+    <div class="mathline">47,524·65 + 47,524·35</div>
+    <div class="mathline">= 47,524(65 + 35)</div>
+    <div class="mathline">= 47,524·100 = 4752,4</div>
+  </div>
+  <div class="grid3" style="margin-top:12px">
+    <div class="tile"><strong>×10</strong><br>запятая на 1 цифру вправо</div>
+    <div class="tile"><strong>×100</strong><br>на 2 цифры вправо</div>
+    <div class="tile"><strong>×1000</strong><br>на 3 цифры вправо</div>
+  </div>
+  <div class="success"><b>Распознавание.</b> Сначала ищите одинаковый множитель, затем проверяйте, не получается ли в скобках удобное число.</div>
+</section>
+
+<section class="card section" id="inequality">
+  <h2><span class="section-num">7</span>Простейшие неравенства и числовая прямая</h2>
+  <p class="intro">Неравенство x ≥ −14,7 задаёт все числа, которые больше либо равны −14,7. На прямой они лежат справа.</p>
+  <div class="numberline">
+    <svg viewBox="0 0 760 150" role="img" aria-label="Числовая прямая для x больше или равно минус 14,7">
+      <defs>
+        <marker id="arrowR" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="currentColor"/></marker>
+      </defs>
+      <line x1="65" y1="72" x2="700" y2="72" stroke="currentColor" stroke-width="3" marker-end="url(#arrowR)"/>
+      <g stroke="currentColor" stroke-width="2" fill="none">
+        <line x1="160" y1="61" x2="160" y2="83"/><line x1="280" y1="61" x2="280" y2="83"/>
+        <line x1="400" y1="61" x2="400" y2="83"/><line x1="520" y1="61" x2="520" y2="83"/>
+      </g>
+      <g fill="currentColor" font-size="20" font-family="system-ui, sans-serif">
+        <text x="139" y="112">−16</text><text x="259" y="112">−15</text><text x="379" y="112">−14</text><text x="499" y="112">−13</text>
+      </g>
+      <line x1="316" y1="72" x2="700" y2="72" stroke="#006f6f" stroke-width="8" marker-end="url(#arrowR)"/>
+      <circle cx="316" cy="72" r="8" fill="#006f6f"/>
+      <text x="285" y="42" fill="#006f6f" font-size="20" font-family="system-ui, sans-serif">−14,7</text>
+    </svg>
+  </div>
+  <div class="grid2" style="margin-top:12px">
+    <div class="tile"><strong>x ≥ −14,7</strong><br>подходят числа справа; наименьшее целое — −14.</div>
+    <div class="tile"><strong>x ≤ a</strong><br>подходят числа слева от a и само a.</div>
+  </div>
+  <div class="warning"><b>Правило на будущее.</b> При умножении или делении обеих частей неравенства на отрицательное число знак меняется на противоположный.</div>
+</section>
+
+<section id="training" class="training-head section">
+  <div class="eyebrow">Путь А · 10 упражнений</div>
+  <h2>Тренировочный блок</h2>
+  <p>Условия полностью соответствуют чек-листу. Сначала решите самостоятельно, затем раскройте ориентир.</p>
+</section>
+
+<div class="training-list">
+  <article class="training-card"><div class="level">Средний уровень · 1</div><h3>Подстановка</h3><p>Найдите значение выражения 18a − 5b + 3c, если a = 0,4; b = 2,6; c = 1,5.</p><details class="solution"><summary>Показать ориентир</summary><div class="solution-body">Подставьте значения: 18·0,4 − 5·2,6 + 3·1,5. Ответ: <b>−1,3</b>.</div></details></article>
+  <article class="training-card"><div class="level">Средний уровень · 2</div><h3>Выражение целиком</h3><p>Известно, что 4mn − 3k = 8. Найдите 6/(4mn − 3k).</p><details class="solution"><summary>Показать ориентир</summary><div class="solution-body">Подставьте весь известный блок: 6/8 = 3/4 = 0,75.</div></details></article>
+  <article class="training-card"><div class="level">Средний уровень · 3</div><h3>Проценты</h3><p>Найдите число, 12% которого равны 54.</p><details class="solution"><summary>Показать ориентир</summary><div class="solution-body">12/100 = 54/x, поэтому x = 100·54/12 = <b>450</b>.</div></details></article>
+  <article class="training-card"><div class="level">Выше среднего · 4</div><h3>Буквенная модель</h3><p>Квадрат имеет сторону a см. От него отрезали прямоугольную полосу со сторонами a см и b см, где 0 &lt; b &lt; a. Запишите площадь оставшейся части: 1) в виде произведения; 2) после раскрытия скобок.</p><details class="solution"><summary>Показать ориентир</summary><div class="solution-body">Оставшиеся стороны: a и a − b. Ответ: <b>a(a − b)</b>; после раскрытия — <b>a² − ab</b>.</div></details></article>
+  <article class="training-card"><div class="level">Выше среднего · 5</div><h3>Общий множитель</h3><p>Вычислите рациональным способом: 36,842·27 + 36,842·73.</p><details class="solution"><summary>Показать ориентир</summary><div class="solution-body">36,842(27 + 73) = 36,842·100 = <b>3684,2</b>.</div></details></article>
+  <article class="training-card"><div class="level">Выше среднего · 6</div><h3>Отрицательные дроби</h3><p>Расположите в порядке возрастания числа −11/12, −5/6, −7/8. Используйте общий знаменатель.</p><details class="solution"><summary>Показать ориентир</summary><div class="solution-body">Общий знаменатель 24: −22/24, −20/24, −21/24. Поэтому <b>−11/12 &lt; −7/8 &lt; −5/6</b>.</div></details></article>
+  <article class="training-card"><div class="level">Выше среднего · 7</div><h3>Наименьшее целое решение</h3><p>Укажите наименьшее целое число, удовлетворяющее неравенству x ≥ −8,4.</p><details class="solution"><summary>Показать ориентир</summary><div class="solution-body">Подходят числа справа от −8,4. Первое целое среди них — <b>−8</b>.</div></details></article>
+  <article class="training-card"><div class="level">Выше среднего · 8</div><h3>Процентное изменение</h3><p>После увеличения неизвестного числа на 15% получили 690. Найдите исходное число.</p><details class="solution"><summary>Показать ориентир</summary><div class="solution-body">После увеличения имеем 115% исходного числа. 115/100 = 690/x, откуда <b>x = 600</b>.</div></details></article>
+  <article class="training-card"><div class="level">Выше среднего · 9</div><h3>Готовый алгебраический блок</h3><p>Известно, что 2x − 5y = −6. Найдите значение выражения 7 − 3(2x − 5y).</p><details class="solution"><summary>Показать ориентир</summary><div class="solution-body">Подставьте −6 вместо всего блока: 7 − 3·(−6) = 7 + 18 = <b>25</b>.</div></details></article>
+  <article class="training-card"><div class="level">Сложное · 10</div><h3>Неравенство + подстановка</h3><p>Найдите наименьшее целое x, удовлетворяющее неравенству x/3 − 2,4 ≥ −5,1. Затем найдите 2x² − 5x + 1 при найденном x.</p><details class="solution"><summary>Показать ориентир</summary><div class="solution-body">x/3 ≥ −2,7, значит x ≥ −8,1. Наименьшее целое x = <b>−8</b>. Тогда 2·64 − 5·(−8) + 1 = <b>169</b>.</div></details></article>
+</div>
+
+<section class="quiz-card" id="quiz">
+  <div class="eyebrow">Мини-квиз</div><h2>Три быстрые проверки</h2>
+  <div class="quiz-q" data-answer="0"><b>1. Если 4mn − 3k = 8, чему равно 6/(4mn − 3k)?</b><div class="quiz-options"><button>0,75</button><button>8</button><button>6</button></div><div class="feedback"></div></div>
+  <div class="quiz-q" data-answer="1"><b>2. Каков правильный порядок возрастания для −11/12, −5/6, −7/8?</b><div class="quiz-options"><button>−5/6 &lt; −7/8 &lt; −11/12</button><button>−11/12 &lt; −7/8 &lt; −5/6</button><button>−7/8 &lt; −11/12 &lt; −5/6</button></div><div class="feedback"></div></div>
+  <div class="quiz-q" data-answer="2"><b>3. Наименьшее целое решение x ≥ −8,4:</b><div class="quiz-options"><button>−9</button><button>−8,4</button><button>−8</button></div><div class="feedback"></div></div>
+</section>
+
+<section class="self-card">
+  <div class="eyebrow">Итоговая самопроверка</div><h2>Перед завершением занятия</h2>
+  <label class="check"><input type="checkbox"><span>Я умею подставлять числа в буквенное выражение и сохранять знаки.</span></label>
+  <label class="check"><input type="checkbox"><span>Я вижу, когда известное выражение можно подставить целиком.</span></label>
+  <label class="check"><input type="checkbox"><span>Я могу перевести простую ситуацию в буквенную формулу.</span></label>
+  <label class="check"><input type="checkbox"><span>Я умею находить число по его проценту через пропорцию.</span></label>
+  <label class="check"><input type="checkbox"><span>Я умею приводить дроби к общему знаменателю и сравнивать отрицательные числа.</span></label>
+  <label class="check"><input type="checkbox"><span>Я распознаю общий множитель и выношу его за скобки.</span></label>
+  <label class="check"><input type="checkbox"><span>Я понимаю, где на числовой прямой находятся решения x ≥ a и x ≤ a.</span></label>
+  <div class="progress" aria-label="Прогресс самопроверки"><span id="progressBar"></span></div>
+  <p id="progressText" class="intro">Отмечено 0 из 7.</p>
+</section>
+
+<footer class="footer">Лёвин Артём Александрович · персональный материал для Кирилла Зиновьева</footer>
+</div>
+<script>
+(()=> {
+  const root=document.documentElement;
+  const themeBtn=document.getElementById('themeBtn');
+  const saved=localStorage.getItem('kirill-020926-theme');
+  if(saved==='dark'||saved==='light') root.dataset.theme=saved;
+  themeBtn.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';localStorage.setItem('kirill-020926-theme',root.dataset.theme);});
+  document.querySelectorAll('.quiz-q').forEach(q=>{const correct=Number(q.dataset.answer);const buttons=[...q.querySelectorAll('button')];const feedback=q.querySelector('.feedback');buttons.forEach((btn,i)=>btn.addEventListener('click',()=>{buttons.forEach((b,j)=>{b.classList.remove('good','bad');if(j===correct)b.classList.add('good');});if(i===correct){feedback.textContent='Верно. Продолжайте.';}else{btn.classList.add('bad');feedback.textContent='Проверьте знак, порядок или используйте известный блок целиком.';}}));});
+  const checks=[...document.querySelectorAll('.self-card input[type="checkbox"]')];const bar=document.getElementById('progressBar');const text=document.getElementById('progressText');const stateKey='kirill-020926-selfcheck';
+  try{const state=JSON.parse(localStorage.getItem(stateKey)||'[]');checks.forEach((c,i)=>c.checked=Boolean(state[i]));}catch(e){}
+  const refresh=()=>{const done=checks.filter(c=>c.checked).length;bar.style.width=(done/checks.length*100)+'%';text.textContent=`Отмечено ${done} из ${checks.length}.`;localStorage.setItem(stateKey,JSON.stringify(checks.map(c=>c.checked)));};
+  checks.forEach(c=>c.addEventListener('change',refresh));refresh();
+})();
+</script>
+</body>
+</html>
