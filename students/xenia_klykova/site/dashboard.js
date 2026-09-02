@@ -1,4 +1,4 @@
-import {LESSONS} from './lesson-registry.js?v=20260831';
+import {LESSONS} from './lesson-registry.js?v=20260902';
 import {initStudentDashboard} from '../../../shared/student-dashboard/dashboard-core.js';
 import {PRACTICE_CONFIG} from './practice-config.js';
 initStudentDashboard({lessons:LESSONS,themeKey:'xenia-dashboard-theme-v1',summaryEvent:'xenia:competence-summary'});
