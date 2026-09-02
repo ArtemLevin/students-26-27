@@ -1,0 +1,1167 @@
+<!doctype html>
+<html lang="ru" data-theme="light" data-detail="full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Интерактивное занятие Анны Трапезниковой по рациональным и иррациональным числам и периодическим дробям">
+  <meta name="color-scheme" content="light dark">
+  <title>Числа и периодические дроби — Анна Трапезникова</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23287f7a'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='37' font-family='serif' fill='%23fff7eb'%3E%E2%84%9A%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #f3eee5;
+      --surface: #fffdf8;
+      --surface-soft: #eee5d8;
+      --surface-strong: #ded1c0;
+      --text: #17243a;
+      --muted: #667083;
+      --line: #d8ccbd;
+      --navy: #172b49;
+      --teal: #287f7a;
+      --teal-soft: #d7eee8;
+      --coral: #c85e50;
+      --coral-soft: #f6ddd5;
+      --gold: #a97625;
+      --gold-soft: #f6e9c9;
+      --success: #287a5b;
+      --shadow: 0 18px 50px rgba(50, 39, 27, .12);
+      --focus: #0f8fa1;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #0b1628;
+      --surface: #142239;
+      --surface-soft: #1b2d48;
+      --surface-strong: #273b57;
+      --text: #f5eddf;
+      --muted: #b0bac8;
+      --line: #344862;
+      --navy: #e8f1f6;
+      --teal: #80cfc2;
+      --teal-soft: #193d40;
+      --coral: #df8172;
+      --coral-soft: #492a30;
+      --gold: #e8bd70;
+      --gold-soft: #443820;
+      --success: #76c9a2;
+      --shadow: 0 22px 60px rgba(0, 0, 0, .35);
+      --focus: #8be1eb;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 95% 2%, rgba(40, 127, 122, .16), transparent 26rem),
+        radial-gradient(circle at 4% 30%, rgba(200, 94, 80, .09), transparent 24rem),
+        var(--bg);
+      color: var(--text);
+      font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    }
+    body.modal-open { overflow: hidden; }
+    button, select, input { font: inherit; }
+    button, select, a { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    a { color: var(--teal); }
+    math { font-family: "Cambria Math", "STIX Two Math", serif; font-size: 1.08em; }
+    :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+    .skip-link {
+      position: fixed; left: 1rem; top: 1rem; z-index: 120; transform: translateY(-160%);
+      background: var(--navy); color: var(--bg); padding: .7rem 1rem; border-radius: .7rem;
+    }
+    .skip-link:focus { transform: translateY(0); }
+    .wrap { width: min(1480px, 100%); margin: auto; padding: 1.25rem; }
+
+    .hero {
+      position: relative; overflow: hidden; min-height: 22rem;
+      display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(15rem, .65fr); gap: 2rem; align-items: end;
+      padding: clamp(1.5rem, 4vw, 3.5rem); border: 1px solid var(--line); border-radius: 2rem;
+      background: linear-gradient(140deg, var(--surface) 0 63%, var(--teal-soft)); box-shadow: var(--shadow);
+    }
+    .hero::after {
+      content: "ℚ ⊂ ℝ"; position: absolute; right: clamp(-2rem, 1vw, 1rem); top: -1.7rem;
+      color: color-mix(in srgb, var(--teal) 12%, transparent); font: 800 clamp(5rem, 13vw, 11rem)/1 Georgia, serif;
+      transform: rotate(-7deg); pointer-events: none;
+    }
+    .hero-copy, .route-card { position: relative; z-index: 1; }
+    .eyebrow { margin: 0 0 .45rem; color: var(--teal); font-size: .78rem; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
+    h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; line-height: 1.14; }
+    h1 { max-width: 12ch; margin: .25rem 0 1rem; font-size: clamp(2.4rem, 6vw, 5.4rem); letter-spacing: -.045em; }
+    .hero-lead { max-width: 51rem; margin: 0; color: var(--muted); font-size: 1.08rem; }
+    .meta { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.25rem; }
+    .meta span { padding: .45rem .75rem; border: 1px solid var(--line); border-radius: 999px; background: color-mix(in srgb, var(--surface) 78%, transparent); color: var(--muted); font-size: .86rem; }
+    .route-card { align-self: stretch; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.2rem; border: 1px solid color-mix(in srgb, var(--teal) 35%, var(--line)); border-radius: 1.3rem; background: color-mix(in srgb, var(--surface) 82%, transparent); }
+    .route-card strong { font-size: 1.05rem; }
+    .route-list { margin: .8rem 0 0; padding-left: 1.2rem; color: var(--muted); }
+
+    .toolbar {
+      position: sticky; top: .55rem; z-index: 30; display: flex; gap: .5rem; align-items: center; flex-wrap: wrap;
+      margin: 1rem 0; padding: .6rem; border: 1px solid var(--line); border-radius: 1rem;
+      background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(14px); box-shadow: 0 10px 28px rgba(24, 34, 45, .09);
+    }
+    .toolbar button, .toolbar select, .toolbar a, .btn {
+      min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
+      padding: .55rem .8rem; border: 1px solid var(--line); border-radius: .75rem;
+      background: var(--surface); color: var(--text); text-decoration: none; font-weight: 750;
+    }
+    .toolbar .grow { flex: 1; }
+    .section-indicator { color: var(--muted); font-size: .88rem; }
+    .tabs { display: flex; gap: .5rem; overflow-x: auto; padding: .15rem .1rem .8rem; scrollbar-width: thin; }
+    .tab { flex: 0 0 auto; min-height: 44px; padding: .55rem 1rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--muted); font-weight: 850; }
+    .tab[aria-selected="true"] { border-color: var(--teal); background: var(--teal); color: #fff; }
+
+    .poster-card, .card, .visual-card {
+      border: 1px solid var(--line); border-radius: 1.35rem; background: linear-gradient(145deg, var(--surface), var(--surface-soft)); box-shadow: var(--shadow);
+    }
+    .poster-card { margin-bottom: 1rem; overflow: hidden; }
+    .poster-card summary { min-height: 58px; list-style: none; display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding: 1rem 1.25rem; cursor: pointer; font-weight: 850; }
+    .poster-card summary::-webkit-details-marker { display: none; }
+    .poster-card summary::after { content: "+"; color: var(--teal); font-size: 1.4rem; }
+    .poster-card[open] summary::after { content: "−"; }
+    .poster-content { padding: 0 1.25rem 1.25rem; }
+    .poster-content p { color: var(--muted); }
+    .poster-button { width: 100%; padding: 0; border: 0; border-radius: 1rem; background: transparent; }
+    .poster-image { display: block; width: min(100%, 980px); max-height: 78vh; object-fit: contain; margin: auto; border: 1px solid var(--line); border-radius: 1rem; background: var(--surface-soft); }
+
+    .layout { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(330px, .75fr); gap: 1rem; align-items: start; }
+    .panel { display: none; }
+    .panel.active { display: block; animation: panel-in .22s ease both; }
+    @keyframes panel-in { from { opacity: 0; transform: translateY(5px); } }
+    .card { padding: clamp(1.1rem, 3vw, 2rem); margin-bottom: 1rem; }
+    .card h2 { margin: 0 0 .8rem; font-size: clamp(1.55rem, 3vw, 2.35rem); }
+    .card h3 { margin: 1.25rem 0 .55rem; }
+    .lead, .detail, .muted { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+    .tile, .callout, .error, .practice-task, .answer-row, .step {
+      border: 1px solid var(--line); border-radius: 1rem; background: color-mix(in srgb, var(--surface-soft) 72%, var(--surface)); padding: 1rem;
+    }
+    .tile strong { color: var(--teal); }
+    .callout { border-left: .3rem solid var(--gold); background: var(--gold-soft); }
+    .callout.teal { border-left-color: var(--teal); background: var(--teal-soft); }
+    .error { border-left: .3rem solid var(--coral); background: var(--coral-soft); }
+    .error strong { color: var(--coral); }
+    .formula { max-width: 100%; overflow-x: auto; margin: .8rem 0; padding: .9rem; border-radius: .9rem; background: color-mix(in srgb, var(--teal-soft) 65%, var(--surface)); text-align: center; }
+    .formula math { white-space: nowrap; }
+    .rule-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: .65rem; margin: 1rem 0; }
+    .rule-strip div { padding: .9rem; border-radius: .9rem; background: var(--surface-soft); text-align: center; }
+    .rule-strip b { display: block; color: var(--teal); font-size: 1.15rem; }
+    .linked { transition: border-color .2s, box-shadow .2s; }
+    .linked.link-active { border-color: var(--teal); box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal) 22%, transparent); }
+
+    .steps { display: grid; gap: .65rem; margin-top: 1rem; counter-reset: solution-step; }
+    .step { display: none; position: relative; min-height: 4.2rem; padding-left: 3.5rem; }
+    .step::before { counter-increment: solution-step; content: counter(solution-step); position: absolute; left: .85rem; top: .85rem; width: 1.9rem; height: 1.9rem; display: grid; place-items: center; border-radius: 50%; background: var(--teal); color: white; font-weight: 900; }
+    .step.revealed { display: block; }
+    .step.current { border-color: var(--coral); box-shadow: 0 0 0 3px color-mix(in srgb, var(--coral) 18%, transparent); }
+    .step-controls { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1rem; }
+    .step-controls button, .primary, .secondary {
+      min-height: 44px; padding: .55rem .85rem; border-radius: .75rem; font-weight: 800;
+    }
+    .primary { border: 1px solid var(--teal); background: var(--teal); color: #fff; }
+    .secondary { border: 1px solid var(--line); background: var(--surface); color: var(--text); }
+    .step-status { color: var(--muted); font-size: .9rem; align-self: center; }
+
+    html[data-detail="brief"] .standard-detail,
+    html[data-detail="brief"] .full-detail,
+    html[data-detail="standard"] .full-detail { display: none !important; }
+
+    .sticky { position: sticky; top: 5.7rem; }
+    .visual-card { padding: 1rem; }
+    .visual-head { display: flex; justify-content: space-between; gap: 1rem; align-items: start; }
+    .visual-head h2 { margin: .1rem 0 .25rem; }
+    .visual-modes { display: grid; grid-template-columns: repeat(2, 1fr); gap: .45rem; margin: .85rem 0; }
+    .mode-button { min-height: 44px; padding: .5rem; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface); color: var(--text); font-weight: 750; }
+    .mode-button[aria-pressed="true"] { border-color: var(--teal); background: var(--teal-soft); color: var(--navy); }
+    .model-select { width: 100%; min-height: 44px; margin-bottom: .6rem; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface); color: var(--text); }
+    .model-shell { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 1rem; background: var(--surface-soft); }
+    .model-shell svg { display: block; width: 100%; height: auto; min-height: 300px; touch-action: none; cursor: grab; }
+    .model-shell svg:active { cursor: grabbing; }
+    .model-shell::after { content: "Нажмите для увеличения"; position: absolute; right: .55rem; bottom: .45rem; padding: .25rem .45rem; border-radius: .45rem; background: color-mix(in srgb, var(--surface) 88%, transparent); color: var(--muted); font-size: .7rem; pointer-events: none; }
+    .model-control-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .4rem; margin-top: .55rem; }
+    .model-control-row button { min-height: 44px; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface); color: var(--text); font-weight: 800; }
+    .zoom-row { display: flex; align-items: center; gap: .6rem; margin-top: .6rem; color: var(--muted); font-size: .88rem; }
+    .zoom-row input { flex: 1; accent-color: var(--teal); }
+    .view-toggles { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: .55rem; color: var(--muted); font-size: .9rem; }
+    .view-toggles label { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; }
+    .view-toggles input { width: 1.15rem; height: 1.15rem; accent-color: var(--teal); }
+    .visual-note { min-height: 4.2rem; margin: .7rem 0 0; padding: .75rem; border-radius: .75rem; background: var(--teal-soft); color: var(--navy); }
+    .hint-trigger { width: 2rem; height: 2rem; display: inline-grid; place-items: center; padding: 0; border: 1px solid var(--teal); border-radius: 50%; background: var(--surface); color: var(--teal); font-weight: 900; }
+    .hint-pulse { animation: hint-pulse 1.25s 2; }
+    @keyframes hint-pulse { 50% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--teal) 0%, transparent); border-color: var(--gold); transform: translateY(-2px); } }
+
+    .practice-list { display: grid; gap: .7rem; }
+    .practice-task { position: relative; padding-left: 3.3rem; }
+    .task-number { position: absolute; left: .9rem; top: .9rem; width: 1.75rem; height: 1.75rem; display: grid; place-items: center; border-radius: .55rem; background: var(--navy); color: var(--bg); font-weight: 900; }
+    .task-level { color: var(--teal); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 900; }
+    .subitems { margin: .45rem 0 0; padding-left: 1.4rem; }
+    .answers { margin-top: 1rem; }
+    .answers summary { min-height: 44px; cursor: pointer; font-weight: 850; color: var(--teal); }
+    .answer-list { display: grid; gap: .55rem; }
+    .answer-row b { color: var(--teal); }
+
+    .quiz-grid { display: grid; gap: .8rem; }
+    .quiz-question { padding: 1rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--surface-soft); }
+    .quiz-question p { margin-top: 0; font-weight: 750; }
+    .quiz-options { display: grid; gap: .4rem; }
+    .quiz-options button { min-height: 44px; padding: .55rem .7rem; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface); color: var(--text); text-align: left; }
+    .quiz-options button.correct { border-color: var(--success); background: color-mix(in srgb, var(--success) 16%, var(--surface)); }
+    .quiz-options button.wrong { border-color: var(--coral); background: var(--coral-soft); }
+    .feedback { min-height: 1.7rem; margin: .45rem 0 0; color: var(--muted); }
+    .quiz-summary { margin-top: 1rem; padding: .8rem; border-radius: .8rem; background: var(--teal-soft); color: var(--navy); }
+    .check-list { display: grid; gap: .45rem; }
+    .check { display: flex; gap: .7rem; align-items: flex-start; padding: .7rem; border-radius: .75rem; background: var(--surface-soft); }
+    .check input { flex: 0 0 auto; width: 1.25rem; height: 1.25rem; margin-top: .15rem; accent-color: var(--teal); }
+    .progress { height: .65rem; overflow: hidden; border-radius: 999px; background: var(--surface-strong); }
+    .progress span { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--teal), var(--success)); transition: width .2s; }
+    .readiness { display: flex; justify-content: space-between; gap: 1rem; margin: .55rem 0 1rem; color: var(--muted); }
+
+    .hint-bubble { position: fixed; z-index: 100; width: min(20rem, calc(100vw - 1.5rem)); padding: 1rem 2.3rem 1rem 1rem; border: 1px solid #61d5cf; border-radius: 1rem; background: #10243a; color: #f8f0e5; box-shadow: 0 18px 45px rgba(0, 0, 0, .34); }
+    .hint-bubble[hidden] { display: none; }
+    .hint-bubble strong { display: block; color: #8ee4dc; }
+    .hint-bubble p { margin: .25rem 0 0; font-size: .9rem; }
+    .hint-close { position: absolute; right: .45rem; top: .35rem; width: 2rem; height: 2rem; border: 0; background: transparent; color: white; font-size: 1.3rem; }
+
+    dialog { border: 0; padding: 0; background: transparent; color: var(--text); }
+    dialog::backdrop { background: rgba(3, 10, 20, .78); backdrop-filter: blur(4px); }
+    .dialog-shell { width: min(1120px, calc(100vw - 1.5rem)); max-height: calc(100vh - 1.5rem); overflow: auto; padding: 1rem; border: 1px solid var(--line); border-radius: 1.3rem; background: var(--surface); box-shadow: var(--shadow); }
+    .dialog-head { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: .7rem; }
+    .dialog-head h2 { margin: 0; }
+    .dialog-close { flex: 0 0 auto; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface-soft); color: var(--text); font-size: 1.5rem; }
+    .dialog-model svg { width: 100%; min-height: min(62vh, 570px); border: 1px solid var(--line); border-radius: 1rem; background: var(--surface-soft); touch-action: none; }
+    .image-dialog img { display: block; max-width: 100%; max-height: 78vh; margin: auto; object-fit: contain; border-radius: 1rem; }
+    .footer { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: 2rem .4rem 1rem; color: var(--muted); font-size: .88rem; }
+    .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
+
+    @media (max-width: 960px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .layout { grid-template-columns: 1fr; }
+      .sticky { position: static; order: -1; }
+      .visual-card { margin-bottom: 1rem; }
+      .model-shell svg { min-height: 360px; }
+    }
+    @media (max-width: 640px) {
+      body { font-size: 16px; }
+      .wrap { padding: .7rem; }
+      .hero { padding: 1.25rem; border-radius: 1.35rem; }
+      .hero::after { opacity: .5; }
+      .toolbar { position: static; }
+      .toolbar > * { flex: 1 1 auto; }
+      .toolbar .grow, .section-indicator { display: none; }
+      .grid, .rule-strip { grid-template-columns: 1fr; }
+      .card { border-radius: 1rem; }
+      .model-control-row { grid-template-columns: repeat(2, 1fr); }
+      .model-shell svg { min-height: 300px; }
+      .footer { flex-direction: column; }
+    }
+    @media (max-width: 370px) {
+      .wrap { padding: .45rem; }
+      .hero, .card, .visual-card { padding: 1rem; }
+      .visual-modes { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+    @media print {
+      :root, html[data-theme="dark"] { --bg: #fff; --surface: #fff; --surface-soft: #fff; --surface-strong: #eee; --text: #111; --muted: #333; --line: #aaa; --shadow: none; --navy: #111; --teal: #135f5c; --teal-soft: #edf7f4; --coral-soft: #fff3ef; --gold-soft: #fff8e6; }
+      body { background: white; font-size: 11pt; }
+      .wrap { width: 100%; padding: 0; }
+      .hero { display: block; min-height: 0; padding: 0 0 12mm; border: 0; box-shadow: none; }
+      .hero::after, .toolbar, .tabs, .sticky, .step-controls, .quiz-grid, .quiz-summary, .hint-bubble, dialog, .poster-card summary::after { display: none !important; }
+      .panel { display: block !important; animation: none !important; }
+      .panel::before { content: attr(data-title); display: block; margin: 8mm 0 3mm; font: 700 20pt Georgia, serif; }
+      .card, .poster-card { box-shadow: none; break-inside: avoid; page-break-inside: avoid; }
+      .step { display: block !important; }
+      .answers > * { display: block !important; }
+      .poster-card .poster-content { display: block !important; }
+      .full-detail, .standard-detail { display: block !important; }
+      a { color: #111; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#lessonContent">К содержанию занятия</a>
+  <div class="wrap">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Интерактивное занятие · 01.09.26</p>
+        <h1>Числа и периодические дроби</h1>
+        <p class="hero-lead">Разберём формы записи действительных чисел, научимся переводить периодические дроби в обыкновенные и определять наименьшее числовое множество после упрощения выражения.</p>
+        <div class="meta">
+          <span>Анна Трапезникова</span>
+          <span>Лёвин Артём Александрович</span>
+          <span>10 класс · углублённый уровень</span>
+          <span>Подробное объяснение</span>
+        </div>
+      </div>
+      <aside class="route-card" aria-label="Маршрут занятия">
+        <strong>Цель занятия</strong>
+        <span class="muted">Уверенно различать виды чисел и выполнять точные преобразования без потери смысла.</span>
+        <ol class="route-list">
+          <li>Десятичная запись</li>
+          <li>Период → дробь</li>
+          <li>Числовые множества</li>
+          <li>Выражения с корнями</li>
+          <li>Тренировка и самопроверка</li>
+        </ol>
+      </aside>
+    </header>
+
+    <nav class="toolbar" aria-label="Управление страницей">
+      <a href="index.html" aria-label="Вернуться к тепловой карте">← К карте</a>
+      <label>
+        <span class="visually-hidden">Уровень подробности</span>
+        <select id="detailSelect" aria-label="Уровень подробности">
+          <option value="brief">Кратко</option>
+          <option value="standard">Стандартно</option>
+          <option value="full" selected>Очень подробно</option>
+        </select>
+      </label>
+      <a href="pdf_docs/01.09.26.pdf" download>↓ PDF</a>
+      <a href="tex_docs/01.09.26.tex" download>↓ TeX</a>
+      <span class="section-indicator" id="sectionIndicator" aria-live="polite">Раздел 1 из 5</span>
+      <span class="grow"></span>
+      <button id="themeToggle" type="button" aria-label="Включить тёмную тему">◐ Тема</button>
+      <button id="printButton" type="button">⎙ Печать</button>
+    </nav>
+
+    <nav class="tabs" role="tablist" aria-label="Разделы занятия">
+      <button class="tab" id="tab-decimals" role="tab" aria-selected="true" aria-controls="decimals" data-tab="decimals">1 · Десятичная запись</button>
+      <button class="tab" id="tab-periodic" role="tab" aria-selected="false" aria-controls="periodic" data-tab="periodic">2 · Периодические дроби</button>
+      <button class="tab" id="tab-sets" role="tab" aria-selected="false" aria-controls="sets" data-tab="sets">3 · Множества чисел</button>
+      <button class="tab" id="tab-radicals" role="tab" aria-selected="false" aria-controls="radicals" data-tab="radicals">4 · Корни</button>
+      <button class="tab" id="tab-practice" role="tab" aria-selected="false" aria-controls="practice" data-tab="practice">5 · Тренировка</button>
+    </nav>
+
+    <details class="poster-card">
+      <summary><span>Наглядная памятка к занятию</span><span class="muted">Открыть плакат</span></summary>
+      <div class="poster-content">
+        <p>Используйте памятку для быстрого повторения определений, правил перевода дробей и вложенности числовых множеств.</p>
+        <button class="poster-button" id="posterOpen" type="button" aria-label="Увеличить памятку">
+          <img class="poster-image" src="images/01.09.26.png" alt="Учебная памятка по рациональным и иррациональным числам и периодическим дробям" loading="lazy">
+        </button>
+      </div>
+    </details>
+
+    <div class="layout">
+      <main id="lessonContent">
+        <section class="panel active" id="decimals" role="tabpanel" aria-labelledby="tab-decimals" data-title="Десятичная запись">
+          <article class="card">
+            <p class="eyebrow">Сначала различаем форму записи</p>
+            <h2>Конечная и периодическая дробь</h2>
+            <div class="grid">
+              <div class="tile linked" data-link="finite">
+                <strong>Конечная дробь</strong>
+                <p>После запятой записано конечное число цифр.</p>
+                <div class="formula"><math><mrow><mn>0,6</mn><mo>,</mo><mspace width=".7em"/><mo>−</mo><mn>0,75</mn><mo>,</mo><mspace width=".7em"/><mn>3,125</mn></mrow></math></div>
+              </div>
+              <div class="tile linked" data-link="periodic">
+                <strong>Бесконечная периодическая дробь</strong>
+                <p>Одна цифра или группа цифр повторяется бесконечно. Повторяющаяся часть называется периодом.</p>
+                <div class="formula"><math><mrow><mn>0,666…</mn><mo>=</mo><mn>0,(6)</mn><mo>,</mo><mspace width=".7em"/><mn>0,727272…</mn><mo>=</mo><mn>0,(72)</mn></mrow></math></div>
+              </div>
+            </div>
+            <div class="callout teal standard-detail"><strong>Рациональность.</strong> Конечная и бесконечная периодическая десятичные дроби являются рациональными числами.</div>
+          </article>
+
+          <article class="card">
+            <h2>Обыкновенная дробь → десятичная</h2>
+            <p>Числитель делят на знаменатель. Деление завершается или приводит к повторению остатка. Повторившийся остаток запускает период.</p>
+            <div class="rule-strip">
+              <div><b>2/3</b>0,(6)</div>
+              <div><b>8/11</b>0,(72)</div>
+              <div><b>3/5</b>0,6</div>
+            </div>
+            <div class="formula"><math display="block"><mrow><mo>−</mo><mfrac><mn>3</mn><mn>4</mn></mfrac><mo>=</mo><mo>−</mo><mn>0,75</mn></mrow></math></div>
+            <p class="full-detail detail">В живой модели справа выберите дробь. Цепочка показывает цифры частного и остатки; цветная петля отмечает начало повторения.</p>
+          </article>
+
+          <article class="card quiz-card">
+            <h2>Быстрая проверка</h2>
+            <div class="quiz-question" data-answer="1" data-explain="Скобки охватывают весь повторяющийся фрагмент 72.">
+              <p>Какая запись соответствует 0,727272…?</p>
+              <div class="quiz-options">
+                <button type="button" data-choice="0">0,7(2)</button>
+                <button type="button" data-choice="1">0,(72)</button>
+                <button type="button" data-choice="2">0,(7)2</button>
+              </div>
+              <p class="feedback" aria-live="polite"></p>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel" id="periodic" role="tabpanel" aria-labelledby="tab-periodic" data-title="Периодические дроби">
+          <article class="card">
+            <p class="eyebrow">Случай 1</p>
+            <h2>Период начинается сразу</h2>
+            <p>В числитель записываем период, в знаменатель — столько девяток, сколько цифр в периоде.</p>
+            <div class="formula"><math display="block"><mrow><mn>0,(A)</mn><mo>=</mo><mfrac><mi>A</mi><mrow><msup><mn>10</mn><mi>k</mi></msup><mo>−</mo><mn>1</mn></mrow></mfrac></mrow></math></div>
+            <div class="grid">
+              <div class="tile"><math><mrow><mn>0,(15)</mn><mo>=</mo><mfrac><mn>15</mn><mn>99</mn></mfrac><mo>=</mo><mfrac><mn>5</mn><mn>33</mn></mfrac></mrow></math></div>
+              <div class="tile"><math><mrow><mn>0,(27)</mn><mo>=</mo><mfrac><mn>27</mn><mn>99</mn></mfrac><mo>=</mo><mfrac><mn>3</mn><mn>11</mn></mfrac></mrow></math></div>
+              <div class="tile"><math><mrow><mn>0,(123)</mn><mo>=</mo><mfrac><mn>123</mn><mn>999</mn></mfrac><mo>=</mo><mfrac><mn>41</mn><mn>333</mn></mfrac></mrow></math></div>
+              <div class="callout"><strong>Самопроверка:</strong> число девяток равно длине периода; полученную дробь сокращаем.</div>
+            </div>
+          </article>
+
+          <article class="card linked" data-link="mixed-rule">
+            <p class="eyebrow">Случай 2</p>
+            <h2>Перед периодом есть цифры</h2>
+            <p>В числителе из числа до периода и первой записи периода вычитаем число до периода. В знаменателе записываем девятки по длине периода, затем нули по числу цифр до периода.</p>
+            <div class="formula"><math display="block"><mrow><mn>0,23(18)</mn><mo>=</mo><mfrac><mrow><mn>2318</mn><mo>−</mo><mn>23</mn></mrow><mn>9900</mn></mfrac><mo>=</mo><mfrac><mn>51</mn><mn>220</mn></mfrac></mrow></math></div>
+            <div class="standard-detail callout teal">Порядок знаменателя важен: сначала девятки периода, затем нули непериодической части.</div>
+          </article>
+
+          <article class="card step-solution" data-solution="mixed">
+            <div class="visual-head">
+              <div><p class="eyebrow">Почему правило работает</p><h2>Вывод для 0,23(18)</h2></div>
+              <button class="hint-trigger" type="button" data-hint-title="Пошаговый режим" data-hint="Открывайте по одному равенству. Живая модель синхронно показывает выделенную часть записи." aria-label="Подсказка о пошаговом решении">?</button>
+            </div>
+            <div class="steps">
+              <div class="step linked" data-link="period-prefix"><math><mrow><mi>x</mi><mo>=</mo><mn>0,23(18)</mn></mrow></math>. Обозначаем исходную дробь через <math><mi>x</mi></math>.</div>
+              <div class="step linked" data-link="period-prefix"><math><mrow><mn>100</mn><mi>x</mi><mo>=</mo><mn>23,(18)</mn></mrow></math>. Две цифры до периода переносим в целую часть.</div>
+              <div class="step linked" data-link="period-cycle"><math><mrow><mn>10000</mn><mi>x</mi><mo>=</mo><mn>2318,(18)</mn></mrow></math>. Ещё две позиции соответствуют длине периода.</div>
+              <div class="step linked" data-link="period-formula">Вычитаем равенства: <math><mrow><mn>9900</mn><mi>x</mi><mo>=</mo><mn>2318</mn><mo>−</mo><mn>23</mn><mo>=</mo><mn>2295</mn></mrow></math>. Одинаковые периодические хвосты исчезают.</div>
+              <div class="step linked" data-link="period-formula"><math><mrow><mi>x</mi><mo>=</mo><mfrac><mn>2295</mn><mn>9900</mn></mfrac><mo>=</mo><mfrac><mn>51</mn><mn>220</mn></mfrac></mrow></math>. Сокращаем дробь.</div>
+            </div>
+            <div class="step-controls" aria-label="Управление решением">
+              <button class="secondary step-prev" type="button">← Предыдущий</button>
+              <button class="primary step-next" type="button">Следующий шаг →</button>
+              <button class="secondary step-all" type="button">Показать всё</button>
+              <button class="secondary step-hide" type="button">Скрыть</button>
+              <span class="step-status" aria-live="polite"></span>
+            </div>
+          </article>
+
+          <article class="card">
+            <h2>Типичные ошибки</h2>
+            <div class="grid">
+              <div class="error"><strong>Неверная длина периода.</strong><br>В 0,(72) повторяется число 72 целиком.</div>
+              <div class="error"><strong>Перепутан знаменатель.</strong><br>Для смешанной дроби сначала идут девятки, затем нули.</div>
+              <div class="error"><strong>Пропущено вычитание.</strong><br>Из числа с первой записью периода вычитают часть до периода.</div>
+              <div class="error"><strong>Дробь не сокращена.</strong><br>После преобразования ищем общий делитель.</div>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel" id="sets" role="tabpanel" aria-labelledby="tab-sets" data-title="Множества чисел">
+          <article class="card">
+            <p class="eyebrow">Классификация</p>
+            <h2>Рациональные и иррациональные числа</h2>
+            <div class="grid">
+              <div class="tile linked" data-link="rational">
+                <strong>Рациональное число</strong>
+                <p>Представляется в виде дроби с целым числителем и ненулевым целым знаменателем.</p>
+                <div class="formula"><math><mrow><mfrac><mi>m</mi><mi>n</mi></mfrac><mo>,</mo><mspace width=".5em"/><mi>m</mi><mo>∈</mo><mi>ℤ</mi><mo>,</mo><mspace width=".5em"/><mi>n</mi><mo>∈</mo><mi>ℤ</mi><mo>,</mo><mspace width=".5em"/><mi>n</mi><mo>≠</mo><mn>0</mn></mrow></math></div>
+              </div>
+              <div class="tile linked" data-link="irrational">
+                <strong>Иррациональное число</strong>
+                <p>Действительное число, которое нельзя представить такой дробью. Его десятичная запись бесконечна и непериодична.</p>
+                <div class="formula"><math><mrow><msqrt><mn>2</mn></msqrt><mo>=</mo><mn>1,41421356…</mn></mrow></math></div>
+              </div>
+            </div>
+            <div class="callout standard-detail">Наличие знака корня ещё не доказывает иррациональность: <math><mrow><msqrt><mn>4</mn></msqrt><mo>=</mo><mn>2</mn></mrow></math> и <math><mrow><msqrt><mn>81</mn></msqrt><mo>=</mo><mn>9</mn></mrow></math>.</div>
+          </article>
+
+          <article class="card linked" data-link="nesting">
+            <h2>Вложенность множеств</h2>
+            <div class="formula"><math display="block"><mrow><mi>ℕ</mi><mo>⊂</mo><mi>ℤ</mi><mo>⊂</mo><mi>ℚ</mi><mo>⊂</mo><mi>ℝ</mi></mrow></math></div>
+            <p>Указываем наименьшее стандартное множество, которому принадлежит число.</p>
+            <div class="grid">
+              <div class="tile"><math><mrow><mn>7</mn><mo>∈</mo><mi>ℕ</mi></mrow></math></div>
+              <div class="tile"><math><mrow><mo>−</mo><mn>5</mn><mo>∈</mo><mi>ℤ</mi></mrow></math></div>
+              <div class="tile"><math><mrow><mfrac><mn>2</mn><mn>7</mn></mfrac><mo>∈</mo><mi>ℚ</mi></mrow></math></div>
+              <div class="tile"><math><mrow><msqrt><mn>2</mn></msqrt><mo>∈</mo><mi>ℝ</mi><mo>∖</mo><mi>ℚ</mi></mrow></math></div>
+            </div>
+            <div class="error full-detail"><strong>Школьная договорённость в пособии:</strong> <math><mrow><mi>ℕ</mi><mo>=</mo><mo>{</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mo>…</mo><mo>}</mo></mrow></math>, поэтому <math><mrow><mn>0</mn><mo>∉</mo><mi>ℕ</mi></mrow></math>.</div>
+          </article>
+
+          <article class="card quiz-card">
+            <h2>Проверьте классификацию</h2>
+            <div class="quiz-question" data-answer="1" data-explain="√81 = 9, поэтому наименьшее множество — натуральные числа.">
+              <p>Каково наименьшее множество для √81?</p>
+              <div class="quiz-options">
+                <button type="button" data-choice="0">ℝ ∖ ℚ</button>
+                <button type="button" data-choice="1">ℕ</button>
+                <button type="button" data-choice="2">ℚ</button>
+              </div>
+              <p class="feedback" aria-live="polite"></p>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel" id="radicals" role="tabpanel" aria-labelledby="tab-radicals" data-title="Выражения с корнями">
+          <article class="card">
+            <p class="eyebrow">Главный приём</p>
+            <h2>Сначала упростите выражение</h2>
+            <p>Внешний вид выражения может создавать ложное впечатление. Классифицируем уже полученное значение.</p>
+            <div class="rule-strip">
+              <div><b>√8</b>2√2</div>
+              <div><b>√18</b>3√2</div>
+              <div><b>√81</b>9</div>
+            </div>
+          </article>
+
+          <article class="card step-solution" data-solution="radical-one">
+            <h2>Сопряжённые выражения</h2>
+            <div class="formula"><math display="block"><mrow><mo>(</mo><msqrt><mn>8</mn></msqrt><mo>−</mo><mn>3</mn><mo>)</mo><mo>(</mo><msqrt><mn>8</mn></msqrt><mo>+</mo><mn>3</mn><mo>)</mo></mrow></math></div>
+            <div class="steps">
+              <div class="step linked" data-link="radical-stage-0">Распознаём формулу <math><mrow><mo>(</mo><mi>a</mi><mo>−</mo><mi>b</mi><mo>)</mo><mo>(</mo><mi>a</mi><mo>+</mo><mi>b</mi><mo>)</mo><mo>=</mo><msup><mi>a</mi><mn>2</mn></msup><mo>−</mo><msup><mi>b</mi><mn>2</mn></msup></mrow></math>.</div>
+              <div class="step linked" data-link="radical-stage-1"><math><mrow><msup><mrow><mo>(</mo><msqrt><mn>8</mn></msqrt><mo>)</mo></mrow><mn>2</mn></msup><mo>−</mo><msup><mn>3</mn><mn>2</mn></msup><mo>=</mo><mn>8</mn><mo>−</mo><mn>9</mn></mrow></math>.</div>
+              <div class="step linked" data-link="radical-stage-3">Получаем <math><mrow><mo>−</mo><mn>1</mn><mo>∈</mo><mi>ℤ</mi><mo>⊂</mo><mi>ℚ</mi></mrow></math>. Значение рационально.</div>
+            </div>
+            <div class="step-controls">
+              <button class="secondary step-prev" type="button">← Предыдущий</button>
+              <button class="primary step-next" type="button">Следующий шаг →</button>
+              <button class="secondary step-all" type="button">Показать всё</button>
+              <button class="secondary step-hide" type="button">Скрыть</button>
+              <span class="step-status" aria-live="polite"></span>
+            </div>
+          </article>
+
+          <article class="card step-solution" data-solution="radical-two">
+            <h2>Квадрат разности</h2>
+            <div class="formula"><math display="block"><mrow><msup><mrow><mo>(</mo><msqrt><mn>3</mn></msqrt><mo>−</mo><mn>1</mn><mo>)</mo></mrow><mn>2</mn></msup><mo>+</mo><mn>2</mn><msqrt><mn>3</mn></msqrt></mrow></math></div>
+            <div class="steps">
+              <div class="step linked" data-link="radical-stage-0">Используем <math><mrow><msup><mrow><mo>(</mo><mi>a</mi><mo>−</mo><mi>b</mi><mo>)</mo></mrow><mn>2</mn></msup><mo>=</mo><msup><mi>a</mi><mn>2</mn></msup><mo>−</mo><mn>2</mn><mi>a</mi><mi>b</mi><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup></mrow></math>.</div>
+              <div class="step linked" data-link="radical-stage-1"><math><mrow><msup><mrow><mo>(</mo><msqrt><mn>3</mn></msqrt><mo>−</mo><mn>1</mn><mo>)</mo></mrow><mn>2</mn></msup><mo>=</mo><mn>3</mn><mo>−</mo><mn>2</mn><msqrt><mn>3</mn></msqrt><mo>+</mo><mn>1</mn></mrow></math>.</div>
+              <div class="step linked" data-link="radical-stage-2"><math><mrow><mn>4</mn><mo>−</mo><mn>2</mn><msqrt><mn>3</mn></msqrt><mo>+</mo><mn>2</mn><msqrt><mn>3</mn></msqrt><mo>=</mo><mn>4</mn></mrow></math>.</div>
+              <div class="step linked" data-link="radical-stage-3"><math><mrow><mn>4</mn><mo>∈</mo><mi>ℕ</mi></mrow></math>, поэтому значение рационально.</div>
+            </div>
+            <div class="step-controls">
+              <button class="secondary step-prev" type="button">← Предыдущий</button>
+              <button class="primary step-next" type="button">Следующий шаг →</button>
+              <button class="secondary step-all" type="button">Показать всё</button>
+              <button class="secondary step-hide" type="button">Скрыть</button>
+              <span class="step-status" aria-live="polite"></span>
+            </div>
+          </article>
+
+          <article class="card">
+            <h2>Типичная ошибка</h2>
+            <div class="error"><strong>Потерян знак среднего слагаемого.</strong> В выражении <math><mrow><msup><mrow><mo>(</mo><msqrt><mn>3</mn></msqrt><mo>−</mo><mn>1</mn><mo>)</mo></mrow><mn>2</mn></msup></mrow></math> роль <math><mi>b</mi></math> играет число 1, поэтому среднее слагаемое равно <math><mrow><mo>−</mo><mn>2</mn><msqrt><mn>3</mn></msqrt></mrow></math>.</div>
+          </article>
+        </section>
+
+        <section class="panel" id="practice" role="tabpanel" aria-labelledby="tab-practice" data-title="Тренировка и самопроверка">
+          <article class="card">
+            <p class="eyebrow">Путь А · от среднего к сложному</p>
+            <h2>Тренировочный блок</h2>
+            <p class="lead">Все упражнения и числа сохранены из пособия. Выполняйте их по порядку.</p>
+            <div class="practice-list">
+              <div class="practice-task"><span class="task-number">1</span><span class="task-level">Средний</span><br>Представьте в виде десятичной дроби:<ol class="subitems"><li>2/3;</li><li>8/11;</li><li>3/5;</li><li>−3/4.</li></ol></div>
+              <div class="practice-task"><span class="task-number">2</span><span class="task-level">Средний</span><br>Представьте в виде бесконечной периодической десятичной дроби:<ol class="subitems"><li>5/18;</li><li>7/12.</li></ol></div>
+              <div class="practice-task"><span class="task-number">3</span><span class="task-level">Средний</span><br>Представьте в виде несократимой обыкновенной дроби:<ol class="subitems"><li>0,(15);</li><li>0,(123);</li><li>0,(27).</li></ol></div>
+              <div class="practice-task"><span class="task-number">4</span><span class="task-level">Выше среднего</span><br>Представьте в виде несократимой обыкновенной дроби:<ol class="subitems"><li>0,2(3);</li><li>0,14(6).</li></ol></div>
+              <div class="practice-task"><span class="task-number">5</span><span class="task-level">Выше среднего</span><br>Представьте в виде несократимой обыкновенной дроби:<ol class="subitems"><li>0,23(18);</li><li>1,2(34).</li></ol></div>
+              <div class="practice-task"><span class="task-number">6</span><span class="task-level">Выше среднего</span><br>Укажите наименьшее из множеств ℕ, ℤ, ℚ, ℝ∖ℚ:<ol class="subitems"><li>√81;</li><li>−12;</li><li>0;</li><li>7/9;</li><li>√7;</li><li>0,(37).</li></ol></div>
+              <div class="practice-task"><span class="task-number">7</span><span class="task-level">Выше среднего</span><br>Упростите и определите рациональность:<ol class="subitems"><li>(√8 − 3)(√8 + 3);</li><li>(√3 − 1)² + 2√3;</li><li>√18 − 3√2.</li></ol></div>
+              <div class="practice-task"><span class="task-number">8</span><span class="task-level">Выше среднего</span><br>Упростите и определите вид числа:<ol class="subitems"><li>√12 + √3;</li><li>(√5 + 1)(√5 − 1);</li><li>√50/√2.</li></ol></div>
+              <div class="practice-task"><span class="task-number">9</span><span class="task-level">Выше среднего</span><br>Определите верные утверждения, неверные исправьте:<ol class="subitems"><li>0 ∈ ℕ;</li><li>−4 ∈ ℤ;</li><li>3/7 ∈ ℚ;</li><li>√2 ∈ ℝ∖ℚ;</li><li>ℚ ⊂ ℝ.</li></ol></div>
+              <div class="practice-task"><span class="task-number">10</span><span class="task-level">Сложный</span><br>Даны <strong>x = 0,1(6)</strong> и <strong>y = 0,(3)</strong>. Без приближённых значений корней найдите <strong>A = (x − y)² + 2√12 − 4√3</strong> и определите вид числа A.</div>
+            </div>
+            <details class="answers">
+              <summary>Показать таблицу ответов</summary>
+              <div class="answer-list">
+                <div class="answer-row"><b>1.</b> 1) 0,(6); 2) 0,(72); 3) 0,6; 4) −0,75.</div>
+                <div class="answer-row"><b>2.</b> 1) 0,2(7); 2) 0,58(3).</div>
+                <div class="answer-row"><b>3.</b> 1) 5/33; 2) 41/333; 3) 3/11.</div>
+                <div class="answer-row"><b>4.</b> 1) 7/30; 2) 11/75.</div>
+                <div class="answer-row"><b>5.</b> 1) 51/220; 2) 611/495.</div>
+                <div class="answer-row"><b>6.</b> 1) ℕ; 2) ℤ; 3) ℤ; 4) ℚ; 5) ℝ∖ℚ; 6) ℚ.</div>
+                <div class="answer-row"><b>7.</b> 1) −1, рациональное; 2) 4, рациональное; 3) 0, рациональное.</div>
+                <div class="answer-row"><b>8.</b> 1) 3√3, иррациональное; 2) 4, рациональное; 3) 5, рациональное.</div>
+                <div class="answer-row"><b>9.</b> 1) неверно: 0 ∉ ℕ; 2–5) верно.</div>
+                <div class="answer-row"><b>10.</b> x = 1/6, y = 1/3, A = 1/36; число A рациональное.</div>
+              </div>
+            </details>
+          </article>
+
+          <article class="card step-solution" data-solution="task-ten">
+            <h2>Разбор задания 10</h2>
+            <div class="steps">
+              <div class="step linked" data-link="task10-fractions"><math><mrow><mi>x</mi><mo>=</mo><mfrac><mn>1</mn><mn>6</mn></mfrac><mo>,</mo><mspace width=".8em"/><mi>y</mi><mo>=</mo><mfrac><mn>1</mn><mn>3</mn></mfrac></mrow></math>. Переводим периодические дроби в обыкновенные.</div>
+              <div class="step linked" data-link="task10-square"><math><mrow><msup><mrow><mo>(</mo><mfrac><mn>1</mn><mn>6</mn></mfrac><mo>−</mo><mfrac><mn>1</mn><mn>3</mn></mfrac><mo>)</mo></mrow><mn>2</mn></msup><mo>=</mo><msup><mrow><mo>(</mo><mo>−</mo><mfrac><mn>1</mn><mn>6</mn></mfrac><mo>)</mo></mrow><mn>2</mn></msup><mo>=</mo><mfrac><mn>1</mn><mn>36</mn></mfrac></mrow></math>.</div>
+              <div class="step linked" data-link="task10-roots"><math><mrow><mn>2</mn><msqrt><mn>12</mn></msqrt><mo>−</mo><mn>4</mn><msqrt><mn>3</mn></msqrt><mo>=</mo><mn>4</mn><msqrt><mn>3</mn></msqrt><mo>−</mo><mn>4</mn><msqrt><mn>3</mn></msqrt><mo>=</mo><mn>0</mn></mrow></math>.</div>
+              <div class="step linked" data-link="task10-answer"><math><mrow><mi>A</mi><mo>=</mo><mfrac><mn>1</mn><mn>36</mn></mfrac><mo>∈</mo><mi>ℚ</mi></mrow></math>. Ответ удовлетворяет требованию точного вычисления.</div>
+            </div>
+            <div class="step-controls">
+              <button class="secondary step-prev" type="button">← Предыдущий</button>
+              <button class="primary step-next" type="button">Следующий шаг →</button>
+              <button class="secondary step-all" type="button">Показать всё</button>
+              <button class="secondary step-hide" type="button">Скрыть</button>
+              <span class="step-status" aria-live="polite"></span>
+            </div>
+          </article>
+
+          <article class="card">
+            <h2>Мини-квиз</h2>
+            <div class="quiz-grid">
+              <div class="quiz-question" data-answer="2" data-explain="Длина периода равна двум, поэтому в знаменателе две девятки.">
+                <p>Какой знаменатель появляется для 0,(27) до сокращения?</p>
+                <div class="quiz-options"><button type="button" data-choice="0">9</button><button type="button" data-choice="1">90</button><button type="button" data-choice="2">99</button></div>
+                <p class="feedback" aria-live="polite"></p>
+              </div>
+              <div class="quiz-question" data-answer="0" data-explain="В периоде две цифры, перед периодом две цифры: 99 и 00 дают 9900.">
+                <p>Какой знаменатель соответствует 0,23(18)?</p>
+                <div class="quiz-options"><button type="button" data-choice="0">9900</button><button type="button" data-choice="1">9999</button><button type="button" data-choice="2">990</button></div>
+                <p class="feedback" aria-live="polite"></p>
+              </div>
+              <div class="quiz-question" data-answer="1" data-explain="Иррациональная десятичная запись бесконечна и непериодична.">
+                <p>Какая десятичная запись характерна для иррационального числа?</p>
+                <div class="quiz-options"><button type="button" data-choice="0">Конечная</button><button type="button" data-choice="1">Бесконечная непериодическая</button><button type="button" data-choice="2">Бесконечная периодическая</button></div>
+                <p class="feedback" aria-live="polite"></p>
+              </div>
+              <div class="quiz-question" data-answer="2" data-explain="Сначала √81 упрощается до 9, а 9 — натуральное число.">
+                <p>Как классифицировать √81 по наименьшему множеству?</p>
+                <div class="quiz-options"><button type="button" data-choice="0">ℝ∖ℚ</button><button type="button" data-choice="1">ℚ</button><button type="button" data-choice="2">ℕ</button></div>
+                <p class="feedback" aria-live="polite"></p>
+              </div>
+            </div>
+            <div class="quiz-summary" id="quizSummary" aria-live="polite">Ответьте на вопросы: результат появится здесь.</div>
+            <button class="secondary" id="quizReset" type="button">Пройти заново</button>
+          </article>
+
+          <article class="card">
+            <h2>Итоговая самопроверка</h2>
+            <div class="progress" aria-hidden="true"><span id="readinessBar"></span></div>
+            <div class="readiness"><span id="readinessText">Отмечено: 0 из 8</span><strong id="readinessPercent">0%</strong></div>
+            <div class="check-list" id="checkList">
+              <label class="check"><input type="checkbox">Я различаю конечную и периодическую десятичную запись.</label>
+              <label class="check"><input type="checkbox">Я могу получить десятичную запись делением числителя на знаменатель.</label>
+              <label class="check"><input type="checkbox">Я умею обратить чистую периодическую дробь.</label>
+              <label class="check"><input type="checkbox">Я могу восстановить правило девяток и нулей для смешанной дроби.</label>
+              <label class="check"><input type="checkbox">Я объясняю, почему вычитание убирает периодический хвост.</label>
+              <label class="check"><input type="checkbox">Я определяю наименьшее числовое множество.</label>
+              <label class="check"><input type="checkbox">Я сначала упрощаю выражение с корнями, затем классифицирую результат.</label>
+              <label class="check"><input type="checkbox">Я проверяю сокращение полученной обыкновенной дроби.</label>
+            </div>
+            <p class="callout teal" id="readinessAdvice">Начните с раздела «Десятичная запись» и объясните вслух два определения.</p>
+          </article>
+        </section>
+      </main>
+
+      <aside class="sticky" aria-label="Интерактивная модель">
+        <article class="visual-card">
+          <div class="visual-head">
+            <div><p class="eyebrow">Живая лаборатория</p><h2 id="modelTitle">Деление с остатком</h2></div>
+            <button class="hint-trigger" type="button" data-hint-title="Режимы модели" data-hint="Переключайте четыре представления: деление, устройство периода, множества и упрощение корней." aria-label="Подсказка о режимах модели">i</button>
+          </div>
+          <div class="visual-modes" role="group" aria-label="Режим визуализации">
+            <button class="mode-button" type="button" data-mode="decimal" aria-pressed="true">Деление</button>
+            <button class="mode-button" type="button" data-mode="period">Период → дробь</button>
+            <button class="mode-button" type="button" data-mode="sets">Множества</button>
+            <button class="mode-button" type="button" data-mode="radical">Корни</button>
+          </div>
+          <label>
+            <span class="visually-hidden">Выберите пример</span>
+            <select class="model-select" id="modelSelect" aria-label="Выберите пример для визуализации"></select>
+          </label>
+          <div class="model-shell">
+            <svg id="modelSvg" viewBox="0 0 640 420" role="button" tabindex="0" aria-label="Интерактивная модель. Нажмите Enter для увеличения"></svg>
+          </div>
+          <div class="zoom-row">
+            <span>Масштаб</span>
+            <input id="zoomRange" type="range" min="0.75" max="2.5" step="0.05" value="1" aria-label="Масштаб модели">
+            <output id="zoomOutput">100%</output>
+            <button class="hint-trigger" type="button" data-hint-title="Масштаб и перемещение" data-hint="Используйте колесо или ползунок. Перетаскивание сдвигает модель; кнопка «Сброс» возвращает исходный вид." aria-label="Подсказка о масштабе">?</button>
+          </div>
+          <div class="view-toggles" aria-label="Видимость элементов модели">
+            <label><input id="labelsToggle" type="checkbox" checked> подписи</label>
+            <label><input id="guidesToggle" type="checkbox" checked> связи</label>
+          </div>
+          <div class="model-control-row">
+            <button type="button" data-model-action="out" aria-label="Уменьшить модель">−</button>
+            <button type="button" data-model-action="in" aria-label="Увеличить модель">+</button>
+            <button type="button" data-model-action="reset">Сброс</button>
+            <button type="button" data-model-action="open">Развернуть</button>
+          </div>
+          <p class="visual-note" id="modelNote" aria-live="polite"></p>
+        </article>
+      </aside>
+    </div>
+
+    <footer class="footer">
+      <span>Лёвин Артём Александрович · эксклюзивно для Анны Трапезниковой</span>
+      <span>Занятие 01.09.26</span>
+    </footer>
+  </div>
+
+  <div class="hint-bubble" id="hintBubble" role="tooltip" aria-hidden="true" hidden>
+    <button class="hint-close" id="hintClose" type="button" aria-label="Закрыть подсказку">×</button>
+    <strong id="hintTitle"></strong><p id="hintText"></p>
+  </div>
+
+  <dialog id="modelDialog" aria-labelledby="modelDialogTitle">
+    <div class="dialog-shell">
+      <header class="dialog-head"><h2 id="modelDialogTitle">Увеличенная модель</h2><button class="dialog-close" type="button" data-close-dialog="modelDialog" aria-label="Закрыть модель">×</button></header>
+      <div class="dialog-model"><svg id="modelSvgLarge" viewBox="0 0 900 570" role="img" aria-label="Увеличенная интерактивная модель"></svg></div>
+      <div class="model-control-row">
+        <button type="button" data-model-action="out">−</button><button type="button" data-model-action="in">+</button><button type="button" data-model-action="reset">Сброс</button><button type="button" data-close-dialog="modelDialog">Закрыть</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="imageDialog" class="image-dialog" aria-labelledby="imageDialogTitle">
+    <div class="dialog-shell">
+      <header class="dialog-head"><h2 id="imageDialogTitle">Памятка к занятию</h2><button class="dialog-close" type="button" data-close-dialog="imageDialog" aria-label="Закрыть изображение">×</button></header>
+      <img src="images/01.09.26.png" alt="Увеличенная учебная памятка по рациональным и иррациональным числам и периодическим дробям">
+    </div>
+  </dialog>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const root = document.documentElement;
+      const $ = (selector, scope = document) => scope.querySelector(selector);
+      const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
+      const STORAGE = {
+        theme: 'anna_trapeznikova-01.09.26-theme',
+        detail: 'anna_trapeznikova-01.09.26-detail',
+        steps: 'anna_trapeznikova-01.09.26-steps',
+        checks: 'anna_trapeznikova-01.09.26-checks'
+      };
+      const safeStorage = {
+        get(key, fallback = null) { try { return localStorage.getItem(key) ?? fallback; } catch (_) { return fallback; } },
+        set(key, value) { try { localStorage.setItem(key, value); } catch (_) {} }
+      };
+
+      const themeButton = $('#themeToggle');
+      const savedTheme = safeStorage.get(STORAGE.theme, 'light');
+      root.dataset.theme = savedTheme === 'dark' ? 'dark' : 'light';
+      function syncThemeLabel() {
+        const dark = root.dataset.theme === 'dark';
+        themeButton.textContent = dark ? '☀ Светлая' : '◐ Тёмная';
+        themeButton.setAttribute('aria-label', dark ? 'Включить светлую тему' : 'Включить тёмную тему');
+      }
+      syncThemeLabel();
+      themeButton.addEventListener('click', () => {
+        root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        safeStorage.set(STORAGE.theme, root.dataset.theme);
+        syncThemeLabel();
+        renderModel();
+      });
+      $('#printButton').addEventListener('click', () => window.print());
+
+      const detailSelect = $('#detailSelect');
+      const savedDetail = safeStorage.get(STORAGE.detail, 'full');
+      if (['brief', 'standard', 'full'].includes(savedDetail)) detailSelect.value = savedDetail;
+      root.dataset.detail = detailSelect.value;
+      detailSelect.addEventListener('change', () => {
+        root.dataset.detail = detailSelect.value;
+        safeStorage.set(STORAGE.detail, detailSelect.value);
+      });
+
+      const tabButtons = $$('.tab');
+      const panels = $$('.panel');
+      function activateTab(id, moveFocus = false) {
+        tabButtons.forEach((button, index) => {
+          const active = button.dataset.tab === id;
+          button.setAttribute('aria-selected', String(active));
+          button.tabIndex = active ? 0 : -1;
+          if (active) {
+            $('#sectionIndicator').textContent = `Раздел ${index + 1} из ${tabButtons.length} · ${button.textContent.replace(/^\d+ · /, '')}`;
+            if (moveFocus) button.focus();
+          }
+        });
+        panels.forEach((panel) => panel.classList.toggle('active', panel.id === id));
+        const modeMap = { decimals: ['decimal', 0], periodic: ['period', 5], sets: ['sets', 0], radicals: ['radical', 0] };
+        if (modeMap[id]) setMode(modeMap[id][0], modeMap[id][1]);
+        window.scrollTo({ top: $('.tabs').offsetTop - 90, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      }
+      tabButtons.forEach((button, index) => {
+        button.addEventListener('click', () => activateTab(button.dataset.tab));
+        button.addEventListener('keydown', (event) => {
+          if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+          event.preventDefault();
+          let next = index;
+          if (event.key === 'ArrowRight') next = (index + 1) % tabButtons.length;
+          if (event.key === 'ArrowLeft') next = (index - 1 + tabButtons.length) % tabButtons.length;
+          if (event.key === 'Home') next = 0;
+          if (event.key === 'End') next = tabButtons.length - 1;
+          activateTab(tabButtons[next].dataset.tab, true);
+        });
+      });
+
+      let savedSteps = {};
+      try { savedSteps = JSON.parse(safeStorage.get(STORAGE.steps, '{}')) || {}; } catch (_) { savedSteps = {}; }
+      function setupSolution(solution) {
+        const id = solution.dataset.solution;
+        const steps = $$('.step', solution);
+        let current = Math.max(0, Math.min(steps.length, Number(savedSteps[id]) || 0));
+        function update() {
+          steps.forEach((step, index) => {
+            const visible = index < current;
+            step.classList.toggle('revealed', visible);
+            step.classList.toggle('current', visible && index === current - 1);
+          });
+          $('.step-prev', solution).disabled = current === 0;
+          $('.step-next', solution).disabled = current === steps.length;
+          $('.step-status', solution).textContent = current ? `Открыто ${current} из ${steps.length}` : 'Решение скрыто';
+          savedSteps[id] = current;
+          safeStorage.set(STORAGE.steps, JSON.stringify(savedSteps));
+          if (current) {
+            const link = steps[current - 1].dataset.link;
+            if (link) queueMicrotask(() => setActiveLink(link));
+          }
+        }
+        $('.step-next', solution).addEventListener('click', () => { current = Math.min(steps.length, current + 1); update(); });
+        $('.step-prev', solution).addEventListener('click', () => { current = Math.max(0, current - 1); update(); });
+        $('.step-all', solution).addEventListener('click', () => { current = steps.length; update(); });
+        $('.step-hide', solution).addEventListener('click', () => { current = 0; update(); });
+        update();
+      }
+      $$('.step-solution').forEach(setupSolution);
+
+      const modelExamples = {
+        decimal: [
+          { label: '2/3 → 0,(6)', numerator: 2, denominator: 3, result: '0,(6)', note: 'Остаток 2 повторяется, поэтому цифра 6 образует период.' },
+          { label: '8/11 → 0,(72)', numerator: 8, denominator: 11, result: '0,(72)', note: 'Остаток 8 возвращается после двух шагов: период состоит из цифр 72.' },
+          { label: '3/5 → 0,6', numerator: 3, denominator: 5, result: '0,6', note: 'Остаток стал равен нулю, поэтому десятичная дробь конечна.' },
+          { label: '−3/4 → −0,75', numerator: -3, denominator: 4, result: '−0,75', note: 'Знак сохраняется, а деление 3 на 4 завершается остатком 0.' },
+          { label: '5/18 → 0,2(7)', numerator: 5, denominator: 18, result: '0,2(7)', note: 'После первой цифры остаток 14 повторяется: непериодическая часть 2, период 7.' },
+          { label: '7/12 → 0,58(3)', numerator: 7, denominator: 12, result: '0,58(3)', note: 'После цифр 58 повторяется остаток 4, поэтому период равен 3.' }
+        ],
+        period: [
+          { label: '0,(15) → 5/33', prefix: '', period: '15', whole: '15', before: '0', denominator: '99', result: '5/33', note: 'Две цифры периода дают две девятки. Дробь 15/99 сокращается до 5/33.' },
+          { label: '0,(123) → 41/333', prefix: '', period: '123', whole: '123', before: '0', denominator: '999', result: '41/333', note: 'Три цифры периода дают три девятки. После сокращения получаем 41/333.' },
+          { label: '0,(27) → 3/11', prefix: '', period: '27', whole: '27', before: '0', denominator: '99', result: '3/11', note: 'Период 27 имеет длину 2; 27/99 сокращается до 3/11.' },
+          { label: '0,2(3) → 7/30', prefix: '2', period: '3', whole: '23', before: '2', denominator: '90', result: '7/30', note: 'Одна девятка для периода и один ноль для цифры 2 до периода.' },
+          { label: '0,14(6) → 11/75', prefix: '14', period: '6', whole: '146', before: '14', denominator: '900', result: '11/75', note: 'Одна девятка и два нуля; (146 − 14)/900 сокращается до 11/75.' },
+          { label: '0,23(18) → 51/220', prefix: '23', period: '18', whole: '2318', before: '23', denominator: '9900', result: '51/220', note: 'Две девятки и два нуля; (2318 − 23)/9900 = 51/220.' },
+          { label: '1,2(34) → 611/495', prefix: '2', period: '34', whole: '1234', before: '12', denominator: '990', result: '611/495', note: 'Учитываем целую часть: (1234 − 12)/990 = 611/495.' }
+        ],
+        sets: [
+          { label: '7', smallest: 'N', note: '7 — натуральное число; одновременно оно целое, рациональное и действительное.' },
+          { label: '−5', smallest: 'Z', note: '−5 — целое число и принадлежит также ℚ и ℝ.' },
+          { label: '2/7', smallest: 'Q', note: '2/7 — рациональное число: это отношение целых чисел с ненулевым знаменателем.' },
+          { label: '√2', smallest: 'I', note: '√2 — иррациональное действительное число, то есть принадлежит ℝ ∖ ℚ.' },
+          { label: '0', smallest: 'Z', note: 'В принятой договорённости 0 не входит в ℕ; наименьшее множество — ℤ.' },
+          { label: '0,(37)', smallest: 'Q', note: 'Периодическая десятичная запись означает рациональность.' }
+        ],
+        radical: [
+          { label: '(√8−3)(√8+3)', stages: ['(√8−3)(√8+3)', '(√8)²−3²', '8−9', '−1 ∈ ℚ'], note: 'Формула разности квадратов полностью устраняет корень.' },
+          { label: '(√3−1)²+2√3', stages: ['(√3−1)²+2√3', '3−2√3+1+2√3', '4−2√3+2√3', '4 ∈ ℕ'], note: 'Противоположные слагаемые с √3 сокращаются.' },
+          { label: '√18−3√2', stages: ['√18−3√2', '3√2−3√2', '0 ∈ ℤ'], note: 'После вынесения множителя из-под корня значение равно нулю.' },
+          { label: '√12+√3', stages: ['√12+√3', '2√3+√3', '3√3 ∈ ℝ∖ℚ'], note: 'Подобные радикалы складываются, корень остаётся: значение иррационально.' },
+          { label: '(√5+1)(√5−1)', stages: ['(√5+1)(√5−1)', '5−1', '4 ∈ ℕ'], note: 'Сопряжённые множители дают разность квадратов.' },
+          { label: '√50/√2', stages: ['√50/√2', '√25', '5 ∈ ℕ'], note: 'Частное корней упрощается до √25 = 5.' }
+        ]
+      };
+      const modelTitles = { decimal: 'Деление с остатком', period: 'Период → дробь', sets: 'Вложенность множеств', radical: 'Упрощение корней' };
+      let modelState = { mode: 'decimal', index: 0, zoom: 1, panX: 0, panY: 0, activeLink: '', labels: true, guides: true };
+      const modelSelect = $('#modelSelect');
+      const modelSvg = $('#modelSvg');
+      const modelSvgLarge = $('#modelSvgLarge');
+
+      function css(name) { return getComputedStyle(root).getPropertyValue(name).trim(); }
+      function esc(value) { return String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char])); }
+      function setMode(mode, preferredIndex = 0) {
+        if (!modelExamples[mode]) return;
+        modelState.mode = mode;
+        modelState.index = Math.max(0, Math.min(modelExamples[mode].length - 1, preferredIndex));
+        modelState.panX = 0;
+        modelState.panY = 0;
+        $$('.mode-button').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.mode === mode)));
+        $('#modelTitle').textContent = modelTitles[mode];
+        $('#modelDialogTitle').textContent = modelTitles[mode];
+        modelSelect.innerHTML = modelExamples[mode].map((item, index) => `<option value="${index}">${esc(item.label)}</option>`).join('');
+        modelSelect.value = String(modelState.index);
+        renderModel();
+      }
+
+      function longDivisionData(numerator, denominator) {
+        const negative = numerator < 0;
+        let remainder = Math.abs(numerator) % denominator;
+        const seen = new Map();
+        const steps = [];
+        let position = 0;
+        while (remainder && !seen.has(remainder) && position < 8) {
+          seen.set(remainder, position);
+          const before = remainder;
+          const scaled = remainder * 10;
+          const digit = Math.floor(scaled / denominator);
+          remainder = scaled % denominator;
+          steps.push({ before, scaled, digit, after: remainder });
+          position += 1;
+        }
+        return { negative, steps, repeatAt: remainder ? seen.get(remainder) : -1 };
+      }
+
+      function decimalMarkup(example, large) {
+        const data = longDivisionData(example.numerator, example.denominator);
+        const width = large ? 900 : 640;
+        const gap = data.steps.length > 4 ? 135 : 150;
+        const startX = Math.max(70, (width - Math.max(1, data.steps.length) * gap) / 2 + 45);
+        const cards = data.steps.map((step, index) => {
+          const x = startX + index * gap;
+          const repeated = index === data.repeatAt;
+          const nextX = startX + (index + 1) * gap;
+          const arrow = index < data.steps.length - 1 ? `<path class="model-guide" d="M${x + 48} 194 H${nextX - 53}" stroke="${css('--muted')}" stroke-width="2" marker-end="url(#arrow)"/>` : '';
+          return `${arrow}<g data-link="decimal-step-${index}" tabindex="0" role="button"><rect x="${x - 48}" y="140" width="96" height="108" rx="16" fill="${repeated ? css('--coral-soft') : css('--surface')}" stroke="${repeated ? css('--coral') : css('--line')}" stroke-width="${repeated ? 3 : 1.5}"/><text class="model-helper" x="${x}" y="171" text-anchor="middle" fill="${css('--muted')}" font-size="14">${step.before} × 10</text><text x="${x}" y="205" text-anchor="middle" fill="${css('--teal')}" font-size="28" font-weight="800">${step.digit}</text><text class="model-helper" x="${x}" y="231" text-anchor="middle" fill="${css('--text')}" font-size="13">остаток ${step.after}</text></g>`;
+        }).join('');
+        const cycle = data.repeatAt >= 0 ? `<path class="model-guide" d="M${startX + (data.steps.length - 1) * gap} 260 C${startX + data.steps.length * gap} 330 ${startX + data.repeatAt * gap - 70} 330 ${startX + data.repeatAt * gap} 260" fill="none" stroke="${css('--coral')}" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#arrowCoral)"/><text class="model-helper" x="${width / 2}" y="342" text-anchor="middle" fill="${css('--coral')}" font-size="15" font-weight="700">остаток повторился — начинается период</text>` : `<text class="model-helper" x="${width / 2}" y="320" text-anchor="middle" fill="${css('--success')}" font-size="16" font-weight="700">остаток 0 — деление завершилось</text>`;
+        return `<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="${css('--muted')}"/></marker><marker id="arrowCoral" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="${css('--coral')}"/></marker></defs><text x="${width / 2}" y="54" text-anchor="middle" fill="${css('--text')}" font-size="26" font-weight="800">${esc(example.label)}</text><text class="model-helper" x="${width / 2}" y="91" text-anchor="middle" fill="${css('--muted')}" font-size="15">каждая карточка: остаток → цифра → новый остаток</text>${cards}${cycle}`;
+      }
+
+      function periodMarkup(example, large) {
+        const width = large ? 900 : 640;
+        const center = width / 2;
+        const prefix = example.prefix || '∅';
+        const numerator = example.before === '0' ? example.whole : `${example.whole} − ${example.before}`;
+        return `<text x="${center}" y="52" text-anchor="middle" fill="${css('--text')}" font-size="28" font-weight="800">${esc(example.label)}</text>
+          <g data-link="period-prefix" tabindex="0"><rect x="${center - 205}" y="100" width="170" height="96" rx="18" fill="${css('--gold-soft')}" stroke="${css('--gold')}"/><text class="model-helper" x="${center - 120}" y="131" text-anchor="middle" fill="${css('--muted')}" font-size="14">до периода</text><text x="${center - 120}" y="174" text-anchor="middle" fill="${css('--gold')}" font-size="32" font-weight="800">${esc(prefix)}</text></g>
+          <g data-link="period-cycle" tabindex="0"><rect x="${center + 35}" y="100" width="170" height="96" rx="18" fill="${css('--teal-soft')}" stroke="${css('--teal')}"/><text class="model-helper" x="${center + 120}" y="131" text-anchor="middle" fill="${css('--muted')}" font-size="14">период</text><text x="${center + 120}" y="174" text-anchor="middle" fill="${css('--teal')}" font-size="32" font-weight="800">${esc(example.period)}</text></g>
+          <path class="model-guide" d="M${center - 120} 211 V250 H${center - 82}" fill="none" stroke="${css('--gold')}" stroke-width="3"/><path class="model-guide" d="M${center + 120} 211 V250 H${center + 82}" fill="none" stroke="${css('--teal')}" stroke-width="3"/>
+          <g data-link="period-formula" tabindex="0"><rect x="${center - 235}" y="250" width="470" height="105" rx="22" fill="${css('--surface')}" stroke="${css('--line')}"/><text x="${center}" y="291" text-anchor="middle" fill="${css('--text')}" font-size="25" font-weight="800">(${esc(numerator)}) / ${esc(example.denominator)}</text><text x="${center}" y="327" text-anchor="middle" fill="${css('--teal')}" font-size="23">= ${esc(example.result)}</text></g>
+          <text class="model-helper" x="${center}" y="392" text-anchor="middle" fill="${css('--muted')}" font-size="14">девятки — период · нули — цифры до периода</text>`;
+      }
+
+      function setsMarkup(example, large) {
+        const width = large ? 900 : 640;
+        const center = width / 2;
+        const selected = example.smallest;
+        const stroke = (id) => selected === id ? css('--coral') : css('--teal');
+        const sw = (id) => selected === id ? 6 : 2;
+        return `<text x="${center}" y="42" text-anchor="middle" fill="${css('--text')}" font-size="28" font-weight="800">Наименьшее множество для ${esc(example.label)}</text>
+          <g data-link="set-R" tabindex="0"><ellipse cx="${center}" cy="235" rx="${large ? 330 : 240}" ry="165" fill="${css('--surface')}" stroke="${stroke('I')}" stroke-width="${sw('I')}"/><text x="${center - (large ? 280 : 200)}" y="115" fill="${css('--text')}" font-size="23" font-weight="800">ℝ</text><text class="model-helper" x="${center - (large ? 267 : 187)}" y="145" fill="${css('--muted')}" font-size="14">иррациональные: √2</text></g>
+          <g data-link="set-Q" tabindex="0"><ellipse cx="${center + 45}" cy="247" rx="${large ? 245 : 175}" ry="125" fill="${css('--teal-soft')}" stroke="${stroke('Q')}" stroke-width="${sw('Q')}"/><text x="${center + (large ? 225 : 158)}" y="178" fill="${css('--teal')}" font-size="24" font-weight="800">ℚ</text></g>
+          <g data-link="set-Z" tabindex="0"><ellipse cx="${center + 25}" cy="258" rx="${large ? 155 : 110}" ry="84" fill="${css('--gold-soft')}" stroke="${stroke('Z')}" stroke-width="${sw('Z')}"/><text x="${center + (large ? 132 : 93)}" y="229" fill="${css('--gold')}" font-size="24" font-weight="800">ℤ</text></g>
+          <g data-link="set-N" tabindex="0"><ellipse cx="${center}" cy="267" rx="${large ? 76 : 54}" ry="44" fill="${css('--coral-soft')}" stroke="${stroke('N')}" stroke-width="${sw('N')}"/><text x="${center}" y="275" text-anchor="middle" fill="${css('--coral')}" font-size="25" font-weight="800">ℕ</text></g>
+          <rect x="${center - 90}" y="365" width="180" height="42" rx="21" fill="${css('--navy')}"/><text x="${center}" y="393" text-anchor="middle" fill="${css('--bg')}" font-size="19" font-weight="800">${esc(example.label)} → ${selected === 'I' ? 'ℝ ∖ ℚ' : selected === 'N' ? 'ℕ' : selected === 'Z' ? 'ℤ' : 'ℚ'}</text>`;
+      }
+
+      function radicalMarkup(example, large) {
+        const width = large ? 900 : 640;
+        const center = width / 2;
+        const gap = large ? 122 : 92;
+        const startY = 92;
+        return `<text x="${center}" y="46" text-anchor="middle" fill="${css('--text')}" font-size="25" font-weight="800">Упростить → классифицировать</text>` + example.stages.map((stage, index) => {
+          const y = startY + index * gap;
+          const final = index === example.stages.length - 1;
+          return `${index ? `<path class="model-guide" d="M${center} ${y - 43} V${y - 18}" stroke="${css('--muted')}" stroke-width="3"/><path class="model-guide" d="M${center - 6} ${y - 25} L${center} ${y - 17} L${center + 6} ${y - 25}" fill="none" stroke="${css('--muted')}" stroke-width="3"/>` : ''}<g data-link="radical-stage-${index}" tabindex="0"><rect x="${center - (large ? 270 : 215)}" y="${y - 16}" width="${large ? 540 : 430}" height="56" rx="18" fill="${final ? css('--teal-soft') : css('--surface')}" stroke="${final ? css('--teal') : css('--line')}" stroke-width="${final ? 3 : 1.5}"/><text x="${center}" y="${y + 20}" text-anchor="middle" fill="${final ? css('--teal') : css('--text')}" font-size="${large ? 24 : 20}" font-weight="${final ? 800 : 650}">${esc(stage)}</text></g>`;
+        }).join('');
+      }
+
+      function markupFor(example, large) {
+        if (modelState.mode === 'decimal') return decimalMarkup(example, large);
+        if (modelState.mode === 'period') return periodMarkup(example, large);
+        if (modelState.mode === 'sets') return setsMarkup(example, large);
+        return radicalMarkup(example, large);
+      }
+      function renderInto(svg, large = false) {
+        const example = modelExamples[modelState.mode][modelState.index];
+        const base = large ? '0 0 900 570' : '0 0 640 420';
+        svg.setAttribute('viewBox', base);
+        svg.innerHTML = `<style>.labels-off .model-helper{display:none}.guides-off .model-guide{display:none}</style><g class="${modelState.labels ? '' : 'labels-off'} ${modelState.guides ? '' : 'guides-off'}" transform="translate(${modelState.panX} ${modelState.panY}) scale(${modelState.zoom})">${markupFor(example, large)}</g>`;
+        svg.querySelectorAll('[data-link]').forEach((node) => {
+          if (node.dataset.link === modelState.activeLink) node.setAttribute('opacity', '1');
+          node.addEventListener('mouseenter', () => setActiveLink(node.dataset.link));
+          node.addEventListener('focus', () => setActiveLink(node.dataset.link));
+        });
+      }
+      function renderModel() {
+        const example = modelExamples[modelState.mode][modelState.index];
+        $('#modelNote').textContent = example.note;
+        $('#zoomRange').value = modelState.zoom;
+        $('#zoomOutput').textContent = `${Math.round(modelState.zoom * 100)}%`;
+        renderInto(modelSvg, false);
+        if ($('#modelDialog').open) renderInto(modelSvgLarge, true);
+      }
+      modelSelect.addEventListener('change', () => { modelState.index = Number(modelSelect.value) || 0; renderModel(); });
+      $('#labelsToggle').addEventListener('change', (event) => { modelState.labels = event.target.checked; renderModel(); });
+      $('#guidesToggle').addEventListener('change', (event) => { modelState.guides = event.target.checked; renderModel(); });
+      $$('.mode-button').forEach((button) => button.addEventListener('click', () => setMode(button.dataset.mode)));
+      $('#zoomRange').addEventListener('input', (event) => { modelState.zoom = Number(event.target.value); renderModel(); });
+      $$('[data-model-action]').forEach((button) => button.addEventListener('click', () => {
+        const action = button.dataset.modelAction;
+        if (action === 'in') modelState.zoom = Math.min(2.5, modelState.zoom + .15);
+        if (action === 'out') modelState.zoom = Math.max(.75, modelState.zoom - .15);
+        if (action === 'reset') Object.assign(modelState, { zoom: 1, panX: 0, panY: 0 });
+        if (action === 'open') openDialog($('#modelDialog'), modelSvg);
+        renderModel();
+      }));
+
+      let pointer = null;
+      function bindPanZoom(svg, canOpen) {
+        svg.addEventListener('pointerdown', (event) => {
+          pointer = { id: event.pointerId, x: event.clientX, y: event.clientY, moved: false };
+          svg.setPointerCapture(event.pointerId);
+        });
+        svg.addEventListener('pointermove', (event) => {
+          if (!pointer || pointer.id !== event.pointerId) return;
+          const dx = event.clientX - pointer.x;
+          const dy = event.clientY - pointer.y;
+          if (Math.abs(dx) + Math.abs(dy) > 3) pointer.moved = true;
+          modelState.panX += dx / modelState.zoom;
+          modelState.panY += dy / modelState.zoom;
+          pointer.x = event.clientX;
+          pointer.y = event.clientY;
+          renderModel();
+        });
+        svg.addEventListener('pointerup', (event) => {
+          const shouldOpen = pointer && !pointer.moved && canOpen;
+          pointer = null;
+          if (shouldOpen) openDialog($('#modelDialog'), svg);
+        });
+        svg.addEventListener('wheel', (event) => {
+          event.preventDefault();
+          modelState.zoom = Math.max(.75, Math.min(2.5, modelState.zoom + (event.deltaY < 0 ? .1 : -.1)));
+          renderModel();
+        }, { passive: false });
+      }
+      bindPanZoom(modelSvg, true);
+      bindPanZoom(modelSvgLarge, false);
+      modelSvg.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openDialog($('#modelDialog'), modelSvg); }
+      });
+
+      function setActiveLink(link) {
+        modelState.activeLink = link || '';
+        $$('.linked').forEach((node) => node.classList.toggle('link-active', node.dataset.link === link));
+        [modelSvg, modelSvgLarge].forEach((svg) => {
+          const nodes = $$('[data-link]', svg);
+          const hasMatch = nodes.some((node) => node.dataset.link === link);
+          nodes.forEach((node) => {
+            node.style.opacity = link && hasMatch && node.dataset.link !== link ? '.28' : '1';
+          });
+        });
+      }
+      $$('.linked').forEach((node) => {
+        node.addEventListener('mouseenter', () => setActiveLink(node.dataset.link));
+        node.addEventListener('focusin', () => setActiveLink(node.dataset.link));
+        node.addEventListener('mouseleave', () => setActiveLink(''));
+        node.addEventListener('focusout', () => setActiveLink(''));
+      });
+
+      let dialogTrigger = null;
+      function openDialog(dialog, trigger) {
+        dialogTrigger = trigger || document.activeElement;
+        dialog.showModal();
+        document.body.classList.add('modal-open');
+        if (dialog.id === 'modelDialog') renderModel();
+        $('.dialog-close', dialog)?.focus();
+      }
+      function closeDialog(dialog) {
+        if (!dialog.open) return;
+        dialog.close();
+        document.body.classList.remove('modal-open');
+        dialogTrigger?.focus?.();
+      }
+      $$('[data-close-dialog]').forEach((button) => button.addEventListener('click', () => closeDialog(document.getElementById(button.dataset.closeDialog))));
+      $$('dialog').forEach((dialog) => {
+        dialog.addEventListener('click', (event) => { if (event.target === dialog) closeDialog(dialog); });
+        dialog.addEventListener('close', () => { document.body.classList.remove('modal-open'); dialogTrigger?.focus?.(); });
+      });
+      $('#posterOpen').addEventListener('click', () => openDialog($('#imageDialog'), $('#posterOpen')));
+
+      const hintBubble = $('#hintBubble');
+      let hintTimer = null;
+      function positionHint(trigger) {
+        const rect = trigger.getBoundingClientRect();
+        const width = Math.min(320, window.innerWidth - 24);
+        let left = Math.min(window.innerWidth - width - 12, Math.max(12, rect.left + rect.width / 2 - width / 2));
+        let top = rect.bottom + 10;
+        if (top + hintBubble.offsetHeight > window.innerHeight - 12) top = Math.max(12, rect.top - hintBubble.offsetHeight - 10);
+        hintBubble.style.width = `${width}px`;
+        hintBubble.style.left = `${left}px`;
+        hintBubble.style.top = `${top}px`;
+      }
+      function showHint(trigger) {
+        clearTimeout(hintTimer);
+        $('#hintTitle').textContent = trigger.dataset.hintTitle;
+        $('#hintText').textContent = trigger.dataset.hint;
+        hintBubble.hidden = false;
+        hintBubble.setAttribute('aria-hidden', 'false');
+        trigger.setAttribute('aria-describedby', 'hintBubble');
+        requestAnimationFrame(() => positionHint(trigger));
+        hintTimer = setTimeout(hideHint, 15000);
+      }
+      function hideHint() {
+        clearTimeout(hintTimer);
+        hintBubble.hidden = true;
+        hintBubble.setAttribute('aria-hidden', 'true');
+        $$('.hint-trigger').forEach((trigger) => trigger.removeAttribute('aria-describedby'));
+      }
+      $$('.hint-trigger').forEach((trigger) => {
+        trigger.addEventListener('mouseenter', () => showHint(trigger));
+        trigger.addEventListener('focus', () => showHint(trigger));
+        trigger.addEventListener('click', (event) => { event.stopPropagation(); showHint(trigger); });
+      });
+      $('#hintClose').addEventListener('click', hideHint);
+      document.addEventListener('click', (event) => { if (!hintBubble.contains(event.target) && !event.target.closest('.hint-trigger')) hideHint(); });
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape') hideHint(); });
+      window.addEventListener('resize', hideHint);
+      try {
+        if (!sessionStorage.getItem('anna-01.09.26-hint')) {
+          setTimeout(() => {
+            const trigger = $$('.hint-trigger')[0];
+            trigger.classList.add('hint-pulse');
+            showHint(trigger);
+            sessionStorage.setItem('anna-01.09.26-hint', '1');
+          }, 3000);
+        }
+      } catch (_) {}
+
+      const quizQuestions = $$('.quiz-question');
+      const quizResults = new Map();
+      quizQuestions.forEach((question) => {
+        $$('.quiz-options button', question).forEach((button) => button.addEventListener('click', () => {
+          const correct = button.dataset.choice === question.dataset.answer;
+          $$('.quiz-options button', question).forEach((option) => option.classList.remove('correct', 'wrong'));
+          button.classList.add(correct ? 'correct' : 'wrong');
+          if (!correct) $('.quiz-options button[data-choice="' + question.dataset.answer + '"]', question)?.classList.add('correct');
+          $('.feedback', question).textContent = `${correct ? 'Верно.' : 'Нужна ещё одна проверка.'} ${question.dataset.explain}`;
+          quizResults.set(question, correct);
+          updateQuizSummary();
+        }));
+      });
+      function updateQuizSummary() {
+        const answered = quizResults.size;
+        const correct = Array.from(quizResults.values()).filter(Boolean).length;
+        const summary = $('#quizSummary');
+        if (!summary) return;
+        if (!answered) summary.textContent = 'Ответьте на вопросы: результат появится здесь.';
+        else if (answered < quizQuestions.length) summary.textContent = `Отвечено ${answered} из ${quizQuestions.length}. Верно: ${correct}.`;
+        else summary.textContent = correct === quizQuestions.length ? `Готово: ${correct} из ${quizQuestions.length}. Все опорные правила восстановлены.` : `Готово: ${correct} из ${quizQuestions.length}. Вернитесь к объяснениям возле отмеченных ошибок.`;
+      }
+      $('#quizReset').addEventListener('click', () => {
+        quizResults.clear();
+        quizQuestions.forEach((question) => {
+          $$('.quiz-options button', question).forEach((button) => button.classList.remove('correct', 'wrong'));
+          $('.feedback', question).textContent = '';
+        });
+        updateQuizSummary();
+      });
+
+      const checks = $$('#checkList input');
+      let savedChecks = [];
+      try { savedChecks = JSON.parse(safeStorage.get(STORAGE.checks, '[]')) || []; } catch (_) { savedChecks = []; }
+      checks.forEach((input, index) => {
+        input.checked = Boolean(savedChecks[index]);
+        input.addEventListener('change', () => {
+          safeStorage.set(STORAGE.checks, JSON.stringify(checks.map((item) => item.checked)));
+          updateReadiness();
+        });
+      });
+      function updateReadiness() {
+        const count = checks.filter((input) => input.checked).length;
+        const percent = Math.round(count / checks.length * 100);
+        $('#readinessBar').style.width = `${percent}%`;
+        $('#readinessText').textContent = `Отмечено: ${count} из ${checks.length}`;
+        $('#readinessPercent').textContent = `${percent}%`;
+        $('#readinessAdvice').textContent = count === checks.length
+          ? 'Все пункты отмечены. Проверьте устойчивость навыка на заданиях 8–10 без подсказок.'
+          : count >= 5
+            ? 'Основная схема собрана. Повторите оставшиеся пункты и решите связанное упражнение.'
+            : 'Начните с раздела «Десятичная запись» и объясните вслух два определения.';
+      }
+      updateReadiness();
+
+      setMode('decimal');
+    })();
+  </script>
+</body>
+</html>
