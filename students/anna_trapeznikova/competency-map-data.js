@@ -543,7 +543,7 @@
     confirmedLessons: [{
       date: '01.09.26',
       title: 'Рациональные и иррациональные числа · периодические дроби',
-      href: 'pdf_docs/01.09.26.pdf',
+      href: '01.09.26.html',
       note: 'Тема представлена в чек-листе и тренировочном блоке; базовый подтверждённый уровень — 2.',
       topicIds: [
         'real_numbers_01', 'real_numbers_02', 'real_numbers_03', 'real_numbers_04',
