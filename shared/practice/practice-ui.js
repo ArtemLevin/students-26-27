@@ -1,3 +1,4 @@
+import {buildPracticeAnalyticsMetadata} from './practice-analytics-metadata.js';
 import {PracticeEngine} from './practice-engine.js';
 import {calendarDayDifference} from './practice-scheduler.js';
 import {PracticeSyncCoordinator,PracticeSyncHttpTransport} from './practice-sync.js';
@@ -12,11 +13,11 @@ const formatDate=value=>value?new Intl.DateTimeFormat('ru-RU',{day:'numeric',mon
 class PracticeDashboardController{
   constructor(root,engine){this.root=root;this.engine=engine;this.feedback='';this.hintText='';this.solution=[];this.sync=null;this.syncPending=false;this.syncStatus='local-only';this.bindExternal();this.render();}
   bindExternal(){
-    addEventListener('student:competence-state',event=>{this.engine.updateCompetenceSnapshot(event.detail?.state||{});this.render();});
+    addEventListener('student:competence-state',event=>{this.engine.updateCompetenceSnapshot(event.detail?.state||{});this.render();this.queueSync();});
     addEventListener('student:competency-open',event=>this.renderDialog(event.detail?.competencyId));
     this.ensureDialog();
   }
-  attachSync(coordinator){this.sync=coordinator;this.syncStatus='connecting';return coordinator.bootstrap().then(result=>{this.syncStatus=result.status;this.render();return result;});}
+  attachSync(coordinator){this.sync=coordinator;this.syncStatus='connecting';return coordinator.syncNow().then(result=>{this.syncStatus=result.status;this.render();return result;});}
   queueSync(){if(!this.sync||this.syncPending)return;this.syncPending=true;queueMicrotask(async()=>{try{const result=await this.sync.syncNow();this.syncStatus=result.status;}catch(error){console.warn('Practice sync failed; local state remains authoritative for this device',error);this.syncStatus='offline';}finally{this.syncPending=false;}});}
   emit(){dispatchEvent(new CustomEvent('student:practice-state',{detail:{state:this.engine.state,config:this.engine.config,syncStatus:this.syncStatus}}));this.queueSync();}
   clear(){this.root.replaceChildren();}
@@ -98,7 +99,20 @@ export function initPracticeDashboard({config,lessons=[],competenceSnapshot=null
     const engine=new PracticeEngine({config,lessons,competenceSnapshot:competenceSnapshot||window.__studentCompetenceState||null}),controller=new PracticeDashboardController(root,engine);
     window.__studentPractice=controller;
     if(config.features?.serverSync===true){
-      const transport=new PracticeSyncHttpTransport({baseUrl:config.syncBaseUrl||'',csrfToken:practiceCsrfToken}),coordinator=new PracticeSyncCoordinator({storage:engine.storage,transport,enabled:true,rehydrate:state=>{engine.state=state;engine.activateConfigured();engine.persist();controller.render();}});
+      const transport=new PracticeSyncHttpTransport({baseUrl:config.syncBaseUrl||'',csrfToken:practiceCsrfToken});
+      const coordinator=new PracticeSyncCoordinator({
+        storage:engine.storage,
+        transport,
+        enabled:true,
+        rehydrate:state=>{engine.state=state;engine.activateConfigured();engine.persist();controller.render();},
+        metadataProvider:()=>buildPracticeAnalyticsMetadata({
+          studentId:config.studentId,
+          studentLevels:engine.competenceSnapshot.studentLevels,
+          lessons:engine.lessons,
+          config,
+          sourceRevision:config.analyticsSourceRevision||''
+        })
+      });
       controller.attachSync(coordinator).catch(error=>console.warn('Practice sync bootstrap failed; local practice remains available',error));
     }
     return controller;
