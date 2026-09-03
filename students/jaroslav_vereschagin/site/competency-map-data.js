@@ -2,7 +2,7 @@
 // Базовые статусы выводятся только из подтверждённых материалов ученицы.
 window.JAROSLAV_OGE_PROGRAM = {
   "student": "jaroslav_vereschagin",
-  "studentName": "Анна Трапезникова",
+  "studentName": "Ярослав Верещагин",
   "programId": "oge-mathematics-2027",
   "programTitle": "Подготовка к ОГЭ по математике",
   "teacher": "Лёвин Артём Александрович",
