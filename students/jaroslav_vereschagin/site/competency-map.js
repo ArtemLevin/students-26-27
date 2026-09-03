@@ -275,7 +275,7 @@
 
     const title = document.createElementNS(svgNamespace, 'title');
     title.id = 'radialTitle';
-    title.textContent = 'Круговая тепловая карта подготовки Ярослава Верещагина к ОГЭ по математике';
+    title.textContent = 'Круговая тепловая карта подготовки Анны Трапезниковой к ОГЭ по математике';
     const description = document.createElementNS(svgNamespace, 'desc');
     description.id = 'radialDescription';
     description.textContent = `${groups.length} тематических секторов и ${allItems.length} отдельных навыков. Используйте Tab или стрелки для перемещения, Enter или пробел для открытия карточки.`;
