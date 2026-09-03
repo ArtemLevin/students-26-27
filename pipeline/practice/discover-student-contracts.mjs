@@ -17,11 +17,17 @@ export const CATALOG_SPECS={
   timofey:{kind:'html',path:'students/timofey/site/index-legacy.html',catalogProfile:'ege-profile-2027'},
   volodia_khachaturian:{kind:'window',path:'students/volodia_khachaturian/competency-map-data.js',global:'COMPETENCY_MAP_DATA'},
   xenia_klykova:{kind:'html',path:'students/xenia_klykova/site/index-base-2026-07-29.html',catalogProfile:'ege-profile-2027'},
-  nastya_pavlova:{kind:'window',path:'students/nastya_pavlova/competency-map-data.js',global:'COMPETENCY_MAP_DATA'},
+  nastya_pavlova:{kind:'window',path:'students/nastya_pavlova/competency-map-data.js',global:'COMPETENCY_MAP_DATA',catalogProfile:'ege-profile-2027-ordered'},
   nikol_sarkisyants:{kind:'html',path:'students/nikol_sarkisyants/site/index-original.html',catalogProfile:'ege-profile-2027'}
 };
 
 function read(root,relative){return fs.readFileSync(path.join(root,relative),'utf8');}
+
+function applyCatalogProfile(groups,spec){
+  if(spec.catalogProfile==='ege-profile-2027')return transformEgeProfile2027Catalog(groups);
+  if(spec.catalogProfile==='ege-profile-2027-ordered')return transformEgeProfile2027Catalog(groups.map((group,index)=>({...group,id:`task_${index+1}`})));
+  return groups;
+}
 
 export function loadCompetencyGroups(studentId,{root=ROOT}={}){
   const spec=CATALOG_SPECS[studentId];
@@ -37,7 +43,7 @@ export function loadCompetencyGroups(studentId,{root=ROOT}={}){
     if(!value)throw new Error(`${studentId}: competency global ${spec.global} is missing`);
     groups=normalizeGroups(value.groups||value);
   }
-  if(spec.catalogProfile==='ege-profile-2027')groups=transformEgeProfile2027Catalog(groups);
+  groups=applyCatalogProfile(groups,spec);
   validateCatalog(groups);
   return groups;
 }
