@@ -3,6 +3,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {extractArrayExpression,evaluateCatalogExpression,flattenGroups,normalizeGroups,validateCatalog} from '../../shared/student-dashboard/legacy-competence-map.js';
+import {transformEgeProfile2027Catalog} from '../../shared/student-dashboard/ege-profile-2027.js';
 import {GeneratorRegistry} from '../../shared/practice/generator-registry.js';
 import {ALL_GENERATORS} from '../../shared/practice/generators/index.js';
 import {ALL_CURATED_BANKS} from '../../shared/practice/curated-banks/index.js';
@@ -13,11 +14,11 @@ export const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../
 export const CATALOG_SPECS={
   kirill_zinoviev:{kind:'window',path:'students/kirill_zinoviev/site/competency-map-data.js',global:'KIRILL_GRADE7_GROUPS'},
   sofya_kalney:{kind:'html',path:'students/sofya_kalney/site/index-19.08.26-base.html'},
-  timofey:{kind:'html',path:'students/timofey/site/index-legacy.html'},
+  timofey:{kind:'html',path:'students/timofey/site/index-legacy.html',catalogProfile:'ege-profile-2027'},
   volodia_khachaturian:{kind:'window',path:'students/volodia_khachaturian/competency-map-data.js',global:'COMPETENCY_MAP_DATA'},
-  xenia_klykova:{kind:'html',path:'students/xenia_klykova/site/index-base-2026-07-29.html'},
+  xenia_klykova:{kind:'html',path:'students/xenia_klykova/site/index-base-2026-07-29.html',catalogProfile:'ege-profile-2027'},
   nastya_pavlova:{kind:'window',path:'students/nastya_pavlova/competency-map-data.js',global:'COMPETENCY_MAP_DATA'},
-  nikol_sarkisyants:{kind:'html',path:'students/nikol_sarkisyants/site/index-original.html'}
+  nikol_sarkisyants:{kind:'html',path:'students/nikol_sarkisyants/site/index-original.html',catalogProfile:'ege-profile-2027'}
 };
 
 function read(root,relative){return fs.readFileSync(path.join(root,relative),'utf8');}
@@ -36,6 +37,7 @@ export function loadCompetencyGroups(studentId,{root=ROOT}={}){
     if(!value)throw new Error(`${studentId}: competency global ${spec.global} is missing`);
     groups=normalizeGroups(value.groups||value);
   }
+  if(spec.catalogProfile==='ege-profile-2027')groups=transformEgeProfile2027Catalog(groups);
   validateCatalog(groups);
   return groups;
 }

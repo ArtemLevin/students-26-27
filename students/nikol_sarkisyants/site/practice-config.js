@@ -1,3 +1,7 @@
+import {installEgeProfile2027ControllerHook} from '../../../shared/student-dashboard/ege-profile-2027.js?v=20260903';
+
+if(typeof window!=='undefined')installEgeProfile2027ControllerHook('__nikolCompetenceMap',window);
+
 export const PRACTICE_CONFIG={
   enabled:true,studentId:'nikol_sarkisyants',storageKey:'nikol-practice-state-v1',masteryStateKey:'nikol-competence-state-v2',dailyTarget:5,dailyMax:7,maxPerGroup:2,remediationMax:1,
   features:{remediation:true,competencyDialogStatus:true,lessonAutoActivation:true},
