@@ -1,6 +1,6 @@
 (()=>{
 const groups=window.KIRILL_GRADE7_GROUPS||[];
-const stage04Mastery={};
+const stage04Mastery={fractions_16:3,rational_8:3};
 const lessons=[
 {date:'08.08.26',href:'08.08.26.html',ids:window.KIRILL_GRADE7_EVIDENCE||[]},
 {date:'12.08.26',href:'12.08.26.html',ids:['percent_8','percent_9','percent_11','percent_12','percent_14','models_12']},
@@ -9,7 +9,8 @@ const lessons=[
 {date:'22.08.26',href:'22.08.26.html',ids:['fractions_14','fractions_15','fractions_16','percent_8','percent_9','percent_11','percent_12','percent_14','expr_1','expr_2','expr_3','models_1','models_2','models_3','models_4','models_5','models_12','models_14']},
 {date:'26.08.26',href:'26.08.26.html',ids:['percent_3','percent_4','percent_9','percent_11','percent_12','percent_13','models_12']},
 {date:'29.08.26',href:'29.08.26.html',ids:['calc_3','calc_4','calc_5','calc_6','fractions_8','fractions_9','rational_1','rational_2','rational_3','rational_6','rational_7','rational_10','rational_11','expr_8']},
-{date:'02.09.26',href:'02.09.26.html',ids:['calc_14','fractions_2','fractions_9','rational_1','rational_2','percent_3','percent_12','expr_2','expr_9','models_2','models_3','models_12','geo_reason_2']}
+{date:'02.09.26',href:'02.09.26.html',ids:['calc_14','fractions_2','fractions_9','rational_1','rational_2','percent_3','percent_12','expr_2','expr_9','models_2','models_3','models_12','geo_reason_2']},
+{date:'05.09.26',href:'05.09.26.html',ids:['calc_10','fractions_16','rational_8','expr_7','expr_9']}
 ];
 const teacherSeed={},evidence={};for(const lesson of lessons)for(const id of lesson.ids){teacherSeed[id]=Math.max(teacherSeed[id]||0,2);evidence[id]={text:`Тема подтверждена материалом занятия ${lesson.date}.`,href:lesson.href};}
 Object.assign(teacherSeed,stage04Mastery);
