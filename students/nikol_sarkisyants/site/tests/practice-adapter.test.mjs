@@ -19,4 +19,16 @@ assert.ok(dashboard.includes('practice-ui.js?v=20260831-practice-4'));
 const map=fs.readFileSync(join(siteDir,'competence-map.js'),'utf8');
 for(const token of ['student:competence-state','student:competency-open','__studentCompetenceState'])assert.ok(map.includes(token),`adapter: ${token}`);
 
-console.log('✓ nikol_sarkisyants: practice adapter, config and entry point');
+const practiceConfigSource=fs.readFileSync(join(siteDir,'practice-config.js'),'utf8');
+assert.ok(practiceConfigSource.includes("import './mastery-authority.js';"),'practice config must load mastery authority before dashboard initialization');
+const masteryAuthority=fs.readFileSync(join(siteDir,'mastery-authority.js'),'utf8');
+for(const token of [
+  "STATE_KEY='nikol-competence-state-v2'",
+  'studentLevels:{...teacherLevels}',
+  'reviewQueue',
+  "#levelPicker .level-btn",
+  'button.disabled=true',
+  'reset.hidden=true'
+])assert.ok(masteryAuthority.includes(token),`mastery authority: ${token}`);
+
+console.log('✓ nikol_sarkisyants: practice adapter, config and GitHub-authoritative mastery');
