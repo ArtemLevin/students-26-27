@@ -8,6 +8,7 @@ import {GeneratorRegistry} from '../../shared/practice/generator-registry.js';
 import {ALL_GENERATORS} from '../../shared/practice/generators/index.js';
 import {ALL_CURATED_BANKS} from '../../shared/practice/curated-banks/index.js';
 import {validateCuratedBank} from '../../shared/practice/curated-bank.js';
+import {readMasteryLevels} from './mastery-source.mjs';
 
 export const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 
@@ -19,6 +20,16 @@ export const CATALOG_SPECS={
   xenia_klykova:{kind:'html',path:'students/xenia_klykova/site/index-base-2026-07-29.html',catalogProfile:'ege-profile-2027'},
   nastya_pavlova:{kind:'window',path:'students/nastya_pavlova/competency-map-data.js',global:'COMPETENCY_MAP_DATA',catalogProfile:'ege-profile-2027-ordered'},
   nikol_sarkisyants:{kind:'html',path:'students/nikol_sarkisyants/site/index-original.html',catalogProfile:'ege-profile-2027'}
+};
+
+export const MASTERY_SPECS={
+  kirill_zinoviev:{path:'students/kirill_zinoviev/site/competence-config.js',symbol:'stage04Mastery'},
+  sofya_kalney:{path:'students/sofya_kalney/site/competence-config.js',symbol:'stage04Mastery'},
+  timofey:{path:'students/timofey/site/competence-config.js',symbol:'stage04Mastery'},
+  volodia_khachaturian:{path:'students/volodia_khachaturian/site/competence-config.js',symbol:'stage04Mastery'},
+  xenia_klykova:{path:'students/xenia_klykova/site/competence-config.js',symbol:'stage04Mastery'},
+  nastya_pavlova:{path:'students/nastya_pavlova/site/index.html',symbol:'stage04Mastery'},
+  nikol_sarkisyants:{path:'students/nikol_sarkisyants/site/dashboard-data.js',symbol:'stage04Mastery'}
 };
 
 function read(root,relative){return fs.readFileSync(path.join(root,relative),'utf8');}
@@ -92,6 +103,13 @@ export async function discoverStudentContracts(studentId,lessonDate,{root=ROOT}=
   const siteDir=path.join(root,'students',studentId,'site');
   const lessonRegistryPath=path.join(siteDir,'lesson-registry.js'),practiceConfigPath=path.join(siteDir,'practice-config.js');
   for(const filePath of [lessonRegistryPath,practiceConfigPath])if(!fs.existsSync(filePath))throw new Error(`${studentId}: missing ${path.relative(root,filePath)}`);
+  const masterySpec=MASTERY_SPECS[studentId];
+  if(!masterySpec)throw new Error(`${studentId}: mastery contract is not configured`);
+  const masteryPath=path.join(root,masterySpec.path);
+  if(!fs.existsSync(masteryPath))throw new Error(`${studentId}: missing ${masterySpec.path}`);
+  const masterySource=fs.readFileSync(masteryPath,'utf8');
+  const mastery={...masterySpec,path:masteryPath,source:masterySource,levels:readMasteryLevels(masterySource,masterySpec.symbol)};
+
   const groups=loadCompetencyGroups(studentId,{root}),competencies=flattenGroups(groups),competencyIds=new Set(competencies.map(item=>item.id));
   const [{LESSONS},{PRACTICE_CONFIG}]=await Promise.all([importModule(lessonRegistryPath),importModule(practiceConfigPath)]);
   if(!Array.isArray(LESSONS))throw new Error(`${studentId}: LESSONS export is invalid`);
@@ -100,9 +118,9 @@ export async function discoverStudentContracts(studentId,lessonDate,{root=ROOT}=
   const curatedBanks=new Map();
   for(const bank of ALL_CURATED_BANKS){validateCuratedBank(bank);if(curatedBanks.has(bank.bankKey))throw new Error(`Duplicate curated bank: ${bank.bankKey}`);curatedBanks.set(bank.bankKey,bank);}
   return {
-    root,studentId,lessonDate,groups,competencies,competencyIds,LESSONS,PRACTICE_CONFIG,generatorRegistry,curatedBanks,
+    root,studentId,lessonDate,groups,competencies,competencyIds,LESSONS,PRACTICE_CONFIG,generatorRegistry,curatedBanks,mastery,
     artifact:discoverLessonArtifact(studentId,lessonDate,{root}),
-    paths:{lessonRegistryPath,practiceConfigPath},
-    sources:{lessonRegistry:fs.readFileSync(lessonRegistryPath,'utf8'),practiceConfig:fs.readFileSync(practiceConfigPath,'utf8')}
+    paths:{lessonRegistryPath,practiceConfigPath,masteryPath},
+    sources:{lessonRegistry:fs.readFileSync(lessonRegistryPath,'utf8'),practiceConfig:fs.readFileSync(practiceConfigPath,'utf8'),mastery:masterySource}
   };
 }
