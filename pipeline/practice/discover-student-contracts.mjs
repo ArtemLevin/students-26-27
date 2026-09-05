@@ -23,13 +23,13 @@ export const CATALOG_SPECS={
 };
 
 export const MASTERY_SPECS={
-  kirill_zinoviev:{path:'students/kirill_zinoviev/site/competence-config.js',symbol:'stage04Mastery'},
-  sofya_kalney:{path:'students/sofya_kalney/site/competence-config.js',symbol:'stage04Mastery'},
-  timofey:{path:'students/timofey/site/competence-config.js',symbol:'stage04Mastery'},
-  volodia_khachaturian:{path:'students/volodia_khachaturian/site/competence-config.js',symbol:'stage04Mastery'},
-  xenia_klykova:{path:'students/xenia_klykova/site/competence-config.js',symbol:'stage04Mastery'},
-  nastya_pavlova:{path:'students/nastya_pavlova/site/index.html',symbol:'stage04Mastery'},
-  nikol_sarkisyants:{path:'students/nikol_sarkisyants/site/dashboard-data.js',symbol:'stage04Mastery'}
+  kirill_zinoviev:{path:'students/kirill_zinoviev/site/competence-config.js',locator:{kind:'symbol',name:'stage04Mastery'}},
+  sofya_kalney:{path:'students/sofya_kalney/site/competence-config.js',locator:{kind:'property',name:'teacherSeed'}},
+  timofey:{path:'students/timofey/site/competence-config.js',locator:{kind:'symbol',name:'teacherSeed'}},
+  volodia_khachaturian:{path:'students/volodia_khachaturian/competency-map-data.js',locator:{kind:'property',name:'baselineLevels'}},
+  xenia_klykova:{path:'students/xenia_klykova/site/competence-config.js',locator:{kind:'property',name:'teacherSeed'}},
+  nastya_pavlova:{path:'students/nastya_pavlova/site/index.html',locator:{kind:'symbol',name:'stage04Mastery'}},
+  nikol_sarkisyants:{path:'students/nikol_sarkisyants/site/dashboard-data.js',locator:{kind:'symbol',name:'levels'}}
 };
 
 function read(root,relative){return fs.readFileSync(path.join(root,relative),'utf8');}
@@ -108,7 +108,7 @@ export async function discoverStudentContracts(studentId,lessonDate,{root=ROOT}=
   const masteryPath=path.join(root,masterySpec.path);
   if(!fs.existsSync(masteryPath))throw new Error(`${studentId}: missing ${masterySpec.path}`);
   const masterySource=fs.readFileSync(masteryPath,'utf8');
-  const mastery={...masterySpec,path:masteryPath,source:masterySource,levels:readMasteryLevels(masterySource,masterySpec.symbol)};
+  const mastery={...masterySpec,path:masteryPath,source:masterySource,levels:readMasteryLevels(masterySource,masterySpec.locator)};
 
   const groups=loadCompetencyGroups(studentId,{root}),competencies=flattenGroups(groups),competencyIds=new Set(competencies.map(item=>item.id));
   const [{LESSONS},{PRACTICE_CONFIG}]=await Promise.all([importModule(lessonRegistryPath),importModule(practiceConfigPath)]);
