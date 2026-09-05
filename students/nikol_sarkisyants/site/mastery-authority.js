@@ -1,5 +1,6 @@
 (() => {
   'use strict';
+  if(typeof window==='undefined'||typeof document==='undefined')return;
 
   const STATE_KEY='nikol-competence-state-v2';
   const SCHEMA_VERSION=2;
