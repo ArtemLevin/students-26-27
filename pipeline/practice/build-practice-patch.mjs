@@ -2,6 +2,8 @@ function autoOutcomeMetadata(outcome){
   const metadata={practiceDisposition:outcome.practiceDisposition};
   if(outcome.confidence==='exact'&&outcome.competencyId)metadata.competencyId=outcome.competencyId;
   if(outcome.confidence==='exact'&&outcome.practiceDisposition==='curated'&&outcome.bankKey)metadata.curatedBankKey=outcome.bankKey;
+  if(outcome.level!==undefined)metadata.level=outcome.level;
+  if(outcome.tone)metadata.tone=outcome.tone;
   if(outcome.practiceGap)metadata.practiceGap=structuredClone(outcome.practiceGap);
   return metadata;
 }
@@ -16,12 +18,7 @@ function buildNewLesson(result,artifact){
     navSubtitle:lesson.navSubtitle||lesson.summary||artifact.summary||'Материалы занятия',
     summary:lesson.summary||artifact.summary||'',
     topics,
-    outcomes:result.outcomes.map(outcome=>({
-      label:outcome.label,
-      ...(outcome.level!==undefined?{level:outcome.level}:{}),
-      ...(outcome.tone?{tone:outcome.tone}:{}),
-      ...autoOutcomeMetadata(outcome)
-    })),
+    outcomes:result.outcomes.map(outcome=>({label:outcome.label,...autoOutcomeMetadata(outcome)})),
     materials:{...artifact.materials,...(lesson.materials||{})}
   };
 }
