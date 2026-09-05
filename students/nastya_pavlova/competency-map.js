@@ -61,7 +61,7 @@
     const source = window.COMPETENCY_MAP_DATA;
     if (!source || !Array.isArray(source.groups)) throw new Error("COMPETENCY_MAP_DATA is unavailable");
 
-    const [{ transformEgeProfile2027Catalog, EGE_PROFILE_2027_CATALOG_VERSION }, { STAGE04_MASTERY }] = await Promise.all([
+    const [{ transformEgeProfile2027Catalog, EGE_PROFILE_2027_CATALOG_VERSION }, { stage04Mastery }] = await Promise.all([
       import(sharedUrl),
       import(masteryUrl)
     ]);
@@ -69,7 +69,7 @@
     const adapted = adaptForNastya(transformed);
     window.COMPETENCY_MAP_DATA = {
       ...source,
-      groups: applyStage04Mastery(adapted, STAGE04_MASTERY),
+      groups: applyStage04Mastery(adapted, stage04Mastery),
       egeCatalogVersion: EGE_PROFILE_2027_CATALOG_VERSION
     };
 
