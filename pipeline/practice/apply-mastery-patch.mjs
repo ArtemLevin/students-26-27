@@ -13,7 +13,7 @@ export function applyMasteryPatch(patch,contracts,{dryRun=false}={}){
   if(!contracts?.mastery)throw new Error(`${contracts?.studentId||'student'}: mastery contract is missing`);
   let source=contracts.mastery.source;
   for(const operation of patch.operations){
-    if(operation.type==='set-mastery-levels')source=replaceMasteryLevels(source,operation.levels,contracts.mastery.symbol);
+    if(operation.type==='set-mastery-levels')source=replaceMasteryLevels(source,operation.levels,contracts.mastery.locator);
     else throw new Error(`Unknown Stage 04 mastery operation: ${operation.type}`);
   }
   const changed=source!==contracts.mastery.source;
