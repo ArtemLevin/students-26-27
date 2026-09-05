@@ -19,37 +19,46 @@ function scanMatching(source,start,open='{',close='}'){
   throw new Error(`Unbalanced ${open}${close} expression`);
 }
 
-export function locateMasteryObject(source,symbol='stage04Mastery'){
-  const pattern=new RegExp(`\\b(?:const|let|var)\\s+${escapeRegExp(symbol)}\\s*=\\s*\\{`);
-  const match=pattern.exec(source);
-  if(!match)throw new Error(`Mastery contract ${symbol} was not found`);
-  const start=source.indexOf('{',match.index),end=scanMatching(source,start);
-  return {start,end};
+function normalizeLocator(locator='stage04Mastery'){
+  if(typeof locator==='string')return {kind:'symbol',name:locator};
+  if(!locator||!['symbol','property'].includes(locator.kind)||typeof locator.name!=='string'||!locator.name)throw new Error('Invalid mastery locator');
+  return locator;
 }
 
-function validateLevels(value,{symbol='stage04Mastery'}={}){
-  if(!value||typeof value!=='object'||Array.isArray(value))throw new Error(`${symbol} must be an object`);
+export function locateMasteryObject(source,locator='stage04Mastery'){
+  const spec=normalizeLocator(locator),name=escapeRegExp(spec.name);
+  const pattern=spec.kind==='symbol'
+    ?new RegExp(`\\b(?:const|let|var)\\s+${name}\\s*=\\s*\\{`)
+    :new RegExp(`(?:^|[,{\\n]\\s*)(?:${name}|["']${name}["'])\\s*:\\s*\\{`,'m');
+  const match=pattern.exec(source);
+  if(!match)throw new Error(`Mastery ${spec.kind} ${spec.name} was not found`);
+  const start=source.indexOf('{',match.index),end=scanMatching(source,start);
+  return {start,end,locator:spec};
+}
+
+function validateLevels(value,{name='mastery'}={}){
+  if(!value||typeof value!=='object'||Array.isArray(value))throw new Error(`${name} must be an object`);
   const result={};
   for(const [id,level] of Object.entries(value)){
-    if(!id)throw new Error(`${symbol} contains an empty competencyId`);
-    if(!Number.isInteger(level)||level<0||level>4)throw new Error(`${symbol}.${id} must be an integer 0..4`);
+    if(!id)throw new Error(`${name} contains an empty competencyId`);
+    if(!Number.isInteger(level)||level<0||level>4)throw new Error(`${name}.${id} must be an integer 0..4`);
     result[id]=level;
   }
   return result;
 }
 
-export function readMasteryLevels(source,symbol='stage04Mastery'){
-  const {start,end}=locateMasteryObject(source,symbol),literal=source.slice(start,end+1);
+export function readMasteryLevels(source,locator='stage04Mastery'){
+  const located=locateMasteryObject(source,locator),literal=source.slice(located.start,located.end+1);
   let value;
   try{value=vm.runInNewContext(`(${literal})`,Object.create(null),{timeout:100});}
-  catch(error){throw new Error(`Cannot parse ${symbol}: ${error.message}`);}
-  return validateLevels(value,{symbol});
+  catch(error){throw new Error(`Cannot parse mastery ${located.locator.name}: ${error.message}`);}
+  return validateLevels(value,{name:located.locator.name});
 }
 
-export function replaceMasteryLevels(source,updates={},symbol='stage04Mastery'){
-  const {start,end}=locateMasteryObject(source,symbol),current=readMasteryLevels(source,symbol);
-  const merged=validateLevels({...current,...updates},{symbol});
+export function replaceMasteryLevels(source,updates={},locator='stage04Mastery'){
+  const located=locateMasteryObject(source,locator),current=readMasteryLevels(source,locator);
+  const merged=validateLevels({...current,...updates},{name:located.locator.name});
   const ordered=Object.fromEntries(Object.entries(merged).sort(([a],[b])=>a.localeCompare(b,'en')));
   const serialized=JSON.stringify(ordered,null,2);
-  return source.slice(0,start)+serialized+source.slice(end+1);
+  return source.slice(0,located.start)+serialized+source.slice(located.end+1);
 }
