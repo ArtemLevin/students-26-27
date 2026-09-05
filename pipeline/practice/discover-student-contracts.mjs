@@ -28,7 +28,7 @@ export const MASTERY_SPECS={
   timofey:{path:'students/timofey/site/competence-config.js',locator:{kind:'symbol',name:'teacherSeed'}},
   volodia_khachaturian:{path:'students/volodia_khachaturian/competency-map-data.js',locator:{kind:'property',name:'baselineLevels'}},
   xenia_klykova:{path:'students/xenia_klykova/site/competence-config.js',locator:{kind:'property',name:'teacherSeed'}},
-  nastya_pavlova:{path:'students/nastya_pavlova/site/index.html',locator:{kind:'symbol',name:'stage04Mastery'}},
+  nastya_pavlova:{path:'students/nastya_pavlova/site/stage04-mastery.js',locator:{kind:'symbol',name:'stage04Mastery'}},
   nikol_sarkisyants:{path:'students/nikol_sarkisyants/site/dashboard-data.js',locator:{kind:'symbol',name:'levels'}}
 };
 
