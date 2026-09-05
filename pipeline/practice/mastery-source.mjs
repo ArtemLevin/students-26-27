@@ -32,7 +32,7 @@ export function locateMasteryObject(source,locator='stage04Mastery'){
     :new RegExp(`(?:^|[,{\\n]\\s*)(?:${name}|["']${name}["'])\\s*:\\s*\\{`,'m');
   const match=pattern.exec(source);
   if(!match)throw new Error(`Mastery ${spec.kind} ${spec.name} was not found`);
-  const start=source.indexOf('{',match.index),end=scanMatching(source,start);
+  const start=match.index+match[0].lastIndexOf('{'),end=scanMatching(source,start);
   return {start,end,locator:spec};
 }
 
