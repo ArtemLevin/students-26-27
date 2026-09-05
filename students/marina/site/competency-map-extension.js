@@ -2,6 +2,10 @@
   'use strict';
   const data = window.MARINA_OGE_MAP;
   if (!data || !Array.isArray(data.groups)) return;
+
+  // IDs 01–12 in every sector are published in competency-map-data.js.
+  // Additional IDs deliberately start at 13 and are computed from a fixed offset,
+  // not from the current array length, so localStorage keys remain stable.
   const additions = {
     task_06:['Делимость натуральных чисел','Наибольший общий делитель и наименьшее общее кратное'],
     task_07:['Сравнение чисел в стандартном виде'],
@@ -26,12 +30,14 @@
     const extra = additions[group.id] || [];
     if (!extra.length) continue;
     const prefix = group.items[0].id.replace(/_\d+$/, '');
-    const existing = new Set(group.items.map(item => item.title));
-    for (const title of extra) {
-      if (existing.has(title)) continue;
-      const index = group.items.length + 1;
+    const existingIds = new Set(group.items.map(item => item.id));
+    const existingTitles = new Set(group.items.map(item => item.title));
+
+    extra.forEach((title, offset) => {
+      const id = `${prefix}_${String(13 + offset).padStart(2, '0')}`;
+      if (existingIds.has(id) || existingTitles.has(title)) return;
       group.items.push({
-        id: `${prefix}_${String(index).padStart(2, '0')}`,
+        id,
         title,
         description: `Навык «${title}» входит в подготовку к соответствующему прототипу ОГЭ. Важно распознать модель, выбрать корректный метод, выполнить преобразования без потери условий и проверить ответ.`,
         diagnostic: `Решить типовую задачу на навык «${title}» и кратко объяснить ключевой шаг решения.`,
@@ -39,7 +45,8 @@
         baseRepeat: false,
         evidence: null
       });
-      existing.add(title);
-    }
+      existingIds.add(id);
+      existingTitles.add(title);
+    });
   }
 })();
