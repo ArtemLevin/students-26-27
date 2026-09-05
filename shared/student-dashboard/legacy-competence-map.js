@@ -74,18 +74,10 @@ function readJson(storage,key,fallback){
   try{const value=JSON.parse(storage.getItem(key)||'null');return value??fallback;}catch(_){return fallback;}
 }
 function readObject(storage,key){const value=readJson(storage,key,{});return value&&typeof value==='object'&&!Array.isArray(value)?value:{};}
-function hasOwn(object,key){return Object.prototype.hasOwnProperty.call(object,key);}
 export function clamp(value){const numeric=Number(value);return Number.isFinite(numeric)?Math.max(0,Math.min(4,Math.round(numeric))):0;}
 
-function createSeededLevels(groups,saved={},teacherSeed={}){
-  const levels={...saved};
-  for(const item of flattenGroups(groups)){
-    if(hasOwn(levels,item.id)){levels[item.id]=clamp(levels[item.id]);continue;}
-    const aliases=[...(item.legacyIds||[]),...(item.legacyId?[item.legacyId]:[])];
-    const migrated=aliases.map(id=>saved[id]).find(value=>value!==undefined);
-    levels[item.id]=clamp(migrated??teacherSeed[item.id]??item.level??0);
-  }
-  return levels;
+function createAuthoritativeLevels(groups,teacherSeed={}){
+  return Object.fromEntries(flattenGroups(groups).map(item=>[item.id,clamp(teacherSeed[item.id]??item.level??0)]));
 }
 
 function normalizeReviewQueue(queue){
@@ -106,19 +98,17 @@ function readLegacyQueue(storage,keys=[],now=()=>new Date().toISOString()){
 export function resolveStateKey(config){return config.stateKey||`${config.storageKey}-state-v2`;}
 
 export function mergeState(groups,storage,config,now=()=>new Date().toISOString()){
-  const {storageKey,baselineKey,teacherSeed={},legacyStorageKeys=[],legacyRepeatKeys=[]}=config;
+  const {baselineKey,teacherSeed={},legacyRepeatKeys=[]}=config;
   const stateKey=resolveStateKey(config),stored=readObject(storage,stateKey);
-  const hasV2=stored.schemaVersion===STATE_SCHEMA_VERSION&&stored.studentLevels&&typeof stored.studentLevels==='object'&&!Array.isArray(stored.studentLevels);
-  const legacyLevels={};
-  if(!hasV2){
-    for(const key of [...legacyStorageKeys,storageKey]){
-      const candidate=readObject(storage,key);
-      if(candidate.schemaVersion!==STATE_SCHEMA_VERSION)Object.assign(legacyLevels,candidate);
-    }
-  }
-  const baseline=Object.fromEntries(flattenGroups(groups).map(item=>[item.id,clamp(teacherSeed[item.id]??item.level??0)]));
-  const state={schemaVersion:STATE_SCHEMA_VERSION,studentLevels:createSeededLevels(groups,hasV2?stored.studentLevels:legacyLevels,teacherSeed),reviewQueue:hasV2?normalizeReviewQueue(stored.reviewQueue):readLegacyQueue(storage,legacyRepeatKeys,now),updatedAt:hasV2&&typeof stored.updatedAt==='string'?stored.updatedAt:now()};
-  try{storage.setItem(baselineKey,JSON.stringify(baseline));storage.setItem(stateKey,JSON.stringify(state));}catch(_){}
+  const hasV2=stored.schemaVersion===STATE_SCHEMA_VERSION;
+  const baseline=createAuthoritativeLevels(groups,teacherSeed);
+  const state={
+    schemaVersion:STATE_SCHEMA_VERSION,
+    studentLevels:{...baseline},
+    reviewQueue:hasV2?normalizeReviewQueue(stored.reviewQueue):readLegacyQueue(storage,legacyRepeatKeys,now),
+    updatedAt:hasV2&&typeof stored.updatedAt==='string'?stored.updatedAt:now()
+  };
+  try{if(baselineKey)storage.setItem(baselineKey,JSON.stringify(baseline));storage.setItem(stateKey,JSON.stringify(state));}catch(_){}
   return {state,baseline,stateKey};
 }
 
@@ -172,13 +162,14 @@ class MapController{
     this.state=merged.state;this.baseline=merged.baseline;this.stateKey=merged.stateKey;this.filter='all';this.active=null;this.radialFocusId=null;this.dialogTrigger=null;
     this.svg=root.querySelector('#radialMap');this.index=root.querySelector('#topicIndex');this.dialog=document.getElementById('competencyDialog');this.bind();this.render();
   }
-  level(item){return clamp(this.state.studentLevels[item.id]??this.baseline[item.id]??item.level??0);}
+  level(item){return clamp(this.baseline[item.id]??item.level??0);}
   inReview(id){return isInReviewQueue(this.state.reviewQueue,id);}
   matches(item,level=this.level(item)){return matchesCompetencyFilter(this.filter,item.id,level,this.state.reviewQueue);}
-  save(){this.state.updatedAt=new Date().toISOString();try{this.storage.setItem(this.stateKey,JSON.stringify(this.state));}catch(_){}}
+  save(){this.state.studentLevels={...this.baseline};this.state.updatedAt=new Date().toISOString();try{this.storage.setItem(this.stateKey,JSON.stringify(this.state));}catch(_){}}
   render(){
+    this.state.studentLevels={...this.baseline};
     this.renderMap();this.renderIndex();
-    const summary=computeSummary(this.groups,this.state.studentLevels,this.state.reviewQueue),visible=this.items.filter(item=>this.matches(item)).length;
+    const summary=computeSummary(this.groups,this.baseline,this.state.reviewQueue),visible=this.items.filter(item=>this.matches(item)).length;
     this.root.querySelector('#radialPercent')?.replaceChildren(document.createTextNode(`${summary.average}%`));
     this.root.querySelector('#radialTopicCount')?.replaceChildren(document.createTextNode(`${summary.total} компетенций`));
     const repeatFilter=this.root.querySelector('[data-filter="repeat"]');if(repeatFilter)repeatFilter.textContent=`В повторении · ${summary.repeat}`;
@@ -237,18 +228,18 @@ class MapController{
   }
   setDialogText(id,value){const node=this.dialog?.querySelector(`#${id}`);if(node)node.textContent=value||'';}
   updatePicker(){
-    const current=clamp(this.state.studentLevels[this.active]??0);
-    this.dialog?.querySelectorAll('.level-btn').forEach(button=>{const level=clamp(button.dataset.level),label=`Уровень ${level}: ${LEVEL_LABELS[level]}. ${LEVEL_DESCRIPTIONS[level]}`;button.setAttribute('aria-pressed',String(level===current));button.setAttribute('aria-label',label);button.title=label;});
-    this.setDialogText('levelExplanation',`${LEVEL_LABELS[current]} — ${LEVEL_DESCRIPTIONS[current]}.`);
+    const item=this.items.find(candidate=>candidate.id===this.active),current=item?this.level(item):0;
+    this.dialog?.querySelectorAll('.level-btn').forEach(button=>{const level=clamp(button.dataset.level),label=`Уровень ${level}: ${LEVEL_LABELS[level]}. ${LEVEL_DESCRIPTIONS[level]}`;button.setAttribute('aria-pressed',String(level===current));button.setAttribute('aria-label',label);button.title=`${label}. Уровень задаётся опубликованным состоянием GitHub.`;button.disabled=true;});
+    this.setDialogText('levelExplanation',`${LEVEL_LABELS[current]} — ${LEVEL_DESCRIPTIONS[current]}. Уровень задаётся опубликованным состоянием GitHub.`);
   }
   updateReviewButton(){const button=this.dialog?.querySelector('#markRepeat');if(!button||!this.active)return;const active=this.inReview(this.active);button.textContent=active?'Убрать из повторения':'Добавить в повторение';button.setAttribute('aria-pressed',String(active));}
   toggleReview(){if(!this.active)return;this.state.reviewQueue=updateReviewQueue(this.state.reviewQueue,this.active,!this.inReview(this.active));this.save();this.render();this.updateReviewButton();}
-  setLevel(level){if(!this.active)return;this.state.studentLevels[this.active]=clamp(level);this.save();this.updatePicker();this.render();}
+  setLevel(){this.updatePicker();}
   restoreDialogFocus(){const trigger=this.dialogTrigger;this.dialogTrigger=null;if(trigger?.isConnected&&typeof trigger.focus==='function'){trigger.focus();return;}const replacement=[...this.root.querySelectorAll('.radial-cell:not(.is-muted),.topic-row:not([hidden])')].find(cell=>cell.dataset.id===this.active);if(replacement){if(replacement.classList.contains('radial-cell'))this.setRadialFocus(replacement.dataset.id);replacement.focus();return;}this.root.querySelector('.filter[aria-pressed="true"]')?.focus();}
   bind(){
     this.root.querySelectorAll('.filter').forEach(button=>button.addEventListener('click',()=>{this.filter=button.dataset.filter||'all';this.root.querySelectorAll('.filter').forEach(candidate=>candidate.setAttribute('aria-pressed',String(candidate===button)));this.render();}));
-    this.root.querySelector('#resetMap')?.addEventListener('click',()=>{if(!confirm('Вернуть опубликованную исходную оценку компетенций?'))return;try{this.storage.removeItem(this.stateKey);this.storage.removeItem(this.config.storageKey);for(const key of this.config.legacyStorageKeys||[])this.storage.removeItem(key);for(const key of this.config.legacyRepeatKeys||[])this.storage.removeItem(key);}catch(_){}const merged=mergeState(this.groups,this.storage,this.config);this.state=merged.state;this.render();this.dialog?.close?.();});
-    this.dialog?.querySelectorAll('.level-btn').forEach(button=>button.addEventListener('click',()=>this.setLevel(button.dataset.level)));
+    const reset=this.root.querySelector('#resetMap');if(reset){reset.hidden=true;reset.disabled=true;}
+    this.dialog?.querySelectorAll('.level-btn').forEach(button=>{button.disabled=true;button.setAttribute('aria-disabled','true');});
     this.dialog?.querySelector('#markRepeat')?.addEventListener('click',()=>this.toggleReview());this.dialog?.querySelector('#closeDialog')?.addEventListener('click',()=>this.dialog.close());this.dialog?.addEventListener('click',event=>{if(event.target===this.dialog)this.dialog.close();});this.dialog?.addEventListener('close',()=>this.restoreDialogFocus());
   }
 }

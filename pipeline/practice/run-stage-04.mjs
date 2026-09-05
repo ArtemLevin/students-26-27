@@ -1,10 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import {fileURLToPath,pathToFileURL} from 'node:url';
+import {pathToFileURL} from 'node:url';
 import {discoverStudentContracts,ROOT} from './discover-student-contracts.mjs';
 import {validateStageResult,stageExitCode,Stage04ValidationError} from './validate-stage-result.mjs';
 import {buildPracticePatch} from './build-practice-patch.mjs';
 import {applyPracticePatch} from './apply-practice-patch.mjs';
+import {buildMasteryPatch} from './build-mastery-patch.mjs';
+import {applyMasteryPatch} from './apply-mastery-patch.mjs';
 
 function parseArgs(argv){
   const args={dryRun:false};
@@ -16,6 +18,8 @@ function parseArgs(argv){
   return args;
 }
 
+function unique(values){return [...new Set(values)];}
+
 export async function runStage04({studentId,lessonDate,analysisPath,root=ROOT,dryRun=false}={}){
   if(!studentId||!lessonDate||!analysisPath)throw new Stage04ValidationError('Required arguments: studentId, lessonDate, analysisPath',{exitCode:3});
   const absoluteAnalysis=path.isAbsolute(analysisPath)?analysisPath:path.resolve(root,analysisPath);
@@ -24,15 +28,27 @@ export async function runStage04({studentId,lessonDate,analysisPath,root=ROOT,dr
   try{analysis=JSON.parse(fs.readFileSync(absoluteAnalysis,'utf8'));}catch(error){throw new Stage04ValidationError(`Stage 04 analysis is not valid JSON: ${error.message}`,{exitCode:3});}
   const contracts=await discoverStudentContracts(studentId,lessonDate,{root});
   const validation=validateStageResult(analysis,contracts,{expectedStudentId:studentId,expectedLessonDate:lessonDate});
-  const patch=buildPracticePatch(validation,contracts);
-  const application=patch.status==='blocked'?{changedFiles:[],sources:null}:applyPracticePatch(patch,contracts,{dryRun});
-  const exitCode=stageExitCode(validation);
+  const practicePatch=buildPracticePatch(validation,contracts);
+  const masteryPatch=buildMasteryPatch(validation,contracts);
+  const blocks=unique([...(practicePatch.blocks||[]),...(masteryPatch.blocks||[])]);
+  const blocked=blocks.length>0||practicePatch.status==='blocked'||masteryPatch.status==='blocked';
+  let practiceApplication={changedFiles:[],sources:null},masteryApplication={changedFiles:[],sources:null};
+  if(!blocked){
+    practiceApplication=applyPracticePatch(practicePatch,contracts,{dryRun});
+    masteryApplication=applyMasteryPatch(masteryPatch,contracts,{dryRun});
+  }
+  const changedFiles=unique([...practiceApplication.changedFiles,...masteryApplication.changedFiles]);
+  const changed=practicePatch.changed||masteryPatch.changed;
+  const status=blocked?'blocked':validation.hasGaps?'gaps':changed?'ready':'noop';
+  const exitCode=stageExitCode({...validation,blocks});
   return {
     stage:'04-spaced-practice',schemaVersion:1,studentId,lessonDate,
-    status:patch.status==='blocked'?'blocked':patch.status,
-    exitCode,dryRun,changedFiles:application.changedFiles,
-    gaps:patch.gaps,blocks:patch.blocks,warnings:patch.warnings,
-    operationTypes:patch.operations.map(operation=>operation.type)
+    status,exitCode,dryRun,changedFiles,
+    gaps:practicePatch.gaps||validation.result.gaps,
+    blocks,
+    warnings:unique([...(practicePatch.warnings||[]),...(masteryPatch.warnings||[])]),
+    operationTypes:[...practicePatch.operations,...masteryPatch.operations].map(operation=>operation.type),
+    masteryUpdates:masteryPatch.levels||{}
   };
 }
 

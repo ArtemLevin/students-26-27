@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Персональный учебный навигатор Марины для подготовки к ОГЭ по математике.">
+  <title>Марина · подготовка к ОГЭ по математике</title>
+  <link rel="stylesheet" href="competency-map.css?v=20260905-1">
+</head>
+<body>
+<a class="skip" href="#content">К содержанию</a>
+
+<header class="topbar">
+  <nav class="nav" aria-label="Главная навигация">
+    <a class="brand" href="#content">
+      <span class="brand-mark" aria-hidden="true">Σ</span>
+      <span>Марина<small>ОГЭ · математика</small></span>
+    </a>
+    <button class="reset-btn" id="resetState" type="button">Вернуть подтверждённые статусы</button>
+    <button class="theme-btn" id="themeToggle" type="button" aria-label="Переключить тему">◐</button>
+  </nav>
+</header>
+
+<main class="shell" id="content">
+  <section class="hero" aria-labelledby="pageTitle">
+    <article class="hero-copy">
+      <p class="eyebrow">Персональный учебный навигатор</p>
+      <h1 id="pageTitle">Подготовка к ОГЭ по математике</h1>
+      <p class="lead">Вся экзаменационная программа разложена на конкретные методы и навыки. Круговая карта показывает структуру экзамена, пройденные темы, темы для повторения и следующий учебный шаг.</p>
+    </article>
+    <aside class="hero-card" aria-label="О кабинете">
+      <div>
+        <p class="eyebrow">Маршрут</p>
+        <h2>Марина</h2>
+        <p>Преподаватель: Лёвин Артём Александрович</p>
+      </div>
+      <div>
+        <p><b>25 экзаменационных секторов</b><br>от практического блока №1–5 до задач высокой сложности №20–25.</p>
+        <p class="source-note">Подтверждённых материалов занятий пока нет, поэтому исходная карта начинается с нейтрального состояния.</p>
+      </div>
+    </aside>
+  </section>
+
+  <section class="stats" aria-label="Сводные показатели">
+    <article class="stat"><b id="statCovered">0</b><span>Пройдено</span></article>
+    <article class="stat"><b id="statCoverage">0%</b><span>Затронуто программы</span></article>
+    <article class="stat"><b id="statRepeat">0</b><span>Пора повторить</span></article>
+    <article class="stat"><b id="statTotal">—</b><span>Всего тем</span></article>
+  </section>
+
+  <section id="map" aria-labelledby="mapTitle">
+    <header class="section-head">
+      <div>
+        <p class="eyebrow">Главный рабочий инструмент</p>
+        <h2 id="mapTitle">Круговая карта компетенций</h2>
+        <p>Каждая радиальная ячейка — отдельный навык. Наведите курсор, используйте Tab или выберите тему в каталоге справа.</p>
+      </div>
+    </header>
+
+    <div class="panel">
+      <div class="toolbar">
+        <div class="filters" role="group" aria-label="Фильтр тем">
+          <button class="filter" type="button" data-filter="all" aria-pressed="true">Вся программа</button>
+          <button class="filter" type="button" data-filter="covered" aria-pressed="false">Пройдено</button>
+          <button class="filter" type="button" data-filter="repeat" aria-pressed="false">Пора повторить</button>
+          <button class="filter" type="button" data-filter="ahead" aria-pressed="false">Ещё впереди</button>
+        </div>
+        <label class="search-wrap">
+          <span class="eyebrow" style="margin:0;white-space:nowrap">Поиск</span>
+          <input class="search" id="topicSearch" type="search" placeholder="Найти тему…" autocomplete="off">
+        </label>
+      </div>
+
+      <div class="radial-layout">
+        <div class="radial-stage">
+          <svg class="radial-map" id="radialMap" viewBox="0 0 800 800" role="img" aria-labelledby="mapSvgTitle mapSvgDesc"></svg>
+          <div class="radial-center" aria-hidden="true">
+            <b id="centerPercent">0%</b>
+            <span>программы затронуто</span>
+            <small id="centerCount">загрузка…</small>
+          </div>
+        </div>
+        <div>
+          <div class="catalog" id="topicCatalog" aria-label="Каталог тем"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="focusTitle">
+    <header class="section-head">
+      <div>
+        <p class="eyebrow">Маршрут подготовки</p>
+        <h2 id="focusTitle">Следующий фокус</h2>
+      </div>
+    </header>
+    <article class="focus-card" id="nextFocus">
+      <span class="chip" data-focus-group>—</span>
+      <h3 data-focus-title>—</h3>
+      <p data-focus-recommendation>—</p>
+      <a data-focus-link hidden>Открыть связанный материал →</a>
+    </article>
+  </section>
+
+  <footer class="footer">
+    <span>Марина · подготовка к ОГЭ по математике</span>
+    <span>Структура программы актуализирована 05.09.2026</span>
+  </footer>
+</main>
+
+<div class="tooltip" id="mapTooltip" role="tooltip" aria-hidden="true"></div>
+
+<dialog id="topicDialog" aria-labelledby="dialogTitle">
+  <div class="dialog-inner">
+    <header class="dialog-head">
+      <div>
+        <p class="eyebrow" id="dialogGroup"></p>
+        <h2 id="dialogTitle"></h2>
+      </div>
+      <button class="dialog-close" id="closeDialog" type="button" aria-label="Закрыть карточку темы">×</button>
+    </header>
+
+    <div class="dialog-meta">
+      <span class="chip" id="dialogLevel"></span>
+    </div>
+
+    <div class="dialog-grid">
+      <section class="dialog-box">
+        <b>Что входит в тему</b>
+        <p id="dialogDescription"></p>
+      </section>
+      <section class="dialog-box">
+        <b>Короткая диагностика</b>
+        <p id="dialogDiagnostic"></p>
+      </section>
+      <section class="dialog-box">
+        <b>История</b>
+        <p id="dialogHistory"></p>
+        <a id="dialogLink" hidden>Открыть подтверждающий материал →</a>
+      </section>
+      <section class="dialog-box">
+        <b>Текущий уровень</b>
+        <p>0 — впереди · 1 — нужна помощь · 2 — с опорой · 3 — почти уверенно · 4 — освоено.</p>
+      </section>
+    </div>
+
+    <div class="level-picker" role="group" aria-label="Уровень темы">
+      <button class="level-btn" type="button" data-level="0" aria-pressed="false">0<br>впереди</button>
+      <button class="level-btn" type="button" data-level="1" aria-pressed="false">1<br>помощь</button>
+      <button class="level-btn" type="button" data-level="2" aria-pressed="false">2<br>с опорой</button>
+      <button class="level-btn" type="button" data-level="3" aria-pressed="false">3<br>почти</button>
+      <button class="level-btn" type="button" data-level="4" aria-pressed="false">4<br>освоено</button>
+    </div>
+
+    <div class="dialog-actions">
+      <button class="action-btn repeat" id="repeatButton" type="button" aria-pressed="false">Добавить в повторение</button>
+    </div>
+  </div>
+</dialog>
+
+<script src="competency-map-data.js?v=20260905-1"></script>
+<script src="competency-map-extension.js?v=20260905-1"></script>
+<script src="competency-map.js?v=20260905-1"></script>
+</body>
+</html>
