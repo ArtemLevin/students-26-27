@@ -1,3 +1,4 @@
+import './mastery-authority.js';
 import {installEgeProfile2027ControllerHook} from '../../../shared/student-dashboard/ege-profile-2027.js?v=20260903';
 
 if(typeof window!=='undefined')installEgeProfile2027ControllerHook('__nikolCompetenceMap',window);
