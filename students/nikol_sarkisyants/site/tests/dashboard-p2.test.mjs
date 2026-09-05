@@ -15,13 +15,13 @@ const dateLessonPattern=/^(?:\d{2}\.\d{2}\.\d{2}|\d{2}-\d{2}-\d{2})\.html$/;
 const lessonFiles=readdirSync(siteDir).filter(name=>dateLessonPattern.test(name)).sort();
 const registryHrefs=registry.LESSONS.map(lesson=>lesson.href).sort();
 
-test('lesson registry contains all 14 current lessons newest-first',()=>{
-  assert.equal(registry.LESSONS.length,14);
+test('lesson registry covers every current dated lesson newest-first',()=>{
+  assert.equal(registry.LESSONS.length,lessonFiles.length);
   registry.validateLessonRegistry(registry.LESSONS);
   for(let index=1;index<registry.LESSONS.length;index+=1){
     assert.ok(registry.LESSONS[index-1].date>registry.LESSONS[index].date,'registry must be newest-first');
   }
-  assert.equal(registry.LESSONS[0].href,'25.08.26.html');
+  assert.equal(registry.getLatestLesson(),registry.LESSONS[0]);
 });
 
 test('registry hrefs exactly match dated lesson HTML files in site directory',()=>{
@@ -46,8 +46,8 @@ test('latest lesson has complete dashboard detail and real material files',()=>{
 test('recent and archive partitions cover registry once without loss',()=>{
   const recent=registry.getRecentLessons();
   const archive=registry.getArchiveLessons();
-  assert.equal(recent.length,registry.RECENT_LIMIT);
-  assert.equal(archive.length,registry.LESSONS.length-registry.RECENT_LIMIT);
+  assert.equal(recent.length,Math.min(registry.RECENT_LIMIT,registry.LESSONS.length));
+  assert.equal(archive.length,Math.max(0,registry.LESSONS.length-registry.RECENT_LIMIT));
   assert.equal(new Set([...recent,...archive].map(lesson=>lesson.href)).size,registry.LESSONS.length);
   assert.deepEqual([...recent,...archive].map(lesson=>lesson.href),registry.LESSONS.map(lesson=>lesson.href));
 });
@@ -55,9 +55,10 @@ test('recent and archive partitions cover registry once without loss',()=>{
 test('archive pagination is data-driven and uses pages of ten',()=>{
   assert.equal(registry.ARCHIVE_PAGE_SIZE,10);
   const first=registry.paginateArchive(registry.LESSONS,0,registry.ARCHIVE_PAGE_SIZE);
-  assert.equal(first.total,11);
-  assert.equal(first.items.length,10);
-  assert.equal(first.pageCount,2);
+  const expectedTotal=Math.max(0,registry.LESSONS.length-registry.RECENT_LIMIT);
+  assert.equal(first.total,expectedTotal);
+  assert.equal(first.items.length,Math.min(registry.ARCHIVE_PAGE_SIZE,expectedTotal));
+  assert.equal(first.pageCount,Math.max(1,Math.ceil(expectedTotal/registry.ARCHIVE_PAGE_SIZE)));
   assert.equal(first.pageIndex,0);
 });
 
