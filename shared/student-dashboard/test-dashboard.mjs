@@ -48,25 +48,38 @@ function assertCoreState(){
   ]}];
   const config={stateKey:'student-state-v2',storageKey:'student-state-v1',baselineKey:'student-baseline',teacherSeed:{new:4,fresh:3},legacyStorageKeys:[],legacyRepeatKeys:['student-repeat-v1']};
   let storage=new MemoryStorage({
-    'student-state-v1':JSON.stringify({new:0,old:4}),
+    'student-state-v1':JSON.stringify({new:0,old:1}),
     'student-repeat-v1':JSON.stringify(['fresh'])
   });
   const first=mergeState(groups,storage,config,()=> '2026-08-24T00:00:00.000Z');
   assert.equal(first.state.schemaVersion,STATE_SCHEMA_VERSION);
-  assert.equal(first.state.studentLevels.new,0,'saved user value must win over baseline');
-  assert.equal(first.state.studentLevels.fresh,3,'missing key must be seeded');
-  assert.equal(first.state.studentLevels.mastered,4,'catalog default must seed missing key');
+  assert.equal(first.state.studentLevels.new,4,'GitHub teacherSeed must override legacy local mastery');
+  assert.equal(first.state.studentLevels.fresh,3,'GitHub teacherSeed must seed mastery');
+  assert.equal(first.state.studentLevels.mastered,4,'catalog level must seed mastery');
   assert.ok(first.state.reviewQueue.fresh,'legacy review queue must migrate independently');
-  assert.equal(first.state.studentLevels.fresh,3,'queue migration must not lower mastery');
+  assert.equal(first.state.studentLevels.fresh,3,'review queue migration must not alter mastery');
+  assert.deepEqual(first.state.studentLevels,first.baseline,'runtime mastery must equal published GitHub baseline');
   const snapshot=storage.getItem('student-state-v2');
   const second=mergeState(groups,storage,config,()=> '2026-08-25T00:00:00.000Z');
-  assert.equal(storage.getItem('student-state-v2'),snapshot,'v2 sync must be idempotent');
+  assert.equal(storage.getItem('student-state-v2'),snapshot,'authoritative sync must be idempotent');
   assert.equal(second.state.updatedAt,'2026-08-24T00:00:00.000Z');
+
+  storage=new MemoryStorage({'student-state-v2':JSON.stringify({
+    schemaVersion:STATE_SCHEMA_VERSION,
+    studentLevels:{new:0,fresh:0,mastered:0},
+    reviewQueue:{fresh:{addedAt:'2026-08-23T00:00:00.000Z'}},
+    updatedAt:'2026-08-23T00:00:00.000Z'
+  })});
+  const authoritative=mergeState(groups,storage,config,()=> '2026-08-24T00:00:00.000Z');
+  assert.deepEqual(authoritative.state.studentLevels,{new:4,fresh:3,mastered:4},'stored v2 mastery must never override GitHub');
+  assert.ok(authoritative.state.reviewQueue.fresh,'stored review queue must remain local and survive authoritative mastery refresh');
+  assert.equal(authoritative.state.updatedAt,'2026-08-23T00:00:00.000Z');
+
   storage=new MemoryStorage({'student-state-v2':'{broken'});
   const recovered=mergeState(groups,storage,config,()=> '2026-08-24T00:00:00.000Z');
-  assert.equal(recovered.state.studentLevels.new,4,'corrupted JSON must recover from baseline');
+  assert.equal(recovered.state.studentLevels.new,4,'corrupted JSON must recover from GitHub baseline');
   const migrated=new MemoryStorage({'student-state-v1':JSON.stringify({old:1})});
-  assert.equal(mergeState(groups,migrated,config).state.studentLevels.new,1,'legacyIds must migrate');
+  assert.equal(mergeState(groups,migrated,config).state.studentLevels.new,4,'legacy mastery aliases must be ignored');
 
   const queue=updateReviewQueue({},'new',true,'2026-08-24T00:00:00.000Z');
   assert.equal(matchesCompetencyFilter('repeat','new',4,queue),true);
@@ -130,13 +143,15 @@ export async function runDashboardTests({student,expectedLessons,catalog,stateKe
   const core=fs.readFileSync(path.join(root,'shared/student-dashboard/dashboard-core.js'),'utf8');
   for(const token of ['inert','aria-hidden','Escape','Tab','shiftKey','matchMedia','sidebar-open','opener','masteredCount'])assert.ok(core.includes(token),`${student}: shell invariant ${token}`);
   const mapCode=fs.readFileSync(path.join(root,'shared/student-dashboard/legacy-competence-map.js'),'utf8');
-  for(const token of ['schemaVersion','studentLevels','reviewQueue','ArrowLeft','Home','restoreDialogFocus','LEVEL_DESCRIPTIONS'])assert.ok(mapCode.includes(token),`${student}: map invariant ${token}`);
+  for(const token of ['schemaVersion','studentLevels','reviewQueue','ArrowLeft','Home','restoreDialogFocus','LEVEL_DESCRIPTIONS','createAuthoritativeLevels','Уровень задаётся опубликованным состоянием GitHub'])assert.ok(mapCode.includes(token),`${student}: map invariant ${token}`);
+  assert.ok(!mapCode.includes('this.state.studentLevels[this.active]='),`${student}: mastery must not be locally editable`);
 
   const groups=loadCatalog(root,catalog),meta=validateCatalog(groups),items=groups.flatMap(group=>group.items);
   assert.ok(meta.groups>0&&meta.items>0,`${student}: catalog must be non-empty`);
   assert.equal(new Set(items.map(item=>item.id)).size,items.length,`${student}: competency ids unique`);
   const seeded=new MemoryStorage(),merged=mergeState(groups,seeded,{stateKey:'probe-v2',storageKey:'probe-v1',baselineKey:'probe-baseline',teacherSeed:{},legacyStorageKeys:[]});
   assert.equal(Object.keys(merged.state.studentLevels).filter(id=>items.some(item=>item.id===id)).length,items.length,`${student}: state covers catalog`);
+  assert.deepEqual(merged.state.studentLevels,merged.baseline,`${student}: mastery must be GitHub-authoritative`);
   assertCoreState();
-  console.log(`✓ ${student}: ${lessons.length} lessons, ${meta.groups} groups, ${meta.items} skills, state v2`);
+  console.log(`✓ ${student}: ${lessons.length} lessons, ${meta.groups} groups, ${meta.items} skills, GitHub-authoritative mastery`);
 }
