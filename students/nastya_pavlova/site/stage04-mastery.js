@@ -1,1 +1,1 @@
-export const STAGE04_MASTERY={};
+export const stage04Mastery={};
