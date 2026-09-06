@@ -1,5 +1,5 @@
-import './competence-update-20260904.js?v=20260904-1';
-import {LESSONS} from './lesson-registry-20260904.js?v=20260904-1';
+import './competence-update-20260906.js?v=20260906-1';
+import {LESSONS} from './lesson-registry-20260906.js?v=20260906-1';
 import {initStudentDashboard} from '../../../shared/student-dashboard/dashboard-core.js';
 import {PRACTICE_CONFIG} from './practice-config.js';
 initStudentDashboard({lessons:LESSONS,themeKey:'sofya-dashboard-theme-v1',summaryEvent:'sofya:competence-summary'});
