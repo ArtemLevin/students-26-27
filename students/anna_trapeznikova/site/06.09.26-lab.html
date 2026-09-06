@@ -56,7 +56,7 @@
     <aside class="controls-card" aria-label="Параметры и пояснения">
       <div class="eyebrow">Параметры</div><h2 id="controlTitle">Выберите конфигурацию</h2>
       <div class="control-group">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><label>Сценарии из пособия</label><span class="hint-wrap"><button class="hint-btn glow" type="button" aria-label="Подсказка о сценариях">i</button><span class="tip"><strong>Только исходные данные</strong>Лаборатория использует только числовые конфигурации из чек-листа и тренировочного блока.</span></span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><label>Сценарии из пособия</label><span class="hint-wrap"><button class="hint-btn glow" type="button" aria-label="Подсказка о сценариях">i</button><span class="tip"><strong>Только исходные данные</strong>Лаборатория использует только числовые конфигурации и ответы из чек-листа и тренировочного блока.</span></span></div>
         <div class="scenario-grid" id="scenarioGrid"></div>
       </div>
       <div class="control-group" id="modeControls"></div>
@@ -67,7 +67,7 @@
         <div class="legend"><span><i class="sw a"></i> основные стороны</span><span><i class="sw b"></i> вспомогательные линии</span><span><i class="sw c"></i> выделенный результат</span></div>
       </div>
       <div class="control-group"><div class="result" id="resultBox" aria-live="polite"></div></div>
-      <div class="control-group"><span class="hint-wrap"><button class="hint-btn" type="button" aria-label="Подсказка о выводе">!</button><span class="tip"><strong>Предметный вывод</strong>После изменения сценария сформулируйте, какое свойство осталось неизменным и какое число изменилось.</span></span><p id="conclusion" style="color:var(--muted)"></p></div>
+      <div class="control-group"><span class="hint-wrap"><button class="hint-btn" type="button" aria-label="Подсказка о выводе">!</button><span class="tip"><strong>Предметный вывод</strong>После изменения сценария сформулируйте, какое свойство осталось неизменным и какой результат относится к выбранной конфигурации.</span></span><p id="conclusion" style="color:var(--muted)"></p></div>
     </aside>
   </main>
 </div>
@@ -77,12 +77,12 @@
 (function(){'use strict';
   const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
   const svg=$('#labSvg'),viewport=$('#viewport'),wrap=$('#canvasWrap');
-  const colors={main:'#007c78',aux:'#315f83',gold:'#b27b21',text:'currentColor',soft:'#8aa4a0'};
+  const colors={main:'#007c78',aux:'#315f83',gold:'#b27b21'};
   const modes={
     triangle:{title:'Прямоугольный треугольник',eyebrow:'Режим 1 · треугольник',goal:'Сопоставьте длины сторон с теоремой Пифагора и тригонометрическими отношениями из занятия.',scenarios:[
-      {id:'example',label:'Пример 1 · AC = 5√21, BC = 10',kind:'legs',ac:'5√21',bc:'10',ab:'25',sin:'2/5',cos:'√21/5',tan:'2/√21',note:'Из группировки получается AB = 25; sin∠BAC = 2/5 = 0,4.'},
-      {id:'task1',label:'Задание 1 · AC = 12, BC = 5',kind:'legs',ac:'12',bc:'5',ab:'13',sin:'5/13',cos:'12/13',tan:'5/12',note:'Тройка 5–12–13 даёт все три отношения без дополнительных преобразований.'},
-      {id:'task2',label:'Задание 2 · MN = 8, MP = 17',kind:'hyp',mn:'8',mp:'17',np:'15',sin:'15/17',cos:'8/17',note:'По Пифагору NP = 15; затем sin∠NMP = 15/17 и cos∠NMP = 8/17.'}
+      {id:'example',label:'Пример 1 · AC = 5√21, BC = 10',kind:'legs',ac:'5√21',acNum:5*Math.sqrt(21),bc:'10',bcNum:10,ab:'25',sin:'2/5',note:'Из группировки получается AB = 25; sin∠BAC = 2/5 = 0,4.'},
+      {id:'task1',label:'Задание 1 · AC = 12, BC = 5',kind:'legs',ac:'12',acNum:12,bc:'5',bcNum:5,ab:'13',sin:'5/13',cos:'12/13',tan:'5/12',note:'Ответы задания: sin∠BAC = 5/13, cos∠BAC = 12/13, tg∠BAC = 5/12.'},
+      {id:'task2',label:'Задание 2 · MN = 8, MP = 17',kind:'hyp',mn:'8',mnNum:8,mp:'17',np:'15',npNum:15,sin:'15/17',cos:'8/17',note:'По Пифагору NP = 15; затем sin∠NMP = 15/17 и cos∠NMP = 8/17.'}
     ]},
     tangent:{title:'Касательная и дуги',eyebrow:'Режим 2 · окружность',goal:'Проследите цепочку: дуга AD → центральный угол AOD → смежный угол AOC → прямоугольный треугольник AOC.',scenarios:[
       {id:'104',label:'Задание 4 · дуга AD = 104°',arc:104,angle:14,note:'∠AOC = 76°, поэтому ∠ACO = 14°.'},
@@ -90,69 +90,76 @@
       {id:'117',label:'Задание 9 · дуга AD = 117°',arc:117,angle:27,note:'Это обратный сценарий: при ∠ACO = 27° получается дуга AD = 117°.'},
       {id:'132',label:'Задание 3 · дуга AD = 132°',arc:132,angle:42,note:'∠AOC = 48°, поэтому ∠ACO = 42°.'}
     ]},
-    ptolemy:{title:'Равные хорды и теорема Птолемея',eyebrow:'Режим 3 · вписанные фигуры',goal:'Сравните числовые сценарии: равные хорды дают симметричную структуру, а Птолемей связывает стороны и диагонали.',scenarios:[
-      {id:'example',label:'Пример 3 · 3, 4, 6',ab:3,bc:4,ad:6,second:4,diag:'√33',be:'17/3',type:'pent',note:'Для ABCD: AC = BD = √33. Для BCDE: BE = 17/3.'},
-      {id:'task6',label:'Задание 6 · 5, 8, 12',ab:5,bc:8,ad:12,diag:'11',type:'trap',note:'AD ∥ BC, поэтому вписанная трапеция равнобедренная и AC = BD = 11.'},
-      {id:'task7',label:'Задание 7 · 3, 5, 7',ab:3,bc:5,ad:7,second:5,diag:'√44',be:'19/3',type:'pent',note:'Сначала AC² = 44, затем второе применение Птолемея даёт BE = 19/3.'},
-      {id:'task8',label:'Задание 8 · 6, 4, 10',ab:6,bc:4,ad:10,diag:'2√19',type:'trap',note:'Для вписанной равнобедренной трапеции диагонали равны: AC = BD = 2√19.'},
-      {id:'task10',label:'Задание 10 · 4, 6, 8',ab:4,bc:6,ad:8,second:6,diag:'8',be:'7',type:'pent',note:'AC = CE = 8, а второе применение Птолемея даёт BE = 7.'}
+    ptolemy:{title:'Равные хорды и теорема Птолемея',eyebrow:'Режим 3 · вписанные фигуры',goal:'Сравните числовые сценарии: равные хорды создают вписанную равнобедренную трапецию, а Птолемей связывает стороны и диагонали.',scenarios:[
+      {id:'example',label:'Пример 3 · 3, 4, 6',ab:3,bc:4,ad:6,diag:'√33',be:'17/3',type:'pent',note:'Для ABCD: AC = BD = √33. Для BCDE: BE = 17/3.'},
+      {id:'task6',label:'Задание 6 · 5, 8, 12',ab:5,bc:8,ad:12,diag:'11',type:'trap',note:'AD ∥ BC, AC = BD = 11.'},
+      {id:'task7',label:'Задание 7 · 3, 5, 7',ab:3,bc:5,ad:7,diag:null,be:'19/3',type:'pent',note:'Двойное применение теоремы Птолемея приводит к ответу BE = 19/3.'},
+      {id:'task8',label:'Задание 8 · 6, 4, 10',ab:6,bc:4,ad:10,diag:'2√19',type:'trap',note:'Для вписанной равнобедренной трапеции AC = BD = 2√19.'},
+      {id:'task10',label:'Задание 10 · 4, 6, 8',ab:4,bc:6,ad:8,diag:null,be:'7',type:'pent',note:'В задаче устанавливается AC = CE, а итоговый ответ: BE = 7.'}
     ]}
   };
   let mode='triangle',scenarioId='example',showAux=true,showLabels=true,scale=1,panX=0,panY=0,panning=false,last={x:0,y:0},dragA=false;
-  function qs(){return new URLSearchParams(location.search)}
-  const initial=qs();if(modes[initial.get('mode')])mode=initial.get('mode');if(initial.get('scenario'))scenarioId=initial.get('scenario');
+  const initial=new URLSearchParams(location.search);if(modes[initial.get('mode')])mode=initial.get('mode');if(initial.get('scenario'))scenarioId=initial.get('scenario');
   const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
   function line(x1,y1,x2,y2,color=colors.main,w=4,dash=''){return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="${w}" ${dash?`stroke-dasharray="${dash}"`:''} stroke-linecap="round"/>`}
   function txt(x,y,t,size=24,anchor='middle',color='currentColor'){return showLabels?`<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="${size}" fill="${color}" font-family="system-ui, sans-serif">${esc(t)}</text>`:''}
   function point(x,y,label,color=colors.main){return `<circle cx="${x}" cy="${y}" r="7" fill="${color}" stroke="white" stroke-width="2"/>${txt(x+14,y-10,label,22,'start')}`}
   function setTransform(){viewport.setAttribute('transform',`translate(${panX} ${panY}) scale(${scale})`);$('#zoomLabel').textContent=Math.round(scale*100)+'%';$('#scaleRange').value=Math.round(scale*100)}
   function activeScenario(){const list=modes[mode].scenarios;return list.find(s=>s.id===scenarioId)||list[0]}
+
   function renderTriangle(s){
+    const C={x:180,y:475};
     if(s.kind==='hyp'){
-      return `<g>${line(180,470,650,470)}${line(180,470,180,200)}${line(180,200,650,470,colors.aux)}<path d="M180 435h35v35" fill="none" stroke="${colors.gold}" stroke-width="4"/>${point(180,470,'N')}${point(180,200,'M')}${point(650,470,'P')}${txt(150,335,'MN = 8',22,'end')}${txt(430,315,'MP = 17',22)}${txt(420,505,'NP = 15',22)}</g>`;
+      const k=Math.min(430/s.npNum,250/s.mnNum);const P={x:C.x+s.npNum*k,y:C.y},M={x:C.x,y:C.y-s.mnNum*k};
+      return `<g>${line(C.x,C.y,P.x,P.y)}${line(C.x,C.y,M.x,M.y)}${line(M.x,M.y,P.x,P.y,colors.aux)}<path d="M${C.x} ${C.y-34}h34v34" fill="none" stroke="${colors.gold}" stroke-width="4"/>${point(C.x,C.y,'N')}${point(M.x,M.y,'M')}${point(P.x,P.y,'P')}${txt(C.x-24,(C.y+M.y)/2,'MN = 8',22,'end')}${txt((C.x+P.x)/2,C.y+34,'NP = 15',22)}${txt((M.x+P.x)/2,(M.y+P.y)/2-18,'MP = 17',22)}</g>`;
     }
-    return `<g>${line(165,480,680,480)}${line(165,480,165,180)}${line(165,180,680,480,colors.aux)}<path d="M165 445h35v35" fill="none" stroke="${colors.gold}" stroke-width="4"/>${point(165,480,'C')}${point(165,180,'B')}${point(680,480,'A')}${txt(420,515,'AC = '+s.ac,22)}${txt(130,335,'BC = '+s.bc,22,'end')}${txt(430,300,'AB = '+s.ab,22)}<path d="M630 480 A50 50 0 0 0 638 453" fill="none" stroke="${colors.gold}" stroke-width="4"/>${txt(610,440,'∠BAC',20,'end',colors.gold)}</g>`;
+    const k=Math.min(430/s.acNum,250/s.bcNum),A={x:C.x+s.acNum*k,y:C.y},B={x:C.x,y:C.y-s.bcNum*k};
+    return `<g>${line(C.x,C.y,A.x,A.y)}${line(C.x,C.y,B.x,B.y)}${line(B.x,B.y,A.x,A.y,colors.aux)}<path d="M${C.x} ${C.y-34}h34v34" fill="none" stroke="${colors.gold}" stroke-width="4"/>${point(C.x,C.y,'C')}${point(B.x,B.y,'B')}${point(A.x,A.y,'A')}${txt((C.x+A.x)/2,C.y+35,'AC = '+s.ac,22)}${txt(C.x-25,(C.y+B.y)/2,'BC = '+s.bc,22,'end')}${txt((B.x+A.x)/2,(B.y+A.y)/2-18,'AB = '+s.ab,22)}${txt(A.x-52,A.y-38,'∠BAC',20,'end',colors.gold)}</g>`;
   }
-  function tangentPoint(arc){const r=185,cx=500,cy=310;const a=-arc*Math.PI/180;return{x:cx+r*Math.cos(a),y:cy+r*Math.sin(a),cx,cy,r}}
+
+  function tangentPoint(arc){const r=185,cx=500,cy=310,a=-arc*Math.PI/180;return{x:cx+r*Math.cos(a),y:cy+r*Math.sin(a),cx,cy,r}}
   function renderTangent(s){
-    const {x,y,cx,cy,r}=tangentPoint(s.arc);const dx=x-cx,dy=y-cy;const len=Math.hypot(dx,dy);const tx=-dy/len,ty=dx/len;const C={x:x-tx*300,y:y-ty*300};const B={x:cx-r,y:cy},D={x:cx+r,y:cy};
-    let out=`<g><circle cx="${cx}" cy="${cy}" r="${r}" fill="#00808008" stroke="${colors.main}" stroke-width="4"/>${line(C.x,C.y,D.x,D.y,colors.aux,3)}${line(C.x,C.y,x,y,colors.main,4)}${line(cx,cy,x,y,colors.aux,3)}${showAux?line(cx,cy,D.x,D.y,colors.aux,3):''}${point(cx,cy,'O',colors.aux)}${point(B.x,B.y,'B',colors.aux)}${point(D.x,D.y,'D',colors.aux)}${point(C.x,C.y,'C',colors.main)}<g id="dragPointA" tabindex="0" role="button" aria-label="Точка A. Перетаскивайте вдоль окружности; значение дуги фиксируется на сценариях занятия.">${point(x,y,'A',colors.gold)}</g>`;
-    if(showAux)out+=`<path d="M ${x+tx*24} ${y+ty*24} L ${x+tx*24-dx/len*24} ${y+ty*24-dy/len*24} L ${x-dx/len*24} ${y-dy/len*24}" fill="none" stroke="${colors.gold}" stroke-width="3"/>`;
-    out+=txt(640,130,`дуга AD = ${s.arc}°`,24,'middle',colors.gold)+txt(255,510,`∠ACO = ${s.angle}°`,24,'middle',colors.gold)+`</g>`;return out;
+    const {x,y,cx,cy,r}=tangentPoint(s.arc),dx=x-cx,dy=y-cy;const C={x:cx+r*r/dx,y:cy},B={x:cx-r,y:cy},D={x:cx+r,y:cy};
+    const tvx=C.x-x,tvy=C.y-y,tlen=Math.hypot(tvx,tvy),tx=tvx/tlen,ty=tvy/tlen,rvx=(cx-x)/r,rvy=(cy-y)/r;
+    let out=`<g><circle cx="${cx}" cy="${cy}" r="${r}" fill="#00808008" stroke="${colors.main}" stroke-width="4"/>${line(C.x,C.y,D.x,D.y,colors.aux,3)}${line(C.x,C.y,x,y,colors.main,4)}${showAux?line(cx,cy,x,y,colors.aux,3)+line(cx,cy,D.x,D.y,colors.aux,3):''}${point(cx,cy,'O',colors.aux)}${point(B.x,B.y,'B',colors.aux)}${point(D.x,D.y,'D',colors.aux)}${point(C.x,C.y,'C',colors.main)}<g id="dragPointA" tabindex="0" role="button" aria-label="Точка A. Перетаскивайте вдоль окружности; значение дуги фиксируется на сценариях занятия.">${point(x,y,'A',colors.gold)}</g>`;
+    if(showAux){const p1={x:x+tx*24,y:y+ty*24},p2={x:p1.x+rvx*24,y:p1.y+rvy*24},p3={x:x+rvx*24,y:y+rvy*24};out+=`<path d="M${p1.x} ${p1.y} L${p2.x} ${p2.y} L${p3.x} ${p3.y}" fill="none" stroke="${colors.gold}" stroke-width="3"/>`}
+    out+=txt(640,125,`дуга AD = ${s.arc}°`,24,'middle',colors.gold)+txt((C.x+cx)/2,cy+46,`∠ACO = ${s.angle}°`,24,'middle',colors.gold)+`</g>`;return out;
+  }
+
+  function cyclicTrapezoid(s){
+    const h=Math.sqrt(s.ab*s.ab-Math.pow((s.ad-s.bc)/2,2));const centerY=-(s.ad*s.ad-s.bc*s.bc)/(8*h);const R=Math.sqrt(Math.pow(s.ad/2,2)+Math.pow(-h/2-centerY,2));const k=Math.min(43,245/R);const sx=450,sy=315;
+    const map=(x,y)=>[sx+x*k,sy-(y-centerY)*k];
+    return {A:map(-s.ad/2,-h/2),B:map(-s.bc/2,h/2),C:map(s.bc/2,h/2),D:map(s.ad/2,-h/2),E:map(0,centerY-R),O:[sx,sy],R:R*k};
   }
   function renderPtolemy(s){
-    const pts={A:[225,180],B:[640,170],C:[710,455],D:[145,465]};let out=`<g><circle cx="430" cy="325" r="275" fill="#00808008" stroke="${colors.main}" stroke-width="4"/>`;
-    const names=['A','B','C','D'];names.forEach((n,i)=>{const p=pts[n],q=pts[names[(i+1)%4]];out+=line(p[0],p[1],q[0],q[1],colors.main,4)});if(showAux){out+=line(...pts.A,...pts.C,colors.aux,3)+line(...pts.B,...pts.D,colors.aux,3)};names.forEach(n=>out+=point(...pts[n],n));out+=txt(430,135,`AB = CD = ${s.ab}`,22)+txt(725,315,`BC = ${s.bc}`,22,'start')+txt(420,515,`AD = ${s.ad}`,22)+txt(430,330,`AC = BD = ${s.diag}`,23,'middle',colors.gold);
-    if(s.type==='pent'){out+=`<circle cx="430" cy="325" r="275" fill="none" stroke="transparent"/><circle cx="420" cy="50" r="7" fill="${colors.gold}" stroke="white" stroke-width="2"/>${txt(420,38,'E',22)}${showAux?line(710,455,420,50,colors.aux,2,'8 6')+line(640,170,420,50,colors.aux,2,'8 6'):''}${txt(545,90,`BE = ${s.be}`,22,'middle',colors.gold)}`}
-    out+='</g>';return out;
+    const p=cyclicTrapezoid(s),names=['A','B','C','D'];let out=`<g><circle cx="${p.O[0]}" cy="${p.O[1]}" r="${p.R}" fill="#00808008" stroke="${colors.main}" stroke-width="4"/>`;
+    names.forEach((n,i)=>{const q=names[(i+1)%4];out+=line(p[n][0],p[n][1],p[q][0],p[q][1],colors.main,4)});if(showAux){out+=line(p.A[0],p.A[1],p.C[0],p.C[1],colors.aux,3)+line(p.B[0],p.B[1],p.D[0],p.D[1],colors.aux,3)};names.forEach(n=>out+=point(p[n][0],p[n][1],n));
+    out+=txt((p.A[0]+p.B[0])/2-18,(p.A[1]+p.B[1])/2,`AB = ${s.ab}`,21,'end')+txt((p.B[0]+p.C[0])/2,(p.B[1]+p.C[1])/2-20,`BC = ${s.bc}`,21)+txt((p.A[0]+p.D[0])/2,(p.A[1]+p.D[1])/2+34,`AD = ${s.ad}`,21)+txt(450,315,s.diag?`AC = BD = ${s.diag}`:'AC = BD',23,'middle',colors.gold);
+    if(s.type==='pent'){out+=point(p.E[0],p.E[1],'E',colors.gold);if(showAux)out+=line(p.C[0],p.C[1],p.E[0],p.E[1],colors.aux,2,'8 6')+line(p.B[0],p.B[1],p.E[0],p.E[1],colors.aux,2,'8 6');out+=txt((p.B[0]+p.E[0])/2-10,(p.B[1]+p.E[1])/2,`BE = ${s.be}`,22,'end',colors.gold)}
+    return out+'</g>';
   }
+
   function resultHTML(s){
-    if(mode==='triangle')return `<strong>Результат</strong><p>${esc(s.note)}</p><div class="formula"><math display="block"><mi>sin</mi><mo>=</mo><mtext>${esc(s.sin)}</mtext>${s.cos?`<mo>,</mo><mspace width=".8em"/><mi>cos</mi><mo>=</mo><mtext>${esc(s.cos)}</mtext>`:''}${s.tan?`<mo>,</mo><mspace width=".8em"/><mi>tg</mi><mo>=</mo><mtext>${esc(s.tan)}</mtext>`:''}</math></div>`;
+    if(mode==='triangle'){
+      let f=`<mi>sin</mi><mo>=</mo><mtext>${esc(s.sin)}</mtext>`;if(s.cos)f+=`<mo>,</mo><mspace width=".8em"/><mi>cos</mi><mo>=</mo><mtext>${esc(s.cos)}</mtext>`;if(s.tan)f+=`<mo>,</mo><mspace width=".8em"/><mi>tg</mi><mo>=</mo><mtext>${esc(s.tan)}</mtext>`;
+      return `<strong>Результат</strong><p>${esc(s.note)}</p><div class="formula"><math display="block">${f}</math></div>`;
+    }
     if(mode==='tangent')return `<strong>Цепочка</strong><p>дуга AD = ${s.arc}° → ∠AOD = ${s.arc}° → ∠AOC = ${180-s.arc}° → ∠ACO = ${s.angle}°.</p><p>${esc(s.note)}</p>`;
     return `<strong>Птолемей</strong><p>${esc(s.note)}</p><div class="formula"><math display="block"><mi>AC</mi><mo>·</mo><mi>BD</mi><mo>=</mo><mi>AB</mi><mo>·</mo><mi>CD</mi><mo>+</mo><mi>BC</mi><mo>·</mo><mi>AD</mi></math></div>`;
   }
-  function modeControlsHTML(){
-    if(mode==='tangent')return `<div class="toggle"><input id="auxToggle" type="checkbox" ${showAux?'checked':''}><label for="auxToggle">Показывать радиусы и прямой угол</label></div><div class="toggle"><input id="labelsToggle" type="checkbox" ${showLabels?'checked':''}><label for="labelsToggle">Показывать подписи</label></div><p style="color:var(--muted)">Перетаскивайте точку A: она привязывается к четырём значениям дуги из материала.</p>`;
-    return `<div class="toggle"><input id="auxToggle" type="checkbox" ${showAux?'checked':''}><label for="auxToggle">Показывать вспомогательные линии</label></div><div class="toggle"><input id="labelsToggle" type="checkbox" ${showLabels?'checked':''}><label for="labelsToggle">Показывать подписи</label></div>`;
-  }
+  function modeControlsHTML(){return `<div class="toggle"><input id="auxToggle" type="checkbox" ${showAux?'checked':''}><label for="auxToggle">${mode==='tangent'?'Показывать радиусы и прямой угол':'Показывать вспомогательные линии'}</label></div><div class="toggle"><input id="labelsToggle" type="checkbox" ${showLabels?'checked':''}><label for="labelsToggle">Показывать подписи</label></div>${mode==='tangent'?'<p style="color:var(--muted)">Перетаскивайте точку A: она привязывается к четырём значениям дуги из материала.</p>':''}`}
   function render(){
     const cfg=modes[mode];if(!cfg.scenarios.some(s=>s.id===scenarioId))scenarioId=cfg.scenarios[0].id;const s=activeScenario();
-    $('#labTitle').textContent=cfg.title;$('#modeEyebrow').textContent=cfg.eyebrow;$('#labGoal').textContent=cfg.goal;$('#controlTitle').textContent=mode==='tangent'?'Выберите значение дуги':'Выберите конфигурацию';
-    $$('.mode').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===mode)));
-    $('#scenarioGrid').innerHTML=cfg.scenarios.map(x=>`<button type="button" class="scenario ${x.id===s.id?'active':''}" data-scenario="${x.id}">${esc(x.label)}</button>`).join('');
-    $('#modeControls').innerHTML=modeControlsHTML();
-    viewport.innerHTML=mode==='triangle'?renderTriangle(s):mode==='tangent'?renderTangent(s):renderPtolemy(s);
-    $('#resultBox').innerHTML=resultHTML(s);$('#conclusion').textContent=mode==='triangle'?'Неизменный принцип: сначала определите недостающую сторону, затем выберите отношение относительно нужного угла.':mode==='tangent'?'Неизменный принцип: радиус к касательной даёт прямой угол, а дуга определяет центральный угол.':'Неизменный принцип: равенства хорд дают симметрию, а формула Птолемея связывает противоположные стороны с диагоналями.';
-    $('#statusText').textContent='Сценарий: '+s.label;$('#scenarioGrid').querySelectorAll('.scenario').forEach(b=>b.addEventListener('click',()=>{scenarioId=b.dataset.scenario;updateUrl();render()}));
-    $('#auxToggle')?.addEventListener('change',e=>{showAux=e.target.checked;render()});$('#labelsToggle')?.addEventListener('change',e=>{showLabels=e.target.checked;render()});
-    if(mode==='tangent')bindDragA();setTransform();
+    $('#labTitle').textContent=cfg.title;$('#modeEyebrow').textContent=cfg.eyebrow;$('#labGoal').textContent=cfg.goal;$('#controlTitle').textContent=mode==='tangent'?'Выберите значение дуги':'Выберите конфигурацию';$$('.mode').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===mode)));
+    $('#scenarioGrid').innerHTML=cfg.scenarios.map(x=>`<button type="button" class="scenario ${x.id===s.id?'active':''}" data-scenario="${x.id}">${esc(x.label)}</button>`).join('');$('#modeControls').innerHTML=modeControlsHTML();
+    viewport.innerHTML=mode==='triangle'?renderTriangle(s):mode==='tangent'?renderTangent(s):renderPtolemy(s);$('#resultBox').innerHTML=resultHTML(s);$('#conclusion').textContent=mode==='triangle'?'Неизменный принцип: сначала определите недостающую сторону, затем выберите отношение относительно нужного угла.':mode==='tangent'?'Неизменный принцип: радиус к касательной даёт прямой угол, а дуга определяет центральный угол.':'Неизменный принцип: равные хорды позволяют получить равные дуги и нужную симметрию, после чего можно проверять применение теоремы Птолемея.';
+    $('#statusText').textContent='Сценарий: '+s.label;$('#scenarioGrid').querySelectorAll('.scenario').forEach(b=>b.addEventListener('click',()=>{scenarioId=b.dataset.scenario;updateUrl();render()}));$('#auxToggle')?.addEventListener('change',e=>{showAux=e.target.checked;render()});$('#labelsToggle')?.addEventListener('change',e=>{showLabels=e.target.checked;render()});if(mode==='tangent')bindDragA();setTransform();
   }
   function updateUrl(){const p=new URLSearchParams();p.set('mode',mode);p.set('scenario',scenarioId);history.replaceState(null,'','?'+p.toString())}
   $$('.mode').forEach((b,i)=>{b.addEventListener('click',()=>{mode=b.dataset.mode;scenarioId=modes[mode].scenarios[0].id;updateUrl();render()});b.addEventListener('keydown',e=>{if(!['ArrowRight','ArrowLeft'].includes(e.key))return;e.preventDefault();const list=$$('.mode');const n=e.key==='ArrowRight'?(i+1)%list.length:(i-1+list.length)%list.length;list[n].focus();list[n].click()})});
-  function zoomBy(d){scale=Math.max(.6,Math.min(1.8,scale+d));setTransform()}$('#zoomIn').onclick=()=>zoomBy(.1);$('#zoomOut').onclick=()=>zoomBy(-.1);$('#scalePlus').onclick=()=>zoomBy(.1);$('#scaleMinus').onclick=()=>zoomBy(-.1);$('#scaleRange').oninput=e=>{scale=Number(e.target.value)/100;setTransform()};$('#resetView').onclick=()=>{scale=1;panX=0;panY=0;setTransform()};
-  wrap.addEventListener('wheel',e=>{e.preventDefault();zoomBy(e.deltaY<0?.1:-.1)},{passive:false});
+  function zoomBy(d){scale=Math.max(.6,Math.min(1.8,scale+d));setTransform()}$('#zoomIn').onclick=()=>zoomBy(.1);$('#zoomOut').onclick=()=>zoomBy(-.1);$('#scalePlus').onclick=()=>zoomBy(.1);$('#scaleMinus').onclick=()=>zoomBy(-.1);$('#scaleRange').oninput=e=>{scale=Number(e.target.value)/100;setTransform()};$('#resetView').onclick=()=>{scale=1;panX=0;panY=0;setTransform()};wrap.addEventListener('wheel',e=>{e.preventDefault();zoomBy(e.deltaY<0?.1:-.1)},{passive:false});
   wrap.addEventListener('pointerdown',e=>{if(e.target.closest('#dragPointA'))return;panning=true;last={x:e.clientX,y:e.clientY};wrap.setPointerCapture(e.pointerId);wrap.classList.add('grabbing')});wrap.addEventListener('pointermove',e=>{if(!panning)return;panX+=(e.clientX-last.x)/scale;panY+=(e.clientY-last.y)/scale;last={x:e.clientX,y:e.clientY};setTransform()});wrap.addEventListener('pointerup',e=>{panning=false;wrap.classList.remove('grabbing');try{wrap.releasePointerCapture(e.pointerId)}catch(_){} });
-  function bindDragA(){const el=$('#dragPointA');if(!el)return;el.addEventListener('pointerdown',e=>{e.stopPropagation();dragA=true;el.setPointerCapture(e.pointerId)});el.addEventListener('pointermove',e=>{if(!dragA)return;const rect=svg.getBoundingClientRect();const x=(e.clientX-rect.left)/rect.width*900;const y=(e.clientY-rect.top)/rect.height*620;const ang=Math.atan2(y-310,x-500)*180/Math.PI;const arc=Math.abs(ang);const vals=modes.tangent.scenarios.map(s=>s.arc);const nearest=vals.reduce((a,b)=>Math.abs(b-arc)<Math.abs(a-arc)?b:a);const target=modes.tangent.scenarios.find(s=>s.arc===nearest);if(target&&target.id!==scenarioId){scenarioId=target.id;updateUrl();render()}});el.addEventListener('pointerup',()=>{dragA=false});el.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;e.preventDefault();const list=modes.tangent.scenarios;let i=list.findIndex(s=>s.id===scenarioId);i=e.key==='ArrowRight'?Math.min(list.length-1,i+1):Math.max(0,i-1);scenarioId=list[i].id;updateUrl();render();setTimeout(()=>$('#dragPointA')?.focus(),0)})}
+  function bindDragA(){const el=$('#dragPointA');if(!el)return;el.addEventListener('pointerdown',e=>{e.stopPropagation();dragA=true;el.setPointerCapture(e.pointerId)});el.addEventListener('pointermove',e=>{if(!dragA)return;const rect=svg.getBoundingClientRect();const x=(e.clientX-rect.left)/rect.width*900,y=(e.clientY-rect.top)/rect.height*620,arc=Math.abs(Math.atan2(y-310,x-500)*180/Math.PI),vals=modes.tangent.scenarios.map(s=>s.arc),nearest=vals.reduce((a,b)=>Math.abs(b-arc)<Math.abs(a-arc)?b:a),target=modes.tangent.scenarios.find(s=>s.arc===nearest);if(target&&target.id!==scenarioId){scenarioId=target.id;updateUrl();render()}});el.addEventListener('pointerup',()=>{dragA=false});el.addEventListener('keydown',e=>{if(!['ArrowRight','ArrowLeft'].includes(e.key))return;e.preventDefault();const list=modes.tangent.scenarios;let i=list.findIndex(s=>s.id===scenarioId);i=e.key==='ArrowRight'?Math.min(list.length-1,i+1):Math.max(0,i-1);scenarioId=list[i].id;updateUrl();render();setTimeout(()=>$('#dragPointA')?.focus(),0)})}
   const shell=$('#shell');$('#fullscreen').onclick=async()=>{try{if(!document.fullscreenElement){await shell.requestFullscreen?.()}else await document.exitFullscreen?.()}catch(_){shell.classList.toggle('full-mode')}};document.addEventListener('fullscreenchange',()=>{$('#fullscreen').textContent=document.fullscreenElement?'Выйти из полного экрана':'На весь экран'});
   const theme=$('#theme');try{const t=localStorage.getItem('anna-060926-lab-theme');if(t)document.documentElement.dataset.theme=t}catch(_){}function syncTheme(){theme.textContent=document.documentElement.dataset.theme==='dark'?'☀ Светлая':'◐ Тёмная'}syncTheme();theme.onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('anna-060926-lab-theme',document.documentElement.dataset.theme)}catch(_){}syncTheme()};
   $$('.hint-btn').forEach(btn=>{const tip=btn.nextElementSibling;const show=()=>{tip.classList.add('show');setTimeout(()=>tip.classList.remove('show'),15000)};btn.addEventListener('mouseenter',show);btn.addEventListener('focus',show);btn.addEventListener('click',()=>tip.classList.toggle('show'));btn.addEventListener('mouseleave',()=>setTimeout(()=>{if(!tip.matches(':hover'))tip.classList.remove('show')},180))});document.addEventListener('click',e=>{if(!e.target.closest('.hint-wrap'))$$('.tip.show').forEach(t=>t.classList.remove('show'))});
