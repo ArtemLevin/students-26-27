@@ -8,6 +8,20 @@ const MONTHS_GENITIVE=[
 
 export const LESSONS=Object.freeze([
   {
+    date:'2026-09-07',
+    href:'07.09.26.html',
+    title:'Производная: произведение, частное и специальные функции',
+    navTitle:'Производная: правила и функции',
+    navSubtitle:'произведение · частное · тригонометрия · exp/log',
+    summary:'На занятии расширен вычислительный аппарат производной: отработаны правила произведения и частного, правило цепочки, производные тригонометрических, показательных и логарифмических функций. Отдельный акцент сделан на распознавании структуры выражения, порядке u′v − uv′, знаках и ОДЗ.',
+    topics:['производная','произведение и частное','тригонометрия','показательная функция','логарифмы','ОДЗ'],
+    outcomes:[
+      {competencyId:'t8_derivative_rules',label:'Правила дифференцирования',level:3,tone:'good'},
+      {competencyId:'t8_elementary_derivatives',label:'Производные элементарных функций',level:2,tone:'process'}
+    ],
+    materials:{tex:'../tex_docs/07.09.26.tex',lab:'07.09.26-lab.html'}
+  },
+  {
     date:'2026-09-04',
     href:'04.09.26.html',
     title:'Повторение алгебры и введение в производную',
@@ -83,5 +97,5 @@ export function paginateArchive(lessons=LESSONS,pageIndex=0,pageSize=ARCHIVE_PAG
 function parseIsoDate(isoDate){const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(isoDate));if(!match)throw new Error(`Invalid lesson date: ${isoDate}`);const year=Number(match[1]),month=Number(match[2]),day=Number(match[3]);if(month<1||month>12||day<1||day>31)throw new Error(`Invalid lesson date: ${isoDate}`);return {year,month,day};}
 export function formatShortDate(isoDate){const {month,day}=parseIsoDate(isoDate);return `${String(day).padStart(2,'0')}.${String(month).padStart(2,'0')}`;}
 export function formatLongDateRu(isoDate){const {year,month,day}=parseIsoDate(isoDate);return `${day} ${MONTHS_GENITIVE[month-1]} ${year}`;}
-export function validateLessonRegistry(lessons=LESSONS){if(!Array.isArray(lessons)||lessons.length===0)throw new Error('Lesson registry is empty');const dates=new Set(),hrefs=new Set();let previousDate=null;lessons.forEach((lesson,index)=>{parseIsoDate(lesson.date);if(!lesson.href||!lesson.title||!lesson.navTitle)throw new Error(`Lesson ${index} is incomplete`);if(dates.has(lesson.date))throw new Error(`Duplicate lesson date: ${lesson.date}`);if(hrefs.has(lesson.href))throw new Error(`Duplicate lesson href: ${lesson.href}`);if(previousDate!==null&&lesson.date>previousDate)throw new Error('Lesson registry must be sorted newest-first');dates.add(lesson.date);hrefs.add(lesson.href);previousDate=lesson.date;});const latest=lessons[0];if(!latest.summary||!Array.isArray(latest.topics)||latest.topics.length===0)throw new Error('Latest lesson requires summary and topics');if(!Array.isArray(latest.outcomes)||latest.outcomes.length===0)throw new Error('Latest lesson requires outcomes');if(!latest.materials||!latest.materials.pdf||!latest.materials.tex)throw new Error('Latest lesson requires PDF and TeX materials');return {count:lessons.length,latest:latest.href};}
+export function validateLessonRegistry(lessons=LESSONS){if(!Array.isArray(lessons)||lessons.length===0)throw new Error('Lesson registry is empty');const dates=new Set(),hrefs=new Set();let previousDate=null;lessons.forEach((lesson,index)=>{parseIsoDate(lesson.date);if(!lesson.href||!lesson.title||!lesson.navTitle)throw new Error(`Lesson ${index} is incomplete`);if(dates.has(lesson.date))throw new Error(`Duplicate lesson date: ${lesson.date}`);if(hrefs.has(lesson.href))throw new Error(`Duplicate lesson href: ${lesson.href}`);if(previousDate!==null&&lesson.date>previousDate)throw new Error('Lesson registry must be sorted newest-first');dates.add(lesson.date);hrefs.add(lesson.href);previousDate=lesson.date;});const latest=lessons[0];if(!latest.summary||!Array.isArray(latest.topics)||latest.topics.length===0)throw new Error('Latest lesson requires summary and topics');if(!Array.isArray(latest.outcomes)||latest.outcomes.length===0)throw new Error('Latest lesson requires outcomes');if(!latest.materials||typeof latest.materials!=='object')throw new Error('Latest lesson requires materials metadata');return {count:lessons.length,latest:latest.href};}
 validateLessonRegistry();
