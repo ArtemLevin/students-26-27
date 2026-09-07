@@ -1,0 +1,242 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=2.1cm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F2F4F4}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.7em,itemsep=0.25em,topsep=0.3em}
+\setlist[enumerate]{leftmargin=2em,itemsep=0.55em,topsep=0.4em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{textgray}{Теория вероятностей}}
+\fancyhead[R]{\small\textcolor{textgray}{Ксения Клыкова}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\newcommand{\sectionrule}{\vspace{-0.4em}\textcolor{accent}{\rule{\linewidth}{0.7pt}}\vspace{0.4em}}
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\prob}[1]{\operatorname{P}\!\left(#1\right)}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{2.1cm}
+{\Large\textcolor{darkaccent}{\textbf{Чек-лист}}\par}
+\vspace{0.7cm}
+{\Huge\textbf{Дерево вероятностей}\par}
+\vspace{0.35cm}
+{\Large\textcolor{textgray}{Маршруты, условные вероятности и диагностические тесты}\par}
+\vspace{2.2cm}
+{\large Лёвин Артём Александрович\par}
+\vspace{0.2cm}
+{\large эксклюзивно для Ксении Клыковой\par}
+\vfill
+{\large 7 сентября 2026\par}
+\vspace{1.7cm}
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent,line width=1.2pt]
+($(current page.south west)+(1.7cm,1.8cm)$)
+.. controls ($(current page.south west)+(5.4cm,2.8cm)$)
+and ($(current page.south east)+(-5.4cm,0.8cm)$)
+.. ($(current page.south east)+(-1.7cm,1.8cm)$);
+\end{tikzpicture}
+\end{titlepage}
+
+\section*{1. Что показывает дерево вероятностей}
+\sectionrule
+Дерево вероятностей удобно использовать, когда случайный процесс проходит \key{несколько последовательных этапов}. Каждый узел показывает состояние после очередного этапа, а каждая ветвь --- один возможный переход.
+\begin{itemize}
+\item Из одного узла должны выходить все возможные продолжения процесса.
+\item Сумма вероятностей ветвей, выходящих из одного узла, равна \(1\).
+\item Полный путь от начала дерева до конечного состояния называют \key{траекторией}.
+\end{itemize}
+
+\section*{2. По пути умножаем, подходящие пути складываем}
+\sectionrule
+Если требуется, чтобы последовательно произошли события \(A\), затем \(B\), затем \(C\), то
+\[
+\prob{A\cap B\cap C}=\prob{A}\,\prob{B\mid A}\,\prob{C\mid A\cap B}.
+\]
+На дереве это означает: \key{вероятности ветвей одного маршрута перемножаются}.
+
+Если нужный результат достигается по взаимно исключающим траекториям \(T_1,T_2,\ldots,T_k\), то
+\[
+\prob{T_1\cup\cdots\cup T_k}=\prob{T_1}+\cdots+\prob{T_k}.
+\]
+То есть \key{вероятности подходящих несовместимых маршрутов складываются}.
+
+\subsection*{Мини-пример: погода}
+Сегодня погода замечательная. Вероятность того, что на следующий день она останется такой же, равна \(0{,}8\); вероятность смены состояния равна \(0{,}2\). Чтобы через два дня погода снова была замечательной, подходят пути
+\[
+\text{З}\to\text{З}\to\text{З}
+\quad\text{или}\quad
+\text{З}\to\text{Х}\to\text{З}.
+\]
+Поэтому
+\[
+\prob{\text{З через два дня}}=0{,}8\cdot0{,}8+0{,}2\cdot0{,}2=0{,}68.
+\]
+
+\section*{3. Как читать длинное условие}
+\sectionrule
+\begin{enumerate}
+\item Определите первый этап процесса.
+\item Для каждого узла перечислите все возможные продолжения.
+\item Подпишите вероятности ветвей.
+\item Проверьте: сумма вероятностей из каждого узла равна \(1\).
+\item Отметьте конечные состояния, удовлетворяющие вопросу.
+\item Вдоль каждого подходящего пути перемножьте вероятности.
+\item Для нескольких подходящих несовместимых путей сложите полученные произведения.
+\end{enumerate}
+В задачах по дням полезно подписывать даты или номера шагов рядом с уровнями дерева.
+
+\section*{4. Повторный анализ после отрицательного результата}
+\sectionrule
+Пусть для больного пациента вероятность ложноотрицательного результата анализа равна \(0{,}3\). Тогда вероятность положительного результата одного анализа равна \(0{,}7\). Если после отрицательного результата анализ проводят ещё раз при тех же вероятностях, то
+\[
+\prob{\text{выявить за два анализа}}=0{,}7+0{,}3\cdot0{,}7=0{,}91.
+\]
+Или через противоположное событие:
+\[
+\prob{\text{выявить за два анализа}}=1-0{,}3^2=0{,}91.
+\]
+
+\newpage
+\section*{5. Истинное состояние и результат теста}
+\sectionrule
+Обозначим
+\[
+D=\{\text{пациент действительно болен}\},\qquad +=\{\text{анализ положительный}\}.
+\]
+Тогда
+\begin{itemize}
+\item \(\prob{+\mid D}\) --- чувствительность теста;
+\item \(\prob{+\mid\overline D}\) --- вероятность ложноположительного результата;
+\item \(\prob{-\mid D}\) --- вероятность ложноотрицательного результата;
+\item \(\prob{D}\) --- доля действительно больных в рассматриваемой группе.
+\end{itemize}
+\[
+\boxed{\text{ложноположительный} = \text{здоров, но тест }+}
+\]
+\[
+\boxed{\text{ложноотрицательный} = \text{болен, но тест }-}
+\]
+
+\section*{6. Вероятность положительного результата}
+\sectionrule
+Положительный результат может появиться по двум несовместимым путям:
+\[
+D\to +\qquad\text{или}\qquad\overline D\to +.
+\]
+Следовательно,
+\[
+\boxed{\prob{+}=\prob{D}\prob{+\mid D}+\prob{\overline D}\prob{+\mid\overline D}}.
+\]
+Если \(\prob{D}=0{,}05\), \(\prob{+\mid D}=0{,}9\), \(\prob{+\mid\overline D}=0{,}01\), то
+\[
+\prob{+}=0{,}05\cdot0{,}9+0{,}95\cdot0{,}01=0{,}0545.
+\]
+
+\section*{7. Обратная задача: найти долю больных}
+\sectionrule
+Пусть \(\prob{D}=x\), \(\prob{+\mid D}=a\), \(\prob{+\mid\overline D}=b\), \(\prob{+}=r\). Тогда
+\[
+ax+b(1-x)=r,
+\]
+откуда при \(a\ne b\)
+\[
+\boxed{x=\frac{r-b}{a-b}}.
+\]
+Например, при \(r=0{,}06\), \(a=0{,}9\), \(b=0{,}01\):
+\[
+x=\frac{0{,}05}{0{,}89}\approx0{,}0562.
+\]
+
+\section*{8. Вероятность болезни после положительного теста}
+\sectionrule
+Если тест уже положительный, требуется условная вероятность
+\[
+\prob{D\mid +}=\frac{\prob{D}\prob{+\mid D}}{\prob{+}}.
+\]
+Для примера с \(\prob{D}=0{,}05\), чувствительностью \(0{,}9\) и ложноположительной вероятностью \(0{,}01\):
+\[
+\prob{D\mid +}=\frac{0{,}05\cdot0{,}9}{0{,}0545}\approx0{,}8257.
+\]
+Важно различать \(\prob{D}\) --- долю больных во всей группе --- и \(\prob{D\mid +}\) --- вероятность болезни среди людей с положительным тестом.
+
+\section*{9. Быстрый алгоритм}
+\sectionrule
+\begin{enumerate}
+\item Что является первым этапом процесса?
+\item Какие исходы возможны на первом этапе?
+\item Какие исходы возможны после каждого из них?
+\item Сумма вероятностей из каждого узла равна \(1\)?
+\item Какие конечные ветви удовлетворяют вопросу?
+\item Вдоль каждого подходящего пути перемножьте вероятности.
+\item Несколько подходящих несовместимых путей сложите.
+\item Проверьте, какую именно вероятность спрашивают: \(\prob{+}\), \(\prob{D}\) или \(\prob{D\mid +}\).
+\end{enumerate}
+
+\section*{10. Типичные ошибки}
+\sectionrule
+\begin{itemize}
+\item Лишний уровень дерева: подписывайте даты или номера этапов.
+\item Перепутаны умножение вдоль пути и сложение разных подходящих путей.
+\item Перепутаны истинное состояние и результат теста.
+\item Неверно прочитан ложный результат.
+\item Нарушена сумма вероятностей ветвей из одного узла.
+\item Смешаны вопросы о доле больных и о вероятности болезни при положительном тесте.
+\item Правильная модель испорчена арифметикой.
+\end{itemize}
+
+\newpage
+\section*{Тренировочный блок}
+\sectionrule
+\begin{enumerate}
+\item Сегодня погода ясная. Вероятность того, что на следующий день погода сохранится, равна \(0{,}75\), а изменится --- \(0{,}25\). Найдите вероятность того, что через два дня погода снова будет ясной.
+\item У больного пациента анализ даёт отрицательный результат с вероятностью \(0{,}2\). После отрицательного результата анализ повторяют один раз при тех же вероятностях. Найдите вероятность того, что заболевание будет выявлено хотя бы одним из двух анализов.
+\item В группе пациентов \(4\%\) действительно больны. Чувствительность теста равна \(0{,}92\), вероятность ложноположительного результата --- \(0{,}03\). Найдите вероятность положительного результата у случайно выбранного пациента.
+\end{enumerate}
+
+\newpage
+\section*{Ответы к тренировочному блоку}
+\sectionrule
+\renewcommand{\arraystretch}{1.35}
+\begin{table}[h!]
+\centering
+\caption{Краткие ответы}
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+\textbf{№} & \textbf{Ответ}\\
+\midrule
+1 & \(0{,}625\)\\
+2 & \(0{,}96\)\\
+3 & \(0{,}0656\)\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\end{document}
