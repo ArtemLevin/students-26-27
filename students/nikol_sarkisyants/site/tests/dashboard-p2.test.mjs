@@ -29,13 +29,13 @@ test('registry hrefs exactly match dated lesson HTML files in site directory',()
   assert.equal(new Set(registryHrefs).size,registryHrefs.length);
 });
 
-test('latest lesson has complete dashboard detail and real material files',()=>{
+test('latest lesson has complete dashboard detail and all referenced material files are real',()=>{
   const latest=registry.getLatestLesson();
   assert.ok(latest.summary);
   assert.ok(latest.topics.length>=3);
   assert.ok(latest.outcomes.length>=1);
-  assert.ok(latest.materials.pdf);
   assert.ok(latest.materials.tex);
+  assert.ok(latest.materials.lab);
 
   const referencedFiles=[latest.href,...Object.values(latest.materials).filter(Boolean)];
   for(const href of referencedFiles){
@@ -72,7 +72,7 @@ test('active HTML exposes data-driven lesson shells and an explicit latest-lesso
   assert.match(indexHtml,/id="latestLessonCta"/);
   assert.match(indexHtml,/id="lessonTopics"/);
   assert.match(indexHtml,/id="latestLessonStatus"/);
-  assert.match(indexHtml,/type="module" src="dashboard\.js\?v=20260831-practice-4"/);
+  assert.match(indexHtml,/type="module" src="dashboard\.js\?v=20260907-1"/);
   assert.doesNotMatch(indexHtml,/href="25\.08\.26\.html"/);
   assert.doesNotMatch(indexHtml,/href="23\.08\.26\.html"/);
   assert.doesNotMatch(indexHtml,/href="18\.08\.26\.html"/);
