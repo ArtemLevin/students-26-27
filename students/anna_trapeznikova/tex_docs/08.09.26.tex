@@ -1,0 +1,986 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=2.15cm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F3F5F5}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkaccent,
+    urlcolor=darkaccent
+}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{
+    leftmargin=1.5em,
+    itemsep=0.35em,
+    topsep=0.35em
+}
+\setlist[enumerate]{
+    leftmargin=1.8em,
+    itemsep=0.45em,
+    topsep=0.4em
+}
+\renewcommand{\arraystretch}{1.35}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{textgray}{Анна Трапезникова \textbullet{} 10 класс}}
+\fancyhead[R]{\small\textcolor{textgray}{ОДЗ и метод интервалов}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\headheight}{14pt}
+
+\newcommand{\topicsection}[1]{%
+    \section*{\textcolor{darkaccent}{#1}}%
+    \vspace{-0.4em}%
+    \textcolor{accent}{\rule{\linewidth}{0.7pt}}%
+    \vspace{0.4em}%
+}
+
+\newcommand{\key}[1]{%
+    \textcolor{darkaccent}{\textbf{#1}}%
+}
+
+\tikzset{
+    flowstart/.style={
+        ellipse,
+        draw=darkaccent,
+        very thick,
+        minimum width=4.2cm,
+        minimum height=1.1cm,
+        align=center,
+        inner sep=5pt
+    },
+    flowaction/.style={
+        rounded corners=4pt,
+        draw=accent,
+        thick,
+        minimum width=10.6cm,
+        minimum height=1.15cm,
+        text width=9.8cm,
+        align=center,
+        inner sep=6pt
+    },
+    flowbranch/.style={
+        rounded corners=4pt,
+        draw=accent,
+        thick,
+        minimum width=5.15cm,
+        minimum height=1.2cm,
+        text width=4.55cm,
+        align=center,
+        inner sep=5pt
+    },
+    flowdecision/.style={
+        diamond,
+        aspect=2.2,
+        draw=darkaccent,
+        thick,
+        text width=5.7cm,
+        align=center,
+        inner sep=2pt
+    },
+    flowarrow/.style={
+        -{Latex[length=3mm]},
+        thick,
+        draw=textgray
+    },
+    flowlabel/.style={
+        font=\small,
+        fill=white,
+        inner sep=1.5pt
+    }
+}
+
+\begin{document}
+
+% =========================================================
+% Титульный лист
+% =========================================================
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{2.4cm}
+
+{\Large\textcolor{darkaccent}{\textbf{Чек-лист}}\par}
+
+\vspace{0.7cm}
+
+{\huge\textbf{Область определения функции и метод интервалов}\par}
+
+\vspace{0.55cm}
+
+{\Large Квадратные и дробно-рациональные неравенства\par}
+
+\vspace{2.2cm}
+
+{\large Анна Трапезникова, 10 класс\par}
+
+\vspace{0.8cm}
+
+{\large \today\par}
+
+\vfill
+
+{\large
+\textcolor{textgray}{
+Лёвин Артём Александрович эксклюзивно для Анны Трапезниковой
+}\par}
+
+\vspace{1.2cm}
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[
+    accent,
+    line width=1.2pt
+]
+    ([xshift=1.7cm,yshift=1.55cm]current page.south west)
+    .. controls
+    ([xshift=6.3cm,yshift=2.25cm]current page.south west)
+    and
+    ([xshift=-6.1cm,yshift=0.9cm]current page.south east)
+    ..
+    ([xshift=-1.7cm,yshift=1.7cm]current page.south east);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% =========================================================
+% Основной чек-лист
+% =========================================================
+
+\topicsection{1. Что нужно уметь после повторения}
+
+\begin{itemize}
+    \item определять ограничения, возникающие из-за знаменателей и квадратных корней;
+    \item записывать ОДЗ как систему условий и находить их пересечение;
+    \item решать квадратные неравенства методом интервалов;
+    \item решать дробно-рациональные неравенства через нули числителя и знаменателя;
+    \item правильно учитывать строгие и нестрогие знаки, а также кратность корней;
+    \item отличать уравнения, которые используются для поиска критических точек, от исходного неравенства.
+\end{itemize}
+
+\topicsection{2. Базовые ограничения области определения}
+
+\subsection*{2.1. Квадратный корень}
+
+Если в выражении есть
+\[
+\sqrt{f(x)},
+\]
+то необходимо условие
+\[
+f(x)\ge 0.
+\]
+
+Корень может быть равен нулю, если сам корень не находится в знаменателе.
+
+\subsection*{2.2. Знаменатель}
+
+Если в выражении есть
+\[
+\frac{g(x)}{f(x)},
+\]
+то необходимо условие
+\[
+f(x)\ne 0.
+\]
+
+Числитель сам по себе ограничений не создаёт.
+
+\subsection*{2.3. Корень в знаменателе}
+
+Если в выражении есть
+\[
+\frac{g(x)}{\sqrt{f(x)}},
+\]
+то одновременно нужны условия
+\[
+f(x)\ge 0,
+\qquad
+\sqrt{f(x)}\ne 0.
+\]
+
+Их удобно объединить:
+\[
+\boxed{f(x)>0}.
+\]
+
+\subsection*{2.4. Несколько источников ограничений}
+
+Все условия выполняются \key{одновременно}. Поэтому они записываются системой, а итоговая область определения является пересечением найденных множеств.
+
+\[
+\begin{cases}
+f_1(x)\ge 0,\\
+f_2(x)>0,\\
+f_3(x)\ne 0.
+\end{cases}
+\]
+
+\topicsection{3. Разобранный тип: корень в числителе и обычный знаменатель}
+
+Рассмотрим функцию
+\[
+y=\frac{\sqrt{10+3x-x^2}}{x-3}.
+\]
+
+Ограничения:
+\[
+\begin{cases}
+10+3x-x^2\ge 0,\\
+x-3\ne 0.
+\end{cases}
+\]
+
+Первое неравенство удобно привести к положительному старшему коэффициенту:
+\[
+10+3x-x^2\ge 0
+\iff
+x^2-3x-10\le 0.
+\]
+
+Корни соответствующего уравнения:
+\[
+x^2-3x-10=0,
+\qquad
+D=9+40=49,
+\]
+\[
+x_1=-2,
+\qquad
+x_2=5.
+\]
+
+Следовательно,
+\[
+x\in[-2;5].
+\]
+
+Из-за знаменателя исключаем точку \(x=3\):
+\[
+\boxed{D(y)=[-2;3)\cup(3;5]}.
+\]
+
+\begin{center}
+\begin{tikzpicture}[x=1.35cm,y=1cm]
+
+\draw[-{Latex[length=2.5mm]},thick]
+    (-3,0)--(6,0);
+
+\foreach \x/\lab in {-2/-2,3/3,5/5}{
+    \draw
+        (\x,0.09)--(\x,-0.09)
+        node[below=4pt] {$\lab$};
+}
+
+\draw[
+    accent,
+    line width=3pt
+]
+    (-2,0)--(3,0);
+
+\draw[
+    accent,
+    line width=3pt
+]
+    (3,0)--(5,0);
+
+\fill[accent]
+    (-2,0)
+    circle (2.2pt);
+
+\draw[
+    accent,
+    fill=white,
+    line width=1.2pt
+]
+    (3,0)
+    circle (2.7pt);
+
+\fill[accent]
+    (5,0)
+    circle (2.2pt);
+
+\end{tikzpicture}
+\end{center}
+
+\subsection*{Ключевой вывод}
+
+Ограничение на числитель появляется здесь только из-за квадратного корня. Сам факт нахождения выражения в числителе ограничения не создаёт.
+
+% =========================================================
+% Блок-схема 1
+% =========================================================
+
+\clearpage
+\thispagestyle{empty}
+
+\begin{center}
+{\Large
+\textcolor{darkaccent}{
+\textbf{Алгоритм: как находить область определения}
+}}
+\end{center}
+
+\vspace{0.9cm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=1.25cm and 2.0cm]
+
+\node[
+    flowstart
+]
+(start)
+{Начало};
+
+\node[
+    flowaction,
+    below=of start
+]
+(scan)
+{Просмотрите выражение и отметьте все знаменатели и квадратные корни};
+
+\node[
+    flowdecision,
+    below=1.35cm of scan
+]
+(root)
+{Есть выражение $\sqrt{f(x)}$?};
+
+\node[
+    flowbranch,
+    below left=1.5cm and 0.2cm of root
+]
+(rootyes)
+{Запишите $f(x)\ge 0$; если этот корень стоит в знаменателе, запишите $f(x)>0$};
+
+\node[
+    flowbranch,
+    below right=1.5cm and 0.2cm of root
+]
+(rootno)
+{Переходите к проверке знаменателей};
+
+\node[
+    flowdecision,
+    below=2.1cm of root
+]
+(den)
+{Есть знаменатель $g(x)$, ещё не учтённый условием на корень?};
+
+\node[
+    flowbranch,
+    below left=1.55cm and 0.2cm of den
+]
+(denyes)
+{Запишите $g(x)\ne 0$};
+
+\node[
+    flowbranch,
+    below right=1.55cm and 0.2cm of den
+]
+(denno)
+{Новых ограничений этого типа нет};
+
+\node[
+    flowaction,
+    below=2.2cm of den
+]
+(system)
+{Объедините все ограничения в систему и решите каждое из них};
+
+\node[
+    flowaction,
+    below=of system
+]
+(intersect)
+{Найдите пересечение полученных множеств};
+
+\node[
+    flowstart,
+    below=of intersect
+]
+(finish)
+{Запишите область определения};
+
+\draw[flowarrow]
+    (start)--(scan);
+
+\draw[flowarrow]
+    (scan)--(root);
+
+\draw[flowarrow]
+    (root)
+    --node[flowlabel,left]{да}
+    (rootyes);
+
+\draw[flowarrow]
+    (root)
+    --node[flowlabel,right]{нет}
+    (rootno);
+
+\draw[flowarrow]
+    (rootyes.south)
+    --
+    (den.north west);
+
+\draw[flowarrow]
+    (rootno.south)
+    --
+    (den.north east);
+
+\draw[flowarrow]
+    (den)
+    --node[flowlabel,left]{да}
+    (denyes);
+
+\draw[flowarrow]
+    (den)
+    --node[flowlabel,right]{нет}
+    (denno);
+
+\draw[flowarrow]
+    (denyes.south)
+    --
+    (system.north west);
+
+\draw[flowarrow]
+    (denno.south)
+    --
+    (system.north east);
+
+\draw[flowarrow]
+    (system)--(intersect);
+
+\draw[flowarrow]
+    (intersect)--(finish);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% =========================================================
+% Метод интервалов
+% =========================================================
+
+\topicsection{4. Квадратное неравенство и метод интервалов}
+
+Для неравенства
+\[
+x^2-3x-10\le 0
+\]
+основная схема такова:
+
+\begin{enumerate}
+    \item заменить неравенство соответствующим уравнением
+    \[
+    x^2-3x-10=0;
+    \]
+
+    \item найти его корни:
+    \[
+    x=-2,
+    \qquad
+    x=5;
+    \]
+
+    \item отметить корни на числовой прямой;
+
+    \item определить знак выражения хотя бы на одном интервале;
+
+    \item при простых корнях чередовать знаки при переходе через каждый корень;
+
+    \item выбрать интервалы, отвечающие знаку исходного неравенства.
+\end{enumerate}
+
+Для нестрогого неравенства корни включаются в ответ. Для строгого --- не включаются.
+
+\subsection*{Удобная калибровка знаком}
+
+Если \(0\) лежит на одном из интервалов, часто удобно подставить именно его. При этом достаточно определить \key{знак} значения, точное число обычно не требуется.
+
+\topicsection{5. Дробно-рациональное неравенство}
+
+Рассмотрим
+\[
+\frac{(x-3)(x-4)}
+     {(x-1)(-x^2+7x-10)}
+\ge 0.
+\]
+
+Разложим квадратный множитель знаменателя:
+\[
+-x^2+7x-10
+=
+-(x-2)(x-5).
+\]
+
+Критические точки получаем из \key{уравнений}:
+\[
+(x-3)(x-4)=0
+\quad\Longrightarrow\quad
+x=3,\ 4,
+\]
+\[
+(x-1)(-x^2+7x-10)=0
+\quad\Longrightarrow\quad
+x=1,\ 2,\ 5.
+\]
+
+Точки \(1,2,5\) являются нулями знаменателя и обязательно выколоты. Точки \(3,4\) являются нулями числителя; при знаке \(\ge\) они включаются.
+
+На крайнем левом интервале удобно проверить \(x=0\):
+\[
+\frac{(-3)(-4)}
+     {(-1)(-10)}
+=
+\frac{12}{10}
+>
+0.
+\]
+
+Все критические точки здесь имеют нечётную кратность, поэтому знак меняется при переходе через каждую из них.
+
+\begin{center}
+\begin{tikzpicture}[x=1.45cm,y=1cm]
+
+\draw[-{Latex[length=2.5mm]},thick]
+    (0,0)--(6.2,0);
+
+\foreach \x/\lab in {1/1,2/2,3/3,4/4,5/5}{
+    \draw
+        (\x,0.1)--(\x,-0.1)
+        node[below=4pt] {$\lab$};
+}
+
+\node at (0.45,0.42) {$+$};
+\node at (1.5,0.42) {$-$};
+\node at (2.5,0.42) {$+$};
+\node at (3.5,0.42) {$-$};
+\node at (4.5,0.42) {$+$};
+\node at (5.65,0.42) {$-$};
+
+\draw[
+    accent,
+    fill=white,
+    line width=1.2pt
+]
+    (1,0)
+    circle (2.6pt);
+
+\draw[
+    accent,
+    fill=white,
+    line width=1.2pt
+]
+    (2,0)
+    circle (2.6pt);
+
+\fill[accent]
+    (3,0)
+    circle (2.2pt);
+
+\fill[accent]
+    (4,0)
+    circle (2.2pt);
+
+\draw[
+    accent,
+    fill=white,
+    line width=1.2pt
+]
+    (5,0)
+    circle (2.6pt);
+
+\end{tikzpicture}
+\end{center}
+
+Отсюда
+\[
+\boxed{
+x\in
+(-\infty;1)
+\cup
+(2;3]
+\cup
+[4;5)
+}.
+\]
+
+\topicsection{6. Кратность корня: когда знак не меняется}
+
+Если множитель имеет вид
+\[
+(x-a)^2,
+\]
+то точка \(x=a\) имеет чётную кратность. При переходе через неё знак всего произведения или дроби \key{не меняется}.
+
+Пример:
+\[
+\frac{(x-2)^2(x-1)}
+     {x(x-3)(x+2)}
+\ge 0.
+\]
+
+Критические точки:
+\[
+-2,\ 0,\ 1,\ 2,\ 3.
+\]
+
+Точка \(x=2\) --- корень чётной кратности, поэтому знак слева и справа от неё одинаков.
+
+\subsection*{Типичная ошибка}
+
+Если дискриминант квадратного уравнения равен нулю, корень существует:
+\[
+D=0
+\quad\Longrightarrow\quad
+x_1=x_2.
+\]
+
+Это один корень второй кратности, а не отсутствие корней.
+
+% =========================================================
+% Блок-схема 2
+% =========================================================
+
+\clearpage
+\thispagestyle{empty}
+
+\begin{center}
+\begin{tikzpicture}[node distance=0.68cm]
+
+\node[
+    font=\Large\bfseries,
+    text=darkaccent,
+    align=center
+]
+(algtitle)
+{Алгоритм: метод интервалов\\для дробного неравенства};
+
+\node[
+    flowstart,
+    below=0.55cm of algtitle
+]
+(starttwo)
+{Исходное неравенство};
+
+\node[
+    flowaction,
+    below=of starttwo
+]
+(zero)
+{Перенесите всё в одну сторону так, чтобы справа был $0$};
+
+\node[
+    flowaction,
+    below=of zero
+]
+(factor)
+{Разложите числитель и знаменатель на множители, если это возможно};
+
+\node[
+    flowaction,
+    below=of factor
+]
+(equations)
+{Решите уравнения: числитель $=0$ и знаменатель $=0$};
+
+\node[
+    flowaction,
+    below=of equations
+]
+(points)
+{Отметьте все критические точки на одной числовой прямой; нули знаменателя выколите};
+
+\node[
+    flowaction,
+    below=of points
+]
+(sign)
+{Определите знак на одном интервале удобной подстановкой};
+
+\node[
+    flowdecision,
+    below=0.8cm of sign
+]
+(mult)
+{Переходим через корень нечётной кратности?};
+
+\node[
+    flowbranch,
+    below left=0.9cm and 0.2cm of mult
+]
+(change)
+{Поменяйте знак};
+
+\node[
+    flowbranch,
+    below right=0.9cm and 0.2cm of mult
+]
+(keep)
+{Сохраните знак};
+
+\node[
+    flowaction,
+    below=1.45cm of mult
+]
+(choose)
+{Выберите интервалы нужного знака; включите допустимые нули числителя при $\le$ или $\ge$};
+
+\node[
+    flowstart,
+    below=0.68cm of choose
+]
+(finishtwo)
+{Запишите ответ};
+
+\draw[flowarrow]
+    (starttwo)--(zero);
+
+\draw[flowarrow]
+    (zero)--(factor);
+
+\draw[flowarrow]
+    (factor)--(equations);
+
+\draw[flowarrow]
+    (equations)--(points);
+
+\draw[flowarrow]
+    (points)--(sign);
+
+\draw[flowarrow]
+    (sign)--(mult);
+
+\draw[flowarrow]
+    (mult)
+    --node[flowlabel,left]{да}
+    (change);
+
+\draw[flowarrow]
+    (mult)
+    --node[flowlabel,right]{нет}
+    (keep);
+
+\draw[flowarrow]
+    (change.south)
+    --
+    (choose.north west);
+
+\draw[flowarrow]
+    (keep.south)
+    --
+    (choose.north east);
+
+\draw[flowarrow]
+    (choose)--(finishtwo);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% =========================================================
+% Итоговый чек-лист
+% =========================================================
+
+\topicsection{7. Что особенно важно не перепутать}
+
+\begin{enumerate}
+    \item
+    \key{Для поиска критических точек решаются уравнения.}
+    Исходное неравенство временно заменяется уравнениями только для нахождения нулей числителя и знаменателя.
+
+    \item
+    \key{Знаменатель не может быть равен нулю.}
+    Его корни всегда исключаются из ответа.
+
+    \item
+    \key{Корень в числителе допускает ноль.}
+    Условие имеет вид
+    \[
+    f(x)\ge 0.
+    \]
+
+    \item
+    \key{Корень в знаменателе ноль не допускает.}
+    Условие имеет вид
+    \[
+    f(x)>0.
+    \]
+
+    \item
+    \key{При умножении или делении неравенства на отрицательное число знак меняется на противоположный.}
+
+    \item
+    \key{Чётная кратность критической точки не меняет знак.}
+    Нечётная кратность меняет знак.
+
+    \item
+    \key{Система условий означает пересечение множеств.}
+    После решения отдельных условий требуется собрать общий ответ.
+\end{enumerate}
+
+\topicsection{8. Мини-чек перед записью ответа}
+
+Перед финальной строкой проверьте:
+
+\begin{itemize}
+    \item все ли знаменатели учтены;
+    \item все ли подкоренные выражения учтены;
+    \item правильно ли выбраны строгие или нестрогие условия;
+    \item выколоты ли нули знаменателя;
+    \item включены ли допустимые нули числителя при нестрогом знаке;
+    \item учтена ли кратность каждого корня;
+    \item выполнено ли пересечение всех условий ОДЗ.
+\end{itemize}
+
+% =========================================================
+% Тренировочный блок
+% =========================================================
+
+\clearpage
+\thispagestyle{plain}
+
+\begin{center}
+{\Large
+\textcolor{darkaccent}{
+\textbf{Тренировочный блок}
+}
+}\\[0.35em]
+
+{\large
+Путь А \textbullet{} по нарастающей сложности
+}
+\end{center}
+
+\vspace{0.7cm}
+
+\begin{enumerate}[label=\textbf{\arabic*)}]
+
+    \item
+    Найдите область определения функции
+    \[
+    y=
+    \frac{\sqrt{x+4}}
+         {x-2}.
+    \]
+
+    \item
+    Найдите область определения функции
+    \[
+    y=
+    \frac{\sqrt{x^2-x-6}}
+         {x+1}.
+    \]
+
+    \item
+    Решите неравенство
+    \[
+    x^2-5x+6\le 0.
+    \]
+
+    \item
+    Решите неравенство
+    \[
+    \frac{(x-1)(x-4)}
+         {(x+2)(x-3)}
+    \ge 0.
+    \]
+
+    \item
+    Решите неравенство
+    \[
+    \frac{(x-2)^2(x+1)}
+         {x(x-4)(x+3)}
+    \le 0.
+    \]
+
+\end{enumerate}
+
+% =========================================================
+% Ответы
+% =========================================================
+
+\clearpage
+\thispagestyle{plain}
+
+\begin{center}
+{\Large
+\textcolor{darkaccent}{
+\textbf{Ответы к тренировочному блоку}
+}}
+\end{center}
+
+\vspace{0.7cm}
+
+\begin{table}[ht]
+\centering
+\caption{Краткие ответы}
+
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+
+1 &
+$[-4;2)\cup(2;+\infty)$
+\\
+
+2 &
+$(-\infty;-2]\cup[3;+\infty)$
+\\
+
+3 &
+$[2;3]$
+\\
+
+4 &
+$(-\infty;-2)\cup[1;3)\cup[4;+\infty)$
+\\
+
+5 &
+$(-3;-1]\cup(0;4)$
+\\
+
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\vspace{0.9cm}
+
+\textbf{Примечание к №5.}
+Точка \(x=2\) имеет чётную кратность, поэтому знак при переходе через неё не меняется; она входит в интервал \((0;4)\).
+
+\end{document}
