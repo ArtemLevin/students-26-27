@@ -1,0 +1,1106 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,left=20mm,right=20mm,top=20mm,bottom=22mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{E8EEEE}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=darkaccent,
+  pdftitle={Чек-лист: сложные функции, монотонность и линейная функция},
+  pdfauthor={Лёвин Артём Александрович}
+}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.6em,itemsep=0.35em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.55em,topsep=0.45em}
+\renewcommand{\arraystretch}{1.35}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{textgray}{ОГЭ по математике}}
+\fancyhead[R]{\small\textcolor{textgray}{Марина}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\headheight}{14pt}
+
+\newcommand{\sect}[1]{\section*{\textcolor{darkaccent}{#1}}}
+\newcommand{\subsect}[1]{\subsection*{\textcolor{accent}{#1}}}
+\newcommand{\key}[1]{\textbf{\textcolor{darkaccent}{#1}}}
+
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=darkaccent,
+    line width=0.9pt,
+    minimum width=38mm,
+    minimum height=10mm,
+    align=center
+  },
+  flowaction/.style={
+    rounded corners=3pt,
+    draw=accent,
+    line width=0.9pt,
+    minimum width=92mm,
+    minimum height=12mm,
+    text width=82mm,
+    align=center
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=2.2,
+    draw=accent,
+    line width=0.9pt,
+    text width=46mm,
+    align=center,
+    inner sep=1.5pt
+  },
+  flowarrow/.style={
+    -{Stealth[length=3mm]},
+    line width=0.9pt,
+    draw=textgray
+  },
+  flownote/.style={
+    font=\small,
+    text=textgray,
+    align=center
+  }
+}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{28mm}
+
+{\Large\textcolor{darkaccent}{\textbf{Чек-лист}}\par}
+\vspace{6mm}
+
+{\LARGE\textbf{Сложные функции, монотонность}\\[2mm]
+\textbf{и линейная функция}\par}
+
+\vspace{8mm}
+{\large Подготовка к ОГЭ по математике\par}
+
+\vspace{20mm}
+{\large Ученица: \textbf{Марина}\par}
+
+\vspace{4mm}
+{\large Дата: \today\par}
+
+\vfill
+
+{\large Лёвин Артём Александрович\par}
+{\normalsize эксклюзивно для Марины\par}
+
+\vspace{18mm}
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent,line width=1.1pt]
+    ($(current page.south west)+(22mm,18mm)$)
+    .. controls ($(current page.south west)+(62mm,29mm)$)
+    and ($(current page.south east)+(-62mm,7mm)$)
+    .. ($(current page.south east)+(-22mm,18mm)$);
+\end{tikzpicture}
+
+\end{titlepage}
+
+\sect{1. Что нужно знать о функции и подстановке}
+
+\key{Функция} записывается, например, так:
+\[
+f(x)=x^2-x-6.
+\]
+
+Запись в скобках указывает, что именно подставляется вместо аргумента $x$.
+
+\subsect{Подстановка в функцию}
+
+Если
+\[
+f(x)=x^2-x-6,
+\]
+то
+\[
+f(1)=1^2-1-6=-6.
+\]
+
+При подстановке выражения $2x-3$ получаем:
+\[
+f(2x-3)=(2x-3)^2-(2x-3)-6.
+\]
+
+\key{Ключевой приём:} в формуле родительской функции заменяйте
+\emph{каждый} $x$ тем выражением, которое записано в скобках.
+
+\subsect{Сложная функция}
+
+Если заданы две функции $f$ и $g$, то
+\[
+(f\circ g)(x)=f(g(x)).
+\]
+
+Функция $f$ здесь внешняя, а $g$ --- внутренняя.
+
+Например, если
+\[
+f(x)=x^3-3x+1,
+\qquad
+g(x)=2x-5,
+\]
+то
+\[
+f(g(x))=(2x-5)^3-3(2x-5)+1.
+\]
+
+\subsect{Обратная задача: увидеть внешнюю и внутреннюю функции}
+
+В выражении
+\[
+(5x+2)^4-2(5x+2)^2+1
+\]
+повторяется фрагмент $5x+2$.
+
+Поэтому удобно взять
+\[
+f(t)=t^4-2t^2+1,
+\qquad
+g(x)=5x+2,
+\]
+и записать исходное выражение как
+\[
+f(g(x)).
+\]
+
+Аналогично
+\[
+\left|x^2-2x-3\right|
+\]
+можно представить в виде
+\[
+f(g(x)),
+\qquad
+f(t)=|t|,
+\qquad
+g(x)=x^2-2x-3.
+\]
+
+\subsect{ОДЗ сложной функции}
+
+Для композиции $f(g(x))$ должны одновременно выполняться два требования:
+\[
+x\in D_g,
+\qquad
+g(x)\in D_f.
+\]
+
+Например,
+\[
+f(x)=\sqrt{x},
+\qquad
+g(x)=2-x.
+\]
+
+Тогда
+\[
+f(g(x))=\sqrt{2-x}.
+\]
+
+По условию существования квадратного корня:
+\[
+2-x\ge0,
+\]
+откуда
+\[
+x\le2.
+\]
+
+Следовательно,
+\[
+D_{f\circ g}=(-\infty,2].
+\]
+
+\clearpage
+\thispagestyle{fancy}
+
+\begin{center}
+{\Large\textcolor{darkaccent}{
+\textbf{Алгоритм: как найти композицию функций}
+}}
+\end{center}
+
+\vspace{8mm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=10mm]
+
+\node[flowstart] (s) {Начало};
+
+\node[flowaction,below=of s] (read)
+{Прочитайте запись $f(g(x))$: $f$ --- внешняя функция, $g$ --- внутренняя};
+
+\node[flowaction,below=of read] (domain)
+{Запишите ограничения: $x\in D_g$ и условие $g(x)\in D_f$};
+
+\node[flowaction,below=of domain] (subst)
+{В формуле $f(x)$ замените каждый $x$ выражением $g(x)$};
+
+\node[flowaction,below=of subst] (simp)
+{Аккуратно упростите полученное выражение};
+
+\node[flowaction,below=of simp] (check)
+{Проверьте ОДЗ и укажите область определения композиции};
+
+\node[flowstart,below=of check] (e) {Готово};
+
+\draw[flowarrow] (s)--(read);
+\draw[flowarrow] (read)--(domain);
+\draw[flowarrow] (domain)--(subst);
+\draw[flowarrow] (subst)--(simp);
+\draw[flowarrow] (simp)--(check);
+\draw[flowarrow] (check)--(e);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+\sect{2. Монотонность функций}
+
+\subsect{Базовые функции}
+
+На тех промежутках, где функции определены, полезно помнить:
+
+\begin{itemize}
+  \item $y=x$ --- возрастающая функция;
+  \item $y=kx+b$: при $k>0$ возрастает, при $k<0$ убывает, при $k=0$ постоянна;
+  \item $y=\sqrt{x}$ возрастает на $[0,+\infty)$;
+  \item $y=-\sqrt{x}$ убывает на $[0,+\infty)$;
+  \item $y=\dfrac1x$ убывает на каждом из промежутков
+  $(-\infty,0)$ и $(0,+\infty)$;
+  \item $y=\dfrac1{x-a}$ убывает на каждом из промежутков
+  $(-\infty,a)$ и $(a,+\infty)$.
+\end{itemize}
+
+\subsect{Монотонность композиции}
+
+Пусть обе функции монотонны на тех промежутках, где рассматривается композиция.
+
+Тогда действует таблица:
+
+\begin{center}
+\begin{tabularx}{0.86\linewidth}{@{}XXc@{}}
+\toprule
+Внешняя $f$ & Внутренняя $g$ & $f\circ g$ \\
+\midrule
+возрастающая & возрастающая & возрастающая \\
+возрастающая & убывающая & убывающая \\
+убывающая & возрастающая & убывающая \\
+убывающая & убывающая & возрастающая \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\key{Важно:} композиция двух убывающих функций является возрастающей.
+
+\subsect{Пример 1}
+
+Рассмотрим функцию
+\[
+y=\sqrt{-2x}.
+\]
+
+Разложение:
+\[
+f(t)=\sqrt{t}
+\quad\text{--- возрастает},
+\]
+\[
+g(x)=-2x
+\quad\text{--- убывает}.
+\]
+
+Следовательно, композиция $f(g(x))$ убывает.
+
+ОДЗ:
+\[
+-2x\ge0,
+\]
+откуда
+\[
+x\le0.
+\]
+
+Итак, функция убывает на
+\[
+(-\infty,0].
+\]
+
+\subsect{Пример 2}
+
+Рассмотрим функцию
+\[
+y=-\sqrt{x-5}.
+\]
+
+Здесь
+\[
+f(t)=-\sqrt{t}
+\quad\text{--- убывает},
+\]
+\[
+g(x)=x-5
+\quad\text{--- возрастает}.
+\]
+
+Композиция убывает.
+
+ОДЗ:
+\[
+x-5\ge0,
+\]
+поэтому
+\[
+x\ge5.
+\]
+
+Следовательно, функция убывает на
+\[
+[5,+\infty).
+\]
+
+\subsect{Сумма монотонных функций}
+
+Если две функции возрастают на одном и том же промежутке, их сумма тоже возрастает.
+
+Если обе функции убывают на одном и том же промежутке, их сумма тоже убывает.
+
+Для функций с разным характером монотонности общего вывода по этому правилу сделать нельзя.
+
+Например,
+\[
+y=\frac1{x+2}-\sqrt{x}.
+\]
+
+Область определения:
+\[
+x\ge0.
+\]
+
+На $[0,+\infty)$ функция
+\[
+\frac1{x+2}
+\]
+убывает.
+
+Функция
+\[
+-\sqrt{x}
+\]
+также убывает.
+
+Следовательно,
+\[
+y=\frac1{x+2}-\sqrt{x}
+\]
+убывает на
+\[
+[0,+\infty).
+\]
+
+\clearpage
+\thispagestyle{fancy}
+
+\begin{center}
+{\Large\textcolor{darkaccent}{
+\textbf{Алгоритм: как определить монотонность}
+}}
+\end{center}
+
+\vspace{5mm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=9mm]
+
+\node[flowstart] (s) {Начало};
+
+\node[flowaction,below=of s] (odz)
+{Найдите область определения и рабочий промежуток};
+
+\node[flowdecision,below=12mm of odz] (comp)
+{Видна композиция $f(g(x))$?};
+
+\node[
+  flowaction,
+  minimum width=62mm,
+  text width=54mm,
+  below=14mm of comp,
+  xshift=-38mm
+] (parts)
+{Определите монотонность внешней и внутренней функций};
+
+\node[
+  flowaction,
+  minimum width=62mm,
+  text width=54mm,
+  below=14mm of comp,
+  xshift=38mm
+] (sum)
+{Представьте выражение как сумму известных функций};
+
+\node[
+  flowaction,
+  minimum width=62mm,
+  text width=54mm,
+  below=17mm of parts
+] (rule)
+{Композиция: одинаковый характер $\Rightarrow$ рост; разный $\Rightarrow$ убывание};
+
+\node[
+  flowdecision,
+  text width=34mm,
+  below=17mm of sum
+] (same)
+{Слагаемые монотонны одинаково?};
+
+\node[
+  flowaction,
+  minimum width=48mm,
+  text width=40mm,
+  below=14mm of same,
+  xshift=12mm
+] (sumres)
+{Сумма имеет тот же характер};
+
+\node[
+  flowaction,
+  minimum width=48mm,
+  text width=40mm,
+  below=14mm of same,
+  xshift=-38mm
+] (other)
+{Правила суммы недостаточно};
+
+\node[flowstart,below=34mm of rule] (e1) {Вывод};
+\node[flowstart,below=13mm of sumres] (e2) {Вывод};
+
+\draw[flowarrow] (s)--(odz);
+\draw[flowarrow] (odz)--(comp);
+
+\draw[flowarrow]
+  (comp.west) -|
+  node[flownote,pos=0.25,above]{да}
+  (parts.north);
+
+\draw[flowarrow]
+  (comp.east) -|
+  node[flownote,pos=0.25,above]{нет}
+  (sum.north);
+
+\draw[flowarrow] (parts)--(rule);
+\draw[flowarrow] (rule)--(e1);
+
+\draw[flowarrow] (sum)--(same);
+
+\draw[flowarrow]
+  (same.south east) --
+  node[flownote,right]{да}
+  (sumres.north);
+
+\draw[flowarrow]
+  (same.south west) --
+  ++(-5mm,-5mm) -|
+  node[flownote,pos=0.2,left]{нет}
+  (other.north);
+
+\draw[flowarrow] (sumres)--(e2);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+\sect{3. Линейная функция $y=kx+b$}
+
+\subsect{Коэффициенты и монотонность}
+
+Для линейной функции
+\[
+y=kx+b
+\]
+коэффициент $k$ отвечает за наклон графика:
+
+\[
+\begin{cases}
+k>0, & \text{функция возрастает},\\
+k<0, & \text{функция убывает},\\
+k=0, & \text{функция постоянна}.
+\end{cases}
+\]
+
+Число $b$ является ординатой точки пересечения графика с осью $Oy$.
+
+\subsect{Точки пересечения с осями}
+
+Рассмотрим график
+\[
+y=2x-1.
+\]
+
+\key{Пересечение с осью $Ox$:}
+
+На оси $Ox$
+\[
+y=0.
+\]
+
+Поэтому
+\[
+0=2x-1,
+\]
+откуда
+\[
+x=\frac12.
+\]
+
+Точка пересечения:
+\[
+\left(\frac12,0\right).
+\]
+
+\key{Пересечение с осью $Oy$:}
+
+На оси $Oy$
+\[
+x=0.
+\]
+
+Подставляем:
+\[
+y=2\cdot0-1=-1.
+\]
+
+Точка пересечения:
+\[
+(0,-1).
+\]
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.72\linewidth,
+  height=0.42\linewidth,
+  axis lines=middle,
+  xmin=-2,
+  xmax=3,
+  ymin=-3,
+  ymax=4,
+  unit vector ratio=1 1,
+  samples=220,
+  clip=false,
+  xlabel={$x$},
+  ylabel={$y$},
+  xtick={-2,-1,0,0.5,1,2,3},
+  ytick={-3,-2,-1,0,1,2,3,4},
+  grid=both,
+  major grid style={
+    line width=.2pt,
+    draw=softgray
+  }
+]
+
+\addplot[
+  accent,
+  thick,
+  domain=-2:3
+]{2*x-1};
+
+\addplot[
+  only marks,
+  mark=*,
+  mark size=2.2pt
+] coordinates {
+  (0.5,0)
+  (0,-1)
+};
+
+\node[anchor=south west]
+  at (axis cs:0.5,0)
+  {$\left(\frac12,0\right)$};
+
+\node[anchor=north east]
+  at (axis cs:0,-1)
+  {$(0,-1)$};
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsect{Как найти формулу прямой по двум точкам}
+
+Пусть прямая проходит через точки
+\[
+A(x_1,y_1),
+\qquad
+B(x_2,y_2),
+\qquad
+x_1\ne x_2.
+\]
+
+Можно использовать систему:
+\[
+\begin{cases}
+y_1=kx_1+b,\\
+y_2=kx_2+b.
+\end{cases}
+\]
+
+Также можно сразу найти
+\[
+k=\frac{y_2-y_1}{x_2-x_1},
+\]
+а затем
+\[
+b=y_1-kx_1.
+\]
+
+\subsect{Пример}
+
+Пусть
+\[
+A(-1,4),
+\qquad
+B(3,-4).
+\]
+
+Находим коэффициент $k$:
+\[
+k=
+\frac{-4-4}{3-(-1)}
+=
+\frac{-8}{4}
+=
+-2.
+\]
+
+Теперь найдём $b$:
+\[
+b=4-(-2)(-1)=2.
+\]
+
+Следовательно,
+\[
+y=-2x+2.
+\]
+
+Поскольку
+\[
+k=-2<0,
+\]
+функция убывает.
+
+\clearpage
+\thispagestyle{fancy}
+
+\begin{center}
+{\Large\textcolor{darkaccent}{
+\textbf{Алгоритм: формула прямой по двум точкам}
+}}
+\end{center}
+
+\vspace{8mm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=10mm]
+
+\node[flowstart] (s) {Начало};
+
+\node[flowaction,below=of s] (pts)
+{Запишите координаты $A(x_1,y_1)$ и $B(x_2,y_2)$; проверьте $x_1\ne x_2$};
+
+\node[flowaction,below=of pts] (k)
+{Найдите наклон:
+$\displaystyle k=\frac{y_2-y_1}{x_2-x_1}$};
+
+\node[flowaction,below=of k] (b)
+{Найдите свободный член:
+$b=y_1-kx_1$};
+
+\node[flowaction,below=of b] (eq)
+{Запишите уравнение $y=kx+b$};
+
+\node[flowaction,below=of eq] (verify)
+{Проверьте подстановкой обе исходные точки};
+
+\node[flowstart,below=of verify] (e) {Готово};
+
+\draw[flowarrow] (s)--(pts);
+\draw[flowarrow] (pts)--(k);
+\draw[flowarrow] (k)--(b);
+\draw[flowarrow] (b)--(eq);
+\draw[flowarrow] (eq)--(verify);
+\draw[flowarrow] (verify)--(e);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+\sect{4. Типичные ошибки и проверка себя}
+
+\begin{itemize}
+
+  \item В $f(g(x))$ подставляют формулу $g(x)$ только в одно место,
+  хотя заменить необходимо каждый $x$ в формуле $f(x)$.
+
+  \item Путают порядок композиции:
+  \[
+  f(g(x))
+  \quad\text{и}\quad
+  g(f(x))
+  \]
+  в общем случае дают разные функции.
+
+  \item Забывают ОДЗ:
+  подкоренное выражение должно быть неотрицательным,
+  знаменатель должен быть отличен от нуля.
+
+  \item Считают, что композиция двух убывающих функций убывает.
+  Верное правило:
+  композиция двух убывающих функций возрастает.
+
+  \item Для суммы функций делают вывод по одному слагаемому.
+  Правило суммы применяется напрямую, когда оба слагаемых
+  монотонны одинаково на одном промежутке.
+
+  \item В точке пересечения с осью $Ox$ забывают условие
+  \[
+  y=0.
+  \]
+
+  \item В точке пересечения с осью $Oy$ забывают условие
+  \[
+  x=0.
+  \]
+
+  \item При восстановлении прямой по двум точкам находят $k$,
+  но забывают вычислить $b$.
+
+\end{itemize}
+
+\subsect{Мини-памятка}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+Ситуация & Что делать \\
+\midrule
+
+$f(g(x))$
+&
+Внешняя функция --- $f$.
+Подставить $g(x)$ вместо каждого $x$ в формуле $f$.
+\\
+
+Корень
+&
+Требовать, чтобы подкоренное выражение было $\ge0$.
+\\
+
+Дробь
+&
+Требовать, чтобы знаменатель был $\ne0$.
+\\
+
+Пересечение с $Ox$
+&
+Положить $y=0$.
+\\
+
+Пересечение с $Oy$
+&
+Положить $x=0$.
+\\
+
+Прямая через две точки
+&
+Найти $k$, затем $b$, записать $y=kx+b$ и проверить обе точки.
+\\
+
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\clearpage
+
+\sect{5. Тренировочный блок}
+
+\textbf{Средний уровень}
+
+\begin{enumerate}
+
+  \item
+  Даны функции
+  \[
+  f(x)=3x-2,
+  \qquad
+  g(x)=1-x.
+  \]
+  Найдите
+  \[
+  f(g(x))
+  \quad\text{и}\quad
+  g(f(x)).
+  \]
+  Определите характер монотонности каждой полученной функции.
+
+  \item
+  Представьте функцию
+  \[
+  y=\left|x^2-4x+1\right|
+  \]
+  как композицию $f(g(x))$, указав внешнюю и внутреннюю функции.
+
+  \item
+  Для функции
+  \[
+  y=\sqrt{5-2x}
+  \]
+  найдите область определения и определите характер монотонности.
+
+\end{enumerate}
+
+\textbf{Уровень выше среднего}
+
+\begin{enumerate}[resume]
+
+  \item
+  Даны функции
+  \[
+  f(x)=\sqrt{x},
+  \qquad
+  g(x)=3-x.
+  \]
+
+  Найдите
+  \[
+  f(g(x))
+  \quad\text{и}\quad
+  g(f(x)),
+  \]
+  укажите область определения каждой композиции
+  и определите её монотонность.
+
+  \item
+  Исследуйте область определения и монотонность функции
+  \[
+  y=\frac1{x+4}-\sqrt{x+1}.
+  \]
+
+  \item
+  Исследуйте область определения и монотонность функции
+  \[
+  y=\frac1{x^5}+\frac1{\sqrt{x}}.
+  \]
+
+  \item
+  Найдите уравнение прямой, проходящей через точки
+  \[
+  A(-2,5),
+  \qquad
+  B(4,-7).
+  \]
+  Укажите характер её монотонности.
+
+  \item
+  Найдите точки пересечения графика
+  \[
+  y=-3x+6
+  \]
+  с осями координат.
+
+  \item
+  Прямая проходит через точки
+  \[
+  A(1,-2),
+  \qquad
+  B(5,6).
+  \]
+  Найдите её формулу и определите,
+  возрастает она или убывает.
+
+\end{enumerate}
+
+\textbf{Сложный уровень}
+
+\begin{enumerate}[resume]
+
+  \item
+  Рассмотрите функцию
+  \[
+  H(x)=\frac1{\sqrt{6-2x}+1}.
+  \]
+
+  Представьте её как композицию нескольких простых функций,
+  найдите область определения и определите характер монотонности
+  на всей области определения.
+
+\end{enumerate}
+
+\clearpage
+
+\sect{6. Ответы к тренировочному блоку}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+№ & Ответ \\
+\midrule
+
+1
+&
+\[
+f(g(x))=1-3x,
+\qquad
+g(f(x))=3-3x.
+\]
+Обе функции убывают.
+\\
+
+2
+&
+Например,
+\[
+f(t)=|t|,
+\qquad
+g(x)=x^2-4x+1.
+\]
+\\
+
+3
+&
+\[
+D=\left(-\infty,\frac52\right].
+\]
+Функция убывает.
+\\
+
+4
+&
+\[
+f(g(x))=\sqrt{3-x},
+\qquad
+D_{f\circ g}=(-\infty,3],
+\]
+функция убывает;
+\[
+g(f(x))=3-\sqrt{x},
+\qquad
+D_{g\circ f}=[0,+\infty),
+\]
+функция убывает.
+\\
+
+5
+&
+\[
+D=[-1,+\infty).
+\]
+Функция убывает на всей области определения.
+\\
+
+6
+&
+\[
+D=(0,+\infty).
+\]
+Функция убывает.
+\\
+
+7
+&
+\[
+y=-2x+1.
+\]
+Функция убывает.
+\\
+
+8
+&
+Пересечение с $Ox$:
+\[
+(2,0).
+\]
+Пересечение с $Oy$:
+\[
+(0,6).
+\]
+\\
+
+9
+&
+\[
+y=2x-4.
+\]
+Функция возрастает.
+\\
+
+10
+&
+\[
+D=(-\infty,3].
+\]
+
+Можно взять последовательность:
+\[
+u(x)=6-2x,
+\qquad
+v(t)=\sqrt{t},
+\qquad
+w(s)=s+1,
+\qquad
+q(r)=\frac1r.
+\]
+
+На рассматриваемых промежутках:
+$u$ убывает,
+$v$ возрастает,
+$w$ возрастает,
+$q$ убывает.
+
+Итоговая функция $H$ возрастает на
+\[
+(-\infty,3].
+\]
+\\
+
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\end{document}
