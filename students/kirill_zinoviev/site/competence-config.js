@@ -1,6 +1,6 @@
 (()=>{
 const groups=window.KIRILL_GRADE7_GROUPS||[];
-const masteryOverrides={fractions_16:3,rational_8:3,expr_5:3};
+const stage04Mastery={fractions_16:3,rational_8:3,expr_5:3};
 const lessons=[
 {date:'08.08.26',href:'08.08.26.html',ids:window.KIRILL_GRADE7_EVIDENCE||[]},
 {date:'12.08.26',href:'12.08.26.html',ids:['percent_8','percent_9','percent_11','percent_12','percent_14','models_12']},
@@ -15,7 +15,7 @@ const lessons=[
 ];
 const teacherSeed={},evidence={};
 for(const lesson of lessons)for(const id of lesson.ids){teacherSeed[id]=Math.max(teacherSeed[id]||0,2);evidence[id]={text:`Тема подтверждена материалом занятия ${lesson.date}.`,href:lesson.href};}
-Object.assign(teacherSeed,masteryOverrides);
+Object.assign(teacherSeed,stage04Mastery);
 const source=URL.createObjectURL(new Blob([`const groups=${JSON.stringify(groups)};`],{type:'text/javascript'}));
 window.STUDENT_COMPETENCE_CONFIG={stateKey:'kirill-competence-state-v2',storageKey:'kirill-competence-map-v2',baselineKey:'kirill-competence-teacher-baseline-v1',legacyStorageKeys:[],legacyRepeatKeys:['kirill-competence-repeat-v1'],legacyUrl:source,fallbackHref:'competency-map-data.js',catalogNames:['groups'],summaryEvent:'kirill:competence-summary',teacherSeed,evidence};
 })();
