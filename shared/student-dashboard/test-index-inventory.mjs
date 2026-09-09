@@ -12,25 +12,67 @@ function walk(dir){
 const root=process.cwd();
 const indexes=walk(path.join(root,'students')).filter(file=>path.basename(file)==='index.html').map(file=>path.relative(root,file).replaceAll('\\','/')).sort();
 assert.deepEqual(indexes,[
+  'students/anna_trapeznikova/site/index.html',
+  'students/ekaterina_gnedkova/site/index.html',
+  'students/jaroslav_vereschagin/site/index.html',
   'students/kirill_zinoviev/site/index.html',
+  'students/marina/site/index.html',
+  'students/nadya_klimenko/site/index.html',
   'students/nastya_pavlova/index.html',
   'students/nastya_pavlova/site/index.html',
   'students/nikol_sarkisyants/site/index.html',
   'students/sofya_kalney/site/index.html',
+  'students/sofya_khomenko/site/index.html',
   'students/timofey/site/index.html',
   'students/volodia_khachaturian/index.html',
   'students/volodia_khachaturian/site/index.html',
   'students/xenia_klykova/chemistry/site/index.html',
-  'students/xenia_klykova/site/index.html'
+  'students/xenia_klykova/site/index.html',
+  'students/xenia_vasilchenko/site/index.html'
 ]);
 
-const dashboardPaths=indexes.filter(file=>file.endsWith('/site/index.html')&&!file.includes('/chemistry/')&&!file.includes('/nikol_sarkisyants/')&&!file.includes('/nastya_pavlova/'));
+// Dashboards created on the newer bespoke radial-map contract are inventoried above,
+// while the legacy shared-shell contract below remains scoped to dashboards that use it.
+const bespokeDashboardPaths=new Set([
+  'students/anna_trapeznikova/site/index.html',
+  'students/ekaterina_gnedkova/site/index.html',
+  'students/jaroslav_vereschagin/site/index.html',
+  'students/marina/site/index.html',
+  'students/nadya_klimenko/site/index.html',
+  'students/sofya_khomenko/site/index.html',
+  'students/xenia_vasilchenko/site/index.html'
+]);
+
+const dashboardPaths=indexes.filter(file=>file.endsWith('/site/index.html')&&!file.includes('/chemistry/')&&!file.includes('/nikol_sarkisyants/')&&!file.includes('/nastya_pavlova/')&&!bespokeDashboardPaths.has(file));
 for(const file of dashboardPaths){
   const html=fs.readFileSync(path.join(root,file),'utf8');
   for(const token of ['data-filter="repeat"','data-filter="unseen"','data-filter="help"','data-filter="progress"','data-filter="confident"','data-filter="mastered"','id="levelExplanation"','aria-labelledby="radialTitle radialDescription"']){
     assert.ok(html.includes(token),`${file}: missing ${token}`);
   }
 }
+
+const ekaterina=fs.readFileSync(path.join(root,'students/ekaterina_gnedkova/site/index.html'),'utf8');
+for(const token of [
+  'class="skip"',
+  'href="#content"',
+  'id="radialMap"',
+  'viewBox="0 0 800 800"',
+  'aria-labelledby="radialTitle radialDescription"',
+  'id="topicSearch"',
+  'data-filter="all"',
+  'data-filter="covered"',
+  'data-filter="repeat"',
+  'data-filter="upcoming"',
+  'id="topicCatalog"',
+  'id="competencyDialog"',
+  'id="repeatToggle"',
+  'id="resetMap"',
+  'id="themeToggle"',
+  'id="mapTooltip"',
+  'competency-map-data.js',
+  'competency-map.js',
+  'competency-map.css'
+])assert.ok(ekaterina.includes(token),`ekaterina index: missing ${token}`);
 
 const adapterPaths=['students/nastya_pavlova/site/index.html','students/nikol_sarkisyants/site/index.html'];
 for(const file of adapterPaths){
@@ -48,4 +90,4 @@ assert.ok(redirect.includes('location.replace'));
 const chemistry=fs.readFileSync(path.join(root,'students/xenia_klykova/chemistry/site/index.html'),'utf8');
 for(const token of ['class="skip"','href="#content"','aria-labelledby="page-title"','min-height:44px','focus-visible','prefers-reduced-motion','Последнее занятие'])assert.ok(chemistry.includes(token),`chemistry index: missing ${token}`);
 
-console.log(`✓ index inventory: ${indexes.length} entry pages covered, ${dashboardPaths.length} shared dashboards migrated, ${adapterPaths.length} practice adapters`);
+console.log(`✓ index inventory: ${indexes.length} entry pages covered, ${dashboardPaths.length} shared dashboards migrated, ${bespokeDashboardPaths.size} bespoke dashboards, ${adapterPaths.length} practice adapters`);
