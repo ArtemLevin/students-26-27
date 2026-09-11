@@ -8,6 +8,20 @@ const MONTHS_GENITIVE=[
 
 export const LESSONS=Object.freeze([
   {
+    date:'2026-09-11',
+    href:'11.09.26.html',
+    title:'Производная сложной функции',
+    navTitle:'Производная сложной функции',
+    navSubtitle:'правило цепочки · переменные и константы',
+    summary:'На занятии систематизировано правило цепочки: выделение внешней и внутренней функций, умножение на производную внутренней части и контроль переменной дифференцирования. Метод применён к корню, экспоненте, степени и синусу; отдельно закреплена проверка ОДЗ.',
+    topics:['производная','правило цепочки','сложная функция','экспонента','степень','ОДЗ'],
+    outcomes:[
+      {competencyId:'t8_derivative_rules',label:'Правило цепочки',level:3,tone:'good',practiceDisposition:'manual'},
+      {competencyId:'t8_elementary_derivatives',label:'Производные сложных функций',level:3,tone:'good',practiceDisposition:'manual'}
+    ],
+    materials:{pdf:'../pdf_docs/11.09.26.pdf',tex:'../tex_docs/11.09.26.tex',lab:'11.09.26-lab.html'}
+  },
+  {
     date:'2026-09-07',
     href:'07.09.26.html',
     title:'Производная: произведение, частное и специальные функции',
@@ -16,8 +30,8 @@ export const LESSONS=Object.freeze([
     summary:'На занятии расширен вычислительный аппарат производной: отработаны правила произведения и частного, правило цепочки, производные тригонометрических, показательных и логарифмических функций. Отдельный акцент сделан на распознавании структуры выражения, порядке u′v − uv′, знаках и ОДЗ.',
     topics:['производная','произведение и частное','тригонометрия','показательная функция','логарифмы','ОДЗ'],
     outcomes:[
-      {competencyId:'t8_derivative_rules',label:'Правила дифференцирования',level:3,tone:'good'},
-      {competencyId:'t8_elementary_derivatives',label:'Производные элементарных функций',level:2,tone:'process'}
+      {competencyId:'t8_derivative_rules',label:'Правила дифференцирования',level:3,tone:'good',practiceDisposition:'manual'},
+      {competencyId:'t8_elementary_derivatives',label:'Производные элементарных функций',level:2,tone:'process',practiceDisposition:'manual'}
     ],
     materials:{tex:'../tex_docs/07.09.26.tex',lab:'07.09.26-lab.html'}
   },
@@ -30,10 +44,10 @@ export const LESSONS=Object.freeze([
     summary:'На занятии разобраны ошибки в задачах на движение по воде, степенях, функциональных подстановках и алгебраических дробях. Затем введён первый вычислительный блок по производной: степенное правило, производная константы, постоянный множитель, сумма и разность.',
     topics:['движение по воде','алгебраические дроби','корни и степени','функциональная подстановка','производная','степенное правило'],
     outcomes:[
-      {competencyId:'t8_derivative_rules',label:'Правила дифференцирования',level:2,tone:'process'},
-      {competencyId:'t8_elementary_derivatives',label:'Производные элементарных функций',level:2,tone:'process'},
-      {competencyId:'t10_water',label:'Движение по воде',level:2,tone:'process'},
-      {label:'Алгебраические дроби и ОДЗ',level:2,tone:'alert'}
+      {competencyId:'t8_derivative_rules',label:'Правила дифференцирования',level:2,tone:'process',practiceDisposition:'manual'},
+      {competencyId:'t8_elementary_derivatives',label:'Производные элементарных функций',level:2,tone:'process',practiceDisposition:'manual'},
+      {competencyId:'t10_water',label:'Движение по воде',level:2,tone:'process',practiceDisposition:'manual'},
+      {label:'Алгебраические дроби и ОДЗ',level:2,tone:'alert',practiceDisposition:'manual'}
     ],
     materials:{
       pdf:'../pdf_docs/04.09.26.pdf',

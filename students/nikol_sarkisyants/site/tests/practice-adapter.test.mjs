@@ -12,7 +12,7 @@ assert.equal(PRACTICE_CONFIG.masteryStateKey,'nikol-competence-state-v2');
 assert.ok(Object.keys(PRACTICE_CONFIG.competencies).length>=10);
 
 const html=fs.readFileSync(join(siteDir,'index.html'),'utf8');
-for(const token of ['id="practiceSection"','id="practiceRoot"','shared/practice/practice.css','dashboard.js?v=20260907-1','competence-map.js?v=20260907-1'])assert.ok(html.includes(token),`index: ${token}`);
+for(const token of ['id="practiceSection"','id="practiceRoot"','shared/practice/practice.css','dashboard.js?v=20260911-1','competence-map.js?v=20260911-1'])assert.ok(html.includes(token),`index: ${token}`);
 
 const dashboard=fs.readFileSync(join(siteDir,'dashboard.js'),'utf8');
 assert.ok(dashboard.includes('practice-ui.js?v=20260831-practice-4'));
