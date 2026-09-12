@@ -12,7 +12,7 @@ const lessons=[
 {date:'02.09.26',href:'02.09.26.html',ids:['calc_14','fractions_2','fractions_9','rational_1','rational_2','percent_3','percent_12','expr_2','expr_9','models_2','models_3','models_12','geo_reason_2']},
 {date:'05.09.26',href:'05.09.26.html',ids:['calc_10','fractions_16','rational_8','expr_7','expr_9']},
 {date:'09.09.26',href:'09.09.26.html',ids:['expr_2','expr_5','expr_6','expr_7','expr_8','expr_11','rational_10']},
-{date:'12.09.26',href:'12.09.26.html',ids:['expr_5','expr_6','expr_8','expr_11','percent_3','percent_4','percent_11','percent_12','percent_13','models_12']}
+{date:'12.09.26',href:'12.09.26.html',ids:['expr_5','expr_6','expr_7','expr_8','expr_11','percent_3','percent_4','percent_11','percent_12','percent_13','models_12']}
 ];
 const teacherSeed={},evidence={};
 for(const lesson of lessons)for(const id of lesson.ids){teacherSeed[id]=Math.max(teacherSeed[id]||0,2);evidence[id]={text:`Тема подтверждена материалом занятия ${lesson.date}.`,href:lesson.href};}
