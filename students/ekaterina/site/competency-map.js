@@ -309,7 +309,10 @@
     levelButtons.forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.level) === (levels[id] || 0))));
     repeatButton.textContent = repeatTopics.has(id) ? 'Убрать из повторения' : 'Добавить в повторение';
     repeatButton.classList.toggle('is-repeat', repeatTopics.has(id));
-    if (typeof dialog.showModal === 'function') dialog.showModal(); else dialog.setAttribute('open', '');
+    if (!dialog.open) {
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else dialog.setAttribute('open', '');
+    }
   }
 
   function refreshAfterChange() {
