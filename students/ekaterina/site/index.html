@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Персональный учебный навигатор Екатерины: алгебра, геометрия, теория вероятностей и статистика · 8 класс">
   <title>Екатерина · учебный навигатор 8 класса</title>
-  <link rel="stylesheet" href="competency-map.css?v=20260913-1">
+  <link rel="stylesheet" href="competency-map.css?v=20260913-2">
 </head>
 <body>
   <a class="skip" href="#content">К содержанию</a>
@@ -29,7 +29,8 @@
       <div class="material-card">
         <time datetime="2026-09-13">13.09.26</time>
         <strong>Углы, треугольники и признаки равенства</strong>
-        <div class="material-links"><a href="../pdf_docs/13.09.26.pdf">PDF</a><a href="../tex_dcos/13.09.26.tex">TeX</a></div>
+        <small style="display:block;margin-top:6px;color:var(--muted);line-height:1.35">Повторение опор геометрии 7 класса: углы, параллельные прямые, равнобедренный треугольник, СУС / УСУ / ССС и доказательства.</small>
+        <div class="material-links"><a href="13.09.26.html">Занятие</a><a href="13.09.26-lab.html?mode=angles">Лаб.</a><a href="../pdf_docs/13.09.26.pdf">PDF</a><a href="../tex_dcos/13.09.26.tex">TeX</a></div>
       </div>
     </nav>
     <div class="sidebar-foot">
@@ -116,7 +117,39 @@
     </div>
   </dialog>
 
-  <script src="competency-map-data.js?v=20260913-1"></script>
-  <script src="competency-map.js?v=20260913-1"></script>
+  <script src="competency-map-data.js?v=20260913-2"></script>
+  <script>
+  (() => {
+    const data = window.EKATERINA_COMPETENCY_DATA;
+    if (!data) return;
+
+    const foundation = data.groups.find(group => group.id === 'foundation');
+    if (foundation) foundation.items.forEach(item => { data.baselineLevels[item.id] = 0; });
+
+    const confirmed = [
+      'foundation_01', 'foundation_02', 'foundation_03', 'foundation_04', 'foundation_05', 'foundation_06',
+      'foundation_08', 'foundation_09', 'foundation_10', 'foundation_11', 'foundation_12', 'geo_quads_03'
+    ];
+    confirmed.forEach(id => { data.baselineLevels[id] = 2; });
+
+    data.evidence = Object.fromEntries(confirmed.map(id => [id, {
+      text: id === 'geo_quads_03'
+        ? 'Свойство противоположных сторон параллелограмма использовано в доказательстве через диагональ на занятии 13.09.26. Подтверждённый уровень: 2/4.'
+        : 'Навык явно разобран в материале занятия 13.09.26 «Углы, треугольники и признаки равенства». Подтверждённый уровень: 2/4.',
+      href: '13.09.26.html',
+      date: '13.09.26'
+    }]));
+
+    data.materials = [{
+      date: '13.09.26',
+      title: 'Углы, треугольники и признаки равенства',
+      html: '13.09.26.html',
+      lab: '13.09.26-lab.html?mode=angles',
+      tex: '../tex_dcos/13.09.26.tex',
+      pdf: '../pdf_docs/13.09.26.pdf'
+    }];
+  })();
+  </script>
+  <script src="competency-map.js?v=20260913-2"></script>
 </body>
 </html>
