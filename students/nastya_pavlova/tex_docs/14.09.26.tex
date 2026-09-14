@@ -1,0 +1,1071 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,left=20mm,right=20mm,top=20mm,bottom=22mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F3F6F6}
+
+\setlength{\headheight}{25pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\onehalfspacing
+\setlist[itemize]{leftmargin=1.5em,itemsep=0.25em,topsep=0.3em}
+\setlist[enumerate]{leftmargin=1.7em,itemsep=0.4em,topsep=0.3em}
+\renewcommand{\arraystretch}{1.35}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{textgray}{ЕГЭ. Профильная математика}}
+\fancyhead[R]{\small\textcolor{textgray}{Графики показательных функций}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{%
+  \hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}%
+}
+
+\newcommand{\sectionline}{%
+  \vspace{-0.2em}
+  \textcolor{accent}{\rule{\linewidth}{0.5pt}}
+  \vspace{0.25em}
+}
+\newcommand{\key}[1]{\textbf{\textcolor{darkaccent}{#1}}}
+
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=accent,
+    line width=0.9pt,
+    align=center,
+    minimum width=5cm,
+    minimum height=10mm,
+    font=\small
+  },
+  flowstep/.style={
+    rounded corners=3pt,
+    draw=accent,
+    line width=0.9pt,
+    align=center,
+    text width=10.8cm,
+    minimum height=10mm,
+    inner sep=5pt,
+    font=\small
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=3.1,
+    draw=accent,
+    line width=0.9pt,
+    align=center,
+    text width=4.1cm,
+    inner sep=1.5pt,
+    font=\small
+  },
+  flowarrow/.style={
+    -{Stealth[length=3mm]},
+    line width=0.9pt,
+    draw=darkaccent
+  }
+}
+
+\begin{document}
+
+% =================================================
+% Титульный лист
+% =================================================
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{23mm}
+
+{\Large\textcolor{darkaccent}{\textbf{Чек-лист}}\par}
+
+\vspace{8mm}
+
+{\huge\textbf{Графики показательных функций}\par}
+
+\vspace{3mm}
+
+{\Large\textbf{Метод узловых точек и восстановление формулы}\par}
+
+\vspace{16mm}
+
+{\large ЕГЭ, профильная математика\par}
+
+\vspace{12mm}
+
+{\large\today\par}
+
+\vfill
+
+{\large\textbf{Лёвин Артём Александрович}\par}
+
+\vspace{2mm}
+
+{\large эксклюзивно для Анастасии Павловой\par}
+
+\vspace{20mm}
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[
+    accent!55,
+    line width=1.2pt
+  ]
+    ([xshift=20mm,yshift=19mm]current page.south west)
+    .. controls +(35mm,12mm) and +(-35mm,-8mm) ..
+    ([xshift=-20mm,yshift=28mm]current page.south east);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% =================================================
+% Основной чек-лист
+% =================================================
+
+\section*{1. Что нужно распознавать сразу}
+\sectionline
+
+\begin{itemize}
+
+  \item
+  \key{$f(6)$} означает: в найденную формулу функции подставить
+  $x=6$ и вычислить значение.
+
+  \item
+  \key{«Найдите $x$, если $f(x)=6$»} означает:
+  вместо $f(x)$ подставить $6$ и решить полученное уравнение
+  относительно $x$.
+
+  \item
+  На графике ордината точки --- это значение функции.
+  Если точка имеет координаты $(x_0;y_0)$, то
+  \[
+      f(x_0)=y_0.
+  \]
+
+\end{itemize}
+
+\key{Главная развилка:}
+сначала выясните, ищете Вы значение функции или аргумент.
+Эти формулировки ведут к разным последним шагам.
+
+% -------------------------------------------------
+
+\section*{2. Модель $f(x)=a^x+b$}
+\sectionline
+
+Для показательной функции используем ограничения
+\[
+    a>0,
+    \qquad
+    a\ne 1.
+\]
+
+Параметр $a$ определяет характер показательной части,
+а $b$ задаёт вертикальный сдвиг графика.
+
+\begin{itemize}
+
+  \item
+  если $a>1$, показательная часть возрастает;
+
+  \item
+  если $0<a<1$, показательная часть убывает;
+
+  \item
+  при $x=0$ всегда
+  \[
+      a^0=1,
+  \]
+  поэтому точка с абсциссой $0$ особенно удобна.
+
+\end{itemize}
+
+% -------------------------------------------------
+
+\section*{3. Узловые точки: рабочая идея}
+\sectionline
+
+В задачах по графику удобно искать точки с простыми координатами.
+В этом чек-листе будем называть их
+\key{узловыми точками}:
+обычно это хорошо считываемые точки графика с целыми координатами.
+
+\begin{enumerate}
+
+  \item
+  Посчитайте число неизвестных параметров в формуле.
+
+  \item
+  Возьмите столько удобных точек,
+  сколько неизвестных параметров нужно найти.
+
+  \item
+  Предпочитайте точки, где
+  \[
+      x=0,\qquad x=1,\qquad x=-1
+  \]
+  или другие небольшие значения.
+
+  \item
+  Для каждой точки $(x_0;y_0)$ запишите равенство
+  \[
+      f(x_0)=y_0.
+  \]
+
+  \item
+  Подставьте координаты в формулу и решите систему.
+
+\end{enumerate}
+
+\key{Важно:}
+если неизвестны два параметра $a$ и $b$,
+обычно достаточно двух подходящих точек.
+Выписывать все видимые точки графика необязательно.
+
+% -------------------------------------------------
+
+\section*{4. Базовый пример}
+\sectionline
+
+Пусть график функции
+\[
+    f(x)=a^x+b
+\]
+проходит через точки
+\[
+    (0;-2)
+    \qquad\text{и}\qquad
+    (1;-1).
+\]
+
+Найдём формулу и вычислим $f(6)$.
+
+Из первой точки:
+\[
+-2=a^0+b=1+b
+\quad\Longrightarrow\quad
+b=-3.
+\]
+
+Из второй точки:
+\[
+-1=a^1+b=a-3
+\quad\Longrightarrow\quad
+a=2.
+\]
+
+Следовательно,
+\[
+    f(x)=2^x-3.
+\]
+
+Поэтому
+\[
+    f(6)=2^6-3=64-3=61.
+\]
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    width=10.5cm,
+    height=11cm,
+    axis lines=middle,
+    xmin=-0.5,
+    xmax=1.6,
+    ymin=-2.5,
+    ymax=0.5,
+    unit vector ratio=1 1,
+    samples=220,
+    clip=false,
+    xlabel={$x$},
+    ylabel={$y$},
+    xtick={0,1},
+    ytick={-2,-1,0},
+    grid=both,
+    minor tick num=0,
+    grid style={
+      line width=.1pt,
+      draw=gray!25
+    },
+    tick label style={
+      font=\small
+    }
+]
+
+\addplot[
+  domain=-0.5:1.6,
+  very thick,
+  accent
+]
+{2^x-3};
+
+\addplot[
+  only marks,
+  mark=*,
+  mark size=2.3pt,
+  darkaccent
+]
+coordinates {
+  (0,-2)
+  (1,-1)
+};
+
+\node[
+  anchor=north east,
+  font=\small
+]
+at (axis cs:-0.08,-2.08)
+{$(0;-2)$};
+
+\node[
+  anchor=west,
+  font=\small,
+  xshift=2pt
+]
+at (axis cs:1,-1)
+{$(1;-1)$};
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\key{Самопроверка:}
+найденная формула должна проходить через обе использованные точки.
+Подстановка координат обратно в формулу ---
+быстрый способ заметить арифметическую ошибку.
+
+% -------------------------------------------------
+
+\section*{5. Если после подстановки появляется квадрат параметра}
+\sectionline
+
+Пусть график
+\[
+    f(x)=a^x+b
+\]
+проходит через точки
+\[
+    (0;-2)
+    \qquad\text{и}\qquad
+    (2;-1).
+\]
+
+Получаем систему
+\[
+\begin{cases}
+-2=a^0+b,\\
+-1=a^2+b.
+\end{cases}
+\]
+
+Из первого уравнения
+\[
+    b=-3.
+\]
+
+Тогда
+\[
+-1=a^2-3
+\quad\Longrightarrow\quad
+a^2=2.
+\]
+
+Алгебраически уравнение $a^2=2$ имеет два корня,
+однако для основания показательной функции действует условие
+\[
+    a>0.
+\]
+
+Поэтому
+\[
+    a=\sqrt2=2^{1/2}.
+\]
+
+Итак,
+\[
+    f(x)
+    =
+    \left(2^{1/2}\right)^x-3
+    =
+    2^{x/2}-3.
+\]
+
+Например,
+\[
+    f(10)
+    =
+    2^5-3
+    =
+    29.
+\]
+
+\key{Типичная ошибка:}
+оставлять значение $a=-\sqrt2$.
+Отрицательное число не подходит в качестве основания
+показательной функции в рассматриваемой модели.
+
+% -------------------------------------------------
+
+\section*{6. Убывающий график: метод тот же}
+\sectionline
+
+Пусть график
+\[
+    f(x)=a^x+b
+\]
+проходит через точки
+\[
+    (-1;-2)
+    \qquad\text{и}\qquad
+    (0;-3).
+\]
+
+Требуется найти $x$, если
+\[
+    f(x)=12.
+\]
+
+Сначала восстанавливаем параметры:
+\[
+\begin{cases}
+-2=a^{-1}+b,\\
+-3=a^0+b.
+\end{cases}
+\]
+
+Из второго уравнения
+\[
+    b=-4.
+\]
+
+Тогда
+\[
+-2=a^{-1}-4
+\quad\Longrightarrow\quad
+a^{-1}=2.
+\]
+
+Следовательно,
+\[
+    a=\frac12.
+\]
+
+Получаем
+\[
+    f(x)
+    =
+    \left(\frac12\right)^x-4.
+\]
+
+Теперь используем условие
+\[
+    f(x)=12:
+\]
+\[
+\left(\frac12\right)^x-4=12.
+\]
+
+Отсюда
+\[
+    \left(\frac12\right)^x=16.
+\]
+
+Переходим к основанию $2$:
+\[
+    2^{-x}=2^4.
+\]
+
+Следовательно,
+\[
+    -x=4,
+\]
+\[
+    x=-4.
+\]
+
+\key{Вывод:}
+возрастание или убывание графика
+не меняет алгоритм восстановления параметров.
+
+% -------------------------------------------------
+
+\section*{7. Когда параметр находится внутри показателя}
+\sectionline
+
+Формула может иметь другой вид, например
+\[
+    f(x)=a^{x+b},
+    \qquad
+    a>0,
+    \qquad
+    a\ne1.
+\]
+
+Здесь параметр $b$ находится в показателе степени,
+поэтому система решается иначе.
+
+Пусть график проходит через точки
+\[
+    (1;1)
+    \qquad\text{и}\qquad
+    (3;2).
+\]
+
+Тогда
+\[
+\begin{cases}
+1=a^{1+b},\\
+2=a^{3+b}.
+\end{cases}
+\]
+
+При
+\[
+    a>0,
+    \qquad
+    a\ne1
+\]
+равенство
+\[
+    a^t=1
+\]
+выполняется только при
+\[
+    t=0.
+\]
+
+Поэтому из первого уравнения:
+\[
+1+b=0
+\quad\Longrightarrow\quad
+b=-1.
+\]
+
+Во втором уравнении:
+\[
+2=a^{3-1}=a^2.
+\]
+
+Следовательно,
+\[
+    a=\sqrt2=2^{1/2}.
+\]
+
+Получаем
+\[
+    f(x)
+    =
+    \left(2^{1/2}\right)^{x-1}
+    =
+    2^{(x-1)/2}.
+\]
+
+Например,
+\[
+    f(-5)
+    =
+    2^{(-5-1)/2}
+    =
+    2^{-3}
+    =
+    \frac18.
+\]
+
+\key{Ключевая проверка:}
+всегда смотрите, где именно стоит параметр:
+снаружи степени или внутри показателя.
+Формулы
+\[
+    a^x+b
+\]
+и
+\[
+    a^{x+b}
+\]
+требуют разных преобразований.
+
+% -------------------------------------------------
+
+\section*{8. Полезные преобразования степеней}
+\sectionline
+
+\begin{align*}
+\sqrt a
+  &=a^{1/2},
+\\[2mm]
+\sqrt[n]{a}
+  &=a^{1/n},
+\\[2mm]
+\left(a^m\right)^n
+  &=a^{mn},
+\\[2mm]
+a^{-n}
+  &=\frac{1}{a^n},
+\\[2mm]
+\left(\frac12\right)^x
+  &=2^{-x}.
+\end{align*}
+
+Если требуется решить уравнение вида
+\[
+    a^r=c
+\]
+и число $c$ удаётся представить как степень того же основания,
+приводите обе части к одинаковому основанию
+и сравнивайте показатели.
+
+% -------------------------------------------------
+
+\section*{9. Типичные ошибки}
+\sectionline
+
+\begin{itemize}
+
+  \item
+  Перепутать координаты:
+  в точке $(x;y)$ первое число подставляется вместо $x$,
+  второе --- вместо $f(x)$.
+
+  \item
+  Перепутать задачи
+  \[
+      f(c)
+      \qquad\text{и}\qquad
+      f(x)=c.
+  \]
+
+  \item
+  Забыть равенство
+  \[
+      a^0=1.
+  \]
+
+  \item
+  Пропустить проверку ограничения
+  \[
+      a>0
+  \]
+  после извлечения корня.
+
+  \item
+  Ошибиться со знаком отрицательной степени:
+  \[
+      a^{-1}=\frac1a.
+  \]
+
+  \item
+  Получить громоздкое или неожиданное число
+  и продолжить без проверки исходных точек.
+  Необычный результат --- повод быстро перепроверить
+  подстановку и арифметику.
+
+  \item
+  Считать, что для каждого графика нужен новый способ.
+  Метод подстановки координат в заданную модель сохраняется;
+  меняется алгебра после подстановки.
+
+\end{itemize}
+
+% =================================================
+% Блок-схема алгоритма
+% =================================================
+
+\clearpage
+
+\thispagestyle{fancy}
+
+\begin{center}
+
+{\Large\textbf{Алгоритм: восстановление функции по графику}\par}
+
+\vspace{7mm}
+
+\begin{tikzpicture}[node distance=5.2mm and 13mm]
+
+  \node[flowstart] (start)
+  {
+    Начало: прочитать формулу и понять,
+    что требуется найти
+  };
+
+  \node[
+    flowstep,
+    below=of start
+  ] (count)
+  {
+    Посчитать неизвестные параметры
+    и выбрать столько же удобных узловых точек
+  };
+
+  \node[
+    flowstep,
+    below=of count
+  ] (translate)
+  {
+    Для каждой точки $(x_0;y_0)$
+    записать $f(x_0)=y_0$
+  };
+
+  \node[
+    flowstep,
+    below=of translate
+  ] (system)
+  {
+    Подставить координаты в формулу
+    и решить полученную систему
+  };
+
+  \node[
+    flowstep,
+    below=of system
+  ] (check)
+  {
+    Проверить ограничения модели:
+    для показательной функции
+    $a>0$, $a\ne1$
+  };
+
+  \node[
+    flowstep,
+    below=of check
+  ] (restore)
+  {
+    Записать восстановленную формулу функции
+    и проверить использованные точки
+  };
+
+  \node[
+    flowdecision,
+    below=7mm of restore
+  ] (goal)
+  {
+    Что требуется?
+  };
+
+  \node[
+    flowstep,
+    below left=8mm and 6mm of goal,
+    text width=5.2cm
+  ] (value)
+  {
+    Найти $f(c)$:
+    подставить $x=c$
+    и вычислить
+  };
+
+  \node[
+    flowstep,
+    below right=8mm and 6mm of goal,
+    text width=5.2cm
+  ] (argument)
+  {
+    Найти $x$ при $f(x)=c$:
+    подставить $c$ вместо $f(x)$
+    и решить уравнение
+  };
+
+  \node[
+    flowstart,
+    below=28mm of goal
+  ] (finish)
+  {
+    Ответ и финальная проверка
+  };
+
+  \draw[flowarrow]
+    (start) -- (count);
+
+  \draw[flowarrow]
+    (count) -- (translate);
+
+  \draw[flowarrow]
+    (translate) -- (system);
+
+  \draw[flowarrow]
+    (system) -- (check);
+
+  \draw[flowarrow]
+    (check) -- (restore);
+
+  \draw[flowarrow]
+    (restore) -- (goal);
+
+  \draw[flowarrow]
+    (goal.south west)
+    --
+    node[
+      above left,
+      font=\small
+    ]
+    {\strut $f(c)$}
+    (value.north);
+
+  \draw[flowarrow]
+    (goal.south east)
+    --
+    node[
+      above right,
+      font=\small
+    ]
+    {\strut $f(x)=c$}
+    (argument.north);
+
+  \draw[flowarrow]
+    (value.south)
+    |-
+    ([xshift=-12mm]finish.west)
+    --
+    (finish.west);
+
+  \draw[flowarrow]
+    (argument.south)
+    |-
+    ([xshift=12mm]finish.east)
+    --
+    (finish.east);
+
+\end{tikzpicture}
+
+\end{center}
+
+\clearpage
+
+% =================================================
+% Тренировочный блок
+% =================================================
+
+\section*{Тренировочный блок: 15--16 сентября}
+\sectionline
+
+Решайте каждую задачу по одному маршруту:
+выбрать удобные точки
+$\to$
+составить систему
+$\to$
+найти параметры
+$\to$
+выполнить требуемое действие.
+
+\subsection*{15.09.2026}
+
+\begin{enumerate}
+
+  \item
+  График функции
+  \[
+      f(x)=a^x+b
+  \]
+  проходит через точки
+  \[
+      (0;-1)
+      \qquad\text{и}\qquad
+      (1;1).
+  \]
+  Найдите $f(5)$.
+
+  \item
+  График функции
+  \[
+      f(x)=a^x+b
+  \]
+  проходит через точки
+  \[
+      (0;-2)
+      \qquad\text{и}\qquad
+      (2;-1).
+  \]
+  Найдите $f(8)$.
+
+  \item
+  Убывающий график функции
+  \[
+      f(x)=a^x+b
+  \]
+  проходит через точки
+  \[
+      (-1;-2)
+      \qquad\text{и}\qquad
+      (0;-3).
+  \]
+  Найдите $x$, если
+  \[
+      f(x)=12.
+  \]
+
+\end{enumerate}
+
+\vspace{5mm}
+
+\subsection*{16.09.2026}
+
+\begin{enumerate}
+
+  \item
+  График функции
+  \[
+      f(x)=a^x+b
+  \]
+  проходит через точки
+  \[
+      (0;1)
+      \qquad\text{и}\qquad
+      (1;3).
+  \]
+  Найдите $f(4)$.
+
+  \item
+  График функции
+  \[
+      f(x)=a^x+b
+  \]
+  проходит через точки
+  \[
+      (0;-4)
+      \qquad\text{и}\qquad
+      (2;5).
+  \]
+  Найдите $f(4)$.
+
+  \item
+  График функции
+  \[
+      f(x)=a^{x+b}
+  \]
+  проходит через точки
+  \[
+      (1;1)
+      \qquad\text{и}\qquad
+      (3;4).
+  \]
+  Найдите $f(-1)$.
+
+\end{enumerate}
+
+% =================================================
+% Ответы
+% =================================================
+
+\clearpage
+
+\section*{Ответы к тренировочному блоку}
+\sectionline
+
+\begin{table}[ht]
+\centering
+\caption{Ответы для самопроверки}
+
+\begin{tabularx}{\linewidth}{@{} l c X @{}}
+
+\toprule
+
+\textbf{Дата}
+&
+\textbf{№}
+&
+\textbf{Ответ}
+\\
+
+\midrule
+
+15.09.2026
+&
+1
+&
+$f(x)=3^x-2$, поэтому
+\[
+f(5)=241.
+\]
+\\
+
+15.09.2026
+&
+2
+&
+$f(x)=2^{x/2}-3$, поэтому
+\[
+f(8)=13.
+\]
+\\
+
+15.09.2026
+&
+3
+&
+$f(x)=\left(\frac12\right)^x-4$, поэтому
+\[
+x=-4.
+\]
+\\
+
+\midrule
+
+16.09.2026
+&
+1
+&
+$f(x)=3^x$, поэтому
+\[
+f(4)=81.
+\]
+\\
+
+16.09.2026
+&
+2
+&
+$f(x)=10^{x/2}-5$, поэтому
+\[
+f(4)=95.
+\]
+\\
+
+16.09.2026
+&
+3
+&
+$f(x)=2^{x-1}$, поэтому
+\[
+f(-1)=\frac14.
+\]
+\\
+
+\bottomrule
+
+\end{tabularx}
+\end{table}
+
+\vfill
+
+\begin{center}
+\textcolor{textgray}{
+\small
+Перед следующим занятием особенно важно уверенно различать
+$f(c)$ и условие $f(x)=c$,
+а также без ошибок переводить координаты точки
+в равенство $f(x_0)=y_0$.
+}
+\end{center}
+
+\end{document}
