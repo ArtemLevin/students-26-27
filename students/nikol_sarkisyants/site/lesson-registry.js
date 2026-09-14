@@ -8,6 +8,21 @@ const MONTHS_GENITIVE=[
 
 export const LESSONS=Object.freeze([
   {
+    date:'2026-09-14',
+    href:'14.09.26.html',
+    title:'Исследование функции с помощью производной',
+    navTitle:'Исследование функции',
+    navSubtitle:'монотонность · критические точки · экстремумы',
+    summary:'На занятии выстроен алгоритм исследования функции по производной: область определения, критические точки, числовая ось и знаки производной. Закреплены интервалы возрастания и убывания, признаки локального максимума и минимума, а также различие между критической и запрещённой точкой.',
+    topics:['производная','монотонность','критические точки','экстремумы','ПКОЗА','ОДЗ'],
+    outcomes:[
+      {competencyId:'t8_monotonicity',label:'Возрастание и убывание',level:3,tone:'good',practiceDisposition:'manual'},
+      {competencyId:'t8_extrema',label:'Точки экстремума',level:3,tone:'good',practiceDisposition:'manual'},
+      {competencyId:'t8_derivative_rules',label:'Применение производной',level:3,tone:'good',practiceDisposition:'manual'}
+    ],
+    materials:{pdf:'../pdf_docs/14.09.26.pdf',tex:'../tex_docs/14.09.26.tex',lab:'14.09.26-lab.html'}
+  },
+  {
     date:'2026-09-11',
     href:'11.09.26.html',
     title:'Производная сложной функции',
