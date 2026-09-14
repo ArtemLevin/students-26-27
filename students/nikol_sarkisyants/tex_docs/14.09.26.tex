@@ -1,0 +1,1117 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,left=20mm,right=20mm,top=20mm,bottom=22mm,headheight=25pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{6A6A6A}
+
+\hypersetup{hidelinks}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=5pt,topsep=4pt}
+\renewcommand{\arraystretch}{1.35}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{softgray}{Николь Саркисьянц · ЕГЭ}}
+\fancyhead[R]{\small\textcolor{softgray}{Исследование функций}}
+\fancyfoot[C]{\small\textcolor{softgray}{\thepage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{%
+  \hbox to\headwidth{%
+    \color{accent}\leaders\hrule height \headrulewidth\hfill
+  }%
+}
+
+\newcommand{\R}{\mathbb{R}}
+
+\tikzset{
+  startstop/.style={
+    ellipse,
+    draw=darkaccent,
+    line width=0.9pt,
+    minimum width=34mm,
+    minimum height=10mm,
+    align=center,
+    text width=31mm
+  },
+  process/.style={
+    rectangle,
+    rounded corners=2mm,
+    draw=accent,
+    line width=0.9pt,
+    minimum height=10mm,
+    align=center,
+    text width=92mm,
+    inner sep=2.5mm,
+    font=\small
+  },
+  decision/.style={
+    diamond,
+    aspect=2.7,
+    draw=darkaccent,
+    line width=0.9pt,
+    align=center,
+    text width=42mm,
+    inner sep=1.2mm,
+    font=\small
+  },
+  branch/.style={
+    rectangle,
+    rounded corners=2mm,
+    draw=accent,
+    line width=0.9pt,
+    minimum height=11mm,
+    align=center,
+    text width=40mm,
+    inner sep=2.2mm,
+    font=\small
+  },
+  flowarrow/.style={
+    -{Stealth[length=3mm,width=2mm]},
+    line width=0.9pt,
+    draw=darkaccent
+  }
+}
+
+\begin{document}
+
+% Основа содержания: доска занятия по исследованию функций.
+% На ней зафиксирована схема:
+% «Производная — Корни — Ось — Знаки — Ответ».
+% :contentReference[oaicite:0]{index=0}
+
+% ------------------------------------------------------------
+% ТИТУЛЬНЫЙ ЛИСТ
+% ------------------------------------------------------------
+
+\thispagestyle{empty}
+
+\begin{center}
+
+\vspace*{30mm}
+
+{\Large\textcolor{darkaccent}{\textbf{Чек-лист}}}\par
+
+\vspace{7mm}
+
+{\huge\textbf{Исследование функции с помощью производной}}\par
+
+\vspace{5mm}
+
+{\large
+Монотонность · критические точки · экстремумы
+}\par
+
+\vspace{16mm}
+
+{\large
+Николь Саркисьянц · ЕГЭ
+}\par
+
+\vfill
+
+{\large \today}\par
+
+\vspace{8mm}
+
+{\normalsize
+Лёвин Артём Александрович эксклюзивно для Николь Саркисьянц
+}\par
+
+\vspace{18mm}
+
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[
+    accent,
+    line width=1.1pt
+  ]
+    ([xshift=20mm,yshift=16mm]current page.south west)
+    ..
+    controls
+    ([xshift=62mm,yshift=28mm]current page.south west)
+    and
+    ([xshift=-60mm,yshift=8mm]current page.south east)
+    ..
+    ([xshift=-20mm,yshift=18mm]current page.south east);
+\end{tikzpicture}
+
+\clearpage
+
+% ------------------------------------------------------------
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% ------------------------------------------------------------
+
+\section*{Основной чек-лист}
+
+\subsection*{1. Что связывает производную и поведение функции}
+
+Для внутренней точки области определения знак производной задаёт направление изменения функции:
+
+\[
+\begin{aligned}
+f'(x)>0
+&\quad\Longrightarrow\quad
+f \text{ возрастает},
+\\
+f'(x)<0
+&\quad\Longrightarrow\quad
+f \text{ убывает}.
+\end{aligned}
+\]
+
+Точка \(x_0\in D(f)\) называется \textbf{критической}, если
+\[
+f'(x_0)=0
+\]
+или производная в \(x_0\) не существует.
+
+При исследовании экстремума принципиальна \textbf{смена знака} производной:
+
+\[
+\begin{array}{ccl}
++\ \longrightarrow\ -
+&:&
+\text{локальный максимум},
+\\[1mm]
+-\ \longrightarrow\ +
+&:&
+\text{локальный минимум},
+\\[1mm]
++\ \longrightarrow\ +
+\quad\text{или}\quad
+-\ \longrightarrow\ -
+&:&
+\text{экстремума нет}.
+\end{array}
+\]
+
+\textbf{Важно.}
+Точки, в которых сама функция не определена, разделяют интервалы исследования, однако точками экстремума функции они быть не могут.
+
+\subsection*{2. Памятка «ПКОЗА»}
+
+\begin{center}
+
+\begin{tabularx}{0.92\linewidth}{
+  @{}
+  >{\bfseries\color{darkaccent}}l
+  X
+  @{}
+}
+\toprule
+
+П
+&
+Найдите производную \(f'(x)\).
+\\
+
+К
+&
+Найдите корни уравнения \(f'(x)=0\).
+Отдельно учитывайте точки, где производная не существует, но сама функция определена.
+\\
+
+О
+&
+Нанесите критические точки и разрывы области определения на числовую ось.
+\\
+
+З
+&
+Определите знак \(f'(x)\) на каждом полученном интервале.
+\\
+
+А
+&
+Сформулируйте ответ:
+интервалы возрастания и убывания,
+точки максимума и минимума.
+\\
+
+\bottomrule
+\end{tabularx}
+
+\end{center}
+
+\subsection*{3. Быстрый пример: квадратная функция}
+
+Исследуем функцию
+
+\[
+f(x)=x^2-x-6.
+\]
+
+Её производная:
+
+\[
+f'(x)=2x-1.
+\]
+
+Находим критическую точку:
+
+\[
+2x-1=0
+\Longrightarrow
+x=\frac12.
+\]
+
+\begin{center}
+
+\begin{tikzpicture}[x=2.5cm,y=1cm]
+
+  \draw[-{Stealth[length=2.5mm]}]
+    (-2,0)--(2.2,0)
+    node[right] {$x$};
+
+  \fill[darkaccent]
+    (0,0) circle (1.8pt);
+
+  \node[below=3pt]
+    at (0,0)
+    {$\frac12$};
+
+  \node[
+    above=4pt,
+    text=darkaccent
+  ]
+    at (-1,0)
+    {$f'(x)<0$};
+
+  \node[
+    above=4pt,
+    text=darkaccent
+  ]
+    at (1,0)
+    {$f'(x)>0$};
+
+  \draw[
+    accent,
+    line width=0.9pt,
+    -{Stealth[length=2mm]}
+  ]
+    (-1.4,-0.55)--(-0.15,-0.95);
+
+  \draw[
+    accent,
+    line width=0.9pt,
+    -{Stealth[length=2mm]}
+  ]
+    (0.15,-0.95)--(1.4,-0.55);
+
+\end{tikzpicture}
+
+\end{center}
+
+Следовательно,
+
+\[
+f \text{ убывает на }
+\left(-\infty;\frac12\right),
+\]
+
+\[
+f \text{ возрастает на }
+\left(\frac12;+\infty\right).
+\]
+
+В точке \(x=\frac12\) производная меняет знак с «\(-\)» на «\(+\)», поэтому там расположен локальный минимум.
+
+\subsection*{4. Типовые ошибки}
+
+\begin{itemize}
+
+  \item
+  забыть область определения до дифференцирования;
+
+  \item
+  принять точку разрыва функции за критическую точку;
+
+  \item
+  найти корни \(f'(x)\) и сразу назвать их экстремумами, не проверив смену знака;
+
+  \item
+  ошибиться со знаком производной на одном из интервалов;
+
+  \item
+  при произведении продифференцировать только один множитель;
+
+  \item
+  в дробно-рациональной функции потерять условие
+  \[
+  \text{знаменатель}\ne0.
+  \]
+
+\end{itemize}
+
+\clearpage
+
+% ------------------------------------------------------------
+% РАЗОБРАННЫЕ КОНСТРУКЦИИ
+% ------------------------------------------------------------
+
+\section*{Разобранные конструкции с занятия}
+
+\subsection*{1. Кубическая функция: два критических значения}
+
+Рассмотрим
+
+\[
+f(x)
+=
+\frac13x^3
+-
+\frac12x^2
+-
+6x
++
+5.
+\]
+
+Получаем:
+
+\[
+f'(x)
+=
+x^2-x-6
+=
+(x+2)(x-3).
+\]
+
+Критические значения:
+
+\[
+x=-2,
+\qquad
+x=3.
+\]
+
+Знак производной:
+
+\[
+\begin{array}{c|ccccc}
+x
+&
+(-\infty,-2)
+&
+-2
+&
+(-2,3)
+&
+3
+&
+(3,+\infty)
+\\
+\midrule
+f'(x)
+&
++
+&
+0
+&
+-
+&
+0
+&
++
+\end{array}
+\]
+
+Поэтому функция возрастает на
+
+\[
+(-\infty,-2)
+\quad\text{и}\quad
+(3,+\infty),
+\]
+
+убывает на
+
+\[
+(-2,3).
+\]
+
+В точке \(x=-2\) расположен локальный максимум, в точке \(x=3\) --- локальный минимум.
+
+\subsection*{2. Корень: сначала ОДЗ, затем производная}
+
+Для функции
+
+\[
+f(x)
+=
+-x\sqrt{x}
++
+3x
++
+1
+\]
+
+область определения:
+
+\[
+D(f)=[0,+\infty).
+\]
+
+Удобно переписать
+
+\[
+x\sqrt{x}=x^{3/2}.
+\]
+
+Тогда при \(x>0\)
+
+\[
+(x\sqrt{x})'
+=
+\frac32\sqrt{x}.
+\]
+
+Следовательно,
+
+\[
+f'(x)
+=
+-\frac32\sqrt{x}
++
+3.
+\]
+
+Ищем критическое значение:
+
+\[
+-\frac32\sqrt{x}+3=0,
+\]
+
+\[
+\sqrt{x}=2,
+\]
+
+\[
+x=4.
+\]
+
+На интервале
+
+\[
+(0,4)
+\]
+
+производная положительна, а на
+
+\[
+(4,+\infty)
+\]
+
+отрицательна.
+
+Значит, \(x=4\) --- точка локального максимума.
+
+\[
+f(4)
+=
+-4\sqrt4+3\cdot4+1
+=
+-8+12+1
+=
+5.
+\]
+
+Точка максимума:
+
+\[
+(4,5).
+\]
+
+\textbf{Ключевая проверка.}
+В произведении \(x\sqrt{x}\) нельзя учитывать производную только корня.
+
+Удобный способ:
+
+\[
+x\sqrt{x}=x^{3/2}
+\quad\Longrightarrow\quad
+(x\sqrt{x})'
+=
+\frac32\sqrt{x}.
+\]
+
+\subsection*{3. Дробь: разрыв области определения обязан быть на оси}
+
+Рассмотрим функцию
+
+\[
+f(x)
+=
+\frac{x^2+289}{x}.
+\]
+
+Сначала область определения:
+
+\[
+x\ne0.
+\]
+
+Упростим функцию:
+
+\[
+f(x)
+=
+x+\frac{289}{x}.
+\]
+
+Производная:
+
+\[
+f'(x)
+=
+1-\frac{289}{x^2}.
+\]
+
+Приведём к одной дроби:
+
+\[
+f'(x)
+=
+\frac{x^2-289}{x^2}.
+\]
+
+Корни производной:
+
+\[
+x^2-289=0,
+\]
+
+\[
+x=\pm17.
+\]
+
+При этом точка
+
+\[
+x=0
+\]
+
+не входит в область определения.
+
+Поэтому числовая ось разбивается на четыре интервала:
+
+\[
+(-\infty,-17),
+\qquad
+(-17,0),
+\qquad
+(0,17),
+\qquad
+(17,+\infty).
+\]
+
+Знаки производной соответственно:
+
+\[
++,\quad -,\quad -,\quad +.
+\]
+
+Следовательно, локальный максимум достигается при
+
+\[
+x=-17.
+\]
+
+\[
+f(-17)
+=
+-17-\frac{289}{17}
+=
+-34.
+\]
+
+Точка локального максимума:
+
+\[
+(-17,-34).
+\]
+
+Локальный минимум достигается при
+
+\[
+x=17.
+\]
+
+\[
+f(17)
+=
+17+\frac{289}{17}
+=
+34.
+\]
+
+Точка локального минимума:
+
+\[
+(17,34).
+\]
+
+\subsection*{4. Произведение: полезно факторизовать производную}
+
+Рассмотрим
+
+\[
+f(x)
+=
+(x+6)^2(x-10)+8.
+\]
+
+По правилу производной произведения:
+
+\[
+\begin{aligned}
+f'(x)
+&=
+2(x+6)(x-10)
++
+(x+6)^2
+\\
+&=
+(x+6)
+\bigl(
+2x-20+x+6
+\bigr)
+\\
+&=
+(x+6)(3x-14).
+\end{aligned}
+\]
+
+Факторизованный вид производной сразу даёт критические значения:
+
+\[
+x=-6,
+\qquad
+x=\frac{14}{3}.
+\]
+
+Такой вид значительно упрощает дальнейшее определение знаков производной.
+
+\clearpage
+
+% ------------------------------------------------------------
+% БЛОК-СХЕМА
+% ------------------------------------------------------------
+
+\thispagestyle{fancy}
+
+\begin{center}
+{\Large
+\textcolor{darkaccent}{
+\textbf{Алгоритм: исследование функции по производной}
+}
+}
+\end{center}
+
+\vspace{2mm}
+
+\begin{center}
+
+\begin{tikzpicture}[
+  node distance=4.5mm and 12mm
+]
+
+  \node[startstop]
+    (start)
+    {Начало};
+
+  \node[
+    process,
+    below=of start
+  ]
+    (domain)
+    {Найдите \(D(f)\) и отметьте точки разрыва области определения};
+
+  \node[
+    process,
+    below=of domain
+  ]
+    (deriv)
+    {Вычислите и упростите \(f'(x)\)};
+
+  \node[
+    process,
+    below=of deriv
+  ]
+    (critical)
+    {Найдите \(f'(x)=0\); учтите точки, где \(f'\) не существует, но \(f\) определена};
+
+  \node[
+    process,
+    below=of critical
+  ]
+    (axis)
+    {Отметьте на оси критические точки и разрывы; определите знаки \(f'(x)\)};
+
+  \node[
+    process,
+    below=of axis
+  ]
+    (mono)
+    {Запишите интервалы возрастания (\(f'>0\)) и убывания (\(f'<0\))};
+
+  \node[
+    decision,
+    below=6mm of mono
+  ]
+    (change)
+    {В критической точке знак \(f'\) меняется?};
+
+  \node[
+    branch,
+    below=9mm of change,
+    xshift=-47mm
+  ]
+    (ext)
+    {Да:
+    \(+\to-\) --- максимум;
+    \(-\to+\) --- минимум};
+
+  \node[
+    branch,
+    below=9mm of change,
+    xshift=47mm
+  ]
+    (noext)
+    {Нет:
+    экстремума в этой критической точке нет};
+
+  \node[
+    process,
+    below=31mm of change
+  ]
+    (answer)
+    {Сформулируйте полный ответ: монотонность и точки экстремума};
+
+  \node[
+    startstop,
+    below=of answer
+  ]
+    (finish)
+    {Конец};
+
+  \draw[flowarrow]
+    (start)--(domain);
+
+  \draw[flowarrow]
+    (domain)--(deriv);
+
+  \draw[flowarrow]
+    (deriv)--(critical);
+
+  \draw[flowarrow]
+    (critical)--(axis);
+
+  \draw[flowarrow]
+    (axis)--(mono);
+
+  \draw[flowarrow]
+    (mono)--(change);
+
+  \draw[flowarrow]
+    (change.west)
+    -|
+    node[
+      pos=0.20,
+      above,
+      font=\small
+    ]
+    {да}
+    (ext.north);
+
+  \draw[flowarrow]
+    (change.east)
+    -|
+    node[
+      pos=0.20,
+      above,
+      font=\small
+    ]
+    {нет}
+    (noext.north);
+
+  \draw[flowarrow]
+    (ext.south)
+    |-
+    (answer.west);
+
+  \draw[flowarrow]
+    (noext.south)
+    |-
+    (answer.east);
+
+  \draw[flowarrow]
+    (answer)--(finish);
+
+\end{tikzpicture}
+
+\end{center}
+
+\clearpage
+
+% ------------------------------------------------------------
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% ------------------------------------------------------------
+
+\section*{Тренировочный блок: 5 заданий}
+
+Для каждой функции:
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+
+  \item
+  найдите область определения;
+
+  \item
+  исследуйте функцию на возрастание и убывание;
+
+  \item
+  укажите внутренние точки локального максимума и минимума, если они существуют.
+
+\end{enumerate}
+
+\vspace{3mm}
+
+\begin{enumerate}[
+  label=\textbf{Задание \arabic*.},
+  leftmargin=5mm,
+  labelindent=5mm,
+  itemindent=5mm
+]
+
+  \item
+  \[
+  y=x^2-6x+5.
+  \]
+
+  \item
+  \[
+  y=-x^2+4x+1.
+  \]
+
+  \item
+  \[
+  y=
+  \frac13x^3
+  -
+  x^2
+  -
+  3x
+  +
+  1.
+  \]
+
+  \item
+  \[
+  y=-x\sqrt{x}+6x+1.
+  \]
+
+  \item
+  \[
+  y=\frac{x^2+64}{x}.
+  \]
+
+\end{enumerate}
+
+\vfill
+
+\textcolor{softgray}{
+\small
+Проверка перед ответом:
+ОДЗ
+\(\rightarrow\)
+производная
+\(\rightarrow\)
+корни
+\(\rightarrow\)
+ось
+\(\rightarrow\)
+знаки
+\(\rightarrow\)
+ответ.
+}
+
+\clearpage
+
+% ------------------------------------------------------------
+% ОТВЕТЫ
+% ------------------------------------------------------------
+
+\section*{Ответы к тренировочному блоку}
+
+\small
+
+\begin{tabularx}{\linewidth}{@{}c X@{}}
+
+\toprule
+
+\textbf{№}
+&
+\textbf{Ответ}
+\\
+
+\midrule
+
+1
+&
+\(D=\R\).
+
+Убывает на
+\[
+(-\infty,3),
+\]
+возрастает на
+\[
+(3,+\infty).
+\]
+
+Локальный минимум:
+\[
+(3,-4).
+\]
+\\
+
+\addlinespace
+
+2
+&
+\(D=\R\).
+
+Возрастает на
+\[
+(-\infty,2),
+\]
+убывает на
+\[
+(2,+\infty).
+\]
+
+Локальный максимум:
+\[
+(2,5).
+\]
+\\
+
+\addlinespace
+
+3
+&
+\(D=\R\).
+
+Возрастает на
+\[
+(-\infty,-1)\cup(3,+\infty),
+\]
+убывает на
+\[
+(-1,3).
+\]
+
+Локальный максимум:
+\[
+\left(-1,\frac83\right).
+\]
+
+Локальный минимум:
+\[
+(3,-8).
+\]
+\\
+
+\addlinespace
+
+4
+&
+\[
+D=[0,+\infty).
+\]
+
+Возрастает на
+\[
+[0,16],
+\]
+убывает на
+\[
+(16,+\infty).
+\]
+
+Внутренний локальный максимум:
+\[
+(16,33).
+\]
+\\
+
+\addlinespace
+
+5
+&
+\[
+D=\R\setminus\{0\}.
+\]
+
+Возрастает на
+\[
+(-\infty,-8)\cup(8,+\infty),
+\]
+убывает на
+\[
+(-8,0)\cup(0,8).
+\]
+
+Локальный максимум:
+\[
+(-8,-16).
+\]
+
+Локальный минимум:
+\[
+(8,16).
+\]
+\\
+
+\bottomrule
+
+\end{tabularx}
+
+\normalsize
+
+\vfill
+
+\begin{center}
+\textcolor{darkaccent}{
+\textbf{
+Главная идея:
+знак производной описывает направление движения графика.
+}
+}
+\end{center}
+
+\end{document}
