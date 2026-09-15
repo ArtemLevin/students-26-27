@@ -96,13 +96,13 @@ function drawTable(){
  text(g,450,500,"Для cos порядок числителей идёт в обратную сторону.",20,"#6b6762",600,"middle");
 }
 function drawReduction(){
- const g=scenes.reduction;clear(g); const r=reductions[state.angle]; card(g,100,95,700,450);
+ const g=scenes.reduction;clear(g); const activeAngle=reductions[state.angle]?state.angle:120; const r=reductions[activeAngle]; card(g,100,95,700,450);
  text(g,450,145,"Приведение к табличному углу",31,"#124c5a",800,"middle");
- text(g,230,245,state.angle+"°",58,"#0b6670",850,"middle"); text(g,340,245,"=",34,"#6b6762",700,"middle"); text(g,470,245,"180° − "+r.base+"°",42,"#9b6a1c",800,"middle");
+ text(g,230,245,activeAngle+"°",58,"#0b6670",850,"middle"); text(g,340,245,"=",34,"#6b6762",700,"middle"); text(g,470,245,"180° − "+r.base+"°",42,"#9b6a1c",800,"middle");
  g.append(E("path",{d:"M260 300 C360 355 540 355 640 300",fill:"none",stroke:"#0b6670","stroke-width":5,"stroke-linecap":"round"}));
  g.append(E("path",{d:"M632 291 l18 8 -14 13",fill:"none",stroke:"#0b6670","stroke-width":5,"stroke-linecap":"round","stroke-linejoin":"round"}));
- text(g,450,390,"sin "+state.angle+"° = "+r.sin,27,"#0b6670",800,"middle");
- text(g,450,440,"cos "+state.angle+"° = "+r.cos,27,"#a94f4b",800,"middle");
+ text(g,450,390,"sin "+activeAngle+"° = "+r.sin,27,"#0b6670",800,"middle");
+ text(g,450,440,"cos "+activeAngle+"° = "+r.cos,27,"#a94f4b",800,"middle");
  text(g,450,495,"sin сохраняет знак; cos получает минус.",19,"#6b6762",600,"middle");
 }
 function drawTriangle(){
@@ -133,7 +133,7 @@ function updatePanel(){
  $$("[data-tri]",$("#controls")).forEach(b=>b.addEventListener("click",()=>{state.tri=b.dataset.tri;renderScenes()}));
 }
 $$(".mode").forEach(b=>b.addEventListener("click",()=>{state.mode=b.dataset.mode; if(state.mode==="table"&&!values[state.angle])state.angle=60;if(state.mode==="reduction"&&!reductions[state.angle])state.angle=120; $$(".mode").forEach(x=>x.classList.toggle("on",x===b));history.replaceState(null,"","?mode="+state.mode);renderScenes()}));
-const q=new URLSearchParams(location.search).get("mode");if(scenes[q])state.mode=q;$$(".mode").forEach(b=>b.classList.toggle("on",b.dataset.mode===state.mode));
+const q=new URLSearchParams(location.search).get("mode");if(scenes[q])state.mode=q;if(state.mode==="table"&&!values[state.angle])state.angle=60;if(state.mode==="reduction"&&!reductions[state.angle])state.angle=120;$$(".mode").forEach(b=>b.classList.toggle("on",b.dataset.mode===state.mode));
 function applyTransform(){$("#viewport").setAttribute("transform",`translate(${state.x} ${state.y}) scale(${state.scale})`);$("#scaleLabel").textContent=Math.round(state.scale*100)+"%"}
 function zoom(f,cx=450,cy=325){const old=state.scale;state.scale=Math.max(.6,Math.min(2.2,state.scale*f));const ratio=state.scale/old;state.x=cx-(cx-state.x)*ratio;state.y=cy-(cy-state.y)*ratio;applyTransform()}
 $("#plus").onclick=()=>zoom(1.15);$("#minus").onclick=()=>zoom(1/1.15);$("#reset").onclick=()=>{state.scale=1;state.x=0;state.y=0;applyTransform()};
@@ -145,7 +145,7 @@ stage.addEventListener("wheel",e=>{e.preventDefault();zoom(e.deltaY<0?1.1:1/1.1)
 stage.addEventListener("keydown",e=>{if(e.key==="+"){zoom(1.15);e.preventDefault()}if(e.key==="-"){zoom(1/1.15);e.preventDefault()}if(e.key==="0"){state.scale=1;state.x=0;state.y=0;applyTransform()}});
 try{const saved=localStorage.getItem("sofya-lab-theme");if(saved)document.documentElement.dataset.theme=saved}catch(e){}
 $("#theme").onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==="dark"?"light":"dark";try{localStorage.setItem("sofya-lab-theme",document.documentElement.dataset.theme)}catch(e){}};
-const tips={zoom:["Масштаб","Кнопки +/− и колесо меняют масштаб одной и той же рабочей области. «Сброс» возвращает 100%."],model:["Как читать модель","Меняйте только предложенные параметры: все значения взяты из материала занятия. Наведение и фокус сохраняют математическое содержание и меняют только состояние интерфейса."]};
+const tips={zoom:["Масштаб","Кнопки +/− и колесо меняют масштаб одной и той же рабочей области. «Сброс» возвращает 100%."],model:["Как читать модель","Меняйте только предложенные параметры: все значения взяты из материала занятия. Наведение и фокус не меняют математику, только состояние интерфейса."]};
 const tip=$("#tip");function showTip(btn){const d=tips[btn.dataset.tip];$("#tipTitle").textContent=d[0];$("#tipText").textContent=d[1];const r=btn.getBoundingClientRect();tip.style.left=Math.max(12,Math.min(innerWidth-325,r.left))+"px";tip.style.top=Math.min(innerHeight-140,r.bottom+8)+"px";tip.classList.add("show");tip.setAttribute("aria-hidden","false")}function hide(){tip.classList.remove("show");tip.setAttribute("aria-hidden","true")}
 $$("[data-tip]").forEach(b=>{b.addEventListener("mouseenter",()=>showTip(b));b.addEventListener("focus",()=>showTip(b))});$("#tip button").onclick=hide;document.addEventListener("keydown",e=>{if(e.key==="Escape")hide()});document.addEventListener("click",e=>{if(!tip.contains(e.target)&&!e.target.dataset.tip)hide()});
 try{if(!sessionStorage.getItem("sofya-lab-hint"))setTimeout(()=>{showTip($("#hintZoom"));sessionStorage.setItem("sofya-lab-hint","1");setTimeout(hide,15000)},3000)}catch(e){}
