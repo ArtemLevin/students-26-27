@@ -1,0 +1,842 @@
+\documentclass[a4paper,12pt]{article}
+
+% ------------------------------------------------
+% Кодировка, язык, математика
+% ------------------------------------------------
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{icomma}
+
+% ------------------------------------------------
+% Типографика
+% ------------------------------------------------
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{microtype}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{parskip}
+
+% ------------------------------------------------
+% Страница
+% ------------------------------------------------
+\usepackage[
+  a4paper,
+  left=20mm,
+  right=20mm,
+  top=20mm,
+  bottom=22mm
+]{geometry}
+
+% ------------------------------------------------
+% Графика
+% ------------------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% ------------------------------------------------
+% Таблицы и списки
+% ------------------------------------------------
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+
+% ------------------------------------------------
+% Служебные пакеты
+% ------------------------------------------------
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+
+% ------------------------------------------------
+% Палитра
+% ------------------------------------------------
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{777777}
+\definecolor{lightaccent}{HTML}{DCEEEE}
+
+\color{textgray}
+
+% ------------------------------------------------
+% Настройки ссылок
+% ------------------------------------------------
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=darkaccent,
+  pdfborder={0 0 0}
+}
+
+% ------------------------------------------------
+% Колонтитулы
+% ------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{softgray}Стереометрия}
+\fancyhead[R]{\small\color{softgray}Ксения Клыкова}
+\fancyfoot[C]{\small\color{softgray}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{%
+  \hbox to\headwidth{\color{lightaccent}\leaders\hrule height \headrulewidth\hfill}}
+\setlength{\headheight}{15pt}
+
+% ------------------------------------------------
+% TkZ
+% ------------------------------------------------
+\tkzSetUpLine[line width=1pt,color=accent]
+\tkzSetUpPoint[color=accent,fill=accent,size=3]
+\tkzSetUpLabel[color=black,font=\small]
+
+% ------------------------------------------------
+% Блок-схемы
+% ------------------------------------------------
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=accent,
+    line width=0.9pt,
+    align=center,
+    minimum width=42mm,
+    minimum height=10mm,
+    inner sep=4pt
+  },
+  flowaction/.style={
+    rectangle,
+    rounded corners=3pt,
+    draw=accent,
+    line width=0.9pt,
+    align=center,
+    text width=93mm,
+    minimum height=12mm,
+    inner sep=5pt
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=3.3,
+    draw=darkaccent,
+    line width=0.9pt,
+    align=center,
+    text width=52mm,
+    inner sep=2pt
+  },
+  flowarrow/.style={
+    -{Latex[length=3mm,width=2mm]},
+    line width=0.9pt,
+    color=darkaccent
+  }
+}
+
+% ------------------------------------------------
+% Пользовательские команды
+% ------------------------------------------------
+\newcommand{\lessonsection}[1]{%
+  \vspace{0.4em}
+  {\Large\bfseries\color{darkaccent}#1}\par
+  \vspace{0.25em}
+  {\color{lightaccent}\rule{\linewidth}{0.8pt}}
+  \vspace{0.6em}
+}
+
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+
+\begin{document}
+
+% ================================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% ================================================================
+\begin{titlepage}
+\thispagestyle{empty}
+
+\begin{center}
+
+\vspace*{24mm}
+
+{\large\color{softgray}Математика $\cdot$ 10 класс}
+
+\vspace{12mm}
+
+{\Huge\bfseries\color{darkaccent}Чек-лист}
+
+\vspace{5mm}
+
+{\LARGE\bfseries
+Параллельность в пространстве\\[2mm]
+и переход к плоской задаче}
+
+\vspace{13mm}
+
+{\large
+Прямые и плоскости $\cdot$
+средняя линия $\cdot$
+подобие треугольников}
+
+\vfill
+
+{\large \today}
+
+\vspace{9mm}
+
+{\large
+Лёвин Артём Александрович\\[2mm]
+\textbf{эксклюзивно для Ксении Клыковой}}
+
+\vspace{20mm}
+
+\begin{tikzpicture}[remember picture]
+\draw[
+  accent,
+  line width=1.2pt
+]
+(-6.6,0)
+.. controls (-4.2,1.0) and (-2.4,-0.85) ..
+(0,0)
+.. controls (2.4,0.85) and (4.3,-1.0) ..
+(6.6,0);
+\end{tikzpicture}
+
+\vspace{5mm}
+
+\end{center}
+\end{titlepage}
+
+\setcounter{page}{1}
+
+% ================================================================
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% ================================================================
+\lessonsection{1. Что важно видеть в пространственной задаче}
+
+Перед доказательством полезно разделить информацию на четыре типа:
+
+\begin{itemize}[leftmargin=8mm,itemsep=2mm]
+  \item какие \key{точки принадлежат прямым};
+  \item какие \key{точки и прямые принадлежат плоскости};
+  \item какие прямые \key{параллельны};
+  \item какие объекты \key{пересекаются}.
+\end{itemize}
+
+В стереометрии рисунок помогает увидеть конструкцию, однако утверждать можно
+только то, что следует из условия или уже доказано.
+
+\medskip
+
+\key{Ключевой принцип занятия:}
+
+\[
+\boxed{\text{пространственную задачу часто полезно свести к треугольнику}}
+\]
+
+После выбора подходящей плоскости становятся доступны знакомые планиметрические
+инструменты: средняя линия, подобие, отношения отрезков.
+
+% ----------------------------------------------------------------
+\lessonsection{2. Две точки прямой в плоскости}
+
+\key{Свойство.}
+Если две различные точки прямой принадлежат плоскости, то вся прямая
+принадлежит этой плоскости.
+
+Пусть
+\[
+A\in c,\qquad B\in c,\qquad A\in\alpha,\qquad B\in\alpha,
+\qquad A\ne B.
+\]
+Тогда
+\[
+c\subset\alpha.
+\]
+
+Это один из самых коротких и полезных способов доказать принадлежность прямой
+плоскости.
+
+\subsection*{\color{darkaccent}Типовая ситуация}
+
+Пусть
+\[
+a\parallel b,\qquad a\subset\alpha,\qquad b\subset\alpha,
+\]
+а прямая \(c\) пересекает \(a\) и \(b\):
+\[
+A=c\cap a,\qquad B=c\cap b.
+\]
+
+Тогда
+\[
+A\in\alpha,\qquad B\in\alpha.
+\]
+
+Поскольку \(a\parallel b\), точки \(A\) и \(B\) различны. Следовательно,
+
+\[
+\boxed{c\subset\alpha}.
+\]
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \tkzDefPoint(0,0){P}
+  \tkzDefPoint(7,0.7){Q}
+  \tkzDefPoint(8.3,4.2){R}
+  \tkzDefPoint(1.3,3.5){S}
+
+  \draw[fill=lightaccent,line width=0.7pt,draw=accent]
+    (P)--(Q)--(R)--(S)--cycle;
+
+  \tkzDefPoint(1.4,1.15){A1}
+  \tkzDefPoint(6.8,1.7){A2}
+  \tkzDefPoint(2.1,2.75){B1}
+  \tkzDefPoint(7.5,3.3){B2}
+
+  \tkzDrawSegment(A1,A2)
+  \tkzDrawSegment(B1,B2)
+
+  \tkzDefPoint(3.15,1.33){A}
+  \tkzDefPoint(5.45,3.09){B}
+  \tkzDrawSegment(A,B)
+
+  \tkzDrawPoints(A,B)
+  \tkzLabelPoints[below](A)
+  \tkzLabelPoints[above](B)
+
+  \node[darkaccent] at (7.65,4.0) {$\alpha$};
+  \node at (6.95,1.25) {$a$};
+  \node at (7.65,2.9) {$b$};
+  \node at (4.0,2.42) {$c$};
+\end{tikzpicture}
+\end{center}
+
+\key{Почему условие \(a\parallel b\) существенно?}
+
+Если \(a\) и \(b\) пересекаются в одной точке \(Q\), прямая \(c\) может
+пересекать обе прямые именно в точке \(Q\) и затем выходить из плоскости.
+Тогда известна только одна общая точка \(c\) и \(\alpha\), чего недостаточно,
+чтобы утверждать \(c\subset\alpha\).
+
+\medskip
+
+\key{Типичная ошибка:}
+увидеть на рисунке, что прямая ``как будто лежит'' в плоскости, и использовать
+это без доказательства.
+
+% ----------------------------------------------------------------
+\lessonsection{3. Параллельные прямые задают плоскость}
+
+Через две различные параллельные прямые проходит единственная плоскость.
+
+Если
+\[
+a\parallel b,
+\]
+то существует единственная плоскость \(\beta\), для которой
+\[
+a\subset\beta,\qquad b\subset\beta.
+\]
+
+Это позволяет вводить \key{вспомогательную плоскость}, даже если она прямо
+не названа в условии.
+
+Аналогично единственную плоскость задают две пересекающиеся прямые.
+
+\medskip
+
+\key{Ограничение.}
+Две скрещивающиеся прямые одной плоскости не задают.
+
+% ----------------------------------------------------------------
+\lessonsection{4. Пересечение двух плоскостей}
+
+Если две различные плоскости имеют общую точку, то их пересечение является
+прямой.
+
+Если
+\[
+\alpha\ne\beta
+\]
+и у плоскостей найдены две различные общие точки \(A\) и \(B\), то
+
+\[
+\boxed{\alpha\cap\beta=AB}.
+\]
+
+Отсюда следует особенно важная идея:
+
+\[
+\boxed{\text{у двух различных плоскостей не бывает двух разных прямых пересечения}}
+\]
+
+Эта мысль позволяет доказывать коллинеарность точек в пространственных
+конструкциях.
+
+% ----------------------------------------------------------------
+\lessonsection{5. Средняя линия внутри пространственной конструкции}
+
+Пусть \(ABCD\) --- тетраэдр, а точки
+
+\[
+M\in DB,\qquad
+N\in DC,\qquad
+P\in AB,\qquad
+Q\in AC
+\]
+
+являются серединами соответствующих рёбер.
+
+Рассмотрим отдельные грани.
+
+В треугольнике \(DBC\):
+\[
+MN\parallel BC,\qquad MN=\frac{BC}{2}.
+\]
+
+В треугольнике \(ABC\):
+\[
+PQ\parallel BC,\qquad PQ=\frac{BC}{2}.
+\]
+
+Следовательно,
+\[
+MN\parallel PQ,\qquad MN=PQ.
+\]
+
+Аналогично:
+
+в треугольнике \(DAB\)
+\[
+MP\parallel AD,\qquad MP=\frac{AD}{2};
+\]
+
+в треугольнике \(DCA\)
+\[
+NQ\parallel AD,\qquad NQ=\frac{AD}{2}.
+\]
+
+Поэтому
+\[
+MP\parallel NQ,\qquad MP=NQ.
+\]
+
+Итак, \(MNPQ\) --- параллелограмм, а его периметр равен
+
+\[
+\begin{aligned}
+P_{MNPQ}
+&=
+2\left(\frac{BC}{2}+\frac{AD}{2}\right)\\
+&=BC+AD.
+\end{aligned}
+\]
+
+При
+\[
+AD=12,\qquad BC=14
+\]
+получаем
+\[
+\boxed{P_{MNPQ}=26}.
+\]
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  \tkzDefPoint(0,0){B}
+  \tkzDefPoint(6.5,0){C}
+  \tkzDefPoint(4.4,4.5){D}
+  \tkzDefPoint(2.1,2.4){A}
+
+  \tkzDrawSegments(B,C C,D D,B A,B A,C A,D)
+
+  \coordinate (M) at ($(D)!0.5!(B)$);
+  \coordinate (N) at ($(D)!0.5!(C)$);
+  \coordinate (P) at ($(A)!0.5!(B)$);
+  \coordinate (Q) at ($(A)!0.5!(C)$);
+
+  \draw[darkaccent,line width=1.4pt]
+    (M)--(N)--(Q)--(P)--cycle;
+
+  \tkzDrawPoints(B,C,D,A)
+  \fill[accent] (M) circle (1.5pt);
+  \fill[accent] (N) circle (1.5pt);
+  \fill[accent] (P) circle (1.5pt);
+  \fill[accent] (Q) circle (1.5pt);
+
+  \tkzLabelPoints[below](B,C)
+  \tkzLabelPoints[above](D)
+  \tkzLabelPoints[left](A)
+
+  \node[left] at (M) {$M$};
+  \node[right] at (N) {$N$};
+  \node[left] at (P) {$P$};
+  \node[right] at (Q) {$Q$};
+\end{tikzpicture}
+\end{center}
+
+\key{Полезный приём.}
+Если пространственный рисунок мешает увидеть среднюю линию, отдельно
+перерисуйте нужную грань как обычный треугольник.
+
+% ----------------------------------------------------------------
+\lessonsection{6. Параллельные прямые и подобие треугольников}
+
+Пусть точка \(C\) лежит на отрезке \(AB\). Через точку \(A\) проходит
+плоскость \(\alpha\).
+
+Через \(B\) и \(C\) проведены параллельные прямые
+\[
+BB_1\parallel CC_1,
+\]
+которые пересекают \(\alpha\) соответственно в точках \(B_1\) и \(C_1\).
+
+Сначала требуется обосновать, что точки
+\[
+A,\ B_1,\ C_1
+\]
+лежат на одной прямой.
+
+\subsection*{\color{darkaccent}Почему \(A,B_1,C_1\) коллинеарны}
+
+Прямые \(BB_1\) и \(CC_1\) параллельны, поэтому они задают некоторую
+плоскость \(\beta\).
+
+Поскольку
+\[
+A,B,C
+\]
+лежат на одной прямой и точки \(B,C\in\beta\), вся прямая \(AB\) лежит
+в \(\beta\). Следовательно,
+\[
+A\in\beta.
+\]
+
+Кроме того,
+\[
+B_1,C_1\in\beta.
+\]
+
+По условию
+\[
+A,B_1,C_1\in\alpha.
+\]
+
+Значит, все три точки принадлежат одновременно двум различным плоскостям
+\(\alpha\) и \(\beta\). Их пересечение --- одна прямая:
+
+\[
+\alpha\cap\beta=AB_1=AC_1.
+\]
+
+Следовательно,
+\[
+\boxed{A,\ B_1,\ C_1\text{ лежат на одной прямой}.}
+\]
+
+Теперь существуют два треугольника:
+\[
+\triangle ACC_1
+\qquad\text{и}\qquad
+\triangle ABB_1.
+\]
+
+Так как
+\[
+CC_1\parallel BB_1,
+\]
+эти треугольники подобны:
+
+\[
+\triangle ACC_1\sim\triangle ABB_1.
+\]
+
+Поэтому
+\[
+\boxed{
+\frac{CC_1}{BB_1}
+=
+\frac{AC}{AB}
+}
+\]
+
+и, следовательно,
+
+\[
+\boxed{
+CC_1=BB_1\cdot\frac{AC}{AB}
+}.
+\]
+
+\subsection*{\color{darkaccent}Частный случай: \(C\) --- середина \(AB\)}
+
+Если
+\[
+AC=CB,
+\]
+то
+\[
+AC=\frac{AB}{2}.
+\]
+
+Следовательно,
+\[
+CC_1=\frac{BB_1}{2}.
+\]
+
+Например, при
+\[
+BB_1=7
+\]
+получаем
+\[
+\boxed{CC_1=3{,}5}.
+\]
+
+\subsection*{\color{darkaccent}Отношение \(AC:CB=3:2\)}
+
+Здесь важно сравнивать \(AC\) со всем \(AB\):
+
+\[
+AC:CB=3:2
+\quad\Longrightarrow\quad
+AC=3x,\quad CB=2x,\quad AB=5x.
+\]
+
+Следовательно,
+\[
+\frac{AC}{AB}=\frac35.
+\]
+
+Если
+\[
+BB_1=20,
+\]
+то
+\[
+CC_1
+=
+20\cdot\frac35
+=
+\boxed{12}.
+\]
+
+\key{Типичная ошибка:}
+использовать отношение \(CB:AB\), то есть \(\frac25\), хотя стороне
+\(CC_1\) в подобии соответствует именно отрезок \(AC\).
+
+% ----------------------------------------------------------------
+\lessonsection{7. Как делать пространственный чертёж}
+
+\begin{enumerate}[leftmargin=9mm,itemsep=2mm]
+  \item Сначала изобразите основную прямую или плоскость.
+  \item Нанесите только те точки, принадлежность которых задана условием.
+  \item Если прямая проходит за плоскостью или гранью, скрытый участок
+        можно показать штриховой линией.
+  \item Не располагайте точку в плоскости только потому, что так рисунок
+        выглядит удобнее.
+  \item После построения отдельно проверьте каждую связь:
+        принадлежность, пересечение, параллельность.
+\end{enumerate}
+
+\key{Важно:}
+пространственный рисунок является моделью. Он помогает рассуждать, но
+доказательство строится на свойствах и теоремах.
+
+
+% ================================================================
+% ИТОГОВЫЙ ЧЕК-ЛИСТ
+% ================================================================
+\lessonsection{8. Перед тем как считать или доказывать}
+
+Проверьте себя:
+
+\begin{itemize}[leftmargin=8mm,itemsep=2.5mm]
+  \item[$\square$] Я различаю обозначения
+  \(A\in a\), \(a\subset\alpha\), \(a\parallel b\).
+  \item[$\square$] Я могу доказать принадлежность прямой плоскости
+  через две её точки.
+  \item[$\square$] Я помню, что параллельные прямые задают единственную
+  плоскость.
+  \item[$\square$] Я умею находить прямую пересечения двух плоскостей
+  по двум общим точкам.
+  \item[$\square$] Я не считаю факт с рисунка доказанным автоматически.
+  \item[$\square$] Я умею выделять нужный треугольник на грани
+  пространственной фигуры.
+  \item[$\square$] Я узнаю среднюю линию даже внутри тетраэдра.
+  \item[$\square$] В подобии я сначала устанавливаю соответствие сторон,
+  затем составляю пропорцию.
+\end{itemize}
+
+\subsection*{\color{darkaccent}Минимум, который стоит помнить}
+
+\[
+\begin{aligned}
+&A,B\in c,\quad A,B\in\alpha,\quad A\ne B
+&&\Longrightarrow&& c\subset\alpha,\\[2mm]
+&a\parallel b
+&&\Longrightarrow&&
+\text{через }a\text{ и }b\text{ проходит единственная плоскость},\\[2mm]
+&\alpha\ne\beta,\quad A,B\in\alpha\cap\beta
+&&\Longrightarrow&&
+\alpha\cap\beta=AB,\\[2mm]
+&M,N\text{ --- середины двух сторон }\triangle ABC
+&&\Longrightarrow&&
+MN\parallel BC,\quad MN=\frac{BC}{2}.
+\end{aligned}
+\]
+
+% ================================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% ================================================================
+\clearpage
+\thispagestyle{plain}
+
+\begin{center}
+{\LARGE\bfseries\color{darkaccent}Тренировочный блок}
+
+\vspace{2mm}
+
+{\large Путь А $\cdot$ 3 задания}
+\end{center}
+
+\vspace{7mm}
+
+\textbf{\color{darkaccent}1. Принадлежность прямой плоскости}
+
+В плоскости \(\alpha\) лежат параллельные прямые \(m\) и \(n\).
+Прямая \(l\) пересекает \(m\) в точке \(X\), а \(n\) --- в точке \(Y\).
+
+Докажите, что
+\[
+l\subset\alpha.
+\]
+
+\vspace{11mm}
+
+\textbf{\color{darkaccent}2. Средние линии тетраэдра}
+
+В тетраэдре \(ABCD\) точки \(M,N,P,Q\) являются соответственно серединами
+рёбер
+\[
+DB,\quad DC,\quad AB,\quad AC.
+\]
+
+Известно:
+\[
+AD=18,\qquad BC=10.
+\]
+
+Найдите периметр четырёхугольника \(MNPQ\).
+
+\vspace{11mm}
+
+\textbf{\color{darkaccent}3. Подобие после построения вспомогательной плоскости}
+
+Точка \(C\) лежит на отрезке \(AB\), причём
+\[
+AC:CB=2:3.
+\]
+
+Через точку \(A\) проведена плоскость \(\alpha\).
+Через точки \(B\) и \(C\) проведены параллельные прямые, пересекающие
+\(\alpha\) соответственно в точках \(B_1\) и \(C_1\).
+
+Известно:
+\[
+BB_1=25.
+\]
+
+\begin{enumerate}[label=\alph*),leftmargin=8mm,itemsep=2mm]
+  \item докажите, что точки \(A,B_1,C_1\) лежат на одной прямой;
+  \item найдите \(CC_1\).
+\end{enumerate}
+
+% ================================================================
+% ОТВЕТЫ
+% ================================================================
+\clearpage
+\thispagestyle{plain}
+
+\begin{center}
+{\LARGE\bfseries\color{darkaccent}Ответы}
+\end{center}
+
+\vspace{8mm}
+
+\renewcommand{\arraystretch}{1.35}
+
+\begin{table}[ht]
+\centering
+\caption{Ответы к тренировочному блоку}
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+\textbf{№} & \textbf{Ответ / ключевой результат} \\
+\midrule
+
+1 &
+Пусть \(X=l\cap m\), \(Y=l\cap n\).
+Так как \(m,n\subset\alpha\), имеем \(X,Y\in\alpha\).
+Поскольку \(m\parallel n\), точки \(X\ne Y\).
+Следовательно, две различные точки прямой \(l\) лежат в \(\alpha\), поэтому
+\[
+l\subset\alpha.
+\]
+\\
+
+\addlinespace
+
+2 &
+\[
+MN=PQ=\frac{BC}{2}=5,
+\qquad
+MP=NQ=\frac{AD}{2}=9.
+\]
+Следовательно,
+\[
+P_{MNPQ}=2(5+9)=\boxed{28}.
+\]
+\\
+
+\addlinespace
+
+3 &
+Прямые \(BB_1\parallel CC_1\) задают вспомогательную плоскость \(\beta\).
+Точки \(A,B_1,C_1\) принадлежат одновременно \(\alpha\) и \(\beta\), поэтому
+лежат на единственной прямой \(\alpha\cap\beta\).
+
+Далее
+\[
+\triangle ACC_1\sim\triangle ABB_1.
+\]
+Так как
+\[
+AC:CB=2:3,
+\]
+то
+\[
+\frac{AC}{AB}=\frac{2}{5}.
+\]
+Поэтому
+\[
+CC_1
+=
+25\cdot\frac25
+=
+\boxed{10}.
+\]
+\\
+
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\vfill
+
+\begin{center}
+{\small\color{softgray}
+Главная идея: сначала найдите плоскость, в которой задача становится плоской.}
+\end{center}
+
+\end{document}
