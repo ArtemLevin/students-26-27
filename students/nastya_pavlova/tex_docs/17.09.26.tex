@@ -1,0 +1,807 @@
+\documentclass[a4paper,12pt]{article}
+
+% ------------------------------------------------
+% Кодировка, язык, математика
+% ------------------------------------------------
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{icomma}
+
+% ------------------------------------------------
+% Шрифт и типографика
+% ------------------------------------------------
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{microtype}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+
+% ------------------------------------------------
+% Страница
+% ------------------------------------------------
+\usepackage[
+  a4paper,
+  left=20mm,
+  right=20mm,
+  top=20mm,
+  bottom=22mm,
+  headheight=15pt
+]{geometry}
+
+% ------------------------------------------------
+% Графика и таблицы
+% ------------------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{needspace}
+\usepackage{xcolor}
+
+% ------------------------------------------------
+% Колонтитулы
+% ------------------------------------------------
+\usepackage{fancyhdr}
+
+% ------------------------------------------------
+% Палитра
+% ------------------------------------------------
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{linegray}{HTML}{A8B0B0}
+
+\color{textgray}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Анастасия Павлова}
+\fancyhead[R]{\small Графики функций}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ------------------------------------------------
+% Служебные команды
+% ------------------------------------------------
+\newcommand{\topic}[1]{%
+  \Needspace{7\baselineskip}%
+  \vspace{0.45em}%
+  {\Large\bfseries\color{darkaccent} #1}\par
+  \vspace{0.2em}%
+  {\color{accent}\rule{\linewidth}{0.7pt}}\par
+  \vspace{0.35em}%
+}
+
+\newcommand{\keyidea}[1]{%
+  \begin{center}
+    \begin{minipage}{0.92\linewidth}
+      \centering\color{darkaccent}\bfseries #1
+    \end{minipage}
+  \end{center}
+}
+
+\newcommand{\checkitem}{\item[$\square$]}
+
+% ------------------------------------------------
+% Единые стили блок-схем
+% ------------------------------------------------
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=darkaccent,
+    line width=0.9pt,
+    align=center,
+    minimum width=4.2cm,
+    minimum height=1.0cm,
+    inner sep=4pt,
+    font=\small
+  },
+  flowaction/.style={
+    rectangle,
+    rounded corners=3pt,
+    draw=accent,
+    line width=0.9pt,
+    align=center,
+    text width=8.8cm,
+    minimum height=1.0cm,
+    inner sep=5pt,
+    font=\small
+  },
+  flowside/.style={
+    rectangle,
+    rounded corners=3pt,
+    draw=accent,
+    line width=0.9pt,
+    align=center,
+    text width=5.0cm,
+    minimum height=1.0cm,
+    inner sep=5pt,
+    font=\small
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=2.7,
+    draw=darkaccent,
+    line width=0.9pt,
+    align=center,
+    text width=5.0cm,
+    inner sep=2pt,
+    font=\small
+  },
+  flowarrow/.style={
+    -{Latex[length=3mm,width=2mm]},
+    line width=0.9pt,
+    draw=textgray
+  }
+}
+
+\begin{document}
+
+% ================================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% ================================================================
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{2.4cm}
+
+{\Large\color{darkaccent}\bfseries Чек-лист\par}
+\vspace{0.7cm}
+{\Huge\bfseries Графики функций\par}
+\vspace{0.25cm}
+{\LARGE\bfseries Узловые точки и точки пересечения\par}
+
+\vspace{1.5cm}
+{\large ЕГЭ, профильная математика\par}
+
+\vfill
+
+{\large\bfseries Анастасия Павлова\par}
+\vspace{0.35cm}
+{\large \today\par}
+
+\vspace{1.3cm}
+{\normalsize Лёвин Артём Александрович эксклюзивно для Анастасии Павловой\par}
+
+\vfill
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent!55,line width=1.25pt]
+    ($(current page.south west)+(18mm,17mm)$)
+      .. controls
+    ($(current page.south west)+(62mm,31mm)$) and
+    ($(current page.south east)+(-64mm,8mm)$)
+      ..
+    ($(current page.south east)+(-18mm,20mm)$);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% ================================================================
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% ================================================================
+\topic{1. Главная идея}
+
+\keyidea{Графики могут быть разными, а общий принцип один: координаты подходящих точек позволяют восстановить неизвестные коэффициенты функции.}
+
+В этом пособии \textbf{узловой точкой} будем называть хорошо считываемую точку графика с удобными, обычно целыми координатами. Если точка $(x_0;y_0)$ принадлежит графику функции $y=f(x)$, то обязательно
+\[
+y_0=f(x_0).
+\]
+Именно это равенство превращает координаты точки в уравнение для неизвестных коэффициентов.
+
+\topic{2. Формулы, которые важно узнавать}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X X@{}}
+\toprule
+Вид графика & Формула & Что помнить \\
+\midrule
+Прямая & $y=kx+b$ & Если неизвестны $k$ и $b$, обычно нужны две информативные точки. \\
+Парабола & $y=ax^2+bx+c$ & Число нужных точек зависит от числа неизвестных коэффициентов. \\
+Корневая функция & $y=k\sqrt{x}$ & $x\ge0$; точка $(0;0)$ не позволяет определить $k$. \\
+Дробно-рациональная функция & $y=\dfrac{k}{x}+a$ & $x\ne0$; особенно внимательно следите за знаком минус. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Если часть коэффициентов уже дана в условии, искать требуется только оставшиеся. Практическое правило:
+\[
+\boxed{\text{число независимых уравнений}=\text{число неизвестных коэффициентов}.}
+\]
+Уравнения должны быть информативными и независимыми: формального совпадения числа точек недостаточно.
+
+\topic{3. Линейная функция: $f(x)=kx+b$}
+
+Пусть график проходит через точки
+\[
+A(-1;-3),\qquad B(3;4).
+\]
+Подставляем координаты в $f(x)=kx+b$:
+\[
+\begin{cases}
+-3=-k+b,\\
+4=3k+b.
+\end{cases}
+\]
+Вычитаем первое уравнение из второго:
+\[
+4k=7,\qquad k=\frac74.
+\]
+Затем
+\[
+-3=-\frac74+b,
+\qquad
+b=-\frac54.
+\]
+Следовательно,
+\[
+\boxed{f(x)=\frac74x-\frac54}.
+\]
+Например,
+\[
+f(-5)=\frac74\cdot(-5)-\frac54
+=-\frac{40}{4}=-10.
+\]
+
+\textbf{Самопроверка:} подставьте $x=-1$ и $x=3$ в найденную формулу. Должны получиться соответственно $-3$ и $4$.
+
+\topic{4. Парабола с двумя неизвестными коэффициентами}
+
+Пусть
+\[
+f(x)=2x^2+bx+c,
+\]
+а график проходит через
+\[
+A(-2;-2),\qquad B(1;1).
+\]
+Коэффициент при $x^2$ уже известен, поэтому требуется найти только $b$ и $c$:
+\[
+\begin{cases}
+-2=2\cdot(-2)^2-2b+c,\\
+1=2\cdot1^2+b+c.
+\end{cases}
+\]
+После упрощения:
+\[
+\begin{cases}
+-2b+c=-10,\\
+b+c=-1.
+\end{cases}
+\]
+Отсюда
+\[
+3b=9,\qquad b=3,\qquad c=-4.
+\]
+Итак,
+\[
+\boxed{f(x)=2x^2+3x-4}.
+\]
+
+Главный вывод: вид графика изменился, а приём остался тем же --- координаты точки подставляются в формулу функции.
+
+\topic{5. Корневая функция: $f(x)=k\sqrt{x}$}
+
+Для квадратного корня обязательно
+\[
+\boxed{x\ge0}.
+\]
+
+Пусть точка $B(4;5)$ принадлежит графику. Тогда
+\[
+5=k\sqrt{4}=2k,
+\qquad
+k=\frac52.
+\]
+Следовательно,
+\[
+\boxed{f(x)=\frac52\sqrt{x}}.
+\]
+Например,
+\[
+f(6{,}76)=\frac52\sqrt{6{,}76}
+=\frac52\cdot2{,}6
+=6{,}5.
+\]
+
+\textbf{Неудачный выбор точки.} Если взять $(0;0)$, получится
+\[
+0=k\sqrt0=0.
+\]
+Это верное равенство, однако значение $k$ из него определить невозможно. Нужно выбрать другую узловую точку.
+
+\topic{6. Дробно-рациональная функция и знак минус}
+
+Рассмотрим
+\[
+f(x)=\frac{k}{x}+a,
+\qquad
+\boxed{x\ne0}.
+\]
+Пусть график проходит через точки $(3;2)$ и $(-3;0)$. Получаем
+\[
+\begin{cases}
+2=\dfrac{k}{3}+a,\\[1mm]
+0=-\dfrac{k}{3}+a.
+\end{cases}
+\]
+Из второго уравнения
+\[
+a=\frac{k}{3}.
+\]
+Подставляем в первое:
+\[
+2=\frac{k}{3}+\frac{k}{3}
+=\frac{2k}{3},
+\qquad
+k=3,
+\qquad
+a=1.
+\]
+Следовательно,
+\[
+\boxed{f(x)=\frac{3}{x}+1}.
+\]
+
+Полезная запись знака при $b\ne0$:
+\[
+\boxed{\frac{a}{-b}=-\frac{a}{b}=\frac{-a}{b}}.
+\]
+Минус в знаменателе лучше сразу перенести перед дробью или в числитель: так дальнейшие преобразования легче контролировать.
+
+\clearpage
+
+% ================================================================
+% БЛОК-СХЕМА 1
+% ================================================================
+\thispagestyle{fancy}
+
+\begin{center}
+{\Large\bfseries\color{darkaccent}
+Алгоритм: восстановление формулы по узловым точкам}
+\end{center}
+
+\vspace{0.65cm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=6.5mm]
+
+  \node[flowstart] (start)
+    {Дана функция с неизвестными коэффициентами};
+
+  \node[flowaction, below=of start] (write)
+    {Запишите общий вид функции и выделите неизвестные коэффициенты};
+
+  \node[flowaction, below=of write] (count)
+    {Определите, сколько независимых уравнений требуется};
+
+  \node[flowaction, below=of count] (choose)
+    {Выберите столько удобных узловых точек, сколько нужно уравнений};
+
+  \node[flowdecision, below=9mm of choose] (useful)
+    {Каждая точка даёт информативное уравнение?};
+
+  \node[flowaction, below=9mm of useful] (subst)
+    {Для каждой точки $(x_i;y_i)$ запишите равенство $y_i=f(x_i)$};
+
+  \node[flowaction, below=of subst] (solve)
+    {Решите полученную систему и найдите коэффициенты};
+
+  \node[flowaction, below=of solve] (verify)
+    {Подставьте исходные точки в найденную формулу};
+
+  \node[flowstart, below=of verify] (finish)
+    {Формула восстановлена};
+
+  \draw[flowarrow] (start) -- (write);
+  \draw[flowarrow] (write) -- (count);
+  \draw[flowarrow] (count) -- (choose);
+  \draw[flowarrow] (choose) -- (useful);
+
+  \draw[flowarrow] (useful) --
+    node[right,font=\small]{да} (subst);
+
+  \draw[flowarrow] (subst) -- (solve);
+  \draw[flowarrow] (solve) -- (verify);
+  \draw[flowarrow] (verify) -- (finish);
+
+  \draw[flowarrow] (useful.west) -- ++(-1.8,0)
+    node[above,font=\small,pos=0.45]{нет}
+    |- (choose.west);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% ================================================================
+% ПЕРЕСЕЧЕНИЯ ГРАФИКОВ
+% ================================================================
+\topic{7. Абсцисса и ордината}
+
+Для точки $(x;y)$:
+\[
+\boxed{\text{абсцисса}=x},
+\qquad
+\boxed{\text{ордината}=y=f(x)}.
+\]
+
+Если требуется ордината точки пересечения, сначала удобно найти её абсциссу $x$, затем подставить найденное значение в формулу одной из функций.
+
+\topic{8. Главное условие пересечения графиков}
+
+Если графики $y=f_1(x)$ и $y=f_2(x)$ пересекаются, в общей точке их ординаты одинаковы. Поэтому
+\[
+\boxed{f_1(x)=f_2(x)}.
+\]
+
+После решения этого уравнения каждое допустимое значение $x$ подставляют в любую из двух исходных функций:
+\[
+y=f_1(x)
+\quad\text{или}\quad
+y=f_2(x).
+\]
+В общей точке обе формулы обязаны дать одно и то же значение $y$.
+
+\subsection*{Пример: пересечение двух прямых}
+
+Пусть
+\[
+f_1(x)=-5x-6,
+\qquad
+f_2(x)=-x+1.
+\]
+Приравниваем формулы:
+\[
+-5x-6=-x+1.
+\]
+Отсюда
+\[
+-4x=7,
+\qquad
+x=-\frac74.
+\]
+Теперь находим ординату:
+\[
+y=f_2\!\left(-\frac74\right)
+=\frac74+1
+=\frac{11}{4}
+=2{,}75.
+\]
+Точка пересечения:
+\[
+\boxed{\left(-\frac74;\frac{11}{4}\right)}.
+\]
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.72\linewidth,
+  height=0.72\linewidth,
+  axis lines=middle,
+  xmin=-4,
+  xmax=3,
+  ymin=-2,
+  ymax=5,
+  samples=200,
+  clip=false,
+  grid=both,
+  major grid style={linegray!45},
+  minor grid style={linegray!18},
+  xlabel={$x$},
+  ylabel={$y$},
+  tick label style={font=\small},
+  label style={font=\small},
+  unit vector ratio=1 1
+]
+\addplot[
+  accent,
+  line width=1.15pt,
+  domain=-2.2:-0.8
+] {-5*x-6};
+
+\addplot[
+  darkaccent,
+  line width=1.15pt,
+  domain=-4:3
+] {-x+1};
+
+\addplot[
+  only marks,
+  mark=*,
+  mark size=2.4pt,
+  darkaccent
+] coordinates {(-1.75,2.75)};
+
+\node[
+  anchor=south west,
+  font=\small
+] at (axis cs:-1.75,2.75)
+  {$\left(-\frac74;\frac{11}{4}\right)$};
+
+\node[
+  anchor=south west,
+  font=\small,
+  text=accent
+] at (axis cs:-2.18,4.55)
+  {$f_1$};
+
+\node[
+  anchor=south west,
+  font=\small,
+  text=darkaccent
+] at (axis cs:-3.7,4.4)
+  {$f_2$};
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\topic{9. Пересечение с корневой функцией}
+
+Пусть
+\[
+y_1=2\sqrt{x+5},
+\qquad
+y_2=3.
+\]
+Сначала учитываем область определения первой функции:
+\[
+x+5\ge0,
+\qquad
+\boxed{x\ge-5}.
+\]
+В точке пересечения
+\[
+2\sqrt{x+5}=3.
+\]
+Делим обе части на $2$:
+\[
+\sqrt{x+5}=\frac32.
+\]
+Обе части неотрицательны, поэтому возведение в квадрат здесь равносильно:
+\[
+x+5=\frac94,
+\qquad
+x=-\frac{11}{4}.
+\]
+Найденное значение удовлетворяет $x\ge-5$. Ордината известна из второй формулы:
+\[
+y=3.
+\]
+Следовательно,
+\[
+\boxed{\left(-\frac{11}{4};3\right)}.
+\]
+
+\topic{10. Типичные ошибки и способы самоконтроля}
+
+\begin{itemize}[leftmargin=7mm,itemsep=0.45em]
+
+  \item
+  \textbf{Перепутаны координаты точки.}
+  Всегда читайте $(x;y)$ и используйте равенство $y=f(x)$.
+
+  \item
+  \textbf{Выбрана неинформативная точка.}
+  Если подстановка даёт только тождество вроде $0=0$, возьмите другую точку.
+
+  \item
+  \textbf{Потерян знак минус в дроби.}
+  Перенесите минус перед всей дробью или в числитель до дальнейших преобразований.
+
+  \item
+  \textbf{Пропущено ограничение.}
+  Для $\sqrt{g(x)}$ требуется $g(x)\ge0$, знаменатель не может быть равен нулю.
+
+  \item
+  \textbf{Найден только $x$ точки пересечения.}
+  Если нужна ордината или вся точка, вычислите также $y$.
+
+  \item
+  \textbf{После возведения в квадрат не выполнена подстановка.}
+  Сверьте найденные значения с исходным равенством и областью определения.
+
+  \item
+  \textbf{Ошибка в восстановленной формуле.}
+  Подставьте в неё исходные узловые точки: это быстрый способ обнаружить неверный знак или арифметическую ошибку.
+
+\end{itemize}
+
+\clearpage
+
+% ================================================================
+% БЛОК-СХЕМА 2
+% ================================================================
+\thispagestyle{fancy}
+
+\begin{center}
+{\Large\bfseries\color{darkaccent}
+Алгоритм: поиск точки пересечения графиков}
+\end{center}
+
+\vspace{0.65cm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=7mm]
+
+  \node[flowstart] (start2)
+    {Даны два графика или две функции};
+
+  \node[flowdecision, below=9mm of start2] (known2)
+    {Формулы обеих функций известны?};
+
+  \node[flowside, right=18mm of known2] (recover2)
+    {Восстановите недостающие формулы по узловым точкам};
+
+  \node[flowaction, below=10mm of known2] (domain2)
+    {Запишите область определения и другие ограничения};
+
+  \node[flowaction, below=of domain2] (equal2)
+    {Составьте уравнение $f_1(x)=f_2(x)$};
+
+  \node[flowaction, below=of equal2] (solve2)
+    {Решите уравнение относительно $x$};
+
+  \node[flowaction, below=of solve2] (check2)
+    {Оставьте только значения, допустимые в исходных функциях};
+
+  \node[flowdecision, below=9mm of check2] (valid2)
+    {Остались допустимые значения $x$?};
+
+  \node[flowaction, below=9mm of valid2] (findy2)
+    {Для каждого допустимого $x$ найдите $y$ по любой исходной функции};
+
+  \node[flowstart, below=of findy2] (finish2)
+    {Запишите точку или точки пересечения};
+
+  \node[flowside, right=18mm of valid2] (none2)
+    {Точек пересечения нет};
+
+  \draw[flowarrow] (start2) -- (known2);
+
+  \draw[flowarrow] (known2) --
+    node[right,font=\small]{да} (domain2);
+
+  \draw[flowarrow] (known2.east) --
+    node[above,font=\small]{нет} (recover2.west);
+
+  \draw[flowarrow] (recover2.south) |- (domain2.east);
+
+  \draw[flowarrow] (domain2) -- (equal2);
+  \draw[flowarrow] (equal2) -- (solve2);
+  \draw[flowarrow] (solve2) -- (check2);
+  \draw[flowarrow] (check2) -- (valid2);
+
+  \draw[flowarrow] (valid2) --
+    node[right,font=\small]{да} (findy2);
+
+  \draw[flowarrow] (findy2) -- (finish2);
+
+  \draw[flowarrow] (valid2.east) --
+    node[above,font=\small]{нет} (none2.west);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% ================================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% ================================================================
+\topic{Тренировочный блок --- Путь А}
+
+\textbf{Пять заданий.}
+Оформляйте ключевые подстановки и системы уравнений.
+В заданиях с корнями и дробями обязательно указывайте область определения.
+
+\begin{enumerate}[
+  leftmargin=8mm,
+  label=\textbf{\arabic*.},
+  itemsep=1.2em
+]
+
+  \item
+  Линейная функция
+  \[
+  f(x)=kx+b
+  \]
+  проходит через точки $A(-2;5)$ и $B(2;-3)$.
+  Найдите формулу функции и вычислите $f(-1)$.
+
+  \item
+  Функция
+  \[
+  f(x)=2x^2+bx+c
+  \]
+  проходит через точки $A(-1;-3)$ и $B(2;6)$.
+  Найдите $b$, $c$ и значение $f(3)$.
+
+  \item
+  График функции
+  \[
+  f(x)=k\sqrt{x}
+  \]
+  проходит через точку $B(4;6)$.
+  Найдите $k$, укажите область определения функции и найдите абсциссу точки пересечения этого графика с прямой $y=9$.
+
+  \item
+  Функция
+  \[
+  f(x)=\frac{k}{x}+a
+  \]
+  проходит через точки $A(2;4)$ и $B(-2;0)$.
+  Найдите $k$, $a$, область определения и значение $f(4)$.
+
+  \item
+  Первая прямая проходит через точки
+  \[
+  A(-1;4),\qquad B(2;-2),
+  \]
+  вторая --- через точки
+  \[
+  C(0;-1),\qquad D(3;5).
+  \]
+  Восстановите формулы обеих прямых и найдите координаты их точки пересечения.
+
+\end{enumerate}
+
+\clearpage
+
+% ================================================================
+% ОТВЕТЫ
+% ================================================================
+\topic{Ответы}
+
+\renewcommand{\arraystretch}{1.55}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}c X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+
+1 &
+$f(x)=-2x+1$, \quad $f(-1)=3$.
+\\
+
+2 &
+$b=1$, \quad $c=-4$, \quad $f(3)=17$.
+\\
+
+3 &
+$k=3$, \quad $x\ge0$, \quad абсцисса точки пересечения: $x=9$.
+\\
+
+4 &
+$k=4$, \quad $a=2$, \quad $x\ne0$, \quad $f(4)=3$.
+\\
+
+5 &
+$y_1=-2x+2$, \quad
+$y_2=2x-1$, \quad
+$\left(\dfrac34;\dfrac12\right)$.
+\\
+
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vfill
+
+\begin{center}
+{\small\color{linegray}
+Сначала восстановите формулу, затем выполняйте требуемое действие.}
+\end{center}
+
+\end{document}

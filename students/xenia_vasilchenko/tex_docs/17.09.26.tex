@@ -1,0 +1,728 @@
+\documentclass[a4paper,12pt]{article}
+
+% ------------------------------------------------
+% Кодировка, язык, математика
+% ------------------------------------------------
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{icomma}
+
+% ------------------------------------------------
+% Шрифт и типографика
+% ------------------------------------------------
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{microtype}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{parskip}
+
+% ------------------------------------------------
+% Страница
+% ------------------------------------------------
+\usepackage[
+  a4paper,
+  left=20mm,
+  right=20mm,
+  top=24mm,
+  bottom=22mm
+]{geometry}
+\raggedbottom
+\setlength{\headheight}{26pt}
+
+% ------------------------------------------------
+% Графика, таблицы, списки
+% ------------------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+
+% ------------------------------------------------
+% Служебные пакеты
+% ------------------------------------------------
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+
+% ------------------------------------------------
+% Палитра
+% ------------------------------------------------
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F3F5F5}
+\definecolor{linegray}{HTML}{B9C3C3}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=darkaccent,
+  pdftitle={Чек-лист: признаки делимости, простые множители и НОД},
+  pdfauthor={Лёвин Артём Александрович}
+}
+
+% ------------------------------------------------
+% Колонтитулы
+% ------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{textgray}{Ксения Васильченко · 6 класс}}
+\fancyhead[R]{\small\textcolor{textgray}{Математика}}
+\fancyfoot[C]{\small\textcolor{textgray}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{%
+  \hbox to\headwidth{%
+    \color{linegray}\leaders\hrule height \headrulewidth\hfill
+  }%
+}
+
+% ------------------------------------------------
+% Команды оформления
+% ------------------------------------------------
+\newcommand{\sectiontitle}[1]{%
+  \vspace{0.25em}%
+  {\Large\bfseries\color{darkaccent}#1\par}%
+  \vspace{0.3em}%
+  {\color{linegray}\rule{\linewidth}{0.6pt}}%
+  \vspace{0.5em}%
+}
+
+\newcommand{\subsectiontitle}[1]{%
+  \vspace{0.2em}%
+  {\large\bfseries\color{accent}#1\par}%
+  \vspace{0.15em}%
+}
+
+\newcommand{\important}[1]{\textbf{\textcolor{darkaccent}{#1}}}
+\newcommand{\nodop}{\mathop{\text{НОД}}\nolimits}
+\newcommand{\lessondate}{17 сентября 2026 года}
+
+\setlist[itemize]{
+  leftmargin=1.6em,
+  itemsep=0.2em,
+  topsep=0.25em
+}
+
+\setlist[enumerate]{
+  leftmargin=1.9em,
+  itemsep=0.4em,
+  topsep=0.3em
+}
+
+% ------------------------------------------------
+% Стили блок-схем
+% ------------------------------------------------
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=darkaccent,
+    very thick,
+    align=center,
+    minimum width=4.2cm,
+    minimum height=1.1cm,
+    fill=softgray,
+    font=\small
+  },
+  flowaction/.style={
+    rectangle,
+    rounded corners=3pt,
+    draw=accent,
+    thick,
+    align=center,
+    text width=8.2cm,
+    minimum height=1.15cm,
+    fill=white,
+    font=\small
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=2.15,
+    draw=darkaccent,
+    thick,
+    align=center,
+    text width=4.7cm,
+    inner sep=1pt,
+    fill=softgray,
+    font=\small
+  },
+  flowarrow/.style={
+    -{Latex[length=3mm,width=2mm]},
+    thick,
+    draw=textgray
+  }
+}
+
+\begin{document}
+
+% ================================================================
+% Титульный лист
+% ================================================================
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{27mm}
+
+{\small\textcolor{accent}{МАТЕМАТИКА · 6 КЛАСС}\par}
+
+\vspace{8mm}
+
+{\Huge\bfseries\color{darkaccent}Чек-лист\par}
+
+\vspace{4mm}
+
+{\LARGE\bfseries
+Признаки делимости, разложение на простые множители и НОД
+\par}
+
+\vspace{14mm}
+
+{\large Ксения Васильченко\par}
+
+\vspace{3mm}
+
+{\normalsize \lessondate\par}
+
+\vfill
+
+{\normalsize
+\textcolor{textgray}{
+Лёвин Артём Александрович эксклюзивно для Ксении Васильченко
+}
+\par}
+
+\vspace{15mm}
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[
+    accent,
+    line width=1.6pt
+  ]
+    ($(current page.south west)+(12mm,17mm)$)
+    .. controls
+    ($(current page.south west)+(62mm,31mm)$)
+    and
+    ($(current page.south east)+(-62mm,7mm)$)
+    ..
+    ($(current page.south east)+(-12mm,18mm)$);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% ================================================================
+% Основной чек-лист
+% ================================================================
+\sectiontitle{1. Короткая вычислительная разминка}
+
+Эти приёмы уже знакомы, но они важны для аккуратной работы с дальнейшими задачами.
+
+\subsectiontitle{Десятичные дроби}
+
+\begin{itemize}
+  \item
+  При сложении и вычитании записывайте числа так, чтобы
+  \important{запятые стояли одна под другой}. Недостающие разряды можно дополнять нулями:
+  \[
+    2{,}30+1{,}72=4{,}02.
+  \]
+
+  \item
+  При умножении сначала удобно выполнить действие как с натуральными числами, затем вернуть десятичную запятую по общему числу знаков после запятой:
+  \[
+    1{,}72\cdot2{,}3=3{,}956.
+  \]
+
+  \item
+  При делении следите за моментом появления запятой в частном:
+  \[
+    2{,}42:4=0{,}605.
+  \]
+\end{itemize}
+
+\important{Самопроверка:} оцените порядок результата. Например, сумма чисел около $2$ и $2$ должна быть около $4$.
+
+\subsectiontitle{Обыкновенные и смешанные дроби}
+
+\begin{itemize}
+  \item Для сложения и вычитания дробей сначала приводите их к общему знаменателю.
+  \item Смешанное число перед умножением или делением удобно переводить в неправильную дробь:
+  \[
+    2\frac13=\frac73.
+  \]
+  \item При делении на дробь умножайте на обратную дробь:
+  \[
+    2\frac13:1\frac25
+    =\frac73:\frac75
+    =\frac73\cdot\frac57
+    =\frac53
+    =1\frac23.
+  \]
+\end{itemize}
+
+\clearpage
+
+\sectiontitle{2. Как находить неизвестный компонент действия}
+
+Формулы ниже помогают превращать более сложное уравнение в последовательность простых шагов.
+
+\renewcommand{\arraystretch}{1.45}
+\begin{center}
+\begin{tabularx}{0.96\linewidth}{@{}>{\centering\arraybackslash}p{0.23\linewidth}XX@{}}
+\toprule
+\textbf{Исходное равенство}
+&
+\textbf{Как найти первый компонент}
+&
+\textbf{Как найти второй компонент}
+\\
+\midrule
+$a+b=c$
+&
+$a=c-b$
+&
+$b=c-a$
+\\
+$a-b=c$
+&
+$a=c+b$
+&
+$b=a-c$
+\\
+$ab=c$
+&
+$a=\dfrac{c}{b}$, $b\ne0$
+&
+$b=\dfrac{c}{a}$, $a\ne0$
+\\
+$\dfrac{a}{b}=c$, $b\ne0$
+&
+$a=bc$
+&
+$b=\dfrac{a}{c}$ при $c\ne0$
+\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsectiontitle{Пример}
+
+Решим уравнение
+\[
+  \frac{x+1}{3}=10.
+\]
+
+Сначала найдём числитель:
+\[
+  x+1=10\cdot3=30.
+\]
+
+Теперь найдём $x$:
+\[
+  x=30-1=29.
+\]
+
+\important{Проверка:}
+\[
+  \frac{29+1}{3}=\frac{30}{3}=10.
+\]
+
+\important{Полезная привычка:} перед каждым действием словами называйте, что именно сейчас неизвестно: слагаемое, уменьшаемое, вычитаемое, множитель, делимое или делитель.
+
+\clearpage
+
+\sectiontitle{3. Признаки делимости}
+
+Признак делимости позволяет быстро понять, делится ли число без остатка, не выполняя полное письменное деление.
+
+\renewcommand{\arraystretch}{1.45}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{0.12\linewidth}Xp{0.29\linewidth}@{}}
+\toprule
+\textbf{На}
+&
+\textbf{Признак делимости}
+&
+\textbf{Пример}
+\\
+\midrule
+$2$
+&
+Последняя цифра чётная: $0$, $2$, $4$, $6$ или $8$.
+&
+$3458$ делится на $2$.
+\\
+$3$
+&
+Сумма всех цифр числа делится на $3$.
+&
+$456$: $4+5+6=15$, значит, число делится на $3$.
+\\
+$4$
+&
+Число, составленное из двух последних цифр, делится на $4$.
+&
+$1004$: последние две цифры дают $04=4$.
+\\
+$5$
+&
+Последняя цифра равна $0$ или $5$.
+&
+$450$ и $455$ делятся на $5$.
+\\
+$6$
+&
+Число одновременно делится на $2$ и на $3$.
+&
+$1224$ делится и на $2$, и на $3$.
+\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsectiontitle{Как соединять признаки}
+
+Для числа $1224$:
+\[
+  1+2+2+4=9,
+\]
+поэтому оно делится на $3$. Последняя цифра $4$ чётная, поэтому число делится на $2$. Следовательно, $1224$ делится и на $6$.
+
+Для проверки делимости на $4$ смотрим только на последние две цифры:
+\[
+  24:4=6,
+\]
+поэтому $1224$ делится на $4$.
+
+\important{Типичная ошибка:} при признаке делимости на $4$ проверять две последние цифры по отдельности. Нужно рассматривать именно число, которое они образуют.
+
+\clearpage
+
+\sectiontitle{4. Разложение на простые множители}
+
+\important{Простое число} имеет ровно два натуральных делителя: $1$ и само это число. Примеры простых чисел:
+\[
+  2,\ 3,\ 5,\ 7,\ 11,\ 13,\ldots
+\]
+
+Разложить натуральное число на простые множители означает представить его как произведение простых чисел.
+
+\subsectiontitle{Пример: разложим число 54}
+
+Начинаем с самого маленького подходящего простого делителя:
+\[
+\begin{array}{r|l}
+54&2\\
+27&3\\
+9&3\\
+3&3\\
+1&
+\end{array}
+\qquad\Longrightarrow\qquad
+54=2\cdot3\cdot3\cdot3=2\cdot3^3.
+\]
+
+На каждом шаге проверяем простые делители по порядку: $2$, затем $3$, затем $5$, $7$ и так далее. После деления снова начинаем проверку полученного числа с маленьких простых делителей.
+
+\subsectiontitle{Ещё один пример}
+
+\[
+\begin{array}{r|l}
+18&2\\
+9&3\\
+3&3\\
+1&
+\end{array}
+\qquad\Longrightarrow\qquad
+18=2\cdot3^2.
+\]
+
+\important{Самопроверка:} перемножьте найденные простые множители. Должно получиться исходное число.
+
+% ================================================================
+% Блок-схема 1
+% ================================================================
+\clearpage
+\thispagestyle{empty}
+
+\begin{center}
+{\Large\bfseries\color{darkaccent}
+Алгоритм: разложение числа на простые множители
+\par}
+
+\vspace{10mm}
+
+\begin{tikzpicture}[node distance=10mm]
+
+  \node[flowstart] (start)
+  {Начало: дано натуральное число $n>1$};
+
+  \node[flowdecision,below=14mm of start,text width=4.0cm] (done)
+  {$n=1$?};
+
+  \node[flowaction,below=16mm of done,text width=7.2cm] (choose)
+  {Найдите самый маленький простой делитель $p$, на который $n$ делится без остатка};
+
+  \node[flowaction,below=of choose,text width=7.2cm] (divide)
+  {Запишите множитель $p$ и замените $n$ на $n:p$};
+
+  \node[flowstart,right=13mm of done,minimum width=3.7cm] (finish)
+  {Конец: разложение\\получено};
+
+  \draw[flowarrow] (start) -- (done);
+
+  \draw[flowarrow]
+  (done.east) -- node[above,font=\small]{да} (finish.west);
+
+  \draw[flowarrow]
+  (done) -- node[right,font=\small]{нет} (choose);
+
+  \draw[flowarrow] (choose) -- (divide);
+
+  \draw[flowarrow]
+  (divide.west) -- ++(-1.6,0) |- (done.west);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% ================================================================
+% НОД
+% ================================================================
+\sectiontitle{5. Наибольший общий делитель}
+
+\important{Общий делитель} двух натуральных чисел --- число, на которое каждое из них делится без остатка. \important{Наибольший общий делитель (НОД)} --- самый большой из общих делителей:
+\[
+  \nodop(a,b).
+\]
+
+\subsectiontitle{Как найти НОД через простые множители}
+
+\begin{enumerate}[itemsep=0.1em,topsep=0.15em]
+  \item Разложите оба числа на простые множители.
+  \item Выберите общие простые множители, учитывая каждое повторение только тогда, когда оно есть в обоих разложениях.
+  \item Перемножьте выбранные множители.
+\end{enumerate}
+
+Иными словами, каждый общий простой множитель входит в НОД столько раз, сколько он встречается \important{в меньшем количестве} из двух разложений.
+
+\subsectiontitle{Пример 1: $\nodop(18,54)$}
+
+\[
+  18=2\cdot3^2,
+  \qquad
+  54=2\cdot3^3,
+  \qquad
+  \nodop(18,54)=2\cdot3^2=18.
+\]
+
+\subsectiontitle{Пример 2: $\nodop(12,18)$}
+
+\[
+  12=2^2\cdot3,
+  \qquad
+  18=2\cdot3^2,
+  \qquad
+  \nodop(12,18)=2\cdot3=6.
+\]
+
+Во втором примере у числа $12$ две двойки, а у числа $18$ только одна. Поэтому в НОД входит только одна двойка. Аналогично с тройками.
+
+\important{Быстрая проверка:} найденный НОД должен делить оба числа без остатка и не может быть больше меньшего из них.
+
+% ================================================================
+% Блок-схема 2
+% ================================================================
+\clearpage
+\thispagestyle{empty}
+
+\begin{center}
+{\Large\bfseries\color{darkaccent}
+Алгоритм: поиск НОД через простые множители
+\par}
+
+\vspace{9mm}
+
+\begin{tikzpicture}[node distance=9mm]
+
+  \node[flowstart] (start)
+  {Начало: даны натуральные числа $a$ и $b$};
+
+  \node[flowaction,below=of start,text width=7.2cm] (factor)
+  {Разложите $a$ и $b$ на простые множители};
+
+  \node[flowaction,below=of factor,text width=7.2cm] (init)
+  {Начните произведение для НОД с числа $1$};
+
+  \node[flowdecision,below=14mm of init,text width=4.2cm] (common)
+  {Есть общий неиспользованный простой множитель?};
+
+  \node[flowaction,below=17mm of common,text width=7.2cm] (take)
+  {Умножьте НОД на этот множитель и отметьте по одному его вхождению в каждом разложении};
+
+  \node[flowstart,right=12mm of common,minimum width=3.8cm] (finish)
+  {Конец:\\получен $\nodop(a,b)$};
+
+  \draw[flowarrow] (start) -- (factor);
+  \draw[flowarrow] (factor) -- (init);
+  \draw[flowarrow] (init) -- (common);
+
+  \draw[flowarrow]
+  (common) -- node[right,font=\small]{да} (take);
+
+  \draw[flowarrow]
+  (take.west) -- ++(-1.7,0) |- (common.west);
+
+  \draw[flowarrow]
+  (common.east) -- node[above,font=\small]{нет} (finish.west);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+\sectiontitle{6. НОД и сокращение дробей}
+
+Если числитель и знаменатель дроби имеют общий делитель, дробь можно сократить, разделив числитель и знаменатель на одно и то же число. Деление сразу на НОД даёт несократимую дробь за один шаг.
+
+\subsectiontitle{Пример: сократим $\dfrac{324}{432}$}
+
+Разложим числа:
+\[
+  324=2^2\cdot3^4,
+  \qquad
+  432=2^4\cdot3^3.
+\]
+
+Берём общие множители в меньших степенях:
+\[
+  \nodop(324,432)=2^2\cdot3^3=108.
+\]
+
+Теперь сокращаем:
+\[
+  \frac{324}{432}
+  =\frac{324:108}{432:108}
+  =\frac34.
+\]
+
+\subsectiontitle{Полезный способ экономить вычисления}
+
+Если при сравнении разложений Вы отмечаете все множители, вошедшие в НОД, то произведение оставшихся множителей показывает результат деления исходного числа на НОД.
+
+В примере выше после удаления общих множителей у $324$ остаётся $3$, а у $432$ остаётся $2^2=4$. Поэтому сразу видно:
+\[
+  \frac{324}{432}=\frac34.
+\]
+
+\subsectiontitle{Типичные ошибки}
+
+\begin{itemize}
+  \item В НОД включён множитель, который встречается только в одном разложении.
+  \item Общий множитель взят больше раз, чем он встречается хотя бы в одном из чисел.
+  \item При разложении допущена ошибка в промежуточном делении.
+  \item При сокращении числитель и знаменатель поделены на разные числа.
+  \item После вычисления НОД не выполнена простая проверка делимости обоих исходных чисел.
+\end{itemize}
+
+% ================================================================
+% Тренировочный блок
+% ================================================================
+\clearpage
+\sectiontitle{7. Тренировочный блок}
+
+Решайте задания по порядку. В заданиях на НОД показывайте разложение чисел на простые множители.
+
+\begin{enumerate}
+
+  \item
+  \textbf{Вычислительная разминка.} Найдите значения:
+  \begin{itemize}[leftmargin=2.2em]
+    \item[а)] $3{,}40+1{,}65$;
+    \item[б)] $1{,}25\cdot2{,}4$;
+    \item[в)] $3{,}24:4$;
+    \item[г)] $2\dfrac14:1\dfrac12$.
+  \end{itemize}
+
+  \item
+  \textbf{Признаки делимости.}
+  \begin{itemize}[leftmargin=2.2em]
+    \item[а)] Определите, на какие из чисел $2$, $3$, $4$, $5$, $6$ делится число $1224$.
+    \item[б)] В числе $12\square4$ вместо квадрата поставьте все цифры, при которых число одновременно делится на $3$ и на $4$.
+  \end{itemize}
+
+  \item
+  \textbf{Разложение на простые множители.} Разложите числа $72$ и $90$ на простые множители.
+
+  \item
+  \textbf{НОД.} Найдите
+  \[
+    \nodop(48,72)
+  \]
+  через разложение на простые множители.
+
+  \item
+  \textbf{НОД и сокращение дроби.} Найдите
+  \[
+    \nodop(414,504),
+  \]
+  затем сократите дробь
+  \[
+    \frac{414}{504}.
+  \]
+
+\end{enumerate}
+
+% ================================================================
+% Ответы
+% ================================================================
+\clearpage
+\sectiontitle{8. Ответы}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{0.10\linewidth}X@{}}
+\toprule
+\textbf{№}
+&
+\textbf{Ответ}
+\\
+\midrule
+1
+&
+а) $5{,}05$; б) $3$; в) $0{,}81$; г) $\dfrac32=1\dfrac12$.
+\\
+2
+&
+а) $1224$ делится на $2$, $3$, $4$ и $6$; на $5$ не делится.\newline
+б) $2$ и $8$: числа $1224$ и $1284$ одновременно делятся на $3$ и на $4$.
+\\
+3
+&
+$72=2^3\cdot3^2$; \quad $90=2\cdot3^2\cdot5$.
+\\
+4
+&
+$48=2^4\cdot3$, $72=2^3\cdot3^2$, поэтому $\nodop(48,72)=2^3\cdot3=24$.
+\\
+5
+&
+$414=2\cdot3^2\cdot23$, $504=2^3\cdot3^2\cdot7$, поэтому $\nodop(414,504)=18$ и
+$\dfrac{414}{504}=\dfrac{23}{28}$.
+\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vfill
+
+{\small
+\textcolor{textgray}{
+Контрольный ориентир: Вы умеете объяснить своими словами признак делимости, разложить число на простые множители, выбрать общие множители для НОД и проверить полученный ответ делением.
+}
+\par}
+
+\end{document}
