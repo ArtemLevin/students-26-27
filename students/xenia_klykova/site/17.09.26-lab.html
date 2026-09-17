@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория Ксении Клыковой: выбор без возвращения и визуализация характеристик статистических данных.">
+<title>Лаборатория вероятности и статистики — Ксения Клыкова</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23285b57'/%3E%3Ccircle cx='22' cy='25' r='7' fill='%23ef9a73'/%3E%3Ccircle cx='42' cy='25' r='7' fill='white'/%3E%3Cpath d='M15 45h34' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#f3eee5;--paper:#fffdf8;--p2:#f7f0e5;--text:#252b2c;--muted:#687174;--line:#d7cec1;--a:#285b57;--a2:#3f7f7a;--coral:#c86f58;--red:#b95c5c;--blue:#4f78a2;--gold:#9d751f;--ok:#3f765c;--shadow:0 15px 42px #25323414}
+html[data-theme=dark]{--bg:#121819;--paper:#1d2526;--p2:#273031;--text:#f3efe7;--muted:#b5bec0;--line:#3b4647;--a:#8fcdc7;--a2:#69b0aa;--coral:#e99a7e;--red:#dc8589;--blue:#8db4dc;--gold:#e4bd69;--ok:#83b99b;--shadow:none}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}button,a{font:inherit}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.shell{max-width:1440px;margin:auto;padding:16px}.top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.top a,.top button,.modebtn,.control{min-height:44px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--text);padding:9px 13px;text-decoration:none;cursor:pointer}.top .grow{flex:1}.modebtn.on,.control.primary{background:var(--a);border-color:var(--a);color:#fff}
+.hero{background:linear-gradient(145deg,var(--paper),var(--p2));border:1px solid var(--line);border-radius:22px;padding:20px 24px;box-shadow:var(--shadow);margin-bottom:12px}.eyebrow{color:var(--gold);font-weight:900;letter-spacing:.12em;text-transform:uppercase;font-size:.76rem}.hero h1{font:800 clamp(1.9rem,4.5vw,3.8rem)/1.04 Georgia,serif;margin:.3rem 0 .6rem}.hero p{margin:.4rem 0;color:var(--muted);max-width:920px}
+.modebar{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px}.modebtn{white-space:nowrap;font-weight:800}
+.workspace{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,.75fr);gap:12px;align-items:start}.stage,.side{border:1px solid var(--line);border-radius:22px;background:var(--paper);box-shadow:var(--shadow)}.stage{padding:18px;min-height:620px}.side{padding:18px;position:sticky;top:12px}.mode{display:none}.mode.on{display:block}.stage h2,.side h2{font-family:Georgia,serif;margin:.1rem 0 .7rem}.lead{color:var(--muted)}
+.pool{display:flex;gap:8px;flex-wrap:wrap;padding:18px;border:1px solid var(--line);border-radius:18px;background:var(--p2);min-height:120px;align-content:flex-start}.ball{width:42px;height:42px;border-radius:50%;border:3px solid #fff;box-shadow:0 3px 9px #0002}.ball.red{background:var(--coral)}.ball.blue{background:var(--blue)}
+.draw-buttons,.toggles{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.draw-buttons button,.toggles button{min-height:44px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--text);padding:9px 13px;cursor:pointer;font-weight:800}.draw-buttons button.red{border-color:var(--coral)}.draw-buttons button.blue{border-color:var(--blue)}button:disabled{opacity:.4;cursor:not-allowed}
+.path{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}.step{min-width:120px;border:1px solid var(--line);border-radius:14px;padding:10px;background:var(--p2)}.step b{display:block}.frac{font-family:"Cambria Math",serif;font-size:1.16rem}.result{border-left:5px solid var(--a2);padding:12px 14px;background:var(--p2);border-radius:0 14px 14px 0;margin:12px 0}.warn{border-left-color:var(--coral)}
+.scale{position:relative;height:210px;margin:18px 0 8px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(to top,var(--p2),var(--paper));overflow:hidden}.axis{position:absolute;left:6%;right:6%;top:62%;height:2px;background:var(--muted)}.tick{position:absolute;top:58%;width:1px;height:18px;background:var(--muted)}.dot{position:absolute;width:18px;height:18px;border-radius:50%;background:var(--blue);transform:translate(-50%,-50%);top:62%;border:2px solid var(--paper);box-shadow:0 2px 5px #0002}.meanline,.medianline,.sigmaline{position:absolute;top:18%;bottom:22%;width:3px;border-radius:3px}.meanline{background:var(--coral)}.medianline{background:var(--a2)}.sigmarange{position:absolute;top:35%;height:52px;background:#3f7f7a24;border:1px dashed var(--a2);border-radius:12px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:.86rem}.key{display:inline-flex;gap:6px;align-items:center}.sw{width:14px;height:14px;border-radius:4px;background:var(--coral)}.sw.med{background:var(--a2)}.sw.sig{background:#3f7f7a30;border:1px dashed var(--a2)}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.stat{padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--p2)}.stat b{display:block;font-size:1.25rem;color:var(--a)}.stat span{color:var(--muted);font-size:.82rem}
+.side ol{padding-left:22px}.side li{margin:8px 0}.formula{overflow-x:auto;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--p2)}math{font-family:"Cambria Math",serif}
+.hint{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--p2);margin:8px 0}.hint strong{color:var(--a)}
+@media(max-width:900px){.workspace{grid-template-columns:1fr}.side{position:static}.stage{min-height:0}}@media(max-width:620px){.shell{padding:9px}.cards{grid-template-columns:repeat(2,1fr)}.ball{width:34px;height:34px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@media print{.top,.modebar,.draw-buttons,.toggles{display:none!important}.workspace{display:block}.side{position:static}.stage,.side,.hero{box-shadow:none;break-inside:avoid}.mode{display:block!important}.shell{max-width:none}}
+</style>
+</head>
+<body><div class="shell">
+<div class="top"><a href="17.09.26.html">← Вернуться к занятию</a><span class="grow"></span><button id="theme">◐ Тема</button><button onclick="print()">⎙ Печать</button></div>
+<header class="hero"><div class="eyebrow">Цифровая лаборатория · 17 сентября 2026</div><h1>Вероятность и разброс данных</h1><p>Исследуйте два механизма из занятия: как меняются условные вероятности при выборе без возвращения и как среднее, медиана, дисперсия и стандартное отклонение описывают числовой набор.</p></header>
+<nav class="modebar" aria-label="Режим лаборатории">
+<button class="modebtn" data-mode="markers">Фломастеры без возвращения</button>
+<button class="modebtn" data-mode="spread">Разброс данных</button>
+<button class="modebtn" data-mode="outlier">Среднее и выброс</button>
+</nav>
+
+<div class="workspace">
+<main class="stage">
+<section class="mode" id="markers">
+<h2>Фломастеры: путь K → K → S</h2>
+<p class="lead">Исходный набор из занятия: 7 красных и 3 синих. Нажимайте цвет следующего извлечения. Модель автоматически уменьшает оставшиеся количества и показывает вероятность выбранной ветви.</p>
+<div class="pool" id="pool" aria-label="Оставшиеся фломастеры"></div>
+<div class="draw-buttons"><button class="red" id="drawRed">Извлечь красный</button><button class="blue" id="drawBlue">Извлечь синий</button><button id="resetDraw">Сброс</button></div>
+<div class="path" id="path"></div>
+<div class="result" id="pathResult">Выберите первый цвет. Для события «первый синий появился третьим» нужен путь K → K → S.</div>
+</section>
+
+<section class="mode" id="spread">
+<h2>Разброс набора 1, 2, 3, 3, 4, 5, 5, 5, 10, 12</h2>
+<p class="lead">Все числа взяты из полного примера чек-листа. Переключатели меняют только представление: исходный набор остаётся тем же.</p>
+<div class="cards"><div class="stat"><b>5</b><span>среднее</span></div><div class="stat"><b>11</b><span>размах</span></div><div class="stat"><b>10,8</b><span>дисперсия</span></div><div class="stat"><b>≈ 3,29</b><span>σ</span></div></div>
+<div class="toggles"><button data-layer="mean">Среднее</button><button data-layer="median">Медиана</button><button data-layer="sigma">Интервал ±σ</button><button id="showAll">Показать всё</button><button id="clearLayers">Скрыть ориентиры</button></div>
+<div class="scale" id="spreadScale" aria-label="Числовая шкала набора"></div>
+<div class="legend"><span class="key"><i class="sw"></i>среднее 5</span><span class="key"><i class="sw med"></i>медиана 4,5</span><span class="key"><i class="sw sig"></i>[1,71; 8,29]</span></div>
+<div class="result">Стандартное отклонение показывает масштаб разброса вокруг среднего. Интервал ±σ здесь служит наглядным ориентиром и сам по себе не задаёт фиксированную вероятность попадания.</div>
+</section>
+
+<section class="mode" id="outlier">
+<h2>Как выброс влияет на среднее и медиану</h2>
+<p class="lead">Набор из занятия: 0,1; 1; 2; 3; 100. Сравните положение среднего 21,22 и медианы 2.</p>
+<div class="cards"><div class="stat"><b>21,22</b><span>среднее</span></div><div class="stat"><b>2</b><span>медиана</span></div><div class="stat"><b>100</b><span>выброс</span></div><div class="stat"><b>5</b><span>наблюдений</span></div></div>
+<div class="scale" id="outlierScale" aria-label="Шкала набора с выбросом"></div>
+<div class="legend"><span class="key"><i class="sw"></i>среднее 21,22</span><span class="key"><i class="sw med"></i>медиана 2</span></div>
+<div class="result">Среднее использует каждое наблюдение, поэтому большое значение 100 заметно сдвигает его. Медиана определяется центральным положением в упорядоченном ряду и остаётся ближе к основной группе значений.</div>
+</section>
+</main>
+
+<aside class="side">
+<h2 id="sideTitle">Что исследуем</h2>
+<div id="sideBody"></div>
+</aside>
+</div>
+</div>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const root=document.documentElement;
+$('#theme').addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';localStorage.setItem('xenia-1709-lab-theme',root.dataset.theme)});
+root.dataset.theme=localStorage.getItem('xenia-1709-lab-theme')||'light';
+
+const side={
+ markers:`<p>Цель: увидеть, почему при выборе без возвращения меняются и числители, и знаменатели.</p><ol><li>Соберите путь K → K → S.</li><li>Сравните вероятность каждого следующего шага с предыдущим состоянием.</li><li>Проверьте произведение ветви.</li></ol><div class="hint"><strong>Связь с занятием.</strong> Конкретная последовательность означает «и затем», поэтому вероятности по ветви перемножаются.</div>`,
+ spread:`<p>Цель: связать формулы с положением данных на числовой шкале.</p><div class="formula"><math display="block"><mrow><mi>D</mi><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msup><mrow><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mover><mi>x</mi><mo>¯</mo></mover><mo>)</mo></mrow><mn>2</mn></msup></mrow></math><math display="block"><mrow><mi>σ</mi><mo>=</mo><msqrt><mi>D</mi></msqrt></mrow></math></div><div class="hint"><strong>Проверка.</strong> Чем дальше отдельные точки от среднего, тем сильнее их вклад в сумму квадратов отклонений.</div>`,
+ outlier:`<p>Цель: визуально сравнить чувствительность среднего и медианы к крайнему значению.</p><ol><li>Найдите основную группу точек около 0,1–3.</li><li>Посмотрите, где проходит медиана.</li><li>Сравните её со средним, которое сместилось к 100.</li></ol><div class="hint"><strong>Вывод.</strong> При сильных выбросах медиана часто устойчивее описывает центральное положение данных.</div>`
+};
+
+function setMode(mode){
+ if(!side[mode])mode='markers';
+ $$('.mode').forEach(x=>x.classList.toggle('on',x.id===mode));
+ $$('.modebtn').forEach(x=>x.classList.toggle('on',x.dataset.mode===mode));
+ $('#sideBody').innerHTML=side[mode];
+ history.replaceState(null,'','?mode='+mode);
+}
+$$('.modebtn').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+
+let red=7,blue=3,steps=[];
+function renderPool(){
+ const pool=$('#pool');pool.innerHTML='';
+ for(let i=0;i<red;i++){const d=document.createElement('i');d.className='ball red';d.title='Красный';pool.append(d)}
+ for(let i=0;i<blue;i++){const d=document.createElement('i');d.className='ball blue';d.title='Синий';pool.append(d)}
+ $('#drawRed').disabled=red===0||steps.length>=3;$('#drawBlue').disabled=blue===0||steps.length>=3;
+ const path=$('#path');path.innerHTML='';
+ steps.forEach((s,i)=>{const d=document.createElement('div');d.className='step';d.innerHTML=`<b>${i+1}. ${s.color==='K'?'красный':'синий'}</b><span class="frac">${s.num}/${s.den}</span>`;path.append(d)});
+ const prob=steps.reduce((p,s)=>p*s.num/s.den,1);
+ const seq=steps.map(s=>s.color).join(' → ');
+ let msg=steps.length?`Путь: ${seq}. Произведение вероятностей выбранных шагов ≈ ${prob.toFixed(4).replace('.',',')}.`:'Выберите первый цвет. Для события «первый синий появился третьим» нужен путь K → K → S.';
+ if(steps.length===3)msg+=(seq==='K → K → S'?' Это нужное событие: точная вероятность 7/40 = 0,175.':' Это другая ветвь эксперимента.');
+ $('#pathResult').textContent=msg;
+}
+function draw(color){
+ const den=red+blue;if(steps.length>=3||den===0)return;
+ const num=color==='K'?red:blue;if(num<=0)return;
+ steps.push({color,num,den});if(color==='K')red--;else blue--;renderPool();
+}
+$('#drawRed').addEventListener('click',()=>draw('K'));$('#drawBlue').addEventListener('click',()=>draw('S'));$('#resetDraw').addEventListener('click',()=>{red=7;blue=3;steps=[];renderPool()});renderPool();
+
+function xPos(v,min,max){return 6+88*(v-min)/(max-min)}
+function buildScale(el,values,min,max,mean,median,sigmaRange){
+ el.innerHTML='<div class="axis"></div>';
+ for(let v=min;v<=max;v+=(max-min>20?20:1)){const t=document.createElement('i');t.className='tick';t.style.left=xPos(v,min,max)+'%';el.append(t)}
+ const counts={};
+ values.forEach(v=>{const key=String(v);counts[key]=(counts[key]||0)+1;const d=document.createElement('i');d.className='dot';d.style.left=xPos(v,min,max)+'%';d.style.top=(62-(counts[key]-1)*10)+'%';d.title=String(v).replace('.',',');el.append(d)});
+ if(mean!=null){const l=document.createElement('i');l.className='meanline layer mean';l.style.left=xPos(mean,min,max)+'%';l.hidden=true;el.append(l)}
+ if(median!=null){const l=document.createElement('i');l.className='medianline layer median';l.style.left=xPos(median,min,max)+'%';l.hidden=true;el.append(l)}
+ if(sigmaRange){const r=document.createElement('i');r.className='sigmarange layer sigma';r.style.left=xPos(sigmaRange[0],min,max)+'%';r.style.width=(xPos(sigmaRange[1],min,max)-xPos(sigmaRange[0],min,max))+'%';r.hidden=true;el.append(r)}
+}
+buildScale($('#spreadScale'),[1,2,3,3,4,5,5,5,10,12],1,12,5,4.5,[1.71,8.29]);
+buildScale($('#outlierScale'),[0.1,1,2,3,100],0,100,21.22,2,null);
+$('#outlierScale').querySelectorAll('.layer').forEach(x=>x.hidden=false);
+$$('[data-layer]').forEach(b=>b.addEventListener('click',()=>{$('#spreadScale').querySelectorAll('.'+b.dataset.layer).forEach(x=>x.hidden=!x.hidden)}));
+$('#showAll').addEventListener('click',()=>$('#spreadScale').querySelectorAll('.layer').forEach(x=>x.hidden=false));
+$('#clearLayers').addEventListener('click',()=>$('#spreadScale').querySelectorAll('.layer').forEach(x=>x.hidden=true));
+
+const mode=new URLSearchParams(location.search).get('mode')||'markers';setMode(mode);
+})();
+</script>
+</body>
+</html>
