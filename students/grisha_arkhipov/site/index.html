@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Персональный учебный навигатор Григория Антипова по профильной математике ЕГЭ">
+  <title>Григорий Антипов · ЕГЭ профильная математика</title>
+  <link rel="stylesheet" href="competency-map.css?v=20260917-1">
+</head>
+<body>
+  <a class="skip-link" href="#main">К содержанию</a>
+  <header class="topbar">
+    <a class="brand" href="#overview" aria-label="В начало учебного навигатора">
+      <span class="brand-mark" aria-hidden="true">Σ</span>
+      <span><strong>Григорий Антипов</strong><small>ЕГЭ · профильная математика</small></span>
+    </a>
+    <div class="topbar-actions">
+      <a class="quiet-link" href="../pdf_docs/17.09.26.pdf">Последний PDF</a>
+      <a class="quiet-link" href="../tex_docs/17.09.26.tex">TeX</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Переключить цветовую тему">
+        <span aria-hidden="true">◐</span><span>Тема</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="overview">
+      <div class="hero-copy">
+        <p class="eyebrow">Персональный учебный навигатор</p>
+        <h1>Профильная математика ЕГЭ — вся программа в одной карте</h1>
+        <p class="hero-lead">
+          Карта показывает структуру курса, уже затронутые темы, будущие шаги и темы,
+          которые преподаватель или ученик добавит в повторение. Состояние сохраняется на этом устройстве.
+        </p>
+        <div class="hero-meta">
+          <span>Ученик: <b>Григорий Антипов</b></span>
+          <span>Преподаватель: <b>Лёвин Артём Александрович</b></span>
+        </div>
+      </div>
+      <aside class="latest-card" aria-labelledby="latest-title">
+        <p class="eyebrow">Последнее занятие · 17.09.2026</p>
+        <h2 id="latest-title">Горнер, Безу и сечения многогранников</h2>
+        <p>В карту перенесены только темы, которые прямо подтверждаются материалами занятия.</p>
+        <div class="latest-actions">
+          <a class="primary-link" href="../pdf_docs/17.09.26.pdf">Открыть PDF →</a>
+          <a class="secondary-link" href="../tex_docs/17.09.26.tex">Исходник TeX</a>
+        </div>
+      </aside>
+    </section>
+
+    <section class="navigator" id="map" aria-labelledby="mapTitle">
+      <header class="section-head">
+        <div>
+          <p class="eyebrow">Главный рабочий инструмент</p>
+          <h2 id="mapTitle">Круговая карта компетенций</h2>
+          <p>Каждая ячейка — отдельный навык или метод. Наведите курсор или переместите фокус клавиатурой, чтобы увидеть подробности.</p>
+        </div>
+        <button class="reset-button" id="resetBaseline" type="button">Вернуть подтверждённые статусы</button>
+      </header>
+
+      <div class="summary-grid" aria-label="Сводка прогресса">
+        <article><b id="coveredCount">—</b><span>Пройдено</span></article>
+        <article><b id="coveragePercent">—</b><span>Затронуто программы</span></article>
+        <article><b id="repeatCount">—</b><span>Пора повторить</span></article>
+        <article><b id="totalCount">—</b><span>Всего тем</span></article>
+      </div>
+
+      <div class="control-row">
+        <div class="filters" role="group" aria-label="Фильтр карты">
+          <button class="filter is-active" type="button" data-filter="all" aria-pressed="true">Вся программа</button>
+          <button class="filter" type="button" data-filter="covered" aria-pressed="false">Пройдено</button>
+          <button class="filter" type="button" data-filter="repeat" aria-pressed="false">Пора повторить</button>
+          <button class="filter" type="button" data-filter="future" aria-pressed="false">Ещё впереди</button>
+        </div>
+        <label class="search-box">
+          <span class="sr-only">Найти тему</span>
+          <input id="topicSearch" type="search" placeholder="Найти тему…" autocomplete="off">
+        </label>
+      </div>
+
+      <div class="map-layout">
+        <div class="map-panel">
+          <div class="radial-stage">
+            <svg id="radialMap" class="radial-map" viewBox="0 0 800 800" role="img"
+                 aria-labelledby="radialTitle radialDesc">
+              <title id="radialTitle">Круговая тепловая карта программы профильной математики ЕГЭ</title>
+              <desc id="radialDesc">Сектора соответствуют крупным разделам программы, кольцевые ячейки — отдельным навыкам.</desc>
+            </svg>
+            <div class="radial-center" aria-hidden="true">
+              <strong id="centerPercent">—</strong>
+              <span>программы затронуто</span>
+              <small id="centerTopics">— тем</small>
+            </div>
+          </div>
+          <div class="legend" aria-label="Цветовая легенда">
+            <span><i class="legend-dot future"></i>Ещё впереди</span>
+            <span><i class="legend-dot covered"></i>Пройдено</span>
+            <span><i class="legend-dot repeat"></i>Пора повторить</span>
+          </div>
+        </div>
+
+        <aside class="catalog-panel" aria-labelledby="catalogTitle">
+          <div class="catalog-head">
+            <div>
+              <p class="eyebrow">Подробный каталог</p>
+              <h3 id="catalogTitle">Все разделы</h3>
+            </div>
+            <span id="catalogMatchCount" class="catalog-count"></span>
+          </div>
+          <div id="topicCatalog" class="topic-catalog"></div>
+        </aside>
+      </div>
+
+      <div class="tooltip" id="mapTooltip" role="tooltip" hidden></div>
+    </section>
+
+    <section class="next-focus" id="nextFocus" aria-labelledby="focusTitle">
+      <div>
+        <p class="eyebrow">Следующий фокус</p>
+        <h2 id="focusTitle">Подбираю следующий шаг…</h2>
+        <p id="focusText"></p>
+      </div>
+      <div id="focusAction"></div>
+    </section>
+
+    <section class="materials" aria-labelledby="materialsTitle">
+      <header class="section-head compact-head">
+        <div>
+          <p class="eyebrow">Материалы занятий</p>
+          <h2 id="materialsTitle">Подтверждающие материалы</h2>
+        </div>
+      </header>
+      <article class="material-card">
+        <div>
+          <time datetime="2026-09-17">17 сентября 2026</time>
+          <h3>Теорема Безу, схема Горнера и построение сечений</h3>
+          <p>Этот материал задаёт исходные подтверждённые статусы карты.</p>
+        </div>
+        <div class="material-links">
+          <a href="../pdf_docs/17.09.26.pdf">PDF</a>
+          <a href="../tex_docs/17.09.26.tex">TeX</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Григорий Антипов · ЕГЭ, профильная математика</span>
+    <span>Лёвин Артём Александрович · обновлено 17.09.2026</span>
+  </footer>
+
+  <dialog id="topicDialog" class="topic-dialog" aria-labelledby="dialogTitle">
+    <form method="dialog" class="dialog-shell">
+      <header class="dialog-head">
+        <div>
+          <p class="eyebrow" id="dialogGroup"></p>
+          <h2 id="dialogTitle"></h2>
+        </div>
+        <button class="icon-button" value="close" aria-label="Закрыть карточку">×</button>
+      </header>
+
+      <div class="dialog-status-line">
+        <span class="status-pill" id="dialogStatus"></span>
+        <span id="dialogLevelText"></span>
+      </div>
+
+      <section>
+        <h3>Что входит в тему</h3>
+        <p id="dialogDescription"></p>
+      </section>
+
+      <section>
+        <h3>Короткая диагностика</h3>
+        <p id="dialogDiagnostic"></p>
+      </section>
+
+      <section>
+        <h3>История</h3>
+        <p id="dialogHistory"></p>
+        <div id="dialogMaterialLinks" class="dialog-material-links"></div>
+      </section>
+
+      <section>
+        <h3>Текущий уровень</h3>
+        <div class="level-picker" role="group" aria-label="Выберите диагностический уровень">
+          <button type="button" data-level="0">0<span>впереди</span></button>
+          <button type="button" data-level="1">1<span>нужна помощь</span></button>
+          <button type="button" data-level="2">2<span>с опорой</span></button>
+          <button type="button" data-level="3">3<span>почти уверенно</span></button>
+          <button type="button" data-level="4">4<span>освоено</span></button>
+        </div>
+      </section>
+
+      <footer class="dialog-actions">
+        <button id="repeatToggle" type="button" class="repeat-button">Добавить в повторение</button>
+        <button value="close" class="primary-button">Готово</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <script src="competency-map-data.js?v=20260917-1"></script>
+  <script src="competency-map.js?v=20260917-1"></script>
+</body>
+</html>
