@@ -46,6 +46,26 @@ export function applyLesson1709CompetenceUpdate(){
     }
   };
 
+  const postUpgradeKey='__xenia1709CompetencePatchInstalled';
+  if(!window[postUpgradeKey]){
+    window[postUpgradeKey]=true;
+    addEventListener('student:competence-state',()=>{
+      const controller=window.__studentCompetenceMap;
+      if(!controller||controller.__xenia1709CompetenceApplied)return;
+      const ids=new Set((controller.items||[]).map(item=>item.id));
+      if(!ids.has('ege2027_t6_variance')||!ids.has('ege2027_t6_stddev'))return;
+      controller.__xenia1709CompetenceApplied=true;
+      controller.baseline={
+        ...(controller.baseline||{}),
+        ege2027_t6_variance:Math.max(Number(controller.baseline?.ege2027_t6_variance||0),2),
+        ege2027_t6_stddev:Math.max(Number(controller.baseline?.ege2027_t6_stddev||0),2)
+      };
+      controller.state.studentLevels={...(controller.state?.studentLevels||{}),...controller.baseline};
+      if(typeof controller.save==='function')controller.save();
+      if(typeof controller.render==='function')controller.render();
+    });
+  }
+
   const migrationKey='xenia-competence-teacher-seed-applied-20260917-probability-statistics';
   if(localStorage.getItem(migrationKey))return;
   try{
