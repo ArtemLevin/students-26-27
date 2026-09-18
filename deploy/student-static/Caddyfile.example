@@ -1,0 +1,25 @@
+# Replace study.example.com with the dedicated student-site hostname.
+study.example.com {
+    root * /srv/students-site/current
+    encode zstd gzip
+
+    header {
+        X-Robots-Tag "noindex, nofollow, noarchive"
+        Referrer-Policy "no-referrer"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        -Server
+    }
+
+    # Do not expose an index of students at the hostname root.
+    @siteRoot path /
+    respond @siteRoot 404
+
+    # Defense in depth: these repository-style paths must never be served.
+    @internal path /.git* /.github* /contracts* /deploy* /docs* /pipeline* /students*
+    respond @internal 404
+
+    try_files {path} {path}/index.html
+    file_server
+}
