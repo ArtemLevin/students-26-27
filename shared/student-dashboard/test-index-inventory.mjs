@@ -13,10 +13,15 @@ const root=process.cwd();
 const indexes=walk(path.join(root,'students')).filter(file=>path.basename(file)==='index.html').map(file=>path.relative(root,file).replaceAll('\\','/')).sort();
 assert.deepEqual(indexes,[
   'students/anna_trapeznikova/site/index.html',
+  'students/darya_savenkova/site/index.html',
+  'students/ekaterina/site/index.html',
   'students/ekaterina_gnedkova/site/index.html',
+  'students/grisha_arkhipov/site/index.html',
   'students/jaroslav_vereschagin/site/index.html',
   'students/kirill_zinoviev/site/index.html',
+  'students/kristina/site/index.html',
   'students/marina/site/index.html',
+  'students/matvey_gorbachev/site/index.html',
   'students/nadya_klimenko/site/index.html',
   'students/nastya_pavlova/index.html',
   'students/nastya_pavlova/site/index.html',
@@ -35,9 +40,14 @@ assert.deepEqual(indexes,[
 // while the legacy shared-shell contract below remains scoped to dashboards that use it.
 const bespokeDashboardPaths=new Set([
   'students/anna_trapeznikova/site/index.html',
+  'students/darya_savenkova/site/index.html',
+  'students/ekaterina/site/index.html',
   'students/ekaterina_gnedkova/site/index.html',
+  'students/grisha_arkhipov/site/index.html',
   'students/jaroslav_vereschagin/site/index.html',
+  'students/kristina/site/index.html',
   'students/marina/site/index.html',
+  'students/matvey_gorbachev/site/index.html',
   'students/nadya_klimenko/site/index.html',
   'students/sofya_khomenko/site/index.html',
   'students/xenia_vasilchenko/site/index.html'

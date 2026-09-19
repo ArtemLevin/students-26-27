@@ -23,7 +23,7 @@ export const CATALOG_SPECS={
 };
 
 export const MASTERY_SPECS={
-  kirill_zinoviev:{path:'students/kirill_zinoviev/site/competence-config.js',locator:{kind:'symbol',name:'stage04Mastery'}},
+  kirill_zinoviev:{path:'students/kirill_zinoviev/site/competence-config.js',locator:{kind:'symbol',name:'teacherMastery'}},
   sofya_kalney:{path:'students/sofya_kalney/site/competence-config.js',locator:{kind:'property',name:'teacherSeed'}},
   timofey:{path:'students/timofey/site/competence-config.js',locator:{kind:'symbol',name:'teacherSeed'}},
   volodia_khachaturian:{path:'students/volodia_khachaturian/competency-map-data.js',locator:{kind:'property',name:'baselineLevels'}},
