@@ -126,7 +126,10 @@ export async function runDashboardTests({student,expectedLessons,catalog,stateKe
   assert.equal(registry.ARCHIVE_PAGE_SIZE,10);
   const files=walk(site).filter(item=>DATE_HTML.test(item.name)).map(item=>item.rel).sort(),refs=lessons.map(item=>item.href).sort();
   assert.deepEqual(refs,files,`${student}: filesystem parity`);
-  for(const href of Object.values(lessons[0].materials||{}))assert.ok(fs.existsSync(path.resolve(site,href)),`${student}: missing latest material ${href}`);
+  for(const href of Object.values(lessons[0].materials||{})){
+    const fileHref=String(href).split(/[?#]/,1)[0];
+    assert.ok(fs.existsSync(path.resolve(site,fileHref)),`${student}: missing latest material ${href}`);
+  }
 
   const html=fs.readFileSync(path.join(site,'index.html'),'utf8');
   for(const forbidden of ['<iframe','contentDocument','contentWindow','.map-frame','id="base"'])assert.ok(!html.includes(forbidden),`${student}: forbidden legacy architecture ${forbidden}`);
