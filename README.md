@@ -4,3 +4,5 @@
 
 - [Архитектура интервального повторения](shared/practice/README.md)
 - [План реализации](PLAN.md)
+
+- [LEVIN / ATLAS: создание нового ученика](design-system/SCAFFOLDING.md)
