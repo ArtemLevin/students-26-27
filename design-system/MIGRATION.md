@@ -19,6 +19,13 @@ Adopt the system without touching competence-map data or behavioral JavaScript.
 
 Existing student pages have different DOM/CSS generations. A scoped adapter lets the system ship incrementally and makes rollback one stylesheet/link removal.
 
-## Pilot
+## Repository rollout
 
-`students/grisha_arkhipov/site/` is the v1 pilot. Its JavaScript and competence data are intentionally unchanged.
+As of 19.09.2026 every current `students/*/site/index.html` has a LEVIN / ATLAS fingerprint.
+
+- Grigory Antipov keeps the dedicated `levin-atlas.css` pilot adapter.
+- The other legacy generations use shared `design-system/student-sites.css`.
+- Every student site owns `design.json`.
+- Functional competence-map JavaScript and learning data stay page-owned and unchanged by the visual migration.
+
+See `STUDENT_ROSTER.md` for the current diversity matrix.
