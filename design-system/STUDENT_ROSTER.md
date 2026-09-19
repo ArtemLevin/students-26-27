@@ -22,6 +22,7 @@ Current migration roster for all `students/*/site/index.html` pages.
 | timofey | blueprint | petrol | balanced | orthogonal | technical | mechanical |
 | volodia_khachaturian | lab | cobalt | compact | orthogonal | technical | mechanical |
 | xenia_klykova | archive | plum | balanced | mixed | technical-editorial | calm |
+| xenia_klykova / chemistry | lab | plum | compact | orthogonal | technical | mechanical |
 | xenia_vasilchenko | cartographer | burgundy | airy | circular | editorial | calm |
 
 The roster is a deliberate diversity matrix. Change at least three axes when a newly created page is too close to a recent neighbor.
