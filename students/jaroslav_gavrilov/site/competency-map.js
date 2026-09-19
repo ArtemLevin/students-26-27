@@ -394,7 +394,7 @@
   });
 
   document.getElementById('resetState').addEventListener('click', () => {
-    if (!confirm('Вернуть уровни и повторение к подтверждённому состоянию из материалов ученицы? Ручные изменения будут удалены.')) return;
+    if (!confirm('Вернуть уровни и повторение к подтверждённому состоянию из материалов ученика? Ручные изменения будут удалены.')) return;
     state.levels = { ...baselineLevels };
     state.repeat = new Set(baselineRepeat);
     localStorage.removeItem(LEVELS_KEY);
