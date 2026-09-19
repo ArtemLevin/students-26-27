@@ -9,6 +9,8 @@ on:
       - 'pipeline/prompts/04_spaced_practice.md'
       - 'pipeline/practice/**'
       - 'pipeline/schemas/spaced-practice-stage-v1.schema.json'
+      - 'design-system/**'
+      - 'SITE_GENERATION_PROMPT.md'
       - '.github/workflows/student-dashboard-tests.yml'
   pull_request:
     paths:
@@ -18,12 +20,25 @@ on:
       - 'pipeline/prompts/04_spaced_practice.md'
       - 'pipeline/practice/**'
       - 'pipeline/schemas/spaced-practice-stage-v1.schema.json'
+      - 'design-system/**'
+      - 'SITE_GENERATION_PROMPT.md'
       - '.github/workflows/student-dashboard-tests.yml'
 
 permissions:
   contents: read
 
 jobs:
+  atlas-contract:
+    name: LEVIN / ATLAS contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify every student cabinet fingerprint
+        run: node design-system/test-contract.mjs
+
   dashboard:
     name: dashboard / ${{ matrix.student }}
     runs-on: ubuntu-latest
