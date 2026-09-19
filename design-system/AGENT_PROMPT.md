@@ -17,6 +17,8 @@ Required anti-template constraint: if the first draft resembles a generic hero +
 
 ## Mandatory repository deliverables
 
+For a brand-new student, start with `node scripts/create-student.mjs <slug>`; see `design-system/SCAFFOLDING.md`.
+
 For every new or redesigned `students/**/site/index.html`:
 
 - create/update adjacent `design.json`;
