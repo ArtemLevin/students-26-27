@@ -1,0 +1,1264 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F2F4F4}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=darkaccent
+}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+
+\setlist[itemize]{
+  leftmargin=1.5em,
+  itemsep=0.25em,
+  topsep=0.3em
+}
+
+\setlist[enumerate]{
+  leftmargin=1.7em,
+  itemsep=0.45em,
+  topsep=0.35em
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{textgray}Трапеция: ключевые методы}
+\fancyhead[R]{\small\color{textgray}София Кальней}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\sectionline}{
+  \par
+  \vspace{0.2em}
+  {\color{accent}\hrule height 0.8pt}
+  \vspace{0.7em}
+}
+
+\newcommand{\important}[1]{
+  \textbf{\color{darkaccent}#1}
+}
+
+\newcommand{\formula}[1]{
+  \[
+  \boxed{#1}
+  \]
+}
+
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=darkaccent,
+    line width=0.8pt,
+    align=center,
+    minimum width=3.8cm,
+    minimum height=0.95cm,
+    fill=softgray,
+    font=\small
+  },
+  flowaction/.style={
+    rounded corners=3pt,
+    draw=accent,
+    line width=0.8pt,
+    align=center,
+    text width=5.9cm,
+    minimum height=0.9cm,
+    font=\small
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=2.5,
+    draw=darkaccent,
+    line width=0.8pt,
+    align=center,
+    text width=4.4cm,
+    inner sep=0.5pt,
+    font=\small
+  },
+  flowarrow/.style={
+    -{Latex[length=3mm]},
+    line width=0.8pt,
+    draw=darkaccent
+  }
+}
+
+\begin{document}
+
+% =========================================================
+% Титульный лист
+% =========================================================
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{2.6cm}
+
+{\Large\color{darkaccent}\textbf{Чек-лист}}\\[0.8em]
+
+{\LARGE\textbf{
+Трапеция: ключевые методы, свойства\\
+и дополнительные построения
+}}\\[1.2em]
+
+{\large ОГЭ по математике}\\[2.2em]
+
+{\large \today}\\[2.5em]
+
+{\large Лёвин Артём Александрович}\\[0.35em]
+
+{\large\textbf{эксклюзивно для Софии Кальней}}\\[3em]
+
+\begin{minipage}{0.78\textwidth}
+\centering
+\color{textgray}
+Главная идея занятия: в задачах о трапеции целенаправленно искать
+треугольники, к которым можно применить уже известные теоремы
+и формулы.
+\end{minipage}
+
+\vfill
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[
+  accent!65,
+  line width=1.2pt
+]
+  ($(current page.south west)+(18mm,18mm)$)
+  .. controls
+  ($(current page.south west)+(65mm,33mm)$)
+  and
+  ($(current page.south east)+(-70mm,7mm)$)
+  ..
+  ($(current page.south east)+(-18mm,19mm)$);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% =========================================================
+% Основной чек-лист
+% =========================================================
+
+\section*{1. Базовые формулы трапеции}
+\sectionline
+
+Пусть основания трапеции равны $a$ и $b$, причём $a<b$,
+а высота равна $h$.
+
+Площадь трапеции:
+
+\formula{
+S=\frac{a+b}{2}\,h
+}
+
+Средняя линия трапеции:
+
+\formula{
+m=\frac{a+b}{2}
+}
+
+Поэтому
+
+\[
+S=mh.
+\]
+
+\important{Ключевая ситуация.}
+Основания известны, а высота отсутствует. Тогда основной вопрос задачи:
+как построить треугольник, в котором эту высоту удастся вычислить?
+
+% ---------------------------------------------------------
+
+\section*{2. Главный приём: параллельный перенос}
+\sectionline
+
+Параллельный перенос особенно полезен тогда, когда после дополнительного
+построения возникает треугольник с достаточным количеством известных
+элементов.
+
+\subsection*{2.1. Перенос боковой стороны}
+
+Пусть в трапеции $ABCD$
+
+\[
+AD\parallel BC,
+\qquad
+AD=b,
+\qquad
+BC=a,
+\]
+
+а боковые стороны равны
+
+\[
+AB=c,
+\qquad
+CD=d.
+\]
+
+Через вершину $C$ проведём $CF\parallel AB$ до пересечения с основанием
+$AD$.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.8]
+
+\tkzSetUpLine[
+  line width=1pt,
+  color=accent
+]
+
+\tkzSetUpPoint[
+  color=accent,
+  fill=accent,
+  size=3
+]
+
+\tkzSetUpLabel[
+  color=black,
+  font=\small
+]
+
+\tkzDefPoint(0,0){A}
+\tkzDefPoint(7,0){D}
+\tkzDefPoint(1.2,3){B}
+\tkzDefPoint(4.2,3){C}
+\tkzDefPoint(3,0){F}
+
+\tkzDrawPolygon(A,B,C,D)
+\tkzDrawSegment(C,F)
+
+\tkzDrawPoints(A,B,C,D,F)
+
+\tkzLabelPoints[below](A,F,D)
+\tkzLabelPoints[above](B,C)
+
+\node[below] at (1.5,0) {$AF=a$};
+\node[below] at (5.0,0) {$FD=b-a$};
+\node[above] at (2.7,3) {$BC=a$};
+
+\end{tikzpicture}
+\end{center}
+
+Четырёхугольник $ABCF$ является параллелограммом. Следовательно,
+
+\[
+CF=AB=c,
+\qquad
+AF=BC=a.
+\]
+
+Поэтому
+
+\[
+FD=AD-AF=b-a.
+\]
+
+Получаем треугольник $CFD$ со сторонами
+
+\[
+c,\qquad d,\qquad b-a.
+\]
+
+Высота этого треугольника к стороне $FD$ совпадает с высотой исходной
+трапеции.
+
+Если все три стороны полученного треугольника известны, удобно применить
+формулу Герона:
+
+\[
+p=\frac{x+y+z}{2},
+\]
+
+\[
+S_{\triangle}
+=
+\sqrt{
+p(p-x)(p-y)(p-z)
+}.
+\]
+
+С другой стороны,
+
+\[
+S_{\triangle}
+=
+\frac12(b-a)h.
+\]
+
+Приравнивая эти выражения, находим высоту $h$.
+
+\subsubsection*{Пример}
+
+Основания трапеции равны $16$ и $44$, боковые стороны --- $17$ и $25$.
+
+После параллельного переноса получаем треугольник со сторонами
+
+\[
+17,\qquad 25,\qquad 44-16=28.
+\]
+
+Его полупериметр:
+
+\[
+p=\frac{17+25+28}{2}=35.
+\]
+
+По формуле Герона:
+
+\[
+S_{\triangle}
+=
+\sqrt{
+35\cdot18\cdot10\cdot7
+}
+=
+210.
+\]
+
+С другой стороны,
+
+\[
+S_{\triangle}
+=
+\frac12\cdot28\cdot h.
+\]
+
+Следовательно,
+
+\[
+14h=210,
+\qquad
+h=15.
+\]
+
+Площадь исходной трапеции:
+
+\[
+S
+=
+\frac{16+44}{2}\cdot15
+=
+450.
+\]
+
+\subsection*{2.2. Перенос диагонали}
+
+Параллельно переносить можно также диагональ.
+
+Если основания трапеции равны $a$ и $b$, а диагонали имеют длины
+$p$ и $q$, после подходящего параллельного переноса возникает треугольник
+со сторонами
+
+\[
+p,\qquad q,\qquad a+b.
+\]
+
+Высота такого треугольника к стороне $a+b$ совпадает с высотой трапеции.
+
+\important{Критерий удачного построения.}
+После дополнительного построения должен появиться треугольник, для которого
+известно достаточно данных, чтобы вычислить его высоту или площадь.
+
+% =========================================================
+% Блок-схема
+% =========================================================
+
+\clearpage
+\thispagestyle{empty}
+
+\begin{center}
+{\Large\color{darkaccent}\textbf{
+Алгоритм: как искать высоту трапеции
+}}
+\end{center}
+
+\vspace{1.4em}
+
+\begin{center}
+\begin{tikzpicture}[node distance=0.55cm]
+
+\node[flowstart] (start) {
+Даны элементы трапеции;\\
+нужно найти площадь
+};
+
+\node[flowaction,below=of start] (formula) {
+Запишите
+$
+S=\dfrac{a+b}{2}h
+$.\\
+Определите, что требуется найти $h$.
+};
+
+\node[
+  flowdecision,
+  below=0.75cm of formula
+] (triangle) {
+Есть удобный треугольник,\\
+содержащий высоту?
+};
+
+\node[
+  flowaction,
+  below=0.75cm of triangle
+] (build) {
+Если нет, проведите высоту или выполните\\
+параллельный перенос боковой стороны/диагонали.
+};
+
+\node[
+  flowdecision,
+  below=0.75cm of build
+] (known) {
+В полученном треугольнике\\
+достаточно известных данных?
+};
+
+\node[
+  flowaction,
+  below=0.75cm of known
+] (calc) {
+Найдите его площадь или высоту:\\
+Герон, Пифагор, свойства $30^\circ$,\\
+равнобедренного или прямоугольного треугольника.
+};
+
+\node[
+  flowaction,
+  below=of calc
+] (back) {
+Подставьте найденную высоту\\
+в формулу площади трапеции.
+};
+
+\node[
+  flowstart,
+  below=of back
+] (finish) {
+Вычислите $S$ и проверьте результат.
+};
+
+\draw[flowarrow]
+(start)--(formula);
+
+\draw[flowarrow]
+(formula)--(triangle);
+
+\draw[flowarrow]
+(triangle)
+--
+node[right]{\small нет / требуется построение}
+(build);
+
+\draw[flowarrow]
+(build)--(known);
+
+\draw[flowarrow]
+(known)
+--
+node[right]{\small да}
+(calc);
+
+\draw[flowarrow]
+(triangle.east)
+--
+++(2.2,0)
+|-
+node[pos=0.25,right]{\small да}
+(calc.east);
+
+\draw[flowarrow]
+(known.west)
+--
+++(-2.2,0)
+|-
+node[pos=0.25,left]{\small нет}
+(build.west);
+
+\draw[flowarrow]
+(calc)--(back);
+
+\draw[flowarrow]
+(back)--(finish);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% =========================================================
+
+\section*{3. Метод равенства площадей}
+\sectionline
+
+Если высота входит в одну формулу площади, а саму площадь можно найти
+другим способом, полезно вычислить одну и ту же площадь двумя способами
+и приравнять результаты.
+
+Пусть треугольник имеет стороны $x$, $y$, $z$, а $h$ --- высота
+к стороне $z$.
+
+Тогда
+
+\[
+S_{\triangle}
+=
+\frac12zh.
+\]
+
+По формуле Герона:
+
+\[
+S_{\triangle}
+=
+\sqrt{
+p(p-x)(p-y)(p-z)
+},
+\]
+
+где
+
+\[
+p=\frac{x+y+z}{2}.
+\]
+
+Следовательно,
+
+\[
+\frac12zh
+=
+\sqrt{
+p(p-x)(p-y)(p-z)
+}.
+\]
+
+Отсюда
+
+\[
+h
+=
+\frac{
+2\sqrt{
+p(p-x)(p-y)(p-z)
+}
+}{z}.
+\]
+
+\important{Контроль.}
+Формулу Герона применяем только после того, как известны все три стороны
+рассматриваемого треугольника.
+
+% =========================================================
+
+\section*{4. Равнобедренная трапеция: проекции и средняя линия}
+\sectionline
+
+Пусть $ABCD$ --- равнобедренная трапеция,
+
+\[
+AD=b,
+\qquad
+BC=a,
+\qquad
+b>a,
+\]
+
+и
+
+\[
+CH\perp AD.
+\]
+
+\begin{center}
+\begin{tikzpicture}[scale=0.85]
+
+\tkzSetUpLine[
+  line width=1pt,
+  color=accent
+]
+
+\tkzSetUpPoint[
+  color=accent,
+  fill=accent,
+  size=3
+]
+
+\tkzSetUpLabel[
+  color=black,
+  font=\small
+]
+
+\tkzDefPoint(0,0){A}
+\tkzDefPoint(8,0){D}
+\tkzDefPoint(2,3){B}
+\tkzDefPoint(6,3){C}
+\tkzDefPoint(6,0){H}
+
+\tkzDrawPolygon(A,B,C,D)
+\tkzDrawSegment(C,H)
+
+\tkzMarkRightAngle[size=0.28](C,H,D)
+
+\tkzDrawPoints(A,B,C,D,H)
+
+\tkzLabelPoints[below](A,H,D)
+\tkzLabelPoints[above](B,C)
+
+\node[above] at (4,3) {$a$};
+\node[below] at (4,0) {$b$};
+
+\end{tikzpicture}
+\end{center}
+
+Для равнобедренной трапеции получаем
+
+\[
+DH=\frac{b-a}{2},
+\]
+
+а большая часть нижнего основания равна
+
+\[
+AH
+=
+b-DH
+=
+b-\frac{b-a}{2}
+=
+\frac{a+b}{2}.
+\]
+
+Следовательно,
+
+\formula{
+AH=m=\frac{a+b}{2}
+}
+
+Итак:
+
+\[
+\boxed{
+\text{большой отрезок}
+=
+\frac{a+b}{2}
+}
+\]
+
+и
+
+\[
+\boxed{
+\text{малый отрезок}
+=
+\frac{b-a}{2}
+}.
+\]
+
+Эти две формулы особенно полезны при проведении высоты в равнобедренной
+трапеции.
+
+% ---------------------------------------------------------
+
+\subsection*{4.1. Диагональ под углом $60^\circ$}
+
+Пусть диагональ равнобедренной трапеции равна $d$ и образует с основанием
+угол $60^\circ$.
+
+Её проекция на основание равна
+
+\[
+d\cos60^\circ
+=
+\frac d2.
+\]
+
+Для равнобедренной трапеции эта проекция равна
+
+\[
+\frac{a+b}{2}.
+\]
+
+Поэтому средняя линия равна
+
+\formula{
+m=\frac d2
+}
+
+Например, при $d=10$
+
+\[
+m=5.
+\]
+
+% ---------------------------------------------------------
+
+\subsection*{4.2. Перпендикулярные диагонали}
+
+У равнобедренной трапеции диагонали равны.
+
+Если дополнительно известно, что диагонали перпендикулярны, после
+параллельного переноса одной диагонали получается прямоугольный
+равнобедренный треугольник.
+
+Его гипотенуза равна сумме оснований:
+
+\[
+a+b.
+\]
+
+Высота исходной трапеции становится медианой к гипотенузе полученного
+прямоугольного треугольника.
+
+В прямоугольном треугольнике медиана, проведённая к гипотенузе,
+равна половине гипотенузы. Следовательно,
+
+\[
+h
+=
+\frac{a+b}{2}.
+\]
+
+Но
+
+\[
+m
+=
+\frac{a+b}{2}.
+\]
+
+Поэтому
+
+\formula{
+h=m
+}
+
+Для площади получаем особенно короткую формулу:
+
+\formula{
+S=m^2
+}
+
+\important{Важно.}
+Перпендикулярность диагоналей не является общим свойством всех
+равнобедренных трапеций. Она должна следовать из условия конкретной задачи.
+
+% =========================================================
+
+\section*{5. Вписанная окружность в трапецию}
+\sectionline
+
+Пусть окружность с центром $O$ вписана в трапецию $ABCD$, где
+
+\[
+AD\parallel BC.
+\]
+
+Центр вписанной окружности лежит на биссектрисах углов.
+
+Следовательно,
+
+\[
+\angle BAO
+=
+\frac12\angle BAD,
+\]
+
+\[
+\angle ABO
+=
+\frac12\angle ABC.
+\]
+
+Поскольку $AD\parallel BC$, углы
+
+\[
+\angle BAD
+\quad\text{и}\quad
+\angle ABC
+\]
+
+являются односторонними при боковой стороне $AB$. Поэтому
+
+\[
+\angle BAD+\angle ABC=180^\circ.
+\]
+
+Рассмотрим треугольник $AOB$:
+
+\[
+\angle AOB
+=
+180^\circ
+-
+\angle BAO
+-
+\angle ABO.
+\]
+
+Подставляем выражения через половины углов:
+
+\[
+\angle AOB
+=
+180^\circ
+-
+\frac12
+\left(
+\angle BAD+\angle ABC
+\right).
+\]
+
+Следовательно,
+
+\[
+\angle AOB
+=
+180^\circ-90^\circ
+=
+90^\circ.
+\]
+
+\formula{
+\angle AOB=90^\circ
+}
+
+Таким образом,
+
+\[
+\triangle AOB
+\]
+
+является прямоугольным.
+
+% ---------------------------------------------------------
+
+\subsection*{5.1. Точка касания на боковой стороне}
+
+Пусть окружность касается стороны $AB$ в точке $T$.
+
+Радиус, проведённый в точку касания, перпендикулярен касательной:
+
+\[
+OT\perp AB.
+\]
+
+Так как $\triangle AOB$ прямоугольный, отрезок $OT$ является высотой,
+проведённой к гипотенузе $AB$.
+
+Если
+
+\[
+AT=x,
+\qquad
+TB=y,
+\]
+
+то по теореме о высоте к гипотенузе
+
+\[
+OT^2
+=
+AT\cdot TB.
+\]
+
+Следовательно,
+
+\[
+r^2=xy,
+\]
+
+\[
+r=\sqrt{xy}.
+\]
+
+Высота трапеции равна диаметру вписанной окружности:
+
+\[
+h=2r.
+\]
+
+Получаем
+
+\formula{
+h=2\sqrt{xy}
+}
+
+Например, если точка касания делит боковую сторону на отрезки $4$ и $1$,
+то
+
+\[
+r=\sqrt{4\cdot1}=2,
+\]
+
+поэтому
+
+\[
+h=4.
+\]
+
+% =========================================================
+
+\section*{6. Прямоугольный треугольник: три ключевые формулы}
+\sectionline
+
+Пусть в прямоугольном треугольнике $ABC$
+
+\[
+\angle ABC=90^\circ,
+\]
+
+а $BH$ --- высота к гипотенузе $AC$.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+
+\tkzSetUpLine[
+  line width=1pt,
+  color=accent
+]
+
+\tkzSetUpPoint[
+  color=accent,
+  fill=accent,
+  size=3
+]
+
+\tkzSetUpLabel[
+  color=black,
+  font=\small
+]
+
+\tkzDefPoint(0,0){A}
+\tkzDefPoint(7,0){C}
+\tkzDefPoint(2,3.1623){B}
+\tkzDefPoint(2,0){H}
+
+\tkzDrawPolygon(A,B,C)
+\tkzDrawSegment(B,H)
+
+\tkzMarkRightAngle[size=0.28](A,B,C)
+\tkzMarkRightAngle[size=0.28](B,H,C)
+
+\tkzDrawPoints(A,B,C,H)
+
+\tkzLabelPoints[below](A,H,C)
+\tkzLabelPoints[above](B)
+
+\end{tikzpicture}
+\end{center}
+
+Высота к гипотенузе:
+
+\formula{
+BH^2=AH\cdot HC
+}
+
+Первый катет:
+
+\formula{
+AB^2=AH\cdot AC
+}
+
+Второй катет:
+
+\formula{
+BC^2=HC\cdot AC
+}
+
+Полезно замечать структуру последних двух формул:
+
+\[
+\boxed{
+\text{катет}^2
+=
+\text{гипотенуза}
+\cdot
+\text{проекция этого катета}
+}
+\]
+
+Все три формулы следуют из подобия треугольников.
+
+% =========================================================
+
+\section*{7. Отрезок между серединами диагоналей}
+\sectionline
+
+Пусть основания трапеции $ABCD$ равны
+
+\[
+AD=b,
+\qquad
+BC=a,
+\qquad
+b>a.
+\]
+
+Пусть $M$ и $N$ --- середины диагоналей трапеции.
+
+Отрезок $MN$ параллелен основаниям.
+
+Его длина равна полуразности оснований:
+
+\formula{
+MN=\frac{b-a}{2}
+}
+
+Если заранее неизвестно, какое основание больше, используйте универсальную
+запись
+
+\formula{
+MN=\frac{|b-a|}{2}
+}
+
+Почему появляется именно полуразность?
+
+В соответствующих треугольниках возникают средние линии длиной
+
+\[
+\frac b2
+\quad\text{и}\quad
+\frac a2.
+\]
+
+Искомый отрезок равен разности этих длин:
+
+\[
+MN
+=
+\frac b2-\frac a2
+=
+\frac{b-a}{2}.
+\]
+
+% =========================================================
+
+\section*{8. Как выбирать дополнительное построение}
+\sectionline
+
+В задачах о трапеции полезно придерживаться следующей стратегии.
+
+\begin{enumerate}
+  \item Сначала запишите формулу искомой величины.
+  
+  \item Определите, какого элемента не хватает.
+  
+  \item Если не хватает высоты, ищите треугольник, содержащий эту высоту.
+  
+  \item Если подходящего треугольника нет, рассмотрите два основных хода:
+  \begin{itemize}
+    \item проведение перпендикуляра;
+    \item параллельный перенос боковой стороны или диагонали.
+  \end{itemize}
+  
+  \item После построения выясните, что известно о полученном треугольнике:
+  \begin{itemize}
+    \item три стороны;
+    \item прямой угол;
+    \item равные стороны;
+    \item угол $30^\circ$ или $60^\circ$;
+    \item медиана;
+    \item высота к гипотенузе.
+  \end{itemize}
+  
+  \item Примените соответствующую теорию треугольников.
+\end{enumerate}
+
+\important{Главный ориентир.}
+Задача формально может быть дана про трапецию, однако основная вычислительная
+работа очень часто происходит внутри правильно выбранного треугольника.
+
+% =========================================================
+
+\section*{9. Типичные ошибки и самопроверка}
+\sectionline
+
+\begin{itemize}
+
+\item
+Не путайте полусумму оснований
+
+\[
+\frac{a+b}{2}
+\]
+
+и полуразность
+
+\[
+\frac{b-a}{2}.
+\]
+
+\item
+После параллельного переноса обязательно объясняйте, почему соответствующие
+отрезки равны.
+
+\item
+При применении формулы Герона сначала вычисляйте полупериметр.
+
+\item
+Проверяйте существование треугольника по неравенству треугольника.
+
+\item
+Равенство диагоналей является свойством равнобедренной трапеции.
+
+\item
+Перпендикулярность диагоналей должна быть дана или доказана отдельно.
+
+\item
+Если окружность вписана в трапецию, расстояние между основаниями равно
+диаметру окружности:
+
+\[
+h=2r.
+\]
+
+\item
+В задаче с точкой касания на боковой стороне сначала докажите или используйте
+доказанный факт
+
+\[
+\angle AOB=90^\circ.
+\]
+
+\item
+Для отрезка между серединами диагоналей используйте модуль разности оснований,
+если неизвестно, какое основание больше:
+
+\[
+\frac{|a-b|}{2}.
+\]
+
+\item
+Если в задаче требуется площадь, полезно в самом начале записать
+
+\[
+S=\frac{a+b}{2}h.
+\]
+
+Это сразу показывает, какого элемента не хватает.
+
+\end{itemize}
+
+% =========================================================
+% Тренировочный блок
+% =========================================================
+
+\clearpage
+
+\section*{Тренировочный блок. Путь А}
+\sectionline
+
+\textbf{Указание.}
+Решайте задачи с полным обоснованием. Если выполняется дополнительное
+построение, поясните его цель и укажите, какие равенства или свойства
+из него следуют.
+
+\begin{enumerate}
+
+\item
+Основания трапеции равны $10$ и $24$, боковые стороны равны $13$ и $15$.
+Найдите площадь трапеции.
+
+\item
+В равнобедренной трапеции основания равны $8$ и $20$, боковая сторона
+равна $10$. Найдите высоту и площадь трапеции.
+
+\item
+Диагональ равнобедренной трапеции равна $14$ и образует с основанием
+угол $60^\circ$. Найдите среднюю линию трапеции.
+
+\item
+В трапецию вписана окружность. Точка касания окружности с одной из боковых
+сторон делит эту сторону на отрезки длиной $4$ и $9$.
+Найдите высоту трапеции.
+
+\item
+Основания трапеции равны $7$ и $19$.
+Найдите длину отрезка, соединяющего середины её диагоналей.
+
+\end{enumerate}
+
+% =========================================================
+% Ответы
+% =========================================================
+
+\clearpage
+
+\section*{Ответы}
+\sectionline
+
+\renewcommand{\arraystretch}{1.35}
+
+\begin{table}[ht]
+\centering
+
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+
+\toprule
+
+\textbf{№}
+&
+\textbf{Ответ}
+\\
+
+\midrule
+
+1
+&
+$204$
+\\
+
+2
+&
+$h=8$, \quad $S=112$
+\\
+
+3
+&
+$7$
+\\
+
+4
+&
+$12$
+\\
+
+5
+&
+$6$
+\\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table}
+
+\end{document}

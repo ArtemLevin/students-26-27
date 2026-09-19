@@ -1,0 +1,761 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm,headheight=25pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softaccent}{HTML}{EAF4F4}
+\definecolor{softgray}{HTML}{F3F5F5}
+
+\hypersetup{hidelinks}
+\color{textgray}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\setlist[itemize]{leftmargin=1.45em,itemsep=0.25em,topsep=0.3em}
+\setlist[enumerate]{leftmargin=1.65em,itemsep=0.45em,topsep=0.35em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{darkaccent} Кирилл Зиновьев}
+\fancyhead[R]{\small\color{darkaccent} Математика, 7 класс}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{%
+  \hbox to\headwidth{%
+    \color{accent}\leaders\hrule height \headrulewidth\hfill
+  }%
+}
+
+\newtcolorbox{keybox}[1][]{
+  enhanced,
+  breakable,
+  colback=softaccent,
+  colframe=accent,
+  boxrule=0.45pt,
+  arc=1.5mm,
+  left=3mm,
+  right=3mm,
+  top=2mm,
+  bottom=2mm,
+  before skip=0.7em,
+  after skip=0.7em,
+  #1
+}
+
+\newtcolorbox{examplebox}[1][]{
+  enhanced,
+  breakable,
+  colback=white,
+  colframe=accent!65!black,
+  boxrule=0.4pt,
+  arc=1.2mm,
+  left=3mm,
+  right=3mm,
+  top=2mm,
+  bottom=2mm,
+  before skip=0.7em,
+  after skip=0.7em,
+  #1
+}
+
+\newtcolorbox{warningbox}[1][]{
+  enhanced,
+  breakable,
+  colback=softgray,
+  colframe=textgray!55,
+  boxrule=0.4pt,
+  arc=1.2mm,
+  left=3mm,
+  right=3mm,
+  top=2mm,
+  bottom=2mm,
+  before skip=0.7em,
+  after skip=0.7em,
+  #1
+}
+
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=accent,
+    thick,
+    align=center,
+    minimum width=34mm,
+    minimum height=10mm,
+    fill=softaccent
+  },
+  flowaction/.style={
+    rectangle,
+    rounded corners=2mm,
+    draw=accent,
+    thick,
+    align=center,
+    text width=85mm,
+    minimum height=11mm,
+    fill=white
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=2.2,
+    draw=accent,
+    thick,
+    align=center,
+    text width=47mm,
+    inner sep=1.6mm,
+    fill=softaccent
+  },
+  flowarrow/.style={
+    -{Stealth[length=3mm]},
+    thick,
+    draw=darkaccent
+  }
+}
+
+\newcommand{\sectionline}{%
+  \par
+  \noindent
+  \color{accent}\rule{\linewidth}{0.45pt}
+  \color{textgray}
+  \par
+}
+
+\begin{document}
+
+% -------------------------------------------------
+% Титульный лист
+% -------------------------------------------------
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{2.1cm}
+
+{\Large\color{darkaccent}\textbf{Чек-лист}}\par
+
+\vspace{0.55cm}
+
+{\huge\bfseries
+Отношения величин и задачи на прямоугольник
+}\par
+
+\vspace{0.25cm}
+
+{\Large\color{accent}
+Математическая модель текстовой задачи
+}\par
+
+\vspace{1.5cm}
+
+{\large 7 класс}\par
+
+\vspace{0.4cm}
+
+{\large Кирилл Зиновьев}\par
+
+\vfill
+
+{\large \today}\par
+
+\vspace{0.55cm}
+
+{\normalsize
+Лёвин Артём Александрович эксклюзивно для Кирилла Зиновьева
+}\par
+
+\vspace{1.15cm}
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[
+    accent!55,
+    line width=1.1pt
+  ]
+    ($(current page.south west)+(18mm,10mm)$)
+    .. controls
+       ($(current page.south west)+(63mm,18mm)$)
+       and
+       ($(current page.south east)+(-63mm,5mm)$)
+    ..
+    ($(current page.south east)+(-18mm,10mm)$);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% -------------------------------------------------
+% Основной чек-лист
+% -------------------------------------------------
+
+\section*{1. Что означает отношение величин}
+\sectionline
+
+Если стороны прямоугольника относятся как
+\[
+a:b=m:n,
+\]
+то числа $m$ и $n$ показывают количество одинаковых долей.
+
+Для длин сторон можно записать
+\[
+a=mx,
+\qquad
+b=nx,
+\qquad
+x>0.
+\]
+
+Здесь $x$ --- длина одной общей доли.
+
+\begin{keybox}
+\textbf{Главная идея.}
+
+Запись
+\[
+a:b=3:6
+\]
+не означает
+\[
+a=3,
+\qquad
+b=6.
+\]
+
+Она означает, что обе длины получаются умножением чисел $3$ и $6$ на один и тот же положительный множитель.
+\end{keybox}
+
+Например, отношению $3:6$ подходят пары длин
+\[
+3\text{ и }6,
+\qquad
+6\text{ и }12,
+\qquad
+9\text{ и }18,
+\]
+поскольку во всех случаях отношение сокращается до $1:2$.
+
+\subsection*{Можно ли сократить отношение?}
+
+Да. Отношения
+\[
+3:6
+\quad\text{и}\quad
+1:2
+\]
+равносильны.
+
+Поэтому возможны две записи:
+\[
+a=3x,
+\qquad
+b=6x
+\]
+или
+\[
+a=y,
+\qquad
+b=2y.
+\]
+
+Переменные $x$ и $y$ тогда имеют разные численные значения, однако итоговые длины сторон совпадают.
+
+\section*{2. Формулы прямоугольника}
+\sectionline
+
+Для прямоугольника со сторонами $a$ и $b$:
+\[
+P=2(a+b),
+\qquad
+S=ab.
+\]
+
+Если
+\[
+a=mx,
+\qquad
+b=nx,
+\]
+то
+\[
+P=2(mx+nx)=2(m+n)x.
+\]
+
+Площадь:
+\[
+S=(mx)(nx)=mnx^2.
+\]
+
+\begin{keybox}
+При умножении $x$ на $x$ получаем
+\[
+x\cdot x=x^2.
+\]
+
+Поэтому, например,
+\[
+(3x)(6x)=18x^2.
+\]
+\end{keybox}
+
+\section*{3. Типовой способ решения задачи}
+\sectionline
+
+Если известно отношение сторон и периметр, удобно действовать в таком порядке:
+
+\begin{enumerate}
+  \item Перевести отношение на язык переменной:
+  \[
+  a=mx,
+  \qquad
+  b=nx.
+  \]
+
+  \item Записать формулу периметра.
+
+  \item Подставить выражения для сторон и получить уравнение относительно $x$.
+
+  \item Найти $x$.
+
+  \item Восстановить длины сторон.
+
+  \item Вычислить требуемую величину, например площадь.
+
+  \item Проверить отношение сторон и исходное условие.
+\end{enumerate}
+
+\begin{examplebox}
+\textbf{Пример 1.}
+
+Стороны прямоугольника относятся как $3:6$, периметр равен $54$ см. Найти площадь.
+
+Пусть
+\[
+a=3x,
+\qquad
+b=6x.
+\]
+
+Тогда
+\[
+P=3x+6x+3x+6x=18x.
+\]
+
+По условию
+\[
+P=54,
+\]
+поэтому
+\[
+18x=54,
+\qquad
+x=3.
+\]
+
+Следовательно,
+\[
+a=9\text{ см},
+\qquad
+b=18\text{ см}.
+\]
+
+Площадь:
+\[
+S=9\cdot18=162\text{ см}^2.
+\]
+\end{examplebox}
+
+\begin{examplebox}
+\textbf{Пример 2.}
+
+Стороны относятся как $2:3$, периметр равен $50$ см.
+
+Записываем
+\[
+a=2x,
+\qquad
+b=3x.
+\]
+
+Тогда
+\[
+2x+3x+2x+3x=50,
+\]
+откуда
+\[
+10x=50,
+\qquad
+x=5.
+\]
+
+Стороны равны
+\[
+10\text{ см}
+\quad\text{и}\quad
+15\text{ см}.
+\]
+
+Поэтому
+\[
+S=150\text{ см}^2.
+\]
+\end{examplebox}
+
+\begin{examplebox}
+\textbf{Пример 3.}
+
+Стороны относятся как $3:5$, периметр равен $16$ см.
+
+Пусть
+\[
+a=3x,
+\qquad
+b=5x.
+\]
+
+Тогда
+\[
+3x+5x+3x+5x=16,
+\]
+то есть
+\[
+16x=16,
+\qquad
+x=1.
+\]
+
+Следовательно,
+\[
+S=(3x)(5x)=15x^2=15\text{ см}^2.
+\]
+\end{examplebox}
+
+\section*{4. Математическая модель текстовой задачи}
+\sectionline
+
+Математическая модель --- это запись условий задачи с помощью переменных, формул, равенств и уравнений.
+
+Рассмотрим движение из города $A$ в город $B$.
+
+Часть пути пройдена по обычной дороге со скоростью $40$ км/ч, оставшаяся часть --- по шоссе со скоростью $60$ км/ч. Общий путь равен $260$ км.
+
+Если времена движения равны $t_1$ и $t_2$, то пройденные расстояния:
+\[
+s_1=40t_1,
+\qquad
+s_2=60t_2.
+\]
+
+Поскольку весь путь равен $260$ км,
+\[
+40t_1+60t_2=260.
+\]
+
+\begin{warningbox}
+Одного такого уравнения недостаточно для однозначного нахождения двух неизвестных $t_1$ и $t_2$.
+
+Нужна дополнительная независимая информация, например общее время движения:
+\[
+t_1+t_2=T.
+\]
+
+Тогда получается система из двух уравнений.
+\end{warningbox}
+
+\subsection*{Проверка здравого смысла}
+
+Если весь путь $260$ км проходится со скоростями от $40$ до $60$ км/ч, общее время должно лежать между
+\[
+\frac{260}{60}
+=
+\frac{13}{3}
+\approx
+4{,}33\text{ ч}
+\]
+и
+\[
+\frac{260}{40}
+=
+6{,}5\text{ ч}.
+\]
+
+Поэтому, например, общее время $4$ часа противоречило бы физическому смыслу условия.
+
+\section*{5. Типичные ошибки}
+\sectionline
+
+\begin{itemize}
+  \item Подменять отношение
+  \[
+  a:b=3:6
+  \]
+  равенствами
+  \[
+  a=3,
+  \qquad
+  b=6.
+  \]
+
+  \item Использовать разные множители для частей одного отношения. В записи
+  \[
+  a=3x,
+  \qquad
+  b=6x
+  \]
+  переменная $x$ одна и та же.
+
+  \item Забывать, что
+  \[
+  x\cdot x=x^2.
+  \]
+
+  \item Пытаться найти площадь до определения масштаба $x$, если данных для этого ещё недостаточно.
+
+  \item Использовать число из условия, не связывая его с формулой. Например, периметр должен войти в уравнение через
+  \[
+  P=2(a+b).
+  \]
+
+  \item Терять единицы измерения: длина измеряется в см, м, км; площадь --- в см$^2$, м$^2$ и т.~д.
+
+  \item В текстовой задаче с несколькими неизвестными считать модель завершённой, когда уравнений недостаточно для однозначного решения.
+\end{itemize}
+
+% -------------------------------------------------
+% Блок-схема
+% -------------------------------------------------
+
+\clearpage
+\thispagestyle{plain}
+
+\begin{center}
+{\Large\bfseries\color{darkaccent}
+Алгоритм: отношение сторон и известный периметр
+}
+\end{center}
+
+\vspace{5mm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=8mm and 16mm]
+
+  \node[flowstart] (start) {
+    Начало
+  };
+
+  \node[
+    flowaction,
+    below=of start
+  ] (ratio) {
+    Из отношения $a:b=m:n$ записать\\
+    $a=mx$, $b=nx$, $x>0$
+  };
+
+  \node[
+    flowaction,
+    below=of ratio
+  ] (perim) {
+    Подставить в формулу периметра\\
+    $P=2(a+b)$
+  };
+
+  \node[
+    flowaction,
+    below=of perim
+  ] (eq) {
+    Составить и решить уравнение\\
+    $2(m+n)x=P$
+  };
+
+  \node[
+    flowaction,
+    below=of eq
+  ] (sides) {
+    Найти стороны\\
+    $a=mx$, $b=nx$
+  };
+
+  \node[
+    flowaction,
+    below=of sides
+  ] (target) {
+    Вычислить требуемую величину\\
+    например, $S=ab$
+  };
+
+  \node[
+    flowdecision,
+    below=10mm of target
+  ] (check) {
+    Условие и отношение выполняются?
+  };
+
+  \node[
+    flowstart,
+    below=10mm of check
+  ] (finish) {
+    Ответ
+  };
+
+  \node[
+    flowaction,
+    right=24mm of check,
+    text width=55mm
+  ] (revise) {
+    Проверить арифметику,\\
+    уравнение и подстановку
+  };
+
+  \draw[flowarrow]
+    (start) -- (ratio);
+
+  \draw[flowarrow]
+    (ratio) -- (perim);
+
+  \draw[flowarrow]
+    (perim) -- (eq);
+
+  \draw[flowarrow]
+    (eq) -- (sides);
+
+  \draw[flowarrow]
+    (sides) -- (target);
+
+  \draw[flowarrow]
+    (target) -- (check);
+
+  \draw[flowarrow]
+    (check)
+    --
+    node[left,font=\small]{да}
+    (finish);
+
+  \draw[flowarrow]
+    (check.east)
+    --
+    node[above,font=\small]{нет}
+    (revise.west);
+
+  \draw[flowarrow]
+    (revise.north)
+    |-
+    ([xshift=8mm]eq.east)
+    --
+    (eq.east);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% -------------------------------------------------
+% Тренировочный блок
+% -------------------------------------------------
+
+\section*{Тренировочный блок --- Путь А}
+\sectionline
+
+\textbf{Правило работы.}
+
+Оформляйте решение последовательно: введите общую долю $x$, составьте уравнение, найдите $x$, затем вычислите требуемую величину.
+
+\begin{enumerate}
+  \item
+  Стороны прямоугольника относятся как $2:3$, а его периметр равен $40$ см. Найдите площадь прямоугольника.
+
+  \item
+  Стороны прямоугольника относятся как $3:5$, а его периметр равен $64$ см. Найдите площадь прямоугольника.
+
+  \item
+  Стороны прямоугольника относятся как $4:7$, а его периметр равен $66$ см. Найдите длины сторон и площадь прямоугольника.
+
+  \item
+  Стороны прямоугольника относятся как $5:8$, а его периметр равен $104$ см. Найдите площадь прямоугольника.
+
+  \item
+  Автомобиль проехал из города $A$ в город $B$ всего $260$ км.
+
+  Часть пути он ехал по обычной дороге со скоростью $40$ км/ч, оставшуюся часть --- по шоссе со скоростью $60$ км/ч.
+
+  Общее время движения составило $5$ часов.
+
+  Сколько времени автомобиль ехал по обычной дороге и сколько по шоссе?
+\end{enumerate}
+
+\vfill
+
+\begin{keybox}
+\textbf{Самопроверка перед завершением работы:}
+
+все числа из условия использованы по смыслу;
+
+уравнение соответствует условию;
+
+найденное значение $x$ положительно;
+
+отношение сторон сохраняется;
+
+единицы измерения указаны.
+\end{keybox}
+
+% -------------------------------------------------
+% Ответы
+% -------------------------------------------------
+
+\clearpage
+
+\section*{Ответы}
+\sectionline
+
+\renewcommand{\arraystretch}{1.35}
+
+\begin{table}[ht]
+\centering
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}cX@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $96\text{ см}^2$ \\
+
+2 & $240\text{ см}^2$ \\
+
+3 & стороны $12$ см и $21$ см; площадь $252\text{ см}^2$ \\
+
+4 & $640\text{ см}^2$ \\
+
+5 & по обычной дороге --- $2$ ч; по шоссе --- $3$ ч \\
+\bottomrule
+\end{tabularx}
+
+\end{table}
+
+\vfill
+
+\begin{center}
+\small\color{darkaccent}
+Лёвин Артём Александрович эксклюзивно для Кирилла Зиновьева
+\end{center}
+
+\end{document}

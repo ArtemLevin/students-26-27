@@ -1,0 +1,1031 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\usepackage{paratype}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,left=19mm,right=19mm,top=18mm,bottom=20mm]{geometry}
+\usepackage[nopatch=footnote]{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{E9EEEE}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkaccent,
+    urlcolor=darkaccent
+}
+
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+\setlist[itemize]{
+    leftmargin=1.7em,
+    itemsep=0.25em,
+    topsep=0.35em
+}
+
+\setlist[enumerate]{
+    leftmargin=1.9em,
+    itemsep=0.35em,
+    topsep=0.35em
+}
+
+\color{textgray}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Марина Селиверстова}
+\fancyhead[R]{\small ОГЭ: графики и параметры}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{15pt}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\newcommand{\sectionrule}{%
+    \par
+    \vspace{-0.4em}
+    {\color{accent}\rule{\linewidth}{0.5pt}}
+    \vspace{0.4em}
+}
+
+\newcommand{\key}[1]{%
+    \textcolor{darkaccent}{\textbf{#1}}
+}
+
+\tikzset{
+    flowstart/.style={
+        ellipse,
+        draw=darkaccent,
+        very thick,
+        align=center,
+        minimum width=36mm,
+        minimum height=13mm,
+        fill=white
+    },
+    flowproc/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=darkaccent,
+        very thick,
+        align=center,
+        text width=48mm,
+        minimum height=15mm,
+        fill=white
+    },
+    flowwide/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=darkaccent,
+        very thick,
+        align=center,
+        text width=58mm,
+        minimum height=17mm,
+        fill=white
+    },
+    flowdec/.style={
+        diamond,
+        aspect=2.15,
+        draw=darkaccent,
+        very thick,
+        align=center,
+        text width=34mm,
+        inner sep=1.5pt,
+        fill=white
+    },
+    flowline/.style={
+        -{Stealth[length=3mm,width=2mm]},
+        very thick,
+        draw=accent
+    },
+    flowlabel/.style={
+        font=\small,
+        fill=white,
+        inner sep=1.5pt,
+        text=darkaccent
+    }
+}
+
+\newcommand{\startflowchartlandscape}{%
+    \clearpage
+    \pdfpagewidth=420mm
+    \pdfpageheight=297mm
+    \newgeometry{left=18mm,right=18mm,top=16mm,bottom=16mm}%
+    \setlength{\textwidth}{384mm}%
+    \setlength{\textheight}{265mm}%
+    \setlength{\hsize}{\textwidth}%
+    \setlength{\linewidth}{\textwidth}%
+    \setlength{\columnwidth}{\textwidth}%
+}
+
+\newcommand{\finishflowchartpage}{%
+    \clearpage
+    \pdfpagewidth=210mm
+    \pdfpageheight=297mm
+    \restoregeometry%
+    \setlength{\linewidth}{\textwidth}%
+}
+
+\begin{document}
+
+% ============================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% ============================================================
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{22mm}
+
+{\color{darkaccent}\Large\bfseries Чек-лист\par}
+
+\vspace{8mm}
+
+{\Huge\bfseries
+Рациональные функции, параболы,\par}
+
+\vspace{2mm}
+
+{\Huge\bfseries
+выколотые точки и параметры\par}
+
+\vspace{8mm}
+
+{\Large ОГЭ по математике\par}
+
+\vfill
+
+{\large Марина Селиверстова\par}
+
+\vspace{5mm}
+
+{\large Дата: \today\par}
+
+\vspace{12mm}
+
+{\large Лёвин Артём Александрович\par}
+{\large эксклюзивно для Марины Селиверстовой\par}
+
+\vfill
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[
+    accent!55,
+    line width=0.9pt
+]
+    ([xshift=18mm,yshift=18mm]current page.south west)
+    .. controls
+    ([xshift=60mm,yshift=31mm]current page.south west)
+    and
+    ([xshift=-70mm,yshift=8mm]current page.south east)
+    ..
+    ([xshift=-18mm,yshift=20mm]current page.south east);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% ============================================================
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% ============================================================
+
+\section*{1. Главная идея занятия}
+\sectionrule
+
+В задачах ОГЭ график сложной дробно-рациональной функции часто после сокращения превращается в знакомую параболу. Ключевой момент: \key{ограничения исходного выражения сохраняются}. Поэтому после построения упрощённого графика нужно удалить точки, соответствующие запрещённым значениям $x$.
+
+Типовая конструкция:
+\[
+y=\frac{P(x)(x-a)}{a-x}.
+\]
+
+Поскольку
+\[
+a-x=-(x-a),
+\]
+при $x\ne a$ получаем
+\[
+y=-P(x),
+\qquad
+x\ne a.
+\]
+
+На графике функции $y=-P(x)$ точка с абсциссой $x=a$ должна быть \key{выколота}.
+
+\section*{2. ОДЗ и сокращение алгебраической дроби}
+\sectionrule
+
+\key{Шаг 1.} Найдите ОДЗ \emph{до сокращения}. Знаменатель не может быть равен нулю.
+
+\key{Шаг 2.} Разложите числитель и знаменатель на множители, если это возможно.
+
+\key{Шаг 3.} Сокращайте только одинаковые множители. Помните:
+\[
+x-a=-(a-x).
+\]
+
+Например,
+\[
+\frac{x-2}{2-x}
+=
+\frac{x-2}{-(x-2)}
+=
+-1,
+\qquad
+x\ne2.
+\]
+
+\key{Шаг 4.} После сокращения обязательно перенесите исходное ограничение в запись упрощённой функции.
+
+\medskip
+
+\textbf{Типичная ошибка.}
+После сокращения множителя $(x-a)$ значение $x=a$ не возвращается в область определения. Сокращение меняет форму записи, но не исходную ОДЗ.
+
+\section*{3. Как построить параболу после упрощения}
+\sectionrule
+
+Пусть после преобразований получена функция
+\[
+y=ax^2+bx+c,
+\qquad
+a\ne0.
+\]
+
+Для уверенного построения достаточно пройти следующие пункты.
+
+\begin{enumerate}
+
+\item
+\key{Вершина параболы:}
+\[
+x_0=-\frac{b}{2a},
+\qquad
+y_0=f(x_0).
+\]
+
+\item
+\key{Пересечения с осью $Ox$:}
+положите $y=0$ и решите квадратное уравнение
+\[
+ax^2+bx+c=0.
+\]
+
+\item
+\key{Пересечение с осью $Oy$:}
+положите $x=0$. Получите точку
+\[
+(0;c).
+\]
+
+\item
+\key{Направление ветвей:}
+\[
+a>0
+\Rightarrow
+\text{ветви вверх},
+\qquad
+a<0
+\Rightarrow
+\text{ветви вниз}.
+\]
+
+\item
+Если точек недостаточно, составьте небольшую таблицу. Выбирайте значения $x$, симметричные относительно $x_0$.
+
+\item
+В самом конце нанесите \key{выколотые точки}, заданные ограничениями исходной функции.
+
+\end{enumerate}
+
+Если $b=0$, то
+\[
+x_0=0,
+\]
+и осью симметрии параболы является ось $Oy$.
+
+Тогда удобно брать пары
+\[
+x=\pm1,
+\qquad
+x=\pm2
+\]
+и так далее.
+
+\section*{4. Общие точки графиков и параметр}
+\sectionrule
+
+\subsection*{4.1. Прямая $y=m$}
+
+Прямая
+\[
+y=m
+\]
+горизонтальна.
+
+Число общих точек определяется её положением относительно графика.
+
+Для параболы важно учитывать:
+
+\begin{itemize}
+\item уровень вершины;
+\item направление ветвей;
+\item выколотые точки: пересечение, попавшее в выколотую точку, \emph{не считается}.
+\end{itemize}
+
+\subsection*{4.2. Прямая $y=kx$}
+
+Любая прямая вида
+\[
+y=kx
+\]
+проходит через начало координат.
+
+Чтобы найти общие точки с графиком $y=f(x)$, приравниваем формулы:
+\[
+f(x)=kx.
+\]
+
+Если после этого получается квадратное уравнение, его дискриминант управляет количеством алгебраических точек пересечения:
+\[
+\begin{array}{ccl}
+D>0 &\Rightarrow& 2\text{ корня},\\
+D=0 &\Rightarrow& 1\text{ корень},\\
+D<0 &\Rightarrow& 0\text{ корней}.
+\end{array}
+\]
+
+При наличии выколотой точки возникает \key{дополнительный случай}. Два корня квадратного уравнения могут соответствовать двум пересечениям упрощённых графиков, но одно из них может быть запрещено ОДЗ. Тогда у исходных графиков останется ровно одна общая точка.
+
+Если выколота точка
+\[
+A(x_h;y_h),
+\qquad
+x_h\ne0,
+\]
+то прямая $y=kx$, проходящая через неё, имеет коэффициент
+\[
+k=\frac{y_h}{x_h}.
+\]
+
+Это значение нужно рассматривать отдельно от случая касания
+\[
+D=0.
+\]
+
+% ============================================================
+% БЛОК-СХЕМА
+% ============================================================
+
+\startflowchartlandscape
+
+\thispagestyle{empty}
+
+\noindent
+\begin{minipage}{\textwidth}
+\centering
+
+{\Large\bfseries\color{darkaccent}
+Алгоритм: график после сокращения и поиск параметра
+\par}
+
+\vspace{7mm}
+
+\begin{tikzpicture}[
+    node distance=15mm and 18mm,
+    font=\small
+]
+
+\node[flowstart] (start)
+{Исходная\\дробно-рациональная функция};
+
+\node[flowproc,right=of start] (odz)
+{Найти ОДЗ\\по исходному знаменателю};
+
+\node[flowproc,right=of odz] (simp)
+{Разложить на множители\\и сократить};
+
+\node[flowproc,right=of simp] (keep)
+{Записать упрощённую функцию\\вместе с ограничениями};
+
+\node[flowproc,right=of keep] (parab)
+{Построить параболу:\\вершина, оси, дополнительные точки};
+
+\node[flowproc,below=of parab] (holes)
+{Удалить точки, запрещённые ОДЗ};
+
+\node[flowdec,left=23mm of holes] (type)
+{Какая прямая\\задана?};
+
+\node[
+    flowwide,
+    below left=18mm and 25mm of type
+] (mline)
+{$y=m$: двигать горизонтальную прямую и считать только существующие пересечения};
+
+\node[
+    flowwide,
+    below right=18mm and 25mm of type
+] (kline)
+{$y=kx$: приравнять формулы $f(x)=kx$};
+
+\node[
+    flowproc,
+    below=of kline
+] (disc)
+{Для касания потребовать $D=0$\\и найти соответствующие $k$};
+
+\node[
+    flowproc,
+    left=22mm of disc
+] (holek)
+{Если выколота $A(x_h;y_h)$ и $x_h\ne0$, проверить $k=y_h/x_h$};
+
+\node[
+    flowwide,
+    below=19mm of $(disc)!0.5!(holek)$
+] (verify)
+{Объединить кандидаты и проверить ОДЗ:\\сколько общих точек осталось у исходных графиков?};
+
+\node[
+    flowstart,
+    below=of verify
+] (finish)
+{Записать ответ};
+
+\draw[flowline] (start) -- (odz);
+\draw[flowline] (odz) -- (simp);
+\draw[flowline] (simp) -- (keep);
+\draw[flowline] (keep) -- (parab);
+\draw[flowline] (parab) -- (holes);
+\draw[flowline] (holes) -- (type);
+
+\draw[flowline]
+(type)
+--
+node[flowlabel,above left] {$y=m$}
+(mline);
+
+\draw[flowline]
+(type)
+--
+node[flowlabel,above right] {$y=kx$}
+(kline);
+
+\draw[flowline]
+(mline.south)
+|-
+(verify.west);
+
+\draw[flowline]
+(kline)
+--
+(disc);
+
+\draw[flowline]
+(kline.south west)
+|-
+(holek.north);
+
+\draw[flowline]
+(disc)
+--
+(verify);
+
+\draw[flowline]
+(holek)
+--
+(verify);
+
+\draw[flowline]
+(verify)
+--
+(finish);
+
+\end{tikzpicture}
+
+\end{minipage}
+
+\finishflowchartpage
+
+% ============================================================
+% ПРИМЕР 1
+% ============================================================
+
+\section*{5. Разобранный пример: парабола с выколотой вершиной}
+\sectionrule
+
+Рассмотрим функцию
+\[
+y=
+\frac{(x+1)(x^2-4x+3)}{x-1}.
+\]
+
+Сначала фиксируем ОДЗ:
+\[
+x\ne1.
+\]
+
+Разложим квадратный трёхчлен:
+\[
+x^2-4x+3
+=
+(x-1)(x-3).
+\]
+
+Тогда при $x\ne1$
+\[
+y=
+\frac{(x+1)(x-1)(x-3)}{x-1}
+=
+(x+1)(x-3)
+=
+x^2-2x-3.
+\]
+
+Вершина:
+\[
+x_0=
+-\frac{-2}{2}
+=
+1,
+\]
+\[
+y_0=
+1-2-3
+=
+-4.
+\]
+
+Корни:
+\[
+x^2-2x-3=0,
+\]
+\[
+(x+1)(x-3)=0.
+\]
+
+Следовательно, точки пересечения с осью $Ox$:
+\[
+(-1;0),
+\qquad
+(3;0).
+\]
+
+С осью $Oy$:
+\[
+(0;-3).
+\]
+
+Значение $x=1$ запрещено, поэтому вершина
+\[
+(1;-4)
+\]
+\key{выколота}.
+
+Для горизонтальной прямой $y=m$ получаем:
+
+\begin{center}
+\begin{tabular}{cc}
+\toprule
+Значение $m$ & Число общих точек \\
+\midrule
+$m<-4$ & $0$ \\
+$m=-4$ & $0$ \\
+$m>-4$ & $2$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ============================================================
+% ПРИМЕР 2
+% ============================================================
+
+\section*{6. Разобранный пример: когда $y=kx$ имеет ровно одну общую точку}
+\sectionrule
+
+Пусть
+\[
+y=
+\frac{(x^2+1)(x-2)}{2-x}.
+\]
+
+ОДЗ:
+\[
+x\ne2.
+\]
+
+Так как
+\[
+2-x=-(x-2),
+\]
+то
+\[
+y=-x^2-1,
+\qquad
+x\ne2.
+\]
+
+Выколота точка
+\[
+A(2;-5).
+\]
+
+Ищем значения $k$, при которых прямая
+\[
+y=kx
+\]
+имеет с исходным графиком ровно одну общую точку.
+
+\textbf{Случай 1: касание.}
+
+\[
+-x^2-1=kx.
+\]
+
+Перенесём всё в одну часть:
+\[
+x^2+kx+1=0.
+\]
+
+Для одного корня необходимо:
+\[
+D=0.
+\]
+
+Дискриминант:
+\[
+D=k^2-4.
+\]
+
+Следовательно,
+\[
+k^2-4=0,
+\]
+\[
+k=2
+\qquad
+\text{или}
+\qquad
+k=-2.
+\]
+
+\textbf{Случай 2: одна из двух точек пересечения выколота.}
+
+Прямая должна проходить через точку
+\[
+A(2;-5).
+\]
+
+Подставляем её координаты в
+\[
+y=kx:
+\]
+\[
+-5=2k.
+\]
+
+Следовательно,
+\[
+k=-\frac52.
+\]
+
+При этом уравнение пересечения имеет корни
+\[
+x=2
+\qquad\text{и}\qquad
+x=\frac12.
+\]
+
+Значение
+\[
+x=2
+\]
+запрещено ОДЗ, поэтому остаётся ровно одна общая точка.
+
+Итак,
+\[
+\textbf{
+$k\in
+\left\{
+-\dfrac52,
+-2,
+2
+\right\}$.
+}
+\]
+
+\begin{center}
+
+\begin{tikzpicture}
+
+\begin{axis}[
+    width=0.82\linewidth,
+    height=92mm,
+    axis lines=middle,
+    xmin=-4,
+    xmax=4,
+    ymin=-10,
+    ymax=4,
+    xlabel={$x$},
+    ylabel={$y$},
+    samples=240,
+    clip=false,
+    unit vector ratio=1 1,
+    tick label style={font=\small},
+    label style={font=\small},
+    legend style={
+        font=\small,
+        draw=none,
+        fill=none,
+        at={(0.02,0.02)},
+        anchor=south west
+    }
+]
+
+\addplot[
+    very thick,
+    color=darkaccent,
+    domain=-4:4
+]
+{-x^2-1};
+\addlegendentry{$y=-x^2-1$}
+
+\addplot[
+    thick,
+    color=accent,
+    domain=-4:4
+]
+{2*x};
+\addlegendentry{$y=2x$}
+
+\addplot[
+    thick,
+    dashed,
+    color=accent!80!black,
+    domain=-4:4
+]
+{-2*x};
+\addlegendentry{$y=-2x$}
+
+\addplot[
+    thick,
+    densely dotted,
+    color=textgray,
+    domain=-4:4
+]
+{-2.5*x};
+\addlegendentry{$y=-\frac52x$}
+
+\addplot[
+    only marks,
+    mark=o,
+    mark size=3.2pt,
+    very thick,
+    color=darkaccent,
+    fill=white
+]
+coordinates {(2,-5)};
+
+\node[
+    anchor=west,
+    font=\small,
+    text=darkaccent
+]
+at (axis cs:2.1,-5)
+{$A(2;-5)$};
+
+\end{axis}
+
+\end{tikzpicture}
+
+\end{center}
+
+% ============================================================
+% КРАТКОЕ ПОВТОРЕНИЕ
+% ============================================================
+
+\section*{7. Что особенно важно помнить}
+\sectionrule
+
+\begin{itemize}
+
+\item
+ОДЗ записывается по \emph{исходной} функции и сохраняется после сокращения.
+
+\item
+Скобки $x-a$ и $a-x$ отличаются знаком:
+\[
+a-x=-(x-a).
+\]
+
+\item
+После сокращения строится знакомый график, затем на нём удаляются запрещённые точки.
+
+\item
+Для пересечения графиков приравниваются формулы функций.
+
+\item
+Для касания прямой и параболы в квадратном уравнении пересечения выполняется
+\[
+D=0.
+\]
+
+\item
+При наличии выколотой точки условие $D=0$ может дать не все ответы: отдельно проверяется прямая, проходящая через выколотую точку.
+
+\item
+В мелких вычислениях особенно контролируйте знаки, квадрат отрицательного числа и перенос слагаемых через знак равенства.
+
+\end{itemize}
+
+% ============================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% ============================================================
+
+\clearpage
+
+\section*{Тренировочный блок. Путь А}
+\sectionrule
+
+Выполните задания последовательно. В графических задачах сначала выпишите ОДЗ, затем упростите функцию, постройте основной график и только после этого отметьте выколотые точки.
+
+\begin{enumerate}
+
+\item
+Для функции
+\[
+y=
+\frac{(x+2)(x^2-5x+6)}{x-2}
+\]
+найдите ОДЗ, упростите выражение и укажите координаты выколотой точки.
+
+\item
+Постройте график функции
+\[
+y=
+\frac{(x^2+4)(x-1)}{1-x}.
+\]
+
+Укажите:
+
+\begin{itemize}
+\item вершину параболы;
+\item пересечения с осями;
+\item выколотую точку.
+\end{itemize}
+
+\item
+Для функции из задания 1 определите количество общих точек её графика с прямой
+\[
+y=m
+\]
+в зависимости от значения $m$.
+
+\item
+Определите все значения $k$, при которых прямая
+\[
+y=kx
+\]
+имеет ровно одну общую точку с графиком функции
+\[
+y=
+\frac{(x^2+1)(x-3)}{3-x}.
+\]
+
+\item
+Определите все значения $k$, при которых прямая
+\[
+y=kx
+\]
+имеет ровно одну общую точку с графиком функции
+\[
+y=
+\frac{(x^2+9)(x+2)}{-x-2}.
+\]
+
+\end{enumerate}
+
+% ============================================================
+% ОТВЕТЫ
+% ============================================================
+
+\clearpage
+
+\section*{Ответы}
+\sectionrule
+
+\renewcommand{\arraystretch}{1.35}
+
+\begin{table}[h]
+\centering
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}c X@{}}
+
+\toprule
+№ & Ответ \\
+\midrule
+
+1 &
+$x\ne2$;
+\[
+y=x^2-x-6;
+\]
+выколота точка
+\[
+(2;-4).
+\]
+\\
+
+2 &
+$x\ne1$;
+\[
+y=-x^2-4.
+\]
+Вершина:
+\[
+(0;-4).
+\]
+С осью $Ox$ пересечений нет.
+С осью $Oy$:
+\[
+(0;-4).
+\]
+Выколота точка:
+\[
+(1;-5).
+\]
+\\
+
+3 &
+$0$ точек при
+\[
+m<-\frac{25}{4};
+\]
+$1$ точка при
+\[
+m=-\frac{25}{4};
+\]
+$1$ точка при
+\[
+m=-4;
+\]
+$2$ точки при
+\[
+m>-\frac{25}{4},
+\qquad
+m\ne-4.
+\]
+\\
+
+4 &
+\[
+k\in
+\left\{
+-\frac{10}{3},
+-2,
+2
+\right\}.
+\]
+\\
+
+5 &
+\[
+k\in
+\left\{
+-6,
+6,
+\frac{13}{2}
+\right\}.
+\]
+\\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table}
+
+\vfill
+
+{\small\color{darkaccent}
+Самопроверка: в задачах с параметром убедитесь, что каждый найденный коэффициент действительно оставляет у исходных графиков ровно одну общую точку после учёта ОДЗ.
+}
+
+\end{document}
