@@ -14,3 +14,16 @@ When creating or redesigning a personal student navigator:
 10. Run the quality gate from `DESIGN_RULES.md` before finalizing.
 
 Required anti-template constraint: if the first draft resembles a generic hero + cards SaaS page, revise the composition before shipping.
+
+## Mandatory repository deliverables
+
+For every new or redesigned `students/**/site/index.html`:
+
+- create/update adjacent `design.json`;
+- expose matching `data-atlas-composition`, `data-atlas-accent`, `data-atlas-density`, and `data-atlas-motion` on `body`;
+- load `tokens.css`, `foundations.css`, and `archetypes.css`;
+- load `student-sites.css` or a deliberate local LEVIN / ATLAS adapter;
+- keep the complete fingerprint tuple unique across entry cabinets;
+- run `node design-system/test-contract.mjs` before commit.
+
+Dated lesson pages and labs remain portable lesson artifacts and are outside the mandatory fingerprint contract.

@@ -58,3 +58,18 @@ Before shipping, verify:
 8. The radial map and learning data remain the primary product.
 9. Dark/light theme behavior remains coherent.
 10. The page is usable with keyboard only.
+
+## Automated repository guardrail
+
+The human release gate above is backed by `design-system/test-contract.mjs`.
+
+For every `students/**/site/index.html`, CI requires:
+
+1. adjacent `design.json`;
+2. fingerprint fields valid against the repository schema contract;
+3. a unique complete fingerprint tuple;
+4. runtime `data-atlas-*` values consistent with `design.json`;
+5. shared `tokens.css`, `foundations.css`, and `archetypes.css`;
+6. either `student-sites.css` or a local LEVIN / ATLAS adapter.
+
+This guardrail checks structural identity. Artistic quality, composition strength, semantic hierarchy, accessibility and anti-template judgment remain part of review.
