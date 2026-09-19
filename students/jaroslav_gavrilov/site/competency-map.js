@@ -312,7 +312,7 @@
     const evidence = Array.isArray(item.evidence) ? item.evidence : [];
     document.getElementById('dialogHistory').textContent = evidence.length
       ? evidence.map(entry => entry.text || entry).join(' ')
-      : 'Диагностических данных пока нет. Тема ещё не подтверждена материалами ученицы.';
+      : 'Диагностических данных пока нет. Тема ещё не подтверждена материалами ученика.';
 
     const material = document.getElementById('dialogMaterial');
     if (item.material && item.material.href) {
