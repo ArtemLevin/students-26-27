@@ -62,7 +62,7 @@ for (const id of COVERED_190926) {
   if (!item) continue;
   item.level = 2;
   item.evidence = [{ text: lessonEvidence }];
-  item.material = '../tex_docs/19.09.26.tex';
+  item.material = { href: '../tex_docs/19.09.26.tex', label: 'Открыть TeX-пособие →' };
 }
 
 window.COMPETENCY_MAP_DATA={
