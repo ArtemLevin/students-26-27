@@ -37,3 +37,19 @@ Before generating a new page, inspect recent `design.json` files. Change at leas
 ## Runtime mapping
 
 The fingerprint is documentation/source-of-truth. Runtime uses body data attributes for the axes that affect shared CSS. Page-specific adapters own detailed selector mapping.
+
+## Runtime attributes
+
+Adopted pages expose the documented fingerprint through body attributes:
+
+```html
+<body
+  data-atlas
+  data-atlas-adapter="universal"
+  data-atlas-composition="cartographer"
+  data-atlas-accent="vermilion"
+  data-atlas-density="airy"
+  data-atlas-motion="calm">
+```
+
+`data-atlas-accent` is independent from the composition seed. This makes the roster combinatorial instead of producing six fixed color themes.

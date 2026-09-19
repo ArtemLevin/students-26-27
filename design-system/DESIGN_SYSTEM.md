@@ -82,3 +82,9 @@ Color cannot be the only signal. Every status must also have text, shape, symbol
 - `2.0`: breaking token/markup contract.
 
 See `DESIGN_RULES.md`, `COMPOSITIONS.md`, `FINGERPRINTS.md` and `MIGRATION.md`.
+
+## Legacy-site adapter
+
+Existing navigator generations share `student-sites.css`, scoped by `data-atlas-adapter="universal"`. It normalizes card geometry, shadows, typography and composition while preserving each page's DOM and behavioral JavaScript. Grigory's original pilot remains a dedicated adapter and serves as the reference implementation for deeper page-specific art direction.
+
+The authoritative assignment of fingerprints is `STUDENT_ROSTER.md`.
