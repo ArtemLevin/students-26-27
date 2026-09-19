@@ -10,6 +10,7 @@ on:
       - 'pipeline/practice/**'
       - 'pipeline/schemas/spaced-practice-stage-v1.schema.json'
       - 'design-system/**'
+      - 'scripts/create-student.mjs'
       - 'SITE_GENERATION_PROMPT.md'
       - '.github/workflows/student-dashboard-tests.yml'
   pull_request:
@@ -21,6 +22,7 @@ on:
       - 'pipeline/practice/**'
       - 'pipeline/schemas/spaced-practice-stage-v1.schema.json'
       - 'design-system/**'
+      - 'scripts/create-student.mjs'
       - 'SITE_GENERATION_PROMPT.md'
       - '.github/workflows/student-dashboard-tests.yml'
 
@@ -36,6 +38,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verify scaffolder
+        shell: bash
+        run: |
+          node --check scripts/create-student.mjs
+          node --test design-system/test-create-student.mjs
+          node scripts/create-student.mjs ci_probe_student --name "CI Probe" --grade "CI" --program "CI" --dry-run
       - name: Verify every student cabinet fingerprint
         run: node design-system/test-contract.mjs
 
