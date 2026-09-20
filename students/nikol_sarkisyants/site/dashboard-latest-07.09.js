@@ -5,7 +5,7 @@ import {
   getRecentLessons,
   formatShortDate,
   formatLongDateRu
-} from './lesson-registry.js?v=20260920-1';
+} from './lesson-registry.js?v=20260911-1';
 
 const byId=id=>document.getElementById(id);
 
