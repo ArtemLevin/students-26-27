@@ -1,0 +1,1116 @@
+\documentclass[a4paper,12pt]{article}
+
+% -------------------------------------------------
+% БАЗОВАЯ КОДИРОВКА И МАТЕМАТИКА
+% -------------------------------------------------
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{icomma}
+
+% -------------------------------------------------
+% ТИПОГРАФИКА
+% -------------------------------------------------
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage[
+    a4paper,
+    left=20mm,
+    right=20mm,
+    top=20mm,
+    bottom=22mm
+]{geometry}
+
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{setspace}
+\onehalfspacing
+
+\usepackage{enumitem}
+\setlist[itemize]{
+    leftmargin=6mm,
+    itemsep=2pt,
+    topsep=4pt
+}
+\setlist[enumerate]{
+    leftmargin=8mm,
+    itemsep=3pt,
+    topsep=4pt
+}
+
+% -------------------------------------------------
+% ГРАФИКА
+% -------------------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{
+    calc,
+    arrows.meta,
+    positioning,
+    shapes.geometric
+}
+
+\usepackage{tkz-euclide}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% -------------------------------------------------
+% ТАБЛИЦЫ
+% -------------------------------------------------
+\usepackage{tabularx,booktabs,longtable}
+\renewcommand{\arraystretch}{1.30}
+
+% -------------------------------------------------
+% СЛУЖЕБНОЕ ОФОРМЛЕНИЕ
+% -------------------------------------------------
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{6F7777}
+\definecolor{lightaccent}{HTML}{DDEEEE}
+
+\color{textgray}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkaccent,
+    urlcolor=darkaccent
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{softgray}Графики функции и производной}
+\fancyhead[R]{\small\color{softgray}Николь Саркисьянц}
+\fancyfoot[C]{\small\color{softgray}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\setlength{\headheight}{15pt}
+
+% -------------------------------------------------
+% ЗАГОЛОВКИ
+% -------------------------------------------------
+\newcommand{\maintitle}[1]{%
+    {\Large\bfseries\color{darkaccent}#1\par}
+    \vspace{2mm}
+    {\color{accent}\rule{\linewidth}{0.6pt}}
+    \vspace{4mm}
+}
+
+\newcommand{\subhead}[1]{%
+    \vspace{3mm}
+    {\large\bfseries\color{darkaccent}#1\par}
+    \vspace{1mm}
+}
+
+\newcommand{\keypoint}[1]{%
+    \par
+    \vspace{1mm}
+    {\color{darkaccent}\bfseries #1}
+}
+
+% -------------------------------------------------
+% СТИЛИ БЛОК-СХЕМ
+% -------------------------------------------------
+\tikzset{
+    flowstart/.style={
+        ellipse,
+        draw=darkaccent,
+        line width=0.9pt,
+        minimum width=39mm,
+        minimum height=11mm,
+        align=center,
+        font=\small
+    },
+    flowaction/.style={
+        rounded corners=2mm,
+        rectangle,
+        draw=accent,
+        line width=0.9pt,
+        minimum height=13mm,
+        text width=56mm,
+        inner sep=3mm,
+        align=center,
+        font=\small
+    },
+    flowdecision/.style={
+        diamond,
+        aspect=2.25,
+        draw=darkaccent,
+        line width=0.9pt,
+        text width=35mm,
+        inner sep=1.5mm,
+        align=center,
+        font=\small
+    },
+    flowfinal/.style={
+        rounded corners=2mm,
+        rectangle,
+        draw=darkaccent,
+        line width=1pt,
+        minimum height=13mm,
+        text width=68mm,
+        inner sep=3mm,
+        align=center,
+        font=\small
+    },
+    flowarrow/.style={
+        -{Stealth[length=3mm,width=2mm]},
+        line width=0.85pt,
+        draw=textgray
+    }
+}
+
+% -------------------------------------------------
+% ДОКУМЕНТ
+% -------------------------------------------------
+\begin{document}
+
+% =================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% =================================================
+\begin{titlepage}
+\thispagestyle{empty}
+
+\begin{center}
+
+\vspace*{24mm}
+
+{\color{accent}\rule{38mm}{1pt}}
+
+\vspace{11mm}
+
+{\Huge\bfseries\color{darkaccent}
+Чек-лист
+\par}
+
+\vspace{6mm}
+
+{\LARGE\bfseries
+Графики функции и производной
+\par}
+
+\vspace{4mm}
+
+{\Large
+Знак производной, монотонность\\
+и точки экстремума
+\par}
+
+\vspace{18mm}
+
+{\large
+Подготовка к ЕГЭ
+\par}
+
+\vfill
+
+{\large
+\today
+\par}
+
+\vspace{12mm}
+
+{\large\bfseries
+Лёвин Артём Александрович
+\par}
+
+\vspace{2mm}
+
+{\large
+эксклюзивно для Николь Саркисьянц
+\par}
+
+\vspace{25mm}
+
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+    \draw[
+        accent!55,
+        line width=1.2pt
+    ]
+    ($(current page.south west)+(18mm,18mm)$)
+    .. controls
+    ($(current page.south west)+(65mm,29mm)$)
+    and
+    ($(current page.south east)+(-72mm,7mm)$)
+    ..
+    ($(current page.south east)+(-18mm,18mm)$);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% =================================================
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% =================================================
+\maintitle{1. Главная идея}
+
+В задачах этого типа первое действие всегда одно:
+
+\[
+\boxed{\text{Определить, чей график дан: }f(x)\text{ или }f'(x).}
+\]
+
+От этого зависит вся последующая логика.
+
+Связь функции и её производной:
+
+\[
+f'(x)>0
+\quad\Longrightarrow\quad
+f(x)\text{ возрастает},
+\]
+
+\[
+f'(x)<0
+\quad\Longrightarrow\quad
+f(x)\text{ убывает}.
+\]
+
+Для дифференцируемой функции в рассматриваемой внутренней точке локального
+экстремума выполняется необходимое условие
+
+\[
+f'(x_0)=0.
+\]
+
+При этом равенство
+
+\[
+f'(x_0)=0
+\]
+
+само по себе ещё не гарантирует наличие экстремума.
+
+\subhead{Что означает знак производной}
+
+\begin{center}
+\begin{tabularx}{0.92\linewidth}{@{}>{\bfseries}l X@{}}
+\toprule
+Условие & Что происходит с функцией \\
+\midrule
+$f'(x)>0$ &
+график функции идёт слева направо вверх; функция возрастает \\
+
+$f'(x)<0$ &
+график функции идёт слева направо вниз; функция убывает \\
+
+$f'(x)=0$ &
+касательная горизонтальна; точка может оказаться экстремумом или стационарной точкой другого типа \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\keypoint{Важно.}
+Знак производной сообщает направление изменения функции.
+Точные значения производной по одному лишь факту возрастания или убывания
+восстановить нельзя.
+
+% -------------------------------------------------
+\maintitle{2. Геометрический смысл производной}
+
+Если функция дифференцируема в точке \(x_0\), то
+
+\[
+f'(x_0)
+\]
+
+равна угловому коэффициенту касательной к графику функции в точке
+
+\[
+\bigl(x_0,f(x_0)\bigr).
+\]
+
+Поэтому:
+
+\[
+f'(x_0)>0
+\]
+
+соответствует касательной, поднимающейся слева направо;
+
+\[
+f'(x_0)<0
+\]
+
+соответствует касательной, опускающейся слева направо;
+
+\[
+f'(x_0)=0
+\]
+
+соответствует горизонтальной касательной.
+
+Чем больше модуль производной,
+
+\[
+|f'(x)|,
+\]
+
+тем больше по модулю наклон касательной.
+
+\keypoint{Практический вывод.}
+При построении качественного эскиза \(f'(x)\) по графику \(f(x)\)
+сначала надёжно устанавливают знак производной.
+Дополнительная информация о крутизне графика помогает уточнить форму
+эскиза, если она действительно считывается с рисунка.
+
+% =================================================
+% ГРАФИКИ
+% =================================================
+\maintitle{3. Один пример: функция и её производная}
+
+Рассмотрим функцию
+
+\[
+f(x)=x^3-3x.
+\]
+
+Её производная:
+
+\[
+f'(x)=3x^2-3.
+\]
+
+Корни производной:
+
+\[
+3x^2-3=0
+\quad\Longleftrightarrow\quad
+x=\pm1.
+\]
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.93\linewidth,
+    height=7cm,
+    axis lines=middle,
+    xmin=-2.2,
+    xmax=2.2,
+    ymin=-3.2,
+    ymax=3.2,
+    xlabel={$x$},
+    ylabel={$y$},
+    samples=250,
+    unit vector ratio=1 1,
+    clip=false,
+    xtick={-2,-1,0,1,2},
+    ytick={-3,-2,-1,0,1,2,3},
+    grid=major,
+    grid style={line width=.2pt,draw=gray!20}
+]
+\addplot[
+    domain=-2.05:2.05,
+    line width=1.2pt,
+    color=accent
+]
+{x^3-3*x};
+
+\addplot[
+    dashed,
+    color=softgray,
+    domain=-3.2:3.2
+]
+coordinates {(-1,-3.2) (-1,3.2)};
+
+\addplot[
+    dashed,
+    color=softgray,
+    domain=-3.2:3.2
+]
+coordinates {(1,-3.2) (1,3.2)};
+
+\node[
+    anchor=south west,
+    text=darkaccent
+] at (axis cs:1.25,1.7) {$y=f(x)$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+На графике видно:
+
+\[
+f(x)\text{ возрастает на }(-\infty,-1),
+\]
+
+\[
+f(x)\text{ убывает на }(-1,1),
+\]
+
+\[
+f(x)\text{ возрастает на }(1,+\infty).
+\]
+
+Следовательно,
+
+\[
+f'(x)>0
+\quad\text{при}\quad
+x<-1\ \text{или}\ x>1,
+\]
+
+\[
+f'(x)<0
+\quad\text{при}\quad
+-1<x<1.
+\]
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.93\linewidth,
+    height=6.7cm,
+    axis lines=middle,
+    xmin=-2.2,
+    xmax=2.2,
+    ymin=-3.6,
+    ymax=9.5,
+    xlabel={$x$},
+    ylabel={$y$},
+    samples=250,
+    unit vector ratio=1 1,
+    clip=false,
+    xtick={-2,-1,0,1,2},
+    ytick={-3,0,3,6,9},
+    grid=major,
+    grid style={line width=.2pt,draw=gray!20}
+]
+\addplot[
+    domain=-2.05:2.05,
+    line width=1.2pt,
+    color=accent
+]
+{3*x^2-3};
+
+\node[
+    anchor=south west,
+    text=darkaccent
+] at (axis cs:1.15,4.8) {$y=f'(x)$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+% -------------------------------------------------
+\maintitle{4. Если дан график функции \(f(x)\)}
+
+Здесь мы смотрим прежде всего на \textbf{монотонность функции}.
+
+\subhead{Основная схема рассуждения}
+
+\[
+\boxed{
+\begin{array}{c}
+f(x)\text{ возрастает}\\[1mm]
+\Downarrow\\[1mm]
+f'(x)>0
+\end{array}}
+\qquad
+\boxed{
+\begin{array}{c}
+f(x)\text{ убывает}\\[1mm]
+\Downarrow\\[1mm]
+f'(x)<0
+\end{array}}
+\]
+
+Если гладкий график переходит:
+
+\[
+\text{убывание}\longrightarrow\text{возрастание},
+\]
+
+то возникает локальный минимум, причём в стандартной дифференцируемой
+ситуации
+
+\[
+f'(x_0)=0.
+\]
+
+Если график переходит:
+
+\[
+\text{возрастание}\longrightarrow\text{убывание},
+\]
+
+то возникает локальный максимум.
+
+\subhead{При построении эскиза \(f'(x)\)}
+
+Работайте в следующем порядке:
+
+\begin{enumerate}
+    \item Разбейте график \(f(x)\) на промежутки монотонности.
+    \item На каждом промежутке определите:
+    \[
+    \text{возрастание или убывание}.
+    \]
+    \item Переведите это в знак производной.
+    \item Отметьте точки, где достоверно известно, что
+    \[
+    f'(x)=0.
+    \]
+    \item Постройте качественный эскиз производной.
+\end{enumerate}
+
+\keypoint{Ограничение метода.}
+По грубому эскизу функции обычно можно уверенно восстановить знак
+производной. Форма графика \(f'(x)\) между характерными точками
+может быть определена лишь качественно.
+
+% -------------------------------------------------
+\maintitle{5. Если дан график производной \(f'(x)\)}
+
+Здесь основное внимание направлено на положение графика относительно
+оси \(Ox\).
+
+Если график производной расположен \textbf{выше} оси \(Ox\), то
+
+\[
+f'(x)>0,
+\]
+
+следовательно, исходная функция возрастает.
+
+Если график производной расположен \textbf{ниже} оси \(Ox\), то
+
+\[
+f'(x)<0,
+\]
+
+следовательно, исходная функция убывает.
+
+\[
+\boxed{
+f'(x)>0
+\Longrightarrow
+f(x)\uparrow
+}
+\]
+
+\[
+\boxed{
+f'(x)<0
+\Longrightarrow
+f(x)\downarrow
+}
+\]
+
+\subhead{Промежутки знакопостоянства}
+
+Промежутком знакопостоянства называют промежуток, на котором выражение
+сохраняет один знак.
+
+Для графика производной это означает:
+
+\begin{itemize}
+    \item график целиком выше оси \(Ox\):
+    \[
+    f'(x)>0;
+    \]
+    \item график целиком ниже оси \(Ox\):
+    \[
+    f'(x)<0.
+    \]
+\end{itemize}
+
+Точки пересечения графика \(f'(x)\) с осью \(Ox\) разбивают ось
+на промежутки знакопостоянства.
+
+% -------------------------------------------------
+\maintitle{6. Как по \(f'(x)\) находить экстремумы \(f(x)\)}
+
+Сам факт
+
+\[
+f'(x_0)=0
+\]
+
+ещё не гарантирует экстремум.
+
+Нужно посмотреть, меняется ли знак производной.
+
+\begin{center}
+\begin{tabularx}{0.94\linewidth}{@{}c c X@{}}
+\toprule
+Слева от \(x_0\) & Справа от \(x_0\) & Вывод \\
+\midrule
+\(f'(x)<0\) & \(f'(x)>0\) &
+функция сначала убывает, затем возрастает:
+\(x_0\) --- точка локального минимума \\
+
+\(f'(x)>0\) & \(f'(x)<0\) &
+функция сначала возрастает, затем убывает:
+\(x_0\) --- точка локального максимума \\
+
+\(f'(x)>0\) & \(f'(x)>0\) &
+экстремума нет \\
+
+\(f'(x)<0\) & \(f'(x)<0\) &
+экстремума нет \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Короткая памятка:
+
+\[
+-\ \longrightarrow\ +
+\qquad
+\text{минимум},
+\]
+
+\[
++\ \longrightarrow\ -
+\qquad
+\text{максимум}.
+\]
+
+% =================================================
+% БЛОК-СХЕМА
+% =================================================
+\clearpage
+\thispagestyle{empty}
+
+\begin{center}
+{\Large\bfseries\color{darkaccent}
+Алгоритм: как читать задачи по графикам \(f(x)\) и \(f'(x)\)
+}
+\end{center}
+
+\vspace{7mm}
+
+\begin{center}
+\begin{tikzpicture}[
+    node distance=9mm and 16mm
+]
+
+\node[flowstart] (start)
+{Начало};
+
+\node[flowaction, below=of start] (read)
+{Прочитайте условие и определите,
+что требуется найти};
+
+\node[flowdecision, below=11mm of read] (whose)
+{Чей график дан?};
+
+\node[
+    flowaction,
+    below left=16mm and 19mm of whose
+] (function)
+{Дан график \(f(x)\).\\
+Разбейте его на промежутки
+возрастания и убывания};
+
+\node[
+    flowaction,
+    below right=16mm and 19mm of whose
+] (derivative)
+{Дан график \(f'(x)\).\\
+Разбейте его на промежутки,
+где график выше и ниже оси \(Ox\)};
+
+\node[
+    flowaction,
+    below=10mm of function
+] (funconvert)
+{Переведите монотонность в знак:
+\[
+f\uparrow\Rightarrow f'>0,
+\qquad
+f\downarrow\Rightarrow f'<0
+\]};
+
+\node[
+    flowaction,
+    below=10mm of derivative
+] (derconvert)
+{Переведите знак производной
+в монотонность:
+\[
+f'>0\Rightarrow f\uparrow,
+\qquad
+f'<0\Rightarrow f\downarrow
+\]};
+
+\coordinate[
+    below=16mm of $(funconvert)!0.5!(derconvert)$
+] (merge);
+
+\node[
+    flowaction,
+    below=5mm of merge,
+    text width=74mm
+] (criterion)
+{Сопоставьте полученные интервалы
+с критерием из условия задачи};
+
+\node[
+    flowaction,
+    below=9mm of criterion,
+    text width=74mm
+] (points)
+{Проверьте границы интервалов,
+нули производной, выколотые точки
+и область определения};
+
+\node[
+    flowfinal,
+    below=9mm of points
+] (answer)
+{Запишите именно то,
+что требуется в условии:
+точки, их количество,
+интервал или значение};
+
+\node[
+    flowstart,
+    below=8mm of answer
+] (finish)
+{Готово};
+
+\draw[flowarrow] (start) -- (read);
+\draw[flowarrow] (read) -- (whose);
+
+\draw[flowarrow]
+(whose.west)
+-| node[pos=0.27,above,font=\small] {\(f(x)\)}
+(function.north);
+
+\draw[flowarrow]
+(whose.east)
+-| node[pos=0.27,above,font=\small] {\(f'(x)\)}
+(derivative.north);
+
+\draw[flowarrow] (function) -- (funconvert);
+\draw[flowarrow] (derivative) -- (derconvert);
+
+\draw[flowarrow]
+(funconvert.south)
+|- (merge);
+
+\draw[flowarrow]
+(derconvert.south)
+|- (merge);
+
+\draw[flowarrow]
+(merge)
+-- (criterion);
+
+\draw[flowarrow] (criterion) -- (points);
+\draw[flowarrow] (points) -- (answer);
+\draw[flowarrow] (answer) -- (finish);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% =================================================
+% ЕГЭ-АЛГОРИТМ
+% =================================================
+\maintitle{7. Четыре вопроса перед решением задачи ЕГЭ}
+
+Практически каждую задачу этого типа удобно прогонять через четыре
+вопроса.
+
+\subhead{Вопрос 1. Чей график дан?}
+
+\[
+f(x)
+\qquad\text{или}\qquad
+f'(x)?
+\]
+
+Это определяет способ чтения рисунка.
+
+\subhead{Вопрос 2. Каков критерий отбора?}
+
+Например:
+
+\[
+f'(x)<0,
+\]
+
+\[
+f'(x)>0,
+\]
+
+\[
+f'(x)=0,
+\]
+
+либо требуется найти точки максимума или минимума функции.
+
+\subhead{Вопрос 3. Что должно происходить на данном графике?}
+
+Если дан \(f(x)\) и требуется
+
+\[
+f'(x)<0,
+\]
+
+то ищем участки \textbf{убывания функции}.
+
+Если дан \(f'(x)\) и требуется
+
+\[
+f'(x)<0,
+\]
+
+то ищем участки, где график производной находится
+\textbf{ниже оси \(Ox\)}.
+
+\subhead{Вопрос 4. Что именно записывать в ответ?}
+
+Проверяйте формулировку:
+
+\begin{itemize}
+    \item число точек;
+    \item сами значения \(x\);
+    \item количество целых значений \(x\);
+    \item точку максимума;
+    \item точку минимума;
+    \item промежуток возрастания или убывания.
+\end{itemize}
+
+\keypoint{Очень важный принцип.}
+Даже после правильного анализа графика задача ещё не закончена.
+Нужно записать ответ именно в той форме, которая требуется условием.
+
+% -------------------------------------------------
+\maintitle{8. Два внешне похожих условия}
+
+Рассмотрим критерий
+
+\[
+f'(x)<0.
+\]
+
+\subhead{Случай A: дан график функции \(f(x)\)}
+
+Требуется установить, где
+
+\[
+f'(x)<0.
+\]
+
+Перевод:
+
+\[
+f'(x)<0
+\quad\Longleftrightarrow\quad
+f(x)\text{ убывает}.
+\]
+
+Значит, на рисунке ищем участки убывания исходной функции.
+
+\subhead{Случай B: дан график производной \(f'(x)\)}
+
+Снова требуется установить, где
+
+\[
+f'(x)<0.
+\]
+
+Теперь никакого дополнительного перевода через монотонность для отбора
+точек делать не требуется.
+
+Ищем участки, где сам график
+
+\[
+y=f'(x)
+\]
+
+находится ниже оси \(Ox\).
+
+\begin{center}
+\begin{tabularx}{0.94\linewidth}{@{}X X@{}}
+\toprule
+Дан \(f(x)\) & Дан \(f'(x)\) \\
+\midrule
+Смотрим, где функция убывает. &
+Смотрим, где график лежит ниже \(Ox\). \\[1mm]
+
+Убывание означает \(f'(x)<0\). &
+Положение ниже \(Ox\) непосредственно означает \(f'(x)<0\). \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+% -------------------------------------------------
+\maintitle{9. Границы интервалов и особые точки}
+
+Здесь часто теряются баллы.
+
+\subhead{Если требуется строгое неравенство}
+
+При условии
+
+\[
+f'(x)<0
+\]
+
+точки, где
+
+\[
+f'(x)=0,
+\]
+
+в ответ не входят.
+
+Аналогично при условии
+
+\[
+f'(x)>0.
+\]
+
+\subhead{Выколотая точка}
+
+Если на графике производной точка выколота, то соответствующее значение
+\(x\) не принадлежит области определения изображённой функции.
+
+Такое значение нельзя учитывать только потому, что оно находится внутри
+подходящего по знаку интервала.
+
+\subhead{Конец изображённого промежутка}
+
+Если точка принадлежит графику, проверяйте её по условию отдельно.
+
+Если она выколота или значение функции в ней не определено,
+использовать её нельзя.
+
+\subhead{Целые значения}
+
+Если требуется количество целых \(x\), сначала получите допустимые
+интервалы, затем перечислите только целые точки внутри них.
+
+Например,
+
+\[
+-3<x<2
+\]
+
+даёт
+
+\[
+x=-2,-1,0,1,
+\]
+
+то есть
+
+\[
+4
+\]
+
+целых значения.
+
+Если условие имеет вид
+
+\[
+-3\le x<2,
+\]
+
+добавляется точка
+
+\[
+x=-3,
+\]
+
+и получается уже \(5\) значений.
+
+% -------------------------------------------------
+\maintitle{10. Типичные ошибки}
+
+\begin{enumerate}
+    \item \textbf{Сразу искать знак, не выяснив, чей график дан.}
+
+    Это приводит к смешению двух разных алгоритмов.
+
+    \item \textbf{На графике \(f(x)\) принимать положение относительно
+    оси \(Ox\) за знак производной.}
+
+    Значение самой функции
+
+    \[
+    f(x)
+    \]
+
+    и знак её производной
+
+    \[
+    f'(x)
+    \]
+
+    описывают разные свойства.
+
+    \item \textbf{На графике \(f'(x)\) смотреть, возрастает сама
+    производная или убывает.}
+
+    Для определения монотонности \(f(x)\) нужен знак \(f'(x)\),
+    то есть положение графика производной относительно оси \(Ox\).
+
+    \item \textbf{Считать каждую точку \(f'(x)=0\) экстремумом.}
+
+    Нужна смена знака производной.
+
+    \item \textbf{Включать ноль производной в условие \(f'(x)<0\).}
+
+    Ноль не является отрицательным числом.
+
+    \item \textbf{Не замечать выколотые точки.}
+
+    Они могут изменить количество допустимых целых значений.
+
+    \item \textbf{Записывать сами точки, когда требуется их количество.}
+
+    Всегда перечитывайте последнюю фразу условия.
+\end{enumerate}
+
+% -------------------------------------------------
+\maintitle{11. Быстрый чек-лист перед ответом}
+
+Проверьте себя:
+
+\begin{itemize}
+    \item Я точно определила, чей график дан?
+    \item Если дан \(f(x)\), я смотрю на монотонность?
+    \item Если дан \(f'(x)\), я смотрю на положение относительно \(Ox\)?
+    \item Я правильно перевела условие
+    \[
+    f'(x)>0
+    \quad\text{или}\quad
+    f'(x)<0?
+    \]
+    \item Я проверила точки, где
+    \[
+    f'(x)=0?
+    \]
+    \item Я проверила смену знака, если ищу экстремум?
+    \item Я исключила выколотые точки?
+    \item Я правильно обработала границы интервалов?
+    \item Если нужны целые числа, я перечислила только целые допустимые \(x\)?
+    \item Я записываю именно тот формат ответа, который требуется?
+\end{itemize}
+
+\vspace{3mm}
+
+\begin{center}
+{\large\bfseries\color{darkaccent}
+Главный ориентир:
+сначала определяем, чей график дан.
+}
+\end{center}
+
+
+\end{document}
