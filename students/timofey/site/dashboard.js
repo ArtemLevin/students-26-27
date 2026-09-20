@@ -4,4 +4,10 @@ import {installEgeProfile2027ControllerHook} from '../../../shared/student-dashb
 import {PRACTICE_CONFIG} from './practice-config.js';
 installEgeProfile2027ControllerHook('__studentCompetenceMap');
 initStudentDashboard({lessons:LESSONS,themeKey:'timofey-dashboard-theme-v1',summaryEvent:'timofey:competence-summary'});
+const latestLabLink=document.getElementById('latestLabLink');
+if(latestLabLink){
+  const lab=LESSONS[0]?.lab;
+  latestLabLink.hidden=!lab;
+  if(lab)latestLabLink.href=lab;
+}
 import('../../../shared/practice/practice-ui.js?v=20260831-practice-2').then(({initPracticeDashboard})=>initPracticeDashboard({config:PRACTICE_CONFIG,lessons:LESSONS})).catch(error=>{console.error('Practice module unavailable',error);const root=document.getElementById('practiceRoot');if(root)root.textContent='Тренировка временно недоступна. Остальные материалы кабинета продолжают работать.';});
