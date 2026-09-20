@@ -43,11 +43,11 @@ test('a=0 demonstrates a stationary point without an extremum',()=>{
   assert.equal(M.derivative(0,0),0);
   assert.equal(M.derivativeSign(-.5,0),1);
   assert.equal(M.derivativeSign(.5,0),1);
-  assert.deepEqual(M.extrema(0,0),[]);
+  assert.equal(M.extrema(0,0).length,0);
 });
 
 test('negative a removes critical points and keeps derivative positive',()=>{
-  assert.deepEqual(M.criticalPoints(-.5),[]);
+  assert.equal(M.criticalPoints(-.5).length,0);
   for(const x of [-2,-1,0,1,2])assert.ok(M.derivative(x,-.5)>0);
   const intervals=M.monotonicIntervals(-.5);
   assert.equal(intervals.length,1);
@@ -76,6 +76,10 @@ test('lab page contains research, comparison, prediction and direct-manipulation
     'data-mode="function"','data-mode="derivative"','data-mode="compare"',
     '20.09.26-lab-model.js','20.09.26-lab-ui.js','prefers-reduced-motion'
   ])assert.ok(html.includes(token),'missing lab surface: '+token);
+});
+
+test('interaction engine parses as JavaScript',()=>{
+  assert.doesNotThrow(()=>new vm.Script(uiSource,{filename:'20.09.26-lab-ui.js'}));
 });
 
 test('interaction engine uses one model source, rAF animation and pointer direct manipulation',()=>{
