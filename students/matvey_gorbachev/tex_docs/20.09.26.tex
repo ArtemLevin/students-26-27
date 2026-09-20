@@ -1,0 +1,1125 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm,headheight=15pt]{geometry}
+\usepackage{microtype}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+
+\usepackage{tkz-euclide}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F1F4F4}
+
+\color{textgray}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkaccent,
+    urlcolor=darkaccent
+}
+
+\newcommand{\tg}{\mathop{\rm tg}\nolimits}
+\newcommand{\ctg}{\mathop{\rm ctg}\nolimits}
+\newcommand{\arctg}{\mathop{\rm arctg}\nolimits}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Чек-лист: графики функций}
+\fancyhead[R]{\small Матвей Горбачёв}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\sectionline}{%
+    \vspace{0.2em}
+    {\color{accent}\rule{\linewidth}{0.7pt}}
+    \vspace{0.45em}
+}
+
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+
+\tikzset{
+    flowstart/.style={
+        ellipse,
+        draw=darkaccent,
+        line width=0.8pt,
+        minimum width=42mm,
+        minimum height=11mm,
+        align=center,
+        font=\small
+    },
+    flowaction/.style={
+        rectangle,
+        rounded corners=2mm,
+        draw=accent,
+        line width=0.8pt,
+        minimum width=78mm,
+        text width=70mm,
+        minimum height=13mm,
+        align=center,
+        font=\small
+    },
+    flowdecision/.style={
+        diamond,
+        aspect=2.35,
+        draw=darkaccent,
+        line width=0.8pt,
+        text width=51mm,
+        align=center,
+        inner sep=1.6mm,
+        font=\small
+    },
+    flowarrow/.style={
+        -{Stealth[length=3mm,width=2mm]},
+        line width=0.8pt,
+        draw=darkaccent
+    }
+}
+
+\begin{document}
+
+% =========================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% =========================================================
+
+\begin{titlepage}
+\thispagestyle{empty}
+
+\begin{center}
+
+\vspace*{22mm}
+
+{\color{darkaccent}\Large\bfseries ЧЕК-ЛИСТ}
+
+\vspace{5mm}
+
+{\Huge\bfseries
+Графики функций\\[2mm]
+и метод узловых точек}
+
+\vspace{9mm}
+
+{\Large
+Поиск коэффициентов по графику\\
+и вычисление значений функции}
+
+\vspace{19mm}
+
+{\large
+Матвей Горбачёв}
+
+\vspace{5mm}
+
+{\normalsize
+Подготовка к ЕГЭ по профильной математике}
+
+\vfill
+
+{\large
+\textbf{Лёвин Артём Александрович}\\[2mm]
+эксклюзивно для Матвея Горбачёва}
+
+\vspace{7mm}
+
+{\large \today}
+
+\vspace{18mm}
+
+\begin{tikzpicture}[remember picture,overlay]
+    \draw[
+        accent,
+        line width=1.1pt
+    ]
+    ($(current page.south west)+(18mm,16mm)$)
+    .. controls
+    ($(current page.south west)+(65mm,25mm)$)
+    and
+    ($(current page.south east)+(-65mm,7mm)$)
+    ..
+    ($(current page.south east)+(-18mm,16mm)$);
+\end{tikzpicture}
+
+\end{center}
+\end{titlepage}
+
+% =========================================================
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% =========================================================
+
+\section*{\textcolor{darkaccent}{1. Что требуется от задачи}}
+
+\sectionline
+
+В задачах по графикам часто известен \key{вид функции}, но неизвестны её коэффициенты.
+
+Типичные формулы:
+
+\[
+f(x)=a^x+b,
+\qquad
+f(x)=a^{x+b},
+\qquad
+f(x)=a^x,
+\qquad
+f(x)=kx+b.
+\]
+
+По изображённому графику требуется:
+
+\begin{itemize}[leftmargin=7mm,itemsep=2mm]
+    \item восстановить неизвестные коэффициенты;
+    \item записать формулу функции;
+    \item вычислить значение вида \(f(c)\);
+    \item найти \(x\), если задано значение \(f(x)\).
+\end{itemize}
+
+Главный универсальный инструмент --- \key{метод узловых точек}.
+
+\section*{\textcolor{darkaccent}{2. Узловая точка}}
+
+\sectionline
+
+\key{Узловая точка} --- точка графика, обе координаты которой удобно считываются с координатной сетки, прежде всего целочисленные:
+
+\[
+A(x_1;y_1),\qquad B(x_2;y_2).
+\]
+
+Поскольку
+
+\[
+y=f(x),
+\]
+
+точка \(A(x_1;y_1)\), принадлежащая графику функции, даёт равенство
+
+\[
+y_1=f(x_1).
+\]
+
+Именно это позволяет превратить информацию с рисунка в уравнение.
+
+\subsection*{\textcolor{accent}{Сколько точек нужно}}
+
+Обычно количество выбранных узловых точек совпадает с количеством неизвестных коэффициентов.
+
+\[
+\boxed{
+\text{число точек}
+=
+\text{число неизвестных коэффициентов}
+}
+\]
+
+Например:
+
+\[
+f(x)=a^x+b
+\]
+
+содержит два неизвестных коэффициента \(a\) и \(b\), поэтому обычно достаточно двух подходящих точек.
+
+Для
+
+\[
+f(x)=a^x
+\]
+
+неизвестен только коэффициент \(a\), поэтому достаточно одной \emph{информативной} точки.
+
+\subsection*{\textcolor{accent}{Какие точки выбирать}}
+
+В первую очередь удобны точки с координатами, близкими к нулю:
+
+\[
+0,\quad 1,\quad -1.
+\]
+
+Причина:
+
+\[
+a^0=1,\qquad a^1=a,
+\]
+
+поэтому система получается значительно проще.
+
+Однако выбранная точка должна действительно содержать нужную информацию.
+
+Например, для
+
+\[
+f(x)=a^x
+\]
+
+точка \((0;1)\) приводит к равенству
+
+\[
+1=a^0=1,
+\]
+
+из которого определить \(a\) невозможно.
+
+В такой ситуации следует выбрать другую узловую точку.
+
+\section*{\textcolor{darkaccent}{3. Главный алгоритм}}
+
+\sectionline
+
+Для функции с неизвестными коэффициентами действуйте последовательно:
+
+\begin{enumerate}[leftmargin=9mm,itemsep=2mm]
+    \item Определите вид функции.
+    \item Посчитайте неизвестные коэффициенты.
+    \item Выберите столько узловых точек, сколько требуется для определения коэффициентов.
+    \item Подставьте координаты каждой точки в формулу:
+    \[
+    y=f(x).
+    \]
+    \item Решите полученную систему или уравнение.
+    \item Проверьте ограничения на коэффициенты.
+    \item Подставьте найденные коэффициенты в исходную формулу.
+    \item Выполните требование задачи.
+\end{enumerate}
+
+Для показательной функции обязательно учитывайте:
+
+\[
+\boxed{a>0,\qquad a\ne1.}
+\]
+
+Это ограничение относится к основанию показательной функции.
+
+
+
+% =========================================================
+% ПРИМЕР 1
+% =========================================================
+
+\section*{\textcolor{darkaccent}{4. Пример: \(f(x)=a^x+b\)}}
+
+\sectionline
+
+Пусть график функции
+
+\[
+f(x)=a^x+b
+\]
+
+проходит через точки
+
+\[
+A(0;-2),
+\qquad
+B(1;-1).
+\]
+
+Подставляем координаты:
+
+\[
+\begin{cases}
+-2=a^0+b,\\
+-1=a^1+b.
+\end{cases}
+\]
+
+Используем
+
+\[
+a^0=1,
+\qquad
+a^1=a:
+\]
+
+\[
+\begin{cases}
+-2=1+b,\\
+-1=a+b.
+\end{cases}
+\]
+
+Из первого уравнения
+
+\[
+b=-3.
+\]
+
+Тогда
+
+\[
+-1=a-3,
+\]
+
+откуда
+
+\[
+a=2.
+\]
+
+Следовательно,
+
+\[
+\boxed{f(x)=2^x-3}.
+\]
+
+Например,
+
+\[
+f(6)=2^6-3=64-3=61.
+\]
+
+\subsection*{\textcolor{accent}{Как выглядит этот график}}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    width=12.5cm,
+    height=8cm,
+    axis lines=middle,
+    xmin=-3,
+    xmax=4,
+    ymin=-4,
+    ymax=7,
+    xtick={-3,-2,-1,0,1,2,3,4},
+    ytick={-4,-3,-2,-1,0,1,2,3,4,5,6,7},
+    grid=both,
+    minor tick num=0,
+    xlabel={$x$},
+    ylabel={$y$},
+    samples=250,
+    clip=false,
+    unit vector ratio=1 1
+]
+\addplot[
+    domain=-3:3.25,
+    very thick,
+    accent
+]
+{2^x-3};
+
+\addplot[
+    only marks,
+    mark=*,
+    mark size=2.5pt,
+    darkaccent
+]
+coordinates {(0,-2) (1,-1)};
+
+\node[anchor=south east] at (axis cs:0,-2) {$A(0;-2)$};
+\node[anchor=north west] at (axis cs:1,-1) {$B(1;-1)$};
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+Горизонтальная прямая
+
+\[
+y=-3
+\]
+
+является асимптотой этого графика.
+
+% =========================================================
+% ПРИМЕР 2
+% =========================================================
+
+\section*{\textcolor{darkaccent}{5. Если возникает уравнение \(a^2=2\)}}
+
+\sectionline
+
+Пусть после подстановки узловых точек получено
+
+\[
+a^2=2.
+\]
+
+Алгебраическое уравнение имеет два решения:
+
+\[
+a=\sqrt2,
+\qquad
+a=-\sqrt2.
+\]
+
+Однако для показательной функции основание должно удовлетворять условию
+
+\[
+a>0.
+\]
+
+Поэтому
+
+\[
+\boxed{a=\sqrt2}.
+\]
+
+Полезно сразу представить корень степенью:
+
+\[
+\sqrt2=2^{1/2}.
+\]
+
+Если
+
+\[
+f(x)=\left(\sqrt2\right)^x-3,
+\]
+
+то
+
+\[
+f(x)=2^{x/2}-3.
+\]
+
+Например,
+
+\[
+f(10)=2^{10/2}-3
+=2^5-3
+=29.
+\]
+
+\section*{\textcolor{darkaccent}{6. Степени с отрицательными показателями}}
+
+\sectionline
+
+Если после подстановки точки возникает
+
+\[
+a^{-2}=4,
+\]
+
+можно использовать свойство
+
+\[
+a^{-2}=\frac1{a^2}.
+\]
+
+Тогда
+
+\[
+\frac1{a^2}=4,
+\qquad
+a^2=\frac14.
+\]
+
+Так как \(a>0\),
+
+\[
+\boxed{a=\frac12}.
+\]
+
+Другой способ --- возвести обе части равенства в степень
+
+\[
+-\frac12:
+\]
+
+\[
+a
+=
+4^{-1/2}
+=
+\left(2^2\right)^{-1/2}
+=
+2^{-1}
+=
+\frac12.
+\]
+
+Полезное правило:
+
+\[
+\boxed{(a^m)^n=a^{mn}}.
+\]
+
+% =========================================================
+% f(x)=a^{x+b}
+% =========================================================
+
+\section*{\textcolor{darkaccent}{7. Если коэффициент находится внутри показателя}}
+
+\sectionline
+
+Рассмотрим функцию
+
+\[
+f(x)=a^{x+b}.
+\]
+
+Пусть известны точки
+
+\[
+A(-3;1),
+\qquad
+B(1;4).
+\]
+
+Получаем систему:
+
+\[
+\begin{cases}
+1=a^{-3+b},\\
+4=a^{1+b}.
+\end{cases}
+\]
+
+Так как
+
+\[
+1=a^0
+\]
+
+и \(a>0,\ a\ne1\), из первого уравнения следует
+
+\[
+-3+b=0,
+\]
+
+поэтому
+
+\[
+b=3.
+\]
+
+Подставляем во второе:
+
+\[
+4=a^{1+3}=a^4.
+\]
+
+Следовательно,
+
+\[
+a=4^{1/4}.
+\]
+
+Так как
+
+\[
+4=2^2,
+\]
+
+получаем
+
+\[
+a=(2^2)^{1/4}=2^{1/2}=\sqrt2.
+\]
+
+Итак,
+
+\[
+\boxed{f(x)=\left(\sqrt2\right)^{x+3}}
+\]
+
+или
+
+\[
+\boxed{f(x)=2^{(x+3)/2}}.
+\]
+
+Например,
+
+\[
+f(-7)
+=
+2^{(-7+3)/2}
+=
+2^{-2}
+=
+\frac14.
+\]
+
+% =========================================================
+% f(c) VS f(x)=c
+% =========================================================
+
+\section*{\textcolor{darkaccent}{8. Не путайте \(f(c)\) и \(f(x)=c\)}}
+
+\sectionline
+
+Это два разных типа заданий.
+
+\subsection*{\textcolor{accent}{Тип 1. Найти \(f(3)\)}}
+
+Если
+
+\[
+f(x)=2x+5,
+\]
+
+то в формулу вместо \(x\) подставляем \(3\):
+
+\[
+f(3)=2\cdot3+5=11.
+\]
+
+То есть
+
+\[
+\boxed{f(c)\ \Rightarrow\ x=c.}
+\]
+
+\subsection*{\textcolor{accent}{Тип 2. Найти \(x\), если \(f(x)=3\)}}
+
+Для той же функции
+
+\[
+f(x)=2x+5
+\]
+
+записываем
+
+\[
+2x+5=3.
+\]
+
+Отсюда
+
+\[
+2x=-2,
+\qquad
+x=-1.
+\]
+
+То есть
+
+\[
+\boxed{f(x)=c\ \Rightarrow\ \text{значение }c
+\text{ подставляется вместо }f(x).}
+\]
+
+\subsection*{\textcolor{accent}{Пример с показательной функцией}}
+
+Если
+
+\[
+f(x)=2^x-3
+\]
+
+и требуется найти \(x\), при котором
+
+\[
+f(x)=29,
+\]
+
+то
+
+\[
+2^x-3=29,
+\]
+
+\[
+2^x=32,
+\]
+
+\[
+2^x=2^5.
+\]
+
+Следовательно,
+
+\[
+\boxed{x=5}.
+\]
+
+% =========================================================
+% ЛИНЕЙНАЯ ФУНКЦИЯ
+% =========================================================
+
+\section*{\textcolor{darkaccent}{9. Метод работает и для линейной функции}}
+
+\sectionline
+
+Пусть
+
+\[
+f(x)=kx+b.
+\]
+
+Неизвестны два коэффициента:
+
+\[
+k,\qquad b.
+\]
+
+Поэтому выбираем две узловые точки.
+
+Например, если график проходит через
+
+\[
+A(0;3),
+\qquad
+B(2;7),
+\]
+
+то
+
+\[
+\begin{cases}
+3=k\cdot0+b,\\
+7=2k+b.
+\end{cases}
+\]
+
+Из первого равенства
+
+\[
+b=3.
+\]
+
+Тогда
+
+\[
+7=2k+3,
+\]
+
+\[
+2k=4,
+\]
+
+\[
+k=2.
+\]
+
+Следовательно,
+
+\[
+\boxed{f(x)=2x+3}.
+\]
+
+Сам алгоритм остаётся тем же:
+
+\[
+\boxed{
+\text{точки}
+\to
+\text{подстановка}
+\to
+\text{система}
+\to
+\text{коэффициенты}
+\to
+\text{формула}
+}
+\]
+
+% =========================================================
+% ТИПИЧНЫЕ ОШИБКИ
+% =========================================================
+
+\section*{\textcolor{darkaccent}{10. Типичные ошибки}}
+
+\sectionline
+
+\begin{enumerate}[leftmargin=9mm,itemsep=3mm]
+
+    \item \key{Перепутаны координаты точки.}
+
+    Для точки
+
+    \[
+    A(2;-3)
+    \]
+
+    следует подставлять
+
+    \[
+    x=2,\qquad f(x)=-3.
+    \]
+
+    \item \key{Выбрано недостаточно точек.}
+
+    Если неизвестны два независимых коэффициента, одного уравнения обычно недостаточно.
+
+    \item \key{Точка не содержит информации о коэффициенте.}
+
+    Для
+
+    \[
+    f(x)=a^x
+    \]
+
+    точка \((0;1)\) приводит только к тождеству
+
+    \[
+    1=1.
+    \]
+
+    \item \key{Забыто условие \(a>0\).}
+
+    Если
+
+    \[
+    a^2=2,
+    \]
+
+    для основания показательной функции выбирается
+
+    \[
+    a=\sqrt2.
+    \]
+
+    \item \key{Перепутаны выражения}
+
+    \[
+    a^x+b
+    \]
+
+    и
+
+    \[
+    a^{x+b}.
+    \]
+
+    В первом случае \(b\) находится \emph{вне степени}, во втором --- \emph{в показателе степени}.
+
+    \item \key{Неверно истолковано требование задачи.}
+
+    \[
+    f(6)
+    \]
+
+    означает подстановку \(x=6\).
+
+    \[
+    f(x)=6
+    \]
+
+    означает уравнение, которое нужно решить относительно \(x\).
+
+    \item \key{Ошибки при работе со степенями.}
+
+    Помните:
+
+    \[
+    a^m a^n=a^{m+n},
+    \]
+
+    \[
+    \frac{a^m}{a^n}=a^{m-n},
+    \]
+
+    \[
+    (a^m)^n=a^{mn},
+    \]
+
+    \[
+    a^{-n}=\frac1{a^n}.
+    \]
+
+\end{enumerate}
+
+\section*{\textcolor{darkaccent}{11. Короткий чек перед ответом}}
+
+\sectionline
+
+Перед завершением задачи проверьте:
+
+\begin{itemize}[leftmargin=7mm,itemsep=2mm]
+    \item правильно ли считаны координаты точек;
+    \item все ли неизвестные коэффициенты определены;
+    \item верно ли подставлены \(x\) и \(y=f(x)\);
+    \item учтено ли условие \(a>0,\ a\ne1\) для показательной функции;
+    \item правильно ли преобразованы степени и корни;
+    \item собрана ли исходная формула функции;
+    \item выполнено ли именно то требование, которое дано в условии.
+\end{itemize}
+
+% =========================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% =========================================================
+
+\clearpage
+
+\section*{\textcolor{darkaccent}{Тренировочный блок --- Путь А}}
+
+\sectionline
+
+\textbf{Количество заданий: 5.}
+
+Решайте задачи методом узловых точек. В тренировочном блоке приведены только условия.
+
+\vspace{3mm}
+
+\subsection*{\textcolor{accent}{Задание 1}}
+
+График функции
+
+\[
+f(x)=a^x+b
+\]
+
+проходит через точки
+
+\[
+A(0;-1),
+\qquad
+B(1;1).
+\]
+
+Найдите
+
+\[
+f(4).
+\]
+
+\vspace{5mm}
+
+\subsection*{\textcolor{accent}{Задание 2}}
+
+График функции
+
+\[
+f(x)=a^x+b
+\]
+
+проходит через точки
+
+\[
+A(0;-2),
+\qquad
+B(2;2).
+\]
+
+Найдите
+
+\[
+f(6).
+\]
+
+\vspace{5mm}
+
+\subsection*{\textcolor{accent}{Задание 3}}
+
+Функция имеет вид
+
+\[
+f(x)=a^x-4.
+\]
+
+Известно, что график проходит через точку
+
+\[
+A(-2;0).
+\]
+
+Найдите
+
+\[
+f(2).
+\]
+
+\vspace{5mm}
+
+\subsection*{\textcolor{accent}{Задание 4}}
+
+График функции
+
+\[
+f(x)=a^{x+b}
+\]
+
+проходит через точки
+
+\[
+A(-2;1),
+\qquad
+B(0;9).
+\]
+
+Найдите
+
+\[
+f(1).
+\]
+
+\vspace{5mm}
+
+\subsection*{\textcolor{accent}{Задание 5}}
+
+График линейной функции
+
+\[
+f(x)=kx+b
+\]
+
+проходит через точки
+
+\[
+A(-1;1),
+\qquad
+B(2;7).
+\]
+
+Найдите значение \(x\), при котором
+
+\[
+f(x)=15.
+\]
+
+% =========================================================
+% ОТВЕТЫ
+% =========================================================
+
+\clearpage
+
+\section*{\textcolor{darkaccent}{Ответы}}
+
+\sectionline
+
+\renewcommand{\arraystretch}{1.4}
+
+\begin{table}[ht]
+\centering
+\begin{tabularx}{0.88\linewidth}{@{}>{\centering\arraybackslash}p{25mm}
+>{\centering\arraybackslash}X@{}}
+\toprule
+\textbf{Задание} & \textbf{Ответ} \\
+\midrule
+1 & \(79\) \\
+2 & \(62\) \\
+3 & \(-\dfrac{15}{4}\) \\
+4 & \(27\) \\
+5 & \(x=6\) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\vfill
+
+\begin{center}
+{\small
+\textcolor{darkaccent}{
+Лёвин Артём Александрович
+}}
+\end{center}
+
+\end{document}
