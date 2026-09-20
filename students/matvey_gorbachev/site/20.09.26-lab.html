@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория: коэффициенты и графики функций из занятия 20.09.26.">
+<title>Лаборатория графиков — Матвей Горбачев</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b4368'/%3E%3Cpath d='M12 49h40M17 54V12M20 43c7-1 10-5 14-10 4-5 7-10 15-17' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#f5f0e8;--paper:#fffdf8;--paper2:#f4eee5;--text:#23282d;--muted:#657079;--line:#d9d0c5;--a:#1b4368;--a2:#123552;--coral:#c65f52;--gold:#9a6b19;--ok:#2e7e61;--shadow:0 16px 48px #493b2518}
+html[data-theme=dark]{--bg:#0e141a;--paper:#17212a;--paper2:#1d2933;--text:#eef3f5;--muted:#a9b6be;--line:#344553;--a:#79add0;--a2:#b0d4ea;--coral:#ef8b7e;--gold:#e2bb71;--ok:#76cba8;--shadow:0 16px 48px #0006}
+*{box-sizing:border-box}html{height:100%}body{margin:0;min-height:100%;background:radial-gradient(circle at 90% 0,#c65f5218,transparent 28%),var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}button,select,input{font:inherit}a{color:inherit}.top{display:flex;gap:10px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--bg) 90%,transparent);position:sticky;top:0;z-index:30;backdrop-filter:blur(12px)}.top a,.top button{min-height:42px;border:1px solid var(--line);border-radius:11px;padding:8px 12px;background:var(--paper);color:var(--text);text-decoration:none}.top strong{font-size:.95rem}.grow{flex:1}.main{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(320px,.72fr);gap:16px;max-width:1500px;margin:auto;padding:16px}.workspace,.side section{border:1px solid var(--line);background:linear-gradient(145deg,var(--paper),var(--paper2));box-shadow:var(--shadow);border-radius:22px}.workspace{padding:clamp(18px,3vw,30px)}.side{display:grid;gap:14px;align-content:start}.side section{padding:18px}.eyebrow{font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:900;color:var(--coral)}h1{font-size:clamp(2rem,4vw,4.3rem);line-height:1.02;letter-spacing:-.045em;margin:.25rem 0 .6rem}h2{font-size:1.3rem;line-height:1.15;margin:.25rem 0 .7rem}.muted{color:var(--muted)}.modes,.buttonrow,.legend{display:flex;gap:8px;flex-wrap:wrap}.mode,.buttonrow button{border:1px solid var(--line);border-radius:11px;background:var(--paper2);color:var(--text);padding:9px 11px;cursor:pointer}.mode.active,.buttonrow .primary{background:var(--a);border-color:var(--a);color:#fff}.legend{margin:14px 0;color:var(--muted);font-size:.9rem}.legend span{display:flex;gap:6px;align-items:center}.dot{width:11px;height:11px;border-radius:50%;background:var(--a)}.dot.guide{background:var(--coral)}.canvas-wrap{position:relative;height:min(62vh,650px);min-height:430px;border:1px solid var(--line);border-radius:17px;overflow:hidden;background:var(--paper2);touch-action:none}.canvas-wrap:focus-visible{outline:3px solid var(--a)}canvas{display:block;width:100%;height:100%;cursor:crosshair}.canvas-badge{position:absolute;left:13px;top:13px;padding:7px 10px;border-radius:10px;background:color-mix(in srgb,var(--paper) 90%,transparent);border:1px solid var(--line);font-weight:800}.control{margin:12px 0}.control label{display:block;color:var(--muted);font-size:.86rem;margin-bottom:5px}.control select,.control input{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--text)}.control input{accent-color:var(--a)}.value{font-weight:900;color:var(--a2)}.formula{padding:12px 14px;border:1px solid var(--line);border-radius:13px;background:var(--paper2);text-align:center;font-family:"Cambria Math",serif;font-size:1.18rem;overflow-x:auto}.result{margin-top:11px;padding:12px;border-left:4px solid var(--coral);background:color-mix(in srgb,var(--coral) 8%,transparent);border-radius:0 12px 12px 0}.node-list{display:grid;gap:8px;margin-top:10px}.node{display:grid;grid-template-columns:auto 1fr;gap:9px;align-items:center;padding:9px;border:1px solid var(--line);border-radius:11px;background:var(--paper2)}.node button{width:34px;height:34px;border-radius:50%;border:0;background:var(--a);color:#fff;font-weight:900;cursor:pointer}.node.active{outline:2px solid var(--coral)}.hint{font-size:.9rem;color:var(--muted)}.back{display:inline-flex;margin-top:12px;text-decoration:none;font-weight:800;color:var(--a2)}
+@media(max-width:900px){.main{grid-template-columns:1fr}.canvas-wrap{height:52vh;min-height:360px}.top strong{display:none}}@media(max-width:520px){.main{padding:10px}.top{flex-wrap:wrap}.top .grow{display:none}.top>*{flex:1}.canvas-wrap{min-height:320px}.workspace,.side section{border-radius:16px}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}@media print{.top,.buttonrow{display:none!important}.main{display:block;padding:0}.workspace,.side section{box-shadow:none;break-inside:avoid;margin-bottom:12px}.canvas-wrap{height:430px}}
+</style>
+</head>
+<body>
+<header class="top">
+<a href="20.09.26.html">← Вернуться к занятию</a>
+<strong>Цифровая лаборатория · 20.09.26</strong>
+<span class="grow"></span>
+<button id="theme" type="button">◐ Тема</button>
+<button type="button" onclick="print()">⎙ Печать</button>
+</header>
+
+<div class="main">
+<section class="workspace">
+<div class="eyebrow">Графики функций</div>
+<h1 id="title">Сдвиг показательной функции</h1>
+<p id="subtitle" class="muted">Меняйте коэффициенты из занятия, отмечайте узловые точки и наблюдайте, какие данные действительно помогают восстановить формулу.</p>
+<div class="modes" role="tablist" aria-label="Режим лаборатории">
+<button class="mode active" data-mode="shift" role="tab" aria-selected="true">aˣ + b</button>
+<button class="mode" data-mode="inside" role="tab" aria-selected="false">aˣ⁺ᵇ</button>
+<button class="mode" data-mode="line" role="tab" aria-selected="false">kx + b</button>
+</div>
+<div class="legend"><span><i class="dot"></i>график функции</span><span><i class="dot guide"></i>выбранная узловая точка</span></div>
+<div class="canvas-wrap" id="canvasWrap" tabindex="0" aria-label="Интерактивный график функции">
+<canvas id="chart"></canvas><span class="canvas-badge" id="badge">A(0; −2)</span>
+</div>
+</section>
+
+<aside class="side">
+<section>
+<div class="eyebrow">Параметры</div>
+<h2 id="controlTitle">f(x)=aˣ+b</h2>
+<div id="expControls">
+<div class="control"><label for="aSelect">Основание a</label><select id="aSelect"><option value="0.5">1/2</option><option value="sqrt2">√2</option><option value="2" selected>2</option></select></div>
+<div class="control"><label for="bSelect">Сдвиг b</label><select id="bSelect"><option value="-4">−4</option><option value="-3" selected>−3</option><option value="3">3</option></select></div>
+</div>
+<div id="lineControls" hidden>
+<div class="control"><label for="kSelect">Коэффициент k</label><select id="kSelect"><option value="2" selected>2</option></select></div>
+<div class="control"><label for="lineB">Свободный член b</label><select id="lineB"><option value="3" selected>3</option></select></div>
+</div>
+<div class="buttonrow"><button id="reset" class="primary" type="button">Исходный пример</button><button id="grid" type="button" aria-pressed="true">Сетка</button></div>
+</section>
+
+<section>
+<div class="eyebrow">Формула</div>
+<div class="formula" id="formula">f(x)=2ˣ−3</div>
+<div class="result" id="result" aria-live="polite"></div>
+</section>
+
+<section>
+<div class="eyebrow">Узловые точки</div>
+<h2>Выберите x</h2>
+<p class="hint">В занятии в приоритете координаты 0, 1 и −1. Точка полезна, только если после подстановки неизвестный коэффициент остаётся в уравнении.</p>
+<div class="node-list">
+<div class="node active" data-x="0"><button type="button">0</button><span id="node0"></span></div>
+<div class="node" data-x="1"><button type="button">1</button><span id="node1"></span></div>
+<div class="node" data-x="-1"><button type="button">−1</button><span id="nodeM1"></span></div><div class="node" data-x="-3"><button type="button">−3</button><span id="nodeM3"></span></div>
+</div>
+</section>
+
+<section>
+<div class="eyebrow">Что наблюдать</div>
+<h2 id="question">Почему точка x=0 так удобна?</h2>
+<p id="explain" class="muted">В функции aˣ+b при x=0 получаем a⁰=1, поэтому равенство сразу связывает y и b.</p>
+<a class="back" href="20.09.26.html#examples">Вернуться к разборам →</a>
+</section>
+</aside>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
+var canvas=$("#chart"),wrap=$("#canvasWrap"),ctx=canvas.getContext("2d");
+var S={mode:new URLSearchParams(location.search).get("mode")||"shift",a:2,b:-3,k:2,lineB:3,x:0,grid:true};
+if(["shift","inside","line"].indexOf(S.mode)<0)S.mode="shift";
+try{var saved=JSON.parse(localStorage.getItem("matvey-200926-lab")||"null");if(saved)Object.assign(S,saved);if(new URLSearchParams(location.search).get("mode"))S.mode=new URLSearchParams(location.search).get("mode")}catch(e){}
+function save(){try{localStorage.setItem("matvey-200926-lab",JSON.stringify(S))}catch(e){}}
+var theme="light";try{theme=localStorage.getItem("matvey-200926-lab-theme")||"light"}catch(e){}document.documentElement.dataset.theme=theme;
+$("#theme").onclick=function(){var v=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=v;try{localStorage.setItem("matvey-200926-lab-theme",v)}catch(e){};draw()};
+
+function aval(){return S.a==="sqrt2"?Math.sqrt(2):+S.a}
+function f(x){if(S.mode==="line")return S.k*x+S.lineB;if(S.mode==="inside")return Math.pow(aval(),x+S.b);return Math.pow(aval(),x)+S.b}
+function fmt(v){if(Math.abs(v-Math.round(v))<1e-9)return String(Math.round(v));return v.toFixed(3).replace(/0+$/,"").replace(/\.$/,"")}
+function aname(){if(S.a==="sqrt2")return "√2";if(+S.a===.5)return "1/2";return String(S.a)}
+function formulaText(){if(S.mode==="line")return "f(x)=2x+3";if(S.mode==="inside")return "f(x)="+aname()+"^(x"+(S.b>=0?"+":"")+S.b+")";return "f(x)="+aname()+"^x"+(S.b>=0?"+":"")+S.b}
+
+function fit(){var r=wrap.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);canvas.width=Math.max(1,Math.floor(r.width*d));canvas.height=Math.max(1,Math.floor(r.height*d));ctx.setTransform(d,0,0,d,0,0);draw()}
+new ResizeObserver(fit).observe(wrap);
+function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+function draw(){
+ var w=wrap.clientWidth,h=wrap.clientHeight,m=46,xmin=-5,xmax=6,ymin=-7,ymax=10;
+ ctx.clearRect(0,0,w,h);
+ function px(x){return m+(x-xmin)/(xmax-xmin)*(w-2*m)}
+ function py(y){return h-m-(y-ymin)/(ymax-ymin)*(h-2*m)}
+ ctx.lineWidth=1;ctx.strokeStyle=css("--line");
+ if(S.grid){for(var gx=-5;gx<=6;gx++){ctx.beginPath();ctx.moveTo(px(gx),m);ctx.lineTo(px(gx),h-m);ctx.stroke()}for(var gy=-7;gy<=10;gy++){ctx.beginPath();ctx.moveTo(m,py(gy));ctx.lineTo(w-m,py(gy));ctx.stroke()}}
+ ctx.strokeStyle=css("--muted");ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(px(xmin),py(0));ctx.lineTo(px(xmax),py(0));ctx.moveTo(px(0),py(ymin));ctx.lineTo(px(0),py(ymax));ctx.stroke();
+ ctx.fillStyle=css("--muted");ctx.font="13px system-ui";ctx.fillText("x",w-m+8,py(0)+4);ctx.fillText("y",px(0)+7,m-7);
+ ctx.strokeStyle=css("--a");ctx.lineWidth=3;ctx.beginPath();var first=true;
+ for(var i=0;i<=420;i++){var x=xmin+(xmax-xmin)*i/420,y=f(x);if(y<ymin-3||y>ymax+3)continue;var X=px(x),Y=py(y);if(first){ctx.moveTo(X,Y);first=false}else ctx.lineTo(X,Y)}ctx.stroke();
+ var y0=f(S.x),X0=px(S.x),Y0=py(y0);
+ ctx.setLineDash([6,5]);ctx.strokeStyle=css("--coral");ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(X0,py(0));ctx.lineTo(X0,Y0);ctx.lineTo(px(0),Y0);ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle=css("--coral");ctx.beginPath();ctx.arc(X0,Y0,6,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle=css("--text");ctx.font="13px system-ui";ctx.fillText("("+S.x+"; "+fmt(y0)+")",Math.min(X0+10,w-105),Math.max(Y0-10,18));
+}
+function nodeText(x){
+ var y=f(x);
+ if(S.mode==="shift"&&x===0)return "("+x+"; "+fmt(y)+"): a⁰=1, удобно находить b";
+ if(S.mode==="inside"&&Math.abs(y-1)<1e-9)return "("+x+"; 1): используйте 1=a⁰ и сравните показатели";
+ if(S.mode==="line"&&x===0)return "(0; "+fmt(y)+"): сразу видно b";
+ return "("+x+"; "+fmt(y)+")";
+}
+function render(){
+ $$(".mode").forEach(function(b){var on=b.dataset.mode===S.mode;b.classList.toggle("active",on);b.setAttribute("aria-selected",String(on))});
+ $("#lineControls").hidden=S.mode!=="line";$("#expControls").hidden=S.mode==="line";
+ if(S.mode==="shift"){ $("#title").textContent="Сдвиг показательной функции";$("#subtitle").textContent="Исследуйте f(x)=aˣ+b и роль узловых точек.";$("#controlTitle").textContent="f(x)=aˣ+b";$("#question").textContent="Почему точка x=0 так удобна?";$("#explain").textContent="При x=0 получаем a⁰=1. В примере занятия A(0;−2) сразу даёт b=−3.";}
+ if(S.mode==="inside"){ $("#title").textContent="Коэффициент внутри показателя";$("#subtitle").textContent="Сравните вид a^(x+b) с aˣ+b: расположение b меняет саму формулу.";$("#controlTitle").textContent="f(x)=a^(x+b)";$("#question").textContent="Как используется значение 1?";$("#explain").textContent="Если значение функции равно 1, записываем 1=a⁰. При допустимом основании это позволяет приравнять показатель к нулю.";}
+ if(S.mode==="line"){ $("#title").textContent="Линейная функция";$("#subtitle").textContent="Тот же алгоритм узловых точек работает для f(x)=kx+b.";$("#controlTitle").textContent="f(x)=kx+b";$("#question").textContent="Что сохраняется при смене вида функции?";$("#explain").textContent="Сохраняется маршрут: точки → подстановка → система → коэффициенты → формула.";}
+ $("#aSelect").value=String(S.a);$("#bSelect").value=String(S.b);$("#kSelect").value=String(S.k);$("#lineB").value=String(S.lineB);
+ $("#formula").textContent=formulaText();
+ $("#node0").textContent=nodeText(0);$("#node1").textContent=nodeText(1);$("#nodeM1").textContent=nodeText(-1);$("#nodeM3").textContent=nodeText(-3);
+ $$(".node").forEach(function(n){n.classList.toggle("active",+n.dataset.x===S.x)});
+ $("#badge").textContent="("+S.x+"; "+fmt(f(S.x))+")";
+ var useful=!(S.mode==="shift"&&S.x===0&&false);
+ if(S.mode==="shift"&&S.x===0)$("#result").innerHTML="<b>Подстановка:</b> "+fmt(f(0))+" = 1 + b. Нулевая степень устраняет a из первого уравнения и помогает найти b.";
+ else if(S.mode==="inside"&&Math.abs(f(S.x)-1)<1e-9)$("#result").innerHTML="<b>Подстановка:</b> 1 = a<sup>"+(S.x+S.b)+"</sup>. Используйте 1=a⁰.";
+ else if(S.mode==="line"&&S.x===0)$("#result").innerHTML="<b>Подстановка:</b> "+fmt(f(0))+" = k·0 + b. Значит b видно сразу.";
+ else $("#result").innerHTML="<b>Узловая точка:</b> x="+S.x+", f(x)="+fmt(f(S.x))+". Запишите это как y₀=f(x₀).";
+ $("#grid").setAttribute("aria-pressed",String(S.grid));draw();save();if(history.replaceState)history.replaceState(null,"","?mode="+S.mode)
+}
+$$(".mode").forEach(function(b){b.onclick=function(){S.mode=b.dataset.mode;if(S.mode==="shift"){S.a=2;S.b=-3;S.x=0}if(S.mode==="inside"){S.a="sqrt2";S.b=3;S.x=-3}if(S.mode==="line"){S.k=2;S.lineB=3;S.x=0}render()}});
+$("#aSelect").onchange=function(e){S.a=e.target.value;render()};$("#bSelect").onchange=function(e){S.b=+e.target.value;render()};
+$("#kSelect").onchange=function(e){S.k=+e.target.value;render()};$("#lineB").onchange=function(e){S.lineB=+e.target.value;render()};
+$$(".node button").forEach(function(b){b.onclick=function(){S.x=+b.parentElement.dataset.x;render()}});
+$("#grid").onclick=function(){S.grid=!S.grid;render()};
+$("#reset").onclick=function(){if(S.mode==="shift"){S.a=2;S.b=-3;S.x=0}else if(S.mode==="inside"){S.a="sqrt2";S.b=3;S.x=-3}else{S.k=2;S.lineB=3;S.x=0}render()};
+render();fit();
+})();
+</script>
+</body></html>
