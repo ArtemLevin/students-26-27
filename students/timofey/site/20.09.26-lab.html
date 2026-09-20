@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория к занятию 20.09.26: ОДЗ, знаки множителей и запрет нуля знаменателя.">
+<title>Лаборатория — показательно-логарифмическое неравенство</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b6f70'/%3E%3Cpath d='M12 43h40M18 36l10-9 8 5 10-15' fill='none' stroke='white' stroke-width='5'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#f5f2eb;--panel:#fffdf8;--text:#202827;--muted:#697673;--accent:#0b6f70;--purple:#56306b;--good:#447b5f;--bad:#a65049;--gold:#b08435;--line:#d8ddd8;color-scheme:light}
+html[data-theme="dark"]{--bg:#101817;--panel:#182320;--text:#edf5f1;--muted:#a9bab5;--accent:#63c8c1;--purple:#cfabe0;--good:#83c79b;--bad:#e88f86;--gold:#e1bd6f;--line:#34423f;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.5}.shell{min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr) 360px}.work{padding:18px}.side{border-left:1px solid var(--line);background:var(--panel);padding:20px;overflow:auto}.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}.btn,button,select,input{font:inherit}.btn,button{min-height:44px;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:9px 13px;cursor:pointer;text-decoration:none}.primary{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}.eyebrow{font-size:.76rem;font-weight:850;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}h1{font-size:clamp(1.8rem,4vw,3.3rem);line-height:1;margin:.2em 0}.lead{color:var(--muted);max-width:820px}.canvasbox{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:12px;height:min(64vh,680px);min-height:430px;position:relative}canvas{width:100%;height:100%;display:block;touch-action:none}.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.9rem;color:var(--muted);margin:12px 0}.dot{width:12px;height:12px;border-radius:50%;display:inline-block;margin-right:4px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{border:1px solid var(--line);border-radius:14px;padding:12px;background:color-mix(in srgb,var(--panel) 94%,var(--accent) 6%)}.metric b{display:block;font-size:1.15rem}.status{padding:14px;border-radius:14px;margin-top:12px;font-weight:750}.status.good{background:color-mix(in srgb,var(--good) 16%,var(--panel));border:1px solid var(--good)}.status.bad{background:color-mix(in srgb,var(--bad) 12%,var(--panel));border:1px solid var(--bad)}.controls{display:grid;gap:12px}.controls label{font-weight:700}.controls input[type=range]{width:100%}.switches{display:flex;gap:12px;flex-wrap:wrap}.switches label{font-weight:500}.hint{position:relative}.hint>button{width:32px;height:32px;border-radius:50%;padding:0;color:var(--accent);font-weight:900}.tip{display:none;position:absolute;right:0;top:38px;width:280px;max-width:75vw;background:#0e2927;color:#eff;border:1px solid #57cec5;border-radius:12px;padding:12px;z-index:6}.tip.show{display:block}.modebar{display:flex;gap:8px;flex-wrap:wrap}.modebar button[aria-pressed="true"]{background:var(--purple);color:#fff;border-color:var(--purple)}.formula{overflow:auto;padding:10px;border-radius:12px;background:var(--bg);text-align:center;margin:10px 0}.formula math{font-size:1.05rem}.mini{font-size:.9rem;color:var(--muted)}.focus{outline:3px solid color-mix(in srgb,var(--accent) 55%,transparent);outline-offset:2px}@media(max-width:900px){.shell{grid-template-columns:1fr}.side{border-left:0;border-top:1px solid var(--line)}.canvasbox{height:55vh;min-height:380px}}@media(max-width:390px){.work,.side{padding:12px}.grid{grid-template-columns:1fr}.canvasbox{min-height:330px;height:50vh}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}@media print{.bar,.controls,.modebar,.hint{display:none!important}.shell{display:block}.side{border:0}.canvasbox{height:520px}}:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 65%,white);outline-offset:3px}
+</style>
+</head>
+<body>
+<div class="shell">
+<main class="work">
+<div class="bar"><a class="btn" href="20.09.26.html">← Вернуться к занятию</a><button id="theme">◐ Тема</button><span class="eyebrow">20.09.26 · Тимофей Васильченко</span></div>
+<p class="eyebrow">Цифровая лаборатория</p><h1>Где исходная дробь действительно ≤ 0?</h1>
+<p class="lead">Двигайте x и наблюдайте три слоя одной задачи: ОДЗ логарифма, знак факторизованного числителя и запрещённую точку, где квадрат знаменателя обращается в нуль.</p>
+<div class="modebar" role="group" aria-label="Режим модели">
+<button data-mode="sign" aria-pressed="true">Знаки и ответ</button><button data-mode="factors" aria-pressed="false">Множители числителя</button><button data-mode="domain" aria-pressed="false">ОДЗ и знаменатель</button>
+</div>
+<div class="legend"><span><i class="dot" style="background:var(--good)"></i>допустимое решение</span><span><i class="dot" style="background:var(--bad)"></i>запрещено / не подходит</span><span><i class="dot" style="background:var(--purple)"></i>критические точки</span></div>
+<div class="canvasbox" id="canvasBox"><canvas id="axis" aria-label="Интерактивная числовая ось с ОДЗ и критическими точками"></canvas></div>
+<div class="bar"><button data-zoom="-1">−</button><button data-zoom="1">+</button><button id="reset">Сброс</button><span id="zoomLabel">100%</span>
+<span class="hint"><button aria-label="Подсказка о масштабе">?</button><span class="tip" role="tooltip" aria-hidden="true">Колесо мыши и кнопки меняют масштаб. Перетаскивание оси выполняет pan, сохраняя те же критические точки.</span></span></div>
+</main>
+<aside class="side">
+<div class="controls">
+<div><div class="eyebrow">Параметр</div><label for="xRange">Текущее значение x</label><input id="xRange" type="range" min="0" max="2" step="0.002" value="1"><div><b id="xValue">x = 1</b></div></div>
+<div class="switches"><label><input type="checkbox" id="labels" checked> подписи</label><label><input type="checkbox" id="shade" checked> решение</label></div>
+<div class="grid">
+<div class="metric" id="mArg" tabindex="0"><span>Аргумент</span><b id="argVal">—</b></div>
+<div class="metric" id="mNum" tabindex="0"><span>Числитель</span><b id="numVal">—</b></div>
+<div class="metric" id="mDen" tabindex="0"><span>Знаменатель</span><b id="denVal">—</b></div>
+<div class="metric" id="mFrac" tabindex="0"><span>Дробь</span><b id="fracVal">—</b></div>
+</div>
+<div id="status" class="status" aria-live="polite"></div>
+<div class="formula"><math display="block"><mrow><mo>(</mo><msup><mn>3</mn><mi>x</mi></msup><mo>−</mo><mn>1</mn><mo>)</mo><mo>(</mo><msup><mn>3</mn><mi>x</mi></msup><mo>−</mo><mn>8</mn><mo>)</mo></mrow></math></div>
+<div class="formula"><math display="block"><mrow><msup><mrow><mo>(</mo><msub><mi>log</mi><mfrac><mn>1</mn><mn>6</mn></mfrac></msub><mo>(</mo><msup><mn>5</mn><mi>x</mi></msup><mo>−</mo><mn>2</mn><mo>)</mo><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mn>2</mn></msup></mrow></math></div>
+<div class="hint"><button aria-label="Подсказка об ОДЗ">i</button><span class="tip" role="tooltip" aria-hidden="true">Сначала проверяйте 5ˣ − 2 &gt; 0. Если аргумент неположителен, исходное выражение не определено.</span></div>
+<div class="hint"><button aria-label="Подсказка о нуле знаменателя">!</button><span class="tip" role="tooltip" aria-hidden="true">При x = log₅8 знаменатель равен нулю. Эта точка выколота, даже когда числитель имеет подходящий знак.</span></div>
+<p class="mini">Критические значения: log₅2 — начало ОДЗ; log₅8 — запрет знаменателя; 0 и log₃8 — нули числителя.</p>
+</div>
+</aside>
+</div>
+<script>
+(function(){
+'use strict';
+var c=document.getElementById('axis'),box=document.getElementById('canvasBox'),ctx=c.getContext('2d');
+var xRange=document.getElementById('xRange'),labels=document.getElementById('labels'),shade=document.getElementById('shade'),status=document.getElementById('status');
+var root=document.documentElement,theme=document.getElementById('theme');
+var crit={odz:Math.log(2)/Math.log(5),hole:Math.log(8)/Math.log(5),zero1:0,zero2:Math.log(8)/Math.log(3)};
+var state={mode:'sign',zoom:1,pan:1,x:1,drag:false,last:0};
+try{if(localStorage.getItem('timofey-200926-lab-theme')==='dark')root.dataset.theme='dark';}catch(e){}
+theme.onclick=function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('timofey-200926-lab-theme',root.dataset.theme);}catch(e){}draw()};
+function css(n){return getComputedStyle(root).getPropertyValue(n).trim()}
+function logb(v,b){return Math.log(v)/Math.log(b)}
+function calc(x){var arg=Math.pow(5,x)-2;var a=Math.pow(3,x)-1,b=Math.pow(3,x)-8,num=a*b;var validArg=arg>0;var q=validArg?logb(arg,1/6)+1:NaN;var den=validArg?q*q:NaN;var hole=validArg&&Math.abs(q)<1e-8;var frac=validArg&&!hole?num/den:NaN;var solution=validArg&&!hole&&frac<=1e-9;return{arg:arg,a:a,b:b,num:num,q:q,den:den,frac:frac,validArg:validArg,hole:hole,solution:solution}}
+function fmt(v){if(!Number.isFinite(v))return '—';if(Math.abs(v)<1e-7)return '0';return (Math.round(v*1000)/1000).toString().replace('.',',')}
+function update(){state.x=Number(xRange.value);var r=calc(state.x);document.getElementById('xValue').textContent='x = '+fmt(state.x);document.getElementById('argVal').textContent=fmt(r.arg);document.getElementById('numVal').textContent=fmt(r.num);document.getElementById('denVal').textContent=fmt(r.den);document.getElementById('fracVal').textContent=fmt(r.frac);status.className='status '+(r.solution?'good':'bad');if(!r.validArg)status.textContent='Вне ОДЗ: 5ˣ − 2 ≤ 0.';else if(r.hole)status.textContent='Запрещённая точка: знаменатель равен нулю.';else if(r.solution)status.textContent='Подходит: дробь определена и её значение ≤ 0.';else status.textContent='Допустимо по ОДЗ, но знак дроби положительный.';draw()}
+function resize(){var d=devicePixelRatio||1,r=box.getBoundingClientRect();c.width=Math.max(1,Math.floor(r.width*d));c.height=Math.max(1,Math.floor(r.height*d));c.style.width=r.width+'px';c.style.height=r.height+'px';ctx.setTransform(d,0,0,d,0,0);draw()}
+function draw(){var W=box.clientWidth,H=box.clientHeight;ctx.clearRect(0,0,W,H);var y=H*.56;var span=1.25/state.zoom;var X=function(v){return W/2+(v-state.pan)*(W*.42/span)};ctx.lineWidth=2;ctx.strokeStyle=css('--muted');ctx.beginPath();ctx.moveTo(28,y);ctx.lineTo(W-28,y);ctx.lineTo(W-40,y-7);ctx.moveTo(W-28,y);ctx.lineTo(W-40,y+7);ctx.stroke();
+if(shade.checked&&state.mode==='sign'){ctx.strokeStyle=css('--good');ctx.lineWidth=8;ctx.lineCap='round';[[crit.odz,crit.hole],[crit.hole,crit.zero2]].forEach(function(seg){ctx.beginPath();ctx.moveTo(X(seg[0]),y);ctx.lineTo(X(seg[1]),y);ctx.stroke()});}
+if(state.mode==='domain'){ctx.strokeStyle=css('--good');ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(X(crit.odz),y);ctx.lineTo(W-32,y);ctx.stroke();}
+var pts=[{x:crit.odz,l:'log₅2',open:true,role:'odz'},{x:crit.hole,l:'log₅8',open:true,role:'hole'},{x:crit.zero1,l:'0',open:false,role:'num'},{x:crit.zero2,l:'log₃8',open:false,role:'num'}];
+pts.forEach(function(p){if(state.mode==='factors'&&p.role!=='num')return;if(state.mode==='domain'&&p.role==='num')return;var xx=X(p.x);if(xx<12||xx>W-12)return;ctx.beginPath();ctx.arc(xx,y,7,0,Math.PI*2);ctx.fillStyle=p.open?css('--panel'):css('--purple');ctx.strokeStyle=p.role==='hole'?css('--bad'):css('--purple');ctx.lineWidth=3;ctx.fill();ctx.stroke();if(labels.checked){ctx.fillStyle=css('--text');ctx.textAlign='center';ctx.font='600 14px system-ui';ctx.fillText(p.l,xx,y+30)}});
+var cur=X(state.x);ctx.strokeStyle=css('--gold');ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(cur,y-52);ctx.lineTo(cur,y+52);ctx.stroke();ctx.fillStyle=css('--gold');ctx.beginPath();ctx.arc(cur,y,6,0,Math.PI*2);ctx.fill();ctx.textAlign='center';ctx.font='700 14px system-ui';ctx.fillText('x='+fmt(state.x),cur,y-62);
+var r=calc(state.x);ctx.textAlign='left';ctx.fillStyle=css('--text');ctx.font='700 16px system-ui';var msg=state.mode==='factors'?'Множители: '+fmt(r.a)+' · '+fmt(r.b):state.mode==='domain'?'Аргумент: '+fmt(r.arg)+'; квадрат знаменателя: '+fmt(r.den):'Знак дроби: '+(r.validArg&&!r.hole?(r.frac<=0?'≤ 0':'> 0'):'не определена');ctx.fillText(msg,20,30)}
+xRange.oninput=update;labels.onchange=draw;shade.onchange=draw;
+document.querySelectorAll('[data-mode]').forEach(function(b){b.onclick=function(){state.mode=b.dataset.mode;document.querySelectorAll('[data-mode]').forEach(function(q){q.setAttribute('aria-pressed',String(q===b))});var u=new URL(location.href);u.searchParams.set('mode',state.mode);history.replaceState(null,'',u);draw()}});
+document.querySelectorAll('[data-zoom]').forEach(function(b){b.onclick=function(){state.zoom=Math.max(.6,Math.min(2.4,state.zoom+(Number(b.dataset.zoom)>.0?.2:-.2)));document.getElementById('zoomLabel').textContent=Math.round(state.zoom*100)+'%';draw()}});
+document.getElementById('reset').onclick=function(){state.zoom=1;state.pan=1;state.x=1;xRange.value='1';document.getElementById('zoomLabel').textContent='100%';update()};
+c.addEventListener('wheel',function(e){e.preventDefault();state.zoom=Math.max(.6,Math.min(2.4,state.zoom+(e.deltaY<0?.1:-.1)));document.getElementById('zoomLabel').textContent=Math.round(state.zoom*100)+'%';draw()},{passive:false});
+c.onpointerdown=function(e){state.drag=true;state.last=e.clientX;c.setPointerCapture(e.pointerId)};c.onpointermove=function(e){if(!state.drag)return;var dx=e.clientX-state.last;state.pan-=dx/(box.clientWidth*.42)*(1.25/state.zoom);state.last=e.clientX;draw()};c.onpointerup=function(){state.drag=false};
+document.querySelectorAll('.hint>button').forEach(function(b){function open(){var t=b.nextElementSibling;t.classList.add('show');t.setAttribute('aria-hidden','false')}function close(){var t=b.nextElementSibling;t.classList.remove('show');t.setAttribute('aria-hidden','true')}b.onclick=function(e){e.stopPropagation();b.nextElementSibling.classList.contains('show')?close():open()};b.onmouseenter=b.onfocus=open;b.onmouseleave=b.onblur=close;});
+document.addEventListener('click',function(){document.querySelectorAll('.tip.show').forEach(function(t){t.classList.remove('show');t.setAttribute('aria-hidden','true')})});document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.tip.show').forEach(function(t){t.classList.remove('show');t.setAttribute('aria-hidden','true')})});
+['mArg','mNum','mDen','mFrac'].forEach(function(id){var el=document.getElementById(id);el.onfocus=el.onmouseenter=function(){el.classList.add('focus')};el.onblur=el.onmouseleave=function(){el.classList.remove('focus')}});
+var m=new URL(location.href).searchParams.get('mode');if(['sign','factors','domain'].indexOf(m)>=0){state.mode=m;document.querySelectorAll('[data-mode]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.mode===m))})}
+window.addEventListener('resize',resize);resize();update();
+})();
+</script>
+</body></html>
