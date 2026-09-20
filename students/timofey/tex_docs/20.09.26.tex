@@ -1,0 +1,891 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{E9EEEE}
+
+\hypersetup{hidelinks}
+
+\geometry{
+  left=20mm,
+  right=20mm,
+  top=20mm,
+  bottom=22mm
+}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+
+\setlist[itemize]{
+  leftmargin=7mm,
+  itemsep=2pt,
+  topsep=3pt
+}
+
+\setlist[enumerate]{
+  leftmargin=8mm,
+  itemsep=3pt,
+  topsep=3pt
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{textgray}Показательно-логарифмические неравенства}
+\fancyhead[R]{\small\color{textgray}ЕГЭ}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{%
+  \hbox to\headwidth{\color{accent!45}\leaders\hrule height \headrulewidth\hfill}
+}
+
+\newcommand{\topicline}{%
+  \par\noindent
+  {\color{accent!55}\rule{\linewidth}{0.6pt}}
+  \par
+}
+
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=darkaccent,
+    line width=0.9pt,
+    minimum width=4.3cm,
+    minimum height=1cm,
+    align=center,
+    font=\small
+  },
+  flowaction/.style={
+    rectangle,
+    rounded corners=3pt,
+    draw=accent,
+    line width=0.8pt,
+    text width=8.2cm,
+    minimum height=1.15cm,
+    align=center,
+    font=\small,
+    inner sep=5pt
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=2.2,
+    draw=darkaccent,
+    line width=0.8pt,
+    text width=4.8cm,
+    align=center,
+    font=\small,
+    inner sep=2pt
+  },
+  flowarrow/.style={
+    -{Latex[length=3mm,width=2mm]},
+    line width=0.8pt,
+    draw=textgray
+  },
+  flowlabel/.style={
+    font=\small,
+    fill=white,
+    inner sep=1.5pt
+  }
+}
+
+\begin{document}
+
+% =========================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% =========================================================
+
+\begin{titlepage}
+\thispagestyle{empty}
+
+\begin{center}
+
+\vspace*{24mm}
+
+{\color{darkaccent}\Large\bfseries ЧЕК-ЛИСТ}
+
+\vspace{8mm}
+
+{\Huge\bfseries
+Показательно-логарифмическое\\[2mm]
+неравенство
+}
+
+\vspace{7mm}
+
+{\Large
+Замены, разложение на множители,\\
+ОДЗ и метод интервалов
+}
+
+\vspace{16mm}
+
+{\color{accent}\rule{0.7\linewidth}{0.8pt}}
+
+\vspace{15mm}
+
+{\large
+ЕГЭ по профильной математике
+}
+
+\vspace{5mm}
+
+{\large
+Путь А
+}
+
+\vfill
+
+{\large
+\textbf{Лёвин Артём Александрович}\\[2mm]
+эксклюзивно для Тимофея Васильченко
+}
+
+\vspace{7mm}
+
+{\large \today}
+
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[
+  accent!45,
+  line width=1.3pt
+]
+([xshift=14mm,yshift=13mm]current page.south west)
+.. controls
+([xshift=62mm,yshift=27mm]current page.south west)
+and
+([xshift=-74mm,yshift=8mm]current page.south east)
+..
+([xshift=-14mm,yshift=16mm]current page.south east);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% =========================================================
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% =========================================================
+
+\section*{\color{darkaccent}1. Главная идея задачи}
+\topicline
+
+Рассмотрим типичное сложное неравенство:
+\[
+\frac{
+9^x-3^{x+2}+8
+}{
+\log_{\frac16}^{\,2}(5^x-2)
++
+\log_{\frac16}\!\left((5^x-2)^2\right)
++1
+}
+\le 0.
+\]
+
+Внешний вид громоздкий, однако структура задачи состоит из нескольких стандартных действий:
+
+\begin{enumerate}
+\item привести показательные выражения к одной повторяющейся конструкции;
+\item выполнить замену;
+\item разложить квадратный трёхчлен на множители;
+\item корректно преобразовать логарифм чётной степени;
+\item выписать ОДЗ;
+\item свернуть знаменатель в квадрат;
+\item учесть, что квадрат знаменателя положителен только при условии, что он не равен нулю;
+\item решить оставшееся произведение методом интервалов;
+\item пересечь результат со всеми ограничениями.
+\end{enumerate}
+
+\section*{\color{darkaccent}2. Показательная часть: ищите повторяющееся выражение}
+\topicline
+
+Если одновременно встречаются
+\[
+a^{2x},\qquad a^x,
+\]
+естественная замена:
+\[
+t=a^x,\qquad t>0.
+\]
+
+В нашей задаче:
+\[
+9^x=(3^2)^x=3^{2x}=(3^x)^2,
+\]
+а также
+\[
+3^{x+2}=3^x\cdot3^2=9\cdot3^x.
+\]
+
+Поэтому
+\[
+9^x-3^{x+2}+8
+=
+(3^x)^2-9\cdot3^x+8.
+\]
+
+Вводим
+\[
+t=3^x.
+\]
+
+Получаем квадратный трёхчлен:
+\[
+t^2-9t+8.
+\]
+
+Его корни:
+\[
+t_1=1,\qquad t_2=8,
+\]
+поэтому
+\[
+t^2-9t+8=(t-1)(t-8).
+\]
+
+Возвращаем замену:
+\[
+\boxed{
+9^x-3^{x+2}+8
+=
+(3^x-1)(3^x-8)
+}.
+\]
+
+\subsection*{\color{accent}Триггер}
+
+Увидели выражения вида
+\[
+a^{2x},\quad a^x
+\]
+--- попробуйте замену
+\[
+t=a^x.
+\]
+
+Увидели квадратный трёхчлен
+\[
+t^2+bt+c
+\]
+--- проверьте возможность разложения на множители.
+
+\section*{\color{darkaccent}3. Степень степени}
+\topicline
+
+Ключевое правило:
+\[
+(a^m)^n=a^{mn}.
+\]
+
+Поэтому
+\[
+(3^x)^2=3^{2x}.
+\]
+
+Важно:
+\[
+(3^x)^2\ne 3^{x^2}.
+\]
+
+При возведении степени в степень показатели \textbf{перемножаются}.
+
+\section*{\color{darkaccent}4. Логарифм чётной степени и модуль}
+\topicline
+
+Для
+\[
+a>0,\qquad a\ne1,\qquad u\ne0
+\]
+справедливо:
+\[
+\boxed{
+\log_a(u^{2n})=2n\log_a|u|
+}.
+\]
+
+В частности,
+\[
+\log_a(u^2)=2\log_a|u|.
+\]
+
+Модуль принципиален: из условия
+\[
+u^2>0
+\]
+следует только
+\[
+u\ne0,
+\]
+знак самого \(u\) заранее неизвестен.
+
+Для нечётной степени при существовании логарифма требуется \(u>0\):
+\[
+\log_a(u^{2n+1})
+=
+(2n+1)\log_a u.
+\]
+
+В нашей задаче:
+\[
+\log_{\frac16}\!\left((5^x-2)^2\right)
+=
+2\log_{\frac16}|5^x-2|.
+\]
+
+\section*{\color{darkaccent}5. ОДЗ снимает модуль}
+\topicline
+
+В знаменателе присутствует
+\[
+\log_{\frac16}(5^x-2).
+\]
+
+Следовательно,
+\[
+5^x-2>0.
+\]
+
+Отсюда
+\[
+5^x>2,
+\]
+а поскольку \(5>1\),
+\[
+\boxed{x>\log_5 2}.
+\]
+
+На ОДЗ известно:
+\[
+5^x-2>0.
+\]
+
+Поэтому
+\[
+|5^x-2|=5^x-2.
+\]
+
+Значит,
+\[
+\log_{\frac16}\!\left((5^x-2)^2\right)
+=
+2\log_{\frac16}(5^x-2).
+\]
+
+\section*{\color{darkaccent}6. Сворачиваем знаменатель}
+\topicline
+
+Обозначим
+\[
+t=\log_{\frac16}(5^x-2).
+\]
+
+Тогда знаменатель превращается в
+\[
+t^2+2t+1.
+\]
+
+Используем формулу сокращённого умножения:
+\[
+t^2+2t+1=(t+1)^2.
+\]
+
+Следовательно,
+\[
+\boxed{
+\log_{\frac16}^{\,2}(5^x-2)
++
+\log_{\frac16}\!\left((5^x-2)^2\right)
++1
+=
+\left(
+\log_{\frac16}(5^x-2)+1
+\right)^2
+}.
+\]
+
+\subsection*{\color{accent}Триггер}
+
+Увидели
+\[
+A^2+2A+1
+\]
+--- сразу проверяйте формулу
+\[
+(A+1)^2.
+\]
+
+Формулы сокращённого умножения полезно узнавать в обе стороны:
+\[
+(A+1)^2
+\longleftrightarrow
+A^2+2A+1.
+\]
+
+\section*{\color{darkaccent}7. Квадрат знаменателя: два разных утверждения}
+\topicline
+
+После преобразований исходная дробь имеет вид
+\[
+\frac{
+(3^x-1)(3^x-8)
+}{
+\left(
+\log_{\frac16}(5^x-2)+1
+\right)^2
+}
+\le0.
+\]
+
+Для любого допустимого \(x\)
+\[
+\left(
+\log_{\frac16}(5^x-2)+1
+\right)^2\ge0.
+\]
+
+Однако знаменатель дроби не имеет права обращаться в нуль.
+
+Поэтому обязательно записываем:
+\[
+\log_{\frac16}(5^x-2)+1\ne0.
+\]
+
+Решим запрещённое равенство:
+\[
+\log_{\frac16}(5^x-2)=-1.
+\]
+
+По определению логарифма:
+\[
+5^x-2=
+\left(\frac16\right)^{-1}=6.
+\]
+
+Следовательно,
+\[
+5^x=8,
+\]
+то есть
+\[
+\boxed{x\ne\log_5 8}.
+\]
+
+Итак, на области определения знаменатель строго положителен:
+\[
+\left(
+\log_{\frac16}(5^x-2)+1
+\right)^2>0.
+\]
+
+Следовательно, знак всей дроби определяется числителем.
+
+\section*{\color{darkaccent}8. Получаем систему}
+\topicline
+
+Исходное неравенство равносильно системе
+\[
+\begin{cases}
+(3^x-1)(3^x-8)\le0,\\[1mm]
+x>\log_5 2,\\[1mm]
+x\ne\log_5 8.
+\end{cases}
+\]
+
+Такой переход допустим именно потому, что знаменатель на допустимых значениях \(x\) положителен.
+
+\section*{\color{darkaccent}9. Решение показательных уравнений}
+\topicline
+
+Для метода интервалов найдём нули множителей.
+
+Первый:
+\[
+3^x-1=0.
+\]
+
+Отсюда
+\[
+3^x=1=3^0,
+\]
+следовательно,
+\[
+x=0.
+\]
+
+Второй:
+\[
+3^x-8=0,
+\]
+то есть
+\[
+3^x=8.
+\]
+
+\subsection*{\color{accent}Способ 1. Логарифмирование}
+
+Применяем логарифм по основанию \(3\):
+\[
+\log_3(3^x)=\log_3 8.
+\]
+
+Используя
+\[
+\log_a(a^x)=x,
+\]
+получаем
+\[
+\boxed{x=\log_3 8}.
+\]
+
+\subsection*{\color{accent}Способ 2. Основное логарифмическое тождество}
+
+При
+\[
+a>0,\qquad a\ne1,\qquad b>0
+\]
+справедливо:
+\[
+\boxed{a^{\log_a b}=b}.
+\]
+
+Поэтому
+\[
+8=3^{\log_3 8}.
+\]
+
+Тогда
+\[
+3^x=3^{\log_3 8},
+\]
+откуда
+\[
+x=\log_3 8.
+\]
+
+Первый способ универсален и особенно полезен в более сложных показательных уравнениях.
+
+\section*{\color{darkaccent}10. Метод интервалов}
+\topicline
+
+Решаем
+\[
+(3^x-1)(3^x-8)\le0.
+\]
+
+Критические точки:
+\[
+x=0,
+\qquad
+x=\log_3 8.
+\]
+
+Так как функция \(3^x\) возрастает,
+\[
+0<\log_3 8.
+\]
+
+Знаки произведения:
+
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[-{Latex[length=2.5mm]},line width=0.8pt]
+  (0,0)--(11,0);
+
+\draw[line width=0.8pt] (3,-0.12)--(3,0.12);
+\draw[line width=0.8pt] (8,-0.12)--(8,0.12);
+
+\filldraw[fill=white,draw=darkaccent,line width=0.9pt]
+  (3,0) circle (2.1pt);
+\filldraw[fill=white,draw=darkaccent,line width=0.9pt]
+  (8,0) circle (2.1pt);
+
+\node[below=4pt] at (3,0) {$0$};
+\node[below=4pt] at (8,0) {$\log_3 8$};
+
+\node[above=5pt] at (1.5,0) {$+$};
+\node[above=5pt] at (5.5,0) {$-$};
+\node[above=5pt] at (9.5,0) {$+$};
+\end{tikzpicture}
+\end{center}
+
+Для знака «\(\le0\)» выбираем отрицательный промежуток вместе с нулями:
+\[
+x\in[0;\log_3 8].
+\]
+
+\section*{\color{darkaccent}11. Финальное пересечение}
+\topicline
+
+Имеем одновременно:
+\[
+x\in[0;\log_3 8],
+\]
+\[
+x>\log_5 2,
+\]
+\[
+x\ne\log_5 8.
+\]
+
+Для упорядочивания точек заметим:
+\[
+0<\log_5 2<\log_5 8.
+\]
+
+Кроме того,
+\[
+\log_5 8
+=
+3\log_5 2,
+\qquad
+\log_3 8
+=
+3\log_3 2.
+\]
+
+Так как
+\[
+5>3>1,
+\]
+для числа \(2>1\)
+\[
+\log_5 2<\log_3 2.
+\]
+
+Следовательно,
+\[
+\log_5 8<\log_3 8.
+\]
+
+Итак,
+\[
+\boxed{
+x\in
+(\log_5 2;\log_5 8)
+\cup
+(\log_5 8;\log_3 8]
+}.
+\]
+
+\section*{\color{darkaccent}12. Что следует узнавать автоматически}
+\topicline
+
+\begin{tabularx}{\linewidth}{@{}p{0.35\linewidth}X@{}}
+\toprule
+\textbf{Что Вы видите} & \textbf{Что стоит проверить} \\
+\midrule
+\(a^{2x}\) и \(a^x\) &
+Замена \(t=a^x\). \\[1mm]
+
+Квадратный трёхчлен &
+Разложение на множители. \\[1mm]
+
+\(\log_a(u^{2n})\) &
+Вынесение степени:
+\(2n\log_a|u|\). \\[1mm]
+
+\(A^2+2A+1\) &
+Свёртка в \((A+1)^2\). \\[1mm]
+
+Квадрат в знаменателе &
+Знаменатель неотрицателен, но отдельно требуется исключить его ноль. \\[1mm]
+
+Произведение множителей &
+Метод интервалов. \\[1mm]
+
+Уравнение \(a^x=b\) &
+\(x=\log_a b\). \\[1mm]
+
+Основание \(\frac1a\) &
+Полезно помнить:
+\(\log_{1/a}u=-\log_a u\). \\
+\bottomrule
+\end{tabularx}
+
+\section*{\color{darkaccent}13. Типичные ошибки}
+\topicline
+
+\begin{enumerate}
+\item
+Писать
+\[
+(3^x)^2=3^{x^2}.
+\]
+Верно:
+\[
+(3^x)^2=3^{2x}.
+\]
+
+\item
+Преобразовывать
+\[
+\log_a(u^2)
+\]
+как
+\[
+2\log_a u
+\]
+без проверки знака \(u\).
+
+Корректная общая формула:
+\[
+\log_a(u^2)=2\log_a|u|.
+\]
+
+\item
+Удалять модуль до записи ОДЗ.
+
+В данной задаче
+\[
+|5^x-2|=5^x-2
+\]
+только после установления
+\[
+5^x-2>0.
+\]
+
+\item
+Говорить, что квадрат знаменателя всегда положителен.
+
+Квадрат может быть равен нулю. Для дроби это запрещено.
+
+\item
+Забывать условие
+\[
+x\ne\log_5 8.
+\]
+
+\item
+Решить только числитель и сразу записать ответ.
+
+Финальный этап --- пересечение с ОДЗ и всеми исключёнными значениями.
+
+\item
+При работе с логарифмическими неравенствами забывать о основании.
+
+Если
+\[
+0<a<1,
+\]
+функция
+\[
+y=\log_a x
+\]
+убывает, поэтому при переходе от логарифмического неравенства к сравнению аргументов направление знака меняется.
+
+\item
+Сокращать множитель дроби, не сохранив условие его ненулевого значения.
+
+Если множитель стоял в знаменателе, его ноль остаётся запрещённым даже после алгебраического сокращения.
+\end{enumerate}
+
+
+
+% =========================================================
+% КРАТКИЙ ЧЕК-ЛИСТ ПЕРЕД ЭКЗАМЕНОМ
+% =========================================================
+
+\section*{\color{darkaccent}14. Проверка решения перед записью ответа}
+\topicline
+
+Перед завершением подобной задачи проверьте:
+
+\begin{itemize}
+\item[$\square$]
+Выписано ОДЗ каждого логарифма.
+
+\item[$\square$]
+Учтён запрет деления на ноль.
+
+\item[$\square$]
+При снятии чётной степени под логарифмом появился модуль.
+
+\item[$\square$]
+Модуль раскрыт только после установления знака подмодульного выражения.
+
+\item[$\square$]
+При замене \(t=a^x\) учтено \(t>0\), если это существенно.
+
+\item[$\square$]
+Квадратный трёхчлен разложен без потери множителей.
+
+\item[$\square$]
+Нули числителя и знаменателя различаются по смыслу:
+нули числителя могут войти в ответ,
+нули знаменателя запрещены.
+
+\item[$\square$]
+Знаки на интервалах определены корректно.
+
+\item[$\square$]
+Если основание логарифма меньше \(1\),
+при сравнении аргументов учтено убывание логарифмической функции.
+
+\item[$\square$]
+В конце выполнено пересечение с ОДЗ.
+
+\item[$\square$]
+Все запрещённые точки удалены из окончательного множества.
+\end{itemize}
+
+% =========================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% =========================================================
+
+\clearpage
+\section*{\color{darkaccent}Тренировочный блок --- Путь А}
+\topicline
+
+\textbf{Задача.}
+Решите неравенства. Решение оформляйте последовательно:
+ОДЗ \(\rightarrow\) преобразование числителя \(\rightarrow\)
+преобразование знаменателя \(\rightarrow\)
+метод интервалов \(\rightarrow\) пересечение ограничений.
+
+\vspace{3mm}
+
+\begin{enumerate}
+
+\item
+\[
+\frac{
+4^x-5\cdot2^x+4
+}{
+\log_{\frac13}^{\,2}(3^x-1)
++
+\log_{\frac13}\!\left((3^x-1)^2\right)
++1
+}
+\le0.
+\]
+
+
+
+\end{enumerate}
+
+
+
+\end{document}
