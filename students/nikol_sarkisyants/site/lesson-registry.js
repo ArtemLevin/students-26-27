@@ -8,6 +8,23 @@ const MONTHS_GENITIVE=[
 
 export const LESSONS=Object.freeze([
   {
+    date:'2026-09-20',
+    href:'20.09.26.html',
+    title:'Графики функции и производной',
+    navTitle:'Графики функции и производной',
+    navSubtitle:'знак производной · монотонность · экстремумы',
+    summary:'Главный навык занятия — различать график функции и график производной и переводить информацию между ними. Закреплены знак f′, промежутки монотонности и знакопостоянства, нули производной, смена знака в точках экстремума, строгие неравенства, границы и выколотые точки.',
+    topics:['график функции','график производной','знак производной','монотонность','экстремумы','границы и выколотые точки'],
+    outcomes:[
+      {competencyId:'t8_derivative_graph',label:'График производной',level:3,tone:'good',practiceDisposition:'manual'},
+      {competencyId:'t8_interpret',label:'Сопоставление f и f′',level:3,tone:'good',practiceDisposition:'manual'},
+      {competencyId:'t8_monotonicity',label:'Возрастание и убывание',level:3,tone:'good',practiceDisposition:'manual'},
+      {competencyId:'t8_extrema',label:'Экстремумы по знаку f′',level:3,tone:'good',practiceDisposition:'manual'},
+      {competencyId:'t8_geometric',label:'Геометрический смысл производной',level:2,tone:'process',practiceDisposition:'manual'}
+    ],
+    materials:{pdf:'../pdf_docs/20.09.26.pdf',tex:'../tex_docs/20.09.26.tex',lab:'20.09.26-lab.html'}
+  },
+  {
     date:'2026-09-14',
     href:'14.09.26.html',
     title:'Исследование функции с помощью производной',
