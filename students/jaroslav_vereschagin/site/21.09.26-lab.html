@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория по линейной функции: исследование влияния коэффициентов k и b на график прямой">
+<meta name="color-scheme" content="light dark">
+<title>Лаборатория графика прямой — Ярослав Верещагин</title>
+<style>
+:root{
+  --surface-page:#f3efe6;--surface-raised:#fffdf8;--surface-soft:#e8eee9;
+  --text-primary:#1f2926;--text-secondary:#66716d;--text-inverse:#f9fffc;
+  --border-subtle:#d7d6cb;--border-strong:#aeb9b3;--accent:#2d6f67;--accent-hover:#245a54;
+  --accent-soft:#dcebe6;--accent-warm:#b26045;--focus-ring:#69a89d;--shadow-low:0 12px 32px rgba(30,45,40,.09);
+  --radius-sm:.55rem;--radius-md:1rem;--radius-lg:1.5rem;--motion-fast:140ms;--motion-normal:240ms;
+  --grid-line:color-mix(in srgb,var(--text-primary) 10%,transparent)
+}
+html[data-theme="dark"]{
+  --surface-page:#101715;--surface-raised:#18211e;--surface-soft:#202c28;--text-primary:#eef4f1;--text-secondary:#a8b4af;
+  --text-inverse:#101715;--border-subtle:#33423d;--border-strong:#53645e;--accent:#73c5b6;--accent-hover:#9ad8cd;
+  --accent-soft:#1d3832;--accent-warm:#e09a7d;--focus-ring:#8bd5c7;--shadow-low:0 12px 32px rgba(0,0,0,.28);
+  --grid-line:color-mix(in srgb,var(--text-primary) 12%,transparent)
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}button,input{font:inherit}a{color:inherit}.shell{width:min(100% - 2rem,1320px);margin:auto}
+.topbar{min-height:62px;border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;gap:.7rem}.topbar a{text-decoration:none;font-weight:780}.topbar span{color:var(--text-secondary)}.topbar button{margin-left:auto}
+.icon-button,.preset,.back-link{min-height:42px;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);padding:.55rem .75rem;cursor:pointer;text-decoration:none}
+.lab-head{padding:2.4rem 0 1.4rem;border-bottom:1px solid var(--border-subtle)}.eyebrow{margin:0;color:var(--accent);font-size:.74rem;font-weight:850;letter-spacing:.11em;text-transform:uppercase}
+h1,h2{font-family:Georgia,Cambria,serif;letter-spacing:-.03em}h1{font-size:clamp(2.4rem,5vw,4.7rem);line-height:1;margin:.5rem 0 1rem}h2{font-size:1.5rem}.lead{max-width:820px;color:var(--text-secondary)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(290px,.75fr);gap:1px;background:var(--border-subtle);border:1px solid var(--border-subtle);margin:1.5rem 0 3rem;min-height:640px}
+.stage,.controls{background:var(--surface-raised)}.stage{padding:clamp(1rem,2.5vw,2rem);display:flex;flex-direction:column}.controls{padding:1.35rem}
+.formula{display:flex;align-items:center;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--border-subtle);padding-bottom:.8rem;margin-bottom:.8rem}.formula math{font:1.5rem "Cambria Math","STIX Two Math",serif}.mode-note{color:var(--text-secondary);font-size:.92rem}
+.plot{width:100%;min-height:480px;flex:1;display:block}.plot .grid{stroke:var(--grid-line);stroke-width:1}.plot .axis{stroke:var(--text-secondary);stroke-width:1.7}.plot .line{stroke:var(--accent);stroke-width:5;stroke-linecap:round}.plot .helper{stroke:var(--accent-warm);stroke-width:2;stroke-dasharray:7 6;fill:none}.plot .point{fill:var(--accent-warm);stroke:var(--surface-raised);stroke-width:3}.plot text{fill:var(--text-primary);font:14px system-ui}.plot .soft{fill:var(--text-secondary)}
+.control{padding:1rem 0;border-bottom:1px solid var(--border-subtle)}.control label{display:flex;justify-content:space-between;gap:1rem;font-weight:780}.control output{color:var(--accent);font:800 1rem ui-monospace,monospace}.control input[type=range]{width:100%;accent-color:var(--accent);margin-top:.8rem;min-height:36px}
+.readout{margin:1rem 0;padding:1rem;border-left:3px solid var(--accent);background:var(--surface-soft)}.readout strong{display:block;margin-bottom:.25rem}.readout span{color:var(--text-secondary)}
+.presets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem}.preset{text-align:left}.preset:hover,.preset:focus-visible{border-color:var(--accent)}
+.hint{font-size:.9rem;color:var(--text-secondary);margin-top:1rem}.back-link{display:inline-flex;margin-top:.3rem;background:var(--accent);border-color:var(--accent);color:var(--text-inverse);font-weight:780}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+@media(max-width:880px){.workspace{grid-template-columns:1fr}.plot{min-height:390px}.controls{border-top:1px solid var(--border-subtle)}}
+@media(max-width:520px){.shell{width:min(100% - 1rem,1320px)}.presets{grid-template-columns:1fr}.formula{align-items:flex-start;flex-direction:column}.plot{min-height:330px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+@media print{.topbar,.controls,.back-link{display:none}.workspace{display:block;border:0}.stage{padding:0}.plot{min-height:500px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="topbar">
+  <a href="21.09.26.html">Ярослав Верещагин</a><span>· график прямой</span>
+  <button class="icon-button" id="themeToggle" type="button" aria-label="Включить тёмную тему">Тема</button>
+</header>
+
+<section class="lab-head">
+  <p class="eyebrow">Цифровая лаборатория · 21 сентября 2026</p>
+  <h1>Как коэффициенты двигают прямую</h1>
+  <p class="lead">Изменяйте <em>k</em> и <em>b</em> и наблюдайте за одной и той же моделью <strong>y = kx + b</strong>. Для <em>k</em> отслеживайте наклон, для <em>b</em> — точку пересечения с осью <em>Oy</em>.</p>
+</section>
+
+<main class="workspace">
+  <section class="stage" aria-labelledby="plotTitle">
+    <div class="formula">
+      <div>
+        <div class="eyebrow" id="plotTitle">Текущая функция</div>
+        <math aria-label="y равно k x плюс b"><mi>y</mi><mo>=</mo><mn id="mathK">1</mn><mi>x</mi><mo id="mathSign">+</mo><mn id="mathB">0</mn></math>
+      </div>
+      <div class="mode-note" id="modeNote">Режим: влияние углового коэффициента k.</div>
+    </div>
+    <svg class="plot" id="plot" viewBox="0 0 840 540" role="img" aria-labelledby="plotTitle plotDescription">
+      <desc id="plotDescription">Координатная плоскость с прямой y = kx + b, точкой пересечения с Oy и треугольником изменения Δy к Δx.</desc>
+      <g id="gridLayer" class="grid"></g>
+      <line class="axis" x1="70" y1="270" x2="790" y2="270"/><line class="axis" x1="430" y1="500" x2="430" y2="40"/>
+      <polygon points="790,270 778,264 778,276" fill="var(--text-secondary)"/><polygon points="430,40 424,52 436,52" fill="var(--text-secondary)"/>
+      <text x="778" y="252">x</text><text x="445" y="54">y</text>
+      <line id="functionLine" class="line" x1="0" y1="0" x2="0" y2="0"/>
+      <path id="slopeTriangle" class="helper" d=""/>
+      <circle id="interceptPoint" class="point" cx="430" cy="270" r="7"/>
+      <text id="interceptLabel" x="446" y="260">b = 0</text>
+      <text id="deltaXLabel" class="soft" x="0" y="0">Δx = 1</text>
+      <text id="deltaYLabel" class="soft" x="0" y="0">Δy = k</text>
+    </svg>
+  </section>
+
+  <aside class="controls" aria-label="Параметры прямой">
+    <h2>Параметры</h2>
+    <div class="control" id="controlK">
+      <label for="kRange"><span>Угловой коэффициент k</span><output id="kOutput">1</output></label>
+      <input id="kRange" type="range" min="-3" max="3" step="0.5" value="1">
+    </div>
+    <div class="control" id="controlB">
+      <label for="bRange"><span>Свободный коэффициент b</span><output id="bOutput">0</output></label>
+      <input id="bRange" type="range" min="-3" max="3" step="0.5" value="0">
+    </div>
+
+    <div class="readout" aria-live="polite">
+      <strong id="direction">Функция возрастает.</strong>
+      <span id="meaning">График проходит через начало координат.</span>
+    </div>
+
+    <h2>Семейства из занятия</h2>
+    <div class="presets" aria-label="Готовые случаи">
+      <button class="preset" type="button" data-k="0" data-b="1">y = 1</button>
+      <button class="preset" type="button" data-k="0" data-b="2">y = 2</button>
+      <button class="preset" type="button" data-k="0" data-b="-3">y = −3</button>
+      <button class="preset" type="button" data-k="1" data-b="0">y = x</button>
+      <button class="preset" type="button" data-k="2" data-b="0">y = 2x</button>
+      <button class="preset" type="button" data-k="-3" data-b="0">y = −3x</button>
+    </div>
+    <p class="hint">Для семейства <strong>y = m</strong> фиксируется k = 0 и меняется b. Для семейства <strong>y = kx</strong> фиксируется b = 0 и меняется k.</p>
+    <a class="back-link" href="21.09.26.html">Вернуться к занятию</a>
+  </aside>
+</main>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const root=document.documentElement;
+  const themeButton=document.getElementById('themeToggle');
+  function setTheme(theme){root.dataset.theme=theme;themeButton.setAttribute('aria-label',theme==='dark'?'Включить светлую тему':'Включить тёмную тему');try{localStorage.setItem('jaroslav-theme',theme);}catch(e){}}
+  try{const saved=localStorage.getItem('jaroslav-theme');if(saved==='dark'||saved==='light')setTheme(saved);}catch(e){}
+  themeButton.addEventListener('click',()=>setTheme(root.dataset.theme==='dark'?'light':'dark'));
+
+  const kRange=document.getElementById('kRange'),bRange=document.getElementById('bRange');
+  const kOutput=document.getElementById('kOutput'),bOutput=document.getElementById('bOutput');
+  const line=document.getElementById('functionLine'),point=document.getElementById('interceptPoint'),label=document.getElementById('interceptLabel');
+  const tri=document.getElementById('slopeTriangle'),dxLabel=document.getElementById('deltaXLabel'),dyLabel=document.getElementById('deltaYLabel');
+  const direction=document.getElementById('direction'),meaning=document.getElementById('meaning');
+  const mathK=document.getElementById('mathK'),mathB=document.getElementById('mathB'),mathSign=document.getElementById('mathSign');
+  const modeNote=document.getElementById('modeNote'),grid=document.getElementById('gridLayer');
+
+  const x0=430,y0=270,sx=60,sy=38;
+  function X(x){return x0+x*sx}function Y(y){return y0-y*sy}
+  for(let x=-6;x<=6;x++){const v=document.createElementNS('http://www.w3.org/2000/svg','line');v.setAttribute('x1',X(x));v.setAttribute('x2',X(x));v.setAttribute('y1','40');v.setAttribute('y2','500');grid.appendChild(v)}
+  for(let y=-6;y<=6;y++){const h=document.createElementNS('http://www.w3.org/2000/svg','line');h.setAttribute('x1','70');h.setAttribute('x2','790');h.setAttribute('y1',Y(y));h.setAttribute('y2',Y(y));grid.appendChild(h)}
+
+  function format(n){return Number.isInteger(n)?String(n):String(n).replace('.',',')}
+  function render(){
+    const k=Number(kRange.value),b=Number(bRange.value);
+    kOutput.value=format(k);bOutput.value=format(b);
+    line.setAttribute('x1',X(-6));line.setAttribute('y1',Y(k*(-6)+b));line.setAttribute('x2',X(6));line.setAttribute('y2',Y(k*6+b));
+    point.setAttribute('cx',X(0));point.setAttribute('cy',Y(b));label.setAttribute('x',X(0)+14);label.setAttribute('y',Y(b)-10);label.textContent='b = '+format(b);
+    const ax=X(0),ay=Y(b),bx=X(1),by=Y(b),cy=Y(k+b);
+    tri.setAttribute('d','M '+ax+' '+ay+' L '+bx+' '+by+' L '+bx+' '+cy);
+    dxLabel.setAttribute('x',(ax+bx)/2-18);dxLabel.setAttribute('y',by+22);
+    dyLabel.setAttribute('x',bx+10);dyLabel.setAttribute('y',(by+cy)/2);dyLabel.textContent='Δy = '+format(k);
+    mathK.textContent=format(k);mathSign.textContent=b<0?'−':'+';mathB.textContent=format(Math.abs(b));
+    if(k>0)direction.textContent='Функция возрастает.';
+    else if(k<0)direction.textContent='Функция убывает.';
+    else direction.textContent='График горизонтален: k = 0.';
+    meaning.textContent=b===0?'График проходит через начало координат.':'Пересечение с Oy: (0; '+format(b)+').';
+  }
+  kRange.addEventListener('input',render);bRange.addEventListener('input',render);
+  document.querySelectorAll('.preset').forEach(btn=>btn.addEventListener('click',()=>{kRange.value=btn.dataset.k;bRange.value=btn.dataset.b;render()}));
+
+  const params=new URLSearchParams(location.search);const mode=params.get('mode')||'slope';
+  if(mode==='intercept'){modeNote.textContent='Режим: влияние свободного коэффициента b.';document.getElementById('controlB').scrollIntoView({block:'nearest'});}
+  if(mode==='families'){modeNote.textContent='Режим: сравнение семейств y = m и y = kx.';}
+  if(mode==='slope')modeNote.textContent='Режим: влияние углового коэффициента k.';
+  render();
+})();
+</script>
+</body>
+</html>
