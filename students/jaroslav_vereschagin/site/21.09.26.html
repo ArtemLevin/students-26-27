@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Ярослав Верещагин: линейная функция y = kx + b, коэффициенты, восстановление формулы по графику и пересечение прямых">
+<meta name="color-scheme" content="light dark">
+<title>График прямой — Ярослав Верещагин</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%232d6f67'/%3E%3Cpath d='M10 47L51 16' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --surface-page:#f3efe6;--surface-raised:#fffdf8;--surface-soft:#e9eee9;
+  --text-primary:#1f2926;--text-secondary:#66716d;--text-inverse:#f9fffc;
+  --border-subtle:#d7d6cb;--border-strong:#aeb9b3;
+  --accent:#2d6f67;--accent-hover:#245a54;--accent-soft:#dcebe6;
+  --accent-warm:#b26045;--success:#357758;--danger:#9e4c45;--warning:#8a691f;
+  --focus-ring:#69a89d;--shadow-low:0 10px 28px rgba(30,45,40,.08);
+  --shadow-high:0 24px 70px rgba(26,40,35,.16);
+  --radius-sm:.55rem;--radius-md:1rem;--radius-lg:1.65rem;
+  --space-1:.4rem;--space-2:.7rem;--space-3:1rem;--space-4:1.5rem;--space-5:2.3rem;--space-6:3.5rem;
+  --motion-fast:140ms;--motion-normal:240ms;
+  --grid-line:color-mix(in srgb,var(--text-primary) 9%,transparent);
+}
+html[data-theme="dark"]{
+  --surface-page:#101715;--surface-raised:#18211e;--surface-soft:#202c28;
+  --text-primary:#eef4f1;--text-secondary:#a8b4af;--text-inverse:#101715;
+  --border-subtle:#33423d;--border-strong:#53645e;
+  --accent:#73c5b6;--accent-hover:#9ad8cd;--accent-soft:#1d3832;
+  --accent-warm:#e09a7d;--success:#75c59b;--danger:#e18b82;--warning:#d7ba6f;
+  --focus-ring:#8bd5c7;--shadow-low:0 10px 28px rgba(0,0,0,.22);--shadow-high:0 24px 70px rgba(0,0,0,.38);
+  --grid-line:color-mix(in srgb,var(--text-primary) 11%,transparent);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button,input{font:inherit}
+button,a{touch-action:manipulation}
+a{color:inherit}
+math{font-family:"Cambria Math","STIX Two Math",serif}
+.skip-link{position:fixed;left:1rem;top:-5rem;z-index:100;background:var(--text-primary);color:var(--surface-page);padding:.7rem 1rem}
+.skip-link:focus{top:1rem}
+.shell{width:min(100% - 2rem,1180px);margin:auto}
+.topbar{position:sticky;top:0;z-index:30;border-bottom:1px solid var(--border-subtle);background:color-mix(in srgb,var(--surface-page) 92%,transparent);backdrop-filter:blur(12px)}
+.topbar .inner{width:min(100% - 2rem,1180px);margin:auto;min-height:62px;display:flex;align-items:center;gap:1rem}
+.brand{font-weight:760;text-decoration:none;letter-spacing:-.015em}
+.brand small{display:block;color:var(--text-secondary);font-size:.74rem;font-weight:650;letter-spacing:.04em}
+.topnav{display:flex;gap:.25rem;margin-left:auto}
+.topnav a,.icon-button,.print-button{border:0;background:transparent;color:var(--text-secondary);padding:.65rem .72rem;text-decoration:none;border-bottom:1px solid transparent}
+.topnav a:hover,.topnav a:focus-visible{color:var(--text-primary);border-bottom-color:var(--accent)}
+.icon-button,.print-button{border:1px solid var(--border-subtle);min-height:42px;cursor:pointer}
+.lesson-cover{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(330px,.75fr);gap:clamp(2rem,5vw,5rem);padding:clamp(3rem,7vw,6.5rem) 0 clamp(2.5rem,6vw,5rem);border-bottom:1px solid var(--border-subtle)}
+.lesson-cover::before{content:"";position:absolute;inset:0 calc(50% - 50vw);z-index:-1;background:
+  linear-gradient(var(--grid-line) 1px,transparent 1px),
+  linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);
+  background-size:38px 38px;mask-image:linear-gradient(to bottom,black,transparent 92%)}
+.eyebrow{margin:0 0 .7rem;color:var(--accent);font-size:.73rem;font-weight:850;letter-spacing:.12em;text-transform:uppercase}
+h1,h2,h3{font-family:Georgia,Cambria,serif;letter-spacing:-.025em}
+h1{font-size:clamp(2.7rem,6vw,5.7rem);line-height:.98;margin:.25rem 0 1.2rem;max-width:720px}
+h2{font-size:clamp(1.9rem,3.7vw,3.25rem);line-height:1.08;margin:0 0 1rem}
+h3{font-size:1.26rem;margin:0 0 .6rem}
+.lead{max-width:720px;color:var(--text-secondary);font-size:1.08rem}
+.folio{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--border-strong);margin-top:2rem;max-width:680px}
+.folio div{padding:.8rem 0;border-bottom:1px solid var(--border-subtle)}
+.folio div:nth-child(odd){padding-right:1rem}
+.folio small{display:block;color:var(--text-secondary);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}
+.folio strong{font-size:.95rem}
+.hero-plot{align-self:center;border-left:1px solid var(--border-strong);padding-left:clamp(1.2rem,3vw,2.4rem)}
+.hero-plot svg{width:100%;height:auto;display:block}
+.hero-plot .axis{stroke:var(--text-secondary);stroke-width:1.5}
+.hero-plot .grid{stroke:var(--grid-line);stroke-width:1}
+.hero-plot .line{stroke:var(--accent);stroke-width:5;stroke-linecap:round}
+.hero-plot .mark{fill:var(--accent-warm);stroke:var(--surface-raised);stroke-width:3}
+.hero-plot text{fill:var(--text-primary);font:15px system-ui}
+.hero-caption{color:var(--text-secondary);font-size:.9rem;margin:.7rem 0 0}
+.route{display:flex;gap:.35rem;overflow-x:auto;padding:1rem 0;border-bottom:1px solid var(--border-subtle);scrollbar-width:thin}
+.route a{white-space:nowrap;text-decoration:none;color:var(--text-secondary);padding:.55rem .72rem;border-left:2px solid transparent}
+.route a:hover,.route a:focus-visible{color:var(--text-primary);border-left-color:var(--accent)}
+.material-actions{display:flex;gap:.6rem;flex-wrap:wrap;padding:1.1rem 0 0}
+.action{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.62rem .9rem;border:1px solid var(--border-strong);text-decoration:none;background:var(--surface-raised)}
+.action.primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse);font-weight:780}
+main{padding:var(--space-5) 0 var(--space-6)}
+.chapter{display:grid;grid-template-columns:minmax(160px,.34fr) minmax(0,1fr);gap:clamp(1.6rem,5vw,5rem);padding:clamp(2.4rem,5vw,4.6rem) 0;border-bottom:1px solid var(--border-subtle);scroll-margin-top:84px}
+.chapter-index{font:750 .72rem/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.08em;color:var(--accent);text-transform:uppercase}
+.chapter-body{min-width:0}
+.chapter-body>p{max-width:770px}
+.formula-line{margin:1.2rem 0;padding:1rem 0;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);overflow-x:auto}
+.formula-line math{font-size:clamp(1.4rem,3vw,2.15rem)}
+.definition-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--border-subtle);border:1px solid var(--border-subtle);margin:1.5rem 0}
+.definition-grid>div{background:var(--surface-raised);padding:1.15rem}
+.definition-grid b{color:var(--accent)}
+.rule-list{display:grid;gap:.8rem;margin:1.3rem 0}
+.rule{padding:.9rem 1rem;border-left:3px solid var(--border-strong);background:color-mix(in srgb,var(--surface-raised) 74%,transparent)}
+.rule[data-tone="accent"]{border-left-color:var(--accent)}
+.rule[data-tone="warm"]{border-left-color:var(--accent-warm)}
+.warning{margin:1.2rem 0;padding:1rem 1.1rem;border-left:3px solid var(--danger);background:color-mix(in srgb,var(--danger) 8%,var(--surface-raised))}
+.inline-link{color:var(--accent);font-weight:720;text-underline-offset:3px}
+.graph-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1.4rem 0}
+.mini-graph{border-top:1px solid var(--border-strong);padding-top:.85rem}
+.mini-graph svg{width:100%;height:auto;display:block}
+.mini-graph line.axis{stroke:var(--text-secondary);stroke-width:1.5}
+.mini-graph line.graph{stroke:var(--accent);stroke-width:4;stroke-linecap:round}
+.mini-graph strong{display:block;margin-top:.5rem}
+.stepper{margin:1.5rem 0;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong)}
+.stepper-head{display:flex;gap:.6rem;flex-wrap:wrap;padding:1rem 0}
+.stepper button,.quiz button,.reset-button{border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);min-height:42px;padding:.55rem .8rem;cursor:pointer}
+.stepper button:hover,.quiz button:hover,.reset-button:hover{border-color:var(--accent)}
+.steps{padding-bottom:1rem}
+.step{display:none;padding:1rem 0;border-top:1px solid var(--border-subtle)}
+.step.active{display:block}
+.step[aria-current="step"] strong{color:var(--accent)}
+.answer-line{color:var(--success);font-weight:780}
+.poster{margin:1.5rem 0;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong)}
+.poster summary{cursor:pointer;padding:1rem 0;font-weight:800}
+.poster figure{margin:0 0 1.2rem}
+.poster img{display:block;width:min(100%,1000px);max-height:78vh;object-fit:contain;border:1px solid var(--border-subtle);cursor:zoom-in;background:var(--surface-raised)}
+.poster figcaption{color:var(--text-secondary);font-size:.9rem;margin-top:.55rem}
+.practice-list{counter-reset:exercise;display:grid;gap:1rem}
+.exercise{counter-increment:exercise;padding:1.1rem 0;border-top:1px solid var(--border-subtle)}
+.exercise::before{content:counter(exercise,decimal-leading-zero);display:block;color:var(--accent);font:800 .72rem/1 ui-monospace,monospace;margin-bottom:.55rem}
+.exercise details{margin-top:.7rem}
+.exercise summary{cursor:pointer;color:var(--accent);font-weight:760}
+.quiz{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1.3rem 0}
+.quiz article{border-top:1px solid var(--border-strong);padding-top:.9rem}
+.quiz button{width:100%;text-align:left;margin:.35rem 0}
+.quiz button.correct{border-color:var(--success)}
+.quiz button.wrong{border-color:var(--danger)}
+.feedback{min-height:1.6rem;color:var(--text-secondary);font-size:.9rem}
+.selfcheck{display:grid;gap:.7rem}
+.selfcheck label{display:flex;gap:.75rem;align-items:flex-start;padding:.6rem 0;border-bottom:1px solid var(--border-subtle)}
+.selfcheck input{width:20px;height:20px;accent-color:var(--accent);margin-top:.2rem}
+.progress-track{height:8px;background:var(--border-subtle);overflow:hidden;margin:1rem 0}
+.progress-track span{display:block;height:100%;width:0;background:var(--accent);transition:width var(--motion-normal)}
+.page-footer{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.8rem 0 2.5rem;color:var(--text-secondary);font-size:.9rem}
+dialog{border:0;padding:0;background:transparent;max-width:min(96vw,1200px)}
+dialog::backdrop{background:rgba(0,0,0,.78)}
+.dialog-shell{background:var(--surface-raised);color:var(--text-primary);padding:1rem;box-shadow:var(--shadow-high)}
+.dialog-shell img{display:block;max-width:100%;max-height:84vh;margin:auto}
+.dialog-close{display:block;margin-left:auto;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);min-width:44px;min-height:44px;cursor:pointer}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+@media(max-width:820px){
+  .topnav{display:none}.lesson-cover{grid-template-columns:1fr}.hero-plot{border-left:0;border-top:1px solid var(--border-strong);padding:1.5rem 0 0}
+  .chapter{grid-template-columns:1fr;gap:.8rem}.definition-grid,.quiz{grid-template-columns:1fr}.graph-strip{grid-template-columns:1fr 1fr}
+}
+@media(max-width:520px){
+  .shell,.topbar .inner{width:min(100% - 1rem,1180px)}
+  h1{font-size:clamp(2.5rem,14vw,4rem)}
+  .folio{grid-template-columns:1fr}.folio div:nth-child(odd){padding-right:0}
+  .graph-strip{grid-template-columns:1fr}
+  .material-actions{display:grid}.action{width:100%}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+@media print{
+  :root{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#bbb;--border-strong:#777}
+  body{background:#fff}.topbar,.route,.material-actions,.stepper-head,.quiz button,.poster summary,.dialog-shell{display:none!important}
+  .lesson-cover::before{display:none}.shell{width:100%}.lesson-cover,.chapter{break-inside:avoid}.step{display:block!important}
+  .poster figure{display:block!important}.poster img{max-height:650px}.quiz{display:block}.quiz article{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#content">К содержанию</a>
+<header class="topbar">
+  <div class="inner">
+    <a class="brand" href="index.html">Ярослав Верещагин<small>ОГЭ · математика</small></a>
+    <nav class="topnav" aria-label="Разделы занятия">
+      <a href="#coefficients">Коэффициенты</a><a href="#points">Две точки</a><a href="#families">Семейства</a><a href="#practice">Тренировка</a>
+    </nav>
+    <button class="print-button" id="printButton" type="button">Печать</button>
+    <button class="icon-button" id="themeToggle" type="button" aria-label="Включить тёмную тему">Тема</button>
+  </div>
+</header>
+
+<div class="shell">
+<section class="lesson-cover" id="top">
+  <div>
+    <p class="eyebrow">Интерактивное пособие · 21 сентября 2026</p>
+    <h1>График прямой</h1>
+    <p class="lead">Линейная функция связывает формулу и рисунок: коэффициент <em>k</em> задаёт направление и наклон, а <em>b</em> показывает, где прямая пересекает ось <em>Oy</em>.</p>
+    <div class="folio" aria-label="Данные занятия">
+      <div><small>Ученик</small><strong>Ярослав Верещагин</strong></div>
+      <div><small>Преподаватель</small><strong>Лёвин Артём Александрович</strong></div>
+      <div><small>Тема</small><strong>Линейная функция</strong></div>
+      <div><small>Формула</small><strong>y = kx + b</strong></div>
+    </div>
+    <div class="material-actions">
+      <a class="action primary" href="21.09.26-lab.html?mode=slope">Исследовать, как меняется график</a>
+      <a class="action" href="../pdf_docs/21.09.26.pdf">Скачать пособие</a>
+      <a class="action" href="../tex_docs/21.09.26.tex">TeX</a>
+    </div>
+  </div>
+  <figure class="hero-plot" aria-labelledby="heroPlotCaption">
+    <svg viewBox="0 0 520 420" role="img" aria-label="Координатная плоскость с возрастающей прямой, пересекающей ось Oy ниже начала координат">
+      <g class="grid">
+        <path d="M60 40V380M110 40V380M160 40V380M210 40V380M260 40V380M310 40V380M360 40V380M410 40V380M460 40V380"/>
+        <path d="M40 70H480M40 120H480M40 170H480M40 220H480M40 270H480M40 320H480M40 370H480"/>
+      </g>
+      <line class="axis" x1="40" y1="220" x2="485" y2="220"/><line class="axis" x1="260" y1="390" x2="260" y2="30"/>
+      <polygon points="485,220 473,214 473,226" fill="var(--text-secondary)"/><polygon points="260,30 254,42 266,42" fill="var(--text-secondary)"/>
+      <line class="line" x1="75" y1="348" x2="455" y2="92"/>
+      <circle class="mark" cx="260" cy="223" r="7"/>
+      <text x="470" y="205">x</text><text x="274" y="46">y</text><text x="276" y="246">b</text><text x="384" y="125">y = kx + b</text>
+    </svg>
+    <figcaption class="hero-caption" id="heroPlotCaption">График читаем слева направо. Точка на оси <em>Oy</em> показывает свободный коэффициент <em>b</em>.</figcaption>
+  </figure>
+</section>
+
+<nav class="route" aria-label="Маршрут занятия">
+  <a href="#idea">01 · Формула</a><a href="#coefficients">02 · k и b</a><a href="#points">03 · Две точки</a><a href="#families">04 · Семейства</a><a href="#physics">05 · Физика</a><a href="#intersection">06 · Пересечение</a><a href="#practice">07 · Тренировка</a><a href="#check">08 · Самопроверка</a>
+</nav>
+
+<details class="poster">
+  <summary>Наглядная ментальная карта занятия</summary>
+  <figure>
+    <img id="posterImage" src="../images/21.09.26.png" alt="Ментальная карта по линейной функции y = kx + b: коэффициенты, свойства, алгоритм восстановления формулы и частые ошибки" loading="lazy">
+    <figcaption>Краткая памятка по ключевым идеям занятия. Нажмите на изображение, чтобы увеличить.</figcaption>
+  </figure>
+</details>
+
+<main id="content">
+<section class="chapter" id="idea">
+  <div class="chapter-index">01 · Главная идея</div>
+  <div class="chapter-body">
+    <h2>Одна формула — целая прямая</h2>
+    <p>Линейная функция задаётся формулой:</p>
+    <div class="formula-line"><math display="block"><mi>y</mi><mo>=</mo><mi>k</mi><mi>x</mi><mo>+</mo><mi>b</mi></math></div>
+    <div class="definition-grid">
+      <div><b>x</b><br>переменная, вместо которой подставляют числа;</div>
+      <div><b>k</b><br>угловой коэффициент;</div>
+      <div><b>b</b><br>свободный коэффициент;</div>
+      <div><b>(0; b)</b><br>точка пересечения графика с осью <em>Oy</em>.</div>
+    </div>
+    <p>При <em>x = 0</em> получаем <em>y = b</em>, поэтому значение <em>b</em> можно считывать непосредственно по пересечению прямой с вертикальной осью.</p>
+  </div>
+</section>
+
+<section class="chapter" id="coefficients">
+  <div class="chapter-index">02 · Коэффициенты</div>
+  <div class="chapter-body">
+    <h2>Что меняют k и b</h2>
+    <div class="rule-list">
+      <div class="rule" data-tone="accent"><strong>k &gt; 0.</strong> При движении слева направо прямая поднимается: функция возрастает.</div>
+      <div class="rule" data-tone="warm"><strong>k &lt; 0.</strong> При движении слева направо прямая опускается: функция убывает.</div>
+      <div class="rule"><strong>k = 0.</strong> Получается горизонтальная прямая <em>y = b</em>, параллельная оси <em>Ox</em>.</div>
+    </div>
+    <div class="graph-strip" aria-label="Три типа наклона прямой">
+      <div class="mini-graph"><svg viewBox="0 0 240 150" role="img" aria-label="Возрастающая прямая"><line class="axis" x1="25" y1="115" x2="220" y2="115"/><line class="axis" x1="75" y1="135" x2="75" y2="18"/><line class="graph" x1="35" y1="126" x2="205" y2="38"/></svg><strong>k &gt; 0</strong></div>
+      <div class="mini-graph"><svg viewBox="0 0 240 150" role="img" aria-label="Убывающая прямая"><line class="axis" x1="25" y1="115" x2="220" y2="115"/><line class="axis" x1="75" y1="135" x2="75" y2="18"/><line class="graph" x1="35" y1="35" x2="205" y2="128"/></svg><strong>k &lt; 0</strong></div>
+      <div class="mini-graph"><svg viewBox="0 0 240 150" role="img" aria-label="Горизонтальная прямая"><line class="axis" x1="25" y1="115" x2="220" y2="115"/><line class="axis" x1="75" y1="135" x2="75" y2="18"/><line class="graph" x1="30" y1="65" x2="210" y2="65"/></svg><strong>k = 0</strong></div>
+    </div>
+    <p><a class="inline-link" href="21.09.26-lab.html?mode=slope">Проверить влияние k на модели</a> · <a class="inline-link" href="21.09.26-lab.html?mode=intercept">Проверить влияние b на модели</a></p>
+    <div class="warning"><strong>Частая ошибка.</strong> Направление графика определяем только слева направо.</div>
+  </div>
+</section>
+
+<section class="chapter" id="points">
+  <div class="chapter-index">03 · Две точки</div>
+  <div class="chapter-body">
+    <h2>Как восстановить формулу точно</h2>
+    <p>Если известны две точки <em>A(x₁; y₁)</em> и <em>B(x₂; y₂)</em>, угловой коэффициент вычисляется как отношение вертикального изменения к горизонтальному:</p>
+    <div class="formula-line"><math display="block"><mi>k</mi><mo>=</mo><mfrac><mrow><msub><mi>y</mi><mn>2</mn></msub><mo>−</mo><msub><mi>y</mi><mn>1</mn></msub></mrow><mrow><msub><mi>x</mi><mn>2</mn></msub><mo>−</mo><msub><mi>x</mi><mn>1</mn></msub></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>Δ</mi><mi>y</mi></mrow><mrow><mi>Δ</mi><mi>x</mi></mrow></mfrac></math></div>
+    <div class="warning"><strong>Не перепутайте порядок.</strong> Для <em>k</em> делим изменение по <em>y</em> на изменение по <em>x</em>.</div>
+    <h3>Пример из занятия: A(1; 3), B(6; 1)</h3>
+    <div class="stepper" data-stepper>
+      <div class="stepper-head">
+        <button type="button" data-action="prev">Предыдущий шаг</button>
+        <button type="button" data-action="next">Следующий шаг</button>
+        <button type="button" data-action="all">Показать всё</button>
+        <button type="button" data-action="reset">Сначала</button>
+      </div>
+      <div class="steps">
+        <div class="step active" aria-current="step"><strong>Шаг 1.</strong> <math><mi>k</mi><mo>=</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mn>3</mn></mrow><mrow><mn>6</mn><mo>−</mo><mn>1</mn></mrow></mfrac><mo>=</mo><mo>−</mo><mfrac><mn>2</mn><mn>5</mn></mfrac></math>.</div>
+        <div class="step"><strong>Шаг 2.</strong> Подставляем точку A в <math><mi>y</mi><mo>=</mo><mi>k</mi><mi>x</mi><mo>+</mo><mi>b</mi></math>: <math><mn>3</mn><mo>=</mo><mo>−</mo><mfrac><mn>2</mn><mn>5</mn></mfrac><mo>+</mo><mi>b</mi></math>.</div>
+        <div class="step"><strong>Шаг 3.</strong> <math><mi>b</mi><mo>=</mo><mn>3</mn><mo>+</mo><mfrac><mn>2</mn><mn>5</mn></mfrac><mo>=</mo><mfrac><mn>17</mn><mn>5</mn></mfrac></math>.</div>
+        <div class="step"><strong>Шаг 4.</strong> Итог: <math><mi>y</mi><mo>=</mo><mo>−</mo><mfrac><mn>2</mn><mn>5</mn></mfrac><mi>x</mi><mo>+</mo><mfrac><mn>17</mn><mn>5</mn></mfrac></math>. Проверяем обе исходные точки подстановкой.</div>
+      </div>
+    </div>
+    <p>Альтернативный точный способ — подставить координаты двух точек в <em>y = kx + b</em>, получить систему из двух уравнений и найти <em>k</em> и <em>b</em>.</p>
+  </div>
+</section>
+
+<section class="chapter" id="families">
+  <div class="chapter-index">04 · Семейства</div>
+  <div class="chapter-body">
+    <h2>Две важные серии прямых</h2>
+    <div class="definition-grid">
+      <div><h3>y = m</h3><p>Горизонтальные прямые. Изменение <em>m</em> перемещает прямую вверх или вниз.</p></div>
+      <div><h3>y = kx</h3><p>Все прямые проходят через начало координат. Изменение <em>k</em> меняет направление и наклон.</p></div>
+    </div>
+    <p>В занятии рассматривались случаи <em>y = 1</em>, <em>y = 2</em>, <em>y = −3</em>, а также <em>y = x</em>, <em>y = 2x</em>, <em>y = −3x</em>.</p>
+    <p><a class="inline-link" href="21.09.26-lab.html?mode=families">Сравнить семейства на одной координатной плоскости</a></p>
+  </div>
+</section>
+
+<section class="chapter" id="physics">
+  <div class="chapter-index">05 · Физика</div>
+  <div class="chapter-body">
+    <h2>Тот же язык работает в движении</h2>
+    <p>Формулы движения имеют ту же структуру, что и линейная функция.</p>
+    <div class="definition-grid">
+      <div><h3>Скорость</h3><div class="formula-line"><math display="block"><mi>v</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><msub><mi>v</mi><mn>0</mn></msub><mo>+</mo><mi>a</mi><mi>t</mi></math></div><p><em>v₀</em> играет роль <em>b</em>, ускорение <em>a</em> — роль <em>k</em>.</p></div>
+      <div><h3>Координата</h3><div class="formula-line"><math display="block"><mi>x</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><msub><mi>x</mi><mn>0</mn></msub><mo>+</mo><mi>v</mi><mi>t</mi></math></div><p><em>x₀</em> — начальная координата, <em>v = Δx/Δt</em> — скорость.</p></div>
+    </div>
+    <p>Пример занятия: если за 4 секунды координата увеличилась на 2 метра, то скорость равна 0,5 м/с.</p>
+  </div>
+</section>
+
+<section class="chapter" id="intersection">
+  <div class="chapter-index">06 · Пересечение</div>
+  <div class="chapter-body">
+    <h2>Точка пересечения — равенство формул</h2>
+    <p>В общей точке обе функции имеют одинаковые значения <em>x</em> и <em>y</em>. Поэтому для двух прямых приравниваем правые части:</p>
+    <div class="formula-line"><math display="block"><msub><mi>k</mi><mn>1</mn></msub><mi>x</mi><mo>+</mo><msub><mi>b</mi><mn>1</mn></msub><mo>=</mo><msub><mi>k</mi><mn>2</mn></msub><mi>x</mi><mo>+</mo><msub><mi>b</mi><mn>2</mn></msub></math></div>
+    <div class="rule-list">
+      <div class="rule" data-tone="accent"><strong>k₁ ≠ k₂.</strong> Прямые пересекаются в одной точке.</div>
+      <div class="rule"><strong>k₁ = k₂, b₁ ≠ b₂.</strong> Прямые параллельны.</div>
+      <div class="rule"><strong>k₁ = k₂, b₁ = b₂.</strong> Графики совпадают.</div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="practice">
+  <div class="chapter-index">07 · Путь А</div>
+  <div class="chapter-body">
+    <h2>Тренировочный блок</h2>
+    <div class="practice-list">
+      <article class="exercise"><strong>Для функции y = −3x + 4 укажите, возрастает она или убывает, и найдите точку пересечения с Oy.</strong><details><summary>Проверить ответ</summary><p class="answer-line">Функция убывает; точка пересечения с Oy — (0; 4).</p></details></article>
+      <article class="exercise"><strong>Прямая проходит через A(1; 2) и B(5; 6). Найдите k.</strong><details><summary>Проверить ответ</summary><p class="answer-line">k = 1.</p></details></article>
+      <article class="exercise"><strong>По точкам A(2; 3) и B(6; 1) восстановите формулу y = kx + b.</strong><details><summary>Проверить ответ</summary><p class="answer-line">k = −1/2, b = 4; y = −1/2 x + 4.</p></details></article>
+      <article class="exercise"><strong>График равномерного движения проходит через (0; −3) и (8; 1). Найдите x₀ и v.</strong><details><summary>Проверить ответ</summary><p class="answer-line">x₀ = −3 м; v = 0,5 м/с.</p></details></article>
+      <article class="exercise"><strong>Найдите точку пересечения y = 2x − 5 и y = −x + 4.</strong><details><summary>Проверить ответ</summary><p class="answer-line">Точка пересечения: (3; 1).</p></details></article>
+    </div>
+
+    <h3 style="margin-top:2rem">Мини-квиз</h3>
+    <div class="quiz" id="quiz">
+      <article data-quiz><strong>Если k &gt; 0, функция…</strong><button type="button" data-correct="true">возрастает</button><button type="button" data-correct="false">убывает</button><p class="feedback" aria-live="polite"></p></article>
+      <article data-quiz><strong>Свободный коэффициент b показывает…</strong><button type="button" data-correct="true">ординату пересечения с Oy</button><button type="button" data-correct="false">абсциссу пересечения с Ox</button><p class="feedback" aria-live="polite"></p></article>
+      <article data-quiz><strong>Угловой коэффициент считаем как…</strong><button type="button" data-correct="true">Δy / Δx</button><button type="button" data-correct="false">Δx / Δy</button><p class="feedback" aria-live="polite"></p></article>
+    </div>
+    <button class="reset-button" id="resetQuiz" type="button">Сбросить мини-квиз</button>
+  </div>
+</section>
+
+<section class="chapter" id="check">
+  <div class="chapter-index">08 · Самопроверка</div>
+  <div class="chapter-body">
+    <h2>Что должно воспроизводиться без подсказки</h2>
+    <div class="selfcheck" id="selfcheck">
+      <label><input type="checkbox">Я различаю роли k и b в формуле y = kx + b.</label>
+      <label><input type="checkbox">Я определяю возрастание и убывание, читая график слева направо.</label>
+      <label><input type="checkbox">Я нахожу k как Δy/Δx и восстанавливаю формулу по двум точкам.</label>
+      <label><input type="checkbox">Я различаю семейства y = m и y = kx.</label>
+      <label><input type="checkbox">Я нахожу точку пересечения двух прямых, приравнивая формулы.</label>
+    </div>
+    <div class="progress-track" aria-hidden="true"><span id="readyBar"></span></div>
+    <p id="readyText" aria-live="polite">Отмечено 0 из 5 навыков.</p>
+  </div>
+</section>
+</main>
+
+<footer class="page-footer">
+  <span>Ярослав Верещагин · ОГЭ по математике</span>
+  <span>Лёвин Артём Александрович · 21.09.2026</span>
+</footer>
+</div>
+
+<dialog id="posterDialog" aria-labelledby="posterDialogTitle">
+  <div class="dialog-shell">
+    <button class="dialog-close" id="posterClose" type="button">Закрыть</button>
+    <h2 id="posterDialogTitle" style="position:absolute;left:-9999px">Ментальная карта занятия</h2>
+    <img src="../images/21.09.26.png" alt="Увеличенная ментальная карта по линейной функции">
+  </div>
+</dialog>
+
+<script>
+(function(){
+  'use strict';
+  const root=document.documentElement;
+  const themeButton=document.getElementById('themeToggle');
+  const printButton=document.getElementById('printButton');
+  function setTheme(theme){
+    root.dataset.theme=theme;
+    themeButton.setAttribute('aria-label',theme==='dark'?'Включить светлую тему':'Включить тёмную тему');
+    try{localStorage.setItem('jaroslav-theme',theme);}catch(e){}
+  }
+  try{const saved=localStorage.getItem('jaroslav-theme');if(saved==='dark'||saved==='light')setTheme(saved);}catch(e){}
+  themeButton.addEventListener('click',()=>setTheme(root.dataset.theme==='dark'?'light':'dark'));
+  printButton.addEventListener('click',()=>window.print());
+
+  document.querySelectorAll('[data-stepper]').forEach((stepper)=>{
+    const steps=[...stepper.querySelectorAll('.step')];let index=0;let showAll=false;
+    function render(){
+      steps.forEach((step,i)=>{const visible=showAll||i===index;step.classList.toggle('active',visible);if(!showAll&&i===index)step.setAttribute('aria-current','step');else step.removeAttribute('aria-current');});
+      try{localStorage.setItem('jaroslav-210926-step',String(index));}catch(e){}
+    }
+    try{const saved=Number(localStorage.getItem('jaroslav-210926-step'));if(Number.isInteger(saved)&&saved>=0&&saved<steps.length)index=saved;}catch(e){}
+    stepper.addEventListener('click',(event)=>{
+      const action=event.target.closest('button')?.dataset.action;if(!action)return;
+      if(action==='next'){showAll=false;index=Math.min(steps.length-1,index+1);}
+      if(action==='prev'){showAll=false;index=Math.max(0,index-1);}
+      if(action==='all'){showAll=true;}
+      if(action==='reset'){showAll=false;index=0;}
+      render();
+    });
+    render();
+  });
+
+  document.querySelectorAll('[data-quiz]').forEach((quiz)=>{
+    quiz.querySelectorAll('button').forEach((button)=>{
+      button.addEventListener('click',()=>{
+        quiz.querySelectorAll('button').forEach(b=>b.classList.remove('correct','wrong'));
+        const ok=button.dataset.correct==='true';
+        button.classList.add(ok?'correct':'wrong');
+        quiz.querySelector('.feedback').textContent=ok?'Верно.':'Проверьте правило ещё раз.';
+      });
+    });
+  });
+  document.getElementById('resetQuiz').addEventListener('click',()=>{
+    document.querySelectorAll('[data-quiz]').forEach((quiz)=>{quiz.querySelectorAll('button').forEach(b=>b.classList.remove('correct','wrong'));quiz.querySelector('.feedback').textContent='';});
+  });
+
+  const checks=[...document.querySelectorAll('#selfcheck input')];
+  const bar=document.getElementById('readyBar');const text=document.getElementById('readyText');
+  function updateReady(){const count=checks.filter(c=>c.checked).length;bar.style.width=(count/checks.length*100)+'%';text.textContent='Отмечено '+count+' из '+checks.length+' навыков.';}
+  checks.forEach(c=>c.addEventListener('change',updateReady));updateReady();
+
+  const dialog=document.getElementById('posterDialog');const poster=document.getElementById('posterImage');const close=document.getElementById('posterClose');
+  poster.addEventListener('click',()=>dialog.showModal());
+  poster.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();dialog.showModal();}});
+  poster.tabIndex=0;poster.setAttribute('role','button');poster.setAttribute('aria-label','Увеличить ментальную карту');
+  close.addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('click',(e)=>{if(e.target===dialog)dialog.close();});
+})();
+</script>
+</body>
+</html>
