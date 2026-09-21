@@ -1,0 +1,627 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[
+  a4paper,
+  left=18mm,
+  right=18mm,
+  top=18mm,
+  bottom=20mm,
+  headheight=14pt
+]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{727B7B}
+
+\color{textgray}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Сечения куба}
+\fancyhead[R]{\small Ксения Клыкова, 10 класс}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=2pt,topsep=3pt}
+
+\newcommand{\term}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\Plane}{\ensuremath{\pi}}
+
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=darkaccent,
+    line width=0.9pt,
+    align=center,
+    minimum width=48mm,
+    minimum height=10mm,
+    inner sep=2.5mm,
+    font=\small
+  },
+  flowaction/.style={
+    rounded corners=2mm,
+    rectangle,
+    draw=accent,
+    line width=0.9pt,
+    align=center,
+    text width=88mm,
+    minimum height=11mm,
+    inner sep=2.5mm,
+    font=\small
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=2.4,
+    draw=darkaccent,
+    line width=0.9pt,
+    align=center,
+    text width=46mm,
+    inner sep=1.5mm,
+    font=\small
+  },
+  flowarrow/.style={
+    -{Stealth[length=2.8mm,width=2mm]},
+    line width=0.9pt,
+    color=textgray
+  }
+}
+
+\begin{document}
+
+% Источник: доска занятия со схемами нескольких построений сечений.
+% :contentReference[oaicite:0]{index=0}
+
+% ============================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% ============================================================
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{22mm}
+
+{\Large\color{darkaccent}\textbf{Чек-лист}}\par
+\vspace{5mm}
+{\LARGE\textbf{Сечения куба}}\par
+\vspace{2mm}
+{\large Построение сечений по трём точкам}\par
+
+\vspace{14mm}
+
+{\large Ксения Клыкова, 10 класс}\par
+\vspace{5mm}
+{\normalsize Дата: \today}\par
+
+\vfill
+
+{\large\textbf{Лёвин Артём Александрович}}\par
+\vspace{2mm}
+{\normalsize эксклюзивно для Ксении Клыковой}\par
+
+\vspace{24mm}
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[
+  accent!70,
+  line width=1.1pt
+]
+  ($(current page.south west)+(16mm,18mm)$)
+  ..
+  controls
+  ($(current page.south west)+(72mm,30mm)$)
+  and
+  ($(current page.south east)+(-75mm,10mm)$)
+  ..
+  ($(current page.south east)+(-16mm,20mm)$);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% ============================================================
+% КРАТКИЙ ЧЕК-ЛИСТ ПО ТЕМЕ
+% ============================================================
+
+\section*{1. Главное по теме}
+
+\term{Сечение куба} --- это многоугольник, полученный при пересечении куба
+с секущей плоскостью.
+
+\term{Три неколлинеарные точки} однозначно задают секущую плоскость \Plane.
+
+\term{След секущей плоскости на грани} --- прямая, по которой плоскость \Plane
+пересекает плоскость этой грани.
+
+\term{Базовые идеи построения}
+
+\begin{itemize}
+\item две точки можно соединять, если они лежат в одной грани;
+\item если две точки принадлежат секущей плоскости, то вся прямая через них
+тоже принадлежит этой плоскости;
+\item общее ребро двух соседних граней служит переходом от одной грани к другой;
+\item внешняя вспомогательная точка допустима, если она получена как пересечение
+двух прямых, лежащих в одной плоскости;
+\item цель построения --- найти вершины сечения на рёбрах куба и замкнуть
+многоугольник.
+\end{itemize}
+
+\term{Мини-памятка проверки}
+
+\begin{itemize}
+\item каждая сторона сечения лежит в одной из граней куба;
+\item каждая вершина сечения лежит на ребре куба;
+\item порядок вершин образует замкнутый многоугольник;
+\item вспомогательные построения не дают ложных пересечений.
+\end{itemize}
+
+% ============================================================
+% АЛГОРИТМ
+% ============================================================
+
+\clearpage
+\thispagestyle{plain}
+
+\begin{center}
+{\Large\color{darkaccent}\textbf{Алгоритм построения сечения}}
+\end{center}
+
+\vspace{4mm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=7mm and 16mm]
+\node[flowstart] (start)
+{Даны три точки\\$P,Q,R$};
+
+\node[flowaction,below=of start] (step1)
+{Определите, какие две из них лежат в одной грани,\\и проведите первый след плоскости};
+
+\node[flowdecision,below=9mm of step1] (dec1)
+{Сечение уже замкнулось?};
+
+\node[flowaction,below=9mm of dec1] (step2)
+{Выберите соседнюю грань\\и найдите общее ребро двух граней};
+
+\node[flowaction,below=of step2] (step3)
+{Продлите известный след до пересечения\\с общим ребром. Получите вспомогательную точку};
+
+\node[flowaction,below=of step3] (step4)
+{Соедините вспомогательную точку\\с известной точкой секущей плоскости на новой грани};
+
+\node[flowaction,below=of step4] (step5)
+{Найдите новую вершину сечения на ребре куба\\и продолжите построение};
+
+\node[flowstart,below=of step5] (finish)
+{Многоугольник замкнут:\\сечение построено};
+
+\draw[flowarrow] (start) -- (step1);
+\draw[flowarrow] (step1) -- (dec1);
+\draw[flowarrow] (dec1) -- node[right,font=\small]{нет} (step2);
+\draw[flowarrow] (step2) -- (step3);
+\draw[flowarrow] (step3) -- (step4);
+\draw[flowarrow] (step4) -- (step5);
+\draw[flowarrow] (step5.west) -- ++(-24mm,0) |- (dec1.west);
+\draw[flowarrow] (dec1.east) -- ++(24mm,0) |- node[pos=0.2,above,font=\small]{да} (finish.east);
+\end{tikzpicture}
+\end{center}
+
+% ============================================================
+% РАЗОБРАННЫЕ ЗАДАНИЯ
+% ============================================================
+
+\clearpage
+\section*{2. Разобранные задания с чертежами}
+
+Во всех рисунках используется стандартная разметка куба
+$ABCD\,EFGH$:
+
+\[
+ABCD \text{ --- передняя грань,}
+\qquad
+EFGH \text{ --- задняя грань.}
+\]
+
+Ниже приведены все восстановленные по содержанию занятия типовые
+разобранные построения. Для каждого задания дан чертёж и короткая
+проверка корректности.
+
+% ------------------------------------------------------------
+% ЗАДАНИЕ 1
+% ------------------------------------------------------------
+
+\subsection*{Задание 1}
+
+Пусть
+\[
+P\in HE,\qquad Q\in FG,\qquad R\in BC.
+\]
+Требуется построить сечение куба плоскостью $\Plane=PQR$.
+
+\begin{minipage}[t]{0.53\linewidth}
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+\tkzSetUpLine[line width=0.9pt,color=textgray]
+\tkzSetUpPoint[color=accent,fill=accent,size=3]
+\tkzSetUpLabel[color=black,font=\small]
+
+\tkzDefPoint(0,2){A}
+\tkzDefPoint(3,2){B}
+\tkzDefPoint(3,0){C}
+\tkzDefPoint(0,0){D}
+\tkzDefPoint(1,3){E}
+\tkzDefPoint(4,3){F}
+\tkzDefPoint(4,1){G}
+\tkzDefPoint(1,1){H}
+
+\coordinate (P) at ($(H)!0.65!(E)$);
+\coordinate (Q) at ($(F)!0.55!(G)$);
+\coordinate (R) at ($(B)!0.75!(C)$);
+\coordinate (S) at ($(D)!0.45!(A)$);
+
+\tkzDrawSegments(A,B B,C C,D D,A A,E B,F C,G D,H)
+\tkzDrawSegments[dashed,color=softgray](E,F F,G G,H H,E)
+
+\draw[darkaccent,line width=1.4pt] (P)--(Q)--(R)--(S)--cycle;
+
+\fill[accent] (P) circle (2pt);
+\fill[accent] (Q) circle (2pt);
+\fill[accent] (R) circle (2pt);
+\fill[accent] (S) circle (2pt);
+
+\tkzLabelPoints[above left](A)
+\tkzLabelPoints[above right](B,F)
+\tkzLabelPoints[below right](C,G)
+\tkzLabelPoints[below left](D,H)
+\tkzLabelPoints[above](E)
+\node[left] at (P) {$P$};
+\node[right] at (Q) {$Q$};
+\node[right] at (R) {$R$};
+\node[left] at (S) {$S$};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.43\linewidth}
+\textbf{Итог:} сечение --- четырёхугольник
+\[
+SPQR.
+\]
+
+\textbf{Построение.}
+\begin{enumerate}
+\item $Q$ и $R$ лежат в правой грани $BCGF$, поэтому проводим $QR$.
+\item $P$ и $Q$ лежат в задней грани $EFGH$, поэтому проводим $PQ$.
+\item Следы секущей плоскости приходят к передней и левой граням, где
+получается четвёртая вершина $S$ на ребре $DA$.
+\item Соединяем $S$ с $P$.
+\end{enumerate}
+
+\textbf{Проверка.}
+\begin{itemize}
+\item $PQ\subset(EFGH)$, $QR\subset(BCGF)$;
+\item $RS\subset(ABCD)$, $SP\subset(ADHE)$;
+\item получен замкнутый четырёхугольник без самопересечений.
+\end{itemize}
+\end{minipage}
+
+\vspace{4mm}
+
+% ------------------------------------------------------------
+% ЗАДАНИЕ 2
+% ------------------------------------------------------------
+
+\subsection*{Задание 2}
+
+Пусть
+\[
+P\in AE,\qquad Q\in BF,\qquad R\in CG.
+\]
+Требуется построить сечение куба плоскостью $\Plane=PQR$.
+
+\begin{minipage}[t]{0.53\linewidth}
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+\tkzSetUpLine[line width=0.9pt,color=textgray]
+\tkzSetUpPoint[color=accent,fill=accent,size=3]
+\tkzSetUpLabel[color=black,font=\small]
+
+\tkzDefPoint(0,2){A}
+\tkzDefPoint(3,2){B}
+\tkzDefPoint(3,0){C}
+\tkzDefPoint(0,0){D}
+\tkzDefPoint(1,3){E}
+\tkzDefPoint(4,3){F}
+\tkzDefPoint(4,1){G}
+\tkzDefPoint(1,1){H}
+
+\coordinate (P) at ($(A)!0.55!(E)$);
+\coordinate (Q) at ($(B)!0.55!(F)$);
+\coordinate (R) at ($(C)!0.45!(G)$);
+\coordinate (S) at ($(D)!0.45!(H)$);
+
+\tkzDrawSegments(A,B B,C C,D D,A A,E B,F C,G D,H)
+\tkzDrawSegments[dashed,color=softgray](E,F F,G G,H H,E)
+
+\draw[darkaccent,line width=1.4pt] (P)--(Q)--(R)--(S)--cycle;
+
+\fill[accent] (P) circle (2pt);
+\fill[accent] (Q) circle (2pt);
+\fill[accent] (R) circle (2pt);
+\fill[accent] (S) circle (2pt);
+
+\tkzLabelPoints[above left](A)
+\tkzLabelPoints[above right](B,F)
+\tkzLabelPoints[below right](C,G)
+\tkzLabelPoints[below left](D,H)
+\tkzLabelPoints[above](E)
+\node[left] at (P) {$P$};
+\node[right] at (Q) {$Q$};
+\node[right] at (R) {$R$};
+\node[left] at (S) {$S$};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.43\linewidth}
+\textbf{Итог:} сечение --- четырёхугольник
+\[
+PQRS.
+\]
+
+\textbf{Построение.}
+\begin{enumerate}
+\item $P$ и $Q$ лежат в верхней грани $ABFE$, поэтому проводим $PQ$.
+\item $Q$ и $R$ лежат в правой грани $BCGF$, поэтому проводим $QR$.
+\item Последняя вершина получается на ребре $DH$:
+\[
+S\in DH.
+\]
+\item Соединяем $S$ с $P$.
+\end{enumerate}
+
+\textbf{Проверка.}
+\begin{itemize}
+\item $PQ\subset(ABFE)$, $QR\subset(BCGF)$;
+\item $RS\subset(DCGH)$, $SP\subset(ADHE)$;
+\item стороны идут по соседним граням, многоугольник замкнут.
+\end{itemize}
+\end{minipage}
+
+\vspace{4mm}
+
+% ------------------------------------------------------------
+% ЗАДАНИЕ 3
+% ------------------------------------------------------------
+
+\subsection*{Задание 3}
+
+Пусть
+\[
+P\in DA,\qquad Q\in BF,\qquad R\in CG.
+\]
+Требуется построить сечение куба плоскостью $\Plane=PQR$.
+
+\begin{minipage}[t]{0.53\linewidth}
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+\tkzSetUpLine[line width=0.9pt,color=textgray]
+\tkzSetUpPoint[color=accent,fill=accent,size=3]
+\tkzSetUpLabel[color=black,font=\small]
+
+\tkzDefPoint(0,2){A}
+\tkzDefPoint(3,2){B}
+\tkzDefPoint(3,0){C}
+\tkzDefPoint(0,0){D}
+\tkzDefPoint(1,3){E}
+\tkzDefPoint(4,3){F}
+\tkzDefPoint(4,1){G}
+\tkzDefPoint(1,1){H}
+
+\coordinate (P) at ($(D)!0.55!(A)$);
+\coordinate (Q) at ($(A)!0.265!(B)$);
+\coordinate (R) at ($(B)!0.25!(F)$);
+\coordinate (S) at ($(C)!0.45!(G)$);
+\coordinate (T) at ($(D)!0.11!(H)$);
+
+\tkzDrawSegments(A,B B,C C,D D,A A,E B,F C,G D,H)
+\tkzDrawSegments[dashed,color=softgray](E,F F,G G,H H,E)
+
+\draw[darkaccent,line width=1.4pt] (P)--(Q)--(R)--(S)--(T)--cycle;
+
+\fill[accent] (P) circle (2pt);
+\fill[accent] (Q) circle (2pt);
+\fill[accent] (R) circle (2pt);
+\fill[accent] (S) circle (2pt);
+\fill[accent] (T) circle (2pt);
+
+\tkzLabelPoints[above left](A)
+\tkzLabelPoints[above right](B,F)
+\tkzLabelPoints[below right](C,G)
+\tkzLabelPoints[below left](D,H)
+\tkzLabelPoints[above](E)
+
+\node[left] at (P) {$P$};
+\node[above] at (Q) {$Q$};
+\node[right] at (R) {$R$};
+\node[right] at (S) {$S$};
+\node[left] at (T) {$T$};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.43\linewidth}
+\textbf{Итог:} сечение --- пятиугольник
+\[
+PQRST.
+\]
+
+\textbf{Построение.}
+\begin{enumerate}
+\item В передней грани сначала связываются точки $P$ и $Q$.
+\item Затем через верхнюю и правую грани строятся стороны $QR$ и $RS$.
+\item След секущей плоскости переходит на нижнюю грань и даёт вершину
+$T$ на ребре $DH$.
+\item Последняя сторона --- $TP$.
+\end{enumerate}
+
+\textbf{Проверка.}
+\begin{itemize}
+\item $PQ\subset(ABCD)$;
+\item $QR\subset(ABFE)$, $RS\subset(BCGF)$;
+\item $ST\subset(DCGH)$, $TP\subset(ADHE)$;
+\item каждая сторона принадлежит своей грани, порядок вершин корректен.
+\end{itemize}
+\end{minipage}
+
+\vspace{4mm}
+
+% ------------------------------------------------------------
+% ЗАДАНИЕ 4
+% ------------------------------------------------------------
+
+\subsection*{Задание 4}
+
+Пусть
+\[
+P\in AB,\qquad Q\in BC,\qquad R\in CG.
+\]
+Дополнительно секущая плоскость проходит через точки
+\[
+T\in AE,\qquad U\in HE,\qquad S\in GH,
+\]
+образуя полный шестиугольник сечения.
+
+\begin{minipage}[t]{0.53\linewidth}
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+\tkzSetUpLine[line width=0.9pt,color=textgray]
+\tkzSetUpPoint[color=accent,fill=accent,size=3]
+\tkzSetUpLabel[color=black,font=\small]
+
+\tkzDefPoint(0,2){A}
+\tkzDefPoint(3,2){B}
+\tkzDefPoint(3,0){C}
+\tkzDefPoint(0,0){D}
+\tkzDefPoint(1,3){E}
+\tkzDefPoint(4,3){F}
+\tkzDefPoint(4,1){G}
+\tkzDefPoint(1,1){H}
+
+\coordinate (P) at ($(A)!0.30!(B)$);
+\coordinate (Q) at ($(B)!0.737!(C)$);
+\coordinate (R) at ($(C)!0.50!(G)$);
+\coordinate (S) at ($(G)!0.25!(H)$);
+\coordinate (U) at ($(H)!0.789!(E)$);
+\coordinate (T) at ($(A)!0.60!(E)$);
+
+\tkzDrawSegments(A,B B,C C,D D,A A,E B,F C,G D,H)
+\tkzDrawSegments[dashed,color=softgray](E,F F,G G,H H,E)
+
+\draw[darkaccent,line width=1.4pt] (P)--(Q)--(R)--(S)--(U)--(T)--cycle;
+
+\fill[accent] (P) circle (2pt);
+\fill[accent] (Q) circle (2pt);
+\fill[accent] (R) circle (2pt);
+\fill[accent] (S) circle (2pt);
+\fill[accent] (U) circle (2pt);
+\fill[accent] (T) circle (2pt);
+
+\tkzLabelPoints[above left](A)
+\tkzLabelPoints[above right](B,F)
+\tkzLabelPoints[below right](C,G)
+\tkzLabelPoints[below left](D,H)
+\tkzLabelPoints[above](E)
+
+\node[above] at (P) {$P$};
+\node[right] at (Q) {$Q$};
+\node[right] at (R) {$R$};
+\node[below] at (S) {$S$};
+\node[left] at (U) {$U$};
+\node[left] at (T) {$T$};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.43\linewidth}
+\textbf{Итог:} сечение --- шестиугольник
+\[
+PQRSTU.
+\]
+
+\textbf{Построение.}
+\begin{enumerate}
+\item Начинаем с передней и правой граней:
+\[
+PQ,\quad QR.
+\]
+\item Затем след секущей плоскости переходит на нижнюю грань:
+\[
+RS.
+\]
+\item После этого строятся задняя и левая части сечения:
+\[
+SU,\quad UT.
+\]
+\item Многоугольник замыкается стороной $TP$.
+\end{enumerate}
+
+\textbf{Проверка.}
+\begin{itemize}
+\item $PQ\subset(ABCD)$, $QR\subset(BCGF)$;
+\item $RS\subset(DCGH)$, $SU\subset(EFGH)$;
+\item $UT\subset(ADHE)$, $TP\subset(ABFE)$;
+\item шесть вершин лежат на рёбрах куба, самопересечений нет.
+\end{itemize}
+\end{minipage}
+
+% ============================================================
+% ТИПИЧНЫЕ ОШИБКИ
+% ============================================================
+
+\clearpage
+\section*{3. Частые ошибки}
+
+\begin{itemize}
+\item соединять точки без проверки, лежат ли они в одной грани;
+\item продлевать прямую в случайную сторону;
+\item путать вспомогательную внешнюю точку и вершину самого сечения;
+\item не проверять, на каком общем ребре соседних граней нужно делать переход;
+\item забывать замкнуть многоугольник;
+\item не проверять принадлежность последней стороны нужной грани.
+\end{itemize}
+
+\textbf{Быстрая проверка после построения}
+
+\begin{enumerate}
+\item Назовите все вершины сечения по порядку.
+\item Для каждой стороны укажите грань, в которой она лежит.
+\item Для каждой вершины укажите ребро куба, на котором она расположена.
+\item Убедитесь, что многоугольник замкнут и не имеет ложных пересечений.
+\end{enumerate}
+
+
+\end{document}
