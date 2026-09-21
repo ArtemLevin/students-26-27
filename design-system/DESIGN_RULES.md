@@ -28,6 +28,12 @@ Before creating a container/card, try:
 7. a diagram;
 8. marginalia.
 
+## Reference requirement
+
+Darya Savenkova is the current reference implementation for the LEVIN / ATLAS quality bar. Use `REFERENCE_DARYA.md` to inherit grammar, interaction purpose and anti-AI discipline.
+
+The reference must not become a cloning template. A redesigned student should differ from Darya or the nearest migrated student in at least three expression/fingerprint axes.
+
 ## Composition requirement
 
 Every page needs at least one strong composition gesture: asymmetric split, oversized index, radial dominance, technical side rail, catalog spine, or comparable structure. Decoration alone does not count.
@@ -58,6 +64,8 @@ Before shipping, verify:
 8. The radial map and learning data remain the primary product.
 9. Dark/light theme behavior remains coherent.
 10. The page is usable with keyboard only.
+11. The page belongs to the same LEVIN / ATLAS family as Darya without copying her exact palette/composition/image assignment.
+12. Route rail, waypoint drift, parallax, Navigator and glow are present only where they communicate orientation, state or next action.
 
 ## Automated repository guardrail
 
