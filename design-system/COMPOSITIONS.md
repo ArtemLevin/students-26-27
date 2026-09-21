@@ -29,6 +29,16 @@ Prioritize chronological and categorical indexing. Materials behave like records
 ## F / COSMOS
 Use the radial data model as orbital hierarchy. Keep the palette restrained and academic; no starfield wallpaper, neon or sci-fi chrome.
 
+## Living-atlas layer
+
+Route progress, coordinate waypoints, the Navigator symbol, micro-parallax and cross-highlight are cross-cutting interaction primitives rather than a seventh composition seed.
+
+They may be used with CARTOGRAPHER, EDITORIAL, BLUEPRINT, LAB or other seeds when they support the learning model. Avoid adding all primitives automatically.
+
+Darya's reference implementation combines CARTOGRAPHER navigator structure with EDITORIAL lesson structure. Other students should preserve the family grammar while changing at least three expression axes.
+
+Shared route/waypoint/parallax behavior: `shared/student-dashboard/atlas-motion.js`.
+
 ## Diversity rule
 
 Two consecutive student sites should differ in at least three fingerprint axes: composition, accent, density, typography character, geometry or motion.

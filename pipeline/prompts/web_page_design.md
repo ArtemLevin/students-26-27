@@ -89,11 +89,21 @@ STUDENT_DIR/DATE-lab.html
 Перед первой строкой HTML изучить:
 
 1. пособие и чек-лист текущего занятия;
-2. pipeline/relevant_docs/relevant.html — как структурный и технический reference;
-3. STUDENT_DIR/index.html — как главный reference визуальной среды конкретного ученика;
-4. 1–3 наиболее свежие учебные страницы того же ученика, если они существуют;
-5. структуру каталогов students/STUDENT/;
-6. фактическое наличие PDF, TeX и изображений.
+2. design-system/REFERENCE_DARYA.md — как текущий контракт визуальной грамматики LEVIN / ATLAS;
+3. students/darya_savenkova/site/index.html — как reference уровня navigator-дизайна;
+4. students/darya_savenkova/site/14.09.26.html — как reference уровня dated lesson, если создаётся/перерабатывается занятие;
+5. pipeline/relevant_docs/relevant.html — как структурный и технический reference;
+6. STUDENT_DIR/index.html — как главный источник индивидуальности конкретного ученика;
+7. 1–3 наиболее свежие учебные страницы того же ученика, если они существуют;
+8. структуру каталогов students/STUDENT/;
+9. фактическое наличие PDF, TeX и изображений.
+
+Иерархия reference:
+- текущий ученик задаёт индивидуальную идентичность и уже сложившиеся учебные паттерны;
+- Дарья задаёт текущую планку качества, editorial/cartographic grammar и связь navigator ↔ lesson;
+- pipeline/relevant_docs/relevant.html задаёт инженерный уровень и технические приёмы.
+
+Дарью запрещено копировать пиксель-в-пиксель. Для другого ученика до реализации зафиксировать минимум три оси, которые будут отличаться: composition, accent, density, geometry, typography balance, background art direction, local signature motif, route presentation или information hierarchy.
 
 Файлы искать по реальной структуре репозитория. В типовой структуре:
 - students/STUDENT/pdf_docs/DATE.pdf;
@@ -197,6 +207,10 @@ SKIPPED, отсутствие Chromium или отсутствие audit-инс�
 - шаблонный каталог курса;
 - рекламный landing page;
 - набор UI-kit карточек.
+
+Главный текущий визуальный reference — `design-system/REFERENCE_DARYA.md` и страницы Дарьи. Наследовать из них язык: editorial hierarchy, learning-route metaphor, restrained cartographic/scientific imagery, meaningful motion, Navigator symbol when useful, rules/whitespace before cards, and cross-highlight between duplicate views of one learning object.
+
+При этом каждая новая страница должна отличаться от Дарьи минимум по трём expression/fingerprint axes. Точный vermilion accent, расположение фоновых изображений, структура hero и маршрутная геометрия Дарьи не являются обязательным шаблоном.
 
 pipeline/relevant_docs/relevant.html использовать как reference инженерных решений и общего уровня качества. Не копировать его композицию, палитру и набор карточек механически.
 
@@ -727,16 +741,32 @@ Motion используется для:
 - раскрытия;
 - связи между control и объектом;
 - перехода шага;
-- feedback.
+- feedback;
+- ориентации по реальному учебному маршруту.
 
-Не использовать постоянное движение как украшение.
+Для LEVIN / ATLAS доступны shared-примитивы из:
+`../../../shared/student-dashboard/atlas-motion.js`
+
+Их использовать только по смыслу:
+- `data-coordinate-field` — редкие waypoint-точки в подходящем hero;
+- `data-journey-stop` + `data-journey-label` — только для реально последовательных вертикальных разделов;
+- `data-atlas-parallax="N"` — микропараллакс 0–12 px, обычно 3–7 px.
+
+Не отмечать соседние колонки как последовательные journey stops.
+
+Navigator — минималистичный компасный символ, который может обозначать следующий учебный шаг. Это фирменный знак, без лица, реплик и геймифицированных реакций.
+
+Не использовать постоянное движение как украшение. Координатные точки допустимы только как тихий картографический фон с минимальной амплитудой.
+
+Glow допустим локально для active/focus learning object, преимущественно в dark theme и с низкой интенсивностью. Neon glow, animated gradient borders, blobs, AI-orb и generic particles запрещены.
 
 Обычная длительность переходов — короткая и спокойная. Конкретные значения хранить в motion tokens.
 
 При prefers-reduced-motion:
-- убрать bounce, pulse, parallax;
+- убрать bounce, pulse, parallax и waypoint drift;
 - сократить или отключить transition;
-- сохранить функциональный feedback и изменение состояния.
+- сохранить функциональный feedback и изменение состояния;
+- контент, который обычно появляется reveal-анимацией, должен оставаться видимым.
 
 ---
 
@@ -764,9 +794,14 @@ Motion используется для:
 
 ## 27. Техническая автономность
 
-DATE.html и DATE-lab.html полностью автономны.
+DATE.html и DATE-lab.html должны оставаться переносимыми и работоспособными без внешней сети.
 
-Внутри каждого файла:
+Предпочтительно держать page-specific CSS/JavaScript внутри файла. Разрешены стабильные локальные shared-модули репозитория, если они являются частью design/product system и входят в production bundle. Текущий разрешённый пример:
+- `../../../shared/student-dashboard/atlas-motion.js`.
+
+Не создавать student-local копию shared-модуля без технической причины.
+
+Внутри каждого файла или доступного локального shared layer:
 - CSS;
 - JavaScript;
 - MathML;
@@ -802,9 +837,9 @@ DATE.html и DATE-lab.html полностью автономны.
 
 После создания занятия обновить STUDENT_DIR/index.html.
 
-Сначала изучить существующий index.html.
+Сначала изучить существующий index.html и `design-system/REFERENCE_DARYA.md`.
 
-Новый блок должен наследовать дизайн index.html. Не переносить туда насильно palette или композицию DATE.html.
+Новый блок должен наследовать дизайн index.html. Если задача включает полный redesign index.html, использовать Дарью как reference grammar/quality bar и сохранить минимум три отличающиеся expression axes. Не переносить туда насильно palette или композицию DATE.html.
 
 Добавить:
 - тему;
@@ -919,6 +954,8 @@ DATE.html и DATE-lab.html полностью автономны.
 10. Есть ли section, который можно удалить без потери смысла? Если да — удалить или упростить.
 11. Есть ли декор, который можно заменить содержанием? Если да — заменить.
 12. Не выглядит ли страница копией предыдущего занятия того же ученика?
+13. Не является ли страница прямым клоном Дарьи? Зафиксированы ли минимум три отличающиеся expression axes?
+14. Все ли waypoint, route, Navigator, glow и parallax элементы имеют навигационную или учебную функцию?
 
 Для сложной страницы сделать screenshot review минимум:
 - desktop light;
@@ -983,23 +1020,25 @@ DATE.html и DATE-lab.html полностью автономны.
 3. Определить учебную структуру.
 4. Определить необходимость лаборатории.
 5. Выбрать aesthetic direction.
-6. Зафиксировать semantic tokens и visual hierarchy.
-7. Спроектировать страницу без generic AI defaults.
-8. Создать DATE.html.
-9. Создать DATE-lab.html только при реальной необходимости.
-10. Реализовать MathML и визуализации.
-11. Реализовать интерактивность.
-12. Реализовать quiz и самопроверку.
-13. Реализовать responsive и print.
-14. Подключить только существующие локальные материалы.
-15. Обновить STUDENT_DIR/index.html в его текущем стиле.
-16. Выполнить Objective UX/UI gates.
-17. Выполнить Anti-slop audit и screenshot review.
-18. Исправить найденные дефекты.
-19. Повторить затронутые gates.
-20. Проверить итоговый diff.
-21. Commit / push / PR / merge.
-22. Подготовить отчёт.
+6. Зафиксировать минимум три оси отличия от Darya reference.
+7. Определить, какие living-atlas primitives действительно нужны: route rail, Navigator, coordinate field, parallax, cross-highlight.
+8. Зафиксировать semantic tokens и visual hierarchy.
+9. Спроектировать страницу без generic AI defaults.
+10. Создать DATE.html.
+11. Создать DATE-lab.html только при реальной необходимости.
+12. Реализовать MathML и визуализации.
+13. Реализовать интерактивность.
+14. Реализовать quiz и самопроверку.
+15. Реализовать responsive и print.
+16. Подключить только существующие локальные материалы.
+17. Обновить STUDENT_DIR/index.html в его текущем стиле.
+18. Выполнить Objective UX/UI gates.
+19. Выполнить Anti-slop audit и screenshot review.
+20. Исправить найденные дефекты.
+21. Повторить затронутые gates.
+22. Проверить итоговый diff.
+23. Commit / push / PR / merge.
+24. Подготовить отчёт.
 
 ---
 
