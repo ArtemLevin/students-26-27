@@ -125,8 +125,12 @@
 
     /* Calm motion: one entrance, one background drift, restrained micro-interactions. */
     @keyframes darya-cover-drift{
-      from{transform:scale(1.018) translate3d(.35%,0,0)}
-      to{transform:scale(1) translate3d(0,0,0)}
+      from{transform:translate3d(.35%,var(--atlas-parallax-y,0),0) scale(1.018)}
+      to{transform:translate3d(0,var(--atlas-parallax-y,0),0) scale(1)}
+    }
+    @keyframes darya-waypoint-drift{
+      0%,100%{transform:translate3d(0,0,0)}
+      50%{transform:translate3d(var(--point-dx),var(--point-dy),0)}
     }
     @keyframes darya-enter{
       from{opacity:0;transform:translate3d(0,12px,0)}
@@ -164,6 +168,33 @@
       opacity:0;
       animation:darya-enter 520ms 390ms cubic-bezier(.2,.7,.2,1) forwards;
     }
+    body[data-darya-index="expedition-atlas"] .coordinate-field{
+      position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+    }
+    body[data-darya-index="expedition-atlas"] .coordinate-waypoint{
+      position:absolute;
+      left:var(--point-x);top:var(--point-y);
+      width:var(--point-size);height:var(--point-size);
+      margin:calc(var(--point-size) / -2);
+      border-radius:50%;
+      border:1px solid color-mix(in srgb,var(--la-site-text) 48%,transparent);
+      background:color-mix(in srgb,var(--la-site-bg) 86%,transparent);
+      opacity:.62;
+      animation:darya-waypoint-drift var(--point-duration) var(--point-delay) ease-in-out infinite;
+    }
+    body[data-darya-index="expedition-atlas"] .coordinate-waypoint:nth-child(3n+1){
+      border-color:color-mix(in srgb,var(--d-red) 74%,transparent);
+      background:var(--d-red);
+      opacity:.72;
+    }
+    body[data-darya-index="expedition-atlas"] .coordinate-waypoint::before,
+    body[data-darya-index="expedition-atlas"] .coordinate-waypoint::after{
+      content:"";position:absolute;left:50%;top:50%;
+      background:color-mix(in srgb,var(--la-site-text) 24%,transparent);
+      transform:translate(-50%,-50%);
+    }
+    body[data-darya-index="expedition-atlas"] .coordinate-waypoint::before{width:13px;height:1px}
+    body[data-darya-index="expedition-atlas"] .coordinate-waypoint::after{width:1px;height:13px}
     body[data-darya-index="expedition-atlas"] .cover-copy{
       display:flex;flex-direction:column;justify-content:center;max-width:54rem;
     }
@@ -259,6 +290,7 @@
       content:"";position:absolute;inset:7rem 0 0 -9rem;
       background:url("../images/atlas-mathematics.png") center/cover no-repeat;
       opacity:.085;filter:grayscale(.45);pointer-events:none;
+      transform:translate3d(0,var(--atlas-parallax-y,0),0) scale(1.015);
       mask-image:linear-gradient(90deg,transparent 0,#000 15%,#000 78%,transparent 100%);
     }
     html[data-theme="dark"] body[data-darya-index="expedition-atlas"] .map-section::before{
@@ -343,9 +375,10 @@
       background:var(--d-panel)!important;
     }
     body[data-darya-index="expedition-atlas"] .focus-card::before{
-      content:"";position:absolute;inset:0;z-index:-2;
+      content:"";position:absolute;inset:-10px;z-index:-2;
       background:url("../images/atlas-cartography.png") 68% 22%/cover no-repeat;
       opacity:.36;filter:saturate(.65) contrast(.92);
+      transform:translate3d(0,var(--atlas-parallax-y,0),0) scale(1.025);
     }
     body[data-darya-index="expedition-atlas"] .focus-card::after{
       content:"";position:absolute;inset:0;z-index:-1;
@@ -357,6 +390,22 @@
     html[data-theme="dark"] body[data-darya-index="expedition-atlas"] .focus-card::before{
       opacity:.13;filter:grayscale(1) invert(1);
     }
+    body[data-darya-index="expedition-atlas"] .navigator-cue{
+      position:absolute;left:clamp(1.4rem,3vw,2.2rem);top:clamp(1.3rem,2.5vw,1.9rem);
+      display:flex;align-items:center;gap:.55rem;color:var(--d-red);
+      font:700 .61rem/1.2 var(--la-font-mono,ui-monospace,monospace);
+      letter-spacing:.12em;text-transform:uppercase;
+    }
+    body[data-darya-index="expedition-atlas"] .navigator-mark{
+      width:28px;height:28px;display:block;overflow:visible;
+    }
+    body[data-darya-index="expedition-atlas"] .navigator-mark .orbit{
+      fill:none;stroke:currentColor;stroke-width:1;opacity:.42;stroke-dasharray:2.5 3.5;
+    }
+    body[data-darya-index="expedition-atlas"] .navigator-mark .needle{
+      fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;
+    }
+    body[data-darya-index="expedition-atlas"] .navigator-mark .point{fill:currentColor}
     body[data-darya-index="expedition-atlas"] .focus-card h2{
       margin:.15rem 0 .6rem;max-width:15ch;
       font:500 clamp(2rem,3.8vw,3.8rem)/.9 var(--la-font-display,Georgia,serif);
@@ -385,7 +434,26 @@
     }
     body[data-darya-index="expedition-atlas"] .topic-group{border-radius:0!important}
     body[data-darya-index="expedition-atlas"] .topic-group summary{padding:.8rem 0}
-    body[data-darya-index="expedition-atlas"] .topic-row{border-radius:0;padding:.52rem .18rem}
+    body[data-darya-index="expedition-atlas"] .topic-row{
+      border-radius:0;padding:.52rem .18rem;
+      transition:background-color 150ms ease,transform 150ms ease,opacity 150ms ease;
+    }
+    body[data-darya-index="expedition-atlas"] .topic-row.is-linked{
+      background:color-mix(in srgb,var(--d-red) 8%,transparent);
+      transform:translateX(3px);
+    }
+    body[data-darya-index="expedition-atlas"] .topic-group.is-linked-group>summary{
+      color:var(--d-red);
+    }
+    body[data-darya-index="expedition-atlas"] .radial-cell.is-linked{
+      opacity:1!important;
+      stroke:var(--d-red)!important;
+      stroke-width:2.7!important;
+      filter:brightness(1.035) drop-shadow(0 0 5px color-mix(in srgb,var(--d-red) 28%,transparent))!important;
+    }
+    html[data-theme="dark"] body[data-darya-index="expedition-atlas"] .radial-cell.is-linked{
+      filter:brightness(1.08) drop-shadow(0 0 9px color-mix(in srgb,var(--d-red) 45%,transparent))!important;
+    }
 
     body[data-darya-index="expedition-atlas"] .journal{
       display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);
@@ -464,6 +532,69 @@
       outline:3px solid color-mix(in srgb,var(--d-red) 64%,transparent);outline-offset:3px;
     }
 
+
+    body[data-darya-index="expedition-atlas"] .journey-rail{
+      --journey-progress:0;
+      position:fixed;
+      z-index:24;
+      right:max(.7rem,calc((100vw - 100rem)/2 - 2.7rem));
+      top:50%;
+      width:2.35rem;
+      height:min(58vh,32rem);
+      transform:translateY(-50%);
+      pointer-events:none;
+    }
+    body[data-darya-index="expedition-atlas"] .journey-track,
+    body[data-darya-index="expedition-atlas"] .journey-track-fill{
+      position:absolute;left:50%;top:.9rem;bottom:.9rem;width:1px;
+      transform:translateX(-50%);
+    }
+    body[data-darya-index="expedition-atlas"] .journey-track{
+      background:var(--d-rule);
+    }
+    body[data-darya-index="expedition-atlas"] .journey-track-fill{
+      bottom:auto;height:calc(100% - 1.8rem);
+      background:var(--d-red);
+      transform:translateX(-50%) scaleY(var(--journey-progress));
+      transform-origin:top center;
+      transition:transform 140ms linear;
+    }
+    body[data-darya-index="expedition-atlas"] .journey-rail ol{
+      position:absolute;inset:0;margin:0;padding:0;list-style:none;
+      display:flex;flex-direction:column;justify-content:space-between;align-items:center;
+    }
+    body[data-darya-index="expedition-atlas"] .journey-rail li{pointer-events:auto}
+    body[data-darya-index="expedition-atlas"] .journey-rail a{
+      position:relative;display:grid;place-items:center;
+      width:1.65rem;height:1.65rem;border-radius:50%;
+      border:1px solid var(--d-rule-strong);
+      background:color-mix(in srgb,var(--la-site-bg) 94%,transparent);
+      color:var(--d-muted);text-decoration:none;
+      font:700 .5rem/1 var(--la-font-mono,ui-monospace,monospace);
+      transition:transform 160ms ease,border-color 160ms ease,color 160ms ease,background-color 160ms ease;
+    }
+    body[data-darya-index="expedition-atlas"] .journey-rail a.is-active{
+      border-color:var(--d-red);background:var(--d-red);color:#fff;transform:scale(1.08);
+    }
+    body[data-darya-index="expedition-atlas"] .journey-rail a::after{
+      content:attr(data-label);
+      position:absolute;right:calc(100% + .6rem);top:50%;
+      transform:translateY(-50%) translateX(4px);
+      width:max-content;max-width:13rem;
+      padding:.35rem .48rem;border:1px solid var(--d-rule);
+      background:color-mix(in srgb,var(--la-site-bg) 96%,transparent);
+      color:var(--la-site-text);opacity:0;pointer-events:none;
+      font:650 .65rem/1.2 var(--la-font-ui,system-ui,sans-serif);
+      letter-spacing:0;text-transform:none;
+      transition:opacity 130ms ease,transform 130ms ease;
+    }
+    body[data-darya-index="expedition-atlas"] .journey-rail a:hover::after,
+    body[data-darya-index="expedition-atlas"] .journey-rail a:focus-visible::after{
+      opacity:1;transform:translateY(-50%) translateX(0);
+    }
+    @media(max-width:1260px){
+      body[data-darya-index="expedition-atlas"] .journey-rail{display:none}
+    }
     @media(max-width:1180px){
       body[data-darya-index="expedition-atlas"] .workspace{grid-template-columns:1fr}
       body[data-darya-index="expedition-atlas"] .map-section{padding-right:0!important}
@@ -554,9 +685,13 @@
         opacity:1!important;transform:none!important;
       }
       body[data-darya-index="expedition-atlas"] .atlas-cover::before,
-      body[data-darya-index="expedition-atlas"] .cover-kicker::before{
+      body[data-darya-index="expedition-atlas"] .cover-kicker::before,
+      body[data-darya-index="expedition-atlas"] .map-section::before,
+      body[data-darya-index="expedition-atlas"] .focus-card::before{
         transform:none!important;
       }
+      body[data-darya-index="expedition-atlas"] .coordinate-waypoint{transform:none!important}
+      body[data-darya-index="expedition-atlas"] .journey-track-fill{transition:none!important}
     }
     @media print{
       body[data-darya-index="expedition-atlas"] .topbar,
@@ -602,7 +737,7 @@
   </header>
 
   <main id="main">
-    <section class="atlas-cover" id="overview" aria-labelledby="pageTitle">
+    <section class="atlas-cover" id="overview" aria-labelledby="pageTitle" data-coordinate-field data-atlas-parallax="6" data-journey-stop data-journey-label="Обзор">
       <div class="cover-copy">
         <p class="cover-kicker">Персональный учебный атлас</p>
         <h1 id="pageTitle">Карта подготовки</h1>
@@ -643,7 +778,7 @@
     </section>
 
     <div class="workspace">
-      <section class="map-section" id="map" aria-labelledby="mapTitle">
+      <section class="map-section" id="map" aria-labelledby="mapTitle" data-atlas-parallax="5" data-journey-stop data-journey-label="Карта программы">
         <header class="section-head">
           <div>
             <p class="eyebrow">Главный рабочий инструмент</p>
@@ -692,7 +827,15 @@
       </section>
 
       <aside class="side-rail">
-        <section class="focus-card" id="focus" aria-labelledby="focusTitle">
+        <section class="focus-card" id="focus" aria-labelledby="focusTitle" data-atlas-parallax="4" data-journey-stop data-journey-label="Следующий фокус">
+          <div class="navigator-cue" aria-hidden="true">
+            <svg class="navigator-mark" viewBox="0 0 32 32">
+              <circle class="orbit" cx="16" cy="16" r="12"/>
+              <path class="needle" d="M11 21l4-11 6 6-10 5Z"/>
+              <circle class="point" cx="22.5" cy="9.5" r="1.7"/>
+            </svg>
+            <span>Навигатор</span>
+          </div>
           <div>
             <p class="eyebrow">Следующий учебный фокус</p>
             <h2 id="focusTitle">Определяю следующий шаг…</h2>
@@ -714,7 +857,7 @@
       </aside>
     </div>
 
-    <section class="journal" id="journal" aria-labelledby="lessonTitle">
+    <section class="journal" id="journal" aria-labelledby="lessonTitle" data-journey-stop data-journey-label="Рабочий журнал">
       <div class="journal-art" aria-hidden="true"></div>
       <article class="lesson-entry">
         <p class="eyebrow">Рабочий журнал · 14.09.2026</p>
@@ -786,6 +929,7 @@
 
   <script src="competency-map-data.js?v=20260914-1"></script>
   <script src="lesson-14.09.26-progress.js?v=20260914-2"></script>
-  <script src="competency-map.js?v=20260914-2"></script>
+  <script src="competency-map.js?v=20260921-1"></script>
+  <script src="atlas-motion.js?v=20260921-1"></script>
 </body>
 </html>
