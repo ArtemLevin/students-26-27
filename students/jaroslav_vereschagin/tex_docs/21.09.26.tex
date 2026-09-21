@@ -1,0 +1,1101 @@
+% Параметры задания: ФИО ученика, Путь А, N=5. :contentReference[oaicite:0]{index=0}
+
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{icomma}
+\usepackage[
+    a4paper,
+    margin=18mm,
+    top=18mm,
+    bottom=20mm,
+    headheight=25pt
+]{geometry}
+
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{
+    calc,
+    arrows.meta,
+    positioning,
+    shapes.geometric
+}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+% ------------------------------------------------
+% Цветовая палитра
+% ------------------------------------------------
+
+\definecolor{accent}{HTML}{2F6F6D}
+\definecolor{darkaccent}{HTML}{214D4B}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{E8ECEC}
+
+% ------------------------------------------------
+% Общая типографика
+% ------------------------------------------------
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkaccent,
+    urlcolor=darkaccent
+}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+
+\setlist[itemize]{
+    leftmargin=6mm,
+    itemsep=2pt,
+    topsep=3pt
+}
+
+\setlist[enumerate]{
+    leftmargin=7mm,
+    itemsep=4pt,
+    topsep=3pt
+}
+
+% ------------------------------------------------
+% Колонтитулы
+% ------------------------------------------------
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[L]{\small\color{textgray}Линейная функция}
+\fancyhead[R]{\small\color{textgray}Ярослав Верещагин}
+\fancyfoot[C]{\small\thepage}
+
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{%
+    \hbox to\headwidth{%
+        \color{softgray}%
+        \leaders\hrule height \headrulewidth\hfill
+    }%
+}
+
+% ------------------------------------------------
+% Заголовки разделов
+% ------------------------------------------------
+
+\newcommand{\topic}[1]{%
+    \vspace{0.5em}%
+    {\Large\bfseries\color{darkaccent}#1}%
+    \par\vspace{0.35em}%
+    {\color{softgray}\rule{\linewidth}{0.7pt}}%
+    \vspace{0.45em}%
+}
+
+% ------------------------------------------------
+% Стили блок-схемы
+% ------------------------------------------------
+
+\tikzset{
+    flowstart/.style={
+        ellipse,
+        draw=accent,
+        very thick,
+        minimum width=34mm,
+        minimum height=10mm,
+        align=center,
+        font=\small
+    },
+    flowaction/.style={
+        rounded corners=3pt,
+        draw=accent,
+        very thick,
+        minimum width=72mm,
+        minimum height=12mm,
+        text width=66mm,
+        align=center,
+        font=\small
+    },
+    flowdecision/.style={
+        diamond,
+        aspect=2.4,
+        draw=accent,
+        very thick,
+        minimum width=45mm,
+        minimum height=17mm,
+        text width=34mm,
+        align=center,
+        font=\small
+    },
+    flowarrow/.style={
+        -{Latex[length=3mm]},
+        very thick,
+        draw=darkaccent
+    }
+}
+
+\begin{document}
+
+% ================================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% ================================================================
+
+\begin{titlepage}
+
+\thispagestyle{empty}
+\centering
+
+\vspace*{26mm}
+
+{\Large\color{darkaccent}\bfseries
+Чек-лист
+\par}
+
+\vspace{8mm}
+
+{\Huge\bfseries
+Линейная функция и график прямой
+\par}
+
+\vspace{4mm}
+
+{\Large
+$y=kx+b$
+\par}
+
+\vspace{18mm}
+
+{\large Коэффициенты $k$ и $b$\par}
+
+\vspace{2mm}
+
+{\large Определение формулы по графику\par}
+
+\vspace{2mm}
+
+{\large Семейства $y=m$ и $y=kx$\par}
+
+\vspace{2mm}
+
+{\large Применение к графикам движения\par}
+
+\vfill
+
+{\large
+Лёвин Артём Александрович
+\par}
+
+\vspace{2mm}
+
+{\large
+эксклюзивно для Ярослава Верещагина
+\par}
+
+\vspace{5mm}
+
+{\large
+\today
+\par}
+
+\vspace{10mm}
+
+\begin{tikzpicture}[remember picture,overlay]
+    \draw[
+        accent!55,
+        line width=1.2pt
+    ]
+    ([xshift=18mm,yshift=18mm]current page.south west)
+    ..
+    controls
+    ([xshift=70mm,yshift=31mm]current page.south west)
+    and
+    ([xshift=-72mm,yshift=8mm]current page.south east)
+    ..
+    ([xshift=-18mm,yshift=18mm]current page.south east);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% ================================================================
+% 1
+% ================================================================
+
+\topic{1. Общий вид линейной функции}
+
+Линейная функция задаётся формулой
+\[
+    y=kx+b,
+\]
+где $x$ --- переменная, $k$ --- \textbf{угловой коэффициент},
+$b$ --- \textbf{свободный коэффициент}.
+
+\textbf{Что показывает $k$:}
+
+\begin{itemize}
+    \item $k>0$ --- функция возрастает:
+    при движении слева направо прямая идёт вверх;
+
+    \item $k<0$ --- функция убывает:
+    при движении слева направо прямая идёт вниз;
+
+    \item $k=0$ --- получаем горизонтальную прямую
+    $y=b$, параллельную оси $Ox$.
+\end{itemize}
+
+\textbf{Что показывает $b$:}
+число $b$ равно ординате точки пересечения графика
+с осью $Oy$.
+
+При $x=0$ всегда
+\[
+    y=b,
+\]
+поэтому график проходит через точку
+\[
+    (0;b).
+\]
+
+\begin{center}
+
+\begin{tikzpicture}
+
+\begin{axis}[
+    width=0.78\linewidth,
+    height=6.4cm,
+    axis lines=middle,
+    xmin=-4,
+    xmax=5,
+    ymin=-4,
+    ymax=5,
+    xtick={-3,-2,-1,1,2,3,4},
+    ytick={-3,-2,-1,1,2,3,4},
+    grid=both,
+    minor tick num=0,
+    xlabel={$x$},
+    ylabel={$y$},
+    clip=false,
+    samples=200,
+    unit vector ratio=1 1
+]
+
+\addplot[
+    accent,
+    very thick,
+    domain=-4:5
+]{0.7*x-1};
+
+\addplot[
+    darkaccent,
+    dashed,
+    very thick,
+    domain=-4:5
+]{-0.6*x+2};
+
+\addplot[
+    textgray,
+    densely dotted,
+    very thick,
+    domain=-4:5
+]{1.5};
+
+\node[
+    anchor=west,
+    text=accent
+]
+at (axis cs:3.4,1.2)
+{$k>0$};
+
+\node[
+    anchor=west,
+    text=darkaccent
+]
+at (axis cs:2.8,0)
+{$k<0$};
+
+\node[
+    anchor=west,
+    text=textgray
+]
+at (axis cs:2.7,1.75)
+{$k=0$};
+
+\end{axis}
+
+\end{tikzpicture}
+
+\end{center}
+
+\textbf{Правило чтения графика:}
+направление возрастания или убывания определяем
+\textbf{слева направо}.
+
+% ================================================================
+% 2
+% ================================================================
+
+\topic{2. Быстрое определение коэффициентов по графику}
+
+Если на графике хорошо видны две точки
+\[
+    A(x_1;y_1)
+    \qquad\text{и}\qquad
+    B(x_2;y_2),
+\]
+то
+\[
+    k=
+    \frac{\Delta y}{\Delta x}
+    =
+    \frac{y_2-y_1}{x_2-x_1}.
+\]
+
+То есть делим
+\textbf{вертикальное изменение}
+на
+\textbf{горизонтальное}.
+
+Знак коэффициента получается автоматически
+из разностей координат.
+
+\textbf{Важно:}
+нельзя делить «горизонтальное на вертикальное».
+Для углового коэффициента используется отношение
+\[
+    \frac{\text{изменение по }y}
+         {\text{изменение по }x}.
+\]
+
+Свободный коэффициент $b$ удобно считывать
+по точке пересечения графика с осью $Oy$.
+
+Например, если эта точка имеет координаты
+\[
+    (0;-2),
+\]
+то
+\[
+    b=-2.
+\]
+
+\textbf{Пример.}
+
+Пусть
+\[
+    A(1;3),
+    \qquad
+    B(6;1).
+\]
+
+Тогда
+\[
+    k=
+    \frac{1-3}{6-1}
+    =
+    -\frac25.
+\]
+
+Подставим координаты точки $A$:
+\[
+    3=
+    -\frac25\cdot1+b.
+\]
+
+Отсюда
+\[
+    b=
+    3+\frac25
+    =
+    \frac{17}{5}.
+\]
+
+Следовательно,
+\[
+    \boxed{
+        y=-\frac25x+\frac{17}{5}
+    }.
+\]
+
+% ================================================================
+% 3
+% ================================================================
+
+\topic{3. Метод узловых точек: точное восстановление формулы}
+
+В рамках этого занятия
+\textbf{узловой точкой}
+будем называть точку графика,
+обе координаты которой являются целыми числами.
+
+Для функции
+\[
+    y=kx+b
+\]
+неизвестны два коэффициента:
+$k$ и $b$.
+
+Поэтому для восстановления формулы достаточно
+взять \textbf{две} подходящие точки графика.
+
+\textbf{Пример.}
+
+Даны точки
+\[
+    A(2;1),
+    \qquad
+    B(6;2).
+\]
+
+Подставляем координаты в формулу
+\[
+    y=kx+b:
+\]
+
+\[
+\begin{cases}
+    1=2k+b,\\
+    2=6k+b.
+\end{cases}
+\]
+
+Вычитаем первое уравнение из второго:
+\[
+    1=4k,
+\]
+откуда
+\[
+    k=\frac14.
+\]
+
+Теперь найдём $b$:
+\[
+    b=
+    1-2\cdot\frac14
+    =
+    \frac12.
+\]
+
+Искомая функция:
+\[
+    \boxed{
+        y=\frac14x+\frac12
+    }.
+\]
+
+\textbf{Самопроверка:}
+после нахождения формулы подставьте
+координаты обеих исходных точек.
+Обе пары координат должны удовлетворять уравнению.
+
+% ================================================================
+% БЛОК-СХЕМА
+% ================================================================
+
+\clearpage
+
+\thispagestyle{empty}
+
+\begin{center}
+
+{\Large\bfseries\color{darkaccent}
+Алгоритм: найти $k$ и $b$ по двум точкам
+}
+
+\end{center}
+
+\vspace{9mm}
+
+\begin{center}
+
+\begin{tikzpicture}[
+    node distance=9mm and 16mm
+]
+
+\node[
+    flowstart
+]
+(start)
+{Начало};
+
+\node[
+    flowaction,
+    below=of start
+]
+(pick)
+{%
+Выберите две точки графика\\
+$A(x_1;y_1)$ и $B(x_2;y_2)$
+};
+
+\node[
+    flowaction,
+    below=of pick
+]
+(sub)
+{%
+Подставьте координаты в\\
+$y=kx+b$ и составьте систему
+};
+
+\node[
+    flowaction,
+    below=of sub
+]
+(solve)
+{%
+Решите систему и найдите\\
+$k$ и $b$
+};
+
+\node[
+    flowaction,
+    below=of solve
+]
+(write)
+{%
+Запишите формулу\\
+$y=kx+b$
+};
+
+\node[
+    flowdecision,
+    below=13mm of write
+]
+(check)
+{%
+Обе точки удовлетворяют формуле?
+};
+
+\node[
+    flowstart,
+    below=13mm of check
+]
+(finish)
+{Готово};
+
+\node[
+    flowaction,
+    right=28mm of check
+]
+(error)
+{%
+Проверьте координаты,
+знаки и арифметику
+};
+
+\draw[flowarrow]
+(start)
+--
+(pick);
+
+\draw[flowarrow]
+(pick)
+--
+(sub);
+
+\draw[flowarrow]
+(sub)
+--
+(solve);
+
+\draw[flowarrow]
+(solve)
+--
+(write);
+
+\draw[flowarrow]
+(write)
+--
+(check);
+
+\draw[flowarrow]
+(check)
+--
+node[
+    left,
+    font=\small
+]
+{да}
+(finish);
+
+\draw[flowarrow]
+(check)
+--
+node[
+    above,
+    font=\small
+]
+{нет}
+(error);
+
+\draw[flowarrow]
+(error.north)
+|-
+([xshift=8mm]sub.east)
+--
+(sub.east);
+
+\end{tikzpicture}
+
+\end{center}
+
+\clearpage
+
+% ================================================================
+% 4
+% ================================================================
+
+\topic{4. Семейство горизонтальных прямых $y=m$}
+
+Формула
+\[
+    y=m
+\]
+задаёт семейство горизонтальных прямых,
+параллельных оси $Ox$.
+
+\begin{itemize}
+    \item при $m=2$ получаем $y=2$;
+
+    \item при $m=0$ получаем $y=0$,
+    то есть ось $Ox$;
+
+    \item при $m=-3$ получаем $y=-3$.
+\end{itemize}
+
+Изменение $m$ перемещает прямую
+\textbf{вверх или вниз},
+не меняя её наклона.
+
+\begin{center}
+
+\begin{tikzpicture}
+
+\begin{axis}[
+    width=0.76\linewidth,
+    height=5.6cm,
+    axis lines=middle,
+    xmin=-4,
+    xmax=4,
+    ymin=-4,
+    ymax=4,
+    xlabel={$x$},
+    ylabel={$y$},
+    grid=both,
+    samples=200,
+    unit vector ratio=1 1,
+    clip=false
+]
+
+\addplot[
+    accent,
+    very thick,
+    domain=-4:4
+]{2};
+
+\addplot[
+    darkaccent,
+    very thick,
+    domain=-4:4
+]{0};
+
+\addplot[
+    textgray,
+    very thick,
+    domain=-4:4
+]{-3};
+
+\node[
+    anchor=west,
+    text=accent
+]
+at (axis cs:2.5,2.25)
+{$y=2$};
+
+\node[
+    anchor=west,
+    text=darkaccent
+]
+at (axis cs:2.5,0.25)
+{$y=0$};
+
+\node[
+    anchor=west,
+    text=textgray
+]
+at (axis cs:2.5,-2.75)
+{$y=-3$};
+
+\end{axis}
+
+\end{tikzpicture}
+
+\end{center}
+
+% ================================================================
+% 5
+% ================================================================
+
+\topic{5. Семейство прямых $y=kx$}
+
+Если
+\[
+    b=0,
+\]
+то формула линейной функции принимает вид
+\[
+    y=kx.
+\]
+
+Все такие прямые проходят через начало координат
+\[
+    (0;0).
+\]
+
+Изменение $k$ меняет наклон прямой:
+
+\begin{itemize}
+    \item $k>0$ --- прямая возрастает;
+
+    \item $k<0$ --- прямая убывает;
+
+    \item $k=0$ --- получаем ось $Ox$;
+
+    \item чем больше $|k|$,
+    тем сильнее прямая отклоняется от оси $Ox$.
+\end{itemize}
+
+\begin{center}
+
+\begin{tikzpicture}
+
+\begin{axis}[
+    width=0.76\linewidth,
+    height=5.2cm,
+    axis lines=middle,
+    xmin=-3.5,
+    xmax=3.5,
+    ymin=-4.5,
+    ymax=4.5,
+    xlabel={$x$},
+    ylabel={$y$},
+    grid=both,
+    samples=200,
+    unit vector ratio=1 1,
+    clip=false
+]
+
+\addplot[
+    accent,
+    very thick,
+    domain=-3:3
+]{x};
+
+\addplot[
+    darkaccent,
+    very thick,
+    domain=-2.2:2.2
+]{2*x};
+
+\addplot[
+    textgray,
+    dashed,
+    very thick,
+    domain=-1.5:1.5
+]{-3*x};
+
+\node[
+    anchor=west,
+    text=accent
+]
+at (axis cs:2.2,2.3)
+{$k=1$};
+
+\node[
+    anchor=west,
+    text=darkaccent
+]
+at (axis cs:1.5,3.2)
+{$k=2$};
+
+\node[
+    anchor=west,
+    text=textgray
+]
+at (axis cs:-1.3,3.9)
+{$k=-3$};
+
+\end{axis}
+
+\end{tikzpicture}
+
+\end{center}
+
+% ================================================================
+% 6
+% ================================================================
+
+\topic{6. Линейная функция в задачах по физике}
+
+Формулы движения имеют ту же структуру,
+что и
+\[
+    y=kx+b.
+\]
+
+\textbf{Скорость при равноускоренном движении:}
+\[
+    v(t)=v_0+at.
+\]
+
+Здесь свободный коэффициент --- $v_0$,
+а угловой коэффициент --- ускорение $a$.
+
+На графике $v(t)$:
+\[
+    v_0=v(0),
+    \qquad
+    a=\frac{\Delta v}{\Delta t}.
+\]
+
+\textbf{Координата при равномерном движении:}
+\[
+    x(t)=x_0+vt.
+\]
+
+Здесь свободный коэффициент ---
+начальная координата $x_0$,
+а угловой коэффициент --- скорость $v$:
+
+\[
+    x_0=x(0),
+    \qquad
+    v=\frac{\Delta x}{\Delta t}.
+\]
+
+Например, если за $4$ с координата увеличилась
+на $2$ м, то
+\[
+    v=
+    \frac{2}{4}
+    =
+    0{,}5\ \text{м/с}.
+\]
+
+% ================================================================
+% 7
+% ================================================================
+
+\clearpage
+
+\topic{7. Условие пересечения графиков}
+
+В точке пересечения двух графиков
+значения $x$ и $y$ у них совпадают.
+
+Поэтому для функций
+\[
+    y=k_1x+b_1
+\]
+и
+\[
+    y=k_2x+b_2
+\]
+координату точки пересечения по $x$
+находят из равенства
+\[
+    k_1x+b_1
+    =
+    k_2x+b_2.
+\]
+
+После нахождения $x$
+его подставляют в любую из двух формул
+и получают соответствующее значение $y$.
+
+Для двух прямых полезно помнить:
+
+\begin{itemize}
+    \item если
+    \[
+        k_1\ne k_2,
+    \]
+    прямые пересекаются в одной точке;
+
+    \item если
+    \[
+        k_1=k_2,
+        \qquad
+        b_1\ne b_2,
+    \]
+    прямые параллельны;
+
+    \item если
+    \[
+        k_1=k_2,
+        \qquad
+        b_1=b_2,
+    \]
+    графики совпадают.
+\end{itemize}
+
+% ================================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% ================================================================
+
+\clearpage
+
+\topic{Тренировочный блок}
+
+\textbf{Путь А.}
+
+Выполните 5 заданий.
+Решения оформляйте последовательно.
+В задачах на восстановление формулы
+обязательно записывайте итоговый вид функции.
+
+\begin{enumerate}
+
+    \item
+    Для функции
+    \[
+        y=-3x+4
+    \]
+    укажите:
+
+    а) возрастает она или убывает;
+
+    б) координаты точки пересечения
+    с осью $Oy$.
+
+    \item
+    Прямая проходит через точки
+    \[
+        A(1;2)
+        \qquad\text{и}\qquad
+        B(5;6).
+    \]
+    Найдите угловой коэффициент $k$.
+
+    \item
+    По двум точкам
+    \[
+        A(2;3)
+        \qquad\text{и}\qquad
+        B(6;1)
+    \]
+    восстановите формулу линейной функции
+    \[
+        y=kx+b.
+    \]
+
+    \item
+    Для равномерного движения координата тела
+    задаётся линейной зависимостью от времени.
+
+    Известно, что график проходит через точки
+    \[
+        (0;-3)
+        \qquad\text{и}\qquad
+        (8;1),
+    \]
+    где время измеряется в секундах,
+    а координата --- в метрах.
+
+    Найдите начальную координату $x_0$
+    и скорость $v$.
+
+    \item
+    Найдите точку пересечения графиков
+    \[
+        y=2x-5
+    \]
+    и
+    \[
+        y=-x+4.
+    \]
+
+\end{enumerate}
+
+% ================================================================
+% ОТВЕТЫ
+% ================================================================
+
+\clearpage
+
+\topic{Ответы}
+
+\renewcommand{\arraystretch}{1.35}
+
+\begin{table}[h]
+
+\centering
+
+\begin{tabularx}{\linewidth}{
+    @{}
+    >{\bfseries}c
+    X
+    @{}
+}
+
+\toprule
+
+№ & Ответ \\
+
+\midrule
+
+1 &
+а) убывает;
+б) $(0;4)$.
+\\
+
+2 &
+$k=1$.
+\\
+
+3 &
+\[
+    k=-\frac12,
+    \qquad
+    b=4,
+\]
+поэтому
+\[
+    y=-\frac12x+4.
+\]
+\\
+
+4 &
+\[
+    x_0=-3\ \text{м},
+\]
+\[
+    v=
+    \frac{1-(-3)}{8}
+    =
+    0{,}5\ \text{м/с}.
+\]
+\\
+
+5 &
+$(3;1)$.
+\\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table}
+
+\end{document}
