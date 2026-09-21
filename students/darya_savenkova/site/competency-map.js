@@ -149,6 +149,21 @@
     renderFocus();
   }
 
+  function clearLinkedFocus() {
+    els.svg?.querySelectorAll('.radial-cell.is-linked').forEach(node => node.classList.remove('is-linked'));
+    els.catalog?.querySelectorAll('.topic-row.is-linked').forEach(node => node.classList.remove('is-linked'));
+    els.catalog?.querySelectorAll('.topic-group.is-linked-group').forEach(node => node.classList.remove('is-linked-group'));
+  }
+
+  function setLinkedFocus(id) {
+    clearLinkedFocus();
+    const cell = [...(els.svg?.querySelectorAll('.radial-cell') || [])].find(node => node.dataset.id === id);
+    const row = [...(els.catalog?.querySelectorAll('.topic-row') || [])].find(node => node.dataset.id === id);
+    cell?.classList.add('is-linked');
+    row?.classList.add('is-linked');
+    row?.closest('.topic-group')?.classList.add('is-linked-group');
+  }
+
   function renderMap() {
     const sectorSize = 360 / groups.length;
     const innerRadius = 148;
@@ -184,14 +199,24 @@
     els.svg.innerHTML = markup;
     els.svg.querySelectorAll('.radial-cell').forEach(cell => {
       const item = itemById.get(cell.dataset.id);
-      cell.addEventListener('mouseenter', event => showTooltip(item, event.clientX, event.clientY));
+      cell.addEventListener('mouseenter', event => {
+        setLinkedFocus(item.id);
+        showTooltip(item, event.clientX, event.clientY);
+      });
       cell.addEventListener('mousemove', event => moveTooltip(event.clientX, event.clientY));
-      cell.addEventListener('mouseleave', hideTooltip);
+      cell.addEventListener('mouseleave', () => {
+        clearLinkedFocus();
+        hideTooltip();
+      });
       cell.addEventListener('focus', () => {
+        setLinkedFocus(item.id);
         const box = cell.getBoundingClientRect();
         showTooltip(item, box.left + box.width / 2, box.top + box.height / 2);
       });
-      cell.addEventListener('blur', hideTooltip);
+      cell.addEventListener('blur', () => {
+        clearLinkedFocus();
+        hideTooltip();
+      });
       cell.addEventListener('click', () => openDialog(item.id, cell));
       cell.addEventListener('keydown', event => {
         if (event.key === 'Enter' || event.key === ' ') {
@@ -219,6 +244,10 @@
     }).join('');
 
     els.catalog.querySelectorAll('.topic-row').forEach(row => {
+      row.addEventListener('mouseenter', () => setLinkedFocus(row.dataset.id));
+      row.addEventListener('mouseleave', clearLinkedFocus);
+      row.addEventListener('focus', () => setLinkedFocus(row.dataset.id));
+      row.addEventListener('blur', clearLinkedFocus);
       row.addEventListener('click', () => openDialog(row.dataset.id, row));
     });
 
