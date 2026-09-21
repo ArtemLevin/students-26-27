@@ -92,6 +92,32 @@ html[data-theme=dark] .lesson-hero::before{
   opacity:.9;
 }
 .hero-copy,.hero-folio,.lesson-route{position:relative;z-index:1}
+.coordinate-field{
+  position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+}
+.coordinate-waypoint{
+  position:absolute;
+  left:var(--point-x);top:var(--point-y);
+  width:var(--point-size);height:var(--point-size);
+  margin:calc(var(--point-size) / -2);
+  border-radius:50%;
+  border:1px solid color-mix(in srgb,var(--ink) 44%,transparent);
+  background:color-mix(in srgb,var(--bg) 88%,transparent);
+  opacity:.58;
+  animation:lesson-waypoint-drift var(--point-duration) var(--point-delay) ease-in-out infinite;
+}
+.coordinate-waypoint:nth-child(3n+1){
+  border-color:color-mix(in srgb,var(--accent) 76%,transparent);
+  background:var(--accent);
+  opacity:.72;
+}
+.coordinate-waypoint::before,.coordinate-waypoint::after{
+  content:"";position:absolute;left:50%;top:50%;
+  background:color-mix(in srgb,var(--ink) 22%,transparent);
+  transform:translate(-50%,-50%);
+}
+.coordinate-waypoint::before{width:13px;height:1px}
+.coordinate-waypoint::after{width:1px;height:13px}
 .hero-copy{align-self:center;max-width:58rem}
 .eyebrow{
   margin:0 0 .62rem;
@@ -146,6 +172,21 @@ html[data-theme=dark] .lesson-hero::before{
   font:600 1rem/1.2 Georgia,serif;
 }
 .hero-folio small{max-width:17rem;color:var(--muted);font-size:.78rem}
+.navigator-cue{
+  display:flex;align-items:center;gap:.52rem;
+  margin-bottom:auto;padding-bottom:1.6rem;
+  color:var(--accent);
+  font:700 .61rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.12em;text-transform:uppercase;
+}
+.navigator-mark{width:27px;height:27px;display:block;overflow:visible}
+.navigator-mark .orbit{
+  fill:none;stroke:currentColor;stroke-width:1;opacity:.42;stroke-dasharray:2.5 3.5;
+}
+.navigator-mark .needle{
+  fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;
+}
+.navigator-mark .point{fill:currentColor}
 .meta{
   position:relative;
   z-index:1;
@@ -319,6 +360,7 @@ main{counter-reset:chapter}
   background:url("../images/atlas-cartography.png") center/cover no-repeat;
   opacity:.035;
   pointer-events:none;
+  transform:translate3d(0,var(--atlas-parallax-y,0),0) scale(1.012);
   mask-image:linear-gradient(90deg,transparent,#000 30%,#000);
 }
 html[data-theme=dark] .card:nth-of-type(3n+2)::after{
@@ -566,14 +608,75 @@ html[data-theme=dark] .card:nth-of-type(3n+2)::after{
 }
 
 @keyframes lesson-bg-settle{
-  from{transform:scale(1.018) translate3d(.3%,0,0)}
-  to{transform:scale(1) translate3d(0,0,0)}
+  from{transform:translate3d(.3%,var(--atlas-parallax-y,0),0) scale(1.018)}
+  to{transform:translate3d(0,var(--atlas-parallax-y,0),0) scale(1)}
+}
+@keyframes lesson-waypoint-drift{
+  0%,100%{transform:translate3d(0,0,0)}
+  50%{transform:translate3d(var(--point-dx),var(--point-dy),0)}
 }
 @keyframes lesson-enter{
   from{opacity:0;transform:translate3d(0,12px,0)}
   to{opacity:1;transform:translate3d(0,0,0)}
 }
 
+
+.journey-rail{
+  --journey-progress:0;
+  position:fixed;
+  z-index:35;
+  right:max(.7rem,calc((100vw - 1240px)/2 - 2.8rem));
+  top:50%;
+  width:2.35rem;
+  height:min(58vh,32rem);
+  transform:translateY(-50%);
+  pointer-events:none;
+}
+.journey-track,.journey-track-fill{
+  position:absolute;left:50%;top:.9rem;bottom:.9rem;width:1px;
+  transform:translateX(-50%);
+}
+.journey-track{background:var(--line)}
+.journey-track-fill{
+  bottom:auto;height:calc(100% - 1.8rem);
+  background:var(--accent);
+  transform:translateX(-50%) scaleY(var(--journey-progress));
+  transform-origin:top center;
+  transition:transform 140ms linear;
+}
+.journey-rail ol{
+  position:absolute;inset:0;margin:0;padding:0;list-style:none;
+  display:flex;flex-direction:column;justify-content:space-between;align-items:center;
+}
+.journey-rail li{pointer-events:auto}
+.journey-rail a{
+  position:relative;display:grid;place-items:center;
+  width:1.65rem;height:1.65rem;border-radius:50%;
+  border:1px solid var(--line-strong);
+  background:color-mix(in srgb,var(--bg) 94%,transparent);
+  color:var(--muted);text-decoration:none;
+  font:700 .5rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  transition:transform 160ms ease,border-color 160ms ease,color 160ms ease,background-color 160ms ease;
+}
+.journey-rail a.is-active{
+  border-color:var(--accent);background:var(--accent);color:#fff;transform:scale(1.08);
+}
+.journey-rail a::after{
+  content:attr(data-label);
+  position:absolute;right:calc(100% + .6rem);top:50%;
+  transform:translateY(-50%) translateX(4px);
+  width:max-content;max-width:13rem;
+  padding:.35rem .48rem;border:1px solid var(--line);
+  background:color-mix(in srgb,var(--bg) 96%,transparent);
+  color:var(--ink);opacity:0;pointer-events:none;
+  font:650 .65rem/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;
+  letter-spacing:0;text-transform:none;
+  transition:opacity 130ms ease,transform 130ms ease;
+}
+.journey-rail a:hover::after,.journey-rail a:focus-visible::after{
+  opacity:1;transform:translateY(-50%) translateX(0);
+}
+@media(max-width:1320px){.journey-rail{display:none}}
 @media(max-width:900px){
   .lesson-hero{grid-template-columns:1fr;min-height:39rem}
   .lesson-hero h1{font-size:clamp(3.9rem,14vw,7.5rem)}
@@ -628,7 +731,9 @@ html[data-theme=dark] .card:nth-of-type(3n+2)::after{
     opacity:1!important;
     transform:none!important;
   }
-  .lesson-hero::before{transform:none!important}
+  .lesson-hero::before,.card::after{transform:none!important}
+  .coordinate-waypoint{transform:none!important}
+  .journey-track-fill{transition:none!important}
 }
 @media print{
   html{color-scheme:light}
@@ -646,13 +751,21 @@ html[data-theme=dark] .card:nth-of-type(3n+2)::after{
 </style>
 </head>
 <body><div class="wrap">
-<header class="lesson-hero">
+<header class="lesson-hero" data-coordinate-field data-atlas-parallax="6">
   <div class="hero-copy">
     <p class="eyebrow">Полевой математический журнал · занятие 01</p>
     <h1>Степени: формулы и стратегия</h1>
     <p class="lead">Маршрут занятия: увидеть структуру основания, привести составные числа, корни и дроби к удобному степенному виду, затем последовательно применять свойства степеней и контролировать ограничения.</p>
   </div>
   <aside class="hero-folio" aria-label="Сведения о занятии">
+    <div class="navigator-cue" aria-hidden="true">
+      <svg class="navigator-mark" viewBox="0 0 32 32">
+        <circle class="orbit" cx="16" cy="16" r="12"/>
+        <path class="needle" d="M11 21l4-11 6 6-10 5Z"/>
+        <circle class="point" cx="22.5" cy="9.5" r="1.7"/>
+      </svg>
+      <span>Навигатор · занятие</span>
+    </div>
     <span class="date">14 · 09</span>
     <strong>Степени и преобразования</strong>
     <small>От распознавания основания до уверенной цепочки преобразований.</small>
@@ -682,7 +795,7 @@ html[data-theme=dark] .card:nth-of-type(3n+2)::after{
 </nav>
 <details class="poster"><summary><span>Наглядная памятка к занятию</span><span>Открыть</span></summary><div class="poster-content"><p>На памятке собраны формулы, алгоритм и типичные ошибки урока.</p><img id="poster" src="../images/14.09.26.png" alt="Ментальная карта по степеням: формулы, алгоритм преобразований и типичные ошибки" loading="lazy"></div></details>
 <main>
-<section id="theory" class="card"><p class="eyebrow">01 · База</p><h2>Что нужно видеть в степени</h2><div class="grid"><div class="tile"><strong>Основание и показатель</strong><div class="mathline"><math><msup><mi>a</mi><mi>n</mi></msup></math></div><p><b>a</b> — основание, <b>n</b> — показатель.</p></div><div class="tile"><strong>Особые показатели</strong><div class="mathline"><math><msup><mi>a</mi><mn>1</mn></msup><mo>=</mo><mi>a</mi><mspace width="1.4em"/><msup><mi>a</mi><mn>0</mn></msup><mo>=</mo><mn>1</mn><mtext>, если </mtext><mi>a</mi><mo>≠</mo><mn>0</mn></math></div><p>Если показатель явно не записан, подразумевается единица.</p></div></div><div class="note"><b>Главный принцип.</b> Сначала анализируйте основание. Составные числа → корни → дроби приводите к степенному виду. Затем выбирайте формулу. <button class="hint" data-tip="Принцип относится прежде всего к основанию степени. Показатель уже может быть дробным, десятичным или содержать корень." aria-label="Подсказка о главном принципе">?</button></div></section>
+<section id="theory" class="card" data-journey-stop data-journey-label="Теория"><p class="eyebrow">01 · База</p><h2>Что нужно видеть в степени</h2><div class="grid"><div class="tile"><strong>Основание и показатель</strong><div class="mathline"><math><msup><mi>a</mi><mi>n</mi></msup></math></div><p><b>a</b> — основание, <b>n</b> — показатель.</p></div><div class="tile"><strong>Особые показатели</strong><div class="mathline"><math><msup><mi>a</mi><mn>1</mn></msup><mo>=</mo><mi>a</mi><mspace width="1.4em"/><msup><mi>a</mi><mn>0</mn></msup><mo>=</mo><mn>1</mn><mtext>, если </mtext><mi>a</mi><mo>≠</mo><mn>0</mn></math></div><p>Если показатель явно не записан, подразумевается единица.</p></div></div><div class="note"><b>Главный принцип.</b> Сначала анализируйте основание. Составные числа → корни → дроби приводите к степенному виду. Затем выбирайте формулу. <button class="hint" data-tip="Принцип относится прежде всего к основанию степени. Показатель уже может быть дробным, десятичным или содержать корень." aria-label="Подсказка о главном принципе">?</button></div></section>
 <section class="card"><p class="eyebrow">02 · Формулы</p><h2>Восемь ключевых свойств</h2><div class="grid">
 <div class="formula"><strong>Умножение одинаковых оснований</strong><math><msup><mi>a</mi><mi>m</mi></msup><mo>·</mo><msup><mi>a</mi><mi>n</mi></msup><mo>=</mo><msup><mi>a</mi><mrow><mi>m</mi><mo>+</mo><mi>n</mi></mrow></msup></math><span>Показатели складываем.</span></div>
 <div class="formula"><strong>Деление одинаковых оснований</strong><math><mfrac><msup><mi>a</mi><mi>m</mi></msup><msup><mi>a</mi><mi>n</mi></msup></mfrac><mo>=</mo><msup><mi>a</mi><mrow><mi>m</mi><mo>−</mo><mi>n</mi></mrow></msup><mtext>, </mtext><mi>a</mi><mo>≠</mo><mn>0</mn></math><span>Показатели вычитаем.</span></div>
@@ -693,17 +806,17 @@ html[data-theme=dark] .card:nth-of-type(3n+2)::after{
 <div class="formula"><strong>Обращение дроби</strong><math><msup><mrow><mo>(</mo><mfrac><mi>a</mi><mi>b</mi></mfrac><mo>)</mo></mrow><mi>n</mi></msup><mo>=</mo><msup><mrow><mo>(</mo><mfrac><mi>b</mi><mi>a</mi></mfrac><mo>)</mo></mrow><mrow><mo>−</mo><mi>n</mi></mrow></msup></math><span>При обращении дроби меняется знак показателя.</span></div>
 <div class="formula"><strong>Корень как степень</strong><math><mroot><msup><mi>a</mi><mi>n</mi></msup><mi>k</mi></mroot><mo>=</mo><msup><mi>a</mi><mfrac><mi>n</mi><mi>k</mi></mfrac></msup></math><span>Внутренний показатель делим на внешний.</span></div></div><p class="note">Формулы полезно читать <b>в обе стороны</b>: это позволяет раскрывать скобки, собирать одинаковые элементы и выносить общий показатель.</p><a class="lablink" href="14.09.26-lab.html?mode=formulas">Исследовать формулы в обе стороны</a></section>
 <section class="card"><p class="eyebrow">03 · Ограничения</p><h2>Когда формула работает</h2><div class="grid"><div class="warning"><strong>Одинаковые основания</strong><p>Складывать или вычитать показатели можно при умножении или делении степеней с одинаковым основанием.</p></div><div class="warning"><strong>Плюс и минус — сигнал проверки</strong><p>Из равенства для произведения нельзя делать вывод для суммы. В общем случае степень суммы не раскладывается на сумму степеней.</p></div><div class="warning"><strong>Нулевой и отрицательный показатели</strong><p>Для нулевого и отрицательного показателя основание в соответствующих формулах не должно быть нулём.</p></div><div class="warning"><strong>Корни и ОДЗ</strong><p>Для корня чётной степени в вещественных числах подкоренное выражение должно быть неотрицательным; в знаменателе — положительным.</p></div></div><div class="note"><b>ВУПС:</b> вычитаемое, умножаемое и подставляемое берите в скобки. Это особенно важно, если внутри уже есть «+» или «−».</div></section>
-<section id="algorithm" class="card"><p class="eyebrow">04 · Алгоритм</p><h2>Как начинать незнакомую задачу</h2><div class="steps"><div class="step"><b>Проверьте ограничения.</b><p>Знаменатели, корни чётной степени, нулевые основания при отрицательных показателях.</p></div><div class="step"><b>Просмотрите основания.</b><p>Есть ли составное число, корень или дробь?</p></div><div class="step"><b>Приведите основание к степенному виду.</b><p>Примеры из урока: 25 = 5², 81 = 3⁴, 8 = 2³.</p></div><div class="step"><b>Раскройте или соберите степени.</b><p>Ищите подходящее свойство и используйте его в нужном направлении.</p></div><div class="step"><b>Упростите показатель.</b><p>Соберите одинаковые основания, аккуратно работайте со скобками.</p></div><div class="step"><b>Проверьте ответ.</b><p>Сверьте ограничения и допустимость всех преобразований.</p></div></div><a class="lablink" href="14.09.26-lab.html?mode=bases">Потренировать распознавание основания</a></section>
+<section id="algorithm" class="card" data-atlas-parallax="3" data-journey-stop data-journey-label="Алгоритм"><p class="eyebrow">04 · Алгоритм</p><h2>Как начинать незнакомую задачу</h2><div class="steps"><div class="step"><b>Проверьте ограничения.</b><p>Знаменатели, корни чётной степени, нулевые основания при отрицательных показателях.</p></div><div class="step"><b>Просмотрите основания.</b><p>Есть ли составное число, корень или дробь?</p></div><div class="step"><b>Приведите основание к степенному виду.</b><p>Примеры из урока: 25 = 5², 81 = 3⁴, 8 = 2³.</p></div><div class="step"><b>Раскройте или соберите степени.</b><p>Ищите подходящее свойство и используйте его в нужном направлении.</p></div><div class="step"><b>Упростите показатель.</b><p>Соберите одинаковые основания, аккуратно работайте со скобками.</p></div><div class="step"><b>Проверьте ответ.</b><p>Сверьте ограничения и допустимость всех преобразований.</p></div></div><a class="lablink" href="14.09.26-lab.html?mode=bases">Потренировать распознавание основания</a></section>
 <section class="card"><p class="eyebrow">05 · Факторизация</p><h2>Если степень числа не видна сразу</h2><p>Разложите составное число на простые множители. В занятии это использовалось для 81:</p><div class="mathline"><math><mn>81</mn><mo>=</mo><mn>3</mn><mo>·</mo><mn>3</mn><mo>·</mo><mn>3</mn><mo>·</mo><mn>3</mn><mo>=</mo><msup><mn>3</mn><mn>4</mn></msup></math></div><p>Тот же принцип связывает примеры <math><mn>8</mn><mo>=</mo><msup><mn>2</mn><mn>3</mn></msup></math>, <math><mn>25</mn><mo>=</mo><msup><mn>5</mn><mn>2</mn></msup></math>, <math><mn>27</mn><mo>=</mo><msup><mn>3</mn><mn>3</mn></msup></math>.</p></section>
-<section id="examples" class="card"><p class="eyebrow">06 · Разборы</p><h2>Четыре примера из занятия</h2>
+<section id="examples" class="card" data-atlas-parallax="3" data-journey-stop data-journey-label="Примеры"><p class="eyebrow">06 · Разборы</p><h2>Четыре примера из занятия</h2>
 <article class="exercise stepper" data-key="ex1"><h3>Пример 1 · составное основание <button class="hint" data-tip="Первое действие продиктовано принципом: 25 — составное основание, поэтому сначала представьте 25 как степень пятёрки." aria-label="Подсказка к первому примеру">?</button></h3><div class="mathline"><math><msup><mn>5</mn><mn>0.36</mn></msup><mo>·</mo><msup><mn>25</mn><mn>0.32</mn></msup></math></div><div class="steps"><div class="step">25 = 5². Привели составное основание к степени.</div><div class="step">Получили 5⁰·³⁶ · (5²)⁰·³².</div><div class="step">Степень в степени даёт 5⁰·⁶⁴.</div><div class="step">5⁰·³⁶ · 5⁰·⁶⁴ = 5¹ = 5.</div></div><div class="stepper-controls"><button class="secondary prev" type="button">← Назад</button><button class="primary next" type="button">Следующий шаг</button><button class="secondary all" type="button">Показать всё</button><button class="secondary reset" type="button">К началу</button></div><a class="lablink" href="14.09.26-lab.html?mode=example">Посмотреть преобразование как цепочку</a></article>
 <article class="exercise stepper" data-key="ex2"><h3>Пример 2 · составное число в знаменателе</h3><div class="mathline"><math><mfrac><mrow><msup><mn>2</mn><mfrac><mn>7</mn><mn>2</mn></mfrac></msup><mo>·</mo><msup><mn>3</mn><mfrac><mn>11</mn><mn>2</mn></mfrac></msup></mrow><msup><mn>6</mn><mfrac><mn>9</mn><mn>2</mn></mfrac></msup></mfrac></math></div><div class="steps"><div class="step">6 = 2 · 3.</div><div class="step">Раскрываем степень произведения в знаменателе.</div><div class="step">Для основания 2 показатель становится 7/2 − 9/2 = −1.</div><div class="step">Для основания 3 получаем 11/2 − 9/2 = 1, поэтому 2⁻¹ · 3 = 3/2.</div></div><div class="stepper-controls"><button class="secondary prev" type="button">← Назад</button><button class="primary next" type="button">Следующий шаг</button><button class="secondary all" type="button">Показать всё</button><button class="secondary reset" type="button">К началу</button></div></article>
 <article class="exercise stepper" data-key="ex3"><h3>Пример 3 · корень переводим в степень <button class="hint" data-tip="Корень двенадцатой степени из 2 — это 2 в степени 1/12. После этого все основания становятся одинаковыми." aria-label="Подсказка к примеру с корнем">?</button></h3><div class="mathline"><math><msup><mrow><mo>(</mo><mfrac><mrow><msup><mn>2</mn><mfrac><mn>1</mn><mn>3</mn></mfrac></msup><mo>·</mo><msup><mn>2</mn><mfrac><mn>1</mn><mn>4</mn></mfrac></msup></mrow><mroot><mn>2</mn><mn>12</mn></mroot></mfrac><mo>)</mo></mrow><mn>2</mn></msup></math></div><div class="steps"><div class="step">Корень двенадцатой степени из 2 = 2¹⁄¹².</div><div class="step">Собираем одинаковое основание 2.</div><div class="step">1/3 + 1/4 − 1/12 = 1/2.</div><div class="step">(2¹⁄²)² = 2.</div></div><div class="stepper-controls"><button class="secondary prev" type="button">← Назад</button><button class="primary next" type="button">Следующий шаг</button><button class="secondary all" type="button">Показать всё</button><button class="secondary reset" type="button">К началу</button></div><a class="lablink" href="14.09.26-lab.html?mode=root">Исследовать роль корня в этом примере</a></article>
 <article class="exercise stepper" data-key="ex4"><h3>Пример 4 · выражения в показателях</h3><div class="mathline"><math><mfrac><mrow><msup><mn>5</mn><mrow><mn>3</mn><msqrt><mn>7</mn></msqrt><mo>−</mo><mn>1</mn></mrow></msup><mo>·</mo><msup><mn>5</mn><mrow><mn>1</mn><mo>−</mo><msqrt><mn>7</mn></msqrt></mrow></msup></mrow><msup><mn>5</mn><mrow><mn>2</mn><msqrt><mn>7</mn></msqrt><mo>−</mo><mn>1</mn></mrow></msup></mfrac></math></div><div class="steps"><div class="step">Основания одинаковые: объединяем показатели.</div><div class="step">Вычитаемый показатель берём целиком в скобки.</div><div class="step">Корневые слагаемые сокращаются; постоянная часть даёт показатель 1.</div><div class="step">5¹ = 5.</div></div><div class="stepper-controls"><button class="secondary prev" type="button">← Назад</button><button class="primary next" type="button">Следующий шаг</button><button class="secondary all" type="button">Показать всё</button><button class="secondary reset" type="button">К началу</button></div></article>
 </section>
-<section id="practice" class="card"><p class="eyebrow">07 · Тренировка</p><h2>10 задач из чек-листа</h2><div class="exercise-list"><div class="exercise"><b>1.</b> 2⁷ · 2³ / 2⁵</div><div class="exercise"><b>2.</b> (3²)⁴ / 3⁵</div><div class="exercise"><b>3.</b> Представьте 1 / 5³ в виде степени с основанием 5.</div><div class="exercise"><b>4.</b> 16³⁄⁴</div><div class="exercise"><b>5.</b> 27²⁄³</div><div class="exercise"><b>6.</b> 5⁰·³⁸ · 25⁰·³¹</div><div class="exercise"><b>7.</b> 2⁷⁄² · 3¹¹⁄² / 6⁹⁄²</div><div class="exercise"><b>8.</b> (2¹⁄³ · 2¹⁄⁴ / ¹²√2)²</div><div class="exercise"><b>9.</b> (2/3)⁻⁴ · (3/2)⁻²</div><div class="exercise"><b>10.</b> 5^(3√7−1) · 25^(1−√7) / 125^(√7/3)</div></div><details class="answers"><summary>Показать таблицу ответов</summary><div><table><thead><tr><th>№</th><th>Ответ</th></tr></thead><tbody><tr><td>1</td><td>32</td></tr><tr><td>2</td><td>27</td></tr><tr><td>3</td><td>5⁻³</td></tr><tr><td>4</td><td>8</td></tr><tr><td>5</td><td>9</td></tr><tr><td>6</td><td>5</td></tr><tr><td>7</td><td>3/2</td></tr><tr><td>8</td><td>2</td></tr><tr><td>9</td><td>9/4</td></tr><tr><td>10</td><td>5</td></tr></tbody></table></div></details></section>
+<section id="practice" class="card" data-atlas-parallax="3" data-journey-stop data-journey-label="Тренировка"><p class="eyebrow">07 · Тренировка</p><h2>10 задач из чек-листа</h2><div class="exercise-list"><div class="exercise"><b>1.</b> 2⁷ · 2³ / 2⁵</div><div class="exercise"><b>2.</b> (3²)⁴ / 3⁵</div><div class="exercise"><b>3.</b> Представьте 1 / 5³ в виде степени с основанием 5.</div><div class="exercise"><b>4.</b> 16³⁄⁴</div><div class="exercise"><b>5.</b> 27²⁄³</div><div class="exercise"><b>6.</b> 5⁰·³⁸ · 25⁰·³¹</div><div class="exercise"><b>7.</b> 2⁷⁄² · 3¹¹⁄² / 6⁹⁄²</div><div class="exercise"><b>8.</b> (2¹⁄³ · 2¹⁄⁴ / ¹²√2)²</div><div class="exercise"><b>9.</b> (2/3)⁻⁴ · (3/2)⁻²</div><div class="exercise"><b>10.</b> 5^(3√7−1) · 25^(1−√7) / 125^(√7/3)</div></div><details class="answers"><summary>Показать таблицу ответов</summary><div><table><thead><tr><th>№</th><th>Ответ</th></tr></thead><tbody><tr><td>1</td><td>32</td></tr><tr><td>2</td><td>27</td></tr><tr><td>3</td><td>5⁻³</td></tr><tr><td>4</td><td>8</td></tr><tr><td>5</td><td>9</td></tr><tr><td>6</td><td>5</td></tr><tr><td>7</td><td>3/2</td></tr><tr><td>8</td><td>2</td></tr><tr><td>9</td><td>9/4</td></tr><tr><td>10</td><td>5</td></tr></tbody></table></div></details></section>
 <section class="card"><p class="eyebrow">08 · Мини-квиз</p><h2>Проверьте выбор формулы</h2><div class="grid quiz"><div class="quiz-item"><b>Когда можно складывать показатели?</b><div class="quiz-options"><button type="button" data-v="0">При сложении степеней</button><button type="button" data-v="1">При умножении степеней с одинаковым основанием</button><button type="button" data-v="0">При любых одинаковых показателях</button></div><div class="feedback" aria-live="polite"></div></div><div class="quiz-item"><b>Что означает отрицательный показатель?</b><div class="quiz-options"><button type="button" data-v="1">Переход к обратной величине: 1 / aⁿ</button><button type="button" data-v="0">Отрицательное значение степени</button><button type="button" data-v="0">Смена знака основания</button></div><div class="feedback" aria-live="polite"></div></div><div class="quiz-item"><b>Первое действие при основании 25?</b><div class="quiz-options"><button type="button" data-v="0">Сложить показатели</button><button type="button" data-v="1">Представить 25 как 5²</button><button type="button" data-v="0">Заменить степень корнем</button></div><div class="feedback" aria-live="polite"></div></div><div class="quiz-item"><b>Как меняются показатели в степени степени?</b><div class="quiz-options"><button type="button" data-v="0">Складываются</button><button type="button" data-v="1">Перемножаются</button><button type="button" data-v="0">Вычитаются</button></div><div class="feedback" aria-live="polite"></div></div></div><p id="quizScore" class="note" aria-live="polite">Ответьте на вопросы — результат появится здесь.</p><button id="quizReset" class="secondary" type="button">Сбросить квиз</button></section>
-<section id="check" class="card"><p class="eyebrow">09 · Самопроверка</p><h2>Что должно воспроизводиться без подсказки</h2><div class="checks"><label class="check"><input type="checkbox" data-check="base"><span>Я различаю основание и показатель степени и помню случаи a¹ и a⁰.</span></label><label class="check"><input type="checkbox" data-check="formulas"><span>Я могу восстановить основные свойства степеней и условия их применения.</span></label><label class="check"><input type="checkbox" data-check="strategy"><span>Я начинаю с анализа основания: составное число → корень → дробь.</span></label><label class="check"><input type="checkbox" data-check="brackets"><span>Я использую скобки при вычитании сложного показателя и помню правило «ВУПС».</span></label><label class="check"><input type="checkbox" data-check="domain"><span>Я проверяю знаменатели, корни чётной степени и ограничения отрицательных показателей.</span></label></div><div class="progress" aria-hidden="true"><span id="readyBar"></span></div><p id="readyText" class="note" aria-live="polite">Готовность: 0 из 5.</p></section>
+<section id="check" class="card" data-journey-stop data-journey-label="Самопроверка"><p class="eyebrow">09 · Самопроверка</p><h2>Что должно воспроизводиться без подсказки</h2><div class="checks"><label class="check"><input type="checkbox" data-check="base"><span>Я различаю основание и показатель степени и помню случаи a¹ и a⁰.</span></label><label class="check"><input type="checkbox" data-check="formulas"><span>Я могу восстановить основные свойства степеней и условия их применения.</span></label><label class="check"><input type="checkbox" data-check="strategy"><span>Я начинаю с анализа основания: составное число → корень → дробь.</span></label><label class="check"><input type="checkbox" data-check="brackets"><span>Я использую скобки при вычитании сложного показателя и помню правило «ВУПС».</span></label><label class="check"><input type="checkbox" data-check="domain"><span>Я проверяю знаменатели, корни чётной степени и ограничения отрицательных показателей.</span></label></div><div class="progress" aria-hidden="true"><span id="readyBar"></span></div><p id="readyText" class="note" aria-live="polite">Готовность: 0 из 5.</p></section>
 </main><footer class="footer"><span>Лёвин Артём Александрович · эксклюзивно для Дарьи Савенковой</span><span>14.09.2026 · профильная математика</span></footer></div>
 <div id="tip" class="tooltip" role="tooltip" hidden></div><dialog id="imageModal" class="modal" aria-label="Увеличенная памятка"><div class="modal-shell"><button id="modalClose" aria-label="Закрыть">×</button><img src="../images/14.09.26.png" alt="Увеличенная памятка по степеням"></div></dialog>
 <script>
@@ -713,4 +826,6 @@ const tip=document.getElementById('tip');function hideTip(){tip.hidden=true}docu
 let answered=new Map();function updateScore(){const good=[...answered.values()].filter(Boolean).length;document.getElementById('quizScore').textContent=`Результат: ${good} из ${document.querySelectorAll('.quiz-item').length}.`}document.querySelectorAll('.quiz-item').forEach((q,idx)=>q.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{q.querySelectorAll('button').forEach(x=>x.classList.remove('good','bad'));const ok=b.dataset.v==='1';b.classList.add(ok?'good':'bad');q.querySelector('.feedback').textContent=ok?'Верно.':'Проверьте соответствующее правило в теории.';answered.set(idx,ok);updateScore()})));document.getElementById('quizReset').addEventListener('click',()=>{answered.clear();document.querySelectorAll('.quiz-options button').forEach(b=>b.classList.remove('good','bad'));document.querySelectorAll('.feedback').forEach(f=>f.textContent='');document.getElementById('quizScore').textContent='Ответьте на вопросы — результат появится здесь.'});
 const checks=[...document.querySelectorAll('[data-check]')],checkKey='darya-140926-selfcheck';let checkState={};try{checkState=JSON.parse(localStorage.getItem(checkKey)||'{}')}catch(_){}checks.forEach(c=>{c.checked=!!checkState[c.dataset.check];c.addEventListener('change',()=>{checkState[c.dataset.check]=c.checked;try{localStorage.setItem(checkKey,JSON.stringify(checkState))}catch(_){};updateReady()})});function updateReady(){const n=checks.filter(c=>c.checked).length;document.getElementById('readyBar').style.width=(n/checks.length*100)+'%';document.getElementById('readyText').textContent=`Готовность: ${n} из ${checks.length}.`;}updateReady();
 const modal=document.getElementById('imageModal'),poster=document.getElementById('poster'),close=document.getElementById('modalClose');poster.addEventListener('click',()=>modal.showModal());close.addEventListener('click',()=>modal.close());modal.addEventListener('click',e=>{if(e.target===modal)modal.close()});})();
-</script></body></html>
+</script>
+<script src="atlas-motion.js?v=20260921-1"></script>
+</body></html>
