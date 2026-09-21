@@ -1,0 +1,937 @@
+/* Anna Trapeznikova — LEVIN / ATLAS migration
+   Signature: mathematical folio / red-pencil marginalia / chapter spine.
+   This adapter intentionally differs from Darya's cartographic expedition:
+   burgundy accent, mixed geometry, left-side editorial spine, no landscape imagery. */
+
+body[data-anna-atlas]{
+  --anna-bg:#f3eee5;
+  --anna-paper:#faf6ef;
+  --anna-paper-2:#eee5d9;
+  --anna-ink:#23211f;
+  --anna-muted:#716c65;
+  --anna-line:#d1c6b8;
+  --anna-line-strong:#a99b8b;
+  --anna-accent:#7b2638;
+  --anna-accent-strong:#5d1828;
+  --anna-accent-soft:#ead7dc;
+  --anna-warm:#8b6846;
+  --anna-good:#4f745c;
+  --anna-bad:#9b4b43;
+  --anna-focus:#9a3850;
+
+  /* Map legacy aliases used by older lesson/lab generations. */
+  --bg:var(--anna-bg);
+  --paper:var(--anna-paper);
+  --paper2:var(--anna-paper-2);
+  --surface:var(--anna-paper);
+  --surface-soft:var(--anna-paper-2);
+  --surface-strong:#ded3c5;
+  --card:var(--anna-paper);
+  --card2:var(--anna-paper-2);
+  --text:var(--anna-ink);
+  --ink:var(--anna-ink);
+  --navy:var(--anna-ink);
+  --muted:var(--anna-muted);
+  --line:var(--anna-line);
+  --line-strong:var(--anna-line-strong);
+  --accent:var(--anna-accent);
+  --accent2:var(--anna-accent-strong);
+  --teal:var(--anna-accent);
+  --teal-strong:var(--anna-accent-strong);
+  --teal-soft:var(--anna-accent-soft);
+  --coral:var(--anna-bad);
+  --coral-soft:#f1ddda;
+  --gold:var(--anna-warm);
+  --gold-soft:#eee3d3;
+  --good:var(--anna-good);
+  --success:var(--anna-good);
+  --bad:var(--anna-bad);
+  --focus:var(--anna-focus);
+  --shadow:none!important;
+
+  margin:0;
+  color:var(--anna-ink);
+  background:
+    linear-gradient(90deg,transparent 0 5.2rem,color-mix(in srgb,var(--anna-accent) 16%,transparent) 5.2rem 5.25rem,transparent 5.25rem),
+    var(--anna-bg)!important;
+}
+html[data-theme="dark"] body[data-anna-atlas]{
+  --anna-bg:#171513;
+  --anna-paper:#201d1a;
+  --anna-paper-2:#28231f;
+  --anna-ink:#f1e9df;
+  --anna-muted:#aaa198;
+  --anna-line:#403a34;
+  --anna-line-strong:#665b51;
+  --anna-accent:#d17589;
+  --anna-accent-strong:#e69aab;
+  --anna-accent-soft:#422a30;
+  --anna-warm:#c1a07d;
+  --anna-good:#83a98e;
+  --anna-bad:#dc8278;
+  --anna-focus:#e18da0;
+
+  --surface-strong:#342e28;
+  --coral-soft:#452b2a;
+  --gold-soft:#3a3024;
+}
+body[data-anna-atlas] *{box-sizing:border-box}
+body[data-anna-atlas]::selection{background:color-mix(in srgb,var(--anna-accent) 22%,transparent)}
+body[data-anna-atlas] h1,
+body[data-anna-atlas] h2,
+body[data-anna-atlas] h3{
+  font-family:Georgia,"Times New Roman",serif;
+  font-weight:500;
+}
+body[data-anna-atlas] .eyebrow{
+  color:var(--anna-accent)!important;
+  font:750 .66rem/1.25 ui-monospace,SFMono-Regular,Consolas,monospace!important;
+  letter-spacing:.13em!important;
+}
+body[data-anna-atlas] :focus-visible{
+  outline:3px solid color-mix(in srgb,var(--anna-focus) 58%,transparent)!important;
+  outline-offset:3px;
+}
+
+/* ---------- Shared coordinate field ---------- */
+body[data-anna-atlas] .coordinate-field{
+  position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+}
+body[data-anna-atlas] .coordinate-waypoint{
+  position:absolute;
+  left:var(--point-x);top:var(--point-y);
+  width:var(--point-size);height:var(--point-size);
+  margin:calc(var(--point-size) / -2);
+  background:var(--anna-accent);
+  border-radius:0;
+  opacity:.34;
+  transform:rotate(45deg);
+  animation:anna-proof-drift var(--point-duration) var(--point-delay) ease-in-out infinite;
+}
+body[data-anna-atlas] .coordinate-waypoint:nth-child(even){
+  background:transparent;
+  border:1px solid color-mix(in srgb,var(--anna-ink) 42%,transparent);
+  opacity:.44;
+}
+body[data-anna-atlas] .coordinate-waypoint::before{
+  content:"";
+  position:absolute;
+  left:50%;top:50%;
+  width:15px;height:1px;
+  background:color-mix(in srgb,var(--anna-accent) 34%,transparent);
+  transform:translate(-50%,-50%) rotate(-45deg);
+}
+
+/* ---------- Shared journey rail: Anna = left manuscript spine ---------- */
+body[data-anna-atlas] .journey-rail{
+  --journey-progress:0;
+  position:fixed;
+  z-index:38;
+  left:max(.85rem,calc((100vw - 1240px)/2 - 3.4rem));
+  top:50%;
+  width:2.6rem;
+  height:min(62vh,34rem);
+  transform:translateY(-50%);
+  pointer-events:none;
+}
+body[data-anna-atlas] .journey-track,
+body[data-anna-atlas] .journey-track-fill{
+  position:absolute;left:50%;top:.95rem;bottom:.95rem;width:1px;
+  transform:translateX(-50%);
+}
+body[data-anna-atlas] .journey-track{
+  background:var(--anna-line);
+}
+body[data-anna-atlas] .journey-track-fill{
+  bottom:auto;height:calc(100% - 1.9rem);
+  background:var(--anna-accent);
+  transform:translateX(-50%) scaleY(var(--journey-progress));
+  transform-origin:top center;
+  transition:transform 140ms linear;
+}
+body[data-anna-atlas] .journey-rail ol{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:space-between;align-items:center;
+  margin:0;padding:0;list-style:none;
+}
+body[data-anna-atlas] .journey-rail li{pointer-events:auto}
+body[data-anna-atlas] .journey-rail a{
+  position:relative;
+  display:grid;place-items:center;
+  width:1.75rem;height:1.75rem;
+  border:1px solid var(--anna-line-strong);
+  border-radius:1px;
+  background:color-mix(in srgb,var(--anna-bg) 95%,transparent);
+  color:var(--anna-muted);
+  text-decoration:none;
+  font:700 .5rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  transform:rotate(45deg);
+  transition:background-color 150ms ease,border-color 150ms ease,color 150ms ease;
+}
+body[data-anna-atlas] .journey-rail a span{transform:rotate(-45deg)}
+body[data-anna-atlas] .journey-rail a.is-active{
+  background:var(--anna-accent);
+  border-color:var(--anna-accent);
+  color:#fff;
+}
+body[data-anna-atlas] .journey-rail a::after{
+  content:attr(data-label);
+  position:absolute;
+  left:calc(100% + .85rem);top:50%;
+  width:max-content;max-width:15rem;
+  padding:.35rem .5rem;
+  border-bottom:1px solid var(--anna-accent);
+  background:color-mix(in srgb,var(--anna-bg) 96%,transparent);
+  color:var(--anna-ink);
+  opacity:0;
+  transform:translateY(-50%) rotate(-45deg) translateX(-4px);
+  pointer-events:none;
+  font:650 .65rem/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;
+  transition:opacity 130ms ease,transform 130ms ease;
+}
+body[data-anna-atlas] .journey-rail a:hover::after,
+body[data-anna-atlas] .journey-rail a:focus-visible::after{
+  opacity:1;
+  transform:translateY(-50%) rotate(-45deg) translateX(0);
+}
+
+/* =========================================================
+   INDEX — editorial folio / manuscript spread
+   ========================================================= */
+body[data-anna-page="index"]{
+  --la-site-bg:var(--anna-bg);
+  --la-site-surface:var(--anna-paper);
+  --la-site-text:var(--anna-ink);
+  --la-site-muted:var(--anna-muted);
+}
+body[data-anna-page="index"] .topbar{
+  position:sticky;top:0;z-index:40;
+  border-bottom:1px solid var(--anna-line)!important;
+  background:color-mix(in srgb,var(--anna-bg) 92%,transparent)!important;
+  backdrop-filter:blur(12px);
+  box-shadow:none!important;
+}
+body[data-anna-page="index"] .topbar-inner{
+  width:min(1240px,calc(100% - 2rem));margin:auto;
+}
+body[data-anna-page="index"] .brand-mark{
+  border-radius:1px!important;
+  background:var(--anna-accent)!important;
+  color:#fff!important;
+  font:700 .74rem/1 ui-monospace,SFMono-Regular,Consolas,monospace!important;
+  transform:rotate(-2deg);
+}
+body[data-anna-page="index"] .topnav a,
+body[data-anna-page="index"] .icon-button{
+  border-radius:1px!important;
+}
+body[data-anna-page="index"] .page{
+  width:min(1240px,calc(100% - 2rem))!important;
+  margin:auto;
+}
+body[data-anna-page="index"] .intro{
+  position:relative;
+  min-height:clamp(29rem,54vw,43rem);
+  display:grid!important;
+  grid-template-columns:minmax(0,1.2fr) minmax(18rem,.55fr)!important;
+  gap:clamp(2rem,8vw,8rem)!important;
+  align-items:end!important;
+  padding:clamp(3rem,8vw,7rem) 0 clamp(2rem,4vw,3rem)!important;
+  border-bottom:1px solid var(--anna-line);
+  overflow:hidden;
+}
+body[data-anna-page="index"] .intro::before{
+  content:"10";
+  position:absolute;
+  right:-.02em;top:-.18em;
+  color:color-mix(in srgb,var(--anna-accent) 7%,transparent);
+  font:500 clamp(12rem,31vw,31rem)/.8 Georgia,serif;
+  letter-spacing:-.08em;
+  pointer-events:none;
+  transform:translate3d(0,var(--atlas-parallax-y,0),0);
+}
+body[data-anna-page="index"] .intro>div,
+body[data-anna-page="index"] .start-card{position:relative;z-index:1}
+body[data-anna-page="index"] .intro h1{
+  max-width:8.2ch!important;
+  margin:.2rem 0 1.35rem!important;
+  font-size:clamp(4rem,9.5vw,9.5rem)!important;
+  line-height:.79!important;
+  letter-spacing:-.07em!important;
+}
+body[data-anna-page="index"] .intro .lead{
+  max-width:46rem!important;
+  color:var(--anna-muted)!important;
+  font-size:clamp(1rem,1.45vw,1.18rem)!important;
+}
+body[data-anna-page="index"] .start-card{
+  align-self:end!important;
+  min-height:21rem;
+  padding:1.2rem 0 1.2rem 1.4rem!important;
+  border:0!important;
+  border-left:1px solid var(--anna-line-strong)!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+body[data-anna-page="index"] .start-card::before{
+  content:"последняя запись";
+  display:block;
+  margin-bottom:2.5rem;
+  color:var(--anna-accent);
+  font:700 .58rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+body[data-anna-page="index"] .start-card strong{
+  display:block;
+  margin:.45rem 0 .65rem;
+  font:500 clamp(1.75rem,3vw,2.8rem)/.95 Georgia,serif;
+  letter-spacing:-.04em;
+}
+body[data-anna-page="index"] .start-card p{color:var(--anna-muted)}
+body[data-anna-page="index"] .material-links{
+  display:flex!important;flex-wrap:wrap!important;gap:.2rem .8rem!important;
+}
+body[data-anna-page="index"] .material-links a{
+  border:0!important;border-bottom:1px solid var(--anna-line)!important;
+  border-radius:0!important;background:transparent!important;
+  padding:.4rem 0!important;color:var(--anna-accent)!important;
+  text-underline-offset:.2em;
+}
+body[data-anna-page="index"] .stats{
+  display:grid!important;
+  grid-template-columns:minmax(13rem,1.4fr) repeat(3,minmax(8rem,1fr))!important;
+  gap:0!important;
+  margin:0!important;
+  border-bottom:1px solid var(--anna-line);
+}
+body[data-anna-page="index"] .stat-card{
+  min-height:8.8rem;
+  padding:1.1rem 1.1rem 1rem 0!important;
+  display:flex!important;flex-direction:column!important;justify-content:space-between!important;
+  border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+}
+body[data-anna-page="index"] .stat-card+.stat-card{
+  padding-left:1.1rem!important;border-left:1px solid var(--anna-line)!important;
+}
+body[data-anna-page="index"] .stat-card span{
+  color:var(--anna-muted)!important;font-size:.76rem!important;
+}
+body[data-anna-page="index"] .stat-card strong{
+  font:500 clamp(2.5rem,4.4vw,4.5rem)/.82 Georgia,serif!important;
+  letter-spacing:-.055em;
+}
+body[data-anna-page="index"] .stat-card small{color:var(--anna-muted)!important}
+body[data-anna-page="index"] .map-section{
+  position:relative;
+  margin:clamp(3rem,7vw,7rem) 0 0!important;
+  padding:0 0 clamp(3rem,6vw,6rem)!important;
+  border:0!important;border-bottom:1px solid var(--anna-line)!important;
+  border-radius:0!important;background:transparent!important;box-shadow:none!important;
+}
+body[data-anna-page="index"] .map-section::before{
+  content:"";
+  position:absolute;
+  left:-2.25rem;top:0;bottom:0;width:1px;
+  background:linear-gradient(var(--anna-accent),transparent 74%);
+}
+body[data-anna-page="index"] .section-head{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:2rem;align-items:end!important;
+  padding-bottom:1.2rem;border-bottom:1px solid var(--anna-line);
+}
+body[data-anna-page="index"] .section-head h2{
+  max-width:9ch;
+  margin:.1rem 0!important;
+  font-size:clamp(2.8rem,6vw,6rem)!important;
+  line-height:.86!important;
+  letter-spacing:-.055em;
+}
+body[data-anna-page="index"] .section-head p{max-width:42rem;color:var(--anna-muted)}
+body[data-anna-page="index"] .secondary-button,
+body[data-anna-page="index"] .primary-button,
+body[data-anna-page="index"] .repeat-button,
+body[data-anna-page="index"] .filter-button{
+  border-radius:1px!important;
+  box-shadow:none!important;
+}
+body[data-anna-page="index"] .toolbar{
+  margin:0!important;padding:.85rem 0!important;
+  border:0!important;border-bottom:1px solid var(--anna-line)!important;
+  border-radius:0!important;background:transparent!important;box-shadow:none!important;
+}
+body[data-anna-page="index"] .filters{gap:0!important}
+body[data-anna-page="index"] .filter-button{
+  border:0!important;border-bottom:2px solid transparent!important;
+  background:transparent!important;color:var(--anna-muted)!important;
+}
+body[data-anna-page="index"] .filter-button[aria-pressed="true"]{
+  color:var(--anna-ink)!important;border-bottom-color:var(--anna-accent)!important;
+}
+body[data-anna-page="index"] .search-field{
+  border:0!important;border-bottom:1px solid var(--anna-line-strong)!important;
+  border-radius:0!important;background:transparent!important;
+}
+body[data-anna-page="index"] .search-field input{background:transparent!important}
+body[data-anna-page="index"] .legend{
+  padding:.8rem 0!important;border-bottom:1px solid var(--anna-line);
+}
+body[data-anna-page="index"] .map-layout{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.45fr) minmax(19rem,.55fr)!important;
+  gap:0!important;
+}
+body[data-anna-page="index"] .radial-column{
+  padding:clamp(1.5rem,4vw,3rem) clamp(1rem,3vw,2.6rem) 1rem 0;
+  border-right:1px solid var(--anna-line);
+}
+body[data-anna-page="index"] .radial-stage{
+  max-width:830px!important;
+  background:
+    radial-gradient(circle,
+      transparent 0 31%,
+      color-mix(in srgb,var(--anna-accent) 11%,transparent) 31.1% 31.2%,
+      transparent 31.3% 48%,
+      color-mix(in srgb,var(--anna-line-strong) 38%,transparent) 48.1% 48.2%,
+      transparent 48.3%)!important;
+}
+body[data-anna-page="index"] .radial-center{
+  border-radius:50%!important;
+  background:color-mix(in srgb,var(--anna-bg) 93%,transparent)!important;
+  box-shadow:none!important;
+}
+body[data-anna-page="index"] .radial-cell{
+  transition:opacity 150ms ease,filter 150ms ease,stroke-width 150ms ease!important;
+}
+body[data-anna-page="index"] .radial-cell.is-linked{
+  opacity:1!important;
+  stroke:var(--anna-accent)!important;
+  stroke-width:2.8!important;
+  filter:brightness(1.03) drop-shadow(0 0 4px color-mix(in srgb,var(--anna-accent) 20%,transparent))!important;
+}
+html[data-theme="dark"] body[data-anna-page="index"] .radial-cell.is-linked{
+  filter:brightness(1.08) drop-shadow(0 0 9px color-mix(in srgb,var(--anna-accent) 38%,transparent))!important;
+}
+body[data-anna-page="index"] .catalog{
+  padding:clamp(1.2rem,3vw,2rem)!important;
+  border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+}
+body[data-anna-page="index"] .catalog-head{
+  background:linear-gradient(var(--anna-bg) 82%,transparent)!important;
+}
+body[data-anna-page="index"] .topic-group{border-radius:0!important}
+body[data-anna-page="index"] .topic-row{
+  border-radius:0!important;
+  transition:background-color 150ms ease,transform 150ms ease!important;
+}
+body[data-anna-page="index"] .topic-row.is-linked{
+  background:color-mix(in srgb,var(--anna-accent) 8%,transparent)!important;
+  transform:translateX(3px);
+}
+body[data-anna-page="index"] .topic-group.is-linked-group>summary{color:var(--anna-accent)}
+body[data-anna-page="index"] .focus-card{
+  position:relative;
+  margin:0!important;
+  padding:clamp(2rem,5vw,4.5rem) 0!important;
+  display:grid!important;
+  grid-template-columns:5rem minmax(0,1fr) auto!important;
+  gap:1.25rem!important;
+  align-items:start!important;
+  border:0!important;border-bottom:1px solid var(--anna-line)!important;
+  border-radius:0!important;background:transparent!important;box-shadow:none!important;
+}
+body[data-anna-page="index"] .focus-icon{
+  width:4.2rem;height:4.2rem;
+  display:grid;place-items:center;
+  border:1px solid var(--anna-accent)!important;
+  border-radius:1px!important;
+  color:var(--anna-accent)!important;
+  background:transparent!important;
+  font:500 2rem/1 Georgia,serif;
+  transform:rotate(-2deg);
+}
+body[data-anna-page="index"] .focus-card h2{
+  max-width:17ch;
+  margin:.1rem 0 .55rem!important;
+  font-size:clamp(2rem,4vw,4.2rem)!important;
+  line-height:.91!important;
+  letter-spacing:-.05em;
+}
+body[data-anna-page="index"] .focus-card p{color:var(--anna-muted)}
+body[data-anna-page="index"] .program-notes{
+  padding:clamp(3rem,7vw,6rem) 0!important;
+  border:0!important;border-bottom:1px solid var(--anna-line)!important;
+}
+body[data-anna-page="index"] .program-notes>div:first-child{
+  display:grid;grid-template-columns:.4fr 1fr;gap:2rem;align-items:end;
+}
+body[data-anna-page="index"] .program-notes h2{
+  max-width:13ch;font-size:clamp(2.4rem,5vw,5rem)!important;line-height:.9!important;
+}
+body[data-anna-page="index"] .notes-grid{
+  display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:0!important;
+  margin-top:2rem;border-top:1px solid var(--anna-line);
+}
+body[data-anna-page="index"] .notes-grid article{
+  padding:1.2rem 1.2rem 1rem 0!important;
+  border:0!important;border-bottom:1px solid var(--anna-line)!important;
+  border-radius:0!important;background:transparent!important;
+}
+body[data-anna-page="index"] .notes-grid article+article{
+  padding-left:1.2rem!important;border-left:1px solid var(--anna-line)!important;
+}
+body[data-anna-page="index"] .notes-grid article>span{
+  color:var(--anna-accent);font:700 .62rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+body[data-anna-page="index"] .lesson-ledger{
+  padding:clamp(3rem,7vw,6rem) 0;
+  border-bottom:1px solid var(--anna-line);
+}
+body[data-anna-page="index"] .lesson-ledger-head{
+  display:grid;grid-template-columns:minmax(0,.55fr) minmax(0,1.45fr);
+  gap:2rem;align-items:end;margin-bottom:1.4rem;
+}
+body[data-anna-page="index"] .lesson-ledger h2{
+  max-width:10ch;margin:0;
+  font:500 clamp(2.7rem,5vw,5rem)/.88 Georgia,serif;
+  letter-spacing:-.055em;
+}
+body[data-anna-page="index"] .lesson-ledger-head p{max-width:40rem;color:var(--anna-muted)}
+body[data-anna-page="index"] .ledger-entry{
+  display:grid;
+  grid-template-columns:7rem minmax(0,1fr) minmax(15rem,.72fr);
+  gap:1.3rem;
+  padding:1.15rem 0;
+  border-top:1px solid var(--anna-line);
+}
+body[data-anna-page="index"] .ledger-date{
+  color:var(--anna-accent);
+  font:700 .7rem/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+body[data-anna-page="index"] .ledger-entry h3{
+  margin:0 0 .3rem;font-size:clamp(1.25rem,2vw,1.7rem);line-height:1.05;
+}
+body[data-anna-page="index"] .ledger-entry p{margin:0;color:var(--anna-muted);font-size:.88rem}
+body[data-anna-page="index"] .ledger-links{
+  display:flex;justify-content:flex-end;align-items:flex-start;gap:.35rem .85rem;flex-wrap:wrap;
+}
+body[data-anna-page="index"] .ledger-links a{
+  color:var(--anna-accent);font-size:.79rem;text-underline-offset:.2em;
+}
+body[data-anna-page="index"] .ledger-entry.is-files-only h3::after{
+  content:" · файлы";
+  color:var(--anna-muted);font:650 .62rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+body[data-anna-page="index"] .footer{
+  width:min(1240px,calc(100% - 2rem));margin:auto;
+  padding:1.4rem 0 2.6rem!important;
+  border:0!important;
+  font-size:.72rem!important;letter-spacing:.04em;text-transform:uppercase;
+}
+
+/* =========================================================
+   LESSONS — mathematical folio / red-pencil editorial notes
+   ========================================================= */
+body[data-anna-page="lesson"]{
+  overflow-x:hidden;
+  background:
+    linear-gradient(90deg,transparent 0 4.7rem,color-mix(in srgb,var(--anna-accent) 15%,transparent) 4.7rem 4.76rem,transparent 4.76rem),
+    var(--anna-bg)!important;
+}
+body[data-anna-page="lesson"] .wrap{
+  width:min(1160px,calc(100% - 2rem))!important;
+  max-width:none!important;
+  margin:auto!important;
+  padding:0!important;
+}
+body[data-anna-page="lesson"] .hero{
+  position:relative!important;
+  min-height:clamp(29rem,52vw,42rem)!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1.35fr) minmax(15rem,.45fr)!important;
+  gap:clamp(2rem,7vw,7rem)!important;
+  align-items:end!important;
+  margin:0 calc(50% - 50vw)!important;
+  padding:clamp(3rem,8vw,7rem) max(clamp(1rem,4vw,2rem),calc((100vw - 1160px)/2)) clamp(2rem,5vw,4rem)!important;
+  overflow:hidden!important;
+  border:0!important;border-bottom:1px solid var(--anna-line)!important;
+  border-radius:0!important;background:transparent!important;box-shadow:none!important;
+}
+body[data-anna-page="lesson"] .hero::before{
+  content:attr(data-folio);
+  position:absolute;
+  left:max(clamp(1rem,4vw,2rem),calc((100vw - 1160px)/2));
+  top:clamp(1.1rem,3vw,2rem);
+  color:var(--anna-accent);
+  font:700 .62rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.13em;
+  border-bottom:1px solid var(--anna-accent);
+  padding-bottom:.35rem;
+  z-index:2;
+}
+body[data-anna-page="lesson"] .hero::after{
+  content:"";
+  position:absolute!important;
+  right:-8vw!important;top:6%!important;
+  width:min(50vw,38rem)!important;height:min(50vw,38rem)!important;
+  border:1px solid color-mix(in srgb,var(--anna-accent) 18%,transparent)!important;
+  border-radius:50%!important;
+  background:
+    linear-gradient(90deg,transparent 49.9%,color-mix(in srgb,var(--anna-accent) 14%,transparent) 50%,transparent 50.1%),
+    linear-gradient(transparent 49.9%,color-mix(in srgb,var(--anna-accent) 14%,transparent) 50%,transparent 50.1%)!important;
+  color:transparent!important;
+  transform:translate3d(0,var(--atlas-parallax-y,0),0)!important;
+  pointer-events:none;
+}
+body[data-anna-page="lesson"] .hero h1{
+  max-width:12ch!important;
+  margin:.25rem 0 1rem!important;
+  font:500 clamp(3.6rem,8vw,8rem)/.82 Georgia,serif!important;
+  letter-spacing:-.065em!important;
+}
+body[data-anna-page="lesson"] .hero .lead,
+body[data-anna-page="lesson"] .hero-lead{
+  max-width:48rem!important;color:var(--anna-muted)!important;font-size:clamp(1rem,1.4vw,1.16rem)!important;
+}
+body[data-anna-page="lesson"] .meta,
+body[data-anna-page="lesson"] .skills,
+body[data-anna-page="lesson"] .route{
+  gap:0!important;margin-top:1.25rem!important;
+}
+body[data-anna-page="lesson"] .meta span,
+body[data-anna-page="lesson"] .skills span,
+body[data-anna-page="lesson"] .route a{
+  padding:.42rem .7rem!important;
+  border:0!important;border-right:1px solid var(--anna-line)!important;
+  border-radius:0!important;background:transparent!important;
+  color:var(--anna-muted)!important;
+}
+body[data-anna-page="lesson"] .route-card,
+body[data-anna-page="lesson"] .goal{
+  border:0!important;border-left:1px solid var(--anna-line-strong)!important;
+  border-radius:0!important;background:transparent!important;box-shadow:none!important;
+}
+body[data-anna-page="lesson"] .toolbar{
+  position:sticky!important;top:0!important;z-index:40!important;
+  margin:0 calc(50% - 50vw) clamp(2.5rem,5vw,4.5rem)!important;
+  padding:.55rem max(clamp(.5rem,4vw,2rem),calc((100vw - 1160px)/2))!important;
+  gap:0!important;
+  border:0!important;border-bottom:1px solid var(--anna-line)!important;
+  border-radius:0!important;
+  background:color-mix(in srgb,var(--anna-bg) 92%,transparent)!important;
+  backdrop-filter:blur(12px);
+  box-shadow:none!important;
+}
+body[data-anna-page="lesson"] .toolbar button,
+body[data-anna-page="lesson"] .toolbar select,
+body[data-anna-page="lesson"] .toolbar a,
+body[data-anna-page="lesson"] .btn,
+body[data-anna-page="lesson"] .lab-entry{
+  border-radius:1px!important;
+  box-shadow:none!important;
+}
+body[data-anna-page="lesson"] .tabs{
+  gap:0!important;
+  padding:.2rem 0 .9rem!important;
+  border-bottom:1px solid var(--anna-line);
+}
+body[data-anna-page="lesson"] .tab{
+  border:0!important;border-bottom:2px solid transparent!important;
+  border-radius:0!important;background:transparent!important;color:var(--anna-muted)!important;
+}
+body[data-anna-page="lesson"] .tab[aria-selected="true"],
+body[data-anna-page="lesson"] .tab.on{
+  background:transparent!important;color:var(--anna-ink)!important;border-bottom-color:var(--anna-accent)!important;
+}
+body[data-anna-page="lesson"] .poster,
+body[data-anna-page="lesson"] .poster-card{
+  margin:0 0 clamp(2.5rem,5vw,4.5rem)!important;
+  border:0!important;border-top:1px solid var(--anna-line)!important;border-bottom:1px solid var(--anna-line)!important;
+  border-radius:0!important;background:transparent!important;box-shadow:none!important;
+}
+body[data-anna-page="lesson"] .poster img,
+body[data-anna-page="lesson"] .poster-image{
+  border-radius:1px!important;background:var(--anna-paper)!important;
+}
+body[data-anna-page="lesson"] .panel.active,
+body[data-anna-page="lesson"] .panel.on{animation:none!important}
+body[data-anna-page="lesson"] .card{
+  position:relative;
+  padding:clamp(2.1rem,5vw,5rem) 0!important;
+  margin:0!important;
+  border:0!important;border-bottom:1px solid var(--anna-line)!important;
+  border-radius:0!important;background:transparent!important;box-shadow:none!important;
+}
+body[data-anna-page="lesson"] .card::before{
+  content:"";
+  position:absolute;left:0;top:0;width:clamp(2.4rem,6vw,5.5rem);height:1px;
+  background:var(--anna-accent);
+}
+body[data-anna-page="lesson"] .card>h2{
+  max-width:20ch!important;
+  margin:.1rem 0 clamp(1.3rem,3vw,2.2rem)!important;
+  font-size:clamp(2.1rem,4.4vw,4.7rem)!important;
+  line-height:.91!important;
+  letter-spacing:-.05em!important;
+}
+body[data-anna-page="lesson"] .grid,
+body[data-anna-page="lesson"] .rule-strip,
+body[data-anna-page="lesson"] .quiz-grid{
+  gap:0!important;border-top:1px solid var(--anna-line);
+}
+body[data-anna-page="lesson"] .tile,
+body[data-anna-page="lesson"] .callout,
+body[data-anna-page="lesson"] .error,
+body[data-anna-page="lesson"] .practice-task,
+body[data-anna-page="lesson"] .answer-row,
+body[data-anna-page="lesson"] .step,
+body[data-anna-page="lesson"] .rule,
+body[data-anna-page="lesson"] .exercise,
+body[data-anna-page="lesson"] .quiz-item,
+body[data-anna-page="lesson"] .quiz-question,
+body[data-anna-page="lesson"] .check,
+body[data-anna-page="lesson"] .check-row{
+  border-radius:1px!important;
+  box-shadow:none!important;
+}
+body[data-anna-page="lesson"] .tile,
+body[data-anna-page="lesson"] .quiz-item,
+body[data-anna-page="lesson"] .quiz-question{
+  background:color-mix(in srgb,var(--anna-paper) 52%,transparent)!important;
+}
+body[data-anna-page="lesson"] .formula{
+  border:0!important;border-left:2px solid var(--anna-accent)!important;
+  border-radius:0!important;
+  background:color-mix(in srgb,var(--anna-accent) 4%,transparent)!important;
+  text-align:left!important;
+}
+body[data-anna-page="lesson"] .callout{
+  border-left:2px solid var(--anna-warm)!important;
+  border-radius:0!important;background:color-mix(in srgb,var(--anna-warm) 7%,transparent)!important;
+}
+body[data-anna-page="lesson"] .callout.teal{
+  border-left-color:var(--anna-accent)!important;background:color-mix(in srgb,var(--anna-accent) 6%,transparent)!important;
+}
+body[data-anna-page="lesson"] .error{
+  border-left:2px solid var(--anna-bad)!important;
+  border-radius:0!important;background:color-mix(in srgb,var(--anna-bad) 6%,transparent)!important;
+}
+body[data-anna-page="lesson"] .step::before{
+  border-radius:1px!important;background:var(--anna-accent)!important;
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace!important;
+}
+body[data-anna-page="lesson"] .step.current{
+  border-color:var(--anna-accent)!important;
+  box-shadow:inset 2px 0 var(--anna-accent)!important;
+}
+body[data-anna-page="lesson"] .primary,
+body[data-anna-page="lesson"] .secondary,
+body[data-anna-page="lesson"] .step-controls button,
+body[data-anna-page="lesson"] .quiz-options button,
+body[data-anna-page="lesson"] .check-reset{
+  border-radius:1px!important;box-shadow:none!important;
+}
+body[data-anna-page="lesson"] .primary,
+body[data-anna-page="lesson"] .lab-entry,
+body[data-anna-page="lesson"] .lab-link{
+  background:var(--anna-accent)!important;border-color:var(--anna-accent)!important;color:#fff!important;
+}
+body[data-anna-page="lesson"] .lab-link{
+  display:inline-flex!important;padding:.55rem .75rem!important;text-decoration:none!important;
+}
+body[data-anna-page="lesson"] .progress{
+  height:4px!important;border-radius:0!important;background:var(--anna-line)!important;
+}
+body[data-anna-page="lesson"] .progress span{
+  background:var(--anna-accent)!important;
+}
+body[data-anna-page="lesson"] .task-number{
+  border-radius:1px!important;background:var(--anna-ink)!important;color:var(--anna-bg)!important;
+}
+body[data-anna-page="lesson"] .hint-bubble,
+body[data-anna-page="lesson"] dialog,
+body[data-anna-page="lesson"] .modal-shell{
+  border-radius:1px!important;box-shadow:none!important;
+}
+
+/* =========================================================
+   LABS — precise instrument, still in Anna's folio family
+   ========================================================= */
+body[data-anna-page="lab"]{
+  background:
+    linear-gradient(90deg,transparent 0 4.7rem,color-mix(in srgb,var(--anna-accent) 13%,transparent) 4.7rem 4.76rem,transparent 4.76rem),
+    var(--anna-bg)!important;
+}
+body[data-anna-page="lab"] .shell,
+body[data-anna-page="lab"] .page{
+  width:min(1380px,calc(100% - 2rem))!important;
+  max-width:none!important;margin:auto!important;padding:1rem 0!important;
+}
+body[data-anna-page="lab"] .top,
+body[data-anna-page="lab"] .topbar,
+body[data-anna-page="lab"] .lab-head{
+  border-bottom:1px solid var(--anna-line)!important;
+  background:transparent!important;box-shadow:none!important;
+}
+body[data-anna-page="lab"] h1{
+  font:500 clamp(2.7rem,5.5vw,5.6rem)/.88 Georgia,serif!important;
+  letter-spacing:-.055em!important;
+}
+body[data-anna-page="lab"] .modes,
+body[data-anna-page="lab"] .modebar,
+body[data-anna-page="lab"] .visual-modes{
+  gap:0!important;border-bottom:1px solid var(--anna-line);
+}
+body[data-anna-page="lab"] .mode,
+body[data-anna-page="lab"] .mode-button{
+  border-radius:0!important;border:0!important;border-bottom:2px solid transparent!important;
+  background:transparent!important;color:var(--anna-muted)!important;box-shadow:none!important;
+}
+body[data-anna-page="lab"] .mode.on,
+body[data-anna-page="lab"] .mode.active,
+body[data-anna-page="lab"] .mode-button[aria-pressed="true"],
+body[data-anna-page="lab"] .mode-button.active{
+  background:transparent!important;color:var(--anna-ink)!important;border-bottom-color:var(--anna-accent)!important;
+}
+body[data-anna-page="lab"] .model,
+body[data-anna-page="lab"] .panel,
+body[data-anna-page="lab"] .stage-card,
+body[data-anna-page="lab"] .controls-card,
+body[data-anna-page="lab"] .experiment-panel,
+body[data-anna-page="lab"] .learning-card,
+body[data-anna-page="lab"] .model-shell{
+  border:1px solid var(--anna-line)!important;
+  border-radius:1px!important;
+  background:color-mix(in srgb,var(--anna-paper) 58%,transparent)!important;
+  box-shadow:none!important;
+}
+body[data-anna-page="lab"] .model,
+body[data-anna-page="lab"] .stage-card{
+  border-left:2px solid var(--anna-accent)!important;
+}
+body[data-anna-page="lab"] .formula,
+body[data-anna-page="lab"] .axis-wrap,
+body[data-anna-page="lab"] .step,
+body[data-anna-page="lab"] .control-group,
+body[data-anna-page="lab"] .snapshot{
+  border-radius:1px!important;box-shadow:none!important;
+}
+body[data-anna-page="lab"] .formula{
+  background:color-mix(in srgb,var(--anna-accent) 5%,transparent)!important;
+}
+body[data-anna-page="lab"] button,
+body[data-anna-page="lab"] .btn,
+body[data-anna-page="lab"] select,
+body[data-anna-page="lab"] input{
+  border-radius:1px!important;box-shadow:none!important;
+}
+body[data-anna-page="lab"] .btn.primary,
+body[data-anna-page="lab"] button.primary{
+  background:var(--anna-accent)!important;border-color:var(--anna-accent)!important;color:#fff!important;
+}
+body[data-anna-page="lab"] .segment{stroke:var(--anna-accent)!important}
+body[data-anna-page="lab"] .included{fill:var(--anna-accent)!important;stroke:var(--anna-accent)!important}
+body[data-anna-page="lab"] .sign{fill:var(--anna-accent-strong)!important}
+body[data-anna-page="lab"] .counter{color:var(--anna-accent)!important}
+body[data-anna-page="lab"] .controls button.on{
+  border-color:var(--anna-accent)!important;box-shadow:inset 3px 0 var(--anna-accent)!important;
+}
+body[data-anna-page="lab"] .result{
+  border-left:2px solid var(--anna-good)!important;border-radius:0!important;
+}
+
+/* ---------- Small, purposeful motion ---------- */
+@keyframes anna-proof-drift{
+  0%,100%{translate:0 0}
+  50%{translate:var(--point-dx) var(--point-dy)}
+}
+body[data-anna-atlas] a,
+body[data-anna-atlas] button{
+  transition:color 150ms ease,border-color 150ms ease,background-color 150ms ease,transform 150ms ease;
+}
+body[data-anna-atlas] a:hover,
+body[data-anna-atlas] button:hover{
+  text-underline-offset:.22em;
+}
+
+/* ---------- Responsive ---------- */
+@media(max-width:1320px){
+  body[data-anna-atlas] .journey-rail{display:none}
+}
+@media(max-width:980px){
+  body[data-anna-atlas]{background:var(--anna-bg)!important}
+  body[data-anna-page="index"] .intro,
+  body[data-anna-page="lesson"] .hero{
+    grid-template-columns:1fr!important;
+    min-height:auto!important;
+  }
+  body[data-anna-page="index"] .start-card{min-height:0}
+  body[data-anna-page="index"] .map-layout{grid-template-columns:1fr!important}
+  body[data-anna-page="index"] .radial-column{border-right:0;border-bottom:1px solid var(--anna-line);padding-right:0}
+  body[data-anna-page="index"] .lesson-ledger-head{grid-template-columns:1fr}
+  body[data-anna-page="index"] .ledger-entry{grid-template-columns:6rem 1fr}
+  body[data-anna-page="index"] .ledger-links{grid-column:2;justify-content:flex-start}
+}
+@media(max-width:760px){
+  body[data-anna-page="index"] .page,
+  body[data-anna-page="index"] .topbar-inner,
+  body[data-anna-page="index"] .footer,
+  body[data-anna-page="lesson"] .wrap,
+  body[data-anna-page="lab"] .shell,
+  body[data-anna-page="lab"] .page{
+    width:calc(100% - 1rem)!important;
+  }
+  body[data-anna-page="index"] .intro h1,
+  body[data-anna-page="lesson"] .hero h1{
+    font-size:clamp(3.3rem,16vw,6.3rem)!important;
+  }
+  body[data-anna-page="index"] .stats{grid-template-columns:1fr 1fr!important}
+  body[data-anna-page="index"] .stat-card:nth-child(3){
+    border-left:0!important;padding-left:0!important;
+  }
+  body[data-anna-page="index"] .section-head{grid-template-columns:1fr!important}
+  body[data-anna-page="index"] .focus-card{grid-template-columns:4rem 1fr!important}
+  body[data-anna-page="index"] .focus-actions{grid-column:2}
+  body[data-anna-page="index"] .notes-grid{grid-template-columns:1fr!important}
+  body[data-anna-page="index"] .notes-grid article+article{padding-left:0!important;border-left:0!important}
+  body[data-anna-page="index"] .ledger-entry{grid-template-columns:1fr!important}
+  body[data-anna-page="index"] .ledger-links{grid-column:1}
+  body[data-anna-page="lesson"] .toolbar{position:static!important}
+  body[data-anna-page="lesson"] .grid,
+  body[data-anna-page="lesson"] .rule-strip{grid-template-columns:1fr!important}
+}
+@media(max-width:480px){
+  body[data-anna-page="index"] .stats{grid-template-columns:1fr!important}
+  body[data-anna-page="index"] .stat-card+.stat-card{
+    border-left:0!important;padding-left:0!important;border-top:1px solid var(--anna-line)!important;
+  }
+  body[data-anna-page="index"] .focus-card{grid-template-columns:1fr!important}
+  body[data-anna-page="index"] .focus-actions{grid-column:1}
+}
+
+/* ---------- Reduced motion / print ---------- */
+@media(prefers-reduced-motion:reduce){
+  body[data-anna-atlas] *,
+  body[data-anna-atlas] *::before,
+  body[data-anna-atlas] *::after{
+    scroll-behavior:auto!important;
+    animation:none!important;
+    transition:none!important;
+  }
+  body[data-anna-atlas] .coordinate-waypoint{translate:0 0!important}
+  body[data-anna-atlas] .journey-track-fill{transition:none!important}
+  body[data-anna-atlas] .intro::before,
+  body[data-anna-atlas] .hero::after{transform:none!important}
+}
+@media print{
+  body[data-anna-atlas]{background:#fff!important;color:#111!important}
+  body[data-anna-atlas] .journey-rail,
+  body[data-anna-atlas] .coordinate-field{display:none!important}
+  body[data-anna-atlas] .card,
+  body[data-anna-atlas] .model,
+  body[data-anna-atlas] .panel,
+  body[data-anna-atlas] .stage-card{box-shadow:none!important;background:#fff!important}
+}
