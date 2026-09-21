@@ -245,15 +245,40 @@
     cells[nextIndex].focus();
   }
 
+  function clearLinkedFocus() {
+    $('.radial-cell.is-linked', $('#radialMap')).forEach((node) => node.classList.remove('is-linked'));
+    $('.topic-row.is-linked', $('#topicIndex')).forEach((node) => node.classList.remove('is-linked'));
+    $('.topic-group.is-linked-group', $('#topicIndex')).forEach((node) => node.classList.remove('is-linked-group'));
+  }
+
+  function setLinkedFocus(id) {
+    clearLinkedFocus();
+    const cell = $('.radial-cell', $('#radialMap')).find((node) => node.dataset.id === id);
+    const row = $('.topic-row', $('#topicIndex')).find((node) => node.dataset.id === id);
+    cell?.classList.add('is-linked');
+    row?.classList.add('is-linked');
+    row?.closest('.topic-group')?.classList.add('is-linked-group');
+  }
+
   function bindMapCell(path, item) {
-    path.addEventListener('mouseenter', (event) => showTooltip(item, event.clientX, event.clientY));
+    path.addEventListener('mouseenter', (event) => {
+      setLinkedFocus(item.id);
+      showTooltip(item, event.clientX, event.clientY);
+    });
     path.addEventListener('mousemove', (event) => positionTooltip(event.clientX, event.clientY));
-    path.addEventListener('mouseleave', hideTooltip);
+    path.addEventListener('mouseleave', () => {
+      clearLinkedFocus();
+      hideTooltip();
+    });
     path.addEventListener('focus', () => {
+      setLinkedFocus(item.id);
       const rect = path.getBoundingClientRect();
       showTooltip(item, rect.left + rect.width / 2, rect.top + rect.height / 2);
     });
-    path.addEventListener('blur', hideTooltip);
+    path.addEventListener('blur', () => {
+      clearLinkedFocus();
+      hideTooltip();
+    });
     path.addEventListener('click', () => openTopic(item.id, path));
     path.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') {
@@ -356,6 +381,10 @@
     badge.className = 'topic-level';
     badge.textContent = status === 'repeat' ? `↻ ${level}/4` : `${level}/4`;
     button.append(dot, title, badge);
+    button.addEventListener('mouseenter', () => setLinkedFocus(item.id));
+    button.addEventListener('mouseleave', clearLinkedFocus);
+    button.addEventListener('focus', () => setLinkedFocus(item.id));
+    button.addEventListener('blur', clearLinkedFocus);
     button.addEventListener('click', () => openTopic(item.id, button));
     return button;
   }
