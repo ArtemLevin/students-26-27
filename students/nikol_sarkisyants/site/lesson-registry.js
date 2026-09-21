@@ -8,6 +8,23 @@ const MONTHS_GENITIVE=[
 
 export const LESSONS=Object.freeze([
   {
+    date:'2026-09-21',
+    href:'21.09.26.html',
+    title:'Геометрический смысл производной',
+    navTitle:'Геометрический смысл производной',
+    navSubtitle:'f и f′ · экстремумы · формулировки ЕГЭ',
+    summary:'На занятии закреплён геометрический смысл производной и систематизировано чтение графиков f и f′. Отработаны знак производной, монотонность, смена знака в точках экстремума, наибольшее и наименьшее значение на заданном промежутке, параллельность касательной прямой и разные форматы ответа ЕГЭ.',
+    topics:['геометрический смысл производной','график функции','график производной','монотонность','экстремумы','формулировки ЕГЭ'],
+    outcomes:[
+      {competencyId:'t8_geometric',label:'Геометрический смысл производной',level:3,tone:'good',practiceDisposition:'manual'},
+      {competencyId:'t8_derivative_graph',label:'Чтение графика производной',level:3,tone:'good',practiceDisposition:'manual'},
+      {competencyId:'t8_monotonicity',label:'Возрастание и убывание',level:3,tone:'good',practiceDisposition:'manual'},
+      {competencyId:'t8_extrema',label:'Экстремумы по знаку f′',level:3,tone:'good',practiceDisposition:'manual'},
+      {competencyId:'t8_interpret',label:'Интерпретация условий ЕГЭ',level:3,tone:'good',practiceDisposition:'manual'}
+    ],
+    materials:{pdf:'../pdf_docs/21.09.26.pdf',tex:'../tex_docs/21.09.26.tex'}
+  },
+  {
     date:'2026-09-20',
     href:'20.09.26.html',
     title:'Графики функции и производной',
