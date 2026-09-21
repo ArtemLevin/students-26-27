@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория по векторам: направление, действия и скалярное произведение">
+<title>Лаборатория векторов — Анастасия Павлова</title>
+<style>
+:root{
+ --surface-page:#edf3f8;--surface-raised:#fffdfa;--surface-soft:#f2f6fa;--text-primary:#172333;--text-secondary:#5d6a78;
+ --border-subtle:#d5dee8;--border-strong:#adbac7;--accent:#185c9e;--accent-hover:#124a81;--accent-soft:#e5f0fa;
+ --coral:#d26b56;--success:#27745e;--danger:#a44f4a;--focus-ring:#d26b56;--shadow-low:0 10px 28px #143e6914;
+ --radius-sm:10px;--radius-md:18px;--space-1:6px;--space-2:10px;--space-3:16px;--space-4:24px;--space-5:36px;--motion-fast:140ms;--motion-normal:240ms;
+}
+html[data-theme=dark]{
+ --surface-page:#0d1620;--surface-raised:#15212d;--surface-soft:#1a2936;--text-primary:#eef4f9;--text-secondary:#aebac5;
+ --border-subtle:#304150;--border-strong:#536473;--accent:#72afe9;--accent-hover:#9ac8f4;--accent-soft:#17334c;--coral:#f08b78;
+ --success:#7bc5a9;--danger:#e18b84;--focus-ring:#f09c89;--shadow-low:0 10px 28px #0006;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button,a{font:inherit}button{cursor:pointer}a{color:var(--accent)}
+.shell{max-width:1180px;margin:auto;padding:18px}
+.topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--border-subtle)}
+.back,.theme{min-height:44px;padding:9px 13px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-raised);color:var(--text-primary);text-decoration:none}
+.head{display:grid;grid-template-columns:1fr auto;gap:28px;padding:44px 0 28px;align-items:end;border-bottom:1px solid var(--border-subtle)}
+.eyebrow{margin:0 0 6px;color:var(--coral);font-size:.76rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+h1{font:750 clamp(2.6rem,6vw,5.6rem)/.95 Georgia,serif;letter-spacing:-.05em;margin:0}
+.lead{max-width:760px;color:var(--text-secondary);font-size:1.08rem}
+.modebar{display:flex;gap:8px;flex-wrap:wrap;padding:18px 0}
+.modebar button{min-height:44px;padding:9px 13px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-raised);color:var(--text-primary)}
+.modebar button[aria-pressed=true]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr);gap:28px;padding:18px 0 54px}
+.instrument{background:var(--surface-raised);border:1px solid var(--border-subtle);box-shadow:var(--shadow-low);padding:20px;border-radius:var(--radius-md)}
+.instrument svg{display:block;width:100%;height:auto;min-height:500px}
+.readout{padding:4px 0}
+.readout h2{font:700 2rem/1.05 Georgia,serif;margin:0 0 18px}
+.readout h3{font:700 1.1rem/1.2 Georgia,serif;margin:28px 0 10px}
+.readout p{color:var(--text-secondary)}
+.formula{padding:17px 0;margin:12px 0;border-top:2px solid var(--accent);border-bottom:1px solid var(--border-subtle);overflow:auto;text-align:center;font-size:1.25rem}
+math{font-family:"Cambria Math","STIX Two Math",serif}
+.controlset{display:grid;gap:8px}
+.controlset button{min-height:44px;text-align:left;padding:10px 12px;border:1px solid var(--border-subtle);border-radius:var(--radius-sm);background:var(--surface-raised);color:var(--text-primary)}
+.controlset button[aria-pressed=true]{border-color:var(--coral);box-shadow:inset 4px 0 var(--coral)}
+.observation{margin-top:24px;padding:16px 0;border-top:1px solid var(--border-strong)}
+.observation strong{color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--text-secondary);font-size:.9rem;margin-top:8px}
+.legend span:before{content:"";display:inline-block;width:11px;height:3px;margin:0 6px 3px 0;background:var(--accent)}
+.legend span:last-child:before{background:var(--coral)}
+.footer{border-top:1px solid var(--border-subtle);padding:24px 0;color:var(--text-secondary);display:flex;justify-content:space-between;gap:18px}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+@media(max-width:860px){.workspace{grid-template-columns:1fr}.head{grid-template-columns:1fr}.instrument svg{min-height:360px}}
+@media(max-width:520px){.shell{padding:12px}.modebar button{flex:1 1 100%}.instrument{padding:8px}.footer{display:block}.footer span{display:block;margin-top:6px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="topbar"><a class="back" href="21.09.26.html">Вернуться к занятию</a><button class="theme" id="themeBtn" type="button" aria-pressed="false">Тёмная тема</button></header>
+<section class="head">
+ <div><p class="eyebrow">Цифровая лаборатория · 21.09.26</p><h1>Вектор как действие</h1><p class="lead">Переключайте только те ситуации, которые разобраны в пособии: направление вектора, действия с координатами и связь скалярного произведения с углом.</p></div>
+ <div><strong>Анастасия Павлова</strong><br><span style="color:var(--text-secondary)">ЕГЭ · профильная математика</span></div>
+</section>
+
+<nav class="modebar" aria-label="Режим лаборатории">
+ <button type="button" data-mode="direction" aria-pressed="true">Направление AB ↔ BA</button>
+ <button type="button" data-mode="operations" aria-pressed="false">Действия с векторами</button>
+ <button type="button" data-mode="angle" aria-pressed="false">Скалярное произведение и угол</button>
+</nav>
+
+<main class="workspace">
+ <section class="instrument" aria-label="Рабочая координатная область">
+  <svg id="stage" viewBox="0 0 720 600" role="img" aria-labelledby="stageTitle stageDesc">
+   <title id="stageTitle">Интерактивная схема векторов</title>
+   <desc id="stageDesc">Координатная область с векторами из выбранного режима.</desc>
+   <defs>
+    <marker id="blueArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="var(--accent)"/></marker>
+    <marker id="coralArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="var(--coral)"/></marker>
+   </defs>
+   <g id="grid" stroke="var(--border-subtle)" stroke-width="1"></g>
+   <g id="drawing"></g>
+  </svg>
+  <div class="legend"><span>первый объект</span><span>второй объект / результат</span></div>
+ </section>
+ <aside class="readout">
+  <p class="eyebrow" id="modeLabel">Направление</p>
+  <h2 id="readoutTitle">Конец минус начало</h2>
+  <div id="readoutText"></div>
+  <div class="formula" id="formula" aria-live="polite"></div>
+  <div id="controls"></div>
+  <div class="observation"><strong>Наблюдение</strong><p id="observation"></p></div>
+ </aside>
+</main>
+
+<footer class="footer"><span>Лёвин Артём Александрович · цифровая лаборатория</span><span>эксклюзивно для Анастасии Павловой</span></footer>
+</div>
+
+<script>
+(()=>{
+ const root=document.documentElement,themeBtn=document.getElementById('themeBtn');
+ function setTheme(t){root.dataset.theme=t;themeBtn.textContent=t==='dark'?'Светлая тема':'Тёмная тема';themeBtn.setAttribute('aria-pressed',String(t==='dark'));try{localStorage.setItem('nastya-vector-lab-theme',t)}catch(e){}}
+ try{setTheme(localStorage.getItem('nastya-vector-lab-theme')||'light')}catch(e){setTheme('light')}
+ themeBtn.addEventListener('click',()=>setTheme(root.dataset.theme==='dark'?'light':'dark'));
+
+ const NS='http://www.w3.org/2000/svg',grid=document.getElementById('grid'),drawing=document.getElementById('drawing');
+ const title=document.getElementById('readoutTitle'),label=document.getElementById('modeLabel'),text=document.getElementById('readoutText'),formula=document.getElementById('formula'),controls=document.getElementById('controls'),observation=document.getElementById('observation');
+ function line(x1,y1,x2,y2,attrs={}){const n=document.createElementNS(NS,'line');for(const [k,v] of Object.entries({x1,y1,x2,y2,...attrs}))n.setAttribute(k,v);return n}
+ function nodeText(x,y,s,attrs={}){const n=document.createElementNS(NS,'text');n.setAttribute('x',x);n.setAttribute('y',y);n.textContent=s;for(const [k,v] of Object.entries(attrs))n.setAttribute(k,v);return n}
+ function circle(x,y,r,fill){const n=document.createElementNS(NS,'circle');n.setAttribute('cx',x);n.setAttribute('cy',y);n.setAttribute('r',r);n.setAttribute('fill',fill);return n}
+ for(let x=60;x<=660;x+=60)grid.appendChild(line(x,30,x,570,{opacity:x===360?1:.55}));
+ for(let y=30;y<=570;y+=60)grid.appendChild(line(60,y,660,y,{opacity:y===300?1:.55}));
+ grid.appendChild(line(60,300,675,300,{'stroke':'var(--border-strong)','stroke-width':2}));
+ grid.appendChild(line(360,570,360,20,{'stroke':'var(--border-strong)','stroke-width':2}));
+ function clear(){drawing.replaceChildren();controls.replaceChildren()}
+ function drawVector(x1,y1,x2,y2,color,marker,labelText){
+  drawing.appendChild(line(x1,y1,x2,y2,{'stroke':color,'stroke-width':7,'stroke-linecap':'round','marker-end':marker}));
+  drawing.appendChild(nodeText((x1+x2)/2+8,(y1+y2)/2-10,labelText,{'fill':color,'font-size':20,'font-weight':700}));
+ }
+ function math(s){return s}
+ function button(textValue,pressed,fn){
+  const b=document.createElement('button');b.type='button';b.textContent=textValue;b.setAttribute('aria-pressed',String(pressed));b.addEventListener('click',fn);return b;
+ }
+ let directionReverse=false,operation='sum';
+ function renderDirection(){
+  clear();label.textContent='Направление';title.textContent='Конец минус начало';
+  const A={x:180,y:420},B={x:540,y:300};
+  drawing.appendChild(circle(A.x,A.y,8,'var(--accent)'));drawing.appendChild(circle(B.x,B.y,8,'var(--coral)'));
+  drawing.appendChild(nodeText(A.x-25,A.y+30,'A(1;1)',{'fill':'var(--text-primary)','font-size':18}));
+  drawing.appendChild(nodeText(B.x+10,B.y-10,'B(7;3)',{'fill':'var(--text-primary)','font-size':18}));
+  if(directionReverse){drawVector(B.x,B.y,A.x,A.y,'var(--coral)','url(#coralArrow)','BA');formula.innerHTML='<math><mover><mi>BA</mi><mo>→</mo></mover><mo>=</mo><mo>(</mo><mo>−</mo><mn>6</mn><mo>;</mo><mo>−</mo><mn>2</mn><mo>)</mo><mo>=</mo><mo>−</mo><mover><mi>AB</mi><mo>→</mo></mover></math>';observation.textContent='При смене направления обе координаты меняют знак.';}
+  else{drawVector(A.x,A.y,B.x,B.y,'var(--accent)','url(#blueArrow)','AB');formula.innerHTML='<math><mover><mi>AB</mi><mo>→</mo></mover><mo>=</mo><mo>(</mo><mn>6</mn><mo>;</mo><mn>2</mn><mo>)</mo></math>';observation.textContent='Координаты показывают смещение вправо и вверх.';}
+  text.innerHTML='<p>Точки фиксированы как в пособии. Изменяется только направление вектора.</p>';
+  const set=document.createElement('div');set.className='controlset';
+  set.append(button('Показать AB',!directionReverse,()=>{directionReverse=false;renderDirection()}),button('Показать BA',directionReverse,()=>{directionReverse=true;renderDirection()}));controls.appendChild(set);
+ }
+ function renderOperations(){
+  clear();label.textContent='Действия';title.textContent='Одни координаты — разные операции';
+  const O={x:360,y:300};
+  const A={x:420,y:180},B={x:540,y:60};
+  drawVector(O.x,O.y,A.x,A.y,'var(--accent)','url(#blueArrow)','a=(1;2)');
+  drawVector(O.x,O.y,B.x,B.y,'var(--coral)','url(#coralArrow)','b=(3;4)');
+  text.innerHTML='<p>Векторы из примера занятия: <strong>a=(1;2)</strong> и <strong>b=(3;4)</strong>.</p>';
+  if(operation==='sum'){formula.innerHTML='<math><mover><mi>a</mi><mo>→</mo></mover><mo>+</mo><mover><mi>b</mi><mo>→</mo></mover><mo>=</mo><mo>(</mo><mn>4</mn><mo>;</mo><mn>6</mn><mo>)</mo></math>';observation.textContent='При сложении соответствующие координаты складываются.'}
+  if(operation==='diff'){formula.innerHTML='<math><mover><mi>a</mi><mo>→</mo></mover><mo>−</mo><mover><mi>b</mi><mo>→</mo></mover><mo>=</mo><mo>(</mo><mo>−</mo><mn>2</mn><mo>;</mo><mo>−</mo><mn>2</mn><mo>)</mo></math>';observation.textContent='При вычитании порядок сохраняется: из координат a вычитаются координаты b.'}
+  if(operation==='dot'){formula.innerHTML='<math><mover><mi>a</mi><mo>→</mo></mover><mo>·</mo><mover><mi>b</mi><mo>→</mo></mover><mo>=</mo><mn>1</mn><mo>·</mo><mn>3</mn><mo>+</mo><mn>2</mn><mo>·</mo><mn>4</mn><mo>=</mo><mn>11</mn></math>';observation.textContent='Скалярное произведение даёт число, а не новый вектор.'}
+  const set=document.createElement('div');set.className='controlset';
+  [['sum','Сумма'],['diff','Разность'],['dot','Скалярное произведение']].forEach(([id,n])=>set.appendChild(button(n,operation===id,()=>{operation=id;renderOperations()})));controls.appendChild(set);
+ }
+ function renderAngle(){
+  clear();label.textContent='Угол';title.textContent='Нулевое скалярное произведение';
+  const O={x:360,y:300};
+  drawVector(O.x,O.y,540,60,'var(--accent)','url(#blueArrow)','p=(3;4)');
+  drawVector(O.x,O.y,180,120,'var(--coral)','url(#coralArrow)','q=(4;−3)');
+  text.innerHTML='<p>Используются векторы из тренировочного блока: <strong>p=(3;4)</strong> и <strong>q=(4;−3)</strong>.</p>';
+  formula.innerHTML='<math><mover><mi>p</mi><mo>→</mo></mover><mo>·</mo><mover><mi>q</mi><mo>→</mo></mover><mo>=</mo><mn>3</mn><mo>·</mo><mn>4</mn><mo>+</mo><mn>4</mn><mo>·</mo><mo>(</mo><mo>−</mo><mn>3</mn><mo>)</mo><mo>=</mo><mn>0</mn><mspace width="1em"/><mo>⇒</mo><mspace width="1em"/><mi>cos</mi><mi>φ</mi><mo>=</mo><mn>0</mn><mo>⇒</mo><mi>φ</mi><mo>=</mo><mn>90</mn><mo>°</mo></math>';
+  observation.textContent='Для двух ненулевых векторов нулевое скалярное произведение означает перпендикулярность.';
+ }
+ const modes={direction:renderDirection,operations:renderOperations,angle:renderAngle};
+ function setMode(mode){
+  if(!modes[mode])mode='direction';
+  document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
+  modes[mode]();
+  const u=new URL(location.href);u.searchParams.set('mode',mode);history.replaceState(null,'',u);
+ }
+ document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+ const params=new URLSearchParams(location.search);setMode(params.get('mode')||'direction');
+})();
+</script>
+</body>
+</html>
