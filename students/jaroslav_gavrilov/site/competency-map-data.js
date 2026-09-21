@@ -65,6 +65,24 @@ for (const [id, cfg] of Object.entries(LESSON_190926)) {
   item.material = { href: '19.09.26.html', label: 'Открыть интерактивное занятие →' };
 }
 
+
+const LESSON_210926 = {
+  'ege08_13': { level: 2, evidence: 'Основное тригонометрическое тождество разобрано как в прямом, так и в обратном направлении; отработано выделение тождества при коэффициентах.' },
+  'ege08_15': { level: 2, repeat: true, evidence: 'Формулы двойного угла повторены в обе стороны; разобраны три формы cos 2α и свёртка 2 sin α cos α в sin 2α.' },
+  'ege14_02': { level: 2, evidence: 'Разобран общий алгоритм решения: сделать аргументы одинаковыми, оставить одну функцию и перейти к алгебраическому уравнению.' },
+  'ege14_04': { level: 2, repeat: true, evidence: 'Формула двойного аргумента применена для перехода от cos 2x к выражению через cos x; навык требует самостоятельного закрепления.' },
+  'ege14_07': { level: 2, evidence: 'В опорном уравнении выполнена замена t = cos x с обязательным ограничением t ∈ [−1; 1] и обратным переходом к x.' }
+};
+for (const [id, cfg] of Object.entries(LESSON_210926)) {
+  const item = G.flatMap(group => group.items).find(topic => topic.id === id);
+  if (!item) continue;
+  item.level = Math.max(item.level || 0, cfg.level);
+  if (Object.prototype.hasOwnProperty.call(cfg, 'repeat')) item.repeat = Boolean(cfg.repeat);
+  item.evidence = Array.isArray(item.evidence) ? item.evidence : [];
+  item.evidence.push({ text: cfg.evidence + ' Материал: занятие 21.09.26 «Тригонометрические формулы и уравнения».' });
+  item.material = { href: '21.09.26.html', label: 'Открыть интерактивное занятие →' };
+}
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'jaroslav_gavrilov',
@@ -74,7 +92,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Структура сверена 19.09.2026 с опубликованными ФИПИ проектами КИМ ЕГЭ-2027 по профильной математике.',
-    updated:'19.09.2026'
+    updated:'21.09.2026'
   },
   groups:G
 };
