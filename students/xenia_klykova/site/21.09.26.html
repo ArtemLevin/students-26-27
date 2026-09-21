@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивное занятие Ксении Клыковой по построению сечений куба: след секущей плоскости, переход между гранями и вспомогательные точки.">
+<title>Сечения куба — Ксения Клыкова</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%235e405e'/%3E%3Cpath d='M17 22l17-8 14 8v19l-17 9-14-9zM17 22l14 8 17-8M31 30v20' fill='none' stroke='white' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  color-scheme:light;
+  --surface-page:#f3eee7;
+  --surface-raised:#fbf8f2;
+  --surface-soft:#eee5dc;
+  --surface-ink:#211e20;
+  --text-primary:#242124;
+  --text-secondary:#6f686c;
+  --text-inverse:#fffaf5;
+  --border-subtle:#d5cbc2;
+  --border-strong:#a99c98;
+  --accent:#684765;
+  --accent-hover:#563952;
+  --accent-soft:#d8c5d2;
+  --section:#875f5e;
+  --success:#496d5b;
+  --danger:#94524f;
+  --warning:#94713b;
+  --focus-ring:#9d6d90;
+  --shadow-low:0 12px 34px rgba(48,37,42,.08);
+  --shadow-high:0 24px 72px rgba(48,37,42,.17);
+  --radius-sm:8px;
+  --radius-md:15px;
+  --radius-lg:24px;
+  --space-1:.4rem;
+  --space-2:.75rem;
+  --space-3:1.15rem;
+  --space-4:1.8rem;
+  --space-5:2.8rem;
+  --motion-fast:150ms;
+  --motion-normal:260ms;
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --surface-page:#171416;
+  --surface-raised:#211d20;
+  --surface-soft:#2b2529;
+  --surface-ink:#f4ecf0;
+  --text-primary:#f3edf0;
+  --text-secondary:#b9adb4;
+  --border-subtle:#41373d;
+  --border-strong:#66565f;
+  --accent:#c89aba;
+  --accent-hover:#ddb2cf;
+  --accent-soft:#513c4d;
+  --section:#cf908a;
+  --success:#8ab39b;
+  --danger:#d78782;
+  --warning:#d8b171;
+  --focus-ring:#e1b6d6;
+  --shadow-low:none;
+  --shadow-high:0 28px 74px rgba(0,0,0,.32);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    linear-gradient(90deg,transparent 0 7.9%,color-mix(in srgb,var(--accent) 5%,transparent) 7.9% 8%,transparent 8% 100%),
+    var(--surface-page);
+  color:var(--text-primary);
+  font:16px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+button,input{font:inherit}
+button,a{color:inherit}
+button{cursor:pointer}
+a:focus-visible,button:focus-visible,input:focus-visible{
+  outline:3px solid var(--focus-ring);
+  outline-offset:3px;
+}
+.skip{
+  position:absolute;left:-9999px;top:.6rem;z-index:100;
+  background:var(--surface-ink);color:var(--surface-page);padding:.65rem .9rem;
+}
+.skip:focus{left:.8rem}
+.wrap{width:min(1180px,calc(100% - clamp(1rem,5vw,4rem)));margin:auto}
+.cover{
+  min-height:clamp(38rem,73vh,50rem);
+  display:grid;
+  grid-template-columns:minmax(0,1.3fr) minmax(18rem,.7fr);
+  gap:clamp(2rem,7vw,7rem);
+  align-items:end;
+  padding:clamp(3rem,7vw,6.8rem) 0 clamp(2rem,5vw,4rem);
+  border-bottom:1px solid var(--border-strong);
+  position:relative;
+}
+.cover:before,.cover:after{
+  content:"";position:absolute;pointer-events:none;
+}
+.cover:before{
+  left:-8vw;right:-8vw;top:9rem;height:1px;background:var(--border-subtle);
+  box-shadow:0 5.4rem 0 var(--border-subtle),0 10.8rem 0 var(--border-subtle);
+  opacity:.55;
+}
+.cover:after{
+  width:clamp(12rem,22vw,21rem);aspect-ratio:1;right:2%;top:5%;
+  border:1px solid var(--border-subtle);
+  transform:rotate(8deg);
+  opacity:.5;
+}
+.kicker,.eyebrow{
+  margin:0;color:var(--accent);
+  font:700 .72rem/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.13em;text-transform:uppercase;
+}
+.cover h1{
+  margin:.65rem 0 1rem;
+  max-width:8.5ch;
+  font:500 clamp(4.1rem,9vw,8.6rem)/.83 Georgia,"Times New Roman",serif;
+  letter-spacing:-.068em;
+}
+.cover .lead{max-width:49rem;margin:0;color:var(--text-secondary);font-size:clamp(1rem,1.5vw,1.2rem)}
+.identity{
+  margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border-subtle);
+  display:grid;grid-template-columns:auto 1fr;gap:.7rem 1.1rem;max-width:41rem;
+}
+.identity b{font-family:Georgia,serif}
+.identity span{color:var(--text-secondary);font-size:.88rem}
+.folio{
+  align-self:end;border-left:1px solid var(--border-strong);padding:1rem 0 1rem 1.5rem;
+  min-height:19rem;display:flex;flex-direction:column;justify-content:flex-end;
+}
+.folio-number{font:500 clamp(4rem,7vw,6.8rem)/.8 Georgia,serif;color:var(--accent);letter-spacing:-.07em}
+.folio h2{font:600 1.25rem/1.25 Georgia,serif;margin:1.1rem 0 .55rem}
+.folio p{margin:0;color:var(--text-secondary);font-size:.9rem}
+.cube-mark{width:100%;max-width:19rem;margin-bottom:auto;color:var(--accent)}
+.cube-mark .edge{fill:none;stroke:currentColor;stroke-width:1.4}
+.cube-mark .ghost{stroke-dasharray:4 5;opacity:.45}
+.cube-mark .cut{fill:color-mix(in srgb,var(--accent) 15%,transparent);stroke:var(--section);stroke-width:2}
+.cube-mark .point{fill:var(--section)}
+.route{
+  position:sticky;top:0;z-index:40;
+  margin:0 calc(50% - 50vw) clamp(2.6rem,6vw,5rem);
+  padding:.55rem max(clamp(.5rem,4vw,2rem),calc((100vw - 1180px)/2));
+  border-bottom:1px solid var(--border-subtle);
+  background:color-mix(in srgb,var(--surface-page) 92%,transparent);
+  backdrop-filter:blur(12px);
+  display:flex;align-items:center;gap:0;overflow-x:auto;
+}
+.route a,.route button{
+  min-height:42px;white-space:nowrap;padding:.5rem .75rem;border:0;border-right:1px solid var(--border-subtle);
+  background:transparent;text-decoration:none;font-size:.8rem;color:var(--text-secondary);
+}
+.route a:hover,.route button:hover{color:var(--text-primary);background:var(--surface-soft)}
+.route .primary{color:var(--text-inverse);background:var(--accent);border-right:0}
+.route .primary:hover{background:var(--accent-hover);color:var(--text-inverse)}
+.chapter{
+  display:grid;grid-template-columns:minmax(11rem,.32fr) minmax(0,1fr);
+  gap:clamp(1.5rem,5vw,5rem);padding:clamp(2.7rem,6vw,5.6rem) 0;
+  border-top:1px solid var(--border-subtle);
+}
+.chapter:first-of-type{border-top:0}
+.chapter-head{position:sticky;top:4.7rem;align-self:start}
+.chapter-no{font:500 3.5rem/1 Georgia,serif;color:var(--accent);opacity:.8}
+.chapter-head h2{font:600 clamp(1.4rem,2.5vw,2rem)/1.1 Georgia,serif;margin:.65rem 0}
+.chapter-head p{margin:0;color:var(--text-secondary);font-size:.86rem}
+.content{min-width:0}
+.content h3{font:600 clamp(1.35rem,2.4vw,1.9rem)/1.2 Georgia,serif;margin:0 0 .8rem}
+.content p{max-width:48rem}
+.rule-line{
+  margin:1.5rem 0;padding:1.1rem 0 1.1rem 1.25rem;border-left:3px solid var(--accent);
+  font-size:1.04rem;
+}
+.rule-line strong{font-family:Georgia,serif}
+.definition-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--border-subtle)}
+.definition-grid article{padding:1.2rem 1.2rem 1.2rem 0;border-bottom:1px solid var(--border-subtle)}
+.definition-grid article:nth-child(even){padding-left:1.2rem;border-left:1px solid var(--border-subtle)}
+.definition-grid strong{display:block;color:var(--accent);font-family:Georgia,serif;margin-bottom:.35rem}
+.definition-grid p{margin:0;color:var(--text-secondary)}
+.algorithm{counter-reset:alg;border-top:1px solid var(--border-strong)}
+.algorithm li{
+  list-style:none;display:grid;grid-template-columns:3rem minmax(0,1fr);gap:1rem;
+  padding:1.2rem 0;border-bottom:1px solid var(--border-subtle);
+}
+.algorithm li:before{
+  counter-increment:alg;content:counter(alg,decimal-leading-zero);
+  color:var(--accent);font:500 1.45rem/1 Georgia,serif;
+}
+.algorithm b{display:block;margin-bottom:.2rem}
+.algorithm span{color:var(--text-secondary)}
+.bridge{
+  margin:2rem 0;padding:1.5rem 0;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:1rem;
+}
+.bridge div{padding:.9rem 0}
+.bridge b{font-family:Georgia,serif}
+.bridge small{display:block;color:var(--text-secondary);margin-top:.25rem}
+.bridge svg{width:80px;color:var(--accent)}
+.example{
+  margin:0 0 2.1rem;padding:0 0 2rem;border-bottom:1px solid var(--border-strong);
+  display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(1.4rem,4vw,3.8rem);
+}
+.example:last-child{border-bottom:0}
+.example-copy{min-width:0}
+.example-copy .case{color:var(--accent);font:700 .73rem/1.3 ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase}
+.example-copy h3{margin:.4rem 0 .8rem}
+.example-copy ul{padding-left:1.15rem}
+.example-copy li{margin:.38rem 0}
+.diagram-shell{
+  min-width:0;background:var(--surface-soft);border:1px solid var(--border-subtle);
+  padding:.7rem;position:relative;overflow:hidden;
+}
+.diagram-shell:after{
+  content:"";position:absolute;inset:10% 8%;border:1px solid color-mix(in srgb,var(--accent) 14%,transparent);pointer-events:none;transform:rotate(-2deg)
+}
+.cube-diagram{display:block;width:100%;aspect-ratio:4/3;position:relative;z-index:1}
+.cube-diagram .edge{stroke:var(--text-secondary);stroke-width:1.3;fill:none}
+.cube-diagram .ghost{stroke-dasharray:5 5;opacity:.5}
+.cube-diagram .section-fill{fill:color-mix(in srgb,var(--section) 18%,transparent);stroke:var(--section);stroke-width:2.6;stroke-linejoin:round}
+.cube-diagram .point{fill:var(--accent);stroke:var(--surface-raised);stroke-width:2}
+.cube-diagram text{font:700 13px system-ui;fill:var(--text-primary);paint-order:stroke;stroke:var(--surface-soft);stroke-width:4px;stroke-linejoin:round}
+.case-note{
+  margin-top:.75rem;padding:.75rem .9rem;border-left:3px solid var(--warning);
+  color:var(--text-secondary);font-size:.88rem;background:color-mix(in srgb,var(--warning) 7%,transparent)
+}
+.lab-link{
+  display:inline-flex;align-items:center;gap:.5rem;margin-top:.7rem;padding:.62rem .85rem;
+  border:1px solid var(--accent);text-decoration:none;color:var(--accent);font-weight:700
+}
+.lab-link:hover{background:var(--accent);color:var(--text-inverse)}
+.stepper{
+  border-top:1px solid var(--border-strong);margin-top:1rem;
+}
+.step-controls{display:flex;gap:.5rem;flex-wrap:wrap;padding:1rem 0}
+.step-controls button{
+  min-height:42px;border:1px solid var(--border-subtle);background:var(--surface-raised);
+  padding:.55rem .75rem;
+}
+.step-controls button:hover{border-color:var(--accent)}
+.step-item{display:none;padding:1.1rem 0;border-top:1px solid var(--border-subtle)}
+.step-item.show{display:block}
+.step-item[aria-current="step"]{border-left:3px solid var(--accent);padding-left:1rem}
+.step-item b{font-family:Georgia,serif}
+.error-list{border-top:1px solid var(--border-strong)}
+.error-row{
+  display:grid;grid-template-columns:2.5rem 1fr;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border-subtle)
+}
+.error-row .mark{color:var(--danger);font:700 1.15rem/1 ui-monospace,monospace}
+.error-row strong{display:block;margin-bottom:.2rem}
+.error-row p{margin:0;color:var(--text-secondary)}
+.poster{
+  width:min(920px,100%);display:block;margin:1rem auto 0;border:1px solid var(--border-subtle);
+  box-shadow:var(--shadow-low);cursor:zoom-in;background:var(--surface-raised)
+}
+.poster-button{border:0;background:transparent;padding:0;width:100%;text-align:left}
+.quiz-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--border-subtle);border:1px solid var(--border-subtle)}
+.quiz{background:var(--surface-raised);padding:1rem}
+.quiz p{margin-top:0;font-weight:700}
+.quiz button{
+  width:100%;min-height:44px;text-align:left;margin:.35rem 0;padding:.55rem .7rem;
+  background:var(--surface-soft);border:1px solid var(--border-subtle)
+}
+.quiz button.good{border-color:var(--success);box-shadow:inset 3px 0 var(--success)}
+.quiz button.bad{border-color:var(--danger);box-shadow:inset 3px 0 var(--danger)}
+.feedback{min-height:3.2rem;color:var(--text-secondary);font-size:.88rem}
+.selfcheck{margin-top:2rem;border-top:1px solid var(--border-strong)}
+.check{display:flex;gap:.7rem;padding:.75rem 0;border-bottom:1px solid var(--border-subtle)}
+.check input{width:20px;height:20px;accent-color:var(--accent);flex:0 0 auto}
+.progress{height:5px;background:var(--border-subtle);margin:1rem 0 .4rem;overflow:hidden}
+.progress span{display:block;height:100%;width:0;background:var(--success);transition:width var(--motion-normal)}
+.progress-text{color:var(--text-secondary);font-size:.9rem}
+footer{
+  display:flex;justify-content:space-between;gap:1rem;padding:2rem 0 3rem;
+  border-top:1px solid var(--border-strong);color:var(--text-secondary);font-size:.82rem
+}
+.modal{
+  position:fixed;inset:0;z-index:90;display:none;place-items:center;padding:1rem;
+  background:rgba(16,12,15,.78)
+}
+.modal.show{display:grid}
+.modal-inner{position:relative;max-width:min(96vw,1300px);max-height:92vh}
+.modal img{display:block;max-width:100%;max-height:90vh;background:#fff}
+.modal-close{
+  position:absolute;right:.5rem;top:.5rem;width:44px;height:44px;border:1px solid rgba(255,255,255,.55);
+  background:rgba(20,16,19,.76);color:#fff;font-size:1.5rem
+}
+@media(max-width:900px){
+  .cover{grid-template-columns:1fr;min-height:auto}
+  .folio{min-height:0;border-left:0;border-top:1px solid var(--border-strong);padding:1.2rem 0 0;display:grid;grid-template-columns:minmax(0,1fr) minmax(12rem,.7fr);gap:1rem}
+  .cube-mark{grid-row:1/4;grid-column:2;margin:0}
+  .chapter{grid-template-columns:1fr;gap:1.4rem}
+  .chapter-head{position:static;display:grid;grid-template-columns:auto 1fr;gap:.8rem;align-items:start}
+  .chapter-head p{grid-column:2}
+  .example{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  body{background:var(--surface-page)}
+  .definition-grid{grid-template-columns:1fr}
+  .definition-grid article:nth-child(even){padding-left:0;border-left:0}
+  .bridge{grid-template-columns:1fr}
+  .bridge svg{transform:rotate(90deg)}
+  .quiz-grid{grid-template-columns:1fr}
+  footer{flex-direction:column}
+}
+@media(max-width:460px){
+  .wrap{width:calc(100% - 1rem)}
+  .cover h1{font-size:3.7rem}
+  .folio{grid-template-columns:1fr}
+  .cube-mark{grid-column:1;grid-row:auto;max-width:16rem}
+  .route{padding-left:.5rem;padding-right:.5rem}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+@media print{
+  html{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#bbb;--border-strong:#888;--accent:#502d4d;--section:#70433f;--shadow-low:none;--shadow-high:none}
+  body{background:#fff}
+  .route,.quiz-grid,.step-controls,.poster-button,.lab-link{display:none!important}
+  .cover{min-height:auto;padding:0 0 1cm}
+  .cover:before,.cover:after{display:none}
+  .chapter{break-before:auto;break-inside:auto;padding:1cm 0}
+  .chapter-head{position:static}
+  .example,.diagram-shell,.definition-grid article,.rule-line{break-inside:avoid;page-break-inside:avoid}
+  .step-item{display:block!important}
+  .modal{display:none!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<div class="wrap">
+<header class="cover">
+  <div>
+    <p class="kicker">Персональный учебный журнал · стереометрия</p>
+    <h1>Сечения куба</h1>
+    <p class="lead">Главный механизм урока: находить след секущей плоскости на одной грани, переходить на соседнюю грань через их общее ребро и получать новые вершины сечения на рёбрах куба.</p>
+    <div class="identity">
+      <b>Ксения Клыкова</b><span>10 класс · профильная математика</span>
+      <b>Артём Александрович Лёвин</b><span>21 сентября 2026</span>
+    </div>
+  </div>
+  <aside class="folio" aria-label="Краткая схема занятия">
+    <svg class="cube-mark" viewBox="0 0 260 210" aria-hidden="true">
+      <path class="edge" d="M45 69L155 69L155 166L45 166Z"/>
+      <path class="edge ghost" d="M89 35L199 35L199 132L89 132Z"/>
+      <path class="edge" d="M45 69L89 35M155 69L199 35M155 166L199 132M45 166L89 132"/>
+      <path class="cut" d="M57 133L112 48L188 84L164 147Z"/>
+      <circle class="point" cx="57" cy="133" r="4"/><circle class="point" cx="112" cy="48" r="4"/><circle class="point" cx="188" cy="84" r="4"/><circle class="point" cx="164" cy="147" r="4"/>
+    </svg>
+    <span class="folio-number">21.09</span>
+    <h2>След → общее ребро → новая вершина</h2>
+    <p>Вспомогательная точка может находиться вне куба. Важно доказать, что она принадлежит секущей плоскости и нужной грани.</p>
+  </aside>
+</header>
+
+<nav class="route" aria-label="Навигация по занятию">
+  <a href="index.html">К материалам</a>
+  <a href="#theory">Теория</a>
+  <a href="#algorithm">Алгоритм</a>
+  <a href="#examples">Разборы</a>
+  <a href="#errors">Ошибки</a>
+  <a href="#memo">Памятка</a>
+  <a href="#check">Самопроверка</a>
+  <a href="../pdf_docs/21.09.26.pdf">Скачать пособие</a>
+  <a href="../tex_docs/21.09.26.tex">TeX</a>
+  <a class="primary" href="21.09.26-lab.html?case=1">Проверить сечение на 3D-модели</a>
+  <button id="themeToggle" type="button">Тема</button>
+  <button type="button" onclick="print()">Печать</button>
+</nav>
+
+<main id="main">
+<section class="chapter" id="theory">
+  <header class="chapter-head">
+    <span class="chapter-no">01</span>
+    <h2>Что именно строим</h2>
+    <p>Язык задачи до начала построений.</p>
+  </header>
+  <div class="content">
+    <div class="definition-grid">
+      <article><strong>Секущая плоскость</strong><p>Три неколлинеарные точки задают единственную плоскость, которой принадлежит искомое сечение.</p></article>
+      <article><strong>Сечение куба</strong><p>Многоугольник, состоящий из точек куба, принадлежащих секущей плоскости.</p></article>
+      <article><strong>След на грани</strong><p>Прямая пересечения секущей плоскости с плоскостью выбранной грани.</p></article>
+      <article><strong>Вершина сечения</strong><p>Точка секущей плоскости, которая одновременно лежит на ребре куба.</p></article>
+    </div>
+    <div class="rule-line"><strong>Ключевое правило.</strong> Если две точки принадлежат секущей плоскости, вся прямая через них также принадлежит этой плоскости. Сторону сечения проводим между точками, лежащими в одной грани куба.</div>
+    <div class="bridge">
+      <div><b>Грань α</b><small>На ней уже известен след секущей плоскости.</small></div>
+      <svg viewBox="0 0 90 45" aria-hidden="true"><path d="M5 28C26 5 62 5 84 28M5 28h80M13 28v10M76 28v10" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      <div><b>Соседняя грань β</b><small>Переход выполняется через общее ребро α ∩ β.</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="algorithm">
+  <header class="chapter-head">
+    <span class="chapter-no">02</span>
+    <h2>Алгоритм</h2>
+    <p>Куда продолжать прямую и зачем это делать.</p>
+  </header>
+  <div class="content">
+    <ol class="algorithm">
+      <li><div><b>Найдите две точки в одной грани.</b><span>Соедините их. Это первый известный след секущей плоскости.</span></div></li>
+      <li><div><b>Выберите соседнюю грань.</b><span>Определите общее ребро текущей и следующей грани.</span></div></li>
+      <li><div><b>Продлите след до общего ребра.</b><span>При необходимости продолжите и ребро. Полученная точка может лежать вне куба.</span></div></li>
+      <li><div><b>Обоснуйте вспомогательную точку.</b><span>Она лежит на следе секущей плоскости и на общем ребре, значит одновременно принадлежит секущей плоскости и новой грани.</span></div></li>
+      <li><div><b>Свяжите её с известной точкой новой грани.</b><span>Получите новый след и найдите его пересечение с очередным ребром куба.</span></div></li>
+      <li><div><b>Повторяйте до замыкания.</b><span>Проверьте, что каждая сторона лежит в одной грани и весь многоугольник замкнут.</span></div></li>
+    </ol>
+
+    <div class="stepper" id="stepper">
+      <h3>Пошаговая логика перехода между гранями</h3>
+      <div class="step-controls">
+        <button type="button" data-step-action="prev">Предыдущий шаг</button>
+        <button type="button" data-step-action="next">Следующий шаг</button>
+        <button type="button" data-step-action="all">Показать всё</button>
+        <button type="button" data-step-action="reset">Сначала</button>
+      </div>
+      <div class="step-item show" data-step="0" aria-current="step"><b>Шаг 1.</b> Зафиксируйте уже построенную прямую сечения на одной грани.</div>
+      <div class="step-item" data-step="1"><b>Шаг 2.</b> Найдите ребро, которое одновременно принадлежит этой грани и соседней.</div>
+      <div class="step-item" data-step="2"><b>Шаг 3.</b> Продлите две компланарные прямые до пересечения. Направление выбирается по месту их возможного пересечения, а не «на глаз».</div>
+      <div class="step-item" data-step="3"><b>Шаг 4.</b> Используйте новую точку как опору на соседней грани и доведите новый след до ребра куба.</div>
+      <div class="step-item" data-step="4"><b>Шаг 5.</b> После каждой новой вершины спросите: с какой уже найденной точкой она лежит в одной грани?</div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="examples">
+  <header class="chapter-head">
+    <span class="chapter-no">03</span>
+    <h2>Разобранные построения</h2>
+    <p>Каждый чертёж строится из пространственных координат, поэтому точки остаются на нужных рёбрах и сечение сохраняет планарность.</p>
+  </header>
+  <div class="content">
+
+    <article class="example">
+      <div class="example-copy">
+        <span class="case">Разбор 1</span>
+        <h3>Три точки на задней и правой гранях</h3>
+        <p><b>Дано:</b> <span>P ∈ HE</span>, <span>Q ∈ FG</span>, <span>R ∈ BC</span>.</p>
+        <ul>
+          <li>PQ лежит в задней грани EFGH.</li>
+          <li>QR лежит в правой грани BCGF.</li>
+          <li>Плоскость пересекает переднюю и левую грани в четвёртой вершине S на ребре DA.</li>
+          <li>Итоговое сечение: SPQR.</li>
+        </ul>
+        <a class="lab-link" href="21.09.26-lab.html?case=1">Повернуть этот случай в лаборатории</a>
+      </div>
+      <figure class="diagram-shell">
+        <svg class="cube-diagram" data-case="1" viewBox="0 0 520 390" role="img" aria-label="Сечение куба для первого разбора"></svg>
+      </figure>
+    </article>
+
+    <article class="example">
+      <div class="example-copy">
+        <span class="case">Разбор 2</span>
+        <h3>Переход по четырём боковым рёбрам</h3>
+        <p><b>Дано:</b> <span>P ∈ AE</span>, <span>Q ∈ BF</span>, <span>R ∈ CG</span>.</p>
+        <ul>
+          <li>PQ — след на верхней грани.</li>
+          <li>QR — след на правой грани.</li>
+          <li>След на нижней грани выходит на ребро DH в точке S.</li>
+          <li>Итоговое сечение: PQRS.</li>
+        </ul>
+        <a class="lab-link" href="21.09.26-lab.html?case=2">Повернуть этот случай в лаборатории</a>
+      </div>
+      <figure class="diagram-shell">
+        <svg class="cube-diagram" data-case="2" viewBox="0 0 520 390" role="img" aria-label="Сечение куба для второго разбора"></svg>
+      </figure>
+    </article>
+
+    <article class="example">
+      <div class="example-copy">
+        <span class="case">Разбор 3</span>
+        <h3>Пятиугольное сечение</h3>
+        <p><b>Проверенный чертёж:</b> исходные точки P, Q, R лежат соответственно на рёбрах DA, AB и BF; затем плоскость пересекает CG и DH.</p>
+        <ul>
+          <li>PQ лежит в передней грани.</li>
+          <li>QR лежит в верхней грани.</li>
+          <li>Далее след проходит через правую и нижнюю грани.</li>
+          <li>Итоговое сечение: PQRST.</li>
+        </ul>
+        <div class="case-note">В этом разборе используется геометрически согласованная версия чертежа: все пять отмеченных вершин вычисляются как пересечения одной плоскости с рёбрами куба.</div>
+        <a class="lab-link" href="21.09.26-lab.html?case=3">Повернуть этот случай в лаборатории</a>
+      </div>
+      <figure class="diagram-shell">
+        <svg class="cube-diagram" data-case="3" viewBox="0 0 520 390" role="img" aria-label="Пятиугольное сечение куба"></svg>
+      </figure>
+    </article>
+
+    <article class="example">
+      <div class="example-copy">
+        <span class="case">Разбор 4</span>
+        <h3>Шестиугольное сечение</h3>
+        <p>Плоскость последовательно пересекает шесть рёбер куба: AB, BC, CG, GH, HE и AE.</p>
+        <ul>
+          <li>Каждая соседняя пара вершин принадлежит одной грани.</li>
+          <li>Переходы идут по цепочке передняя → правая → нижняя → задняя → левая → верхняя.</li>
+          <li>Получается замкнутый шестиугольник PQRSTU.</li>
+        </ul>
+        <a class="lab-link" href="21.09.26-lab.html?case=4">Повернуть этот случай в лаборатории</a>
+      </div>
+      <figure class="diagram-shell">
+        <svg class="cube-diagram" data-case="4" viewBox="0 0 520 390" role="img" aria-label="Шестиугольное сечение куба"></svg>
+      </figure>
+    </article>
+
+  </div>
+</section>
+
+<section class="chapter" id="errors">
+  <header class="chapter-head">
+    <span class="chapter-no">04</span>
+    <h2>Частые ошибки</h2>
+    <p>Проверка логики важнее направления линии на плоском рисунке.</p>
+  </header>
+  <div class="content">
+    <div class="error-list">
+      <div class="error-row"><span class="mark">01</span><div><strong>Соединять точки без общей грани.</strong><p>Сначала определите, в какой грани лежит предполагаемая сторона сечения.</p></div></div>
+      <div class="error-row"><span class="mark">02</span><div><strong>Продлевать прямую наугад.</strong><p>Ищите вторую прямую в той же плоскости и место, где они могут пересечься.</p></div></div>
+      <div class="error-row"><span class="mark">03</span><div><strong>Считать внешнюю вспомогательную точку вершиной сечения.</strong><p>Вершина сечения должна лежать на ребре самого куба.</p></div></div>
+      <div class="error-row"><span class="mark">04</span><div><strong>Не доказывать принадлежность новой линии секущей плоскости.</strong><p>Достаточно показать, что две её точки уже принадлежат секущей плоскости.</p></div></div>
+      <div class="error-row"><span class="mark">05</span><div><strong>Не замкнуть многоугольник.</strong><p>В конце пройдите по всем сторонам и для каждой назовите грань, в которой она лежит.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="memo">
+  <header class="chapter-head">
+    <span class="chapter-no">05</span>
+    <h2>Памятка урока</h2>
+    <p>Короткая ментальная карта для повторения.</p>
+  </header>
+  <div class="content">
+    <button class="poster-button" id="posterButton" type="button" aria-label="Увеличить ментальную карту">
+      <img class="poster" src="../images/21.09.26.png" alt="Ментальная карта по теме «Сечения куба»: главная идея, понятия, алгоритм и частые ошибки">
+    </button>
+    <p class="case-note">Нажмите на памятку, чтобы открыть её крупно.</p>
+  </div>
+</section>
+
+<section class="chapter" id="check">
+  <header class="chapter-head">
+    <span class="chapter-no">06</span>
+    <h2>Самопроверка</h2>
+    <p>Только идеи, которые были на занятии.</p>
+  </header>
+  <div class="content">
+    <div class="quiz-grid">
+      <article class="quiz" data-answer="b" data-explain="Сторона сечения лежит в плоскости конкретной грани, поэтому её конечные точки должны принадлежать этой грани.">
+        <p>Когда две найденные точки можно сразу соединить как сторону сечения?</p>
+        <button type="button" data-choice="a">Когда они визуально находятся рядом</button>
+        <button type="button" data-choice="b">Когда они лежат в одной грани</button>
+        <button type="button" data-choice="c">Когда обе находятся внутри куба</button>
+        <div class="feedback" aria-live="polite"></div>
+      </article>
+      <article class="quiz" data-answer="c" data-explain="Общее ребро принадлежит обеим соседним граням и позволяет перенести след секущей плоскости с одной грани на другую.">
+        <p>Зачем в построении искать общее ребро соседних граней?</p>
+        <button type="button" data-choice="a">Чтобы измерить ребро куба</button>
+        <button type="button" data-choice="b">Чтобы проверить равенство граней</button>
+        <button type="button" data-choice="c">Чтобы перейти со следом плоскости на соседнюю грань</button>
+        <div class="feedback" aria-live="polite"></div>
+      </article>
+      <article class="quiz" data-answer="a" data-explain="Вспомогательная точка может находиться вне куба. Важно, чтобы она корректно получалась как пересечение компланарных прямых и принадлежала секущей плоскости.">
+        <p>Может ли полезная вспомогательная точка лежать вне куба?</p>
+        <button type="button" data-choice="a">Да</button>
+        <button type="button" data-choice="b">Нет</button>
+        <button type="button" data-choice="c">Только на верхней грани</button>
+        <div class="feedback" aria-live="polite"></div>
+      </article>
+    </div>
+    <button id="resetQuiz" type="button" class="lab-link">Сбросить ответы</button>
+
+    <div class="selfcheck">
+      <h3>Итоговый чек-лист</h3>
+      <label class="check"><input type="checkbox" data-skill="face">Я могу определить, какие две точки лежат в одной грани.</label>
+      <label class="check"><input type="checkbox" data-skill="edge">Я нахожу общее ребро двух соседних граней.</label>
+      <label class="check"><input type="checkbox" data-skill="aux">Я понимаю, зачем строится вспомогательная точка вне куба.</label>
+      <label class="check"><input type="checkbox" data-skill="vertex">Я умею получить новую вершину сечения на ребре куба.</label>
+      <label class="check"><input type="checkbox" data-skill="verify">Я могу проверить каждую сторону по грани и замкнутость сечения.</label>
+      <div class="progress" aria-label="Прогресс самопроверки"><span id="progressBar"></span></div>
+      <p class="progress-text" id="progressText" aria-live="polite">Отмечено: 0 из 5.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <span>Ксения Клыкова · сечения куба · 21 сентября 2026</span>
+  <span>Лёвин Артём Александрович</span>
+</footer>
+</div>
+
+<div class="modal" id="posterModal" role="dialog" aria-modal="true" aria-label="Ментальная карта по сечениям куба">
+  <div class="modal-inner">
+    <button class="modal-close" id="modalClose" type="button" aria-label="Закрыть памятку">×</button>
+    <img src="../images/21.09.26.png" alt="Увеличенная ментальная карта по теме «Сечения куба»">
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var html=document.documentElement;
+var safeStore={
+  get:function(k){try{return localStorage.getItem(k)}catch(_){return null}},
+  set:function(k,v){try{localStorage.setItem(k,v)}catch(_){}}
+};
+var themeButton=document.getElementById('themeToggle');
+var savedTheme=safeStore.get('xenia-sections-theme');
+if(savedTheme==='dark'||savedTheme==='light')html.dataset.theme=savedTheme;
+themeButton.addEventListener('click',function(){
+  html.dataset.theme=html.dataset.theme==='dark'?'light':'dark';
+  safeStore.set('xenia-sections-theme',html.dataset.theme);
+});
+
+var cube={
+  A:[0,0,1],B:[1,0,1],C:[1,0,0],D:[0,0,0],
+  E:[0,1,1],F:[1,1,1],G:[1,1,0],H:[0,1,0]
+};
+var edges=[
+  ['A','B'],['B','C'],['C','D'],['D','A'],
+  ['E','F'],['F','G'],['G','H'],['H','E'],
+  ['A','E'],['B','F'],['C','G'],['D','H']
+];
+var cases={
+  1:{given:[['P','H','E',.65],['Q','F','G',.55],['R','B','C',.75]],names:{HE:'P',FG:'Q',BC:'R',DA:'S'}},
+  2:{given:[['P','A','E',.55],['Q','B','F',.55],['R','C','G',.45]],names:{AE:'P',BF:'Q',CG:'R',DH:'S'}},
+  3:{given:[['P','D','A',.55],['Q','A','B',.265],['R','B','F',.25]],names:{DA:'P',AB:'Q',BF:'R',CG:'S',DH:'T'}},
+  4:{given:[['P','A','B',.30],['Q','B','C',.7368421053],['R','C','G',.50]],names:{AB:'P',BC:'Q',CG:'R',GH:'S',HE:'U',AE:'T'}}
+};
+function add(a,b){return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]}
+function sub(a,b){return [a[0]-b[0],a[1]-b[1],a[2]-b[2]]}
+function mul(a,s){return [a[0]*s,a[1]*s,a[2]*s]}
+function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]}
+function cross(a,b){return [a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]]}
+function norm(a){var n=Math.sqrt(dot(a,a))||1;return mul(a,1/n)}
+function pointOn(a,b,t){return add(mul(cube[a],1-t),mul(cube[b],t))}
+function plane(given){
+  var p=pointOn(given[0][1],given[0][2],given[0][3]);
+  var q=pointOn(given[1][1],given[1][2],given[1][3]);
+  var r=pointOn(given[2][1],given[2][2],given[2][3]);
+  var n=cross(sub(q,p),sub(r,p));
+  return {n:n,d:dot(n,p)};
+}
+function intersectionPoints(c){
+  var pl=plane(c.given),arr=[];
+  edges.forEach(function(e){
+    var a=cube[e[0]],b=cube[e[1]],v=sub(b,a),den=dot(pl.n,v);
+    if(Math.abs(den)<1e-9)return;
+    var t=(pl.d-dot(pl.n,a))/den;
+    if(t<-1e-7||t>1+1e-7)return;
+    var p=add(a,mul(v,t));
+    var duplicate=arr.some(function(o){return Math.hypot(o.p[0]-p[0],o.p[1]-p[1],o.p[2]-p[2])<1e-6});
+    if(!duplicate)arr.push({p:p,edge:e[0]+e[1],t:t});
+  });
+  var centroid=[0,0,0];
+  arr.forEach(function(o){centroid=add(centroid,o.p)});
+  centroid=mul(centroid,1/arr.length);
+  var n=norm(pl.n),ref=Math.abs(n[2])<.9?[0,0,1]:[0,1,0],u=norm(cross(n,ref)),v=cross(n,u);
+  arr.sort(function(a,b){
+    var aa=Math.atan2(dot(sub(a.p,centroid),v),dot(sub(a.p,centroid),u));
+    var bb=Math.atan2(dot(sub(b.p,centroid),v),dot(sub(b.p,centroid),u));
+    return aa-bb;
+  });
+  return arr;
+}
+function project(p){
+  var x=145+p[0]*195+p[1]*70;
+  var y=310-p[2]*190-p[1]*55;
+  return [x,y];
+}
+function svgEl(tag,attrs){
+  var el=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  Object.keys(attrs||{}).forEach(function(k){el.setAttribute(k,attrs[k])});
+  return el;
+}
+function renderDiagram(svg,c){
+  svg.textContent='';
+  edges.forEach(function(e,i){
+    var p1=project(cube[e[0]]),p2=project(cube[e[1]]);
+    var path=svgEl('line',{x1:p1[0],y1:p1[1],x2:p2[0],y2:p2[1],class:'edge'+(i>=4&&i<=7?' ghost':'')});
+    svg.appendChild(path);
+  });
+  Object.keys(cube).forEach(function(k){
+    var p=project(cube[k]),t=svgEl('text',{x:p[0]+5,y:p[1]-7});
+    t.textContent=k;svg.appendChild(t);
+  });
+  var ints=intersectionPoints(c),poly=ints.map(function(o){var p=project(o.p);return p[0]+','+p[1]}).join(' ');
+  svg.appendChild(svgEl('polygon',{points:poly,class:'section-fill'}));
+  var givens={};
+  c.given.forEach(function(g){givens[g[0]]=pointOn(g[1],g[2],g[3])});
+  ints.forEach(function(o,index){
+    var p=project(o.p),name=null;
+    Object.keys(givens).forEach(function(k){
+      var q=givens[k];
+      if(Math.hypot(q[0]-o.p[0],q[1]-o.p[1],q[2]-o.p[2])<1e-5)name=k;
+    });
+    if(!name)name=c.names[o.edge]||('X'+(index+1));
+    var circle=svgEl('circle',{cx:p[0],cy:p[1],r:5,class:'point'});
+    svg.appendChild(circle);
+    var t=svgEl('text',{x:p[0]+8,y:p[1]-8});t.textContent=name;svg.appendChild(t);
+  });
+}
+document.querySelectorAll('.cube-diagram').forEach(function(svg){
+  var key=Number(svg.dataset.case);
+  renderDiagram(svg,cases[key]);
+});
+
+var steps=[].slice.call(document.querySelectorAll('.step-item'));
+var stepIndex=Number(safeStore.get('xenia-sections-step')||0);
+if(!Number.isFinite(stepIndex)||stepIndex<0||stepIndex>=steps.length)stepIndex=0;
+function renderSteps(showAll){
+  steps.forEach(function(el,i){
+    var visible=showAll||i<=stepIndex;
+    el.classList.toggle('show',visible);
+    if(!showAll&&i===stepIndex)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current');
+  });
+}
+renderSteps(false);
+document.querySelectorAll('[data-step-action]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var action=b.dataset.stepAction;
+    if(action==='prev')stepIndex=Math.max(0,stepIndex-1);
+    if(action==='next')stepIndex=Math.min(steps.length-1,stepIndex+1);
+    if(action==='reset')stepIndex=0;
+    safeStore.set('xenia-sections-step',String(stepIndex));
+    renderSteps(action==='all');
+  });
+});
+
+document.querySelectorAll('.quiz').forEach(function(q){
+  q.querySelectorAll('button[data-choice]').forEach(function(b){
+    b.addEventListener('click',function(){
+      q.querySelectorAll('button[data-choice]').forEach(function(x){x.classList.remove('good','bad')});
+      var good=b.dataset.choice===q.dataset.answer;
+      b.classList.add(good?'good':'bad');
+      if(!good){
+        var right=q.querySelector('button[data-choice="'+q.dataset.answer+'"]');
+        if(right)right.classList.add('good');
+      }
+      q.querySelector('.feedback').textContent=(good?'Верно. ':'Проверьте ещё раз. ')+q.dataset.explain;
+    });
+  });
+});
+document.getElementById('resetQuiz').addEventListener('click',function(){
+  document.querySelectorAll('.quiz').forEach(function(q){
+    q.querySelectorAll('button').forEach(function(b){b.classList.remove('good','bad')});
+    q.querySelector('.feedback').textContent='';
+  });
+});
+
+var checks=[].slice.call(document.querySelectorAll('[data-skill]'));
+var bar=document.getElementById('progressBar'),progressText=document.getElementById('progressText');
+function updateProgress(fromStorage){
+  var done=0;
+  checks.forEach(function(c){
+    var key='xenia-sections-skill-'+c.dataset.skill;
+    if(fromStorage)c.checked=safeStore.get(key)==='1';
+    if(c.checked)done++;
+  });
+  bar.style.width=(done/checks.length*100)+'%';
+  progressText.textContent='Отмечено: '+done+' из '+checks.length+'.';
+}
+checks.forEach(function(c){
+  c.addEventListener('change',function(){
+    safeStore.set('xenia-sections-skill-'+c.dataset.skill,c.checked?'1':'0');
+    updateProgress(false);
+  });
+});
+updateProgress(true);
+
+var posterButton=document.getElementById('posterButton');
+var modal=document.getElementById('posterModal');
+var modalClose=document.getElementById('modalClose');
+var lastFocus=null;
+function openModal(){lastFocus=document.activeElement;modal.classList.add('show');modalClose.focus()}
+function closeModal(){modal.classList.remove('show');if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+posterButton.addEventListener('click',openModal);
+modalClose.addEventListener('click',closeModal);
+modal.addEventListener('click',function(e){if(e.target===modal)closeModal()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('show'))closeModal()});
+})();
+</script>
+</body>
+</html>

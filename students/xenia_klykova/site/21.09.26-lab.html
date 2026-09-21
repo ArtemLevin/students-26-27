@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивная 3D-лаборатория Ксении Клыковой по сечениям куба.">
+<title>Лаборатория сечений куба — Ксения Клыкова</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%235e405e'/%3E%3Cpath d='M17 22l17-8 14 8v19l-17 9-14-9zM17 22l14 8 17-8M31 30v20' fill='none' stroke='white' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  color-scheme:light;
+  --surface-page:#f3eee7;
+  --surface-raised:#fbf8f2;
+  --surface-soft:#eee5dc;
+  --surface-instrument:#e7ddd6;
+  --text-primary:#242124;
+  --text-secondary:#6f686c;
+  --text-inverse:#fffaf5;
+  --border-subtle:#d5cbc2;
+  --border-strong:#a99c98;
+  --accent:#684765;
+  --accent-hover:#563952;
+  --accent-soft:#d8c5d2;
+  --section:#875f5e;
+  --success:#496d5b;
+  --danger:#94524f;
+  --warning:#94713b;
+  --focus-ring:#9d6d90;
+  --shadow-low:0 12px 34px rgba(48,37,42,.08);
+  --shadow-high:0 24px 72px rgba(48,37,42,.17);
+  --radius-sm:8px;
+  --radius-md:15px;
+  --radius-lg:24px;
+  --space-1:.4rem;
+  --space-2:.75rem;
+  --space-3:1.15rem;
+  --space-4:1.8rem;
+  --space-5:2.8rem;
+  --motion-fast:150ms;
+  --motion-normal:260ms;
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --surface-page:#171416;
+  --surface-raised:#211d20;
+  --surface-soft:#2b2529;
+  --surface-instrument:#1a1719;
+  --text-primary:#f3edf0;
+  --text-secondary:#b9adb4;
+  --border-subtle:#41373d;
+  --border-strong:#66565f;
+  --accent:#c89aba;
+  --accent-hover:#ddb2cf;
+  --accent-soft:#513c4d;
+  --section:#cf908a;
+  --success:#8ab39b;
+  --danger:#d78782;
+  --warning:#d8b171;
+  --focus-ring:#e1b6d6;
+  --shadow-low:none;
+  --shadow-high:0 28px 74px rgba(0,0,0,.32);
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button,input{font:inherit}
+button,a{color:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.shell{min-height:100vh;display:grid;grid-template-rows:auto 1fr}
+.topbar{
+  display:flex;align-items:center;gap:.7rem;padding:.72rem clamp(.7rem,2vw,1.4rem);
+  border-bottom:1px solid var(--border-strong);background:var(--surface-raised)
+}
+.topbar a,.topbar button{
+  min-height:42px;display:inline-flex;align-items:center;padding:.5rem .7rem;border:1px solid var(--border-subtle);
+  background:transparent;text-decoration:none
+}
+.topbar a:hover,.topbar button:hover{border-color:var(--accent)}
+.topbar .title{border:0;padding:0;margin-right:auto;display:block}
+.topbar .title strong{display:block;font-family:Georgia,serif;font-size:1.1rem}
+.topbar .title span{display:block;color:var(--text-secondary);font-size:.74rem}
+.workspace{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(19rem,.8fr);min-height:0}
+.stage{
+  min-height:0;position:relative;overflow:hidden;background:
+  linear-gradient(90deg,color-mix(in srgb,var(--accent) 6%,transparent) 1px,transparent 1px),
+  linear-gradient(color-mix(in srgb,var(--accent) 6%,transparent) 1px,transparent 1px),
+  var(--surface-instrument);
+  background-size:40px 40px;
+}
+.stage:after{
+  content:"";position:absolute;inset:7%;border:1px solid color-mix(in srgb,var(--accent) 17%,transparent);pointer-events:none
+}
+#model{
+  position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;z-index:1
+}
+#model.dragging{cursor:grabbing}
+.edge{stroke:var(--text-secondary);stroke-width:2;fill:none;vector-effect:non-scaling-stroke}
+.edge.hidden{stroke-dasharray:7 7;opacity:.45}
+.plane{fill:color-mix(in srgb,var(--accent) 12%,transparent);stroke:color-mix(in srgb,var(--accent) 58%,transparent);stroke-width:1.4;vector-effect:non-scaling-stroke}
+.section{fill:color-mix(in srgb,var(--section) 24%,transparent);stroke:var(--section);stroke-width:4;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.trace{stroke:var(--section);stroke-width:5;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.point{fill:var(--accent);stroke:var(--surface-raised);stroke-width:3;vector-effect:non-scaling-stroke}
+.vertex-label,.edge-label{
+  font:700 15px system-ui;fill:var(--text-primary);paint-order:stroke;stroke:var(--surface-instrument);stroke-width:5px;stroke-linejoin:round
+}
+.edge-label{font-size:12px;fill:var(--text-secondary)}
+.stage-help{
+  position:absolute;left:1rem;bottom:1rem;z-index:3;max-width:29rem;padding:.65rem .8rem;
+  border:1px solid var(--border-subtle);background:color-mix(in srgb,var(--surface-raised) 90%,transparent);
+  color:var(--text-secondary);font-size:.78rem;pointer-events:none
+}
+.panel{
+  overflow:auto;border-left:1px solid var(--border-strong);background:var(--surface-raised);
+  padding:clamp(1rem,2.6vw,1.8rem)
+}
+.eyebrow{margin:0;color:var(--accent);font:700 .68rem/1.3 ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase}
+.panel h1{font:500 clamp(2.2rem,4vw,3.8rem)/.9 Georgia,serif;letter-spacing:-.045em;margin:.45rem 0 .8rem}
+.panel h2{font:600 1.15rem/1.2 Georgia,serif;margin:1.7rem 0 .7rem}
+.lead{color:var(--text-secondary);margin:0 0 1.2rem}
+.case-tabs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border-subtle);border:1px solid var(--border-subtle)}
+.case-tabs button{
+  min-height:48px;border:0;background:var(--surface-soft);text-align:left;padding:.6rem .7rem
+}
+.case-tabs button[aria-pressed="true"]{background:var(--accent);color:var(--text-inverse)}
+.case-tabs b{display:block}
+.case-tabs small{display:block;opacity:.78;margin-top:.12rem}
+.readout{border-top:1px solid var(--border-strong);margin-top:1.4rem}
+.readout-row{display:grid;grid-template-columns:5.2rem 1fr;gap:.7rem;padding:.7rem 0;border-bottom:1px solid var(--border-subtle)}
+.readout-row b{font:600 .78rem/1.4 ui-monospace,monospace;color:var(--accent);text-transform:uppercase}
+.readout-row span{color:var(--text-secondary)}
+.stage-steps{display:grid;gap:.4rem}
+.stage-steps button{
+  min-height:44px;text-align:left;padding:.6rem .7rem;border:1px solid var(--border-subtle);background:transparent
+}
+.stage-steps button[aria-current="step"]{border-color:var(--accent);box-shadow:inset 3px 0 var(--accent);background:var(--surface-soft)}
+.controls{display:grid;gap:.8rem}
+.control-row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.control-row button{
+  min-height:42px;padding:.5rem .7rem;border:1px solid var(--border-subtle);background:var(--surface-soft)
+}
+.control-row label{display:flex;align-items:center;gap:.45rem;color:var(--text-secondary)}
+.control-row input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent)}
+.zoom-row{display:grid;grid-template-columns:4rem 1fr;gap:.7rem;align-items:center;color:var(--text-secondary)}
+.zoom-row input{width:100%;accent-color:var(--accent)}
+.vertex-table{width:100%;border-collapse:collapse}
+.vertex-table th,.vertex-table td{padding:.55rem .35rem;border-bottom:1px solid var(--border-subtle);text-align:left}
+.vertex-table th{font-size:.74rem;color:var(--text-secondary);font-weight:700}
+.vertex-table td:first-child{font-weight:800;color:var(--accent)}
+.goal{
+  margin-top:1.3rem;padding:1rem 0;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong)
+}
+.goal strong{font-family:Georgia,serif}
+.goal p{margin:.3rem 0 0;color:var(--text-secondary)}
+.status{min-height:2.4rem;margin-top:.8rem;color:var(--text-secondary);font-size:.84rem}
+@media(max-width:900px){
+  .workspace{grid-template-columns:1fr;grid-template-rows:minmax(32rem,58vh) auto}
+  .panel{border-left:0;border-top:1px solid var(--border-strong);overflow:visible}
+}
+@media(max-width:540px){
+  .topbar{flex-wrap:wrap}
+  .topbar .title{width:100%;order:-1}
+  .workspace{grid-template-rows:minmax(27rem,52vh) auto}
+  .case-tabs{grid-template-columns:1fr}
+  .stage-help{left:.5rem;right:.5rem;bottom:.5rem}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  .topbar,.controls,.case-tabs,.stage-steps,.stage-help{display:none!important}
+  .workspace{display:block}
+  .stage{height:18cm;background:#fff}
+  .panel{border:0}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="topbar">
+  <div class="title"><strong>Лаборатория сечений куба</strong><span>Ксения Клыкова · 21 сентября 2026</span></div>
+  <a id="backLink" href="21.09.26.html#examples">Вернуться к занятию</a>
+  <a href="../pdf_docs/21.09.26.pdf">Скачать пособие</a>
+  <button id="themeToggle" type="button">Тема</button>
+  <button id="resetView" type="button">Сбросить вид</button>
+</header>
+
+<main class="workspace">
+  <section class="stage" aria-label="Рабочая 3D-модель куба">
+    <svg id="model" viewBox="0 0 900 760" role="img" aria-labelledby="modelTitle modelDesc">
+      <title id="modelTitle">Интерактивная модель сечения куба</title>
+      <desc id="modelDesc">Куб можно вращать перетаскиванием. На модели показываются исходные точки и сечение одной плоскостью.</desc>
+      <g id="planeLayer"></g>
+      <g id="cubeLayer"></g>
+      <g id="sectionLayer"></g>
+      <g id="labelLayer"></g>
+    </svg>
+    <div class="stage-help">Перетаскивайте модель мышью или пальцем. Колесо меняет масштаб. Скрытые рёбра показаны штриховой линией.</div>
+  </section>
+
+  <aside class="panel">
+    <p class="eyebrow">Пространственный инструмент</p>
+    <h1>Увидеть плоскость</h1>
+    <p class="lead">Проверьте на модели четыре разобранных случая. Плоскость и все вершины сечения вычисляются по трём исходным точкам на рёбрах куба.</p>
+
+    <div class="case-tabs" role="group" aria-label="Выбор разобранного случая">
+      <button type="button" data-case="1"><b>Разбор 1</b><small>HE · FG · BC</small></button>
+      <button type="button" data-case="2"><b>Разбор 2</b><small>AE · BF · CG</small></button>
+      <button type="button" data-case="3"><b>Разбор 3</b><small>DA · AB · BF</small></button>
+      <button type="button" data-case="4"><b>Разбор 4</b><small>шесть рёбер</small></button>
+    </div>
+
+    <div class="goal">
+      <strong id="caseTitle">Разбор 1</strong>
+      <p id="caseGoal"></p>
+    </div>
+
+    <h2>Этап построения</h2>
+    <div class="stage-steps" role="group" aria-label="Этапы построения">
+      <button type="button" data-stage="0">1. Исходные точки</button>
+      <button type="button" data-stage="1">2. Первый след</button>
+      <button type="button" data-stage="2">3. Все пересечения с рёбрами</button>
+      <button type="button" data-stage="3">4. Готовое сечение</button>
+    </div>
+
+    <h2>Управление моделью</h2>
+    <div class="controls">
+      <div class="control-row">
+        <label><input type="checkbox" id="showPlane" checked> показать секущую плоскость</label>
+        <label><input type="checkbox" id="showLabels" checked> подписи</label>
+      </div>
+      <div class="zoom-row"><label for="zoom">Масштаб</label><input id="zoom" type="range" min="0.7" max="1.65" step="0.05" value="1" aria-label="Масштаб модели"></div>
+      <div class="control-row">
+        <button id="turnLeft" type="button">Повернуть влево</button>
+        <button id="turnRight" type="button">Повернуть вправо</button>
+      </div>
+    </div>
+
+    <div class="readout">
+      <div class="readout-row"><b>Идея</b><span id="ideaText"></span></div>
+      <div class="readout-row"><b>Проверка</b><span>Каждая соседняя пара вершин сечения должна лежать в одной грани куба.</span></div>
+    </div>
+
+    <h2>Вершины сечения</h2>
+    <table class="vertex-table">
+      <thead><tr><th>Точка</th><th>Ребро куба</th></tr></thead>
+      <tbody id="vertexRows"></tbody>
+    </table>
+    <p class="status" id="status" aria-live="polite"></p>
+  </aside>
+</main>
+</div>
+
+<script>
+(function(){
+'use strict';
+var html=document.documentElement;
+var safeStore={
+  get:function(k){try{return localStorage.getItem(k)}catch(_){return null}},
+  set:function(k,v){try{localStorage.setItem(k,v)}catch(_){}}
+};
+var themeButton=document.getElementById('themeToggle');
+var savedTheme=safeStore.get('xenia-sections-lab-theme');
+if(savedTheme==='dark'||savedTheme==='light')html.dataset.theme=savedTheme;
+themeButton.addEventListener('click',function(){
+  html.dataset.theme=html.dataset.theme==='dark'?'light':'dark';
+  safeStore.set('xenia-sections-lab-theme',html.dataset.theme);
+});
+
+var V={
+  A:[0,0,1],B:[1,0,1],C:[1,0,0],D:[0,0,0],
+  E:[0,1,1],F:[1,1,1],G:[1,1,0],H:[0,1,0]
+};
+var EDGES=[
+  ['A','B'],['B','C'],['C','D'],['D','A'],
+  ['E','F'],['F','G'],['G','H'],['H','E'],
+  ['A','E'],['B','F'],['C','G'],['D','H']
+];
+var CASES={
+  1:{
+    title:'Разбор 1 · задняя и правая грани',
+    goal:'Начните с PQ и QR. Полная плоскость пересекает ещё ребро DA, поэтому итоговое сечение — четырёхугольник.',
+    idea:'Два первых следа лежат на соседних гранях; остальные вершины определяются той же секущей плоскостью.',
+    given:[['P','H','E',.65],['Q','F','G',.55],['R','B','C',.75]],
+    names:{HE:'P',FG:'Q',BC:'R',DA:'S'}
+  },
+  2:{
+    title:'Разбор 2 · четыре боковых ребра',
+    goal:'Точки P и Q дают след на верхней грани, Q и R — на правой. Четвёртая вершина появляется на DH.',
+    idea:'Плоскость проходит через четыре боковых ребра и образует четырёхугольное сечение.',
+    given:[['P','A','E',.55],['Q','B','F',.55],['R','C','G',.45]],
+    names:{AE:'P',BF:'Q',CG:'R',DH:'S'}
+  },
+  3:{
+    title:'Разбор 3 · пятиугольник',
+    goal:'Проверенная конфигурация использует исходные точки на DA, AB и BF; затем эта же плоскость пересекает CG и DH.',
+    idea:'При переходе через несколько соседних граней сечение может получить пять вершин.',
+    given:[['P','D','A',.55],['Q','A','B',.265],['R','B','F',.25]],
+    names:{DA:'P',AB:'Q',BF:'R',CG:'S',DH:'T'}
+  },
+  4:{
+    title:'Разбор 4 · шестиугольник',
+    goal:'Секущая плоскость последовательно пересекает шесть рёбер: AB, BC, CG, GH, HE и AE.',
+    idea:'После каждой новой вершины переходите на соседнюю грань; шесть переходов замыкают шестиугольник.',
+    given:[['P','A','B',.30],['Q','B','C',.7368421053],['R','C','G',.50]],
+    names:{AB:'P',BC:'Q',CG:'R',GH:'S',HE:'U',AE:'T'}
+  }
+};
+
+function add(a,b){return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]}
+function sub(a,b){return [a[0]-b[0],a[1]-b[1],a[2]-b[2]]}
+function mul(a,s){return [a[0]*s,a[1]*s,a[2]*s]}
+function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]}
+function cross(a,b){return [a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]]}
+function length(a){return Math.sqrt(dot(a,a))}
+function norm(a){var n=length(a)||1;return mul(a,1/n)}
+function pointOn(a,b,t){return add(mul(V[a],1-t),mul(V[b],t))}
+function edgeKey(a,b){return a+b}
+function planeFromGiven(c){
+  var p=pointOn(c.given[0][1],c.given[0][2],c.given[0][3]);
+  var q=pointOn(c.given[1][1],c.given[1][2],c.given[1][3]);
+  var r=pointOn(c.given[2][1],c.given[2][2],c.given[2][3]);
+  var n=cross(sub(q,p),sub(r,p));
+  return {n:n,d:dot(n,p),points:[p,q,r]};
+}
+function intersections(c){
+  var pl=planeFromGiven(c),out=[];
+  EDGES.forEach(function(e){
+    var a=V[e[0]],b=V[e[1]],dir=sub(b,a),den=dot(pl.n,dir);
+    if(Math.abs(den)<1e-9)return;
+    var t=(pl.d-dot(pl.n,a))/den;
+    if(t<-1e-8||t>1+1e-8)return;
+    var p=add(a,mul(dir,t)),key=edgeKey(e[0],e[1]);
+    if(out.some(function(o){return length(sub(o.p,p))<1e-7}))return;
+    out.push({p:p,edge:key,t:t,name:c.names[key]||key});
+  });
+  var center=[0,0,0];
+  out.forEach(function(o){center=add(center,o.p)});
+  center=mul(center,1/out.length);
+  var n=norm(pl.n),reference=Math.abs(n[2])<.9?[0,0,1]:[0,1,0],u=norm(cross(n,reference)),v=cross(n,u);
+  out.sort(function(a,b){
+    var aa=Math.atan2(dot(sub(a.p,center),v),dot(sub(a.p,center),u));
+    var bb=Math.atan2(dot(sub(b.p,center),v),dot(sub(b.p,center),u));
+    return aa-bb;
+  });
+  return {vertices:out,plane:pl,center:center,u:u,v:v};
+}
+function isGivenPoint(c,p){
+  for(var i=0;i<c.given.length;i++){
+    var g=c.given[i],q=pointOn(g[1],g[2],g[3]);
+    if(length(sub(q,p))<1e-6)return g[0];
+  }
+  return null;
+}
+
+var svg=document.getElementById('model');
+var cubeLayer=document.getElementById('cubeLayer');
+var planeLayer=document.getElementById('planeLayer');
+var sectionLayer=document.getElementById('sectionLayer');
+var labelLayer=document.getElementById('labelLayer');
+var rows=document.getElementById('vertexRows');
+var status=document.getElementById('status');
+var showPlane=document.getElementById('showPlane');
+var showLabels=document.getElementById('showLabels');
+var zoomInput=document.getElementById('zoom');
+var currentCase=1,currentStage=3,yaw=-.72,pitch=.48,zoom=1;
+var drag=false,lastX=0,lastY=0;
+
+function rotate(p){
+  var x=p[0]-.5,y=p[1]-.5,z=p[2]-.5;
+  var cy=Math.cos(yaw),sy=Math.sin(yaw);
+  var x1=x*cy-y*sy,y1=x*sy+y*cy;
+  var cp=Math.cos(pitch),sp=Math.sin(pitch);
+  var y2=y1*cp-z*sp,z2=y1*sp+z*cp;
+  return [x1,y2,z2];
+}
+function project(p){
+  var q=rotate(p),s=355*zoom;
+  return [450+q[0]*s,380-q[2]*s,q[1]];
+}
+function svgEl(tag,attrs){
+  var el=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  Object.keys(attrs||{}).forEach(function(k){el.setAttribute(k,attrs[k])});
+  return el;
+}
+function clear(g){while(g.firstChild)g.removeChild(g.firstChild)}
+function draw(){
+  var c=CASES[currentCase],data=intersections(c);
+  clear(cubeLayer);clear(planeLayer);clear(sectionLayer);clear(labelLayer);
+
+  var edgeData=EDGES.map(function(e){
+    var a=project(V[e[0]]),b=project(V[e[1]]);
+    return {e:e,a:a,b:b,depth:(a[2]+b[2])/2};
+  }).sort(function(a,b){return b.depth-a.depth});
+  edgeData.forEach(function(o){
+    cubeLayer.appendChild(svgEl('line',{
+      x1:o.a[0],y1:o.a[1],x2:o.b[0],y2:o.b[1],
+      class:'edge'+(o.depth>.08?' hidden':'')
+    }));
+  });
+
+  if(showPlane.checked&&currentStage>=2){
+    var scale=1.52,planePts=data.vertices.map(function(o){
+      return add(data.center,mul(sub(o.p,data.center),scale));
+    });
+    var points=planePts.map(function(p){var q=project(p);return q[0]+','+q[1]}).join(' ');
+    planeLayer.appendChild(svgEl('polygon',{points:points,class:'plane'}));
+  }
+
+  if(currentStage===1){
+    var a=project(planeFromGiven(c).points[0]),b=project(planeFromGiven(c).points[1]);
+    sectionLayer.appendChild(svgEl('line',{x1:a[0],y1:a[1],x2:b[0],y2:b[1],class:'trace'}));
+  }
+  if(currentStage>=3){
+    var poly=data.vertices.map(function(o){var q=project(o.p);return q[0]+','+q[1]}).join(' ');
+    sectionLayer.appendChild(svgEl('polygon',{points:poly,class:'section'}));
+  }
+
+  var pointsToDraw=currentStage<2?planeFromGiven(c).points:data.vertices.map(function(o){return o.p});
+  pointsToDraw.forEach(function(p){
+    var q=project(p),givenName=isGivenPoint(c,p),name=givenName;
+    if(!name){
+      var hit=data.vertices.find(function(o){return length(sub(o.p,p))<1e-6});
+      name=hit?hit.name:'';
+    }
+    sectionLayer.appendChild(svgEl('circle',{cx:q[0],cy:q[1],r:7,class:'point'}));
+    if(showLabels.checked&&name){
+      var t=svgEl('text',{x:q[0]+11,y:q[1]-10,class:'vertex-label'});t.textContent=name;labelLayer.appendChild(t);
+    }
+  });
+
+  if(showLabels.checked){
+    Object.keys(V).forEach(function(name){
+      var q=project(V[name]),t=svgEl('text',{x:q[0]+7,y:q[1]-8,class:'edge-label'});t.textContent=name;labelLayer.appendChild(t);
+    });
+  }
+
+  rows.innerHTML='';
+  data.vertices.forEach(function(o){
+    var tr=document.createElement('tr'),td1=document.createElement('td'),td2=document.createElement('td');
+    td1.textContent=o.name;td2.textContent=o.edge.split('').join('–');
+    tr.appendChild(td1);tr.appendChild(td2);rows.appendChild(tr);
+  });
+  status.textContent='Плоскость пересекает '+data.vertices.length+' рёбер куба. Все показанные вершины вычислены из одной плоскости по трём исходным точкам.';
+}
+function setCase(n){
+  currentCase=n;
+  document.querySelectorAll('[data-case]').forEach(function(b){b.setAttribute('aria-pressed',String(Number(b.dataset.case)===n))});
+  document.getElementById('caseTitle').textContent=CASES[n].title;
+  document.getElementById('caseGoal').textContent=CASES[n].goal;
+  document.getElementById('ideaText').textContent=CASES[n].idea;
+  document.getElementById('backLink').href='21.09.26.html#examples';
+  var u=new URL(location.href);u.searchParams.set('case',String(n));history.replaceState(null,'',u.pathname+u.search);
+  draw();
+}
+function setStage(n){
+  currentStage=n;
+  document.querySelectorAll('[data-stage]').forEach(function(b){
+    if(Number(b.dataset.stage)===n)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');
+  });
+  draw();
+}
+document.querySelectorAll('[data-case]').forEach(function(b){b.addEventListener('click',function(){setCase(Number(b.dataset.case))})});
+document.querySelectorAll('[data-stage]').forEach(function(b){b.addEventListener('click',function(){setStage(Number(b.dataset.stage))})});
+showPlane.addEventListener('change',draw);showLabels.addEventListener('change',draw);
+zoomInput.addEventListener('input',function(){zoom=Number(zoomInput.value);draw()});
+document.getElementById('turnLeft').addEventListener('click',function(){yaw-=.18;draw()});
+document.getElementById('turnRight').addEventListener('click',function(){yaw+=.18;draw()});
+document.getElementById('resetView').addEventListener('click',function(){yaw=-.72;pitch=.48;zoom=1;zoomInput.value='1';currentStage=3;setStage(3);draw()});
+
+svg.addEventListener('pointerdown',function(e){drag=true;lastX=e.clientX;lastY=e.clientY;svg.classList.add('dragging');svg.setPointerCapture(e.pointerId)});
+svg.addEventListener('pointermove',function(e){
+  if(!drag)return;
+  yaw+=(e.clientX-lastX)*.009;
+  pitch=Math.max(-1.15,Math.min(1.15,pitch+(e.clientY-lastY)*.007));
+  lastX=e.clientX;lastY=e.clientY;draw();
+});
+svg.addEventListener('pointerup',function(e){drag=false;svg.classList.remove('dragging');try{svg.releasePointerCapture(e.pointerId)}catch(_){}});
+svg.addEventListener('pointercancel',function(){drag=false;svg.classList.remove('dragging')});
+svg.addEventListener('wheel',function(e){
+  e.preventDefault();
+  zoom=Math.max(.7,Math.min(1.65,zoom+(e.deltaY<0?.06:-.06)));
+  zoomInput.value=String(zoom);draw();
+},{passive:false});
+
+var requested=Number(new URLSearchParams(location.search).get('case'));
+if(!CASES[requested])requested=1;
+setStage(3);setCase(requested);
+})();
+</script>
+</body>
+</html>
