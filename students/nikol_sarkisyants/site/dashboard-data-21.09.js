@@ -56,7 +56,8 @@
         let changed=false;
         Object.entries(fresh).forEach(([id,level])=>{
           const current=Number(state.studentLevels[id]??0);
-          if(current<level){
+          const confirmedUpgrade=id==='t8_geometric'&&current===2&&level===3;
+          if(current===0||confirmedUpgrade){
             state.studentLevels[id]=level;
             changed=true;
           }
