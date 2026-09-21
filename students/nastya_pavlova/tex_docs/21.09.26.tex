@@ -1,0 +1,1027 @@
+\documentclass[a4paper,12pt]{article}
+
+% -------------------------------------------------
+% Кодировка, язык, математика
+% -------------------------------------------------
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{icomma}
+
+% -------------------------------------------------
+% Типографика
+% -------------------------------------------------
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage[a4paper,margin=20mm,top=19mm,bottom=20mm]{geometry}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{setspace}
+\onehalfspacing
+
+\usepackage{xcolor}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softaccent}{HTML}{EAF4F4}
+\definecolor{softgray}{HTML}{F5F6F6}
+\definecolor{warning}{HTML}{8A5B38}
+
+\color{textgray}
+
+% -------------------------------------------------
+% Графика
+% -------------------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+
+\usepackage{tkz-euclide}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% -------------------------------------------------
+% Таблицы, списки, оформление
+% -------------------------------------------------
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage[most]{tcolorbox}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkaccent,
+    urlcolor=darkaccent
+}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Векторы на координатной плоскости}
+\fancyhead[R]{\small Анастасия Павлова}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% -------------------------------------------------
+% Служебные команды
+% -------------------------------------------------
+\newcommand{\vect}[1]{\overrightarrow{#1}}
+\newcommand{\va}{\vec a}
+\newcommand{\vb}{\vec b}
+\newcommand{\vc}{\vec c}
+\newcommand{\vd}{\vec d}
+
+\newcommand{\tg}{\mathop{\mathrm{tg}}\nolimits}
+\newcommand{\ctg}{\mathop{\mathrm{ctg}}\nolimits}
+\newcommand{\arctg}{\mathop{\mathrm{arctg}}\nolimits}
+
+\newcommand{\sectionline}{%
+    \par\noindent
+    {\color{accent}\rule{\linewidth}{0.6pt}}
+    \par
+}
+
+% -------------------------------------------------
+% Лёгкие учебные блоки
+% -------------------------------------------------
+\tcbset{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=accent,
+    boxrule=0.55pt,
+    arc=1mm,
+    left=3mm,
+    right=3mm,
+    top=2mm,
+    bottom=2mm,
+    before skip=5pt,
+    after skip=6pt
+}
+
+\newtcolorbox{keybox}[1][]{
+    colback=softaccent,
+    colframe=accent,
+    title={#1},
+    fonttitle=\bfseries,
+    coltitle=darkaccent
+}
+
+\newtcolorbox{examplebox}[1][]{
+    colback=white,
+    colframe=darkaccent,
+    title={#1},
+    fonttitle=\bfseries,
+    coltitle=darkaccent
+}
+
+\newtcolorbox{warningbox}[1][]{
+    colback=softgray,
+    colframe=warning,
+    title={#1},
+    fonttitle=\bfseries,
+    coltitle=warning
+}
+
+% -------------------------------------------------
+% Стили блок-схем
+% -------------------------------------------------
+\tikzset{
+    flowstart/.style={
+        ellipse,
+        draw=darkaccent,
+        line width=0.8pt,
+        minimum width=44mm,
+        minimum height=12mm,
+        align=center,
+        fill=softaccent,
+        font=\small
+    },
+    flowaction/.style={
+        rectangle,
+        rounded corners=2mm,
+        draw=accent,
+        line width=0.7pt,
+        minimum width=78mm,
+        text width=68mm,
+        minimum height=14mm,
+        align=center,
+        fill=white,
+        font=\small
+    },
+    flowcondition/.style={
+        diamond,
+        aspect=2.2,
+        draw=accent,
+        line width=0.7pt,
+        text width=38mm,
+        align=center,
+        inner sep=1.5mm,
+        fill=softgray,
+        font=\small
+    },
+    flowarrow/.style={
+        -{Stealth[length=3mm,width=2mm]},
+        line width=0.8pt,
+        draw=darkaccent
+    }
+}
+
+% -------------------------------------------------
+% Документ
+% -------------------------------------------------
+\begin{document}
+
+% =================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% =================================================
+\begin{titlepage}
+\thispagestyle{empty}
+
+\begin{center}
+
+\vspace*{22mm}
+
+{\color{darkaccent}\Large\bfseries ЧЕК-ЛИСТ}
+
+\vspace{9mm}
+
+{\Huge\bfseries Векторы на координатной плоскости}
+
+\vspace{5mm}
+
+{\Large Координаты, длина, действия с векторами\\
+и скалярное произведение}
+
+\vspace{14mm}
+
+{\color{accent}\rule{0.70\linewidth}{0.8pt}}
+
+\vspace{14mm}
+
+{\large
+\textbf{Формат:} подготовка к ЕГЭ
+}
+
+\vspace{5mm}
+
+{\large
+\textbf{Ученица:} Анастасия Павлова
+}
+
+\vspace{5mm}
+
+{\large
+\textbf{Дата:} \today
+}
+
+\vfill
+
+{\large
+Лёвин Артём Александрович\\[2mm]
+\textbf{эксклюзивно для Анастасии Павловой}
+}
+
+\vspace{14mm}
+
+\begin{tikzpicture}[remember picture,overlay]
+    \draw[
+        accent,
+        line width=1.15pt,
+        opacity=0.60
+    ]
+    ($(current page.south west)+(18mm,17mm)$)
+    .. controls
+    ($(current page.south west)+(68mm,29mm)$)
+    and
+    ($(current page.south east)+(-68mm,7mm)$)
+    ..
+    ($(current page.south east)+(-18mm,20mm)$);
+\end{tikzpicture}
+
+\end{center}
+\end{titlepage}
+
+% =================================================
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% =================================================
+
+\section*{\color{darkaccent}1. Координаты вектора}
+
+\sectionline
+
+Пусть
+\[
+A(x_A;y_A), \qquad B(x_B;y_B).
+\]
+
+Тогда координаты вектора, направленного из точки \(A\) в точку \(B\),
+вычисляются по формуле
+\[
+\boxed{
+\vect{AB}=
+\bigl(x_B-x_A\,;\,y_B-y_A\bigr).
+}
+\]
+
+\begin{keybox}[Главная интерпретация]
+Координаты вектора показывают его \textbf{смещение}:
+
+\[
+\begin{array}{ccl}
+x>0 &\Longrightarrow& \text{смещение вправо},\\
+x<0 &\Longrightarrow& \text{смещение влево},\\
+y>0 &\Longrightarrow& \text{смещение вверх},\\
+y<0 &\Longrightarrow& \text{смещение вниз}.
+\end{array}
+\]
+\end{keybox}
+
+Например, если вектор перемещает точку на \(6\) единиц вправо
+и на \(1\) единицу вверх, то
+\[
+\vec a=(6;1).
+\]
+
+Если направление вектора развернуть, обе координаты меняют знак:
+\[
+\vect{BA}=-\vect{AB}.
+\]
+
+\begin{center}
+\begin{tikzpicture}[scale=0.78,>=Stealth]
+    \draw[step=1cm,very thin,gray!25] (-1,-1) grid (8,5);
+    \draw[->,line width=0.9pt] (-1,0)--(8.3,0) node[right] {$x$};
+    \draw[->,line width=0.9pt] (0,-1)--(0,5.3) node[above] {$y$};
+
+    \foreach \x in {1,...,7}
+        \draw (\x,0.08)--(\x,-0.08) node[below=2pt] {\small \x};
+
+    \foreach \y in {1,...,4}
+        \draw (0.08,\y)--(-0.08,\y) node[left=2pt] {\small \y};
+
+    \coordinate (A) at (1,1);
+    \coordinate (B) at (7,3);
+
+    \fill[darkaccent] (A) circle (2.1pt);
+    \fill[darkaccent] (B) circle (2.1pt);
+
+    \draw[->,accent,line width=1.5pt] (A)--(B);
+
+    \node[below left] at (A) {$A(1;1)$};
+    \node[above right] at (B) {$B(7;3)$};
+
+    \draw[dashed,gray] (A)--(7,1);
+    \draw[dashed,gray] (7,1)--(B);
+
+    \node[below] at (4,1) {\small \(+6\)};
+    \node[right] at (7,2) {\small \(+2\)};
+\end{tikzpicture}
+\end{center}
+
+Здесь
+\[
+\vect{AB}=(7-1;3-1)=(6;2).
+\]
+
+\begin{warningbox}[Типичная ошибка]
+Порядок вычитания принципиален:
+\[
+\boxed{\text{конец} - \text{начало}.}
+\]
+
+Для \(\vect{AB}\) сначала используются координаты точки \(B\),
+затем координаты точки \(A\).
+\end{warningbox}
+
+% -------------------------------------------------
+
+\section*{\color{darkaccent}2. Длина вектора}
+
+\sectionline
+
+Если
+\[
+\vec a=(x;y),
+\]
+то его длина равна
+\[
+\boxed{
+|\vec a|=\sqrt{x^2+y^2}.
+}
+\]
+
+Это формула расстояния, полученная из теоремы Пифагора.
+
+\begin{examplebox}[Пример]
+Пусть
+\[
+\vec a=(3;4).
+\]
+Тогда
+\[
+|\vec a|
+=
+\sqrt{3^2+4^2}
+=
+\sqrt{9+16}
+=
+5.
+\]
+\end{examplebox}
+
+Если даны две точки, сначала найдите координаты вектора.
+
+\begin{examplebox}[Длина вектора по координатам его концов]
+Пусть
+\[
+M(3;4),\qquad T(-3;-5).
+\]
+
+Тогда
+\[
+\vect{MT}
+=
+(-3-3;-5-4)
+=
+(-6;-9).
+\]
+
+Следовательно,
+\[
+|\vect{MT}|
+=
+\sqrt{(-6)^2+(-9)^2}
+=
+\sqrt{36+81}
+=
+\sqrt{117}
+=
+3\sqrt{13}.
+\]
+\end{examplebox}
+
+\begin{keybox}[Квадрат длины]
+Иногда в задаче требуется найти именно
+\[
+|\vec a|^2.
+\]
+
+Тогда извлекать корень вообще не требуется:
+\[
+\boxed{
+|\vec a|^2=x^2+y^2.
+}
+\]
+
+Например, для
+\[
+\vec a=(-6;2)
+\]
+получаем
+\[
+|\vec a|^2=(-6)^2+2^2=40.
+\]
+\end{keybox}
+
+% -------------------------------------------------
+
+\section*{\color{darkaccent}3. Осторожно с квадратными корнями}
+
+\sectionline
+
+В задачах на длину вектора часто появляются квадратные корни.
+
+Допустимо:
+\[
+\sqrt{ab}=\sqrt a\sqrt b,
+\qquad a\ge0,\quad b\ge0.
+\]
+
+Например,
+\[
+\sqrt{75}
+=
+\sqrt{25\cdot3}
+=
+5\sqrt3.
+\]
+
+Также
+\[
+\sqrt{\frac ab}
+=
+\frac{\sqrt a}{\sqrt b},
+\qquad
+a\ge0,\quad b>0.
+\]
+
+\begin{warningbox}[Так делать нельзя]
+В общем случае
+\[
+\boxed{
+\sqrt{a+b}\ne\sqrt a+\sqrt b
+}
+\]
+и
+\[
+\boxed{
+\sqrt{a-b}\ne\sqrt a-\sqrt b.
+}
+\]
+
+Например,
+\[
+\sqrt{75}
+=
+\sqrt{100-25}
+\ne
+10-5.
+\]
+
+Кроме того,
+\[
+\boxed{\sqrt{x^2}=|x|.}
+\]
+\end{warningbox}
+
+% -------------------------------------------------
+
+\section*{\color{darkaccent}4. Сложение и вычитание векторов}
+
+\sectionline
+
+Пусть
+\[
+\vec a=(x_1;y_1),
+\qquad
+\vec b=(x_2;y_2).
+\]
+
+Тогда
+\[
+\boxed{
+\vec a+\vec b=
+(x_1+x_2\,;\,y_1+y_2)
+}
+\]
+
+и
+\[
+\boxed{
+\vec a-\vec b=
+(x_1-x_2\,;\,y_1-y_2).
+}
+\]
+
+\begin{examplebox}[Пример]
+Для
+\[
+\vec a=(1;2),
+\qquad
+\vec b=(3;4)
+\]
+получаем
+\[
+\vec a+\vec b
+=
+(1+3;2+4)
+=
+(4;6),
+\]
+а
+\[
+\vec a-\vec b
+=
+(1-3;2-4)
+=
+(-2;-2).
+\]
+\end{examplebox}
+
+Можно складывать любое конечное число векторов:
+\[
+\vec a+\vec b+\vec c.
+\]
+
+Координаты по-прежнему складываются отдельно:
+\[
+(x_a+x_b+x_c\,;\,y_a+y_b+y_c).
+\]
+
+\begin{keybox}[Стратегия]
+Сначала найдите координаты каждого отдельного вектора.
+
+После этого работайте с координатами как с обычными числовыми парами:
+складывайте, вычитайте и подставляйте в нужную формулу.
+\end{keybox}
+
+% -------------------------------------------------
+
+\section*{\color{darkaccent}5. Умножение вектора на число}
+
+\sectionline
+
+Если
+\[
+\vec a=(x;y),
+\]
+то
+\[
+\boxed{
+k\vec a=(kx;ky).
+}
+\]
+
+Например,
+\[
+\vec a=(1;2)
+\]
+и
+\[
+3\vec a=(3;6).
+\]
+
+Если коэффициент отрицательный,
+\[
+-3\vec a=(-3;-6).
+\]
+
+\begin{keybox}[Что происходит геометрически]
+При умножении на число меняется длина вектора.
+
+Если коэффициент отрицательный, дополнительно меняется направление
+на противоположное.
+\end{keybox}
+
+% -------------------------------------------------
+
+\section*{\color{darkaccent}6. Скалярное произведение}
+
+\sectionline
+
+Для векторов
+\[
+\vec a=(x_1;y_1),
+\qquad
+\vec b=(x_2;y_2)
+\]
+скалярное произведение можно вычислить через координаты:
+\[
+\boxed{
+\vec a\cdot\vec b=x_1x_2+y_1y_2.
+}
+\]
+
+Скалярное произведение --- это \textbf{число}.
+
+\begin{examplebox}[Пример]
+Пусть
+\[
+\vec p=(1;2),
+\qquad
+\vec q=(3;4).
+\]
+
+Тогда
+\[
+\vec p\cdot\vec q
+=
+1\cdot3+2\cdot4
+=
+11.
+\]
+\end{examplebox}
+
+Вторая важная формула:
+\[
+\boxed{
+\vec a\cdot\vec b
+=
+|\vec a|\,|\vec b|\cos\varphi,
+}
+\]
+где \(\varphi\) --- угол между ненулевыми векторами.
+
+Отсюда
+\[
+\boxed{
+\cos\varphi
+=
+\frac{\vec a\cdot\vec b}
+{|\vec a|\,|\vec b|}.
+}
+\]
+
+Эта формула применима, если
+\[
+|\vec a|\ne0
+\qquad\text{и}\qquad
+|\vec b|\ne0.
+\]
+
+Для нулевого вектора угол с другим вектором в данном смысле
+не определяется.
+
+
+
+% -------------------------------------------------
+
+\section*{\color{darkaccent}7. Косинус угла между векторами}
+
+\sectionline
+
+Рассмотрим
+\[
+\vec k=(-1;2),
+\qquad
+\vec t=(-2;3).
+\]
+
+Сначала вычислим скалярное произведение:
+\[
+\vec k\cdot\vec t
+=
+(-1)(-2)+2\cdot3
+=
+8.
+\]
+
+Длины:
+\[
+|\vec k|
+=
+\sqrt{(-1)^2+2^2}
+=
+\sqrt5,
+\]
+\[
+|\vec t|
+=
+\sqrt{(-2)^2+3^2}
+=
+\sqrt{13}.
+\]
+
+Следовательно,
+\[
+\cos\varphi
+=
+\frac8{\sqrt5\sqrt{13}}
+=
+\frac8{\sqrt{65}}.
+\]
+
+При необходимости знаменатель можно рационализировать:
+\[
+\frac8{\sqrt{65}}
+=
+\frac{8\sqrt{65}}{65}.
+\]
+
+\begin{keybox}[Полезный частный случай]
+Если для двух ненулевых векторов
+\[
+\vec a\cdot\vec b=0,
+\]
+то
+\[
+\cos\varphi=0.
+\]
+
+Следовательно,
+\[
+\varphi=90^\circ,
+\]
+то есть векторы перпендикулярны.
+\end{keybox}
+
+И наоборот, для ненулевых векторов:
+\[
+\boxed{
+\vec a\perp\vec b
+\quad\Longleftrightarrow\quad
+\vec a\cdot\vec b=0.
+}
+\]
+
+% -------------------------------------------------
+
+\section*{\color{darkaccent}8. Составные выражения с векторами}
+
+\sectionline
+
+В экзаменационной задаче может встретиться выражение вида
+\[
+(\vec a-\vec b)\cdot\vec c.
+\]
+
+Работайте по уровням.
+
+\begin{enumerate}[label=\arabic*.,leftmargin=8mm,itemsep=2pt]
+    \item Найдите координаты \(\vec a,\vec b,\vec c\).
+    \item Вычислите координаты \(\vec a-\vec b\).
+    \item Выполните скалярное произведение полученного вектора с \(\vec c\).
+\end{enumerate}
+
+\begin{examplebox}[Пример]
+Пусть
+\[
+\vec a=(4;6),
+\qquad
+\vec b=(6;-2),
+\qquad
+\vec c=(1;-4).
+\]
+
+Тогда
+\[
+\vec a-\vec b
+=
+(4-6;6-(-2))
+=
+(-2;8).
+\]
+
+Следовательно,
+\[
+(\vec a-\vec b)\cdot\vec c
+=
+(-2)\cdot1+8\cdot(-4)
+=
+-34.
+\]
+\end{examplebox}
+
+\begin{warningbox}[Следите за знаками]
+Особенно опасны выражения вида
+\[
+y_1-y_2
+\]
+при отрицательном \(y_2\).
+
+Например,
+\[
+6-(-2)=8.
+\]
+
+Скобки вокруг отрицательных координат лучше записывать всегда.
+\end{warningbox}
+
+% -------------------------------------------------
+
+\section*{\color{darkaccent}9. Быстрый чек-лист перед ответом}
+
+\sectionline
+
+\begin{enumerate}[label=\(\square\),leftmargin=8mm,itemsep=4pt]
+    \item Для \(\vect{AB}\) использовано правило
+    \[
+    \text{конец}-\text{начало}.
+    \]
+
+    \item При вычислении длины отрицательные координаты взяты в скобки:
+    \[
+    (-3)^2=9.
+    \]
+
+    \item Координаты складывались и вычитались по соответствующим компонентам.
+
+    \item При умножении вектора на число умножены обе координаты.
+
+    \item Скалярное произведение записано как
+    \[
+    x_1x_2+y_1y_2.
+    \]
+
+    \item Для косинуса проверено, что оба вектора ненулевые.
+
+    \item Корень не разбит по сумме или разности.
+
+    \item Если требуется квадрат длины, не выполнялись лишние действия с корнем.
+
+    \item Знаки перед отрицательными координатами проверены повторно.
+\end{enumerate}
+
+% =================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% =================================================
+
+\clearpage
+
+\section*{\color{darkaccent}Тренировочный блок --- Путь А}
+
+\sectionline
+
+\textbf{Заданий: 5.}
+
+Решайте последовательно. В тренировочном блоке требуется записать
+только решение и итоговый ответ.
+
+\vspace{4mm}
+
+\subsection*{Задание 1}
+
+Даны точки
+\[
+A(-2;3),
+\qquad
+B(5;7).
+\]
+
+Найдите:
+
+\begin{enumerate}[label=\alph*)]
+    \item координаты вектора \(\vect{AB}\);
+    \item длину вектора \(\vect{AB}\).
+\end{enumerate}
+
+\vspace{7mm}
+
+\subsection*{Задание 2}
+
+Даны векторы
+\[
+\vec a=(4;-3),
+\qquad
+\vec b=(-2;5).
+\]
+
+Найдите координаты вектора
+\[
+\vec c=2\vec a-\vec b
+\]
+и его длину.
+
+\vspace{7mm}
+
+\subsection*{Задание 3}
+
+Даны векторы
+\[
+\vec p=(3;4),
+\qquad
+\vec q=(4;-3).
+\]
+
+Найдите:
+
+\begin{enumerate}[label=\alph*)]
+    \item скалярное произведение \(\vec p\cdot\vec q\);
+    \item косинус угла между векторами;
+    \item угол между векторами.
+\end{enumerate}
+
+\vspace{7mm}
+
+\subsection*{Задание 4}
+
+Даны векторы
+\[
+\vec a=(2;6),
+\qquad
+\vec b=(8;4).
+\]
+
+Найдите
+\[
+|\vec a-\vec b|^2.
+\]
+
+\vspace{7mm}
+
+\subsection*{Задание 5}
+
+Даны векторы
+\[
+\vec a=(5;1),
+\qquad
+\vec b=(2;-3),
+\qquad
+\vec c=(-1;4).
+\]
+
+Найдите значение выражения
+\[
+(2\vec a-\vec b)\cdot\vec c.
+\]
+
+% =================================================
+% ОТВЕТЫ
+% =================================================
+
+\clearpage
+
+\section*{\color{darkaccent}Ответы}
+
+\sectionline
+
+\vspace{5mm}
+
+\renewcommand{\arraystretch}{1.45}
+
+\begin{table}[ht]
+\centering
+\begin{tabularx}{\linewidth}{@{}c X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+
+1 &
+\[
+\vect{AB}=(7;4),
+\qquad
+|\vect{AB}|=\sqrt{65}.
+\]
+\\
+
+2 &
+\[
+\vec c=(10;-11),
+\qquad
+|\vec c|=\sqrt{221}.
+\]
+\\
+
+3 &
+\[
+\vec p\cdot\vec q=0,
+\qquad
+\cos\varphi=0,
+\qquad
+\varphi=90^\circ.
+\]
+\\
+
+4 &
+\[
+|\vec a-\vec b|^2=40.
+\]
+\\
+
+5 &
+\[
+(2\vec a-\vec b)\cdot\vec c=-23.
+\]
+\\
+
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\vfill
+
+\begin{center}
+{\small\color{darkaccent}
+Лёвин Артём Александрович
+\quad\(\cdot\)\quad
+эксклюзивно для Анастасии Павловой
+}
+\end{center}
+
+\end{document}
