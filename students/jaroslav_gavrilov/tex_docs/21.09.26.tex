@@ -1,0 +1,1001 @@
+\documentclass[a4paper,12pt]{article}
+
+% -------------------------------------------------
+% Кодировка и язык
+% -------------------------------------------------
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+% -------------------------------------------------
+% Математика
+% -------------------------------------------------
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{icomma}
+
+% -------------------------------------------------
+% Типографика
+% -------------------------------------------------
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{
+  left=20mm,
+  right=20mm,
+  top=20mm,
+  bottom=22mm
+}
+\usepackage{parskip}
+\usepackage{setspace}
+\onehalfspacing
+
+% -------------------------------------------------
+% Таблицы и списки
+% -------------------------------------------------
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+
+% -------------------------------------------------
+% Графика
+% -------------------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+
+% -------------------------------------------------
+% Служебное
+% -------------------------------------------------
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+% -------------------------------------------------
+% Цветовая палитра
+% -------------------------------------------------
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{747474}
+\definecolor{linegray}{HTML}{D9E1E1}
+
+\color{textgray}
+
+% -------------------------------------------------
+% PDF
+% -------------------------------------------------
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=darkaccent,
+  pdftitle={Чек-лист. Тригонометрические формулы и уравнения},
+  pdfauthor={Лёвин Артём Александрович}
+}
+
+% -------------------------------------------------
+% Колонтитулы
+% -------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Тригонометрия}
+\fancyhead[R]{\small Ярослав Гаврилов}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% -------------------------------------------------
+% Заголовки
+% -------------------------------------------------
+\newcommand{\maintitle}[1]{%
+  {\Large\bfseries\color{darkaccent}#1\par}
+  \vspace{0.5em}
+  {\color{accent}\rule{\linewidth}{0.7pt}\par}
+  \vspace{0.8em}
+}
+
+\newcommand{\subheading}[1]{%
+  \vspace{0.7em}
+  {\large\bfseries\color{darkaccent}#1\par}
+  \vspace{0.25em}
+}
+
+\newcommand{\important}[1]{%
+  \par\noindent
+  {\bfseries\color{darkaccent}#1}
+}
+
+% -------------------------------------------------
+% TikZ: блок-схемы
+% -------------------------------------------------
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=accent,
+    line width=0.9pt,
+    minimum width=42mm,
+    minimum height=10mm,
+    align=center,
+    font=\small
+  },
+  flowaction/.style={
+    rectangle,
+    rounded corners=2mm,
+    draw=accent,
+    line width=0.8pt,
+    text width=68mm,
+    minimum height=12mm,
+    align=center,
+    inner sep=4pt,
+    font=\small
+  },
+  flowdecision/.style={
+    diamond,
+    draw=darkaccent,
+    line width=0.8pt,
+    aspect=2.5,
+    text width=43mm,
+    align=center,
+    inner sep=2pt,
+    font=\small
+  },
+  flowarrow/.style={
+    -{Stealth[length=3mm,width=2mm]},
+    line width=0.8pt,
+    draw=darkaccent
+  },
+  flowlabel/.style={
+    font=\small,
+    fill=white,
+    inner sep=1.5pt
+  }
+}
+
+\setlist[itemize]{
+  leftmargin=1.7em,
+  itemsep=0.35em,
+  topsep=0.35em
+}
+
+\setlist[enumerate]{
+  leftmargin=2em,
+  itemsep=0.55em,
+  topsep=0.45em
+}
+
+\begin{document}
+
+% =================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% =================================================
+\begin{titlepage}
+\thispagestyle{empty}
+
+\begin{center}
+
+\vspace*{24mm}
+
+{\color{accent}\rule{32mm}{1.2pt}}
+
+\vspace{11mm}
+
+{\Huge\bfseries\color{darkaccent}
+Чек-лист
+\par}
+
+\vspace{7mm}
+
+{\LARGE\bfseries
+Тригонометрические формулы\\[2mm]
+и решение тригонометрических уравнений
+\par}
+
+\vspace{12mm}
+
+{\large
+Основные тождества, формулы суммы и разности,\\
+формулы двойного угла, приведение к одной функции,\\
+замена и решение уравнений
+\par}
+
+\vfill
+
+{\large
+Ярослав Гаврилов
+\par}
+
+\vspace{7mm}
+
+{\normalsize
+Подготовка к ЕГЭ по профильной математике
+\par}
+
+\vspace{12mm}
+
+{\normalsize
+\today
+\par}
+
+\vspace{18mm}
+
+{\small
+Лёвин Артём Александрович\\
+эксклюзивно для Ярослава Гаврилова
+\par}
+
+\vspace{21mm}
+
+\end{center}
+
+% Сдержанная кривая Безье внизу титульного листа
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[
+    accent!55,
+    line width=1.4pt
+  ]
+  ($(current page.south west)+(0mm,15mm)$)
+  .. controls
+  ($(current page.south west)+(55mm,25mm)$)
+  and
+  ($(current page.south east)+(-60mm,7mm)$)
+  ..
+  ($(current page.south east)+(0mm,17mm)$);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% =================================================
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% =================================================
+\maintitle{1. Основное тригонометрическое тождество}
+
+Главная формула:
+
+\[
+\boxed{\sin^2\alpha+\cos^2\alpha=1}
+\]
+
+Она верна для любого допустимого значения угла \(\alpha\).
+
+\subheading{Что необходимо увидеть}
+
+Чтобы непосредственно получить единицу, должны одновременно выполняться условия:
+
+\begin{itemize}
+  \item аргументы синуса и косинуса совпадают;
+  \item синус и косинус возведены во вторую степень;
+  \item коэффициенты перед \(\sin^2\alpha\) и \(\cos^2\alpha\) равны \(1\).
+\end{itemize}
+
+Например,
+
+\[
+\sin^2 37^\circ+\cos^2 37^\circ=1.
+\]
+
+Значение самого угла здесь роли не играет.
+
+При разных аргументах такое преобразование недопустимо:
+
+\[
+\sin^2 60^\circ+\cos^2 59^\circ\ne 1
+\quad\text{в общем случае.}
+\]
+
+\subheading{Если коэффициенты мешают}
+
+Иногда тождество можно сначала \emph{выделить}.
+
+Например,
+
+\[
+4\sin^2\alpha+\cos^2\alpha
+=
+3\sin^2\alpha+
+\bigl(\sin^2\alpha+\cos^2\alpha\bigr)
+=
+3\sin^2\alpha+1.
+\]
+
+Если коэффициенты одинаковы, общий множитель удобно вынести:
+
+\[
+4\sin^2\alpha+4\cos^2\alpha
+=
+4\bigl(\sin^2\alpha+\cos^2\alpha\bigr)
+=
+4.
+\]
+
+\subheading{Формулу нужно знать в обе стороны}
+
+Полезно видеть не только
+
+\[
+\sin^2\alpha+\cos^2\alpha\longrightarrow 1,
+\]
+
+но и обратное преобразование:
+
+\[
+1\longrightarrow \sin^2\alpha+\cos^2\alpha.
+\]
+
+Поэтому любое число \(A\) можно при необходимости представить как
+
+\[
+A
+=
+A\bigl(\sin^2\alpha+\cos^2\alpha\bigr).
+\]
+
+Например,
+
+\[
+5
+=
+5\sin^2 20^\circ+5\cos^2 20^\circ.
+\]
+
+И аналогично
+
+\[
+-5
+=
+-5\sin^2 120^\circ-5\cos^2 120^\circ.
+\]
+
+\important{Ключевая идея.}
+Тригонометрические формулы полезно узнавать в обоих направлениях:
+раскрывать их и, наоборот, сворачивать.
+
+% =================================================
+\maintitle{2. Формулы суммы и разности}
+
+Для синуса:
+
+\[
+\boxed{
+\sin(\alpha+\beta)
+=
+\sin\alpha\cos\beta+
+\cos\alpha\sin\beta
+}
+\]
+
+\[
+\boxed{
+\sin(\alpha-\beta)
+=
+\sin\alpha\cos\beta-
+\cos\alpha\sin\beta
+}
+\]
+
+Для косинуса:
+
+\[
+\boxed{
+\cos(\alpha+\beta)
+=
+\cos\alpha\cos\beta-
+\sin\alpha\sin\beta
+}
+\]
+
+\[
+\boxed{
+\cos(\alpha-\beta)
+=
+\cos\alpha\cos\beta+
+\sin\alpha\sin\beta
+}
+\]
+
+\subheading{Зачем они нужны}
+
+Формулы позволяют:
+
+\begin{itemize}
+  \item вычислять нетабличные значения через табличные углы;
+  \item раскрывать сложные аргументы;
+  \item преобразовывать выражения так, чтобы аргументы в уравнении стали одинаковыми.
+\end{itemize}
+
+\subheading{Пример: \(\sin 15^\circ\)}
+
+Представим
+
+\[
+15^\circ=45^\circ-30^\circ.
+\]
+
+Тогда
+
+\[
+\begin{aligned}
+\sin 15^\circ
+&=
+\sin(45^\circ-30^\circ)
+\\
+&=
+\sin45^\circ\cos30^\circ
+-
+\cos45^\circ\sin30^\circ
+\\
+&=
+\frac{\sqrt2}{2}\cdot\frac{\sqrt3}{2}
+-
+\frac{\sqrt2}{2}\cdot\frac12
+\\
+&=
+\frac{\sqrt6-\sqrt2}{4}.
+\end{aligned}
+\]
+
+Аналогично
+
+\[
+\sin75^\circ
+=
+\sin(45^\circ+30^\circ)
+=
+\frac{\sqrt6+\sqrt2}{4}.
+\]
+
+\subheading{Частный полезный случай}
+
+Рассмотрим
+
+\[
+\sin\left(\frac{\pi}{2}+x\right).
+\]
+
+По формуле суммы:
+
+\[
+\begin{aligned}
+\sin\left(\frac{\pi}{2}+x\right)
+&=
+\sin\frac{\pi}{2}\cos x+
+\cos\frac{\pi}{2}\sin x
+\\
+&=
+1\cdot\cos x+0\cdot\sin x
+\\
+&=
+\cos x.
+\end{aligned}
+\]
+
+Следовательно,
+
+\[
+\boxed{
+\sin\left(\frac{\pi}{2}+x\right)=\cos x
+}
+\]
+
+Аналогично,
+
+\[
+\boxed{
+\cos\left(\frac{\pi}{2}-x\right)=\sin x
+}
+\]
+
+Эти равенства можно получать через формулы приведения, однако
+формулы суммы и разности дают надёжный универсальный способ проверки.
+
+% =================================================
+\maintitle{3. Формулы двойного угла}
+
+\subheading{Синус двойного угла}
+
+\[
+\boxed{
+\sin 2\alpha=2\sin\alpha\cos\alpha
+}
+\]
+
+Формула следует из формулы суммы:
+
+\[
+\begin{aligned}
+\sin2\alpha
+&=
+\sin(\alpha+\alpha)
+\\
+&=
+\sin\alpha\cos\alpha+
+\cos\alpha\sin\alpha
+\\
+&=
+2\sin\alpha\cos\alpha.
+\end{aligned}
+\]
+
+\subheading{Главная практическая идея}
+
+Если перед Вами
+
+\[
+\sin u,
+\]
+
+то формулу двойного угла можно записать как
+
+\[
+\boxed{
+\sin u
+=
+2\sin\frac{u}{2}\cos\frac{u}{2}
+}
+\]
+
+То есть исходный аргумент целиком делится на \(2\).
+
+Например,
+
+\[
+\sin3\alpha
+=
+2\sin\frac{3\alpha}{2}
+\cos\frac{3\alpha}{2},
+\]
+
+\[
+\sin101\alpha
+=
+2\sin\frac{101\alpha}{2}
+\cos\frac{101\alpha}{2}.
+\]
+
+Формула работает и в обратную сторону:
+
+\[
+2\sin3\alpha\cos3\alpha
+=
+\sin6\alpha.
+\]
+
+\subheading{Если множителя \(2\) нет}
+
+Выражение
+
+\[
+\sin5\alpha\cos5\alpha
+\]
+
+ещё нельзя непосредственно свернуть по формуле двойного угла.
+
+Добавим нужную двойку:
+
+\[
+\sin5\alpha\cos5\alpha
+=
+\frac12
+\bigl(
+2\sin5\alpha\cos5\alpha
+\bigr).
+\]
+
+Следовательно,
+
+\[
+\boxed{
+\sin5\alpha\cos5\alpha
+=
+\frac12\sin10\alpha
+}
+\]
+
+В общем случае
+
+\[
+\boxed{
+\sin u\cos u=\frac12\sin2u
+}
+\]
+
+\subheading{Косинус двойного угла}
+
+Необходимо знать три равносильные формы:
+
+\[
+\boxed{
+\cos2\alpha
+=
+\cos^2\alpha-\sin^2\alpha
+}
+\]
+
+\[
+\boxed{
+\cos2\alpha
+=
+2\cos^2\alpha-1
+}
+\]
+
+\[
+\boxed{
+\cos2\alpha
+=
+1-2\sin^2\alpha
+}
+\]
+
+Для произвольного аргумента \(u\):
+
+\[
+\cos u
+=
+\cos^2\frac{u}{2}
+-
+\sin^2\frac{u}{2},
+\]
+
+\[
+\cos u
+=
+2\cos^2\frac{u}{2}-1,
+\]
+
+\[
+\cos u
+=
+1-2\sin^2\frac{u}{2}.
+\]
+
+Например,
+
+\[
+\cos3\alpha
+=
+2\cos^2\frac{3\alpha}{2}-1.
+\]
+
+\important{Как выбрать форму?}
+Смотрите на остальные части задачи.
+Если выгодно получить только косинусы, используйте
+\(2\cos^2\alpha-1\).
+Если нужны только синусы, используйте
+\(1-2\sin^2\alpha\).
+
+% =================================================
+\maintitle{4. Главная концепция решения тригонометрических уравнений}
+
+Перед алгебраическим решением удобно стремиться к двум целям:
+
+\[
+\boxed{\text{одинаковые аргументы}}
+\]
+
+и
+
+\[
+\boxed{\text{одинаковая тригонометрическая функция}}
+\]
+
+Если в одной части уравнения присутствует \(2x\), а в другой \(x\),
+формулы двойного угла часто позволяют перейти от \(2x\) к \(x\).
+
+Если одновременно присутствуют синусы и косинусы,
+основное тригонометрическое тождество и формулы двойного угла
+часто позволяют оставить только одну функцию.
+
+\subheading{Опорный пример}
+
+Решим
+
+\[
+\cos2x
+=
+\sin\left(x+\frac{\pi}{2}\right).
+\]
+
+Сначала преобразуем правую часть:
+
+\[
+\sin\left(x+\frac{\pi}{2}\right)=\cos x.
+\]
+
+Получаем
+
+\[
+\cos2x=\cos x.
+\]
+
+Справа уже стоит косинус, поэтому для левой части рационально выбрать
+
+\[
+\cos2x=2\cos^2x-1.
+\]
+
+Тогда
+
+\[
+2\cos^2x-1=\cos x.
+\]
+
+Переносим всё в одну часть:
+
+\[
+2\cos^2x-\cos x-1=0.
+\]
+
+Теперь уравнение стало алгебраическим относительно \(\cos x\).
+
+Выполняем замену
+
+\[
+t=\cos x,
+\qquad
+-1\le t\le1.
+\]
+
+Получаем
+
+\[
+2t^2-t-1=0.
+\]
+
+Корни:
+
+\[
+t_1=1,
+\qquad
+t_2=-\frac12.
+\]
+
+Оба удовлетворяют ограничению
+
+\[
+-1\le t\le1.
+\]
+
+Возвращаемся к исходной переменной:
+
+\[
+\cos x=1
+\]
+
+или
+
+\[
+\cos x=-\frac12.
+\]
+
+Следовательно,
+
+\[
+\boxed{
+x=2\pi n,\qquad n\in\mathbb Z
+}
+\]
+
+или
+
+\[
+\boxed{
+x=\pm\frac{2\pi}{3}+2\pi n,
+\qquad n\in\mathbb Z
+}
+\]
+
+\subheading{Почему ограничение для замены обязательно}
+
+При
+
+\[
+t=\sin x
+\quad\text{или}\quad
+t=\cos x
+\]
+
+всегда выполняется
+
+\[
+\boxed{-1\le t\le1}.
+\]
+
+Поэтому, например, корень
+
+\[
+t=2
+\]
+
+алгебраического уравнения необходимо отбросить:
+значения \(\sin x=2\) и \(\cos x=2\) невозможны.
+
+\subheading{Ограничения и типичные риски}
+
+\begin{itemize}
+  \item До преобразований проверяйте ОДЗ, если в уравнении есть дроби, корни или другие выражения с ограничениями.
+  \item Не делите уравнение на \(\sin x\), \(\cos x\) или другое выражение с переменной без отдельного рассмотрения случая, когда делитель равен нулю.
+  \item При замене \(t=\sin x\) или \(t=\cos x\) обязательно учитывайте \(t\in[-1;1]\).
+  \item После возведения обеих частей уравнения в квадрат обязательна проверка найденных корней.
+  \item Следите за знаками при переносе слагаемых.
+  \item Формула применяется только при выполнении её структуры: аргументы и коэффициенты должны соответствовать формуле.
+\end{itemize}
+
+\important{Рабочий принцип.}
+Если преобразование делает аргументы и функции более однородными,
+обычно Вы движетесь в полезном направлении.
+
+
+% =================================================
+% КРАТКИЙ ЧЕК-ЛИСТ
+% =================================================
+\maintitle{5. Чек-лист перед решением}
+
+Перед тем как переходить к вычислениям, проверьте:
+
+\begin{itemize}
+  \item[$\square$] Я определил ОДЗ и ограничения, если они есть.
+  \item[$\square$] Я сравнил аргументы всех тригонометрических функций.
+  \item[$\square$] Я понимаю, какая формула позволяет сделать аргументы одинаковыми.
+  \item[$\square$] Я стараюсь оставить одну основную функцию: синус или косинус.
+  \item[$\square$] Я узнаю формулы как слева направо, так и справа налево.
+  \item[$\square$] Я перенёс всё в одну часть, если это помогает увидеть структуру.
+  \item[$\square$] При замене \(t=\sin x\) или \(t=\cos x\) я записал \(t\in[-1;1]\).
+  \item[$\square$] Я не делил на выражение, которое может быть равно нулю, без проверки отдельного случая.
+  \item[$\square$] После обратной замены я записал все серии решений.
+\end{itemize}
+
+\subheading{Минимум формул, который необходимо узнавать сразу}
+
+\[
+\sin^2x+\cos^2x=1
+\]
+
+\[
+\sin(\alpha\pm\beta)
+=
+\sin\alpha\cos\beta
+\pm
+\cos\alpha\sin\beta
+\]
+
+\[
+\cos(\alpha\pm\beta)
+=
+\cos\alpha\cos\beta
+\mp
+\sin\alpha\sin\beta
+\]
+
+\[
+\sin2x=2\sin x\cos x
+\]
+
+\[
+\cos2x
+=
+\cos^2x-\sin^2x
+=
+2\cos^2x-1
+=
+1-2\sin^2x.
+\]
+
+% =================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% =================================================
+\clearpage
+\thispagestyle{fancy}
+
+\maintitle{Тренировочный блок. Путь А}
+
+\textbf{Задача 1. Базовые преобразования}
+
+Упростите выражения:
+
+\begin{enumerate}[label=\alph*)]
+  \item
+  \[
+  4\sin^2\alpha+4\cos^2\alpha;
+  \]
+
+  \item
+  \[
+  2\sin5x\cos5x;
+  \]
+
+  \item представьте
+  \[
+  \cos3x
+  \]
+  только через \(\cos\dfrac{3x}{2}\).
+\end{enumerate}
+
+\vspace{8mm}
+
+\textbf{Задача 2. Формула суммы}
+
+Вычислите точное значение
+
+\[
+\sin75^\circ.
+\]
+
+Ответ представьте в виде выражения с корнями.
+
+\vspace{10mm}
+
+\textbf{Задача 3. Тригонометрическое уравнение}
+
+Решите уравнение
+
+\[
+\cos2x+\sin\left(x+\frac{\pi}{2}\right)=0.
+\]
+
+Запишите все решения.
+
+% =================================================
+% ОТВЕТЫ
+% =================================================
+\clearpage
+\thispagestyle{fancy}
+
+\maintitle{Ответы}
+
+\renewcommand{\arraystretch}{1.45}
+
+\begin{table}[ht]
+\centering
+\begin{tabularx}{\linewidth}{
+  >{\raggedright\arraybackslash}p{22mm}
+  X
+}
+\toprule
+\textbf{Задание} & \textbf{Ответ} \\
+\midrule
+
+1а &
+\[
+4
+\]
+\\
+
+1б &
+\[
+\sin10x
+\]
+\\
+
+1в &
+\[
+2\cos^2\frac{3x}{2}-1
+\]
+\\
+
+2 &
+\[
+\frac{\sqrt6+\sqrt2}{4}
+\]
+\\
+
+3 &
+\[
+x=\pm\frac{\pi}{3}+2\pi n
+\quad\text{или}\quad
+x=\pi+2\pi n,
+\qquad n\in\mathbb Z
+\]
+\\
+
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\vfill
+
+\begin{center}
+{\small\color{softgray}
+Лёвин Артём Александрович
+}
+\end{center}
+
+\end{document}
