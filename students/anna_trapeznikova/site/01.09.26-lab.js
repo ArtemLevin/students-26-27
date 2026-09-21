@@ -652,7 +652,7 @@
       if (output) output.textContent = String(step) + ' / ' + String(derived.maxStep);
     });
     this.queryAll('[data-lab-action="play"]').forEach(function (button) {
-      button.textContent = this.state.ui.playing ? '❚❚' : '▶';
+      button.textContent = this.state.ui.playing ? 'Пауза' : 'Старт';
       button.setAttribute('aria-label', this.state.ui.playing ? 'Поставить эксперимент на паузу' : 'Запустить эксперимент');
     }, this);
   };
@@ -1315,7 +1315,7 @@
       this.text(panel, 478, 226, '= ' + String(activeStep.digit) + ' × ' + String(data.reducedDenominator) + ' + ' + String(activeStep.after), { 'font-size': 17, fill: 'var(--teal-strong)', 'font-weight': 750 });
       this.text(panel, 478, 265, 'Получена цифра ' + String(activeStep.digit), { 'font-size': 13, fill: 'var(--muted)' });
     } else {
-      this.text(panel, 478, 207, 'Нажмите ▶', { 'font-size': 24, 'font-weight': 850 });
+      this.text(panel, 478, 207, 'Нажмите «Старт»', { 'font-size': 24, 'font-weight': 850 });
       this.text(panel, 478, 238, 'или выберите шаг на графике', { 'font-size': 13, fill: 'var(--muted)' });
     }
     this.text(panel, 478, 294, 'предпериод ' + data.prefixLength + ' · период ' + data.periodLength, { 'font-size': 12, fill: 'var(--coral)', 'font-weight': 750 });
