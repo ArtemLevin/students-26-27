@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Интерактивное занятие Нади Клименко: уравнения, проценты, НОД и НОК.">
+  <title>Уравнения, проценты, НОД и НОК — Надя Клименко</title>
+  <style>
+    :root{
+      --surface-page:#f4f0e7;
+      --surface-raised:#fffdf8;
+      --surface-soft:#edf5f1;
+      --surface-accent:#e5f1ee;
+      --text-primary:#202725;
+      --text-secondary:#64706c;
+      --text-inverse:#ffffff;
+      --border-subtle:#d6ddd8;
+      --border-strong:#9ca9a4;
+      --accent:#0b6f6b;
+      --accent-hover:#075753;
+      --accent-soft:#d9ece8;
+      --support:#9a6f2d;
+      --support-soft:#f3ead7;
+      --success:#2d7654;
+      --danger:#9c4c4d;
+      --warning:#9a6f2d;
+      --focus-ring:#167f7a;
+      --shadow-low:0 10px 30px rgba(35,61,53,.08);
+      --shadow-high:0 22px 60px rgba(35,61,53,.14);
+      --radius-sm:.55rem;
+      --radius-md:1rem;
+      --radius-lg:1.6rem;
+      --space-1:.4rem;
+      --space-2:.7rem;
+      --space-3:1rem;
+      --space-4:1.5rem;
+      --space-5:2.2rem;
+      --space-6:3.2rem;
+      --motion-fast:150ms;
+      --motion-normal:260ms;
+      --max:1180px;
+      --journey-progress:0;
+    }
+    html[data-theme="dark"]{
+      --surface-page:#111816;
+      --surface-raised:#18211e;
+      --surface-soft:#1d2a26;
+      --surface-accent:#183530;
+      --text-primary:#eef5f2;
+      --text-secondary:#a9b7b2;
+      --text-inverse:#10201c;
+      --border-subtle:#33443e;
+      --border-strong:#60736b;
+      --accent:#63c8c0;
+      --accent-hover:#86d9d2;
+      --accent-soft:#173c37;
+      --support:#dfb76e;
+      --support-soft:#3b3020;
+      --success:#83c8a2;
+      --danger:#e28b8d;
+      --warning:#dfb76e;
+      --focus-ring:#8dded7;
+      --shadow-low:0 12px 34px rgba(0,0,0,.22);
+      --shadow-high:0 24px 64px rgba(0,0,0,.34);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--surface-page)}
+    body{
+      margin:0;
+      color:var(--text-primary);
+      background:
+        linear-gradient(90deg,transparent 0 8%,color-mix(in srgb,var(--border-subtle) 22%,transparent) 8% 8.08%,transparent 8.08%),
+        var(--surface-page);
+      font:16px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+    }
+    a{color:inherit}
+    button,input{font:inherit}
+    button{cursor:pointer}
+    math{font-family:"Cambria Math","Times New Roman",serif;font-size:1.1em}
+    :focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+    .skip-link{position:absolute;left:-9999px;top:0}
+    .skip-link:focus{left:1rem;top:1rem;z-index:100;background:var(--surface-raised);padding:.7rem 1rem;border:1px solid var(--border-strong)}
+    .shell{width:min(calc(100% - 2rem),var(--max));margin:auto}
+    .topbar{
+      position:sticky;top:0;z-index:30;
+      border-bottom:1px solid var(--border-subtle);
+      background:color-mix(in srgb,var(--surface-page) 90%,transparent);
+      backdrop-filter:blur(12px);
+    }
+    .topbar-inner{min-height:58px;display:flex;align-items:center;gap:var(--space-3)}
+    .brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;font-weight:750}
+    .brand-mark{width:30px;height:30px;border:1px solid var(--border-strong);border-radius:50%;display:grid;place-items:center;color:var(--accent);font:700 .8rem Georgia,serif}
+    .topnav{display:flex;gap:.2rem;margin-left:auto}
+    .topnav a,.topbar button{
+      min-height:42px;padding:.55rem .75rem;border:0;border-bottom:1px solid transparent;
+      background:transparent;color:var(--text-secondary);text-decoration:none;
+    }
+    .topnav a:hover,.topnav a:focus-visible,.topbar button:hover{color:var(--text-primary);border-bottom-color:var(--accent)}
+    .lesson-cover{
+      position:relative;
+      min-height:600px;
+      display:grid;
+      grid-template-columns:minmax(0,1.08fr) minmax(300px,.72fr);
+      gap:clamp(2rem,6vw,5rem);
+      align-items:center;
+      padding:clamp(3.5rem,8vw,7rem) 0 clamp(3rem,6vw,5rem);
+      border-bottom:1px solid var(--border-subtle);
+      overflow:hidden;
+    }
+    .lesson-cover::after{
+      content:"";position:absolute;inset:auto -15% 11% 42%;height:1px;
+      background:linear-gradient(90deg,var(--accent),transparent);
+      transform:rotate(-4deg);opacity:.45;pointer-events:none;
+    }
+    .coordinate-waypoint{
+      position:absolute;left:var(--point-x);top:var(--point-y);
+      width:var(--point-size);height:var(--point-size);margin:calc(var(--point-size)/-2);
+      border:1px solid color-mix(in srgb,var(--accent) 65%,transparent);
+      border-radius:50%;opacity:.32;pointer-events:none;
+      transform:translate3d(0,var(--atlas-parallax-y,0),0);
+    }
+    .coordinate-waypoint::before,.coordinate-waypoint::after{
+      content:"";position:absolute;left:50%;top:50%;background:var(--accent);opacity:.45;transform:translate(-50%,-50%)
+    }
+    .coordinate-waypoint::before{width:9px;height:1px}
+    .coordinate-waypoint::after{width:1px;height:9px}
+    .cover-copy{position:relative;z-index:2}
+    .kicker,.section-index{
+      margin:0 0 .9rem;color:var(--accent);font:750 .73rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;
+      letter-spacing:.12em;text-transform:uppercase;
+    }
+    h1,h2,h3{font-family:Georgia,Cambria,serif;letter-spacing:-.025em}
+    h1{font-size:clamp(3.2rem,7vw,7.1rem);line-height:.89;margin:.15rem 0 1.3rem;max-width:9ch;font-weight:550}
+    .cover-lead{max-width:45rem;font-size:clamp(1.05rem,1.8vw,1.3rem);color:var(--text-secondary)}
+    .thesis{
+      margin:2rem 0 0;padding:1.1rem 0 1.1rem 1.25rem;border-left:4px solid var(--accent);
+      font:600 clamp(1.15rem,2vw,1.45rem)/1.45 Georgia,Cambria,serif;max-width:43rem
+    }
+    .folio{
+      margin-top:2.1rem;display:grid;grid-template-columns:auto 1fr;gap:.45rem 1rem;
+      max-width:34rem;border-top:1px solid var(--border-strong);padding-top:1rem
+    }
+    .folio dt{color:var(--text-secondary);font-size:.82rem}
+    .folio dd{margin:0;font-weight:650}
+    .cover-material{
+      position:relative;z-index:2;margin:0;align-self:end;
+      border-left:1px solid var(--border-strong);padding-left:1.2rem;
+    }
+    .cover-material img{
+      width:100%;display:block;border:1px solid var(--border-subtle);
+      box-shadow:var(--shadow-low);background:var(--surface-raised)
+    }
+    .cover-material figcaption{font-size:.82rem;color:var(--text-secondary);margin-top:.65rem}
+    .route{
+      display:grid;grid-template-columns:repeat(5,1fr);
+      border-bottom:1px solid var(--border-subtle);margin-bottom:var(--space-6)
+    }
+    .route a{
+      padding:1rem .8rem;text-decoration:none;color:var(--text-secondary);
+      border-right:1px solid var(--border-subtle);font-size:.86rem
+    }
+    .route a:first-child{border-left:1px solid var(--border-subtle)}
+    .route a:hover,.route a:focus-visible{color:var(--accent);background:var(--surface-soft)}
+    main{position:relative}
+    .journey{
+      position:absolute;left:-2.2rem;top:0;bottom:0;width:1px;background:var(--border-subtle);display:none
+    }
+    .journey span{display:block;width:1px;height:calc(var(--journey-progress)*1%);background:var(--accent)}
+    .chapter{
+      padding:0 0 var(--space-6);
+      margin:0 0 var(--space-6);
+      border-bottom:1px solid var(--border-subtle);
+      transform:translate3d(0,var(--atlas-parallax-y,0),0);
+    }
+    .chapter-head{
+      display:grid;grid-template-columns:minmax(180px,.35fr) minmax(0,1fr);
+      gap:clamp(1.3rem,5vw,4rem);align-items:start;margin-bottom:var(--space-5)
+    }
+    .chapter-head h2{font-size:clamp(2rem,4.3vw,4.4rem);line-height:.95;margin:0;font-weight:550;max-width:12ch}
+    .chapter-intro{max-width:48rem;color:var(--text-secondary);font-size:1.05rem;margin:0}
+    .rule-strip{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+      border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);
+      margin:1.4rem 0 2rem
+    }
+    .rule-strip>div{padding:1rem;border-right:1px solid var(--border-subtle)}
+    .rule-strip>div:last-child{border-right:0}
+    .rule-strip strong{display:block;color:var(--accent);margin-bottom:.25rem}
+    .mathline{
+      margin:1rem 0;padding:1rem 1.1rem;overflow-x:auto;background:var(--surface-soft);
+      border-left:3px solid var(--accent)
+    }
+    .mathline.center{text-align:center}
+    .example{
+      display:grid;grid-template-columns:minmax(160px,.34fr) minmax(0,1fr);
+      gap:clamp(1rem,4vw,3rem);padding:1.4rem 0;border-top:1px solid var(--border-subtle)
+    }
+    .example:last-child{border-bottom:1px solid var(--border-subtle)}
+    .example h3{margin:0;font-size:1.3rem}
+    .example p{margin:.2rem 0 .8rem}
+    .annotation{font-size:.88rem;color:var(--text-secondary)}
+    .warning{
+      padding:1rem 1.15rem;border-left:4px solid var(--danger);
+      background:color-mix(in srgb,var(--danger) 8%,var(--surface-raised));margin:1.2rem 0
+    }
+    .note{
+      padding:1rem 1.15rem;border-left:4px solid var(--support);
+      background:var(--support-soft);margin:1.2rem 0
+    }
+    .comparison{
+      display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border-strong);margin:1.5rem 0
+    }
+    .comparison section{padding:clamp(1rem,3vw,1.6rem)}
+    .comparison section+section{border-left:1px solid var(--border-strong)}
+    .comparison h3{font-size:1.7rem;margin:.1rem 0 1rem;color:var(--accent)}
+    .comparison ul{padding-left:1.2rem}
+    .factor{
+      display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:.7rem 0
+    }
+    .factor span{padding:.35rem .55rem;border-bottom:1px solid var(--border-strong);font-family:"Cambria Math",serif}
+    .decision{
+      display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:stretch;margin:2rem 0
+    }
+    .decision .path{border-top:4px solid var(--accent);padding:1.2rem 0}
+    .decision .path:last-child{border-color:var(--support)}
+    .decision .arrow{display:grid;place-items:center;color:var(--text-secondary);font-size:1.4rem}
+    .path h3{margin:.2rem 0 .8rem}
+    .steps{counter-reset:step;margin:1rem 0}
+    .step{
+      counter-increment:step;display:grid;grid-template-columns:2.3rem minmax(0,1fr);
+      gap:1rem;padding:1rem 0;border-top:1px solid var(--border-subtle)
+    }
+    .step::before{
+      content:counter(step);width:2.1rem;height:2.1rem;border:1px solid var(--border-strong);
+      border-radius:50%;display:grid;place-items:center;color:var(--accent);font-weight:800
+    }
+    .step.current{background:linear-gradient(90deg,var(--accent-soft),transparent)}
+    .step[hidden]{display:none}
+    .stepper-controls{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
+    .btn,.stepper-controls button,.quiz button{
+      border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);
+      padding:.65rem .9rem;min-height:44px;border-radius:var(--radius-sm);text-decoration:none
+    }
+    .btn.primary,.stepper-controls .primary{
+      background:var(--accent);border-color:var(--accent);color:var(--text-inverse)
+    }
+    .btn:hover,.stepper-controls button:hover,.quiz button:hover{border-color:var(--accent)}
+    .practice-sheet{
+      border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);
+      padding:1.3rem 0;margin:1.4rem 0
+    }
+    .task{display:grid;grid-template-columns:2.6rem minmax(0,1fr);gap:.7rem;padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+    .task:last-child{border-bottom:0}
+    .task-no{font:700 1rem ui-monospace,monospace;color:var(--accent)}
+    details.answers{margin-top:1rem}
+    details.answers summary{cursor:pointer;font-weight:750;color:var(--accent)}
+    table{width:100%;border-collapse:collapse;margin-top:1rem}
+    th,td{text-align:left;padding:.7rem .6rem;border-bottom:1px solid var(--border-subtle)}
+    th{color:var(--text-secondary);font-size:.82rem}
+    .quiz{
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:1.5rem 0
+    }
+    .quiz-item{padding:1rem 0;border-top:1px solid var(--border-strong)}
+    .quiz-item p{font-weight:700}
+    .quiz-options{display:flex;gap:.5rem;flex-wrap:wrap}
+    .quiz button[data-state="good"]{border-color:var(--success);color:var(--success)}
+    .quiz button[data-state="bad"]{border-color:var(--danger);color:var(--danger)}
+    .feedback{min-height:1.6em;margin-top:.55rem;color:var(--text-secondary)}
+    .feedback.good{color:var(--success)}.feedback.bad{color:var(--danger)}
+    .checklist{display:grid;grid-template-columns:1fr 1fr;gap:.25rem 1.3rem;margin:1.2rem 0}
+    .check{display:flex;gap:.7rem;align-items:flex-start;padding:.75rem 0;border-bottom:1px solid var(--border-subtle)}
+    .check input{width:20px;height:20px;accent-color:var(--accent);flex:none}
+    .progress{height:7px;background:var(--border-subtle);overflow:hidden;margin:.8rem 0}
+    .progress span{display:block;width:0;height:100%;background:var(--accent);transition:width var(--motion-normal)}
+    .materials{
+      display:flex;gap:.65rem;flex-wrap:wrap;margin-top:1.4rem
+    }
+    .footer{
+      padding:2rem 0 3rem;color:var(--text-secondary);display:flex;justify-content:space-between;gap:1rem;
+      border-top:1px solid var(--border-subtle);font-size:.88rem
+    }
+    @media(min-width:1260px){.journey{display:block}}
+    @media(max-width:900px){
+      .lesson-cover{grid-template-columns:1fr;min-height:auto}
+      .cover-material{border-left:0;border-top:1px solid var(--border-strong);padding:1rem 0 0;max-width:720px}
+      .route{grid-template-columns:1fr 1fr}
+      .chapter-head,.example{grid-template-columns:1fr}
+      .rule-strip{grid-template-columns:1fr}
+      .rule-strip>div{border-right:0;border-bottom:1px solid var(--border-subtle)}
+      .comparison,.decision,.quiz,.checklist{grid-template-columns:1fr}
+      .comparison section+section{border-left:0;border-top:1px solid var(--border-strong)}
+      .decision .arrow{transform:rotate(90deg)}
+    }
+    @media(max-width:640px){
+      body{background:var(--surface-page)}
+      .shell{width:min(calc(100% - 1.1rem),var(--max))}
+      .topnav{display:none}
+      h1{font-size:clamp(2.8rem,15vw,4.4rem)}
+      .route{grid-template-columns:1fr}
+      .route a{border-left:1px solid var(--border-subtle)}
+      .footer{flex-direction:column}
+    }
+    @media(prefers-reduced-motion:reduce){
+      *{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+      [data-atlas-parallax]{transform:none!important}
+    }
+    @media print{
+      :root,html[data-theme="dark"]{
+        --surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--surface-accent:#fff;
+        --text-primary:#111;--text-secondary:#333;--border-subtle:#ccc;--border-strong:#888;
+        --accent:#1d5c58;--support:#76551f;--shadow-low:none;--shadow-high:none
+      }
+      body{background:#fff;font-size:11pt}
+      .topbar,.route,.stepper-controls,.quiz-options,.materials{display:none!important}
+      .shell{width:100%;max-width:none}
+      .lesson-cover{min-height:0;grid-template-columns:1fr;padding:0 0 1.5rem}
+      .cover-material{display:none}
+      .chapter{break-inside:auto}
+      .example,.practice-sheet,.comparison{break-inside:avoid}
+      .step[hidden]{display:grid!important}
+      details.answers>div{display:block!important}
+      details.answers summary{display:none}
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#content">К содержанию</a>
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <a class="brand" href="index.html"><span class="brand-mark">Σ</span><span>Надя Клименко · 6 класс</span></a>
+    <nav class="topnav" aria-label="Разделы страницы">
+      <a href="#equations">Уравнения</a>
+      <a href="#percent">Проценты</a>
+      <a href="#gcd-lcm">НОД / НОК</a>
+      <a href="#practice">Тренировка</a>
+    </nav>
+    <button id="themeToggle" type="button">Тёмная тема</button>
+  </div>
+</header>
+
+<div class="shell">
+  <header class="lesson-cover" data-coordinate-field data-atlas-parallax="4">
+    <div class="cover-copy">
+      <p class="kicker">Занятие · 22 сентября 2026</p>
+      <h1>Уравнения, проценты, НОД и НОК</h1>
+      <p class="cover-lead">Четыре знакомых сюжета соединяются одним навыком: сначала определить, что именно требуется найти, затем выбрать подходящее правило и проверить смысл результата.</p>
+      <p class="thesis">Опорная пара занятия: <strong>НОД делит исходные числа</strong>, <strong>НОК делится на исходные числа</strong>.</p>
+      <dl class="folio">
+        <dt>Ученица</dt><dd>Надя Клименко</dd>
+        <dt>Преподаватель</dt><dd>Лёвин Артём Александрович</dd>
+        <dt>Курс</dt><dd>6 класс · Математическая вертикаль</dd>
+        <dt>Маршрут</dt><dd>Уравнения → проценты → НОД → НОК → выбор метода</dd>
+      </dl>
+      <div class="materials">
+        <a class="btn primary" href="../pdf_docs/22.09.26.pdf" download>Скачать пособие</a>
+        <a class="btn" href="../tex_docs/22.09.26.tex">TeX-исходник</a>
+        <a class="btn" href="../images/22.09.26.png">Ментальная карта</a>
+      </div>
+    </div>
+    <figure class="cover-material">
+      <img src="../images/22.09.26.png" alt="Ментальная карта занятия: уравнения, проценты, НОД и НОК">
+      <figcaption>Ментальная карта занятия: краткая схема выбора метода и ключевые формулы.</figcaption>
+    </figure>
+  </header>
+
+  <nav class="route" aria-label="Маршрут занятия">
+    <a href="#equations">01 · Уравнения</a>
+    <a href="#percent">02 · Проценты</a>
+    <a href="#gcd-lcm">03 · НОД и НОК</a>
+    <a href="#algorithm">04 · Выбор метода</a>
+    <a href="#practice">05 · Закрепление</a>
+  </nav>
+
+  <main id="content">
+    <div class="journey" aria-hidden="true"><span></span></div>
+
+    <section class="chapter" id="equations" data-journey-stop data-journey-label="Уравнения">
+      <header class="chapter-head">
+        <div><p class="section-index">01 · Неизвестный компонент</p><h2>Сначала восстановите действие</h2></div>
+        <p class="chapter-intro">В простых уравнениях полезно видеть роль неизвестного: знаменатель, числитель или вычитаемое. Для дробного уравнения ограничение знаменателя проверяется до преобразований.</p>
+      </header>
+
+      <div class="rule-strip">
+        <div><strong>Неизвестный знаменатель</strong><span>Если <math><mrow><mfrac><mi>A</mi><mi>B</mi></mfrac><mo>=</mo><mi>C</mi></mrow></math>, то <math><mrow><mi>B</mi><mo>=</mo><mfrac><mi>A</mi><mi>C</mi></mfrac></mrow></math>.</span></div>
+        <div><strong>Неизвестный числитель</strong><span>Если дробь равна числу, восстановите числитель умножением.</span></div>
+        <div><strong>Неизвестное вычитаемое</strong><span>В равенстве <math><mrow><mi>a</mi><mo>−</mo><mi>x</mi><mo>=</mo><mi>b</mi></mrow></math> вычитаемое равно <math><mrow><mi>a</mi><mo>−</mo><mi>b</mi></mrow></math>.</span></div>
+      </div>
+
+      <article class="example">
+        <h3>Пример 1 · знаменатель</h3>
+        <div>
+          <div class="mathline center"><math display="block"><mrow><mfrac><mn>6</mn><mrow><mi>x</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mo>=</mo><mn>2</mn></mrow></math></div>
+          <p>Ограничение: <math><mrow><mi>x</mi><mo>−</mo><mn>1</mn><mo>≠</mo><mn>0</mn></mrow></math>, поэтому <math><mrow><mi>x</mi><mo>≠</mo><mn>1</mn></mrow></math>.</p>
+          <div class="mathline"><math><mrow><mi>x</mi><mo>−</mo><mn>1</mn><mo>=</mo><mfrac><mn>6</mn><mn>2</mn></mfrac><mo>=</mo><mn>3</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>4</mn></mrow></math></div>
+          <p class="annotation">Проверка: <math><mrow><mfrac><mn>6</mn><mrow><mn>4</mn><mo>−</mo><mn>1</mn></mrow></mfrac><mo>=</mo><mn>2</mn></mrow></math>.</p>
+        </div>
+      </article>
+
+      <article class="example">
+        <h3>Пример 2 · числитель</h3>
+        <div>
+          <div class="mathline"><math><mrow><mfrac><mrow><mi>x</mi><mo>−</mo><mn>1</mn></mrow><mn>2</mn></mfrac><mo>=</mo><mn>3</mn><mo>⇒</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>=</mo><mn>6</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>7</mn></mrow></math></div>
+        </div>
+      </article>
+
+      <article class="example">
+        <h3>Пример 3 · вычитаемое</h3>
+        <div>
+          <div class="mathline"><math><mrow><mn>10</mn><mo>−</mo><mi>x</mi><mo>=</mo><mn>6</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>10</mn><mo>−</mo><mn>6</mn><mo>=</mo><mn>4</mn></mrow></math></div>
+          <div class="warning"><strong>Контроль знака.</strong> Запись <math><mrow><mi>x</mi><mo>=</mo><mn>16</mn></mrow></math> не удовлетворяет исходному равенству. Подстановка сразу показывает ошибку.</div>
+        </div>
+      </article>
+    </section>
+
+    <section class="chapter" id="percent" data-journey-stop data-journey-label="Проценты" data-atlas-parallax="3">
+      <header class="chapter-head">
+        <div><p class="section-index">02 · Часть и целое</p><h2>Три процентные модели</h2></div>
+        <p class="chapter-intro">Перед вычислением определите, что требуется: часть от целого, всё число по известной части или процентное отношение двух чисел.</p>
+      </header>
+
+      <div class="rule-strip">
+        <div><strong>Найти процент от числа</strong><math display="block"><mrow><mi>A</mi><mo>·</mo><mfrac><mi>p</mi><mn>100</mn></mfrac></mrow></math></div>
+        <div><strong>Найти всё число</strong><math display="block"><mrow><mi>B</mi><mo>·</mo><mfrac><mn>100</mn><mi>p</mi></mfrac></mrow></math></div>
+        <div><strong>Найти процент</strong><math display="block"><mrow><mfrac><mi>A</mi><mi>B</mi></mfrac><mo>·</mo><mn>100</mn><mo>%</mo></mrow></math></div>
+      </div>
+
+      <article class="example">
+        <h3>20% от 500</h3>
+        <div><div class="mathline"><math><mrow><mn>500</mn><mo>·</mo><mfrac><mn>20</mn><mn>100</mn></mfrac><mo>=</mo><mn>100</mn></mrow></math></div></div>
+      </article>
+      <article class="example">
+        <h3>20% числа равны 500</h3>
+        <div><div class="mathline"><math><mrow><mn>500</mn><mo>·</mo><mfrac><mn>100</mn><mn>20</mn></mfrac><mo>=</mo><mn>2500</mn></mrow></math></div></div>
+      </article>
+      <article class="example">
+        <h3>Сколько процентов 20 от 100</h3>
+        <div><div class="mathline"><math><mrow><mfrac><mn>20</mn><mn>100</mn></mfrac><mo>·</mo><mn>100</mn><mo>%</mo><mo>=</mo><mn>20</mn><mo>%</mo></mrow></math></div></div>
+      </article>
+      <article class="example">
+        <h3>Скидка 20%</h3>
+        <div>
+          <p>После скидки остаётся оплатить <strong>80%</strong> исходной цены.</p>
+          <div class="mathline"><math><mrow><mn>3000</mn><mo>·</mo><mfrac><mn>80</mn><mn>100</mn></mfrac><mo>=</mo><mn>2400</mn></mrow></math><span> руб.</span></div>
+          <div class="note">Быстрая проверка смысла: итоговая цена после скидки должна быть меньше исходных 3000 рублей.</div>
+        </div>
+      </article>
+    </section>
+
+    <section class="chapter" id="gcd-lcm" data-journey-stop data-journey-label="НОД и НОК">
+      <header class="chapter-head">
+        <div><p class="section-index">03 · Теория чисел</p><h2>Делит или делится?</h2></div>
+        <p class="chapter-intro">НОД и НОК строятся через простые множители, однако отвечают на разные вопросы. НОД связан с разбиением на одинаковые группы. НОК показывает первое общее совпадение или наименьшую общую сумму.</p>
+      </header>
+
+      <div class="comparison">
+        <section>
+          <h3>НОД</h3>
+          <p><strong>Наибольший общий делитель</strong> — наибольшее натуральное число, которое делит каждое исходное число.</p>
+          <ul>
+            <li>одинаковые группы;</li>
+            <li>одинаковые комплекты;</li>
+            <li>максимально возможное число групп.</li>
+          </ul>
+          <p><strong>При факторизации:</strong> берём только общие простые множители в наименьших степенях.</p>
+        </section>
+        <section>
+          <h3>НОК</h3>
+          <p><strong>Наименьшее общее кратное</strong> — наименьшее натуральное число, которое делится на каждое исходное число.</p>
+          <ul>
+            <li>одновременно;</li>
+            <li>снова совпадут;</li>
+            <li>наименьшая общая сумма или период.</li>
+          </ul>
+          <p><strong>При факторизации:</strong> берём все необходимые простые множители в достаточных степенях.</p>
+        </section>
+      </div>
+
+      <article class="example">
+        <h3>НОД трёх чисел</h3>
+        <div>
+          <div class="factor"><span>252 = 2² · 3² · 7</span><span>392 = 2³ · 7²</span><span>504 = 2³ · 3² · 7</span></div>
+          <div class="mathline"><math><mrow><mi>НОД</mi><mo>(</mo><mn>252</mn><mo>,</mo><mn>392</mn><mo>,</mo><mn>504</mn><mo>)</mo><mo>=</mo><msup><mn>2</mn><mn>2</mn></msup><mo>·</mo><mn>7</mn><mo>=</mo><mn>28</mn></mrow></math></div>
+          <p>Получается <strong>28 одинаковых комплектов</strong>. В каждом: <math><mrow><mn>252</mn><mo>:</mo><mn>28</mn><mo>=</mo><mn>9</mn></mrow></math> тетрадей, <math><mrow><mn>392</mn><mo>:</mo><mn>28</mn><mo>=</mo><mn>14</mn></mrow></math> ручек и <math><mrow><mn>504</mn><mo>:</mo><mn>28</mn><mo>=</mo><mn>18</mn></mrow></math> карандашей.</p>
+        </div>
+      </article>
+
+      <article class="example">
+        <h3>НОК для общей суммы</h3>
+        <div>
+          <div class="factor"><span>45 = 3² · 5</span><span>60 = 2² · 3 · 5</span></div>
+          <div class="mathline"><math><mrow><mi>НОК</mi><mo>(</mo><mn>45</mn><mo>,</mo><mn>60</mn><mo>)</mo><mo>=</mo><msup><mn>2</mn><mn>2</mn></msup><mo>·</mo><msup><mn>3</mn><mn>2</mn></msup><mo>·</mo><mn>5</mn><mo>=</mo><mn>180</mn></mrow></math></div>
+          <p>180 рублей делятся и на 45, и на 60. Это соответствует 4 пирожкам по 45 рублей или 3 пирожкам по 60 рублей.</p>
+        </div>
+      </article>
+
+      <article class="example">
+        <h3>НОК чисел 15 и 24</h3>
+        <div>
+          <div class="factor"><span>15 = 3 · 5</span><span>24 = 2³ · 3</span></div>
+          <div class="mathline"><math><mrow><mi>НОК</mi><mo>(</mo><mn>15</mn><mo>,</mo><mn>24</mn><mo>)</mo><mo>=</mo><msup><mn>2</mn><mn>3</mn></msup><mo>·</mo><mn>3</mn><mo>·</mo><mn>5</mn><mo>=</mo><mn>120</mn></mrow></math></div>
+          <p class="annotation">Число 240 тоже является общим кратным, но 120 меньше.</p>
+        </div>
+      </article>
+
+      <div class="note"><strong>Граничные случаи.</strong> НОД может совпадать с одним из исходных чисел: <math><mrow><mi>НОД</mi><mo>(</mo><mn>6</mn><mo>,</mo><mn>12</mn><mo>)</mo><mo>=</mo><mn>6</mn></mrow></math>. НОК тоже может совпадать с одним из чисел: <math><mrow><mi>НОК</mi><mo>(</mo><mn>6</mn><mo>,</mo><mn>12</mn><mo>)</mo><mo>=</mo><mn>12</mn></mrow></math>.</div>
+    </section>
+
+    <section class="chapter" id="algorithm" data-journey-stop data-journey-label="Выбор метода" data-atlas-parallax="3">
+      <header class="chapter-head">
+        <div><p class="section-index">04 · Распознавание</p><h2>Как выбрать НОД или НОК</h2></div>
+        <p class="chapter-intro">Смысл задачи определяет действие. Слова «одинаковые группы» ведут к общему делителю. Формулировки про первое общее совпадение ведут к общему кратному.</p>
+      </header>
+
+      <div class="decision">
+        <div class="path">
+          <p class="section-index">Путь 1</p>
+          <h3>Разбиваем на одинаковые группы</h3>
+          <p>Ищите НОД. Он должен делить каждое исходное количество.</p>
+        </div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="path">
+          <p class="section-index">Путь 2</p>
+          <h3>Ищем первое общее совпадение</h3>
+          <p>Ищите НОК. Он должен делиться на каждое исходное число.</p>
+        </div>
+      </div>
+
+      <article aria-labelledby="stepperTitle">
+        <h3 id="stepperTitle">Пошаговый алгоритм</h3>
+        <div class="steps" id="methodStepper">
+          <div class="step current"><div><strong>Прочитайте условие и назовите общую величину.</strong><br><span class="annotation">Количество групп, общий период или общая сумма.</span></div></div>
+          <div class="step" hidden><div><strong>Определите направление.</strong><br><span class="annotation">Группы → НОД. Первое совпадение → НОК.</span></div></div>
+          <div class="step" hidden><div><strong>Разложите числа на простые множители.</strong></div></div>
+          <div class="step" hidden><div><strong>Соберите нужные множители.</strong><br><span class="annotation">Для НОД — общие. Для НОК — все недостающие.</span></div></div>
+          <div class="step" hidden><div><strong>Проверьте смысл результата.</strong><br><span class="annotation">НОД делит исходные числа; НОК делится на них.</span></div></div>
+        </div>
+        <div class="stepper-controls">
+          <button type="button" data-stepper="prev">Назад</button>
+          <button class="primary" type="button" data-stepper="next">Следующий шаг</button>
+          <button type="button" data-stepper="all">Показать всё</button>
+          <button type="button" data-stepper="reset">К началу</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="chapter" id="practice" data-journey-stop data-journey-label="Закрепление">
+      <header class="chapter-head">
+        <div><p class="section-index">05 · Путь А</p><h2>Три задания на закрепление</h2></div>
+        <p class="chapter-intro">Задания повторяют ключевые действия занятия: восстановление неизвестного компонента, скидку и распознавание НОД/НОК.</p>
+      </header>
+
+      <div class="practice-sheet">
+        <div class="task">
+          <div class="task-no">01</div>
+          <div>
+            <strong>Решите уравнения.</strong>
+            <p><math><mrow><mi>a</mi><mo>)</mo><mspace width=".5em"/><mfrac><mn>18</mn><mrow><mi>x</mi><mo>−</mo><mn>2</mn></mrow></mfrac><mo>=</mo><mn>6</mn></mrow></math></p>
+            <p><math><mrow><mi>б</mi><mo>)</mo><mspace width=".5em"/><mfrac><mrow><mi>x</mi><mo>+</mo><mn>3</mn></mrow><mn>5</mn></mfrac><mo>=</mo><mn>4</mn></mrow></math></p>
+            <p><math><mrow><mi>в</mi><mo>)</mo><mspace width=".5em"/><mn>17</mn><mo>−</mo><mi>x</mi><mo>=</mo><mn>9</mn></mrow></math></p>
+          </div>
+        </div>
+        <div class="task">
+          <div class="task-no">02</div>
+          <div><strong>Проценты.</strong><p>Куртка стоила 4800 рублей. Цену снизили на 15%. Найдите стоимость куртки после скидки.</p></div>
+        </div>
+        <div class="task">
+          <div class="task-no">03</div>
+          <div>
+            <strong>НОД и НОК.</strong>
+            <p>Для школьного мероприятия подготовили 168 тетрадей и 252 карандаша.</p>
+            <ol>
+              <li>Какое наибольшее число одинаковых наборов можно составить, используя все тетради и карандаши?</li>
+              <li>Сколько тетрадей и сколько карандашей будет в одном наборе?</li>
+              <li>Два автоматических устройства включаются через каждые 18 минут и 24 минуты. Сейчас они включились одновременно. Через сколько минут они впервые снова включатся одновременно?</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <details class="answers">
+        <summary>Показать ответы</summary>
+        <div>
+          <table>
+            <thead><tr><th>Задание</th><th>Ответ</th></tr></thead>
+            <tbody>
+              <tr><td>1а</td><td><math><mrow><mi>x</mi><mo>=</mo><mn>5</mn></mrow></math></td></tr>
+              <tr><td>1б</td><td><math><mrow><mi>x</mi><mo>=</mo><mn>17</mn></mrow></math></td></tr>
+              <tr><td>1в</td><td><math><mrow><mi>x</mi><mo>=</mo><mn>8</mn></mrow></math></td></tr>
+              <tr><td>2</td><td>4080 руб.</td></tr>
+              <tr><td>3а</td><td>84 набора</td></tr>
+              <tr><td>3б</td><td>2 тетради и 3 карандаша</td></tr>
+              <tr><td>3в</td><td>72 минуты</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <section aria-labelledby="quizTitle">
+        <h3 id="quizTitle">Мини-квиз: выберите правило</h3>
+        <div class="quiz">
+          <div class="quiz-item">
+            <p>Какая проверка обязательна для <math><mrow><mfrac><mn>6</mn><mrow><mi>x</mi><mo>−</mo><mn>1</mn></mrow></mfrac></mrow></math>?</p>
+            <div class="quiz-options">
+              <button type="button" data-correct="true">Знаменатель не равен нулю</button>
+              <button type="button">Числитель равен нулю</button>
+            </div>
+            <div class="feedback" aria-live="polite"></div>
+          </div>
+          <div class="quiz-item">
+            <p>После скидки 20% какая доля цены остаётся к оплате?</p>
+            <div class="quiz-options">
+              <button type="button">20%</button>
+              <button type="button" data-correct="true">80%</button>
+            </div>
+            <div class="feedback" aria-live="polite"></div>
+          </div>
+          <div class="quiz-item">
+            <p>В условии требуется максимально много одинаковых комплектов. Что искать?</p>
+            <div class="quiz-options">
+              <button type="button" data-correct="true">НОД</button>
+              <button type="button">НОК</button>
+            </div>
+            <div class="feedback" aria-live="polite"></div>
+          </div>
+          <div class="quiz-item">
+            <p>Нужно найти первое общее совпадение двух периодов. Что искать?</p>
+            <div class="quiz-options">
+              <button type="button">НОД</button>
+              <button type="button" data-correct="true">НОК</button>
+            </div>
+            <div class="feedback" aria-live="polite"></div>
+          </div>
+        </div>
+        <button class="btn" id="quizReset" type="button">Сбросить квиз</button>
+      </section>
+
+      <section aria-labelledby="checkTitle">
+        <h3 id="checkTitle">Итоговая самопроверка</h3>
+        <div class="checklist" id="checklist">
+          <label class="check"><input type="checkbox"><span>Я проверяю знаменатель до решения дробного уравнения.</span></label>
+          <label class="check"><input type="checkbox"><span>Я различаю три типа процентных задач.</span></label>
+          <label class="check"><input type="checkbox"><span>Я связываю одинаковые группы с НОД.</span></label>
+          <label class="check"><input type="checkbox"><span>Я связываю первое общее совпадение с НОК.</span></label>
+          <label class="check"><input type="checkbox"><span>Я умею собирать НОД и НОК по простым множителям.</span></label>
+          <label class="check"><input type="checkbox"><span>Я проверяю найденный результат по исходному условию.</span></label>
+        </div>
+        <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+        <p id="progressText" class="annotation" aria-live="polite">Отмечено: 0 из 6.</p>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Надя Клименко · занятие 22.09.26</span>
+    <span>Лёвин Артём Александрович</span>
+  </footer>
+</div>
+
+<script src="../../../shared/student-dashboard/atlas-motion.js?v=20260921-1"></script>
+<script>
+(() => {
+  "use strict";
+  const root = document.documentElement;
+  const themeButton = document.getElementById("themeToggle");
+
+  const safeGet = key => {
+    try { return localStorage.getItem(key); } catch (_) { return null; }
+  };
+  const safeSet = (key,value) => {
+    try { localStorage.setItem(key,value); } catch (_) {}
+  };
+
+  let theme = safeGet("nadya-22-theme") || "light";
+  const applyTheme = value => {
+    theme = value === "dark" ? "dark" : "light";
+    root.dataset.theme = theme;
+    themeButton.textContent = theme === "dark" ? "Светлая тема" : "Тёмная тема";
+  };
+  applyTheme(theme);
+  themeButton.addEventListener("click", () => {
+    applyTheme(theme === "dark" ? "light" : "dark");
+    safeSet("nadya-22-theme", theme);
+  });
+
+  const steps = [...document.querySelectorAll("#methodStepper .step")];
+  let stepIndex = 0;
+  const paintSteps = mode => {
+    steps.forEach((step,index) => {
+      const visible = mode === "all" || index <= stepIndex;
+      step.hidden = !visible;
+      step.classList.toggle("current", mode !== "all" && index === stepIndex);
+    });
+  };
+  document.querySelector("[data-stepper='next']").addEventListener("click", () => {
+    stepIndex = Math.min(steps.length - 1, stepIndex + 1);
+    paintSteps();
+  });
+  document.querySelector("[data-stepper='prev']").addEventListener("click", () => {
+    stepIndex = Math.max(0, stepIndex - 1);
+    paintSteps();
+  });
+  document.querySelector("[data-stepper='all']").addEventListener("click", () => paintSteps("all"));
+  document.querySelector("[data-stepper='reset']").addEventListener("click", () => {
+    stepIndex = 0;
+    paintSteps();
+  });
+
+  document.querySelectorAll(".quiz-item").forEach(item => {
+    item.addEventListener("click", event => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      item.querySelectorAll("button").forEach(candidate => candidate.removeAttribute("data-state"));
+      const correct = button.dataset.correct === "true";
+      button.dataset.state = correct ? "good" : "bad";
+      const feedback = item.querySelector(".feedback");
+      feedback.className = "feedback " + (correct ? "good" : "bad");
+      feedback.textContent = correct ? "Верно: правило выбрано по смыслу условия." : "Проверьте ключевой признак задачи и выберите правило ещё раз.";
+    });
+  });
+  document.getElementById("quizReset").addEventListener("click", () => {
+    document.querySelectorAll(".quiz button").forEach(button => button.removeAttribute("data-state"));
+    document.querySelectorAll(".feedback").forEach(node => {
+      node.className = "feedback";
+      node.textContent = "";
+    });
+  });
+
+  const checks = [...document.querySelectorAll("#checklist input")];
+  const progressBar = document.getElementById("progressBar");
+  const progressText = document.getElementById("progressText");
+  const updateChecks = () => {
+    const done = checks.filter(input => input.checked).length;
+    progressBar.style.width = ((done / checks.length) * 100) + "%";
+    progressText.textContent = "Отмечено: " + done + " из " + checks.length + ".";
+  };
+  checks.forEach(input => input.addEventListener("change", updateChecks));
+})();
+</script>
+</body>
+</html>
