@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Занятие Ксении Васильченко: вычисления с дробями, смысл НОД в текстовых задачах и составные уравнения.">
+<title>НОД в задачах и составные уравнения — Ксения Васильченко</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232f6658'/%3E%3Cpath d='M15 32h34M32 15v34' stroke='white' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --surface-page:#f5f0e5;
+  --surface-raised:#fffdf7;
+  --surface-soft:#eee8da;
+  --text-primary:#23302c;
+  --text-secondary:#65706b;
+  --text-inverse:#fffdf8;
+  --border-subtle:#d7cfbf;
+  --border-strong:#a9a08f;
+  --accent:#2f6658;
+  --accent-hover:#244f45;
+  --accent-soft:#dce9e2;
+  --success:#3d7559;
+  --danger:#9a4d43;
+  --warning:#976f2e;
+  --focus-ring:#bd7d37;
+  --shadow-low:0 10px 28px rgba(49,42,28,.08);
+  --shadow-high:0 22px 54px rgba(49,42,28,.14);
+  --radius-sm:8px;
+  --radius-md:15px;
+  --radius-lg:26px;
+  --space-1:.45rem;
+  --space-2:.8rem;
+  --space-3:1.2rem;
+  --space-4:1.8rem;
+  --space-5:2.7rem;
+  --motion-fast:150ms;
+  --motion-normal:260ms;
+}
+html[data-theme="dark"]{
+  --surface-page:#111815;
+  --surface-raised:#18211d;
+  --surface-soft:#202b26;
+  --text-primary:#edf4ef;
+  --text-secondary:#abb9b1;
+  --border-subtle:#35443d;
+  --border-strong:#5a6c63;
+  --accent:#79b29d;
+  --accent-hover:#94c6b3;
+  --accent-soft:#223d34;
+  --success:#78bc91;
+  --danger:#e18b80;
+  --warning:#ddb56c;
+  --focus-ring:#efb96c;
+  --shadow-low:0 10px 28px rgba(0,0,0,.22);
+  --shadow-high:0 22px 54px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:inherit}
+button{font:inherit}
+.skip-link{position:absolute;left:-9999px;top:0}
+.skip-link:focus{left:1rem;top:1rem;z-index:100;background:var(--surface-raised);padding:.7rem 1rem;border:2px solid var(--focus-ring)}
+.shell{width:min(100% - 2rem,1180px);margin:0 auto}
+.topbar{position:sticky;top:0;z-index:40;border-bottom:1px solid var(--border-subtle);background:color-mix(in srgb,var(--surface-page) 91%,transparent);backdrop-filter:blur(12px)}
+.topbar-inner{min-height:60px;display:flex;align-items:center;gap:1rem}
+.brand{font-weight:760;letter-spacing:-.02em}
+.topbar nav{margin-left:auto;display:flex;gap:.35rem;flex-wrap:wrap}
+.topbar a,.topbar button{min-height:42px;display:inline-flex;align-items:center;border:1px solid var(--border-subtle);background:transparent;color:var(--text-primary);padding:.55rem .78rem;text-decoration:none;border-radius:var(--radius-sm);cursor:pointer}
+.topbar a:hover,.topbar button:hover{border-color:var(--accent);color:var(--accent)}
+.hero{position:relative;padding:clamp(2.4rem,7vw,6.2rem) 0 clamp(2rem,5vw,4.5rem);border-bottom:1px solid var(--border-subtle);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,var(--accent-soft),transparent 48%);opacity:.55;pointer-events:none}
+.hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,.86fr) minmax(340px,1.14fr);gap:clamp(2rem,6vw,5.5rem);align-items:center}
+.kicker{margin:0 0 .8rem;color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.75rem}
+h1,h2,h3{line-height:1.12;letter-spacing:-.025em}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(3rem,7.5vw,6.6rem);font-weight:500;margin:.15rem 0 1.2rem;max-width:9ch}
+.lead{font-size:clamp(1rem,1.6vw,1.2rem);color:var(--text-secondary);max-width:44rem}
+.folio{display:flex;gap:.65rem 1rem;flex-wrap:wrap;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border-subtle);color:var(--text-secondary);font-size:.88rem}
+.poster-frame{position:relative;margin:0;min-width:0}
+.poster-frame::before{content:"";position:absolute;inset:1.2rem -1rem -1rem 1.2rem;border:1px solid var(--border-strong);z-index:0}
+.poster-button{position:relative;z-index:1;padding:0;border:0;background:transparent;width:100%;cursor:zoom-in}
+.poster-button img{display:block;width:100%;height:auto;border:1px solid var(--border-strong);box-shadow:var(--shadow-high);background:var(--surface-raised)}
+.poster-caption{margin:.85rem 0 0;color:var(--text-secondary);font-size:.85rem}
+.route{display:flex;gap:1.1rem;overflow:auto;padding:1rem 0;border-bottom:1px solid var(--border-subtle);scrollbar-width:thin}
+.route a{flex:0 0 auto;text-decoration:none;font-weight:720;color:var(--text-secondary);padding:.35rem 0;border-bottom:2px solid transparent}
+.route a:hover,.route a:focus-visible{color:var(--accent);border-color:var(--accent)}
+.chapter{padding:clamp(2.8rem,7vw,5.8rem) 0;border-bottom:1px solid var(--border-subtle)}
+.chapter-head{display:grid;grid-template-columns:120px minmax(0,720px);gap:1.5rem;align-items:start;margin-bottom:2.1rem}
+.chapter-no{font:700 .75rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent);letter-spacing:.14em;text-transform:uppercase}
+.chapter h2{font-family:Georgia,"Times New Roman",serif;font-size:clamp(2rem,4.7vw,4rem);font-weight:500;margin:0}
+.chapter-intro{grid-column:2;color:var(--text-secondary);font-size:1.05rem;max-width:48rem;margin:0}
+.rule-line{display:grid;grid-template-columns:minmax(180px,.5fr) minmax(0,1fr);gap:1.5rem;padding:1.1rem 0;border-top:1px solid var(--border-subtle)}
+.rule-line strong{color:var(--accent)}
+.formula{font-family:"Cambria Math","STIX Two Math",serif;font-size:clamp(1.2rem,2.6vw,1.7rem);overflow:auto;padding:.25rem 0}
+.formula small{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--text-secondary);font-size:.72em}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:2rem 0}
+.flow-step{position:relative;padding:1.15rem 1rem;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);background:var(--surface-raised)}
+.flow-step:first-child{border-left:1px solid var(--border-strong);border-radius:var(--radius-md) 0 0 var(--radius-md)}
+.flow-step:last-child{border-right:1px solid var(--border-strong);border-radius:0 var(--radius-md) var(--radius-md) 0}
+.flow-step:not(:last-child)::after{content:"";position:absolute;right:-7px;top:50%;width:12px;height:12px;border-top:2px solid var(--accent);border-right:2px solid var(--accent);transform:translateY(-50%) rotate(45deg);z-index:2}
+.flow-step b{display:block;color:var(--accent);margin-bottom:.35rem}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1.4rem,4vw,3.5rem);align-items:start}
+.scenario{padding:1.2rem 0;border-top:2px solid var(--accent)}
+.scenario h3{font-size:1.25rem;margin:.1rem 0 .8rem}
+.scenario p{margin:.5rem 0;color:var(--text-secondary)}
+.equation-track{display:grid;gap:0}
+.eq-step{display:grid;grid-template-columns:5rem minmax(0,1fr);gap:1rem;padding:1rem 0;border-top:1px solid var(--border-subtle)}
+.eq-step .mark{font:700 .75rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent);letter-spacing:.08em}
+.notice{margin:1.5rem 0;padding:1rem 1.15rem;border-left:3px solid var(--warning);background:color-mix(in srgb,var(--warning) 8%,var(--surface-raised));color:var(--text-secondary)}
+.warning{border-left-color:var(--danger);background:color-mix(in srgb,var(--danger) 7%,var(--surface-raised))}
+.practice{counter-reset:item;display:grid;gap:0}
+.task{counter-increment:item;padding:1.2rem 0;border-top:1px solid var(--border-subtle);display:grid;grid-template-columns:3rem minmax(0,1fr);gap:1rem}
+.task::before{content:counter(item,decimal-leading-zero);font:700 .78rem/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent)}
+.answer-panel{display:none;padding:1rem 1.15rem;background:var(--surface-soft);border-left:3px solid var(--success);margin-top:1rem}
+.answer-panel.show{display:block}
+.action{display:inline-flex;align-items:center;min-height:44px;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);padding:.65rem .9rem;border-radius:var(--radius-sm);font-weight:700;cursor:pointer;text-decoration:none}
+.action.primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem 1.5rem;margin-top:1.2rem}
+.check{display:flex;gap:.7rem;align-items:flex-start;padding:.75rem 0;border-top:1px solid var(--border-subtle)}
+.check input{width:20px;height:20px;margin-top:.15rem;accent-color:var(--accent)}
+.progress{height:7px;background:var(--surface-soft);margin-top:1rem;overflow:hidden}
+.progress span{display:block;height:100%;width:0;background:var(--success);transition:width var(--motion-normal)}
+.footer{padding:2rem 0 3rem;color:var(--text-secondary);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.88rem}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:3vw;background:rgba(0,0,0,.82);z-index:100}
+.modal.show{display:flex}
+.modal img{max-width:96vw;max-height:90vh;object-fit:contain}
+.modal button{position:fixed;right:1.2rem;top:1.2rem;min-width:48px;min-height:48px;border:0;background:var(--surface-raised);color:var(--text-primary);font-size:1.35rem;border-radius:50%;cursor:pointer}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+@media(max-width:820px){
+  .shell{width:min(100% - 1.25rem,1180px)}
+  .hero-grid{grid-template-columns:1fr}
+  h1{max-width:12ch}
+  .poster-frame{max-width:760px}
+  .chapter-head{grid-template-columns:1fr;gap:.5rem}
+  .chapter-intro{grid-column:1}
+  .rule-line,.split{grid-template-columns:1fr}
+  .flow{grid-template-columns:1fr}
+  .flow-step,.flow-step:first-child,.flow-step:last-child{border:1px solid var(--border-subtle);border-radius:0;margin-top:-1px}
+  .flow-step:first-child{border-radius:var(--radius-md) var(--radius-md) 0 0}
+  .flow-step:last-child{border-radius:0 0 var(--radius-md) var(--radius-md)}
+  .flow-step:not(:last-child)::after{right:50%;top:auto;bottom:-7px;transform:translateX(50%) rotate(135deg)}
+  .checks{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .topbar-inner{align-items:flex-start;padding:.65rem 0;flex-direction:column}
+  .topbar nav{margin-left:0;width:100%}
+  .topbar a,.topbar button{flex:1;justify-content:center}
+  .eq-step{grid-template-columns:1fr;gap:.35rem}
+  .footer{flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@media print{
+  :root{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#aaa;--border-strong:#777;--shadow-low:none;--shadow-high:none}
+  .topbar,.route,.poster-frame,.answer-toggle{display:none!important}
+  .chapter{break-inside:auto;padding:24pt 0}
+  .answer-panel{display:block!important}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">К содержанию</a>
+
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <div class="brand">Ксения Васильченко · математика, 6 класс</div>
+    <nav aria-label="Материалы занятия">
+      <a href="index.html">Навигатор</a>
+      <a href="../pdf_docs/22.09.26.pdf">Скачать пособие</a>
+      <a href="../tex_docs/22.09.26.tex">TeX</a>
+      <button id="themeToggle" type="button">Тема</button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero">
+  <div class="shell hero-grid">
+    <div>
+      <p class="kicker">22 сентября 2026 · учебный журнал</p>
+      <h1>НОД в задачах и составные уравнения</h1>
+      <p class="lead">Сначала укрепляем вычисления с десятичными и обыкновенными дробями. Затем связываем НОД со смыслом одинаковых групп и учимся разбирать составное уравнение от внешнего действия к неизвестному.</p>
+      <div class="folio">
+        <span>Ксения Васильченко</span>
+        <span>6 класс</span>
+        <span>Лёвин Артём Александрович</span>
+      </div>
+    </div>
+    <figure class="poster-frame">
+      <button class="poster-button" id="posterOpen" type="button" aria-label="Открыть памятку крупно">
+        <img src="../images/22.09.26.png" alt="Ментальная карта: НОД, дроби и уравнения">
+      </button>
+      <figcaption class="poster-caption">Карта занятия: вычисления, НОД, смысл группировки и уравнения.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<div class="shell">
+<nav class="route" aria-label="Маршрут занятия">
+  <a href="#warmup">01 · Дроби</a>
+  <a href="#gcd">02 · НОД</a>
+  <a href="#meaning">03 · Смысл НОД</a>
+  <a href="#equations">04 · Уравнения</a>
+  <a href="#practice">05 · Тренировка</a>
+  <a href="#check">06 · Проверка</a>
+</nav>
+
+<section class="chapter" id="warmup">
+  <header class="chapter-head">
+    <div class="chapter-no">01 · Разминка</div>
+    <h2>Дроби: три опоры для аккуратного счёта</h2>
+    <p class="chapter-intro">Вычислительная часть занятия — это база для следующих тем. Здесь важнее всего видеть структуру действия и не терять запятую, знаменатель или обратную дробь.</p>
+  </header>
+
+  <div class="rule-line">
+    <strong>Десятичные дроби</strong>
+    <div>При сложении и вычитании выравнивайте числа по запятой. При умножении сначала считайте как с натуральными числами, затем восстановите число знаков после запятой.</div>
+  </div>
+  <div class="rule-line">
+    <strong>Общий знаменатель</strong>
+    <div class="formula">2/3 + 1/5 = 10/15 + 3/15 = 13/15</div>
+  </div>
+  <div class="rule-line">
+    <strong>Смешанное число</strong>
+    <div class="formula">2 2/3 = (2 · 3 + 2) / 3 = 8/3</div>
+  </div>
+  <div class="rule-line">
+    <strong>Деление дробей</strong>
+    <div class="formula">2/3 : 7/5 = 2/3 · 5/7 = 10/21</div>
+  </div>
+  <div class="notice warning"><b>Контроль:</b> сокращаются общие множители. Слагаемые суммы сокращать нельзя.</div>
+</section>
+
+<section class="chapter" id="gcd">
+  <header class="chapter-head">
+    <div class="chapter-no">02 · НОД</div>
+    <h2>Общие множители — в наименьших степенях</h2>
+    <p class="chapter-intro">Наибольший общий делитель — самое большое натуральное число, на которое оба исходных числа делятся без остатка.</p>
+  </header>
+
+  <div class="flow" aria-label="Алгоритм поиска НОД">
+    <div class="flow-step"><b>Шаг 1</b>Разложите оба числа на простые множители.</div>
+    <div class="flow-step"><b>Шаг 2</b>Выделите только общие простые множители.</div>
+    <div class="flow-step"><b>Шаг 3</b>Берите общие множители в наименьших степенях.</div>
+    <div class="flow-step"><b>Шаг 4</b>Перемножьте их и проверьте делением.</div>
+  </div>
+
+  <div class="split">
+    <div>
+      <h3>84</h3>
+      <div class="formula">84 = 2² · 3 · 7</div>
+    </div>
+    <div>
+      <h3>112</h3>
+      <div class="formula">112 = 2⁴ · 7</div>
+    </div>
+  </div>
+  <div class="formula">НОД(84, 112) = 2² · 7 = 28</div>
+  <div class="notice"><b>Проверка:</b> 84 : 28 = 3, а 112 : 28 = 4. Оба частных натуральные.</div>
+</section>
+
+<section class="chapter" id="meaning">
+  <header class="chapter-head">
+    <div class="chapter-no">03 · Смысл</div>
+    <h2>Что именно означает найденный НОД?</h2>
+    <p class="chapter-intro">Ключевой вопрос текстовой задачи: какая величина должна быть одинаковой и максимально возможной? Смысл НОД определяется условием задачи.</p>
+  </header>
+
+  <div class="split">
+    <article class="scenario">
+      <h3>Одинаковые наборы</h3>
+      <p>84 помидора и 112 огурцов распределяются по максимальному числу одинаковых наборов.</p>
+      <div class="formula">НОД(84, 112) = 28</div>
+      <p><b>28</b> — число наборов. В каждом наборе: 84 : 28 = 3 помидора и 112 : 28 = 4 огурца.</p>
+    </article>
+    <article class="scenario">
+      <h3>Одинаковый размер группы</h3>
+      <p>108 мальчиков и 114 девочек распределяются отдельно по группам с одинаковым максимально возможным числом человек.</p>
+      <div class="formula">НОД(108, 114) = 6</div>
+      <p><b>6</b> — число человек в каждой группе. Получается 18 групп мальчиков и 19 групп девочек.</p>
+    </article>
+  </div>
+
+  <div class="notice warning"><b>Частая ошибка:</b> считать, что НОД всегда означает количество групп. Сначала определите, что именно по условию должно быть одинаковым.</div>
+</section>
+
+<section class="chapter" id="equations">
+  <header class="chapter-head">
+    <div class="chapter-no">04 · Уравнения</div>
+    <h2>Разбирайте составное уравнение снаружи внутрь</h2>
+    <p class="chapter-intro">Если целое выражение с x играет роль одного компонента действия, временно рассматривайте это выражение как единый объект. Выполните обратное действие, затем решайте более простое уравнение.</p>
+  </header>
+
+  <div class="rule-line">
+    <strong>Связи компонентов</strong>
+    <div>
+      <div class="formula">a + b = c → a = c − b, b = c − a</div>
+      <div class="formula">a − b = c → a = b + c, b = a − c</div>
+      <div class="formula">ab = c → a = c : b, b = c : a</div>
+      <div class="formula">a : b = c → a = bc, b = a : c <small>(b ≠ 0; для формулы b = a : c нужно c ≠ 0)</small></div>
+    </div>
+  </div>
+
+  <h3>(x + 3) / 2 = 10</h3>
+  <div class="equation-track">
+    <div class="eq-step"><span class="mark">ШАГ 1</span><div>Выражение <b>x + 3</b> — делимое.</div></div>
+    <div class="eq-step"><span class="mark">ШАГ 2</span><div class="formula">x + 3 = 10 · 2 = 20</div></div>
+    <div class="eq-step"><span class="mark">ШАГ 3</span><div class="formula">x = 20 − 3 = 17</div></div>
+    <div class="eq-step"><span class="mark">ПРОВЕРКА</span><div class="formula">(17 + 3) / 2 = 10</div></div>
+  </div>
+
+  <h3>6 / (x − 5) = 2</h3>
+  <div class="equation-track">
+    <div class="eq-step"><span class="mark">ОДЗ</span><div class="formula">x − 5 ≠ 0 → x ≠ 5</div></div>
+    <div class="eq-step"><span class="mark">ШАГ 1</span><div>Выражение <b>x − 5</b> — делитель.</div></div>
+    <div class="eq-step"><span class="mark">ШАГ 2</span><div class="formula">x − 5 = 6 : 2 = 3</div></div>
+    <div class="eq-step"><span class="mark">ШАГ 3</span><div class="formula">x = 3 + 5 = 8</div></div>
+    <div class="eq-step"><span class="mark">ПРОВЕРКА</span><div class="formula">6 / (8 − 5) = 2</div></div>
+  </div>
+  <div class="notice"><b>Опора вместо зубрёжки:</b> если правило забыто, возьмите простое верное числовое равенство, например 10 − 2 = 8 или 6 : 2 = 3, и восстановите связь компонентов по смыслу.</div>
+</section>
+
+<section class="chapter" id="practice">
+  <header class="chapter-head">
+    <div class="chapter-no">05 · Путь А</div>
+    <h2>Пять заданий на закрепление</h2>
+    <p class="chapter-intro">Задания идут от вычислительной базы к НОД в текстовой задаче и составным уравнениям.</p>
+  </header>
+
+  <div class="practice">
+    <div class="task"><div><b>Вычислите:</b><br>а) 1,7 − 0,46; б) 0,32 · 1,5; в) 3/4 + 2/5; г) 2 1/3 − 1 3/4.</div></div>
+    <div class="task"><div>Разложите 72 и 120 на простые множители. Найдите НОД(72, 120).</div></div>
+    <div class="task"><div>Есть 96 яблок и 144 груши. Составьте максимальное число одинаковых наборов, используя все фрукты. Найдите число наборов и состав каждого.</div></div>
+    <div class="task"><div>126 мальчиков и 168 девочек распределяют отдельно по группам с одинаковым максимально возможным числом человек. Найдите размер группы и количество групп.</div></div>
+    <div class="task"><div>Решите и проверьте: а) (x + 7) / 3 = 9; б) 12 / (x − 2) = 3. Для пункта б) сначала укажите ограничение.</div></div>
+  </div>
+
+  <button class="action answer-toggle" id="answerToggle" type="button" aria-expanded="false" aria-controls="answers">Показать ответы</button>
+  <div class="answer-panel" id="answers">
+    <b>Ответы.</b>
+    1) а) 1,24; б) 0,48; в) 23/20 = 1 3/20; г) 7/12.
+    2) НОД(72, 120) = 24.
+    3) 48 наборов; по 2 яблока и 3 груши.
+    4) по 42 человека; 3 группы мальчиков и 4 группы девочек.
+    5) а) x = 20; б) x = 6, x ≠ 2.
+  </div>
+</section>
+
+<section class="chapter" id="check">
+  <header class="chapter-head">
+    <div class="chapter-no">06 · Проверка</div>
+    <h2>Что должно остаться после занятия</h2>
+    <p class="chapter-intro">Отметьте только те пункты, которые Вы можете выполнить без подсказки.</p>
+  </header>
+
+  <div class="checks">
+    <label class="check"><input type="checkbox" data-skill><span>Я выравниваю десятичные дроби по запятой и контролирую положение запятой при умножении.</span></label>
+    <label class="check"><input type="checkbox" data-skill><span>Я привожу обыкновенные дроби к общему знаменателю и делю на дробь через обратную.</span></label>
+    <label class="check"><input type="checkbox" data-skill><span>Я нахожу НОД по общим простым множителям в наименьших степенях.</span></label>
+    <label class="check"><input type="checkbox" data-skill><span>Я определяю по условию задачи, что означает найденный НОД.</span></label>
+    <label class="check"><input type="checkbox" data-skill><span>Я нахожу неизвестные компоненты арифметических действий.</span></label>
+    <label class="check"><input type="checkbox" data-skill><span>Я решаю составное уравнение по внешнему действию и проверяю ОДЗ знаменателя.</span></label>
+  </div>
+  <div class="progress" aria-label="Прогресс самопроверки"><span id="progressBar"></span></div>
+  <p id="progressText" class="lead" aria-live="polite">Отмечено 0 из 6.</p>
+
+  <div class="notice warning">
+    <b>Мини-памятка об ошибках:</b> общий знаменатель обязателен; слагаемые не сокращаются; знак при обратном действии проверяется по смыслу; значение знаменателя не может быть нулём; найденный корень проверяется подстановкой.
+  </div>
+</section>
+
+<footer class="footer">
+  <span>Ксения Васильченко · математика, 6 класс</span>
+  <span>Лёвин Артём Александрович · 22.09.26</span>
+</footer>
+</div>
+</main>
+
+<div class="modal" id="posterModal" role="dialog" aria-modal="true" aria-label="Увеличенная ментальная карта" aria-hidden="true">
+  <button id="posterClose" type="button" aria-label="Закрыть">×</button>
+  <img src="../images/22.09.26.png" alt="Увеличенная ментальная карта: НОД, дроби и уравнения">
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var root=document.documentElement;
+  var theme=document.getElementById('themeToggle');
+  try{root.dataset.theme=localStorage.getItem('xenia-220926-theme')||'light';}catch(e){}
+  theme.addEventListener('click',function(){
+    root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+    try{localStorage.setItem('xenia-220926-theme',root.dataset.theme);}catch(e){}
+  });
+
+  var toggle=document.getElementById('answerToggle');
+  var answers=document.getElementById('answers');
+  toggle.addEventListener('click',function(){
+    var open=answers.classList.toggle('show');
+    toggle.setAttribute('aria-expanded',String(open));
+    toggle.textContent=open?'Скрыть ответы':'Показать ответы';
+  });
+
+  var checks=Array.prototype.slice.call(document.querySelectorAll('[data-skill]'));
+  var bar=document.getElementById('progressBar');
+  var label=document.getElementById('progressText');
+  function renderChecks(){
+    var n=checks.filter(function(x){return x.checked;}).length;
+    bar.style.width=(n/checks.length*100)+'%';
+    label.textContent='Отмечено '+n+' из '+checks.length+'.';
+    try{localStorage.setItem('xenia-220926-checks',JSON.stringify(checks.map(function(x){return x.checked;})));}catch(e){}
+  }
+  try{
+    var saved=JSON.parse(localStorage.getItem('xenia-220926-checks')||'[]');
+    checks.forEach(function(x,i){x.checked=!!saved[i];});
+  }catch(e){}
+  checks.forEach(function(x){x.addEventListener('change',renderChecks);});
+  renderChecks();
+
+  var open=document.getElementById('posterOpen');
+  var modal=document.getElementById('posterModal');
+  var close=document.getElementById('posterClose');
+  var lastFocus=null;
+  function closeModal(){
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden','true');
+    if(lastFocus)lastFocus.focus();
+  }
+  open.addEventListener('click',function(){
+    lastFocus=open;
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden','false');
+    close.focus();
+  });
+  close.addEventListener('click',closeModal);
+  modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('show'))closeModal();});
+})();
+</script>
+</body>
+</html>
