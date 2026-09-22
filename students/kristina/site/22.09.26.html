@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивное занятие Кристины: метод узловых точек, восстановление формулы линейной и квадратичной функции по графику.">
+<title>Метод узловых точек — Кристина</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%236b4f72'/%3E%3Cpath d='M13 46L28 29L39 37L51 17' fill='none' stroke='white' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='28' cy='29' r='4' fill='%2368aaa0'/%3E%3C/svg%3E">
+<style>
+:root{
+  --surface-page:#f4f0e9;
+  --surface-raised:#fffdf8;
+  --surface-soft:#ebe5dc;
+  --surface-ink:#242326;
+  --text-primary:#27252a;
+  --text-secondary:#6d6871;
+  --text-inverse:#fffdf8;
+  --border-subtle:#d6cfc7;
+  --border-strong:#aaa0ac;
+  --accent:#6b4f72;
+  --accent-hover:#523b58;
+  --accent-soft:#ece4ee;
+  --coordinate:#4d8b83;
+  --coordinate-soft:#dfece9;
+  --success:#39745d;
+  --danger:#9c4e50;
+  --warning:#9c742f;
+  --focus-ring:0 0 0 3px #6b4f7238;
+  --shadow-low:0 8px 28px #3129340d;
+  --shadow-high:0 18px 55px #31293418;
+  --radius-sm:8px;
+  --radius-md:16px;
+  --radius-lg:28px;
+  --space-1:.4rem;
+  --space-2:.7rem;
+  --space-3:1rem;
+  --space-4:1.5rem;
+  --space-5:2.2rem;
+  --space-6:3.4rem;
+  --motion-fast:150ms;
+  --motion-normal:260ms;
+  --display:Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --math:"Cambria Math","Times New Roman",serif;
+}
+html[data-theme="dark"]{
+  --surface-page:#151317;
+  --surface-raised:#1d1a20;
+  --surface-soft:#28232a;
+  --surface-ink:#f3edf5;
+  --text-primary:#f1edf2;
+  --text-secondary:#b8afb9;
+  --text-inverse:#181419;
+  --border-subtle:#3b343e;
+  --border-strong:#655b68;
+  --accent:#c5a4ca;
+  --accent-hover:#dbc0df;
+  --accent-soft:#312835;
+  --coordinate:#79bdb4;
+  --coordinate-soft:#203836;
+  --success:#7ac69f;
+  --danger:#e28e91;
+  --warning:#d8ae60;
+  --focus-ring:0 0 0 3px #c5a4ca40;
+  --shadow-low:0 8px 28px #0003;
+  --shadow-high:0 18px 55px #0006;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--surface-page);
+  color:var(--text-primary);
+  font:16px/1.68 var(--sans);
+}
+a{color:inherit}
+button,a{font:inherit}
+button{cursor:pointer}
+.skip-link{
+  position:fixed;left:.75rem;top:.75rem;z-index:100;
+  padding:.65rem .9rem;background:var(--surface-ink);color:var(--text-inverse);
+  transform:translateY(-180%);transition:transform var(--motion-fast);
+}
+.skip-link:focus{transform:none}
+.topbar{
+  position:sticky;top:0;z-index:40;
+  display:flex;align-items:center;gap:var(--space-2);
+  padding:.65rem max(1rem,calc((100vw - 92rem)/2));
+  background:color-mix(in srgb,var(--surface-page) 92%,transparent);
+  border-bottom:1px solid var(--border-subtle);
+  backdrop-filter:blur(12px);
+}
+.topbar a,.topbar button{
+  min-height:42px;border:1px solid var(--border-subtle);
+  background:transparent;color:var(--text-primary);
+  padding:.55rem .75rem;text-decoration:none;
+  border-radius:var(--radius-sm);
+}
+.topbar .home{
+  margin-right:auto;border-color:transparent;padding-left:0;
+  font-weight:750;
+}
+.topbar a:hover,.topbar button:hover{border-color:var(--accent);color:var(--accent-hover)}
+.topbar a:focus-visible,.topbar button:focus-visible,
+.route a:focus-visible,.step-controls button:focus-visible,
+.quiz button:focus-visible,.check-row input:focus-visible,
+.mindmap-button:focus-visible,.modal-close:focus-visible{
+  outline:none;box-shadow:var(--focus-ring)
+}
+.page{
+  width:min(100% - clamp(1.2rem,4vw,4rem),92rem);
+  margin:0 auto;
+}
+.cover{
+  position:relative;
+  display:grid;grid-template-columns:minmax(0,1.04fr) minmax(24rem,.8fr);
+  gap:clamp(2rem,6vw,7rem);
+  min-height:40rem;
+  align-items:center;
+  padding:clamp(3rem,7vw,6rem) 0 clamp(2.5rem,5vw,4.5rem);
+  border-bottom:1px solid var(--border-subtle);
+  overflow:hidden;
+}
+.cover-copy{position:relative;z-index:2}
+.kicker{
+  margin:0 0 1rem;color:var(--accent);
+  font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+}
+.cover h1{
+  max-width:13ch;margin:.1rem 0 1.2rem;
+  font:700 clamp(3rem,7vw,6.8rem)/.94 var(--display);
+  letter-spacing:-.055em;
+}
+.cover-lead{
+  max-width:46rem;margin:0 0 1.7rem;
+  color:var(--text-secondary);font-size:clamp(1rem,1.6vw,1.18rem)
+}
+.folio{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  max-width:43rem;border-top:1px solid var(--border-strong);
+}
+.folio div{padding:.75rem 1rem .75rem 0;border-bottom:1px solid var(--border-subtle)}
+.folio span{display:block;color:var(--text-secondary);font-size:.74rem}
+.folio strong{font-size:.92rem}
+.cover-visual{
+  position:relative;min-height:31rem;
+  display:grid;place-items:center;
+}
+.coordinate-sheet{
+  width:min(100%,31rem);aspect-ratio:1;
+  background:
+    linear-gradient(var(--border-subtle) 1px,transparent 1px),
+    linear-gradient(90deg,var(--border-subtle) 1px,transparent 1px),
+    var(--surface-raised);
+  background-size:34px 34px;
+  border:1px solid var(--border-strong);
+  box-shadow:var(--shadow-high);
+  position:relative;overflow:hidden;
+  transform:rotate(-1.3deg) translateY(var(--atlas-parallax-y,0));
+}
+.coordinate-sheet svg{display:block;width:100%;height:100%}
+.cover-equation{
+  position:absolute;left:-1.5rem;bottom:2.5rem;
+  max-width:20rem;padding:1rem 1.2rem;
+  background:var(--surface-raised);border-left:4px solid var(--accent);
+  box-shadow:var(--shadow-low);
+  font-family:var(--math);
+}
+.cover-equation strong{display:block;color:var(--accent);font-family:var(--sans);font-size:.74rem;text-transform:uppercase;letter-spacing:.09em}
+.route{
+  display:flex;flex-wrap:wrap;gap:.25rem;
+  margin:1.5rem 0 0;
+}
+.route a{
+  text-decoration:none;color:var(--text-secondary);
+  padding:.5rem .65rem;border-bottom:1px solid transparent;
+}
+.route a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.section{
+  display:grid;grid-template-columns:minmax(12rem,.28fr) minmax(0,.72fr);
+  gap:clamp(1.5rem,5vw,6rem);
+  padding:clamp(3rem,7vw,6rem) 0;
+  border-bottom:1px solid var(--border-subtle);
+}
+.section-index{
+  position:sticky;top:5.25rem;align-self:start;
+}
+.section-index .num{
+  display:block;font:700 clamp(2.5rem,5vw,5rem)/1 var(--display);
+  color:var(--accent);
+}
+.section-index h2{
+  margin:.45rem 0;font:700 clamp(1.5rem,2.4vw,2.25rem)/1.08 var(--display)
+}
+.section-index p{margin:.4rem 0;color:var(--text-secondary);font-size:.92rem}
+.section-body{min-width:0}
+.section-body>p:first-child{font-size:1.08rem;max-width:52rem}
+.rule-line{
+  margin:2rem 0;padding:1.15rem 0;
+  border-top:1px solid var(--border-strong);
+  border-bottom:1px solid var(--border-subtle);
+  font-size:1.03rem;
+}
+.rule-line strong{color:var(--accent)}
+.math-block{
+  margin:1.5rem 0;padding:1.15rem 1rem;
+  border-left:3px solid var(--coordinate);
+  background:color-mix(in srgb,var(--coordinate-soft) 55%,transparent);
+  overflow-x:auto;
+}
+.math-block math{font-family:var(--math);font-size:1.2rem}
+.point-table{
+  width:100%;border-collapse:collapse;margin:1.5rem 0;
+}
+.point-table th,.point-table td{
+  text-align:left;padding:.8rem .7rem;border-bottom:1px solid var(--border-subtle)
+}
+.point-table th{color:var(--text-secondary);font-size:.82rem;font-weight:750}
+.note{
+  margin:1.4rem 0;padding:1rem 1.1rem;
+  border-left:3px solid var(--accent);background:var(--accent-soft)
+}
+.note.warning{border-left-color:var(--warning);background:color-mix(in srgb,var(--warning) 9%,transparent)}
+.stepper{
+  margin:2rem 0;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);
+}
+.stepper-head{
+  display:flex;justify-content:space-between;gap:1rem;align-items:end;
+  padding:1.2rem 0;border-bottom:1px solid var(--border-subtle);
+}
+.stepper-head h3{margin:0;font:700 1.45rem/1.1 var(--display)}
+.step-count{color:var(--text-secondary);font-size:.85rem}
+.step-stage{min-height:14rem;padding:clamp(1.2rem,4vw,2.5rem) 0}
+.step-item{display:none;max-width:52rem}
+.step-item.current{display:block}
+.step-item h4{margin:0 0 .7rem;color:var(--accent);font-size:.84rem;text-transform:uppercase;letter-spacing:.09em}
+.step-item p{margin:.45rem 0}
+.step-controls{
+  display:flex;gap:.5rem;flex-wrap:wrap;padding:1rem 0
+}
+.step-controls button{
+  min-height:42px;padding:.55rem .85rem;
+  border:1px solid var(--border-subtle);background:var(--surface-raised);color:var(--text-primary);
+  border-radius:var(--radius-sm)
+}
+.step-controls button.primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.step-controls button:disabled{opacity:.45;cursor:not-allowed}
+.question-contrast{
+  display:grid;grid-template-columns:1fr 1fr;margin:2rem 0;
+  border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong)
+}
+.question-half{padding:clamp(1.2rem,3vw,2rem)}
+.question-half+ .question-half{border-left:1px solid var(--border-strong)}
+.question-half h3{margin:.1rem 0 1rem;font:700 1.6rem var(--display)}
+.question-half .arrow{
+  display:block;margin:.9rem 0;color:var(--coordinate);font-weight:800
+}
+.error-list{counter-reset:error;margin:1.5rem 0;padding:0;list-style:none}
+.error-list li{
+  counter-increment:error;display:grid;grid-template-columns:2.3rem 1fr;
+  gap:.8rem;padding:.9rem 0;border-bottom:1px solid var(--border-subtle)
+}
+.error-list li:before{
+  content:counter(error,decimal-leading-zero);
+  color:var(--danger);font:700 .78rem var(--sans);padding-top:.18rem
+}
+.resource-strip{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;
+  gap:1.5rem;align-items:center;margin:2rem 0;
+  padding:1.5rem;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong)
+}
+.resource-strip img{
+  width:min(100%,26rem);display:block;border:1px solid var(--border-subtle);box-shadow:var(--shadow-low)
+}
+.resource-links{display:flex;gap:.6rem;flex-wrap:wrap}
+.resource-links a,.mindmap-button{
+  min-height:44px;display:inline-flex;align-items:center;
+  padding:.65rem .9rem;border:1px solid var(--border-subtle);
+  background:var(--surface-raised);color:var(--text-primary);
+  border-radius:var(--radius-sm);text-decoration:none
+}
+.resource-links a.primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.mindmap-button{cursor:pointer}
+.practice-list{display:grid;gap:0;border-top:1px solid var(--border-strong)}
+.practice-list details{border-bottom:1px solid var(--border-subtle);padding:1rem 0}
+.practice-list summary{cursor:pointer;font-weight:750}
+.practice-list details p{margin:.8rem 0 .2rem;color:var(--text-secondary)}
+.quiz{
+  margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--border-strong)
+}
+.quiz h3{font:700 1.55rem var(--display)}
+.quiz-item{padding:1.2rem 0;border-bottom:1px solid var(--border-subtle)}
+.quiz-options{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.8rem}
+.quiz button{
+  min-height:42px;padding:.55rem .8rem;border:1px solid var(--border-subtle);
+  background:var(--surface-raised);color:var(--text-primary);border-radius:var(--radius-sm)
+}
+.quiz button[aria-pressed="true"]{border-color:var(--accent);box-shadow:var(--focus-ring)}
+.quiz button.correct{border-color:var(--success);color:var(--success)}
+.quiz button.wrong{border-color:var(--danger);color:var(--danger)}
+.feedback{min-height:1.6rem;margin:.65rem 0 0;color:var(--text-secondary)}
+.selfcheck{
+  margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--border-strong)
+}
+.check-row{
+  display:flex;align-items:flex-start;gap:.75rem;padding:.75rem 0;border-bottom:1px solid var(--border-subtle)
+}
+.check-row input{width:20px;height:20px;margin-top:.2rem;accent-color:var(--accent)}
+.progress-line{margin-top:1rem;height:5px;background:var(--border-subtle);overflow:hidden}
+.progress-line span{display:block;width:0;height:100%;background:var(--success);transition:width var(--motion-normal)}
+.progress-text{margin:.55rem 0;color:var(--text-secondary);font-size:.9rem}
+.footer{
+  display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  padding:2rem 0 3rem;color:var(--text-secondary);font-size:.88rem
+}
+dialog{
+  width:min(94vw,78rem);max-height:92vh;padding:0;border:1px solid var(--border-strong);
+  background:var(--surface-raised);color:var(--text-primary);box-shadow:var(--shadow-high)
+}
+dialog::backdrop{background:#171219b5}
+.modal-shell{position:relative;padding:1rem}
+.modal-shell img{display:block;width:100%;height:auto}
+.modal-close{
+  position:sticky;top:.5rem;float:right;z-index:2;
+  min-height:44px;padding:.55rem .8rem;
+  border:1px solid var(--border-subtle);background:var(--surface-raised);color:var(--text-primary);
+  border-radius:var(--radius-sm)
+}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:900px){
+  .cover{grid-template-columns:1fr;min-height:0}
+  .cover h1{max-width:11ch}
+  .cover-visual{min-height:25rem}
+  .section{grid-template-columns:1fr;gap:1rem}
+  .section-index{position:static}
+  .question-contrast{grid-template-columns:1fr}
+  .question-half+.question-half{border-left:0;border-top:1px solid var(--border-strong)}
+  .resource-strip{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .page{width:min(100% - 1.25rem,92rem)}
+  .topbar{padding:.55rem .65rem;flex-wrap:wrap}
+  .topbar .home{width:100%;min-height:auto}
+  .topbar a:not(.home),.topbar button{flex:1;text-align:center}
+  .cover{padding-top:2.4rem}
+  .cover h1{font-size:clamp(2.8rem,15vw,4.5rem)}
+  .folio{grid-template-columns:1fr}
+  .cover-visual{min-height:20rem}
+  .cover-equation{left:.5rem;right:.5rem;bottom:1rem;max-width:none}
+  .route{display:grid;grid-template-columns:1fr 1fr}
+  .question-half{padding:1.15rem 0}
+  .stepper-head{align-items:start;flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*:before,*:after{animation:none!important;transition:none!important}
+  .coordinate-sheet{transform:none}
+}
+@media print{
+  :root,html[data-theme="dark"]{
+    --surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--text-primary:#111;
+    --text-secondary:#333;--border-subtle:#bbb;--border-strong:#777;--accent:#333;
+    --coordinate:#444;--coordinate-soft:#fff;--shadow-low:none;--shadow-high:none
+  }
+  body{background:#fff}
+  .topbar,.route,.step-controls,.quiz,.selfcheck,.mindmap-button,.modal-close{display:none!important}
+  .page{width:100%;margin:0}
+  .cover{min-height:0;grid-template-columns:1fr 38%;gap:1.2rem;padding:1rem 0}
+  .cover h1{font-size:34pt}
+  .coordinate-sheet{box-shadow:none;transform:none}
+  .section{display:block;padding:1.4rem 0;break-inside:auto}
+  .section-index{position:static;margin-bottom:.8rem}
+  .section-index .num{font-size:26pt}
+  .step-item{display:block!important;border-bottom:1px solid #ccc;padding:.7rem 0}
+  .resource-strip{display:block}
+  .resource-strip img{max-width:50%;box-shadow:none}
+  .practice-list details[open] p,.practice-list details p{display:block}
+  details>summary{list-style:none}
+  dialog{display:none!important}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">К содержанию</a>
+
+<nav class="topbar" aria-label="Навигация занятия">
+  <a class="home" href="index.html">Кристина · учебный навигатор</a>
+  <a href="../pdf_docs/22.09.26.pdf">Скачать пособие</a>
+  <a href="../tex_docs/22.09.26.tex">TeX</a>
+  <button id="themeToggle" type="button" aria-pressed="false">Тёмная тема</button>
+  <button type="button" id="printButton">Печать</button>
+</nav>
+
+<main id="main" class="page">
+  <header class="cover" data-coordinate-field>
+    <div class="cover-copy">
+      <p class="kicker">22 сентября 2026 · графики функций</p>
+      <h1>Метод узловых точек</h1>
+      <p class="cover-lead">Как восстановить формулу функции по графику, найти неизвестные коэффициенты и правильно понять, что именно требуется подставить в финальном шаге.</p>
+
+      <div class="folio" aria-label="Сведения о занятии">
+        <div><span>Ученица</span><strong>Кристина</strong></div>
+        <div><span>Преподаватель</span><strong>Лёвин Артём Александрович</strong></div>
+        <div><span>Фокус</span><strong>Линейная и квадратичная функции</strong></div>
+        <div><span>Метод</span><strong>Точки → система → коэффициенты</strong></div>
+      </div>
+
+      <nav class="route" aria-label="Маршрут занятия">
+        <a href="#idea">01 · Узловые точки</a>
+        <a href="#linear">02 · Линейная функция</a>
+        <a href="#question">03 · Вопрос задачи</a>
+        <a href="#quadratic">04 · Парабола</a>
+        <a href="#practice">05 · Тренировка</a>
+      </nav>
+    </div>
+
+    <div class="cover-visual" data-atlas-parallax="4">
+      <div class="coordinate-sheet" aria-hidden="true">
+        <svg viewBox="0 0 500 500">
+          <line x1="250" y1="30" x2="250" y2="470" stroke="currentColor" opacity=".46" stroke-width="2"/>
+          <line x1="30" y1="250" x2="470" y2="250" stroke="currentColor" opacity=".46" stroke-width="2"/>
+          <line x1="78" y1="422" x2="440" y2="55" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="190" cy="342" r="9" fill="var(--coordinate)" stroke="var(--surface-raised)" stroke-width="4"/>
+          <circle cx="370" cy="162" r="9" fill="var(--coordinate)" stroke="var(--surface-raised)" stroke-width="4"/>
+          <text x="150" y="375" fill="var(--text-primary)" font-size="20" font-family="system-ui">A(−1; −3)</text>
+          <text x="350" y="135" fill="var(--text-primary)" font-size="20" font-family="system-ui">B(3; 4)</text>
+          <text x="455" y="242" fill="var(--text-secondary)" font-size="18" font-family="system-ui">x</text>
+          <text x="262" y="45" fill="var(--text-secondary)" font-size="18" font-family="system-ui">y</text>
+        </svg>
+      </div>
+      <div class="cover-equation">
+        <strong>Маршрут решения</strong>
+        точки графика → система уравнений → коэффициенты → формула → ответ
+      </div>
+    </div>
+  </header>
+
+  <section class="section" id="idea" data-journey-stop data-journey-label="Узловые точки">
+    <header class="section-index">
+      <span class="num">01</span>
+      <h2>Точка становится уравнением</h2>
+      <p>Сначала считываем данные с графика без приближений.</p>
+    </header>
+    <div class="section-body">
+      <p>В этом пособии <strong>узловой</strong> называем точку графика, у которой обе координаты — целые числа. Если точка <strong>A(x; y)</strong> лежит на графике, её координаты удовлетворяют равенству <strong>y = f(x)</strong>.</p>
+
+      <div class="rule-line">
+        <strong>Главный принцип:</strong> неизвестные коэффициенты определяются из независимых уравнений, полученных подстановкой координат точек.
+      </div>
+
+      <table class="point-table">
+        <thead>
+          <tr><th>Точка</th><th>Статус</th><th>Почему</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>A(−1; −3)</td><td>узловая</td><td>обе координаты целые</td></tr>
+          <tr><td>B(3; 4)</td><td>узловая</td><td>обе координаты целые</td></tr>
+          <tr><td>C(2; 2,4)</td><td>не узловая</td><td>ордината 2,4 не является целым числом</td></tr>
+        </tbody>
+      </table>
+
+      <div class="note">
+        Если узловых точек несколько, особенно удобны точки с <strong>x = 0</strong>, <strong>y = 0</strong>, <strong>x = 1</strong> или <strong>x = −1</strong>. Это сокращает вычисления, хотя сам метод от такого выбора не зависит.
+      </div>
+
+      <div class="math-block" aria-label="Порядок координат">
+        <math display="block">
+          <mrow>
+            <mi>A</mi><mo>(</mo><msub><mi>x</mi><mn>0</mn></msub><mo>;</mo><msub><mi>y</mi><mn>0</mn></msub><mo>)</mo>
+            <mspace width="1em"/><mo>⇒</mo><mspace width="1em"/>
+            <msub><mi>y</mi><mn>0</mn></msub><mo>=</mo><mi>f</mi><mo>(</mo><msub><mi>x</mi><mn>0</mn></msub><mo>)</mo>
+          </mrow>
+        </math>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="linear" data-journey-stop data-journey-label="Линейная функция">
+    <header class="section-index">
+      <span class="num">02</span>
+      <h2>Восстанавливаем прямую</h2>
+      <p>Для f(x) = kx + b нужны два коэффициента.</p>
+    </header>
+    <div class="section-body">
+      <p>Пусть прямая проходит через точки <strong>A(−1; −3)</strong> и <strong>B(3; 4)</strong>. Две точки с разными абсциссами дают два независимых уравнения для коэффициентов <strong>k</strong> и <strong>b</strong>.</p>
+
+      <div class="stepper" id="linearStepper" aria-label="Пошаговое восстановление линейной функции">
+        <div class="stepper-head">
+          <h3>От точек к формуле</h3>
+          <span class="step-count" id="stepCount">Шаг 1 из 5</span>
+        </div>
+        <div class="step-stage">
+          <article class="step-item current" data-step="0" aria-current="step">
+            <h4>Шаг 1 · Запишите общий вид</h4>
+            <p>Работаем с линейной функцией:</p>
+            <div class="math-block">
+              <math display="block"><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mi>k</mi><mi>x</mi><mo>+</mo><mi>b</mi></mrow></math>
+            </div>
+            <p>Неизвестны два коэффициента: <strong>k</strong> и <strong>b</strong>.</p>
+          </article>
+
+          <article class="step-item" data-step="1">
+            <h4>Шаг 2 · Подставьте первую точку</h4>
+            <p>Для A(−1; −3): вместо x подставляем −1, вместо f(x) — −3.</p>
+            <div class="math-block">
+              <math display="block">
+                <mrow><mo>−</mo><mn>3</mn><mo>=</mo><mo>−</mo><mi>k</mi><mo>+</mo><mi>b</mi></mrow>
+              </math>
+            </div>
+          </article>
+
+          <article class="step-item" data-step="2">
+            <h4>Шаг 3 · Подставьте вторую точку</h4>
+            <p>Для B(3; 4) получаем второе уравнение.</p>
+            <div class="math-block">
+              <math display="block">
+                <mrow><mn>4</mn><mo>=</mo><mn>3</mn><mi>k</mi><mo>+</mo><mi>b</mi></mrow>
+              </math>
+            </div>
+            <p>Теперь перед нами система из двух уравнений.</p>
+          </article>
+
+          <article class="step-item" data-step="3">
+            <h4>Шаг 4 · Решите систему</h4>
+            <p>Из первого уравнения: b = k − 3. Подставляем это выражение во второе и получаем 4k = 7.</p>
+            <div class="math-block">
+              <math display="block">
+                <mrow>
+                  <mi>k</mi><mo>=</mo><mfrac><mn>7</mn><mn>4</mn></mfrac>
+                  <mo>,</mo><mspace width="1em"/>
+                  <mi>b</mi><mo>=</mo><mo>−</mo><mfrac><mn>5</mn><mn>4</mn></mfrac>
+                </mrow>
+              </math>
+            </div>
+          </article>
+
+          <article class="step-item" data-step="4">
+            <h4>Шаг 5 · Запишите функцию и ответьте на вопрос</h4>
+            <div class="math-block">
+              <math display="block">
+                <mrow>
+                  <mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo>
+                  <mfrac><mn>7</mn><mn>4</mn></mfrac><mi>x</mi>
+                  <mo>−</mo><mfrac><mn>5</mn><mn>4</mn></mfrac>
+                </mrow>
+              </math>
+            </div>
+            <p>Для f(−5) подставляем x = −5 и получаем <strong>−10</strong>.</p>
+          </article>
+        </div>
+
+        <div class="step-controls">
+          <button type="button" id="stepPrev">Назад</button>
+          <button type="button" class="primary" id="stepNext">Следующий шаг</button>
+          <button type="button" id="stepAll">Показать всё</button>
+          <button type="button" id="stepReset">Сначала</button>
+        </div>
+      </div>
+
+      <div class="note">
+        <strong>Самопроверка:</strong> подставьте в найденную формулу одну исходную точку. Для B(3; 4) получается f(3) = 4 — координаты подтверждаются.
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="question" data-journey-stop data-journey-label="Вопрос задачи">
+    <header class="section-index">
+      <span class="num">03</span>
+      <h2>Что именно дано?</h2>
+      <p>Две похожие записи приводят к разным действиям.</p>
+    </header>
+    <div class="section-body">
+      <p>Самая важная развилка финального шага — различить значение аргумента и значение функции.</p>
+
+      <div class="question-contrast">
+        <article class="question-half">
+          <h3>Найти f(−5)</h3>
+          <p>Число −5 — это значение <strong>x</strong>.</p>
+          <span class="arrow">x = −5 → подставить в формулу</span>
+          <div class="math-block">
+            <math display="block">
+              <mrow>
+                <mi>f</mi><mo>(</mo><mo>−</mo><mn>5</mn><mo>)</mo>
+                <mo>=</mo><mn>2</mn><mo>·</mo><mo>(</mo><mo>−</mo><mn>5</mn><mo>)</mo><mo>−</mo><mn>1</mn>
+                <mo>=</mo><mo>−</mo><mn>11</mn>
+              </mrow>
+            </math>
+          </div>
+        </article>
+
+        <article class="question-half">
+          <h3>Дано f(x) = −5</h3>
+          <p>Число −5 — это значение <strong>функции</strong>.</p>
+          <span class="arrow">−5 = формула → решить уравнение</span>
+          <div class="math-block">
+            <math display="block">
+              <mrow>
+                <mo>−</mo><mn>5</mn><mo>=</mo><mn>2</mn><mi>x</mi><mo>−</mo><mn>1</mn>
+                <mspace width="1em"/><mo>⇒</mo><mspace width="1em"/>
+                <mi>x</mi><mo>=</mo><mo>−</mo><mn>2</mn>
+              </mrow>
+            </math>
+          </div>
+        </article>
+      </div>
+
+      <div class="rule-line">
+        <strong>Памятка:</strong> запись f(a) сообщает значение аргумента; запись f(x) = c сообщает значение функции и приводит к уравнению относительно x.
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="quadratic" data-journey-stop data-journey-label="Квадратичная функция">
+    <header class="section-index">
+      <span class="num">04</span>
+      <h2>Тот же метод для параболы</h2>
+      <p>Меняется формула, логика остаётся прежней.</p>
+    </header>
+    <div class="section-body">
+      <p>Пусть известен общий вид <strong>f(x) = 2x² + bx + c</strong>. Коэффициент при x² уже известен, поэтому требуется определить только <strong>b</strong> и <strong>c</strong>.</p>
+
+      <div class="math-block">
+        <math display="block">
+          <mrow>
+            <mi>C</mi><mo>(</mo><mn>0</mn><mo>;</mo><mo>−</mo><mn>4</mn><mo>)</mo>
+            <mspace width="1em"/><mo>⇒</mo><mspace width="1em"/>
+            <mi>c</mi><mo>=</mo><mo>−</mo><mn>4</mn>
+          </mrow>
+        </math>
+      </div>
+
+      <p>Точка с x = 0 особенно удобна: при x = 0 слагаемые с x исчезают, и значение функции сразу равно свободному коэффициенту c.</p>
+
+      <div class="math-block">
+        <math display="block">
+          <mrow>
+            <mi>D</mi><mo>(</mo><mn>1</mn><mo>;</mo><mn>1</mn><mo>)</mo>
+            <mspace width="1em"/><mo>⇒</mo><mspace width="1em"/>
+            <mn>1</mn><mo>=</mo><mn>2</mn><mo>+</mo><mi>b</mi><mo>−</mo><mn>4</mn>
+            <mspace width="1em"/><mo>⇒</mo><mspace width="1em"/>
+            <mi>b</mi><mo>=</mo><mn>3</mn>
+          </mrow>
+        </math>
+      </div>
+
+      <p>Итоговая функция:</p>
+      <div class="math-block">
+        <math display="block">
+          <mrow>
+            <mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+            <mo>=</mo><mn>2</mn><msup><mi>x</mi><mn>2</mn></msup>
+            <mo>+</mo><mn>3</mn><mi>x</mi><mo>−</mo><mn>4</mn>
+          </mrow>
+        </math>
+      </div>
+
+      <p>Например, f(−5) = 31.</p>
+
+      <div class="note warning">
+        Само число точек не заменяет проверку логики: уравнений должно быть достаточно, чтобы неизвестные коэффициенты определялись однозначно.
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="errors" data-journey-stop data-journey-label="Ошибки">
+    <header class="section-index">
+      <span class="num">05</span>
+      <h2>Где чаще всего сбивается решение</h2>
+      <p>Проверяем запись до вычислений.</p>
+    </header>
+    <div class="section-body">
+      <ol class="error-list">
+        <li><span>Путают порядок координат. Запись точки всегда читается как (x; y).</span></li>
+        <li><span>Берут точку, которая не лежит на графике, или пытаются использовать координату, которую нельзя считать точно.</span></li>
+        <li><span>Путают задачи f(a) = ? и f(x) = a.</span></li>
+        <li><span>Теряют знак минус при переносе слагаемого или при подстановке отрицательного x.</span></li>
+        <li><span>Находят один коэффициент и останавливаются, хотя формула содержит ещё неизвестные коэффициенты.</span></li>
+        <li><span>После решения системы не записывают итоговую формулу функции.</span></li>
+        <li><span>Не проверяют найденную формулу по одной из исходных точек.</span></li>
+      </ol>
+
+      <div class="math-block">
+        <math display="block">
+          <mrow>
+            <mo>−</mo><mn>3</mn><mi>k</mi><mo>+</mo><mi>b</mi><mo>=</mo><mo>−</mo><mn>3</mn>
+            <mspace width="1em"/><mo>⇒</mo><mspace width="1em"/>
+            <mi>b</mi><mo>=</mo><mn>3</mn><mi>k</mi><mo>−</mo><mn>3</mn>
+          </mrow>
+        </math>
+      </div>
+
+      <p>При переносе слагаемого −3k в другую часть уравнения его знак меняется.</p>
+    </div>
+  </section>
+
+  <section class="section" id="practice" data-journey-stop data-journey-label="Тренировка">
+    <header class="section-index">
+      <span class="num">06</span>
+      <h2>Закрепление</h2>
+      <p>Задания совпадают с тренировочным блоком пособия.</p>
+    </header>
+    <div class="section-body">
+      <div class="resource-strip">
+        <div>
+          <p class="kicker">Материалы занятия</p>
+          <h3 style="font:700 1.7rem var(--display);margin:.2rem 0 1rem">Ментальная карта и печатное пособие</h3>
+          <div class="resource-links">
+            <a class="primary" href="../pdf_docs/22.09.26.pdf">Скачать пособие</a>
+            <a href="../tex_docs/22.09.26.tex">Открыть TeX</a>
+            <button class="mindmap-button" type="button" id="openMindmap">Увеличить ментальную карту</button>
+          </div>
+        </div>
+        <img src="../images/22.09.26.png" alt="Ментальная карта по методу узловых точек: главная идея, линейная функция, различие f(a) и f(x)=c, квадратичная функция и типичные ошибки">
+      </div>
+
+      <div class="practice-list">
+        <details>
+          <summary>1. Какие точки являются узловыми?</summary>
+          <p>A(−2; 3), B(1,5; 4), C(0; −5), D(7; 1/2), E(3; 4).</p>
+          <p><strong>Ответ:</strong> A, C, E.</p>
+        </details>
+        <details>
+          <summary>2. Для f(x) = 4x + 1 найдите f(1) и x, если f(x) = 1.</summary>
+          <p><strong>Ответ:</strong> f(1) = 5; x = 0.</p>
+        </details>
+        <details>
+          <summary>3. Прямая проходит через (−3; −4) и (1; 2). Восстановите формулу и найдите f(−5).</summary>
+          <p><strong>Ответ:</strong> f(x) = 3x/2 + 1/2; f(−5) = −7.</p>
+        </details>
+        <details>
+          <summary>4. Прямая проходит через A(−3; −3) и B(1; 2). Найдите формулу и f(−9).</summary>
+          <p><strong>Ответ:</strong> f(x) = 5x/4 + 3/4; f(−9) = −21/2.</p>
+        </details>
+        <details>
+          <summary>5. Прямая проходит через A(−4; −2) и B(4; 1). Найдите x, если f(x) = 5/2.</summary>
+          <p><strong>Ответ:</strong> f(x) = 3x/8 − 1/2; x = 8.</p>
+        </details>
+        <details>
+          <summary>6. Для f(x) = 2x² + bx + c по точкам (0; −4) и (1; 1) найдите b, c и f(2).</summary>
+          <p><strong>Ответ:</strong> b = 3, c = −4, f(2) = 10.</p>
+        </details>
+        <details>
+          <summary>7. f(x) = −2x² + bx + c проходит через D(2; 5), E(3; 3). Найдите b, c и f(−1).</summary>
+          <p><strong>Ответ:</strong> b = 8, c = −3, f(x) = −2x² + 8x − 3, f(−1) = −13.</p>
+        </details>
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3>Мини-квиз</h3>
+
+        <div class="quiz-item" data-answer="acE">
+          <strong>Какие точки из A(−2; 3), B(1,5; 4), C(0; −5), E(3; 4) узловые?</strong>
+          <div class="quiz-options">
+            <button type="button" data-value="acE">A, C, E</button>
+            <button type="button" data-value="all">Все</button>
+            <button type="button" data-value="bc">B, C</button>
+          </div>
+          <p class="feedback" aria-live="polite"></p>
+        </div>
+
+        <div class="quiz-item" data-answer="5">
+          <strong>Если f(x) = 4x + 1, чему равно f(1)?</strong>
+          <div class="quiz-options">
+            <button type="button" data-value="5">5</button>
+            <button type="button" data-value="1">1</button>
+            <button type="button" data-value="0">0</button>
+          </div>
+          <p class="feedback" aria-live="polite"></p>
+        </div>
+
+        <div class="quiz-item" data-answer="0">
+          <strong>Если f(x) = 4x + 1 и f(x) = 1, чему равен x?</strong>
+          <div class="quiz-options">
+            <button type="button" data-value="0">0</button>
+            <button type="button" data-value="1">1</button>
+            <button type="button" data-value="4">4</button>
+          </div>
+          <p class="feedback" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <div class="selfcheck" id="selfcheck">
+        <h3 style="font:700 1.55rem var(--display)">Самопроверка</h3>
+        <label class="check-row"><input type="checkbox" data-check="points"><span>Я различаю узловые точки и правильно записываю координаты в порядке (x; y).</span></label>
+        <label class="check-row"><input type="checkbox" data-check="system"><span>Я умею получить систему уравнений из двух точек линейного графика.</span></label>
+        <label class="check-row"><input type="checkbox" data-check="coeff"><span>Я нахожу все неизвестные коэффициенты и записываю итоговую формулу.</span></label>
+        <label class="check-row"><input type="checkbox" data-check="question"><span>Я различаю задачи на f(a) и на поиск x из равенства f(x) = c.</span></label>
+        <label class="check-row"><input type="checkbox" data-check="check"><span>Я проверяю найденную функцию подстановкой исходной точки.</span></label>
+        <div class="progress-line" aria-hidden="true"><span id="progressBar"></span></div>
+        <p class="progress-text" id="progressText" aria-live="polite">Отмечено: 0 из 5.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>Кристина · 22.09.2026</span>
+    <span>Лёвин Артём Александрович</span>
+  </footer>
+</main>
+
+<dialog id="mindmapDialog" aria-labelledby="mindmapTitle">
+  <div class="modal-shell">
+    <button class="modal-close" type="button" id="closeMindmap">Закрыть</button>
+    <h2 id="mindmapTitle" class="sr-only">Ментальная карта по методу узловых точек</h2>
+    <img src="../images/22.09.26.png" alt="Ментальная карта по методу узловых точек">
+  </div>
+</dialog>
+
+<script src="../../../shared/student-dashboard/atlas-motion.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  var root=document.documentElement;
+  var themeButton=document.getElementById('themeToggle');
+  var printButton=document.getElementById('printButton');
+  var storageOk=true;
+
+  function safeGet(key){
+    try{return localStorage.getItem(key);}catch(e){storageOk=false;return null;}
+  }
+  function safeSet(key,value){
+    if(!storageOk)return;
+    try{localStorage.setItem(key,value);}catch(e){storageOk=false;}
+  }
+
+  var savedTheme=safeGet('kristina-22-theme');
+  if(savedTheme==='dark') root.dataset.theme='dark';
+  function syncTheme(){
+    var dark=root.dataset.theme==='dark';
+    themeButton.setAttribute('aria-pressed',String(dark));
+    themeButton.textContent=dark?'Светлая тема':'Тёмная тема';
+  }
+  syncTheme();
+
+  themeButton.addEventListener('click',function(){
+    root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+    safeSet('kristina-22-theme',root.dataset.theme);
+    syncTheme();
+  });
+  printButton.addEventListener('click',function(){window.print();});
+
+  var stepper=document.getElementById('linearStepper');
+  var steps=Array.prototype.slice.call(stepper.querySelectorAll('.step-item'));
+  var prev=document.getElementById('stepPrev');
+  var next=document.getElementById('stepNext');
+  var all=document.getElementById('stepAll');
+  var reset=document.getElementById('stepReset');
+  var count=document.getElementById('stepCount');
+  var current=parseInt(safeGet('kristina-22-step')||'0',10);
+  if(!Number.isFinite(current)||current<0||current>=steps.length) current=0;
+
+  function renderStep(){
+    steps.forEach(function(item,index){
+      var active=index===current;
+      item.classList.toggle('current',active);
+      if(active)item.setAttribute('aria-current','step');else item.removeAttribute('aria-current');
+    });
+    count.textContent='Шаг '+(current+1)+' из '+steps.length;
+    prev.disabled=current===0;
+    next.disabled=current===steps.length-1;
+    safeSet('kristina-22-step',String(current));
+  }
+  prev.addEventListener('click',function(){if(current>0){current--;renderStep();}});
+  next.addEventListener('click',function(){if(current<steps.length-1){current++;renderStep();}});
+  reset.addEventListener('click',function(){current=0;renderStep();});
+  all.addEventListener('click',function(){
+    steps.forEach(function(item){item.classList.add('current');item.removeAttribute('aria-current');});
+    count.textContent='Показаны все 5 шагов';
+    prev.disabled=false;next.disabled=false;
+  });
+  renderStep();
+
+  document.querySelectorAll('.quiz-item').forEach(function(item){
+    var answer=item.getAttribute('data-answer');
+    var feedback=item.querySelector('.feedback');
+    item.querySelectorAll('button').forEach(function(button){
+      button.addEventListener('click',function(){
+        item.querySelectorAll('button').forEach(function(b){
+          b.setAttribute('aria-pressed','false');
+          b.classList.remove('correct','wrong');
+        });
+        button.setAttribute('aria-pressed','true');
+        if(button.getAttribute('data-value')===answer){
+          button.classList.add('correct');
+          feedback.textContent='Верно.';
+        }else{
+          button.classList.add('wrong');
+          feedback.textContent='Проверьте, что именно подставляется в формулу и какие координаты являются целыми.';
+        }
+      });
+    });
+  });
+
+  var checks=Array.prototype.slice.call(document.querySelectorAll('[data-check]'));
+  var progressBar=document.getElementById('progressBar');
+  var progressText=document.getElementById('progressText');
+  var storedChecks=(safeGet('kristina-22-checks')||'').split(',').filter(Boolean);
+  checks.forEach(function(box){box.checked=storedChecks.indexOf(box.getAttribute('data-check'))!==-1;});
+
+  function syncChecks(){
+    var active=checks.filter(function(box){return box.checked;});
+    progressBar.style.width=((active.length/checks.length)*100)+'%';
+    progressText.textContent='Отмечено: '+active.length+' из '+checks.length+'.';
+    safeSet('kristina-22-checks',active.map(function(box){return box.getAttribute('data-check');}).join(','));
+  }
+  checks.forEach(function(box){box.addEventListener('change',syncChecks);});
+  syncChecks();
+
+  var dialog=document.getElementById('mindmapDialog');
+  var openMindmap=document.getElementById('openMindmap');
+  var closeMindmap=document.getElementById('closeMindmap');
+  var lastFocus=null;
+
+  openMindmap.addEventListener('click',function(){
+    lastFocus=document.activeElement;
+    if(typeof dialog.showModal==='function'){
+      dialog.showModal();
+      closeMindmap.focus();
+    }
+  });
+  closeMindmap.addEventListener('click',function(){dialog.close();});
+  dialog.addEventListener('click',function(event){
+    if(event.target===dialog)dialog.close();
+  });
+  dialog.addEventListener('close',function(){
+    if(lastFocus&&typeof lastFocus.focus==='function')lastFocus.focus();
+  });
+})();
+</script>
+</body>
+</html>
