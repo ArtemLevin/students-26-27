@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Кирилл Зиновьев: раскрытие скобок, подобные слагаемые, корень уравнения, проверка подстановкой и равносильные уравнения">
+<title>Уравнения, корни и преобразования — Кирилл Зиновьев</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23005f58'/%3E%3Cpath d='M15 20h14m-7-7v14m10 7h17M35 22l12 12M47 22L35 34' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --surface-page:#f4efe5;
+  --surface-raised:#fffdf8;
+  --surface-soft:#eef4ee;
+  --surface-note:#f7f0df;
+  --text-primary:#242b28;
+  --text-secondary:#66706b;
+  --text-inverse:#f8fbf9;
+  --border-subtle:#d7ddd6;
+  --border-strong:#9fb5a9;
+  --accent:#176a5d;
+  --accent-hover:#0f564c;
+  --accent-soft:#dcebe2;
+  --accent-ink:#0c4b42;
+  --warning:#9a6829;
+  --danger:#9b4b48;
+  --success:#2d7657;
+  --focus-ring:#176a5d;
+  --shadow-low:0 8px 26px rgba(39,55,49,.08);
+  --shadow-high:0 20px 56px rgba(39,55,49,.13);
+  --radius-sm:8px;
+  --radius-md:16px;
+  --radius-lg:28px;
+  --space-1:.35rem;
+  --space-2:.65rem;
+  --space-3:1rem;
+  --space-4:1.5rem;
+  --space-5:2.2rem;
+  --space-6:3.25rem;
+  --motion-fast:140ms;
+  --motion-normal:260ms;
+}
+html[data-theme="dark"]{
+  --surface-page:#101715;
+  --surface-raised:#18211e;
+  --surface-soft:#1f2d28;
+  --surface-note:#29251d;
+  --text-primary:#edf4f0;
+  --text-secondary:#aab8b0;
+  --text-inverse:#102018;
+  --border-subtle:#34443d;
+  --border-strong:#587267;
+  --accent:#72b9a6;
+  --accent-hover:#8fcab9;
+  --accent-soft:#243d35;
+  --accent-ink:#a5ddcc;
+  --warning:#d7ac69;
+  --danger:#e08b87;
+  --success:#7bc49d;
+  --focus-ring:#8fd1bd;
+  --shadow-low:0 8px 26px rgba(0,0,0,.2);
+  --shadow-high:0 20px 56px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button,a{font:inherit}
+a{color:inherit}
+button{cursor:pointer}
+img{max-width:100%;display:block}
+math{font-family:"Cambria Math","STIX Two Math",serif;font-size:1.07em}
+.skip{position:fixed;left:1rem;top:-5rem;z-index:50;background:var(--text-primary);color:var(--surface-raised);padding:.65rem 1rem;border-radius:var(--radius-sm)}
+.skip:focus{top:1rem}
+.wrap{width:min(1180px,calc(100% - 38px));margin:auto;padding:28px 0 70px}
+.hero{position:relative;min-height:500px;padding:56px 56px 44px;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-subtle);overflow:hidden}
+.hero:before{content:"";position:absolute;right:-80px;top:50px;width:390px;height:390px;border:1px solid var(--border-subtle);border-radius:50%}
+.hero:after{content:"x";position:absolute;right:85px;top:95px;font:italic 240px/.8 Georgia,serif;color:var(--accent);opacity:.07;pointer-events:none}
+.folio{display:flex;justify-content:space-between;gap:1rem;align-items:center;color:var(--text-secondary);font-size:.82rem;letter-spacing:.08em;text-transform:uppercase}
+.eyebrow{color:var(--accent);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.08;margin:0;color:var(--text-primary)}
+h1{font-size:clamp(2.8rem,7vw,6.25rem);max-width:850px;margin:48px 0 24px;letter-spacing:-.045em}
+h2{font-size:clamp(2rem,4vw,3.35rem);letter-spacing:-.025em}
+h3{font-size:1.25rem}
+.hero-lead{max-width:720px;font-size:1.22rem;color:var(--text-secondary);margin:0}
+.hero-meta{display:flex;flex-wrap:wrap;gap:.55rem 1.25rem;margin-top:28px;padding-top:18px;border-top:1px solid var(--border-subtle);max-width:820px;color:var(--text-secondary)}
+.hero-meta strong{color:var(--text-primary)}
+.hero-route{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:42px;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-subtle)}
+.hero-route a{padding:15px 12px;text-decoration:none;border-right:1px solid var(--border-subtle);color:var(--text-secondary);transition:color var(--motion-fast),background var(--motion-fast)}
+.hero-route a:last-child{border-right:0}
+.hero-route a:hover,.hero-route a:focus-visible{background:var(--accent-soft);color:var(--accent-ink)}
+.hero-route b{display:block;color:var(--text-primary);font-size:.92rem;margin-bottom:2px}
+.toolbar{display:flex;gap:.6rem;align-items:center;padding:14px 0;position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--surface-page) 93%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--border-subtle)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:.58rem .85rem;border:1px solid var(--border-strong);border-radius:999px;background:var(--surface-raised);color:var(--text-primary);text-decoration:none;transition:background var(--motion-fast),border-color var(--motion-fast),color var(--motion-fast),transform var(--motion-fast)}
+.btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.btn.primary:hover{background:var(--accent-hover);color:var(--text-inverse)}
+.grow{flex:1}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.route-line{display:grid;grid-template-columns:170px 1fr;gap:42px;margin-top:var(--space-6)}
+.route-aside{position:relative;color:var(--text-secondary);font-size:.9rem}
+.route-aside:after{content:"";position:absolute;right:-22px;top:7px;bottom:-52px;width:1px;background:var(--border-subtle)}
+.route-index{position:sticky;top:86px}
+.route-index a{display:block;text-decoration:none;padding:.45rem 0;color:var(--text-secondary)}
+.route-index a:hover,.route-index a:focus-visible{color:var(--accent)}
+.lesson{padding:28px 0 44px;border-bottom:1px solid var(--border-subtle)}
+.section-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,.42fr);gap:42px;align-items:end;margin-bottom:26px}
+.section-head p{margin:0;color:var(--text-secondary);max-width:440px}
+.rule{padding:20px 0;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-subtle);font-size:1.08rem}
+.rule strong{color:var(--accent-ink)}
+.math-stage{margin:26px 0;padding:34px;border:1px solid var(--border-subtle);border-radius:var(--radius-lg);background:var(--surface-raised);box-shadow:var(--shadow-low)}
+.math-stage .formula{overflow-x:auto;padding:.55rem 0;text-align:center;font-size:clamp(1.32rem,3vw,2.15rem)}
+.notebook-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:28px}
+.note{padding:20px;border-left:3px solid var(--accent);background:var(--surface-soft)}
+.note.warning{border-left-color:var(--warning);background:var(--surface-note)}
+.step-list{counter-reset:step;display:grid;gap:0;border-top:1px solid var(--border-subtle)}
+.step{counter-increment:step;display:grid;grid-template-columns:54px 1fr;gap:18px;padding:22px 0;border-bottom:1px solid var(--border-subtle)}
+.step:before{content:counter(step,decimal-leading-zero);font:700 1rem Georgia,serif;color:var(--accent);padding-top:2px}
+.term-demo{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center;justify-content:center;font:700 1.6rem/1.3 "Cambria Math",Georgia,serif}
+.term{padding:.15rem .4rem;border-bottom:3px solid var(--accent)}
+.term.alt{border-color:var(--warning)}
+.arrow{color:var(--text-secondary)}
+.checker{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.72fr);gap:30px;align-items:start}
+.candidate-set{display:flex;gap:.55rem;flex-wrap:wrap;margin:18px 0}
+.candidate{border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);padding:.7rem 1rem;border-radius:var(--radius-sm)}
+.candidate[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.compare-panel{padding:24px;background:var(--surface-soft);border-top:4px solid var(--accent)}
+.compare-row{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border-subtle)}
+.compare-row:last-child{border-bottom:0}
+.compare-row b{text-align:center;font:700 1.35rem "Cambria Math",Georgia,serif}
+.compare-status{margin-top:16px;font-weight:800;color:var(--accent-ink)}
+.equiv{display:grid;grid-template-columns:1fr auto 1fr;gap:22px;align-items:center;margin-top:24px}
+.equation-sheet{padding:26px;background:var(--surface-raised);border:1px solid var(--border-subtle);border-radius:var(--radius-md);text-align:center}
+.equation-sheet .roots{margin-top:10px;color:var(--accent-ink);font-weight:800}
+.equiv-mark{font:700 2.2rem Georgia,serif;color:var(--accent)}
+.error-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--border-subtle)}
+.error-item{padding:18px 18px 18px 0;border-bottom:1px solid var(--border-subtle);display:grid;grid-template-columns:32px 1fr;gap:10px}
+.error-item:nth-child(odd){border-right:1px solid var(--border-subtle);padding-right:22px}
+.error-item:nth-child(even){padding-left:22px}
+.error-no{font:700 .9rem Georgia,serif;color:var(--danger)}
+.poster{margin-top:var(--space-5);border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-subtle)}
+.poster summary{cursor:pointer;list-style:none;padding:18px 0;display:flex;justify-content:space-between;gap:1rem;font-weight:800}
+.poster summary::-webkit-details-marker{display:none}
+.poster-body{padding:0 0 28px}
+.poster-frame{position:relative;overflow:hidden;border-radius:var(--radius-md);border:1px solid var(--border-subtle);background:var(--surface-raised)}
+.poster-frame button{display:block;border:0;padding:0;background:none;width:100%}
+.poster-frame img{width:100%;height:auto}
+.poster-caption{color:var(--text-secondary);font-size:.92rem;margin:.7rem 0 0}
+.practice-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.practice-day{padding:24px 0;border-top:1px solid var(--border-strong)}
+.practice-day ol{padding-left:1.4rem}
+.practice-day li{margin:1.15rem 0}
+.practice-day math{font-size:1.12em}
+.answer-details{margin-top:18px;border-top:1px solid var(--border-subtle)}
+.answer-details summary{cursor:pointer;padding:14px 0;font-weight:800;color:var(--accent-ink)}
+.selfcheck{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;margin-top:20px}
+.selfcheck label{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border-subtle)}
+.progress{height:5px;background:var(--border-subtle);margin-top:18px;overflow:hidden}
+.progress span{display:block;height:100%;width:0;background:var(--accent);transition:width var(--motion-normal)}
+.footer{display:flex;justify-content:space-between;gap:1rem;color:var(--text-secondary);font-size:.9rem;padding-top:28px}
+dialog{width:min(1060px,calc(100% - 30px));max-height:90vh;padding:0;border:0;border-radius:var(--radius-md);background:var(--surface-raised);color:var(--text-primary);box-shadow:var(--shadow-high)}
+dialog::backdrop{background:rgba(8,15,12,.72)}
+.modal-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border-subtle)}
+.modal-bar button{border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);border-radius:var(--radius-sm);padding:.45rem .7rem}
+dialog img{width:100%;height:auto}
+@media(max-width:900px){
+  .hero{padding:42px 26px 34px;min-height:auto}
+  .hero-route{grid-template-columns:1fr 1fr}
+  .hero-route a{border-bottom:1px solid var(--border-subtle)}
+  .route-line{grid-template-columns:1fr;gap:0}
+  .route-aside{display:none}
+  .section-head,.notebook-grid,.checker{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+  .wrap{width:min(100% - 24px,1180px);padding-top:12px}
+  .hero{padding:32px 8px 28px}
+  h1{margin-top:32px}
+  .folio{align-items:flex-start}
+  .hero-route{grid-template-columns:1fr}
+  .hero-route a{border-right:0}
+  .toolbar{overflow-x:auto;white-space:nowrap}
+  .toolbar .grow{display:none}
+  .math-stage{padding:22px 16px}
+  .equiv{grid-template-columns:1fr}
+  .equiv-mark{text-align:center;transform:rotate(90deg)}
+  .error-list,.practice-grid,.selfcheck{grid-template-columns:1fr}
+  .error-item:nth-child(odd){border-right:0;padding-right:0}
+  .error-item:nth-child(even){padding-left:0}
+  .footer{flex-direction:column}
+}
+@media(max-width:390px){
+  body{font-size:15px}
+  .wrap{width:min(100% - 18px,1180px)}
+  .hero{padding-left:3px;padding-right:3px}
+  h1{font-size:2.45rem}
+  .compare-row{grid-template-columns:1fr}
+  .compare-row span{text-align:center}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@media print{
+  :root,html[data-theme="dark"]{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--surface-note:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#bbb;--border-strong:#888;--accent:#154f46;--accent-ink:#154f46;--shadow-low:none;--shadow-high:none}
+  body{background:#fff}
+  .wrap{width:100%;padding:0}
+  .toolbar,.candidate-set,.poster summary,.modal-bar,dialog{display:none!important}
+  .hero{min-height:auto;padding:0 0 20pt;border-top:0}
+  .hero:before,.hero:after{display:none}
+  .hero-route{margin-top:18pt}
+  .route-line{display:block;margin-top:18pt}
+  .route-aside{display:none}
+  .lesson{break-before:auto}
+  .math-stage,.equation-sheet{box-shadow:none;break-inside:avoid}
+  .poster-body{display:block!important;padding-top:8pt}
+  .poster-frame{break-inside:avoid}
+  details>*{display:block!important}
+  .answer-details>div{display:block!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">К содержанию</a>
+<div class="wrap">
+<header class="hero">
+  <div class="folio"><span>Математика · 7 класс</span><span>23 сентября 2026 · занятие 14</span></div>
+  <h1>Уравнения, корни и преобразования</h1>
+  <p class="hero-lead">Сегодня связываем два базовых навыка: аккуратно преобразовывать выражение и понимать, при каком значении переменной уравнение становится верным.</p>
+  <div class="hero-meta">
+    <span><strong>Ученик:</strong> Кирилл Зиновьев</span>
+    <span><strong>Преподаватель:</strong> Лёвин Артём Александрович</span>
+    <span><strong>Фокус:</strong> корень уравнения и проверка подстановкой</span>
+  </div>
+  <nav class="hero-route" aria-label="Маршрут занятия">
+    <a href="#brackets"><b>01 · Скобки</b><span>распределить множитель</span></a>
+    <a href="#terms"><b>02 · Подобные</b><span>собрать коэффициенты</span></a>
+    <a href="#root"><b>03 · Корень</b><span>понять смысл равенства</span></a>
+    <a href="#types"><b>04 · Виды</b><span>модуль и нулевое произведение</span></a>
+    <a href="#equiv"><b>05 · Равносильность</b><span>сравнить корни</span></a>
+  </nav>
+</header>
+
+<nav class="toolbar" aria-label="Инструменты страницы">
+  <a class="btn" href="index.html">К кабинету</a>
+  <a class="btn" href="../pdf_docs/23.09.26.pdf" download>Скачать пособие</a>
+  <a class="btn" href="../tex_docs/23.09.26.tex">TeX</a>
+  <span class="grow"></span>
+  <button class="btn" id="theme" type="button" aria-label="Переключить цветовую тему">Тёмная тема</button>
+  <button class="btn" type="button" id="printPage">Печать</button>
+</nav>
+
+<details class="poster">
+  <summary><span>Ментальная карта занятия</span><span>Открыть памятку</span></summary>
+  <div class="poster-body">
+    <div class="poster-frame">
+      <button id="posterOpen" type="button" aria-label="Открыть ментальную карту крупнее">
+        <img src="../images/23.09.26.png" alt="Ментальная карта по уравнениям, корням, раскрытию скобок, подобным слагаемым и равносильности" loading="lazy">
+      </button>
+    </div>
+    <p class="poster-caption">Карта связывает пять опорных идей занятия: скобки, подобные слагаемые, корень, специальные виды уравнений и равносильность.</p>
+  </div>
+</details>
+
+<div class="route-line">
+<aside class="route-aside" aria-label="Содержание занятия">
+  <nav class="route-index">
+    <div class="eyebrow">Маршрут</div>
+    <a href="#brackets">01 Скобки</a>
+    <a href="#terms">02 Подобные</a>
+    <a href="#root">03 Корень уравнения</a>
+    <a href="#types">04 Полезные виды</a>
+    <a href="#equiv">05 Равносильность</a>
+    <a href="#practice">06 Тренировка</a>
+  </nav>
+</aside>
+
+<main id="content">
+<section class="lesson" id="brackets">
+  <header class="section-head">
+    <div><div class="eyebrow">01 · Базовое преобразование</div><h2>Раскрытие скобок</h2></div>
+    <p>Внешний множитель действует на каждое слагаемое внутри скобок. Знак результата каждый раз определяется правилом умножения.</p>
+  </header>
+  <div class="rule"><strong>Правило.</strong> В выражении <math><mi>a</mi><mo>(</mo><mi>b</mi><mo>+</mo><mi>c</mi><mo>)</mo></math> множитель <math><mi>a</mi></math> нужно умножить и на <math><mi>b</mi></math>, и на <math><mi>c</mi></math>.</div>
+  <div class="math-stage">
+    <div class="formula"><math display="block"><mn>2</mn><mo>(</mo><mi>x</mi><mo>+</mo><mn>5</mn><mo>)</mo><mo>=</mo><mn>2</mn><mi>x</mi><mo>+</mo><mn>10</mn></math></div>
+    <div class="formula"><math display="block"><mo>−</mo><mn>2</mn><mo>(</mo><mi>x</mi><mo>+</mo><mn>5</mn><mo>)</mo><mo>=</mo><mo>−</mo><mn>2</mn><mi>x</mi><mo>−</mo><mn>10</mn></math></div>
+    <div class="formula"><math display="block"><mo>−</mo><mo>(</mo><mi>a</mi><mo>−</mo><mi>b</mi><mo>)</mo><mo>=</mo><mo>−</mo><mi>a</mi><mo>+</mo><mi>b</mi></math></div>
+  </div>
+  <div class="notebook-grid">
+    <div class="step-list">
+      <div class="step"><div><strong>Найдите внешний множитель.</strong><br>Отдельно отметьте его знак.</div></div>
+      <div class="step"><div><strong>Умножьте на каждое слагаемое.</strong><br>Не пропускайте второй член скобок.</div></div>
+      <div class="step"><div><strong>Проверьте знаки.</strong><br>Отрицательный множитель меняет знак результата каждого умножения.</div></div>
+    </div>
+    <div class="note warning"><strong>Частая ошибка</strong><br>Минус перед скобками относится ко всей скобке. Его нельзя применить только к первому слагаемому.</div>
+  </div>
+</section>
+
+<section class="lesson" id="terms">
+  <header class="section-head">
+    <div><div class="eyebrow">02 · Сборка выражения</div><h2>Подобные слагаемые</h2></div>
+    <p>Подобными являются слагаемые с одинаковой буквенной частью. Складываются их коэффициенты, а буквенная часть сохраняется.</p>
+  </header>
+  <div class="math-stage">
+    <div class="term-demo" aria-label="Примеры приведения подобных">
+      <span class="term">3x</span><span>+</span><span class="term">5x</span><span class="arrow">→</span><span>8x</span>
+    </div>
+    <div class="term-demo">
+      <span class="term alt">−4y</span><span>+</span><span class="term alt">2y</span><span class="arrow">→</span><span>−2y</span>
+    </div>
+  </div>
+  <div class="rule"><strong>Связка двух навыков.</strong> В примере <math><mn>2</mn><mo>(</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>)</mo><mo>−</mo><mn>3</mn><mo>(</mo><mn>5</mn><mo>−</mo><mn>2</mn><mi>x</mi><mo>)</mo></math> сначала раскрываем скобки, затем собираем подобные.</div>
+  <div class="math-stage">
+    <div class="formula"><math display="block"><mn>2</mn><mi>x</mi><mo>−</mo><mn>2</mn><mo>−</mo><mn>15</mn><mo>+</mo><mn>6</mn><mi>x</mi><mo>=</mo><mn>8</mn><mi>x</mi><mo>−</mo><mn>17</mn></math></div>
+  </div>
+</section>
+
+<section class="lesson" id="root">
+  <header class="section-head">
+    <div><div class="eyebrow">03 · Главная идея занятия</div><h2>Что значит «корень уравнения»</h2></div>
+    <p>Корень — значение переменной, при котором левая и правая части уравнения дают одно и то же число.</p>
+  </header>
+  <div class="rule"><strong>Проверка корня:</strong> подставить число вместо каждого <math><mi>x</mi></math> → вычислить обе части → сравнить результаты.</div>
+
+  <div class="checker">
+    <div>
+      <div class="math-stage">
+        <div class="formula"><math display="block"><mn>3</mn><msup><mi>x</mi><mn>2</mn></msup><mo>=</mo><mn>5</mn><mi>x</mi><mo>+</mo><mn>12</mn></math></div>
+      </div>
+      <p><strong>Выберите одно из значений, которые проверялись на занятии:</strong></p>
+      <div class="candidate-set" role="group" aria-label="Выбор значения x">
+        <button class="candidate" type="button" data-x="1" aria-pressed="true">x = 1</button>
+        <button class="candidate" type="button" data-x="2" aria-pressed="false">x = 2</button>
+        <button class="candidate" type="button" data-x="3" aria-pressed="false">x = 3</button>
+      </div>
+      <div class="note">Проверка одного значения отвечает только на вопрос об этом значении. Она сама по себе не перечисляет все корни уравнения.</div>
+    </div>
+    <div class="compare-panel" aria-live="polite">
+      <div class="eyebrow">Подстановка</div>
+      <div class="compare-row"><span>Левая часть</span><span>→</span><b id="lhsValue">3</b></div>
+      <div class="compare-row"><span>Правая часть</span><span>→</span><b id="rhsValue">17</b></div>
+      <p class="compare-status" id="rootStatus">3 ≠ 17: число 1 не является корнем.</p>
+    </div>
+  </div>
+
+  <div class="math-stage">
+    <div class="formula"><math display="block"><mi>x</mi><mo>+</mo><mn>3</mn><mo>=</mo><mn>5</mn><mspace width=".8em"/><mo>⇒</mo><mspace width=".8em"/><mi>x</mi><mo>=</mo><mn>2</mn></math></div>
+    <p style="text-align:center;color:var(--text-secondary);margin:.5rem 0 0">При подстановке 2 левая часть становится равной 5.</p>
+  </div>
+</section>
+
+<section class="lesson" id="types">
+  <header class="section-head">
+    <div><div class="eyebrow">04 · Два полезных вида</div><h2>Модуль и нулевое произведение</h2></div>
+    <p>Эти примеры показывают, почему у одного уравнения может быть сразу два корня.</p>
+  </header>
+  <div class="notebook-grid">
+    <article>
+      <h3>Модуль</h3>
+      <div class="math-stage">
+        <div class="formula"><math display="block"><mo>|</mo><mi>x</mi><mo>|</mo><mo>=</mo><mn>4</mn></math></div>
+        <div class="formula"><math display="block"><mi>x</mi><mo>=</mo><mo>−</mo><mn>4</mn><mspace width=".7em"/><mtext>или</mtext><mspace width=".7em"/><mi>x</mi><mo>=</mo><mn>4</mn></math></div>
+      </div>
+      <div class="note"><strong>Почему два?</strong><br>И <math><mo>|</mo><mo>−</mo><mn>4</mn><mo>|</mo></math>, и <math><mo>|</mo><mn>4</mn><mo>|</mo></math> равны 4.</div>
+    </article>
+    <article>
+      <h3>Произведение равно нулю</h3>
+      <div class="math-stage">
+        <div class="formula"><math display="block"><mo>(</mo><mi>x</mi><mo>−</mo><mn>5</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>+</mo><mn>5</mn><mo>)</mo><mo>=</mo><mn>0</mn></math></div>
+        <div class="formula"><math display="block"><mi>x</mi><mo>=</mo><mn>5</mn><mspace width=".7em"/><mtext>или</mtext><mspace width=".7em"/><mi>x</mi><mo>=</mo><mo>−</mo><mn>5</mn></math></div>
+      </div>
+      <div class="note"><strong>Почему два?</strong><br>Произведение равно нулю, когда хотя бы один множитель равен нулю.</div>
+    </article>
+  </div>
+</section>
+
+<section class="lesson" id="equiv">
+  <header class="section-head">
+    <div><div class="eyebrow">05 · Сравнение уравнений</div><h2>Равносильные уравнения</h2></div>
+    <p>Равносильность определяется полным совпадением множеств корней. Одного общего корня недостаточно.</p>
+  </header>
+  <div class="equiv" aria-label="Пример равносильных уравнений">
+    <div class="equation-sheet">
+      <math display="block"><msup><mi>x</mi><mn>2</mn></msup><mo>=</mo><mn>25</mn></math>
+      <div class="roots">корни: −5 и 5</div>
+    </div>
+    <div class="equiv-mark">⇔</div>
+    <div class="equation-sheet">
+      <math display="block"><mo>(</mo><mi>x</mi><mo>−</mo><mn>5</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>+</mo><mn>5</mn><mo>)</mo><mo>=</mo><mn>0</mn></math>
+      <div class="roots">корни: −5 и 5</div>
+    </div>
+  </div>
+  <div class="note" style="margin-top:24px"><strong>Для сравнения:</strong> уравнение <math><mi>x</mi><mo>−</mo><mn>5</mn><mo>=</mo><mn>0</mn></math> имеет только один корень — 5, поэтому оно этим двум уравнениям не равносильно.</div>
+
+  <h3 style="margin-top:36px">Частые ошибки</h3>
+  <div class="error-list">
+    <div class="error-item"><span class="error-no">01</span><span>Умножить внешний множитель только на первое слагаемое в скобках.</span></div>
+    <div class="error-item"><span class="error-no">02</span><span>Потерять знак при работе с отрицательным множителем.</span></div>
+    <div class="error-item"><span class="error-no">03</span><span>Сложить слагаемые с разной буквенной частью.</span></div>
+    <div class="error-item"><span class="error-no">04</span><span>Подставить проверяемое число не во все места, где встречается переменная.</span></div>
+    <div class="error-item"><span class="error-no">05</span><span>Забыть второй корень в уравнении с квадратом или модулем.</span></div>
+    <div class="error-item"><span class="error-no">06</span><span>Считать уравнения равносильными только потому, что у них есть общий корень.</span></div>
+  </div>
+</section>
+
+<section class="lesson" id="practice">
+  <header class="section-head">
+    <div><div class="eyebrow">06 · Путь Б</div><h2>Тренировка 24–25 сентября</h2></div>
+    <p>По три задания в день. Используйте те же правила и способы проверки, которые разобраны выше.</p>
+  </header>
+  <div class="practice-grid">
+    <article class="practice-day">
+      <h3>24.09.2026</h3>
+      <ol>
+        <li>Раскройте скобки и приведите подобные:
+          <div><math><mo>−</mo><mn>3</mn><mo>(</mo><mn>2</mn><mi>x</mi><mo>−</mo><mn>5</mn><mo>)</mo><mo>+</mo><mn>4</mn><mi>x</mi><mo>−</mo><mn>7</mn></math>.</div>
+        </li>
+        <li>Определите, является ли <math><mi>x</mi><mo>=</mo><mn>2</mn></math> корнем:
+          <div><math><mn>2</mn><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>3</mn><mo>=</mo><mn>5</mn><mi>x</mi><mo>+</mo><mn>1</mn></math>.</div>
+        </li>
+        <li>Найдите все корни: <math><mo>|</mo><mi>x</mi><mo>|</mo><mo>=</mo><mn>7</mn></math>.</li>
+      </ol>
+      <details class="answer-details"><summary>Ответы за 24.09</summary><div><p>1) <math><mo>−</mo><mn>2</mn><mi>x</mi><mo>+</mo><mn>8</mn></math>.</p><p>2) Да, <math><mi>x</mi><mo>=</mo><mn>2</mn></math> является корнем.</p><p>3) <math><mi>x</mi><mo>=</mo><mo>−</mo><mn>7</mn></math> и <math><mi>x</mi><mo>=</mo><mn>7</mn></math>.</p></div></details>
+    </article>
+    <article class="practice-day">
+      <h3>25.09.2026</h3>
+      <ol>
+        <li>Раскройте скобки и приведите подобные:
+          <div><math><mo>−</mo><mn>4</mn><mo>(</mo><mn>3</mn><mo>−</mo><mn>2</mn><mi>x</mi><mo>)</mo><mo>−</mo><mn>5</mn><mo>(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo>)</mo></math>.</div>
+        </li>
+        <li>Среди чисел −2, −1, 1, 2 укажите все корни:
+          <div><math><mn>3</mn><msup><mi>x</mi><mn>2</mn></msup><mo>=</mo><mn>5</mn><mi>x</mi><mo>+</mo><mn>2</mn></math>.</div>
+        </li>
+        <li>Определите, какие уравнения равносильны:
+          <div><math><mtext>A)</mtext><mspace width=".4em"/><msup><mi>x</mi><mn>2</mn></msup><mo>=</mo><mn>49</mn></math>;</div>
+          <div><math><mtext>B)</mtext><mspace width=".4em"/><mi>x</mi><mo>−</mo><mn>7</mn><mo>=</mo><mn>0</mn></math>;</div>
+          <div><math><mtext>C)</mtext><mspace width=".4em"/><mo>(</mo><mi>x</mi><mo>−</mo><mn>7</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>+</mo><mn>7</mn><mo>)</mo><mo>=</mo><mn>0</mn></math>.</div>
+        </li>
+      </ol>
+      <details class="answer-details"><summary>Ответы за 25.09</summary><div><p>1) <math><mn>3</mn><mi>x</mi><mo>−</mo><mn>17</mn></math>.</p><p>2) Из перечисленных чисел подходит только <math><mi>x</mi><mo>=</mo><mn>2</mn></math>.</p><p>3) A и C; у обоих корни −7 и 7.</p></div></details>
+    </article>
+  </div>
+
+  <h3 style="margin-top:28px">Самопроверка</h3>
+  <div class="selfcheck">
+    <label><input type="checkbox" data-self><span>Я умножаю внешний множитель на каждое слагаемое в скобках.</span></label>
+    <label><input type="checkbox" data-self><span>Я узнаю подобные слагаемые по одинаковой буквенной части.</span></label>
+    <label><input type="checkbox" data-self><span>Я могу своими словами объяснить, что такое корень уравнения.</span></label>
+    <label><input type="checkbox" data-self><span>Я проверяю корень подстановкой в обе части уравнения.</span></label>
+    <label><input type="checkbox" data-self><span>Я помню про два корня в примерах с модулем и квадратом.</span></label>
+    <label><input type="checkbox" data-self><span>Я сравниваю все корни, когда проверяю равносильность.</span></label>
+  </div>
+  <div class="progress" aria-label="Прогресс самопроверки"><span id="selfBar"></span></div>
+  <p id="selfState" aria-live="polite" style="color:var(--text-secondary)">Отмечено 0 из 6.</p>
+</section>
+</main>
+</div>
+
+<footer class="footer">
+  <span>Лёвин Артём Александрович · материал для Кирилла Зиновьева</span>
+  <span>23.09.26</span>
+</footer>
+</div>
+
+<dialog id="posterDialog" aria-labelledby="posterDialogTitle">
+  <div class="modal-bar"><strong id="posterDialogTitle">Ментальная карта занятия</strong><button id="posterClose" type="button">Закрыть</button></div>
+  <img src="../images/23.09.26.png" alt="Увеличенная ментальная карта по теме уравнений, корней и преобразований">
+</dialog>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var theme=document.getElementById('theme');
+  var themeKey='kirill-230926-theme';
+  try{
+    var saved=localStorage.getItem(themeKey);
+    if(saved==='dark'||saved==='light') root.dataset.theme=saved;
+  }catch(e){}
+  function syncTheme(){
+    theme.textContent=root.dataset.theme==='dark'?'Светлая тема':'Тёмная тема';
+  }
+  syncTheme();
+  theme.addEventListener('click',function(){
+    root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+    syncTheme();
+    try{localStorage.setItem(themeKey,root.dataset.theme)}catch(e){}
+  });
+
+  document.getElementById('printPage').addEventListener('click',function(){window.print()});
+
+  var values={
+    '1':{lhs:'3',rhs:'17',text:'3 ≠ 17: число 1 не является корнем.'},
+    '2':{lhs:'12',rhs:'22',text:'12 ≠ 22: число 2 не является корнем.'},
+    '3':{lhs:'27',rhs:'27',text:'27 = 27: число 3 является корнем.'}
+  };
+  var candidateButtons=[].slice.call(document.querySelectorAll('.candidate'));
+  var lhs=document.getElementById('lhsValue');
+  var rhs=document.getElementById('rhsValue');
+  var status=document.getElementById('rootStatus');
+  candidateButtons.forEach(function(button){
+    button.addEventListener('click',function(){
+      candidateButtons.forEach(function(item){item.setAttribute('aria-pressed',String(item===button))});
+      var item=values[button.dataset.x];
+      lhs.textContent=item.lhs;
+      rhs.textContent=item.rhs;
+      status.textContent=item.text;
+    });
+  });
+
+  var checks=[].slice.call(document.querySelectorAll('[data-self]'));
+  var selfBar=document.getElementById('selfBar');
+  var selfState=document.getElementById('selfState');
+  var selfKey='kirill-230926-selfcheck';
+  try{
+    var stored=JSON.parse(localStorage.getItem(selfKey)||'[]');
+    checks.forEach(function(check,i){check.checked=stored[i]===true});
+  }catch(e){}
+  function syncSelf(){
+    var count=checks.filter(function(check){return check.checked}).length;
+    selfBar.style.width=(count/checks.length*100)+'%';
+    selfState.textContent='Отмечено '+count+' из '+checks.length+'.';
+    try{localStorage.setItem(selfKey,JSON.stringify(checks.map(function(check){return check.checked})))}catch(e){}
+  }
+  checks.forEach(function(check){check.addEventListener('change',syncSelf)});
+  syncSelf();
+
+  var dialog=document.getElementById('posterDialog');
+  var openButton=document.getElementById('posterOpen');
+  var closeButton=document.getElementById('posterClose');
+  var returnFocus=null;
+  openButton.addEventListener('click',function(){
+    returnFocus=openButton;
+    if(dialog.showModal) dialog.showModal();
+  });
+  closeButton.addEventListener('click',function(){dialog.close()});
+  dialog.addEventListener('click',function(event){
+    if(event.target===dialog) dialog.close();
+  });
+  dialog.addEventListener('close',function(){
+    if(returnFocus) returnFocus.focus();
+  });
+})();
+</script>
+</body>
+</html>
