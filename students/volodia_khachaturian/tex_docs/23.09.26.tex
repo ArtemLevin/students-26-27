@@ -1,0 +1,694 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{666666}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=darkaccent
+}
+
+\color{textgray}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+
+\setlist[itemize]{
+  leftmargin=1.5em,
+  itemsep=0.2em,
+  topsep=0.35em
+}
+
+\setlist[enumerate]{
+  leftmargin=1.8em,
+  itemsep=0.35em,
+  topsep=0.35em
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Движение с постоянным ускорением}
+\rhead{\small Володя Хачатурян}
+\cfoot{\small \thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\sectionline}{%
+  \vspace{0.1em}
+  \noindent\textcolor{accent}{\rule{\linewidth}{0.5pt}}
+  \vspace{0.45em}
+}
+
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\ms}{\,\text{м/с}}
+\newcommand{\mss}{\,\text{м/с}^{2}}
+\newcommand{\metre}{\,\text{м}}
+\newcommand{\second}{\,\text{с}}
+
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=darkaccent,
+    line width=0.9pt,
+    minimum width=34mm,
+    minimum height=10mm,
+    align=center,
+    font=\small
+  },
+  flowaction/.style={
+    rounded corners=3pt,
+    draw=darkaccent,
+    line width=0.9pt,
+    text width=63mm,
+    minimum height=13mm,
+    align=center,
+    font=\small,
+    inner sep=4pt
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=2.15,
+    draw=darkaccent,
+    line width=0.9pt,
+    text width=39mm,
+    align=center,
+    font=\small,
+    inner sep=2pt
+  },
+  flowarrow/.style={
+    -{Stealth[length=3mm,width=2mm]},
+    line width=0.9pt,
+    draw=darkaccent
+  }
+}
+
+\begin{document}
+
+% =========================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% =========================================================
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{24mm}
+
+{\Large\textcolor{darkaccent}{\textbf{Чек-лист}}\par}
+
+\vspace{7mm}
+
+{\huge\textbf{Равноускоренное прямолинейное движение}\par}
+
+\vspace{3mm}
+
+{\Large\textbf{Координата, скорость, перемещение и путь за отдельную секунду}\par}
+
+\vspace{18mm}
+
+{\large Ученик: \textbf{Володя Хачатурян}\par}
+\vspace{3mm}
+{\large Подготовка: \textbf{ОГЭ по физике}\par}
+\vspace{3mm}
+{\large Тренировочный блок: \textbf{Путь Б}\par}
+
+\vfill
+
+{\large 23 сентября 2026 г.\par}
+
+\vspace{6mm}
+
+{\large\textbf{Лёвин Артём Александрович эксклюзивно для Володи Хачатуряна}\par}
+
+\vspace{16mm}
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent,line width=1.1pt]
+  ([xshift=18mm,yshift=17mm]current page.south west)
+  .. controls
+  ([xshift=70mm,yshift=28mm]current page.south west)
+  and
+  ([xshift=-70mm,yshift=8mm]current page.south east)
+  ..
+  ([xshift=-18mm,yshift=18mm]current page.south east);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% =========================================================
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% =========================================================
+
+\section*{1. Три величины, которые нельзя путать}
+\sectionline
+
+\begin{itemize}
+  \item \key{Координата $x$} показывает положение тела на оси $Ox$.
+
+  \item \key{Перемещение $\Delta x$} за промежуток времени:
+  \[
+    \boxed{\Delta x=x_{\text{кон}}-x_{\text{нач}}}.
+  \]
+  Перемещение может быть положительным, отрицательным или равным нулю.
+
+  \item \key{Путь $s$} --- длина пройденного участка траектории, поэтому
+  \[
+    s\ge 0.
+  \]
+\end{itemize}
+
+Если тело на рассматриваемом промежутке не меняет направление движения, то
+\[
+  s=|\Delta x|.
+\]
+Если направление меняется, путь нужно находить по отдельным участкам движения.
+
+\section*{2. Базовые формулы движения с постоянным ускорением}
+\sectionline
+
+Для движения вдоль оси $Ox$ при постоянной проекции ускорения $a_x$:
+
+\[
+\boxed{x=x_0+v_{0x}t+\frac{a_xt^2}{2}}
+\]
+
+\[
+\boxed{v_x=v_{0x}+a_xt}
+\]
+
+\[
+\boxed{\Delta x=v_{0x}t+\frac{a_xt^2}{2}}
+\]
+
+где $x_0$ --- начальная координата, $v_{0x}$ --- начальная проекция скорости,
+$a_x$ --- проекция ускорения, $t$ --- время.
+
+\textbf{Главное правило знаков.}
+Знак входит в значение коэффициента. Например, если
+\[
+  x=6-3t,
+\]
+то
+\[
+  v_{0x}=-3\ms,
+  \qquad
+  a_x=0.
+\]
+
+\section*{3. Как читать уравнение координаты}
+\sectionline
+
+Если закон движения записан как
+\[
+  x=A+Bt+Ct^2,
+\]
+то сравниваем его с
+\[
+  x=x_0+v_{0x}t+\frac{a_x}{2}t^2.
+\]
+Отсюда
+\[
+\boxed{x_0=A,\qquad v_{0x}=B,\qquad a_x=2C.}
+\]
+
+Особенно важно помнить: коэффициент при $t^2$ равен $a_x/2$, поэтому ускорение в два раза больше этого коэффициента.
+
+\subsection*{Пример 1. В уравнении отсутствуют слагаемые}
+
+Пусть
+\[
+  x=6t^2.
+\]
+Полная запись имеет вид
+\[
+  x=0+0\cdot t+6t^2.
+\]
+Следовательно,
+\[
+  x_0=0,
+  \qquad
+  v_{0x}=0,
+  \qquad
+  \frac{a_x}{2}=6,
+\]
+поэтому
+\[
+  \boxed{a_x=12\mss.}
+\]
+
+А для уравнения
+\[
+  x=6-3t
+\]
+имеем
+\[
+  \boxed{x_0=6\metre,\qquad v_{0x}=-3\ms,\qquad a_x=0.}
+\]
+
+\subsection*{Пример 2. Координата в заданный момент}
+
+Пусть
+\[
+  x=8t-2t^2.
+\]
+Через $3\second$:
+\[
+  x(3)=8\cdot3-2\cdot3^2=24-18=6\metre.
+\]
+
+\section*{4. Как найти перемещение за несколько секунд}
+\sectionline
+
+Если известен закон координаты, надёжнее всего использовать
+\[
+\boxed{\Delta x=x(t_2)-x(t_1).}
+\]
+
+Например, при
+\[
+  x=6-4t+t^2
+\]
+за первые $5\second$:
+\[
+  x(0)=6\metre,
+\]
+\[
+  x(5)=6-4\cdot5+5^2=11\metre,
+\]
+поэтому
+\[
+  \boxed{\Delta x=11-6=5\metre.}
+\]
+
+\textbf{Самопроверка.}
+Если требуется перемещение «за первые $T$ секунд», нужно сравнить координаты в моменты $0$ и $T$.
+
+\section*{5. Перемещение за $n$-ю секунду}
+\sectionline
+
+Фраза «за $n$-ю секунду» означает промежуток
+\[
+  [n-1;\,n]\ \text{с}.
+\]
+Например, четвёртая секунда --- это промежуток от $3\second$ до $4\second$.
+
+Пусть $\tau=1\second$ --- длительность одной секунды. Тогда
+\[
+  \Delta x_n=x(n\tau)-x((n-1)\tau).
+\]
+Подставим закон движения:
+\begin{align*}
+\Delta x_n
+&=
+\left(
+  x_0+v_{0x}n\tau+\frac{a_xn^2\tau^2}{2}
+\right)
+-
+\left(
+  x_0+v_{0x}(n-1)\tau+
+  \frac{a_x(n-1)^2\tau^2}{2}
+\right)
+\\[1mm]
+&=v_{0x}\tau+
+\frac{a_x\tau^2}{2}
+\left(n^2-(n-1)^2\right)
+\\[1mm]
+&=v_{0x}\tau+
+\frac{a_x\tau^2}{2}(2n-1).
+\end{align*}
+
+Итак,
+\[
+\boxed{
+\Delta x_n=
+ v_{0x}\tau+
+ \frac{a_x\tau^2}{2}(2n-1),
+\qquad \tau=1\second.
+}
+\]
+
+Для вычислений можно сразу подставить $\tau=1\second$:
+\[
+\boxed{
+\Delta x_n=
+ v_{0x}\cdot 1\second+
+ \frac{a_x(1\second)^2}{2}(2n-1).
+}
+\]
+Так сохраняются и физический смысл, и размерность формулы.
+
+\subsection*{Пример 3. Четвёртая и седьмая секунды}
+
+Начальная скорость тела равна
+\[
+  v_{0x}=2\ms,
+\]
+а путь за четвёртую секунду составляет
+\[
+  s_4=2{,}7\metre.
+\]
+В рассматриваемой задаче движение идёт в положительном направлении, поэтому на этом интервале
+\[
+  s_4=\Delta x_4.
+\]
+
+По формуле для четвёртой секунды:
+\[
+  2{,}7=2+\frac{a_x}{2}(2\cdot4-1)
+  =2+\frac{7a_x}{2}.
+\]
+Следовательно,
+\[
+  \frac{7a_x}{2}=0{,}7,
+  \qquad
+  a_x=0{,}2\mss.
+\]
+
+Теперь
+\[
+  \Delta x_7=
+  2+\frac{0{,}2}{2}(2\cdot7-1)
+  =2+0{,}1\cdot13
+  =3{,}3\metre.
+\]
+Так как скорость остаётся положительной, путь за седьмую секунду также равен
+\[
+  \boxed{s_7=3{,}3\metre.}
+\]
+
+\section*{6. Когда путь и перемещение за секунду различаются}
+\sectionline
+
+Чтобы понять, можно ли использовать $s=|\Delta x|$, проверьте знак скорости на рассматриваемом интервале.
+
+Если
+\[
+  v_x=v_{0x}+a_xt
+\]
+обращается в ноль внутри интервала $[t_1;t_2]$, тело меняет направление. Тогда нужно найти момент остановки $t_*$ из уравнения
+\[
+  v_x(t_*)=0
+\]
+и сложить пути до и после остановки:
+\[
+\boxed{
+  s=|x(t_*)-x(t_1)|+|x(t_2)-x(t_*)|.
+}
+\]
+
+\section*{7. Как читать уравнение скорости}
+\sectionline
+
+Если
+\[
+  v_x=D+Et,
+\]
+то сравнение с
+\[
+  v_x=v_{0x}+a_xt
+\]
+даёт
+\[
+\boxed{v_{0x}=D,\qquad a_x=E.}
+\]
+
+\subsection*{Пример 4. Когда скорость становится равной нулю}
+
+Пусть
+\[
+  x=12t-2t^2.
+\]
+Из закона координаты:
+\[
+  v_{0x}=12\ms,
+  \qquad
+  \frac{a_x}{2}=-2,
+  \qquad
+  a_x=-4\mss.
+\]
+Поэтому
+\[
+  v_x=12-4t.
+\]
+В момент остановки
+\[
+  v_x=0,
+\]
+значит
+\[
+  12-4t=0,
+  \qquad
+  \boxed{t=3\second.}
+\]
+
+\subsection*{Пример 5. Из скорости получить перемещение}
+
+Пусть
+\[
+  v_x=3-2t.
+\]
+Тогда
+\[
+  v_{0x}=3\ms,
+  \qquad
+  a_x=-2\mss.
+\]
+Следовательно,
+\[
+  \Delta x=v_{0x}t+\frac{a_xt^2}{2}
+  =3t-t^2.
+\]
+Итак,
+\[
+  \boxed{\Delta x=3t-t^2.}
+\]
+
+\section*{8. Перевод формулировок задачи на язык физики}
+\sectionline
+
+\renewcommand{\arraystretch}{1.3}
+\begin{table}[ht]
+\centering
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Фраза в условии} & \textbf{Что нужно увидеть} \\
+\midrule
+«Зависимость координаты от времени описывается уравнением...»
+& Дано уравнение $x(t)$. \\
+«Движение описывается уравнением $x=\ldots$»
+& Дано уравнение координаты $x(t)$. \\
+«В какой момент времени...»
+& Искомая величина --- $t$. \\
+«Проекция скорости на ось $Ox$ равна нулю»
+& Использовать условие $v_x=0$. \\
+«Перемещение за первые $5$ секунд»
+& Найти $x(5)-x(0)$. \\
+«За четвёртую секунду»
+& Рассмотреть интервал от $3$ до $4$ с. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section*{9. Типичные ошибки}
+\sectionline
+
+\begin{enumerate}
+  \item Путать величину \textbf{за четыре секунды} с величиной \textbf{за четвёртую секунду}.
+
+  \item Терять знак коэффициента. В выражении $x=6-3t$ начальная скорость равна $-3\ms$.
+
+  \item Принимать коэффициент при $t^2$ непосредственно за ускорение. В законе координаты этот коэффициент равен $a_x/2$.
+
+  \item Добавлять $x_0$ в формулу перемещения. Начальная координата входит в формулу координаты, но сокращается при вычислении $\Delta x$.
+
+  \item Считать путь равным перемещению при смене направления движения.
+
+  \item Подставлять числа до того, как определена искомая физическая величина и выбрана формула.
+
+  \item Записывать число без его знака или без единицы измерения.
+\end{enumerate}
+
+% =========================================================
+% БЛОК-СХЕМА
+% =========================================================
+
+\clearpage
+\thispagestyle{empty}
+
+\begin{center}
+{\Large\textcolor{darkaccent}{\textbf{Алгоритм: как разобрать уравнение движения}}\par}
+
+\vspace{4mm}
+
+\begin{tikzpicture}[node distance=6mm and 16mm]
+
+\node[flowstart] (start) {Начало};
+
+\node[flowdecision,below=of start] (isx)
+{Дано уравнение координаты $x(t)$?};
+
+\node[flowaction,below=11mm of isx,xshift=-41mm] (xform)
+{Сравните с $x=x_0+v_{0x}t+\dfrac{a_xt^2}{2}$.\\
+Найдите $x_0$, $v_{0x}$, $a_x$.};
+
+\node[flowaction,below=11mm of isx,xshift=41mm] (vform)
+{Тогда дано $v_x(t)$. Сравните с $v_x=v_{0x}+a_xt$.\\
+Найдите $v_{0x}$, $a_x$.};
+
+\node[flowaction,below=42mm of isx] (solve)
+{Переведите вопрос в обозначения, выберите формулу и выполните вычисления, сохраняя знаки.};
+
+\node[flowdecision,below=of solve] (path)
+{Искомая величина --- путь $s$?};
+
+\node[flowaction,below=11mm of path,xshift=-43mm] (pathcheck)
+{Проверьте знак $v_x$. При смене направления найдите момент остановки и сложите пути по участкам.};
+
+\node[flowaction,below=11mm of path,xshift=43mm] (directcheck)
+{Проверьте полученный результат: единицы измерения, знак и физический смысл.};
+
+\node[flowaction,below=40mm of path] (finalcheck)
+{Для пути убедитесь, что итог неотрицателен; для проекций сохраните физически значимый знак.};
+
+\node[flowstart,below=of finalcheck] (finish) {Ответ};
+
+\draw[flowarrow] (start) -- (isx);
+\draw[flowarrow] (isx) -| node[pos=0.22,above left,font=\small]{да} (xform);
+\draw[flowarrow] (isx) -| node[pos=0.22,above right,font=\small]{нет} (vform);
+\draw[flowarrow] (xform.south) |- (solve.west);
+\draw[flowarrow] (vform.south) |- (solve.east);
+\draw[flowarrow] (solve) -- (path);
+\draw[flowarrow] (path) -| node[pos=0.22,above left,font=\small]{да} (pathcheck);
+\draw[flowarrow] (path) -| node[pos=0.22,above right,font=\small]{нет} (directcheck);
+\draw[flowarrow] (pathcheck.south) |- (finalcheck.west);
+\draw[flowarrow] (directcheck.south) |- (finalcheck.east);
+\draw[flowarrow] (finalcheck) -- (finish);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% =========================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% =========================================================
+
+\section*{Тренировочный блок --- Путь Б}
+\sectionline
+
+На каждый день выполните по три задания. Формулу сначала записывайте в общем виде, затем подставляйте численные значения. В ответах обязательно указывайте единицы измерения.
+
+\subsection*{24.09.2026}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+
+  \item
+  Движение тела описывается уравнением
+  \[
+    x=5+4t+t^2.
+  \]
+  Определите $x_0$, $v_{0x}$, $a_x$ и координату тела через $3\second$.
+
+  \item
+  Проекция скорости тела задаётся уравнением
+  \[
+    v_x=7-2t.
+  \]
+  Определите начальную скорость, ускорение и момент времени, когда $v_x=0$.
+
+  \item
+  Тело движется с постоянным ускорением вдоль оси $Ox$. Начальная скорость равна
+  \[
+    1{,}5\ms,
+  \]
+  а перемещение за третью секунду равно
+  \[
+    2{,}5\metre.
+  \]
+  Найдите ускорение и перемещение за шестую секунду.
+
+\end{enumerate}
+
+\clearpage
+
+\subsection*{25.09.2026}
+
+\begin{enumerate}[label=\textbf{\arabic*.},resume]
+
+  \item
+  Движение тела описывается уравнением
+  \[
+    x=12-3t+2t^2.
+  \]
+  Определите $x_0$, $v_{0x}$, $a_x$, скорость через $2\second$ и перемещение за первые $2\second$.
+
+  \item
+  Проекция скорости тела задаётся уравнением
+  \[
+    v_x=6-3t.
+  \]
+  Запишите зависимость перемещения от времени $\Delta x(t)$. Затем найдите момент остановки и перемещение от $t=0$ до этого момента.
+
+  \item
+  Движение тела описывается уравнением
+  \[
+    x=-4+10t-2t^2.
+  \]
+  Найдите:
+  \begin{itemize}
+    \item момент, когда скорость равна нулю;
+    \item координату тела в этот момент;
+    \item перемещение за третью секунду;
+    \item путь, пройденный за третью секунду.
+  \end{itemize}
+
+\end{enumerate}
+
+% =========================================================
+% ОТВЕТЫ
+% =========================================================
+
+\clearpage
+
+\section*{Ответы к тренировочному блоку}
+\sectionline
+
+\renewcommand{\arraystretch}{1.4}
+\begin{table}[ht]
+\centering
+\begin{tabularx}{\linewidth}{@{}c>{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+1 & $x_0=5\metre$; $v_{0x}=4\ms$; $a_x=2\mss$; $x(3)=26\metre$. \\
+2 & $v_{0x}=7\ms$; $a_x=-2\mss$; $t=3{,}5\second$. \\
+3 & $a_x=0{,}4\mss$; $\Delta x_6=3{,}7\metre$. \\
+4 & $x_0=12\metre$; $v_{0x}=-3\ms$; $a_x=4\mss$; $v_x(2)=5\ms$; $\Delta x=2\metre$. \\
+5 & $\Delta x=6t-1{,}5t^2$; $t_{\text{ост}}=2\second$; $\Delta x(2)=6\metre$. \\
+6 & $t_{\text{ост}}=2{,}5\second$; $x(2{,}5)=8{,}5\metre$; $\Delta x_3=0$; $s_3=1\metre$. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\end{document}
