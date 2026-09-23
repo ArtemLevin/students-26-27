@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивное занятие Володи Хачатуряна: равноускоренное движение, чтение x(t) и v(t), перемещение за n-ю секунду, остановка и путь.">
+<title>Равноускоренное движение: x(t), v(t) и n-я секунда — Володя Хачатурян</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%231f5d68'/%3E%3Cpath d='M12 42h40M17 37c7-17 16-23 30-20' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='36' cy='23' r='4' fill='%23d06b55'/%3E%3C/svg%3E">
+<style>
+:root{
+  --surface-page:#f3eee4;
+  --surface-raised:#fffdf7;
+  --surface-soft:#e9f0ee;
+  --surface-ink:#172323;
+  --text-primary:#1c2929;
+  --text-secondary:#64706f;
+  --text-inverse:#ffffff;
+  --border-subtle:#cfd9d6;
+  --border-strong:#99aaa6;
+  --accent:#1f5d68;
+  --accent-hover:#184b54;
+  --accent-soft:#d9e8e9;
+  --signal:#d06b55;
+  --signal-soft:#f2ded7;
+  --success:#2d735a;
+  --danger:#a94c48;
+  --warning:#8b651f;
+  --focus-ring:#2d7f8a;
+  --shadow-low:0 8px 28px #334d4814;
+  --shadow-high:0 18px 55px #223d381f;
+  --radius-sm:8px;
+  --radius-md:16px;
+  --radius-lg:28px;
+  --space-1:.4rem;
+  --space-2:.7rem;
+  --space-3:1rem;
+  --space-4:1.4rem;
+  --space-5:2rem;
+  --space-6:3rem;
+  --motion-fast:140ms;
+  --motion-normal:220ms;
+}
+html[data-theme="dark"]{
+  --surface-page:#101717;
+  --surface-raised:#172120;
+  --surface-soft:#1d2b29;
+  --surface-ink:#edf4f2;
+  --text-primary:#edf4f2;
+  --text-secondary:#a8b8b5;
+  --text-inverse:#ffffff;
+  --border-subtle:#314340;
+  --border-strong:#526864;
+  --accent:#74b4bd;
+  --accent-hover:#93c8ce;
+  --accent-soft:#17383c;
+  --signal:#e1937f;
+  --signal-soft:#3b2723;
+  --success:#6ab492;
+  --danger:#e18b86;
+  --warning:#d7b367;
+  --focus-ring:#91d0d8;
+  --shadow-low:0 8px 28px #0005;
+  --shadow-high:0 18px 55px #0008;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.66 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button,input,select{font:inherit}
+a{color:inherit}
+button{cursor:pointer}
+.skip{position:absolute;left:-9999px;top:0}.skip:focus{left:1rem;top:1rem;z-index:1000;background:var(--surface-raised);padding:.7rem 1rem;border:2px solid var(--focus-ring)}
+.shell{width:min(100% - clamp(1rem,4vw,4rem),92rem);margin:auto}
+.topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--surface-page) 93%,transparent);border-bottom:1px solid var(--border-subtle);backdrop-filter:blur(12px)}
+.topbar-inner{min-height:58px;display:flex;align-items:center;gap:.6rem}
+.topbar a,.topbar button{min-height:42px;border:0;background:transparent;color:var(--text-secondary);padding:.6rem .75rem;text-decoration:none}
+.topbar a:hover,.topbar button:hover{color:var(--text-primary)}
+.topbar .home{font-weight:750;color:var(--text-primary);padding-left:0}
+.topbar .grow{flex:1}
+.hero{position:relative;min-height:36rem;padding:clamp(3rem,7vw,7rem) 0 clamp(2rem,5vw,4rem);border-bottom:1px solid var(--border-subtle);overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(18rem,.58fr);gap:clamp(2rem,8vw,8rem);align-items:end}
+.kicker{display:flex;align-items:center;gap:.8rem;color:var(--accent);font:750 .76rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.11em;text-transform:uppercase}
+.kicker:before{content:"";width:2.3rem;height:1px;background:var(--accent)}
+.hero h1{font:700 clamp(3.1rem,8vw,7.8rem)/.94 Georgia,"Times New Roman",serif;letter-spacing:-.055em;margin:.8rem 0 1.2rem;max-width:10ch}
+.hero .lead{max-width:53rem;font-size:clamp(1.05rem,1.8vw,1.28rem);color:var(--text-secondary)}
+.hero-meta{margin-top:1.5rem;display:flex;gap:.45rem 1.2rem;flex-wrap:wrap;color:var(--text-secondary);font-size:.9rem}
+.hero-meta b{color:var(--text-primary);font-weight:720}
+.instrument{position:relative;padding:1.2rem 0 0;border-top:1px solid var(--border-strong)}
+.instrument:before{content:"";position:absolute;inset:-3rem -4rem -2rem -3rem;background:linear-gradient(130deg,transparent 10%,var(--accent-soft) 55%,transparent 90%);opacity:.62;transform:skewY(-4deg);z-index:-1}
+.instrument-label{font:700 .7rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.12em}
+.instrument-formula{margin:.55rem 0 .7rem;font:600 clamp(1.5rem,2.8vw,2.5rem)/1.2 "Cambria Math",Cambria,serif}
+.instrument-note{color:var(--text-secondary);font-size:.94rem}
+.primary-link{display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;min-height:44px;padding:.68rem .92rem;background:var(--accent);color:var(--text-inverse);text-decoration:none;font-weight:760;border-radius:var(--radius-sm)}
+.primary-link:hover{background:var(--accent-hover)}
+.route{border-bottom:1px solid var(--border-subtle)}
+.route-inner{display:grid;grid-template-columns:repeat(5,1fr)}
+.route a{position:relative;padding:1rem .8rem;text-decoration:none;color:var(--text-secondary);border-right:1px solid var(--border-subtle);font-size:.88rem}
+.route a:first-child{border-left:1px solid var(--border-subtle)}
+.route a:before{content:attr(data-no);display:block;color:var(--signal);font:700 .72rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;margin-bottom:.4rem}
+.route a:hover,.route a:focus-visible{background:var(--surface-raised);color:var(--text-primary)}
+main{padding:clamp(2rem,5vw,5rem) 0}
+.chapter{padding:clamp(2rem,4vw,4.5rem) 0;border-top:1px solid var(--border-subtle)}
+.chapter:first-child{border-top:0}
+.chapter-head{display:grid;grid-template-columns:minmax(0,.38fr) minmax(0,1fr);gap:clamp(1.4rem,5vw,5rem);margin-bottom:2rem}
+.chapter-no{color:var(--signal);font:700 .78rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.1em}
+.chapter h2{font:700 clamp(2rem,4vw,4rem)/1.04 Georgia,"Times New Roman",serif;letter-spacing:-.035em;margin:0}
+.chapter-intro{color:var(--text-secondary);max-width:58rem}
+.formula-stage{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(16rem,.52fr);gap:clamp(1.5rem,5vw,5rem);align-items:start}
+.formula-hero{padding:clamp(1.3rem,3vw,2.2rem) 0;border-top:2px solid var(--accent);border-bottom:1px solid var(--border-subtle)}
+.formula-hero math{font-size:clamp(1.5rem,3vw,2.5rem)}
+.formula-hero p{color:var(--text-secondary)}
+.ledger{border-top:1px solid var(--border-strong)}
+.ledger-row{display:grid;grid-template-columns:minmax(7.5rem,.7fr) 1.3fr;gap:1rem;padding:.8rem 0;border-bottom:1px solid var(--border-subtle)}
+.ledger-row b{font-weight:720}
+.ledger-row span{color:var(--text-secondary)}
+.signal{border-left:3px solid var(--signal);padding:.8rem 1rem;margin:1.2rem 0;background:linear-gradient(90deg,var(--signal-soft),transparent)}
+.timeline{position:relative;padding:1.2rem 0 0}
+.timeline-line{height:2px;background:var(--border-strong);position:relative;margin:3rem 0 1.4rem}
+.timeline-line:before,.timeline-line:after{content:"";position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:var(--accent);transform:translateY(-50%)}
+.timeline-line:before{left:0}.timeline-line:after{right:0}
+.interval{position:absolute;left:75%;right:0;top:50%;height:8px;transform:translateY(-50%);background:var(--signal);border-radius:10px}
+.tick{position:absolute;top:18px;transform:translateX(-50%);font:700 .76rem ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--text-secondary)}
+.tick:before{content:"";position:absolute;left:50%;bottom:22px;width:1px;height:12px;background:var(--border-strong)}
+.method{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:clamp(1.5rem,4vw,4rem)}
+.steps{counter-reset:step;border-top:1px solid var(--border-strong)}
+.step{display:grid;grid-template-columns:3.2rem 1fr;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+.step:before{counter-increment:step;content:counter(step);width:2.2rem;height:2.2rem;display:grid;place-items:center;border:1px solid var(--accent);color:var(--accent);font-weight:800;border-radius:50%}
+.step b{display:block;margin-bottom:.2rem}
+.step p{margin:.15rem 0;color:var(--text-secondary)}
+.mathline{overflow-x:auto;padding:.15rem 0}
+.mathline math{font-size:1.12rem}
+.example{padding:1.3rem 0;border-top:1px solid var(--border-strong)}
+.example h3{font:700 1.45rem/1.2 Georgia,serif;margin:.3rem 0 .8rem}
+.example .answer{color:var(--success);font-weight:760}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;vertical-align:top;padding:.8rem .7rem;border-bottom:1px solid var(--border-subtle)}
+th{font-size:.82rem;color:var(--text-secondary);font-weight:700}
+.warning-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.warning-item{padding:1rem 0;border-top:2px solid var(--danger)}
+.warning-item b{display:block;margin-bottom:.35rem}
+.warning-item p{margin:0;color:var(--text-secondary)}
+.poster{border-top:1px solid var(--border-strong);padding-top:1rem}
+.poster summary{cursor:pointer;display:flex;justify-content:space-between;gap:1rem;align-items:center;font-weight:760}
+.poster summary::marker{color:var(--accent)}
+.poster-body{padding-top:1rem}
+.poster img{display:block;width:min(100%,1100px);max-height:80vh;object-fit:contain;margin:auto;border:1px solid var(--border-subtle);background:var(--surface-raised)}
+.quiz{border-top:1px solid var(--border-strong);padding-top:1rem}
+.quiz h3{font:700 1.4rem Georgia,serif}
+.quiz button{display:block;width:100%;text-align:left;margin:.5rem 0;padding:.8rem .9rem;min-height:44px;background:var(--surface-raised);color:var(--text-primary);border:1px solid var(--border-subtle);border-radius:var(--radius-sm)}
+.quiz button.good{border-color:var(--success);box-shadow:inset 3px 0 var(--success)}
+.quiz button.bad{border-color:var(--danger);box-shadow:inset 3px 0 var(--danger)}
+.feedback{min-height:2rem;color:var(--text-secondary);padding-top:.35rem}
+.checklist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem 1.4rem}
+.check{display:flex;gap:.7rem;align-items:flex-start;padding:.6rem 0;border-bottom:1px solid var(--border-subtle)}
+.check input{margin-top:.25rem;width:20px;height:20px;accent-color:var(--accent)}
+.progress-line{height:6px;background:var(--border-subtle);margin-top:1rem;overflow:hidden}
+.progress-line span{display:block;height:100%;width:0;background:var(--success);transition:width var(--motion-normal)}
+.footer{padding:2rem 0 3rem;border-top:1px solid var(--border-subtle);color:var(--text-secondary);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+@media(max-width:960px){
+  .hero-grid,.formula-stage,.method,.chapter-head{grid-template-columns:1fr}
+  .route-inner{grid-template-columns:1fr 1fr 1fr}
+  .warning-list,.checklist{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .shell{width:min(100% - 1.2rem,92rem)}
+  .hero{min-height:auto;padding:2.5rem 0}
+  .hero h1{font-size:clamp(2.7rem,15vw,4.6rem)}
+  .route-inner{grid-template-columns:1fr}
+  .route a,.route a:first-child{border-left:0;border-right:0;border-bottom:1px solid var(--border-subtle)}
+  .ledger-row{grid-template-columns:1fr}
+  .chapter{padding:2.4rem 0}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+@media print{
+  :root,html[data-theme="dark"]{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#bbb;--border-strong:#888;--accent:#164e57;--signal:#8f3c2d;--shadow-low:none;--shadow-high:none}
+  .topbar,.route,.quiz button,.primary-link{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .shell{width:100%}
+  .hero{min-height:auto;padding:12mm 0 7mm}
+  .hero h1{font-size:30pt}
+  .instrument:before{display:none}
+  .chapter{break-before:auto;break-inside:auto;padding:9mm 0}
+  .formula-hero,.example,.warning-item,.poster{break-inside:avoid}
+  .poster img{max-height:180mm}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">К содержанию</a>
+
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <a class="home" href="index.html">Володя Хачатурян · ОГЭ по физике</a>
+    <span class="grow"></span>
+    <a href="../pdf_docs/23.09.26.pdf" download>Скачать пособие</a>
+    <a href="../tex_docs/23.09.26.tex">TeX</a>
+    <button id="themeToggle" type="button" aria-label="Переключить светлую и тёмную тему">Тема</button>
+    <button type="button" onclick="print()">Печать</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="shell hero-grid">
+    <div>
+      <p class="kicker">23 сентября 2026 · кинематика</p>
+      <h1>Читать движение по формуле</h1>
+      <p class="lead">Главный навык занятия — видеть за записью <b>x(t)</b> или <b>v(t)</b> физические величины, сохранять их знаки и отличать перемещение за несколько секунд от перемещения именно за отдельную секунду.</p>
+      <div class="hero-meta">
+        <span><b>Ученик:</b> Володя Хачатурян</span>
+        <span><b>Преподаватель:</b> Лёвин Артём Александрович</span>
+        <span><b>Формат:</b> ОГЭ</span>
+      </div>
+    </div>
+    <aside class="instrument" aria-label="Ключевая формула занятия">
+      <div class="instrument-label">центральный инструмент</div>
+      <div class="instrument-formula">x = x₀ + v₀ₓt + aₓt²/2</div>
+      <p class="instrument-note">Свободный член даёт начальную координату, коэффициент при t — начальную скорость, коэффициент при t² равен половине ускорения.</p>
+      <a class="primary-link" href="23.09.26-lab.html?mode=coefficients">Разобрать коэффициенты на модели →</a>
+    </aside>
+  </div>
+</section>
+
+<nav class="route" aria-label="Маршрут занятия">
+  <div class="shell route-inner">
+    <a href="#read" data-no="01">Читаем x(t)</a>
+    <a href="#nth" data-no="02">Отдельная секунда</a>
+    <a href="#velocity" data-no="03">Читаем v(t)</a>
+    <a href="#path" data-no="04">Путь и смена направления</a>
+    <a href="#check" data-no="05">Ошибки и самопроверка</a>
+  </div>
+</nav>
+
+<main id="content" class="shell">
+  <section class="chapter" id="read">
+    <header class="chapter-head">
+      <div class="chapter-no">01 · ЗАКОН КООРДИНАТЫ</div>
+      <div>
+        <h2>Уравнение уже содержит данные задачи</h2>
+        <p class="chapter-intro">Запись вида <b>x = A + Bt + Ct²</b> нужно сравнить с общей формулой равноускоренного движения. Тогда каждое слагаемое получает физический смысл.</p>
+      </div>
+    </header>
+
+    <div class="formula-stage">
+      <div class="formula-hero">
+        <div class="mathline">
+          <math display="block" aria-label="x равно x нулевое плюс v нулевое x умножить на t плюс a x умножить на t в квадрате пополам">
+            <mrow><mi>x</mi><mo>=</mo><msub><mi>x</mi><mn>0</mn></msub><mo>+</mo><msub><mi>v</mi><mrow><mn>0</mn><mi>x</mi></mrow></msub><mi>t</mi><mo>+</mo><mfrac><mrow><msub><mi>a</mi><mi>x</mi></msub><msup><mi>t</mi><mn>2</mn></msup></mrow><mn>2</mn></mfrac></mrow>
+          </math>
+        </div>
+        <p>Если <b>x = A + Bt + Ct²</b>, то <b>x₀ = A</b>, <b>v₀ₓ = B</b>, <b>aₓ = 2C</b>.</p>
+      </div>
+
+      <div class="ledger" aria-label="Смысл коэффициентов">
+        <div class="ledger-row"><b>A</b><span>начальная координата x₀</span></div>
+        <div class="ledger-row"><b>B</b><span>начальная скорость v₀ₓ</span></div>
+        <div class="ledger-row"><b>C</b><span>aₓ/2, поэтому aₓ = 2C</span></div>
+      </div>
+    </div>
+
+    <div class="example">
+      <h3>Пример: x = 6t²</h3>
+      <p>Отсутствующие слагаемые равны нулю:</p>
+      <div class="mathline"><math display="block"><mrow><mi>x</mi><mo>=</mo><mn>0</mn><mo>+</mo><mn>0</mn><mo>·</mo><mi>t</mi><mo>+</mo><mn>6</mn><msup><mi>t</mi><mn>2</mn></msup></mrow></math></div>
+      <p>Значит, x₀ = 0, v₀ₓ = 0, а aₓ/2 = 6.</p>
+      <p class="answer">aₓ = 12 м/с².</p>
+    </div>
+
+    <div class="example">
+      <h3>Пример: x = 6 − 3t</h3>
+      <p>Коэффициент при t равен <b>−3</b>. Знак относится к числу и не отделяется от него.</p>
+      <p class="answer">x₀ = 6 м, v₀ₓ = −3 м/с, aₓ = 0.</p>
+    </div>
+
+    <p class="signal"><b>Самопроверка:</b> если в уравнении нет слагаемого, соответствующий коэффициент равен нулю; если коэффициент отрицательный, знак сохраняется.</p>
+  </section>
+
+  <section class="chapter" id="nth">
+    <header class="chapter-head">
+      <div class="chapter-no">02 · n-Я СЕКУНДА</div>
+      <div>
+        <h2>«За 4 секунды» и «за 4-ю секунду» — разные промежутки</h2>
+        <p class="chapter-intro">Четвёртая секунда начинается в момент 3 с и заканчивается в момент 4 с. Поэтому перемещение за n-ю секунду находится как разность координат в конце и начале этого секундного интервала.</p>
+      </div>
+    </header>
+
+    <div class="timeline" aria-label="Временная шкала четвёртой секунды">
+      <div class="timeline-line">
+        <span class="interval" aria-hidden="true"></span>
+        <span class="tick" style="left:0%">0 с</span>
+        <span class="tick" style="left:25%">1 с</span>
+        <span class="tick" style="left:50%">2 с</span>
+        <span class="tick" style="left:75%">3 с</span>
+        <span class="tick" style="left:100%">4 с</span>
+      </div>
+      <p><b>Отдельная секунда:</b> Δxₙ = x(n) − x(n−1), если время измеряется в секундах.</p>
+    </div>
+
+    <div class="formula-stage">
+      <div class="formula-hero">
+        <div class="mathline">
+          <math display="block">
+            <mrow><msub><mrow><mi>Δ</mi><mi>x</mi></mrow><mi>n</mi></msub><mo>=</mo><msub><mi>v</mi><mrow><mn>0</mn><mi>x</mi></mrow></msub><mo>+</mo><mfrac><mrow><msub><mi>a</mi><mi>x</mi></msub><mo>(</mo><mn>2</mn><mi>n</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow><mn>2</mn></mfrac></mrow>
+          </math>
+        </div>
+        <p>Это компактная школьная запись для секундных интервалов; она следует из разности x(n) − x(n−1).</p>
+      </div>
+      <div>
+        <p class="signal"><b>Условие для пути:</b> формула даёт перемещение. Чтобы назвать его путём, проверьте, что внутри этой секунды тело не меняло направление.</p>
+        <a class="primary-link" href="23.09.26-lab.html?mode=nth">Увидеть n-ю секунду на шкале →</a>
+      </div>
+    </div>
+
+    <div class="example">
+      <h3>Разобранная задача: 4-я → 7-я секунда</h3>
+      <p>Дано: v₀ₓ = 2 м/с, перемещение за 4-ю секунду равно 2,7 м.</p>
+      <div class="mathline"><math display="block"><mrow><mn>2.7</mn><mo>=</mo><mn>2</mn><mo>+</mo><mfrac><mrow><mn>7</mn><msub><mi>a</mi><mi>x</mi></msub></mrow><mn>2</mn></mfrac></mrow></math></div>
+      <p>Отсюда aₓ = 0,2 м/с².</p>
+      <div class="mathline"><math display="block"><mrow><msub><mrow><mi>Δ</mi><mi>x</mi></mrow><mn>7</mn></msub><mo>=</mo><mn>2</mn><mo>+</mo><mfrac><mrow><mn>0.2</mn><mo>·</mo><mn>13</mn></mrow><mn>2</mn></mfrac><mo>=</mo><mn>3.3</mn><mtext> м</mtext></mrow></math></div>
+      <p class="answer">За 7-ю секунду: 3,3 м.</p>
+    </div>
+  </section>
+
+  <section class="chapter" id="velocity">
+    <header class="chapter-head">
+      <div class="chapter-no">03 · ЗАКОН СКОРОСТИ</div>
+      <div>
+        <h2>Скорость читается ещё проще</h2>
+        <p class="chapter-intro">Если дана формула vₓ = D + Et, то D — начальная скорость, E — ускорение. А фраза «скорость равна нулю» сразу превращается в условие vₓ = 0.</p>
+      </div>
+    </header>
+
+    <div class="formula-stage">
+      <div class="formula-hero">
+        <div class="mathline"><math display="block"><mrow><msub><mi>v</mi><mi>x</mi></msub><mo>=</mo><msub><mi>v</mi><mrow><mn>0</mn><mi>x</mi></mrow></msub><mo>+</mo><msub><mi>a</mi><mi>x</mi></msub><mi>t</mi></mrow></math></div>
+        <p>Для vₓ = 3 − 2t: v₀ₓ = 3 м/с, aₓ = −2 м/с².</p>
+      </div>
+      <div class="ledger">
+        <div class="ledger-row"><b>vₓ = 0</b><span>момент остановки</span></div>
+        <div class="ledger-row"><b>vₓ &gt; 0</b><span>движение вдоль +Ox</span></div>
+        <div class="ledger-row"><b>vₓ &lt; 0</b><span>движение против +Ox</span></div>
+      </div>
+    </div>
+
+    <div class="example">
+      <h3>Пример: x = 12t − 2t²</h3>
+      <p>По коэффициентам: v₀ₓ = 12 м/с, aₓ = −4 м/с². Поэтому</p>
+      <div class="mathline"><math display="block"><mrow><msub><mi>v</mi><mi>x</mi></msub><mo>=</mo><mn>12</mn><mo>−</mo><mn>4</mn><mi>t</mi></mrow></math></div>
+      <p>В момент остановки 12 − 4t = 0.</p>
+      <p class="answer">t = 3 с.</p>
+      <p><a class="primary-link" href="23.09.26-lab.html?mode=turn">Проследить смену направления →</a></p>
+    </div>
+
+    <div class="example">
+      <h3>Из скорости получить перемещение</h3>
+      <p>Для vₓ = 3 − 2t имеем v₀ₓ = 3 м/с и aₓ = −2 м/с². Тогда</p>
+      <div class="mathline"><math display="block"><mrow><mi>Δ</mi><mi>x</mi><mo>=</mo><mn>3</mn><mi>t</mi><mo>−</mo><msup><mi>t</mi><mn>2</mn></msup></mrow></math></div>
+    </div>
+  </section>
+
+  <section class="chapter" id="path">
+    <header class="chapter-head">
+      <div class="chapter-no">04 · ПУТЬ И ПЕРЕМЕЩЕНИЕ</div>
+      <div>
+        <h2>Путь требует проверки направления</h2>
+        <p class="chapter-intro">Перемещение равно xкон − xнач и может иметь любой знак. Путь всегда неотрицателен. Если скорость меняет знак внутри рассматриваемого интервала, путь складывают по участкам.</p>
+      </div>
+    </header>
+
+    <div class="method">
+      <div>
+        <p class="signal"><b>Без смены направления:</b> s = |Δx|.</p>
+        <p class="signal"><b>Со сменой направления:</b> найдите t*, для которого vₓ(t*) = 0, затем сложите длины двух участков.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div><b>Запишите интервал времени.</b><p>Например, для третьей секунды это [2; 3] с.</p></div></div>
+        <div class="step"><div><b>Проверьте знак vₓ.</b><p>Найдите, попадает ли момент vₓ = 0 внутрь интервала.</p></div></div>
+        <div class="step"><div><b>Если знак не меняется.</b><p>Путь равен модулю перемещения.</p></div></div>
+        <div class="step"><div><b>Если знак меняется.</b><p>Разделите движение в точке остановки и сложите пути по частям.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="check">
+    <header class="chapter-head">
+      <div class="chapter-no">05 · КОНТРОЛЬ</div>
+      <div>
+        <h2>Ошибки, которые реально меняют ответ</h2>
+        <p class="chapter-intro">Перед завершением задачи проверьте три вещи: знак коэффициента, смысл временного интервала и различие между путём и перемещением.</p>
+      </div>
+    </header>
+
+    <div class="warning-list">
+      <div class="warning-item"><b>За 4 секунды ≠ за 4-ю секунду.</b><p>Во втором случае нужен интервал от 3 до 4 с.</p></div>
+      <div class="warning-item"><b>Коэффициент при t² — это aₓ/2.</b><p>Ускорение получают удвоением коэффициента.</p></div>
+      <div class="warning-item"><b>Знак — часть числа.</b><p>В x = 6 − 3t начальная скорость равна −3 м/с.</p></div>
+      <div class="warning-item"><b>В Δx нет x₀.</b><p>Начальная координата сокращается при вычислении разности координат.</p></div>
+    </div>
+
+    <div class="example">
+      <h3>Фразы условия → обозначения</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Фраза</th><th>Что записать</th></tr></thead>
+          <tbody>
+            <tr><td>«Зависимость координаты от времени…»</td><td>дано x(t)</td></tr>
+            <tr><td>«В какой момент времени…»</td><td>ищем t</td></tr>
+            <tr><td>«Проекция скорости равна нулю»</td><td>vₓ = 0</td></tr>
+            <tr><td>«Перемещение за первые 5 секунд»</td><td>Δx = x(5) − x(0)</td></tr>
+            <tr><td>«За четвёртую секунду»</td><td>интервал [3; 4] с</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <details class="poster">
+      <summary><span>Наглядная памятка к занятию</span><span>Открыть</span></summary>
+      <div class="poster-body">
+        <p>Краткая акварельная карта с формулами, алгоритмом и типичными ошибками.</p>
+        <img src="../images/23.09.26.png" alt="Ментальная карта по равноускоренному движению: координата, скорость, перемещение, путь, формула за n-ю секунду и типичные ошибки" loading="lazy">
+      </div>
+    </details>
+
+    <div class="quiz" id="quiz">
+      <h3>Мини-квиз</h3>
+      <p><b>1.</b> В уравнении x = A + Bt + Ct² чему равно ускорение?</p>
+      <button type="button" data-q="1" data-ok="0">C</button>
+      <button type="button" data-q="1" data-ok="1">2C</button>
+      <button type="button" data-q="1" data-ok="0">B</button>
+      <div class="feedback" id="feedback1" aria-live="polite"></div>
+
+      <p><b>2.</b> Какой интервал соответствует четвёртой секунде?</p>
+      <button type="button" data-q="2" data-ok="0">от 0 до 4 с</button>
+      <button type="button" data-q="2" data-ok="1">от 3 до 4 с</button>
+      <button type="button" data-q="2" data-ok="0">от 4 до 5 с</button>
+      <div class="feedback" id="feedback2" aria-live="polite"></div>
+      <button type="button" id="quizReset">Сбросить ответы</button>
+    </div>
+
+    <div class="example">
+      <h3>Самопроверка</h3>
+      <div class="checklist" id="selfCheck">
+        <label class="check"><input type="checkbox"><span>Я извлекаю x₀, v₀ₓ и aₓ из x(t).</span></label>
+        <label class="check"><input type="checkbox"><span>Я сохраняю знак коэффициента.</span></label>
+        <label class="check"><input type="checkbox"><span>Я различаю «за n секунд» и «за n-ю секунду».</span></label>
+        <label class="check"><input type="checkbox"><span>Я использую vₓ = 0 для момента остановки.</span></label>
+        <label class="check"><input type="checkbox"><span>Я проверяю смену направления перед вычислением пути.</span></label>
+        <label class="check"><input type="checkbox"><span>Я указываю единицы: м, м/с, м/с², с.</span></label>
+      </div>
+      <div class="progress-line" aria-hidden="true"><span id="checkProgress"></span></div>
+      <p id="checkText" aria-live="polite">Отмечено: 0 из 6.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="footer shell">
+  <span>Володя Хачатурян · ОГЭ по физике</span>
+  <span>Лёвин Артём Александрович · 23.09.2026</span>
+</footer>
+
+<script>
+(function(){
+  const root=document.documentElement;
+  const themeKey='volodia-230926-theme';
+  function setTheme(value){
+    root.dataset.theme=value;
+    try{localStorage.setItem(themeKey,value);}catch(e){}
+  }
+  try{
+    const saved=localStorage.getItem(themeKey);
+    if(saved==='dark'||saved==='light')root.dataset.theme=saved;
+  }catch(e){}
+  document.getElementById('themeToggle').addEventListener('click',function(){
+    setTheme(root.dataset.theme==='dark'?'light':'dark');
+  });
+
+  document.querySelectorAll('#quiz button[data-q]').forEach(function(button){
+    button.addEventListener('click',function(){
+      const q=button.dataset.q;
+      const group=[...document.querySelectorAll('#quiz button[data-q="'+q+'"]')];
+      group.forEach(function(item){item.classList.remove('good','bad');});
+      const ok=button.dataset.ok==='1';
+      button.classList.add(ok?'good':'bad');
+      const feedback=document.getElementById('feedback'+q);
+      feedback.textContent=ok
+        ? (q==='1'?'Верно: коэффициент C равен aₓ/2, значит aₓ = 2C.':'Верно: четвёртая секунда — промежуток от 3 до 4 с.')
+        : (q==='1'?'Сравните Ct² с (aₓ/2)t².':'Отдельная секунда начинается на одну секунду раньше своего номера.');
+    });
+  });
+  document.getElementById('quizReset').addEventListener('click',function(){
+    document.querySelectorAll('#quiz button[data-q]').forEach(function(item){item.classList.remove('good','bad');});
+    document.getElementById('feedback1').textContent='';
+    document.getElementById('feedback2').textContent='';
+  });
+
+  const checks=[...document.querySelectorAll('#selfCheck input')];
+  const progress=document.getElementById('checkProgress');
+  const text=document.getElementById('checkText');
+  const storageKey='volodia-230926-selfcheck';
+  function updateChecks(){
+    const count=checks.filter(function(c){return c.checked;}).length;
+    progress.style.width=(count/checks.length*100)+'%';
+    text.textContent='Отмечено: '+count+' из '+checks.length+'.';
+    try{localStorage.setItem(storageKey,JSON.stringify(checks.map(function(c){return c.checked;})));}catch(e){}
+  }
+  try{
+    const saved=JSON.parse(localStorage.getItem(storageKey)||'null');
+    if(Array.isArray(saved))checks.forEach(function(c,i){c.checked=Boolean(saved[i]);});
+  }catch(e){}
+  checks.forEach(function(c){c.addEventListener('change',updateChecks);});
+  updateChecks();
+})();
+</script>
+</body>
+</html>
