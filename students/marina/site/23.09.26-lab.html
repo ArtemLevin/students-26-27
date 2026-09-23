@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория Марины по гиперболе: коэффициент k, сдвиг, выколотая точка и горизонтальная прямая y=m.">
+<title>Лаборатория гиперболы — Марина</title>
+<style>
+:root{
+  --surface-page:#f1f0ea;--surface-raised:#fffef9;--surface-soft:#e3eeea;
+  --text-primary:#1e2826;--text-secondary:#66726f;--text-inverse:#fbfffd;
+  --border-subtle:#d4ddd8;--border-strong:#aab9b3;
+  --accent:#087a76;--accent-hover:#05615e;--accent-soft:#d9ebe6;
+  --success:#39785c;--danger:#a74942;--warning:#9a6b25;--focus-ring:#52b7b0;
+  --shadow-low:0 12px 34px rgba(41,56,51,.08);--shadow-high:0 24px 70px rgba(32,46,41,.13);
+  --radius-sm:.55rem;--radius-md:1rem;--radius-lg:1.4rem;
+  --space-1:.35rem;--space-2:.65rem;--space-3:1rem;--space-4:1.5rem;--space-5:2.3rem;--space-6:3.4rem;
+  --motion-fast:140ms;--motion-normal:260ms;
+  --serif:Georgia,"Times New Roman",serif;--sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+html[data-theme="dark"]{
+  --surface-page:#0e1716;--surface-raised:#15201e;--surface-soft:#1b2b28;
+  --text-primary:#eef5f3;--text-secondary:#a9b8b4;--text-inverse:#0e1716;
+  --border-subtle:#31433e;--border-strong:#4b625c;
+  --accent:#67c9c2;--accent-hover:#92ddd7;--accent-soft:#173a36;
+  --success:#79c69b;--danger:#e48b82;--warning:#e0b66d;--focus-ring:#7adbd3;
+  --shadow-low:0 12px 34px rgba(0,0,0,.23);--shadow-high:0 24px 70px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.55 var(--sans)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+.topbar{border-bottom:1px solid var(--border-strong);background:var(--surface-page)}
+.topbar-inner{width:min(1460px,calc(100% - 2rem));margin:auto;min-height:64px;display:flex;align-items:center;gap:.65rem}
+.brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;font-weight:800}
+.brand-mark{width:2rem;height:2rem;display:grid;place-items:center;border:1px solid var(--border-strong);font-family:var(--serif);color:var(--accent)}
+.spacer{flex:1}
+.top-btn{min-height:40px;border:1px solid var(--border-subtle);background:transparent;color:var(--text-primary);padding:.55rem .8rem;text-decoration:none}
+.top-btn:hover,.top-btn:focus-visible{border-color:var(--accent);outline:2px solid color-mix(in srgb,var(--focus-ring) 35%,transparent);outline-offset:2px}
+.lab{width:min(1460px,calc(100% - 2rem));margin:auto;padding:1rem 0 3rem}
+.intro{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2rem;align-items:end;padding:2.4rem 0 1.3rem;border-bottom:1px solid var(--border-strong)}
+.eyebrow{margin:0 0 .65rem;color:var(--accent);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800}
+.intro h1{margin:0;font:600 clamp(2.8rem,6vw,6.5rem)/.9 var(--serif);letter-spacing:-.055em;max-width:10ch}
+.intro p{max-width:760px;color:var(--text-secondary);font-size:1.03rem}
+.mode-tabs{display:flex;gap:0;overflow:auto;border:1px solid var(--border-strong);border-left:0;border-right:0;margin:0 0 1rem}
+.mode-tab{white-space:nowrap;border:0;border-right:1px solid var(--border-subtle);background:transparent;color:var(--text-secondary);padding:.9rem 1rem;font-weight:750}
+.mode-tab[aria-selected="true"]{background:var(--accent-soft);color:var(--accent)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(330px,.55fr);min-height:690px;border-bottom:1px solid var(--border-strong)}
+.instrument{min-width:0;border-right:1px solid var(--border-strong);padding:1rem 1rem 1rem 0}
+.stage{position:relative;height:min(68vh,720px);min-height:520px;border:1px solid var(--border-subtle);background:var(--surface-raised);overflow:hidden;box-shadow:var(--shadow-low)}
+.stage:before{content:"";position:absolute;inset:0;background:
+linear-gradient(to right,color-mix(in srgb,var(--border-subtle) 65%,transparent) 1px,transparent 1px),
+linear-gradient(to bottom,color-mix(in srgb,var(--border-subtle) 65%,transparent) 1px,transparent 1px);
+background-size:40px 40px;pointer-events:none}
+.stage svg{position:relative;z-index:1;display:block;width:100%;height:100%}
+.axis{stroke:var(--border-strong);stroke-width:1.2}
+.curve{fill:none;stroke:var(--accent);stroke-width:3}
+.line{fill:none;stroke:var(--warning);stroke-width:2.6}
+.asym{stroke:var(--danger);stroke-width:1.4;stroke-dasharray:8 7}
+.point{fill:var(--success);stroke:var(--surface-raised);stroke-width:2}
+.hole{fill:var(--surface-raised);stroke:var(--danger);stroke-width:3}
+.label{fill:var(--text-secondary);font:14px var(--sans)}
+.plot-title{position:absolute;left:1rem;top:1rem;z-index:3;padding:.65rem .8rem;background:color-mix(in srgb,var(--surface-raised) 92%,transparent);border:1px solid var(--border-subtle);font-family:var(--serif);font-weight:700}
+.status-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--border-subtle);border-top:0;background:var(--surface-raised)}
+.status-strip div{padding:.85rem 1rem;border-right:1px solid var(--border-subtle)}
+.status-strip div:last-child{border-right:0}
+.status-strip span{display:block;color:var(--text-secondary);font-size:.72rem;text-transform:uppercase;letter-spacing:.1em}
+.status-strip b{display:block;margin-top:.2rem;font-family:var(--serif);font-size:1.05rem}
+.panel{padding:1.2rem 0 1rem 1.2rem}
+.panel h2{font:600 2rem/1.05 var(--serif);margin:.1rem 0 .6rem}
+.panel .lead{color:var(--text-secondary);margin-top:0}
+.control-group{padding:1rem 0;border-top:1px solid var(--border-subtle)}
+.control-group label{display:flex;justify-content:space-between;gap:1rem;font-weight:800;margin-bottom:.6rem}
+.control-group label output{color:var(--accent);font-family:var(--serif)}
+.control-group input[type="range"]{width:100%;accent-color:var(--accent)}
+.segmented{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem}
+.segmented button{min-height:42px;border:1px solid var(--border-subtle);background:var(--surface-raised);color:var(--text-primary);font-weight:750}
+.segmented button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.readout{padding:1rem;border:1px solid var(--border-subtle);background:var(--surface-raised);box-shadow:var(--shadow-low)}
+.readout h3{margin:.1rem 0 .65rem;font:600 1.25rem var(--serif)}
+.readout p{margin:.45rem 0;color:var(--text-secondary)}
+.readout strong{color:var(--text-primary)}
+.rule{margin-top:1rem;padding:.85rem 1rem;border-left:3px solid var(--accent);background:var(--accent-soft)}
+.rule.danger{border-left-color:var(--danger);background:color-mix(in srgb,var(--danger) 8%,var(--surface-page))}
+.mode-note{margin-top:1rem;color:var(--text-secondary);font-size:.9rem}
+.reference{padding:2rem 0;display:grid;grid-template-columns:.35fr .65fr;gap:2rem}
+.reference h2{font:600 clamp(2rem,4vw,4rem)/.95 var(--serif);letter-spacing:-.045em;margin:0}
+.reference-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--border-subtle)}
+.ref{padding:1rem 1rem 1rem 0;border-bottom:1px solid var(--border-subtle)}
+.ref:nth-child(even){padding-left:1rem;border-left:1px solid var(--border-subtle)}
+.ref strong{display:block;color:var(--accent);margin-bottom:.25rem}
+.footer{padding:1.5rem 0;color:var(--text-secondary);display:flex;justify-content:space-between;gap:1rem;font-size:.86rem}
+[hidden]{display:none!important}
+@media(max-width:980px){
+  .workspace{grid-template-columns:1fr}.instrument{border-right:0;padding-right:0}.panel{padding-left:0}.stage{height:60vh;min-height:500px}
+  .intro{grid-template-columns:1fr}.reference{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .lab,.topbar-inner{width:min(100% - 1rem,1460px)}
+  .stage{height:56vh;min-height:430px}.status-strip{grid-template-columns:1fr}.status-strip div{border-right:0;border-bottom:1px solid var(--border-subtle)}
+  .status-strip div:last-child{border-bottom:0}.reference-grid{grid-template-columns:1fr}.ref:nth-child(even){padding-left:0;border-left:0}.hide-sm{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body data-atlas data-atlas-adapter="universal" data-atlas-composition="scientific-instrument" data-atlas-accent="petrol" data-atlas-density="compact" data-atlas-motion="calm">
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="23.09.26.html"><span class="brand-mark" aria-hidden="true">Σ</span><span>Лаборатория · Марина</span></a>
+    <span class="spacer"></span>
+    <a class="top-btn hide-sm" href="23.09.26.html">Вернуться к занятию</a>
+    <button class="top-btn" id="themeToggle" type="button">Тема</button>
+  </div>
+</header>
+
+<main class="lab">
+  <section class="intro">
+    <div>
+      <p class="eyebrow">Цифровая лаборатория · 23.09.2026</p>
+      <h1>Гипербола как система</h1>
+    </div>
+    <p>Меняйте один параметр за раз и отслеживайте причинно-следственную связь: где находятся ветви, как читаются асимптоты, почему сокращение оставляет «дырку» и когда пересечение с прямой исчезает.</p>
+  </section>
+
+  <div class="mode-tabs" role="tablist" aria-label="Режимы лаборатории">
+    <button class="mode-tab" type="button" role="tab" data-mode="base" aria-selected="true">k и четверти</button>
+    <button class="mode-tab" type="button" role="tab" data-mode="shift" aria-selected="false">Сдвиг и асимптоты</button>
+    <button class="mode-tab" type="button" role="tab" data-mode="hole" aria-selected="false">Выколотая точка + y = kx</button>
+    <button class="mode-tab" type="button" role="tab" data-mode="horizontal" aria-selected="false">Горизонтальная y = m</button>
+  </div>
+
+  <section class="workspace">
+    <div class="instrument">
+      <div class="stage">
+        <div class="plot-title" id="plotTitle">y = k/x</div>
+        <svg id="graph" viewBox="0 0 900 650" role="img" aria-labelledby="graphTitle graphDesc">
+          <title id="graphTitle">Интерактивный график гиперболы</title>
+          <desc id="graphDesc">График меняется в зависимости от выбранного режима и параметров.</desc>
+        </svg>
+      </div>
+      <div class="status-strip">
+        <div><span>Структура</span><b id="statusA">Обратная пропорциональность</b></div>
+        <div><span>Ключевой факт</span><b id="statusB">xy = k</b></div>
+        <div><span>Результат</span><b id="statusC">I и III четверти</b></div>
+      </div>
+    </div>
+
+    <aside class="panel">
+      <div data-panel="base">
+        <p class="eyebrow">Режим 01</p><h2>Коэффициент k</h2>
+        <p class="lead">Знак k выбирает пары четвертей; увеличение |k| отодвигает ветви от начала координат при фиксированном |x|.</p>
+        <div class="control-group">
+          <label for="baseK">k <output id="baseKOut">1</output></label>
+          <input id="baseK" type="range" min="-3" max="2" step="0.5" value="1" list="kmarks">
+          <datalist id="kmarks"><option value="-3"></option><option value="0.5"></option><option value="1"></option><option value="2"></option></datalist>
+        </div>
+        <div class="readout">
+          <h3>Что читать с графика</h3>
+          <p><strong>Асимптоты:</strong> x = 0 и y = 0.</p>
+          <p><strong>Область определения:</strong> x ≠ 0.</p>
+          <p><strong>Множество значений:</strong> y ≠ 0.</p>
+          <p id="baseQuarter"></p>
+        </div>
+        <div class="rule">Для любой точки гиперболы выполняется xy = k.</div>
+      </div>
+
+      <div data-panel="shift" hidden>
+        <p class="eyebrow">Режим 02</p><h2>Сдвинутая гипербола</h2>
+        <p class="lead">Работаем с примером y = (2x − 3)/(x + 5) = 2 − 13/(x + 5).</p>
+        <div class="control-group">
+          <span class="eyebrow">Слои</span>
+          <div class="segmented">
+            <button type="button" data-toggle="asymptotes" aria-pressed="true">Асимптоты</button>
+            <button type="button" data-toggle="points" aria-pressed="true">Контрольные точки</button>
+          </div>
+        </div>
+        <div class="readout">
+          <h3>Структура</h3>
+          <p><strong>ОДЗ:</strong> x ≠ −5.</p>
+          <p><strong>Асимптоты:</strong> x = −5 и y = 2.</p>
+          <p><strong>Центр:</strong> (−5; 2).</p>
+          <p><strong>Точки:</strong> (3/2; 0) и (0; −3/5).</p>
+        </div>
+        <div class="rule">После выделения целой части асимптоты читаются непосредственно из вида 2 − 13/(x + 5).</div>
+      </div>
+
+      <div data-panel="hole" hidden>
+        <p class="eyebrow">Режим 03</p><h2>Выколотая точка и y = kx</h2>
+        <p class="lead">После сокращения f(x) = 1/x, но x = −1/2 остаётся запрещённым. Меняйте k у прямой y = kx.</p>
+        <div class="control-group">
+          <label for="lineK">k <output id="lineKOut">4</output></label>
+          <input id="lineK" type="range" min="-2" max="8" step="0.25" value="4">
+        </div>
+        <div class="readout">
+          <h3>Число допустимых пересечений</h3>
+          <p id="holeEquation">kx² = 1</p>
+          <p><strong>Выколотая точка:</strong> (−1/2; −2).</p>
+          <p><strong>Допустимых общих точек:</strong> <span id="holeCount">1</span>.</p>
+        </div>
+        <div class="rule danger" id="holeRule">При k = 4 одна из двух точек совпадает с выколотой, поэтому остаётся ровно одна допустимая общая точка.</div>
+      </div>
+
+      <div data-panel="horizontal" hidden>
+        <p class="eyebrow">Режим 04</p><h2>Горизонтальная y = m</h2>
+        <p class="lead">Для g(x) = 3 − 1/x исходные ограничения: x ≠ 0, −2. Точка (−2; 7/2) выколота.</p>
+        <div class="control-group">
+          <label for="mValue">m <output id="mOut">3</output></label>
+          <input id="mValue" type="range" min="1.5" max="4.5" step="0.05" value="3">
+        </div>
+        <div class="readout">
+          <h3>Пересечение</h3>
+          <p><strong>Горизонтальная асимптота:</strong> y = 3.</p>
+          <p><strong>Выколотая точка:</strong> (−2; 7/2).</p>
+          <p><strong>Допустимых общих точек:</strong> <span id="mCount">0</span>.</p>
+        </div>
+        <div class="rule" id="mRule">При m = 3 прямая совпадает с уровнем горизонтальной асимптоты, поэтому пересечений нет.</div>
+      </div>
+
+      <p class="mode-note">Все формулы, контрольные точки и специальные значения параметров взяты из материала занятия 23.09.26.</p>
+    </aside>
+  </section>
+
+  <section class="reference">
+    <div><p class="eyebrow">Опорные правила</p><h2>Что должно остаться после эксперимента</h2></div>
+    <div class="reference-grid">
+      <div class="ref"><strong>y = k/x</strong>Оси координат — асимптоты. Знак k определяет четверти.</div>
+      <div class="ref"><strong>(ax+b)/(cx+d)</strong>Вертикальная асимптота x = −d/c, горизонтальная y = a/c.</div>
+      <div class="ref"><strong>После сокращения</strong>Исходные запрещённые x сохраняются и могут дать выколотые точки.</div>
+      <div class="ref"><strong>Параметрические прямые</strong>Сначала находим формальные пересечения, затем проверяем их по исходному ОДЗ.</div>
+    </div>
+  </section>
+
+  <footer class="footer"><span>Марина Селиверстова · цифровая лаборатория</span><span>Лёвин Артём Александрович · 23.09.2026</span></footer>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var root=document.documentElement;
+  root.setAttribute('data-theme',localStorage.getItem('marina-theme')||'light');
+  document.getElementById('themeToggle').addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);localStorage.setItem('marina-theme',next);draw();
+  });
+
+  var svg=document.getElementById('graph'),plotTitle=document.getElementById('plotTitle');
+  var tabs=[].slice.call(document.querySelectorAll('.mode-tab'));
+  var panels=[].slice.call(document.querySelectorAll('[data-panel]'));
+  var mode='base',showAsym=true,showPoints=true;
+  var baseK=document.getElementById('baseK'),lineK=document.getElementById('lineK'),mValue=document.getElementById('mValue');
+
+  function el(name,attrs){
+    var e=document.createElementNS('http://www.w3.org/2000/svg',name);
+    Object.keys(attrs||{}).forEach(function(k){e.setAttribute(k,attrs[k]);});return e;
+  }
+  function clear(){while(svg.firstChild)svg.removeChild(svg.firstChild);}
+  function pathFor(fn,xmin,xmax,step,sx,sy,cx,cy,limit){
+    var d='',pen=false;
+    for(var x=xmin;x<=xmax;x+=step){
+      var y=fn(x);
+      if(!isFinite(y)||Math.abs(y)>limit){pen=false;continue;}
+      var X=cx+x*sx,Y=cy-y*sy;
+      d+=(pen?'L':'M')+X.toFixed(2)+' '+Y.toFixed(2)+' ';pen=true;
+    }
+    return d;
+  }
+  function axes(cx,cy){
+    svg.appendChild(el('line',{x1:0,y1:cy,x2:900,y2:cy,'class':'axis'}));
+    svg.appendChild(el('line',{x1:cx,y1:0,x2:cx,y2:650,'class':'axis'}));
+  }
+  function label(x,y,t){
+    var tx=el('text',{x:x,y:y,'class':'label'});tx.textContent=t;svg.appendChild(tx);
+  }
+  function setStatus(a,b,c){document.getElementById('statusA').textContent=a;document.getElementById('statusB').textContent=b;document.getElementById('statusC').textContent=c;}
+  function fmt(n){
+    if(Math.abs(n-Math.round(n))<1e-9)return String(Math.round(n));
+    return String(Math.round(n*100)/100).replace('.',',');
+  }
+
+  function drawBase(){
+    var k=parseFloat(baseK.value),cx=450,cy=325,sx=62,sy=62;
+    plotTitle.textContent='y = '+fmt(k)+'/x';
+    axes(cx,cy);
+    svg.appendChild(el('path',{d:pathFor(function(x){return k/x;},-6.8,-.12,.025,sx,sy,cx,cy,8),'class':'curve'}));
+    svg.appendChild(el('path',{d:pathFor(function(x){return k/x;},.12,6.8,.025,sx,sy,cx,cy,8),'class':'curve'}));
+    var q=k>0?'I и III четверти':'II и IV четверти';
+    document.getElementById('baseKOut').textContent=fmt(k);
+    document.getElementById('baseQuarter').innerHTML='<strong>Ветви:</strong> '+q+'.';
+    setStatus('Обратная пропорциональность','xy = '+fmt(k),q);
+  }
+  function drawShift(){
+    var cx=570,cy=360,sx=55,sy=42;
+    plotTitle.textContent='y = (2x − 3)/(x + 5)';
+    axes(cx,cy);
+    if(showAsym){
+      svg.appendChild(el('line',{x1:cx-5*sx,y1:0,x2:cx-5*sx,y2:650,'class':'asym'}));
+      svg.appendChild(el('line',{x1:0,y1:cy-2*sy,x2:900,y2:cy-2*sy,'class':'asym'}));
+      label(cx-5*sx+8,24,'x = −5');label(12,cy-2*sy-8,'y = 2');
+    }
+    svg.appendChild(el('path',{d:pathFor(function(x){return (2*x-3)/(x+5);},-10,-5.08,.02,sx,sy,cx,cy,9),'class':'curve'}));
+    svg.appendChild(el('path',{d:pathFor(function(x){return (2*x-3)/(x+5);},-4.92,5,.02,sx,sy,cx,cy,9),'class':'curve'}));
+    if(showPoints){
+      [[1.5,0],[0,-.6]].forEach(function(p){svg.appendChild(el('circle',{cx:cx+p[0]*sx,cy:cy-p[1]*sy,r:6,'class':'point'}));});
+    }
+    setStatus('Линейно-дробная функция','центр (−5; 2)','асимптоты x = −5, y = 2');
+  }
+  function drawHole(){
+    var k=parseFloat(lineK.value),cx=450,cy=325,sx=70,sy=70;
+    plotTitle.textContent='f(x) = 1/x и y = '+fmt(k)+'x';
+    axes(cx,cy);
+    svg.appendChild(el('path',{d:pathFor(function(x){return 1/x;},-5.8,-.11,.02,sx,sy,cx,cy,7),'class':'curve'}));
+    svg.appendChild(el('path',{d:pathFor(function(x){return 1/x;},.11,5.8,.02,sx,sy,cx,cy,7),'class':'curve'}));
+    svg.appendChild(el('path',{d:pathFor(function(x){return k*x;},-6,6,.04,sx,sy,cx,cy,7),'class':'line'}));
+    svg.appendChild(el('circle',{cx:cx-.5*sx,cy:cy-(-2)*sy,r:7,'class':'hole'}));
+    var count=0,rule='';
+    if(k>0){
+      var r=1/Math.sqrt(k);
+      [[r,k*r],[-r,-k*r]].forEach(function(p){
+        if(Math.abs(p[0]+.5)>0.015)svg.appendChild(el('circle',{cx:cx+p[0]*sx,cy:cy-p[1]*sy,r:6,'class':'point'}));
+      });
+      count=Math.abs(k-4)<0.001?1:2;
+      rule=Math.abs(k-4)<0.001?'При k = 4 одна из формальных точек совпадает с выколотой (−1/2; −2), поэтому остаётся одна допустимая точка.':'При k > 0 у уравнения kx² = 1 две формальные точки; обе допустимы, пока ни одна не совпадает с выколотой.';
+    }else{
+      count=0;rule='При k ≤ 0 уравнение kx² = 1 не даёт действительных пересечений.';
+    }
+    document.getElementById('lineKOut').textContent=fmt(k);
+    document.getElementById('holeCount').textContent=String(count);
+    document.getElementById('holeRule').textContent=rule;
+    setStatus('Гипербола с исключённой точкой','x = −1/2 запрещён',count+' допустимых пересечений');
+  }
+  function drawHorizontal(){
+    var m=parseFloat(mValue.value),cx=450,cy=350,sx=72,sy=72;
+    plotTitle.textContent='g(x) = 3 − 1/x и y = '+fmt(m);
+    axes(cx,cy);
+    svg.appendChild(el('line',{x1:0,y1:cy-3*sy,x2:900,y2:cy-3*sy,'class':'asym'}));
+    svg.appendChild(el('path',{d:pathFor(function(x){return 3-1/x;},-5.8,-.1,.02,sx,sy,cx,cy,6),'class':'curve'}));
+    svg.appendChild(el('path',{d:pathFor(function(x){return 3-1/x;},.1,5.8,.02,sx,sy,cx,cy,6),'class':'curve'}));
+    svg.appendChild(el('circle',{cx:cx-2*sx,cy:cy-3.5*sy,r:7,'class':'hole'}));
+    svg.appendChild(el('line',{x1:0,y1:cy-m*sy,x2:900,y2:cy-m*sy,'class':'line'}));
+    var eps=.026,count=1,rule='';
+    if(Math.abs(m-3)<eps){count=0;rule='При m = 3 прямая лежит на уровне горизонтальной асимптоты, поэтому пересечений нет.';}
+    else if(Math.abs(m-3.5)<eps){count=0;rule='При m = 7/2 единственная формальная точка соответствует x = −2, но эта точка выколота.';}
+    else{
+      var x=-1/(m-3),y=m;
+      if(Math.abs(x)<=5.8&&Math.abs(y)<=6)svg.appendChild(el('circle',{cx:cx+x*sx,cy:cy-y*sy,r:6,'class':'point'}));
+      rule='При m ≠ 3 уравнение даёт единственное x = −1/(m − 3); оно допустимо, кроме случая m = 7/2.';
+    }
+    document.getElementById('mOut').textContent=fmt(m);
+    document.getElementById('mCount').textContent=String(count);
+    document.getElementById('mRule').textContent=rule;
+    setStatus('Сдвинутая гипербола','асимптота y = 3',count+' допустимых пересечений');
+  }
+  function draw(){clear();if(mode==='base')drawBase();if(mode==='shift')drawShift();if(mode==='hole')drawHole();if(mode==='horizontal')drawHorizontal();}
+  function openMode(next){
+    mode=next;
+    tabs.forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.mode===mode));});
+    panels.forEach(function(p){p.hidden=p.dataset.panel!==mode;});
+    var u=new URL(location.href);u.searchParams.set('mode',mode);history.replaceState(null,'',u);
+    draw();
+  }
+  tabs.forEach(function(b){b.addEventListener('click',function(){openMode(b.dataset.mode);});});
+  document.querySelectorAll('[data-toggle]').forEach(function(b){
+    b.addEventListener('click',function(){
+      if(b.dataset.toggle==='asymptotes')showAsym=!showAsym;
+      if(b.dataset.toggle==='points')showPoints=!showPoints;
+      b.setAttribute('aria-pressed',String(b.dataset.toggle==='asymptotes'?showAsym:showPoints));draw();
+    });
+  });
+  [baseK,lineK,mValue].forEach(function(c){c.addEventListener('input',draw);});
+  var requested=new URLSearchParams(location.search).get('mode');
+  if(['base','shift','hole','horizontal'].indexOf(requested)>=0)mode=requested;
+  openMode(mode);
+})();
+</script>
+</body>
+</html>
