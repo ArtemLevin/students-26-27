@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория Володи Хачатуряна по равноускоренному движению: коэффициенты x(t), n-я секунда и смена направления.">
+<title>Лаборатория движения — Володя Хачатурян</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%231f5d68'/%3E%3Cpath d='M12 42h40M17 37c7-17 16-23 30-20' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='36' cy='23' r='4' fill='%23d06b55'/%3E%3C/svg%3E">
+<style>
+:root{
+  --surface-page:#eef1ed;
+  --surface-raised:#fbfcf8;
+  --surface-soft:#e0e9e6;
+  --surface-dark:#172526;
+  --text-primary:#1b2929;
+  --text-secondary:#667372;
+  --text-inverse:#f7fbfa;
+  --border-subtle:#cad5d2;
+  --border-strong:#8fa39f;
+  --accent:#1f5d68;
+  --accent-hover:#184b54;
+  --accent-soft:#d6e6e7;
+  --signal:#d06b55;
+  --signal-soft:#f1ddd7;
+  --success:#2d735a;
+  --danger:#a94c48;
+  --warning:#8b651f;
+  --focus-ring:#2d7f8a;
+  --shadow-low:0 8px 24px #334c4715;
+  --shadow-high:0 20px 65px #263f3926;
+  --radius-sm:8px;
+  --radius-md:14px;
+  --radius-lg:24px;
+  --space-1:.4rem;
+  --space-2:.7rem;
+  --space-3:1rem;
+  --space-4:1.4rem;
+  --space-5:2rem;
+  --motion-fast:140ms;
+  --motion-normal:220ms;
+}
+html[data-theme="dark"]{
+  --surface-page:#0f1717;
+  --surface-raised:#16211f;
+  --surface-soft:#1e2c29;
+  --surface-dark:#eaf2f0;
+  --text-primary:#edf4f2;
+  --text-secondary:#a9b9b5;
+  --text-inverse:#142020;
+  --border-subtle:#30413e;
+  --border-strong:#536963;
+  --accent:#76b8c1;
+  --accent-hover:#94cbd1;
+  --accent-soft:#17363a;
+  --signal:#e39782;
+  --signal-soft:#3a2925;
+  --success:#6ab492;
+  --danger:#e18b86;
+  --warning:#d8b36a;
+  --focus-ring:#91d0d8;
+  --shadow-low:0 8px 24px #0005;
+  --shadow-high:0 20px 65px #0008;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.58 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+.lab{min-height:100vh;display:grid;grid-template-rows:auto auto 1fr}
+.topbar{display:flex;align-items:center;gap:.7rem;min-height:58px;padding:.55rem clamp(.8rem,2vw,1.6rem);border-bottom:1px solid var(--border-subtle);background:var(--surface-raised)}
+.topbar a,.topbar button{min-height:42px;padding:.55rem .75rem;border:1px solid transparent;background:transparent;color:var(--text-secondary);text-decoration:none}
+.topbar a:hover,.topbar button:hover{color:var(--text-primary);border-color:var(--border-subtle)}
+.topbar .brand{font-weight:800;color:var(--text-primary)}
+.topbar .grow{flex:1}
+.modebar{display:flex;gap:0;border-bottom:1px solid var(--border-subtle);background:var(--surface-raised);overflow-x:auto}
+.mode{position:relative;min-height:54px;padding:.8rem 1rem;border:0;border-right:1px solid var(--border-subtle);background:transparent;color:var(--text-secondary);white-space:nowrap}
+.mode[aria-selected="true"]{color:var(--text-primary);background:var(--surface-soft)}
+.mode[aria-selected="true"]:after{content:"";position:absolute;left:.8rem;right:.8rem;bottom:0;height:3px;background:var(--signal)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(19rem,.72fr);min-height:0}
+.stage{position:relative;min-height:calc(100vh - 113px);padding:clamp(1rem,3vw,2.5rem);overflow:hidden;background:
+  linear-gradient(var(--border-subtle) 1px,transparent 1px),
+  linear-gradient(90deg,var(--border-subtle) 1px,transparent 1px),
+  var(--surface-page);
+background-size:36px 36px}
+.stage:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--surface-page) 0,transparent 10%,transparent 90%,var(--surface-page) 100%);pointer-events:none}
+.panel{display:none;position:relative;z-index:1}.panel.on{display:block}
+.panel-head{display:flex;justify-content:space-between;gap:1rem;align-items:end;margin-bottom:1.5rem}
+.eyebrow{color:var(--accent);font:750 .72rem ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase}
+.panel h1{font:700 clamp(2rem,4vw,4.2rem)/1 Georgia,serif;letter-spacing:-.04em;margin:.35rem 0 .5rem}
+.panel .lead{color:var(--text-secondary);max-width:56rem;margin:0}
+.readout{font:700 .82rem ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--text-secondary);white-space:nowrap}
+.equation-board{background:var(--surface-raised);border:1px solid var(--border-strong);box-shadow:var(--shadow-low);padding:clamp(1.2rem,3vw,2rem);margin-top:1rem}
+.equation{font:600 clamp(1.7rem,4vw,3.4rem)/1.25 "Cambria Math",Cambria,serif;overflow-x:auto;white-space:nowrap}
+.coef-strip{display:grid;grid-template-columns:repeat(3,1fr);margin-top:1.3rem;border-top:1px solid var(--border-strong);border-left:1px solid var(--border-subtle)}
+.coef{padding:1rem;border-right:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)}
+.coef small{display:block;color:var(--text-secondary);margin-bottom:.3rem}
+.coef strong{font-size:1.3rem}
+.coef:nth-child(2) strong{color:var(--accent)}
+.coef:nth-child(3) strong{color:var(--signal)}
+.axis-card{margin-top:1.5rem;background:var(--surface-raised);border:1px solid var(--border-subtle);padding:1rem;box-shadow:var(--shadow-low)}
+.axis-svg{width:100%;height:auto;display:block}
+.axis-svg text{fill:var(--text-secondary);font:13px system-ui,-apple-system,"Segoe UI",sans-serif}
+.axis-svg .axis{stroke:var(--border-strong);stroke-width:2}
+.axis-svg .tick{stroke:var(--border-strong);stroke-width:1}
+.axis-svg .focus{stroke:var(--signal);stroke-width:7;stroke-linecap:round}
+.axis-svg .motion{stroke:var(--accent);stroke-width:3;fill:none}
+.axis-svg .guide{stroke:var(--border-subtle);stroke-dasharray:5 5}
+.axis-svg .point{fill:var(--signal);stroke:var(--surface-raised);stroke-width:3}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);margin-top:1rem;border-top:1px solid var(--border-strong)}
+.metric{padding:.9rem 0;border-bottom:1px solid var(--border-subtle)}
+.metric small{display:block;color:var(--text-secondary);font-size:.78rem}
+.metric strong{font-size:1.15rem}
+.metric+.metric{padding-left:1rem;border-left:1px solid var(--border-subtle)}
+.graphs{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
+.graph-card{background:var(--surface-raised);border:1px solid var(--border-subtle);padding:.8rem}
+.graph-card h3{font:700 1rem Georgia,serif;margin:.15rem 0 .5rem}
+.graph{width:100%;height:250px;display:block}
+.graph .axis{stroke:var(--border-strong);stroke-width:1.4}
+.graph .grid{stroke:var(--border-subtle);stroke-width:1}
+.graph .curve{stroke:var(--accent);stroke-width:3;fill:none}
+.graph .velocity{stroke:var(--signal);stroke-width:3;fill:none}
+.graph .cursor{stroke:var(--signal);stroke-width:1.6;stroke-dasharray:5 4}
+.graph .dot{fill:var(--signal)}
+.graph text{fill:var(--text-secondary);font:12px system-ui,-apple-system,"Segoe UI",sans-serif}
+.sidebar{padding:1.1rem;border-left:1px solid var(--border-subtle);background:var(--surface-raised);overflow:auto}
+.control-group{padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+.control-group:first-child{padding-top:0}
+.control-group h2{font:700 1.1rem Georgia,serif;margin:.2rem 0 .7rem}
+.control-group label{display:block;color:var(--text-secondary);font-size:.88rem;margin:.75rem 0 .35rem}
+select,input[type="range"]{width:100%}
+select{min-height:44px;padding:.55rem .65rem;background:var(--surface-raised);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:var(--radius-sm)}
+input[type="range"]{accent-color:var(--accent)}
+.value-row{display:flex;justify-content:space-between;gap:.7rem;align-items:center}
+.value{font:750 .9rem ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent)}
+.explain{padding:.8rem 0;color:var(--text-secondary)}
+.explain b{color:var(--text-primary)}
+.status{padding:.75rem .8rem;border-left:3px solid var(--accent);background:var(--accent-soft);margin:.7rem 0}
+.status.warning{border-color:var(--signal);background:var(--signal-soft)}
+.reset{width:100%;min-height:44px;margin-top:.7rem;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);border-radius:var(--radius-sm)}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+@media(max-width:980px){.workspace{grid-template-columns:1fr}.sidebar{border-left:0;border-top:1px solid var(--border-subtle)}.stage{min-height:auto}.graphs{grid-template-columns:1fr}}
+@media(max-width:620px){.topbar .brand{display:none}.coef-strip,.metrics{grid-template-columns:1fr}.coef,.metric+.metric{border-left:0;padding-left:0}.mode{padding:.75rem .85rem}.panel-head{display:block}.readout{margin-top:.6rem}.equation{font-size:1.55rem}}
+@media(prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+@media print{.topbar,.modebar,.sidebar{display:none!important}.workspace{display:block}.stage{background:#fff;padding:0}.panel{display:block!important;break-after:page}.panel:not(:first-child){padding-top:10mm}:root,html[data-theme=dark]{--surface-page:#fff;--surface-raised:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#bbb;--border-strong:#777;--accent:#164e57;--signal:#8f3c2d;--shadow-low:none}.graph-card,.equation-board,.axis-card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="lab">
+  <header class="topbar">
+    <a class="brand" href="23.09.26.html">← Вернуться к занятию</a>
+    <span class="grow"></span>
+    <span>Лаборатория движения</span>
+    <button id="themeToggle" type="button" aria-label="Переключить светлую и тёмную тему">Тема</button>
+    <button type="button" onclick="print()">Печать</button>
+  </header>
+
+  <nav class="modebar" role="tablist" aria-label="Режимы лаборатории">
+    <button class="mode" type="button" role="tab" aria-selected="true" data-mode="coefficients">Коэффициенты x(t)</button>
+    <button class="mode" type="button" role="tab" aria-selected="false" data-mode="nth">Отдельная секунда</button>
+    <button class="mode" type="button" role="tab" aria-selected="false" data-mode="turn">Остановка и путь</button>
+  </nav>
+
+  <div class="workspace">
+    <main class="stage">
+      <section class="panel on" data-panel="coefficients">
+        <div class="panel-head">
+          <div>
+            <div class="eyebrow">Режим 01 · читать формулу</div>
+            <h1>Что скрыто в x(t)</h1>
+            <p class="lead">Выберите одну из формул, разобранных в пособии. Лаборатория сопоставит её с x = x₀ + v₀ₓt + aₓt²/2.</p>
+          </div>
+          <div class="readout" id="coefReadout">x₀ = 0 · v₀ₓ = 8 · aₓ = −4</div>
+        </div>
+
+        <div class="equation-board">
+          <div class="equation" id="equationText">x = 8t − 2t²</div>
+          <div class="coef-strip">
+            <div class="coef"><small>свободный член</small><strong id="coefX0">x₀ = 0 м</strong></div>
+            <div class="coef"><small>коэффициент при t</small><strong id="coefV0">v₀ₓ = 8 м/с</strong></div>
+            <div class="coef"><small>удвоенный коэффициент при t²</small><strong id="coefA">aₓ = −4 м/с²</strong></div>
+          </div>
+        </div>
+
+        <div class="graphs">
+          <div class="graph-card">
+            <h3>Координата x(t)</h3>
+            <svg class="graph" id="coefXGraph" viewBox="0 0 520 250" role="img" aria-label="График координаты для выбранного уравнения"></svg>
+          </div>
+          <div class="graph-card">
+            <h3>Скорость vₓ(t)</h3>
+            <svg class="graph" id="coefVGraph" viewBox="0 0 520 250" role="img" aria-label="График скорости для выбранного уравнения"></svg>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="nth">
+        <div class="panel-head">
+          <div>
+            <div class="eyebrow">Режим 02 · временной интервал</div>
+            <h1>Что значит n-я секунда</h1>
+            <p class="lead">В примере занятия v₀ₓ = 2 м/с и aₓ = 0,2 м/с². Меняйте номер секунды и сравнивайте x(n), x(n−1) и их разность.</p>
+          </div>
+          <div class="readout" id="nthReadout">n = 4 · интервал [3; 4] с</div>
+        </div>
+
+        <div class="axis-card">
+          <svg class="axis-svg" id="nthAxis" viewBox="0 0 900 190" role="img" aria-label="Временная шкала отдельной секунды"></svg>
+        </div>
+
+        <div class="metrics">
+          <div class="metric"><small>координата в начале</small><strong id="nthStart">x(3) = 6,9 м</strong></div>
+          <div class="metric"><small>координата в конце</small><strong id="nthEnd">x(4) = 9,6 м</strong></div>
+          <div class="metric"><small>перемещение за n-ю секунду</small><strong id="nthDelta">Δx₄ = 2,7 м</strong></div>
+        </div>
+
+        <div class="equation-board">
+          <div class="equation" id="nthFormula">Δx₄ = x(4) − x(3) = 2,7 м</div>
+          <p>Для этого примера скорость остаётся положительной, поэтому на выбранных секундных интервалах путь совпадает с перемещением.</p>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="turn">
+        <div class="panel-head">
+          <div>
+            <div class="eyebrow">Режим 03 · знак скорости</div>
+            <h1>Где движение меняет направление</h1>
+            <p class="lead">Для x = 12t − 2t² скорость равна vₓ = 12 − 4t. В момент t = 3 с она обращается в ноль; после этого знак скорости меняется.</p>
+          </div>
+          <div class="readout" id="turnReadout">t = 3,0 с · vₓ = 0 м/с</div>
+        </div>
+
+        <div class="graphs">
+          <div class="graph-card">
+            <h3>Координата x(t)</h3>
+            <svg class="graph" id="turnXGraph" viewBox="0 0 520 250" role="img" aria-label="График координаты x равно 12t минус 2t в квадрате"></svg>
+          </div>
+          <div class="graph-card">
+            <h3>Скорость vₓ(t)</h3>
+            <svg class="graph" id="turnVGraph" viewBox="0 0 520 250" role="img" aria-label="График скорости v x равно 12 минус 4t"></svg>
+          </div>
+        </div>
+
+        <div class="metrics">
+          <div class="metric"><small>координата</small><strong id="turnX">x = 18 м</strong></div>
+          <div class="metric"><small>скорость</small><strong id="turnV">vₓ = 0 м/с</strong></div>
+          <div class="metric"><small>путь от t = 0</small><strong id="turnS">s = 18 м</strong></div>
+        </div>
+        <div class="status" id="turnStatus">В этот момент тело останавливается. При дальнейшем движении знак скорости станет отрицательным.</div>
+      </section>
+    </main>
+
+    <aside class="sidebar" aria-label="Параметры лаборатории">
+      <section class="control-group" id="coefControls">
+        <h2>Формула из пособия</h2>
+        <label for="equationSelect">Выберите закон координаты</label>
+        <select id="equationSelect">
+          <option value="eq1">x = 8t − 2t²</option>
+          <option value="eq2">x = 6 − 4t + t²</option>
+          <option value="eq3">x = 6t²</option>
+          <option value="eq4">x = 6 − 3t</option>
+          <option value="eq5">x = 12t − 2t²</option>
+        </select>
+        <div class="explain"><b>Смотрите на три места:</b> свободный член, коэффициент при t и коэффициент при t².</div>
+      </section>
+
+      <section class="control-group" id="nthControls" hidden>
+        <h2>Номер секунды</h2>
+        <label for="nthRange">n</label>
+        <div class="value-row"><input id="nthRange" type="range" min="1" max="7" step="1" value="4"><span class="value" id="nthValue">4-я</span></div>
+        <div class="explain">Интервал n-й секунды: от n−1 до n секунд.</div>
+        <div class="status">При n = 4 лаборатория воспроизводит исходные 2,7 м из разобранной задачи.</div>
+      </section>
+
+      <section class="control-group" id="turnControls" hidden>
+        <h2>Момент времени</h2>
+        <label for="turnRange">t</label>
+        <div class="value-row"><input id="turnRange" type="range" min="0" max="5" step="0.1" value="3"><span class="value" id="turnValue">3,0 с</span></div>
+        <div class="explain">До 3 с скорость положительна, в 3 с равна нулю, после 3 с отрицательна.</div>
+      </section>
+
+      <section class="control-group">
+        <h2>Что проверить</h2>
+        <div class="explain"><b>x(t):</b> коэффициент при t² равен aₓ/2.</div>
+        <div class="explain"><b>n-я секунда:</b> это [n−1; n] с.</div>
+        <div class="explain"><b>Путь:</b> при смене знака vₓ движение нужно делить на участки.</div>
+        <button class="reset" id="resetButton" type="button">Сбросить текущий режим</button>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<script>
+(function(){
+  const root=document.documentElement;
+  const themeKey='volodia-230926-lab-theme';
+  try{
+    const saved=localStorage.getItem(themeKey);
+    if(saved==='dark'||saved==='light')root.dataset.theme=saved;
+  }catch(e){}
+  document.getElementById('themeToggle').addEventListener('click',function(){
+    root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+    try{localStorage.setItem(themeKey,root.dataset.theme);}catch(e){}
+    renderAll();
+  });
+
+  const equations={
+    eq1:{label:'x = 8t − 2t²',x0:0,v0:8,a:-4},
+    eq2:{label:'x = 6 − 4t + t²',x0:6,v0:-4,a:2},
+    eq3:{label:'x = 6t²',x0:0,v0:0,a:12},
+    eq4:{label:'x = 6 − 3t',x0:6,v0:-3,a:0},
+    eq5:{label:'x = 12t − 2t²',x0:0,v0:12,a:-4}
+  };
+  let mode='coefficients';
+
+  function num(value,digits){
+    const rounded=Number(value.toFixed(digits==null?2:digits));
+    return String(rounded).replace('.',',');
+  }
+  function xAt(p,t){return p.x0+p.v0*t+p.a*t*t/2}
+  function vAt(p,t){return p.v0+p.a*t}
+  function css(name){return getComputedStyle(root).getPropertyValue(name).trim()}
+
+  function svgEl(tag,attrs,text){
+    const el=document.createElementNS('http://www.w3.org/2000/svg',tag);
+    Object.entries(attrs||{}).forEach(function(entry){el.setAttribute(entry[0],entry[1]);});
+    if(text!=null)el.textContent=text;
+    return el;
+  }
+
+  function drawGraph(svg,fn,tMax,yLabel,className,cursorT){
+    svg.replaceChildren();
+    const W=520,H=250,pad={l:48,r:18,t:18,b:34};
+    const samples=[];
+    for(let i=0;i<=100;i++){const t=tMax*i/100;samples.push({t:t,y:fn(t)});}
+    let yMin=Math.min.apply(null,samples.map(function(p){return p.y;}));
+    let yMax=Math.max.apply(null,samples.map(function(p){return p.y;}));
+    if(yMin===yMax){yMin-=1;yMax+=1}
+    const margin=(yMax-yMin)*.14;
+    yMin-=margin;yMax+=margin;
+    if(yMin>0)yMin=0;
+    if(yMax<0)yMax=0;
+    function X(t){return pad.l+t/tMax*(W-pad.l-pad.r)}
+    function Y(y){return pad.t+(yMax-y)/(yMax-yMin)*(H-pad.t-pad.b)}
+
+    for(let i=0;i<=5;i++){
+      const t=tMax*i/5;
+      const gx=X(t);
+      svg.appendChild(svgEl('line',{x1:gx,y1:pad.t,x2:gx,y2:H-pad.b,class:'grid'}));
+      svg.appendChild(svgEl('text',{x:gx,y:H-10,'text-anchor':'middle'},num(t,1)));
+    }
+    for(let i=0;i<=4;i++){
+      const y=yMin+(yMax-yMin)*i/4;
+      const gy=Y(y);
+      svg.appendChild(svgEl('line',{x1:pad.l,y1:gy,x2:W-pad.r,y2:gy,class:'grid'}));
+      svg.appendChild(svgEl('text',{x:pad.l-8,y:gy+4,'text-anchor':'end'},num(y,1)));
+    }
+    if(yMin<=0&&yMax>=0)svg.appendChild(svgEl('line',{x1:pad.l,y1:Y(0),x2:W-pad.r,y2:Y(0),class:'axis'}));
+    svg.appendChild(svgEl('line',{x1:pad.l,y1:pad.t,x2:pad.l,y2:H-pad.b,class:'axis'}));
+    let d='';
+    samples.forEach(function(p,i){d+=(i?'L':'M')+X(p.t)+' '+Y(p.y)+' ';});
+    svg.appendChild(svgEl('path',{d:d,class:className||'curve'}));
+    svg.appendChild(svgEl('text',{x:W-12,y:H-10,'text-anchor':'end'},'t, с'));
+    svg.appendChild(svgEl('text',{x:12,y:20},yLabel));
+    if(cursorT!=null){
+      const y=fn(cursorT),cx=X(cursorT),cy=Y(y);
+      svg.appendChild(svgEl('line',{x1:cx,y1:pad.t,x2:cx,y2:H-pad.b,class:'cursor'}));
+      svg.appendChild(svgEl('circle',{cx:cx,cy:cy,r:5,class:'dot'}));
+    }
+  }
+
+  function renderCoefficients(){
+    const p=equations[document.getElementById('equationSelect').value];
+    document.getElementById('equationText').textContent=p.label;
+    document.getElementById('coefX0').textContent='x₀ = '+num(p.x0)+' м';
+    document.getElementById('coefV0').textContent='v₀ₓ = '+num(p.v0)+' м/с';
+    document.getElementById('coefA').textContent='aₓ = '+num(p.a)+' м/с²';
+    document.getElementById('coefReadout').textContent='x₀ = '+num(p.x0)+' · v₀ₓ = '+num(p.v0)+' · aₓ = '+num(p.a);
+    drawGraph(document.getElementById('coefXGraph'),function(t){return xAt(p,t)},5,'x, м','curve');
+    drawGraph(document.getElementById('coefVGraph'),function(t){return vAt(p,t)},5,'vₓ, м/с','velocity');
+  }
+
+  function renderNth(){
+    const n=Number(document.getElementById('nthRange').value);
+    const p={x0:0,v0:2,a:.2};
+    const start=n-1,end=n;
+    const xs=xAt(p,start),xe=xAt(p,end),delta=xe-xs;
+    document.getElementById('nthValue').textContent=n+'-я';
+    document.getElementById('nthReadout').textContent='n = '+n+' · интервал ['+start+'; '+end+'] с';
+    document.getElementById('nthStart').textContent='x('+start+') = '+num(xs,1)+' м';
+    document.getElementById('nthEnd').textContent='x('+end+') = '+num(xe,1)+' м';
+    document.getElementById('nthDelta').textContent='Δx₍'+n+'₎ = '+num(delta,1)+' м';
+    document.getElementById('nthFormula').textContent='Δx₍'+n+'₎ = x('+end+') − x('+start+') = '+num(delta,1)+' м';
+
+    const svg=document.getElementById('nthAxis');
+    svg.replaceChildren();
+    const W=900,left=55,right=845,y=92,max=7;
+    svg.appendChild(svgEl('line',{x1:left,y1:y,x2:right,y2:y,class:'axis'}));
+    for(let i=0;i<=max;i++){
+      const x=left+(right-left)*i/max;
+      svg.appendChild(svgEl('line',{x1:x,y1:y-9,x2:x,y2:y+9,class:'tick'}));
+      svg.appendChild(svgEl('text',{x:x,y:y+35,'text-anchor':'middle'},i+' с'));
+    }
+    const sx=left+(right-left)*start/max;
+    const ex=left+(right-left)*end/max;
+    svg.appendChild(svgEl('line',{x1:sx,y1:y,x2:ex,y2:y,class:'focus'}));
+    svg.appendChild(svgEl('text',{x:(sx+ex)/2,y:y-26,'text-anchor':'middle'},n+'-я секунда'));
+  }
+
+  function distanceFromZero(t){
+    const p={x0:0,v0:12,a:-4};
+    if(t<=3)return Math.abs(xAt(p,t)-xAt(p,0));
+    const turn=xAt(p,3);
+    return Math.abs(turn-xAt(p,0))+Math.abs(xAt(p,t)-turn);
+  }
+  function renderTurn(){
+    const t=Number(document.getElementById('turnRange').value);
+    const p={x0:0,v0:12,a:-4};
+    const x=xAt(p,t),v=vAt(p,t),s=distanceFromZero(t);
+    document.getElementById('turnValue').textContent=num(t,1)+' с';
+    document.getElementById('turnReadout').textContent='t = '+num(t,1)+' с · vₓ = '+num(v,1)+' м/с';
+    document.getElementById('turnX').textContent='x = '+num(x,1)+' м';
+    document.getElementById('turnV').textContent='vₓ = '+num(v,1)+' м/с';
+    document.getElementById('turnS').textContent='s = '+num(s,1)+' м';
+    const status=document.getElementById('turnStatus');
+    status.classList.toggle('warning',t>3);
+    if(t<3)status.textContent='Скорость положительна: тело движется вдоль +Ox и приближается к точке остановки.';
+    else if(Math.abs(t-3)<.001)status.textContent='В этот момент тело останавливается. При дальнейшем движении знак скорости станет отрицательным.';
+    else status.textContent='Скорость отрицательна: направление уже изменилось, поэтому путь от t = 0 больше модуля текущего перемещения.';
+    drawGraph(document.getElementById('turnXGraph'),function(q){return xAt(p,q)},5,'x, м','curve',t);
+    drawGraph(document.getElementById('turnVGraph'),function(q){return vAt(p,q)},5,'vₓ, м/с','velocity',t);
+  }
+
+  function setMode(next){
+    mode=next;
+    document.querySelectorAll('.mode').forEach(function(button){
+      const on=button.dataset.mode===next;
+      button.setAttribute('aria-selected',on?'true':'false');
+    });
+    document.querySelectorAll('.panel').forEach(function(panel){panel.classList.toggle('on',panel.dataset.panel===next);});
+    document.getElementById('coefControls').hidden=next!=='coefficients';
+    document.getElementById('nthControls').hidden=next!=='nth';
+    document.getElementById('turnControls').hidden=next!=='turn';
+    history.replaceState(null,'','?mode='+next);
+    renderAll();
+  }
+  function renderAll(){renderCoefficients();renderNth();renderTurn();}
+
+  document.querySelectorAll('.mode').forEach(function(button){
+    button.addEventListener('click',function(){setMode(button.dataset.mode);});
+  });
+  document.getElementById('equationSelect').addEventListener('change',renderCoefficients);
+  document.getElementById('nthRange').addEventListener('input',renderNth);
+  document.getElementById('turnRange').addEventListener('input',renderTurn);
+  document.getElementById('resetButton').addEventListener('click',function(){
+    if(mode==='coefficients')document.getElementById('equationSelect').value='eq1';
+    if(mode==='nth')document.getElementById('nthRange').value='4';
+    if(mode==='turn')document.getElementById('turnRange').value='3';
+    renderAll();
+  });
+
+  const requested=new URLSearchParams(location.search).get('mode');
+  if(['coefficients','nth','turn'].includes(requested))mode=requested;
+  setMode(mode);
+})();
+</script>
+</body>
+</html>
