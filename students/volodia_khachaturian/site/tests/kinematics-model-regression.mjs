@@ -107,14 +107,14 @@ console.log('Kinematics simulator regression: OK');
 // 23.09.26 — research simulator: one-state kinematics, n-th second and reversal.
 {
   const lab=fs.readFileSync(path.join(here,'..','23.09.26-lab.html'),'utf8');
-  const labScripts=[...lab.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/gi)].map(match=>match[1]);
+  const labScripts=[...lab.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)].map(match=>match[1]);
   assert.ok(labScripts.length>0,'23.09 lab inline script must exist');
   for(const source of labScripts)new vm.Script(source,{filename:'23.09.26-lab.inline.js'});
 
-  const labIds=[...lab.matchAll(/\\bid="([^"]+)"/g)].map(match=>match[1]);
+  const labIds=[...lab.matchAll(/\bid="([^"]+)"/g)].map(match=>match[1]);
   assert.equal(new Set(labIds).size,labIds.length,'23.09 lab ids must be unique');
 
-  const labCore=lab.match(/\\/\\* MODEL_CORE_230926_START \\*\\/([\\s\\S]*?)\\/\\* MODEL_CORE_230926_END \\*\\//);
+  const labCore=lab.match(/\/\* MODEL_CORE_230926_START \*\/([\s\S]*?)\/\* MODEL_CORE_230926_END \*\//);
   assert.ok(labCore,'23.09 simulator core marker must exist');
   const ctx={};
   vm.createContext(ctx);
@@ -185,9 +185,9 @@ console.log('Kinematics simulator regression: OK');
     'MODEL_CORE_230926_START'
   ]) assert.ok(lab.includes(required),'23.09 simulator capability missing: '+required);
 
-  assert.ok(!/<script\\s+src=/i.test(lab),'23.09 lab must remain autonomous without external scripts');
+  assert.ok(!/<script\s+src=/i.test(lab),'23.09 lab must remain autonomous without external scripts');
   assert.ok(!/<link[^>]+href=["']https?:/i.test(lab),'23.09 lab must remain autonomous without external styles');
-  assert.ok(!/console\\.log\\s*\\(/.test(lab),'23.09 lab must not ship debug console output');
+  assert.ok(!/console\.log\s*\(/.test(lab),'23.09 lab must not ship debug console output');
 }
 
 console.log('23.09 research simulator regression: OK');
