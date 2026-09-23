@@ -1,0 +1,1006 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+\usepackage{amsmath,amssymb}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm,top=20mm,bottom=22mm,headheight=25pt,headsep=6mm]{geometry}
+\usepackage[nopatch=footnote]{microtype}
+
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{needspace}
+
+% -------------------------------------------------
+% Цветовая палитра
+% -------------------------------------------------
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{6B7280}
+\definecolor{lightline}{HTML}{D7E1E1}
+
+\color{textgray}
+\setstretch{1.35}
+\raggedbottom
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkaccent,
+    urlcolor=darkaccent
+}
+
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.6em,itemsep=0.25em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.55em,topsep=0.45em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{softgray}Векторы}
+\fancyhead[R]{\small\color{softgray}ЕГЭ}
+\fancyfoot[C]{\small\color{softgray}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{%
+    \hbox to\headwidth{\color{lightline}\leaders\hrule height \headrulewidth\hfill}%
+}
+
+% -------------------------------------------------
+% Служебные команды
+% -------------------------------------------------
+\newcommand{\vect}[1]{\overrightarrow{#1}}
+\newcommand{\vct}[1]{\vec{#1}}
+\newcommand{\modv}[1]{\left|#1\right|}
+\newcommand{\sectionline}{%
+    \vspace{0.1em}
+    {\color{accent}\rule{\linewidth}{0.6pt}}
+    \vspace{0.3em}
+}
+\newcommand{\topic}[1]{%
+    \Needspace{7\baselineskip}%
+    \section*{\color{darkaccent}#1}
+    \sectionline
+}
+\newcommand{\checkitem}[1]{%
+    \par\noindent
+    {\color{accent}\(\square\)}\;#1\par
+}
+
+% -------------------------------------------------
+% Стили блок-схем
+% -------------------------------------------------
+\tikzset{
+    flowstart/.style={
+        ellipse,
+        draw=darkaccent,
+        line width=0.9pt,
+        minimum width=34mm,
+        minimum height=10mm,
+        align=center,
+        font=\small
+    },
+    flowaction/.style={
+        rounded corners=3pt,
+        rectangle,
+        draw=accent,
+        line width=0.9pt,
+        text width=82mm,
+        minimum height=12mm,
+        align=center,
+        inner sep=4pt,
+        font=\small
+    },
+    flowbranch/.style={
+        rounded corners=3pt,
+        rectangle,
+        draw=accent,
+        line width=0.9pt,
+        text width=57mm,
+        minimum height=17mm,
+        align=center,
+        inner sep=4pt,
+        font=\small
+    },
+    flowdecision/.style={
+        diamond,
+        aspect=2.8,
+        draw=darkaccent,
+        line width=0.9pt,
+        text width=40mm,
+        align=center,
+        inner sep=2pt,
+        font=\small
+    },
+    flowarrow/.style={
+        -{Stealth[length=3mm,width=2mm]},
+        line width=0.9pt,
+        draw=textgray
+    },
+    flowlabel/.style={
+        font=\small,
+        fill=white,
+        inner sep=1.5pt
+    }
+}
+
+% -------------------------------------------------
+% Документ
+% -------------------------------------------------
+\begin{document}
+
+% =================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% =================================================
+\begin{titlepage}
+\thispagestyle{empty}
+
+\begin{center}
+
+\vspace*{25mm}
+
+{\color{darkaccent}\Large\bfseries ЧЕК-ЛИСТ}
+
+\vspace{9mm}
+
+{\Huge\bfseries Векторы}
+
+\vspace{4mm}
+
+{\Large
+Координаты, длина, действия,\\
+скалярное произведение и угол между векторами
+}
+
+\vspace{17mm}
+
+{\color{accent}\rule{0.68\linewidth}{0.9pt}}
+
+\vspace{15mm}
+
+{\large
+ЕГЭ по профильной математике
+}
+
+\vspace{8mm}
+
+{\large
+Формат тренировки: Путь А
+}
+
+\vspace{20mm}
+
+{\large
+Дата: 23 сентября 2026 г.
+}
+
+\vfill
+
+{\large
+Лёвин Артём Александрович
+}
+
+\vspace{2mm}
+
+{\large
+эксклюзивно для Екатерины Гнедковой
+}
+
+\vspace{24mm}
+
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+    \draw[
+        accent,
+        line width=1.1pt
+    ]
+    ($(current page.south west)+(12mm,14mm)$)
+    .. controls
+    ($(current page.south west)+(65mm,27mm)$)
+    and
+    ($(current page.south east)+(-62mm,5mm)$)
+    ..
+    ($(current page.south east)+(-12mm,16mm)$);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% =================================================
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% =================================================
+\topic{1. Координаты вектора}
+
+Пусть
+\[
+A(x_A;y_A),
+\qquad
+B(x_B;y_B).
+\]
+
+Тогда координаты вектора \(\vect{AB}\) равны
+\[
+\boxed{
+\vect{AB}
+=
+(x_B-x_A\,;\,y_B-y_A)
+}.
+\]
+
+Главное правило:
+\[
+\boxed{\text{конец} - \text{начало}}
+\]
+по каждой координате.
+
+\subsection*{\color{darkaccent}Геометрический смысл}
+
+Координаты вектора показывают смещение:
+
+\begin{itemize}
+    \item первая координата --- смещение по оси \(x\);
+    \item вторая координата --- смещение по оси \(y\).
+\end{itemize}
+
+Например, если вектор смещает точку на \(5\) единиц вправо и на \(2\) единицы вверх, то
+\[
+\vct a=(5;2).
+\]
+
+\subsection*{\color{darkaccent}Пример}
+
+Пусть
+\[
+A(2;2),
+\qquad
+B(7;4).
+\]
+
+Тогда
+\[
+\vect{AB}
+=
+(7-2\,;\,4-2)
+=
+(5;2).
+\]
+
+\checkitem{При нахождении координат вектора Вы вычитаете координаты начала из координат конца.}
+
+\checkitem{Отрицательная координата допустима: она означает смещение в отрицательном направлении соответствующей оси.}
+
+% =================================================
+\topic{2. Длина вектора}
+
+Если \(\vct a=(x;y)\), то
+\[
+\boxed{
+\modv{\vct a}=\sqrt{x^2+y^2}
+}.
+\]
+
+Формула следует из теоремы Пифагора. Например,
+\[
+\vect{AB}=(5;2)
+\quad\Longrightarrow\quad
+\modv{\vect{AB}}=\sqrt{5^2+2^2}=\sqrt{29}.
+\]
+
+Для любого вектора
+\[
+\modv{\vct a}\ge0,
+\qquad
+\modv{\vct a}=0\quad\Longleftrightarrow\quad\vct a=\vct 0.
+\]
+
+\checkitem{Под корнем складываются квадраты координат.}
+
+\checkitem{Если координата отрицательна, при возведении в квадрат заключайте её в скобки: например, \((-3)^2=9\).}
+
+% =================================================
+\topic{3. Умножение вектора на число}
+
+Если
+\[
+\vct a=(x;y),
+\]
+то
+\[
+\boxed{
+\lambda\vct a=(\lambda x;\lambda y)
+}.
+\]
+
+Например,
+\[
+\vct a=(5;2)
+\quad\Longrightarrow\quad
+5\vct a=(25;10).
+\]
+
+При умножении на \(-1\) получаем противоположный вектор:
+\[
+-\vct a=(-x;-y),
+\qquad
+\modv{-\vct a}=\modv{\vct a}.
+\]
+Для ненулевого \(\vct a\) векторы \(\vct a\) и \(-\vct a\) имеют противоположные направления.
+
+\checkitem{Число умножает каждую координату вектора.}
+
+% =================================================
+\topic{4. Сложение, вычитание и линейная комбинация}
+
+Пусть
+\[
+\vct a=(x_a;y_a),
+\qquad
+\vct b=(x_b;y_b).
+\]
+
+Тогда
+\[
+\boxed{
+\begin{aligned}
+\vct a+\vct b&=(x_a+x_b\,;\,y_a+y_b),\\
+\vct a-\vct b&=(x_a-x_b\,;\,y_a-y_b).
+\end{aligned}
+}
+\]
+
+Также
+\[
+\vct a-\vct b=\vct a+(-\vct b).
+\]
+
+\subsection*{\color{darkaccent}Пример: линейная комбинация}
+
+Пусть \(\vct k=(1;2)\), \(\vct t=(3;4)\). Найдём длину вектора \(3\vct k-2\vct t\):
+\[
+\begin{aligned}
+3\vct k&=(3;6),
+&2\vct t&=(6;8),\\
+3\vct k-2\vct t&=(-3;-2),
+&\modv{3\vct k-2\vct t}&=\sqrt{13}.
+\end{aligned}
+\]
+
+\subsection*{\color{darkaccent}Надёжный порядок действий}
+
+\[
+\boxed{
+\text{коэффициенты}
+\;\longrightarrow\;
+\text{координаты результата}
+\;\longrightarrow\;
+\text{длина при необходимости}
+}
+\]
+
+Такой порядок позволяет отдельно контролировать каждый этап вычислений.
+
+% =================================================
+% ОТДЕЛЬНАЯ СТРАНИЦА БЛОК-СХЕМЫ
+% =================================================
+\clearpage
+\thispagestyle{fancy}
+
+\begin{center}
+{\Large\bfseries\color{darkaccent}
+Алгоритм: линейная комбинация векторов
+}
+\end{center}
+
+\vfill
+
+\begin{center}
+\begin{tikzpicture}[node distance=8mm]
+
+\node[flowstart] (start) {Начало};
+
+\node[flowaction,below=of start] (write)
+{Выпишите координаты всех исходных векторов};
+
+\node[flowaction,below=of write] (multiply)
+{Умножьте обе координаты каждого вектора на его числовой коэффициент};
+
+\node[flowaction,below=of multiply] (combine)
+{Сложите или вычтите соответствующие координаты};
+
+\node[flowdecision,below=11mm of combine] (target)
+{Требуется длина полученного вектора?};
+
+\node[flowbranch,below=16mm of target,xshift=-40mm] (length)
+{Да: для \(\vct c=(x;y)\) вычислите
+\(\modv{\vct c}=\sqrt{x^2+y^2}\)};
+
+\node[flowbranch,below=16mm of target,xshift=40mm] (coords)
+{Нет: оставьте найденные координаты вектора как окончательный результат};
+
+\coordinate (merge) at ($(length.south)!0.5!(coords.south)+(0,-13mm)$);
+\node[flowstart,below=0mm of merge] (finish) {Ответ};
+
+\draw[flowarrow] (start) -- (write);
+\draw[flowarrow] (write) -- (multiply);
+\draw[flowarrow] (multiply) -- (combine);
+\draw[flowarrow] (combine) -- (target);
+
+\draw[flowarrow]
+(target.south west)
+|- node[flowlabel,pos=0.3,left]{да}
+(length.north);
+
+\draw[flowarrow]
+(target.south east)
+|- node[flowlabel,pos=0.3,right]{нет}
+(coords.north);
+
+\draw[flowarrow] (length.south) |- (finish.west);
+\draw[flowarrow] (coords.south) |- (finish.east);
+
+\end{tikzpicture}
+\end{center}
+
+\vfill
+\clearpage
+
+% =================================================
+\topic{5. Скалярное произведение по координатам}
+
+Пусть
+\[
+\vct a=(x_a;y_a),
+\qquad
+\vct b=(x_b;y_b).
+\]
+
+Тогда
+\[
+\boxed{
+\vct a\cdot\vct b
+=
+x_ax_b+y_ay_b
+}.
+\]
+
+Результат скалярного произведения --- \textbf{число}.
+
+\subsection*{\color{darkaccent}Пример}
+
+Пусть
+\[
+\vct a=(2;-3),
+\qquad
+\vct b=(1;-5).
+\]
+
+Тогда
+\[
+\vct a\cdot\vct b
+=
+2\cdot1+(-3)\cdot(-5)
+=
+2+15
+=
+17.
+\]
+
+\checkitem{Перемножаются соответствующие координаты, после чего два произведения складываются.}
+
+\checkitem{Особенно внимательно проверяйте знак произведения двух отрицательных чисел.}
+
+% =================================================
+\topic{6. Скалярное произведение и угол между векторами}
+
+Если \(\varphi\) --- угол между ненулевыми векторами \(\vct a\) и \(\vct b\), где
+\[
+0^\circ\le\varphi\le180^\circ,
+\]
+то
+\[
+\boxed{
+\vct a\cdot\vct b
+=
+\modv{\vct a}\,\modv{\vct b}\cos\varphi
+}.
+\]
+
+Поскольку оба вектора ненулевые,
+\[
+\modv{\vct a}>0,
+\qquad
+\modv{\vct b}>0,
+\]
+поэтому можно разделить на произведение их длин:
+\[
+\boxed{
+\cos\varphi
+=
+\frac{\vct a\cdot\vct b}
+{\modv{\vct a}\modv{\vct b}}
+}.
+\]
+
+\subsection*{\color{darkaccent}Если известны координаты}
+
+Удобный порядок вычислений:
+\[
+\vct a\cdot\vct b
+\quad\longrightarrow\quad
+\modv{\vct a}
+\quad\longrightarrow\quad
+\modv{\vct b}
+\quad\longrightarrow\quad
+\cos\varphi.
+\]
+
+\subsection*{\color{darkaccent}Пример}
+
+Пусть
+\[
+\vct a=(3;4),
+\qquad
+\vct b=(4;-3).
+\]
+
+Тогда
+\[
+\vct a\cdot\vct b
+=
+3\cdot4+4\cdot(-3)
+=
+0.
+\]
+
+При этом
+\[
+\modv{\vct a}=5,
+\qquad
+\modv{\vct b}=5.
+\]
+
+Следовательно,
+\[
+\cos\varphi
+=
+\frac{0}{5\cdot5}
+=
+0,
+\]
+значит,
+\[
+\varphi=90^\circ.
+\]
+
+Для ненулевых векторов получаем важный признак:
+\[
+\boxed{
+\vct a\cdot\vct b=0
+\quad\Longleftrightarrow\quad
+\vct a\perp\vct b
+}.
+\]
+
+Кроме того, знак скалярного произведения помогает быстро проверить характер угла:
+\[
+\begin{aligned}
+\vct a\cdot\vct b&>0 &&\Longrightarrow && 0^\circ\le\varphi<90^\circ,\\
+\vct a\cdot\vct b&=0 &&\Longrightarrow && \varphi=90^\circ,\\
+\vct a\cdot\vct b&<0 &&\Longrightarrow && 90^\circ<\varphi\le180^\circ.
+\end{aligned}
+\]
+
+% =================================================
+\topic{7. Как выбрать формулу скалярного произведения}
+
+Ориентируйтесь на данные задачи.
+
+Если известны координаты обоих векторов, удобно начать с
+\[
+\vct a\cdot\vct b=x_ax_b+y_ay_b.
+\]
+
+Если известны длины векторов и угол между ними, используйте
+\[
+\vct a\cdot\vct b
+=
+\modv{\vct a}\modv{\vct b}\cos\varphi.
+\]
+
+Если известны координаты ненулевых векторов, а требуется угол, формулы объединяются:
+\[
+\boxed{
+\cos\varphi
+=
+\frac{x_ax_b+y_ay_b}
+{\sqrt{x_a^2+y_a^2}\,\sqrt{x_b^2+y_b^2}}
+}.
+\]
+
+\subsection*{\color{darkaccent}Контроль результата}
+
+Для угла между векторами обязательно
+\[
+-1\le\cos\varphi\le1.
+\]
+
+Если после вычислений получено число вне этого диапазона, в вычислениях есть ошибка.
+
+% =================================================
+\topic{8. Сложение векторов геометрически}
+
+Для сложения векторов действует \textbf{правило треугольника}: если конец первого вектора совместить с началом второго, то вектор суммы направлен от начала первого вектора к концу второго.
+
+В частности, для точек \(A\), \(B\), \(C\)
+\[
+\boxed{
+\vect{AB}+\vect{BC}=\vect{AC}
+}.
+\]
+
+При вычитании удобно использовать равенство
+\[
+\vct a-\vct b=\vct a+(-\vct b)
+\]
+и затем применять правило треугольника.
+
+Для ненулевого \(\vct b\) векторы \(\vct b\) и \(-\vct b\) имеют одинаковую длину и противоположные направления.
+
+% =================================================
+\topic{9. Геометрическая задача с ромбом}
+
+\begin{minipage}[t]{0.59\linewidth}
+Пусть \(ABCD\) --- ромб, его диагонали \(AC\) и \(BD\) пересекаются в точке \(O\). Диагонали ромба точкой пересечения делятся пополам и взаимно перпендикулярны.
+
+Рассмотрим случай
+\[
+AC=12,
+\qquad
+BD=16.
+\]
+Тогда
+\[
+AO=OC=6,
+\qquad
+BO=OD=8.
+\]
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.36\linewidth}
+\centering
+\vspace{0pt}
+\begin{tikzpicture}[scale=0.47]
+\tkzSetUpLine[line width=1pt,color=accent]
+\tkzSetUpPoint[color=accent,fill=accent,size=3]
+\tkzSetUpLabel[color=black,font=\small]
+
+\tkzDefPoint(0,4){A}
+\tkzDefPoint(-5,0){B}
+\tkzDefPoint(0,-4){C}
+\tkzDefPoint(5,0){D}
+\tkzDefPoint(0,0){O}
+
+\tkzDrawPolygon(A,B,C,D)
+\tkzDrawSegments(A,C B,D A,D)
+\tkzDrawPoints(A,B,C,D,O)
+
+\tkzLabelPoints[above](A)
+\tkzLabelPoints[left](B)
+\tkzLabelPoints[below](C)
+\tkzLabelPoints[right](D)
+\tkzLabelPoints[below right](O)
+
+\tkzMarkRightAngle[size=0.38](A,O,D)
+\end{tikzpicture}
+\end{minipage}
+
+Поскольку \(B\), \(O\), \(D\) лежат на одной прямой в порядке \(B\! - \!O\! - \!D\) и \(BO=OD\),
+\[
+\vect{BO}=\vect{OD}.
+\]
+По правилу треугольника
+\[
+\vect{AO}+\vect{BO}
+=
+\vect{AO}+\vect{OD}
+=
+\vect{AD}.
+\]
+Следовательно,
+\[
+\modv{\vect{AO}+\vect{BO}}
+=AD
+=\sqrt{AO^2+OD^2}
+=\sqrt{6^2+8^2}
+=10.
+\]
+
+\checkitem{Если координатная система в геометрической задаче не задана, её можно ввести самостоятельно, когда это упрощает решение.}
+
+\checkitem{Если в качестве осей выбираются диагонали ромба, их перпендикулярность гарантирует корректную прямоугольную систему координат.}
+
+% =================================================
+\topic{10. Квадрат длины вектора}
+
+Если требуется найти квадрат длины вектора, извлекать корень не нужно.
+
+Для
+\[
+\vct a=(x;y)
+\]
+имеем
+\[
+\boxed{
+\modv{\vct a}^{2}=x^2+y^2
+}.
+\]
+
+Например, если
+\[
+\vct a=(10;10),
+\]
+то
+\[
+\modv{\vct a}^{2}
+=
+10^2+10^2
+=
+200.
+\]
+
+Это удобно в задачах, где требуется именно \(\modv{\vct a}^{2}\): лишнее извлечение корня увеличивает объём вычислений.
+
+% =================================================
+\topic{11. Типичные ошибки}
+
+\begin{enumerate}
+    \item \textbf{Перепутан порядок при поиске координат.}
+
+    Для \(\vect{AB}\) нужно считать
+    \[
+    B-A,
+    \]
+    то есть координаты конца минус координаты начала.
+
+    \item \textbf{Числовой множитель применён только к одной координате.}
+
+    Если
+    \[
+    \vct a=(x;y),
+    \]
+    то
+    \[
+    3\vct a=(3x;3y).
+    \]
+
+    \item \textbf{При вычитании векторов потерян знак.}
+
+    Например,
+    \[
+    (3;6)-(6;8)=(-3;-2).
+    \]
+
+    \item \textbf{Отрицательная координата неверно возведена в квадрат.}
+
+    Верно:
+    \[
+    (-3)^2=9.
+    \]
+
+    \item \textbf{Смешаны скалярное произведение и длина.}
+
+    Выражение
+    \[
+    \vct a\cdot\vct b
+    \]
+    является числом, а
+    \[
+    \modv{\vct a}
+    \]
+    --- длиной одного вектора.
+
+    \item \textbf{Формула через угол используется при нулевом векторе.}
+
+    Формула
+    \[
+    \cos\varphi
+    =
+    \frac{\vct a\cdot\vct b}
+    {\modv{\vct a}\modv{\vct b}}
+    \]
+    применима только к двум ненулевым векторам.
+
+    \item \textbf{Сложное выражение считается одним действием.}
+
+    Надёжнее отдельно получить, например,
+    \[
+    3\vct a,
+    \qquad
+    2\vct b,
+    \]
+    затем найти их разность и только после этого вычислять длину.
+\end{enumerate}
+
+% =================================================
+\topic{12. Итоговый чек-лист}
+
+Перед тренировкой убедитесь, что Вы умеете:
+
+\checkitem{находить координаты вектора по координатам его начала и конца;}
+
+\checkitem{понимать координаты вектора как смещение по двум осям;}
+
+\checkitem{вычислять длину вектора и квадрат его длины;}
+
+\checkitem{умножать вектор на число;}
+
+\checkitem{складывать и вычитать векторы по координатам;}
+
+\checkitem{последовательно вычислять линейную комбинацию вида \(m\vct a+n\vct b\);}
+
+\checkitem{находить скалярное произведение по координатам;}
+
+\checkitem{использовать формулу скалярного произведения через длины и угол;}
+
+\checkitem{находить \(\cos\varphi\) между двумя ненулевыми векторами;}
+
+\checkitem{распознавать перпендикулярность ненулевых векторов по условию \(\vct a\cdot\vct b=0\);}
+
+\checkitem{складывать векторы геометрически по правилу треугольника;}
+
+\checkitem{заменять вычитание сложением с противоположным вектором;}
+
+\checkitem{вводить удобную систему координат в геометрической задаче.}
+
+% =================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% =================================================
+\clearpage
+
+\topic{Тренировочный блок --- Путь А}
+
+\textbf{7 заданий.} Решайте последовательно и записывайте промежуточные координаты векторов.
+
+\begin{enumerate}
+
+    \item Даны точки
+    \[
+    A(-3;2),
+    \qquad
+    B(4;-2).
+    \]
+    Найдите координаты вектора \(\vect{AB}\) и его длину.
+
+    \vspace{8mm}
+
+    \item Даны векторы
+    \[
+    \vct a=(2;-1),
+    \qquad
+    \vct b=(-3;4).
+    \]
+    Найдите координаты и длину вектора
+    \[
+    \vct c=3\vct a-2\vct b.
+    \]
+
+    \vspace{8mm}
+
+    \item Даны векторы
+    \[
+    \vct a=(4;-2),
+    \qquad
+    \vct b=(1;5).
+    \]
+    Найдите
+    \[
+    \vct a\cdot\vct b.
+    \]
+
+    \vspace{8mm}
+
+    \item Даны векторы
+    \[
+    \vct a=(3;4),
+    \qquad
+    \vct b=(4;-3).
+    \]
+    Найдите косинус угла между ними и величину этого угла.
+
+    \vspace{8mm}
+
+    \item Даны точки
+    \[
+    A(1;-2),\quad B(5;1),
+    \qquad
+    C(-1;3),\quad D(2;-1).
+    \]
+    Найдите
+    \[
+    \modv{\vect{AB}+\vect{CD}}^2.
+    \]
+
+    \vspace{8mm}
+
+    \item Известно, что
+    \[
+    \modv{\vct a}=6,
+    \qquad
+    \modv{\vct b}=4,
+    \]
+    а угол между векторами равен
+    \[
+    60^\circ.
+    \]
+    Найдите
+    \[
+    \vct a\cdot\vct b.
+    \]
+
+    \vspace{8mm}
+
+    \item Диагонали ромба \(ABCD\) пересекаются в точке \(O\). Известно, что
+    \[
+    AC=10,
+    \qquad
+    BD=24.
+    \]
+    Найдите
+    \[
+    \modv{\vect{AO}+\vect{BO}}.
+    \]
+
+\end{enumerate}
+
+% =================================================
+% ОТВЕТЫ
+% =================================================
+\clearpage
+
+\topic{Ответы}
+
+\renewcommand{\arraystretch}{1.45}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{
+    >{\centering\arraybackslash}p{14mm}
+    X
+}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+1 & \(\vect{AB}=(7;-4),\quad \modv{\vect{AB}}=\sqrt{65}\) \\
+2 & \(\vct c=(12;-11),\quad \modv{\vct c}=\sqrt{265}\) \\
+3 & \(-6\) \\
+4 & \(\cos\varphi=0,\quad \varphi=90^\circ\) \\
+5 & \(50\) \\
+6 & \(12\) \\
+7 & \(13\) \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vfill
+
+\begin{center}
+{\small\color{softgray}
+Лёвин Артём Александрович
+\quad\textbullet\quad
+эксклюзивно для Екатерины Гнедковой
+}
+\end{center}
+
+\end{document}
