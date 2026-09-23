@@ -504,7 +504,7 @@ var labScenarios={
 var labState={A:{x:2,y:2},B:{x:7,y:4},C:{x:5,y:6},scenario:'shift',ghost:null,history:[],future:[],activeChallenge:null,layers:{a:true,b:true,components:true,angle:true,ghost:true}};
 function clonePoints(source){return{A:{x:source.A.x,y:source.A.y},B:{x:source.B.x,y:source.B.y},C:{x:source.C.x,y:source.C.y}}}
 function samePoints(p,q){return p&&q&&p.A.x===q.A.x&&p.A.y===q.A.y&&p.B.x===q.B.x&&p.B.y===q.B.y&&p.C.x===q.C.x&&p.C.y===q.C.y}
-function pushHistory(snapshot){if(!snapshot||samePoints(snapshot,labState))return;labState.history.push(clonePoints(snapshot));if(labState.history.length>40)labState.history.shift();labState.future=[]}
+function pushHistory(snapshot){if(!snapshot)return;var last=labState.history.length?labState.history[labState.history.length-1]:null;if(last&&samePoints(last,snapshot))return;labState.history.push(clonePoints(snapshot));if(labState.history.length>40)labState.history.shift();labState.future=[]}
 function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
 function snap(v){return Math.round(v*2)/2}
 function clean(v){return Math.abs(v)<1e-9?0:v}
