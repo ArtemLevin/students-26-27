@@ -118,7 +118,7 @@ console.log('Kinematics simulator regression: OK');
   assert.ok(labCore,'23.09 simulator core marker must exist');
   const ctx={};
   vm.createContext(ctx);
-  vm.runInContext(labCore[1]+'\\nthis.api2309={positionAt,velocityAt,stopTime,pathBetween,motionAt,nthSecond,hasDirectionChange};',ctx);
+  vm.runInContext(labCore[1]+'\nthis.api2309={positionAt,velocityAt,stopTime,pathBetween,motionAt,nthSecond,hasDirectionChange};',ctx);
   const api=ctx.api2309;
 
   // x = 12t - 2t²: stop at 3 s, then reversal makes path exceed |displacement|.
