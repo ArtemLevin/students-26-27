@@ -3,39 +3,41 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Цифровая лаборатория Володи Хачатуряна по равноускоренному движению: коэффициенты x(t), n-я секунда и смена направления.">
+<meta name="description" content="Исследовательская лаборатория Володи Хачатуряна по равноускоренному движению: x(t), v(t), ускорение, n-я секунда, путь и перемещение.">
 <title>Лаборатория движения — Володя Хачатурян</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%231f5d68'/%3E%3Cpath d='M12 42h40M17 37c7-17 16-23 30-20' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='36' cy='23' r='4' fill='%23d06b55'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%231f5d68'/%3E%3Cpath d='M10 42h44M15 38c8-22 21-25 34-16' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='38' cy='24' r='4' fill='%23d06b55'/%3E%3C/svg%3E">
 <style>
 :root{
   --surface-page:#eef1ed;
   --surface-raised:#fbfcf8;
-  --surface-soft:#e0e9e6;
-  --surface-dark:#172526;
+  --surface-soft:#e1e9e6;
+  --surface-strong:#d4dfdb;
   --text-primary:#1b2929;
-  --text-secondary:#667372;
+  --text-secondary:#64716f;
   --text-inverse:#f7fbfa;
-  --border-subtle:#cad5d2;
-  --border-strong:#8fa39f;
+  --border-subtle:#c9d4d1;
+  --border-strong:#8ea29e;
   --accent:#1f5d68;
   --accent-hover:#184b54;
-  --accent-soft:#d6e6e7;
+  --accent-soft:#d7e6e7;
   --signal:#d06b55;
   --signal-soft:#f1ddd7;
   --success:#2d735a;
+  --success-soft:#dfece6;
   --danger:#a94c48;
   --warning:#8b651f;
   --focus-ring:#2d7f8a;
+  --velocity:#1f5d68;
+  --acceleration:#d06b55;
+  --displacement:#6c5f93;
+  --path:#2d735a;
+  --snap-a:#7a5c99;
+  --snap-b:#b56935;
   --shadow-low:0 8px 24px #334c4715;
   --shadow-high:0 20px 65px #263f3926;
   --radius-sm:8px;
   --radius-md:14px;
   --radius-lg:24px;
-  --space-1:.4rem;
-  --space-2:.7rem;
-  --space-3:1rem;
-  --space-4:1.4rem;
-  --space-5:2rem;
   --motion-fast:140ms;
   --motion-normal:220ms;
 }
@@ -43,425 +45,1144 @@ html[data-theme="dark"]{
   --surface-page:#0f1717;
   --surface-raised:#16211f;
   --surface-soft:#1e2c29;
-  --surface-dark:#eaf2f0;
+  --surface-strong:#263733;
   --text-primary:#edf4f2;
   --text-secondary:#a9b9b5;
-  --text-inverse:#142020;
+  --text-inverse:#132020;
   --border-subtle:#30413e;
-  --border-strong:#536963;
+  --border-strong:#566d67;
   --accent:#76b8c1;
   --accent-hover:#94cbd1;
   --accent-soft:#17363a;
   --signal:#e39782;
   --signal-soft:#3a2925;
   --success:#6ab492;
+  --success-soft:#173428;
   --danger:#e18b86;
   --warning:#d8b36a;
   --focus-ring:#91d0d8;
+  --velocity:#76b8c1;
+  --acceleration:#e39782;
+  --displacement:#b4a6df;
+  --path:#6ab492;
+  --snap-a:#c1a3df;
+  --snap-b:#e1ad75;
   --shadow-low:0 8px 24px #0005;
   --shadow-high:0 20px 65px #0008;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.58 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
 button,input,select{font:inherit}
 button{cursor:pointer}
 a{color:inherit}
+button:disabled,input:disabled,select:disabled{cursor:not-allowed;opacity:.52}
+[hidden]{display:none!important}
 .lab{min-height:100vh;display:grid;grid-template-rows:auto auto 1fr}
-.topbar{display:flex;align-items:center;gap:.7rem;min-height:58px;padding:.55rem clamp(.8rem,2vw,1.6rem);border-bottom:1px solid var(--border-subtle);background:var(--surface-raised)}
-.topbar a,.topbar button{min-height:42px;padding:.55rem .75rem;border:1px solid transparent;background:transparent;color:var(--text-secondary);text-decoration:none}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:.55rem;min-height:58px;padding:.55rem clamp(.7rem,2vw,1.6rem);border-bottom:1px solid var(--border-subtle);background:color-mix(in srgb,var(--surface-raised) 94%,transparent);backdrop-filter:blur(12px)}
+.topbar a,.topbar button{min-height:42px;padding:.55rem .72rem;border:1px solid transparent;background:transparent;color:var(--text-secondary);text-decoration:none}
 .topbar a:hover,.topbar button:hover{color:var(--text-primary);border-color:var(--border-subtle)}
 .topbar .brand{font-weight:800;color:var(--text-primary)}
 .topbar .grow{flex:1}
-.modebar{display:flex;gap:0;border-bottom:1px solid var(--border-subtle);background:var(--surface-raised);overflow-x:auto}
-.mode{position:relative;min-height:54px;padding:.8rem 1rem;border:0;border-right:1px solid var(--border-subtle);background:transparent;color:var(--text-secondary);white-space:nowrap}
-.mode[aria-selected="true"]{color:var(--text-primary);background:var(--surface-soft)}
-.mode[aria-selected="true"]:after{content:"";position:absolute;left:.8rem;right:.8rem;bottom:0;height:3px;background:var(--signal)}
-.workspace{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(19rem,.72fr);min-height:0}
-.stage{position:relative;min-height:calc(100vh - 113px);padding:clamp(1rem,3vw,2.5rem);overflow:hidden;background:
-  linear-gradient(var(--border-subtle) 1px,transparent 1px),
-  linear-gradient(90deg,var(--border-subtle) 1px,transparent 1px),
-  var(--surface-page);
-background-size:36px 36px}
-.stage:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--surface-page) 0,transparent 10%,transparent 90%,var(--surface-page) 100%);pointer-events:none}
-.panel{display:none;position:relative;z-index:1}.panel.on{display:block}
-.panel-head{display:flex;justify-content:space-between;gap:1rem;align-items:end;margin-bottom:1.5rem}
-.eyebrow{color:var(--accent);font:750 .72rem ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase}
-.panel h1{font:700 clamp(2rem,4vw,4.2rem)/1 Georgia,serif;letter-spacing:-.04em;margin:.35rem 0 .5rem}
-.panel .lead{color:var(--text-secondary);max-width:56rem;margin:0}
-.readout{font:700 .82rem ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--text-secondary);white-space:nowrap}
-.equation-board{background:var(--surface-raised);border:1px solid var(--border-strong);box-shadow:var(--shadow-low);padding:clamp(1.2rem,3vw,2rem);margin-top:1rem}
-.equation{font:600 clamp(1.7rem,4vw,3.4rem)/1.25 "Cambria Math",Cambria,serif;overflow-x:auto;white-space:nowrap}
-.coef-strip{display:grid;grid-template-columns:repeat(3,1fr);margin-top:1.3rem;border-top:1px solid var(--border-strong);border-left:1px solid var(--border-subtle)}
-.coef{padding:1rem;border-right:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)}
-.coef small{display:block;color:var(--text-secondary);margin-bottom:.3rem}
-.coef strong{font-size:1.3rem}
-.coef:nth-child(2) strong{color:var(--accent)}
-.coef:nth-child(3) strong{color:var(--signal)}
-.axis-card{margin-top:1.5rem;background:var(--surface-raised);border:1px solid var(--border-subtle);padding:1rem;box-shadow:var(--shadow-low)}
-.axis-svg{width:100%;height:auto;display:block}
-.axis-svg text{fill:var(--text-secondary);font:13px system-ui,-apple-system,"Segoe UI",sans-serif}
-.axis-svg .axis{stroke:var(--border-strong);stroke-width:2}
-.axis-svg .tick{stroke:var(--border-strong);stroke-width:1}
-.axis-svg .focus{stroke:var(--signal);stroke-width:7;stroke-linecap:round}
-.axis-svg .motion{stroke:var(--accent);stroke-width:3;fill:none}
-.axis-svg .guide{stroke:var(--border-subtle);stroke-dasharray:5 5}
-.axis-svg .point{fill:var(--signal);stroke:var(--surface-raised);stroke-width:3}
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);margin-top:1rem;border-top:1px solid var(--border-strong)}
-.metric{padding:.9rem 0;border-bottom:1px solid var(--border-subtle)}
-.metric small{display:block;color:var(--text-secondary);font-size:.78rem}
-.metric strong{font-size:1.15rem}
-.metric+.metric{padding-left:1rem;border-left:1px solid var(--border-subtle)}
-.graphs{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
-.graph-card{background:var(--surface-raised);border:1px solid var(--border-subtle);padding:.8rem}
-.graph-card h3{font:700 1rem Georgia,serif;margin:.15rem 0 .5rem}
-.graph{width:100%;height:250px;display:block}
-.graph .axis{stroke:var(--border-strong);stroke-width:1.4}
-.graph .grid{stroke:var(--border-subtle);stroke-width:1}
-.graph .curve{stroke:var(--accent);stroke-width:3;fill:none}
-.graph .velocity{stroke:var(--signal);stroke-width:3;fill:none}
-.graph .cursor{stroke:var(--signal);stroke-width:1.6;stroke-dasharray:5 4}
-.graph .dot{fill:var(--signal)}
-.graph text{fill:var(--text-secondary);font:12px system-ui,-apple-system,"Segoe UI",sans-serif}
-.sidebar{padding:1.1rem;border-left:1px solid var(--border-subtle);background:var(--surface-raised);overflow:auto}
+.viewbar{position:sticky;top:58px;z-index:45;display:flex;border-bottom:1px solid var(--border-subtle);background:var(--surface-raised);overflow-x:auto}
+.view-tab{position:relative;min-height:54px;padding:.8rem 1rem;border:0;border-right:1px solid var(--border-subtle);background:transparent;color:var(--text-secondary);white-space:nowrap}
+.view-tab[aria-selected="true"]{color:var(--text-primary);background:var(--surface-soft)}
+.view-tab[aria-selected="true"]:after{content:"";position:absolute;left:.8rem;right:.8rem;bottom:0;height:3px;background:var(--signal)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(19rem,.66fr);min-height:0}
+.stage{position:relative;min-width:0;padding:clamp(1rem,2.6vw,2.3rem);background:
+ linear-gradient(color-mix(in srgb,var(--border-subtle) 64%,transparent) 1px,transparent 1px),
+ linear-gradient(90deg,color-mix(in srgb,var(--border-subtle) 64%,transparent) 1px,transparent 1px),
+ var(--surface-page);
+ background-size:36px 36px}
+.stage:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--surface-page) 0,transparent 9%,transparent 91%,var(--surface-page) 100%);pointer-events:none}
+.stage-inner{position:relative;z-index:1}
+.stage-head{display:flex;justify-content:space-between;align-items:end;gap:1.2rem;margin-bottom:1rem}
+.eyebrow{color:var(--accent);font:750 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase}
+.stage h1{font:700 clamp(2rem,4vw,4.3rem)/1 Georgia,"Times New Roman",serif;letter-spacing:-.045em;margin:.35rem 0 .55rem}
+.lead{color:var(--text-secondary);max-width:60rem;margin:0}
+.live-state{font:750 .78rem/1.35 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--text-secondary);text-align:right}
+.action-strip{display:flex;gap:.45rem;align-items:center;flex-wrap:wrap;margin:1rem 0}
+.action-strip button,.action-strip select{min-height:42px;padding:.55rem .75rem;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);border-radius:var(--radius-sm)}
+.action-strip button.primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse);font-weight:780}
+.action-strip button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+.timeline{display:grid;grid-template-columns:auto 1fr auto;gap:.75rem;align-items:center;margin:.75rem 0 1rem;padding:.75rem 0;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)}
+.timeline input{width:100%;accent-color:var(--signal)}
+.time-readout{min-width:5.5rem;text-align:right;font:800 .9rem ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--signal)}
+.instrument{background:var(--surface-raised);border:1px solid var(--border-strong);box-shadow:var(--shadow-low)}
+.motion-card{padding:clamp(.7rem,2vw,1.15rem)}
+.motion-svg{display:block;width:100%;height:auto;touch-action:none;user-select:none}
+.motion-svg text,.chart text{fill:var(--text-secondary);font:12px system-ui,-apple-system,"Segoe UI",sans-serif}
+.motion-svg .axis{stroke:var(--border-strong);stroke-width:2}
+.motion-svg .minor{stroke:var(--border-subtle);stroke-width:1}
+.motion-svg .start-line{stroke:var(--displacement);stroke-width:1.5;stroke-dasharray:5 5}
+.motion-svg .turn-line{stroke:var(--signal);stroke-width:1.5;stroke-dasharray:5 5}
+.motion-svg .path-line{stroke:var(--path);stroke-width:8;stroke-linecap:round;opacity:.35}
+.motion-svg .dx-line{stroke:var(--displacement);stroke-width:3}
+.motion-svg .velocity-line{stroke:var(--velocity);stroke-width:4}
+.motion-svg .acceleration-line{stroke:var(--acceleration);stroke-width:4}
+.motion-svg .body{fill:var(--accent);stroke:var(--surface-raised);stroke-width:4}
+.motion-svg .body-ring{fill:none;stroke:var(--accent);stroke-width:2;opacity:.24}
+.motion-svg .ghost-a{fill:var(--snap-a);opacity:.62}
+.motion-svg .ghost-b{fill:var(--snap-b);opacity:.62}
+.metric-ledger{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:1px solid var(--border-subtle)}
+.metric{padding:.85rem .8rem;border-right:1px solid var(--border-subtle)}
+.metric:last-child{border-right:0}
+.metric small{display:block;color:var(--text-secondary);font-size:.73rem;margin-bottom:.2rem}
+.metric strong{font-size:1.05rem}
+.metric.velocity strong{color:var(--velocity)}
+.metric.accel strong{color:var(--acceleration)}
+.metric.dx strong{color:var(--displacement)}
+.metric.path strong{color:var(--path)}
+.discovery{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(16rem,.7fr);gap:1rem;margin-top:1rem}
+.annotation{padding:1rem 1.05rem;border-left:3px solid var(--accent);background:var(--accent-soft)}
+.annotation strong{display:block;margin-bottom:.25rem}
+.annotation p{margin:.2rem 0;color:var(--text-secondary)}
+.relation-bars{display:grid;gap:.55rem;padding:.9rem;background:var(--surface-raised);border:1px solid var(--border-subtle)}
+.bar-row{display:grid;grid-template-columns:6.2rem 1fr 4.8rem;gap:.6rem;align-items:center;font-size:.82rem}
+.bar-track{height:8px;background:var(--surface-strong);overflow:hidden}
+.bar-fill{height:100%;transform-origin:left center}
+.bar-fill.velocity{background:var(--velocity)}
+.bar-fill.accel{background:var(--acceleration)}
+.bar-fill.dx{background:var(--displacement)}
+.bar-fill.path{background:var(--path)}
+.bar-value{text-align:right;font:750 .78rem ui-monospace,SFMono-Regular,Consolas,monospace}
+.graph-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
+.graph-card{position:relative;background:var(--surface-raised);border:1px solid var(--border-subtle);padding:.75rem}
+.graph-card header{display:flex;align-items:baseline;justify-content:space-between;gap:.7rem}
+.graph-card h2{font:700 1.05rem Georgia,serif;margin:.1rem 0 .4rem}
+.graph-card small{color:var(--text-secondary)}
+.chart{display:block;width:100%;height:auto;touch-action:none;user-select:none}
+.chart .grid{stroke:var(--border-subtle);stroke-width:1}
+.chart .axis{stroke:var(--border-strong);stroke-width:1.3}
+.chart .curve-x{stroke:var(--accent);stroke-width:3;fill:none}
+.chart .curve-v{stroke:var(--signal);stroke-width:3;fill:none}
+.chart .cursor{stroke:var(--signal);stroke-width:1.4;stroke-dasharray:5 4}
+.chart .current-dot{fill:var(--signal);stroke:var(--surface-raised);stroke-width:2}
+.chart .nth-band{fill:var(--signal-soft);opacity:.72}
+.chart .ghost-a{stroke:var(--snap-a);stroke-width:2;fill:none;stroke-dasharray:7 5}
+.chart .ghost-b{stroke:var(--snap-b);stroke-width:2;fill:none;stroke-dasharray:3 5}
+.chart .drag-surface{fill:transparent;cursor:ew-resize}
+.formula-rack{margin-top:1rem;border-top:1px solid var(--border-strong)}
+.formula-row{display:grid;grid-template-columns:minmax(10rem,.55fr) 1.45fr;gap:1rem;padding:.75rem 0;border-bottom:1px solid var(--border-subtle)}
+.formula-row b{font:650 1.06rem "Cambria Math",Cambria,serif}
+.formula-row span{color:var(--text-secondary)}
+.legend{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.7rem}
+.legend button{min-height:36px;padding:.4rem .6rem;border:1px solid var(--border-subtle);background:var(--surface-raised);color:var(--text-secondary);border-radius:var(--radius-sm)}
+.legend button[aria-pressed="true"]{color:var(--text-primary);border-color:var(--border-strong)}
+.legend i{display:inline-block;width:.7rem;height:.18rem;margin-right:.35rem;vertical-align:middle;background:currentColor}
+.legend .v{color:var(--velocity)}.legend .a{color:var(--acceleration)}.legend .dx{color:var(--displacement)}.legend .s{color:var(--path)}
+.view-section{display:none}.view-section.on{display:block}
+.nth-board{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(18rem,.65fr);gap:1rem}
+.nth-scale{padding:1rem;background:var(--surface-raised);border:1px solid var(--border-subtle)}
+.nth-svg{width:100%;height:auto;display:block;touch-action:none}
+.nth-svg text{fill:var(--text-secondary);font:12px system-ui,-apple-system,"Segoe UI",sans-serif}
+.nth-svg .axis{stroke:var(--border-strong);stroke-width:2}
+.nth-svg .tick{stroke:var(--border-strong)}
+.nth-svg .focus{stroke:var(--signal);stroke-width:9;stroke-linecap:round}
+.nth-svg .total{stroke:var(--displacement);stroke-width:4;stroke-linecap:round;opacity:.52}
+.nth-formula{padding:1rem;border-top:2px solid var(--signal);background:var(--surface-raised)}
+.nth-formula .big{font:650 clamp(1.25rem,2.8vw,2rem) "Cambria Math",Cambria,serif;margin:.35rem 0}
+.compare-panel{margin-top:1rem;background:var(--surface-raised);border:1px solid var(--border-subtle)}
+.compare-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 1rem;border-bottom:1px solid var(--border-subtle)}
+.compare-table{width:100%;border-collapse:collapse}
+.compare-table th,.compare-table td{padding:.65rem .8rem;border-bottom:1px solid var(--border-subtle);text-align:right}
+.compare-table th:first-child,.compare-table td:first-child{text-align:left}
+.compare-table th{font-size:.78rem;color:var(--text-secondary)}
+.delta-pos{color:var(--success)}.delta-neg{color:var(--danger)}
+.empty-state{padding:1.1rem;color:var(--text-secondary)}
+.sidebar{position:sticky;top:112px;align-self:start;max-height:calc(100vh - 112px);overflow:auto;padding:1rem;border-left:1px solid var(--border-subtle);background:var(--surface-raised)}
 .control-group{padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
 .control-group:first-child{padding-top:0}
-.control-group h2{font:700 1.1rem Georgia,serif;margin:.2rem 0 .7rem}
-.control-group label{display:block;color:var(--text-secondary);font-size:.88rem;margin:.75rem 0 .35rem}
-select,input[type="range"]{width:100%}
-select{min-height:44px;padding:.55rem .65rem;background:var(--surface-raised);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:var(--radius-sm)}
+.control-group h2{font:700 1.08rem Georgia,serif;margin:.1rem 0 .65rem}
+.control-group h3{font-size:.9rem;margin:.8rem 0 .4rem}
+.control-group label{display:block;color:var(--text-secondary);font-size:.84rem;margin:.65rem 0 .3rem}
+select,input[type="range"],input[type="number"]{width:100%}
+select,input[type="number"]{min-height:42px;padding:.5rem .6rem;background:var(--surface-raised);color:var(--text-primary);border:1px solid var(--border-strong);border-radius:var(--radius-sm)}
 input[type="range"]{accent-color:var(--accent)}
-.value-row{display:flex;justify-content:space-between;gap:.7rem;align-items:center}
-.value{font:750 .9rem ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent)}
-.explain{padding:.8rem 0;color:var(--text-secondary)}
-.explain b{color:var(--text-primary)}
-.status{padding:.75rem .8rem;border-left:3px solid var(--accent);background:var(--accent-soft);margin:.7rem 0}
-.status.warning{border-color:var(--signal);background:var(--signal-soft)}
-.reset{width:100%;min-height:44px;margin-top:.7rem;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);border-radius:var(--radius-sm)}
+.range-row{display:grid;grid-template-columns:1fr 4.8rem;gap:.55rem;align-items:center}
+.value{font:750 .82rem ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent);text-align:right}
+.inline-actions{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.6rem}
+.inline-actions button{min-height:40px;padding:.5rem .65rem;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);border-radius:var(--radius-sm)}
+.inline-actions .primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.status{padding:.72rem .8rem;border-left:3px solid var(--accent);background:var(--accent-soft);margin:.65rem 0;color:var(--text-secondary)}
+.status strong{color:var(--text-primary)}
+.status.good{border-color:var(--success);background:var(--success-soft)}
+.status.warn{border-color:var(--signal);background:var(--signal-soft)}
+.predict-box,.challenge-box,.guide-box{padding:.8rem;border:1px solid var(--border-subtle);background:var(--surface-soft)}
+.predict-box p,.challenge-box p,.guide-box p{margin:.25rem 0 .6rem}
+.choice-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.35rem}
+.choice-grid button{min-height:40px;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);border-radius:var(--radius-sm)}
+.choice-grid button.selected{border-color:var(--accent);background:var(--accent-soft)}
+.predict-bars{display:grid;gap:.4rem;margin-top:.65rem}
+.predict-line{display:grid;grid-template-columns:5rem 1fr 3.8rem;gap:.4rem;align-items:center;font-size:.77rem}
+.predict-track{height:8px;background:var(--surface-strong)}
+.predict-fill{height:100%;background:var(--signal)}
+.detail-toggle{display:flex;align-items:center;justify-content:space-between;gap:.7rem}
+.detail-toggle button{min-height:38px;padding:.4rem .6rem;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);border-radius:var(--radius-sm)}
+.guide-step{font:750 .75rem ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--signal)}
+.highlight-control{outline:2px solid var(--signal);outline-offset:4px}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 :focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
-@media(max-width:980px){.workspace{grid-template-columns:1fr}.sidebar{border-left:0;border-top:1px solid var(--border-subtle)}.stage{min-height:auto}.graphs{grid-template-columns:1fr}}
-@media(max-width:620px){.topbar .brand{display:none}.coef-strip,.metrics{grid-template-columns:1fr}.coef,.metric+.metric{border-left:0;padding-left:0}.mode{padding:.75rem .85rem}.panel-head{display:block}.readout{margin-top:.6rem}.equation{font-size:1.55rem}}
-@media(prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
-@media print{.topbar,.modebar,.sidebar{display:none!important}.workspace{display:block}.stage{background:#fff;padding:0}.panel{display:block!important;break-after:page}.panel:not(:first-child){padding-top:10mm}:root,html[data-theme=dark]{--surface-page:#fff;--surface-raised:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#bbb;--border-strong:#777;--accent:#164e57;--signal:#8f3c2d;--shadow-low:none}.graph-card,.equation-board,.axis-card{break-inside:avoid}}
+@media(max-width:1180px){.metric-ledger{grid-template-columns:repeat(3,1fr)}.metric:nth-child(3){border-right:0}.metric:nth-child(-n+3){border-bottom:1px solid var(--border-subtle)}}
+@media(max-width:980px){
+ .workspace{grid-template-columns:1fr}
+ .sidebar{position:static;max-height:none;border-left:0;border-top:1px solid var(--border-subtle)}
+ .graph-grid,.nth-board,.discovery{grid-template-columns:1fr}
+ .stage{padding-bottom:1rem}
+}
+@media(max-width:620px){
+ .topbar .brand{font-size:0}.topbar .brand:after{content:"← Урок";font-size:.9rem}
+ .stage-head{display:block}.live-state{text-align:left;margin-top:.5rem}
+ .metric-ledger{grid-template-columns:1fr 1fr}
+ .metric,.metric:nth-child(3){border-right:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)}
+ .metric:nth-child(even){border-right:0}
+ .formula-row{grid-template-columns:1fr}
+ .timeline{grid-template-columns:auto 1fr}.time-readout{grid-column:1/-1;text-align:left}
+ .view-tab{padding:.75rem .8rem}
+ .compare-table{font-size:.82rem}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
+@media print{
+ .topbar,.viewbar,.sidebar,.action-strip,.timeline,.legend,.choice-grid{display:none!important}
+ .workspace{display:block}.stage{background:#fff;padding:0}
+ .view-section{display:block!important;break-after:page}
+ :root,html[data-theme="dark"]{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#bbb;--border-strong:#777;--accent:#164e57;--signal:#8f3c2d;--shadow-low:none}
+ .instrument,.graph-card,.compare-panel,.nth-scale,.nth-formula{break-inside:avoid}
+}
 </style>
 </head>
 <body>
 <div class="lab">
-  <header class="topbar">
-    <a class="brand" href="23.09.26.html">← Вернуться к занятию</a>
-    <span class="grow"></span>
-    <span>Лаборатория движения</span>
-    <button id="themeToggle" type="button" aria-label="Переключить светлую и тёмную тему">Тема</button>
-    <button type="button" onclick="print()">Печать</button>
+<header class="topbar">
+  <a class="brand" href="23.09.26.html">← Вернуться к занятию</a>
+  <span class="grow"></span>
+  <span>Исследовательская лаборатория движения</span>
+  <button id="themeToggle" type="button" aria-label="Переключить тему">Тема</button>
+  <button type="button" onclick="print()">Печать</button>
+</header>
+
+<nav class="viewbar" role="tablist" aria-label="Представления лаборатории">
+  <button class="view-tab" type="button" role="tab" aria-selected="true" data-view="motion">Движение и графики</button>
+  <button class="view-tab" type="button" role="tab" aria-selected="false" data-view="nth">n-я секунда</button>
+  <button class="view-tab" type="button" role="tab" aria-selected="false" data-view="compare">Сравнение A/B</button>
+</nav>
+
+<div class="workspace">
+<main class="stage" id="mainStage">
+<div class="stage-inner">
+
+<section class="view-section on" data-view-panel="motion">
+  <header class="stage-head">
+    <div>
+      <div class="eyebrow">Равноускоренное движение · исследование</div>
+      <h1>Измените причину — проследите последствия</h1>
+      <p class="lead">Меняйте начальную координату, скорость, ускорение или время. Положение тела, векторы, числа и оба графика пересчитываются из одного состояния модели.</p>
+    </div>
+    <div class="live-state" id="liveState">t = 0,0 с · x = 0 м · vₓ = 12 м/с</div>
   </header>
 
-  <nav class="modebar" role="tablist" aria-label="Режимы лаборатории">
-    <button class="mode" type="button" role="tab" aria-selected="true" data-mode="coefficients">Коэффициенты x(t)</button>
-    <button class="mode" type="button" role="tab" aria-selected="false" data-mode="nth">Отдельная секунда</button>
-    <button class="mode" type="button" role="tab" aria-selected="false" data-mode="turn">Остановка и путь</button>
-  </nav>
+  <div class="action-strip" aria-label="Управление временем">
+    <button class="primary" id="playPause" type="button">Запустить</button>
+    <button id="stepBack" type="button">−0,1 с</button>
+    <button id="stepForward" type="button">+0,1 с</button>
+    <button id="replayBtn" type="button">Сначала</button>
+    <label for="speedSelect" class="sr-only">Скорость воспроизведения</label>
+    <select id="speedSelect" aria-label="Скорость воспроизведения">
+      <option value="0.5">0,5×</option>
+      <option value="1" selected>1×</option>
+      <option value="2">2×</option>
+    </select>
+    <button id="undoBtn" type="button">Назад</button>
+    <button id="redoBtn" type="button">Вперёд</button>
+    <button id="snapshotABtn" type="button">Снимок A</button>
+    <button id="snapshotBBtn" type="button">Снимок B</button>
+  </div>
 
-  <div class="workspace">
-    <main class="stage">
-      <section class="panel on" data-panel="coefficients">
-        <div class="panel-head">
-          <div>
-            <div class="eyebrow">Режим 01 · читать формулу</div>
-            <h1>Что скрыто в x(t)</h1>
-            <p class="lead">Выберите одну из формул, разобранных в пособии. Лаборатория сопоставит её с x = x₀ + v₀ₓt + aₓt²/2.</p>
-          </div>
-          <div class="readout" id="coefReadout">x₀ = 0 · v₀ₓ = 8 · aₓ = −4</div>
-        </div>
+  <div class="timeline">
+    <span>0 с</span>
+    <input id="timeRange" type="range" min="0" max="5" step="0.01" value="0" aria-label="Время эксперимента">
+    <strong class="time-readout" id="timeValue">0,00 с</strong>
+  </div>
 
-        <div class="equation-board">
-          <div class="equation" id="equationText">x = 8t − 2t²</div>
-          <div class="coef-strip">
-            <div class="coef"><small>свободный член</small><strong id="coefX0">x₀ = 0 м</strong></div>
-            <div class="coef"><small>коэффициент при t</small><strong id="coefV0">v₀ₓ = 8 м/с</strong></div>
-            <div class="coef"><small>удвоенный коэффициент при t²</small><strong id="coefA">aₓ = −4 м/с²</strong></div>
-          </div>
-        </div>
+  <article class="instrument motion-card" aria-labelledby="motionTitle">
+    <h2 id="motionTitle" class="sr-only">Движение тела вдоль оси Ox</h2>
+    <svg class="motion-svg" id="motionSvg" viewBox="0 0 980 330" role="img" aria-label="Модель движения вдоль оси Ox с векторами скорости, ускорения, перемещения и пути"></svg>
+    <div class="metric-ledger" aria-label="Текущее состояние">
+      <div class="metric"><small>координата</small><strong id="metricX">0 м</strong></div>
+      <div class="metric velocity"><small>скорость</small><strong id="metricV">12 м/с</strong></div>
+      <div class="metric accel"><small>ускорение</small><strong id="metricA">−4 м/с²</strong></div>
+      <div class="metric dx"><small>перемещение</small><strong id="metricDx">0 м</strong></div>
+      <div class="metric path"><small>путь</small><strong id="metricPath">0 м</strong></div>
+      <div class="metric"><small>момент остановки</small><strong id="metricStop">3 с</strong></div>
+    </div>
+  </article>
 
-        <div class="graphs">
-          <div class="graph-card">
-            <h3>Координата x(t)</h3>
-            <svg class="graph" id="coefXGraph" viewBox="0 0 520 250" role="img" aria-label="График координаты для выбранного уравнения"></svg>
-          </div>
-          <div class="graph-card">
-            <h3>Скорость vₓ(t)</h3>
-            <svg class="graph" id="coefVGraph" viewBox="0 0 520 250" role="img" aria-label="График скорости для выбранного уравнения"></svg>
-          </div>
-        </div>
-      </section>
+  <div class="legend" aria-label="Слои визуализации">
+    <button type="button" data-layer="velocity" aria-pressed="true"><i class="v"></i>скорость</button>
+    <button type="button" data-layer="acceleration" aria-pressed="true"><i class="a"></i>ускорение</button>
+    <button type="button" data-layer="displacement" aria-pressed="true"><i class="dx"></i>перемещение</button>
+    <button type="button" data-layer="path" aria-pressed="true"><i class="s"></i>путь</button>
+  </div>
 
-      <section class="panel" data-panel="nth">
-        <div class="panel-head">
-          <div>
-            <div class="eyebrow">Режим 02 · временной интервал</div>
-            <h1>Что значит n-я секунда</h1>
-            <p class="lead">В примере занятия v₀ₓ = 2 м/с и aₓ = 0,2 м/с². Меняйте номер секунды и сравнивайте x(n), x(n−1) и их разность.</p>
-          </div>
-          <div class="readout" id="nthReadout">n = 4 · интервал [3; 4] с</div>
-        </div>
+  <div class="discovery">
+    <div class="annotation" id="annotationBox">
+      <strong id="annotationTitle">Сейчас тело движется вдоль +Ox</strong>
+      <p id="annotationText">Скорость положительна. Ускорение отрицательно, поэтому модуль скорости уменьшается: тело тормозит.</p>
+    </div>
+    <div class="relation-bars" aria-label="Сравнение модулей величин">
+      <div class="bar-row"><span>|vₓ|</span><div class="bar-track"><div class="bar-fill velocity" id="barV"></div></div><span class="bar-value" id="barVValue">12</span></div>
+      <div class="bar-row"><span>|aₓ|</span><div class="bar-track"><div class="bar-fill accel" id="barA"></div></div><span class="bar-value" id="barAValue">4</span></div>
+      <div class="bar-row"><span>|Δx|</span><div class="bar-track"><div class="bar-fill dx" id="barDx"></div></div><span class="bar-value" id="barDxValue">0</span></div>
+      <div class="bar-row"><span>s</span><div class="bar-track"><div class="bar-fill path" id="barPath"></div></div><span class="bar-value" id="barPathValue">0</span></div>
+    </div>
+  </div>
 
-        <div class="axis-card">
-          <svg class="axis-svg" id="nthAxis" viewBox="0 0 900 190" role="img" aria-label="Временная шкала отдельной секунды"></svg>
-        </div>
+  <div class="graph-grid">
+    <article class="graph-card">
+      <header><h2>Координата x(t)</h2><small>Тяните курсор по графику</small></header>
+      <svg class="chart" id="xGraph" viewBox="0 0 520 270" role="img" aria-label="Интерактивный график координаты от времени"></svg>
+    </article>
+    <article class="graph-card">
+      <header><h2>Скорость vₓ(t)</h2><small>Пересечение vₓ = 0 — остановка</small></header>
+      <svg class="chart" id="vGraph" viewBox="0 0 520 270" role="img" aria-label="Интерактивный график скорости от времени"></svg>
+    </article>
+  </div>
 
-        <div class="metrics">
-          <div class="metric"><small>координата в начале</small><strong id="nthStart">x(3) = 6,9 м</strong></div>
-          <div class="metric"><small>координата в конце</small><strong id="nthEnd">x(4) = 9,6 м</strong></div>
-          <div class="metric"><small>перемещение за n-ю секунду</small><strong id="nthDelta">Δx₄ = 2,7 м</strong></div>
-        </div>
+  <div class="formula-rack" id="formulaRack">
+    <div class="formula-row"><b id="formulaX">x = 12t − 2t²</b><span>Координата — положение тела на оси.</span></div>
+    <div class="formula-row"><b id="formulaV">vₓ = 12 − 4t</b><span>Скорость меняется линейно; её наклон задаёт ускорение.</span></div>
+    <div class="formula-row"><b id="formulaState">x(0) = 0 м; vₓ(0) = 12 м/с</b><span>Текущий момент подставляется в обе формулы одновременно.</span></div>
+  </div>
+</section>
 
-        <div class="equation-board">
-          <div class="equation" id="nthFormula">Δx₄ = x(4) − x(3) = 2,7 м</div>
-          <p>Для этого примера скорость остаётся положительной, поэтому на выбранных секундных интервалах путь совпадает с перемещением.</p>
-        </div>
-      </section>
+<section class="view-section" data-view-panel="nth">
+  <header class="stage-head">
+    <div>
+      <div class="eyebrow">Отдельная секунда · два масштаба времени</div>
+      <h1>За n секунд и за n-ю секунду</h1>
+      <p class="lead">Верхняя шкала показывает весь интервал от 0 до n, нижняя выделяет только [n−1; n]. Графики справа используют ту же модель.</p>
+    </div>
+    <div class="live-state" id="nthLive">n = 4 · [3; 4] с</div>
+  </header>
 
-      <section class="panel" data-panel="turn">
-        <div class="panel-head">
-          <div>
-            <div class="eyebrow">Режим 03 · знак скорости</div>
-            <h1>Где движение меняет направление</h1>
-            <p class="lead">Для x = 12t − 2t² скорость равна vₓ = 12 − 4t. В момент t = 3 с она обращается в ноль; после этого знак скорости меняется.</p>
-          </div>
-          <div class="readout" id="turnReadout">t = 3,0 с · vₓ = 0 м/с</div>
-        </div>
-
-        <div class="graphs">
-          <div class="graph-card">
-            <h3>Координата x(t)</h3>
-            <svg class="graph" id="turnXGraph" viewBox="0 0 520 250" role="img" aria-label="График координаты x равно 12t минус 2t в квадрате"></svg>
-          </div>
-          <div class="graph-card">
-            <h3>Скорость vₓ(t)</h3>
-            <svg class="graph" id="turnVGraph" viewBox="0 0 520 250" role="img" aria-label="График скорости v x равно 12 минус 4t"></svg>
-          </div>
-        </div>
-
-        <div class="metrics">
-          <div class="metric"><small>координата</small><strong id="turnX">x = 18 м</strong></div>
-          <div class="metric"><small>скорость</small><strong id="turnV">vₓ = 0 м/с</strong></div>
-          <div class="metric"><small>путь от t = 0</small><strong id="turnS">s = 18 м</strong></div>
-        </div>
-        <div class="status" id="turnStatus">В этот момент тело останавливается. При дальнейшем движении знак скорости станет отрицательным.</div>
-      </section>
-    </main>
-
-    <aside class="sidebar" aria-label="Параметры лаборатории">
-      <section class="control-group" id="coefControls">
-        <h2>Формула из пособия</h2>
-        <label for="equationSelect">Выберите закон координаты</label>
-        <select id="equationSelect">
-          <option value="eq1">x = 8t − 2t²</option>
-          <option value="eq2">x = 6 − 4t + t²</option>
-          <option value="eq3">x = 6t²</option>
-          <option value="eq4">x = 6 − 3t</option>
-          <option value="eq5">x = 12t − 2t²</option>
-        </select>
-        <div class="explain"><b>Смотрите на три места:</b> свободный член, коэффициент при t и коэффициент при t².</div>
-      </section>
-
-      <section class="control-group" id="nthControls" hidden>
-        <h2>Номер секунды</h2>
-        <label for="nthRange">n</label>
-        <div class="value-row"><input id="nthRange" type="range" min="1" max="7" step="1" value="4"><span class="value" id="nthValue">4-я</span></div>
-        <div class="explain">Интервал n-й секунды: от n−1 до n секунд.</div>
-        <div class="status">При n = 4 лаборатория воспроизводит исходные 2,7 м из разобранной задачи.</div>
-      </section>
-
-      <section class="control-group" id="turnControls" hidden>
-        <h2>Момент времени</h2>
-        <label for="turnRange">t</label>
-        <div class="value-row"><input id="turnRange" type="range" min="0" max="5" step="0.1" value="3"><span class="value" id="turnValue">3,0 с</span></div>
-        <div class="explain">До 3 с скорость положительна, в 3 с равна нулю, после 3 с отрицательна.</div>
-      </section>
-
-      <section class="control-group">
-        <h2>Что проверить</h2>
-        <div class="explain"><b>x(t):</b> коэффициент при t² равен aₓ/2.</div>
-        <div class="explain"><b>n-я секунда:</b> это [n−1; n] с.</div>
-        <div class="explain"><b>Путь:</b> при смене знака vₓ движение нужно делить на участки.</div>
-        <button class="reset" id="resetButton" type="button">Сбросить текущий режим</button>
-      </section>
+  <div class="nth-board">
+    <div class="nth-scale">
+      <svg class="nth-svg" id="nthSvg" viewBox="0 0 900 270" role="img" aria-label="Сравнение первых n секунд и отдельной n-й секунды"></svg>
+      <div class="metric-ledger">
+        <div class="metric"><small>x(n−1)</small><strong id="nthStart">6,9 м</strong></div>
+        <div class="metric"><small>x(n)</small><strong id="nthEnd">9,6 м</strong></div>
+        <div class="metric dx"><small>Δx за n-ю секунду</small><strong id="nthDx">2,7 м</strong></div>
+        <div class="metric path"><small>путь за n-ю секунду</small><strong id="nthPath">2,7 м</strong></div>
+        <div class="metric"><small>Δx за первые n секунд</small><strong id="nthTotalDx">9,6 м</strong></div>
+        <div class="metric"><small>разница смыслов</small><strong id="nthRatio">3,6×</strong></div>
+      </div>
+    </div>
+    <aside class="nth-formula">
+      <div class="eyebrow">Текущий расчёт</div>
+      <div class="big" id="nthEquation">Δx₄ = x(4) − x(3) = 2,7 м</div>
+      <p id="nthExplanation">Четвёртая секунда — промежуток от 3 до 4 с. Начальная координата x₀ сокращается в разности.</p>
+      <div class="status" id="nthDirectionStatus"><strong>Направление не меняется.</strong> Поэтому путь на этой секунде равен |Δx₄|.</div>
     </aside>
   </div>
+
+  <div class="graph-grid">
+    <article class="graph-card"><header><h2>x(t)</h2><small>Полоса = n-я секунда</small></header><svg class="chart" id="nthXGraph" viewBox="0 0 520 270" role="img" aria-label="График координаты с выделенной n-й секундой"></svg></article>
+    <article class="graph-card"><header><h2>vₓ(t)</h2><small>Проверка смены направления</small></header><svg class="chart" id="nthVGraph" viewBox="0 0 520 270" role="img" aria-label="График скорости с выделенной n-й секундой"></svg></article>
+  </div>
+</section>
+
+<section class="view-section" data-view-panel="compare">
+  <header class="stage-head">
+    <div>
+      <div class="eyebrow">Ghost states · сравнение</div>
+      <h1>Что именно изменилось между A и B</h1>
+      <p class="lead">Сохраните два состояния: разные моменты времени или разные параметры. Лаборатория наложит траектории и покажет численные изменения.</p>
+    </div>
+    <div class="live-state" id="compareLive">A — нет · B — нет</div>
+  </header>
+  <div class="compare-panel">
+    <div class="compare-head"><strong>Снимки состояния</strong><span id="compareHint">Создайте A и B в режиме «Движение и графики».</span></div>
+    <div id="compareEmpty" class="empty-state">Пока сравнивать нечего.</div>
+    <div id="compareContent" hidden>
+      <div class="graph-grid" style="margin:0;padding:1rem">
+        <article class="graph-card"><header><h2>x(t): A / B</h2><small>пунктирные ghost-кривые</small></header><svg class="chart" id="compareXGraph" viewBox="0 0 520 270"></svg></article>
+        <article class="graph-card"><header><h2>vₓ(t): A / B</h2><small>сравнение наклонов и нулей</small></header><svg class="chart" id="compareVGraph" viewBox="0 0 520 270"></svg></article>
+      </div>
+      <div style="overflow:auto">
+        <table class="compare-table">
+          <thead><tr><th>Величина</th><th>A</th><th>B</th><th>B − A</th></tr></thead>
+          <tbody id="compareRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+</main>
+
+<aside class="sidebar" aria-label="Параметры и учебные эксперименты">
+  <section class="control-group">
+    <h2>Сценарий</h2>
+    <label for="scenarioSelect">Готовый эксперимент</label>
+    <select id="scenarioSelect">
+      <option value="turn">Остановка и разворот: x = 12t − 2t²</option>
+      <option value="eq1">Торможение: x = 8t − 2t²</option>
+      <option value="reverse">Сначала влево, затем вправо: x = 6 − 4t + t²</option>
+      <option value="rest">Из покоя: x = 6t²</option>
+      <option value="uniformLeft">Равномерно влево: x = 6 − 3t</option>
+      <option value="nthLesson">Задача про 4-ю секунду: v₀ = 2, a = 0,2</option>
+      <option value="free">Исследовать самому</option>
+    </select>
+    <div class="status" id="scenarioNote"><strong>Что смотреть:</strong> момент vₓ = 0 и различие между путём и перемещением после разворота.</div>
+  </section>
+
+  <section class="control-group" id="freeControls">
+    <div class="detail-toggle"><h2>Параметры модели</h2><button id="makeFree" type="button">Сделать свободным</button></div>
+    <label for="x0Range">x₀, м</label>
+    <div class="range-row"><input id="x0Range" type="range" min="-10" max="10" step="0.5" value="0"><span class="value" id="x0Value">0</span></div>
+    <label for="v0Range">v₀ₓ, м/с</label>
+    <div class="range-row"><input id="v0Range" type="range" min="-12" max="12" step="0.5" value="12"><span class="value" id="v0Value">12</span></div>
+    <label for="aRange">aₓ, м/с²</label>
+    <div class="range-row"><input id="aRange" type="range" min="-8" max="12" step="0.5" value="-4"><span class="value" id="aValue">−4</span></div>
+    <label for="durationRange">Длительность, с</label>
+    <div class="range-row"><input id="durationRange" type="range" min="2" max="10" step="0.5" value="5"><span class="value" id="durationValue">5</span></div>
+  </section>
+
+  <section class="control-group" id="nthControls">
+    <h2>n-я секунда</h2>
+    <label for="nthRange">Номер секунды n</label>
+    <div class="range-row"><input id="nthRange" type="range" min="1" max="5" step="1" value="4"><span class="value" id="nthValue">4-я</span></div>
+    <div class="status" id="nthSideStatus"><strong>Интервал:</strong> [3; 4] с.</div>
+  </section>
+
+  <section class="control-group">
+    <h2>Предскажи результат</h2>
+    <div class="predict-box">
+      <p id="predictQuestion">Если для x = 12t − 2t² сделать торможение вдвое сильнее, тело остановится раньше или позже?</p>
+      <div class="choice-grid" id="predictChoices">
+        <button type="button" data-predict="earlier">Раньше</button>
+        <button type="button" data-predict="same">Так же</button>
+        <button type="button" data-predict="later">Позже</button>
+      </div>
+      <div class="inline-actions"><button class="primary" id="predictCheck" type="button">Проверить</button></div>
+      <div id="predictFeedback" class="status" aria-live="polite">Сначала выберите прогноз.</div>
+      <div class="predict-bars" id="predictBars" hidden></div>
+    </div>
+  </section>
+
+  <section class="control-group">
+    <h2>Микро-задача</h2>
+    <div class="challenge-box">
+      <label for="challengeSelect">Выберите цель</label>
+      <select id="challengeSelect">
+        <option value="stop">Поймайте момент остановки</option>
+        <option value="nth">Найдите секунду с Δx = 2,7 м</option>
+        <option value="path">Сделайте путь больше |Δx|</option>
+      </select>
+      <div class="inline-actions"><button id="challengeStart" type="button">Запустить задачу</button></div>
+      <p id="challengePrompt">Передвиньте время так, чтобы vₓ стало равно нулю.</p>
+      <div class="status" id="challengeStatus" aria-live="polite"><strong>Статус:</strong> условие ещё не выполнено.</div>
+    </div>
+  </section>
+
+  <section class="control-group">
+    <h2>Маршрут открытия</h2>
+    <div class="guide-box">
+      <div class="guide-step" id="guideStep">Шаг 1 из 5</div>
+      <p id="guideText">Измените x₀. Заметьте: график x(t) сдвигается вверх или вниз, а vₓ(t) не меняется.</p>
+      <div class="inline-actions">
+        <button id="guidePrev" type="button">Назад</button>
+        <button id="guideApply" type="button">Показать</button>
+        <button id="guideNext" type="button">Дальше</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="control-group">
+    <div class="detail-toggle"><h2>Вычисления</h2><button id="detailToggle" type="button" aria-expanded="true">Скрыть</button></div>
+    <div id="detailContent">
+      <div class="status"><strong>Единый источник истины:</strong> x = x₀ + v₀ₓt + aₓt²/2; vₓ = v₀ₓ + aₓt.</div>
+      <div class="status"><strong>Путь:</strong> если vₓ меняет знак внутри интервала, движение автоматически делится в моменте vₓ = 0.</div>
+    </div>
+  </section>
+</aside>
+</div>
 </div>
 
 <script>
 (function(){
-  const root=document.documentElement;
-  const themeKey='volodia-230926-lab-theme';
-  try{
-    const saved=localStorage.getItem(themeKey);
-    if(saved==='dark'||saved==='light')root.dataset.theme=saved;
-  }catch(e){}
-  document.getElementById('themeToggle').addEventListener('click',function(){
-    root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
-    try{localStorage.setItem(themeKey,root.dataset.theme);}catch(e){}
-    renderAll();
+'use strict';
+
+/* MODEL_CORE_230926_START */
+function clamp(value,min,max){return Math.min(max,Math.max(min,value));}
+function positionAt(model,t){
+  const q=clamp(Number(t)||0,0,model.duration);
+  return model.x0+model.v0*q+model.a*q*q/2;
+}
+function velocityAt(model,t){
+  const q=clamp(Number(t)||0,0,model.duration);
+  return model.v0+model.a*q;
+}
+function stopTime(model){
+  if(Math.abs(model.a)<1e-12)return null;
+  const t=-model.v0/model.a;
+  return t>=0&&t<=model.duration?t:null;
+}
+function pathBetween(model,t1,t2){
+  let a=clamp(Math.min(t1,t2),0,model.duration);
+  let b=clamp(Math.max(t1,t2),0,model.duration);
+  if(b<=a)return 0;
+  const turn=stopTime(model);
+  if(turn!=null&&turn>a&&turn<b){
+    return Math.abs(positionAt(model,turn)-positionAt(model,a))+Math.abs(positionAt(model,b)-positionAt(model,turn));
+  }
+  return Math.abs(positionAt(model,b)-positionAt(model,a));
+}
+function motionAt(model,t){
+  const q=clamp(Number(t)||0,0,model.duration);
+  const x=positionAt(model,q);
+  const v=velocityAt(model,q);
+  const dx=x-model.x0;
+  return {t:q,x:x,v:v,a:model.a,dx:dx,absDx:Math.abs(dx),path:pathBetween(model,0,q),stop:stopTime(model)};
+}
+function nthSecond(model,n){
+  const k=Math.max(1,Math.floor(Number(n)||1));
+  const start=clamp(k-1,0,model.duration);
+  const end=clamp(k,0,model.duration);
+  const x1=positionAt(model,start),x2=positionAt(model,end);
+  return {n:k,start:start,end:end,x1:x1,x2:x2,dx:x2-x1,path:pathBetween(model,start,end),totalDx:x2-model.x0};
+}
+function hasDirectionChange(model,t1,t2){
+  const turn=stopTime(model);
+  return turn!=null&&turn>Math.min(t1,t2)&&turn<Math.max(t1,t2);
+}
+/* MODEL_CORE_230926_END */
+
+const root=document.documentElement;
+const NS='http://www.w3.org/2000/svg';
+const reducedMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const scenarios={
+  turn:{label:'x = 12t − 2t²',x0:0,v0:12,a:-4,duration:5,note:'Момент vₓ = 0 и различие между путём и перемещением после разворота.'},
+  eq1:{label:'x = 8t − 2t²',x0:0,v0:8,a:-4,duration:4,note:'Отрицательное ускорение уменьшает положительную скорость до остановки, затем меняет направление.'},
+  reverse:{label:'x = 6 − 4t + t²',x0:6,v0:-4,a:2,duration:5,note:'Скорость сначала отрицательна, ускорение положительно: тело тормозит при движении влево, затем идёт вправо.'},
+  rest:{label:'x = 6t²',x0:0,v0:0,a:12,duration:3,note:'Старт из покоя: скорость растёт линейно, координата — квадратично.'},
+  uniformLeft:{label:'x = 6 − 3t',x0:6,v0:-3,a:0,duration:5,note:'Граничный случай aₓ = 0: скорость постоянна, график x(t) — прямая.'},
+  nthLesson:{label:'x = 2t + 0,1t²',x0:0,v0:2,a:.2,duration:7,note:'Сценарий из задачи урока: за 4-ю секунду Δx = 2,7 м; за 7-ю — 3,3 м.'}
+};
+const initial=scenarios.turn;
+const state={
+  scenario:'turn',
+  view:'motion',
+  model:{x0:initial.x0,v0:initial.v0,a:initial.a,duration:initial.duration},
+  t:0,
+  nth:4,
+  running:false,
+  speed:1,
+  layers:{velocity:true,acceleration:true,displacement:true,path:true},
+  snapshots:{A:null,B:null},
+  prediction:null,
+  challenge:'stop',
+  guide:0,
+  detail:true,
+  history:[],
+  historyIndex:-1
+};
+let raf=0,lastFrame=0,draggingGraph=false;
+
+function $(id){return document.getElementById(id);}
+function svg(tag,attrs,text){
+  const el=document.createElementNS(NS,tag);
+  Object.entries(attrs||{}).forEach(function(entry){el.setAttribute(entry[0],String(entry[1]));});
+  if(text!=null)el.textContent=text;
+  return el;
+}
+function num(value,digits){
+  if(!Number.isFinite(value))return '—';
+  const d=digits==null?2:digits;
+  const rounded=Number(value.toFixed(d));
+  const clean=Math.abs(rounded)<Math.pow(10,-d)?0:rounded;
+  return String(clean).replace('.',',').replace('-','−');
+}
+function signed(value,digits){
+  if(Math.abs(value)<1e-12)return '0';
+  return (value>0?'+':'−')+num(Math.abs(value),digits);
+}
+function modelCopy(model){return {x0:model.x0,v0:model.v0,a:model.a,duration:model.duration};}
+function snapshotCopy(){
+  return {model:modelCopy(state.model),t:state.t,nth:state.nth,scenario:state.scenario,motion:motionAt(state.model,state.t)};
+}
+function stateSignature(){return JSON.stringify({model:state.model,t:Number(state.t.toFixed(3)),nth:state.nth,scenario:state.scenario});}
+function pushHistory(){
+  const snap={model:modelCopy(state.model),t:state.t,nth:state.nth,scenario:state.scenario};
+  const sig=JSON.stringify(snap);
+  const current=state.history[state.historyIndex];
+  if(current&&JSON.stringify(current)===sig)return;
+  state.history=state.history.slice(0,state.historyIndex+1);
+  state.history.push(snap);
+  if(state.history.length>40)state.history.shift();
+  state.historyIndex=state.history.length-1;
+  updateHistoryButtons();
+}
+function restoreHistory(index){
+  const snap=state.history[index];
+  if(!snap)return;
+  state.historyIndex=index;
+  state.model=modelCopy(snap.model);
+  state.t=snap.t;state.nth=snap.nth;state.scenario=snap.scenario;
+  state.running=false;
+  syncControls();
+  render();
+  updateHistoryButtons();
+}
+function updateHistoryButtons(){
+  $('undoBtn').disabled=state.historyIndex<=0;
+  $('redoBtn').disabled=state.historyIndex<0||state.historyIndex>=state.history.length-1;
+}
+function equationText(model){
+  const parts=[];
+  if(Math.abs(model.x0)>1e-12)parts.push(num(model.x0,2));
+  if(Math.abs(model.v0)>1e-12)parts.push((model.v0<0?'− ':'')+(Math.abs(model.v0)===1?'':num(Math.abs(model.v0),2))+'t');
+  const c=model.a/2;
+  if(Math.abs(c)>1e-12)parts.push((c<0?'− ':'')+(Math.abs(c)===1?'':num(Math.abs(c),2))+'t²');
+  if(!parts.length)return 'x = 0';
+  let text='x = '+parts[0];
+  for(let i=1;i<parts.length;i++){
+    const p=parts[i];
+    text+=' '+(p.startsWith('− ')?p:'+ '+p);
+  }
+  return text;
+}
+function velocityText(model){
+  let text='vₓ = '+num(model.v0,2);
+  if(Math.abs(model.a)>1e-12)text+=' '+(model.a<0?'−':' +')+' '+num(Math.abs(model.a),2)+'t';
+  return text;
+}
+function scenarioFromModel(){
+  for(const key of Object.keys(scenarios)){
+    const s=scenarios[key],m=state.model;
+    if(Math.abs(s.x0-m.x0)<1e-9&&Math.abs(s.v0-m.v0)<1e-9&&Math.abs(s.a-m.a)<1e-9&&Math.abs(s.duration-m.duration)<1e-9)return key;
+  }
+  return 'free';
+}
+function setScenario(key,options){
+  const opts=options||{};
+  if(key==='free'){
+    state.scenario='free';
+    if(!opts.keepTime)state.t=clamp(state.t,0,state.model.duration);
+  }else{
+    const s=scenarios[key];
+    if(!s)return;
+    state.scenario=key;
+    state.model={x0:s.x0,v0:s.v0,a:s.a,duration:s.duration};
+    state.t=opts.t!=null?clamp(opts.t,0,s.duration):0;
+    state.nth=clamp(state.nth,1,Math.max(1,Math.floor(s.duration)));
+  }
+  state.running=false;
+  syncControls();
+  render();
+  if(opts.record!==false)pushHistory();
+}
+function setView(view){
+  state.view=view;
+  document.querySelectorAll('.view-tab').forEach(function(btn){
+    const on=btn.dataset.view===view;
+    btn.setAttribute('aria-selected',on?'true':'false');
   });
-
-  const equations={
-    eq1:{label:'x = 8t − 2t²',x0:0,v0:8,a:-4},
-    eq2:{label:'x = 6 − 4t + t²',x0:6,v0:-4,a:2},
-    eq3:{label:'x = 6t²',x0:0,v0:0,a:12},
-    eq4:{label:'x = 6 − 3t',x0:6,v0:-3,a:0},
-    eq5:{label:'x = 12t − 2t²',x0:0,v0:12,a:-4}
-  };
-  let mode='coefficients';
-
-  function num(value,digits){
-    const rounded=Number(value.toFixed(digits==null?2:digits));
-    return String(rounded).replace('.',',');
+  document.querySelectorAll('.view-section').forEach(function(panel){panel.classList.toggle('on',panel.dataset.viewPanel===view);});
+  render();
+}
+function setTime(value,record){
+  state.t=clamp(Number(value)||0,0,state.model.duration);
+  state.running=false;
+  if(record)pushHistory();
+  render();
+}
+function setModelParam(key,value,record){
+  state.scenario='free';
+  state.model[key]=Number(value);
+  if(key==='duration'){
+    state.model.duration=clamp(state.model.duration,2,10);
+    state.t=clamp(state.t,0,state.model.duration);
+    state.nth=clamp(state.nth,1,Math.max(1,Math.floor(state.model.duration)));
   }
-  function xAt(p,t){return p.x0+p.v0*t+p.a*t*t/2}
-  function vAt(p,t){return p.v0+p.a*t}
-  function css(name){return getComputedStyle(root).getPropertyValue(name).trim()}
+  syncControls();
+  if(record)pushHistory();
+  render();
+}
+function syncControls(){
+  $('scenarioSelect').value=state.scenario;
+  $('x0Range').value=state.model.x0;
+  $('v0Range').value=state.model.v0;
+  $('aRange').value=state.model.a;
+  $('durationRange').value=state.model.duration;
+  $('timeRange').max=state.model.duration;
+  $('timeRange').value=state.t;
+  $('nthRange').max=Math.max(1,Math.floor(state.model.duration));
+  state.nth=clamp(state.nth,1,Number($('nthRange').max));
+  $('nthRange').value=state.nth;
+  $('speedSelect').value=String(state.speed);
+  $('x0Value').textContent=num(state.model.x0,1);
+  $('v0Value').textContent=num(state.model.v0,1);
+  $('aValue').textContent=num(state.model.a,1);
+  $('durationValue').textContent=num(state.model.duration,1);
+  $('nthValue').textContent=state.nth+'-я';
+  $('makeFree').disabled=state.scenario==='free';
+  const editable=state.scenario==='free';
+  ['x0Range','v0Range','aRange','durationRange'].forEach(function(id){$(id).disabled=!editable;});
+  const note=state.scenario==='free'?'Свободный режим: меняйте параметры и наблюдайте синхронные изменения во всех представлениях.':scenarios[state.scenario].note;
+  $('scenarioNote').innerHTML='<strong>Что смотреть:</strong> '+note;
+}
+function worldDomain(model){
+  const values=[model.x0];
+  for(let i=0;i<=120;i++)values.push(positionAt(model,model.duration*i/120));
+  if(state.snapshots.A)for(let i=0;i<=60;i++)values.push(positionAt(state.snapshots.A.model,state.snapshots.A.model.duration*i/60));
+  if(state.snapshots.B)for(let i=0;i<=60;i++)values.push(positionAt(state.snapshots.B.model,state.snapshots.B.model.duration*i/60));
+  let min=Math.min.apply(null,values),max=Math.max.apply(null,values);
+  if(max-min<6){min-=3;max+=3}
+  const pad=(max-min)*.12;
+  return [min-pad,max+pad];
+}
+function renderMotion(){
+  const el=$('motionSvg');el.replaceChildren();
+  const W=980,H=330,left=62,right=930,axisY=156;
+  const m=state.model,s=motionAt(m,state.t),domain=worldDomain(m),min=domain[0],max=domain[1];
+  const X=function(x){return left+(x-min)/(max-min)*(right-left);};
+  const defs=svg('defs');
+  function marker(id,color){
+    const mk=svg('marker',{id:id,viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'7',markerHeight:'7',orient:'auto-start-reverse'});
+    mk.appendChild(svg('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:color}));
+    return mk;
+  }
+  defs.appendChild(marker('arrowV','var(--velocity)'));
+  defs.appendChild(marker('arrowA','var(--acceleration)'));
+  defs.appendChild(marker('arrowDx','var(--displacement)'));
+  el.appendChild(defs);
 
-  function svgEl(tag,attrs,text){
-    const el=document.createElementNS('http://www.w3.org/2000/svg',tag);
-    Object.entries(attrs||{}).forEach(function(entry){el.setAttribute(entry[0],entry[1]);});
-    if(text!=null)el.textContent=text;
-    return el;
+  el.appendChild(svg('line',{x1:left,y1:axisY,x2:right,y2:axisY,class:'axis'}));
+  const ticks=10;
+  for(let i=0;i<=ticks;i++){
+    const value=min+(max-min)*i/ticks,x=X(value);
+    el.appendChild(svg('line',{x1:x,y1:axisY-7,x2:x,y2:axisY+7,class:'minor'}));
+    el.appendChild(svg('text',{x:x,y:axisY+26,'text-anchor':'middle'},num(value,1)));
+  }
+  el.appendChild(svg('text',{x:right,y:axisY-14,'text-anchor':'end'},'x, м'));
+
+  const startX=X(m.x0),currentX=X(s.x);
+  el.appendChild(svg('line',{x1:startX,y1:55,x2:startX,y2:axisY+78,class:'start-line'}));
+  el.appendChild(svg('text',{x:startX,y:48,'text-anchor':'middle'},'x₀'));
+
+  const turn=stopTime(m);
+  if(turn!=null){
+    const tx=X(positionAt(m,turn));
+    el.appendChild(svg('line',{x1:tx,y1:62,x2:tx,y2:axisY+58,class:'turn-line'}));
+    el.appendChild(svg('text',{x:tx,y:55,'text-anchor':'middle'},'vₓ=0 · t='+num(turn,2)+' с'));
   }
 
-  function drawGraph(svg,fn,tMax,yLabel,className,cursorT){
-    svg.replaceChildren();
-    const W=520,H=250,pad={l:48,r:18,t:18,b:34};
-    const samples=[];
-    for(let i=0;i<=100;i++){const t=tMax*i/100;samples.push({t:t,y:fn(t)});}
-    let yMin=Math.min.apply(null,samples.map(function(p){return p.y;}));
-    let yMax=Math.max.apply(null,samples.map(function(p){return p.y;}));
-    if(yMin===yMax){yMin-=1;yMax+=1}
-    const margin=(yMax-yMin)*.14;
-    yMin-=margin;yMax+=margin;
-    if(yMin>0)yMin=0;
-    if(yMax<0)yMax=0;
-    function X(t){return pad.l+t/tMax*(W-pad.l-pad.r)}
-    function Y(y){return pad.t+(yMax-y)/(yMax-yMin)*(H-pad.t-pad.b)}
+  if(state.layers.path&&s.path>1e-9){
+    const segments=70;
+    let prev=positionAt(m,0);
+    for(let i=1;i<=segments;i++){
+      const tt=s.t*i/segments,xx=positionAt(m,tt);
+      el.appendChild(svg('line',{x1:X(prev),y1:axisY+48,x2:X(xx),y2:axisY+48,class:'path-line'}));
+      prev=xx;
+    }
+    el.appendChild(svg('text',{x:left,y:axisY+72},'пройденный путь s = '+num(s.path,2)+' м'));
+  }
+  if(state.layers.displacement&&Math.abs(s.dx)>1e-9){
+    el.appendChild(svg('line',{x1:startX,y1:axisY+18,x2:currentX,y2:axisY+18,class:'dx-line','marker-end':'url(#arrowDx)'}));
+  }
 
-    for(let i=0;i<=5;i++){
-      const t=tMax*i/5;
-      const gx=X(t);
-      svg.appendChild(svgEl('line',{x1:gx,y1:pad.t,x2:gx,y2:H-pad.b,class:'grid'}));
-      svg.appendChild(svgEl('text',{x:gx,y:H-10,'text-anchor':'middle'},num(t,1)));
+  if(state.snapshots.A){
+    const a=state.snapshots.A.motion;
+    el.appendChild(svg('circle',{cx:X(a.x),cy:axisY,r:10,class:'ghost-a'}));
+    el.appendChild(svg('text',{x:X(a.x),y:axisY-25,'text-anchor':'middle'},'A'));
+  }
+  if(state.snapshots.B){
+    const b=state.snapshots.B.motion;
+    el.appendChild(svg('circle',{cx:X(b.x),cy:axisY,r:10,class:'ghost-b'}));
+    el.appendChild(svg('text',{x:X(b.x),y:axisY-25,'text-anchor':'middle'},'B'));
+  }
+
+  el.appendChild(svg('circle',{cx:currentX,cy:axisY,r:25,class:'body-ring'}));
+  el.appendChild(svg('circle',{cx:currentX,cy:axisY,r:13,class:'body'}));
+  el.appendChild(svg('text',{x:currentX,y:axisY-33,'text-anchor':'middle'},'t = '+num(s.t,2)+' с'));
+
+  const maxSpeed=Math.max(1,Math.abs(m.v0),Math.abs(velocityAt(m,m.duration)));
+  const maxAccel=Math.max(1,Math.abs(m.a),8);
+  if(state.layers.velocity&&Math.abs(s.v)>1e-9){
+    const len=clamp(Math.abs(s.v)/maxSpeed*130,34,130),dir=Math.sign(s.v);
+    el.appendChild(svg('line',{x1:currentX,y1:axisY-72,x2:currentX+dir*len,y2:axisY-72,class:'velocity-line','marker-end':'url(#arrowV)'}));
+    el.appendChild(svg('text',{x:currentX+dir*len/2,y:axisY-84,'text-anchor':'middle'},'vₓ = '+num(s.v,2)));
+  }
+  if(state.layers.acceleration&&Math.abs(m.a)>1e-9){
+    const len=clamp(Math.abs(m.a)/maxAccel*110,30,110),dir=Math.sign(m.a);
+    el.appendChild(svg('line',{x1:currentX,y1:axisY+102,x2:currentX+dir*len,y2:axisY+102,class:'acceleration-line','marker-end':'url(#arrowA)'}));
+    el.appendChild(svg('text',{x:currentX+dir*len/2,y:axisY+126,'text-anchor':'middle'},'aₓ = '+num(m.a,2)));
+  }
+}
+function graphScale(models,kind,tMax){
+  const values=[];
+  models.filter(Boolean).forEach(function(model){
+    for(let i=0;i<=100;i++){
+      const t=tMax*i/100;
+      values.push(kind==='x'?positionAt(model,Math.min(t,model.duration)):velocityAt(model,Math.min(t,model.duration)));
     }
-    for(let i=0;i<=4;i++){
-      const y=yMin+(yMax-yMin)*i/4;
-      const gy=Y(y);
-      svg.appendChild(svgEl('line',{x1:pad.l,y1:gy,x2:W-pad.r,y2:gy,class:'grid'}));
-      svg.appendChild(svgEl('text',{x:pad.l-8,y:gy+4,'text-anchor':'end'},num(y,1)));
-    }
-    if(yMin<=0&&yMax>=0)svg.appendChild(svgEl('line',{x1:pad.l,y1:Y(0),x2:W-pad.r,y2:Y(0),class:'axis'}));
-    svg.appendChild(svgEl('line',{x1:pad.l,y1:pad.t,x2:pad.l,y2:H-pad.b,class:'axis'}));
+  });
+  let min=Math.min.apply(null,values),max=Math.max.apply(null,values);
+  if(min===max){min-=1;max+=1}
+  const pad=(max-min)*.14;
+  min-=pad;max+=pad;
+  if(min>0)min=0;if(max<0)max=0;
+  return [min,max];
+}
+function drawChart(el,kind,options){
+  const opts=options||{},model=opts.model||state.model;
+  const ghosts=opts.ghosts||[];
+  const W=520,H=270,p={l:50,r:18,t:18,b:38};
+  const tMax=opts.tMax||Math.max.apply(null,[model.duration].concat(ghosts.map(function(g){return g.model.duration;})));
+  const scale=graphScale([model].concat(ghosts.map(function(g){return g.model;})),kind,tMax);
+  const yMin=scale[0],yMax=scale[1];
+  const X=function(t){return p.l+t/tMax*(W-p.l-p.r);};
+  const Y=function(y){return p.t+(yMax-y)/(yMax-yMin)*(H-p.t-p.b);};
+  const fn=function(m,t){return kind==='x'?positionAt(m,t):velocityAt(m,t);};
+  el.replaceChildren();
+
+  for(let i=0;i<=5;i++){
+    const t=tMax*i/5,x=X(t);
+    el.appendChild(svg('line',{x1:x,y1:p.t,x2:x,y2:H-p.b,class:'grid'}));
+    el.appendChild(svg('text',{x:x,y:H-13,'text-anchor':'middle'},num(t,1)));
+  }
+  for(let i=0;i<=4;i++){
+    const y=yMin+(yMax-yMin)*i/4,yy=Y(y);
+    el.appendChild(svg('line',{x1:p.l,y1:yy,x2:W-p.r,y2:yy,class:'grid'}));
+    el.appendChild(svg('text',{x:p.l-7,y:yy+4,'text-anchor':'end'},num(y,1)));
+  }
+  if(opts.nthBand){
+    const s=opts.nthBand.start,e=opts.nthBand.end;
+    el.appendChild(svg('rect',{x:X(s),y:p.t,width:Math.max(0,X(e)-X(s)),height:H-p.t-p.b,class:'nth-band'}));
+  }
+  if(yMin<=0&&yMax>=0)el.appendChild(svg('line',{x1:p.l,y1:Y(0),x2:W-p.r,y2:Y(0),class:'axis'}));
+  el.appendChild(svg('line',{x1:p.l,y1:p.t,x2:p.l,y2:H-p.b,class:'axis'}));
+
+  function pathFor(m,className){
     let d='';
-    samples.forEach(function(p,i){d+=(i?'L':'M')+X(p.t)+' '+Y(p.y)+' ';});
-    svg.appendChild(svgEl('path',{d:d,class:className||'curve'}));
-    svg.appendChild(svgEl('text',{x:W-12,y:H-10,'text-anchor':'end'},'t, с'));
-    svg.appendChild(svgEl('text',{x:12,y:20},yLabel));
-    if(cursorT!=null){
-      const y=fn(cursorT),cx=X(cursorT),cy=Y(y);
-      svg.appendChild(svgEl('line',{x1:cx,y1:pad.t,x2:cx,y2:H-pad.b,class:'cursor'}));
-      svg.appendChild(svgEl('circle',{cx:cx,cy:cy,r:5,class:'dot'}));
+    const end=Math.min(m.duration,tMax);
+    for(let i=0;i<=120;i++){
+      const t=end*i/120,y=fn(m,t);
+      d+=(i?'L':'M')+X(t)+' '+Y(y)+' ';
     }
+    el.appendChild(svg('path',{d:d,class:className}));
   }
+  ghosts.forEach(function(g){pathFor(g.model,g.className);});
+  pathFor(model,kind==='x'?'curve-x':'curve-v');
 
-  function renderCoefficients(){
-    const p=equations[document.getElementById('equationSelect').value];
-    document.getElementById('equationText').textContent=p.label;
-    document.getElementById('coefX0').textContent='x₀ = '+num(p.x0)+' м';
-    document.getElementById('coefV0').textContent='v₀ₓ = '+num(p.v0)+' м/с';
-    document.getElementById('coefA').textContent='aₓ = '+num(p.a)+' м/с²';
-    document.getElementById('coefReadout').textContent='x₀ = '+num(p.x0)+' · v₀ₓ = '+num(p.v0)+' · aₓ = '+num(p.a);
-    drawGraph(document.getElementById('coefXGraph'),function(t){return xAt(p,t)},5,'x, м','curve');
-    drawGraph(document.getElementById('coefVGraph'),function(t){return vAt(p,t)},5,'vₓ, м/с','velocity');
+  const cursor=clamp(opts.cursor==null?state.t:opts.cursor,0,model.duration);
+  const cy=Y(fn(model,cursor)),cx=X(cursor);
+  el.appendChild(svg('line',{x1:cx,y1:p.t,x2:cx,y2:H-p.b,class:'cursor'}));
+  el.appendChild(svg('circle',{cx:cx,cy:cy,r:5,class:'current-dot'}));
+  el.appendChild(svg('text',{x:W-12,y:H-13,'text-anchor':'end'},'t, с'));
+  el.appendChild(svg('text',{x:12,y:18},kind==='x'?'x, м':'vₓ, м/с'));
+
+  const drag=svg('rect',{x:p.l,y:p.t,width:W-p.l-p.r,height:H-p.t-p.b,class:'drag-surface',tabindex:'0','aria-label':'Перемещайте по горизонтали, чтобы изменить время'});
+  const setFromEvent=function(evt){
+    const rect=el.getBoundingClientRect();
+    const px=(evt.clientX-rect.left)/rect.width*W;
+    const tt=clamp((px-p.l)/(W-p.l-p.r)*tMax,0,model.duration);
+    setTime(tt,false);
+  };
+  drag.addEventListener('pointerdown',function(evt){draggingGraph=true;drag.setPointerCapture(evt.pointerId);setFromEvent(evt);});
+  drag.addEventListener('pointermove',function(evt){if(draggingGraph)setFromEvent(evt);});
+  drag.addEventListener('pointerup',function(){draggingGraph=false;pushHistory();});
+  drag.addEventListener('pointercancel',function(){draggingGraph=false;});
+  drag.addEventListener('keydown',function(evt){
+    if(evt.key==='ArrowLeft'||evt.key==='ArrowRight'){evt.preventDefault();setTime(state.t+(evt.key==='ArrowRight'?.1:-.1),true);}
+  });
+  el.appendChild(drag);
+}
+function renderMetrics(){
+  const m=state.model,s=motionAt(m,state.t),turn=stopTime(m);
+  $('metricX').textContent=num(s.x,2)+' м';
+  $('metricV').textContent=num(s.v,2)+' м/с';
+  $('metricA').textContent=num(m.a,2)+' м/с²';
+  $('metricDx').textContent=num(s.dx,2)+' м';
+  $('metricPath').textContent=num(s.path,2)+' м';
+  $('metricStop').textContent=turn==null?'нет':num(turn,2)+' с';
+  $('liveState').textContent='t = '+num(s.t,2)+' с · x = '+num(s.x,2)+' м · vₓ = '+num(s.v,2)+' м/с';
+  $('timeValue').textContent=num(s.t,2)+' с';
+  $('timeRange').value=s.t;
+  $('formulaX').textContent=equationText(m);
+  $('formulaV').textContent=velocityText(m);
+  $('formulaState').textContent='x('+num(s.t,2)+') = '+num(s.x,2)+' м; vₓ('+num(s.t,2)+') = '+num(s.v,2)+' м/с';
+
+  const maxV=Math.max(1,Math.abs(m.v0),Math.abs(velocityAt(m,m.duration)));
+  const maxA=Math.max(1,Math.abs(m.a),8);
+  const maxS=Math.max(1,pathBetween(m,0,m.duration));
+  $('barV').style.width=(Math.abs(s.v)/maxV*100)+'%';
+  $('barA').style.width=(Math.abs(m.a)/maxA*100)+'%';
+  $('barDx').style.width=(Math.abs(s.dx)/maxS*100)+'%';
+  $('barPath').style.width=(s.path/maxS*100)+'%';
+  $('barVValue').textContent=num(Math.abs(s.v),1);
+  $('barAValue').textContent=num(Math.abs(m.a),1);
+  $('barDxValue').textContent=num(Math.abs(s.dx),1);
+  $('barPathValue').textContent=num(s.path,1);
+
+  const title=$('annotationTitle'),text=$('annotationText');
+  if(Math.abs(s.v)<.05){
+    title.textContent='Момент остановки';
+    text.textContent='vₓ ≈ 0. Если ускорение сохраняет знак, сразу после этого момента направление движения изменится.';
+  }else if(Math.abs(m.a)<.05){
+    title.textContent='Граничный случай: равномерное движение';
+    text.textContent='aₓ = 0, поэтому скорость постоянна, а x(t) меняется линейно.';
+  }else if(s.v*m.a<0){
+    title.textContent='Тело тормозит';
+    text.textContent='Скорость и ускорение направлены в разные стороны: модуль скорости уменьшается.';
+  }else{
+    title.textContent='Тело разгоняется';
+    text.textContent='Скорость и ускорение имеют одинаковый знак: модуль скорости растёт.';
   }
-
-  function renderNth(){
-    const n=Number(document.getElementById('nthRange').value);
-    const p={x0:0,v0:2,a:.2};
-    const start=n-1,end=n;
-    const xs=xAt(p,start),xe=xAt(p,end),delta=xe-xs;
-    document.getElementById('nthValue').textContent=n+'-я';
-    document.getElementById('nthReadout').textContent='n = '+n+' · интервал ['+start+'; '+end+'] с';
-    document.getElementById('nthStart').textContent='x('+start+') = '+num(xs,1)+' м';
-    document.getElementById('nthEnd').textContent='x('+end+') = '+num(xe,1)+' м';
-    document.getElementById('nthDelta').textContent='Δx₍'+n+'₎ = '+num(delta,1)+' м';
-    document.getElementById('nthFormula').textContent='Δx₍'+n+'₎ = x('+end+') − x('+start+') = '+num(delta,1)+' м';
-
-    const svg=document.getElementById('nthAxis');
-    svg.replaceChildren();
-    const W=900,left=55,right=845,y=92,max=7;
-    svg.appendChild(svgEl('line',{x1:left,y1:y,x2:right,y2:y,class:'axis'}));
-    for(let i=0;i<=max;i++){
-      const x=left+(right-left)*i/max;
-      svg.appendChild(svgEl('line',{x1:x,y1:y-9,x2:x,y2:y+9,class:'tick'}));
-      svg.appendChild(svgEl('text',{x:x,y:y+35,'text-anchor':'middle'},i+' с'));
-    }
-    const sx=left+(right-left)*start/max;
-    const ex=left+(right-left)*end/max;
-    svg.appendChild(svgEl('line',{x1:sx,y1:y,x2:ex,y2:y,class:'focus'}));
-    svg.appendChild(svgEl('text',{x:(sx+ex)/2,y:y-26,'text-anchor':'middle'},n+'-я секунда'));
+  if(s.path-s.absDx>.05){
+    text.textContent+=' Путь уже больше |Δx|: тело успело сменить направление.';
   }
+}
+function renderNth(){
+  const n=nthSecond(state.model,state.nth),m=state.model;
+  $('nthLive').textContent='n = '+state.nth+' · ['+num(n.start,0)+'; '+num(n.end,0)+'] с';
+  $('nthValue').textContent=state.nth+'-я';
+  $('nthSideStatus').innerHTML='<strong>Интервал:</strong> ['+num(n.start,0)+'; '+num(n.end,0)+'] с.';
+  $('nthStart').textContent=num(n.x1,2)+' м';
+  $('nthEnd').textContent=num(n.x2,2)+' м';
+  $('nthDx').textContent=num(n.dx,2)+' м';
+  $('nthPath').textContent=num(n.path,2)+' м';
+  $('nthTotalDx').textContent=num(n.totalDx,2)+' м';
+  const ratio=Math.abs(n.dx)>1e-9?Math.abs(n.totalDx/n.dx):null;
+  $('nthRatio').textContent=ratio==null?'—':num(ratio,2)+'×';
+  $('nthEquation').textContent='Δx₍'+state.nth+'₎ = x('+num(n.end,0)+') − x('+num(n.start,0)+') = '+num(n.dx,2)+' м';
+  $('nthExplanation').textContent=state.nth+'-я секунда — промежуток от '+num(n.start,0)+' до '+num(n.end,0)+' с. Начальная координата x₀ сокращается в разности.';
+  const changed=hasDirectionChange(m,n.start,n.end);
+  $('nthDirectionStatus').className='status '+(changed?'warn':'');
+  $('nthDirectionStatus').innerHTML=changed?'<strong>Внутри секунды есть остановка.</strong> Поэтому путь нужно считать по двум участкам; s ≠ |Δx|.':'<strong>Направление не меняется.</strong> Поэтому путь на этой секунде равен |Δx|.';
 
-  function distanceFromZero(t){
-    const p={x0:0,v0:12,a:-4};
-    if(t<=3)return Math.abs(xAt(p,t)-xAt(p,0));
-    const turn=xAt(p,3);
-    return Math.abs(turn-xAt(p,0))+Math.abs(xAt(p,t)-turn);
+  const el=$('nthSvg');el.replaceChildren();
+  const W=900,left=62,right=842,y1=90,y2=190,max=Math.max(1,Math.floor(m.duration));
+  const X=function(t){return left+t/max*(right-left);};
+  el.appendChild(svg('text',{x:left,y:34},'Первые n секунд: [0; '+state.nth+']'));
+  el.appendChild(svg('line',{x1:left,y1:y1,x2:X(Math.min(state.nth,max)),y2:y1,class:'total'}));
+  el.appendChild(svg('text',{x:left,y:150},state.nth+'-я секунда: ['+num(n.start,0)+'; '+num(n.end,0)+']'));
+  el.appendChild(svg('line',{x1:X(n.start),y1:y2,x2:X(n.end),y2:y2,class:'focus'}));
+  [y1,y2].forEach(function(y){el.appendChild(svg('line',{x1:left,y1:y,x2:right,y2:y,class:'axis'}));});
+  for(let i=0;i<=max;i++){
+    const x=X(i);
+    el.appendChild(svg('line',{x1:x,y1:y1-6,x2:x,y2:y1+6,class:'tick'}));
+    el.appendChild(svg('line',{x1:x,y1:y2-6,x2:x,y2:y2+6,class:'tick'}));
+    el.appendChild(svg('text',{x:x,y:y2+30,'text-anchor':'middle'},i+' с'));
   }
-  function renderTurn(){
-    const t=Number(document.getElementById('turnRange').value);
-    const p={x0:0,v0:12,a:-4};
-    const x=xAt(p,t),v=vAt(p,t),s=distanceFromZero(t);
-    document.getElementById('turnValue').textContent=num(t,1)+' с';
-    document.getElementById('turnReadout').textContent='t = '+num(t,1)+' с · vₓ = '+num(v,1)+' м/с';
-    document.getElementById('turnX').textContent='x = '+num(x,1)+' м';
-    document.getElementById('turnV').textContent='vₓ = '+num(v,1)+' м/с';
-    document.getElementById('turnS').textContent='s = '+num(s,1)+' м';
-    const status=document.getElementById('turnStatus');
-    status.classList.toggle('warning',t>3);
-    if(t<3)status.textContent='Скорость положительна: тело движется вдоль +Ox и приближается к точке остановки.';
-    else if(Math.abs(t-3)<.001)status.textContent='В этот момент тело останавливается. При дальнейшем движении знак скорости станет отрицательным.';
-    else status.textContent='Скорость отрицательна: направление уже изменилось, поэтому путь от t = 0 больше модуля текущего перемещения.';
-    drawGraph(document.getElementById('turnXGraph'),function(q){return xAt(p,q)},5,'x, м','curve',t);
-    drawGraph(document.getElementById('turnVGraph'),function(q){return vAt(p,q)},5,'vₓ, м/с','velocity',t);
-  }
-
-  function setMode(next){
-    mode=next;
-    document.querySelectorAll('.mode').forEach(function(button){
-      const on=button.dataset.mode===next;
-      button.setAttribute('aria-selected',on?'true':'false');
+  drawChart($('nthXGraph'),'x',{model:m,cursor:n.end,nthBand:n});
+  drawChart($('nthVGraph'),'v',{model:m,cursor:n.end,nthBand:n});
+}
+function renderCompare(){
+  const A=state.snapshots.A,B=state.snapshots.B;
+  $('compareLive').textContent='A — '+(A?'есть':'нет')+' · B — '+(B?'есть':'нет');
+  const ready=A&&B;
+  $('compareEmpty').hidden=Boolean(ready);
+  $('compareContent').hidden=!ready;
+  if(!ready)return;
+  const tMax=Math.max(A.model.duration,B.model.duration);
+  drawChart($('compareXGraph'),'x',{model:A.model,cursor:A.t,tMax:tMax,ghosts:[{model:B.model,className:'ghost-b'}]});
+  drawChart($('compareVGraph'),'v',{model:A.model,cursor:A.t,tMax:tMax,ghosts:[{model:B.model,className:'ghost-b'}]});
+  const am=motionAt(A.model,A.t),bm=motionAt(B.model,B.t);
+  const rows=[
+    ['t, с',A.t,B.t],
+    ['x₀, м',A.model.x0,B.model.x0],
+    ['v₀ₓ, м/с',A.model.v0,B.model.v0],
+    ['aₓ, м/с²',A.model.a,B.model.a],
+    ['x, м',am.x,bm.x],
+    ['vₓ, м/с',am.v,bm.v],
+    ['Δx, м',am.dx,bm.dx],
+    ['s, м',am.path,bm.path]
+  ];
+  const body=$('compareRows');body.replaceChildren();
+  rows.forEach(function(row){
+    const delta=row[2]-row[1],tr=document.createElement('tr');
+    [row[0],num(row[1],2),num(row[2],2),signed(delta,2)].forEach(function(value,index){
+      const td=document.createElement('td');td.textContent=value;
+      if(index===3&&Math.abs(delta)>1e-9)td.className=delta>0?'delta-pos':'delta-neg';
+      tr.appendChild(td);
     });
-    document.querySelectorAll('.panel').forEach(function(panel){panel.classList.toggle('on',panel.dataset.panel===next);});
-    document.getElementById('coefControls').hidden=next!=='coefficients';
-    document.getElementById('nthControls').hidden=next!=='nth';
-    document.getElementById('turnControls').hidden=next!=='turn';
-    history.replaceState(null,'','?mode='+next);
-    renderAll();
+    body.appendChild(tr);
+  });
+  $('compareHint').textContent='A: '+equationText(A.model)+' · B: '+equationText(B.model);
+}
+function renderGraphs(){
+  const ghosts=[];
+  if(state.snapshots.A)ghosts.push({model:state.snapshots.A.model,className:'ghost-a'});
+  if(state.snapshots.B)ghosts.push({model:state.snapshots.B.model,className:'ghost-b'});
+  drawChart($('xGraph'),'x',{ghosts:ghosts});
+  drawChart($('vGraph'),'v',{ghosts:ghosts});
+}
+function validateChallenge(){
+  const box=$('challengeStatus');
+  let ok=false,message='';
+  if(state.challenge==='stop'){
+    const s=motionAt(state.model,state.t);
+    ok=Math.abs(s.v)<.08;
+    message=ok?'Найдено: vₓ ≈ 0 при t = '+num(state.t,2)+' с.':'Сейчас vₓ = '+num(s.v,2)+' м/с. Ищите пересечение графика скорости с нулём.';
+  }else if(state.challenge==='nth'){
+    const n=nthSecond(state.model,state.nth);
+    ok=Math.abs(n.dx-2.7)<.02;
+    message=ok?'Найдено: '+state.nth+'-я секунда даёт Δx = '+num(n.dx,1)+' м.':'Сейчас Δx₍'+state.nth+'₎ = '+num(n.dx,1)+' м.';
+  }else{
+    const s=motionAt(state.model,state.t);
+    ok=s.path>s.absDx+.05;
+    message=ok?'Получено: s = '+num(s.path,2)+' м > |Δx| = '+num(s.absDx,2)+' м. Значит, направление уже менялось.':'Пока s = |Δx|. Продвиньте время за момент разворота.';
   }
-  function renderAll(){renderCoefficients();renderNth();renderTurn();}
-
-  document.querySelectorAll('.mode').forEach(function(button){
-    button.addEventListener('click',function(){setMode(button.dataset.mode);});
+  box.className='status '+(ok?'good':'');
+  box.innerHTML='<strong>'+(ok?'Выполнено.':'Статус:')+'</strong> '+message;
+}
+function renderPrediction(){
+  document.querySelectorAll('[data-predict]').forEach(function(btn){btn.classList.toggle('selected',btn.dataset.predict===state.prediction);});
+}
+function render(){
+  syncControls();
+  renderMotion();
+  renderMetrics();
+  renderGraphs();
+  renderNth();
+  renderCompare();
+  validateChallenge();
+  renderPrediction();
+  $('playPause').textContent=state.running?'Пауза':'Запустить';
+  document.querySelectorAll('[data-layer]').forEach(function(btn){btn.setAttribute('aria-pressed',state.layers[btn.dataset.layer]?'true':'false');});
+  $('detailContent').hidden=!state.detail;
+  $('detailToggle').textContent=state.detail?'Скрыть':'Показать';
+  $('detailToggle').setAttribute('aria-expanded',state.detail?'true':'false');
+}
+function animate(now){
+  if(!state.running)return;
+  if(!lastFrame)lastFrame=now;
+  const dt=Math.min(.05,(now-lastFrame)/1000)*state.speed;
+  lastFrame=now;
+  state.t+=dt;
+  if(state.t>=state.model.duration){state.t=state.model.duration;state.running=false;lastFrame=0;}
+  render();
+  if(state.running)raf=requestAnimationFrame(animate);
+}
+function togglePlay(){
+  if(state.running){state.running=false;lastFrame=0;if(raf)cancelAnimationFrame(raf);render();return;}
+  if(state.t>=state.model.duration-.001)state.t=0;
+  state.running=true;lastFrame=0;
+  if(reducedMotion){
+    // Motion is instructional content; only decorative transitions are disabled.
+  }
+  raf=requestAnimationFrame(animate);render();
+}
+function takeSnapshot(which){
+  state.snapshots[which]=snapshotCopy();
+  render();
+}
+function checkPrediction(){
+  if(!state.prediction){$('predictFeedback').textContent='Сначала выберите прогноз.';return;}
+  const base={x0:0,v0:12,a:-4,duration:5},strong={x0:0,v0:12,a:-8,duration:5};
+  const t1=stopTime(base),t2=stopTime(strong);
+  const correct='earlier';
+  const ok=state.prediction===correct;
+  $('predictFeedback').className='status '+(ok?'good':'warn');
+  $('predictFeedback').innerHTML='<strong>'+(ok?'Прогноз подтверждён.':'Проверьте идею ещё раз.')+'</strong> При aₓ = −4 м/с² остановка через '+num(t1,1)+' с, при aₓ = −8 м/с² — через '+num(t2,1)+' с. При той же v₀ более сильное торможение быстрее доводит vₓ до нуля.';
+  const bars=$('predictBars');bars.hidden=false;bars.innerHTML='';
+  [[t1,'a = −4'],[t2,'a = −8']].forEach(function(item){
+    const row=document.createElement('div');row.className='predict-line';
+    const label=document.createElement('span');label.textContent=item[1];
+    const track=document.createElement('div');track.className='predict-track';
+    const fill=document.createElement('div');fill.className='predict-fill';fill.style.width=(item[0]/Math.max(t1,t2)*100)+'%';
+    track.appendChild(fill);
+    const val=document.createElement('span');val.textContent=num(item[0],1)+' с';
+    row.append(label,track,val);bars.appendChild(row);
   });
-  document.getElementById('equationSelect').addEventListener('change',renderCoefficients);
-  document.getElementById('nthRange').addEventListener('input',renderNth);
-  document.getElementById('turnRange').addEventListener('input',renderTurn);
-  document.getElementById('resetButton').addEventListener('click',function(){
-    if(mode==='coefficients')document.getElementById('equationSelect').value='eq1';
-    if(mode==='nth')document.getElementById('nthRange').value='4';
-    if(mode==='turn')document.getElementById('turnRange').value='3';
-    renderAll();
-  });
+}
+const guideSteps=[
+  {text:'Измените x₀. Заметьте: график x(t) сдвигается вверх или вниз, а vₓ(t) не меняется.',field:'x0Range',apply:function(){setScenario('free',{record:false});setModelParam('x0',6,false);}},
+  {text:'Измените v₀ₓ. Начальное значение графика vₓ(t) меняется, а у x(t) меняется начальный наклон.',field:'v0Range',apply:function(){setScenario('free',{record:false});setModelParam('v0',4,false);}},
+  {text:'Измените aₓ. График vₓ(t) меняет наклон, а x(t) — кривизну. Коэффициент при t² равен aₓ/2.',field:'aRange',apply:function(){setScenario('free',{record:false});setModelParam('a',-2,false);}},
+  {text:'Найдите момент vₓ = 0. В этот момент тело останавливается; после него знак скорости может измениться.',field:'timeRange',apply:function(){setScenario('turn',{record:false});state.t=3;}},
+  {text:'Перейдите к n-й секунде. Сравните [0; n] и [n−1; n], затем проверьте, меняется ли направление внутри секунды.',field:'nthRange',apply:function(){setScenario('nthLesson',{record:false});state.nth=4;setView('nth');}}
+];
+function renderGuide(){
+  const g=guideSteps[state.guide];
+  $('guideStep').textContent='Шаг '+(state.guide+1)+' из '+guideSteps.length;
+  $('guideText').textContent=g.text;
+  $('guidePrev').disabled=state.guide===0;
+  $('guideNext').disabled=state.guide===guideSteps.length-1;
+  document.querySelectorAll('.highlight-control').forEach(function(el){el.classList.remove('highlight-control');});
+  const field=$(g.field);if(field)field.closest('.range-row')?.classList.add('highlight-control');
+}
+function startChallenge(){
+  state.challenge=$('challengeSelect').value;
+  if(state.challenge==='stop'){
+    setScenario('turn',{record:false});state.t=1;setView('motion');
+    $('challengePrompt').textContent='Передвиньте время так, чтобы vₓ стало равно нулю.';
+  }else if(state.challenge==='nth'){
+    setScenario('nthLesson',{record:false});state.nth=1;setView('nth');
+    $('challengePrompt').textContent='Меняйте n и найдите секунду, где Δx = 2,7 м.';
+  }else{
+    setScenario('turn',{record:false});state.t=1;setView('motion');
+    $('challengePrompt').textContent='Продвиньте время так, чтобы путь стал больше модуля перемещения.';
+  }
+  syncControls();render();pushHistory();
+}
 
-  const requested=new URLSearchParams(location.search).get('mode');
-  if(['coefficients','nth','turn'].includes(requested))mode=requested;
-  setMode(mode);
+try{
+  const saved=localStorage.getItem('volodia-230926-lab-theme');
+  if(saved==='dark'||saved==='light')root.dataset.theme=saved;
+}catch(e){}
+$('themeToggle').addEventListener('click',function(){
+  root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+  try{localStorage.setItem('volodia-230926-lab-theme',root.dataset.theme);}catch(e){}
+  render();
+});
+document.querySelectorAll('.view-tab').forEach(function(btn){btn.addEventListener('click',function(){setView(btn.dataset.view);});});
+$('scenarioSelect').addEventListener('change',function(){setScenario(this.value);});
+$('makeFree').addEventListener('click',function(){setScenario('free');});
+[
+  ['x0Range','x0'],['v0Range','v0'],['aRange','a'],['durationRange','duration']
+].forEach(function(pair){
+  const el=$(pair[0]);
+  el.addEventListener('input',function(){setModelParam(pair[1],this.value,false);});
+  el.addEventListener('change',function(){pushHistory();});
+});
+$('timeRange').addEventListener('input',function(){setTime(this.value,false);});
+$('timeRange').addEventListener('change',function(){pushHistory();});
+$('nthRange').addEventListener('input',function(){state.nth=Number(this.value);render();});
+$('nthRange').addEventListener('change',function(){pushHistory();});
+$('playPause').addEventListener('click',togglePlay);
+$('stepBack').addEventListener('click',function(){setTime(state.t-.1,true);});
+$('stepForward').addEventListener('click',function(){setTime(state.t+.1,true);});
+$('replayBtn').addEventListener('click',function(){setTime(0,true);});
+$('speedSelect').addEventListener('change',function(){state.speed=Number(this.value)||1;render();});
+$('undoBtn').addEventListener('click',function(){if(state.historyIndex>0)restoreHistory(state.historyIndex-1);});
+$('redoBtn').addEventListener('click',function(){if(state.historyIndex<state.history.length-1)restoreHistory(state.historyIndex+1);});
+$('snapshotABtn').addEventListener('click',function(){takeSnapshot('A');});
+$('snapshotBBtn').addEventListener('click',function(){takeSnapshot('B');});
+document.querySelectorAll('[data-layer]').forEach(function(btn){btn.addEventListener('click',function(){state.layers[btn.dataset.layer]=!state.layers[btn.dataset.layer];render();});});
+document.querySelectorAll('[data-predict]').forEach(function(btn){btn.addEventListener('click',function(){state.prediction=btn.dataset.predict;renderPrediction();});});
+$('predictCheck').addEventListener('click',checkPrediction);
+$('challengeStart').addEventListener('click',startChallenge);
+$('challengeSelect').addEventListener('change',function(){state.challenge=this.value;});
+$('guidePrev').addEventListener('click',function(){state.guide=Math.max(0,state.guide-1);renderGuide();});
+$('guideNext').addEventListener('click',function(){state.guide=Math.min(guideSteps.length-1,state.guide+1);renderGuide();});
+$('guideApply').addEventListener('click',function(){guideSteps[state.guide].apply();syncControls();render();renderGuide();pushHistory();});
+$('detailToggle').addEventListener('click',function(){state.detail=!state.detail;render();});
+
+const params=new URLSearchParams(location.search);
+const legacy=params.get('mode');
+if(legacy==='nth'){state.scenario='nthLesson';state.model=modelCopy(scenarios.nthLesson);state.nth=4;state.view='nth';}
+else if(legacy==='turn'){state.scenario='turn';state.model=modelCopy(scenarios.turn);state.t=3;state.view='motion';}
+else if(legacy==='coefficients'){state.scenario='eq1';state.model=modelCopy(scenarios.eq1);state.view='motion';}
+const requestedScenario=params.get('scenario');
+if(requestedScenario&&scenarios[requestedScenario]){state.scenario=requestedScenario;state.model=modelCopy(scenarios[requestedScenario]);}
+const requestedView=params.get('view');
+if(['motion','nth','compare'].includes(requestedView))state.view=requestedView;
+
+syncControls();setView(state.view);renderGuide();pushHistory();render();
 })();
 </script>
 </body>
