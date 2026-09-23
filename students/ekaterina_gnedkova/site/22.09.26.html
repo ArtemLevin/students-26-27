@@ -167,7 +167,7 @@ svg .point-a{fill:var(--vector-a)}svg text{fill:var(--text-primary);font:12px sy
 @media(max-width:390px){main{width:min(100% - 1rem,76rem)}.cover h1{font-size:3.25rem}.topbar{padding:.55rem .5rem;gap:.3rem}.identity span{display:none}.topbar a,.topbar button{padding:.45rem .5rem}.task{grid-template-columns:2.9rem minmax(0,1fr)}}
 @media(max-width:320px){.cover h1{font-size:2.8rem}.identity strong{font-size:.88rem}.print-action{display:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
-@media print{html{color-scheme:light}:root{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#f3f3f3;--text-primary:#111;--text-secondary:#444;--border-subtle:#ccc;--border-strong:#777;--accent:#075b5e}.topbar,.route,.studio-controls,.stepper-nav,.stepper-actions,.quiz-actions,.progress-track{display:none!important}body{background:#fff}main{width:100%;max-width:none}.cover{min-height:auto;display:block;padding:1.5rem 0 2rem}.cover h1{font-size:42pt}.key-formula{min-height:auto;border:0;padding:1rem 0;display:block}.vector-mark{padding:0;background:#fff}.lesson-section{padding:1.3rem 0}.vector-studio{position:relative;top:auto;box-shadow:none;break-inside:avoid}[data-scene][hidden],.stepper-panel[hidden]{display:block!important}.stepper-panel{min-height:auto}.answers:not([open]) .answer-grid{display:grid}.answers summary,.quiz-feedback{display:none}.print-only{display:block}.task,.error,.example,.rule-band{break-inside:avoid}a{color:#111;text-decoration:none}}
+@media print{html{color-scheme:light}:root{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#f3f3f3;--text-primary:#111;--text-secondary:#444;--border-subtle:#ccc;--border-strong:#777;--accent:#075b5e}.topbar,.route,.studio-controls,.stepper-nav,.stepper-actions,.quiz-actions,.progress-track,.scenario-row,.lab-toolbar,.lab-legend,.lab-details,.angle-control,.history-actions,.active-learning{display:none!important}body{background:#fff}main{width:100%;max-width:none}.cover{min-height:auto;display:block;padding:1.5rem 0 2rem}.cover h1{font-size:42pt}.key-formula{min-height:auto;border:0;padding:1rem 0;display:block}.vector-mark{padding:0;background:#fff}.lesson-section{padding:1.3rem 0}.vector-studio{position:relative;top:auto;box-shadow:none;break-inside:avoid}[data-scene][hidden],.stepper-panel[hidden]{display:block!important}.stepper-panel{min-height:auto}.answers:not([open]) .answer-grid{display:grid}.answers summary,.quiz-feedback{display:none}.print-only{display:block}.task,.error,.example,.rule-band{break-inside:avoid}a{color:#111;text-decoration:none}}
 </style>
 </head>
 <body>
@@ -342,12 +342,12 @@ svg .point-a{fill:var(--vector-a)}svg text{fill:var(--text-primary);font:12px sy
     <section class="compare-panel" aria-labelledby="compareTitle">
       <h4 id="compareTitle">До / после</h4>
       <table class="compare-table">
-        <thead><tr><th>Величина</th><th>Запомнено</th><th>Сейчас</th></tr></thead>
+        <thead><tr><th>Величина</th><th>Запомнено</th><th>Сейчас</th><th>Изменение</th></tr></thead>
         <tbody>
-          <tr><td>a</td><td id="cmpAOld">—</td><td id="cmpANow">—</td></tr>
-          <tr><td>b</td><td id="cmpBOld">—</td><td id="cmpBNow">—</td></tr>
-          <tr><td>a · b</td><td id="cmpDotOld">—</td><td id="cmpDotNow">—</td></tr>
-          <tr><td>φ</td><td id="cmpAngleOld">—</td><td id="cmpAngleNow">—</td></tr>
+          <tr><td>a</td><td id="cmpAOld">—</td><td id="cmpANow">—</td><td id="cmpADelta">—</td></tr>
+          <tr><td>b</td><td id="cmpBOld">—</td><td id="cmpBNow">—</td><td id="cmpBDelta">—</td></tr>
+          <tr><td>a · b</td><td id="cmpDotOld">—</td><td id="cmpDotNow">—</td><td id="cmpDotDelta">—</td></tr>
+          <tr><td>φ</td><td id="cmpAngleOld">—</td><td id="cmpAngleNow">—</td><td id="cmpAngleDelta">—</td></tr>
         </tbody>
       </table>
     </section>
@@ -539,6 +539,7 @@ var labEls={
   undo:document.getElementById('undoLab'),redo:document.getElementById('redoLab'),
   cmpAOld:document.getElementById('cmpAOld'),cmpANow:document.getElementById('cmpANow'),cmpBOld:document.getElementById('cmpBOld'),cmpBNow:document.getElementById('cmpBNow'),
   cmpDotOld:document.getElementById('cmpDotOld'),cmpDotNow:document.getElementById('cmpDotNow'),cmpAngleOld:document.getElementById('cmpAngleOld'),cmpAngleNow:document.getElementById('cmpAngleNow'),
+  cmpADelta:document.getElementById('cmpADelta'),cmpBDelta:document.getElementById('cmpBDelta'),cmpDotDelta:document.getElementById('cmpDotDelta'),cmpAngleDelta:document.getElementById('cmpAngleDelta'),
   graphDot:document.getElementById('cosGraphDot'),graph:document.getElementById('cosGraph'),curve:document.getElementById('cosCurve'),challengeFeedback:document.getElementById('challengeFeedback')
 };
 var coordInputs=[].slice.call(document.querySelectorAll('.coord-grid input[data-point]'));
@@ -568,8 +569,9 @@ function insightFor(d){
 }
 function renderCompare(d){
   labEls.cmpANow.textContent=vecText(d.a);labEls.cmpBNow.textContent=vecText(d.b);labEls.cmpDotNow.textContent=fmt(d.dot);labEls.cmpAngleNow.textContent=d.angle===null?'не определён':fmt(d.angle,1)+'°';
-  if(!labState.ghost){labEls.cmpAOld.textContent=labEls.cmpBOld.textContent=labEls.cmpDotOld.textContent=labEls.cmpAngleOld.textContent='—';return}
+  if(!labState.ghost){labEls.cmpAOld.textContent=labEls.cmpBOld.textContent=labEls.cmpDotOld.textContent=labEls.cmpAngleOld.textContent=labEls.cmpADelta.textContent=labEls.cmpBDelta.textContent=labEls.cmpDotDelta.textContent=labEls.cmpAngleDelta.textContent='—';return}
   var g=derive(labState.ghost);labEls.cmpAOld.textContent=vecText(g.a);labEls.cmpBOld.textContent=vecText(g.b);labEls.cmpDotOld.textContent=fmt(g.dot);labEls.cmpAngleOld.textContent=g.angle===null?'не определён':fmt(g.angle,1)+'°';
+  labEls.cmpADelta.textContent=vecText({x:d.a.x-g.a.x,y:d.a.y-g.a.y});labEls.cmpBDelta.textContent=vecText({x:d.b.x-g.b.x,y:d.b.y-g.b.y});labEls.cmpDotDelta.textContent=fmt(d.dot-g.dot);labEls.cmpAngleDelta.textContent=(d.angle===null||g.angle===null)?'—':fmt(d.angle-g.angle,1)+'°';
 }
 function renderChallenge(d){
   var buttons=[].slice.call(document.querySelectorAll('[data-challenge]'));buttons.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.challenge===labState.activeChallenge))});
