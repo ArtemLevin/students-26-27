@@ -17,6 +17,10 @@
   --radius-sm:.45rem;--radius-md:.85rem;
   --motion-fast:140ms;--motion-normal:240ms;
   --vector-a:#0b6f72;--vector-b:#9d4d4d;
+  --glow-accent:rgba(11,111,114,.22);
+  --glow-warm:rgba(183,139,70,.16);
+  --dust-light:rgba(255,253,248,.58);
+  --dust-soft:rgba(11,111,114,.13);
 }
 html[data-theme="dark"]{
   color-scheme:dark;
@@ -27,12 +31,24 @@ html[data-theme="dark"]{
   --success:#78bd9e;--danger:#db8b8b;--warning:#d7ad64;--focus-ring:#8bd7d7;
   --shadow-low:0 10px 28px rgba(0,0,0,.18);
   --vector-a:#69bfc0;--vector-b:#db8b8b;
+  --glow-accent:rgba(105,191,192,.18);
+  --glow-warm:rgba(215,173,100,.11);
+  --dust-light:rgba(255,255,255,.10);
+  --dust-soft:rgba(105,191,192,.09);
 }
 html[data-theme="dark"] .cover::before{opacity:.17;filter:saturate(.42) brightness(.72) contrast(1.05)}
-html[data-theme="dark"] #theory::before,html[data-theme="dark"] #geometry::before{opacity:.07;filter:saturate(.35) brightness(.72) contrast(1.08)}
+html[data-theme="dark"] #theory::before,html[data-theme="dark"] #geometry::before,html[data-theme="dark"] #operations::before,html[data-theme="dark"] #scalar::before,html[data-theme="dark"] #training::before{opacity:.055;filter:saturate(.32) brightness(.68) contrast(1.08)}
+html[data-theme="dark"] .route::before{opacity:.075;filter:saturate(.3) brightness(.68)}
+html[data-theme="dark"] .ambient-dust{opacity:.42;mix-blend-mode:screen}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--surface-page);color:var(--text-primary);font:400 1rem/1.65 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+body{position:relative;isolation:isolate;margin:0;background:var(--surface-page);color:var(--text-primary);font:400 1rem/1.65 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+.ambient-dust{position:fixed;inset:-8vh -8vw;z-index:0;pointer-events:none;overflow:hidden;opacity:.62;mix-blend-mode:soft-light}
+.ambient-dust::before,.ambient-dust::after{content:"";position:absolute;inset:-8%;background-repeat:repeat;will-change:transform}
+.ambient-dust::before{background-image:radial-gradient(circle at 14% 22%,var(--dust-light) 0 1px,transparent 1.7px),radial-gradient(circle at 64% 18%,var(--dust-light) 0 .8px,transparent 1.5px),radial-gradient(circle at 38% 74%,var(--dust-light) 0 1.15px,transparent 1.9px),radial-gradient(circle at 82% 68%,var(--dust-soft) 0 1px,transparent 1.8px),radial-gradient(circle at 55% 47%,var(--dust-light) 0 .65px,transparent 1.35px);background-size:260px 260px,310px 310px,350px 350px,290px 290px,215px 215px;animation:dustDriftA 30s linear infinite}
+.ambient-dust::after{background-image:radial-gradient(circle at 24% 64%,var(--dust-soft) 0 .9px,transparent 1.65px),radial-gradient(circle at 72% 32%,var(--dust-light) 0 1px,transparent 1.75px),radial-gradient(circle at 48% 12%,var(--dust-light) 0 .7px,transparent 1.4px);background-size:330px 330px,390px 390px,245px 245px;opacity:.65;animation:dustDriftB 42s linear infinite}
+@keyframes dustDriftA{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(-14px,10px,0)}100%{transform:translate3d(-28px,18px,0)}}
+@keyframes dustDriftB{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(11px,-8px,0)}100%{transform:translate3d(22px,-15px,0)}}
 a{color:var(--accent);text-underline-offset:.18em}
 button,a{touch-action:manipulation}
 button{font:inherit}
@@ -45,7 +61,7 @@ button{font:inherit}
 .topbar nav{display:flex;gap:.25rem;flex-wrap:wrap}
 .topbar a,.topbar button{min-height:42px;display:inline-flex;align-items:center;justify-content:center;padding:.5rem .72rem;border:1px solid transparent;background:transparent;color:var(--text-secondary);text-decoration:none;border-radius:var(--radius-sm)}
 .topbar a:hover,.topbar button:hover{color:var(--text-primary);border-color:var(--border-subtle)}
-main{width:min(100% - clamp(1.2rem,5vw,5rem),76rem);margin:0 auto}
+main{position:relative;z-index:1;width:min(100% - clamp(1.2rem,5vw,5rem),76rem);margin:0 auto}
 .cover{position:relative;isolation:isolate;overflow:hidden;min-height:72vh;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(18rem,.75fr);gap:clamp(2rem,7vw,7rem);align-items:center;padding:clamp(3rem,8vw,7rem) 0 clamp(2rem,6vw,5rem);border-bottom:1px solid var(--border-subtle)}
 .cover::before{content:"";position:absolute;z-index:0;inset:0 -7vw 0 39%;pointer-events:none;background:linear-gradient(90deg,var(--surface-page) 0%,color-mix(in srgb,var(--surface-page) 84%,transparent) 19%,color-mix(in srgb,var(--surface-page) 30%,transparent) 62%,transparent 100%),url("../images/vector-atlas.png") 52% 48%/cover no-repeat;opacity:.33;filter:saturate(.68) contrast(.98)}
 .cover::after{content:"";position:absolute;z-index:0;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 62%,var(--surface-page) 100%)}
@@ -57,18 +73,23 @@ main{width:min(100% - clamp(1.2rem,5vw,5rem),76rem);margin:0 auto}
 .key-formula{position:relative;min-height:24rem;display:grid;place-items:center;border-left:1px solid var(--border-subtle);padding-left:clamp(1.5rem,4vw,4rem)}
 .key-formula::before,.key-formula::after{content:"";position:absolute;background:var(--border-subtle);pointer-events:none}
 .key-formula::before{left:20%;right:3%;top:50%;height:1px}.key-formula::after{top:10%;bottom:10%;left:50%;width:1px}
-.vector-mark{position:relative;z-index:2;width:min(100%,23rem);background:var(--surface-page);padding:1.1rem 0}
+.vector-mark{position:relative;z-index:2;width:min(100%,23rem);background:color-mix(in srgb,var(--surface-page) 91%,transparent);padding:1.1rem 0;border-radius:var(--radius-md);box-shadow:0 0 0 1px color-mix(in srgb,var(--border-subtle) 68%,transparent),0 20px 80px var(--glow-accent)}
+.vector-mark::before{content:"";position:absolute;z-index:-1;inset:-4rem -5rem;border-radius:50%;pointer-events:none;background:radial-gradient(circle,var(--glow-accent) 0%,color-mix(in srgb,var(--glow-accent) 50%,transparent) 35%,transparent 72%);filter:blur(18px);opacity:.92}
 .vector-mark .formula{font:700 clamp(1.7rem,3.5vw,3rem)/1.2 "Cambria Math",Cambria,serif;color:var(--accent)}
 .vector-mark p{margin:.6rem 0 0;color:var(--text-secondary)}
-.route{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-bottom:1px solid var(--border-subtle)}
+.route{position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-bottom:1px solid var(--border-subtle)}
+.route::before{content:"";position:absolute;z-index:-1;inset:-55% -2rem -75%;pointer-events:none;background:linear-gradient(90deg,var(--surface-page) 0%,transparent 22%,transparent 78%,var(--surface-page) 100%),url("../images/vector-route.png") 50% 54%/cover no-repeat;opacity:.13;filter:saturate(.45) contrast(.92)}
 .route a{padding:1rem .8rem;text-decoration:none;color:var(--text-secondary);border-right:1px solid var(--border-subtle);font-size:.88rem}
 .route a:first-child{border-left:1px solid var(--border-subtle)}.route b{display:block;color:var(--accent);font:700 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;margin-bottom:.25rem}
 .lesson-section{padding:clamp(3rem,8vw,6rem) 0;border-bottom:1px solid var(--border-subtle)}
-#theory,#geometry{position:relative;isolation:isolate;overflow:hidden}
-#theory::before,#geometry::before{content:"";position:absolute;z-index:0;pointer-events:none;background-repeat:no-repeat;background-size:cover}
+#theory,#geometry,#operations,#scalar,#training{position:relative;isolation:isolate;overflow:hidden}
+#theory::before,#geometry::before,#operations::before,#scalar::before,#training::before{content:"";position:absolute;z-index:0;pointer-events:none;background-repeat:no-repeat;background-size:cover}
 #theory::before{width:min(42rem,68vw);height:min(27rem,44vw);right:-7rem;top:1.2rem;background-image:linear-gradient(90deg,var(--surface-page) 0%,transparent 38%),url("../images/vector-mathematics.png");background-position:center;opacity:.10;filter:saturate(.45) contrast(.94)}
 #geometry::before{width:min(40rem,64vw);height:min(31rem,50vw);left:-9rem;bottom:1.8rem;background-image:linear-gradient(270deg,var(--surface-page) 0%,transparent 42%),url("../images/vector-cartography.png");background-position:58% 44%;opacity:.105;filter:saturate(.48) contrast(.96)}
-#theory>* ,#geometry>*{position:relative;z-index:1}
+#operations::before{width:min(34rem,58vw);height:min(24rem,40vw);right:-8rem;bottom:1rem;background-image:linear-gradient(90deg,var(--surface-page) 0%,transparent 44%),url("../images/vector-atlas.png");background-position:44% 56%;opacity:.075;filter:saturate(.45) contrast(.95)}
+#scalar::before{width:min(38rem,62vw);height:min(28rem,46vw);left:-10rem;top:2rem;background-image:linear-gradient(270deg,var(--surface-page) 0%,transparent 43%),url("../images/vector-mathematics.png");background-position:62% 43%;opacity:.07;filter:saturate(.42) contrast(.95)}
+#training::before{inset:0 -7rem 0 42%;background-image:linear-gradient(90deg,var(--surface-page) 0%,color-mix(in srgb,var(--surface-page) 62%,transparent) 36%,transparent 76%),url("../images/vector-route.png");background-position:54% 48%;opacity:.12;filter:saturate(.48) contrast(.94)}
+#theory>* ,#geometry>*,#operations>*,#scalar>*,#training>*{position:relative;z-index:1}
 .section-head{display:grid;grid-template-columns:minmax(10rem,.36fr) minmax(0,1fr);gap:2rem;align-items:start;margin-bottom:2rem}
 .section-index{color:var(--accent);font:700 .76rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.08em}
 .section-head h2{margin:0;font:700 clamp(2rem,4vw,3.6rem)/1.05 Georgia,Cambria,serif;letter-spacing:-.035em}
@@ -93,7 +114,9 @@ svg .va{stroke:var(--vector-a);fill:none;stroke-width:3}svg .vb{stroke:var(--vec
 svg .point-a{fill:var(--vector-a)}svg text{fill:var(--text-primary);font:12px system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
 
 [data-scene][hidden]{display:none}
-.vector-lab{margin-top:clamp(2.4rem,6vw,4.5rem);padding-top:1.4rem;border-top:2px solid var(--accent)}
+.vector-lab{position:relative;isolation:isolate;margin-top:clamp(2.4rem,6vw,4.5rem);padding-top:1.4rem;border-top:2px solid var(--accent)}
+.vector-lab::before{content:"";position:absolute;z-index:-2;inset:-2rem -6vw -3rem;pointer-events:none;background:linear-gradient(180deg,transparent 0%,color-mix(in srgb,var(--surface-page) 78%,transparent) 72%,var(--surface-page) 100%),url("../images/vector-route.png") 52% 47%/cover no-repeat;opacity:.065;filter:saturate(.42) contrast(.94)}
+.vector-lab::after{content:"";position:absolute;z-index:-1;width:min(46rem,88vw);height:25rem;left:50%;top:7rem;transform:translateX(-50%);pointer-events:none;border-radius:50%;background:radial-gradient(ellipse,var(--glow-accent) 0%,color-mix(in srgb,var(--glow-accent) 55%,transparent) 31%,transparent 72%);filter:blur(34px);opacity:.74}
 .lab-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(17rem,.55fr);gap:1.5rem 3rem;align-items:end}
 .lab-intro h3{margin:.2rem 0;font:700 clamp(1.7rem,3vw,2.6rem)/1.05 Georgia,Cambria,serif;letter-spacing:-.025em}
 .lab-intro p{margin:.4rem 0;color:var(--text-secondary)}
@@ -105,7 +128,8 @@ svg .point-a{fill:var(--vector-a)}svg text{fill:var(--text-primary);font:12px sy
 }
 .scenario-row button[aria-pressed="true"],.legend-button[aria-pressed="true"],.challenge-row button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--text-primary)}
 .lab-shell{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(19rem,.65fr);gap:1rem;align-items:start}
-.lab-stage{min-width:0;background:var(--surface-raised);border:1px solid var(--border-subtle);box-shadow:var(--shadow-low)}
+.lab-stage{position:relative;min-width:0;background:var(--surface-raised);border:1px solid var(--border-subtle);box-shadow:var(--shadow-low),0 24px 70px color-mix(in srgb,var(--glow-accent) 48%,transparent),0 0 46px color-mix(in srgb,var(--glow-warm) 26%,transparent)}
+.lab-stage::before{content:"";position:absolute;inset:-1px;pointer-events:none;border-radius:inherit;box-shadow:inset 0 1px 0 color-mix(in srgb,var(--text-inverse) 48%,transparent);opacity:.65}
 .lab-stage-top{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;padding:.9rem 1rem;border-bottom:1px solid var(--border-subtle)}
 .lab-stage-top strong{display:block}.lab-stage-top span{font-size:.82rem;color:var(--text-secondary)}
 .lab-toolbar{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:flex-end}
@@ -172,15 +196,16 @@ svg .point-a{fill:var(--vector-a)}svg text{fill:var(--text-primary);font:12px sy
 .selfcheck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem 2rem}.selfcheck label{display:flex;gap:.7rem;align-items:flex-start;padding:.55rem 0;border-top:1px solid var(--border-subtle)}.selfcheck input{margin-top:.35rem}
 .progress-line{margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border-strong)}.progress-track{height:8px;background:var(--surface-soft);overflow:hidden;border-radius:999px}.progress-value{height:100%;width:0;background:var(--accent);transition:width var(--motion-normal) ease}
 .footer{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:2rem 0 4rem;color:var(--text-secondary);font-size:.85rem}.print-only{display:none}
-@media(max-width:900px){.cover{grid-template-columns:1fr;min-height:auto}.cover::before{inset:31% -18vw 0 12%;background-position:52% 52%;opacity:.21}.key-formula{min-height:17rem;border-left:0;border-top:1px solid var(--border-subtle);padding:2rem 0 0}.split{grid-template-columns:1fr}.vector-studio{position:relative;top:auto}.section-head{grid-template-columns:1fr;gap:.45rem}.errors,.selfcheck,.answer-grid{grid-template-columns:1fr}#theory::before{right:-15rem;top:2rem;width:38rem;height:24rem;opacity:.075}#geometry::before{left:-17rem;bottom:2rem;width:38rem;height:29rem;opacity:.075}}
+@media(max-width:900px){.cover{grid-template-columns:1fr;min-height:auto}.cover::before{inset:31% -18vw 0 12%;background-position:52% 52%;opacity:.21}.key-formula{min-height:17rem;border-left:0;border-top:1px solid var(--border-subtle);padding:2rem 0 0}.split{grid-template-columns:1fr}.vector-studio{position:relative;top:auto}.section-head{grid-template-columns:1fr;gap:.45rem}.errors,.selfcheck,.answer-grid{grid-template-columns:1fr}#theory::before{right:-15rem;top:2rem;width:38rem;height:24rem;opacity:.075}#geometry::before{left:-17rem;bottom:2rem;width:38rem;height:29rem;opacity:.075}#operations::before{right:-17rem;width:36rem;height:25rem;opacity:.055}#scalar::before{left:-18rem;width:38rem;height:27rem;opacity:.05}#training::before{inset:12% -15rem 0 18%;opacity:.08}.vector-lab::before{inset:0 -11vw -2rem;opacity:.045}.vector-lab::after{top:12rem;height:22rem;opacity:.58}}
 @media(max-width:768px){.topbar nav a[href^="#"]{display:none}.route{grid-template-columns:1fr}.route a{border-left:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)}.angle-strip{grid-template-columns:1fr}.angle-strip div{border-right:0;border-bottom:1px solid var(--border-subtle)}}
 @media(max-width:390px){main{width:min(100% - 1rem,76rem)}.cover h1{font-size:3.25rem}.cover::before{inset:39% -31vw 0 4%;opacity:.17}.topbar{padding:.55rem .5rem;gap:.3rem}.identity span{display:none}.topbar a,.topbar button{padding:.45rem .5rem}.task{grid-template-columns:2.9rem minmax(0,1fr)}}
 @media(max-width:320px){.cover h1{font-size:2.8rem}.identity strong{font-size:.88rem}.print-action{display:none}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
-@media print{html{color-scheme:light}:root{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#f3f3f3;--text-primary:#111;--text-secondary:#444;--border-subtle:#ccc;--border-strong:#777;--accent:#075b5e}.topbar,.route,.studio-controls,.stepper-nav,.stepper-actions,.quiz-actions,.progress-track,.scenario-row,.lab-toolbar,.lab-legend,.lab-details,.angle-control,.history-actions,.active-learning{display:none!important}body{background:#fff}main{width:100%;max-width:none}.cover::before,.cover::after,#theory::before,#geometry::before{display:none!important}.cover{min-height:auto;display:block;padding:1.5rem 0 2rem}.cover h1{font-size:42pt}.key-formula{min-height:auto;border:0;padding:1rem 0;display:block}.vector-mark{padding:0;background:#fff}.lesson-section{padding:1.3rem 0}.vector-studio{position:relative;top:auto;box-shadow:none;break-inside:avoid}[data-scene][hidden],.stepper-panel[hidden]{display:block!important}.stepper-panel{min-height:auto}.answers:not([open]) .answer-grid{display:grid}.answers summary,.quiz-feedback{display:none}.print-only{display:block}.task,.error,.example,.rule-band{break-inside:avoid}a{color:#111;text-decoration:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.ambient-dust{opacity:.42}}
+@media print{html{color-scheme:light}:root{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#f3f3f3;--text-primary:#111;--text-secondary:#444;--border-subtle:#ccc;--border-strong:#777;--accent:#075b5e}.topbar,.route,.studio-controls,.stepper-nav,.stepper-actions,.quiz-actions,.progress-track,.scenario-row,.lab-toolbar,.lab-legend,.lab-details,.angle-control,.history-actions,.active-learning{display:none!important}body{background:#fff}main{width:100%;max-width:none}.ambient-dust,.cover::before,.cover::after,.route::before,#theory::before,#geometry::before,#operations::before,#scalar::before,#training::before,.vector-lab::before,.vector-lab::after,.vector-mark::before{display:none!important}.cover{min-height:auto;display:block;padding:1.5rem 0 2rem}.cover h1{font-size:42pt}.key-formula{min-height:auto;border:0;padding:1rem 0;display:block}.vector-mark{padding:0;background:#fff}.lesson-section{padding:1.3rem 0}.vector-studio{position:relative;top:auto;box-shadow:none;break-inside:avoid}[data-scene][hidden],.stepper-panel[hidden]{display:block!important}.stepper-panel{min-height:auto}.answers:not([open]) .answer-grid{display:grid}.answers summary,.quiz-feedback{display:none}.print-only{display:block}.task,.error,.example,.rule-band{break-inside:avoid}a{color:#111;text-decoration:none}}
 </style>
 </head>
 <body>
+<div class="ambient-dust" aria-hidden="true"></div>
 <a class="skip" href="#content">К содержанию</a>
 <header class="topbar">
   <div class="identity"><strong>Екатерина Гнедкова</strong><span>ЕГЭ · профильная математика · 22.09.26</span></div>
