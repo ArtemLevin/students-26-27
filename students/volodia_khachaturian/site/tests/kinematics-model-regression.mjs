@@ -102,3 +102,92 @@ assert.ok(!/<script\s+src=/i.test(html),'lesson page must remain autonomous with
 assert.ok(!/<link[^>]+href=["']https?:/i.test(html),'lesson page must remain autonomous without external styles');
 
 console.log('Kinematics simulator regression: OK');
+
+
+// 23.09.26 — research simulator: one-state kinematics, n-th second and reversal.
+{
+  const lab=fs.readFileSync(path.join(here,'..','23.09.26-lab.html'),'utf8');
+  const labScripts=[...lab.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/gi)].map(match=>match[1]);
+  assert.ok(labScripts.length>0,'23.09 lab inline script must exist');
+  for(const source of labScripts)new vm.Script(source,{filename:'23.09.26-lab.inline.js'});
+
+  const labIds=[...lab.matchAll(/\\bid="([^"]+)"/g)].map(match=>match[1]);
+  assert.equal(new Set(labIds).size,labIds.length,'23.09 lab ids must be unique');
+
+  const labCore=lab.match(/\\/\\* MODEL_CORE_230926_START \\*\\/([\\s\\S]*?)\\/\\* MODEL_CORE_230926_END \\*\\//);
+  assert.ok(labCore,'23.09 simulator core marker must exist');
+  const ctx={};
+  vm.createContext(ctx);
+  vm.runInContext(labCore[1]+'\\nthis.api2309={positionAt,velocityAt,stopTime,pathBetween,motionAt,nthSecond,hasDirectionChange};',ctx);
+  const api=ctx.api2309;
+
+  // x = 12t - 2t²: stop at 3 s, then reversal makes path exceed |displacement|.
+  {
+    const m={x0:0,v0:12,a:-4,duration:5};
+    assert.equal(api.stopTime(m),3);
+    const at3=api.motionAt(m,3);
+    assert.equal(at3.x,18);
+    assert.equal(at3.v,0);
+    assert.equal(at3.path,18);
+    const at4=api.motionAt(m,4);
+    assert.equal(at4.x,16);
+    assert.equal(at4.v,-4);
+    assert.equal(at4.dx,16);
+    assert.equal(at4.path,20);
+    assert.ok(at4.path>at4.absDx);
+  }
+
+  // Lesson example: v0=2 m/s, a=0.2 m/s² -> 2.7 m on 4th second, 3.3 m on 7th.
+  {
+    const m={x0:0,v0:2,a:.2,duration:7};
+    const fourth=api.nthSecond(m,4);
+    const seventh=api.nthSecond(m,7);
+    assert.ok(Math.abs(fourth.dx-2.7)<1e-9);
+    assert.ok(Math.abs(fourth.path-2.7)<1e-9);
+    assert.ok(Math.abs(seventh.dx-3.3)<1e-9);
+  }
+
+  // x = 6 - 4t + t²: returns to x0 by t=4, but travels 8 m.
+  {
+    const m={x0:6,v0:-4,a:2,duration:5};
+    assert.equal(api.stopTime(m),2);
+    const at4=api.motionAt(m,4);
+    assert.equal(at4.x,6);
+    assert.equal(at4.dx,0);
+    assert.equal(at4.path,8);
+    assert.equal(api.hasDirectionChange(m,0,4),true);
+  }
+
+  // Boundary case a=0: no stop caused by acceleration, path equals |displacement|.
+  {
+    const m={x0:6,v0:-3,a:0,duration:5};
+    assert.equal(api.stopTime(m),null);
+    const at2=api.motionAt(m,2);
+    assert.equal(at2.x,0);
+    assert.equal(at2.path,6);
+    assert.equal(at2.path,at2.absDx);
+  }
+
+  for(const required of [
+    '<option value="free">Исследовать самому</option>',
+    'id="snapshotABtn"',
+    'id="snapshotBBtn"',
+    'id="predictCheck"',
+    'id="challengeStart"',
+    'id="guidePrev"',
+    'id="guideNext"',
+    'id="compareXGraph"',
+    'id="nthSvg"',
+    'data-layer="velocity"',
+    'requestAnimationFrame',
+    'pointerdown',
+    'prefers-reduced-motion',
+    'MODEL_CORE_230926_START'
+  ]) assert.ok(lab.includes(required),'23.09 simulator capability missing: '+required);
+
+  assert.ok(!/<script\\s+src=/i.test(lab),'23.09 lab must remain autonomous without external scripts');
+  assert.ok(!/<link[^>]+href=["']https?:/i.test(lab),'23.09 lab must remain autonomous without external styles');
+  assert.ok(!/console\\.log\\s*\\(/.test(lab),'23.09 lab must not ship debug console output');
+}
+
+console.log('23.09 research simulator regression: OK');
