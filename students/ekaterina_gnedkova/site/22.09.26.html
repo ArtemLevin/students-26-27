@@ -131,7 +131,7 @@ svg .point-a{fill:var(--vector-a)}svg text{fill:var(--text-primary);font:12px sy
 .relation-track{height:7px;background:var(--surface-soft);overflow:hidden;border-radius:999px}.relation-fill{height:100%;background:var(--accent);width:0}.relation-fill.b{background:var(--vector-b)}
 .cos-scale{position:relative;height:28px;margin-top:.8rem}.cos-scale::before{content:"";position:absolute;left:0;right:0;top:13px;height:1px;background:var(--border-strong)}.cos-scale::after{content:"";position:absolute;left:50%;top:7px;bottom:7px;width:1px;background:var(--border-strong)}
 .cos-marker{position:absolute;top:7px;width:12px;height:12px;border-radius:50%;background:var(--warning);transform:translateX(-50%);transition:left var(--motion-fast) ease}.cos-scale-labels{display:flex;justify-content:space-between;font-size:.68rem;color:var(--text-secondary)}
-.lab-details{border-bottom:1px solid var(--border-subtle)}.lab-details summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:700}.coord-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;padding:0 0 1rem}.coord-grid label{display:grid;gap:.25rem;font-size:.78rem;color:var(--text-secondary)}.coord-grid input[type="range"],.angle-control input[type="range"]{width:100%}
+.lab-details{border-bottom:1px solid var(--border-subtle)}.lab-details summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:700}.coord-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;padding:0 0 1rem}.coord-grid label{display:grid;gap:.25rem;font-size:.78rem;color:var(--text-secondary)}.coord-grid input[type="range"],.angle-control input[type="range"]{width:100%;accent-color:var(--accent)}
 .angle-control{padding:1rem 0;border-bottom:1px solid var(--border-subtle)}.angle-control label{display:flex;justify-content:space-between;gap:1rem;font-weight:700}.angle-control small{display:block;margin-top:.35rem;color:var(--text-secondary)}
 .history-actions{display:flex;gap:.4rem;flex-wrap:wrap;padding:1rem 0}
 .lab-lower{display:grid;grid-template-columns:minmax(0,1fr) minmax(18rem,.72fr);gap:1.2rem;margin-top:1.2rem}
@@ -508,7 +508,8 @@ function pushHistory(snapshot){if(!snapshot)return;var last=labState.history.len
 function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
 function snap(v){return Math.round(v*2)/2}
 function clean(v){return Math.abs(v)<1e-9?0:v}
-function fmt(v,digits){if(v===null||v===undefined||!Number.isFinite(v))return 'не определено';var n=clean(v);return Number.isInteger(n)?String(n):n.toFixed(digits===undefined?2:digits).replace(/\.?0+$/,'').replace('.',',')}
+function fmt(v,digits){if(v===null||v===undefined||!Number.isFinite(v))return 'не определено';var n=clean(v),raw=Number.isInteger(n)?String(n):n.toFixed(digits===undefined?2:digits).replace(/\.?0+$/,'').replace('.',',');return raw.replace('-','−')}
+function factor(v){var t=fmt(v);return v<0?'('+t+')':t}
 function vecText(v){return '('+fmt(v.x)+'; '+fmt(v.y)+')'}
 function lengthText(len,sq){if(Math.abs(sq-Math.round(sq))<1e-9){var root=Math.sqrt(Math.round(sq));if(Number.isInteger(root))return String(root);return '√'+Math.round(sq)+' ≈ '+fmt(len,2)}return fmt(len,2)}
 function derive(points){
@@ -584,7 +585,8 @@ function renderLab(){
   setLine(labEls.vectorA,A,B);setLine(labEls.vectorB,A,C);
   labEls.componentA.setAttribute('points',A.x+','+A.y+' '+B.x+','+A.y+' '+B.x+','+B.y);
   labEls.componentB.setAttribute('points',A.x+','+A.y+' '+C.x+','+A.y+' '+C.x+','+C.y);
-  [['A',A,labEls.pointA,labEls.labelA],['B',B,labEls.pointB,labEls.labelB],['C',C,labEls.pointC,labEls.labelC]].forEach(function(row){var name=row[0],p=row[1],circle=row[2],label=row[3],lp=labelPosition(p,10,-12);circle.setAttribute('cx',p.x);circle.setAttribute('cy',p.y);circle.setAttribute('aria-label','Точка '+name+' ('+fmt(labState[name].x)+'; '+fmt(labState[name].y)+'). Стрелками можно перемещать.');label.setAttribute('x',lp.x);label.setAttribute('y',lp.y);label.textContent=name+'('+fmt(labState[name].x)+'; '+fmt(labState[name].y)+')'});
+  var bcNear=Math.hypot(B.x-C.x,B.y-C.y)<44;
+  [['A',A,labEls.pointA,labEls.labelA],['B',B,labEls.pointB,labEls.labelB],['C',C,labEls.pointC,labEls.labelC]].forEach(function(row){var name=row[0],p=row[1],circle=row[2],label=row[3],dy=(bcNear&&name==='C')?20:-12,lp=labelPosition(p,10,dy);circle.setAttribute('cx',p.x);circle.setAttribute('cy',p.y);circle.setAttribute('aria-label','Точка '+name+' ('+fmt(labState[name].x)+'; '+fmt(labState[name].y)+'). Стрелками можно перемещать.');label.setAttribute('x',lp.x);label.setAttribute('y',lp.y);label.textContent=name+'('+fmt(labState[name].x)+'; '+fmt(labState[name].y)+')'});
   var midA=labelPosition({x:(A.x+B.x)/2,y:(A.y+B.y)/2},8,-10),midB=labelPosition({x:(A.x+C.x)/2,y:(A.y+C.y)/2},8,18);
   labEls.vectorALabel.setAttribute('x',midA.x);labEls.vectorALabel.setAttribute('y',midA.y);labEls.vectorALabel.textContent='a = '+vecText(d.a);
   labEls.vectorBLabel.setAttribute('x',midB.x);labEls.vectorBLabel.setAttribute('y',midB.y);labEls.vectorBLabel.textContent='b = '+vecText(d.b);
@@ -592,7 +594,7 @@ function renderLab(){
   labEls.components.style.display=labState.layers.components?'':'none';labEls.vectorA.style.display=labState.layers.a?'':'none';labEls.vectorALabel.style.display=labState.layers.a?'':'none';labEls.vectorB.style.display=labState.layers.b?'':'none';labEls.vectorBLabel.style.display=labState.layers.b?'':'none';
   if(labState.ghost&&labState.layers.ghost){var gA=toScreen(labState.ghost.A),gB=toScreen(labState.ghost.B),gC=toScreen(labState.ghost.C);setLine(labEls.ghostA,gA,gB);setLine(labEls.ghostB,gA,gC);labEls.ghostGroup.style.display=''}else labEls.ghostGroup.style.display='none';
   labEls.stateA.textContent=vecText(d.a);labEls.stateB.textContent=vecText(d.b);labEls.stateLenA.textContent=lengthText(d.la,d.a2);labEls.stateLenB.textContent=lengthText(d.lb,d.b2);labEls.stateDot.textContent=fmt(d.dot);labEls.stateAngle.textContent=d.angle===null?'не определён':fmt(d.angle,1)+'°';
-  labEls.liveFormula.textContent='a · b = '+fmt(d.a.x)+'·'+fmt(d.b.x)+' + '+fmt(d.a.y)+'·'+fmt(d.b.y)+' = '+fmt(d.dot)+(d.cos===null?'. Деление на |a||b| сейчас невозможно.':'; cos φ = '+fmt(d.dot)+' / ('+fmt(d.la,2)+'·'+fmt(d.lb,2)+') = '+fmt(d.cos,3)+'.');
+  labEls.liveFormula.textContent='a · b = '+factor(d.a.x)+'·'+factor(d.b.x)+' + '+factor(d.a.y)+'·'+factor(d.b.y)+' = '+fmt(d.dot)+(d.cos===null?'. Деление на |a||b| сейчас невозможно.':'; cos φ = '+fmt(d.dot)+' / ('+fmt(d.la,2)+'·'+fmt(d.lb,2)+') = '+fmt(d.cos,3)+'.');
   var maxLen=20;labEls.barA.style.width=Math.min(100,d.la/maxLen*100)+'%';labEls.barB.style.width=Math.min(100,d.lb/maxLen*100)+'%';labEls.barALabel.textContent=fmt(d.la,1);labEls.barBLabel.textContent=fmt(d.lb,1);
   labEls.cosMarker.style.left=(d.cos===null?50:(d.cos+1)*50)+'%';labEls.cosMarker.style.opacity=d.cos===null?'.3':'1';
   labEls.angleInput.disabled=d.angle===null;labEls.angleInput.value=d.angle===null?90:Math.round(d.angle);labEls.angleOut.textContent=d.angle===null?'—':fmt(d.angle,1)+'°';
@@ -643,7 +645,7 @@ function svgCoords(event){var rect=labEls.svg.getBoundingClientRect();return{x:(
 [['A',labEls.pointA],['B',labEls.pointB],['C',labEls.pointC]].forEach(function(pair){
   var name=pair[0],el=pair[1];
   el.addEventListener('pointerdown',function(event){drag={name:name,start:clonePoints(labState),id:event.pointerId};el.setPointerCapture(event.pointerId);event.preventDefault()});
-  el.addEventListener('pointermove',function(event){if(!drag||drag.name!==name||drag.id!==event.pointerId)return;movePoint(name,fromScreen(svgCoords(event).x,svgCoords(event).y),null)});
+  el.addEventListener('pointermove',function(event){if(!drag||drag.name!==name||drag.id!==event.pointerId)return;var p=svgCoords(event);movePoint(name,fromScreen(p.x,p.y),null)});
   function end(event){if(!drag||drag.name!==name)return;if(!samePoints(drag.start,labState))pushHistory(drag.start);drag=null;renderLab()}
   el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
   el.addEventListener('keydown',function(event){var step=event.shiftKey?1:0.5,delta={x:0,y:0};if(event.key==='ArrowLeft')delta.x=-step;else if(event.key==='ArrowRight')delta.x=step;else if(event.key==='ArrowUp')delta.y=step;else if(event.key==='ArrowDown')delta.y=-step;else return;event.preventDefault();var before=clonePoints(labState),p={x:labState[name].x+delta.x,y:labState[name].y+delta.y};movePoint(name,p,before)});
