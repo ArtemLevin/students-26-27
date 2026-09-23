@@ -12,7 +12,7 @@
   --text-primary:#1f2928;--text-secondary:#68716e;--text-inverse:#f7fbfa;
   --border-subtle:#d6d2c8;--border-strong:#9baaa5;
   --accent:#0b6f72;--accent-hover:#075b5e;--accent-soft:#dbeceb;
-  --success:#2e7357;--danger:#9d4d4d;--focus-ring:#148b8e;
+  --success:#2e7357;--danger:#9d4d4d;--warning:#9a6a1f;--focus-ring:#148b8e;
   --shadow-low:0 10px 28px rgba(31,41,40,.07);
   --radius-sm:.45rem;--radius-md:.85rem;
   --motion-fast:140ms;--motion-normal:240ms;
@@ -24,7 +24,7 @@ html[data-theme="dark"]{
   --text-primary:#edf3f1;--text-secondary:#aab7b3;--text-inverse:#12201e;
   --border-subtle:#334744;--border-strong:#58706b;
   --accent:#69bfc0;--accent-hover:#86d2d2;--accent-soft:#203e3c;
-  --success:#78bd9e;--danger:#db8b8b;--focus-ring:#8bd7d7;
+  --success:#78bd9e;--danger:#db8b8b;--warning:#d7ad64;--focus-ring:#8bd7d7;
   --shadow-low:0 10px 28px rgba(0,0,0,.18);
   --vector-a:#69bfc0;--vector-b:#db8b8b;
 }
@@ -81,7 +81,74 @@ main{width:min(100% - clamp(1.2rem,5vw,5rem),76rem);margin:0 auto}
 svg .grid{stroke:var(--border-subtle);stroke-width:.65}svg .axis{stroke:var(--border-strong);stroke-width:1.3}
 svg .va{stroke:var(--vector-a);fill:none;stroke-width:3}svg .vb{stroke:var(--vector-b);fill:none;stroke-width:3}
 svg .point-a{fill:var(--vector-a)}svg text{fill:var(--text-primary);font:12px system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+
 [data-scene][hidden]{display:none}
+.vector-lab{margin-top:clamp(2.4rem,6vw,4.5rem);padding-top:1.4rem;border-top:2px solid var(--accent)}
+.lab-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(17rem,.55fr);gap:1.5rem 3rem;align-items:end}
+.lab-intro h3{margin:.2rem 0;font:700 clamp(1.7rem,3vw,2.6rem)/1.05 Georgia,Cambria,serif;letter-spacing:-.025em}
+.lab-intro p{margin:.4rem 0;color:var(--text-secondary)}
+.lab-outcomes{margin:0;padding:.8rem 0 0 1.2rem;border-top:1px solid var(--border-subtle);color:var(--text-secondary);font-size:.9rem}
+.lab-outcomes li{margin:.22rem 0}
+.scenario-row{display:flex;gap:.45rem;flex-wrap:wrap;margin:1.2rem 0 1rem}
+.scenario-row button,.lab-toolbar button,.legend-button,.history-actions button,.prediction button,.challenge-row button{
+  min-height:44px;padding:.56rem .74rem;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);border-radius:var(--radius-sm)
+}
+.scenario-row button[aria-pressed="true"],.legend-button[aria-pressed="true"],.challenge-row button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--text-primary)}
+.lab-shell{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(19rem,.65fr);gap:1rem;align-items:start}
+.lab-stage{min-width:0;background:var(--surface-raised);border:1px solid var(--border-subtle);box-shadow:var(--shadow-low)}
+.lab-stage-top{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;padding:.9rem 1rem;border-bottom:1px solid var(--border-subtle)}
+.lab-stage-top strong{display:block}.lab-stage-top span{font-size:.82rem;color:var(--text-secondary)}
+.lab-toolbar{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:flex-end}
+.lab-toolbar button:disabled,.history-actions button:disabled{opacity:.45;cursor:not-allowed}
+.lab-canvas-wrap{position:relative;padding:.7rem}
+#vectorLabSvg{display:block;width:100%;height:auto;aspect-ratio:9/7;background:var(--surface-page);border:1px solid var(--border-subtle);touch-action:none;user-select:none}
+#vectorLabSvg .lab-grid-line{stroke:var(--border-subtle);stroke-width:.7;vector-effect:non-scaling-stroke}
+#vectorLabSvg .lab-axis{stroke:var(--border-strong);stroke-width:1.35;vector-effect:non-scaling-stroke}
+#vectorLabSvg .component-a{stroke:color-mix(in srgb,var(--vector-a) 55%,transparent);stroke-width:1.2;stroke-dasharray:5 4;vector-effect:non-scaling-stroke}
+#vectorLabSvg .component-b{stroke:color-mix(in srgb,var(--vector-b) 55%,transparent);stroke-width:1.2;stroke-dasharray:5 4;vector-effect:non-scaling-stroke}
+#vectorLabSvg .vector-a-line{stroke:var(--vector-a);stroke-width:3.3;fill:none;vector-effect:non-scaling-stroke}
+#vectorLabSvg .vector-b-line{stroke:var(--vector-b);stroke-width:3.3;fill:none;vector-effect:non-scaling-stroke}
+#vectorLabSvg .ghost-line{stroke:var(--border-strong);stroke-width:2.2;stroke-dasharray:8 6;opacity:.7;fill:none;vector-effect:non-scaling-stroke}
+#vectorLabSvg .angle-arc{stroke:var(--warning);stroke-width:2.3;fill:none;vector-effect:non-scaling-stroke}
+#vectorLabSvg .handle{stroke:var(--surface-raised);stroke-width:3;cursor:grab;vector-effect:non-scaling-stroke}
+#vectorLabSvg .handle:active{cursor:grabbing}#vectorLabSvg .handle-a{fill:var(--text-primary)}#vectorLabSvg .handle-b{fill:var(--vector-a)}#vectorLabSvg .handle-c{fill:var(--vector-b)}
+#vectorLabSvg .handle:focus{outline:none;stroke:var(--focus-ring);stroke-width:5}
+#vectorLabSvg .point-label{fill:var(--text-primary);font:600 13px/1 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;paint-order:stroke;stroke:var(--surface-page);stroke-width:4;stroke-linejoin:round}
+#vectorLabSvg .vector-label{font:700 13px/1 ui-monospace,SFMono-Regular,Consolas,monospace;paint-order:stroke;stroke:var(--surface-page);stroke-width:4;stroke-linejoin:round}
+#vectorLabSvg .vector-label.a{fill:var(--vector-a)}#vectorLabSvg .vector-label.b{fill:var(--vector-b)}
+.lab-legend{display:flex;gap:.35rem;flex-wrap:wrap;padding:.2rem .7rem 1rem}
+.legend-button{display:inline-flex;align-items:center;gap:.45rem;font-size:.82rem;min-height:40px}
+.legend-swatch{width:1.4rem;height:3px;background:var(--text-secondary)}.legend-swatch.a{background:var(--vector-a)}.legend-swatch.b{background:var(--vector-b)}.legend-swatch.ghost{height:0;border-top:2px dashed var(--border-strong);background:none}
+.lab-insight{min-height:3.4rem;margin:0;padding:.85rem 1rem;border-top:1px solid var(--border-subtle);color:var(--text-secondary)}
+.lab-insight strong{color:var(--text-primary)}
+.lab-panel{border-top:2px solid var(--accent)}
+.state-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-bottom:1px solid var(--border-subtle)}
+.state-item{padding:.8rem .7rem;border-right:1px solid var(--border-subtle);border-top:1px solid var(--border-subtle);min-width:0}
+.state-item:nth-child(2n){border-right:0}.state-item dt{font-size:.72rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.06em}.state-item dd{margin:.1rem 0 0;font:700 1.05rem/1.3 "Cambria Math",Cambria,serif;overflow-wrap:anywhere}
+.formula-live{padding:1rem 0;border-bottom:1px solid var(--border-subtle)}.formula-live strong{display:block;margin-bottom:.3rem;color:var(--accent)}.formula-live code{display:block;white-space:normal;font:600 .93rem/1.55 "Cambria Math",Cambria,serif;color:var(--text-primary);background:none}
+.relation-bars{padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+.relation-line{display:grid;grid-template-columns:3.2rem minmax(0,1fr) 3rem;gap:.6rem;align-items:center;margin:.55rem 0;font-size:.83rem}
+.relation-track{height:7px;background:var(--surface-soft);overflow:hidden;border-radius:999px}.relation-fill{height:100%;background:var(--accent);width:0}.relation-fill.b{background:var(--vector-b)}
+.cos-scale{position:relative;height:28px;margin-top:.8rem}.cos-scale::before{content:"";position:absolute;left:0;right:0;top:13px;height:1px;background:var(--border-strong)}.cos-scale::after{content:"";position:absolute;left:50%;top:7px;bottom:7px;width:1px;background:var(--border-strong)}
+.cos-marker{position:absolute;top:7px;width:12px;height:12px;border-radius:50%;background:var(--warning);transform:translateX(-50%);transition:left var(--motion-fast) ease}.cos-scale-labels{display:flex;justify-content:space-between;font-size:.68rem;color:var(--text-secondary)}
+.lab-details{border-bottom:1px solid var(--border-subtle)}.lab-details summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:700}.coord-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;padding:0 0 1rem}.coord-grid label{display:grid;gap:.25rem;font-size:.78rem;color:var(--text-secondary)}.coord-grid input[type="range"],.angle-control input[type="range"]{width:100%;accent-color:var(--accent)}
+.angle-control{padding:1rem 0;border-bottom:1px solid var(--border-subtle)}.angle-control label{display:flex;justify-content:space-between;gap:1rem;font-weight:700}.angle-control small{display:block;margin-top:.35rem;color:var(--text-secondary)}
+.history-actions{display:flex;gap:.4rem;flex-wrap:wrap;padding:1rem 0}
+.lab-lower{display:grid;grid-template-columns:minmax(0,1fr) minmax(18rem,.72fr);gap:1.2rem;margin-top:1.2rem}
+.compare-panel,.graph-panel,.active-learning{padding-top:1rem;border-top:1px solid var(--border-strong)}
+.compare-panel h4,.graph-panel h4,.active-learning h4{margin:0 0 .6rem;font-size:1rem}
+.compare-table{width:100%;border-collapse:collapse;font-size:.86rem}.compare-table th,.compare-table td{text-align:left;padding:.5rem .4rem;border-bottom:1px solid var(--border-subtle)}.compare-table th{color:var(--text-secondary);font-weight:600}
+#cosGraph{display:block;width:100%;height:auto;background:var(--surface-raised);border:1px solid var(--border-subtle);touch-action:none;cursor:crosshair}
+#cosGraph .graph-axis{stroke:var(--border-strong);stroke-width:1;vector-effect:non-scaling-stroke}#cosGraph .graph-curve{stroke:var(--accent);stroke-width:2.2;fill:none;vector-effect:non-scaling-stroke}#cosGraph .graph-dot{fill:var(--warning);stroke:var(--surface-raised);stroke-width:2}#cosGraph text{fill:var(--text-secondary);font-size:11px}
+.active-learning{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.5rem}
+.prediction,.challenge-box{min-width:0}.prediction p,.challenge-box p{margin:.35rem 0;color:var(--text-secondary)}
+.prediction-options,.challenge-row{display:flex;gap:.45rem;flex-wrap:wrap;margin:.75rem 0}
+.prediction-feedback,.challenge-feedback{min-height:2.8rem;padding:.65rem 0;border-top:1px solid var(--border-subtle);color:var(--text-secondary)}
+.prediction-feedback.good,.challenge-feedback.good{color:var(--success)}.prediction-feedback.bad{color:var(--danger)}
+.challenge-row button{font-size:.86rem}
+@media(max-width:900px){.lab-intro,.lab-shell,.lab-lower{grid-template-columns:1fr}.active-learning{grid-template-columns:1fr}.lab-panel{border-top:1px solid var(--border-strong)}}
+@media(max-width:520px){.state-grid,.coord-grid{grid-template-columns:1fr}.state-item{border-right:0}.lab-stage-top{display:block}.lab-toolbar{justify-content:flex-start;margin-top:.65rem}.scenario-row button{flex:1 1 46%}.relation-line{grid-template-columns:2.7rem minmax(0,1fr) 2.7rem}}
+
 .algorithm{counter-reset:step;margin:2rem 0 0;border-top:1px solid var(--border-strong);padding:0}
 .algorithm li{list-style:none;counter-increment:step;display:grid;grid-template-columns:3.5rem minmax(0,1fr);gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
 .algorithm li::before{content:counter(step,decimal-leading-zero);color:var(--accent);font:700 .78rem/1.8 ui-monospace,SFMono-Regular,Consolas,monospace}.algorithm li p{margin:0}
@@ -100,7 +167,7 @@ svg .point-a{fill:var(--vector-a)}svg text{fill:var(--text-primary);font:12px sy
 @media(max-width:390px){main{width:min(100% - 1rem,76rem)}.cover h1{font-size:3.25rem}.topbar{padding:.55rem .5rem;gap:.3rem}.identity span{display:none}.topbar a,.topbar button{padding:.45rem .5rem}.task{grid-template-columns:2.9rem minmax(0,1fr)}}
 @media(max-width:320px){.cover h1{font-size:2.8rem}.identity strong{font-size:.88rem}.print-action{display:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
-@media print{html{color-scheme:light}:root{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#f3f3f3;--text-primary:#111;--text-secondary:#444;--border-subtle:#ccc;--border-strong:#777;--accent:#075b5e}.topbar,.route,.studio-controls,.stepper-nav,.stepper-actions,.quiz-actions,.progress-track{display:none!important}body{background:#fff}main{width:100%;max-width:none}.cover{min-height:auto;display:block;padding:1.5rem 0 2rem}.cover h1{font-size:42pt}.key-formula{min-height:auto;border:0;padding:1rem 0;display:block}.vector-mark{padding:0;background:#fff}.lesson-section{padding:1.3rem 0}.vector-studio{position:relative;top:auto;box-shadow:none;break-inside:avoid}[data-scene][hidden],.stepper-panel[hidden]{display:block!important}.stepper-panel{min-height:auto}.answers:not([open]) .answer-grid{display:grid}.answers summary,.quiz-feedback{display:none}.print-only{display:block}.task,.error,.example,.rule-band{break-inside:avoid}a{color:#111;text-decoration:none}}
+@media print{html{color-scheme:light}:root{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#f3f3f3;--text-primary:#111;--text-secondary:#444;--border-subtle:#ccc;--border-strong:#777;--accent:#075b5e}.topbar,.route,.studio-controls,.stepper-nav,.stepper-actions,.quiz-actions,.progress-track,.scenario-row,.lab-toolbar,.lab-legend,.lab-details,.angle-control,.history-actions,.active-learning{display:none!important}body{background:#fff}main{width:100%;max-width:none}.cover{min-height:auto;display:block;padding:1.5rem 0 2rem}.cover h1{font-size:42pt}.key-formula{min-height:auto;border:0;padding:1rem 0;display:block}.vector-mark{padding:0;background:#fff}.lesson-section{padding:1.3rem 0}.vector-studio{position:relative;top:auto;box-shadow:none;break-inside:avoid}[data-scene][hidden],.stepper-panel[hidden]{display:block!important}.stepper-panel{min-height:auto}.answers:not([open]) .answer-grid{display:grid}.answers summary,.quiz-feedback{display:none}.print-only{display:block}.task,.error,.example,.rule-band{break-inside:avoid}a{color:#111;text-decoration:none}}
 </style>
 </head>
 <body>
@@ -153,20 +220,173 @@ svg .point-a{fill:var(--vector-a)}svg text{fill:var(--text-primary);font:12px sy
     <div class="note"><b>Нулевой вектор</b><p>Длина равна нулю тогда и только тогда, когда обе координаты равны нулю.</p></div>
   </div>
 </div>
-<figure class="vector-studio" aria-labelledby="studioCaption">
-  <div class="studio-controls" role="group" aria-label="Выбор визуализации">
-    <button type="button" data-scene-button="shift" aria-pressed="true">AB = (5; 2)</button>
-    <button type="button" data-scene-button="perpendicular" aria-pressed="false">Перпендикулярные векторы</button>
+</div>
+<div class="vector-lab" id="vectorLab">
+  <div class="lab-intro">
+    <div>
+      <p class="kicker">Исследовательская модель</p>
+      <h3>Векторная лаборатория</h3>
+      <p>Перетаскивайте точки A, B и C. Вектор <strong>a = AB</strong>, вектор <strong>b = AC</strong>. Координаты, длины, скалярное произведение, cos φ и угол пересчитываются из одного состояния модели.</p>
+    </div>
+    <ul class="lab-outcomes">
+      <li>увидеть правило «конец − начало»;</li>
+      <li>связать координаты с длиной;</li>
+      <li>увидеть, как a·b меняется вместе с углом;</li>
+      <li>получить перпендикулярность непосредственно в модели;</li>
+      <li>исследовать граничный случай нулевого вектора.</li>
+    </ul>
   </div>
-  <svg viewBox="0 0 420 320" role="img" aria-labelledby="vectorSvgTitle vectorSvgDesc">
-    <title id="vectorSvgTitle">Координатные модели из занятия</title><desc id="vectorSvgDesc">Пример AB из A(2;2) в B(7;4) и пара векторов (3;4), (4;-3).</desc>
-    <defs><marker id="arrowA" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="var(--vector-a)"/></marker><marker id="arrowB" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="var(--vector-b)"/></marker></defs>
-    <g aria-hidden="true"><path class="grid" d="M40 40H390M40 80H390M40 120H390M40 160H390M40 200H390M40 240H390M40 280H390"/><path class="grid" d="M80 20V290M120 20V290M160 20V290M200 20V290M240 20V290M280 20V290M320 20V290M360 20V290"/></g>
-    <g data-scene="shift"><path class="axis" d="M40 280H390M40 280V20"/><line class="va" x1="120" y1="200" x2="320" y2="120" marker-end="url(#arrowA)"/><circle class="point-a" cx="120" cy="200" r="4"/><circle class="point-a" cx="320" cy="120" r="4"/><text x="92" y="219">A(2; 2)</text><text x="326" y="116">B(7; 4)</text><text x="205" y="145">AB = (5; 2)</text></g>
-    <g data-scene="perpendicular" hidden><path class="axis" d="M210 290V20M40 160H390"/><line class="va" x1="210" y1="160" x2="300" y2="40" marker-end="url(#arrowA)"/><line class="vb" x1="210" y1="160" x2="330" y2="250" marker-end="url(#arrowB)"/><text x="278" y="55">a = (3; 4)</text><text x="304" y="269">b = (4; −3)</text><text x="64" y="45">a · b = 0</text></g>
-  </svg>
-  <figcaption id="studioCaption">Обе модели используют числовые данные из пособия и связывают координатную запись с направлением.</figcaption>
-</figure>
+
+  <div class="scenario-row" role="group" aria-label="Готовые сценарии">
+    <button type="button" data-lab-scenario="shift" aria-pressed="true">Координаты AB</button>
+    <button type="button" data-lab-scenario="perpendicular" aria-pressed="false">Перпендикулярность</button>
+    <button type="button" data-lab-scenario="scalar17" aria-pressed="false">a · b = 17</button>
+    <button type="button" data-lab-scenario="obtuse" aria-pressed="false">Отрицательное a · b</button>
+    <button type="button" data-lab-scenario="zero" aria-pressed="false">Нулевой вектор</button>
+    <button type="button" data-lab-scenario="free" aria-pressed="false">Исследовать самому</button>
+  </div>
+
+  <div class="lab-shell">
+    <section class="lab-stage" aria-labelledby="labStageTitle">
+      <div class="lab-stage-top">
+        <div><strong id="labStageTitle">Координатная плоскость</strong><span id="labModeNote">Тяните точки или используйте ползунки справа.</span></div>
+        <div class="lab-toolbar">
+          <button type="button" id="saveSnapshot">Запомнить состояние</button>
+          <button type="button" id="resetLab">Сбросить сценарий</button>
+        </div>
+      </div>
+      <div class="lab-canvas-wrap">
+        <svg id="vectorLabSvg" viewBox="0 0 720 560" role="img" aria-labelledby="labSvgTitle labSvgDesc">
+          <title id="labSvgTitle">Интерактивная модель двух векторов</title>
+          <desc id="labSvgDesc">Точки A, B и C можно перемещать. Векторы AB и AC пересчитываются в реальном времени.</desc>
+          <defs>
+            <marker id="labArrowA" markerWidth="10" markerHeight="10" refX="8.5" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0 0 L10 5 L0 10 Z" fill="var(--vector-a)"/></marker>
+            <marker id="labArrowB" markerWidth="10" markerHeight="10" refX="8.5" refY="5" orient="auto" markerUnits="strokeWidth"><path d="M0 0 L10 5 L0 10 Z" fill="var(--vector-b)"/></marker>
+          </defs>
+          <g id="labGrid" aria-hidden="true"></g>
+          <g id="labGhost" aria-hidden="true">
+            <line id="ghostA" class="ghost-line"/>
+            <line id="ghostB" class="ghost-line"/>
+          </g>
+          <g id="labComponents" aria-hidden="true">
+            <polyline id="componentA" class="component-a" fill="none"/>
+            <polyline id="componentB" class="component-b" fill="none"/>
+          </g>
+          <path id="angleArc" class="angle-arc" aria-hidden="true"/>
+          <line id="vectorA" class="vector-a-line" marker-end="url(#labArrowA)"/>
+          <line id="vectorB" class="vector-b-line" marker-end="url(#labArrowB)"/>
+          <text id="vectorALabel" class="vector-label a">a</text>
+          <text id="vectorBLabel" class="vector-label b">b</text>
+          <circle id="pointA" class="handle handle-a" r="8" tabindex="0" role="button" aria-label="Точка A"/>
+          <circle id="pointB" class="handle handle-b" r="8" tabindex="0" role="button" aria-label="Точка B"/>
+          <circle id="pointC" class="handle handle-c" r="8" tabindex="0" role="button" aria-label="Точка C"/>
+          <text id="labelA" class="point-label">A</text><text id="labelB" class="point-label">B</text><text id="labelC" class="point-label">C</text>
+        </svg>
+      </div>
+      <div class="lab-legend" aria-label="Легенда модели">
+        <button type="button" class="legend-button" data-layer="a" aria-pressed="true"><span class="legend-swatch a"></span>a = AB</button>
+        <button type="button" class="legend-button" data-layer="b" aria-pressed="true"><span class="legend-swatch b"></span>b = AC</button>
+        <button type="button" class="legend-button" data-layer="components" aria-pressed="true">Компоненты</button>
+        <button type="button" class="legend-button" data-layer="angle" aria-pressed="true">Угол φ</button>
+        <button type="button" class="legend-button" data-layer="ghost" aria-pressed="true"><span class="legend-swatch ghost"></span>Сравнение</button>
+      </div>
+      <p class="lab-insight" id="labInsight" aria-live="polite"></p>
+    </section>
+
+    <aside class="lab-panel" aria-label="Текущее состояние модели">
+      <dl class="state-grid">
+        <div class="state-item"><dt>a = AB</dt><dd id="stateA">—</dd></div>
+        <div class="state-item"><dt>|a|</dt><dd id="stateLenA">—</dd></div>
+        <div class="state-item"><dt>b = AC</dt><dd id="stateB">—</dd></div>
+        <div class="state-item"><dt>|b|</dt><dd id="stateLenB">—</dd></div>
+        <div class="state-item"><dt>a · b</dt><dd id="stateDot">—</dd></div>
+        <div class="state-item"><dt>φ</dt><dd id="stateAngle">—</dd></div>
+      </dl>
+      <div class="formula-live">
+        <strong>Почему получилось именно так</strong>
+        <code id="liveFormula">—</code>
+      </div>
+      <div class="relation-bars">
+        <div class="relation-line"><span>|a|</span><div class="relation-track"><div class="relation-fill" id="barA"></div></div><b id="barALabel">—</b></div>
+        <div class="relation-line"><span>|b|</span><div class="relation-track"><div class="relation-fill b" id="barB"></div></div><b id="barBLabel">—</b></div>
+        <div class="cos-scale" aria-label="Шкала косинуса от минус одного до одного"><span class="cos-marker" id="cosMarker"></span></div>
+        <div class="cos-scale-labels"><span>−1 · тупой</span><span>0 · 90°</span><span>1 · острый</span></div>
+      </div>
+
+      <details class="lab-details">
+        <summary>Исследовать координаты вручную</summary>
+        <div class="coord-grid">
+          <label>A.x <span id="axOut"></span><input id="axInput" data-point="A" data-axis="x" type="range" min="-8" max="8" step="0.5"></label>
+          <label>A.y <span id="ayOut"></span><input id="ayInput" data-point="A" data-axis="y" type="range" min="-6" max="6" step="0.5"></label>
+          <label>B.x <span id="bxOut"></span><input id="bxInput" data-point="B" data-axis="x" type="range" min="-8" max="8" step="0.5"></label>
+          <label>B.y <span id="byOut"></span><input id="byInput" data-point="B" data-axis="y" type="range" min="-6" max="6" step="0.5"></label>
+          <label>C.x <span id="cxOut"></span><input id="cxInput" data-point="C" data-axis="x" type="range" min="-8" max="8" step="0.5"></label>
+          <label>C.y <span id="cyOut"></span><input id="cyInput" data-point="C" data-axis="y" type="range" min="-6" max="6" step="0.5"></label>
+        </div>
+      </details>
+
+      <div class="angle-control">
+        <label for="angleInput"><span>Повернуть b, сохраняя |b|</span><span id="angleOut">—</span></label>
+        <input id="angleInput" type="range" min="0" max="180" step="1">
+        <small id="angleHint">Ползунок меняет угол между векторами и сразу пересчитывает a · b.</small>
+      </div>
+      <div class="history-actions">
+        <button type="button" id="undoLab">Шаг назад</button>
+        <button type="button" id="redoLab">Шаг вперёд</button>
+        <button type="button" id="clearSnapshot">Убрать сравнение</button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="lab-lower">
+    <section class="compare-panel" aria-labelledby="compareTitle">
+      <h4 id="compareTitle">До / после</h4>
+      <table class="compare-table">
+        <thead><tr><th>Величина</th><th>Запомнено</th><th>Сейчас</th><th>Изменение</th></tr></thead>
+        <tbody>
+          <tr><td>a</td><td id="cmpAOld">—</td><td id="cmpANow">—</td><td id="cmpADelta">—</td></tr>
+          <tr><td>b</td><td id="cmpBOld">—</td><td id="cmpBNow">—</td><td id="cmpBDelta">—</td></tr>
+          <tr><td>a · b</td><td id="cmpDotOld">—</td><td id="cmpDotNow">—</td><td id="cmpDotDelta">—</td></tr>
+          <tr><td>φ</td><td id="cmpAngleOld">—</td><td id="cmpAngleNow">—</td><td id="cmpAngleDelta">—</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="graph-panel" aria-labelledby="graphTitle">
+      <h4 id="graphTitle">cos φ как функция угла</h4>
+      <p>Точка движется вместе с моделью. Нажмите на график, чтобы задать угол и повернуть b.</p>
+      <svg id="cosGraph" viewBox="0 0 420 220" role="img" aria-label="График косинуса угла от 0 до 180 градусов">
+        <line class="graph-axis" x1="36" y1="110" x2="400" y2="110"/><line class="graph-axis" x1="36" y1="20" x2="36" y2="200"/>
+        <path id="cosCurve" class="graph-curve"/><circle id="cosGraphDot" class="graph-dot" r="6" cx="36" cy="20"/>
+        <text x="30" y="214">0°</text><text x="200" y="214">90°</text><text x="374" y="214">180°</text><text x="8" y="28">1</text><text x="12" y="114">0</text><text x="6" y="198">−1</text>
+      </svg>
+    </section>
+
+    <section class="active-learning">
+      <div class="prediction">
+        <h4>Предскажи результат</h4>
+        <p><strong>Эксперимент 1.</strong> Для a = (3; 4) и b = (4; −3) каким будет знак a · b?</p>
+        <div class="prediction-options" data-prediction="perpendicular">
+          <button type="button" value="positive">положительный</button><button type="button" value="zero">нулевой</button><button type="button" value="negative">отрицательный</button>
+        </div>
+        <p class="prediction-feedback" id="predictionFeedback1" aria-live="polite"></p>
+        <p><strong>Эксперимент 2.</strong> Если B совпадёт с A, можно ли вычислить угол между a и b по формуле с cos φ?</p>
+        <div class="prediction-options" data-prediction="zero">
+          <button type="button" value="yes">да</button><button type="button" value="no">нет</button>
+        </div>
+        <p class="prediction-feedback" id="predictionFeedback2" aria-live="polite"></p>
+      </div>
+      <div class="challenge-box">
+        <h4>Исследовательские вызовы</h4>
+        <p>Выберите цель и добейтесь её перетаскиванием точек или ползунками.</p>
+        <div class="challenge-row" role="group" aria-label="Микро-задания">
+          <button type="button" data-challenge="perpendicular" aria-pressed="false">Сделать a ⟂ b</button>
+          <button type="button" data-challenge="length5" aria-pressed="false">Получить |a| = 5</button>
+          <button type="button" data-challenge="negative" aria-pressed="false">Сделать a · b &lt; 0</button>
+        </div>
+        <p class="challenge-feedback" id="challengeFeedback" aria-live="polite">Выберите один вызов.</p>
+      </div>
+    </section>
+  </div>
 </div>
 </section>
 
@@ -270,8 +490,177 @@ function setTheme(theme){root.dataset.theme=theme;var dark=theme==='dark';themeT
 var savedTheme=safeStorage.get(themeKey),preferredDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;setTheme(savedTheme==='dark'||savedTheme==='light'?savedTheme:(preferredDark?'dark':'light'));
 themeToggle.addEventListener('click',function(){var next=root.dataset.theme==='dark'?'light':'dark';setTheme(next);safeStorage.set(themeKey,next)});
 document.getElementById('printButton').addEventListener('click',function(){window.print()});
-var sceneButtons=[].slice.call(document.querySelectorAll('[data-scene-button]')),scenes=[].slice.call(document.querySelectorAll('[data-scene]'));
-sceneButtons.forEach(function(button){button.addEventListener('click',function(){var target=button.dataset.sceneButton;sceneButtons.forEach(function(item){item.setAttribute('aria-pressed',String(item===button))});scenes.forEach(function(scene){scene.hidden=scene.dataset.scene!==target})})});
+
+/* Векторная лаборатория: единое состояние → вычисления → render. */
+var LAB_BOUNDS={xmin:-10,xmax:10,ymin:-8,ymax:8,editXMin:-8,editXMax:8,editYMin:-6,editYMax:6};
+var LAB_VIEW={w:720,h:560,cx:360,cy:280,scale:32};
+var labScenarios={
+  shift:{label:'Координаты AB',A:{x:2,y:2},B:{x:7,y:4},C:{x:5,y:6}},
+  perpendicular:{label:'Перпендикулярность',A:{x:0,y:0},B:{x:3,y:4},C:{x:4,y:-3}},
+  scalar17:{label:'a · b = 17',A:{x:0,y:0},B:{x:2,y:-3},C:{x:1,y:-5}},
+  obtuse:{label:'Отрицательное a · b',A:{x:0,y:0},B:{x:4,y:-2},C:{x:1,y:5}},
+  zero:{label:'Нулевой вектор',A:{x:0,y:0},B:{x:0,y:0},C:{x:3,y:4}}
+};
+var labState={A:{x:2,y:2},B:{x:7,y:4},C:{x:5,y:6},scenario:'shift',ghost:null,history:[],future:[],activeChallenge:null,layers:{a:true,b:true,components:true,angle:true,ghost:true}};
+function clonePoints(source){return{A:{x:source.A.x,y:source.A.y},B:{x:source.B.x,y:source.B.y},C:{x:source.C.x,y:source.C.y}}}
+function samePoints(p,q){return p&&q&&p.A.x===q.A.x&&p.A.y===q.A.y&&p.B.x===q.B.x&&p.B.y===q.B.y&&p.C.x===q.C.x&&p.C.y===q.C.y}
+function pushHistory(snapshot){if(!snapshot)return;var last=labState.history.length?labState.history[labState.history.length-1]:null;if(last&&samePoints(last,snapshot))return;labState.history.push(clonePoints(snapshot));if(labState.history.length>40)labState.history.shift();labState.future=[]}
+function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
+function snap(v){return Math.round(v*2)/2}
+function clean(v){return Math.abs(v)<1e-9?0:v}
+function fmt(v,digits){if(v===null||v===undefined||!Number.isFinite(v))return 'не определено';var n=clean(v),raw=Number.isInteger(n)?String(n):n.toFixed(digits===undefined?2:digits).replace(/\.?0+$/,'').replace('.',',');return raw.replace('-','−')}
+function factor(v){var t=fmt(v);return v<0?'('+t+')':t}
+function vecText(v){return '('+fmt(v.x)+'; '+fmt(v.y)+')'}
+function lengthText(len,sq){if(Math.abs(sq-Math.round(sq))<1e-9){var root=Math.sqrt(Math.round(sq));if(Number.isInteger(root))return String(root);return '√'+Math.round(sq)+' ≈ '+fmt(len,2)}return fmt(len,2)}
+function derive(points){
+  var a={x:points.B.x-points.A.x,y:points.B.y-points.A.y},b={x:points.C.x-points.A.x,y:points.C.y-points.A.y};
+  var a2=a.x*a.x+a.y*a.y,b2=b.x*b.x+b.y*b.y,la=Math.sqrt(a2),lb=Math.sqrt(b2),dot=a.x*b.x+a.y*b.y;
+  var cos=null,angle=null;
+  if(la>1e-9&&lb>1e-9){cos=clamp(dot/(la*lb),-1,1);angle=Math.acos(cos)*180/Math.PI}
+  return{a:a,b:b,a2:a2,b2:b2,la:la,lb:lb,dot:dot,cos:cos,angle:angle};
+}
+function toScreen(p){return{x:LAB_VIEW.cx+p.x*LAB_VIEW.scale,y:LAB_VIEW.cy-p.y*LAB_VIEW.scale}}
+function fromScreen(x,y){return{x:snap((x-LAB_VIEW.cx)/LAB_VIEW.scale),y:snap((LAB_VIEW.cy-y)/LAB_VIEW.scale)}}
+function pointInside(p){return p.x>=LAB_BOUNDS.editXMin&&p.x<=LAB_BOUNDS.editXMax&&p.y>=LAB_BOUNDS.editYMin&&p.y<=LAB_BOUNDS.editYMax}
+function setLine(el,p1,p2){el.setAttribute('x1',p1.x);el.setAttribute('y1',p1.y);el.setAttribute('x2',p2.x);el.setAttribute('y2',p2.y)}
+function labelPosition(p,dx,dy){return{x:clamp(p.x+dx,16,LAB_VIEW.w-74),y:clamp(p.y+dy,18,LAB_VIEW.h-12)}}
+var labEls={
+  svg:document.getElementById('vectorLabSvg'),grid:document.getElementById('labGrid'),ghostGroup:document.getElementById('labGhost'),
+  components:document.getElementById('labComponents'),componentA:document.getElementById('componentA'),componentB:document.getElementById('componentB'),
+  angleArc:document.getElementById('angleArc'),vectorA:document.getElementById('vectorA'),vectorB:document.getElementById('vectorB'),
+  pointA:document.getElementById('pointA'),pointB:document.getElementById('pointB'),pointC:document.getElementById('pointC'),
+  labelA:document.getElementById('labelA'),labelB:document.getElementById('labelB'),labelC:document.getElementById('labelC'),
+  vectorALabel:document.getElementById('vectorALabel'),vectorBLabel:document.getElementById('vectorBLabel'),
+  ghostA:document.getElementById('ghostA'),ghostB:document.getElementById('ghostB'),insight:document.getElementById('labInsight'),
+  stateA:document.getElementById('stateA'),stateB:document.getElementById('stateB'),stateLenA:document.getElementById('stateLenA'),stateLenB:document.getElementById('stateLenB'),
+  stateDot:document.getElementById('stateDot'),stateAngle:document.getElementById('stateAngle'),liveFormula:document.getElementById('liveFormula'),
+  barA:document.getElementById('barA'),barB:document.getElementById('barB'),barALabel:document.getElementById('barALabel'),barBLabel:document.getElementById('barBLabel'),
+  cosMarker:document.getElementById('cosMarker'),angleInput:document.getElementById('angleInput'),angleOut:document.getElementById('angleOut'),angleHint:document.getElementById('angleHint'),
+  undo:document.getElementById('undoLab'),redo:document.getElementById('redoLab'),
+  cmpAOld:document.getElementById('cmpAOld'),cmpANow:document.getElementById('cmpANow'),cmpBOld:document.getElementById('cmpBOld'),cmpBNow:document.getElementById('cmpBNow'),
+  cmpDotOld:document.getElementById('cmpDotOld'),cmpDotNow:document.getElementById('cmpDotNow'),cmpAngleOld:document.getElementById('cmpAngleOld'),cmpAngleNow:document.getElementById('cmpAngleNow'),
+  cmpADelta:document.getElementById('cmpADelta'),cmpBDelta:document.getElementById('cmpBDelta'),cmpDotDelta:document.getElementById('cmpDotDelta'),cmpAngleDelta:document.getElementById('cmpAngleDelta'),
+  graphDot:document.getElementById('cosGraphDot'),graph:document.getElementById('cosGraph'),curve:document.getElementById('cosCurve'),challengeFeedback:document.getElementById('challengeFeedback')
+};
+var coordInputs=[].slice.call(document.querySelectorAll('.coord-grid input[data-point]'));
+function buildGrid(){
+  var frag=document.createDocumentFragment(),ns='http://www.w3.org/2000/svg';
+  for(var x=LAB_BOUNDS.xmin;x<=LAB_BOUNDS.xmax;x+=1){var sx=toScreen({x:x,y:0}).x,line=document.createElementNS(ns,'line');line.setAttribute('x1',sx);line.setAttribute('x2',sx);line.setAttribute('y1',24);line.setAttribute('y2',536);line.setAttribute('class',x===0?'lab-axis':'lab-grid-line');frag.appendChild(line)}
+  for(var y=LAB_BOUNDS.ymin;y<=LAB_BOUNDS.ymax;y+=1){var sy=toScreen({x:0,y:y}).y,lineY=document.createElementNS(ns,'line');lineY.setAttribute('x1',40);lineY.setAttribute('x2',680);lineY.setAttribute('y1',sy);lineY.setAttribute('y2',sy);lineY.setAttribute('class',y===0?'lab-axis':'lab-grid-line');frag.appendChild(lineY)}
+  labEls.grid.replaceChildren(frag);
+}
+function buildCosCurve(){
+  var pts=[];for(var d=0;d<=180;d+=3){var x=36+d/180*364,y=110-Math.cos(d*Math.PI/180)*82;pts.push((d===0?'M':'L')+x.toFixed(1)+' '+y.toFixed(1))}
+  labEls.curve.setAttribute('d',pts.join(' '));
+}
+function anglePath(points,derived){
+  if(derived.angle===null||derived.la<.35||derived.lb<.35)return'';
+  var alpha=Math.atan2(derived.a.y,derived.a.x),beta=Math.atan2(derived.b.y,derived.b.x),delta=beta-alpha;
+  while(delta>Math.PI)delta-=2*Math.PI;while(delta<-Math.PI)delta+=2*Math.PI;
+  var center=toScreen(points.A),r=Math.max(22,Math.min(54,derived.la*LAB_VIEW.scale*.24,derived.lb*LAB_VIEW.scale*.24)),segments=Math.max(6,Math.round(Math.abs(delta)*14)),path='';
+  for(var i=0;i<=segments;i++){var t=alpha+delta*i/segments,p={x:center.x+r*Math.cos(t),y:center.y-r*Math.sin(t)};path+=(i?' L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1)}
+  return path;
+}
+function insightFor(d){
+  if(d.la<1e-9||d.lb<1e-9)return'<strong>Граничный случай.</strong> Один из векторов нулевой: его длина равна 0, поэтому делить на |a||b| нельзя и угол по формуле cos φ не определяется.';
+  if(Math.abs(d.dot)<1e-8)return'<strong>Обратите внимание:</strong> a · b = 0. Для двух ненулевых векторов это означает φ = 90° и перпендикулярность.';
+  if(d.dot>0)return'<strong>Причина видна в формуле:</strong> a · b > 0, значит cos φ > 0 и угол острый. Перемещайте C через положение 90°, чтобы увидеть смену знака.';
+  return'<strong>Причина видна в формуле:</strong> a · b < 0, значит cos φ < 0 и угол тупой. Поверните b ближе к a и следите за переходом через ноль.';
+}
+function renderCompare(d){
+  labEls.cmpANow.textContent=vecText(d.a);labEls.cmpBNow.textContent=vecText(d.b);labEls.cmpDotNow.textContent=fmt(d.dot);labEls.cmpAngleNow.textContent=d.angle===null?'не определён':fmt(d.angle,1)+'°';
+  if(!labState.ghost){labEls.cmpAOld.textContent=labEls.cmpBOld.textContent=labEls.cmpDotOld.textContent=labEls.cmpAngleOld.textContent=labEls.cmpADelta.textContent=labEls.cmpBDelta.textContent=labEls.cmpDotDelta.textContent=labEls.cmpAngleDelta.textContent='—';return}
+  var g=derive(labState.ghost);labEls.cmpAOld.textContent=vecText(g.a);labEls.cmpBOld.textContent=vecText(g.b);labEls.cmpDotOld.textContent=fmt(g.dot);labEls.cmpAngleOld.textContent=g.angle===null?'не определён':fmt(g.angle,1)+'°';
+  labEls.cmpADelta.textContent=vecText({x:d.a.x-g.a.x,y:d.a.y-g.a.y});labEls.cmpBDelta.textContent=vecText({x:d.b.x-g.b.x,y:d.b.y-g.b.y});labEls.cmpDotDelta.textContent=fmt(d.dot-g.dot);labEls.cmpAngleDelta.textContent=(d.angle===null||g.angle===null)?'—':fmt(d.angle-g.angle,1)+'°';
+}
+function renderChallenge(d){
+  var buttons=[].slice.call(document.querySelectorAll('[data-challenge]'));buttons.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.challenge===labState.activeChallenge))});
+  if(!labState.activeChallenge){labEls.challengeFeedback.className='challenge-feedback';labEls.challengeFeedback.textContent='Выберите один вызов.';return}
+  var ok=false,text='';
+  if(labState.activeChallenge==='perpendicular'){ok=d.la>0&&d.lb>0&&Math.abs(d.dot)<.001;text=ok?'Получилось: a · b = 0, поэтому a ⟂ b.':'Цель: два ненулевых вектора и a · b = 0. Сейчас a · b = '+fmt(d.dot)+'.'}
+  if(labState.activeChallenge==='length5'){ok=Math.abs(d.la-5)<.001;text=ok?'Получилось: |a| = 5.':'Цель: |a| = 5. Сейчас |a| = '+fmt(d.la,2)+'.'}
+  if(labState.activeChallenge==='negative'){ok=d.dot<0;text=ok?'Получилось: a · b < 0, значит угол между ненулевыми векторами тупой.':'Цель: сделать a · b отрицательным. Сейчас a · b = '+fmt(d.dot)+'.'}
+  labEls.challengeFeedback.className='challenge-feedback'+(ok?' good':'');labEls.challengeFeedback.textContent=text;
+}
+function renderLab(){
+  var d=derive(labState),A=toScreen(labState.A),B=toScreen(labState.B),C=toScreen(labState.C);
+  setLine(labEls.vectorA,A,B);setLine(labEls.vectorB,A,C);
+  labEls.componentA.setAttribute('points',A.x+','+A.y+' '+B.x+','+A.y+' '+B.x+','+B.y);
+  labEls.componentB.setAttribute('points',A.x+','+A.y+' '+C.x+','+A.y+' '+C.x+','+C.y);
+  var bcNear=Math.hypot(B.x-C.x,B.y-C.y)<44;
+  [['A',A,labEls.pointA,labEls.labelA],['B',B,labEls.pointB,labEls.labelB],['C',C,labEls.pointC,labEls.labelC]].forEach(function(row){var name=row[0],p=row[1],circle=row[2],label=row[3],dy=(bcNear&&name==='C')?20:-12,lp=labelPosition(p,10,dy);circle.setAttribute('cx',p.x);circle.setAttribute('cy',p.y);circle.setAttribute('aria-label','Точка '+name+' ('+fmt(labState[name].x)+'; '+fmt(labState[name].y)+'). Стрелками можно перемещать.');label.setAttribute('x',lp.x);label.setAttribute('y',lp.y);label.textContent=name+'('+fmt(labState[name].x)+'; '+fmt(labState[name].y)+')'});
+  var midA=labelPosition({x:(A.x+B.x)/2,y:(A.y+B.y)/2},8,-10),midB=labelPosition({x:(A.x+C.x)/2,y:(A.y+C.y)/2},8,18);
+  labEls.vectorALabel.setAttribute('x',midA.x);labEls.vectorALabel.setAttribute('y',midA.y);labEls.vectorALabel.textContent='a = '+vecText(d.a);
+  labEls.vectorBLabel.setAttribute('x',midB.x);labEls.vectorBLabel.setAttribute('y',midB.y);labEls.vectorBLabel.textContent='b = '+vecText(d.b);
+  labEls.angleArc.setAttribute('d',labState.layers.angle?anglePath(labState,d):'');
+  labEls.components.style.display=labState.layers.components?'':'none';labEls.vectorA.style.display=labState.layers.a?'':'none';labEls.vectorALabel.style.display=labState.layers.a?'':'none';labEls.vectorB.style.display=labState.layers.b?'':'none';labEls.vectorBLabel.style.display=labState.layers.b?'':'none';
+  if(labState.ghost&&labState.layers.ghost){var gA=toScreen(labState.ghost.A),gB=toScreen(labState.ghost.B),gC=toScreen(labState.ghost.C);setLine(labEls.ghostA,gA,gB);setLine(labEls.ghostB,gA,gC);labEls.ghostGroup.style.display=''}else labEls.ghostGroup.style.display='none';
+  labEls.stateA.textContent=vecText(d.a);labEls.stateB.textContent=vecText(d.b);labEls.stateLenA.textContent=lengthText(d.la,d.a2);labEls.stateLenB.textContent=lengthText(d.lb,d.b2);labEls.stateDot.textContent=fmt(d.dot);labEls.stateAngle.textContent=d.angle===null?'не определён':fmt(d.angle,1)+'°';
+  labEls.liveFormula.textContent='a · b = '+factor(d.a.x)+'·'+factor(d.b.x)+' + '+factor(d.a.y)+'·'+factor(d.b.y)+' = '+fmt(d.dot)+(d.cos===null?'. Деление на |a||b| сейчас невозможно.':'; cos φ = '+fmt(d.dot)+' / ('+fmt(d.la,2)+'·'+fmt(d.lb,2)+') = '+fmt(d.cos,3)+'.');
+  var maxLen=20;labEls.barA.style.width=Math.min(100,d.la/maxLen*100)+'%';labEls.barB.style.width=Math.min(100,d.lb/maxLen*100)+'%';labEls.barALabel.textContent=fmt(d.la,1);labEls.barBLabel.textContent=fmt(d.lb,1);
+  labEls.cosMarker.style.left=(d.cos===null?50:(d.cos+1)*50)+'%';labEls.cosMarker.style.opacity=d.cos===null?'.3':'1';
+  labEls.angleInput.disabled=d.angle===null;labEls.angleInput.value=d.angle===null?90:Math.round(d.angle);labEls.angleOut.textContent=d.angle===null?'—':fmt(d.angle,1)+'°';
+  labEls.insight.innerHTML=insightFor(d);
+  coordInputs.forEach(function(input){var val=labState[input.dataset.point][input.dataset.axis];input.value=val;var out=document.getElementById(input.id.replace('Input','Out'));if(out)out.textContent=fmt(val)});
+  labEls.undo.disabled=labState.history.length===0;labEls.redo.disabled=labState.future.length===0;
+  document.querySelectorAll('[data-lab-scenario]').forEach(function(button){button.setAttribute('aria-pressed',String(button.dataset.labScenario===labState.scenario))});
+  document.querySelectorAll('[data-layer]').forEach(function(button){var key=button.dataset.layer;if(key==='a'||key==='b'||key==='components'||key==='angle'||key==='ghost')button.setAttribute('aria-pressed',String(labState.layers[key]))});
+  if(d.angle===null){labEls.graphDot.style.opacity='.25'}else{labEls.graphDot.style.opacity='1';labEls.graphDot.setAttribute('cx',36+d.angle/180*364);labEls.graphDot.setAttribute('cy',110-d.cos*82)}
+  renderCompare(d);renderChallenge(d);
+}
+function applyScenario(name,remember){
+  if(name==='free'){labState.scenario='free';renderLab();return}
+  var sc=labScenarios[name];if(!sc)return;if(remember)pushHistory(clonePoints(labState));labState.A={x:sc.A.x,y:sc.A.y};labState.B={x:sc.B.x,y:sc.B.y};labState.C={x:sc.C.x,y:sc.C.y};labState.scenario=name;renderLab();
+}
+function movePoint(name,p,rememberSnapshot){
+  var next={x:clamp(snap(p.x),LAB_BOUNDS.editXMin,LAB_BOUNDS.editXMax),y:clamp(snap(p.y),LAB_BOUNDS.editYMin,LAB_BOUNDS.editYMax)};
+  if(rememberSnapshot)pushHistory(rememberSnapshot);labState[name]=next;labState.scenario='free';renderLab();
+}
+function setAngle(deg,rememberSnapshot){
+  var d=derive(labState);if(d.la<1e-9||d.lb<1e-9){labEls.angleHint.textContent='Угол нельзя задавать, пока один из векторов нулевой.';return false}
+  var alpha=Math.atan2(d.a.y,d.a.x),theta=alpha+deg*Math.PI/180,candidate={x:labState.A.x+d.lb*Math.cos(theta),y:labState.A.y+d.lb*Math.sin(theta)};
+  if(!pointInside(candidate)){labEls.angleHint.textContent='Граница координатного поля: выбранный поворот выводит точку C за допустимый диапазон.';renderLab();return false}
+  if(rememberSnapshot)pushHistory(rememberSnapshot);labState.C={x:Math.round(candidate.x*100)/100,y:Math.round(candidate.y*100)/100};labState.scenario='free';labEls.angleHint.textContent='|b| сохраняется; меняются направление, cos φ и a · b.';renderLab();return true;
+}
+buildGrid();buildCosCurve();
+document.querySelectorAll('[data-lab-scenario]').forEach(function(button){button.addEventListener('click',function(){applyScenario(button.dataset.labScenario,true)})});
+document.querySelectorAll('[data-layer]').forEach(function(button){button.addEventListener('click',function(){var key=button.dataset.layer;labState.layers[key]=!labState.layers[key];renderLab()})});
+document.getElementById('saveSnapshot').addEventListener('click',function(){labState.ghost=clonePoints(labState);renderLab()});
+document.getElementById('clearSnapshot').addEventListener('click',function(){labState.ghost=null;renderLab()});
+document.getElementById('resetLab').addEventListener('click',function(){applyScenario(labState.scenario==='free'?'shift':labState.scenario,true)});
+labEls.undo.addEventListener('click',function(){if(!labState.history.length)return;labState.future.push(clonePoints(labState));var prev=labState.history.pop();labState.A=prev.A;labState.B=prev.B;labState.C=prev.C;labState.scenario='free';renderLab()});
+labEls.redo.addEventListener('click',function(){if(!labState.future.length)return;labState.history.push(clonePoints(labState));var next=labState.future.pop();labState.A=next.A;labState.B=next.B;labState.C=next.C;labState.scenario='free';renderLab()});
+var editStart=null;
+coordInputs.forEach(function(input){
+  function begin(){if(!editStart)editStart=clonePoints(labState)}
+  input.addEventListener('pointerdown',begin);input.addEventListener('focus',begin);
+  input.addEventListener('input',function(){var p=input.dataset.point,axis=input.dataset.axis;labState[p][axis]=Number(input.value);labState.scenario='free';renderLab()});
+  input.addEventListener('change',function(){if(editStart&&!samePoints(editStart,labState))pushHistory(editStart);editStart=null;renderLab()});
+  input.addEventListener('blur',function(){if(editStart&&!samePoints(editStart,labState))pushHistory(editStart);editStart=null});
+});
+var angleStart=null;labEls.angleInput.addEventListener('pointerdown',function(){angleStart=clonePoints(labState)});labEls.angleInput.addEventListener('focus',function(){if(!angleStart)angleStart=clonePoints(labState)});
+labEls.angleInput.addEventListener('input',function(){setAngle(Number(labEls.angleInput.value),null)});
+labEls.angleInput.addEventListener('change',function(){if(angleStart&&!samePoints(angleStart,labState))pushHistory(angleStart);angleStart=null;renderLab()});
+labEls.angleInput.addEventListener('blur',function(){if(angleStart&&!samePoints(angleStart,labState))pushHistory(angleStart);angleStart=null});
+var drag=null;
+function svgCoords(event){var rect=labEls.svg.getBoundingClientRect();return{x:(event.clientX-rect.left)*LAB_VIEW.w/rect.width,y:(event.clientY-rect.top)*LAB_VIEW.h/rect.height}}
+[['A',labEls.pointA],['B',labEls.pointB],['C',labEls.pointC]].forEach(function(pair){
+  var name=pair[0],el=pair[1];
+  el.addEventListener('pointerdown',function(event){drag={name:name,start:clonePoints(labState),id:event.pointerId};el.setPointerCapture(event.pointerId);event.preventDefault()});
+  el.addEventListener('pointermove',function(event){if(!drag||drag.name!==name||drag.id!==event.pointerId)return;var p=svgCoords(event);movePoint(name,fromScreen(p.x,p.y),null)});
+  function end(event){if(!drag||drag.name!==name)return;if(!samePoints(drag.start,labState))pushHistory(drag.start);drag=null;renderLab()}
+  el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
+  el.addEventListener('keydown',function(event){var step=event.shiftKey?1:0.5,delta={x:0,y:0};if(event.key==='ArrowLeft')delta.x=-step;else if(event.key==='ArrowRight')delta.x=step;else if(event.key==='ArrowUp')delta.y=step;else if(event.key==='ArrowDown')delta.y=-step;else return;event.preventDefault();var before=clonePoints(labState),p={x:labState[name].x+delta.x,y:labState[name].y+delta.y};movePoint(name,p,before)});
+});
+labEls.graph.addEventListener('pointerdown',function(event){var rect=labEls.graph.getBoundingClientRect(),x=(event.clientX-rect.left)*420/rect.width,deg=clamp((x-36)/364*180,0,180);setAngle(Math.round(deg),clonePoints(labState))});
+document.querySelectorAll('[data-challenge]').forEach(function(button){button.addEventListener('click',function(){labState.activeChallenge=button.dataset.challenge;labState.scenario='free';renderLab()})});
+document.querySelectorAll('.prediction-options button').forEach(function(button){button.addEventListener('click',function(){
+  var box=button.parentElement,type=box.dataset.prediction,value=button.value,feedback=type==='perpendicular'?document.getElementById('predictionFeedback1'):document.getElementById('predictionFeedback2'),correct=(type==='perpendicular'&&value==='zero')||(type==='zero'&&value==='no');
+  if(type==='perpendicular')applyScenario('perpendicular',true);else applyScenario('zero',true);
+  feedback.className='prediction-feedback '+(correct?'good':'bad');
+  feedback.textContent=type==='perpendicular'?(correct?'Верно: 3·4 + 4·(−3) = 0, значит угол 90°.':'Проверьте вычисление: 3·4 + 4·(−3) = 0. Модель показывает угол 90°.'): (correct?'Верно: при |a| = 0 знаменатель |a||b| равен нулю, поэтому угол по этой формуле не определяется.':'Посмотрите на знаменатель формулы cos φ: при |a| = 0 деление невозможно.');
+})});
+renderLab();
 var stepButtons=[].slice.call(document.querySelectorAll('[data-step]')),stepPanels=[].slice.call(document.querySelectorAll('[data-step-panel]')),stepKey='ekaterina_gnedkova-22.09.26-rhombus-step';
 var currentStep=parseInt(safeStorage.get(stepKey)||'0',10);if(!Number.isInteger(currentStep)||currentStep<0||currentStep>=stepPanels.length)currentStep=0;
 function showStep(index){currentStep=Math.max(0,Math.min(stepPanels.length-1,index));stepPanels.forEach(function(panel,i){panel.hidden=i!==currentStep});stepButtons.forEach(function(button,i){if(i===currentStep)button.setAttribute('aria-current','step');else button.removeAttribute('aria-current')});safeStorage.set(stepKey,String(currentStep))}
