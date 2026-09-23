@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Марина Селиверстова: гипербола, обратная пропорциональность, асимптоты, сдвиги, выколотые точки и параметры.">
+<title>Гипербола: асимптоты, сдвиги и выколотые точки — Марина</title>
+<style>
+:root{
+  --surface-page:#f3efe7;--surface-raised:#fffdf8;--surface-soft:#e9f0ed;
+  --text-primary:#202827;--text-secondary:#66716e;--text-inverse:#f8fbfa;
+  --border-subtle:#d7ded9;--border-strong:#aebdb7;
+  --accent:#087a76;--accent-hover:#05615e;--accent-soft:#dcece8;
+  --success:#39785c;--danger:#a74942;--warning:#9a6b25;--focus-ring:#4fb3ad;
+  --shadow-low:0 12px 30px rgba(44,58,53,.08);--shadow-high:0 22px 60px rgba(29,43,39,.14);
+  --radius-sm:.55rem;--radius-md:1rem;--radius-lg:1.55rem;
+  --space-1:.35rem;--space-2:.65rem;--space-3:1rem;--space-4:1.5rem;--space-5:2.25rem;--space-6:3.5rem;
+  --motion-fast:140ms;--motion-normal:260ms;
+  --serif:Georgia,"Times New Roman",serif;--sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+html[data-theme="dark"]{
+  --surface-page:#0e1716;--surface-raised:#15201e;--surface-soft:#1a2a27;
+  --text-primary:#edf4f2;--text-secondary:#aab8b4;--text-inverse:#0e1716;
+  --border-subtle:#30423d;--border-strong:#49615a;
+  --accent:#65c8c1;--accent-hover:#8edbd5;--accent-soft:#173b37;
+  --success:#79c59b;--danger:#e48a81;--warning:#dfb66f;--focus-ring:#79d9d2;
+  --shadow-low:0 12px 30px rgba(0,0,0,.22);--shadow-high:0 22px 60px rgba(0,0,0,.34);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.62 var(--sans)}
+button,a,select{font:inherit}
+a{color:inherit}
+button{cursor:pointer}
+.skip{position:fixed;left:1rem;top:-5rem;z-index:100;background:var(--text-primary);color:var(--surface-page);padding:.7rem 1rem}
+.skip:focus{top:1rem}
+.topbar{position:sticky;top:0;z-index:40;border-bottom:1px solid var(--border-subtle);background:color-mix(in srgb,var(--surface-page) 90%,transparent);backdrop-filter:blur(14px)}
+.nav{width:min(1240px,calc(100% - 2rem));margin:auto;min-height:62px;display:flex;align-items:center;gap:.65rem}
+.brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;font-weight:800}
+.brand-mark{width:2rem;height:2rem;display:grid;place-items:center;border:1px solid var(--border-strong);font-family:var(--serif);color:var(--accent)}
+.nav-spacer{flex:1}
+.nav-btn{min-height:40px;padding:.55rem .78rem;border:1px solid var(--border-subtle);background:transparent;color:var(--text-primary);text-decoration:none}
+.nav-btn:hover,.nav-btn:focus-visible{border-color:var(--accent);outline:2px solid color-mix(in srgb,var(--focus-ring) 35%,transparent);outline-offset:2px}
+.shell{width:min(1240px,calc(100% - 2rem));margin:auto}
+.hero{min-height:min(760px,84vh);display:grid;grid-template-columns:minmax(0,.9fr) minmax(420px,1.1fr);align-items:stretch;border-bottom:1px solid var(--border-strong)}
+.hero-copy{padding:clamp(3rem,7vw,7rem) clamp(1rem,4vw,4rem) clamp(3rem,6vw,5rem) 0;display:flex;flex-direction:column;justify-content:center}
+.eyebrow{margin:0 0 .8rem;color:var(--accent);font-size:.76rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.hero h1{margin:0;font:600 clamp(3.4rem,8vw,7.5rem)/.88 var(--serif);letter-spacing:-.055em;max-width:8ch}
+.hero .lead{max-width:48rem;margin:1.5rem 0;color:var(--text-secondary);font-size:clamp(1rem,1.6vw,1.2rem)}
+.signature{margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border-subtle);display:flex;justify-content:space-between;gap:1rem;color:var(--text-secondary);font-size:.9rem}
+.hero-figure{position:relative;min-height:520px;border-left:1px solid var(--border-strong);overflow:hidden;background:
+linear-gradient(to right,var(--border-subtle) 1px,transparent 1px),
+linear-gradient(to bottom,var(--border-subtle) 1px,transparent 1px);
+background-size:54px 54px}
+.hero-figure:after{content:"xy = k";position:absolute;right:1rem;bottom:.4rem;font:500 clamp(4rem,9vw,8.5rem)/1 var(--serif);letter-spacing:-.07em;color:color-mix(in srgb,var(--accent) 9%,transparent);pointer-events:none}
+.hero-figure svg{position:absolute;inset:0;width:100%;height:100%}
+.axis{stroke:var(--border-strong);stroke-width:1.4}.curve{fill:none;stroke:var(--accent);stroke-width:3}.asym{stroke:var(--warning);stroke-width:1.5;stroke-dasharray:8 8}.point{fill:var(--accent)}
+.hero-note{position:absolute;left:1.2rem;bottom:1.2rem;width:min(19rem,calc(100% - 2.4rem));padding:1rem;background:color-mix(in srgb,var(--surface-raised) 91%,transparent);border:1px solid var(--border-subtle);box-shadow:var(--shadow-low)}
+.hero-note strong{display:block;font-family:var(--serif);font-size:1.25rem}
+.hero-note span{color:var(--text-secondary);font-size:.9rem}
+.route{display:flex;gap:0;overflow:auto;border-bottom:1px solid var(--border-strong)}
+.route a{white-space:nowrap;text-decoration:none;padding:1rem 1.25rem;border-right:1px solid var(--border-subtle);color:var(--text-secondary)}
+.route a:hover,.route a:focus-visible{color:var(--accent);background:var(--accent-soft);outline:none}
+.chapter{display:grid;grid-template-columns:minmax(220px,.32fr) minmax(0,.68fr);gap:clamp(2rem,6vw,6rem);padding:clamp(3rem,7vw,6.5rem) 0;border-bottom:1px solid var(--border-strong)}
+.chapter-index{position:sticky;top:92px;align-self:start}
+.chapter-index b{display:block;font:500 clamp(4rem,8vw,7rem)/.8 var(--serif);color:color-mix(in srgb,var(--accent) 22%,var(--text-primary));letter-spacing:-.07em}
+.chapter-index h2{margin:1rem 0 .5rem;font:600 clamp(1.6rem,3vw,2.6rem)/1.05 var(--serif);letter-spacing:-.03em}
+.chapter-index p{color:var(--text-secondary)}
+.content{min-width:0}
+.content h3{margin:2.1rem 0 .75rem;font:600 clamp(1.35rem,2vw,1.8rem)/1.15 var(--serif)}
+.prose{max-width:760px;color:var(--text-secondary)}
+.formula-lead{margin:0 0 1.5rem;padding:1.4rem 0;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);font:500 clamp(2rem,4vw,3.8rem)/1.1 var(--serif);letter-spacing:-.035em;overflow:auto}
+.formula-small{font:500 1.25rem/1.4 var(--serif)}
+.fact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--border-subtle)}
+.fact{padding:1.15rem 1rem 1.15rem 0;border-bottom:1px solid var(--border-subtle)}
+.fact:nth-child(even){padding-left:1rem;border-left:1px solid var(--border-subtle)}
+.fact strong{display:block;color:var(--accent);margin-bottom:.25rem}
+.callout{margin:1.5rem 0;padding:1rem 1.2rem;border-left:3px solid var(--accent);background:var(--accent-soft)}
+.callout.warning{border-left-color:var(--danger);background:color-mix(in srgb,var(--danger) 8%,var(--surface-page))}
+.table-wrap{overflow:auto;border-top:1px solid var(--border-strong)}
+table{width:100%;border-collapse:collapse;min-width:560px}
+th,td{padding:.8rem .7rem;text-align:center;border-bottom:1px solid var(--border-subtle)}
+th:first-child,td:first-child{text-align:left}
+.graph-card{margin-top:1.5rem;border:1px solid var(--border-subtle);background:var(--surface-raised);box-shadow:var(--shadow-low)}
+.graph-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem;border-bottom:1px solid var(--border-subtle)}
+.graph-head strong{font-family:var(--serif);font-size:1.25rem}.graph-head span{color:var(--text-secondary);font-size:.88rem}
+.graph-card svg{display:block;width:100%;height:auto;aspect-ratio:16/9}
+.steps{border-top:1px solid var(--border-strong);counter-reset:step}
+.step{position:relative;padding:1.1rem 0 1.1rem 4rem;border-bottom:1px solid var(--border-subtle)}
+.step:before{counter-increment:step;content:counter(step,decimal-leading-zero);position:absolute;left:0;top:1.2rem;color:var(--accent);font:.75rem ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.1em;font-weight:800}
+.step b{font-family:var(--serif);font-size:1.12rem}
+.lab-bridge{margin-top:2rem;padding:1.4rem;border:1px solid var(--border-strong);display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;background:var(--surface-raised)}
+.lab-bridge h3{margin:0 0 .35rem}.lab-bridge p{margin:0;color:var(--text-secondary)}
+.primary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.65rem .9rem;background:var(--accent);color:var(--text-inverse);border:1px solid var(--accent);text-decoration:none;font-weight:800}
+.primary:hover{background:var(--accent-hover)}
+.poster{padding:clamp(3rem,7vw,6rem) 0;border-bottom:1px solid var(--border-strong);display:grid;grid-template-columns:minmax(240px,.38fr) minmax(0,.62fr);gap:clamp(2rem,6vw,5rem);align-items:center}
+.poster h2{font:600 clamp(2rem,4vw,4.5rem)/.95 var(--serif);letter-spacing:-.05em;margin:.3rem 0 1rem}
+.poster p{color:var(--text-secondary)}
+.poster img{display:block;width:100%;max-height:78vh;object-fit:contain;border:1px solid var(--border-subtle);background:var(--surface-raised);box-shadow:var(--shadow-high)}
+.practice{padding:clamp(3rem,7vw,6rem) 0}
+.practice h2{font:600 clamp(2.5rem,5vw,5rem)/.95 var(--serif);letter-spacing:-.05em;margin:0 0 1rem}
+.exercise{padding:1.3rem 0;border-top:1px solid var(--border-subtle)}
+.exercise h3{margin:0 0 .7rem}
+details{border-top:1px solid var(--border-subtle);padding:1rem 0}
+summary{cursor:pointer;font-weight:800;color:var(--accent)}
+.checks{margin-top:2rem;border-top:1px solid var(--border-strong)}
+.check{display:flex;align-items:flex-start;gap:.7rem;padding:.8rem 0;border-bottom:1px solid var(--border-subtle)}
+.check input{width:1.2rem;height:1.2rem;accent-color:var(--accent);margin-top:.15rem}
+.progress{height:6px;background:var(--border-subtle);margin-top:1rem}.progress span{display:block;height:100%;width:0;background:var(--success);transition:width var(--motion-normal)}
+.resources{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.4rem}
+.resource{padding:.6rem .8rem;border:1px solid var(--border-subtle);text-decoration:none}
+.resource:hover{border-color:var(--accent)}
+footer{padding:2rem 0 3rem;display:flex;justify-content:space-between;gap:1rem;color:var(--text-secondary);font-size:.86rem}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}.hero-copy{padding-right:0}.hero-figure{border-left:0;border-top:1px solid var(--border-strong);min-height:460px}
+  .chapter{grid-template-columns:1fr}.chapter-index{position:static}.poster{grid-template-columns:1fr}.lab-bridge{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .shell,.nav{width:min(100% - 1rem,1240px)}
+  .hero h1{font-size:clamp(3rem,17vw,5.4rem)}
+  .hero-figure{min-height:390px}.signature{flex-direction:column}
+  .fact-grid{grid-template-columns:1fr}.fact:nth-child(even){padding-left:0;border-left:0}
+  .chapter{padding:3rem 0}.route a{padding:.85rem .9rem}.nav .hide-sm{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@media print{
+  .topbar,.route,.lab-bridge,.checks,.resources{display:none!important}
+  body{background:#fff;color:#111}.shell{width:100%}.hero{min-height:auto;grid-template-columns:1fr}.hero-figure{display:none}
+  .chapter{display:block;break-inside:avoid}.chapter-index{position:static}.poster{display:block}.poster img{max-height:520px;box-shadow:none}
+}
+</style>
+</head>
+<body data-atlas data-atlas-adapter="universal" data-atlas-composition="diagrammatic-studio" data-atlas-accent="petrol" data-atlas-density="airy" data-atlas-motion="calm">
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar">
+  <nav class="nav" aria-label="Навигация по занятию">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">Σ</span><span>Марина · ОГЭ</span></a>
+    <span class="nav-spacer"></span>
+    <a class="nav-btn hide-sm" href="../pdf_docs/23.09.26.pdf">PDF</a>
+    <a class="nav-btn hide-sm" href="../tex_docs/23.09.26.tex">TeX</a>
+    <button class="nav-btn" id="themeToggle" type="button" aria-label="Переключить цветовую тему">Тема</button>
+  </nav>
+</header>
+
+<main class="shell" id="main">
+  <section class="hero" aria-labelledby="title">
+    <div class="hero-copy">
+      <p class="eyebrow">Занятие · 23 сентября 2026</p>
+      <h1 id="title">Гипербола и обратная пропорциональность</h1>
+      <p class="lead">Асимптоты, сдвиги, сохранение исходных ограничений после сокращения и выколотые точки. Главная идея занятия — сначала увидеть структуру функции, затем строить график.</p>
+      <div class="signature">
+        <strong>Марина Селиверстова</strong>
+        <span>Лёвин Артём Александрович · ОГЭ</span>
+      </div>
+    </div>
+    <div class="hero-figure" aria-label="Схема базовой гиперболы y равно единица делённое на x">
+      <svg id="heroGraph" viewBox="0 0 640 640" role="img" aria-labelledby="heroGraphTitle heroGraphDesc">
+        <title id="heroGraphTitle">Базовая гипербола y = 1/x</title>
+        <desc id="heroGraphDesc">Две ветви гиперболы расположены в первой и третьей четвертях и приближаются к осям координат.</desc>
+      </svg>
+      <div class="hero-note"><strong>Оси координат — асимптоты</strong><span>Для y = k/x график к ним приближается, но не пересекает их.</span></div>
+    </div>
+  </section>
+
+  <nav class="route" aria-label="Разделы занятия">
+    <a href="#base">01 · Базовая гипербола</a>
+    <a href="#shift">02 · Сдвиг</a>
+    <a href="#hole">03 · Выколотая точка</a>
+    <a href="#horizontal">04 · y = m</a>
+    <a href="#practice">05 · Тренировка</a>
+  </nav>
+
+  <section class="chapter" id="base">
+    <header class="chapter-index">
+      <b>01</b>
+      <h2>Базовая гипербола</h2>
+      <p>Сначала фиксируем область определения, асимптоты и четверти. Только потом берём точки.</p>
+    </header>
+    <div class="content">
+      <div class="formula-lead">y = k/x, &nbsp; k ≠ 0</div>
+      <p class="prose">Обратная пропорциональность задаётся формулой y = k/x. График состоит из двух ветвей, а для любой точки выполняется xy = k.</p>
+      <div class="fact-grid">
+        <div class="fact"><strong>Область определения</strong>x ∈ ℝ \ {0}</div>
+        <div class="fact"><strong>Множество значений</strong>y ∈ ℝ \ {0}</div>
+        <div class="fact"><strong>Асимптоты</strong>x = 0 и y = 0</div>
+        <div class="fact"><strong>Знак k</strong>k &gt; 0: I и III четверти; k &lt; 0: II и IV</div>
+      </div>
+
+      <h3>Как построить по точкам</h3>
+      <p class="prose">Берём ненулевые значения x по обе стороны от нуля, вычисляем y = k/x, наносим точки и проводим две плавные ветви, приближающиеся к асимптотам.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>x</th><th>−2</th><th>−1</th><th>−1/2</th><th>1/2</th><th>1</th><th>2</th></tr></thead>
+          <tbody><tr><th>y = 1/x</th><td>−1/2</td><td>−1</td><td>−2</td><td>2</td><td>1</td><td>1/2</td></tr></tbody>
+        </table>
+      </div>
+      <div class="callout"><b>Самопроверка.</b> До построения определите знак k и четверти; после построения убедитесь, что ветви не пересекают оси.</div>
+      <div class="lab-bridge">
+        <div><h3>Исследование коэффициента k</h3><p>В лаборатории можно менять k и видеть, как знак выбирает четверти, а |k| меняет положение ветвей.</p></div>
+        <a class="primary" href="23.09.26-lab.html?mode=base">Открыть режим k</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="shift">
+    <header class="chapter-index">
+      <b>02</b>
+      <h2>Сдвинутая гипербола</h2>
+      <p>У линейно-дробной функции центр графика задаётся пересечением двух асимптот.</p>
+    </header>
+    <div class="content">
+      <div class="formula-lead">(ax + b)/(cx + d), &nbsp; c ≠ 0</div>
+      <p class="prose">При ad − bc ≠ 0 график является сдвинутой гиперболой. Сначала учитываем ограничение cx + d ≠ 0.</p>
+      <div class="fact-grid">
+        <div class="fact"><strong>Вертикальная асимптота</strong>x = −d/c</div>
+        <div class="fact"><strong>Горизонтальная асимптота</strong>y = a/c</div>
+        <div class="fact"><strong>Центр</strong>(−d/c; a/c)</div>
+        <div class="fact"><strong>Удобное преобразование</strong>(ax+b)/(cx+d) = a/c + (bc−ad)/(c(cx+d))</div>
+      </div>
+
+      <h3>Пример из занятия</h3>
+      <div class="formula-lead">y = (2x − 3)/(x + 5) = 2 − 13/(x + 5)</div>
+      <div class="steps">
+        <div class="step"><b>ОДЗ:</b> x ≠ −5.</div>
+        <div class="step"><b>Асимптоты:</b> x = −5 и y = 2.</div>
+        <div class="step"><b>Пересечение с Ox:</b> (3/2; 0).</div>
+        <div class="step"><b>Пересечение с Oy:</b> (0; −3/5).</div>
+      </div>
+      <div class="graph-card">
+        <div class="graph-head"><strong>Эскиз по структуре</strong><span>асимптоты + две надёжные точки</span></div>
+        <svg id="shiftGraph" viewBox="0 0 900 500" role="img" aria-label="График функции y равно (2x минус 3) делённое на (x плюс 5)"></svg>
+      </div>
+      <div class="callout">Для эскиза обычно достаточно найти асимптоты и несколько надёжных точек, особенно пересечения с осями, если они существуют.</div>
+      <div class="lab-bridge">
+        <div><h3>Проверить сдвиг</h3><p>В отдельном режиме асимптоты, центр и контрольные точки можно включать по слоям.</p></div>
+        <a class="primary" href="23.09.26-lab.html?mode=shift">Открыть режим сдвига</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="hole">
+    <header class="chapter-index">
+      <b>03</b>
+      <h2>Сокращение и выколотая точка</h2>
+      <p>Главная ловушка: упрощённая формула не возвращает значения x, запрещённые исходным знаменателем.</p>
+    </header>
+    <div class="content">
+      <div class="formula-lead">f(x) = (2x + 1)/(2x² + x) = (2x + 1)/(x(2x + 1))</div>
+      <div class="steps">
+        <div class="step"><b>Сначала исходный знаменатель:</b> x ≠ 0 и x ≠ −1/2.</div>
+        <div class="step"><b>После сокращения:</b> f(x) = 1/x, но оба исходных ограничения сохраняются.</div>
+        <div class="step"><b>Выколотая точка:</b> при x = −1/2 упрощённая формула дала бы y = −2, поэтому (−1/2; −2) выколота.</div>
+      </div>
+      <div class="callout warning"><b>Правило.</b> Сокращение упрощает формулу функции, но не меняет исходную область определения.</div>
+
+      <h3>Параметрическая прямая y = kx</h3>
+      <p class="prose">Для пересечения с y = 1/x получаем kx² = 1. При k &gt; 0 обычная гипербола имеет две точки пересечения. Чтобы у функции с выколотой точкой осталась ровно одна общая точка, одна из двух точек должна совпасть с выколотой.</p>
+      <div class="formula-lead">−2 = k·(−1/2) &nbsp; ⇒ &nbsp; k = 4</div>
+      <p class="prose">Проверка: 4x² = 1, поэтому x = ±1/2. Значение x = −1/2 запрещено, x = 1/2 допустимо — остаётся ровно одна общая точка.</p>
+      <div class="lab-bridge">
+        <div><h3>Увидеть изменение числа пересечений</h3><p>Перемещайте параметр k и сравнивайте обычные точки пересечения с исключённой точкой.</p></div>
+        <a class="primary" href="23.09.26-lab.html?mode=hole">Открыть параметр k</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="algorithm">
+    <header class="chapter-index">
+      <b>→</b>
+      <h2>Алгоритм построения</h2>
+      <p>Удобный маршрут для рациональной функции гиперболического типа.</p>
+    </header>
+    <div class="content">
+      <div class="steps">
+        <div class="step"><b>Выпишите ОДЗ</b> по исходному знаменателю.</div>
+        <div class="step"><b>Разложите</b> числитель и знаменатель на множители.</div>
+        <div class="step"><b>Проверьте общий множитель.</b> Если он есть — сократите, сохранив исходные ограничения.</div>
+        <div class="step"><b>Приведите функцию к удобному виду</b> и найдите асимптоты.</div>
+        <div class="step"><b>Проверьте запрещённые значения:</b> после сокращения они могут дать выколотые точки.</div>
+        <div class="step"><b>Найдите удобные точки</b> — пересечения с осями или значения из таблицы.</div>
+        <div class="step"><b>Постройте ветви</b> с учётом асимптот, ОДЗ и выколотых точек.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="horizontal">
+    <header class="chapter-index">
+      <b>04</b>
+      <h2>Горизонтальная прямая y = m</h2>
+      <p>Отсутствие пересечений может возникнуть из-за асимптоты или из-за выколотой точки.</p>
+    </header>
+    <div class="content">
+      <div class="formula-lead">g(x) = 3 − (x + 2)/(x² + 2x)</div>
+      <p class="prose">Исходный знаменатель даёт x ≠ 0, −2. При допустимых x получаем g(x) = 3 − 1/x.</p>
+      <div class="fact-grid">
+        <div class="fact"><strong>m = 3</strong>Это горизонтальная асимптота, общих точек нет.</div>
+        <div class="fact"><strong>m = 7/2</strong>Единственная возможная точка соответствует x = −2, но она выколота.</div>
+      </div>
+      <div class="formula-lead">m = 3 − 1/x &nbsp; ⇒ &nbsp; x = −1/(m − 3)</div>
+      <div class="callout"><b>Ответ:</b> m = 3 или m = 7/2.</div>
+      <div class="lab-bridge">
+        <div><h3>Провести горизонтальную прямую</h3><p>Меняйте m и отслеживайте момент, когда единственное пересечение исчезает.</p></div>
+        <a class="primary" href="23.09.26-lab.html?mode=horizontal">Открыть режим y = m</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="poster" aria-labelledby="posterTitle">
+    <div>
+      <p class="eyebrow">Наглядная памятка</p>
+      <h2 id="posterTitle">Собрать маршрут в одной схеме</h2>
+      <p>Плакат к занятию помогает быстро повторить свойства гиперболы, асимптоты, выколотые точки и последовательность построения.</p>
+      <div class="resources">
+        <a class="resource" href="../images/23.09.26.png">Открыть изображение</a>
+        <a class="resource" href="../pdf_docs/23.09.26.pdf">PDF пособия</a>
+        <a class="resource" href="../tex_docs/23.09.26.tex">TeX</a>
+      </div>
+    </div>
+    <img src="../images/23.09.26.png" alt="Памятка по гиперболе, асимптотам, сдвигам и выколотым точкам" loading="lazy">
+  </section>
+
+  <section class="practice" id="practice" aria-labelledby="practiceTitle">
+    <p class="eyebrow">Тренировочный блок · Путь А</p>
+    <h2 id="practiceTitle">Проверка понимания</h2>
+
+    <article class="exercise">
+      <h3>1. Базовая гипербола</h3>
+      <p>Для функции y = −3/x укажите область определения, обе асимптоты, четверти расположения ветвей; заполните таблицу для x = −3, −1, 1, 3 и постройте эскиз.</p>
+      <details><summary>Показать ответ</summary><p>D(y) = ℝ \ {0}; асимптоты x = 0 и y = 0; ветви во II и IV четвертях. Значения y: 1, 3, −3, −1.</p></details>
+    </article>
+
+    <article class="exercise">
+      <h3>2. Сокращение и одна общая точка</h3>
+      <p>Постройте f(x) = (3x − 3)/(x² − x) с учётом ограничений. Найдите a, при котором y = ax имеет с графиком ровно одну общую точку.</p>
+      <details><summary>Показать ответ</summary><p>x ≠ 0, 1; после сокращения f(x) = 3/x; точка (1; 3) выколота; a = 3.</p></details>
+    </article>
+
+    <article class="exercise">
+      <h3>3. Сдвиг, выколотая точка и y = m</h3>
+      <p>Постройте g(x) = 4 − (x − 3)/(x² − 3x) с учётом ограничений. Найдите все m, при которых y = m не имеет с графиком общих точек.</p>
+      <details><summary>Показать ответ</summary><p>x ≠ 0, 3; после сокращения g(x) = 4 − 1/x; точка (3; 11/3) выколота; m = 4 или m = 11/3.</p></details>
+    </article>
+
+    <div class="checks" aria-labelledby="checkTitle">
+      <h3 id="checkTitle">Самопроверка маршрута</h3>
+      <label class="check"><input type="checkbox" data-check="odz"><span>Я начинаю с ОДЗ исходной функции.</span></label>
+      <label class="check"><input type="checkbox" data-check="asym"><span>Я умею находить вертикальную и горизонтальную асимптоты.</span></label>
+      <label class="check"><input type="checkbox" data-check="holes"><span>После сокращения я сохраняю исходные ограничения и отмечаю выколотые точки.</span></label>
+      <label class="check"><input type="checkbox" data-check="intersections"><span>Для y = m и y = kx я отдельно проверяю число допустимых пересечений.</span></label>
+      <div class="progress" aria-hidden="true"><span id="checkProgress"></span></div>
+      <p id="checkText" class="prose">0 из 4 пунктов отмечено.</p>
+    </div>
+  </section>
+
+  <footer><span>Марина Селиверстова · персональный материал</span><span>Лёвин Артём Александрович · 23.09.2026</span></footer>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var root=document.documentElement;
+  var saved=localStorage.getItem('marina-theme')||'light';
+  root.setAttribute('data-theme',saved);
+  document.getElementById('themeToggle').addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    localStorage.setItem('marina-theme',next);
+  });
+
+  function svgEl(name,attrs){
+    var e=document.createElementNS('http://www.w3.org/2000/svg',name);
+    Object.keys(attrs||{}).forEach(function(k){e.setAttribute(k,attrs[k]);});
+    return e;
+  }
+  function pathFor(fn,xmin,xmax,step,scaleX,scaleY,cx,cy){
+    var d='',pen=false;
+    for(var x=xmin;x<=xmax;x+=step){
+      var y=fn(x);
+      if(!isFinite(y)||Math.abs(y)>20){pen=false;continue;}
+      var X=cx+x*scaleX,Y=cy-y*scaleY;
+      d+=(pen?'L':'M')+X.toFixed(2)+' '+Y.toFixed(2)+' ';
+      pen=true;
+    }
+    return d;
+  }
+  function drawAxes(svg,w,h,sx,sy,cx,cy){
+    svg.appendChild(svgEl('line',{x1:0,y1:cy,x2:w,y2:cy,'class':'axis'}));
+    svg.appendChild(svgEl('line',{x1:cx,y1:0,x2:cx,y2:h,'class':'axis'}));
+  }
+  var hero=document.getElementById('heroGraph');
+  drawAxes(hero,640,640,56,56,320,320);
+  hero.appendChild(svgEl('path',{d:pathFor(function(x){return 1/x;},-5.5,-.12,.03,56,56,320,320),'class':'curve'}));
+  hero.appendChild(svgEl('path',{d:pathFor(function(x){return 1/x;},.12,5.5,.03,56,56,320,320),'class':'curve'}));
+  [[-2,-.5],[-1,-1],[-.5,-2],[.5,2],[1,1],[2,.5]].forEach(function(p){
+    hero.appendChild(svgEl('circle',{cx:320+p[0]*56,cy:320-p[1]*56,r:4,'class':'point'}));
+  });
+
+  var shift=document.getElementById('shiftGraph'),w=900,h=500,cx=560,cy=290,sx=55,sy=42;
+  drawAxes(shift,w,h,sx,sy,cx,cy);
+  shift.appendChild(svgEl('line',{x1:cx-5*sx,y1:0,x2:cx-5*sx,y2:h,'class':'asym'}));
+  shift.appendChild(svgEl('line',{x1:0,y1:cy-2*sy,x2:w,y2:cy-2*sy,'class':'asym'}));
+  shift.appendChild(svgEl('path',{d:pathFor(function(x){return (2*x-3)/(x+5);},-10,-5.12,.025,sx,sy,cx,cy),'class':'curve'}));
+  shift.appendChild(svgEl('path',{d:pathFor(function(x){return (2*x-3)/(x+5);},-4.88,4,.025,sx,sy,cx,cy),'class':'curve'}));
+  [[1.5,0],[0,-.6]].forEach(function(p){shift.appendChild(svgEl('circle',{cx:cx+p[0]*sx,cy:cy-p[1]*sy,r:5,'class':'point'}));});
+
+  var checks=[].slice.call(document.querySelectorAll('[data-check]'));
+  var state={};try{state=JSON.parse(localStorage.getItem('marina-230926-checks')||'{}')||{};}catch(e){}
+  function sync(){
+    var done=0;state={};
+    checks.forEach(function(c){state[c.dataset.check]=c.checked;if(c.checked)done++;});
+    localStorage.setItem('marina-230926-checks',JSON.stringify(state));
+    document.getElementById('checkProgress').style.width=(done/checks.length*100)+'%';
+    document.getElementById('checkText').textContent=done+' из '+checks.length+' пунктов отмечено.';
+  }
+  checks.forEach(function(c){c.checked=!!state[c.dataset.check];c.addEventListener('change',sync);});
+  sync();
+})();
+</script>
+</body>
+</html>
