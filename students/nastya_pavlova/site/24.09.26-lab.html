@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория Анастасии Павловой по текстовым задачам на движение: встреча, неодновременный старт и разворот">
+<title>Лаборатория движения — Анастасия Павлова</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23185c9e'/%3E%3Cpath d='M12 35h40M17 27h8l5-7h12l6 7h4v12H12z' fill='none' stroke='white' stroke-width='4'/%3E%3Ccircle cx='22' cy='40' r='4' fill='white'/%3E%3Ccircle cx='44' cy='40' r='4' fill='white'/%3E%3C/svg%3E">
+<style>
+:root{
+  color-scheme:light;
+  --surface-page:#eef3f8;
+  --surface-raised:#fffdfa;
+  --surface-soft:#f4f7fa;
+  --text-primary:#172333;
+  --text-secondary:#5d6976;
+  --text-inverse:#fff;
+  --border-subtle:#d7e0e8;
+  --border-strong:#aebbc8;
+  --accent:#185c9e;
+  --accent-hover:#124a81;
+  --accent-soft:#e5f0fa;
+  --coral:#cf6a56;
+  --coral-soft:#f7e7e2;
+  --success:#27745e;
+  --focus-ring:#cf6a56;
+  --shadow-low:0 8px 24px rgba(21,63,107,.08);
+  --radius-sm:10px;
+  --radius-md:18px;
+  --radius-lg:28px;
+  --motion-fast:140ms;
+  --motion-normal:240ms;
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --surface-page:#0d1620;
+  --surface-raised:#15212d;
+  --surface-soft:#192936;
+  --text-primary:#eef4f8;
+  --text-secondary:#aebac5;
+  --text-inverse:#0d1620;
+  --border-subtle:#304150;
+  --border-strong:#526372;
+  --accent:#77b5ed;
+  --accent-hover:#9bc9f3;
+  --accent-soft:#17334b;
+  --coral:#f08b78;
+  --coral-soft:#4b2925;
+  --success:#7bc5a9;
+  --focus-ring:#f09c89;
+  --shadow-low:0 8px 24px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.62 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button,a,input{font:inherit}
+button{cursor:pointer;color:inherit}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.shell{max-width:1180px;margin:auto;padding:18px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:8px 0 14px;border-bottom:1px solid var(--border-subtle)}
+.identity{display:flex;gap:10px;align-items:center}
+.mark{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--accent);border-radius:50%;color:var(--accent);font-weight:900}
+.identity strong,.identity small{display:block}.identity small{color:var(--text-secondary)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.actions a,.actions button{min-height:44px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-raised);color:var(--text-primary);padding:9px 13px;text-decoration:none}
+.hero{padding:clamp(36px,6vw,72px) 0 30px;border-bottom:1px solid var(--border-subtle)}
+.eyebrow{margin:0 0 8px;color:var(--coral);font-weight:850;letter-spacing:.12em;text-transform:uppercase;font-size:.76rem}
+.hero h1{margin:0;max-width:12ch;font:750 clamp(3rem,7vw,6.4rem)/.93 Georgia,"Times New Roman",serif;letter-spacing:-.055em}
+.hero p{max-width:760px;color:var(--text-secondary);font-size:1.06rem}
+.mode-tabs{display:flex;gap:6px;overflow:auto;padding:18px 0 10px}
+.mode-tabs button{white-space:nowrap;min-height:44px;border:0;border-bottom:2px solid transparent;background:transparent;padding:9px 12px;color:var(--text-secondary)}
+.mode-tabs button[aria-selected="true"]{color:var(--text-primary);border-bottom-color:var(--coral);font-weight:800}
+.lab-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.55fr);gap:clamp(24px,5vw,56px);padding:28px 0 54px}
+.instrument{min-width:0}
+.track-panel{position:relative;background:var(--surface-raised);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:clamp(22px,4vw,42px);box-shadow:var(--shadow-low)}
+.track-title{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:28px}
+.track-title h2{margin:0;font:700 clamp(1.8rem,3.4vw,3rem)/1 Georgia,serif}
+.track-title span{color:var(--text-secondary);font-variant-numeric:tabular-nums}
+.road-wrap{padding:74px 6px 38px}
+.road{position:relative;height:10px;border-radius:999px;background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 45%,var(--coral)),var(--coral))}
+.point{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;transform:translate(-50%,-50%);background:var(--surface-raised);border:3px solid var(--text-primary)}
+.point.start{left:0}.point.end{left:100%}
+.marker{position:absolute;top:-50px;transform:translateX(-50%);width:46px;height:30px;border:3px solid currentColor;border-radius:14px 18px 8px 8px;background:var(--surface-raised);transition:left var(--motion-fast) linear}
+.marker:before,.marker:after{content:"";position:absolute;bottom:-9px;width:11px;height:11px;border-radius:50%;background:var(--text-primary);border:2px solid var(--surface-raised)}
+.marker:before{left:6px}.marker:after{right:6px}
+.marker.one{color:var(--accent)}.marker.two{color:var(--coral);top:22px}
+.marker[hidden]{display:none}
+.road-label{position:absolute;top:24px;transform:translateX(-50%);font-size:.76rem;color:var(--text-secondary);white-space:nowrap}
+.road-label.start{left:0;transform:none}.road-label.end{left:100%;transform:translateX(-100%)}
+.turn-marker{position:absolute;top:-18px;left:100%;width:2px;height:46px;background:var(--coral);transform:translateX(-50%);display:none}
+.turn-marker:after{content:"разворот";position:absolute;top:-25px;right:0;color:var(--coral);font-size:.75rem;white-space:nowrap}
+.turn-marker.show{display:block}
+.controls{margin-top:28px;padding-top:20px;border-top:1px solid var(--border-subtle)}
+.range-line{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
+.range-line label{font-weight:700}
+.range-line output{min-width:68px;text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.quick button{min-height:42px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-soft);padding:8px 11px}
+.readout{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:26px;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong)}
+.readout div{padding:14px 12px;border-right:1px solid var(--border-subtle)}
+.readout div:last-child{border-right:0}
+.readout small{display:block;color:var(--text-secondary)}
+.readout strong{display:block;margin-top:5px;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.sidebar{min-width:0}
+.panel{padding:0 0 24px;margin-bottom:24px;border-bottom:1px solid var(--border-subtle)}
+.panel h2,.panel h3{margin:0 0 10px}.panel p{color:var(--text-secondary)}
+.formula{padding:14px 0;border-top:1px solid var(--border-subtle);font-family:"Cambria Math","STIX Two Math",serif;font-size:1.15rem;overflow:auto}
+.legend{display:grid;gap:10px}
+.legend span{display:flex;align-items:center;gap:9px}
+.dot{width:12px;height:12px;border-radius:50%;background:currentColor}.dot.one{color:var(--accent)}.dot.two{color:var(--coral)}
+.status{padding:14px 0;border-top:1px solid var(--border-subtle);color:var(--text-secondary)}
+.status strong{color:var(--text-primary)}
+.footer{display:flex;justify-content:space-between;gap:16px;padding:24px 0;color:var(--text-secondary);font-size:.88rem;border-top:1px solid var(--border-subtle)}
+@media(max-width:820px){
+  .lab-grid{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:1fr 1fr;gap:22px}.panel{margin:0}
+}
+@media(max-width:560px){
+  .shell{padding:12px}.topbar{align-items:flex-start}.identity small{display:none}.hero h1{font-size:clamp(2.8rem,17vw,4.8rem)}
+  .sidebar{grid-template-columns:1fr}.readout{grid-template-columns:1fr}.readout div{border-right:0;border-bottom:1px solid var(--border-subtle)}.readout div:last-child{border-bottom:0}
+  .range-line{grid-template-columns:1fr auto}.range-line input{grid-column:1/-1}.footer{flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.marker{transition:none}}
+@media print{.topbar,.mode-tabs,.controls{display:none!important}.shell{max-width:none}.lab-grid{grid-template-columns:1fr}.track-panel{box-shadow:none}.sidebar{display:grid;grid-template-columns:1fr 1fr;gap:20px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="topbar">
+  <div class="identity">
+    <span class="mark" aria-hidden="true">Σ</span>
+    <span><strong>Анастасия Павлова</strong><small>Лаборатория движения · 24.09.26</small></span>
+  </div>
+  <div class="actions">
+    <a href="24.09.26.html">Вернуться к занятию</a>
+    <button id="themeBtn" type="button" aria-pressed="false">Тёмная тема</button>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <p class="eyebrow">Цифровая лаборатория</p>
+  <h1>Увидеть, как собирается встреча</h1>
+  <p>Передвигайте время по шкале и наблюдайте только те сценарии и числа, которые разобраны на занятии. Положение участников помогает проверить смысл таблицы v–t–S и уравнения.</p>
+</section>
+
+<div class="mode-tabs" role="tablist" aria-label="Сценарии движения">
+  <button type="button" role="tab" aria-selected="true" data-mode="meeting">Навстречу · 560 км</button>
+  <button type="button" role="tab" aria-selected="false" data-mode="delay">Старт через 2 часа</button>
+  <button type="button" role="tab" aria-selected="false" data-mode="turnaround">Разворот у опушки</button>
+</div>
+
+<div class="lab-grid">
+  <section class="instrument" aria-labelledby="scenarioTitle">
+    <div class="track-panel">
+      <div class="track-title">
+        <div><p class="eyebrow" id="scenarioKicker">Одновременный старт</p><h2 id="scenarioTitle">Встречное движение</h2></div>
+        <span id="meetingBadge">встреча при t = 4 ч</span>
+      </div>
+
+      <div class="road-wrap">
+        <div class="road" id="road">
+          <span class="point start" aria-hidden="true"></span>
+          <span class="point end" aria-hidden="true"></span>
+          <span class="marker one" id="markerOne" aria-label="Положение первого участника"></span>
+          <span class="marker two" id="markerTwo" aria-label="Положение второго участника"></span>
+          <span class="turn-marker" id="turnMarker" aria-hidden="true"></span>
+          <span class="road-label start" id="startLabel">город A</span>
+          <span class="road-label end" id="endLabel">город B · 560 км</span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="range-line">
+          <label for="timeRange">Время</label>
+          <input id="timeRange" type="range" min="0" max="4" step="0.05" value="0">
+          <output id="timeOut" for="timeRange">0,00 ч</output>
+        </div>
+        <div class="quick">
+          <button type="button" data-jump="start">Начало</button>
+          <button type="button" data-jump="event" id="eventBtn">Ключевой момент</button>
+          <button type="button" data-jump="meet">Момент встречи</button>
+        </div>
+      </div>
+
+      <div class="readout" aria-live="polite">
+        <div><small id="oneLabel">Первый: путь</small><strong id="oneValue">0 км</strong></div>
+        <div><small id="twoLabel">Второй: путь</small><strong id="twoValue">0 км</strong></div>
+        <div><small id="gapLabel">Осталось между ними</small><strong id="gapValue">560 км</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="sidebar">
+    <section class="panel">
+      <p class="eyebrow">Что наблюдать</p>
+      <h2 id="ideaTitle">Сумма путей растёт до 560 км</h2>
+      <p id="ideaText">Оба автомобиля начали движение одновременно. В любой момент до встречи их времена одинаковы, а в момент встречи сумма путей равна общему расстоянию.</p>
+      <div class="formula" id="formulaOne">S₁ = 60t, S₂ = 80t</div>
+      <div class="formula" id="formulaTwo">S₁ + S₂ = 560</div>
+    </section>
+
+    <section class="panel">
+      <p class="eyebrow">Участники</p>
+      <div class="legend">
+        <span><i class="dot one" aria-hidden="true"></i><span id="legendOne">первый автомобиль · 60 км/ч</span></span>
+        <span><i class="dot two" aria-hidden="true"></i><span id="legendTwo">второй автомобиль · 80 км/ч</span></span>
+      </div>
+      <p class="status" id="statusText"><strong>Старт.</strong> Оба автомобиля находятся в своих городах.</p>
+    </section>
+  </aside>
+</div>
+</main>
+
+<footer class="footer"><span>Анастасия Павлова · персональный учебный материал</span><span>Лёвин Артём Александрович</span></footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var root=document.documentElement;
+  var themeBtn=document.getElementById('themeBtn');
+  function setTheme(theme){
+    root.dataset.theme=theme;
+    themeBtn.setAttribute('aria-pressed',String(theme==='dark'));
+    themeBtn.textContent=theme==='dark'?'Светлая тема':'Тёмная тема';
+    try{localStorage.setItem('nastya-motion-lab-theme',theme);}catch(e){}
+  }
+  try{setTheme(localStorage.getItem('nastya-motion-lab-theme')||'light');}catch(e){setTheme('light');}
+  themeBtn.addEventListener('click',function(){setTheme(root.dataset.theme==='dark'?'light':'dark');});
+
+  var configs={
+    meeting:{
+      kicker:'Одновременный старт',
+      title:'Встречное движение',
+      badge:'встреча при t = 4 ч',
+      max:4,
+      event:2,
+      meet:4,
+      eventLabel:'2 часа',
+      startLabel:'город A',
+      endLabel:'город B · 560 км',
+      oneLegend:'первый автомобиль · 60 км/ч',
+      twoLegend:'второй автомобиль · 80 км/ч',
+      oneLabel:'Первый: путь',
+      twoLabel:'Второй: путь',
+      gapLabel:'Осталось между ними',
+      ideaTitle:'Сумма путей растёт до 560 км',
+      ideaText:'Оба автомобиля начали движение одновременно. В любой момент до встречи их времена одинаковы, а в момент встречи сумма путей равна общему расстоянию.',
+      f1:'S₁ = 60t, S₂ = 80t',
+      f2:'S₁ + S₂ = 560',
+      calc:function(t){
+        var s1=60*t,s2=80*t;
+        return {p1:s1/560,p2:1-s2/560,v1:s1,v2:s2,gap:Math.max(0,560-s1-s2),turn:false,
+          status:t>=4?'Встреча: 60·4 + 80·4 = 560 км.':(t===0?'Старт: оба автомобиля находятся в своих городах.':'Автомобили движутся навстречу; сумма пройденных путей увеличивается.')};
+      }
+    },
+    delay:{
+      kicker:'Неодновременный старт',
+      title:'Второй выезжает через 2 часа',
+      badge:'встреча через 3 ч после второго старта',
+      max:5,
+      event:2,
+      meet:5,
+      eventLabel:'выезд второго',
+      startLabel:'город A',
+      endLabel:'город B · 580 км',
+      oneLegend:'первый автомобиль · 80 км/ч',
+      twoLegend:'второй автомобиль · 60 км/ч',
+      oneLabel:'Первый: путь',
+      twoLabel:'Второй: путь',
+      gapLabel:'Осталось между ними',
+      ideaTitle:'Первый движется на 2 часа дольше',
+      ideaText:'До отметки 2 часа второй автомобиль ещё не начал движение. Если после его старта прошло x часов, первый находится в пути x + 2 часа.',
+      f1:'S₁ = 80(x + 2), S₂ = 60x',
+      f2:'80(x + 2) + 60x = 580',
+      calc:function(t){
+        var s1=80*t;
+        var moving2=Math.max(0,t-2);
+        var s2=60*moving2;
+        return {p1:Math.min(1,s1/580),p2:Math.max(0,1-s2/580),v1:s1,v2:s2,gap:Math.max(0,580-s1-s2),turn:false,
+          status:t>=5?'Встреча: первый двигался 5 часов, второй — 3 часа.':(t<2?'Первый уже движется; второй ещё находится в городе B.':(t===2?'Через 2 часа второй автомобиль начинает движение.':'Оба автомобиля движутся навстречу, но время первого больше на 2 часа.'))};
+      }
+    },
+    turnaround:{
+      kicker:'Движение с разворотом',
+      title:'До опушки и обратно',
+      badge:'встреча при t = 1,2 ч',
+      max:1.2,
+      event:6/6.5,
+      meet:1.2,
+      eventLabel:'быстрый у опушки',
+      startLabel:'старт',
+      endLabel:'опушка · 6 км',
+      oneLegend:'быстрый пешеход · 6,5 км/ч',
+      twoLegend:'медленный пешеход · 3,5 км/ч',
+      oneLabel:'Быстрый: весь путь',
+      twoLabel:'Медленный: путь',
+      gapLabel:'Расстояние между ними',
+      ideaTitle:'После разворота путь быстрого продолжает расти',
+      ideaText:'До опушки быстрый проходит 6 км, затем идёт обратно. В момент встречи его полный путь равен 6 + x, а путь медленного — 6 − x.',
+      f1:'(6 + x) / 6,5 = (6 − x) / 3,5',
+      f2:'x = 1,8 км = 1800 м',
+      calc:function(t){
+        var edge=6/6.5;
+        var fastDistance=6.5*t;
+        var p1=t<=edge?fastDistance/6:(6-6.5*(t-edge))/6;
+        var slowDistance=3.5*t;
+        var p2=slowDistance/6;
+        return {p1:Math.max(0,Math.min(1,p1)),p2:Math.max(0,Math.min(1,p2)),v1:fastDistance,v2:slowDistance,gap:Math.max(0,Math.abs(p1-p2)*6),turn:t>=edge,
+          status:t>=1.2?'Встреча: оба находятся в 4,2 км от старта, то есть в 1,8 км от опушки.':(t<edge?'Оба идут к опушке; быстрый приближается к точке разворота.':'Быстрый уже развернулся и идёт навстречу медленному.')};
+      }
+    }
+  };
+
+  var current='meeting';
+  var time=document.getElementById('timeRange');
+  var out=document.getElementById('timeOut');
+  var markerOne=document.getElementById('markerOne');
+  var markerTwo=document.getElementById('markerTwo');
+  var turnMarker=document.getElementById('turnMarker');
+
+  function fmt(n,d){
+    return n.toFixed(d==null?2:d).replace('.',',').replace(/,00$/,'');
+  }
+  function applyMode(mode){
+    current=mode;
+    var c=configs[mode];
+    document.querySelectorAll('[data-mode]').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.mode===mode));});
+    document.getElementById('scenarioKicker').textContent=c.kicker;
+    document.getElementById('scenarioTitle').textContent=c.title;
+    document.getElementById('meetingBadge').textContent=c.badge;
+    document.getElementById('startLabel').textContent=c.startLabel;
+    document.getElementById('endLabel').textContent=c.endLabel;
+    document.getElementById('legendOne').textContent=c.oneLegend;
+    document.getElementById('legendTwo').textContent=c.twoLegend;
+    document.getElementById('oneLabel').textContent=c.oneLabel;
+    document.getElementById('twoLabel').textContent=c.twoLabel;
+    document.getElementById('gapLabel').textContent=c.gapLabel;
+    document.getElementById('ideaTitle').textContent=c.ideaTitle;
+    document.getElementById('ideaText').textContent=c.ideaText;
+    document.getElementById('formulaOne').textContent=c.f1;
+    document.getElementById('formulaTwo').textContent=c.f2;
+    document.getElementById('eventBtn').textContent=c.eventLabel;
+    time.min=0;time.max=c.max;time.step=mode==='turnaround'?0.01:0.05;time.value=0;
+    paint();
+    try{history.replaceState(null,'','?mode='+mode);}catch(e){}
+  }
+
+  function paint(){
+    var c=configs[current],t=Number(time.value),r=c.calc(t);
+    markerOne.style.left=(r.p1*100)+'%';
+    markerTwo.style.left=(r.p2*100)+'%';
+    turnMarker.classList.toggle('show',current==='turnaround');
+    out.value=fmt(t,2)+' ч';
+    document.getElementById('oneValue').textContent=fmt(r.v1,2)+' км';
+    document.getElementById('twoValue').textContent=fmt(r.v2,2)+' км';
+    document.getElementById('gapValue').textContent=fmt(r.gap,2)+' км';
+    document.getElementById('statusText').innerHTML='<strong>'+ (t>=c.meet?'Ключевой момент.':'Наблюдение.') +'</strong> '+r.status;
+  }
+
+  document.querySelectorAll('[data-mode]').forEach(function(b){b.addEventListener('click',function(){applyMode(b.dataset.mode);});});
+  time.addEventListener('input',paint);
+  document.querySelectorAll('[data-jump]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var c=configs[current];
+      if(b.dataset.jump==='start')time.value=0;
+      if(b.dataset.jump==='event')time.value=c.event;
+      if(b.dataset.jump==='meet')time.value=c.meet;
+      paint();
+    });
+  });
+
+  var requested=new URLSearchParams(location.search).get('mode');
+  if(!configs[requested])requested='meeting';
+  applyMode(requested);
+})();
+</script>
+</body>
+</html>
