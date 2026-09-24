@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория Ярослава Верещагина: парабола, гипербола и модуль">
+<meta name="color-scheme" content="light dark">
+<title>Лаборатория графиков функций — Ярослав Верещагин</title>
+<style>
+:root{
+  --surface-page:#f3efe6;
+  --surface-raised:#fffdf8;
+  --surface-soft:#e8eee9;
+  --surface-warm:#f3e5df;
+  --text-primary:#1f2926;
+  --text-secondary:#68736e;
+  --text-inverse:#f8fffc;
+  --border-subtle:#d8d6cc;
+  --border-strong:#aab8b1;
+  --accent:#2d6f67;
+  --accent-hover:#245a54;
+  --accent-soft:#dcebe6;
+  --accent-warm:#b96247;
+  --success:#3e7957;
+  --danger:#a44d3b;
+  --warning:#9b7338;
+  --focus-ring:#69a89d;
+  --shadow-low:0 12px 30px rgba(30,45,40,.08);
+  --radius-sm:.5rem;
+  --radius-md:1rem;
+  --radius-lg:1.5rem;
+  --space-1:.4rem;
+  --space-2:.75rem;
+  --space-3:1.15rem;
+  --space-4:1.8rem;
+  --space-5:2.8rem;
+  --motion-fast:140ms;
+  --motion-normal:240ms;
+  --grid-line:color-mix(in srgb,var(--text-primary) 9%,transparent);
+}
+html[data-theme="dark"]{
+  --surface-page:#101715;
+  --surface-raised:#18211e;
+  --surface-soft:#202c28;
+  --surface-warm:#30221d;
+  --text-primary:#eef4f1;
+  --text-secondary:#a9b5b0;
+  --text-inverse:#101715;
+  --border-subtle:#34423d;
+  --border-strong:#53645e;
+  --accent:#78c7b8;
+  --accent-hover:#9bd9ce;
+  --accent-soft:#1d3832;
+  --accent-warm:#e29a7c;
+  --success:#83c79a;
+  --danger:#e49582;
+  --warning:#d5ae6e;
+  --focus-ring:#8bd5c7;
+  --shadow-low:0 12px 30px rgba(0,0,0,.25);
+  --grid-line:color-mix(in srgb,var(--text-primary) 11%,transparent);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.58 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button{font:inherit}
+a{color:inherit}
+math{font-family:"Cambria Math","STIX Two Math",serif}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.shell{width:min(100% - 2rem,1320px);margin:auto}
+.topbar{border-bottom:1px solid var(--border-subtle)}
+.topbar-inner{min-height:62px;display:flex;align-items:center;gap:.7rem}
+.topbar a{text-decoration:none;font-weight:800}
+.topbar span{color:var(--text-secondary)}
+.icon-button{margin-left:auto;min-height:40px;border:1px solid var(--border-subtle);background:var(--surface-raised);color:var(--text-primary);padding:.5rem .7rem;cursor:pointer}
+.lab-head{padding:2.6rem 0 1.4rem;border-bottom:1px solid var(--border-subtle)}
+.eyebrow{margin:0;color:var(--accent);font:800 .72rem/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.11em;text-transform:uppercase}
+h1,h2,h3{font-family:Georgia,Cambria,serif;letter-spacing:-.035em}
+h1{font-size:clamp(2.7rem,6vw,5.4rem);line-height:.96;margin:.45rem 0 1rem}
+h2{font-size:1.55rem;margin:.2rem 0 1rem}
+h3{font-size:1.05rem;margin:0 0 .45rem}
+.lead{max-width:900px;color:var(--text-secondary);font-size:1.08rem}
+.mode-nav{display:flex;flex-wrap:wrap;gap:.45rem;padding:1rem 0}
+.mode-button{min-height:42px;padding:.55rem .75rem;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);cursor:pointer}
+.mode-button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,.75fr);gap:1px;background:var(--border-subtle);border:1px solid var(--border-subtle);margin:0 0 2.7rem;min-height:650px}
+.stage,.controls{background:var(--surface-raised)}
+.stage{padding:clamp(1rem,2.5vw,2rem);display:flex;flex-direction:column}
+.controls{padding:1.35rem}
+.stage-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;padding-bottom:.8rem;border-bottom:1px solid var(--border-subtle)}
+.stage-head p{margin:.25rem 0 0;color:var(--text-secondary)}
+.current-formula{font-size:clamp(1.25rem,2.5vw,1.8rem);white-space:nowrap}
+.plot{width:100%;min-height:500px;flex:1;display:block}
+.plot .grid{stroke:var(--grid-line);stroke-width:1}
+.plot .axis{stroke:var(--text-secondary);stroke-width:1.7}
+.plot .curve{stroke:var(--accent);stroke-width:4.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.plot .base-curve{stroke:var(--accent-warm);stroke-width:2.4;stroke-dasharray:7 6;fill:none;opacity:.78}
+.plot .asymptote{stroke:var(--accent-warm);stroke-width:1.6;stroke-dasharray:8 7}
+.plot .point{fill:var(--accent-warm);stroke:var(--surface-raised);stroke-width:3}
+.plot text{fill:var(--text-primary);font:14px system-ui}
+.plot .soft{fill:var(--text-secondary)}
+.control-group{padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+.control-group:last-child{border-bottom:0}
+.control-group p{margin:.25rem 0 .7rem;color:var(--text-secondary)}
+.choice-row{display:flex;flex-wrap:wrap;gap:.45rem}
+.choice{min-height:42px;padding:.55rem .72rem;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);cursor:pointer}
+.choice[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent)}
+.readout{margin:1rem 0;padding:1rem;border-left:3px solid var(--accent);background:var(--surface-soft)}
+.readout strong{display:block;margin-bottom:.25rem}
+.readout span{color:var(--text-secondary)}
+.warning{border-left-color:var(--accent-warm);background:var(--surface-warm)}
+.mode-panel[hidden]{display:none}
+.back-link{display:inline-flex;min-height:44px;align-items:center;padding:.65rem .85rem;background:var(--accent);color:var(--text-inverse);text-decoration:none;font-weight:800}
+.footer{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:0 0 2rem;color:var(--text-secondary);font-size:.86rem}
+@media(max-width:900px){
+  .workspace{grid-template-columns:1fr}
+  .plot{min-height:420px}
+  .controls{border-top:1px solid var(--border-subtle)}
+}
+@media(max-width:520px){
+  .shell{width:min(100% - 1rem,1320px)}
+  .stage-head{flex-direction:column}
+  .plot{min-height:350px}
+  h1{font-size:clamp(2.4rem,14vw,4rem)}
+}
+@media(prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+@media print{
+  .topbar,.mode-nav,.controls,.back-link{display:none!important}
+  body{background:#fff;color:#111}
+  .workspace{display:block;border:0;background:#fff}
+  .stage{padding:0;background:#fff}
+  .plot{min-height:520px}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <a href="24.09.26.html">Ярослав Верещагин</a>
+    <span>· лаборатория графиков функций</span>
+    <button class="icon-button" id="themeToggle" type="button" aria-label="Включить тёмную тему">Тема</button>
+  </div>
+</header>
+
+<div class="shell">
+  <section class="lab-head">
+    <p class="eyebrow">Цифровая лаборатория · 24 сентября 2026</p>
+    <h1>Что именно меняет график</h1>
+    <p class="lead">Три режима соответствуют занятию: знак коэффициентов параболы, параметр <em>k</em> у гиперболы и отражение отрицательной части графика при переходе к <em>|f(x)|</em>.</p>
+  </section>
+
+  <nav class="mode-nav" aria-label="Режим лаборатории">
+    <button class="mode-button" type="button" data-mode="parabola" aria-pressed="true">Парабола</button>
+    <button class="mode-button" type="button" data-mode="hyperbola" aria-pressed="false">Гипербола</button>
+    <button class="mode-button" type="button" data-mode="modulus" aria-pressed="false">Модуль</button>
+  </nav>
+
+  <main class="workspace">
+    <section class="stage" aria-labelledby="stageTitle">
+      <div class="stage-head">
+        <div>
+          <p class="eyebrow" id="stageTitle">Рабочая плоскость</p>
+          <h2 id="stageHeading">Знаки коэффициентов параболы</h2>
+          <p id="stageNote">Меняйте направление ветвей и положение вершины по оси x. Следите за знаком b в формуле b = −2axв.</p>
+        </div>
+        <div class="current-formula" id="formulaDisplay">b = −2ax<sub>в</sub></div>
+      </div>
+
+      <svg class="plot" id="plot" viewBox="0 0 860 560" role="img" aria-labelledby="stageHeading plotDesc">
+        <desc id="plotDesc">Интерактивная координатная плоскость для исследования графиков занятия.</desc>
+        <g id="gridLayer" class="grid"></g>
+        <line class="axis" x1="70" y1="280" x2="805" y2="280"/>
+        <line class="axis" x1="430" y1="40" x2="430" y2="520"/>
+        <polygon points="805,280 793,274 793,286" fill="var(--text-secondary)"/>
+        <polygon points="430,40 424,52 436,52" fill="var(--text-secondary)"/>
+        <text x="790" y="260">x</text>
+        <text x="445" y="55">y</text>
+        <line id="asymptoteX" class="asymptote" x1="430" y1="40" x2="430" y2="520" hidden/>
+        <line id="asymptoteY" class="asymptote" x1="70" y1="280" x2="805" y2="280" hidden/>
+        <path id="basePathA" class="base-curve" d="" hidden/>
+        <path id="basePathB" class="base-curve" d="" hidden/>
+        <path id="curveA" class="curve" d=""/>
+        <path id="curveB" class="curve" d="" hidden/>
+        <circle id="keyPoint" class="point" cx="430" cy="280" r="7"/>
+        <text id="keyLabel" x="445" y="265"></text>
+      </svg>
+    </section>
+
+    <aside class="controls">
+      <section class="mode-panel" id="panelParabola">
+        <h2>Парабола</h2>
+        <div class="control-group">
+          <h3>Направление ветвей</h3>
+          <div class="choice-row">
+            <button class="choice" type="button" data-parabola-a="positive" aria-pressed="true">a &gt; 0</button>
+            <button class="choice" type="button" data-parabola-a="negative" aria-pressed="false">a &lt; 0</button>
+          </div>
+        </div>
+        <div class="control-group">
+          <h3>Положение вершины</h3>
+          <p>Выберите знак x<sub>в</sub>.</p>
+          <div class="choice-row">
+            <button class="choice" type="button" data-vertex="-1" aria-pressed="true">x<sub>в</sub> &lt; 0</button>
+            <button class="choice" type="button" data-vertex="0" aria-pressed="false">x<sub>в</sub> = 0</button>
+            <button class="choice" type="button" data-vertex="1" aria-pressed="false">x<sub>в</sub> &gt; 0</button>
+          </div>
+        </div>
+        <div class="readout" aria-live="polite">
+          <strong id="parabolaResult">b &gt; 0</strong>
+          <span id="parabolaReason">Минус × плюс × минус даёт плюс.</span>
+        </div>
+        <div class="readout warning"><strong>Контроль</strong><span>Внешний минус в b = −2ax<sub>в</sub> сохраняется всегда.</span></div>
+      </section>
+
+      <section class="mode-panel" id="panelHyperbola" hidden>
+        <h2>Гипербола</h2>
+        <div class="control-group">
+          <h3>Выберите k</h3>
+          <p>Использованы только случаи из занятия.</p>
+          <div class="choice-row">
+            <button class="choice" type="button" data-k="1" aria-pressed="true">k = 1</button>
+            <button class="choice" type="button" data-k="2" aria-pressed="false">k = 2</button>
+            <button class="choice" type="button" data-k="0.5" aria-pressed="false">k = 0,5</button>
+            <button class="choice" type="button" data-k="-1" aria-pressed="false">k = −1</button>
+          </div>
+        </div>
+        <div class="readout" aria-live="polite">
+          <strong id="hyperbolaResult">I и III четверти</strong>
+          <span id="hyperbolaReason">k &gt; 0. Асимптоты: x = 0 и y = 0.</span>
+        </div>
+        <div class="readout warning"><strong>ОДЗ</strong><span>x ≠ 0. Ветви не соединяются через ось Oy.</span></div>
+      </section>
+
+      <section class="mode-panel" id="panelModulus" hidden>
+        <h2>Модуль</h2>
+        <div class="control-group">
+          <h3>Исходная функция</h3>
+          <div class="choice-row">
+            <button class="choice" type="button" data-function="line" aria-pressed="true">2x − 1</button>
+            <button class="choice" type="button" data-function="parabola" aria-pressed="false">x² − x − 6</button>
+            <button class="choice" type="button" data-function="hyperbola" aria-pressed="false">1/x</button>
+          </div>
+        </div>
+        <div class="control-group">
+          <h3>Показать</h3>
+          <div class="choice-row">
+            <button class="choice" type="button" data-mod-view="base" aria-pressed="false">Исходный f(x)</button>
+            <button class="choice" type="button" data-mod-view="absolute" aria-pressed="true">|f(x)|</button>
+            <button class="choice" type="button" data-mod-view="both" aria-pressed="false">Сравнить</button>
+          </div>
+        </div>
+        <div class="readout" aria-live="polite">
+          <strong id="modulusResult">Излом при x = 1/2</strong>
+          <span id="modulusReason">Участок исходной прямой ниже Ox отражается вверх.</span>
+        </div>
+        <div class="readout warning"><strong>Контроль</strong><span>У графика y = |f(x)| все значения y неотрицательны.</span></div>
+      </section>
+
+      <a class="back-link" href="24.09.26.html">Вернуться к занятию</a>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <span>Ярослав Верещагин · ОГЭ по математике</span>
+    <span>Лёвин Артём Александрович · 24.09.2026</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const root=document.documentElement;
+  const themeButton=document.getElementById('themeToggle');
+  function setTheme(theme){
+    root.dataset.theme=theme;
+    themeButton.setAttribute('aria-label',theme==='dark'?'Включить светлую тему':'Включить тёмную тему');
+    try{localStorage.setItem('jaroslav-theme',theme)}catch(e){}
+  }
+  try{
+    const saved=localStorage.getItem('jaroslav-theme');
+    if(saved==='dark'||saved==='light')setTheme(saved);
+  }catch(e){}
+  themeButton.addEventListener('click',()=>setTheme(root.dataset.theme==='dark'?'light':'dark'));
+
+  const plot=document.getElementById('plot');
+  const grid=document.getElementById('gridLayer');
+  const curveA=document.getElementById('curveA');
+  const curveB=document.getElementById('curveB');
+  const baseA=document.getElementById('basePathA');
+  const baseB=document.getElementById('basePathB');
+  const keyPoint=document.getElementById('keyPoint');
+  const keyLabel=document.getElementById('keyLabel');
+  const asymX=document.getElementById('asymptoteX');
+  const asymY=document.getElementById('asymptoteY');
+  const heading=document.getElementById('stageHeading');
+  const note=document.getElementById('stageNote');
+  const formula=document.getElementById('formulaDisplay');
+
+  const x0=430,y0=280,sx=58,sy=38;
+  const X=(x)=>x0+x*sx;
+  const Y=(y)=>y0-y*sy;
+  for(let x=-6;x<=6;x++){
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',X(x));line.setAttribute('x2',X(x));line.setAttribute('y1','40');line.setAttribute('y2','520');grid.appendChild(line);
+  }
+  for(let y=-6;y<=6;y++){
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1','70');line.setAttribute('x2','805');line.setAttribute('y1',Y(y));line.setAttribute('y2',Y(y));grid.appendChild(line);
+  }
+
+  function pathFor(fn,min=-6,max=6,step=.04){
+    let d='',drawing=false;
+    for(let x=min;x<=max+1e-9;x+=step){
+      const y=fn(x);
+      const visible=Number.isFinite(y)&&Math.abs(y)<=6.7;
+      if(!visible){drawing=false;continue}
+      const cmd=drawing?'L':'M';
+      d+=cmd+X(x).toFixed(1)+' '+Y(y).toFixed(1)+' ';
+      drawing=true;
+    }
+    return d;
+  }
+  function splitHyperbola(fn){
+    return [
+      pathFor(fn,-6,-.13,.035),
+      pathFor(fn,.13,6,.035)
+    ];
+  }
+  function setPressed(selector,match){
+    document.querySelectorAll(selector).forEach((button)=>button.setAttribute('aria-pressed',String(match(button))));
+  }
+  function resetPlot(){
+    curveA.hidden=false;curveB.hidden=true;baseA.hidden=true;baseB.hidden=true;
+    asymX.hidden=true;asymY.hidden=true;keyPoint.hidden=false;keyLabel.hidden=false;
+    curveA.setAttribute('d','');curveB.setAttribute('d','');baseA.setAttribute('d','');baseB.setAttribute('d','');
+  }
+
+  let mode='parabola';
+  let parabolaA=1;
+  let vertexSign=-1;
+  let k=1;
+  let modFunction='line';
+  let modView='absolute';
+
+  function renderParabola(){
+    resetPlot();
+    heading.textContent='Знаки коэффициентов параболы';
+    note.textContent='Меняйте направление ветвей и положение вершины по оси x. Следите за знаком b в формуле b = −2axв.';
+    formula.innerHTML='b = −2ax<sub>в</sub>';
+    const xv=vertexSign*2;
+    const a=parabolaA*.48;
+    curveA.setAttribute('d',pathFor((x)=>a*(x-xv)*(x-xv)-2,-6,6,.04));
+    keyPoint.setAttribute('cx',X(xv));keyPoint.setAttribute('cy',Y(-2));
+    keyLabel.setAttribute('x',X(xv)+12);keyLabel.setAttribute('y',Y(-2)-10);
+    keyLabel.textContent=vertexSign<0?'xв < 0':vertexSign>0?'xв > 0':'xв = 0';
+    let bSign=0;
+    if(vertexSign!==0)bSign=-Math.sign(parabolaA)*Math.sign(vertexSign);
+    const result=document.getElementById('parabolaResult');
+    const reason=document.getElementById('parabolaReason');
+    result.textContent=bSign>0?'b > 0':bSign<0?'b < 0':'b = 0';
+    if(vertexSign===0)reason.textContent='При xв = 0 из формулы сразу получаем b = 0.';
+    else{
+      const aWord=parabolaA>0?'плюс':'минус';
+      const xWord=vertexSign>0?'плюс':'минус';
+      const bWord=bSign>0?'плюс':'минус';
+      reason.textContent='Минус × '+aWord+' × '+xWord+' даёт '+bWord+'.';
+    }
+  }
+
+  function renderHyperbola(){
+    resetPlot();
+    heading.textContent='Как k меняет гиперболу';
+    note.textContent='Сравните четверти и положение ветвей. Ноль в область определения не входит.';
+    formula.innerHTML='y = k/x, &nbsp; x ≠ 0';
+    asymX.hidden=false;asymY.hidden=false;keyPoint.hidden=true;keyLabel.hidden=true;
+    const paths=splitHyperbola((x)=>k/x);
+    curveA.setAttribute('d',paths[0]);curveB.hidden=false;curveB.setAttribute('d',paths[1]);
+    const result=document.getElementById('hyperbolaResult');
+    const reason=document.getElementById('hyperbolaReason');
+    result.textContent=k>0?'I и III четверти':'II и IV четверти';
+    if(k===2)reason.textContent='k > 0, |k| > 1: при том же |x| значение |y| больше, чем для k = 1.';
+    else if(k===.5)reason.textContent='k > 0, 0 < |k| < 1: при том же |x| значение |y| меньше, чем для k = 1.';
+    else if(k<0)reason.textContent='k < 0: ветви переходят во II и IV четверти.';
+    else reason.textContent='Классический случай k = 1. Асимптоты: x = 0 и y = 0.';
+  }
+
+  function modulusDefinition(){
+    if(modFunction==='line')return {
+      base:(x)=>2*x-1,
+      text:'y = |2x − 1|',
+      result:'Излом при x = 1/2',
+      reason:'Участок исходной прямой ниже Ox отражается вверх.',
+      split:false
+    };
+    if(modFunction==='parabola')return {
+      base:(x)=>x*x-x-6,
+      text:'y = |x² − x − 6|',
+      result:'Корни: −2 и 3',
+      reason:'Между корнями исходная парабола ниже Ox; этот участок отражается вверх.',
+      split:false
+    };
+    return {
+      base:(x)=>1/x,
+      text:'y = |1/x|,  x ≠ 0',
+      result:'Сохраняется x ≠ 0',
+      reason:'Ветвь из III четверти отражается во II четверть.',
+      split:true
+    };
+  }
+
+  function renderModulus(){
+    resetPlot();
+    heading.textContent='Отражение при y = |f(x)|';
+    note.textContent='Сравните исходный график и результат после модуля. Отрицательные значения y меняют знак.';
+    const def=modulusDefinition();
+    formula.textContent=def.text;
+    document.getElementById('modulusResult').textContent=def.result;
+    document.getElementById('modulusReason').textContent=def.reason;
+    keyPoint.hidden=true;keyLabel.hidden=true;
+    if(modFunction==='hyperbola'){asymX.hidden=false;asymY.hidden=false}
+
+    const abs=(x)=>Math.abs(def.base(x));
+    const basePaths=def.split?splitHyperbola(def.base):[pathFor(def.base)];
+    const absPaths=def.split?splitHyperbola(abs):[pathFor(abs)];
+
+    if(modView==='base'){
+      curveA.setAttribute('d',basePaths[0]);
+      if(basePaths[1]){curveB.hidden=false;curveB.setAttribute('d',basePaths[1])}
+    }else if(modView==='absolute'){
+      curveA.setAttribute('d',absPaths[0]);
+      if(absPaths[1]){curveB.hidden=false;curveB.setAttribute('d',absPaths[1])}
+    }else{
+      baseA.hidden=false;baseA.setAttribute('d',basePaths[0]);
+      if(basePaths[1]){baseB.hidden=false;baseB.setAttribute('d',basePaths[1])}
+      curveA.setAttribute('d',absPaths[0]);
+      if(absPaths[1]){curveB.hidden=false;curveB.setAttribute('d',absPaths[1])}
+    }
+  }
+
+  function render(){
+    if(mode==='parabola')renderParabola();
+    if(mode==='hyperbola')renderHyperbola();
+    if(mode==='modulus')renderModulus();
+  }
+
+  function setMode(next){
+    mode=next;
+    document.querySelectorAll('[data-mode]').forEach((button)=>button.setAttribute('aria-pressed',String(button.dataset.mode===mode)));
+    document.querySelectorAll('.mode-panel').forEach((panel)=>panel.hidden=true);
+    document.getElementById(mode==='parabola'?'panelParabola':mode==='hyperbola'?'panelHyperbola':'panelModulus').hidden=false;
+    const url=new URL(location.href);url.searchParams.set('mode',mode);history.replaceState(null,'',url);
+    render();
+  }
+
+  document.querySelectorAll('[data-mode]').forEach((button)=>button.addEventListener('click',()=>setMode(button.dataset.mode)));
+  document.querySelectorAll('[data-parabola-a]').forEach((button)=>button.addEventListener('click',()=>{
+    parabolaA=button.dataset.parabolaA==='positive'?1:-1;
+    setPressed('[data-parabola-a]',(b)=>(b.dataset.parabolaA==='positive')===(parabolaA>0));
+    renderParabola();
+  }));
+  document.querySelectorAll('[data-vertex]').forEach((button)=>button.addEventListener('click',()=>{
+    vertexSign=Number(button.dataset.vertex);
+    setPressed('[data-vertex]',(b)=>Number(b.dataset.vertex)===vertexSign);
+    renderParabola();
+  }));
+  document.querySelectorAll('[data-k]').forEach((button)=>button.addEventListener('click',()=>{
+    k=Number(button.dataset.k);
+    setPressed('[data-k]',(b)=>Number(b.dataset.k)===k);
+    renderHyperbola();
+  }));
+  document.querySelectorAll('[data-function]').forEach((button)=>button.addEventListener('click',()=>{
+    modFunction=button.dataset.function;
+    setPressed('[data-function]',(b)=>b.dataset.function===modFunction);
+    renderModulus();
+  }));
+  document.querySelectorAll('[data-mod-view]').forEach((button)=>button.addEventListener('click',()=>{
+    modView=button.dataset.modView;
+    setPressed('[data-mod-view]',(b)=>b.dataset.modView===modView);
+    renderModulus();
+  }));
+
+  const requested=new URLSearchParams(location.search).get('mode');
+  setMode(['parabola','hyperbola','modulus'].includes(requested)?requested:'parabola');
+})();
+</script>
+</body>
+</html>
