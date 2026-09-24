@@ -1,0 +1,549 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{paratype}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{6B7280}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+\setlength{\emergencystretch}{2em}
+\raggedbottom
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\color{textgray}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Ксения Васильченко · 6 класс}
+\fancyhead[R]{\small НОД и НОК}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\newcommand{\nodru}{\mathop{\text{НОД}}\nolimits}
+\newcommand{\nokru}{\mathop{\text{НОК}}\nolimits}
+\newcommand{\lessondate}{24 сентября 2026 г.}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\newcommand{\sectionline}{%
+  \vspace{-0.2em}\par\noindent
+  {\color{accent}\rule{\linewidth}{0.55pt}}%
+  \vspace{0.35em}
+}
+
+\newcommand{\keyidea}[1]{%
+  \par\noindent{\color{darkaccent}\bfseries #1}\par
+}
+
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=accent,
+    line width=0.9pt,
+    align=center,
+    minimum width=38mm,
+    minimum height=10mm,
+    font=\small
+  },
+  flowaction/.style={
+    rounded corners=2mm,
+    rectangle,
+    draw=accent,
+    line width=0.9pt,
+    align=center,
+    text width=46mm,
+    minimum height=13mm,
+    font=\small
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=2.35,
+    draw=darkaccent,
+    line width=0.9pt,
+    align=center,
+    text width=43mm,
+    inner sep=1.6pt,
+    font=\small
+  },
+  flowresult/.style={
+    rounded corners=2mm,
+    rectangle,
+    draw=darkaccent,
+    line width=1pt,
+    align=center,
+    text width=39mm,
+    minimum height=13mm,
+    font=\small
+  },
+  flowarrow/.style={
+    -{Stealth[length=3mm,width=2mm]},
+    line width=0.9pt,
+    draw=textgray
+  }
+}
+
+\begin{document}
+
+% ============================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% ============================================================
+
+\thispagestyle{empty}
+\begin{titlepage}
+\centering
+\vspace*{27mm}
+
+{\Large\color{darkaccent}\bfseries Чек-лист\par}
+\vspace{4mm}
+
+{\huge\bfseries
+НОД и НОК: вычисление и выбор в задачах\par}
+
+\vspace{10mm}
+
+{\large Ксения Васильченко, 6 класс\par}
+
+\vfill
+
+{\large\bfseries Что повторить после занятия\par}
+\vspace{4mm}
+
+\begin{minipage}{0.80\textwidth}
+\centering
+Десятичные и обыкновенные дроби · простейшие уравнения ·
+разложение на простые множители · наибольший общий делитель ·
+наименьшее общее кратное · выбор НОД или НОК по смыслу задачи
+\end{minipage}
+
+\vfill
+
+{\normalsize
+Лёвин Артём Александрович эксклюзивно для Ксении Васильченко\par}
+\vspace{2mm}
+{\normalsize \lessondate\par}
+
+\vspace{18mm}
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[
+  accent!55,
+  line width=1.05pt
+]
+  ([xshift=20mm,yshift=17mm]current page.south west)
+  .. controls
+  ([xshift=67mm,yshift=30mm]current page.south west)
+  and
+  ([xshift=-64mm,yshift=8mm]current page.south east)
+  ..
+  ([xshift=-20mm,yshift=19mm]current page.south east);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% ============================================================
+% ОСНОВНОЙ ЧЕК-ЛИСТ
+% ============================================================
+
+\section*{1. Короткая разминка}
+\sectionline
+
+Эти навыки использовались перед основной темой занятия.
+
+\textbf{Десятичные дроби.}
+При сложении и вычитании записывайте числа так, чтобы запятые стояли друг под другом:
+\[
+1{,}50+2{,}57=4{,}07,
+\qquad
+2{,}57-1{,}50=1{,}07.
+\]
+При умножении сначала умножайте числа без запятых, затем отделяйте справа столько цифр,
+сколько знаков после запятой было в обоих множителях вместе:
+\[
+1{,}5\cdot1{,}2=1{,}80=1{,}8.
+\]
+При делении на натуральное число следите за положением запятой:
+\[
+1{,}5:3=0{,}5.
+\]
+
+\textbf{Обыкновенные дроби.}
+Для сложения нужен общий знаменатель:
+\[
+\frac23+\frac17=\frac{14}{21}+\frac3{21}=\frac{17}{21}.
+\]
+При делении на дробь умножайте на обратную дробь:
+\[
+\frac23:3\frac15
+=\frac23:\frac{16}{5}
+=\frac23\cdot\frac5{16}
+=\frac5{24}.
+\]
+Перед умножением дробей можно сократить общий множитель числителя одной дроби и знаменателя другой. Например, в произведении
+\[
+\frac23\cdot\frac5{16}
+\]
+можно сократить числа \(2\) и \(16\) на \(2\).
+
+\textbf{Простейшие уравнения.}
+\[
+\frac{x}{3}=5 \quad\Rightarrow\quad x=15,
+\]
+а в уравнении
+\[
+\frac3x=5
+\]
+обязательно учитываем ограничение \(x\ne0\). Здесь
+\[
+x=\frac35.
+\]
+После нахождения корня выполните подстановку в исходное уравнение: левая и правая части должны совпасть.
+
+\section*{2. Делитель и кратное: главное различие}
+\sectionline
+
+Перед НОД и НОК полезно чётко различать два слова.
+
+\begin{itemize}[leftmargin=7mm,itemsep=3pt,topsep=2pt]
+\item \textbf{Делитель числа} --- число, на которое исходное число делится без остатка. Например, \(6\) --- делитель \(24\), потому что \(24:6=4\).
+\item \textbf{Кратное числа} --- число, которое делится на исходное число без остатка. Например, \(24\) --- кратное \(6\), потому что \(24:6=4\).
+\end{itemize}
+
+\keyidea{Короткая опора}
+
+Если \(d=\nodru(a,b)\), то \(a\) и \(b\) делятся на \(d\).
+Если \(m=\nokru(a,b)\), то уже \(m\) делится и на \(a\), и на \(b\).
+
+\section*{3. НОД --- наибольший общий делитель}
+\sectionline
+
+\textbf{Определение.}
+\(\nodru(a,b)\) --- наибольшее натуральное число, на которое оба числа \(a\) и \(b\) делятся без остатка.
+
+\textbf{Как найти НОД по разложению на простые множители:}
+
+\begin{enumerate}[leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item разложите оба числа на простые множители;
+\item найдите множители, которые встречаются в обоих разложениях;
+\item возьмите каждый общий множитель столько раз, сколько он встречается в обоих разложениях одновременно;
+\item перемножьте выбранные множители.
+\end{enumerate}
+
+\textbf{Пример.}
+\[
+24=2\cdot2\cdot2\cdot3,
+\qquad
+36=2\cdot2\cdot3\cdot3.
+\]
+Общие множители: \(2\), ещё один \(2\) и \(3\). Поэтому
+\[
+\nodru(24,36)=2\cdot2\cdot3=12.
+\]
+Проверка:
+\[
+24:12=2,
+\qquad
+36:12=3.
+\]
+
+\keyidea{Смысл НОД в задачах}
+
+НОД особенно часто появляется, когда из нескольких данных количеств нужно \textbf{составить одинаковые группы или части без остатка}, причём требуется максимально возможное число групп или наибольший одинаковый размер части.
+
+\section*{4. НОК --- наименьшее общее кратное}
+\sectionline
+
+\textbf{Определение.}
+\(\nokru(a,b)\) --- наименьшее натуральное число, которое делится и на \(a\), и на \(b\) без остатка.
+
+Для маленьких чисел НОК иногда видно сразу:
+\[
+\nokru(2,3)=6,
+\qquad
+\nokru(2,5)=10.
+\]
+
+\textbf{Как найти НОК по разложению на простые множители:}
+
+\begin{enumerate}[leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item разложите оба числа на простые множители;
+\item перепишите полностью разложение одного числа;
+\item из второго разложения добавьте те множители, которых ещё не хватает;
+\item перемножьте полученные множители.
+\end{enumerate}
+
+\textbf{Пример.}
+\[
+12=2\cdot2\cdot3,
+\qquad
+45=3\cdot3\cdot5.
+\]
+Берём все множители первого числа: \(2\cdot2\cdot3\).
+Из второго разложения одной тройки уже хватает, поэтому добавляем ещё одну \(3\) и множитель \(5\):
+\[
+\nokru(12,45)
+=2\cdot2\cdot3\cdot3\cdot5
+=180.
+\]
+Проверка:
+\[
+180:12=15,
+\qquad
+180:45=4.
+\]
+
+Ещё один пример:
+\[
+18=2\cdot3\cdot3,
+\qquad
+24=2\cdot2\cdot2\cdot3,
+\]
+поэтому
+\[
+\nokru(18,24)=2\cdot2\cdot2\cdot3\cdot3=72.
+\]
+
+\keyidea{Смысл НОК в задачах}
+
+НОК нужен, когда ищут \textbf{первое общее совпадение} периодических событий или \textbf{наименьшее общее количество}, которое должно делиться на несколько заданных величин.
+
+\clearpage
+\section*{5. НОД или НОК: как понять по смыслу}
+\sectionline
+
+Слова \textit{«наибольшее»} и \textit{«наименьшее»} полезны как подсказки, но решающим остаётся смысл задачи.
+
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.20\linewidth}YY@{}}
+\toprule
+ & НОД & НОК \\
+\midrule
+Что происходит?
+& Исходные количества делятся на одинаковые части или группы.
+& Ищется общее число или момент, кратный нескольким величинам. \\
+Типичный вопрос
+& «Сколько максимально одинаковых наборов?»; «Какой наибольший одинаковый размер части?»
+& «Когда события впервые совпадут?»; «Какое наименьшее количество подойдёт всем условиям?» \\
+Самопроверка
+& Ответ должен делить каждое исходное число без остатка.
+& Ответ должен делиться на каждое исходное число без остатка. \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Пример: одинаковые наборы}
+
+Из \(72\) красных и \(96\) синих бусин нужно составить максимально возможное число одинаковых наборов, используя все бусины.
+Число наборов должно делить и \(72\), и \(96\), поэтому нужен НОД:
+\[
+\nodru(72,96)=24.
+\]
+Получится \(24\) набора, в каждом по
+\[
+72:24=3
+\]
+красные и
+\[
+96:24=4
+\]
+синие бусины.
+
+\subsection*{Пример: совпадение периодов}
+
+Моторное масло меняют каждые \(15\) тыс. км, приводной ремень --- каждые \(60\) тыс. км.
+Первый пробег после начального момента, при котором обе замены совпадут:
+\[
+\nokru(15,60)=60\text{ тыс. км}.
+\]
+Это четвёртая замена масла, потому что \(60:15=4\), и первая плановая замена ремня, потому что \(60:60=1\).
+
+\subsection*{Пример: одинаковая минимальная сумма}
+
+Дима покупает пирожки по \(45\) руб. за штуку, а Витя --- по \(60\) руб. за штуку.
+Нужно найти наименьшую одинаковую сумму, которую каждый сможет потратить полностью на целое число пирожков.
+Такая сумма должна делиться и на \(45\), и на \(60\):
+\[
+\nokru(45,60)=180\text{ руб.}
+\]
+Действительно,
+\[
+180:45=4,
+\qquad
+180:60=3.
+\]
+Значит, Дима купит \(4\) пирожка, а Витя --- \(3\).
+
+\section*{6. Типичные ошибки}
+\sectionline
+
+\begin{itemize}[leftmargin=7mm,itemsep=3pt,topsep=2pt]
+\item \textbf{Перепутать направление деления.} НОД делит исходные числа; НОК само делится на исходные числа.
+\item \textbf{Для НОД взять лишний множитель.} В НОД входят только множители, общие для всех рассматриваемых чисел.
+\item \textbf{Для НОК забыть недостающий множитель.} После записи одного разложения нужно добавить из другого всё, чего ещё не хватает.
+\item \textbf{Выбрать метод только по одному слову.} Сначала определите смысл: разделение на одинаковые группы или первое общее совпадение.
+\item \textbf{Не проверить ответ.} После вычисления НОД или НОК обязательно выполните короткую проверку делением.
+\end{itemize}
+
+% ============================================================
+% ОТДЕЛЬНАЯ СТРАНИЦА С БЛОК-СХЕМОЙ
+% ============================================================
+
+\clearpage
+\thispagestyle{empty}
+
+\begin{center}
+{\Large\bfseries\color{darkaccent}
+Алгоритм: как выбрать НОД или НОК в текстовой задаче\par}
+\vspace{11mm}
+
+\begin{tikzpicture}[x=1mm,y=1mm]
+
+\node[flowstart] (start) at (0,0) {Прочитайте условие};
+
+\node[flowaction,text width=50mm] (meaning) at (0,-22)
+{Сформулируйте своими словами, что требуется найти};
+
+\node[flowdecision,text width=36mm] (split) at (0,-55)
+{Из данных количеств составляют одинаковые группы или части без остатка?};
+
+\node[flowresult,text width=36mm] (gcd) at (-44,-94)
+{Используйте НОД};
+
+\node[flowdecision,text width=36mm] (coincide) at (0,-112)
+{Ищется первое совпадение или наименьшее общее кратное?};
+
+\node[flowaction,text width=40mm] (gcdcheck) at (-44,-132)
+{Проверьте: ответ делит каждое исходное число};
+
+\node[flowresult,text width=36mm] (lcm) at (44,-151)
+{Используйте НОК};
+
+\node[flowaction,text width=41mm] (reread) at (-44,-171)
+{Перечитайте вопрос и уточните, что именно должно быть общим};
+
+\node[flowaction,text width=40mm] (lcmcheck) at (44,-185)
+{Проверьте: ответ делится на каждое исходное число};
+
+\node[flowstart] (finish) at (0,-222)
+{Ответ обоснован};
+
+\draw[flowarrow] (start) -- (meaning);
+\draw[flowarrow] (meaning) -- (split);
+
+\draw[flowarrow] (split) -- node[above left,font=\small]{да} (gcd);
+\draw[flowarrow] (split) -- node[right,font=\small]{нет} (coincide);
+
+\draw[flowarrow] (gcd) -- (gcdcheck);
+\draw[flowarrow] (coincide) -- node[above right,font=\small]{да} (lcm);
+\draw[flowarrow] (coincide) -- node[above left,font=\small]{нет} (reread);
+\draw[flowarrow] (lcm) -- (lcmcheck);
+
+\draw[flowarrow] (gcdcheck.south) |- (finish.west);
+\draw[flowarrow] (lcmcheck.south) |- (finish.east);
+\draw[flowarrow] (reread.west) -- ++(-10,0) |- (meaning.west);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% ============================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% ============================================================
+
+\section*{Тренировочный блок · Путь А}
+\sectionline
+
+\textbf{1. Определите, что следует использовать: НОД или НОК.}
+
+\begin{enumerate}[label=\alph*),leftmargin=8mm,itemsep=2pt,topsep=2pt]
+\item Из двух видов конфет составляют максимально возможное число одинаковых наборов без остатка.
+\item Два сигнала повторяются через разные промежутки времени. Нужно найти момент их первого нового совпадения.
+\item Нужно найти наименьшую одинаковую сумму, которая делится на две заданные цены без остатка.
+\end{enumerate}
+
+\vspace{2mm}
+
+\textbf{2.} Разложите числа на простые множители и найдите:
+\[
+\nodru(30,45),
+\qquad
+\nokru(8,12).
+\]
+
+\vspace{2mm}
+
+\textbf{3.} Есть \(72\) красные и \(96\) синих бусин. Нужно составить максимально возможное число одинаковых наборов, используя все бусины. Сколько наборов получится? Сколько бусин каждого цвета будет в одном наборе?
+
+\vspace{2mm}
+
+\textbf{4.} Два сигнала прозвучали одновременно. Первый повторяется каждые \(18\) секунд, второй --- каждые \(24\) секунды. Через сколько секунд они впервые снова прозвучат одновременно?
+
+\vspace{2mm}
+
+\textbf{5.} Дима покупает пирожки по \(45\) руб. за штуку, а Витя --- по \(60\) руб. за штуку. Какую наименьшую одинаковую сумму нужно иметь каждому, чтобы оба могли потратить её полностью на целое число пирожков? Сколько пирожков купит каждый? Укажите, почему здесь нужен НОД или НОК.
+
+\vfill
+
+{\color{softgray}\small
+Для самопроверки выбора метода задайте себе один вопрос:
+\textit{я делю исходные количества на одинаковые группы или ищу первое общее совпадение / наименьшее общее кратное?}}
+
+% ============================================================
+% ОТВЕТЫ
+% ============================================================
+
+\clearpage
+
+\section*{Ответы}
+\sectionline
+
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\linewidth}{@{}p{0.07\linewidth}X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+1
+& а) НОД; б) НОК; в) НОК. \\
+2
+& \(30=2\cdot3\cdot5\), \(45=3\cdot3\cdot5\), поэтому \(\nodru(30,45)=15\). \(8=2\cdot2\cdot2\), \(12=2\cdot2\cdot3\), поэтому \(\nokru(8,12)=24\). \\
+3
+& \(24\) набора; в каждом по \(3\) красные и \(4\) синие бусины. \\
+4
+& \(72\) секунды. \\
+5
+& \(180\) руб.; Дима купит \(4\) пирожка, Витя --- \(3\); используется НОК, потому что искомая сумма должна быть наименьшим общим кратным чисел \(45\) и \(60\). \\
+\bottomrule
+\end{tabularx}
+
+\vspace{8mm}
+
+\keyidea{Финальная самопроверка}
+
+\begin{itemize}[leftmargin=7mm,itemsep=3pt,topsep=2pt]
+\item Для НОД убедитесь, что ответ делит каждое исходное число.
+\item Для НОК убедитесь, что ответ делится на каждое исходное число.
+\item В текстовой задаче отдельно проверьте, отвечает ли найденное число именно на поставленный вопрос.
+\end{itemize}
+
+\end{document}
