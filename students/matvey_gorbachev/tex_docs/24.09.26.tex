@@ -1,0 +1,864 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=19mm,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+
+\hypersetup{hidelinks}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\arraystretch}{1.28}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{darkaccent}{Векторы на координатной плоскости}}
+\fancyhead[R]{\small Матвей Горбачев}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\tkzSetUpLine[line width=1pt,color=accent]
+\tkzSetUpPoint[color=accent,fill=accent,size=3]
+\tkzSetUpLabel[color=black,font=\small]
+
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=darkaccent,
+    line width=0.9pt,
+    align=center,
+    minimum width=42mm,
+    minimum height=10mm,
+    inner sep=2.5mm,
+    font=\small
+  },
+  flowaction/.style={
+    rounded corners=2mm,
+    draw=accent,
+    line width=0.9pt,
+    align=center,
+    text width=68mm,
+    minimum height=11mm,
+    inner sep=2.7mm,
+    font=\small
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=2.3,
+    draw=darkaccent,
+    line width=0.9pt,
+    align=center,
+    text width=42mm,
+    inner sep=1.3mm,
+    font=\small
+  },
+  flowarrow/.style={
+    -{Latex[length=3mm,width=2mm]},
+    line width=0.9pt,
+    draw=textgray
+  }
+}
+
+\newcommand{\vect}[1]{\vec{#1}}
+\newcommand{\checkitem}{\item[$\square$]}
+\newcommand{\sectionrule}{%
+  \par\vspace{1mm}%
+  {\color{accent!60}\hrule height 0.7pt}%
+  \vspace{3mm}%
+}
+
+\begin{document}
+
+% =========================================================
+% Титульный лист
+% =========================================================
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{0.15\textheight}
+
+{\Large\textcolor{darkaccent}{Чек-лист}\par}
+
+\vspace{7mm}
+
+{\Huge\bfseries Векторы на координатной плоскости\par}
+
+\vspace{4mm}
+
+{\Large
+Координаты, длина, операции\\
+и скалярное произведение
+\par}
+
+
+
+\vfill
+
+{\normalsize \today\par}
+
+\vspace{8mm}
+
+{\normalsize
+Лёвин Артём Александрович\\
+эксклюзивно для Матвея Горбачева
+\par}
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[
+  accent!45,
+  line width=1.5pt
+]
+  ($(current page.south west)+(0,18mm)$)
+  .. controls
+  ($(current page.south west)+(55mm,37mm)$)
+  and
+  ($(current page.south east)+(-58mm,7mm)$)
+  ..
+  ($(current page.south east)+(0,23mm)$);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% =========================================================
+% Основной чек-лист
+% =========================================================
+
+\section*{1. Координаты вектора}
+\sectionrule
+
+Пусть
+\[
+A(x_A;y_A)
+\]
+--- начало вектора, а
+\[
+B(x_B;y_B)
+\]
+--- его конец. Тогда
+
+\[
+\boxed{
+\overrightarrow{AB}
+=
+(x_B-x_A;\,y_B-y_A)
+}
+\]
+
+\begin{itemize}[leftmargin=7mm,itemsep=2mm]
+
+\checkitem
+Всегда используйте порядок
+\[
+\text{координаты конца}-\text{координаты начала}.
+\]
+
+\checkitem
+Координата по \(x\) показывает горизонтальное смещение:
+вправо --- положительное, влево --- отрицательное.
+
+\checkitem
+Координата по \(y\) показывает вертикальное смещение:
+вверх --- положительное, вниз --- отрицательное.
+
+\checkitem
+Если начало вектора совпадает с началом координат,
+координаты вектора совпадают с координатами его конца.
+
+\end{itemize}
+
+\textbf{Пример.}
+Пусть
+\[
+A(3;2),\qquad B(9;3).
+\]
+Тогда
+\[
+\overrightarrow{AB}
+=
+(9-3;\,3-2)
+=
+(6;1).
+\]
+Это означает смещение на \(6\) единиц вправо и на \(1\) единицу вверх.
+
+\section*{2. Длина вектора}
+\sectionrule
+
+Если
+\[
+\vect a=(x_a;y_a),
+\]
+то
+\[
+\boxed{|\vect a|=\sqrt{x_a^2+y_a^2}}
+\]
+и, следовательно,
+\[
+\boxed{|\vect a|^2=x_a^2+y_a^2}.
+\]
+
+Если в задаче требуется именно \textbf{квадрат длины}, извлекать квадратный корень не нужно.
+Например, для
+\[
+\vect a=(6;2)
+\]
+получаем
+\[
+|\vect a|^2=6^2+2^2=40.
+\]
+
+\section*{3. Основные операции с векторами}
+\sectionrule
+
+Для
+\[
+\vect a=(x_a;y_a),
+\qquad
+\vect b=(x_b;y_b)
+\]
+используются следующие правила.
+
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.31\linewidth}X@{}}
+\toprule
+Операция & Формула \\
+\midrule
+Умножение на число
+&
+\(k\vect a=(kx_a;ky_a)\)
+\\[1.5mm]
+Сложение
+&
+\(\vect a+\vect b=(x_a+x_b;\,y_a+y_b)\)
+\\[1.5mm]
+Вычитание
+&
+\(\vect a-\vect b=(x_a-x_b;\,y_a-y_b)\)
+\\[1.5mm]
+Противоположный вектор
+&
+\(-\vect b=(-x_b;-y_b)\)
+\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Вычитание удобно понимать через сложение:
+\[
+\boxed{\vect a-\vect b=\vect a+(-\vect b)}.
+\]
+Противоположный вектор имеет ту же длину, но направлен в противоположную сторону:
+\[
+\overrightarrow{BA}=-\overrightarrow{AB}.
+\]
+
+\section*{4. Геометрическое сложение векторов}
+\sectionrule
+
+При сложении действует \textbf{правило треугольника}:
+\[
+\boxed{
+\overrightarrow{AB}+\overrightarrow{BC}=\overrightarrow{AC}
+}.
+\]
+
+Чтобы сложить два произвольных вектора геометрически, второй вектор можно параллельно перенести так,
+чтобы его начало совпало с концом первого. Сумма соединяет начало первого вектора с концом перенесённого второго.
+
+Для вычитания сначала замените
+\[
+\vect a-\vect b
+\]
+на
+\[
+\vect a+(-\vect b),
+\]
+после чего примените обычное правило сложения.
+
+\textbf{Важно различать}
+\[
+|\vect a|+|\vect b|
+\qquad\text{и}\qquad
+|\vect a+\vect b|.
+\]
+В общем случае эти величины не равны.
+
+\section*{5. Скалярное произведение и угол между векторами}
+\sectionrule
+
+Скалярное произведение двух векторов --- \textbf{число}. Его можно вычислять двумя способами.
+
+\subsection*{Через координаты}
+
+\[
+\boxed{
+\vect a\cdot\vect b
+=
+x_ax_b+y_ay_b
+}.
+\]
+
+\subsection*{Через длины и угол}
+
+Если \(\varphi\) --- угол между ненулевыми векторами,
+\[
+0^\circ\le\varphi\le180^\circ,
+\]
+то
+\[
+\boxed{
+\vect a\cdot\vect b
+=
+|\vect a|\,|\vect b|\cos\varphi
+}.
+\]
+
+Следовательно,
+\[
+\boxed{
+\displaystyle
+\cos\varphi
+=
+\frac{x_ax_b+y_ay_b}
+{\sqrt{x_a^2+y_a^2}\,\sqrt{x_b^2+y_b^2}}
+},
+\qquad
+|\vect a|\ne0,
+\quad
+|\vect b|\ne0.
+\]
+
+Для ненулевых векторов полезен критерий перпендикулярности:
+\[
+\boxed{
+\vect a\perp\vect b
+\iff
+\vect a\cdot\vect b=0
+}.
+\]
+
+Также знак скалярного произведения позволяет быстро проверить характер угла:
+\[
+\vect a\cdot\vect b>0\Rightarrow\varphi<90^\circ,
+\]
+\[
+\vect a\cdot\vect b=0\Rightarrow\varphi=90^\circ,
+\]
+\[
+\vect a\cdot\vect b<0\Rightarrow\varphi>90^\circ.
+\]
+
+\textbf{Пример.}
+Пусть
+\[
+\vect a=(1;2),
+\qquad
+\vect b=(-2;-1).
+\]
+Тогда
+\[
+\vect a\cdot\vect b
+=1\cdot(-2)+2\cdot(-1)
+=-4,
+\]
+\[
+|\vect a|=\sqrt5,
+\qquad
+|\vect b|=\sqrt5.
+\]
+Поэтому
+\[
+\cos\varphi=-\frac45,
+\]
+а значит,
+\[
+\boxed{
+\varphi=\arccos\!\left(-\frac45\right)
+}.
+\]
+Отрицательный косинус согласуется с тем, что угол тупой.
+
+\section*{6. Составные выражения: порядок действий}
+\sectionrule
+
+Если в скалярном произведении участвует сумма или разность векторов,
+удобнее сначала выполнить операции с векторами.
+
+Пусть
+\[
+\vect a=(-1;3),
+\qquad
+\vect b=(4;1),
+\qquad
+\vect c=(2;t),
+\]
+и известно, что
+\[
+(\vect a+\vect b)\cdot\vect c=0.
+\]
+Сначала
+\[
+\vect a+\vect b=(3;4).
+\]
+Затем
+\[
+(3;4)\cdot(2;t)=3\cdot2+4t.
+\]
+По условию
+\[
+6+4t=0,
+\]
+откуда
+\[
+\boxed{t=-\frac32}.
+\]
+
+\section*{7. Координатный метод в геометрии}
+\sectionrule
+
+Если координаты в условии отсутствуют, их часто выгодно \textbf{ввести самостоятельно}.
+Используйте декартову систему координат: оси должны быть взаимно перпендикулярны,
+а единичный масштаб по обеим осям --- одинаковым.
+
+Удобное начало координат часто совпадает с:
+\begin{itemize}[leftmargin=7mm,itemsep=1.5mm]
+\checkitem вершиной фигуры;
+\checkitem серединой стороны;
+\checkitem центром симметрии или точкой пересечения диагоналей;
+\checkitem основанием высоты.
+\end{itemize}
+
+\textbf{Пример: прямоугольник.}
+Пусть
+\[
+AB=6,
+\qquad
+AD=8.
+\]
+Выберем
+\[
+A(0;0),\quad B(0;6),\quad D(8;0),\quad C(8;6).
+\]
+Тогда
+\[
+\overrightarrow{AB}=(0;6),
+\qquad
+\overrightarrow{AD}=(8;0),
+\]
+поэтому
+\[
+\overrightarrow{AB}+\overrightarrow{AD}=(8;6),
+\]
+и
+\[
+\left|
+\overrightarrow{AB}+\overrightarrow{AD}
+\right|
+=\sqrt{8^2+6^2}=10.
+\]
+Тот же результат следует из правила параллелограмма:
+\[
+\overrightarrow{AB}+\overrightarrow{AD}=\overrightarrow{AC}.
+\]
+
+Пусть диагонали пересекаются в точке \(O\). Поскольку диагонали прямоугольника делятся точкой пересечения пополам,
+\[
+O(4;3).
+\]
+\[
+\overrightarrow{AO}=(4;3),
+\qquad
+\overrightarrow{DO}=(-4;3).
+\]
+Следовательно,
+\[
+\overrightarrow{AO}+\overrightarrow{DO}=(0;6),
+\]
+и
+\[
+\boxed{
+\left|
+\overrightarrow{AO}+\overrightarrow{DO}
+\right|=6
+}.
+\]
+
+\begin{center}
+\begin{tikzpicture}[scale=0.55]
+\tkzDefPoint(0,0){A}
+\tkzDefPoint(0,6){B}
+\tkzDefPoint(8,6){C}
+\tkzDefPoint(8,0){D}
+\tkzInterLL(A,C)(B,D)
+\tkzGetPoint{O}
+\tkzDrawPolygon(A,B,C,D)
+\tkzDrawSegments(A,C B,D)
+\tkzDrawPoints(A,B,C,D,O)
+\tkzLabelPoints[below left](A)
+\tkzLabelPoints[above left](B)
+\tkzLabelPoints[above right](C)
+\tkzLabelPoints[below right](D)
+\tkzLabelPoints[above](O)
+\tkzLabelSegment[left](A,B){$6$}
+\tkzLabelSegment[below](A,D){$8$}
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\section*{8. Полезная геометрическая заготовка: равносторонний треугольник}
+\sectionrule
+
+Для равностороннего треугольника со стороной \(a\) полезно помнить высоту
+\[
+\boxed{h=\frac{a\sqrt3}{2}}.
+\]
+Высота одновременно является медианой, поэтому по теореме Пифагора
+\[
+h^2+\left(\frac a2\right)^2=a^2.
+\]
+Отсюда
+\[
+h^2=\frac{3a^2}{4},
+\qquad
+h=\frac{a\sqrt3}{2}.
+\]
+В координатных задачах начало координат часто удобно помещать в основание такой высоты.
+
+\section*{9. Сонаправленные и противоположно направленные векторы}
+\sectionrule
+
+Если ненулевые векторы \(\vect c\) и \(\vect b\) сонаправлены, то
+\[
+\boxed{
+\vect c=k\vect b,
+\qquad
+k>0
+}.
+\]
+Если они направлены противоположно, то
+\[
+\boxed{
+\vect c=k\vect b,
+\qquad
+k<0
+}.
+\]
+При умножении вектора на число его длина изменяется по правилу
+\[
+\boxed{|k\vect b|=|k|\,|\vect b|}.
+\]
+
+\textbf{Пример.}
+Пусть
+\[
+\vect a=(-2;4),
+\qquad
+\vect b=(2;-1),
+\]
+вектор \(\vect c\) сонаправлен с \(\vect b\), причём
+\[
+|\vect c|=|\vect a|.
+\]
+Из сонаправленности
+\[
+\vect c=k\vect b=(2k;-k),
+\qquad
+k>0.
+\]
+Далее
+\[
+|\vect c|
+=\sqrt{(2k)^2+(-k)^2}
+=\sqrt{5k^2}
+=|k|\sqrt5,
+\]
+а
+\[
+|\vect a|
+=\sqrt{(-2)^2+4^2}
+=\sqrt{20}
+=2\sqrt5.
+\]
+Поэтому
+\[
+|k|\sqrt5=2\sqrt5,
+\]
+то есть
+\[
+|k|=2.
+\]
+Так как \(k>0\), получаем
+\[
+k=2,
+\]
+а значит,
+\[
+\boxed{\vect c=(4;-2)}.
+\]
+
+\section*{10. Типичные ошибки и самопроверка}
+\sectionrule
+
+\begin{itemize}[leftmargin=7mm,itemsep=2mm]
+\checkitem В \(\overrightarrow{AB}\) перепутаны начало и конец. Проверка: всегда \(B-A\).
+\checkitem При движении влево или вниз потерян знак «минус».
+\checkitem В формуле длины одна из координат не возведена в квадрат.
+\checkitem При поиске \(|\vect a|^2\) без необходимости извлекается корень.
+\checkitem Смешиваются \(|\vect a|+|\vect b|\) и \(|\vect a+\vect b|\).
+\checkitem В скалярном произведении перемножены несоответствующие координаты.
+\checkitem При поиске угла найден только \(\cos\varphi\), хотя требуется сам \(\varphi\).
+\checkitem Если \(\cos\varphi=c<0\), то \(\varphi=\arccos c\); дополнительная поправка не нужна.
+\checkitem При сонаправленности допускается \(k<0\), хотя должно быть \(k>0\).
+\checkitem В геометрии введены косые оси или разный единичный масштаб, после чего неверно применена формула длины.
+\end{itemize}
+
+\clearpage
+\section*{11. Итоговый чек-лист формул}
+\sectionrule
+
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.36\linewidth}X@{}}
+\toprule
+Что требуется & Формула \\
+\midrule
+Координаты \(\overrightarrow{AB}\)
+& \((x_B-x_A;\,y_B-y_A)\) \\[1.5mm]
+Длина
+& \(|\vect a|=\sqrt{x_a^2+y_a^2}\) \\[1.5mm]
+Квадрат длины
+& \(|\vect a|^2=x_a^2+y_a^2\) \\[1.5mm]
+Умножение на число
+& \(k\vect a=(kx_a;ky_a)\) \\[1.5mm]
+Сумма
+& \(\vect a+\vect b=(x_a+x_b;\,y_a+y_b)\) \\[1.5mm]
+Разность
+& \(\vect a-\vect b=(x_a-x_b;\,y_a-y_b)\) \\[1.5mm]
+Скалярное произведение
+& \(\vect a\cdot\vect b=x_ax_b+y_ay_b\) \\[1.5mm]
+Скалярное произведение через угол
+& \(\vect a\cdot\vect b=|\vect a||\vect b|\cos\varphi\) \\[1.5mm]
+Косинус угла
+& \(\displaystyle \cos\varphi=\frac{\vect a\cdot\vect b}{|\vect a||\vect b|}\) \\[2mm]
+Перпендикулярность
+& \(\vect a\perp\vect b\iff\vect a\cdot\vect b=0\) для ненулевых векторов \\[1.5mm]
+Сонаправленность
+& \(\vect c=k\vect b,\ k>0\) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% =========================================================
+% Блок-схема
+% =========================================================
+
+\clearpage
+\thispagestyle{fancy}
+
+\begin{center}
+{\Large\bfseries\textcolor{darkaccent}{Алгоритм: координатный метод в задачах на векторы}}
+\end{center}
+
+\vspace{5mm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=7mm and 12mm]
+
+\node[flowstart] (start) {Начало решения};
+
+\node[flowdecision,below=of start] (given)
+{Координаты\\уже заданы?};
+
+\node[flowaction,below left=8mm and 6mm of given,text width=47mm] (choose)
+{Введите декартову систему координат. Выберите удобное начало: вершина, середина, центр симметрии или основание высоты.};
+
+\node[flowaction,below right=8mm and 6mm of given,text width=47mm] (read)
+{Аккуратно выпишите данные координаты точек и векторов.};
+
+\node[flowaction,below=39mm of given,text width=67mm] (vecs)
+{Найдите координаты нужных векторов: конец минус начало.};
+
+\node[flowaction,below=of vecs,text width=67mm] (ops)
+{Выполните требуемое векторное выражение. При необходимости найдите его длину.};
+
+\node[flowdecision,below=of ops] (angle)
+{Нужно найти угол?};
+
+\node[flowaction,below right=8mm and 6mm of angle,text width=47mm] (cosine)
+{Вычислите \(\vect a\cdot\vect b\), длины векторов, затем \(\cos\varphi\) и \(\varphi\).};
+
+\node[flowaction,below=39mm of angle,text width=67mm] (check)
+{Проверьте знаки, порядок координат и геометрический смысл ответа.};
+
+\node[flowstart,below=of check] (finish) {Ответ};
+
+\draw[flowarrow] (start) -- (given);
+
+\draw[flowarrow] (given) -- node[above left,font=\small]{нет} (choose);
+\draw[flowarrow] (given) -- node[above right,font=\small]{да} (read);
+
+\draw[flowarrow] (choose.south) |- (vecs.west);
+\draw[flowarrow] (read.south) |- (vecs.east);
+
+\draw[flowarrow] (vecs) -- (ops);
+\draw[flowarrow] (ops) -- (angle);
+
+\draw[flowarrow] (angle) -- node[above right,font=\small]{да} (cosine);
+\draw[flowarrow] (angle.west) -- ++(-18mm,0) |- node[pos=0.18,left,font=\small]{нет} (check.west);
+\draw[flowarrow] (cosine.south) |- (check.east);
+
+\draw[flowarrow] (check) -- (finish);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% =========================================================
+% Тренировочный блок
+% =========================================================
+
+\section*{Тренировочный блок --- Путь А}
+\sectionrule
+
+\textbf{Инструкция.}
+Решите задания самостоятельно. Промежуточные координаты рекомендуется выписывать полностью:
+это снижает риск ошибок в знаках и порядке вычитания.
+
+\begin{enumerate}[leftmargin=8mm,label=\textbf{\arabic*.},itemsep=8mm]
+
+\item
+Даны точки
+\[
+A(-2;5),
+\qquad
+B(4;1).
+\]
+Найдите координаты вектора \(\overrightarrow{AB}\) и его длину.
+
+\item
+Даны векторы
+\[
+\vect a=(3;-1),
+\qquad
+\vect b=(1;2).
+\]
+Найдите
+\[
+2\vect a-\vect b
+\]
+и длину полученного вектора.
+
+\item
+Даны векторы
+\[
+\vect a=(1;1),
+\qquad
+\vect b=(2;0).
+\]
+Найдите угол между этими векторами.
+
+\item
+В прямоугольнике \(ABCD\)
+\[
+AB=8,
+\qquad
+AD=12.
+\]
+Диагонали пересекаются в точке \(O\).
+Найдите
+\[
+\left|
+\overrightarrow{AO}+\overrightarrow{DO}
+\right|.
+\]
+Рекомендуется использовать координатный метод.
+
+\item
+Даны
+\[
+\vect a=(-6;8),
+\qquad
+\vect b=(3;-4).
+\]
+Вектор \(\vect c\) сонаправлен с \(\vect b\), причём
+\[
+|\vect c|=|\vect a|.
+\]
+Найдите координаты \(\vect c\) и значение
+\[
+x_c+y_c.
+\]
+
+\end{enumerate}
+
+% =========================================================
+% Ответы
+% =========================================================
+
+\clearpage
+
+\section*{Ответы}
+\sectionrule
+
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\linewidth}{@{}p{0.12\linewidth}X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+1
+&
+\(\overrightarrow{AB}=(6;-4),\quad |\overrightarrow{AB}|=2\sqrt{13}.\)
+\\[2mm]
+2
+&
+\(2\vect a-\vect b=(5;-4),\quad |2\vect a-\vect b|=\sqrt{41}.\)
+\\[2mm]
+3
+&
+\(45^\circ.\)
+\\[2mm]
+4
+&
+\(8.\)
+\\[2mm]
+5
+&
+\(\vect c=(6;-8),\quad x_c+y_c=-2.\)
+\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\vfill
+
+\begin{center}
+\small\textcolor{textgray}{Лёвин Артём Александрович эксклюзивно для Матвея Горбачева}
+\end{center}
+
+\end{document}
