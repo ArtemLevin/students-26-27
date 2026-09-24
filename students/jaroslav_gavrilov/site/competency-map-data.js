@@ -83,6 +83,27 @@ for (const [id, cfg] of Object.entries(LESSON_210926)) {
   item.material = { href: '21.09.26.html', label: 'Открыть интерактивное занятие →' };
 }
 
+
+const LESSON_240926 = {
+  'ege07_11': { level: 3, evidence: 'Повторено решение простейшего уравнения с тангенсом и периодом π; запись общей серии использована в однородном уравнении.' },
+  'ege08_15': { level: 3, repeat: true, evidence: 'Формула sin 2x = 2 sin x cos x использована как первый шаг преобразования; навык требуется закрепить самостоятельной практикой.' },
+  'ege14_02': { level: 3, evidence: 'Отработано распознавание структуры тригонометрического уравнения: выравнивание аргументов, поиск общего множителя, группировка и переход к простым уравнениям.' },
+  'ege14_04': { level: 3, repeat: true, evidence: 'Формула двойного аргумента применялась для получения общей алгебраической структуры и последующего вынесения множителя.' },
+  'ege14_06': { level: 2, repeat: true, evidence: 'Введён и разобран основной метод решения однородного уравнения первой степени a sin x + b cos x = 0 через обоснованное деление на cos x.' },
+  'ege14_13': { level: 3, evidence: 'Закреплена запись общей серии решений с целым параметром k и корректным периодом для тангенса.' },
+  'ege14_15': { level: 2, repeat: true, evidence: 'Разобран отбор корней на промежутке через двойное неравенство для параметра k; навык требует ежедневного закрепления.' },
+  'ege14_17': { level: 2, repeat: true, evidence: 'Отдельно разобрана потеря корней при делении на выражение, которое может обращаться в ноль; безопасный приём — вынесение и разбор нулевого произведения.' }
+};
+for (const [id, cfg] of Object.entries(LESSON_240926)) {
+  const item = G.flatMap(group => group.items).find(topic => topic.id === id);
+  if (!item) continue;
+  item.level = Math.max(item.level || 0, cfg.level);
+  if (Object.prototype.hasOwnProperty.call(cfg, 'repeat')) item.repeat = Boolean(cfg.repeat);
+  item.evidence = Array.isArray(item.evidence) ? item.evidence : [];
+  item.evidence.push({ text: cfg.evidence + ' Материал: занятие 24.09.26 «Тригонометрические уравнения: выбор метода и отбор корней».' });
+  item.material = { href: '24.09.26.html', label: 'Открыть интерактивное занятие →' };
+}
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'jaroslav_gavrilov',
@@ -92,7 +113,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Структура сверена 19.09.2026 с опубликованными ФИПИ проектами КИМ ЕГЭ-2027 по профильной математике.',
-    updated:'21.09.2026'
+    updated:'24.09.2026'
   },
   groups:G
 };

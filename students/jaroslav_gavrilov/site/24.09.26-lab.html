@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Цифровая лаборатория Ярослава Гаврилова: отбор корней тригонометрического уравнения через целый параметр k.">
+  <title>24.09.26 · Лаборатория отбора корней · Ярослав Гаврилов</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231f5664'/%3E%3Cpath d='M13 43h38M20 33h24M27 23h10' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root{
+      --surface-page:#f5f0e8;
+      --surface-raised:#fffdf8;
+      --surface-soft:#ece5da;
+      --text-primary:#20282b;
+      --text-secondary:#687276;
+      --text-inverse:#fffdf8;
+      --border-subtle:rgba(32,40,43,.16);
+      --border-strong:rgba(32,40,43,.34);
+      --accent:#1f5664;
+      --accent-hover:#173f49;
+      --accent-soft:#d9e7e9;
+      --accent-warm:#bf6657;
+      --success:#47715c;
+      --danger:#9d4e46;
+      --focus-ring:#cf7b6c;
+      --shadow-low:0 12px 34px rgba(29,46,51,.08);
+      --radius-sm:8px;
+      --radius-md:14px;
+      --radius-lg:24px;
+      --motion-fast:150ms;
+      --motion-normal:260ms;
+    }
+    html[data-theme="dark"]{
+      --surface-page:#151a1c;
+      --surface-raised:#1e2528;
+      --surface-soft:#273135;
+      --text-primary:#edf0eb;
+      --text-secondary:#aeb9bc;
+      --text-inverse:#101416;
+      --border-subtle:rgba(237,240,235,.14);
+      --border-strong:rgba(237,240,235,.30);
+      --accent:#81b8c3;
+      --accent-hover:#a4ced6;
+      --accent-soft:#203b42;
+      --accent-warm:#e18a79;
+      --success:#84ad93;
+      --danger:#e09589;
+      --focus-ring:#e7a293;
+      --shadow-low:0 12px 34px rgba(0,0,0,.18);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;background:var(--surface-page);color:var(--text-primary);
+      font-family:Arial,sans-serif;line-height:1.6;
+    }
+    button,a{font:inherit}
+    :focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+    .skip-link{position:fixed;left:1rem;top:-5rem;z-index:100;background:var(--surface-raised);padding:.7rem 1rem;border:1px solid var(--border-strong)}
+    .skip-link:focus{top:1rem}
+    .shell{width:min(100% - clamp(1rem,6vw,6rem),88rem);margin:0 auto;padding-bottom:4rem}
+    .topbar{
+      position:sticky;top:0;z-index:30;margin:0 calc(50% - 50vw);
+      display:flex;align-items:center;gap:.7rem;padding:.7rem max(clamp(.5rem,4vw,2rem),calc((100vw - 88rem)/2));
+      border-bottom:1px solid var(--border-subtle);
+      background:color-mix(in srgb,var(--surface-page) 94%,transparent);backdrop-filter:blur(12px);
+    }
+    .topbar a,.topbar button{
+      min-height:42px;display:inline-flex;align-items:center;text-decoration:none;
+      border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);padding:.55rem .8rem;
+    }
+    .topbar a:hover,.topbar button:hover{background:var(--surface-soft)}
+    .topbar .grow{flex:1;border:0}
+    .hero{
+      min-height:40vh;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(18rem,.8fr);
+      gap:clamp(2rem,6vw,6rem);align-items:end;padding:clamp(3rem,7vw,6rem) 0 2.5rem;
+      border-bottom:1px solid var(--border-strong);
+    }
+    .eyebrow{margin:0 0 .65rem;color:var(--accent-warm);font:700 .72rem/1.2 ui-monospace,monospace;letter-spacing:.13em;text-transform:uppercase}
+    h1,h2,h3{font-family:Georgia,serif;letter-spacing:-.025em}
+    h1{font-size:clamp(3rem,7vw,6.4rem);line-height:.92;margin:.1rem 0 1rem;max-width:12ch}
+    .lead{max-width:48rem;color:var(--text-secondary);font-size:clamp(1.05rem,2vw,1.3rem)}
+    .hero-note{border-left:2px solid var(--accent);padding-left:1.2rem;color:var(--text-secondary)}
+    .hero-note strong{display:block;color:var(--text-primary);font-family:Georgia,serif;font-size:1.2rem;margin-bottom:.35rem}
+    .lab{
+      display:grid;grid-template-columns:minmax(17rem,.58fr) minmax(0,1.42fr);
+      gap:clamp(1.5rem,4vw,4rem);padding:clamp(2.5rem,6vw,5rem) 0;
+      border-bottom:1px solid var(--border-strong);
+    }
+    .controls{
+      position:sticky;top:70px;align-self:start;
+      border-top:2px solid var(--accent);border-bottom:1px solid var(--border-strong);
+      padding:1.2rem 0;
+    }
+    .controls h2{margin:.1rem 0 .7rem;font-size:clamp(1.7rem,3vw,2.8rem)}
+    .controls p{color:var(--text-secondary)}
+    .k-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.4rem;margin:1rem 0}
+    .k-grid button{
+      min-height:46px;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);
+    }
+    .k-grid button[aria-pressed="true"]{background:var(--accent);color:var(--text-inverse);border-color:var(--accent)}
+    .readout{margin-top:1rem;padding:1rem 0;border-top:1px solid var(--border-subtle)}
+    .readout dl{margin:0}
+    .readout div{display:grid;grid-template-columns:5.5rem 1fr;gap:.8rem;padding:.55rem 0;border-bottom:1px solid var(--border-subtle)}
+    .readout dt{color:var(--text-secondary)}
+    .readout dd{margin:0;font-weight:700}
+    .status{display:inline-block;margin-top:.9rem;padding:.55rem .75rem;border-left:3px solid var(--accent);background:var(--accent-soft)}
+    .status[data-fit="yes"]{border-color:var(--success)}
+    .status[data-fit="no"]{border-color:var(--danger)}
+    .stage{min-width:0}
+    .stage h2{font-size:clamp(2rem,4vw,4rem);margin:.1rem 0 .6rem}
+    .stage-intro{color:var(--text-secondary);max-width:52rem}
+    .formula{
+      margin:1.6rem 0;padding:1.2rem 0;
+      border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);
+      font:600 clamp(1.5rem,4vw,3.3rem)/1.2 Georgia,serif;
+      overflow-x:auto;
+    }
+    .axis-wrap{margin:1.5rem 0;padding:1rem 0;border-bottom:1px solid var(--border-strong)}
+    svg{display:block;width:100%;height:auto;overflow:visible}
+    .axis-note{display:grid;grid-template-columns:1fr 1fr;gap:1rem;color:var(--text-secondary);font-size:.9rem}
+    .logic{
+      margin-top:2rem;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+      border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);
+    }
+    .logic div{padding:1rem;border-right:1px solid var(--border-subtle)}
+    .logic div:last-child{border-right:0}
+    .logic strong{display:block;color:var(--accent);font-family:Georgia,serif}
+    .explain{
+      padding:clamp(2.5rem,6vw,5rem) 0;border-bottom:1px solid var(--border-strong);
+      display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:clamp(1.5rem,4vw,4rem);
+    }
+    .explain h2{font-size:clamp(2rem,4vw,3.8rem);margin:.1rem 0}
+    .steps{border-top:1px solid var(--border-strong);counter-reset:s}
+    .step{position:relative;padding:1rem 0 1rem 3.4rem;border-bottom:1px solid var(--border-subtle)}
+    .step::before{
+      counter-increment:s;content:counter(s);
+      position:absolute;left:0;top:1rem;width:2rem;height:2rem;display:grid;place-items:center;
+      border:1px solid var(--border-strong);color:var(--accent);font-weight:700;
+    }
+    .quiz{padding:clamp(2.5rem,6vw,5rem) 0}
+    .quiz h2{font-size:clamp(2rem,4vw,3.8rem);margin:.1rem 0 1rem}
+    .question{padding:1rem 0;border-top:1px solid var(--border-subtle)}
+    .choices{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.7rem}
+    .choices button{min-height:44px;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);padding:.65rem .8rem}
+    .choices button.good{border-color:var(--success);background:color-mix(in srgb,var(--success) 8%,transparent)}
+    .choices button.bad{border-color:var(--danger);background:color-mix(in srgb,var(--danger) 8%,transparent)}
+    .feedback{min-height:1.5rem;color:var(--text-secondary);margin-top:.4rem}
+    footer{display:flex;justify-content:space-between;gap:1rem;padding:2rem 0;color:var(--text-secondary);font-size:.82rem}
+    @media(max-width:900px){
+      .hero,.lab,.explain{grid-template-columns:1fr}
+      .controls{position:static}
+      .logic{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:560px){
+      .shell{width:calc(100% - 1rem)}
+      .topbar{padding:.6rem .5rem}
+      .topbar .label{display:none}
+      h1{font-size:clamp(3rem,15vw,5rem)}
+      .k-grid{grid-template-columns:repeat(5,1fr)}
+      .axis-note,.logic{grid-template-columns:1fr}
+      .logic div{border-right:0;border-bottom:1px solid var(--border-subtle)}
+      footer{flex-direction:column}
+    }
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+    }
+    @media print{
+      html{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#ccc;--border-strong:#888;--accent:#154552;--accent-soft:#eef5f5}
+      .topbar,.k-grid,.quiz{display:none!important}
+      .shell{width:100%}
+      .hero{min-height:auto;padding:1rem 0 2rem}
+      .controls{position:static}
+      .lab,.explain{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">К содержанию</a>
+  <div class="shell">
+    <nav class="topbar" aria-label="Навигация лаборатории">
+      <a href="24.09.26.html"><span class="label">Вернуться к занятию</span></a>
+      <a href="index.html">К карте</a>
+      <span class="grow"></span>
+      <button id="themeBtn" type="button" aria-label="Переключить цветовую тему" aria-pressed="false">Тема</button>
+    </nav>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="pageTitle">
+        <div>
+          <p class="eyebrow">Цифровая лаборатория · 24 сентября 2026</p>
+          <h1 id="pageTitle">Отбор корней через k</h1>
+          <p class="lead">Меняйте целый параметр k и наблюдайте, как меняется x в общей серии x = π/6 + πk. Цель — увидеть, почему при ограниченном промежутке сначала удобно искать допустимые k.</p>
+        </div>
+        <aside class="hero-note">
+          <strong>Исходные данные занятия</strong>
+          <span>x = π/6 + πk, k ∈ Z<br>−π/3 ≤ x ≤ π/2</span>
+        </aside>
+      </section>
+
+      <section class="lab" id="selection" aria-labelledby="labTitle">
+        <aside class="controls">
+          <p class="eyebrow">Управление параметром</p>
+          <h2>Выберите k</h2>
+          <p>Параметр принимает только целые значения. Для каждого k лаборатория вычисляет соответствующий x и показывает его положение относительно заданного промежутка.</p>
+          <div class="k-grid" role="group" aria-label="Выбор целого параметра k">
+            <button type="button" data-k="-2" aria-pressed="false">−2</button>
+            <button type="button" data-k="-1" aria-pressed="false">−1</button>
+            <button type="button" data-k="0" aria-pressed="true">0</button>
+            <button type="button" data-k="1" aria-pressed="false">1</button>
+            <button type="button" data-k="2" aria-pressed="false">2</button>
+          </div>
+          <div class="readout" aria-live="polite">
+            <dl>
+              <div><dt>k</dt><dd id="kRead">0</dd></div>
+              <div><dt>x</dt><dd id="xRead">π/6</dd></div>
+              <div><dt>Промежуток</dt><dd>[−π/3; π/2]</dd></div>
+            </dl>
+            <p class="status" id="fitRead" data-fit="yes">Корень входит в промежуток.</p>
+          </div>
+        </aside>
+
+        <div class="stage">
+          <p class="eyebrow">Наблюдение</p>
+          <h2 id="labTitle">Один параметр управляет серией</h2>
+          <p class="stage-intro">Формула общего решения уже найдена. Здесь Вы исследуете только этап отбора: какие значения серии остаются после ограничения промежутком.</p>
+          <div class="formula" aria-live="polite">x = π/6 + π · <span id="formulaK">0</span> = <span id="formulaX">π/6</span></div>
+
+          <div class="axis-wrap">
+            <svg id="axis" viewBox="0 0 920 220" role="img" aria-labelledby="axisTitle axisDesc">
+              <title id="axisTitle">Числовая прямая для отбора корней</title>
+              <desc id="axisDesc">Показан заданный промежуток и точка текущего значения x.</desc>
+              <line x1="70" y1="112" x2="850" y2="112" stroke="currentColor" stroke-width="2"/>
+              <path d="M850 112l-13-7v14z" fill="currentColor"/>
+              <line id="intervalLine" x1="408" y1="75" x2="538" y2="75" stroke="var(--accent-warm)" stroke-width="9" stroke-linecap="round"/>
+              <circle cx="408" cy="75" r="6" fill="var(--accent-warm)"/>
+              <circle cx="538" cy="75" r="6" fill="var(--accent-warm)"/>
+              <g fill="currentColor" font-family="Arial,sans-serif" font-size="16" text-anchor="middle">
+                <text x="304" y="145">−π</text>
+                <text x="408" y="145">−π/3</text>
+                <text x="460" y="145">0</text>
+                <text x="538" y="145">π/2</text>
+                <text x="616" y="145">π</text>
+              </g>
+              <g stroke="currentColor" stroke-width="2">
+                <line x1="304" y1="104" x2="304" y2="120"/>
+                <line x1="408" y1="104" x2="408" y2="120"/>
+                <line x1="460" y1="104" x2="460" y2="120"/>
+                <line x1="538" y1="104" x2="538" y2="120"/>
+                <line x1="616" y1="104" x2="616" y2="120"/>
+              </g>
+              <line id="pointStem" x1="486" y1="52" x2="486" y2="104" stroke="var(--accent)" stroke-width="2"/>
+              <circle id="point" cx="486" cy="52" r="10" fill="var(--accent)"/>
+              <text id="pointLabel" x="486" y="31" fill="currentColor" font-family="Arial,sans-serif" font-size="17" text-anchor="middle">π/6</text>
+            </svg>
+          </div>
+
+          <div class="axis-note">
+            <p><strong>Коралловый отрезок</strong><br>заданный промежуток [−π/3; π/2].</p>
+            <p><strong>Бирюзовая точка</strong><br>текущее значение x для выбранного k.</p>
+          </div>
+
+          <div class="logic" aria-label="Алгоритм отбора">
+            <div><strong>1. Формула</strong><span>x = π/6 + πk</span></div>
+            <div><strong>2. Ограничение</strong><span>−π/3 ≤ x ≤ π/2</span></div>
+            <div><strong>3. Найти k</strong><span>−1/2 ≤ k ≤ 1/3</span></div>
+            <div><strong>4. Целое k</strong><span>подходит только k = 0</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="explain" aria-labelledby="whyTitle">
+        <div>
+          <p class="eyebrow">Почему метод работает</p>
+          <h2 id="whyTitle">Промежуток превращается в фильтр</h2>
+        </div>
+        <div class="steps">
+          <div class="step">Подставьте формулу общего решения вместо x в обе границы промежутка.</div>
+          <div class="step">Одинаковыми действиями преобразуйте левую, среднюю и правую части двойного неравенства.</div>
+          <div class="step">Добейтесь, чтобы в центре осталось только k.</div>
+          <div class="step">Возьмите только целые k, потому что k ∈ Z.</div>
+          <div class="step">Подставьте каждое допустимое k обратно в формулу x.</div>
+        </div>
+      </section>
+
+      <section class="quiz" aria-labelledby="quizTitle">
+        <p class="eyebrow">Контроль понимания</p>
+        <h2 id="quizTitle">Два коротких вопроса</h2>
+        <div class="question" data-correct="0">
+          <strong>1. Какое целое k лежит в промежутке −1/2 ≤ k ≤ 1/3?</strong>
+          <div class="choices"><button type="button" data-v="0">k = 0</button><button type="button" data-v="1">k = 1</button><button type="button" data-v="2">k = −1</button></div>
+          <div class="feedback" aria-live="polite"></div>
+        </div>
+        <div class="question" data-correct="1">
+          <strong>2. Что нужно сделать после нахождения допустимого k?</strong>
+          <div class="choices"><button type="button" data-v="0">Остановиться на значении k</button><button type="button" data-v="1">Подставить k в формулу общего решения и найти x</button></div>
+          <div class="feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <footer>
+        <span>Ярослав Гаврилов · цифровая лаборатория</span>
+        <span>Лёвин Артём Александрович · 24.09.2026</span>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+  (function(){
+    'use strict';
+    var root=document.documentElement;
+    var themeBtn=document.getElementById('themeBtn');
+    function safeGet(key){try{return localStorage.getItem(key)}catch(e){return null}}
+    function safeSet(key,value){try{localStorage.setItem(key,value)}catch(e){}}
+    function applyTheme(theme){
+      root.dataset.theme=theme==='dark'?'dark':'light';
+      themeBtn.setAttribute('aria-pressed',String(root.dataset.theme==='dark'));
+    }
+    applyTheme(safeGet('jaroslav-240926-lab-theme')||((window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'));
+    themeBtn.addEventListener('click',function(){
+      var next=root.dataset.theme==='dark'?'light':'dark';
+      safeSet('jaroslav-240926-lab-theme',next);
+      applyTheme(next);
+    });
+
+    var labels={
+      '-2':'−11π/6',
+      '-1':'−5π/6',
+      '0':'π/6',
+      '1':'7π/6',
+      '2':'13π/6'
+    };
+    var ratios={
+      '-2':-11/6,
+      '-1':-5/6,
+      '0':1/6,
+      '1':7/6,
+      '2':13/6
+    };
+    var buttons=[].slice.call(document.querySelectorAll('[data-k]'));
+    var kRead=document.getElementById('kRead');
+    var xRead=document.getElementById('xRead');
+    var formulaK=document.getElementById('formulaK');
+    var formulaX=document.getElementById('formulaX');
+    var fitRead=document.getElementById('fitRead');
+    var point=document.getElementById('point');
+    var stem=document.getElementById('pointStem');
+    var label=document.getElementById('pointLabel');
+    var min=-2.5,max=2.5,left=70,right=850;
+    function xPos(ratio){return left+(ratio-min)/(max-min)*(right-left)}
+    function render(k){
+      var key=String(k);
+      var ratio=ratios[key];
+      var fit=ratio>=-1/3&&ratio<=1/2;
+      buttons.forEach(function(button){button.setAttribute('aria-pressed',String(button.dataset.k===key))});
+      kRead.textContent=key;
+      xRead.textContent=labels[key];
+      formulaK.textContent=key;
+      formulaX.textContent=labels[key];
+      fitRead.dataset.fit=fit?'yes':'no';
+      fitRead.textContent=fit?'Корень входит в промежуток.':'Корень не входит в промежуток.';
+      var pos=xPos(ratio);
+      point.setAttribute('cx',pos);
+      stem.setAttribute('x1',pos);
+      stem.setAttribute('x2',pos);
+      label.setAttribute('x',pos);
+      label.textContent=labels[key];
+      point.setAttribute('fill',fit?'var(--success)':'var(--accent)');
+      stem.setAttribute('stroke',fit?'var(--success)':'var(--accent)');
+    }
+    buttons.forEach(function(button){
+      button.addEventListener('click',function(){render(Number(button.dataset.k))});
+    });
+    render(0);
+
+    document.querySelectorAll('.question').forEach(function(question){
+      question.querySelectorAll('.choices button').forEach(function(button){
+        button.addEventListener('click',function(){
+          var correct=String(question.dataset.correct);
+          var ok=button.dataset.v===correct;
+          question.querySelectorAll('.choices button').forEach(function(item){item.classList.remove('good','bad')});
+          button.classList.add(ok?'good':'bad');
+          var target=question.querySelector('[data-v="'+correct+'"]');
+          if(target)target.classList.add('good');
+          question.querySelector('.feedback').textContent=ok?'Верно.':'Проверьте алгоритм отбора выше.';
+        });
+      });
+    });
+  })();
+  </script>
+</body>
+</html>
