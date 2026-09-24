@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивное занятие Анастасии Павловой: текстовые задачи на движение, таблица v–t–S, встречное движение, догонка, неодновременный старт и разворот">
+<title>Текстовые задачи на движение — Анастасия Павлова</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23185c9e'/%3E%3Cpath d='M12 35h40M17 27h8l5-7h12l6 7h4v12H12z' fill='none' stroke='white' stroke-width='4'/%3E%3Ccircle cx='22' cy='40' r='4' fill='white'/%3E%3Ccircle cx='44' cy='40' r='4' fill='white'/%3E%3C/svg%3E">
+<style>
+:root{
+  color-scheme:light;
+  --surface-page:#eef3f8;
+  --surface-raised:#fffdfa;
+  --surface-soft:#f4f7fa;
+  --surface-track:#e7edf3;
+  --text-primary:#172333;
+  --text-secondary:#5d6976;
+  --text-inverse:#ffffff;
+  --border-subtle:#d7e0e8;
+  --border-strong:#aebbc8;
+  --accent:#185c9e;
+  --accent-hover:#124a81;
+  --accent-soft:#e5f0fa;
+  --coral:#cf6a56;
+  --coral-soft:#f7e7e2;
+  --success:#27745e;
+  --danger:#a34d48;
+  --warning:#a87220;
+  --focus-ring:#cf6a56;
+  --shadow-low:0 8px 24px rgba(21,63,107,.08);
+  --shadow-high:0 24px 64px rgba(21,63,107,.14);
+  --radius-sm:10px;
+  --radius-md:18px;
+  --radius-lg:30px;
+  --space-1:6px;
+  --space-2:10px;
+  --space-3:16px;
+  --space-4:24px;
+  --space-5:36px;
+  --space-6:56px;
+  --motion-fast:140ms;
+  --motion-normal:240ms;
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --surface-page:#0d1620;
+  --surface-raised:#15212d;
+  --surface-soft:#192936;
+  --surface-track:#233342;
+  --text-primary:#eef4f8;
+  --text-secondary:#aebac5;
+  --text-inverse:#0d1620;
+  --border-subtle:#304150;
+  --border-strong:#526372;
+  --accent:#77b5ed;
+  --accent-hover:#9bc9f3;
+  --accent-soft:#17334b;
+  --coral:#f08b78;
+  --coral-soft:#4b2925;
+  --success:#7bc5a9;
+  --danger:#e08b84;
+  --warning:#e1b46e;
+  --focus-ring:#f09c89;
+  --shadow-low:0 8px 24px rgba(0,0,0,.28);
+  --shadow-high:0 24px 64px rgba(0,0,0,.42);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:var(--accent)}
+button,a{font:inherit}
+button{cursor:pointer;color:inherit}
+math{font-family:"Cambria Math","STIX Two Math",serif;font-size:1.05em}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.skip-link{position:absolute;left:-9999px;top:8px;z-index:100;background:var(--surface-raised);padding:10px 14px;border:1px solid var(--border-strong);border-radius:var(--radius-sm)}
+.skip-link:focus{left:12px}
+.shell{max-width:1240px;margin:auto;padding:18px}
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:8px 0 14px;border-bottom:1px solid var(--border-subtle);background:color-mix(in srgb,var(--surface-page) 92%,transparent);backdrop-filter:blur(12px)}
+.identity{display:flex;gap:10px;align-items:center}
+.mark{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--accent);color:var(--accent);font-weight:900;border-radius:50%}
+.identity strong,.identity small{display:block}
+.identity small{color:var(--text-secondary)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.toolbar a,.toolbar button,.lab-link,.download-link{min-height:44px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-raised);color:var(--text-primary);padding:9px 13px;text-decoration:none}
+.toolbar a:hover,.toolbar button:hover,.lab-link:hover,.download-link:hover{border-color:var(--accent)}
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.03fr) minmax(360px,.97fr);gap:clamp(28px,6vw,76px);padding:clamp(42px,7vw,88px) 0 var(--space-6);align-items:center;border-bottom:1px solid var(--border-subtle)}
+.eyebrow{margin:0 0 8px;color:var(--coral);font-weight:850;letter-spacing:.12em;text-transform:uppercase;font-size:.76rem}
+.hero h1{margin:0 0 18px;max-width:8.5ch;font:750 clamp(3rem,7.2vw,7rem)/.92 Georgia,"Times New Roman",serif;letter-spacing:-.06em}
+.lead{max-width:720px;color:var(--text-secondary);font-size:clamp(1.03rem,1.55vw,1.22rem)}
+.lesson-meta{display:flex;gap:12px 20px;flex-wrap:wrap;margin-top:24px;padding-top:16px;border-top:1px solid var(--border-subtle);color:var(--text-secondary);font-size:.94rem}
+.motion-stage{position:relative;min-height:420px;border-left:1px solid var(--border-subtle);padding-left:clamp(22px,4vw,54px);display:flex;flex-direction:column;justify-content:center}
+.motion-stage:before{content:"";position:absolute;inset:7% 3% 13% 11%;background:radial-gradient(circle at 72% 26%,color-mix(in srgb,var(--coral) 14%,transparent),transparent 40%),radial-gradient(circle at 30% 70%,color-mix(in srgb,var(--accent) 12%,transparent),transparent 42%);pointer-events:none}
+.track-figure{position:relative;z-index:1;padding:28px 10px}
+.track-line{height:8px;border-radius:999px;background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 45%,var(--coral)),var(--coral));position:relative;margin:74px 18px 44px}
+.track-line:before,.track-line:after{content:"";position:absolute;top:50%;width:15px;height:15px;border-radius:50%;background:var(--surface-raised);border:3px solid currentColor;transform:translateY(-50%)}
+.track-line:before{left:-4px;color:var(--accent)}
+.track-line:after{right:-4px;color:var(--coral)}
+.car{position:absolute;top:-49px;width:58px;height:29px;border:2px solid currentColor;border-radius:14px 18px 8px 8px;background:var(--surface-raised)}
+.car:before,.car:after{content:"";position:absolute;bottom:-8px;width:12px;height:12px;border-radius:50%;background:var(--text-primary);border:3px solid var(--surface-raised)}
+.car:before{left:8px}.car:after{right:8px}
+.car.one{left:10%;color:var(--accent)}
+.car.two{right:10%;color:var(--coral)}
+.car.one .arrow{left:68px}.car.two .arrow{right:68px;transform:rotate(180deg)}
+.arrow{position:absolute;top:8px;width:48px;height:2px;background:currentColor}
+.arrow:after{content:"";position:absolute;right:0;top:-4px;border-left:9px solid currentColor;border-top:5px solid transparent;border-bottom:5px solid transparent}
+.track-labels{display:flex;justify-content:space-between;color:var(--text-secondary);font-size:.86rem;padding:0 14px}
+.vts-card{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);margin:4px 12px 0}
+.vts-card div{padding:15px 10px;text-align:center;border-right:1px solid var(--border-subtle)}
+.vts-card div:last-child{border-right:0}
+.vts-card strong{display:block;font:700 1.8rem/1 Georgia,serif;color:var(--accent)}
+.vts-card span{display:block;margin-top:6px;color:var(--text-secondary);font-size:.84rem}
+.stage-caption{position:relative;z-index:1;margin:20px 12px 0;padding-top:14px;border-top:1px solid var(--border-subtle);color:var(--text-secondary)}
+.route{display:flex;gap:6px;overflow:auto;padding:16px 0;border-bottom:1px solid var(--border-subtle)}
+.route a{white-space:nowrap;text-decoration:none;color:var(--text-secondary);padding:9px 11px;border-bottom:2px solid transparent}
+.route a:hover,.route a:focus-visible{color:var(--text-primary);border-bottom-color:var(--coral)}
+.chapter{display:grid;grid-template-columns:150px minmax(0,1fr);gap:clamp(24px,6vw,84px);padding:clamp(48px,7vw,82px) 0;border-bottom:1px solid var(--border-subtle)}
+.chapter-index{position:sticky;top:90px;align-self:start;color:var(--text-secondary);font-size:.82rem;text-transform:uppercase;letter-spacing:.08em}
+.chapter-index b{display:block;color:var(--coral);font:700 2.2rem/1 Georgia,serif;letter-spacing:-.04em;margin-bottom:8px}
+.chapter-body{min-width:0}
+.chapter h2{margin:0 0 18px;font:700 clamp(2rem,4.2vw,4rem)/1 Georgia,"Times New Roman",serif;letter-spacing:-.045em}
+.chapter h3{margin:28px 0 10px;font-size:1.08rem}
+.prose{max-width:780px;color:var(--text-secondary);font-size:1.03rem}
+.math-display{overflow:auto;padding:13px 0;font-size:clamp(1.05rem,2vw,1.3rem)}
+.rule-line{margin:26px 0;padding:18px 0;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-subtle)}
+.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.note{padding:18px 0;border-top:1px solid var(--border-subtle)}
+.note strong{color:var(--accent)}
+.note.warning strong{color:var(--coral)}
+.vts-table{width:100%;border-collapse:collapse;margin:18px 0}
+.vts-table th,.vts-table td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--border-subtle)}
+.vts-table th{color:var(--text-secondary);font-size:.84rem;text-transform:uppercase;letter-spacing:.08em}
+.vts-table tbody tr:hover{background:var(--surface-soft)}
+.steps{counter-reset:step;display:grid;gap:0;margin-top:18px}
+.step{counter-increment:step;display:grid;grid-template-columns:52px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--border-subtle)}
+.step:before{content:counter(step,decimal-leading-zero);color:var(--coral);font:700 1.25rem/1 Georgia,serif}
+.equation-strip{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:18px 0;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)}
+.equation-strip span{color:var(--text-secondary)}
+.scenario{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.7fr);gap:24px;align-items:center;padding:20px 0;border-top:1px solid var(--border-subtle)}
+.scenario-visual{min-height:150px;background:var(--surface-soft);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:20px;display:flex;align-items:center}
+.scenario-road{width:100%;height:6px;border-radius:999px;background:var(--border-strong);position:relative}
+.scenario-road i{position:absolute;top:-12px;width:28px;height:28px;border-radius:50%;border:3px solid var(--surface-raised);box-shadow:0 0 0 2px currentColor;background:var(--surface-raised)}
+.scenario-road i:first-child{left:8%;color:var(--accent)}
+.scenario-road i:last-child{right:8%;color:var(--coral)}
+.lab-link{margin-top:8px}
+.poster-wrap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(220px,.55fr);gap:24px;align-items:start}
+.poster-button{border:0;background:transparent;padding:0;display:block;width:100%;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-low)}
+.poster-button img{display:block;width:100%;height:auto}
+.poster-note{padding-top:12px;color:var(--text-secondary)}
+.exercise-list{display:grid;gap:0}
+.exercise{border-top:1px solid var(--border-subtle);padding:2px 0}
+.exercise summary{cursor:pointer;padding:16px 0;font-weight:700}
+.exercise .answer{padding:0 0 18px;color:var(--success)}
+.quiz{display:grid;gap:20px}
+.quiz-q{padding-top:16px;border-top:1px solid var(--border-subtle)}
+.quiz-options{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.quiz-options button{min-height:44px;border:1px solid var(--border-strong);background:var(--surface-raised);border-radius:var(--radius-sm);padding:9px 12px}
+.quiz-options button.good{border-color:var(--success);color:var(--success)}
+.quiz-options button.bad{border-color:var(--danger);color:var(--danger)}
+.feedback{min-height:1.5em;color:var(--text-secondary)}
+.checks{display:grid;gap:8px;margin-top:14px}
+.checks label{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border-subtle)}
+.checks input{margin-top:5px}
+.progress-track{height:6px;background:var(--border-subtle);border-radius:999px;overflow:hidden;margin-top:18px}
+.progress-track span{display:block;height:100%;width:0;background:var(--accent);transition:width var(--motion-normal)}
+.footer{display:flex;justify-content:space-between;gap:14px;padding:28px 0;color:var(--text-secondary);font-size:.88rem}
+dialog{width:min(1180px,94vw);max-height:92vh;border:1px solid var(--border-strong);border-radius:var(--radius-md);background:var(--surface-raised);color:var(--text-primary);padding:0;box-shadow:var(--shadow-high)}
+dialog::backdrop{background:rgba(4,13,22,.72)}
+.dialog-shell{padding:18px}
+.dialog-head{display:flex;justify-content:flex-end}
+.dialog-head button{width:44px;height:44px;border-radius:50%;border:1px solid var(--border-strong);background:var(--surface-raised)}
+dialog img{display:block;max-width:100%;height:auto;margin:auto}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}.motion-stage{border-left:0;border-top:1px solid var(--border-subtle);padding:28px 0 0;min-height:340px}
+  .chapter{grid-template-columns:1fr;gap:12px}.chapter-index{position:static;display:flex;align-items:baseline;gap:12px}
+  .split,.scenario,.poster-wrap{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .shell{padding:12px}.topbar{align-items:flex-start}.identity small{display:none}.toolbar{gap:6px}.toolbar a,.toolbar button{padding:8px 10px}
+  .hero{padding-top:34px}.hero h1{font-size:clamp(2.7rem,17vw,5rem)}.track-line{margin-left:2px;margin-right:2px}
+  .route{margin-left:-12px;margin-right:-12px;padding-left:12px;padding-right:12px}
+  .chapter{padding:44px 0}.lesson-meta{gap:8px 14px}.vts-card strong{font-size:1.45rem}
+  .footer{flex-direction:column}.quiz-options{display:grid}.quiz-options button{width:100%}
+}
+@media(max-width:390px){
+  .toolbar .secondary{display:none}.chapter h2{font-size:2.15rem}.motion-stage{min-height:300px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}
+}
+@media print{
+  :root{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--text-primary:#111;--text-secondary:#444;--border-subtle:#bbb;--border-strong:#777;--accent:#184f82;--coral:#9a4638}
+  body{background:#fff}.topbar,.route,.lab-link,.toolbar,dialog{display:none!important}.shell{max-width:none;padding:0}.hero{grid-template-columns:1fr;padding:20px 0}.motion-stage{min-height:250px}.chapter{grid-template-columns:110px 1fr;padding:28px 0}.chapter-index{position:static}.exercise .answer{display:block}.poster-button{box-shadow:none}.footer{padding-top:12px}
+  .chapter,.scenario,.note,.exercise{break-inside:avoid}
+}
+</style>
+</head>
+<body data-atlas data-atlas-adapter="universal" data-atlas-composition="linear-route" data-atlas-accent="cobalt" data-atlas-density="airy" data-atlas-motion="calm">
+<a class="skip-link" href="#lessonMain">К содержанию занятия</a>
+<div class="shell">
+<header class="topbar">
+  <div class="identity">
+    <span class="mark" aria-hidden="true">Σ</span>
+    <span><strong>Анастасия Павлова</strong><small>ЕГЭ · профильная математика · 24.09.26</small></span>
+  </div>
+  <div class="toolbar" aria-label="Действия">
+    <a class="secondary" href="index.html">К карте</a>
+    <a class="secondary" href="24.09.26-lab.html?mode=meeting">Лаборатория</a>
+    <a class="secondary" href="../pdf_docs/24.09.26.pdf" download>Скачать пособие</a>
+    <a class="secondary" href="../tex_docs/24.09.26.tex" target="_blank" rel="noopener">TeX</a>
+    <button id="printBtn" type="button">Печать</button>
+    <button id="themeBtn" type="button" aria-pressed="false">Тёмная тема</button>
+  </div>
+</header>
+
+<main id="lessonMain">
+<section class="hero" aria-labelledby="pageTitle">
+  <div>
+    <p class="eyebrow">Текстовая задача как математическая модель</p>
+    <h1 id="pageTitle">Движение: от текста к уравнению</h1>
+    <p class="lead">Главная опора занятия — перевод условия в таблицу <strong>v–t–S</strong>. После этого встреча, разный момент старта, догонка и разворот сводятся к одной точной смысловой связи между пройденными путями или временами.</p>
+    <div class="lesson-meta" aria-label="Метаданные занятия">
+      <span>24 сентября 2026</span>
+      <span>Анастасия Павлова</span>
+      <span>Преподаватель: Лёвин Артём Александрович</span>
+      <span>Путь А · 5 заданий</span>
+    </div>
+  </div>
+
+  <div class="motion-stage" aria-label="Схема перехода от движения к таблице">
+    <div class="track-figure">
+      <div class="track-line">
+        <span class="car one" aria-hidden="true"><span class="arrow"></span></span>
+        <span class="car two" aria-hidden="true"><span class="arrow"></span></span>
+      </div>
+      <div class="track-labels"><span>первый участник</span><span>общий путь</span><span>второй участник</span></div>
+    </div>
+    <div class="vts-card" aria-label="Таблица скорость время путь">
+      <div><strong>v</strong><span>скорость</span></div>
+      <div><strong>t</strong><span>время</span></div>
+      <div><strong>S</strong><span>путь</span></div>
+    </div>
+    <p class="stage-caption"><strong>Рабочая последовательность:</strong> искомая величина → данные условия → формульный столбец → смысловое уравнение.</p>
+  </div>
+</section>
+
+<nav class="route" aria-label="Разделы занятия">
+  <a href="#foundation">Основа</a>
+  <a href="#meeting">Навстречу</a>
+  <a href="#delay">Разный старт</a>
+  <a href="#catchup">Догонка</a>
+  <a href="#turnaround">Разворот</a>
+  <a href="#poster">Памятка</a>
+  <a href="#practice">Тренировка</a>
+  <a href="#selfcheck">Самопроверка</a>
+</nav>
+
+<section class="chapter" id="foundation" data-journey-stop data-journey-label="Таблица v–t–S">
+  <div class="chapter-index"><b>01</b><span>Основа</span></div>
+  <div class="chapter-body">
+    <p class="eyebrow">Три величины, одна связь</p>
+    <h2>Сначала соберите модель движения</h2>
+    <p class="prose">Для равномерного движения используются путь <strong>S</strong>, скорость <strong>v</strong> и время <strong>t</strong>. Если известны две величины, третья определяется формулой.</p>
+    <div class="split">
+      <div class="note">
+        <strong>Основная формула</strong>
+        <div class="math-display"><math display="block"><mi>S</mi><mo>=</mo><mi>v</mi><mi>t</mi></math></div>
+      </div>
+      <div class="note">
+        <strong>Обратные формулы</strong>
+        <div class="math-display"><math display="block"><mi>v</mi><mo>=</mo><mfrac><mi>S</mi><mi>t</mi></mfrac><mo>,</mo><mspace width="1em"/><mi>t</mi><mo>=</mo><mfrac><mi>S</mi><mi>v</mi></mfrac></math></div>
+      </div>
+    </div>
+    <table class="vts-table">
+      <thead><tr><th>Величина</th><th>Смысл</th><th>Типичная единица</th></tr></thead>
+      <tbody>
+        <tr><td><strong>v</strong></td><td>скорость</td><td>км/ч</td></tr>
+        <tr><td><strong>t</strong></td><td>время</td><td>ч</td></tr>
+        <tr><td><strong>S</strong></td><td>путь</td><td>км</td></tr>
+      </tbody>
+    </table>
+    <div class="rule-line"><strong>Главный принцип.</strong> Сначала поместите <em>x</em> туда, где находится искомая величина. Затем занесите известные данные. Последний незаполненный столбец получите по формуле движения.</div>
+    <div class="steps" aria-label="Алгоритм решения задачи на движение">
+      <div class="step">Определите, что требуется найти.</div>
+      <div class="step">Разберите схему движения и при необходимости сделайте короткий чертёж.</div>
+      <div class="step">Введите <strong>x</strong> и выразите через него связанные величины.</div>
+      <div class="step">Заполните таблицу <strong>v–t–S</strong>.</div>
+      <div class="step">Переведите оставшееся смысловое условие в уравнение.</div>
+      <div class="step">Решите уравнение и проверьте единицы и смысл ответа.</div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="meeting" data-journey-stop data-journey-label="Встречное движение">
+  <div class="chapter-index"><b>02</b><span>Навстречу</span></div>
+  <div class="chapter-body">
+    <p class="eyebrow">Один момент встречи</p>
+    <h2>Одновременный старт связывает времена</h2>
+    <p class="prose">Если автомобили стартовали одновременно и рассматривается момент их встречи, они двигались одинаковое время. При встречном движении до первой встречи сумма пройденных путей равна общему расстоянию.</p>
+    <div class="equation-strip">
+      <math><msub><mi>t</mi><mn>1</mn></msub><mo>=</mo><msub><mi>t</mi><mn>2</mn></msub></math>
+      <span>и</span>
+      <math><msub><mi>S</mi><mn>1</mn></msub><mo>+</mo><msub><mi>S</mi><mn>2</mn></msub><mo>=</mo><msub><mi>S</mi><mtext>общее</mtext></msub></math>
+    </div>
+
+    <h3>Пример: найти время</h3>
+    <table class="vts-table">
+      <thead><tr><th>Участник</th><th>v, км/ч</th><th>t, ч</th><th>S, км</th></tr></thead>
+      <tbody>
+        <tr><td>Первый автомобиль</td><td>60</td><td>x</td><td>60x</td></tr>
+        <tr><td>Второй автомобиль</td><td>80</td><td>x</td><td>80x</td></tr>
+      </tbody>
+    </table>
+    <div class="math-display"><math display="block"><mn>60</mn><mi>x</mi><mo>+</mo><mn>80</mn><mi>x</mi><mo>=</mo><mn>560</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>4</mn><mtext> ч</mtext></math></div>
+
+    <h3>Пример: найти место встречи</h3>
+    <p>Если общее расстояние равно 480 км, а путь первого автомобиля обозначен через <strong>x</strong>, путь второго равен <strong>480 − x</strong>. При одновременном старте:</p>
+    <div class="math-display"><math display="block"><mfrac><mi>x</mi><mn>55</mn></mfrac><mo>=</mo><mfrac><mrow><mn>480</mn><mo>−</mo><mi>x</mi></mrow><mn>65</mn></mfrac><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>220</mn><mtext> км</mtext></math></div>
+
+    <h3>Пример: найти скорость</h3>
+    <p>Если автомобили встретились через 3 часа, общее расстояние 390 км, а скорость второго 60 км/ч:</p>
+    <div class="math-display"><math display="block"><mn>3</mn><mi>x</mi><mo>+</mo><mn>180</mn><mo>=</mo><mn>390</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>70</mn><mtext> км/ч</mtext></math></div>
+    <p><a class="lab-link" href="24.09.26-lab.html?mode=meeting">Проследить встречу на временной шкале</a></p>
+  </div>
+</section>
+
+<section class="chapter" id="delay" data-journey-stop data-journey-label="Разный старт">
+  <div class="chapter-index"><b>03</b><span>Разный старт</span></div>
+  <div class="chapter-body">
+    <p class="eyebrow">Кто начал раньше — двигался дольше</p>
+    <h2>Разница времени должна появиться в модели</h2>
+    <p class="prose">Если второй автомобиль выехал через 2 часа после первого, то при обозначении времени второго через <strong>x</strong> время первого равно <strong>x + 2</strong>.</p>
+    <table class="vts-table">
+      <thead><tr><th>Участник</th><th>v, км/ч</th><th>t, ч</th><th>S, км</th></tr></thead>
+      <tbody>
+        <tr><td>Первый автомобиль</td><td>80</td><td>x + 2</td><td>80(x + 2)</td></tr>
+        <tr><td>Второй автомобиль</td><td>60</td><td>x</td><td>60x</td></tr>
+      </tbody>
+    </table>
+    <div class="math-display"><math display="block"><mn>80</mn><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo><mo>+</mo><mn>60</mn><mi>x</mi><mo>=</mo><mn>580</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>3</mn><mtext> ч</mtext></math></div>
+    <div class="rule-line"><strong>Если времена уже выражены дробями:</strong> из большего времени вычитайте меньшее и получайте заданную разницу. Для рассмотренного типа задачи возможна запись <math><mfrac><mi>x</mi><mn>50</mn></mfrac><mo>−</mo><mfrac><mrow><mn>380</mn><mo>−</mo><mi>x</mi></mrow><mn>60</mn></mfrac><mo>=</mo><mn>1</mn></math>.</div>
+    <p><a class="lab-link" href="24.09.26-lab.html?mode=delay">Увидеть двухчасовой сдвиг старта</a></p>
+  </div>
+</section>
+
+<section class="chapter" id="catchup" data-journey-stop data-journey-label="Догонка">
+  <div class="chapter-index"><b>04</b><span>Догонка</span></div>
+  <div class="chapter-body">
+    <p class="eyebrow">Одинаковое направление</p>
+    <h2>Быстрый должен закрыть начальный отрыв</h2>
+    <p class="prose">Если легковой автомобиль стартует позади грузовика на 125 км и едет на 25 км/ч быстрее, то к моменту догоняния он должен пройти на 125 км больше.</p>
+    <div class="equation-strip">
+      <math><msub><mi>S</mi><mtext>быстрого</mtext></msub><mo>−</mo><msub><mi>S</mi><mtext>медленного</mtext></msub><mo>=</mo><msub><mi>S</mi><mtext>отрыв</mtext></msub></math>
+    </div>
+    <p>Пусть скорость грузовика равна <strong>y</strong>, тогда скорость легкового автомобиля равна <strong>y + 25</strong>, а время до догоняния — <strong>x</strong>:</p>
+    <div class="math-display"><math display="block"><mi>x</mi><mo>(</mo><mi>y</mi><mo>+</mo><mn>25</mn><mo>)</mo><mo>=</mo><mi>x</mi><mi>y</mi><mo>+</mo><mn>125</mn><mo>⇒</mo><mn>25</mn><mi>x</mi><mo>=</mo><mn>125</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>5</mn><mtext> ч</mtext></math></div>
+
+    <h3>Единицы измерения</h3>
+    <p>Если скорость дана в км/ч, расстояние удобно перевести в километры, а найденное время сначала получается в часах:</p>
+    <div class="math-display"><math display="block"><mn>300</mn><mtext> м</mtext><mo>=</mo><mn>0.3</mn><mtext> км</mtext><mo>,</mo><mspace width="1em"/><mn>2</mn><mi>x</mi><mo>=</mo><mn>0.3</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>0.15</mn><mtext> ч</mtext><mo>=</mo><mn>9</mn><mtext> мин</mtext></math></div>
+    <div class="rule-line"><strong>Проверка размерности:</strong> м ↔ км, мин ↔ ч. Единицы должны быть согласованы до составления уравнения.</div>
+  </div>
+</section>
+
+<section class="chapter" id="turnaround" data-journey-stop data-journey-label="Разворот">
+  <div class="chapter-index"><b>05</b><span>Разворот</span></div>
+  <div class="chapter-body">
+    <p class="eyebrow">x — только часть маршрута</p>
+    <h2>В таблице учитывайте весь пройденный путь</h2>
+    <p class="prose">До опушки 6 км. Быстрый пешеход дошёл до неё, развернулся и встретил медленного. Если встреча произошла на расстоянии <strong>x</strong> км от опушки, быстрый прошёл <strong>6 + x</strong>, а медленный — <strong>6 − x</strong>.</p>
+    <div class="scenario">
+      <div>
+        <div class="math-display"><math display="block"><mfrac><mrow><mn>6</mn><mo>+</mo><mi>x</mi></mrow><mn>6.5</mn></mfrac><mo>=</mo><mfrac><mrow><mn>6</mn><mo>−</mo><mi>x</mi></mrow><mn>3.5</mn></mfrac></math></div>
+        <div class="math-display"><math display="block"><mn>3.5</mn><mo>(</mo><mn>6</mn><mo>+</mo><mi>x</mi><mo>)</mo><mo>=</mo><mn>6.5</mn><mo>(</mo><mn>6</mn><mo>−</mo><mi>x</mi><mo>)</mo><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>1.8</mn><mtext> км</mtext><mo>=</mo><mn>1800</mn><mtext> м</mtext></math></div>
+      </div>
+      <div class="scenario-visual" aria-label="Схематический маршрут туда и обратно">
+        <div class="scenario-road"><i aria-hidden="true"></i><i aria-hidden="true"></i></div>
+      </div>
+    </div>
+    <div class="rule-line"><strong>Ограничение по смыслу:</strong> <math><mn>0</mn><mo>&lt;</mo><mi>x</mi><mo>&lt;</mo><mn>6</mn></math>. Полученное значение 1,8 км этому условию соответствует.</div>
+    <p><a class="lab-link" href="24.09.26-lab.html?mode=turnaround">Проследить момент разворота и встречи</a></p>
+  </div>
+</section>
+
+<section class="chapter" id="poster" data-journey-stop data-journey-label="Ментальная карта">
+  <div class="chapter-index"><b>06</b><span>Памятка</span></div>
+  <div class="chapter-body">
+    <p class="eyebrow">Визуальное повторение</p>
+    <h2>Ключевые ситуации на одной карте</h2>
+    <div class="poster-wrap">
+      <button class="poster-button" id="posterBtn" type="button" aria-label="Открыть ментальную карту крупнее" aria-haspopup="dialog" aria-controls="posterDialog">
+        <img src="../images/24.09.26.png" alt="Ментальная карта: таблица v–t–S, встречное движение, неодновременный старт, догонка, разворот, единицы измерения и алгоритм решения">
+      </button>
+      <div class="poster-note">
+        <p><strong>Пять опор:</strong> формула S = vt; одинаковое время при одновременном старте; большее время у стартовавшего раньше; разность путей при догонке; весь путь при развороте.</p>
+        <p>Нажмите на карту, чтобы открыть её крупнее.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="practice" data-journey-stop data-journey-label="Тренировка">
+  <div class="chapter-index"><b>07</b><span>Путь А</span></div>
+  <div class="chapter-body">
+    <p class="eyebrow">5 заданий · от простого к более сложному</p>
+    <h2>Тренировочный блок</h2>
+    <div class="exercise-list">
+      <details class="exercise"><summary>1. Расстояние между городами 640 км. Навстречу друг другу одновременно выехали автомобили со скоростями 70 и 90 км/ч. Через сколько часов они встретятся?</summary><div class="answer">Ответ: 4 ч.</div></details>
+      <details class="exercise"><summary>2. Расстояние между городами 540 км. Автомобили одновременно выехали навстречу друг другу со скоростями 60 и 75 км/ч. На каком расстоянии от города первого автомобиля произойдёт встреча?</summary><div class="answer">Ответ: 240 км.</div></details>
+      <details class="exercise"><summary>3. Первый автомобиль едет из A в B со скоростью 80 км/ч. Через 2 часа навстречу ему выехал второй со скоростью 60 км/ч. Расстояние между городами 580 км. Через сколько часов после выезда второго произойдёт встреча?</summary><div class="answer">Ответ: 3 ч.</div></details>
+      <details class="exercise"><summary>4. Быстрый пешеход находится позади медленного на 450 м. Скорость медленного 5 км/ч, скорость быстрого на 3 км/ч больше. Через сколько минут произойдёт догоняние?</summary><div class="answer">Ответ: 9 мин.</div></details>
+      <details class="exercise"><summary>5. Два пешехода одновременно идут к опушке в 6 км от старта со скоростями 6,5 и 3,5 км/ч. Первый дошёл до опушки, развернулся и встретил второго. На каком расстоянии от опушки произошла встреча?</summary><div class="answer">Ответ: 1800 м.</div></details>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="selfcheck" data-journey-stop data-journey-label="Самопроверка">
+  <div class="chapter-index"><b>08</b><span>Контроль</span></div>
+  <div class="chapter-body">
+    <p class="eyebrow">Перед ответом</p>
+    <h2>Проверьте смысл модели</h2>
+    <div class="split">
+      <div class="note warning"><strong>Сумма или разность?</strong><p>Навстречу — пути складываются до общего расстояния. В догонке — разность путей закрывает начальный отрыв.</p></div>
+      <div class="note warning"><strong>Кто стартовал раньше?</strong><p>Он двигался дольше. Разница времён должна появиться в таблице или уравнении.</p></div>
+      <div class="note warning"><strong>Разворот.</strong><p>В формулу S = vt подставляйте весь фактически пройденный путь.</p></div>
+      <div class="note warning"><strong>Единицы.</strong><p>Не смешивайте метры с километрами и минуты с часами.</p></div>
+    </div>
+
+    <h3>Короткая диагностика</h3>
+    <div class="quiz">
+      <div class="quiz-q" data-answer="b">
+        <strong>1. Что можно записать для двух участников, одновременно выехавших навстречу и встретившихся?</strong>
+        <div class="quiz-options"><button type="button" data-choice="a">S₁ = S₂</button><button type="button" data-choice="b">t₁ = t₂</button><button type="button" data-choice="c">v₁ = v₂</button></div>
+        <p class="feedback" aria-live="polite"></p>
+      </div>
+      <div class="quiz-q" data-answer="c">
+        <strong>2. Первый участник выехал раньше второго. Как соотносятся времена до одного и того же момента?</strong>
+        <div class="quiz-options"><button type="button" data-choice="a">Первый двигался меньше</button><button type="button" data-choice="b">Времена обязательно равны</button><button type="button" data-choice="c">Первый двигался дольше</button></div>
+        <p class="feedback" aria-live="polite"></p>
+      </div>
+      <div class="quiz-q" data-answer="a">
+        <strong>3. Какая связь используется при догонке с начальным отрывом?</strong>
+        <div class="quiz-options"><button type="button" data-choice="a">Sбыстрого − Sмедленного = отрыв</button><button type="button" data-choice="b">Sбыстрого + Sмедленного = отрыв</button><button type="button" data-choice="c">Sбыстрого = Sмедленного</button></div>
+        <p class="feedback" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <h3>Самопроверка</h3>
+    <div class="checks" id="checks">
+      <label><input type="checkbox">Я начинаю решение с вопроса задачи и выбираю место для x.</label>
+      <label><input type="checkbox">Я заполняю таблицу v–t–S и использую S = vt.</label>
+      <label><input type="checkbox">Я различаю встречное движение и движение в догонку.</label>
+      <label><input type="checkbox">Я учитываю неодновременный старт через разницу времён.</label>
+      <label><input type="checkbox">Я при развороте считаю весь пройденный путь.</label>
+      <label><input type="checkbox">Я согласовываю единицы и проверяю смысл ответа.</label>
+    </div>
+    <div class="progress-track" aria-hidden="true"><span id="progressBar"></span></div>
+    <p id="progressText" aria-live="polite">Отметьте освоенные пункты.</p>
+  </div>
+</section>
+</main>
+
+<footer class="footer"><span>Анастасия Павлова · персональный учебный материал</span><span>Лёвин Артём Александрович</span></footer>
+</div>
+
+<dialog id="posterDialog" aria-labelledby="posterDialogTitle">
+  <div class="dialog-shell">
+    <div class="dialog-head"><button type="button" id="posterClose" aria-label="Закрыть увеличенную памятку">×</button></div>
+    <h2 id="posterDialogTitle" class="skip-link">Ментальная карта по задачам на движение</h2>
+    <img src="../images/24.09.26.png" alt="Увеличенная ментальная карта по текстовым задачам на движение">
+  </div>
+</dialog>
+
+<script>
+(function(){
+  'use strict';
+  var root=document.documentElement;
+  var themeBtn=document.getElementById('themeBtn');
+  var storageKey='nastya-motion-2409-theme';
+
+  function setTheme(theme){
+    root.dataset.theme=theme;
+    themeBtn.setAttribute('aria-pressed',String(theme==='dark'));
+    themeBtn.textContent=theme==='dark'?'Светлая тема':'Тёмная тема';
+    try{localStorage.setItem(storageKey,theme);}catch(e){}
+  }
+  try{setTheme(localStorage.getItem(storageKey)||'light');}catch(e){setTheme('light');}
+  themeBtn.addEventListener('click',function(){setTheme(root.dataset.theme==='dark'?'light':'dark');});
+  document.getElementById('printBtn').addEventListener('click',function(){window.print();});
+
+  document.querySelectorAll('.quiz-q').forEach(function(q){
+    q.querySelectorAll('button').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        if(q.dataset.done==='1')return;
+        q.dataset.done='1';
+        var ok=btn.dataset.choice===q.dataset.answer;
+        btn.classList.add(ok?'good':'bad');
+        q.querySelector('.feedback').textContent=ok?'Верно.':'Проверьте соответствующий раздел и повторите после перезагрузки страницы.';
+      });
+    });
+  });
+
+  var checks=[].slice.call(document.querySelectorAll('#checks input'));
+  var bar=document.getElementById('progressBar');
+  var progressText=document.getElementById('progressText');
+  function paintChecks(){
+    var n=checks.filter(function(x){return x.checked;}).length;
+    bar.style.width=(100*n/checks.length)+'%';
+    if(n===checks.length)progressText.textContent='Все ключевые пункты отмечены.';
+    else if(n>=4)progressText.textContent='Основной алгоритм собран. Проверьте оставшиеся пункты.';
+    else progressText.textContent='Продолжите повторение по разделам занятия.';
+    try{localStorage.setItem('nastya-motion-2409-checks',JSON.stringify(checks.map(function(x){return x.checked;})));}catch(e){}
+  }
+  try{
+    var saved=JSON.parse(localStorage.getItem('nastya-motion-2409-checks')||'[]');
+    checks.forEach(function(x,i){x.checked=!!saved[i];});
+  }catch(e){}
+  checks.forEach(function(x){x.addEventListener('change',paintChecks);});
+  paintChecks();
+
+  var dialog=document.getElementById('posterDialog');
+  var openBtn=document.getElementById('posterBtn');
+  var closeBtn=document.getElementById('posterClose');
+  var lastFocus=null;
+  function openDialog(){lastFocus=document.activeElement;dialog.showModal();closeBtn.focus();}
+  function closeDialog(){if(dialog.open)dialog.close();}
+  openBtn.addEventListener('click',openDialog);
+  closeBtn.addEventListener('click',closeDialog);
+  dialog.addEventListener('click',function(e){if(e.target===dialog)closeDialog();});
+  dialog.addEventListener('close',function(){if(lastFocus)lastFocus.focus();});
+})();
+</script>
+<script src="../../../shared/student-dashboard/atlas-motion.js"></script>
+</body>
+</html>
