@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория Матвея Горбачева по векторам: координаты, сумма, длина, скалярное произведение и угол.">
+<meta name="color-scheme" content="light dark">
+<title>Лаборатория векторов — Матвей Горбачев</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230f5b62'/%3E%3Cpath d='M12 46 47 18m0 0-8 2m8-2-2 8M16 50h33M12 46V13' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --surface-page:#f2efe7;--surface-raised:#fbfaf6;--surface-soft:#e8eee9;
+  --text-primary:#222522;--text-secondary:#666b66;--text-inverse:#fff;
+  --border-subtle:#d0cdc3;--border-strong:#99978f;
+  --accent:#0f5b62;--accent-hover:#0a474c;--accent-soft:#d9e8e6;
+  --copper:#a65335;--copper-soft:#f0dfd5;--success:#2e7457;--danger:#9c463d;--warning:#9b6a18;
+  --focus-ring:#167a83;--shadow-low:0 9px 26px #30281b14;--radius-sm:8px;--radius-md:14px;--radius-lg:22px;
+  --space-1:.4rem;--space-2:.75rem;--space-3:1.1rem;--space-4:1.6rem;--space-5:2.4rem;--space-6:3.5rem;
+  --motion-fast:140ms;--motion-normal:240ms
+}
+html[data-theme="dark"]{
+  --surface-page:#111817;--surface-raised:#182220;--surface-soft:#202d2a;
+  --text-primary:#edf2ef;--text-secondary:#a8b3ae;--border-subtle:#34433f;--border-strong:#62706b;
+  --accent:#7fc3c7;--accent-hover:#a2d8da;--accent-soft:#17383a;--copper:#e09370;--copper-soft:#3a2822;
+  --success:#7bc5a0;--danger:#e58a82;--warning:#e5bd70;--focus-ring:#a2d8da;--shadow-low:0 12px 34px #0005
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a,button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.topbar{
+  position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:.9rem;padding:.7rem 1rem;
+  background:color-mix(in srgb,var(--surface-page) 92%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border-subtle)
+}
+.topbar a,.topbar button{min-height:42px;border:1px solid var(--border-subtle);background:var(--surface-raised);padding:.55rem .75rem;text-decoration:none;border-radius:var(--radius-sm)}
+.topbar strong{font-size:.92rem}.grow{flex:1}
+.layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(310px,.72fr);gap:1rem;max-width:1540px;margin:auto;padding:1rem}
+.workspace{min-width:0}
+.workspace-head{padding:1.1rem 0 1rem;border-bottom:1px solid var(--border-subtle)}
+.eyebrow{margin:0 0 .45rem;color:var(--copper);font-size:.74rem;font-weight:850;letter-spacing:.13em;text-transform:uppercase}
+h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:600;line-height:1.08}
+h1{font-size:clamp(2.2rem,4vw,4.6rem);letter-spacing:-.045em;margin:.1rem 0 .7rem}
+h2{font-size:1.35rem;margin:.15rem 0 .7rem}
+.muted{color:var(--text-secondary)}
+.modebar{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:1rem}
+.mode{
+  min-height:42px;padding:.55rem .8rem;border:1px solid var(--border-strong);
+  background:var(--surface-raised);border-radius:var(--radius-sm)
+}
+.mode[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.stage{
+  position:relative;margin-top:1rem;height:min(69vh,720px);min-height:500px;
+  background:var(--surface-raised);border:1px solid var(--border-subtle);box-shadow:var(--shadow-low);
+  overflow:hidden;border-radius:var(--radius-sm);touch-action:none
+}
+.stage svg{display:block;width:100%;height:100%}
+.grid-line{stroke:var(--border-subtle);stroke-width:1}
+.axis{stroke:var(--border-strong);stroke-width:1.8}
+.axis-label,.tick-label,.point-label{fill:var(--text-secondary);font:12px system-ui}
+.point-label{fill:var(--text-primary);font-weight:700}
+.vector-a{stroke:var(--accent);stroke-width:4;fill:none;stroke-linecap:round}
+.vector-b{stroke:var(--copper);stroke-width:4;fill:none;stroke-linecap:round}
+.vector-sum{stroke:var(--success);stroke-width:4;fill:none;stroke-linecap:round;stroke-dasharray:8 5}
+.guide{stroke:var(--border-strong);stroke-width:1.3;stroke-dasharray:5 5}
+.handle-a{fill:var(--accent);stroke:var(--surface-raised);stroke-width:3}
+.handle-b{fill:var(--copper);stroke:var(--surface-raised);stroke-width:3}
+.handle-a,.handle-b{cursor:grab}
+.handle-a:active,.handle-b:active{cursor:grabbing}
+.angle-arc{stroke:var(--warning);stroke-width:4;fill:none;stroke-linecap:round}
+.stage-note{
+  position:absolute;left:.75rem;top:.75rem;max-width:min(34rem,calc(100% - 1.5rem));
+  padding:.55rem .7rem;background:color-mix(in srgb,var(--surface-raised) 92%,transparent);
+  border:1px solid var(--border-subtle);font-size:.88rem;color:var(--text-secondary)
+}
+.side{display:grid;gap:.8rem;align-content:start}
+.panel{background:var(--surface-raised);border-top:2px solid var(--accent);border-bottom:1px solid var(--border-subtle);padding:1rem}
+.panel.copper{border-top-color:var(--copper)}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.control label{display:block;color:var(--text-secondary);font-size:.82rem;margin-bottom:.25rem}
+.control input{width:100%;min-height:42px;padding:.45rem .55rem;border:1px solid var(--border-strong);background:var(--surface-page);border-radius:var(--radius-sm)}
+.actions{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:.9rem}
+.actions button{min-height:42px;border:1px solid var(--border-strong);background:var(--surface-raised);padding:.55rem .7rem;border-radius:var(--radius-sm)}
+.actions .primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.formula{padding:.8rem 0;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);overflow:auto}
+.formula math{font-family:"Cambria Math","Times New Roman",serif;font-size:1.22rem}
+.metrics{display:grid;gap:.45rem;margin-top:.8rem}
+.metric{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.8rem;padding:.5rem 0;border-bottom:1px solid var(--border-subtle)}
+.metric span{color:var(--text-secondary)}.metric strong{font-variant-numeric:tabular-nums}
+.legend{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:.75rem;color:var(--text-secondary);font-size:.86rem}
+.legend span{display:flex;align-items:center;gap:.35rem}.swatch{width:18px;height:3px;background:var(--accent)}.swatch.b{background:var(--copper)}.swatch.s{background:var(--success)}
+.observation{border-left:3px solid var(--copper);padding-left:.8rem}
+.kbd{font:700 .78rem/1 ui-monospace,Consolas,monospace;border:1px solid var(--border-strong);padding:.17rem .32rem;border-radius:4px}
+@media(max-width:950px){.layout{grid-template-columns:1fr}.stage{height:58vh;min-height:430px}.side{grid-template-columns:1fr 1fr}.panel:first-child{grid-column:1/-1}}
+@media(max-width:640px){.layout{padding:.65rem}.topbar{flex-wrap:wrap}.topbar strong,.topbar .optional{display:none}.stage{min-height:360px;height:52vh}.side{grid-template-columns:1fr}.controls{grid-template-columns:1fr 1fr}h1{font-size:2.35rem}}
+@media(max-width:380px){.controls{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{.topbar,.modebar,.actions{display:none!important}.layout{display:block;padding:0}.stage{height:520px;break-inside:avoid}.panel{break-inside:avoid;margin-top:.6rem}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a href="24.09.26.html">← Вернуться к занятию</a>
+  <strong>Цифровая лаборатория · 24.09.26</strong>
+  <span class="grow"></span>
+  <button id="theme" type="button">Тема</button>
+  <button class="optional" type="button" onclick="print()">Печать</button>
+</header>
+
+<main class="layout">
+  <section class="workspace" aria-labelledby="labTitle">
+    <div class="workspace-head">
+      <p class="eyebrow">Векторы · рабочая поверхность</p>
+      <h1 id="labTitle">Координаты видны как движение</h1>
+      <p class="muted" id="subtitle">Перемещайте начало и конец вектора. Модель пересчитывает только формулы, разобранные на занятии.</p>
+      <div class="modebar" role="group" aria-label="Режим лаборатории">
+        <button class="mode" data-mode="coordinates" type="button" aria-pressed="true">Координаты</button>
+        <button class="mode" data-mode="sum" type="button" aria-pressed="false">Сумма</button>
+        <button class="mode" data-mode="angle" type="button" aria-pressed="false">Угол</button>
+      </div>
+    </div>
+
+    <div class="stage" id="stage" tabindex="0" aria-label="Интерактивная координатная плоскость с векторами">
+      <svg id="plot" viewBox="0 0 900 620" role="img" aria-labelledby="plotTitle plotDesc">
+        <title id="plotTitle">Интерактивная модель векторов</title>
+        <desc id="plotDesc">Координатная плоскость. Конечные точки векторов можно перемещать мышью, касанием или клавиатурой.</desc>
+        <defs>
+          <marker id="arrowAccent" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="var(--accent)"/></marker>
+          <marker id="arrowCopper" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="var(--copper)"/></marker>
+          <marker id="arrowSuccess" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10Z" fill="var(--success)"/></marker>
+        </defs>
+        <g id="grid"></g>
+        <g id="drawing"></g>
+      </svg>
+      <div class="stage-note" id="stageNote">Точки привязаны к целочисленной сетке. Выберите точку и используйте клавиши со стрелками для точной настройки.</div>
+    </div>
+  </section>
+
+  <aside class="side">
+    <section class="panel">
+      <p class="eyebrow">Параметры</p>
+      <h2 id="controlTitle">Точки A и B</h2>
+      <div class="controls" id="controls"></div>
+      <div class="actions">
+        <button class="primary" id="reset" type="button">Исходный пример</button>
+        <button id="gridToggle" type="button" aria-pressed="true">Сетка</button>
+      </div>
+    </section>
+
+    <section class="panel copper">
+      <p class="eyebrow">Формула</p>
+      <div class="formula" id="formula"></div>
+      <div class="metrics" id="metrics" aria-live="polite"></div>
+    </section>
+
+    <section class="panel">
+      <p class="eyebrow">Что наблюдать</p>
+      <h2 id="question">Почему знак координаты меняется?</h2>
+      <p class="muted observation" id="observation">Сдвиг вправо и вверх положителен; влево и вниз — отрицателен.</p>
+      <div class="legend" id="legend"></div>
+    </section>
+
+    <section class="panel">
+      <p class="eyebrow">Управление</p>
+      <p class="muted">Перетаскивайте цветные точки. Для клавиатуры: выберите точку клавишей Tab, затем используйте <span class="kbd">←</span> <span class="kbd">→</span> <span class="kbd">↑</span> <span class="kbd">↓</span>.</p>
+      <a href="24.09.26.html#method">Вернуться к координатному методу →</a>
+    </section>
+  </aside>
+</main>
+
+<script>
+(function(){
+"use strict";
+var NS="http://www.w3.org/2000/svg",plot=document.getElementById("plot"),grid=document.getElementById("grid"),drawing=document.getElementById("drawing"),stage=document.getElementById("stage");
+var xmin=-6,xmax=10,ymin=-6,ymax=8,W=900,H=620,pad=58;
+var queryMode=new URLSearchParams(location.search).get("mode");
+var S={mode:["coordinates","sum","angle"].indexOf(queryMode)>=0?queryMode:"coordinates",grid:true,A:{x:3,y:2},B:{x:9,y:3},a:{x:3,y:-1},b:{x:1,y:2}};
+try{var saved=JSON.parse(localStorage.getItem("matvey-240926-vector-lab")||"null");if(saved){S=Object.assign(S,saved);if(queryMode)S.mode=queryMode}}catch(e){}
+function save(){try{localStorage.setItem("matvey-240926-vector-lab",JSON.stringify(S))}catch(e){}}
+try{document.documentElement.dataset.theme=localStorage.getItem("matvey-240926-lab-theme")||"light"}catch(e){}
+document.getElementById("theme").onclick=function(){var v=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=v;try{localStorage.setItem("matvey-240926-lab-theme",v)}catch(e){}};
+
+function sx(x){return pad+(x-xmin)/(xmax-xmin)*(W-2*pad)}
+function sy(y){return H-pad-(y-ymin)/(ymax-ymin)*(H-2*pad)}
+function gx(px){return Math.max(xmin,Math.min(xmax,Math.round(xmin+(px-pad)/(W-2*pad)*(xmax-xmin))))}
+function gy(py){return Math.max(ymin,Math.min(ymax,Math.round(ymin+(H-pad-py)/(H-2*pad)*(ymax-ymin))))}
+function el(tag,attrs,parent){
+  var n=document.createElementNS(NS,tag);Object.keys(attrs||{}).forEach(function(k){n.setAttribute(k,attrs[k])});(parent||drawing).appendChild(n);return n
+}
+function text(x,y,value,cls,parent){var n=el("text",{x:x,y:y,class:cls||"point-label"},parent);n.textContent=value;return n}
+function clear(n){while(n.firstChild)n.removeChild(n.firstChild)}
+function fmt(n){return Math.abs(n-Math.round(n))<1e-9?String(Math.round(n)):n.toFixed(3).replace(/0+$/,"").replace(/\.$/,"")}
+function vlen(v){return Math.sqrt(v.x*v.x+v.y*v.y)}
+function dot(a,b){return a.x*b.x+a.y*b.y}
+function safeAngle(a,b){var la=vlen(a),lb=vlen(b);if(!la||!lb)return null;var c=Math.max(-1,Math.min(1,dot(a,b)/(la*lb)));return {cos:c,deg:Math.acos(c)*180/Math.PI}}
+function setHTML(id,html){document.getElementById(id).innerHTML=html}
+function line(x1,y1,x2,y2,cls,marker,parent){return el("line",{x1:sx(x1),y1:sy(y1),x2:sx(x2),y2:sy(y2),class:cls,"marker-end":marker?"url(#"+marker+")":""},parent)}
+function handle(point,key,cls,label){
+  var c=el("circle",{cx:sx(point.x),cy:sy(point.y),r:10,class:cls,tabindex:"0",role:"button","aria-label":label+" "+point.x+"; "+point.y,"data-handle":key});
+  c.addEventListener("pointerdown",startDrag);c.addEventListener("keydown",handleKey);return c
+}
+function drawGrid(){
+  clear(grid);if(!S.grid)return;
+  for(var x=xmin;x<=xmax;x++){el("line",{x1:sx(x),y1:sy(ymin),x2:sx(x),y2:sy(ymax),class:x===0?"axis":"grid-line"},grid);if(x!==0)text(sx(x)+3,sy(0)+15,String(x),"tick-label",grid)}
+  for(var y=ymin;y<=ymax;y++){el("line",{x1:sx(xmin),y1:sy(y),x2:sx(xmax),y2:sy(y),class:y===0?"axis":"grid-line"},grid);if(y!==0)text(sx(0)+6,sy(y)-5,String(y),"tick-label",grid)}
+  text(sx(xmax)-4,sy(0)-9,"x","axis-label",grid);text(sx(0)+8,sy(ymax)+12,"y","axis-label",grid)
+}
+function drawCoordinates(){
+  line(S.A.x,S.A.y,S.B.x,S.B.y,"vector-a","arrowAccent");
+  line(S.A.x,S.A.y,S.B.x,S.A.y,"guide",null);line(S.B.x,S.A.y,S.B.x,S.B.y,"guide",null);
+  handle(S.A,"A","handle-b","Точка A");handle(S.B,"B","handle-a","Точка B");
+  text(sx(S.A.x)+12,sy(S.A.y)+22,"A("+S.A.x+"; "+S.A.y+")");text(sx(S.B.x)+12,sy(S.B.y)-12,"B("+S.B.x+"; "+S.B.y+")");
+  var dx=S.B.x-S.A.x,dy=S.B.y-S.A.y;
+  text((sx(S.A.x)+sx(S.B.x))/2,sy(S.A.y)+22,"Δx = "+(dx>=0?"+":"")+dx,"point-label");
+  text(sx(S.B.x)+12,(sy(S.A.y)+sy(S.B.y))/2,"Δy = "+(dy>=0?"+":"")+dy,"point-label");
+}
+function drawVectors(showSum,showAngle){
+  line(0,0,S.a.x,S.a.y,"vector-a","arrowAccent");line(0,0,S.b.x,S.b.y,"vector-b","arrowCopper");
+  handle(S.a,"a","handle-a","Конец вектора a");handle(S.b,"b","handle-b","Конец вектора b");
+  text(sx(S.a.x)+12,sy(S.a.y)-10,"a = ("+S.a.x+"; "+S.a.y+")");text(sx(S.b.x)+12,sy(S.b.y)+20,"b = ("+S.b.x+"; "+S.b.y+")");
+  if(showSum){var s={x:S.a.x+S.b.x,y:S.a.y+S.b.y};line(0,0,s.x,s.y,"vector-sum","arrowSuccess");text(sx(s.x)+12,sy(s.y)-10,"a+b = ("+s.x+"; "+s.y+")")}
+  if(showAngle){
+    var ang=safeAngle(S.a,S.b);
+    if(ang){
+      var r=52,a1=Math.atan2(-S.a.y,S.a.x),a2=Math.atan2(-S.b.y,S.b.x),d=a2-a1;
+      while(d>Math.PI)d-=2*Math.PI;while(d< -Math.PI)d+=2*Math.PI;
+      if(d<0){var t=a1;a1=a2;a2=t;d=-d}
+      var x1=sx(0)+r*Math.cos(a1),y1=sy(0)+r*Math.sin(a1),x2=sx(0)+r*Math.cos(a2),y2=sy(0)+r*Math.sin(a2);
+      el("path",{d:"M "+x1+" "+y1+" A "+r+" "+r+" 0 0 1 "+x2+" "+y2,class:"angle-arc"});
+      text(sx(0)+72,sy(0)-22,"φ","point-label")
+    }
+  }
+}
+function renderFormula(){
+  if(S.mode==="coordinates"){
+    setHTML("formula",'<math display="block"><mover><mi>AB</mi><mo>→</mo></mover><mo>=</mo><mo>(</mo><msub><mi>x</mi><mi>B</mi></msub><mo>−</mo><msub><mi>x</mi><mi>A</mi></msub><mo>;</mo><msub><mi>y</mi><mi>B</mi></msub><mo>−</mo><msub><mi>y</mi><mi>A</mi></msub><mo>)</mo></math>');
+  }else if(S.mode==="sum"){
+    setHTML("formula",'<math display="block"><mi>a</mi><mo>+</mo><mi>b</mi><mo>=</mo><mo>(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>x</mi><mn>2</mn></msub><mo>;</mo><msub><mi>y</mi><mn>1</mn></msub><mo>+</mo><msub><mi>y</mi><mn>2</mn></msub><mo>)</mo></math>');
+  }else{
+    setHTML("formula",'<math display="block"><mi>cos</mi><mi>φ</mi><mo>=</mo><mfrac><mrow><mi>a</mi><mo>·</mo><mi>b</mi></mrow><mrow><mo>|</mo><mi>a</mi><mo>|</mo><mo>|</mo><mi>b</mi><mo>|</mo></mrow></mfrac></math>');
+  }
+}
+function control(label,key,val,min,max){
+  return '<div class="control"><label for="c-'+key+'">'+label+'</label><input id="c-'+key+'" data-key="'+key+'" type="number" min="'+min+'" max="'+max+'" step="1" value="'+val+'"></div>'
+}
+function renderControls(){
+  var box=document.getElementById("controls"),html="";
+  if(S.mode==="coordinates"){
+    document.getElementById("controlTitle").textContent="Точки A и B";
+    html+=control("x точки A","A.x",S.A.x,xmin,xmax)+control("y точки A","A.y",S.A.y,ymin,ymax)+control("x точки B","B.x",S.B.x,xmin,xmax)+control("y точки B","B.y",S.B.y,ymin,ymax);
+  }else{
+    document.getElementById("controlTitle").textContent="Векторы a и b";
+    html+=control("x вектора a","a.x",S.a.x,xmin,xmax)+control("y вектора a","a.y",S.a.y,ymin,ymax)+control("x вектора b","b.x",S.b.x,xmin,xmax)+control("y вектора b","b.y",S.b.y,ymin,ymax);
+  }
+  box.innerHTML=html;
+  box.querySelectorAll("input").forEach(function(inp){inp.addEventListener("change",function(){setKey(inp.dataset.key,+inp.value);render()})})
+}
+function setKey(key,val){var p=key.split(".");S[p[0]][p[1]]=Math.round(val)}
+function renderMetrics(){
+  var box=document.getElementById("metrics"),html="";
+  if(S.mode==="coordinates"){
+    var dx=S.B.x-S.A.x,dy=S.B.y-S.A.y,len=Math.sqrt(dx*dx+dy*dy);
+    html+='<div class="metric"><span>AB</span><strong>('+dx+'; '+dy+')</strong></div>';
+    html+='<div class="metric"><span>|AB|</span><strong>'+fmt(len)+'</strong></div>';
+    html+='<div class="metric"><span>Смещение по x</span><strong>'+(dx>=0?"+":"")+dx+'</strong></div>';
+    html+='<div class="metric"><span>Смещение по y</span><strong>'+(dy>=0?"+":"")+dy+'</strong></div>';
+  }else if(S.mode==="sum"){
+    var sxv=S.a.x+S.b.x,syv=S.a.y+S.b.y,len2=Math.sqrt(sxv*sxv+syv*syv);
+    html+='<div class="metric"><span>a + b</span><strong>('+sxv+'; '+syv+')</strong></div>';
+    html+='<div class="metric"><span>|a + b|</span><strong>'+fmt(len2)+'</strong></div>';
+    html+='<div class="metric"><span>|a|</span><strong>'+fmt(vlen(S.a))+'</strong></div>';
+    html+='<div class="metric"><span>|b|</span><strong>'+fmt(vlen(S.b))+'</strong></div>';
+  }else{
+    var ang=safeAngle(S.a,S.b),d=dot(S.a,S.b);
+    html+='<div class="metric"><span>a · b</span><strong>'+d+'</strong></div>';
+    html+='<div class="metric"><span>|a|</span><strong>'+fmt(vlen(S.a))+'</strong></div>';
+    html+='<div class="metric"><span>|b|</span><strong>'+fmt(vlen(S.b))+'</strong></div>';
+    html+='<div class="metric"><span>cos φ</span><strong>'+(ang?fmt(ang.cos):"не определён")+'</strong></div>';
+    html+='<div class="metric"><span>φ</span><strong>'+(ang?fmt(ang.deg)+"°":"не определён")+'</strong></div>';
+  }
+  box.innerHTML=html
+}
+function renderText(){
+  document.querySelectorAll(".mode").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.mode===S.mode))});
+  if(S.mode==="coordinates"){
+    document.getElementById("labTitle").textContent="Координаты видны как движение";
+    document.getElementById("subtitle").textContent="Перемещайте начало и конец вектора. Координаты — это смещение от начала к концу.";
+    document.getElementById("question").textContent="Почему знак координаты меняется?";
+    document.getElementById("observation").textContent="Сдвиг вправо и вверх положителен; влево и вниз — отрицателен.";
+    document.getElementById("legend").innerHTML='<span><i class="swatch"></i>вектор AB</span><span><i class="swatch b"></i>точка A</span>';
+  }else if(S.mode==="sum"){
+    document.getElementById("labTitle").textContent="Сумма складывает смещения";
+    document.getElementById("subtitle").textContent="Изменяйте a и b. Зелёный пунктир показывает результирующий вектор a + b.";
+    document.getElementById("question").textContent="Что складывается?";
+    document.getElementById("observation").textContent="Координаты складываются по компонентам: x с x, y с y. Длина суммы вычисляется уже после сложения.";
+    document.getElementById("legend").innerHTML='<span><i class="swatch"></i>a</span><span><i class="swatch b"></i>b</span><span><i class="swatch s"></i>a + b</span>';
+  }else{
+    document.getElementById("labTitle").textContent="Скалярное произведение показывает угол";
+    document.getElementById("subtitle").textContent="Меняйте направления a и b и наблюдайте одновременно a · b, cos φ и сам угол.";
+    document.getElementById("question").textContent="Что говорит знак a · b?";
+    var ang=safeAngle(S.a,S.b),d=dot(S.a,S.b),msg=!ang?"Угол определяется только для двух ненулевых векторов.":d>0?"Скалярное произведение положительно: угол острый.":d<0?"Скалярное произведение отрицательно: угол тупой.":"Скалярное произведение равно нулю: векторы перпендикулярны.";
+    document.getElementById("observation").textContent=msg;
+    document.getElementById("legend").innerHTML='<span><i class="swatch"></i>a</span><span><i class="swatch b"></i>b</span>';
+  }
+}
+function render(){
+  drawGrid();clear(drawing);
+  if(S.mode==="coordinates")drawCoordinates();else drawVectors(S.mode==="sum",S.mode==="angle");
+  renderFormula();renderControls();renderMetrics();renderText();save();
+  if(history.replaceState)history.replaceState(null,"","?mode="+S.mode)
+}
+document.querySelectorAll(".mode").forEach(function(b){b.addEventListener("click",function(){S.mode=b.dataset.mode;resetMode();render()})});
+function resetMode(){
+  if(S.mode==="coordinates"){S.A={x:3,y:2};S.B={x:9,y:3}}
+  if(S.mode==="sum"){S.a={x:3,y:-1};S.b={x:1,y:2}}
+  if(S.mode==="angle"){S.a={x:1,y:1};S.b={x:2,y:0}}
+}
+document.getElementById("reset").onclick=function(){resetMode();render()};
+document.getElementById("gridToggle").onclick=function(){S.grid=!S.grid;this.setAttribute("aria-pressed",String(S.grid));render()};
+
+var dragging=null;
+function startDrag(e){dragging=e.currentTarget.dataset.handle;e.preventDefault()}
+plot.addEventListener("pointermove",function(e){
+  if(!dragging)return;
+  var r=plot.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*W,py=(e.clientY-r.top)/r.height*H,x=gx(px),y=gy(py);
+  if(dragging==="A"||dragging==="B")S[dragging]={x:x,y:y};else S[dragging]={x:x,y:y};
+  render()
+});
+window.addEventListener("pointerup",function(){dragging=null});
+window.addEventListener("pointercancel",function(){dragging=null});
+function handleKey(e){
+  var key=e.currentTarget.dataset.handle,dx=0,dy=0;
+  if(e.key==="ArrowLeft")dx=-1;if(e.key==="ArrowRight")dx=1;if(e.key==="ArrowUp")dy=1;if(e.key==="ArrowDown")dy=-1;
+  if(!dx&&!dy)return;e.preventDefault();
+  var p=S[key];p.x=Math.max(xmin,Math.min(xmax,p.x+dx));p.y=Math.max(ymin,Math.min(ymax,p.y+dy));render();
+  var next=plot.querySelector('[data-handle="'+key+'"]');if(next)next.focus()
+}
+render();
+})();
+</script>
+</body>
+</html>

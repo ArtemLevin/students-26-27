@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивный конспект Матвея Горбачева: векторы на координатной плоскости, длина, операции, скалярное произведение и угол между векторами.">
+<meta name="color-scheme" content="light dark">
+<title>Векторы на координатной плоскости — Матвей Горбачев</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230f5b62'/%3E%3Cpath d='M12 46 47 18m0 0-8 2m8-2-2 8M16 50h33M12 46V13' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --surface-page:#f2efe7;
+  --surface-raised:#fbfaf6;
+  --surface-soft:#e8eee9;
+  --text-primary:#222522;
+  --text-secondary:#666b66;
+  --text-inverse:#fff;
+  --border-subtle:#d0cdc3;
+  --border-strong:#99978f;
+  --accent:#0f5b62;
+  --accent-hover:#0a474c;
+  --accent-soft:#d9e8e6;
+  --copper:#a65335;
+  --copper-soft:#f0dfd5;
+  --success:#2e7457;
+  --danger:#9c463d;
+  --warning:#9b6a18;
+  --focus-ring:#167a83;
+  --shadow-low:0 9px 26px #30281b14;
+  --radius-sm:8px;
+  --radius-md:14px;
+  --radius-lg:22px;
+  --space-1:.4rem;
+  --space-2:.75rem;
+  --space-3:1.1rem;
+  --space-4:1.6rem;
+  --space-5:2.4rem;
+  --space-6:3.5rem;
+  --motion-fast:140ms;
+  --motion-normal:240ms;
+}
+html[data-theme="dark"]{
+  --surface-page:#111817;
+  --surface-raised:#182220;
+  --surface-soft:#202d2a;
+  --text-primary:#edf2ef;
+  --text-secondary:#a8b3ae;
+  --border-subtle:#34433f;
+  --border-strong:#62706b;
+  --accent:#7fc3c7;
+  --accent-hover:#a2d8da;
+  --accent-soft:#17383a;
+  --copper:#e09370;
+  --copper-soft:#3a2822;
+  --success:#7bc5a0;
+  --danger:#e58a82;
+  --warning:#e5bd70;
+  --focus-ring:#a2d8da;
+  --shadow-low:0 12px 34px #0005;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--surface-page);color:var(--text-primary);
+  font:17px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  text-rendering:optimizeLegibility
+}
+a,button,input{font:inherit}
+a{color:inherit}
+button{color:inherit}
+math{font-family:"Cambria Math","Times New Roman",serif}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.skip-link{position:fixed;left:1rem;top:-5rem;z-index:100;padding:.7rem 1rem;background:var(--surface-raised);border:1px solid var(--border-strong)}
+.skip-link:focus{top:1rem}
+.shell{width:min(1180px,calc(100% - 44px));margin:auto}
+.topbar{
+  position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:1rem;
+  min-height:54px;border-bottom:1px solid var(--border-subtle);
+  background:color-mix(in srgb,var(--surface-page) 92%,transparent);backdrop-filter:blur(10px)
+}
+.topbar .shell{display:flex;align-items:center;gap:1rem}
+.topbar a,.topbar button{
+  min-height:40px;border:0;background:transparent;text-decoration:none;padding:.45rem 0;
+  color:var(--text-secondary);cursor:pointer
+}
+.topbar a:hover,.topbar button:hover{color:var(--text-primary)}
+.brand{font-weight:780;color:var(--text-primary)!important}
+.grow{flex:1}
+.cover{
+  position:relative;overflow:hidden;
+  display:grid;grid-template-columns:minmax(0,1.2fr) minmax(260px,.55fr);gap:clamp(2rem,7vw,6.5rem);
+  padding:clamp(4rem,8vw,7.5rem) 0 clamp(3rem,6vw,5rem);
+  border-bottom:1px solid var(--border-subtle)
+}
+.cover::before{
+  content:"";position:absolute;inset:-8% -14% 0 38%;z-index:-2;opacity:.17;
+  background:
+    linear-gradient(90deg,var(--surface-page) 5%,transparent 48%),
+    linear-gradient(180deg,transparent 45%,var(--surface-page) 92%),
+    url("../images/24.09.26.png") center/cover no-repeat;
+  filter:saturate(.68)
+}
+html[data-theme="dark"] .cover::before{opacity:.09;filter:saturate(.45) brightness(.75)}
+.coordinate-field{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.coordinate-waypoint{
+  position:absolute;left:var(--point-x);top:var(--point-y);width:var(--point-size);height:var(--point-size);
+  margin:calc(var(--point-size)/-2);border:1px solid color-mix(in srgb,var(--accent) 52%,transparent);
+  border-radius:50%;opacity:.42;background:var(--surface-page)
+}
+.coordinate-waypoint::before,.coordinate-waypoint::after{
+  content:"";position:absolute;left:50%;top:50%;background:color-mix(in srgb,var(--accent) 55%,transparent);
+  transform:translate(-50%,-50%)
+}
+.coordinate-waypoint::before{width:14px;height:1px}.coordinate-waypoint::after{width:1px;height:14px}
+.eyebrow{
+  margin:0 0 .9rem;color:var(--copper);font-weight:850;font-size:.75rem;
+  letter-spacing:.14em;text-transform:uppercase
+}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:600;line-height:1.08}
+h1{font-size:clamp(3rem,7.2vw,6.8rem);letter-spacing:-.055em;margin:.2rem 0 1.2rem;max-width:830px}
+h2{font-size:clamp(1.8rem,3vw,2.8rem);letter-spacing:-.025em;margin:.2rem 0 1rem}
+h3{font-size:1.25rem;margin:.2rem 0 .7rem}
+.lead{max-width:760px;font-size:1.12rem;color:var(--text-secondary);margin:0}
+.hero-formula{
+  margin:2rem 0 0;padding:1.1rem 0 1rem;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-subtle);
+  max-width:750px;overflow-x:auto
+}
+.hero-formula math{font-size:clamp(1.65rem,4vw,3rem)}
+.cover-aside{border-left:1px solid var(--border-subtle);padding-left:1.5rem;align-self:end}
+.cover-aside dl{margin:0}.cover-aside div{padding:.72rem 0;border-bottom:1px solid var(--border-subtle)}
+.cover-aside dt{font-size:.72rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.12em;font-weight:800}
+.cover-aside dd{margin:.15rem 0 0}
+.route{margin:1.35rem 0 0;padding:0;list-style:none;counter-reset:route}
+.route li{counter-increment:route;display:grid;grid-template-columns:2rem 1fr;gap:.55rem;padding:.38rem 0;color:var(--text-secondary)}
+.route li::before{content:counter(route,decimal-leading-zero);color:var(--copper);font-size:.75rem;font-weight:850}
+.actions{display:flex;gap:1.2rem;flex-wrap:wrap;margin-top:1.6rem}
+.text-action{display:inline-flex;align-items:center;min-height:42px;text-decoration:none;border-bottom:2px solid var(--accent);font-weight:800}
+.text-action.lab{border-bottom-color:var(--copper)}
+.quicknav{
+  display:flex;gap:1.4rem;overflow:auto;padding:1rem 0;margin-bottom:var(--space-5);
+  border-bottom:1px solid var(--border-subtle)
+}
+.quicknav a{white-space:nowrap;text-decoration:none;color:var(--text-secondary);font-size:.92rem}
+.quicknav a:hover{color:var(--accent)}
+main{padding-bottom:4rem}
+.chapter{padding:clamp(2.7rem,5vw,4.8rem) 0;border-bottom:1px solid var(--border-subtle)}
+.chapter-head{display:grid;grid-template-columns:110px minmax(0,1fr);gap:1rem;align-items:start;margin-bottom:2rem}
+.chapter-num{font:700 2.4rem/1 Georgia,serif;color:var(--copper)}
+.chapter-intro{max-width:780px;color:var(--text-secondary);margin:0}
+.split{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:clamp(1.5rem,5vw,4rem);align-items:start}
+.rule{
+  padding:1.2rem 0;border-top:2px solid var(--accent);border-bottom:1px solid var(--border-subtle);
+  margin:1.4rem 0;overflow-x:auto
+}
+.rule math{font-size:clamp(1.35rem,2.8vw,2rem)}
+.margin-note{border-left:3px solid var(--copper);padding:.2rem 0 .2rem 1rem;color:var(--text-secondary)}
+.formula-ledger{border-top:1px solid var(--border-strong)}
+.formula-row{
+  display:grid;grid-template-columns:minmax(150px,.42fr) minmax(0,1fr);gap:1.1rem;
+  padding:1rem 0;border-bottom:1px solid var(--border-subtle);align-items:center
+}
+.formula-row strong{font-size:.92rem}.formula-row .mathline{overflow:auto}
+.formula-row math{font-size:1.22rem}
+.vector-board{
+  border:1px solid var(--border-subtle);background:var(--surface-raised);box-shadow:var(--shadow-low);
+  padding:1rem;border-radius:var(--radius-sm)
+}
+.vector-board svg{display:block;width:100%;height:auto}
+.axis{stroke:var(--border-strong);stroke-width:1.5}
+.gridline{stroke:var(--border-subtle);stroke-width:1}
+.vec-a{stroke:var(--accent);fill:none;stroke-width:4;stroke-linecap:round}
+.vec-b{stroke:var(--copper);fill:none;stroke-width:4;stroke-linecap:round}
+.point{fill:var(--text-primary)}
+.svg-label{font:600 14px system-ui;fill:var(--text-primary)}
+.svg-muted{font:12px system-ui;fill:var(--text-secondary)}
+.steps{counter-reset:step;border-top:1px solid var(--border-strong)}
+.step{counter-increment:step;display:grid;grid-template-columns:2.1rem 1fr;gap:.8rem;padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+.step::before{content:counter(step,decimal-leading-zero);color:var(--copper);font-weight:850;font-size:.78rem}
+.step.current{background:linear-gradient(90deg,var(--accent-soft),transparent)}
+.step.hidden-step{display:none}
+.step-controls{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem}
+.step-controls button,.quiz button,.answers-toggle{
+  min-height:42px;border:1px solid var(--border-strong);background:var(--surface-raised);padding:.55rem .8rem;cursor:pointer;
+  border-radius:var(--radius-sm)
+}
+.step-controls button.primary,.answers-toggle{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.error-list{display:grid;grid-template-columns:1fr 1fr;gap:0 2rem;border-top:1px solid var(--border-strong)}
+.error-item{padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+.error-item b{color:var(--danger)}
+.poster{
+  margin:1.7rem 0 0;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)
+}
+.poster summary{cursor:pointer;padding:1rem 0;font-weight:800}
+.poster figure{margin:0 0 1rem}.poster img{width:100%;height:auto;display:block;cursor:zoom-in;border:1px solid var(--border-subtle)}
+.poster figcaption{color:var(--text-secondary);font-size:.9rem;margin-top:.6rem}
+.lab-strip{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1.2rem;align-items:center;
+  margin:2rem 0;padding:1.3rem 0;border-top:1px solid var(--copper);border-bottom:1px solid var(--copper)
+}
+.task-list{counter-reset:task;border-top:1px solid var(--border-strong)}
+.task{counter-increment:task;display:grid;grid-template-columns:2rem 1fr;gap:.8rem;padding:1.1rem 0;border-bottom:1px solid var(--border-subtle)}
+.task::before{content:counter(task,decimal-leading-zero);font-weight:900;color:var(--copper);font-size:.78rem}
+.answers{display:none;margin-top:1rem}.answers.show{display:block}
+.answers table{width:100%;border-collapse:collapse}.answers th,.answers td{text-align:left;padding:.75rem;border-bottom:1px solid var(--border-subtle)}
+.quiz{margin-top:2rem;padding-top:1.2rem;border-top:1px solid var(--border-strong)}
+.quiz-options{display:flex;gap:.7rem;flex-wrap:wrap}
+.quiz button.good{border-color:var(--success);color:var(--success)}.quiz button.bad{border-color:var(--danger);color:var(--danger)}
+.feedback{min-height:1.7rem;margin-top:.8rem;color:var(--text-secondary)}
+.checklist{display:grid;gap:.75rem;max-width:760px}
+.check{display:grid;grid-template-columns:auto 1fr;gap:.7rem;align-items:start}.check input{margin-top:.32rem;accent-color:var(--accent)}
+.progress{height:6px;background:var(--border-subtle);margin-top:1.2rem;overflow:hidden}.progress span{display:block;height:100%;width:0;background:var(--accent);transition:width var(--motion-normal)}
+.footer{padding:2rem 0;color:var(--text-secondary);font-size:.88rem}
+.modal{position:fixed;inset:0;z-index:90;display:none;padding:2rem;background:#000b;place-items:center}
+.modal.show{display:grid}.modal-box{position:relative;max-width:min(1200px,96vw);max-height:94vh;background:var(--surface-raised);padding:1rem}
+.modal img{max-width:100%;max-height:86vh;display:block}
+.modal-close{position:absolute;right:.5rem;top:.5rem;width:42px;height:42px;border:1px solid var(--border-strong);background:var(--surface-raised);cursor:pointer}
+@media(max-width:900px){
+  .cover,.split{grid-template-columns:1fr}.cover-aside{border-left:0;border-top:1px solid var(--border-subtle);padding:1.3rem 0 0}
+  .cover::before{inset:0;opacity:.08;background-position:center}.chapter-head{grid-template-columns:70px 1fr}
+}
+@media(max-width:620px){
+  body{font-size:16px}.shell{width:min(100% - 28px,1180px)}
+  .topbar .optional{display:none}.cover{padding-top:3rem}
+  h1{font-size:clamp(2.7rem,15vw,4.4rem)}.chapter-head{grid-template-columns:1fr}.chapter-num{font-size:1.2rem}
+  .formula-row{grid-template-columns:1fr}.error-list{grid-template-columns:1fr}.lab-strip{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+@media print{
+  :root{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--text-primary:#111;--text-secondary:#444;--border-subtle:#aaa;--border-strong:#555}
+  .topbar,.quicknav,.actions,.step-controls,.answers-toggle,.quiz,.lab-strip,.modal{display:none!important}
+  .cover::before,.coordinate-field{display:none!important}.cover{padding:1rem 0;display:block}.cover-aside{border:0;padding:1rem 0}
+  .chapter{break-inside:auto}.vector-board,.rule,.formula-row,.task{break-inside:avoid}.step.hidden-step{display:grid!important}.answers{display:block!important}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">К содержанию</a>
+<header class="topbar">
+  <div class="shell">
+    <a class="brand" href="index.html">← Матвей Горбачев</a>
+    <a class="optional" href="#coordinates">Координаты</a>
+    <a class="optional" href="#dot">Скалярное произведение</a>
+    <span class="grow"></span>
+    <a href="../pdf_docs/24.09.26.pdf" target="_blank" rel="noreferrer">Скачать пособие</a>
+    <a class="optional" href="../tex_docs/24.09.26.tex" target="_blank" rel="noreferrer">TeX</a>
+    <button id="theme" type="button">Тема</button>
+    <button class="optional" type="button" onclick="print()">Печать</button>
+  </div>
+</header>
+
+<div class="shell">
+<header class="cover" data-coordinate-field>
+  <div>
+    <p class="eyebrow">24.09.2026 · координаты и векторы</p>
+    <h1>Вектор как точное смещение</h1>
+    <p class="lead">Главная идея занятия: переводить геометрию на язык координат. Координаты вектора описывают смещение, а затем из них напрямую находятся длина, сумма, разность, скалярное произведение и угол.</p>
+    <div class="hero-formula" aria-label="Координаты вектора AB">
+      <math display="block">
+        <mover><mi>AB</mi><mo>→</mo></mover>
+        <mo>=</mo>
+        <mo>(</mo><msub><mi>x</mi><mi>B</mi></msub><mo>−</mo><msub><mi>x</mi><mi>A</mi></msub>
+        <mo>;</mo>
+        <msub><mi>y</mi><mi>B</mi></msub><mo>−</mo><msub><mi>y</mi><mi>A</mi></msub><mo>)</mo>
+      </math>
+    </div>
+    <div class="actions">
+      <a class="text-action lab" href="24.09.26-lab.html?mode=coordinates">Исследовать смещение на модели →</a>
+      <a class="text-action" href="#practice">К тренировке →</a>
+    </div>
+  </div>
+  <aside class="cover-aside">
+    <dl>
+      <div><dt>Ученик</dt><dd>Матвей Горбачев</dd></div>
+      <div><dt>Преподаватель</dt><dd>Лёвин Артём Александрович</dd></div>
+      <div><dt>Формат</dt><dd>ЕГЭ · Путь А</dd></div>
+    </dl>
+    <ol class="route">
+      <li>координаты и смысл знаков</li>
+      <li>длина и операции</li>
+      <li>скалярное произведение и угол</li>
+      <li>координатный метод в геометрии</li>
+      <li>сонаправленность и контроль ошибок</li>
+    </ol>
+  </aside>
+</header>
+
+<nav class="quicknav" aria-label="Разделы занятия">
+  <a href="#coordinates">01 Координаты</a>
+  <a href="#operations">02 Операции</a>
+  <a href="#dot">03 Угол</a>
+  <a href="#method">04 Метод</a>
+  <a href="#practice">05 Тренировка</a>
+  <a href="#check">06 Самопроверка</a>
+</nav>
+
+<details class="poster">
+  <summary>Наглядная памятка к занятию</summary>
+  <figure>
+    <img id="poster" src="../images/24.09.26.png" alt="Ментальная карта по векторам: координаты, длина, операции, скалярное произведение, алгоритм и частые ошибки">
+    <figcaption>Пять ветвей памятки собирают основные формулы и порядок применения координатного метода.</figcaption>
+  </figure>
+</details>
+
+<div class="lab-strip">
+  <div>
+    <p class="eyebrow">Цифровая лаборатория</p>
+    <h2>Меняйте векторы и сразу проверяйте формулы</h2>
+    <p class="chapter-intro">На координатной модели можно увидеть знак смещения, сумму, длину, скалярное произведение и угол. Все вычисления строятся по формулам занятия.</p>
+  </div>
+  <a class="text-action lab" href="24.09.26-lab.html?mode=coordinates">Перейти к модели →</a>
+</div>
+
+<main id="main">
+<section class="chapter" id="coordinates" data-journey-stop data-journey-label="Координаты">
+  <header class="chapter-head">
+    <div class="chapter-num">01</div>
+    <div><p class="eyebrow">Координаты вектора</p><h2>Конец минус начало</h2><p class="chapter-intro">Самая важная запись темы. Она одновременно задаёт вычислительный алгоритм и геометрический смысл координат вектора.</p></div>
+  </header>
+  <div class="split">
+    <div>
+      <div class="rule">
+        <math display="block">
+          <mover><mi>AB</mi><mo>→</mo></mover>
+          <mo>=</mo>
+          <mo>(</mo><msub><mi>x</mi><mi>B</mi></msub><mo>−</mo><msub><mi>x</mi><mi>A</mi></msub>
+          <mo>;</mo><msub><mi>y</mi><mi>B</mi></msub><mo>−</mo><msub><mi>y</mi><mi>A</mi></msub><mo>)</mo>
+        </math>
+      </div>
+      <p><b>Пример из занятия.</b> Для A(3; 2) и B(9; 3) получаем (9 − 3; 3 − 2) = (6; 1).</p>
+      <p>Число 6 означает смещение на 6 единиц вправо; число 1 — на 1 единицу вверх.</p>
+      <div class="margin-note"><b>Знаки.</b> Вправо и вверх — положительные координаты. Влево и вниз — отрицательные.</div>
+      <p>Если начало вектора совпадает с началом координат, координаты вектора совпадают с координатами его конца.</p>
+      <a class="text-action lab" href="24.09.26-lab.html?mode=coordinates">Подвигать конец вектора →</a>
+    </div>
+    <figure class="vector-board">
+      <svg viewBox="0 0 440 300" role="img" aria-labelledby="coordTitle coordDesc">
+        <title id="coordTitle">Вектор AB с координатами 6 и 1</title>
+        <desc id="coordDesc">Из точки A в точку B вектор смещается вправо на шесть единиц и вверх на одну.</desc>
+        <defs>
+          <marker id="arrowA" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="var(--accent)"/></marker>
+        </defs>
+        <g>
+          <path class="axis" d="M35 245H410M75 270V28"/>
+          <path class="gridline" d="M125 40V260M175 40V260M225 40V260M275 40V260M325 40V260M375 40V260M45 195H405M45 145H405M45 95H405M45 45H405"/>
+          <circle class="point" cx="125" cy="195" r="5"/><circle class="point" cx="375" cy="145" r="5"/>
+          <path class="vec-a" marker-end="url(#arrowA)" d="M125 195L375 145"/>
+          <text class="svg-label" x="94" y="219">A(3; 2)</text><text class="svg-label" x="340" y="126">B(9; 3)</text>
+          <text class="svg-muted" x="225" y="132">Δx = +6</text><text class="svg-muted" x="382" y="174">Δy = +1</text>
+        </g>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<section class="chapter" id="operations" data-journey-stop data-journey-label="Операции">
+  <header class="chapter-head">
+    <div class="chapter-num">02</div>
+    <div><p class="eyebrow">Длина и операции</p><h2>После координат всё считается покомпонентно</h2><p class="chapter-intro">Длина получается по теореме Пифагора, а сложение, вычитание и умножение на число выполняются отдельно по каждой координате.</p></div>
+  </header>
+  <div class="formula-ledger">
+    <div class="formula-row"><strong>Длина</strong><div class="mathline"><math><mrow><mo>|</mo><mi>a</mi><mo>|</mo><mo>=</mo><msqrt><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup></msqrt></mrow></math></div></div>
+    <div class="formula-row"><strong>Квадрат длины</strong><div class="mathline"><math><mrow><msup><mrow><mo>|</mo><mi>a</mi><mo>|</mo></mrow><mn>2</mn></msup><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup></mrow></math></div></div>
+    <div class="formula-row"><strong>Умножение на число</strong><div class="mathline"><math><mrow><mi>k</mi><mi>a</mi><mo>=</mo><mo>(</mo><mi>kx</mi><mo>;</mo><mi>ky</mi><mo>)</mo></mrow></math></div></div>
+    <div class="formula-row"><strong>Сумма</strong><div class="mathline"><math><mrow><mi>a</mi><mo>+</mo><mi>b</mi><mo>=</mo><mo>(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>x</mi><mn>2</mn></msub><mo>;</mo><msub><mi>y</mi><mn>1</mn></msub><mo>+</mo><msub><mi>y</mi><mn>2</mn></msub><mo>)</mo></mrow></math></div></div>
+    <div class="formula-row"><strong>Разность</strong><div class="mathline"><math><mrow><mi>a</mi><mo>−</mo><mi>b</mi><mo>=</mo><mo>(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>−</mo><msub><mi>x</mi><mn>2</mn></msub><mo>;</mo><msub><mi>y</mi><mn>1</mn></msub><mo>−</mo><msub><mi>y</mi><mn>2</mn></msub><mo>)</mo></mrow></math></div></div>
+  </div>
+  <p class="margin-note">Для вычитания полезно помнить: противоположный вектор имеет те же длину и координаты с противоположными знаками. Поэтому a − b можно воспринимать как a + (−b).</p>
+  <p><b>Не смешивайте:</b> сумма длин и длина суммы — разные величины. В общем случае |a| + |b| не равно |a + b|.</p>
+  <a class="text-action lab" href="24.09.26-lab.html?mode=sum">Сложить два вектора на модели →</a>
+</section>
+
+<section class="chapter" id="dot" data-journey-stop data-journey-label="Скалярное произведение">
+  <header class="chapter-head">
+    <div class="chapter-num">03</div>
+    <div><p class="eyebrow">Скалярное произведение</p><h2>Координаты связываются с углом</h2><p class="chapter-intro">Две формулы описывают одну величину. Первая удобна для вычисления, вторая — для связи с углом между векторами.</p></div>
+  </header>
+  <div class="split">
+    <div>
+      <div class="rule">
+        <math display="block">
+          <mi>a</mi><mo>·</mo><mi>b</mi><mo>=</mo>
+          <msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>2</mn></msub>
+          <mo>+</mo>
+          <msub><mi>y</mi><mn>1</mn></msub><msub><mi>y</mi><mn>2</mn></msub>
+        </math>
+      </div>
+      <div class="rule">
+        <math display="block">
+          <mi>a</mi><mo>·</mo><mi>b</mi><mo>=</mo>
+          <mo>|</mo><mi>a</mi><mo>|</mo><mo>|</mo><mi>b</mi><mo>|</mo><mi>cos</mi><mi>φ</mi>
+        </math>
+      </div>
+      <p>Для ненулевых векторов:</p>
+      <div class="rule">
+        <math display="block">
+          <mi>cos</mi><mi>φ</mi><mo>=</mo>
+          <mfrac>
+            <mrow><mi>a</mi><mo>·</mo><mi>b</mi></mrow>
+            <mrow><mo>|</mo><mi>a</mi><mo>|</mo><mo>|</mo><mi>b</mi><mo>|</mo></mrow>
+          </mfrac>
+        </math>
+      </div>
+      <p>Если a · b = 0, ненулевые векторы перпендикулярны. Знак произведения даёт быструю проверку: положительное — угол острый, ноль — прямой, отрицательное — тупой.</p>
+    </div>
+    <div>
+      <h3>Пример из занятия</h3>
+      <p>a = (1; 2), b = (−2; −1).</p>
+      <div class="steps" data-stepper="angle">
+        <div class="step"><div><b>Скалярное произведение.</b> 1 · (−2) + 2 · (−1) = −4.</div></div>
+        <div class="step"><div><b>Длины.</b> Обе длины равны √5.</div></div>
+        <div class="step"><div><b>Косинус.</b> cos φ = −4/5.</div></div>
+        <div class="step"><div><b>Угол.</b> φ = arccos(−4/5). Отрицательный косинус подтверждает, что угол тупой.</div></div>
+      </div>
+      <div class="step-controls" data-controls="angle">
+        <button data-prev type="button">← Назад</button>
+        <button data-next class="primary" type="button">Следующий шаг →</button>
+        <button data-all type="button">Показать всё</button>
+        <button data-reset type="button">Сначала</button>
+      </div>
+      <a class="text-action lab" href="24.09.26-lab.html?mode=angle">Изменить угол между векторами →</a>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="method" data-journey-stop data-journey-label="Координатный метод">
+  <header class="chapter-head">
+    <div class="chapter-num">04</div>
+    <div><p class="eyebrow">Координатный метод</p><h2>Если координат нет — их можно ввести</h2><p class="chapter-intro">Удобная система координат превращает геометрическую задачу в последовательность обычных вычислений с векторами.</p></div>
+  </header>
+  <div class="split">
+    <div>
+      <div class="steps">
+        <div class="step"><div><b>Введите декартовы оси.</b> Они должны быть взаимно перпендикулярны, масштаб по обеим осям одинаков.</div></div>
+        <div class="step"><div><b>Выберите удобное начало.</b> Вершина, центр симметрии, точка пересечения диагоналей или основание высоты часто упрощают координаты.</div></div>
+        <div class="step"><div><b>Выпишите координаты точек и векторов.</b> Используйте правило «конец минус начало».</div></div>
+        <div class="step"><div><b>Выполните нужное действие.</b> Сумма, разность, длина или скалярное произведение.</div></div>
+        <div class="step"><div><b>Проверьте смысл.</b> Знаки и полученная длина должны согласовываться с рисунком.</div></div>
+      </div>
+    </div>
+    <div>
+      <h3>Прямоугольник 6 × 8</h3>
+      <p>Если A(0; 0), B(0; 6), D(8; 0), то AB = (0; 6), AD = (8; 0).</p>
+      <p>Сумма AB + AD = (8; 6), поэтому её длина равна 10. Геометрически эта сумма совпадает с диагональю AC.</p>
+      <p>Если O — точка пересечения диагоналей, то O(4; 3), а AO + DO = (0; 6). Длина суммы равна 6.</p>
+      <div class="margin-note"><b>Полезная заготовка.</b> Высота равностороннего треугольника со стороной a равна a√3/2. Начало координат часто удобно размещать в основании высоты.</div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="direction" data-journey-stop data-journey-label="Направление">
+  <header class="chapter-head">
+    <div class="chapter-num">05</div>
+    <div><p class="eyebrow">Сонаправленность</p><h2>Коэффициент пропорциональности хранит направление</h2><p class="chapter-intro">Для сонаправленных ненулевых векторов коэффициент положителен; для противоположно направленных — отрицателен.</p></div>
+  </header>
+  <div class="rule">
+    <math display="block">
+      <mi>c</mi><mo>=</mo><mi>k</mi><mi>b</mi><mo>,</mo><mspace width=".8em"/><mi>k</mi><mo>&gt;</mo><mn>0</mn>
+    </math>
+  </div>
+  <p>В примере a = (−2; 4), b = (2; −1), |c| = |a| и c сонаправлен с b. Из |c| = |k| |b| получается |k| = 2. Поскольку k &gt; 0, берём k = 2 и получаем c = (4; −2).</p>
+  <h3>Частые ошибки</h3>
+  <div class="error-list">
+    <div class="error-item"><b>Начало и конец перепутаны.</b><br>Для AB всегда вычисляйте B − A.</div>
+    <div class="error-item"><b>Потерян знак.</b><br>Смещение влево или вниз даёт отрицательную координату.</div>
+    <div class="error-item"><b>Смешаны две величины.</b><br>|a| + |b| и |a + b| имеют разный смысл.</div>
+    <div class="error-item"><b>Пропущен квадрат.</b><br>В длине обе координаты сначала возводятся в квадрат.</div>
+    <div class="error-item"><b>Остановились на cos φ.</b><br>Если требуется угол, используйте arccos найденного значения.</div>
+    <div class="error-item"><b>Неверный знак k.</b><br>Для сонаправленных векторов k &gt; 0.</div>
+  </div>
+</section>
+
+<section class="chapter" id="practice" data-journey-stop data-journey-label="Тренировка">
+  <header class="chapter-head">
+    <div class="chapter-num">06</div>
+    <div><p class="eyebrow">Путь А · 5 заданий</p><h2>Закрепление от координат к направлению</h2><p class="chapter-intro">Все задания повторяют навыки из занятия. Решения не показаны; ответы можно открыть для самопроверки.</p></div>
+  </header>
+  <div class="task-list">
+    <div class="task"><div>Даны A(−2; 5), B(4; 1). Найдите координаты AB и его длину.</div></div>
+    <div class="task"><div>Даны a = (3; −1), b = (1; 2). Найдите 2a − b и длину полученного вектора.</div></div>
+    <div class="task"><div>Даны a = (1; 1), b = (2; 0). Найдите угол между векторами.</div></div>
+    <div class="task"><div>В прямоугольнике ABCD: AB = 8, AD = 12. Диагонали пересекаются в O. Найдите |AO + DO|.</div></div>
+    <div class="task"><div>Даны a = (−6; 8), b = (3; −4). Вектор c сонаправлен с b и |c| = |a|. Найдите c и x<sub>c</sub> + y<sub>c</sub>.</div></div>
+  </div>
+  <button class="answers-toggle" id="answerToggle" type="button" aria-expanded="false" aria-controls="answers">Показать ответы</button>
+  <div class="answers" id="answers">
+    <table>
+      <thead><tr><th>№</th><th>Ответ</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>AB = (6; −4), |AB| = 2√13</td></tr>
+        <tr><td>2</td><td>2a − b = (5; −4), длина √41</td></tr>
+        <tr><td>3</td><td>45°</td></tr>
+        <tr><td>4</td><td>8</td></tr>
+        <tr><td>5</td><td>c = (6; −8), x<sub>c</sub> + y<sub>c</sub> = −2</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="quiz">
+    <p class="eyebrow">Мини-квиз</p>
+    <h3>Как найти координаты AB?</h3>
+    <div class="quiz-options">
+      <button type="button">A − B</button>
+      <button type="button" data-ok="1">B − A</button>
+      <button type="button">Сложить координаты A и B</button>
+    </div>
+    <div class="feedback" aria-live="polite"></div>
+  </div>
+
+  <div class="quiz">
+    <p class="eyebrow">Мини-квиз</p>
+    <h3>Что следует из a · b = 0 для ненулевых векторов?</h3>
+    <div class="quiz-options">
+      <button type="button" data-ok="1">Они перпендикулярны</button>
+      <button type="button">Они сонаправлены</button>
+      <button type="button">Их длины равны</button>
+    </div>
+    <div class="feedback" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="chapter" id="check" data-journey-stop data-journey-label="Самопроверка">
+  <header class="chapter-head">
+    <div class="chapter-num">07</div>
+    <div><p class="eyebrow">Перед ответом</p><h2>Короткая самопроверка</h2><p class="chapter-intro">Отметьте пункты, которые можете выполнить без подсказки.</p></div>
+  </header>
+  <div class="checklist">
+    <label class="check"><input type="checkbox">Могу найти координаты вектора по двум точкам и объяснить знаки.</label>
+    <label class="check"><input type="checkbox">Могу найти длину и квадрат длины вектора.</label>
+    <label class="check"><input type="checkbox">Могу сложить, вычесть векторы и умножить вектор на число.</label>
+    <label class="check"><input type="checkbox">Могу вычислить скалярное произведение по координатам.</label>
+    <label class="check"><input type="checkbox">Могу найти cos φ и затем угол между ненулевыми векторами.</label>
+    <label class="check"><input type="checkbox">Могу разумно ввести систему координат в геометрической задаче.</label>
+    <label class="check"><input type="checkbox">Помню знак коэффициента k для сонаправленных векторов.</label>
+  </div>
+  <div class="progress" aria-label="Прогресс самопроверки"><span id="progressBar"></span></div>
+  <p id="progressText" class="chapter-intro"></p>
+</section>
+</main>
+
+<footer class="footer">Лёвин Артём Александрович · Матвей Горбачев · 24.09.2026</footer>
+</div>
+
+<div class="modal" id="posterModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Увеличенная памятка">
+  <div class="modal-box">
+    <button class="modal-close" type="button" aria-label="Закрыть памятку">×</button>
+    <img src="../images/24.09.26.png" alt="">
+  </div>
+</div>
+
+<script src="../../../shared/student-dashboard/atlas-motion.js"></script>
+<script>
+(function(){
+"use strict";
+var root=document.documentElement;
+var storageTheme="matvey-240926-theme";
+try{root.dataset.theme=localStorage.getItem(storageTheme)||"light"}catch(e){}
+document.getElementById("theme").addEventListener("click",function(){
+  var next=root.dataset.theme==="dark"?"light":"dark";root.dataset.theme=next;
+  try{localStorage.setItem(storageTheme,next)}catch(e){}
+});
+
+document.querySelectorAll("[data-stepper]").forEach(function(box){
+  var key=box.dataset.stepper,steps=[].slice.call(box.querySelectorAll(".step")),controls=document.querySelector('[data-controls="'+key+'"]'),index=0;
+  try{index=Math.max(0,Math.min(steps.length-1,+(localStorage.getItem("matvey-240926-step-"+key)||0)))}catch(e){}
+  function render(){
+    steps.forEach(function(step,i){
+      step.classList.toggle("hidden-step",i>index);
+      step.classList.toggle("current",i===index);
+      if(i===index)step.setAttribute("aria-current","step");else step.removeAttribute("aria-current");
+    });
+    try{localStorage.setItem("matvey-240926-step-"+key,String(index))}catch(e){}
+  }
+  controls.querySelector("[data-next]").addEventListener("click",function(){index=Math.min(steps.length-1,index+1);render()});
+  controls.querySelector("[data-prev]").addEventListener("click",function(){index=Math.max(0,index-1);render()});
+  controls.querySelector("[data-all]").addEventListener("click",function(){index=steps.length-1;render()});
+  controls.querySelector("[data-reset]").addEventListener("click",function(){index=0;render()});
+  render();
+});
+
+var answers=document.getElementById("answers"),answerToggle=document.getElementById("answerToggle");
+answerToggle.addEventListener("click",function(){
+  var open=answers.classList.toggle("show");
+  answerToggle.setAttribute("aria-expanded",String(open));
+  answerToggle.textContent=open?"Скрыть ответы":"Показать ответы";
+});
+
+document.querySelectorAll(".quiz").forEach(function(quiz){
+  var fb=quiz.querySelector(".feedback");
+  quiz.querySelectorAll("button").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      quiz.querySelectorAll("button").forEach(function(x){x.classList.remove("good","bad")});
+      if(btn.dataset.ok==="1"){
+        btn.classList.add("good");fb.textContent="Верно: это следует непосредственно из правила занятия.";fb.style.color="var(--success)";
+      }else{
+        btn.classList.add("bad");fb.textContent="Проверьте формулу и смысл обозначений ещё раз.";fb.style.color="var(--danger)";
+      }
+    });
+  });
+});
+
+var checks=[].slice.call(document.querySelectorAll(".check input")),bar=document.getElementById("progressBar"),progressText=document.getElementById("progressText");
+function updateProgress(){
+  var n=checks.filter(function(c){return c.checked}).length;
+  bar.style.width=(100*n/checks.length)+"%";
+  progressText.textContent=n+" из "+checks.length+" пунктов отмечено";
+}
+checks.forEach(function(c){c.addEventListener("change",updateProgress)});updateProgress();
+
+var poster=document.getElementById("poster"),modal=document.getElementById("posterModal"),close=modal.querySelector(".modal-close"),lastFocus=null;
+function openModal(){
+  lastFocus=document.activeElement;modal.classList.add("show");modal.setAttribute("aria-hidden","false");close.focus();
+}
+function closeModal(){
+  modal.classList.remove("show");modal.setAttribute("aria-hidden","true");if(lastFocus)lastFocus.focus();
+}
+poster.addEventListener("click",openModal);
+poster.setAttribute("tabindex","0");
+poster.setAttribute("role","button");
+poster.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();openModal()}});
+close.addEventListener("click",closeModal);
+modal.addEventListener("click",function(e){if(e.target===modal)closeModal()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&modal.classList.contains("show"))closeModal()});
+})();
+</script>
+</body>
+</html>
