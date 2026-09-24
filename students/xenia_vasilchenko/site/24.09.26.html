@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивное занятие Ксении Васильченко: НОД и НОК, разложение на простые множители и выбор метода в текстовых задачах.">
+<title>НОД и НОК: вычисление и выбор в задачах — Ксения Васильченко</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23833f50'/%3E%3Cpath d='M14 22h36M14 42h36M25 14v36M39 14v36' stroke='white' stroke-width='3' stroke-linecap='round' opacity='.92'/%3E%3C/svg%3E">
+<style>
+:root{
+  color-scheme:light;
+  --surface-page:#f4efe6;
+  --surface-raised:#fffdf8;
+  --surface-soft:#eee6db;
+  --surface-cool:#e7eff1;
+  --text-primary:#242321;
+  --text-secondary:#6b6862;
+  --text-inverse:#fffdf8;
+  --border-subtle:#d8cfc1;
+  --border-strong:#a99d8f;
+  --accent:#833f50;
+  --accent-hover:#6d3241;
+  --accent-soft:#ecdce1;
+  --secondary:#47798a;
+  --secondary-soft:#dbe9ed;
+  --success:#47745d;
+  --danger:#a04f48;
+  --warning:#9b712f;
+  --focus-ring:#d19649;
+  --shadow-low:0 10px 28px rgba(51,39,31,.08);
+  --shadow-high:0 22px 58px rgba(51,39,31,.14);
+  --radius-sm:7px;
+  --radius-md:14px;
+  --radius-lg:24px;
+  --space-1:.45rem;
+  --space-2:.8rem;
+  --space-3:1.2rem;
+  --space-4:1.8rem;
+  --space-5:2.8rem;
+  --motion-fast:150ms;
+  --motion-normal:260ms;
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --surface-page:#171515;
+  --surface-raised:#211e1e;
+  --surface-soft:#2b2526;
+  --surface-cool:#1e292d;
+  --text-primary:#f2ece8;
+  --text-secondary:#b9ada9;
+  --border-subtle:#403838;
+  --border-strong:#625456;
+  --accent:#d18a9a;
+  --accent-hover:#e2a6b3;
+  --accent-soft:#422a31;
+  --secondary:#82b2c1;
+  --secondary-soft:#23383e;
+  --success:#83bd98;
+  --danger:#e08b82;
+  --warning:#dfb56d;
+  --focus-ring:#efbd71;
+  --shadow-low:0 10px 28px rgba(0,0,0,.22);
+  --shadow-high:0 22px 58px rgba(0,0,0,.36);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--surface-page);
+  color:var(--text-primary);
+  font:16px/1.66 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+a{color:inherit}
+button,input{font:inherit}
+button{color:inherit}
+.skip-link{position:absolute;left:-9999px;top:0}
+.skip-link:focus{left:1rem;top:1rem;z-index:1000;background:var(--surface-raised);padding:.7rem 1rem;border:2px solid var(--focus-ring)}
+.shell{width:min(100% - 2rem,1220px);margin:0 auto}
+.topbar{
+  position:sticky;top:0;z-index:40;
+  border-bottom:1px solid var(--border-subtle);
+  background:color-mix(in srgb,var(--surface-page) 92%,transparent);
+  backdrop-filter:blur(12px);
+}
+.topbar-inner{min-height:62px;display:flex;align-items:center;gap:1rem}
+.brand{font-weight:760;letter-spacing:-.02em}
+.brand small{display:block;color:var(--text-secondary);font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-top:.12rem}
+.topbar nav{margin-left:auto;display:flex;gap:.35rem;flex-wrap:wrap}
+.topbar a,.topbar button{
+  min-height:42px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--border-subtle);background:transparent;color:var(--text-primary);
+  padding:.55rem .78rem;text-decoration:none;border-radius:var(--radius-sm);cursor:pointer;
+}
+.topbar a:hover,.topbar button:hover{border-color:var(--accent);color:var(--accent)}
+
+.hero{
+  position:relative;
+  margin:0 calc(50% - 50vw);
+  padding:clamp(3rem,7vw,7rem) max(clamp(1rem,4vw,2rem),calc((100vw - 1220px)/2)) clamp(2.2rem,5vw,4.6rem);
+  min-height:clamp(34rem,62vw,47rem);
+  overflow:hidden;
+  border-bottom:1px solid var(--border-subtle);
+}
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(90deg,color-mix(in srgb,var(--surface-page) 98%,transparent) 0%,color-mix(in srgb,var(--surface-page) 92%,transparent) 47%,color-mix(in srgb,var(--surface-page) 76%,transparent) 100%),
+    linear-gradient(180deg,transparent 64%,var(--surface-page) 100%),
+    radial-gradient(circle at 78% 24%,color-mix(in srgb,var(--secondary) 17%,transparent),transparent 28%),
+    radial-gradient(circle at 85% 72%,color-mix(in srgb,var(--accent) 15%,transparent),transparent 24%);
+}
+.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.06fr) minmax(320px,.72fr);gap:clamp(2rem,7vw,7rem);align-items:center}
+.kicker{margin:0 0 .85rem;color:var(--accent);font:800 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.14em;text-transform:uppercase}
+h1,h2,h3{line-height:1.12;letter-spacing:-.03em}
+h1{font:500 clamp(4rem,9.5vw,9.4rem)/.80 Georgia,"Times New Roman",serif;margin:.15rem 0 1.3rem;max-width:7.7ch;letter-spacing:-.07em}
+.lead{font-size:clamp(1rem,1.55vw,1.22rem);color:var(--text-secondary);max-width:48rem}
+.folio{display:flex;gap:.65rem 1rem;flex-wrap:wrap;margin-top:1.6rem;padding-top:1rem;border-top:1px solid var(--border-subtle);color:var(--text-secondary);font-size:.88rem}
+
+.dual-rule{align-self:stretch;display:grid;grid-template-rows:1fr 1fr;border-left:1px solid var(--border-strong)}
+.rule-half{position:relative;padding:clamp(1.4rem,3vw,2.2rem);display:flex;flex-direction:column;justify-content:center;min-height:13rem}
+.rule-half+ .rule-half{border-top:1px solid var(--border-strong)}
+.rule-half .label{font:800 .68rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.13em;text-transform:uppercase;color:var(--text-secondary)}
+.rule-half b{font:500 clamp(3rem,6vw,5.9rem)/.85 Georgia,serif;letter-spacing:-.06em;margin:.55rem 0 .8rem}
+.rule-half p{margin:0;max-width:24rem;color:var(--text-secondary)}
+.rule-half.gcd b{color:var(--accent)}
+.rule-half.lcm b{color:var(--secondary)}
+.rule-half::after{content:"";position:absolute;right:1.2rem;top:1.2rem;width:54px;height:54px;border:1px solid var(--border-subtle);transform:rotate(45deg)}
+.rule-half.lcm::after{border-radius:50%;transform:none}
+
+.route{display:flex;gap:1.05rem;overflow:auto;padding:1rem 0;border-bottom:1px solid var(--border-subtle);scrollbar-width:thin}
+.route a{flex:0 0 auto;text-decoration:none;font-weight:720;color:var(--text-secondary);padding:.35rem 0;border-bottom:2px solid transparent}
+.route a:hover,.route a:focus-visible{color:var(--accent);border-color:var(--accent)}
+.chapter{padding:clamp(2.8rem,7vw,5.8rem) 0;border-bottom:1px solid var(--border-subtle)}
+.chapter-head{display:grid;grid-template-columns:118px minmax(0,760px);gap:1.45rem;align-items:start;margin-bottom:2.1rem}
+.chapter-no{font:700 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent);letter-spacing:.14em;text-transform:uppercase}
+.chapter h2{font:500 clamp(2.1rem,4.9vw,4.25rem)/1.02 Georgia,"Times New Roman",serif;margin:0}
+.chapter-intro{grid-column:2;color:var(--text-secondary);font-size:1.05rem;max-width:50rem;margin:0}
+.rule-line{display:grid;grid-template-columns:minmax(180px,.48fr) minmax(0,1fr);gap:1.6rem;padding:1.15rem 0;border-top:1px solid var(--border-subtle)}
+.rule-line strong{color:var(--accent)}
+.formula{font-family:"Cambria Math","STIX Two Math",Georgia,serif;font-size:clamp(1.18rem,2.4vw,1.66rem);overflow:auto;padding:.2rem 0}
+.formula.small{font-size:1.05rem}
+.two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1.4rem,4vw,3.7rem)}
+.note{padding:1rem 1.15rem;border-left:3px solid var(--warning);background:color-mix(in srgb,var(--warning) 8%,var(--surface-raised));color:var(--text-secondary)}
+.note.danger{border-left-color:var(--danger);background:color-mix(in srgb,var(--danger) 7%,var(--surface-raised))}
+.note.good{border-left-color:var(--success);background:color-mix(in srgb,var(--success) 7%,var(--surface-raised))}
+.definition-list{display:grid;gap:0}
+.definition{display:grid;grid-template-columns:9rem minmax(0,1fr);gap:1rem;padding:1.15rem 0;border-top:1px solid var(--border-subtle)}
+.definition b{color:var(--accent)}
+.direction-line{display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:center;margin:2rem 0;padding:1.25rem 0;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong)}
+.direction-line .side{min-width:0}
+.direction-line .side:last-child{text-align:right}
+.direction-line strong{display:block;font:500 clamp(1.7rem,3.2vw,2.8rem)/1 Georgia,serif;margin-bottom:.35rem}
+.direction-line .arrow{color:var(--text-secondary);font-size:1.5rem}
+.direction-line small{color:var(--text-secondary)}
+
+.factor-workbench{border-top:2px solid var(--text-primary);margin-top:1.2rem}
+.factor-toolbar{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+.factor-toolbar button{border:1px solid var(--border-strong);background:transparent;padding:.65rem .85rem;border-radius:var(--radius-sm);cursor:pointer;font-weight:750}
+.factor-toolbar button[aria-pressed="true"]{background:var(--text-primary);color:var(--surface-page);border-color:var(--text-primary)}
+.factor-panel{display:none;padding:clamp(1.3rem,3vw,2rem) 0}
+.factor-panel.active{display:block}
+.factor-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,.58fr);gap:clamp(1.5rem,4vw,4rem);align-items:start}
+.factor-rows{display:grid;gap:.7rem}
+.factor-row{display:grid;grid-template-columns:4.4rem minmax(0,1fr);gap:.8rem;align-items:center;padding:.75rem 0;border-bottom:1px solid var(--border-subtle)}
+.factor-row b{font-family:Georgia,serif;font-size:1.45rem}
+.chips{display:flex;gap:.38rem;flex-wrap:wrap;align-items:center}
+.factor-chip{min-width:2.1rem;height:2.1rem;display:grid;place-items:center;border:1px solid var(--border-strong);background:var(--surface-raised);font-weight:780}
+.factor-chip.pick{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.factor-chip.pick-secondary{border-color:var(--secondary);background:var(--secondary-soft);color:var(--secondary)}
+.factor-result{padding:1.2rem;border-left:3px solid var(--accent);background:var(--surface-raised)}
+.factor-result.lcm{border-left-color:var(--secondary)}
+.factor-result .result{font:500 clamp(2.2rem,4.5vw,4.2rem)/1 Georgia,serif;margin:.3rem 0 .8rem}
+.factor-result p{color:var(--text-secondary);margin:.4rem 0}
+
+.decision-rail{display:grid;grid-template-columns:minmax(0,1fr) 1px minmax(0,1fr);gap:clamp(1.2rem,4vw,3rem);align-items:stretch;margin:1.5rem 0}
+.decision-divider{background:var(--border-strong)}
+.decision-side{padding:1rem 0}
+.decision-side h3{font:500 clamp(2rem,4vw,3.3rem)/1 Georgia,serif;margin:.2rem 0 .8rem}
+.decision-side.gcd h3{color:var(--accent)}
+.decision-side.lcm h3{color:var(--secondary)}
+.decision-side ul{padding-left:1.15rem;color:var(--text-secondary)}
+.decision-side li{margin:.45rem 0}
+.decision-prompt{font-weight:760;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border-subtle)}
+
+.examples{display:grid;gap:0}
+.example{display:grid;grid-template-columns:92px minmax(0,1fr) minmax(170px,.44fr);gap:1.25rem;padding:1.3rem 0;border-top:1px solid var(--border-subtle);align-items:start}
+.example-index{font:700 .7rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent);letter-spacing:.12em}
+.example h3{margin:0 0 .45rem;font-size:1.3rem}
+.example p{margin:.35rem 0;color:var(--text-secondary)}
+.example-result{font:500 clamp(1.6rem,3vw,2.6rem)/1 Georgia,serif;color:var(--text-primary)}
+
+.poster-strip{display:grid;grid-template-columns:minmax(0,.7fr) minmax(260px,.42fr);gap:clamp(1.4rem,4vw,3.2rem);align-items:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border-subtle)}
+.poster-strip p{color:var(--text-secondary)}
+.poster-button{border:0;background:transparent;padding:0;cursor:zoom-in}
+.poster-button img{display:block;width:100%;height:auto;border:1px solid var(--border-strong);box-shadow:var(--shadow-low)}
+
+.classifier{display:grid;gap:0;border-top:2px solid var(--text-primary)}
+.classifier-item{display:grid;grid-template-columns:2.5rem minmax(0,1fr) auto;gap:1rem;align-items:center;padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+.classifier-text{min-width:0}
+.choice-buttons{display:flex;gap:.45rem}
+.choice-buttons button{min-width:64px;border:1px solid var(--border-strong);background:var(--surface-raised);padding:.55rem .7rem;border-radius:var(--radius-sm);cursor:pointer;font-weight:800}
+.choice-buttons button.correct{background:var(--success);border-color:var(--success);color:white}
+.choice-buttons button.wrong{background:var(--danger);border-color:var(--danger);color:white}
+.feedback{grid-column:2 / -1;min-height:1.4em;color:var(--text-secondary);font-size:.9rem}
+
+.practice{counter-reset:item;display:grid;gap:0;border-top:2px solid var(--text-primary)}
+.task{counter-increment:item;padding:1.25rem 0;border-bottom:1px solid var(--border-subtle);display:grid;grid-template-columns:3rem minmax(0,1fr);gap:1rem}
+.task::before{content:counter(item,decimal-leading-zero);font:700 .76rem/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent)}
+.answer-panel{display:none;margin-top:1rem;padding:1rem 1.15rem;background:var(--surface-soft);border-left:3px solid var(--success)}
+.answer-panel.show{display:block}
+.action{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);padding:.65rem .9rem;border-radius:var(--radius-sm);font-weight:750;cursor:pointer;text-decoration:none}
+.action.primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+
+.errors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 2rem;border-top:1px solid var(--border-subtle)}
+.error-item{padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+.error-item b{display:block;color:var(--danger);margin-bottom:.25rem}
+.error-item span{color:var(--text-secondary)}
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem 1.5rem;margin-top:1.2rem}
+.check{display:flex;gap:.7rem;align-items:flex-start;padding:.72rem 0;border-top:1px solid var(--border-subtle)}
+.check input{width:20px;height:20px;margin-top:.15rem;accent-color:var(--accent)}
+.progress{height:7px;background:var(--surface-soft);margin-top:1rem;overflow:hidden}
+.progress span{display:block;height:100%;width:0;background:var(--success);transition:width var(--motion-normal)}
+.footer{padding:2rem 0 3rem;color:var(--text-secondary);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.88rem}
+
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:3vw;background:rgba(0,0,0,.84);z-index:100}
+.modal.show{display:flex}
+.modal img{max-width:96vw;max-height:90vh;object-fit:contain}
+.modal button{position:fixed;right:1.2rem;top:1.2rem;min-width:48px;min-height:48px;border:0;background:var(--surface-raised);color:var(--text-primary);font-size:1.35rem;border-radius:50%;cursor:pointer}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+
+@media(max-width:860px){
+  .shell{width:min(100% - 1.25rem,1220px)}
+  .hero-grid{grid-template-columns:1fr}
+  h1{max-width:10ch}
+  .dual-rule{border-left:0;border-top:1px solid var(--border-strong);grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .rule-half+ .rule-half{border-top:0;border-left:1px solid var(--border-strong)}
+  .chapter-head{grid-template-columns:1fr;gap:.55rem}
+  .chapter-intro{grid-column:1}
+  .rule-line,.definition,.factor-grid,.poster-strip{grid-template-columns:1fr}
+  .example{grid-template-columns:64px minmax(0,1fr)}
+  .example-result{grid-column:2}
+}
+@media(max-width:620px){
+  .topbar-inner{align-items:flex-start;padding:.65rem 0;flex-direction:column}
+  .topbar nav{margin-left:0;width:100%}
+  .topbar a,.topbar button{flex:1}
+  .dual-rule{grid-template-columns:1fr}
+  .rule-half+ .rule-half{border-left:0;border-top:1px solid var(--border-strong)}
+  .direction-line{grid-template-columns:1fr;gap:.5rem}
+  .direction-line .side:last-child{text-align:left}
+  .direction-line .arrow{transform:rotate(90deg);width:max-content}
+  .decision-rail{grid-template-columns:1fr}
+  .decision-divider{height:1px}
+  .classifier-item{grid-template-columns:2rem minmax(0,1fr)}
+  .choice-buttons{grid-column:2}
+  .feedback{grid-column:2}
+  .errors,.checks{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@media print{
+  :root{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--surface-cool:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#aaa;--border-strong:#777;--shadow-low:none;--shadow-high:none}
+  .topbar,.route,.poster-strip,.factor-toolbar,.choice-buttons,.answer-toggle{display:none!important}
+  .chapter{break-inside:auto;padding:24pt 0}
+  .factor-panel{display:block!important}
+  .answer-panel{display:block!important}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">К содержанию</a>
+
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <div class="brand">Ксения Васильченко<small>математика · 6 класс</small></div>
+    <nav aria-label="Материалы занятия">
+      <a href="index.html">Навигатор</a>
+      <a href="../pdf_docs/24.09.26.pdf">Пособие PDF</a>
+      <a href="../tex_docs/24.09.26.tex">TeX</a>
+      <button id="themeToggle" type="button" aria-label="Переключить тему">Тема</button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <p class="kicker">24 сентября 2026 · учебный журнал</p>
+      <h1>НОД и НОК</h1>
+      <p class="lead">Главная задача занятия — увидеть направление деления: НОД делит исходные числа, а НОК сам делится на них. После этого выбор метода в текстовой задаче становится осмысленным.</p>
+      <div class="folio">
+        <span>Ксения Васильченко</span>
+        <span>6 класс</span>
+        <span>Лёвин Артём Александрович</span>
+      </div>
+    </div>
+
+    <div class="dual-rule" aria-label="Главное различие НОД и НОК">
+      <section class="rule-half gcd">
+        <span class="label">Делитель</span>
+        <b>НОД</b>
+        <p>Делит каждое исходное число. Частый смысл: одинаковые группы, наборы или части без остатка.</p>
+      </section>
+      <section class="rule-half lcm">
+        <span class="label">Кратное</span>
+        <b>НОК</b>
+        <p>Сам делится на каждое исходное число. Частый смысл: первое совпадение или минимальная общая величина.</p>
+      </section>
+    </div>
+  </div>
+</section>
+
+<div class="shell">
+<nav class="route" aria-label="Маршрут занятия">
+  <a href="#idea">01 · Направление</a>
+  <a href="#compute">02 · Вычисление</a>
+  <a href="#choose">03 · Выбор метода</a>
+  <a href="#examples">04 · Смысл задач</a>
+  <a href="#warmup">05 · Разминка</a>
+  <a href="#practice">06 · Тренировка</a>
+  <a href="#check">07 · Самопроверка</a>
+</nav>
+
+<section class="chapter" id="idea">
+  <header class="chapter-head">
+    <div class="chapter-no">01 · Опора</div>
+    <h2>Делитель и кратное смотрят в разные стороны</h2>
+    <p class="chapter-intro">Это различие связывает определения, алгоритмы и текстовые задачи. Если оно понятно, НОД и НОК перестают быть двумя похожими наборами букв.</p>
+  </header>
+
+  <div class="definition-list">
+    <div class="definition">
+      <b>Делитель</b>
+      <div>Число, на которое исходное число делится без остатка. Например, \(6\) — делитель \(24\), потому что \(24:6=4\).</div>
+    </div>
+    <div class="definition">
+      <b>Кратное</b>
+      <div>Число, которое делится на данное число без остатка. Например, \(24\) — кратное \(6\), потому что \(24:6=4\).</div>
+    </div>
+  </div>
+
+  <div class="direction-line" aria-label="Направление проверки для НОД и НОК">
+    <div class="side">
+      <strong>НОД → числа</strong>
+      <small>Например: \(24:12=2\), \(36:12=3\).</small>
+    </div>
+    <div class="arrow" aria-hidden="true">↔</div>
+    <div class="side">
+      <strong>числа → НОК</strong>
+      <small>Например: \(180:12=15\), \(180:45=4\).</small>
+    </div>
+  </div>
+
+  <div class="note good"><b>Самопроверка определения:</b> для НОД ответ должен делить исходные числа; для НОК ответ должен делиться на исходные числа.</div>
+</section>
+
+<section class="chapter" id="compute">
+  <header class="chapter-head">
+    <div class="chapter-no">02 · Алгоритм</div>
+    <h2>Простые множители показывают, что брать</h2>
+    <p class="chapter-intro">Разложение на простые множители одинаково запускает оба алгоритма. Различие начинается в момент выбора множителей.</p>
+  </header>
+
+  <div class="factor-workbench" aria-label="Интерактивное сравнение НОД и НОК">
+    <div class="factor-toolbar" role="group" aria-label="Выберите алгоритм">
+      <button type="button" data-factor-tab="gcd" aria-pressed="true">НОД: только общие</button>
+      <button type="button" data-factor-tab="lcm" aria-pressed="false">НОК: всё необходимое</button>
+    </div>
+
+    <section class="factor-panel active" data-factor-panel="gcd">
+      <div class="factor-grid">
+        <div class="factor-rows">
+          <div class="factor-row">
+            <b>24</b>
+            <div class="chips" aria-label="24 равно 2 умножить на 2 умножить на 2 умножить на 3">
+              <span class="factor-chip pick">2</span><span>·</span>
+              <span class="factor-chip pick">2</span><span>·</span>
+              <span class="factor-chip">2</span><span>·</span>
+              <span class="factor-chip pick">3</span>
+            </div>
+          </div>
+          <div class="factor-row">
+            <b>36</b>
+            <div class="chips" aria-label="36 равно 2 умножить на 2 умножить на 3 умножить на 3">
+              <span class="factor-chip pick">2</span><span>·</span>
+              <span class="factor-chip pick">2</span><span>·</span>
+              <span class="factor-chip pick">3</span><span>·</span>
+              <span class="factor-chip">3</span>
+            </div>
+          </div>
+        </div>
+        <aside class="factor-result">
+          <small>Берём только общие множители</small>
+          <div class="result">2 · 2 · 3 = 12</div>
+          <p><b>НОД(24, 36) = 12.</b></p>
+          <p>Проверка: \(24:12=2\), \(36:12=3\).</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="factor-panel" data-factor-panel="lcm">
+      <div class="factor-grid">
+        <div class="factor-rows">
+          <div class="factor-row">
+            <b>12</b>
+            <div class="chips" aria-label="12 равно 2 умножить на 2 умножить на 3">
+              <span class="factor-chip pick-secondary">2</span><span>·</span>
+              <span class="factor-chip pick-secondary">2</span><span>·</span>
+              <span class="factor-chip pick-secondary">3</span>
+            </div>
+          </div>
+          <div class="factor-row">
+            <b>45</b>
+            <div class="chips" aria-label="45 равно 3 умножить на 3 умножить на 5">
+              <span class="factor-chip">3</span><span>·</span>
+              <span class="factor-chip pick-secondary">3</span><span>·</span>
+              <span class="factor-chip pick-secondary">5</span>
+            </div>
+          </div>
+        </div>
+        <aside class="factor-result lcm">
+          <small>Берём всё необходимое</small>
+          <div class="result">2 · 2 · 3 · 3 · 5 = 180</div>
+          <p><b>НОК(12, 45) = 180.</b></p>
+          <p>Проверка: \(180:12=15\), \(180:45=4\).</p>
+        </aside>
+      </div>
+    </section>
+  </div>
+
+  <div class="rule-line">
+    <strong>НОД</strong>
+    <div>Разложите числа → найдите общие простые множители → возьмите только их → перемножьте.</div>
+  </div>
+  <div class="rule-line">
+    <strong>НОК</strong>
+    <div>Разложите числа → перепишите множители одного числа → из второго добавьте то, чего не хватает → перемножьте.</div>
+  </div>
+
+  <div class="note"><b>Ещё один ориентир:</b> \(18=2\cdot3\cdot3\), \(24=2\cdot2\cdot2\cdot3\), поэтому \(\operatorname{НОК}(18,24)=72\).</div>
+</section>
+
+<section class="chapter" id="choose">
+  <header class="chapter-head">
+    <div class="chapter-no">03 · Решение</div>
+    <h2>Сначала смысл задачи, затем сокращение НОД или НОК</h2>
+    <p class="chapter-intro">Слова «наибольшее» и «наименьшее» помогают, но главный признак — действие с величинами: делим их на одинаковые части или ищем первое общее совпадение.</p>
+  </header>
+
+  <div class="decision-rail">
+    <section class="decision-side gcd">
+      <p class="chapter-no">Ветвь A</p>
+      <h3>НОД</h3>
+      <ul>
+        <li>одинаковые группы;</li>
+        <li>одинаковые наборы;</li>
+        <li>равные части без остатка;</li>
+        <li>максимально возможное число групп или размер части.</li>
+      </ul>
+      <p class="decision-prompt">Вопрос: «Что должно делить все исходные количества?»</p>
+    </section>
+    <div class="decision-divider" aria-hidden="true"></div>
+    <section class="decision-side lcm">
+      <p class="chapter-no">Ветвь B</p>
+      <h3>НОК</h3>
+      <ul>
+        <li>первое совпадение событий;</li>
+        <li>общий момент;</li>
+        <li>минимальная одинаковая сумма;</li>
+        <li>наименьшее число, кратное всем данным.</li>
+      </ul>
+      <p class="decision-prompt">Вопрос: «Что должно делиться на все исходные величины?»</p>
+    </section>
+  </div>
+
+  <h3>Быстрая проверка выбора</h3>
+  <div class="classifier" id="classifier">
+    <div class="classifier-item" data-answer="gcd">
+      <div class="example-index">01</div>
+      <div class="classifier-text">Из двух видов конфет составляют максимально возможное число одинаковых наборов без остатка.</div>
+      <div class="choice-buttons">
+        <button type="button" data-choice="gcd">НОД</button>
+        <button type="button" data-choice="lcm">НОК</button>
+      </div>
+      <div class="feedback" aria-live="polite"></div>
+    </div>
+    <div class="classifier-item" data-answer="lcm">
+      <div class="example-index">02</div>
+      <div class="classifier-text">Два сигнала повторяются через разные промежутки времени. Нужно найти момент их первого нового совпадения.</div>
+      <div class="choice-buttons">
+        <button type="button" data-choice="gcd">НОД</button>
+        <button type="button" data-choice="lcm">НОК</button>
+      </div>
+      <div class="feedback" aria-live="polite"></div>
+    </div>
+    <div class="classifier-item" data-answer="lcm">
+      <div class="example-index">03</div>
+      <div class="classifier-text">Нужно найти наименьшую одинаковую сумму, которая делится на две заданные цены без остатка.</div>
+      <div class="choice-buttons">
+        <button type="button" data-choice="gcd">НОД</button>
+        <button type="button" data-choice="lcm">НОК</button>
+      </div>
+      <div class="feedback" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="examples">
+  <header class="chapter-head">
+    <div class="chapter-no">04 · Примеры</div>
+    <h2>Один вопрос меняет смысл найденного числа</h2>
+    <p class="chapter-intro">Здесь важна интерпретация ответа: число после вычисления должно отвечать на вопрос условия, а не просто быть правильным НОД или НОК.</p>
+  </header>
+
+  <div class="examples">
+    <article class="example">
+      <div class="example-index">НАБОРЫ</div>
+      <div>
+        <h3>72 красные и 96 синих бусин</h3>
+        <p>Максимально возможное число одинаковых наборов должно делить оба количества.</p>
+      </div>
+      <div class="example-result">НОД = 24</div>
+    </article>
+    <article class="example">
+      <div class="example-index">ПЕРИОДЫ</div>
+      <div>
+        <h3>Замена масла каждые 15 тыс. км и ремня каждые 60 тыс. км</h3>
+        <p>Первый общий пробег должен быть кратен обоим периодам.</p>
+      </div>
+      <div class="example-result">НОК = 60</div>
+    </article>
+    <article class="example">
+      <div class="example-index">СУММА</div>
+      <div>
+        <h3>Пирожки по 45 руб. и по 60 руб.</h3>
+        <p>Минимальная одинаковая сумма должна делиться и на 45, и на 60.</p>
+      </div>
+      <div class="example-result">НОК = 180</div>
+    </article>
+  </div>
+
+  <div class="poster-strip">
+    <div>
+      <p class="chapter-no">Ментальная карта</p>
+      <h3>Весь урок на одном листе</h3>
+      <p>Откройте памятку крупно, чтобы быстро восстановить определения, алгоритмы и признаки выбора метода.</p>
+      <button class="action" id="posterOpen" type="button">Открыть памятку</button>
+    </div>
+    <button class="poster-button" id="posterPreview" type="button" aria-label="Открыть ментальную карту крупно">
+      <img src="../images/24.09.26.png" alt="Ментальная карта по теме НОД и НОК">
+    </button>
+  </div>
+</section>
+
+<section class="chapter" id="warmup">
+  <header class="chapter-head">
+    <div class="chapter-no">05 · Разминка</div>
+    <h2>Вычислительные опоры занятия</h2>
+    <p class="chapter-intro">Перед новой темой были повторены действия с десятичными и обыкновенными дробями и простейшие уравнения.</p>
+  </header>
+
+  <div class="rule-line">
+    <strong>Десятичные дроби</strong>
+    <div>
+      <div class="formula small">1,50 + 2,57 = 4,07</div>
+      <div class="formula small">2,57 − 1,50 = 1,07</div>
+      <div class="formula small">1,5 · 1,2 = 1,8; &nbsp; 1,5 : 3 = 0,5</div>
+    </div>
+  </div>
+  <div class="rule-line">
+    <strong>Обыкновенные дроби</strong>
+    <div>
+      <div class="formula small">2/3 + 1/7 = 14/21 + 3/21 = 17/21</div>
+      <div class="formula small">2/3 : 3 1/5 = 2/3 · 5/16 = 5/24</div>
+    </div>
+  </div>
+  <div class="rule-line">
+    <strong>Простейшие уравнения</strong>
+    <div>
+      <div class="formula small">x/3 = 5 → x = 15</div>
+      <div class="formula small">3/x = 5 → x = 3/5, &nbsp; x ≠ 0</div>
+      <p>Найденное значение проверяйте подстановкой в исходное равенство.</p>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="practice">
+  <header class="chapter-head">
+    <div class="chapter-no">06 · Путь А</div>
+    <h2>Пять заданий на закрепление</h2>
+    <p class="chapter-intro">Сначала определяйте тип задачи, затем выполняйте вычисления. Ответы скрыты для самостоятельной работы.</p>
+  </header>
+
+  <div class="practice">
+    <article class="task">
+      <div>
+        <b>Определите, что использовать: НОД или НОК.</b>
+        <p>а) Из двух видов конфет составляют максимально возможное число одинаковых наборов без остатка.</p>
+        <p>б) Два сигнала повторяются через разные промежутки времени. Нужно найти момент их первого нового совпадения.</p>
+        <p>в) Нужно найти наименьшую одинаковую сумму, которая делится на две заданные цены без остатка.</p>
+      </div>
+    </article>
+    <article class="task">
+      <div>Разложите числа на простые множители и найдите:
+        <div class="formula small">НОД(30, 45), &nbsp; НОК(8, 12).</div>
+      </div>
+    </article>
+    <article class="task">
+      <div>Есть 72 красные и 96 синих бусин. Нужно составить максимально возможное число одинаковых наборов, используя все бусины. Сколько наборов получится? Сколько бусин каждого цвета будет в одном наборе?</div>
+    </article>
+    <article class="task">
+      <div>Два сигнала прозвучали одновременно. Первый повторяется каждые 18 секунд, второй — каждые 24 секунды. Через сколько секунд они впервые снова прозвучат одновременно?</div>
+    </article>
+    <article class="task">
+      <div>Дима покупает пирожки по 45 руб. за штуку, а Витя — по 60 руб. за штуку. Какую наименьшую одинаковую сумму нужно иметь каждому, чтобы оба могли потратить её полностью на целое число пирожков? Сколько пирожков купит каждый? Объясните выбор НОД или НОК.</div>
+    </article>
+  </div>
+
+  <p><button class="action primary answer-toggle" id="answerToggle" type="button" aria-expanded="false">Показать ответы</button></p>
+  <div class="answer-panel" id="answers">
+    <p><b>1.</b> а) НОД; б) НОК; в) НОК.</p>
+    <p><b>2.</b> НОД(30,45)=15; НОК(8,12)=24.</p>
+    <p><b>3.</b> 24 набора; в каждом по 3 красные и 4 синие бусины.</p>
+    <p><b>4.</b> 72 секунды.</p>
+    <p><b>5.</b> 180 руб.; Дима купит 4 пирожка, Витя — 3. Используется НОК.</p>
+  </div>
+</section>
+
+<section class="chapter" id="check">
+  <header class="chapter-head">
+    <div class="chapter-no">07 · Контроль</div>
+    <h2>Ошибки, которые стоит ловить сразу</h2>
+    <p class="chapter-intro">Короткая финальная проверка должна занимать меньше времени, чем исправление решения после ошибки.</p>
+  </header>
+
+  <div class="errors">
+    <div class="error-item"><b>Перепутано направление деления</b><span>НОД делит исходные числа; НОК сам делится на них.</span></div>
+    <div class="error-item"><b>В НОД попал лишний множитель</b><span>Берите только те простые множители, которые являются общими.</span></div>
+    <div class="error-item"><b>В НОК потерялся множитель</b><span>После первого разложения добавьте из второго всё, чего ещё не хватает.</span></div>
+    <div class="error-item"><b>Метод выбран по одному слову</b><span>Сначала определите смысл: одинаковые группы или первое совпадение.</span></div>
+    <div class="error-item"><b>Ответ не проверен</b><span>Сделайте деление и убедитесь, что определение НОД или НОК выполнено.</span></div>
+  </div>
+
+  <h3>Самопроверка</h3>
+  <div class="checks">
+    <label class="check"><input type="checkbox" data-skill="direction"> <span>Я различаю делитель и кратное и помню направление проверки.</span></label>
+    <label class="check"><input type="checkbox" data-skill="gcd"> <span>Я нахожу НОД по общим простым множителям.</span></label>
+    <label class="check"><input type="checkbox" data-skill="lcm"> <span>Я нахожу НОК, добавляя недостающие множители.</span></label>
+    <label class="check"><input type="checkbox" data-skill="choice"> <span>Я различаю задачи на одинаковые группы и на первое совпадение.</span></label>
+    <label class="check"><input type="checkbox" data-skill="verify"> <span>Я проверяю найденное число делением и связываю ответ с вопросом задачи.</span></label>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <p id="progressText" aria-live="polite">Отмечено 0 из 5.</p>
+</section>
+
+<footer class="footer">
+  <span>Ксения Васильченко · математика, 6 класс</span>
+  <span>Лёвин Артём Александрович · 24.09.26</span>
+</footer>
+</div>
+</main>
+
+<div class="modal" id="posterModal" role="dialog" aria-modal="true" aria-label="Увеличенная ментальная карта" aria-hidden="true">
+  <button id="posterClose" type="button" aria-label="Закрыть">×</button>
+  <img src="../images/24.09.26.png" alt="Увеличенная ментальная карта по теме НОД и НОК">
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var root=document.documentElement;
+  var theme=document.getElementById('themeToggle');
+  try{root.dataset.theme=localStorage.getItem('xenia-240926-theme')||'light';}catch(e){}
+  theme.addEventListener('click',function(){
+    root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+    try{localStorage.setItem('xenia-240926-theme',root.dataset.theme);}catch(e){}
+  });
+
+  var tabButtons=Array.prototype.slice.call(document.querySelectorAll('[data-factor-tab]'));
+  var panels=Array.prototype.slice.call(document.querySelectorAll('[data-factor-panel]'));
+  tabButtons.forEach(function(button){
+    button.addEventListener('click',function(){
+      var target=button.getAttribute('data-factor-tab');
+      tabButtons.forEach(function(item){item.setAttribute('aria-pressed',String(item===button));});
+      panels.forEach(function(panel){panel.classList.toggle('active',panel.getAttribute('data-factor-panel')===target);});
+    });
+  });
+
+  Array.prototype.slice.call(document.querySelectorAll('.classifier-item')).forEach(function(item){
+    var expected=item.getAttribute('data-answer');
+    var feedback=item.querySelector('.feedback');
+    var buttons=Array.prototype.slice.call(item.querySelectorAll('[data-choice]'));
+    buttons.forEach(function(button){
+      button.addEventListener('click',function(){
+        buttons.forEach(function(x){x.classList.remove('correct','wrong');});
+        var ok=button.getAttribute('data-choice')===expected;
+        button.classList.add(ok?'correct':'wrong');
+        feedback.textContent=ok
+          ? (expected==='gcd'?'Верно: исходные количества делятся на одинаковые группы.':'Верно: ищется общее кратное или первое совпадение.')
+          : 'Проверьте, что именно должно делиться: исходные количества или найденный общий результат.';
+      });
+    });
+  });
+
+  var answerToggle=document.getElementById('answerToggle');
+  var answers=document.getElementById('answers');
+  answerToggle.addEventListener('click',function(){
+    var open=answers.classList.toggle('show');
+    answerToggle.setAttribute('aria-expanded',String(open));
+    answerToggle.textContent=open?'Скрыть ответы':'Показать ответы';
+  });
+
+  var checks=Array.prototype.slice.call(document.querySelectorAll('[data-skill]'));
+  var bar=document.getElementById('progressBar');
+  var label=document.getElementById('progressText');
+  function renderChecks(){
+    var n=checks.filter(function(x){return x.checked;}).length;
+    bar.style.width=(n/checks.length*100)+'%';
+    label.textContent='Отмечено '+n+' из '+checks.length+'.';
+    try{localStorage.setItem('xenia-240926-checks',JSON.stringify(checks.map(function(x){return x.checked;})));}catch(e){}
+  }
+  try{
+    var saved=JSON.parse(localStorage.getItem('xenia-240926-checks')||'[]');
+    checks.forEach(function(x,i){x.checked=!!saved[i];});
+  }catch(e){}
+  checks.forEach(function(x){x.addEventListener('change',renderChecks);});
+  renderChecks();
+
+  var modal=document.getElementById('posterModal');
+  var close=document.getElementById('posterClose');
+  var posterTriggers=[document.getElementById('posterOpen'),document.getElementById('posterPreview')];
+  var lastFocus=null;
+  function openModal(trigger){
+    lastFocus=trigger;
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden','false');
+    close.focus();
+  }
+  function closeModal(){
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden','true');
+    if(lastFocus)lastFocus.focus();
+  }
+  posterTriggers.forEach(function(trigger){trigger.addEventListener('click',function(){openModal(trigger);});});
+  close.addEventListener('click',closeModal);
+  modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('show'))closeModal();});
+})();
+</script>
+</body>
+</html>
