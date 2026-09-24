@@ -1,0 +1,571 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{777777}
+
+\hypersetup{hidelinks}
+\color{textgray}
+\onehalfspacing
+\frenchspacing
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+
+\setlist[itemize]{leftmargin=1.7em,itemsep=0.25em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=2em,itemsep=0.45em,topsep=0.4em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small Сечения многогранников}
+\rhead{\small Ксения Клыкова}
+\cfoot{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\sectitle}[1]{%
+  \vspace{0.55em}%
+  {\Large\bfseries\color{darkaccent}#1\par}%
+  \vspace{0.2em}%
+  \noindent{\color{accent}\rule{\linewidth}{0.8pt}}%
+  \vspace{0.45em}%
+}
+
+\newcommand{\subtopic}[1]{%
+  \vspace{0.4em}%
+  {\large\bfseries\color{darkaccent}#1\par}%
+  \vspace{0.15em}%
+}
+
+\newcommand{\important}[1]{{\bfseries\color{darkaccent}#1}}
+
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=darkaccent,
+    line width=0.9pt,
+    align=center,
+    minimum width=4.4cm,
+    minimum height=1.05cm,
+    font=\small
+  },
+  flowaction/.style={
+    rounded corners=3pt,
+    draw=accent,
+    line width=0.9pt,
+    align=center,
+    text width=9.5cm,
+    minimum height=1.0cm,
+    font=\small
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=2.2,
+    draw=darkaccent,
+    line width=0.9pt,
+    align=center,
+    text width=4.8cm,
+    inner sep=1.5pt,
+    font=\small
+  },
+  flowarrow/.style={
+    -{Latex[length=3mm,width=2mm]},
+    line width=0.85pt,
+    color=textgray
+  }
+}
+
+\begin{document}
+\pagenumbering{gobble}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{2.2cm}
+
+{\Large\color{darkaccent}\textbf{Чек-лист}\par}
+
+\vspace{0.8cm}
+
+{\huge\bfseries Сечения куба и тетраэдра\par}
+
+\vspace{0.35cm}
+
+{\Large Построение, вспомогательные точки и обоснование\par}
+
+\vspace{1.7cm}
+
+{\large Ксения Клыкова\par}
+
+\vspace{0.35cm}
+
+{\normalsize Подготовка к ЕГЭ\par}
+
+\vfill
+
+{\normalsize
+Лёвин Артём Александрович эксклюзивно для Ксении Клыковой
+\par}
+
+\vspace{0.35cm}
+
+{\normalsize 24 сентября 2026 г.\par}
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent!55,line width=1.15pt]
+  ($(current page.south west)+(1.5cm,1.15cm)$)
+  .. controls
+  ($(current page.south west)+(6.0cm,2.0cm)$)
+  and
+  ($(current page.south east)+(-6.0cm,0.35cm)$)
+  ..
+  ($(current page.south east)+(-1.5cm,1.2cm)$);
+\end{tikzpicture}
+
+\end{titlepage}
+
+\pagenumbering{arabic}
+
+\sectitle{1. Сечение и след плоскости на грани}
+
+Пусть многогранник пересекается плоскостью $\alpha$.
+\important{Сечение многогранника плоскостью} --- многоугольник, сторонами которого служат отрезки линий пересечения плоскости $\alpha$ с гранями многогранника.
+
+Если плоскость грани обозначить через $\beta$, то линия
+\[
+  \alpha\cap\beta
+\]
+называется следом плоскости $\alpha$ на этой грани. Чтобы построить след, достаточно найти две его точки.
+
+\subtopic{Три опорных факта}
+
+\begin{enumerate}
+  \item Если две различные точки $A$ и $B$ принадлежат плоскости $\alpha$, то прямая $AB$ целиком лежит в этой плоскости:
+  \[
+    A,B\in\alpha
+    \quad\Longrightarrow\quad
+    AB\subset\alpha.
+  \]
+
+  \item Если $P\in AB$ и $AB\subset\alpha$, то
+  \[
+    P\in\alpha.
+  \]
+
+  \item Если две точки принадлежат одновременно плоскости сечения $\alpha$ и плоскости одной грани, то соединяющая их прямая является следом $\alpha$ на этой грани.
+\end{enumerate}
+
+\subtopic{Как читать обозначения}
+
+\begin{itemize}
+  \item $K\in AA_1$ означает, что точка $K$ лежит на ребре $AA_1$.
+  \item $P=KL\cap BD$ означает, что $P$ --- точка пересечения прямых $KL$ и $BD$.
+  \item $KL\subset\alpha$ означает, что вся прямая $KL$ лежит в плоскости $\alpha$.
+  \item Если пересечение получается за пределами ребра, продолжают прямую, содержащую это ребро. Вспомогательная точка при этом может находиться вне многогранника.
+\end{itemize}
+
+\sectitle{2. Основной метод: переход от грани к грани}
+
+Плоскость сечения пересекает каждую затронутую грань по прямой. Поэтому построение удобно вести последовательно, восстанавливая один след за другим.
+
+\begin{enumerate}
+  \item Найдите две известные точки плоскости $\alpha$, лежащие в одной грани, и соедините их.
+  \item Продлите найденный след до пересечения с ребром или с продолжением ребра соседней грани.
+  \item Новая вспомогательная точка принадлежит $\alpha$, поскольку лежит на уже построенной прямой плоскости $\alpha$.
+  \item В соседней грани найдите вторую точку, которая тоже принадлежит $\alpha$, и проведите новый след.
+  \item Повторяйте переход, пока граница сечения не замкнётся.
+\end{enumerate}
+
+\important{Контрольный вопрос на каждом шаге:} почему две точки, которые Вы собираетесь соединить, принадлежат одновременно плоскости сечения и одной плоскости грани?
+
+\sectitle{3. Как обосновывать построение}
+
+Рисунок показывает идею, а короткая цепочка принадлежностей делает построение строгим. Основной шаблон:
+\[
+A,B\in\alpha
+\Longrightarrow
+AB\subset\alpha,
+\qquad
+P\in AB
+\Longrightarrow
+P\in\alpha.
+\]
+
+Если точка $P$ одновременно лежит в плоскости сечения $\alpha$ и в плоскости грани $\beta$, она становится общей точкой этих плоскостей и помогает построить следующий след.
+
+\subtopic{Короткий шаблон записи}
+
+Пусть $K,L,M\in\alpha$ и $P=KL\cap BD$, причём прямая $BD$ лежит в плоскости грани $(BDC)$. Тогда
+\[
+K,L\in\alpha
+\Longrightarrow
+KL\subset\alpha
+\Longrightarrow
+P\in\alpha,
+\]
+а из $P\in BD\subset(BDC)$ следует $P\in(BDC)$. Если также $M\in(BDC)$, то $P$ и $M$ --- две общие точки плоскостей $\alpha$ и $(BDC)$, поэтому
+\[
+PM\subset\alpha
+\quad\text{и}\quad
+PM\subset(BDC).
+\]
+Следовательно, точка пересечения $PM$ с подходящим ребром этой грани также принадлежит $\alpha$.
+
+\clearpage
+\thispagestyle{empty}
+
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: построение сечения многогранника}
+\end{center}
+
+\vspace{0.65cm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=6mm]
+
+  \node[flowstart] (start) {Начало};
+
+  \node[flowaction,below=of start] (given)
+  {Обозначьте плоскость сечения $\alpha$ и подпишите все исходные точки};
+
+  \node[flowaction,below=of given] (sameface)
+  {Найдите две точки плоскости $\alpha$, лежащие в одной грани, и проведите через них след};
+
+  \node[flowdecision,below=8mm of sameface] (done)
+  {Граница сечения уже замкнулась?};
+
+  \node[flowaction,below=9mm of done] (extend)
+  {Продлите текущий след до ребра или продолжения ребра соседней грани};
+
+  \node[flowaction,below=of extend] (aux)
+  {Получите вспомогательную точку и обоснуйте её принадлежность $\alpha$};
+
+  \node[flowaction,below=of aux] (nextface)
+  {В соседней грани найдите вторую точку плоскости $\alpha$ и проведите новый след};
+
+  \node[flowaction,below=of nextface] (vertex)
+  {Отметьте новую вершину сечения на ребре многогранника};
+
+  \node[flowaction,below=10mm of vertex] (check)
+  {Проверьте: все вершины принадлежат $\alpha$, а каждая сторона лежит в одной грани};
+
+  \node[flowaction,below=of check] (style)
+  {Оформите видимость: скрытые участки --- пунктиром, видимые --- сплошными};
+
+  \node[flowstart,below=of style] (finish) {Сечение построено};
+
+  \draw[flowarrow] (start) -- (given);
+  \draw[flowarrow] (given) -- (sameface);
+  \draw[flowarrow] (sameface) -- (done);
+  \draw[flowarrow] (done) -- node[right,font=\small]{нет} (extend);
+  \draw[flowarrow] (extend) -- (aux);
+  \draw[flowarrow] (aux) -- (nextface);
+  \draw[flowarrow] (nextface) -- (vertex);
+
+  \draw[flowarrow]
+    (vertex.west) -- ++(-2.3,0) |- (sameface.west);
+
+  \draw[flowarrow]
+    (done.east) -- ++(2.8,0)
+    node[above,font=\small]{да} |- (check.east);
+
+  \draw[flowarrow] (check) -- (style);
+  \draw[flowarrow] (style) -- (finish);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+\sectitle{4. Разобранный пример: сечение куба}
+
+Рассмотрим куб
+\[
+ABCDA_1B_1C_1D_1.
+\]
+Пусть $K$, $L$, $M$ --- середины рёбер $AA_1$, $A_1B_1$, $CC_1$ соответственно. Требуется построить сечение плоскостью
+\[
+\alpha=(KLM).
+\]
+
+\begin{center}
+\begin{tikzpicture}[scale=0.82]
+
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(5,0){B}
+  \tkzDefPoint(6.7,1.5){C}
+  \tkzDefPoint(1.7,1.5){D}
+
+  \tkzDefPoint(0,4){A1}
+  \tkzDefPoint(5,4){B1}
+  \tkzDefPoint(6.7,5.5){C1}
+  \tkzDefPoint(1.7,5.5){D1}
+
+  \tkzDefPoint(0,2){K}
+  \tkzDefPoint(2.5,4){L}
+  \tkzDefPoint(5.85,4.75){N}
+  \tkzDefPoint(6.7,3.5){M}
+  \tkzDefPoint(4.2,1.5){P}
+  \tkzDefPoint(0.85,0.75){Q}
+
+  \tkzDefPoint(5,6){X}
+  \tkzDefPoint(9.2,5.5){Z}
+  \tkzDefPoint(1.7,-0.5){Y}
+
+  % Каркас куба
+  \tkzDrawSegments[line width=0.9pt](A,B B,C C,C1 C1,B1 B1,A1 A1,A B,B1 A1,D1 D1,C1)
+  \tkzDrawSegments[dashed,line width=0.85pt](A,D D,C D,D1)
+
+  % Вспомогательные прямые
+  \tkzDrawSegments[color=softgray,line width=0.65pt,densely dashed](K,X X,M L,Z Z,Y Y,K)
+
+  % Видимые стороны сечения
+  \tkzDrawSegments[color=accent,line width=1.6pt](K,L L,N N,M)
+
+  % Скрытые стороны сечения
+  \tkzDrawSegments[color=accent,line width=1.6pt,dashed](M,P P,Q Q,K)
+
+  \tkzDrawPoints[color=accent,fill=accent,size=3](K,L,N,M,P,Q)
+  \tkzDrawPoints[color=softgray,fill=white,size=2.5](X,Z,Y)
+
+  \tkzLabelPoints[below](A,B)
+  \tkzLabelPoints[right](C,C1,M,X,Z)
+  \tkzLabelPoints[left](D,A1,K,Y)
+  \tkzLabelPoints[above](B1,D1,L,N)
+  \tkzLabelPoints[below](P,Q)
+
+\end{tikzpicture}
+\end{center}
+
+Построение удобно вести через три вспомогательные точки $X$, $Z$, $Y$.
+
+\begin{enumerate}
+  \item Проведите $KL$. Продлите эту прямую до пересечения с прямой $BB_1$; обозначьте точку пересечения $X$.
+  \item Точки $X$ и $M$ лежат в плоскости правой грани $BCC_1B_1$. Проведите $XM$; эта прямая пересечёт ребро $B_1C_1$ в точке $N$.
+  \item В верхней грани проведите $LN$ и продлите до пересечения с прямой $C_1D_1$. Получите вспомогательную точку $Z$.
+  \item В плоскости задней грани $DCC_1D_1$ проведите $ZM$. Эта прямая пересечёт ребро $CD$ в точке $P$, а продолжение прямой $DD_1$ --- в точке $Y$.
+  \item В плоскости левой грани $ADD_1A_1$ проведите $YK$. Прямая $YK$ пересечёт ребро $AD$ в точке $Q$.
+  \item Замкните многоугольник. Искомое сечение:
+  \[
+    \boxed{KLNMPQ}.
+  \]
+\end{enumerate}
+
+\subtopic{Почему построение корректно}
+
+\begin{align*}
+K,L,M&\in\alpha,\\
+K,L\in\alpha
+&\Longrightarrow KL\subset\alpha
+\Longrightarrow X\in\alpha,\\
+X,M\in\alpha
+&\Longrightarrow XM\subset\alpha
+\Longrightarrow N\in\alpha,\\
+L,N\in\alpha
+&\Longrightarrow LN\subset\alpha
+\Longrightarrow Z\in\alpha,\\
+Z,M\in\alpha
+&\Longrightarrow ZM\subset\alpha
+\Longrightarrow P,Y\in\alpha,\\
+Y,K\in\alpha
+&\Longrightarrow YK\subset\alpha
+\Longrightarrow Q\in\alpha.
+\end{align*}
+
+Все вершины $K,L,N,M,P,Q$ принадлежат $\alpha$, а каждая соседняя пара лежит в одной грани куба. Следовательно,
+\[
+\boxed{KLNMPQ}
+\]
+--- искомое сечение.
+
+\sectitle{5. Сечение тетраэдра}
+
+Для тетраэдра действует тот же принцип, но цепочка переходов обычно короче.
+
+Пусть в тетраэдре $ABCD$
+\[
+K\in AB,
+\qquad
+L\in AC,
+\qquad
+M\in CD,
+\]
+причём $KL\not\parallel BC$. Пусть
+\[
+P=KL\cap BC.
+\]
+Так как $K,L\in\alpha$, имеем $KL\subset\alpha$, а значит $P\in\alpha$.
+
+Точки $P$ и $M$ лежат одновременно в плоскости сечения $\alpha$ и в плоскости грани $(BCD)$. Поэтому можно провести $PM$. Если
+\[
+N=PM\cap BD,
+\]
+то $N\in\alpha$, и получаем сечение
+\[
+\boxed{KLMN}.
+\]
+
+Проверка по граням:
+\[
+KL\subset(ABC),
+\qquad
+LM\subset(ACD),
+\qquad
+MN\subset(BCD),
+\qquad
+NK\subset(ABD).
+\]
+
+Если нужные прямые параллельны, точку пересечения не ищут: используют параллельность следов или переходят к другой грани.
+
+\begingroup
+\setlist[itemize]{leftmargin=1.7em,itemsep=0.05em,topsep=0.15em}
+\setlist[enumerate]{leftmargin=2em,itemsep=0.08em,topsep=0.15em}
+
+\sectitle{6. Оформление чертежа и самопроверка}
+
+\subtopic{Видимые и скрытые линии}
+
+\begin{itemize}
+  \item Видимый участок ребра или построенной прямой проводят сплошной линией, скрытый поверхностью многогранника --- пунктиром.
+  \item Продолжение прямой за пределами многогранника не становится скрытым автоматически: тип линии определяется видимостью в выбранной проекции.
+  \item Все исходные и вспомогательные точки подписывают, чтобы различать данные и полученные точки.
+  \item Стороны сечения можно выделить одним акцентным цветом, сохраняя различие между сплошными и пунктирными участками.
+\end{itemize}
+
+\subtopic{Типичные ошибки}
+
+\begin{itemize}
+  \item Соединять точки, не лежащие в одной грани.
+  \item Использовать вспомогательную точку, не обосновав её принадлежность $\alpha$.
+  \item Путать ребро с прямой, содержащей это ребро, и забывать о допустимом продолжении прямой.
+  \item Останавливать построение до замыкания многоугольника.
+  \item Оставлять точки без обозначений или неверно оформлять скрытые участки.
+\end{itemize}
+
+\subtopic{Финальная проверка}
+
+Перед завершением задачи убедитесь:
+\begin{enumerate}
+  \item все исходные и вспомогательные точки подписаны;
+  \item каждая новая прямая построена по двум точкам, принадлежащим нужной плоскости;
+  \item каждая вершина сечения лежит на ребре многогранника, а каждая сторона --- в одной грани;
+  \item многоугольник замкнут;
+  \item принадлежность построенных вершин плоскости $\alpha$ обоснована;
+  \item видимые и скрытые участки оформлены последовательно.
+\end{enumerate}
+
+\endgroup
+
+\clearpage
+
+\sectitle{Тренировочный блок --- Путь А}
+
+\begingroup
+\setstretch{1.22}
+
+\textbf{1. Базовая логика.}
+Пусть $A,B\in\alpha$ и $P\in AB$. Запишите минимальную цепочку утверждений, доказывающую $P\in\alpha$.
+
+\vspace{0.45em}
+
+\textbf{2. Тетраэдр.}
+В тетраэдре $ABCD$ заданы
+$K\in AB$, $L\in AC$, $M\in CD$, причём $KL\not\parallel BC$.
+Пусть $P=KL\cap BC$, а прямая $PM$ пересекает ребро $BD$ в точке $N$.
+Постройте сечение плоскостью $(KLM)$ и укажите порядок его вершин.
+
+\vspace{0.45em}
+
+\textbf{3. Видимость линий.}
+Для проекции куба из разобранного примера определите, какие из рёбер
+$AD$, $DC$, $DD_1$, $AA_1$, $BB_1$ показаны пунктиром, а какие --- сплошной линией.
+
+\vspace{0.45em}
+
+\textbf{4. Найдите логический пробел.}
+Ученик написал
+\[
+P=KL\cap BD
+\quad\Longrightarrow\quad
+P\in\alpha.
+\]
+Каких утверждений не хватает, чтобы вывод был строгим? Запишите исправленную короткую цепочку.
+
+\vspace{0.45em}
+
+\textbf{5. Самостоятельное построение.}
+В кубе $ABCDA_1B_1C_1D_1$ точки $K$, $L$, $M$ --- середины рёбер
+$BB_1$, $B_1C_1$, $DD_1$ соответственно.
+Постройте сечение плоскостью $\alpha=(KLM)$ методом перехода от грани к грани.
+Подпишите остальные вершины сечения и кратко обоснуйте их принадлежность $\alpha$.
+
+\endgroup
+
+\clearpage
+
+\sectitle{Ответы}
+
+\renewcommand{\arraystretch}{1.45}
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.8cm}X@{}}
+\toprule
+№ & Ответ \\
+\midrule
+
+1 &
+$A,B\in\alpha\Rightarrow AB\subset\alpha$; поскольку $P\in AB$, получаем $P\in\alpha$.
+\\
+
+2 &
+Сечение $KLMN$, где $P=KL\cap BC$ и $N=PM\cap BD$.
+\\
+
+3 &
+Пунктиром: $AD$, $DC$, $DD_1$. Сплошной линией: $AA_1$, $BB_1$.
+\\
+
+4 &
+Необходимо указать $K,L\in\alpha$, откуда $KL\subset\alpha$. Затем из $P\in KL$ следует $P\in\alpha$. Само условие $P\in BD$ принадлежность плоскости $\alpha$ не доказывает.
+\\
+
+5 &
+Получается шестиугольник. Если обозначить
+\[
+E=\alpha\cap C_1D_1,
+\qquad
+F=\alpha\cap AD,
+\qquad
+G=\alpha\cap AB,
+\]
+то порядок вершин
+\[
+K-L-E-M-F-G.
+\]
+Для заданных середин рёбер точки $E$, $F$, $G$ также являются серединами соответствующих рёбер.
+\\
+
+\bottomrule
+\end{tabularx}
+
+\end{document}

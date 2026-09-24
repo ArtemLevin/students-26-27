@@ -1,0 +1,895 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{paratype}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,top=19mm,bottom=19mm,left=20mm,right=20mm,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F2F4F4}
+\definecolor{lightaccent}{HTML}{E4F1F1}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=darkaccent,
+  pdftitle={Чек-лист: парабола, гипербола и модуль},
+  pdfauthor={Артём Александрович Лёвин}
+}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\renewcommand{\arraystretch}{1.25}
+
+\setlist[itemize]{
+  leftmargin=1.55em,
+  itemsep=0.22em,
+  topsep=0.25em
+}
+\setlist[enumerate]{
+  leftmargin=1.85em,
+  itemsep=0.35em,
+  topsep=0.3em
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{textgray}Ярослав Верещагин \textbullet{} ОГЭ}
+\fancyhead[R]{\small\color{textgray}Парабола, гипербола, модуль}
+\fancyfoot[C]{\small\color{textgray}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\newcommand{\topic}[1]{%
+  \vspace{0.25em}
+  {\Large\bfseries\color{darkaccent}#1}\par
+  \vspace{0.1em}
+  {\color{accent}\rule{\linewidth}{0.7pt}}\par
+  \vspace{0.35em}
+}
+
+\newcommand{\subtopic}[1]{%
+  \vspace{0.35em}
+  {\large\bfseries\color{darkaccent}#1}\par
+  \vspace{0.1em}
+}
+
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=accent,
+    very thick,
+    minimum width=40mm,
+    minimum height=10mm,
+    align=center,
+    fill=lightaccent,
+    font=\small
+  },
+  flowaction/.style={
+    rounded corners=3pt,
+    draw=accent,
+    thick,
+    minimum width=52mm,
+    minimum height=12mm,
+    text width=48mm,
+    align=center,
+    fill=white,
+    font=\small
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=2.2,
+    draw=darkaccent,
+    thick,
+    text width=34mm,
+    align=center,
+    inner sep=1.5pt,
+    fill=softgray,
+    font=\small
+  },
+  flowend/.style={
+    ellipse,
+    draw=darkaccent,
+    very thick,
+    minimum width=42mm,
+    minimum height=10mm,
+    align=center,
+    fill=lightaccent,
+    font=\small
+  },
+  flowarrow/.style={
+    -{Stealth[length=3mm,width=2mm]},
+    thick,
+    draw=darkaccent
+  }
+}
+
+\begin{document}
+
+% =================================================
+% Титульный лист
+% =================================================
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+
+\vspace*{22mm}
+
+{\color{accent}\rule{0.72\linewidth}{1.2pt}}\\[13mm]
+
+{\fontsize{28}{33}\selectfont
+ \bfseries\color{darkaccent}
+ Чек-лист}\\[5mm]
+
+{\fontsize{21}{26}\selectfont
+ \bfseries
+ Парабола, гипербола и модуль}\\[8mm]
+
+{\large
+Графики функций: чтение, построение и преобразования}\\[17mm]
+
+{\large\bfseries
+Ярослав Верещагин}\\[2mm]
+
+{\normalsize
+Подготовка к ОГЭ по математике}\\[19mm]
+
+{\normalsize
+Артём Александрович Лёвин}\\[1mm]
+
+{\normalsize
+эксклюзивно для Ярослава Верещагина}\\[12mm]
+
+{\large 24 сентября 2026 г.}
+
+\vfill
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[
+    accent,
+    line width=1.15pt
+  ]
+    ($(current page.south west)+(18mm,20mm)$)
+    .. controls
+    ($(current page.south west)+(64mm,33mm)$)
+    and
+    ($(current page.south east)+(-72mm,8mm)$)
+    ..
+    ($(current page.south east)+(-18mm,22mm)$);
+
+  \draw[
+    accent!45,
+    line width=0.55pt
+  ]
+    ($(current page.south west)+(20mm,15mm)$)
+    .. controls
+    ($(current page.south west)+(84mm,28mm)$)
+    and
+    ($(current page.south east)+(-91mm,3mm)$)
+    ..
+    ($(current page.south east)+(-20mm,17mm)$);
+\end{tikzpicture}
+
+\end{titlepage}
+
+% =================================================
+% Парабола
+% =================================================
+
+\topic{1. Парабола: читаем коэффициенты по графику}
+
+Рассматриваем квадратичную функцию
+\[
+  y=ax^2+bx+c,
+  \qquad a\ne0.
+\]
+
+\subtopic{Что означает каждый коэффициент}
+
+\begin{itemize}
+  \item
+  \key{Коэффициент $a$} задаёт направление ветвей:
+  \[
+    a>0 \Rightarrow \text{ветви направлены вверх},
+    \qquad
+    a<0 \Rightarrow \text{ветви направлены вниз}.
+  \]
+
+  \item
+  \key{Коэффициент $c$} равен значению функции при $x=0$:
+  \[
+    c=f(0).
+  \]
+  Поэтому парабола пересекает ось $Oy$ в точке
+  \[
+    (0;c).
+  \]
+  Если эта точка выше оси $Ox$, то $c>0$; ниже --- $c<0$;
+  если парабола проходит через начало координат, то $c=0$.
+
+  \item
+  \key{Абсцисса вершины} вычисляется по формуле
+  \[
+    x_{\text{в}}=-\frac{b}{2a}.
+  \]
+  Отсюда
+  \[
+    b=-2ax_{\text{в}}.
+  \]
+  Эта запись особенно удобна, когда по рисунку нужно определить только знак $b$.
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+Знак $a$ & Знак $x_{\text{в}}$ & Знак $b=-2ax_{\text{в}}$ \\
+\midrule
+$+$ & $+$ & $-$ \\
+$+$ & $-$ & $+$ \\
+$-$ & $+$ & $+$ \\
+$-$ & $-$ & $-$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Если вершина лежит на оси $Oy$, то
+\[
+  x_{\text{в}}=0
+  \quad\Rightarrow\quad
+  b=0.
+\]
+
+\subtopic{Пример}
+
+Пусть ветви параболы направлены вверх, точка пересечения с осью $Oy$
+лежит ниже оси $Ox$, а вершина находится слева от оси $Oy$.
+Тогда
+\[
+  a>0,
+  \qquad
+  c<0,
+  \qquad
+  x_{\text{в}}<0.
+\]
+Следовательно,
+\[
+  b=-2ax_{\text{в}}>0.
+\]
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.76\linewidth,
+  height=7cm,
+  axis lines=middle,
+  xmin=-5,
+  xmax=4,
+  ymin=-5,
+  ymax=6,
+  xtick={-4,-3,-2,-1,1,2,3},
+  ytick={-4,-2,2,4},
+  xlabel={$x$},
+  ylabel={$y$},
+  axis equal image,
+  unit vector ratio=1 1,
+  samples=240,
+  clip=false,
+  grid=both,
+  minor tick num=0,
+  grid style={line width=.15pt,draw=gray!25},
+  every axis plot/.append style={very thick}
+]
+\addplot[accent,domain=-4.2:2.6] {0.7*(x+1.5)^2-3};
+\addplot[only marks,mark=*,mark size=2.1pt,darkaccent]
+coordinates {(-1.5,-3) (0,-1.425)};
+\node[anchor=north east,text=darkaccent] at (axis cs:-1.5,-3) {$V$};
+\node[anchor=west,text=darkaccent] at (axis cs:0,-1.425) {$(0;c)$};
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+
+\key{Самопроверка.}
+В формуле $b=-2ax_{\text{в}}$ не теряйте внешний минус.
+Сначала определите знаки $a$ и $x_{\text{в}}$, затем отдельно выполните анализ знаков.
+
+% =================================================
+% Блок-схема параболы
+% =================================================
+
+\clearpage
+\thispagestyle{fancy}
+
+\begin{center}
+{\Large\bfseries\color{darkaccent}
+Алгоритм: определить знаки $a$, $b$, $c$ по графику параболы}
+\end{center}
+
+\vspace{7mm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=11mm and 10mm]
+
+\node[flowstart] (start) {Дан график\\$y=ax^2+bx+c$};
+
+\node[flowdecision,below=of start] (a) {Куда направлены ветви?};
+
+\node[flowaction,below left=of a] (apos) {$a>0$\\ветви вверх};
+\node[flowaction,below right=of a] (aneg) {$a<0$\\ветви вниз};
+
+\node[flowaction,below=27mm of a] (c)
+{Найдите пересечение с $Oy$:\\его ордината равна $c$};
+
+\node[flowaction,below=of c] (xv)
+{Определите знак $x_{\text{в}}$\\по положению вершины};
+
+\node[flowaction,below=of xv] (b)
+{Определите знак $b$ по формуле\\$b=-2ax_{\text{в}}$};
+
+\node[flowend,below=of b] (end)
+{Запишите знаки $a$, $b$, $c$};
+
+\draw[flowarrow] (start) -- (a);
+\draw[flowarrow] (a) -| node[pos=0.22,above left]{\small вверх} (apos);
+\draw[flowarrow] (a) -| node[pos=0.22,above right]{\small вниз} (aneg);
+\draw[flowarrow] (apos) |- (c);
+\draw[flowarrow] (aneg) |- (c);
+\draw[flowarrow] (c) -- (xv);
+\draw[flowarrow] (xv) -- (b);
+\draw[flowarrow] (b) -- (end);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% =================================================
+% Гипербола
+% =================================================
+
+\topic{2. Гипербола $y=\dfrac{k}{x}$}
+
+Рассматриваем функцию
+\[
+  y=\frac{k}{x},
+  \qquad k\ne0.
+\]
+
+\subtopic{ОДЗ и основные свойства}
+
+\begin{itemize}
+  \item
+  Делить на ноль нельзя, поэтому
+  \[
+    x\ne0.
+  \]
+  Область определения:
+  \[
+    (-\infty;0)\cup(0;+\infty).
+  \]
+
+  \item
+  Значение $y=0$ для такой функции невозможно, поэтому
+  \[
+    y\ne0.
+  \]
+
+  \item
+  Прямые
+  \[
+    x=0
+    \qquad\text{и}\qquad
+    y=0
+  \]
+  являются асимптотами графика.
+
+  \item
+  Если $k>0$, ветви расположены в I и III четвертях.
+
+  \item
+  Если $k<0$, ветви расположены во II и IV четвертях.
+\end{itemize}
+
+\subtopic{Как влияет величина $|k|$}
+
+При одном и том же ненулевом $x$
+\[
+  |y|=\frac{|k|}{|x|}.
+\]
+Поэтому при увеличении $|k|$ соответствующая точка графика имеет большее $|y|$;
+при уменьшении $|k|$ --- меньшее $|y|$.
+
+Например, при $x=1$
+\[
+  \frac{2}{1}=2,
+  \qquad
+  \frac{1}{1}=1,
+  \qquad
+  \frac{0{,}5}{1}=0{,}5.
+\]
+
+\subtopic{Коэффициент в знаменателе}
+
+Формулу полезно привести к стандартному виду $k/x$:
+\[
+  \frac{1}{2x}
+  =
+  \frac{1/2}{x}
+  =
+  \frac{0{,}5}{x}.
+\]
+Следовательно, здесь
+\[
+  k=0{,}5.
+\]
+
+\subtopic{Построение по точкам}
+
+Ноль брать нельзя. Удобно выбирать значения $x$, симметричные относительно нуля,
+например
+\[
+  -4,-2,-1,1,2,4.
+\]
+Для каждого значения вычисляем
+\[
+  y=\frac{k}{x}.
+\]
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.80\linewidth,
+  height=7cm,
+  axis lines=middle,
+  xmin=-5,
+  xmax=5,
+  ymin=-5,
+  ymax=5,
+  xlabel={$x$},
+  ylabel={$y$},
+  axis equal image,
+  unit vector ratio=1 1,
+  samples=260,
+  clip=true,
+  grid=both,
+  grid style={line width=.15pt,draw=gray!25},
+  legend style={
+    at={(0.5,-0.16)},
+    anchor=north,
+    legend columns=2,
+    draw=none,
+    font=\small
+  }
+]
+\addplot[accent,very thick,domain=-5:-0.18,forget plot] {1/x};
+\addplot[accent,very thick,domain=0.18:5] {1/x};
+\addlegendentry{$y=1/x$}
+
+\addplot[darkaccent,very thick,dashed,domain=-5:-0.18,forget plot] {2/x};
+\addplot[darkaccent,very thick,dashed,domain=0.18:5] {2/x};
+\addlegendentry{$y=2/x$}
+
+\addplot[gray!70!black,very thick,dotted,domain=-5:-0.18,forget plot] {0.5/x};
+\addplot[gray!70!black,very thick,dotted,domain=0.18:5] {0.5/x};
+\addlegendentry{$y=0{,}5/x$}
+
+\addplot[black,thick,dashdotted,domain=-5:-0.18,forget plot] {-1/x};
+\addplot[black,thick,dashdotted,domain=0.18:5] {-1/x};
+\addlegendentry{$y=-1/x$}
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+
+\key{Типичные ошибки:}
+\begin{itemize}[itemsep=0.08em,topsep=0.12em]
+  \item подставлять $x=0$;
+  \item соединять две ветви через ось $Oy$;
+  \item путать четверти при $k>0$ и $k<0$;
+  \item считать, что в $y=1/(2x)$ коэффициент $k$ равен $2$.
+\end{itemize}
+
+% =================================================
+% Модуль
+% =================================================
+
+\clearpage
+\topic{3. Модуль, наложенный на всю правую часть}
+
+Рассматриваем функцию
+\[
+  y=|f(x)|.
+\]
+
+Здесь модуль охватывает \emph{всю} правую часть. Именно для такого случая действует правило отражения относительно оси $Ox$.
+
+\[
+  |f(x)|=
+  \begin{cases}
+    f(x), & f(x)\ge0,\\
+    -f(x), & f(x)<0.
+  \end{cases}
+\]
+
+Отсюда следует геометрическое правило:
+
+\begin{itemize}
+  \item часть графика $y=f(x)$, лежащая на оси $Ox$ или выше неё, остаётся на месте;
+  \item часть графика, лежащая ниже оси $Ox$, отражается симметрично относительно оси $Ox$ вверх;
+  \item у графика $y=|f(x)|$ всегда выполняется $y\ge0$.
+\end{itemize}
+
+\subtopic{Где искать точки смены правила}
+
+Нужно решить уравнение
+\[
+  f(x)=0.
+\]
+Именно в этих точках исходный график пересекает ось $Ox$,
+а знак $f(x)$ может измениться.
+
+Для линейного выражения под модулем корень даёт вершину «галочки».
+
+Например,
+\[
+  y=|2x-1|.
+\]
+Точка излома находится из условия
+\[
+  2x-1=0,
+\]
+поэтому
+\[
+  x=\frac12.
+\]
+Вершина графика имеет координаты
+\[
+  \left(\frac12;0\right).
+\]
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.82\linewidth,
+  height=7.2cm,
+  axis lines=middle,
+  xmin=-3,
+  xmax=4,
+  ymin=-4,
+  ymax=6,
+  xlabel={$x$},
+  ylabel={$y$},
+  axis equal image,
+  unit vector ratio=1 1,
+  samples=220,
+  clip=false,
+  grid=both,
+  grid style={line width=.15pt,draw=gray!25},
+  legend style={
+    at={(0.5,-0.16)},
+    anchor=north,
+    legend columns=2,
+    draw=none,
+    font=\small
+  }
+]
+\addplot[gray!65,thick,dashed,domain=-3:4] {2*x-1};
+\addlegendentry{$y=2x-1$}
+\addplot[accent,very thick,domain=-3:4] {abs(2*x-1)};
+\addlegendentry{$y=|2x-1|$}
+\addplot[only marks,mark=*,mark size=2.1pt,darkaccent]
+coordinates {(0.5,0)};
+\node[anchor=north east,text=darkaccent] at (axis cs:0.5,0) {$\left(\frac12;0\right)$};
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+
+\subtopic{То же правило для параболы}
+
+Для
+\[
+  y=|x^2-x-6|
+\]
+сначала рассматриваем
+\[
+  y=x^2-x-6=(x-3)(x+2).
+\]
+Корни исходной параболы:
+\[
+  x=-2,
+  \qquad
+  x=3.
+\]
+Поскольку ветви исходной параболы направлены вверх, она лежит ниже оси $Ox$
+на промежутке
+\[
+  (-2;3).
+\]
+Именно этот участок при переходе к модулю отражается вверх.
+
+\subtopic{То же правило для гиперболы}
+
+Для
+\[
+  y=\left|\frac1x\right|
+\]
+сохраняется ограничение
+\[
+  x\ne0.
+\]
+Ветвь исходной гиперболы $y=1/x$, лежащая в III четверти,
+отражается во II четверть. Итоговый график целиком расположен выше оси $Ox$.
+
+\key{Самопроверка.}
+После построения $y=|f(x)|$ на рисунке не должно остаться ни одной точки с $y<0$.
+
+% =================================================
+% Блок-схема модуля
+% =================================================
+
+\clearpage
+\thispagestyle{fancy}
+
+\begin{center}
+{\Large\bfseries\color{darkaccent}
+Алгоритм: построить график $y=|f(x)|$}
+\end{center}
+
+\vspace{8mm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=12mm and 10mm]
+
+\node[flowstart] (start) {Дана функция\\$y=|f(x)|$};
+
+\node[flowaction,below=of start] (base)
+{Постройте исходный график\\$y=f(x)$};
+
+\node[flowaction,below=of base] (roots)
+{Найдите точки, где\\$f(x)=0$};
+
+\node[flowdecision,below=of roots] (sign)
+{Есть участки графика\\ниже оси $Ox$?};
+
+\node[flowaction,below left=of sign] (reflect)
+{Отразите все такие участки\\симметрично относительно $Ox$};
+
+\node[flowaction,below right=of sign] (keep)
+{Оставьте исходный график\\без изменений};
+
+\node[flowaction,below=28mm of sign] (check)
+{Проверьте итог:\\все точки должны удовлетворять $y\ge0$};
+
+\node[flowend,below=of check] (end)
+{График $y=|f(x)|$ построен};
+
+\draw[flowarrow] (start) -- (base);
+\draw[flowarrow] (base) -- (roots);
+\draw[flowarrow] (roots) -- (sign);
+\draw[flowarrow] (sign) -| node[pos=0.22,above left]{\small да} (reflect);
+\draw[flowarrow] (sign) -| node[pos=0.22,above right]{\small нет} (keep);
+\draw[flowarrow] (reflect) |- (check);
+\draw[flowarrow] (keep) |- (check);
+\draw[flowarrow] (check) -- (end);
+
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+% =================================================
+% Итоги и домашняя подготовка
+% =================================================
+
+\topic{4. Что нужно уметь после занятия}
+
+\begin{enumerate}
+  \item
+  По графику параболы $y=ax^2+bx+c$ определять знак $a$,
+  знак $c$, положение вершины и затем знак $b$ по формуле
+  \[
+    b=-2ax_{\text{в}}.
+  \]
+
+  \item
+  Для гиперболы $y=k/x$ помнить ограничение $x\ne0$,
+  распознавать четверти по знаку $k$ и учитывать влияние величины $|k|$.
+
+  \item
+  Строить гиперболу по таблице значений, не используя $x=0$.
+
+  \item
+  Для $y=|f(x)|$ оставлять верхнюю часть исходного графика на месте,
+  а нижнюю отражать относительно оси $Ox$.
+
+  \item
+  Для линейного выражения под модулем находить точку излома из уравнения
+  \[
+    f(x)=0.
+  \]
+\end{enumerate}
+
+\subtopic{Домашняя подготовка к текстовым задачам ОГЭ}
+
+Для каждого из заданий 1--5:
+\begin{enumerate}
+  \item внимательно прочитайте весь текст задачи;
+  \item выпишите все введённые величины и обозначения;
+  \item оформите краткую запись «Дано»;
+  \item отдельно запишите, что требуется найти;
+  \item решение пока не выполняйте.
+\end{enumerate}
+
+Цель такой подготовки --- заранее разобраться в условии и обозначениях,
+чтобы на занятии сосредоточиться на построении решения.
+
+% =================================================
+% Тренировочный блок
+% =================================================
+
+\clearpage
+
+\topic{Тренировочный блок --- Путь А}
+
+\begingroup
+\small
+\setstretch{1.18}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.2em,topsep=0.18em}
+
+\textbf{5 заданий.}
+Задания расположены от базового чтения графика к комбинированному применению правил.
+
+\begin{enumerate}
+  \item
+  Парабола
+  \[
+    y=ax^2+bx+c
+  \]
+  имеет ветви вверх, пересекает ось $Oy$ ниже оси $Ox$,
+  а её вершина лежит слева от оси $Oy$.
+
+  Определите знаки
+  \[
+    a,\qquad b,\qquad c.
+  \]
+
+  \item
+  Установите соответствие между функциями и описаниями их графиков:
+  \[
+    \text{A) } y=\frac{3}{x},
+    \qquad
+    \text{Б) } y=-\frac{2}{x},
+    \qquad
+    \text{В) } y=\frac{1}{4x}.
+  \]
+
+  \begin{enumerate}[label=\arabic*),itemsep=0.1em]
+    \item ветви расположены во II и IV четвертях;
+    \item ветви расположены в I и III четвертях, причём при $|x|=1$ имеем $|y|>1$;
+    \item ветви расположены в I и III четвертях, причём при $|x|=1$ имеем $|y|<1$.
+  \end{enumerate}
+
+  \item
+  Для функции
+  \[
+    y=\frac{2}{x}
+  \]
+  составьте таблицу значений при
+  \[
+    x\in\{-4,-2,-1,1,2,4\},
+  \]
+  постройте график и укажите его асимптоты.
+
+  \item
+  Постройте график
+  \[
+    y=|x-2|.
+  \]
+  Укажите координаты точки излома и определите,
+  какая часть прямой $y=x-2$ отражается относительно оси $Ox$.
+
+  \item
+  Для функции
+  \[
+    y=|x^2-4x+3|
+  \]
+  определите без подробного построения:
+  \begin{enumerate}[label=\alph*),itemsep=0.1em]
+    \item корни подмодульного выражения;
+    \item абсциссу вершины исходной параболы;
+    \item промежуток, на котором исходная парабола расположена ниже оси $Ox$;
+    \item участок, который при переходе к модулю отражается вверх.
+  \end{enumerate}
+\end{enumerate}
+\endgroup
+
+% =================================================
+% Ответы
+% =================================================
+
+\clearpage
+
+\topic{Ответы}
+
+\begin{table}[ht]
+\centering
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}c X@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 &
+$\displaystyle a>0,\quad b>0,\quad c<0.$
+\\[2mm]
+
+2 &
+A--2, Б--1, В--3.
+\\[2mm]
+
+3 &
+При $x=-4,-2,-1,1,2,4$ соответственно
+\[
+  y=-\frac12,-1,-2,2,1,\frac12.
+\]
+Асимптоты:
+\[
+  x=0,\qquad y=0.
+\]
+\\[2mm]
+
+4 &
+Точка излома:
+\[
+  (2;0).
+\]
+Участок прямой $y=x-2$, соответствующий $x<2$, лежит ниже оси $Ox$
+и отражается вверх.
+\\[2mm]
+
+5 &
+\[
+  x^2-4x+3=(x-1)(x-3),
+\]
+поэтому корни: $1$ и $3$;
+\[
+  x_{\text{в}}=2.
+\]
+Исходная парабола ниже оси $Ox$ на промежутке $(1;3)$,
+и именно этот участок отражается вверх.
+\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\vfill
+
+{\small\color{textgray}
+Короткая самопроверка перед завершением работы:
+для параболы контролируйте минус в $b=-2ax_{\text{в}}$;
+для гиперболы --- запрет $x=0$;
+для $y=|f(x)|$ --- отсутствие точек с $y<0$.
+}
+
+\end{document}
