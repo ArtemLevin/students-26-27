@@ -49,7 +49,7 @@ h2{font-size:1.35rem;margin:.15rem 0 .7rem}
   min-height:42px;padding:.55rem .8rem;border:1px solid var(--border-strong);
   background:var(--surface-raised);border-radius:var(--radius-sm)
 }
-.mode[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.mode[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
 .stage{
   position:relative;margin-top:1rem;height:min(69vh,720px);min-height:500px;
   background:var(--surface-raised);border:1px solid var(--border-subtle);box-shadow:var(--shadow-low);
@@ -114,10 +114,10 @@ h2{font-size:1.35rem;margin:.15rem 0 .7rem}
       <p class="eyebrow">Векторы · рабочая поверхность</p>
       <h1 id="labTitle">Координаты видны как движение</h1>
       <p class="muted" id="subtitle">Перемещайте начало и конец вектора. Модель пересчитывает только формулы, разобранные на занятии.</p>
-      <div class="modebar" role="tablist" aria-label="Режим лаборатории">
-        <button class="mode" data-mode="coordinates" role="tab" aria-selected="true">Координаты</button>
-        <button class="mode" data-mode="sum" role="tab" aria-selected="false">Сумма</button>
-        <button class="mode" data-mode="angle" role="tab" aria-selected="false">Угол</button>
+      <div class="modebar" role="group" aria-label="Режим лаборатории">
+        <button class="mode" data-mode="coordinates" type="button" aria-pressed="true">Координаты</button>
+        <button class="mode" data-mode="sum" type="button" aria-pressed="false">Сумма</button>
+        <button class="mode" data-mode="angle" type="button" aria-pressed="false">Угол</button>
       </div>
     </div>
 
@@ -282,7 +282,7 @@ function renderMetrics(){
   box.innerHTML=html
 }
 function renderText(){
-  document.querySelectorAll(".mode").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.mode===S.mode))});
+  document.querySelectorAll(".mode").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.mode===S.mode))});
   if(S.mode==="coordinates"){
     document.getElementById("labTitle").textContent="Координаты видны как движение";
     document.getElementById("subtitle").textContent="Перемещайте начало и конец вектора. Координаты — это смещение от начала к концу.";
@@ -320,15 +320,15 @@ document.getElementById("reset").onclick=function(){resetMode();render()};
 document.getElementById("gridToggle").onclick=function(){S.grid=!S.grid;this.setAttribute("aria-pressed",String(S.grid));render()};
 
 var dragging=null;
-function startDrag(e){dragging=e.currentTarget.dataset.handle;e.currentTarget.setPointerCapture(e.pointerId)}
+function startDrag(e){dragging=e.currentTarget.dataset.handle;e.preventDefault()}
 plot.addEventListener("pointermove",function(e){
   if(!dragging)return;
   var r=plot.getBoundingClientRect(),px=(e.clientX-r.left)/r.width*W,py=(e.clientY-r.top)/r.height*H,x=gx(px),y=gy(py);
   if(dragging==="A"||dragging==="B")S[dragging]={x:x,y:y};else S[dragging]={x:x,y:y};
   render()
 });
-plot.addEventListener("pointerup",function(){dragging=null});
-plot.addEventListener("pointercancel",function(){dragging=null});
+window.addEventListener("pointerup",function(){dragging=null});
+window.addEventListener("pointercancel",function(){dragging=null});
 function handleKey(e){
   var key=e.currentTarget.dataset.handle,dx=0,dy=0;
   if(e.key==="ArrowLeft")dx=-1;if(e.key==="ArrowRight")dx=1;if(e.key==="ArrowUp")dy=1;if(e.key==="ArrowDown")dy=-1;
