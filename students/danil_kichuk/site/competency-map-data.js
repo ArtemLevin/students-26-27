@@ -63,7 +63,7 @@ for (const [id, cfg] of Object.entries(LESSON_250926)) {
   item.level = cfg.level;
   item.repeat = false;
   item.evidence = [{ text: cfg.evidence + ' Материал: занятие 25.09.26 «Степени и показательные уравнения».' }];
-  item.material = { href: '../pdf_docs/25.09.26.pdf', label: 'Открыть PDF занятия →' };
+  item.material = { href: '25.09.26.html', label: 'Открыть интерактивное занятие →' };
 }
 
 window.COMPETENCY_MAP_DATA={

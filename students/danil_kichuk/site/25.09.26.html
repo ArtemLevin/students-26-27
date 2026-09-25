@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивное занятие Даниила Кичука: степени, свойства степеней, корни и простейшие показательные уравнения.">
+<title>Степени и показательные уравнения · Даниил Кичук</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23287f7a'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-size='30' font-family='Arial' fill='white'%3Ea%5En%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  color-scheme:light;
+  --surface-page:#f4efe6;
+  --surface-raised:#fffaf2;
+  --surface-soft:#ece4d8;
+  --surface-ink:#172b46;
+  --text-primary:#172b46;
+  --text-secondary:#657184;
+  --text-inverse:#fffaf2;
+  --border-subtle:#d7cfc3;
+  --border-strong:#9aa5ad;
+  --accent:#287f7a;
+  --accent-hover:#1d6965;
+  --accent-soft:#d7ebe6;
+  --success:#47735f;
+  --danger:#9b5148;
+  --warning:#a66c2b;
+  --focus-ring:#0b6f8a;
+  --shadow-low:0 10px 28px rgba(33,48,68,.08);
+  --shadow-high:0 26px 70px rgba(33,48,68,.16);
+  --radius-sm:.5rem;
+  --radius-md:1rem;
+  --radius-lg:1.6rem;
+  --space-1:.35rem;
+  --space-2:.65rem;
+  --space-3:1rem;
+  --space-4:1.5rem;
+  --space-5:2.25rem;
+  --space-6:3.4rem;
+  --motion-fast:140ms;
+  --motion-normal:240ms;
+  --formula-bg:#eef4f1;
+  --rail:#b8ccc6;
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --surface-page:#0f1d31;
+  --surface-raised:#172a43;
+  --surface-soft:#1d334e;
+  --surface-ink:#f1eadf;
+  --text-primary:#f1eadf;
+  --text-secondary:#aebbc9;
+  --text-inverse:#0f1d31;
+  --border-subtle:#30445e;
+  --border-strong:#66788d;
+  --accent:#80cfc2;
+  --accent-hover:#a4e3d8;
+  --accent-soft:#234c4d;
+  --success:#86b29a;
+  --danger:#dc8177;
+  --warning:#e0ae6b;
+  --focus-ring:#8bd8ec;
+  --shadow-low:0 10px 30px rgba(0,0,0,.2);
+  --shadow-high:0 28px 70px rgba(0,0,0,.35);
+  --formula-bg:#132a35;
+  --rail:#355d62;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    linear-gradient(90deg,transparent 0,transparent calc(50% - 1px),color-mix(in srgb,var(--border-subtle) 32%,transparent) 50%,transparent calc(50% + 1px)),
+    var(--surface-page);
+  color:var(--text-primary);
+  font:16px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+button,input{font:inherit}
+button,a{color:inherit}
+a{text-underline-offset:.18em}
+button{cursor:pointer}
+math{font-family:"Cambria Math","STIX Two Math",serif;font-size:1.08em}
+.skip{
+  position:fixed;left:1rem;top:.6rem;z-index:99;padding:.65rem .9rem;
+  background:var(--surface-raised);border:1px solid var(--border-strong);border-radius:var(--radius-sm);
+  transform:translateY(-160%);transition:transform var(--motion-fast)
+}
+.skip:focus{transform:none}
+.topbar{
+  position:sticky;top:0;z-index:30;
+  display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);
+  padding:.75rem clamp(1rem,4vw,3rem);
+  background:color-mix(in srgb,var(--surface-page) 90%,transparent);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border-subtle)
+}
+.topbar nav{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:flex-end}
+.brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;min-width:max-content}
+.brand-mark{
+  display:grid;place-items:center;width:2.15rem;height:2.15rem;border:1px solid var(--accent);
+  border-radius:50%;color:var(--accent);font-weight:800
+}
+.brand strong,.brand small{display:block}
+.brand small{color:var(--text-secondary);font-size:.73rem}
+.btn,.icon-btn{
+  min-height:2.75rem;border:1px solid var(--border-subtle);background:var(--surface-raised);
+  border-radius:var(--radius-sm);padding:.62rem .9rem;text-decoration:none;
+  display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+  transition:border-color var(--motion-fast),background var(--motion-fast),transform var(--motion-fast)
+}
+.btn:hover,.icon-btn:hover{border-color:var(--accent);background:var(--accent-soft)}
+.btn:active,.icon-btn:active{transform:translateY(1px)}
+.icon-btn{width:2.75rem;padding:0}
+.primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse);font-weight:750}
+.primary:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.wrap{width:min(1180px,calc(100% - clamp(1.25rem,5vw,4.5rem)));margin:auto}
+.hero{
+  min-height:82vh;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(18rem,.65fr);
+  align-items:end;gap:clamp(2rem,7vw,8rem);
+  padding:clamp(3rem,9vw,8rem) 0 clamp(2.5rem,6vw,5rem);
+  border-bottom:1px solid var(--border-strong);
+  position:relative
+}
+.hero::after{
+  content:"";position:absolute;right:2%;top:12%;width:min(34vw,27rem);aspect-ratio:1;
+  border:1px solid var(--rail);border-radius:50%;opacity:.48;pointer-events:none
+}
+.hero::before{
+  content:"aⁿ";position:absolute;right:8%;top:18%;color:color-mix(in srgb,var(--accent) 16%,transparent);
+  font:600 min(22vw,15rem)/1 Georgia,serif;letter-spacing:-.08em;pointer-events:none
+}
+.kicker{
+  margin:0 0 .8rem;color:var(--accent);font:800 .72rem/1.25 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.13em;text-transform:uppercase
+}
+h1,h2,h3,p{overflow-wrap:anywhere}
+h1{
+  margin:0;max-width:9.5ch;
+  font:500 clamp(3.5rem,8.8vw,8.3rem)/.83 Georgia,"Times New Roman",serif;
+  letter-spacing:-.065em;text-wrap:balance
+}
+.hero-lead{max-width:46rem;margin:1.4rem 0 0;color:var(--text-secondary);font-size:clamp(1rem,1.5vw,1.25rem)}
+.hero-folio{
+  position:relative;z-index:2;padding:1.2rem 0 1.2rem 1.45rem;border-left:1px solid var(--border-strong)
+}
+.hero-folio .date{display:block;color:var(--accent);font:500 clamp(3.4rem,7vw,6.4rem)/.85 Georgia,serif;letter-spacing:-.055em}
+.hero-folio dl{margin:1.7rem 0 0}
+.hero-folio div{padding:.7rem 0;border-top:1px solid var(--border-subtle)}
+.hero-folio dt{color:var(--text-secondary);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}
+.hero-folio dd{margin:.18rem 0 0;font-weight:650}
+.core-idea{
+  grid-column:1/-1;margin-top:clamp(1rem,4vw,3rem);padding:1.35rem 0;
+  border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);
+  display:grid;grid-template-columns:minmax(10rem,.45fr) minmax(0,1.55fr);gap:2rem;align-items:center
+}
+.core-idea p{margin:0;color:var(--text-secondary)}
+.core-formula{
+  margin:0;padding:1.1rem 1.3rem;background:var(--formula-bg);border-left:4px solid var(--accent);
+  font-weight:760;font-size:clamp(1.2rem,2.5vw,2rem)
+}
+.route{
+  margin:0 calc(50% - 50vw);padding:0 max(clamp(1rem,4vw,2rem),calc((100vw - 1180px)/2));
+  border-bottom:1px solid var(--border-subtle);background:var(--surface-soft)
+}
+.route ol{display:flex;gap:0;margin:0;padding:0;list-style:none;overflow-x:auto}
+.route a{
+  min-width:max-content;padding:1rem 1.05rem;text-decoration:none;color:var(--text-secondary);
+  border-right:1px solid var(--border-subtle);display:block
+}
+.route a:hover,.route a:focus-visible{color:var(--text-primary);background:var(--surface-raised)}
+main section.lesson-section{padding:clamp(3.5rem,8vw,7rem) 0;border-bottom:1px solid var(--border-subtle)}
+.section-grid{display:grid;grid-template-columns:minmax(13rem,.46fr) minmax(0,1.54fr);gap:clamp(2rem,6vw,6rem)}
+.section-note{position:sticky;top:5.5rem;align-self:start}
+.section-number{display:block;color:var(--accent);font:700 .75rem ui-monospace,SFMono-Regular,Consolas,monospace}
+.section-note h2{margin:.4rem 0 .7rem;font:500 clamp(2rem,4vw,3.4rem)/1 Georgia,serif;letter-spacing:-.035em}
+.section-note p{margin:0;color:var(--text-secondary)}
+.prose{min-width:0}
+.prose>p:first-child{margin-top:0}
+.workspace{
+  position:relative;margin:1.5rem 0;padding:clamp(1.2rem,3vw,2.2rem);
+  background:
+    repeating-linear-gradient(180deg,transparent 0,transparent 2.05rem,color-mix(in srgb,var(--border-subtle) 38%,transparent) 2.08rem),
+    var(--surface-raised);
+  border:1px solid var(--border-subtle);box-shadow:var(--shadow-low);border-radius:var(--radius-md)
+}
+.workspace::before{
+  content:"";position:absolute;left:2rem;top:0;bottom:0;width:1px;background:color-mix(in srgb,var(--danger) 28%,transparent)
+}
+.workspace>*{position:relative}
+.formula{
+  padding:1rem 1.1rem;margin:1rem 0;background:var(--formula-bg);border-radius:var(--radius-sm);overflow-x:auto;
+  text-align:center
+}
+.rule-list{display:grid;gap:.75rem;margin:1.4rem 0}
+.rule{
+  display:grid;grid-template-columns:minmax(12rem,.7fr) minmax(0,1.3fr);gap:1rem;
+  align-items:center;padding:.8rem 0;border-top:1px solid var(--border-subtle)
+}
+.rule:first-child{border-top:1px solid var(--border-strong)}
+.rule p{margin:0;color:var(--text-secondary)}
+.transformer{
+  border:1px solid var(--border-subtle);border-radius:var(--radius-md);background:var(--surface-raised);
+  overflow:hidden;margin-top:1.5rem
+}
+.transformer-tabs{display:flex;flex-wrap:wrap;border-bottom:1px solid var(--border-subtle)}
+.transformer-tabs button{
+  flex:1 1 10rem;min-height:3rem;border:0;border-right:1px solid var(--border-subtle);
+  background:transparent;padding:.75rem 1rem;font-weight:700
+}
+.transformer-tabs button[aria-selected="true"]{background:var(--accent-soft);color:var(--accent-hover)}
+.transformer-panel{padding:clamp(1.3rem,4vw,2.5rem)}
+.transformer-panel[hidden]{display:none}
+.transformer-panel h3{margin-top:0;font:600 1.4rem Georgia,serif}
+.stepper{
+  margin:1.5rem 0;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong)
+}
+.step{
+  display:none;padding:1.15rem 0;border-top:1px solid var(--border-subtle)
+}
+.step:first-child{border-top:0}
+.step.active,.step.revealed{display:block}
+.step strong{display:block;margin-bottom:.35rem;color:var(--accent)}
+.step p{margin:.25rem 0}
+.stepper-controls{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:1rem}
+.stepper-status{margin:.8rem 0 0;color:var(--text-secondary);font-size:.9rem}
+.callout{
+  margin:1.4rem 0;padding:1rem 1.15rem;border-left:4px solid var(--warning);
+  background:color-mix(in srgb,var(--warning) 9%,var(--surface-raised));border-radius:0 var(--radius-sm) var(--radius-sm) 0
+}
+.callout.danger{border-left-color:var(--danger);background:color-mix(in srgb,var(--danger) 9%,var(--surface-raised))}
+.callout.good{border-left-color:var(--success);background:color-mix(in srgb,var(--success) 9%,var(--surface-raised))}
+.task-list{counter-reset:task;display:grid;gap:1rem}
+.task{
+  counter-increment:task;padding:1rem 0;border-top:1px solid var(--border-subtle)
+}
+.task::before{
+  content:counter(task,decimal-leading-zero);display:block;color:var(--accent);
+  font:750 .75rem ui-monospace,SFMono-Regular,Consolas,monospace;margin-bottom:.4rem
+}
+.task p{margin:.2rem 0}
+.answer{
+  margin-top:.8rem;padding:.8rem 1rem;background:var(--formula-bg);border-radius:var(--radius-sm)
+}
+.answer[hidden]{display:none}
+.practice-controls{display:flex;gap:.6rem;flex-wrap:wrap;margin:1.1rem 0 1.6rem}
+.quiz{
+  margin-top:2rem;padding:1.25rem;border:1px solid var(--border-strong);border-radius:var(--radius-md);background:var(--surface-raised)
+}
+.quiz h3{margin:.1rem 0 .7rem}
+.quiz-actions{display:flex;gap:.65rem;flex-wrap:wrap}
+.quiz-feedback{min-height:1.7rem;margin:.9rem 0 0;font-weight:650}
+.quiz-feedback.good{color:var(--success)}
+.quiz-feedback.bad{color:var(--danger)}
+.checklist{display:grid;gap:.65rem;margin-top:1rem}
+.check{
+  display:flex;gap:.75rem;align-items:flex-start;padding:.8rem 0;border-top:1px solid var(--border-subtle)
+}
+.check input{width:1.2rem;height:1.2rem;margin-top:.22rem;accent-color:var(--accent)}
+.progress-line{height:.55rem;background:var(--surface-soft);border-radius:99px;overflow:hidden;margin:1rem 0 .5rem}
+.progress-line span{display:block;height:100%;width:0;background:var(--accent);transition:width var(--motion-normal)}
+.poster{
+  margin-top:2rem;display:grid;grid-template-columns:minmax(0,1fr) minmax(15rem,.55fr);gap:1.2rem;align-items:center
+}
+.poster button{border:0;background:transparent;padding:0;text-align:left}
+.poster img{
+  display:block;width:100%;height:auto;max-height:32rem;object-fit:contain;border:1px solid var(--border-subtle);
+  background:var(--surface-raised);border-radius:var(--radius-md);box-shadow:var(--shadow-low)
+}
+.poster figcaption{color:var(--text-secondary);font-size:.92rem}
+footer{padding:2rem 0 4rem;display:flex;justify-content:space-between;gap:1rem;color:var(--text-secondary);font-size:.88rem}
+dialog{
+  width:min(92vw,1100px);max-height:90vh;border:1px solid var(--border-strong);border-radius:var(--radius-lg);
+  padding:0;background:var(--surface-raised);color:var(--text-primary);box-shadow:var(--shadow-high)
+}
+dialog::backdrop{background:rgba(10,20,32,.72)}
+.dialog-head{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.2rem;border-bottom:1px solid var(--border-subtle)}
+.dialog-head h2{margin:0;font:600 1.35rem Georgia,serif}
+.dialog-body{padding:1rem;overflow:auto}
+.dialog-body img{display:block;width:100%;height:auto;max-height:72vh;object-fit:contain}
+@media(max-width:900px){
+  .hero,.section-grid,.core-idea,.poster{grid-template-columns:1fr}
+  .hero{min-height:auto;padding-top:4.5rem}
+  .hero::after{width:50vw;top:10%;opacity:.3}
+  .hero-folio{border-left:0;border-top:1px solid var(--border-strong);padding:1.2rem 0}
+  .section-note{position:static}
+  .workspace::before{left:1rem}
+  .rule{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  body{font-size:15px}
+  .topbar{align-items:flex-start}
+  .brand span:last-child{display:none}
+  .topbar nav{gap:.35rem}
+  .topbar .btn{padding:.55rem .65rem;min-height:2.6rem}
+  .topbar .optional-label{display:none}
+  h1{font-size:clamp(3rem,18vw,5rem)}
+  .hero::before{font-size:32vw;right:2%;top:11%}
+  .hero::after{width:72vw;right:-24%}
+  .route{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
+  .workspace{padding:1rem}
+  .workspace::before{display:none}
+  .transformer-tabs{display:grid;grid-template-columns:1fr}
+  .transformer-tabs button{border-right:0;border-bottom:1px solid var(--border-subtle)}
+  footer{flex-direction:column}
+}
+@media(max-width:360px){
+  .topbar{padding:.6rem .7rem}
+  .wrap{width:min(100% - 1rem,1180px)}
+  .btn{font-size:.88rem}
+}
+@media(prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
+@media print{
+  :root,html[data-theme="dark"]{
+    --surface-page:#fff;--surface-raised:#fff;--surface-soft:#f4f4f4;--text-primary:#111;
+    --text-secondary:#444;--border-subtle:#bbb;--border-strong:#888;--accent:#155f5b;--formula-bg:#f4f7f6
+  }
+  body{background:#fff}
+  .topbar,.route,.practice-controls,.stepper-controls,.quiz-actions,.poster button{display:none!important}
+  .wrap{width:100%;max-width:none}
+  .hero{min-height:auto;padding:1.5rem 0 2rem}
+  .hero::before,.hero::after{display:none}
+  main section.lesson-section{padding:2rem 0;break-inside:auto}
+  .section-note{position:static}
+  .section-grid{grid-template-columns:1fr}
+  .step{display:block!important}
+  .answer{display:block!important}
+  .workspace,.quiz{box-shadow:none}
+  .poster{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">К содержанию</a>
+<header class="topbar">
+  <a class="brand" href="index.html">
+    <span class="brand-mark" aria-hidden="true">Σ</span>
+    <span><strong>Даниил Кичук</strong><small>ЕГЭ · профильная математика</small></span>
+  </a>
+  <nav aria-label="Действия с материалом">
+    <a class="btn" href="index.html">Навигатор</a>
+    <a class="btn primary" href="../pdf_docs/25.09.26.pdf">Скачать пособие</a>
+    <a class="btn" href="../tex_docs/25.09.26.tex"><span class="optional-label">Открыть </span>TeX</a>
+    <button class="icon-btn" id="printBtn" type="button" aria-label="Печать">P</button>
+    <button class="icon-btn" id="themeBtn" type="button" aria-label="Переключить тему" aria-pressed="false">◐</button>
+  </nav>
+</header>
+
+<div class="wrap">
+<header class="hero">
+  <div>
+    <p class="kicker">Рабочая тетрадь · занятие 25.09.2026</p>
+    <h1>Степени и показательные уравнения</h1>
+    <p class="hero-lead">Главный маршрут занятия: распознать степенную структуру, привести выражение к удобному основанию, применить свойства степеней и только затем выполнять вычисление или решать уравнение.</p>
+  </div>
+  <aside class="hero-folio" aria-label="Сведения о занятии">
+    <span class="date">25.09</span>
+    <dl>
+      <div><dt>Ученик</dt><dd>Даниил Кичук</dd></div>
+      <div><dt>Программа</dt><dd>ЕГЭ · профильная математика</dd></div>
+      <div><dt>Преподаватель</dt><dd>Лёвин Артём Александрович</dd></div>
+    </dl>
+  </aside>
+  <div class="core-idea">
+    <p><strong>Главная идея.</strong><br>Перед формулами нужно увидеть, во что можно превратить исходное выражение.</p>
+    <p class="core-formula">Привести выражение к степенному виду.</p>
+  </div>
+</header>
+
+<nav class="route" aria-label="Маршрут занятия">
+  <ol>
+    <li><a href="#direction">01 · Направление</a></li>
+    <li><a href="#rules">02 · Свойства</a></li>
+    <li><a href="#factor">03 · Разложение</a></li>
+    <li><a href="#roots">04 · Корни и дроби</a></li>
+    <li><a href="#equations">05 · Уравнения</a></li>
+    <li><a href="#practice">06 · Практика</a></li>
+    <li><a href="#check">07 · Самопроверка</a></li>
+  </ol>
+</nav>
+
+<main id="content">
+<section class="lesson-section" id="direction">
+  <div class="section-grid">
+    <header class="section-note">
+      <span class="section-number">01 / 07</span>
+      <h2>Сначала ищем направление</h2>
+      <p>Составные числа, корни и дроби часто скрывают удобную степенную запись.</p>
+    </header>
+    <div class="prose">
+      <p>Первый вопрос перед преобразованием: <strong>можно ли переписать объект в виде степени?</strong> На занятии использовались три характерных сигнала.</p>
+      <div class="transformer" data-transformer>
+        <div class="transformer-tabs" role="tablist" aria-label="Три способа увидеть степенную форму">
+          <button id="tab-number" role="tab" aria-selected="true" aria-controls="panel-number" tabindex="0" data-tab="number">Составное число</button>
+          <button id="tab-root" role="tab" aria-selected="false" aria-controls="panel-root" tabindex="-1" data-tab="root">Корень</button>
+          <button id="tab-fraction" role="tab" aria-selected="false" aria-controls="panel-fraction" tabindex="-1" data-tab="fraction">Дробь</button>
+        </div>
+        <div class="transformer-panel" id="panel-number" role="tabpanel" aria-labelledby="tab-number" data-panel="number">
+          <h3>Составное число раскладываем</h3>
+          <div class="formula"><math display="block"><mrow><mn>8</mn><mo>=</mo><msup><mn>2</mn><mn>3</mn></msup></mrow></math></div>
+          <p>Так становится видно основание 2, с которым можно дальше применять свойства степеней.</p>
+        </div>
+        <div class="transformer-panel" id="panel-root" role="tabpanel" aria-labelledby="tab-root" data-panel="root" hidden>
+          <h3>Корень переводим в дробный показатель</h3>
+          <div class="formula"><math display="block"><mrow><msqrt><mn>8</mn></msqrt><mo>=</mo><msup><mn>2</mn><mfrac><mn>3</mn><mn>2</mn></mfrac></msup></mrow></math></div>
+          <p>Корень становится степенью; показатель 3 делится на 2.</p>
+        </div>
+        <div class="transformer-panel" id="panel-fraction" role="tabpanel" aria-labelledby="tab-fraction" data-panel="fraction" hidden>
+          <h3>Обратную величину переводим в отрицательную степень</h3>
+          <div class="formula"><math display="block"><mrow><mfrac><mn>1</mn><mn>32</mn></mfrac><mo>=</mo><msup><mn>2</mn><mrow><mo>−</mo><mn>5</mn></mrow></msup></mrow></math></div>
+          <p>Отрицательный показатель фиксирует переход к обратной степени.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lesson-section" id="rules">
+  <div class="section-grid">
+    <header class="section-note">
+      <span class="section-number">02 / 07</span>
+      <h2>Свойства степеней</h2>
+      <p>Формулы начинают работать после проверки основания и условий применимости.</p>
+    </header>
+    <div class="prose">
+      <div class="rule-list">
+        <div class="rule">
+          <div class="formula"><math><mrow><msup><mi>a</mi><mi>m</mi></msup><mo>·</mo><msup><mi>a</mi><mi>n</mi></msup><mo>=</mo><msup><mi>a</mi><mrow><mi>m</mi><mo>+</mo><mi>n</mi></mrow></msup></mrow></math></div>
+          <p>При умножении степеней <strong>одного основания</strong> показатели складываются.</p>
+        </div>
+        <div class="rule">
+          <div class="formula"><math><mrow><mfrac><msup><mi>a</mi><mi>m</mi></msup><msup><mi>a</mi><mi>n</mi></msup></mfrac><mo>=</mo><msup><mi>a</mi><mrow><mi>m</mi><mo>−</mo><mi>n</mi></mrow></msup></mrow></math></div>
+          <p>Для частного требуется <math><mrow><mi>a</mi><mo>≠</mo><mn>0</mn></mrow></math>.</p>
+        </div>
+        <div class="rule">
+          <div class="formula"><math><mrow><msup><mrow><mo>(</mo><msup><mi>a</mi><mi>m</mi></msup><mo>)</mo></mrow><mi>n</mi></msup><mo>=</mo><msup><mi>a</mi><mrow><mi>m</mi><mi>n</mi></mrow></msup></mrow></math></div>
+          <p>При возведении степени в степень показатели перемножаются.</p>
+        </div>
+        <div class="rule">
+          <div class="formula"><math><mrow><msup><mrow><mo>(</mo><mi>a</mi><mi>b</mi><mo>)</mo></mrow><mi>n</mi></msup><mo>=</mo><msup><mi>a</mi><mi>n</mi></msup><msup><mi>b</mi><mi>n</mi></msup></mrow></math></div>
+          <p>Степень произведения распределяется по множителям.</p>
+        </div>
+        <div class="rule">
+          <div class="formula"><math><mrow><msup><mrow><mo>(</mo><mfrac><mi>a</mi><mi>b</mi></mfrac><mo>)</mo></mrow><mi>n</mi></msup><mo>=</mo><mfrac><msup><mi>a</mi><mi>n</mi></msup><msup><mi>b</mi><mi>n</mi></msup></mfrac></mrow></math></div>
+          <p>Для дроби требуется <math><mrow><mi>b</mi><mo>≠</mo><mn>0</mn></mrow></math>.</p>
+        </div>
+        <div class="rule">
+          <div class="formula"><math><mrow><msup><mi>a</mi><mrow><mo>−</mo><mi>n</mi></mrow></msup><mo>=</mo><mfrac><mn>1</mn><msup><mi>a</mi><mi>n</mi></msup></mfrac></mrow></math></div>
+          <p>Отрицательная степень задаёт обратную величину; <math><mrow><mi>a</mi><mo>≠</mo><mn>0</mn></mrow></math>.</p>
+        </div>
+        <div class="rule">
+          <div class="formula"><math><mrow><mroot><msup><mi>a</mi><mi>m</mi></msup><mi>n</mi></mroot><mo>=</mo><msup><mi>a</mi><mfrac><mi>m</mi><mi>n</mi></mfrac></msup></mrow></math></div>
+          <p>Главный ориентир занятия: внутренняя степень делится на внешнюю.</p>
+        </div>
+      </div>
+      <div class="callout">Перед каждым преобразованием полезно задать вопрос: <strong>какую формулу я сейчас могу применить и почему?</strong></div>
+    </div>
+  </div>
+</section>
+
+<section class="lesson-section" id="factor">
+  <div class="section-grid">
+    <header class="section-note">
+      <span class="section-number">03 / 07</span>
+      <h2>Разложение составного числа</h2>
+      <p>Это подготовительный инструмент: он открывает нужное основание для дальнейших степенных преобразований.</p>
+    </header>
+    <div class="prose">
+      <p><strong>Простое число</strong> имеет ровно два делителя: 1 и само число. Число 1 не относится ни к простым, ни к составным.</p>
+      <div class="workspace">
+        <h3>Разложение числа 72</h3>
+        <div class="stepper" data-stepper="factor">
+          <div class="step active" data-step>
+            <strong>Шаг 1</strong>
+            <p>Начинаем с самого маленького делителя:</p>
+            <div class="formula"><math display="block"><mrow><mn>72</mn><mo>=</mo><mn>2</mn><mo>·</mo><mn>36</mn></mrow></math></div>
+          </div>
+          <div class="step" data-step>
+            <strong>Шаг 2</strong>
+            <div class="formula"><math display="block"><mrow><mn>72</mn><mo>=</mo><mn>2</mn><mo>·</mo><mn>2</mn><mo>·</mo><mn>18</mn></mrow></math></div>
+          </div>
+          <div class="step" data-step>
+            <strong>Шаг 3</strong>
+            <div class="formula"><math display="block"><mrow><mn>72</mn><mo>=</mo><mn>2</mn><mo>·</mo><mn>2</mn><mo>·</mo><mn>2</mn><mo>·</mo><mn>9</mn></mrow></math></div>
+          </div>
+          <div class="step" data-step>
+            <strong>Шаг 4</strong>
+            <p>Собираем одинаковые простые множители в степени:</p>
+            <div class="formula"><math display="block"><mrow><mn>72</mn><mo>=</mo><msup><mn>2</mn><mn>3</mn></msup><mo>·</mo><msup><mn>3</mn><mn>2</mn></msup></mrow></math></div>
+          </div>
+        </div>
+        <div class="stepper-controls" data-controls="factor">
+          <button class="btn" type="button" data-act="prev">Назад</button>
+          <button class="btn primary" type="button" data-act="next">Следующий шаг</button>
+          <button class="btn" type="button" data-act="all">Показать всё</button>
+          <button class="btn" type="button" data-act="reset">Сначала</button>
+        </div>
+        <p class="stepper-status" data-status="factor" aria-live="polite">Шаг 1 из 4</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lesson-section" id="roots">
+  <div class="section-grid">
+    <header class="section-note">
+      <span class="section-number">04 / 07</span>
+      <h2>Корни, дроби и вычисления</h2>
+      <p>Одна и та же стратегия: перевести запись к степеням, затем применить свойства.</p>
+    </header>
+    <div class="prose">
+      <h3>Корень как степень</h3>
+      <div class="formula"><math display="block"><mrow><msqrt><mn>8</mn></msqrt><mo>=</mo><msqrt><msup><mn>2</mn><mn>3</mn></msup></msqrt><mo>=</mo><msup><mrow><mo>(</mo><msup><mn>2</mn><mn>3</mn></msup><mo>)</mo></mrow><mfrac><mn>1</mn><mn>2</mn></mfrac></msup><mo>=</mo><msup><mn>2</mn><mfrac><mn>3</mn><mn>2</mn></mfrac></msup></mrow></math></div>
+      <div class="formula"><math display="block"><mrow><mroot><mn>81</mn><mn>4</mn></mroot><mo>=</mo><mroot><msup><mn>3</mn><mn>4</mn></msup><mn>4</mn></mroot><mo>=</mo><mn>3</mn></mrow></math></div>
+
+      <h3>Дробь как отрицательная степень</h3>
+      <div class="formula"><math display="block"><mrow><mfrac><mn>1</mn><mn>64</mn></mfrac><mo>=</mo><mfrac><mn>1</mn><msup><mn>2</mn><mn>6</mn></msup></mfrac><mo>=</mo><msup><mn>2</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow></math></div>
+
+      <h3>Типовой порядок вычисления</h3>
+      <div class="workspace">
+        <div class="formula"><math display="block"><mrow><mfrac><msup><mn>5</mn><mn>0.36</mn></msup><msup><mn>25</mn><mn>0.32</mn></msup></mfrac></mrow></math></div>
+        <ol>
+          <li>Привести числа к одному основанию.</li>
+          <li>Применить свойства степеней.</li>
+          <li>Выполнить вычисления.</li>
+        </ol>
+        <div class="formula"><math display="block"><mrow><mfrac><msup><mn>5</mn><mn>0.36</mn></msup><msup><mrow><mo>(</mo><msup><mn>5</mn><mn>2</mn></msup><mo>)</mo></mrow><mn>0.32</mn></msup></mfrac><mo>=</mo><mfrac><msup><mn>5</mn><mn>0.36</mn></msup><msup><mn>5</mn><mn>0.64</mn></msup></mfrac><mo>=</mo><msup><mn>5</mn><mrow><mo>−</mo><mn>0.28</mn></mrow></msup></mrow></math></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lesson-section" id="equations">
+  <div class="section-grid">
+    <header class="section-note">
+      <span class="section-number">05 / 07</span>
+      <h2>Показательные уравнения</h2>
+      <p>Цель — получить одинаковые основания, после чего сравнить показатели.</p>
+    </header>
+    <div class="prose">
+      <div class="formula"><math display="block"><mrow><msup><mi>a</mi><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow></msup><mo>=</mo><msup><mi>a</mi><mrow><mi>g</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow></msup></mrow></math></div>
+      <div class="workspace">
+        <h3>Пример из занятия</h3>
+        <div class="stepper" data-stepper="equation">
+          <div class="step active" data-step>
+            <strong>Шаг 1 · увидеть основание</strong>
+            <div class="formula"><math display="block"><mrow><msup><mn>2</mn><mrow><mi>x</mi><mo>+</mo><mn>3</mn></mrow></msup><mo>=</mo><mn>8</mn></mrow></math></div>
+          </div>
+          <div class="step" data-step>
+            <strong>Шаг 2 · переписать правую часть</strong>
+            <div class="formula"><math display="block"><mrow><mn>8</mn><mo>=</mo><msup><mn>2</mn><mn>3</mn></msup></mrow></math></div>
+          </div>
+          <div class="step" data-step>
+            <strong>Шаг 3 · сравнить показатели</strong>
+            <div class="formula"><math display="block"><mrow><msup><mn>2</mn><mrow><mi>x</mi><mo>+</mo><mn>3</mn></mrow></msup><mo>=</mo><msup><mn>2</mn><mn>3</mn></msup><mo>⇒</mo><mi>x</mi><mo>+</mo><mn>3</mn><mo>=</mo><mn>3</mn></mrow></math></div>
+          </div>
+          <div class="step" data-step>
+            <strong>Шаг 4 · получить ответ</strong>
+            <div class="formula"><math display="block"><mrow><mi>x</mi><mo>=</mo><mn>0</mn></mrow></math></div>
+          </div>
+        </div>
+        <div class="stepper-controls" data-controls="equation">
+          <button class="btn" type="button" data-act="prev">Назад</button>
+          <button class="btn primary" type="button" data-act="next">Следующий шаг</button>
+          <button class="btn" type="button" data-act="all">Показать всё</button>
+          <button class="btn" type="button" data-act="reset">Сначала</button>
+        </div>
+        <p class="stepper-status" data-status="equation" aria-live="polite">Шаг 1 из 4</p>
+      </div>
+
+      <div class="callout danger">
+        <strong>Когда нельзя сразу сравнивать показатели.</strong>
+        В записи <math><mrow><msup><mn>2</mn><mi>x</mi></msup><mo>=</mo><msup><mn>3</mn><mi>x</mi></msup></mrow></math> основания разные, поэтому переход к сравнению показателей недопустим.
+      </div>
+
+      <div class="quiz" id="quiz">
+        <h3>Мини-квиз</h3>
+        <p>Можно ли из равенства <math><mrow><msup><mn>2</mn><mi>x</mi></msup><mo>=</mo><msup><mn>3</mn><mi>x</mi></msup></mrow></math> сразу сделать вывод «показатели равны»?</p>
+        <div class="quiz-actions">
+          <button class="btn" type="button" data-answer="yes">Да</button>
+          <button class="btn" type="button" data-answer="no">Нет</button>
+          <button class="btn" type="button" id="quizReset">Сбросить</button>
+        </div>
+        <p class="quiz-feedback" id="quizFeedback" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lesson-section" id="practice">
+  <div class="section-grid">
+    <header class="section-note">
+      <span class="section-number">06 / 07</span>
+      <h2>Тренировочный блок</h2>
+      <p>Десять заданий из пособия. Ответы можно раскрыть по одному или сразу все.</p>
+    </header>
+    <div class="prose">
+      <div class="practice-controls">
+        <button class="btn primary" type="button" id="showAllAnswers">Показать все ответы</button>
+        <button class="btn" type="button" id="hideAllAnswers">Скрыть ответы</button>
+      </div>
+      <div class="task-list">
+        <article class="task">
+          <p>Представьте в степенном виде:</p>
+          <div class="formula"><math><msqrt><mn>32</mn></msqrt></math></div>
+          <button class="btn answer-btn" type="button" aria-expanded="false" aria-controls="answer1">Показать ответ</button>
+          <div class="answer" id="answer1" hidden><math><msup><mn>2</mn><mfrac><mn>5</mn><mn>2</mn></mfrac></msup></math></div>
+        </article>
+        <article class="task">
+          <p>Представьте в степенном виде:</p>
+          <div class="formula"><math><mfrac><mn>1</mn><mn>128</mn></mfrac></math></div>
+          <button class="btn answer-btn" type="button" aria-expanded="false" aria-controls="answer2">Показать ответ</button>
+          <div class="answer" id="answer2" hidden><math><msup><mn>2</mn><mrow><mo>−</mo><mn>7</mn></mrow></msup></math></div>
+        </article>
+        <article class="task">
+          <p>Разложите на простые множители:</p>
+          <div class="formula"><math><mn>108</mn></math></div>
+          <button class="btn answer-btn" type="button" aria-expanded="false" aria-controls="answer3">Показать ответ</button>
+          <div class="answer" id="answer3" hidden><math><mrow><mn>108</mn><mo>=</mo><msup><mn>2</mn><mn>2</mn></msup><mo>·</mo><msup><mn>3</mn><mn>3</mn></msup></mrow></math></div>
+        </article>
+        <article class="task">
+          <p>Представьте в степенном виде:</p>
+          <div class="formula"><math><mroot><mn>81</mn><mn>3</mn></mroot></math></div>
+          <button class="btn answer-btn" type="button" aria-expanded="false" aria-controls="answer4">Показать ответ</button>
+          <div class="answer" id="answer4" hidden><math><msup><mn>3</mn><mfrac><mn>4</mn><mn>3</mn></mfrac></msup></math></div>
+        </article>
+        <article class="task">
+          <p>Упростите:</p>
+          <div class="formula"><math><mfrac><msup><mn>3</mn><mn>7</mn></msup><msup><mn>3</mn><mn>4</mn></msup></mfrac></math></div>
+          <button class="btn answer-btn" type="button" aria-expanded="false" aria-controls="answer5">Показать ответ</button>
+          <div class="answer" id="answer5" hidden><math><mrow><msup><mn>3</mn><mn>3</mn></msup><mo>=</mo><mn>27</mn></mrow></math></div>
+        </article>
+        <article class="task">
+          <p>Вычислите:</p>
+          <div class="formula"><math><mfrac><msup><mn>2</mn><mfrac><mn>3</mn><mn>2</mn></mfrac></msup><msup><mn>2</mn><mfrac><mn>1</mn><mn>2</mn></mfrac></msup></mfrac></math></div>
+          <button class="btn answer-btn" type="button" aria-expanded="false" aria-controls="answer6">Показать ответ</button>
+          <div class="answer" id="answer6" hidden><math><mn>2</mn></math></div>
+        </article>
+        <article class="task">
+          <p>Решите уравнение:</p>
+          <div class="formula"><math><mrow><msup><mn>5</mn><mrow><mi>x</mi><mo>+</mo><mn>1</mn></mrow></msup><mo>=</mo><mn>125</mn></mrow></math></div>
+          <button class="btn answer-btn" type="button" aria-expanded="false" aria-controls="answer7">Показать ответ</button>
+          <div class="answer" id="answer7" hidden><math><mrow><mi>x</mi><mo>=</mo><mn>2</mn></mrow></math></div>
+        </article>
+        <article class="task">
+          <p>Решите уравнение:</p>
+          <div class="formula"><math><mrow><msup><mn>3</mn><mrow><mn>2</mn><mi>x</mi><mo>−</mo><mn>1</mn></mrow></msup><mo>=</mo><mn>27</mn></mrow></math></div>
+          <button class="btn answer-btn" type="button" aria-expanded="false" aria-controls="answer8">Показать ответ</button>
+          <div class="answer" id="answer8" hidden><math><mrow><mi>x</mi><mo>=</mo><mn>2</mn></mrow></math></div>
+        </article>
+        <article class="task">
+          <p>Упростите:</p>
+          <div class="formula"><math><mfrac><msup><mn>4</mn><mi>x</mi></msup><msup><mn>2</mn><mi>x</mi></msup></mfrac></math></div>
+          <button class="btn answer-btn" type="button" aria-expanded="false" aria-controls="answer9">Показать ответ</button>
+          <div class="answer" id="answer9" hidden><math><msup><mn>2</mn><mi>x</mi></msup></math></div>
+        </article>
+        <article class="task">
+          <p>Решите уравнение:</p>
+          <div class="formula"><math><mrow><msup><mn>2</mn><mrow><mi>x</mi><mo>+</mo><mn>2</mn></mrow></msup><mo>=</mo><mn>4</mn><msqrt><mn>2</mn></msqrt></mrow></math></div>
+          <button class="btn answer-btn" type="button" aria-expanded="false" aria-controls="answer10">Показать ответ</button>
+          <div class="answer" id="answer10" hidden><math><mrow><mi>x</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></mrow></math></div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lesson-section" id="check">
+  <div class="section-grid">
+    <header class="section-note">
+      <span class="section-number">07 / 07</span>
+      <h2>Самопроверка</h2>
+      <p>Отметьте только те действия, которые уже можете объяснить самостоятельно.</p>
+    </header>
+    <div class="prose">
+      <h3>Типичные ошибки занятия</h3>
+      <div class="callout danger">Складывать показатели при разных основаниях.</div>
+      <div class="callout danger">Забывать условия применения формул.</div>
+      <div class="callout danger">Неверно работать с отрицательной степенью.</div>
+      <div class="callout danger">Сокращать выражения без проверки нулей в знаменателе.</div>
+      <div class="callout danger">Терять скобки при переносах.</div>
+
+      <div class="workspace">
+        <h3>Что должно быть устойчиво после занятия</h3>
+        <div class="progress-line" aria-hidden="true"><span id="checkProgress"></span></div>
+        <p id="checkStatus" aria-live="polite">Отмечено: 0 из 8.</p>
+        <div class="checklist" id="checklist">
+          <label class="check"><input type="checkbox" data-check="0"> <span>Вижу, когда составное число удобно разложить на простые множители.</span></label>
+          <label class="check"><input type="checkbox" data-check="1"> <span>Применяю свойства степеней только при выполнении их условий.</span></label>
+          <label class="check"><input type="checkbox" data-check="2"> <span>Перевожу корень в степень с рациональным показателем.</span></label>
+          <label class="check"><input type="checkbox" data-check="3"> <span>Перевожу обратную величину в степень с отрицательным показателем.</span></label>
+          <label class="check"><input type="checkbox" data-check="4"> <span>Привожу числовые основания к одному основанию перед вычислением.</span></label>
+          <label class="check"><input type="checkbox" data-check="5"> <span>Решаю простейшее показательное уравнение через единое основание.</span></label>
+          <label class="check"><input type="checkbox" data-check="6"> <span>Не сравниваю показатели, если основания разные.</span></label>
+          <label class="check"><input type="checkbox" data-check="7"> <span>Перед преобразованием могу назвать формулу и объяснить, почему она применима.</span></label>
+        </div>
+        <button class="btn" type="button" id="resetChecks">Сбросить отметки</button>
+      </div>
+
+      <figure class="poster">
+        <button type="button" id="posterOpen" aria-label="Увеличить ментальную карту занятия">
+          <img src="../images/25.09.26.png" alt="Ментальная карта занятия о степенях и показательных уравнениях">
+        </button>
+        <figcaption>
+          <strong>Ментальная карта занятия.</strong>
+          Используйте её для быстрого повторения маршрута: степенная форма, свойства, разложение, корни, дроби и показательные уравнения.
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <span>Даниил Кичук · занятие 25.09.2026</span>
+  <span>Лёвин Артём Александрович</span>
+</footer>
+</div>
+
+<dialog id="posterDialog" aria-labelledby="posterDialogTitle">
+  <div class="dialog-head">
+    <h2 id="posterDialogTitle">Ментальная карта занятия</h2>
+    <button class="icon-btn" type="button" id="posterClose" aria-label="Закрыть">×</button>
+  </div>
+  <div class="dialog-body">
+    <img src="../images/25.09.26.png" alt="Увеличенная ментальная карта занятия о степенях и показательных уравнениях">
+  </div>
+</dialog>
+
+<script>
+(() => {
+  'use strict';
+
+  const safeGet = (key, fallback) => {
+    try {
+      const value = localStorage.getItem(key);
+      return value === null ? fallback : value;
+    } catch (_) {
+      return fallback;
+    }
+  };
+  const safeSet = (key, value) => {
+    try { localStorage.setItem(key, value); } catch (_) {}
+  };
+  const safeRemove = (key) => {
+    try { localStorage.removeItem(key); } catch (_) {}
+  };
+
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('themeBtn');
+  const savedTheme = safeGet('danil-250926-theme', 'light');
+  root.dataset.theme = savedTheme === 'dark' ? 'dark' : 'light';
+  themeBtn.setAttribute('aria-pressed', String(root.dataset.theme === 'dark'));
+  themeBtn.addEventListener('click', () => {
+    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    themeBtn.setAttribute('aria-pressed', String(root.dataset.theme === 'dark'));
+    safeSet('danil-250926-theme', root.dataset.theme);
+  });
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+  document.querySelectorAll('[data-transformer]').forEach(widget => {
+    const tabs = [...widget.querySelectorAll('[role="tab"]')];
+    const panels = [...widget.querySelectorAll('[role="tabpanel"]')];
+    const activate = tab => {
+      tabs.forEach(item => {
+        const selected = item === tab;
+        item.setAttribute('aria-selected', String(selected));
+        item.tabIndex = selected ? 0 : -1;
+      });
+      panels.forEach(panel => { panel.hidden = panel.dataset.panel !== tab.dataset.tab; });
+      tab.focus();
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activate(tab));
+      tab.addEventListener('keydown', event => {
+        if (!['ArrowRight','ArrowLeft','Home','End'].includes(event.key)) return;
+        event.preventDefault();
+        let next = index;
+        if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+        if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
+        if (event.key === 'Home') next = 0;
+        if (event.key === 'End') next = tabs.length - 1;
+        activate(tabs[next]);
+      });
+    });
+  });
+
+  const steppers = new Map();
+  document.querySelectorAll('[data-stepper]').forEach(node => {
+    const key = node.dataset.stepper;
+    const steps = [...node.querySelectorAll('[data-step]')];
+    const status = document.querySelector('[data-status="' + key + '"]');
+    const stored = Number(safeGet('danil-250926-step-' + key, '0'));
+    const state = { node, steps, status, index: Number.isFinite(stored) ? Math.min(Math.max(stored, 0), steps.length - 1) : 0, all: false };
+    steppers.set(key, state);
+    renderStepper(state);
+  });
+  function renderStepper(state) {
+    state.steps.forEach((step, index) => {
+      step.classList.toggle('active', !state.all && index === state.index);
+      step.classList.toggle('revealed', state.all);
+    });
+    state.status.textContent = state.all ? 'Показаны все шаги.' : 'Шаг ' + (state.index + 1) + ' из ' + state.steps.length;
+    safeSet('danil-250926-step-' + state.node.dataset.stepper, String(state.index));
+  }
+  document.querySelectorAll('[data-controls]').forEach(group => {
+    const state = steppers.get(group.dataset.controls);
+    group.addEventListener('click', event => {
+      const button = event.target.closest('button[data-act]');
+      if (!button) return;
+      const action = button.dataset.act;
+      if (action === 'next') { state.all = false; state.index = Math.min(state.index + 1, state.steps.length - 1); }
+      if (action === 'prev') { state.all = false; state.index = Math.max(state.index - 1, 0); }
+      if (action === 'all') { state.all = true; }
+      if (action === 'reset') { state.all = false; state.index = 0; }
+      renderStepper(state);
+    });
+  });
+
+  const answerButtons = [...document.querySelectorAll('.answer-btn')];
+  const setAnswer = (button, open) => {
+    const answer = document.getElementById(button.getAttribute('aria-controls'));
+    answer.hidden = !open;
+    button.setAttribute('aria-expanded', String(open));
+    button.textContent = open ? 'Скрыть ответ' : 'Показать ответ';
+  };
+  answerButtons.forEach(button => button.addEventListener('click', () => {
+    setAnswer(button, button.getAttribute('aria-expanded') !== 'true');
+  }));
+  document.getElementById('showAllAnswers').addEventListener('click', () => answerButtons.forEach(button => setAnswer(button, true)));
+  document.getElementById('hideAllAnswers').addEventListener('click', () => answerButtons.forEach(button => setAnswer(button, false)));
+
+  const quiz = document.getElementById('quiz');
+  const quizFeedback = document.getElementById('quizFeedback');
+  quiz.addEventListener('click', event => {
+    const button = event.target.closest('button[data-answer]');
+    if (!button) return;
+    const correct = button.dataset.answer === 'no';
+    quizFeedback.textContent = correct
+      ? 'Верно. Основания 2 и 3 различны, поэтому показатели сразу сравнивать нельзя.'
+      : 'Проверьте основания: они различны. Сначала нужен допустимый способ преобразования к общей структуре.';
+    quizFeedback.className = 'quiz-feedback ' + (correct ? 'good' : 'bad');
+  });
+  document.getElementById('quizReset').addEventListener('click', () => {
+    quizFeedback.textContent = '';
+    quizFeedback.className = 'quiz-feedback';
+  });
+
+  const checkboxes = [...document.querySelectorAll('#checklist input[type="checkbox"]')];
+  const checkProgress = document.getElementById('checkProgress');
+  const checkStatus = document.getElementById('checkStatus');
+  const updateChecks = () => {
+    const count = checkboxes.filter(input => input.checked).length;
+    checkProgress.style.width = (count / checkboxes.length * 100) + '%';
+    checkStatus.textContent = 'Отмечено: ' + count + ' из ' + checkboxes.length + '.';
+  };
+  checkboxes.forEach(input => {
+    input.checked = safeGet('danil-250926-check-' + input.dataset.check, '0') === '1';
+    input.addEventListener('change', () => {
+      safeSet('danil-250926-check-' + input.dataset.check, input.checked ? '1' : '0');
+      updateChecks();
+    });
+  });
+  document.getElementById('resetChecks').addEventListener('click', () => {
+    checkboxes.forEach(input => {
+      input.checked = false;
+      safeRemove('danil-250926-check-' + input.dataset.check);
+    });
+    updateChecks();
+  });
+  updateChecks();
+
+  const dialog = document.getElementById('posterDialog');
+  const openPoster = document.getElementById('posterOpen');
+  const closePoster = document.getElementById('posterClose');
+  let dialogTrigger = null;
+  const closeDialog = () => {
+    if (!dialog.open) return;
+    dialog.close();
+  };
+  openPoster.addEventListener('click', () => {
+    dialogTrigger = openPoster;
+    dialog.showModal();
+    closePoster.focus();
+  });
+  closePoster.addEventListener('click', closeDialog);
+  dialog.addEventListener('click', event => {
+    const rect = dialog.getBoundingClientRect();
+    const outside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+    if (outside) closeDialog();
+  });
+  dialog.addEventListener('close', () => {
+    if (dialogTrigger) dialogTrigger.focus();
+  });
+})();
+</script>
+</body>
+</html>
