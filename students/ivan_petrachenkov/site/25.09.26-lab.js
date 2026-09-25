@@ -231,7 +231,7 @@ function renderRoute() {
   attr($('routeDot'), { cx:end.x, cy:end.y });
   attr($('routeDrag'), { cx:end.x, cy:end.y });
   const samePoint = Math.hypot(end.x - start.x, end.y - start.y) < 12;
-  $('routeStartLabel').hidden = samePoint;
+  $('routeStartLabel').toggleAttribute('hidden', samePoint);
   setText('routeEndLabel', samePoint ? 'A = B' : 'B');
   attr($('routeStartLabel'), { x:start.x + 16, y:start.y - 14 });
   attr($('routeEndLabel'), {
@@ -239,7 +239,7 @@ function renderRoute() {
     y:clamp(end.y + (end.y < 252 ? 28 : -18), 26, 480)
   });
   setText('routeScaleLabel', `R = ${fmt(value.radius,0)} м · масштаб ×${fmt(zoom,1)} · пройдено ${fmt(value.turns * value.progress)} оборота`);
-  $('routeGhost').hidden = !snapshot;
+  $('routeGhost').toggleAttribute('hidden', !snapshot);
   $('routeGhostLegend').hidden = !snapshot;
   if (snapshot) {
     const oldRadius = snapshot.radius * 8 * zoom, a = routePoint(oldRadius, 0), b = routePoint(oldRadius, snapshot.theta);
@@ -352,8 +352,8 @@ function renderGraph() {
   attr($('graphDot'), { cx:dotX, cy:dotY });
   attr($('graphGuideVertical'), { x1:dotX, y1:dotY, x2:dotX, y2:272 });
   attr($('graphGuideHorizontal'), { x1:58, y1:dotY, x2:dotX, y2:dotY });
-  $('graphGhost').hidden = !snapshot;
-  $('graphPlotGhost').hidden = !snapshot;
+  $('graphGhost').toggleAttribute('hidden', !snapshot);
+  $('graphPlotGhost').toggleAttribute('hidden', !snapshot);
   $('graphGhostLegend').hidden = !snapshot;
   if (snapshot) {
     attr($('ghostAxisVector'), { x1:axisX(snapshot.x0, domain), y1:71, x2:axisX(snapshot.coordinate, domain), y2:71 });
