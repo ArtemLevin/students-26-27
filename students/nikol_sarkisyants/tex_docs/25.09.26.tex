@@ -1,0 +1,1308 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[left=20mm,right=20mm,top=20mm,bottom=22mm]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\onehalfspacing
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{6B7474}
+
+\color{textgray}
+
+\newcommand{\checkbox}{\(\square\)}
+
+\newcommand{\topicrule}{%
+  \par\noindent
+  {\color{accent}\rule{\linewidth}{0.55pt}}
+  \par
+}
+
+\newcommand{\keyformula}[1]{%
+  \begin{center}
+    {\color{darkaccent}\large #1}
+  \end{center}
+}
+
+\setlist[itemize]{
+  leftmargin=7mm,
+  itemsep=3pt,
+  topsep=3pt
+}
+
+\setlist[enumerate]{
+  leftmargin=8mm,
+  itemsep=4pt,
+  topsep=4pt
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small\color{softgray}Николь Саркисьянц}
+\rhead{\small\color{softgray}Производная и касательная}
+\cfoot{\small\color{softgray}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{14pt}
+
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=darkaccent,
+    line width=0.8pt,
+    minimum width=42mm,
+    minimum height=11mm,
+    align=center,
+    font=\small
+  },
+  flowaction/.style={
+    rectangle,
+    rounded corners=2mm,
+    draw=accent,
+    line width=0.8pt,
+    text width=100mm,
+    minimum height=12mm,
+    inner sep=3mm,
+    align=center,
+    font=\small
+  },
+  flowsmall/.style={
+    rectangle,
+    rounded corners=2mm,
+    draw=accent,
+    line width=0.8pt,
+    text width=48mm,
+    minimum height=12mm,
+    inner sep=3mm,
+    align=center,
+    font=\small
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=2.35,
+    draw=darkaccent,
+    line width=0.8pt,
+    text width=42mm,
+    inner sep=1.5mm,
+    align=center,
+    font=\small
+  },
+  flowarrow/.style={
+    -{Latex[length=3mm,width=2mm]},
+    line width=0.8pt,
+    draw=darkaccent
+  },
+  flowlabel/.style={
+    font=\small,
+    fill=white,
+    inner sep=1pt
+  }
+}
+
+\begin{document}
+
+% =========================================================
+% Титульный лист
+% =========================================================
+
+\begin{titlepage}
+\thispagestyle{empty}
+
+\begin{center}
+
+\vspace*{20mm}
+
+{\Large\color{darkaccent}
+Лёвин Артём Александрович
+}
+
+\vspace{20mm}
+
+{\color{accent}\rule{0.70\linewidth}{0.8pt}}
+
+\vspace{13mm}
+
+{\Huge\bfseries
+Чек-лист
+}
+
+\vspace{7mm}
+
+{\LARGE\bfseries
+Производная и касательная
+}
+
+\vspace{5mm}
+
+{\Large
+Угловой коэффициент. Графический смысл производной.\\
+Задачи на касательную
+}
+
+\vspace{16mm}
+
+{\large
+ЕГЭ по профильной математике
+}
+
+\vspace{20mm}
+
+{\Large\bfseries
+Николь Саркисьянц
+}
+
+\vfill
+
+{\small
+Лёвин Артём Александрович\\
+эксклюзивно для Николь Саркисьянц
+}
+
+\vspace{5mm}
+
+{\small \today}
+
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[
+    accent!55,
+    line width=1.1pt
+  ]
+  ([xshift=18mm,yshift=18mm]current page.south west)
+  .. controls
+  ([xshift=58mm,yshift=31mm]current page.south west)
+  and
+  ([xshift=-65mm,yshift=8mm]current page.south east)
+  ..
+  ([xshift=-18mm,yshift=20mm]current page.south east);
+\end{tikzpicture}
+
+\end{titlepage}
+
+\setcounter{page}{1}
+
+% =========================================================
+% 1. Ядро темы
+% =========================================================
+
+\section*{\color{darkaccent}1. Ядро темы}
+\topicrule
+
+В задачах этого типа одно и то же число можно увидеть тремя способами:
+как значение производной, как угловой коэффициент касательной и как
+тангенс угла её наклона.
+
+\keyformula{
+\[
+\boxed{f'(x_0)=k=\tg\alpha}
+\]
+}
+
+Здесь:
+
+\begin{itemize}
+  \item[\checkbox]
+  \(f'(x_0)\) --- производная функции в точке с абсциссой \(x_0\);
+
+  \item[\checkbox]
+  \(k\) --- угловой коэффициент касательной;
+
+  \item[\checkbox]
+  \(\alpha\) --- угол наклона касательной к положительному направлению
+  оси \(Ox\), где
+  \[
+  0\le\alpha<\pi;
+  \]
+
+  \item[\checkbox]
+  касательная имеет уравнение прямой
+  \[
+  y=kx+b.
+  \]
+\end{itemize}
+
+Для стандартных задач ЕГЭ предполагается, что производная в рассматриваемой
+точке существует и конечна. Тогда касательная не вертикальна и её угловой
+коэффициент определён.
+
+\section*{\color{darkaccent}2. Абсцисса и ордината}
+\topicrule
+
+\begin{itemize}
+  \item[\checkbox]
+  \textbf{Абсцисса} --- координата \(x\), то есть положение точки
+  по горизонтали.
+
+  \item[\checkbox]
+  \textbf{Ордината} --- координата \(y\), то есть положение точки
+  по вертикали.
+
+  \item[\checkbox]
+  Если дана точка с абсциссой \(x_0\), то в этой точке
+  \[
+  x=x_0.
+  \]
+\end{itemize}
+
+\section*{\color{darkaccent}3. Как знак производной связан с касательной}
+\topicrule
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+
+\begin{tabularx}{0.94\linewidth}
+{@{}>{\centering\arraybackslash}p{31mm}X@{}}
+
+\toprule
+
+\textbf{Знак}
+&
+\textbf{Что видно на касательной}
+\\
+
+\midrule
+
+\(f'(x_0)>0\)
+&
+Касательная поднимается слева направо.
+\\
+
+\(f'(x_0)<0\)
+&
+Касательная опускается слева направо.
+\\
+
+\(f'(x_0)=0\)
+&
+Касательная горизонтальна.
+\\
+
+\bottomrule
+
+\end{tabularx}
+\end{center}
+
+Самая надёжная вычислительная формула для прямой через две точки
+
+\[
+A(x_1;y_1),
+\qquad
+B(x_2;y_2)
+\]
+
+имеет вид
+
+\[
+\boxed{
+k=
+\frac{y_2-y_1}{x_2-x_1}
+}
+\qquad
+(x_1\ne x_2).
+\]
+
+Эта формула автоматически учитывает знак наклона.
+
+Если Вы строите прямоугольный треугольник и используете только
+\emph{длины} его катетов, то сначала получается величина \(|k|\).
+После этого знак определяется по направлению касательной.
+
+% =========================================================
+% 4. Производная по изображённой касательной
+% =========================================================
+
+\section*{\color{darkaccent}4. Производная по изображённой касательной}
+\topicrule
+
+Чтобы найти \(f'(x_0)\) по рисунку:
+
+\begin{enumerate}
+  \item
+  найдите касательную, проведённую в точке с абсциссой \(x_0\);
+
+  \item
+  выберите на касательной две точки с точно читаемыми координатами;
+
+  \item
+  вычислите её угловой коэффициент
+  \[
+  k=
+  \frac{\Delta y}{\Delta x};
+  \]
+
+  \item
+  запишите
+  \[
+  f'(x_0)=k.
+  \]
+\end{enumerate}
+
+\textbf{Важно.}
+Выбранные точки должны лежать именно на касательной.
+Точка касания при этом не обязана быть одной из выбранных точек.
+
+\subsection*{Простой пример}
+
+Рассмотрим функцию
+
+\[
+f(x)=\frac{x^2}{4}.
+\]
+
+В точке
+
+\[
+x_0=2
+\]
+
+имеем
+
+\[
+f(2)=1,
+\]
+
+а касательная имеет уравнение
+
+\[
+y=x-1.
+\]
+
+На касательной удобно взять точки
+
+\[
+(0;-1)
+\qquad\text{и}\qquad
+(2;1).
+\]
+
+Тогда
+
+\[
+k=
+\frac{1-(-1)}{2-0}
+=
+\frac22
+=
+1.
+\]
+
+Следовательно,
+
+\[
+\boxed{f'(2)=1}.
+\]
+
+\begin{center}
+
+\begin{tikzpicture}
+
+\begin{axis}[
+  width=100mm,
+  height=100mm,
+  axis lines=middle,
+  xmin=-2.5,
+  xmax=4.5,
+  ymin=-2,
+  ymax=5,
+  xlabel={$x$},
+  ylabel={$y$},
+  xtick={-2,-1,0,1,2,3,4},
+  ytick={-1,0,1,2,3,4},
+  samples=220,
+  clip=false,
+  unit vector ratio=1 1,
+  grid=both,
+  grid style={
+    line width=.15pt,
+    draw=gray!25
+  },
+  axis line style={
+    draw=textgray
+  },
+  tick label style={
+    font=\small
+  }
+]
+
+\addplot[
+  domain=-2.3:4.3,
+  line width=1.2pt,
+  color=darkaccent
+]
+{x^2/4};
+
+\addplot[
+  domain=-0.8:4.3,
+  line width=1.1pt,
+  color=accent
+]
+{x-1};
+
+\addplot[
+  only marks,
+  mark=*,
+  mark size=2pt,
+  color=darkaccent
+]
+coordinates {(2,1)};
+
+\addplot[
+  only marks,
+  mark=*,
+  mark size=1.8pt,
+  color=accent
+]
+coordinates {(0,-1) (2,1)};
+
+\draw[
+  dashed,
+  accent
+]
+(axis cs:0,-1)
+--
+(axis cs:2,-1);
+
+\draw[
+  dashed,
+  accent
+]
+(axis cs:2,-1)
+--
+(axis cs:2,1);
+
+\node[
+  anchor=south west,
+  font=\small,
+  text=darkaccent
+]
+at (axis cs:2,1)
+{$(2;1)$};
+
+\node[
+  anchor=north east,
+  font=\small,
+  text=accent
+]
+at (axis cs:0,-1)
+{$(0;-1)$};
+
+\node[
+  anchor=south west,
+  font=\small,
+  text=darkaccent
+]
+at (axis cs:3.0,2.5)
+{$y=\dfrac{x^2}{4}$};
+
+\node[
+  anchor=south west,
+  font=\small,
+  text=accent
+]
+at (axis cs:3.0,1.75)
+{$y=x-1$};
+
+\end{axis}
+
+\end{tikzpicture}
+
+\end{center}
+
+\subsection*{Если касательная убывает}
+
+Пусть касательная проходит через точки
+
+\[
+A(-1;3),
+\qquad
+B(3;1).
+\]
+
+Тогда
+
+\[
+k=
+\frac{1-3}{3-(-1)}
+=
+-\frac24
+=
+-\frac12.
+\]
+
+Поэтому
+
+\[
+\boxed{
+f'(x_0)=-\frac12
+}.
+\]
+
+% =========================================================
+% 5. Параллельность
+% =========================================================
+
+\section*{\color{darkaccent}5. Если касательная параллельна заданной прямой}
+\topicrule
+
+Параллельные прямые вида
+
+\[
+y=kx+b
+\]
+
+имеют одинаковые угловые коэффициенты.
+
+Поэтому если касательная к графику функции в точке \(x_0\)
+параллельна прямой
+
+\[
+y=mx+c,
+\]
+
+то
+
+\[
+\boxed{
+f'(x_0)=m
+}.
+\]
+
+Свободный коэффициент \(c\) на значение производной здесь не влияет.
+
+\subsection*{Пример}
+
+Касательная параллельна прямой
+
+\[
+y=4x-7.
+\]
+
+Её угловой коэффициент равен \(4\), следовательно,
+
+\[
+\boxed{
+f'(x_0)=4
+}.
+\]
+
+% =========================================================
+% 6. График производной
+% =========================================================
+
+\section*{\color{darkaccent}6. Если дан график производной \(y=f'(x)\)}
+\topicrule
+
+На графике производной значение \(f'(x)\) является обычной ординатой \(y\).
+
+Поэтому условие
+
+\[
+f'(x)=m
+\]
+
+на таком рисунке означает
+
+\[
+y=m.
+\]
+
+Отсюда:
+
+\begin{itemize}
+  \item[\checkbox]
+  если нужно найти \textbf{количество} подходящих значений \(x\),
+  посчитайте точки пересечения графика \(y=f'(x)\) с горизонталью
+  \[
+  y=m;
+  \]
+
+  \item[\checkbox]
+  если нужны \textbf{абсциссы}, считайте координаты \(x\)
+  соответствующих точек пересечения.
+\end{itemize}
+
+Типовая цепочка рассуждений:
+
+\[
+\boxed{
+\text{параллельность}
+\Rightarrow
+k=m
+\Rightarrow
+f'(x)=m
+\Rightarrow
+y=m
+\text{ на графике }f'
+}
+\]
+
+% =========================================================
+% 7. Касательная через заданную точку
+% =========================================================
+
+\section*{\color{darkaccent}7. Если касательная проходит через заданную точку}
+\topicrule
+
+Пусть известна точка касания
+
+\[
+M(x_0;f(x_0))
+\]
+
+и ещё одна точка касательной
+
+\[
+P(x_1;y_1),
+\qquad
+x_1\ne x_0.
+\]
+
+Тогда
+
+\[
+\boxed{
+f'(x_0)
+=
+k
+=
+\frac{f(x_0)-y_1}{x_0-x_1}
+}.
+\]
+
+Если касательная проходит через начало координат
+
+\[
+O(0;0)
+\]
+
+и
+
+\[
+x_0\ne0,
+\]
+
+то
+
+\[
+\boxed{
+f'(x_0)
+=
+\frac{f(x_0)}{x_0}
+}.
+\]
+
+% =========================================================
+% 8. Функция и конкретная касательная
+% =========================================================
+
+\section*{\color{darkaccent}8. Если даны функция и конкретная касательная}
+\topicrule
+
+Пусть прямая
+
+\[
+y=kx+b
+\]
+
+является касательной к графику
+
+\[
+y=f(x)
+\]
+
+в точке с абсциссой \(x_0\).
+
+В точке касания одновременно выполняются два условия:
+
+\[
+\boxed{
+f'(x_0)=k
+}
+\]
+
+и
+
+\[
+\boxed{
+f(x_0)=kx_0+b
+}.
+\]
+
+Первое условие означает совпадение наклонов.
+
+Второе условие означает, что точка касания принадлежит одновременно
+графику функции и касательной.
+
+\subsection*{Пример из ключевого типа задач}
+
+Прямая
+
+\[
+y=-2x-12
+\]
+
+является касательной к графику функции
+
+\[
+f(x)=x^3-2x^2-6x-4.
+\]
+
+Найдём абсциссу точки касания.
+
+\textbf{1. Совпадение наклонов}
+
+\[
+f'(x)=3x^2-4x-6.
+\]
+
+Угловой коэффициент касательной равен
+
+\[
+k=-2.
+\]
+
+Следовательно,
+
+\[
+3x^2-4x-6=-2,
+\]
+
+откуда
+
+\[
+3x^2-4x-4=0.
+\]
+
+Дискриминант:
+
+\[
+D=
+(-4)^2
+-
+4\cdot3\cdot(-4)
+=
+16+48
+=
+64.
+\]
+
+Получаем два кандидата:
+
+\[
+x_1=2,
+\qquad
+x_2=-\frac23.
+\]
+
+\textbf{2. Проверка принадлежности касательной}
+
+Для \(x=2\):
+
+\[
+f(2)
+=
+8-8-12-4
+=
+-16,
+\]
+
+а на прямой
+
+\[
+-2\cdot2-12
+=
+-16.
+\]
+
+Кандидат подходит.
+
+Для
+
+\[
+x=-\frac23
+\]
+
+получаем
+
+\[
+f\!\left(-\frac23\right)
+=
+-\frac{8}{27}
+-
+\frac89
++
+4
+-
+4
+=
+-\frac{32}{27}.
+\]
+
+На касательной:
+
+\[
+-2\left(-\frac23\right)-12
+=
+\frac43-12
+=
+-\frac{32}{3}.
+\]
+
+Значения различаются, поэтому
+
+\[
+x=-\frac23
+\]
+
+не является абсциссой точки касания с данной прямой.
+
+Итак,
+
+\[
+\boxed{
+x_0=2
+}.
+\]
+
+% =========================================================
+% Блок-схема алгоритма
+% =========================================================
+
+\clearpage
+\thispagestyle{empty}
+
+\begin{center}
+
+{\Large\bfseries\color{darkaccent}
+Алгоритм: функция и уравнение касательной
+}
+
+\end{center}
+
+\vspace{7mm}
+
+\begin{center}
+
+\begin{tikzpicture}[
+  node distance=7mm and 22mm
+]
+
+\node[
+  flowstart
+]
+(start)
+{Даны \(y=f(x)\) и \(y=kx+b\)};
+
+\node[
+  flowaction,
+  below=of start
+]
+(deriv)
+{Найдите производную \(f'(x)\).};
+
+\node[
+  flowaction,
+  below=of deriv
+]
+(slope)
+{Выделите угловой коэффициент касательной \(k\).};
+
+\node[
+  flowaction,
+  below=of slope
+]
+(candidates)
+{
+Решите уравнение
+\[
+f'(x)=k
+\]
+и получите кандидатов на абсциссу точки касания.
+};
+
+\node[
+  flowaction,
+  below=of candidates
+]
+(take)
+{Возьмите очередного кандидата \(x\).};
+
+\node[
+  flowdecision,
+  below=9mm of take
+]
+(check)
+{
+Выполняется ли
+\(f(x)=kx+b\)?
+};
+
+\node[
+  flowsmall,
+  below right=11mm and 10mm of check
+]
+(keep)
+{Сохраните этот кандидат.};
+
+\node[
+  flowsmall,
+  below left=11mm and 10mm of check
+]
+(reject)
+{Отбросьте этот кандидат.};
+
+\node[
+  flowdecision,
+  below=24mm of check
+]
+(more)
+{Остались непроверенные кандидаты?};
+
+\node[
+  flowstart,
+  below=12mm of more
+]
+(finish)
+{Оставшиеся значения \(x\) --- ответ};
+
+\draw[flowarrow]
+(start)
+--
+(deriv);
+
+\draw[flowarrow]
+(deriv)
+--
+(slope);
+
+\draw[flowarrow]
+(slope)
+--
+(candidates);
+
+\draw[flowarrow]
+(candidates)
+--
+(take);
+
+\draw[flowarrow]
+(take)
+--
+(check);
+
+\draw[flowarrow]
+(check.east)
+-|
+node[
+  flowlabel,
+  pos=0.25
+]
+{да}
+(keep.north);
+
+\draw[flowarrow]
+(check.west)
+-|
+node[
+  flowlabel,
+  pos=0.25
+]
+{нет}
+(reject.north);
+
+\draw[flowarrow]
+(keep.south)
+|-
+(more.east);
+
+\draw[flowarrow]
+(reject.south)
+|-
+(more.west);
+
+\draw[flowarrow]
+(more.south)
+--
+node[
+  flowlabel,
+  right
+]
+{нет}
+(finish.north);
+
+\draw[flowarrow]
+(more.west)
+--
+++(-24mm,0)
+|-
+node[
+  flowlabel,
+  pos=0.25
+]
+{да}
+(take.west);
+
+\end{tikzpicture}
+
+\end{center}
+
+\clearpage
+
+% =========================================================
+% 9. Что знать наизусть
+% =========================================================
+
+\section*{\color{darkaccent}9. Что необходимо знать наизусть}
+\topicrule
+
+\begin{itemize}
+
+  \item[\checkbox]
+  Касательная в рассматриваемой точке имеет вид
+  \[
+  y=kx+b.
+  \]
+
+  \item[\checkbox]
+  Основная связь:
+  \[
+  f'(x_0)=k=\tg\alpha.
+  \]
+
+  \item[\checkbox]
+  По двум точкам прямой:
+  \[
+  k=
+  \frac{y_2-y_1}{x_2-x_1}.
+  \]
+
+  \item[\checkbox]
+  Параллельные прямые имеют одинаковые угловые коэффициенты.
+
+  \item[\checkbox]
+  Если касательная параллельна
+  \[
+  y=mx+c,
+  \]
+  то
+  \[
+  f'(x_0)=m.
+  \]
+
+  \item[\checkbox]
+  На графике
+  \[
+  y=f'(x)
+  \]
+  условие
+  \[
+  f'(x)=m
+  \]
+  означает
+  \[
+  y=m.
+  \]
+
+  \item[\checkbox]
+  Для конкретной касательной
+  \[
+  y=kx+b
+  \]
+  в точке касания одновременно выполняются условия
+  \[
+  f'(x_0)=k,
+  \qquad
+  f(x_0)=kx_0+b.
+  \]
+
+\end{itemize}
+
+% =========================================================
+% 10. Типичные ошибки
+% =========================================================
+
+\section*{\color{darkaccent}10. Типичные ошибки}
+\topicrule
+
+\begin{enumerate}
+
+  \item
+  \textbf{Брать две точки на графике функции вместо касательной.}
+
+  Для вычисления \(k\) нужны две точки одной и той же касательной.
+
+  \item
+  \textbf{Использовать неточные точки.}
+
+  Лучше выбирать узлы координатной сетки, координаты которых считываются
+  однозначно.
+
+  \item
+  \textbf{Терять знак производной.}
+
+  Если касательная опускается слева направо, то
+
+  \[
+  k<0.
+  \]
+
+  \item
+  \textbf{Перепутать вертикальное и горизонтальное изменения.}
+
+  Всегда
+
+  \[
+  k=
+  \frac{\Delta y}{\Delta x}.
+  \]
+
+  \item
+  \textbf{Брать свободный коэффициент \(b\) вместо \(k\).}
+
+  С производной связан коэффициент перед \(x\).
+
+  \item
+  \textbf{Перепутать график функции и график производной.}
+
+  На графике
+
+  \[
+  y=f'(x)
+  \]
+
+  значение производной читается как координата \(y\).
+
+  \item
+  \textbf{После решения \(f'(x)=k\) принимать все корни без проверки.}
+
+  Если дана конкретная касательная
+
+  \[
+  y=kx+b,
+  \]
+
+  каждый кандидат должен удовлетворять также условию
+
+  \[
+  f(x)=kx+b.
+  \]
+
+  \item
+  \textbf{Считать, что после нахождения одного подходящего кандидата
+  остальные можно не проверять.}
+
+  В общем случае одна прямая может касаться графика более чем в одной точке,
+  поэтому следует проверить все найденные кандидаты.
+
+\end{enumerate}
+
+% =========================================================
+% 11. Краткая памятка
+% =========================================================
+
+\section*{\color{darkaccent}11. Сверхкраткая памятка}
+\topicrule
+
+\begin{center}
+
+\renewcommand{\arraystretch}{1.5}
+
+\begin{tabularx}{0.95\linewidth}
+{@{}p{54mm}X@{}}
+
+\toprule
+
+\textbf{Что дано}
+&
+\textbf{Что делать}
+\\
+
+\midrule
+
+Нарисована касательная
+&
+Взять две точные точки на ней и найти
+\[
+k=
+\frac{\Delta y}{\Delta x}.
+\]
+\\
+
+Касательная параллельна
+\(y=mx+c\)
+&
+Сразу использовать
+\[
+f'(x_0)=m.
+\]
+\\
+
+Дан график
+\(y=f'(x)\)
+и известно
+\(f'(x)=m\)
+&
+Искать на графике точки с ординатой
+\[
+y=m.
+\]
+\\
+
+Даны
+\(f(x)\)
+и касательная
+\(y=kx+b\)
+&
+Сначала решить
+\[
+f'(x)=k,
+\]
+затем проверить кандидатов по
+\[
+f(x)=kx+b.
+\]
+\\
+
+Касательная убывает
+&
+Помнить:
+\[
+f'(x_0)<0.
+\]
+\\
+
+Касательная горизонтальна
+&
+\[
+f'(x_0)=0.
+\]
+\\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{center}
+
+
+
+\end{document}
