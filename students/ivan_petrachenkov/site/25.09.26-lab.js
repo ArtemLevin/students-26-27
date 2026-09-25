@@ -217,7 +217,7 @@ function makeRoutePlot(radius, turns) {
 function renderRoute() {
   const value = routeValues(state.route);
   const snapshot = state.comparison.route && routeValues(state.comparison.route);
-  const zoom = clamp(170 / (Math.max(value.radius, snapshot?.radius ?? 0) * 8), 1, 3);
+  const zoom = clamp(170 / (Math.max(value.radius, snapshot?.radius ?? 0) * 8), 1, 4);
   const radiusPx = value.radius * 8 * zoom;
   const start = routePoint(radiusPx, 0);
   const end = routePoint(radiusPx, value.theta);
@@ -517,7 +517,7 @@ attachDrag($('routeScene'), 'routeCircle', event => {
   const point = svgCoords($('routeScene'), event);
   const radius = state.route.radius * 8;
   const oldRadius = state.comparison.route?.radius ?? 0;
-  const zoom = clamp(170 / (Math.max(state.route.radius, oldRadius) * 8), 1, 3);
+  const zoom = clamp(170 / (Math.max(state.route.radius, oldRadius) * 8), 1, 4);
   return Math.abs(Math.hypot(point.x - 300, point.y - 252) - radius * zoom) < 46;
 });
 attachDrag($('routePlot'), 'routePlot', event => event.target.id === 'routePlotHit');

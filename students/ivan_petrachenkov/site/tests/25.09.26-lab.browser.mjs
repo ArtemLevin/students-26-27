@@ -46,8 +46,11 @@ for (const width of [1440,1024,900,768,390,320]) {
 }
 await desktop.setViewportSize({width:1440,height:900});
 await desktop.locator('[data-route-scenario=half]').click();
+await desktop.waitForFunction(() => document.querySelector('#radiusValue').textContent === '20 м');
 await desktop.locator('#routeNext').click();
+await desktop.waitForFunction(() => document.querySelector('#angleValue').textContent === '90°');
 await desktop.locator('#routeNext').click();
+await desktop.waitForFunction(() => document.querySelector('#angleValue').textContent === '180°');
 assert.equal(await desktop.locator('#displacementValue').textContent(),'40 м');
 assert.equal(await desktop.locator('#angleValue').textContent(),'180°');
 await desktop.locator('#routeSave').click();
