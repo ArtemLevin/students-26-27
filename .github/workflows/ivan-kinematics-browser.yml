@@ -1,0 +1,38 @@
+name: Ivan kinematics simulator
+on:
+  pull_request:
+    paths:
+      - 'students/ivan_petrachenkov/site/25.09.26-lab*'
+      - 'students/ivan_petrachenkov/site/tests/25.09.26-lab*'
+      - '.github/workflows/ivan-kinematics-browser.yml'
+jobs:
+  simulator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify mathematical and interaction model
+        run: node --test students/ivan_petrachenkov/site/tests/25.09.26-lab.*.test.mjs
+      - name: Install browser runner
+        run: |
+          mkdir -p /tmp/ivan-lab-runner
+          cd /tmp/ivan-lab-runner
+          npm init -y >/dev/null
+          npm install playwright@1.56.0 --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Start static site
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/ivan-lab-http.log 2>&1 &
+      - name: Check desktop, mobile, touch and themes
+        run: |
+          cp students/ivan_petrachenkov/site/tests/25.09.26-lab.browser.mjs /tmp/ivan-lab-runner/runner.mjs
+          node /tmp/ivan-lab-runner/runner.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ivan-kinematics-screenshots
+          path: /tmp/ivan-lab-screens/*.png
+          if-no-files-found: ignore
