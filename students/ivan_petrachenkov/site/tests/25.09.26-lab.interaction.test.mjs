@@ -9,6 +9,10 @@ class Element {
   fire(name,extra={}){for(const handler of this.listeners[name]??[])handler({target:this,pointerId:1,clientX:0,clientY:0,preventDefault(){},...extra})}
   setAttribute(name,value){this.attributes.set(name,String(value))}
   removeAttribute(name){this.attributes.delete(name)}
+  toggleAttribute(name,force){
+    if(force)this.setAttribute(name,'');else this.removeAttribute(name);
+    if(name==='hidden')this.hidden=Boolean(force);
+  }
   getAttribute(name){return this.attributes.get(name)}
   append(child){this.children.push(child)}
   replaceChildren(...items){this.children=items}
@@ -74,6 +78,7 @@ test('snapshot remains visible as a ghost and two numerical states compare',()=>
   click(id('routeNext'));
   assert.equal(id('routeComparison').hidden,false);
   assert.equal(id('routeGhost').hidden,false);
+  assert.equal(id('routeGhost').attributes.has('hidden'),false);
   assert.equal(id('routeOldPath').textContent,'7,85 м');
   assert.equal(id('routeNewPath').textContent,'15,71 м');
 });

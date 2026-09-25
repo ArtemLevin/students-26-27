@@ -56,6 +56,7 @@ assert.equal(await desktop.locator('#angleValue').textContent(),'180°');
 await desktop.locator('#routeSave').click();
 await desktop.locator('[data-route-scenario=full]').click();
 await desktop.locator('#routeNext').click();
+await desktop.waitForFunction(() => !document.querySelector('#routeGhost').hasAttribute('hidden'));
 assert.equal(await desktop.locator('#routeGhost').isVisible(),true);
 assert.equal(await desktop.locator('#routeComparison').isVisible(),true);
 await desktop.locator('#routeClear').click();
