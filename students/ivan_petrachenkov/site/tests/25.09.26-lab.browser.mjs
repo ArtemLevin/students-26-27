@@ -62,8 +62,7 @@ assert.equal(await desktop.locator('#routeComparison').isVisible(),true);
 await desktop.locator('#routeClear').click();
 await desktop.locator('#tab-graph').click();
 await desktop.locator('[data-graph-scenario=second]').click();
-const marker=await svgScreenPoint(desktop,'#graphPlot',311,160);
-await desktop.mouse.click(marker.x,marker.y);
+await desktop.locator('#graphHit').click();
 await desktop.waitForFunction(() => document.querySelector('#coordinateValue').textContent === '0 м');
 assert.equal(await desktop.locator('#coordinateValue').textContent(),'0 м');
 await desktop.screenshot({path:`${screenshots}/graph-1440-light.png`,fullPage:true});
@@ -74,6 +73,7 @@ const mobile=await browser.newPage({viewport:{width:390,height:844},hasTouch:tru
 attachErrors(mobile);
 await open(mobile);
 await mobile.locator('[data-route-scenario=half]').click();
+await mobile.locator('#routeScene').scrollIntoViewIfNeeded();
 const radius=Number(await mobile.locator('#routeBase').getAttribute('r'));
 const start=await svgScreenPoint(mobile,'#routeScene',300,252-radius);
 const end=await svgScreenPoint(mobile,'#routeScene',300,252+radius);
