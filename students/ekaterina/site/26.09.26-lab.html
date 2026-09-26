@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивная лаборатория по геометрии · Екатерина Скелли · 26.09.2026">
+<title>Лаборатория · 26.09.26 · Екатерина</title>
+<style>
+:root{--surface-page:#eef2ef;--surface-raised:#fffefa;--surface-soft:#e0ece9;--text-primary:#203033;--text-secondary:#697775;--border-subtle:#d3dfdc;--accent:#287c7a;--accent-hover:#1b6260;--danger:#a24e4e;--success:#3b7b60;--focus-ring:#0c7775;--shadow-low:0 12px 34px rgba(31,54,55,.09);--radius-sm:10px;--radius-md:18px;--radius-lg:28px}
+html[data-theme="dark"]{--surface-page:#172021;--surface-raised:#202b2c;--surface-soft:#263839;--text-primary:#edf4f2;--text-secondary:#a9bab6;--border-subtle:#344445;--accent:#74beb8;--accent-hover:#9bd5d0;--danger:#ef9b9b;--success:#8ed2ad;--focus-ring:#9bd5d0;--shadow-low:0 12px 34px rgba(0,0,0,.24)}
+*{box-sizing:border-box}body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--surface-page) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border-subtle)}.topin{max-width:1180px;margin:auto;padding:10px 18px;display:flex;gap:10px;align-items:center}.brand{font-weight:850;margin-right:auto}.btn,.tab{border:1px solid var(--border-subtle);background:var(--surface-raised);color:var(--text-primary);padding:9px 12px;border-radius:999px;text-decoration:none;cursor:pointer;font:inherit}.tab[aria-pressed="true"]{background:var(--accent);color:white;border-color:var(--accent)}.wrap{max-width:1180px;margin:auto;padding:32px 18px 70px}.hero{max-width:800px}.eyebrow{text-transform:uppercase;letter-spacing:.13em;font-size:.75rem;font-weight:850;color:var(--accent)}h1{font-size:clamp(2.5rem,6vw,5.5rem);line-height:.92;letter-spacing:-.055em;margin:.2em 0}.lead{color:var(--text-secondary);font-size:1.1rem}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0}.panel{display:none}.panel.active{display:grid;grid-template-columns:1.05fr .95fr;gap:22px}.instrument,.notes{background:var(--surface-raised);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--shadow-low)}.stage{min-height:420px;display:grid;place-items:center;background:var(--surface-soft);border-radius:var(--radius-md);overflow:hidden}.stage svg{width:100%;height:auto;display:block}.control{margin-top:18px}.control label{display:flex;justify-content:space-between;gap:12px;font-weight:750}.control input[type="range"]{width:100%;accent-color:var(--accent)}.readout{font-size:clamp(1.8rem,4vw,3rem);font-weight:850;color:var(--accent);letter-spacing:-.04em;margin:.4em 0}.state{padding:12px 14px;border-left:4px solid var(--accent);background:var(--surface-soft);border-radius:0 var(--radius-sm) var(--radius-sm) 0}.state.good{border-left-color:var(--success)}.state.bad{border-left-color:var(--danger)}.notes h2{font-size:2rem;line-height:1.1}.notes li{margin:.55em 0}.formula{font:700 1.05rem/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;padding:12px 14px;background:var(--surface-soft);border-radius:var(--radius-sm);overflow:auto}.checks label{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid var(--border-subtle)}footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--border-subtle);color:var(--text-secondary)}
+@media(max-width:820px){.panel.active{grid-template-columns:1fr}.stage{min-height:330px}.topin{flex-wrap:wrap}.brand{width:100%}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="topin"><div class="brand">Екатерина · лаборатория 26.09.26</div><a class="btn" href="26.09.26.html">← К занятию</a><button class="btn" id="theme" type="button">◐ Тема</button></div></header>
+<main class="wrap">
+<section class="hero"><p class="eyebrow">Цифровая лаборатория</p><h1>Что меняется, а что остаётся?</h1><p class="lead">Три модели из занятия. Изменяйте параметр и наблюдайте закономерность; затем сформулируйте её словами.</p></section>
+<div class="tabs" role="tablist" aria-label="Режим лаборатории">
+<button class="tab" data-mode="triangle" aria-pressed="true">Неравенство треугольника</button>
+<button class="tab" data-mode="bisectors" aria-pressed="false">Биссектрисы смежных углов</button>
+<button class="tab" data-mode="circle" aria-pressed="false">Центральный и вписанный</button>
+</div>
+
+<section class="panel active" id="triangle">
+<div class="instrument">
+<div class="stage"><svg id="triSvg" viewBox="0 0 600 420" role="img" aria-label="Треугольник со сторонами 7, 11 и изменяемой третьей стороной">
+<line x1="90" y1="330" x2="510" y2="330" stroke="var(--text-primary)" stroke-width="5"/>
+<line id="triL" x1="90" y1="330" x2="300" y2="95" stroke="var(--accent)" stroke-width="6"/>
+<line id="triR" x1="510" y1="330" x2="300" y2="95" stroke="var(--accent)" stroke-width="6"/>
+<circle id="triTop" cx="300" cy="95" r="8" fill="var(--accent)"/>
+<text x="270" y="365" fill="var(--text-primary)" font-size="24">x</text><text x="155" y="205" fill="var(--text-primary)" font-size="24">7</text><text x="420" y="205" fill="var(--text-primary)" font-size="24">11</text>
+</svg></div>
+<div class="control"><label for="xSide"><span>Третья сторона x</span><span id="xValue">10</span></label><input id="xSide" type="range" min="1" max="20" step="1" value="10"></div>
+<div class="state" id="triState"></div>
+</div>
+<aside class="notes"><p class="eyebrow">Наблюдение</p><h2>Две строгие границы</h2><div class="formula">|11 − 7| &lt; x &lt; 11 + 7 → 4 &lt; x &lt; 18</div><ul><li>При x = 4 фигура вырождается.</li><li>При x = 18 фигура вырождается.</li><li>Для целых x подходят 5, 6, …, 17.</li></ul></aside>
+</section>
+
+<section class="panel" id="bisectors">
+<div class="instrument">
+<div class="stage"><svg id="bisSvg" viewBox="0 0 600 420" role="img" aria-label="Смежные углы и их биссектрисы">
+<line x1="80" y1="310" x2="520" y2="310" stroke="var(--text-primary)" stroke-width="5"/>
+<line id="ray" x1="300" y1="310" x2="380" y2="90" stroke="var(--text-primary)" stroke-width="5"/>
+<line id="b1" x1="300" y1="310" x2="420" y2="170" stroke="var(--accent)" stroke-width="4"/>
+<line id="b2" x1="300" y1="310" x2="170" y2="180" stroke="var(--accent)" stroke-width="4"/>
+<text id="aText" x="390" y="285" fill="var(--text-primary)" font-size="24"></text>
+<text id="bText" x="155" y="285" fill="var(--text-primary)" font-size="24"></text>
+<text x="275" y="205" fill="var(--accent)" font-size="26" font-weight="700">90°</text>
+</svg></div>
+<div class="control"><label for="adjAngle"><span>Первый смежный угол α</span><span id="adjValue">70°</span></label><input id="adjAngle" type="range" min="20" max="160" step="1" value="70"></div>
+<div class="state good">Угол между биссектрисами: <strong>90°</strong> при любом положении луча.</div>
+</div>
+<aside class="notes"><p class="eyebrow">Почему</p><h2>Половины суммы 180°</h2><div class="formula">α/2 + β/2 = (α + β)/2 = 90°</div><p>Вы меняете α, поэтому β меняется как 180° − α. Сумма половин остаётся постоянной.</p></aside>
+</section>
+
+<section class="panel" id="circle">
+<div class="instrument">
+<div class="stage"><svg id="circleSvg" viewBox="0 0 600 420" role="img" aria-label="Центральный и вписанный углы, опирающиеся на одну дугу">
+<circle cx="300" cy="210" r="150" fill="none" stroke="var(--text-primary)" stroke-width="4"/>
+<circle cx="300" cy="210" r="7" fill="var(--accent)"/>
+<line id="oa" x1="300" y1="210" x2="300" y2="60" stroke="var(--accent)" stroke-width="4"/>
+<line id="ob" x1="300" y1="210" x2="450" y2="210" stroke="var(--accent)" stroke-width="4"/>
+<line id="ca" x1="170" y1="285" x2="300" y2="60" stroke="var(--text-primary)" stroke-width="3"/>
+<line id="cb" x1="170" y1="285" x2="450" y2="210" stroke="var(--text-primary)" stroke-width="3"/>
+<text id="centralText" x="318" y="180" fill="var(--accent)" font-size="25" font-weight="700"></text>
+<text id="inscribedText" x="175" y="260" fill="var(--text-primary)" font-size="24"></text>
+</svg></div>
+<div class="control"><label for="centralAngle"><span>Центральный угол</span><span id="centralValue">80°</span></label><input id="centralAngle" type="range" min="20" max="160" step="2" value="80"></div>
+<div class="state good">Вписанный угол: <strong id="inscribedValue">40°</strong>.</div>
+</div>
+<aside class="notes"><p class="eyebrow">Одна дуга</p><h2>Вписанный в два раза меньше</h2><div class="formula">центральный = 2 × вписанный</div><p>Оба угла должны опираться на одну и ту же дугу. Именно это условие делает связь корректной.</p></aside>
+</section>
+
+<section style="margin-top:34px" class="checks">
+<p class="eyebrow">Самопроверка</p>
+<label><input type="checkbox"> Я могу объяснить, почему границы в неравенстве треугольника строгие.</label>
+<label><input type="checkbox"> Я могу доказать, что биссектрисы смежных углов перпендикулярны.</label>
+<label><input type="checkbox"> Я проверяю, что центральный и вписанный углы опираются на одну дугу.</label>
+</section>
+<footer>Лёвин Артём Александрович · эксклюзивно для Екатерины Скелли · 26.09.2026</footer>
+</main>
+<script>
+(function(){
+'use strict';
+var root=document.documentElement,theme=document.getElementById('theme');
+root.dataset.theme=localStorage.getItem('ekaterina-260926-lab-theme')||'light';
+theme.onclick=function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';localStorage.setItem('ekaterina-260926-lab-theme',root.dataset.theme);};
+
+var tabs=[].slice.call(document.querySelectorAll('.tab'));
+function setMode(mode){
+ tabs.forEach(function(t){t.setAttribute('aria-pressed',t.dataset.mode===mode?'true':'false');});
+ document.querySelectorAll('.panel').forEach(function(p){p.classList.toggle('active',p.id===mode);});
+ history.replaceState(null,'','?mode='+mode);
+}
+tabs.forEach(function(t){t.onclick=function(){setMode(t.dataset.mode);};});
+
+var x=document.getElementById('xSide'),xv=document.getElementById('xValue'),triState=document.getElementById('triState'),triTop=document.getElementById('triTop'),triL=document.getElementById('triL'),triR=document.getElementById('triR');
+function updateTriangle(){
+ var n=+x.value;xv.textContent=n;
+ var ok=n>4&&n<18;
+ triState.className='state '+(ok?'good':'bad');
+ triState.innerHTML=ok?'<strong>Треугольник существует.</strong> Выполняется 4 &lt; x &lt; 18.':'<strong>Треугольник не существует.</strong> Нарушено строгое неравенство.';
+ var y=ok?Math.max(80,330-(18-Math.abs(n-11))*15):330;
+ triTop.setAttribute('cy',y);triL.setAttribute('y2',y);triR.setAttribute('y2',y);
+}
+x.oninput=updateTriangle;updateTriangle();
+
+var a=document.getElementById('adjAngle'),av=document.getElementById('adjValue'),ray=document.getElementById('ray'),b1=document.getElementById('b1'),b2=document.getElementById('b2'),aText=document.getElementById('aText'),bText=document.getElementById('bText');
+function point(deg,len){var r=deg*Math.PI/180;return [300+Math.cos(r)*len,310-Math.sin(r)*len];}
+function line(el,deg,len){var p=point(deg,len);el.setAttribute('x2',p[0]);el.setAttribute('y2',p[1]);}
+function updateBis(){
+ var alpha=+a.value,beta=180-alpha;av.textContent=alpha+'°';aText.textContent=alpha+'°';bText.textContent=beta+'°';
+ line(ray,alpha,235);line(b1,alpha/2,190);line(b2,alpha+(beta/2),190);
+}
+a.oninput=updateBis;updateBis();
+
+var c=document.getElementById('centralAngle'),cv=document.getElementById('centralValue'),iv=document.getElementById('inscribedValue'),ob=document.getElementById('ob'),cb=document.getElementById('cb'),centralText=document.getElementById('centralText'),inscribedText=document.getElementById('inscribedText');
+function updateCircle(){
+ var ang=+c.value,half=ang/2;cv.textContent=ang+'°';iv.textContent=half+'°';centralText.textContent=ang+'°';inscribedText.textContent=half+'°';
+ var r=(90-ang)*Math.PI/180, bx=300+150*Math.cos(r), by=210-150*Math.sin(r);
+ ob.setAttribute('x2',bx);ob.setAttribute('y2',by);cb.setAttribute('x2',bx);cb.setAttribute('y2',by);
+}
+c.oninput=updateCircle;updateCircle();
+
+var params=new URLSearchParams(location.search),mode=params.get('mode');
+if(['triangle','bisectors','circle'].indexOf(mode)<0)mode='triangle';setMode(mode);
+})();
+</script>
+</body>
+</html>
