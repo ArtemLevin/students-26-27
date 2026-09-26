@@ -1,0 +1,1376 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{helvet}
+\renewcommand{\sfdefault}{cmss}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm,headheight=25pt,footskip=14mm]{geometry}
+\usepackage[nopatch=footnote]{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{6B7280}
+\definecolor{linegray}{HTML}{D6DEDE}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkaccent,
+    urlcolor=darkaccent
+}
+
+\color{textgray}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+
+\setlist[itemize]{
+    leftmargin=1.6em,
+    itemsep=0.25em,
+    topsep=0.35em
+}
+\setlist[enumerate]{
+    leftmargin=1.8em,
+    itemsep=0.45em,
+    topsep=0.4em
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{softgray}{
+    Геометрия: трапеции, окружности, прямоугольные треугольники
+}}
+\fancyhead[R]{\small\textcolor{softgray}{София Кальней}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{%
+    \hbox to\headwidth{%
+        \color{linegray}\leaders\hrule height \headrulewidth\hfill
+    }%
+}
+\renewcommand{\footrulewidth}{0pt}
+
+\newcommand{\Section}[1]{%
+    \vspace{0.4em}%
+    {\Large\bfseries\color{darkaccent}#1}\par
+    \vspace{0.25em}
+    \noindent
+    \textcolor{linegray}{\rule{\linewidth}{0.6pt}}
+    \vspace{0.5em}%
+}
+
+\newcommand{\Subsection}[1]{%
+    \vspace{0.3em}%
+    {\large\bfseries\color{accent}#1}\par
+    \vspace{0.25em}%
+}
+
+\newcommand{\Key}[1]{%
+    \textbf{\textcolor{darkaccent}{#1}}%
+}
+
+% -------------------------------------------------
+% Стили блок-схем
+% -------------------------------------------------
+
+\tikzset{
+    flowstart/.style={
+        ellipse,
+        draw=darkaccent,
+        line width=0.9pt,
+        minimum width=42mm,
+        minimum height=11mm,
+        align=center,
+        font=\small
+    },
+    flowaction/.style={
+        rectangle,
+        rounded corners=2mm,
+        draw=accent,
+        line width=0.9pt,
+        text width=84mm,
+        minimum height=14mm,
+        align=center,
+        font=\small,
+        inner sep=3mm
+    },
+    flowdecision/.style={
+        diamond,
+        aspect=2.2,
+        draw=darkaccent,
+        line width=0.9pt,
+        text width=48mm,
+        align=center,
+        font=\small,
+        inner sep=1.5mm
+    },
+    flowarrow/.style={
+        -{Stealth[length=3mm,width=2mm]},
+        line width=0.9pt,
+        draw=darkaccent
+    },
+    flowlabel/.style={
+        font=\small,
+        fill=white,
+        inner sep=1pt,
+        text=darkaccent
+    }
+}
+
+% -------------------------------------------------
+% Специальные страницы для крупных блок-схем
+% -------------------------------------------------
+
+\newenvironment{flowchartpagelandscape}{%
+    \clearpage
+    \pdfpagewidth=420mm
+    \pdfpageheight=297mm
+    \paperwidth=420mm
+    \paperheight=297mm
+    \newgeometry{
+        layoutwidth=420mm,
+        layoutheight=297mm,
+        left=18mm,
+        right=18mm,
+        top=15mm,
+        bottom=15mm,
+        headheight=12pt,
+        headsep=0pt,
+        footskip=8mm
+    }
+    \thispagestyle{empty}
+}{%
+    \clearpage
+    \restoregeometry
+    \pdfpagewidth=210mm
+    \pdfpageheight=297mm
+    \paperwidth=210mm
+    \paperheight=297mm
+}
+
+\newenvironment{flowchartpageportrait}{%
+    \clearpage
+    \pdfpagewidth=297mm
+    \pdfpageheight=420mm
+    \paperwidth=297mm
+    \paperheight=420mm
+    \newgeometry{
+        layoutwidth=297mm,
+        layoutheight=420mm,
+        left=20mm,
+        right=20mm,
+        top=18mm,
+        bottom=18mm,
+        headheight=12pt,
+        headsep=0pt,
+        footskip=8mm
+    }
+    \thispagestyle{empty}
+}{%
+    \clearpage
+    \restoregeometry
+    \pdfpagewidth=210mm
+    \pdfpageheight=297mm
+    \paperwidth=210mm
+    \paperheight=297mm
+}
+
+\begin{document}
+
+% =================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% =================================================
+
+\thispagestyle{empty}
+
+\begin{center}
+
+\vspace*{23mm}
+
+{\small\textcolor{softgray}{ОГЭ по математике · геометрия}}\par
+
+\vspace{10mm}
+
+{\Huge\bfseries\color{darkaccent}Чек-лист}\par
+
+\vspace{4mm}
+
+{\Large\bfseries
+Трапеции, окружности и прямоугольные треугольники
+}\par
+
+\vspace{5mm}
+
+{\large
+Касательные · биссектрисы · высота к гипотенузе · описанная окружность
+}\par
+
+\vspace{18mm}
+
+{\large\bfseries София Кальней}\par
+
+{\normalsize программа: ОГЭ}\par
+
+\vfill
+
+{\normalsize \today}\par
+
+\vspace{4mm}
+
+{\small
+Лёвин Артём Александрович эксклюзивно для Софии Кальней
+}\par
+
+\vspace{15mm}
+
+\begin{tikzpicture}[x=1cm,y=1cm]
+    \draw[
+        accent,
+        line width=1.1pt
+    ]
+    (0,0)
+    .. controls (3.0,0.85) and (7.2,-0.65) ..
+    (10.5,0.08)
+    .. controls (12.6,0.52) and (14.8,0.30) ..
+    (16.2,0.02);
+\end{tikzpicture}
+
+\end{center}
+
+\clearpage
+
+% =================================================
+\Section{1. Главная идея занятия}
+
+Практически вся работа строится вокруг одного принципа:
+\Key{старайтесь переводить конфигурацию к треугольникам,
+особенно к прямоугольным}.
+Окружность и трапеция дают полезные дополнительные построения,
+после которых начинают работать стандартные теоремы.
+
+\begin{itemize}
+
+    \item Если есть \Key{касательная к окружности},
+    проведите радиус в точку касания.
+
+    \item Если окружность \Key{вписана в угол},
+    соедините вершину угла с центром окружности:
+    получится биссектриса.
+
+    \item Если окружность \Key{вписана в многоугольник},
+    отмечайте равные касательные, выходящие из одной вершины.
+
+    \item В равнобедренной трапеции проводите высоту
+    к большему основанию:
+    она сразу даёт прямоугольный треугольник
+    и удобные отрезки на основании.
+
+    \item Если трапеция вписана в окружность,
+    полезно провести диагональ и перейти к треугольнику,
+    вписанному в ту же окружность.
+
+\end{itemize}
+
+% =================================================
+\Section{2. Что нужно знать наизусть}
+
+\Subsection{2.1. Касательные и вписанная окружность}
+
+\begin{enumerate}
+
+    \item Радиус, проведённый в точку касания,
+    перпендикулярен касательной:
+    \[
+        OT\perp l.
+    \]
+
+    \item Касательные, проведённые из одной точки
+    к окружности, равны.
+
+    Если из точки $A$ проведены касательные
+    $AB$ и $AC$, то
+    \[
+        AB=AC.
+    \]
+
+    \item Центр окружности, вписанной в угол,
+    лежит на биссектрисе этого угла.
+
+    \item Для четырёхугольника,
+    в который вписана окружность,
+    суммы длин противоположных сторон равны:
+    \[
+        AB+CD=BC+AD.
+    \]
+
+    Это следствие равенства касательных,
+    выходящих из каждой вершины.
+
+\end{enumerate}
+
+% -------------------------------------------------
+\Subsection{2.2. Равнобедренная трапеция}
+
+Пусть $ABCD$ --- равнобедренная трапеция,
+\[
+AD\parallel BC,
+\qquad
+AD>BC.
+\]
+
+Из вершины $C$ опущена высота
+\[
+CH\perp AD.
+\]
+
+Тогда
+\[
+AH=\frac{AD+BC}{2},
+\qquad
+DH=\frac{AD-BC}{2}.
+\]
+
+Поскольку средняя линия трапеции равна
+\[
+m=\frac{AD+BC}{2},
+\]
+получаем важное соотношение
+\[
+\boxed{AH=m}.
+\]
+
+Если боковая сторона равна $a$,
+а угол при большем основании равен $30^\circ$,
+то в прямоугольном треугольнике $CDH$
+\[
+CH=a\sin30^\circ=\frac a2,
+\]
+\[
+DH=a\cos30^\circ=\frac{a\sqrt3}{2}.
+\]
+
+% -------------------------------------------------
+\Subsection{2.3. Прямоугольный треугольник: высота к гипотенузе}
+
+Пусть в прямоугольном треугольнике $ABC$
+угол $B$ прямой,
+а $BH$ --- высота к гипотенузе $AC$.
+
+Обозначим
+\[
+AH=p,
+\qquad
+HC=q,
+\qquad
+AC=c,
+\qquad
+BH=h.
+\]
+
+Тогда
+\[
+\boxed{h^2=pq},
+\qquad
+\boxed{AB^2=cp},
+\qquad
+\boxed{BC^2=cq}.
+\]
+
+Также из равенства площадей
+\[
+\frac12 AB\cdot BC
+=
+\frac12 AC\cdot BH
+\]
+следует
+\[
+\boxed{
+h=\frac{AB\cdot BC}{AC}
+}.
+\]
+
+% -------------------------------------------------
+\Subsection{2.4. Описанная окружность}
+
+Для треугольника со стороной $a$,
+лежащей напротив угла $\alpha$,
+верна расширенная теорема синусов:
+\[
+\frac{a}{\sin\alpha}=2R.
+\]
+
+Отсюда
+\[
+\boxed{
+R=\frac{a}{2\sin\alpha}
+}.
+\]
+
+Особенно полезен частный случай:
+\[
+\alpha=30^\circ.
+\]
+
+Так как
+\[
+\sin30^\circ=\frac12,
+\]
+получаем
+\[
+\boxed{R=a},
+\]
+где $a$ --- сторона,
+лежащая напротив угла $30^\circ$.
+
+Если сторона треугольника является диаметром
+описанной окружности,
+то угол, опирающийся на этот диаметр,
+равен $90^\circ$.
+
+\clearpage
+
+% =================================================
+\Section{3. Наглядная схема: высота к гипотенузе}
+
+\begin{center}
+
+\begin{tikzpicture}[scale=1.05]
+
+    \tkzDefPoint(0,0){A}
+    \tkzDefPoint(8,0){C}
+    \tkzDefPoint(3,4){B}
+
+    \tkzDefPointBy[projection=onto A--C](B)
+    \tkzGetPoint{H}
+
+    \tkzDrawPolygon[
+        line width=1pt,
+        color=accent
+    ](A,B,C)
+
+    \tkzDrawSegment[
+        line width=1pt,
+        color=darkaccent
+    ](B,H)
+
+    \tkzMarkRightAngle[size=0.28](A,B,C)
+    \tkzMarkRightAngle[size=0.28](B,H,C)
+
+    \tkzDrawPoints(A,B,C,H)
+
+    \tkzLabelPoints[below](A,H,C)
+    \tkzLabelPoints[above](B)
+
+    \node[
+        below=8mm of H,
+        text=darkaccent,
+        font=\small
+    ]{
+        $BH^2=AH\cdot HC$
+    };
+
+\end{tikzpicture}
+
+\end{center}
+
+\textbf{Почему формула работает.}
+Треугольники $ABH$ и $BCH$ подобны по двум углам.
+
+Из отношения сходственных сторон
+\[
+\frac{AH}{BH}
+=
+\frac{BH}{HC}
+\]
+получаем
+\[
+BH^2=AH\cdot HC.
+\]
+
+Это одна из ключевых формул занятия:
+она позволяет находить высоту
+или один из отрезков гипотенузы
+без введения дополнительных неизвестных.
+
+% =================================================
+\Section{4. Типовая модель 1: прямоугольная трапеция с вписанной окружностью}
+
+Пусть в прямоугольную трапецию $ABCD$
+вписана окружность радиуса $r$,
+\[
+AB\parallel CD,
+\qquad
+AD\perp AB,
+\]
+а меньшее основание
+\[
+AB=\frac43r.
+\]
+
+Найдём все стороны трапеции.
+
+\begin{center}
+
+\begin{tikzpicture}[scale=1.45]
+
+    \tkzDefPoint(0,2){A}
+    \tkzDefPoint(1.3333,2){B}
+    \tkzDefPoint(4,0){C}
+    \tkzDefPoint(0,0){D}
+
+    \tkzDefPoint(1,1){O}
+
+    \tkzDefPoint(1,2){P}
+    \tkzDefPoint(1.6,1.8){T}
+    \tkzDefPoint(1,0){Q}
+    \tkzDefPoint(0,1){S}
+
+    \tkzDrawPolygon[
+        line width=1pt,
+        color=accent
+    ](A,B,C,D)
+
+    \tkzDrawCircle[
+        line width=0.9pt,
+        color=darkaccent
+    ](O,P)
+
+    \tkzDrawSegments[
+        line width=0.85pt,
+        color=darkaccent
+    ](
+        O,P
+        O,T
+        O,Q
+        O,S
+    )
+
+    \tkzMarkRightAngle[size=0.20](A,D,C)
+    \tkzMarkRightAngle[size=0.18](O,P,B)
+    \tkzMarkRightAngle[size=0.18](O,T,C)
+
+    \tkzDrawPoints(A,B,C,D,O,P,T,Q,S)
+
+    \tkzLabelPoints[above left](A)
+    \tkzLabelPoint[above right](B){$B$}
+    \tkzLabelPoint[above left](P){$P$}
+    \tkzLabelPoints[right](C,T)
+    \tkzLabelPoints[below](D,Q)
+    \tkzLabelPoints[left](S)
+    \tkzLabelPoints[below right](O)
+
+\end{tikzpicture}
+
+\end{center}
+
+\begin{enumerate}
+
+    \item Окружность касается обоих параллельных оснований.
+    Поэтому расстояние между основаниями
+    равно диаметру:
+    \[
+        AD=2r.
+    \]
+
+    \item Из вершины $A$ выходят две равные касательные.
+    Поэтому отрезки от $A$
+    до точек касания на $AB$ и $AD$
+    равны $r$.
+
+    Следовательно,
+    \[
+        BP
+        =
+        AB-AP
+        =
+        \frac43r-r
+        =
+        \frac13r.
+    \]
+
+    \item Из вершины $B$ касательные равны:
+    \[
+        BT=BP=\frac13r.
+    \]
+
+    \item Центр $O$ лежит на биссектрисах
+    углов $B$ и $C$.
+
+    Соседние углы трапеции в сумме дают
+    \[
+        \angle ABC+\angle BCD=180^\circ.
+    \]
+
+    Поэтому
+    \[
+        \angle OBC+\angle BCO
+        =
+        \frac12\left(
+            \angle ABC+\angle BCD
+        \right)
+        =
+        90^\circ.
+    \]
+
+    Значит,
+    \[
+        \angle BOC=90^\circ.
+    \]
+
+    Треугольник $BOC$ прямоугольный,
+    а $OT$ --- высота к гипотенузе $BC$.
+
+    \item По свойству высоты,
+    проведённой к гипотенузе,
+    \[
+        OT^2=BT\cdot TC.
+    \]
+
+    Подставляем
+    \[
+        OT=r,
+        \qquad
+        BT=\frac13r:
+    \]
+    \[
+        r^2
+        =
+        \frac13r\cdot TC.
+    \]
+
+    Отсюда
+    \[
+        TC=3r.
+    \]
+
+    \item Наклонная боковая сторона:
+    \[
+        BC
+        =
+        BT+TC
+        =
+        \frac13r+3r
+        =
+        \frac{10}{3}r.
+    \]
+
+    \item Из вершины $C$ выходят равные касательные:
+    \[
+        CQ=CT=3r.
+    \]
+
+    Из вершины $D$ также выходят равные касательные:
+    \[
+        DQ=DS=r.
+    \]
+
+    Поэтому
+    \[
+        CD
+        =
+        CQ+QD
+        =
+        3r+r
+        =
+        4r.
+    \]
+
+\end{enumerate}
+
+Итак,
+\[
+\boxed{
+AB=\frac43r,
+\qquad
+BC=\frac{10}{3}r,
+\qquad
+CD=4r,
+\qquad
+AD=2r
+}.
+\]
+
+\textbf{Проверка.}
+Для четырёхугольника с вписанной окружностью
+\[
+AB+CD=BC+AD.
+\]
+
+Действительно,
+\[
+\frac43r+4r
+=
+\frac{10}{3}r+2r
+=
+\frac{16}{3}r.
+\]
+
+\clearpage
+
+% =================================================
+\Section{5. Типовая модель 2: равнобедренная трапеция в окружности}
+
+Пусть боковая сторона равнобедренной трапеции
+равна $a$,
+средняя линия равна $b$,
+а углы при большем основании
+равны $30^\circ$.
+
+Требуется найти радиус окружности,
+описанной около трапеции.
+
+Проведём диагональ $AC$
+и высоту
+\[
+CH\perp AD.
+\]
+
+Тогда треугольник $ACD$
+вписан в ту же окружность,
+что и трапеция.
+
+\begin{center}
+
+\begin{tikzpicture}[scale=1.05]
+
+    \tkzDefPoint(0,0){A}
+    \tkzDefPoint(5.464,0){D}
+    \tkzDefPoint(1.732,1){B}
+    \tkzDefPoint(3.732,1){C}
+    \tkzDefPoint(3.732,0){H}
+
+    \tkzDrawPolygon[
+        line width=1pt,
+        color=accent
+    ](A,B,C,D)
+
+    \tkzDrawSegment[
+        line width=0.9pt,
+        color=darkaccent
+    ](A,C)
+
+    \tkzDrawSegment[
+        line width=0.9pt,
+        color=darkaccent
+    ](C,H)
+
+    \tkzMarkRightAngle[size=0.22](C,H,A)
+
+    \tkzMarkAngle[size=0.52](C,D,A)
+    \tkzLabelAngle[pos=0.80](C,D,A){$30^\circ$}
+
+    \tkzDrawPoints(A,B,C,D,H)
+
+    \tkzLabelPoints[below](A,H,D)
+    \tkzLabelPoints[above](B,C)
+
+\end{tikzpicture}
+
+\end{center}
+
+Так как $CH$ --- высота равнобедренной трапеции,
+\[
+AH
+=
+\frac{AD+BC}{2}
+=
+b.
+\]
+
+В прямоугольном треугольнике $CDH$
+\[
+CH
+=
+a\sin30^\circ
+=
+\frac a2.
+\]
+
+Следовательно,
+из прямоугольного треугольника $ACH$
+\[
+AC^2
+=
+AH^2+CH^2
+=
+b^2+\frac{a^2}{4}.
+\]
+
+Поэтому
+\[
+AC
+=
+\sqrt{
+    b^2+\frac{a^2}{4}
+}.
+\]
+
+В треугольнике $ACD$
+сторона $AC$ лежит напротив угла
+\[
+\angle ADC=30^\circ.
+\]
+
+По расширенной теореме синусов
+\[
+R
+=
+\frac{AC}{2\sin30^\circ}
+=
+AC.
+\]
+
+Итак,
+\[
+\boxed{
+R=
+\sqrt{
+    b^2+\frac{a^2}{4}
+}
+}.
+\]
+
+% -------------------------------------------------
+\Subsection{Полезное наблюдение}
+
+Если известны $a$ и $b$,
+можно восстановить оба основания трапеции.
+
+В прямоугольном треугольнике $CDH$
+\[
+DH
+=
+a\cos30^\circ
+=
+\frac{a\sqrt3}{2}.
+\]
+
+Для равнобедренной трапеции
+\[
+DH
+=
+\frac{AD-BC}{2}.
+\]
+
+Следовательно,
+\[
+AD-BC=a\sqrt3.
+\]
+
+Средняя линия даёт
+\[
+AD+BC=2b.
+\]
+
+Решая систему,
+получаем
+\[
+\boxed{
+AD=b+\frac{a\sqrt3}{2}
+},
+\]
+\[
+\boxed{
+BC=b-\frac{a\sqrt3}{2}
+}.
+\]
+
+Чтобы меньшее основание было положительным,
+необходимо
+\[
+\boxed{
+b>\frac{a\sqrt3}{2}
+}.
+\]
+
+\clearpage
+
+% =================================================
+% БЛОК-СХЕМА
+% =================================================
+
+\begin{flowchartpageportrait}
+
+\begin{center}
+
+{\Large\bfseries\color{darkaccent}
+Алгоритм: трапеция и окружность
+}\par
+
+\vspace{10mm}
+
+\begin{tikzpicture}[
+    node distance=5mm and 15mm
+]
+
+    \node[flowstart] (start) {
+        Прочитайте условие и сделайте точный чертёж
+    };
+
+    \node[
+        flowdecision,
+        below=of start
+    ] (circle) {
+        Есть окружность и касания?
+    };
+
+    \node[
+        flowaction,
+        below left=8mm and 15mm of circle
+    ] (tangent) {
+        Проведите радиусы в точки касания;
+        отметьте перпендикуляры;
+        выпишите равные касательные;
+        проведите биссектрисы к центру
+    };
+
+    \node[
+        flowaction,
+        below right=8mm and 15mm of circle
+    ] (trap) {
+        Проверьте тип трапеции.
+        Для равнобедренной проведите
+        высоту к большему основанию
+    };
+
+    \node[
+        flowaction,
+        below=32mm of circle
+    ] (tri) {
+        Найдите прямоугольный треугольник
+        или создайте его дополнительным построением:
+        высотой, диагональю, радиусом
+    };
+
+    \node[
+        flowdecision,
+        below=of tri
+    ] (alt) {
+        Есть высота к гипотенузе?
+    };
+
+    \node[
+        flowaction,
+        below left=8mm and 15mm of alt
+    ] (metric) {
+        Используйте
+        $h^2=pq$,
+        $a^2=cp$,
+        $b^2=cq$
+        или
+        $h=ab/c$
+    };
+
+    \node[
+        flowaction,
+        below right=8mm and 15mm of alt
+    ] (pyth) {
+        Используйте Пифагора,
+        тригонометрию угла $30^\circ$
+        и свойства трапеции
+    };
+
+    \node[
+        flowdecision,
+        below=30mm of alt
+    ] (Rneed) {
+        Нужно найти радиус
+        описанной окружности?
+    };
+
+    \node[
+        flowaction,
+        below left=8mm and 15mm of Rneed
+    ] (sine) {
+        Перейдите к вписанному треугольнику
+        и примените
+        \[
+            R=\frac{a}{2\sin\alpha}
+        \]
+    };
+
+    \node[
+        flowaction,
+        below right=8mm and 15mm of Rneed
+    ] (collect) {
+        Соберите искомые стороны
+        из найденных отрезков
+    };
+
+    \node[
+        flowaction,
+        below=28mm of Rneed
+    ] (check) {
+        Проверьте длины, знаки,
+        применимость формул
+        и согласованность с чертежом
+    };
+
+    \node[
+        flowstart,
+        below=of check
+    ] (finish) {
+        Запишите ответ
+    };
+
+    \draw[flowarrow]
+        (start) -- (circle);
+
+    \draw[flowarrow]
+        (circle)
+        --
+        node[
+            flowlabel,
+            pos=0.28,
+            left
+        ]{да}
+        (tangent);
+
+    \draw[flowarrow]
+        (circle)
+        --
+        node[
+            flowlabel,
+            pos=0.28,
+            right
+        ]{нет}
+        (trap);
+
+    \draw[flowarrow]
+        (tangent)
+        |-
+        (tri.west);
+
+    \draw[flowarrow]
+        (trap)
+        |-
+        (tri.east);
+
+    \draw[flowarrow]
+        (tri) -- (alt);
+
+    \draw[flowarrow]
+        (alt)
+        --
+        node[
+            flowlabel,
+            pos=0.28,
+            left
+        ]{да}
+        (metric);
+
+    \draw[flowarrow]
+        (alt)
+        --
+        node[
+            flowlabel,
+            pos=0.28,
+            right
+        ]{нет}
+        (pyth);
+
+    \draw[flowarrow]
+        (metric)
+        |-
+        (Rneed.west);
+
+    \draw[flowarrow]
+        (pyth)
+        |-
+        (Rneed.east);
+
+    \draw[flowarrow]
+        (Rneed)
+        --
+        node[
+            flowlabel,
+            pos=0.28,
+            left
+        ]{да}
+        (sine);
+
+    \draw[flowarrow]
+        (Rneed)
+        --
+        node[
+            flowlabel,
+            pos=0.28,
+            right
+        ]{нет}
+        (collect);
+
+    \draw[flowarrow]
+        (sine)
+        |-
+        (check.west);
+
+    \draw[flowarrow]
+        (collect)
+        |-
+        (check.east);
+
+    \draw[flowarrow]
+        (check) -- (finish);
+
+\end{tikzpicture}
+
+\end{center}
+
+\end{flowchartpageportrait}
+
+% =================================================
+\Section{6. Типичные ошибки и контрольные вопросы}
+
+\begin{itemize}
+
+    \item
+    \Key{Радиус к касательной.}
+    Перпендикуляр возникает только
+    в точке касания.
+
+    \item
+    \Key{Равные касательные.}
+    Сравниваются отрезки,
+    выходящие из одной и той же внешней точки.
+
+    \item
+    \Key{Биссектриса.}
+    Центр вписанной окружности
+    лежит на биссектрисе угла,
+    образованного двумя касательными.
+
+    \item
+    \Key{Высота к гипотенузе.}
+    Формула
+    \[
+        h^2=pq
+    \]
+    применима только к высоте,
+    проведённой из вершины прямого угла
+    к гипотенузе.
+
+    \item
+    \Key{Проекции катетов.}
+    В формулах
+    \[
+        a^2=cp,
+        \qquad
+        b^2=cq
+    \]
+    каждому катету соответствует
+    его собственная проекция на гипотенузу.
+
+    \item
+    \Key{Диаметр.}
+    Если сторона треугольника
+    является диаметром окружности,
+    противоположный угол равен $90^\circ$.
+
+    \item
+    \Key{Радиус через угол.}
+    В формуле
+    \[
+        R=\frac{a}{2\sin\alpha}
+    \]
+    сторона $a$ обязана лежать
+    напротив угла $\alpha$.
+
+    \item
+    \Key{Угол $30^\circ$.}
+    Если напротив $30^\circ$
+    лежит сторона $a$, то
+    \[
+        R=a.
+    \]
+
+    \item
+    \Key{Равнобедренная трапеция.}
+    Формулы
+    \[
+        AH=\frac{AD+BC}{2},
+        \qquad
+        DH=\frac{AD-BC}{2}
+    \]
+    требуют равнобедренности трапеции.
+
+\end{itemize}
+
+% -------------------------------------------------
+\Subsection{Быстрая самопроверка перед решением}
+
+\begin{enumerate}
+
+    \item Где можно провести перпендикуляр?
+
+    \item Какие касательные равны?
+
+    \item Какие биссектрисы проходят
+    через центр окружности?
+
+    \item Какой прямоугольный треугольник
+    уже есть или может быть построен?
+
+    \item Есть ли высота к гипотенузе?
+
+    \item Можно ли заменить задачу о трапеции
+    задачей о вписанном треугольнике?
+
+    \item Какая сторона лежит
+    напротив известного угла?
+
+\end{enumerate}
+
+\clearpage
+
+% =================================================
+\Section{7. Тренировочный блок — Путь А}
+
+\textbf{Условия.}
+Решайте без готовых шаблонов перед глазами.
+Для каждой задачи сначала выполните чертёж
+и подпишите все данные.
+Решения в этом блоке не приводятся.
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+
+    \item
+    Из точки $P$, лежащей вне окружности,
+    проведены касательные $PA$ и $PB$.
+    Известно, что
+    \[
+        PA=7.
+    \]
+    Найдите $PB$.
+
+    \item
+    В прямоугольную трапецию
+    вписана окружность радиуса $6$.
+    Меньшее основание трапеции равно $8$.
+    Найдите все четыре стороны трапеции.
+
+    \item
+    Боковая сторона равнобедренной трапеции
+    равна $10$,
+    средняя линия равна $12$,
+    а углы при большем основании
+    равны $30^\circ$.
+    Найдите радиус окружности,
+    описанной около трапеции.
+
+    \item
+    Равнобедренная трапеция $ABCD$
+    вписана в окружность,
+    \[
+        AD\parallel BC.
+    \]
+    Большее основание
+    \[
+        AD=26
+    \]
+    является диаметром окружности,
+    а
+    \[
+        BC=14.
+    \]
+    Найдите высоту трапеции,
+    боковую сторону
+    и диагональ $AC$.
+
+    \item
+    Боковая сторона равнобедренной трапеции
+    равна $8$,
+    углы при большем основании
+    равны $30^\circ$,
+    а радиус описанной окружности
+    равен $10$.
+    Найдите среднюю линию
+    и оба основания трапеции.
+
+\end{enumerate}
+
+\clearpage
+
+% =================================================
+\Section{8. Ответы к тренировочному блоку}
+
+\renewcommand{\arraystretch}{1.35}
+
+\begin{table}[ht]
+
+\centering
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}c X@{}}
+
+\toprule
+№ & Ответ \\
+\midrule
+
+1 &
+$PB=7$.
+\\
+
+2 &
+Меньшее основание $8$,
+большее основание $24$,
+перпендикулярная боковая сторона $12$,
+наклонная боковая сторона $20$.
+\\
+
+3 &
+$R=13$.
+\\
+
+4 &
+Высота
+$2\sqrt{30}$,
+боковая сторона
+$2\sqrt{39}$,
+диагональ
+$AC=2\sqrt{130}$.
+\\
+
+5 &
+Средняя линия
+$2\sqrt{21}$;
+основания
+\[
+2\sqrt{21}-4\sqrt3
+\]
+и
+\[
+2\sqrt{21}+4\sqrt3.
+\]
+\\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table}
+
+\vfill
+
+\begin{center}
+\textcolor{softgray}{\small
+Ключевой ориентир:
+окружность и трапеция должны привести Вас
+к треугольнику,
+с которым уже можно работать
+стандартными теоремами.
+}
+\end{center}
+
+\end{document}
