@@ -8,6 +8,21 @@ const MONTHS_GENITIVE=[
 
 export const LESSONS=Object.freeze([
   {
+    date:'2026-09-25',
+    href:'25.09.26.html',
+    title:'Производная и касательная',
+    navTitle:'Производная и касательная',
+    navSubtitle:'угловой коэффициент · параллельность · точка касания',
+    summary:'На занятии закреплена связь f′(x₀)=k=tg α и отработаны основные типы задач на касательную: вычисление производной по двум точкам прямой, использование параллельности, чтение уровня y=m на графике производной и поиск абсциссы точки касания по двум условиям.',
+    topics:['производная','касательная','угловой коэффициент','параллельные прямые','график производной','точка касания'],
+    outcomes:[
+      {competencyId:'t8_geometric',label:'Геометрический смысл производной',level:3,tone:'good',practiceDisposition:'manual'},
+      {competencyId:'t8_derivative_graph',label:'Чтение графика производной',level:3,tone:'good',practiceDisposition:'manual'},
+      {competencyId:'t8_interpret',label:'Задачи на касательную',level:3,tone:'good',practiceDisposition:'manual'}
+    ],
+    materials:{pdf:'../pdf_docs/25.09.26.pdf',tex:'../tex_docs/25.09.26.tex',lab:'25.09.26-lab.html'}
+  },
+  {
     date:'2026-09-21',
     href:'21.09.26.html',
     title:'Геометрический смысл производной',
