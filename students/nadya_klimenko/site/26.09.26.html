@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Интерактивное занятие Нади Клименко: простые уравнения, НОД и НОК, связь НОД и НОК, степени простых множителей и встречное движение.">
+  <title>НОД, НОК и движение — Надя Клименко</title>
+  <style>
+    :root{
+      --surface-page:#f3f1e9;
+      --surface-raised:#fffdf7;
+      --surface-soft:#eaf3f1;
+      --surface-ink:#153432;
+      --text-primary:#1f2927;
+      --text-secondary:#64716e;
+      --text-inverse:#f8fffd;
+      --border-subtle:#d4ddd9;
+      --border-strong:#8ca39d;
+      --accent:#087d79;
+      --accent-hover:#05615e;
+      --accent-soft:#d9efeb;
+      --support:#9a6b2f;
+      --support-soft:#f3eadb;
+      --success:#2c7758;
+      --danger:#9f4c4d;
+      --focus-ring:#0f918c;
+      --shadow-low:0 10px 34px rgba(23,61,56,.08);
+      --shadow-high:0 24px 64px rgba(23,61,56,.15);
+      --radius-sm:.5rem;
+      --radius-md:.95rem;
+      --radius-lg:1.4rem;
+      --space-1:.45rem;
+      --space-2:.75rem;
+      --space-3:1rem;
+      --space-4:1.55rem;
+      --space-5:2.35rem;
+      --space-6:3.5rem;
+      --motion-fast:150ms;
+      --motion-normal:260ms;
+      --max:1200px;
+      --journey-progress:0;
+    }
+    html[data-theme="dark"]{
+      --surface-page:#101817;
+      --surface-raised:#172220;
+      --surface-soft:#1b2d2a;
+      --surface-ink:#dff8f3;
+      --text-primary:#edf6f3;
+      --text-secondary:#a8b8b4;
+      --text-inverse:#10211f;
+      --border-subtle:#30433f;
+      --border-strong:#607a73;
+      --accent:#67d3ca;
+      --accent-hover:#8ce2db;
+      --accent-soft:#173b37;
+      --support:#e0b872;
+      --support-soft:#3a3021;
+      --success:#85caa5;
+      --danger:#e48b8d;
+      --focus-ring:#91e7df;
+      --shadow-low:0 12px 34px rgba(0,0,0,.2);
+      --shadow-high:0 24px 64px rgba(0,0,0,.34);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--surface-page)}
+    body{
+      margin:0;
+      color:var(--text-primary);
+      background:
+        linear-gradient(90deg,transparent 0 7.5%,color-mix(in srgb,var(--border-subtle) 24%,transparent) 7.5% 7.58%,transparent 7.58%),
+        var(--surface-page);
+      font:16px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+    }
+    a{color:inherit}
+    button,input{font:inherit}
+    button{cursor:pointer}
+    :focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+    .skip-link{position:absolute;left:-9999px;top:0}
+    .skip-link:focus{left:1rem;top:1rem;z-index:100;background:var(--surface-raised);padding:.7rem 1rem;border:1px solid var(--border-strong)}
+    .shell{width:min(calc(100% - 2rem),var(--max));margin:auto}
+    .topbar{
+      position:sticky;top:0;z-index:40;border-bottom:1px solid var(--border-subtle);
+      background:color-mix(in srgb,var(--surface-page) 91%,transparent);backdrop-filter:blur(12px)
+    }
+    .topbar-inner{min-height:58px;display:flex;align-items:center;gap:1rem}
+    .brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;font-weight:760}
+    .brand-mark{width:31px;height:31px;border:1px solid var(--border-strong);border-radius:50%;display:grid;place-items:center;color:var(--accent);font:700 .8rem Georgia,serif}
+    .topnav{display:flex;gap:.1rem;margin-left:auto}
+    .topnav a,.topbar button{
+      min-height:42px;padding:.55rem .72rem;border:0;border-bottom:1px solid transparent;background:transparent;
+      color:var(--text-secondary);text-decoration:none
+    }
+    .topnav a:hover,.topnav a:focus-visible,.topbar button:hover{color:var(--text-primary);border-bottom-color:var(--accent)}
+    .lesson-cover{
+      position:relative;min-height:640px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(310px,.65fr);
+      gap:clamp(2rem,7vw,6rem);align-items:end;padding:clamp(3.5rem,8vw,7rem) 0 clamp(2.5rem,5vw,4rem);
+      border-bottom:1px solid var(--border-strong);overflow:hidden
+    }
+    .lesson-cover::before{
+      content:"";position:absolute;right:-7%;top:10%;width:min(46vw,560px);aspect-ratio:1;border-radius:50%;
+      border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);
+      box-shadow:inset 0 0 0 52px color-mix(in srgb,var(--accent) 4%,transparent),inset 0 0 0 104px color-mix(in srgb,var(--accent) 3%,transparent);
+      pointer-events:none
+    }
+    .coordinate-waypoint{
+      position:absolute;left:var(--point-x);top:var(--point-y);width:var(--point-size);height:var(--point-size);
+      margin:calc(var(--point-size)/-2);border:1px solid color-mix(in srgb,var(--accent) 58%,transparent);
+      border-radius:50%;opacity:.28;pointer-events:none;transform:translate3d(0,var(--atlas-parallax-y,0),0)
+    }
+    .coordinate-waypoint::before,.coordinate-waypoint::after{content:"";position:absolute;left:50%;top:50%;background:var(--accent);opacity:.45;transform:translate(-50%,-50%)}
+    .coordinate-waypoint::before{width:9px;height:1px}.coordinate-waypoint::after{width:1px;height:9px}
+    .cover-copy,.cover-side{position:relative;z-index:2}
+    .kicker,.section-index{
+      margin:0 0 .9rem;color:var(--accent);font:750 .73rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;
+      letter-spacing:.12em;text-transform:uppercase
+    }
+    h1,h2,h3{font-family:Georgia,Cambria,serif;letter-spacing:-.025em}
+    h1{font-size:clamp(3.2rem,7vw,7rem);line-height:.9;margin:.15rem 0 1.4rem;max-width:9ch;font-weight:540}
+    .cover-lead{max-width:49rem;font-size:clamp(1.05rem,1.8vw,1.3rem);color:var(--text-secondary)}
+    .thesis{
+      margin:2rem 0 0;padding:1.15rem 0 1.15rem 1.3rem;border-left:4px solid var(--accent);
+      font:600 clamp(1.14rem,2vw,1.45rem)/1.45 Georgia,Cambria,serif;max-width:46rem
+    }
+    .folio{margin-top:2rem;display:grid;grid-template-columns:auto 1fr;gap:.4rem 1rem;max-width:36rem;border-top:1px solid var(--border-strong);padding-top:1rem}
+    .folio dt{color:var(--text-secondary);font-size:.82rem}.folio dd{margin:0;font-weight:650}
+    .cover-side{align-self:end;border-left:1px solid var(--border-strong);padding-left:1.25rem}
+    .cover-side img{width:100%;display:block;border:1px solid var(--border-subtle);box-shadow:var(--shadow-low);background:var(--surface-raised)}
+    .cover-side figcaption{font-size:.82rem;color:var(--text-secondary);margin-top:.65rem}
+    .materials{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.4rem}
+    .btn,.control{
+      min-height:44px;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);
+      padding:.65rem .9rem;border-radius:var(--radius-sm);text-decoration:none
+    }
+    .btn.primary,.control.primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+    .btn:hover,.control:hover{border-color:var(--accent)}
+    .route{
+      display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--border-subtle);
+      margin-bottom:var(--space-6)
+    }
+    .route a{padding:1rem .7rem;text-decoration:none;color:var(--text-secondary);border-right:1px solid var(--border-subtle);font-size:.84rem}
+    .route a:first-child{border-left:1px solid var(--border-subtle)}
+    .route a:hover,.route a:focus-visible{color:var(--accent);background:var(--surface-soft)}
+    main{position:relative}
+    .journey{position:absolute;left:-2.2rem;top:0;bottom:0;width:1px;background:var(--border-subtle);display:none}
+    .journey span{display:block;width:1px;height:calc(var(--journey-progress)*1%);background:var(--accent)}
+    .chapter{padding:0 0 var(--space-6);margin:0 0 var(--space-6);border-bottom:1px solid var(--border-subtle);transform:translate3d(0,var(--atlas-parallax-y,0),0)}
+    .chapter-head{display:grid;grid-template-columns:minmax(190px,.34fr) minmax(0,1fr);gap:clamp(1.4rem,5vw,4rem);align-items:start;margin-bottom:var(--space-5)}
+    .chapter-head h2{font-size:clamp(2rem,4.2vw,4.25rem);line-height:.96;margin:0;font-weight:540;max-width:13ch}
+    .chapter-intro{max-width:50rem;color:var(--text-secondary);font-size:1.05rem;margin:0}
+    .ledger{border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong)}
+    .ledger-row{display:grid;grid-template-columns:minmax(150px,.35fr) minmax(0,1fr);gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+    .ledger-row:last-child{border-bottom:0}.ledger-row strong{color:var(--accent)}.ledger-row p{margin:0}
+    .formula{
+      margin:1rem 0;padding:1.05rem 1.2rem;background:var(--surface-soft);border-left:3px solid var(--accent);
+      overflow-x:auto;font:600 clamp(1.05rem,2vw,1.35rem)/1.5 "Cambria Math","Times New Roman",serif
+    }
+    .formula.big{text-align:center;font-size:clamp(1.5rem,3vw,2.15rem);background:var(--accent-soft)}
+    .note{padding:1rem 1.15rem;border-left:4px solid var(--support);background:var(--support-soft);margin:1.2rem 0}
+    .warning{padding:1rem 1.15rem;border-left:4px solid var(--danger);background:color-mix(in srgb,var(--danger) 8%,var(--surface-raised));margin:1.2rem 0}
+    .example{display:grid;grid-template-columns:minmax(170px,.34fr) minmax(0,1fr);gap:clamp(1rem,4vw,3rem);padding:1.4rem 0;border-top:1px solid var(--border-subtle)}
+    .example:last-child{border-bottom:1px solid var(--border-subtle)}.example h3{margin:0;font-size:1.28rem}.example p{margin:.25rem 0 .8rem}
+    .annotation{font-size:.88rem;color:var(--text-secondary)}
+    .factor-line{display:flex;gap:.55rem;flex-wrap:wrap;margin:.7rem 0}.factor-line span{padding:.35rem .55rem;border-bottom:1px solid var(--border-strong);font-family:"Cambria Math",serif}
+    .two-ways{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border-strong);margin:1.5rem 0}
+    .two-ways section{padding:clamp(1rem,3vw,1.6rem)}.two-ways section+section{border-left:1px solid var(--border-strong)}
+    .two-ways h3{margin:.1rem 0 .8rem;color:var(--accent);font-size:1.7rem}
+    .theorem-board{
+      display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:1.5rem;align-items:stretch;margin:1.7rem 0
+    }
+    .theorem-main{border-top:4px solid var(--accent);padding:1.25rem 0}
+    .theorem-side{border-top:4px solid var(--support);padding:1.25rem 0}
+    .stepper{border-top:1px solid var(--border-strong);margin-top:1rem}
+    .step{display:grid;grid-template-columns:2.2rem minmax(0,1fr);gap:.85rem;padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+    .step::before{content:attr(data-step);width:2rem;height:2rem;border:1px solid var(--border-strong);border-radius:50%;display:grid;place-items:center;color:var(--accent);font-weight:800}
+    .step.current{background:linear-gradient(90deg,var(--accent-soft),transparent)}.step[hidden]{display:none}
+    .stepper-controls{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
+    .exponent-table{width:100%;border-collapse:collapse;margin:1rem 0}
+    .exponent-table th,.exponent-table td{padding:.75rem .65rem;border-bottom:1px solid var(--border-subtle);text-align:center}
+    .exponent-table th{color:var(--text-secondary);font-size:.82rem}
+    .exponent-table td:first-child,.exponent-table th:first-child{text-align:left}
+    .motion-strip{display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:center;margin:1.5rem 0}
+    .motion-person{padding:1rem;border-top:3px solid var(--accent)}.motion-person:last-child{border-color:var(--support)}
+    .motion-arrow{font:700 1.3rem/1 ui-monospace,monospace;color:var(--text-secondary)}
+    .practice-sheet{border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);padding:1.3rem 0;margin:1.4rem 0}
+    .task{display:grid;grid-template-columns:2.6rem minmax(0,1fr);gap:.75rem;padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+    .task:last-child{border-bottom:0}.task-no{font:700 1rem ui-monospace,monospace;color:var(--accent)}
+    details.answers{margin-top:1rem}details.answers summary{cursor:pointer;font-weight:750;color:var(--accent)}
+    table.answer-table{width:100%;border-collapse:collapse;margin-top:1rem}.answer-table th,.answer-table td{text-align:left;padding:.7rem .6rem;border-bottom:1px solid var(--border-subtle)}
+    .answer-table th{color:var(--text-secondary);font-size:.82rem}
+    .quiz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:1.5rem 0}
+    .quiz-item{padding:1rem 0;border-top:1px solid var(--border-strong)}.quiz-item p{font-weight:700}
+    .quiz-options{display:flex;gap:.5rem;flex-wrap:wrap}.quiz button{min-height:42px;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);padding:.55rem .75rem;border-radius:var(--radius-sm)}
+    .quiz button[data-state="good"]{border-color:var(--success);color:var(--success)}.quiz button[data-state="bad"]{border-color:var(--danger);color:var(--danger)}
+    .feedback{min-height:1.5em;margin-top:.5rem;color:var(--text-secondary)}.feedback.good{color:var(--success)}.feedback.bad{color:var(--danger)}
+    .checklist{display:grid;grid-template-columns:1fr 1fr;gap:.25rem 1.2rem;margin:1.2rem 0}
+    .check{display:flex;gap:.7rem;align-items:flex-start;padding:.75rem 0;border-bottom:1px solid var(--border-subtle)}
+    .check input{width:20px;height:20px;accent-color:var(--accent);flex:none}
+    .progress{height:7px;background:var(--border-subtle);overflow:hidden;margin:.8rem 0}.progress span{display:block;width:0;height:100%;background:var(--accent);transition:width var(--motion-normal)}
+    .footer{padding:2rem 0 3rem;color:var(--text-secondary);display:flex;justify-content:space-between;gap:1rem;border-top:1px solid var(--border-subtle);font-size:.88rem}
+    @media(min-width:1260px){.journey{display:block}}
+    @media(max-width:930px){
+      .lesson-cover{grid-template-columns:1fr;min-height:auto}.cover-side{border-left:0;border-top:1px solid var(--border-strong);padding:1rem 0 0;max-width:720px}
+      .route{grid-template-columns:1fr 1fr}.chapter-head,.example,.ledger-row,.theorem-board{grid-template-columns:1fr}
+      .two-ways,.quiz,.checklist{grid-template-columns:1fr}.two-ways section+section{border-left:0;border-top:1px solid var(--border-strong)}
+      .motion-strip{grid-template-columns:1fr}.motion-arrow{transform:rotate(90deg);justify-self:center}
+    }
+    @media(max-width:640px){
+      body{background:var(--surface-page)}.shell{width:min(calc(100% - 1.1rem),var(--max))}.topnav{display:none}
+      h1{font-size:clamp(2.8rem,15vw,4.4rem)}.route{grid-template-columns:1fr}.route a{border-left:1px solid var(--border-subtle)}
+      .footer{flex-direction:column}
+    }
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}[data-atlas-parallax]{transform:none!important}}
+    @media print{
+      :root,html[data-theme="dark"]{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--accent-soft:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#ccc;--border-strong:#888;--accent:#155e5a;--support:#76551f}
+      body{background:#fff;font-size:11pt}.topbar,.route,.stepper-controls,.quiz-options,.materials{display:none!important}.shell{width:100%;max-width:none}
+      .lesson-cover{min-height:0;grid-template-columns:1fr;padding:0 0 1.5rem}.cover-side{display:none}.step[hidden]{display:grid!important}
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#content">К содержанию</a>
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <a class="brand" href="index.html"><span class="brand-mark">Σ</span><span>Надя Клименко · 6 класс</span></a>
+    <nav class="topnav" aria-label="Разделы страницы">
+      <a href="#equations">Уравнения</a>
+      <a href="#gcd-lcm">НОД / НОК</a>
+      <a href="#identity">Связь</a>
+      <a href="#motion">Движение</a>
+      <a href="#practice">Путь А</a>
+    </nav>
+    <button id="themeToggle" type="button">Тёмная тема</button>
+  </div>
+</header>
+
+<div class="shell">
+  <header class="lesson-cover" data-coordinate-field data-atlas-parallax="4">
+    <div class="cover-copy">
+      <p class="kicker">Занятие · 26 сентября 2026</p>
+      <h1>НОД, НОК и движение</h1>
+      <p class="cover-lead">Занятие соединяет три уровня рассуждения: восстановление неизвестного компонента, работу с простыми множителями и перевод текстовой задачи в уравнение движения.</p>
+      <p class="thesis">Главная связка: для двух натуральных чисел <strong>НОД(a,b) · НОК(a,b) = ab</strong>; в движении сначала строим модель <strong>S = vt</strong>, затем уравнение.</p>
+      <dl class="folio">
+        <dt>Ученица</dt><dd>Надя Клименко</dd>
+        <dt>Преподаватель</dt><dd>Лёвин Артём Александрович</dd>
+        <dt>Курс</dt><dd>6 класс · Математическая вертикаль</dd>
+        <dt>Маршрут</dt><dd>Уравнения → факторизация → НОД/НОК → связь → движение → Путь А</dd>
+      </dl>
+      <div class="materials">
+        <a class="btn primary" href="../pdf_docs/26.09.26.pdf" download>Скачать пособие</a>
+        <a class="btn" href="../tex_docs/26.09.26.tex">TeX-исходник</a>
+        <a class="btn" href="../images/26.09.26.png">Ментальная карта</a>
+      </div>
+    </div>
+    <figure class="cover-side">
+      <img src="../images/26.09.26.png" alt="Ментальная карта занятия 26.09.26: НОД, НОК, уравнения и движение">
+      <figcaption>Ментальная карта занятия: ключевые формулы, алгоритмы и связи между темами.</figcaption>
+    </figure>
+  </header>
+
+  <nav class="route" aria-label="Маршрут занятия">
+    <a href="#equations">01 · Уравнения</a>
+    <a href="#factorization">02 · Множители</a>
+    <a href="#gcd-lcm">03 · НОД / НОК</a>
+    <a href="#identity">04 · Связь</a>
+    <a href="#motion">05 · Движение</a>
+    <a href="#practice">06 · Путь А</a>
+  </nav>
+
+  <main id="content">
+    <div class="journey" aria-hidden="true"><span></span></div>
+
+    <section class="chapter" id="equations" data-journey-stop data-journey-label="Уравнения">
+      <header class="chapter-head">
+        <div><p class="section-index">01 · Обратные действия</p><h2>Роль неизвестного определяет ход решения</h2></div>
+        <p class="chapter-intro">Перед преобразованием назовите компонент действия. Для дробного уравнения отдельно зафиксируйте запрещённое значение знаменателя, после решения выполните подстановку.</p>
+      </header>
+
+      <div class="ledger">
+        <div class="ledger-row"><strong>x / a = b</strong><p>Неизвестное делимое равно произведению делителя и частного. Пример из пособия: x / 3 = 5, поэтому x = 15.</p></div>
+        <div class="ledger-row"><strong>(x + c) / a = b</strong><p>Сначала найдите x + c, затем x. Пример: (x + 1) / 3 = 5, поэтому x = 14.</p></div>
+        <div class="ledger-row"><strong>a / (x + c) = b</strong><p>Неизвестный делитель равен делимому, делённому на частное. Пример: 3 / (x + 1) = 5, поэтому x = −2/5.</p></div>
+        <div class="ledger-row"><strong>a − x = b</strong><p>Вычитаемое равно разности уменьшаемого и разности. Пример: 10 − x = 2, поэтому x = 8.</p></div>
+        <div class="ledger-row"><strong>ax + b = c</strong><p>Сначала уберите прибавление или вычитание, затем делите на коэффициент при x. Пример: 2x − 3 = 10, поэтому x = 13/2.</p></div>
+      </div>
+
+      <article class="example">
+        <h3>Дробное уравнение</h3>
+        <div>
+          <div class="warning"><strong>Ограничение:</strong> для 2 / (x − 3) = 10 обязательно x ≠ 3.</div>
+          <div class="formula">x − 3 = 2/10 = 1/5 → x = 16/5</div>
+          <p>После этого значение допустимо: знаменатель не обращается в ноль.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="chapter" id="factorization" data-journey-stop data-journey-label="Простые множители" data-atlas-parallax="3">
+      <header class="chapter-head">
+        <div><p class="section-index">02 · Факторизация</p><h2>Степени показывают количество множителей</h2></div>
+        <p class="chapter-intro">Разложение на простые множители становится общим языком для НОД и НОК. Показатель степени показывает, сколько раз соответствующий простой множитель входит в число.</p>
+      </header>
+
+      <div class="factor-line"><span>84 = 2² · 3 · 7</span><span>126 = 2 · 3² · 7</span></div>
+      <div class="note"><strong>Простое число</strong> имеет ровно два натуральных делителя: 1 и само число. Число 1 простым не является.</div>
+
+      <table class="exponent-table" aria-label="Сравнение показателей степеней">
+        <thead><tr><th>Множитель</th><th>в 84</th><th>в 126</th><th>для НОД</th><th>для НОК</th></tr></thead>
+        <tbody>
+          <tr><td>2</td><td>2</td><td>1</td><td>min = 1</td><td>max = 2</td></tr>
+          <tr><td>3</td><td>1</td><td>2</td><td>min = 1</td><td>max = 2</td></tr>
+          <tr><td>7</td><td>1</td><td>1</td><td>min = 1</td><td>max = 1</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="chapter" id="gcd-lcm" data-journey-stop data-journey-label="НОД и НОК">
+      <header class="chapter-head">
+        <div><p class="section-index">03 · Выбор алгоритма</p><h2>Минимальные и максимальные степени</h2></div>
+        <p class="chapter-intro">Для НОД берутся только общие простые множители в наименьших степенях. Для НОК нужны все простые множители в наибольших степенях, встречающихся в разложениях.</p>
+      </header>
+
+      <div class="two-ways">
+        <section>
+          <h3>НОД</h3>
+          <p>Наибольшее натуральное число, на которое оба исходных числа делятся без остатка.</p>
+          <div class="formula">НОД(84,126) = 2¹ · 3¹ · 7 = 42</div>
+          <p>В задаче про ленты длиной 84 см и 126 см это длина одинакового куска: 42 см.</p>
+        </section>
+        <section>
+          <h3>НОК</h3>
+          <p>Наименьшее натуральное число, которое делится на оба исходных числа.</p>
+          <div class="formula">НОК(12,18) = 2² · 3² = 36</div>
+          <p>Если сигналы повторяются каждые 12 и 18 минут, следующее одновременное срабатывание произойдёт через 36 минут.</p>
+        </section>
+      </div>
+
+      <div class="note"><strong>Смысл выбора.</strong> Максимально крупные одинаковые части или максимум одинаковых групп ведут к НОД. Первое общее совпадение повторяющихся циклов ведёт к НОК.</div>
+    </section>
+
+    <section class="chapter" id="identity" data-journey-stop data-journey-label="Связь НОД и НОК">
+      <header class="chapter-head">
+        <div><p class="section-index">04 · Связь двух чисел</p><h2>Произведение сохраняется</h2></div>
+        <p class="chapter-intro">Для двух натуральных чисел НОД и НОК связаны произведением исходных чисел. Формула позволяет находить один объект через другой и выполнять обратный ход.</p>
+      </header>
+
+      <div class="formula big">НОД(a,b) · НОК(a,b) = ab</div>
+
+      <div class="theorem-board">
+        <div class="theorem-main">
+          <p class="section-index">Прямой ход</p>
+          <h3>Известны a, b и НОД</h3>
+          <p>Для a = 84, b = 180 и НОД(a,b) = 12:</p>
+          <div class="formula">НОК(a,b) = (84 · 180) / 12 = 84 · 15 = 1260</div>
+        </div>
+        <div class="theorem-side">
+          <p class="section-index">Обратный ход</p>
+          <h3>Известны НОД и НОК</h3>
+          <p>Тогда сразу известно произведение исходных чисел:</p>
+          <div class="formula">ab = НОД(a,b) · НОК(a,b)</div>
+        </div>
+      </div>
+
+      <div class="warning"><strong>Граница формулы:</strong> в таком виде равенство относится к двум натуральным числам. Для трёх и более чисел нельзя просто перемножить все числа и разделить на их общий НОД.</div>
+
+      <article class="example">
+        <h3>Восстановление числа</h3>
+        <div>
+          <p>Пусть НОД(n,360) = 120 и НОК(n,360) = 2520.</p>
+          <div class="formula">120 · 2520 = n · 360 → n = (120 · 2520) / 360 = 840</div>
+          <div class="factor-line"><span>840 = 2³ · 3 · 5 · 7</span></div>
+          <p>Следовательно, если n = 2ˣ3ʸ5ᶻ7ʷ, то x = 3, а y = z = w = 1.</p>
+        </div>
+      </article>
+
+      <article aria-labelledby="stepperTitle">
+        <h3 id="stepperTitle">Как читать степени при НОД и НОК</h3>
+        <div class="stepper" id="powerStepper">
+          <div class="step current" data-step="1"><div><strong>Запишите разложения.</strong><br><span class="annotation">a = 2^α3^β, b = 2^γ3^δ.</span></div></div>
+          <div class="step" data-step="2" hidden><div><strong>Для НОД выбирайте меньший показатель.</strong><br><span class="annotation">2^min(α,γ) · 3^min(β,δ).</span></div></div>
+          <div class="step" data-step="3" hidden><div><strong>Для НОК выбирайте больший показатель.</strong><br><span class="annotation">2^max(α,γ) · 3^max(β,δ).</span></div></div>
+          <div class="step" data-step="4" hidden><div><strong>Проверьте смысл.</strong><br><span class="annotation">НОД должен делить оба числа, НОК должен делиться на оба числа.</span></div></div>
+        </div>
+        <div class="stepper-controls">
+          <button class="control" type="button" data-stepper="prev">Назад</button>
+          <button class="control primary" type="button" data-stepper="next">Следующий шаг</button>
+          <button class="control" type="button" data-stepper="all">Показать всё</button>
+          <button class="control" type="button" data-stepper="reset">К началу</button>
+        </div>
+      </article>
+
+      <article class="example">
+        <h3>Простое число в задаче на НОК</h3>
+        <div>
+          <p>Найдите простое число p, если НОК(p,18) = 90.</p>
+          <div class="factor-line"><span>18 = 2 · 3²</span><span>90 = 2 · 3² · 5</span></div>
+          <p>Чтобы НОК вырос от 18 до 90, должен появиться новый простой множитель 5. Поэтому p = 5.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="chapter" id="motion" data-journey-stop data-journey-label="Встречное движение" data-atlas-parallax="3">
+      <header class="chapter-head">
+        <div><p class="section-index">05 · Математическая модель</p><h2>Текст → таблица → уравнение</h2></div>
+        <p class="chapter-intro">Для равномерного движения используется S = vt. В задаче на встречное движение пути двух участников до встречи в сумме дают всё расстояние между пунктами.</p>
+      </header>
+
+      <div class="formula big">S = vt</div>
+
+      <div class="motion-strip" aria-label="Схема встречного движения">
+        <div class="motion-person"><strong>Катер</strong><p>скорость x км/ч<br>время 2 ч<br>путь 2x км</p></div>
+        <div class="motion-arrow" aria-hidden="true">→ ←</div>
+        <div class="motion-person"><strong>Теплоход</strong><p>скорость x + 2 км/ч<br>время 2 ч<br>путь 2(x + 2) км</p></div>
+      </div>
+
+      <article class="example">
+        <h3>Расстояние 58 км</h3>
+        <div>
+          <p>Скорость теплохода на 2 км/ч больше скорости катера, встреча произошла через 2 часа.</p>
+          <div class="formula">2x + 2(x + 2) = 58</div>
+          <div class="formula">2x + 2x + 4 = 58 → 4x = 54 → x = 13,5</div>
+          <p>Скорости: 13,5 км/ч и 15,5 км/ч.</p>
+          <div class="note"><strong>Проверка:</strong> 2 · 13,5 + 2 · 15,5 = 27 + 31 = 58.</div>
+        </div>
+      </article>
+
+      <div class="ledger">
+        <div class="ledger-row"><strong>1 · Выписать данные</strong><p>Назовите известные величины и то, что требуется найти.</p></div>
+        <div class="ledger-row"><strong>2 · Ввести x</strong><p>Обозначьте неизвестную скорость через x и выразите вторую скорость.</p></div>
+        <div class="ledger-row"><strong>3 · Заполнить v, t, S</strong><p>Путь каждого участника найдите по формуле S = vt.</p></div>
+        <div class="ledger-row"><strong>4 · Составить уравнение</strong><p>При встречном движении сумма пройденных путей равна общему расстоянию.</p></div>
+        <div class="ledger-row"><strong>5 · Проверить</strong><p>Подставьте найденные скорости и проверьте единицы измерения и смысл ответа.</p></div>
+      </div>
+    </section>
+
+    <section class="chapter" id="practice" data-journey-stop data-journey-label="Путь А">
+      <header class="chapter-head">
+        <div><p class="section-index">06 · Самостоятельная работа</p><h2>Тренировочный блок «Путь А»</h2></div>
+        <p class="chapter-intro">Три задания из пособия проверяют ограничение знаменателя, связь НОД и НОК и построение модели встречного движения.</p>
+      </header>
+
+      <div class="practice-sheet">
+        <div class="task">
+          <div class="task-no">01</div>
+          <div><strong>Решите уравнение 8 / (x − 2) = 4.</strong><p>Сначала укажите значение x, при котором выражение не имеет смысла. После решения выполните проверку подстановкой.</p></div>
+        </div>
+        <div class="task">
+          <div class="task-no">02</div>
+          <div><strong>Связь НОД и НОК.</strong><p>Для двух натуральных чисел a = 168 и b известно: НОД(a,b) = 24, НОК(a,b) = 840. Найдите b и разложите его на простые множители.</p></div>
+        </div>
+        <div class="task">
+          <div class="task-no">03</div>
+          <div><strong>Встречное движение.</strong><p>Из двух пунктов, расстояние между которыми 82 км, одновременно навстречу друг другу выехали два велосипедиста. Скорость второго на 5 км/ч больше скорости первого. Через 2 часа они встретились. Найдите скорости обоих велосипедистов.</p></div>
+        </div>
+      </div>
+
+      <details class="answers">
+        <summary>Показать ответы из пособия</summary>
+        <table class="answer-table">
+          <thead><tr><th>№</th><th>Ответ</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>x ≠ 2; x = 4. Проверка: 8 / (4 − 2) = 4.</td></tr>
+            <tr><td>2</td><td>b = 120; 120 = 2³ · 3 · 5.</td></tr>
+            <tr><td>3</td><td>18 км/ч и 23 км/ч.</td></tr>
+          </tbody>
+        </table>
+      </details>
+
+      <section aria-labelledby="quizTitle">
+        <h3 id="quizTitle">Короткая проверка ключевых правил</h3>
+        <div class="quiz">
+          <div class="quiz-item">
+            <p>Какой показатель степени берётся для НОД?</p>
+            <div class="quiz-options"><button type="button" data-correct="true">Меньший</button><button type="button">Больший</button></div>
+            <div class="feedback" aria-live="polite"></div>
+          </div>
+          <div class="quiz-item">
+            <p>Какой показатель степени берётся для НОК?</p>
+            <div class="quiz-options"><button type="button">Меньший</button><button type="button" data-correct="true">Больший</button></div>
+            <div class="feedback" aria-live="polite"></div>
+          </div>
+          <div class="quiz-item">
+            <p>Для скольких натуральных чисел в пособии используется формула НОД(a,b) · НОК(a,b) = ab?</p>
+            <div class="quiz-options"><button type="button" data-correct="true">Для двух</button><button type="button">Для любого количества</button></div>
+            <div class="feedback" aria-live="polite"></div>
+          </div>
+          <div class="quiz-item">
+            <p>Что складывается в задаче на встречное движение до встречи?</p>
+            <div class="quiz-options"><button type="button" data-correct="true">Пройденные пути</button><button type="button">Скорости как готовый ответ</button></div>
+            <div class="feedback" aria-live="polite"></div>
+          </div>
+        </div>
+        <button class="control" id="quizReset" type="button">Сбросить проверку</button>
+      </section>
+
+      <section aria-labelledby="checkTitle">
+        <h3 id="checkTitle">Чек-лист перед самостоятельной работой</h3>
+        <div class="checklist" id="checklist">
+          <label class="check"><input type="checkbox"><span>Решаю простые линейные и дробные уравнения и выполняю проверку.</span></label>
+          <label class="check"><input type="checkbox"><span>Раскладываю натуральные числа на простые множители.</span></label>
+          <label class="check"><input type="checkbox"><span>Нахожу НОД и НОК по разложению.</span></label>
+          <label class="check"><input type="checkbox"><span>Выбираю НОД или НОК по смыслу текстовой задачи.</span></label>
+          <label class="check"><input type="checkbox"><span>Применяю НОД(a,b) · НОК(a,b) = ab только для двух чисел.</span></label>
+          <label class="check"><input type="checkbox"><span>Восстанавливаю число по известным НОД и НОК.</span></label>
+          <label class="check"><input type="checkbox"><span>Читаю показатели степеней в разложении на простые множители.</span></label>
+          <label class="check"><input type="checkbox"><span>Использую простоту числа в задачах на НОК.</span></label>
+          <label class="check"><input type="checkbox"><span>Составляю таблицу движения и перевожу условие в уравнение.</span></label>
+        </div>
+        <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+        <p id="progressText" class="annotation" aria-live="polite">Отмечено: 0 из 9.</p>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Надя Клименко · занятие 26.09.26</span>
+    <span>Лёвин Артём Александрович · эксклюзивно для Нади Клименко</span>
+  </footer>
+</div>
+
+<script src="../../../shared/student-dashboard/atlas-motion.js?v=20260921-1"></script>
+<script>
+(() => {
+  "use strict";
+  const root = document.documentElement;
+  const themeButton = document.getElementById("themeToggle");
+  const safeGet = key => { try { return localStorage.getItem(key); } catch (_) { return null; } };
+  const safeSet = (key,value) => { try { localStorage.setItem(key,value); } catch (_) {} };
+
+  let theme = safeGet("nadya-26-theme") || "light";
+  const applyTheme = value => {
+    theme = value === "dark" ? "dark" : "light";
+    root.dataset.theme = theme;
+    themeButton.textContent = theme === "dark" ? "Светлая тема" : "Тёмная тема";
+  };
+  applyTheme(theme);
+  themeButton.addEventListener("click", () => {
+    applyTheme(theme === "dark" ? "light" : "dark");
+    safeSet("nadya-26-theme", theme);
+  });
+
+  const steps = [...document.querySelectorAll("#powerStepper .step")];
+  let stepIndex = 0;
+  const paintSteps = mode => {
+    steps.forEach((step,index) => {
+      const visible = mode === "all" || index <= stepIndex;
+      step.hidden = !visible;
+      step.classList.toggle("current", mode !== "all" && index === stepIndex);
+    });
+  };
+  document.querySelector("[data-stepper='next']").addEventListener("click", () => {
+    stepIndex = Math.min(steps.length - 1, stepIndex + 1);
+    paintSteps();
+  });
+  document.querySelector("[data-stepper='prev']").addEventListener("click", () => {
+    stepIndex = Math.max(0, stepIndex - 1);
+    paintSteps();
+  });
+  document.querySelector("[data-stepper='all']").addEventListener("click", () => paintSteps("all"));
+  document.querySelector("[data-stepper='reset']").addEventListener("click", () => {
+    stepIndex = 0;
+    paintSteps();
+  });
+
+  document.querySelectorAll(".quiz-item").forEach(item => {
+    item.addEventListener("click", event => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      item.querySelectorAll("button").forEach(candidate => candidate.removeAttribute("data-state"));
+      const correct = button.dataset.correct === "true";
+      button.dataset.state = correct ? "good" : "bad";
+      const feedback = item.querySelector(".feedback");
+      feedback.className = "feedback " + (correct ? "good" : "bad");
+      feedback.textContent = correct ? "Верно." : "Сверьте правило с соответствующим разделом занятия.";
+    });
+  });
+  document.getElementById("quizReset").addEventListener("click", () => {
+    document.querySelectorAll(".quiz button").forEach(button => button.removeAttribute("data-state"));
+    document.querySelectorAll(".feedback").forEach(node => {
+      node.className = "feedback";
+      node.textContent = "";
+    });
+  });
+
+  const checks = [...document.querySelectorAll("#checklist input")];
+  const progressBar = document.getElementById("progressBar");
+  const progressText = document.getElementById("progressText");
+  const updateChecks = () => {
+    const done = checks.filter(input => input.checked).length;
+    progressBar.style.width = ((done / checks.length) * 100) + "%";
+    progressText.textContent = "Отмечено: " + done + " из " + checks.length + ".";
+  };
+  checks.forEach(input => input.addEventListener("change", updateChecks));
+})();
+</script>
+</body>
+</html>
