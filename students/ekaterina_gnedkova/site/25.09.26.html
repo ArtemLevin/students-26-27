@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Текстовые задачи: движение, средняя скорость, протяжённые тела и производительность. Персональный конспект Екатерины Гнедковой от 25.09.26.">
+<title>Текстовые задачи · Екатерина Гнедкова · 25.09.26</title>
+<style>
+:root{
+  color-scheme:light;
+  --surface-page:#f3f0e8;--surface-raised:#fffdf8;--surface-soft:#e3ece8;--surface-warm:#eee7d9;
+  --text-primary:#1f2928;--text-secondary:#66716d;--text-inverse:#f7fbfa;
+  --border-subtle:#d7d2c8;--border-strong:#96aaa4;
+  --accent:#0b6f72;--accent-hover:#075b5e;--accent-soft:#d8ebe8;
+  --success:#2e7357;--danger:#9d4d4d;--warning:#93651f;--focus-ring:#148b8e;
+  --shadow-low:0 12px 30px rgba(31,41,40,.07);
+  --radius-sm:.4rem;--radius-md:.8rem;--radius-lg:1.25rem;
+  --space-1:.4rem;--space-2:.7rem;--space-3:1rem;--space-4:1.5rem;--space-5:2rem;--space-6:3rem;
+  --motion-fast:140ms;--motion-normal:240ms;
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --surface-page:#17201f;--surface-raised:#1d2927;--surface-soft:#243330;--surface-warm:#2b2a25;
+  --text-primary:#edf3f1;--text-secondary:#aab7b3;--text-inverse:#12201e;
+  --border-subtle:#334744;--border-strong:#58706b;
+  --accent:#69bfc0;--accent-hover:#86d2d2;--accent-soft:#203e3c;
+  --success:#78bd9e;--danger:#db8b8b;--warning:#d7ad64;--focus-ring:#8bd7d7;
+  --shadow-low:0 12px 30px rgba(0,0,0,.18);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:400 1rem/1.65 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:var(--accent);text-underline-offset:.18em}
+button,a{touch-action:manipulation}
+button{font:inherit}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.skip{position:absolute;left:.75rem;top:-5rem;z-index:90;padding:.7rem 1rem;background:var(--surface-raised);color:var(--text-primary);border:1px solid var(--border-strong)}
+.skip:focus{top:.75rem}
+.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:.65rem;padding:.65rem clamp(.8rem,3vw,2rem);background:color-mix(in srgb,var(--surface-page) 94%,transparent);border-bottom:1px solid var(--border-subtle);backdrop-filter:blur(10px)}
+.identity{display:flex;flex-direction:column;line-height:1.15;margin-right:auto}
+.identity strong{font-family:Georgia,Cambria,serif}.identity span{font-size:.72rem;color:var(--text-secondary)}
+.topbar nav{display:flex;gap:.15rem;flex-wrap:wrap}
+.topbar a,.topbar button{min-height:44px;display:inline-flex;align-items:center;justify-content:center;padding:.5rem .7rem;border:1px solid transparent;background:transparent;color:var(--text-secondary);text-decoration:none;border-radius:var(--radius-sm)}
+.topbar a:hover,.topbar button:hover{color:var(--text-primary);border-color:var(--border-subtle)}
+main{width:min(100% - clamp(1.2rem,5vw,5rem),78rem);margin:0 auto}
+.cover{min-height:72vh;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(18rem,.72fr);gap:clamp(2rem,7vw,7rem);align-items:center;padding:clamp(3rem,8vw,7rem) 0 clamp(2.5rem,6vw,5rem);border-bottom:1px solid var(--border-subtle)}
+.kicker{margin:0 0 .85rem;color:var(--accent);font-weight:750;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase}
+.cover h1{margin:0;max-width:11ch;font:700 clamp(3.1rem,7.5vw,7rem)/.94 Georgia,Cambria,serif;letter-spacing:-.055em}
+.lead{max-width:43rem;margin:1.3rem 0 0;font-size:clamp(1.05rem,1.9vw,1.28rem);color:var(--text-secondary)}
+.meta{margin-top:1.8rem;padding-top:1rem;border-top:1px solid var(--border-subtle);display:flex;gap:.5rem 1.6rem;flex-wrap:wrap;color:var(--text-secondary);font-size:.88rem}
+.cover-actions{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:1.2rem}
+.primary,.secondary,.answer-button,.quiz-option,.step-button,.check-button{min-height:44px;padding:.58rem .82rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:transparent;color:var(--text-primary)}
+.primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse);text-decoration:none}
+.primary:hover{background:var(--accent-hover)}
+.secondary{text-decoration:none}
+.method-plate{position:relative;padding:1.2rem 0;border-top:2px solid var(--accent);border-bottom:1px solid var(--border-subtle)}
+.method-plate .plate-label{color:var(--accent);font:700 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase}
+.method-route{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin-top:1rem}
+.route-step{position:relative;padding:1rem .75rem;border-left:1px solid var(--border-subtle);min-height:8.5rem}
+.route-step:last-child{border-right:1px solid var(--border-subtle)}
+.route-step b{display:block;color:var(--accent);font:700 .72rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;margin-bottom:.6rem}
+.route-step strong{display:block;font-size:1rem}
+.route-step small{display:block;margin-top:.5rem;color:var(--text-secondary)}
+.route-step:not(:last-child)::after{content:"";position:absolute;right:-5px;top:1.35rem;width:9px;height:9px;border-top:1px solid var(--accent);border-right:1px solid var(--accent);transform:rotate(45deg);background:var(--surface-page);z-index:2}
+.lesson-section{padding:clamp(3rem,7vw,5.5rem) 0;border-bottom:1px solid var(--border-subtle)}
+.section-head{display:grid;grid-template-columns:minmax(9rem,.28fr) minmax(0,1fr);gap:2rem;align-items:start;margin-bottom:2rem}
+.section-index{color:var(--accent);font:700 .74rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.08em}
+.section-head h2{margin:0;font:700 clamp(2rem,4vw,3.5rem)/1.05 Georgia,Cambria,serif;letter-spacing:-.035em}
+.section-head p{margin:.7rem 0 0;max-width:48rem;color:var(--text-secondary)}
+.rule-band{margin:1.8rem 0;padding:1.1rem 0;border-top:2px solid var(--accent);border-bottom:1px solid var(--border-subtle);display:grid;grid-template-columns:minmax(9rem,.28fr) minmax(0,1fr);gap:2rem;align-items:center}
+.rule-band strong{color:var(--accent)}
+.math,math{font-family:"Cambria Math",Cambria,serif}
+math{color:inherit}
+.big-math{font:600 clamp(1.25rem,2.7vw,2.15rem)/1.35 "Cambria Math",Cambria,serif;overflow-x:auto;max-width:100%}
+.table-wrap{overflow-x:auto;max-width:100%;border-top:1px solid var(--border-subtle)}
+table{width:100%;border-collapse:collapse;min-width:36rem}
+th,td{text-align:left;padding:.75rem .65rem;border-bottom:1px solid var(--border-subtle);vertical-align:top}
+th{font-size:.78rem;color:var(--text-secondary);letter-spacing:.04em}
+.scenario-layout{display:grid;grid-template-columns:minmax(15rem,.34fr) minmax(0,1fr);gap:clamp(1.5rem,5vw,4rem);align-items:start}
+.scenario-nav{position:sticky;top:5.2rem;border-top:2px solid var(--accent)}
+.scenario-nav button{width:100%;min-height:46px;text-align:left;padding:.75rem .2rem;border:0;border-bottom:1px solid var(--border-subtle);background:transparent;color:var(--text-secondary)}
+.scenario-nav button[aria-selected="true"]{color:var(--text-primary);font-weight:700}
+.scenario-panel{padding-top:.25rem}
+.scenario-panel[hidden]{display:none}
+.scenario-panel h3{margin:0 0 .75rem;font:700 clamp(1.5rem,2.6vw,2.25rem)/1.1 Georgia,Cambria,serif}
+.scenario-panel p{max-width:52rem;color:var(--text-secondary)}
+.formula-strip{padding:1.1rem 0;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);margin:1rem 0 1.4rem}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(18rem,.8fr);gap:clamp(2rem,5vw,4rem);align-items:start}
+.note{padding-top:.8rem;border-top:1px solid var(--border-subtle)}
+.note h3{margin:0 0 .5rem;font-size:1rem}.note p,.note li{color:var(--text-secondary)}
+.stepper{border-top:2px solid var(--accent);padding-top:1rem}
+.stepper-nav{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
+.step-button[aria-current="step"]{background:var(--accent-soft);border-color:var(--accent)}
+.step-panel{min-height:13rem;padding:1rem 0;border-top:1px solid var(--border-subtle)}
+.step-panel h3{margin:.1rem 0 .75rem;font:700 1.35rem/1.2 Georgia,Cambria,serif}
+.step-panel p{color:var(--text-secondary)}
+.step-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.visual-note{margin:1.8rem 0 0;display:grid;grid-template-columns:minmax(0,1fr) minmax(16rem,.5fr);gap:1.5rem 2rem;align-items:center;padding:1.25rem 0;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)}
+.visual-note img{width:100%;height:auto;display:block;border:1px solid var(--border-subtle);box-shadow:var(--shadow-low);cursor:zoom-in}
+.visual-note p{color:var(--text-secondary)}
+.training-list{display:grid;gap:1.6rem}
+.task{padding-top:1rem;border-top:1px solid var(--border-subtle)}
+.task-head{display:flex;gap:1rem;align-items:flex-start}
+.task-no{flex:0 0 auto;color:var(--accent);font:700 .78rem/1.35 ui-monospace,SFMono-Regular,Consolas,monospace}
+.task p{margin:0;max-width:62rem}
+.answer-row{margin-top:.75rem;display:flex;gap:.7rem;align-items:center;flex-wrap:wrap}
+.answer{color:var(--success);font-weight:700}
+.quiz{margin-top:2rem;padding-top:1rem;border-top:2px solid var(--accent)}
+.quiz-question{margin-top:1.4rem}
+.quiz-question h3{font-size:1rem;margin:0 0 .7rem}
+.quiz-options{display:flex;gap:.5rem;flex-wrap:wrap}
+.quiz-option[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.quiz-feedback{min-height:1.6rem;margin:.65rem 0 0;color:var(--text-secondary)}
+.checklist{display:grid;gap:.65rem;margin-top:1.2rem}
+.check-item{display:flex;gap:.7rem;align-items:flex-start;padding:.6rem 0;border-bottom:1px solid var(--border-subtle)}
+.check-item input{width:1.2rem;height:1.2rem;margin-top:.2rem;accent-color:var(--accent)}
+.progress-line{margin-top:1rem;height:5px;background:var(--border-subtle);overflow:hidden}
+.progress-line span{display:block;height:100%;width:0;background:var(--accent);transition:width var(--motion-normal) ease}
+.footer{padding:2rem 0 3rem;color:var(--text-secondary);font-size:.88rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.image-dialog{width:min(94vw,75rem);max-height:92vh;padding:0;border:1px solid var(--border-subtle);background:var(--surface-raised);color:var(--text-primary)}
+.image-dialog::backdrop{background:rgba(0,0,0,.58)}
+.dialog-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 1rem;border-bottom:1px solid var(--border-subtle)}
+.dialog-head button{min-width:44px;min-height:44px;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary)}
+.image-dialog img{display:block;width:100%;height:auto;max-height:calc(92vh - 70px);object-fit:contain}
+@media(max-width:900px){
+  .cover,.split,.scenario-layout,.visual-note{grid-template-columns:1fr}
+  .method-route{grid-template-columns:1fr}
+  .route-step{min-height:auto;border-right:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)}
+  .route-step:not(:last-child)::after{right:1rem;top:auto;bottom:-5px;transform:rotate(135deg)}
+  .scenario-nav{position:static;display:flex;overflow-x:auto;border-bottom:1px solid var(--border-subtle)}
+  .scenario-nav button{flex:0 0 auto;width:auto;padding:.7rem .8rem;border-bottom:0;border-right:1px solid var(--border-subtle)}
+  .section-head{grid-template-columns:1fr;gap:.45rem}
+  .rule-band{grid-template-columns:1fr;gap:.5rem}
+}
+@media(max-width:700px){
+  .topbar nav{display:none}
+  .cover{min-height:auto;padding-top:4rem}
+  .cover h1{font-size:clamp(2.7rem,15vw,4.5rem)}
+  .method-plate{margin-top:1rem}
+  main{width:min(100% - 1.4rem,78rem)}
+  table{min-width:31rem}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+}
+@media print{
+  :root,html[data-theme="dark"]{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--surface-warm:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#bbb;--border-strong:#777;--accent:#006b6b;--accent-soft:#fff;color-scheme:light}
+  body{background:#fff;color:#111;font-size:10.5pt}
+  .topbar,.cover-actions,.scenario-nav,.stepper-nav,.step-actions,.answer-button,.quiz,.image-dialog{display:none!important}
+  main{width:100%}
+  .cover{min-height:auto;grid-template-columns:1fr;padding:1.5rem 0}
+  .method-route{grid-template-columns:repeat(5,1fr)}
+  .scenario-panel[hidden]{display:block!important}
+  .scenario-panel{break-inside:avoid}
+  .answer[hidden]{display:inline!important}
+  .lesson-section{padding:1.3rem 0}
+  .task{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">К содержанию</a>
+
+<header class="topbar">
+  <div class="identity">
+    <strong>Екатерина Гнедкова</strong>
+    <span>ЕГЭ · профильная математика · 25.09.26</span>
+  </div>
+  <nav aria-label="Разделы занятия">
+    <a href="#method">Метод</a>
+    <a href="#movement">Движение</a>
+    <a href="#special">Специальные случаи</a>
+    <a href="#work">Производительность</a>
+    <a href="#training">Тренировка</a>
+  </nav>
+  <a href="index.html">К карте</a>
+  <button id="themeToggle" type="button" aria-label="Включить тёмную тему">Тема</button>
+</header>
+
+<main id="content">
+  <section class="cover" aria-labelledby="pageTitle">
+    <div>
+      <p class="kicker">Рабочий конспект · 25.09.26</p>
+      <h1 id="pageTitle">Текстовые задачи</h1>
+      <p class="lead">Главная задача занятия — быстро переводить текст в таблицу, таблицу в уравнение и обязательно возвращаться к смыслу найденной величины.</p>
+      <div class="meta">
+        <span>Ученица: Екатерина Гнедкова</span>
+        <span>Преподаватель: Лёвин Артём Александрович</span>
+        <span>Путь А · 10 задач</span>
+      </div>
+      <div class="cover-actions">
+        <a class="primary" href="../pdf_docs/25.09.26.pdf" target="_blank" rel="noopener">Скачать пособие</a>
+        <a class="secondary" href="../tex_docs/25.09.26.tex" target="_blank" rel="noopener">TeX</a>
+        <a class="secondary" href="#training">К тренировке</a>
+      </div>
+    </div>
+
+    <div class="method-plate" aria-label="Главный маршрут решения">
+      <span class="plate-label">Маршрут решения</span>
+      <div class="method-route">
+        <div class="route-step"><b>01</b><strong>Вопрос</strong><small>Что требуется найти?</small></div>
+        <div class="route-step"><b>02</b><strong>Таблица</strong><small>Скорость, время, путь или производительность, время, результат.</small></div>
+        <div class="route-step"><b>03</b><strong>Связь</strong><small>Равенство, разность времён, общий путь, один круг.</small></div>
+        <div class="route-step"><b>04</b><strong>Уравнение</strong><small>Переведите условие на язык алгебры.</small></div>
+        <div class="route-step"><b>05</b><strong>Проверка</strong><small>Смысл ответа, ограничения, единицы.</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="method">
+    <header class="section-head">
+      <span class="section-index">01 · ОСНОВА</span>
+      <div>
+        <h2>Одна структура для разных сюжетов</h2>
+        <p>В движении и задачах на работу меняются названия величин, но логика остаётся одинаковой: величина за единицу времени × время = результат.</p>
+      </div>
+    </header>
+
+    <div class="rule-band">
+      <strong>Движение</strong>
+      <div class="big-math"><math display="block"><mi>S</mi><mo>=</mo><mi>v</mi><mi>t</mi><mo>,</mo><mspace width="1em"/><mi>t</mi><mo>=</mo><mfrac><mi>S</mi><mi>v</mi></mfrac><mo>,</mo><mspace width="1em"/><mi>v</mi><mo>=</mo><mfrac><mi>S</mi><mi>t</mi></mfrac></math></div>
+    </div>
+
+    <div class="rule-band">
+      <strong>Работа</strong>
+      <div class="big-math"><math display="block"><mi>A</mi><mo>=</mo><mi>p</mi><mi>t</mi><mo>,</mo><mspace width="1em"/><mi>t</mi><mo>=</mo><mfrac><mi>A</mi><mi>p</mi></mfrac><mo>,</mo><mspace width="1em"/><mi>p</mi><mo>=</mo><mfrac><mi>A</mi><mi>t</mi></mfrac></math></div>
+    </div>
+
+    <div class="table-wrap" aria-label="Сопоставление величин">
+      <table>
+        <thead><tr><th>Тип</th><th>Величина за единицу времени</th><th>Время</th><th>Результат</th></tr></thead>
+        <tbody>
+          <tr><td>Движение</td><td>скорость <span class="math">v</span></td><td><span class="math">t</span></td><td>путь <span class="math">S = vt</span></td></tr>
+          <tr><td>Производительность</td><td>производительность <span class="math">p</span></td><td><span class="math">t</span></td><td>работа или объём <span class="math">A = pt</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="split" style="margin-top:2rem">
+      <div class="note">
+        <h3>С чего начинать</h3>
+        <p>Сначала обозначьте через <span class="math">x</span> величину, которую спрашивают. После этого заполните известные клетки таблицы и восстановите остальные по формулам.</p>
+      </div>
+      <div class="note">
+        <h3>Единицы</h3>
+        <p><span class="math">40 мин = 2/3 ч</span>, <span class="math">300 м = 0,3 км</span>. В одном уравнении все единицы должны быть согласованы.</p>
+      </div>
+    </div>
+
+    <div class="visual-note">
+      <div>
+        <p class="kicker">Визуальная памятка</p>
+        <h3 style="font:700 1.7rem/1.1 Georgia,Cambria,serif;margin:.2rem 0 .7rem">Текстовые задачи: главное</h3>
+        <p>Акварельная карта собирает формулы, типы движения, алгоритм и частые ошибки на одном листе. Нажмите на изображение, чтобы рассмотреть его крупнее.</p>
+      </div>
+      <button id="openImage" type="button" style="border:0;padding:0;background:transparent">
+        <img src="../images/25.09.26.png" alt="Ментальная карта по текстовым задачам: таблица величина-время-результат, виды движения, алгоритм решения и частые ошибки">
+      </button>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="movement">
+    <header class="section-head">
+      <span class="section-index">02 · ДВИЖЕНИЕ</span>
+      <div>
+        <h2>Сумма или разность скоростей?</h2>
+        <p>Переключайтесь между четырьмя ситуациями. Ключевой вопрос один: что происходит с расстоянием между участниками?</p>
+      </div>
+    </header>
+
+    <div class="scenario-layout">
+      <div class="scenario-nav" role="tablist" aria-label="Типы задач на движение">
+        <button role="tab" id="tab-meet" aria-controls="panel-meet" aria-selected="true" data-tab="meet">Навстречу</button>
+        <button role="tab" id="tab-catch" aria-controls="panel-catch" aria-selected="false" data-tab="catch">Вдогонку</button>
+        <button role="tab" id="tab-circle" aria-controls="panel-circle" aria-selected="false" data-tab="circle">Круговая трасса</button>
+        <button role="tab" id="tab-river" aria-controls="panel-river" aria-selected="false" data-tab="river">Река</button>
+      </div>
+
+      <div>
+        <article class="scenario-panel" id="panel-meet" role="tabpanel" aria-labelledby="tab-meet">
+          <h3>Движение навстречу</h3>
+          <div class="formula-strip big-math"><math display="block"><msub><mi>v</mi><mtext>сбл</mtext></msub><mo>=</mo><msub><mi>v</mi><mn>1</mn></msub><mo>+</mo><msub><mi>v</mi><mn>2</mn></msub></math></div>
+          <p>Если участники стартуют одновременно и начальное расстояние равно <span class="math">S</span>, то <span class="math">t = S / (v₁ + v₂)</span>.</p>
+          <p>Если требуется расстояние от пункта A до места встречи, удобно сразу обозначить его через <span class="math">x</span>. Второй путь тогда равен <span class="math">S − x</span>.</p>
+          <div class="note"><h3>Ранний старт</h3><p>Тот, кто выехал раньше, находится в пути дольше. Разность времён должна равняться величине форы.</p></div>
+        </article>
+
+        <article class="scenario-panel" id="panel-catch" role="tabpanel" aria-labelledby="tab-catch" hidden>
+          <h3>Движение вдогонку</h3>
+          <div class="formula-strip big-math"><math display="block"><msub><mi>v</mi><mtext>сбл</mtext></msub><mo>=</mo><msub><mi>v</mi><mtext>быстр</mtext></msub><mo>−</mo><msub><mi>v</mi><mtext>медл</mtext></msub></math></div>
+          <p>Если начальный отрыв равен <span class="math">d</span>, то <span class="math">t = d / (vбыстр − vмедл)</span>. Необходимо <span class="math">vбыстр &gt; vмедл</span>.</p>
+          <p>Вспомогательная переменная допустима, если после упрощения уравнение однозначно определяет искомую величину.</p>
+        </article>
+
+        <article class="scenario-panel" id="panel-circle" role="tabpanel" aria-labelledby="tab-circle" hidden>
+          <h3>Круговая трасса</h3>
+          <div class="formula-strip big-math"><math display="block"><mo>(</mo><msub><mi>v</mi><mtext>быстр</mtext></msub><mo>−</mo><msub><mi>v</mi><mtext>медл</mtext></msub><mo>)</mo><mi>t</mi><mo>=</mo><mi>L</mi></math></div>
+          <p>Обгон на один круг означает, что быстрый участник прошёл на одну длину трассы больше. Для обгона на <span class="math">k</span> кругов правая часть становится <span class="math">kL</span>.</p>
+          <p>При старте из противоположных точек расстояние по полуокружности равно <span class="math">L/2</span>. При движении навстречу до первой встречи: <span class="math">(v₁ + v₂)t = L/2</span>.</p>
+        </article>
+
+        <article class="scenario-panel" id="panel-river" role="tabpanel" aria-labelledby="tab-river" hidden>
+          <h3>Движение по реке</h3>
+          <div class="formula-strip big-math"><math display="block"><msub><mi>v</mi><mtext>по теч.</mtext></msub><mo>=</mo><mi>v</mi><mo>+</mo><mi>u</mi><mspace width="1.1em"/><mo>·</mo><mspace width="1.1em"/><msub><mi>v</mi><mtext>против</mtext></msub><mo>=</mo><mi>v</mi><mo>−</mo><mi>u</mi><mspace width="1.1em"/><mo>·</mo><mspace width="1.1em"/><msub><mi>v</mi><mtext>плота</mtext></msub><mo>=</mo><mi>u</mi></math></div>
+          <p><span class="math">v</span> — собственная скорость лодки, <span class="math">u</span> — скорость течения. Для движения против течения необходимо <span class="math">v &gt; u</span>.</p>
+          <p>Стоянка и более ранний старт — отдельные интервалы времени; их нельзя терять при составлении уравнения.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="special">
+    <header class="section-head">
+      <span class="section-index">03 · ОСОБЫЕ СЛУЧАИ</span>
+      <div>
+        <h2>Средняя скорость и протяжённые тела</h2>
+        <p>В этих задачах самая частая ошибка — применять привычную формулу механически, не проверяя, какие именно расстояния и времена складываются.</p>
+      </div>
+    </header>
+
+    <div class="split">
+      <div>
+        <div class="rule-band">
+          <strong>Средняя скорость</strong>
+          <div class="big-math"><math display="block"><msub><mi>v</mi><mtext>ср</mtext></msub><mo>=</mo><mfrac><msub><mi>S</mi><mtext>общ</mtext></msub><msub><mi>t</mi><mtext>общ</mtext></msub></mfrac></math></div>
+        </div>
+        <p>Если путь разделён на три равные по длине части, то простое среднее арифметическое скоростей использовать нельзя.</p>
+        <div class="formula-strip big-math"><math display="block"><msub><mi>v</mi><mtext>ср</mtext></msub><mo>=</mo><mfrac><mn>3</mn><mrow><mfrac><mn>1</mn><msub><mi>v</mi><mn>1</mn></msub></mfrac><mo>+</mo><mfrac><mn>1</mn><msub><mi>v</mi><mn>2</mn></msub></mfrac><mo>+</mo><mfrac><mn>1</mn><msub><mi>v</mi><mn>3</mn></msub></mfrac></mrow></mfrac></math></div>
+      </div>
+
+      <div>
+        <div class="rule-band">
+          <strong>Протяжённые тела</strong>
+          <div class="big-math"><math display="block"><mi>t</mi><mo>=</mo><mfrac><mrow><msub><mi>L</mi><mn>1</mn></msub><mo>+</mo><msub><mi>L</mi><mn>2</mn></msub></mrow><msub><mi>v</mi><mtext>отн</mtext></msub></mfrac></math></div>
+        </div>
+        <p>Чтобы поезд полностью прошёл платформу, его передняя точка должна пройти сумму длины поезда и длины платформы.</p>
+        <p>Навстречу относительная скорость равна сумме скоростей, в одном направлении — разности.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="work">
+    <header class="section-head">
+      <span class="section-index">04 · ПРОИЗВОДИТЕЛЬНОСТЬ</span>
+      <div>
+        <h2>Та же таблица, другие названия</h2>
+        <p>Вместо скорости используем производительность, вместо пути — выполненную работу или объём. Связь остаётся прежней: результат равен произведению производительности на время.</p>
+      </div>
+    </header>
+
+    <div class="rule-band">
+      <strong>Базовая связь</strong>
+      <div class="big-math"><math display="block"><mi>A</mi><mo>=</mo><mi>p</mi><mi>t</mi></math></div>
+    </div>
+
+    <div class="split">
+      <div class="note">
+        <h3>Как понять, у кого производительность больше</h3>
+        <p>Если за одинаковое время вторая труба заполняет больший бак, то её производительность выше. Это позволяет правильно выбрать <span class="math">x</span> и <span class="math">x + 6</span>.</p>
+      </div>
+      <div class="note">
+        <h3>Ограничение</h3>
+        <p>Производительность положительна. В дробях <span class="math">A/p</span> знаменатель не может быть равен нулю.</p>
+      </div>
+    </div>
+
+    <div class="stepper" style="margin-top:2rem" aria-labelledby="pipeExample">
+      <p class="kicker">Пошаговый разбор</p>
+      <h3 id="pipeExample" style="font:700 1.8rem/1.1 Georgia,Cambria,serif;margin:.2rem 0 1rem">Две трубы · 770 л и 830 л</h3>
+      <div class="stepper-nav" role="group" aria-label="Шаги решения">
+        <button class="step-button" type="button" data-step="0" aria-current="step">1</button>
+        <button class="step-button" type="button" data-step="1">2</button>
+        <button class="step-button" type="button" data-step="2">3</button>
+        <button class="step-button" type="button" data-step="3">4</button>
+        <button class="step-button" type="button" data-step="4">5</button>
+      </div>
+      <div class="step-panel" id="stepPanel" tabindex="-1"></div>
+      <div class="step-actions">
+        <button class="secondary" type="button" id="prevStep">Назад</button>
+        <button class="primary" type="button" id="nextStep">Дальше</button>
+        <button class="secondary" type="button" id="showAllSteps">Показать всё</button>
+        <button class="secondary" type="button" id="resetSteps">К началу</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="training">
+    <header class="section-head">
+      <span class="section-index">05 · ПУТЬ А</span>
+      <div>
+        <h2>Тренировка: 10 задач</h2>
+        <p>Задачи идут от прямой модели к ситуациям с временной форой, круговой трассой, рекой, средней скоростью, протяжённым телом и производительностью.</p>
+      </div>
+    </header>
+
+    <div class="training-list">
+      <article class="task"><div class="task-head"><span class="task-no">01</span><p>Из городов A и B, расстояние между которыми 360 км, одновременно навстречу друг другу выехали два автомобиля со скоростями 60 км/ч и 90 км/ч. На каком расстоянии от города A они встретятся, если первый автомобиль выехал из A?</p></div><div class="answer-row"><button class="answer-button" type="button" data-answer="144 км">Показать ответ</button><span class="answer" hidden></span></div></article>
+      <article class="task"><div class="task-head"><span class="task-no">02</span><p>Расстояние между городами равно 450 км. Первый автомобиль выехал из города A со скоростью 60 км/ч на 30 минут раньше второго, который выехал из города B навстречу ему со скоростью 90 км/ч. На каком расстоянии от города A произойдёт встреча?</p></div><div class="answer-row"><button class="answer-button" type="button" data-answer="198 км">Показать ответ</button><span class="answer" hidden></span></div></article>
+      <article class="task"><div class="task-head"><span class="task-no">03</span><p>Медленный пешеход идёт со скоростью 5 км/ч. Быстрый пешеход выходит вслед за ним из той же точки, когда первый уже находится на расстоянии 450 м, и движется со скоростью 6,5 км/ч. Через сколько минут быстрый пешеход догонит медленного?</p></div><div class="answer-row"><button class="answer-button" type="button" data-answer="18 мин">Показать ответ</button><span class="answer" hidden></span></div></article>
+      <article class="task"><div class="task-head"><span class="task-no">04</span><p>По круговой трассе длиной 12 км одновременно из одной точки в одном направлении выехали два автомобиля. Скорость быстрого автомобиля равна 78 км/ч. Через 40 минут он впервые обогнал медленного ровно на один круг. Найдите скорость медленного автомобиля.</p></div><div class="answer-row"><button class="answer-button" type="button" data-answer="60 км/ч">Показать ответ</button><span class="answer" hidden></span></div></article>
+      <article class="task"><div class="task-head"><span class="task-no">05</span><p>Два велосипедиста стартовали из противоположных точек круговой трассы длиной 20 км и поехали навстречу друг другу со скоростями 12 км/ч и 8 км/ч. Через сколько минут они впервые встретятся?</p></div><div class="answer-row"><button class="answer-button" type="button" data-answer="30 мин">Показать ответ</button><span class="answer" hidden></span></div></article>
+      <article class="task"><div class="task-head"><span class="task-no">06</span><p>Моторная лодка проходит некоторое расстояние по течению со скоростью 30 км/ч, затем стоит 2 часа и возвращается против течения со скоростью 20 км/ч. Весь рейс занимает 7 часов. Найдите суммарный путь лодки туда и обратно.</p></div><div class="answer-row"><button class="answer-button" type="button" data-answer="120 км">Показать ответ</button><span class="answer" hidden></span></div></article>
+      <article class="task"><div class="task-head"><span class="task-no">07</span><p>Плот движется по реке со скоростью течения 3 км/ч. Через 2 часа после отправления плота из той же точки вслед за ним вышла моторная лодка. Её собственная скорость равна 15 км/ч. На каком расстоянии от пункта отправления лодка догонит плот?</p></div><div class="answer-row"><button class="answer-button" type="button" data-answer="7,2 км">Показать ответ</button><span class="answer" hidden></span></div></article>
+      <article class="task"><div class="task-head"><span class="task-no">08</span><p>Первую треть пути автомобиль ехал со скоростью 12 км/ч, вторую треть — со скоростью 18 км/ч, последнюю треть — со скоростью 36 км/ч. Найдите среднюю скорость автомобиля на всём пути.</p></div><div class="answer-row"><button class="answer-button" type="button" data-answer="18 км/ч">Показать ответ</button><span class="answer" hidden></span></div></article>
+      <article class="task"><div class="task-head"><span class="task-no">09</span><p>Поезд длиной 180 м движется со скоростью 72 км/ч и полностью проходит мимо платформы длиной 270 м. Сколько секунд длится прохождение платформы от момента, когда локомотив поравнялся с началом платформы, до момента, когда последний вагон миновал её конец?</p></div><div class="answer-row"><button class="answer-button" type="button" data-answer="22,5 с">Показать ответ</button><span class="answer" hidden></span></div></article>
+      <article class="task"><div class="task-head"><span class="task-no">10</span><p>Первая труба наполняет бак объёмом 720 л за то же время, за которое вторая труба наполняет бак объёмом 900 л. Вторая труба пропускает на 10 л/мин больше первой. Сколько литров воды в минуту пропускает первая труба?</p></div><div class="answer-row"><button class="answer-button" type="button" data-answer="40 л/мин">Показать ответ</button><span class="answer" hidden></span></div></article>
+    </div>
+
+    <div class="quiz" id="quiz" aria-labelledby="quizTitle">
+      <p class="kicker">Короткая самопроверка</p>
+      <h2 id="quizTitle" style="font:700 2rem/1.1 Georgia,Cambria,serif;margin:.2rem 0">Выберите правильную идею</h2>
+
+      <div class="quiz-question" data-correct="sum">
+        <h3>1. Два участника движутся навстречу. Что используется как скорость сближения?</h3>
+        <div class="quiz-options">
+          <button class="quiz-option" type="button" data-choice="sum">Сумма скоростей</button>
+          <button class="quiz-option" type="button" data-choice="diff">Разность скоростей</button>
+        </div>
+        <p class="quiz-feedback" aria-live="polite"></p>
+      </div>
+
+      <div class="quiz-question" data-correct="total">
+        <h3>2. Средняя скорость на всём пути — это…</h3>
+        <div class="quiz-options">
+          <button class="quiz-option" type="button" data-choice="total">Общий путь / общее время</button>
+          <button class="quiz-option" type="button" data-choice="mean">Среднее арифметическое скоростей</button>
+        </div>
+        <p class="quiz-feedback" aria-live="polite"></p>
+      </div>
+
+      <div class="quiz-question" data-correct="current">
+        <h3>3. С какой скоростью относительно берега движется плот?</h3>
+        <div class="quiz-options">
+          <button class="quiz-option" type="button" data-choice="current">Со скоростью течения</button>
+          <button class="quiz-option" type="button" data-choice="boat">С собственной скоростью лодки</button>
+        </div>
+        <p class="quiz-feedback" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <div style="margin-top:2.3rem;padding-top:1rem;border-top:2px solid var(--accent)">
+      <p class="kicker">Финальная отметка</p>
+      <h2 style="font:700 2rem/1.1 Georgia,Cambria,serif;margin:.2rem 0">Что должно остаться после занятия</h2>
+      <div class="checklist" id="selfCheck">
+        <label class="check-item"><input type="checkbox" data-check="table"> <span>Я начинаю текстовую задачу с выбора неизвестной и таблицы.</span></label>
+        <label class="check-item"><input type="checkbox" data-check="relative"> <span>Я различаю сумму и разность скоростей в задачах на движение.</span></label>
+        <label class="check-item"><input type="checkbox" data-check="river"> <span>Я учитываю течение, стоянку и временную фору.</span></label>
+        <label class="check-item"><input type="checkbox" data-check="average"> <span>Я считаю среднюю скорость как общий путь, делённый на общее время.</span></label>
+        <label class="check-item"><input type="checkbox" data-check="work"> <span>Я перевожу задачи на производительность в связь A = pt.</span></label>
+        <label class="check-item"><input type="checkbox" data-check="units"> <span>Я проверяю единицы, ограничения и смысл ответа.</span></label>
+      </div>
+      <div class="progress-line" aria-hidden="true"><span id="checkProgress"></span></div>
+      <p id="checkStatus" aria-live="polite" style="color:var(--text-secondary)"></p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>Екатерина Гнедкова · ЕГЭ по профильной математике</span>
+    <span>Лёвин Артём Александрович · 25.09.26</span>
+  </footer>
+</main>
+
+<dialog class="image-dialog" id="imageDialog" aria-labelledby="imageDialogTitle">
+  <div class="dialog-head">
+    <strong id="imageDialogTitle">Ментальная карта · текстовые задачи</strong>
+    <button type="button" id="closeImage" aria-label="Закрыть изображение">×</button>
+  </div>
+  <img src="../images/25.09.26.png" alt="Ментальная карта по текстовым задачам: алгоритм, типы движения, формулы и частые ошибки">
+</dialog>
+
+<script>
+(function(){
+  'use strict';
+
+  function safeGet(key){
+    try{return localStorage.getItem(key);}catch(_){return null;}
+  }
+  function safeSet(key,value){
+    try{localStorage.setItem(key,value);}catch(_){}
+  }
+
+  var themeKey='ekaterina_gnedkova-25-09-26-theme';
+  var savedTheme=safeGet(themeKey);
+  if(savedTheme==='dark'||savedTheme==='light') document.documentElement.dataset.theme=savedTheme;
+
+  var themeToggle=document.getElementById('themeToggle');
+  function syncThemeLabel(){
+    var dark=document.documentElement.dataset.theme==='dark';
+    themeToggle.setAttribute('aria-label',dark?'Включить светлую тему':'Включить тёмную тему');
+    themeToggle.textContent=dark?'Светлая тема':'Тёмная тема';
+  }
+  syncThemeLabel();
+  themeToggle.addEventListener('click',function(){
+    var next=document.documentElement.dataset.theme==='dark'?'light':'dark';
+    document.documentElement.dataset.theme=next;
+    safeSet(themeKey,next);
+    syncThemeLabel();
+  });
+
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('[data-tab]'));
+  var panels=Array.prototype.slice.call(document.querySelectorAll('.scenario-panel'));
+  function selectTab(name,focus){
+    tabs.forEach(function(tab){
+      var active=tab.dataset.tab===name;
+      tab.setAttribute('aria-selected',String(active));
+      tab.tabIndex=active?0:-1;
+      if(active&&focus) tab.focus();
+    });
+    panels.forEach(function(panel){panel.hidden=panel.id!=='panel-'+name;});
+  }
+  selectTab('meet',false);
+
+  tabs.forEach(function(tab,index){
+    tab.addEventListener('click',function(){selectTab(tab.dataset.tab,false);});
+    tab.addEventListener('keydown',function(event){
+      if(event.key!=='ArrowRight'&&event.key!=='ArrowLeft') return;
+      event.preventDefault();
+      var delta=event.key==='ArrowRight'?1:-1;
+      var next=(index+delta+tabs.length)%tabs.length;
+      selectTab(tabs[next].dataset.tab,true);
+    });
+  });
+
+  var steps=[
+    {title:'Шаг 1. Выберите неизвестную',body:'Пусть x — производительность первой трубы, л/мин. Тогда x > 0.'},
+    {title:'Шаг 2. Сравните производительности',body:'За одинаковое время вторая труба заполняет больший бак, поэтому её производительность равна x + 6.'},
+    {title:'Шаг 3. Выразите время',body:'Для первой трубы t = 770 / x, для второй t = 830 / (x + 6). Времена равны.'},
+    {title:'Шаг 4. Составьте и решите уравнение',body:'770 / x = 830 / (x + 6). Получаем 770(x + 6) = 830x, затем 4620 = 60x и x = 77.'},
+    {title:'Шаг 5. Вернитесь к смыслу',body:'Первая труба пропускает 77 л/мин, вторая — 83 л/мин. Обе производительности положительны, и вторая действительно больше на 6 л/мин.'}
+  ];
+  var stepKey='ekaterina_gnedkova-25-09-26-step';
+  var currentStep=Math.min(Math.max(Number(safeGet(stepKey))||0,0),steps.length-1);
+  var stepPanel=document.getElementById('stepPanel');
+  var stepButtons=Array.prototype.slice.call(document.querySelectorAll('[data-step]'));
+  function renderStep(){
+    var item=steps[currentStep];
+    stepPanel.innerHTML='<h3>'+item.title+'</h3><p>'+item.body+'</p>';
+    stepButtons.forEach(function(button){
+      var active=Number(button.dataset.step)===currentStep;
+      if(active) button.setAttribute('aria-current','step'); else button.removeAttribute('aria-current');
+    });
+    safeSet(stepKey,String(currentStep));
+  }
+  stepButtons.forEach(function(button){
+    button.addEventListener('click',function(){currentStep=Number(button.dataset.step);renderStep();});
+  });
+  document.getElementById('prevStep').addEventListener('click',function(){currentStep=Math.max(0,currentStep-1);renderStep();});
+  document.getElementById('nextStep').addEventListener('click',function(){currentStep=Math.min(steps.length-1,currentStep+1);renderStep();});
+  document.getElementById('resetSteps').addEventListener('click',function(){currentStep=0;renderStep();});
+  document.getElementById('showAllSteps').addEventListener('click',function(){
+    stepPanel.innerHTML=steps.map(function(item){return '<section><h3>'+item.title+'</h3><p>'+item.body+'</p></section>';}).join('');
+    stepButtons.forEach(function(button){button.removeAttribute('aria-current');});
+  });
+  renderStep();
+
+  Array.prototype.slice.call(document.querySelectorAll('.answer-button')).forEach(function(button){
+    button.addEventListener('click',function(){
+      var answer=button.parentElement.querySelector('.answer');
+      var open=!answer.hidden;
+      answer.hidden=open;
+      answer.textContent=open?'':'Ответ: '+button.dataset.answer;
+      button.textContent=open?'Показать ответ':'Скрыть ответ';
+      button.setAttribute('aria-expanded',String(!open));
+    });
+    button.setAttribute('aria-expanded','false');
+  });
+
+  Array.prototype.slice.call(document.querySelectorAll('.quiz-question')).forEach(function(block){
+    var correct=block.dataset.correct;
+    var feedback=block.querySelector('.quiz-feedback');
+    Array.prototype.slice.call(block.querySelectorAll('.quiz-option')).forEach(function(button){
+      button.addEventListener('click',function(){
+        Array.prototype.slice.call(block.querySelectorAll('.quiz-option')).forEach(function(other){other.setAttribute('aria-pressed',String(other===button));});
+        var ok=button.dataset.choice===correct;
+        feedback.textContent=ok?'Верно. Это соответствует алгоритму занятия.':'Проверьте правило в соответствующем разделе выше.';
+        feedback.style.color=ok?'var(--success)':'var(--danger)';
+      });
+      button.setAttribute('aria-pressed','false');
+    });
+  });
+
+  var checkKey='ekaterina_gnedkova-25-09-26-selfcheck';
+  var checks=Array.prototype.slice.call(document.querySelectorAll('#selfCheck input'));
+  var savedChecks={};
+  try{savedChecks=JSON.parse(safeGet(checkKey)||'{}')||{};}catch(_){savedChecks={};}
+  checks.forEach(function(input){
+    input.checked=Boolean(savedChecks[input.dataset.check]);
+    input.addEventListener('change',function(){
+      var state={};
+      checks.forEach(function(item){state[item.dataset.check]=item.checked;});
+      safeSet(checkKey,JSON.stringify(state));
+      renderProgress();
+    });
+  });
+  function renderProgress(){
+    var done=checks.filter(function(item){return item.checked;}).length;
+    var percent=Math.round(done/checks.length*100);
+    document.getElementById('checkProgress').style.width=percent+'%';
+    document.getElementById('checkStatus').textContent='Отмечено: '+done+' из '+checks.length+'.';
+  }
+  renderProgress();
+
+  var dialog=document.getElementById('imageDialog');
+  var openImage=document.getElementById('openImage');
+  var closeImage=document.getElementById('closeImage');
+  var imageTrigger=null;
+  function closeDialog(){
+    if(dialog.open) dialog.close(); else dialog.removeAttribute('open');
+  }
+  openImage.addEventListener('click',function(){
+    imageTrigger=openImage;
+    if(typeof dialog.showModal==='function') dialog.showModal(); else dialog.setAttribute('open','');
+    closeImage.focus();
+  });
+  closeImage.addEventListener('click',closeDialog);
+  dialog.addEventListener('click',function(event){if(event.target===dialog) closeDialog();});
+  dialog.addEventListener('close',function(){if(imageTrigger) imageTrigger.focus();});
+  document.addEventListener('keydown',function(event){if(event.key==='Escape'&&dialog.hasAttribute('open')) closeDialog();});
+})();
+</script>
+</body>
+</html>
