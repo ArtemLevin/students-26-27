@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивное занятие Володи Хачатуряна: средняя путевая скорость, полный путь и полное время, равные доли пути и времени, проценты пути и алгебра дробей.">
+<title>Средняя скорость и базовая кинематика — Володя Хачатурян</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23004d4d'/%3E%3Cpath d='M10 42h44M16 38l11-11 9 7 12-16' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --surface-page:#f4f1e9;--surface-raised:#fffdf8;--surface-soft:#e7efec;--surface-strong:#d7e4df;
+  --text-primary:#1e2a28;--text-secondary:#68736f;--text-inverse:#fff;
+  --border-subtle:#cfd9d4;--border-strong:#93aaa2;--accent:#006b67;--accent-hover:#005551;--accent-soft:#d9ebe7;
+  --signal:#b65f42;--signal-soft:#f1ddd5;--success:#2f7358;--danger:#a34c45;--warning:#85641f;--focus-ring:#168e86;
+  --shadow-low:0 8px 24px #26443b14;--radius-sm:8px;--radius-md:16px;--radius-lg:26px;
+  --space-1:.4rem;--space-2:.7rem;--space-3:1rem;--space-4:1.4rem;--space-5:2rem;--space-6:3rem;
+  --motion-fast:140ms;--motion-normal:220ms;
+}
+html[data-theme="dark"]{
+  --surface-page:#101817;--surface-raised:#172321;--surface-soft:#1c2e2a;--surface-strong:#264038;
+  --text-primary:#edf5f2;--text-secondary:#a9bbb5;--text-inverse:#fff;
+  --border-subtle:#324640;--border-strong:#597269;--accent:#77c7be;--accent-hover:#98d9d2;--accent-soft:#153c37;
+  --signal:#e29a80;--signal-soft:#3c2822;--success:#70b997;--danger:#e18b84;--warning:#d8b866;--focus-ring:#9cddd6;
+  --shadow-low:0 8px 24px #0005;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button,input{font:inherit}
+a{color:inherit}
+button{cursor:pointer}
+.skip{position:absolute;left:-9999px;top:0}.skip:focus{left:1rem;top:1rem;z-index:100;background:var(--surface-raised);padding:.65rem .9rem;border:2px solid var(--focus-ring)}
+.shell{width:min(100% - clamp(1rem,4vw,4rem),92rem);margin:auto}
+.topbar{position:sticky;top:0;z-index:20;border-bottom:1px solid var(--border-subtle);background:color-mix(in srgb,var(--surface-page) 94%,transparent);backdrop-filter:blur(10px)}
+.topbar-inner{display:flex;align-items:center;gap:.55rem;min-height:58px}
+.topbar a,.topbar button{min-height:44px;border:0;background:transparent;padding:.65rem .75rem;text-decoration:none;color:var(--text-secondary)}
+.topbar .home{font-weight:760;color:var(--text-primary);padding-left:0}.topbar .grow{flex:1}
+.hero{padding:clamp(2.6rem,6vw,5.5rem) 0 2.5rem;border-bottom:1px solid var(--border-subtle)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(18rem,.8fr);gap:clamp(2rem,7vw,7rem);align-items:center}
+.kicker{font:750 .75rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.hero h1{font:720 clamp(2.8rem,7vw,6.8rem)/.96 Georgia,"Times New Roman",serif;letter-spacing:-.05em;margin:.75rem 0 1rem;max-width:10ch}
+.hero .lead{font-size:clamp(1.05rem,1.8vw,1.25rem);color:var(--text-secondary);max-width:52rem}
+.hero-meta{display:flex;gap:.4rem 1.1rem;flex-wrap:wrap;color:var(--text-secondary);font-size:.9rem;margin-top:1.2rem}.hero-meta b{color:var(--text-primary)}
+.journey{padding:1rem 0;border-top:2px solid var(--accent);border-bottom:1px solid var(--border-subtle)}
+.journey-title{font:720 .74rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.12em}
+.journey-line{position:relative;height:122px;margin-top:.8rem}
+.journey-line:before{content:"";position:absolute;left:2%;right:2%;top:58px;height:2px;background:var(--border-strong)}
+.segment{position:absolute;top:40px;height:36px;border:2px solid var(--accent);background:var(--accent-soft);display:grid;place-items:center;font-weight:760}
+.segment.s1{left:2%;width:52%}.segment.s2{left:54%;width:44%;border-color:var(--signal);background:var(--signal-soft)}
+.journey-caption{display:flex;justify-content:space-between;color:var(--text-secondary);font-size:.88rem}
+.formula-main{margin-top:1rem;font:650 clamp(1.4rem,2.6vw,2.2rem)/1.2 "Cambria Math",Cambria,serif}
+.route{border-bottom:1px solid var(--border-subtle)}
+.route-inner{display:grid;grid-template-columns:repeat(5,1fr)}
+.route a{padding:.9rem .8rem;min-height:66px;text-decoration:none;color:var(--text-secondary);border-right:1px solid var(--border-subtle);font-size:.86rem}
+.route a:first-child{border-left:1px solid var(--border-subtle)}
+.route a:before{content:attr(data-no);display:block;color:var(--signal);font:760 .7rem ui-monospace,SFMono-Regular,Consolas,monospace;margin-bottom:.25rem}
+.route a:hover,.route a:focus-visible{background:var(--surface-raised);color:var(--text-primary)}
+main{padding:clamp(2rem,5vw,4.5rem) 0}
+.chapter{padding:clamp(2.2rem,4vw,4.5rem) 0;border-top:1px solid var(--border-subtle)}.chapter:first-child{border-top:0}
+.chapter-head{display:grid;grid-template-columns:minmax(8rem,.3fr) minmax(0,1fr);gap:clamp(1.2rem,4vw,4rem);margin-bottom:1.7rem}
+.chapter-no{font:760 .75rem/1 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--signal);letter-spacing:.1em}
+.chapter h2{font:720 clamp(2rem,4vw,3.8rem)/1.04 Georgia,"Times New Roman",serif;letter-spacing:-.035em;margin:0}
+.chapter-intro{color:var(--text-secondary);max-width:62rem}
+.rule{display:grid;grid-template-columns:minmax(0,1fr) minmax(16rem,.56fr);gap:clamp(1.3rem,4vw,4rem);align-items:start}
+.formula-panel{padding:1.3rem 0;border-top:2px solid var(--accent);border-bottom:1px solid var(--border-subtle)}
+.formula-panel math{font-size:clamp(1.45rem,3vw,2.4rem)}
+.formula-panel p{color:var(--text-secondary)}
+.ledger{border-top:1px solid var(--border-strong)}
+.ledger-row{display:grid;grid-template-columns:minmax(7.5rem,.8fr) 1.2fr;gap:1rem;padding:.8rem 0;border-bottom:1px solid var(--border-subtle)}
+.ledger-row span{color:var(--text-secondary)}
+.case-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem;margin-top:1.6rem}
+.case{padding:1rem 0;border-top:2px solid var(--border-strong)}
+.case h3{font:700 1.25rem Georgia,serif;margin:.25rem 0 .6rem}
+.case p{color:var(--text-secondary)}
+.case .key{font-weight:760;color:var(--text-primary)}
+.example{padding:1.2rem 0;border-top:1px solid var(--border-strong)}
+.example h3{font:700 1.4rem Georgia,serif;margin:.2rem 0 .7rem}
+.answer{color:var(--success);font-weight:760}
+.signal{border-left:3px solid var(--signal);padding:.8rem 1rem;background:linear-gradient(90deg,var(--signal-soft),transparent);margin:1rem 0}
+.mathline{overflow-x:auto;padding:.2rem 0}.mathline math{font-size:1.12rem}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse}th,td{text-align:left;vertical-align:top;padding:.75rem .65rem;border-bottom:1px solid var(--border-subtle)}th{font-size:.82rem;color:var(--text-secondary)}
+.stepper{display:grid;grid-template-columns:minmax(15rem,.46fr) minmax(0,1fr);gap:2rem}
+.step-nav{border-top:1px solid var(--border-strong)}
+.step-nav button{width:100%;min-height:48px;text-align:left;border:0;border-bottom:1px solid var(--border-subtle);background:transparent;color:var(--text-secondary);padding:.75rem .6rem}
+.step-nav button[aria-current="step"]{color:var(--text-primary);box-shadow:inset 3px 0 var(--accent);background:var(--surface-soft)}
+.step-stage{min-height:230px;padding:1.1rem 0;border-top:2px solid var(--accent)}
+.step-stage h3{font:700 1.55rem Georgia,serif;margin:.2rem 0 .8rem}
+.step-stage p{color:var(--text-secondary)}
+.step-controls{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.btn{min-height:44px;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);padding:.65rem .9rem;border-radius:var(--radius-sm)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}.btn.primary:hover{background:var(--accent-hover)}
+.errors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.error{padding:1rem 0;border-top:2px solid var(--danger)}.error b{display:block;margin-bottom:.35rem}.error p{margin:0;color:var(--text-secondary)}
+.practice-list{counter-reset:p}.practice-item{counter-increment:p;display:grid;grid-template-columns:2.4rem 1fr;gap:.9rem;padding:1rem 0;border-top:1px solid var(--border-subtle)}
+.practice-item:before{content:counter(p);display:grid;place-items:center;width:2rem;height:2rem;border:1px solid var(--accent);border-radius:50%;font-weight:800;color:var(--accent)}
+.answers{display:none;margin-top:1rem}.answers.show{display:block}
+.poster{border-top:1px solid var(--border-strong);padding-top:1rem;margin-top:1.6rem}.poster summary{cursor:pointer;font-weight:760}.poster img{display:block;width:min(100%,1100px);max-height:80vh;object-fit:contain;margin:1rem auto 0;border:1px solid var(--border-subtle);background:var(--surface-raised)}
+.quiz{border-top:1px solid var(--border-strong);padding-top:1rem}.quiz h3{font:700 1.4rem Georgia,serif}
+.quiz button[data-q]{display:block;width:100%;text-align:left;min-height:44px;margin:.45rem 0;padding:.75rem .85rem;border:1px solid var(--border-subtle);background:var(--surface-raised);color:var(--text-primary);border-radius:var(--radius-sm)}
+.quiz button.good{border-color:var(--success);box-shadow:inset 3px 0 var(--success)}.quiz button.bad{border-color:var(--danger);box-shadow:inset 3px 0 var(--danger)}
+.feedback{min-height:1.7rem;color:var(--text-secondary)}
+.checklist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem 1.2rem}.check{display:flex;gap:.7rem;align-items:flex-start;padding:.6rem 0;border-bottom:1px solid var(--border-subtle)}.check input{width:20px;height:20px;margin-top:.2rem;accent-color:var(--accent)}
+.progress-line{height:6px;background:var(--border-subtle);overflow:hidden;margin-top:1rem}.progress-line span{display:block;height:100%;width:0;background:var(--success);transition:width var(--motion-normal)}
+.footer{padding:2rem 0 3rem;border-top:1px solid var(--border-subtle);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;color:var(--text-secondary)}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+@media(max-width:960px){.hero-grid,.rule,.stepper,.chapter-head{grid-template-columns:1fr}.case-grid{grid-template-columns:1fr}.route-inner{grid-template-columns:1fr 1fr 1fr}.errors,.checklist{grid-template-columns:1fr}}
+@media(max-width:620px){.shell{width:min(100% - 1.2rem,92rem)}.hero h1{font-size:clamp(2.7rem,15vw,4.5rem)}.route-inner{grid-template-columns:1fr}.route a,.route a:first-child{border-left:0;border-right:0;border-bottom:1px solid var(--border-subtle)}.journey-line{height:145px}.journey-caption{flex-direction:column;gap:.25rem}.ledger-row{grid-template-columns:1fr}.chapter{padding:2.4rem 0}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+@media print{
+  :root,html[data-theme="dark"]{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#bbb;--border-strong:#888;--accent:#005b57;--signal:#91452f}
+  .topbar,.route,.step-controls,.quiz button,.answer-toggle{display:none!important}.answers{display:block!important}
+  body{background:#fff;font-size:11pt}.shell{width:100%}.hero{padding:10mm 0 6mm}.hero h1{font-size:30pt}.chapter{padding:8mm 0}.poster img{max-height:175mm}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">К содержанию</a>
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <a class="home" href="index.html">Володя Хачатурян · ОГЭ по физике</a>
+    <span class="grow"></span>
+    <a href="../pdf_docs/26.09.26.pdf" download>Скачать пособие</a>
+    <a href="../tex_docs/26.09.26.tex">TeX</a>
+    <button id="themeToggle" type="button">Тема</button>
+    <button type="button" onclick="print()">Печать</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="shell hero-grid">
+    <div>
+      <p class="kicker">26 сентября 2026 · кинематика</p>
+      <h1>Средняя скорость без ловушек</h1>
+      <p class="lead">Главная идея занятия: средняя путевая скорость всегда строится из <b>полного пути</b> и <b>полного времени</b>. Разные доли пути и времени дают разные способы вычисления этих двух величин.</p>
+      <div class="hero-meta">
+        <span><b>Ученик:</b> Володя Хачатурян</span>
+        <span><b>Преподаватель:</b> Лёвин Артём Александрович</span>
+        <span><b>Путь Б:</b> 27–28.09.2026</span>
+      </div>
+    </div>
+    <aside class="journey" aria-label="Схема движения по двум участкам">
+      <div class="journey-title">собираем весь маршрут</div>
+      <div class="journey-line" aria-hidden="true">
+        <div class="segment s1">S₁, t₁</div>
+        <div class="segment s2">S₂, t₂</div>
+      </div>
+      <div class="journey-caption"><span>участки считаем отдельно</span><span>потом складываем</span></div>
+      <div class="formula-main">v<sub>ср</sub> = (S₁ + S₂ + …) / (t₁ + t₂ + …)</div>
+    </aside>
+  </div>
+</section>
+
+<nav class="route" aria-label="Маршрут занятия">
+  <div class="shell route-inner">
+    <a href="#base" data-no="01">Базовая кинематика</a>
+    <a href="#average" data-no="02">Средняя скорость</a>
+    <a href="#cases" data-no="03">Три типа условий</a>
+    <a href="#algebra" data-no="04">Алгебра дробей</a>
+    <a href="#practice" data-no="05">Алгоритм и тренировка</a>
+  </div>
+</nav>
+
+<main id="content" class="shell">
+<section class="chapter" id="base">
+  <header class="chapter-head">
+    <div class="chapter-no">01 · БАЗА</div>
+    <div><h2>Формулы движения остаются рабочим набором</h2><p class="chapter-intro">Перед новой темой повторяем координату, скорость, ускорение, путь и три формы перемещения при равноускоренном движении.</p></div>
+  </header>
+  <div class="rule">
+    <div class="formula-panel">
+      <div class="mathline"><math display="block"><mrow><mi>x</mi><mo>=</mo><msub><mi>x</mi><mn>0</mn></msub><mo>+</mo><msub><mi>v</mi><mrow><mn>0</mn><mi>x</mi></mrow></msub><mi>t</mi><mo>+</mo><mfrac><mrow><msub><mi>a</mi><mi>x</mi></msub><msup><mi>t</mi><mn>2</mn></msup></mrow><mn>2</mn></mfrac></mrow></math></div>
+      <div class="mathline"><math display="block"><mrow><msub><mi>v</mi><mi>x</mi></msub><mo>=</mo><msub><mi>v</mi><mrow><mn>0</mn><mi>x</mi></mrow></msub><mo>+</mo><msub><mi>a</mi><mi>x</mi></msub><mi>t</mi></mrow></math></div>
+      <p>Если направление на рассматриваемом промежутке не меняется, путь равен модулю изменения координаты. При развороте путь складывается по участкам.</p>
+    </div>
+    <div class="ledger">
+      <div class="ledger-row"><b>Перемещение</b><span>Δx = x − x₀</span></div>
+      <div class="ledger-row"><b>Ускорение</b><span>aₓ = Δvₓ / Δt</span></div>
+      <div class="ledger-row"><b>Без времени</b><span>Δx = (vₓ² − v₀ₓ²) / (2aₓ)</span></div>
+      <div class="ledger-row"><b>За n-ю секунду</b><span>Sₙ = v₀τ + aτ²(2n−1)/2, τ = 1 с</span></div>
+    </div>
+  </div>
+  <p class="signal"><b>Геометрический минимум:</b> c² = a² + b²; L = 2πR = πD; половина окружности — πR; четверть — πR/2.</p>
+</section>
+
+<section class="chapter" id="average">
+  <header class="chapter-head">
+    <div class="chapter-no">02 · ГЛАВНАЯ ИДЕЯ</div>
+    <div><h2>Средняя скорость — весь путь, делённый на всё время</h2><p class="chapter-intro">В этом занятии под средней скоростью понимается средняя путевая скорость: одна постоянная скорость, с которой тот же полный путь был бы пройден за то же полное время.</p></div>
+  </header>
+  <div class="rule">
+    <div class="formula-panel">
+      <div class="mathline"><math display="block"><mrow><msub><mi>v</mi><mtext>ср</mtext></msub><mo>=</mo><mfrac><msub><mi>S</mi><mi>Σ</mi></msub><msub><mi>t</mi><mi>Σ</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>S</mi><mn>1</mn></msub><mo>+</mo><msub><mi>S</mi><mn>2</mn></msub><mo>+</mo><mo>…</mo></mrow><mrow><msub><mi>t</mi><mn>1</mn></msub><mo>+</mo><msub><mi>t</mi><mn>2</mn></msub><mo>+</mo><mo>…</mo></mrow></mfrac></mrow></math></div>
+      <p>На каждом равномерном участке: Sᵢ = vᵢtᵢ и tᵢ = Sᵢ/vᵢ.</p>
+    </div>
+    <div class="ledger">
+      <div class="ledger-row"><b>Шаг 1</b><span>разделить движение на участки</span></div>
+      <div class="ledger-row"><b>Шаг 2</b><span>восстановить Sᵢ и tᵢ</span></div>
+      <div class="ledger-row"><b>Шаг 3</b><span>сложить весь путь и всё время</span></div>
+      <div class="ledger-row"><b>Шаг 4</b><span>вычислить отношение SΣ / tΣ</span></div>
+    </div>
+  </div>
+  <div class="example">
+    <h3>Пример: 5 ч со скоростью 60 км/ч, затем 4 ч со скоростью 15 км/ч</h3>
+    <p>S₁ = 60·5 = 300 км, S₂ = 15·4 = 60 км.</p>
+    <div class="mathline"><math display="block"><mrow><msub><mi>v</mi><mtext>ср</mtext></msub><mo>=</mo><mfrac><mrow><mn>300</mn><mo>+</mo><mn>60</mn></mrow><mrow><mn>5</mn><mo>+</mo><mn>4</mn></mrow></mfrac><mo>=</mo><mn>40</mn><mtext> км/ч</mtext></mrow></math></div>
+    <p class="answer">Ответ: 40 км/ч.</p>
+  </div>
+</section>
+
+<section class="chapter" id="cases">
+  <header class="chapter-head">
+    <div class="chapter-no">03 · ТИП УСЛОВИЯ</div>
+    <div><h2>Половина пути и половина времени ведут к разным формулам</h2><p class="chapter-intro">Перед вычислениями определяем, какая величина разделена на части: путь, время или весь путь задан долями и процентами.</p></div>
+  </header>
+  <div class="case-grid">
+    <article class="case">
+      <h3>Равные части пути</h3>
+      <p>S₁ = S₂ = S/2, поэтому времена различаются.</p>
+      <p class="key">v<sub>ср</sub> = 2v₁v₂ / (v₁ + v₂)</p>
+      <p>Для 5 км/ч и 10 км/ч: 20/3 км/ч ≈ 6,67 км/ч.</p>
+    </article>
+    <article class="case">
+      <h3>Равные части времени</h3>
+      <p>t₁ = t₂ = T/2, поэтому средняя скорость становится средним арифметическим.</p>
+      <p class="key">v<sub>ср</sub> = (v₁ + v₂) / 2</p>
+      <p>Для 20 км/ч и 80 км/ч: 50 км/ч.</p>
+    </article>
+    <article class="case">
+      <h3>Доли и проценты пути</h3>
+      <p>Sᵢ = pᵢS, tᵢ = pᵢS/vᵢ, сумма долей равна 1.</p>
+      <p class="key">v<sub>ср</sub> = 1 / (p₁/v₁ + … + pₙ/vₙ)</p>
+      <p>20%, 50%, 30% пути переводим в 0,2S; 0,5S; 0,3S.</p>
+    </article>
+  </div>
+  <div class="example">
+    <h3>Пример с тремя долями пути</h3>
+    <p>20% пути — 10 м/с, 50% — 12 м/с, 30% — 15 м/с.</p>
+    <div class="mathline"><math display="block"><mrow><msub><mi>v</mi><mtext>ср</mtext></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mfrac><mn>0.2</mn><mn>10</mn></mfrac><mo>+</mo><mfrac><mn>0.5</mn><mn>12</mn></mfrac><mo>+</mo><mfrac><mn>0.3</mn><mn>15</mn></mfrac></mrow></mfrac><mo>=</mo><mfrac><mn>600</mn><mn>49</mn></mfrac><mtext> м/с</mtext><mo>≈</mo><mn>12.24</mn><mtext> м/с</mtext></mrow></math></div>
+    <p class="answer">Проверка: 12,24 м/с находится между 10 м/с и 15 м/с.</p>
+  </div>
+</section>
+
+<section class="chapter" id="algebra">
+  <header class="chapter-head">
+    <div class="chapter-no">04 · АЛГЕБРА</div>
+    <div><h2>Большинство ошибок здесь — работа с дробями</h2><p class="chapter-intro">Средняя скорость часто сводится к аккуратному делению дроби на число, сложению дробей, делению на дробь и сокращению только общих множителей.</p></div>
+  </header>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Действие</th><th>Правило</th><th>Пример из пособия</th></tr></thead>
+      <tbody>
+        <tr><td>Дробь делим на число</td><td>A/B : c = A/(Bc)</td><td>S/2 : 5 = S/10</td></tr>
+        <tr><td>Складываем дроби</td><td>A/B + C/D = (AD + BC)/(BD)</td><td>S/10 + S/20 = 3S/20</td></tr>
+        <tr><td>Делим на дробь</td><td>A/B : C/D = AD/(BC)</td><td>1/3 : 2/5 = 5/6</td></tr>
+        <tr><td>Сокращаем</td><td>только общие множители</td><td>5S/(10S) = 1/2 при S ≠ 0</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="signal"><b>Нельзя:</b> сокращать слагаемые. В (S + 5)/S сокращения на S нет; в S(S + 5)/S общий множитель S сокращается при S ≠ 0.</p>
+  <div class="errors">
+    <div class="error"><b>Среднее арифметическое скоростей без проверки.</b><p>Оно работает для равных промежутков времени, но не для равных половин пути.</p></div>
+    <div class="error"><b>Путать путь и перемещение.</b><p>При развороте путь складывается по участкам и остаётся неотрицательным.</p></div>
+    <div class="error"><b>Не переводить условие в выражения.</b><p>Половина пути → S/2; две трети времени → 2T/3; 20% пути → 0,2S.</p></div>
+    <div class="error"><b>Смешивать единицы.</b><p>Перед сложением пути и времени должны быть приведены к согласованным единицам.</p></div>
+  </div>
+</section>
+
+<section class="chapter" id="practice">
+  <header class="chapter-head">
+    <div class="chapter-no">05 · АЛГОРИТМ</div>
+    <div><h2>Решение можно вести по одному маршруту</h2><p class="chapter-intro">Ниже тот же алгоритм, что в блок-схеме пособия. Переключайте шаги и сверяйте логику решения.</p></div>
+  </header>
+  <div class="stepper">
+    <div class="step-nav" id="stepNav">
+      <button type="button" data-step="0">1. Разбить движение</button>
+      <button type="button" data-step="1">2. Перевести условие</button>
+      <button type="button" data-step="2">3. Восстановить Sᵢ и tᵢ</button>
+      <button type="button" data-step="3">4. Найти SΣ и tΣ</button>
+      <button type="button" data-step="4">5. Вычислить vср</button>
+      <button type="button" data-step="5">6. Проверить ответ</button>
+    </div>
+    <div class="step-stage">
+      <p class="chapter-no" id="stepCounter">ШАГ 1 ИЗ 6</p>
+      <h3 id="stepTitle"></h3>
+      <p id="stepText"></p>
+      <div class="step-controls">
+        <button class="btn" id="prevStep" type="button">Назад</button>
+        <button class="btn primary" id="nextStep" type="button">Дальше</button>
+        <button class="btn" id="showAllSteps" type="button">Показать весь маршрут</button>
+        <button class="btn" id="resetSteps" type="button">К началу</button>
+      </div>
+      <div id="allSteps" hidden></div>
+    </div>
+  </div>
+
+  <div class="example">
+    <h3>Тренировочный блок · 27.09.2026</h3>
+    <div class="practice-list">
+      <div class="practice-item">Первые 3 ч автомобиль двигался со скоростью 60 км/ч, следующие 2 ч — со скоростью 30 км/ч. Найдите среднюю скорость.</div>
+      <div class="practice-item">Первую половину пути велосипедист ехал со скоростью 6 км/ч, вторую половину — со скоростью 12 км/ч. Найдите среднюю скорость.</div>
+      <div class="practice-item">Первую половину всего времени тело двигалось со скоростью 24 км/ч, вторую половину — со скоростью 72 км/ч. Найдите среднюю скорость.</div>
+    </div>
+  </div>
+
+  <div class="example">
+    <h3>Тренировочный блок · 28.09.2026</h3>
+    <div class="practice-list">
+      <div class="practice-item">Первые 20% пути тело двигалось со скоростью 10 м/с, следующие 50% — со скоростью 20 м/с, оставшиеся 30% — со скоростью 15 м/с. Найдите среднюю скорость.</div>
+      <div class="practice-item">Первые 2/3 всего времени автомобиль двигался со скоростью 30 км/ч, оставшуюся треть времени — со скоростью 90 км/ч. Найдите среднюю скорость.</div>
+      <div class="practice-item">Первую четверть пути тело двигалось со скоростью 5 м/с, оставшиеся 3/4 пути — со скоростью 15 м/с. Найдите среднюю скорость.</div>
+    </div>
+    <button class="btn answer-toggle" id="answerToggle" type="button" aria-expanded="false" aria-controls="answers">Показать ответы</button>
+    <div class="answers" id="answers">
+      <div class="table-wrap"><table><thead><tr><th>Дата</th><th>№</th><th>Ответ</th></tr></thead><tbody>
+        <tr><td>27.09</td><td>1</td><td>48 км/ч</td></tr>
+        <tr><td>27.09</td><td>2</td><td>8 км/ч</td></tr>
+        <tr><td>27.09</td><td>3</td><td>48 км/ч</td></tr>
+        <tr><td>28.09</td><td>1</td><td>200/13 м/с ≈ 15,38 м/с</td></tr>
+        <tr><td>28.09</td><td>2</td><td>50 км/ч</td></tr>
+        <tr><td>28.09</td><td>3</td><td>10 м/с</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+
+  <details class="poster">
+    <summary>Наглядная акварельная карта занятия</summary>
+    <img src="../images/26.09.26.png" alt="Акварельная памятка по средней скорости, полному пути, полному времени, долям пути и алгоритму решения" loading="lazy">
+  </details>
+
+  <div class="quiz" id="quiz">
+    <h3>Мини-квиз</h3>
+    <p><b>1.</b> Первую половину пути тело движется со скоростью v₁, вторую — со скоростью v₂. Какая формула соответствует этому случаю?</p>
+    <button type="button" data-q="1" data-ok="0">(v₁ + v₂) / 2</button>
+    <button type="button" data-q="1" data-ok="1">2v₁v₂ / (v₁ + v₂)</button>
+    <button type="button" data-q="1" data-ok="0">v₁ + v₂</button>
+    <div class="feedback" id="feedback1" aria-live="polite"></div>
+    <p><b>2.</b> Какая проверка подходит для положительных скоростей на всех участках?</p>
+    <button type="button" data-q="2" data-ok="1">vср лежит между минимальной и максимальной скоростями</button>
+    <button type="button" data-q="2" data-ok="0">vср всегда равна большей скорости</button>
+    <button type="button" data-q="2" data-ok="0">vср всегда равна среднему арифметическому</button>
+    <div class="feedback" id="feedback2" aria-live="polite"></div>
+    <button class="btn" id="quizReset" type="button">Сбросить ответы</button>
+  </div>
+
+  <div class="example">
+    <h3>Самопроверка перед ответом</h3>
+    <div class="checklist" id="selfCheck">
+      <label class="check"><input type="checkbox"><span>Я разделил движение на отдельные участки.</span></label>
+      <label class="check"><input type="checkbox"><span>Я понимаю, что дано на каждом участке: путь, время, скорость, доля или процент.</span></label>
+      <label class="check"><input type="checkbox"><span>Я перевёл слова условия в S/2, 2T/3, 0,2S и другие нужные выражения.</span></label>
+      <label class="check"><input type="checkbox"><span>Я восстановил недостающие величины по S = vt или t = S/v.</span></label>
+      <label class="check"><input type="checkbox"><span>Я использовал vср = SΣ/tΣ.</span></label>
+      <label class="check"><input type="checkbox"><span>Я аккуратно сложил дроби и проверил знаменатели.</span></label>
+      <label class="check"><input type="checkbox"><span>Я сокращал только общие множители.</span></label>
+      <label class="check"><input type="checkbox"><span>Я привёл единицы измерения к единому виду.</span></label>
+      <label class="check"><input type="checkbox"><span>Я проверил, что средняя скорость лежит между минимумом и максимумом.</span></label>
+      <label class="check"><input type="checkbox"><span>В ответе записаны число и единица измерения.</span></label>
+    </div>
+    <div class="progress-line" aria-hidden="true"><span id="checkProgress"></span></div>
+    <p id="checkText" aria-live="polite">Отмечено: 0 из 10.</p>
+  </div>
+</section>
+</main>
+
+<footer class="footer shell">
+  <span>Володя Хачатурян · ОГЭ по физике</span>
+  <span>Лёвин Артём Александрович · 26.09.2026</span>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+  const root=document.documentElement;
+  const themeKey='volodia-260926-theme';
+  try{const saved=localStorage.getItem(themeKey);if(saved==='dark'||saved==='light')root.dataset.theme=saved;}catch(e){}
+  document.getElementById('themeToggle').addEventListener('click',function(){
+    const next=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=next;try{localStorage.setItem(themeKey,next);}catch(e){}
+  });
+
+  const steps=[
+    ['Разбейте движение на участки','Для каждого участка выпишите известные Sᵢ, tᵢ, vᵢ, доли или проценты.'],
+    ['Переведите словесные данные','Половина пути превращается в S/2, две трети времени — в 2T/3, 20% пути — в 0,2S.'],
+    ['Восстановите неизвестные величины','Если не хватает пути или времени, используйте Sᵢ = vᵢtᵢ или tᵢ = Sᵢ/vᵢ.'],
+    ['Сложите весь путь и всё время','Найдите SΣ = ΣSᵢ и tΣ = Σtᵢ. Доли пути и времени складывайте после приведения к общему виду.'],
+    ['Вычислите среднюю скорость','Используйте vср = SΣ/tΣ. Не заменяйте её автоматически средним арифметическим скоростей.'],
+    ['Проверьте результат','Проверьте знаменатели, единицы измерения и физический смысл. При положительных скоростях vср должна быть между минимумом и максимумом.']
+  ];
+  let current=0;
+  const nav=[...document.querySelectorAll('#stepNav button')],title=document.getElementById('stepTitle'),text=document.getElementById('stepText'),counter=document.getElementById('stepCounter');
+  function renderStep(){
+    nav.forEach((b,i)=>{if(i===current)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');});
+    counter.textContent='ШАГ '+(current+1)+' ИЗ '+steps.length;title.textContent=steps[current][0];text.textContent=steps[current][1];
+    document.getElementById('prevStep').disabled=current===0;document.getElementById('nextStep').disabled=current===steps.length-1;
+    try{localStorage.setItem('volodia-260926-step',String(current));}catch(e){}
+  }
+  try{const saved=Number(localStorage.getItem('volodia-260926-step'));if(Number.isInteger(saved)&&saved>=0&&saved<steps.length)current=saved;}catch(e){}
+  nav.forEach((b,i)=>b.addEventListener('click',()=>{current=i;renderStep();}));
+  document.getElementById('prevStep').addEventListener('click',()=>{if(current>0){current--;renderStep();}});
+  document.getElementById('nextStep').addEventListener('click',()=>{if(current<steps.length-1){current++;renderStep();}});
+  document.getElementById('resetSteps').addEventListener('click',()=>{current=0;document.getElementById('allSteps').hidden=true;renderStep();});
+  document.getElementById('showAllSteps').addEventListener('click',function(){
+    const box=document.getElementById('allSteps');box.hidden=!box.hidden;
+    box.innerHTML=steps.map((s,i)=>'<p><b>'+(i+1)+'. '+s[0]+'</b><br>'+s[1]+'</p>').join('');
+    this.textContent=box.hidden?'Показать весь маршрут':'Скрыть весь маршрут';
+  });
+  renderStep();
+
+  const answerToggle=document.getElementById('answerToggle'),answers=document.getElementById('answers');
+  answerToggle.addEventListener('click',function(){const open=answers.classList.toggle('show');this.setAttribute('aria-expanded',String(open));this.textContent=open?'Скрыть ответы':'Показать ответы';});
+
+  document.querySelectorAll('#quiz button[data-q]').forEach(function(button){
+    button.addEventListener('click',function(){
+      const q=button.dataset.q,group=[...document.querySelectorAll('#quiz button[data-q="'+q+'"]')];
+      group.forEach(b=>b.classList.remove('good','bad'));const ok=button.dataset.ok==='1';button.classList.add(ok?'good':'bad');
+      document.getElementById('feedback'+q).textContent=ok
+        ? (q==='1'?'Верно: при равных половинах пути время на участках различается.':'Верно: это быстрая проверка физического смысла ответа.')
+        : (q==='1'?'Сначала сравните, что разделено пополам: путь или время.':'Эта проверка не выполняется для произвольного среднего арифметического.');
+    });
+  });
+  document.getElementById('quizReset').addEventListener('click',function(){
+    document.querySelectorAll('#quiz button[data-q]').forEach(b=>b.classList.remove('good','bad'));document.getElementById('feedback1').textContent='';document.getElementById('feedback2').textContent='';
+  });
+
+  const checks=[...document.querySelectorAll('#selfCheck input')],bar=document.getElementById('checkProgress'),label=document.getElementById('checkText'),checkKey='volodia-260926-selfcheck';
+  function updateChecks(){const n=checks.filter(c=>c.checked).length;bar.style.width=(n/checks.length*100)+'%';label.textContent='Отмечено: '+n+' из '+checks.length+'.';try{localStorage.setItem(checkKey,JSON.stringify(checks.map(c=>c.checked)));}catch(e){}}
+  try{const saved=JSON.parse(localStorage.getItem(checkKey)||'null');if(Array.isArray(saved))checks.forEach((c,i)=>c.checked=Boolean(saved[i]));}catch(e){}
+  checks.forEach(c=>c.addEventListener('change',updateChecks));updateChecks();
+})();
+</script>
+</body>
+</html>
