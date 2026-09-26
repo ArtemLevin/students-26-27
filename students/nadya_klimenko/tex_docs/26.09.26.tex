@@ -1,0 +1,1047 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm,headheight=25pt,headsep=6mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.45em,itemsep=0.2em,topsep=0.25em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.4em,topsep=0.3em}
+\renewcommand{\arraystretch}{1.28}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{textgray}{Надя Клименко, 6 класс}}
+\fancyhead[R]{\small\textcolor{textgray}{Математика}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{%
+  \hbox to\headwidth{%
+    \color{accent}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrulewidth}{0pt}
+
+\newcommand{\sectionline}{%
+  \par\vspace{0.1em}%
+  {\color{accent}\hrule height 0.7pt}%
+  \vspace{0.55em}}
+
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\GCDru}{\mathop{\text{НОД}}\nolimits}
+\newcommand{\LCMru}{\mathop{\text{НОК}}\nolimits}
+
+\tikzset{
+  flowstart/.style={
+    ellipse,
+    draw=darkaccent,
+    line width=0.8pt,
+    align=center,
+    minimum width=48mm,
+    minimum height=12mm,
+    font=\small,
+    inner sep=4pt
+  },
+  flowaction/.style={
+    rounded corners=3pt,
+    draw=accent,
+    line width=0.8pt,
+    align=center,
+    text width=74mm,
+    minimum height=13mm,
+    font=\small,
+    inner sep=5pt
+  },
+  flowdecision/.style={
+    diamond,
+    aspect=2.15,
+    draw=darkaccent,
+    line width=0.8pt,
+    align=center,
+    text width=47mm,
+    font=\small,
+    inner sep=2pt
+  },
+  flowend/.style={
+    ellipse,
+    draw=darkaccent,
+    line width=0.8pt,
+    align=center,
+    minimum width=52mm,
+    minimum height=12mm,
+    font=\small,
+    inner sep=4pt
+  },
+  flowarrow/.style={
+    -{Latex[length=3mm,width=2mm]},
+    line width=0.8pt,
+    draw=textgray
+  }
+}
+
+\newenvironment{flowchartpage}{%
+  \clearpage
+  \thispagestyle{empty}%
+}{%
+  \clearpage
+}
+
+\newenvironment{flowchartpagelandscape}{%
+  \clearpage
+  \begingroup
+  \pdfpagewidth=420mm
+  \pdfpageheight=297mm
+  \paperwidth=420mm
+  \paperheight=297mm
+  \newgeometry{left=22mm,right=22mm,top=20mm,bottom=20mm}
+  \setlength{\textwidth}{376mm}%
+  \setlength{\linewidth}{376mm}%
+  \setlength{\hsize}{376mm}%
+  \setlength{\columnwidth}{376mm}%
+  \setlength{\textheight}{257mm}%
+  \thispagestyle{empty}%
+}{%
+  \clearpage
+  \restoregeometry
+  \endgroup
+  \pdfpagewidth=210mm
+  \pdfpageheight=297mm
+  \paperwidth=210mm
+  \paperheight=297mm
+}
+
+\begin{document}
+
+% -------------------- Титульный лист --------------------
+\thispagestyle{empty}
+\begin{center}
+
+\vspace*{22mm}
+
+{\Large\textcolor{darkaccent}{\textbf{Чек-лист}}}\par
+
+\vspace{5mm}
+
+{\LARGE\bfseries НОД и НОК: вычисление, смысл и связь}\par
+
+\vspace{4mm}
+
+{\Large\bfseries Простые уравнения и задачи на движение}\par
+
+\vspace{18mm}
+
+{\large\textbf{Надя Клименко, 6 класс}}\par
+
+\vspace{8mm}
+
+{\normalsize Тренировочный блок: \textbf{Путь А}}\par
+
+\vfill
+
+{\normalsize \today}\par
+
+\vspace{5mm}
+
+{\small Лёвин Артём Александрович эксклюзивно для Нади Клименко}\par
+
+\vspace{12mm}
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent!55,line width=1.1pt]
+    ($(current page.south west)+(18mm,16mm)$)
+      .. controls
+      ($(current page.south west)+(70mm,28mm)$)
+      and
+      ($(current page.south east)+(-72mm,8mm)$)
+      ..
+      ($(current page.south east)+(-18mm,18mm)$);
+\end{tikzpicture}
+
+\end{center}
+
+\clearpage
+
+% -------------------- Теория --------------------
+\section*{1. Простые уравнения: обратные действия}
+\sectionline
+
+Главная цель --- уверенно находить неизвестный компонент действия
+и проверять ответ подстановкой.
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}l X X@{}}
+\toprule
+Тип & Как рассуждать & Пример \\
+\midrule
+
+$\dfrac{x}{a}=b$
+&
+Неизвестное делимое равно произведению делителя и частного.
+&
+$\dfrac{x}{3}=5 \Rightarrow x=15$.
+\\
+
+$\dfrac{x+c}{a}=b$
+&
+Сначала найдите $x+c$, затем $x$.
+&
+$\dfrac{x+1}{3}=5 \Rightarrow x=14$.
+\\
+
+$\dfrac{a}{x+c}=b$
+&
+Неизвестный делитель равен делимому, делённому на частное.
+&
+$\dfrac{3}{x+1}=5 \Rightarrow x=-\dfrac25$.
+\\
+
+$a+x=b$
+&
+Неизвестное слагаемое равно разности суммы и известного слагаемого.
+&
+$5+x=6 \Rightarrow x=1$.
+\\
+
+$a-x=b$
+&
+Вычитаемое равно разности уменьшаемого и разности.
+&
+$10-x=2 \Rightarrow x=8$.
+\\
+
+$ax+b=c$
+&
+Сначала уберите прибавление или вычитание,
+затем делите на коэффициент при $x$.
+&
+$2x-3=10 \Rightarrow x=\dfrac{13}{2}$.
+\\
+
+\bottomrule
+\end{tabularx}
+
+\textbf{Ограничение.}
+Если неизвестная находится в знаменателе,
+знаменатель не может быть равен нулю.
+
+Например,
+\[
+\frac{2}{x-3}=10,
+\qquad
+x\ne3.
+\]
+
+Так как
+\[
+x-3=\frac{2}{10}=\frac15,
+\]
+получаем
+\[
+x=\frac{16}{5}.
+\]
+Это значение допустимо.
+
+\textbf{Самопроверка.}
+Подставьте найденное число в исходное уравнение:
+левая и правая части должны совпасть.
+
+\section*{2. Разложение на простые множители}
+\sectionline
+
+Для вычисления НОД и НОК удобно раскладывать числа
+на простые множители:
+\[
+84=2^2\cdot3\cdot7,
+\qquad
+126=2\cdot3^2\cdot7.
+\]
+
+Показатель степени показывает,
+сколько раз соответствующий простой множитель
+входит в разложение числа.
+
+\textbf{Простое число} имеет ровно два натуральных делителя:
+$1$ и само это число.
+Число $1$ простым не является.
+
+\section*{3. НОД: наибольший общий делитель}
+\sectionline
+
+\textbf{Определение.}
+$\GCDru(a,b)$ --- наибольшее натуральное число,
+на которое и $a$, и $b$ делятся без остатка.
+
+Для НОД берём только
+\key{общие простые множители}
+в
+\key{наименьших степенях}:
+\[
+\GCDru(84,126)
+=
+2^1\cdot3^1\cdot7
+=
+42.
+\]
+
+\textbf{Смысл в текстовых задачах.}
+НОД особенно часто возникает,
+когда нужно разбить несколько количеств
+на одинаковые части без остатка
+и сделать размер части или число групп
+максимально возможным.
+
+\textbf{Пример.}
+Ленты длиной $84$ см и $126$ см
+разрезают на одинаковые куски
+наибольшей возможной длины.
+
+Тогда
+\[
+\GCDru(84,126)=42,
+\]
+поэтому длина одного куска равна $42$ см.
+
+Из первой ленты получится
+\[
+84:42=2
+\]
+куска, из второй ---
+\[
+126:42=3
+\]
+куска.
+
+\section*{4. НОК: наименьшее общее кратное}
+\sectionline
+
+\textbf{Определение.}
+$\LCMru(a,b)$ --- наименьшее натуральное число,
+которое делится и на $a$, и на $b$.
+
+Например,
+\[
+12=2^2\cdot3,
+\qquad
+18=2\cdot3^2.
+\]
+
+Для НОК берём
+\key{все нужные простые множители}
+в
+\key{наибольших степенях}:
+\[
+\LCMru(12,18)
+=
+2^2\cdot3^2
+=
+36.
+\]
+
+\textbf{Смысл в текстовых задачах.}
+НОК часто возникает при повторяющихся событиях:
+требуется узнать,
+через какое наименьшее время
+несколько циклов снова совпадут.
+
+\textbf{Пример.}
+Один сигнал повторяется каждые $12$ минут,
+другой --- каждые $18$ минут.
+Если сейчас они прозвучали одновременно,
+то снова одновременно прозвучат через
+\[
+\LCMru(12,18)=36\text{ минут}.
+\]
+
+% -------------------- Схема НОД / НОК --------------------
+\begin{flowchartpagelandscape}
+
+\begin{center}
+{\Large\bfseries\textcolor{darkaccent}{Алгоритм: как выбрать НОД или НОК}}
+\end{center}
+
+\vspace{4mm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=7mm]
+
+  \node[flowstart] (start)
+    {Определите, что именно требуется найти};
+
+  \node[flowdecision,below=of start] (split)
+    {Нужно разбить величины на одинаковые части без остатка?};
+
+  \node[flowdecision,below=of split] (max)
+    {Требуется максимально возможный размер части
+     или максимум одинаковых групп?};
+
+  \node[flowdecision,below=of max] (cycle)
+    {Есть повторяющиеся циклы
+     или требуется наименьшее общее кратное?};
+
+  \node[flowaction,below=of cycle] (other)
+    {Составьте другое уравнение по смыслу задачи};
+
+  \node[flowend,below=of other] (finish)
+    {Запишите ответ и объясните смысл найденного числа};
+
+  \node[
+    flowaction,
+    left=13mm of cycle,
+    text width=48mm
+  ] (gcd)
+    {Найдите НОД данных чисел};
+
+  \node[
+    flowaction,
+    right=13mm of other,
+    text width=48mm
+  ] (lcm)
+    {Найдите НОК данных чисел};
+
+  \draw[flowarrow]
+    (start) -- (split);
+
+  \draw[flowarrow]
+    (split)
+    --
+    node[right,font=\small]{да}
+    (max);
+
+  \draw[flowarrow]
+    (split.east)
+    --
+    ++(8mm,0)
+    |-
+    node[pos=0.18,right,font=\small]{нет}
+    (cycle.east);
+
+  \draw[flowarrow]
+    (max.west)
+    --
+    node[above,font=\small]{да}
+    (gcd.north);
+
+  \draw[flowarrow]
+    (max)
+    --
+    node[right,font=\small]{нет}
+    (cycle);
+
+  \draw[flowarrow]
+    (cycle.east)
+    --
+    node[above,font=\small]{да}
+    (lcm.north);
+
+  \draw[flowarrow]
+    (cycle)
+    --
+    node[right,font=\small]{нет}
+    (other);
+
+  \draw[flowarrow]
+    (gcd.south)
+    |-
+    (finish.west);
+
+  \draw[flowarrow]
+    (lcm.south)
+    |-
+    (finish.east);
+
+  \draw[flowarrow]
+    (other)
+    --
+    (finish);
+
+\end{tikzpicture}
+\end{center}
+
+\end{flowchartpagelandscape}
+
+% -------------------- Связь НОД и НОК --------------------
+\section*{5. Связь НОД и НОК для двух чисел}
+\sectionline
+
+Для двух натуральных чисел $a$ и $b$ верна формула
+\[
+\boxed{
+\GCDru(a,b)\cdot\LCMru(a,b)=ab
+}.
+\]
+
+Отсюда
+\[
+\LCMru(a,b)
+=
+\frac{ab}{\GCDru(a,b)},
+\qquad
+\GCDru(a,b)
+=
+\frac{ab}{\LCMru(a,b)}.
+\]
+
+\textbf{Пример.}
+Известно, что
+\[
+a=84,
+\qquad
+b=180,
+\qquad
+\GCDru(a,b)=12.
+\]
+
+Тогда
+\[
+\LCMru(a,b)
+=
+\frac{84\cdot180}{12}
+=
+84\cdot15
+=
+1260.
+\]
+
+\textbf{Важно.}
+Формула
+\[
+\GCDru(a,b)\cdot\LCMru(a,b)=ab
+\]
+в таком виде относится к
+\textbf{двум натуральным числам}.
+
+Для трёх и более чисел нельзя
+просто перемножить все числа
+и разделить полученное произведение
+на их общий НОД.
+
+\subsection*{Обратный ход}
+
+Если известны НОД и НОК двух чисел,
+то известно и их произведение:
+\[
+ab
+=
+\GCDru(a,b)\cdot\LCMru(a,b).
+\]
+
+При поиске самих чисел
+возможные пары нужно дополнительно проверять
+по НОД и НОК.
+
+\section*{6. Степени простых множителей}
+\sectionline
+
+Если
+\[
+n=2^x3^y5^z7^w,
+\]
+то $x,y,z,w$ показывают,
+сколько раз соответствующие простые множители
+входят в разложение числа $n$.
+
+\textbf{Пример.}
+Пусть
+\[
+\GCDru(n,360)=120,
+\qquad
+\LCMru(n,360)=2520.
+\]
+
+Для двух чисел $n$ и $360$:
+\[
+120\cdot2520
+=
+n\cdot360.
+\]
+
+Следовательно,
+\[
+n
+=
+\frac{120\cdot2520}{360}
+=
+\frac{2520}{3}
+=
+840.
+\]
+
+Разложим число $840$:
+\[
+840
+=
+2^3\cdot3\cdot5\cdot7.
+\]
+
+Значит,
+\[
+x=3,
+\qquad
+y=z=w=1.
+\]
+
+Полезно помнить общий принцип.
+Если
+\[
+a=2^{\alpha}3^{\beta},
+\qquad
+b=2^{\gamma}3^{\delta},
+\]
+то
+\[
+\GCDru(a,b)
+=
+2^{\min(\alpha,\gamma)}
+3^{\min(\beta,\delta)},
+\]
+а
+\[
+\LCMru(a,b)
+=
+2^{\max(\alpha,\gamma)}
+3^{\max(\beta,\delta)}.
+\]
+
+\section*{7. Простое число в задаче на НОК}
+\sectionline
+
+\textbf{Пример.}
+Найдите простое число $p$, если
+\[
+\LCMru(p,18)=90.
+\]
+
+Имеем
+\[
+18=2\cdot3^2,
+\qquad
+90=2\cdot3^2\cdot5.
+\]
+
+Чтобы НОК увеличился от $18$ до $90$,
+должен появиться новый простой множитель $5$.
+Поэтому
+\[
+p=5.
+\]
+
+Числа $2$ и $3$ уже входят
+в разложение числа $18$,
+поэтому при $p=2$ или $p=3$
+НОК остался бы равен $18$.
+
+\section*{8. Задачи на движение: от текста к уравнению}
+\sectionline
+
+Для равномерного движения используется формула
+\[
+S=vt,
+\]
+где $S$ --- путь,
+$v$ --- скорость,
+$t$ --- время.
+
+\textbf{Пример.}
+Из двух пристаней навстречу друг другу
+одновременно вышли катер и теплоход.
+Расстояние между пристанями $58$ км.
+Скорость теплохода на $2$ км/ч
+больше скорости катера.
+Они встретились через $2$ часа.
+Найдите обе скорости.
+
+Пусть скорость катера равна $x$ км/ч.
+Тогда скорость теплохода равна
+$x+2$ км/ч.
+
+\begin{table}[ht]
+\centering
+\caption{Таблица величин для задачи на движение}
+\begin{tabularx}{0.92\linewidth}{@{}lXXX@{}}
+\toprule
+Участник
+&
+Скорость, км/ч
+&
+Время, ч
+&
+Путь, км
+\\
+\midrule
+Катер
+&
+$x$
+&
+$2$
+&
+$2x$
+\\
+Теплоход
+&
+$x+2$
+&
+$2$
+&
+$2(x+2)$
+\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+До встречи катер и теплоход
+вместе прошли всё расстояние между пристанями:
+\[
+2x+2(x+2)=58.
+\]
+
+Решаем:
+\[
+2x+2x+4=58,
+\]
+\[
+4x=54,
+\]
+\[
+x=13{,}5.
+\]
+
+Следовательно, скорости равны
+\[
+13{,}5\text{ км/ч}
+\qquad\text{и}\qquad
+15{,}5\text{ км/ч}.
+\]
+
+Проверка:
+\[
+2\cdot13{,}5
++
+2\cdot15{,}5
+=
+27+31
+=
+58.
+\]
+
+% -------------------- Схема движения --------------------
+\begin{flowchartpage}
+
+\begin{center}
+{\Large\bfseries\textcolor{darkaccent}{Алгоритм: задача на движение навстречу}}
+\end{center}
+
+\vspace{4mm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=6.5mm]
+
+  \node[flowstart] (start)
+    {Выпишите известные величины и то, что нужно найти};
+
+  \node[flowaction,below=of start] (var)
+    {Обозначьте неизвестную скорость через $x$
+     и выразите остальные скорости};
+
+  \node[flowaction,below=of var] (table)
+    {Заполните таблицу $v$, $t$, $S$;
+     путь вычисляйте по формуле $S=vt$};
+
+  \node[flowdecision,below=of table] (meet)
+    {Участники движутся навстречу
+     и встречаются между пунктами?};
+
+  \node[flowaction,below=of meet] (other)
+    {Составьте уравнение по конкретному условию движения};
+
+  \node[flowaction,below=of other] (sum)
+    {Для встречи навстречу:
+     сложите пути и приравняйте сумму
+     к общему расстоянию};
+
+  \node[flowaction,below=of sum] (solve)
+    {Решите полученное уравнение
+     и найдите требуемые величины};
+
+  \node[flowdecision,below=of solve] (check)
+    {Подстановка и смысл ответа
+     подтверждают результат?};
+
+  \node[flowaction,below=of check] (repair)
+    {Исправьте таблицу, уравнение или вычисления};
+
+  \node[flowend,below=of repair] (finish)
+    {Запишите ответ с единицами измерения};
+
+  \draw[flowarrow]
+    (start)
+    --
+    (var);
+
+  \draw[flowarrow]
+    (var)
+    --
+    (table);
+
+  \draw[flowarrow]
+    (table)
+    --
+    (meet);
+
+  \draw[flowarrow]
+    (meet)
+    --
+    node[right,font=\small]{нет}
+    (other);
+
+  \draw[flowarrow]
+    (meet.west)
+    --
+    ++(-9mm,0)
+    |-
+    node[pos=0.18,left,font=\small]{да}
+    (sum.west);
+
+  \draw[flowarrow]
+    (other.east)
+    --
+    ++(9mm,0)
+    |-
+    (solve.east);
+
+  \draw[flowarrow]
+    (sum)
+    --
+    (solve);
+
+  \draw[flowarrow]
+    (solve)
+    --
+    (check);
+
+  \draw[flowarrow]
+    (check)
+    --
+    node[right,font=\small]{нет}
+    (repair);
+
+  \draw[flowarrow]
+    (check.west)
+    --
+    ++(-9mm,0)
+    |-
+    node[pos=0.18,left,font=\small]{да}
+    (finish.west);
+
+  \draw[flowarrow]
+    (repair.east)
+    --
+    ++(11mm,0)
+    |-
+    (table.east);
+
+\end{tikzpicture}
+\end{center}
+
+\end{flowchartpage}
+
+% -------------------- Ошибки и итог --------------------
+\section*{9. Типичные ошибки}
+\sectionline
+
+\begin{enumerate}
+
+  \item
+  \textbf{Путать НОД и НОК.}
+  Разбиение на одинаковые максимально крупные части
+  обычно связано с НОД;
+  совпадение циклов и наименьшее общее кратное ---
+  с НОК.
+
+  \item
+  \textbf{Неверно выбирать степени.}
+  В НОД берутся меньшие показатели
+  общих простых множителей;
+  в НОК --- большие показатели
+  всех нужных простых множителей.
+
+  \item
+  \textbf{Применять формулу двух чисел
+  к трём и более числам.}
+  Равенство
+  \[
+  \GCDru(a,b)\LCMru(a,b)=ab
+  \]
+  напрямую работает только для пары чисел.
+
+  \item
+  \textbf{Забывать ограничение в дробном уравнении.}
+  Знаменатель не может быть равен нулю.
+
+  \item
+  \textbf{Получать число без объяснения его смысла.}
+  В текстовой задаче нужно указать,
+  что означает ответ:
+  длину куска, число минут, скорость и т.~д.
+
+  \item
+  \textbf{Составлять уравнение на движение
+  без таблицы и проверки.}
+  Для первых задач надёжнее сначала выразить величины,
+  заполнить таблицу,
+  затем составить уравнение.
+
+\end{enumerate}
+
+\section*{10. Чек-лист перед самостоятельной работой}
+\sectionline
+
+Убедитесь, что Вы умеете:
+
+\begin{itemize}
+
+  \item
+  решать простые линейные и дробные уравнения
+  и проверять ответ;
+
+  \item
+  раскладывать натуральные числа
+  на простые множители;
+
+  \item
+  находить НОД и НОК по разложению;
+
+  \item
+  выбирать НОД или НОК
+  по смыслу текстовой задачи;
+
+  \item
+  применять формулу
+  \[
+  \GCDru(a,b)\cdot\LCMru(a,b)=ab
+  \]
+  только для двух чисел;
+
+  \item
+  восстанавливать число
+  по известным НОД и НОК;
+
+  \item
+  читать показатели степеней
+  в разложении на простые множители;
+
+  \item
+  использовать простоту числа
+  в задачах на НОК;
+
+  \item
+  составлять таблицу движения
+  и переводить условие в уравнение.
+
+\end{itemize}
+
+% -------------------- Тренировка --------------------
+\clearpage
+
+\section*{Тренировочный блок --- Путь А}
+\sectionline
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+
+  \item
+  Решите уравнение
+  \[
+  \frac{8}{x-2}=4.
+  \]
+  Сначала укажите значение $x$,
+  при котором выражение не имеет смысла.
+  После решения выполните проверку подстановкой.
+
+  \item
+  Известно, что для двух натуральных чисел
+  $a=168$ и $b$ выполняется
+  \[
+  \GCDru(a,b)=24,
+  \qquad
+  \LCMru(a,b)=840.
+  \]
+  Найдите число $b$
+  и разложите его на простые множители.
+
+  \item
+  Из двух пунктов,
+  расстояние между которыми $82$ км,
+  одновременно навстречу друг другу
+  выехали два велосипедиста.
+  Скорость второго на $5$ км/ч
+  больше скорости первого.
+  Через $2$ часа они встретились.
+  Найдите скорости обоих велосипедистов.
+
+\end{enumerate}
+
+% -------------------- Ответы --------------------
+\clearpage
+
+\section*{Ответы к тренировочному блоку}
+\sectionline
+
+\begin{longtable}{@{}p{0.12\linewidth}p{0.82\linewidth}@{}}
+
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+\endhead
+
+1
+&
+Ограничение:
+$x\ne2$.
+Ответ:
+$x=4$.
+Проверка:
+\[
+\frac{8}{4-2}=4.
+\]
+\\
+
+2
+&
+\[
+b=120,
+\qquad
+120=2^3\cdot3\cdot5.
+\]
+\\
+
+3
+&
+$18$ км/ч и $23$ км/ч.
+\\
+
+\bottomrule
+
+\end{longtable}
+
+\clearpage
+
+\end{document}

@@ -1,0 +1,1100 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[scaled=0.95]{DejaVuSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm,headheight=25pt]{geometry}
+\usepackage[nopatch=footnote]{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+% ------------------------------------------------
+% Палитра и базовая типографика
+% ------------------------------------------------
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{666666}
+
+\color{textgray}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+\setlength{\emergencystretch}{2em}
+
+\hypersetup{
+    hidelinks,
+    pdftitle={Чек-лист: рациональные функции и гипербола},
+    pdfauthor={Лёвин Артём Александрович}
+}
+
+% ------------------------------------------------
+% Колонтитулы
+% ------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Марина Селиверстова}
+\fancyhead[R]{\small ОГЭ --- математика}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{%
+  \hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+% ------------------------------------------------
+% Списки и заголовки
+% ------------------------------------------------
+\setlist[itemize]{
+    leftmargin=1.7em,
+    itemsep=0.25em,
+    topsep=0.25em
+}
+
+\setlist[enumerate]{
+    leftmargin=2em,
+    itemsep=0.35em,
+    topsep=0.25em
+}
+
+\newcommand{\sectiontitle}[1]{%
+    \par\vspace{0.65em}
+    {\Large\bfseries\color{darkaccent}#1}\par
+    \vspace{0.15em}
+    {\color{accent}\rule{\linewidth}{0.65pt}}\par
+    \vspace{0.3em}
+}
+
+\newcommand{\subsectiontitle}[1]{%
+    \par\vspace{0.45em}
+    {\large\bfseries\color{darkaccent}#1}\par
+    \vspace{0.1em}
+}
+
+\newcommand{\checkitem}{\(\square\)\;}
+
+% ------------------------------------------------
+% TikZ-стили блок-схемы
+% ------------------------------------------------
+\tikzset{
+    flowstart/.style={
+        ellipse,
+        draw=darkaccent,
+        line width=0.9pt,
+        align=center,
+        minimum width=38mm,
+        minimum height=10mm,
+        font=\small
+    },
+    flowaction/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=accent,
+        line width=0.9pt,
+        align=center,
+        text width=120mm,
+        minimum height=12mm,
+        inner sep=4.5pt,
+        font=\small
+    },
+    flowdecision/.style={
+        diamond,
+        aspect=2.35,
+        draw=darkaccent,
+        line width=0.9pt,
+        align=center,
+        text width=58mm,
+        inner sep=2.5pt,
+        font=\small
+    },
+    flowbranch/.style={
+        rectangle,
+        rounded corners=3pt,
+        draw=accent,
+        line width=0.9pt,
+        align=center,
+        text width=62mm,
+        minimum height=12mm,
+        inner sep=4pt,
+        font=\small
+    },
+    flowarrow/.style={
+        -{Stealth[length=3mm,width=2mm]},
+        line width=0.9pt,
+        draw=textgray
+    }
+}
+
+% ------------------------------------------------
+% Локальная A3-страница для крупной блок-схемы
+% ------------------------------------------------
+\newenvironment{flowchartpageportrait}{%
+    \clearpage
+    \begingroup
+    \setlength{\paperwidth}{297mm}%
+    \setlength{\paperheight}{420mm}%
+    \pdfpagewidth=297mm
+    \pdfpageheight=420mm
+    \setlength{\hoffset}{0pt}%
+    \setlength{\voffset}{0pt}%
+    \setlength{\oddsidemargin}{-1.4mm}%
+    \setlength{\evensidemargin}{-1.4mm}%
+    \setlength{\topmargin}{-3.4mm}%
+    \setlength{\headheight}{0pt}%
+    \setlength{\headsep}{0pt}%
+    \setlength{\footskip}{0pt}%
+    \setlength{\textwidth}{249mm}%
+    \setlength{\textheight}{376mm}%
+    \setlength{\linewidth}{249mm}%
+    \setlength{\columnwidth}{249mm}%
+    \hsize=249mm
+    \vsize=376mm
+    \thispagestyle{empty}%
+}{%
+    \clearpage
+    \endgroup
+}
+
+\begin{document}
+
+% ================================================================
+% ТИТУЛЬНЫЙ ЛИСТ
+% ================================================================
+\thispagestyle{empty}
+
+\begin{center}
+
+\vspace*{1.4cm}
+
+{\large\color{softgray} Подготовка к ОГЭ по математике}
+
+\vspace{1.4cm}
+
+{\fontsize{28}{34}\selectfont\bfseries\color{darkaccent}
+Чек-лист}
+
+\vspace{0.55cm}
+
+{\LARGE\bfseries
+Рациональные функции и гипербола}
+
+\vspace{0.55cm}
+
+{\large
+асимптоты \(\boldsymbol{\cdot}\)
+точки пересечения \(\boldsymbol{\cdot}\)
+ОДЗ\\[0.15em]
+сокращение дробей \(\boldsymbol{\cdot}\)
+выколотые точки \(\boldsymbol{\cdot}\)
+прямая \(y=m\)}
+
+\vspace{1.45cm}
+
+{\Large\bfseries Марина Селиверстова}
+
+\vspace{0.35cm}
+
+{\large Тренировочный блок: Путь А}
+
+\vfill
+
+{\large \today}
+
+\vspace{1.45cm}
+
+{\small
+Лёвин Артём Александрович\\
+эксклюзивно для Марины Селиверстовой}
+
+\vspace{0.9cm}
+
+\begin{tikzpicture}[remember picture,overlay]
+    \draw[
+        accent,
+        line width=1.15pt
+    ]
+    ([xshift=18mm,yshift=18mm]current page.south west)
+    .. controls
+    ([xshift=63mm,yshift=29mm]current page.south west)
+    and
+    ([xshift=-70mm,yshift=11mm]current page.south east)
+    ..
+    ([xshift=-18mm,yshift=20mm]current page.south east);
+\end{tikzpicture}
+
+\end{center}
+
+\clearpage
+
+% ================================================================
+% КЛЮЧЕВЫЕ ЗНАНИЯ
+% ================================================================
+\sectiontitle{1. Что необходимо уметь}
+
+После повторения темы Вы должны уверенно выполнять следующие действия.
+
+\begin{itemize}
+    \item \checkitem определять ОДЗ исходной рациональной функции;
+    \item \checkitem упрощать рациональное выражение, не теряя исходные ограничения;
+    \item \checkitem находить вертикальную и горизонтальную асимптоты;
+    \item \checkitem находить точки пересечения графика с осями \(Ox\) и \(Oy\);
+    \item \checkitem определять расположение ветвей гиперболы;
+    \item \checkitem отмечать выколотые точки после сокращения множителей;
+    \item \checkitem использовать прямую \(y=m\) для исследования числа общих точек с графиком.
+\end{itemize}
+
+\sectiontitle{2. Базовая модель гиперболы}
+
+Удобнейший вид для построения:
+
+\[
+\boxed{y=a+\frac{b}{x-c}},
+\qquad b\ne0.
+\]
+
+Из формулы сразу читаются асимптоты:
+
+\[
+\boxed{x=c},
+\qquad
+\boxed{y=a}.
+\]
+
+Точка
+
+\[
+\boxed{C(c;a)}
+\]
+
+--- центр симметрии графика, то есть точка пересечения асимптот.
+
+\subsectiontitle{Как знак \(b\) влияет на ветви}
+
+Если
+
+\[
+b>0,
+\]
+
+ветви расположены относительно центра \(C\) так же, как у графика
+
+\[
+y=\frac1x.
+\]
+
+Если
+
+\[
+b<0,
+\]
+
+ветви расположены относительно центра \(C\) так же, как у графика
+
+\[
+y=-\frac1x.
+\]
+
+\textbf{Важно:} в общем случае симметрия выполняется относительно точки
+\(C(c;a)\), а не относительно начала координат.
+
+\sectiontitle{3. Линейно-дробная функция}
+
+Пусть
+
+\[
+y=\frac{Ax+B}{Cx+D},
+\qquad C\ne0.
+\]
+
+Если
+
+\[
+AD-BC\ne0,
+\]
+
+график является гиперболой с асимптотами
+
+\[
+\boxed{x=-\frac{D}{C}},
+\qquad
+\boxed{y=\frac{A}{C}}.
+\]
+
+Если \(AD-BC=0\), числитель и знаменатель пропорциональны. После упрощения
+может получиться постоянная функция с исключённой точкой, поэтому формулу
+гиперболы применять нельзя механически.
+
+\subsectiontitle{Пример}
+
+Для функции
+
+\[
+y=\frac{x+1}{x-1}
+\]
+
+получаем
+
+\[
+x=1,
+\qquad
+y=1
+\]
+
+как вертикальную и горизонтальную асимптоты соответственно.
+
+Точки пересечения с осями:
+
+\[
+y=0
+\Longrightarrow
+x+1=0
+\Longrightarrow
+\boxed{(-1;0)},
+\]
+
+\[
+x=0
+\Longrightarrow
+y=-1
+\Longrightarrow
+\boxed{(0;-1)}.
+\]
+
+% ================================================================
+% ОДЗ И СОКРАЩЕНИЕ
+% ================================================================
+\sectiontitle{4. ОДЗ и сокращение рациональной дроби}
+
+ОДЗ определяют \textbf{по исходной формуле до сокращения}.
+
+Рассмотрим
+
+\[
+y=\frac{x+1}{x^2+x}-2.
+\]
+
+Разложим знаменатель:
+
+\[
+x^2+x=x(x+1).
+\]
+
+Следовательно,
+
+\[
+\boxed{x\ne0,\quad x\ne-1}.
+\]
+
+Теперь можно сократить общий множитель:
+
+\[
+y=
+\frac{x+1}{x(x+1)}-2
+=
+\frac1x-2,
+\qquad x\ne0,-1.
+\]
+
+Ограничение \(x\ne-1\) после сокращения сохраняется. При \(x=-1\)
+упрощённая формула дала бы
+
+\[
+y=-1-2=-3.
+\]
+
+Поэтому точка
+
+\[
+\boxed{(-1;-3)}
+\]
+
+на графике должна быть \textbf{выколота}.
+
+\subsectiontitle{Правило}
+
+Если
+
+\[
+\frac{(x-a)P(x)}{(x-a)Q(x)}
+\]
+
+сокращается на \(x-a\), то после сокращения обязательно остаётся условие
+
+\[
+\boxed{x\ne a}.
+\]
+
+Сокращение изменяет запись функции, но не возвращает в её область определения
+значения, запрещённые в исходной формуле.
+
+\sectiontitle{5. Точки пересечения с координатными осями}
+
+\subsectiontitle{Пересечение с \(Ox\)}
+
+На оси \(Ox\)
+
+\[
+y=0.
+\]
+
+Для дроби
+
+\[
+\frac{P(x)}{Q(x)}=0
+\]
+
+нужно одновременно выполнить условия
+
+\[
+\boxed{P(x)=0},
+\qquad
+\boxed{Q(x)\ne0}.
+\]
+
+\subsectiontitle{Пересечение с \(Oy\)}
+
+На оси \(Oy\)
+
+\[
+x=0.
+\]
+
+Поэтому нужно подставить \(x=0\) в функцию. Если \(0\notin D(f)\),
+пересечения с \(Oy\) нет.
+
+\sectiontitle{6. Быстрое чтение сдвинутой гиперболы}
+
+Если функция уже записана в виде
+
+\[
+y=a+\frac{b}{x-c},
+\]
+
+не требуется предварительно приводить её к одной большой дроби.
+
+Например,
+
+\[
+y=3+\frac1x.
+\]
+
+Сразу получаем
+
+\[
+\boxed{x=0},
+\qquad
+\boxed{y=3}.
+\]
+
+Для
+
+\[
+y=\frac1{2x+3}-1
+\]
+
+горизонтальная асимптота видна сразу:
+
+\[
+\boxed{y=-1}.
+\]
+
+Вертикальную асимптоту находим из знаменателя:
+
+\[
+2x+3=0
+\Longrightarrow
+\boxed{x=-\frac32}.
+\]
+
+Пересечение с \(Ox\):
+
+\[
+0=\frac1{2x+3}-1
+\Longrightarrow
+\frac1{2x+3}=1=\frac11.
+\]
+
+После перемножения крест-накрест:
+
+\[
+2x+3=1
+\Longrightarrow
+\boxed{x=-1}.
+\]
+
+Пересечение с \(Oy\):
+
+\[
+y(0)=\frac13-1=-\frac23,
+\]
+
+то есть точка
+
+\[
+\boxed{\left(0;-\frac23\right)}.
+\]
+
+Кроме того,
+
+\[
+y=-1+\frac{\frac12}{x+\frac32},
+\]
+
+поэтому коэффициент при дроби положителен и ветви расположены относительно
+центра
+
+\[
+\left(-\frac32;-1\right)
+\]
+
+так же, как у \(y=\frac1x\).
+
+Это быстрый способ. Универсальный способ остаётся тем же: сначала привести
+выражение к знакомому виду, затем определить ОДЗ, асимптоты и ключевые точки.
+
+% ================================================================
+% ПРИМЕРЫ И ПАРАМЕТР
+% ================================================================
+\sectiontitle{7. Полный пример: линейно-дробная функция}
+
+Рассмотрим
+
+\[
+y=\frac{2x+1}{-x+2}.
+\]
+
+ОДЗ:
+
+\[
+-x+2\ne0
+\Longrightarrow
+\boxed{x\ne2}.
+\]
+
+Здесь
+
+\[
+A=2,
+\quad
+B=1,
+\quad
+C=-1,
+\quad
+D=2.
+\]
+
+Асимптоты:
+
+\[
+x=-\frac{D}{C}
+=-\frac{2}{-1}
+=\boxed{2},
+\]
+
+\[
+y=\frac{A}{C}
+=\frac{2}{-1}
+=\boxed{-2}.
+\]
+
+Пересечение с \(Ox\):
+
+\[
+2x+1=0
+\Longrightarrow
+x=-\frac12,
+\]
+
+то есть
+
+\[
+\boxed{\left(-\frac12;0\right)}.
+\]
+
+Пересечение с \(Oy\):
+
+\[
+y(0)=\frac12,
+\]
+
+поэтому
+
+\[
+\boxed{\left(0;\frac12\right)}.
+\]
+
+Этих данных достаточно для качественного эскиза. Большую таблицу значений
+строить не требуется.
+
+\sectiontitle{8. Если положение ветвей вызывает сомнение}
+
+Таблица значений остаётся допустимым способом самопроверки.
+
+Удобно брать значения \(x\), расположенные симметрично относительно
+вертикальной асимптоты. Например, если асимптота
+
+\[
+x=2,
+\]
+
+можно взять пары
+
+\[
+1\ \text{и}\ 3,
+\qquad
+0\ \text{и}\ 4.
+\]
+
+Обычно достаточно одной-двух дополнительных точек на каждой стороне
+асимптоты, чтобы проверить расположение ветвей.
+
+\sectiontitle{9. Выколотая точка и прямая \(y=m\)}
+
+Вернёмся к функции
+
+\[
+y=\frac{x+1}{x^2+x}-2.
+\]
+
+После упрощения:
+
+\[
+y=\frac1x-2,
+\qquad
+\boxed{x\ne0,-1}.
+\]
+
+Асимптоты:
+
+\[
+\boxed{x=0},
+\qquad
+\boxed{y=-2}.
+\]
+
+Пересечение с \(Ox\):
+
+\[
+0=\frac1x-2
+\Longrightarrow
+\frac1x=2
+\Longrightarrow
+x=\frac12,
+\]
+
+поэтому
+
+\[
+\boxed{\left(\frac12;0\right)}.
+\]
+
+Пересечения с \(Oy\) нет, поскольку \(x=0\) не входит в ОДЗ.
+
+При исключённом значении \(x=-1\) упрощённая функция дала бы
+
+\[
+y=-3.
+\]
+
+Следовательно, точка
+
+\[
+\boxed{(-1;-3)}
+\]
+
+выколота.
+
+\subsectiontitle{График}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.82\linewidth,
+    height=0.55\linewidth,
+    axis lines=middle,
+    xmin=-4,
+    xmax=4,
+    ymin=-6,
+    ymax=4,
+    samples=240,
+    clip=true,
+    unit vector ratio=1 1,
+    xlabel={$x$},
+    ylabel={$y$},
+    xtick={-3,-2,-1,1,2,3},
+    ytick={-5,-4,-3,-2,-1,1,2,3},
+    grid=both,
+    grid style={line width=.2pt,draw=gray!25},
+    tick label style={font=\small},
+    label style={font=\small}
+]
+
+\addplot[
+    domain=-4:-1.015,
+    thick,
+    color=darkaccent
+]
+{1/x-2};
+
+\addplot[
+    domain=-0.985:-0.08,
+    thick,
+    color=darkaccent
+]
+{1/x-2};
+
+\addplot[
+    domain=0.08:4,
+    thick,
+    color=darkaccent
+]
+{1/x-2};
+
+\addplot[
+    dashed,
+    color=accent,
+    thick,
+    domain=-4:4
+]
+{-2};
+
+\addplot[
+    only marks,
+    mark=o,
+    mark size=3.2pt,
+    line width=1pt,
+    color=darkaccent
+]
+coordinates {(-1,-3)};
+
+\addplot[
+    only marks,
+    mark=*,
+    mark size=2.2pt,
+    color=darkaccent
+]
+coordinates {(0.5,0)};
+
+\node[anchor=south east,font=\small]
+at (axis cs:-1,-3) {$(-1;-3)$};
+
+\node[anchor=south west,font=\small]
+at (axis cs:0.5,0) {$\left(\frac12;0\right)$};
+
+\node[anchor=south east,font=\small,text=accent]
+at (axis cs:3.8,-2) {$y=-2$};
+
+\node[anchor=south west,font=\small,text=accent]
+at (axis cs:0.08,3.1) {$x=0$};
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsectiontitle{Как работает прямая \(y=m\)}
+
+Прямая
+
+\[
+y=m
+\]
+
+всегда горизонтальна. Изменение \(m\) перемещает её вверх или вниз.
+
+Для функции
+
+\[
+y=-2+\frac1x
+\]
+
+значение
+
+\[
+\boxed{m=-2}
+\]
+
+не даёт общих точек: это уровень горизонтальной асимптоты.
+
+Из-за выколотой точки отсутствует также уровень
+
+\[
+\boxed{m=-3}.
+\]
+
+Действительно,
+
+\[
+\frac1x-2=-3
+\Longrightarrow
+x=-1,
+\]
+
+но \(x=-1\) исключено из ОДЗ. Других решений это уравнение не имеет.
+
+Итак,
+
+\[
+\boxed{m\in\{-3;-2\}}.
+\]
+
+\sectiontitle{10. Типичные ошибки}
+
+\begin{enumerate}
+    \item \textbf{Сократить дробь и забыть исходное ограничение.}
+
+    Исключённое значение остаётся запрещённым после сокращения.
+
+    \item \textbf{Начать строить график до упрощения функции.}
+
+    Сначала определите ОДЗ и приведите выражение к удобному виду.
+
+    \item \textbf{Потерять знак в знаменателе.}
+
+    Например,
+
+    \[
+    -x+2=0
+    \Longrightarrow
+    x=2.
+    \]
+
+    \item \textbf{Искать пересечение с \(Oy\), подставляя запрещённое \(x=0\).}
+
+    Если \(0\notin D(f)\), пересечения с \(Oy\) нет.
+
+    \item \textbf{Приравнять дробь к нулю и забыть знаменатель.}
+
+    Для
+
+    \[
+    \frac{P(x)}{Q(x)}=0
+    \]
+
+    требуется одновременно
+
+    \[
+    P(x)=0,
+    \qquad
+    Q(x)\ne0.
+    \]
+
+    \item \textbf{Считать любую гиперболу симметричной относительно начала координат.}
+
+    Центр симметрии графика
+
+    \[
+    y=a+\frac{b}{x-c}
+    \]
+
+    равен \((c;a)\).
+
+    \item \textbf{Перепутать выколотую точку и асимптоту.}
+
+    Выколотая точка --- одно отсутствующее значение графика. Асимптота описывает
+    поведение функции при приближении к определённой прямой.
+\end{enumerate}
+
+\clearpage
+
+% ================================================================
+% ТРЕНИРОВОЧНЫЙ БЛОК
+% ================================================================
+\begin{center}
+{\LARGE\bfseries\color{darkaccent}
+Тренировочный блок}
+
+\vspace{0.2cm}
+
+{\large Путь А}
+
+\vspace{0.15cm}
+
+
+\end{center}
+
+\vspace{0.4cm}
+
+\sectiontitle{Задание 1}
+
+Постройте график функции
+
+\[
+\boxed{y=\frac{2x-3}{x+1}}.
+\]
+
+В ходе решения:
+
+\begin{enumerate}[label=\alph*)]
+    \item укажите ОДЗ;
+    \item найдите вертикальную и горизонтальную асимптоты;
+    \item найдите точки пересечения с \(Ox\) и \(Oy\);
+    \item постройте эскиз графика.
+\end{enumerate}
+
+\vspace{0.6cm}
+
+\sectiontitle{Задание 2}
+
+Постройте график функции
+
+\[
+\boxed{y=\frac1{2x+3}-1}.
+\]
+
+В ходе решения:
+
+\begin{enumerate}[label=\alph*)]
+    \item укажите ОДЗ;
+    \item найдите обе асимптоты;
+    \item найдите точки пересечения с координатными осями;
+    \item определите положение ветвей относительно точки пересечения асимптот;
+    \item постройте эскиз графика.
+\end{enumerate}
+
+\vspace{0.6cm}
+
+\sectiontitle{Задание 3}
+
+Дана функция
+
+\[
+\boxed{y=\frac{x-2}{x^2-2x}-1}.
+\]
+
+\begin{enumerate}[label=\alph*)]
+    \item Укажите ОДЗ исходной функции.
+    \item Упростите выражение, сохранив все ограничения.
+    \item Найдите асимптоты.
+    \item Найдите точки пересечения с координатными осями.
+    \item Найдите и отметьте выколотую точку.
+    \item Постройте график.
+    \item Найдите все значения \(m\), при которых прямая
+    \[
+    y=m
+    \]
+    не имеет с графиком функции ни одной общей точки.
+\end{enumerate}
+
+\clearpage
+
+% ================================================================
+% ОТВЕТЫ
+% ================================================================
+\begin{center}
+{\LARGE\bfseries\color{darkaccent}
+Ответы к тренировочному блоку}
+\end{center}
+
+\vspace{0.55cm}
+
+\renewcommand{\arraystretch}{1.4}
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabularx}{\linewidth}{
+    >{\centering\arraybackslash}p{0.06\linewidth}
+    >{\raggedright\arraybackslash}X
+    >{\raggedright\arraybackslash}X
+}
+\toprule
+\textbf{№} &
+\textbf{ОДЗ и асимптоты} &
+\textbf{Ключевые точки и итог} \\
+\midrule
+
+1 &
+\(
+D(f):\ x\ne-1.
+\)
+
+\(
+x=-1,\quad y=2.
+\)
+&
+\(
+\left(\frac32;0\right),
+\quad
+(0;-3).
+\)
+\\
+
+\midrule
+
+2 &
+\(
+D(f):\ x\ne-\frac32.
+\)
+
+\(
+x=-\frac32,\quad y=-1.
+\)
+&
+\(
+(-1;0),
+\quad
+\left(0;-\frac23\right).
+\)
+
+Ветви расположены как у \(y=\frac1x\) относительно центра
+\(\left(-\frac32;-1\right)\).
+\\
+
+\midrule
+
+3 &
+\(
+D(f):\ x\ne0,\ 2.
+\)
+
+\(
+y=\frac1x-1,\quad x\ne0,2.
+\)
+
+\(
+x=0,\quad y=-1.
+\)
+&
+Пересечение с \(Ox\): \((1;0)\).
+
+С \(Oy\) пересечения нет.
+
+Выколотая точка:
+
+\[
+\left(2;-\frac12\right).
+\]
+
+\[
+\boxed{m\in\left\{-1;-\frac12\right\}}.
+\]
+\\
+
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\vfill
+
+\begin{center}
+{\color{accent}\rule{0.72\linewidth}{0.65pt}}
+
+\vspace{0.3cm}
+
+{\small
+Перед построением графика начинайте с ОДЗ и упрощения выражения.\\
+Сокращённый множитель исчезает из формулы, но соответствующее ограничение остаётся.}
+\end{center}
+
+\end{document}
