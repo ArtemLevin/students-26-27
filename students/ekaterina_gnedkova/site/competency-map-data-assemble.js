@@ -41,21 +41,35 @@ const vectorTitles = new Set([
   "Перпендикулярность векторов"
 ]);
 const vectorSupportTitles = new Set(["Векторный метод в планиметрии"]);
-const lesson2509TextTitles = new Set([
+const lesson2509Level3Titles = new Set([
   "Равномерное движение по прямой",
   "Движение навстречу",
   "Движение вдогонку",
   "Движение по окружности",
-  "Движение по реке",
   "Средняя скорость",
+  "Моделирование условия уравнением",
+  "Формулы движения"
+]);
+const lesson2509Level2Titles = new Set([
+  "Движение по реке",
   "Производительность и время работы",
   "Трубы и резервуары",
-  "Моделирование условия уравнением"
-]);
-const lesson2509FormulaTitles = new Set([
   "Перевод единиц измерения",
-  "Формулы движения",
   "Контроль размерности результата"
+]);
+const lesson2509SectionByTitle = new Map([
+  ["Равномерное движение по прямой","#movement"],
+  ["Движение навстречу","#movement"],
+  ["Движение вдогонку","#movement"],
+  ["Движение по окружности","#movement"],
+  ["Движение по реке","#movement"],
+  ["Средняя скорость","#special"],
+  ["Производительность и время работы","#work"],
+  ["Трубы и резервуары","#work"],
+  ["Моделирование условия уравнением","#method"],
+  ["Перевод единиц измерения","#method"],
+  ["Формулы движения","#method"],
+  ["Контроль размерности результата","#method"]
 ]);
 
 const evidence0809={date:'08.09.26',text:'Тема явно отработана в чек-листе и web-конспекте занятия 08.09.26 «Степени, корни и приведение к единому степенному виду».',web:'08.09.26.html',pdf:'../pdf_docs/08.09.26.pdf',tex:'../tex_docs/08.09.26.tex'};
@@ -63,7 +77,15 @@ const evidence1109={date:'11.09.26',text:'Навык закреплён в че�
 const evidence1509={date:'15.09.26',text:'Навык применён в прикладных задачах со степенями: перевод условия в формулу, факторизация, работа с порядком десятки, дробной и отрицательной степенью и проверка смысла ответа.',web:'15.09.26.html',lab:'15.09.26-lab.html',pdf:'../pdf_docs/15.09.26.pdf',tex:'../tex_docs/15.09.26.tex'};
 const evidence1909={date:'19.09.26',text:'Навык отработан на занятии 19.09.26: свойства степеней и стандартный вид числа применялись в прикладных формулах; показательная функция восстанавливалась по узловым точкам с проверкой найденной формулы.',web:'19.09.26.html',lab:'19.09.26-lab.html',pdf:'../pdf_docs/19.09.26.pdf',tex:'../tex_docs/19.09.26.tex'};
 const evidence2209={date:'22.09.26',text:'Навык отработан на занятии 22.09.26 «Векторы»: координаты и длина, покоординатные действия, линейная комбинация, скалярное произведение, угол и признак перпендикулярности; в геометрическом примере применено правило треугольника.',web:'22.09.26.html',tex:'../tex_docs/22.09.26.tex'};
-const evidence2509={date:'25.09.26',text:'Навык подтверждён на занятии 25.09.26 «Текстовые задачи»: табличный метод, перевод текста в уравнение, движение навстречу и вдогонку, круговая трасса, река, средняя скорость, протяжённые тела и производительность.',web:'25.09.26.html',pdf:'../pdf_docs/25.09.26.pdf',tex:'../tex_docs/25.09.26.tex'};
+const evidence2509For=(title,level)=>({
+  date:'25.09.26',
+  text:level===3
+    ? 'Навык применялся на занятии 25.09.26 с уверенным воспроизведением основной схемы решения; уровень оставлен консервативно ниже полного освоения.'
+    : 'Навык разбирался на занятии 25.09.26, но в соответствующем месте потребовалась опора или коррекция; поэтому зафиксирован уровень «с опорой».',
+  web:`25.09.26.html${lesson2509SectionByTitle.get(title)||''}`,
+  pdf:'../pdf_docs/25.09.26.pdf',
+  tex:'../tex_docs/25.09.26.tex'
+});
 
 const groups=groupDefs.map((def,groupIndex)=>{
   const number=groupIndex+1;
@@ -82,12 +104,12 @@ const groups=groupDefs.map((def,groupIndex)=>{
       const isGraphSkill=number===12&&graphTitles.has(title);
       const isVectorSkill=number===2&&vectorTitles.has(title);
       const isVectorSupport=number===2&&vectorSupportTitles.has(title);
-      const isLesson2509Text=number===11&&lesson2509TextTitles.has(title);
-      const isLesson2509Formula=number===10&&lesson2509FormulaTitles.has(title);
+      const isLesson2509Level3=(number===11||number===10)&&lesson2509Level3Titles.has(title);
+      const isLesson2509Level2=(number===11||number===10)&&lesson2509Level2Titles.has(title);
 
       const level=isMasteredPower?4:
-        isLesson2509Text?3:
-        isLesson2509Formula?3:
+        isLesson2509Level3?3:
+        isLesson2509Level2?2:
         isVectorSkill?3:
         isPowerSkill?3:
         isLesson1909Power?3:
@@ -104,7 +126,8 @@ const groups=groupDefs.map((def,groupIndex)=>{
 
       if(isLesson1909Power||isGraphSkill||isFormulaSkill||isEquationSkill) evidence.push({...evidence1909});
       if(isVectorSkill||isVectorSupport) evidence.push({...evidence2209});
-      if(isLesson2509Text||isLesson2509Formula) evidence.push({...evidence2509});
+      if(isLesson2509Level3) evidence.push(evidence2509For(title,3));
+      if(isLesson2509Level2) evidence.push(evidence2509For(title,2));
 
       const id=`${groupId}_${String(itemIndex+1).padStart(3,'0')}`;
       return{
