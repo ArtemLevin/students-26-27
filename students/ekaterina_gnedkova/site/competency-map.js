@@ -409,6 +409,8 @@
         history.appendChild(p);
         const links = document.createElement('div');
         links.className = 'evidence-links';
+        if (entry.web) links.appendChild(makeLink(entry.web, 'Web-конспект'));
+        if (entry.lab) links.appendChild(makeLink(entry.lab, 'Лаборатория'));
         if (entry.pdf) links.appendChild(makeLink(entry.pdf, 'PDF материала'));
         if (entry.tex) links.appendChild(makeLink(entry.tex, 'TeX материала'));
         history.appendChild(links);
@@ -589,8 +591,28 @@
     if (lesson) {
       $('#latestLessonTitle').textContent = lesson.title;
       $('#latestLessonLead').textContent = lesson.summary;
-      $('#latestPdf').href = lesson.pdf;
-      $('#latestTex').href = lesson.tex;
+
+      const latestPdf = $('#latestPdf');
+      if (latestPdf) {
+        if (lesson.pdf) {
+          latestPdf.href = lesson.pdf;
+          latestPdf.hidden = false;
+        } else {
+          latestPdf.hidden = true;
+          latestPdf.removeAttribute('href');
+        }
+      }
+
+      const latestTex = $('#latestTex');
+      if (latestTex) {
+        if (lesson.tex) {
+          latestTex.href = lesson.tex;
+          latestTex.hidden = false;
+        } else {
+          latestTex.hidden = true;
+          latestTex.removeAttribute('href');
+        }
+      }
     }
   }
 
