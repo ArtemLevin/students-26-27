@@ -2,7 +2,7 @@ import {runDashboardTests} from '../../../../shared/student-dashboard/test-dashb
 
 await runDashboardTests({
   student:'sofya_kalney',
-  expectedLessons:16,
+  expectedLessons:19,
   stateKey:'sofya-competence-state-v2',
   storageKey:'sofya-competence-map-v1',
   catalog:{
