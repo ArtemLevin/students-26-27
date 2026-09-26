@@ -194,7 +194,20 @@ data.topicMaterials={
   exam_24:material23,
   exam_25:material23,
   exam_27:material23,
-  exam_28:material23
+  exam_28:material23,
+  measure_03:material26,
+  kin_04:material26,
+  kin_05:material26,
+  kin_06:material26,
+  kin_07:material26,
+  kin_08:material26,
+  exam_02:material26,
+  exam_03:material26,
+  exam_23:material26,
+  exam_24:material26,
+  exam_25:material26,
+  exam_27:material26,
+  exam_28:material26
 };
 
 data.materials=[
