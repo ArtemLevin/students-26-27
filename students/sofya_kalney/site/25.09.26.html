@@ -15,7 +15,7 @@
   --surface-soft:#edf4ef;
   --surface-accent:#f0e8f0;
   --text-primary:#252725;
-  --text-secondary:#6c716d;
+  --text-secondary:#646965;
   --text-inverse:#fffdf8;
   --border-subtle:#d9d8cf;
   --border-strong:#aaa99f;
@@ -70,6 +70,12 @@ body{
 button{font:inherit;color:inherit}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.skip{
+  position:fixed;left:1rem;top:1rem;z-index:100;
+  padding:.65rem .9rem;background:var(--text-primary);color:var(--surface-page);
+  text-decoration:none;font-weight:800;transform:translateY(-180%);
+}
+.skip:focus{transform:translateY(0)}
 .shell{width:min(1180px,calc(100% - clamp(1rem,4vw,3.5rem)));margin:auto;padding-bottom:4rem}
 .toolbar{
   position:sticky;top:0;z-index:30;
@@ -89,7 +95,7 @@ a{color:inherit}
 .toolbar .grow{flex:1}
 .hero{
   position:relative;
-  display:grid;grid-template-columns:minmax(0,1.02fr) minmax(320px,.98fr);
+  display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);
   gap:clamp(2rem,6vw,5rem);align-items:center;
   min-height:clamp(33rem,62vw,47rem);
   padding:clamp(3rem,7vw,7rem) 0 clamp(2rem,5vw,4rem);
@@ -112,14 +118,9 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 }
 .hero-meta span{font-size:.78rem;color:var(--text-secondary)}
 .hero-meta strong{display:block;margin-top:.15rem;color:var(--text-primary);font-size:.95rem}
-.hero-art{position:relative;min-height:410px;display:grid;place-items:center}
-.hero-art::before{
-  content:"";position:absolute;inset:6% -5% 0 5%;
-  background:var(--surface-accent);border-radius:45% 55% 48% 52% / 42% 42% 58% 58%;
-  opacity:.58;
-}
+.hero-art{position:relative;min-height:390px;display:grid;place-items:center}
 .hero-art img{
-  position:relative;z-index:1;width:100%;height:auto;max-height:520px;object-fit:contain;
+  width:100%;height:auto;max-height:470px;object-fit:contain;
   border:1px solid var(--border-subtle);box-shadow:var(--shadow-low);
 }
 .route{
@@ -137,7 +138,7 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
   display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:2rem;align-items:center;
 }
 .rule strong{font:600 1.2rem/1.25 Georgia,serif}
-.formula{font-family:"Cambria Math","STIX Two Math",serif;font-size:clamp(1.25rem,2.4vw,2rem);color:var(--accent);letter-spacing:.01em}
+.formula{font-family:"Cambria Math","STIX Two Math",serif;font-size:clamp(1.25rem,2.4vw,2rem);color:var(--accent);letter-spacing:.01em;min-width:0;overflow-wrap:anywhere}
 .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,.9fr);gap:clamp(2rem,5vw,4rem);align-items:start}
 .diagram{
   background:var(--surface-raised);border:1px solid var(--border-subtle);
@@ -161,6 +162,15 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 .formula-strip>div+div{border-left:1px solid var(--border-subtle)}
 .formula-strip small{display:block;color:var(--text-secondary);margin-bottom:.35rem}
 .formula-strip b{font-family:"Cambria Math","STIX Two Math",serif;font-size:1.25rem;color:var(--accent)}
+.decision-route{list-style:none;margin:0;padding:0;border-top:1px solid var(--border-subtle)}
+.decision-route li{display:grid;grid-template-columns:54px minmax(0,1fr);gap:1rem;padding:1.05rem 0;border-bottom:1px solid var(--border-subtle)}
+.decision-route .route-step{width:36px;height:36px;border:1px solid var(--accent);border-radius:50%;display:grid;place-items:center;color:var(--accent);font-weight:850}
+.decision-route strong{display:block;margin-bottom:.25rem;font-family:Georgia,"Times New Roman",serif;font-size:1.05rem}
+.decision-route p{margin:.25rem 0;color:var(--text-secondary)}
+.decision-route .branch{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.65rem}
+.decision-route .branch span{padding:.65rem 0;border-top:1px solid var(--border-subtle)}
+.muted{color:var(--text-secondary)}
+.section-space{margin-top:3rem}
 .error-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--border-subtle)}
 .error-list div{padding:1.1rem 1rem;border-bottom:1px solid var(--border-subtle)}
 .error-list div:nth-child(odd){border-right:1px solid var(--border-subtle)}
@@ -190,6 +200,7 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
   body{font-size:15px}.hero-meta{grid-template-columns:1fr}.chapter-head{grid-template-columns:1fr;gap:.6rem}
   .chapter-no{font-size:2.2rem}.rule{grid-template-columns:1fr;gap:.5rem}
   .formula-strip{grid-template-columns:1fr}.formula-strip>div+div{border-left:0;border-top:1px solid var(--border-subtle)}
+  .decision-route li{grid-template-columns:42px minmax(0,1fr)}.decision-route .branch{grid-template-columns:1fr}
   .error-list{grid-template-columns:1fr}.error-list div:nth-child(odd){border-right:0}.toolbar{position:static}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.progress span{transition:none}}
@@ -200,6 +211,7 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 </style>
 </head>
 <body>
+<a class="skip" href="#content">К содержанию</a>
 <div class="shell">
 <nav class="toolbar" aria-label="Навигация по занятию">
 <a href="index.html">← Кабинет</a>
@@ -211,10 +223,11 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 <span class="grow"></span>
 <a href="../pdf_docs/25.09.26.pdf" download="25.09.26.pdf">PDF</a>
 <a href="../tex_docs/25.09.26.tex">TeX</a>
-<button id="theme" type="button">◐ Тема</button>
-<button type="button" onclick="print()">Печать</button>
+<button id="theme" type="button" aria-pressed="false">Тема: светлая</button>
+<button id="print" type="button">Печать</button>
 </nav>
 
+<main id="content">
 <header class="hero">
 <div class="hero-copy">
 <p class="eyebrow">София Кальней · 25 сентября 2026 · ОГЭ</p>
@@ -233,11 +246,12 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 
 <nav class="route" aria-label="Маршрут занятия">
 <a href="#tangents">01 · касательные</a>
-<a href="#inscribed">02 · прямоугольная трапеция</a>
-<a href="#circumscribed">03 · равнобедренная трапеция</a>
-<a href="#height">04 · высота к гипотенузе</a>
-<a href="#errors">05 · ошибки</a>
-<a href="#practice">06 · тренировка</a>
+<a href="#height">02 · высота к гипотенузе</a>
+<a href="#inscribed">03 · прямоугольная трапеция</a>
+<a href="#circumscribed">04 · равнобедренная трапеция</a>
+<a href="#algorithm">05 · алгоритм</a>
+<a href="#errors">06 · ошибки</a>
+<a href="#practice">07 · тренировка</a>
 </nav>
 
 <section class="chapter" id="tangents">
@@ -253,7 +267,9 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 <div class="note">Если окружность вписана в четырёхугольник, суммы противоположных сторон равны: <strong>AB + CD = BC + AD</strong>.</div>
 </div>
 <div class="diagram">
-<svg viewBox="0 0 540 380" role="img" aria-label="Две касательные из точки A к окружности">
+<svg viewBox="0 0 540 380" role="img" aria-labelledby="tangentTitle tangentDesc">
+<title id="tangentTitle">Две касательные к окружности из одной точки</title>
+<desc id="tangentDesc">Из точки A проведены касательные AB и AC. Радиусы OB и OC перпендикулярны касательным в точках B и C.</desc>
 <circle cx="210" cy="190" r="150" fill="color-mix(in srgb,var(--success) 10%,transparent)" stroke="var(--text-primary)" stroke-width="3"/>
 <circle cx="210" cy="190" r="5" fill="var(--accent)"/>
 <text x="222" y="184" fill="var(--text-primary)" font-size="20">O</text>
@@ -270,14 +286,50 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 </div>
 </section>
 
-<section class="chapter" id="inscribed">
+<section class="chapter" id="height">
 <div class="chapter-head">
 <div class="chapter-no">02</div>
-<div><p class="eyebrow">Модель 1</p><h2>Прямоугольная трапеция с вписанной окружностью</h2><p class="chapter-intro">Если меньшее основание равно 4r/3, то равные касательные дают короткий отрезок r/3. Биссектрисы соседних углов образуют прямоугольный треугольник, а радиус к боковой стороне становится высотой к его гипотенузе.</p></div>
+<div><p class="eyebrow">Опорная теория</p><h2>Высота к гипотенузе</h2><p class="chapter-intro">Эти соотношения работают именно для высоты, проведённой из вершины прямого угла к гипотенузе. Здесь используются обозначения отрезков на чертеже, чтобы формулы можно было сразу сопоставить с геометрией.</p></div>
+</div>
+<div class="formula-strip">
+<div><small>высота</small><b>BH² = AH·HC</b></div>
+<div><small>катет AB</small><b>AB² = AC·AH</b></div>
+<div><small>катет BC</small><b>BC² = AC·HC</b></div>
+<div><small>через площадь</small><b>BH = AB·BC/AC</b></div>
+</div>
+<div class="split" style="margin-top:2rem">
+<div>
+<h3>Почему h² = pq</h3>
+<p>Пусть BH — высота к гипотенузе AC. Она делит гипотенузу на отрезки AH и HC. Треугольники ABH и BCH подобны по двум углам. Из отношения сходственных сторон:</p>
+<div class="rule"><strong>Пропорция</strong><span class="formula">AH/BH = BH/HC</span></div>
+<p>После перемножения крест-накрест:</p>
+<div class="rule"><strong>Метрическое соотношение</strong><span class="formula">BH² = AH·HC</span></div>
+</div>
+<div class="diagram">
+<svg viewBox="0 0 560 390" role="img" aria-labelledby="heightTitle heightDesc">
+<title id="heightTitle">Высота к гипотенузе прямоугольного треугольника</title>
+<desc id="heightDesc">Треугольник ABC прямоугольный при B. Из B проведена высота BH к гипотенузе AC, H лежит на AC.</desc>
+<path d="M100 315L100 70L485 315Z" fill="color-mix(in srgb,var(--success) 9%,transparent)" stroke="var(--text-primary)" stroke-width="4"/>
+<path d="M100 315L210.97 140.62" stroke="var(--accent)" stroke-width="4"/>
+<path d="M226.16 150.28L216.49 165.47L201.31 155.80" fill="none" stroke="var(--accent)" stroke-width="3"/>
+<path d="M100 296h19v19" fill="none" stroke="var(--text-primary)" stroke-width="3"/>
+<text x="82" y="60" font-size="20" fill="var(--text-primary)">A</text><text x="78" y="340" font-size="20" fill="var(--text-primary)">B</text><text x="495" y="340" font-size="20" fill="var(--text-primary)">C</text><circle cx="210.97" cy="140.62" r="4" fill="var(--text-primary)"/><text x="221" y="133" font-size="20" fill="var(--text-primary)">H</text>
+<text x="145" y="245" font-size="18" fill="var(--accent)">BH</text>
+</svg>
+</div>
+</div>
+</section>
+
+<section class="chapter" id="inscribed">
+<div class="chapter-head">
+<div class="chapter-no">03</div>
+<div><p class="eyebrow">Модель 1</p><h2>Прямоугольная трапеция с вписанной окружностью</h2><p class="chapter-intro">Пусть AB ∥ CD, AD ⟂ AB, радиус вписанной окружности равен r, а меньшее основание AB = 4r/3. Равные касательные и биссектрисы переводят задачу к прямоугольному треугольнику BOC, где OT — высота к гипотенузе BC.</p></div>
 </div>
 <div class="split">
 <div class="diagram">
-<svg viewBox="0 0 620 420" role="img" aria-label="Прямоугольная трапеция с вписанной окружностью">
+<svg viewBox="0 0 620 420" role="img" aria-labelledby="inscribedTitle inscribedDesc">
+<title id="inscribedTitle">Прямоугольная трапеция с вписанной окружностью</title>
+<desc id="inscribedDesc">Основания AB и CD параллельны, AD перпендикулярно основаниям. Окружность касается всех четырёх сторон; её радиус равен r.</desc>
 <path d="M100 130L233.33 130L500 330L100 330Z" fill="color-mix(in srgb,var(--accent) 7%,transparent)" stroke="var(--text-primary)" stroke-width="4"/>
 <circle cx="200" cy="230" r="100" fill="color-mix(in srgb,var(--success) 8%,transparent)" stroke="var(--accent)" stroke-width="3"/>
 <circle cx="200" cy="230" r="5" fill="var(--accent)"/><text x="212" y="225" font-size="20" fill="var(--text-primary)">O</text>
@@ -285,6 +337,10 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 <line x1="200" y1="230" x2="200" y2="330" stroke="var(--text-secondary)" stroke-width="3"/>
 <line x1="200" y1="230" x2="260" y2="150" stroke="var(--text-secondary)" stroke-width="3"/>
 <line x1="200" y1="230" x2="100" y2="230" stroke="var(--text-secondary)" stroke-width="3"/>
+<circle cx="200" cy="130" r="4" fill="var(--text-primary)"/><text x="204" y="121" font-size="17" fill="var(--text-primary)">P</text>
+<circle cx="260" cy="150" r="4" fill="var(--text-primary)"/><text x="268" y="148" font-size="17" fill="var(--text-primary)">T</text>
+<circle cx="200" cy="330" r="4" fill="var(--text-primary)"/><text x="205" y="352" font-size="17" fill="var(--text-primary)">Q</text>
+<circle cx="100" cy="230" r="4" fill="var(--text-primary)"/><text x="82" y="224" font-size="17" fill="var(--text-primary)">S</text>
 <path d="M100 312h18v18" fill="none" stroke="var(--accent)" stroke-width="3"/>
 <text x="78" y="122" font-size="20" fill="var(--text-primary)">A</text><text x="238" y="122" font-size="20" fill="var(--text-primary)">B</text><text x="510" y="350" font-size="20" fill="var(--text-primary)">C</text><text x="78" y="352" font-size="20" fill="var(--text-primary)">D</text>
 <text x="143" y="112" font-size="18" fill="var(--accent)">4r/3</text><text x="65" y="235" font-size="18" fill="var(--accent)">2r</text>
@@ -293,11 +349,11 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 <div>
 <div class="steps">
 <div><strong>Высота трапеции:</strong> окружность касается двух параллельных оснований, поэтому расстояние между ними равно диаметру: <strong>AD = 2r</strong>.</div>
-<div>От вершины A до точек касания получаем отрезки длины <strong>r</strong>, поэтому остаток на меньшем основании равен <strong>r/3</strong>.</div>
-<div>Из одной вершины касательные равны, значит соответствующий отрезок на наклонной стороне также равен <strong>r/3</strong>.</div>
+<div>Из вершины A касательные равны: <strong>AP = AS = r</strong>. Поэтому <strong>BP = AB − AP = r/3</strong>.</div>
+<div>Из вершины B касательные равны, значит <strong>BT = BP = r/3</strong>.</div>
 <div>Биссектрисы соседних углов дают прямой угол при центре: половина суммы 180° равна 90°.</div>
-<div>Для высоты к гипотенузе: <strong>r² = (r/3)·x</strong>, поэтому <strong>x = 3r</strong>.</div>
-<div>Собираем стороны: <strong>AB = 4r/3, BC = 10r/3, CD = 4r, AD = 2r</strong>.</div>
+<div>Для высоты к гипотенузе: <strong>OT² = BT·TC</strong>, то есть <strong>r² = (r/3)·TC</strong>. Поэтому <strong>TC = 3r</strong>.</div>
+<div>Собираем стороны: <strong>BC = BT + TC = 10r/3</strong>, а по равным касательным <strong>CD = 3r + r = 4r</strong>. Итак, <strong>AB = 4r/3, BC = 10r/3, CD = 4r, AD = 2r</strong>.</div>
 </div>
 <div class="note">Контроль: <strong>AB + CD = BC + AD = 16r/3</strong>.</div>
 </div>
@@ -306,20 +362,22 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 
 <section class="chapter" id="circumscribed">
 <div class="chapter-head">
-<div class="chapter-no">03</div>
+<div class="chapter-no">04</div>
 <div><p class="eyebrow">Модель 2</p><h2>Равнобедренная трапеция в окружности</h2><p class="chapter-intro">Диагональ переводит задачу о трапеции в задачу о треугольнике, вписанном в ту же окружность. Высота к большему основанию даёт прямоугольный треугольник и выражает диагональ через боковую сторону и среднюю линию.</p></div>
 </div>
 <div class="split">
 <div>
-<div class="rule"><strong>Высота в равнобедренной трапеции</strong><span class="formula">AH = (AD + BC)/2 = m</span></div>
+<div class="rule"><strong>Отрезок AH после проведения высоты CH</strong><span class="formula">AH = (AD + BC)/2 = m</span></div>
 <div class="rule"><strong>Полуразность оснований</strong><span class="formula">DH = (AD − BC)/2</span></div>
 <div class="rule"><strong>При угле 30° и боковой стороне a</strong><span class="formula">CH = a/2</span></div>
 <div class="rule"><strong>Диагональ</strong><span class="formula">AC = √(b² + a²/4)</span></div>
-<div class="rule"><strong>Радиус описанной окружности</strong><span class="formula">R = x/(2 sin α)</span></div>
-<div class="note">В общей формуле x — сторона напротив угла α. В треугольнике ACD сторона AC лежит напротив угла 30°, поэтому <strong>R = AC = √(b² + a²/4)</strong>. Для невырожденной трапеции требуется <strong>b &gt; a√3/2</strong>.</div>
+<div class="rule"><strong>Радиус в треугольнике ACD</strong><span class="formula">R = AC/(2 sin 30°) = AC</span></div>
+<div class="note">По расширенной теореме синусов <strong>R = s/(2 sin α)</strong>, где s лежит напротив угла α. Здесь напротив 30° лежит AC, поэтому <strong>R = AC = √(b² + a²/4)</strong>. Чтобы меньшее основание было положительным, требуется <strong>b &gt; a√3/2</strong>.</div>
 </div>
 <div class="diagram">
-<svg viewBox="0 0 620 420" role="img" aria-label="Равнобедренная трапеция, высота и диагональ">
+<svg viewBox="0 0 620 420" role="img" aria-labelledby="circumscribedTitle circumscribedDesc">
+<title id="circumscribedTitle">Равнобедренная трапеция с диагональю и высотой</title>
+<desc id="circumscribedDesc">Из вершины C опущена высота CH к большему основанию AD, проведена диагональ AC, угол при вершине D равен 30 градусов.</desc>
 <path d="M60 330L233.21 230L386.79 230L560 330Z" fill="color-mix(in srgb,var(--accent) 7%,transparent)" stroke="var(--text-primary)" stroke-width="4"/>
 <line x1="60" y1="330" x2="386.79" y2="230" stroke="var(--accent)" stroke-width="4"/>
 <line x1="386.79" y1="230" x2="386.79" y2="330" stroke="var(--success)" stroke-width="3" stroke-dasharray="8 7"/>
@@ -333,48 +391,32 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 </div>
 </section>
 
-<section class="chapter" id="height">
+<section class="chapter" id="algorithm">
 <div class="chapter-head">
-<div class="chapter-no">04</div>
-<div><p class="eyebrow">Опорная теория</p><h2>Высота к гипотенузе</h2><p class="chapter-intro">Эти формулы работают именно для высоты, проведённой из вершины прямого угла к гипотенузе. Их удобно получать из подобия трёх прямоугольных треугольников.</p></div>
+<div class="chapter-no">05</div>
+<div><p class="eyebrow">Алгоритм выбора хода</p><h2>Как переводить трапецию к рабочему треугольнику</h2><p class="chapter-intro">Эта последовательность собрана из блок-схемы пособия. Она нужна перед новой задачей, когда готового шаблона ещё нет.</p></div>
 </div>
-<div class="formula-strip">
-<div><small>высота</small><b>h² = pq</b></div>
-<div><small>первый катет</small><b>a² = cp</b></div>
-<div><small>второй катет</small><b>b² = cq</b></div>
-<div><small>через площадь</small><b>h = ab/c</b></div>
-</div>
-<div class="split" style="margin-top:2rem">
-<div>
-<h3>Почему h² = pq</h3>
-<p>Пусть BH — высота к гипотенузе AC, AH = p, HC = q. Треугольники ABH и BCH подобны по двум углам. Из отношения сходственных сторон:</p>
-<div class="rule"><strong>Пропорция</strong><span class="formula">AH/BH = BH/HC</span></div>
-<p>После перемножения крест-накрест:</p>
-<div class="rule"><strong>Метрическое соотношение</strong><span class="formula">BH² = AH·HC</span></div>
-</div>
-<div class="diagram">
-<svg viewBox="0 0 560 390" role="img" aria-label="Прямоугольный треугольник с высотой к гипотенузе">
-<path d="M100 315L100 70L485 315Z" fill="color-mix(in srgb,var(--success) 9%,transparent)" stroke="var(--text-primary)" stroke-width="4"/>
-<path d="M100 315L205 210" stroke="var(--accent)" stroke-width="4"/>
-<path d="M187 228l13 13 13-13" fill="none" stroke="var(--accent)" stroke-width="3"/>
-<path d="M100 296h19v19" fill="none" stroke="var(--text-primary)" stroke-width="3"/>
-<text x="82" y="60" font-size="20" fill="var(--text-primary)">A</text><text x="78" y="340" font-size="20" fill="var(--text-primary)">B</text><text x="495" y="340" font-size="20" fill="var(--text-primary)">C</text><text x="212" y="205" font-size="20" fill="var(--text-primary)">H</text>
-<text x="145" y="255" font-size="18" fill="var(--accent)">h</text>
-</svg>
-</div>
-</div>
+<ol class="decision-route">
+<li><span class="route-step">1</span><div><strong>Сделайте точный чертёж.</strong><p>Подпишите известные длины, углы, параллельность и точки касания.</p></div></li>
+<li><span class="route-step">2</span><div><strong>Проверьте, есть ли окружность и касания.</strong><div class="branch"><span><b>Да:</b> проведите радиусы в точки касания, отметьте перпендикуляры, равные касательные и биссектрисы к центру.</span><span><b>Нет:</b> определите тип трапеции; для равнобедренной проведите высоту к большему основанию.</span></div></div></li>
+<li><span class="route-step">3</span><div><strong>Найдите прямоугольный треугольник или создайте его.</strong><p>Используйте высоту, диагональ или радиус только с понятной целью.</p></div></li>
+<li><span class="route-step">4</span><div><strong>Есть высота к гипотенузе?</strong><div class="branch"><span><b>Да:</b> примените BH² = AH·HC, AB² = AC·AH, BC² = AC·HC или BH = AB·BC/AC.</span><span><b>Нет:</b> используйте Пифагора, тригонометрию угла 30° и свойства трапеции.</span></div></div></li>
+<li><span class="route-step">5</span><div><strong>Нужно найти радиус описанной окружности?</strong><div class="branch"><span><b>Да:</b> перейдите к треугольнику в той же окружности и используйте R = s/(2 sin α).</span><span><b>Нет:</b> соберите искомые стороны из найденных отрезков.</span></div></div></li>
+<li><span class="route-step">6</span><div><strong>Проверьте ответ.</strong><p>Сверьте длины, знаки, условия применимости формул и согласованность результата с чертежом.</p></div></li>
+</ol>
 </section>
 
 <section class="chapter" id="errors">
 <div class="chapter-head">
-<div class="chapter-no">05</div>
+<div class="chapter-no">06</div>
 <div><p class="eyebrow">Контроль</p><h2>Условия применимости и частые ошибки</h2><p class="chapter-intro">Перед подстановкой в формулу сначала проверьте, что конфигурация действительно соответствует её условиям.</p></div>
 </div>
 <div class="error-list">
 <div><strong>Точка касания.</strong><br>Перпендикуляр от центра проводится именно в точку касания.</div>
 <div><strong>Равные касательные.</strong><br>Сравнивайте только отрезки, выходящие из одной внешней точки.</div>
-<div><strong>h² = pq.</strong><br>Формула относится к высоте к гипотенузе прямоугольного треугольника.</div>
-<div><strong>R = a/(2 sin α).</strong><br>Сторона a должна лежать напротив угла α.</div>
+<div><strong>BH² = AH·HC.</strong><br>Формула относится только к высоте, проведённой из вершины прямого угла к гипотенузе.</div>
+<div><strong>Проекции катетов.</strong><br>В AB² = AC·AH и BC² = AC·HC каждому катету соответствует собственная проекция.</div>
+<div><strong>R = s/(2 sin α).</strong><br>Сторона s должна лежать напротив угла α; при α = 30° получаем R = s.</div>
 <div><strong>Равнобедренная трапеция.</strong><br>Формулы полусуммы и полуразности в используемом виде требуют равнобедренности.</div>
 <div><strong>Диаметр.</strong><br>Прямой угол возникает у вписанного угла, опирающегося на диаметр.</div>
 </div>
@@ -383,10 +425,10 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 
 <section class="chapter" id="practice">
 <div class="chapter-head">
-<div class="chapter-no">06</div>
+<div class="chapter-no">07</div>
 <div><p class="eyebrow">Путь А · 5 заданий</p><h2>Первичное закрепление</h2><p class="chapter-intro">Условия соответствуют тренировочному блоку пособия. Перед вычислениями выполните чертёж и отметьте применяемое свойство.</p></div>
 </div>
-<ol class="practice-list">
+<ol class="practice-list" id="practiceList">
 <li>Из точки P, лежащей вне окружности, проведены касательные PA и PB. Известно, что PA = 7. Найдите PB.<div class="answer">Ответ: 7.</div></li>
 <li>В прямоугольную трапецию вписана окружность радиуса 6. Меньшее основание трапеции равно 8. Найдите все четыре стороны трапеции.<div class="answer">Ответ: основания 8 и 24; боковые стороны 12 и 20.</div></li>
 <li>Боковая сторона равнобедренной трапеции равна 10, средняя линия равна 12, а углы при большем основании равны 30°. Найдите радиус окружности, описанной около трапеции.<div class="answer">Ответ: 13.</div></li>
@@ -394,14 +436,14 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 <li>Боковая сторона равнобедренной трапеции равна 8, углы при большем основании равны 30°, а радиус описанной окружности равен 10. Найдите среднюю линию и оба основания трапеции.<div class="answer">Ответ: m = 2√21; основания 2√21 − 4√3 и 2√21 + 4√3.</div></li>
 </ol>
 <div class="action-row">
-<button class="btn" id="answers" type="button">Показать ответы</button>
+<button class="btn" id="answers" type="button" aria-expanded="false">Показать ответы</button>
 </div>
 
-<div style="margin-top:3rem">
+<div class="section-space">
 <p class="eyebrow">Самопроверка</p>
 <h3>Перед следующим занятием</h3>
-<div class="progress"><span id="progressBar"></span></div>
-<p id="progressText" style="color:var(--text-secondary)">Отмечено: 0 из 7</p>
+<div class="progress" id="selfCheckProgress" role="progressbar" aria-labelledby="progressText" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0"><span id="progressBar"></span></div>
+<p id="progressText" class="muted">Отмечено: 0 из 7</p>
 <div class="checks">
 <label class="check"><input type="checkbox">Я провожу радиус в каждую нужную точку касания.</label>
 <label class="check"><input type="checkbox">Я узнаю равные касательные из одной точки.</label>
@@ -413,6 +455,7 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 </div>
 </div>
 </section>
+</main>
 
 <footer class="footer"><span>Лёвин Артём Александрович · эксклюзивно для Софии Кальней</span><span>25.09.2026 · ОГЭ</span></footer>
 </div>
@@ -420,27 +463,51 @@ h3{margin:.1em 0 .5em;font-size:1.25rem;line-height:1.2}
 (()=>{'use strict';
 const root=document.documentElement;
 const theme=document.getElementById('theme');
-const saved=localStorage.getItem('sofya-lesson-theme-v1');
-if(saved)root.dataset.theme=saved;
-theme.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';localStorage.setItem('sofya-lesson-theme-v1',root.dataset.theme)});
+const printButton=document.getElementById('print');
 const answers=document.getElementById('answers');
-answers.addEventListener('click',()=>{
+const bar=document.getElementById('progressBar');
+const text=document.getElementById('progressText');
+const progress=document.getElementById('selfCheckProgress');
+const checks=[...document.querySelectorAll('.check input')];
+const safeGet=key=>{try{return localStorage.getItem(key)}catch(_){return null}};
+const safeSet=(key,value)=>{try{localStorage.setItem(key,value)}catch(_){}};
+const saved=safeGet('sofya-lesson-theme-v1');
+if(saved==='light'||saved==='dark')root.dataset.theme=saved;
+function renderTheme(){
+  const dark=root.dataset.theme==='dark';
+  theme.setAttribute('aria-pressed',String(dark));
+  theme.textContent=dark?'Тема: тёмная':'Тема: светлая';
+  theme.setAttribute('aria-label',dark?'Переключить на светлую тему':'Переключить на тёмную тему');
+}
+theme?.addEventListener('click',()=>{
+  root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+  safeSet('sofya-lesson-theme-v1',root.dataset.theme);
+  renderTheme();
+});
+printButton?.addEventListener('click',()=>window.print());
+answers?.addEventListener('click',()=>{
   const nodes=[...document.querySelectorAll('.answer')];
+  if(!nodes.length)return;
   const show=!nodes[0].classList.contains('show');
   nodes.forEach(node=>node.classList.toggle('show',show));
   answers.textContent=show?'Скрыть ответы':'Показать ответы';
+  answers.setAttribute('aria-expanded',String(show));
 });
-const checks=[...document.querySelectorAll('.check input')];
-const bar=document.getElementById('progressBar'),text=document.getElementById('progressText');
 checks.forEach((input,index)=>{
-  input.checked=localStorage.getItem('sofya-250926-check-'+index)==='1';
-  input.addEventListener('change',()=>{localStorage.setItem('sofya-250926-check-'+index,input.checked?'1':'0');renderProgress()});
+  input.checked=safeGet('sofya-250926-check-'+index)==='1';
+  input.addEventListener('change',()=>{
+    safeSet('sofya-250926-check-'+index,input.checked?'1':'0');
+    renderProgress();
+  });
 });
 function renderProgress(){
   const count=checks.filter(input=>input.checked).length;
-  bar.style.width=(count/checks.length*100)+'%';
-  text.textContent='Отмечено: '+count+' из '+checks.length;
+  const total=checks.length||1;
+  if(bar)bar.style.width=(count/total*100)+'%';
+  if(text)text.textContent='Отмечено: '+count+' из '+checks.length;
+  progress?.setAttribute('aria-valuenow',String(count));
 }
+renderTheme();
 renderProgress();
 })();
 </script>
