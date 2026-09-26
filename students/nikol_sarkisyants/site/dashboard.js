@@ -7,7 +7,7 @@ import {
   paginateArchive,
   formatShortDate,
   formatLongDateRu
-} from './lesson-registry.js?v=20260921-1';
+} from './lesson-registry.js?v=20260925-1';
 import {PRACTICE_CONFIG} from './practice-config.js';
 
 const THEME_KEY='nikol-dashboard-theme-v1';
@@ -105,6 +105,7 @@ function renderLatestLesson(){
   configureMaterialLink('latestReviewLink',materials.review,{newTab:true});
   configureMaterialLink('latestPdfLink',materials.pdf);
   configureMaterialLink('latestTexLink',materials.tex);
+  configureMaterialLink('latestLabLink',materials.lab);
 }
 
 function createLessonLink(lesson,index){

@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Николь Саркисьянц · производная и касательная · угловой коэффициент · задачи ЕГЭ · 25.09.2026">
+<title>Производная и касательная — Николь Саркисьянц</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23722932'/%3E%3Cpath d='M8 44L54 20' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M10 50H55' stroke='%23d5b36d' stroke-width='3'/%3E%3C/svg%3E">
+<style>
+:root{
+  color-scheme:light;
+  --surface-page:#f1ede6;--surface-raised:#fffdf8;--surface-soft:#e9e3da;
+  --text-primary:#242323;--text-secondary:#6d6864;--text-inverse:#fff;
+  --border-subtle:#d5cdc2;--border-strong:#aa9e92;
+  --accent:#762d39;--accent-hover:#5e222d;--accent-soft:#f0e0e3;
+  --signal:#a5742e;--signal-soft:#f4ead8;--success:#356f58;--danger:#9d4a43;
+  --focus-ring:#ba873b;--graph:#3d667e;--shadow-low:0 12px 34px rgba(58,42,36,.08);
+  --radius-sm:8px;--radius-md:14px;--space-1:.45rem;--space-2:.75rem;--space-3:1rem;
+  --space-4:1.5rem;--space-5:2.4rem;--space-6:4rem;--motion-fast:150ms;--motion-normal:260ms;
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --surface-page:#171515;--surface-raised:#211e1f;--surface-soft:#2a2526;
+  --text-primary:#f3efeb;--text-secondary:#bcb3ad;--border-subtle:#453d3a;--border-strong:#665650;
+  --accent:#d98a95;--accent-hover:#efa1ab;--accent-soft:#392428;
+  --signal:#dbb36f;--signal-soft:#332b20;--success:#7ec3a0;--danger:#df8a84;
+  --focus-ring:#e1bd75;--graph:#8bb7d1;--shadow-low:0 14px 40px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.64 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:inherit}button,input{font:inherit}.page{width:min(100% - 2rem,1200px);margin:auto;padding-bottom:4rem}
+.skip{position:fixed;left:1rem;top:-5rem;z-index:100;background:var(--text-primary);color:var(--surface-page);padding:.7rem 1rem}.skip:focus{top:1rem}
+.topbar{position:sticky;top:.7rem;z-index:30;margin:1rem 0 0;display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;padding:.48rem 0;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);background:color-mix(in srgb,var(--surface-page) 92%,transparent);backdrop-filter:blur(10px)}
+.topbar a,.topbar button{min-height:40px;padding:.55rem .68rem;border:0;border-right:1px solid var(--border-subtle);background:transparent;color:var(--text-primary);text-decoration:none;font-weight:720;cursor:pointer}
+.topbar a:hover,.topbar button:hover{color:var(--accent)}.topbar .lab{background:var(--accent);color:var(--text-inverse);border:0}.topbar .grow{flex:1}.date{font:700 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--text-secondary);letter-spacing:.08em}
+.cover{position:relative;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(330px,.72fr);gap:clamp(2rem,6vw,6rem);align-items:end;min-height:620px;padding:clamp(3rem,8vw,7rem) 0 clamp(2rem,5vw,4rem);border-bottom:1px solid var(--border-strong);overflow:hidden}
+.coordinate-field{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.coordinate-waypoint{position:absolute;left:var(--point-x);top:var(--point-y);width:var(--point-size);height:var(--point-size);margin:calc(var(--point-size)/-2);border:1px solid color-mix(in srgb,var(--accent) 38%,transparent);border-radius:50%;opacity:.3}
+.coordinate-waypoint:before,.coordinate-waypoint:after{content:"";position:absolute;left:50%;top:50%;background:color-mix(in srgb,var(--text-primary) 22%,transparent);transform:translate(-50%,-50%)}.coordinate-waypoint:before{width:11px;height:1px}.coordinate-waypoint:after{width:1px;height:11px}
+.cover-copy,.instrument{position:relative;z-index:1}.kicker{margin:0 0 .9rem;color:var(--accent);font:750 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.14em;text-transform:uppercase}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif}h1{margin:0;max-width:10ch;font-size:clamp(3.8rem,8vw,7.8rem);line-height:.86;letter-spacing:-.065em;font-weight:500}h2{margin:.1rem 0 .8rem;font-size:clamp(2rem,4.3vw,4rem);line-height:1;letter-spacing:-.045em;font-weight:500}h3{margin:.1rem 0 .55rem;font-size:1.24rem;line-height:1.2}
+.lead{max-width:62ch;margin:1.35rem 0;color:var(--text-secondary);font-size:1.08rem}.signature{display:flex;gap:.8rem;align-items:center;margin-top:1.5rem;color:var(--text-secondary);font-size:.9rem}.signature b{color:var(--text-primary)}
+.navigator{width:36px;height:36px;border:1px solid var(--border-strong);display:grid;place-items:center;color:var(--accent)}.navigator svg{width:20px;height:20px}
+.route{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.5rem}.route a{color:var(--text-secondary);text-decoration:none;border-bottom:1px solid var(--border-subtle);padding-bottom:.18rem}.route a:hover,.route a:focus-visible{color:var(--accent);border-color:var(--accent)}
+.instrument{border-left:1px solid var(--border-strong);padding-left:clamp(1.2rem,3vw,2.3rem)}
+.instrument-label{font:700 .68rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--text-secondary)}
+.hero-formula{margin:.6rem 0 1.5rem;font:500 clamp(2.4rem,5vw,4.6rem)/1 Georgia,"Times New Roman",serif;letter-spacing:-.04em;color:var(--accent);white-space:nowrap}
+.instrument svg{display:block;width:100%;height:auto}.instrument-note{display:grid;grid-template-columns:auto 1fr;gap:.8rem;padding-top:1rem;border-top:1px solid var(--border-subtle);color:var(--text-secondary)}.readout{font:700 .72rem/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent)}
+.poster{border-bottom:1px solid var(--border-subtle)}.poster summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:1rem;padding:1rem 0;font-weight:760}.poster summary::-webkit-details-marker{display:none}.poster summary:after{content:"+";color:var(--accent);font-size:1.35rem}.poster[open] summary:after{content:"−"}.poster-body{display:grid;grid-template-columns:minmax(180px,.32fr) minmax(0,.68fr);gap:2rem;padding:1rem 0 2rem;align-items:start}.poster-body p{margin:0;color:var(--text-secondary)}.poster-open{border:0;padding:0;background:transparent;cursor:zoom-in}.poster-open img{display:block;width:100%;max-height:74vh;object-fit:contain;border:1px solid var(--border-subtle);background:var(--surface-raised)}
+.section{scroll-margin-top:5.5rem;padding:clamp(2.8rem,7vw,6rem) 0;border-bottom:1px solid var(--border-subtle)}.section-head{display:grid;grid-template-columns:5rem minmax(0,1fr);gap:1.2rem;margin-bottom:2rem}.folio{font:700 .72rem/1.25 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent);letter-spacing:.12em}.section-head p{margin:0;color:var(--text-secondary);max-width:66ch}
+.readout-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--border-strong);border-left:1px solid var(--border-subtle)}.readout-cell{min-height:12rem;padding:1.4rem;border-right:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)}.readout-cell .math{font:500 clamp(1.6rem,3vw,2.5rem)/1.1 Georgia,serif;color:var(--accent)}.readout-cell p{color:var(--text-secondary)}
+.slope-studio{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:2rem;align-items:start}.board{padding:1rem 0;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong)}.board svg{display:block;width:100%;height:auto}.method{border-top:1px solid var(--border-strong);counter-reset:step}.method-row{counter-increment:step;display:grid;grid-template-columns:4.2rem minmax(0,1fr);gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border-subtle)}.method-row:before{content:counter(step,decimal-leading-zero);font:700 .72rem/1.25 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent);letter-spacing:.12em}.method-row p{margin:.25rem 0;color:var(--text-secondary)}.formula-line{margin:1rem 0;padding:1rem 0;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);font:500 clamp(1.3rem,2.8vw,2rem)/1.35 Georgia,serif;color:var(--accent);overflow-x:auto}
+.lab-link{display:inline-flex;align-items:center;gap:.45rem;margin-top:1rem;color:var(--accent);font-weight:800;text-decoration:none;border-bottom:1px solid var(--accent)}
+.relation{display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:stretch}.relation-block{padding:1.35rem;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-subtle)}.relation-block b{display:block;color:var(--accent);margin-bottom:.5rem}.relation-block p{color:var(--text-secondary)}.relation-arrow{align-self:center;color:var(--accent);font-size:2rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem}.example{border-top:1px solid var(--border-strong);padding-top:1rem}.example p{color:var(--text-secondary)}.example .math-row{font:500 1.25rem/1.6 Georgia,serif;overflow-x:auto}.result{color:var(--accent);font-weight:800}
+.warning-list{border-top:1px solid var(--border-strong)}.warning{display:grid;grid-template-columns:7rem minmax(0,1fr);gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border-subtle)}.warning b{color:var(--danger);font:700 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase}.warning p{margin:0}
+.checks{border-top:1px solid var(--border-strong)}.check{display:grid;grid-template-columns:auto 1fr;gap:.8rem;padding:.85rem 0;border-bottom:1px solid var(--border-subtle)}.check input{width:20px;height:20px;margin-top:.2rem;accent-color:var(--accent)}.check small{display:block;color:var(--text-secondary)}.progress{height:3px;background:var(--border-subtle);margin-top:1.2rem}.progress span{display:block;width:0;height:100%;background:var(--accent);transition:width var(--motion-normal)}.status{color:var(--text-secondary);font-size:.9rem}
+.footer{display:flex;justify-content:space-between;gap:1rem;padding:2rem 0;color:var(--text-secondary);font-size:.88rem}
+dialog{width:min(1100px,94vw);border:1px solid var(--border-subtle);background:var(--surface-raised);color:var(--text-primary);padding:1rem;box-shadow:0 30px 90px rgba(0,0,0,.45)}dialog::backdrop{background:rgba(0,0,0,.72)}dialog button{float:right;min-width:44px;min-height:44px;border:1px solid var(--border-subtle);background:transparent;color:var(--text-primary);font-size:1.4rem}.dialog-img{display:block;max-width:100%;max-height:82vh;margin:3rem auto 0}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+@media(max-width:900px){.cover,.slope-studio,.two-col{grid-template-columns:1fr}.instrument{border-left:0;border-top:1px solid var(--border-strong);padding:1.5rem 0 0}.readout-grid{grid-template-columns:1fr 1fr}.poster-body{grid-template-columns:1fr}.relation{grid-template-columns:1fr}.relation-arrow{transform:rotate(90deg);text-align:center}.section-head{grid-template-columns:3.7rem 1fr}}
+@media(max-width:560px){body{font-size:15px}.page{width:min(100% - 1rem,1200px)}.topbar{position:static}.topbar .grow{display:none}.topbar>*{flex:1 1 auto}.topbar .date{flex-basis:100%;text-align:center}.readout-grid{grid-template-columns:1fr}.warning{grid-template-columns:1fr}.footer{display:block}.footer span{display:block;margin:.35rem 0}.hero-formula{white-space:normal}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.progress span{transition:none}}
+@media print{html,html[data-theme="dark"]{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#bbb;--border-strong:#888;--accent:#5b1f27;--shadow-low:none}body{background:#fff}.page{width:100%;padding:0}.topbar,dialog,.coordinate-field{display:none!important}.cover{min-height:auto;padding:1rem 0 2rem}.section{padding:1.6rem 0}.poster:not([open]) .poster-body{display:grid}.poster img{max-height:240mm}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">К содержанию</a>
+<div class="page">
+<nav class="topbar" aria-label="Навигация по занятию">
+<a href="index.html">← Кабинет</a>
+<a href="#core">Связь</a>
+<a href="#slope">Наклон</a>
+<a href="#parallel">Параллельность</a>
+<a href="#contact">Точка касания</a>
+<a href="#errors">Ошибки</a>
+<span class="grow"></span>
+<span class="date">25.09.2026</span>
+<a class="lab" href="25.09.26-lab.html?mode=slope">Цифровая лаборатория</a>
+<a href="../pdf_docs/25.09.26.pdf" download="25.09.26.pdf">PDF</a>
+<a href="../tex_docs/25.09.26.tex">TeX</a>
+<button id="theme" type="button" aria-label="Переключить светлую и тёмную тему">Тема</button>
+<button type="button" onclick="window.print()">Печать</button>
+</nav>
+
+<main id="content">
+<header class="cover" data-coordinate-field>
+<div class="cover-copy">
+<p class="kicker">ЕГЭ · производная · касательная · 25 сентября 2026</p>
+<h1>Производная и касательная</h1>
+<p class="lead">Ключ урока — научиться видеть одно число в трёх формах: значение производной, угловой коэффициент касательной и тангенс угла её наклона. После этого задачи на график, параллельность и точку касания сводятся к коротким алгоритмам.</p>
+<div class="signature">
+<span class="navigator" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor"/><path d="M15.8 8.2 13.4 13.4 8.2 15.8 10.6 10.6 15.8 8.2Z" fill="currentColor"/></svg></span>
+<div><b>Николь Саркисьянц</b><br>Лёвин Артём Александрович · персональный учебный конспект</div>
+</div>
+<nav class="route" aria-label="Маршрут занятия">
+<a href="#core">01 · одно число</a><a href="#slope">02 · две точки</a><a href="#parallel">03 · одинаковый k</a><a href="#contact">04 · два условия</a><a href="#errors">05 · контроль</a>
+</nav>
+</div>
+
+<aside class="instrument" aria-label="Главная формула занятия">
+<div class="instrument-label">CORE RELATION / 25.09</div>
+<div class="hero-formula">f′(x₀) = k = tg α</div>
+<svg viewBox="0 0 500 330" role="img" aria-labelledby="heroTitle">
+<title id="heroTitle">Кривая и касательная с углом наклона</title>
+<path d="M42 255H464M92 35V294" stroke="var(--border-strong)" stroke-width="2"/>
+<path d="M118 205C178 78 255 82 302 190S388 270 438 112" fill="none" stroke="var(--graph)" stroke-width="6" stroke-linecap="round"/>
+<path d="M126 248L430 91" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/>
+<circle cx="282" cy="168" r="7" fill="var(--text-primary)"/>
+<path d="M282 168V255" stroke="var(--border-strong)" stroke-dasharray="6 6"/>
+<path d="M282 255h62" stroke="var(--signal)" stroke-width="3"/>
+<path d="M337 255A55 55 0 0 0 329 227" fill="none" stroke="var(--signal)" stroke-width="3"/>
+<text x="340" y="236" fill="var(--signal)" font-size="20" font-weight="700">α</text>
+<text x="292" y="280" fill="var(--text-secondary)" font-size="17">x₀</text>
+<text x="341" y="107" fill="var(--accent)" font-size="17">касательная</text>
+</svg>
+<div class="instrument-note"><span class="readout">READOUT</span><span>Касательная поднимается — производная положительна; опускается — отрицательна; горизонтальна — равна нулю.</span></div>
+</aside>
+</header>
+
+<details class="poster">
+<summary><span>Ментальная карта занятия</span><span>открыть</span></summary>
+<div class="poster-body">
+<p>Карта собирает пять опор урока: главную формулу, координаты, знак производной, два алгоритма и типичные ошибки.</p>
+<button class="poster-open" id="posterOpen" type="button" aria-label="Увеличить ментальную карту"><img src="../images/25.09.26.png" alt="Ментальная карта по теме производной и касательной" loading="lazy"></button>
+</div>
+</details>
+
+<section class="section" id="core" data-journey-stop data-journey-label="Связь">
+<div class="section-head"><span class="folio">01 / CORE</span><div><h2>Одно число — три языка</h2><p>Производная в точке описывает локальный наклон графика. В задачах на касательную это число можно читать как коэффициент k или как tg α.</p></div></div>
+<div class="readout-grid">
+<article class="readout-cell"><span class="readout">DERIVATIVE</span><div class="math">f′(x₀)</div><p>Производная функции в точке с абсциссой x₀.</p></article>
+<article class="readout-cell"><span class="readout">LINE</span><div class="math">y = kx + b</div><p>Касательная — прямая. С производной связан коэффициент перед x.</p></article>
+<article class="readout-cell"><span class="readout">ANGLE</span><div class="math">k = tg α</div><p>α — угол наклона прямой к положительному направлению оси Ox.</p></article>
+</div>
+<div class="formula-line">f′(x₀) &gt; 0 — касательная поднимается; &nbsp; f′(x₀) &lt; 0 — опускается; &nbsp; f′(x₀) = 0 — горизонтальна.</div>
+</section>
+
+<section class="section" id="slope" data-journey-stop data-journey-label="Наклон">
+<div class="section-head"><span class="folio">02 / SLOPE</span><div><h2>Как посчитать производную по касательной</h2><p>Вместо измерения угла используйте две точно читаемые точки одной и той же касательной.</p></div></div>
+<div class="slope-studio">
+<div class="board">
+<svg viewBox="0 0 640 430" role="img" aria-labelledby="slopeTitle">
+<title id="slopeTitle">Пример из пособия: функция x в квадрате делить на четыре и касательная y равно x минус один</title>
+<path d="M52 342H600M142 44V386" stroke="var(--border-strong)" stroke-width="2"/>
+<g stroke="var(--border-subtle)" stroke-width="1">
+<path d="M214 44V386M286 44V386M358 44V386M430 44V386M502 44V386"/>
+<path d="M52 270H600M52 198H600M52 126H600"/>
+</g>
+<path d="M70 330C155 145 250 104 340 139S478 252 565 74" fill="none" stroke="var(--graph)" stroke-width="6" stroke-linecap="round"/>
+<path d="M142 342L502 126" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/>
+<circle cx="286" cy="270" r="6" fill="var(--accent)"/><circle cx="430" cy="198" r="7" fill="var(--text-primary)"/>
+<path d="M286 270H430V198" fill="none" stroke="var(--signal)" stroke-width="3" stroke-dasharray="7 6"/>
+<text x="448" y="185" fill="var(--text-primary)" font-size="17">(2; 1)</text>
+<text x="214" y="295" fill="var(--accent)" font-size="17">(0; −1)</text>
+<text x="455" y="105" fill="var(--graph)" font-size="18">f(x)=x²/4</text>
+<text x="392" y="237" fill="var(--accent)" font-size="18">y=x−1</text>
+</svg>
+</div>
+<div>
+<div class="method">
+<div class="method-row"><div><h3>Выберите две точки</h3><p>Обе должны лежать на касательной и иметь точные координаты.</p></div></div>
+<div class="method-row"><div><h3>Посчитайте наклон</h3><p>Используйте координатные приращения: <b>k=(y₂−y₁)/(x₂−x₁)</b>.</p></div></div>
+<div class="method-row"><div><h3>Вернитесь к производной</h3><p>По главной связи урока <b>f′(x₀)=k</b>.</p></div></div>
+</div>
+<div class="formula-line">k = (1 − (−1)) / (2 − 0) = 2 / 2 = 1 &nbsp;⇒&nbsp; f′(2)=1.</div>
+<a class="lab-link" href="25.09.26-lab.html?mode=slope">Исследовать наклон в цифровой лаборатории →</a>
+</div>
+</div>
+</section>
+
+<section class="section" id="parallel" data-journey-stop data-journey-label="Параллельность">
+<div class="section-head"><span class="folio">03 / PARALLEL</span><div><h2>Параллельность сразу выдаёт производную</h2><p>Если касательная параллельна заданной прямой, у них совпадают угловые коэффициенты.</p></div></div>
+<div class="relation">
+<div class="relation-block"><b>Дана прямая</b><div class="formula-line">y = mx + c</div><p>Её угловой коэффициент равен m.</p></div>
+<div class="relation-arrow" aria-hidden="true">→</div>
+<div class="relation-block"><b>Касательная параллельна ей</b><div class="formula-line">k = m &nbsp;⇒&nbsp; f′(x₀)=m</div><p>Свободный коэффициент c для наклона роли не играет.</p></div>
+</div>
+<div class="two-col" style="margin-top:2rem">
+<div class="example"><h3>Если дан график производной</h3><p>Условие <b>f′(x)=m</b> превращается в поиск точек графика <b>y=f′(x)</b> на горизонтальном уровне <b>y=m</b>.</p><div class="formula-line">f′(x)=m &nbsp;⇔&nbsp; y=m на графике f′</div></div>
+<div class="example"><h3>Что читать в ответ</h3><p>Если просят количество точек — считайте пересечения с уровнем. Если просят абсциссы — выписывайте соответствующие значения x.</p><a class="lab-link" href="25.09.26-lab.html?mode=parallel">Проверить параллельность на модели →</a></div>
+</div>
+</section>
+
+<section class="section" id="contact" data-journey-stop data-journey-label="Касание">
+<div class="section-head"><span class="folio">04 / CONTACT</span><div><h2>Функция и конкретная касательная: нужны два условия</h2><p>Совпадение наклона даёт кандидатов. Принадлежность одной и той же точке отбирает те значения x, где дана именно эта касательная.</p></div></div>
+<div class="relation">
+<div class="relation-block"><b>Условие 1 · одинаковый наклон</b><div class="formula-line">f′(x₀)=k</div><p>Сначала решите это уравнение и получите кандидатов.</p></div>
+<div class="relation-arrow" aria-hidden="true">+</div>
+<div class="relation-block"><b>Условие 2 · общая точка</b><div class="formula-line">f(x₀)=kx₀+b</div><p>Проверьте каждый найденный кандидат по уравнению касательной.</p></div>
+</div>
+
+<div class="example" style="margin-top:2rem">
+<h3>Пример из пособия</h3>
+<p>Прямая <b>y=−2x−12</b> касается графика <b>f(x)=x³−2x²−6x−4</b>.</p>
+<div class="math-row">f′(x)=3x²−4x−6.</div>
+<div class="math-row">3x²−4x−6=−2 &nbsp;⇒&nbsp; 3x²−4x−4=0.</div>
+<div class="math-row">Кандидаты: x=2 и x=−2/3.</div>
+<div class="math-row">При x=2: &nbsp; f(2)=−16, &nbsp; −2·2−12=−16.</div>
+<div class="math-row">При x=−2/3 значения функции и прямой различаются.</div>
+<p class="result">Абсцисса точки касания: x₀=2.</p>
+</div>
+</section>
+
+<section class="section" id="errors" data-journey-stop data-journey-label="Контроль">
+<div class="section-head"><span class="folio">05 / CONTROL</span><div><h2>Пять мест, где чаще всего теряется решение</h2><p>Проверяйте их перед записью ответа.</p></div></div>
+<div class="warning-list">
+<div class="warning"><b>Ошибка 01</b><p>Для вычисления k берут точки на графике функции вместо точек на касательной.</p></div>
+<div class="warning"><b>Ошибка 02</b><p>Используют только длины катетов и забывают восстановить знак для убывающей касательной.</p></div>
+<div class="warning"><b>Ошибка 03</b><p>В уравнении y=kx+b принимают свободный коэффициент b за угловой коэффициент.</p></div>
+<div class="warning"><b>Ошибка 04</b><p>Путают график функции y=f(x) с графиком производной y=f′(x).</p></div>
+<div class="warning"><b>Ошибка 05</b><p>После решения f′(x)=k не проверяют все кандидаты условием f(x)=kx+b.</p></div>
+</div>
+
+<div class="two-col" style="margin-top:2rem">
+<div><h3>Мини-памятка</h3><div class="formula-line">k = Δy / Δx</div><div class="formula-line">f′(x₀)=k=tg α</div><div class="formula-line">касательная ∥ y=mx+c &nbsp;⇒&nbsp; f′(x₀)=m</div></div>
+<div>
+<h3>Самопроверка</h3>
+<div class="checks" id="checks">
+<label class="check"><input type="checkbox"><span>Нахожу k по двум точкам касательной.<small>Использую именно координатные приращения Δy/Δx.</small></span></label>
+<label class="check"><input type="checkbox"><span>Сохраняю знак производной.<small>Вверх — плюс, вниз — минус, горизонтально — ноль.</small></span></label>
+<label class="check"><input type="checkbox"><span>Использую параллельность как равенство угловых коэффициентов.<small>Из y=mx+c беру коэффициент m.</small></span></label>
+<label class="check"><input type="checkbox"><span>Читаю f′(x)=m как уровень y=m на графике производной.<small>После этого выполняю именно действие из вопроса.</small></span></label>
+<label class="check"><input type="checkbox"><span>Для конкретной касательной проверяю оба условия.<small>f′(x₀)=k и f(x₀)=kx₀+b.</small></span></label>
+</div>
+<div class="progress" aria-hidden="true"><span id="progress"></span></div>
+<p class="status" id="checkStatus" aria-live="polite"></p>
+</div>
+</div>
+</section>
+</main>
+
+<footer class="footer"><span>Николь Саркисьянц · ЕГЭ по профильной математике</span><span>Лёвин Артём Александрович · 25.09.2026</span></footer>
+</div>
+
+<dialog id="posterDialog" aria-label="Ментальная карта занятия">
+<button id="posterClose" type="button" aria-label="Закрыть увеличенное изображение">×</button>
+<img class="dialog-img" src="../images/25.09.26.png" alt="Увеличенная ментальная карта по теме производной и касательной">
+</dialog>
+
+<script src="../../../shared/student-dashboard/atlas-motion.js"></script>
+<script>
+(function(){
+  var root=document.documentElement;
+  var themeButton=document.getElementById('theme');
+  var themeKey='nikol-lesson-theme';
+  try{
+    var saved=localStorage.getItem(themeKey);
+    if(saved==='dark'||saved==='light')root.dataset.theme=saved;
+  }catch(_){}
+  themeButton.addEventListener('click',function(){
+    var next=root.dataset.theme==='dark'?'light':'dark';
+    root.dataset.theme=next;
+    try{localStorage.setItem(themeKey,next)}catch(_){}
+  });
+
+  var checks=[].slice.call(document.querySelectorAll('#checks input[type="checkbox"]'));
+  var progress=document.getElementById('progress');
+  var status=document.getElementById('checkStatus');
+  var checkKey='nikol-25-09-checks';
+  try{
+    var states=JSON.parse(localStorage.getItem(checkKey)||'[]');
+    checks.forEach(function(box,i){box.checked=Boolean(states[i])});
+  }catch(_){}
+  function updateChecks(){
+    var done=checks.filter(function(box){return box.checked}).length;
+    progress.style.width=(done/checks.length*100)+'%';
+    status.textContent=done+' из '+checks.length+' пунктов отмечено';
+    try{localStorage.setItem(checkKey,JSON.stringify(checks.map(function(box){return box.checked})))}catch(_){}
+  }
+  checks.forEach(function(box){box.addEventListener('change',updateChecks)});
+  updateChecks();
+
+  var dialog=document.getElementById('posterDialog');
+  var opener=document.getElementById('posterOpen');
+  var close=document.getElementById('posterClose');
+  var lastOpener=null;
+  opener.addEventListener('click',function(){lastOpener=opener;dialog.showModal();close.focus()});
+  close.addEventListener('click',function(){dialog.close()});
+  dialog.addEventListener('click',function(event){if(event.target===dialog)dialog.close()});
+  dialog.addEventListener('close',function(){if(lastOpener)lastOpener.focus()});
+})();
+</script>
+</body>
+</html>
