@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория: выколотая точка и горизонталь y=m · София Кальней · 27.09.2026">
+<title>Лаборатория: выколотая точка · София Кальней</title>
+<style>
+:root{
+  --surface-page:#f4f0e7;--surface-raised:#fffdf8;--surface-soft:#e9efe9;
+  --text-primary:#172823;--text-secondary:#5d6a64;--border-subtle:#cdd7d0;
+  --border-strong:#72877c;--accent:#245f56;--accent-hover:#184b43;
+  --accent-soft:#d7e6df;--danger:#a24a40;--warning:#9b6a2d;--focus-ring:#d18a48;
+  --radius-sm:8px;--radius-md:15px;--radius-lg:26px;--shadow:0 14px 34px rgba(27,48,40,.11)
+}
+html[data-theme="dark"]{
+  --surface-page:#12201c;--surface-raised:#182b25;--surface-soft:#20382f;
+  --text-primary:#f0f3ee;--text-secondary:#b7c3bd;--border-subtle:#345147;
+  --border-strong:#789388;--accent:#8fc6b5;--accent-hover:#abd7ca;
+  --accent-soft:#25483d;--danger:#ef9a8f;--warning:#ddb16e;--focus-ring:#f1b77d;
+  --shadow:0 16px 40px rgba(0,0,0,.25)
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font-family:Inter,system-ui,"Segoe UI",sans-serif;line-height:1.55}
+a{color:inherit}.skip{position:absolute;left:-9999px}.skip:focus{left:.5rem;top:.5rem;background:var(--surface-raised);padding:.6rem;z-index:10}
+header{max-width:1220px;margin:auto;padding:1rem 1.2rem;display:flex;align-items:center;gap:1rem}
+header a{text-decoration:none;font-weight:800}.spacer{flex:1}
+button{font:inherit;color:inherit;background:var(--surface-raised);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:.65rem .8rem;cursor:pointer}
+button:hover{border-color:var(--accent)}button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+main{max-width:1220px;margin:auto;padding:1.2rem 1.2rem 4rem}
+.hero{padding:2rem 0 2.5rem;border-bottom:1px solid var(--border-strong)}
+.kicker{color:var(--accent);font-weight:850;letter-spacing:.1em;text-transform:uppercase;font-size:.78rem}
+h1{font-size:clamp(2.5rem,6vw,5.2rem);line-height:.95;letter-spacing:-.05em;margin:.4rem 0 1rem}
+.lead{max-width:800px;color:var(--text-secondary);font-size:1.15rem}
+.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(270px,.65fr);gap:1.2rem;margin-top:1.2rem;align-items:start}
+.stage,.panel{background:var(--surface-raised);border:1px solid var(--border-subtle);border-radius:var(--radius-md);box-shadow:var(--shadow)}
+.stage{padding:1rem}.panel{padding:1.1rem;position:sticky;top:1rem}
+canvas{width:100%;height:clamp(390px,58vh,620px);display:block;touch-action:none}
+.readout{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:.75rem}
+.metric{background:var(--surface-soft);padding:.7rem;border-radius:var(--radius-sm)}
+.metric small{display:block;color:var(--text-secondary)}.metric strong{font-size:1.3rem}
+.control{margin:1rem 0}.control label{display:flex;justify-content:space-between;gap:.8rem;font-weight:800}.control input{width:100%;margin-top:.6rem}
+.preset{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}.preset button[data-active="true"]{background:var(--accent);color:var(--surface-page)}
+.formula{font:800 1.05rem/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--accent-soft);padding:.8rem;border-radius:var(--radius-sm);overflow:auto}
+.explain{border-left:3px solid var(--accent);padding-left:.9rem;margin-top:1rem;color:var(--text-secondary)}
+.result{margin-top:1rem;padding:1rem;border-top:2px solid var(--accent);background:var(--surface-soft)}
+.legend{display:flex;gap:.8rem;flex-wrap:wrap;color:var(--text-secondary);font-size:.9rem;margin-top:.6rem}
+.dot{display:inline-block;width:.7rem;height:.7rem;border-radius:50%;margin-right:.25rem;background:var(--accent)}.dot.hole{background:transparent;border:2px solid var(--danger)}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.panel{position:static}.readout{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#lab">К лаборатории</a>
+<header>
+  <a href="27.09.26.html">← Вернуться к занятию</a>
+  <span class="spacer"></span>
+  <button id="theme" type="button">Тёмная тема</button>
+</header>
+
+<main id="lab">
+<section class="hero">
+  <p class="kicker">Цифровая лаборатория · 27.09.26</p>
+  <h1>Горизонталь против выколотой параболы</h1>
+  <p class="lead">Исследуйте один и тот же график из занятия: <strong>y=x²+x−12, x≠−2</strong>. Меняйте уровень <strong>m</strong> и наблюдайте, сколько общих точек остаётся у прямой y=m после удаления точки (−2;−10).</p>
+</section>
+
+<div class="layout">
+  <section class="stage" aria-label="Интерактивный график">
+    <canvas id="plot" width="900" height="620" aria-label="Парабола y=x²+x−12, выколотая точка и горизонталь y=m"></canvas>
+    <div class="legend"><span><i class="dot"></i>парабола</span><span><i class="dot hole"></i>выколотая точка</span><span>горизонтальная линия — y=m</span></div>
+    <div class="readout">
+      <div class="metric"><small>m</small><strong id="mOut">−10</strong></div>
+      <div class="metric"><small>общих точек</small><strong id="countOut">1</strong></div>
+      <div class="metric"><small>дискриминант</small><strong id="dOut">9</strong></div>
+    </div>
+  </section>
+
+  <aside class="panel">
+    <h2>Управление</h2>
+    <div class="control">
+      <label for="m">Уровень y=m <span id="sliderValue">−10</span></label>
+      <input id="m" type="range" min="-14" max="8" step="0.25" value="-10">
+    </div>
+    <div class="preset" aria-label="Особые уровни">
+      <button type="button" data-m="-12.25">Вершина −49/4</button>
+      <button type="button" data-m="-10">Выкол −10</button>
+      <button type="button" data-m="-12">Два пересечения</button>
+      <button type="button" data-m="0">Уровень 0</button>
+    </div>
+
+    <h2>Что вычисляется</h2>
+    <div class="formula">x² + x − 12 = m<br>x² + x − (12 + m) = 0</div>
+    <p class="explain">Полная парабола имеет корни этого квадратного уравнения. Затем из пересечений исключается x=−2, потому что исходная функция при x=−2 не определена.</p>
+
+    <div class="result">
+      <strong id="finding">При m=−10 остаётся одна общая точка.</strong>
+      <p id="detail">Вторая точка полной параболы — (−2;−10), но она выколота.</p>
+    </div>
+
+    <h2>Проверка идеи занятия</h2>
+    <p>Два специальных уровня дают ровно одну общую точку:</p>
+    <div class="formula">m = −49/4<br>m = −10</div>
+  </aside>
+</div>
+</main>
+
+<script>
+(function(){
+  const root=document.documentElement, themeBtn=document.getElementById('theme');
+  let theme=localStorage.getItem('sofya-lab-20260927-theme')||'light';
+  function themeRender(){root.dataset.theme=theme;themeBtn.textContent=theme==='dark'?'Светлая тема':'Тёмная тема';draw()}
+  themeBtn.onclick=function(){theme=theme==='dark'?'light':'dark';localStorage.setItem('sofya-lab-20260927-theme',theme);themeRender()};
+
+  const canvas=document.getElementById('plot'), ctx=canvas.getContext('2d'), slider=document.getElementById('m');
+  const mOut=document.getElementById('mOut'), countOut=document.getElementById('countOut'), dOut=document.getElementById('dOut');
+  const sliderValue=document.getElementById('sliderValue'), finding=document.getElementById('finding'), detail=document.getElementById('detail');
+
+  function css(name){return getComputedStyle(root).getPropertyValue(name).trim()}
+  function fmt(v){if(Math.abs(v+12.25)<1e-9)return '−49/4';return String(v).replace('-', '−').replace('.', ',')}
+  function intersections(m){
+    const D=49+4*m;
+    if(D<0)return {D:D,roots:[]};
+    if(Math.abs(D)<1e-9)return {D:0,roots:[-0.5]};
+    const s=Math.sqrt(D);
+    return {D:D,roots:[(-1-s)/2,(-1+s)/2]};
+  }
+  function validRoots(m){
+    return intersections(m).roots.filter(function(x){return Math.abs(x+2)>1e-7});
+  }
+  function resize(){
+    const r=canvas.getBoundingClientRect(), d=window.devicePixelRatio||1;
+    canvas.width=Math.round(r.width*d);canvas.height=Math.round(r.height*d);
+    ctx.setTransform(d,0,0,d,0,0);draw();
+  }
+  function draw(){
+    const r=canvas.getBoundingClientRect(), W=r.width,H=r.height;
+    if(!W||!H)return;
+    ctx.clearRect(0,0,W,H);
+    const xmin=-6,xmax=5,ymin=-15,ymax=10;
+    const X=function(x){return (x-xmin)/(xmax-xmin)*W};
+    const Y=function(y){return H-(y-ymin)/(ymax-ymin)*H};
+    ctx.strokeStyle=css('--border-subtle');ctx.lineWidth=1;
+    for(let x=-6;x<=5;x++){ctx.beginPath();ctx.moveTo(X(x),0);ctx.lineTo(X(x),H);ctx.stroke()}
+    for(let y=-15;y<=10;y+=5){ctx.beginPath();ctx.moveTo(0,Y(y));ctx.lineTo(W,Y(y));ctx.stroke()}
+    ctx.strokeStyle=css('--border-strong');ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(0,Y(0));ctx.lineTo(W,Y(0));ctx.stroke();
+    ctx.beginPath();ctx.moveTo(X(0),0);ctx.lineTo(X(0),H);ctx.stroke();
+
+    ctx.strokeStyle=css('--accent');ctx.lineWidth=3;ctx.beginPath();
+    let first=true;
+    for(let px=0;px<=W;px+=2){
+      const x=xmin+px/W*(xmax-xmin), y=x*x+x-12;
+      if(y<ymin-2||y>ymax+2){first=true;continue}
+      if(first){ctx.moveTo(X(x),Y(y));first=false}else ctx.lineTo(X(x),Y(y));
+    }
+    ctx.stroke();
+
+    const m=parseFloat(slider.value);
+    ctx.strokeStyle=css('--warning');ctx.lineWidth=2;ctx.setLineDash([8,6]);
+    ctx.beginPath();ctx.moveTo(0,Y(m));ctx.lineTo(W,Y(m));ctx.stroke();ctx.setLineDash([]);
+
+    const all=intersections(m).roots;
+    all.forEach(function(x){
+      if(Math.abs(x+2)<1e-7)return;
+      ctx.fillStyle=css('--warning');ctx.beginPath();ctx.arc(X(x),Y(m),6,0,Math.PI*2);ctx.fill();
+    });
+
+    ctx.fillStyle=css('--surface-raised');ctx.strokeStyle=css('--danger');ctx.lineWidth=3;
+    ctx.beginPath();ctx.arc(X(-2),Y(-10),7,0,Math.PI*2);ctx.fill();ctx.stroke();
+
+    ctx.fillStyle=css('--accent');ctx.beginPath();ctx.arc(X(-.5),Y(-12.25),5,0,Math.PI*2);ctx.fill();
+  }
+  function update(){
+    const m=parseFloat(slider.value), info=intersections(m), roots=validRoots(m);
+    mOut.textContent=fmt(m);sliderValue.textContent=fmt(m);
+    countOut.textContent=String(roots.length);dOut.textContent=fmt(info.D);
+    if(Math.abs(m+12.25)<1e-9){
+      finding.textContent='При m=−49/4 прямая касается параболы в вершине.';
+      detail.textContent='Дискриминант равен нулю, поэтому общая точка ровно одна.';
+    }else if(Math.abs(m+10)<1e-9){
+      finding.textContent='При m=−10 остаётся одна общая точка.';
+      detail.textContent='Вторая точка полной параболы — (−2;−10), но она выколота.';
+    }else if(roots.length===0){
+      finding.textContent='Общих точек нет.';
+      detail.textContent=info.D<0?'Горизонталь лежит ниже минимума параболы.':'Единственное пересечение исключено ОДЗ.';
+    }else if(roots.length===1){
+      finding.textContent='Общая точка одна.';
+      detail.textContent='Проверьте, связано ли это с касанием или с исключённой точкой.';
+    }else{
+      finding.textContent='Общих точек две.';
+      detail.textContent='Обе точки полной параболы допустимы для исходной функции.';
+    }
+    document.querySelectorAll('[data-m]').forEach(function(b){b.dataset.active=String(Math.abs(parseFloat(b.dataset.m)-m)<1e-9)});
+    draw();
+  }
+  slider.addEventListener('input',update);
+  document.querySelectorAll('[data-m]').forEach(function(b){b.onclick=function(){slider.value=b.dataset.m;update()}});
+  window.addEventListener('resize',resize);
+  themeRender();requestAnimationFrame(function(){resize();update()});
+})();
+</script>
+</body>
+</html>
