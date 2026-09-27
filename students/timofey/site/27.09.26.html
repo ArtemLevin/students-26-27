@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Финансово-экономические задачи ЕГЭ: вклады, кредиты, порядок начисления процентов и схемы погашения. Занятие Тимофея Васильченко 27.09.26.">
+<title>Вклады и кредиты · Тимофей Васильченко</title>
+<style>
+:root{
+  color-scheme:dark;
+  --surface-page:#0d1617;
+  --surface-raised:#132123;
+  --surface-soft:#18292b;
+  --surface-quiet:#102022;
+  --text-primary:#edf4f2;
+  --text-secondary:#a9bab6;
+  --text-inverse:#0c1919;
+  --border-subtle:#2b4244;
+  --border-strong:#4c6666;
+  --accent:#65b7ae;
+  --accent-hover:#83cbc3;
+  --accent-soft:#21423f;
+  --success:#83b996;
+  --danger:#dc8a83;
+  --warning:#d5ad6d;
+  --focus-ring:#b9e7e0;
+  --shadow-low:0 16px 42px rgba(0,0,0,.18);
+  --radius-sm:6px;
+  --radius-md:12px;
+  --radius-lg:20px;
+  --space-1:.35rem;
+  --space-2:.7rem;
+  --space-3:1.1rem;
+  --space-4:1.6rem;
+  --space-5:2.4rem;
+  --space-6:3.6rem;
+  --motion-fast:140ms;
+  --motion-normal:240ms;
+}
+html[data-theme="light"]{
+  color-scheme:light;
+  --surface-page:#f1eee6;
+  --surface-raised:#fbf8f1;
+  --surface-soft:#e8eee9;
+  --surface-quiet:#f5f1e9;
+  --text-primary:#1d2928;
+  --text-secondary:#65716e;
+  --text-inverse:#f5fbf9;
+  --border-subtle:#c9d2cd;
+  --border-strong:#94a7a1;
+  --accent:#236f69;
+  --accent-hover:#175c57;
+  --accent-soft:#d6e7e2;
+  --success:#3d7954;
+  --danger:#9b4b45;
+  --warning:#8b6327;
+  --focus-ring:#0f645e;
+  --shadow-low:0 16px 42px rgba(45,55,48,.09);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    linear-gradient(90deg,color-mix(in srgb,var(--border-subtle) 22%,transparent) 1px,transparent 1px) 0 0/48px 48px,
+    linear-gradient(color-mix(in srgb,var(--border-subtle) 18%,transparent) 1px,transparent 1px) 0 0/48px 48px,
+    var(--surface-page);
+  color:var(--text-primary);
+  font:16px/1.65 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+button,a{font:inherit}
+button{color:inherit}
+a{color:inherit}
+.skip{
+  position:fixed;left:1rem;top:-5rem;z-index:100;
+  padding:.7rem 1rem;background:var(--accent);color:var(--text-inverse);
+  text-decoration:none;border-radius:var(--radius-sm)
+}
+.skip:focus{top:1rem}
+.wrap{width:min(1180px,calc(100% - clamp(1.2rem,5vw,4.5rem)));margin:auto}
+.topbar{
+  position:sticky;top:0;z-index:30;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.65rem max(clamp(.6rem,4vw,2rem),calc((100vw - 1180px)/2));
+  border-bottom:1px solid var(--border-subtle);
+  background:color-mix(in srgb,var(--surface-page) 88%,transparent);
+  backdrop-filter:blur(12px)
+}
+.topbar a,.topbar button{
+  min-height:42px;display:inline-flex;align-items:center;
+  border:0;background:transparent;text-decoration:none;color:var(--text-secondary);
+  padding:.45rem .6rem
+}
+.topbar a:hover,.topbar button:hover{color:var(--text-primary)}
+.topbar a:focus-visible,.topbar button:focus-visible,.route a:focus-visible,.mode-btn:focus-visible,.answer-btn:focus-visible{
+  outline:3px solid var(--focus-ring);outline-offset:3px
+}
+.brand{font-weight:750;letter-spacing:.02em}
+.hero{
+  position:relative;
+  min-height:41rem;
+  padding:clamp(4rem,9vw,8rem) 0 clamp(2.2rem,5vw,4rem);
+  display:grid;grid-template-columns:minmax(0,1.32fr) minmax(17rem,.68fr);
+  gap:clamp(2rem,8vw,8rem);align-items:end;
+  border-bottom:1px solid var(--border-strong)
+}
+.hero::before{
+  content:"";position:absolute;right:0;top:9%;width:min(42vw,480px);aspect-ratio:1;
+  border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);
+  background:
+    linear-gradient(90deg,transparent 49.8%,color-mix(in srgb,var(--accent) 25%,transparent) 50%,transparent 50.2%),
+    linear-gradient(transparent 49.8%,color-mix(in srgb,var(--accent) 25%,transparent) 50%,transparent 50.2%);
+  transform:rotate(7deg);opacity:.55;pointer-events:none
+}
+.hero-copy,.folio{position:relative;z-index:1}
+.kicker{
+  margin:0 0 .8rem;color:var(--accent);
+  font:750 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;
+  text-transform:uppercase;letter-spacing:.13em
+}
+h1{
+  margin:.2rem 0 1.35rem;max-width:10ch;
+  font:600 clamp(4rem,9vw,8.7rem)/.82 Georgia,"Times New Roman",serif;
+  letter-spacing:-.065em;text-wrap:balance
+}
+.lead{max-width:48rem;margin:0;color:var(--text-secondary);font-size:clamp(1rem,1.5vw,1.2rem)}
+.folio{
+  min-height:19rem;padding:1.2rem 0 1rem 1.4rem;
+  border-left:1px solid var(--border-strong);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--surface-page) 80%,transparent),transparent)
+}
+.folio .date{
+  color:var(--accent);font:500 clamp(3.2rem,6vw,6.2rem)/.78 Georgia,serif;
+  letter-spacing:-.06em
+}
+.folio strong{margin-top:1.2rem;font-family:Georgia,serif}
+.folio small{color:var(--text-secondary);max-width:18rem}
+.hero-formula{
+  margin-top:2rem;padding:1rem 0;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);
+  display:flex;flex-wrap:wrap;gap:.8rem 2rem;align-items:baseline
+}
+.hero-formula b{font:500 clamp(1.55rem,3vw,2.4rem)/1.15 Georgia,serif;color:var(--accent)}
+.hero-formula span{color:var(--text-secondary)}
+.route{
+  display:flex;flex-wrap:wrap;gap:0;
+  border-bottom:1px solid var(--border-subtle);
+  margin-bottom:clamp(3rem,6vw,5rem)
+}
+.route a{
+  min-height:44px;display:inline-flex;align-items:center;padding:.6rem .85rem;
+  color:var(--text-secondary);text-decoration:none;border-bottom:2px solid transparent
+}
+.route a:hover{color:var(--text-primary);border-color:var(--accent)}
+main section{scroll-margin-top:76px}
+.section-head{
+  display:grid;grid-template-columns:11rem minmax(0,1fr);gap:1.2rem;
+  padding-top:var(--space-5);margin-bottom:var(--space-4);border-top:1px solid var(--border-strong)
+}
+.section-no{
+  color:var(--accent);font:750 .72rem/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;
+  letter-spacing:.12em;text-transform:uppercase
+}
+.section-head h2{
+  margin:0;max-width:24ch;font:600 clamp(2.2rem,4.6vw,4.3rem)/.96 Georgia,serif;letter-spacing:-.045em
+}
+.prose{max-width:58rem;margin-left:min(12.2rem,15vw)}
+.prose p{color:var(--text-secondary)}
+.prose strong{color:var(--text-primary)}
+.formula-line{
+  margin:1.4rem 0;padding:.9rem 0;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);
+  font:500 clamp(1.35rem,2.7vw,2.1rem)/1.3 Georgia,serif;color:var(--accent)
+}
+.ledger{
+  margin:2rem 0 4rem;padding:clamp(1.1rem,2.8vw,2rem);
+  border:1px solid var(--border-strong);background:var(--surface-raised);box-shadow:var(--shadow-low)
+}
+.ledger-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;margin-bottom:1.4rem}
+.ledger-head h3{margin:0;font:600 clamp(1.6rem,3vw,2.5rem)/1.1 Georgia,serif}
+.ledger-head p{margin:.35rem 0 0;color:var(--text-secondary)}
+.mode-switch{display:flex;border:1px solid var(--border-subtle)}
+.mode-btn{
+  min-height:42px;border:0;border-right:1px solid var(--border-subtle);background:transparent;padding:.6rem .85rem;cursor:pointer
+}
+.mode-btn:last-child{border-right:0}
+.mode-btn[aria-pressed="true"]{background:var(--accent);color:var(--text-inverse)}
+.state-flow{
+  display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1px;
+  background:var(--border-subtle);border:1px solid var(--border-subtle)
+}
+.state{
+  min-height:8.5rem;padding:1rem;background:var(--surface-soft);
+  display:flex;flex-direction:column;justify-content:space-between;gap:.7rem
+}
+.state small{color:var(--text-secondary);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}
+.state strong{font:600 1.15rem/1.15 Georgia,serif}
+.state .value{color:var(--accent);font-weight:800}
+.ledger-note{margin:1rem 0 0;color:var(--text-secondary)}
+.split{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(19rem,.72fr);gap:clamp(1.5rem,5vw,4rem);align-items:start
+}
+.rule-list{list-style:none;padding:0;margin:0}
+.rule-list li{padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+.rule-list li:first-child{border-top:1px solid var(--border-subtle)}
+.rule-list b{display:block;margin-bottom:.2rem;color:var(--accent)}
+.worked{
+  padding:1.25rem;border-left:3px solid var(--accent);background:var(--surface-quiet)
+}
+.worked h3{margin:.1rem 0 .8rem;font-family:Georgia,serif}
+.worked p{margin:.45rem 0;color:var(--text-secondary)}
+.worked .equation{color:var(--text-primary);font:500 1.15rem/1.45 Georgia,serif}
+.credit-table{width:100%;border-collapse:collapse;margin:1.4rem 0 2rem}
+.credit-table th,.credit-table td{padding:.75rem .7rem;text-align:left;border-bottom:1px solid var(--border-subtle);vertical-align:top}
+.credit-table th{color:var(--accent);font-size:.78rem;text-transform:uppercase;letter-spacing:.07em}
+.schemes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--border-subtle);border:1px solid var(--border-subtle)}
+.scheme{background:var(--surface-raised);padding:1.25rem;min-height:17rem}
+.scheme .tag{color:var(--warning);font:750 .7rem/1.2 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em}
+.scheme h3{font-family:Georgia,serif;margin:.55rem 0}
+.scheme p{color:var(--text-secondary)}
+.scheme .math{display:block;margin-top:1rem;color:var(--accent);font:600 1.25rem Georgia,serif}
+.errors{columns:2;column-gap:3rem;padding:0;list-style:none}
+.errors li{break-inside:avoid;padding:.9rem 0;border-top:1px solid var(--border-subtle)}
+.errors strong{color:var(--danger)}
+.practice-intro{display:flex;align-items:end;justify-content:space-between;gap:1rem;margin-bottom:1.4rem}
+.practice-intro p{margin:0;color:var(--text-secondary)}
+.tasks{counter-reset:task;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--border-subtle);border:1px solid var(--border-subtle)}
+.task{counter-increment:task;background:var(--surface-raised);padding:1.15rem;min-height:13rem}
+.task::before{content:"0" counter(task);display:block;color:var(--accent);font:750 .72rem ui-monospace,monospace;margin-bottom:.75rem}
+.task p{margin:0;color:var(--text-secondary)}
+.task strong{color:var(--text-primary)}
+.answer-panel{margin-top:1rem;border-top:1px solid var(--border-strong);padding-top:1rem}
+.answer-btn{min-height:44px;border:1px solid var(--accent);background:transparent;color:var(--accent);padding:.65rem 1rem;cursor:pointer}
+.answer-btn:hover{background:var(--accent-soft)}
+.answers{margin-top:1rem}
+.answers[hidden]{display:none}
+.answers table{width:100%;border-collapse:collapse}
+.answers th,.answers td{padding:.65rem;border-bottom:1px solid var(--border-subtle);text-align:left}
+.answers th{color:var(--accent)}
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem 1.2rem;margin:1.5rem 0}
+.check{
+  display:grid;grid-template-columns:auto 1fr;gap:.7rem;align-items:start;
+  padding:.8rem 0;border-bottom:1px solid var(--border-subtle);color:var(--text-secondary)
+}
+.check input{width:1.15rem;height:1.15rem;margin-top:.2rem;accent-color:var(--accent)}
+footer{
+  margin-top:5rem;padding:1.4rem 0 3rem;border-top:1px solid var(--border-strong);
+  display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;color:var(--text-secondary);font-size:.85rem
+}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:auto;padding-top:5rem}
+  .folio{min-height:12rem}
+  .section-head{grid-template-columns:1fr;gap:.45rem}
+  .prose{margin-left:0}
+  .state-flow{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .split{grid-template-columns:1fr}
+  .schemes{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+  h1{font-size:clamp(3.4rem,17vw,5rem)}
+  .ledger-head,.practice-intro{display:block}
+  .mode-switch{margin-top:1rem;width:max-content}
+  .state-flow{grid-template-columns:1fr}
+  .state{min-height:auto}
+  .tasks,.checks{grid-template-columns:1fr}
+  .errors{columns:1}
+  .credit-table{font-size:.9rem}
+  .topbar .brand{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+@media print{
+  .topbar,.route,.answer-btn{display:none!important}
+  body{background:#fff;color:#111}
+  .wrap{width:100%}
+  .hero{min-height:auto;padding:1rem 0 2rem}
+  .hero::before{display:none}
+  .ledger,.scheme,.task{box-shadow:none}
+  .answers[hidden]{display:block}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">К содержанию</a>
+<header class="topbar">
+  <a href="index.html">← В кабинет</a>
+  <span class="brand">Тимофей · профильная математика</span>
+  <button id="themeToggle" type="button" aria-label="Переключить цветовую тему">Светлая тема</button>
+</header>
+
+<div class="wrap">
+<header class="hero" aria-labelledby="pageTitle">
+  <div class="hero-copy">
+    <p class="kicker">Финансовая математика · ЕГЭ</p>
+    <h1 id="pageTitle">Вклады и кредиты</h1>
+    <p class="lead">Главный инструмент занятия — таблица состояний по годам. Сначала фиксируем реальный порядок событий, затем определяем базу начисления процентов и только после этого считаем платёж или итоговую сумму.</p>
+    <div class="hero-formula">
+      <b aria-label="p равно r делить на сто">p = r / 100</b>
+      <b aria-label="S новое равно S умножить на один плюс p">S<sub>нов</sub> = S(1+p)</b>
+      <span>Проценты работают только после того, как установлена сумма, от которой они начисляются.</span>
+    </div>
+  </div>
+  <aside class="folio" aria-label="Метаданные занятия">
+    <span class="date">27.09</span>
+    <strong>Тимофей Васильченко</strong>
+    <small>Лёвин Артём Александрович · вклады, кредиты, равные платежи и равномерное уменьшение долга</small>
+  </aside>
+</header>
+
+<nav class="route" aria-label="Маршрут занятия">
+  <a href="#idea">Идея</a>
+  <a href="#deposits">Вклады</a>
+  <a href="#credits">Кредиты</a>
+  <a href="#schemes">Схемы погашения</a>
+  <a href="#errors">Ошибки</a>
+  <a href="#practice">10 задач</a>
+</nav>
+
+<main id="content">
+<section id="idea">
+  <div class="section-head">
+    <span class="section-no">01 · ориентир</span>
+    <h2>Деньги как последовательность состояний</h2>
+  </div>
+  <div class="prose">
+    <p>Финансовая задача становится проще, если рассматривать сумму как величину, которая последовательно меняется во времени. Для каждого года важно зафиксировать <strong>порядок событий</strong>: когда начисляются проценты, когда совершается пополнение, снятие или платёж.</p>
+    <div class="formula-line">p = r / 100 &nbsp; · &nbsp; множитель роста = 1 + p</div>
+    <ul class="rule-list">
+      <li><b>Переведите ставку.</b> 10% = 0,1, а множитель увеличения равен 1,1.</li>
+      <li><b>Отделяйте тело от операций.</b> Не смешивайте исходную сумму вклада или кредита с процентами, взносами и платежами.</li>
+      <li><b>Не угадывайте формулу.</b> Сначала восстановите события по годам; уравнение появляется после заполнения модели.</li>
+    </ul>
+  </div>
+
+  <div class="ledger" aria-labelledby="ledgerTitle">
+    <div class="ledger-head">
+      <div>
+        <h3 id="ledgerTitle">Два маршрута одной идеи</h3>
+        <p id="ledgerDescription">Переключите режим: значения взяты из разобранных на занятии примеров.</p>
+      </div>
+      <div class="mode-switch" role="group" aria-label="Выбор примера">
+        <button class="mode-btn" type="button" data-mode="deposit" aria-pressed="true">Вклад</button>
+        <button class="mode-btn" type="button" data-mode="credit" aria-pressed="false">Кредит</button>
+      </div>
+    </div>
+    <div class="state-flow" id="stateFlow" aria-live="polite"></div>
+    <p class="ledger-note" id="ledgerNote"></p>
+  </div>
+</section>
+
+<section id="deposits">
+  <div class="section-head">
+    <span class="section-no">02 · вклады</span>
+    <h2>Сначала найдите базу начисления</h2>
+  </div>
+  <div class="split">
+    <div>
+      <ul class="rule-list">
+        <li><b>Пополнение до процентов.</b> Сначала прибавьте его к сумме на счёте, затем начисляйте процент.</li>
+        <li><b>Пополнение после процентов.</b> Оно увеличивает итог текущего года; проценты на добавку начнут начисляться со следующего периода.</li>
+        <li><b>Эквивалентные формулировки.</b> «В конце первого года после процентов внесли A» и «в начале второго года до процентов внесли A» описывают один момент между периодами.</li>
+        <li><b>Снятие.</b> Сначала определите момент снятия и только затем базу, от которой считается процент.</li>
+      </ul>
+      <div class="formula-line">S<sub>n</sub> = S<sub>0</sub>(1+p)<sup>n</sup></div>
+      <p>Эта короткая формула применима, когда ставка постоянна и дополнительных операций нет. Если ставка меняется, множители меняются вместе с ней: S<sub>3</sub> = S<sub>0</sub>(1+p<sub>1</sub>)(1+p<sub>2</sub>)(1+p<sub>3</sub>).</p>
+    </div>
+    <aside class="worked">
+      <h3>Разобранный вклад</h3>
+      <p>120 млн руб., 15% годовых; в начале второго и третьего годов добавляют по 10 млн руб.</p>
+      <p class="equation">120 → 138</p>
+      <p class="equation">138 + 10 = 148</p>
+      <p class="equation">148 · 1,15 = 170,2</p>
+      <p class="equation">170,2 + 10 = 180,2</p>
+      <p class="equation">180,2 · 1,15 = 207,23</p>
+      <p><strong>Итог:</strong> 207,23 млн руб.</p>
+    </aside>
+  </div>
+  <div class="prose">
+    <h3>Неизвестная ставка</h3>
+    <p>Если ставка одинакова каждый год, удобно обозначить x = 1 + p. В разобранном примере 500 тыс. руб. за три года превратились в 665,5 тыс. руб.:</p>
+    <div class="formula-line">500x³ = 665,5 → x³ = 1,331 → x = 1,1 → r = 10%</div>
+  </div>
+</section>
+
+<section id="credits">
+  <div class="section-head">
+    <span class="section-no">03 · кредиты</span>
+    <h2>Одна таблица для разных схем</h2>
+  </div>
+  <div class="prose">
+    <p>Для стандартного порядка «проценты → платёж» остаток после периода описывает переход:</p>
+    <div class="formula-line">D<sub>после</sub> = D<sub>до</sub>(1+p) − P</div>
+    <p>Остаток одного года становится начальным долгом следующего. Если кредит к концу срока погашен полностью, последняя строка даёт условие D<sub>после</sub> = 0.</p>
+  </div>
+  <table class="credit-table">
+    <thead><tr><th>Этап</th><th>Смысл</th></tr></thead>
+    <tbody>
+      <tr><td>Начальный долг</td><td>Сколько Вы должны банку на начало года.</td></tr>
+      <tr><td>Начисленные проценты</td><td>p от начального долга текущего года.</td></tr>
+      <tr><td>Общая задолженность</td><td>Начальный долг + начисленные проценты.</td></tr>
+      <tr><td>Платёж</td><td>Сколько вносится банку в этом году.</td></tr>
+      <tr><td>Остаток долга</td><td>Общая задолженность − платёж.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="schemes">
+  <div class="section-head">
+    <span class="section-no">04 · распознавание</span>
+    <h2>Три схемы погашения</h2>
+  </div>
+  <div class="schemes">
+    <article class="scheme">
+      <span class="tag">Схема 1</span>
+      <h3>Платёж равен процентам</h3>
+      <p>Если после платежа долг должен остаться прежним, платёж компенсирует только начисленные проценты.</p>
+      <span class="math">P = pD</span>
+    </article>
+    <article class="scheme">
+      <span class="tag">Схема 2</span>
+      <h3>Платежи одинаковы</h3>
+      <p>Если несколько платежей по условию равны, обозначайте их одной переменной и доводите таблицу до полного погашения.</p>
+      <span class="math">P₁ = P₂ = … = x</span>
+    </article>
+    <article class="scheme">
+      <span class="tag">Схема 3</span>
+      <h3>Долг уменьшается равными долями</h3>
+      <p>Ежегодно погашается одинаковая часть исходного тела кредита. Проценты при этом считаются от текущего остатка.</p>
+      <span class="math">P<sub>k</sub> = S/n + pD<sub>k</sub></span>
+    </article>
+  </div>
+  <div class="worked" style="margin-top:1.5rem">
+    <h3>Разобранный кредит</h3>
+    <p>120 тыс. руб. на 3 года под 10%; тело долга уменьшается равными долями.</p>
+    <p class="equation">120 / 3 = 40 тыс. руб. тела кредита ежегодно</p>
+    <p class="equation">Платежи: 52 → 48 → 44 тыс. руб.</p>
+    <p class="equation">Остаток: 120 → 80 → 40 → 0</p>
+  </div>
+</section>
+
+<section id="errors">
+  <div class="section-head">
+    <span class="section-no">05 · контроль</span>
+    <h2>Ошибки, которые ломают модель</h2>
+  </div>
+  <ul class="errors">
+    <li><strong>Проценты считают не от той суммы.</strong><br>Сначала установите реальный остаток в момент начисления.</li>
+    <li><strong>Путают процент и коэффициент роста.</strong><br>10% = 0,1; увеличение на 10% означает множитель 1,1.</li>
+    <li><strong>Путают равные платежи и равные доли долга.</strong><br>При равных долях платежи обычно различаются из-за процентов на уменьшающийся остаток.</li>
+    <li><strong>Забывают нулевой остаток.</strong><br>Полное погашение кредита должно завершиться условием D<sub>после</sub> = 0.</li>
+    <li><strong>Рано округляют.</strong><br>Сохраняйте точные десятичные значения до финального ответа.</li>
+    <li><strong>Сразу строят громоздкую формулу.</strong><br>Сначала заполните годы и только потом составляйте уравнение.</li>
+  </ul>
+</section>
+
+<section id="practice">
+  <div class="section-head">
+    <span class="section-no">06 · Путь А</span>
+    <h2>10 задач на распознавание схемы</h2>
+  </div>
+  <div class="practice-intro">
+    <p>Решайте через таблицу или последовательность состояний. Условия и ответы перенесены из чек-листа занятия.</p>
+    <a href="../tex_docs/27.09.26.tex">Открыть исходный TeX →</a>
+  </div>
+  <div class="tasks">
+    <article class="task"><p>На вклад внесли <strong>200 тыс. руб.</strong>. В конце каждого года банк увеличивает сумму на <strong>12%</strong>. Дополнительных операций нет. Какая сумма будет на вкладе через два года?</p></article>
+    <article class="task"><p>На вклад внесли <strong>120 тыс. руб.</strong>. В конце каждого года сумма увеличивается на 10%. В начале второго и третьего годов снимают по 5 тыс. руб. Сколько будет к концу третьего года?</p></article>
+    <article class="task"><p>На вклад внесли <strong>100 тыс. руб.</strong>. В конце каждого года сумма увеличивается на 20%. В начале второго и третьего годов вклад пополняют на 10 тыс. руб. Найдите итог к концу третьего года.</p></article>
+    <article class="task"><p>Вклад <strong>400 тыс. руб.</strong> размещён на три года без операций. Ставка каждый год одна и та же. К концу третьего года оказалось 532,4 тыс. руб. Найдите годовую ставку.</p></article>
+    <article class="task"><p>На вклад внесли <strong>1000 тыс. руб.</strong>. Ставки по годам: 8%, 10%, 12%. Пополнений и снятий не было. Найдите итоговую сумму.</p></article>
+    <article class="task"><p>Кредит <strong>240 тыс. руб.</strong> на три года под 10%. После каждого платежа тело долга уменьшается на одну и ту же величину; к концу третьего года кредит погашен. Найдите сумму всех платежей.</p></article>
+    <article class="task"><p>Кредит <strong>300 тыс. руб.</strong> на три года под 20%. В конце первого и второго годов платёж равен только процентам; в конце третьего года кредит погашается полностью. Найдите сумму всех платежей.</p></article>
+    <article class="task"><p>Кредит <strong>500 тыс. руб.</strong> на три года под 10%. Первые два платежа одинаковы и равны x, третий платёж — 203,5 тыс. руб. После третьего платежа долг равен нулю. Найдите x.</p></article>
+    <article class="task"><p>Кредит <strong>600 тыс. руб.</strong> на четыре года под 15%. После каждого ежегодного платежа тело кредита уменьшается на одну и ту же величину. Найдите сумму всех четырёх платежей.</p></article>
+    <article class="task"><p>Кредит <strong>360 тыс. руб.</strong> на четыре года под 25%. Первые два года выплачиваются только проценты. Платежи в конце третьего и четвёртого годов одинаковы и равны x. После четвёртого платежа долг равен нулю. Найдите x.</p></article>
+  </div>
+  <div class="answer-panel">
+    <button class="answer-btn" id="answerToggle" type="button" aria-expanded="false" aria-controls="answers">Показать ответы</button>
+    <div class="answers" id="answers" hidden>
+      <table>
+        <thead><tr><th>№</th><th>Ответ</th><th>№</th><th>Ответ</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>250,88 тыс. руб.</td><td>6</td><td>288 тыс. руб.</td></tr>
+          <tr><td>2</td><td>148,17 тыс. руб.</td><td>7</td><td>480 тыс. руб.</td></tr>
+          <tr><td>3</td><td>199,2 тыс. руб.</td><td>8</td><td>200 тыс. руб.</td></tr>
+          <tr><td>4</td><td>10%</td><td>9</td><td>825 тыс. руб.</td></tr>
+          <tr><td>5</td><td>1330,56 тыс. руб.</td><td>10</td><td>250 тыс. руб.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="checks" aria-label="Самопроверка решения">
+    <label class="check"><input type="checkbox">Определил, вклад это или кредит.</label>
+    <label class="check"><input type="checkbox">Перевёл процент в десятичную дробь.</label>
+    <label class="check"><input type="checkbox">Зафиксировал порядок событий.</label>
+    <label class="check"><input type="checkbox">Нашёл сумму, от которой начисляются проценты.</label>
+    <label class="check"><input type="checkbox">Перенёс итог года в следующий период.</label>
+    <label class="check"><input type="checkbox">Проверил финальный остаток, единицы и ответ.</label>
+  </div>
+</section>
+</main>
+
+<footer>
+  <span>Лёвин Артём Александрович · эксклюзивно для Тимофея Васильченко</span>
+  <span>27 сентября 2026 · профильная математика, ЕГЭ</span>
+</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var root=document.documentElement;
+  var themeButton=document.getElementById("themeToggle");
+  var themeKey="timofey-lesson-theme-v1";
+  function applyTheme(value){
+    root.dataset.theme=value;
+    themeButton.textContent=value==="dark"?"Светлая тема":"Тёмная тема";
+    try{localStorage.setItem(themeKey,value);}catch(_){}
+  }
+  try{applyTheme(localStorage.getItem(themeKey)||"dark");}catch(_){applyTheme("dark");}
+  themeButton.addEventListener("click",function(){applyTheme(root.dataset.theme==="dark"?"light":"dark");});
+
+  var modes={
+    deposit:{
+      states:[
+        ["Старт","Сумма","120 млн"],
+        ["Год 1","+15%","138"],
+        ["Начало 2-го","Пополнение","148"],
+        ["Год 2","+15%","170,2"],
+        ["Начало 3-го","Пополнение","180,2"],
+        ["Год 3","+15%","207,23"]
+      ],
+      note:"Пополнение происходит до начисления процентов второго и третьего годов, поэтому входит в базу начисления."
+    },
+    credit:{
+      states:[
+        ["Старт","Долг","120 тыс."],
+        ["Год 1","Проценты","12"],
+        ["Платёж","40 + 12","52"],
+        ["Год 2","Платёж","48"],
+        ["Год 3","Платёж","44"],
+        ["Финиш","Остаток","0"]
+      ],
+      note:"Тело кредита ежегодно уменьшается на 40 тыс. руб.; проценты считаются от текущего остатка 120 → 80 → 40."
+    }
+  };
+  var flow=document.getElementById("stateFlow");
+  var note=document.getElementById("ledgerNote");
+  function renderMode(name){
+    var data=modes[name];
+    flow.replaceChildren();
+    data.states.forEach(function(item){
+      var node=document.createElement("div");
+      node.className="state";
+      var small=document.createElement("small");
+      small.textContent=item[0];
+      var strong=document.createElement("strong");
+      strong.textContent=item[1];
+      var value=document.createElement("span");
+      value.className="value";
+      value.textContent=item[2];
+      node.append(small,strong,value);
+      flow.append(node);
+    });
+    note.textContent=data.note;
+    document.querySelectorAll(".mode-btn").forEach(function(btn){
+      btn.setAttribute("aria-pressed",String(btn.dataset.mode===name));
+    });
+  }
+  document.querySelectorAll(".mode-btn").forEach(function(btn){
+    btn.addEventListener("click",function(){renderMode(btn.dataset.mode);});
+  });
+  renderMode("deposit");
+
+  var answerButton=document.getElementById("answerToggle");
+  var answers=document.getElementById("answers");
+  answerButton.addEventListener("click",function(){
+    var open=answerButton.getAttribute("aria-expanded")==="true";
+    answerButton.setAttribute("aria-expanded",String(!open));
+    answers.hidden=open;
+    answerButton.textContent=open?"Показать ответы":"Скрыть ответы";
+  });
+})();
+</script>
+</body>
+</html>
