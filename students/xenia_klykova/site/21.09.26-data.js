@@ -13,9 +13,9 @@ export const LESSON_2109={
     {label:'Самостоятельное построение без подсказки',level:2,tone:'process',practiceDisposition:'manual'}
   ],
   materials:{
-    pdf:'../pdf_docs/21.09.26.pdf',
-    tex:'../tex_docs/21.09.26.tex',
-    image:'../images/21.09.26.png',
+    pdf:'../pdf_docs/27.09.26.pdf',
+    tex:'../tex_docs/27.09.26.tex',
+    image:'../images/27.09.26.png',
     lab:'21.09.26-lab.html?case=1'
   }
 };
