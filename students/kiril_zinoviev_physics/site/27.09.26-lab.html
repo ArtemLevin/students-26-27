@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Цифровая лаборатория Кирилла Зиновьева: график s(t), скорость и перевод единиц">
+<title>Лаборатория движения — Кирилл Зиновьев · 27.09.26</title>
+<style>
+:root{
+  color-scheme:light;
+  --surface-page:#f3f0e8;
+  --surface-raised:#fffdf8;
+  --surface-soft:#e8eee9;
+  --text-primary:#182838;
+  --text-secondary:#627282;
+  --text-inverse:#f8fbfa;
+  --border-subtle:#d7d2c7;
+  --border-strong:#aeb7b7;
+  --accent:#0d7473;
+  --accent-hover:#075f5f;
+  --accent-soft:#d9ece9;
+  --secondary:#315f8d;
+  --secondary-soft:#dce6ef;
+  --danger:#a8534a;
+  --danger-soft:#f2dfda;
+  --success:#4b795e;
+  --warning:#9b6530;
+  --focus-ring:#1d7f7d;
+  --shadow-low:0 8px 26px #1b2a3810;
+  --shadow-high:0 18px 52px #1b2a3820;
+  --radius-sm:4px;
+  --radius-md:10px;
+  --radius-lg:18px;
+  --space-1:.35rem;
+  --space-2:.65rem;
+  --space-3:1rem;
+  --space-4:1.4rem;
+  --space-5:2rem;
+  --space-6:3rem;
+  --motion-fast:140ms;
+  --motion-normal:220ms
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --surface-page:#0b1520;
+  --surface-raised:#102234;
+  --surface-soft:#162b3b;
+  --text-primary:#edf4f2;
+  --text-secondary:#aebcc6;
+  --text-inverse:#0b1520;
+  --border-subtle:#294458;
+  --border-strong:#476276;
+  --accent:#7ac8bd;
+  --accent-hover:#9ed8cf;
+  --accent-soft:#173b3b;
+  --secondary:#8cb1d1;
+  --secondary-soft:#1b334b;
+  --danger:#db8378;
+  --danger-soft:#402a2d;
+  --success:#88bc99;
+  --warning:#deb474;
+  --focus-ring:#8ad4ca;
+  --shadow-low:0 8px 26px #0004;
+  --shadow-high:0 18px 52px #0007
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:inherit}
+button,input{font:inherit}
+.top{min-height:58px;padding:.55rem max(1rem,calc((100vw - 1500px)/2));display:flex;align-items:center;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--border-subtle);background:var(--surface-raised)}
+.top a{text-decoration:none;font-weight:800}
+.top-tools{display:flex;gap:.45rem}
+.btn{min-height:42px;padding:.55rem .8rem;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);font-weight:760;cursor:pointer;text-decoration:none}
+.btn:hover,.btn:focus-visible{border-color:var(--accent);outline:2px solid color-mix(in srgb,var(--focus-ring) 28%,transparent);outline-offset:2px}
+.btn.accent,.mode[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.shell{width:min(100% - 2rem,1500px);margin:auto;padding:1.5rem 0 3rem}
+.intro{display:flex;justify-content:space-between;gap:2rem;align-items:end;padding:1rem 0 1.4rem;border-bottom:1px solid var(--border-subtle)}
+.eyebrow{margin:0 0 .5rem;color:var(--accent);font:800 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase}
+h1{max-width:15ch;margin:0;font:720 clamp(2.5rem,5vw,5rem)/.95 Georgia,"Times New Roman",serif;letter-spacing:-.045em}
+.intro p:last-child{max-width:70ch;color:var(--text-secondary)}
+.modebar{display:flex;gap:.45rem;flex-wrap:wrap;margin:1rem 0}
+.mode{min-height:42px;padding:.55rem .8rem;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);font-weight:800;cursor:pointer}
+.workspace{display:grid;grid-template-columns:minmax(0,2.1fr) minmax(300px,.9fr);gap:1.1rem;align-items:start}
+.model-card{min-width:0;border:1px solid var(--border-subtle);background:var(--surface-raised);box-shadow:var(--shadow-low)}
+.model-head{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:1rem 1.1rem;border-bottom:1px solid var(--border-subtle)}
+.model-head h2{margin:0;font:700 1.35rem Georgia,serif}
+.model-head small{color:var(--text-secondary)}
+.canvas{position:relative;min-height:520px;padding:1rem;display:grid;place-items:center;background:
+ linear-gradient(var(--border-subtle) 1px,transparent 1px),
+ linear-gradient(90deg,var(--border-subtle) 1px,transparent 1px),
+ var(--surface-raised);
+ background-size:44px 44px}
+.canvas svg{display:block;width:100%;height:500px;max-height:62vh}
+.axis{stroke:var(--text-primary);stroke-width:2}.gridline{stroke:var(--border-subtle);stroke-width:1}.line-a{stroke:var(--danger);stroke-width:5;fill:none}.line-b{stroke:var(--secondary);stroke-width:5;fill:none}.line-muted{opacity:.22}.point-a{fill:var(--danger);stroke:var(--surface-raised);stroke-width:3}.point-b{fill:var(--secondary);stroke:var(--surface-raised);stroke-width:3}.guide{stroke:var(--accent);stroke-width:2;stroke-dasharray:7 7}.canvas text{fill:var(--text-primary);font:650 15px system-ui}.canvas .label-a{fill:var(--danger)}.canvas .label-b{fill:var(--secondary)}
+.readout{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--border-subtle)}
+.metric{padding:1rem;text-align:center;border-right:1px solid var(--border-subtle)}.metric:last-child{border-right:0}.metric small{display:block;color:var(--text-secondary);font-size:.72rem}.metric strong{font-size:1.35rem}
+.controls{position:sticky;top:1rem;border-top:3px solid var(--accent);background:var(--surface-raised);box-shadow:var(--shadow-low)}
+.control{padding:1rem 1.1rem;border-bottom:1px solid var(--border-subtle)}.control:last-child{border-bottom:0}
+.control h2,.control h3{margin:0 0 .65rem}.control h2{font:700 1.3rem Georgia,serif}.control h3{font-size:.95rem}
+.control-row{display:flex;gap:.45rem;flex-wrap:wrap}
+.range-line{display:grid;grid-template-columns:1fr auto;gap:.7rem;align-items:center}.range-line input{width:100%;accent-color:var(--accent)}
+.scale{display:flex;justify-content:space-between;color:var(--text-secondary);font-size:.72rem;margin-top:.25rem}
+.note{padding:.85rem;background:var(--surface-soft);color:var(--text-secondary);font-size:.88rem}
+.conclusion{margin-top:1.1rem;padding:1.2rem 1.35rem;border-left:3px solid var(--accent);background:var(--surface-raised)}
+.conclusion h2{margin:0 0 .4rem;font:700 1.35rem Georgia,serif}
+.units-view{display:none;min-height:520px;padding:clamp(1.1rem,3vw,2rem)}
+.units-view.active{display:block}.graph-view.hidden{display:none}
+.unit-list{display:grid;gap:.75rem;margin-top:1rem}
+.unit-case{width:100%;padding:1rem;text-align:left;border:1px solid var(--border-subtle);background:var(--surface-raised);color:var(--text-primary);cursor:pointer}
+.unit-case[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.unit-case strong{display:block}.unit-case small{color:var(--text-secondary)}
+.conversion-stage{margin-top:1.3rem;padding:1.4rem;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong)}
+.conversion-flow{display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:center}.conversion-flow div{padding:1.3rem;background:var(--surface-soft);text-align:center}.conversion-flow b{font-size:1.35rem}.conversion-flow span{font-weight:900;color:var(--accent)}
+.proof{margin-top:1rem;color:var(--text-secondary)}
+.footer{max-width:1500px;margin:auto;padding:0 1rem 2rem;color:var(--text-secondary);font-size:.78rem}
+:focus-visible{outline:2px solid var(--focus-ring);outline-offset:3px}
+@media(max-width:980px){.workspace{grid-template-columns:1fr}.controls{position:static}.canvas{min-height:430px}.canvas svg{height:420px}.intro{align-items:start;flex-direction:column}}
+@media(max-width:620px){body{font-size:15px}.shell{width:calc(100% - 1rem)}.top{padding:.5rem}.top-tools .pdf{display:none}.canvas{min-height:350px;padding:.35rem}.canvas svg{height:350px}.readout{grid-template-columns:1fr}.metric{border-right:0;border-bottom:1px solid var(--border-subtle)}.metric:last-child{border-bottom:0}.conversion-flow{grid-template-columns:1fr}.conversion-flow span{transform:rotate(90deg)}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{html{color-scheme:light!important}body{background:#fff!important;color:#111!important}.top-tools,.modebar,.controls{display:none!important}.workspace{display:block}.model-card,.conclusion{box-shadow:none}.canvas{background:#fff}.footer{color:#444}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="27.09.26.html">← Вернуться к занятию</a>
+  <div class="top-tools">
+    <a class="btn pdf" href="../pdf_docs/27.09.26.pdf" download>Скачать пособие</a>
+    <button class="btn" id="themeBtn" type="button">Тема</button>
+  </div>
+</header>
+
+<main class="shell">
+  <section class="intro">
+    <div>
+      <p class="eyebrow">Цифровая лаборатория · 27.09.26 · Кирилл Зиновьев</p>
+      <h1>Движение как измерительный прибор</h1>
+      <p>Исследуйте две зависимости из занятия: как скорость меняет наклон графика s(t) и как исходные единицы превращаются в согласованные единицы расчёта.</p>
+    </div>
+  </section>
+
+  <div class="modebar" role="group" aria-label="Режим лаборатории">
+    <button class="mode" type="button" data-mode="graph" aria-pressed="true">График s(t)</button>
+    <button class="mode" type="button" data-mode="units" aria-pressed="false">Перевод единиц</button>
+  </div>
+
+  <div class="workspace">
+    <section class="model-card" aria-labelledby="modelTitle">
+      <div class="model-head">
+        <h2 id="modelTitle">График пути при равномерном движении</h2>
+        <small id="modelHint">Выберите скорость и момент времени</small>
+      </div>
+
+      <div class="graph-view" id="graphView">
+        <div class="canvas">
+          <svg id="graphSvg" viewBox="0 0 900 560" role="img" aria-labelledby="svgTitle svgDesc">
+            <title id="svgTitle">Интерактивные графики s равно 7t и s равно 3t</title>
+            <desc id="svgDesc">Две прямые на координатной плоскости. Ползунок времени перемещает точку вдоль выбранного графика и показывает соответствующий путь.</desc>
+            <line class="gridline" x1="90" y1="470" x2="820" y2="470"/>
+            <line class="gridline" x1="90" y1="382" x2="820" y2="382"/>
+            <line class="gridline" x1="90" y1="294" x2="820" y2="294"/>
+            <line class="gridline" x1="90" y1="206" x2="820" y2="206"/>
+            <line class="gridline" x1="90" y1="118" x2="820" y2="118"/>
+            <line class="gridline" x1="236" y1="70" x2="236" y2="470"/>
+            <line class="gridline" x1="382" y1="70" x2="382" y2="470"/>
+            <line class="gridline" x1="528" y1="70" x2="528" y2="470"/>
+            <line class="gridline" x1="674" y1="70" x2="674" y2="470"/>
+            <line class="gridline" x1="820" y1="70" x2="820" y2="470"/>
+            <line class="axis" x1="90" y1="500" x2="90" y2="55"/>
+            <line class="axis" x1="60" y1="470" x2="850" y2="470"/>
+            <polyline id="line7" class="line-a" points="90,470 236,390 382,310 528,230 674,150 820,70"/>
+            <polyline id="line3" class="line-b" points="90,470 236,436 382,401 528,367 674,333 820,299"/>
+            <line id="guideX" class="guide" x1="90" y1="470" x2="90" y2="470"/>
+            <line id="guideY" class="guide" x1="90" y1="470" x2="90" y2="470"/>
+            <circle id="point7" class="point-a" cx="90" cy="470" r="9"/>
+            <circle id="point3" class="point-b" cx="90" cy="470" r="9"/>
+            <text x="858" y="476">t, с</text><text x="48" y="48">s, м</text>
+            <text x="228" y="495">1</text><text x="374" y="495">2</text><text x="520" y="495">3</text><text x="666" y="495">4</text><text x="812" y="495">5</text>
+            <text x="55" y="475">0</text><text x="46" y="386">10</text><text x="46" y="298">20</text><text x="46" y="210">30</text><text x="46" y="122">40</text>
+            <text class="label-a" x="705" y="125">s = 7t</text>
+            <text class="label-b" x="700" y="320">s = 3t</text>
+          </svg>
+        </div>
+        <div class="readout">
+          <div class="metric"><small>выбранная скорость</small><strong id="speedRead">7 м/с</strong></div>
+          <div class="metric"><small>время</small><strong id="timeRead">0 с</strong></div>
+          <div class="metric"><small>путь</small><strong id="pathRead">0 м</strong></div>
+        </div>
+      </div>
+
+      <div class="units-view" id="unitsView">
+        <p><strong>Выберите один из переводов, которые разбирались на занятии.</strong> Прибор показывает действие и результат без добавления новых числовых примеров.</p>
+        <div class="unit-list" id="unitList">
+          <button class="unit-case" type="button" data-case="minutes" aria-pressed="true"><strong>5 мин → с</strong><small>время</small></button>
+          <button class="unit-case" type="button" data-case="hours" aria-pressed="false"><strong>2 ч → с</strong><small>время</small></button>
+          <button class="unit-case" type="button" data-case="cm" aria-pressed="false"><strong>3,5 см → м</strong><small>длина</small></button>
+          <button class="unit-case" type="button" data-case="mm" aria-pressed="false"><strong>3,5 мм → м</strong><small>длина</small></button>
+          <button class="unit-case" type="button" data-case="speed" aria-pressed="false"><strong>72 км/ч → м/с</strong><small>скорость</small></button>
+        </div>
+        <div class="conversion-stage">
+          <div class="conversion-flow">
+            <div><small>исходная запись</small><br><b id="fromValue">5 мин</b></div>
+            <span id="operation">× 60</span>
+            <div><small>согласованная запись</small><br><b id="toValue">300 с</b></div>
+          </div>
+          <p class="proof" id="proofText">В одной минуте 60 секунд, поэтому 5 · 60 = 300.</p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="controls" aria-label="Панель управления лабораторией">
+      <div class="control graph-control">
+        <h2>Параметры графика</h2>
+        <h3>Выберите скорость</h3>
+        <div class="control-row">
+          <button class="btn speed-btn accent" type="button" data-speed="7" aria-pressed="true">7 м/с</button>
+          <button class="btn speed-btn" type="button" data-speed="3" aria-pressed="false">3 м/с</button>
+        </div>
+      </div>
+      <div class="control graph-control">
+        <h3>Момент времени</h3>
+        <div class="range-line"><input id="timeRange" type="range" min="0" max="5" step="1" value="0" aria-label="Время от 0 до 5 секунд"><strong id="rangeValue">0 с</strong></div>
+        <div class="scale"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5 с</span></div>
+      </div>
+      <div class="control graph-control">
+        <h3>Сравнение</h3>
+        <label><input id="showBoth" type="checkbox" checked> Показывать обе прямые</label>
+      </div>
+      <div class="control graph-control">
+        <button class="btn" id="resetGraph" type="button">Сбросить график</button>
+      </div>
+      <div class="control units-control" hidden>
+        <h2>Как читать перевод</h2>
+        <div class="note">Смотрите одновременно на исходную единицу, действие и новую единицу. Для км/ч → м/с числовое значение делится на 3,6.</div>
+      </div>
+    </aside>
+  </div>
+
+  <section class="conclusion">
+    <h2>Вывод</h2>
+    <p id="conclusionText">При постоянной скорости путь определяется формулой s = vt. Для одного и того же времени прямая с большей скоростью расположена круче.</p>
+  </section>
+</main>
+
+<footer class="footer">Лёвин Артём Александрович · эксклюзивно для Кирилла Зиновьева</footer>
+
+<script>
+(function(){
+  'use strict';
+  var root=document.documentElement;
+  var themeBtn=document.getElementById('themeBtn');
+  function safeGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function safeSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  var theme=safeGet('kiril-physics-270926-lab-theme')||'light';
+  function applyTheme(){root.dataset.theme=theme;themeBtn.textContent=theme==='dark'?'Светлая тема':'Тёмная тема'}
+  applyTheme();
+  themeBtn.addEventListener('click',function(){theme=theme==='dark'?'light':'dark';safeSet('kiril-physics-270926-lab-theme',theme);applyTheme()});
+
+  var mode='graph';
+  var speed=7;
+  var time=0;
+  var cases={
+    minutes:{from:'5 мин',op:'× 60',to:'300 с',proof:'В одной минуте 60 секунд, поэтому 5 · 60 = 300.'},
+    hours:{from:'2 ч',op:'× 3600',to:'7200 с',proof:'В одном часе 3600 секунд, поэтому 2 · 3600 = 7200.'},
+    cm:{from:'3,5 см',op:'÷ 100',to:'0,035 м',proof:'В одном метре 100 сантиметров, поэтому при переходе см → м делим на 100.'},
+    mm:{from:'3,5 мм',op:'÷ 1000',to:'0,0035 м',proof:'В одном метре 1000 миллиметров, поэтому при переходе мм → м делим на 1000.'},
+    speed:{from:'72 км/ч',op:'÷ 3,6',to:'20 м/с',proof:'1000 м / 3600 с = 1/3,6 м/с, поэтому 72 ÷ 3,6 = 20.'}
+  };
+
+  var x0=90, xStep=146, y0=470;
+  function yFor(v,t){return y0-(v*t)*(400/35)}
+  function renderGraph(){
+    var x=x0+xStep*time;
+    var y7=yFor(7,time);
+    var y3=yFor(3,time);
+    document.getElementById('point7').setAttribute('cx',x);
+    document.getElementById('point7').setAttribute('cy',y7);
+    document.getElementById('point3').setAttribute('cx',x);
+    document.getElementById('point3').setAttribute('cy',y3);
+    var y=speed===7?y7:y3;
+    document.getElementById('guideX').setAttribute('x1',x);
+    document.getElementById('guideX').setAttribute('x2',x);
+    document.getElementById('guideX').setAttribute('y1',y0);
+    document.getElementById('guideX').setAttribute('y2',y);
+    document.getElementById('guideY').setAttribute('x1',x0);
+    document.getElementById('guideY').setAttribute('x2',x);
+    document.getElementById('guideY').setAttribute('y1',y);
+    document.getElementById('guideY').setAttribute('y2',y);
+    document.getElementById('speedRead').textContent=speed+' м/с';
+    document.getElementById('timeRead').textContent=time+' с';
+    document.getElementById('pathRead').textContent=(speed*time)+' м';
+    document.getElementById('rangeValue').textContent=time+' с';
+    document.querySelectorAll('.speed-btn').forEach(function(btn){
+      var active=Number(btn.dataset.speed)===speed;
+      btn.classList.toggle('accent',active);
+      btn.setAttribute('aria-pressed',String(active));
+    });
+    document.getElementById('point7').style.opacity=speed===7?1:.38;
+    document.getElementById('point3').style.opacity=speed===3?1:.38;
+  }
+  document.querySelectorAll('.speed-btn').forEach(function(btn){btn.addEventListener('click',function(){speed=Number(btn.dataset.speed);renderGraph()})});
+  document.getElementById('timeRange').addEventListener('input',function(e){time=Number(e.target.value);renderGraph()});
+  document.getElementById('showBoth').addEventListener('change',function(e){
+    var other=speed===7?document.getElementById('line3'):document.getElementById('line7');
+    other.classList.toggle('line-muted',!e.target.checked);
+  });
+  document.getElementById('resetGraph').addEventListener('click',function(){
+    speed=7;time=0;document.getElementById('timeRange').value='0';document.getElementById('showBoth').checked=true;
+    document.getElementById('line3').classList.remove('line-muted');document.getElementById('line7').classList.remove('line-muted');renderGraph();
+  });
+
+  function renderCase(key){
+    var c=cases[key];
+    document.getElementById('fromValue').textContent=c.from;
+    document.getElementById('operation').textContent=c.op;
+    document.getElementById('toValue').textContent=c.to;
+    document.getElementById('proofText').textContent=c.proof;
+    document.querySelectorAll('.unit-case').forEach(function(btn){btn.setAttribute('aria-pressed',String(btn.dataset.case===key))});
+  }
+  document.querySelectorAll('.unit-case').forEach(function(btn){btn.addEventListener('click',function(){renderCase(btn.dataset.case)})});
+
+  function setMode(next){
+    mode=next==='units'?'units':'graph';
+    document.getElementById('graphView').classList.toggle('hidden',mode!=='graph');
+    document.getElementById('unitsView').classList.toggle('active',mode==='units');
+    document.querySelectorAll('.graph-control').forEach(function(el){el.hidden=mode!=='graph'});
+    document.querySelectorAll('.units-control').forEach(function(el){el.hidden=mode!=='units'});
+    document.querySelectorAll('.mode').forEach(function(btn){btn.setAttribute('aria-pressed',String(btn.dataset.mode===mode))});
+    document.getElementById('modelTitle').textContent=mode==='graph'?'График пути при равномерном движении':'Перевод единиц';
+    document.getElementById('modelHint').textContent=mode==='graph'?'Выберите скорость и момент времени':'Используются только примеры занятия';
+    document.getElementById('conclusionText').textContent=mode==='graph'?'При постоянной скорости путь определяется формулой s = vt. Для одного и того же времени прямая с большей скоростью расположена круче.':'Согласованные единицы делают формулу читаемой: после преобразования размерностей должна остаться единица искомой величины.';
+    history.replaceState(null,'','?mode='+mode);
+  }
+  document.querySelectorAll('.mode').forEach(function(btn){btn.addEventListener('click',function(){setMode(btn.dataset.mode)})});
+  var query=new URLSearchParams(location.search).get('mode');
+  setMode(query==='units'?'units':'graph');
+  renderCase('minutes');
+  renderGraph();
+})();
+</script>
+</body>
+</html>
