@@ -37,7 +37,7 @@ export const LESSONS=Object.freeze([
       {competencyId:'t8_extrema',label:'Экстремумы по знаку f′',level:3,tone:'good',practiceDisposition:'manual'},
       {competencyId:'t8_interpret',label:'Интерпретация условий ЕГЭ',level:3,tone:'good',practiceDisposition:'manual'}
     ],
-    materials:{pdf:'../pdf_docs/21.09.26.pdf',tex:'../tex_docs/21.09.26.tex'}
+    materials:{pdf:'../pdf_docs/27.09.26.pdf',tex:'../tex_docs/27.09.26.tex'}
   },
   {
     date:'2026-09-20',
