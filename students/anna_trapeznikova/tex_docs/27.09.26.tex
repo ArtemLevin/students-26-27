@@ -1,0 +1,362 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{287A78}
+\definecolor{darkaccent}{HTML}{174F4D}
+\definecolor{textgray}{HTML}{303030}
+\definecolor{softgray}{HTML}{F2F4F4}
+\definecolor{muted}{HTML}{687676}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\setlength{\headheight}{25pt}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.28em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.7em,itemsep=0.45em,topsep=0.4em}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted} Рациональные неравенства}
+\fancyhead[R]{\small\color{muted} Анна Трапезникова}
+\fancyfoot[C]{\small\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\checkitem}{\(\square\)\hspace{0.45em}}
+\newcommand{\important}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\R}{\mathbb{R}}
+
+\begin{document}
+
+% ---------- TITLE ----------
+\thispagestyle{empty}
+\begin{center}
+\vspace*{24mm}
+{\color{accent}\rule{0.72\linewidth}{1.2pt}}\\[10mm]
+{\Huge\bfseries\color{darkaccent} Чек-лист}\\[7mm]
+{\LARGE\bfseries Рациональные неравенства}\\[3mm]
+{\Large Метод интервалов, кратность корней и нормализация}\\[14mm]
+{\large 27.09.26}\\[22mm]
+
+\begin{minipage}{0.76\linewidth}
+\centering
+\large
+Главная цель: уверенно приводить рациональное неравенство к удобному виду, находить все критические точки, учитывать кратность корней и безошибочно выбирать нужные промежутки.
+\end{minipage}
+
+\vfill
+{\large\bfseries Лёвин Артём Александрович}\\[2mm]
+{\normalsize эксклюзивно для Анны Трапезниковой}
+\vspace{13mm}
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent,line width=1.4pt]
+    ($(current page.south west)+(18mm,18mm)$)
+    .. controls ($(current page.south west)+(60mm,29mm)$) and ($(current page.south east)+(-64mm,7mm)$)
+    .. ($(current page.south east)+(-18mm,20mm)$);
+  \draw[accent!55,line width=0.75pt]
+    ($(current page.south west)+(18mm,13mm)$)
+    .. controls ($(current page.south west)+(75mm,3mm)$) and ($(current page.south east)+(-78mm,27mm)$)
+    .. ($(current page.south east)+(-18mm,14mm)$);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------- CORE CHECKLIST ----------
+\section*{1. Что должно быть доведено до автоматизма}
+
+\textbf{Нормальная форма рационального неравенства:}
+\[
+\frac{P(x)}{Q(x)}\;\gtreqless\;0, \qquad Q(x)\ne0.
+\]
+Именно к этому виду удобно применять метод интервалов. Если справа стоит дробь или другое выражение, сначала перенесите всё в одну сторону и приведите к общему знаменателю.
+
+\begin{itemize}
+  \item \checkitem \textbf{ОДЗ записано до сокращений.} Корни знаменателя никогда не входят в ответ.
+  \item \checkitem \textbf{Числитель и знаменатель разложены на множители.} Не раскрывайте знаменатель без необходимости: факторизованный вид полезнее.
+  \item \checkitem \textbf{Найдены все критические точки.} Это нули числителя и нули знаменателя.
+  \item \checkitem \textbf{Для каждой точки определена кратность.} Степень множителя \((x-a)^k\) и есть кратность корня \(a\).
+  \item \checkitem \textbf{Точки нанесены на числовую прямую в правильном порядке.}
+  \item \checkitem \textbf{Один знак найден подстановкой.} Достаточно определить знак выражения, вычислять точное значение обычно не нужно.
+  \item \checkitem \textbf{Учтено правило кратности.} Через корень нечётной кратности знак меняется, через корень чётной кратности --- сохраняется.
+  \item \checkitem \textbf{Ответ собран по знаку неравенства.} Нули числителя включаются только при \(\le\) или \(\ge\); нули знаменателя исключаются всегда.
+\end{itemize}
+
+\subsection*{Кратность: главное правило}
+Пусть в разложении есть множитель \((x-a)^k\).
+\begin{itemize}
+  \item Если \(k\) \textbf{нечётно}, выражение меняет знак при переходе через \(a\).
+  \item Если \(k\) \textbf{чётно}, выражение сохраняет знак при переходе через \(a\).
+\end{itemize}
+
+\important{Важно:} чётность относится к \emph{кратности корня}, то есть к количеству повторений соответствующего множителя, а не к самому числу \(a\).
+
+\subsection*{Как отмечать точки}
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{0.94\linewidth}{@{}X X X@{}}
+\toprule
+\textbf{Точка} & \textbf{Строгое неравенство} & \textbf{Нестрогое неравенство} \\
+\midrule
+Ноль числителя & исключить & включить \\
+Ноль знаменателя & исключить & исключить \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+% ---------- WORKED EXAMPLE 1 ----------
+\section*{2. Разобранный пример: кратности корней}
+Решим
+\[
+\frac{(x-1)^2(x+3)^6(x-5)^9}{x^2}\ge0.
+\]
+
+\textbf{Шаг 1. Критические точки.}
+\[
+\begin{array}{c|c|c}
+\text{точка} & \text{откуда} & \text{кратность}\\
+\hline
+-3 & (x+3)^6 & 6\ \text{(чётная)}\\
+0 & x^2\ \text{в знаменателе} & 2\ \text{(чётная)}\\
+1 & (x-1)^2 & 2\ \text{(чётная)}\\
+5 & (x-5)^9 & 9\ \text{(нечётная)}
+\end{array}
+\]
+Точка \(0\) запрещена; точки \(-3,1,5\) могут входить в ответ, потому что неравенство нестрогое.
+
+\textbf{Шаг 2. Один проверочный знак.} Возьмём \(x=2\):
+\[
+(2-1)^2>0,\quad (2+3)^6>0,\quad (2-5)^9<0,\quad 2^2>0,
+\]
+значит, на интервале \((1,5)\) стоит знак «\(-\)».
+
+\textbf{Шаг 3. Распространяем знаки.} Через \(-3\), \(0\), \(1\) знак не меняется; через \(5\) меняется.
+
+\begin{center}
+\begin{tikzpicture}[x=1.45cm,y=1cm,>=Latex]
+  \draw[->,line width=0.8pt] (-4.3,0) -- (6.4,0) node[right] {$x$};
+  \foreach \x/\lab/\kind in {-3/-3/fill,0/0/open,1/1/fill,5/5/fill}{
+    \draw (\x,0.09)--(\x,-0.09);
+    \node[below=3pt] at (\x,0) {$\lab$};
+  }
+  \fill[accent] (-3,0) circle (2.2pt);
+  \draw[accent,line width=1pt,fill=white] (0,0) circle (2.4pt);
+  \fill[accent] (1,0) circle (2.2pt);
+  \fill[accent] (5,0) circle (2.2pt);
+  \node[above=5pt] at (-3.65,0) {$-$};
+  \node[above=5pt] at (-1.5,0) {$-$};
+  \node[above=5pt] at (0.5,0) {$-$};
+  \node[above=5pt] at (3,0) {$-$};
+  \node[above=5pt] at (5.65,0) {$+$};
+\end{tikzpicture}
+\end{center}
+
+\[
+\boxed{x\in\{-3;1\}\cup[5;+\infty)}.
+\]
+
+\subsection*{Что здесь проверяется}
+\begin{itemize}
+  \item чётная кратность сохраняет знак;
+  \item нечётная кратность меняет знак;
+  \item запрещённая точка остаётся выколотой независимо от кратности;
+  \item при нестрогом знаке нули числителя включаются.
+\end{itemize}
+
+\subsection*{Типичная ошибка}
+Не ставьте знаки «по памяти» сразу на всех интервалах. Сначала найдите \textbf{один} знак подстановкой, затем переходите через точки с учётом кратностей.
+
+% ---------- WORKED EXAMPLE 2 ----------
+\section*{3. Разобранный пример: сначала нормализовать}
+Решим
+\[
+\frac{3}{x-5}<\frac{3x-1}{x^2-1}.
+\]
+
+\textbf{1. Переносим всё влево и приводим к общему знаменателю:}
+\begin{align*}
+\frac{3}{x-5}-\frac{3x-1}{x^2-1}&<0,\\
+\frac{3(x^2-1)-(3x-1)(x-5)}{(x-5)(x^2-1)}&<0,\\
+\frac{16x-8}{(x-5)(x-1)(x+1)}&<0,\\
+\frac{8(2x-1)}{(x-5)(x-1)(x+1)}&<0.
+\end{align*}
+
+\important{Не раскрывайте знаменатель:} его факторизованный вид сразу показывает запрещённые точки.
+
+\textbf{2. Критические точки:}
+\[
+-1,\quad \frac12,\quad 1,\quad 5.
+\]
+Все имеют нечётную кратность, поэтому при проходе через каждую точку знак меняется. Точки \(-1,1,5\) запрещены; \(\frac12\) тоже не входит, потому что неравенство строгое.
+
+\textbf{3. Ответ:}
+\[
+\boxed{x\in\left(-1;\frac12\right)\cup(1;5)}.
+\]
+
+\subsection*{Когда можно сокращать общий множитель}
+Если числитель и знаменатель имеют общий множитель, сначала зафиксируйте ограничение из знаменателя.
+Например,
+\[
+\frac{(x-3)(x+3)}{(x-3)(x+2)}\ge0,\qquad x\ne3,-2.
+\]
+После сокращения можно исследовать \(\dfrac{x+3}{x+2}\), но точка \(x=3\) остаётся запрещённой и должна быть выколота в финальном ответе.
+
+\clearpage
+
+% ---------- FLOWCHART ----------
+\thispagestyle{fancy}
+\begin{center}
+{\LARGE\bfseries\color{darkaccent} Алгоритм: рациональное неравенство методом интервалов}
+\end{center}
+\vspace{5mm}
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=6.5mm,
+  startstop/.style={ellipse,draw=accent,line width=1pt,minimum width=39mm,minimum height=10mm,align=center,fill=softgray},
+  process/.style={rectangle,rounded corners=2mm,draw=accent,line width=1pt,text width=125mm,minimum height=10mm,align=center,inner sep=5pt},
+  decision/.style={diamond,aspect=2.4,draw=accent,line width=1pt,text width=36mm,align=center,inner sep=2pt},
+  line/.style={-{Latex[length=3mm]},line width=0.9pt,draw=darkaccent}
+]
+  \node[startstop] (start) {Старт};
+  \node[process,below=of start] (norm) {Перенесите всё в одну сторону и получите \(\dfrac{P(x)}{Q(x)}\gtreqless0\)};
+  \node[process,below=of norm] (domain) {Запишите ограничения: \(Q(x)\ne0\)};
+  \node[process,below=of domain] (factor) {Разложите числитель и знаменатель на множители; знаменатель без нужды не раскрывайте};
+  \node[process,below=of factor] (points) {Найдите нули числителя и знаменателя, определите кратности, расположите точки по возрастанию};
+  \node[process,below=of points] (sign) {Подставьте одно удобное число и определите знак на одном интервале};
+  \node[decision,below=8mm of sign] (mult) {Переходим через очередную критическую точку};
+  \node[process,below=8mm of mult,xshift=-31mm,text width=48mm] (odd) {Нечётная кратность: знак меняется};
+  \node[process,below=8mm of mult,xshift=31mm,text width=48mm] (even) {Чётная кратность: знак сохраняется};
+  \node[process,below=25mm of mult,text width=116mm] (select) {Выберите интервалы нужного знака. Нули числителя включайте только при \(\le\) или \(\ge\); нули знаменателя исключайте всегда};
+  \node[startstop,below=of select] (finish) {Запишите ответ и проверьте ОДЗ};
+
+  \draw[line] (start)--(norm);
+  \draw[line] (norm)--(domain);
+  \draw[line] (domain)--(factor);
+  \draw[line] (factor)--(points);
+  \draw[line] (points)--(sign);
+  \draw[line] (sign)--(mult);
+  \draw[line] (mult)--node[above left,sloped]{\small нечётная}(odd);
+  \draw[line] (mult)--node[above right,sloped]{\small чётная}(even);
+  \draw[line] (odd.south) |- (select.west);
+  \draw[line] (even.south) |- (select.east);
+  \draw[line] (select)--(finish);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------- SELF-CHECK ----------
+\section*{4. Быстрая самопроверка перед ответом}
+Перед тем как закончить решение, задайте себе семь вопросов.
+\begin{enumerate}
+  \item Приведено ли неравенство к виду «одна дробь и ноль»?
+  \item Выписаны ли все запрещённые значения знаменателя?
+  \item Все ли выражения разложены на множители настолько, насколько это полезно?
+  \item Не потеряна ли запрещённая точка после сокращения общего множителя?
+  \item Для всех критических точек верно определена кратность?
+  \item Проверен ли хотя бы один знак реальной подстановкой?
+  \item Включены ли только допустимые граничные точки?
+\end{enumerate}
+
+\subsection*{Пять типичных ошибок}
+\begin{itemize}
+  \item Умножать обе части на знаменатель неизвестного знака и забывать, что знак неравенства может измениться.
+  \item Сократить общий множитель и забыть выколоть его ноль из знаменателя.
+  \item Менять знак при переходе через корень чётной кратности.
+  \item Включать ноль знаменателя при нестрогом неравенстве.
+  \item Раскрывать факторизованный знаменатель и тем самым усложнять поиск критических точек.
+\end{itemize}
+
+\important{Ориентир:} в методе интервалов Вы исследуете прежде всего \textbf{знак} выражения. Точное числовое значение при подстановке обычно не требуется.
+
+Если множитель заведомо положителен, его можно учесть сразу. Например, \(x^4+x^2+1>0\) при любом \(x\in\R\): он не создаёт критических точек и не меняет знак дроби.
+
+\clearpage
+
+% ---------- TRAINING ----------
+\section*{5. Тренировочный блок — Путь А}
+\textbf{10 задач.} Решите методом интервалов. В каждой задаче явно отметьте ОДЗ и критические точки. Решений здесь нет; ответы приведены на следующей странице.
+
+\begin{enumerate}
+  \item \(\displaystyle \frac{(x-2)(x+3)}{x-1}\ge0.\)
+
+  \item \(\displaystyle \frac{(x+1)^2(x-4)}{x-2}>0.\)
+
+  \item \(\displaystyle \frac{(x-3)^2(x+2)^3}{(x+1)^2}\le0.\)
+
+  \item \(\displaystyle \frac{x^2-9}{x^2-x-6}\ge0.\)
+
+  \item \(\displaystyle \frac{3}{x-5}<\frac{3x-1}{x^2-1}.\)
+
+  \item \(\displaystyle \frac{x^2-4x}{x^2-5x+6}\ge0.\)
+
+  \item \(\displaystyle \frac{x^2(x-4)^2}{(x-1)(x-5)}\ge0.\)
+
+  \item \(\displaystyle \frac{(x+1)^4(x-2)^3}{(2x-5)^2(x+4)}<0.\)
+
+  \item \(\displaystyle \frac{x^4+x^2+1}{(x+1)(x-5)}\le0.\)
+
+  \item \(\displaystyle \frac{x^4-5x^2+4}{x^2-4}\ge0.\)
+\end{enumerate}
+
+\vfill
+\begin{center}
+\small\color{muted}
+Проверяйте не только интервалы, но и судьбу каждой граничной точки.
+\end{center}
+\clearpage
+
+% ---------- ANSWERS ----------
+\section*{6. Ответы к тренировочному блоку}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{@{}p{0.08\linewidth}p{0.84\linewidth}@{}}
+\toprule
+\textbf{№} & \textbf{Ответ}\\
+\midrule
+1 & \(\displaystyle [-3;1)\cup[2;+\infty)\)\\
+2 & \(\displaystyle (-\infty;-1)\cup(-1;2)\cup(4;+\infty)\)\\
+3 & \(\displaystyle (-\infty;-2]\cup\{3\}\)\\
+4 & \(\displaystyle (-\infty;-3]\cup(-2;3)\cup(3;+\infty)\)\\
+5 & \(\displaystyle \left(-1;\frac12\right)\cup(1;5)\)\\
+6 & \(\displaystyle (-\infty;0]\cup(2;3)\cup[4;+\infty)\)\\
+7 & \(\displaystyle (-\infty;1)\cup\{4\}\cup(5;+\infty)\)\\
+8 & \(\displaystyle (-4;-1)\cup(-1;2)\)\\
+9 & \(\displaystyle (-1;5)\)\\
+10 & \(\displaystyle (-\infty;-2)\cup(-2;-1]\cup[1;2)\cup(2;+\infty)\)\\
+\bottomrule
+\end{longtable}
+
+\subsection*{Контрольные акценты}
+\begin{itemize}
+  \item В №4 точка \(x=3\) остаётся запрещённой после сокращения общего множителя.
+  \item В №7 точка \(x=4\) даёт изолированное допустимое значение, потому что числитель обращается в ноль, а соседние интервалы отрицательны.
+  \item В №9 числитель \(x^4+x^2+1\) всегда положителен, поэтому знак определяется только знаменателем.
+  \item В №10 после сокращения множителя \(x^2-4\) необходимо сохранить запрет \(x\ne\pm2\).
+\end{itemize}
+
+\vfill
+\begin{center}
+\color{darkaccent}\rule{0.58\linewidth}{0.7pt}\\[3mm]
+\small Лёвин Артём Александрович эксклюзивно для Анны Трапезниковой
+\end{center}
+
+\end{document}
