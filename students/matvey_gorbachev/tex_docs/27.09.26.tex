@@ -1,0 +1,525 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{parskip}
+
+\definecolor{accent}{HTML}{2D6A6A}
+\definecolor{darkaccent}{HTML}{1E4D4D}
+\definecolor{textgray}{HTML}{303030}
+\definecolor{softgray}{HTML}{6C757D}
+\definecolor{lightaccent}{HTML}{E8F1F1}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.5em,itemsep=0.35em,topsep=0.4em}
+\setlist[enumerate]{leftmargin=1.7em,itemsep=0.55em,topsep=0.4em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{softgray}Прикладные задачи}
+\fancyhead[R]{\small\color{softgray}Матвей Горбачев}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{15pt}
+
+\newcommand{\sectionline}{\par\vspace{0.3em}{\color{accent}\hrule height 0.7pt}\vspace{0.7em}}
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+
+\tikzset{
+  startstop/.style={ellipse,draw=accent,thick,fill=lightaccent,minimum width=38mm,minimum height=10mm,align=center,font=\small},
+  process/.style={rectangle,rounded corners=2mm,draw=accent,thick,minimum width=105mm,minimum height=11mm,align=center,font=\small,text width=95mm},
+  decision/.style={diamond,aspect=2.3,draw=accent,thick,align=center,font=\small,text width=38mm,inner sep=1.5mm},
+  arrow/.style={-{Latex[length=3mm]},thick,draw=darkaccent}
+}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{22mm}
+
+{\Large\color{softgray}Чек-лист\par}
+\vspace{8mm}
+{\Huge\bfseries\color{darkaccent}Прикладные задачи\par}
+\vspace{3mm}
+{\Large\color{textgray}Формулы, единицы, квадратные уравнения и отбор корней\par}
+
+\vspace{18mm}
+{\large Матвей Горбачев\par}
+\vspace{3mm}
+{\normalsize 27.09.2026\par}
+
+\vfill
+{\large\bfseries\color{darkaccent}Лёвин Артём Александрович\par}
+\vspace{2mm}
+{\normalsize эксклюзивно для Матвея Горбачева\par}
+
+\vspace{12mm}
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent,line width=1.2pt]
+    ($(current page.south west)+(20mm,18mm)$)
+    .. controls ($(current page.south west)+(70mm,31mm)$)
+    and ($(current page.south east)+(-70mm,7mm)$)
+    .. ($(current page.south east)+(-20mm,18mm)$);
+\end{tikzpicture}
+\end{titlepage}
+
+\section*{1. Главная идея}
+\sectionline
+
+Прикладная задача обычно выглядит длиннее, чем её математическое ядро. Ваша цель --- быстро перевести текст в последовательность
+\[
+\text{данные}
+\;\longrightarrow\;
+\text{формула}
+\;\longrightarrow\;
+\text{уравнение или неравенство}
+\;\longrightarrow\;
+\text{проверка смысла ответа}.
+\]
+
+\key{Главный навык:} не считать сразу. Сначала определить, что обозначает каждая величина, какие данные даны явно, какие приходится извлечь из текста, и что именно требуется найти.
+
+\section*{2. Что обязательно проверять до вычислений}
+\sectionline
+
+\begin{itemize}
+  \item \key{Что ищем?} Выпишите искомую величину и её смысл.
+  \item \key{Какая формула дана?} Не путайте запись вида $L(T)$ с произведением $L\cdot T$: это значение величины $L$, зависящее от параметра $T$.
+  \item \key{Единицы измерения.} Если в одной формуле встречаются метры и миллиметры, секунды и минуты и т.~п., приведите всё к согласованным единицам.
+  \item \key{Неявные данные.} Фразы «частота второго гудка больше», «уровень поднялся», «прибор отключается при достижении температуры» содержат математическую информацию, которую нужно отдельно записать.
+  \item \key{Допустимость.} В прикладной задаче математический корень может не иметь физического или смыслового значения.
+\end{itemize}
+
+\section*{3. Технические приёмы, которые экономят вычисления}
+\sectionline
+
+\subsection*{3.1. Убирайте неудобные десятичные дроби}
+
+Например,
+\[
+1{,}2\cdot10^{-5}=12\cdot10^{-6},
+\qquad
+0{,}625=625\cdot10^{-3}.
+\]
+
+Так легче сокращать множители и степени десятки, не теряя точность.
+
+\subsection*{3.2. Избавляйтесь от дробей в уравнении}
+
+Если все знаменатели числовые, домножьте обе части на их общий знаменатель. Например,
+\[
+10=-\frac{x^2}{60}+\frac{7x}{6}
+\]
+удобно умножить на $60$ и получить
+\[
+x^2-70x+600=0.
+\]
+
+\subsection*{3.3. Рисунок полезен, когда текст описывает процесс}
+
+Если говорится о падении, подъёме уровня воды, движении мяча или расстояниях до линзы, короткая схема часто сразу показывает, какую разность или какой интервал нужно искать.
+
+\section*{4. Типовые модели занятия}
+\sectionline
+
+\subsection*{4.1. Изменение величины по формуле}
+
+Если
+\[
+L=L_0(1+\alpha T),
+\]
+то при известном удлинении $\Delta L=L-L_0$ удобно сначала записать
+\[
+L=L_0+\Delta L,
+\]
+а затем подставить в исходную формулу.
+
+\textbf{Пример.}
+\[
+L_0=10\text{ м},
+\qquad
+\alpha=1{,}2\cdot10^{-5},
+\qquad
+\Delta L=3\text{ мм}=3\cdot10^{-3}\text{ м}.
+\]
+
+Тогда
+\[
+10+3\cdot10^{-3}
+=
+10\left(1+12\cdot10^{-6}T\right),
+\]
+откуда
+\[
+T=25^{\circ}\text{C}.
+\]
+
+\subsection*{4.2. Разность двух состояний}
+
+Если путь свободного падения задаётся формулой
+\[
+h=5t^2,
+\]
+а время полёта уменьшилось с $t_1$ до $t_2$, то изменение уровня
+\[
+\Delta h=5t_1^2-5t_2^2.
+\]
+
+При $t_1=0{,}6$ с и $t_2=0{,}4$ с:
+\[
+\Delta h
+=
+5(0{,}36-0{,}16)
+=
+1\text{ м}.
+\]
+
+\subsection*{4.3. Нулевая величина может упростить формулу}
+
+Если
+\[
+P=m\left(\frac{v^2}{L}-g\right)
+\]
+и по условию $P=0$, а $m\ne0$, то
+\[
+\frac{v^2}{L}-g=0,
+\qquad
+v=\sqrt{Lg}.
+\]
+
+При $L=0{,}625$ м и $g=10$ м/с$^2$:
+\[
+v^2=6{,}25.
+\]
+
+Так как $v$ --- скорость, берём неотрицательное значение:
+\[
+v=2{,}5\text{ м/с}.
+\]
+
+\subsection*{4.4. Два корня --- два момента или два положения}
+
+Квадратное уравнение часто описывает два момента времени или два положения объекта. Перед записью ответа спросите:
+
+\begin{itemize}
+  \item нужен первый или второй момент;
+  \item нужна разность моментов;
+  \item нужен наибольший или наименьший корень;
+  \item не завершился ли процесс раньше второго корня.
+\end{itemize}
+
+Например, если прибор отключается при первом достижении предельной температуры, из двух положительных корней выбирают \textbf{первый по времени}.
+
+\subsection*{4.5. «Не менее» и «не более» задают неравенство}
+
+Равенство удобно использовать для поиска \textbf{границ}, но окончательный ответ определяется исходным знаком неравенства.
+
+Если высота мяча $h(t)$ должна удовлетворять условию
+\[
+h(t)\ge h_0,
+\]
+сначала найдите моменты пересечения из
+\[
+h(t)=h_0.
+\]
+
+Затем определите, где график находится на уровне $h_0$ или выше. Для параболы это можно сделать по направлению ветвей, методом интервалов или проверочной точкой.
+
+Записывать в ответ только корни уравнения здесь недостаточно: вопрос обычно требует \textbf{промежуток времени} или его длину.
+
+\section*{5. Отбор корней по смыслу}
+\sectionline
+
+После решения уравнения каждый корень проверяйте по трём фильтрам:
+
+\begin{enumerate}
+  \item \key{математический:} удовлетворяет ли исходному уравнению и ограничениям;
+  \item \key{предметный:} имеет ли смысл отрицательное время, отрицательная длина, значение после завершения процесса;
+  \item \key{формулировочный:} спрашивают первый момент, последний момент, продолжительность, минимум, максимум или конкретное положение.
+\end{enumerate}
+
+\section*{6. Задачи на зависимость величин}
+\sectionline
+
+Иногда ответ нельзя получить простой подстановкой крайнего значения. Нужно понять, \textbf{как одна величина зависит от другой}.
+
+Например,
+\[
+\frac1{d_1}+\frac1{d_2}=\frac1f
+\]
+даёт
+\[
+\frac1{d_1}=\frac1f-\frac1{d_2}.
+\]
+
+Если $f$ фиксировано и нужно минимизировать $d_1$, то дробь $1/d_1$ должна стать максимальной.
+
+При увеличении положительного $d_2$ величина $1/d_2$ уменьшается, поэтому правая часть возрастает, а $d_1$ уменьшается. Значит, для минимума $d_1$ берут \textbf{наибольшее допустимое $d_2$}.
+
+\textbf{Пример.} Пусть
+\[
+f=30\text{ см},
+\qquad
+d_2\in[180;210]\text{ см},
+\qquad
+d_1\in[30;50]\text{ см}.
+\]
+
+Для минимума $d_1$ берём $d_2=210$ см:
+\[
+\frac1{d_1}
+=
+\frac1{30}-\frac1{210}
+=
+\frac6{210}
+=
+\frac1{35},
+\qquad
+d_1=35\text{ см}.
+\]
+
+Полученное значение попадает в заданный диапазон $[30;50]$ см.
+
+\section*{7. Проценты и сокращение неизвестной величины}
+\sectionline
+
+Если одна величина составляет $p\%$ от другой,
+\[
+A=\frac{p}{100}B.
+\]
+
+В формулах вида
+\[
+I=\frac{\mathcal E}{R+r},
+\qquad
+I_{\text{кз}}=\frac{\mathcal E}{r}
+\]
+общий ненулевой множитель $\mathcal E$ можно сократить после корректной подстановки отношения $I$ и $I_{\text{кз}}$.
+
+\textbf{Пример.} При $r=1$ Ом и
+\[
+I=20\%\,I_{\text{кз}}
+\]
+получаем
+\[
+\frac{\mathcal E}{R+1}
+=
+\frac15\cdot\frac{\mathcal E}{1}
+\quad\Longrightarrow\quad
+\frac1{R+1}
+=
+\frac15
+\quad\Longrightarrow\quad
+R=4\text{ Ом}.
+\]
+
+\clearpage
+\thispagestyle{plain}
+
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм решения прикладной задачи}
+\end{center}
+
+\vspace{6mm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=7mm]
+  \node (start) [startstop] {Прочитайте условие целиком};
+
+  \node (p1) [process,below=of start]
+  {Определите искомую величину и расшифруйте обозначения в формуле};
+
+  \node (p2) [process,below=of p1]
+  {Извлеките явные и неявные данные; при необходимости сделайте короткий рисунок};
+
+  \node (p3) [process,below=of p2]
+  {Приведите единицы к согласованному виду и упростите запись чисел};
+
+  \node (p4) [process,below=of p3]
+  {Составьте уравнение или неравенство и выполните вычисления};
+
+  \node (p5) [process,below=of p4]
+  {Проверьте все найденные значения: исходное условие, ограничения, единицы и физический смысл};
+
+  \node (d1) [decision,below=10mm of p5]
+  {Вопрос требует выбрать момент, минимум, максимум или интервал?};
+
+  \node (p6) [process,below=12mm of d1]
+  {Выберите нужное допустимое значение, разность моментов или нужный промежуток};
+
+  \node (finish) [startstop,below=9mm of p6]
+  {Сформулируйте ответ с единицами};
+
+  \draw[arrow] (start) -- (p1);
+  \draw[arrow] (p1) -- (p2);
+  \draw[arrow] (p2) -- (p3);
+  \draw[arrow] (p3) -- (p4);
+  \draw[arrow] (p4) -- (p5);
+  \draw[arrow] (p5) -- (d1);
+
+  \draw[arrow]
+    (d1.south)
+    --
+    node[right,font=\small]{да}
+    (p6.north);
+
+  \draw[arrow]
+    (d1.east)
+    --
+    ++(24mm,0)
+    |-
+    node[pos=0.18,above,font=\small]{нет}
+    (finish.east);
+
+  \draw[arrow] (p6) -- (finish);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+\section*{8. Тренировочный блок --- Путь А}
+\sectionline
+
+\textbf{Решите 10 задач.}
+
+Решения оформляйте кратко, но обязательно показывайте переход от текста к формуле и финальную проверку ответа.
+
+\begin{enumerate}
+
+  \item Длина стержня при нагревании описывается формулой
+  \[
+  L=L_0(1+\alpha T).
+  \]
+  При $L_0=12$ м и $\alpha=1{,}5\cdot10^{-5}$ стержень удлинился на $5{,}4$ мм. Найдите $T$.
+
+  \item Глубина, пройденная падающим камнем, задаётся формулой
+  \[
+  h=5t^2.
+  \]
+  До дождя время падения камня до воды было $0{,}8$ с, после дождя --- $0{,}6$ с. На сколько метров поднялся уровень воды?
+
+  \item Сила давления описывается формулой
+  \[
+  P=m\left(\frac{v^2}{L}-g\right).
+  \]
+  Найдите скорость $v$, если
+  \[
+  P=0,
+  \qquad
+  L=0{,}9\text{ м},
+  \qquad
+  g=10\text{ м/с}^2,
+  \qquad
+  m>0.
+  \]
+
+  \item Частоты связаны формулой
+  \[
+  f=\frac{f_0}{1-v/c}.
+  \]
+  Первый гудок имеет частоту $f_0=490$ Гц, а частота второго гудка на $10$ Гц больше. Скорость звука $c=300$ м/с. Найдите скорость приближения $v$.
+
+  \item Высота объекта зависит от расстояния $x\ge0$ по формуле
+  \[
+  y=-\frac{x^2}{48}+\frac54x.
+  \]
+  При каких значениях $x$ объект находится на высоте $12$ м? В ответ запишите \textbf{наибольшее} значение $x$.
+
+  \item Высота мяча задаётся формулой
+  \[
+  h(t)=-4t^2+8t+1,
+  \qquad
+  t\ge0.
+  \]
+  Сколько секунд мяч находится \textbf{не ниже} отметки $4$ м?
+
+  \item Температура прибора меняется по закону
+  \[
+  T(t)=1400+200t-10t^2.
+  \]
+  При первом достижении температуры $1760$ прибор автоматически отключается. Через сколько секунд произойдёт отключение?
+
+  \item Сила тока задаётся формулами
+  \[
+  I=\frac{\mathcal E}{R+r},
+  \qquad
+  I_{\text{кз}}=\frac{\mathcal E}{r}.
+  \]
+  Известно, что $r=2$ Ом и
+  \[
+  I=25\%\,I_{\text{кз}}.
+  \]
+  Найдите $R$.
+
+  \item Для линзы выполняется формула
+  \[
+  \frac1{d_1}+\frac1{d_2}=\frac1{24}.
+  \]
+  Расстояние $d_2$ может изменяться от $120$ до $168$ см. Найдите наименьшее возможное значение $d_1$.
+
+  \item Высота тела над уровнем старта описывается формулой
+  \[
+  h(t)=20t-5t^2,
+  \qquad
+  t\ge0.
+  \]
+  Найдите промежуток времени, на котором
+  \[
+  h(t)\ge15\text{ м}.
+  \]
+
+\end{enumerate}
+
+\clearpage
+
+\section*{9. Ответы}
+\sectionline
+
+\renewcommand{\arraystretch}{1.35}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}c X@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $30^{\circ}\text{C}$ \\
+2 & $1{,}4$ м \\
+3 & $3$ м/с \\
+4 & $6$ м/с \\
+5 & $48$ м \\
+6 & $1$ с \\
+7 & $2$ с \\
+8 & $6$ Ом \\
+9 & $28$ см \\
+10 & $t\in[1;3]$ с \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vfill
+
+{\small\color{softgray}
+Перед сдачей каждого ответа проверьте: единицы, ограничения, смысл найденных значений и точное соответствие вопросу задачи.
+}
+
+\end{document}
