@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория Матвея Горбачева по прикладным задачам: промежуток времени для параболы и зависимость расстояний в формуле линзы.">
+<meta name="color-scheme" content="light dark">
+<title>Лаборатория прикладных моделей — Матвей Горбачев</title>
+<style>
+:root{
+ --surface-page:#f4efe6;--surface-raised:#fffaf2;--surface-soft:#e8eef0;
+ --text-primary:#1e2b32;--text-secondary:#66727a;--text-inverse:#fff;
+ --border-subtle:#d8d0c4;--border-strong:#9f9688;--accent:#1b4965;--accent-hover:#12384e;
+ --accent-soft:#dce8ee;--warm:#c95f42;--warm-soft:#f5dfd6;--success:#37745b;--danger:#a34d43;
+ --focus-ring:#26769b;--shadow-low:0 10px 30px #3b2d1c14;--radius-sm:8px;--radius-md:14px;
+ --space-1:.45rem;--space-2:.8rem;--space-3:1.15rem;--space-4:1.7rem;--space-5:2.5rem;--motion-normal:240ms
+}
+html[data-theme="dark"]{
+ --surface-page:#11191d;--surface-raised:#182329;--surface-soft:#202e35;
+ --text-primary:#edf3f5;--text-secondary:#a8b5bb;--border-subtle:#33444c;--border-strong:#607079;
+ --accent:#82b9d1;--accent-hover:#acd4e4;--accent-soft:#193747;--warm:#ef9b80;--warm-soft:#3d2924;
+ --success:#7bc5a0;--danger:#e99086;--focus-ring:#acd4e4;--shadow-low:0 12px 34px #0005
+}
+*{box-sizing:border-box}body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}a,button,input{font:inherit}a{color:inherit}math{font-family:"Cambria Math","Times New Roman",serif}:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.topbar{border-bottom:1px solid var(--border-subtle);background:var(--surface-page)}.topbar-inner{width:min(1320px,calc(100% - 36px));min-height:56px;margin:auto;display:flex;align-items:center;gap:1rem}.topbar a,.topbar button{min-height:42px;border:0;background:transparent;text-decoration:none;color:var(--text-secondary);cursor:pointer}.topbar a:hover,.topbar button:hover{color:var(--text-primary)}.brand{font-weight:800;color:var(--text-primary)!important}.grow{flex:1}
+.shell{width:min(1320px,calc(100% - 36px));margin:auto;padding:2rem 0 3rem}.intro{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2rem;align-items:end;padding:1rem 0 2rem;border-bottom:1px solid var(--border-subtle)}.eyebrow{margin:0 0 .6rem;color:var(--warm);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;font-weight:850}h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:600;line-height:1.1}h1{font-size:clamp(2.7rem,5.7vw,5.6rem);margin:.2rem 0 .8rem;letter-spacing:-.045em}h2{font-size:clamp(1.65rem,2.8vw,2.5rem);margin:.2rem 0 .8rem}p{max-width:800px}.muted{color:var(--text-secondary)}
+.mode-tabs{display:flex;gap:.6rem;flex-wrap:wrap}.mode-tabs button{min-height:44px;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);padding:.55rem .9rem;cursor:pointer;border-radius:var(--radius-sm)}.mode-tabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.workspace{display:grid;grid-template-columns:minmax(0,2fr) minmax(300px,.8fr);gap:2rem;margin-top:2rem;align-items:start}.stage{background:var(--surface-raised);border:1px solid var(--border-subtle);box-shadow:var(--shadow-low);padding:1rem;min-width:0}.stage svg{display:block;width:100%;height:auto;min-height:430px}.panel{border-top:2px solid var(--accent);padding-top:1rem}.formula{padding:1rem 0;border-bottom:1px solid var(--border-subtle);overflow-x:auto}.formula math{font-size:1.35rem}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1rem 0}.metric{padding:.8rem 0;border-bottom:1px solid var(--border-subtle)}.metric span{display:block;color:var(--text-secondary);font-size:.8rem;text-transform:uppercase;letter-spacing:.09em}.metric strong{font-size:1.35rem}.control{margin:1.2rem 0}.control label{display:flex;justify-content:space-between;gap:1rem;font-weight:750}.control input[type="range"]{width:100%;accent-color:var(--accent);min-height:36px}.actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem}.actions button{min-height:42px;border:1px solid var(--border-strong);background:var(--surface-raised);padding:.55rem .8rem;cursor:pointer;border-radius:var(--radius-sm)}.actions .primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.finding{border-left:3px solid var(--warm);padding:.2rem 0 .2rem 1rem;margin:1.2rem 0;color:var(--text-secondary)}.finding strong{color:var(--text-primary)}
+.legend{display:flex;gap:1rem;flex-wrap:wrap;color:var(--text-secondary);font-size:.88rem;margin-top:.8rem}.legend span::before{content:"";display:inline-block;width:.7rem;height:.7rem;margin-right:.4rem;border-radius:50%;background:var(--accent)}.legend span.threshold::before{background:var(--warm)}.legend span.good::before{background:var(--success)}
+.hidden{display:none!important}.axis{stroke:var(--border-strong);stroke-width:1.5}.grid{stroke:var(--border-subtle);stroke-width:1}.curve{fill:none;stroke:var(--accent);stroke-width:4}.threshold-line{stroke:var(--warm);stroke-width:2;stroke-dasharray:8 7}.good-area{fill:color-mix(in srgb,var(--success) 22%,transparent)}.point{fill:var(--warm);stroke:var(--surface-raised);stroke-width:4}.label{fill:var(--text-primary);font:600 15px system-ui}.muted-label{fill:var(--text-secondary);font:13px system-ui}.measure{stroke:var(--accent);stroke-width:5}.lens{fill:var(--accent-soft);stroke:var(--accent);stroke-width:3}.object{stroke:var(--warm);stroke-width:4}.screen{stroke:var(--border-strong);stroke-width:5}.ray{stroke:var(--text-secondary);stroke-width:2;fill:none;stroke-dasharray:5 5}
+@media(max-width:900px){.workspace{grid-template-columns:1fr}.intro{grid-template-columns:1fr}.stage svg{min-height:330px}}
+@media(max-width:540px){.shell,.topbar-inner{width:min(100% - 24px,1320px)}.topbar .optional{display:none}.metrics{grid-template-columns:1fr}.stage{padding:.5rem}.stage svg{min-height:280px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{.topbar,.mode-tabs,.actions,.control{display:none!important}.workspace{display:block}.panel{margin-top:1.5rem}.stage{box-shadow:none}.hidden{display:block!important}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner"><a class="brand" href="27.09.26.html">← Вернуться к занятию</a><span class="grow"></span><a class="optional" href="../pdf_docs/27.09.26.pdf" target="_blank" rel="noreferrer">Скачать пособие</a><button id="theme" type="button">Тема</button></div></header>
+<main class="shell">
+<section class="intro"><div><p class="eyebrow">27.09.2026 · цифровая лаборатория</p><h1>Прикладная формула как живой объект</h1><p class="muted">Меняйте один параметр и следите, как перестраивается связанная величина. Здесь используются только две модели из чек-листа занятия.</p></div><div class="mode-tabs" role="tablist" aria-label="Режим лаборатории"><button id="tabInterval" type="button" role="tab" aria-selected="true" aria-controls="intervalMode">Парабола и промежуток</button><button id="tabLens" type="button" role="tab" aria-selected="false" aria-controls="lensMode">Формула линзы</button></div></section>
+
+<section id="intervalMode" class="workspace" role="tabpanel" aria-labelledby="tabInterval">
+<div class="stage"><svg id="intervalSvg" viewBox="0 0 820 520" role="img" aria-labelledby="intervalTitle intervalDesc"><title id="intervalTitle">График высоты h(t)=20t−5t²</title><desc id="intervalDesc">Парабола с уровнем 15 метров и выделенным промежутком от 1 до 3 секунд.</desc>
+<g id="intervalGrid"></g><line class="axis" x1="70" y1="450" x2="770" y2="450"></line><line class="axis" x1="70" y1="450" x2="70" y2="55"></line>
+<rect id="goodBand" class="good-area" x="245" y="55" width="350" height="395"></rect><line id="threshold" class="threshold-line" x1="70" y1="185" x2="770" y2="185"></line>
+<path id="curve" class="curve"></path><circle id="movingPoint" class="point" r="9"></circle>
+<text class="label" x="746" y="478">t</text><text class="label" x="42" y="66">h</text><text class="muted-label" x="78" y="176">15 м</text><text class="muted-label" x="232" y="476">1</text><text class="muted-label" x="584" y="476">3</text><text class="muted-label" x="744" y="476">4</text>
+</svg><div class="legend"><span>график h(t)</span><span class="threshold">уровень 15 м</span><span class="good">h ≥ 15</span></div></div>
+<aside class="panel"><p class="eyebrow">Режим 01</p><h2>Границы дают корни, ответ даёт неравенство</h2><div class="formula"><math display="block"><mi>h</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mn>20</mn><mi>t</mi><mo>−</mo><mn>5</mn><msup><mi>t</mi><mn>2</mn></msup><mo>,</mo><mspace width=".6em"/><mi>h</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>≥</mo><mn>15</mn></math></div>
+<div class="control"><label for="timeRange"><span>Время t</span><output id="timeOut">2,0 с</output></label><input id="timeRange" type="range" min="0" max="4" step="0.05" value="2"></div>
+<div class="metrics"><div class="metric"><span>h(t)</span><strong id="heightOut">20,0 м</strong></div><div class="metric"><span>Условие</span><strong id="conditionOut">выполняется</strong></div></div>
+<div class="finding" id="intervalFinding"><strong>Ключевой вывод.</strong> Уравнение h(t)=15 даёт t=1 и t=3. Между этими моментами парабола выше уровня 15, поэтому ответ: [1; 3] с.</div>
+<div class="actions"><button type="button" data-time="1">t = 1</button><button type="button" data-time="3">t = 3</button><button id="intervalReset" class="primary" type="button">Сбросить</button></div>
+</aside>
+</section>
+
+<section id="lensMode" class="workspace hidden" role="tabpanel" aria-labelledby="tabLens">
+<div class="stage"><svg viewBox="0 0 820 520" role="img" aria-labelledby="lensTitle lensDesc"><title id="lensTitle">Схема линзы и двух расстояний</title><desc id="lensDesc">Предмет слева от линзы, экран справа; длины d1 и d2 меняются согласованно по формуле линзы.</desc>
+<line class="axis" x1="65" y1="290" x2="770" y2="290"></line><line id="objectLine" class="object" x1="135" y1="290" x2="135" y2="150"></line><path class="object" d="M120 165 135 145 150 165"></path>
+<path class="lens" d="M400 105 Q360 290 400 475 Q440 290 400 105Z"></path><line id="screenLine" class="screen" x1="705" y1="115" x2="705" y2="465"></line>
+<path class="ray" d="M135 150 L400 245 L705 330"></path><path class="ray" d="M135 150 L400 150 L705 330"></path>
+<line id="d1Line" class="measure" x1="135" y1="420" x2="400" y2="420"></line><line id="d2Line" class="measure" x1="400" y1="450" x2="705" y2="450"></line>
+<text class="label" x="378" y="86">линза</text><text class="label" x="684" y="92">экран</text><text class="muted-label" id="d1Svg" x="235" y="405">d₁</text><text class="muted-label" id="d2Svg" x="540" y="435">d₂</text>
+</svg></div>
+<aside class="panel"><p class="eyebrow">Режим 02</p><h2>Увеличьте d₂ и наблюдайте d₁</h2><div class="formula"><math display="block"><mfrac><mn>1</mn><msub><mi>d</mi><mn>1</mn></msub></mfrac><mo>+</mo><mfrac><mn>1</mn><msub><mi>d</mi><mn>2</mn></msub></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>24</mn></mfrac></math></div>
+<div class="control"><label for="d2Range"><span>d₂</span><output id="d2Out">144 см</output></label><input id="d2Range" type="range" min="120" max="168" step="1" value="144"></div>
+<div class="metrics"><div class="metric"><span>d₁</span><strong id="d1Out">28,8 см</strong></div><div class="metric"><span>1/d₁</span><strong id="invOut">0,0347</strong></div></div>
+<div class="finding"><strong>Ключевой вывод.</strong> При увеличении d₂ дробь 1/d₂ уменьшается, поэтому 1/d₁ растёт, а d₁ уменьшается. Минимум на данном диапазоне достигается при d₂ = 168 см: d₁ = 28 см.</div>
+<div class="actions"><button type="button" data-d2="120">d₂ = 120</button><button type="button" data-d2="168">d₂ = 168</button><button id="lensReset" class="primary" type="button">Сбросить</button></div>
+</aside>
+</section>
+</main>
+<script>
+(function(){
+"use strict";
+var root=document.documentElement,theme=document.getElementById("theme");
+function safeGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function safeSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+var saved=safeGet("matvey-270926-theme");if(saved==="dark"||saved==="light")root.dataset.theme=saved;
+theme.addEventListener("click",function(){root.dataset.theme=root.dataset.theme==="dark"?"light":"dark";safeSet("matvey-270926-theme",root.dataset.theme)});
+
+var tabI=document.getElementById("tabInterval"),tabL=document.getElementById("tabLens"),modeI=document.getElementById("intervalMode"),modeL=document.getElementById("lensMode");
+function setMode(mode,push){var lens=mode==="lens";modeI.classList.toggle("hidden",lens);modeL.classList.toggle("hidden",!lens);tabI.setAttribute("aria-selected",String(!lens));tabL.setAttribute("aria-selected",String(lens));tabI.tabIndex=lens?-1:0;tabL.tabIndex=lens?0:-1;if(push){var u=new URL(location.href);u.searchParams.set("mode",lens?"lens":"interval");history.replaceState(null,"",u)}}
+tabI.addEventListener("click",function(){setMode("interval",true)});tabL.addEventListener("click",function(){setMode("lens",true)});[tabI,tabL].forEach(function(tab){tab.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key==="ArrowLeft"){e.preventDefault();if(tab===tabI){setMode("lens",true);tabL.focus()}else{setMode("interval",true);tabI.focus()}}})});
+setMode(new URLSearchParams(location.search).get("mode")==="lens"?"lens":"interval",false);
+
+var svg=document.getElementById("intervalSvg"),curve=document.getElementById("curve"),point=document.getElementById("movingPoint"),time=document.getElementById("timeRange"),timeOut=document.getElementById("timeOut"),heightOut=document.getElementById("heightOut"),conditionOut=document.getElementById("conditionOut");
+function sx(t){return 70+t/4*700}function sy(h){return 450-h/22*350}function H(t){return 20*t-5*t*t}
+var pts=[];for(var t=0;t<=4.001;t+=0.04)pts.push((pts.length?"L":"M")+sx(t).toFixed(1)+" "+sy(H(t)).toFixed(1));curve.setAttribute("d",pts.join(" "));
+function updateInterval(v){var t=Number(v),h=H(t);time.value=String(t);timeOut.value=t.toLocaleString("ru-RU",{minimumFractionDigits:1,maximumFractionDigits:2})+" с";heightOut.textContent=h.toLocaleString("ru-RU",{minimumFractionDigits:1,maximumFractionDigits:2})+" м";conditionOut.textContent=h>=15-1e-9?"выполняется":"не выполняется";conditionOut.style.color=h>=15-1e-9?"var(--success)":"var(--danger)";point.setAttribute("cx",String(sx(t)));point.setAttribute("cy",String(sy(h)))}
+time.addEventListener("input",function(){updateInterval(time.value)});document.querySelectorAll("[data-time]").forEach(function(b){b.addEventListener("click",function(){updateInterval(b.dataset.time)})});document.getElementById("intervalReset").addEventListener("click",function(){updateInterval(2)});updateInterval(2);
+
+var d2=document.getElementById("d2Range"),d2Out=document.getElementById("d2Out"),d1Out=document.getElementById("d1Out"),invOut=document.getElementById("invOut"),d1Svg=document.getElementById("d1Svg"),d2Svg=document.getElementById("d2Svg");
+function D1(d){return 24*d/(d-24)}
+function updateLens(v){var x=Number(v),y=D1(x);d2.value=String(x);d2Out.value=x.toLocaleString("ru-RU")+" см";d1Out.textContent=y.toLocaleString("ru-RU",{minimumFractionDigits:1,maximumFractionDigits:1})+" см";invOut.textContent=(1/y).toLocaleString("ru-RU",{minimumFractionDigits:4,maximumFractionDigits:4});d1Svg.textContent="d₁ = "+y.toLocaleString("ru-RU",{maximumFractionDigits:1})+" см";d2Svg.textContent="d₂ = "+x.toLocaleString("ru-RU")+" см"}
+d2.addEventListener("input",function(){updateLens(d2.value)});document.querySelectorAll("[data-d2]").forEach(function(b){b.addEventListener("click",function(){updateLens(b.dataset.d2)})});document.getElementById("lensReset").addEventListener("click",function(){updateLens(144)});updateLens(144);
+})();
+</script>
+</body>
+</html>
