@@ -520,7 +520,7 @@
     if (evidence.length) {
       els.dialogHistory.innerHTML = evidence.map(entry =>
         `<div class="history-entry"><b>${escapeHTML(entry.date || "Материал")}</b><br>${escapeHTML(entry.text || "Тема встречалась в материале.")}` +
-        (entry.href ? `<br><a href="${escapeHTML(entry.href)}" target="_blank">Открыть подтверждающий материал →</a>` : "") +
+        (entry.href ? `<br><a href="${escapeHTML(entry.href)}" target="_blank" rel="noopener noreferrer">Открыть подтверждающий материал →</a>` : "") +
         `</div>`
       ).join("");
     } else {
@@ -539,6 +539,7 @@
       els.dialogMaterial.hidden = false;
     } else {
       els.dialogMaterial.hidden = true;
+      els.dialogMaterial.removeAttribute("href");
     }
 
     els.repeatToggle.textContent = state.repeat.has(id) ? "Убрать из повторения" : "Добавить в повторение";
