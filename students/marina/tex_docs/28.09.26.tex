@@ -1,0 +1,310 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{cmap}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=18mm,top=18mm,bottom=20mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{enumitem}
+\usepackage{booktabs,tabularx,longtable}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+
+\definecolor{accent}{HTML}{176B87}
+\definecolor{darkaccent}{HTML}{0F4C5C}
+\definecolor{textgray}{HTML}{2E3438}
+\definecolor{softgray}{HTML}{EEF3F5}
+\definecolor{warn}{HTML}{A6533B}
+\definecolor{ok}{HTML}{386641}
+
+\color{textgray}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\headheight}{15pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=5pt,topsep=4pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{darkaccent}Векторы}
+\fancyhead[R]{\small\color{darkaccent}28.09.26}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\newcommand{\vect}[1]{\overrightarrow{#1}}
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\mistake}[1]{\textbf{\color{warn}#1}}
+\newcommand{\good}[1]{\textbf{\color{ok}#1}}
+
+\tikzset{
+  vec/.style={-{Stealth[length=3.2mm,width=2.1mm]},line width=1.25pt,color=accent},
+  flowstart/.style={ellipse,draw=darkaccent,line width=0.9pt,minimum width=34mm,minimum height=11mm,align=center,fill=softgray},
+  flowaction/.style={rounded corners=2mm,draw=darkaccent,line width=0.9pt,text width=48mm,minimum height=13mm,align=center,fill=white},
+  flowdecision/.style={diamond,aspect=2.2,draw=darkaccent,line width=0.9pt,text width=39mm,align=center,inner sep=1.5pt,fill=softgray},
+  flowarrow/.style={-{Stealth[length=3mm,width=2mm]},line width=1pt,color=darkaccent}
+}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{18mm}
+{\Large\color{darkaccent}\textbf{Чек-лист}}\\[6mm]
+{\huge\bfseries Векторы}\\[3mm]
+{\Large действия и правила построения}\\[14mm]
+
+\begin{tikzpicture}[scale=1.05]
+  \coordinate (A) at (0,0);
+  \coordinate (B) at (3.2,0.7);
+  \coordinate (C) at (5.9,-0.1);
+  \draw[vec] (A)--(B) node[midway,above] {$\vec a$};
+  \draw[vec] (B)--(C) node[midway,above] {$\vec b$};
+  \draw[vec,color=darkaccent,line width=1.6pt] (A)--(C) node[midway,below] {$\vec a+\vec b$};
+\end{tikzpicture}
+
+\vfill
+{\large Марина Селиверстова}\\[3mm]
+{\normalsize 28.09.26}\\[11mm]
+{\small\color{darkaccent}Лёвин Артём Александрович эксклюзивно для Марины Селиверстовой}
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent!55,line width=1.2pt]
+  ([xshift=16mm,yshift=12mm]current page.south west)
+  .. controls ([xshift=55mm,yshift=22mm]current page.south west) and ([xshift=-55mm,yshift=4mm]current page.south east) ..
+  ([xshift=-16mm,yshift=15mm]current page.south east);
+\end{tikzpicture}
+
+\clearpage
+\section*{1. Что такое вектор}
+\key{Вектор} --- направленный отрезок: у него есть \textbf{начало} и \textbf{конец}.
+
+Если начало --- точка $A$, а конец --- точка $B$, то вектор записывают как $\vect{AB}$. Порядок букв важен: $\vect{AB}$ направлен от $A$ к $B$, а $\vect{BA}$ --- в обратную сторону.
+
+\begin{center}
+\begin{tikzpicture}
+  \coordinate (A) at (0,0);
+  \coordinate (B) at (5.2,0);
+  \fill[darkaccent] (A) circle (1.8pt) node[below] {$A$};
+  \fill[darkaccent] (B) circle (1.8pt) node[below] {$B$};
+  \draw[vec] (A)--(B) node[midway,above] {$\vect{AB}$};
+\end{tikzpicture}
+\end{center}
+
+\key{Мини-памятка:} первая буква --- начало, вторая --- конец. При переносе вектора в другое место его \textbf{не поворачивают и не растягивают}: длина и направление сохраняются.
+
+\section*{2. Сложение двух векторов: правило треугольника}
+Чтобы сложить два вектора, второй вектор переносят параллельно самому себе так, чтобы \key{его начало совпало с концом первого}.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+  \coordinate (A) at (0,0);
+  \coordinate (B) at (3.2,1.0);
+  \coordinate (C) at (6.5,0.2);
+  \draw[vec] (A)--(B) node[midway,above] {$\vec a$};
+  \draw[vec] (B)--(C) node[midway,above] {$\vec b$};
+  \draw[vec,color=darkaccent,line width=1.6pt] (A)--(C) node[midway,below] {$\vec a+\vec b$};
+  \fill[darkaccent] (A) circle (1.5pt);
+  \fill[darkaccent] (B) circle (1.5pt);
+  \fill[darkaccent] (C) circle (1.5pt);
+\end{tikzpicture}
+\end{center}
+
+\begin{enumerate}
+  \item Постройте первый вектор.
+  \item К его концу перенесите \textbf{начало} второго вектора, сохраняя его длину и направление.
+  \item Соедините начало первого с концом второго. Полученный вектор --- сумма.
+\end{enumerate}
+
+\mistake{Типичная ошибка:} совмещать конец первого с концом второго. Нужна связка \textbf{конец первого $\to$ начало второго}.
+
+\section*{3. Вычитание векторов}
+Вычитание переводим в сложение:
+\[
+\vec a-\vec b=\vec a+(-\vec b).
+\]
+
+Вектор $-\vec b$ имеет \textbf{ту же длину}, что и $\vec b$, но направлен в противоположную сторону. Иными словами, у него меняются местами начало и конец.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.95]
+  \coordinate (A) at (0,0);
+  \coordinate (B) at (3.2,0.8);
+  \coordinate (C) at (5.9,-0.4);
+  \draw[vec] (A)--(B) node[midway,above] {$\vec a$};
+  \draw[vec] (B)--(C) node[midway,above] {$-\vec b$};
+  \draw[vec,color=darkaccent,line width=1.6pt] (A)--(C) node[midway,below] {$\vec a-\vec b$};
+\end{tikzpicture}
+\end{center}
+
+\key{Главная последовательность:} развернуть вычитаемый вектор $\to$ присоединить его началом к концу первого $\to$ замкнуть путь.
+
+\clearpage
+\section*{4. Умножение вектора на число}
+Для числа $k$ выполняется
+\[
+|k\vec a|=|k|\,|\vec a|.
+\]
+То есть модуль коэффициента задаёт изменение длины, а знак определяет направление:
+
+\begin{itemize}
+  \item $k>0$: направление сохраняется;
+  \item $k<0$: направление становится противоположным;
+  \item $k=0$: получается нулевой вектор $\vec 0$;
+  \item дробный коэффициент, например $\frac12$, уменьшает длину вектора в соответствующее число раз.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[vec] (0,1.8)--(2.2,1.8) node[midway,above] {$\vec a$};
+  \draw[vec] (0,0.8)--(4.4,0.8) node[midway,above] {$2\vec a$};
+  \draw[vec] (4.4,-0.2)--(0,-0.2) node[midway,below] {$-2\vec a$};
+\end{tikzpicture}
+\end{center}
+
+\mistake{Важно:} положительный коэффициент не поворачивает вектор. Отрицательный знак разворачивает направление строго на противоположное.
+
+\section*{5. Сложение нескольких векторов: правило многоугольника}
+Для трёх и более векторов действует та же идея: к концу предыдущего вектора присоединяют начало следующего.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+  \coordinate (A) at (0,0);
+  \coordinate (B) at (2.5,1.1);
+  \coordinate (C) at (4.5,0.2);
+  \coordinate (D) at (6.8,1.6);
+  \draw[vec] (A)--(B) node[midway,above] {$\vec a$};
+  \draw[vec] (B)--(C) node[midway,above] {$\vec b$};
+  \draw[vec] (C)--(D) node[midway,below] {$\vec c$};
+  \draw[vec,color=darkaccent,line width=1.6pt] (A)--(D) node[midway,below] {$\vec a+\vec b+\vec c$};
+\end{tikzpicture}
+\end{center}
+
+Результирующий вектор соединяет \textbf{начало первого} с \textbf{концом последнего}.
+
+\section*{6. Как выражать один вектор через другие}
+Ищите путь от начала нужного вектора к его концу и записывайте последовательность перемещений.
+
+В параллелограмме $ABCD$, если
+\[
+\vect{AB}=\vec a,\qquad \vect{AD}=\vec b,
+\]
+то путь $B\to A\to D$ даёт
+\[
+\vect{BD}=\vect{BA}+\vect{AD}=-\vec a+\vec b=\vec b-\vec a.
+\]
+
+\key{Контроль направления:} нужный вектор $\vect{BD}$ должен начинаться в $B$ и заканчиваться в $D$. Это быстрый способ проверить знак и порядок слагаемых.
+
+\section*{7. Ошибки, которые стоит ловить сразу}
+\begin{itemize}
+  \item \mistake{Перепутаны начало и конец:} $\vect{AB}\neq\vect{BA}$.
+  \item \mistake{Второй вектор присоединён концом:} при сложении к концу первого подводят \textbf{начало второго}.
+  \item \mistake{При вычитании не развернули второй вектор:} сначала $\vec a-\vec b=\vec a+(-\vec b)$.
+  \item \mistake{Вектор повернули произвольно:} при параллельном переносе длина и направление сохраняются.
+  \item \mistake{Отрицательный коэффициент изменил только длину:} знак «минус» обязательно меняет направление на противоположное.
+  \item \mistake{Результирующий вектор соединяет неверные точки:} соединяйте начало первого и конец последнего.
+\end{itemize}
+
+\section*{8. Самопроверка за 20 секунд}
+Перед тем как считать построение завершённым, проверьте четыре пункта:
+\begin{enumerate}[label=\arabic*.,itemsep=2pt]
+  \item При переносе вектор сохранил длину и направление?
+  \item При вычитании второй вектор сначала развернут?
+  \item Каждый следующий вектор начинается в конце предыдущего?
+  \item Результат соединяет начало всего пути с его концом?
+\end{enumerate}
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: сложение и вычитание векторов}
+\end{center}
+\vspace{6mm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=13mm and 17mm]
+  \node[flowstart] (start) {Начало};
+  \node[flowdecision,below=of start] (op) {Какая операция?};
+  \node[flowaction,below left=18mm and 9mm of op] (sum) {Сложение: второй вектор оставьте без изменения};
+  \node[flowaction,below right=18mm and 9mm of op] (sub) {Вычитание: замените $\vec a-\vec b$ на $\vec a+(-\vec b)$ и разверните $\vec b$};
+  \node[flowaction,below=28mm of op] (attach) {Параллельно перенесите второй вектор: его начало должно совпасть с концом первого};
+  \node[flowaction,below=of attach] (close) {Соедините начало первого вектора с концом второго};
+  \node[flowstart,below=of close] (finish) {Получен результирующий вектор};
+
+  \draw[flowarrow] (start)--(op);
+  \draw[flowarrow] (op)-- node[above left]{\small сложение} (sum);
+  \draw[flowarrow] (op)-- node[above right]{\small вычитание} (sub);
+  \draw[flowarrow] (sum.south) |- (attach.west);
+  \draw[flowarrow] (sub.south) |- (attach.east);
+  \draw[flowarrow] (attach)--(close);
+  \draw[flowarrow] (close)--(finish);
+\end{tikzpicture}
+\end{center}
+
+\vfill
+\begin{center}
+\good{Финальная проверка:} перенос не меняет вектор, а результат начинается там же, где первый вектор, и заканчивается там, где завершился весь путь.
+\end{center}
+
+\clearpage
+\section*{Тренировочный блок --- Путь А}
+\textbf{10 заданий.} Выполняйте построения схематично: важнее сохранить направления, длины в клетках и правильный порядок соединения векторов.
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Вектор $\vect{AB}$ направлен из точки $A$ в точку $B$. Запишите вектор той же длины, направленный строго противоположно.
+
+  \item Запишите разность $\vec a-\vec b$ в виде суммы двух векторов.
+
+  \item Вектор $\vec p$ имеет длину 4 клетки и направлен вправо. Укажите длину и направление вектора $-2\vec p$.
+
+  \item Вектор $\vec a$ имеет длину 3 клетки и направлен вправо, а $\vec b$ --- 2 клетки вверх. Постройте $\vec a+\vec b$ по правилу треугольника и опишите положение конца результирующего вектора относительно его начала.
+
+  \item Вектор $\vec p$ имеет длину 4 клетки и направлен вправо, а $\vec k$ --- 3 клетки вверх. Постройте $\vec p-\vec k$ и опишите положение его конца относительно начала.
+
+  \item Вектор $\vec p$ имеет длину 2 клетки и направлен вправо, а $\vec k$ --- 2 клетки вверх. Постройте $\vec p+2\vec k$ и опишите положение конца результирующего вектора относительно начала.
+
+  \item Вектор $\vec a$ имеет длину 2 клетки и направлен вправо, а $\vec b$ --- 3 клетки вверх. Постройте $2\vec a+3\vec b$ и опишите итоговое перемещение.
+
+  \item Вектор $\vec p$ имеет длину 3 клетки и направлен вправо, $\vec k$ --- 2 клетки вверх, $\vec t$ --- 1 клетку влево. Постройте $\vec p+\vec k-\vec t$ и опишите итоговое перемещение.
+
+  \item В параллелограмме $ABCD$ задано $\vect{AB}=\vec a$, $\vect{AD}=\vec b$. Выразите $\vect{BD}$ через $\vec a$ и $\vec b$.
+
+  \item В том же параллелограмме выразите $\vect{DB}$ через $\vec a$ и $\vec b$. Проверьте ответ сравнением с $\vect{BD}$.
+\end{enumerate}
+
+\clearpage
+\section*{Ответы}
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{@{}p{12mm}p{0.82\linewidth}@{}}
+\toprule
+\textbf{№} & \textbf{Ответ / ориентир для самопроверки}\\
+\midrule
+\endhead
+1 & $\vect{BA}=-\vect{AB}$.\\
+2 & $\vec a-\vec b=\vec a+(-\vec b)$.\\
+3 & Длина 8 клеток; направление влево.\\
+4 & От начала: 3 клетки вправо и 2 клетки вверх. Результат --- $\vec a+\vec b$.\\
+5 & Развернуть $\vec k$: $-\vec k$ направлен вниз. От начала: 4 клетки вправо и 3 клетки вниз.\\
+6 & $2\vec k$ --- 4 клетки вверх. От начала: 2 клетки вправо и 4 клетки вверх.\\
+7 & $2\vec a$ --- 4 клетки вправо, $3\vec b$ --- 9 клеток вверх. Итог: 4 клетки вправо и 9 клеток вверх.\\
+8 & $-\vec t$ --- 1 клетка вправо. Итог: 4 клетки вправо и 2 клетки вверх.\\
+9 & $\vect{BD}=\vect{BA}+\vect{AD}=-\vec a+\vec b=\vec b-\vec a$.\\
+10 & $\vect{DB}=\vec a-\vec b=-\vect{BD}$.\\
+\bottomrule
+\end{longtable}
+
+\vfill
+\begin{center}
+{\small\color{darkaccent}Лёвин Артём Александрович эксклюзивно для Марины Селиверстовой}
+\end{center}
+
+\end{document}
