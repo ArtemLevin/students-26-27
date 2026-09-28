@@ -8,6 +8,23 @@ const MONTHS_GENITIVE=[
 
 export const LESSONS=Object.freeze([
   {
+    date:'2026-09-28',
+    href:'28.09.26.html',
+    title:'Оптимизационные задачи с производной',
+    navTitle:'Оптимизация с производной',
+    navSubtitle:'целевая функция · ограничения · максимум и минимум',
+    summary:'На занятии выстроен универсальный маршрут прикладной оптимизации: определить целевую величину, свести модель к одной переменной, зафиксировать допустимую область, найти критические точки и доказать максимум или минимум по знаку производной и, когда нужно, по граничным значениям. Разобраны модели выручки, произведения, мощности и объёма коробки.',
+    topics:['оптимизация','целевая функция','ограничения','критические точки','максимум и минимум','прикладные задачи'],
+    outcomes:[
+      {competencyId:'t12_applied',label:'Прикладная оптимизация',level:2,tone:'process',practiceDisposition:'manual'},
+      {competencyId:'t12_domain',label:'ОДЗ и допустимая область',level:2,tone:'process',practiceDisposition:'manual'},
+      {competencyId:'t12_endpoints',label:'Критические точки и границы',level:2,tone:'process',practiceDisposition:'manual'},
+      {competencyId:'t12_product',label:'Произведения функций',level:2,tone:'process',practiceDisposition:'manual'},
+      {competencyId:'t12_quotient',label:'Частные функций',level:2,tone:'process',practiceDisposition:'manual'}
+    ],
+    materials:{pdf:'../pdf_docs/28.09.26.pdf',tex:'../tex_docs/28.09.26.tex',lab:'28.09.26-lab.html'}
+  },
+  {
     date:'2026-09-25',
     href:'25.09.26.html',
     title:'Производная и касательная',

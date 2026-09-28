@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Николь Саркисьянц · оптимизационные задачи с производной · целевая функция · ограничения · экстремум · 28.09.2026">
+<title>Оптимизационные задачи с производной — Николь Саркисьянц</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23356B75'/%3E%3Cpath d='M12 46h40M16 42c8-26 24-26 32 0' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='25' r='4' fill='%23E5B85C'/%3E%3C/svg%3E">
+<style>
+:root{
+  color-scheme:light;
+  --page:#f2eee7;--paper:#fffdf8;--soft:#e8efef;--text:#252727;--muted:#687274;
+  --line:#c9d1cf;--line-strong:#849695;--accent:#356b75;--accent-deep:#234b52;
+  --accent-soft:#dce9ea;--signal:#a7792e;--danger:#98504a;--success:#356f58;--focus:#b98535;
+  --shadow:0 14px 38px rgba(46,62,64,.08);
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#141819;--paper:#1e2425;--soft:#252e2f;--text:#edf1ef;--muted:#b6c1bf;
+  --line:#394849;--line-strong:#627879;--accent:#7fc0c8;--accent-deep:#a7d9de;
+  --accent-soft:#24393c;--signal:#ddb86c;--danger:#df9087;--success:#7bc2a0;--focus:#e3bd72;
+  --shadow:0 18px 46px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--page);color:var(--text);font:16px/1.64 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:inherit}button,input{font:inherit;color:inherit}.page{width:min(100% - 2rem,1220px);margin:auto;padding-bottom:4rem}.skip{position:fixed;left:1rem;top:-5rem;z-index:100;background:var(--text);color:var(--page);padding:.7rem 1rem}.skip:focus{top:1rem}
+.topbar{position:sticky;top:.65rem;z-index:40;margin:1rem 0 0;display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;padding:.5rem 0;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);background:color-mix(in srgb,var(--page) 93%,transparent);backdrop-filter:blur(10px)}
+.topbar a,.topbar button{min-height:40px;padding:.55rem .7rem;border:0;border-right:1px solid var(--line);background:transparent;text-decoration:none;font-weight:740;cursor:pointer}.topbar a:hover,.topbar button:hover{color:var(--accent)}.topbar .lab{background:var(--accent);color:var(--page);border:0}.grow{flex:1}.date{font:700 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--muted);letter-spacing:.08em}
+.cover{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(330px,.75fr);gap:clamp(2.2rem,6vw,6rem);align-items:end;min-height:640px;padding:clamp(3rem,8vw,7rem) 0 clamp(2rem,5vw,4rem);border-bottom:1px solid var(--line-strong);overflow:hidden}
+.coordinate-field{position:absolute;inset:0;pointer-events:none;overflow:hidden}.coordinate-waypoint{position:absolute;left:var(--point-x);top:var(--point-y);width:var(--point-size);height:var(--point-size);margin:calc(var(--point-size)/-2);border:1px solid color-mix(in srgb,var(--accent) 36%,transparent);border-radius:50%;opacity:.28}
+.cover-copy,.instrument{position:relative;z-index:1}.kicker{margin:0 0 .9rem;color:var(--accent);font:750 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.14em;text-transform:uppercase}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif}h1{margin:0;max-width:11ch;font-size:clamp(3.7rem,8vw,7.5rem);line-height:.88;letter-spacing:-.06em;font-weight:500}h2{margin:.1rem 0 .8rem;font-size:clamp(2rem,4.3vw,4rem);line-height:1;letter-spacing:-.045em;font-weight:500}h3{margin:.2rem 0 .55rem;font-size:1.24rem;line-height:1.2}.lead{max-width:62ch;margin:1.4rem 0;color:var(--muted);font-size:1.08rem}
+.signature{display:flex;gap:.8rem;align-items:center;margin-top:1.5rem;color:var(--muted);font-size:.9rem}.signature b{color:var(--text)}.navigator{width:36px;height:36px;border:1px solid var(--line-strong);display:grid;place-items:center;color:var(--accent)}
+.route{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1.5rem}.route a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:.18rem}.route a:hover,.route a:focus-visible{color:var(--accent);border-color:var(--accent)}
+.instrument{border-left:1px solid var(--line-strong);padding-left:clamp(1.2rem,3vw,2.3rem)}.instrument-label,.folio,.readout{font:700 .69rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.hero-formula{margin:.8rem 0 1.4rem;font:500 clamp(2.1rem,4.5vw,4rem)/1.08 Georgia,serif;color:var(--accent);letter-spacing:-.04em}.instrument svg{display:block;width:100%;height:auto}.instrument-note{display:grid;grid-template-columns:auto 1fr;gap:.8rem;padding-top:1rem;border-top:1px solid var(--line);color:var(--muted)}.instrument-note .readout{color:var(--accent)}
+.poster{border-bottom:1px solid var(--line)}.poster summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:1rem;padding:1rem 0;font-weight:760}.poster summary::-webkit-details-marker{display:none}.poster summary:after{content:"+";color:var(--accent);font-size:1.35rem}.poster[open] summary:after{content:"−"}.poster-body{display:grid;grid-template-columns:minmax(180px,.32fr) minmax(0,.68fr);gap:2rem;padding:1rem 0 2rem;align-items:start}.poster-body p{margin:0;color:var(--muted)}.poster-open{border:0;padding:0;background:transparent;cursor:zoom-in}.poster-open img{display:block;width:100%;max-height:76vh;object-fit:contain;border:1px solid var(--line);background:var(--paper)}
+.section{scroll-margin-top:5.4rem;padding:clamp(2.8rem,7vw,5.8rem) 0;border-bottom:1px solid var(--line)}.section-head{display:grid;grid-template-columns:5rem minmax(0,1fr);gap:1.2rem;margin-bottom:2rem}.section-head p{margin:0;color:var(--muted);max-width:68ch}
+.route-list{counter-reset:route;border-top:1px solid var(--line-strong)}.route-row{counter-increment:route;display:grid;grid-template-columns:4.5rem minmax(0,1fr);gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line)}.route-row:before{content:counter(route,decimal-leading-zero);font:700 .72rem/1.2 ui-monospace,monospace;color:var(--accent)}.route-row p{margin:.25rem 0;color:var(--muted)}
+.model-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}.model{border-top:1px solid var(--line-strong);padding-top:1.1rem}.model .formula{font:500 1.35rem/1.55 Georgia,serif;color:var(--accent);overflow-x:auto}.model p{color:var(--muted)}.tag{display:inline-block;font:700 .68rem/1.2 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--signal);margin-bottom:.7rem}
+.formula-line{margin:1rem 0;padding:1rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font:500 clamp(1.25rem,2.7vw,2rem)/1.4 Georgia,serif;color:var(--accent);overflow-x:auto}
+.warning-list{border-top:1px solid var(--line-strong)}.warning{display:grid;grid-template-columns:7rem minmax(0,1fr);gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line)}.warning b{color:var(--danger);font:700 .7rem/1.2 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.warning p{margin:0}
+.training{counter-reset:task;border-top:1px solid var(--line-strong)}.task{counter-increment:task;display:grid;grid-template-columns:4rem minmax(0,1fr);gap:1rem;padding:1.15rem 0;border-bottom:1px solid var(--line)}.task:before{content:counter(task,decimal-leading-zero);font:700 .76rem/1.2 ui-monospace,monospace;color:var(--accent)}.task p{margin:0}.answers{border-top:1px solid var(--line-strong)}.answers summary{cursor:pointer;padding:1rem 0;font-weight:800;color:var(--accent)}.answer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-left:1px solid var(--line);border-top:1px solid var(--line)}.answer-grid div{padding:.9rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.selfcheck{border-top:1px solid var(--line-strong)}.check{display:grid;grid-template-columns:auto 1fr;gap:.8rem;padding:.85rem 0;border-bottom:1px solid var(--line)}.check input{width:20px;height:20px;margin-top:.2rem;accent-color:var(--accent)}.check small{display:block;color:var(--muted)}.progress{height:3px;background:var(--line);margin-top:1.2rem}.progress span{display:block;width:0;height:100%;background:var(--accent);transition:width .25s}.status{color:var(--muted);font-size:.9rem}
+.footer{display:flex;justify-content:space-between;gap:1rem;padding:2rem 0;color:var(--muted);font-size:.88rem}dialog{width:min(1100px,94vw);border:1px solid var(--line);background:var(--paper);color:var(--text);padding:1rem;box-shadow:0 30px 90px rgba(0,0,0,.45)}dialog::backdrop{background:rgba(0,0,0,.72)}dialog button{float:right;min-width:44px;min-height:44px;border:1px solid var(--line);background:transparent;font-size:1.4rem}.dialog-img{display:block;max-width:100%;max-height:82vh;margin:3rem auto 0}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+@media(max-width:900px){.cover,.model-grid{grid-template-columns:1fr}.instrument{border-left:0;border-top:1px solid var(--line-strong);padding:1.5rem 0 0}.poster-body{grid-template-columns:1fr}.section-head{grid-template-columns:3.7rem 1fr}.answer-grid{grid-template-columns:1fr}}
+@media(max-width:560px){body{font-size:15px}.page{width:min(100% - 1rem,1220px)}.topbar{position:static}.topbar .grow{display:none}.topbar>*{flex:1 1 auto}.topbar .date{flex-basis:100%;text-align:center}.warning{grid-template-columns:1fr}.footer{display:block}.footer span{display:block;margin:.35rem 0}.hero-formula{font-size:2rem}.task{grid-template-columns:3rem 1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.progress span{transition:none}.coordinate-waypoint{animation:none!important;transform:none!important}}
+@media print{html,html[data-theme="dark"]{--page:#fff;--paper:#fff;--soft:#fff;--text:#111;--muted:#333;--line:#bbb;--line-strong:#888;--accent:#234b52}body{background:#fff}.page{width:100%;padding:0}.topbar,dialog,.coordinate-field{display:none!important}.cover{min-height:auto;padding:1rem 0 2rem}.section{padding:1.6rem 0}.poster:not([open]) .poster-body{display:grid}.poster img{max-height:240mm}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">К содержанию</a>
+<div class="page">
+<nav class="topbar" aria-label="Навигация по занятию">
+<a href="index.html">← Кабинет</a>
+<a href="#route">Маршрут</a>
+<a href="#models">Модели</a>
+<a href="#limits">Ограничения</a>
+<a href="#training">Тренировка</a>
+<span class="grow"></span><span class="date">28.09.2026</span>
+<a class="lab" href="28.09.26-lab.html?mode=revenue">Цифровая лаборатория</a>
+<a href="../pdf_docs/28.09.26.pdf" download="28.09.26.pdf">PDF</a>
+<a href="../tex_docs/28.09.26.tex">TeX</a>
+<button id="theme" type="button" aria-label="Переключить светлую и тёмную тему">Тема</button>
+<button id="printPage" type="button">Печать</button>
+</nav>
+
+<main id="content">
+<header class="cover" data-coordinate-field>
+<div class="cover-copy">
+<p class="kicker">ЕГЭ · производная · оптимизация · 28 сентября 2026</p>
+<h1>Оптимизационные задачи</h1>
+<p class="lead">Главный навык занятия — переводить прикладной текст в целевую функцию одной переменной, заранее фиксировать допустимые значения и только после этого применять производную для доказательства максимума или минимума.</p>
+<div class="signature"><span class="navigator" aria-hidden="true">⌖</span><div><b>Николь Саркисьянц</b><br>Лёвин Артём Александрович · персональный учебный конспект</div></div>
+<nav class="route" aria-label="Маршрут занятия"><a href="#route">01 · цель</a><a href="#limits">02 · область</a><a href="#models">03 · модели</a><a href="#errors">04 · контроль</a><a href="#training">05 · практика</a></nav>
+</div>
+<aside class="instrument" aria-label="Главная схема занятия">
+<div class="instrument-label">TARGET FUNCTION / 28.09</div>
+<div class="hero-formula">текст → f(x) → f′(x) → экстремум</div>
+<svg viewBox="0 0 520 320" role="img" aria-labelledby="heroTitle heroDesc">
+<title id="heroTitle">Схема поиска максимума целевой функции</title>
+<desc id="heroDesc">Кривая возрастает до внутренней критической точки, затем убывает. Эта точка даёт максимум при соблюдении ограничений.</desc>
+<path d="M50 260H475M80 285V42" stroke="var(--line-strong)" stroke-width="2"/>
+<path d="M86 250 C160 220 210 110 278 88 C340 69 397 145 468 232" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round"/>
+<line x1="278" y1="88" x2="278" y2="260" stroke="var(--signal)" stroke-width="2.5" stroke-dasharray="7 7"/>
+<circle cx="278" cy="88" r="7" fill="var(--text)"/>
+<text x="290" y="80" fill="var(--text)" font-size="18">f′(x)=0</text>
+<text x="172" y="182" fill="var(--success)" font-size="16">f′&gt;0</text>
+<text x="365" y="164" fill="var(--danger)" font-size="16">f′&lt;0</text>
+<text x="210" y="288" fill="var(--muted)" font-size="16">критическая точка</text>
+</svg>
+<div class="instrument-note"><span class="readout">CHECK</span><span>Критическая точка становится ответом только после проверки допустимой области и характера экстремума.</span></div>
+</aside>
+</header>
+
+<details class="poster">
+<summary><span>Ментальная карта занятия</span><span>открыть</span></summary>
+<div class="poster-body"><p>Карта собирает главную идею, маршрут решения, ограничения, модели и частые ошибки.</p><button class="poster-open" id="posterOpen" type="button" aria-label="Увеличить ментальную карту"><img src="../images/28.09.26.png" alt="Ментальная карта по оптимизационным задачам с производной" loading="lazy"></button></div>
+</details>
+
+<section class="section" id="route" data-journey-stop data-journey-label="Маршрут">
+<div class="section-head"><span class="folio">01 / ROUTE</span><div><h2>Сначала цель, потом производная</h2><p>Слова «наибольший», «наименьший», «максимальный» и «минимальный» указывают, какую величину нужно превратить в функцию. Производная появляется только после построения корректной модели.</p></div></div>
+<div class="route-list">
+<div class="route-row"><div><b>Определите переменную.</b><p>Запишите, что она означает и какую величину требуется найти.</p></div></div>
+<div class="route-row"><div><b>Выберите целевую величину.</b><p>Выручка R, площадь S, мощность P, объём V или другая величина из условия.</p></div></div>
+<div class="route-row"><div><b>Сведите к одной переменной.</b><p>Выразите остальные величины и подставьте их в целевую функцию.</p></div></div>
+<div class="route-row"><div><b>Запишите ограничения.</b><p>Длины, количества, сопротивления и заданные промежутки рассматриваются только в допустимой области.</p></div></div>
+<div class="route-row"><div><b>Найдите f′(x)=0.</b><p>Оставьте только критические точки, попавшие в допустимую область.</p></div></div>
+<div class="route-row"><div><b>Докажите экстремум.</b><p>Исследуйте знак производной и, если границы входят в область, сравните нужные значения.</p></div></div>
+<div class="route-row"><div><b>Ответьте на вопрос.</b><p>Вернитесь к смыслу переменной и вычислите сам максимум или минимум, если это требуется.</p></div></div>
+</div>
+</section>
+
+<section class="section" id="limits" data-journey-stop data-journey-label="Ограничения">
+<div class="section-head"><span class="folio">02 / DOMAIN</span><div><h2>Ограничения — часть модели</h2><p>Алгебраическая формула может существовать там, где прикладная ситуация уже потеряла смысл. Поэтому допустимый промежуток фиксируется до анализа производной.</p></div></div>
+<div class="formula-line">коробка 30×30: &nbsp; V(x)=x(30−2x)², &nbsp; 0&lt;x&lt;15</div>
+<div class="model-grid">
+<article class="model"><span class="tag">Целые значения</span><h3>Количество товара</h3><p>Для q∈ℕ сначала исследуйте непрерывную модель. Если точка экстремума нецелая, сравните ближайшие допустимые целые значения.</p></article>
+<article class="model"><span class="tag">Границы</span><h3>Заданный промежуток</h3><p>Если условием дано 20≤t≤80, исследование ведётся только на этом отрезке. Входящие границы при необходимости участвуют в сравнении.</p></article>
+</div>
+<p class="formula-line">Критическая точка вне допустимой области не может быть ответом прикладной задачи.</p>
+</section>
+
+<section class="section" id="models" data-journey-stop data-journey-label="Модели">
+<div class="section-head"><span class="folio">03 / MODELS</span><div><h2>Четыре модели из занятия</h2><p>Контексты разные, математический маршрут один: построить целевую функцию, упростить производную и прочитать смену знака.</p></div></div>
+<div class="model-grid">
+<article class="model"><span class="tag">Выручка</span><h3>Цена × количество</h3><div class="formula">p(q)=180−3q<br>R(q)=180q−3q²<br>R′(q)=180−6q</div><p>При 0&lt;q&lt;60 максимум достигается при q=30, Rmax=2700.</p><a href="28.09.26-lab.html?mode=revenue">Исследовать модель →</a></article>
+<article class="model"><span class="tag">Произведение</span><h3>Две связанные величины</h3><div class="formula">Q(t)=(t−20)(80−t)<br>Q′(t)=100−2t</div><p>На 20≤t≤80 максимум достигается при t=50, Qmax=900.</p><a href="28.09.26-lab.html?mode=product">Исследовать модель →</a></article>
+<article class="model"><span class="tag">Дробь</span><h3>Мощность нагрузки</h3><div class="formula">I=36/(3+R)<br>P(R)=36²R/(3+R)²<br>P′(R)=36²(3−R)/(3+R)³</div><p>При R&gt;0 знак производной меняется с «+» на «−» в R=3 Ом; Pmax=108 Вт.</p><a href="28.09.26-lab.html?mode=power">Исследовать модель →</a></article>
+<article class="model"><span class="tag">Геометрия</span><h3>Открытая коробка</h3><div class="formula">V(x)=x(30−2x)²<br>V′(x)=12(x−5)(x−15)</div><p>При 0&lt;x&lt;15 точка x=5 см даёт максимум Vmax=2000 см³.</p><a href="28.09.26-lab.html?mode=box">Исследовать модель →</a></article>
+</div>
+</section>
+
+<section class="section" id="errors" data-journey-stop data-journey-label="Контроль">
+<div class="section-head"><span class="folio">04 / CHECK</span><div><h2>Ошибки, которые ломают решение</h2><p>Большинство сбоев происходит до вычисления производной или сразу после нахождения критической точки.</p></div></div>
+<div class="warning-list">
+<div class="warning"><b>Цель</b><p>Дифференцируется не та величина. Сначала установите, что именно оптимизируется.</p></div>
+<div class="warning"><b>Переменные</b><p>В целевой формуле остаются две или три переменные вместо одной.</p></div>
+<div class="warning"><b>Доказательство</b><p>Из f′(x)=0 сразу делается вывод об ответе без анализа знаков.</p></div>
+<div class="warning"><b>Область</b><p>Производная исследуется вне допустимого промежутка или забываются входящие границы.</p></div>
+<div class="warning"><b>Целые q</b><p>Нецелая критическая точка округляется без сравнения соседних допустимых целых значений.</p></div>
+<div class="warning"><b>Ответ</b><p>Найден оптимальный параметр, но не вычислено экстремальное значение, когда оно требуется условием.</p></div>
+</div>
+</section>
+
+<section class="section" id="training" data-journey-stop data-journey-label="Тренировка">
+<div class="section-head"><span class="folio">05 / PRACTICE</span><div><h2>Путь А · 10 задач</h2><p>Для каждой задачи: целевая функция → ограничения → производная → критические точки → анализ знаков и границ → вывод.</p></div></div>
+<div class="training">
+<div class="task"><p>Цена товара зависит от числа проданных единиц: p(q)=240−4q, q∈ℕ. Выручка R=pq. Сколько единиц нужно продать для максимальной выручки? Найдите её.</p></div>
+<div class="task"><p>Прямоугольник имеет стороны x и y, причём y=120−2x, x&gt;0, y&gt;0. При каком x площадь максимальна? Найдите вторую сторону и максимальную площадь.</p></div>
+<div class="task"><p>При 10≤t≤70 заданы A=t−10 и B=70−t. Показатель Q=AB. Найдите t, при котором Q максимален, и само максимальное значение.</p></div>
+<div class="task"><p>I=48/(4+R), R&gt;0 Ом. Мощность P=I²R. Найдите сопротивление R, при котором мощность максимальна, и максимальную мощность.</p></div>
+<div class="task"><p>Из квадратного листа 24×24 см вырезают по углам квадраты со стороной x и делают открытую коробку. При каком x объём максимален? Найдите этот объём.</p></div>
+<div class="task"><p>Цена единицы товара p(q)=200−2q, затраты C(q)=20q+500, q∈ℕ. При каком q прибыль максимальна? Найдите максимальную прибыль.</p></div>
+<div class="task"><p>Для x&gt;0 рассмотрите F(x)=x+36/x. Найдите её наименьшее значение и значение x, при котором оно достигается.</p></div>
+<div class="task"><p>Прямоугольник имеет площадь 144. Его стороны положительны. При каких длинах сторон периметр минимален? Найдите минимальный периметр.</p></div>
+<div class="task"><p>Из прямоугольного листа 40×30 см по углам вырезают одинаковые квадраты со стороной x и делают открытую коробку. Найдите x, при котором объём максимален. Ответ дайте в точном виде.</p></div>
+<div class="task"><p>I=60/(5+R), R&gt;0 Ом, P=I²R. Найдите R, при котором мощность максимальна, и максимальную мощность.</p></div>
+</div>
+<details class="answers"><summary>Проверить ответы</summary><div class="answer-grid">
+<div><b>1.</b> q=30, Rmax=3600.</div><div><b>2.</b> x=30, y=60, Smax=1800.</div>
+<div><b>3.</b> t=40, Qmax=900.</div><div><b>4.</b> R=4 Ом, Pmax=144 Вт.</div>
+<div><b>5.</b> x=4 см, Vmax=1024 см³.</div><div><b>6.</b> q=45, максимум прибыли 3550.</div>
+<div><b>7.</b> x=6, Fmin=12.</div><div><b>8.</b> 12 и 12, Pmin=48.</div>
+<div><b>9.</b> x=(35−5√13)/3 см.</div><div><b>10.</b> R=5 Ом, Pmax=180 Вт.</div>
+</div></details>
+</section>
+
+<section class="section" id="selfcheck">
+<div class="section-head"><span class="folio">06 / SELF-CHECK</span><div><h2>Пять пунктов перед ответом</h2><p>Отметьте только то, что действительно проверено в решении.</p></div></div>
+<div class="selfcheck" id="checks">
+<label class="check"><input type="checkbox"><span>Целевая функция соответствует величине, которую нужно максимизировать или минимизировать.<small>Смысл функции совпадает с вопросом задачи.</small></span></label>
+<label class="check"><input type="checkbox"><span>Функция выражена через одну переменную.<small>Все остальные величины подставлены.</small></span></label>
+<label class="check"><input type="checkbox"><span>Ограничения выписаны до анализа производной.<small>Критические точки проверяются только в допустимой области.</small></span></label>
+<label class="check"><input type="checkbox"><span>Критические и нужные граничные точки исследованы.<small>Вывод об экстремуме доказан, а не угадан.</small></span></label>
+<label class="check"><input type="checkbox"><span>Ответ дан ровно на вопрос задачи.<small>При необходимости вычислено само экстремальное значение.</small></span></label>
+</div><div class="progress" aria-hidden="true"><span id="progress"></span></div><p class="status" id="checkStatus" aria-live="polite"></p>
+</section>
+</main>
+<footer class="footer"><span>Николь Саркисьянц · ЕГЭ</span><span>Лёвин Артём Александрович эксклюзивно для Николь Саркисьянц</span></footer>
+</div>
+
+<dialog id="posterDialog" aria-label="Ментальная карта занятия"><button id="posterClose" type="button" aria-label="Закрыть">×</button><img class="dialog-img" src="../images/28.09.26.png" alt="Ментальная карта по оптимизационным задачам с производной"></dialog>
+<script src="../../../shared/student-dashboard/atlas-motion.js"></script>
+<script>
+(function(){
+  var root=document.documentElement,theme=document.getElementById('theme'),themeKey='nikol-lesson-theme';
+  try{var saved=localStorage.getItem(themeKey);if(saved==='dark'||saved==='light')root.dataset.theme=saved}catch(_){}
+  theme.addEventListener('click',function(){var next=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=next;try{localStorage.setItem(themeKey,next)}catch(_){}});
+  document.getElementById('printPage').addEventListener('click',function(){window.print()});
+  var checks=[].slice.call(document.querySelectorAll('#checks input[type="checkbox"]')),progress=document.getElementById('progress'),status=document.getElementById('checkStatus'),key='nikol-28-09-checks';
+  try{var states=JSON.parse(localStorage.getItem(key)||'[]');checks.forEach(function(box,i){box.checked=Boolean(states[i])})}catch(_){}
+  function update(){var done=checks.filter(function(box){return box.checked}).length;progress.style.width=(done/checks.length*100)+'%';status.textContent=done+' из '+checks.length+' пунктов отмечено';try{localStorage.setItem(key,JSON.stringify(checks.map(function(box){return box.checked})))}catch(_){}}
+  checks.forEach(function(box){box.addEventListener('change',update)});update();
+  var dialog=document.getElementById('posterDialog'),opener=document.getElementById('posterOpen'),close=document.getElementById('posterClose'),last=null;
+  opener.addEventListener('click',function(){last=opener;dialog.showModal();close.focus()});close.addEventListener('click',function(){dialog.close()});dialog.addEventListener('click',function(e){if(e.target===dialog)dialog.close()});dialog.addEventListener('close',function(){if(last)last.focus()});
+})();
+</script>
+</body>
+</html>
