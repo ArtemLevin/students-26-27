@@ -104,6 +104,26 @@ for (const [id, cfg] of Object.entries(LESSON_240926)) {
   item.material = { href: '24.09.26.html', label: 'Открыть интерактивное занятие →' };
 }
 
+
+const LESSON_280926 = {
+  'ege12_02': { level: 2, evidence: 'Отработана область значений синуса и косинуса через базовый диапазон [−1;1] и формулу [b−|a|; b+|a|] на примерах 3cos x−2 и −2sin x+1.' },
+  'ege12_06': { level: 3, evidence: 'Периодичность разобрана через определение и проверку f(x±T)=f(x); самостоятельно вычислялись периоды sin(4x/5) и tg(3x/5).' },
+  'ege12_14': { level: 2, evidence: 'Повторены графики sin x и cos x, их ограниченность и построение по узловым точкам; разобран график y=2sin x+1.' },
+  'ege12_15': { level: 2, evidence: 'На графике y=2sin x+1 разобран вертикальный сдвиг на 1 вверх и его связь со средней линией и областью значений.' },
+  'ege12_17': { level: 1, evidence: 'Разобрано вертикальное растяжение графика коэффициентом 2; отдельное отражение графика не отрабатывалось.' },
+  'ege14_13': { level: 3, evidence: 'Повторена запись периодических серий с целым параметром n и добавлением 2πn в ответах.' },
+  'ege14_15': { level: 2, repeat: true, evidence: 'Отбор корней на промежутке разобран двумя способами: двойным неравенством и по окружности; навык требует дальнейшего самостоятельного закрепления.' }
+};
+for (const [id, cfg] of Object.entries(LESSON_280926)) {
+  const item = G.flatMap(group => group.items).find(topic => topic.id === id);
+  if (!item) continue;
+  item.level = Math.max(item.level || 0, cfg.level);
+  if (Object.prototype.hasOwnProperty.call(cfg, 'repeat')) item.repeat = Boolean(cfg.repeat);
+  item.evidence = Array.isArray(item.evidence) ? item.evidence : [];
+  item.evidence.push({ text: cfg.evidence + ' Материал: занятие 28.09.26 «Тригонометрические функции: периодичность, графики и неравенства».' });
+  item.material = { href: '28.09.26.html', label: 'Открыть интерактивное занятие →' };
+}
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'jaroslav_gavrilov',
@@ -113,7 +133,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Структура сверена 19.09.2026 с опубликованными ФИПИ проектами КИМ ЕГЭ-2027 по профильной математике.',
-    updated:'24.09.2026'
+    updated:'28.09.2026'
   },
   groups:G
 };
