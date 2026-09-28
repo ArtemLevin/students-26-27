@@ -19,10 +19,13 @@
   const LEVELS_KEY = `${storageBase}-competency-map`;
   const REPEAT_KEY = `${storageBase}-repeat`;
   const THEME_KEY = `${storageBase}-theme`;
+  const SEED_KEY = `${storageBase}-seed-version`;
+  const seedVersion = String(meta.updated || '');
+  const seedChanged = safeStorageGet(SEED_KEY) !== seedVersion;
 
   const state = {
-    levels: loadObject(LEVELS_KEY, baselineLevels),
-    repeat: new Set(loadArray(REPEAT_KEY, [...baselineRepeat])),
+    levels: loadObject(LEVELS_KEY, baselineLevels, seedChanged),
+    repeat: new Set(loadArray(REPEAT_KEY, [...baselineRepeat], seedChanged)),
     filter: 'all',
     query: '',
     activeId: null,
@@ -48,13 +51,37 @@
     focusOpen: document.getElementById('focusOpen')
   };
 
-  function loadObject(key, fallback) {
+  function safeStorageGet(key) {
     try {
-      const parsed = JSON.parse(localStorage.getItem(key) || 'null');
+      return localStorage.getItem(key);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function safeStorageSet(key, value) {
+    try {
+      localStorage.setItem(key, value);
+    } catch (_) {}
+  }
+
+  function safeStorageRemove(key) {
+    try {
+      localStorage.removeItem(key);
+    } catch (_) {}
+  }
+
+  function loadObject(key, fallback, mergeBaseline = false) {
+    try {
+      const parsed = JSON.parse(safeStorageGet(key) || 'null');
       if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return { ...fallback };
       const normalized = { ...fallback };
       for (const [id, value] of Object.entries(parsed)) {
-        if (itemById.has(id)) normalized[id] = clampLevel(value);
+        if (!itemById.has(id)) continue;
+        const storedLevel = clampLevel(value);
+        normalized[id] = mergeBaseline
+          ? Math.max(clampLevel(fallback[id] ?? 0), storedLevel)
+          : storedLevel;
       }
       return normalized;
     } catch (_) {
@@ -62,18 +89,20 @@
     }
   }
 
-  function loadArray(key, fallback) {
+  function loadArray(key, fallback, mergeBaseline = false) {
     try {
-      const parsed = JSON.parse(localStorage.getItem(key) || 'null');
-      return Array.isArray(parsed) ? parsed.filter(id => itemById.has(id)) : fallback;
+      const parsed = JSON.parse(safeStorageGet(key) || 'null');
+      if (!Array.isArray(parsed)) return fallback;
+      const stored = parsed.filter(id => itemById.has(id));
+      return mergeBaseline ? [...new Set([...fallback, ...stored])] : stored;
     } catch (_) {
       return fallback;
     }
   }
 
   function saveState() {
-    localStorage.setItem(LEVELS_KEY, JSON.stringify(state.levels));
-    localStorage.setItem(REPEAT_KEY, JSON.stringify([...state.repeat]));
+    safeStorageSet(LEVELS_KEY, JSON.stringify(state.levels));
+    safeStorageSet(REPEAT_KEY, JSON.stringify([...state.repeat]));
   }
 
   function clampLevel(value) {
@@ -397,8 +426,8 @@
     if (!confirm('Вернуть уровни и повторение к подтверждённому состоянию из материалов ученика? Ручные изменения будут удалены.')) return;
     state.levels = { ...baselineLevels };
     state.repeat = new Set(baselineRepeat);
-    localStorage.removeItem(LEVELS_KEY);
-    localStorage.removeItem(REPEAT_KEY);
+    safeStorageRemove(LEVELS_KEY);
+    safeStorageRemove(REPEAT_KEY);
     render();
   });
 
@@ -409,14 +438,19 @@
     themeToggle.setAttribute('aria-pressed', String(resolved === 'dark'));
     themeToggle.title = resolved === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему';
   }
-  let theme = localStorage.getItem(THEME_KEY);
+  let theme = safeStorageGet(THEME_KEY);
   if (!theme) theme = window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   applyTheme(theme);
   themeToggle.addEventListener('click', () => {
     const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-    localStorage.setItem(THEME_KEY, next);
+    safeStorageSet(THEME_KEY, next);
     applyTheme(next);
   });
+
+  if (seedChanged) {
+    saveState();
+    safeStorageSet(SEED_KEY, seedVersion);
+  }
 
   render();
 })();

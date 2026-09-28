@@ -1,0 +1,265 @@
+name: Yaroslav 28.09 browser review
+
+on:
+  push:
+    branches:
+      - review/jaroslav-280926
+
+permissions:
+  contents: read
+
+jobs:
+  browser-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser review dependencies
+        run: |
+          npm install --no-save playwright@1.55.0 @axe-core/playwright@4.10.2
+          npx playwright install --with-deps chromium
+      - name: Run browser release-gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p browser-artifacts
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/yaroslav-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          for i in {1..40}; do
+            if curl -fsS http://127.0.0.1:4173/students/jaroslav_gavrilov/site/28.09.26.html >/dev/null; then break; fi
+            sleep .25
+          done
+          cat > browser-review.mjs <<'NODE'
+          import { chromium } from 'playwright';
+          import AxeBuilder from '@axe-core/playwright';
+
+          const root='http://127.0.0.1:4173/students/jaroslav_gavrilov/site/';
+          const lesson=root+'28.09.26.html';
+          const home=root+'index.html';
+          const failures=[];
+          const notes=[];
+          const assert=(condition,message)=>{ if(!condition) failures.push(message); };
+
+          function attachDiagnostics(page,label){
+            page.on('console',msg=>{ if(msg.type()==='error') failures.push(label+' console: '+msg.text()); });
+            page.on('pageerror',err=>failures.push(label+' pageerror: '+err.message));
+            page.on('requestfailed',req=>failures.push(label+' request failed: '+req.url()+' '+(req.failure()?.errorText||'')));
+            page.on('response',res=>{ if(res.status()>=400) failures.push(label+' HTTP '+res.status()+': '+res.url()); });
+          }
+
+          async function noHorizontalOverflow(page,label){
+            const dims=await page.evaluate(()=>({
+              viewport:document.documentElement.clientWidth,
+              doc:document.documentElement.scrollWidth,
+              body:document.body.scrollWidth
+            }));
+            assert(dims.doc<=dims.viewport+1 && dims.body<=dims.viewport+1,
+              label+' horizontal overflow: '+JSON.stringify(dims));
+          }
+
+          async function axe(page,label){
+            const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa']).analyze();
+            const serious=result.violations.filter(v=>['serious','critical'].includes(v.impact));
+            if(serious.length){
+              const details=serious.map(v=>({
+                id:v.id,
+                impact:v.impact,
+                nodes:v.nodes.slice(0,12).map(n=>({
+                  target:n.target,
+                  html:n.html,
+                  failureSummary:n.failureSummary
+                }))
+              }));
+              failures.push(label+' axe: '+JSON.stringify(details));
+            }
+            notes.push(label+' axe violations total='+result.violations.length+', serious/critical='+serious.length);
+          }
+
+          const browser=await chromium.launch({headless:true});
+          const context=await browser.newContext();
+          const page=await context.newPage();
+          attachDiagnostics(page,'lesson');
+
+          const sizes=[
+            [375,812],[390,844],[768,1024],[1024,768],[1366,768],[1440,900],[1920,1080]
+          ];
+          for(const [width,height] of sizes){
+            await page.setViewportSize({width,height});
+            await page.goto(lesson,{waitUntil:'networkidle'});
+            await page.evaluate(()=>localStorage.setItem('jaroslav-theme','light'));
+            await page.reload({waitUntil:'networkidle'});
+            await noHorizontalOverflow(page,'lesson '+width+'x'+height+' light');
+            const h1=await page.locator('h1').boundingBox();
+            assert(h1 && h1.x>=-1 && h1.x+h1.width<=width+1,'lesson '+width+' h1 exceeds viewport');
+            await page.screenshot({path:'browser-artifacts/lesson-'+width+'x'+height+'-light.png',fullPage:true});
+          }
+
+          await page.setViewportSize({width:1366,height:768});
+          await page.goto(lesson,{waitUntil:'networkidle'});
+          await page.evaluate(()=>localStorage.setItem('jaroslav-theme','light'));
+          await page.reload({waitUntil:'networkidle'});
+
+          const graphPoints=await page.evaluate(()=>{
+            const path=document.getElementById('transformedWave');
+            const d=path.getAttribute('d');
+            const pts=[...d.matchAll(/[ML]([0-9.]+) ([0-9.]+)/g)].map(m=>[+m[1],+m[2]]);
+            const at=x=>pts.reduce((best,p)=>Math.abs(p[0]-x)<Math.abs(best[0]-x)?p:best,pts[0]);
+            return [70,230,390,550,710].map(at);
+          });
+          const expected=[[70,265],[230,370],[390,265],[550,160],[710,265]];
+          graphPoints.forEach((p,i)=>{
+            assert(Math.abs(p[0]-expected[i][0])<.2 && Math.abs(p[1]-expected[i][1])<.2,
+              'graph key point mismatch at '+expected[i][0]+': '+JSON.stringify(p));
+          });
+
+          await page.getByRole('button',{name:'cos(x/2) · T=3π'}).click();
+          assert((await page.locator('#periodResult').textContent()).includes('не является'),'period switch did not update result');
+          await page.getByRole('button',{name:'y=−2sin x+1'}).click();
+          assert((await page.locator('#rangeExplanation').textContent()).includes('−1≤y≤3'),'range switch result mismatch');
+          await page.getByRole('button',{name:'Только y=2sin x+1'}).click();
+          assert(await page.locator('#baseWave').evaluate(el=>getComputedStyle(el).display==='none'),'graph base curve not hidden');
+          assert((await page.locator('#graphModeStatus').textContent()).includes('только график y=2sin x+1'),'graph live status missing');
+          await page.getByRole('button',{name:'cos α ≤ √3/2'}).click();
+          assert((await page.locator('#circleAnswer').textContent()).includes('11π/6'),'circle answer did not update');
+
+          await page.locator('details.poster summary').click();
+          const zoom=page.locator('#posterZoom');
+          await zoom.focus();
+          await page.keyboard.press('Enter');
+          assert(await page.locator('#imageDialog').evaluate(el=>el.open),'poster dialog did not open from keyboard');
+          await page.keyboard.press('Escape');
+          assert(!(await page.locator('#imageDialog').evaluate(el=>el.open)),'poster dialog did not close on Escape');
+          assert(await page.evaluate(()=>document.activeElement?.id==='posterZoom'),'focus did not return to poster zoom control');
+
+          await axe(page,'lesson desktop light');
+          await page.screenshot({path:'browser-artifacts/lesson-1366x768-reviewed-light.png',fullPage:true});
+
+          await page.evaluate(()=>localStorage.setItem('jaroslav-theme','dark'));
+          await page.reload({waitUntil:'networkidle'});
+          assert(await page.evaluate(()=>document.documentElement.dataset.theme==='dark'),'lesson dark theme not applied');
+          await noHorizontalOverflow(page,'lesson desktop dark');
+          await axe(page,'lesson desktop dark');
+          await page.screenshot({path:'browser-artifacts/lesson-1366x768-dark.png',fullPage:true});
+
+          await page.setViewportSize({width:390,height:844});
+          await page.goto(lesson,{waitUntil:'networkidle'});
+          await page.evaluate(()=>localStorage.setItem('jaroslav-theme','dark'));
+          await page.reload({waitUntil:'networkidle'});
+          await noHorizontalOverflow(page,'lesson mobile dark');
+          await axe(page,'lesson mobile dark');
+          await page.screenshot({path:'browser-artifacts/lesson-390x844-dark.png',fullPage:true});
+
+          await page.emulateMedia({media:'print'});
+          const printState=await page.evaluate(()=>({
+            topbar:getComputedStyle(document.querySelector('.topbar')).display,
+            route:getComputedStyle(document.querySelector('.route')).display,
+            poster:getComputedStyle(document.querySelector('.poster-content')).display
+          }));
+          assert(printState.topbar==='none' && printState.route==='none','print navigation not hidden');
+          assert(printState.poster!=='none','poster missing from print view');
+          await page.screenshot({path:'browser-artifacts/lesson-print.png',fullPage:true});
+          await page.emulateMedia({media:'screen',reducedMotion:'reduce'});
+          const transition=await page.locator('#progressBar').evaluate(el=>getComputedStyle(el).transitionDuration);
+          assert(parseFloat(transition)<=0.001,'reduced motion did not remove progress transition: '+transition);
+
+          const restricted=await browser.newContext({viewport:{width:390,height:844}});
+          await restricted.addInitScript(()=>{
+            const boom=()=>{throw new DOMException('blocked','SecurityError');};
+            Storage.prototype.getItem=boom;
+            Storage.prototype.setItem=boom;
+            Storage.prototype.removeItem=boom;
+          });
+          const restrictedLesson=await restricted.newPage();
+          attachDiagnostics(restrictedLesson,'lesson restricted storage');
+          await restrictedLesson.goto(lesson,{waitUntil:'networkidle'});
+          assert((await restrictedLesson.locator('h1').textContent()).replace(/\u00ad/g,'').includes('Тригонометрические'),'lesson failed with restricted storage');
+          await restricted.close();
+
+          const homeContext=await browser.newContext({viewport:{width:1366,height:768}});
+          const homePage=await homeContext.newPage();
+          attachDiagnostics(homePage,'home');
+          await homePage.goto(home,{waitUntil:'networkidle'});
+          await homePage.evaluate(()=>{
+            localStorage.setItem('jaroslav_gavrilov-ege-profile-math-competency-map',JSON.stringify({ege12_06:0}));
+            localStorage.setItem('jaroslav_gavrilov-ege-profile-math-repeat',JSON.stringify([]));
+            localStorage.removeItem('jaroslav_gavrilov-ege-profile-math-seed-version');
+          });
+          await homePage.reload({waitUntil:'networkidle'});
+          assert((await homePage.locator('#lessonTitle').textContent()).includes('периодичность'),'home latest lesson title mismatch');
+          assert(await homePage.locator('a[href="28.09.26.html"]').count()>=1,'home latest lesson link missing');
+          const migrated=await homePage.evaluate(()=>({
+            levels:JSON.parse(localStorage.getItem('jaroslav_gavrilov-ege-profile-math-competency-map')||'{}'),
+            repeat:JSON.parse(localStorage.getItem('jaroslav_gavrilov-ege-profile-math-repeat')||'[]'),
+            seed:localStorage.getItem('jaroslav_gavrilov-ege-profile-math-seed-version')
+          }));
+          assert(migrated.levels.ege12_06===2,'teacher seed did not migrate period level: '+JSON.stringify(migrated));
+          assert(migrated.repeat.includes('ege14_15'),'teacher repeat seed did not migrate: '+JSON.stringify(migrated));
+          assert(migrated.seed==='28.09.2026','seed version not stored: '+JSON.stringify(migrated));
+
+          await homePage.locator('#topicSearch').fill('Периодичность функции');
+          const periodRow=homePage.locator('.topic-row').filter({hasText:'Периодичность функции'}).first();
+          await periodRow.click();
+          assert((await homePage.locator('#dialogHistory').textContent()).includes('28.09.26'),'heatmap evidence missing current lesson');
+          assert((await homePage.locator('#dialogLevel').textContent()).includes('2 / 4'),'period level is not calibrated to 2/4');
+          const materialHref=await homePage.locator('#dialogMaterial').getAttribute('href');
+          assert(materialHref==='28.09.26.html#period','heatmap deep link mismatch: '+materialHref);
+          await homePage.locator('.icon-btn[value="close"]').click();
+
+          await noHorizontalOverflow(homePage,'home desktop light');
+          await axe(homePage,'home desktop light');
+          await homePage.screenshot({path:'browser-artifacts/home-1366x768-light.png',fullPage:true});
+
+          await homePage.evaluate(()=>localStorage.setItem('jaroslav_gavrilov-ege-profile-math-theme','dark'));
+          await homePage.reload({waitUntil:'networkidle'});
+          assert(await homePage.evaluate(()=>document.documentElement.dataset.theme==='dark'),'home dark theme not applied');
+          await noHorizontalOverflow(homePage,'home desktop dark');
+          await axe(homePage,'home desktop dark');
+          await homePage.screenshot({path:'browser-artifacts/home-1366x768-dark.png',fullPage:true});
+
+          await homePage.setViewportSize({width:390,height:844});
+          await homePage.reload({waitUntil:'networkidle'});
+          await noHorizontalOverflow(homePage,'home mobile dark');
+          const overflowers=await homePage.evaluate(()=>[...document.querySelectorAll('body *')].map(el=>{
+            const r=el.getBoundingClientRect();
+            return {tag:el.tagName,id:el.id,cls:el.className?.baseVal||el.className||'',left:r.left,right:r.right,width:r.width};
+          }).filter(x=>x.left < -1 || x.right > innerWidth + 1).slice(0,20));
+          if(overflowers.length) notes.push('home mobile overflowers='+JSON.stringify(overflowers));
+          await axe(homePage,'home mobile dark');
+          await homePage.screenshot({path:'browser-artifacts/home-390x844-dark.png',fullPage:true});
+
+          const restrictedHomeContext=await browser.newContext({viewport:{width:390,height:844}});
+          await restrictedHomeContext.addInitScript(()=>{
+            const boom=()=>{throw new DOMException('blocked','SecurityError');};
+            Storage.prototype.getItem=boom;
+            Storage.prototype.setItem=boom;
+            Storage.prototype.removeItem=boom;
+          });
+          const restrictedHome=await restrictedHomeContext.newPage();
+          attachDiagnostics(restrictedHome,'home restricted storage');
+          await restrictedHome.goto(home,{waitUntil:'networkidle'});
+          assert(await restrictedHome.locator('#radialMap .radial-cell').count()>0,'home heatmap failed with restricted storage');
+          await restrictedHomeContext.close();
+
+          await homeContext.close();
+          await context.close();
+          await browser.close();
+
+          console.log(notes.join('\n'));
+          if(failures.length){
+            console.error('\nFAILURES:\n- '+failures.join('\n- '));
+            process.exit(1);
+          }
+          console.log('Yaroslav browser release-gate: PASS');
+          NODE
+          node browser-review.mjs
+      - name: Upload browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: yaroslav-280926-browser-review
+          path: browser-artifacts
+          if-no-files-found: warn
