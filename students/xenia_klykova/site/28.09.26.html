@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивное занятие Ксении Клыковой по математическому ожиданию дискретной случайной величины, числу успехов и ожидаемому числу испытаний.">
+<title>Математическое ожидание — Ксения Клыкова</title>
+<style>
+:root{
+  color-scheme:light;
+  --surface-page:#f5f3ed;
+  --surface-raised:#fffdf7;
+  --surface-soft:#e8f1ef;
+  --surface-warm:#f4eadc;
+  --text-primary:#202827;
+  --text-secondary:#65706e;
+  --text-inverse:#f8fffd;
+  --border-subtle:#ccd8d5;
+  --border-strong:#8ca5a0;
+  --accent:#247b7b;
+  --accent-hover:#196565;
+  --accent-soft:#cfe5e1;
+  --secondary:#a45f45;
+  --secondary-soft:#f0d8cb;
+  --success:#39755d;
+  --danger:#9c4f4f;
+  --warning:#8a642b;
+  --focus-ring:#52a4a0;
+  --shadow-low:0 12px 34px rgba(28,69,67,.08);
+  --radius-sm:7px;
+  --radius-md:13px;
+  --radius-lg:20px;
+  --space-1:.45rem;
+  --space-2:.8rem;
+  --space-3:1.2rem;
+  --space-4:1.9rem;
+  --space-5:3rem;
+  --motion-fast:150ms;
+  --motion-normal:220ms;
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --surface-page:#111817;
+  --surface-raised:#192220;
+  --surface-soft:#20302d;
+  --surface-warm:#30261f;
+  --text-primary:#edf5f3;
+  --text-secondary:#aebfbb;
+  --text-inverse:#10201e;
+  --border-subtle:#344642;
+  --border-strong:#5d7772;
+  --accent:#72c0bb;
+  --accent-hover:#92d3cf;
+  --accent-soft:#234945;
+  --secondary:#d89275;
+  --secondary-soft:#50352a;
+  --success:#78b79b;
+  --danger:#df8989;
+  --warning:#d1aa69;
+  --focus-ring:#9ad8d4;
+  --shadow-low:none;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button,input{font:inherit}
+a,button{color:inherit}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.skip{position:absolute;left:-9999px;top:.6rem;z-index:100;background:var(--text-primary);color:var(--surface-page);padding:.65rem .9rem}
+.skip:focus{left:.6rem}
+.wrap{width:min(1180px,calc(100% - clamp(1rem,5vw,4rem)));margin:auto}
+.topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:.45rem;overflow-x:auto;padding:.62rem 0;border-bottom:1px solid var(--border-subtle);background:color-mix(in srgb,var(--surface-page) 94%,transparent);backdrop-filter:blur(12px)}
+.topbar a,.topbar button,.materials a{min-height:44px;display:inline-flex;align-items:center;border:1px solid var(--border-subtle);background:transparent;padding:.52rem .75rem;text-decoration:none;white-space:nowrap}
+.topbar .grow{flex:1}
+.primary{background:var(--accent)!important;border-color:var(--accent)!important;color:var(--text-inverse)!important;font-weight:760}
+.topbar a:hover,.topbar button:hover,.materials a:hover{border-color:var(--accent);color:var(--accent)}
+.cover{padding:clamp(3.4rem,8vw,7rem) 0 clamp(2.5rem,6vw,4.8rem);border-bottom:1px solid var(--border-strong)}
+.cover-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(19rem,.95fr);gap:clamp(2rem,7vw,6rem);align-items:end}
+.kicker,.eyebrow{margin:0;color:var(--accent);font:760 .72rem/1.35 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em;text-transform:uppercase}
+.cover h1{margin:.55rem 0 1rem;max-width:10ch;font:500 clamp(3.6rem,8vw,7rem)/.9 Georgia,"Times New Roman",serif;letter-spacing:-.06em}
+.lead{max-width:52rem;color:var(--text-secondary);font-size:clamp(1rem,1.45vw,1.2rem)}
+.identity{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border-subtle);display:grid;grid-template-columns:auto 1fr;gap:.3rem 1rem;max-width:47rem}
+.identity b{font-family:Georgia,serif}.identity span{color:var(--text-secondary);font-size:.9rem}
+.formula-stage{border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);padding:1.6rem 0}
+.formula-stage .label{color:var(--text-secondary);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em}
+.formula-stage math{display:block;font-family:"Cambria Math",serif;font-size:clamp(2rem,4.4vw,4rem);overflow-x:auto;padding:.5rem 0}
+.formula-note{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border-subtle);margin-top:1rem}
+.formula-note div{background:var(--surface-page);padding:1rem}
+.formula-note b{display:block;color:var(--accent);font-family:Georgia,serif}.formula-note span{font-size:.9rem;color:var(--text-secondary)}
+.route{display:flex;overflow-x:auto;margin:0 0 var(--space-5);padding:.5rem 0;border-bottom:1px solid var(--border-subtle)}
+.route a{min-height:44px;display:flex;align-items:center;padding:.5rem .75rem;border-right:1px solid var(--border-subtle);text-decoration:none;white-space:nowrap;color:var(--text-secondary);font-size:.82rem}
+.route a:hover{color:var(--text-primary);box-shadow:inset 0 -2px var(--accent)}
+.chapter{display:grid;grid-template-columns:minmax(10rem,.28fr) minmax(0,1fr);gap:clamp(1.5rem,5vw,4.5rem);padding:clamp(2.8rem,6vw,5.2rem) 0;border-top:1px solid var(--border-subtle)}
+.chapter-head{position:sticky;top:4.8rem;align-self:start}
+.chapter-no{font:500 3rem/1 Georgia,serif;color:var(--accent)}
+.chapter-head h2{margin:.48rem 0 .35rem;font:600 clamp(1.35rem,2.4vw,1.95rem)/1.12 Georgia,serif}
+.chapter-head p{margin:0;color:var(--text-secondary);font-size:.88rem}
+.content{min-width:0}
+.content h3{font:600 clamp(1.25rem,2.3vw,1.75rem)/1.2 Georgia,serif;margin:0 0 .7rem}
+.content p{max-width:52rem}
+.rule{margin:1.25rem 0;padding:1rem 0 1rem 1.2rem;border-left:3px solid var(--accent)}
+.rule.warm{border-left-color:var(--secondary)}
+.rule.danger{border-left-color:var(--danger)}
+.definitions{border-top:1px solid var(--border-strong)}
+.definitions div{display:grid;grid-template-columns:minmax(10rem,.33fr) 1fr;gap:1.2rem;padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+.definitions b{font-family:Georgia,serif;color:var(--accent)}.definitions span{color:var(--text-secondary)}
+.dist{width:100%;border-collapse:collapse;margin:1.1rem 0 1.4rem}
+.dist th,.dist td{padding:.85rem .7rem;border-bottom:1px solid var(--border-subtle);text-align:left}
+.dist th{color:var(--text-secondary);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em}
+.dist td:first-child{font-family:"Cambria Math",serif;font-size:1.15rem;color:var(--accent)}
+.math-block{max-width:100%;overflow-x:auto;margin:1rem 0;padding:1rem 0;border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)}
+.math-block math{font-family:"Cambria Math",serif;font-size:clamp(1.2rem,2.5vw,1.65rem)}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border-subtle);border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);margin:1.4rem 0}
+.trio article{background:var(--surface-page);padding:1.2rem}
+.trio .code{color:var(--accent);font:760 .72rem ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase}
+.trio h3{margin:.45rem 0;font-size:1.15rem}
+.trio math{display:block;font-family:"Cambria Math",serif;font-size:1.65rem;margin:.6rem 0}
+.trio p{color:var(--text-secondary);font-size:.9rem}
+.selector{margin-top:1.4rem;border:1px solid var(--border-strong);background:var(--surface-raised);box-shadow:var(--shadow-low)}
+.selector-head{display:flex;gap:.55rem;flex-wrap:wrap;padding:1rem;border-bottom:1px solid var(--border-subtle)}
+.selector-head button{min-height:44px;border:1px solid var(--border-subtle);background:var(--surface-page);padding:.55rem .75rem}
+.selector-head button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.selector-body{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:0}
+.selector-question,.selector-result{padding:1.25rem}
+.selector-question{border-right:1px solid var(--border-subtle);background:var(--surface-soft)}
+.selector-question h3,.selector-result h3{margin-top:0}
+.selector-result math{display:block;font-family:"Cambria Math",serif;font-size:clamp(1.35rem,3vw,2.1rem);overflow-x:auto;margin:.7rem 0}
+.poster-button{display:block;width:100%;border:0;background:transparent;padding:0;margin-top:1.4rem}
+.poster{display:block;width:min(980px,100%);margin:auto;border:1px solid var(--border-subtle);box-shadow:var(--shadow-low)}
+figure figcaption{color:var(--text-secondary);font-size:.84rem;margin-top:.6rem}
+.errors{border-top:1px solid var(--border-strong)}
+.error{display:grid;grid-template-columns:2.6rem 1fr;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+.error b:first-child{color:var(--danger);font:700 1rem ui-monospace,monospace}.error strong{display:block}.error span{color:var(--text-secondary)}
+.exercise{padding:1.1rem 0;border-bottom:1px solid var(--border-subtle)}
+.exercise h3{margin:0;font-size:1.05rem}.exercise p{margin:.45rem 0}
+.answer-toggle{min-height:42px;border:1px solid var(--border-subtle);background:transparent;padding:.45rem .7rem;margin-top:.45rem}
+.answer{margin-top:.6rem;padding:.8rem 0;border-top:1px solid var(--border-subtle);color:var(--text-secondary)}
+.quiz,.selfcheck{margin-top:2rem;padding:1.3rem 0;border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong)}
+.quiz-options{display:grid;gap:.5rem;max-width:52rem}
+.quiz-options button{min-height:44px;text-align:left;border:1px solid var(--border-subtle);background:var(--surface-raised);padding:.65rem .8rem}
+.quiz-options button.good{border-color:var(--success);box-shadow:inset 3px 0 var(--success)}
+.quiz-options button.bad{border-color:var(--danger);box-shadow:inset 3px 0 var(--danger)}
+.feedback{min-height:2rem;color:var(--text-secondary)}
+.check{display:flex;gap:.7rem;padding:.7rem 0;border-bottom:1px solid var(--border-subtle)}
+.check input{width:20px;height:20px;accent-color:var(--accent)}
+.progress{height:5px;background:var(--border-subtle);margin:1rem 0 .3rem;overflow:hidden}.progress span{display:block;height:100%;width:0;background:var(--success);transition:width var(--motion-normal)}
+.progress-text{color:var(--text-secondary)}
+.materials{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:2rem}
+.modal{position:fixed;inset:0;z-index:90;display:none;place-items:center;padding:1rem;background:rgba(7,14,13,.84)}
+.modal.show{display:grid}.modal-inner{position:relative;max-width:min(96vw,1500px);max-height:92vh}.modal img{display:block;max-width:100%;max-height:90vh;background:#fff}.modal-close{position:absolute;right:.5rem;top:.5rem;width:46px;height:46px;border:1px solid rgba(255,255,255,.65);background:rgba(11,24,22,.84);color:white;font-size:1.5rem}
+footer{display:flex;justify-content:space-between;gap:1rem;padding:2rem 0 3rem;border-top:1px solid var(--border-strong);color:var(--text-secondary);font-size:.82rem}
+@media(max-width:900px){.cover-grid{grid-template-columns:1fr}.chapter{grid-template-columns:1fr;gap:1.2rem}.chapter-head{position:static;display:grid;grid-template-columns:auto 1fr;gap:.8rem;align-items:start}.chapter-head p{grid-column:2}.trio{grid-template-columns:1fr}.selector-body{grid-template-columns:1fr}.selector-question{border-right:0;border-bottom:1px solid var(--border-subtle)}}
+@media(max-width:620px){.wrap{width:calc(100% - 1rem)}.cover h1{font-size:3.45rem}.identity,.definitions div{grid-template-columns:1fr}.formula-note{grid-template-columns:1fr}.topbar{position:static}footer{flex-direction:column}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+@media print{html{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--surface-warm:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#bbb;--border-strong:#777;--accent:#155f5f;--shadow-low:none}.topbar,.route,.selector-head,.answer-toggle,.quiz-options,.modal,.poster-button{display:none!important}.wrap{width:100%;max-width:none}.cover{padding:0 0 1cm}.chapter{grid-template-columns:1fr;padding:1cm 0}.chapter-head{position:static}.answer{display:block!important}.exercise,.rule,.trio,.selector{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<div class="wrap">
+<nav class="topbar" aria-label="Действия занятия">
+  <a href="index.html">К кабинету</a>
+  <a class="primary" href="../pdf_docs/28.09.26.pdf">Скачать пособие</a>
+  <a href="../tex_docs/28.09.26.tex">TeX</a>
+  <span class="grow"></span>
+  <button type="button" id="printButton">Печать</button>
+  <button type="button" id="themeToggle" aria-label="Переключить тему">Тема</button>
+</nav>
+<main id="main">
+<header class="cover">
+  <div class="cover-grid">
+    <div>
+      <p class="kicker">Персональный учебный журнал · 28 сентября 2026</p>
+      <h1>Математическое ожидание</h1>
+      <p class="lead">Учимся видеть за таблицей вероятностей долгосрочное среднее, строить распределение и выбирать короткую формулу для числа успехов или числа испытаний до успеха.</p>
+      <div class="identity">
+        <b>Ксения Клыкова</b><span>подготовка к ЕГЭ · вероятность и статистика</span>
+        <b>Артём Александрович Лёвин</b><span>фокус занятия: смысл ожидания и выбор модели</span>
+      </div>
+    </div>
+    <section class="formula-stage" aria-label="Главная формула занятия">
+      <div class="label">Главная формула</div>
+      <math display="block" aria-label="Математическое ожидание X равно сумме x и умножить на p и">
+        <mrow><mi>E</mi><mo>(</mo><mi>X</mi><mo>)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>x</mi><mi>i</mi></msub><msub><mi>p</mi><mi>i</mi></msub></mrow>
+      </math>
+      <div class="formula-note">
+        <div><b>значение</b><span>что может принять случайная величина</span></div>
+        <div><b>вероятность</b><span>как часто этот исход появляется в модели</span></div>
+        <div><b>среднее</b><span>к чему стремится средний результат длинной серии</span></div>
+      </div>
+    </section>
+  </div>
+</header>
+
+<nav class="route" aria-label="Содержание">
+  <a href="#meaning">01 Смысл</a><a href="#distribution">02 Распределение</a><a href="#formulas">03 Формулы</a><a href="#choice">04 Выбор метода</a><a href="#errors">05 Ошибки</a><a href="#training">06 Тренировка</a><a href="#check">07 Самопроверка</a>
+</nav>
+
+<section class="chapter" id="meaning">
+<header class="chapter-head"><div class="chapter-no">01</div><h2>Что означает E(X)</h2><p>Сначала смысл, затем вычисление.</p></header>
+<div class="content">
+  <p class="eyebrow">Определение</p>
+  <h3>Математическое ожидание — долгосрочное среднее</h3>
+  <p>Если один и тот же случайный эксперимент много раз повторять при одинаковых условиях, среднее арифметическое наблюдаемых значений приближается к математическому ожиданию.</p>
+  <div class="rule"><b>Критически важно:</b> математическое ожидание не обязано быть наиболее вероятным значением и вообще может не входить в список возможных значений случайной величины.</div>
+  <div class="definitions">
+    <div><b>Случайная величина X</b><span>Число, которое описывает результат случайного эксперимента.</span></div>
+    <div><b>Значения xᵢ</b><span>Все возможные числовые результаты X.</span></div>
+    <div><b>Вероятности pᵢ</b><span>Вероятности соответствующих значений; для полного распределения их сумма равна 1.</span></div>
+    <div><b>E(X)</b><span>Средневзвешенное значений xᵢ с весами pᵢ.</span></div>
+  </div>
+  <div class="rule warm">Если число автоматов без кофе может быть только 0, 1 или 2, значение <b>E(X)=0,8</b> остаётся корректным: это среднее по множеству дней, а не исход одного дня.</div>
+</div>
+</section>
+
+<section class="chapter" id="distribution">
+<header class="chapter-head"><div class="chapter-no">02</div><h2>Сначала построить распределение</h2><p>Пример с двумя автоматами.</p></header>
+<div class="content">
+  <p>Вероятность того, что кофе закончится в первом автомате, равна 0,2, во втором — 0,6. События независимы. Пусть X — число автоматов, в которых кофе закончится к вечеру.</p>
+  <table class="dist">
+    <thead><tr><th>X</th><th>Событие</th><th>Вероятность</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>не закончится ни в одном</td><td>(1 − 0,2)(1 − 0,6) = 0,32</td></tr>
+      <tr><td>1</td><td>закончится ровно в одном</td><td>1 − 0,32 − 0,12 = 0,56</td></tr>
+      <tr><td>2</td><td>закончится в обоих</td><td>0,2 · 0,6 = 0,12</td></tr>
+    </tbody>
+  </table>
+  <div class="math-block">
+    <math display="block" aria-label="E X равно ноль умножить на 0,32 плюс один умножить на 0,56 плюс два умножить на 0,12 равно 0,8">
+      <mrow><mi>E</mi><mo>(</mo><mi>X</mi><mo>)</mo><mo>=</mo><mn>0</mn><mo>·</mo><mn>0.32</mn><mo>+</mo><mn>1</mn><mo>·</mo><mn>0.56</mn><mo>+</mo><mn>2</mn><mo>·</mo><mn>0.12</mn><mo>=</mo><mn>0.8</mn></mrow>
+    </math>
+  </div>
+  <div class="rule"><b>Быстрый путь.</b> Если X — число произошедших событий, можно представить X как сумму индикаторов. Тогда <b>E(X)=p₁+p₂+…+pₙ</b>. Для этих двух автоматов сразу получаем 0,2 + 0,6 = 0,8.</div>
+  <p>Для самого ожидания суммы индикаторов независимость не требуется. Она нужна здесь для построения полного совместного распределения через произведения вероятностей.</p>
+</div>
+</section>
+
+<section class="chapter" id="formulas">
+<header class="chapter-head"><div class="chapter-no">03</div><h2>Три короткие формулы</h2><p>Они заменяют длинный перебор, когда модель подходит.</p></header>
+<div class="content">
+  <div class="trio">
+    <article><div class="code">фиксированное n</div><h3>Число успехов</h3><math display="block"><mrow><mi>E</mi><mo>(</mo><mi>X</mi><mo>)</mo><mo>=</mo><mi>n</mi><mi>p</mi></mrow></math><p>n одинаковых независимых испытаний, вероятность успеха p постоянна. Пример: 6 бросков монеты → ожидаемо 3 орла.</p></article>
+    <article><div class="code">до первого успеха</div><h3>Число испытаний</h3><math display="block"><mrow><mi>E</mi><mo>(</mo><mi>T</mi><mo>)</mo><mo>=</mo><mfrac><mn>1</mn><mi>p</mi></mfrac></mrow></math><p>Испытания повторяются независимо с одной и той же вероятностью успеха p. При p=0,05 ожидание равно 20.</p></article>
+    <article><div class="code">до r успехов</div><h3>Несколько успехов</h3><math display="block"><mrow><mi>E</mi><mo>(</mo><msub><mi>T</mi><mi>r</mi></msub><mo>)</mo><mo>=</mo><mfrac><mi>r</mi><mi>p</mi></mfrac></mrow></math><p>Успехи не обязаны идти подряд. Две шестёрки при бросках кубика дают ожидание 12 бросков.</p></article>
+  </div>
+  <div class="rule warm"><b>Отдельный сюжет:</b> симметричную монету бросают до появления обеих сторон. После первого броска одна сторона уже есть; противоположную ждём в среднем ещё 2 броска. Поэтому E(T)=3.</div>
+</div>
+</section>
+
+<section class="chapter" id="choice">
+<header class="chapter-head"><div class="chapter-no">04</div><h2>Как выбрать метод</h2><p>Смотрите на то, что считает случайная величина.</p></header>
+<div class="content">
+  <div class="selector" aria-labelledby="selectorTitle">
+    <div class="selector-head" role="group" aria-label="Выбор типа задачи">
+      <button type="button" data-case="general" aria-pressed="true">Распределение</button>
+      <button type="button" data-case="fixed" aria-pressed="false">Число успехов</button>
+      <button type="button" data-case="wait" aria-pressed="false">Ждём успех</button>
+    </div>
+    <div class="selector-body">
+      <div class="selector-question"><p class="eyebrow">Вопрос к условию</p><h3 id="selectorTitle">Что именно нужно усреднить?</h3><p id="selectorPrompt">Известны возможные значения случайной величины и их вероятности.</p></div>
+      <div class="selector-result"><p class="eyebrow">Подходящий метод</p><h3 id="selectorMethod">Общая формула</h3><math id="selectorFormula" display="block"><mrow><mi>E</mi><mo>(</mo><mi>X</mi><mo>)</mo><mo>=</mo><mo>∑</mo><msub><mi>x</mi><mi>i</mi></msub><msub><mi>p</mi><mi>i</mi></msub></mrow></math><p id="selectorNote">Проверьте, что вероятности составляют полное распределение и дают сумму 1.</p></div>
+    </div>
+  </div>
+  <div class="rule"><b>Сначала определите случайную величину.</b> Формула выбирается по смыслу X или T, а не по отдельным словам «монета», «кубик» или «успех».</div>
+  <figure>
+    <button class="poster-button" id="openPoster" type="button" aria-label="Открыть плакат крупно">
+      <img class="poster" src="../images/28.09.26.png" alt="Плакат по математическому ожиданию: смысл, основная формула, специальные случаи, алгоритм выбора метода и типичные ошибки" loading="lazy">
+    </button>
+    <figcaption>Наглядная памятка занятия. Нажмите, чтобы открыть крупно.</figcaption>
+  </figure>
+</div>
+</section>
+
+<section class="chapter" id="errors">
+<header class="chapter-head"><div class="chapter-no">05</div><h2>Типичные ошибки</h2><p>Большинство ошибок — выбор неверной модели.</p></header>
+<div class="content">
+  <div class="errors">
+    <div class="error"><b>01</b><div><strong>«E(X) — наиболее вероятный исход»</strong><span>Нет. Это долгосрочное среднее. Мода и математическое ожидание — разные характеристики.</span></div></div>
+    <div class="error"><b>02</b><div><strong>Вероятности не дают сумму 1</strong><span>Сначала восстановите недостающую вероятность, затем считайте ожидание.</span></div></div>
+    <div class="error"><b>03</b><div><strong>Перепутаны xᵢ и pᵢ</strong><span>Запишите пары «значение — вероятность», затем перемножайте.</span></div></div>
+    <div class="error"><b>04</b><div><strong>Забыт нулевой исход</strong><span>В задачах о выигрыше проигрышный билет даёт X=0 и входит в распределение.</span></div></div>
+    <div class="error"><b>05</b><div><strong>Формула 1/p применяется автоматически</strong><span>Она требует повторяющихся независимых испытаний с постоянной вероятностью успеха p&gt;0.</span></div></div>
+    <div class="error"><b>06</b><div><strong>«До r успехов» путают с «r успехов подряд»</strong><span>Формула r/p относится к успехам без требования подряд.</span></div></div>
+    <div class="error"><b>07</b><div><strong>Строят всю биномиальную таблицу ради среднего</strong><span>Если требуется только ожидаемое число успехов, используйте E(X)=np.</span></div></div>
+  </div>
+  <div class="quiz">
+    <h3>Мини-квиз: что означает E(X)=0,8 автомата?</h3>
+    <div class="quiz-options">
+      <button type="button">В конкретный день сломается ровно 0,8 автомата.</button>
+      <button type="button" data-ok="1">В длинной серии дней среднее число таких автоматов стремится к 0,8.</button>
+      <button type="button">Исход 0,8 является самым вероятным.</button>
+    </div>
+    <div class="feedback" aria-live="polite"></div>
+  </div>
+</div>
+</section>
+
+<section class="chapter" id="training">
+<header class="chapter-head"><div class="chapter-no">06</div><h2>Тренировка · Путь А</h2><p>10 задач от общей формулы к специальным моделям.</p></header>
+<div class="content">
+  <article class="exercise"><h3>1. Распределение из трёх значений</h3><p>X принимает −1, 0, 2 с вероятностями 0,2; 0,5; 0,3. Найдите E(X).</p><button class="answer-toggle" type="button" aria-expanded="false">Показать ответ</button><div class="answer" hidden>E(X)=0,4.</div></article>
+  <article class="exercise"><h3>2. Недостающая вероятность</h3><p>X принимает 0, 1, 4. P(X=0)=0,35, P(X=1)=0,45. Найдите P(X=4) и E(X).</p><button class="answer-toggle" type="button" aria-expanded="false">Показать ответ</button><div class="answer" hidden>P(X=4)=0,20; E(X)=1,25.</div></article>
+  <article class="exercise"><h3>3. Лотерея</h3><p>Из 20 000 билетов 900 выигрывают 100 руб., 80 — 1000 руб., 20 — 5000 руб.; остальные ничего не выигрывают. Найдите математическое ожидание выигрыша на один билет.</p><button class="answer-toggle" type="button" aria-expanded="false">Показать ответ</button><div class="answer" hidden>13,5 руб.</div></article>
+  <article class="exercise"><h3>4. Два автомата</h3><p>Вероятности окончания кофе в двух независимых автоматах равны 0,3 и 0,4. X — число автоматов без кофе. Постройте распределение X и найдите E(X).</p><button class="answer-toggle" type="button" aria-expanded="false">Показать ответ</button><div class="answer" hidden>P(X=0)=0,42; P(X=1)=0,46; P(X=2)=0,12; E(X)=0,7.</div></article>
+  <article class="exercise"><h3>5. Монета 14 раз</h3><p>Симметричную монету бросают 14 раз. Найдите математическое ожидание числа орлов.</p><button class="answer-toggle" type="button" aria-expanded="false">Показать ответ</button><div class="answer" hidden>7.</div></article>
+  <article class="exercise"><h3>6. Кубик 30 раз</h3><p>Игральный кубик бросают 30 раз. Найдите математическое ожидание числа выпадений шестёрки.</p><button class="answer-toggle" type="button" aria-expanded="false">Показать ответ</button><div class="answer" hidden>5.</div></article>
+  <article class="exercise"><h3>7. До первого успеха</h3><p>Вероятность успеха в одном независимом испытании равна 0,2. Испытания повторяют до первого успеха. Найдите ожидаемое число испытаний.</p><button class="answer-toggle" type="button" aria-expanded="false">Показать ответ</button><div class="answer" hidden>5.</div></article>
+  <article class="exercise"><h3>8. До четырёх попаданий</h3><p>Вероятность попадания при каждом независимом выстреле равна 0,25. Стреляют до четырёх попаданий. Найдите ожидаемое число выстрелов.</p><button class="answer-toggle" type="button" aria-expanded="false">Показать ответ</button><div class="answer" hidden>16.</div></article>
+  <article class="exercise"><h3>9. Обе стороны монеты</h3><p>Симметричную монету бросают до тех пор, пока не появятся и орёл, и решка хотя бы по одному разу. Найдите ожидаемое число бросков.</p><button class="answer-toggle" type="button" aria-expanded="false">Показать ответ</button><div class="answer" hidden>3.</div></article>
+  <article class="exercise"><h3>10. Три датчика</h3><p>Три датчика срабатывают независимо с вероятностями 0,15; 0,40; 0,65. X — число сработавших датчиков. Найдите E(X) и объясните, почему полное распределение не требуется.</p><button class="answer-toggle" type="button" aria-expanded="false">Показать ответ</button><div class="answer" hidden>1,20; по линейности ожидания E(X)=0,15+0,40+0,65.</div></article>
+</div>
+</section>
+
+<section class="chapter" id="check">
+<header class="chapter-head"><div class="chapter-no">07</div><h2>Самопроверка</h2><p>Пять вопросов перед финальным ответом.</p></header>
+<div class="content">
+  <div class="selfcheck">
+    <label class="check"><input type="checkbox"> <span>Я могу словами определить, что именно является случайной величиной.</span></label>
+    <label class="check"><input type="checkbox"> <span>Я выписал все возможные значения и проверил вероятности.</span></label>
+    <label class="check"><input type="checkbox"> <span>Я проверил, подходит ли np, 1/p, r/p или сумма вероятностей.</span></label>
+    <label class="check"><input type="checkbox"> <span>Я отличаю среднее значение от наиболее вероятного исхода.</span></label>
+    <label class="check"><input type="checkbox"> <span>Я проверил смысл и единицы итогового результата.</span></label>
+    <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+    <div class="progress-text" id="progressText">0 из 5</div>
+  </div>
+  <div class="materials"><a href="../pdf_docs/28.09.26.pdf">PDF занятия</a><a href="../tex_docs/28.09.26.tex">Исходник TeX</a><a href="../images/28.09.26.png">Плакат</a></div>
+</div>
+</section>
+</main>
+<footer><span>Ксения Клыкова · математическое ожидание</span><span>Лёвин Артём Александрович · 28.09.26</span></footer>
+</div>
+
+<div class="modal" id="posterModal" role="dialog" aria-modal="true" aria-label="Плакат по математическому ожиданию">
+  <div class="modal-inner"><button class="modal-close" id="closePoster" type="button" aria-label="Закрыть">×</button><img src="../images/28.09.26.png" alt="Плакат по математическому ожиданию"></div>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var saved=null;
+  try{saved=localStorage.getItem('xenia-280926-theme')}catch(e){}
+  if(saved==='dark'||saved==='light')root.dataset.theme=saved;
+  document.getElementById('themeToggle').addEventListener('click',function(){
+    root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';
+    try{localStorage.setItem('xenia-280926-theme',root.dataset.theme)}catch(e){}
+  });
+  document.getElementById('printButton').addEventListener('click',function(){window.print()});
+
+  var cases={
+    general:{prompt:'Известны возможные значения случайной величины и их вероятности.',method:'Общая формула',formula:'general',note:'Проверьте, что вероятности составляют полное распределение и дают сумму 1.'},
+    fixed:{prompt:'X считает число успехов в фиксированном числе одинаковых независимых испытаний.',method:'Число успехов',formula:'fixed',note:'Если вероятность успеха постоянна и равна p, полное биномиальное распределение для одного ожидания не требуется.'},
+    wait:{prompt:'T считает число повторяющихся независимых испытаний до первого или r-го успеха.',method:'Ожидание времени до успеха',formula:'wait',note:'До первого успеха используйте 1/p; до r успехов без требования подряд — r/p.'}
+  };
+  function mathMarkup(type){
+    if(type==='fixed')return '<mrow><mi>E</mi><mo>(</mo><mi>X</mi><mo>)</mo><mo>=</mo><mi>n</mi><mi>p</mi></mrow>';
+    if(type==='wait')return '<mrow><mi>E</mi><mo>(</mo><mi>T</mi><mo>)</mo><mo>=</mo><mfrac><mn>1</mn><mi>p</mi></mfrac><mtext> или </mtext><mi>E</mi><mo>(</mo><msub><mi>T</mi><mi>r</mi></msub><mo>)</mo><mo>=</mo><mfrac><mi>r</mi><mi>p</mi></mfrac></mrow>';
+    return '<mrow><mi>E</mi><mo>(</mo><mi>X</mi><mo>)</mo><mo>=</mo><mo>∑</mo><msub><mi>x</mi><mi>i</mi></msub><msub><mi>p</mi><mi>i</mi></msub></mrow>';
+  }
+  document.querySelectorAll('[data-case]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('[data-case]').forEach(function(b){b.setAttribute('aria-pressed',b===btn?'true':'false')});
+      var item=cases[btn.dataset.case];
+      document.getElementById('selectorPrompt').textContent=item.prompt;
+      document.getElementById('selectorMethod').textContent=item.method;
+      document.getElementById('selectorFormula').innerHTML=mathMarkup(item.formula);
+      document.getElementById('selectorNote').textContent=item.note;
+    });
+  });
+
+  document.querySelectorAll('.answer-toggle').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var answer=btn.nextElementSibling;
+      var open=btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded',open?'false':'true');
+      answer.hidden=open;
+      btn.textContent=open?'Показать ответ':'Скрыть ответ';
+    });
+  });
+
+  document.querySelectorAll('.quiz-options button').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var box=btn.closest('.quiz');
+      box.querySelectorAll('.quiz-options button').forEach(function(b){b.classList.remove('good','bad')});
+      var ok=btn.dataset.ok==='1';
+      btn.classList.add(ok?'good':'bad');
+      box.querySelector('.feedback').textContent=ok?'Верно: математическое ожидание описывает долгосрочное среднее.':'Проверьте определение: отдельный исход и долгосрочное среднее — разные вещи.';
+    });
+  });
+
+  var checks=Array.from(document.querySelectorAll('.check input'));
+  function updateProgress(){
+    var n=checks.filter(function(x){return x.checked}).length;
+    document.getElementById('progressBar').style.width=(n/checks.length*100)+'%';
+    document.getElementById('progressText').textContent=n+' из '+checks.length;
+    try{localStorage.setItem('xenia-280926-checks',JSON.stringify(checks.map(function(x){return x.checked})))}catch(e){}
+  }
+  try{
+    var stored=JSON.parse(localStorage.getItem('xenia-280926-checks')||'null');
+    if(Array.isArray(stored))checks.forEach(function(x,i){x.checked=Boolean(stored[i])});
+  }catch(e){}
+  checks.forEach(function(x){x.addEventListener('change',updateProgress)});updateProgress();
+
+  var modal=document.getElementById('posterModal'),open=document.getElementById('openPoster'),close=document.getElementById('closePoster');
+  var lastFocus=null;
+  function closeModal(){modal.classList.remove('show');if(lastFocus)lastFocus.focus()}
+  open.addEventListener('click',function(){lastFocus=open;modal.classList.add('show');close.focus()});
+  close.addEventListener('click',closeModal);
+  modal.addEventListener('click',function(e){if(e.target===modal)closeModal()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('show'))closeModal()});
+})();
+</script>
+</body>
+</html>
