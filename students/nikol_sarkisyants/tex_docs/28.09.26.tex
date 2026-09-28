@@ -1,0 +1,392 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\geometry{left=18mm,right=18mm,top=18mm,bottom=20mm}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{356B75}
+\definecolor{darkaccent}{HTML}{234B52}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{soft}{HTML}{EEF4F5}
+\definecolor{muted}{HTML}{6F7C80}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\setlength{\parindent}{0pt}
+\setlength{\headheight}{25pt}
+\onehalfspacing
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=4pt,topsep=3pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}Чек-лист: оптимизационные задачи}
+\fancyhead[R]{\small\color{muted}28.09.26}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\sectionline}{\vspace{1mm}{\color{accent}\hrule height 0.7pt}\vspace{3mm}}
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{center}
+\vspace*{20mm}
+{\Large\color{muted}Математика · профильный уровень}\par
+\vspace{11mm}
+{\fontsize{30}{34}\selectfont\bfseries\color{darkaccent}Чек-лист}\par
+\vspace{4mm}
+{\LARGE\bfseries Оптимизационные задачи с производной}\par
+\vspace{10mm}
+{\large Как переводить прикладной текст в функцию одной переменной, учитывать ограничения и доказывать максимум или минимум}\par
+\vspace{18mm}
+{\Large\bfseries Николь Саркисьянц}\par
+\vspace{5mm}
+{\large 28.09.26}\par
+\vfill
+{\small\color{textgray}Лёвин Артём Александрович эксклюзивно для Николь Саркисьянц}\par
+\vspace{8mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent,line width=1.2pt] (-7,0) .. controls (-3,1.0) and (2,-1.0) .. (7,0.2);
+\draw[accent!50,line width=0.7pt] (-6.4,-0.25) .. controls (-2.5,0.55) and (2.8,-0.7) .. (6.3,-0.1);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{1. Главная идея}
+\sectionline
+В прикладной задаче слова \key{«наибольший»}, \key{«наименьший»}, \key{«максимальный»}, \key{«минимальный»} указывают, \textbf{какую величину нужно оптимизировать}. Для этой величины строят функцию одной переменной, а затем исследуют её на допустимых значениях с помощью производной.
+
+\key{Главный вопрос при чтении условия:} \emph{к чему относится слово «максимальный» или «минимальный»?}
+
+\begin{itemize}
+  \item максимальная выручка $\Rightarrow$ строим функцию выручки $R$;
+  \item максимальная площадь $\Rightarrow$ строим функцию площади $S$;
+  \item максимальная мощность $\Rightarrow$ строим функцию мощности $P$;
+  \item максимальный объём $\Rightarrow$ строим функцию объёма $V$.
+\end{itemize}
+
+\section*{2. Универсальный маршрут решения}
+\sectionline
+\begin{enumerate}
+  \item \key{Обозначьте переменную}, которую требуется найти, и подпишите её смысл.
+  \item \key{Найдите оптимизируемую величину}: что должно стать максимальным или минимальным?
+  \item \key{Составьте формулу} этой величины из данных условия.
+  \item \key{Сведите формулу к одной переменной}. Желательно к той, которую спрашивают в задаче.
+  \item \key{Запишите допустимые значения}: длины, количества, температуры, сопротивления и т.~п.
+  \item \key{Упростите функцию}, если это делает дифференцирование прозрачнее.
+  \item \key{Найдите производную} и решите $f'(x)=0$ внутри допустимой области.
+  \item \key{Исследуйте знак производной} только на допустимом промежутке.
+  \item Если границы входят в область определения, \key{не забудьте их}: при необходимости сравните значения функции в критических и граничных точках.
+  \item \key{Ответьте ровно на вопрос}: найдите требуемую переменную и, если просят, само максимальное или минимальное значение.
+\end{enumerate}
+
+\section*{3. Ограничения --- часть решения}
+\sectionline
+В прикладных задачах алгебраическая формула может существовать при значениях, которые не имеют смысла в рассматриваемой ситуации.
+
+\begin{itemize}
+  \item количество товара: обычно $q\in\mathbb N$; для применения производной сначала исследуют непрерывную модель, а затем возвращаются к целым значениям;
+  \item длина, площадь, объём и сопротивление в рассматриваемых моделях должны удовлетворять физическим ограничениям задачи;
+  \item если из квадрата со стороной $30$ вырезают по углам квадраты со стороной $x$, то
+  \[
+    0<x<15,
+  \]
+  поскольку сторона дна $30-2x$ должна быть положительной;
+  \item если условием дан промежуток, например $20\le t\le80$, исследование ведётся только на нём.
+\end{itemize}
+
+\textbf{Для целочисленной величины:} если непрерывная модель даёт нецелую точку максимума или минимума, сравните ближайшие допустимые целые значения.
+
+\textbf{Важно:} критическая точка вне допустимой области не может быть ответом прикладной задачи.
+
+\clearpage
+\section*{Алгоритм: как решать оптимизационную задачу}
+\vspace{4mm}
+\begin{center}
+\begin{tikzpicture}[
+  node distance=6mm and 13mm,
+  every node/.style={font=\small,align=center},
+  startstop/.style={ellipse,draw=accent,line width=0.9pt,minimum width=42mm,minimum height=9mm,fill=soft},
+  process/.style={rectangle,rounded corners=2mm,draw=accent,line width=0.9pt,text width=101mm,minimum height=10mm,fill=white},
+  decision/.style={diamond,aspect=2.2,draw=accent,line width=0.9pt,text width=45mm,inner sep=1.5mm,fill=soft},
+  side/.style={rectangle,rounded corners=2mm,draw=accent,line width=0.9pt,text width=47mm,minimum height=10mm,fill=white},
+  arrow/.style={-{Stealth[length=2.6mm]},line width=0.9pt,color=darkaccent}
+]
+\node[startstop] (start) {Прочитать условие};
+\node[process,below=of start] (target) {Определить, какая величина должна быть максимальной или минимальной};
+\node[process,below=of target] (formula) {Составить целевую функцию};
+\node[decision,below=of formula] (onevar) {Осталась одна переменная?};
+\node[side,right=19mm of onevar] (sub) {Выразить лишние величины и подставить};
+\node[process,below=of onevar] (domain) {Записать допустимую область и смысловые ограничения};
+\node[process,below=of domain] (der) {Найти $f'(x)$ и упростить её до удобной для анализа формы};
+\node[process,below=of der] (crit) {Найти критические точки внутри допустимой области};
+\node[process,below=of crit] (signs) {Расставить знаки $f'(x)$ на допустимых промежутках};
+\node[process,below=of signs] (bounds) {Учесть допустимые границы, если они входят в область};
+\node[process,below=of bounds] (proof) {Обосновать максимум или минимум по знакам производной и, когда нужно, по значениям функции};
+\node[startstop,below=of proof] (answer) {Записать ответ на вопрос задачи};
+
+\draw[arrow] (start)--(target);
+\draw[arrow] (target)--(formula);
+\draw[arrow] (formula)--(onevar);
+\draw[arrow] (onevar)-- node[left]{да} (domain);
+\draw[arrow] (onevar)-- node[above]{нет} (sub);
+\draw[arrow] (sub) |- (formula.east);
+\draw[arrow] (domain)--(der);
+\draw[arrow] (der)--(crit);
+\draw[arrow] (crit)--(signs);
+\draw[arrow] (signs)--(bounds);
+\draw[arrow] (bounds)--(proof);
+\draw[arrow] (proof)--(answer);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{4. Типовой пример: максимальная выручка}
+\sectionline
+Пусть $q$ --- количество проданных наборов, а цена одного набора задаётся формулой
+\[
+  p(q)=180-3q.
+\]
+Выручка равна цене, умноженной на количество:
+\[
+  R(q)=p(q)\,q=(180-3q)q=180q-3q^2.
+\]
+По смыслу $q\in\mathbb N$, $q>0$, а цена должна быть положительной: $180-3q>0$, то есть $q<60$.
+
+Для поиска вершины сначала исследуем непрерывную модель на $0<q<60$:
+\[
+  R'(q)=180-6q.
+\]
+Критическая точка:
+\[
+  180-6q=0 \quad\Longrightarrow\quad q=30.
+\]
+
+\begin{center}
+\begin{tikzpicture}[x=1.15cm,y=1cm,font=\small]
+\draw[-{Stealth[length=2mm]},line width=0.8pt] (0,0)--(8,0) node[right]{$q$};
+\draw[line width=0.8pt] (3.5,-0.13)--(3.5,0.13) node[below=4pt]{$30$};
+\node at (1.8,0.45) {$R'(q)>0$};
+\node at (5.4,0.45) {$R'(q)<0$};
+\draw[-{Stealth[length=2mm]},accent,line width=1pt] (1,0.9)--(3.15,1.45);
+\draw[-{Stealth[length=2mm]},accent,line width=1pt] (3.85,1.45)--(6.1,0.9);
+\node[darkaccent] at (3.5,1.72) {максимум};
+\end{tikzpicture}
+\end{center}
+
+До $30$ выручка возрастает, после $30$ убывает. Точка $q=30$ уже целая, поэтому дополнительного сравнения соседних целых значений не требуется. Следовательно,
+\[
+  q=30,\qquad R_{\max}=R(30)=(180-90)\cdot30=2700.
+\]
+
+\section*{5. Если целевая функция --- произведение}
+\sectionline
+Пусть
+\[
+  A=t-20,\qquad B=80-t,\qquad Q=AB,\qquad 20\le t\le80.
+\]
+Тогда
+\[
+  Q(t)=(t-20)(80-t).
+\]
+Можно раскрыть скобки или применить правило произведения:
+\[
+  (uv)'=u'v+uv'.
+\]
+Получаем
+\[
+  Q'(t)=(80-t)-(t-20)=100-2t.
+\]
+Отсюда $t=50$. При $20\le t<50$ производная положительна, при $50<t\le80$ отрицательна. На концах $Q(20)=Q(80)=0$, поэтому
+\[
+  Q_{\max}=Q(50)=30\cdot30=900.
+\]
+
+\key{Приём:} незнакомый прикладной контекст не должен пугать. Сначала выпишите данные формулы и свяжите их в одну целевую функцию.
+
+\section*{6. Если целевая функция --- дробь}
+\sectionline
+В задаче на электрическую мощность могут быть заданы
+\[
+  I=\frac{36}{3+R},\qquad P=I^2R,\qquad R>0,
+\]
+где $R$ --- сопротивление нагрузки в омах. После подстановки
+\[
+  P(R)=\frac{36^2R}{(3+R)^2}.
+\]
+По правилу производной частного и последующему упрощению
+\[
+  P'(R)=\frac{36^2(9-R^2)}{(3+R)^4}
+       =\frac{36^2(3-R)}{(3+R)^3}.
+\]
+В области $R>0$ знаменатель положителен, поэтому знак производной определяется множителем $3-R$:
+\[
+  0<R<3:~P'(R)>0,\qquad R>3:~P'(R)<0.
+\]
+Следовательно,
+\[
+  R=3~\text{Ом},\qquad
+  P_{\max}=\frac{36^2\cdot3}{6^2}=108~\text{Вт}.
+\]
+
+\key{Практическое правило:} перед расстановкой знаков доводите производную до формы, где её знак читается сразу.
+
+\clearpage
+\section*{7. Геометрическая модель: коробка из квадратного листа}
+\sectionline
+Из квадратного листа $30\times30$ см по углам вырезают квадраты со стороной $x$ и загибают края. После вырезания сторона дна становится $30-2x$, а высота коробки равна $x$.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.16,font=\small]
+\def\c{4}
+\tkzDefPoint(0,0){A}
+\tkzDefPoint(30,0){B}
+\tkzDefPoint(30,30){C}
+\tkzDefPoint(0,30){D}
+\tkzDrawPolygon[color=accent,line width=1.1pt](A,B,C,D)
+
+\tkzDefPoint(\c,0){E}
+\tkzDefPoint(\c,30){F}
+\tkzDefPoint(30-\c,0){G}
+\tkzDefPoint(30-\c,30){H}
+\tkzDefPoint(0,\c){I}
+\tkzDefPoint(30,\c){J}
+\tkzDefPoint(0,30-\c){K}
+\tkzDefPoint(30,30-\c){L}
+\tkzDrawSegments[dashed,color=accent,line width=0.8pt](E,F G,H I,J K,L)
+
+\fill[soft] (0,0) rectangle (\c,\c);
+\fill[soft] (30-\c,0) rectangle (30,\c);
+\fill[soft] (0,30-\c) rectangle (\c,30);
+\fill[soft] (30-\c,30-\c) rectangle (30,30);
+
+\draw[{Stealth[length=2mm]}-{Stealth[length=2mm]},darkaccent,line width=0.8pt] (0,-2.2)--(\c,-2.2) node[midway,below] {$x$};
+\draw[{Stealth[length=2mm]}-{Stealth[length=2mm]},darkaccent,line width=0.8pt] (\c,15)--(30-\c,15) node[midway,fill=white] {$30-2x$};
+\node at (15,-4.4) {$30$ см};
+\node[rotate=90] at (-2.2,15) {$30$ см};
+\end{tikzpicture}
+\end{center}
+
+Размеры коробки:
+\[
+  (30-2x)\times(30-2x)\times x.
+\]
+Поэтому
+\[
+  V(x)=x(30-2x)^2,
+  \qquad 0<x<15.
+\]
+После раскрытия скобок
+\[
+  V(x)=900x-120x^2+4x^3,
+\]
+\[
+  V'(x)=900-240x+12x^2=12(x-5)(x-15).
+\]
+Точка $x=15$ лежит на границе вырожденной конструкции и не входит в допустимую область. На $(0,5)$ имеем $V'(x)>0$, на $(5,15)$ --- $V'(x)<0$. Следовательно,
+\[
+  x=5~\text{см},\qquad V_{\max}=5\cdot20^2=2000~\text{см}^3.
+\]
+
+\section*{8. Частые ошибки}
+\sectionline
+\begin{itemize}
+  \item Дифференцировать не ту величину. Сначала определите, что именно оптимизируется.
+  \item Оставить в целевой формуле две или три переменные вместо одной.
+  \item Найти $f'(x)=0$ и сразу объявить ответ, не доказав максимум или минимум.
+  \item Исследовать производную вне допустимого промежутка.
+  \item Забыть проверить границы, если они входят в область определения.
+  \item Не упростить громоздкую производную перед анализом знаков.
+  \item После нахождения оптимального параметра забыть вычислить само экстремальное значение, если оно требуется.
+  \item Для целого количества товара округлить нецелую критическую точку без сравнения соседних допустимых целых значений.
+\end{itemize}
+
+\section*{9. Мини-памятка перед ответом}
+\sectionline
+Проверьте пять пунктов:
+\begin{enumerate}
+  \item целевая функция соответствует величине, которую нужно максимизировать или минимизировать;
+  \item функция выражена через одну переменную;
+  \item ограничения выписаны до анализа производной;
+  \item критические и, при необходимости, граничные точки исследованы только в допустимой области;
+  \item вывод о максимуме или минимуме обоснован, а ответ дан именно на вопрос задачи.
+\end{enumerate}
+
+\clearpage
+\section*{Тренировочный блок --- Путь А}
+\sectionline
+\textbf{10 задач.} Для каждой задачи придерживайтесь полного маршрута: целевая функция $\to$ ограничения $\to$ производная $\to$ критические точки $\to$ анализ знаков и границ $\to$ вывод.
+
+\begin{enumerate}
+  \item Цена товара зависит от числа проданных единиц: $p(q)=240-4q$, где $q\in\mathbb N$. Выручка $R=pq$. Сколько единиц товара нужно продать, чтобы выручка была максимальной? Найдите максимальную выручку.
+
+  \item Прямоугольник имеет стороны $x$ и $y$, причём $y=120-2x$, $x>0$, $y>0$. При каком $x$ площадь прямоугольника максимальна? Найдите вторую сторону и максимальную площадь.
+
+  \item При $10\le t\le70$ заданы $A=t-10$ и $B=70-t$. Показатель $Q=AB$. Найдите значение $t$, при котором $Q$ максимален, и само максимальное значение.
+
+  \item Сила тока задаётся формулой $I=\dfrac{48}{4+R}$, где $R>0$ измеряется в омах. Мощность на нагрузке равна $P=I^2R$. Найдите сопротивление $R$, при котором мощность максимальна, и максимальную мощность.
+
+  \item Из квадратного листа $24\times24$ см вырезают по углам квадраты со стороной $x$ и делают открытую коробку. При каком $x$ объём коробки максимален? Найдите этот объём.
+
+  \item Цена единицы товара равна $p(q)=200-2q$, а затраты на производство $q$ единиц составляют $C(q)=20q+500$, где $q\in\mathbb N$. При каком $q$ прибыль максимальна? Найдите максимальную прибыль.
+
+  \item Для $x>0$ рассмотрите величину
+  \[
+    F(x)=x+\frac{36}{x}.
+  \]
+  Найдите её наименьшее значение и значение $x$, при котором оно достигается.
+
+  \item Прямоугольник имеет площадь $144$. Его стороны положительны. При каких длинах сторон периметр прямоугольника минимален? Найдите минимальный периметр.
+
+  \item Из прямоугольного листа $40\times30$ см по углам вырезают одинаковые квадраты со стороной $x$ и делают открытую коробку. Найдите $x$, при котором объём максимален. Ответ дайте в точном виде.
+
+  \item Сила тока задаётся формулой $I=\dfrac{60}{5+R}$, где $R>0$ измеряется в омах, а мощность равна $P=I^2R$. Найдите $R$, при котором мощность максимальна, и максимальную мощность.
+\end{enumerate}
+
+\clearpage
+\section*{Ответы}
+\sectionline
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{@{}>{\bfseries}p{10mm} p{0.82\linewidth}@{}}
+\toprule
+№ & Ответ \\
+\midrule
+\endfirsthead
+\toprule
+№ & Ответ \\
+\midrule
+\endhead
+1 & $q=30$, $R_{\max}=3600$ ден. ед. \\
+2 & $x=30$, $y=60$, $S_{\max}=1800$. \\
+3 & $t=40$, $Q_{\max}=900$. \\
+4 & $R=4$ Ом, $P_{\max}=144$ Вт. \\
+5 & $x=4$ см, $V_{\max}=1024$ см$^3$. \\
+6 & $q=45$, максимальная прибыль $3550$ ден. ед. \\
+7 & $x=6$, $F_{\min}=12$. \\
+8 & стороны $12$ и $12$, $P_{\min}=48$. \\
+9 & $\displaystyle x=\frac{35-5\sqrt{13}}{3}$ см. \\
+10 & $R=5$ Ом, $P_{\max}=180$ Вт. \\
+\bottomrule
+\end{longtable}
+
+\vfill
+{\small\color{muted}Лёвин Артём Александрович эксклюзивно для Николь Саркисьянц}\par
+
+\end{document}
