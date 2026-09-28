@@ -1,0 +1,466 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=18mm,headsep=7mm,footskip=10mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{1B6F78}
+\definecolor{darkaccent}{HTML}{124B52}
+\definecolor{textgray}{HTML}{30363A}
+\definecolor{softgray}{HTML}{EEF2F3}
+\definecolor{warmgray}{HTML}{6A7175}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\headheight}{24.1pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=4pt,topsep=4pt}
+\newcommand{\checkitem}{\(\square\)\hspace{0.45em}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{warmgray}Тригонометрические функции}
+\fancyhead[R]{\small\color{warmgray}Ярослав Гаврилов}
+\fancyfoot[C]{\small\color{warmgray}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{softgray}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\sectionrule}{\par\vspace{-0.3em}{\color{accent}\rule{\linewidth}{0.7pt}}\vspace{0.6em}}
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\R}{\mathbb{R}}
+
+\begin{document}
+
+% ---------- TITLE ----------
+\thispagestyle{empty}
+\begin{center}
+\vspace*{18mm}
+{\Large\color{warmgray}Чек-лист}\par
+\vspace{7mm}
+{\Huge\bfseries\color{darkaccent}Тригонометрические функции}\par
+\vspace{3mm}
+{\Large периодичность, графики, неравенства и отбор корней}\par
+\vspace{18mm}
+{\large Ярослав Гаврилов}\par
+\vspace{4mm}
+{\normalsize 28 сентября 2026}\par
+\vfill
+{\small\color{warmgray}Лёвин Артём Александрович эксклюзивно для Ярослава Гаврилова}\par
+\vspace{9mm}
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent,line width=1.2pt,opacity=.65]
+    ($(current page.south west)+(14mm,13mm)$)
+    .. controls ($(current page.south west)+(58mm,25mm)$) and ($(current page.south east)+(-70mm,2mm)$) ..
+    ($(current page.south east)+(-14mm,14mm)$);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------- 1 ----------
+\section*{1. Периодичность: что нужно уметь}
+\sectionrule
+
+\checkitem \key{Понимать определение.} Число $T\ne0$ является периодом функции $f$, если вместе с каждым $x\in D(f)$ числа $x+T$ и $x-T$ также принадлежат $D(f)$ и
+\[
+ f(x+T)=f(x).
+\]
+Для доказательства достаточно проверить сдвиг на $+T$. Равенство $f(x-T)=f(x)$ следует из того же свойства после замены аргумента; на занятии обе подстановки использовались как симметричная самопроверка.
+
+\checkitem \key{Знать базовые периоды.}
+\begin{center}
+\begin{tabular}{@{}lc@{}}
+\toprule
+\textbf{Функция} & \textbf{Наименьший положительный период}\\
+\midrule
+$\sin x,\ \cos x$ & $2\pi$\\
+$\tg x,\ \ctg x$ & $\pi$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\checkitem \key{Учитывать коэффициент перед $x$.} Если $k\ne0$, то
+\[
+T_{\sin(kx)}=T_{\cos(kx)}=\frac{2\pi}{|k|},
+\qquad
+T_{\tg(kx)}=T_{\ctg(kx)}=\frac{\pi}{|k|}.
+\]
+
+\subsection*{Пример 1. Доказать период $\boldsymbol{\frac{2\pi}{3}}$ для $\boldsymbol{f(x)=\sin 3x}$}
+\[
+\begin{aligned}
+f\!\left(x+\frac{2\pi}{3}\right)
+&=\sin\!\left(3x+2\pi\right)=\sin 3x=f(x),\\
+f\!\left(x-\frac{2\pi}{3}\right)
+&=\sin\!\left(3x-2\pi\right)=\sin 3x=f(x).
+\end{aligned}
+\]
+Следовательно, $\frac{2\pi}{3}$ --- период функции. По формуле $\frac{2\pi}{|3|}$ это также её наименьший положительный период.
+
+\subsection*{Пример 2. Почему $\boldsymbol{3\pi}$ не является периодом $\boldsymbol{y=\cos\frac{x}{2}}$}
+\[
+\cos\frac{x+3\pi}{2}
+=\cos\left(\frac{x}{2}+\frac{3\pi}{2}\right)
+=\sin\frac{x}{2}.
+\]
+Получилось другое выражение, значит равенство $f(x+3\pi)=f(x)$ выполняется не для всех $x$. Поэтому $3\pi$ периодом не является. Правильный наименьший положительный период:
+\[
+T=\frac{2\pi}{1/2}=4\pi.
+\]
+
+\subsection*{Быстрая самопроверка}
+\begin{itemize}
+\item Коэффициент $k$ стоит \textbf{внутри} аргумента: $\sin(kx)$, $\cos(kx)$, $\tg(kx)$.
+\item Чем больше $|k|$, тем меньше период.
+\item Для $\tg$ и $\ctg$ базовый период $\pi$, для $\sin$ и $\cos$ --- $2\pi$.
+\item Примеры из занятия: $T\!\left(\sin\frac{4x}{5}\right)=\frac{5\pi}{2}$, \quad $T\!\left(\tg\frac{3x}{5}\right)=\frac{5\pi}{3}$.
+\end{itemize}
+
+% ---------- 2 ----------
+\section*{2. Область определения и область значений}
+\sectionrule
+
+\checkitem \key{Синус и косинус ограничены:}
+\[
+D(\sin x)=D(\cos x)=\R,\qquad
+-1\le \sin x\le1,\quad -1\le\cos x\le1.
+\]
+То есть область значений обеих функций равна $[-1;1]$.
+
+\checkitem \key{Тангенс и котангенс по значениям не ограничены:}
+\[
+E(\tg x)=E(\ctg x)=\R.
+\]
+При этом
+\[
+D(\tg x)=\R\setminus\left\{\frac{\pi}{2}+\pi n\right\},\qquad
+D(\ctg x)=\R\setminus\{\pi n\},\quad n\in\mathbb Z.
+\]
+
+\subsection*{Как найти область значений $\boldsymbol{y=a\sin x+b}$ или $\boldsymbol{y=a\cos x+b}$}
+Поскольку $-1\le\sin x\le1$ и $-1\le\cos x\le1$, удобно помнить итог:
+\[
+\boxed{\ b-|a|\le y\le b+|a|\ }.
+\]
+
+\textbf{Пример.} Для $y=3\cos x-2$:
+\[
+-1\le\cos x\le1
+\quad\Longrightarrow\quad
+-3\le3\cos x\le3
+\quad\Longrightarrow\quad
+-5\le3\cos x-2\le1.
+\]
+Следовательно, $E(y)=[-5;1]$.
+
+\textbf{Пример со знаком «минус».} Для $y=-2\sin x+1$ можно либо аккуратно умножить двойное неравенство на $-2$ с разворотом знаков, либо сразу применить формулу:
+\[
+1-|-2|\le y\le1+|-2|
+\quad\Longrightarrow\quad
+-1\le y\le3.
+\]
+
+\subsection*{Типичные ошибки}
+\begin{itemize}[itemsep=0pt,topsep=2pt]
+\item при умножении двойного неравенства на отрицательное число забывают развернуть оба знака; после преобразований границы записывают от меньшего значения к большему;
+\item путают $D(f)$ и $E(f)$ или ошибочно ограничивают значения тангенса промежутком $[-1;1]$.
+\end{itemize}
+
+\clearpage
+
+% ---------- 3 ----------
+\section*{3. График $\boldsymbol{y=2\sin x+1}$}
+\sectionrule
+
+\checkitem \key{Понимать преобразования.}
+\begin{itemize}
+\item множитель $2$ \textbf{перед} $\sin x$ растягивает график по вертикали в $2$ раза;
+\item $+1$ сдвигает весь график вверх на $1$;
+\item амплитуда становится равной $2$;
+\item область значений: $[-1;3]$;
+\item период остаётся $2\pi$, потому что коэффициент перед $x$ не изменился.
+\end{itemize}
+
+\checkitem \key{Уметь построить по ключевым точкам.}
+\begin{center}
+\begin{tabular}{@{}cccccc@{}}
+\toprule
+$x$ & $-\pi$ & $-\frac{\pi}{2}$ & $0$ & $\frac{\pi}{2}$ & $\pi$\\
+\midrule
+$2\sin x+1$ & $1$ & $-1$ & $1$ & $3$ & $1$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.92\linewidth,
+  height=7.0cm,
+  axis lines=middle,
+  xmin=-3.45,xmax=3.45,
+  ymin=-2.2,ymax=3.8,
+  xtick={-3.14159,-1.5708,0,1.5708,3.14159},
+  xticklabels={$-\pi$,$-\frac{\pi}{2}$,$0$,$\frac{\pi}{2}$,$\pi$},
+  ytick={-2,-1,0,1,2,3},
+  grid=both,
+  minor tick num=1,
+  clip=false,
+  legend style={at={(0.02,0.98)},anchor=north west,draw=none,fill=none},
+  samples=220,
+  domain=-3.3:3.3
+]
+\addplot[accent,very thick] {2*sin(deg(x))+1};
+\addlegendentry{$y=2\sin x+1$}
+\addplot[warmgray,dashed,thick] {sin(deg(x))};
+\addlegendentry{$y=\sin x$}
+\addplot[only marks,mark=*,mark size=2pt,accent] coordinates {
+(-3.14159,1) (-1.5708,-1) (0,1) (1.5708,3) (3.14159,1)
+};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection*{Мини-алгоритм построения}
+\begin{enumerate}
+\item Возьмите стандартные узловые аргументы $-\pi,-\frac\pi2,0,\frac\pi2,\pi$.
+\item Вычислите значения функции.
+\item Отметьте точки на координатной плоскости.
+\item Соедините их плавной синусоидой и продолжите график периодически.
+\item Проверьте амплитуду, среднюю линию $y=1$ и период $2\pi$.
+\end{enumerate}
+
+% ---------- 4 ----------
+\section*{4. Тригонометрические неравенства на окружности}
+\sectionrule
+
+\checkitem \key{Помнить геометрический смысл косинуса.} На единичной окружности $\cos\alpha$ --- это абсцисса точки. Поэтому условие на косинус выделяет вертикальной границей нужные дуги.
+
+\subsection*{Пример 1. $\boldsymbol{\cos\alpha\ge\frac12}$}
+Граничные углы: $-\frac\pi3$ и $\frac\pi3$. Нужна правая дуга, где абсцисса не меньше $\frac12$:
+\[
+\boxed{\alpha\in\left[-\frac\pi3+2\pi n;\ \frac\pi3+2\pi n\right],\quad n\in\mathbb Z.}
+\]
+
+\subsection*{Пример 2. $\boldsymbol{\cos\alpha\le\frac{\sqrt3}{2}}$}
+Граничные углы: $\frac\pi6$ и $\frac{11\pi}{6}$. Нужна большая дуга, расположенная слева от вертикали $x=\frac{\sqrt3}{2}$:
+\[
+\boxed{\alpha\in\left[\frac\pi6+2\pi n;\ \frac{11\pi}{6}+2\pi n\right],\quad n\in\mathbb Z.}
+\]
+
+\begin{center}
+\begin{minipage}[t]{0.46\linewidth}
+\centering
+\begin{tikzpicture}[scale=0.82]
+  \tkzDefPoint(0,0){Oa}
+  \tkzDefPoint(2.15,0){Aa}
+  \tkzDrawCircle[accent,line width=1pt](Oa,Aa)
+  \draw[->,warmgray] (-2.45,0)--(2.55,0);
+  \draw[->,warmgray] (0,-2.4)--(0,2.5);
+  \draw[darkaccent,dashed] (1.075,-2.0)--(1.075,2.0);
+  \draw[accent,line width=3pt,line cap=round] ({2.15*cos(-60)},{2.15*sin(-60)}) arc[start angle=-60,end angle=60,radius=2.15];
+  \fill[accent] ({2.15*cos(-60)},{2.15*sin(-60)}) circle (2pt);
+  \fill[accent] ({2.15*cos(60)},{2.15*sin(60)}) circle (2pt);
+  \node[below right] at ({2.15*cos(-60)},{2.15*sin(-60)}) {$-\frac\pi3$};
+  \node[above right] at ({2.15*cos(60)},{2.15*sin(60)}) {$\frac\pi3$};
+\end{tikzpicture}
+
+{\small $\cos\alpha\ge\frac12$: правая дуга}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.46\linewidth}
+\centering
+\begin{tikzpicture}[scale=0.82]
+  \tkzDefPoint(0,0){Ob}
+  \tkzDefPoint(2.15,0){Ab}
+  \tkzDrawCircle[accent,line width=1pt](Ob,Ab)
+  \draw[->,warmgray] (-2.45,0)--(2.55,0);
+  \draw[->,warmgray] (0,-2.4)--(0,2.5);
+  \draw[darkaccent,dashed] ({2.15*sqrt(3)/2},-2.0)--({2.15*sqrt(3)/2},2.0);
+  \draw[accent,line width=3pt,line cap=round]
+    ({2.15*cos(30)},{2.15*sin(30)}) arc[start angle=30,end angle=330,radius=2.15];
+  \fill[accent] ({2.15*cos(30)},{2.15*sin(30)}) circle (2pt);
+  \fill[accent] ({2.15*cos(330)},{2.15*sin(330)}) circle (2pt);
+  \node[above right] at ({2.15*cos(30)},{2.15*sin(30)}) {$\frac\pi6$};
+  \node[below right] at ({2.15*cos(330)},{2.15*sin(330)}) {$\frac{11\pi}{6}$};
+\end{tikzpicture}
+
+{\small $\cos\alpha\le\frac{\sqrt3}{2}$: большая дуга}
+\end{minipage}
+\end{center}
+
+\subsection*{Что обязательно проверить}
+\begin{itemize}
+\item знаки $\ge$ и $\le$ включают граничные точки; при $>$ и $<$ скобки будут круглыми;
+\item интервал записывается от меньшего угла к большему;
+\item для полного ответа добавляется $2\pi n$, $n\in\mathbb Z$;
+\item при движении по выделенной дуге удобно ориентироваться против часовой стрелки.
+\end{itemize}
+
+\clearpage
+
+% ---------- FLOWCHART ----------
+\thispagestyle{empty}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: неравенство с $\cos\alpha$ на окружности}
+
+\vspace{2mm}
+{\small Схема ниже относится к основному случаю $|a|\le1$. Если $|a|>1$, сначала сравните $a$ с диапазоном $-1\le\cos\alpha\le1$.}
+\end{center}
+\vspace{5mm}
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=11mm,
+  startstop/.style={ellipse,draw=accent,line width=1pt,minimum width=42mm,minimum height=10mm,align=center,fill=softgray},
+  process/.style={rectangle,rounded corners=2mm,draw=accent,line width=1pt,text width=100mm,minimum height=12mm,align=center},
+  decision/.style={diamond,aspect=2.4,draw=accent,line width=1pt,text width=38mm,align=center,inner sep=1.5mm},
+  arrow/.style={-{Stealth[length=3mm]},line width=1pt,draw=darkaccent}
+]
+  \node[startstop] (s) {Начало};
+  \node[process,below=of s] (p1) {Найдите граничные углы из уравнения $\cos\alpha=a$};
+  \node[process,below=of p1] (p2) {Отметьте соответствующие точки на единичной окружности};
+  \node[decision,below=12mm of p2] (d) {Какой знак?};
+  \node[process,below left=15mm and 8mm of d,text width=57mm] (p3a) {$\cos\alpha\ge a$ или $>a$: выберите дугу с большими абсциссами};
+  \node[process,below right=15mm and 8mm of d,text width=57mm] (p3b) {$\cos\alpha\le a$ или $<a$: выберите дугу с меньшими абсциссами};
+  \node[process,below=25mm of d] (p4) {Запишите выбранную дугу от меньшего угла к большему и добавьте $2\pi n$, $n\in\mathbb Z$};
+  \node[process,below=of p4] (p5) {Проверьте тип скобок: строгий знак --- точки исключаются; нестрогий --- включаются};
+  \node[startstop,below=of p5] (e) {Ответ};
+
+  \draw[arrow] (s)--(p1);
+  \draw[arrow] (p1)--(p2);
+  \draw[arrow] (p2)--(d);
+  \draw[arrow] (d)-- node[above left]{\small $\ge,>$} (p3a);
+  \draw[arrow] (d)-- node[above right]{\small $\le,<$} (p3b);
+  \draw[arrow] (p3a.south) |- (p4.west);
+  \draw[arrow] (p3b.south) |- (p4.east);
+  \draw[arrow] (p4)--(p5);
+  \draw[arrow] (p5)--(e);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------- 5 ----------
+\section*{5. Отбор корней на заданном промежутке}
+\sectionrule
+
+После решения тригонометрического уравнения часто получается серия
+\[
+x=x_0+2\pi n,\qquad n\in\mathbb Z.
+\]
+Нужно оставить только те значения, которые попадают в заданный промежуток.
+
+\begin{minipage}[t]{0.48\linewidth}
+\subsection*{Способ 1. Двойное неравенство}
+Для промежутка $[a;b]$ запишите
+\[
+a\le x_0+2\pi n\le b.
+\]
+Решите неравенство относительно целого $n$, затем подставьте найденные значения обратно.
+
+\textbf{Пример.} Для
+\[
+x=\frac\pi6+2\pi n
+\]
+на $\left[-\frac\pi2;\pi\right]$:
+\[
+-\frac\pi2\le\frac\pi6+2\pi n\le\pi,
+\]
+\[
+-\frac13\le n\le\frac{5}{12}.
+\]
+Единственное целое значение $n=0$, поэтому
+\[
+\boxed{x=\frac\pi6}.
+\]
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\subsection*{Способ 2. По окружности}
+\begin{enumerate}[leftmargin=6mm,itemsep=2pt]
+\item Отметьте дугу заданного промежутка.
+\item Нанесите базовый угол $x_0$.
+\item Найдите его копии с шагом $2\pi$ внутри дуги.
+\item Запишите конкретные углы без параметра $n$.
+\end{enumerate}
+
+\textbf{Характерный случай.} Для той же серии на
+\[
+\left[-\frac{5\pi}{2};-\frac{3\pi}{2}\right]
+\]
+подходит $n=-1$:
+\[
+\boxed{x=\frac\pi6-2\pi=-\frac{11\pi}{6}}.
+\]
+
+\subsection*{Контроль перед ответом}
+\begin{itemize}[leftmargin=5mm,itemsep=1.5pt]
+\item \checkitem серия корней записана верно;
+\item \checkitem границы и скобки учтены;
+\item \checkitem используются только целые $n$;
+\item \checkitem найденные углы лежат в промежутке.
+\end{itemize}
+\end{minipage}
+
+% ---------- TRAINING ----------
+\clearpage
+\section*{6. Тренировочный блок --- Путь А}
+\sectionrule
+
+\textbf{10 заданий.} Выполняйте по порядку: сложность постепенно возрастает. Решения здесь не приводятся.
+
+\begin{enumerate}[itemsep=4pt,topsep=4pt]
+\item Найдите наименьший положительный период функции $y=\sin 5x$.
+\item Найдите наименьший положительный период функции $y=\tg\frac{2x}{3}$.
+\item Определите, является ли $T=2\pi$ периодом функции $y=\cos\frac{x}{2}$. Кратко обоснуйте ответ подстановкой $x+T$.
+\item Найдите область значений функции $y=4\cos x-1$.
+\item Найдите область значений функции $y=-3\sin x+2$.
+\item Для $y=2\sin x-1$ найдите значения при $x=-\pi,-\frac\pi2,0,\frac\pi2,\pi$ и укажите область значений функции.
+\item Решите неравенство $\displaystyle \cos x\ge\frac{\sqrt2}{2}$.
+\item Решите неравенство $\displaystyle \cos x\le\frac12$.
+\item Из серии $\displaystyle x=\frac\pi4+2\pi n$, $n\in\mathbb Z$, отберите корни на $\displaystyle \left[-\frac\pi2;\pi\right]$.
+\item Из серии $\displaystyle x=\frac\pi3+2\pi n$, $n\in\mathbb Z$, отберите корни на $\displaystyle \left[-\frac{5\pi}{2};-\frac{3\pi}{2}\right]$.
+\end{enumerate}
+
+\vspace{5mm}
+\textbf{Мини-проверка после выполнения:} период берётся из базовой функции; область значений учитывает $|a|$; в неравенствах проверены границы дуги; при отборе корней параметр $n$ обязательно целый.
+
+% ---------- ANSWERS ----------
+\clearpage
+\section*{7. Ответы}
+\sectionrule
+
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+\textbf{№} & \textbf{Ответ}\\
+\midrule
+1 & $\displaystyle \frac{2\pi}{5}$\\
+2 & $\displaystyle \frac{3\pi}{2}$\\
+3 & Нет. $\displaystyle \cos\frac{x+2\pi}{2}=\cos\left(\frac{x}{2}+\pi\right)=-\cos\frac{x}{2}\not\equiv\cos\frac{x}{2}$.\\
+4 & $[-5;3]$\\
+5 & $[-1;5]$\\
+6 & $-1,-3,-1,1,-1$ соответственно; $E(y)=[-3;1]$.\\
+7 & $\displaystyle x\in\left[-\frac\pi4+2\pi n;\frac\pi4+2\pi n\right],\ n\in\mathbb Z$.\\
+8 & $\displaystyle x\in\left[\frac\pi3+2\pi n;\frac{5\pi}{3}+2\pi n\right],\ n\in\mathbb Z$.\\
+9 & $\displaystyle x=\frac\pi4$.\\
+10 & $\displaystyle x=-\frac{5\pi}{3}$.\\
+\bottomrule
+\end{tabularx}
+
+\vfill
+{\small\color{warmgray}Лёвин Артём Александрович эксклюзивно для Ярослава Гаврилова}\par
+
+\end{document}
