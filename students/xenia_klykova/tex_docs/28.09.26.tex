@@ -1,0 +1,334 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{cmap}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=19mm,top=18mm,bottom=18mm]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{tabularx,booktabs,longtable,array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage{needspace}
+
+\definecolor{accent}{HTML}{247B7B}
+\definecolor{darkaccent}{HTML}{155555}
+\definecolor{textgray}{HTML}{30363A}
+\definecolor{softgray}{HTML}{F2F5F5}
+\definecolor{warn}{HTML}{8A5A20}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\setlength{\headheight}{25pt}
+\onehalfspacing
+\setlist[itemize]{leftmargin=1.55em,itemsep=0.25em,topsep=0.25em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.5em,topsep=0.4em}
+\renewcommand{\arraystretch}{1.25}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{textgray}Математическое ожидание}
+\fancyhead[R]{\small\color{textgray}Ксения Клыкова}
+\fancyfoot[C]{\small\color{textgray}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\LessonDate}{28.09.26}
+\newcommand{\E}{\mathsf{E}}
+\newcommand{\Prb}{\mathsf{P}}
+\newcommand{\sectionline}{\par\vspace{0.2em}{\color{accent}\hrule height 0.6pt}\vspace{0.5em}}
+\newcommand{\Key}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\smallnote}[1]{\begin{quote}\small\color{textgray}#1\end{quote}}
+
+\begin{document}
+
+% --- title page ---
+\thispagestyle{empty}
+\begin{center}
+\vspace*{2.5cm}
+{\Large\color{darkaccent}\textbf{ЧЕК-ЛИСТ}}\\[0.8cm]
+{\fontsize{28}{34}\selectfont\textbf{Математическое ожидание}}\\[0.45cm]
+{\Large дискретная случайная величина и типовые задачи}\\[1.5cm]
+
+{\large Ксения Клыкова}\\[0.4cm]
+{\normalsize \LessonDate}\\[2.0cm]
+
+\begin{minipage}{0.72\textwidth}
+\centering
+\color{textgray}
+Главная цель: научиться распознавать, \emph{что именно усредняется}, правильно строить распределение и быстро выбирать специальную формулу там, где полная таблица не нужна.
+\end{minipage}
+
+\vfill
+{\small\color{textgray}Лёвин Артём Александрович эксклюзивно для Ксении Клыковой}
+
+\vspace{0.8cm}
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent!65,line width=1.2pt]
+    ($(current page.south west)+(18mm,15mm)$)
+    .. controls ($(current page.south west)+(60mm,28mm)$) and ($(current page.south east)+(-70mm,4mm)$)
+    .. ($(current page.south east)+(-18mm,17mm)$);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{1. Что нужно понимать про математическое ожидание}
+\sectionline
+
+Пусть дискретная случайная величина $X$ принимает значения $x_1,x_2,\ldots,x_n$ с вероятностями $p_1,p_2,\ldots,p_n$. Тогда
+\[
+\boxed{\E(X)=x_1p_1+x_2p_2+\dots+x_np_n=\sum_{i=1}^{n}x_ip_i.}
+\]
+
+\Key{Смысл.} Математическое ожидание --- это средний результат, к которому приближается среднее арифметическое большого числа независимых повторений одного и того же эксперимента при неизменных условиях.
+
+\Key{Очень важно.} $\E(X)$ не обязано быть наиболее вероятным значением и вообще не обязано входить в список возможных значений $X$.
+
+\smallnote{Например, если $X$ --- число автоматов, в которых к вечеру закончится кофе, то $X$ может принимать только $0$, $1$ или $2$. Значение $\E(X)=0{,}8$ вполне корректно: это долгосрочное среднее, а не результат одного конкретного дня.}
+
+\subsection*{Перед вычислением: три быстрые проверки}
+\begin{itemize}
+  \item Все вероятности должны удовлетворять $0\le p_i\le 1$.
+  \item Для полного распределения обязательно $p_1+\dots+p_n=1$.
+  \item Каждому значению $x_i$ должна соответствовать именно его вероятность $p_i$.
+\end{itemize}
+
+\subsection*{Мини-пример}
+Пусть $X$ принимает значения $0,1,2$ с вероятностями $0{,}32$, $0{,}56$, $0{,}12$. Тогда
+\[
+\E(X)=0\cdot0{,}32+1\cdot0{,}56+2\cdot0{,}12=0{,}8.
+\]
+
+\clearpage
+
+\section*{2. Как строить распределение: пример с двумя автоматами}
+\sectionline
+
+Пусть вероятность того, что кофе закончится в первом автомате, равна $0{,}2$, во втором --- $0{,}6$. \textbf{Предполагаем независимость} событий. Случайная величина $X$ --- число автоматов, в которых кофе закончится к вечеру.
+
+\begin{center}
+\begin{tabularx}{0.88\linewidth}{>{\centering\arraybackslash}p{0.16\linewidth}X>{\centering\arraybackslash}p{0.23\linewidth}}
+\toprule
+$X$ & Событие & Вероятность \\
+\midrule
+$0$ & кофе не закончится ни в одном автомате & $(1-0{,}2)(1-0{,}6)=0{,}32$ \\
+$1$ & кофе закончится ровно в одном автомате & $1-0{,}32-0{,}12=0{,}56$ \\
+$2$ & кофе закончится в обоих автоматах & $0{,}2\cdot0{,}6=0{,}12$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Отсюда
+\[
+\E(X)=0\cdot0{,}32+1\cdot0{,}56+2\cdot0{,}12=0{,}8.
+\]
+
+\subsection*{Быстрый способ для суммы индикаторов}
+Если $X$ --- число произошедших событий среди нескольких испытаний, то удобно представить
+\[
+X=I_1+I_2+\dots+I_n,
+\]
+где $I_k=1$, если $k$-е событие произошло, и $I_k=0$ иначе. Тогда
+\[
+\boxed{\E(X)=p_1+p_2+\dots+p_n.}
+\]
+Для двух автоматов сразу получаем $\E(X)=0{,}2+0{,}6=0{,}8$.
+
+\Key{Плюс этого приёма:} для вычисления ожидания суммы индикаторов независимость не нужна. Независимость понадобится, если Вы хотите строить полное совместное распределение переменной $X$ через произведения вероятностей.
+
+\subsection*{Если известны количества исходов}
+Если из $N$ равновозможных билетов ровно $n_i$ дают выигрыш $x_i$, то
+\[
+p_i=\frac{n_i}{N},\qquad \E(X)=\sum x_i\frac{n_i}{N}.
+\]
+Не забывайте учитывать исход $X=0$, если часть билетов ничего не выигрывает.
+
+\clearpage
+
+\begingroup
+\setstretch{1.02}
+\setlength{\parskip}{0.12em}
+\section*{3. Три специальные формулы, которые экономят время}
+\sectionline
+
+\subsection*{A. Число успехов в $n$ одинаковых испытаниях}
+Если проводится $n$ испытаний, вероятность успеха в каждом испытании постоянна и равна $p$, а $X$ --- число успехов, то
+\[
+\boxed{\E(X)=np.}
+\]
+
+\Key{Пример.} Симметричную монету бросают $6$ раз. Ожидаемое число орлов:
+\[
+\E(X)=6\cdot\frac12=3.
+\]
+Полное распределение по формуле Бернулли можно построить, но для одного только математического ожидания это лишняя работа.
+
+\subsection*{B. Число испытаний до первого успеха}
+Пусть независимые испытания повторяются при постоянной вероятности успеха $p>0$. Если $T$ --- номер испытания, на котором впервые получен успех, то
+\[
+\boxed{\E(T)=\frac{1}{p}.}
+\]
+
+\Key{Пример.} Вероятность попадания при одном выстреле $0{,}05$. Среднее число выстрелов до первого попадания:
+\[
+\E(T)=\frac{1}{0{,}05}=20.
+\]
+
+\subsection*{C. Число испытаний до $r$ успехов}
+При тех же условиях, если $T_r$ --- число испытаний до получения $r$ успехов (успехи не обязаны идти подряд), то
+\[
+\boxed{\E(T_r)=\frac{r}{p}.}
+\]
+
+\Key{Примеры.}
+\begin{itemize}
+  \item Монету бросают до двух орлов: $\E(T_2)=2/(1/2)=4$.
+  \item Кубик бросают до двух шестёрок: $\E(T_2)=2/(1/6)=12$.
+\end{itemize}
+
+\smallnote{Число $12$ во втором примере --- среднее число бросков в длинной серии повторений такого эксперимента. Это не означает, что две шестёрки «должны» выпасть ровно за 12 бросков.}
+
+\subsection*{D. Монета до появления обеих сторон}
+После первого броска одна сторона уже появилась. Чтобы дождаться противоположной стороны, при $p=1/2$ в среднем нужно ещё $1/p=2$ броска. Поэтому
+\[
+\boxed{\E(T)=1+2=3.}
+\]
+\endgroup
+
+\clearpage
+
+% --- flowchart-only page ---
+\thispagestyle{fancy}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: как выбрать способ вычисления $\E$}
+\end{center}
+\vspace{0.6cm}
+
+\tikzset{
+  startstop/.style={ellipse,draw=accent,very thick,align=center,minimum width=42mm,minimum height=11mm,fill=softgray},
+  process/.style={rounded corners=2mm,draw=accent,thick,align=center,text width=86mm,minimum height=12mm},
+  decision/.style={diamond,aspect=2.4,draw=darkaccent,thick,align=center,text width=48mm,inner sep=1.5pt},
+  arrow/.style={-{Latex[length=3mm]},thick,draw=textgray}
+}
+
+\begin{center}
+\begin{tikzpicture}[node distance=9mm]
+  \node[startstop] (start) {Определите, что означает случайная величина};
+  \node[decision,below=of start] (fixed) {$X$ считает успехи при фиксированном числе испытаний?};
+  \node[process,below=of fixed] (np) {Да: одинаковая вероятность $p$ в $n$ испытаниях --- $\E(X)=np$.\\Разные вероятности отдельных событий --- $\E(X)=\sum p_i$.};
+  \node[decision,below=of np] (wait) {$X$ --- число испытаний до первого или нескольких успехов?};
+  \node[process,below=of wait] (geom) {Да: до первого успеха $\E(T)=1/p$;\\до $r$ успехов $\E(T_r)=r/p$.};
+  \node[process,below=of geom] (general) {Если специальная формула не подходит: выпишите значения $x_i$ и вероятности $p_i$, проверьте $\sum p_i=1$, затем вычислите $\E(X)=\sum x_ip_i$.};
+  \node[startstop,below=of general] (end) {Проверьте смысл и единицы результата};
+
+  \draw[arrow] (start) -- (fixed);
+  \draw[arrow] (fixed) -- node[right,font=\small]{да} (np);
+  \draw[arrow] (np) -- (wait);
+  \draw[arrow] (wait) -- node[right,font=\small]{да} (geom);
+  \draw[arrow] (geom) -- (general);
+  \draw[arrow] (fixed.east) -- ++(27mm,0) |- node[pos=0.24,right,font=\small]{нет} (wait.east);
+  \draw[arrow] (wait.east) -- ++(27mm,0) |- node[pos=0.24,right,font=\small]{нет} (general.east);
+  \draw[arrow] (general) -- (end);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{4. Типичные ошибки и самопроверка}
+\sectionline
+
+\begin{tabularx}{\linewidth}{>{\bfseries\color{warn}}p{0.33\linewidth}X}
+\toprule
+Ошибка & Как исправить \\
+\midrule
+«Матожидание --- самый вероятный исход» & Думайте о среднем результате большой серии повторений. Мода и математическое ожидание --- разные характеристики. \\
+
+Вероятности не дают сумму $1$ & Сначала восстановите недостающую вероятность, затем считайте $\E(X)$. \\
+
+Перепутаны значения и вероятности & Запишите таблицу парами $(x_i,p_i)$ и только потом перемножайте. \\
+
+Забыли нулевой выигрыш & В распределении должен быть исход $X=0$ с вероятностью всех проигрышных билетов. \\
+
+Используют $1/p$ без условий & Формула требует повторяющихся независимых испытаний с постоянной вероятностью успеха $p>0$. \\
+
+Путают «до двух успехов» и «два успеха подряд» & $r/p$ относится к $r$ успехам без требования подряд. Для серии подряд нужна другая модель. \\
+
+Считают полное биномиальное распределение ради одного ожидания & Если нужен только средний счёт успехов, используйте $np$. \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Самопроверка перед ответом}
+\begin{enumerate}
+  \item Что именно является случайной величиной и в каких единицах она измеряется?
+  \item Какие значения она может принимать?
+  \item Вероятности корректны и дают сумму $1$?
+  \item Есть ли специальная формула, которая сокращает расчёт?
+  \item Имеет ли итог разумный смысл? Например, для числа успехов в $n$ испытаниях ожидание должно лежать между $0$ и $n$.
+\end{enumerate}
+
+\clearpage
+
+\section*{5. Тренировочный блок --- Путь А}
+\sectionline
+
+\textbf{10 задач.} Решения здесь не приводятся. Сначала определите случайную величину и выберите наиболее короткий корректный метод.
+
+\begin{enumerate}
+  \item Случайная величина $X$ принимает значения $-1$, $0$, $2$ с вероятностями $0{,}2$, $0{,}5$, $0{,}3$. Найдите $\E(X)$.
+
+  \item Случайная величина $X$ принимает значения $0$, $1$, $4$. Известно: $\Prb(X=0)=0{,}35$, $\Prb(X=1)=0{,}45$. Найдите $\Prb(X=4)$ и $\E(X)$.
+
+  \item В лотерее выпущено $20\,000$ билетов. Из них $900$ билетов выигрывают 100 руб., $80$ билетов --- 1000 руб., $20$ билетов --- 5000 руб.; остальные билеты ничего не выигрывают. Найдите математическое ожидание выигрыша на один билет.
+
+  \item Вероятность того, что к вечеру кофе закончится в первом автомате, равна $0{,}3$, во втором --- $0{,}4$. События независимы. Пусть $X$ --- число автоматов без кофе. Постройте распределение $X$ и найдите $\E(X)$.
+
+  \item Симметричную монету бросают $14$ раз. Найдите математическое ожидание числа выпавших орлов.
+
+  \item Игральный кубик бросают $30$ раз. Найдите математическое ожидание числа выпадений шестёрки.
+
+  \item Вероятность успешного исхода в одном независимом испытании равна $0{,}2$. Испытания повторяют до первого успеха. Найдите ожидаемое число испытаний.
+
+  \item Вероятность попадания в мишень при каждом выстреле равна $0{,}25$, выстрелы независимы. Стреляют до четырёх попаданий. Найдите ожидаемое число выстрелов.
+
+  \item Симметричную монету бросают до тех пор, пока не появятся и орёл, и решка хотя бы по одному разу. Найдите ожидаемое число бросков.
+
+  \item Три датчика срабатывают независимо. Вероятности срабатывания за смену равны соответственно $0{,}15$, $0{,}40$, $0{,}65$. Пусть $X$ --- число сработавших датчиков. Найдите $\E(X)$. Затем объясните одним предложением, почему для вычисления этого ожидания можно обойтись без полного распределения $X$.
+\end{enumerate}
+
+\clearpage
+
+\section*{6. Ответы}
+\sectionline
+
+\begin{center}
+\begin{tabularx}{0.92\linewidth}{>{\centering\arraybackslash}p{0.10\linewidth}X}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $\E(X)=0{,}4$. \\
+2 & $\Prb(X=4)=0{,}20$; $\E(X)=1{,}25$. \\
+3 & $13{,}5$ руб. \\
+4 & $\Prb(X=0)=0{,}42$, $\Prb(X=1)=0{,}46$, $\Prb(X=2)=0{,}12$; $\E(X)=0{,}7$. \\
+5 & $7$. \\
+6 & $5$. \\
+7 & $5$. \\
+8 & $16$. \\
+9 & $3$. \\
+10 & $1{,}20$; используется линейность математического ожидания: $\E(X)=0{,}15+0{,}40+0{,}65$. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vfill
+\small\color{textgray}
+Ключевой ориентир: сначала определите случайную величину, затем проверьте, можно ли применить $np$, $1/p$, $r/p$ или сумму вероятностей индикаторов. Если нет --- стройте распределение и используйте $\E(X)=\sum x_ip_i$.
+
+\end{document}
