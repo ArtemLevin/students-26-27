@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Интерактивное занятие Ярослава Верещагина: маркировка автомобильных шин, размеры колеса, проценты и прикладные задачи ОГЭ">
+<meta name="color-scheme" content="light dark">
+<title>Автомобильные шины — Ярослав Верещагин · 28.09.26</title>
+<style>
+:root{
+  --surface-page:#f3f0e8;--surface-raised:#fffdf8;--surface-soft:#e9eee9;
+  --text-primary:#17211f;--text-secondary:#5c6965;--text-inverse:#fff;
+  --border-subtle:#d6ddd8;--border-strong:#9baaa4;
+  --accent:#315f56;--accent-hover:#244940;--accent-soft:#dbe8e2;
+  --accent-warm:#b75a45;--accent-warm-soft:#f0ddd6;
+  --success:#2d6b54;--danger:#a04336;--warning:#9a6a2d;--focus-ring:#2d6f62;
+  --shadow-low:0 9px 26px rgba(29,44,40,.08);--shadow-high:0 26px 70px rgba(16,28,25,.2);
+  --radius-sm:8px;--radius-md:16px;--radius-lg:26px;
+  --space-1:.4rem;--space-2:.75rem;--space-3:1.1rem;--space-4:1.6rem;--space-5:2.5rem;--space-6:4.5rem;
+  --motion-fast:140ms;--motion-normal:240ms;
+}
+html[data-theme="dark"]{
+  --surface-page:#111816;--surface-raised:#17211e;--surface-soft:#1d2a26;
+  --text-primary:#edf3f0;--text-secondary:#aebdb7;--text-inverse:#0f1614;
+  --border-subtle:#30413b;--border-strong:#587067;
+  --accent:#86b7a8;--accent-hover:#9ccabb;--accent-soft:#223b34;
+  --accent-warm:#e18a72;--accent-warm-soft:#402820;
+  --success:#80b89f;--danger:#e58b7a;--warning:#d8b477;--focus-ring:#9fd2c2;
+  --shadow-low:none;--shadow-high:0 26px 70px rgba(0,0,0,.46)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.65 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:inherit}
+button,input,select{font:inherit}
+.skip-link{position:fixed;left:1rem;top:-4rem;z-index:100;background:var(--text-primary);color:var(--surface-page);padding:.7rem 1rem}
+.skip-link:focus{top:1rem}
+.shell{width:min(1180px,calc(100% - 2rem));margin:auto}
+.topbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--surface-page) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--border-subtle)}
+.topbar-inner{width:min(1180px,calc(100% - 2rem));margin:auto;min-height:64px;display:flex;align-items:center;gap:1rem}
+.brand{font-weight:820;text-decoration:none;line-height:1.15}.brand small{display:block;color:var(--text-secondary);font-weight:600;font-size:.72rem}
+.topnav{margin-left:auto;display:flex;gap:.15rem}.topnav a{text-decoration:none;color:var(--text-secondary);padding:.5rem .65rem;border-bottom:2px solid transparent}.topnav a:hover,.topnav a:focus-visible{color:var(--text-primary);border-color:var(--accent)}
+.icon-button,.print-button,.choice,.step-button{border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);min-height:42px;padding:.52rem .75rem;cursor:pointer}
+.icon-button:hover,.print-button:hover,.choice:hover,.step-button:hover{border-color:var(--accent)}
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:clamp(2rem,6vw,5.2rem);padding:clamp(3.4rem,8vw,7rem) 0 3rem;align-items:center;border-bottom:1px solid var(--border-subtle)}
+.eyebrow{margin:0 0 .8rem;color:var(--accent);font-size:.74rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+h1,h2,h3{font-family:Georgia,Cambria,serif;letter-spacing:-.025em}
+h1{font-size:clamp(3rem,7vw,6.4rem);line-height:.94;margin:.2rem 0 1.2rem;max-width:760px}
+h2{font-size:clamp(2rem,4vw,3.35rem);line-height:1.06;margin:0 0 1rem}
+h3{font-size:1.25rem;margin:0 0 .55rem}
+.lead{font-size:1.08rem;color:var(--text-secondary);max-width:700px}
+.meta{display:flex;flex-wrap:wrap;gap:.4rem 1rem;margin:1.4rem 0 0;color:var(--text-secondary);font-size:.9rem}
+.actions{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.35rem}.action{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.65rem .9rem;border:1px solid var(--border-strong);text-decoration:none;background:var(--surface-raised)}.action.primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse);font-weight:800}
+.tire-stage{position:relative;min-height:440px;display:grid;place-items:center}
+.tire-card{width:min(100%,510px);background:var(--surface-raised);border:1px solid var(--border-subtle);box-shadow:var(--shadow-low);padding:1.2rem}
+.tire-card svg{width:100%;height:auto;display:block}
+.tire-card .tire{fill:none;stroke:var(--text-primary);stroke-width:22}.tire-card .rim{fill:none;stroke:var(--accent);stroke-width:10}.tire-card .hub{fill:var(--accent-warm)}.tire-card .dim{stroke:var(--accent-warm);stroke-width:3;marker-start:url(#arrow);marker-end:url(#arrow)}.tire-card text{fill:var(--text-primary);font:700 15px system-ui}.tire-card .soft{fill:var(--text-secondary);font-weight:600}
+.readout{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border-subtle);border:1px solid var(--border-subtle);margin-top:1rem}.readout div{background:var(--surface-raised);padding:.8rem}.readout small{display:block;color:var(--text-secondary)}.readout strong{font-size:1.08rem}
+.route{display:flex;gap:.2rem;overflow-x:auto;padding:.95rem 0;border-bottom:1px solid var(--border-subtle);scrollbar-width:thin}.route a{white-space:nowrap;text-decoration:none;color:var(--text-secondary);padding:.5rem .7rem;border-left:2px solid transparent}.route a:hover,.route a:focus-visible{color:var(--text-primary);border-color:var(--accent)}
+.poster{margin:1rem 0 0;border-bottom:1px solid var(--border-subtle)}.poster summary{cursor:pointer;font-weight:800;padding:1rem 0}.poster figure{margin:0 0 1.5rem}.poster img{display:block;width:min(100%,1000px);max-height:78vh;object-fit:contain;background:var(--surface-raised);border:1px solid var(--border-subtle);cursor:zoom-in}.poster figcaption{color:var(--text-secondary);font-size:.9rem;margin-top:.55rem}
+main{padding-bottom:var(--space-6)}
+.chapter{display:grid;grid-template-columns:minmax(150px,.28fr) minmax(0,1fr);gap:clamp(1.5rem,5vw,5rem);padding:clamp(2.6rem,6vw,5rem) 0;border-bottom:1px solid var(--border-subtle);scroll-margin-top:80px}.chapter-index{font:800 .72rem/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--accent);letter-spacing:.09em;text-transform:uppercase}.chapter-body{min-width:0}.chapter-body>p{max-width:780px}
+.marking{display:flex;align-items:center;gap:.18em;flex-wrap:wrap;font:900 clamp(2.1rem,6vw,4.8rem)/1 ui-monospace,SFMono-Regular,Consolas,monospace;margin:1.1rem 0 1.5rem}.marking span{padding:.14em .12em}.marking .cold{color:var(--accent)}.marking .warm{color:var(--accent-warm)}
+.decode-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--border-subtle);border:1px solid var(--border-subtle)}.decode-grid article{background:var(--surface-raised);padding:1rem}.decode-grid b{display:block;font-size:1.35rem;color:var(--accent)}
+.formula-chain{display:grid;gap:.8rem;margin:1.4rem 0}.formula{display:grid;grid-template-columns:minmax(110px,.26fr) 1fr;gap:1rem;align-items:baseline;padding:1rem 0;border-top:1px solid var(--border-subtle)}.formula strong{font:800 clamp(1.5rem,4vw,2.4rem)/1.1 Georgia,serif;color:var(--accent)}.formula p{margin:0;color:var(--text-secondary)}
+.example{padding:1rem 1.1rem;border-left:4px solid var(--accent);background:var(--surface-soft);margin:1.2rem 0}.warning{padding:1rem 1.1rem;border-left:4px solid var(--danger);background:color-mix(in srgb,var(--danger) 9%,var(--surface-raised));margin:1rem 0}
+.instrument{border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);padding:1.1rem 0;margin:1.5rem 0}.instrument-head{display:flex;justify-content:space-between;gap:1rem;align-items:start;flex-wrap:wrap}.preset-row{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}.choice[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}.instrument-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:1.4rem;align-items:center}.calc-table{width:100%;border-collapse:collapse}.calc-table th,.calc-table td{text-align:left;padding:.7rem .2rem;border-bottom:1px solid var(--border-subtle)}.calc-table td:last-child{text-align:right;font-weight:800}
+.flow{counter-reset:flow;display:grid;gap:.7rem;margin:1.2rem 0}.flow li{list-style:none;counter-increment:flow;display:grid;grid-template-columns:2.2rem 1fr;gap:.8rem;align-items:start}.flow li::before{content:counter(flow);width:2.1rem;height:2.1rem;display:grid;place-items:center;border:1px solid var(--accent);border-radius:50%;color:var(--accent);font-weight:900}
+.compact-table{width:100%;border-collapse:collapse}.compact-table th,.compact-table td{padding:.75rem .5rem;border-bottom:1px solid var(--border-subtle);vertical-align:top}.compact-table th{text-align:left;color:var(--text-secondary);font-size:.82rem}
+.practice{counter-reset:exercise;display:grid;gap:.9rem}.exercise{counter-increment:exercise;padding:1rem 0;border-top:1px solid var(--border-subtle)}.exercise::before{content:counter(exercise,decimal-leading-zero);display:block;color:var(--accent);font:900 .72rem/1 ui-monospace,monospace;margin-bottom:.5rem}.exercise details{margin-top:.55rem}.exercise summary{cursor:pointer;color:var(--accent);font-weight:800}
+.quiz{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1.4rem 0}.quiz article{padding-top:.9rem;border-top:1px solid var(--border-strong)}.quiz button{width:100%;text-align:left;margin:.3rem 0}.quiz button.correct{border-color:var(--success)}.quiz button.wrong{border-color:var(--danger)}.feedback{min-height:1.4rem;color:var(--text-secondary);font-size:.9rem}
+.footer{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.6rem 0 2.5rem;color:var(--text-secondary);font-size:.9rem}
+dialog{border:0;padding:0;background:transparent;max-width:min(96vw,1300px)}dialog::backdrop{background:rgba(0,0,0,.78)}.dialog-shell{background:var(--surface-raised);padding:1rem;box-shadow:var(--shadow-high)}.dialog-shell img{display:block;max-width:100%;max-height:86vh;margin:auto}.dialog-close{display:block;margin-left:auto;min-width:44px;min-height:44px;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);cursor:pointer}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+@media(max-width:860px){.topnav{display:none}.hero{grid-template-columns:1fr}.tire-stage{min-height:0}.chapter{grid-template-columns:1fr;gap:.7rem}.decode-grid{grid-template-columns:repeat(2,1fr)}.instrument-grid{grid-template-columns:1fr}.quiz{grid-template-columns:1fr}}
+@media(max-width:540px){.shell,.topbar-inner{width:min(100% - 1rem,1180px)}h1{font-size:clamp(2.7rem,14vw,4.2rem)}.readout{grid-template-columns:repeat(2,1fr)}.decode-grid{grid-template-columns:1fr}.actions{display:grid}.action{width:100%}.formula{grid-template-columns:1fr}.tire-card{padding:.75rem}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+@media print{html{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#bbb;--border-strong:#777}.topbar,.route,.actions,.preset-row,.quiz button,.poster summary{display:none!important}.shell{width:100%}.hero,.chapter{break-inside:avoid}.poster figure{display:block!important}.poster img{max-height:600px}.exercise details{display:block}.exercise details>*{display:block}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#content">К содержанию</a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="index.html">Ярослав Верещагин<small>ОГЭ · математика</small></a>
+    <nav class="topnav" aria-label="Разделы занятия"><a href="#marking">Маркировка</a><a href="#formulas">Формулы</a><a href="#algorithm">Алгоритм</a><a href="#practice">Тренировка</a></nav>
+    <button class="print-button" id="printButton" type="button">Печать</button>
+    <button class="icon-button" id="themeToggle" type="button" aria-label="Включить тёмную тему">Тема</button>
+  </div>
+</header>
+
+<div class="shell">
+<section class="hero" id="top">
+  <div>
+    <p class="eyebrow">Интерактивное пособие · 28 сентября 2026</p>
+    <h1>Автомобильные шины</h1>
+    <p class="lead">Маркировка превращается в вычислительную цепочку: прочитать данные, найти высоту боковины, перевести дюймы в миллиметры, вычислить полный диаметр и сравнить пробег за оборот.</p>
+    <div class="meta"><span>Ярослав Верещагин</span><span>Лёвин Артём Александрович</span><span>Практико-ориентированные задачи ОГЭ</span></div>
+    <div class="actions">
+      <a class="action primary" href="#instrument">Разобрать маркировку</a>
+      <a class="action" href="../pdf_docs/28.09.26.pdf">Скачать пособие</a>
+      <a class="action" href="../tex_docs/28.09.26.tex">TeX</a>
+    </div>
+  </div>
+  <div class="tire-stage" aria-label="Схема колеса и основных размеров">
+    <div class="tire-card">
+      <svg viewBox="0 0 520 380" role="img" aria-labelledby="wheelTitle wheelDesc">
+        <title id="wheelTitle">Схема полного диаметра колеса</title>
+        <desc id="wheelDesc">Шина вокруг диска. Показаны ширина B, высота боковины H, диаметр диска d и полный диаметр D.</desc>
+        <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 z" fill="var(--accent-warm)"/></marker></defs>
+        <circle class="tire" cx="240" cy="190" r="135"/>
+        <circle class="rim" cx="240" cy="190" r="83"/>
+        <circle class="hub" cx="240" cy="190" r="15"/>
+        <line class="dim" x1="405" y1="55" x2="405" y2="325"/>
+        <text x="422" y="195">D</text>
+        <line class="dim" x1="365" y1="107" x2="365" y2="273"/>
+        <text x="380" y="195">d</text>
+        <line class="dim" x1="330" y1="70" x2="330" y2="107"/>
+        <text x="343" y="95">H</text>
+        <line class="dim" x1="105" y1="340" x2="375" y2="340"/>
+        <text x="233" y="365">B</text>
+      </svg>
+      <div class="readout">
+        <div><small>Ширина</small><strong>B</strong></div><div><small>Боковина</small><strong>H</strong></div><div><small>Диск</small><strong>d</strong></div><div><small>Колесо</small><strong>D</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<nav class="route" aria-label="Маршрут занятия">
+  <a href="#marking">01 · Расшифровка</a><a href="#formulas">02 · Формулы</a><a href="#instrument">03 · Вычислительный стенд</a><a href="#algorithm">04 · Алгоритм</a><a href="#percent">05 · Проценты</a><a href="#errors">06 · Ошибки</a><a href="#practice">07 · Тренировка</a>
+</nav>
+
+<details class="poster">
+  <summary>Наглядная ментальная карта занятия</summary>
+  <figure>
+    <img id="posterImage" src="../images/28.09.26.png" alt="Памятка по маркировке шин: ширина, высота боковины, диаметр диска, полный диаметр, длина окружности и процентное изменение" loading="lazy">
+    <figcaption>Пять опорных блоков: смысл маркировки, формулы, алгоритм и типичные ошибки. Нажмите на изображение, чтобы увеличить.</figcaption>
+  </figure>
+</details>
+
+<main id="content">
+<section class="chapter" id="marking">
+  <div class="chapter-index">01 · Маркировка</div>
+  <div class="chapter-body">
+    <h2>Прочитайте запись до вычислений</h2>
+    <div class="marking" aria-label="Пример маркировки 195 дробь 65 R15"><span class="cold">195</span><span>/</span><span class="warm">65</span><span class="cold">R</span><span class="warm">15</span></div>
+    <div class="decode-grid">
+      <article><b>195</b>ширина шины <strong>B</strong>, мм</article>
+      <article><b>65</b>высота боковины в процентах от ширины</article>
+      <article><b>R</b>радиальная конструкция; числового значения для расчёта не даёт</article>
+      <article><b>15</b>диаметр диска <strong>d</strong> в дюймах</article>
+    </div>
+    <div class="warning"><strong>Ключевая ловушка.</strong> Число после дроби — процент, поэтому 65 означает 65% от ширины, а не 65 мм.</div>
+  </div>
+</section>
+
+<section class="chapter" id="formulas">
+  <div class="chapter-index">02 · Формулы</div>
+  <div class="chapter-body">
+    <h2>Одна цепочка величин</h2>
+    <div class="formula-chain">
+      <div class="formula"><strong>H = p/100 · B</strong><p>Высота боковины: берём второе число маркировки как процент от ширины.</p></div>
+      <div class="formula"><strong>d = 25,4 · r</strong><p>Диаметр диска: число после R переводим из дюймов в миллиметры.</p></div>
+      <div class="formula"><strong>D = 2H + d</strong><p>Полный диаметр колеса: две боковины плюс диаметр диска.</p></div>
+      <div class="formula"><strong>L = πD</strong><p>Пробег за один оборот равен длине окружности колеса.</p></div>
+    </div>
+    <div class="example"><strong>Пример из занятия: 225/40 R18.</strong><br>Высота боковины: H = 0,40 · 225 = 90 мм.</div>
+  </div>
+</section>
+
+<section class="chapter" id="instrument">
+  <div class="chapter-index">03 · Стенд</div>
+  <div class="chapter-body">
+    <h2>Смотрите, как маркировка превращается в размеры</h2>
+    <p>Выберите одну из маркировок, использованных в сегодняшнем материале. Все показатели пересчитываются из одной цепочки формул.</p>
+    <div class="instrument">
+      <div class="instrument-head"><div><h3 id="presetTitle">195/65 R15</h3><p id="presetCaption">Базовый пример расшифровки маркировки.</p></div><span class="eyebrow">Единицы · мм</span></div>
+      <div class="preset-row" role="group" aria-label="Выбор маркировки">
+        <button class="choice" type="button" data-b="195" data-p="65" data-r="15" data-note="Базовый пример расшифровки маркировки." aria-pressed="true">195/65 R15</button>
+        <button class="choice" type="button" data-b="225" data-p="40" data-r="18" data-note="Пример на высоту боковины из основной части." aria-pressed="false">225/40 R18</button>
+        <button class="choice" type="button" data-b="205" data-p="60" data-r="16" data-note="Пример на полный диаметр колеса." aria-pressed="false">205/60 R16</button>
+        <button class="choice" type="button" data-b="215" data-p="50" data-r="17" data-note="Заводская маркировка из тренировочного блока." aria-pressed="false">215/50 R17</button>
+      </div>
+      <div class="instrument-grid">
+        <svg id="dynamicWheel" viewBox="0 0 520 380" role="img" aria-label="Динамическая схема выбранного колеса">
+          <defs><marker id="arrow2" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse"><path d="M0,0 L8,4 L0,8 z" fill="var(--accent-warm)"/></marker></defs>
+          <circle id="dynTire" cx="240" cy="190" r="135" fill="none" stroke="var(--text-primary)" stroke-width="22"/>
+          <circle id="dynRim" cx="240" cy="190" r="83" fill="none" stroke="var(--accent)" stroke-width="10"/>
+          <circle cx="240" cy="190" r="15" fill="var(--accent-warm)"/>
+          <line x1="410" y1="55" x2="410" y2="325" stroke="var(--accent-warm)" stroke-width="3" marker-start="url(#arrow2)" marker-end="url(#arrow2)"/>
+          <text x="428" y="195" fill="var(--text-primary)" font-family="system-ui" font-weight="800">D</text>
+        </svg>
+        <table class="calc-table" aria-label="Расчёт выбранной маркировки">
+          <tbody>
+            <tr><th>Ширина B</th><td id="outB">195 мм</td></tr>
+            <tr><th>Высота H</th><td id="outH">126,75 мм</td></tr>
+            <tr><th>Диск d</th><td id="outDsmall">381 мм</td></tr>
+            <tr><th>Полный диаметр D</th><td id="outDbig">634,5 мм</td></tr>
+            <tr><th>Пробег за оборот L</th><td id="outL">≈ 1993,34 мм</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="algorithm">
+  <div class="chapter-index">04 · Алгоритм</div>
+  <div class="chapter-body">
+    <h2>Сначала смысл, потом счёт</h2>
+    <ol class="flow">
+      <li>Прочитайте маркировку и вопрос задачи.</li>
+      <li>Выпишите B, процент p и диаметр диска r в дюймах.</li>
+      <li>Найдите H = p/100 · B.</li>
+      <li>Переведите диск в миллиметры: d = 25,4 · r.</li>
+      <li>Если нужен весь диаметр, найдите D = 2H + d.</li>
+      <li>Если нужен пробег за оборот, используйте L = πD.</li>
+      <li>Проверьте единицы и только затем выполняйте требуемое округление.</li>
+    </ol>
+    <div class="warning"><strong>Табличный вопрос.</strong> Если просят наибольшую ширину при заданном диаметре диска, сначала найдите нужный столбец или строку таблицы и сравнивайте только допустимые варианты.</div>
+  </div>
+</section>
+
+<section class="chapter" id="percent">
+  <div class="chapter-index">05 · Проценты</div>
+  <div class="chapter-body">
+    <h2>«Стало − было» делим на «было»</h2>
+    <div class="formula-chain">
+      <div class="formula"><strong>(B − A) / A · 100%</strong><p>Универсальная формула процентного увеличения: знаменатель всегда содержит исходное значение.</p></div>
+      <div class="formula"><strong>(D₂ − D₁) / D₁ · 100%</strong><p>Для пробега за оборот π сокращается, поэтому достаточно сравнить полные диаметры.</p></div>
+    </div>
+    <p>При вычислении процентов удобно сначала умножить числитель на 100, а затем делить. Это снижает риск получить лишние нули при письменном делении.</p>
+  </div>
+</section>
+
+<section class="chapter" id="errors">
+  <div class="chapter-index">06 · Контроль</div>
+  <div class="chapter-body">
+    <h2>Пять ошибок, которые меняют ответ</h2>
+    <table class="compact-table">
+      <thead><tr><th>Ошибка</th><th>Как проверить себя</th></tr></thead>
+      <tbody>
+        <tr><td>65 принять за миллиметры</td><td>Второе число — процент от ширины B.</td></tr>
+        <tr><td>Написать D = H + d</td><td>У колеса две боковины: D = 2H + d.</td></tr>
+        <tr><td>Смешать дюймы и миллиметры</td><td>До сложения переведите r в d = 25,4r.</td></tr>
+        <tr><td>Делить процент изменения на новое</td><td>В знаменателе стоит исходное значение.</td></tr>
+        <tr><td>Округлить промежуточный результат слишком рано</td><td>Храните точные диаметры до последнего шага.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="chapter" id="practice">
+  <div class="chapter-index">07 · Путь А</div>
+  <div class="chapter-body">
+    <h2>10 задач на закрепление</h2>
+    <div class="practice">
+      <div class="exercise">Шина имеет маркировку <strong>205/60 R16</strong>. Найдите её ширину в миллиметрах.<details><summary>Ответ</summary>205 мм.</details></div>
+      <div class="exercise">Шина имеет маркировку <strong>225/40 R18</strong>. Найдите высоту боковины.<details><summary>Ответ</summary>90 мм.</details></div>
+      <div class="exercise">Диаметр диска равен 17 дюймам. Сколько это миллиметров?<details><summary>Ответ</summary>431,8 мм.</details></div>
+      <div class="exercise">Для шины <strong>195/65 R15</strong> найдите полный диаметр колеса.<details><summary>Ответ</summary>634,5 мм.</details></div>
+      <div class="exercise">На заводе установлен комплект <strong>215/50 R17</strong>. Найдите полный диаметр заводского колеса.<details><summary>Ответ</summary>646,8 мм.</details></div>
+      <div class="exercise">Заводские шины <strong>185/60 R14</strong>, новые — <strong>195/55 R15</strong>. На сколько миллиметров изменится полный диаметр?<details><summary>Ответ</summary>Увеличится на 17,9 мм.</details></div>
+      <div class="exercise">Для диска 16 дюймов разрешены 195/55 R16, 205/55 R16 и 215/50 R16. Какова наибольшая разрешённая ширина?<details><summary>Ответ</summary>215 мм.</details></div>
+      <div class="exercise">Заводские шины <strong>185/60 R14</strong>, новые — <strong>195/55 R15</strong>. На сколько процентов увеличится пробег за один оборот? Округлите до десятых.<details><summary>Ответ</summary>На 3,1%.</details></div>
+      <div class="exercise">Заводская шина <strong>195/65 R15</strong>, новая — <strong>205/55 R16</strong>. На сколько процентов изменится пробег за оборот? Укажите направление изменения.<details><summary>Ответ</summary>Уменьшится на 0,4%.</details></div>
+      <div class="exercise">Заводская шина <strong>215/50 R17</strong>. Варианты замены: 225/45 R17, 205/55 R17, 225/50 R17. Какой вариант даст наибольший пробег и на сколько процентов он будет больше заводского?<details><summary>Ответ</summary>205/55 R17; примерно на 1,6%.</details></div>
+    </div>
+
+    <div class="quiz" aria-label="Мини-проверка">
+      <article><h3>Что означает 65?</h3><button class="step-button" data-ok="0">65 мм</button><button class="step-button" data-ok="1">65% от ширины</button><div class="feedback"></div></article>
+      <article><h3>Как найти весь диаметр?</h3><button class="step-button" data-ok="1">2H + d</button><button class="step-button" data-ok="0">H + d</button><div class="feedback"></div></article>
+      <article><h3>Что в знаменателе процентов?</h3><button class="step-button" data-ok="1">Исходное значение</button><button class="step-button" data-ok="0">Новое значение</button><div class="feedback"></div></article>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer"><span>Ярослав Верещагин · ОГЭ по математике</span><span>Лёвин Артём Александрович эксклюзивно для Ярослава Верещагина</span><span>28.09.2026</span></footer>
+</div>
+
+<dialog id="posterDialog" aria-label="Увеличенная ментальная карта"><div class="dialog-shell"><button class="dialog-close" id="posterClose" type="button" aria-label="Закрыть">×</button><img src="../images/28.09.26.png" alt="Ментальная карта занятия по маркировке шин"></div></dialog>
+
+<script>
+(function(){
+  'use strict';
+  const root=document.documentElement;
+  const THEME_KEY='jaroslav-vereschagin-theme';
+  const themeToggle=document.getElementById('themeToggle');
+  const printButton=document.getElementById('printButton');
+  const poster=document.getElementById('posterImage');
+  const dialog=document.getElementById('posterDialog');
+  const close=document.getElementById('posterClose');
+  let lastFocus=null;
+
+  function setTheme(theme){
+    root.dataset.theme=theme;
+    themeToggle.setAttribute('aria-label',theme==='dark'?'Включить светлую тему':'Включить тёмную тему');
+    try{localStorage.setItem(THEME_KEY,theme)}catch(_){}
+  }
+  let saved='light'; try{saved=localStorage.getItem(THEME_KEY)||'light'}catch(_){}
+  setTheme(saved==='dark'?'dark':'light');
+  themeToggle.addEventListener('click',()=>setTheme(root.dataset.theme==='dark'?'light':'dark'));
+  printButton.addEventListener('click',()=>window.print());
+
+  const nf=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2});
+  const choices=[...document.querySelectorAll('.choice')];
+  function renderChoice(button){
+    choices.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+    const B=Number(button.dataset.b),p=Number(button.dataset.p),r=Number(button.dataset.r);
+    const H=p/100*B,d=r*25.4,D=2*H+d,L=Math.PI*D;
+    document.getElementById('presetTitle').textContent=button.textContent;
+    document.getElementById('presetCaption').textContent=button.dataset.note;
+    document.getElementById('outB').textContent=nf.format(B)+' мм';
+    document.getElementById('outH').textContent=nf.format(H)+' мм';
+    document.getElementById('outDsmall').textContent=nf.format(d)+' мм';
+    document.getElementById('outDbig').textContent=nf.format(D)+' мм';
+    document.getElementById('outL').textContent='≈ '+nf.format(L)+' мм';
+    const scale=135/D;
+    const rimR=Math.max(52,d*scale);
+    document.getElementById('dynRim').setAttribute('r',rimR.toFixed(2));
+  }
+  choices.forEach(button=>button.addEventListener('click',()=>renderChoice(button)));
+  renderChoice(choices[0]);
+
+  document.querySelectorAll('.quiz article').forEach(article=>{
+    const feedback=article.querySelector('.feedback');
+    article.querySelectorAll('button').forEach(button=>{
+      button.addEventListener('click',()=>{
+        article.querySelectorAll('button').forEach(b=>b.classList.remove('correct','wrong'));
+        const ok=button.dataset.ok==='1';
+        button.classList.add(ok?'correct':'wrong');
+        feedback.textContent=ok?'Верно.':'Проверьте правило ещё раз.';
+      });
+    });
+  });
+
+  if(poster&&dialog){
+    poster.addEventListener('click',()=>{lastFocus=poster;dialog.showModal();close.focus()});
+    close.addEventListener('click',()=>dialog.close());
+    dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+    dialog.addEventListener('close',()=>lastFocus&&lastFocus.focus());
+  }
+})();
+</script>
+</body>
+</html>
