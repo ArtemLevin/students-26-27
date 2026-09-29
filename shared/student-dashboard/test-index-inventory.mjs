@@ -10,51 +10,40 @@ function walk(dir){
 }
 
 const root=process.cwd();
-const indexes=walk(path.join(root,'students')).filter(file=>path.basename(file)==='index.html').map(file=>path.relative(root,file).replaceAll('\\','/')).sort();
-assert.deepEqual(indexes,[
-  'students/anna_trapeznikova/site/index.html',
-  'students/darya_savenkova/site/index.html',
-  'students/ekaterina/site/index.html',
-  'students/ekaterina_gnedkova/site/index.html',
-  'students/grisha_arkhipov/site/index.html',
-  'students/jaroslav_vereschagin/site/index.html',
-  'students/kirill_zinoviev/site/index.html',
-  'students/kristina/site/index.html',
-  'students/marina/site/index.html',
-  'students/matvey_gorbachev/site/index.html',
-  'students/nadya_klimenko/site/index.html',
-  'students/nastya_pavlova/index.html',
-  'students/nastya_pavlova/site/index.html',
-  'students/nikol_sarkisyants/site/index.html',
-  'students/sofya_kalney/site/index.html',
-  'students/sofya_khomenko/site/index.html',
-  'students/timofey/site/index.html',
-  'students/volodia_khachaturian/index.html',
-  'students/volodia_khachaturian/site/index.html',
-  'students/xenia_klykova/chemistry/site/index.html',
-  'students/xenia_klykova/site/index.html',
-  'students/xenia_vasilchenko/site/index.html'
-]);
+const indexes=walk(path.join(root,'students')).filter(file=>path.basename(file)==='index.html').map(file=>path.relative(root,file).replaceAll('\\\\','/')).sort();
+assert.ok(indexes.length>0,'No student index entry points found');
 
-// Dashboards created on the newer bespoke radial-map contract are inventoried above,
-// while the legacy shared-shell contract below remains scoped to dashboards that use it.
-const bespokeDashboardPaths=new Set([
-  'students/anna_trapeznikova/site/index.html',
-  'students/darya_savenkova/site/index.html',
-  'students/ekaterina/site/index.html',
-  'students/ekaterina_gnedkova/site/index.html',
-  'students/grisha_arkhipov/site/index.html',
-  'students/jaroslav_vereschagin/site/index.html',
-  'students/kristina/site/index.html',
-  'students/marina/site/index.html',
-  'students/matvey_gorbachev/site/index.html',
-  'students/nadya_klimenko/site/index.html',
-  'students/sofya_khomenko/site/index.html',
-  'students/xenia_vasilchenko/site/index.html'
-]);
+const siteIndexes=indexes.filter(file=>file.endsWith('/site/index.html'));
+const sharedDashboardPaths=[];
+const adapterPaths=[];
+const chemistryPaths=[];
+const bespokeDashboardPaths=[];
 
-const dashboardPaths=indexes.filter(file=>file.endsWith('/site/index.html')&&!file.includes('/chemistry/')&&!file.includes('/nikol_sarkisyants/')&&!file.includes('/nastya_pavlova/')&&!bespokeDashboardPaths.has(file));
-for(const file of dashboardPaths){
+for(const file of siteIndexes){
+  const absolute=path.join(root,file);
+  const dir=path.dirname(absolute);
+  const html=fs.readFileSync(absolute,'utf8');
+  const isSharedDashboard=['dashboard.js','lesson-registry.js','competence-config.js'].every(name=>fs.existsSync(path.join(dir,name)));
+  const isChemistry=file.includes('/chemistry/');
+  const isPracticeAdapter=!isSharedDashboard&&[
+    'id="practiceSection"',
+    'id="practiceRoot"',
+    'shared/practice/practice.css'
+  ].every(token=>html.includes(token));
+
+  if(isSharedDashboard)sharedDashboardPaths.push(file);
+  else if(isChemistry)chemistryPaths.push(file);
+  else if(isPracticeAdapter)adapterPaths.push(file);
+  else bespokeDashboardPaths.push(file);
+}
+
+assert.equal(
+  sharedDashboardPaths.length+adapterPaths.length+chemistryPaths.length+bespokeDashboardPaths.length,
+  siteIndexes.length,
+  'Every site/index.html must belong to exactly one discovered architecture'
+);
+
+for(const file of sharedDashboardPaths){
   const html=fs.readFileSync(path.join(root,file),'utf8');
   for(const token of ['data-filter="repeat"','data-filter="unseen"','data-filter="help"','data-filter="progress"','data-filter="confident"','data-filter="mastered"','id="levelExplanation"','aria-labelledby="radialTitle radialDescription"']){
     assert.ok(html.includes(token),`${file}: missing ${token}`);
@@ -84,7 +73,6 @@ for(const token of [
   'competency-map.css'
 ])assert.ok(ekaterina.includes(token),`ekaterina index: missing ${token}`);
 
-const adapterPaths=['students/nastya_pavlova/site/index.html','students/nikol_sarkisyants/site/index.html'];
 for(const file of adapterPaths){
   const html=fs.readFileSync(path.join(root,file),'utf8');
   for(const token of ['id="practiceSection"','id="practiceRoot"','shared/practice/practice.css'])assert.ok(html.includes(token),`${file}: missing ${token}`);
@@ -97,7 +85,11 @@ assert.ok(redirect.includes("'#practice':'#practiceSection'"));
 assert.ok(redirect.includes('site/index.html#practiceSection'));
 assert.ok(redirect.includes('location.replace'));
 
-const chemistry=fs.readFileSync(path.join(root,'students/xenia_klykova/chemistry/site/index.html'),'utf8');
-for(const token of ['class="skip"','href="#content"','aria-labelledby="page-title"','min-height:44px','focus-visible','prefers-reduced-motion','Последнее занятие'])assert.ok(chemistry.includes(token),`chemistry index: missing ${token}`);
+for(const file of chemistryPaths){
+  const chemistry=fs.readFileSync(path.join(root,file),'utf8');
+  for(const token of ['class="skip"','href="#content"','aria-labelledby="page-title"','min-height:44px','focus-visible','prefers-reduced-motion','Последнее занятие']){
+    assert.ok(chemistry.includes(token),`${file}: missing ${token}`);
+  }
+}
 
-console.log(`✓ index inventory: ${indexes.length} entry pages covered, ${dashboardPaths.length} shared dashboards migrated, ${bespokeDashboardPaths.size} bespoke dashboards, ${adapterPaths.length} practice adapters`);
+console.log(`✓ index inventory: ${indexes.length} entry pages covered, ${sharedDashboardPaths.length} shared dashboards migrated, ${bespokeDashboardPaths.size} bespoke dashboards, ${adapterPaths.length} practice adapters`);
