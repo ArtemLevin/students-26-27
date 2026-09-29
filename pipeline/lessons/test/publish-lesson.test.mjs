@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import {publishLesson,normalizeLessonDate,replaceRegistryImportVersion} from '../../../scripts/publish-lesson.mjs';
+import {publishLesson,normalizeLessonDate,replaceRegistryImportVersion,parseArgs} from '../../../scripts/publish-lesson.mjs';
 
 function tempRepo({registry=true,indexLink=true,design=true,roster=true}={}){
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'lesson-publish-'));
@@ -77,6 +77,19 @@ test('bespoke publication requires index registration',async()=>{
 test('publication refuses an incomplete student scaffold',async()=>{
   const {root}=tempRepo({design:false});
   await assert.rejects(()=>publishLesson({root,student:'demo_student',date:'29.09.26',verifyChanges:false}),/New students must be created with node scripts\/create-student\.mjs/);
+});
+
+test('verification failure rolls back registry and dashboard writes',async()=>{
+  const {root,site}=tempRepo();
+  const registryPath=path.join(site,'lesson-registry.js'),dashboardPath=path.join(site,'dashboard.js');
+  const beforeRegistry=fs.readFileSync(registryPath,'utf8'),beforeDashboard=fs.readFileSync(dashboardPath,'utf8');
+  await assert.rejects(()=>publishLesson({root,student:'demo_student',date:'29.09.26'}),/Publication changes were rolled back/);
+  assert.equal(fs.readFileSync(registryPath,'utf8'),beforeRegistry);
+  assert.equal(fs.readFileSync(dashboardPath,'utf8'),beforeDashboard);
+});
+
+test('production CLI does not expose a verification bypass',()=>{
+  assert.throws(()=>parseArgs(['demo_student','29.09.26','--no-verify']),/Unknown option: --no-verify/);
 });
 
 test('dashboard cache-buster rewrite accepts imports with or without a version',()=>{
