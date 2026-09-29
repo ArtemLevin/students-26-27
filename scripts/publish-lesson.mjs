@@ -95,9 +95,9 @@ export async function publishLesson({root=ROOT,student,date,dryRun=false,verifyC
 }
 export function parseArgs(argv){
   const out={student:null,date:null,dryRun:false,verifyChanges:true,help:false};
-  for(const token of argv){if(token==='--dry-run')out.dryRun=true;else if(token==='--no-verify')out.verifyChanges=false;else if(token==='--help'||token==='-h')out.help=true;else if(token.startsWith('--'))throw new Error(`Unknown option: ${token}`);else if(!out.student)out.student=token;else if(!out.date)out.date=token;else throw new Error(`Unexpected argument: ${token}`);}
-  if(!out.help){if(!out.student||!out.date)throw new Error('Usage: node scripts/publish-lesson.mjs <student> <DD.MM.YY|YYYY-MM-DD> [--dry-run] [--no-verify]');validateSlug(out.student);normalizeLessonDate(out.date);}return out;
+  for(const token of argv){if(token==='--dry-run')out.dryRun=true;else if(token==='--help'||token==='-h')out.help=true;else if(token.startsWith('--'))throw new Error(`Unknown option: ${token}`);else if(!out.student)out.student=token;else if(!out.date)out.date=token;else throw new Error(`Unexpected argument: ${token}`);}
+  if(!out.help){if(!out.student||!out.date)throw new Error('Usage: node scripts/publish-lesson.mjs <student> <DD.MM.YY|YYYY-MM-DD> [--dry-run]');validateSlug(out.student);normalizeLessonDate(out.date);}return out;
 }
-export function helpText(){return 'Usage: node scripts/publish-lesson.mjs <student> <DD.MM.YY|YYYY-MM-DD> [--dry-run] [--no-verify]\nNew students must first be created with scripts/create-student.mjs.\n';}
+export function helpText(){return 'Usage: node scripts/publish-lesson.mjs <student> <DD.MM.YY|YYYY-MM-DD> [--dry-run]\nNew students must first be created with scripts/create-student.mjs. Production verification cannot be disabled from the CLI.\n';}
 const main=process.argv[1]&&path.resolve(process.argv[1])===path.resolve(fileURLToPath(import.meta.url));
 if(main){try{const options=parseArgs(process.argv.slice(2));if(options.help)process.stdout.write(helpText());else process.stdout.write(`${JSON.stringify(await publishLesson(options),null,2)}\n`);}catch(error){process.stderr.write(`publish-lesson: ${error.message}\n`);process.exitCode=1;}}
