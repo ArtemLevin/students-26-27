@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория по уравнениям с модулем: знак подмодульного выражения и интервалы.">
+<meta name="color-scheme" content="light dark">
+<title>Лаборатория знака — Анна Трапезникова</title>
+<style>
+:root{--bg:#f4efe8;--paper:#fffaf3;--ink:#24211e;--muted:#6d655e;--line:#d4cac0;--accent:#315f73;--accent2:#842f46;--good:#2f715b;--bad:#a23b3b;--focus:#8b5570}
+html[data-theme=dark]{--bg:#171513;--paper:#211e1b;--ink:#f4eee7;--muted:#beb3a8;--line:#403832;--accent:#77a9bb;--accent2:#db8195;--good:#78b79d;--bad:#e08787;--focus:#e29bb2}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.62 system-ui,-apple-system,"Segoe UI",sans-serif}button,input{font:inherit;color:inherit}button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.wrap{width:min(1080px,calc(100% - 2rem));margin:auto;padding-bottom:3rem}.top{display:flex;gap:.6rem;align-items:center;padding:1rem 0;border-bottom:1px solid var(--line);flex-wrap:wrap}.top a,.top button{border:1px solid var(--line);background:transparent;padding:.55rem .75rem;text-decoration:none;cursor:pointer}.top a:first-child{margin-right:auto}
+.hero{padding:clamp(3rem,8vw,6rem) 0 2.5rem;border-bottom:1px solid var(--line)}.eyebrow{color:var(--accent2);font:750 .7rem ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase}.hero h1{margin:.4rem 0 1rem;max-width:11ch;font:500 clamp(3.4rem,8vw,7rem)/.86 Georgia,serif;letter-spacing:-.06em}.hero p{max-width:48rem;color:var(--muted)}
+.modebar{display:flex;gap:.5rem;flex-wrap:wrap;margin:1.5rem 0}.modebar button{border:1px solid var(--line);background:transparent;padding:.65rem .8rem;cursor:pointer}.modebar button[aria-pressed=true]{border-color:var(--accent);color:var(--accent);box-shadow:inset 0 -2px var(--accent)}
+.grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(18rem,.6fr);gap:2rem;align-items:start}.stage{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.25rem 0}.formula{font:500 clamp(1.5rem,3vw,2.6rem)/1.2 Georgia,serif;margin:0 0 1rem}.axis{position:relative;height:180px;margin:1rem 0}.axisline{position:absolute;left:4%;right:4%;top:88px;border-top:2px solid var(--ink)}.boundary,.marker{position:absolute;top:80px;width:16px;height:16px;border-radius:50%;transform:translateX(-50%)}.boundary{border:2px solid var(--accent2);background:var(--bg)}.boundary:after{position:absolute;top:20px;left:50%;transform:translateX(-50%);font:700 .75rem ui-monospace,monospace}.b1:after{content:"−1"}.b2:after{content:"2"}.marker{background:var(--accent);border:3px solid var(--paper);box-shadow:0 0 0 2px var(--accent)}.marker:after{content:"x";position:absolute;left:50%;top:-28px;transform:translateX(-50%);color:var(--accent);font-weight:800}.intervals{position:absolute;left:4%;right:4%;top:35px;display:grid;grid-template-columns:1fr 1fr 1fr;text-align:center;color:var(--muted);font-size:.8rem}
+.controls{display:grid;gap:.8rem;margin-top:1rem}.controls label{display:grid;grid-template-columns:4rem minmax(0,1fr) 5rem;gap:.7rem;align-items:center}.controls input[type=range]{width:100%;accent-color:var(--accent)}.controls input[type=number]{width:100%;padding:.45rem;border:1px solid var(--line);background:var(--paper)}.reset{justify-self:start;border:1px solid var(--line);background:transparent;padding:.55rem .75rem;cursor:pointer}
+.readout{border-left:1px solid var(--line);padding-left:1.2rem}.readout h2{font:500 2rem/1 Georgia,serif}.readout dl{margin:0}.readout dt{font-weight:800;margin-top:.9rem}.readout dd{margin:.2rem 0;color:var(--muted)}.status{margin-top:1.2rem;padding:1rem;border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 5%,transparent)}.status.good{border-color:var(--good)}.status.bad{border-color:var(--bad)}.prompt{margin-top:2rem;padding:1.1rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.prompt strong{color:var(--accent2)}
+.note{color:var(--muted);font-size:.9rem}
+@media(max-width:780px){.grid{grid-template-columns:1fr}.readout{border-left:0;border-top:1px solid var(--line);padding:1rem 0 0}.controls label{grid-template-columns:3rem minmax(0,1fr) 4.5rem}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="top" aria-label="Навигация лаборатории"><a href="29.09.26.html">← Вернуться к занятию</a><button id="theme" type="button">Тема</button></nav>
+<header class="hero"><p class="eyebrow">Цифровая лаборатория · 29.09.26</p><h1>Лаборатория знака</h1><p>Меняйте x и наблюдайте, как знак подмодульного выражения мгновенно меняет раскрытие модуля. Все режимы построены на примерах из занятия.</p></header>
+<div class="modebar" role="group" aria-label="Режим лаборатории">
+<button id="twoBtn" type="button" data-mode="two" aria-pressed="true">Два модуля</button>
+<button id="oneBtn" type="button" data-mode="one" aria-pressed="false">Один модуль</button>
+</div>
+<div class="grid">
+<section class="stage" aria-labelledby="formula">
+<h2 class="formula" id="formula">|x−2| + |x+1| = 7</h2>
+<div class="axis" id="axis" aria-label="Интерактивная числовая ось">
+<div class="axisline"></div><span class="boundary b1" id="b1"></span><span class="boundary b2" id="b2"></span><span class="marker" id="marker"></span>
+<div class="intervals" id="intervals"><span>(−,−)</span><span>(−,+)</span><span>(+,+)</span></div>
+</div>
+<div class="controls">
+<label><span>x</span><input id="slider" type="range" min="-6" max="8" step="0.5" value="0" aria-label="Значение x"><input id="number" type="number" min="-6" max="8" step="0.5" value="0" aria-label="Введите x"></label>
+<button class="reset" id="reset" type="button">Сбросить x</button>
+</div>
+<p class="prompt" id="prompt"><strong>Эксперимент:</strong> проведите x через точки −1 и 2 и следите, какая из двух скобок меняет знак.</p>
+</section>
+<aside class="readout" aria-live="polite"><p class="eyebrow">Текущее состояние</p><h2 id="stateTitle">x = 0</h2><dl id="readout"></dl><div class="status" id="status"></div></aside>
+</div>
+<p class="note">Ползунок поддерживает клавиши со стрелками. Числовое поле даёт альтернативный способ управления без перетаскивания.</p>
+</div>
+<script>
+(function(){
+'use strict';
+const q=new URLSearchParams(location.search), root=document.documentElement;
+const state={mode:q.get('mode')==='one'?'one':'two',x:0};
+const slider=document.getElementById('slider'), number=document.getElementById('number'), marker=document.getElementById('marker'), formula=document.getElementById('formula'), readout=document.getElementById('readout'), status=document.getElementById('status'), title=document.getElementById('stateTitle'), prompt=document.getElementById('prompt'), b1=document.getElementById('b1'),b2=document.getElementById('b2'),intervals=document.getElementById('intervals');
+const fmt=n=>Number.isInteger(n)?String(n):String(n).replace('.',',');
+const sign=n=>n>0?'+':n<0?'−':'0';
+function scale(x){return 4+(x+6)/14*92}
+function render(){
+  const x=state.x; slider.value=x; number.value=x; marker.style.left=scale(x)+'%'; title.textContent='x = '+fmt(x);
+  document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===state.mode)));
+  if(state.mode==='two'){
+    formula.textContent='|x−2| + |x+1| = 7';
+    b1.hidden=false;b2.hidden=false;intervals.hidden=false;b1.style.left=scale(-1)+'%';b2.style.left=scale(2)+'%';
+    const f=x-2,g=x+1,sum=Math.abs(f)+Math.abs(g);
+    readout.innerHTML='<dt>x−2</dt><dd>'+fmt(f)+' · знак '+sign(f)+' · |x−2|='+fmt(Math.abs(f))+'</dd><dt>x+1</dt><dd>'+fmt(g)+' · знак '+sign(g)+' · |x+1|='+fmt(Math.abs(g))+'</dd><dt>Сумма модулей</dt><dd>'+fmt(sum)+'</dd>';
+    const interval=x<-1?'x<−1':x>2?'x>2':'−1≤x≤2';
+    status.className='status '+(sum===7?'good':'');status.textContent='Интервал: '+interval+'. '+(sum===7?'Для этого x равенство выполняется.':'Для этого x левая часть не равна 7.');
+    prompt.innerHTML='<strong>Эксперимент:</strong> проведите x через точки −1 и 2 и следите, какая из двух скобок меняет знак.';
+  }else{
+    formula.textContent='|2x−1| = x+5';
+    b1.hidden=true;b2.hidden=true;intervals.hidden=true;
+    const f=2*x-1,g=x+5,af=Math.abs(f),ok=af===g,allowed=g>=0;
+    readout.innerHTML='<dt>F(x)=2x−1</dt><dd>'+fmt(f)+' · знак '+sign(f)+' · |F(x)|='+fmt(af)+'</dd><dt>G(x)=x+5</dt><dd>'+fmt(g)+' · условие G(x)≥0: '+(allowed?'выполнено':'не выполнено')+'</dd>';
+    status.className='status '+(ok&&allowed?'good':(!allowed?'bad':''));
+    status.textContent=!allowed?'Правая часть отрицательна: равенство с модулем невозможно.':ok?'Равенство выполняется: это корень исходного уравнения.':'Условие G(x)≥0 выполнено, но значения сторон пока различаются.';
+    prompt.innerHTML='<strong>Эксперимент:</strong> найдите положения ползунка, в которых |2x−1| и x+5 совпадают, и сравните их с ответами из пособия.';
+  }
+}
+function setX(v){const n=Math.max(-6,Math.min(8,Number(v)));if(Number.isFinite(n)){state.x=Math.round(n*2)/2;render()}}
+slider.addEventListener('input',e=>setX(e.target.value));number.addEventListener('change',e=>setX(e.target.value));document.getElementById('reset').addEventListener('click',()=>setX(0));
+document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{state.mode=b.dataset.mode;const u=new URL(location.href);u.searchParams.set('mode',state.mode);history.replaceState({},'',u);render()}));
+const theme=document.getElementById('theme');theme.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark'});render();
+})();
+</script>
+</body></html>
