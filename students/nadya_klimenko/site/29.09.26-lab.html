@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория Нади Клименко по алгоритму Евклида, взаимно простым числам и выбору НОД или НОК.">
+<title>Лаборатория: алгоритм Евклида — Надя Клименко</title>
+<style>
+:root{
+  color-scheme:light;
+  --surface-page:#f3f1e9;
+  --surface-raised:#fffdf7;
+  --surface-soft:#e9f3f0;
+  --surface-warm:#f3eadb;
+  --text-primary:#1e2927;
+  --text-secondary:#65716e;
+  --text-inverse:#f8fffd;
+  --border-subtle:#d4ddd9;
+  --border-strong:#8ca39d;
+  --accent:#087d79;
+  --accent-hover:#05615e;
+  --accent-soft:#d7efea;
+  --support:#a46d2b;
+  --success:#2d7758;
+  --danger:#9f4c4d;
+  --focus-ring:#0f918c;
+  --shadow-low:0 10px 34px rgba(23,61,56,.08);
+  --radius-sm:.5rem;
+  --radius-md:.9rem;
+  --radius-lg:1.25rem;
+  --space-1:.45rem;
+  --space-2:.75rem;
+  --space-3:1rem;
+  --space-4:1.5rem;
+  --space-5:2.35rem;
+  --space-6:3.5rem;
+  --motion-fast:150ms;
+  --motion-normal:260ms;
+  --max:1280px;
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --surface-page:#101817;
+  --surface-raised:#172220;
+  --surface-soft:#1b302c;
+  --surface-warm:#352b1e;
+  --text-primary:#edf6f3;
+  --text-secondary:#a8b8b4;
+  --text-inverse:#10211f;
+  --border-subtle:#30433f;
+  --border-strong:#607a73;
+  --accent:#67d3ca;
+  --accent-hover:#8ce2db;
+  --accent-soft:#173b37;
+  --support:#e0b872;
+  --success:#85caa5;
+  --danger:#e48b8d;
+  --focus-ring:#91e7df;
+  --shadow-low:0 12px 34px rgba(0,0,0,.2);
+}
+*{box-sizing:border-box}
+html{background:var(--surface-page);scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:inherit}button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.app{width:min(calc(100% - 1.4rem),var(--max));margin:auto;padding:1.1rem 0 2.5rem}
+.top{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:end;padding:1.1rem 0 1.25rem;border-bottom:1px solid var(--border-strong)}
+.eyebrow{margin:0 0 .5rem;color:var(--accent);font:750 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em;text-transform:uppercase}
+h1,h2,h3{font-family:Georgia,Cambria,serif;letter-spacing:-.02em}
+h1{margin:.1rem 0 .65rem;font-size:clamp(2.3rem,5vw,4.8rem);line-height:.95;font-weight:540}
+.top p{max-width:65rem;margin:.3rem 0;color:var(--text-secondary)}
+.actions{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:flex-end}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.65rem .85rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-raised);text-decoration:none}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.btn:hover{border-color:var(--accent)}
+.modes{display:flex;gap:0;border-bottom:1px solid var(--border-subtle);overflow-x:auto}
+.mode{min-height:48px;padding:.7rem 1rem;border:0;border-bottom:3px solid transparent;background:transparent;white-space:nowrap}
+.mode.on{border-bottom-color:var(--accent);color:var(--accent);font-weight:780}
+.subbar{display:flex;align-items:center;gap:.7rem;min-height:54px;border-bottom:1px solid var(--border-subtle)}
+.subbar .spacer{flex:1}
+.workspace{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.5fr);gap:1.25rem;padding-top:1.25rem}
+.stage{min-width:0}
+.side{position:sticky;top:1rem;align-self:start;border-left:1px solid var(--border-strong);padding-left:1.25rem}
+.side-section{padding:0 0 1rem;margin:0 0 1rem;border-bottom:1px solid var(--border-subtle)}.side-section:last-child{border-bottom:0}
+.side h2,.side h3{margin:.15rem 0 .55rem}.side p{color:var(--text-secondary)}
+.state-list{display:grid;grid-template-columns:1fr auto;gap:.5rem 1rem;font-size:.92rem}.state-list span{color:var(--text-secondary)}.state-list b{text-align:right}
+.view{display:none}.view.on{display:block}
+.view>h2{font-size:clamp(1.9rem,3.5vw,3.4rem);margin:.2rem 0 .65rem}.lead{max-width:60rem;color:var(--text-secondary)}
+.scenario-strip{display:flex;gap:.5rem;flex-wrap:wrap;margin:1.15rem 0}
+.scenario{min-height:42px;padding:.55rem .75rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-raised)}
+.scenario.on{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.instrument{border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);margin:1rem 0;padding:1rem 0}
+.pair-head{display:flex;justify-content:space-between;gap:1rem;align-items:end;margin-bottom:.8rem}.pair-head strong{font:600 clamp(1.3rem,2.5vw,2rem)/1.2 Georgia,serif}.pair-head span{color:var(--text-secondary)}
+.trail{position:relative;padding-left:2.7rem}.trail::before{content:"";position:absolute;left:.8rem;top:.5rem;bottom:.5rem;width:1px;background:var(--border-subtle)}
+.trail-row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;align-items:center;padding:.9rem 0;border-bottom:1px solid var(--border-subtle)}.trail-row:last-child{border-bottom:0}
+.trail-row::before{content:"";position:absolute;left:-2.25rem;top:50%;width:.68rem;height:.68rem;border:2px solid var(--accent);border-radius:50%;background:var(--surface-page);transform:translateY(-50%)}
+.trail-row.current{background:linear-gradient(90deg,var(--accent-soft),transparent)}
+.trail-row.future{opacity:.3}.equation{font:600 clamp(1rem,2.1vw,1.3rem)/1.4 "Cambria Math","Times New Roman",serif}.remainder{font:800 1.15rem/1 ui-monospace,monospace;color:var(--support)}
+.transport{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}.transport button{min-height:42px;padding:.55rem .75rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-raised)}
+.transport button.primary{background:var(--accent);color:var(--text-inverse);border-color:var(--accent)}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--border-strong);border-bottom:1px solid var(--border-strong);margin:1rem 0}
+.metric{padding:.85rem}.metric+.metric{border-left:1px solid var(--border-subtle)}.metric small{display:block;color:var(--text-secondary);font-size:.78rem}.metric b{display:block;font-size:1.3rem;color:var(--accent);font-variant-numeric:tabular-nums}
+.insight{padding:1rem 1.1rem;border-left:4px solid var(--support);background:var(--surface-warm);margin:1rem 0}
+.prediction{border-top:1px solid var(--border-strong);padding-top:1rem;margin-top:1rem}.prediction h3{margin:.2rem 0 .7rem}
+.predict-options{display:flex;gap:.5rem;flex-wrap:wrap}.predict-options button{min-height:42px;padding:.55rem .75rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-raised)}
+.predict-options button.selected{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.feedback{min-height:1.6em;margin:.7rem 0;color:var(--text-secondary)}.feedback.good{color:var(--success)}.feedback.bad{color:var(--danger)}
+.case-list{border-top:1px solid var(--border-strong);margin-top:1rem}
+.case{padding:1.1rem 0;border-bottom:1px solid var(--border-subtle);display:grid;grid-template-columns:minmax(150px,.35fr) minmax(0,1fr);gap:1rem}.case h3{margin:0}.case p{margin:.25rem 0}.case .formula{font:600 1.08rem/1.45 "Cambria Math",serif;background:var(--surface-soft);padding:.75rem .9rem;margin:.7rem 0;border-left:3px solid var(--accent)}
+.choice-buttons{display:flex;gap:.5rem;flex-wrap:wrap;margin:.65rem 0}.choice-buttons button{min-height:40px;padding:.5rem .7rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface-raised)}
+.choice-buttons button.good{border-color:var(--success);color:var(--success)}.choice-buttons button.bad{border-color:var(--danger);color:var(--danger)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.footer{text-align:center;color:var(--text-secondary);padding:2rem 0 0}
+@media(max-width:980px){.workspace{grid-template-columns:1fr}.side{position:static;border-left:0;border-top:1px solid var(--border-strong);padding:1rem 0 0}.metrics{grid-template-columns:repeat(2,1fr)}.metric:nth-child(3){border-left:0;border-top:1px solid var(--border-subtle)}.metric:nth-child(4){border-top:1px solid var(--border-subtle)}}
+@media(max-width:680px){.top{grid-template-columns:1fr}.actions{justify-content:flex-start}.case{grid-template-columns:1fr}.metrics{grid-template-columns:1fr}.metric+.metric,.metric:nth-child(3){border-left:0;border-top:1px solid var(--border-subtle)}.trail{padding-left:2.2rem}.trail-row::before{left:-1.78rem}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media print{:root,html[data-theme="dark"]{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--surface-warm:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#ccc;--border-strong:#888;--accent:#155e5a}.actions,.modes,.subbar,.transport,.choice-buttons,.predict-options{display:none!important}.workspace{grid-template-columns:1fr}.side{position:static;border-left:0}.view{display:block!important;break-before:page}.view:first-child{break-before:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div>
+    <p class="eyebrow">Цифровая лаборатория · 29.09.26</p>
+    <h1>Алгоритм Евклида как инструмент</h1>
+    <p>Все пары чисел и прикладные ситуации взяты из пособия. Здесь можно пошагово проследить остатки, проверить взаимную простоту и потренировать выбор между НОД и НОК без добавления новых условий.</p>
+  </div>
+  <div class="actions">
+    <a class="btn" href="29.09.26.html">← Вернуться к занятию</a>
+    <a class="btn" href="../pdf_docs/29.09.26.pdf" download>PDF</a>
+    <button class="btn" id="theme" type="button">Тёмная тема</button>
+  </div>
+</header>
+
+<nav class="modes" aria-label="Режимы лаборатории">
+  <button class="mode on" type="button" data-mode="euclid">След остатков</button>
+  <button class="mode" type="button" data-mode="coprime">Взаимная простота</button>
+  <button class="mode" type="button" data-mode="applications">НОД или НОК</button>
+</nav>
+<div class="subbar"><span class="eyebrow" id="modeLabel">Режим: след остатков</span><span class="spacer"></span><button class="btn" id="reset" type="button">Сбросить состояние</button></div>
+
+<div class="workspace">
+<main class="stage">
+<section class="view on" id="view-euclid">
+  <h2>Как остаток ведёт к НОД?</h2>
+  <p class="lead">Выберите одну из пар из пособия и двигайтесь по цепочке делений. На каждом шаге новая пара состоит из прежнего меньшего числа и полученного остатка.</p>
+  <div class="scenario-strip" id="euclidScenarios">
+    <button class="scenario on" type="button" data-key="52-20">52 и 20</button>
+    <button class="scenario" type="button" data-key="221-65">221 и 65</button>
+    <button class="scenario" type="button" data-key="1000-37">1000 и 37</button>
+    <button class="scenario" type="button" data-key="2026-748">2026 и 748</button>
+  </div>
+  <div class="instrument">
+    <div class="pair-head"><strong id="pairTitle">НОД(52,20)</strong><span id="stepCounter">Шаг 1 из 4</span></div>
+    <div class="trail" id="euclidTrail" aria-live="polite"></div>
+  </div>
+  <div class="transport">
+    <button type="button" id="prevStep">Назад</button>
+    <button type="button" class="primary" id="nextStep">Следующий шаг</button>
+    <button type="button" id="showAll">Показать всю цепочку</button>
+  </div>
+  <div class="metrics">
+    <div class="metric"><small>Исходное a</small><b id="metricA">52</b></div>
+    <div class="metric"><small>Исходное b</small><b id="metricB">20</b></div>
+    <div class="metric"><small>Текущий остаток</small><b id="metricR">12</b></div>
+    <div class="metric"><small>Итоговый НОД</small><b id="metricGcd">4</b></div>
+  </div>
+  <div class="insight" id="euclidInsight">Первый остаток 12 становится вторым числом новой пары: (20,12).</div>
+</section>
+
+<section class="view" id="view-coprime">
+  <h2>Можно ли увидеть взаимную простоту до разложения?</h2>
+  <p class="lead">Сначала сделайте прогноз, затем запустите алгоритм Евклида. Если итоговый НОД равен 1, числа взаимно простые.</p>
+  <div class="scenario-strip" id="coprimeScenarios">
+    <button class="scenario on" type="button" data-key="221-65">221 и 65</button>
+    <button class="scenario" type="button" data-key="1000-37">1000 и 37</button>
+  </div>
+  <div class="prediction">
+    <h3>Ваш прогноз</h3>
+    <div class="predict-options">
+      <button type="button" data-answer="yes">Взаимно простые</button>
+      <button type="button" data-answer="no">Есть общий делитель больше 1</button>
+    </div>
+    <p class="feedback" id="predictionFeedback" aria-live="polite"></p>
+  </div>
+  <div class="instrument">
+    <div class="pair-head"><strong id="coprimeTitle">221 и 65</strong><span>Проверка алгоритмом Евклида</span></div>
+    <div class="trail" id="coprimeTrail"></div>
+  </div>
+  <button class="btn primary" id="runCoprime" type="button">Показать проверку</button>
+  <div class="insight" id="coprimeResult">Сначала выберите прогноз.</div>
+</section>
+
+<section class="view" id="view-applications">
+  <h2>Как определить, нужен НОД или НОК?</h2>
+  <p class="lead">В пособии есть три разных смысла: максимально крупная одинаковая часть, максимальное сокращение дроби и первое совпадение периодов.</p>
+  <div class="case-list">
+    <article class="case" data-case="square">
+      <h3>Квадраты 96 × 72 см</h3>
+      <div>
+        <p>Нужно покрыть прямоугольник одинаковыми максимально крупными квадратами без обрезков.</p>
+        <div class="choice-buttons"><button type="button" data-choice="gcd">НОД</button><button type="button" data-choice="lcm">НОК</button></div>
+        <p class="feedback" aria-live="polite"></p>
+        <div class="formula">НОД(96,72) = 24; количество квадратов: 4 · 3 = 12.</div>
+      </div>
+    </article>
+    <article class="case" data-case="fraction">
+      <h3>Дробь 84 / 126</h3>
+      <div>
+        <p>Нужно сократить дробь максимально за один шаг.</p>
+        <div class="choice-buttons"><button type="button" data-choice="gcd">НОД</button><button type="button" data-choice="lcm">НОК</button></div>
+        <p class="feedback" aria-live="polite"></p>
+        <div class="formula">НОД(84,126) = 42; 84 / 126 = 2 / 3.</div>
+      </div>
+    </article>
+    <article class="case" data-case="bus">
+      <h3>Автобусы: 24 и 36 минут</h3>
+      <div>
+        <p>Нужно узнать, через сколько минут они снова придут одновременно.</p>
+        <div class="choice-buttons"><button type="button" data-choice="gcd">НОД</button><button type="button" data-choice="lcm">НОК</button></div>
+        <p class="feedback" aria-live="polite"></p>
+        <div class="formula">НОД(24,36) = 12; НОК(24,36) = 72 минуты.</div>
+      </div>
+    </article>
+  </div>
+</section>
+</main>
+
+<aside class="side">
+  <section class="side-section"><p class="eyebrow">Что наблюдать</p><h2 id="sideTitle">Остаток становится частью новой пары</h2><p id="sideText">Алгоритм уменьшает числа шаг за шагом, сохраняя их НОД. Нулевой остаток завершает процесс.</p></section>
+  <section class="side-section"><h3>Ключевой вопрос</h3><p id="guide">Какой остаток нужно перенести в следующую пару?</p></section>
+  <section class="side-section"><h3>Контекст</h3><div class="state-list"><span>Ученица</span><b>Надя Клименко</b><span>Дата</span><b>29.09.26</b><span>Тема</span><b id="sideMode">Алгоритм Евклида</b></div></section>
+  <section class="side-section"><h3>Материалы</h3><a class="btn" href="../tex_docs/29.09.26.tex">TeX</a> <a class="btn" href="../images/29.09.26.png">Постер</a></section>
+</aside>
+</div>
+<footer class="footer">Лёвин Артём Александрович · эксклюзивно для Нади Клименко</footer>
+</div>
+
+<script>
+(() => {
+"use strict";
+const root=document.documentElement;
+const safeGet=key=>{try{return localStorage.getItem(key)}catch(_){return null}};
+const safeSet=(key,value)=>{try{localStorage.setItem(key,value)}catch(_){}};
+let theme=safeGet("nadya-29-lab-theme")||"light";
+const themeButton=document.getElementById("theme");
+function applyTheme(value){theme=value==="dark"?"dark":"light";root.dataset.theme=theme;themeButton.textContent=theme==="dark"?"Светлая тема":"Тёмная тема"}
+applyTheme(theme);
+themeButton.addEventListener("click",()=>{applyTheme(theme==="dark"?"light":"dark");safeSet("nadya-29-lab-theme",theme)});
+
+const scenarios={
+  "52-20":{a:52,b:20},
+  "221-65":{a:221,b:65},
+  "1000-37":{a:1000,b:37},
+  "2026-748":{a:2026,b:748}
+};
+function euclid(a,b){
+  const out=[];
+  let x=a,y=b;
+  while(y!==0){
+    const q=Math.floor(x/y),r=x%y;
+    out.push({a:x,b:y,q,r});
+    x=y;y=r;
+  }
+  return {steps:out,gcd:x};
+}
+function equation(step){return step.a+" = "+step.b+" · "+step.q+" + "+step.r}
+const modeMeta={
+  euclid:{label:"Режим: след остатков",title:"Остаток становится частью новой пары",text:"Алгоритм уменьшает числа шаг за шагом, сохраняя их НОД. Нулевой остаток завершает процесс.",guide:"Какой остаток нужно перенести в следующую пару?",side:"Алгоритм Евклида"},
+  coprime:{label:"Режим: взаимная простота",title:"НОД = 1 — критерий взаимной простоты",text:"Пары 221 и 65, 1000 и 37 показывают два контрастных исхода алгоритма.",guide:"Какой последний ненулевой остаток получится?",side:"Взаимная простота"},
+  applications:{label:"Режим: НОД или НОК",title:"Смысл условия определяет инструмент",text:"Максимальный общий размер ведёт к НОД, первое совпадение периодов — к НОК.",guide:"Ищется общий делитель или первое общее кратное?",side:"Выбор метода"}
+};
+const modeButtons=[...document.querySelectorAll(".mode")],views=[...document.querySelectorAll(".view")];
+function setMode(mode){
+  if(!modeMeta[mode]) mode="euclid";
+  modeButtons.forEach(b=>{const on=b.dataset.mode===mode;b.classList.toggle("on",on);b.setAttribute("aria-pressed",String(on))});
+  views.forEach(v=>v.classList.toggle("on",v.id==="view-"+mode));
+  document.getElementById("modeLabel").textContent=modeMeta[mode].label;
+  document.getElementById("sideTitle").textContent=modeMeta[mode].title;
+  document.getElementById("sideText").textContent=modeMeta[mode].text;
+  document.getElementById("guide").textContent=modeMeta[mode].guide;
+  document.getElementById("sideMode").textContent=modeMeta[mode].side;
+  const u=new URL(location.href);u.searchParams.set("mode",mode);history.replaceState(null,"",u);
+}
+modeButtons.forEach(b=>b.addEventListener("click",()=>setMode(b.dataset.mode)));
+
+let currentKey="52-20",stepIndex=0,showAll=false;
+function renderTrail(){
+  const s=scenarios[currentKey],result=euclid(s.a,s.b),steps=result.steps;
+  const trail=document.getElementById("euclidTrail");
+  trail.textContent="";
+  steps.forEach((step,index)=>{
+    const row=document.createElement("div");
+    row.className="trail-row";
+    if(!showAll&&index>stepIndex) row.classList.add("future");
+    if(!showAll&&index===stepIndex) row.classList.add("current");
+    const eq=document.createElement("div");eq.className="equation";eq.textContent=equation(step);
+    const rem=document.createElement("div");rem.className="remainder";rem.textContent=step.r===0?"НОД "+result.gcd:"r = "+step.r;
+    row.append(eq,rem);trail.append(row);
+  });
+  const active=steps[Math.min(stepIndex,steps.length-1)];
+  document.getElementById("pairTitle").textContent="НОД("+s.a+","+s.b+")";
+  document.getElementById("stepCounter").textContent=showAll?"Вся цепочка":"Шаг "+(stepIndex+1)+" из "+steps.length;
+  document.getElementById("metricA").textContent=s.a;
+  document.getElementById("metricB").textContent=s.b;
+  document.getElementById("metricR").textContent=active.r;
+  document.getElementById("metricGcd").textContent=result.gcd;
+  document.getElementById("euclidInsight").textContent=active.r===0
+    ?"Остаток стал равен нулю. Последнее ненулевое число "+result.gcd+" — это НОД."
+    :"Остаток "+active.r+" станет вторым числом новой пары: ("+active.b+","+active.r+").";
+}
+document.querySelectorAll("#euclidScenarios .scenario").forEach(b=>b.addEventListener("click",()=>{
+  currentKey=b.dataset.key;stepIndex=0;showAll=false;
+  document.querySelectorAll("#euclidScenarios .scenario").forEach(x=>x.classList.toggle("on",x===b));
+  renderTrail();
+}));
+document.getElementById("prevStep").addEventListener("click",()=>{showAll=false;stepIndex=Math.max(0,stepIndex-1);renderTrail()});
+document.getElementById("nextStep").addEventListener("click",()=>{showAll=false;const n=euclid(scenarios[currentKey].a,scenarios[currentKey].b).steps.length;stepIndex=Math.min(n-1,stepIndex+1);renderTrail()});
+document.getElementById("showAll").addEventListener("click",()=>{showAll=true;renderTrail()});
+
+let coprimeKey="221-65",prediction=null;
+function resetPrediction(){
+  prediction=null;
+  document.querySelectorAll(".predict-options button").forEach(b=>b.classList.remove("selected"));
+  document.getElementById("predictionFeedback").textContent="";
+  document.getElementById("predictionFeedback").className="feedback";
+  document.getElementById("coprimeTrail").textContent="";
+  document.getElementById("coprimeResult").textContent="Сначала выберите прогноз.";
+}
+document.querySelectorAll("#coprimeScenarios .scenario").forEach(b=>b.addEventListener("click",()=>{
+  coprimeKey=b.dataset.key;
+  document.querySelectorAll("#coprimeScenarios .scenario").forEach(x=>x.classList.toggle("on",x===b));
+  document.getElementById("coprimeTitle").textContent=b.textContent;
+  resetPrediction();
+}));
+document.querySelectorAll(".predict-options button").forEach(b=>b.addEventListener("click",()=>{
+  prediction=b.dataset.answer;
+  document.querySelectorAll(".predict-options button").forEach(x=>x.classList.toggle("selected",x===b));
+  document.getElementById("predictionFeedback").textContent="Прогноз сохранён. Теперь покажите проверку.";
+}));
+document.getElementById("runCoprime").addEventListener("click",()=>{
+  const s=scenarios[coprimeKey],result=euclid(s.a,s.b),isCoprime=result.gcd===1;
+  const trail=document.getElementById("coprimeTrail");trail.textContent="";
+  result.steps.forEach(step=>{
+    const row=document.createElement("div");row.className="trail-row";
+    const eq=document.createElement("div");eq.className="equation";eq.textContent=equation(step);
+    const rem=document.createElement("div");rem.className="remainder";rem.textContent=step.r===0?"НОД "+result.gcd:"r = "+step.r;
+    row.append(eq,rem);trail.append(row);
+  });
+  const correct=prediction===(isCoprime?"yes":"no");
+  const feedback=document.getElementById("predictionFeedback");
+  if(prediction){feedback.className="feedback "+(correct?"good":"bad");feedback.textContent=correct?"Прогноз подтвердился.":"Прогноз не подтвердился — сравните его с полученным НОД."}
+  else{feedback.className="feedback";feedback.textContent="Проверка выполнена без предварительного прогноза."}
+  document.getElementById("coprimeResult").textContent=isCoprime
+    ?"НОД("+s.a+","+s.b+") = 1, поэтому числа взаимно простые."
+    :"НОД("+s.a+","+s.b+") = "+result.gcd+", поэтому у чисел есть общий делитель больше 1.";
+});
+
+const correctChoice={square:"gcd",fraction:"gcd",bus:"lcm"};
+document.querySelectorAll(".case").forEach(card=>{
+  card.querySelectorAll(".choice-buttons button").forEach(button=>button.addEventListener("click",()=>{
+    card.querySelectorAll(".choice-buttons button").forEach(b=>b.classList.remove("good","bad"));
+    const ok=button.dataset.choice===correctChoice[card.dataset.case];
+    button.classList.add(ok?"good":"bad");
+    const f=card.querySelector(".feedback");
+    f.className="feedback "+(ok?"good":"bad");
+    f.textContent=ok?"Верно. Смысл условия совпадает с выбранным инструментом.":"Сверьте формулировку условия: максимальный общий размер ведёт к НОД, первое совпадение — к НОК.";
+  }));
+});
+
+function resetAll(){
+  currentKey="52-20";stepIndex=0;showAll=false;
+  document.querySelectorAll("#euclidScenarios .scenario").forEach(b=>b.classList.toggle("on",b.dataset.key===currentKey));
+  renderTrail();
+  coprimeKey="221-65";
+  document.querySelectorAll("#coprimeScenarios .scenario").forEach(b=>b.classList.toggle("on",b.dataset.key===coprimeKey));
+  document.getElementById("coprimeTitle").textContent="221 и 65";
+  resetPrediction();
+  document.querySelectorAll(".choice-buttons button").forEach(b=>b.classList.remove("good","bad"));
+  document.querySelectorAll(".case .feedback").forEach(f=>{f.className="feedback";f.textContent=""});
+}
+document.getElementById("reset").addEventListener("click",resetAll);
+
+renderTrail();
+const initial=new URL(location.href).searchParams.get("mode")||"euclid";
+setMode(initial);
+})();
+</script>
+</body>
+</html>
