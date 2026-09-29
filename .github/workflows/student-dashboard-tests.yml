@@ -8,9 +8,12 @@ on:
       - 'shared/practice/**'
       - 'pipeline/prompts/04_spaced_practice.md'
       - 'pipeline/practice/**'
+      - 'pipeline/lessons/**'
+      - 'pipeline/prompts/web_page_design.md'
       - 'pipeline/schemas/spaced-practice-stage-v1.schema.json'
       - 'design-system/**'
       - 'scripts/create-student.mjs'
+      - 'scripts/publish-lesson.mjs'
       - 'SITE_GENERATION_PROMPT.md'
       - '.github/workflows/student-dashboard-tests.yml'
   pull_request:
@@ -20,9 +23,12 @@ on:
       - 'shared/practice/**'
       - 'pipeline/prompts/04_spaced_practice.md'
       - 'pipeline/practice/**'
+      - 'pipeline/lessons/**'
+      - 'pipeline/prompts/web_page_design.md'
       - 'pipeline/schemas/spaced-practice-stage-v1.schema.json'
       - 'design-system/**'
       - 'scripts/create-student.mjs'
+      - 'scripts/publish-lesson.mjs'
       - 'SITE_GENERATION_PROMPT.md'
       - '.github/workflows/student-dashboard-tests.yml'
 
@@ -30,6 +36,23 @@ permissions:
   contents: read
 
 jobs:
+  production-workflow:
+    name: production workflow contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check production workflow
+        shell: bash
+        run: |
+          node --check scripts/create-student.mjs
+          node --check scripts/publish-lesson.mjs
+          node --check pipeline/lessons/lesson-registry.mjs
+      - name: Run production workflow regression
+        run: node --test design-system/test-create-student.mjs pipeline/lessons/test/*.test.mjs
+
   atlas-contract:
     name: LEVIN / ATLAS contract
     runs-on: ubuntu-latest
