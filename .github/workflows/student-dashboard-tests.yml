@@ -1,9 +1,14 @@
 name: Student dashboard regression
 
 on:
+  pull_request: {}
   push:
+    branches:
+      - main
     paths:
-      - 'students/**'
+      - 'students/**/site/**'
+      - 'students/*/index.html'
+      - 'students/*/competency-map*'
       - 'shared/student-dashboard/**'
       - 'shared/practice/**'
       - 'pipeline/prompts/04_spaced_practice.md'
@@ -14,30 +19,54 @@ on:
       - 'design-system/**'
       - 'scripts/create-student.mjs'
       - 'scripts/publish-lesson.mjs'
+      - 'scripts/ci/student-dashboard-scope.mjs'
+      - 'scripts/ci/test-student-dashboard-scope.mjs'
       - 'SITE_GENERATION_PROMPT.md'
       - '.github/workflows/student-dashboard-tests.yml'
-  pull_request:
-    paths:
-      - 'students/**'
-      - 'shared/student-dashboard/**'
-      - 'shared/practice/**'
-      - 'pipeline/prompts/04_spaced_practice.md'
-      - 'pipeline/practice/**'
-      - 'pipeline/lessons/**'
-      - 'pipeline/prompts/web_page_design.md'
-      - 'pipeline/schemas/spaced-practice-stage-v1.schema.json'
-      - 'design-system/**'
-      - 'scripts/create-student.mjs'
-      - 'scripts/publish-lesson.mjs'
-      - 'SITE_GENERATION_PROMPT.md'
-      - '.github/workflows/student-dashboard-tests.yml'
+
+concurrency:
+  group: student-dashboard-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
+  scope:
+    name: change scope
+    runs-on: ubuntu-latest
+    outputs:
+      heavy: ${{ steps.scope.outputs.heavy }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify change classifier
+        run: |
+          node --check scripts/ci/student-dashboard-scope.mjs
+          node --test scripts/ci/test-student-dashboard-scope.mjs
+      - name: Classify changed paths
+        id: scope
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "push" ]; then
+            echo "heavy=true" >> "$GITHUB_OUTPUT"
+            echo '{"heavy":true,"reason":"main push selected by workflow paths"}'
+          else
+            git diff --name-only "$BASE_SHA" "$HEAD_SHA" | node scripts/ci/student-dashboard-scope.mjs
+          fi
+
   production-workflow:
     name: production workflow contract
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -55,6 +84,8 @@ jobs:
 
   atlas-contract:
     name: LEVIN / ATLAS contract
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -72,6 +103,8 @@ jobs:
 
   dashboard:
     name: dashboard / ${{ matrix.student }}
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -118,6 +151,8 @@ jobs:
 
   index-inventory:
     name: index inventory
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -129,6 +164,8 @@ jobs:
 
   practice:
     name: shared practice engine
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -146,6 +183,8 @@ jobs:
 
   practice-coverage:
     name: practice coverage audit
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -184,6 +223,8 @@ jobs:
 
   stage-04:
     name: post-lesson Stage 04
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -197,3 +238,53 @@ jobs:
         run: node -e "JSON.parse(require('node:fs').readFileSync('pipeline/schemas/spaced-practice-stage-v1.schema.json','utf8')); console.log('Stage 04 schema OK')"
       - name: Run Stage 04 regression suite
         run: node --test pipeline/practice/test/*.test.mjs
+
+  merge-gate:
+    name: merge gate
+    if: always()
+    needs:
+      - scope
+      - production-workflow
+      - atlas-contract
+      - dashboard
+      - index-inventory
+      - practice
+      - practice-coverage
+      - stage-04
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce required job results
+        shell: bash
+        env:
+          SCOPE: ${{ needs.scope.result }}
+          PRODUCTION: ${{ needs.production-workflow.result }}
+          ATLAS: ${{ needs.atlas-contract.result }}
+          DASHBOARD: ${{ needs.dashboard.result }}
+          INVENTORY: ${{ needs.index-inventory.result }}
+          PRACTICE: ${{ needs.practice.result }}
+          COVERAGE: ${{ needs.practice-coverage.result }}
+          STAGE04: ${{ needs.stage-04.result }}
+        run: |
+          if [ "$SCOPE" != "success" ]; then
+            echo "change scope failed: $SCOPE"
+            exit 1
+          fi
+          for item in \
+            "production workflow contract=$PRODUCTION" \
+            "LEVIN / ATLAS contract=$ATLAS" \
+            "dashboard matrix=$DASHBOARD" \
+            "index inventory=$INVENTORY" \
+            "shared practice engine=$PRACTICE" \
+            "practice coverage audit=$COVERAGE" \
+            "post-lesson Stage 04=$STAGE04"
+          do
+            result="${item#*=}"
+            case "$result" in
+              success|skipped) ;;
+              *)
+                echo "required job did not pass: $item"
+                exit 1
+                ;;
+            esac
+          done
+          echo "merge gate passed"
