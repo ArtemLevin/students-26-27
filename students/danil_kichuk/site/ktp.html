@@ -118,7 +118,7 @@ tbody tr{cursor:pointer}tbody tr:hover{background:color-mix(in srgb,var(--accent
   <div class="actions">
     <button class="icon-btn" id="themeBtn" title="Сменить тему" aria-label="Сменить светлую или тёмную тему">◐</button>
     <button class="icon-btn" id="exportBtn" title="Экспорт прогресса" aria-label="Экспортировать прогресс в JSON">⇩</button>
-    <label class="icon-btn" title="Импорт прогресса" aria-label="Импортировать прогресс из JSON">⇧<input id="importInput" type="file" accept="application/json" hidden></label>
+    <button class="icon-btn" id="importBtn" title="Импорт прогресса" aria-label="Импортировать прогресс из JSON">⇧</button><input id="importInput" type="file" accept="application/json" hidden>
     <button class="icon-btn" id="printBtn" title="Печать" aria-label="Распечатать КТП">⌘P</button>
   </div>
 </nav>
@@ -215,7 +215,7 @@ function renderStages(){
     const ls=LESSONS.filter(l=>l.stage===s), done=ls.filter(l=>rec(l).status==="done").length, p=Math.round(done/ls.length*100);
     host.insertAdjacentHTML("beforeend",'<article class="stage"><div class="kicker">'+String(i+1).padStart(2,"0")+'</div><h3>'+esc(s)+'</h3><p>'+ls.length+' занятий · '+done+' пройдено</p><div class="progress"><i style="width:'+p+'%"></i></div></article>');
   });
-  $("stageFilter").innerHTML='<option value="all">Все этапы</option>'+stages.map(s=>'<option>'+esc(s)+'</option>').join("");
+  const prevStage=$("stageFilter").value||"all"; $("stageFilter").innerHTML='<option value="all">Все этапы</option>'+stages.map(s=>'<option>'+esc(s)+'</option>').join(""); if([...$("stageFilter").options].some(o=>o.value===prevStage))$("stageFilter").value=prevStage;
 }
 function renderMonthSummary(){
   $("monthSummary").innerHTML=months.map(m=>{
@@ -290,7 +290,7 @@ document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{state.ui.view=b.data
 ["search","stageFilter","statusFilter"].forEach(id=>$(id).addEventListener(id==="search"?"input":"change",()=>{renderRoute();renderJournal()}));
 $("drawerClose").onclick=closeDrawer;$("drawerBg").onclick=closeDrawer;
 $("themeBtn").onclick=()=>{const t=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=t;localStorage.setItem(THEME,t)};
-$("exportBtn").onclick=exportState;$("importInput").onchange=e=>{if(e.target.files[0])importState(e.target.files[0]);e.target.value=""};$("printBtn").onclick=()=>window.print();
+$("exportBtn").onclick=exportState;$("importBtn").onclick=()=>$("importInput").click();$("importInput").onchange=e=>{if(e.target.files[0])importState(e.target.files[0]);e.target.value=""};$("printBtn").onclick=()=>window.print();
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDrawer();if(e.key==="/"&&!["INPUT","TEXTAREA","SELECT"].includes(document.activeElement.tagName)){e.preventDefault();$("search").focus()}});
 renderAll();
 </script>
