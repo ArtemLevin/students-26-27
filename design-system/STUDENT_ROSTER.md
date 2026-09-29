@@ -6,9 +6,13 @@ Current migration roster for all `students/*/site/index.html` pages.
 |---|---|---|---|---|---|---|
 | anna_trapeznikova | editorial | burgundy | airy | mixed | technical-editorial | calm |
 | darya_savenkova | cartographer | vermilion | airy | circular | editorial | calm |
+| danil_kichuk | cartographer | ochre | airy | circular | editorial | calm |
 | ekaterina | archive | ochre | balanced | mixed | technical-editorial | calm |
 | ekaterina_gnedkova | lab | petrol | compact | orthogonal | technical | mechanical |
 | grisha_arkhipov | blueprint | cobalt | airy | orthogonal | technical-editorial | calm |
+| ivan_petrachenkov | cartographer | petrol | airy | circular | technical-editorial | calm |
+| jaroslav_gavrilov | cartographer | petrol | airy | circular | editorial | calm |
+| kiril_zinoviev_physics | cartographer | petrol | airy | circular | technical | calm |
 | jaroslav_vereschagin | cartographer | forest | balanced | circular | technical-editorial | calm |
 | kirill_zinoviev | lab | graphite | compact | orthogonal | technical | mechanical |
 | kristina | editorial | plum | airy | mixed | editorial | calm |
