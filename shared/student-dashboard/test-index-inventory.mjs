@@ -10,7 +10,7 @@ function walk(dir){
 }
 
 const root=process.cwd();
-const indexes=walk(path.join(root,'students')).filter(file=>path.basename(file)==='index.html').map(file=>path.relative(root,file).replaceAll('\\\\','/')).sort();
+const indexes=walk(path.join(root,'students')).filter(file=>path.basename(file)==='index.html').map(file=>path.relative(root,file).replaceAll('\\','/')).sort();
 assert.ok(indexes.length>0,'No student index entry points found');
 
 const siteIndexes=indexes.filter(file=>file.endsWith('/site/index.html'));
@@ -92,4 +92,4 @@ for(const file of chemistryPaths){
   }
 }
 
-console.log(`✓ index inventory: ${indexes.length} entry pages covered, ${sharedDashboardPaths.length} shared dashboards migrated, ${bespokeDashboardPaths.size} bespoke dashboards, ${adapterPaths.length} practice adapters`);
+console.log(`✓ index inventory: ${indexes.length} entry pages covered, ${sharedDashboardPaths.length} shared dashboards, ${bespokeDashboardPaths.length} bespoke dashboards, ${adapterPaths.length} practice adapters, ${chemistryPaths.length} chemistry dashboards`);
