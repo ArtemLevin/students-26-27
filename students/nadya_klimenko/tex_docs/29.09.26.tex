@@ -1,0 +1,294 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{icomma}
+
+\geometry{left=18mm,right=18mm,top=18mm,bottom=20mm}
+\onehalfspacing
+\renewcommand{\familydefault}{\sfdefault}
+\setlength{\parindent}{0pt}
+\setlength{\headheight}{15pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=5pt,topsep=4pt}
+
+\definecolor{accent}{HTML}{176B87}
+\definecolor{darkaccent}{HTML}{0B4F63}
+\definecolor{textgray}{HTML}{2E3438}
+\definecolor{softgray}{HTML}{F2F5F6}
+\definecolor{linegray}{HTML}{B8C4C9}
+
+\color{textgray}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small НОД, алгоритм Евклида и НОК}
+\fancyhead[R]{\small 29.09.26}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\newcommand{\nodr}{\mathop{\text{НОД}}\nolimits}
+\newcommand{\nokr}{\mathop{\text{НОК}}\nolimits}
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\sectionrule}{\vspace{-2mm}\par\noindent\textcolor{linegray}{\rule{\linewidth}{0.5pt}}\par\vspace{1mm}}
+
+\begin{document}
+
+% ---------- TITLE ----------
+\thispagestyle{empty}
+\begin{center}
+\vspace*{28mm}
+{\Large\textcolor{darkaccent}{Математика}}\\[9mm]
+{\Huge\bfseries Чек-лист}\\[5mm]
+{\LARGE\bfseries НОД, алгоритм Евклида и НОК}\\[15mm]
+{\large Надя Клименко}\\[4mm]
+{\normalsize 29.09.26}\\[22mm]
+\begin{minipage}{0.78\textwidth}
+\centering
+\large
+Главная идея занятия: научиться быстро находить НОД с помощью алгоритма Евклида и применять его в дробях, задачах на разбиение и при вычислении НОК.
+\end{minipage}
+\vfill
+{\small Лёвин Артём Александрович эксклюзивно для Нади Клименко}
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent,line width=1.2pt]
+  ($(current page.south west)+(18mm,17mm)$)
+  .. controls ($(current page.south west)+(60mm,30mm)$)
+  and ($(current page.south east)+(-65mm,7mm)$)
+  .. ($(current page.south east)+(-18mm,19mm)$);
+\draw[accent!45,line width=0.7pt]
+  ($(current page.south west)+(18mm,12mm)$)
+  .. controls ($(current page.south west)+(82mm,2mm)$)
+  and ($(current page.south east)+(-80mm,26mm)$)
+  .. ($(current page.south east)+(-18mm,13mm)$);
+\end{tikzpicture}
+\clearpage
+
+% ---------- CORE ----------
+\section*{1. Что нужно помнить про НОД}
+\sectionrule
+\key{Наибольший общий делитель} двух натуральных чисел --- самое большое натуральное число, на которое оба числа делятся без остатка.
+
+Например,
+\[
+\nodr(32,12)=4,
+\]
+потому что 4 делит и 32, и 12, а большего общего делителя нет.
+
+\textbf{Где НОД появляется в задачах:}
+\begin{itemize}
+  \item нужно разбить или разрезать объекты на \key{максимально крупные одинаковые части};
+  \item нужно составить \key{максимальное число одинаковых наборов};
+  \item нужно сократить дробь сразу на \key{наибольший общий множитель};
+  \item нужно проверить, являются ли числа взаимно простыми.
+\end{itemize}
+
+\section*{2. Алгоритм Евклида}
+\sectionrule
+Вместо разложения больших чисел на простые множители можно последовательно делить с остатком.
+
+Для $a>b>0$:
+\begin{enumerate}
+  \item разделите $a$ на $b$ с остатком: $a=bq+r$;
+  \item замените пару $(a,b)$ на $(b,r)$;
+  \item повторяйте, пока остаток не станет равен нулю;
+  \item \key{последний ненулевой остаток} и есть $\nodr(a,b)$.
+\end{enumerate}
+
+\textbf{Пример.} Найдём $\nodr(52,20)$:
+\[
+\begin{aligned}
+52&=20\cdot2+12,\\
+20&=12\cdot1+8,\\
+12&=8\cdot1+4,\\
+8&=4\cdot2+0.
+\end{aligned}
+\]
+Следовательно, $\nodr(52,20)=4$.
+
+\textbf{Самопроверка:} найденный НОД обязан делить оба исходных числа без остатка.
+
+\section*{3. Взаимно простые числа}
+\sectionrule
+Два натуральных числа называются \key{взаимно простыми}, если
+\[
+\nodr(a,b)=1.
+\]
+
+\textbf{Пример 1.} Для 221 и 65 алгоритм Евклида даёт НОД 13, поэтому эти числа не взаимно простые.
+
+\textbf{Пример 2.} $1000=37\cdot27+1$. Как только в цепочке появился остаток 1, итоговый НОД будет равен 1. Значит, 1000 и 37 взаимно простые.
+
+\section*{4. Сокращение дробей через НОД}
+\sectionrule
+Чтобы сократить дробь максимально за один шаг, удобно найти НОД числителя и знаменателя:
+\[
+\frac{a}{b}=\frac{a:\nodr(a,b)}{b:\nodr(a,b)}.
+\]
+
+\textbf{Пример.}
+\[
+\nodr(84,126)=42,
+\qquad
+\frac{84}{126}=\frac{84:42}{126:42}=\frac{2}{3}.
+\]
+
+Если после сокращения числитель и знаменатель взаимно просты, дробь несократима.
+
+\clearpage
+% ---------- FLOWCHART ----------
+\thispagestyle{empty}
+\begin{center}
+{\Large\bfseries\textcolor{darkaccent}{Алгоритм Евклида}}\\[8mm]
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=11mm,
+  startstop/.style={ellipse,draw=accent,line width=0.9pt,minimum width=40mm,minimum height=11mm,align=center,fill=softgray},
+  process/.style={rounded corners=3pt,draw=accent,line width=0.9pt,minimum width=92mm,minimum height=13mm,text width=82mm,align=center},
+  decision/.style={diamond,aspect=2.2,draw=accent,line width=0.9pt,minimum width=50mm,minimum height=17mm,text width=40mm,align=center,inner sep=1pt},
+  arrow/.style={-{Stealth[length=3mm]},line width=0.9pt,color=darkaccent}
+]
+\node (start) [startstop] {Даны натуральные числа $a>b>0$};
+\node (divide) [process,below=of start] {Разделите $a$ на $b$ с остатком: $a=bq+r$};
+\node (zero) [decision,below=14mm of divide] {$r=0$?};
+\node (replace) [process,below=14mm of zero] {Замените пару $(a,b)$ на $(b,r)$};
+\node (finish) [startstop,right=18mm of zero] {$\nodr$ равен текущему $b$};
+
+\draw[arrow] (start) -- (divide);
+\draw[arrow] (divide) -- (zero);
+\draw[arrow] (zero) -- node[right,font=\small]{нет} (replace);
+\draw[arrow] (replace.west) -- ++(-18mm,0) |- (divide.west);
+\draw[arrow] (zero.east) -- node[above,font=\small]{да} (finish.west);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------- APPLICATIONS ----------
+\section*{5. Прикладная задача на НОД: максимальный квадрат}
+\sectionrule
+Прямоугольник $96\times72$ см нужно покрыть одинаковыми максимально крупными квадратами без обрезков.
+
+Сторона такого квадрата:
+\[
+\nodr(96,72)=24\text{ см}.
+\]
+Количество квадратов:
+\[
+\frac{96}{24}\cdot\frac{72}{24}=4\cdot3=12.
+\]
+
+\key{Сигнал НОД:} слова «максимально крупные одинаковые», «разделить без остатка», «наибольшее число одинаковых наборов».
+
+\section*{6. Как связаны НОД и НОК}
+\sectionrule
+Для положительных натуральных чисел $a$ и $b$:
+\[
+\nodr(a,b)\cdot\nokr(a,b)=a\cdot b.
+\]
+Отсюда
+\[
+\boxed{\nokr(a,b)=\frac{a\cdot b}{\nodr(a,b)}}.
+\]
+
+\textbf{Пример.} Автобусы приходят каждые 24 и 36 минут. Найдём момент следующего совпадения:
+\[
+\nodr(24,36)=12,
+\qquad
+\nokr(24,36)=\frac{24\cdot36}{12}=72.
+\]
+Они снова придут одновременно через 72 минуты.
+
+\section*{7. Как выбрать: НОД или НОК?}
+\sectionrule
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.21\linewidth}X X@{}}
+\toprule
+ & НОД & НОК \\
+\midrule
+Что ищем & максимально возможный общий размер или максимальное число одинаковых групп & минимальный общий момент, длину периода или первое совпадение \\
+Типичные слова & разрезать, разложить поровну, одинаковые наборы, самый большой размер & снова одновременно, через сколько впервые, повторяется, общий цикл \\
+Главный вопрос & «Что должно делить оба числа?» & «Какое наименьшее число кратно обоим?» \\
+\bottomrule
+\end{tabularx}
+
+\vspace{4mm}
+\textbf{Полезная стратегия:} если нужен НОК больших чисел, сначала найдите НОД алгоритмом Евклида, затем используйте формулу связи НОД и НОК.
+
+\section*{8. Частые ошибки}
+\sectionrule
+\begin{itemize}
+  \item В алгоритме Евклида на следующем шаге берут \key{остаток}, а не частное.
+  \item НОД --- это \key{последний ненулевой остаток}, а не ноль.
+  \item Если НОД равен 1, числа взаимно простые; это не означает, что сами числа обязаны быть простыми.
+  \item В задаче с квадратами НОД даёт \key{сторону} квадрата. Для количества квадратов нужно сравнить площади или посчитать число квадратов по каждой стороне.
+  \item В задаче на повторяющиеся события обычно нужен НОК, потому что ищется \key{первое общее кратное времени}.
+  \item В формуле $\nokr(a,b)=ab/\nodr(a,b)$ сначала удобно сократить, а затем умножать: так вычисления проще.
+\end{itemize}
+
+\clearpage
+% ---------- TRAINING ----------
+\section*{Тренировочный блок --- Путь А}
+\sectionrule
+\textbf{10 заданий.} Решайте по нарастающей сложности. В заданиях на НОД используйте алгоритм Евклида.
+
+\begin{enumerate}
+  \item Найдите $\nodr(84,30)$.
+  \item Найдите $\nodr(252,198)$.
+  \item Найдите $\nodr(2026,748)$.
+  \item Являются ли числа 1000 и 37 взаимно простыми? Обоснуйте ответ через НОД.
+  \item Сократите дробь $\dfrac{391}{299}$ до несократимого вида.
+  \item Сократите дробь $\dfrac{132}{198}$ до несократимого вида.
+  \item Прямоугольную площадку размером $168\times126$ см нужно покрыть одинаковыми максимально крупными квадратными плитками без подрезки. Найдите сторону плитки и количество плиток.
+  \item Из 84 красных и 126 белых тюльпанов составляют максимально возможное число одинаковых букетов, используя все цветы. Сколько получится букетов? Сколько красных и белых тюльпанов будет в каждом букете?
+  \item Два световых сигнала повторяются через каждые 90 с и 126 с. Сейчас они сработали одновременно. Через сколько секунд они впервые снова сработают одновременно? Ответ также запишите в минутах и секундах.
+  \item Два рулона ленты длиной 840 см и 660 см нужно разрезать без остатка на одинаковые куски максимально возможной длины. Найдите длину одного куска и общее количество получившихся кусков.
+\end{enumerate}
+
+\clearpage
+% ---------- ANSWERS ----------
+\section*{Ответы}
+\sectionrule
+\begin{longtable}{@{}>{\bfseries}p{14mm}p{0.78\linewidth}@{}}
+\toprule
+№ & Ответ \\
+\midrule
+\endfirsthead
+\toprule
+№ & Ответ \\
+\midrule
+\endhead
+1 & $6$ \\
+2 & $18$ \\
+3 & $2$ \\
+4 & Да, взаимно простые: $\nodr(1000,37)=1$. \\
+5 & $\dfrac{17}{13}$ \\
+6 & $\dfrac{2}{3}$ \\
+7 & Сторона плитки $42$ см; всего $12$ плиток. \\
+8 & $42$ букета; в каждом по 2 красных и 3 белых тюльпана. \\
+9 & $630$ с $=10$ мин $30$ с. \\
+10 & Длина куска $60$ см; всего $25$ кусков. \\
+\bottomrule
+\end{longtable}
+
+\vfill
+\begin{center}
+\small\textcolor{darkaccent}{Лёвин Артём Александрович эксклюзивно для Нади Клименко}
+\end{center}
+
+\end{document}
