@@ -72,6 +72,28 @@ const lesson2509SectionByTitle = new Map([
   ["Контроль размерности результата","#method"]
 ]);
 
+const lesson2909Level2Titles = new Set([
+  "Проценты как числовые множители",
+  "Формулы процентов и концентраций",
+  "Смеси и сплавы",
+  "Растворы и концентрации",
+  "Проценты и последовательные изменения",
+  "Моделирование условия системой уравнений"
+]);
+const lesson2909EvidenceTitles = new Set([
+  ...lesson2909Level2Titles,
+  "Моделирование условия уравнением"
+]);
+const lesson2909SectionByTitle = new Map([
+  ["Проценты как числовые множители","#percent"],
+  ["Формулы процентов и концентраций","#model"],
+  ["Смеси и сплавы","#cases"],
+  ["Растворы и концентрации","#mixing"],
+  ["Проценты и последовательные изменения","#percent"],
+  ["Моделирование условия уравнением","#algorithm"],
+  ["Моделирование условия системой уравнений","#algorithm"]
+]);
+
 const evidence0809={date:'08.09.26',text:'Тема явно отработана в чек-листе и web-конспекте занятия 08.09.26 «Степени, корни и приведение к единому степенному виду».',web:'08.09.26.html',pdf:'../pdf_docs/08.09.26.pdf',tex:'../tex_docs/08.09.26.tex'};
 const evidence1109={date:'11.09.26',text:'Навык закреплён в чек-листе и интерактивном занятии 11.09.26 «Степенные преобразования и показательные уравнения».',web:'11.09.26.html',pdf:'../pdf_docs/11.09.26.pdf',tex:'../tex_docs/11.09.26.tex'};
 const evidence1509={date:'15.09.26',text:'Навык применён в прикладных задачах со степенями: перевод условия в формулу, факторизация, работа с порядком десятки, дробной и отрицательной степенью и проверка смысла ответа.',web:'15.09.26.html',lab:'15.09.26-lab.html',pdf:'../pdf_docs/15.09.26.pdf',tex:'../tex_docs/15.09.26.tex'};
@@ -85,6 +107,13 @@ const evidence2509For=(title,level)=>({
   web:`25.09.26.html${lesson2509SectionByTitle.get(title)||''}`,
   pdf:'../pdf_docs/25.09.26.pdf',
   tex:'../tex_docs/25.09.26.tex'
+});
+const evidence2909For=(title)=>({
+  date:'29.09.26',
+  text:'Навык представлен и отработан в материале 29.09.26 по смесям, растворам и процентам. Отдельная фиксация полностью самостоятельного выполнения в источнике отсутствует, поэтому новые темы отмечены консервативно на уровне «с опорой».',
+  web:`29.09.26.html${lesson2909SectionByTitle.get(title)||''}`,
+  pdf:'../pdf_docs/29.09.26.pdf',
+  tex:'../tex_docs/29.09.26.tex'
 });
 
 const groups=groupDefs.map((def,groupIndex)=>{
@@ -106,10 +135,13 @@ const groups=groupDefs.map((def,groupIndex)=>{
       const isVectorSupport=number===2&&vectorSupportTitles.has(title);
       const isLesson2509Level3=(number===11||number===10)&&lesson2509Level3Titles.has(title);
       const isLesson2509Level2=(number===11||number===10)&&lesson2509Level2Titles.has(title);
+      const isLesson2909Level2=(number===8||number===10||number===11)&&lesson2909Level2Titles.has(title);
+      const hasLesson2909Evidence=(number===8||number===10||number===11)&&lesson2909EvidenceTitles.has(title);
 
       const level=isMasteredPower?4:
         isLesson2509Level3?3:
         isLesson2509Level2?2:
+        isLesson2909Level2?2:
         isVectorSkill?3:
         isPowerSkill?3:
         isLesson1909Power?3:
@@ -128,6 +160,7 @@ const groups=groupDefs.map((def,groupIndex)=>{
       if(isVectorSkill||isVectorSupport) evidence.push({...evidence2209});
       if(isLesson2509Level3) evidence.push(evidence2509For(title,3));
       if(isLesson2509Level2) evidence.push(evidence2509For(title,2));
+      if(hasLesson2909Evidence) evidence.push(evidence2909For(title));
 
       const id=`${groupId}_${String(itemIndex+1).padStart(3,'0')}`;
       return{
@@ -148,7 +181,7 @@ window.COMPETENCY_MAP_DATA={
     teacher:'Лёвин Артём Александрович',
     program:'подготовка к ЕГЭ по профильной математике',
     examVersion:'проект ЕГЭ-2027',
-    updated:'25.09.26',
+    updated:'29.09.26',
     sourceNote:'Структура актуализирована по проектам документов ФИПИ ЕГЭ-2027; подтверждённые уровни уточняются по материалам занятий.'
   },
   storage:{
@@ -157,6 +190,7 @@ window.COMPETENCY_MAP_DATA={
     theme:'ekaterina_gnedkova-ege_profile_2027-theme'
   },
   materials:[
+    {date:'29.09.26',title:'Смеси, растворы и проценты',summary:'Баланс массы компонента, растворы и сплавы, вода и чистое вещество, высушивание, процентные коэффициенты и системы уравнений.',web:'29.09.26.html',pdf:'../pdf_docs/29.09.26.pdf',tex:'../tex_docs/29.09.26.tex'},
     {date:'25.09.26',title:'Текстовые задачи',summary:'Табличный метод: движение навстречу и вдогонку, круговая трасса, река, средняя скорость, протяжённые тела, производительность и перевод условия в уравнение.',web:'25.09.26.html',pdf:'../pdf_docs/25.09.26.pdf',tex:'../tex_docs/25.09.26.tex'},
     {date:'22.09.26',title:'Векторы',summary:'Координаты и длина вектора, действия и линейная комбинация, скалярное произведение, угол, перпендикулярность и геометрическое сложение.',web:'22.09.26.html',tex:'../tex_docs/22.09.26.tex'},
     {date:'19.09.26',title:'Степени и показательная функция',summary:'Свойства степеней, стандартный вид числа, прикладные степенные зависимости, показательная функция и метод узловых точек.',web:'19.09.26.html',lab:'19.09.26-lab.html',pdf:'../pdf_docs/19.09.26.pdf',tex:'../tex_docs/19.09.26.tex'},
