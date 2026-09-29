@@ -23,7 +23,12 @@ for(const file of siteIndexes){
   const absolute=path.join(root,file);
   const dir=path.dirname(absolute);
   const html=fs.readFileSync(absolute,'utf8');
-  const isSharedDashboard=['dashboard.js','lesson-registry.js','competence-config.js'].every(name=>fs.existsSync(path.join(dir,name)));
+  const isSharedDashboard=/<script[^>]+src=["'][^"']*dashboard\\.js(?:\\?[^"']*)?["']/i.test(html);
+  if(isSharedDashboard){
+    for(const name of ['dashboard.js','lesson-registry.js','competence-config.js']){
+      assert.ok(fs.existsSync(path.join(dir,name)),`${file}: shared dashboard is missing ${name}`);
+    }
+  }
   const isChemistry=file.includes('/chemistry/');
   const isPracticeAdapter=!isSharedDashboard&&[
     'id="practiceSection"',
