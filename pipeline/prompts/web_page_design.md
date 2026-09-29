@@ -12,7 +12,53 @@ TEACHER=Лёвин Артём Александрович
 
 Этот prompt задаёт архитектуру проектирования, реализации и проверки учебной web-страницы. Его цель — сохранять уже сложившийся академический, персональный и премиальный характер страниц учеников, одновременно снижая шаблонность и типичные признаки AI-generated UI.
 
+
 ---
+
+## 0. Production workflow contract
+
+Этот prompt является частью production workflow. Создание кабинета и публикация занятия должны проходить через канонические scripts репозитория.
+
+### Новый ученик
+
+Если `students/STUDENT/site/index.html` ещё не существует, первоначальный каркас кабинета создавать только через:
+
+```bash
+node scripts/create-student.mjs STUDENT --name "ФИО ученика" --grade "класс/уровень" --program "программа"
+```
+
+Scaffolder атомарно создаёт обязательные LEVIN / ATLAS artifacts (`site/index.html`, `site/design.json`) и обновляет `design-system/STUDENT_ROSTER.md`.
+
+Запрещено вручную создавать первоначальные `index.html`, `design.json` или строку roster в обход scaffolder. Если scaffolder отклоняет существующий или неполный кабинет, сначала установить причину и восстановить контракт; не маскировать ошибку ручным набором недостающих файлов.
+
+### Публикация занятия
+
+После создания `DATE.html`, опционального `DATE-lab.html` и применимого обновления `index.html` обязательно выполнить:
+
+```bash
+node scripts/publish-lesson.mjs STUDENT DATE
+```
+
+Допустимые DATE: `DD.MM.YY` или `YYYY-MM-DD`.
+
+Для registry-backed кабинета helper является единственным production path для регистрации занятия:
+- идемпотентно upsert'ит `lesson-registry.js`;
+- сохраняет уже существующие rich metadata (`topics`, `outcomes`, навигационные подписи);
+- добавляет реально существующие PDF / TeX / lab refs;
+- синхронизирует cache-busting импорта registry в `dashboard.js`;
+- проверяет registry ↔ filesystem parity и применимые regression gates;
+- при failure откатывает собственные записи.
+
+Не редактировать `lesson-registry.js` и его cache-busting вручную в обычном workflow публикации.
+
+Для bespoke кабинета без `lesson-registry.js` сначала обновить существующий `index.html` в его текущей архитектуре. Publish helper проверяет, что index действительно содержит ссылку на `DATE.html`.
+
+Если publish helper завершился ошибкой, занятие считать непубликованным до устранения причины.
+
+### Stage 04
+
+Если для ученика применим Stage 04 и подготовлен analysis artifact, запускать Stage 04 после базовой публикации. Stage 04 и publish helper используют общий writer `pipeline/lessons/lesson-registry.mjs`, поэтому алгоритм upsert реестра должен оставаться единым.
+
 
 ## 1. Главная задача
 
@@ -833,13 +879,27 @@ DATE.html и DATE-lab.html должны оставаться переносим�
 
 ## 28. Обновление STUDENT_DIR/index.html
 
-После создания занятия обновить STUDENT_DIR/index.html.
+После создания занятия определить архитектуру кабинета.
 
-Сначала изучить существующий index.html и `design-system/REFERENCE_DARYA.md`.
+### Registry-backed кабинет
+
+Если существует `STUDENT_DIR/lesson-registry.js`, список последних/архивных занятий должен оставаться производным от registry. Не добавлять вручную дублирующую lesson metadata в index/dashboard.
+
+После реализации страницы запустить:
+
+```bash
+node scripts/publish-lesson.mjs STUDENT DATE
+```
+
+Helper регистрирует занятие и проверяет parity.
+
+### Bespoke кабинет
+
+Если `lesson-registry.js` отсутствует, изучить существующий `index.html` и `design-system/REFERENCE_DARYA.md`, затем обновить index в его текущей архитектуре.
 
 Новый блок должен наследовать дизайн index.html. Если задача включает полный redesign index.html, использовать Дарью как reference grammar/quality bar и сохранить минимум три отличающиеся expression axes. Не переносить туда насильно palette или композицию DATE.html.
 
-Добавить:
+Добавить только применимые элементы:
 - тему;
 - дату;
 - краткое образовательное описание;
@@ -849,6 +909,9 @@ DATE.html и DATE-lab.html должны оставаться переносим�
 - TeX при наличии, если это принято на текущей странице.
 
 Не менять другие карточки, тепловую карту и общую навигацию без необходимости.
+
+После изменения index также запустить `node scripts/publish-lesson.mjs STUDENT DATE`: helper подтверждает, что bespoke index действительно зарегистрировал новую страницу.
+
 
 ---
 
@@ -1013,30 +1076,38 @@ DATE.html и DATE-lab.html должны оставаться переносим�
 
 ## 33. Порядок выполнения задачи
 
-1. Прочитать исходное пособие и чек-лист.
-2. Выполнить context scan.
-3. Определить учебную структуру.
-4. Определить необходимость лаборатории.
-5. Выбрать aesthetic direction.
-6. Зафиксировать минимум три оси отличия от Darya reference.
-7. Определить, какие living-atlas primitives действительно нужны: route rail, Navigator, coordinate field, parallax, cross-highlight.
-8. Зафиксировать semantic tokens и visual hierarchy.
-9. Спроектировать страницу без generic AI defaults.
-10. Создать DATE.html.
-11. Создать DATE-lab.html только при реальной необходимости.
-12. Реализовать MathML и визуализации.
-13. Реализовать интерактивность.
-14. Реализовать quiz и самопроверку.
-15. Реализовать responsive и print.
+1. Синхронизироваться с актуальным main и определить, существует ли student scaffold.
+2. Если кабинета ещё нет — создать его только через `scripts/create-student.mjs`.
+3. Прочитать исходное пособие и чек-лист.
+4. Выполнить context scan.
+5. Определить учебную структуру.
+6. Определить необходимость лаборатории.
+7. Выбрать aesthetic direction.
+8. Зафиксировать минимум три оси отличия от Darya reference.
+9. Определить, какие living-atlas primitives действительно нужны: route rail, Navigator, coordinate field, parallax, cross-highlight.
+10. Зафиксировать semantic tokens и visual hierarchy.
+11. Спроектировать страницу без generic AI defaults.
+12. Создать DATE.html.
+13. Создать DATE-lab.html только при реальной необходимости.
+14. Реализовать MathML, визуализации и интерактивность.
+15. Реализовать quiz, самопроверку, responsive и print.
 16. Подключить только существующие локальные материалы.
-17. Обновить STUDENT_DIR/index.html в его текущем стиле.
-18. Выполнить Objective UX/UI gates.
-19. Выполнить Anti-slop audit и screenshot review.
-20. Исправить найденные дефекты.
-21. Повторить затронутые gates.
-22. Проверить итоговый diff.
-23. Commit / push / PR / merge.
-24. Подготовить отчёт.
+17. Для bespoke кабинета обновить STUDENT_DIR/index.html; registry-backed index не дублировать вручную.
+18. Выполнить `node scripts/publish-lesson.mjs STUDENT DATE` и устранить все publication-contract failures.
+19. Если применим Stage 04 — выполнить его после базовой публикации и проверить zero unexpected drift.
+20. Выполнить Objective UX/UI gates.
+21. Выполнить Anti-slop audit и screenshot review.
+22. Исправить найденные дефекты.
+23. Повторить затронутые gates и publication helper при изменении publication artifacts.
+24. Проверить итоговый diff.
+25. Commit / push / PR.
+26. Дождаться успешных применимых CI checks; при failure установить root cause и исправить.
+27. Merge в main.
+28. Проверить post-merge CI на merge commit.
+29. Подготовить отчёт.
+
+Нельзя заявлять READY / опубликовано, если обязательный scaffolder/publish contract или применимый CI gate завершился ошибкой.
+
 
 ---
 
@@ -1060,6 +1131,9 @@ DATE.html и DATE-lab.html должны оставаться переносим�
 - результаты responsive проверки;
 - результаты accessibility проверки;
 - результат anti-slop audit: READY / REWORK / BLOCKED;
+- использовался ли scaffolder и его результат, если создавался новый кабинет;
+- результат `scripts/publish-lesson.mjs`, режим публикации и изменённые им файлы;
+- результат Stage 04, если он применим;
 - какие findings были исправлены;
 - какие проверки остались NOT VERIFIED и почему;
 - commit SHA;
