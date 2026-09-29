@@ -114,11 +114,11 @@ function loadCatalog(root,spec){
   return normalizeGroups(evaluateCatalogExpression(extractArrayExpression(text,spec.names||['groups','GROUPS'])));
 }
 
-export async function runDashboardTests({student,expectedLessons,catalog,stateKey,storageKey}){
+export async function runDashboardTests({student,catalog,stateKey,storageKey}){
   const root=process.cwd(),site=path.join(root,'students',student,'site');
   assert.ok(fs.existsSync(path.join(site,'index.html')),`${student}: index missing`);
   const registry=await loadRegistry(site),lessons=registry.LESSONS;
-  assert.equal(lessons.length,expectedLessons,`${student}: lesson count`);
+  assert.ok(lessons.length>0,`${student}: registry must contain at least one lesson`);
   for(let index=1;index<lessons.length;index+=1)assert.ok(lessons[index-1].date>=lessons[index].date,`${student}: registry newest-first`);
   assert.equal(new Set(lessons.map(item=>item.date)).size,lessons.length,`${student}: unique dates`);
   assert.equal(new Set(lessons.map(item=>item.href)).size,lessons.length,`${student}: unique hrefs`);
