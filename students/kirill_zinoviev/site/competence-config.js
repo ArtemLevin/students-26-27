@@ -1,6 +1,6 @@
 (()=>{
 const groups=window.KIRILL_GRADE7_GROUPS||[];
-const teacherMastery={fractions_16:3,rational_8:3,expr_5:3,percent_12:3};
+const teacherMastery={fractions_16:3,rational_8:3,expr_5:3,expr_6:3,expr_7:3,expr_8:3,percent_12:3,equations_4:3,equations_5:3,equations_7:3,equations_8:3};
 const lessons=[
 {date:'08.08.26',href:'08.08.26.html',ids:window.KIRILL_GRADE7_EVIDENCE||[]},
 {date:'12.08.26',href:'12.08.26.html',ids:['percent_8','percent_9','percent_11','percent_12','percent_14','models_12']},
@@ -15,7 +15,8 @@ const lessons=[
 {date:'12.09.26',href:'12.09.26.html',ids:['expr_5','expr_6','expr_7','expr_8','expr_11','percent_3','percent_4','percent_11','percent_12','percent_13','models_12']},
 {date:'16.09.26',href:'16.09.26.html',ids:['functions_4','functions_6','functions_14','models_6','models_14']},
 {date:'19.09.26',href:'19.09.26.html',ids:['percent_1','percent_2','equations_12','models_1','models_2','models_3','models_4','models_6','models_14','geo_reason_1','geo_reason_2']},
-{date:'23.09.26',href:'23.09.26.html',ids:['expr_5','expr_6','expr_7','expr_8','equations_1','equations_2']}
+{date:'23.09.26',href:'23.09.26.html',ids:['expr_5','expr_6','expr_7','expr_8','equations_1','equations_2']},
+{date:'30.09.26',href:'30.09.26.html',ids:['expr_6','expr_7','expr_8','equations_2','equations_4','equations_5','equations_7','equations_8','equations_12','models_3']}
 ];
 const teacherSeed={},evidence={};
 for(const lesson of lessons)for(const id of lesson.ids){teacherSeed[id]=Math.max(teacherSeed[id]||0,2);evidence[id]={text:`Тема подтверждена материалом занятия ${lesson.date}.`,href:lesson.href};}
