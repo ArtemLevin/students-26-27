@@ -1,0 +1,362 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{2E6F70}
+\definecolor{darkaccent}{HTML}{214F50}
+\definecolor{textgray}{HTML}{2F3437}
+\definecolor{softgray}{HTML}{6B7478}
+\definecolor{linegray}{HTML}{D9DEDF}
+
+\setlength{\headheight}{25pt}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\setlist[itemize]{leftmargin=1.45em,itemsep=0.25em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.75em,itemsep=0.55em,topsep=0.4em}
+\renewcommand{\arraystretch}{1.32}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{softgray}Ксения Клыкова}
+\fancyhead[R]{\small\color{softgray}30.09.26}
+\fancyfoot[C]{\small\color{softgray}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{linegray}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\sectiontitle}[1]{%
+  \vspace{0.55em}%
+  {\Large\bfseries\color{darkaccent}#1}\par
+  \vspace{0.25em}\color{linegray}\hrule\color{textgray}\vspace{0.45em}
+}
+\newcommand{\subhead}[1]{{\bfseries\color{accent}#1}}
+\newcommand{\checkline}[1]{\item[$\square$] #1}
+\newcommand{\important}[1]{\textbf{\color{darkaccent}#1}}
+
+\tikzset{
+  flowstart/.style={ellipse, draw=accent, line width=0.9pt, text width=6.2cm,
+    minimum height=1.0cm, align=center, fill=accent!5, font=\small},
+  flowact/.style={rounded corners=4pt, rectangle, draw=accent, line width=0.9pt,
+    text width=7.6cm, minimum height=1.1cm, align=center, fill=accent!3, font=\small},
+  flowcond/.style={diamond, aspect=2.25, draw=darkaccent, line width=0.9pt,
+    text width=4.8cm, align=center, fill=accent!4, inner sep=1.2pt, font=\small},
+  flowarrow/.style={-{Stealth[length=3.2mm,width=2.1mm]}, line width=0.9pt, draw=darkaccent},
+  flowlabel/.style={font=\small\bfseries, text=darkaccent, fill=white, inner sep=1.5pt}
+}
+
+\begin{document}
+\color{textgray}
+
+% ---------- Title page ----------
+\thispagestyle{empty}
+\begin{center}
+\vspace*{2.4cm}
+{\small\color{softgray}\MakeUppercase{математика}}\\[1.1cm]
+{\Huge\bfseries\color{darkaccent}Чек-лист}\\[0.45cm]
+{\LARGE\bfseries Поиск рациональных корней многочлена}\\[0.28cm]
+{\Large Теорема Безу и схема Горнера}\\[1.35cm]
+
+{\large Ксения Клыкова}\\[0.45cm]
+{\normalsize 30 сентября 2026 г.}\\[1.5cm]
+
+\begin{minipage}{0.72\textwidth}
+\centering
+\color{softgray}
+Корень многочлена $\longleftrightarrow$ линейный множитель $\longleftrightarrow$ нулевой остаток.\\[0.35cm]
+Схема Горнера позволяет быстро проверить кандидата и одновременно понизить степень многочлена.
+\end{minipage}
+\end{center}
+
+\vfill
+\begin{center}
+{\small\color{darkaccent}Лёвин Артём Александрович эксклюзивно для Ксении Клыковой}
+\end{center}
+\vspace{0.6cm}
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent!60,line width=1.15pt]
+    ($(current page.south west)+(1.5cm,1.15cm)$)
+    .. controls ($(current page.south west)+(6.0cm,2.0cm)$)
+    and ($(current page.south east)+(-6.0cm,0.25cm)$)
+    .. ($(current page.south east)+(-1.5cm,1.15cm)$);
+\end{tikzpicture}
+\clearpage
+
+% ---------- Main checklist ----------
+\sectiontitle{1. Теорема Безу: как узнать линейный множитель}
+
+Для любого многочлена $P(x)$ при делении на $x-a$ остаток равен $P(a)$:
+\[
+P(x)=(x-a)Q(x)+P(a).
+\]
+Отсюда следует главный критерий:
+\[
+\boxed{\;P(a)=0\quad\Longleftrightarrow\quad x-a\text{ является делителем }P(x).\;}
+\]
+
+\begin{itemize}
+  \checkline{Если Вы нашли число $a$ и получили $P(a)=0$, то $a$ --- корень уравнения $P(x)=0$.}
+  \checkline{Одновременно можно вынести множитель $x-a$ и перейти к многочлену степени на единицу меньше.}
+  \checkline{Если $P(a)\ne0$, число $a$ не является корнем; оно остаётся только проверенным кандидатом.}
+\end{itemize}
+
+\subhead{Пример.} Пусть
+\[
+P(x)=x^3-2x^2+3x-2.
+\]
+Проверяем $x=1$:
+\[
+P(1)=1-2+3-2=0.
+\]
+Значит, $x-1$ --- множитель. После деления получаем
+\[
+P(x)=(x-1)(x^2-x+2).
+\]
+Для квадратного множителя $D=1-8=-7<0$, поэтому над действительными числами исходное уравнение имеет единственный корень $x=1$.
+
+\sectiontitle{2. Где искать рациональные корни}
+
+Пусть
+\[
+P(x)=a_nx^n+a_{n-1}x^{n-1}+\dots+a_1x+a_0,
+\]
+где все коэффициенты целые. Если несократимая дробь
+\[
+r=\frac{p}{q},\qquad \gcd(p,q)=1,
+\]
+является рациональным корнем, то
+\[
+\boxed{p\mid a_0,\qquad q\mid a_n.}
+\]
+
+\begin{itemize}
+  \checkline{Для приведённого многочлена ($a_n=1$) рациональный корень обязан быть целым делителем свободного члена $a_0$.}
+  \checkline{Выписывайте делители со знаками $\pm$.}
+  \checkline{Для неприведённого многочлена учитывайте знаменатели --- делители старшего коэффициента.}
+  \checkline{Список кандидатов содержит возможные корни. Каждый кандидат всё равно нужно проверить.}
+\end{itemize}
+
+\subhead{Пример.} Для
+\[
+2x^3-3x^2-8x+12=0
+\]
+числитель рационального корня делит $12$, а знаменатель делит $2$. После сокращения кандидаты:
+\[
+\pm\frac12,\ \pm1,\ \pm\frac32,\ \pm2,\ \pm3,\ \pm4,\ \pm6,\ \pm12.
+\]
+
+\sectiontitle{3. Схема Горнера}
+
+Схема Горнера одновременно выполняет две задачи:
+\begin{itemize}
+  \item вычисляет $P(a)$;
+  \item если $P(a)=0$, даёт коэффициенты частного $P(x):(x-a)$.
+\end{itemize}
+
+\subhead{Правило.} Выпишите коэффициенты по убыванию степеней. Первый коэффициент снесите вниз. Затем повторяйте цикл
+\[
+\text{умножить на }a\;\longrightarrow\;\text{прибавить следующий коэффициент}.
+\]
+Последнее число --- остаток $P(a)$; остальные полученные числа --- коэффициенты частного.
+
+\subhead{Пример.} Разделим
+\[
+P(x)=x^3-x^2+4x+6
+\]
+на $x+1=x-(-1)$.
+
+\begin{center}
+\begin{tabular}{c@{\hspace{1.1cm}}rrrr}
+ & $1$ & $-1$ & $4$ & $6$\\
+$-1$ &   & $-1$ & $2$ & $-6$\\
+\midrule
+ & $1$ & $-2$ & $6$ & $0$
+\end{tabular}
+\end{center}
+
+Следовательно,
+\[
+P(x)=(x+1)(x^2-2x+6),
+\]
+а нулевой остаток подтверждает, что $x=-1$ --- корень.
+
+\sectiontitle{4. Пропущенная степень означает нулевой коэффициент}
+
+Перед схемой Горнера степени должны идти подряд. Если некоторой степени нет, впишите для неё коэффициент $0$.
+
+\subhead{Пример.}
+\[
+x^3-3x+2=x^3+0x^2-3x+2,
+\]
+поэтому строка коэффициентов имеет вид
+\[
+1,\ 0,\ -3,\ 2.
+\]
+Для $a=1$ схема Горнера даёт
+\[
+1,\ 1,\ -2,\ 0,
+\]
+то есть
+\[
+x^3-3x+2=(x-1)(x^2+x-2)=(x-1)^2(x+2).
+\]
+
+\sectiontitle{5. Что важно контролировать}
+
+\begin{itemize}
+  \checkline{Не перепутать корень $a$ и делитель $x-a$: корню $-1$ соответствует множитель $x+1$.}
+  \checkline{Не забыть нулевые коэффициенты при пропущенных степенях.}
+  \checkline{Не считать кандидата корнем до проверки: нужен нулевой остаток.}
+  \checkline{В схеме Горнера сначала умножаем, затем складываем.}
+  \checkline{После понижения степени решить полученный многочлен до конца.}
+  \checkline{Для дробного кандидата использовать несократимую дробь $p/q$ и условие $p\mid a_0$, $q\mid a_n$.}
+  \checkline{Если после деления тот же корень снова обращает частное в ноль, корень кратный.}
+\end{itemize}
+
+\sectiontitle{6. Самопроверка}
+\begin{itemize}
+  \checkline{Я умею по значению $P(a)$ определить, является ли $a$ корнем.}
+  \checkline{Я умею перейти от корня $a$ к множителю $x-a$.}
+  \checkline{Я умею выписать целые и рациональные кандидаты на корни.}
+  \checkline{Я умею выполнить схему Горнера без пропуска нулевых коэффициентов.}
+  \checkline{Я умею восстановить частное по строке Горнера и решить оставшееся уравнение.}
+\end{itemize}
+
+% ---------- Flowchart ----------
+\clearpage
+\thispagestyle{plain}
+\begin{center}
+{\LARGE\bfseries\color{darkaccent}Алгоритм: поиск рационального корня и понижение степени}
+\end{center}
+\vspace{0.8cm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=10mm and 24mm]
+  \node[flowstart] (start) {Дано уравнение $P(x)=0$ с целыми коэффициентами};
+  \node[flowact, below=of start] (cands) {Выпишите кандидатов $r=p/q$:\\ $p\mid a_0$, $q\mid a_n$, дробь $p/q$ несократима};
+  \node[flowact, below=of cands] (pick) {Возьмите очередного кандидата $r$ и выполните схему Горнера};
+  \node[flowcond, below=13mm of pick] (zero) {Последний элемент равен $0$?};
+  \node[flowact, below=14mm of zero] (factor) {Да: $r$ --- корень, $x-r$ --- множитель.\\ Коэффициенты слева дают частное $Q(x)$};
+  \node[flowact, below=of factor] (solve) {Решите $Q(x)=0$. Если степень всё ещё высокая, повторите алгоритм};
+  \node[flowstart, below=of solve] (end) {Запишите полный набор корней};
+  \node[flowact, right=30mm of zero, text width=5.0cm] (next) {Нет: этот кандидат не подходит. Возьмите следующий};
+
+  \draw[flowarrow] (start) -- (cands);
+  \draw[flowarrow] (cands) -- (pick);
+  \draw[flowarrow] (pick) -- (zero);
+  \draw[flowarrow] (zero) -- node[flowlabel,left]{да} (factor);
+  \draw[flowarrow] (factor) -- (solve);
+  \draw[flowarrow] (solve) -- (end);
+  \draw[flowarrow] (zero.east) -- node[flowlabel,above]{нет} (next.west);
+  \draw[flowarrow] (next.north) |- ($(pick.east)+(0.5cm,0)$) -- (pick.east);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------- Training block ----------
+\sectiontitle{Тренировочный блок --- Путь А}
+\begingroup
+\small
+\setstretch{1.14}
+\textbf{10 задач.} Решения в этом разделе не приведены. Используйте теорему Безу, список рациональных кандидатов и схему Горнера.
+
+\begin{enumerate}[label=\textbf{\arabic*.},itemsep=0.28em,topsep=0.25em]
+  \item Для многочлена
+  \[
+  P(x)=x^3-5x^2+2x+8
+  \]
+  выпишите все возможные целые корни.
+
+  \item Проверьте, является ли число $2$ корнем многочлена
+  \[
+  P(x)=x^3-3x^2-4x+12.
+  \]
+
+  \item Известно, что $P(-3)=0$. Какой линейный множитель обязательно входит в разложение $P(x)$?
+
+  \item С помощью схемы Горнера разделите
+  \[
+  x^3-x^2+4x+6
+  \]
+  на $x+1$. Укажите частное и остаток.
+
+  \item Для многочлена
+  \[
+  P(x)=x^4-5x^2+4
+  \]
+  запишите полную строку коэффициентов, которую нужно использовать в схеме Горнера.
+
+  \item Решите уравнение
+  \[
+  x^3-4x^2+x+6=0,
+  \]
+  найдя сначала целый корень, а затем понизив степень схемой Горнера.
+
+  \item Решите уравнение
+  \[
+  x^3-3x+2=0.
+  \]
+  Обратите внимание на пропущенную степень и кратность одного из корней.
+
+  \item Для уравнения
+  \[
+  2x^3-3x^2-8x+12=0
+  \]
+  выпишите все различные рациональные кандидаты на корни в сокращённом виде.
+
+  \item Решите уравнение
+  \[
+  2x^3+x^2-8x-4=0.
+  \]
+  Среди корней есть дробное число.
+
+  \item Решите уравнение
+  \[
+  x^4-5x^2+4=0,
+  \]
+  последовательно понижая степень схемой Горнера после нахождения каждого подходящего целого корня.
+\end{enumerate}
+\endgroup
+
+\clearpage
+
+% ---------- Answers ----------
+\sectiontitle{Ответы}
+\begin{longtable}{@{}p{0.08\linewidth}p{0.84\linewidth}@{}}
+\toprule
+\textbf{№} & \textbf{Ответ}\\
+\midrule
+\endhead
+1 & $\pm1,\ \pm2,\ \pm4,\ \pm8$.\\
+2 & Да, так как $P(2)=0$.\\
+3 & $x+3$.\\
+4 & Частное $x^2-2x+6$, остаток $0$.\\
+5 & $1,\ 0,\ -5,\ 0,\ 4$.\\
+6 & $x=-1,\ 2,\ 3$.\\
+7 & $x=-2$ и $x=1$; корень $x=1$ имеет кратность $2$.\\
+8 & $\pm\frac12,\ \pm1,\ \pm\frac32,\ \pm2,\ \pm3,\ \pm4,\ \pm6,\ \pm12$.\\
+9 & $x=-2,\ -\frac12,\ 2$.\\
+10 & $x=-2,\ -1,\ 1,\ 2$.\\
+\bottomrule
+\end{longtable}
+
+\vfill
+\begin{center}
+{\small\color{softgray}Лёвин Артём Александрович эксклюзивно для Ксении Клыковой}
+\end{center}
+
+\end{document}
