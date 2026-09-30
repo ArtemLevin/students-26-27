@@ -11,7 +11,7 @@
     'stereo_09','stereo_10','stereo_11','stereo_12','stereo_13','stereo_14','stereo_16','stereo_18'
   ];
   const currentIds = [
-    'calc_05','calc_15',
+    'calc_05','calc_09','calc_10','calc_15',
     'eq_02','eq_20',
     'ineq_02','ineq_03','ineq_04','ineq_05','ineq_23','ineq_24',
     'func_09',
@@ -32,6 +32,8 @@
   });
   const lessonAnchor = {
     calc_05: 'read',
+    calc_09: 'extra',
+    calc_10: 'extra',
     calc_15: 'read',
     eq_02: 'quadratic',
     eq_20: 'domain',
