@@ -11,7 +11,7 @@
     'stereo_09','stereo_10','stereo_11','stereo_12','stereo_13','stereo_14','stereo_16','stereo_18'
   ];
   const currentIds = [
-    'calc_05','calc_15',
+    'calc_05','calc_09','calc_10','calc_15',
     'eq_02','eq_20',
     'ineq_02','ineq_03','ineq_04','ineq_05','ineq_23','ineq_24',
     'func_09',
@@ -20,7 +20,6 @@
 
   data.baselineLevels = {};
   oldIds.forEach((id) => { data.baselineLevels[id] = 2; });
-  currentIds.forEach((id) => { data.baselineLevels[id] = 2; });
 
   data.evidence = {};
   oldIds.forEach((id) => {
@@ -31,10 +30,30 @@
       tex: '../tex_docs/17.09.26.tex'
     };
   });
+  const lessonAnchor = {
+    calc_05: 'read',
+    calc_09: 'extra',
+    calc_10: 'extra',
+    calc_15: 'read',
+    eq_02: 'quadratic',
+    eq_20: 'domain',
+    ineq_02: 'intervals',
+    ineq_03: 'intervals',
+    ineq_04: 'intervals',
+    ineq_05: 'intervals',
+    ineq_23: 'intervals',
+    ineq_24: 'intervals',
+    func_09: 'intervals',
+    text_15: 'border',
+    text_17: 'border',
+    text_21: 'domain',
+    text_22: 'domain'
+  };
   currentIds.forEach((id) => {
     data.evidence[id] = {
-      text: 'Навык отрабатывался на занятии 30.09.2026: прикладные формулы, границы, квадратные уравнения, метод интервалов и отбор ответа по смыслу.',
+      text: 'Навык затрагивался на занятии 30.09.2026. Диагностический уровень автоматически не повышается без подтверждения самостоятельности.',
       date: '30.09.2026',
+      lesson: `30.09.26.html#${lessonAnchor[id]}`,
       href: '../pdf_docs/30.09.26.pdf',
       tex: '../tex_docs/30.09.26.tex'
     };
