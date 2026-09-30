@@ -17,7 +17,7 @@ let reps=new Set(Array.isArray(read(RK,[]))?read(RK,[]):[]),filter='all',q='',ac
 const save=()=>{localStorage.setItem(LK,JSON.stringify(levels));localStorage.setItem(RK,JSON.stringify([...reps]))};
 const level=id=>Number.isInteger(+levels[id])&&+levels[id]>=0&&+levels[id]<=4?+levels[id]:(Number.isInteger(+BASE[id])?+BASE[id]:0);
 const status=id=>(reps.has(id)||BREP.has(id))?'repeat':level(id)>0?'covered':'future';
-const statusText=id=>status(id)==='repeat'?'Пора повторить':status(id)==='covered'?'Пройдено':'Ещё впереди';
+const statusText=id=>status(id)==='repeat'?'Пора повторить':status(id)==='covered'?'Диагностировано':'Ещё впереди';
 const allRepeat=()=>new Set([...BREP,...reps]);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 const css=s=>window.CSS?.escape?CSS.escape(s):String(s).replace(/[^a-zA-Z0-9_-]/g,'\\$&');
@@ -82,7 +82,7 @@ function open(id){
   el.dlg.showModal?el.dlg.showModal():el.dlg.setAttribute('open','')
 }
 function stats(){
-  const R=allRepeat(),c=A.filter(x=>level(x.id)>0).length,t=A.filter(x=>level(x.id)>0||R.has(x.id)).length,p=A.length?Math.round(t/A.length*100):0;
+  const R=allRepeat(),c=A.filter(x=>level(x.id)>0).length,p=A.length?Math.round(c/A.length*100):0;
   el.covered.textContent=c;el.coverage.textContent=`${p}%`;el.repeat.textContent=R.size;el.total.textContent=A.length;el.center.textContent=`${p}%`;el.centerTopics.textContent=`${A.length} тем`
 }
 function focus(){
