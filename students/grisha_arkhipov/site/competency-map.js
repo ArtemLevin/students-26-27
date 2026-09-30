@@ -75,7 +75,7 @@ const link=(href,text)=>{const a=document.createElement('a');a.href=href;a.textC
 function open(id){
   const x=M.get(id);if(!x)return;active=id;const lv=level(id),st=status(id),ev=E[id];
   el.dg.textContent=`${x.group.code} · ${x.group.name}`;el.dt.textContent=x.title;el.ds.textContent=statusText(id);el.ds.dataset.status=st;el.dl.textContent=L[lv];el.dd.textContent=x.description;el.dx.textContent=x.diagnostic;el.dm.innerHTML='';
-  if(ev){el.dh.textContent=ev.text;if(ev.href)el.dm.append(link(ev.href,'Открыть PDF'));if(ev.tex)el.dm.append(link(ev.tex,'Открыть TeX'))}
+  if(ev){el.dh.textContent=ev.text;if(ev.lesson)el.dm.append(link(ev.lesson,'Открыть занятие'));if(ev.href)el.dm.append(link(ev.href,'Открыть PDF'));if(ev.tex)el.dm.append(link(ev.tex,'Открыть TeX'))}
   else el.dh.textContent=Object.hasOwn(levels,id)?'Диагностический уровень был изменён вручную на этом устройстве. Подтверждающего материала занятия пока нет.':'Диагностических данных по этой теме пока нет.';
   el.dlg.querySelectorAll('.level-picker button').forEach(b=>{const on=+b.dataset.level===lv;b.classList.toggle('is-selected',on);b.setAttribute('aria-pressed',on?'true':'false')});
   const rep=st==='repeat';el.rt.textContent=rep?'Убрать из повторения':'Добавить в повторение';el.rt.classList.toggle('is-repeat',rep);
