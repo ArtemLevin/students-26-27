@@ -35,10 +35,10 @@
   Object.keys(baselineLevels).forEach((id)=>{evidence[id]={text:'Тема подтверждена материалами занятия 17.09.2026.',date:'17.09.2026',href:'../pdf_docs/17.09.26.pdf',tex:'../tex_docs/17.09.26.tex'};});
   window.COMPETENCY_MAP_DATA={
     student:'grisha_arkhipov',
-    studentName:'Григорий Антипов',
+    studentName:'Григорий Архипов',
     program:'ЕГЭ, профильная математика',
     teacher:'Лёвин Артём Александрович',
-    updated:'17.09.2026',
+    updated:'30.09.2026',
     sourceNote:'Структура охватывает профильную математику ЕГЭ и согласована с актуальной рамкой проектов КИМ ФИПИ 2027.',
     groups,
     baselineLevels,
