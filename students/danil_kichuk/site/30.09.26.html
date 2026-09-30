@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивное занятие Даниила Кичука: степени в задачах прикладного характера, показательные зависимости и работа с готовыми формулами.">
+<title>Степени в задачах прикладного характера · Даниил Кичук</title>
+<style>
+:root{
+  color-scheme:light;
+  --page:#f3efe6;
+  --paper:#fffaf1;
+  --ink:#1f2d36;
+  --muted:#66727a;
+  --line:#d8cfc0;
+  --line-strong:#9f9689;
+  --accent:#9b6329;
+  --accent-2:#315f66;
+  --accent-soft:#f0dfc7;
+  --teal-soft:#dcebea;
+  --danger:#9a4f46;
+  --success:#4d725d;
+  --focus:#0a6d87;
+  --shadow:0 18px 48px rgba(42,37,29,.09);
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#111b22;
+  --paper:#18252e;
+  --ink:#f1eadf;
+  --muted:#b4bec3;
+  --line:#34434b;
+  --line-strong:#6d777c;
+  --accent:#e0a663;
+  --accent-2:#82c7c6;
+  --accent-soft:#3a2d20;
+  --teal-soft:#173338;
+  --danger:#df8a82;
+  --success:#8bb59b;
+  --focus:#8ad6eb;
+  --shadow:0 22px 58px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    linear-gradient(90deg,transparent 0,transparent calc(50% - 1px),color-mix(in srgb,var(--line) 32%,transparent) 50%,transparent calc(50% + 1px)),
+    var(--page);
+  color:var(--ink);
+  font:16px/1.66 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+a{color:inherit;text-underline-offset:.18em}
+button{font:inherit;color:inherit}
+button,a{touch-action:manipulation}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{
+  position:fixed;left:1rem;top:.5rem;z-index:100;background:var(--paper);border:1px solid var(--line-strong);
+  padding:.65rem .9rem;transform:translateY(-160%);transition:transform .15s
+}
+.skip:focus{transform:none}
+.topbar{
+  position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.75rem clamp(1rem,4vw,3rem);background:color-mix(in srgb,var(--page) 91%,transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)
+}
+.brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;min-width:max-content}
+.brand-mark{
+  width:2.15rem;height:2.15rem;display:grid;place-items:center;border:1px solid var(--accent);
+  color:var(--accent);border-radius:50%;font-weight:800
+}
+.brand strong,.brand small{display:block}
+.brand small{font-size:.72rem;color:var(--muted)}
+.top-actions{display:flex;gap:.45rem;flex-wrap:wrap;justify-content:flex-end}
+.btn{
+  min-height:2.65rem;padding:.58rem .82rem;border:1px solid var(--line);background:var(--paper);
+  text-decoration:none;display:inline-flex;align-items:center;justify-content:center;cursor:pointer
+}
+.btn:hover{border-color:var(--accent);background:var(--accent-soft)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+html[data-theme="dark"] .btn.primary{color:#1b2022}
+.wrap{width:min(1180px,calc(100% - clamp(1.2rem,5vw,4.5rem)));margin:auto}
+.hero{
+  min-height:76vh;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(16rem,.58fr);
+  align-items:end;gap:clamp(2rem,7vw,7rem);padding:clamp(3rem,9vw,8rem) 0 clamp(2.8rem,7vw,6rem);
+  border-bottom:1px solid var(--line-strong);position:relative;overflow:hidden
+}
+.hero::before{
+  content:"5/3";position:absolute;right:4%;top:10%;font:500 min(21vw,14rem)/1 Georgia,serif;
+  color:color-mix(in srgb,var(--accent) 13%,transparent);letter-spacing:-.08em;pointer-events:none
+}
+.kicker{
+  margin:0 0 1rem;color:var(--accent);font:800 .72rem/1.2 ui-monospace,Consolas,monospace;
+  text-transform:uppercase;letter-spacing:.13em
+}
+h1{margin:0;max-width:11ch;font:500 clamp(3.2rem,8.3vw,7.8rem)/.84 Georgia,"Times New Roman",serif;letter-spacing:-.06em;text-wrap:balance}
+.lead{max-width:48rem;margin:1.5rem 0 0;color:var(--muted);font-size:clamp(1rem,1.5vw,1.23rem)}
+.hero-meta{border-left:1px solid var(--line-strong);padding-left:1.3rem;position:relative;z-index:2}
+.hero-meta strong{display:block;font:500 clamp(2.4rem,5.2vw,4.8rem)/.9 Georgia,serif;color:var(--accent)}
+.hero-meta dl{margin:1.2rem 0 0}
+.hero-meta div{padding:.7rem 0;border-top:1px solid var(--line)}
+.hero-meta dt{color:var(--muted);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em}
+.hero-meta dd{margin:.2rem 0 0;font-weight:650}
+.core{
+  grid-column:1/-1;display:grid;grid-template-columns:minmax(12rem,.45fr) minmax(0,1.55fr);gap:2rem;
+  align-items:center;padding:1.25rem 0;margin-top:2.4rem;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong)
+}
+.core p{margin:0;color:var(--muted)}
+.core strong{font:600 clamp(1.35rem,2.5vw,2rem)/1.25 Georgia,serif}
+.route{
+  margin:0 calc(50% - 50vw);padding:0 max(clamp(1rem,4vw,2rem),calc((100vw - 1180px)/2));
+  border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--paper) 77%,var(--page))
+}
+.route ol{display:flex;margin:0;padding:0;list-style:none;overflow-x:auto}
+.route a{display:block;min-width:max-content;padding:.9rem 1rem;text-decoration:none;color:var(--muted);border-right:1px solid var(--line)}
+.route a:hover,.route a:focus-visible{color:var(--ink);background:var(--paper)}
+.lesson-section{padding:clamp(3.5rem,8vw,7rem) 0;border-bottom:1px solid var(--line)}
+.section-grid{display:grid;grid-template-columns:minmax(13rem,.43fr) minmax(0,1.57fr);gap:clamp(2rem,6vw,6rem)}
+.section-note{position:sticky;top:5.4rem;align-self:start}
+.section-index{display:block;color:var(--accent);font:800 .72rem ui-monospace,Consolas,monospace;letter-spacing:.1em}
+.section-note h2{margin:.45rem 0 .8rem;font:500 clamp(2rem,4vw,3.35rem)/1 Georgia,serif;letter-spacing:-.035em}
+.section-note p{margin:0;color:var(--muted)}
+.prose{min-width:0}
+.prose>p:first-child{margin-top:0}
+.rulebook{border-top:1px solid var(--line-strong)}
+.rule{
+  display:grid;grid-template-columns:minmax(12rem,.7fr) minmax(0,1.3fr);gap:1.2rem;
+  padding:1rem 0;border-bottom:1px solid var(--line);align-items:start
+}
+.rule strong{font-weight:750}
+.rule p{margin:0;color:var(--muted)}
+.formula{
+  display:block;margin:1rem 0;padding:1rem 1.15rem;background:var(--teal-soft);border-left:4px solid var(--accent-2);
+  font:600 clamp(1.08rem,2.1vw,1.45rem)/1.45 "Cambria Math","Times New Roman",serif;overflow-x:auto
+}
+.workspace{
+  margin:1.5rem 0;padding:clamp(1.1rem,3vw,2rem);background:
+    repeating-linear-gradient(180deg,transparent 0,transparent 2rem,color-mix(in srgb,var(--line) 32%,transparent) 2.03rem),
+    var(--paper);
+  border:1px solid var(--line);box-shadow:var(--shadow)
+}
+.workspace h3{margin-top:0}
+.power-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--line-strong)}
+.power-grid div{padding:1rem;border-bottom:1px solid var(--line)}
+.power-grid div:nth-child(odd){border-right:1px solid var(--line)}
+.power-grid code{font:700 1.15rem/1.3 "Cambria Math","Times New Roman",serif;color:var(--accent-2)}
+.callout{padding:1rem 1.15rem;border-left:4px solid var(--accent);background:var(--accent-soft);margin:1.4rem 0}
+.callout p{margin:.25rem 0}
+.models{border:1px solid var(--line);background:var(--paper);box-shadow:var(--shadow)}
+.model-tabs{display:flex;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.model-tabs button{
+  flex:1 1 10rem;min-height:3.1rem;border:0;border-right:1px solid var(--line);border-bottom:3px solid transparent;
+  background:transparent;padding:.7rem .8rem;cursor:pointer;color:var(--muted);font-weight:700
+}
+.model-tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent);background:var(--accent-soft)}
+.model-panel{padding:clamp(1.1rem,3vw,2rem)}
+.model-panel[hidden]{display:none}
+.model-panel h3{margin-top:0;font:500 clamp(1.55rem,3vw,2.25rem)/1 Georgia,serif}
+.calc{counter-reset:calc;margin:1rem 0 0;padding:0;list-style:none}
+.calc li{counter-increment:calc;padding:.75rem 0 .75rem 2.6rem;border-top:1px solid var(--line);position:relative}
+.calc li::before{
+  content:counter(calc);position:absolute;left:0;top:.72rem;width:1.75rem;height:1.75rem;display:grid;place-items:center;
+  border:1px solid var(--accent);color:var(--accent);font:800 .75rem ui-monospace,monospace;border-radius:50%
+}
+.result{margin-top:1rem;padding:.85rem 1rem;border-left:4px solid var(--success);background:color-mix(in srgb,var(--success) 10%,var(--paper));font-weight:750}
+.error-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.error{
+  border-top:2px solid var(--danger);padding:1rem 0
+}
+.error strong{color:var(--danger)}
+.error p{margin:.35rem 0 0;color:var(--muted)}
+.training{counter-reset:task}
+.task{
+  counter-increment:task;padding:1.15rem 0;border-top:1px solid var(--line);display:grid;
+  grid-template-columns:3rem minmax(0,1fr) auto;gap:1rem;align-items:start
+}
+.task::before{
+  content:counter(task,decimal-leading-zero);font:800 .78rem ui-monospace,Consolas,monospace;color:var(--accent);padding-top:.22rem
+}
+.task p{margin:0}
+.answer-toggle{border:1px solid var(--line);background:var(--paper);padding:.45rem .65rem;cursor:pointer;min-height:2.35rem}
+.answer{grid-column:2/-1;margin:.55rem 0 0;padding:.75rem 1rem;border-left:3px solid var(--success);background:color-mix(in srgb,var(--success) 8%,var(--paper));font-weight:700}
+.answer[hidden]{display:none}
+.checklist{display:grid;gap:.65rem;margin-top:1.2rem}
+.checkitem{display:flex;gap:.75rem;align-items:flex-start;padding:.7rem 0;border-top:1px solid var(--line)}
+.checkitem input{width:1.15rem;height:1.15rem;margin-top:.22rem;accent-color:var(--accent)}
+.materials{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+footer{padding:2.3rem 0 3rem;color:var(--muted);display:flex;justify-content:space-between;gap:1rem;border-top:1px solid var(--line)}
+@media(max-width:820px){
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .hero-meta{border-left:0;border-top:1px solid var(--line-strong);padding:1.2rem 0 0}
+  .core{grid-template-columns:1fr;gap:.6rem}
+  .section-grid{grid-template-columns:1fr}
+  .section-note{position:static}
+  .rule{grid-template-columns:1fr;gap:.35rem}
+  .power-grid{grid-template-columns:1fr}
+  .power-grid div:nth-child(odd){border-right:0}
+  .error-list{grid-template-columns:1fr}
+  .task{grid-template-columns:2.2rem minmax(0,1fr)}
+  .task .answer-toggle{grid-column:2;justify-self:start}
+  .answer{grid-column:2}
+  footer{flex-direction:column}
+}
+@media(max-width:620px){
+  .topbar{align-items:flex-start}
+  .top-actions .btn:not(#themeBtn){display:none}
+  h1{font-size:clamp(2.8rem,15vw,4.7rem)}
+  .hero::before{font-size:38vw;right:-4%;top:15%}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+@media print{
+  .topbar,.route,.answer-toggle{display:none!important}
+  body{background:#fff;color:#111}
+  .hero{min-height:auto}
+  .section-note{position:static}
+  .answer[hidden]{display:block}
+  .lesson-section{break-inside:auto}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+
+<header class="topbar">
+  <a class="brand" href="index.html" aria-label="Вернуться в учебный кабинет">
+    <span class="brand-mark" aria-hidden="true">Σ</span>
+    <span><strong>Даниил Кичук</strong><small>ЕГЭ · профильная математика</small></span>
+  </a>
+  <div class="top-actions">
+    <a class="btn" href="index.html">К карте</a>
+    <a class="btn" href="../pdf_docs/30.09.26.pdf">PDF</a>
+    <a class="btn" href="../tex_docs/30.09.26.tex">TeX</a>
+    <button class="btn" id="printBtn" type="button">Печать</button>
+    <button class="btn" id="themeBtn" type="button" aria-label="Переключить цветовую тему" aria-pressed="false">◐</button>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+  <header class="hero">
+    <div>
+      <p class="kicker">Занятие · 30 сентября 2026</p>
+      <h1>Степени в задачах прикладного характера</h1>
+      <p class="lead">Главная задача — увидеть в длинном прикладном условии знакомую алгебру: аккуратно выписать данные, привести числа к удобному степенному виду и корректно извлечь неизвестную величину.</p>
+    </div>
+
+    <aside class="hero-meta" aria-label="Сведения о занятии">
+      <strong>30.09</strong>
+      <dl>
+        <div><dt>Формат</dt><dd>рабочий конспект + тренировка</dd></div>
+        <div><dt>Основной навык</dt><dd>задание №10 ЕГЭ</dd></div>
+        <div><dt>Связь с прошлым уроком</dt><dd>степени и показательные уравнения</dd></div>
+      </dl>
+    </aside>
+
+    <div class="core">
+      <p>Рабочая идея</p>
+      <strong>Дано → перевод условия → удобные степени → подстановка → обратная степень → проверка ограничения и смысла.</strong>
+    </div>
+  </header>
+
+  <nav class="route" aria-label="Маршрут занятия">
+    <ol>
+      <li><a href="#strategy">01 · стратегия</a></li>
+      <li><a href="#powers">02 · подготовка чисел</a></li>
+      <li><a href="#models">03 · модели занятия</a></li>
+      <li><a href="#errors">04 · ошибки</a></li>
+      <li><a href="#training">05 · тренировка</a></li>
+      <li><a href="#check">06 · самопроверка</a></li>
+    </ol>
+  </nav>
+
+  <section class="lesson-section" id="strategy">
+    <div class="section-grid">
+      <aside class="section-note">
+        <span class="section-index">01 / МАРШРУТ</span>
+        <h2>Как читать прикладную задачу</h2>
+        <p>Формула уже дана. Трудность — организовать вычисления и перевод текста.</p>
+      </aside>
+      <div class="prose">
+        <div class="rulebook">
+          <div class="rule"><strong>1. Выписать только нужное</strong><p>Формулу, известные величины, ограничение и то, что требуется найти.</p></div>
+          <div class="rule"><strong>2. Перевести текст</strong><p>«Уменьшилось в два раза» превращается в связь двух состояний, например V₂ = V₁/2.</p></div>
+          <div class="rule"><strong>3. Подготовить числа</strong><p>Десятичные коэффициенты и составные числа переписываются так, чтобы свойства степеней работали проще.</p></div>
+          <div class="rule"><strong>4. Подставить в скобках</strong><p>Если вместо V₁ подставляется 2V₂, в степень идёт всё выражение: (2V₂)ᵃ.</p></div>
+          <div class="rule"><strong>5. Убрать степень у неизвестной</strong><p>Если V<sup>5/3</sup> = A, обе части возводятся в степень 3/5.</p></div>
+          <div class="rule"><strong>6. Проверить ответ</strong><p>Ограничение, единицы и физический смысл результата проверяются в финале.</p></div>
+        </div>
+
+        <div class="callout">
+          <strong>Граница «не менее / не более» требует проверки.</strong>
+          <p>Равенство на границе используется только после того, как понятен характер зависимости: где достигается требуемый максимум или минимум.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="powers">
+    <div class="section-grid">
+      <aside class="section-note">
+        <span class="section-index">02 / СТЕПЕНИ</span>
+        <h2>Подготовка к вычислениям</h2>
+        <p>На доске именно эта стадия позволяла упростить громоздкие выражения.</p>
+      </aside>
+      <div class="prose">
+        <div class="workspace">
+          <h3>Числа, которые нужно узнавать</h3>
+          <div class="power-grid">
+            <div><code>6,25 · 10<sup>5</sup> = 625 · 10<sup>3</sup></code><br><small>сдвинули запятую вправо — показатель десятки уменьшили</small></div>
+            <div><code>625 = 5<sup>4</sup></code><br><small>удобное основание для степени 5/3</small></div>
+            <div><code>3125 = 5<sup>5</sup></code><br><small>получается последовательным делением на 5</small></div>
+            <div><code>128 = 2<sup>7</sup></code><br><small>полезно в задаче с четвёртой степенью</small></div>
+            <div><code>125 = 5<sup>3</sup></code><br><small>кубическая структура</small></div>
+            <div><code>(a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup></code><br><small>основное действие при извлечении неизвестной</small></div>
+          </div>
+        </div>
+        <span class="formula">Если V<sup>5/3</sup> = A, то V = A<sup>3/5</sup>.</span>
+        <p>Обратная степень применяется к <strong>обеим частям равенства</strong>. Это отдельная операция над равенством, поэтому менять показатель только слева нельзя.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="models">
+    <div class="section-grid">
+      <aside class="section-note">
+        <span class="section-index">03 / ПЯТЬ МОДЕЛЕЙ</span>
+        <h2>Все ключевые задачи занятия</h2>
+        <p>Переключайте вкладки: в каждой сохранены формула, данные и ключевой вычислительный ход с доски.</p>
+      </aside>
+      <div class="prose">
+        <div class="models" data-models>
+          <div class="model-tabs" role="tablist" aria-label="Модели занятия">
+            <button role="tab" id="tab-m1" aria-controls="m1" aria-selected="true" tabindex="0">pV<sup>k</sup></button>
+            <button role="tab" id="tab-m2" aria-controls="m2" aria-selected="false" tabindex="-1">убывание</button>
+            <button role="tab" id="tab-m3" aria-controls="m3" aria-selected="false" tabindex="-1">два состояния</button>
+            <button role="tab" id="tab-m4" aria-controls="m4" aria-selected="false" tabindex="-1">T<sup>4</sup></button>
+            <button role="tab" id="tab-m5" aria-controls="m5" aria-selected="false" tabindex="-1">l<sup>3</sup></button>
+          </div>
+
+          <article class="model-panel" id="m1" role="tabpanel" aria-labelledby="tab-m1">
+            <h3>Степенная зависимость pV<sup>5/3</sup> = 200</h3>
+            <span class="formula">p ≥ 6,25 · 10<sup>5</sup>, &nbsp; V > 0</span>
+            <ol class="calc">
+              <li>Для максимального V проверяем: при росте p объём уменьшается, значит берём минимально допустимое давление.</li>
+              <li>p = 6,25 · 10<sup>5</sup> = 625 · 10<sup>3</sup>.</li>
+              <li>V<sup>5/3</sup> = 200 / (625 · 10<sup>3</sup>) = 1 / 5<sup>5</sup>.</li>
+              <li>V = (1 / 5<sup>5</sup>)<sup>3/5</sup> = 1 / 5<sup>3</sup>.</li>
+            </ol>
+            <div class="result">Ответ занятия: V = 0,008.</div>
+          </article>
+
+          <article class="model-panel" id="m2" role="tabpanel" aria-labelledby="tab-m2" hidden>
+            <h3>Показательный закон убывания</h3>
+            <span class="formula">m(t) = m₀ · 2<sup>−t/T</sup></span>
+            <ol class="calc">
+              <li>m₀ = 40, T = 10, m = 5.</li>
+              <li>40 · 2<sup>−t/10</sup> = 5.</li>
+              <li>2<sup>−t/10</sup> = 1/8 = 2<sup>−3</sup>.</li>
+              <li>Основания одинаковы, поэтому −t/10 = −3.</li>
+            </ol>
+            <div class="result">Ответ занятия: t = 30.</div>
+          </article>
+
+          <article class="model-panel" id="m3" role="tabpanel" aria-labelledby="tab-m3" hidden>
+            <h3>Два состояния одной системы</h3>
+            <span class="formula">p₁V₁<sup>a</sup> = p₂V₂<sup>a</sup></span>
+            <ol class="calc">
+              <li>Объём уменьшился вдвое: V₂ = V₁/2, то есть V₁ = 2V₂.</li>
+              <li>Давление увеличилось в четыре раза: p₂ = 4p₁.</li>
+              <li>p₁(2V₂)<sup>a</sup> = (4p₁)V₂<sup>a</sup>.</li>
+              <li>После сокращения: 2<sup>a</sup> = 4 = 2<sup>2</sup>.</li>
+            </ol>
+            <div class="result">Ответ занятия: a = 2.</div>
+          </article>
+
+          <article class="model-panel" id="m4" role="tabpanel" aria-labelledby="tab-m4" hidden>
+            <h3>Четвёртая степень в формуле излучения</h3>
+            <span class="formula">P = σST<sup>4</sup></span>
+            <ol class="calc">
+              <li>σ = 5,7 · 10<sup>−8</sup> = 57 · 10<sup>−9</sup>.</li>
+              <li>S = 10<sup>20</sup>/128, &nbsp; P = 1,14 · 10<sup>25</sup> = 114 · 10<sup>23</sup>.</li>
+              <li>После подстановки и сокращений: T<sup>4</sup> = 2<sup>8</sup> · 10<sup>12</sup>.</li>
+              <li>T = (2<sup>8</sup> · 10<sup>12</sup>)<sup>1/4</sup> = 2<sup>2</sup> · 10<sup>3</sup>.</li>
+            </ol>
+            <div class="result">Ответ занятия: T = 4000.</div>
+          </article>
+
+          <article class="model-panel" id="m5" role="tabpanel" aria-labelledby="tab-m5" hidden>
+            <h3>Кубическая зависимость в задаче о натяжении</h3>
+            <span class="formula">T = ρgl<sup>3</sup> − mg</span>
+            <ol class="calc">
+              <li>ρ = 1000, g = 10, m = 25, ограничение T ≤ 1000.</li>
+              <li>Для максимальной длины используем граничное значение T = 1000.</li>
+              <li>l<sup>3</sup> = 1250/10000 = 125/1000.</li>
+              <li>125 = 5<sup>3</sup>, 1000 = 10<sup>3</sup>, поэтому l = 5/10.</li>
+            </ol>
+            <div class="result">Ответ занятия: l = 0,5 м.</div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="errors">
+    <div class="section-grid">
+      <aside class="section-note">
+        <span class="section-index">04 / КОНТРОЛЬ</span>
+        <h2>Ошибки, которые ломают решение</h2>
+        <p>Именно здесь чаще всего теряется правильная структура вычислений.</p>
+      </aside>
+      <div class="prose">
+        <div class="error-list">
+          <article class="error"><strong>Потеря скобок</strong><p>Если V₁ = 2V₂, то V₁<sup>a</sup> = (2V₂)<sup>a</sup>.</p></article>
+          <article class="error"><strong>Степень только одному множителю</strong><p>(ab)<sup>n</sup> = a<sup>n</sup>b<sup>n</sup>; показатель относится ко всему произведению.</p></article>
+          <article class="error"><strong>Изменить показатель только слева</strong><p>Если обе части возводятся в обратную степень, операция выполняется симметрично.</p></article>
+          <article class="error"><strong>Рано перейти к десятичным дробям</strong><p>Сначала ищите сокращения и удобные основания степеней.</p></article>
+          <article class="error"><strong>Механически заменить «не менее» на «равно»</strong><p>Сначала устанавливается направление зависимости и нужная граница.</p></article>
+          <article class="error"><strong>Забыть итоговую единицу</strong><p>Промежуточные вычисления можно вести компактно, а ответ оформляется в требуемых единицах.</p></article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="training">
+    <div class="section-grid">
+      <aside class="section-note">
+        <span class="section-index">05 / ПУТЬ А</span>
+        <h2>10 задач на закрепление</h2>
+        <p>Условия из чек-листа. Ответ можно открыть после самостоятельного решения.</p>
+      </aside>
+      <div class="prose training">
+        <article class="task">
+          <p>m(t) = 64 · 2<sup>−t/6</sup>. Через сколько единиц времени масса станет равна 8?</p>
+          <button class="answer-toggle" type="button" aria-expanded="false" aria-controls="a1">Ответ</button>
+          <div class="answer" id="a1" hidden>18</div>
+        </article>
+        <article class="task">
+          <p>pV<sup>3/2</sup> = 54. Найдите V, если p = 2.</p>
+          <button class="answer-toggle" type="button" aria-expanded="false" aria-controls="a2">Ответ</button>
+          <div class="answer" id="a2" hidden>9</div>
+        </article>
+        <article class="task">
+          <p>В процессе pV<sup>a</sup> = const. Объём уменьшили в 3 раза, давление увеличили в 9 раз. Найдите a.</p>
+          <button class="answer-toggle" type="button" aria-expanded="false" aria-controls="a3">Ответ</button>
+          <div class="answer" id="a3" hidden>2</div>
+        </article>
+        <article class="task">
+          <p>P = σST<sup>4</sup>. Найдите T, если σ = 5 · 10<sup>−8</sup>, S = 2 · 10<sup>6</sup>, P = 1,6 · 10<sup>12</sup>.</p>
+          <button class="answer-toggle" type="button" aria-expanded="false" aria-controls="a4">Ответ</button>
+          <div class="answer" id="a4" hidden>2000</div>
+        </article>
+        <article class="task">
+          <p>T = ρgl<sup>3</sup> − mg. При ρ = 800, g = 10, m = 20 допустимо T ≤ 800. Найдите максимально допустимое l.</p>
+          <button class="answer-toggle" type="button" aria-expanded="false" aria-controls="a5">Ответ</button>
+          <div class="answer" id="a5" hidden>0,5 м</div>
+        </article>
+        <article class="task">
+          <p>m(t) = 160 · 2<sup>−t/4</sup>. Найдите момент времени, когда масса станет равна 10.</p>
+          <button class="answer-toggle" type="button" aria-expanded="false" aria-controls="a6">Ответ</button>
+          <div class="answer" id="a6" hidden>16</div>
+        </article>
+        <article class="task">
+          <p>pV<sup>5/3</sup> = 972. Найдите V, если p = 4.</p>
+          <button class="answer-toggle" type="button" aria-expanded="false" aria-controls="a7">Ответ</button>
+          <div class="answer" id="a7" hidden>27</div>
+        </article>
+        <article class="task">
+          <p>В процессе pV<sup>a</sup> = const. Объём уменьшили в 4 раза, давление увеличили в 8 раз. Найдите a.</p>
+          <button class="answer-toggle" type="button" aria-expanded="false" aria-controls="a8">Ответ</button>
+          <div class="answer" id="a8" hidden>3/2</div>
+        </article>
+        <article class="task">
+          <p>P = σST<sup>4</sup>. Найдите T, если σ = 8 · 10<sup>−8</sup>, S = 2 · 10<sup>6</sup>, P = 1,296 · 10<sup>13</sup>.</p>
+          <button class="answer-toggle" type="button" aria-expanded="false" aria-controls="a9">Ответ</button>
+          <div class="answer" id="a9" hidden>3000</div>
+        </article>
+        <article class="task">
+          <p>T = ρgl<sup>3</sup> − mg. При ρ = 1000, g = 10, m = 20 допустимо T ≤ 1960. Найдите максимально допустимое l.</p>
+          <button class="answer-toggle" type="button" aria-expanded="false" aria-controls="a10">Ответ</button>
+          <div class="answer" id="a10" hidden>0,6 м</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="check">
+    <div class="section-grid">
+      <aside class="section-note">
+        <span class="section-index">06 / САМОПРОВЕРКА</span>
+        <h2>Что должно получаться без подсказки</h2>
+        <p>Отметки хранятся только в Вашем браузере.</p>
+      </aside>
+      <div class="prose">
+        <div class="checklist" id="checklist">
+          <label class="checkitem"><input type="checkbox" data-key="data"> <span>Выписываю формулу, данные, ограничение и искомую величину отдельно.</span></label>
+          <label class="checkitem"><input type="checkbox" data-key="translate"> <span>Перевожу «увеличилось / уменьшилось в n раз» в математическую связь между состояниями.</span></label>
+          <label class="checkitem"><input type="checkbox" data-key="powers"> <span>Узнаю 625 = 5⁴, 3125 = 5⁵, 128 = 2⁷ и 125 = 5³.</span></label>
+          <label class="checkitem"><input type="checkbox" data-key="inverse"> <span>Применяю обратную степень к обеим частям равенства.</span></label>
+          <label class="checkitem"><input type="checkbox" data-key="bounds"> <span>Перед использованием границы «не менее / не более» проверяю направление зависимости.</span></label>
+          <label class="checkitem"><input type="checkbox" data-key="check"> <span>Проверяю ограничение, единицы и разумность ответа.</span></label>
+        </div>
+
+        <div class="materials" aria-label="Материалы занятия">
+          <a class="btn primary" href="../pdf_docs/30.09.26.pdf">Открыть PDF</a>
+          <a class="btn" href="../tex_docs/30.09.26.tex">Открыть TeX</a>
+          <a class="btn" href="25.09.26.html">Предыдущее занятие · 25.09</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Лёвин Артём Александрович эксклюзивно для Даниила Кичука</span>
+    <span>30.09.2026</span>
+  </footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var root=document.documentElement;
+  function get(k,f){try{return localStorage.getItem(k)||f}catch(_){return f}}
+  function set(k,v){try{localStorage.setItem(k,v)}catch(_){}}
+  var themeBtn=document.getElementById("themeBtn");
+  root.dataset.theme=get("danil-300926-theme","light")==="dark"?"dark":"light";
+  themeBtn.setAttribute("aria-pressed",String(root.dataset.theme==="dark"));
+  themeBtn.addEventListener("click",function(){
+    root.dataset.theme=root.dataset.theme==="dark"?"light":"dark";
+    themeBtn.setAttribute("aria-pressed",String(root.dataset.theme==="dark"));
+    set("danil-300926-theme",root.dataset.theme);
+  });
+  document.getElementById("printBtn").addEventListener("click",function(){window.print()});
+
+  var tabs=Array.prototype.slice.call(document.querySelectorAll("[role=tab]"));
+  var panels=Array.prototype.slice.call(document.querySelectorAll("[role=tabpanel]"));
+  function activate(tab,focus){
+    tabs.forEach(function(t){
+      var on=t===tab;
+      t.setAttribute("aria-selected",String(on));
+      t.tabIndex=on?0:-1;
+    });
+    panels.forEach(function(p){p.hidden=p.id!==tab.getAttribute("aria-controls")});
+    if(focus)tab.focus();
+  }
+  tabs.forEach(function(tab,index){
+    tab.addEventListener("click",function(){activate(tab,false)});
+    tab.addEventListener("keydown",function(e){
+      if(["ArrowRight","ArrowLeft","Home","End"].indexOf(e.key)===-1)return;
+      e.preventDefault();
+      var next=index;
+      if(e.key==="ArrowRight")next=(index+1)%tabs.length;
+      if(e.key==="ArrowLeft")next=(index-1+tabs.length)%tabs.length;
+      if(e.key==="Home")next=0;
+      if(e.key==="End")next=tabs.length-1;
+      activate(tabs[next],true);
+    });
+  });
+
+  document.querySelectorAll(".answer-toggle").forEach(function(btn){
+    btn.addEventListener("click",function(){
+      var answer=document.getElementById(btn.getAttribute("aria-controls"));
+      var open=btn.getAttribute("aria-expanded")==="true";
+      answer.hidden=open;
+      btn.setAttribute("aria-expanded",String(!open));
+      btn.textContent=open?"Ответ":"Скрыть ответ";
+    });
+  });
+
+  document.querySelectorAll("#checklist input[type=checkbox]").forEach(function(input){
+    var key="danil-300926-check-"+input.dataset.key;
+    input.checked=get(key,"0")==="1";
+    input.addEventListener("change",function(){set(key,input.checked?"1":"0")});
+  });
+})();
+</script>
+</body>
+</html>
