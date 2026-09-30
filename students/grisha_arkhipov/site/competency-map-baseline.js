@@ -20,7 +20,6 @@
 
   data.baselineLevels = {};
   oldIds.forEach((id) => { data.baselineLevels[id] = 2; });
-  currentIds.forEach((id) => { data.baselineLevels[id] = 2; });
 
   data.evidence = {};
   oldIds.forEach((id) => {
@@ -31,10 +30,28 @@
       tex: '../tex_docs/17.09.26.tex'
     };
   });
+  const lessonAnchor = {
+    calc_05: 'read',
+    calc_15: 'read',
+    eq_02: 'quadratic',
+    eq_20: 'domain',
+    ineq_02: 'intervals',
+    ineq_03: 'intervals',
+    ineq_04: 'intervals',
+    ineq_05: 'intervals',
+    ineq_23: 'intervals',
+    ineq_24: 'intervals',
+    func_09: 'intervals',
+    text_15: 'border',
+    text_17: 'border',
+    text_21: 'domain',
+    text_22: 'domain'
+  };
   currentIds.forEach((id) => {
     data.evidence[id] = {
-      text: 'Навык отрабатывался на занятии 30.09.2026: прикладные формулы, границы, квадратные уравнения, метод интервалов и отбор ответа по смыслу.',
+      text: 'Навык затрагивался на занятии 30.09.2026. Диагностический уровень автоматически не повышается без подтверждения самостоятельности.',
       date: '30.09.2026',
+      lesson: `30.09.26.html#${lessonAnchor[id]}`,
       href: '../pdf_docs/30.09.26.pdf',
       tex: '../tex_docs/30.09.26.tex'
     };
