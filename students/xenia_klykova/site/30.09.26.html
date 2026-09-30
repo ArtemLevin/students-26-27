@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивное занятие Ксении Клыковой: теорема Безу, рациональные корни многочлена и схема Горнера.">
+<title>Теорема Безу и схема Горнера — Ксения Клыкова</title>
+<style>
+:root{
+  color-scheme:light;
+  --page:#f4f0e8;--paper:#fffdf7;--ink:#252326;--muted:#6d696f;--line:#d9d0c7;
+  --plum:#754867;--plum-dark:#56344b;--plum-soft:#eadde6;--sage:#667b6d;--sage-soft:#e3e9e3;
+  --warn:#a8614f;--warn-soft:#f3dfd8;--focus:#9a6b8c;--shadow:0 16px 42px rgba(61,43,54,.09)
+}
+html[data-theme="dark"]{
+  color-scheme:dark;--page:#171516;--paper:#211e20;--ink:#f1ecef;--muted:#bcb2b8;--line:#443c41;
+  --plum:#c792b5;--plum-dark:#e0b4d0;--plum-soft:#3b2b36;--sage:#a7b9ad;--sage-soft:#26322b;
+  --warn:#df9a87;--warn-soft:#442e2a;--focus:#d7a8c8;--shadow:none
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--page);color:var(--ink);font:16px/1.66 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:inherit}button{font:inherit;color:inherit}.skip{position:absolute;left:-9999px;top:.6rem;z-index:100;background:var(--ink);color:var(--page);padding:.65rem .9rem}.skip:focus{left:.6rem}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.shell{width:min(1180px,calc(100% - clamp(1rem,5vw,4rem)));margin:auto}.topbar{position:sticky;top:0;z-index:30;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--page) 94%,transparent);backdrop-filter:blur(12px)}.topbar .shell{min-height:58px;display:flex;align-items:center;gap:.55rem;overflow-x:auto}.topbar a,.topbar button{min-height:42px;padding:.48rem .7rem;border:0;background:transparent;text-decoration:none;white-space:nowrap}.topbar a:hover,.topbar button:hover{color:var(--plum)}.grow{flex:1}.primary{background:var(--plum)!important;color:white!important;padding:.55rem .85rem!important}
+.hero{padding:clamp(3.5rem,8vw,7.5rem) 0 clamp(2.3rem,6vw,4.5rem);border-bottom:1px solid var(--line)}.hero-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(18rem,.95fr);gap:clamp(2rem,7vw,6rem);align-items:end}.eyebrow{margin:0;color:var(--plum);font:760 .72rem/1.35 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em;text-transform:uppercase}.hero h1{margin:.55rem 0 1rem;max-width:11ch;font:600 clamp(3.4rem,7.6vw,6.7rem)/.91 Georgia,"Times New Roman",serif;letter-spacing:-.055em}.lead{max-width:52rem;color:var(--muted);font-size:clamp(1rem,1.35vw,1.18rem)}.signature{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--line);display:flex;gap:1rem;flex-wrap:wrap;color:var(--muted);font-size:.9rem}.signature b{color:var(--ink)}
+.theorem-strip{position:relative;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:1.4rem 0 1.55rem}.theorem-strip .label{font-size:.76rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}.theorem{font:600 clamp(2.25rem,5vw,4.6rem)/1.08 Georgia,"Times New Roman",serif;letter-spacing:-.035em;margin:.35rem 0;overflow-x:auto}.theorem small{display:block;margin-top:.65rem;font:400 .9rem/1.55 system-ui;color:var(--muted);letter-spacing:0}
+.route{display:flex;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:2.3rem}.route a{min-height:45px;display:flex;align-items:center;padding:.5rem .78rem;border-right:1px solid var(--line);text-decoration:none;white-space:nowrap;color:var(--muted);font-size:.84rem}.route a:hover{color:var(--plum);box-shadow:inset 0 -2px var(--plum)}
+.chapter{display:grid;grid-template-columns:minmax(11rem,.27fr) minmax(0,1fr);gap:clamp(1.5rem,5vw,4.8rem);padding:clamp(2.8rem,6vw,5rem) 0;border-top:1px solid var(--line)}.chapter-head{position:sticky;top:78px;align-self:start}.chapter-no{font:500 3.1rem/1 Georgia,serif;color:var(--plum)}.chapter-head h2{margin:.5rem 0 .35rem;font:600 clamp(1.35rem,2.4vw,2rem)/1.12 Georgia,serif}.chapter-head p{margin:0;color:var(--muted);font-size:.9rem}.content{min-width:0}.content h3{font:600 clamp(1.18rem,2vw,1.55rem)/1.22 Georgia,serif;margin:1.6rem 0 .6rem}.content p{max-width:55rem}.rule{margin:1.25rem 0;padding:1rem 0 1rem 1.15rem;border-left:3px solid var(--plum);max-width:55rem}.rule.sage{border-left-color:var(--sage)}.rule.warn{border-left-color:var(--warn)}
+.math{max-width:100%;overflow-x:auto;margin:1rem 0;padding:1rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font:600 clamp(1.2rem,2.4vw,1.7rem)/1.4 "Cambria Math",Georgia,serif;white-space:nowrap}.steps{counter-reset:step;border-top:1px solid var(--line);max-width:56rem}.step{counter-increment:step;display:grid;grid-template-columns:2.5rem 1fr;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line)}.step:before{content:counter(step);display:grid;place-items:center;width:2rem;height:2rem;border:1px solid var(--plum);color:var(--plum);font:700 .85rem Georgia,serif}.step b{font-family:Georgia,serif}.step p{margin:.25rem 0;color:var(--muted)}
+.coeff-table{width:100%;max-width:700px;border-collapse:collapse;margin:1.25rem 0}.coeff-table th,.coeff-table td{padding:.75rem .8rem;border-bottom:1px solid var(--line);text-align:center}.coeff-table th{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em}.coeff-table td{font:600 1.1rem "Cambria Math",serif}.zero{color:var(--warn);font-weight:800}.notes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--line);border-left:1px solid var(--line);max-width:820px}.note{padding:1.1rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.note b{display:block;font-family:Georgia,serif;color:var(--plum);margin-bottom:.25rem}.note span{color:var(--muted);font-size:.92rem}
+.practice{display:grid;gap:0;border-top:1px solid var(--line)}.exercise{padding:1rem 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:3.3rem 1fr;gap:1rem}.exercise .n{font:600 1.45rem Georgia,serif;color:var(--plum)}.exercise p{margin:0}.answer-toggle{margin-top:1rem;border:1px solid var(--plum);background:transparent;color:var(--plum);padding:.65rem .85rem;cursor:pointer}.answers{margin-top:1rem;border-top:1px solid var(--line)}.answer{display:grid;grid-template-columns:3.3rem 1fr;gap:1rem;padding:.75rem 0;border-bottom:1px solid var(--line)}.answer b{color:var(--plum)}
+.lab-call{margin:1.6rem 0;padding:1.4rem 0;border-top:2px solid var(--sage);border-bottom:1px solid var(--line);max-width:58rem}.lab-call h3{margin:.15rem 0 .4rem}.lab-call p{color:var(--muted);margin:.3rem 0 1rem}.lab-call a{display:inline-flex;min-height:44px;align-items:center;background:var(--sage);color:#fff;text-decoration:none;padding:.55rem .85rem;font-weight:750}
+.materials{display:flex;gap:.55rem;flex-wrap:wrap;margin:1rem 0}.materials a,.poster-btn{display:inline-flex;min-height:44px;align-items:center;border:1px solid var(--line);background:transparent;text-decoration:none;padding:.55rem .8rem;cursor:pointer}.materials a:hover,.poster-btn:hover{border-color:var(--plum);color:var(--plum)}
+.checks{display:grid;gap:.55rem;max-width:58rem}.check{display:flex;gap:.7rem;align-items:flex-start;padding:.75rem 0;border-bottom:1px solid var(--line)}.check input{margin-top:.3rem;inline-size:1.1rem;block-size:1.1rem}.progress{height:5px;background:var(--line);margin:.9rem 0 1rem;max-width:58rem}.progress span{display:block;height:100%;background:var(--plum);width:0;transition:width .2s ease}.progress-text{color:var(--muted);font-size:.9rem}
+.footer{padding:2rem 0 3rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:1rem;color:var(--muted);font-size:.88rem}
+dialog{width:min(1000px,calc(100% - 2rem));border:0;padding:0;background:var(--paper);color:var(--ink);box-shadow:var(--shadow)}dialog::backdrop{background:rgba(20,15,19,.72)}.dialog-head{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.1rem;border-bottom:1px solid var(--line)}.dialog-head h2{margin:0;font:600 1.25rem Georgia,serif}.dialog-head button{border:0;background:transparent;font-size:1.8rem;cursor:pointer}.poster{display:block;width:100%;height:auto;max-height:78vh;object-fit:contain;background:var(--page)}
+@media(max-width:820px){.hero-grid{grid-template-columns:1fr}.chapter{grid-template-columns:1fr}.chapter-head{position:static}.hero h1{max-width:none}.notes{grid-template-columns:1fr}.theorem{font-size:clamp(1.7rem,8vw,2.6rem)}.footer{flex-direction:column}}
+@media(max-width:520px){.shell{width:min(100% - 1rem,1180px)}.hero{padding-top:2.8rem}.hero h1{font-size:clamp(2.7rem,16vw,4rem)}.exercise,.answer{grid-template-columns:2.3rem 1fr}.signature{display:grid}.topbar .shell{padding:.1rem 0}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.progress span{transition:none}}
+@media print{.topbar,.route,.materials,.poster-btn,.answer-toggle,.lab-call,.checks,.progress,.progress-text{display:none!important}body{background:#fff;color:#000}.shell{width:100%;max-width:none}.hero{padding:1rem 0 2rem}.chapter{display:block;break-inside:avoid}.chapter-head{position:static}.answers[hidden]{display:block!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">К содержанию</a>
+<header class="topbar">
+  <div class="shell">
+    <a href="index.html">← Кабинет</a>
+    <a href="#bezu">Безу</a><a href="#roots">Корни</a><a href="#horner">Горнер</a><a href="#practice">Тренировка</a>
+    <span class="grow"></span>
+    <a class="primary" href="30.09.26-lab.html">Лаборатория</a>
+    <button id="themeToggle" type="button" aria-label="Переключить тему">◐</button>
+  </div>
+</header>
+<main id="content">
+<section class="hero">
+  <div class="shell hero-grid">
+    <div>
+      <p class="eyebrow">30 сентября 2026 · профильная математика</p>
+      <h1>Корень превращает многочлен в произведение</h1>
+      <p class="lead">Теорема Безу связывает значение <b>P(a)</b> с делением на <b>x − a</b>. Схема Горнера делает эту проверку короткой и сразу даёт коэффициенты многочлена меньшей степени.</p>
+      <div class="signature"><b>Ксения Клыкова</b><span>Лёвин Артём Александрович</span><span>индивидуальный конспект занятия</span></div>
+    </div>
+    <div class="theorem-strip" aria-label="Главная формула занятия">
+      <div class="label">Главный переход</div>
+      <div class="theorem">P(a)=0 ⇔ P(x)=(x−a)Q(x)<small>нулевой остаток → найден корень → степень можно понизить</small></div>
+    </div>
+  </div>
+</section>
+<div class="shell route" aria-label="Маршрут по занятию">
+  <a href="#bezu">01 · Теорема Безу</a><a href="#roots">02 · Рациональные кандидаты</a><a href="#horner">03 · Схема Горнера</a><a href="#gaps">04 · Пропущенные степени</a><a href="#control">05 · Контроль ошибок</a><a href="#practice">06 · 10 задач</a>
+</div>
+<section class="shell chapter" id="bezu">
+  <header class="chapter-head"><div class="chapter-no">01</div><h2>Теорема Безу</h2><p>корень ↔ множитель</p></header>
+  <div class="content">
+    <h3>Остаток при делении на x − a равен P(a)</h3>
+    <div class="math">P(x) = (x − a)Q(x) + P(a)</div>
+    <div class="rule"><b>Если P(a)=0, число a является корнем, а x−a — делителем многочлена.</b></div>
+    <p>Это позволяет перейти от кубического или многочлена более высокой степени к уравнению меньшей степени.</p>
+    <h3>Пример из занятия</h3>
+    <div class="math">P(x)=x³−2x²+3x−2, &nbsp; P(1)=1−2+3−2=0</div>
+    <p>Следовательно, <b>x−1</b> — множитель. После деления:</p>
+    <div class="math">P(x)=(x−1)(x²−x+2)</div>
+    <div class="rule sage">Для квадратного множителя D=−7&lt;0, поэтому над действительными числами остаётся единственный корень x=1.</div>
+  </div>
+</section>
+<section class="shell chapter" id="roots">
+  <header class="chapter-head"><div class="chapter-no">02</div><h2>Где искать корень</h2><p>сначала кандидаты, потом проверка</p></header>
+  <div class="content">
+    <h3>Приведённый многочлен</h3>
+    <p>Если старший коэффициент равен 1, рациональный корень обязан быть целым делителем свободного члена.</p>
+    <div class="rule"><b>Проверяйте делители свободного члена со знаками ±.</b></div>
+    <h3>Неприведённый многочлен</h3>
+    <div class="math">r=p/q, &nbsp; НОД(p,q)=1, &nbsp; p | a₀, &nbsp; q | aₙ</div>
+    <p>Числитель делит свободный коэффициент, знаменатель — старший. Полученный список содержит возможные корни; каждый кандидат требует проверки.</p>
+    <h3>Пример из чек-листа</h3>
+    <p>Для <b>2x³−3x²−8x+12</b> после сокращения получаем кандидаты:</p>
+    <div class="math">±1/2, ±1, ±3/2, ±2, ±3, ±4, ±6, ±12</div>
+    <div class="lab-call"><p class="eyebrow">Исследование</p><h3>Проверьте кандидатов в цифровой лаборатории</h3><p>Лаборатория строит строку Горнера для выбранного кандидата и показывает, стал ли остаток нулём.</p><a href="30.09.26-lab.html#candidates">Открыть режим кандидатов →</a></div>
+  </div>
+</section>
+<section class="shell chapter" id="horner">
+  <header class="chapter-head"><div class="chapter-no">03</div><h2>Схема Горнера</h2><p>проверка и деление одним алгоритмом</p></header>
+  <div class="content">
+    <p>Первый коэффициент сносится вниз. Затем повторяется один и тот же цикл.</p>
+    <div class="steps">
+      <div class="step"><div><b>Запишите коэффициенты</b><p>По убыванию степеней, включая нулевые коэффициенты.</p></div></div>
+      <div class="step"><div><b>Снесите первый коэффициент</b><p>Без изменения.</p></div></div>
+      <div class="step"><div><b>Умножьте на a</b><p>Где a — проверяемый кандидат на корень.</p></div></div>
+      <div class="step"><div><b>Прибавьте следующий коэффициент</b><p>Полученное число снова умножьте на a.</p></div></div>
+      <div class="step"><div><b>Посмотрите на последнее число</b><p>Это остаток P(a). Остальные числа дают коэффициенты частного.</p></div></div>
+    </div>
+    <h3>Пример: деление x³−x²+4x+6 на x+1</h3>
+    <table class="coeff-table" aria-label="Схема Горнера для a равно минус один">
+      <thead><tr><th>a</th><th>x³</th><th>x²</th><th>x</th><th>1</th></tr></thead>
+      <tbody><tr><td>−1</td><td>1</td><td>−1</td><td>4</td><td>6</td></tr><tr><td>результат</td><td>1</td><td>−2</td><td>6</td><td class="zero">0</td></tr></tbody>
+    </table>
+    <div class="math">x³−x²+4x+6 = (x+1)(x²−2x+6)</div>
+    <div class="lab-call"><p class="eyebrow">Пошаговый режим</p><h3>Разберите каждую операцию в таблице</h3><p>Можно двигаться по шагам: снос → умножение → сложение → остаток.</p><a href="30.09.26-lab.html#steps">Открыть пошаговый режим →</a></div>
+  </div>
+</section>
+<section class="shell chapter" id="gaps">
+  <header class="chapter-head"><div class="chapter-no">04</div><h2>Пропущенные степени</h2><p>пустого места в строке коэффициентов нет</p></header>
+  <div class="content">
+    <div class="rule warn"><b>Если степень пропущена, её коэффициент равен 0.</b></div>
+    <h3>x³−3x+2</h3>
+    <div class="math">x³ + 0x² − 3x + 2</div>
+    <table class="coeff-table" aria-label="Коэффициенты многочлена x в кубе минус 3x плюс 2"><thead><tr><th>x³</th><th>x²</th><th>x</th><th>1</th></tr></thead><tbody><tr><td>1</td><td class="zero">0</td><td>−3</td><td>2</td></tr></tbody></table>
+    <p>Для a=1 схема Горнера даёт <b>1, 1, −2, 0</b>, поэтому:</p>
+    <div class="math">x³−3x+2=(x−1)(x²+x−2)=(x−1)²(x+2)</div>
+    <h3>x⁴−5x²+4</h3>
+    <table class="coeff-table" aria-label="Полная строка коэффициентов"><thead><tr><th>x⁴</th><th>x³</th><th>x²</th><th>x</th><th>1</th></tr></thead><tbody><tr><td>1</td><td class="zero">0</td><td>−5</td><td class="zero">0</td><td>4</td></tr></tbody></table>
+  </div>
+</section>
+<section class="shell chapter" id="control">
+  <header class="chapter-head"><div class="chapter-no">05</div><h2>Контроль ошибок</h2><p>короткая проверка перед ответом</p></header>
+  <div class="content">
+    <div class="notes">
+      <div class="note"><b>Корень и множитель</b><span>Корню −1 соответствует x+1.</span></div>
+      <div class="note"><b>Нулевые коэффициенты</b><span>Пропущенная степень всё равно занимает место.</span></div>
+      <div class="note"><b>Кандидат ещё не корень</b><span>Нужен нулевой остаток после подстановки или Горнера.</span></div>
+      <div class="note"><b>Порядок Горнера</b><span>Сначала умножение на a, затем сложение.</span></div>
+      <div class="note"><b>Решение продолжается</b><span>После деления нужно решить полученный многочлен до конца.</span></div>
+      <div class="note"><b>Кратный корень</b><span>Если тот же корень снова обращает частное в ноль, он имеет кратность больше 1.</span></div>
+    </div>
+    <h3>Материалы занятия</h3>
+    <div class="materials"><a href="../pdf_docs/30.09.26.pdf">PDF</a><a href="../tex_docs/30.09.26.tex">TeX</a><button class="poster-btn" id="openPoster" type="button">Открыть постер</button></div>
+  </div>
+</section>
+<section class="shell chapter" id="practice">
+  <header class="chapter-head"><div class="chapter-no">06</div><h2>Путь А · 10 задач</h2><p>от кандидатов к полному разложению</p></header>
+  <div class="content">
+    <div class="practice">
+      <div class="exercise"><div class="n">01</div><p>Для P(x)=x³−5x²+2x+8 выпишите все возможные целые корни.</p></div>
+      <div class="exercise"><div class="n">02</div><p>Проверьте, является ли число 2 корнем P(x)=x³−3x²−4x+12.</p></div>
+      <div class="exercise"><div class="n">03</div><p>Известно, что P(−3)=0. Какой линейный множитель обязательно входит в разложение P(x)?</p></div>
+      <div class="exercise"><div class="n">04</div><p>С помощью схемы Горнера разделите x³−x²+4x+6 на x+1. Укажите частное и остаток.</p></div>
+      <div class="exercise"><div class="n">05</div><p>Для P(x)=x⁴−5x²+4 запишите полную строку коэффициентов для схемы Горнера.</p></div>
+      <div class="exercise"><div class="n">06</div><p>Решите x³−4x²+x+6=0, найдя целый корень и понизив степень схемой Горнера.</p></div>
+      <div class="exercise"><div class="n">07</div><p>Решите x³−3x+2=0. Учтите пропущенную степень и кратность корня.</p></div>
+      <div class="exercise"><div class="n">08</div><p>Для 2x³−3x²−8x+12=0 выпишите все различные рациональные кандидаты в сокращённом виде.</p></div>
+      <div class="exercise"><div class="n">09</div><p>Решите 2x³+x²−8x−4=0. Среди корней есть дробное число.</p></div>
+      <div class="exercise"><div class="n">10</div><p>Решите x⁴−5x²+4=0, последовательно понижая степень схемой Горнера.</p></div>
+    </div>
+    <button class="answer-toggle" id="answersToggle" type="button" aria-expanded="false" aria-controls="answers">Показать ответы</button>
+    <div class="answers" id="answers" hidden>
+      <div class="answer"><b>01</b><span>±1, ±2, ±4, ±8.</span></div><div class="answer"><b>02</b><span>Да, P(2)=0.</span></div><div class="answer"><b>03</b><span>x+3.</span></div><div class="answer"><b>04</b><span>x²−2x+6, остаток 0.</span></div><div class="answer"><b>05</b><span>1, 0, −5, 0, 4.</span></div><div class="answer"><b>06</b><span>x=−1, 2, 3.</span></div><div class="answer"><b>07</b><span>x=−2 и x=1; x=1 кратности 2.</span></div><div class="answer"><b>08</b><span>±1/2, ±1, ±3/2, ±2, ±3, ±4, ±6, ±12.</span></div><div class="answer"><b>09</b><span>x=−2, −1/2, 2.</span></div><div class="answer"><b>10</b><span>x=−2, −1, 1, 2.</span></div>
+    </div>
+    <h3>Самопроверка</h3>
+    <div class="progress" aria-hidden="true"><span id="progressBar"></span></div><div class="progress-text" id="progressText">0 из 5</div>
+    <div class="checks">
+      <label class="check"><input type="checkbox">Я определяю корень по условию P(a)=0.</label>
+      <label class="check"><input type="checkbox">Я перехожу от корня a к множителю x−a без ошибки в знаке.</label>
+      <label class="check"><input type="checkbox">Я выписываю целые и рациональные кандидаты.</label>
+      <label class="check"><input type="checkbox">Я ставлю нули на места пропущенных степеней.</label>
+      <label class="check"><input type="checkbox">Я восстанавливаю частное по строке Горнера и решаю уравнение до конца.</label>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="shell footer"><span>Лёвин Артём Александрович эксклюзивно для Ксении Клыковой</span><span>30.09.26</span></footer>
+<dialog id="posterDialog" aria-labelledby="posterTitle"><div class="dialog-head"><h2 id="posterTitle">Теорема Безу и схема Горнера</h2><button id="closePoster" type="button" aria-label="Закрыть">×</button></div><img class="poster" src="../images/30.09.26.png" alt="Учебный постер по теореме Безу, рациональным корням и схеме Горнера"></dialog>
+<script>
+(()=>{'use strict';
+ const root=document.documentElement,theme=document.getElementById('themeToggle');
+ let current='light';try{current=localStorage.getItem('xenia-300926-theme')||'light'}catch(_){ }root.dataset.theme=current;theme.textContent=current==='dark'?'☀':'◐';
+ theme.addEventListener('click',()=>{current=current==='dark'?'light':'dark';root.dataset.theme=current;theme.textContent=current==='dark'?'☀':'◐';try{localStorage.setItem('xenia-300926-theme',current)}catch(_){}});
+ const toggle=document.getElementById('answersToggle'),answers=document.getElementById('answers');toggle.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')==='true';toggle.setAttribute('aria-expanded',String(!open));answers.hidden=open;toggle.textContent=open?'Показать ответы':'Скрыть ответы'});
+ const checks=[...document.querySelectorAll('.check input')],bar=document.getElementById('progressBar'),label=document.getElementById('progressText');
+ try{const saved=JSON.parse(localStorage.getItem('xenia-300926-checks')||'null');if(Array.isArray(saved))checks.forEach((x,i)=>x.checked=Boolean(saved[i]))}catch(_){}
+ function progress(){const n=checks.filter(x=>x.checked).length;bar.style.width=(n/checks.length*100)+'%';label.textContent=n+' из '+checks.length;try{localStorage.setItem('xenia-300926-checks',JSON.stringify(checks.map(x=>x.checked)))}catch(_){}}
+ checks.forEach(x=>x.addEventListener('change',progress));progress();
+ const dialog=document.getElementById('posterDialog'),open=document.getElementById('openPoster'),close=document.getElementById('closePoster');open.addEventListener('click',()=>{if(typeof dialog.showModal==='function'){dialog.showModal();close.focus()}});close.addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+})();
+</script>
+</body>
+</html>
