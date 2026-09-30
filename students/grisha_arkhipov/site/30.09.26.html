@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Интерактивное занятие Григория Архипова: прикладные задачи с формулами, граничные значения, квадратные уравнения и отбор корней.">
+  <title>30.09.26 · Прикладные задачи с формулами · Григорий Архипов</title>
+  <style>
+    :root{
+      color-scheme:light;
+      --bg:#f3f1ec;--paper:#faf8f3;--paper2:#ebe8e1;--ink:#1f2529;--muted:#667078;
+      --line:#cbd0cf;--line2:#aeb8b7;--accent:#315f79;--accent2:#183d52;--signal:#a86d20;
+      --good:#3e725c;--bad:#9a4f4f;--shadow:0 18px 52px rgba(37,54,62,.07);
+    }
+    html[data-theme=dark]{
+      color-scheme:dark;
+      --bg:#12181c;--paper:#182126;--paper2:#202b31;--ink:#edf2f3;--muted:#a6b0b5;
+      --line:#33434b;--line2:#50626a;--accent:#6fa9c8;--accent2:#9bc8df;--signal:#d7a65b;
+      --good:#7eb69b;--bad:#dd8585;--shadow:0 18px 55px rgba(0,0,0,.28);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+    a{color:inherit}button,input{font:inherit;color:inherit}
+    .skip{position:absolute;left:-9999px}.skip:focus{left:1rem;top:1rem;z-index:99;background:var(--paper);padding:.7rem 1rem;border:1px solid var(--line2)}
+    .wrap{width:min(1240px,calc(100% - clamp(1rem,4vw,4rem)));margin:auto}
+    .hero{
+      position:relative;margin:0 calc(50% - 50vw);padding:clamp(3.5rem,7vw,7rem) max(clamp(1rem,4vw,2rem),calc((100vw - 1240px)/2)) 2rem;
+      min-height:34rem;border-bottom:1px solid var(--line);overflow:hidden;
+      display:grid;grid-template-columns:minmax(0,1.25fr) minmax(16rem,.48fr);gap:clamp(2rem,7vw,7rem);align-items:end;
+    }
+    .hero::before{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background:
+        linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 94%,transparent) 42%,color-mix(in srgb,var(--bg) 58%,transparent) 75%,transparent 100%),
+        radial-gradient(circle at 78% 32%,color-mix(in srgb,var(--accent) 17%,transparent),transparent 29%);
+    }
+    .hero::after{
+      content:"";position:absolute;right:-8rem;top:4rem;width:34rem;height:34rem;border:1px solid color-mix(in srgb,var(--accent) 33%,transparent);
+      border-radius:50%;box-shadow:inset 0 0 0 5rem color-mix(in srgb,var(--accent) 3%,transparent);
+    }
+    .hero-copy,.hero-index{position:relative;z-index:1}
+    .eyebrow{margin:0 0 .75rem;color:var(--accent);font:750 .68rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.13em;text-transform:uppercase}
+    h1,h2,h3{font-family:Georgia,"Times New Roman",serif}
+    h1{margin:.1rem 0 1.3rem;max-width:9ch;font-size:clamp(3.7rem,8.5vw,8.8rem);font-weight:500;line-height:.82;letter-spacing:-.065em;text-wrap:balance}
+    .hero-lead{max-width:49rem;margin:0;color:var(--muted);font-size:clamp(1rem,1.5vw,1.2rem)}
+    .signature{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--line);max-width:39rem;color:var(--muted);font-size:.84rem}
+    .signature b{color:var(--ink)}
+    .hero-index{align-self:end;border-left:1px solid var(--line2);padding:1rem 0 1rem 1.4rem;background:color-mix(in srgb,var(--bg) 55%,transparent)}
+    .hero-index .date{display:block;margin-bottom:1rem;color:var(--accent);font:500 clamp(3.7rem,6vw,6.8rem)/.78 Georgia,serif;letter-spacing:-.06em}
+    .hero-index p{margin:.4rem 0;color:var(--muted);font-size:.83rem}.hero-index strong{color:var(--ink)}
+    .route-strip{
+      position:relative;z-index:1;grid-column:1/-1;margin-top:1.5rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+      display:grid;grid-template-columns:repeat(6,1fr)
+    }
+    .route-strip a{min-height:5rem;padding:.85rem .75rem;text-decoration:none;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:flex-end;gap:.25rem}
+    .route-strip a:last-child{border-right:0}.route-strip b{color:var(--accent);font:700 .64rem/1 ui-monospace,monospace}.route-strip span{font-size:.83rem}
+    .toolbar{
+      position:sticky;top:0;z-index:30;margin:0 calc(50% - 50vw) clamp(2rem,4vw,4rem);
+      padding:.55rem max(clamp(.5rem,4vw,2rem),calc((100vw - 1240px)/2));
+      display:flex;gap:0;flex-wrap:wrap;background:color-mix(in srgb,var(--bg) 91%,transparent);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)
+    }
+    .toolbar a,.toolbar button{min-height:40px;padding:.55rem .78rem;border:0;border-right:1px solid var(--line);background:transparent;text-decoration:none;cursor:pointer;font-size:.8rem}
+    .toolbar a:first-child{border-left:1px solid var(--line)}
+    .toolbar a:hover,.toolbar button:hover,.toolbar a:focus-visible,.toolbar button:focus-visible{background:color-mix(in srgb,var(--accent) 8%,transparent);outline:2px solid transparent}
+    .toolbar .lab{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .toolbar .spacer{flex:1;border:0}
+    .poster{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:clamp(2rem,5vw,4rem)}
+    .poster summary{cursor:pointer;min-height:4rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;list-style:none;font:600 1rem/1.2 Georgia,serif}
+    .poster summary::-webkit-details-marker{display:none}.poster summary span:last-child{color:var(--accent);font:700 .65rem/1.2 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em}
+    .poster-grid{padding:1rem 0 2.5rem;display:grid;grid-template-columns:minmax(12rem,.32fr) minmax(0,.68fr);gap:clamp(1.5rem,4vw,3.5rem);align-items:start}
+    .poster-grid p{margin:0;color:var(--muted);font:500 clamp(1.2rem,2vw,1.9rem)/1.25 Georgia,serif}
+    .poster img{display:block;width:100%;max-height:75vh;object-fit:contain;border:1px solid var(--line);background:var(--paper)}
+    .chapter{position:relative;padding:clamp(2.7rem,6vw,6rem) 0;border-bottom:1px solid var(--line)}
+    .chapter::before{content:"";position:absolute;top:0;left:0;width:clamp(2.4rem,7vw,7rem);height:1px;background:var(--accent)}
+    .chapter-head{display:grid;grid-template-columns:minmax(0,.32fr) minmax(0,.68fr);gap:clamp(1.5rem,5vw,5rem);margin-bottom:2rem}
+    .chapter-no{color:var(--accent);font:500 clamp(3.2rem,6vw,6.4rem)/.85 Georgia,serif;letter-spacing:-.06em}
+    .chapter h2{margin:0;max-width:18ch;font-size:clamp(2.2rem,4.8vw,4.8rem);font-weight:500;line-height:.92;letter-spacing:-.045em}
+    .lead{margin:.9rem 0 0;max-width:48rem;color:var(--muted);font-size:1.05rem}
+    .ledger{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
+    .ledger>div{padding:1.05rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--paper) 56%,transparent)}
+    .ledger b{display:block;color:var(--accent);margin-bottom:.3rem}.ledger p{margin:0;color:var(--muted);font-size:.9rem}
+    .math{overflow-x:auto;padding:1rem 0;margin:.8rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font:500 clamp(1.08rem,2vw,1.38rem)/1.5 "Cambria Math",Georgia,serif}
+    .callout{margin:1.2rem 0;padding:1rem 1.2rem;border-left:2px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent)}
+    .callout strong{color:var(--accent)}
+    .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1.2rem,3vw,2rem)}
+    .case{padding:1.2rem 0;border-top:1px solid var(--line)}.case h3{margin:.2rem 0 .55rem;font-size:1.35rem}.case p{margin:.4rem 0}
+    .steps{counter-reset:s;border-top:1px solid var(--line)}
+    .step{counter-increment:s;display:grid;grid-template-columns:3.2rem 1fr;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line)}
+    .step::before{content:counter(s,decimal-leading-zero);color:var(--accent);font:700 .72rem/1.5 ui-monospace,monospace}.step p{margin:0}
+    table{width:100%;border-collapse:collapse;margin:1rem 0}th,td{text-align:left;padding:.75rem .6rem;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+    .error{border-left:2px solid var(--bad);padding:.85rem 1rem;margin:.7rem 0;background:color-mix(in srgb,var(--bad) 5%,transparent)}.error strong{color:var(--bad)}
+    .lab-preview{display:grid;grid-template-columns:minmax(0,.62fr) minmax(15rem,.38fr);gap:2rem;align-items:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.6rem 0}
+    .timeline{position:relative;min-height:9rem}.axis{position:absolute;left:4%;right:4%;top:52%;height:1px;background:var(--line2)}.axis::after{content:"";position:absolute;right:-1px;top:-4px;border-left:8px solid var(--line2);border-top:4px solid transparent;border-bottom:4px solid transparent}
+    .mark{position:absolute;top:calc(52% - 8px);width:16px;height:16px;border-radius:50%;border:2px solid var(--accent);background:var(--bg);transform:translateX(-50%)}.mark::after{content:attr(data-label);position:absolute;top:1.25rem;left:50%;transform:translateX(-50%);white-space:nowrap;color:var(--muted);font-size:.75rem}
+    .mark.good{background:var(--good);border-color:var(--good)}.mark.bad{border-color:var(--bad)}.mark.bad::before{content:"×";position:absolute;inset:-10px -2px auto auto;color:var(--bad);font-weight:800}
+    .lab-preview h3{font-size:clamp(1.5rem,3vw,2.6rem);margin:.2rem 0 .5rem}.lab-preview p{color:var(--muted)}
+    .lab-cta{display:inline-flex;align-items:center;min-height:44px;padding:.7rem 1rem;background:var(--accent);color:white;text-decoration:none}
+    .tasks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
+    .task{padding:1rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--paper) 55%,transparent)}
+    .task .n{color:var(--accent);font:700 .68rem/1 ui-monospace,monospace}.task p{margin:.45rem 0}.task details{margin-top:.8rem}.task summary{cursor:pointer;color:var(--accent)}
+    .progress-panel{margin-top:1.5rem;padding:1.1rem 0;border-top:1px solid var(--line)}
+    .progressbar{height:6px;background:var(--line);overflow:hidden}.progressbar span{display:block;height:100%;width:0;background:var(--good)}
+    .checks{columns:2;column-gap:2rem}.check{break-inside:avoid;display:flex;gap:.6rem;align-items:flex-start;padding:.45rem 0}.check input{width:18px;height:18px;accent-color:var(--accent)}
+    .footer{padding:2.2rem 0 3rem;display:flex;justify-content:space-between;gap:1rem;color:var(--muted);font-size:.82rem}.footer strong{color:var(--ink)}
+    :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr}.hero-index{border-left:0;border-top:1px solid var(--line);padding:1rem 0}.route-strip{grid-template-columns:repeat(3,1fr)}
+      .chapter-head,.poster-grid,.lab-preview{grid-template-columns:1fr}.ledger{grid-template-columns:repeat(2,1fr)}.two,.tasks{grid-template-columns:1fr}.checks{columns:1}
+    }
+    @media(max-width:560px){
+      .route-strip{grid-template-columns:repeat(2,1fr)}.toolbar{position:static}.toolbar .spacer{display:none}.toolbar>*{flex:1 1 auto}
+      .ledger{grid-template-columns:1fr}.hero{min-height:auto}.footer{flex-direction:column}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+    @media print{
+      html{--bg:#fff;--paper:#fff;--paper2:#fff;--ink:#111;--muted:#444;--line:#bbb;--line2:#999;--shadow:none}
+      .toolbar,.poster,.lab-preview,.progress-panel{display:none!important}.wrap{width:100%;max-width:none}.hero{min-height:auto;padding:1rem 0;margin:0;display:block}.hero::before,.hero::after{display:none}.hero-index{border:0;padding:0}.route-strip{display:none}.chapter{break-inside:avoid-page}
+    }
+  </style>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Интерактивное занятие · профильная математика</p>
+      <h1>Прикладные задачи с формулами</h1>
+      <p class="hero-lead">Главная линия занятия: перевести условие в математическую модель, найти граничное значение, получить все кандидаты и затем отобрать ответ по смыслу задачи и области применимости формулы.</p>
+      <div class="signature"><b>Григорий Архипов</b> · 10 класс · Лёвин Артём Александрович</div>
+    </div>
+    <aside class="hero-index" aria-label="Паспорт занятия">
+      <span class="date">30·09</span>
+      <p><strong>2026</strong></p>
+      <p>ЕГЭ · задание 10 и прикладные модели</p>
+      <p>Фокус: формула → уравнение → отбор корня</p>
+    </aside>
+    <nav class="route-strip" aria-label="Маршрут занятия">
+      <a href="#read"><b>01</b><span>Прочитать модель</span></a>
+      <a href="#border"><b>02</b><span>Найти границу</span></a>
+      <a href="#quadratic"><b>03</b><span>Решить уравнение</span></a>
+      <a href="#domain"><b>04</b><span>Отобрать корни</span></a>
+      <a href="#intervals"><b>05</b><span>Проверить промежуток</span></a>
+      <a href="#practice"><b>06</b><span>Закрепить</span></a>
+    </nav>
+  </header>
+
+  <nav class="toolbar" aria-label="Инструменты занятия">
+    <a href="index.html">← Навигатор</a>
+    <a class="lab" href="30.09.26-lab.html">Лаборатория отбора корней</a>
+    <a href="../pdf_docs/30.09.26.pdf">PDF</a>
+    <a href="../tex_docs/30.09.26.tex">TeX</a>
+    <span class="spacer"></span>
+    <button id="theme" type="button" aria-label="Переключить цветовую тему">◐ Тема</button>
+    <button id="printBtn" type="button">Печать</button>
+  </nav>
+
+  <details class="poster">
+    <summary><span>Наглядная памятка к занятию</span><span>Открыть</span></summary>
+    <div class="poster-grid">
+      <p>Короткая карта идей: что считать, где искать границу и почему один из корней иногда приходится отбросить.</p>
+      <img src="../images/30.09.26.png" alt="Учебная памятка по прикладным задачам с формулами" loading="lazy">
+    </div>
+  </details>
+
+  <main id="main">
+    <section class="chapter" id="read">
+      <div class="chapter-head">
+        <div class="chapter-no">01</div>
+        <div><p class="eyebrow">Чтение условия</p><h2>Сначала смысл, затем вычисления</h2><p class="lead">Формула уже задаёт математическую модель. Ваша задача — понять обозначения, единицы, допустимый диапазон и то, какую величину требует вопрос.</p></div>
+      </div>
+      <div class="ledger">
+        <div><b>Аргумент и значение</b><p><i>h(t)</i> — высота в момент <i>t</i>; скобки обозначают зависимость.</p></div>
+        <div><b>Единицы</b><p>3 мм = 0,003 м = 3·10<sup>−3</sup> м.</p></div>
+        <div><b>Ограничения</b><p>Например, время t ≥ 0, количество изделий — целое.</p></div>
+        <div><b>Уровень отсчёта</b><p>Стена 14 м и ещё 1 м сверху означают высоту 15 м.</p></div>
+      </div>
+      <h3>Тепловое расширение</h3>
+      <div class="math">L(T)=L₀(1+αT), &nbsp; L₀=10 м, &nbsp; α=1,2·10<sup>−5</sup> °C<sup>−1</sup></div>
+      <p>Для удлинения на 3 мм: <b>L−L₀=0,003</b>. Тогда αL₀T=0,003 и <b>T=25 °C</b>.</p>
+      <div class="callout"><strong>Проверка масштаба.</strong> При переносе степени десяти коэффициент меняется обратно: 1,2·10<sup>−5</sup> = 12·10<sup>−6</sup>.</div>
+    </section>
+
+    <section class="chapter" id="border">
+      <div class="chapter-head">
+        <div class="chapter-no">02</div>
+        <div><p class="eyebrow">Порог</p><h2>Границу удобно искать через равенство</h2><p class="lead">Слова «не менее», «не более», «впервые», «наибольший» определяют, как интерпретировать найденные значения после решения уравнения.</p></div>
+      </div>
+      <table>
+        <thead><tr><th>Фраза</th><th>Запись</th><th>Что важно</th></tr></thead>
+        <tbody>
+          <tr><td>не менее A</td><td>f(x) ≥ A</td><td>граница включена</td></tr>
+          <tr><td>не более A</td><td>f(x) ≤ A</td><td>граница включена</td></tr>
+          <tr><td>больше / меньше A</td><td>f(x) &gt; A / f(x) &lt; A</td><td>граница исключена</td></tr>
+          <tr><td>ровно A</td><td>f(x)=A</td><td>решаем уравнение</td></tr>
+        </tbody>
+      </table>
+      <div class="two">
+        <article class="case">
+          <p class="eyebrow">Прибыль</p>
+          <h3>Минимальное целое количество</h3>
+          <div class="math">Π(q)=q(p−v)−f</div>
+          <p>При p=600, v=300 и f=700 000 получаем Π(q)=300q−700 000. Для прибыли не менее 500 000 граница задаётся равенством и даёт <b>q=4000</b>.</p>
+          <p>Если граничное значение равно 1666⅔, минимальное целое количество — 1667.</p>
+        </article>
+        <article class="case">
+          <p class="eyebrow">Изменение значения</p>
+          <h3>Вычитаем два состояния</h3>
+          <div class="math">Δh=h(0,6)−h(0,4)=5(0,6²−0,4²)=1 м</div>
+          <p>Для нелинейной функции f(t₁)−f(t₂) обычно не равно f(t₁−t₂). Подстановка 0,2 с дала бы ошибочные 0,2 м.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="chapter" id="quadratic">
+      <div class="chapter-head">
+        <div class="chapter-no">03</div>
+        <div><p class="eyebrow">Квадратное уравнение</p><h2>Получить все корни — только половина решения</h2><p class="lead">После вычислений начинается содержательная часть: определить, какой корень отвечает вопросу и допустим ли он для процесса.</p></div>
+      </div>
+      <div class="steps">
+        <div class="step"><p><b>Уберите числовые знаменатели.</b> Умножьте каждое слагаемое на общий кратный знаменателей.</p></div>
+        <div class="step"><p><b>Приведите к ax²+bx+c=0.</b> Проверьте знаки коэффициентов.</p></div>
+        <div class="step"><p><b>Вычислите D=b²−4ac</b> и найдите все действительные корни.</p></div>
+        <div class="step"><p><b>Отберите ответ.</b> Учитывайте слова «впервые», «наибольшее», диапазон времени и физический смысл.</p></div>
+      </div>
+      <h3>Камень над стеной</h3>
+      <div class="math">15 = −x²/160 + 7x/8 &nbsp; ⇔ &nbsp; x²−140x+2400=0</div>
+      <p>D=10 000, поэтому x₁=20 и x₂=120. Оба значения дают высоту 15 м. Если требуется <b>наибольшее расстояние</b>, выбираем <b>120 м</b>.</p>
+      <h3>Нагреватель</h3>
+      <div class="math">T(t)=1400+200t−10t², &nbsp; T=1760 &nbsp; ⇒ &nbsp; t²−20t+36=0</div>
+      <p>Корни: 2 и 18 минут. Для отключения при первом достижении опасной температуры выбираем <b>2 минуты</b>.</p>
+      <div class="lab-preview">
+        <div class="timeline" aria-hidden="true">
+          <div class="axis"></div>
+          <span class="mark good" style="left:20%" data-label="2 мин"></span>
+          <span class="mark" style="left:82%" data-label="18 мин"></span>
+        </div>
+        <div><p class="eyebrow">Интерактив</p><h3>Почему выбран именно этот корень?</h3><p>В лаборатории можно пройти четыре исходных сценария и для каждого самостоятельно выбрать допустимый корень или продолжительность.</p><a class="lab-cta" href="30.09.26-lab.html">Открыть лабораторию →</a></div>
+      </div>
+    </section>
+
+    <section class="chapter" id="domain">
+      <div class="chapter-head">
+        <div class="chapter-no">04</div>
+        <div><p class="eyebrow">Область применимости</p><h2>Математический корень может не описывать процесс</h2><p class="lead">Формула действительна только в заданном диапазоне. Продолжение графика за границу процесса иногда создаёт формально верные, но предметно недопустимые решения.</p></div>
+      </div>
+      <h3>Слив воды из цилиндрического бака</h3>
+      <div class="math">h(t)=20(1−t/1000)², &nbsp; 0≤t≤1000</div>
+      <p>Четверть начального объёма для вертикального цилиндрического бака означает четверть высоты: h=5 м. Уравнение даёт <b>t=500</b> и <b>t=1500</b>.</p>
+      <div class="two">
+        <div class="callout"><strong>500 с — допустимо.</strong><br>Значение лежит в диапазоне 0≤t≤1000.</div>
+        <div class="error"><strong>1500 с — исключаем.</strong><br>К этому моменту бак уже пуст; формула слива после t=1000 неприменима.</div>
+      </div>
+      <h3>Доля объёма и доля высоты</h3>
+      <div class="math">V=Sh, &nbsp; V₀=Sh₀ &nbsp; ⇒ &nbsp; V/V₀ = h/h₀</div>
+      <p>Это работает для вертикального бака с постоянной площадью горизонтального сечения. Если площадь сечения меняется с высотой, нужна другая зависимость.</p>
+    </section>
+
+    <section class="chapter" id="intervals">
+      <div class="chapter-head">
+        <div class="chapter-no">05</div>
+        <div><p class="eyebrow">Промежуток</p><h2>Два граничных момента превращаются в продолжительность</h2><p class="lead">Сначала находим моменты достижения уровня, затем проверяем, где условие выполняется, и только после этого вычисляем длину промежутка.</p></div>
+      </div>
+      <h3>Мяч на высоте не менее 3 м</h3>
+      <div class="math">h(t)=1,4+9t−5t², &nbsp; h(t)=3 &nbsp; ⇒ &nbsp; t₁=0,2; &nbsp; t₂=1,6</div>
+      <p>Между 0,2 и 1,6 с парабола находится выше уровня 3 м. Продолжительность равна <b>1,6−0,2=1,4 с</b>.</p>
+      <h3>Метод интервалов как проверка</h3>
+      <div class="math">p(t)=(t−2)(t−6)</div>
+      <table>
+        <thead><tr><th>Промежуток</th><th>(−∞;2)</th><th>(2;6)</th><th>(6;+∞)</th></tr></thead>
+        <tbody><tr><td>Пробное число</td><td>0</td><td>4</td><td>8</td></tr><tr><td>Знак p(t)</td><td>+</td><td>−</td><td>+</td></tr></tbody>
+      </table>
+      <p>Следовательно, p(t)≤0 при t∈[2;6], а p(t)&lt;0 при t∈(2;6). Недопустимые точки исключаются всегда.</p>
+      <div class="callout"><strong>Типичная ошибка.</strong> Не выбирайте корень выражения как пробную точку: там значение равно нулю и знак промежутка не определяется.</div>
+    </section>
+
+    <section class="chapter" id="practice">
+      <div class="chapter-head">
+        <div class="chapter-no">06</div>
+        <div><p class="eyebrow">Путь А</p><h2>10 задач + 3 прикладных сюжета</h2><p class="lead">Условия полностью совпадают с тренировочным блоком текущего пособия. Ответы скрыты, чтобы сначала пройти маршрут самостоятельно.</p></div>
+      </div>
+      <div class="tasks">
+        <article class="task"><span class="n">01</span><p>h(t)=5t². Найдите h(0,8).</p><details><summary>Ответ</summary><p>3,2 м.</p></details></article>
+        <article class="task"><span class="n">02</span><p>L(T)=L₀(1+αT), L₀=8 м, α=2·10⁻⁵ °C⁻¹. При какой температуре удлинение составит 4 мм?</p><details><summary>Ответ</summary><p>25 °C.</p></details></article>
+        <article class="task"><span class="n">03</span><p>Π(q)=300q−200 000. Найдите минимальное целое q для прибыли не менее 300 000 руб.</p><details><summary>Ответ</summary><p>1667 изделий.</p></details></article>
+        <article class="task"><span class="n">04</span><p>h(t)=5t². До дождя 0,8 с, после дождя 0,6 с. На сколько поднялся уровень воды?</p><details><summary>Ответ</summary><p>1,4 м.</p></details></article>
+        <article class="task"><span class="n">05</span><p>Решите x²/12 − x/2 = 4/3.</p><details><summary>Ответ</summary><p>x=−2; x=8.</p></details></article>
+        <article class="task"><span class="n">06</span><p>T(t)=20+20t−t². При первом достижении 84 °C прибор отключается. Когда?</p><details><summary>Ответ</summary><p>4 мин.</p></details></article>
+        <article class="task"><span class="n">07</span><p>y(x)=−x²/40+x, 0≤x≤40. Найдите наибольшее x, когда камень ровно на 1 м выше стены 6,5 м.</p><details><summary>Ответ</summary><p>30 м.</p></details></article>
+        <article class="task"><span class="n">08</span><p>h(t)=10t−t², 0≤t≤10. Сколько секунд мяч находится на высоте не менее 21 м?</p><details><summary>Ответ</summary><p>4 с.</p></details></article>
+        <article class="task"><span class="n">09</span><p>h(t)=16(1−t/400)², 0≤t≤400. Через сколько секунд останется четверть первоначального объёма?</p><details><summary>Ответ</summary><p>200 с.</p></details></article>
+        <article class="task"><span class="n">10</span><p>T(t)=70+14t−t², 0≤t≤14. Когда температура не ниже 115 °C и какова продолжительность?</p><details><summary>Ответ</summary><p>t∈[5;9] мин; 4 мин.</p></details></article>
+        <article class="task"><span class="n">11</span><p>Подводный зонд: T=ρgl³−mg, ρ=1000 кг/м³, g=10 Н/кг, m=25 кг. Максимальный l при T≤1000 Н?</p><details><summary>Ответ</summary><p>0,5 м.</p></details></article>
+        <article class="task"><span class="n">12</span><p>Закон Стефана–Больцмана P=σST⁴. При данных пособия найдите минимальную температуру звезды.</p><details><summary>Ответ</summary><p>5000 К.</p></details></article>
+        <article class="task"><span class="n">13</span><p>Эффект Доплера: f(v)=f₀/(1−v/c), f₀=590 Гц, c=300 м/с. Минимальная скорость для различия частот на 10 Гц?</p><details><summary>Ответ</summary><p>5 м/с.</p></details></article>
+      </div>
+
+      <div class="progress-panel">
+        <p class="eyebrow">Самопроверка</p>
+        <div class="progressbar" aria-hidden="true"><span id="bar"></span></div>
+        <p id="progressText">Отмечено: 0 из 8</p>
+        <div class="checks" id="checks">
+          <label class="check"><input type="checkbox"> <span>Я различаю аргумент функции и её значение.</span></label>
+          <label class="check"><input type="checkbox"> <span>Я проверяю единицы и перевожу миллиметры в метры.</span></label>
+          <label class="check"><input type="checkbox"> <span>Я перевожу «не менее» и «не более» в неравенство.</span></label>
+          <label class="check"><input type="checkbox"> <span>Я нахожу границу через равенство.</span></label>
+          <label class="check"><input type="checkbox"> <span>Я решаю квадратное уравнение и проверяю дискриминант.</span></label>
+          <label class="check"><input type="checkbox"> <span>Я отбираю корень по смыслу: первый, наибольший, допустимый.</span></label>
+          <label class="check"><input type="checkbox"> <span>Я отличаю момент времени от продолжительности.</span></label>
+          <label class="check"><input type="checkbox"> <span>Я проверяю ответ подстановкой и по области применимости.</span></label>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span><strong>Лёвин Артём Александрович</strong> эксклюзивно для Григория Архипова</span>
+    <span>30 сентября 2026</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const root=document.documentElement;
+  const themeBtn=document.getElementById('theme');
+  const key='grisha-theme';
+  let theme='light';
+  try{theme=localStorage.getItem(key)||((window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light')}catch(_){}
+  root.dataset.theme=theme;
+  function syncTheme(){themeBtn.textContent=theme==='dark'?'☀ Светлая':'◐ Тёмная';themeBtn.setAttribute('aria-pressed',theme==='dark'?'true':'false')}
+  syncTheme();
+  themeBtn.addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';root.dataset.theme=theme;try{localStorage.setItem(key,theme)}catch(_){}syncTheme()});
+  document.getElementById('printBtn').addEventListener('click',()=>window.print());
+
+  const inputs=[...document.querySelectorAll('#checks input')];
+  const bar=document.getElementById('bar'),label=document.getElementById('progressText'),progressKey='grisha-300926-progress';
+  let saved=[];
+  try{saved=JSON.parse(localStorage.getItem(progressKey)||'[]')}catch(_){saved=[]}
+  inputs.forEach((input,i)=>{input.checked=!!saved[i];input.addEventListener('change',()=>{const state=inputs.map(x=>x.checked);try{localStorage.setItem(progressKey,JSON.stringify(state))}catch(_){}update()})});
+  function update(){const n=inputs.filter(x=>x.checked).length;bar.style.width=(n/inputs.length*100)+'%';label.textContent='Отмечено: '+n+' из '+inputs.length}
+  update();
+})();
+</script>
+</body>
+</html>
