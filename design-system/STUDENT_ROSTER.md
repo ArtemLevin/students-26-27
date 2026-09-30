@@ -17,6 +17,7 @@ Current migration roster for all `students/*/site/index.html` pages.
 | kirill_zinoviev | lab | graphite | compact | orthogonal | technical | mechanical |
 | kristina | editorial | plum | airy | mixed | editorial | calm |
 | marina | cosmos | petrol | airy | circular | editorial | calm |
+| mark_gukin | editorial | forest | balanced | circular | technical-editorial | calm |
 | matvey_gorbachev | blueprint | graphite | balanced | orthogonal | technical | mechanical |
 | nadya_klimenko | archive | vermilion | balanced | mixed | technical-editorial | calm |
 | nastya_pavlova | cosmos | cobalt | airy | circular | technical-editorial | calm |
