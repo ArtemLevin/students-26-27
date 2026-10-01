@@ -20,7 +20,7 @@ function write(file,content=''){
   fs.mkdirSync(path.dirname(file),{recursive:true});
   fs.writeFileSync(file,content);
 }
-function fixture(){
+export function fixture(){
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'validated-migration-plan-'));
   const studentId='demo_student';
   const base=path.join(root,'students',studentId);
@@ -327,21 +327,30 @@ test('validated dry-run CLI emits an executable plan and performs zero writes',(
   assert.deepEqual(fs.readFileSync(x.baselinePath),baselineBefore);
 });
 
-test('CLI rejects apply while P5.0d.3 write mode is closed',()=>{
+test('CLI apply executes reviewed migration atomically',()=>{
   const x=fixture();
   const script=path.join(process.cwd(),'pipeline','migration','migrate-student.mjs');
+  const protectedBefore=fs.readFileSync(path.join(x.site,'index.html'));
   const run=spawnSync(process.execPath,[
     script,
     x.studentId,
     '--root',x.root,
     '--manifest','pipeline/migration/manifests/demo_student.json',
     '--date','2026-10-01',
-    '--apply'
+    '--apply',
+    '--json'
   ],{cwd:process.cwd(),encoding:'utf8'});
 
-  assert.notEqual(run.status,0);
-  assert.match(run.stderr,/Write migration remains disabled in P5\.0d\.3/);
-  assert.equal(fs.existsSync(x.contractPath),false);
+  assert.equal(run.status,0,run.stderr||run.stdout);
+  const result=JSON.parse(run.stdout);
+  assert.equal(result.status,'applied');
+  assert.equal(result.architecture,'v2');
+  assert.equal(result.rolledBack,false);
+  assert.equal(result.coverage.complete,true);
+  assert.equal(inspectStudent(x.root,x.studentId).architecture,'v2');
+  assert.equal(fs.existsSync(x.contractPath),true);
+  assert.equal(fs.existsSync(x.reportPath),true);
+  assert.deepEqual(fs.readFileSync(path.join(x.site,'index.html')),protectedBefore);
 });
 
 test('manifest loader reads root-relative reviewed manifest',()=>{
