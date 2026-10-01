@@ -1,6 +1,13 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import {
+  loadCompetencyCatalog,
+  loadLessonRegistry,
+  validateLessonPublicationIntentData,
+  validateRegistryMetadataParity
+} from './publication-contract.mjs';
+export {validateLessonPublicationIntentData} from './publication-contract.mjs';
 
 export const STUDENT_CONTRACT_VERSION=2;
 export const KTP_PLAN_VERSION=1;
@@ -233,6 +240,8 @@ function localMaterialPath(siteRoot,studentBase,reference,label){
 }
 function escapeRegExp(value){return String(value).replace(/[.*+?^$()|[\]\\]/g,'\\$&');}
 
+void validateLessonPublicationIntentData;
+
 export function discoverV2Students(root=process.cwd()){
   const studentsDir=path.join(root,'students');
   if(!fs.existsSync(studentsDir))return [];
@@ -260,6 +269,14 @@ export function validateStudentPackage({root=process.cwd(),studentId}={}){
 
   const plan=validateKtpPlanData(loadJson(planPath),{studentId});
   const state=validateKtpStateData(loadJson(statePath),{studentId,plan});
+  const competencyCatalog=loadCompetencyCatalog(catalogPath);
+  for(const lesson of plan.lessons){
+    for(const competencyId of lesson.targetCompetencies){
+      if(!competencyCatalog.ids.has(competencyId)){
+        fail('ktp-plan '+lesson.id,'target competency '+competencyId+' is absent from the competency catalog');
+      }
+    }
+  }
   const metadataFiles=fs.readdirSync(metadataDir).filter(name=>name.endsWith('.lesson.json')).sort();
   const metadataByDate=new Map(),siteRoot=path.join(base,'site');
 
@@ -268,6 +285,11 @@ export function validateStudentPackage({root=process.cwd(),studentId}={}){
     const metadata=validateLessonMetadataData(loadJson(file),{studentId,plan});
     if(metadataByDate.has(metadata.date))fail(file,'duplicate metadata date '+metadata.date);
     metadataByDate.set(metadata.date,metadata);
+    for(const outcome of metadata.outcomes){
+      if(!competencyCatalog.ids.has(outcome.competencyId)){
+        fail(name+'.outcomes','competency '+outcome.competencyId+' is absent from the competency catalog');
+      }
+    }
     for(const [kind,reference] of Object.entries(metadata.materials)){
       const target=localMaterialPath(siteRoot,base,reference,name+'.materials.'+kind);
       mustExist(target,name+'.materials.'+kind);
@@ -281,6 +303,8 @@ export function validateStudentPackage({root=process.cwd(),studentId}={}){
       }
     }
   }
+
+  validateRegistryMetadataParity(loadLessonRegistry(registryPath),metadataByDate);
 
   for(const [ktpId,recordState] of Object.entries(state.records)){
     for(const lessonDate of recordState.lessonRefs||[]){
