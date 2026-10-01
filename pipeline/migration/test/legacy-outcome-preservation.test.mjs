@@ -97,10 +97,13 @@ test('migration replaces mapped legacy outcome with canonical evidence and prese
   });
   write(path.join(x.site,'candidate-registry.js'),source);
   const registry=loadLessonRegistry(path.join(x.site,'candidate-registry.js'));
-  assert.deepEqual(registry[0].outcomes,[
-    {competencyId:'skill_a',evidenceAnchor:'practice',relation:'practiced'},
-    {label:'Legacy-only observation',level:3,tone:'good'}
-  ]);
+  assert.deepEqual(
+    JSON.parse(JSON.stringify(registry[0].outcomes)),
+    [
+      {competencyId:'skill_a',evidenceAnchor:'practice',relation:'practiced'},
+      {label:'Legacy-only observation',level:3,tone:'good'}
+    ]
+  );
   assert.equal(
     validateRegistryMetadataParity(registry,built.metadataByDate),
     true
