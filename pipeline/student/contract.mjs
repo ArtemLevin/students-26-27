@@ -261,9 +261,9 @@ export function validateMasteryStateData(value,{studentId=null,catalogIds=null}=
   return value;
 }
 
-export function loadJson(filePath,label=path.basename(filePath)){
+export function loadJson(filePath,label=path.basename(filePath),fsView=fs){
   let value;
-  try{value=JSON.parse(fs.readFileSync(filePath,'utf8'));}
+  try{value=JSON.parse(fsView.readFileSync(filePath,'utf8'));}
   catch(error){fail(label,'cannot parse JSON: '+error.message);}
   return value;
 }
@@ -275,9 +275,9 @@ export function resolveStudentContractPath(root,studentId,relative){
   if(target!==base&&!target.startsWith(base+path.sep))fail(relative,'resolved outside the student directory');
   return target;
 }
-function mustExist(filePath,label,options={}){
-  if(!fs.existsSync(filePath))fail(label,'referenced path does not exist');
-  const stat=fs.statSync(filePath),directory=options.directory===true;
+function mustExist(filePath,label,options={},fsView=fs){
+  if(!fsView.existsSync(filePath))fail(label,'referenced path does not exist');
+  const stat=fsView.statSync(filePath),directory=options.directory===true;
   if(directory?!stat.isDirectory():!stat.isFile())fail(label,directory?'must be a directory':'must be a file');
 }
 function localMaterialPath(siteRoot,studentBase,reference,label){
@@ -298,11 +298,11 @@ export function discoverV2Students(root=process.cwd()){
     .sort();
 }
 
-export function validateStudentPackage({root=process.cwd(),studentId}={}){
+export function validateStudentPackage({root=process.cwd(),studentId,fsView=fs}={}){
   string(studentId,'studentId',{pattern:STUDENT_ID_RE});
   const base=studentRoot(root,studentId),contractPath=path.join(base,'student-contract.json');
-  mustExist(contractPath,'student-contract.json');
-  const contract=validateStudentContractData(loadJson(contractPath),{studentId});
+  mustExist(contractPath,'student-contract.json',{},fsView);
+  const contract=validateStudentContractData(loadJson(contractPath,path.basename(contractPath),fsView),{studentId});
 
   const planPath=resolveStudentContractPath(root,studentId,contract.planning.plan);
   const statePath=resolveStudentContractPath(root,studentId,contract.planning.state);
@@ -310,15 +310,15 @@ export function validateStudentPackage({root=process.cwd(),studentId}={}){
   const metadataDir=resolveStudentContractPath(root,studentId,contract.lessons.metadataDir);
   const catalogPath=resolveStudentContractPath(root,studentId,contract.competencies.catalog);
   const masteryPath=resolveStudentContractPath(root,studentId,contract.competencies.mastery);
-  for(const pair of [[planPath,'KTP plan'],[statePath,'KTP state'],[registryPath,'lesson registry'],[catalogPath,'competency catalog'],[masteryPath,'mastery authority']])mustExist(pair[0],pair[1]);
-  mustExist(metadataDir,'lesson metadata directory',{directory:true});
-  if(contract.practice.config!==null)mustExist(resolveStudentContractPath(root,studentId,contract.practice.config),'practice config');
+  for(const pair of [[planPath,'KTP plan'],[statePath,'KTP state'],[registryPath,'lesson registry'],[catalogPath,'competency catalog'],[masteryPath,'mastery authority']])mustExist(pair[0],pair[1],{},fsView);
+  mustExist(metadataDir,'lesson metadata directory',{directory:true},fsView);
+  if(contract.practice.config!==null)mustExist(resolveStudentContractPath(root,studentId,contract.practice.config),'practice config',{},fsView);
 
-  const plan=validateKtpPlanData(loadJson(planPath),{studentId});
-  const state=validateKtpStateData(loadJson(statePath),{studentId,plan});
-  const competencyCatalog=loadCompetencyCatalog(catalogPath);
+  const plan=validateKtpPlanData(loadJson(planPath,path.basename(planPath),fsView),{studentId});
+  const state=validateKtpStateData(loadJson(statePath,path.basename(statePath),fsView),{studentId,plan});
+  const competencyCatalog=loadCompetencyCatalog(catalogPath,{fsView});
   if(path.extname(masteryPath).toLowerCase()==='.json'){
-    validateMasteryStateData(loadJson(masteryPath),{
+    validateMasteryStateData(loadJson(masteryPath,path.basename(masteryPath),fsView),{
       studentId,
       catalogIds:competencyCatalog.ids
     });
@@ -330,12 +330,12 @@ export function validateStudentPackage({root=process.cwd(),studentId}={}){
       }
     }
   }
-  const metadataFiles=fs.readdirSync(metadataDir).filter(name=>name.endsWith('.lesson.json')).sort();
+  const metadataFiles=fsView.readdirSync(metadataDir).filter(name=>name.endsWith('.lesson.json')).sort();
   const metadataByDate=new Map(),siteRoot=path.join(base,'site');
 
   for(const name of metadataFiles){
     const file=path.join(metadataDir,name);
-    const metadata=validateLessonMetadataData(loadJson(file),{studentId,plan});
+    const metadata=validateLessonMetadataData(loadJson(file,path.basename(file),fsView),{studentId,plan});
     if(metadataByDate.has(metadata.date))fail(file,'duplicate metadata date '+metadata.date);
     metadataByDate.set(metadata.date,metadata);
     for(const outcome of metadata.outcomes){
@@ -345,11 +345,11 @@ export function validateStudentPackage({root=process.cwd(),studentId}={}){
     }
     for(const [kind,reference] of Object.entries(metadata.materials)){
       const target=localMaterialPath(siteRoot,base,reference,name+'.materials.'+kind);
-      mustExist(target,name+'.materials.'+kind);
+      mustExist(target,name+'.materials.'+kind,{},fsView);
     }
     if(metadata.materials.html){
       const htmlPath=localMaterialPath(siteRoot,base,metadata.materials.html,name+'.materials.html');
-      const html=fs.readFileSync(htmlPath,'utf8');
+      const html=fsView.readFileSync(htmlPath,'utf8');
       for(const outcome of metadata.outcomes){
         const anchor=escapeRegExp(outcome.evidenceAnchor);
         if(!new RegExp('\\bid=["\\\']'+anchor+'["\\\']').test(html))fail(name,'evidence anchor #'+outcome.evidenceAnchor+' is missing from '+metadata.materials.html);
@@ -357,7 +357,7 @@ export function validateStudentPackage({root=process.cwd(),studentId}={}){
     }
   }
 
-  validateRegistryMetadataParity(loadLessonRegistry(registryPath),metadataByDate);
+  validateRegistryMetadataParity(loadLessonRegistry(registryPath,{fsView}),metadataByDate);
 
   for(const [ktpId,recordState] of Object.entries(state.records)){
     for(const lessonDate of recordState.lessonRefs||[]){
