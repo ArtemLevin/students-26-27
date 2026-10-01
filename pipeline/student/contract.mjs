@@ -12,6 +12,7 @@ export const STUDENT_CONTRACT_VERSION=2;
 export const KTP_PLAN_VERSION=1;
 export const KTP_STATE_VERSION=1;
 export const LESSON_METADATA_VERSION=1;
+export const MASTERY_STATE_VERSION=1;
 
 const STUDENT_ID_RE=/^[a-z0-9]+(?:_[a-z0-9]+)*$/;
 const KTP_ID_RE=/^ktp-(\d{3,})$/;
@@ -19,6 +20,10 @@ const TOKEN_ID_RE=/^[A-Za-z0-9_.:-]+$/;
 const STAGE_ID_RE=/^[a-z0-9]+(?:[-_][a-z0-9]+)*$/;
 const ANCHOR_RE=/^[A-Za-z][A-Za-z0-9_-]*$/;
 const PRIVATE_STATE_KEYS=new Set(['teacherPrivateNote','parentContact','healthNote','personalObservation']);
+const MASTERY_SOURCE_KINDS=new Set([
+  'teacher-seed','teacher-mastery','baseline-levels',
+  'mastery-authority','stage04-mastery','dashboard-data'
+]);
 
 function fail(label,message){throw new Error(label+': '+message);}
 function record(value,label){
@@ -231,6 +236,31 @@ export function validateLessonMetadataData(value,{studentId=null,plan=null}={}){
   return value;
 }
 
+export function validateMasteryStateData(value,{studentId=null,catalogIds=null}={}){
+  const label='mastery-state';
+  exactKeys(value,['version','studentId','updated','levels'],[],label);
+  if(value.version!==MASTERY_STATE_VERSION)fail(label,'version must be '+MASTERY_STATE_VERSION);
+  string(value.studentId,label+'.studentId',{pattern:STUDENT_ID_RE});
+  if(studentId&&value.studentId!==studentId)fail(label+'.studentId','studentId mismatch');
+  date(value.updated,label+'.updated');
+  record(value.levels,label+'.levels');
+
+  for(const [competencyId,entry] of Object.entries(value.levels)){
+    string(competencyId,label+'.levels competencyId',{pattern:TOKEN_ID_RE});
+    exactKeys(entry,['level','sourcePath','sourceKind','basis'],[],label+'.levels.'+competencyId);
+    integer(entry.level,label+'.levels.'+competencyId+'.level',0,4);
+    assertRepoRelativePath(entry.sourcePath,label+'.levels.'+competencyId+'.sourcePath');
+    if(!MASTERY_SOURCE_KINDS.has(entry.sourceKind)){
+      fail(label+'.levels.'+competencyId+'.sourceKind','invalid mastery source kind');
+    }
+    string(entry.basis,label+'.levels.'+competencyId+'.basis',{max:1000});
+    if(catalogIds&&!catalogIds.has(competencyId)){
+      fail(label+'.levels.'+competencyId,'competency is absent from the competency catalog');
+    }
+  }
+  return value;
+}
+
 export function loadJson(filePath,label=path.basename(filePath)){
   let value;
   try{value=JSON.parse(fs.readFileSync(filePath,'utf8'));}
@@ -287,6 +317,12 @@ export function validateStudentPackage({root=process.cwd(),studentId}={}){
   const plan=validateKtpPlanData(loadJson(planPath),{studentId});
   const state=validateKtpStateData(loadJson(statePath),{studentId,plan});
   const competencyCatalog=loadCompetencyCatalog(catalogPath);
+  if(path.extname(masteryPath).toLowerCase()==='.json'){
+    validateMasteryStateData(loadJson(masteryPath),{
+      studentId,
+      catalogIds:competencyCatalog.ids
+    });
+  }
   for(const lesson of plan.lessons){
     for(const competencyId of lesson.targetCompetencies){
       if(!competencyCatalog.ids.has(competencyId)){
