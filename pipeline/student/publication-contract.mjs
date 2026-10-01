@@ -225,8 +225,12 @@ function extractLessonsArray(source,label){
   fail(label,'unterminated LESSONS array');
 }
 
+export function parseLessonRegistrySource(source,{label='lesson registry'}={}){
+  return extractLessonsArray(source,label);
+}
+
 export function loadLessonRegistry(filePath){
-  return extractLessonsArray(fs.readFileSync(filePath,'utf8'),'lesson registry');
+  return parseLessonRegistrySource(fs.readFileSync(filePath,'utf8'),{label:'lesson registry'});
 }
 
 function metadataRegistryProjection(metadata){
