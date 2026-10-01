@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {inspectStudent,inventoryStudents} from '../inventory-students.mjs';
 import {buildMigrationPlan,parseArgs} from '../migrate-student.mjs';
+import {evaluateArchitectureRatchet} from '../audit-ratchet.mjs';
 
 function root(){
   const value=fs.mkdtempSync(path.join(os.tmpdir(),'student-migration-'));
@@ -66,4 +67,33 @@ test('missing scaffold files block migration',()=>{
 test('write migration requires explicit future implementation and dry-run is parsed',()=>{
   assert.equal(parseArgs(['alice','--dry-run']).dryRun,true);
   assert.throws(()=>parseArgs([]),/studentId is required/);
+});
+
+test('architecture ratchet rejects regressions and requires immediate baseline tightening',()=>{
+  const baseline={version:1,minV2:1,maxNonV2:23};
+
+  assert.equal(
+    evaluateArchitectureRatchet({summary:{total:24,byArchitecture:{v2:1}}},baseline).ok,
+    true
+  );
+
+  const regression=evaluateArchitectureRatchet(
+    {summary:{total:25,byArchitecture:{v2:1}}},
+    baseline
+  );
+  assert.equal(regression.ok,false);
+  assert.ok(regression.violations.some(item=>item.includes('non-v2 count increased')));
+
+  const untightened=evaluateArchitectureRatchet(
+    {summary:{total:24,byArchitecture:{v2:2}}},
+    baseline
+  );
+  assert.equal(untightened.ok,false);
+  assert.ok(untightened.violations.some(item=>item.includes('baseline was not ratcheted')));
+
+  const tightened=evaluateArchitectureRatchet(
+    {summary:{total:24,byArchitecture:{v2:2}}},
+    {version:1,minV2:2,maxNonV2:22}
+  );
+  assert.equal(tightened.ok,true);
 });
