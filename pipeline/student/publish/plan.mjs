@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import {
   loadJson,
   resolveStudentContractPath,
@@ -25,6 +26,15 @@ import {deriveRegistrySource} from './registry.mjs';
 function json(value){return JSON.stringify(value,null,2)+'\n';}
 function relative(root,file){return path.relative(root,file).replaceAll('\\','/');}
 function readIfExists(file){return fs.existsSync(file)?fs.readFileSync(file,'utf8'):null;}
+function sha256Buffer(buffer){return crypto.createHash('sha256').update(buffer).digest('hex');}
+function filePrecondition(root,file){
+  const exists=fs.existsSync(file);
+  return {
+    path:relative(root,file),
+    exists,
+    sha256:exists?sha256Buffer(fs.readFileSync(file)):null
+  };
+}
 function metadataMapFromDir(metadataDir){
   const map=new Map();
   if(!fs.existsSync(metadataDir))return map;
@@ -169,6 +179,27 @@ export function buildV2PublicationPlan({
     if(!sameObject(change.before,change.after))changedKtp[ktpId]=change;
   }
 
+  const preconditionFiles=[
+    contractPath,
+    planPath,
+    statePath,
+    registryPath,
+    metadataPath,
+    catalogPath,
+    artifact.htmlPath,
+    ...Object.values(metadata.materials)
+      .filter(reference=>reference!==metadata.materials.html)
+      .map(reference=>path.resolve(path.dirname(registryPath),String(reference).split(/[?#]/,1)[0]))
+  ];
+  const preconditions=[];
+  const seenPreconditions=new Set();
+  for(const file of preconditionFiles){
+    const resolved=path.resolve(file);
+    if(seenPreconditions.has(resolved))continue;
+    seenPreconditions.add(resolved);
+    preconditions.push(filePrecondition(root,resolved));
+  }
+
   return {
     version:1,
     studentId,
@@ -180,6 +211,7 @@ export function buildV2PublicationPlan({
     conflicts,
     warnings:[...preflight.warnings],
     changes:{ktp:changedKtp},
+    preconditions,
     writes,
     candidates:{
       metadata,
