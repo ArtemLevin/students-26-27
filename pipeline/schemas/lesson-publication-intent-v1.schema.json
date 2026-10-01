@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://students-26-27.local/schemas/lesson-publication-intent-v1.schema.json",
+  "title": "Lesson Publication Intent v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "studentId",
+    "lessonDate",
+    "topics",
+    "actualSummary",
+    "ktpMatches",
+    "outcomes",
+    "warnings"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "studentId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "lessonDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "topics": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "actualSummary": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "ktpMatches": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ktpMatch" }
+    },
+    "outcomes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/outcome" }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    }
+  },
+  "$defs": {
+    "confidence": {
+      "enum": ["exact", "probable", "ambiguous"]
+    },
+    "decision": {
+      "enum": ["apply", "review", "ignore"]
+    },
+    "ktpMatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ktpId",
+        "confidence",
+        "decision",
+        "coverage",
+        "reason"
+      ],
+      "properties": {
+        "ktpId": {
+          "type": "string",
+          "pattern": "^ktp-[0-9]{3,}$"
+        },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "decision": { "$ref": "#/$defs/decision" },
+        "coverage": {
+          "enum": ["complete", "partial", "deferred"]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "decision": { "const": "apply" } },
+            "required": ["decision"]
+          },
+          "then": {
+            "properties": { "confidence": { "const": "exact" } }
+          }
+        }
+      ]
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "competencyId",
+        "evidenceAnchor",
+        "relation",
+        "confidence",
+        "decision",
+        "masteryClaim",
+        "basis"
+      ],
+      "properties": {
+        "competencyId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "evidenceAnchor": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"
+        },
+        "relation": {
+          "enum": ["touched", "practiced", "assessed"]
+        },
+        "confidence": { "$ref": "#/$defs/confidence" },
+        "decision": { "$ref": "#/$defs/decision" },
+        "masteryClaim": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/masteryClaim" }
+          ]
+        },
+        "basis": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "decision": { "const": "apply" } },
+            "required": ["decision"]
+          },
+          "then": {
+            "properties": { "confidence": { "const": "exact" } }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "masteryClaim": { "type": "object" }
+            },
+            "required": ["masteryClaim"]
+          },
+          "then": {
+            "properties": {
+              "relation": { "const": "assessed" },
+              "confidence": { "const": "exact" },
+              "decision": { "const": "apply" }
+            }
+          }
+        }
+      ]
+    },
+    "masteryClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "confidence", "basis"],
+      "properties": {
+        "level": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "confidence": { "const": "exact" },
+        "basis": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      }
+    }
+  }
+}
