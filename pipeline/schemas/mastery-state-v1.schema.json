@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://students-26-27.local/schemas/mastery-state-v1.schema.json",
+  "title": "Student Mastery State v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "studentId",
+    "updated",
+    "levels"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "studentId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date"
+    },
+    "levels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "level",
+          "sourcePath",
+          "sourceKind",
+          "basis"
+        ],
+        "properties": {
+          "level": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4
+          },
+          "sourcePath": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sourceKind": {
+            "enum": [
+              "teacher-seed",
+              "teacher-mastery",
+              "baseline-levels",
+              "mastery-authority",
+              "stage04-mastery",
+              "dashboard-data"
+            ]
+          },
+          "basis": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        }
+      }
+    }
+  }
+}
