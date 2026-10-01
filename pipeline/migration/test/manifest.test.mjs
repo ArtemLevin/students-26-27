@@ -49,6 +49,7 @@ function manifest(studentId='demo_student'){
   return {
     version:1,
     studentId,
+    identity:{studentName:'Demo Student',program:'Demo Program'},
     sourceArchitecture:'modern-shared',
     planning:{mode:'rolling',ktpExtraction:null},
     lessonMappings:[
@@ -85,6 +86,16 @@ function manifest(studentId='demo_student'){
 test('structural manifest validator accepts the canonical v1 shape',()=>{
   const value=manifest();
   assert.equal(validateStudentMigrationManifestData(value),value);
+});
+
+test('identity remains structurally optional but is required for automatic migration',()=>{
+  const repo=root();modernShared(repo);
+  const value=manifest();
+  delete value.identity;
+  assert.equal(validateStudentMigrationManifestData(value),value);
+  const report=validateStudentMigrationManifest({root:repo,manifest:value});
+  assert.equal(report.automaticEligible,false);
+  assert.ok(report.reviewItems.some(item=>item.type==='identity-missing'));
 });
 
 test('rolling modern-shared manifest can be automatically eligible',()=>{
@@ -170,6 +181,7 @@ test('fixed migration requires a real KTP source and tracks non-exact extraction
   const value={
     version:1,
     studentId:'ktp_student',
+    identity:{studentName:'KTP Student',program:'Demo Program'},
     sourceArchitecture:'legacy-ktp',
     planning:{
       mode:'fixed',
@@ -303,6 +315,7 @@ test('existing KTP cannot be silently downgraded to rolling planning',()=>{
   const value={
     version:1,
     studentId:'ktp_student',
+    identity:{studentName:'KTP Student',program:'Demo Program'},
     sourceArchitecture:'legacy-ktp',
     planning:{mode:'rolling',ktpExtraction:null},
     lessonMappings:[{lessonDate:'2026-09-30',ktpMatches:[]}],
