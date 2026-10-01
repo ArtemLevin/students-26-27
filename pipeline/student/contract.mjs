@@ -164,7 +164,11 @@ export function validateKtpStateData(value,{studentId=null,plan=null}={}){
     }
     if(state.status==='done'){
       if(!state.actualDate)fail(item,'done requires actualDate');
-      if(!state.coverage)fail(item,'done requires coverage');
+      if(state.coverage!=='complete')fail(item,'done requires coverage complete');
+    }
+    if(state.status==='in_progress'){
+      if(state.actualDate)fail(item,'in_progress must not contain actualDate');
+      if(!['partial','deferred'].includes(state.coverage))fail(item,'in_progress requires partial or deferred coverage');
     }
     if(state.status==='moved'&&!state.scheduledDate)fail(item,'moved requires scheduledDate');
     if(['planned','moved','skipped'].includes(state.status)&&state.actualDate)fail(item,state.status+' must not contain actualDate');
