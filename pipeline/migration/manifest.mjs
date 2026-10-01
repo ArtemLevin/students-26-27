@@ -235,6 +235,7 @@ export function validateStudentMigrationManifest({
       confidence:extraction.confidence
     });
   }else{
+    if(snapshot.features.ktp)fail('student-migration-manifest.planning','existing KTP source must be preserved with fixed planning');
     if(value.planning.ktpExtraction!==null)fail('student-migration-manifest.planning','rolling migration must not declare ktpExtraction');
     for(const mapping of value.lessonMappings){
       if(mapping.ktpMatches.length)fail('student-migration-manifest.lessonMappings','rolling migration historical lessons must have empty ktpMatches');
