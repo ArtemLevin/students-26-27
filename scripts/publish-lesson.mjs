@@ -7,6 +7,7 @@ import {validateSlug} from './create-student.mjs';
 import {replaceLessonRegistrySource} from '../pipeline/lessons/lesson-registry.mjs';
 import {buildV2PublicationPlan} from '../pipeline/student/publish/plan.mjs';
 import {executeV2Publication} from '../pipeline/student/publish/transaction.mjs';
+import {verifyPublishedPlan} from '../pipeline/student/publish/verify.mjs';
 
 export const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const DATE_HTML=/^(?:\d{2}\.\d{2}\.\d{2}|\d{2}-\d{2}-\d{2})\.html$/;
@@ -73,6 +74,19 @@ async function verify(root,student,{registry=null,dashboard=null}={}){
   checks.push(runNode(root,['design-system/test-contract.mjs']),runNode(root,['shared/student-dashboard/test-index-inventory.mjs']));
   const regression=path.join(root,'students',student,'site','tests','dashboard-regression.mjs');if(fs.existsSync(regression))checks.push(runNode(root,[path.relative(root,regression)]));
   return checks;
+}
+function verifyV2Production(root,student,plan){
+  const packageVerification=verifyPublishedPlan({root,plan});
+  const checks=[
+    runNode(root,['design-system/test-contract.mjs']),
+    runNode(root,['shared/student-dashboard/test-index-inventory.mjs'])
+  ];
+  const testDir=path.join(root,'students',student,'site','tests');
+  for(const name of ['student-platform-v2.test.mjs','dashboard-regression.mjs']){
+    const file=path.join(testDir,name);
+    if(fs.existsSync(file))checks.push(runNode(root,[path.relative(root,file)]));
+  }
+  return {...packageVerification,checks};
 }
 function loadPublicationIntent(root,intentPath){
   if(!intentPath)throw new Error('Student Platform v2 publication requires --intent <file>.');
@@ -150,7 +164,12 @@ export async function publishV2Lesson({
     intentFile:loaded.file?path.relative(root,loaded.file).replaceAll('\\','/'):null
   };
   if(dryRun)return summary;
-  const transaction=executeV2Publication({root,plan});
+  const transaction=executeV2Publication({
+    root,
+    plan,
+    postflight:({root:transactionRoot,plan:transactionPlan})=>
+      verifyV2Production(transactionRoot,student,transactionPlan)
+  });
   return {
     ...summary,
     changedFiles:transaction.changedFiles,
