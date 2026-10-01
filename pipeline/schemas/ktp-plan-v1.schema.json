@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://students-26-27.local/schemas/ktp-plan-v1.schema.json",
+  "title": "KTP Plan v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "studentId", "programVersion", "lessons"],
+  "properties": {
+    "version": {"const": 1},
+    "studentId": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+    "programVersion": {"type": "string", "minLength": 1, "maxLength": 120},
+    "lessons": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/lesson"}
+    }
+  },
+  "$defs": {
+    "lesson": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "order", "plannedDate", "stageId", "stage", "block", "topic", "content", "result", "check", "homework", "targetCompetencies"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^ktp-[0-9]{3,}$"},
+        "order": {"type": "integer", "minimum": 1},
+        "plannedDate": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "format": "date"}
+          ]
+        },
+        "stageId": {"type": "string", "pattern": "^[a-z0-9]+(?:[-_][a-z0-9]+)*$"},
+        "stage": {"type": "string", "minLength": 1, "maxLength": 200},
+        "block": {"type": "string", "minLength": 1, "maxLength": 240},
+        "topic": {"type": "string", "minLength": 1, "maxLength": 300},
+        "content": {"type": "string", "minLength": 1, "maxLength": 5000},
+        "result": {"type": "string", "minLength": 1, "maxLength": 3000},
+        "check": {"type": "string", "minLength": 1, "maxLength": 3000},
+        "homework": {"type": "string", "minLength": 1, "maxLength": 3000},
+        "targetCompetencies": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]+$"}
+        }
+      }
+    }
+  }
+}
