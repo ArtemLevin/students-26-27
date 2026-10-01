@@ -136,13 +136,18 @@ export function validateStudentMigrationManifestData(value,{studentId=null}={}){
   exactKeys(
     value,
     ['version','studentId','sourceArchitecture','planning','lessonMappings','competencyMappings','preserveMastery','ambiguities','blockers','warnings'],
-    [],
+    ['identity'],
     label
   );
   if(value.version!==STUDENT_MIGRATION_MANIFEST_VERSION)fail(label,'version must be '+STUDENT_MIGRATION_MANIFEST_VERSION);
   string(value.studentId,label+'.studentId',{pattern:STUDENT_ID_RE});
   if(studentId&&value.studentId!==studentId)fail(label,'studentId mismatch');
   if(!ARCHITECTURES.has(value.sourceArchitecture))fail(label+'.sourceArchitecture','invalid source architecture');
+  if(value.identity!==undefined){
+    exactKeys(value.identity,['studentName','program'],[],label+'.identity');
+    string(value.identity.studentName,label+'.identity.studentName',{max:160});
+    string(value.identity.program,label+'.identity.program',{max:240});
+  }
 
   exactKeys(value.planning,['mode','ktpExtraction'],[],label+'.planning');
   if(!['fixed','rolling'].includes(value.planning.mode))fail(label+'.planning.mode','must be fixed or rolling');
@@ -250,6 +255,12 @@ export function validateStudentMigrationManifest({
   if(!snapshot.features.design)fail('student-migration-manifest','site/design.json is missing');
 
   const reviewItems=[];
+  if(value.identity===undefined){
+    reviewItems.push({
+      type:'identity-missing',
+      reference:studentId
+    });
+  }
   if(value.planning.mode==='fixed'){
     if(!snapshot.features.ktp)fail('student-migration-manifest.planning','fixed migration requires an existing KTP source');
     if(value.planning.ktpExtraction===null)fail('student-migration-manifest.planning','fixed migration requires ktpExtraction');
@@ -438,6 +449,7 @@ export function validateStudentMigrationManifest({
     studentId,
     sourceArchitecture:value.sourceArchitecture,
     planningMode:value.planning.mode,
+    identity:value.identity??null,
     automaticEligible,
     reviewItems,
     blockers:[...value.blockers],
