@@ -1,0 +1,245 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://students-26-27.local/schemas/migration-coverage-v1.schema.json",
+  "title": "Student Migration Coverage v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "studentId",
+    "sourceArchitecture",
+    "targetArchitecture",
+    "migrationDate",
+    "complete",
+    "lessons",
+    "ktp",
+    "competencies",
+    "mastery",
+    "materials",
+    "preservation",
+    "writes",
+    "warnings",
+    "reviewItems",
+    "blockers"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "studentId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
+    },
+    "sourceArchitecture": {
+      "enum": [
+        "modern-shared",
+        "legacy-ktp",
+        "legacy-structured",
+        "legacy-bespoke"
+      ]
+    },
+    "targetArchitecture": {
+      "const": "v2"
+    },
+    "migrationDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "complete": {
+      "type": "boolean"
+    },
+    "lessons": {
+      "$ref": "#/$defs/countCoverage"
+    },
+    "ktp": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "sourceLessons",
+        "candidateLessons",
+        "mappedHistoricalLessons",
+        "fieldAliases"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "fixed",
+            "rolling"
+          ]
+        },
+        "sourceLessons": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "candidateLessons": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "mappedHistoricalLessons": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fieldAliases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "ktpId",
+              "source",
+              "target"
+            ],
+            "properties": {
+              "ktpId": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "target": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "competencies": {
+      "$ref": "#/$defs/countCoverage"
+    },
+    "mastery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resolvedSource",
+        "candidate",
+        "conflicts",
+        "orphans"
+      ],
+      "properties": {
+        "resolvedSource": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "candidate": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "conflicts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "orphans": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "materials": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "html",
+        "pdf",
+        "tex",
+        "lab"
+      ],
+      "properties": {
+        "html": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pdf": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tex": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "lab": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "preservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protectedFilesChanged"
+      ],
+      "properties": {
+        "protectedFilesChanged": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "writes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reviewItems": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "countCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "candidate",
+        "missing",
+        "extra"
+      ],
+      "properties": {
+        "source": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "candidate": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "missing": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "extra": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}
