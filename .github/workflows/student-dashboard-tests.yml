@@ -146,22 +146,6 @@ jobs:
         run: node --test pipeline/student/publish/test/*.test.mjs
       - name: Run migration pipeline regression
         run: node --test pipeline/migration/test/*.test.mjs
-      - name: P5.1 Volodia canary transactional apply smoke
-        if: github.head_ref == 'feat/student-platform-v2-p5-1-canary-volodia'
-        run: |
-          node scripts/student.mjs migrate volodia_khachaturian \
-            --manifest pipeline/migration/manifests/volodia_khachaturian.json \
-            --date 2026-10-01 \
-            --apply \
-            --json
-      - name: P5.1 capture canary migration patch
-        if: github.head_ref == 'feat/student-platform-v2-p5-1-canary-volodia'
-        shell: bash
-        run: |
-          git add -A
-          echo '===P5_1_CANARY_PATCH_BEGIN==='
-          git diff --cached --no-ext-diff --no-color --full-index
-          echo '===P5_1_CANARY_PATCH_END==='
       - name: Audit current student architectures
         shell: bash
         run: |
