@@ -126,12 +126,14 @@ jobs:
           node --check pipeline/migration/build/ktp-state.mjs
           node --check pipeline/migration/build/lessons.mjs
           node --check pipeline/migration/build/candidate.mjs
+          node --check pipeline/migration/coverage.mjs
+          node --check pipeline/migration/plan.mjs
           node --check pipeline/migration/inspect-legacy-state.mjs
           node --check pipeline/migration/migrate-student.mjs
           node --check pipeline/migration/audit-ratchet.mjs
       - name: Parse student platform JSON Schemas
         run: |
-          node -e "const fs=require('node:fs'); for (const name of ['student-contract-v2.schema.json','ktp-plan-v1.schema.json','ktp-state-v1.schema.json','lesson-metadata-v1.schema.json','lesson-publication-intent-v1.schema.json','student-migration-manifest-v1.schema.json','mastery-state-v1.schema.json']) JSON.parse(fs.readFileSync('pipeline/schemas/'+name,'utf8')); console.log('Student Platform schemas OK')"
+          node -e "const fs=require('node:fs'); for (const name of ['student-contract-v2.schema.json','ktp-plan-v1.schema.json','ktp-state-v1.schema.json','lesson-metadata-v1.schema.json','lesson-publication-intent-v1.schema.json','student-migration-manifest-v1.schema.json','mastery-state-v1.schema.json','migration-coverage-v1.schema.json']) JSON.parse(fs.readFileSync('pipeline/schemas/'+name,'utf8')); console.log('Student Platform schemas OK')"
       - name: Run shared filesystem transaction regression
         run: node --test pipeline/fs/test/*.test.mjs
       - name: Run student platform contract regression
