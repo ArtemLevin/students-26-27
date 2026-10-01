@@ -7,6 +7,10 @@ const EXACT_PATHS=new Set([
   'SITE_GENERATION_PROMPT.md',
   'pipeline/prompts/04_spaced_practice.md',
   'pipeline/prompts/web_page_design.md',
+  'pipeline/prompts/extract_lesson_evidence.md',
+  'pipeline/prompts/map_lesson_to_ktp.md',
+  'pipeline/prompts/build_student_plan.md',
+  'pipeline/prompts/migrate_student_architecture.md',
   'pipeline/schemas/spaced-practice-stage-v1.schema.json',
   'scripts/create-student.mjs',
   'scripts/publish-lesson.mjs',
@@ -20,6 +24,7 @@ const PREFIXES=[
   'pipeline/practice/',
   'pipeline/lessons/',
   'pipeline/student/',
+  'pipeline/migration/',
   'pipeline/schemas/',
   'design-system/'
 ];
