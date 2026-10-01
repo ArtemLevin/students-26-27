@@ -132,7 +132,8 @@ export async function publishV2Lesson({
   intentPath=null,
   intent=null,
   dryRun=false,
-  verifyChanges=true
+  verifyChanges=true,
+  postflight=null
 }={}){
   if(verifyChanges===false)throw new Error('Student Platform v2 publication verification cannot be disabled.');
   const normalized=normalizeLessonDate(date);
@@ -167,8 +168,8 @@ export async function publishV2Lesson({
   const transaction=executeV2Publication({
     root,
     plan,
-    postflight:({root:transactionRoot,plan:transactionPlan})=>
-      verifyV2Production(transactionRoot,student,transactionPlan)
+    postflight:postflight||(({root:transactionRoot,plan:transactionPlan})=>
+      verifyV2Production(transactionRoot,student,transactionPlan))
   });
   return {
     ...summary,
@@ -185,13 +186,14 @@ export async function publishLesson({
   intentPath=null,
   intent=null,
   dryRun=false,
-  verifyChanges=true
+  verifyChanges=true,
+  v2Postflight=null
 }={}){
   if(!student||!date)throw new Error('Student and lesson date are required.');
   requireScaffold(root,student);
   const contractPath=path.join(root,'students',student,'student-contract.json');
   if(fs.existsSync(contractPath)){
-    return publishV2Lesson({root,student,date,intentPath,intent,dryRun,verifyChanges});
+    return publishV2Lesson({root,student,date,intentPath,intent,dryRun,verifyChanges,postflight:v2Postflight});
   }
   return publishLegacyLesson({root,student,date,dryRun,verifyChanges});
 }
