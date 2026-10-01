@@ -97,6 +97,21 @@ Use only when a real existing KTP source is present:
 }
 ```
 
+## Legacy learning-state inspection
+
+When a deterministic `inspect-legacy-state` report is available, treat it as the authoritative repository inventory for competency IDs and preserved mastery.
+
+Rules:
+
+- Copy **every** item from `mastery.resolved` into `preserveMastery` exactly once.
+- Preserve the exact `competencyId`, `level`, `sourcePath` and `sourceKind` from a real extracted claim.
+- If several equal claims exist, choose one of the listed real provenance sources; do not invent a new source.
+- Never omit a resolved mastery item.
+- Never add a `preserveMastery` item that is absent from extracted repository claims.
+- If `mastery.conflicts` contains an ID, do not choose either level. Add a `mastery` ambiguity for that competency ID and leave it out of `preserveMastery`.
+- If `diagnostics.orphanClaims` contains an ID, add an explicit `mastery` or `source` ambiguity for that ID.
+- A report with mastery conflicts, orphan claims, unresolved catalog or source warnings is not eligible for automatic migration.
+
 ## Mastery preservation sources
 
 Allowed `sourceKind` values:
@@ -214,4 +229,6 @@ Verify that:
 - lesson coverage was not converted into mastery;
 - probable/ambiguous items remain visibly non-exact;
 - private data is absent;
+- every resolved repository mastery level is represented exactly once in `preserveMastery`;
+- no unresolved mastery conflict was converted into a preserved level;
 - the output contains only the declared manifest fields.
