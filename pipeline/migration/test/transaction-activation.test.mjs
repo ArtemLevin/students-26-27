@@ -111,10 +111,11 @@ test('manifest or protected source drift makes the migration plan stale before w
 
 test('partial migration failure restores updates and removes newly created directories',()=>{
   const x=fixture();
-  const state='students/demo_student/state.txt';
-  const created='students/demo_student/site/data/lessons/new.json';
+  const state='pipeline/migration/baseline.json';
+  const created='students/demo_student/site/data/lessons/2026-09-30.lesson.json';
+  const before=fs.readFileSync(path.join(x.root,...state.split('/')));
   const plan=planFor(x,[
-    {kind:'update',path:state,content:'after\n'},
+    {kind:'update',path:state,content:'{"changed":true}\n'},
     {kind:'create',path:created,content:'{}\n'}
   ]);
 
@@ -132,9 +133,9 @@ test('partial migration failure restores updates and removes newly created direc
     /Migration changes were rolled back/
   );
 
-  assert.equal(
-    fs.readFileSync(path.join(x.root,...state.split('/')),'utf8'),
-    'before\n'
+  assert.deepEqual(
+    fs.readFileSync(path.join(x.root,...state.split('/'))),
+    before
   );
   assert.equal(fs.existsSync(path.join(x.root,...created.split('/'))),false);
   assert.equal(fs.existsSync(path.join(x.studentRoot,'site','data')),false);
@@ -143,11 +144,11 @@ test('partial migration failure restores updates and removes newly created direc
 
 test('postflight failure rolls the complete migration write set back byte-for-byte',()=>{
   const x=fixture();
-  const state='students/demo_student/state.txt';
+  const state='pipeline/migration/baseline.json';
   const created='students/demo_student/student-contract.json';
   const before=fs.readFileSync(path.join(x.root,...state.split('/')));
   const plan=planFor(x,[
-    {kind:'update',path:state,content:'after\n'},
+    {kind:'update',path:state,content:'{"changed":true}\n'},
     {kind:'create',path:created,content:'{}\n'}
   ]);
 
@@ -162,5 +163,23 @@ test('postflight failure rolls the complete migration write set back byte-for-by
 
   assert.deepEqual(fs.readFileSync(path.join(x.root,...state.split('/'))),before);
   assert.equal(fs.existsSync(path.join(x.root,...created.split('/'))),false);
+  assert.deepEqual(tempRoots(x.root),[]);
+});
+
+
+test('crafted migration plan cannot write outside the canonical allowlist',()=>{
+  const x=fixture();
+  const target='students/demo_student/site/assets/rogue.js';
+  const plan=planFor(x,[{kind:'create',path:target,content:'boom\n'}]);
+
+  assert.throws(
+    ()=>executeMigrationTransaction({
+      root:x.root,
+      plan,
+      postflight:()=>({ok:true})
+    }),
+    /migration write policy: write target is outside the migration allowlist/
+  );
+  assert.equal(fs.existsSync(path.join(x.root,...target.split('/'))),false);
   assert.deepEqual(tempRoots(x.root),[]);
 });
