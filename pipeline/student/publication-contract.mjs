@@ -229,7 +229,7 @@ export function parseLessonRegistrySource(source,{label='lesson registry'}={}){
   return extractLessonsArray(source,label);
 }
 
-export function loadLessonRegistry(filePath){
+export function loadLessonRegistry(filePath,{fsView=fs}={}){
   return parseLessonRegistrySource(fsView.readFileSync(filePath,'utf8'),{label:'lesson registry'});
 }
 
