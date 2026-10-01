@@ -9,6 +9,7 @@ import {
   formatLongDateRu
 } from './lesson-registry.js?v=20260925-1';
 import {PRACTICE_CONFIG} from './practice-config.js';
+import {presentLessonOutcome} from '../../../shared/student-dashboard/outcome-adapter.js';
 
 const THEME_KEY='nikol-dashboard-theme-v1';
 const MOBILE_QUERY='(max-width:900px)';
@@ -80,16 +81,17 @@ function renderLatestLesson(){
     title.className='status-title';
     title.textContent='После урока';
     const outcomes=(lesson.outcomes||[]).map(outcome=>{
+      const view=presentLessonOutcome(outcome,{lessonDate:lesson.date});
       const row=document.createElement('div');
-      row.className=`outcome ${outcome.tone||'process'}`;
+      row.className=`outcome ${view.tone}`;
       const mark=document.createElement('span');
       mark.className='outcome-mark';
-      mark.textContent=outcome.tone==='good'?'✓':outcome.tone==='alert'?'!':'◐';
+      mark.textContent=view.mark;
       const label=document.createElement('span');
-      label.textContent=outcome.label;
-      const level=document.createElement('b');
-      level.textContent=`${outcome.level}/4`;
-      row.append(mark,label,level);
+      label.textContent=view.label;
+      const detail=document.createElement('b');
+      detail.textContent=view.detail;
+      row.append(mark,label,detail);
       return row;
     });
     status.replaceChildren(title,...outcomes);
