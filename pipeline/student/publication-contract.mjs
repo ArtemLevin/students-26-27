@@ -152,14 +152,14 @@ export function validateLessonPublicationIntentData(value,{studentId=null,plan=n
   return value;
 }
 
-export function loadCompetencyCatalog(filePath){
+export function loadCompetencyCatalog(filePath,{fsView=fs}={}){
   const label='competency catalog';
   let data;
   if(path.extname(filePath).toLowerCase()==='.json'){
-    try{data=JSON.parse(fs.readFileSync(filePath,'utf8'));}
+    try{data=JSON.parse(fsView.readFileSync(filePath,'utf8'));}
     catch(error){fail(label,'cannot parse JSON: '+error.message);}
   }else{
-    const source=fs.readFileSync(filePath,'utf8');
+    const source=fsView.readFileSync(filePath,'utf8');
     const sandbox={window:Object.create(null)};
     vm.createContext(sandbox,{codeGeneration:{strings:false,wasm:false}});
     try{
@@ -229,8 +229,8 @@ export function parseLessonRegistrySource(source,{label='lesson registry'}={}){
   return extractLessonsArray(source,label);
 }
 
-export function loadLessonRegistry(filePath){
-  return parseLessonRegistrySource(fs.readFileSync(filePath,'utf8'),{label:'lesson registry'});
+export function loadLessonRegistry(filePath,{fsView=fs}={}){
+  return parseLessonRegistrySource(fsView.readFileSync(filePath,'utf8'),{label:'lesson registry'});
 }
 
 function metadataRegistryProjection(metadata){
