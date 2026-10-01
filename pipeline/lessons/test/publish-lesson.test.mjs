@@ -321,3 +321,41 @@ test('legacy publication ignores v2 dispatch and preserves the established workf
   assert.equal(result.architecture,'legacy');
   assert.equal(result.mode,'registry-upsert');
 });
+
+test('v2 publication verification cannot be disabled programmatically',async()=>{
+  const x=v2Repo();
+  await assert.rejects(
+    ()=>publishLesson({
+      root:x.root,
+      student:x.student,
+      date:'29.09.26',
+      intentPath:'29.09.26.publish.json',
+      verifyChanges:false
+    }),
+    /verification cannot be disabled/
+  );
+  assert.equal(fs.existsSync(x.metadataPath),false);
+});
+
+test('v2 dispatcher rolls back when production postflight fails',async()=>{
+  const x=v2Repo();
+  const beforeState=fs.readFileSync(x.statePath);
+  const beforeRegistry=fs.readFileSync(x.registryPath);
+
+  await assert.rejects(
+    ()=>publishLesson({
+      root:x.root,
+      student:x.student,
+      date:'29.09.26',
+      intentPath:'29.09.26.publish.json',
+      v2Postflight:()=>{
+        throw new Error('forced production postflight failure');
+      }
+    }),
+    /forced production postflight failure[\s\S]*rolled back/
+  );
+
+  assert.equal(fs.existsSync(x.metadataPath),false);
+  assert.deepEqual(fs.readFileSync(x.statePath),beforeState);
+  assert.deepEqual(fs.readFileSync(x.registryPath),beforeRegistry);
+});
