@@ -104,6 +104,11 @@ jobs:
           node --check pipeline/student/contract.mjs
           node --check pipeline/student/publication-contract.mjs
           node --check pipeline/student/publish/preflight.mjs
+          node --check pipeline/student/publish/artifact.mjs
+          node --check pipeline/student/publish/metadata.mjs
+          node --check pipeline/student/publish/ktp-state.mjs
+          node --check pipeline/student/publish/registry.mjs
+          node --check pipeline/student/publish/plan.mjs
           node --check pipeline/student/validate.mjs
           node --check scripts/student.mjs
           node --check pipeline/migration/inventory-students.mjs
@@ -114,6 +119,8 @@ jobs:
           node -e "const fs=require('node:fs'); for (const name of ['student-contract-v2.schema.json','ktp-plan-v1.schema.json','ktp-state-v1.schema.json','lesson-metadata-v1.schema.json','lesson-publication-intent-v1.schema.json']) JSON.parse(fs.readFileSync('pipeline/schemas/'+name,'utf8')); console.log('Student Platform schemas OK')"
       - name: Run student platform contract regression
         run: node --test pipeline/student/test/*.test.mjs
+      - name: Run v2 publication domain regression
+        run: node --test pipeline/student/publish/test/*.test.mjs
       - name: Run migration pipeline regression
         run: node --test pipeline/migration/test/*.test.mjs
       - name: Audit current student architectures
