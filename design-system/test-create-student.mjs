@@ -21,6 +21,14 @@ function tempRepo(){
     '| existing | editorial | burgundy | airy | mixed | editorial | calm |','',
     'The roster is a deliberate diversity matrix. Change at least three axes when a newly created page is too close to a recent neighbor.',''
   ].join('\n'));
+  fs.mkdirSync(path.join(root,'pipeline','student'),{recursive:true});
+  fs.mkdirSync(path.join(root,'pipeline','migration'),{recursive:true});
+  fs.writeFileSync(path.join(root,'design-system','test-contract.mjs'),'process.exit(0);\n');
+  fs.writeFileSync(path.join(root,'pipeline','student','validate.mjs'),'process.exit(0);\n');
+  fs.writeFileSync(path.join(root,'pipeline','migration','baseline.json'),JSON.stringify({
+    version:1,measuredAt:'test',total:1,minV2:0,maxNonV2:1,
+    byArchitecture:{v2:0,'legacy-structured':1}
+  },null,2)+'\n');
   return root;
 }
 test('slug safety',()=>{
