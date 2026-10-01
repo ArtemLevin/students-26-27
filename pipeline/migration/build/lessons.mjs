@@ -291,6 +291,9 @@ export function renderCanonicalLessonRegistry({
     });
 
   const source=[
+    'export const RECENT_LIMIT=3;',
+    'export const ARCHIVE_PAGE_SIZE=10;',
+    '',
     'export const LESSONS='+JSON.stringify(lessons,null,2)+';',
     '',
     'export function compareLessonsNewestFirst(left,right){return right.date.localeCompare(left.date);}',
