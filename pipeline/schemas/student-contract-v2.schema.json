@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://students-26-27.local/schemas/student-contract-v2.schema.json",
+  "title": "Student Contract v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "studentId", "studentName", "program", "planning", "lessons", "competencies", "practice"],
+  "properties": {
+    "version": {"const": 2},
+    "studentId": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+    "studentName": {"type": "string", "minLength": 1, "maxLength": 160},
+    "program": {"type": "string", "minLength": 1, "maxLength": 240},
+    "planning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "plan", "state"],
+      "properties": {
+        "mode": {"enum": ["fixed", "rolling"]},
+        "plan": {"$ref": "#/$defs/repoPath"},
+        "state": {"$ref": "#/$defs/repoPath"}
+      }
+    },
+    "lessons": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["registry", "metadataDir"],
+      "properties": {
+        "registry": {"$ref": "#/$defs/repoPath"},
+        "metadataDir": {"$ref": "#/$defs/repoPath"}
+      }
+    },
+    "competencies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["catalog", "mastery"],
+      "properties": {
+        "catalog": {"$ref": "#/$defs/repoPath"},
+        "mastery": {"$ref": "#/$defs/repoPath"}
+      }
+    },
+    "practice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["config"],
+      "properties": {
+        "config": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/repoPath"}
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "repoPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"
+    }
+  }
+}
