@@ -4,7 +4,6 @@ import path from 'node:path';
 import {
   loadCompetencyCatalog,
   loadLessonRegistry,
-  validateLessonPublicationIntentData,
   validateRegistryMetadataParity
 } from './publication-contract.mjs';
 export {validateLessonPublicationIntentData} from './publication-contract.mjs';
@@ -239,8 +238,6 @@ function localMaterialPath(siteRoot,studentBase,reference,label){
   return target;
 }
 function escapeRegExp(value){return String(value).replace(/[.*+?^$()|[\]\\]/g,'\\$&');}
-
-void validateLessonPublicationIntentData;
 
 export function discoverV2Students(root=process.cwd()){
   const studentsDir=path.join(root,'students');
