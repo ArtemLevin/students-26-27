@@ -103,6 +103,22 @@ function loadPresentationRegistry(registryPath,warnings){
     return new Map();
   }
 }
+function normalizeLegacyOutcome(value){
+  if(!value||typeof value!=='object'||Array.isArray(value))return null;
+  if(typeof value.label!=='string'||!value.label.trim())return null;
+  const level=Number(value.level);
+  if(!Number.isInteger(level)||level<0||level>4)return null;
+  const outcome={label:value.label.trim(),level};
+  if(typeof value.competencyId==='string'&&value.competencyId.trim()){
+    outcome.competencyId=value.competencyId.trim();
+  }
+  if(typeof value.tone==='string'&&value.tone.trim())outcome.tone=value.tone.trim();
+  if(typeof value.practiceDisposition==='string'&&value.practiceDisposition.trim()){
+    outcome.practiceDisposition=value.practiceDisposition.trim();
+  }
+  return outcome;
+}
+
 function uniqueStrings(value){
   if(!Array.isArray(value))return [];
   return [...new Set(value.filter(item=>typeof item==='string'&&item.trim()).map(item=>item.trim()))];
@@ -186,6 +202,28 @@ export function buildHistoricalLessonMetadata({
       }
     }
     const ktpRefs=lessonMapping.ktpMatches.map(item=>item.ktpId);
+    const canonicalIds=new Set((outcomesByDate.get(lessonDate)||[]).map(item=>item.competencyId));
+    const legacyOutcomes=[];
+    for(const rawOutcome of legacy?.outcomes||[]){
+      const normalized=normalizeLegacyOutcome(rawOutcome);
+      if(!normalized){
+        warnings.push({
+          type:'legacy-outcome-unreadable',
+          lessonDate,
+          label:typeof rawOutcome?.label==='string'?rawOutcome.label:null
+        });
+        continue;
+      }
+      if(normalized.competencyId&&canonicalIds.has(normalized.competencyId))continue;
+      legacyOutcomes.push(normalized);
+    }
+    if(legacyOutcomes.length){
+      warnings.push({
+        type:'legacy-outcomes-preserved',
+        lessonDate,
+        count:legacyOutcomes.length
+      });
+    }
     const metadata={
       version:1,
       studentId,
@@ -201,6 +239,7 @@ export function buildHistoricalLessonMetadata({
         }))
       }:{}),
       outcomes:outcomesByDate.get(lessonDate)||[],
+      ...(legacyOutcomes.length?{legacyOutcomes}:{}),
       materials:materialsForLesson({
         studentRoot,
         site,
@@ -241,9 +280,12 @@ export function renderCanonicalLessonRegistry({
         ...presentation,
         summary:metadata.summary,
         topics:metadata.topics,
-        outcomes:metadata.outcomes.map(({competencyId,evidenceAnchor,relation})=>({
-          competencyId,evidenceAnchor,relation
-        })),
+        outcomes:[
+          ...metadata.outcomes.map(({competencyId,evidenceAnchor,relation})=>({
+            competencyId,evidenceAnchor,relation
+          })),
+          ...(metadata.legacyOutcomes||[])
+        ],
         materials:metadata.materials
       };
     });

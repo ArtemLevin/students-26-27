@@ -233,6 +233,17 @@ export function loadLessonRegistry(filePath,{fsView=fs}={}){
   return parseLessonRegistrySource(fsView.readFileSync(filePath,'utf8'),{label:'lesson registry'});
 }
 
+function legacyOutcomeRegistryProjection(outcome){
+  const projected={
+    label:outcome.label,
+    level:outcome.level
+  };
+  if(outcome.competencyId!==undefined)projected.competencyId=outcome.competencyId;
+  if(outcome.tone!==undefined)projected.tone=outcome.tone;
+  if(outcome.practiceDisposition!==undefined)projected.practiceDisposition=outcome.practiceDisposition;
+  return projected;
+}
+
 function metadataRegistryProjection(metadata){
   if(!metadata.materials.html){
     fail('lesson metadata '+metadata.date,'materials.html is required for registry parity');
@@ -244,9 +255,12 @@ function metadataRegistryProjection(metadata){
     summary:metadata.summary,
     topics:metadata.topics,
     ktpRefs:metadata.ktpRefs,
-    outcomes:metadata.outcomes.map(({competencyId,evidenceAnchor,relation})=>({
-      competencyId,evidenceAnchor,relation
-    })),
+    outcomes:[
+      ...metadata.outcomes.map(({competencyId,evidenceAnchor,relation})=>({
+        competencyId,evidenceAnchor,relation
+      })),
+      ...(metadata.legacyOutcomes||[]).map(legacyOutcomeRegistryProjection)
+    ],
     materials:metadata.materials
   };
 }
