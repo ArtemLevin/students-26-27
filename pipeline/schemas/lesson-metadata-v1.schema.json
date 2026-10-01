@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://students-26-27.local/schemas/lesson-metadata-v1.schema.json",
+  "title": "Lesson Metadata v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "studentId", "date", "title", "summary", "topics", "ktpRefs", "outcomes", "materials"],
+  "properties": {
+    "version": {"const": 1},
+    "studentId": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+    "date": {"type": "string", "format": "date"},
+    "title": {"type": "string", "minLength": 1, "maxLength": 300},
+    "summary": {"type": "string", "maxLength": 3000},
+    "topics": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 160}
+    },
+    "ktpRefs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^ktp-[0-9]{3,}$"}
+    },
+    "outcomes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/outcome"}
+    },
+    "materials": {"$ref": "#/$defs/materials"}
+  },
+  "$defs": {
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["competencyId", "evidenceAnchor", "relation", "masteryClaim"],
+      "properties": {
+        "competencyId": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]+$"},
+        "evidenceAnchor": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"},
+        "relation": {"enum": ["touched", "practiced", "assessed"]},
+        "masteryClaim": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["level", "confidence", "basis"],
+              "properties": {
+                "level": {"type": "integer", "minimum": 0, "maximum": 4},
+                "confidence": {"const": "exact"},
+                "basis": {"type": "string", "minLength": 1, "maxLength": 1000}
+              }
+            }
+          ]
+        }
+      }
+    },
+    "materials": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "html": {"type": "string", "minLength": 1},
+        "pdf": {"type": "string", "minLength": 1},
+        "tex": {"type": "string", "minLength": 1},
+        "lab": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
