@@ -13,6 +13,8 @@ test('dashboard and production contract changes are heavy',()=>{
     'pipeline/practice/run-stage-04.mjs',
     'pipeline/lessons/lesson-registry.mjs',
     'pipeline/student/contract.mjs',
+    'pipeline/migration/inventory-students.mjs',
+    'pipeline/prompts/map_lesson_to_ktp.md',
     'pipeline/schemas/student-contract-v2.schema.json',
     'pipeline/prompts/web_page_design.md',
     'design-system/fingerprint.schema.json',
