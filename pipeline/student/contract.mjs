@@ -184,7 +184,7 @@ export function validateKtpStateData(value,{studentId=null,plan=null}={}){
 
 export function validateLessonMetadataData(value,{studentId=null,plan=null}={}){
   const label='lesson-metadata';
-  exactKeys(value,['version','studentId','date','title','summary','topics','ktpRefs','outcomes','materials'],['ktpCoverage'],label);
+  exactKeys(value,['version','studentId','date','title','summary','topics','ktpRefs','outcomes','materials'],['ktpCoverage','legacyOutcomes'],label);
   if(value.version!==LESSON_METADATA_VERSION)fail(label,'version must be '+LESSON_METADATA_VERSION);
   string(value.studentId,label+'.studentId',{pattern:STUDENT_ID_RE});
   if(studentId&&value.studentId!==studentId)fail(label,'studentId mismatch');
@@ -215,6 +215,18 @@ export function validateLessonMetadataData(value,{studentId=null,plan=null}={}){
     const refs=[...value.ktpRefs].sort();
     const coverage=[...coverageIds].sort();
     if(JSON.stringify(refs)!==JSON.stringify(coverage))fail(label+'.ktpCoverage','must cover exactly the same KTP IDs as ktpRefs');
+  }
+  if('legacyOutcomes' in value){
+    array(value.legacyOutcomes,label+'.legacyOutcomes');
+    value.legacyOutcomes.forEach((outcome,index)=>{
+      const item=label+'.legacyOutcomes['+index+']';
+      exactKeys(outcome,['label','level'],['competencyId','tone','practiceDisposition'],item);
+      if('competencyId' in outcome)string(outcome.competencyId,item+'.competencyId',{pattern:TOKEN_ID_RE});
+      string(outcome.label,item+'.label',{max:300});
+      integer(outcome.level,item+'.level',0,4);
+      if('tone' in outcome)string(outcome.tone,item+'.tone',{max:40});
+      if('practiceDisposition' in outcome)string(outcome.practiceDisposition,item+'.practiceDisposition',{max:64});
+    });
   }
   array(value.outcomes,label+'.outcomes');
   value.outcomes.forEach((outcome,index)=>{
