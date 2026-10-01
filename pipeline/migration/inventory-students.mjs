@@ -6,14 +6,14 @@ import {fileURLToPath} from 'node:url';
 export const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 const DATE_HTML=/^(?:\d{2}\.\d{2}\.\d{2}|\d{2}-\d{2}-\d{2})\.html$/;
 
-function exists(file){return fs.existsSync(file);}
-function countFiles(dir,predicate=()=>true){
-  if(!exists(dir))return 0;
-  return fs.readdirSync(dir,{withFileTypes:true}).filter(entry=>entry.isFile()&&predicate(entry.name)).length;
+function exists(file,fsView=fs){return fsView.existsSync(file);}
+function countFiles(dir,predicate=()=>true,fsView=fs){
+  if(!exists(dir,fsView))return 0;
+  return fsView.readdirSync(dir,{withFileTypes:true}).filter(entry=>entry.isFile()&&predicate(entry.name)).length;
 }
-function firstExisting(paths){return paths.find(exists)||null;}
+function firstExisting(paths,fsView=fs){return paths.find(file=>exists(file,fsView))||null;}
 
-export function inspectStudent(root,studentId){
+export function inspectStudent(root,studentId,{fsView=fs}={}){
   const base=path.join(root,'students',studentId),site=path.join(base,'site');
   const contract=path.join(base,'student-contract.json');
   const index=path.join(site,'index.html');
@@ -25,44 +25,44 @@ export function inspectStudent(root,studentId){
     path.join(base,'competency-map-data.js'),
     path.join(site,'competence-config.js'),
     path.join(site,'dashboard-data.js')
-  ]);
+  ],fsView);
   const mastery=firstExisting([
     path.join(site,'mastery-authority.js'),
     path.join(site,'stage04-mastery.js'),
     path.join(site,'competence-config.js'),
     path.join(site,'competency-map-baseline.js'),
     path.join(site,'dashboard-data.js')
-  ]);
+  ],fsView);
   const practice=path.join(site,'practice-config.js');
   const design=path.join(site,'design.json');
   const chemistry=path.join(base,'chemistry');
 
   let architecture='legacy-bespoke';
-  if(exists(contract))architecture='v2';
-  else if(exists(lessonRegistry)&&exists(dashboard))architecture='modern-shared';
-  else if(exists(ktp))architecture='legacy-ktp';
+  if(exists(contract,fsView))architecture='v2';
+  else if(exists(lessonRegistry,fsView)&&exists(dashboard,fsView))architecture='modern-shared';
+  else if(exists(ktp,fsView))architecture='legacy-ktp';
   else if(competency)architecture='legacy-structured';
 
   return {
     studentId,
     architecture,
     features:{
-      contract:exists(contract),
-      index:exists(index),
-      design:exists(design),
-      ktp:exists(ktp),
-      lessonRegistry:exists(lessonRegistry),
-      dashboard:exists(dashboard),
+      contract:exists(contract,fsView),
+      index:exists(index,fsView),
+      design:exists(design,fsView),
+      ktp:exists(ktp,fsView),
+      lessonRegistry:exists(lessonRegistry,fsView),
+      dashboard:exists(dashboard,fsView),
       competency:!!competency,
       mastery:!!mastery,
-      practice:exists(practice),
-      chemistry:exists(chemistry)
+      practice:exists(practice,fsView),
+      chemistry:exists(chemistry,fsView)
     },
     counts:{
-      lessonHtml:countFiles(site,name=>DATE_HTML.test(name)),
-      lessonLabs:countFiles(site,name=>/-lab\.html$/.test(name)),
-      tex:countFiles(path.join(base,'tex_docs'),name=>name.endsWith('.tex')),
-      pdf:countFiles(path.join(base,'pdf_docs'),name=>name.endsWith('.pdf'))
+      lessonHtml:countFiles(site,name=>DATE_HTML.test(name),fsView),
+      lessonLabs:countFiles(site,name=>/-lab\.html$/.test(name),fsView),
+      tex:countFiles(path.join(base,'tex_docs'),name=>name.endsWith('.tex'),fsView),
+      pdf:countFiles(path.join(base,'pdf_docs'),name=>name.endsWith('.pdf'),fsView)
     },
     paths:{
       competency:competency?path.relative(root,competency).replaceAll('\\','/'):null,
@@ -71,12 +71,12 @@ export function inspectStudent(root,studentId){
   };
 }
 
-export function inventoryStudents(root=ROOT){
+export function inventoryStudents(root=ROOT,{fsView=fs}={}){
   const studentsDir=path.join(root,'students');
-  if(!exists(studentsDir))return {students:[],summary:{total:0,byArchitecture:{}}};
-  const students=fs.readdirSync(studentsDir,{withFileTypes:true})
+  if(!exists(studentsDir,fsView))return {students:[],summary:{total:0,byArchitecture:{}}};
+  const students=fsView.readdirSync(studentsDir,{withFileTypes:true})
     .filter(entry=>entry.isDirectory())
-    .map(entry=>inspectStudent(root,entry.name))
+    .map(entry=>inspectStudent(root,entry.name,{fsView}))
     .filter(item=>item.features.index||item.features.contract)
     .sort((a,b)=>a.studentId.localeCompare(b.studentId,'en'));
   const byArchitecture={};
