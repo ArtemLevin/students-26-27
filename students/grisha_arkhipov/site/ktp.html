@@ -277,5 +277,16 @@ $("themeBtn").onclick=()=>{const t=document.documentElement.dataset.theme==="dar
 $("printBtn").onclick=()=>window.print();$("closeBtn").onclick=()=>$("drawer").close();
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("drawer").open)$("drawer").close();if(e.key==="/"&&!["INPUT","TEXTAREA","SELECT"].includes(document.activeElement.tagName)){e.preventDefault();state.ui.view="ktp";renderViews();$("search").focus()}});
 renderAll();
+const requestedKtpId=new URLSearchParams(location.search).get("lesson");
+if(requestedKtpId){
+  const requestedLesson=LESSONS.find(item=>item.ktpId===requestedKtpId);
+  if(requestedLesson){
+    state.ui.view="ktp";
+    renderAll();
+    const row=document.querySelector('.lesson-open[data-id="'+requestedLesson.n+'"]');
+    if(row){row.closest("details").open=true;row.scrollIntoView({block:"center"});}
+    openDrawer(requestedLesson.n);
+  }
+}
 </script>
 </body></html>
