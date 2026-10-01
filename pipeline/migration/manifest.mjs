@@ -5,6 +5,7 @@ import {
   isCalendarDate
 } from '../student/contract.mjs';
 import {inspectStudent} from './inventory-students.mjs';
+import {inspectLegacyLearningState} from './legacy/inspect-learning-state.mjs';
 
 export const STUDENT_MIGRATION_MANIFEST_VERSION=1;
 
@@ -101,6 +102,32 @@ function lessonHtmlPath(root,studentId,lessonDate){
     if(fs.existsSync(file))return file;
   }
   return null;
+}
+
+function hasAmbiguity(manifest,{kind,reference}){
+  return manifest.ambiguities.some(item=>
+    item.kind===kind&&item.reference===reference
+  );
+}
+function assertKnownLegacyCompetency({legacyIds,suppliedIds,competencyId,label}){
+  if(legacyIds&&!legacyIds.has(competencyId)){
+    fail(label,'unknown competencyId '+competencyId+' in extracted legacy catalog');
+  }
+  if(suppliedIds&&!suppliedIds.has(competencyId)){
+    fail(label,'unknown competencyId '+competencyId);
+  }
+}
+function summarizeLegacyLearningState(state){
+  return {
+    automaticEligible:state.automaticEligible,
+    catalogCount:state.catalog?.count??0,
+    resolvedMastery:state.mastery.resolved.length,
+    masteryConflicts:state.mastery.conflicts.length,
+    orphanClaims:state.diagnostics.orphanClaims.length,
+    aliases:state.diagnostics.aliases.length,
+    indirectSources:state.diagnostics.indirectSources.length,
+    warnings:state.diagnostics.warnings.length
+  };
 }
 
 export function validateStudentMigrationManifestData(value,{studentId=null}={}){
@@ -260,12 +287,62 @@ export function validateStudentMigrationManifest({
     }
   }
 
-  const knownCompetencies=competencyIds===null?null:new Set(competencyIds);
+  const legacyState=inspectLegacyLearningState({root,studentId});
+  const legacyCompetencies=legacyState.catalog?new Set(legacyState.catalog.ids):null;
+  const suppliedCompetencies=competencyIds===null?null:new Set(competencyIds);
+
+  if(!legacyState.catalog){
+    reviewItems.push({
+      type:'legacy-catalog-unresolved',
+      reference:studentId
+    });
+  }
+
+  for(const conflict of legacyState.mastery.conflicts){
+    if(!hasAmbiguity(value,{kind:'mastery',reference:conflict.competencyId})){
+      fail(
+        'student-migration-manifest.ambiguities',
+        'legacy mastery conflict for '+conflict.competencyId+' must be declared as a mastery ambiguity'
+      );
+    }
+    reviewItems.push({
+      type:'legacy-mastery-conflict',
+      reference:conflict.competencyId
+    });
+  }
+
+  for(const orphan of legacyState.diagnostics.orphanClaims){
+    const declared=
+      hasAmbiguity(value,{kind:'mastery',reference:orphan.competencyId})||
+      hasAmbiguity(value,{kind:'source',reference:orphan.competencyId});
+    if(!declared){
+      fail(
+        'student-migration-manifest.ambiguities',
+        'orphan legacy mastery claim '+orphan.competencyId+' must be declared as an ambiguity'
+      );
+    }
+    reviewItems.push({
+      type:'legacy-mastery-orphan',
+      reference:orphan.competencyId
+    });
+  }
+
+  for(const warning of legacyState.diagnostics.warnings){
+    reviewItems.push({
+      type:'legacy-source-review',
+      reference:warning.sourcePath||studentId,
+      warning:warning.type
+    });
+  }
+
   for(const mapping of value.competencyMappings){
     if(!actualDates.has(mapping.lessonDate))fail('student-migration-manifest.competencyMappings','references lesson without HTML: '+mapping.lessonDate);
-    if(knownCompetencies&&!knownCompetencies.has(mapping.competencyId)){
-      fail('student-migration-manifest.competencyMappings','unknown competencyId '+mapping.competencyId);
-    }
+    assertKnownLegacyCompetency({
+      legacyIds:legacyCompetencies,
+      suppliedIds:suppliedCompetencies,
+      competencyId:mapping.competencyId,
+      label:'student-migration-manifest.competencyMappings'
+    });
     const htmlPath=lessonHtmlPath(root,studentId,mapping.lessonDate);
     if(!htmlPath)fail('student-migration-manifest.competencyMappings','lesson HTML is missing for '+mapping.lessonDate);
     assertAnchor(
@@ -281,13 +358,67 @@ export function validateStudentMigrationManifest({
     });
   }
 
+  const extractedClaims=legacyState.mastery.claims;
+  const resolvedMastery=new Map(
+    legacyState.mastery.resolved.map(item=>[item.competencyId,item])
+  );
+  const conflictedMastery=new Set(
+    legacyState.mastery.conflicts.map(item=>item.competencyId)
+  );
+  const manifestMastery=new Map(
+    value.preserveMastery.map(item=>[item.competencyId,item])
+  );
+
   for(const entry of value.preserveMastery){
-    if(knownCompetencies&&!knownCompetencies.has(entry.competencyId)){
-      fail('student-migration-manifest.preserveMastery','unknown competencyId '+entry.competencyId);
-    }
+    assertKnownLegacyCompetency({
+      legacyIds:legacyCompetencies,
+      suppliedIds:suppliedCompetencies,
+      competencyId:entry.competencyId,
+      label:'student-migration-manifest.preserveMastery'
+    });
     const source=resolveStudentPath(root,studentId,entry.sourcePath,'student-migration-manifest.preserveMastery.sourcePath');
     if(!fs.existsSync(source)||!fs.statSync(source).isFile()){
       fail('student-migration-manifest.preserveMastery.sourcePath','referenced mastery source does not exist: '+entry.sourcePath);
+    }
+    if(conflictedMastery.has(entry.competencyId)){
+      fail(
+        'student-migration-manifest.preserveMastery',
+        'cannot preserve unresolved legacy mastery conflict for '+entry.competencyId
+      );
+    }
+    const exactClaim=extractedClaims.find(claim=>
+      claim.competencyId===entry.competencyId&&
+      claim.level===entry.level&&
+      claim.sourcePath===entry.sourcePath&&
+      claim.sourceKind===entry.sourceKind
+    );
+    if(!exactClaim){
+      fail(
+        'student-migration-manifest.preserveMastery',
+        'entry for '+entry.competencyId+' does not match an extracted repository mastery claim'
+      );
+    }
+    const resolved=resolvedMastery.get(entry.competencyId);
+    if(!resolved){
+      fail(
+        'student-migration-manifest.preserveMastery',
+        'entry for '+entry.competencyId+' has no resolved repository mastery value'
+      );
+    }
+    if(resolved.level!==entry.level){
+      fail(
+        'student-migration-manifest.preserveMastery',
+        'level mismatch for '+entry.competencyId+': repository='+resolved.level+', manifest='+entry.level
+      );
+    }
+  }
+
+  for(const [competencyId,resolved] of resolvedMastery){
+    if(!manifestMastery.has(competencyId)){
+      fail(
+        'student-migration-manifest.preserveMastery',
+        'missing preserved mastery for '+competencyId+' at level '+resolved.level
+      );
     }
   }
 
@@ -300,7 +431,8 @@ export function validateStudentMigrationManifest({
   const automaticEligible=
     value.blockers.length===0&&
     value.ambiguities.length===0&&
-    reviewItems.length===0;
+    reviewItems.length===0&&
+    legacyState.automaticEligible;
 
   return {
     studentId,
@@ -310,6 +442,7 @@ export function validateStudentMigrationManifest({
     reviewItems,
     blockers:[...value.blockers],
     warnings:[...value.warnings],
+    legacyLearningState:summarizeLegacyLearningState(legacyState),
     stats:{
       historicalLessons:actualDates.size,
       lessonMappings:value.lessonMappings.length,
