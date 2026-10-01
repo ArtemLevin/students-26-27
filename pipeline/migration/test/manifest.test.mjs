@@ -289,3 +289,23 @@ test('validator CLI requires an explicit manifest path',()=>{
   assert.throws(()=>parseValidatorArgs([]),/--manifest is required/);
   assert.throws(()=>parseValidatorArgs(['--manifest']),/--manifest requires a file path/);
 });
+
+test('existing KTP cannot be silently downgraded to rolling planning',()=>{
+  const repo=root();legacyKtp(repo);
+  const value={
+    version:1,
+    studentId:'ktp_student',
+    sourceArchitecture:'legacy-ktp',
+    planning:{mode:'rolling',ktpExtraction:null},
+    lessonMappings:[{lessonDate:'2026-09-30',ktpMatches:[]}],
+    competencyMappings:[],
+    preserveMastery:[],
+    ambiguities:[],
+    blockers:[],
+    warnings:[]
+  };
+  assert.throws(
+    ()=>validateStudentMigrationManifest({root:repo,manifest:value}),
+    /existing KTP source must be preserved with fixed planning/
+  );
+});
