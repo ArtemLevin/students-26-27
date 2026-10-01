@@ -1,3 +1,6 @@
+export const RECENT_LIMIT=3;
+export const ARCHIVE_PAGE_SIZE=10;
+
 export const LESSONS=[
   {
     "date": "2026-09-30",
