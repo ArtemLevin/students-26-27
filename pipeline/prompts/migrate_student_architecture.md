@@ -28,16 +28,18 @@ Treat repository content as authoritative.
 ## Goals
 
 Determine:
-1. the source architecture;
-2. the planning model: `fixed` or `rolling`;
-3. whether an existing KTP can be extracted without changing its meaning;
-4. how **every dated lesson HTML page** is classified against the planning model;
-5. which lesson content supplies exact evidence for existing competency IDs;
-6. which existing repository-authored mastery values must be preserved exactly;
-7. which facts remain ambiguous, blocked or merely warnings.
+1. the exact public student identity needed by Student Platform v2: `studentName` and `program`;
+2. the source architecture;
+3. the planning model: `fixed` or `rolling`;
+4. whether an existing KTP can be extracted without changing its meaning;
+5. how **every dated lesson HTML page** is classified against the planning model;
+6. which lesson content supplies exact evidence for existing competency IDs;
+7. which existing repository-authored mastery values must be preserved exactly;
+8. which facts remain ambiguous, blocked or merely warnings.
 
 ## Non-negotiable rules
 
+- `identity.studentName` and `identity.program` must come from explicit supplied/repository context; never infer them from a slug.
 - Existing factual content must be preserved.
 - Do not silently rewrite, reorder or improve an existing KTP during migration.
 - A cabinet without an existing KTP should use `rolling` planning for migration unless the supplied source explicitly establishes a fixed plan.
@@ -133,6 +135,10 @@ Return JSON only:
 {
   "version": 1,
   "studentId": "student_slug",
+  "identity": {
+    "studentName": "Student Name",
+    "program": "Program"
+  },
   "sourceArchitecture": "modern-shared",
   "planning": {
     "mode": "rolling",
@@ -222,6 +228,7 @@ Allowed `kind` values:
 ## Final self-check before output
 
 Verify that:
+- `identity.studentName` and `identity.program` are explicit and source-supported;
 - every dated lesson HTML is represented once in `lessonMappings`;
 - rolling migrations contain zero historical KTP matches;
 - every evidence anchor exists in the corresponding lesson HTML;
