@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {
+  isCalendarDate,
   validateMasteryStateData
 } from '../../student/contract.mjs';
 import {validateStudentMigrationManifest} from '../manifest.mjs';
@@ -104,8 +105,8 @@ export function buildMigrationCandidate({
   const report=validateStudentMigrationManifest({root,manifest});
   const studentId=manifest.studentId;
 
-  if(!migrationDate||!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(migrationDate)){
-    throw new Error('migration candidate: migrationDate must be YYYY-MM-DD');
+  if(!isCalendarDate(migrationDate)){
+    throw new Error('migration candidate: migrationDate must be a valid YYYY-MM-DD calendar date');
   }
 
   if(!report.automaticEligible){
