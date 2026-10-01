@@ -24,6 +24,10 @@ function modernShared(repo,id='demo_student'){
   write(path.join(site,'design.json'),'{}');
   write(path.join(site,'dashboard.js'),'export {};');
   write(path.join(site,'lesson-registry.js'),'export const LESSONS=[];');
+  write(
+    path.join(site,'competency-map-data.js'),
+    "window.COMPETENCY_MAP_DATA={groups:[{id:'core',items:[{id:'text_15',title:'Text skill'}]}]};"
+  );
   write(path.join(site,'30.09.26.html'),'<section id="border"></section>');
   write(path.join(site,'01.10.26.html'),'<section id="graph-model"></section>');
   write(path.join(site,'competence-config.js'),'window.STUDENT_COMPETENCE_CONFIG={teacherSeed:{text_15:2}};');
@@ -34,6 +38,10 @@ function legacyKtp(repo,id='ktp_student'){
   write(path.join(site,'index.html'),'<!doctype html>');
   write(path.join(site,'design.json'),'{}');
   write(path.join(site,'ktp.html'),'<main>KTP</main>');
+  write(
+    path.join(site,'competency-map-data.js'),
+    "window.COMPETENCY_MAP_DATA={groups:[{id:'core',items:[{id:'ktp_skill',title:'KTP skill'}]}]};"
+  );
   write(path.join(site,'30.09.26.html'),'<section id="task"></section>');
   return {base,site};
 }
