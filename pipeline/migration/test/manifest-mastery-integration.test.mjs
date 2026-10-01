@@ -47,6 +47,7 @@ function manifest({
   return {
     version:1,
     studentId:'demo_student',
+    identity:{studentName:'Demo Student',program:'Demo Program'},
     sourceArchitecture:'modern-shared',
     planning:{mode:'rolling',ktpExtraction:null},
     lessonMappings:[
