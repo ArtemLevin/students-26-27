@@ -7,6 +7,7 @@ import {
   parseLessonRegistrySource,
   validateRegistryMetadataParity
 } from '../../student/publication-contract.mjs';
+import {discoverHistoricalLessons} from '../legacy/discover-lessons.mjs';
 
 function decodeHtml(value){
   return String(value)
@@ -33,15 +34,6 @@ function metaDescription(html){
   }
   return null;
 }
-function lessonFilename(studentSite,isoDate){
-  const [year,month,day]=isoDate.split('-');
-  const yy=year.slice(-2);
-  for(const name of [day+'.'+month+'.'+yy+'.html',day+'-'+month+'-'+yy+'.html']){
-    const file=path.join(studentSite,name);
-    if(fs.existsSync(file)&&fs.statSync(file).isFile())return name;
-  }
-  return null;
-}
 function insideStudent(studentRoot,target){
   const base=path.resolve(studentRoot),resolved=path.resolve(target);
   return resolved===base||resolved.startsWith(base+path.sep);
@@ -55,14 +47,18 @@ function existingMaterial({studentRoot,site,reference}){
   if(!fs.existsSync(target)||!fs.statSync(target).isFile())return null;
   return reference;
 }
-function datedCandidate({studentRoot,site,isoDate,kind,htmlName}){
+function datedCandidate({studentRoot,site,isoDate,kind,htmlHref}){
   const [year,month,day]=isoDate.split('-'),yy=year.slice(-2);
   const dotted=day+'.'+month+'.'+yy,hyphen=day+'-'+month+'-'+yy;
-  const htmlStem=htmlName.replace(/\.html$/i,'');
+  const htmlStem=path.posix.basename(htmlHref).replace(/\.html$/i,'');
+  const htmlDirectory=path.posix.dirname(htmlHref);
+  const siblingLab=htmlDirectory==='.'
+    ?htmlStem+'-lab.html'
+    :htmlDirectory+'/'+htmlStem+'-lab.html';
 
   const specs={
     lab:[
-      {file:path.join(site,htmlStem+'-lab.html'),ref:htmlStem+'-lab.html'},
+      {file:path.resolve(site,...siblingLab.split('/')),ref:siblingLab},
       {file:path.join(site,dotted+'-lab.html'),ref:dotted+'-lab.html'},
       {file:path.join(site,hyphen+'-lab.html'),ref:hyphen+'-lab.html'}
     ],
@@ -124,9 +120,9 @@ function uniqueStrings(value){
   return [...new Set(value.filter(item=>typeof item==='string'&&item.trim()).map(item=>item.trim()))];
 }
 function materialsForLesson({
-  studentRoot,site,isoDate,htmlName,legacyRecord
+  studentRoot,site,isoDate,htmlHref,legacyRecord
 }){
-  const materials={html:htmlName};
+  const materials={html:htmlHref};
   for(const kind of ['pdf','tex','lab']){
     const fromRegistry=existingMaterial({
       studentRoot,
@@ -134,7 +130,7 @@ function materialsForLesson({
       reference:legacyRecord?.materials?.[kind]
     });
     const reference=fromRegistry||datedCandidate({
-      studentRoot,site,isoDate,kind,htmlName
+      studentRoot,site,isoDate,kind,htmlHref
     });
     if(reference)materials[kind]=reference;
   }
@@ -152,6 +148,7 @@ export function buildHistoricalLessonMetadata({
   const registryPath=path.join(site,'lesson-registry.js');
   const warnings=[];
   const legacyByDate=loadPresentationRegistry(registryPath,warnings);
+  const historicalLessons=discoverHistoricalLessons({root,studentId});
   const mappingsByDate=new Map(
     manifest.lessonMappings.map(item=>[item.lessonDate,item])
   );
@@ -177,10 +174,11 @@ export function buildHistoricalLessonMetadata({
   const presentationByDate=new Map();
 
   for(const lessonDate of [...mappingsByDate.keys()].sort()){
-    const htmlName=lessonFilename(site,lessonDate);
-    if(!htmlName)throw new Error('migration lessons: HTML is missing for '+lessonDate);
-    const html=fs.readFileSync(path.join(site,htmlName),'utf8');
-    const legacy=legacyByDate.get(lessonDate)||null;
+    const historicalLesson=historicalLessons.byDate.get(lessonDate);
+    if(!historicalLesson)throw new Error('migration lessons: HTML is missing for '+lessonDate);
+    const htmlHref=historicalLesson.href;
+    const html=fs.readFileSync(historicalLesson.absolutePath,'utf8');
+    const legacy=historicalLesson.registryRecord||legacyByDate.get(lessonDate)||null;
     const title=
       (typeof legacy?.title==='string'&&legacy.title.trim()?legacy.title.trim():null)||
       tagText(html,'h1')||
@@ -244,7 +242,7 @@ export function buildHistoricalLessonMetadata({
         studentRoot,
         site,
         isoDate:lessonDate,
-        htmlName,
+        htmlHref,
         legacyRecord:legacy
       })
     };

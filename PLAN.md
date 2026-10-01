@@ -1,5 +1,16 @@
 # PLAN — post-MVP развитие интервального повторения
 
+> **Current implementation state — 2026-10-01**
+>
+> - обязательный исполняемый Stage 04 реализован и включён в CI;
+> - Student Platform v2: **2 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`);
+> - текущий rollout: **P5.2**;
+> - текущий gate: **P5.2-0 Migration Preflight Hardening** — recursive historical lesson discovery и strict migration write allowlist;
+> - следующий migration candidate после прохождения hardening gates: `kirill_zinoviev`;
+> - `timofey` временно заблокирован до reconciliation nested lesson history и competency catalog для `ege2027_t17_*`;
+> - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
+
+
 Статус: **MVP Practice Engine реализован; следующий этап — автоматический жизненный цикл новых уроков, серверная синхронизация и педагогическая аналитика**
 
 Дата актуализации: 2026-08-31  

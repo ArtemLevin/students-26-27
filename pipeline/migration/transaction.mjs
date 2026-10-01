@@ -3,6 +3,7 @@ import {
   StaleTransactionPlanError
 } from '../fs/atomic-transaction.mjs';
 import {verifyMigrationPostflight} from './postflight.mjs';
+import {assertMigrationWriteSet} from './write-policy.mjs';
 
 export class StaleMigrationPlanError extends StaleTransactionPlanError{
   constructor(message){
@@ -21,6 +22,10 @@ export function executeMigrationTransaction({
   if(!plan||plan.operation!=='student-migration'){
     throw new Error('migration transaction: student-migration plan is required');
   }
+  assertMigrationWriteSet({
+    studentId:plan.studentId,
+    writes:plan.writes
+  });
 
   const result=executeAtomicPlan({
     root,
