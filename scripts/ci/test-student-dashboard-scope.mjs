@@ -12,10 +12,13 @@ test('dashboard and production contract changes are heavy',()=>{
     'shared/practice/validate-configs.mjs',
     'pipeline/practice/run-stage-04.mjs',
     'pipeline/lessons/lesson-registry.mjs',
+    'pipeline/student/contract.mjs',
+    'pipeline/schemas/student-contract-v2.schema.json',
     'pipeline/prompts/web_page_design.md',
     'design-system/fingerprint.schema.json',
     'scripts/create-student.mjs',
     'scripts/publish-lesson.mjs',
+    'scripts/student.mjs',
     '.github/workflows/student-dashboard-tests.yml'
   ])assert.equal(isDashboardRelevantPath(file),true,file);
 });
