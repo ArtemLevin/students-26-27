@@ -11,6 +11,16 @@ function countFiles(dir,predicate=()=>true,fsView=fs){
   if(!exists(dir,fsView))return 0;
   return fsView.readdirSync(dir,{withFileTypes:true}).filter(entry=>entry.isFile()&&predicate(entry.name)).length;
 }
+function countFilesRecursive(dir,predicate=()=>true,fsView=fs){
+  if(!exists(dir,fsView))return 0;
+  let count=0;
+  for(const entry of fsView.readdirSync(dir,{withFileTypes:true})){
+    const target=path.join(dir,entry.name);
+    if(entry.isDirectory())count+=countFilesRecursive(target,predicate,fsView);
+    else if(entry.isFile()&&predicate(entry.name))count+=1;
+  }
+  return count;
+}
 function firstExisting(paths,fsView=fs){return paths.find(file=>exists(file,fsView))||null;}
 
 export function inspectStudent(root,studentId,{fsView=fs}={}){
@@ -59,8 +69,8 @@ export function inspectStudent(root,studentId,{fsView=fs}={}){
       chemistry:exists(chemistry,fsView)
     },
     counts:{
-      lessonHtml:countFiles(site,name=>DATE_HTML.test(name),fsView),
-      lessonLabs:countFiles(site,name=>/-lab\.html$/.test(name),fsView),
+      lessonHtml:countFilesRecursive(site,name=>DATE_HTML.test(name),fsView),
+      lessonLabs:countFilesRecursive(site,name=>/-lab\.html$/.test(name),fsView),
       tex:countFiles(path.join(base,'tex_docs'),name=>name.endsWith('.tex'),fsView),
       pdf:countFiles(path.join(base,'pdf_docs'),name=>name.endsWith('.pdf'),fsView)
     },
