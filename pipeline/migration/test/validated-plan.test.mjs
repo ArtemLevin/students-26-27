@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import {spawnSync} from 'node:child_process';
 import {createOverlayFsView} from '../../fs/view.mjs';
 import {validateStudentPackage} from '../../student/contract.mjs';
 import {buildMigrationCandidate} from '../build/candidate.mjs';
@@ -301,6 +302,46 @@ test('validated dry-run CLI parser accepts manifest/date and keeps apply disable
     ()=>parseMigrationArgs(['demo_student','--dry-run','--date','2026-02-31']),
     /valid YYYY-MM-DD/
   );
+});
+
+test('validated dry-run CLI emits an executable plan and performs zero writes',()=>{
+  const x=fixture();
+  const baselineBefore=fs.readFileSync(x.baselinePath);
+  const script=path.join(process.cwd(),'pipeline','migration','migrate-student.mjs');
+  const run=spawnSync(process.execPath,[
+    script,
+    x.studentId,
+    '--root',x.root,
+    '--manifest','pipeline/migration/manifests/demo_student.json',
+    '--date','2026-10-01',
+    '--dry-run',
+    '--json'
+  ],{cwd:process.cwd(),encoding:'utf8'});
+
+  assert.equal(run.status,0,run.stderr||run.stdout);
+  const plan=JSON.parse(run.stdout);
+  assert.equal(plan.executable,true);
+  assert.equal(plan.coverage.complete,true);
+  assert.equal(fs.existsSync(x.contractPath),false);
+  assert.equal(fs.existsSync(x.reportPath),false);
+  assert.deepEqual(fs.readFileSync(x.baselinePath),baselineBefore);
+});
+
+test('CLI rejects apply while P5.0d.3 write mode is closed',()=>{
+  const x=fixture();
+  const script=path.join(process.cwd(),'pipeline','migration','migrate-student.mjs');
+  const run=spawnSync(process.execPath,[
+    script,
+    x.studentId,
+    '--root',x.root,
+    '--manifest','pipeline/migration/manifests/demo_student.json',
+    '--date','2026-10-01',
+    '--apply'
+  ],{cwd:process.cwd(),encoding:'utf8'});
+
+  assert.notEqual(run.status,0);
+  assert.match(run.stderr,/Write migration remains disabled in P5\.0d\.3/);
+  assert.equal(fs.existsSync(x.contractPath),false);
 });
 
 test('manifest loader reads root-relative reviewed manifest',()=>{
