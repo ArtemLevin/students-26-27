@@ -7,6 +7,7 @@ import {buildMigrationCandidate} from './build/candidate.mjs';
 import {buildMigrationCoverage} from './coverage.mjs';
 import {inspectLegacyLearningState} from './legacy/inspect-learning-state.mjs';
 import {inventoryStudents} from './inventory-students.mjs';
+import {assertMigrationWriteSet} from './write-policy.mjs';
 
 function json(value){return JSON.stringify(value,null,2)+'\n';}
 function fileKind(root,relative){
@@ -70,6 +71,7 @@ export function buildValidatedMigrationPlan({
     };
   }
 
+  assertMigrationWriteSet({studentId,writes:candidate.writes});
   const candidateOverlay=createOverlayFsView({
     root,
     writes:candidate.writes
@@ -125,6 +127,7 @@ export function buildValidatedMigrationPlan({
     baselineWrite,
     reportWrite
   ].sort((a,b)=>a.path.localeCompare(b.path,'en'));
+  assertMigrationWriteSet({studentId,writes});
 
   const fullOverlay=createOverlayFsView({root,writes});
   const finalValidation=validateStudentPackage({
