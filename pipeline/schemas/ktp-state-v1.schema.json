@@ -33,7 +33,26 @@
           "uniqueItems": true,
           "items": {"type": "string", "format": "date"}
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "done"}}, "required": ["status"]},
+          "then": {
+            "required": ["actualDate", "coverage"],
+            "properties": {"coverage": {"const": "complete"}}
+          }
+        },
+        {
+          "if": {"properties": {"status": {"const": "in_progress"}}, "required": ["status"]},
+          "then": {
+            "required": ["coverage"],
+            "properties": {
+              "coverage": {"enum": ["partial", "deferred"]},
+              "actualDate": {"type": "null"}
+            }
+          }
+        }
+      ]
     }
   }
 }
