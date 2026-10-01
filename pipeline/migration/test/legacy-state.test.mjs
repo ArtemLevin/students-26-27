@@ -230,8 +230,18 @@ test('inspect CLI parser is read-only and explicit',()=>{
   assert.throws(()=>parseInspectArgs(['a','b']),/Unexpected argument/);
 });
 
-test('real Kirill format preserves explicit teacherMastery overrides and is migration-eligible',()=>{
-  const report=inspectLegacyLearningState({root:ROOT,studentId:'kirill_zinoviev'});
+test('real Kirill legacy source format preserves explicit teacherMastery overrides and is migration-eligible',()=>{
+  const x=fixture('kirill_legacy_fixture');
+  for(const name of ['competency-map-data.js','competence-config.js']){
+    write(
+      path.join(x.site,name),
+      fs.readFileSync(
+        path.join(ROOT,'students','kirill_zinoviev','site',name),
+        'utf8'
+      )
+    );
+  }
+  const report=inspectLegacyLearningState({root:x.root,studentId:x.studentId});
   const item=report.mastery.resolved.find(entry=>entry.competencyId==='fractions_16');
   assert.ok(report.catalog?.count>0);
   assert.equal(item?.level,3);
