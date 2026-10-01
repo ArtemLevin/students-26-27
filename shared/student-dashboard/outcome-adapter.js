@@ -1,4 +1,3 @@
-const LEGACY_TONES=new Set(['good','process','alert']);
 const CANONICAL_RELATIONS=new Set(['touched','practiced','assessed']);
 const COMPETENCY_ID=/^[A-Za-z0-9_.:-]+$/;
 const ANCHOR_ID=/^[A-Za-z][A-Za-z0-9_-]*$/;
@@ -30,7 +29,7 @@ export function assertCompatibleOutcome(outcome,{lessonDate='unknown'}={}){
 }
 
 function legacyPresentation(outcome){
-  const tone=LEGACY_TONES.has(outcome.tone)?outcome.tone:'process';
+  const tone=cleanLabel(outcome.tone)||'process';
   return {
     schema:'legacy',
     competencyId:typeof outcome.competencyId==='string'?outcome.competencyId:null,
