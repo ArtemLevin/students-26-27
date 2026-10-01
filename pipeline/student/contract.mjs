@@ -175,7 +175,7 @@ export function validateKtpStateData(value,{studentId=null,plan=null}={}){
 
 export function validateLessonMetadataData(value,{studentId=null,plan=null}={}){
   const label='lesson-metadata';
-  exactKeys(value,['version','studentId','date','title','summary','topics','ktpRefs','outcomes','materials'],[],label);
+  exactKeys(value,['version','studentId','date','title','summary','topics','ktpRefs','outcomes','materials'],['ktpCoverage'],label);
   if(value.version!==LESSON_METADATA_VERSION)fail(label,'version must be '+LESSON_METADATA_VERSION);
   string(value.studentId,label+'.studentId',{pattern:STUDENT_ID_RE});
   if(studentId&&value.studentId!==studentId)fail(label,'studentId mismatch');
@@ -191,6 +191,22 @@ export function validateLessonMetadataData(value,{studentId=null,plan=null}={}){
     if(!KTP_ID_RE.test(ref))fail(label+'.ktpRefs['+i+']','must match ktp-NNN');
     if(plan&&!planIds.has(ref))fail(label+'.ktpRefs['+i+']','references an item absent from the KTP plan');
   });
+  if('ktpCoverage' in value){
+    array(value.ktpCoverage,label+'.ktpCoverage');
+    const coverageIds=[];
+    value.ktpCoverage.forEach((entry,index)=>{
+      const item=label+'.ktpCoverage['+index+']';
+      exactKeys(entry,['ktpId','coverage'],[],item);
+      string(entry.ktpId,item+'.ktpId',{pattern:KTP_ID_RE});
+      if(plan&&!planIds.has(entry.ktpId))fail(item+'.ktpId','references an item absent from the KTP plan');
+      if(!['complete','partial','deferred'].includes(entry.coverage))fail(item+'.coverage','invalid coverage');
+      coverageIds.push(entry.ktpId);
+    });
+    unique(coverageIds,label+'.ktpCoverage ktpId');
+    const refs=[...value.ktpRefs].sort();
+    const coverage=[...coverageIds].sort();
+    if(JSON.stringify(refs)!==JSON.stringify(coverage))fail(label+'.ktpCoverage','must cover exactly the same KTP IDs as ktpRefs');
+  }
   array(value.outcomes,label+'.outcomes');
   value.outcomes.forEach((outcome,index)=>{
     const item=label+'.outcomes['+index+']';
