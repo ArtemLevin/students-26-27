@@ -5,148 +5,50 @@
   "description": "Public repository state. Private teacher, parent, health or personal-observation fields are intentionally absent.",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "version",
-    "studentId",
-    "programVersion",
-    "updated",
-    "records"
-  ],
+  "required": ["version", "studentId", "programVersion", "updated", "records"],
   "properties": {
-    "version": {
-      "const": 1
-    },
-    "studentId": {
-      "type": "string",
-      "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"
-    },
-    "programVersion": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 120
-    },
-    "updated": {
-      "type": "string",
-      "format": "date"
-    },
+    "version": {"const": 1},
+    "studentId": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+    "programVersion": {"type": "string", "minLength": 1, "maxLength": 120},
+    "updated": {"type": "string", "format": "date"},
     "records": {
       "type": "object",
-      "propertyNames": {
-        "pattern": "^ktp-[0-9]{3,}$"
-      },
-      "additionalProperties": {
-        "$ref": "#/$defs/record"
-      }
+      "propertyNames": {"pattern": "^ktp-[0-9]{3,}$"},
+      "additionalProperties": {"$ref": "#/$defs/record"}
     }
   },
   "$defs": {
     "record": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "status"
-      ],
+      "required": ["status"],
       "properties": {
-        "status": {
-          "enum": [
-            "planned",
-            "in_progress",
-            "done",
-            "moved",
-            "skipped"
-          ]
-        },
-        "scheduledDate": {
-          "oneOf": [
-            {
-              "type": "null"
-            },
-            {
-              "type": "string",
-              "format": "date"
-            }
-          ]
-        },
-        "actualDate": {
-          "oneOf": [
-            {
-              "type": "null"
-            },
-            {
-              "type": "string",
-              "format": "date"
-            }
-          ]
-        },
-        "coverage": {
-          "enum": [
-            "complete",
-            "partial",
-            "deferred"
-          ]
-        },
-        "actualSummary": {
-          "type": "string",
-          "maxLength": 2000
-        },
+        "status": {"enum": ["planned", "in_progress", "done", "moved", "skipped"]},
+        "scheduledDate": {"oneOf": [{"type": "null"}, {"type": "string", "format": "date"}]},
+        "actualDate": {"oneOf": [{"type": "null"}, {"type": "string", "format": "date"}]},
+        "coverage": {"enum": ["complete", "partial", "deferred"]},
+        "actualSummary": {"type": "string", "maxLength": 2000},
         "lessonRefs": {
           "type": "array",
           "uniqueItems": true,
-          "items": {
-            "type": "string",
-            "format": "date"
-          }
+          "items": {"type": "string", "format": "date"}
         }
       },
       "allOf": [
         {
-          "if": {
-            "properties": {
-              "status": {
-                "const": "done"
-              }
-            },
-            "required": [
-              "status"
-            ]
-          },
+          "if": {"properties": {"status": {"const": "done"}}, "required": ["status"]},
           "then": {
-            "required": [
-              "actualDate",
-              "coverage"
-            ],
-            "properties": {
-              "coverage": {
-                "const": "complete"
-              }
-            }
+            "required": ["actualDate", "coverage"],
+            "properties": {"coverage": {"const": "complete"}}
           }
         },
         {
-          "if": {
-            "properties": {
-              "status": {
-                "const": "in_progress"
-              }
-            },
-            "required": [
-              "status"
-            ]
-          },
+          "if": {"properties": {"status": {"const": "in_progress"}}, "required": ["status"]},
           "then": {
-            "required": [
-              "coverage"
-            ],
+            "required": ["coverage"],
             "properties": {
-              "coverage": {
-                "enum": [
-                  "partial",
-                  "deferred"
-                ]
-              },
-              "actualDate": {
-                "type": "null"
-              }
+              "coverage": {"enum": ["partial", "deferred"]},
+              "actualDate": {"type": "null"}
             }
           }
         }
