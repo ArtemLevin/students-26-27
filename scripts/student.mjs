@@ -5,6 +5,7 @@ import {run as runValidate} from '../pipeline/student/validate.mjs';
 import {run as runInventory} from '../pipeline/migration/inventory-students.mjs';
 import {run as runMigrate} from '../pipeline/migration/migrate-student.mjs';
 import {run as runValidateManifest} from '../pipeline/migration/validate-manifest.mjs';
+import {run as runInspectLegacyState} from '../pipeline/migration/inspect-legacy-state.mjs';
 
 export function helpText(){
   return [
@@ -15,6 +16,7 @@ export function helpText(){
     '  node scripts/student.mjs inventory [--json] [--json-output FILE] [--markdown-output FILE]',
     '  node scripts/student.mjs migrate STUDENT --dry-run [--json]',
     '  node scripts/student.mjs validate-manifest --manifest FILE [--root ROOT] [--json]',
+    '  node scripts/student.mjs inspect-legacy-state STUDENT [--root ROOT] [--json]',
     '',
     'Migration writes remain deliberately disabled until semantic mappings are reviewed.',
     'The CLI is the single entry point for Student Platform v2 architecture operations.'
@@ -31,6 +33,7 @@ export function run(argv=process.argv.slice(2)){
   if(command==='inventory')return runInventory(rest);
   if(command==='migrate')return runMigrate(rest);
   if(command==='validate-manifest')return runValidateManifest(rest);
+  if(command==='inspect-legacy-state')return runInspectLegacyState(rest);
   throw new Error('Unknown command: '+command);
 }
 
