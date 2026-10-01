@@ -106,6 +106,7 @@ jobs:
           node --check scripts/student.mjs
           node --check pipeline/migration/inventory-students.mjs
           node --check pipeline/migration/migrate-student.mjs
+          node --check pipeline/migration/audit-ratchet.mjs
       - name: Parse student platform JSON Schemas
         run: |
           node -e "const fs=require('node:fs'); for (const name of ['student-contract-v2.schema.json','ktp-plan-v1.schema.json','ktp-state-v1.schema.json','lesson-metadata-v1.schema.json']) JSON.parse(fs.readFileSync('pipeline/schemas/'+name,'utf8')); console.log('Student Platform schemas OK')"
@@ -129,6 +130,8 @@ jobs:
             student-architecture-report.json
             student-architecture-report.md
           if-no-files-found: error
+      - name: Enforce architecture migration ratchet
+        run: node pipeline/migration/audit-ratchet.mjs
       - name: Validate migrated v2 students
         run: node scripts/student.mjs validate
   atlas-contract:
