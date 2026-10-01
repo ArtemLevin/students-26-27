@@ -2,6 +2,8 @@
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {run as runValidate} from '../pipeline/student/validate.mjs';
+import {run as runInventory} from '../pipeline/migration/inventory-students.mjs';
+import {run as runMigrate} from '../pipeline/migration/migrate-student.mjs';
 
 export function helpText(){
   return [
@@ -9,9 +11,11 @@ export function helpText(){
     '',
     'Usage:',
     '  node scripts/student.mjs validate [student_id] [--json]',
+    '  node scripts/student.mjs inventory [--json] [--json-output FILE] [--markdown-output FILE]',
+    '  node scripts/student.mjs migrate STUDENT --dry-run [--json]',
     '',
-    'P0 exposes the v2 validation command. Create, migrate and publish orchestration',
-    'will be added on top of this contract in the next implementation stages.'
+    'Migration writes remain deliberately disabled until semantic mappings are reviewed.',
+    'The CLI is the single entry point for Student Platform v2 architecture operations.'
   ].join('\n')+'\n';
 }
 
@@ -22,6 +26,8 @@ export function run(argv=process.argv.slice(2)){
     return null;
   }
   if(command==='validate')return runValidate(rest);
+  if(command==='inventory')return runInventory(rest);
+  if(command==='migrate')return runMigrate(rest);
   throw new Error('Unknown command: '+command);
 }
 

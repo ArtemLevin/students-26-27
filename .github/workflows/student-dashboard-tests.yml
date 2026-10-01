@@ -15,7 +15,12 @@ on:
       - 'pipeline/practice/**'
       - 'pipeline/lessons/**'
       - 'pipeline/student/**'
+      - 'pipeline/migration/**'
       - 'pipeline/prompts/web_page_design.md'
+      - 'pipeline/prompts/extract_lesson_evidence.md'
+      - 'pipeline/prompts/map_lesson_to_ktp.md'
+      - 'pipeline/prompts/build_student_plan.md'
+      - 'pipeline/prompts/migrate_student_architecture.md'
       - 'pipeline/schemas/**'
       - 'design-system/**'
       - 'scripts/create-student.mjs'
@@ -99,11 +104,34 @@ jobs:
           node --check pipeline/student/contract.mjs
           node --check pipeline/student/validate.mjs
           node --check scripts/student.mjs
+          node --check pipeline/migration/inventory-students.mjs
+          node --check pipeline/migration/migrate-student.mjs
+          node --check pipeline/migration/audit-ratchet.mjs
       - name: Parse student platform JSON Schemas
         run: |
           node -e "const fs=require('node:fs'); for (const name of ['student-contract-v2.schema.json','ktp-plan-v1.schema.json','ktp-state-v1.schema.json','lesson-metadata-v1.schema.json']) JSON.parse(fs.readFileSync('pipeline/schemas/'+name,'utf8')); console.log('Student Platform schemas OK')"
       - name: Run student platform contract regression
         run: node --test pipeline/student/test/*.test.mjs
+      - name: Run migration pipeline regression
+        run: node --test pipeline/migration/test/*.test.mjs
+      - name: Audit current student architectures
+        shell: bash
+        run: |
+          node scripts/student.mjs inventory \
+            --json-output student-architecture-report.json \
+            --markdown-output student-architecture-report.md \
+            > /dev/null
+          cat student-architecture-report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload architecture inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: student-architecture-report
+          path: |
+            student-architecture-report.json
+            student-architecture-report.md
+          if-no-files-found: error
+      - name: Enforce architecture migration ratchet
+        run: node pipeline/migration/audit-ratchet.mjs
       - name: Validate migrated v2 students
         run: node scripts/student.mjs validate
   atlas-contract:
