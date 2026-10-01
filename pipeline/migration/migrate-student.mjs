@@ -5,6 +5,8 @@ import {fileURLToPath} from 'node:url';
 import {isCalendarDate} from '../student/contract.mjs';
 import {ROOT,inspectStudent} from './inventory-students.mjs';
 import {buildValidatedMigrationPlan} from './plan.mjs';
+import {buildTransactionalMigrationPlan} from './transaction-plan.mjs';
+import {executeMigrationTransaction} from './transaction.mjs';
 
 export function buildMigrationPlan({root=ROOT,studentId}){
   if(!studentId)throw new Error('studentId is required');
@@ -126,15 +128,12 @@ export function run(argv=process.argv.slice(2)){
   const options=parseArgs(argv);
   if(options.help){
     process.stdout.write(
-      'Usage: node pipeline/migration/migrate-student.mjs STUDENT --dry-run [--manifest FILE] [--date YYYY-MM-DD] [--json]\n'
+      'Usage: node pipeline/migration/migrate-student.mjs STUDENT (--dry-run|--apply) [--manifest FILE] [--date YYYY-MM-DD] [--json]\n'
     );
     return null;
   }
-  if(options.apply){
-    throw new Error('Write migration remains disabled in P5.0d.3. Use --dry-run; transactional activation is P5.0d.4.');
-  }
-  if(!options.dryRun){
-    throw new Error('Write migration remains disabled in P5.0d.3. Run with --dry-run.');
+  if(!options.dryRun&&!options.apply){
+    throw new Error('Choose exactly one migration mode: --dry-run or --apply.');
   }
 
   let plan;
@@ -149,20 +148,34 @@ export function run(argv=process.argv.slice(2)){
         ' does not match requested student '+options.studentId
       );
     }
-    plan=buildValidatedMigrationPlan({
-      root:options.root,
-      manifest,
-      migrationDate:options.date||migrationDateToday()
-    });
+    const migrationDate=options.date||migrationDateToday();
+    plan=options.apply
+      ?buildTransactionalMigrationPlan({
+        root:options.root,
+        manifest,
+        manifestPath:options.manifestPath,
+        migrationDate
+      })
+      :buildValidatedMigrationPlan({
+        root:options.root,
+        manifest,
+        migrationDate
+      });
   }else{
     if(options.date!==null){
       throw new Error('--date requires --manifest');
     }
+    if(options.apply){
+      throw new Error('--apply requires a reviewed --manifest FILE');
+    }
     plan=buildMigrationPlan(options);
   }
 
-  process.stdout.write(JSON.stringify(plan,null,2)+'\n');
-  return plan;
+  const result=options.apply
+    ?executeMigrationTransaction({root:options.root,plan})
+    :plan;
+  process.stdout.write(JSON.stringify(result,null,2)+'\n');
+  return result;
 }
 
 const main=process.argv[1]&&path.resolve(process.argv[1])===path.resolve(fileURLToPath(import.meta.url));

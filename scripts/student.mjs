@@ -14,11 +14,11 @@ export function helpText(){
     'Usage:',
     '  node scripts/student.mjs validate [student_id] [--json]',
     '  node scripts/student.mjs inventory [--json] [--json-output FILE] [--markdown-output FILE]',
-    '  node scripts/student.mjs migrate STUDENT --dry-run [--json]',
+    '  node scripts/student.mjs migrate STUDENT (--dry-run|--apply) [--manifest FILE] [--date YYYY-MM-DD] [--json]',
     '  node scripts/student.mjs validate-manifest --manifest FILE [--root ROOT] [--json]',
     '  node scripts/student.mjs inspect-legacy-state STUDENT [--root ROOT] [--json]',
     '',
-    'Migration writes remain deliberately disabled until semantic mappings are reviewed.',
+    'Migration apply requires a reviewed manifest and runs through optimistic preconditions, atomic writes, postflight validation, and rollback.',
     'The CLI is the single entry point for Student Platform v2 architecture operations.'
   ].join('\n')+'\n';
 }
