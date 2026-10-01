@@ -124,8 +124,12 @@ export function executeV2Publication({
         mode:exists?(fs.statSync(target).mode&0o777):null
       });
       const temp=writeTemp(target,write.content,'stage');
+      const snapshot=snapshots.get(target);
+      if(snapshot.mode!==null)fs.chmodSync(temp,snapshot.mode);
       staged.push({target,temp,write});
     }
+
+    verifyPublicationPreconditions({root,preconditions:plan.preconditions||[]});
 
     for(let index=0;index<staged.length;index+=1){
       const item=staged[index];
