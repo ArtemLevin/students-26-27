@@ -239,9 +239,21 @@ test('real Kirill format preserves explicit teacherMastery overrides',()=>{
   assert.equal(report.mastery.conflicts.length,0);
 });
 
-test('real Volodia format detects baselineLevels→teacherSeed alias',()=>{
-  const report=inspectLegacyLearningState({root:ROOT,studentId:'volodia_khachaturian'});
-  assert.ok(report.catalog?.count>0);
+test('real Volodia competence-config format detects baselineLevels→teacherSeed alias',()=>{
+  const x=fixture('volodia_legacy_fixture');
+  write(
+    path.join(x.site,'competency-map-data.js'),
+    "window.COMPETENCY_MAP_DATA={storageNamespace:'volodia-oge-physics-v1',groups:[{id:'g',name:'G',items:[{id:'kin_01',title:'Kinematics'}]}],baselineLevels:{kin_01:2},evidence:{},topicMaterials:{}};\n"
+  );
+  write(
+    path.join(x.site,'competence-config.js'),
+    fs.readFileSync(
+      path.join(ROOT,'students','volodia_khachaturian','site','competence-config.js'),
+      'utf8'
+    )
+  );
+  const report=inspectLegacyLearningState({root:x.root,studentId:x.studentId});
+  assert.equal(report.catalog?.count,1);
   assert.ok(report.diagnostics.aliases.some(item=>item.targetKind==='baseline-levels'));
   assert.equal(report.mastery.conflicts.length,0);
 });
