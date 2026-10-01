@@ -5,6 +5,8 @@ import {spawnSync} from 'node:child_process';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {validateSlug} from './create-student.mjs';
 import {replaceLessonRegistrySource} from '../pipeline/lessons/lesson-registry.mjs';
+import {buildV2PublicationPlan} from '../pipeline/student/publish/plan.mjs';
+import {executeV2Publication} from '../pipeline/student/publish/transaction.mjs';
 
 export const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const DATE_HTML=/^(?:\d{2}\.\d{2}\.\d{2}|\d{2}-\d{2}-\d{2})\.html$/;
@@ -72,8 +74,23 @@ async function verify(root,student,{registry=null,dashboard=null}={}){
   const regression=path.join(root,'students',student,'site','tests','dashboard-regression.mjs');if(fs.existsSync(regression))checks.push(runNode(root,[path.relative(root,regression)]));
   return checks;
 }
-export async function publishLesson({root=ROOT,student,date,dryRun=false,verifyChanges=true}={}){
-  if(!student||!date)throw new Error('Student and lesson date are required.');
+function loadPublicationIntent(root,intentPath){
+  if(!intentPath)throw new Error('Student Platform v2 publication requires --intent <file>.');
+  const file=path.isAbsolute(intentPath)?intentPath:path.resolve(root,intentPath);
+  if(!fs.existsSync(file))throw new Error('Publication intent file does not exist: '+intentPath);
+  let value;
+  try{value=JSON.parse(fs.readFileSync(file,'utf8'));}
+  catch(error){throw new Error('Cannot parse publication intent '+intentPath+': '+error.message);}
+  return {file,value};
+}
+
+export async function publishLegacyLesson({
+  root=ROOT,
+  student,
+  date,
+  dryRun=false,
+  verifyChanges=true
+}={}){
   const scaffold=requireScaffold(root,student),a=discoverArtifact(root,student,date),registry=path.join(scaffold.site,'lesson-registry.js'),dashboard=path.join(scaffold.site,'dashboard.js');
   const hasRegistry=fs.existsSync(registry),hasDashboard=fs.existsSync(dashboard),planned=new Map();let lesson=null,mode='bespoke-index-verified';
   if(hasRegistry){
@@ -85,19 +102,101 @@ export async function publishLesson({root=ROOT,student,date,dryRun=false,verifyC
     if(!re.test(index))throw new Error(`${student}: bespoke dashboard index.html must link to ${a.href} before publication.`);
   }
   const changedFiles=[...planned.keys()].map(x=>path.relative(root,x));
-  if(dryRun)return {student,date:a.iso,base:a.base,mode,dryRun:true,changedFiles,lesson,materials:a.materials};
+  if(dryRun)return {student,date:a.iso,base:a.base,architecture:'legacy',mode,dryRun:true,changedFiles,lesson,materials:a.materials};
   const backups=new Map([...planned.keys()].map(x=>[x,fs.readFileSync(x,'utf8')]));
   try{
     for(const [file,content] of planned)writeAtomic(file,content);
     const verification=verifyChanges?await verify(root,student,{registry:hasRegistry?registry:null,dashboard:hasDashboard?dashboard:null}):[];
-    return {student,date:a.iso,base:a.base,mode,dryRun:false,changedFiles,lesson,materials:a.materials,verification};
+    return {student,date:a.iso,base:a.base,architecture:'legacy',mode,dryRun:false,changedFiles,lesson,materials:a.materials,verification};
   }catch(error){for(const [file,content] of backups)writeAtomic(file,content);throw new Error(`${error.message}\nPublication changes were rolled back.`);}
 }
-export function parseArgs(argv){
-  const out={student:null,date:null,dryRun:false,verifyChanges:true,help:false};
-  for(const token of argv){if(token==='--dry-run')out.dryRun=true;else if(token==='--help'||token==='-h')out.help=true;else if(token.startsWith('--'))throw new Error(`Unknown option: ${token}`);else if(!out.student)out.student=token;else if(!out.date)out.date=token;else throw new Error(`Unexpected argument: ${token}`);}
-  if(!out.help){if(!out.student||!out.date)throw new Error('Usage: node scripts/publish-lesson.mjs <student> <DD.MM.YY|YYYY-MM-DD> [--dry-run]');validateSlug(out.student);normalizeLessonDate(out.date);}return out;
+
+export async function publishV2Lesson({
+  root=ROOT,
+  student,
+  date,
+  intentPath=null,
+  intent=null,
+  dryRun=false,
+  verifyChanges=true
+}={}){
+  if(verifyChanges===false)throw new Error('Student Platform v2 publication verification cannot be disabled.');
+  const normalized=normalizeLessonDate(date);
+  const loaded=intent?{file:null,value:intent}:loadPublicationIntent(root,intentPath);
+  if(loaded.value?.lessonDate!==normalized.iso){
+    throw new Error(
+      'Publication intent lessonDate '+String(loaded.value?.lessonDate||'')+
+      ' does not match requested lesson date '+normalized.iso+'.'
+    );
+  }
+  const plan=buildV2PublicationPlan({
+    root,
+    studentId:student,
+    intent:loaded.value
+  });
+  const summary={
+    student,
+    date:normalized.iso,
+    base:normalized.base,
+    architecture:'v2',
+    mode:'transactional-v2',
+    dryRun,
+    executable:plan.executable,
+    changedFiles:plan.writes.map(item=>item.path),
+    reviewItems:plan.reviewItems,
+    conflicts:plan.conflicts,
+    warnings:plan.warnings,
+    ktpChanges:plan.changes.ktp,
+    intentFile:loaded.file?path.relative(root,loaded.file).replaceAll('\\','/'):null
+  };
+  if(dryRun)return summary;
+  const transaction=executeV2Publication({root,plan});
+  return {
+    ...summary,
+    changedFiles:transaction.changedFiles,
+    verification:transaction.verification,
+    rolledBack:transaction.rolledBack
+  };
 }
-export function helpText(){return 'Usage: node scripts/publish-lesson.mjs <student> <DD.MM.YY|YYYY-MM-DD> [--dry-run]\nNew students must first be created with scripts/create-student.mjs. Production verification cannot be disabled from the CLI.\n';}
+
+export async function publishLesson({
+  root=ROOT,
+  student,
+  date,
+  intentPath=null,
+  intent=null,
+  dryRun=false,
+  verifyChanges=true
+}={}){
+  if(!student||!date)throw new Error('Student and lesson date are required.');
+  requireScaffold(root,student);
+  const contractPath=path.join(root,'students',student,'student-contract.json');
+  if(fs.existsSync(contractPath)){
+    return publishV2Lesson({root,student,date,intentPath,intent,dryRun,verifyChanges});
+  }
+  return publishLegacyLesson({root,student,date,dryRun,verifyChanges});
+}
+export function parseArgs(argv){
+  const out={student:null,date:null,intentPath:null,dryRun:false,verifyChanges:true,help:false};
+  for(let index=0;index<argv.length;index+=1){
+    const token=argv[index];
+    if(token==='--dry-run')out.dryRun=true;
+    else if(token==='--help'||token==='-h')out.help=true;
+    else if(token==='--intent'){
+      const value=argv[index+1];
+      if(!value||value.startsWith('--'))throw new Error('--intent requires a file path');
+      out.intentPath=value;index+=1;
+    }else if(token.startsWith('--'))throw new Error(`Unknown option: ${token}`);
+    else if(!out.student)out.student=token;
+    else if(!out.date)out.date=token;
+    else throw new Error(`Unexpected argument: ${token}`);
+  }
+  if(!out.help){
+    if(!out.student||!out.date)throw new Error('Usage: node scripts/publish-lesson.mjs <student> <DD.MM.YY|YYYY-MM-DD> [--intent <file>] [--dry-run]');
+    validateSlug(out.student);normalizeLessonDate(out.date);
+  }
+  return out;
+}
+export function helpText(){return 'Usage: node scripts/publish-lesson.mjs <student> <DD.MM.YY|YYYY-MM-DD> [--intent <file>] [--dry-run]\nStudent Platform v2 students require --intent <file>. Legacy students keep the existing publication workflow. Production verification cannot be disabled from the CLI.\n';}
 const main=process.argv[1]&&path.resolve(process.argv[1])===path.resolve(fileURLToPath(import.meta.url));
 if(main){try{const options=parseArgs(process.argv.slice(2));if(options.help)process.stdout.write(helpText());else process.stdout.write(`${JSON.stringify(await publishLesson(options),null,2)}\n`);}catch(error){process.stderr.write(`publish-lesson: ${error.message}\n`);process.exitCode=1;}}
