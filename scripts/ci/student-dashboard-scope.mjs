@@ -10,6 +10,7 @@ const EXACT_PATHS=new Set([
   'pipeline/schemas/spaced-practice-stage-v1.schema.json',
   'scripts/create-student.mjs',
   'scripts/publish-lesson.mjs',
+  'scripts/student.mjs',
   'scripts/ci/student-dashboard-scope.mjs',
   'scripts/ci/test-student-dashboard-scope.mjs'
 ]);
@@ -18,6 +19,8 @@ const PREFIXES=[
   'shared/practice/',
   'pipeline/practice/',
   'pipeline/lessons/',
+  'pipeline/student/',
+  'pipeline/schemas/',
   'design-system/'
 ];
 

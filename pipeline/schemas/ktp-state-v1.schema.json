@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://students-26-27.local/schemas/ktp-state-v1.schema.json",
+  "title": "KTP State v1",
+  "description": "Public repository state. Private teacher, parent, health or personal-observation fields are intentionally absent.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "studentId", "programVersion", "updated", "records"],
+  "properties": {
+    "version": {"const": 1},
+    "studentId": {"type": "string", "pattern": "^[a-z0-9]+(?:_[a-z0-9]+)*$"},
+    "programVersion": {"type": "string", "minLength": 1, "maxLength": 120},
+    "updated": {"type": "string", "format": "date"},
+    "records": {
+      "type": "object",
+      "propertyNames": {"pattern": "^ktp-[0-9]{3,}$"},
+      "additionalProperties": {"$ref": "#/$defs/record"}
+    }
+  },
+  "$defs": {
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {"enum": ["planned", "in_progress", "done", "moved", "skipped"]},
+        "scheduledDate": {"oneOf": [{"type": "null"}, {"type": "string", "format": "date"}]},
+        "actualDate": {"oneOf": [{"type": "null"}, {"type": "string", "format": "date"}]},
+        "coverage": {"enum": ["complete", "partial", "deferred"]},
+        "actualSummary": {"type": "string", "maxLength": 2000},
+        "lessonRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "format": "date"}
+        }
+      }
+    }
+  }
+}
