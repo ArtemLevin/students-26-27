@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {discoverHistoricalLessons} from '../legacy/discover-lessons.mjs';
+import {inspectStudent,ROOT} from '../inventory-students.mjs';
 import {validateStudentMigrationManifest} from '../manifest.mjs';
 
 function write(file,content=''){
@@ -105,4 +106,15 @@ test('manifest cannot omit a nested historical lesson',()=>{
     ()=>validateStudentMigrationManifest({root:x.root,manifest}),
     /missing historical lesson classification for 2026-05-20/
   );
+});
+
+
+test('real Timofey history includes nested lessons and inventory sees the same dated HTML surface',()=>{
+  const report=discoverHistoricalLessons({root:ROOT,studentId:'timofey'});
+  assert.ok(report.lessons.length>=26);
+  assert.equal(report.byDate.get('2026-05-20')?.href,'lessons/20-05-26.html');
+  assert.ok(report.byDate.get('2026-05-20')?.sources.includes('registry'));
+  assert.ok(report.byDate.get('2026-05-20')?.sources.includes('filesystem'));
+  const inventory=inspectStudent(ROOT,'timofey');
+  assert.equal(inventory.counts.lessonHtml,report.lessons.length);
 });
