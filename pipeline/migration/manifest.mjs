@@ -6,6 +6,7 @@ import {
 } from '../student/contract.mjs';
 import {inspectStudent} from './inventory-students.mjs';
 import {inspectLegacyLearningState} from './legacy/inspect-learning-state.mjs';
+import {discoverHistoricalLessons} from './legacy/discover-lessons.mjs';
 
 export const STUDENT_MIGRATION_MANIFEST_VERSION=1;
 
@@ -13,7 +14,6 @@ const STUDENT_ID_RE=/^[a-z0-9]+(?:_[a-z0-9]+)*$/;
 const KTP_ID_RE=/^ktp-(\d{3,})$/;
 const TOKEN_ID_RE=/^[A-Za-z0-9_.:-]+$/;
 const ANCHOR_RE=/^[A-Za-z][A-Za-z0-9_-]*$/;
-const DATE_HTML=/^(\d{2})[.-](\d{2})[.-](\d{2})\.html$/;
 const CONFIDENCE=new Set(['exact','probable','ambiguous']);
 const COVERAGE=new Set(['complete','partial','deferred']);
 const RELATION=new Set(['touched','practiced','assessed']);
@@ -64,23 +64,6 @@ function scanPrivateKeys(value,label='student-migration-manifest'){
   }
 }
 function confidence(value,label){if(!CONFIDENCE.has(value))fail(label,'invalid confidence');}
-function lessonIsoFromFilename(name){
-  const match=String(name).match(DATE_HTML);
-  if(!match)return null;
-  const day=Number(match[1]),month=Number(match[2]),year=2000+Number(match[3]);
-  const iso=year+'-'+String(month).padStart(2,'0')+'-'+String(day).padStart(2,'0');
-  return isCalendarDate(iso)?iso:null;
-}
-function actualLessonDates(root,studentId){
-  const site=path.join(root,'students',studentId,'site');
-  if(!fs.existsSync(site))return new Set();
-  return new Set(
-    fs.readdirSync(site,{withFileTypes:true})
-      .filter(entry=>entry.isFile())
-      .map(entry=>lessonIsoFromFilename(entry.name))
-      .filter(Boolean)
-  );
-}
 function resolveStudentPath(root,studentId,relative,label){
   assertRepoRelativePath(relative,label);
   const base=path.resolve(root,'students',studentId);
@@ -94,16 +77,6 @@ function assertAnchor(html,anchor,label){
     fail(label,'evidence anchor #'+anchor+' is missing from the lesson HTML');
   }
 }
-function lessonHtmlPath(root,studentId,lessonDate){
-  const [year,month,day]=lessonDate.split('-');
-  const yy=year.slice(-2),site=path.join(root,'students',studentId,'site');
-  for(const name of [day+'.'+month+'.'+yy+'.html',day+'-'+month+'-'+yy+'.html']){
-    const file=path.join(site,name);
-    if(fs.existsSync(file))return file;
-  }
-  return null;
-}
-
 function hasAmbiguity(manifest,{kind,reference}){
   return manifest.ambiguities.some(item=>
     item.kind===kind&&item.reference===reference
@@ -280,7 +253,8 @@ export function validateStudentMigrationManifest({
     }
   }
 
-  const actualDates=actualLessonDates(root,studentId);
+  const historicalLessons=discoverHistoricalLessons({root,studentId});
+  const actualDates=new Set(historicalLessons.lessons.map(item=>item.date));
   const declaredDates=new Set(value.lessonMappings.map(item=>item.lessonDate));
   const missing=[...actualDates].filter(dateValue=>!declaredDates.has(dateValue)).sort();
   const extra=[...declaredDates].filter(dateValue=>!actualDates.has(dateValue)).sort();
@@ -354,10 +328,10 @@ export function validateStudentMigrationManifest({
       competencyId:mapping.competencyId,
       label:'student-migration-manifest.competencyMappings'
     });
-    const htmlPath=lessonHtmlPath(root,studentId,mapping.lessonDate);
-    if(!htmlPath)fail('student-migration-manifest.competencyMappings','lesson HTML is missing for '+mapping.lessonDate);
+    const historicalLesson=historicalLessons.byDate.get(mapping.lessonDate);
+    if(!historicalLesson)fail('student-migration-manifest.competencyMappings','lesson HTML is missing for '+mapping.lessonDate);
     assertAnchor(
-      fs.readFileSync(htmlPath,'utf8'),
+      fs.readFileSync(historicalLesson.absolutePath,'utf8'),
       mapping.evidenceAnchor,
       'student-migration-manifest.competencyMappings '+mapping.lessonDate+' '+mapping.competencyId
     );

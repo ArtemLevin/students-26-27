@@ -230,13 +230,15 @@ test('inspect CLI parser is read-only and explicit',()=>{
   assert.throws(()=>parseInspectArgs(['a','b']),/Unexpected argument/);
 });
 
-test('real Kirill format preserves explicit teacherMastery overrides',()=>{
+test('real Kirill format preserves explicit teacherMastery overrides and is migration-eligible',()=>{
   const report=inspectLegacyLearningState({root:ROOT,studentId:'kirill_zinoviev'});
   const item=report.mastery.resolved.find(entry=>entry.competencyId==='fractions_16');
   assert.ok(report.catalog?.count>0);
   assert.equal(item?.level,3);
   assert.equal(item?.sourceKind,'teacher-mastery');
   assert.equal(report.mastery.conflicts.length,0);
+  assert.equal(report.diagnostics.orphanClaims.length,0);
+  assert.equal(report.automaticEligible,true);
 });
 
 test('real Volodia competence-config format detects baselineLevels→teacherSeed alias',()=>{
@@ -270,4 +272,24 @@ test('real Sofya format resolves its embedded legacy competency catalog',()=>{
   assert.ok(report.catalog?.count>100);
   assert.ok(report.mastery.resolved.length>0);
   assert.equal(report.mastery.conflicts.length,0);
+});
+
+
+test('real Timofey format exposes known task-17 catalog drift and remains blocked',()=>{
+  const report=inspectLegacyLearningState({root:ROOT,studentId:'timofey'});
+  assert.ok(report.catalog?.count>0);
+  assert.ok(report.mastery.resolved.length>0);
+  assert.equal(report.mastery.conflicts.length,0);
+  assert.deepEqual(
+    report.diagnostics.orphanClaims.map(item=>item.competencyId).sort(),
+    [
+      'ege2027_t17_analysis',
+      'ege2027_t17_constraints',
+      'ege2027_t17_interpretation',
+      'ege2027_t17_optimization',
+      'ege2027_t17_relations',
+      'ege2027_t17_variables'
+    ]
+  );
+  assert.equal(report.automaticEligible,false);
 });
