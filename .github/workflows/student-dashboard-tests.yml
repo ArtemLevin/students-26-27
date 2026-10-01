@@ -114,7 +114,21 @@ jobs:
       - name: Run migration pipeline regression
         run: node --test pipeline/migration/test/*.test.mjs
       - name: Audit current student architectures
-        run: node scripts/student.mjs inventory --json > student-architecture-report.json
+        shell: bash
+        run: |
+          node scripts/student.mjs inventory \
+            --json-output student-architecture-report.json \
+            --markdown-output student-architecture-report.md \
+            > /dev/null
+          cat student-architecture-report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload architecture inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: student-architecture-report
+          path: |
+            student-architecture-report.json
+            student-architecture-report.md
+          if-no-files-found: error
       - name: Validate migrated v2 students
         run: node scripts/student.mjs validate
   atlas-contract:
