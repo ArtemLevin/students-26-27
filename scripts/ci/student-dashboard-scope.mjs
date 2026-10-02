@@ -28,6 +28,11 @@ const PREFIXES=[
   'pipeline/schemas/',
   'design-system/'
 ];
+const MIGRATION_RECOVERY_EXACT=new Set([
+  'pipeline/prompts/migrate_student_architecture.md',
+  'pipeline/schemas/student-migration-manifest-v1.schema.json',
+  'pipeline/schemas/migration-coverage-v1.schema.json'
+]);
 
 function normalize(value){return String(value||'').trim().replaceAll('\\','/').replace(/^\.\//,'');}
 
@@ -45,16 +50,31 @@ export function isDashboardRelevantPath(value){
   return false;
 }
 
+export function isMigrationRecoveryPath(value){
+  const file=normalize(value);
+  return file.startsWith('pipeline/migration/')||MIGRATION_RECOVERY_EXACT.has(file);
+}
+
 export function classifyStudentDashboardChanges(files){
   const normalized=[...new Set(files.map(normalize).filter(Boolean))].sort();
   const relevant=normalized.filter(isDashboardRelevantPath);
-  return {heavy:relevant.length>0,relevant,all:normalized};
+  const migrationRecovery=normalized.filter(isMigrationRecoveryPath);
+  return {
+    heavy:relevant.length>0,
+    migrationRecovery:migrationRecovery.length>0,
+    relevant,
+    migrationRecoveryPaths:migrationRecovery,
+    all:normalized
+  };
 }
 
 function main(){
   const files=fs.readFileSync(0,'utf8').split(/\r?\n/);
   const result=classifyStudentDashboardChanges(files);
-  if(process.env.GITHUB_OUTPUT)fs.appendFileSync(process.env.GITHUB_OUTPUT,`heavy=${result.heavy?'true':'false'}\n`);
+  if(process.env.GITHUB_OUTPUT){
+    fs.appendFileSync(process.env.GITHUB_OUTPUT,`heavy=${result.heavy?'true':'false'}\n`);
+    fs.appendFileSync(process.env.GITHUB_OUTPUT,`migration_recovery=${result.migrationRecovery?'true':'false'}\n`);
+  }
   process.stdout.write(`${JSON.stringify(result)}\n`);
 }
 
