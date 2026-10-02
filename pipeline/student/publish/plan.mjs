@@ -10,6 +10,7 @@ import {
   validateStudentContractData
 } from '../contract.mjs';
 import {
+  assertEvidenceAnchors,
   loadCompetencyCatalog,
   parseLessonRegistrySource,
   validateRegistryMetadataParity
@@ -25,14 +26,28 @@ import {deriveRegistrySource} from './registry.mjs';
 
 function json(value){return JSON.stringify(value,null,2)+'\n';}
 function relative(root,file){return path.relative(root,file).replaceAll('\\','/');}
-function readIfExists(file){return fs.existsSync(file)?fs.readFileSync(file,'utf8'):null;}
-function sha256Buffer(buffer){return crypto.createHash('sha256').update(buffer).digest('hex');}
-function filePrecondition(root,file){
+function fileSnapshot(file,{encoding='utf8'}={}){
   const exists=fs.existsSync(file);
   return {
-    path:relative(root,file),
     exists,
-    sha256:exists?sha256Buffer(fs.readFileSync(file)):null
+    source:exists?fs.readFileSync(file,encoding):null
+  };
+}
+function snapshotFsView(snapshot){
+  return {
+    readFileSync(){
+      if(!snapshot.exists)throw new Error('snapshot file does not exist');
+      return snapshot.source;
+    }
+  };
+}
+function sha256Buffer(buffer){return crypto.createHash('sha256').update(buffer).digest('hex');}
+function filePrecondition(root,file,snapshot=null){
+  const captured=snapshot||fileSnapshot(file,{encoding:null});
+  return {
+    path:relative(root,file),
+    exists:captured.exists,
+    sha256:captured.exists?sha256Buffer(captured.source):null
   };
 }
 function metadataMapFromDir(metadataDir){
@@ -82,21 +97,41 @@ export function buildV2PublicationPlan({
   const preflight=preflightLessonPublication({root,studentId,intent});
   const studentRoot=path.join(root,'students',studentId);
   const contractPath=path.join(studentRoot,'student-contract.json');
-  const contract=validateStudentContractData(loadJson(contractPath),{studentId});
+  const contractSnapshot=fileSnapshot(contractPath);
+  const contract=validateStudentContractData(
+    loadJson(contractPath,path.basename(contractPath),snapshotFsView(contractSnapshot)),
+    {studentId}
+  );
   const planPath=resolveStudentContractPath(root,studentId,contract.planning.plan);
   const statePath=resolveStudentContractPath(root,studentId,contract.planning.state);
   const registryPath=resolveStudentContractPath(root,studentId,contract.lessons.registry);
   const metadataDir=resolveStudentContractPath(root,studentId,contract.lessons.metadataDir);
   const catalogPath=resolveStudentContractPath(root,studentId,contract.competencies.catalog);
 
-  const plan=validateKtpPlanData(loadJson(planPath),{studentId});
-  const currentState=loadJson(statePath);
+  const planSnapshot=fileSnapshot(planPath);
+  const plan=validateKtpPlanData(
+    loadJson(planPath,path.basename(planPath),snapshotFsView(planSnapshot)),
+    {studentId}
+  );
+  const stateSnapshot=fileSnapshot(statePath);
+  const currentState=loadJson(
+    statePath,
+    path.basename(statePath),
+    snapshotFsView(stateSnapshot)
+  );
   validateKtpStateData(currentState,{studentId,plan});
-  const catalog=loadCompetencyCatalog(catalogPath);
+  const catalogSnapshot=fileSnapshot(catalogPath);
+  const catalog=loadCompetencyCatalog(
+    catalogPath,
+    {fsView:snapshotFsView(catalogSnapshot)}
+  );
   const artifact=discoverLessonArtifact({
     root,
     studentId,
     lessonDate:intent.lessonDate
+  });
+  assertEvidenceAnchors(artifact.htmlSource,intent.outcomes,{
+    label:'lesson '+intent.lessonDate
   });
   const metadata=buildLessonMetadata({studentId,artifact,intent});
   validateLessonMetadataData(metadata,{studentId,plan});
@@ -108,7 +143,8 @@ export function buildV2PublicationPlan({
   validateCandidateMaterials({root,studentId,metadata});
 
   const metadataPath=path.join(metadataDir,intent.lessonDate+'.lesson.json');
-  const beforeMetadataSource=readIfExists(metadataPath);
+  const metadataSnapshot=fileSnapshot(metadataPath);
+  const beforeMetadataSource=metadataSnapshot.exists?metadataSnapshot.source:null;
   const existingMetadata=beforeMetadataSource===null?null:JSON.parse(beforeMetadataSource);
   const conflicts=[];
   if(existingMetadata&&!samePublicationContribution(existingMetadata,metadata)){
@@ -129,7 +165,8 @@ export function buildV2PublicationPlan({
   });
   validateKtpStateData(stateResult.state,{studentId,plan});
 
-  const beforeRegistrySource=fs.readFileSync(registryPath,'utf8');
+  const registrySnapshot=fileSnapshot(registryPath);
+  const beforeRegistrySource=registrySnapshot.source;
   const registryResult=deriveRegistrySource({
     source:beforeRegistrySource,
     metadata
@@ -144,7 +181,7 @@ export function buildV2PublicationPlan({
 
   const metadataSource=json(metadata);
   const stateSource=json(stateResult.state);
-  const beforeStateSource=fs.readFileSync(statePath,'utf8');
+  const beforeStateSource=stateSnapshot.source;
 
   const candidates=[
     {
@@ -179,25 +216,34 @@ export function buildV2PublicationPlan({
     if(!sameObject(change.before,change.after))changedKtp[ktpId]=change;
   }
 
-  const preconditionFiles=[
-    contractPath,
-    planPath,
-    statePath,
-    registryPath,
-    metadataPath,
-    catalogPath,
-    artifact.htmlPath,
+  const preconditionEntries=[
+    {file:contractPath,snapshot:contractSnapshot},
+    {file:planPath,snapshot:planSnapshot},
+    {file:statePath,snapshot:stateSnapshot},
+    {file:registryPath,snapshot:registrySnapshot},
+    {file:metadataPath,snapshot:metadataSnapshot},
+    {file:catalogPath,snapshot:catalogSnapshot},
+    {
+      file:artifact.htmlPath,
+      snapshot:{exists:true,source:artifact.htmlSource}
+    },
     ...Object.values(metadata.materials)
       .filter(reference=>reference!==metadata.materials.html)
-      .map(reference=>path.resolve(path.dirname(registryPath),String(reference).split(/[?#]/,1)[0]))
+      .map(reference=>({
+        file:path.resolve(
+          path.dirname(registryPath),
+          String(reference).split(/[?#]/,1)[0]
+        ),
+        snapshot:null
+      }))
   ];
   const preconditions=[];
   const seenPreconditions=new Set();
-  for(const file of preconditionFiles){
-    const resolved=path.resolve(file);
+  for(const entry of preconditionEntries){
+    const resolved=path.resolve(entry.file);
     if(seenPreconditions.has(resolved))continue;
     seenPreconditions.add(resolved);
-    preconditions.push(filePrecondition(root,resolved));
+    preconditions.push(filePrecondition(root,resolved,entry.snapshot));
   }
 
   return {
