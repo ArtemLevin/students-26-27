@@ -1,0 +1,102 @@
+name: Matvey reconciliation baseline inspect
+
+on:
+  push:
+    branches:
+      - 'feat/student-platform-v2-reconcile-matvey-gorbachev'
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-reconcile-matvey-gorbachev
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Prove title mapping uniqueness and runtime overlay state
+        run: |
+          node scripts/student.mjs inspect-legacy-state matvey_gorbachev --json > /tmp/legacy.json
+          node --input-type=module - <<'NODE'
+          import fs from 'node:fs';
+          import vm from 'node:vm';
+
+          const window={};
+          const context=vm.createContext({window,console,localStorage:{getItem(){return null},setItem(){}}});
+          vm.runInContext(
+            fs.readFileSync('students/matvey_gorbachev/site/competency-map-data.js','utf8'),
+            context,
+            {filename:'competency-map-data.js'}
+          );
+
+          const html=fs.readFileSync('students/matvey_gorbachev/site/index.html','utf8');
+          const inline=[...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
+            .filter(m=>!/\bsrc\s*=/i.test(m[1]||''))
+            .map(m=>m[2]);
+          const overlay=inline.find(source=>/const\s+covered\s*=\s*new Set/.test(source)&&/item\.level\s*=/.test(source));
+          if(!overlay)throw new Error('Matvey mastery overlay not found');
+
+          const data=window.COMPETENCY_MAP_DATA;
+          const items=data.groups.flatMap(group=>group.items);
+          const byTitle=new Map();
+          for(const item of items){
+            if(!byTitle.has(item.title))byTitle.set(item.title,[]);
+            byTitle.get(item.title).push(item.id);
+          }
+          const duplicateTitles=[...byTitle.entries()]
+            .filter(([,ids])=>ids.length>1)
+            .map(([title,ids])=>({title,ids}));
+
+          const literals=[...overlay.matchAll(/["']([^"'\n]+)["']/g)].map(m=>m[1]);
+          const candidateTitles=[...new Set(literals.filter(value=>byTitle.has(value)))].sort();
+          const titleMappings=candidateTitles.map(title=>({title,ids:byTitle.get(title)}));
+          const ambiguous=titleMappings.filter(item=>item.ids.length!==1);
+
+          const before=new Map(items.map(item=>[item.id,{
+            level:item.level,
+            status:item.status,
+            evidence:JSON.parse(JSON.stringify(item.evidence||[]))
+          }]));
+          vm.runInContext(overlay,context,{filename:'index-mastery-overlay.js'});
+          const changed=[];
+          for(const item of data.groups.flatMap(group=>group.items)){
+            const prev=before.get(item.id);
+            const after={level:item.level,status:item.status,evidence:item.evidence||[]};
+            if(JSON.stringify(prev)!==JSON.stringify(after)){
+              changed.push({id:item.id,title:item.title,before:prev,after});
+            }
+          }
+
+          const report=JSON.parse(fs.readFileSync('/tmp/legacy.json','utf8'));
+          const levels=data.groups.flatMap(group=>group.items).reduce((m,item)=>{
+            m[item.level]=(m[item.level]||0)+1; return m;
+          },{});
+          console.log(JSON.stringify({
+            inspector:{
+              catalog:report.catalog?.count,
+              mastery:report.mastery?.resolved?.length,
+              warnings:report.diagnostics?.warnings,
+              automaticEligible:report.automaticEligible
+            },
+            catalog:{
+              count:items.length,
+              uniqueTitles:byTitle.size,
+              duplicateTitles
+            },
+            overlay:{
+              candidateTitleCount:candidateTitles.length,
+              titleMappings,
+              ambiguous,
+              changedCount:changed.length,
+              changed,
+              levelCounts:levels,
+              updated:data.updated,
+              storagePrefix:data.storagePrefix,
+              nextAfterBaseline:data.nextAfterBaseline,
+              materials:data.materials
+            }
+          },null,2));
+          NODE
