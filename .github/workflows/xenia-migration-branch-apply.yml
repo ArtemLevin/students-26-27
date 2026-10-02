@@ -1,0 +1,85 @@
+name: Xenia migration branch apply
+
+on:
+  push:
+    branches:
+      - 'feat/student-platform-v2-p5-2-9-xenia-migration'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout migration branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-p5-2-9-xenia-migration
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate reviewed manifest
+        run: node scripts/student.mjs validate-manifest --manifest pipeline/migration/manifests/xenia_klykova.json --json
+
+      - name: Inspect reconciled legacy state
+        run: node scripts/student.mjs inspect-legacy-state xenia_klykova --json
+
+      - name: Validated dry-run
+        shell: bash
+        run: |
+          node scripts/student.mjs migrate xenia_klykova \
+            --manifest pipeline/migration/manifests/xenia_klykova.json \
+            --date 2026-10-02 \
+            --dry-run \
+            --json > /tmp/xenia-dry-run.json
+          node -e "const p=require('/tmp/xenia-dry-run.json'); if(!p.executable||!p.coverage?.complete) process.exit(1); console.log(JSON.stringify({executable:p.executable,coverage:p.coverage,projectedBaseline:p.projectedBaseline},null,2));"
+
+      - name: Transactional apply
+        run: |
+          node scripts/student.mjs migrate xenia_klykova \
+            --manifest pipeline/migration/manifests/xenia_klykova.json \
+            --date 2026-10-02 \
+            --apply \
+            --json
+
+      - name: Validate migrated package
+        run: node scripts/student.mjs validate xenia_klykova --json
+
+      - name: Run migration regression suite
+        run: node --test pipeline/migration/test/*.test.mjs
+
+      - name: Run Xenia dashboard regression
+        run: node students/xenia_klykova/site/tests/dashboard-regression.mjs
+
+      - name: Validate practice contracts
+        run: |
+          node shared/practice/validate-configs.mjs
+          node shared/practice/audit-lesson-coverage.mjs
+
+      - name: Enforce architecture ratchet
+        run: node pipeline/migration/audit-ratchet.mjs
+
+      - name: Commit generated migration state
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            pipeline/migration/baseline.json \
+            pipeline/migration/reports/xenia_klykova.json \
+            students/xenia_klykova/student-contract.json \
+            students/xenia_klykova/site/data \
+            students/xenia_klykova/site/lesson-registry.js \
+            students/xenia_klykova/site/tests/student-platform-v2.test.mjs
+          if git diff --cached --quiet; then
+            echo "Migration produced no generated changes"
+            exit 1
+          fi
+          git commit -m "P5.2-9: apply Xenia Student Platform v2 migration"
+          git push origin HEAD:feat/student-platform-v2-p5-2-9-xenia-migration
