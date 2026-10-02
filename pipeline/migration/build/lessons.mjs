@@ -275,7 +275,8 @@ export function renderCanonicalLessonRegistry({
         ktpRefs:metadata.ktpRefs,
         href:metadata.materials.html,
         title:metadata.title,
-        ...presentation,
+        navTitle:presentation.navTitle||metadata.title,
+        ...(presentation.navSubtitle?{navSubtitle:presentation.navSubtitle}:{}),
         summary:metadata.summary,
         topics:metadata.topics,
         outcomes:[
@@ -306,7 +307,7 @@ export function renderCanonicalLessonRegistry({
     "function parseIsoDate(isoDate){const match=/^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(String(isoDate));if(!match)throw new Error('Invalid lesson date: '+isoDate);const year=Number(match[1]),month=Number(match[2]),day=Number(match[3]);if(month<1||month>12||day<1||day>31)throw new Error('Invalid lesson date: '+isoDate);return {year,month,day};}",
     "export function formatShortDate(isoDate){const {month,day}=parseIsoDate(isoDate);return String(day).padStart(2,'0')+'.'+String(month).padStart(2,'0');}",
     "export function formatLongDateRu(isoDate){const {year,month,day}=parseIsoDate(isoDate);return day+' '+MONTHS_GENITIVE[month-1]+' '+year;}",
-    "export function validateLessonRegistry(lessons=LESSONS){if(!Array.isArray(lessons)||lessons.length===0)throw new Error('Lesson registry is empty');const dates=new Set(),hrefs=new Set();let previousDate=null;lessons.forEach((lesson,index)=>{parseIsoDate(lesson.date);if(!lesson.href||!lesson.title||!lesson.navTitle)throw new Error('Lesson '+index+' is incomplete');if(dates.has(lesson.date))throw new Error('Duplicate lesson date: '+lesson.date);if(hrefs.has(lesson.href))throw new Error('Duplicate lesson href: '+lesson.href);if(previousDate!==null&&lesson.date>previousDate)throw new Error('Lesson registry must be sorted newest-first');dates.add(lesson.date);hrefs.add(lesson.href);previousDate=lesson.date;});const latest=lessons[0];if(!latest.summary||!Array.isArray(latest.topics)||latest.topics.length===0)throw new Error('Latest lesson requires summary and topics');if(!Array.isArray(latest.outcomes)||latest.outcomes.length===0)throw new Error('Latest lesson requires outcomes');if(!latest.materials||typeof latest.materials!=='object')throw new Error('Latest lesson requires materials metadata');return {count:lessons.length,latest:latest.href};}",
+    "export function validateLessonRegistry(lessons=LESSONS){if(!Array.isArray(lessons)||lessons.length===0)throw new Error('Lesson registry is empty');const dates=new Set(),hrefs=new Set();let previousDate=null;lessons.forEach((lesson,index)=>{parseIsoDate(lesson.date);if(!lesson.href||!lesson.title||!lesson.navTitle)throw new Error('Lesson '+index+' is incomplete');if(typeof lesson.summary!=='string'||!Array.isArray(lesson.topics)||!Array.isArray(lesson.outcomes))throw new Error('Lesson '+index+' has invalid metadata shape');if(!lesson.materials||typeof lesson.materials!=='object')throw new Error('Lesson '+index+' requires materials metadata');if(dates.has(lesson.date))throw new Error('Duplicate lesson date: '+lesson.date);if(hrefs.has(lesson.href))throw new Error('Duplicate lesson href: '+lesson.href);if(previousDate!==null&&lesson.date>previousDate)throw new Error('Lesson registry must be sorted newest-first');dates.add(lesson.date);hrefs.add(lesson.href);previousDate=lesson.date;});return {count:lessons.length,latest:lessons[0].href};}",
     ''
   ].join('\n');
 
