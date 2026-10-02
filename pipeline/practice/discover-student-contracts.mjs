@@ -173,13 +173,15 @@ export async function discoverStudentContracts(studentId,lessonDate,{root=ROOT}=
       lessonRegistryPath:practice.paths.registryPath,
       practiceConfigPath:practice.paths.configPath,
       masteryPath,
-      metadataPath
+      metadataPath,
+      catalogPath:practice.paths.catalogPath
     },
     sources:{
       lessonRegistry:fs.readFileSync(practice.paths.registryPath,'utf8'),
       practiceConfig:fs.readFileSync(practice.paths.configPath,'utf8'),
       mastery:masterySource,
-      lessonMetadata:fs.readFileSync(metadataPath,'utf8')
+      lessonMetadata:fs.readFileSync(metadataPath,'utf8'),
+      catalog:fs.readFileSync(practice.paths.catalogPath,'utf8')
     }
   };
 }
