@@ -5,13 +5,13 @@
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
 > - Student Platform v2: **19 / 24** кабинетов; rolling-clean и fixed-KTP waves завершены;
 > - текущий этап: **reconciliation wave** для оставшихся legacy-structured источников;
-> - `ekaterina_gnedkova` reconciled и мигрирована: browser-loader через `document.write` безопасно разрешён внутри `studentRoot`, repository mastery authority сделан явным;
-> - migration result: **7/7 historical lessons, 369/369 competencies, 369/369 mastery**, материалы 7 HTML / 7 PDF / 7 TeX / 3 lab;
-> - mastery distribution сохранён точно: **321×0, 13×2, 25×3, 10×4**; conflicts/orphans=0, warnings/reviewItems/blockers=[], protectedFilesChanged=[];
-> - architecture ratchet: **v2=19 / non-v2=5**, `legacy-structured=5`, `legacy-ktp=0`;
+> - `ekaterina_gnedkova` reconciled и мигрирована: 7/7 historical lessons, 369/369 competencies, 369/369 mastery;
+> - следующий reconciliation gate завершён для `sofya_khomenko`: dated inline mastery overlay вынесен из `index.html` в явный `mastery-authority.js`, сохраняя тот же runtime order перед `competency-map.js`;
+> - real-source result Софьи: **343/343 competencies**, **343/343 mastery**, распределение **283×0 + 60×2**, conflicts/orphans/warnings=0, `automaticEligible=true`;
+> - следующий gate: отдельная Student Platform v2 migration `sofya_khomenko` после merge reconciliation PR;
+> - architecture baseline пока остаётся **v2=19 / non-v2=5**, `legacy-structured=5`, `legacy-ktp=0`;
 > - `darya_savenkova` остаётся автоматически ready, но отложена из-за роли design reference;
-> - следующий reconciliation targets: `kristina`, `matvey_gorbachev`, `nastya_pavlova`, `sofya_khomenko` — unresolved inline mastery mutations;
-> - следующий gate выбирается только после свежего post-merge readiness и real-source inspection;
+> - после Софьи reconciliation targets: `kristina`, `matvey_gorbachev`, `nastya_pavlova`;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
