@@ -1,0 +1,54 @@
+name: Danil Kichuk fixed-KTP preflight
+
+on:
+  push:
+    branches:
+      - 'feat/student-platform-v2-fixed-ktp-danil-kichuk'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-fixed-ktp-danil-kichuk
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inspect legacy state
+        run: node scripts/student.mjs inspect-legacy-state danil_kichuk --json
+      - name: Readiness gate
+        shell: bash
+        run: |
+          node scripts/student.mjs readiness --json > /tmp/readiness.json
+          node -e "const r=require('/tmp/readiness.json'); const s=r.students.find(x=>x.studentId==='danil_kichuk'); if(!s)process.exit(1); if(s.status!=='ready'||s.architecture!=='legacy-ktp'||s.planningMode!=='fixed')process.exit(2); if(s.lessons!==2||s.competencies!==356||s.mastery!==0)process.exit(3); if(s.masteryConflicts||s.orphanClaims||s.warnings.length||s.scaffoldBlockers.length||s.reasons.length)process.exit(4); console.log(JSON.stringify(s,null,2)); console.log('READY_CANDIDATES'); console.log(JSON.stringify(r.students.filter(x=>x.status==='ready'),null,2));"
+      - name: Inspect fixed KTP extraction and lesson/date matches
+        shell: bash
+        run: |
+          node --input-type=module - <<'NODE'
+          import fs from 'node:fs';
+          import {extractLegacyKtp} from './pipeline/migration/legacy/ktp-extractor.mjs';
+          import {discoverHistoricalLessons} from './pipeline/migration/legacy/discover-lessons.mjs';
+          const source=fs.readFileSync('./students/danil_kichuk/site/ktp.html','utf8');
+          const ktp=extractLegacyKtp({studentId:'danil_kichuk',source,sourcePath:'site/ktp.html'});
+          const historical=discoverHistoricalLessons({root:process.cwd(),studentId:'danil_kichuk'});
+          const dates=new Set(historical.lessons.map(x=>x.date));
+          const dateMatches=ktp.plan.lessons.filter(x=>dates.has(x.plannedDate)).map(x=>({id:x.id,plannedDate:x.plannedDate,stage:x.stage,block:x.block,topic:x.topic}));
+          console.log(JSON.stringify({
+            sourceRows:ktp.sourceRows,
+            programVersion:ktp.programVersion,
+            fieldAliases:ktp.fieldAliases,
+            warnings:ktp.warnings,
+            historicalLessons:historical.lessons,
+            dateMatches
+          },null,2));
+          if(ktp.warnings.length)process.exit(5);
+          NODE
+      - name: Architecture ratchet
+        run: node pipeline/migration/audit-ratchet.mjs
