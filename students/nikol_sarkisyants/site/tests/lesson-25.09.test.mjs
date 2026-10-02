@@ -2,14 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync,readFileSync} from 'node:fs';
 import {dirname,join} from 'node:path';
-import {fileURLToPath} from 'node:url';
+import {fileURLToPath,pathToFileURL} from 'node:url';
 import vm from 'node:vm';
 
 const testDir=dirname(fileURLToPath(import.meta.url));
 const siteDir=dirname(testDir);
 const lesson=readFileSync(join(siteDir,'25.09.26.html'),'utf8');
 const lab=readFileSync(join(siteDir,'25.09.26-lab.html'),'utf8');
-const registry=readFileSync(join(siteDir,'lesson-registry.js'),'utf8');
+const registryModule=await import(pathToFileURL(join(siteDir,'lesson-registry.js')).href);
 const index=readFileSync(join(siteDir,'index.html'),'utf8');
 const heatmap=readFileSync(join(siteDir,'dashboard-data-25.09.js'),'utf8');
 
@@ -105,8 +105,14 @@ test('lab constrains the visual experiment and supports deep-linked modes',()=>{
 });
 
 test('lesson integration remains unique and connected to the competence map',()=>{
-  assert.equal((registry.match(/date:'2026-09-25'/g)||[]).length,1);
-  assert.match(registry,/materials:\{pdf:'\.\.\/pdf_docs\/25\.09\.26\.pdf',tex:'\.\.\/tex_docs\/25\.09\.26\.tex',lab:'25\.09\.26-lab\.html'\}/);
+  const lessonRecords=registryModule.LESSONS.filter(item=>item.date==='2026-09-25');
+  assert.equal(lessonRecords.length,1);
+  assert.deepEqual(lessonRecords[0].materials,{
+    html:'25.09.26.html',
+    pdf:'../pdf_docs/25.09.26.pdf',
+    tex:'../tex_docs/25.09.26.tex',
+    lab:'25.09.26-lab.html'
+  });
   assert.match(index,/dashboard-data-25\.09\.js\?v=20260925-1/);
   for(const id of ['t8_geometric','t8_derivative_graph','t8_interpret']){
     assert.match(heatmap,new RegExp(id+':3'));
