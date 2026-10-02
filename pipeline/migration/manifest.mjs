@@ -23,6 +23,7 @@ const MASTERY_SOURCE_KINDS=new Set([
   'teacher-mastery',
   'baseline-levels',
   'mastery-authority',
+  'linked-progress-overlay',
   'stage04-mastery',
   'dashboard-data'
 ]);

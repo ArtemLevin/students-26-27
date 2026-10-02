@@ -6,6 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {
   discoverV2Students,
+  validateMasteryStateData,
   validateStudentContractData,
   validateStudentPackage
 } from '../contract.mjs';
@@ -101,6 +102,29 @@ function fixture(){
   writeJson(path.join(metadataDir,'2026-09-30.lesson.json'),metadata);
   return {root,student,base,site,contract,plan,state,metadata};
 }
+
+test('mastery state accepts linked progress overlay provenance',()=>{
+  const value={
+    version:1,
+    studentId:'test_student',
+    updated:'2026-10-02',
+    levels:{
+      text_15:{
+        level:2,
+        sourcePath:'site/lesson-30.09.26-progress.js',
+        sourceKind:'linked-progress-overlay',
+        basis:'Repository-authored linked lesson progress delta.'
+      }
+    }
+  };
+  assert.equal(
+    validateMasteryStateData(value,{
+      studentId:'test_student',
+      catalogIds:new Set(['text_15'])
+    }),
+    value
+  );
+});
 
 test('valid v2 package passes strict cross-reference validation',()=>{
   const x=fixture();
