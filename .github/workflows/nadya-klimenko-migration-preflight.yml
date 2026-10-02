@@ -1,4 +1,4 @@
-name: Nadya Klimenko migration preflight
+name: Nadya Klimenko migration branch apply
 
 on:
   push:
@@ -6,10 +6,10 @@ on:
       - 'feat/student-platform-v2-p5-3-9-nadya-klimenko'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  preflight:
+  migrate:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -21,12 +21,31 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Validate reviewed manifest
+        run: node scripts/student.mjs validate-manifest --manifest pipeline/migration/manifests/nadya_klimenko.json --json
       - name: Inspect legacy state
         run: node scripts/student.mjs inspect-legacy-state nadya_klimenko --json
-      - name: Readiness preflight
+      - name: Validated dry-run
         shell: bash
         run: |
-          node scripts/student.mjs readiness --json > /tmp/readiness.json
-          node -e "const r=require('/tmp/readiness.json'); const s=r.students.find(x=>x.studentId==='nadya_klimenko'); if(!s)process.exit(1); if(s.status!=='ready')process.exit(2); if(s.architecture!=='legacy-structured')process.exit(3); if(s.planningMode!=='rolling')process.exit(4); if(s.lessons!==7||s.competencies!==221||s.mastery!==0)process.exit(5); if(s.masteryConflicts||s.orphanClaims||s.warnings.length||s.scaffoldBlockers.length||s.reasons.length)process.exit(6); console.log(JSON.stringify(s,null,2));"
-      - name: Check current architecture ratchet
+          node scripts/student.mjs migrate nadya_klimenko --manifest pipeline/migration/manifests/nadya_klimenko.json --date 2026-10-02 --dry-run --json > /tmp/nadya-klimenko-dry-run.json
+          node -e "const p=require('/tmp/nadya-klimenko-dry-run.json'),c=p.coverage; if(!p.executable||!c?.complete)process.exit(1); if(c.lessons?.source!==7||c.lessons?.candidate!==7)process.exit(2); if(c.competencies?.source!==221||c.competencies?.candidate!==221)process.exit(3); if(c.mastery?.resolvedSource!==0||c.mastery?.candidate!==0||c.mastery?.conflicts!==0||c.mastery?.orphans!==0)process.exit(4); if((p.reviewItems||[]).length||(p.blockers||[]).length||(p.warnings||[]).length)process.exit(5); console.log(JSON.stringify({coverage:c,projectedBaseline:p.projectedBaseline},null,2));"
+      - name: Transactional apply
+        run: node scripts/student.mjs migrate nadya_klimenko --manifest pipeline/migration/manifests/nadya_klimenko.json --date 2026-10-02 --apply --json
+      - name: Validate migrated package
+        run: node scripts/student.mjs validate nadya_klimenko --json
+      - name: Verify empty canonical mastery
+        run: node -e "const s=require('./students/nadya_klimenko/site/data/mastery-state.json'); if(Object.keys(s.levels).length)process.exit(1);"
+      - name: Run migration regression suite
+        run: node --test pipeline/migration/test/*.test.mjs
+      - name: Enforce architecture ratchet
         run: node pipeline/migration/audit-ratchet.mjs
+      - name: Commit generated migration state
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pipeline/migration/baseline.json pipeline/migration/reports/nadya_klimenko.json students/nadya_klimenko/student-contract.json students/nadya_klimenko/site/data students/nadya_klimenko/site/lesson-registry.js students/nadya_klimenko/site/tests/student-platform-v2.test.mjs
+          git diff --cached --quiet && exit 1 || true
+          git commit -m "P5.3-9: apply Nadya Klimenko Student Platform v2 migration"
+          git push origin HEAD:feat/student-platform-v2-p5-3-9-nadya-klimenko
