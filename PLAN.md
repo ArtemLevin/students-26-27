@@ -3,13 +3,13 @@
 > **Current implementation state — 2026-10-02**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **16 / 24** кабинетов;
-> - текущий rollout: **P5.3 legacy-structured rolling-clean завершён; следующий переход — fixed-KTP wave**;
-> - завершена проверенная rolling-wave: `ivan_petrachenkov` (28 mastery), `kiril_zinoviev_physics` (25 mastery), `anna_trapeznikova` (mastery=0), `jaroslav_vereschagin` (larger mastery=0), `ekaterina` (235/235 full mastery preservation), `xenia_vasilchenko` (mastery=0), `nadya_klimenko` (mastery=0);
-> - завершённый этап: **P5.3-10 Marina** — 8/8 historical lessons, 300/300 competencies, zero authoritative mastery; materials 8 HTML / 7 PDF / 8 TeX / 7 lab;
+> - Student Platform v2: **17 / 24** кабинетов;
+> - текущий rollout: **fixed-KTP wave** после завершённой P5.3 rolling-clean;
+> - завершена проверенная rolling-wave: `ivan_petrachenkov` (28 mastery), `kiril_zinoviev_physics` (25 mastery), `anna_trapeznikova` (mastery=0), `jaroslav_vereschagin` (larger mastery=0), `ekaterina` (235/235 full mastery preservation), `xenia_vasilchenko` (mastery=0), `nadya_klimenko` (mastery=0), `marina` (mastery=0);
+> - завершённый fixed-KTP gate: **Danil Kichuk** — 2/2 historical lessons, 70/70 fixed KTP rows, 356/356 competencies, zero authoritative mastery; materials 2 HTML / 2 PDF / 2 TeX / 0 lab; historical lessons intentionally left without unproven KTP refs;
 > - conflicts/orphans=0, warnings/reviewItems/blockers=[], protectedFilesChanged=[];
-> - architecture ratchet после apply: **v2=16 / non-v2=8**, `legacy-structured=6`, `legacy-ktp=2`, `modern-shared=0`;
-> - после merge выполнить свежий readiness inventory и выбрать следующий fixed-KTP gate из `danil_kichuk` / `jaroslav_gavrilov`;
+> - architecture ratchet после apply: **v2=17 / non-v2=7**, `legacy-structured=6`, `legacy-ktp=1`, `modern-shared=0`;
+> - следующий fixed-KTP candidate после свежего post-merge readiness: `jaroslav_gavrilov`;
 > - `darya_savenkova` пока не использовать из-за роли design reference;
 > - blocked legacy-structured кабинеты (`ekaterina_gnedkova`, `kristina`, `matvey_gorbachev`, `nastya_pavlova`, `sofya_khomenko`) мигрировать только после отдельного reconciliation источников;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
