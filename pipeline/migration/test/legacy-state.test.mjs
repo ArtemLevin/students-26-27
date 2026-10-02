@@ -785,6 +785,69 @@ test('real Matvey Gorbachev source resolves title overlays uniquely and fails cl
   );
 });
 
+test('real Darya Savenkova linked lesson progress becomes repository mastery without changing the dashboard source',()=>{
+  const x=fixture('darya_savenkova_linked_progress_fixture');
+  for(const name of ['competency-map-data.js','lesson-14.09.26-progress.js','index.html']){
+    write(
+      path.join(x.site,name),
+      fs.readFileSync(path.join(ROOT,'students','darya_savenkova','site',name),'utf8')
+    );
+  }
+
+  const report=inspectLegacyLearningState(x);
+  const levelCounts=report.mastery.resolved.reduce((counts,item)=>{
+    counts[item.level]=(counts[item.level]||0)+1;
+    return counts;
+  },{});
+
+  assert.equal(report.catalog?.count,356);
+  assert.equal(report.mastery.resolved.length,7);
+  assert.deepEqual(levelCounts,{2:5,3:2});
+  assert.ok(report.mastery.resolved.every(item=>
+    item.sourceKind==='linked-progress-overlay'&&
+    item.sourcePath==='site/lesson-14.09.26-progress.js'&&
+    item.resolution===undefined
+  ));
+  assert.ok(report.sources.some(item=>
+    item.path==='site/lesson-14.09.26-progress.js'&&
+    item.kind==='linked-progress-overlay'
+  ));
+  assert.equal(report.mastery.conflicts.length,0);
+  assert.deepEqual(report.diagnostics.orphanClaims,[]);
+  assert.deepEqual(report.diagnostics.warnings,[]);
+  assert.equal(report.automaticEligible,true);
+
+  const sandbox=createLegacySandbox();
+  executeLegacyFile({
+    sandbox,
+    filePath:path.join(x.site,'competency-map-data.js'),
+    relativePath:'site/competency-map-data.js'
+  });
+  executeLegacyFile({
+    sandbox,
+    filePath:path.join(x.site,'lesson-14.09.26-progress.js'),
+    relativePath:'site/lesson-14.09.26-progress.js'
+  });
+  const data=sandbox.window.COMPETENCY_MAP_DATA;
+  const byId=new Map(data.groups.flatMap(group=>group.items).map(item=>[item.id,item]));
+
+  assert.equal(data.meta.updated,'14.09.2026');
+  assert.ok(data.meta.sourceNote.includes('подтверждённые результаты пробного занятия'));
+
+  assert.equal(byId.get('ege08_02').level,3);
+  assert.equal(byId.get('ege08_02').material.href,'14.09.26.html');
+
+  assert.equal(byId.get('ege08_03').level,2);
+  assert.equal(byId.get('ege08_03').repeat,true);
+  assert.equal(byId.get('ege08_03').material.href,'14.09.26.html');
+
+  assert.equal(byId.get('ege08_04').level,3);
+  assert.equal(byId.get('ege08_06').level,2);
+  assert.equal(byId.get('ege08_06').repeat,true);
+  assert.equal(byId.get('ege20_02').level,2);
+  assert.equal(byId.get('ege20_03').level,2);
+});
+
 test('real Mark index stays eligible under the inline mastery guard',()=>{
   const x=fixture('mark_inline_guard_fixture');
   for(const name of ['competency-map-data.js','index.html']){
