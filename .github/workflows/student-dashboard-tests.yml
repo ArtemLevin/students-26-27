@@ -45,6 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       heavy: ${{ steps.scope.outputs.heavy }}
+      migration_recovery: ${{ steps.scope.outputs.migration_recovery }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -61,12 +62,332 @@ jobs:
         shell: bash
         env:
           EVENT_NAME: ${{ github.event_name }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          if [ "$EVENT_NAME" = "push" ]; then
+          if [ "$EVENT_NAME" = "push" ] && printf '%s' "$BASE_SHA" | grep -Eq '^0+
+
+  production-workflow:
+    name: production workflow contract
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check production workflow
+        shell: bash
+        run: |
+          node --check scripts/create-student.mjs
+          node --check scripts/publish-lesson.mjs
+          node --check pipeline/lessons/lesson-registry.mjs
+      - name: Run production workflow regression
+        run: node --test design-system/test-create-student.mjs pipeline/lessons/test/*.test.mjs
+
+  student-contract:
+    name: student platform v2 contract
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check steady-state student platform modules
+        run: |
+          node --check pipeline/fs/atomic-transaction.mjs
+          node --check pipeline/fs/view.mjs
+          node --check pipeline/student/contract.mjs
+          node --check pipeline/student/publication-contract.mjs
+          node --check pipeline/student/audit-steady-state.mjs
+          node --check pipeline/student/publish/preflight.mjs
+          node --check pipeline/student/publish/artifact.mjs
+          node --check pipeline/student/publish/metadata.mjs
+          node --check pipeline/student/publish/ktp-state.mjs
+          node --check pipeline/student/publish/registry.mjs
+          node --check pipeline/student/publish/plan.mjs
+          node --check pipeline/student/publish/transaction.mjs
+          node --check pipeline/student/publish/verify.mjs
+          node --check pipeline/student/validate.mjs
+          node --check pipeline/migration/inventory-students.mjs
+          node --check scripts/student.mjs
+      - name: Syntax check migration recovery modules
+        if: needs.scope.outputs.migration_recovery == 'true'
+        run: |
+          find pipeline/migration -type f -name '*.mjs' -print0 | xargs -0 -n1 node --check
+      - name: Parse steady-state student platform JSON Schemas
+        run: |
+          node -e "const fs=require('node:fs'); for (const name of ['student-contract-v2.schema.json','ktp-plan-v1.schema.json','ktp-state-v1.schema.json','lesson-metadata-v1.schema.json','lesson-publication-intent-v1.schema.json','mastery-state-v1.schema.json']) JSON.parse(fs.readFileSync('pipeline/schemas/'+name,'utf8')); console.log('Steady-state Student Platform schemas OK')"
+      - name: Parse migration recovery JSON Schemas
+        if: needs.scope.outputs.migration_recovery == 'true'
+        run: |
+          node -e "const fs=require('node:fs'); for (const name of ['student-migration-manifest-v1.schema.json','migration-coverage-v1.schema.json']) JSON.parse(fs.readFileSync('pipeline/schemas/'+name,'utf8')); console.log('Migration recovery schemas OK')"
+      - name: Run shared filesystem transaction regression
+        run: node --test pipeline/fs/test/*.test.mjs
+      - name: Run student platform contract regression
+        run: node --test pipeline/student/test/*.test.mjs
+      - name: Run v2 publication domain regression
+        run: node --test pipeline/student/publish/test/*.test.mjs
+      - name: Enforce Student Platform steady state
+        shell: bash
+        run: |
+          set -o pipefail
+          node scripts/student.mjs audit --markdown | tee student-platform-steady-state.md
+          cat student-platform-steady-state.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Validate all v2 students
+        run: node scripts/student.mjs validate
+      - name: Run migration recovery regression
+        if: needs.scope.outputs.migration_recovery == 'true'
+        run: node --test pipeline/migration/test/*.test.mjs
+      - name: Build migration recovery inventories
+        if: needs.scope.outputs.migration_recovery == 'true'
+        shell: bash
+        run: |
+          node scripts/student.mjs inventory \
+            --json-output student-architecture-report.json \
+            --markdown-output student-architecture-report.md \
+            > /dev/null
+          node scripts/student.mjs readiness \
+            --json-output student-migration-readiness.json \
+            --markdown-output student-migration-readiness.md \
+            > /dev/null
+          cat student-architecture-report.md >> "$GITHUB_STEP_SUMMARY"
+          cat student-migration-readiness.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload migration recovery inventories
+        if: needs.scope.outputs.migration_recovery == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: student-migration-recovery-report
+          path: |
+            student-architecture-report.json
+            student-architecture-report.md
+            student-migration-readiness.json
+            student-migration-readiness.md
+          if-no-files-found: error
+      - name: Enforce migration recovery architecture ratchet
+        if: needs.scope.outputs.migration_recovery == 'true'
+        run: node pipeline/migration/audit-ratchet.mjs
+  atlas-contract:
+    name: LEVIN / ATLAS contract
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify scaffolder
+        shell: bash
+        run: |
+          node --check scripts/create-student.mjs
+          node --test design-system/test-create-student.mjs
+          node scripts/create-student.mjs ci_probe_student --name "CI Probe" --grade "CI" --program "CI" --dry-run
+      - name: Verify every student cabinet fingerprint
+        run: node design-system/test-contract.mjs
+
+  dashboard:
+    name: dashboard / ${{ matrix.student }}
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - student: grisha_arkhipov
+            test: node students/grisha_arkhipov/site/tests/student-platform-v2.test.mjs
+          - student: kirill_zinoviev
+            test: node students/kirill_zinoviev/site/tests/dashboard-regression.mjs
+          - student: sofya_kalney
+            test: node students/sofya_kalney/site/tests/dashboard-regression.mjs
+          - student: timofey
+            test: node students/timofey/site/tests/dashboard-regression.mjs
+          - student: volodia_khachaturian
+            test: node students/volodia_khachaturian/site/tests/dashboard-regression.mjs
+          - student: xenia_klykova
+            test: node students/xenia_klykova/site/tests/dashboard-regression.mjs
+          - student: nikol_sarkisyants
+            test: node --test students/nikol_sarkisyants/site/tests/*.test.mjs
+          - student: nastya_pavlova
+            test: node students/nastya_pavlova/site/tests/practice-adapter.test.mjs
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check dashboard modules
+        shell: bash
+        run: |
+          if [ -f "students/${{ matrix.student }}/site/dashboard.js" ]; then
+            node --check "students/${{ matrix.student }}/site/dashboard.js"
+          fi
+          if [ -f "students/${{ matrix.student }}/site/lesson-registry.js" ]; then
+            node --check "students/${{ matrix.student }}/site/lesson-registry.js"
+          fi
+          if [ -f "students/${{ matrix.student }}/site/competence-config.js" ]; then
+            node --check "students/${{ matrix.student }}/site/competence-config.js"
+          fi
+          if [ -f "students/${{ matrix.student }}/site/practice-config.js" ]; then
+            node --check "students/${{ matrix.student }}/site/practice-config.js"
+          fi
+          node --check shared/student-dashboard/dashboard-core.js
+          node --check shared/student-dashboard/outcome-adapter.js
+          node --check shared/student-dashboard/legacy-competence-map.js
+      - name: Run regression suite
+        run: ${{ matrix.test }}
+
+  index-inventory:
+    name: index inventory
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify every student index entry point
+        run: node shared/student-dashboard/test-index-inventory.mjs
+      - name: Verify dual-schema lesson outcome compatibility
+        run: node --test shared/student-dashboard/test-outcome-adapter.mjs
+
+  practice:
+    name: shared practice engine
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check practice modules
+        shell: bash
+        run: |
+          find shared/practice -type f \( -name '*.js' -o -name '*.mjs' \) -print0 | xargs -0 -n1 node --check
+      - name: Validate student mappings
+        run: node shared/practice/validate-configs.mjs
+      - name: Run scheduler, generator and integration tests
+        run: node --test shared/practice/test/*.test.mjs
+
+  practice-coverage:
+    name: practice coverage audit
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate structural practice contracts
+        run: node shared/practice/validate-configs.mjs
+      - name: Run lesson coverage ratchet
+        shell: bash
+        run: |
+          set -o pipefail
+          node shared/practice/audit-lesson-coverage.mjs \
+            --format markdown \
+            --json-output practice-coverage-report.json \
+            | tee practice-coverage-report.md
+      - name: Publish coverage summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f practice-coverage-report.md ]; then
+            cat practice-coverage-report.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '## Practice coverage audit' >> "$GITHUB_STEP_SUMMARY"
+            echo 'Coverage report was not generated.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: practice-coverage-report
+          path: |
+            practice-coverage-report.json
+            practice-coverage-report.md
+          if-no-files-found: warn
+
+  stage-04:
+    name: post-lesson Stage 04
+    needs: scope
+    if: needs.scope.outputs.heavy == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check Stage 04 modules
+        shell: bash
+        run: find pipeline/practice -type f -name '*.mjs' -print0 | xargs -0 -n1 node --check
+      - name: Parse Stage 04 JSON Schema
+        run: node -e "JSON.parse(require('node:fs').readFileSync('pipeline/schemas/spaced-practice-stage-v1.schema.json','utf8')); console.log('Stage 04 schema OK')"
+      - name: Run Stage 04 regression suite
+        run: node --test pipeline/practice/test/*.test.mjs
+
+  merge-gate:
+    name: merge gate
+    if: always()
+    needs:
+      - scope
+      - production-workflow
+      - student-contract
+      - atlas-contract
+      - dashboard
+      - index-inventory
+      - practice
+      - practice-coverage
+      - stage-04
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce required job results
+        shell: bash
+        env:
+          SCOPE: ${{ needs.scope.result }}
+          PRODUCTION: ${{ needs.production-workflow.result }}
+          STUDENT_CONTRACT: ${{ needs.student-contract.result }}
+          ATLAS: ${{ needs.atlas-contract.result }}
+          DASHBOARD: ${{ needs.dashboard.result }}
+          INVENTORY: ${{ needs.index-inventory.result }}
+          PRACTICE: ${{ needs.practice.result }}
+          COVERAGE: ${{ needs.practice-coverage.result }}
+          STAGE04: ${{ needs.stage-04.result }}
+        run: |
+          if [ "$SCOPE" != "success" ]; then
+            echo "change scope failed: $SCOPE"
+            exit 1
+          fi
+          for item in \
+            "production workflow contract=$PRODUCTION" \
+            "student platform v2 contract=$STUDENT_CONTRACT" \
+            "LEVIN / ATLAS contract=$ATLAS" \
+            "dashboard matrix=$DASHBOARD" \
+            "index inventory=$INVENTORY" \
+            "shared practice engine=$PRACTICE" \
+            "practice coverage audit=$COVERAGE" \
+            "post-lesson Stage 04=$STAGE04"
+          do
+            result="${item#*=}"
+            case "$result" in
+              success|skipped) ;;
+              *)
+                echo "required job did not pass: $item"
+                exit 1
+                ;;
+            esac
+          done
+          echo "merge gate passed"
+; then
             echo "heavy=true" >> "$GITHUB_OUTPUT"
-            echo '{"heavy":true,"reason":"main push selected by workflow paths"}'
+            echo "migration_recovery=false" >> "$GITHUB_OUTPUT"
+            echo '{"heavy":true,"migrationRecovery":false,"reason":"initial main push"}'
           else
             git diff --name-only "$BASE_SHA" "$HEAD_SHA" | node scripts/ci/student-dashboard-scope.mjs
           fi
