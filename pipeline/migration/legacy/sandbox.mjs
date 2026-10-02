@@ -39,6 +39,7 @@ function makeElement(){
 
 export function createLegacySandbox(){
   const localStorage=makeStorage();
+  const documentWrites=[];
   const document={
     readyState:'complete',
     body:makeElement(),
@@ -48,7 +49,8 @@ export function createLegacySandbox(){
     getElementById(){return null;},
     querySelector(){return null;},
     querySelectorAll(){return [];},
-    createElement(){return makeElement();}
+    createElement(){return makeElement();},
+    write(...parts){documentWrites.push(parts.map(part=>String(part)).join(''));}
   };
   class BlobStub{
     constructor(parts=[],options={}){this.parts=parts;this.type=options.type||'';}
@@ -86,7 +88,7 @@ export function createLegacySandbox(){
     name:'student-migration-legacy-sandbox',
     codeGeneration:{strings:false,wasm:false}
   });
-  return {context,window,localStorage};
+  return {context,window,localStorage,documentWrites};
 }
 
 const CAPTURES=[
