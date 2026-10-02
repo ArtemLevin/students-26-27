@@ -16,7 +16,7 @@ import {
   outcomeCoverageKey,
   validatePracticeGap
 } from './coverage-policy.js';
-import {PRACTICE_STUDENT_SPECS,ROOT,loadPracticeStudentContracts} from './validate-configs.mjs';
+import {discoverPracticeStudentSpecs,ROOT,loadPracticeStudentContracts} from './validate-configs.mjs';
 
 const BASELINE_PATH=path.join(ROOT,'shared/practice/coverage-baseline-v1.json');
 const COVERED_STATUSES=new Set(['covered-generator','covered-curated','manual-assessment']);
@@ -100,7 +100,7 @@ export function auditStudentCoverage({student,lessons,config,competencyIds,gener
 }
 
 export async function auditRepositoryCoverage({student=null,root=ROOT,baseline=loadCoverageBaseline(),generatorRegistry=new GeneratorRegistry(ALL_GENERATORS),curatedBanks=curatedRegistry()}={}){
-  const students=student?[student]:Object.keys(PRACTICE_STUDENT_SPECS),reports=[];
+  const students=student?[student]:Object.keys(discoverPracticeStudentSpecs(root)),reports=[];
   for(const studentId of students){
     try{
       const contracts=await loadPracticeStudentContracts(studentId,{root,registry:generatorRegistry,validate:false});

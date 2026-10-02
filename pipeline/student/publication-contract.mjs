@@ -278,6 +278,22 @@ function metadataRegistryProjection(metadata){
   };
 }
 
+function registryOutcomeProjection(outcome,label){
+  record(outcome,label);
+  if(
+    typeof outcome.competencyId==='string'&&
+    typeof outcome.evidenceAnchor==='string'&&
+    typeof outcome.relation==='string'
+  ){
+    return {
+      competencyId:outcome.competencyId,
+      evidenceAnchor:outcome.evidenceAnchor,
+      relation:outcome.relation
+    };
+  }
+  return legacyOutcomeRegistryProjection(outcome);
+}
+
 function registryProjection(lesson,index){
   const label='lesson registry['+index+']';
   record(lesson,label);
@@ -287,6 +303,7 @@ function registryProjection(lesson,index){
     ['navTitle','navSubtitle'],
     label
   );
+  array(lesson.outcomes,label+'.outcomes');
   return {
     date:lesson.date,
     href:lesson.href,
@@ -294,7 +311,9 @@ function registryProjection(lesson,index){
     summary:lesson.summary,
     topics:lesson.topics,
     ktpRefs:lesson.ktpRefs,
-    outcomes:lesson.outcomes,
+    outcomes:lesson.outcomes.map((outcome,outcomeIndex)=>
+      registryOutcomeProjection(outcome,label+'.outcomes['+outcomeIndex+']')
+    ),
     materials:lesson.materials
   };
 }

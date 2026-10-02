@@ -12,7 +12,11 @@
 > - role `student-dashboard-design-reference` защищена отдельным SHA-256 snapshot contract: **13 reference files** в `site/` и `images/`;
 > - hash guard прошёл до и после transactional apply; migration добавила только v2 sidecars и не изменила reference surface;
 > - architecture ratchet: **v2=24 / non-v2=0**, `byArchitecture={v2:24}`;
-> - следующий этап — post-migration consolidation: удалить временные migration-wave допущения/документальный drift и определить steady-state lifecycle для новых уроков и v2 maintenance;
+> - post-migration consolidation реализована: steady-state audit фиксирует invariant 24/24 v2 и отсутствие временных migration workflows;
+> - публикация новых уроков в штатном режиме v2-only и требует reviewed publication intent; legacy publication доступна только через явный recovery opt-in;
+> - Stage 04 работает от canonical v2 catalog / lesson metadata / mastery state, сохраняет practice enrichment и применяет registry + practice + mastery транзакционно с rollback и stale-plan guards;
+> - migration tooling сохранён как recovery/historical path; CI классифицирует migration-recovery отдельно от обычного steady-state gate;
+> - следующий продуктовый этап по operational roadmap — автоматизация жизненного цикла новых уроков, серверная синхронизация и педагогическая аналитика;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 

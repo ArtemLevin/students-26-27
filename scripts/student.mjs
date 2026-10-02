@@ -7,6 +7,7 @@ import {run as runMigrate} from '../pipeline/migration/migrate-student.mjs';
 import {run as runValidateManifest} from '../pipeline/migration/validate-manifest.mjs';
 import {run as runInspectLegacyState} from '../pipeline/migration/inspect-legacy-state.mjs';
 import {run as runReadiness} from '../pipeline/migration/readiness-inventory.mjs';
+import {run as runSteadyStateAudit} from '../pipeline/student/audit-steady-state.mjs';
 
 export function helpText(){
   return [
@@ -14,14 +15,17 @@ export function helpText(){
     '',
     'Usage:',
     '  node scripts/student.mjs validate [student_id] [--json]',
+    '  node scripts/student.mjs audit [--json|--markdown] [--root ROOT]',
     '  node scripts/student.mjs inventory [--json] [--json-output FILE] [--markdown-output FILE]',
+    '',
+    'Recovery / historical migration commands:',
     '  node scripts/student.mjs migrate STUDENT (--dry-run|--apply) [--manifest FILE] [--date YYYY-MM-DD] [--json]',
     '  node scripts/student.mjs validate-manifest --manifest FILE [--root ROOT] [--json]',
     '  node scripts/student.mjs inspect-legacy-state STUDENT [--root ROOT] [--json]',
     '  node scripts/student.mjs readiness [--json] [--json-output FILE] [--markdown-output FILE]',
     '',
-    'Migration apply requires a reviewed manifest and runs through optimistic preconditions, atomic writes, postflight validation, and rollback.',
-    'The CLI is the single entry point for Student Platform v2 architecture operations.'
+    'Steady-state operations are validate, audit and inventory.',
+    'Migration commands remain available for recovery and historical verification.'
   ].join('\n')+'\n';
 }
 
@@ -32,6 +36,7 @@ export function run(argv=process.argv.slice(2)){
     return null;
   }
   if(command==='validate')return runValidate(rest);
+  if(command==='audit')return runSteadyStateAudit(rest);
   if(command==='inventory')return runInventory(rest);
   if(command==='migrate')return runMigrate(rest);
   if(command==='validate-manifest')return runValidateManifest(rest);
