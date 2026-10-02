@@ -1,0 +1,29 @@
+name: P5.2-6 Nikol registry compatibility preflight
+
+on:
+  push:
+    branches:
+      - feat/student-platform-v2-p5-2-6-nikol-registry
+    paths:
+      - .github/workflows/p5-2-6-nikol-preflight.yml
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Focused historical discovery regression
+        run: node --test pipeline/migration/test/historical-lessons.test.mjs
+      - name: Full migration regression
+        run: node --test pipeline/migration/test/*.test.mjs
+      - name: Nikol migration preflight
+        shell: bash
+        run: |
+          node pipeline/migration/inspect-legacy-state.mjs nikol_sarkisyants --json
+          node --input-type=module -e "import {discoverHistoricalLessons} from './pipeline/migration/legacy/discover-lessons.mjs'; const r=discoverHistoricalLessons({root:process.cwd(),studentId:'nikol_sarkisyants'}); console.log(JSON.stringify({studentId:r.studentId,lessons:r.lessons.map(x=>({date:x.date,href:x.href,sources:x.sources})),diagnostics:r.diagnostics},null,2));"
