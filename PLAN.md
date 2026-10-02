@@ -3,13 +3,13 @@
 > **Current implementation state — 2026-10-02**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **6 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`, `sofya_kalney`, `nikol_sarkisyants`);
+> - Student Platform v2: **7 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`, `sofya_kalney`, `nikol_sarkisyants`, `xenia_klykova`);
 > - текущий rollout: **P5.2**;
-> - завершённый этап: **P5.2-8** — Xenia mastery authority reconciled: stale orphan `t11_other` удалён из repository-authored teacher seed, а подтверждённые runtime mastery `ege2027_t6_variance=2` и `ege2027_t6_stddev=2` закреплены в canonical legacy authority;
-> - regression guard на реальных legacy sources Ксении требует EGE-2027 catalog transform, отсутствие mastery conflicts/orphans и `automaticEligible=true`;
-> - обязательный `merge gate` теперь включает полный student-specific regression suite Никол; отдельный дублирующий workflow удалён;
-> - `xenia_klykova` остаётся последним modern-shared кабинетом;
-> - следующий gate: **P5.2-9 Xenia migration** — повторить automatic preflight, подготовить reviewed manifest, выполнить validated dry-run и transactional apply с сохранением lesson/mastery/practice runtime contracts;
+> - завершённый этап: **P5.2-9** — `xenia_klykova` мигрирована из `modern-shared` в v2 через reviewed manifest, validated dry-run и transactional apply;
+> - migration coverage Ксении: 23/23 historical lessons, 296/296 effective EGE-2027 competencies, 69/69 repository-authored mastery values, conflicts/orphans=0, protectedFilesChanged=[];
+> - dashboard regression для Xenia/Timofey теперь проверяет effective runtime catalog после EGE-2027 transform; canonical и runtime catalog содержат 296 skills;
+> - architecture ratchet: **v2=7**, **non-v2=17**, `modern-shared=0`, `legacy-structured=15`, `legacy-ktp=2`;
+> - следующий gate: **P5.2-10 modern-shared closure** — запретить повторное появление `modern-shared` через architecture ratchet/regression, затем построить readiness inventory для P5.3 legacy-structured rollout;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
