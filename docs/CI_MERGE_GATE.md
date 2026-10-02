@@ -10,7 +10,8 @@ The student-dashboard workflow exposes one stable required-check context:
 - Feature-branch pushes do not start a duplicate dashboard workflow.
 - Pushes to `main` still run the regression suite for dashboard-relevant changes.
 - Material-only changes such as `tex_docs/**`, `pdf_docs/**`, posters, or unrelated documentation take the lightweight path.
-- Dashboard/site/runtime/design/pipeline changes run the full regression suite.
+- Dashboard/site/runtime/design/pipeline changes and `students/*/student-contract.json` run the full regression suite.
+- Student dashboard matrix entries own their complete student-specific regression suite; dedicated duplicate workflows are avoided so `merge gate` remains the authoritative result.
 - Concurrency cancels stale runs for the same pull request.
 - `merge gate` fails if change classification fails or any required heavy job fails/cancels. Intentionally skipped heavy jobs are accepted only when the classifier selected the lightweight path.
 

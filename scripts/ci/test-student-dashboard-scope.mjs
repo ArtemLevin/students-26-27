@@ -8,6 +8,7 @@ test('dashboard and production contract changes are heavy',()=>{
     'students/xenia_klykova/chemistry/site/index.html',
     'students/volodia_khachaturian/index.html',
     'students/nastya_pavlova/competency-map-data.js',
+    'students/nikol_sarkisyants/student-contract.json',
     'shared/student-dashboard/dashboard-core.js',
     'shared/practice/validate-configs.mjs',
     'pipeline/practice/run-stage-04.mjs',
