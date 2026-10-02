@@ -13,8 +13,19 @@ export function applyMasteryPatch(patch,contracts,{dryRun=false}={}){
   if(!contracts?.mastery)throw new Error(`${contracts?.studentId||'student'}: mastery contract is missing`);
   let source=contracts.mastery.source;
   for(const operation of patch.operations){
-    if(operation.type==='set-mastery-levels')source=replaceMasteryLevels(source,operation.levels,contracts.mastery.locator);
-    else throw new Error(`Unknown Stage 04 mastery operation: ${operation.type}`);
+    if(operation.type==='set-mastery-levels'){
+      source=replaceMasteryLevels(
+        source,
+        operation.levels,
+        contracts.mastery.locator,
+        {
+          sourcePath:'site/data/lessons/'+contracts.lessonDate+'.lesson.json',
+          sourceKind:'stage04-mastery',
+          basisById:operation.basisById||{},
+          updated:contracts.lessonDate
+        }
+      );
+    }else throw new Error(`Unknown Stage 04 mastery operation: ${operation.type}`);
   }
   const changed=source!==contracts.mastery.source;
   const changedFiles=changed?[path.relative(contracts.root,contracts.mastery.path)]:[];
