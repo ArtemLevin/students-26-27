@@ -3,12 +3,12 @@
 > **Current implementation state — 2026-10-01**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **5 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`, `sofya_kalney`);
+> - Student Platform v2: **6 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`, `sofya_kalney`, `nikol_sarkisyants`);
 > - текущий rollout: **P5.2**;
-> - завершённый этап: **P5.2-6** — historical lesson discovery принимает точный безопасный wrapper `Object.freeze(array literal)`; произвольные вычисляемые/chained выражения остаются fail-closed;
-> - `nikol_sarkisyants`: automatic migration preflight теперь чистый — 22/22 уроков, 284 competency IDs, 103 mastery values, conflicts/orphans = 0;
-> - `xenia_klykova` остаётся заблокирована orphan mastery `t11_other`;
-> - следующий gate: **P5.2-7 Nikol migration** — выполнить reviewed manifest → dry-run → transactional apply → full merge gate;
+> - завершённый этап: **P5.2-7** — `nikol_sarkisyants` мигрирована с сохранением 22 исторических уроков, 284 competency IDs и 103 mastery values;
+> - canonical migration registry теперь сохраняет общий dashboard API для recent/archive pagination, date formatting и registry validation; это закрывает найденную post-apply регрессию Никол и защищает следующие modern-shared миграции;
+> - `xenia_klykova` — последний modern-shared кабинет; migration preflight блокируется единственным orphan mastery `t11_other`;
+> - следующий gate: **P5.2-8 Xenia orphan reconciliation** — установить источник истины для `t11_other`, устранить catalog/mastery drift с regression guard и повторить automatic migration preflight;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
