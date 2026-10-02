@@ -3,17 +3,16 @@
 > **Current implementation state — 2026-10-02**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **21 / 24** кабинетов; rolling-clean и fixed-KTP waves завершены;
+> - Student Platform v2: **22 / 24** кабинетов; rolling-clean и fixed-KTP waves завершены;
 > - текущий этап: **reconciliation wave** для оставшихся legacy-structured источников;
-> - `ekaterina_gnedkova`, `sofya_khomenko` и `kristina` reconciled и мигрированы в v2;
-> - следующий reconciliation gate завершён для `nastya_pavlova`: шесть ID-based lesson overlays 10.09–28.09 вынесены из `site/index.html` в явный root `mastery-authority.js`;
-> - inspector теперь воспроизводит фактический root `competency-map.js` runtime path: ordered legacy groups → EGE-2027 transform; raw 367-ID catalog корректно становится **379-ID runtime catalog**;
-> - real-source result Насти: **379 competencies**, **367 repository-authored mastery records**, распределение **314×0 + 53×2**, 12 runtime-added EGE-2027 competencies остаются без override и с default level 0;
-> - regression фиксирует runtime semantics всех dated overlays: status/evidence/hrefs и финальный lesson metadata 28.09 сохраняются; conflicts/orphans/warnings=0, `automaticEligible=true`;
-> - следующий gate: отдельная Student Platform v2 migration `nastya_pavlova` после merge reconciliation PR;
-> - architecture baseline пока остаётся **v2=21 / non-v2=3**, `legacy-structured=3`, `legacy-ktp=0`;
+> - `ekaterina_gnedkova`, `sofya_khomenko`, `kristina` и `nastya_pavlova` reconciled и мигрированы в v2;
+> - migration result Насти: **9/9 historical lessons, 379/379 competencies, 367/367 repository-authored mastery**, материалы 9 HTML / 8 PDF / 9 TeX / 7 lab;
+> - mastery distribution сохранён точно: **314×0 + 53×2**; 12 runtime-added EGE-2027 competencies присутствуют в canonical catalog без mastery override и остаются на default level 0;
+> - сохранены два legacy outcome sets: 26.08 (8 outcomes) и 03.09 (9 outcomes); эти preservation warnings проверяются exact guard'ом;
+> - conflicts/orphans=0, reviewItems/blockers=[], protectedFilesChanged=[];
+> - architecture ratchet: **v2=22 / non-v2=2**, `legacy-structured=2`, `legacy-ktp=0`;
 > - `darya_savenkova` остаётся автоматически ready, но отложена из-за роли design reference;
-> - после Насти remaining reconciliation target: `matvey_gorbachev`;
+> - последний unresolved reconciliation target: `matvey_gorbachev`, где inline authority адресуется по titles и требует отдельного ambiguity-safe reconciliation;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
