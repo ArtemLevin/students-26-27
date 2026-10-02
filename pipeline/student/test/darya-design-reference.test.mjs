@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import {ROOT} from '../inventory-students.mjs';
+import {ROOT} from '../../migration/inventory-students.mjs';
 
 const SNAPSHOT_PATH=path.join(
   ROOT,
