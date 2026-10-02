@@ -1,0 +1,308 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=18mm,headsep=7mm,footskip=12mm]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{needspace}
+
+\definecolor{accent}{HTML}{1F6F78}
+\definecolor{darkaccent}{HTML}{174C52}
+\definecolor{textgray}{HTML}{2B3033}
+\definecolor{softgray}{HTML}{6B7478}
+\definecolor{rulegray}{HTML}{CDD6D8}
+\definecolor{softaccent}{HTML}{EAF3F4}
+\definecolor{warn}{HTML}{8A4B2B}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\onehalfspacing
+\setlist[itemize]{leftmargin=1.25em,itemsep=0.25em,topsep=0.25em}
+\setlist[enumerate]{leftmargin=1.55em,itemsep=0.35em,topsep=0.35em}
+\renewcommand{\arraystretch}{1.25}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{softgray}Геометрия · ОГЭ}
+\fancyhead[R]{\small\color{softgray}София Кальней}
+\fancyfoot[C]{\small\color{softgray}\thepage}
+\renewcommand{\headrulewidth}{0pt}\setlength{\headheight}{14.5pt}
+
+\newcommand{\sectionline}{\par\vspace{0.2em}\noindent\color{rulegray}\rule{\linewidth}{0.6pt}\par\color{textgray}\vspace{0.45em}}
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\formula}[1]{\[\boxed{#1}\]}
+\newcommand{\lessondate}{3 октября 2026 г.}
+
+\begin{document}
+\color{textgray}
+
+% ---------- TITLE ----------
+\thispagestyle{empty}
+\begin{center}
+\vspace*{25mm}
+{\Large\color{softgray}Чек-лист}\par
+\vspace{7mm}
+{\fontsize{26}{31}\selectfont\bfseries\color{darkaccent}Высоты, площади и\\[2mm]биссектрисы треугольника}\par
+\vspace{10mm}
+{\large Геометрия · подготовка к ОГЭ}\par
+\vspace{18mm}
+{\large София Кальней}\par
+\vspace{4mm}
+{\normalsize \lessondate}\par
+\vfill
+{\small\color{softgray}Лёвин Артём Александрович эксклюзивно для Софии Кальней}\par
+\vspace{8mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[accent,line width=1.2pt] (0,0) .. controls (3,0.9) and (7,-0.9) .. (10,0);
+  \draw[rulegray,line width=0.7pt] (1,-0.35) .. controls (4,0.3) and (6,-0.3) .. (9,-0.35);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------- CORE ----------
+\section*{1. Главная идея занятия}
+\sectionline
+В задачах на высоты и биссектрисы удобно связывать один и тот же треугольник с несколькими известными формулами. Центральные инструменты занятия:
+\begin{itemize}
+  \item площадь треугольника и формула Герона;
+  \item два прямоугольных треугольника после проведения высоты;
+  \item площадь через две стороны и синус угла между ними;
+  \item формулы длины биссектрисы.
+\end{itemize}
+
+\key{Практический ориентир.} Если в задаче появляется высота, сразу ищите способ выразить площадь или используйте прямоугольные треугольники. Если появляется биссектриса, отметьте равные половины угла и проверьте, какая формула использует известные данные.
+
+\section*{2. Высота через площадь}
+\sectionline
+Пусть в $\triangle ABC$ высота $BH$ проведена к стороне $AC=a$.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.78]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(8,0){C}
+  \tkzDefPoint(2.5,4.2){B}
+  \tkzDefPointBy[projection=onto A--C](B)\tkzGetPoint{H}
+  \tkzDrawPolygon[line width=1pt,color=accent](A,B,C)
+  \tkzDrawSegment[line width=1pt,color=darkaccent](B,H)
+  \tkzMarkRightAngle[size=0.35,color=darkaccent](B,H,C)
+  \tkzDrawPoints[color=accent,fill=accent,size=2.5](A,B,C,H)
+  \tkzLabelPoints[below](A,H,C)
+  \tkzLabelPoints[above](B)
+  \tkzLabelSegment[below](A,C){$a$}
+  \tkzLabelSegment[right](B,H){$h_a$}
+\end{tikzpicture}
+\end{center}
+
+Если известна площадь $S$, то
+\formula{S=\frac12 a h_a \quad\Longrightarrow\quad h_a=\frac{2S}{a}.}
+
+Если известны три стороны $a,b,c$, сначала используйте формулу Герона:
+\formula{p=\frac{a+b+c}{2},\qquad S=\sqrt{p(p-a)(p-b)(p-c)}.}
+
+\Needspace{8\baselineskip}
+\key{Пример занятия.} Для сторон $10$, $17$, $21$:
+\[
+p=24,\qquad S=\sqrt{24\cdot14\cdot7\cdot3}=84,
+\]
+поэтому высота к стороне $21$ равна
+\[
+h=\frac{2\cdot84}{21}=8.
+\]
+
+\section*{3. Та же высота через два прямоугольных треугольника}
+\sectionline
+Обозначим $AH=y$, тогда $HC=a-y$. Для той же высоты $BH=x$ получаем две теоремы Пифагора:
+\[
+\begin{cases}
+x^2+y^2=AB^2,\\
+x^2+(a-y)^2=BC^2.
+\end{cases}
+\]
+Удобный ход --- \key{вычесть уравнения}. Тогда $x^2$ исчезает, находится $y$, после чего $x$ восстанавливается из любого уравнения.
+
+Для треугольника со сторонами $10$, $17$, $21$:
+\[
+\begin{cases}
+x^2+y^2=100,\\
+x^2+(21-y)^2=289.
+\end{cases}
+\]
+После вычитания получается $y=6$, затем $x^2=100-36=64$, значит $x=8$.
+
+\key{Когда метод особенно полезен.} Когда высота делит фигуру на два прямоугольных треугольника с удобными сторонами или когда площадь вычислять громоздко.
+
+% ---------- AREA + BISECTOR ----------
+\section*{4. Площадь через две стороны и синус угла}
+\sectionline
+Если известны стороны $b$ и $c$ и угол $A$ между ними, то
+\formula{S=\frac12 bc\sin A.}
+Эта формула работает для любой пары сторон, если в формуле стоит \key{угол между выбранными сторонами}.
+
+\textbf{Мини-пример.} Если $b=8$, $c=11$, $A=30^\circ$, то
+\[
+S=\frac12\cdot8\cdot11\cdot\sin30^\circ=22.
+\]
+
+\clearpage
+\section*{5. Биссектриса: формула через половину угла}
+\sectionline
+Пусть $AK$ --- биссектриса угла $A$ в $\triangle ABC$.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.82]
+  \tkzDefPoint(0,0){B}
+  \tkzDefPoint(8,0){C}
+  \tkzDefPoint(3.0,4.4){A}
+  \tkzDefLine[bisector](B,A,C)\tkzGetPoint{T}
+  \tkzInterLL(A,T)(B,C)\tkzGetPoint{K}
+  \tkzDrawPolygon[line width=1pt,color=accent](A,B,C)
+  \tkzDrawSegment[line width=1pt,color=darkaccent](A,K)
+  \tkzMarkAngle[size=0.65,color=darkaccent](B,A,K)
+  \tkzMarkAngle[size=0.85,color=darkaccent](K,A,C)
+  \tkzDrawPoints[color=accent,fill=accent,size=2.5](A,B,C,K)
+  \tkzLabelPoints[above](A)
+  \tkzLabelPoints[below](B,K,C)
+  \tkzLabelSegment[left](A,B){$c$}
+  \tkzLabelSegment[right](A,C){$b$}
+  \tkzLabelSegment[right](A,K){$l_a$}
+\end{tikzpicture}
+\end{center}
+
+Пусть $\angle A=2\alpha$. Сравнение площади всего треугольника с суммой площадей $\triangle ABK$ и $\triangle ACK$ даёт:
+\[
+\frac12 bc\sin 2\alpha
+=\frac12 l_a(c+b)\sin\alpha.
+\]
+Используя $\sin2\alpha=2\sin\alpha\cos\alpha$, получаем
+\formula{l_a=\frac{2bc\cos\frac A2}{b+c}.}
+
+\key{Смысл вывода.} Одна и та же площадь выражается двумя способами: сразу для большого треугольника и как сумма площадей двух треугольников, образованных биссектрисой.
+
+\section*{6. Биссектриса: формула через отрезки противоположной стороны}
+\sectionline
+Если биссектриса $AK$ делит сторону $BC$ на отрезки $BK=m$ и $KC=n$, то
+\formula{AK^2=AB\cdot AC-BK\cdot KC.}
+То есть
+\[
+l_a^2=bc-mn.
+\]
+Формула особенно удобна, когда длины $BK$ и $KC$ уже известны или легко находятся по теореме о биссектрисе:
+\formula{\frac{BK}{KC}=\frac{AB}{AC}.}
+
+\section*{7. Что обязательно проверять}
+\sectionline
+\begin{itemize}
+  \item В формуле $S=\frac12 bc\sin A$ угол $A$ должен лежать \key{между} сторонами $b$ и $c$.
+  \item Высота --- положительная длина, поэтому из $h^2=q$ берём $h=\sqrt q$.
+  \item После проведения высоты подпишите оба отрезка основания: например, $AH=y$, $HC=a-y$.
+  \item В формуле биссектрисы $l_a^2=bc-mn$ произведение $mn$ относится к двум частям стороны, которую пересекает биссектриса.
+  \item Перед вычислениями проверьте, что стороны образуют треугольник.
+  \item Корни и дроби можно оставлять в точном виде, если условие не требует десятичного приближения.
+\end{itemize}
+\clearpage
+
+% ---------- FLOWCHART ----------
+\thispagestyle{fancy}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: как искать высоту треугольника}
+\end{center}
+\vspace{8mm}
+
+\begin{center}
+\begin{tikzpicture}[
+  startstop/.style={ellipse,draw=accent,line width=1pt,minimum width=42mm,minimum height=10mm,align=center,fill=softaccent},
+  process/.style={rectangle,rounded corners=2mm,draw=accent,line width=1pt,text width=40mm,minimum height=13mm,align=center},
+  decision/.style={diamond,aspect=2.25,draw=accent,line width=1pt,text width=28mm,align=center,inner sep=1.2mm},
+  arrow/.style={-{Stealth[length=3mm]},line width=0.9pt,color=darkaccent},
+  lab/.style={font=\small,fill=white,inner sep=1pt}
+]
+\node[startstop] (start) at (0,0) {Нужно найти высоту $h_a$};
+\node[decision] (three) at (0,-2.3) {Известны три стороны?};
+\node[process] (heron) at (-4.0,-5.0) {Найдите площадь по формуле Герона};
+\node[decision] (angle) at (3.5,-5.0) {Известны две стороны и угол между ними?};
+\node[process] (fromarea) at (-4.0,-8.0) {Используйте $h_a=\dfrac{2S}{a}$};
+\node[process] (sine) at (1.0,-8.3) {Найдите $S=\dfrac12 bc\sin A$};
+\node[process] (right) at (6.0,-8.3) {Проведите высоту и составьте две теоремы Пифагора};
+\node[startstop] (finish) at (1.0,-11.5) {Проверьте длину и запишите ответ};
+
+\draw[arrow] (start) -- (three);
+\draw[arrow] (three) -- node[lab,above left]{да} (heron);
+\draw[arrow] (three) -- node[lab,above right]{нет} (angle);
+\draw[arrow] (heron) -- (fromarea);
+\draw[arrow] (angle) -- node[lab,above left]{да} (sine);
+\draw[arrow] (angle) -- node[lab,above right]{нет} (right);
+\draw[arrow] (sine) -- (finish);
+\draw[arrow] (right) -- (finish);
+\draw[arrow] (fromarea) -- (finish);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------- TRAINING ----------
+\section*{Тренировочный блок · Путь А}
+\sectionline
+\textbf{10 задач.} Решайте по порядку: от прямого применения формул к сочетанию нескольких идей.
+
+\begin{enumerate}
+  \item В треугольнике стороны равны $6$, $8$ и $10$. Найдите высоту, проведённую к стороне $10$.
+
+  \item В треугольнике стороны равны $13$, $14$ и $15$. Найдите высоту, проведённую к стороне $14$, используя формулу Герона.
+
+  \item В треугольнике $ABC$ даны $AB=15$, $BC=20$, $AC=25$. Высота $BH$ проведена к $AC$. Решите задачу через два прямоугольных треугольника: найдите $AH$ и $BH$.
+
+  \item Две стороны треугольника равны $8$ и $11$, угол между ними равен $30^\circ$. Найдите площадь треугольника.
+
+  \item Площадь треугольника равна $30$. Одна сторона равна $12$, а высота проведена к этой стороне. Найдите высоту.
+
+  \item В треугольнике две стороны, образующие угол $60^\circ$, равны $6$ и $8$. Найдите длину биссектрисы этого угла по формуле через косинус половины угла.
+
+  \item В $\triangle ABC$ биссектриса $AK$ проведена к стороне $BC$. Известно: $AB=10$, $AC=15$, $BC=20$. Найдите $BK$, $KC$ и $AK$.
+
+  \item Стороны треугольника равны $7$, $8$ и $9$. Найдите высоту, проведённую к стороне $9$. Ответ запишите в точном виде.
+
+  \item Две стороны треугольника равны $8$ и $10$, угол между ними равен $120^\circ$. Найдите площадь треугольника.
+
+  \item В треугольнике со сторонами $13$, $14$, $15$ к стороне $14$ проведены высота и биссектриса из противоположной вершины. Найдите длины обеих линий.
+\end{enumerate}
+\clearpage
+
+% ---------- ANSWERS ----------
+\section*{Ответы}
+\sectionline
+\begin{longtable}{@{}>{\bfseries}p{10mm}p{0.80\linewidth}@{}}
+\toprule
+№ & Ответ \\
+\midrule
+\endhead
+1 & $\dfrac{24}{5}=4{,}8$. \\
+2 & $12$. \\
+3 & $AH=9$, $BH=12$. \\
+4 & $22$. \\
+5 & $5$. \\
+6 & $\dfrac{24\sqrt3}{7}$. \\
+7 & $BK=8$, $KC=12$, $AK=3\sqrt6$. \\
+8 & $\dfrac{8\sqrt5}{3}$. \\
+9 & $20\sqrt3$. \\
+10 & высота $12$, биссектриса $\dfrac{3\sqrt{65}}{2}$. \\
+\bottomrule
+\end{longtable}
+
+\vspace{8mm}
+\textcolor{softgray}{\small Самопроверка: если ответ на высоту превышает обе прилежащие стороны, вернитесь к вычислению площади или к теореме Пифагора.}
+
+\end{document}
