@@ -3,16 +3,15 @@
 > **Current implementation state — 2026-10-02**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **18 / 24** кабинетов; rolling-clean и fixed-KTP waves завершены;
+> - Student Platform v2: **19 / 24** кабинетов; rolling-clean и fixed-KTP waves завершены;
 > - текущий этап: **reconciliation wave** для оставшихся legacy-structured источников;
-> - первый reconciliation gate завершён для `ekaterina_gnedkova`: legacy `competency-map-data.js` является browser loader через `document.write`, который подключает 4 catalog parts и assembler;
-> - migration sandbox теперь безопасно исполняет только локальные `document.write` script dependencies внутри `studentRoot`; external/path-traversal/missing/cycle/execution failures fail closed;
-> - для Екатерины Гнедковой repository mastery authority сделан явным через `mastery-authority.js`, который проецирует фактические runtime `item.level` значения;
-> - real-source regression: **369/369 competencies**, **369/369 mastery records** (включая явные нули), 5 local script dependencies, conflicts/orphans/warnings=0, `automaticEligible=true`;
-> - следующий gate: отдельная Student Platform v2 migration `ekaterina_gnedkova` только после merge reconciliation PR;
+> - `ekaterina_gnedkova` reconciled и мигрирована: browser-loader через `document.write` безопасно разрешён внутри `studentRoot`, repository mastery authority сделан явным;
+> - migration result: **7/7 historical lessons, 369/369 competencies, 369/369 mastery**, материалы 7 HTML / 7 PDF / 7 TeX / 3 lab;
+> - mastery distribution сохранён точно: **321×0, 13×2, 25×3, 10×4**; conflicts/orphans=0, warnings/reviewItems/blockers=[], protectedFilesChanged=[];
+> - architecture ratchet: **v2=19 / non-v2=5**, `legacy-structured=5`, `legacy-ktp=0`;
 > - `darya_savenkova` остаётся автоматически ready, но отложена из-за роли design reference;
-> - после Екатерины: по одному reconciliate `kristina`, `matvey_gorbachev`, `nastya_pavlova`, `sofya_khomenko` с unresolved inline mastery mutations;
-> - architecture baseline остаётся **v2=18 / non-v2=6**, `legacy-structured=6`, `legacy-ktp=0`;
+> - следующий reconciliation targets: `kristina`, `matvey_gorbachev`, `nastya_pavlova`, `sofya_khomenko` — unresolved inline mastery mutations;
+> - следующий gate выбирается только после свежего post-merge readiness и real-source inspection;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
