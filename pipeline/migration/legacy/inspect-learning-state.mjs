@@ -507,16 +507,37 @@ function loadIndexCatalogFallback({
   });
 }
 
+function detectEge2027RuntimeTransform({root,studentId}){
+  const studentRoot=path.join(root,'students',studentId);
+  const candidates=[
+    {
+      file:path.join(studentRoot,'site','dashboard.js'),
+      sourcePath:'site/dashboard.js',
+      matches:source=>
+        /ege-profile-2027\.js/.test(source)&&
+        /installEgeProfile2027ControllerHook\s*\(/.test(source)
+    },
+    {
+      file:path.join(studentRoot,'competency-map.js'),
+      sourcePath:'competency-map.js',
+      matches:source=>
+        /ege-profile-2027\.js/.test(source)&&
+        /transformEgeProfile2027Catalog\s*\(/.test(source)
+    }
+  ];
+  for(const candidate of candidates){
+    if(!fs.existsSync(candidate.file)||!fs.statSync(candidate.file).isFile())continue;
+    const source=fs.readFileSync(candidate.file,'utf8');
+    if(candidate.matches(source))return candidate;
+  }
+  return null;
+}
+
 function applyKnownRuntimeCatalogTransforms({
   root,studentId,catalogCandidates,warnings
 }){
-  const dashboardPath=path.join(root,'students',studentId,'site','dashboard.js');
-  if(!fs.existsSync(dashboardPath)||!fs.statSync(dashboardPath).isFile())return [];
-  const source=fs.readFileSync(dashboardPath,'utf8');
-  const usesEge2027=
-    /ege-profile-2027\.js/.test(source)&&
-    /installEgeProfile2027ControllerHook\s*\(/.test(source);
-  if(!usesEge2027)return [];
+  const runtime=detectEge2027RuntimeTransform({root,studentId});
+  if(!runtime)return [];
 
   const transformed=[];
   for(const candidate of catalogCandidates){
@@ -526,12 +547,13 @@ function applyKnownRuntimeCatalogTransforms({
       transformed.push({
         sourcePath:candidate.sourcePath,
         symbol:candidate.symbol,
-        transform:'ege-profile-2027'
+        transform:'ege-profile-2027',
+        runtimeSourcePath:runtime.sourcePath
       });
     }catch(error){
       warnings.push({
         type:'catalog-transform-failed',
-        sourcePath:'site/dashboard.js',
+        sourcePath:runtime.sourcePath,
         transform:'ege-profile-2027',
         message:error.message
       });
