@@ -44,7 +44,9 @@ export function registryRecordFromMetadata(metadata,{existing=null}={}){
   const canonicalOutcomes=metadata.outcomes.map(outcome=>{
     const previous=existingByCoreKey.get(coreOutcomeKey(outcome))||null;
     return {
-      ...structuredClone(outcome),
+      competencyId:outcome.competencyId,
+      evidenceAnchor:outcome.evidenceAnchor,
+      relation:outcome.relation,
       ...practiceEnrichment(previous)
     };
   });
