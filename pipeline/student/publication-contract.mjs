@@ -216,6 +216,11 @@ function extractLessonsArray(source,label){
           let closing=i+1;
           while(/\s/.test(source[closing]||''))closing+=1;
           if(source[closing]!==')')fail(label,'Object.freeze LESSONS wrapper must contain exactly one array literal');
+          let after=closing+1;
+          while(/\s/.test(source[after]||''))after+=1;
+          if(source[after]!==';'&&source[after]!==undefined){
+            fail(label,'Object.freeze LESSONS wrapper must be the complete assignment expression');
+          }
         }
         const literal=source.slice(start,i+1);
         try{
