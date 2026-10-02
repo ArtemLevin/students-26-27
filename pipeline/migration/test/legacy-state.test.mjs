@@ -366,3 +366,54 @@ test('real Xenia legacy sources reconcile EGE-2027 mastery and stay migration-el
   );
   assert.equal(report.automaticEligible,true);
 });
+
+test('inline index mastery mutation fails closed instead of producing a false-ready source',()=>{
+  const x=fixture('inline_mastery_fixture');
+  write(path.join(x.site,'competency-map-data.js'),catalog(['a']));
+  write(
+    path.join(x.site,'index.html'),
+    "<!doctype html><script>const data=window.COMPETENCY_MAP_DATA;const item=data.groups[0].items[0];item.level=Math.max(Number(item.level)||0,3);</script>"
+  );
+  const report=inspectLegacyLearningState(x);
+  const warning=report.diagnostics.warnings.find(
+    item=>item.type==='inline-mastery-mutation-unresolved'
+  );
+  assert.ok(warning);
+  assert.equal(warning.sourcePath,'site/index.html');
+  assert.equal(report.automaticEligible,false);
+});
+
+test('real Kristina index is blocked until inline repository mastery is reconciled',()=>{
+  const x=fixture('kristina_inline_fixture');
+  for(const name of ['competency-map-data.js','index.html']){
+    write(
+      path.join(x.site,name),
+      fs.readFileSync(path.join(ROOT,'students','kristina','site',name),'utf8')
+    );
+  }
+  const report=inspectLegacyLearningState(x);
+  assert.equal(report.catalog?.count,360);
+  assert.ok(
+    report.diagnostics.warnings.some(
+      item=>item.type==='inline-mastery-mutation-unresolved'&&item.sourcePath==='site/index.html'
+    )
+  );
+  assert.equal(report.automaticEligible,false);
+});
+
+test('real Mark index stays eligible under the inline mastery guard',()=>{
+  const x=fixture('mark_inline_guard_fixture');
+  for(const name of ['competency-map-data.js','index.html']){
+    write(
+      path.join(x.site,name),
+      fs.readFileSync(path.join(ROOT,'students','mark_gukin','site',name),'utf8')
+    );
+  }
+  const report=inspectLegacyLearningState(x);
+  assert.equal(report.catalog?.count,356);
+  assert.equal(
+    report.diagnostics.warnings.some(item=>item.type==='inline-mastery-mutation-unresolved'),
+    false
+  );
+  assert.equal(report.automaticEligible,true);
+});
