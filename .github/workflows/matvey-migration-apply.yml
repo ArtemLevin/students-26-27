@@ -1,0 +1,128 @@
+name: Matvey migration apply
+
+on:
+  push:
+    branches:
+      - 'feat/student-platform-v2-migrate-matvey-gorbachev'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-migrate-matvey-gorbachev
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate reviewed manifest
+        run: node scripts/student.mjs validate-manifest --manifest pipeline/migration/manifests/matvey_gorbachev.json --json
+
+      - name: Reconcile manifest against current authority
+        shell: bash
+        run: |
+          node scripts/student.mjs inspect-legacy-state matvey_gorbachev --json > /tmp/matvey.json
+          node - <<'NODE'
+          const manifest=require('./pipeline/migration/manifests/matvey_gorbachev.json');
+          const report=require('/tmp/matvey.json');
+          if(!report.automaticEligible)process.exit(1);
+          if(report.catalog?.count!==342||report.mastery?.resolved?.length!==342)process.exit(2);
+          const expected=new Map(report.mastery.resolved.map(x=>[x.competencyId,x.level]));
+          if(manifest.preserveMastery.length!==expected.size)process.exit(3);
+          for(const item of manifest.preserveMastery){
+            if(expected.get(item.competencyId)!==item.level)process.exit(4);
+            if(item.sourcePath!=='site/mastery-authority.js'||item.sourceKind!=='mastery-authority'||item.confidence!=='exact')process.exit(5);
+          }
+          NODE
+
+      - name: Validated dry-run
+        shell: bash
+        run: |
+          node scripts/student.mjs migrate matvey_gorbachev \
+            --manifest pipeline/migration/manifests/matvey_gorbachev.json \
+            --date 2026-10-02 \
+            --dry-run \
+            --json > /tmp/dry-run.json
+          node - <<'NODE'
+          const p=require('/tmp/dry-run.json'),c=p.coverage;
+          if(!p.executable||!c?.complete)process.exit(1);
+          if(c.lessons?.source!==5||c.lessons?.candidate!==5)process.exit(2);
+          if(c.ktp?.mappedHistoricalLessons!==0)process.exit(3);
+          if(c.competencies?.source!==342||c.competencies?.candidate!==342)process.exit(4);
+          if(c.mastery?.resolvedSource!==342||c.mastery?.candidate!==342||c.mastery?.conflicts!==0||c.mastery?.orphans!==0)process.exit(5);
+          if((p.reviewItems||[]).length||(p.blockers||[]).length||(p.warnings||[]).length)process.exit(6);
+          NODE
+
+      - name: Transactional apply
+        run: |
+          node scripts/student.mjs migrate matvey_gorbachev \
+            --manifest pipeline/migration/manifests/matvey_gorbachev.json \
+            --date 2026-10-02 \
+            --apply \
+            --json
+
+      - name: Validate migrated package
+        run: node scripts/student.mjs validate matvey_gorbachev --json
+
+      - name: Verify canonical mastery preservation
+        run: |
+          node - <<'NODE'
+          const catalog=require('./students/matvey_gorbachev/site/data/competency-catalog.json');
+          const state=require('./students/matvey_gorbachev/site/data/mastery-state.json');
+          const catalogIds=new Set(catalog.groups.flatMap(group=>group.items).map(item=>item.id));
+          const values=Object.values(state.levels);
+          const counts={};
+          for(const value of values){
+            counts[value.level]=(counts[value.level]||0)+1;
+            if(value.sourcePath!=='site/mastery-authority.js'||value.sourceKind!=='mastery-authority')process.exit(1);
+          }
+          if(catalogIds.size!==342||values.length!==342)process.exit(2);
+          if(counts[0]!==281||counts[2]!==61||Object.keys(counts).length!==2)process.exit(3);
+          NODE
+
+      - name: Verify migration report and ratchet target
+        run: |
+          node - <<'NODE'
+          const report=require('./pipeline/migration/reports/matvey_gorbachev.json');
+          const baseline=require('./pipeline/migration/baseline.json');
+          if(!report.complete)process.exit(1);
+          if(report.lessons.source!==5||report.lessons.candidate!==5)process.exit(2);
+          if(report.ktp.mappedHistoricalLessons!==0)process.exit(3);
+          if(report.competencies.source!==342||report.competencies.candidate!==342)process.exit(4);
+          if(report.mastery.resolvedSource!==342||report.mastery.candidate!==342||report.mastery.conflicts!==0||report.mastery.orphans!==0)process.exit(5);
+          if(report.materials.html!==5||report.materials.pdf!==5||report.materials.tex!==5||report.materials.lab!==4)process.exit(6);
+          if(report.preservation.protectedFilesChanged.length)process.exit(7);
+          if(report.warnings.length||report.reviewItems.length||report.blockers.length)process.exit(8);
+          if(baseline.minV2!==23||baseline.maxNonV2!==1||baseline.byArchitecture?.v2!==23||baseline.byArchitecture?.['legacy-structured']!==1)process.exit(9);
+          NODE
+
+      - name: Run migration regression suite
+        run: node --test pipeline/migration/test/*.test.mjs
+
+      - name: Enforce architecture ratchet
+        run: node pipeline/migration/audit-ratchet.mjs
+
+      - name: Commit generated migration state
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            pipeline/migration/baseline.json \
+            pipeline/migration/reports/matvey_gorbachev.json \
+            students/matvey_gorbachev/student-contract.json \
+            students/matvey_gorbachev/site/data \
+            students/matvey_gorbachev/site/lesson-registry.js \
+            students/matvey_gorbachev/site/tests/student-platform-v2.test.mjs
+          if git diff --cached --quiet; then
+            echo "Migration produced no generated changes"
+            exit 1
+          fi
+          git commit -m "Reconciliation: apply Matvey Student Platform v2 migration"
+          git push origin HEAD:feat/student-platform-v2-migrate-matvey-gorbachev
