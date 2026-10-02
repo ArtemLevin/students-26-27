@@ -146,6 +146,17 @@ function executeDocumentWriteDependencies({
         });
         continue;
       }
+      const canonicalStudentRoot=fs.realpathSync(studentRoot);
+      const canonicalFile=fs.realpathSync(file);
+      if(canonicalFile!==canonicalStudentRoot&&!canonicalFile.startsWith(canonicalStudentRoot+path.sep)){
+        warnings.push({
+          type:'document-write-script-outside-student',
+          sourcePath:relativePath,
+          parentSourcePath,
+          src
+        });
+        continue;
+      }
       dependencies.push({
         sourcePath:relativePath,
         parentSourcePath
