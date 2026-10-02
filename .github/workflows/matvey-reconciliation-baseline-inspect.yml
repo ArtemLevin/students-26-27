@@ -1,102 +1,163 @@
-name: Matvey reconciliation baseline inspect
+name: Matvey reconciliation generate authority
 
 on:
   push:
     branches:
       - 'feat/student-platform-v2-reconcile-matvey-gorbachev'
 
+permissions:
+  contents: write
+
 jobs:
-  inspect:
+  generate:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
         with:
           ref: feat/student-platform-v2-reconcile-matvey-gorbachev
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
 
-      - name: Prove title mapping uniqueness and runtime overlay state
+      - name: Generate ambiguity-safe mastery authority
         run: |
-          node scripts/student.mjs inspect-legacy-state matvey_gorbachev --json > /tmp/legacy.json
           node --input-type=module - <<'NODE'
           import fs from 'node:fs';
           import vm from 'node:vm';
 
+          const indexPath='students/matvey_gorbachev/site/index.html';
+          const dataPath='students/matvey_gorbachev/site/competency-map-data.js';
+          const authorityPath='students/matvey_gorbachev/site/mastery-authority.js';
+
           const window={};
-          const context=vm.createContext({window,console,localStorage:{getItem(){return null},setItem(){}}});
           vm.runInContext(
-            fs.readFileSync('students/matvey_gorbachev/site/competency-map-data.js','utf8'),
-            context,
+            fs.readFileSync(dataPath,'utf8'),
+            vm.createContext({window,console}),
             {filename:'competency-map-data.js'}
           );
-
-          const html=fs.readFileSync('students/matvey_gorbachev/site/index.html','utf8');
-          const inline=[...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)]
-            .filter(m=>!/\bsrc\s*=/i.test(m[1]||''))
-            .map(m=>m[2]);
-          const overlay=inline.find(source=>/const\s+covered\s*=\s*new Set/.test(source)&&/item\.level\s*=/.test(source));
-          if(!overlay)throw new Error('Matvey mastery overlay not found');
-
           const data=window.COMPETENCY_MAP_DATA;
           const items=data.groups.flatMap(group=>group.items);
+          if(items.length!==342)throw new Error('Unexpected Matvey catalog size: '+items.length);
+
           const byTitle=new Map();
           for(const item of items){
             if(!byTitle.has(item.title))byTitle.set(item.title,[]);
             byTitle.get(item.title).push(item.id);
           }
-          const duplicateTitles=[...byTitle.entries()]
-            .filter(([,ids])=>ids.length>1)
-            .map(([title,ids])=>({title,ids}));
+          if(byTitle.size!==342)throw new Error('Catalog title uniqueness changed');
 
+          const html=fs.readFileSync(indexPath,'utf8');
+          const matches=[...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
+          const target=matches.find(m=>/const\s+covered\s*=\s*new Set/.test(m[2])&&/item\.level\s*=/.test(m[2]));
+          if(!target)throw new Error('Matvey inline mastery overlay not found');
+
+          const overlay=target[2].trim();
           const literals=[...overlay.matchAll(/["']([^"'\n]+)["']/g)].map(m=>m[1]);
-          const candidateTitles=[...new Set(literals.filter(value=>byTitle.has(value)))].sort();
-          const titleMappings=candidateTitles.map(title=>({title,ids:byTitle.get(title)}));
-          const ambiguous=titleMappings.filter(item=>item.ids.length!==1);
+          const selected=[...new Set(literals.filter(value=>byTitle.has(value)))].sort();
+          if(selected.length!==55)throw new Error('Unexpected overlay title count: '+selected.length);
 
-          const before=new Map(items.map(item=>[item.id,{
-            level:item.level,
-            status:item.status,
-            evidence:JSON.parse(JSON.stringify(item.evidence||[]))
-          }]));
-          vm.runInContext(overlay,context,{filename:'index-mastery-overlay.js'});
-          const changed=[];
-          for(const item of data.groups.flatMap(group=>group.items)){
-            const prev=before.get(item.id);
-            const after={level:item.level,status:item.status,evidence:item.evidence||[]};
-            if(JSON.stringify(prev)!==JSON.stringify(after)){
-              changed.push({id:item.id,title:item.title,before:prev,after});
-            }
+          const expected={};
+          for(const title of selected){
+            const ids=byTitle.get(title)||[];
+            if(ids.length!==1)throw new Error('Ambiguous title: '+title+' -> '+ids.join(','));
+            expected[title]=ids[0];
           }
 
-          const report=JSON.parse(fs.readFileSync('/tmp/legacy.json','utf8'));
-          const levels=data.groups.flatMap(group=>group.items).reduce((m,item)=>{
-            m[item.level]=(m[item.level]||0)+1; return m;
-          },{});
-          console.log(JSON.stringify({
-            inspector:{
-              catalog:report.catalog?.count,
-              mastery:report.mastery?.resolved?.length,
-              warnings:report.diagnostics?.warnings,
-              automaticEligible:report.automaticEligible
-            },
-            catalog:{
-              count:items.length,
-              uniqueTitles:byTitle.size,
-              duplicateTitles
-            },
-            overlay:{
-              candidateTitleCount:candidateTitles.length,
-              titleMappings,
-              ambiguous,
-              changedCount:changed.length,
-              changed,
-              levelCounts:levels,
-              updated:data.updated,
-              storagePrefix:data.storagePrefix,
-              nextAfterBaseline:data.nextAfterBaseline,
-              materials:data.materials
+          const guard=`(() => {
+            "use strict";
+            const data=window.COMPETENCY_MAP_DATA;
+            if(!data||!Array.isArray(data.groups)){
+              throw new Error("Matvey Gorbachev mastery authority requires loaded competency catalog");
             }
+            const expectedTitleToId=${JSON.stringify(expected,null,2)};
+            const byTitle=new Map();
+            for(const group of data.groups){
+              for(const item of group.items||[]){
+                if(!byTitle.has(item.title))byTitle.set(item.title,[]);
+                byTitle.get(item.title).push(item.id);
+              }
+            }
+            for(const [title,expectedId] of Object.entries(expectedTitleToId)){
+              const ids=byTitle.get(title)||[];
+              if(ids.length!==1||ids[0]!==expectedId){
+                throw new Error("Matvey mastery title mapping changed: "+title+" -> "+ids.join(","));
+              }
+            }
+          })();`;
+
+          const projection=`(() => {
+            "use strict";
+            const data=window.COMPETENCY_MAP_DATA;
+            const levels={};
+            for(const group of data.groups){
+              for(const item of group.items||[]){
+                if(!item||typeof item.id!=="string"||!item.id){
+                  throw new Error("Matvey mastery authority found competency without stable id");
+                }
+                const level=Number(item.level);
+                if(!Number.isInteger(level)||level<0||level>4){
+                  throw new Error("Matvey mastery authority found invalid level for "+item.id);
+                }
+                if(Object.prototype.hasOwnProperty.call(levels,item.id)){
+                  throw new Error("Matvey mastery authority found duplicate id: "+item.id);
+                }
+                levels[item.id]=level;
+              }
+            }
+            window.STUDENT_MASTERY_AUTHORITY={
+              version:1,
+              basis:"Repository-authored baseline levels after ambiguity-checked title overlays 17.09–27.09.",
+              titleMappingCount:Object.keys(expectedTitleToId||{}).length,
+              levels
+            };
+          })();`.replace(
+            'titleMappingCount:Object.keys(expectedTitleToId||{}).length,',
+            'titleMappingCount:55,'
+          );
+
+          fs.writeFileSync(authorityPath,guard+'\n\n'+overlay+'\n\n'+projection+'\n');
+
+          const replacement='<script src="mastery-authority.js?v=20261002-1"></script>';
+          const updated=html.slice(0,target.index)+replacement+html.slice(target.index+target[0].length);
+          fs.writeFileSync(indexPath,updated);
+
+          console.log(JSON.stringify({
+            catalog:items.length,
+            uniqueTitles:byTitle.size,
+            selectedTitles:selected.length,
+            expected
           },null,2));
           NODE
+
+      - name: Verify generated runtime equivalence
+        run: |
+          node --input-type=module - <<'NODE'
+          import fs from 'node:fs';
+          import vm from 'node:vm';
+          const window={};
+          const localStorage={getItem(){return null},setItem(){}};
+          const context=vm.createContext({window,console,localStorage});
+          vm.runInContext(fs.readFileSync('students/matvey_gorbachev/site/competency-map-data.js','utf8'),context);
+          vm.runInContext(fs.readFileSync('students/matvey_gorbachev/site/mastery-authority.js','utf8'),context);
+          const data=window.COMPETENCY_MAP_DATA;
+          const items=data.groups.flatMap(group=>group.items);
+          const counts={};
+          for(const item of items)counts[item.level]=(counts[item.level]||0)+1;
+          if(items.length!==342||Object.keys(window.STUDENT_MASTERY_AUTHORITY.levels).length!==342)process.exit(1);
+          if(counts[0]!==281||counts[2]!==61||Object.keys(counts).length!==2)process.exit(2);
+          if(window.STUDENT_MASTERY_AUTHORITY.titleMappingCount!==55)process.exit(3);
+          if(data.updated!=='27.09.2026'||data.storagePrefix!=='matvey_gorbachev-ege-profile-math'||data.nextAfterBaseline!=='functions_09')process.exit(4);
+          NODE
+
+      - name: Commit reconciled authority
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/matvey_gorbachev/site/mastery-authority.js students/matvey_gorbachev/site/index.html
+          git diff --cached --quiet && exit 1 || true
+          git commit -m "Reconciliation: externalize Matvey mastery authority"
+          git push origin HEAD:feat/student-platform-v2-reconcile-matvey-gorbachev
