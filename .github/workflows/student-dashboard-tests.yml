@@ -65,7 +65,13 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          if [ "$EVENT_NAME" = "push" ] && printf '%s' "$BASE_SHA" | grep -Eq '^0+
+          if ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+            echo "heavy=true" >> "${GITHUB_OUTPUT}"
+            echo "migration_recovery=true" >> "${GITHUB_OUTPUT}"
+            echo '{"heavy":true,"migrationRecovery":true,"reason":"base commit unavailable"}'
+          else
+            git diff --name-only "${BASE_SHA}" "${HEAD_SHA}" | node scripts/ci/student-dashboard-scope.mjs
+          fi
 
   production-workflow:
     name: production workflow contract
