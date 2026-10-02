@@ -287,7 +287,7 @@ function localLegacyUrl(value){
   if(/^(?:blob:|data:|https?:|\/\/)/i.test(value))return null;
   return value.split(/[?#]/,1)[0]||null;
 }
-function inlineScripts(html){
+function allInlineScripts(html){
   const scripts=[];
   const re=/<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
   let match,index=0;
@@ -296,10 +296,30 @@ function inlineScripts(html){
     const attrs=match[1]||'';
     const source=match[2]||'';
     if(/\bsrc\s*=/i.test(attrs))continue;
-    if(!/(?:\b(?:const|let|var)\s+(?:groups|GROUPS)\s*=|COMPETENCY|competenc)/.test(source))continue;
     scripts.push({index,source});
   }
   return scripts;
+}
+function inlineScripts(html){
+  return allInlineScripts(html).filter(({source})=>
+    /(?:\b(?:const|let|var)\s+(?:groups|GROUPS)\s*=|COMPETENCY|competenc)/.test(source)
+  );
+}
+function detectInlineMasteryMutations({root,studentId,warnings}){
+  const file=path.join(root,'students',studentId,'site','index.html');
+  if(!fs.existsSync(file)||!fs.statSync(file).isFile())return;
+  const html=fs.readFileSync(file,'utf8');
+  const mutation=/\.(?:level|teacherSeed|teacherMastery|baselineLevels|studentLevels)\s*=|\[['"](?:level|teacherSeed|teacherMastery|baselineLevels|studentLevels)['"]\]\s*=/;
+  const scripts=allInlineScripts(html)
+    .filter(item=>mutation.test(item.source))
+    .map(item=>item.index);
+  if(!scripts.length)return;
+  warnings.push({
+    type:'inline-mastery-mutation-unresolved',
+    sourcePath:'site/index.html',
+    scripts,
+    count:scripts.length
+  });
 }
 function scanHtmlCatalogFile({
   file,relativePath,sandbox,catalogCandidates
@@ -606,6 +626,12 @@ export function inspectLegacyLearningState({root=process.cwd(),studentId}={}){
     warnings
   });
 
+  detectInlineMasteryMutations({
+    root,
+    studentId,
+    warnings
+  });
+
   const catalogTransforms=applyKnownRuntimeCatalogTransforms({
     root,
     studentId,
@@ -617,7 +643,7 @@ export function inspectLegacyLearningState({root=process.cwd(),studentId}={}){
   const masteryResult=resolveClaims(claims,catalogResult.catalog);
   const conflicts=[...catalogResult.conflicts,...masteryResult.conflicts];
   const hardWarnings=warnings.filter(item=>
-    ['source-execution-failed','legacy-catalog-outside-student','legacy-catalog-missing','legacy-catalog-not-found','catalog-transform-failed']
+    ['source-execution-failed','legacy-catalog-outside-student','legacy-catalog-missing','legacy-catalog-not-found','catalog-transform-failed','inline-mastery-mutation-unresolved']
       .includes(item.type)
   );
   const automaticEligible=
