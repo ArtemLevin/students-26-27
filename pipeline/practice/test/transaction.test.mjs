@@ -5,8 +5,10 @@ import os from 'node:os';
 import path from 'node:path';
 import {
   buildStage04TransactionPlan,
-  executeStage04Transaction
+  executeStage04Transaction,
+  StaleStage04PlanError
 } from '../transaction.mjs';
+import {verifyTransactionPreconditions} from '../../fs/atomic-transaction.mjs';
 
 function fixture(){
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'stage04-tx-'));
@@ -16,6 +18,9 @@ function fixture(){
   const registryPath=path.join(site,'lesson-registry.js');
   const practicePath=path.join(site,'practice-config.js');
   const masteryPath=path.join(data,'mastery-state.json');
+  const metadataPath=path.join(data,'lessons','2026-10-02.lesson.json');
+  const catalogPath=path.join(data,'competency-catalog.json');
+  fs.mkdirSync(path.dirname(metadataPath),{recursive:true});
 
   const registrySource=[
     'export const LESSONS=[',
@@ -54,10 +59,28 @@ function fixture(){
       }
     }
   },null,2)+'\n';
+  const metadataSource=JSON.stringify({
+    version:1,
+    studentId:'demo',
+    date:'2026-10-02',
+    outcomes:[{
+      competencyId:'skill',
+      evidenceAnchor:'skill-anchor',
+      relation:'assessed',
+      masteryClaim:null
+    }]
+  },null,2)+'\n';
+  const catalogSource=JSON.stringify({
+    version:1,
+    studentId:'demo',
+    groups:[{id:'core',name:'Core',items:[{id:'skill',title:'Навык'}]}]
+  },null,2)+'\n';
 
   fs.writeFileSync(registryPath,registrySource);
   fs.writeFileSync(practicePath,practiceSource);
   fs.writeFileSync(masteryPath,masterySource);
+  fs.writeFileSync(metadataPath,metadataSource);
+  fs.writeFileSync(catalogPath,catalogSource);
 
   const contracts={
     root,
@@ -66,12 +89,16 @@ function fixture(){
     paths:{
       lessonRegistryPath:registryPath,
       practiceConfigPath:practicePath,
-      masteryPath
+      masteryPath,
+      metadataPath,
+      catalogPath
     },
     sources:{
       lessonRegistry:registrySource,
       practiceConfig:practiceSource,
-      mastery:masterySource
+      mastery:masterySource,
+      lessonMetadata:metadataSource,
+      catalog:catalogSource
     },
     mastery:{
       path:masteryPath,
@@ -161,7 +188,28 @@ test('Stage 04 transaction plan combines registry, practice and mastery writes',
       'students/demo/site/practice-config.js'
     ].sort()
   );
-  assert.equal(plan.preconditions.length,3);
+  assert.equal(plan.preconditions.length,5);
+});
+
+test('Stage 04 preconditions use discovery snapshots and reject concurrent source drift',()=>{
+  const x=fixture();
+  fs.appendFileSync(x.contracts.paths.lessonRegistryPath,'// concurrent update\n');
+  const plan=buildStage04TransactionPlan({
+    contracts:x.contracts,
+    practicePatch:x.practicePatch,
+    masteryPatch:x.masteryPatch
+  });
+
+  assert.throws(
+    ()=>verifyTransactionPreconditions({
+      root:x.root,
+      preconditions:plan.preconditions,
+      StaleError:StaleStage04PlanError,
+      planLabel:'Stage 04'
+    }),
+    error=>error instanceof StaleStage04PlanError&&
+      /content changed since the Stage 04 plan was built/.test(error.message)
+  );
 });
 
 test('Stage 04 transaction commits all managed files together',()=>{
