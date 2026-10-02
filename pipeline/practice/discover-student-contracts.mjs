@@ -1,60 +1,56 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import vm from 'node:vm';
-import {fileURLToPath,pathToFileURL} from 'node:url';
-import {extractArrayExpression,evaluateCatalogExpression,flattenGroups,normalizeGroups,validateCatalog} from '../../shared/student-dashboard/legacy-competence-map.js';
-import {transformEgeProfile2027Catalog} from '../../shared/student-dashboard/ege-profile-2027.js';
+import {fileURLToPath} from 'node:url';
+import {normalizeGroups,validateCatalog} from '../../shared/student-dashboard/legacy-competence-map.js';
 import {GeneratorRegistry} from '../../shared/practice/generator-registry.js';
 import {ALL_GENERATORS} from '../../shared/practice/generators/index.js';
 import {ALL_CURATED_BANKS} from '../../shared/practice/curated-banks/index.js';
 import {validateCuratedBank} from '../../shared/practice/curated-bank.js';
+import {discoverPracticeStudentSpecs,loadPracticeStudentContracts} from '../../shared/practice/validate-configs.mjs';
+import {
+  loadJson,
+  resolveStudentContractPath,
+  validateStudentContractData,
+  validateStudentPackage
+} from '../student/contract.mjs';
+import {loadCompetencyCatalog} from '../student/publication-contract.mjs';
 import {readMasteryLevels} from './mastery-source.mjs';
 
 export const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
 
-export const CATALOG_SPECS={
-  kirill_zinoviev:{kind:'window',path:'students/kirill_zinoviev/site/competency-map-data.js',global:'KIRILL_GRADE7_GROUPS'},
-  sofya_kalney:{kind:'html',path:'students/sofya_kalney/site/index-19.08.26-base.html'},
-  timofey:{kind:'html',path:'students/timofey/site/index-legacy.html',catalogProfile:'ege-profile-2027'},
-  volodia_khachaturian:{kind:'window',path:'students/volodia_khachaturian/competency-map-data.js',global:'COMPETENCY_MAP_DATA'},
-  xenia_klykova:{kind:'html',path:'students/xenia_klykova/site/index-base-2026-07-29.html',catalogProfile:'ege-profile-2027'},
-  nastya_pavlova:{kind:'window',path:'students/nastya_pavlova/competency-map-data.js',global:'COMPETENCY_MAP_DATA',catalogProfile:'ege-profile-2027-ordered'},
-  nikol_sarkisyants:{kind:'html',path:'students/nikol_sarkisyants/site/index-original.html',catalogProfile:'ege-profile-2027'}
-};
+function canonicalSpecMaps(root=ROOT){
+  const practice=discoverPracticeStudentSpecs(root);
+  const catalogs={},mastery={};
+  for(const [studentId,spec] of Object.entries(practice)){
+    catalogs[studentId]={
+      kind:'contract',
+      path:'students/'+studentId+'/'+spec.catalog
+    };
+    mastery[studentId]={
+      path:'students/'+studentId+'/'+spec.mastery,
+      locator:spec.mastery.endsWith('.json')
+        ?{kind:'state-json',name:'levels'}
+        :{kind:'symbol',name:'stage04Mastery'}
+    };
+  }
+  return {catalogs,mastery};
+}
 
-export const MASTERY_SPECS={
-  kirill_zinoviev:{path:'students/kirill_zinoviev/site/competence-config.js',locator:{kind:'symbol',name:'teacherMastery'}},
-  sofya_kalney:{path:'students/sofya_kalney/site/competence-config.js',locator:{kind:'property',name:'teacherSeed'}},
-  timofey:{path:'students/timofey/site/competence-config.js',locator:{kind:'symbol',name:'teacherSeed'}},
-  volodia_khachaturian:{path:'students/volodia_khachaturian/competency-map-data.js',locator:{kind:'property',name:'baselineLevels'}},
-  xenia_klykova:{path:'students/xenia_klykova/site/competence-config.js',locator:{kind:'property',name:'teacherSeed'}},
-  nastya_pavlova:{path:'students/nastya_pavlova/site/stage04-mastery.js',locator:{kind:'symbol',name:'stage04Mastery'}},
-  nikol_sarkisyants:{path:'students/nikol_sarkisyants/site/dashboard-data.js',locator:{kind:'symbol',name:'levels'}}
-};
+const canonicalSpecs=canonicalSpecMaps(ROOT);
+export const CATALOG_SPECS=Object.freeze(canonicalSpecs.catalogs);
+export const MASTERY_SPECS=Object.freeze(canonicalSpecs.mastery);
 
-function read(root,relative){return fs.readFileSync(path.join(root,relative),'utf8');}
-
-function applyCatalogProfile(groups,spec){
-  if(spec.catalogProfile==='ege-profile-2027')return transformEgeProfile2027Catalog(groups);
-  if(spec.catalogProfile==='ege-profile-2027-ordered')return transformEgeProfile2027Catalog(groups.map((group,index)=>({...group,id:`task_${index+1}`})));
-  return groups;
+function readContract(studentId,{root=ROOT}={}){
+  const file=path.join(root,'students',studentId,'student-contract.json');
+  if(!fs.existsSync(file))throw new Error(`${studentId}: missing student-contract.json`);
+  return validateStudentContractData(loadJson(file,'student-contract.json'),{studentId});
 }
 
 export function loadCompetencyGroups(studentId,{root=ROOT}={}){
-  const spec=CATALOG_SPECS[studentId];
-  if(!spec)throw new Error(`Unsupported student contract: ${studentId}`);
-  const source=read(root,spec.path);
-  let groups;
-  if(spec.kind==='html')groups=normalizeGroups(evaluateCatalogExpression(extractArrayExpression(source)));
-  else{
-    const sandbox={window:{}};
-    vm.createContext(sandbox);
-    vm.runInContext(source,sandbox,{timeout:1500,filename:spec.path});
-    const value=sandbox.window[spec.global];
-    if(!value)throw new Error(`${studentId}: competency global ${spec.global} is missing`);
-    groups=normalizeGroups(value.groups||value);
-  }
-  groups=applyCatalogProfile(groups,spec);
+  const contract=readContract(studentId,{root});
+  const file=resolveStudentContractPath(root,studentId,contract.competencies.catalog);
+  const catalog=loadCompetencyCatalog(file);
+  const groups=normalizeGroups(catalog.data.groups||[]);
   validateCatalog(groups);
   return groups;
 }
@@ -80,8 +76,14 @@ function htmlMetadata(source){
 
 export function discoverLessonArtifact(studentId,lessonDate,{root=ROOT}={}){
   const base=lessonBasename(lessonDate),studentRoot=path.join(root,'students',studentId);
-  const sitePath=path.join(studentRoot,'site',`${base}.html`),texPath=path.join(studentRoot,'tex_docs',`${base}.tex`),pdfPath=path.join(studentRoot,'pdf_docs',`${base}.pdf`);
-  const files={html:fs.existsSync(sitePath)?sitePath:null,tex:fs.existsSync(texPath)?texPath:null,pdf:fs.existsSync(pdfPath)?pdfPath:null};
+  const sitePath=path.join(studentRoot,'site',`${base}.html`);
+  const texPath=path.join(studentRoot,'tex_docs',`${base}.tex`);
+  const pdfPath=path.join(studentRoot,'pdf_docs',`${base}.pdf`);
+  const files={
+    html:fs.existsSync(sitePath)?sitePath:null,
+    tex:fs.existsSync(texPath)?texPath:null,
+    pdf:fs.existsSync(pdfPath)?pdfPath:null
+  };
   if(!files.html&&!files.tex&&!files.pdf)throw new Error(`${studentId} ${lessonDate}: no final lesson artifact found`);
   const meta=files.html?htmlMetadata(fs.readFileSync(files.html,'utf8')):{title:'',summary:''};
   return {
@@ -90,37 +92,96 @@ export function discoverLessonArtifact(studentId,lessonDate,{root=ROOT}={}){
     title:meta.title||`Занятие ${base}`,
     summary:meta.summary,
     files,
-    materials:{...(files.pdf?{pdf:`../pdf_docs/${base}.pdf`}:{}),...(files.tex?{tex:`../tex_docs/${base}.tex`}:{})}
+    materials:{
+      ...(files.pdf?{pdf:`../pdf_docs/${base}.pdf`}:{}),
+      ...(files.tex?{tex:`../tex_docs/${base}.tex`}:{})
+    }
   };
 }
 
-async function importModule(filePath){
-  return import(`${pathToFileURL(filePath).href}?stage04=${Date.now()}-${Math.random()}`);
+function curatedRegistry(){
+  const result=new Map();
+  for(const bank of ALL_CURATED_BANKS){
+    validateCuratedBank(bank);
+    if(result.has(bank.bankKey))throw new Error(`Duplicate curated bank: ${bank.bankKey}`);
+    result.set(bank.bankKey,bank);
+  }
+  return result;
 }
 
 export async function discoverStudentContracts(studentId,lessonDate,{root=ROOT}={}){
   if(!isCalendarDate(lessonDate))throw new Error(`Invalid lesson date: ${lessonDate}`);
-  const siteDir=path.join(root,'students',studentId,'site');
-  const lessonRegistryPath=path.join(siteDir,'lesson-registry.js'),practiceConfigPath=path.join(siteDir,'practice-config.js');
-  for(const filePath of [lessonRegistryPath,practiceConfigPath])if(!fs.existsSync(filePath))throw new Error(`${studentId}: missing ${path.relative(root,filePath)}`);
-  const masterySpec=MASTERY_SPECS[studentId];
-  if(!masterySpec)throw new Error(`${studentId}: mastery contract is not configured`);
-  const masteryPath=path.join(root,masterySpec.path);
-  if(!fs.existsSync(masteryPath))throw new Error(`${studentId}: missing ${masterySpec.path}`);
-  const masterySource=fs.readFileSync(masteryPath,'utf8');
-  const mastery={...masterySpec,path:masteryPath,source:masterySource,levels:readMasteryLevels(masterySource,masterySpec.locator)};
+  const contract=readContract(studentId,{root});
+  if(contract.practice.config===null){
+    throw new Error(`${studentId}: Stage 04 is disabled because student-contract.json has practice.config=null`);
+  }
 
-  const groups=loadCompetencyGroups(studentId,{root}),competencies=flattenGroups(groups),competencyIds=new Set(competencies.map(item=>item.id));
-  const [{LESSONS},{PRACTICE_CONFIG}]=await Promise.all([importModule(lessonRegistryPath),importModule(practiceConfigPath)]);
-  if(!Array.isArray(LESSONS))throw new Error(`${studentId}: LESSONS export is invalid`);
-  if(!PRACTICE_CONFIG||PRACTICE_CONFIG.studentId!==studentId)throw new Error(`${studentId}: PRACTICE_CONFIG.studentId mismatch`);
-  const generatorRegistry=new GeneratorRegistry(ALL_GENERATORS);
-  const curatedBanks=new Map();
-  for(const bank of ALL_CURATED_BANKS){validateCuratedBank(bank);if(curatedBanks.has(bank.bankKey))throw new Error(`Duplicate curated bank: ${bank.bankKey}`);curatedBanks.set(bank.bankKey,bank);}
+  validateStudentPackage({root,studentId});
+
+  const practice=await loadPracticeStudentContracts(
+    studentId,
+    {root,registry:new GeneratorRegistry(ALL_GENERATORS),validate:true}
+  );
+  const lesson=practice.LESSONS.find(item=>item.date===lessonDate)||null;
+  if(!lesson){
+    throw new Error(
+      `${studentId} ${lessonDate}: lesson must be published through scripts/publish-lesson.mjs before Stage 04`
+    );
+  }
+
+  const metadataDir=resolveStudentContractPath(root,studentId,contract.lessons.metadataDir);
+  const metadataPath=path.join(metadataDir,lessonDate+'.lesson.json');
+  if(!fs.existsSync(metadataPath)){
+    throw new Error(
+      `${studentId} ${lessonDate}: canonical lesson metadata is missing; publish the lesson before Stage 04`
+    );
+  }
+  const lessonMetadata=loadJson(metadataPath,path.basename(metadataPath));
+
+  const masteryPath=resolveStudentContractPath(root,studentId,contract.competencies.mastery);
+  if(path.extname(masteryPath).toLowerCase()!=='.json'){
+    throw new Error(
+      `${studentId}: steady-state Stage 04 requires canonical JSON mastery state, got ${contract.competencies.mastery}`
+    );
+  }
+  const masterySource=fs.readFileSync(masteryPath,'utf8');
+  const masteryLocator={kind:'state-json',name:'levels'};
+  const mastery={
+    path:masteryPath,
+    source:masterySource,
+    locator:masteryLocator,
+    levels:readMasteryLevels(masterySource,masteryLocator)
+  };
+
   return {
-    root,studentId,lessonDate,groups,competencies,competencyIds,LESSONS,PRACTICE_CONFIG,generatorRegistry,curatedBanks,mastery,
+    root,
+    studentId,
+    lessonDate,
+    contract,
+    groups:practice.groups,
+    competencies:practice.groups.flatMap(group=>group.items||[]),
+    competencyIds:practice.competencyIds,
+    LESSONS:practice.LESSONS,
+    PRACTICE_CONFIG:practice.PRACTICE_CONFIG,
+    generatorRegistry:practice.registry,
+    curatedBanks:curatedRegistry(),
+    mastery,
+    lesson,
+    lessonMetadata,
     artifact:discoverLessonArtifact(studentId,lessonDate,{root}),
-    paths:{lessonRegistryPath,practiceConfigPath,masteryPath},
-    sources:{lessonRegistry:fs.readFileSync(lessonRegistryPath,'utf8'),practiceConfig:fs.readFileSync(practiceConfigPath,'utf8'),mastery:masterySource}
+    paths:{
+      lessonRegistryPath:practice.paths.registryPath,
+      practiceConfigPath:practice.paths.configPath,
+      masteryPath,
+      metadataPath,
+      catalogPath:practice.paths.catalogPath
+    },
+    sources:{
+      lessonRegistry:fs.readFileSync(practice.paths.registryPath,'utf8'),
+      practiceConfig:fs.readFileSync(practice.paths.configPath,'utf8'),
+      mastery:masterySource,
+      lessonMetadata:fs.readFileSync(metadataPath,'utf8'),
+      catalog:fs.readFileSync(practice.paths.catalogPath,'utf8')
+    }
   };
 }

@@ -39,6 +39,10 @@ export function validateStageResult(input,contracts,{expectedStudentId=contracts
   if(normalized.lesson!==undefined&&(!normalized.lesson||typeof normalized.lesson!=='object'||Array.isArray(normalized.lesson)))errors.push('lesson must be an object when present');
 
   const existingLesson=contracts?.LESSONS?.find(lesson=>lesson.date===normalized.lessonDate)||null;
+  const canonicalMetadata=contracts?.lessonMetadata||null;
+  const canonicalByAnchor=new Map(
+    (canonicalMetadata?.outcomes||[]).map(item=>[item.evidenceAnchor,item])
+  );
   const seenLabels=new Set();
   for(const [index,outcome] of (normalized.outcomes||[]).entries()){
     const prefix=`outcomes[${index}]`;
@@ -55,6 +59,21 @@ export function validateStageResult(input,contracts,{expectedStudentId=contracts
 
     const id=outcome.competencyId;
     if(id&&contracts&&!contracts.competencyIds.has(id))errors.push(`${prefix}: unknown competencyId ${id}`);
+
+    if(canonicalMetadata){
+      if(typeof outcome.evidenceAnchor!=='string'||!outcome.evidenceAnchor.trim()){
+        errors.push(`${prefix}.evidenceAnchor is required after v2 lesson publication`);
+      }else{
+        const canonical=canonicalByAnchor.get(outcome.evidenceAnchor);
+        if(!canonical){
+          errors.push(`${prefix}.evidenceAnchor #${outcome.evidenceAnchor} is absent from canonical lesson metadata`);
+        }else if(id&&canonical.competencyId!==id){
+          errors.push(
+            `${prefix}.competencyId ${id} does not match canonical metadata ${canonical.competencyId} at #${outcome.evidenceAnchor}`
+          );
+        }
+      }
+    }
     if(['generator','curated'].includes(outcome.practiceDisposition)&&!id)errors.push(`${prefix}: competencyId is required for ${outcome.practiceDisposition}`);
     if(outcome.practiceDisposition==='competency-gap'&&id)errors.push(`${prefix}: competency-gap must not invent competencyId`);
 
@@ -80,8 +99,10 @@ export function validateStageResult(input,contracts,{expectedStudentId=contracts
     if(['coverage-gap','competency-gap'].includes(outcome.practiceDisposition)&&!normalized.gaps.includes(outcome.label))normalized.gaps.push(outcome.label);
 
     if(existingLesson){
-      const match=(existingLesson.outcomes||[]).find(item=>item.label===outcome.label);
-      if(!match)blocks.push(`${outcome.label}: outcome is absent from existing lesson metadata`);
+      const match=outcome.evidenceAnchor
+        ?(existingLesson.outcomes||[]).find(item=>item.evidenceAnchor===outcome.evidenceAnchor)
+        :(existingLesson.outcomes||[]).find(item=>item.label===outcome.label);
+      if(!match)blocks.push(`${outcome.label}: outcome is absent from existing lesson registry`);
       else if(match.competencyId&&id&&match.competencyId!==id)blocks.push(`${outcome.label}: existing competencyId ${match.competencyId} cannot be replaced by ${id}`);
     }
   }

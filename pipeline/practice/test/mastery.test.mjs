@@ -40,13 +40,68 @@ test('mastery source helper supports symbol and property contracts idempotently'
   assert.deepEqual(readMasteryLevels(propertyNext,{kind:'property',name:'teacherSeed'}),{a:2,b:1});
 });
 
+test('canonical mastery-state JSON updates levels with Stage 04 provenance and monotonic date',()=>{
+  const source=JSON.stringify({
+    version:1,
+    studentId:'student',
+    updated:'2026-09-30',
+    levels:{
+      skill:{
+        level:2,
+        sourcePath:'site/legacy.js',
+        sourceKind:'teacher-seed',
+        basis:'Earlier observation.'
+      }
+    }
+  },null,2)+'\n';
+  const locator={kind:'state-json',name:'levels'};
+  assert.deepEqual(readMasteryLevels(source,locator),{skill:2});
+
+  const next=replaceMasteryLevels(
+    source,
+    {skill:3,new_skill:1},
+    locator,
+    {
+      sourcePath:'site/data/lessons/2026-10-02.lesson.json',
+      sourceKind:'stage04-mastery',
+      basisById:{
+        skill:'Assessed exactly on lesson.',
+        new_skill:'New exact lesson observation.'
+      },
+      updated:'2026-10-02'
+    }
+  );
+  const state=JSON.parse(next);
+  assert.equal(state.updated,'2026-10-02');
+  assert.deepEqual(readMasteryLevels(next,locator),{new_skill:1,skill:3});
+  assert.deepEqual(state.levels.skill,{
+    level:3,
+    sourcePath:'site/data/lessons/2026-10-02.lesson.json',
+    sourceKind:'stage04-mastery',
+    basis:'Assessed exactly on lesson.'
+  });
+
+  const older=replaceMasteryLevels(
+    next,
+    {skill:1},
+    locator,
+    {updated:'2026-09-01'}
+  );
+  assert.equal(JSON.parse(older).updated,'2026-10-02');
+});
+
 test('exact competency + exact confidence + explicit level produces an authoritative mastery update',()=>{
   const patch=buildMasteryPatch(validation([
     {label:'Навык',competencyId:'skill',confidence:'exact',level:3}
   ]),masteryContracts({skill:2}));
   assert.equal(patch.status,'ready');
   assert.deepEqual(patch.levels,{skill:3});
-  assert.deepEqual(patch.operations,[{type:'set-mastery-levels',levels:{skill:3}}]);
+  assert.deepEqual(patch.basisById,{skill:'Stage 04 exact mastery observation.'});
+  assert.deepEqual(patch.operations,[{
+    type:'set-mastery-levels',
+    levels:{skill:3},
+    basisById:{skill:'Stage 04 exact mastery observation.'}
+  }]);
 });
 
 test('mastery update may lower a level when exact lesson evidence says so',()=>{

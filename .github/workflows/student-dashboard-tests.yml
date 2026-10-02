@@ -45,6 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       heavy: ${{ steps.scope.outputs.heavy }}
+      migration_recovery: ${{ steps.scope.outputs.migration_recovery }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -61,14 +62,15 @@ jobs:
         shell: bash
         env:
           EVENT_NAME: ${{ github.event_name }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          if [ "$EVENT_NAME" = "push" ]; then
-            echo "heavy=true" >> "$GITHUB_OUTPUT"
-            echo '{"heavy":true,"reason":"main push selected by workflow paths"}'
+          if ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+            echo "heavy=true" >> "${GITHUB_OUTPUT}"
+            echo "migration_recovery=true" >> "${GITHUB_OUTPUT}"
+            echo '{"heavy":true,"migrationRecovery":true,"reason":"base commit unavailable"}'
           else
-            git diff --name-only "$BASE_SHA" "$HEAD_SHA" | node scripts/ci/student-dashboard-scope.mjs
+            git diff --name-only "${BASE_SHA}" "${HEAD_SHA}" | node scripts/ci/student-dashboard-scope.mjs
           fi
 
   production-workflow:
@@ -100,12 +102,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Syntax check student platform modules
+      - name: Syntax check steady-state student platform modules
         run: |
           node --check pipeline/fs/atomic-transaction.mjs
           node --check pipeline/fs/view.mjs
           node --check pipeline/student/contract.mjs
           node --check pipeline/student/publication-contract.mjs
+          node --check pipeline/student/audit-steady-state.mjs
           node --check pipeline/student/publish/preflight.mjs
           node --check pipeline/student/publish/artifact.mjs
           node --check pipeline/student/publish/metadata.mjs
@@ -115,72 +118,64 @@ jobs:
           node --check pipeline/student/publish/transaction.mjs
           node --check pipeline/student/publish/verify.mjs
           node --check pipeline/student/validate.mjs
-          node --check scripts/student.mjs
           node --check pipeline/migration/inventory-students.mjs
-          node --check pipeline/migration/manifest.mjs
-          node --check pipeline/migration/validate-manifest.mjs
-          node --check pipeline/migration/legacy/sandbox.mjs
-          node --check pipeline/migration/legacy/discover-sources.mjs
-          node --check pipeline/migration/legacy/discover-lessons.mjs
-          node --check pipeline/migration/legacy/inspect-learning-state.mjs
-          node --check pipeline/migration/legacy/ktp-extractor.mjs
-          node --check pipeline/migration/build/canonical-state.mjs
-          node --check pipeline/migration/build/ktp-state.mjs
-          node --check pipeline/migration/build/lessons.mjs
-          node --check pipeline/migration/build/candidate.mjs
-          node --check pipeline/migration/coverage.mjs
-          node --check pipeline/migration/write-policy.mjs
-          node --check pipeline/migration/plan.mjs
-          node --check pipeline/migration/snapshot.mjs
-          node --check pipeline/migration/transaction-plan.mjs
-          node --check pipeline/migration/postflight.mjs
-          node --check pipeline/migration/transaction.mjs
-          node --check pipeline/migration/inspect-legacy-state.mjs
-          node --check pipeline/migration/migrate-student.mjs
-          node --check pipeline/migration/audit-ratchet.mjs
-          node --check pipeline/migration/readiness-inventory.mjs
-      - name: Parse student platform JSON Schemas
+          node --check scripts/student.mjs
+      - name: Syntax check migration recovery modules
+        if: needs.scope.outputs.migration_recovery == 'true'
         run: |
-          node -e "const fs=require('node:fs'); for (const name of ['student-contract-v2.schema.json','ktp-plan-v1.schema.json','ktp-state-v1.schema.json','lesson-metadata-v1.schema.json','lesson-publication-intent-v1.schema.json','student-migration-manifest-v1.schema.json','mastery-state-v1.schema.json','migration-coverage-v1.schema.json']) JSON.parse(fs.readFileSync('pipeline/schemas/'+name,'utf8')); console.log('Student Platform schemas OK')"
+          find pipeline/migration -type f -name '*.mjs' -print0 | xargs -0 -n1 node --check
+      - name: Parse steady-state student platform JSON Schemas
+        run: |
+          node -e "const fs=require('node:fs'); for (const name of ['student-contract-v2.schema.json','ktp-plan-v1.schema.json','ktp-state-v1.schema.json','lesson-metadata-v1.schema.json','lesson-publication-intent-v1.schema.json','mastery-state-v1.schema.json']) JSON.parse(fs.readFileSync('pipeline/schemas/'+name,'utf8')); console.log('Steady-state Student Platform schemas OK')"
+      - name: Parse migration recovery JSON Schemas
+        if: needs.scope.outputs.migration_recovery == 'true'
+        run: |
+          node -e "const fs=require('node:fs'); for (const name of ['student-migration-manifest-v1.schema.json','migration-coverage-v1.schema.json']) JSON.parse(fs.readFileSync('pipeline/schemas/'+name,'utf8')); console.log('Migration recovery schemas OK')"
       - name: Run shared filesystem transaction regression
         run: node --test pipeline/fs/test/*.test.mjs
       - name: Run student platform contract regression
         run: node --test pipeline/student/test/*.test.mjs
       - name: Run v2 publication domain regression
         run: node --test pipeline/student/publish/test/*.test.mjs
-      - name: Run migration pipeline regression
+      - name: Enforce Student Platform steady state
+        shell: bash
+        run: |
+          set -o pipefail
+          node scripts/student.mjs audit --markdown | tee student-platform-steady-state.md
+          cat student-platform-steady-state.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Validate all v2 students
+        run: node scripts/student.mjs validate
+      - name: Run migration recovery regression
+        if: needs.scope.outputs.migration_recovery == 'true'
         run: node --test pipeline/migration/test/*.test.mjs
-      - name: Audit current student architectures
+      - name: Build migration recovery inventories
+        if: needs.scope.outputs.migration_recovery == 'true'
         shell: bash
         run: |
           node scripts/student.mjs inventory \
             --json-output student-architecture-report.json \
             --markdown-output student-architecture-report.md \
             > /dev/null
-          cat student-architecture-report.md >> "$GITHUB_STEP_SUMMARY"
-      - name: Build migration readiness inventory
-        shell: bash
-        run: |
           node scripts/student.mjs readiness \
             --json-output student-migration-readiness.json \
             --markdown-output student-migration-readiness.md \
             > /dev/null
-          cat student-migration-readiness.md
+          cat student-architecture-report.md >> "$GITHUB_STEP_SUMMARY"
           cat student-migration-readiness.md >> "$GITHUB_STEP_SUMMARY"
-      - name: Upload architecture and readiness inventories
+      - name: Upload migration recovery inventories
+        if: needs.scope.outputs.migration_recovery == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: student-architecture-report
+          name: student-migration-recovery-report
           path: |
             student-architecture-report.json
             student-architecture-report.md
             student-migration-readiness.json
             student-migration-readiness.md
           if-no-files-found: error
-      - name: Enforce architecture migration ratchet
+      - name: Enforce migration recovery architecture ratchet
+        if: needs.scope.outputs.migration_recovery == 'true'
         run: node pipeline/migration/audit-ratchet.mjs
-      - name: Validate migrated v2 students
-        run: node scripts/student.mjs validate
   atlas-contract:
     name: LEVIN / ATLAS contract
     needs: scope

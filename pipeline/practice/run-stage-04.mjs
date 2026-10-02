@@ -4,9 +4,8 @@ import {pathToFileURL} from 'node:url';
 import {discoverStudentContracts,ROOT} from './discover-student-contracts.mjs';
 import {validateStageResult,stageExitCode,Stage04ValidationError} from './validate-stage-result.mjs';
 import {buildPracticePatch} from './build-practice-patch.mjs';
-import {applyPracticePatch} from './apply-practice-patch.mjs';
 import {buildMasteryPatch} from './build-mastery-patch.mjs';
-import {applyMasteryPatch} from './apply-mastery-patch.mjs';
+import {executeStage04Transaction} from './transaction.mjs';
 
 function parseArgs(argv){
   const args={dryRun:false};
@@ -32,12 +31,16 @@ export async function runStage04({studentId,lessonDate,analysisPath,root=ROOT,dr
   const masteryPatch=buildMasteryPatch(validation,contracts);
   const blocks=unique([...(practicePatch.blocks||[]),...(masteryPatch.blocks||[])]);
   const blocked=blocks.length>0||practicePatch.status==='blocked'||masteryPatch.status==='blocked';
-  let practiceApplication={changedFiles:[],sources:null},masteryApplication={changedFiles:[],sources:null};
+  let transaction={changedFiles:[],rolledBack:false};
   if(!blocked){
-    practiceApplication=applyPracticePatch(practicePatch,contracts,{dryRun});
-    masteryApplication=applyMasteryPatch(masteryPatch,contracts,{dryRun});
+    transaction=executeStage04Transaction({
+      contracts,
+      practicePatch,
+      masteryPatch,
+      dryRun
+    });
   }
-  const changedFiles=unique([...practiceApplication.changedFiles,...masteryApplication.changedFiles]);
+  const changedFiles=transaction.changedFiles||[];
   const changed=practicePatch.changed||masteryPatch.changed;
   const status=blocked?'blocked':validation.hasGaps?'gaps':changed?'ready':'noop';
   const exitCode=stageExitCode({...validation,blocks});
@@ -48,7 +51,8 @@ export async function runStage04({studentId,lessonDate,analysisPath,root=ROOT,dr
     blocks,
     warnings:unique([...(practicePatch.warnings||[]),...(masteryPatch.warnings||[])]),
     operationTypes:[...practicePatch.operations,...masteryPatch.operations].map(operation=>operation.type),
-    masteryUpdates:masteryPatch.levels||{}
+    masteryUpdates:masteryPatch.levels||{},
+    rolledBack:transaction.rolledBack||false
   };
 }
 

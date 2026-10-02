@@ -34,6 +34,102 @@ test('Stage 04 JSON Schema and validator use the shared disposition policy',()=>
   assert.ok(schema.properties.outcomes.items.properties.practiceGap);
 });
 
+test('steady-state Stage 04 binds outcomes to canonical lesson evidence anchors',()=>{
+  const canonical={
+    date:'2026-08-31',
+    outcomes:[{
+      competencyId:'t5_product',
+      evidenceAnchor:'product-rule',
+      relation:'assessed',
+      masteryClaim:null
+    }]
+  };
+  const existing={
+    date:'2026-08-31',
+    href:'31.08.26.html',
+    title:'Урок',
+    summary:'Итоги',
+    topics:['Вероятность'],
+    ktpRefs:[],
+    outcomes:[{
+      competencyId:'t5_product',
+      evidenceAnchor:'product-rule',
+      relation:'assessed'
+    }],
+    materials:{html:'31.08.26.html'}
+  };
+  const c=contracts({lessonMetadata:canonical,LESSONS:[existing]});
+
+  const missingAnchor=analysis({
+    outcomes:[{...analysis().outcomes[0]}]
+  });
+  assert.throws(
+    ()=>validateStageResult(missingAnchor,c),
+    error=>error instanceof Stage04ValidationError&&
+      error.details.some(item=>item.includes('evidenceAnchor is required'))
+  );
+
+  const wrongAnchor=analysis({
+    outcomes:[{...analysis().outcomes[0],evidenceAnchor:'other-anchor'}]
+  });
+  assert.throws(
+    ()=>validateStageResult(wrongAnchor,c),
+    error=>error instanceof Stage04ValidationError&&
+      error.details.some(item=>item.includes('absent from canonical lesson metadata'))
+  );
+
+  const exact=analysis({
+    outcomes:[{
+      ...analysis().outcomes[0],
+      evidenceAnchor:'product-rule',
+      level:3,
+      tone:'good'
+    }]
+  });
+  const validation=validateStageResult(exact,c);
+  const patch=buildPracticePatch(validation,c);
+  assert.equal(patch.lesson.outcomes[0].evidenceAnchor,'product-rule');
+  assert.equal(patch.lesson.outcomes[0].label,'Умножение независимых событий');
+  assert.equal(patch.lesson.outcomes[0].practiceDisposition,'generator');
+  assert.equal(patch.lesson.outcomes[0].level,3);
+});
+
+test('steady-state Stage 04 rejects competency remapping at an existing evidence anchor',()=>{
+  const canonical={
+    date:'2026-08-31',
+    outcomes:[{
+      competencyId:'t5_product',
+      evidenceAnchor:'product-rule',
+      relation:'assessed',
+      masteryClaim:null
+    }]
+  };
+  const bad=analysis({
+    outcomes:[{
+      ...analysis().outcomes[0],
+      competencyId:'another_skill',
+      evidenceAnchor:'product-rule'
+    }]
+  });
+  const c=contracts({
+    competencyIds:new Set(['t5_product','another_skill']),
+    lessonMetadata:canonical,
+    LESSONS:[{
+      date:'2026-08-31',
+      outcomes:[{
+        competencyId:'t5_product',
+        evidenceAnchor:'product-rule',
+        relation:'assessed'
+      }]
+    }]
+  });
+  assert.throws(
+    ()=>validateStageResult(bad,c),
+    error=>error instanceof Stage04ValidationError&&
+      error.details.some(item=>item.includes('does not match canonical metadata'))
+  );
+});
+
 test('arbitrary competencyId is rejected before patch building',()=>{
   const bad=analysis({outcomes:[{...analysis().outcomes[0],competencyId:'invented_id'}]});
   assert.throws(()=>validateStageResult(bad,contracts()),error=>error instanceof Stage04ValidationError&&error.exitCode===3&&error.details.some(item=>item.includes('unknown competencyId invented_id')));
