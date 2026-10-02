@@ -6,13 +6,15 @@
 > - Student Platform v2: **22 / 24** кабинетов; rolling-clean и fixed-KTP waves завершены;
 > - текущий этап: **reconciliation wave** для оставшихся legacy-structured источников;
 > - `ekaterina_gnedkova`, `sofya_khomenko`, `kristina` и `nastya_pavlova` reconciled и мигрированы в v2;
-> - migration result Насти: **9/9 historical lessons, 379/379 competencies, 367/367 repository-authored mastery**, материалы 9 HTML / 8 PDF / 9 TeX / 7 lab;
-> - mastery distribution сохранён точно: **314×0 + 53×2**; 12 runtime-added EGE-2027 competencies присутствуют в canonical catalog без mastery override и остаются на default level 0;
-> - сохранены два legacy outcome sets: 26.08 (8 outcomes) и 03.09 (9 outcomes); эти preservation warnings проверяются exact guard'ом;
-> - conflicts/orphans=0, reviewItems/blockers=[], protectedFilesChanged=[];
-> - architecture ratchet: **v2=22 / non-v2=2**, `legacy-structured=2`, `legacy-ktp=0`;
+> - следующий reconciliation gate завершён для `matvey_gorbachev`: four dated title-based overlays 17.09–27.09 вынесены из `site/index.html` в явный `site/mastery-authority.js`;
+> - доказана однозначность текущего title mapping: **342/342 unique catalog titles**, overlay использует **55 titles**, для всех 55 match count = 1 и зафиксирован ожидаемый competency ID;
+> - authority fail-closed: любое missing/duplicate/remapped title вызывает ошибку `Matvey mastery title mapping changed`;
+> - real-source result Матвея: **342/342 competencies/mastery**, распределение **281×0 + 61×2**, conflicts/orphans/warnings=0, `automaticEligible=true`;
+> - regression исполняет baseline + authority и проверяет evidence 17.09/20.09/24.09/27.09, storage metadata и synthetic duplicate-title failure;
+> - следующий gate: отдельная Student Platform v2 migration `matvey_gorbachev` после merge reconciliation PR;
+> - architecture baseline пока остаётся **v2=22 / non-v2=2**, `legacy-structured=2`, `legacy-ktp=0`;
 > - `darya_savenkova` остаётся автоматически ready, но отложена из-за роли design reference;
-> - последний unresolved reconciliation target: `matvey_gorbachev`, где inline authority адресуется по titles и требует отдельного ambiguity-safe reconciliation;
+> - после migration Матвея единственным non-v2 кабинетом останется `darya_savenkova`;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
