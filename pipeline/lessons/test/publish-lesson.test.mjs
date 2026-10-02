@@ -185,9 +185,9 @@ test('dry-run reports registry changes without writing them',async()=>{
 
 test('bespoke publication requires index registration',async()=>{
   const missing=tempRepo({registry:false,indexLink:false});
-  await assert.rejects(()=>publishLesson({root:missing.root,student:'demo_student',date:'29.09.26',verifyChanges:false}),/index\.html must link to 29\.09\.26\.html/);
+  await assert.rejects(()=>publishLesson({root:missing.root,student:'demo_student',date:'29.09.26',legacyRecovery:true,verifyChanges:false}),/index\.html must link to 29\.09\.26\.html/);
   const linked=tempRepo({registry:false,indexLink:true});
-  const result=await publishLesson({root:linked.root,student:'demo_student',date:'29.09.26',verifyChanges:false});
+  const result=await publishLesson({root:linked.root,student:'demo_student',date:'29.09.26',legacyRecovery:true,verifyChanges:false});
   assert.equal(result.mode,'bespoke-index-verified');
   assert.deepEqual(result.changedFiles,[]);
 });
