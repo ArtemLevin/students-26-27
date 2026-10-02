@@ -465,9 +465,9 @@ test('inline index mastery mutation fails closed instead of producing a false-re
   assert.equal(report.automaticEligible,false);
 });
 
-test('real Kristina index is blocked until inline repository mastery is reconciled',()=>{
+test('real Kristina source is eligible after inline repository mastery reconciliation',()=>{
   const x=fixture('kristina_inline_fixture');
-  for(const name of ['competency-map-data.js','index.html']){
+  for(const name of ['competency-map-data.js','mastery-authority.js','index.html']){
     write(
       path.join(x.site,name),
       fs.readFileSync(path.join(ROOT,'students','kristina','site',name),'utf8')
@@ -475,12 +475,14 @@ test('real Kristina index is blocked until inline repository mastery is reconcil
   }
   const report=inspectLegacyLearningState(x);
   assert.equal(report.catalog?.count,360);
-  assert.ok(
+  assert.equal(report.mastery.resolved.length,360);
+  assert.equal(
     report.diagnostics.warnings.some(
-      item=>item.type==='inline-mastery-mutation-unresolved'&&item.sourcePath==='site/index.html'
-    )
+      item=>item.type==='inline-mastery-mutation-unresolved'
+    ),
+    false
   );
-  assert.equal(report.automaticEligible,false);
+  assert.equal(report.automaticEligible,true);
 });
 
 test('real Sofya Khomenko source externalizes dated inline mastery into explicit authority',()=>{
