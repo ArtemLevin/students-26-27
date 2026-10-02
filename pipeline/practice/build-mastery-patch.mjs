@@ -3,7 +3,7 @@ export function buildMasteryPatch(validation,contracts){
   if(validationBlocks.length)return {status:'blocked',changed:false,blocks:[...validationBlocks],warnings:[],operations:[],levels:{}};
   if(!contracts?.mastery)throw new Error(`${contracts?.studentId||'student'}: mastery contract is missing`);
 
-  const levels={},warnings=[],blocks=[];
+  const levels={},basisById={},warnings=[],blocks=[];
   for(const outcome of result.outcomes){
     if(outcome.level===undefined)continue;
     if(!outcome.competencyId){
@@ -20,13 +20,15 @@ export function buildMasteryPatch(validation,contracts){
       continue;
     }
     levels[outcome.competencyId]=outcome.level;
+    basisById[outcome.competencyId]=String(outcome.reason||'Stage 04 exact mastery observation.').trim();
   }
 
-  if(blocks.length)return {status:'blocked',changed:false,blocks,warnings,operations:[],levels:{}};
+  if(blocks.length)return {status:'blocked',changed:false,blocks,warnings,operations:[],levels:{},basisById:{}};
   const changedLevels=Object.fromEntries(Object.entries(levels).filter(([id,level])=>contracts.mastery.levels[id]!==level));
   const changed=Object.keys(changedLevels).length>0;
+  const changedBasis=Object.fromEntries(Object.keys(changedLevels).map(id=>[id,basisById[id]]));
   return {
-    status:changed?'ready':'noop',changed,blocks:[],warnings,levels:changedLevels,
-    operations:changed?[{type:'set-mastery-levels',levels:changedLevels}]:[]
+    status:changed?'ready':'noop',changed,blocks:[],warnings,levels:changedLevels,basisById:changedBasis,
+    operations:changed?[{type:'set-mastery-levels',levels:changedLevels,basisById:changedBasis}]:[]
   };
 }
