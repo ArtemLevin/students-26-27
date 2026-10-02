@@ -1,0 +1,308 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=18mm,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,longtable,array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{multicol}
+
+\definecolor{accent}{HTML}{176B6B}
+\definecolor{darkaccent}{HTML}{0D4444}
+\definecolor{textgray}{HTML}{2D3338}
+\definecolor{softgray}{HTML}{EEF2F2}
+\definecolor{warn}{HTML}{8A4A32}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\onehalfspacing
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small\color{textgray}Степени: свойства и преобразования}
+\rhead{\small\color{textgray}Анна Баннова}
+\cfoot{\small\color{textgray}\thepage}
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.25em,topsep=0.25em}
+\setlist[enumerate]{leftmargin=1.7em,itemsep=0.45em,topsep=0.35em}
+\newcommand{\term}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\note}[1]{\par\smallskip\noindent{\color{warn}\textbf{Проверка:}} #1\par\smallskip}
+\newcommand{\formula}[1]{\[\boxed{\displaystyle #1}\]}
+
+\tikzset{
+  startstop/.style={ellipse,draw=accent,line width=0.9pt,minimum width=36mm,minimum height=10mm,align=center,fill=softgray},
+  action/.style={rectangle,rounded corners=2pt,draw=accent,line width=0.9pt,text width=55mm,minimum height=12mm,align=center},
+  decision/.style={diamond,aspect=2.25,draw=accent,line width=0.9pt,text width=33mm,align=center,inner sep=1.5pt},
+  arrow/.style={-{Latex[length=2.6mm]},line width=0.9pt,draw=darkaccent},
+  lab/.style={font=\small,fill=white,inner sep=1.5pt,text=textgray}
+}
+
+\begin{document}
+
+% ---------- TITLE ----------
+\thispagestyle{empty}
+\begin{center}
+\vspace*{24mm}
+{\Large\color{textgray}Чек-лист}\par
+\vspace{5mm}
+{\Huge\bfseries\color{darkaccent}Степени}\par
+\vspace{3mm}
+{\LARGE\color{accent}свойства, границы применимости и перевод в степенной вид}\par
+\vspace{14mm}
+{\large Анна Баннова}\par
+\vspace{2mm}
+{\normalsize 2 октября 2026}\par
+\vfill
+{\large\bfseries Лёвин Артём Александрович}\par
+{\normalsize эксклюзивно для Анны Банновой}\par
+\vspace{22mm}
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent,line width=1.1pt]
+  ($(current page.south west)+(18mm,18mm)$)
+  .. controls ($(current page.south west)+(65mm,33mm)$) and ($(current page.south east)+(-70mm,7mm)$) ..
+  ($(current page.south east)+(-18mm,20mm)$);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------- CORE IDEAS ----------
+\section*{1. Главная идея занятия}
+
+В задачах со степенями сначала ищите структуру выражения. Формула работает только при выполнении своих условий. Одну и ту же формулу полезно узнавать \term{в обе стороны}: сворачивать выражение и, при необходимости, раскрывать его обратно.
+
+\note{Плюс или минус между частями выражения часто означает, что стандартная формула для произведения или частного степеней здесь напрямую не применяется. Например, $(a+b)^n\ne a^n+b^n$ в общем случае.}
+
+\subsection*{Базовые факты}
+\begin{itemize}
+  \item $a^1=a$.
+  \item $a^0=1$ при $a\ne0$.
+  \item $0^n=0$ при натуральном $n>0$; выражение $0^0$ в школьной алгебре не определяют.
+\end{itemize}
+
+\section*{2. Восемь формул, которые нужно узнавать}
+
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries\color{darkaccent}}p{7mm} X X@{}}
+\toprule
+№ & Формула & Когда применять \\
+\midrule
+1 & $a^m\cdot a^n=a^{m+n}$ & одинаковое основание, между степенями умножение \\
+2 & $\dfrac{a^m}{a^n}=a^{m-n}$, $a\ne0$ & одинаковое ненулевое основание, деление \\
+3 & $a^n b^n=(ab)^n$ & одинаковая степень, между основаниями умножение \\
+4 & $\dfrac{a^n}{b^n}=\left(\dfrac ab\right)^n$, $b\ne0$ & одинаковая степень в числителе и знаменателе \\
+5 & $(a^m)^n=a^{mn}$ & степень возводится в степень \\
+6 & $\dfrac1{a^n}=a^{-n}$, $a\ne0$ & нужно убрать дробь вида $1/a^n$ \\
+7 & $\left(\dfrac ab\right)^n=\left(\dfrac ba\right)^{-n}$, $a,b\ne0$ & нужно поменять местами числитель и знаменатель \\
+8 & $\sqrt[k]{a^m}=a^{m/k}$ & переход от корня к дробной степени; для единой школьной записи безопасно считать $a>0$ \\
+\bottomrule
+\end{tabularx}
+
+\vspace{2mm}
+\textbf{Формулы работают и справа налево.} Например,
+\[
+a^{m+n}=a^m\cdot a^n,\qquad (ab)^n=a^n b^n.
+\]
+
+\clearpage
+
+% ---------- POWER FORM ----------
+\section*{3. Принцип: переводим основание в степенной вид}
+
+Когда получили задачу на степени, проверьте основание по трём пунктам.
+
+\subsection*{1. Составное число}
+\term{Простое число} имеет ровно два положительных делителя: $1$ и само число.\par
+\term{Составное число} имеет больше двух положительных делителей. Число $1$ не является ни простым, ни составным.
+
+Составное основание полезно разложить на простые множители:
+\[
+16=2^4,\qquad 81=3^4,\qquad 25=5^2,\qquad 49=7^2.
+\]
+
+\subsection*{2. Корень в основании}
+Корень можно заменить дробной степенью:
+\[
+\sqrt[k]{a^m}=a^{m/k}.
+\]
+Примеры:
+\[
+\sqrt{5}=5^{1/2},\qquad \sqrt[3]{81}=\left(3^4\right)^{1/3}=3^{4/3}.
+\]
+
+\subsection*{3. Дробь в основании}
+Дробь часто удобно заменить отрицательной степенью:
+\[
+\frac1{2^5}=2^{-5},\qquad \frac15=5^{-1},\qquad 0{,}5=\frac12=2^{-1}.
+\]
+
+\note{Этот алгоритм относится прежде всего к \textbf{основанию} степени. Например, в $3^{\sqrt5}$ корень находится в показателе; специально переписывать $\sqrt5$ как степень для этого алгоритма не требуется.}
+
+\section*{4. Как понять, что преобразование законно}
+{\small
+\begin{itemize}
+  \item Определите операцию между степенями: умножение, деление, сложение или вычитание.
+  \item Проверьте, что совпадает именно то, что требует формула: основание или показатель.
+  \item При делении проверьте ненулевой знаменатель; при корнях и дробных степенях — область допустимых значений.
+  \item После шага проверьте: выражение стало проще и появилась ли следующая узнаваемая формула?
+\end{itemize}
+}
+
+\clearpage
+
+% ---------- FLOWCHART ----------
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: задача на вычисление со степенями}
+\end{center}
+\vspace{8mm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=7mm and 15mm]
+  \node[startstop] (s) {Получено выражение со степенями};
+  \node[decision,below=of s] (comp) {Составное число в основании?};
+  \node[action,right=of comp,text width=44mm] (factor) {Разложить основание на простые множители};
+  \node[decision,below=11mm of comp] (root) {Корень в основании?};
+  \node[action,right=of root,text width=44mm] (toroot) {Заменить корень дробной степенью};
+  \node[decision,below=11mm of root] (frac) {Дробь в основании?};
+  \node[action,right=of frac,text width=44mm] (tofrac) {При необходимости перейти к отрицательной степени};
+  \node[action,below=12mm of frac,text width=72mm] (scan) {Сравнить выражение с формулами: одинаковые основания? одинаковые показатели? степень в степени?};
+  \node[decision,below=of scan] (can) {Есть применимая формула?};
+  \node[action,below=of can,text width=58mm] (apply) {Применить формулу и упростить};
+  \node[action,right=of can,text width=44mm] (check) {Проверить условия и выбрать другой ход};
+  \node[startstop,below=of apply] (finish) {Получено простое выражение / число};
+
+  \draw[arrow] (s) -- (comp);
+  \draw[arrow] (comp) -- node[lab,above]{да} (factor);
+  \draw[arrow] (factor.south) |- (root.east);
+  \draw[arrow] (comp) -- node[lab,left]{нет} (root);
+  \draw[arrow] (root) -- node[lab,above]{да} (toroot);
+  \draw[arrow] (toroot.south) |- (frac.east);
+  \draw[arrow] (root) -- node[lab,left]{нет} (frac);
+  \draw[arrow] (frac) -- node[lab,above]{да} (tofrac);
+  \draw[arrow] (tofrac.south) |- (scan.east);
+  \draw[arrow] (frac) -- node[lab,left]{нет} (scan);
+  \draw[arrow] (scan) -- (can);
+  \draw[arrow] (can) -- node[lab,left]{да} (apply);
+  \draw[arrow] (can) -- node[lab,above]{нет} (check);
+  \draw[arrow] (check.east) -- ++(9mm,0) |- (scan.east);
+  \draw[arrow] (apply) -- (finish);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------- EXAMPLES ----------
+\section*{5. Примеры по алгоритму}
+
+\subsection*{Пример 1. Одинаковые основания}
+\[
+\frac{2^3\cdot2^4}{2^7}
+=2^{3+4-7}
+=2^0
+=1.
+\]
+\textbf{Что сработало:} при умножении показатели сложили, при делении вычли.
+
+\subsection*{Пример 2. Составное основание + степень в степени}
+\[
+5^{0{,}36}\cdot25^{0{,}32}
+=5^{0{,}36}\cdot\left(5^2\right)^{0{,}32}
+=5^{0{,}36}\cdot5^{0{,}64}
+=5^1
+=5.
+\]
+\textbf{Что сработало:} $25=5^2$, затем показатели при степени в степени перемножили, а при умножении степеней сложили.
+
+\subsection*{Пример 3. Дробные показатели}
+\[
+7^{4/9}\cdot49^{5/18}
+=7^{4/9}\cdot\left(7^2\right)^{5/18}
+=7^{4/9}\cdot7^{5/9}
+=7.
+\]
+
+\subsection*{Пример 4. Корень и дробь}
+\[
+\frac1{\sqrt3}
+=\left(3^{1/2}\right)^{-1}
+=3^{-1/2}.
+\]
+Здесь можно идти и в другом порядке: сначала $1/x=x^{-1}$, затем заменить корень дробной степенью. Результат совпадёт.
+
+\section*{6. Частые ошибки}
+\begin{enumerate}
+  \item \textbf{Складывать показатели в $(a^m)^n$.} Здесь показатели \term{перемножаются}: $(a^m)^n=a^{mn}$.
+  \item \textbf{Применять формулу через плюс:} $a^n+b^n\ne(a+b)^n$ в общем случае.
+  \item \textbf{Забывать условие $a\ne0$:} оно необходимо для $a^0=1$ и формул с делением на $a^n$.
+  \item \textbf{Ошибаться при факторизации:} например, $9=3^2$, а не $3^3$.
+  \item \textbf{Менять дробь местами без смены знака показателя:} $\left(\frac ab\right)^n=\left(\frac ba\right)^{-n}$.
+  \item \textbf{Преобразовывать всё подряд.} Меняйте запись только тогда, когда это открывает путь к следующей формуле.
+\end{enumerate}
+
+\clearpage
+
+% ---------- TRAINING ----------
+\section*{7. Тренировочный блок — Путь А}
+\textbf{10 заданий.} Решайте по принципу: привести основания к удобному степенному виду, затем применить формулы.
+
+\begin{enumerate}
+  \item Вычислите: $2^4\cdot2^3$.
+  \item Вычислите: $\dfrac{5^9}{5^6}$.
+  \item Упростите: $\left(3^2\right)^4$.
+  \item Укажите равенство, которое \textbf{не является тождеством}:\\
+  \quad A) $x^4y^4=(xy)^4$;\qquad
+  Б) $x^4+y^4=(x+y)^4$;\qquad
+  В) $(x^4)^3=x^{12}$.
+  \item Представьте в виде степени с основанием $2$: $\dfrac1{4^3}$.
+  \item Представьте в виде степени с основанием $3$: $\sqrt[3]{81}$.
+  \item Представьте в виде степени с основанием $5$: $\dfrac1{\sqrt5}$.
+  \item Вычислите: $5^{0{,}4}\cdot25^{0{,}3}$.
+  \item Вычислите: $3^{2/5}\cdot9^{3/10}$.
+  \item Вычислите: $\dfrac{16^{3/4}}{8^{2/3}}$.
+\end{enumerate}
+
+\vfill
+\begin{center}
+\small\color{textgray}
+Перед проверкой ответов убедитесь, что в каждой строке Вы можете назвать применённую формулу и её условие.
+\end{center}
+\clearpage
+
+% ---------- ANSWERS ----------
+\section*{8. Ответы}
+
+\renewcommand{\arraystretch}{1.55}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries\color{darkaccent}}p{12mm} X@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $2^7=128$ \\
+2 & $5^3=125$ \\
+3 & $3^8=6561$ \\
+4 & Б: $x^4+y^4=(x+y)^4$ — неверно в общем случае \\
+5 & $2^{-6}$ \\
+6 & $3^{4/3}$ \\
+7 & $5^{-1/2}$ \\
+8 & $5$ \\
+9 & $3$ \\
+10 & $2$ \\
+\bottomrule
+\end{tabularx}
+
+\vfill
+\begin{center}
+\color{textgray}\small
+Лёвин Артём Александрович эксклюзивно для Анны Банновой
+\end{center}
+
+\end{document}

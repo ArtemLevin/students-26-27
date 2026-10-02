@@ -1,0 +1,396 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\geometry{left=18mm,right=18mm,top=18mm,bottom=18mm}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\onehalfspacing
+
+\definecolor{accent}{HTML}{1B7F79}
+\definecolor{darkaccent}{HTML}{135C58}
+\definecolor{textgray}{HTML}{2F3336}
+\definecolor{softgray}{HTML}{F1F4F3}
+\definecolor{warn}{HTML}{9A5B3D}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=5.5mm,itemsep=1.5mm,topsep=1mm}
+\setlist[enumerate]{leftmargin=7mm,itemsep=2mm,topsep=1mm}
+\renewcommand{\arraystretch}{1.25}
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{textgray}Оптимизация с помощью производной}
+\fancyhead[R]{\small\color{textgray}Николь Саркисьянц}
+\fancyfoot[C]{\small\color{textgray}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\important}[1]{\textcolor{warn}{\textbf{#1}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+
+\tikzset{
+  startstop/.style={ellipse, draw=accent, line width=0.9pt, align=center, minimum width=42mm, minimum height=11mm, fill=softgray},
+  process/.style={rectangle, rounded corners=2mm, draw=accent, line width=0.9pt, align=center, text width=83mm, minimum height=13mm, fill=white},
+  decision/.style={diamond, aspect=2.5, draw=accent, line width=0.9pt, align=center, text width=45mm, inner sep=1.5mm, fill=softgray},
+  arrow/.style={-{Latex[length=3mm]}, line width=0.9pt, draw=darkaccent}
+}
+
+\begin{document}
+
+% ---------------- TITLE ----------------
+\thispagestyle{empty}
+\begin{center}
+\vspace*{18mm}
+{\Large\color{darkaccent}\textbf{Чек-лист}}\\[5mm]
+{\huge\textbf{Оптимизация с помощью производной}}\\[3mm]
+{\Large Максимум, минимум и задачи с параметрами модели}\\[14mm]
+
+{\large \textbf{Николь Саркисьянц}}\\[3mm]
+{\normalsize профильная математика, ЕГЭ}\\[10mm]
+
+\begin{minipage}{0.78\linewidth}
+\centering
+\color{textgray}
+На занятии разобраны четыре модели: максимизация выручки, максимизация площади, максимизация мощности и минимизация сноса лодки течением. Общий инструмент один: правильно выбрать функцию, область допустимых значений и исследовать знак производной.
+\end{minipage}
+
+\vfill
+{\large 02.10.2026}\\[9mm]
+{\small Лёвин Артём Александрович эксклюзивно для Николь Саркисьянц}
+
+\vspace{10mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent, line width=1.1pt] (-6,0) .. controls (-3.4,1.0) and (-1.8,-0.8) .. (0,0)
+.. controls (2.2,0.9) and (3.9,-0.8) .. (6,0.2);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------------- CORE IDEA ----------------
+\section*{1. Главная идея: что именно мы оптимизируем}
+
+В задаче на оптимизацию есть \key{целевая величина}: выручка, площадь, мощность, расстояние, время, объём и т.п. Её нужно выразить как функцию \(F(x)\) одной переменной и исследовать на \key{допустимом множестве}.
+
+\begin{center}
+\begin{tabularx}{0.95\linewidth}{@{}>{\bfseries}l X@{}}
+\toprule
+Шаг & Что проверить \\
+\midrule
+1. Переменная & Что обозначает \(x\); какие единицы измерения? \\
+2. Ограничения & Где модель имеет смысл: \(x>0\), знаменатель \(\ne0\), геометрические и физические ограничения, \(x\in\N\) и т.д. \\
+3. Целевая функция & Записать \(F(x)\) только через одну переменную. \\
+4. Производная & Найти \(F'(x)\), упростить её и определить критические точки. \\
+5. Знак \(F'\) & Установить интервалы возрастания и убывания. \\
+6. Экстремум & Сравнить допустимые критические точки и, если нужно, граничные значения. \\
+7. Ответ & Вернуться к смыслу задачи: указать величину, единицы и требуемые параметры. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\important{Ключевой принцип:} уравнение \(F'(x)=0\) даёт только \emph{кандидатов}. Максимум или минимум подтверждается знаком производной, сравнением значений или свойствами функции на рассматриваемой области.
+
+\subsection*{Если переменная натуральная}
+Если \(x\in\N\), производная исследует непрерывную модель. Если найденная точка \(x_0\) нецелая, проверьте ближайшие допустимые целые значения: обычно \(\lfloor x_0\rfloor\) и \(\lceil x_0\rceil\).
+
+\subsection*{Полезные формулы}
+\[
+(uv)'=u'v+uv',\qquad
+\left(\frac{u}{v}\right)'=\frac{u'v-uv'}{v^2},\qquad
+(\sin x)'=\cos x,\qquad (\cos x)'=-\sin x.
+\]
+
+\clearpage
+
+% ---------------- EXAMPLES 1-2 ----------------
+\section*{2. Максимум выручки и площади}
+
+\subsection*{Пример 1. Выручка}
+Цена товара зависит от числа проданных единиц:
+\[
+p(q)=240-4q,\qquad q\in\N.
+\]
+Выручка равна цене одной единицы, умноженной на количество:
+\[
+R(q)=p(q)q=(240-4q)q=240q-4q^2.
+\]
+Тогда
+\[
+R'(q)=240-8q.
+\]
+Критическая точка:
+\[
+240-8q=0 \quad\Longrightarrow\quad q=30.
+\]
+Поскольку \(R'(q)>0\) при \(q<30\) и \(R'(q)<0\) при \(q>30\), в точке \(q=30\) достигается максимум:
+\[
+\boxed{R_{\max}=R(30)=3600}.
+\]
+
+\begin{center}
+\begin{tikzpicture}[x=0.09cm,y=1cm]
+\draw[-{Latex[length=3mm]},line width=0.9pt] (0,0)--(68,0);
+\fill[accent] (30,0) circle (1.8pt);
+\node[below] at (30,0) {\(30\)};
+\node[above,accent] at (15,0.08) {\(+\)};
+\node[above,accent] at (49,0.08) {\(-\)};
+\draw[-{Latex[length=3mm]},accent,line width=0.9pt] (8,-0.7)--(27,-0.18);
+\draw[-{Latex[length=3mm]},accent,line width=0.9pt] (33,-0.18)--(55,-0.7);
+\node[right] at (68,0) {\(q\)};
+\end{tikzpicture}
+\end{center}
+
+\key{Что важно:} сначала построена выручка \(R=pq\). Производная применяется уже к целевой функции, а не к исходной формуле цены.
+
+\subsection*{Пример 2. Площадь прямоугольника}
+Стороны \(x\) и \(y\) связаны условием
+\[
+y=120-2x,\qquad x>0,\quad y>0.
+\]
+Из \(y>0\) получаем \(0<x<60\). Площадь:
+\[
+S(x)=x(120-2x)=120x-2x^2,
+\qquad S'(x)=120-4x.
+\]
+Отсюда
+\[
+S'(x)=0 \Longrightarrow x=30,\qquad y=60,
+\]
+и
+\[
+\boxed{S_{\max}=30\cdot60=1800}.
+\]
+
+\important{Типичная ошибка:} найти \(x\), но забыть восстановить вторую сторону или требуемое максимальное значение.
+
+\clearpage
+
+% ---------------- EXAMPLE POWER ----------------
+\section*{3. Рациональная функция: максимальная мощность}
+
+Сила тока задаётся формулой
+\[
+I(R)=\frac{48}{4+R},\qquad R>0,
+\]
+а мощность на нагрузке
+\[
+P=I^2R.
+\]
+Подставляем \(I(R)\):
+\[
+P(R)=\frac{48^2R}{(R+4)^2}.
+\]
+Дифференцируем:
+\[
+P'(R)=48^2\cdot\frac{(R+4)^2-2R(R+4)}{(R+4)^4}
+=48^2\cdot\frac{4-R}{(R+4)^3}.
+\]
+На области \(R>0\) знаменатель положителен, поэтому знак производной определяется выражением \(4-R\):
+\[
+P'(R)>0 \text{ при }0<R<4,\qquad
+P'(R)<0 \text{ при }R>4.
+\]
+Значит,
+\[
+\boxed{R=4\ \text{Ом}}
+\]
+даёт максимальную мощность. При этом
+\[
+I=\frac{48}{8}=6\ \text{А},\qquad
+\boxed{P_{\max}=6^2\cdot4=144\ \text{Вт}}.
+\]
+
+\subsection*{Что помогает в дробно-рациональных моделях}
+\begin{itemize}
+  \item Сразу выпишите область допустимых значений.
+  \item После дифференцирования \key{факторизуйте} производную: знак часто определяется одним простым множителем.
+  \item Не решайте уравнение числителя вне области задачи: например, отрицательное сопротивление здесь недопустимо.
+  \item Проверяйте единицы измерения в финальном ответе.
+\end{itemize}
+
+\clearpage
+
+% ---------------- EXAMPLE RIVER ----------------
+\section*{4. Минимизация сноса лодки течением}
+
+Пусть ширина реки \(h=100\) м, скорость течения \(u=1\) м/с, скорость лодки относительно воды \(v=0{,}8\) м/с. Угол \(\alpha\) выбирается так, что \(0<\alpha<\pi\). Снос вдоль берега выражается как
+\[
+L(\alpha)=h\,\frac{u+v\cos\alpha}{v\sin\alpha}
+=100\,\frac{1+0{,}8\cos\alpha}{0{,}8\sin\alpha}.
+\]
+
+Здесь особенно важно не потерять область: \(\sin\alpha>0\) при \(0<\alpha<\pi\).
+
+Дифференцируем:
+\[
+L'(\alpha)=\frac{100}{0{,}8}\cdot
+\frac{-0{,}8\sin^2\alpha-(1+0{,}8\cos\alpha)\cos\alpha}{\sin^2\alpha}.
+\]
+Используем \(\sin^2\alpha+\cos^2\alpha=1\):
+\[
+L'(\alpha)=\frac{-100(0{,}8+\cos\alpha)}{0{,}8\sin^2\alpha}.
+\]
+Критическая точка задаётся условием
+\[
+0{,}8+\cos\alpha=0
+\quad\Longrightarrow\quad
+\boxed{\cos\alpha=-0{,}8}.
+\]
+В интервале \((0,\pi)\) имеем \(\sin\alpha=0{,}6\). Тогда
+\[
+L_{\min}=100\cdot\frac{1+0{,}8(-0{,}8)}{0{,}8\cdot0{,}6}
+=100\cdot\frac{0{,}36}{0{,}48}
+=\boxed{75\ \text{м}}.
+\]
+
+\key{Смысл:} при скорости течения больше скорости лодки полностью устранить снос невозможно, но выбор направления позволяет сделать его минимальным.
+
+\important{Типичная ошибка:} после нахождения \(\cos\alpha\) забыть выбрать знак \(\sin\alpha\) по области \(0<\alpha<\pi\). Здесь \(\sin\alpha>0\).
+
+\clearpage
+
+% ---------------- ALGORITHM FLOWCHART ----------------
+\thispagestyle{empty}
+\begin{center}
+{\Large\color{darkaccent}\textbf{Алгоритм: задача на максимум или минимум}}\\[10mm]
+
+\begin{tikzpicture}[node distance=8mm]
+\node[startstop] (start) {Прочитать условие и определить\\целевую величину};
+\node[process, below=of start] (var) {Ввести переменную и выписать все ограничения\\(геометрические, физические, ОДЗ, натуральность)};
+\node[process, below=of var] (func) {Выразить целевую величину как функцию одной переменной \(F(x)\)};
+\node[process, below=of func] (der) {Найти и упростить \(F'(x)\).\\Получить допустимые критические точки};
+\node[decision, below=10mm of der] (disc) {Переменная дискретная\\или есть границы?};
+\node[process, text width=57mm, below left=12mm and 5mm of disc] (compare) {Проверить соседние целые\\и/или граничные значения};
+\node[process, text width=57mm, below right=12mm and 5mm of disc] (sign) {Исследовать знак \(F'(x)\):\\где функция растёт и убывает};
+\node[process, below=24mm of disc] (answer) {Выбрать максимум/минимум и восстановить\\все величины, которые спрашивает задача};
+\node[startstop, below=of answer] (finish) {Записать ответ с единицами\\и проверить его смысл};
+
+\draw[arrow] (start)--(var);
+\draw[arrow] (var)--(func);
+\draw[arrow] (func)--(der);
+\draw[arrow] (der)--(disc);
+\draw[arrow] (disc)--node[above left]{\small да}(compare);
+\draw[arrow] (disc)--node[above right]{\small нет}(sign);
+\draw[arrow] (compare)|-(answer);
+\draw[arrow] (sign)|-(answer);
+\draw[arrow] (answer)--(finish);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------------- QUICK CHECKLIST ----------------
+\section*{5. Короткая самопроверка перед ответом}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Я оптимизирую именно ту величину, которую спрашивают?
+  \item Функция выражена через одну переменную?
+  \item Я выписал допустимые значения переменной до исследования производной?
+  \item Все критические точки принадлежат допустимой области?
+  \item Я подтвердил максимум/минимум знаком производной или сравнением значений?
+  \item Если переменная натуральная, я проверил соседние целые значения?
+  \item Для тригонометрической модели я учёл знак \(\sin\alpha\) и диапазон угла?
+  \item Для рациональной функции я проверил знаменатели и знак факторов?
+  \item Я восстановил дополнительные величины из условия?
+  \item В ответе есть единицы измерения и он физически/геометрически разумен?
+\end{enumerate}
+
+\section*{6. Мини-памятка по типичным ошибкам}
+\begin{itemize}
+  \item \important{Пропущенная область:} формально найденная критическая точка может быть недопустимой.
+  \item \important{Производная не той функции:} сначала составьте целевую функцию, затем дифференцируйте.
+  \item \important{Только \(F'(x)=0\):} нулевая производная сама по себе ещё не доказывает максимум или минимум.
+  \item \important{Потеря смысла:} задача может спрашивать не \(x\), а площадь, выручку, мощность, вторую сторону или минимальный снос.
+  \item \important{Дискретность:} при \(x\in\N\) нельзя автоматически округлять; сравните соседние целые значения.
+  \item \important{Тригонометрия:} после нахождения \(\cos\alpha\) знак \(\sin\alpha\) определяется диапазоном \(\alpha\).
+\end{itemize}
+
+\clearpage
+
+% ---------------- TRAINING ----------------
+\section*{7. Тренировочный блок --- Путь А}
+\textbf{10 задач.} Решения в этом разделе не приводятся. Сложность возрастает постепенно.
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Цена товара зависит от числа проданных единиц: \(p(q)=300-5q\), \(q\in\N\). Выручка \(R=pq\). Сколько единиц нужно продать для максимальной выручки? Найдите максимальную выручку.
+
+  \item Стороны прямоугольника связаны условием \(y=160-4x\), \(x>0\), \(y>0\). Найдите \(x\), вторую сторону и максимальную площадь.
+
+  \item Периметр прямоугольника равен \(100\) см. Одну сторону обозначили \(x\). При каких размерах площадь максимальна? Найдите эту площадь.
+
+  \item Сила тока задаётся формулой \(I=\dfrac{72}{6+R}\), \(R>0\). Мощность на нагрузке равна \(P=I^2R\). Найдите сопротивление, при котором мощность максимальна, и максимальную мощность.
+
+  \item Для \(R>0\) задана функция мощности
+  \[
+  P(R)=\frac{10000R}{(R+10)^2}.
+  \]
+  Найдите точку максимума и максимальное значение \(P\).
+
+  \item Площадь прямоугольника равна \(36\text{ см}^2\). Его стороны \(x\) и \(36/x\), \(x>0\). Найдите размеры прямоугольника с минимальным периметром и этот периметр.
+
+  \pagebreak[4]
+
+  \item Цена товара задаётся формулой \(p(q)=205-4q\), \(q\in\N\). Найдите натуральное \(q\), при котором выручка \(R=pq\) максимальна, и максимальную выручку. \emph{Обязательно учтите дискретность.}
+
+  \item Ширина реки \(150\) м, скорость течения \(1\) м/с, скорость лодки относительно воды \(0{,}8\) м/с. Снос описывается функцией
+  \[
+  L(\alpha)=150\,\frac{1+0{,}8\cos\alpha}{0{,}8\sin\alpha},\qquad 0<\alpha<\pi.
+  \]
+  Найдите \(\cos\alpha\), при котором снос минимален, и минимальный снос.
+
+  \item Ширина реки \(120\) м, скорость течения \(1{,}25\) м/с, скорость лодки относительно воды \(0{,}75\) м/с. Используется модель
+  \[
+  L(\alpha)=120\,\frac{1{,}25+0{,}75\cos\alpha}{0{,}75\sin\alpha},\qquad 0<\alpha<\pi.
+  \]
+  Найдите \(\cos\alpha\) и минимальный снос.
+
+  \item Из квадратного листа картона со стороной \(30\) см вырезают по углам квадраты со стороной \(x\), затем загибают края и получают открытую коробку. Объём
+  \[
+  V(x)=x(30-2x)^2,\qquad 0<x<15.
+  \]
+  Найдите \(x\), при котором объём максимален, и максимальный объём.
+\end{enumerate}
+
+\clearpage
+
+% ---------------- ANSWERS ----------------
+\section*{8. Ответы}
+\begin{center}
+\begin{tabularx}{0.96\linewidth}{@{}c X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+1 & \(q=30\); \(R_{\max}=4500\). \\
+2 & \(x=20\), \(y=80\); \(S_{\max}=1600\). \\
+3 & \(25\text{ см}\times25\text{ см}\); \(S_{\max}=625\text{ см}^2\). \\
+4 & \(R=6\ \text{Ом}\); \(P_{\max}=216\ \text{Вт}\). \\
+5 & \(R=10\); \(P_{\max}=250\). \\
+6 & \(6\text{ см}\times6\text{ см}\); \(P_{\min}=24\text{ см}\). \\
+7 & \(q=26\); \(R_{\max}=2626\). \\
+8 & \(\cos\alpha=-0{,}8\); \(L_{\min}=112{,}5\text{ м}\). \\
+9 & \(\cos\alpha=-0{,}6\); \(L_{\min}=160\text{ м}\). \\
+10 & \(x=5\text{ см}\); \(V_{\max}=2000\text{ см}^3\). \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vfill
+\begin{center}
+\small\color{textgray}
+Лёвин Артём Александрович эксклюзивно для Николь Саркисьянц
+\end{center}
+
+\end{document}

@@ -1,0 +1,457 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=17mm,headheight=28pt,footskip=14mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{tabularx,booktabs,array,longtable}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{accent}{HTML}{2F6F6D}
+\definecolor{darkaccent}{HTML}{204C4A}
+\definecolor{textgray}{HTML}{303638}
+\definecolor{softgray}{HTML}{EEF3F2}
+\definecolor{warmgray}{HTML}{F6F3EE}
+\definecolor{warn}{HTML}{8A4F3D}
+
+\setlength{\parindent}{0pt}
+\setstretch{1.18}
+\setlist[itemize]{leftmargin=5mm,itemsep=2pt,topsep=2pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=2pt,topsep=2pt}
+\raggedbottom
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{textgray}Сборник формул по кинематике}
+\fancyhead[R]{\small\color{textgray}03.10.26}
+\fancyfoot[C]{\small\color{textgray}\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\warntext}[1]{\textbf{\color{warn}#1}}
+\newcommand{\formula}[1]{\[\displaystyle #1\]}
+\newcommand{\unit}[1]{\,\text{#1}}
+\newcommand{\headcell}[1]{\textbf{\color{darkaccent}#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+% =============================================================
+% TITLE
+% =============================================================
+\thispagestyle{empty}
+\begin{center}
+\vspace*{25mm}
+{\Large\color{accent}\textbf{Накопительный сборник}}\\[8mm]
+{\huge\bfseries Формулы по кинематике}\\[4mm]
+{\Large путь, перемещение, координата, скорость,\\
+текстовые задачи и равноускоренное движение}\\[16mm]
+
+\begin{minipage}{0.80\textwidth}
+\centering
+\large
+Справочник устроен по принципу \textbf{«величина $\rightarrow$ формула $\rightarrow$ условия применимости $\rightarrow$ типичная ошибка»}.\\[2mm]
+Он предназначен для быстрого повторения перед решением задач и будет дополняться по мере прохождения новых тем.
+\end{minipage}
+
+\vfill
+{\large Иван Петраченков}\\[3mm]
+{\large Физика \textbullet\ подготовка к ЕГЭ}\\[6mm]
+{\large 3 октября 2026 г.}\\[7mm]
+{\normalsize\color{textgray}Лёвин Артём Александрович эксклюзивно для Ивана Петраченкова}
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent,line width=1.1pt]
+  ($(current page.south west)+(17mm,16mm)$)
+  .. controls +(40mm,13mm) and +(-45mm,-9mm) ..
+  ($(current page.south east)+(-17mm,23mm)$);
+\end{tikzpicture}
+
+\clearpage
+
+% =============================================================
+% QUICK MAP
+% =============================================================
+\section*{0. Быстрая карта формул}
+\small
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{0.23\linewidth}Y Y@{}}
+\toprule
+\headcell{Что ищем} & \headcell{Основная формула} & \headcell{Что проверить перед подстановкой} \\
+\midrule
+Координату при равномерном движении & $x=x_0+v_xt$ & знак $v_x$ и выбор оси \\
+Скорость при равноускоренном движении & $v_x=v_{0x}+a_xt$ & знаки $v_{0x}$ и $a_x$ \\
+Координату при равноускоренном движении & $x=x_0+v_{0x}t+\dfrac{a_xt^2}{2}$ & начальную координату и проекции \\
+Перемещение & $S_x=v_{0x}t+\dfrac{a_xt^2}{2}$ & менялось ли направление движения \\
+Перемещение без времени & $v_x^2-v_{0x}^2=2a_xS_x$ & $a_x\neq0$ \\
+Перемещение без ускорения & $S_x=\dfrac{v_{0x}+v_x}{2}t$ & движение равноускоренное \\
+Перемещение за $n$-ю секунду & $S_n=S(n\,\text{с})-S((n-1)\,\text{с})$ & не путать с перемещением за первые $n$ секунд \\
+Момент встречи & $x_1(t)=x_2(t)$ & одна ось, один момент времени \\
+Среднюю скорость & $v_{\text{ср}}=\dfrac{S_{\text{общ}}}{t_{\text{общ}}}$ & складывать именно пути и времена \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vspace{2mm}
+\key{Правило выбора формулы.} Не начинайте с поиска «знакомой формулы». Сначала выпишите известные и неизвестные величины, выберите ось и только затем берите зависимость, в которой минимум лишних неизвестных.
+
+\key{Правило единиц.} Перед вычислениями приведите величины к согласованной системе единиц. Для задач школьной кинематики безопасный стандарт --- СИ: метры, секунды, м/с, м/с$^2$.
+
+\normalsize
+\clearpage
+
+% =============================================================
+% BASICS
+% =============================================================
+\section*{1. Путь, перемещение и векторы}
+\small
+
+\subsection*{1.1. Путь и перемещение}
+\begin{itemize}
+\item $S$ --- \textbf{путь}: длина пройденной траектории, скалярная величина, $S\ge0$.
+\item $\vec s$ --- \textbf{перемещение}: вектор из начального положения в конечное.
+\item На прямой удобно работать с проекцией перемещения:
+\end{itemize}
+\formula{S_x=\Delta x=x-x_0.}
+
+\warntext{Не смешивайте путь и проекцию перемещения.} Если тело меняет направление, обычно $S\neq|S_x|$.
+
+\subsection*{1.2. Движение по окружности}
+Для полного оборота по окружности радиуса $R$:
+\formula{S=2\pi R.}
+Для полуокружности:
+\formula{S=\pi R, \qquad |\vec s|=2R.}
+То есть путь зависит от траектории, а модуль перемещения --- только от начальной и конечной точек.
+
+\subsection*{1.3. Вектор по координатам}
+Если $A(x_A,y_A)$ и $B(x_B,y_B)$, то
+\formula{\vec{AB}=(x_B-x_A,\;y_B-y_A),}
+\formula{|\vec{AB}|=\sqrt{(x_B-x_A)^2+(y_B-y_A)^2}.}
+
+\subsection*{1.4. Проекции вектора}
+Если вектор $\vec A$ образует угол $\alpha$ с положительным направлением оси $x$:
+\formula{A_x=A\cos\alpha, \qquad A_y=A\sin\alpha.}
+\key{Знак проекции} определяется направлением вектора относительно выбранной оси.
+
+\normalsize
+\clearpage
+
+% =============================================================
+% UNIFORM MOTION
+% =============================================================
+\section*{2. Равномерное прямолинейное движение}
+\small
+
+\subsection*{2.1. Координата}
+\formula{\boxed{x=x_0+v_xt}}
+где $x_0$ --- начальная координата, $v_x$ --- постоянная проекция скорости.
+
+\subsection*{2.2. Скорость и перемещение}
+\formula{v_x=\frac{\Delta x}{\Delta t}, \qquad S_x=v_xt.}
+Для обычных текстовых задач без координат часто используются эквивалентные записи
+\formula{S=vt, \qquad v=\frac{S}{t}, \qquad t=\frac{S}{v}.}
+
+\subsection*{2.3. Что читать по графику $x(t)$}
+При равномерном движении график $x(t)$ --- прямая, а её наклон задаёт скорость:
+\formula{v_x=\frac{\Delta x}{\Delta t}=\tg\alpha.}
+
+\begin{center}
+\begin{tikzpicture}[x=0.9cm,y=0.9cm,>=Stealth]
+\draw[->,line width=0.8pt] (0,0)--(7,0) node[right] {$t$};
+\draw[->,line width=0.8pt] (0,0)--(0,4.8) node[above] {$x$};
+\draw[accent,line width=1.4pt] (0.8,0.8)--(6.2,4.2);
+\draw[accent,dashed] (4.2,0)--(4.2,2.94);
+\draw[accent,dashed] (0,2.94)--(4.2,2.94);
+\draw[->,warn,line width=0.8pt] (2.0,0.8) arc[start angle=0,end angle=31,radius=1.2];
+\node[warn] at (2.9,1.35) {$\alpha$};
+\node[textgray,align=left] at (5.0,1.15) {$\displaystyle v_x=\frac{\Delta x}{\Delta t}$};
+\end{tikzpicture}
+\end{center}
+
+\warntext{Частая ошибка:} угол на рисунке сам по себе не является скоростью. Скорость задаётся тангенсом угла наклона графика к оси времени.
+
+\normalsize
+\clearpage
+
+% =============================================================
+% TEXT PROBLEMS
+% =============================================================
+\section*{3. Текстовые задачи на движение}
+\small
+
+\subsection*{3.1. Навстречу и вдогонку}
+Скорость сближения при движении навстречу:
+\formula{v_{\text{сбл}}=v_1+v_2.}
+Скорость сближения при движении в одном направлении:
+\formula{v_{\text{сбл}}=|v_1-v_2|.}
+Если начальное расстояние между объектами равно $L$, то до встречи
+\formula{t=\frac{L}{v_{\text{сбл}}}.}
+
+\subsection*{3.2. Движение по реке}
+Пусть $v$ --- собственная скорость лодки, $u$ --- скорость течения:
+\formula{v_{\text{по течению}}=v+u,}
+\formula{v_{\text{против течения}}=v-u,}
+\formula{v_{\text{плота}}=u.}
+Для маршрута на расстояние $x$ вниз по реке, стоянки $t_0$ и возвращения обратно:
+\formula{t_{\text{общ}}=\frac{x}{v+u}+t_0+\frac{x}{v-u}.}
+\key{Условие применимости:} для самостоятельного движения против течения необходимо $v>u$.
+
+\subsection*{3.3. Круговая трасса}
+Если два участника движутся по одной окружности длины $L$ в одном направлении, время между последовательными обгонами определяется относительной скоростью:
+\formula{(v_{\text{быстр}}-v_{\text{медл}})t=L.}
+Если они стартуют из противоположных точек и движутся навстречу, начальное расстояние по трассе равно $L/2$:
+\formula{(v_1+v_2)t=\frac{L}{2}.}
+
+\subsection*{3.4. Протяжённые тела}
+Для полного прохождения двух протяжённых объектов друг мимо друга нужно «закрыть» сумму их длин:
+\formula{t=\frac{L_1+L_2}{v_1+v_2} \quad \text{(навстречу)},}
+\formula{t=\frac{L_1+L_2}{|v_1-v_2|} \quad \text{(в одном направлении)}.}
+
+\subsection*{3.5. Средняя скорость}
+Главная формула:
+\formula{\boxed{v_{\text{ср}}=\frac{S_{\text{общ}}}{t_{\text{общ}}}}}
+Для двух \textbf{равных по длине} участков со скоростями $v_1$ и $v_2$:
+\formula{v_{\text{ср}}=\frac{2v_1v_2}{v_1+v_2}.}
+Для трёх \textbf{равных по длине} участков:
+\formula{v_{\text{ср}}=\frac{3}{\dfrac1{v_1}+\dfrac1{v_2}+\dfrac1{v_3}}.}
+\warntext{Среднее арифметическое скоростей обычно неприменимо.} Сначала складывайте путь и время.
+
+\normalsize
+\clearpage
+
+% =============================================================
+% ACCELERATED MOTION
+% =============================================================
+\section*{4. Равноускоренное прямолинейное движение}
+\small
+
+\key{Главная настройка перед формулами:} выбрать ось $x$. Величины $v_{0x}$, $v_x$, $a_x$ --- проекции и могут быть отрицательными.
+
+\subsection*{4.1. Скорость}
+\formula{\boxed{v_x=v_{0x}+a_xt}}
+
+Из неё удобно выражать:
+\formula{t=\frac{v_x-v_{0x}}{a_x}, \qquad a_x=\frac{v_x-v_{0x}}{t}.}
+
+\subsection*{4.2. Координата}
+\formula{\boxed{x=x_0+v_{0x}t+\frac{a_xt^2}{2}}}
+Связь координаты и проекции перемещения:
+\formula{x=x_0+S_x.}
+
+\subsection*{4.3. Три формулы проекции перемещения}
+\begin{align*}
+\boxed{S_x=v_{0x}t+\frac{a_xt^2}{2}},\\[3mm]
+\boxed{S_x=\frac{v_x^2-v_{0x}^2}{2a_x}}, \qquad a_x\neq0,\\[3mm]
+\boxed{S_x=\frac{v_{0x}+v_x}{2}\,t}.
+\end{align*}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{0.97\linewidth}{@{}Y Y Y@{}}
+\toprule
+\headcell{Формула} & \headcell{Когда особенно удобна} & \headcell{Чего в ней нет} \\
+\midrule
+$S_x=v_{0x}t+\dfrac{a_xt^2}{2}$ & известны $v_{0x}$, $a_x$, $t$ & конечной скорости $v_x$ \\
+$S_x=\dfrac{v_x^2-v_{0x}^2}{2a_x}$ & время не дано или не нужно & времени $t$ \\
+$S_x=\dfrac{v_{0x}+v_x}{2}t$ & известны начальная и конечная скорости & ускорения $a_x$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\key{Методическая связь.} Вторая и третья формулы получают подстановкой из базовых зависимостей. Полезно понимать, \emph{какую величину нужно исключить}, даже если готовые формулы Вы используете по памяти.
+
+\normalsize
+\clearpage
+
+% =============================================================
+% NTH SECOND
+% =============================================================
+\section*{5. Перемещение за $n$-ю секунду}
+\small
+
+\subsection*{5.1. Главная идея}
+Перемещение за отдельную $n$-ю секунду --- разность двух накопленных перемещений:
+\formula{\boxed{S_n=S(n\,\text{с})-S((n-1)\,\text{с})}.}
+
+Для равноускоренного движения при интервале $\Delta t=1\unit{с}$:
+\formula{\boxed{S_n=v_{0x}\Delta t+\frac{a_x(2n-1)(\Delta t)^2}{2}}, \qquad \Delta t=1\unit{с}.}
+
+Эта запись сохраняет физическую размерность явно. При численной подстановке в СИ единичный интервал времени часто мысленно опускают, но смысл формулы остаётся тем же.
+
+\subsection*{5.2. Движение из состояния покоя}
+Если тело стартует из состояния покоя,
+\formula{v_{0x}=0,}
+поэтому
+\formula{S_n=\frac{a_x(2n-1)(\Delta t)^2}{2}.}
+
+\subsection*{5.3. Остановка}
+Если ось направлена по начальной скорости и тело тормозит,
+\formula{a_x<0.}
+Если через время $t$ тело остановилось, то в этот момент
+\formula{\boxed{v_x=0},}
+следовательно,
+\formula{0=v_{0x}+a_xt.}
+Это условие часто даёт недостающее уравнение в задаче.
+
+\subsection*{5.4. Критическое различие}
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{0.86\linewidth}{@{}>{\bfseries}p{0.24\linewidth}Y@{}}
+\toprule
+$S(n\,\text{с})$ & перемещение за \textbf{весь промежуток} от $0$ до $n$ секунд \\
+$S_n$ & перемещение \textbf{только на интервале} от $(n-1)$ до $n$ секунд \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\warntext{Это одна из главных точек контроля:} «за четыре секунды» и «за четвёртую секунду» --- разные величины.
+
+\normalsize
+\clearpage
+
+% =============================================================
+% MEETING VIA COORDINATES
+% =============================================================
+\section*{6. Задачи на встречу через координаты}
+\small
+
+\subsection*{6.1. Универсальное уравнение координаты}
+Для каждого тела сначала записывайте общую форму:
+\formula{x=x_0+v_{0x}t+\frac{a_xt^2}{2}.}
+Затем подставляйте данные конкретного тела.
+
+\subsection*{6.2. Условие встречи}
+\formula{\boxed{x_1(t)=x_2(t)}}
+Это означает: в один и тот же момент времени тела находятся в одной координате.
+
+\subsection*{6.3. Частный случай: оба тела движутся равномерно}
+\formula{x_1=x_{01}+v_{1x}t, \qquad x_2=x_{02}+v_{2x}t.}
+Далее решается уравнение
+\formula{x_{01}+v_{1x}t=x_{02}+v_{2x}t.}
+
+\subsection*{6.4. Если одно или оба тела движутся с ускорением}
+Используйте полные уравнения:
+\formula{x_1=x_{01}+v_{01x}t+\frac{a_{1x}t^2}{2},}
+\formula{x_2=x_{02}+v_{02x}t+\frac{a_{2x}t^2}{2}.}
+После решения уравнения встречи оставляйте только физически допустимые значения времени $t\ge0$.
+
+\subsection*{6.5. Алгоритм}
+\begin{enumerate}
+\item Нарисовать схему и выбрать ось.
+\item Для каждого тела определить $x_0$, $v_{0x}$ и $a_x$ со знаками.
+\item Записать общую формулу координаты.
+\item Получить $x_1(t)$ и $x_2(t)$.
+\item Использовать $x_1=x_2$ и найти $t$.
+\item Подставить найденное время в любое уравнение координаты и получить место встречи.
+\end{enumerate}
+
+\key{Почему этот подход важен.} Он масштабируется на задачи, где скорости, ускорения, начальные координаты и направления движения различны; табличная схема «скорость--время--путь» там быстро становится менее надёжной.
+
+\normalsize
+\clearpage
+
+% =============================================================
+% FORMULA CHOICE
+% =============================================================
+\section*{7. Как выбирать формулу без перебора}
+\small
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=7mm and 8mm,
+  >=Stealth,
+  every node/.style={font=\small,align=center},
+  box/.style={rectangle,rounded corners=2mm,draw=accent,thick,text width=11.2cm,minimum height=11mm,inner sep=3mm},
+  side/.style={rectangle,rounded corners=2mm,draw=warn,thick,text width=4.6cm,minimum height=10mm,inner sep=3mm},
+  arrow/.style={->,accent,thick}
+]
+\node[box] (a) {1. Выпишите, что известно и что требуется найти.};
+\node[box,below=of a] (b) {2. Выберите ось и поставьте знаки проекций.};
+\node[box,below=of b] (c) {3. Найдите формулу, где есть искомая величина и минимум лишних неизвестных.};
+\node[side,below=7mm of c,xshift=-3.2cm] (t) {Нет времени $t$?\\Используйте связь $v_x^2-v_{0x}^2=2a_xS_x$.};
+\node[side,below=7mm of c,xshift=3.2cm] (acc) {Нет ускорения $a_x$?\\Используйте $S_x=\dfrac{v_{0x}+v_x}{2}t$.};
+\node[box,below=22mm of c] (d) {4. Подставьте числа только после записи формулы в общем виде.};
+\node[box,below=of d] (e) {5. Проверьте знак, единицы и физический смысл результата.};
+\draw[arrow] (a)--(b);
+\draw[arrow] (b)--(c);
+\draw[arrow] (c)--(t);
+\draw[arrow] (c)--(acc);
+\draw[arrow] (t.south) |- (d.west);
+\draw[arrow] (acc.south) |- (d.east);
+\draw[arrow] (d)--(e);
+\end{tikzpicture}
+\end{center}
+
+\subsection*{Пять быстрых проверок ответа}
+\begin{enumerate}
+\item \key{Размерность:} ответ имеет нужные единицы?
+\item \key{Знак:} он согласуется с выбранной осью?
+\item \key{Порядок величины:} результат физически реалистичен?
+\item \key{Граница:} при $a_x=0$ формула переходит в равномерное движение там, где должна?
+\item \key{Смысл:} путь, перемещение и координата не перепутаны?
+\end{enumerate}
+
+\normalsize
+\clearpage
+
+% =============================================================
+% ERRORS / SYMBOLS
+% =============================================================
+\section*{8. Частые ошибки и обозначения}
+\small
+
+\subsection*{8.1. Частые ошибки}
+\begin{itemize}
+\item Использовать модуль скорости там, где нужна её проекция со знаком.
+\item Подставлять числа до выбора оси и терять знак ускорения.
+\item Считать, что при торможении ускорение «равно положительному числу», хотя его проекция по выбранной оси отрицательна.
+\item Путать путь за первые $n$ секунд и путь за $n$-ю секунду.
+\item При остановке забывать условие $v_x=0$ в конечный момент.
+\item В задачах на встречу складывать пути без явного контроля координат, когда движение усложняется.
+\item Для средней скорости брать среднее арифметическое скоростей без проверки структуры пути и времени.
+\item Для движения по реке забывать различать собственную скорость лодки и скорость относительно берега.
+\end{itemize}
+
+\subsection*{8.2. Обозначения}
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{0.92\linewidth}{@{}p{0.22\linewidth}Y p{0.24\linewidth}@{}}
+\toprule
+\headcell{Обозначение} & \headcell{Смысл} & \headcell{Типичные единицы СИ} \\
+\midrule
+$x,\;x_0$ & текущая и начальная координаты & м \\
+$S$ & путь & м \\
+$S_x$ & проекция перемещения & м \\
+$v,\;v_x$ & модуль скорости и её проекция & м/с \\
+$v_0,\;v_{0x}$ & начальная скорость и её проекция & м/с \\
+$a,\;a_x$ & модуль ускорения и его проекция & м/с$^2$ \\
+$t$ & время & с \\
+$R$ & радиус окружности & м \\
+$L$ & длина трассы или объекта & м \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vfill
+\begin{center}
+\color{textgray}\small
+Актуальная версия сборника: 03.10.26\\[2mm]
+Лёвин Артём Александрович эксклюзивно для Ивана Петраченкова
+\end{center}
+
+\end{document}
