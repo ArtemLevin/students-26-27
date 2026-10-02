@@ -22,12 +22,15 @@ function relative(root,file){
   return path.relative(root,file).replaceAll('\\','/');
 }
 
-function filePrecondition(root,file){
+function filePrecondition(root,file,expectedSource){
+  if(typeof expectedSource!=='string'&&!Buffer.isBuffer(expectedSource)){
+    throw new Error('Stage 04 transaction: missing source snapshot for '+relative(root,file));
+  }
   return {
     kind:'file',
     path:relative(root,file),
     exists:true,
-    sha256:sha256(fs.readFileSync(file))
+    sha256:sha256(expectedSource)
   };
 }
 
@@ -79,9 +82,31 @@ export function buildStage04TransactionPlan({
     reviewItems:[],
     conflicts:[],
     preconditions:[
-      filePrecondition(contracts.root,contracts.paths.lessonRegistryPath),
-      filePrecondition(contracts.root,contracts.paths.practiceConfigPath),
-      filePrecondition(contracts.root,contracts.paths.masteryPath)
+      filePrecondition(
+        contracts.root,
+        contracts.paths.lessonRegistryPath,
+        contracts.sources.lessonRegistry
+      ),
+      filePrecondition(
+        contracts.root,
+        contracts.paths.practiceConfigPath,
+        contracts.sources.practiceConfig
+      ),
+      filePrecondition(
+        contracts.root,
+        contracts.paths.masteryPath,
+        contracts.sources.mastery
+      ),
+      ...(contracts.paths.metadataPath&&contracts.sources.lessonMetadata!==undefined?[filePrecondition(
+        contracts.root,
+        contracts.paths.metadataPath,
+        contracts.sources.lessonMetadata
+      )]:[]),
+      ...(contracts.paths.catalogPath&&contracts.sources.catalog!==undefined?[filePrecondition(
+        contracts.root,
+        contracts.paths.catalogPath,
+        contracts.sources.catalog
+      )]:[])
     ],
     writes
   };
