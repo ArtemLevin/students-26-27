@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {ROOT} from '../inventory-students.mjs';
 import {inspectLegacyLearningState} from '../legacy/inspect-learning-state.mjs';
-import {createLegacySandbox,executeLegacySource} from '../legacy/sandbox.mjs';
+import {createLegacySandbox,executeLegacyFile,executeLegacySource} from '../legacy/sandbox.mjs';
 import {parseArgs as parseInspectArgs} from '../inspect-legacy-state.mjs';
 
 function write(file,content=''){
@@ -517,6 +517,81 @@ test('real Sofya Khomenko source externalizes dated inline mastery into explicit
   assert.deepEqual(report.diagnostics.orphanClaims,[]);
   assert.deepEqual(report.diagnostics.warnings,[]);
   assert.equal(report.automaticEligible,true);
+});
+
+test('real Kristina source externalizes dated mastery while preserving runtime lesson evidence',()=>{
+  const x=fixture('kristina_reconciled_fixture');
+  for(const name of ['competency-map-data.js','mastery-authority.js','index.html']){
+    write(
+      path.join(x.site,name),
+      fs.readFileSync(path.join(ROOT,'students','kristina','site',name),'utf8')
+    );
+  }
+
+  const index=fs.readFileSync(
+    path.join(ROOT,'students','kristina','site','index.html'),
+    'utf8'
+  );
+  assert.ok(index.indexOf('competency-map-data.js')<index.indexOf('mastery-authority.js'));
+  assert.ok(index.indexOf('mastery-authority.js')<index.indexOf('competency-map.js'));
+  assert.equal(/item\\.level\\s*=/.test(index),false);
+
+  const report=inspectLegacyLearningState(x);
+  const levelCounts=report.mastery.resolved.reduce((counts,item)=>{
+    counts[item.level]=(counts[item.level]||0)+1;
+    return counts;
+  },{});
+
+  assert.equal(report.catalog?.count,360);
+  assert.equal(report.mastery.resolved.length,360);
+  assert.deepEqual(levelCounts,{0:340,2:17,3:3});
+  assert.ok(report.mastery.resolved.every(item=>
+    item.sourceKind==='mastery-authority'&&
+    item.sourcePath==='site/mastery-authority.js'
+  ));
+  assert.equal(report.mastery.conflicts.length,0);
+  assert.deepEqual(report.diagnostics.orphanClaims,[]);
+  assert.deepEqual(report.diagnostics.warnings,[]);
+  assert.equal(report.automaticEligible,true);
+
+  const sandbox=createLegacySandbox();
+  executeLegacyFile({
+    sandbox,
+    filePath:path.join(x.site,'competency-map-data.js'),
+    relativePath:'site/competency-map-data.js'
+  });
+  executeLegacyFile({
+    sandbox,
+    filePath:path.join(x.site,'mastery-authority.js'),
+    relativePath:'site/mastery-authority.js'
+  });
+  const data=sandbox.window.COMPETENCY_MAP_DATA;
+  const byId=new Map(data.groups.flatMap(group=>group.items).map(item=>[item.id,item]));
+
+  assert.equal(data.meta.updated,'22.09.2026');
+  assert.equal(byId.get('ege03_01').level,2);
+  assert.equal(byId.get('ege03_01').material.href,'../pdf_docs/14.09.26.pdf');
+
+  assert.equal(byId.get('ege08_17').level,3);
+  assert.equal(byId.get('ege08_17').repeat,false);
+  assert.equal(byId.get('ege08_17').material.href,'15.09.26.html');
+  assert.ok(byId.get('ege08_17').evidence.some(entry=>
+    entry.text.includes('15.09.26')
+  ));
+
+  assert.equal(byId.get('ege08_18').level,2);
+  assert.equal(byId.get('ege08_18').repeat,true);
+  assert.equal(byId.get('ege08_18').material.href,'15.09.26.html');
+  assert.ok(byId.get('ege08_18').evidence.some(entry=>
+    entry.text.includes('15.09.26')
+  ));
+
+  assert.equal(byId.get('ege07_13').level,2);
+  assert.equal(byId.get('ege07_13').repeat,true);
+  assert.equal(byId.get('ege07_13').material.href,'22.09.26.html');
+  assert.ok(byId.get('ege07_13').evidence.some(entry=>
+    entry.text.includes('22.09.26')
+  ));
 });
 
 test('real Mark index stays eligible under the inline mastery guard',()=>{
