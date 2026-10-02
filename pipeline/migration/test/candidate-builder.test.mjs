@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {ROOT} from '../inventory-students.mjs';
 import {buildMigrationCandidate} from '../build/candidate.mjs';
+import {renderCanonicalLessonRegistry} from '../build/lessons.mjs';
 import {extractLegacyKtp} from '../legacy/ktp-extractor.mjs';
 
 function repoRoot(){
@@ -261,4 +262,25 @@ test('real Jaroslav legacy KTP extracts all 72 rows and preserves source stage I
   assert.equal(result.plan.lessons.at(-1).id,'ktp-072');
   assert.equal(result.plan.lessons[0].stageId,'layer3');
   assert.ok(result.fieldAliases.some(item=>item.source==='check'&&item.target==='result'));
+});
+
+test('sparse canonical registry stays self-validating without invented lesson semantics',async()=>{
+  const metadataByDate=new Map([['2026-09-30',{
+    version:1,
+    studentId:'demo_student',
+    date:'2026-09-30',
+    title:'Степени. Вычисления',
+    summary:'Исторический урок без machine-readable outcomes.',
+    topics:[],
+    ktpRefs:[],
+    outcomes:[],
+    materials:{html:'30.09.26.html'}
+  }]]);
+  const source=renderCanonicalLessonRegistry({metadataByDate});
+  const url='data:text/javascript;base64,'+Buffer.from(source).toString('base64');
+  const registry=await import(url);
+  assert.equal(registry.LESSONS[0].navTitle,'Степени. Вычисления');
+  assert.deepEqual(registry.LESSONS[0].topics,[]);
+  assert.deepEqual(registry.LESSONS[0].outcomes,[]);
+  assert.deepEqual(registry.validateLessonRegistry(),{count:1,latest:'30.09.26.html'});
 });
