@@ -41,6 +41,44 @@ test('discovery unions registry and recursive filesystem and preserves nested hr
   assert.deepEqual(report.diagnostics,[]);
 });
 
+test('discovery accepts a frozen literal lesson registry without executing registry code',()=>{
+  const x=fixture();
+  const registry=fs.readFileSync(path.join(x.site,'lesson-registry.js'),'utf8');
+  const literal=registry.match(/export const LESSONS=(\[[\s\S]*\]);/)?.[1];
+  assert.ok(literal);
+  write(
+    path.join(x.site,'lesson-registry.js'),
+    'export const LESSONS=Object.freeze('+literal+');\n'
+  );
+  const report=discoverHistoricalLessons(x);
+  assert.equal(report.lessons.length,2);
+  assert.deepEqual(report.diagnostics,[]);
+});
+
+test('lesson discovery rejects chained expressions after a frozen literal registry',()=>{
+  const x=fixture();
+  write(
+    path.join(x.site,'lesson-registry.js'),
+    "export const LESSONS=Object.freeze([{date:'2026-09-30',href:'30.09.26.html'}]).map(Boolean);\n"
+  );
+  assert.throws(
+    ()=>discoverHistoricalLessons(x),
+    /Object\.freeze LESSONS wrapper must be the complete assignment expression/
+  );
+});
+
+test('lesson discovery still rejects arbitrary computed LESSONS wrappers',()=>{
+  const x=fixture();
+  write(
+    path.join(x.site,'lesson-registry.js'),
+    "export const LESSONS=buildLessons([{date:'2026-09-30',href:'30.09.26.html'}]);\n"
+  );
+  assert.throws(
+    ()=>discoverHistoricalLessons(x),
+    /LESSONS must be an array literal/
+  );
+});
+
 test('filesystem-only dated lesson remains part of historical coverage',()=>{
   const x=fixture();
   write(path.join(x.site,'lessons','21-05-26.html'),'<!doctype html><h1>Unregistered</h1>');
@@ -108,6 +146,14 @@ test('manifest cannot omit a nested historical lesson',()=>{
   );
 });
 
+
+test('real Nikol frozen registry is readable and covers every dated lesson HTML',()=>{
+  const report=discoverHistoricalLessons({root:ROOT,studentId:'nikol_sarkisyants'});
+  const inventory=inspectStudent(ROOT,'nikol_sarkisyants');
+  assert.equal(report.lessons.length,22);
+  assert.equal(inventory.counts.lessonHtml,22);
+  assert.deepEqual(report.diagnostics,[]);
+});
 
 test('real Timofey history includes nested lessons and inventory sees the same dated HTML surface',()=>{
   const report=discoverHistoricalLessons({root:ROOT,studentId:'timofey'});
