@@ -3,16 +3,16 @@
 > **Current implementation state — 2026-10-02**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **20 / 24** кабинетов; rolling-clean и fixed-KTP waves завершены;
+> - Student Platform v2: **21 / 24** кабинетов; rolling-clean и fixed-KTP waves завершены;
 > - текущий этап: **reconciliation wave** для оставшихся legacy-structured источников;
-> - `ekaterina_gnedkova` и `sofya_khomenko` reconciled и мигрированы в v2;
-> - следующий reconciliation gate завершён для `kristina`: inline overlays 15.09/22.09 вынесены в явный `mastery-authority.js` после repository state 14.09 и до инициализации `competency-map.js`;
-> - real-source result Кристины: **360/360 competencies**, **360/360 mastery**, распределение **340×0 + 17×2 + 3×3**, conflicts/orphans/warnings=0, `automaticEligible=true`;
-> - regression также фиксирует runtime semantics: исходный 14.09 material сохраняется, dated 15.09/22.09 overlays сохраняют levels, repeat, evidence и material links;
-> - следующий gate: отдельная Student Platform v2 migration `kristina` после merge reconciliation PR;
-> - architecture baseline пока остаётся **v2=20 / non-v2=4**, `legacy-structured=4`, `legacy-ktp=0`;
+> - `ekaterina_gnedkova`, `sofya_khomenko` и `kristina` reconciled и мигрированы в v2;
+> - migration result Кристины: **2/2 historical lessons, 360/360 competencies, 360/360 mastery**, материалы 2 HTML / 2 PDF / 2 TeX / 0 lab;
+> - mastery distribution сохранён точно: **340×0 + 17×2 + 3×3**; conflicts/orphans=0, warnings/reviewItems/blockers=[], protectedFilesChanged=[];
+> - runtime legacy semantics также защищены regression-тестом: 14.09 material и dated 15.09/22.09 levels/repeat/evidence/material сохраняются;
+> - architecture ratchet: **v2=21 / non-v2=3**, `legacy-structured=3`, `legacy-ktp=0`;
 > - `darya_savenkova` остаётся автоматически ready, но отложена из-за роли design reference;
-> - после Кристины remaining reconciliation targets: `matvey_gorbachev`, `nastya_pavlova`;
+> - remaining reconciliation targets: `matvey_gorbachev`, `nastya_pavlova`;
+> - следующий gate выбирается после свежего post-merge readiness и сравнения complexity/runtime semantics двух оставшихся inline overlays;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
