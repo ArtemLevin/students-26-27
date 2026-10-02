@@ -10,6 +10,7 @@ const SOURCE_PRIORITY={
   'stage04-mastery':60,
   'teacher-mastery':50,
   'mastery-authority':40,
+  'linked-progress-overlay':35,
   'dashboard-data':30,
   'teacher-seed':20,
   'baseline-levels':10
@@ -69,6 +70,21 @@ function catalogFromValue(value){
   }
   if(!items.length)return null;
   return items;
+}
+function catalogLevelsFromValue(value){
+  const groups=Array.isArray(value)?value:plainObject(value)&&Array.isArray(value.groups)?value.groups:null;
+  if(!groups)return null;
+  const levels={};
+  for(const group of groups){
+    if(!group||!Array.isArray(group.items))continue;
+    for(const item of group.items){
+      if(!item||typeof item.id!=='string'||!item.id)continue;
+      const level=Number(item.level);
+      if(!Number.isInteger(level)||level<LEVEL_MIN||level>LEVEL_MAX)continue;
+      levels[item.id]=level;
+    }
+  }
+  return Object.keys(levels).length?levels:null;
 }
 function addCatalogCandidate(target,{sourcePath,symbol,value}){
   const items=catalogFromValue(value);
@@ -250,7 +266,7 @@ function findAlias(previousObjects,value,kinds=null){
     sameObject(item.value,value)&&(!kinds||kinds.includes(item.kind))
   )||null;
 }
-function claimsFromExecution({source,result,previousObjects,sandbox}){
+function claimsFromExecution({source,result,previousObjects,sandbox,beforeLinkedProgressLevels=null}){
   const claims=[],aliases=[],indirectSources=[];
   const c=result.captures;
   const explicitMasteryIds=new Set(levelEntries(c.teacherMastery).map(([id])=>id));
@@ -347,6 +363,24 @@ function claimsFromExecution({source,result,previousObjects,sandbox}){
       sourceKind:'stage04-mastery',
       sourceSymbol:'stage04Mastery'
     });
+  }
+
+  if(source.name==='linked-progress-overlay'&&beforeLinkedProgressLevels){
+    const afterLevels=catalogLevelsFromValue(sandbox.window.COMPETENCY_MAP_DATA);
+    if(afterLevels){
+      for(const [competencyId,level] of Object.entries(afterLevels)){
+        if(!Object.prototype.hasOwnProperty.call(beforeLinkedProgressLevels,competencyId))continue;
+        if(beforeLinkedProgressLevels[competencyId]===level)continue;
+        claims.push(claim({
+          competencyId,
+          level,
+          sourcePath:source.relativePath,
+          sourceKind:'linked-progress-overlay',
+          sourceSymbol:'COMPETENCY_MAP_DATA.groups[*].items[*].level',
+          resolution:'runtime-delta'
+        }));
+      }
+    }
   }
 
   return {claims,aliases,indirectSources};
@@ -668,6 +702,15 @@ export function inspectLegacyLearningState({root=process.cwd(),studentId}={}){
 
   for(const source of sources){
     let result;
+    const beforeLinkedProgressLevels=source.name==='linked-progress-overlay'
+      ?catalogLevelsFromValue(sandbox.window.COMPETENCY_MAP_DATA)
+      :null;
+    if(source.name==='linked-progress-overlay'&&!beforeLinkedProgressLevels){
+      warnings.push({
+        type:'linked-progress-catalog-missing',
+        sourcePath:source.relativePath
+      });
+    }
     sandbox.documentWrites.splice(0);
     try{
       result=executeLegacyFile({
@@ -716,7 +759,8 @@ export function inspectLegacyLearningState({root=process.cwd(),studentId}={}){
       source,
       result,
       previousObjects,
-      sandbox
+      sandbox,
+      beforeLinkedProgressLevels
     });
     claims.push(...extracted.claims);
     aliases.push(...extracted.aliases);
@@ -807,6 +851,7 @@ export function inspectLegacyLearningState({root=process.cwd(),studentId}={}){
       'legacy-catalog-not-found',
       'catalog-transform-failed',
       'inline-mastery-mutation-unresolved',
+      'linked-progress-catalog-missing',
       'document-write-script-depth-exceeded',
       'document-write-script-unsupported',
       'document-write-script-outside-student',
