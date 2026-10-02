@@ -99,22 +99,24 @@ function assertCoreState(){
   assert.equal(LEVEL_DESCRIPTIONS.length,5);
 }
 
-function loadCatalog(root,spec){
+function loadCatalog(root,spec,transform=null){
+  let groups;
   if(spec.kind==='json-assignment'){
     const text=fs.readFileSync(path.join(root,spec.path),'utf8'),index=text.indexOf('=');
-    return normalizeGroups(JSON.parse(text.slice(index+1).replace(/;\s*$/,'')));
-  }
-  if(spec.kind==='window-script'){
+    groups=JSON.parse(text.slice(index+1).replace(/;\s*$/,''));
+  }else if(spec.kind==='window-script'){
     const text=fs.readFileSync(path.join(root,spec.path),'utf8'),sandbox={window:{}};
     vm.createContext(sandbox);
     vm.runInContext(text,sandbox,{timeout:1000});
-    return normalizeGroups(sandbox.window[spec.global].groups||sandbox.window[spec.global]);
+    groups=sandbox.window[spec.global].groups||sandbox.window[spec.global];
+  }else{
+    const text=fs.readFileSync(path.join(root,spec.path),'utf8');
+    groups=evaluateCatalogExpression(extractArrayExpression(text,spec.names||['groups','GROUPS']));
   }
-  const text=fs.readFileSync(path.join(root,spec.path),'utf8');
-  return normalizeGroups(evaluateCatalogExpression(extractArrayExpression(text,spec.names||['groups','GROUPS'])));
+  return normalizeGroups(transform?transform(groups):groups);
 }
 
-export async function runDashboardTests({student,catalog,stateKey,storageKey}){
+export async function runDashboardTests({student,catalog,stateKey,storageKey,catalogTransform=null}){
   const root=process.cwd(),site=path.join(root,'students',student,'site');
   assert.ok(fs.existsSync(path.join(site,'index.html')),`${student}: index missing`);
   const registry=await loadRegistry(site),lessons=registry.LESSONS;
@@ -149,7 +151,7 @@ export async function runDashboardTests({student,catalog,stateKey,storageKey}){
   for(const token of ['schemaVersion','studentLevels','reviewQueue','ArrowLeft','Home','restoreDialogFocus','LEVEL_DESCRIPTIONS','createAuthoritativeLevels','Уровень задаётся опубликованным состоянием GitHub'])assert.ok(mapCode.includes(token),`${student}: map invariant ${token}`);
   assert.ok(!mapCode.includes('this.state.studentLevels[this.active]='),`${student}: mastery must not be locally editable`);
 
-  const groups=loadCatalog(root,catalog),meta=validateCatalog(groups),items=groups.flatMap(group=>group.items);
+  const groups=loadCatalog(root,catalog,catalogTransform),meta=validateCatalog(groups),items=groups.flatMap(group=>group.items);
   assert.ok(meta.groups>0&&meta.items>0,`${student}: catalog must be non-empty`);
   assert.equal(new Set(items.map(item=>item.id)).size,items.length,`${student}: competency ids unique`);
   const seeded=new MemoryStorage(),merged=mergeState(groups,seeded,{stateKey:'probe-v2',storageKey:'probe-v1',baselineKey:'probe-baseline',teacherSeed:{},legacyStorageKeys:[]});
