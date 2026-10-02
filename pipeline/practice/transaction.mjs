@@ -124,7 +124,8 @@ export function executeStage04Transaction({
   practicePatch,
   masteryPatch,
   dryRun=false,
-  faultInjector=null
+  faultInjector=null,
+  postflight=null
 }={}){
   const plan=buildStage04TransactionPlan({contracts,practicePatch,masteryPatch});
   if(dryRun){
@@ -138,7 +139,7 @@ export function executeStage04Transaction({
   const result=executeAtomicPlan({
     root:contracts.root,
     plan,
-    postflight:({root,plan})=>verifyStage04Transaction({root,plan,contracts}),
+    postflight:postflight||(({root,plan})=>verifyStage04Transaction({root,plan,contracts})),
     faultInjector,
     StaleError:StaleStage04PlanError,
     planLabel:'Stage 04',
