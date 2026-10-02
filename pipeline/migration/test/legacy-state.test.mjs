@@ -492,6 +492,14 @@ test('real Sofya Khomenko source externalizes dated inline mastery into explicit
     );
   }
 
+  const index=fs.readFileSync(
+    path.join(ROOT,'students','sofya_khomenko','site','index.html'),
+    'utf8'
+  );
+  assert.ok(index.indexOf('competency-map-data.js')<index.indexOf('mastery-authority.js'));
+  assert.ok(index.indexOf('mastery-authority.js')<index.indexOf('competency-map.js'));
+  assert.equal(/item\\.level\\s*=/.test(index),false);
+
   const report=inspectLegacyLearningState(x);
   const levelCounts=report.mastery.resolved.reduce((counts,item)=>{
     counts[item.level]=(counts[item.level]||0)+1;
