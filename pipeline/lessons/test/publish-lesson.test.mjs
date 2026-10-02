@@ -152,7 +152,7 @@ test('normalizes public lesson date formats',()=>{
 
 test('registry-backed publication upserts lesson and cache version idempotently',async()=>{
   const {root,site}=tempRepo();
-  const first=await publishLesson({root,student:'demo_student',date:'29.09.26',verifyChanges:false});
+  const first=await publishLesson({root,student:'demo_student',date:'29.09.26',legacyRecovery:true,verifyChanges:false});
   assert.equal(first.mode,'registry-upsert');
   assert.deepEqual(first.changedFiles.sort(),['students/demo_student/site/dashboard.js','students/demo_student/site/lesson-registry.js']);
   const registry=fs.readFileSync(path.join(site,'lesson-registry.js'),'utf8');
@@ -160,14 +160,14 @@ test('registry-backed publication upserts lesson and cache version idempotently'
   assert.match(registry,/"pdf": "\.\.\/pdf_docs\/29\.09\.26\.pdf"/);
   assert.match(registry,/"tex": "\.\.\/tex_docs\/29\.09\.26\.tex"/);
   assert.match(fs.readFileSync(path.join(site,'dashboard.js'),'utf8'),/lesson-registry\.js\?v=20260929/);
-  const second=await publishLesson({root,student:'demo_student',date:'2026-09-29',verifyChanges:false});
+  const second=await publishLesson({root,student:'demo_student',date:'2026-09-29',legacyRecovery:true,verifyChanges:false});
   assert.deepEqual(second.changedFiles,[]);
 });
 
 test('existing lesson metadata survives a publication rerun',async()=>{
   const {root,site}=tempRepo();
   fs.writeFileSync(path.join(site,'lesson-registry.js'),"export const RECENT_LIMIT=3;\nexport const ARCHIVE_PAGE_SIZE=10;\nexport const LESSONS=[\n{date:'2026-09-29',href:'29.09.26.html',title:'Новый урок',navTitle:'Коротко',navSubtitle:'Подзаголовок',summary:'Сводка',topics:['Тема'],outcomes:[{label:'Навык',practiceDisposition:'manual'}],materials:{}},\n{date:'2026-09-28',href:'28.09.26.html',title:'Старый урок',navTitle:'Старый',navSubtitle:'старое',summary:'старое',topics:[],outcomes:[],materials:{}}\n];\n");
-  await publishLesson({root,student:'demo_student',date:'29.09.26',verifyChanges:false});
+  await publishLesson({root,student:'demo_student',date:'29.09.26',legacyRecovery:true,verifyChanges:false});
   const registry=fs.readFileSync(path.join(site,'lesson-registry.js'),'utf8');
   assert.match(registry,/"label": "Навык"/);
   assert.match(registry,/"practiceDisposition": "manual"/);
@@ -177,7 +177,7 @@ test('existing lesson metadata survives a publication rerun',async()=>{
 test('dry-run reports registry changes without writing them',async()=>{
   const {root,site}=tempRepo();
   const before=fs.readFileSync(path.join(site,'lesson-registry.js'),'utf8');
-  const result=await publishLesson({root,student:'demo_student',date:'29.09.26',verifyChanges:false,dryRun:true});
+  const result=await publishLesson({root,student:'demo_student',date:'29.09.26',legacyRecovery:true,verifyChanges:false,dryRun:true});
   assert.equal(result.dryRun,true);
   assert.ok(result.changedFiles.includes('students/demo_student/site/lesson-registry.js'));
   assert.equal(fs.readFileSync(path.join(site,'lesson-registry.js'),'utf8'),before);
@@ -194,14 +194,14 @@ test('bespoke publication requires index registration',async()=>{
 
 test('publication refuses an incomplete student scaffold',async()=>{
   const {root}=tempRepo({design:false});
-  await assert.rejects(()=>publishLesson({root,student:'demo_student',date:'29.09.26',verifyChanges:false}),/New students must be created with node scripts\/create-student\.mjs/);
+  await assert.rejects(()=>publishLesson({root,student:'demo_student',date:'29.09.26',legacyRecovery:true,verifyChanges:false}),/New students must be created with node scripts\/create-student\.mjs/);
 });
 
 test('verification failure rolls back registry and dashboard writes',async()=>{
   const {root,site}=tempRepo();
   const registryPath=path.join(site,'lesson-registry.js'),dashboardPath=path.join(site,'dashboard.js');
   const beforeRegistry=fs.readFileSync(registryPath,'utf8'),beforeDashboard=fs.readFileSync(dashboardPath,'utf8');
-  await assert.rejects(()=>publishLesson({root,student:'demo_student',date:'29.09.26'}),/Publication changes were rolled back/);
+  await assert.rejects(()=>publishLesson({root,student:'demo_student',date:'29.09.26',legacyRecovery:true}),/Publication changes were rolled back/);
   assert.equal(fs.readFileSync(registryPath,'utf8'),beforeRegistry);
   assert.equal(fs.readFileSync(dashboardPath,'utf8'),beforeDashboard);
 });
@@ -225,6 +225,7 @@ test('CLI parses --intent without changing legacy positional syntax',()=>{
       intentPath:'intent.json',
       dryRun:true,
       verifyChanges:true,
+      legacyRecovery:false,
       help:false
     }
   );
@@ -310,12 +311,31 @@ test('v2 dispatch rejects intent for a different lesson date before writes',asyn
   assert.equal(fs.readFileSync(x.statePath,'utf8'),beforeState);
 });
 
-test('legacy publication ignores v2 dispatch and preserves the established workflow',async()=>{
+test('steady-state publication fails closed when student-contract.json is missing',async()=>{
+  const {root}=tempRepo();
+  await assert.rejects(
+    ()=>publishLesson({
+      root,
+      student:'demo_student',
+      date:'29.09.26',
+      verifyChanges:false
+    }),
+    /Steady-state publication is v2-only/
+  );
+});
+
+test('legacy recovery remains available only through explicit opt-in',()=>{
+  const parsed=parseArgs(['demo_student','29.09.26','--legacy-recovery']);
+  assert.equal(parsed.legacyRecovery,true);
+});
+
+test('explicit legacy recovery preserves the historical publication workflow',async()=>{
   const {root}=tempRepo();
   const result=await publishLesson({
     root,
     student:'demo_student',
     date:'29.09.26',
+    legacyRecovery:true,
     verifyChanges:false
   });
   assert.equal(result.architecture,'legacy');
