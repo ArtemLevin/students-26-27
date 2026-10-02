@@ -10,10 +10,17 @@ export function evaluateArchitectureRatchet(report,baseline){
   if(!baseline||baseline.version!==1)throw new Error('Unsupported migration baseline');
   const v2=report.summary.byArchitecture.v2||0;
   const nonV2=report.summary.total-v2;
+  const modernShared=report.summary.byArchitecture['modern-shared']||0;
   const violations=[];
 
   if(v2<baseline.minV2)violations.push('v2 count regressed: '+v2+' < baseline '+baseline.minV2);
   if(nonV2>baseline.maxNonV2)violations.push('non-v2 count increased: '+nonV2+' > baseline '+baseline.maxNonV2);
+  if(baseline.byArchitecture&&typeof baseline.byArchitecture==='object'){
+    const maxModernShared=baseline.byArchitecture['modern-shared']||0;
+    if(modernShared>maxModernShared){
+      violations.push('modern-shared count increased: '+modernShared+' > baseline '+maxModernShared);
+    }
+  }
 
   const improved=v2>baseline.minV2||nonV2<baseline.maxNonV2;
   if(improved&&(baseline.minV2!==v2||baseline.maxNonV2!==nonV2)){
@@ -23,7 +30,7 @@ export function evaluateArchitectureRatchet(report,baseline){
     );
   }
 
-  return {ok:violations.length===0,v2,nonV2,total:report.summary.total,violations};
+  return {ok:violations.length===0,v2,nonV2,modernShared,total:report.summary.total,violations};
 }
 
 export function auditArchitectureRatchet({root=ROOT,baselinePath=DEFAULT_BASELINE}={}){
