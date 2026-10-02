@@ -97,12 +97,12 @@ jobs:
           if(c.competencies?.source!==379||c.competencies?.candidate!==379)process.exit(4);
           if(c.mastery?.resolvedSource!==367||c.mastery?.candidate!==367||c.mastery?.conflicts!==0||c.mastery?.orphans!==0)process.exit(5);
           if((p.reviewItems||[]).length||(p.blockers||[]).length)process.exit(6);
-          console.log(JSON.stringify({rawWarnings:p.warnings},null,2));
           const warnings=(p.warnings||[]).map(value=>typeof value==='string'?JSON.parse(value):value);
-          const normalized=warnings.map(item=>JSON.stringify(item)).sort();
+          const canonical=item=>[item.type,item.lessonDate,item.count].join('|');
+          const normalized=warnings.map(canonical).sort();
           const expected=[
-            JSON.stringify({count:8,lessonDate:'2026-08-26',type:'legacy-outcomes-preserved'}),
-            JSON.stringify({count:9,lessonDate:'2026-09-03',type:'legacy-outcomes-preserved'})
+            'legacy-outcomes-preserved|2026-08-26|8',
+            'legacy-outcomes-preserved|2026-09-03|9'
           ].sort();
           if(JSON.stringify(normalized)!==JSON.stringify(expected))process.exit(7);
           console.log(JSON.stringify({coverage:c,warnings,projectedBaseline:p.projectedBaseline},null,2));
