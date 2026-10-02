@@ -596,6 +596,103 @@ test('real Kristina source externalizes dated mastery while preserving runtime l
   ));
 });
 
+test('real Nastya Pavlova source reconciles ID overlays before root EGE-2027 runtime transform',()=>{
+  const x=fixture('nastya_pavlova_reconciled_fixture');
+  const studentRoot=path.join(x.root,'students',x.studentId);
+
+  for(const name of ['competency-map-data.js','mastery-authority.js','competency-map.js']){
+    write(
+      path.join(studentRoot,name),
+      fs.readFileSync(path.join(ROOT,'students','nastya_pavlova',name),'utf8')
+    );
+  }
+  for(const name of ['index.html','stage04-mastery.js']){
+    write(
+      path.join(x.site,name),
+      fs.readFileSync(path.join(ROOT,'students','nastya_pavlova','site',name),'utf8')
+    );
+  }
+
+  const index=fs.readFileSync(
+    path.join(ROOT,'students','nastya_pavlova','site','index.html'),
+    'utf8'
+  );
+  assert.ok(index.indexOf('../competency-map-data.js')<index.indexOf('../mastery-authority.js'));
+  assert.ok(index.indexOf('../mastery-authority.js')<index.indexOf('../competency-map.js'));
+  assert.equal(/item\\.level\\s*=/.test(index),false);
+
+  const report=inspectLegacyLearningState(x);
+  const ids=new Set(report.catalog?.ids||[]);
+  const levelCounts=report.mastery.resolved.reduce((counts,item)=>{
+    counts[item.level]=(counts[item.level]||0)+1;
+    return counts;
+  },{});
+
+  assert.equal(report.catalog?.count,379);
+  assert.equal(report.mastery.resolved.length,367);
+  assert.deepEqual(levelCounts,{0:314,2:53});
+  assert.ok(report.mastery.resolved.every(item=>
+    item.sourceKind==='mastery-authority'&&
+    item.sourcePath==='mastery-authority.js'
+  ));
+  for(const id of [
+    'ege2027_t6_random_variable',
+    'ege2027_t6_variance',
+    'ege2027_t6_stddev',
+    'ege2027_t17_variables',
+    'ege2027_t17_optimization',
+    'ege2027_t17_interpretation'
+  ])assert.equal(ids.has(id),true,id);
+  assert.ok(report.diagnostics.catalogTransforms.some(item=>
+    item.transform==='ege-profile-2027'&&
+    item.runtimeSourcePath==='competency-map.js'
+  ));
+  assert.equal(report.mastery.conflicts.length,0);
+  assert.deepEqual(report.diagnostics.orphanClaims,[]);
+  assert.deepEqual(report.diagnostics.warnings,[]);
+  assert.equal(report.automaticEligible,true);
+
+  const sandbox=createLegacySandbox();
+  executeLegacyFile({
+    sandbox,
+    filePath:path.join(studentRoot,'competency-map-data.js'),
+    relativePath:'competency-map-data.js'
+  });
+  executeLegacyFile({
+    sandbox,
+    filePath:path.join(studentRoot,'mastery-authority.js'),
+    relativePath:'mastery-authority.js'
+  });
+  const data=sandbox.window.COMPETENCY_MAP_DATA;
+  const byId=new Map(data.groups.flatMap(group=>group.items).map(item=>[item.id,item]));
+
+  assert.equal(Object.keys(sandbox.window.STUDENT_MASTERY_AUTHORITY.levels).length,367);
+  assert.equal(data.lesson.date,'28.09.26');
+  assert.equal(data.lesson.title,'Круговая трасса, движение по воде и средняя скорость');
+  assert.equal(data.lesson.pdf,'site/28.09.26.html');
+  assert.equal(data.lesson.tex,'tex_docs/28.09.26.tex');
+
+  assert.equal(byId.get('calc_01').level,2);
+  assert.equal(byId.get('calc_01').evidence.href,'pdf_docs/26.08.26.pdf');
+
+  assert.equal(byId.get('eq_09').level,2);
+  assert.equal(byId.get('eq_09').status,'covered');
+  assert.equal(byId.get('eq_09').evidence.href,'14.09.26.html');
+
+  assert.equal(byId.get('func_01').level,2);
+  assert.equal(byId.get('func_01').evidence.href,'17.09.26.html');
+
+  assert.equal(byId.get('vec_01').level,2);
+  assert.equal(byId.get('vec_01').evidence.href,'21.09.26.html');
+
+  assert.equal(byId.get('text_01').level,2);
+  assert.equal(byId.get('text_01').evidence.href,'24.09.26.html');
+
+  assert.equal(byId.get('text_05').level,2);
+  assert.equal(byId.get('text_05').evidence.href,'28.09.26.html');
+  assert.equal(byId.get('text_20').evidence.href,'28.09.26.html');
+});
+
 test('real Mark index stays eligible under the inline mastery guard',()=>{
   const x=fixture('mark_inline_guard_fixture');
   for(const name of ['competency-map-data.js','index.html']){

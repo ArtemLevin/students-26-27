@@ -6,13 +6,14 @@
 > - Student Platform v2: **21 / 24** кабинетов; rolling-clean и fixed-KTP waves завершены;
 > - текущий этап: **reconciliation wave** для оставшихся legacy-structured источников;
 > - `ekaterina_gnedkova`, `sofya_khomenko` и `kristina` reconciled и мигрированы в v2;
-> - migration result Кристины: **2/2 historical lessons, 360/360 competencies, 360/360 mastery**, материалы 2 HTML / 2 PDF / 2 TeX / 0 lab;
-> - mastery distribution сохранён точно: **340×0 + 17×2 + 3×3**; conflicts/orphans=0, warnings/reviewItems/blockers=[], protectedFilesChanged=[];
-> - runtime legacy semantics также защищены regression-тестом: 14.09 material и dated 15.09/22.09 levels/repeat/evidence/material сохраняются;
-> - architecture ratchet: **v2=21 / non-v2=3**, `legacy-structured=3`, `legacy-ktp=0`;
+> - следующий reconciliation gate завершён для `nastya_pavlova`: шесть ID-based lesson overlays 10.09–28.09 вынесены из `site/index.html` в явный root `mastery-authority.js`;
+> - inspector теперь воспроизводит фактический root `competency-map.js` runtime path: ordered legacy groups → EGE-2027 transform; raw 367-ID catalog корректно становится **379-ID runtime catalog**;
+> - real-source result Насти: **379 competencies**, **367 repository-authored mastery records**, распределение **314×0 + 53×2**, 12 runtime-added EGE-2027 competencies остаются без override и с default level 0;
+> - regression фиксирует runtime semantics всех dated overlays: status/evidence/hrefs и финальный lesson metadata 28.09 сохраняются; conflicts/orphans/warnings=0, `automaticEligible=true`;
+> - следующий gate: отдельная Student Platform v2 migration `nastya_pavlova` после merge reconciliation PR;
+> - architecture baseline пока остаётся **v2=21 / non-v2=3**, `legacy-structured=3`, `legacy-ktp=0`;
 > - `darya_savenkova` остаётся автоматически ready, но отложена из-за роли design reference;
-> - remaining reconciliation targets: `matvey_gorbachev`, `nastya_pavlova`;
-> - следующий gate выбирается после свежего post-merge readiness и сравнения complexity/runtime semantics двух оставшихся inline overlays;
+> - после Насти remaining reconciliation target: `matvey_gorbachev`;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
