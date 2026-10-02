@@ -187,7 +187,8 @@ export async function publishLesson({
   intent=null,
   dryRun=false,
   verifyChanges=true,
-  v2Postflight=null
+  v2Postflight=null,
+  legacyRecovery=false
 }={}){
   if(!student||!date)throw new Error('Student and lesson date are required.');
   requireScaffold(root,student);
@@ -195,13 +196,20 @@ export async function publishLesson({
   if(fs.existsSync(contractPath)){
     return publishV2Lesson({root,student,date,intentPath,intent,dryRun,verifyChanges,postflight:v2Postflight});
   }
+  if(!legacyRecovery){
+    throw new Error(
+      student+': student-contract.json is missing. Steady-state publication is v2-only. '+
+      'Use --legacy-recovery only for an explicitly reviewed historical recovery workflow.'
+    );
+  }
   return publishLegacyLesson({root,student,date,dryRun,verifyChanges});
 }
 export function parseArgs(argv){
-  const out={student:null,date:null,intentPath:null,dryRun:false,verifyChanges:true,help:false};
+  const out={student:null,date:null,intentPath:null,dryRun:false,verifyChanges:true,legacyRecovery:false,help:false};
   for(let index=0;index<argv.length;index+=1){
     const token=argv[index];
     if(token==='--dry-run')out.dryRun=true;
+    else if(token==='--legacy-recovery')out.legacyRecovery=true;
     else if(token==='--help'||token==='-h')out.help=true;
     else if(token==='--intent'){
       const value=argv[index+1];
@@ -213,11 +221,11 @@ export function parseArgs(argv){
     else throw new Error(`Unexpected argument: ${token}`);
   }
   if(!out.help){
-    if(!out.student||!out.date)throw new Error('Usage: node scripts/publish-lesson.mjs <student> <DD.MM.YY|YYYY-MM-DD> [--intent <file>] [--dry-run]');
+    if(!out.student||!out.date)throw new Error('Usage: node scripts/publish-lesson.mjs <student> <DD.MM.YY|YYYY-MM-DD> [--intent <file>] [--dry-run] [--legacy-recovery]');
     validateSlug(out.student);normalizeLessonDate(out.date);
   }
   return out;
 }
-export function helpText(){return 'Usage: node scripts/publish-lesson.mjs <student> <DD.MM.YY|YYYY-MM-DD> [--intent <file>] [--dry-run]\nStudent Platform v2 students require --intent <file>. Legacy students keep the existing publication workflow. Production verification cannot be disabled from the CLI.\n';}
+export function helpText(){return 'Usage: node scripts/publish-lesson.mjs <student> <DD.MM.YY|YYYY-MM-DD> [--intent <file>] [--dry-run] [--legacy-recovery]\nSteady-state publication requires Student Platform v2 and --intent <file>. --legacy-recovery is reserved for explicitly reviewed historical recovery. Production verification cannot be disabled from the CLI.\n';}
 const main=process.argv[1]&&path.resolve(process.argv[1])===path.resolve(fileURLToPath(import.meta.url));
 if(main){try{const options=parseArgs(process.argv.slice(2));if(options.help)process.stdout.write(helpText());else process.stdout.write(`${JSON.stringify(await publishLesson(options),null,2)}\n`);}catch(error){process.stderr.write(`publish-lesson: ${error.message}\n`);process.exitCode=1;}}
