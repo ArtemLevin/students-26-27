@@ -931,43 +931,37 @@ DATE.html и DATE-lab.html должны оставаться переносим�
 
 ---
 
-## 28. Обновление STUDENT_DIR/index.html
+## 28. Интеграция занятия в кабинет
 
-После создания занятия определить архитектуру кабинета.
+Student Platform v2 использует canonical lesson metadata и `lesson-registry.js` как presentation projection. Новое занятие не регистрировать ручным добавлением карточки/metadata в `index.html`.
 
-### Registry-backed кабинет
+До publication:
+- `DATE.html` должен существовать;
+- `DATE-lab.html` подключать только при фактическом наличии;
+- PDF/TeX/image refs добавлять только для существующих файлов;
+- KTP mapping и competency evidence должны быть подготовлены;
+- publication intent должен ссылаться только на реальные KTP IDs, competency IDs и HTML evidence anchors.
 
-Если существует `STUDENT_DIR/lesson-registry.js`, список последних/архивных занятий должен оставаться производным от registry. Не добавлять вручную дублирующую lesson metadata в index/dashboard.
-
-После реализации страницы запустить:
+Publication выполняется только через:
 
 ```bash
-node scripts/publish-lesson.mjs STUDENT DATE
+node scripts/publish-lesson.mjs STUDENT DATE \
+  --intent PATH_TO_PUBLICATION_INTENT \
+  --dry-run
 ```
 
-Helper регистрирует занятие и проверяет parity.
+и после чистого dry-run:
 
-### Bespoke кабинет
+```bash
+node scripts/publish-lesson.mjs STUDENT DATE \
+  --intent PATH_TO_PUBLICATION_INTENT
+```
 
-Если `lesson-registry.js` отсутствует, изучить существующий `index.html` и `design-system/REFERENCE_DARYA.md`, затем обновить index в его текущей архитектуре.
+После publication проверить, что кабинет отображает новый lesson record из registry/canonical metadata ровно один раз, старые занятия сохранились, ссылки на материалы корректны, а KTP state соответствует фактическому mapping.
 
-Новый блок должен наследовать дизайн index.html. Если задача включает полный redesign index.html, использовать Дарью как reference grammar/quality bar и сохранить минимум три отличающиеся expression axes. Не переносить туда насильно palette или композицию DATE.html.
+`index.html` изменять только если текущая архитектура кабинета действительно требует presentation/UX-правки, которую registry/runtime не покрывает. Такое изменение не должно создавать второй source of truth для lesson history, heatmap или mastery.
 
-Добавить только применимые элементы:
-- тему;
-- дату;
-- краткое образовательное описание;
-- ссылку на DATE.html;
-- ссылку на DATE-lab.html при наличии;
-- «Скачать пособие» при наличии PDF;
-- TeX при наличии, если это принято на текущей странице.
-
-Не менять другие карточки, тепловую карту и общую навигацию без необходимости.
-
-После изменения index также запустить `node scripts/publish-lesson.mjs STUDENT DATE`: helper подтверждает, что bespoke index действительно зарегистрировал новую страницу.
-
-
----
+Mastery/heatmap levels не обновлять вручную из факта наличия новой страницы. Для этого используется evidence + применимый Stage 04.
 
 ## 29. Objective UX/UI gates
 
@@ -1146,19 +1140,23 @@ Helper регистрирует занятие и проверяет parity.
 14. Реализовать MathML, визуализации и интерактивность.
 15. Реализовать quiz, самопроверку, responsive и print.
 16. Подключить только существующие локальные материалы.
-17. Для bespoke кабинета обновить STUDENT_DIR/index.html; registry-backed index не дублировать вручную.
-18. Выполнить `node scripts/publish-lesson.mjs STUDENT DATE` и устранить все publication-contract failures.
-19. Если применим Stage 04 — выполнить его после базовой публикации и проверить zero unexpected drift.
-20. Выполнить Objective UX/UI gates.
-21. Выполнить Anti-slop audit и screenshot review.
-22. Исправить найденные дефекты.
-23. Повторить затронутые gates и publication helper при изменении publication artifacts.
-24. Проверить итоговый diff.
-25. Commit / push / PR.
-26. Дождаться успешных применимых CI checks; при failure установить root cause и исправить.
-27. Merge в main.
-28. Проверить post-merge CI на merge commit.
-29. Подготовить отчёт.
+17. Сопоставить урок с KTP через `pipeline/prompts/map_lesson_to_ktp.md`.
+18. Извлечь competency evidence через `pipeline/prompts/extract_lesson_evidence.md` и проверить реальные HTML anchors.
+19. Собрать reviewed `lesson-publication-intent-v1`.
+20. Выполнить `node scripts/publish-lesson.mjs STUDENT DATE --intent PATH_TO_PUBLICATION_INTENT --dry-run` и устранить review/conflict/warning blockers.
+21. Выполнить transactional publication той же командой без `--dry-run`.
+22. Если применим Stage 04 — выполнить `post-lesson-practice.mjs` сначала в dry-run, затем apply; проверить zero unexpected drift.
+23. Выполнить Objective UX/UI gates.
+24. Выполнить Anti-slop audit и screenshot review.
+25. Исправить найденные дефекты.
+26. Если менялись lesson HTML/evidence/publication artifacts, повторить затронутые gates от нового snapshot.
+27. Выполнить Student Platform validation/audit и применимые Practice/Stage 04 tests.
+28. Проверить итоговый diff.
+29. Commit / push / PR.
+30. Дождаться успешных применимых CI checks; при failure установить root cause и исправить.
+31. Merge в main.
+32. Проверить post-merge CI/deployment на merge commit.
+33. Подготовить отчёт.
 
 Нельзя заявлять READY / опубликовано, если обязательный scaffolder/publish contract или применимый CI gate завершился ошибкой.
 
