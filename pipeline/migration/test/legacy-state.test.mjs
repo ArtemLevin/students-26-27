@@ -483,6 +483,34 @@ test('real Kristina index is blocked until inline repository mastery is reconcil
   assert.equal(report.automaticEligible,false);
 });
 
+test('real Sofya Khomenko source externalizes dated inline mastery into explicit authority',()=>{
+  const x=fixture('sofya_khomenko_reconciled_fixture');
+  for(const name of ['competency-map-data.js','mastery-authority.js','index.html']){
+    write(
+      path.join(x.site,name),
+      fs.readFileSync(path.join(ROOT,'students','sofya_khomenko','site',name),'utf8')
+    );
+  }
+
+  const report=inspectLegacyLearningState(x);
+  const levelCounts=report.mastery.resolved.reduce((counts,item)=>{
+    counts[item.level]=(counts[item.level]||0)+1;
+    return counts;
+  },{});
+
+  assert.equal(report.catalog?.count,343);
+  assert.equal(report.mastery.resolved.length,343);
+  assert.deepEqual(levelCounts,{0:283,2:60});
+  assert.ok(report.mastery.resolved.every(item=>
+    item.sourceKind==='mastery-authority'&&
+    item.sourcePath==='site/mastery-authority.js'
+  ));
+  assert.equal(report.mastery.conflicts.length,0);
+  assert.deepEqual(report.diagnostics.orphanClaims,[]);
+  assert.deepEqual(report.diagnostics.warnings,[]);
+  assert.equal(report.automaticEligible,true);
+});
+
 test('real Mark index stays eligible under the inline mastery guard',()=>{
   const x=fixture('mark_inline_guard_fixture');
   for(const name of ['competency-map-data.js','index.html']){
