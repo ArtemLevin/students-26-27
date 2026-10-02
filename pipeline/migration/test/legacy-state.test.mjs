@@ -277,11 +277,23 @@ test('real Nikol format treats mastery-authority as an indirect dashboard-data w
   assert.ok(report.diagnostics.indirectSources.some(item=>item.sourceKind==='mastery-authority'));
 });
 
-test('real Sofya format resolves its embedded legacy competency catalog',()=>{
-  const report=inspectLegacyLearningState({root:ROOT,studentId:'sofya_kalney'});
-  assert.ok(report.catalog?.count>100);
-  assert.ok(report.mastery.resolved.length>0);
+test('real Sofya legacy sources resolve their embedded competency catalog and stay migration-eligible',()=>{
+  const x=fixture('sofya_legacy_fixture');
+  for(const name of ['competence-config.js','index-19.08.26-base.html']){
+    write(
+      path.join(x.site,name),
+      fs.readFileSync(
+        path.join(ROOT,'students','sofya_kalney','site',name),
+        'utf8'
+      )
+    );
+  }
+  const report=inspectLegacyLearningState({root:x.root,studentId:x.studentId});
+  assert.equal(report.catalog?.count,324);
+  assert.equal(report.mastery.resolved.length,29);
   assert.equal(report.mastery.conflicts.length,0);
+  assert.deepEqual(report.diagnostics.orphanClaims,[]);
+  assert.equal(report.automaticEligible,true);
 });
 
 
