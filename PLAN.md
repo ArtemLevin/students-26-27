@@ -3,14 +3,14 @@
 > **Current implementation state — 2026-10-02**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **7 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`, `sofya_kalney`, `nikol_sarkisyants`, `xenia_klykova`);
-> - текущий rollout: **P5.3 preparation**;
-> - завершённый этап: **P5.2-10** — `modern-shared` закрыт архитектурным ratchet на baseline=0; старые v1 baseline без per-architecture counts сохраняют прежнюю семантику;
-> - CI публикует deterministic migration readiness inventory для всех non-v2 кабинетов;
-> - readiness на текущем `main`: **17 non-v2 = 16 ready / 0 review / 1 blocked**; blocker `ekaterina_gnedkova` — unresolved catalog (`source-execution-failed` + `index-catalog-not-found`);
-> - оставшийся состав: `legacy-structured=15`, `legacy-ktp=2`; `modern-shared=0`;
-> - следующий gate: **P5.3-1 Mark Gukin pilot** — минимальный clean legacy-structured case: 1 historical lesson, 356 competencies, 0 repository-authored mastery, rolling planning; выполнить reviewed manifest → validated dry-run → transactional apply → full merge gate;
-> - после пилота продолжить rollout по readiness inventory; `darya_savenkova` не использовать первой из-за роли design reference, fixed-KTP кабинеты вести отдельной волной;
+> - Student Platform v2: **8 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`, `sofya_kalney`, `nikol_sarkisyants`, `xenia_klykova`, `mark_gukin`);
+> - текущий rollout: **P5.3 legacy-structured**;
+> - завершённый этап: **P5.3-1 Mark Gukin pilot** — reviewed manifest, validated dry-run и transactional apply успешно мигрировали 1/1 historical lesson и 356/356 competencies; repository-authored mastery отсутствует, conflicts/orphans=0, protectedFilesChanged=[];
+> - migration regression suite после apply: **100/100**; architecture ratchet: **v2=8 / non-v2=16**, `legacy-structured=14`, `legacy-ktp=2`, `modern-shared=0`;
+> - self-review пилота выявил sparse-registry contract drift: v2 schema допускает пустые `topics/outcomes`, а generated helper требовал непустые значения; canonical generator теперь добавляет `navTitle` fallback и валидирует sparse metadata без semantic invention, с behavioral regression guard;
+> - readiness после Mark: **16 non-v2 = 15 ready / 0 review / 1 blocked**; `ekaterina_gnedkova` остаётся blocked из-за unresolved legacy catalog;
+> - следующий gate: **P5.3-2 Kristina** — clean rolling legacy-structured case: 2 historical lessons, 360 competencies, 0 repository-authored mastery; `darya_savenkova` пока не использовать как pilot из-за роли design reference;
+> - fixed-KTP кабинеты (`danil_kichuk`, `jaroslav_gavrilov`) вести отдельной волной после нескольких rolling migrations;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
