@@ -55,6 +55,18 @@ test('discovery accepts a frozen literal lesson registry without executing regis
   assert.deepEqual(report.diagnostics,[]);
 });
 
+test('lesson discovery rejects chained expressions after a frozen literal registry',()=>{
+  const x=fixture();
+  write(
+    path.join(x.site,'lesson-registry.js'),
+    "export const LESSONS=Object.freeze([{date:'2026-09-30',href:'30.09.26.html'}]).map(Boolean);\n"
+  );
+  assert.throws(
+    ()=>discoverHistoricalLessons(x),
+    /Object\.freeze LESSONS wrapper must be the complete assignment expression/
+  );
+});
+
 test('lesson discovery still rejects arbitrary computed LESSONS wrappers',()=>{
   const x=fixture();
   write(
