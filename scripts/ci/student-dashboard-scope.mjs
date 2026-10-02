@@ -39,6 +39,7 @@ export function isDashboardRelevantPath(value){
   if(file.startsWith('students/')){
     if(file.includes('/site/'))return true;
     if(/^students\/[^/]+\/index\.html$/.test(file))return true;
+    if(/^students\/[^/]+\/student-contract\.json$/.test(file))return true;
     if(/^students\/[^/]+\/competency-map[^/]*\.(?:js|css)$/.test(file))return true;
   }
   return false;
