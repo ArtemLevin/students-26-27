@@ -1,0 +1,89 @@
+name: Sofya Khomenko migration preflight
+
+on:
+  push:
+    branches:
+      - 'feat/student-platform-v2-migrate-sofya-khomenko'
+
+permissions:
+  contents: write
+
+jobs:
+  preflight:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-migrate-sofya-khomenko
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Inspect reconciled source
+        shell: bash
+        run: |
+          node scripts/student.mjs inspect-legacy-state sofya_khomenko --json > /tmp/sofya.json
+          node -e "const r=require('/tmp/sofya.json'); if(!r.automaticEligible)process.exit(1); if(r.catalog?.count!==343||r.mastery?.resolved?.length!==343)process.exit(2); if(r.mastery?.conflicts?.length||r.diagnostics?.orphanClaims?.length||r.diagnostics?.warnings?.length)process.exit(3); if(!r.mastery.resolved.every(x=>x.sourceKind==='mastery-authority'&&x.sourcePath==='site/mastery-authority.js'))process.exit(4);"
+
+      - name: Generate candidate manifest
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const report=require('/tmp/sofya.json');
+          const manifest={
+            version:1,
+            studentId:'sofya_khomenko',
+            identity:{
+              studentName:'София Хоменко',
+              program:'подготовка к ОГЭ по математике'
+            },
+            sourceArchitecture:'legacy-structured',
+            planning:{mode:'rolling',ktpExtraction:null},
+            lessonMappings:[
+              {lessonDate:'2026-09-08',ktpMatches:[]},
+              {lessonDate:'2026-09-15',ktpMatches:[]},
+              {lessonDate:'2026-09-22',ktpMatches:[]},
+              {lessonDate:'2026-09-29',ktpMatches:[]}
+            ],
+            competencyMappings:[],
+            preserveMastery:report.mastery.resolved.map(item=>({
+              competencyId:item.competencyId,
+              level:item.level,
+              sourcePath:item.sourcePath,
+              sourceKind:item.sourceKind,
+              confidence:'exact',
+              basis:item.basis
+            })),
+            ambiguities:[],
+            blockers:[],
+            warnings:[]
+          };
+          fs.mkdirSync('pipeline/migration/manifests',{recursive:true});
+          fs.writeFileSync('pipeline/migration/manifests/sofya_khomenko.json',JSON.stringify(manifest,null,2)+'\n');
+          NODE
+
+      - name: Validate manifest
+        run: node scripts/student.mjs validate-manifest --manifest pipeline/migration/manifests/sofya_khomenko.json --json
+
+      - name: Validated dry-run
+        shell: bash
+        run: |
+          node scripts/student.mjs migrate sofya_khomenko \
+            --manifest pipeline/migration/manifests/sofya_khomenko.json \
+            --date 2026-10-02 \
+            --dry-run \
+            --json > /tmp/dry-run.json
+          node -e "const p=require('/tmp/dry-run.json'),c=p.coverage; if(!p.executable||!c?.complete)process.exit(1); if(c.lessons?.source!==4||c.lessons?.candidate!==4)process.exit(2); if(c.competencies?.source!==343||c.competencies?.candidate!==343)process.exit(3); if(c.mastery?.resolvedSource!==343||c.mastery?.candidate!==343||c.mastery?.conflicts!==0||c.mastery?.orphans!==0)process.exit(4); if((p.reviewItems||[]).length||(p.blockers||[]).length||(p.warnings||[]).length)process.exit(5);"
+
+      - name: Commit candidate manifest
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pipeline/migration/manifests/sofya_khomenko.json
+          git diff --cached --quiet && exit 1 || true
+          git commit -m "Reconciliation: generate Sofya Khomenko migration manifest"
+          git push origin HEAD:feat/student-platform-v2-migrate-sofya-khomenko
