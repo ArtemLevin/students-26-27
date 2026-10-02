@@ -3,21 +3,16 @@
 > **Current implementation state — 2026-10-02**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **13 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`, `sofya_kalney`, `nikol_sarkisyants`, `xenia_klykova`, `mark_gukin`, `ivan_petrachenkov`, `kiril_zinoviev_physics`, `anna_trapeznikova`, `jaroslav_vereschagin`, `ekaterina`);
+> - Student Platform v2: **14 / 24** кабинетов;
 > - текущий rollout: **P5.3 legacy-structured**;
-> - **P5.3-2** закрыл false-ready риск для unresolved inline mastery mutations;
-> - **P5.3-3 Ivan Petrachenkov** сохранил 28/28 repository-authored mastery records;
-> - **P5.3-4 Kiril Zinoviev Physics** сохранил 25/25 mastery records с точными уровнями 2/3;
-> - **P5.3-5 Anna Trapeznikova** подтвердил clean `mastery=0` path на 5 lessons / 371 competencies;
-> - **P5.3-6 Jaroslav Vereschagin** подтвердил larger clean path на 8 lessons / 324 competencies;
-> - завершённый этап: **P5.3-7 Ekaterina full mastery preservation** — 4/4 historical lessons, 235/235 competencies и **235/235 explicit baseline mastery records** сохранены ID-в-ID и level-в-level;
-> - mastery distribution после apply совпадает с repository source: **223×level 0 + 12×level 2**; conflicts/orphans=0, warnings/reviewItems/blockers=[], protectedFilesChanged=[];
-> - материалы сохранены по фактическому наличию: 4 HTML, 4 PDF, 1 TeX, 3 lab;
-> - architecture ratchet после apply: **v2=13 / non-v2=11**, `legacy-structured=9`, `legacy-ktp=2`, `modern-shared=0`;
-> - временный branch-only migration workflow удалён после успешного apply; production CI остаётся централизован в обязательном `merge gate`;
-> - согласованная rolling-wave `Ivan → Kiril Physics → clean mastery=0 → larger clean → Ekaterina` завершена после merge этого gate;
-> - следующий этап требует свежего readiness inventory оставшихся non-v2; blocked legacy-structured кабинеты мигрировать только после отдельного reconciliation источников;
-> - `darya_savenkova` пока не использовать из-за роли design reference; fixed-KTP кабинеты (`danil_kichuk`, `jaroslav_gavrilov`) вести отдельной волной;
+> - завершена проверенная rolling-wave: `ivan_petrachenkov` (28 mastery), `kiril_zinoviev_physics` (25 mastery), `anna_trapeznikova` (mastery=0), `jaroslav_vereschagin` (larger mastery=0), `ekaterina` (235/235 full mastery preservation);
+> - завершённый этап: **P5.3-8 Xenia Vasilchenko** — 7/7 historical lessons, 200/200 competencies, zero authoritative mastery; materials 7 HTML / 7 PDF / 7 TeX / 2 lab;
+> - conflicts/orphans=0, warnings/reviewItems/blockers=[], protectedFilesChanged=[];
+> - architecture ratchet после apply: **v2=14 / non-v2=10**, `legacy-structured=8`, `legacy-ktp=2`, `modern-shared=0`;
+> - следующий ready rolling gate: **P5.3-9 `nadya_klimenko`** (7 historical lessons, 221 competencies, mastery=0), затем `marina` (8 / 300 / 0);
+> - `darya_savenkova` пока не использовать из-за роли design reference;
+> - blocked legacy-structured кабинеты (`ekaterina_gnedkova`, `kristina`, `matvey_gorbachev`, `nastya_pavlova`, `sofya_khomenko`) мигрировать только после отдельного reconciliation источников;
+> - fixed-KTP кабинеты (`danil_kichuk`, `jaroslav_gavrilov`) вести отдельной волной после rolling-clean wave;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
