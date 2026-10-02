@@ -1,0 +1,139 @@
+name: Darya migration apply
+
+on:
+  push:
+    branches:
+      - 'feat/student-platform-v2-migrate-darya-savenkova'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-migrate-darya-savenkova
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify design-reference surface before apply
+        run: node --test pipeline/migration/test/darya-design-reference.test.mjs
+
+      - name: Validate reviewed manifest
+        run: node scripts/student.mjs validate-manifest --manifest pipeline/migration/manifests/darya_savenkova.json --json
+
+      - name: Reconcile manifest against current linked progress
+        shell: bash
+        run: |
+          node scripts/student.mjs inspect-legacy-state darya_savenkova --json > /tmp/darya.json
+          node - <<'NODE'
+          const manifest=require('./pipeline/migration/manifests/darya_savenkova.json');
+          const report=require('/tmp/darya.json');
+          if(!report.automaticEligible)process.exit(1);
+          if(report.catalog?.count!==356||report.mastery?.resolved?.length!==7)process.exit(2);
+          const expected=new Map(report.mastery.resolved.map(x=>[x.competencyId,x.level]));
+          if(manifest.preserveMastery.length!==expected.size)process.exit(3);
+          for(const item of manifest.preserveMastery){
+            if(expected.get(item.competencyId)!==item.level)process.exit(4);
+            if(item.sourcePath!=='site/lesson-14.09.26-progress.js'||item.sourceKind!=='linked-progress-overlay'||item.confidence!=='exact')process.exit(5);
+          }
+          NODE
+
+      - name: Validated dry-run
+        shell: bash
+        run: |
+          node scripts/student.mjs migrate darya_savenkova \
+            --manifest pipeline/migration/manifests/darya_savenkova.json \
+            --date 2026-10-02 \
+            --dry-run \
+            --json > /tmp/dry-run.json
+          node - <<'NODE'
+          const p=require('/tmp/dry-run.json'),c=p.coverage;
+          if(!p.executable||!c?.complete)process.exit(1);
+          if(c.lessons?.source!==1||c.lessons?.candidate!==1)process.exit(2);
+          if(c.ktp?.mappedHistoricalLessons!==0)process.exit(3);
+          if(c.competencies?.source!==356||c.competencies?.candidate!==356)process.exit(4);
+          if(c.mastery?.resolvedSource!==7||c.mastery?.candidate!==7||c.mastery?.conflicts!==0||c.mastery?.orphans!==0)process.exit(5);
+          if((p.reviewItems||[]).length||(p.blockers||[]).length||(p.warnings||[]).length)process.exit(6);
+          if(p.projectedBaseline?.minV2!==24||p.projectedBaseline?.maxNonV2!==0||p.projectedBaseline?.byArchitecture?.v2!==24)process.exit(7);
+          NODE
+
+      - name: Transactional apply
+        run: |
+          node scripts/student.mjs migrate darya_savenkova \
+            --manifest pipeline/migration/manifests/darya_savenkova.json \
+            --date 2026-10-02 \
+            --apply \
+            --json
+
+      - name: Validate migrated package
+        run: node scripts/student.mjs validate darya_savenkova --json
+
+      - name: Verify design-reference surface after apply
+        run: node --test pipeline/migration/test/darya-design-reference.test.mjs
+
+      - name: Verify canonical mastery preservation
+        run: |
+          node - <<'NODE'
+          const catalog=require('./students/darya_savenkova/site/data/competency-catalog.json');
+          const state=require('./students/darya_savenkova/site/data/mastery-state.json');
+          const catalogIds=new Set(catalog.groups.flatMap(group=>group.items).map(item=>item.id));
+          const values=Object.values(state.levels);
+          const counts={};
+          for(const value of values){
+            counts[value.level]=(counts[value.level]||0)+1;
+            if(value.sourcePath!=='site/lesson-14.09.26-progress.js'||value.sourceKind!=='linked-progress-overlay')process.exit(1);
+          }
+          if(catalogIds.size!==356||values.length!==7)process.exit(2);
+          if(counts[2]!==5||counts[3]!==2||Object.keys(counts).length!==2)process.exit(3);
+          NODE
+
+      - name: Verify migration report and final architecture ratchet
+        run: |
+          node - <<'NODE'
+          const report=require('./pipeline/migration/reports/darya_savenkova.json');
+          const baseline=require('./pipeline/migration/baseline.json');
+          if(!report.complete)process.exit(1);
+          if(report.lessons.source!==1||report.lessons.candidate!==1)process.exit(2);
+          if(report.ktp.mappedHistoricalLessons!==0)process.exit(3);
+          if(report.competencies.source!==356||report.competencies.candidate!==356)process.exit(4);
+          if(report.mastery.resolvedSource!==7||report.mastery.candidate!==7||report.mastery.conflicts!==0||report.mastery.orphans!==0)process.exit(5);
+          if(report.materials.html!==1||report.materials.pdf!==1||report.materials.tex!==1||report.materials.lab!==1)process.exit(6);
+          if(report.preservation.protectedFilesChanged.length)process.exit(7);
+          if(report.warnings.length||report.reviewItems.length||report.blockers.length)process.exit(8);
+          if(baseline.total!==24||baseline.minV2!==24||baseline.maxNonV2!==0||baseline.byArchitecture?.v2!==24)process.exit(9);
+          if(Object.keys(baseline.byArchitecture||{}).length!==1)process.exit(10);
+          NODE
+
+      - name: Run migration regression suite
+        run: node --test pipeline/migration/test/*.test.mjs
+
+      - name: Run student contract regression suite
+        run: node --test pipeline/student/test/*.test.mjs
+
+      - name: Enforce architecture ratchet
+        run: node pipeline/migration/audit-ratchet.mjs
+
+      - name: Commit generated migration state
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            pipeline/migration/baseline.json \
+            pipeline/migration/reports/darya_savenkova.json \
+            students/darya_savenkova/student-contract.json \
+            students/darya_savenkova/site/data \
+            students/darya_savenkova/site/lesson-registry.js \
+            students/darya_savenkova/site/tests/student-platform-v2.test.mjs
+          if git diff --cached --quiet; then
+            echo "Migration produced no generated changes"
+            exit 1
+          fi
+          git commit -m "Migration: apply Darya Savenkova Student Platform v2 migration"
+          git push origin HEAD:feat/student-platform-v2-migrate-darya-savenkova
