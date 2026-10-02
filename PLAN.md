@@ -3,16 +3,15 @@
 > **Current implementation state — 2026-10-02**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **15 / 24** кабинетов;
-> - текущий rollout: **P5.3 legacy-structured**;
-> - завершена проверенная rolling-wave: `ivan_petrachenkov` (28 mastery), `kiril_zinoviev_physics` (25 mastery), `anna_trapeznikova` (mastery=0), `jaroslav_vereschagin` (larger mastery=0), `ekaterina` (235/235 full mastery preservation), `xenia_vasilchenko` (mastery=0);
-> - завершённый этап: **P5.3-9 Nadya Klimenko** — 7/7 historical lessons, 221/221 competencies, zero authoritative mastery; materials 7 HTML / 7 PDF / 7 TeX / 5 lab;
+> - Student Platform v2: **16 / 24** кабинетов;
+> - текущий rollout: **P5.3 legacy-structured rolling-clean завершён; следующий переход — fixed-KTP wave**;
+> - завершена проверенная rolling-wave: `ivan_petrachenkov` (28 mastery), `kiril_zinoviev_physics` (25 mastery), `anna_trapeznikova` (mastery=0), `jaroslav_vereschagin` (larger mastery=0), `ekaterina` (235/235 full mastery preservation), `xenia_vasilchenko` (mastery=0), `nadya_klimenko` (mastery=0);
+> - завершённый этап: **P5.3-10 Marina** — 8/8 historical lessons, 300/300 competencies, zero authoritative mastery; materials 8 HTML / 7 PDF / 8 TeX / 7 lab;
 > - conflicts/orphans=0, warnings/reviewItems/blockers=[], protectedFilesChanged=[];
-> - architecture ratchet после apply: **v2=15 / non-v2=9**, `legacy-structured=7`, `legacy-ktp=2`, `modern-shared=0`;
-> - следующий ready rolling gate: **P5.3-10 `marina`** (8 historical lessons, 300 competencies, mastery=0);
+> - architecture ratchet после apply: **v2=16 / non-v2=8**, `legacy-structured=6`, `legacy-ktp=2`, `modern-shared=0`;
+> - после merge выполнить свежий readiness inventory и выбрать следующий fixed-KTP gate из `danil_kichuk` / `jaroslav_gavrilov`;
 > - `darya_savenkova` пока не использовать из-за роли design reference;
 > - blocked legacy-structured кабинеты (`ekaterina_gnedkova`, `kristina`, `matvey_gorbachev`, `nastya_pavlova`, `sofya_khomenko`) мигрировать только после отдельного reconciliation источников;
-> - fixed-KTP кабинеты (`danil_kichuk`, `jaroslav_gavrilov`) вести отдельной волной после rolling-clean wave;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
