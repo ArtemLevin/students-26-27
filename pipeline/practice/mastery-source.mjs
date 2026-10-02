@@ -95,7 +95,7 @@ export function replaceMasteryLevels(source,updates={},locator='stage04Mastery',
         basis:basisById[id]||previous?.basis||'Stage 04 repository-authored mastery update.'
       };
     }
-    if(options.updated)next.updated=options.updated;
+    if(options.updated)next.updated=state.updated&&state.updated>options.updated?state.updated:options.updated;
     next.levels=Object.fromEntries(Object.entries(next.levels).sort(([a],[b])=>a.localeCompare(b,'en')));
     return JSON.stringify(next,null,2)+'\n';
   }
