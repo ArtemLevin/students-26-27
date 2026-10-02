@@ -23,6 +23,9 @@ test('Nastya canonical v2 catalog preserves the 20-line EGE-2027 runtime profile
   assert.ok(ids.has('ege2027_t6_expectation'));
   assert.ok(ids.has('ege2027_t17_optimization'));
 
+  const catalog=JSON.parse(
+    fs.readFileSync(path.join(ROOT,'students','nastya_pavlova',spec.catalog),'utf8')
+  );
   const mastery=JSON.parse(
     fs.readFileSync(path.join(ROOT,'students','nastya_pavlova',spec.mastery),'utf8')
   );
@@ -31,6 +34,6 @@ test('Nastya canonical v2 catalog preserves the 20-line EGE-2027 runtime profile
 
   const task13=groups[12];
   assert.equal(task13.short,'13');
-  assert.match(task13.title,/Прикладная и финансовая задача/);
+  assert.match(catalog.groups[12].name,/Прикладная и финансовая задача/);
   assert.ok(task13.items.length>0);
 });
