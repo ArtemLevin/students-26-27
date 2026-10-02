@@ -3,11 +3,11 @@
 > **Current implementation state — 2026-10-01**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **2 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`);
+> - Student Platform v2: **3 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`);
 > - текущий rollout: **P5.2**;
-> - текущий gate: **P5.2-0 Migration Preflight Hardening** — recursive historical lesson discovery и strict migration write allowlist;
-> - следующий migration candidate после прохождения hardening gates: `kirill_zinoviev`;
-> - `timofey` временно заблокирован до reconciliation nested lesson history и competency catalog для `ege2027_t17_*`;
+> - завершённый этап: **P5.2-1** — `kirill_zinoviev` мигрирован с сохранением 15 исторических уроков, 230 competency IDs и 85 mastery values;
+> - следующий gate: **P5.2-2 Timofey catalog reconciliation** для шести `ege2027_t17_*` competency IDs;
+> - миграция `timofey` остаётся заблокированной до устранения catalog drift и повторного automatic-eligibility gate;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
