@@ -22,3 +22,7 @@ jobs:
         shell: bash
         run: |
           node pipeline/migration/inspect-legacy-state.mjs timofey --json
+      - name: Inspect Timofey historical lessons
+        shell: bash
+        run: |
+          node --input-type=module -e "import {discoverHistoricalLessons} from './pipeline/migration/legacy/discover-lessons.mjs'; const r=discoverHistoricalLessons({root:process.cwd(),studentId:'timofey'}); console.log(JSON.stringify({studentId:r.studentId,lessons:r.lessons.map(x=>({date:x.date,href:x.href,sources:x.sources})),diagnostics:r.diagnostics},null,2));"
