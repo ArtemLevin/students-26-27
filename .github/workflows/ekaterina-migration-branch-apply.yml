@@ -1,0 +1,81 @@
+name: Ekaterina migration branch apply
+
+on:
+  push:
+    branches:
+      - 'feat/student-platform-v2-p5-3-7-ekaterina'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout migration branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-p5-3-7-ekaterina
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate reviewed manifest
+        run: node scripts/student.mjs validate-manifest --manifest pipeline/migration/manifests/ekaterina.json --json
+
+      - name: Inspect legacy state
+        run: node scripts/student.mjs inspect-legacy-state ekaterina --json
+
+      - name: Validated dry-run
+        shell: bash
+        run: |
+          node scripts/student.mjs migrate ekaterina \
+            --manifest pipeline/migration/manifests/ekaterina.json \
+            --date 2026-10-02 \
+            --dry-run \
+            --json > /tmp/ekaterina-dry-run.json
+          node -e "const p=require('/tmp/ekaterina-dry-run.json'); const c=p.coverage; if(!p.executable||!c?.complete) process.exit(1); if(c.lessons?.source!==4||c.lessons?.candidate!==4) process.exit(2); if(c.competencies?.source!==235||c.competencies?.candidate!==235) process.exit(3); if(c.mastery?.resolvedSource!==235||c.mastery?.candidate!==235||c.mastery?.conflicts!==0||c.mastery?.orphans!==0) process.exit(4); console.log(JSON.stringify({executable:p.executable,coverage:c,projectedBaseline:p.projectedBaseline},null,2));"
+
+      - name: Transactional apply
+        run: |
+          node scripts/student.mjs migrate ekaterina \
+            --manifest pipeline/migration/manifests/ekaterina.json \
+            --date 2026-10-02 \
+            --apply \
+            --json
+
+      - name: Validate migrated package
+        run: node scripts/student.mjs validate ekaterina --json
+
+      - name: Verify exact preserved mastery
+        run: |
+          node -e "const fs=require('node:fs'),vm=require('node:vm'); const sandbox={window:{}}; vm.createContext(sandbox); vm.runInContext(fs.readFileSync('students/ekaterina/site/competency-map-data.js','utf8'),sandbox); const expected=sandbox.window.EKATERINA_COMPETENCY_DATA.baselineLevels; const state=require('./students/ekaterina/site/data/mastery-state.json'); const ids=Object.keys(expected); if(ids.length!==235||Object.keys(state.levels).length!==235) process.exit(1); for(const id of ids){const value=state.levels[id]; if(!value||value.level!==expected[id]||value.sourceKind!=='baseline-levels'||value.sourcePath!=='site/competency-map-data.js'){console.error('mastery mismatch',id,expected[id],value);process.exit(2);}} const counts=Object.values(expected).reduce((a,v)=>(a[v]=(a[v]||0)+1,a),{}); if(counts[0]!==223||counts[2]!==12) process.exit(3); console.log('Ekaterina mastery preserved:',ids.length,counts);"
+
+      - name: Run migration regression suite
+        run: node --test pipeline/migration/test/*.test.mjs
+
+      - name: Enforce architecture ratchet
+        run: node pipeline/migration/audit-ratchet.mjs
+
+      - name: Commit generated migration state
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            pipeline/migration/baseline.json \
+            pipeline/migration/reports/ekaterina.json \
+            students/ekaterina/student-contract.json \
+            students/ekaterina/site/data \
+            students/ekaterina/site/lesson-registry.js \
+            students/ekaterina/site/tests/student-platform-v2.test.mjs
+          if git diff --cached --quiet; then
+            echo "Migration produced no generated changes"
+            exit 1
+          fi
+          git commit -m "P5.3-7: apply Ekaterina Student Platform v2 migration"
+          git push origin HEAD:feat/student-platform-v2-p5-3-7-ekaterina
