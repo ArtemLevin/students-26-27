@@ -3,15 +3,16 @@
 > **Current implementation state — 2026-10-02**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **18 / 24** кабинетов;
-> - rolling-clean wave завершена; fixed-KTP wave также завершена;
-> - завершённый fixed-KTP gate: **Jaroslav Gavrilov** — 4/4 historical lessons, 72/72 fixed KTP rows, 356/356 competencies, zero authoritative mastery; materials 4 HTML / 4 PDF / 4 TeX / 2 lab;
-> - historical lessons Ярослава intentionally сохраняют `ktpRefs=[]`: ни одному из 4 исторических уроков не присвоен speculative KTP mapping; `mappedHistoricalLessons=0`;
-> - conflicts/orphans=0, warnings/reviewItems/blockers=[], protectedFilesChanged=[];
-> - architecture ratchet после apply: **v2=18 / non-v2=6**, `legacy-structured=6`, `legacy-ktp=0`, `modern-shared=0`;
+> - Student Platform v2: **18 / 24** кабинетов; rolling-clean и fixed-KTP waves завершены;
+> - текущий этап: **reconciliation wave** для оставшихся legacy-structured источников;
+> - первый reconciliation gate завершён для `ekaterina_gnedkova`: legacy `competency-map-data.js` является browser loader через `document.write`, который подключает 4 catalog parts и assembler;
+> - migration sandbox теперь безопасно исполняет только локальные `document.write` script dependencies внутри `studentRoot`; external/path-traversal/missing/cycle/execution failures fail closed;
+> - для Екатерины Гнедковой repository mastery authority сделан явным через `mastery-authority.js`, который проецирует фактические runtime `item.level` значения;
+> - real-source regression: **369/369 competencies**, **369/369 mastery records** (включая явные нули), 5 local script dependencies, conflicts/orphans/warnings=0, `automaticEligible=true`;
+> - следующий gate: отдельная Student Platform v2 migration `ekaterina_gnedkova` только после merge reconciliation PR;
 > - `darya_savenkova` остаётся автоматически ready, но отложена из-за роли design reference;
-> - blocked legacy-structured кабинеты: `ekaterina_gnedkova` (unresolved catalog), `kristina`, `matvey_gorbachev`, `nastya_pavlova`, `sofya_khomenko` (unresolved inline mastery mutations);
-> - следующий инженерный этап: **reconciliation wave** — по одному кабинету восстанавливать canonical catalog/mastery authority, добавлять real-source regression guard и только после зелёного preflight выполнять migration;
+> - после Екатерины: по одному reconciliate `kristina`, `matvey_gorbachev`, `nastya_pavlova`, `sofya_khomenko` с unresolved inline mastery mutations;
+> - architecture baseline остаётся **v2=18 / non-v2=6**, `legacy-structured=6`, `legacy-ktp=0`;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 

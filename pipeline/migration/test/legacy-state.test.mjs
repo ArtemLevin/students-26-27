@@ -182,6 +182,88 @@ test('embedded legacyUrl catalog is extracted from inline groups without using i
   assert.equal(report.catalog.sourcePath,'site/legacy.html');
 });
 
+test('document.write learning-data loader executes local scripts in browser order',()=>{
+  const x=fixture('document_write_loader_fixture');
+  write(
+    path.join(x.site,'competency-map-data.js'),
+    "document.write('<script src=\"catalog-part.js?v=1\"><\\/script>');document.write('<script src=\"catalog-assemble.js?v=1\"><\\/script>');\n"
+  );
+  write(
+    path.join(x.site,'catalog-part.js'),
+    "window.__defs=[{id:'g',name:'G',items:[{id:'a',title:'A'}]}];\n"
+  );
+  write(
+    path.join(x.site,'catalog-assemble.js'),
+    "window.COMPETENCY_MAP_DATA={groups:window.__defs};\n"
+  );
+
+  const report=inspectLegacyLearningState(x);
+  assert.equal(report.catalog?.count,1);
+  assert.equal(report.catalog?.ids[0],'a');
+  assert.deepEqual(
+    report.diagnostics.scriptDependencies.map(item=>item.sourcePath),
+    ['site/catalog-part.js','site/catalog-assemble.js']
+  );
+  assert.equal(report.automaticEligible,true);
+});
+
+test('document.write learning-data loader fails closed on path traversal',()=>{
+  const x=fixture('document_write_escape_fixture');
+  write(
+    path.join(x.site,'competency-map-data.js'),
+    "document.write('<script src=\"../../escape.js\"><\\/script>');\n"
+  );
+
+  const report=inspectLegacyLearningState(x);
+  assert.ok(
+    report.diagnostics.warnings.some(
+      item=>item.type==='document-write-script-outside-student'
+    )
+  );
+  assert.equal(report.automaticEligible,false);
+});
+
+test('real Ekaterina Gnedkova split catalog resolves full catalog and explicit baseline mastery',()=>{
+  const x=fixture('ekaterina_gnedkova_split_fixture');
+  for(const name of [
+    'competency-map-data.js',
+    'competency-map-data-part-1.js',
+    'competency-map-data-part-2.js',
+    'competency-map-data-part-3.js',
+    'competency-map-data-part-4.js',
+    'competency-map-data-assemble.js',
+    'mastery-authority.js',
+    'index.html'
+  ]){
+    write(
+      path.join(x.site,name),
+      fs.readFileSync(
+        path.join(ROOT,'students','ekaterina_gnedkova','site',name),
+        'utf8'
+      )
+    );
+  }
+
+  const report=inspectLegacyLearningState({root:x.root,studentId:x.studentId});
+  const vector=report.mastery.resolved.find(item=>item.competencyId==='ege27_02_001');
+  const untouched=report.mastery.resolved.find(item=>item.competencyId==='ege27_01_001');
+
+  assert.equal(report.catalog?.count,369);
+  assert.equal(report.mastery.resolved.length,369);
+  assert.equal(vector?.level,3);
+  assert.equal(untouched?.level,0);
+  assert.ok(report.mastery.resolved.every(item=>item.sourceKind==='mastery-authority'));
+  assert.equal(report.mastery.conflicts.length,0);
+  assert.deepEqual(report.diagnostics.orphanClaims,[]);
+  assert.equal(
+    report.diagnostics.scriptDependencies.filter(
+      item=>item.parentSourcePath==='site/competency-map-data.js'
+    ).length,
+    5
+  );
+  assert.equal(report.automaticEligible,true);
+});
+
 test('sandbox hides host process, require and fetch and disables string code generation',()=>{
   const sandbox=createLegacySandbox();
   executeLegacySource({
