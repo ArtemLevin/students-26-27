@@ -1,26 +1,107 @@
-name: P5.2-5 Sofya migration preflight
+name: P5.2-5 Sofya migration executor
 
 on:
   push:
     branches:
       - feat/student-platform-v2-p5-2-5-sofya
     paths:
+      - pipeline/migration/manifests/sofya_kalney.json
+      - pipeline/migration/test/legacy-state.test.mjs
       - .github/workflows/p5-2-5-sofya-preflight.yml
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  inspect:
+  migrate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-p5-2-5-sofya
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Inspect Sofya legacy state
-        run: node pipeline/migration/inspect-legacy-state.mjs sofya_kalney --json
-      - name: Inspect Sofya historical lessons
+      - name: Guard one-shot execution
+        id: guard
         shell: bash
         run: |
-          node --input-type=module -e "import {discoverHistoricalLessons} from './pipeline/migration/legacy/discover-lessons.mjs'; const r=discoverHistoricalLessons({root:process.cwd(),studentId:'sofya_kalney'}); console.log(JSON.stringify({studentId:r.studentId,lessons:r.lessons.map(x=>({date:x.date,href:x.href,sources:x.sources})),diagnostics:r.diagnostics},null,2));"
+          if [ -f students/sofya_kalney/student-contract.json ]; then
+            echo "already_applied=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "already_applied=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Migration regression before apply
+        if: steps.guard.outputs.already_applied == 'false'
+        run: node --test pipeline/migration/test/*.test.mjs
+      - name: Validated dry-run
+        if: steps.guard.outputs.already_applied == 'false'
+        shell: bash
+        run: |
+          node scripts/student.mjs migrate sofya_kalney \
+            --manifest pipeline/migration/manifests/sofya_kalney.json \
+            --date 2026-10-02 \
+            --dry-run \
+            --json | tee /tmp/sofya-dry-run.json
+      - name: Transactional apply
+        if: steps.guard.outputs.already_applied == 'false'
+        shell: bash
+        run: |
+          node scripts/student.mjs migrate sofya_kalney \
+            --manifest pipeline/migration/manifests/sofya_kalney.json \
+            --date 2026-10-02 \
+            --apply \
+            --json | tee /tmp/sofya-apply.json
+      - name: Post-apply verification
+        if: steps.guard.outputs.already_applied == 'false'
+        shell: bash
+        run: |
+          node pipeline/migration/audit-ratchet.mjs
+          node scripts/student.mjs validate
+          node students/sofya_kalney/site/tests/student-platform-v2.test.mjs
+          node students/sofya_kalney/site/tests/dashboard-regression.mjs
+          node --test pipeline/migration/test/*.test.mjs
+      - name: Verify generated write-set
+        if: steps.guard.outputs.already_applied == 'false'
+        shell: bash
+        run: |
+          mapfile -t changed < <(
+            {
+              git diff --name-only
+              git ls-files --others --exclude-standard
+            } | sort -u
+          )
+          printf '%s\n' "${changed[@]}"
+          test "${#changed[@]}" -gt 0
+          for file in "${changed[@]}"; do
+            case "$file" in
+              pipeline/migration/baseline.json|\
+              pipeline/migration/reports/sofya_kalney.json|\
+              students/sofya_kalney/student-contract.json|\
+              students/sofya_kalney/site/data/*|\
+              students/sofya_kalney/site/lesson-registry.js|\
+              students/sofya_kalney/site/tests/student-platform-v2.test.mjs)
+                ;;
+              *)
+                echo "Unexpected migration write: $file" >&2
+                exit 1
+                ;;
+            esac
+          done
+      - name: Commit generated migration
+        if: steps.guard.outputs.already_applied == 'false'
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            pipeline/migration/baseline.json \
+            pipeline/migration/reports/sofya_kalney.json \
+            students/sofya_kalney/student-contract.json \
+            students/sofya_kalney/site/data \
+            students/sofya_kalney/site/lesson-registry.js \
+            students/sofya_kalney/site/tests/student-platform-v2.test.mjs
+          git diff --cached --check
+          git commit -m "P5.2-5: apply Sofya Student Platform v2 migration"
+          git push origin HEAD:feat/student-platform-v2-p5-2-5-sofya
