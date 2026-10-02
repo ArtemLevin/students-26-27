@@ -81,6 +81,105 @@ function discoverWindowCatalogCandidates(target,window,sourcePath){
     addCatalogCandidate(target,{sourcePath,symbol,value});
   }
 }
+function documentWriteScriptSources(html){
+  const sources=[];
+  const pattern=/<script\b[^>]*\bsrc\s*=\s*["']([^"']+)["'][^>]*>/gi;
+  let match;
+  while((match=pattern.exec(String(html))))sources.push(match[1]);
+  return sources;
+}
+function executeDocumentWriteDependencies({
+  sandbox,
+  studentRoot,
+  parentFile,
+  parentSourcePath,
+  warnings,
+  dependencies,
+  depth=0,
+  stack=[]
+}){
+  const writes=sandbox.documentWrites.splice(0);
+  if(!writes.length)return;
+  if(depth>=16){
+    warnings.push({
+      type:'document-write-script-depth-exceeded',
+      sourcePath:parentSourcePath
+    });
+    return;
+  }
+
+  for(const html of writes){
+    for(const rawSrc of documentWriteScriptSources(html)){
+      const src=String(rawSrc).trim();
+      if(!src||src.startsWith('/')||src.startsWith('//')||/^[a-z][a-z\d+.-]*:/i.test(src)){
+        warnings.push({
+          type:'document-write-script-unsupported',
+          sourcePath:parentSourcePath,
+          src
+        });
+        continue;
+      }
+      const clean=src.split(/[?#]/,1)[0];
+      const file=path.resolve(path.dirname(parentFile),clean);
+      if(file!==studentRoot&&!file.startsWith(studentRoot+path.sep)){
+        warnings.push({
+          type:'document-write-script-outside-student',
+          sourcePath:parentSourcePath,
+          src
+        });
+        continue;
+      }
+      const relativePath=path.relative(studentRoot,file).replaceAll('\\','/');
+      if(stack.includes(file)){
+        warnings.push({
+          type:'document-write-script-cycle',
+          sourcePath:relativePath,
+          parentSourcePath
+        });
+        continue;
+      }
+      if(!fs.existsSync(file)||!fs.statSync(file).isFile()){
+        warnings.push({
+          type:'document-write-script-missing',
+          sourcePath:relativePath,
+          parentSourcePath
+        });
+        continue;
+      }
+      dependencies.push({
+        sourcePath:relativePath,
+        parentSourcePath
+      });
+      try{
+        sandbox.documentWrites.splice(0);
+        executeLegacyFile({
+          sandbox,
+          filePath:file,
+          relativePath
+        });
+      }catch(error){
+        sandbox.documentWrites.splice(0);
+        warnings.push({
+          type:'document-write-script-execution-failed',
+          sourcePath:relativePath,
+          parentSourcePath,
+          message:error.message
+        });
+        continue;
+      }
+      executeDocumentWriteDependencies({
+        sandbox,
+        studentRoot,
+        parentFile:file,
+        parentSourcePath:relativePath,
+        warnings,
+        dependencies,
+        depth:depth+1,
+        stack:[...stack,file]
+      });
+    }
+  }
+}
 function idsKey(items){
   return [...new Set(items.map(item=>item.id))].sort().join('\u0000');
 }
@@ -515,14 +614,15 @@ export function inspectLegacyLearningState({root=process.cwd(),studentId}={}){
   const snapshot=inspectStudent(root,studentId);
   if(snapshot.architecture==='v2')throw new Error('legacy learning state: student is already v2: '+studentId);
 
-  const {sources}=discoverLegacyLearningSources({root,studentId});
+  const {studentRoot,sources}=discoverLegacyLearningSources({root,studentId});
   const sandbox=createLegacySandbox();
   const catalogCandidates=[];
-  const claims=[],aliases=[],indirectSources=[],warnings=[];
+  const claims=[],aliases=[],indirectSources=[],warnings=[],scriptDependencies=[];
   const previousObjects=[];
 
   for(const source of sources){
     let result;
+    sandbox.documentWrites.splice(0);
     try{
       result=executeLegacyFile({
         sandbox,
@@ -531,6 +631,7 @@ export function inspectLegacyLearningState({root=process.cwd(),studentId}={}){
         module:source.module
       });
     }catch(error){
+      sandbox.documentWrites.splice(0);
       warnings.push({
         type:'source-execution-failed',
         sourcePath:source.relativePath,
@@ -538,6 +639,16 @@ export function inspectLegacyLearningState({root=process.cwd(),studentId}={}){
       });
       continue;
     }
+
+    executeDocumentWriteDependencies({
+      sandbox,
+      studentRoot,
+      parentFile:source.file,
+      parentSourcePath:source.relativePath,
+      warnings,
+      dependencies:scriptDependencies,
+      stack:[source.file]
+    });
 
     if(result.captures.groups){
       addCatalogCandidate(catalogCandidates,{
@@ -643,8 +754,20 @@ export function inspectLegacyLearningState({root=process.cwd(),studentId}={}){
   const masteryResult=resolveClaims(claims,catalogResult.catalog);
   const conflicts=[...catalogResult.conflicts,...masteryResult.conflicts];
   const hardWarnings=warnings.filter(item=>
-    ['source-execution-failed','legacy-catalog-outside-student','legacy-catalog-missing','legacy-catalog-not-found','catalog-transform-failed','inline-mastery-mutation-unresolved']
-      .includes(item.type)
+    [
+      'source-execution-failed',
+      'legacy-catalog-outside-student',
+      'legacy-catalog-missing',
+      'legacy-catalog-not-found',
+      'catalog-transform-failed',
+      'inline-mastery-mutation-unresolved',
+      'document-write-script-depth-exceeded',
+      'document-write-script-unsupported',
+      'document-write-script-outside-student',
+      'document-write-script-cycle',
+      'document-write-script-missing',
+      'document-write-script-execution-failed'
+    ].includes(item.type)
   );
   const automaticEligible=
     !!catalogResult.catalog&&
@@ -665,6 +788,7 @@ export function inspectLegacyLearningState({root=process.cwd(),studentId}={}){
     diagnostics:{
       aliases,
       indirectSources,
+      scriptDependencies,
       catalogTransforms,
       orphanClaims:masteryResult.orphanClaims,
       warnings
