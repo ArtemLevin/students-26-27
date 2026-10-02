@@ -183,7 +183,7 @@ test('Stage 04 transaction commits all managed files together',()=>{
     sourceKind:'stage04-mastery',
     basis:'Assessed exactly during lesson.'
   });
-  assert.match(fs.readFileSync(x.files[0],'utf8'),/"practiceDisposition":"manual"/);
+  assert.match(fs.readFileSync(x.files[0],'utf8'),/"practiceDisposition"\s*:\s*"manual"/);
   assert.match(fs.readFileSync(x.files[1],'utf8'),/demo\.generator/);
 });
 
