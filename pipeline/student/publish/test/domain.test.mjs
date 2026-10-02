@@ -305,6 +305,58 @@ test('one lesson can update several KTP items independently',()=>{
   assert.equal(result.records['ktp-003'].coverage,'partial');
 });
 
+test('registry derivation preserves Stage 04 enrichment on canonical outcomes',()=>{
+  const source=registrySource([{
+    date:'2026-10-07',
+    ktpRefs:['ktp-002'],
+    href:'07.10.26.html',
+    title:'Графики №12',
+    navTitle:'Графики',
+    navSubtitle:'чтение графика',
+    summary:'Описание',
+    topics:['графики'],
+    outcomes:[{
+      competencyId:'func_17',
+      evidenceAnchor:'graph-model',
+      relation:'practiced',
+      label:'Чтение графика',
+      level:3,
+      tone:'good',
+      practiceDisposition:'generator'
+    }],
+    materials:{html:'07.10.26.html'}
+  }]);
+  const metadata={
+    version:1,
+    studentId:'test_student',
+    date:'2026-10-07',
+    title:'Графики №12',
+    summary:'Описание',
+    topics:['графики'],
+    ktpRefs:['ktp-002'],
+    ktpCoverage:[{ktpId:'ktp-002',coverage:'complete'}],
+    outcomes:[{
+      competencyId:'func_17',
+      evidenceAnchor:'graph-model',
+      relation:'practiced',
+      masteryClaim:null
+    }],
+    materials:{html:'07.10.26.html'}
+  };
+
+  const result=deriveRegistrySource({source,metadata});
+  assert.equal(result.record.outcomes.length,1);
+  assert.deepEqual(result.record.outcomes[0],{
+    competencyId:'func_17',
+    evidenceAnchor:'graph-model',
+    relation:'practiced',
+    label:'Чтение графика',
+    level:3,
+    tone:'good',
+    practiceDisposition:'generator'
+  });
+});
+
 test('registry is derived from metadata while preserving navigation labels',()=>{
   const x=repoFixture();
   const metadata={
