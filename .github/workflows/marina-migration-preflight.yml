@@ -1,0 +1,32 @@
+name: Marina migration preflight
+
+on:
+  push:
+    branches:
+      - 'feat/student-platform-v2-p5-3-10-marina'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout migration branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-p5-3-10-marina
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inspect legacy state
+        run: node scripts/student.mjs inspect-legacy-state marina --json
+      - name: Readiness preflight
+        shell: bash
+        run: |
+          node scripts/student.mjs readiness --json > /tmp/readiness.json
+          node -e "const r=require('/tmp/readiness.json'); const s=r.students.find(x=>x.studentId==='marina'); if(!s)process.exit(1); if(s.status!=='ready')process.exit(2); if(s.architecture!=='legacy-structured')process.exit(3); if(s.planningMode!=='rolling')process.exit(4); if(s.lessons!==8||s.competencies!==300||s.mastery!==0)process.exit(5); if(s.masteryConflicts||s.orphanClaims||s.warnings.length||s.scaffoldBlockers.length||s.reasons.length)process.exit(6); console.log(JSON.stringify(s,null,2)); console.log('READY_CANDIDATES'); console.log(JSON.stringify(r.students.filter(x=>x.status==='ready'),null,2));"
+      - name: Check current architecture ratchet
+        run: node pipeline/migration/audit-ratchet.mjs
