@@ -341,3 +341,28 @@ test('real Timofey legacy sources apply the runtime EGE-2027 catalog transform a
   );
   assert.equal(report.automaticEligible,true);
 });
+
+test('real Xenia legacy sources reconcile EGE-2027 mastery and stay migration-eligible',()=>{
+  const x=fixture('xenia_legacy_fixture');
+  for(const name of ['competence-config.js','dashboard.js','index-base-2026-07-29.html']){
+    write(
+      path.join(x.site,name),
+      fs.readFileSync(
+        path.join(ROOT,'students','xenia_klykova','site',name),
+        'utf8'
+      )
+    );
+  }
+  const report=inspectLegacyLearningState({root:x.root,studentId:x.studentId});
+  const variance=report.mastery.resolved.find(item=>item.competencyId==='ege2027_t6_variance');
+  const stddev=report.mastery.resolved.find(item=>item.competencyId==='ege2027_t6_stddev');
+  assert.equal(variance?.level,2);
+  assert.equal(stddev?.level,2);
+  assert.equal(report.mastery.resolved.some(item=>item.competencyId==='t11_other'),false);
+  assert.equal(report.mastery.conflicts.length,0);
+  assert.deepEqual(report.diagnostics.orphanClaims,[]);
+  assert.ok(
+    report.diagnostics.catalogTransforms.some(item=>item.transform==='ege-profile-2027')
+  );
+  assert.equal(report.automaticEligible,true);
+});
