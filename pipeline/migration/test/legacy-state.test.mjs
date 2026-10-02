@@ -693,6 +693,98 @@ test('real Nastya Pavlova source reconciles ID overlays before root EGE-2027 run
   assert.equal(byId.get('text_20').evidence.href,'28.09.26.html');
 });
 
+test('real Matvey Gorbachev source resolves title overlays uniquely and fails closed on title drift',()=>{
+  const x=fixture('matvey_gorbachev_reconciled_fixture');
+  for(const name of ['competency-map-data.js','mastery-authority.js','index.html']){
+    write(
+      path.join(x.site,name),
+      fs.readFileSync(path.join(ROOT,'students','matvey_gorbachev','site',name),'utf8')
+    );
+  }
+
+  const index=fs.readFileSync(
+    path.join(ROOT,'students','matvey_gorbachev','site','index.html'),
+    'utf8'
+  );
+  assert.ok(index.indexOf('competency-map-data.js')<index.indexOf('mastery-authority.js'));
+  assert.ok(index.indexOf('mastery-authority.js')<index.indexOf('competency-map.js'));
+  assert.equal(/item\\.level\\s*=/.test(index),false);
+
+  const report=inspectLegacyLearningState(x);
+  const levelCounts=report.mastery.resolved.reduce((counts,item)=>{
+    counts[item.level]=(counts[item.level]||0)+1;
+    return counts;
+  },{});
+
+  assert.equal(report.catalog?.count,342);
+  assert.equal(report.mastery.resolved.length,342);
+  assert.deepEqual(levelCounts,{0:281,2:61});
+  assert.ok(report.mastery.resolved.every(item=>
+    item.sourceKind==='mastery-authority'&&
+    item.sourcePath==='site/mastery-authority.js'
+  ));
+  assert.equal(report.mastery.conflicts.length,0);
+  assert.deepEqual(report.diagnostics.orphanClaims,[]);
+  assert.deepEqual(report.diagnostics.warnings,[]);
+  assert.equal(report.automaticEligible,true);
+
+  const sandbox=createLegacySandbox();
+  executeLegacyFile({
+    sandbox,
+    filePath:path.join(x.site,'competency-map-data.js'),
+    relativePath:'site/competency-map-data.js'
+  });
+  executeLegacyFile({
+    sandbox,
+    filePath:path.join(x.site,'mastery-authority.js'),
+    relativePath:'site/mastery-authority.js'
+  });
+  const data=sandbox.window.COMPETENCY_MAP_DATA;
+  const byId=new Map(data.groups.flatMap(group=>group.items).map(item=>[item.id,item]));
+
+  assert.equal(sandbox.window.STUDENT_MASTERY_AUTHORITY.titleMappingCount,55);
+  assert.equal(Object.keys(sandbox.window.STUDENT_MASTERY_AUTHORITY.levels).length,342);
+  assert.equal(data.updated,'27.09.2026');
+  assert.equal(data.storagePrefix,'matvey_gorbachev-ege-profile-math');
+  assert.equal(data.nextAfterBaseline,'functions_09');
+
+  assert.equal(byId.get('powers_01').level,2);
+  assert.ok(byId.get('powers_01').evidence.some(entry=>entry.date==='17.09.26'));
+
+  assert.equal(byId.get('functions_13').level,2);
+  assert.ok(byId.get('functions_13').evidence.some(entry=>entry.date==='20.09.26'));
+
+  assert.equal(byId.get('vectors_06').level,2);
+  assert.ok(byId.get('vectors_06').evidence.some(entry=>entry.date==='24.09.26'));
+
+  assert.equal(byId.get('equations_07').level,2);
+  assert.ok(byId.get('equations_07').evidence.some(entry=>
+    entry.date==='27.09.26'&&entry.href==='27.09.26.html#roots'
+  ));
+  assert.equal(byId.get('numbers_06').level,0);
+  assert.ok(byId.get('numbers_06').evidence.some(entry=>
+    entry.date==='27.09.26'&&entry.href==='27.09.26.html#models'
+  ));
+
+  const driftSandbox=createLegacySandbox();
+  executeLegacyFile({
+    sandbox:driftSandbox,
+    filePath:path.join(x.site,'competency-map-data.js'),
+    relativePath:'site/competency-map-data.js'
+  });
+  const driftItems=driftSandbox.window.COMPETENCY_MAP_DATA.groups.flatMap(group=>group.items);
+  const duplicateTarget=driftItems.find(item=>item.id==='numbers_01');
+  duplicateTarget.title='Показательная функция';
+  assert.throws(
+    ()=>executeLegacyFile({
+      sandbox:driftSandbox,
+      filePath:path.join(x.site,'mastery-authority.js'),
+      relativePath:'site/mastery-authority.js'
+    }),
+    /Matvey mastery title mapping changed/
+  );
+});
+
 test('real Mark index stays eligible under the inline mastery guard',()=>{
   const x=fixture('mark_inline_guard_fixture');
   for(const name of ['competency-map-data.js','index.html']){
