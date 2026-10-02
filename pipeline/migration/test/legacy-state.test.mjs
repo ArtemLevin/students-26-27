@@ -285,21 +285,23 @@ test('real Sofya format resolves its embedded legacy competency catalog',()=>{
 });
 
 
-test('real Timofey format exposes known task-17 catalog drift and remains blocked',()=>{
+test('real Timofey format applies the runtime EGE-2027 catalog transform and is migration-eligible',()=>{
   const report=inspectLegacyLearningState({root:ROOT,studentId:'timofey'});
+  const ids=new Set(report.catalog?.ids||[]);
   assert.ok(report.catalog?.count>0);
   assert.ok(report.mastery.resolved.length>0);
   assert.equal(report.mastery.conflicts.length,0);
-  assert.deepEqual(
-    report.diagnostics.orphanClaims.map(item=>item.competencyId).sort(),
-    [
-      'ege2027_t17_analysis',
-      'ege2027_t17_constraints',
-      'ege2027_t17_interpretation',
-      'ege2027_t17_optimization',
-      'ege2027_t17_relations',
-      'ege2027_t17_variables'
-    ]
+  assert.deepEqual(report.diagnostics.orphanClaims,[]);
+  for(const id of [
+    'ege2027_t17_analysis',
+    'ege2027_t17_constraints',
+    'ege2027_t17_interpretation',
+    'ege2027_t17_optimization',
+    'ege2027_t17_relations',
+    'ege2027_t17_variables'
+  ])assert.equal(ids.has(id),true,id);
+  assert.ok(
+    report.diagnostics.catalogTransforms.some(item=>item.transform==='ege-profile-2027')
   );
-  assert.equal(report.automaticEligible,false);
+  assert.equal(report.automaticEligible,true);
 });
