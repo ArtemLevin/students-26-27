@@ -3,11 +3,11 @@
 > **Current implementation state — 2026-10-01**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **4 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`);
+> - Student Platform v2: **5 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`, `sofya_kalney`);
 > - текущий rollout: **P5.2**;
-> - завершённый этап: **P5.2-3** — `timofey` мигрирован с сохранением 26 исторических уроков, 296 competency IDs и 47 mastery values;
-> - EGE-2027 runtime catalog Тимофея теперь используется migration preflight через общий `transformEgeProfile2027Catalog()`, поэтому production dashboard и migration pipeline разделяют один catalog contract;
-> - следующий gate: **P5.2-4 Remaining modern-shared candidate audit** — выбрать следующий автоматически мигрируемый кабинет по исполняемому inventory/preflight, без ручного предположения о кандидате;
+> - завершённый этап: **P5.2-5** — `sofya_kalney` мигрирована с сохранением 20 исторических уроков, 324 competency IDs и 29 mastery values;
+> - P5.2-4 audit оставшихся modern-shared кабинетов выявил два независимых блокера: `nikol_sarkisyants` — legacy registry parser не принимает вычисляемый `LESSONS`; `xenia_klykova` — orphan mastery `t11_other`;
+> - следующий gate: **P5.2-6 Nikol registry compatibility** — сделать historical lesson discovery совместимым с безопасным вычисляемым registry форматом Никол и повторить automatic migration preflight;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
