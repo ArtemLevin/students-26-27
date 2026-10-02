@@ -1,0 +1,81 @@
+name: Ivan migration branch apply
+
+on:
+  push:
+    branches:
+      - 'feat/student-platform-v2-p5-3-3-ivan-petrachenkov'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout migration branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-p5-3-3-ivan-petrachenkov
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate reviewed manifest
+        run: node scripts/student.mjs validate-manifest --manifest pipeline/migration/manifests/ivan_petrachenkov.json --json
+
+      - name: Inspect legacy state
+        run: node scripts/student.mjs inspect-legacy-state ivan_petrachenkov --json
+
+      - name: Validated dry-run
+        shell: bash
+        run: |
+          node scripts/student.mjs migrate ivan_petrachenkov \
+            --manifest pipeline/migration/manifests/ivan_petrachenkov.json \
+            --date 2026-10-02 \
+            --dry-run \
+            --json > /tmp/ivan-dry-run.json
+          node -e "const p=require('/tmp/ivan-dry-run.json'); if(!p.executable||!p.coverage?.complete) process.exit(1); if(p.coverage?.mastery?.resolvedSource!==28||p.coverage?.mastery?.candidate!==28) process.exit(2); console.log(JSON.stringify({executable:p.executable,coverage:p.coverage,projectedBaseline:p.projectedBaseline},null,2));"
+
+      - name: Transactional apply
+        run: |
+          node scripts/student.mjs migrate ivan_petrachenkov \
+            --manifest pipeline/migration/manifests/ivan_petrachenkov.json \
+            --date 2026-10-02 \
+            --apply \
+            --json
+
+      - name: Validate migrated package
+        run: node scripts/student.mjs validate ivan_petrachenkov --json
+
+      - name: Verify preserved mastery
+        run: |
+          node -e "const s=require('./students/ivan_petrachenkov/site/data/mastery-state.json'); const values=Object.values(s.levels); if(values.length!==28||values.some(v=>v!==2)) process.exit(1); console.log('Ivan mastery preserved:',values.length);"
+
+      - name: Run migration regression suite
+        run: node --test pipeline/migration/test/*.test.mjs
+
+      - name: Enforce architecture ratchet
+        run: node pipeline/migration/audit-ratchet.mjs
+
+      - name: Commit generated migration state
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            pipeline/migration/baseline.json \
+            pipeline/migration/reports/ivan_petrachenkov.json \
+            students/ivan_petrachenkov/student-contract.json \
+            students/ivan_petrachenkov/site/data \
+            students/ivan_petrachenkov/site/lesson-registry.js \
+            students/ivan_petrachenkov/site/tests/student-platform-v2.test.mjs
+          if git diff --cached --quiet; then
+            echo "Migration produced no generated changes"
+            exit 1
+          fi
+          git commit -m "P5.3-3: apply Ivan Student Platform v2 migration"
+          git push origin HEAD:feat/student-platform-v2-p5-3-3-ivan-petrachenkov
