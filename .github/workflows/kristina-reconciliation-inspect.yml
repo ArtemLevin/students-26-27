@@ -1,0 +1,42 @@
+name: Kristina reconciliation inspect
+
+on:
+  push:
+    branches:
+      - 'feat/student-platform-v2-reconcile-kristina'
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-reconcile-kristina
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inspect reconciled legacy source
+        shell: bash
+        run: |
+          node scripts/student.mjs inspect-legacy-state kristina --json > /tmp/kristina.json
+          node - <<'NODE'
+          const r=require('/tmp/kristina.json');
+          const counts={};
+          for(const item of r.mastery.resolved)counts[item.level]=(counts[item.level]||0)+1;
+          const repeats=[];
+          const data=require('fs').readFileSync('students/kristina/site/mastery-authority.js','utf8');
+          console.log(JSON.stringify({
+            automaticEligible:r.automaticEligible,
+            catalog:r.catalog?.count,
+            mastery:r.mastery?.resolved?.length,
+            conflicts:r.mastery?.conflicts?.length,
+            orphans:r.diagnostics?.orphanClaims?.length,
+            warnings:r.diagnostics?.warnings,
+            levelCounts:counts,
+            sourceKinds:[...new Set(r.mastery.resolved.map(x=>x.sourceKind))],
+            sourcePaths:[...new Set(r.mastery.resolved.map(x=>x.sourcePath))],
+            authorityBytes:data.length
+          },null,2));
+          if(!r.automaticEligible)process.exit(1);
+          NODE
