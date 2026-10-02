@@ -13,6 +13,31 @@ const SNAPSHOT_PATH=path.join(
   'darya_savenkova.json'
 );
 
+function referenceFiles(){
+  const roots=[
+    path.join(ROOT,'students','darya_savenkova','site'),
+    path.join(ROOT,'students','darya_savenkova','images')
+  ];
+  const out=[];
+  const walk=directory=>{
+    for(const entry of fs.readdirSync(directory,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name,'en'))){
+      const file=path.join(directory,entry.name);
+      if(entry.isDirectory()){
+        walk(file);
+        continue;
+      }
+      if(!entry.isFile())continue;
+      const relative=path.relative(ROOT,file).replaceAll('\\','/');
+      if(relative.startsWith('students/darya_savenkova/site/data/'))continue;
+      if(relative.startsWith('students/darya_savenkova/site/tests/'))continue;
+      if(relative==='students/darya_savenkova/site/lesson-registry.js')continue;
+      out.push(relative);
+    }
+  };
+  for(const root of roots)walk(root);
+  return out.sort((a,b)=>a.localeCompare(b,'en'));
+}
+
 function sha256(file){
   return crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 }
@@ -35,8 +60,9 @@ test('Darya design-reference surface matches the approved migration snapshot',()
     'students/darya_savenkova/site/14.09.26.html',
     'students/darya_savenkova/site/14.09.26-lab.html'
   ];
-  const paths=snapshot.files.map(item=>item.path);
+  const paths=snapshot.files.map(item=>item.path).sort((a,b)=>a.localeCompare(b,'en'));
   assert.equal(new Set(paths).size,paths.length);
+  assert.deepEqual(paths,referenceFiles());
   for(const value of required)assert.ok(paths.includes(value),value);
 
   for(const item of snapshot.files){
