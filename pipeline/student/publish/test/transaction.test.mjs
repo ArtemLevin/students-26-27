@@ -256,6 +256,54 @@ test('stale state precondition aborts before staging publication writes',()=>{
   assert.deepEqual(tempFiles(x.root),[]);
 });
 
+
+test('state drift during plan construction is rejected as stale before publication writes',()=>{
+  const x=fixture();
+  const originalReadFileSync=fs.readFileSync;
+  let stateReads=0;
+  let concurrentState=null;
+  let plan;
+
+  try{
+    fs.readFileSync=function(file,...args){
+      const result=originalReadFileSync.call(fs,file,...args);
+      if(path.resolve(String(file))===path.resolve(x.statePath)){
+        stateReads+=1;
+        if(stateReads===2){
+          const external=JSON.parse(
+            typeof result==='string'?result:result.toString('utf8')
+          );
+          external.updated='2026-10-01';
+          concurrentState=Buffer.from(JSON.stringify(external,null,2)+'\n');
+          fs.writeFileSync(x.statePath,concurrentState);
+        }
+      }
+      return result;
+    };
+    plan=buildV2PublicationPlan({
+      root:x.root,
+      studentId:x.studentId,
+      intent:intent(x.studentId)
+    });
+  }finally{
+    fs.readFileSync=originalReadFileSync;
+  }
+
+  assert.ok(stateReads>=2,'fixture must mutate state after the candidate snapshot read');
+  assert.deepEqual(fs.readFileSync(x.statePath),concurrentState);
+
+  assert.throws(
+    ()=>executeV2Publication({root:x.root,plan}),
+    error=>error instanceof StalePublicationPlanError&&
+      error.code==='STALE_PUBLICATION_PLAN'&&
+      /content changed since the publication plan was built/.test(error.message)
+  );
+
+  assert.deepEqual(fs.readFileSync(x.statePath),concurrentState);
+  assert.equal(fs.existsSync(x.metadataPath),false);
+  assert.deepEqual(tempFiles(x.root),[]);
+});
+
 test('failure after partial application rolls every target back byte-for-byte',()=>{
   const x=fixture();
   const plan=buildV2PublicationPlan({
