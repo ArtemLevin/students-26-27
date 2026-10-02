@@ -1,0 +1,121 @@
+name: Ekaterina Gnedkova migration apply
+
+on:
+  push:
+    branches:
+      - 'feat/student-platform-v2-migrate-ekaterina-gnedkova'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout migration branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-migrate-ekaterina-gnedkova
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate reviewed manifest
+        run: node scripts/student.mjs validate-manifest --manifest pipeline/migration/manifests/ekaterina_gnedkova.json --json
+
+      - name: Reconcile manifest against current authority
+        shell: bash
+        run: |
+          node scripts/student.mjs inspect-legacy-state ekaterina_gnedkova --json > /tmp/legacy.json
+          node - <<'NODE'
+          const manifest=require('./pipeline/migration/manifests/ekaterina_gnedkova.json');
+          const report=require('/tmp/legacy.json');
+          if(!report.automaticEligible)process.exit(1);
+          if(report.catalog?.count!==369||report.mastery?.resolved?.length!==369)process.exit(2);
+          const expected=new Map(report.mastery.resolved.map(x=>[x.competencyId,x.level]));
+          if(manifest.preserveMastery.length!==expected.size)process.exit(3);
+          for(const item of manifest.preserveMastery){
+            if(expected.get(item.competencyId)!==item.level)process.exit(4);
+            if(item.sourcePath!=='site/mastery-authority.js'||item.sourceKind!=='mastery-authority'||item.confidence!=='exact')process.exit(5);
+          }
+          NODE
+
+      - name: Validated dry-run
+        shell: bash
+        run: |
+          node scripts/student.mjs migrate ekaterina_gnedkova \
+            --manifest pipeline/migration/manifests/ekaterina_gnedkova.json \
+            --date 2026-10-02 \
+            --dry-run \
+            --json > /tmp/dry-run.json
+          node -e "const p=require('/tmp/dry-run.json'),c=p.coverage; if(!p.executable||!c?.complete)process.exit(1); if(c.lessons?.source!==7||c.lessons?.candidate!==7)process.exit(2); if(c.competencies?.source!==369||c.competencies?.candidate!==369)process.exit(3); if(c.mastery?.resolvedSource!==369||c.mastery?.candidate!==369||c.mastery?.conflicts!==0||c.mastery?.orphans!==0)process.exit(4); if((p.reviewItems||[]).length||(p.blockers||[]).length||(p.warnings||[]).length)process.exit(5);"
+
+      - name: Transactional apply
+        run: |
+          node scripts/student.mjs migrate ekaterina_gnedkova \
+            --manifest pipeline/migration/manifests/ekaterina_gnedkova.json \
+            --date 2026-10-02 \
+            --apply \
+            --json
+
+      - name: Validate migrated package
+        run: node scripts/student.mjs validate ekaterina_gnedkova --json
+
+      - name: Verify canonical mastery preservation
+        run: |
+          node - <<'NODE'
+          const state=require('./students/ekaterina_gnedkova/site/data/mastery-state.json');
+          const values=Object.values(state.levels);
+          const counts={};
+          for(const value of values){
+            counts[value.level]=(counts[value.level]||0)+1;
+            if(value.sourcePath!=='site/mastery-authority.js'||value.sourceKind!=='mastery-authority')process.exit(1);
+          }
+          const expected={0:321,2:13,3:25,4:10};
+          if(values.length!==369||JSON.stringify(counts)!==JSON.stringify(expected))process.exit(2);
+          console.log('Ekaterina mastery preserved:',values.length,counts);
+          NODE
+
+      - name: Verify migration report and ratchet target
+        run: |
+          node - <<'NODE'
+          const report=require('./pipeline/migration/reports/ekaterina_gnedkova.json');
+          const baseline=require('./pipeline/migration/baseline.json');
+          if(!report.complete)process.exit(1);
+          if(report.lessons.source!==7||report.lessons.candidate!==7)process.exit(2);
+          if(report.competencies.source!==369||report.competencies.candidate!==369)process.exit(3);
+          if(report.mastery.resolvedSource!==369||report.mastery.candidate!==369||report.mastery.conflicts!==0||report.mastery.orphans!==0)process.exit(4);
+          if(report.materials.html!==7||report.materials.pdf!==6||report.materials.tex!==7||report.materials.lab!==3)process.exit(5);
+          if(report.preservation.protectedFilesChanged.length)process.exit(6);
+          if(report.warnings.length||report.reviewItems.length||report.blockers.length)process.exit(7);
+          if(baseline.minV2!==19||baseline.maxNonV2!==5||baseline.byArchitecture?.v2!==19||baseline.byArchitecture?.['legacy-structured']!==5)process.exit(8);
+          NODE
+
+      - name: Run migration regression suite
+        run: node --test pipeline/migration/test/*.test.mjs
+
+      - name: Enforce architecture ratchet
+        run: node pipeline/migration/audit-ratchet.mjs
+
+      - name: Commit generated migration state
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            pipeline/migration/baseline.json \
+            pipeline/migration/reports/ekaterina_gnedkova.json \
+            students/ekaterina_gnedkova/student-contract.json \
+            students/ekaterina_gnedkova/site/data \
+            students/ekaterina_gnedkova/site/lesson-registry.js \
+            students/ekaterina_gnedkova/site/tests/student-platform-v2.test.mjs
+          if git diff --cached --quiet; then
+            echo "Migration produced no generated changes"
+            exit 1
+          fi
+          git commit -m "Reconciliation: apply Ekaterina Gnedkova Student Platform v2 migration"
+          git push origin HEAD:feat/student-platform-v2-migrate-ekaterina-gnedkova
