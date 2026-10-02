@@ -5,14 +5,14 @@
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
 > - Student Platform v2: **20 / 24** кабинетов; rolling-clean и fixed-KTP waves завершены;
 > - текущий этап: **reconciliation wave** для оставшихся legacy-structured источников;
-> - `ekaterina_gnedkova` reconciled и мигрирована: 7/7 historical lessons, 369/369 competencies, 369/369 mastery;
-> - `sofya_khomenko` reconciled и мигрирована: dated inline overlay вынесен в явный `mastery-authority.js`, runtime load order сохранён;
-> - migration result Софьи: **4/4 historical lessons, 343/343 competencies, 343/343 mastery**, материалы 4 HTML / 4 PDF / 4 TeX / 2 lab;
-> - mastery distribution сохранён точно: **283×0 + 60×2**; conflicts/orphans=0, warnings/reviewItems/blockers=[], protectedFilesChanged=[];
-> - architecture ratchet: **v2=20 / non-v2=4**, `legacy-structured=4`, `legacy-ktp=0`;
+> - `ekaterina_gnedkova` и `sofya_khomenko` reconciled и мигрированы в v2;
+> - следующий reconciliation gate завершён для `kristina`: inline overlays 15.09/22.09 вынесены в явный `mastery-authority.js` после repository state 14.09 и до инициализации `competency-map.js`;
+> - real-source result Кристины: **360/360 competencies**, **360/360 mastery**, распределение **340×0 + 17×2 + 3×3**, conflicts/orphans/warnings=0, `automaticEligible=true`;
+> - regression также фиксирует runtime semantics: исходный 14.09 material сохраняется, dated 15.09/22.09 overlays сохраняют levels, repeat, evidence и material links;
+> - следующий gate: отдельная Student Platform v2 migration `kristina` после merge reconciliation PR;
+> - architecture baseline пока остаётся **v2=20 / non-v2=4**, `legacy-structured=4`, `legacy-ktp=0`;
 > - `darya_savenkova` остаётся автоматически ready, но отложена из-за роли design reference;
-> - remaining reconciliation targets: `kristina`, `matvey_gorbachev`, `nastya_pavlova`;
-> - следующий gate выбирается после свежего post-merge readiness и сравнения сложности inline mastery semantics;
+> - после Кристины remaining reconciliation targets: `matvey_gorbachev`, `nastya_pavlova`;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
