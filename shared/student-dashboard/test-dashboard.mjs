@@ -116,7 +116,7 @@ function loadCatalog(root,spec,transform=null){
   return normalizeGroups(transform?transform(groups):groups);
 }
 
-export async function runDashboardTests({student,catalog,stateKey,storageKey,catalogTransform=null}){
+export async function runDashboardTests({student,catalog,stateKey,storageKey,catalogTransform=null,canonicalCatalogPath=null}){
   const root=process.cwd(),site=path.join(root,'students',student,'site');
   assert.ok(fs.existsSync(path.join(site,'index.html')),`${student}: index missing`);
   const registry=await loadRegistry(site),lessons=registry.LESSONS;
@@ -154,6 +154,13 @@ export async function runDashboardTests({student,catalog,stateKey,storageKey,cat
   const groups=loadCatalog(root,catalog,catalogTransform),meta=validateCatalog(groups),items=groups.flatMap(group=>group.items);
   assert.ok(meta.groups>0&&meta.items>0,`${student}: catalog must be non-empty`);
   assert.equal(new Set(items.map(item=>item.id)).size,items.length,`${student}: competency ids unique`);
+  if(canonicalCatalogPath){
+    const canonicalValue=JSON.parse(fs.readFileSync(path.join(root,canonicalCatalogPath),'utf8'));
+    const canonicalGroups=normalizeGroups(canonicalValue.groups||[]);
+    const runtimeIds=items.map(item=>item.id).sort();
+    const canonicalIds=canonicalGroups.flatMap(group=>group.items).map(item=>item.id).sort();
+    assert.deepEqual(runtimeIds,canonicalIds,`${student}: effective runtime catalog must match canonical v2 catalog`);
+  }
   const seeded=new MemoryStorage(),merged=mergeState(groups,seeded,{stateKey:'probe-v2',storageKey:'probe-v1',baselineKey:'probe-baseline',teacherSeed:{},legacyStorageKeys:[]});
   assert.equal(Object.keys(merged.state.studentLevels).filter(id=>items.some(item=>item.id===id)).length,items.length,`${student}: state covers catalog`);
   assert.deepEqual(merged.state.studentLevels,merged.baseline,`${student}: mastery must be GitHub-authoritative`);
