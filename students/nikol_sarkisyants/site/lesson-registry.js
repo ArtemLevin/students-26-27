@@ -1,196 +1,709 @@
 export const RECENT_LIMIT=3;
 export const ARCHIVE_PAGE_SIZE=10;
 
-const MONTHS_GENITIVE=[
-  'января','февраля','марта','апреля','мая','июня',
-  'июля','августа','сентября','октября','ноября','декабря'
-];
+const MONTHS_GENITIVE=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
-export const LESSONS=Object.freeze([
+export const LESSONS=[
   {
-    date:'2026-09-28',
-    href:'28.09.26.html',
-    title:'Оптимизационные задачи с производной',
-    navTitle:'Оптимизация с производной',
-    navSubtitle:'целевая функция · ограничения · максимум и минимум',
-    summary:'На занятии выстроен универсальный маршрут прикладной оптимизации: определить целевую величину, свести модель к одной переменной, зафиксировать допустимую область, найти критические точки и доказать максимум или минимум по знаку производной и, когда нужно, по граничным значениям. Разобраны модели выручки, произведения, мощности и объёма коробки.',
-    topics:['оптимизация','целевая функция','ограничения','критические точки','максимум и минимум','прикладные задачи'],
-    outcomes:[
-      {competencyId:'t12_applied',label:'Прикладная оптимизация',level:2,tone:'process',practiceDisposition:'manual'},
-      {competencyId:'t12_domain',label:'ОДЗ и допустимая область',level:2,tone:'process',practiceDisposition:'manual'},
-      {competencyId:'t12_endpoints',label:'Критические точки и границы',level:2,tone:'process',practiceDisposition:'manual'},
-      {competencyId:'t12_product',label:'Произведения функций',level:2,tone:'process',practiceDisposition:'manual'},
-      {competencyId:'t12_quotient',label:'Частные функций',level:2,tone:'process',practiceDisposition:'manual'}
+    "date": "2026-09-28",
+    "ktpRefs": [],
+    "href": "28.09.26.html",
+    "title": "Оптимизационные задачи с производной",
+    "navTitle": "Оптимизация с производной",
+    "navSubtitle": "целевая функция · ограничения · максимум и минимум",
+    "summary": "На занятии выстроен универсальный маршрут прикладной оптимизации: определить целевую величину, свести модель к одной переменной, зафиксировать допустимую область, найти критические точки и доказать максимум или минимум по знаку производной и, когда нужно, по граничным значениям. Разобраны модели выручки, произведения, мощности и объёма коробки.",
+    "topics": [
+      "оптимизация",
+      "целевая функция",
+      "ограничения",
+      "критические точки",
+      "максимум и минимум",
+      "прикладные задачи"
     ],
-    materials:{pdf:'../pdf_docs/28.09.26.pdf',tex:'../tex_docs/28.09.26.tex',lab:'28.09.26-lab.html'}
-  },
-  {
-    date:'2026-09-25',
-    href:'25.09.26.html',
-    title:'Производная и касательная',
-    navTitle:'Производная и касательная',
-    navSubtitle:'угловой коэффициент · параллельность · точка касания',
-    summary:'На занятии закреплена связь f′(x₀)=k=tg α и отработаны основные типы задач на касательную: вычисление производной по двум точкам прямой, использование параллельности, чтение уровня y=m на графике производной и поиск абсциссы точки касания по двум условиям.',
-    topics:['производная','касательная','угловой коэффициент','параллельные прямые','график производной','точка касания'],
-    outcomes:[
-      {competencyId:'t8_geometric',label:'Геометрический смысл производной',level:3,tone:'good',practiceDisposition:'manual'},
-      {competencyId:'t8_derivative_graph',label:'Чтение графика производной',level:3,tone:'good',practiceDisposition:'manual'},
-      {competencyId:'t8_interpret',label:'Задачи на касательную',level:3,tone:'good',practiceDisposition:'manual'}
+    "outcomes": [
+      {
+        "label": "Прикладная оптимизация",
+        "level": 2,
+        "competencyId": "t12_applied",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "ОДЗ и допустимая область",
+        "level": 2,
+        "competencyId": "t12_domain",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Критические точки и границы",
+        "level": 2,
+        "competencyId": "t12_endpoints",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Произведения функций",
+        "level": 2,
+        "competencyId": "t12_product",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Частные функций",
+        "level": 2,
+        "competencyId": "t12_quotient",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      }
     ],
-    materials:{pdf:'../pdf_docs/25.09.26.pdf',tex:'../tex_docs/25.09.26.tex',lab:'25.09.26-lab.html'}
-  },
-  {
-    date:'2026-09-21',
-    href:'21.09.26.html',
-    title:'Геометрический смысл производной',
-    navTitle:'Геометрический смысл производной',
-    navSubtitle:'f и f′ · экстремумы · формулировки ЕГЭ',
-    summary:'На занятии закреплён геометрический смысл производной и систематизировано чтение графиков f и f′. Отработаны знак производной, монотонность, смена знака в точках экстремума, наибольшее и наименьшее значение на заданном промежутке, параллельность касательной прямой и разные форматы ответа ЕГЭ.',
-    topics:['геометрический смысл производной','график функции','график производной','монотонность','экстремумы','формулировки ЕГЭ'],
-    outcomes:[
-      {competencyId:'t8_geometric',label:'Геометрический смысл производной',level:3,tone:'good',practiceDisposition:'manual'},
-      {competencyId:'t8_derivative_graph',label:'Чтение графика производной',level:3,tone:'good',practiceDisposition:'manual'},
-      {competencyId:'t8_monotonicity',label:'Возрастание и убывание',level:3,tone:'good',practiceDisposition:'manual'},
-      {competencyId:'t8_extrema',label:'Экстремумы по знаку f′',level:3,tone:'good',practiceDisposition:'manual'},
-      {competencyId:'t8_interpret',label:'Интерпретация условий ЕГЭ',level:3,tone:'good',practiceDisposition:'manual'}
-    ],
-    materials:{pdf:'../pdf_docs/27.09.26.pdf',tex:'../tex_docs/27.09.26.tex'}
-  },
-  {
-    date:'2026-09-20',
-    href:'20.09.26.html',
-    title:'Графики функции и производной',
-    navTitle:'Графики функции и производной',
-    navSubtitle:'знак производной · монотонность · экстремумы',
-    summary:'Главный навык занятия — различать график функции и график производной и переводить информацию между ними. Закреплены знак f′, промежутки монотонности и знакопостоянства, нули производной, смена знака в точках экстремума, строгие неравенства, границы и выколотые точки.',
-    topics:['график функции','график производной','знак производной','монотонность','экстремумы','границы и выколотые точки'],
-    outcomes:[
-      {competencyId:'t8_derivative_graph',label:'График производной',level:3,tone:'good',practiceDisposition:'manual'},
-      {competencyId:'t8_interpret',label:'Сопоставление f и f′',level:3,tone:'good',practiceDisposition:'manual'},
-      {competencyId:'t8_monotonicity',label:'Возрастание и убывание',level:3,tone:'good',practiceDisposition:'manual'},
-      {competencyId:'t8_extrema',label:'Экстремумы по знаку f′',level:3,tone:'good',practiceDisposition:'manual'},
-      {competencyId:'t8_geometric',label:'Геометрический смысл производной',level:2,tone:'process',practiceDisposition:'manual'}
-    ],
-    materials:{pdf:'../pdf_docs/20.09.26.pdf',tex:'../tex_docs/20.09.26.tex',lab:'20.09.26-lab.html'}
-  },
-  {
-    date:'2026-09-14',
-    href:'14.09.26.html',
-    title:'Исследование функции с помощью производной',
-    navTitle:'Исследование функции',
-    navSubtitle:'монотонность · критические точки · экстремумы',
-    summary:'На занятии выстроен алгоритм исследования функции по производной: область определения, критические точки, числовая ось и знаки производной. Закреплены интервалы возрастания и убывания, признаки локального максимума и минимума, а также различие между критической и запрещённой точкой.',
-    topics:['производная','монотонность','критические точки','экстремумы','ПКОЗА','ОДЗ'],
-    outcomes:[
-      {competencyId:'t8_monotonicity',label:'Возрастание и убывание',level:3,tone:'good',practiceDisposition:'manual'},
-      {competencyId:'t8_extrema',label:'Точки экстремума',level:3,tone:'good',practiceDisposition:'manual'},
-      {competencyId:'t8_derivative_rules',label:'Применение производной',level:3,tone:'good',practiceDisposition:'manual'}
-    ],
-    materials:{pdf:'../pdf_docs/14.09.26.pdf',tex:'../tex_docs/14.09.26.tex',lab:'14.09.26-lab.html'}
-  },
-  {
-    date:'2026-09-11',
-    href:'11.09.26.html',
-    title:'Производная сложной функции',
-    navTitle:'Производная сложной функции',
-    navSubtitle:'правило цепочки · переменные и константы',
-    summary:'На занятии систематизировано правило цепочки: выделение внешней и внутренней функций, умножение на производную внутренней части и контроль переменной дифференцирования. Метод применён к корню, экспоненте, степени и синусу; отдельно закреплена проверка ОДЗ.',
-    topics:['производная','правило цепочки','сложная функция','экспонента','степень','ОДЗ'],
-    outcomes:[
-      {competencyId:'t8_derivative_rules',label:'Правило цепочки',level:3,tone:'good',practiceDisposition:'manual'},
-      {competencyId:'t8_elementary_derivatives',label:'Производные сложных функций',level:3,tone:'good',practiceDisposition:'manual'}
-    ],
-    materials:{pdf:'../pdf_docs/11.09.26.pdf',tex:'../tex_docs/11.09.26.tex',lab:'11.09.26-lab.html'}
-  },
-  {
-    date:'2026-09-07',
-    href:'07.09.26.html',
-    title:'Производная: произведение, частное и специальные функции',
-    navTitle:'Производная: правила и функции',
-    navSubtitle:'произведение · частное · тригонометрия · exp/log',
-    summary:'На занятии расширен вычислительный аппарат производной: отработаны правила произведения и частного, правило цепочки, производные тригонометрических, показательных и логарифмических функций. Отдельный акцент сделан на распознавании структуры выражения, порядке u′v − uv′, знаках и ОДЗ.',
-    topics:['производная','произведение и частное','тригонометрия','показательная функция','логарифмы','ОДЗ'],
-    outcomes:[
-      {competencyId:'t8_derivative_rules',label:'Правила дифференцирования',level:3,tone:'good',practiceDisposition:'manual'},
-      {competencyId:'t8_elementary_derivatives',label:'Производные элементарных функций',level:2,tone:'process',practiceDisposition:'manual'}
-    ],
-    materials:{tex:'../tex_docs/07.09.26.tex',lab:'07.09.26-lab.html'}
-  },
-  {
-    date:'2026-09-04',
-    href:'04.09.26.html',
-    title:'Повторение алгебры и введение в производную',
-    navTitle:'Алгебра и производная',
-    navSubtitle:'дроби · степени · первые правила производной',
-    summary:'На занятии разобраны ошибки в задачах на движение по воде, степенях, функциональных подстановках и алгебраических дробях. Затем введён первый вычислительный блок по производной: степенное правило, производная константы, постоянный множитель, сумма и разность.',
-    topics:['движение по воде','алгебраические дроби','корни и степени','функциональная подстановка','производная','степенное правило'],
-    outcomes:[
-      {competencyId:'t8_derivative_rules',label:'Правила дифференцирования',level:2,tone:'process',practiceDisposition:'manual'},
-      {competencyId:'t8_elementary_derivatives',label:'Производные элементарных функций',level:2,tone:'process',practiceDisposition:'manual'},
-      {competencyId:'t10_water',label:'Движение по воде',level:2,tone:'process',practiceDisposition:'manual'},
-      {label:'Алгебраические дроби и ОДЗ',level:2,tone:'alert',practiceDisposition:'manual'}
-    ],
-    materials:{
-      pdf:'../pdf_docs/04.09.26.pdf',
-      tex:'../tex_docs/04.09.26.tex'
+    "materials": {
+      "html": "28.09.26.html",
+      "pdf": "../pdf_docs/28.09.26.pdf",
+      "tex": "../tex_docs/28.09.26.tex",
+      "lab": "28.09.26-lab.html"
     }
   },
   {
-    date:'2026-08-25',
-    href:'25.08.26.html',
-    title:'Планиметрия: стратегия решения геометрических задач',
-    navTitle:'Планиметрия: стратегия решения',
-    navSubtitle:'высоты · площади · окружность · подобие',
-    summary:'На занятии выстроена единая стратегия планиметрии: искать фигуру, которой принадлежит искомая величина, выделять прямоугольные треугольники и общие элементы, сравнивать методы Пифагора, тригонометрии и площадей, а также распознавать окружность и подобие.',
-    topics:['планиметрия','высоты','площади','окружность','подобие','Пифагор и тригонометрия'],
-    outcomes:[
-      {label:'Стратегия планиметрии',level:2,tone:'process'},
-      {label:'Прямоугольные треугольники',level:2,tone:'process'},
-      {label:'Метод площадей',level:2,tone:'process'},
-      {label:'Окружность и вписанные углы',level:2,tone:'process'},
-      {label:'Подобие треугольников',level:2,tone:'process'}
+    "date": "2026-09-25",
+    "ktpRefs": [],
+    "href": "25.09.26.html",
+    "title": "Производная и касательная",
+    "navTitle": "Производная и касательная",
+    "navSubtitle": "угловой коэффициент · параллельность · точка касания",
+    "summary": "На занятии закреплена связь f′(x₀)=k=tg α и отработаны основные типы задач на касательную: вычисление производной по двум точкам прямой, использование параллельности, чтение уровня y=m на графике производной и поиск абсциссы точки касания по двум условиям.",
+    "topics": [
+      "производная",
+      "касательная",
+      "угловой коэффициент",
+      "параллельные прямые",
+      "график производной",
+      "точка касания"
     ],
-    materials:{pdf:'../pdf_docs/25.08.26.pdf',tex:'../tex_docs/25.08.26.tex'}
+    "outcomes": [
+      {
+        "label": "Геометрический смысл производной",
+        "level": 3,
+        "competencyId": "t8_geometric",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Чтение графика производной",
+        "level": 3,
+        "competencyId": "t8_derivative_graph",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Задачи на касательную",
+        "level": 3,
+        "competencyId": "t8_interpret",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "25.09.26.html",
+      "pdf": "../pdf_docs/25.09.26.pdf",
+      "tex": "../tex_docs/25.09.26.tex",
+      "lab": "25.09.26-lab.html"
+    }
   },
   {
-    date:'2026-08-23',
-    href:'23.08.26.html',
-    title:'Повторение алгебры и базовой планиметрии',
-    navTitle:'Алгебра и планиметрия',
-    navSubtitle:'радикалы · площади · окружности',
-    summary:'После занятия основной фокус сместился на самостоятельное применение формул планиметрии, аккуратность преобразований с радикалами и проверку корней в иррациональных уравнениях.',
-    topics:['показательные','логарифмы','иррациональные','площади','окружности','синусы и косинусы'],
-    outcomes:[
-      {label:'Показательные уравнения',level:3,tone:'good'},
-      {label:'Логарифмические уравнения',level:3,tone:'good'},
-      {label:'Иррациональные уравнения',level:2,tone:'process'},
-      {label:'Базовая планиметрия',level:2,tone:'process'},
-      {competencyId:'t7_radical_num',label:'Преобразования радикалов',level:2,tone:'alert'}
+    "date": "2026-09-21",
+    "ktpRefs": [],
+    "href": "21.09.26.html",
+    "title": "Геометрический смысл производной",
+    "navTitle": "Геометрический смысл производной",
+    "navSubtitle": "f и f′ · экстремумы · формулировки ЕГЭ",
+    "summary": "На занятии закреплён геометрический смысл производной и систематизировано чтение графиков f и f′. Отработаны знак производной, монотонность, смена знака в точках экстремума, наибольшее и наименьшее значение на заданном промежутке, параллельность касательной прямой и разные форматы ответа ЕГЭ.",
+    "topics": [
+      "геометрический смысл производной",
+      "график функции",
+      "график производной",
+      "монотонность",
+      "экстремумы",
+      "формулировки ЕГЭ"
     ],
-    materials:{pdf:'../pdf_docs/23.08.26.pdf',tex:'../tex_docs/23.08.26.tex',review:'../review_docs/review_23.08.26.pdf'}
+    "outcomes": [
+      {
+        "label": "Геометрический смысл производной",
+        "level": 3,
+        "competencyId": "t8_geometric",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Чтение графика производной",
+        "level": 3,
+        "competencyId": "t8_derivative_graph",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Возрастание и убывание",
+        "level": 3,
+        "competencyId": "t8_monotonicity",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Экстремумы по знаку f′",
+        "level": 3,
+        "competencyId": "t8_extrema",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Интерпретация условий ЕГЭ",
+        "level": 3,
+        "competencyId": "t8_interpret",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "21.09.26.html",
+      "pdf": "../pdf_docs/21.09.26.pdf",
+      "tex": "../tex_docs/21.09.26.tex"
+    }
   },
-  {date:'2026-08-18',href:'18.08.26.html',title:'Тригонометрические уравнения и смешанные неравенства',navTitle:'Тригонометрические уравнения',navSubtitle:'смешанные неравенства'},
-  {date:'2026-08-15',href:'15.08.26.html',title:'Векторы и скалярное произведение',navTitle:'Векторы',navSubtitle:'скалярное произведение'},
-  {date:'2026-08-11',href:'11.08.26.html',title:'Тригонометрия, теорема Безу и логарифмические неравенства',navTitle:'Тригонометрия, Безу и логарифмы',navSubtitle:'уравнения и неравенства'},
-  {date:'2026-08-07',href:'07.08.26.html',title:'Смешанные схемы кредитования',navTitle:'Смешанные схемы кредитования',navSubtitle:'финансовые задачи'},
-  {date:'2026-08-04',href:'04.08.26.html',title:'Дифференцированная схема кредитования',navTitle:'Дифференцированный кредит',navSubtitle:'финансовая модель'},
-  {date:'2026-08-01',href:'01.08.26.html',title:'Комплексное повторение: формулы и связи',navTitle:'Комплексное повторение',navSubtitle:'формулы и связи'},
-  {date:'2026-07-28',href:'28-07-26.html',title:'Кредиты: аннуитетная и дифференцированная схемы',navTitle:'Аннуитет и дифференцированный кредит',navSubtitle:'сравнение схем'},
-  {date:'2026-07-25',href:'25-07-26.html',title:'Кредиты. Аннуитетная схема',navTitle:'Аннуитетный кредит',navSubtitle:'финансовая модель'},
-  {date:'2026-07-21',href:'21-07-26.html',title:'Комплексное повторение ЕГЭ',navTitle:'Комплексное повторение ЕГЭ',navSubtitle:'смешанный блок'},
-  {date:'2026-07-18',href:'18-07-26.html',title:'Сравнение вкладов и поиск ставки',navTitle:'Вклады и ставка',navSubtitle:'финансовые задачи'},
-  {date:'2026-07-14',href:'14-07-26.html',title:'Вклады и сложные проценты',navTitle:'Вклады и сложные проценты',navSubtitle:'рекуррентная модель'},
-  {date:'2026-07-11',href:'11-07-26.html',title:'Смешанные уравнения и неравенства',navTitle:'Смешанные уравнения и неравенства',navSubtitle:'алгебра'}
-]);
+  {
+    "date": "2026-09-20",
+    "ktpRefs": [],
+    "href": "20.09.26.html",
+    "title": "Графики функции и производной",
+    "navTitle": "Графики функции и производной",
+    "navSubtitle": "знак производной · монотонность · экстремумы",
+    "summary": "Главный навык занятия — различать график функции и график производной и переводить информацию между ними. Закреплены знак f′, промежутки монотонности и знакопостоянства, нули производной, смена знака в точках экстремума, строгие неравенства, границы и выколотые точки.",
+    "topics": [
+      "график функции",
+      "график производной",
+      "знак производной",
+      "монотонность",
+      "экстремумы",
+      "границы и выколотые точки"
+    ],
+    "outcomes": [
+      {
+        "label": "График производной",
+        "level": 3,
+        "competencyId": "t8_derivative_graph",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Сопоставление f и f′",
+        "level": 3,
+        "competencyId": "t8_interpret",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Возрастание и убывание",
+        "level": 3,
+        "competencyId": "t8_monotonicity",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Экстремумы по знаку f′",
+        "level": 3,
+        "competencyId": "t8_extrema",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Геометрический смысл производной",
+        "level": 2,
+        "competencyId": "t8_geometric",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "20.09.26.html",
+      "pdf": "../pdf_docs/20.09.26.pdf",
+      "tex": "../tex_docs/20.09.26.tex",
+      "lab": "20.09.26-lab.html"
+    }
+  },
+  {
+    "date": "2026-09-14",
+    "ktpRefs": [],
+    "href": "14.09.26.html",
+    "title": "Исследование функции с помощью производной",
+    "navTitle": "Исследование функции",
+    "navSubtitle": "монотонность · критические точки · экстремумы",
+    "summary": "На занятии выстроен алгоритм исследования функции по производной: область определения, критические точки, числовая ось и знаки производной. Закреплены интервалы возрастания и убывания, признаки локального максимума и минимума, а также различие между критической и запрещённой точкой.",
+    "topics": [
+      "производная",
+      "монотонность",
+      "критические точки",
+      "экстремумы",
+      "ПКОЗА",
+      "ОДЗ"
+    ],
+    "outcomes": [
+      {
+        "label": "Возрастание и убывание",
+        "level": 3,
+        "competencyId": "t8_monotonicity",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Точки экстремума",
+        "level": 3,
+        "competencyId": "t8_extrema",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Применение производной",
+        "level": 3,
+        "competencyId": "t8_derivative_rules",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "14.09.26.html",
+      "pdf": "../pdf_docs/14.09.26.pdf",
+      "tex": "../tex_docs/14.09.26.tex",
+      "lab": "14.09.26-lab.html"
+    }
+  },
+  {
+    "date": "2026-09-11",
+    "ktpRefs": [],
+    "href": "11.09.26.html",
+    "title": "Производная сложной функции",
+    "navTitle": "Производная сложной функции",
+    "navSubtitle": "правило цепочки · переменные и константы",
+    "summary": "На занятии систематизировано правило цепочки: выделение внешней и внутренней функций, умножение на производную внутренней части и контроль переменной дифференцирования. Метод применён к корню, экспоненте, степени и синусу; отдельно закреплена проверка ОДЗ.",
+    "topics": [
+      "производная",
+      "правило цепочки",
+      "сложная функция",
+      "экспонента",
+      "степень",
+      "ОДЗ"
+    ],
+    "outcomes": [
+      {
+        "label": "Правило цепочки",
+        "level": 3,
+        "competencyId": "t8_derivative_rules",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Производные сложных функций",
+        "level": 3,
+        "competencyId": "t8_elementary_derivatives",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "11.09.26.html",
+      "pdf": "../pdf_docs/11.09.26.pdf",
+      "tex": "../tex_docs/11.09.26.tex",
+      "lab": "11.09.26-lab.html"
+    }
+  },
+  {
+    "date": "2026-09-07",
+    "ktpRefs": [],
+    "href": "07.09.26.html",
+    "title": "Производная: произведение, частное и специальные функции",
+    "navTitle": "Производная: правила и функции",
+    "navSubtitle": "произведение · частное · тригонометрия · exp/log",
+    "summary": "На занятии расширен вычислительный аппарат производной: отработаны правила произведения и частного, правило цепочки, производные тригонометрических, показательных и логарифмических функций. Отдельный акцент сделан на распознавании структуры выражения, порядке u′v − uv′, знаках и ОДЗ.",
+    "topics": [
+      "производная",
+      "произведение и частное",
+      "тригонометрия",
+      "показательная функция",
+      "логарифмы",
+      "ОДЗ"
+    ],
+    "outcomes": [
+      {
+        "label": "Правила дифференцирования",
+        "level": 3,
+        "competencyId": "t8_derivative_rules",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Производные элементарных функций",
+        "level": 2,
+        "competencyId": "t8_elementary_derivatives",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "07.09.26.html",
+      "pdf": "../pdf_docs/07.09.26.pdf",
+      "tex": "../tex_docs/07.09.26.tex",
+      "lab": "07.09.26-lab.html"
+    }
+  },
+  {
+    "date": "2026-09-04",
+    "ktpRefs": [],
+    "href": "04.09.26.html",
+    "title": "Повторение алгебры и введение в производную",
+    "navTitle": "Алгебра и производная",
+    "navSubtitle": "дроби · степени · первые правила производной",
+    "summary": "На занятии разобраны ошибки в задачах на движение по воде, степенях, функциональных подстановках и алгебраических дробях. Затем введён первый вычислительный блок по производной: степенное правило, производная константы, постоянный множитель, сумма и разность.",
+    "topics": [
+      "движение по воде",
+      "алгебраические дроби",
+      "корни и степени",
+      "функциональная подстановка",
+      "производная",
+      "степенное правило"
+    ],
+    "outcomes": [
+      {
+        "label": "Правила дифференцирования",
+        "level": 2,
+        "competencyId": "t8_derivative_rules",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Производные элементарных функций",
+        "level": 2,
+        "competencyId": "t8_elementary_derivatives",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Движение по воде",
+        "level": 2,
+        "competencyId": "t10_water",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Алгебраические дроби и ОДЗ",
+        "level": 2,
+        "tone": "alert",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "04.09.26.html",
+      "pdf": "../pdf_docs/04.09.26.pdf",
+      "tex": "../tex_docs/04.09.26.tex",
+      "lab": "04.09.26-lab.html"
+    }
+  },
+  {
+    "date": "2026-08-25",
+    "ktpRefs": [],
+    "href": "25.08.26.html",
+    "title": "Планиметрия: стратегия решения геометрических задач",
+    "navTitle": "Планиметрия: стратегия решения",
+    "navSubtitle": "высоты · площади · окружность · подобие",
+    "summary": "На занятии выстроена единая стратегия планиметрии: искать фигуру, которой принадлежит искомая величина, выделять прямоугольные треугольники и общие элементы, сравнивать методы Пифагора, тригонометрии и площадей, а также распознавать окружность и подобие.",
+    "topics": [
+      "планиметрия",
+      "высоты",
+      "площади",
+      "окружность",
+      "подобие",
+      "Пифагор и тригонометрия"
+    ],
+    "outcomes": [
+      {
+        "label": "Стратегия планиметрии",
+        "level": 2,
+        "tone": "process"
+      },
+      {
+        "label": "Прямоугольные треугольники",
+        "level": 2,
+        "tone": "process"
+      },
+      {
+        "label": "Метод площадей",
+        "level": 2,
+        "tone": "process"
+      },
+      {
+        "label": "Окружность и вписанные углы",
+        "level": 2,
+        "tone": "process"
+      },
+      {
+        "label": "Подобие треугольников",
+        "level": 2,
+        "tone": "process"
+      }
+    ],
+    "materials": {
+      "html": "25.08.26.html",
+      "pdf": "../pdf_docs/25.08.26.pdf",
+      "tex": "../tex_docs/25.08.26.tex"
+    }
+  },
+  {
+    "date": "2026-08-23",
+    "ktpRefs": [],
+    "href": "23.08.26.html",
+    "title": "Повторение алгебры и базовой планиметрии",
+    "navTitle": "Алгебра и планиметрия",
+    "navSubtitle": "радикалы · площади · окружности",
+    "summary": "После занятия основной фокус сместился на самостоятельное применение формул планиметрии, аккуратность преобразований с радикалами и проверку корней в иррациональных уравнениях.",
+    "topics": [
+      "показательные",
+      "логарифмы",
+      "иррациональные",
+      "площади",
+      "окружности",
+      "синусы и косинусы"
+    ],
+    "outcomes": [
+      {
+        "label": "Показательные уравнения",
+        "level": 3,
+        "tone": "good"
+      },
+      {
+        "label": "Логарифмические уравнения",
+        "level": 3,
+        "tone": "good"
+      },
+      {
+        "label": "Иррациональные уравнения",
+        "level": 2,
+        "tone": "process"
+      },
+      {
+        "label": "Базовая планиметрия",
+        "level": 2,
+        "tone": "process"
+      },
+      {
+        "label": "Преобразования радикалов",
+        "level": 2,
+        "competencyId": "t7_radical_num",
+        "tone": "alert"
+      }
+    ],
+    "materials": {
+      "html": "23.08.26.html",
+      "pdf": "../pdf_docs/23.08.26.pdf",
+      "tex": "../tex_docs/23.08.26.tex"
+    }
+  },
+  {
+    "date": "2026-08-18",
+    "ktpRefs": [],
+    "href": "18.08.26.html",
+    "title": "Тригонометрические уравнения и смешанные неравенства",
+    "navTitle": "Тригонометрические уравнения",
+    "navSubtitle": "смешанные неравенства",
+    "summary": "Интерактивное занятие Николь Саркисьянц: тригонометрические уравнения и смешанные неравенства",
+    "topics": [],
+    "outcomes": [],
+    "materials": {
+      "html": "18.08.26.html"
+    }
+  },
+  {
+    "date": "2026-08-15",
+    "ktpRefs": [],
+    "href": "15.08.26.html",
+    "title": "Векторы и скалярное произведение",
+    "navTitle": "Векторы",
+    "navSubtitle": "скалярное произведение",
+    "summary": "Векторы и скалярное произведение — интерактивное пособие для Николь Саркисьянц",
+    "topics": [],
+    "outcomes": [],
+    "materials": {
+      "html": "15.08.26.html",
+      "pdf": "../pdf_docs/15.08.26.pdf",
+      "tex": "../tex_docs/15.08.26.tex"
+    }
+  },
+  {
+    "date": "2026-08-11",
+    "ktpRefs": [],
+    "href": "11.08.26.html",
+    "title": "Тригонометрия, теорема Безу и логарифмические неравенства",
+    "navTitle": "Тригонометрия, Безу и логарифмы",
+    "navSubtitle": "уравнения и неравенства",
+    "summary": "Интерактивное пособие для Николь Саркисьянц: тригонометрические уравнения, теорема Безу, отбор корней и логарифмические неравенства",
+    "topics": [],
+    "outcomes": [],
+    "materials": {
+      "html": "11.08.26.html",
+      "pdf": "../pdf_docs/11.08.26.pdf",
+      "tex": "../tex_docs/11.08.26.tex"
+    }
+  },
+  {
+    "date": "2026-08-07",
+    "ktpRefs": [],
+    "href": "07.08.26.html",
+    "title": "Смешанные схемы кредитования",
+    "navTitle": "Смешанные схемы кредитования",
+    "navSubtitle": "финансовые задачи",
+    "summary": "Интерактивное пособие по смешанным схемам кредитования для Николь Саркисьянц",
+    "topics": [],
+    "outcomes": [],
+    "materials": {
+      "html": "07.08.26.html",
+      "pdf": "../pdf_docs/07.08.26.pdf",
+      "tex": "../tex_docs/07.08.26.tex"
+    }
+  },
+  {
+    "date": "2026-08-04",
+    "ktpRefs": [],
+    "href": "04.08.26.html",
+    "title": "Дифференцированная схема кредитования",
+    "navTitle": "Дифференцированный кредит",
+    "navSubtitle": "финансовая модель",
+    "summary": "",
+    "topics": [],
+    "outcomes": [],
+    "materials": {
+      "html": "04.08.26.html",
+      "pdf": "../pdf_docs/04.08.26.pdf",
+      "tex": "../tex_docs/04.08.26.tex"
+    }
+  },
+  {
+    "date": "2026-08-01",
+    "ktpRefs": [],
+    "href": "01.08.26.html",
+    "title": "Комплексное повторение: формулы и связи",
+    "navTitle": "Комплексное повторение",
+    "navSubtitle": "формулы и связи",
+    "summary": "Интерактивное комплексное повторение ЕГЭ для Николь Саркисьянц",
+    "topics": [],
+    "outcomes": [],
+    "materials": {
+      "html": "01.08.26.html",
+      "pdf": "../pdf_docs/01.08.26.pdf",
+      "tex": "../tex_docs/01.08.26.tex"
+    }
+  },
+  {
+    "date": "2026-07-28",
+    "ktpRefs": [],
+    "href": "28-07-26.html",
+    "title": "Кредиты: аннуитетная и дифференцированная схемы",
+    "navTitle": "Аннуитет и дифференцированный кредит",
+    "navSubtitle": "сравнение схем",
+    "summary": "Интерактивный разбор аннуитетной и дифференцированной схем кредитования для подготовки к ЕГЭ.",
+    "topics": [],
+    "outcomes": [],
+    "materials": {
+      "html": "28-07-26.html",
+      "pdf": "../pdf_docs/28.07.26.pdf",
+      "tex": "../tex_docs/28.07.26.tex"
+    }
+  },
+  {
+    "date": "2026-07-25",
+    "ktpRefs": [],
+    "href": "25-07-26.html",
+    "title": "Кредиты. Аннуитетная схема",
+    "navTitle": "Аннуитетный кредит",
+    "navSubtitle": "финансовая модель",
+    "summary": "Интерактивное учебное пособие по аннуитетной схеме кредитования: теория, пошаговый разбор, динамическая модель, похожая задача и самопроверка.",
+    "topics": [],
+    "outcomes": [],
+    "materials": {
+      "html": "25-07-26.html",
+      "pdf": "../pdf_docs/25.07.26.pdf",
+      "tex": "../tex_docs/25.07.26.tex"
+    }
+  },
+  {
+    "date": "2026-07-21",
+    "ktpRefs": [],
+    "href": "21-07-26.html",
+    "title": "Комплексное повторение ЕГЭ",
+    "navTitle": "Комплексное повторение ЕГЭ",
+    "navSubtitle": "смешанный блок",
+    "summary": "Интерактивное пособие Николь Саркисьянц по комплексному повторению тестовой части ЕГЭ.",
+    "topics": [],
+    "outcomes": [],
+    "materials": {
+      "html": "21-07-26.html",
+      "pdf": "../pdf_docs/21.07.26.pdf",
+      "tex": "../tex_docs/21.07.26.tex"
+    }
+  },
+  {
+    "date": "2026-07-18",
+    "ktpRefs": [],
+    "href": "18-07-26.html",
+    "title": "Сравнение вкладов и поиск ставки",
+    "navTitle": "Вклады и ставка",
+    "navSubtitle": "финансовые задачи",
+    "summary": "Интерактивное пособие ЕГЭ: сравнение вкладов, операции и поиск процентной ставки.",
+    "topics": [],
+    "outcomes": [],
+    "materials": {
+      "html": "18-07-26.html",
+      "pdf": "../pdf_docs/18.07.26.pdf",
+      "tex": "../tex_docs/18.07.26.tex"
+    }
+  },
+  {
+    "date": "2026-07-14",
+    "ktpRefs": [],
+    "href": "14-07-26.html",
+    "title": "Вклады и сложные проценты",
+    "navTitle": "Вклады и сложные проценты",
+    "navSubtitle": "рекуррентная модель",
+    "summary": "Интерактивное пособие ЕГЭ: вклады, сложные проценты, пополнения и снятия.",
+    "topics": [],
+    "outcomes": [],
+    "materials": {
+      "html": "14-07-26.html",
+      "pdf": "../pdf_docs/14.07.26.pdf",
+      "tex": "../tex_docs/14.07.26.tex"
+    }
+  },
+  {
+    "date": "2026-07-11",
+    "ktpRefs": [],
+    "href": "11-07-26.html",
+    "title": "Смешанные уравнения и неравенства",
+    "navTitle": "Смешанные уравнения и неравенства",
+    "navSubtitle": "алгебра",
+    "summary": "",
+    "topics": [],
+    "outcomes": [],
+    "materials": {
+      "html": "11-07-26.html",
+      "pdf": "../pdf_docs/11.07.26.pdf",
+      "tex": "../tex_docs/11.07.26.tex"
+    }
+  }
+];
 
 export function compareLessonsNewestFirst(left,right){return right.date.localeCompare(left.date);}
 export function sortedLessons(lessons=LESSONS){return [...lessons].sort(compareLessonsNewestFirst);}
 export function getLatestLesson(lessons=LESSONS){return sortedLessons(lessons)[0]||null;}
+export function getLessonByDate(date,lessons=LESSONS){return lessons.find(item=>item.date===date)||null;}
 export function getRecentLessons(lessons=LESSONS,limit=RECENT_LIMIT){return sortedLessons(lessons).slice(0,Math.max(0,limit));}
 export function getArchiveLessons(lessons=LESSONS,limit=RECENT_LIMIT){return sortedLessons(lessons).slice(Math.max(0,limit));}
 export function paginateArchive(lessons=LESSONS,pageIndex=0,pageSize=ARCHIVE_PAGE_SIZE){const archive=getArchiveLessons(lessons);const safeSize=Math.max(1,Number(pageSize)||ARCHIVE_PAGE_SIZE);const pageCount=Math.max(1,Math.ceil(archive.length/safeSize));const safeIndex=Math.max(0,Math.min(pageCount-1,Number(pageIndex)||0));const start=safeIndex*safeSize;return {items:archive.slice(start,start+safeSize),pageIndex:safeIndex,pageCount,total:archive.length};}
-function parseIsoDate(isoDate){const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(isoDate));if(!match)throw new Error(`Invalid lesson date: ${isoDate}`);const year=Number(match[1]),month=Number(match[2]),day=Number(match[3]);if(month<1||month>12||day<1||day>31)throw new Error(`Invalid lesson date: ${isoDate}`);return {year,month,day};}
-export function formatShortDate(isoDate){const {month,day}=parseIsoDate(isoDate);return `${String(day).padStart(2,'0')}.${String(month).padStart(2,'0')}`;}
-export function formatLongDateRu(isoDate){const {year,month,day}=parseIsoDate(isoDate);return `${day} ${MONTHS_GENITIVE[month-1]} ${year}`;}
-export function validateLessonRegistry(lessons=LESSONS){if(!Array.isArray(lessons)||lessons.length===0)throw new Error('Lesson registry is empty');const dates=new Set(),hrefs=new Set();let previousDate=null;lessons.forEach((lesson,index)=>{parseIsoDate(lesson.date);if(!lesson.href||!lesson.title||!lesson.navTitle)throw new Error(`Lesson ${index} is incomplete`);if(dates.has(lesson.date))throw new Error(`Duplicate lesson date: ${lesson.date}`);if(hrefs.has(lesson.href))throw new Error(`Duplicate lesson href: ${lesson.href}`);if(previousDate!==null&&lesson.date>previousDate)throw new Error('Lesson registry must be sorted newest-first');dates.add(lesson.date);hrefs.add(lesson.href);previousDate=lesson.date;});const latest=lessons[0];if(!latest.summary||!Array.isArray(latest.topics)||latest.topics.length===0)throw new Error('Latest lesson requires summary and topics');if(!Array.isArray(latest.outcomes)||latest.outcomes.length===0)throw new Error('Latest lesson requires outcomes');if(!latest.materials||typeof latest.materials!=='object')throw new Error('Latest lesson requires materials metadata');return {count:lessons.length,latest:latest.href};}
-validateLessonRegistry();
+function parseIsoDate(isoDate){const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(isoDate));if(!match)throw new Error('Invalid lesson date: '+isoDate);const year=Number(match[1]),month=Number(match[2]),day=Number(match[3]);if(month<1||month>12||day<1||day>31)throw new Error('Invalid lesson date: '+isoDate);return {year,month,day};}
+export function formatShortDate(isoDate){const {month,day}=parseIsoDate(isoDate);return String(day).padStart(2,'0')+'.'+String(month).padStart(2,'0');}
+export function formatLongDateRu(isoDate){const {year,month,day}=parseIsoDate(isoDate);return day+' '+MONTHS_GENITIVE[month-1]+' '+year;}
+export function validateLessonRegistry(lessons=LESSONS){if(!Array.isArray(lessons)||lessons.length===0)throw new Error('Lesson registry is empty');const dates=new Set(),hrefs=new Set();let previousDate=null;lessons.forEach((lesson,index)=>{parseIsoDate(lesson.date);if(!lesson.href||!lesson.title||!lesson.navTitle)throw new Error('Lesson '+index+' is incomplete');if(dates.has(lesson.date))throw new Error('Duplicate lesson date: '+lesson.date);if(hrefs.has(lesson.href))throw new Error('Duplicate lesson href: '+lesson.href);if(previousDate!==null&&lesson.date>previousDate)throw new Error('Lesson registry must be sorted newest-first');dates.add(lesson.date);hrefs.add(lesson.href);previousDate=lesson.date;});const latest=lessons[0];if(!latest.summary||!Array.isArray(latest.topics)||latest.topics.length===0)throw new Error('Latest lesson requires summary and topics');if(!Array.isArray(latest.outcomes)||latest.outcomes.length===0)throw new Error('Latest lesson requires outcomes');if(!latest.materials||typeof latest.materials!=='object')throw new Error('Latest lesson requires materials metadata');return {count:lessons.length,latest:latest.href};}

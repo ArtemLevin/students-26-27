@@ -170,6 +170,12 @@ test('rolling candidate is deterministic and performs zero disk writes',()=>{
   assert.ok(registryWrite);
   assert.match(registryWrite.content,/export const RECENT_LIMIT=3;/);
   assert.match(registryWrite.content,/export const ARCHIVE_PAGE_SIZE=10;/);
+  assert.match(registryWrite.content,/export function getRecentLessons/);
+  assert.match(registryWrite.content,/export function getArchiveLessons/);
+  assert.match(registryWrite.content,/export function paginateArchive/);
+  assert.match(registryWrite.content,/export function formatShortDate/);
+  assert.match(registryWrite.content,/export function formatLongDateRu/);
+  assert.match(registryWrite.content,/export function validateLessonRegistry/);
   assert.equal(fs.existsSync(path.join(x.base,'student-contract.json')),false);
   assert.deepEqual(fs.readdirSync(x.base).sort(),before);
 });
