@@ -53,46 +53,7 @@ jobs:
 
       - name: Verify preserved mastery
         run: |
-          node - <<'NODE'
-          const state=require('./students/kiril_zinoviev_physics/site/data/mastery-state.json');
-          const expected={
-  "measurement_09": 2,
-  "measurement_10": 3,
-  "measurement_11": 2,
-  "measurement_12": 3,
-  "measurement_13": 3,
-  "motion_04": 2,
-  "motion_05": 2,
-  "motion_06": 3,
-  "motion_08": 2,
-  "motion_09": 3,
-  "motion_10": 2,
-  "motion_11": 3,
-  "motion_12": 2,
-  "motion_13": 2,
-  "motion_15": 2,
-  "motion_16": 2,
-  "motion_17": 2,
-  "motion_18": 2,
-  "motion_19": 2,
-  "motion_20": 3,
-  "motion_23": 3,
-  "motion_24": 2,
-  "motion_25": 2,
-  "motion_26": 2,
-  "motion_27": 2
-};
-          const ids=Object.keys(state.levels);
-          if(ids.length!==Object.keys(expected).length) process.exit(1);
-          for(const [id,level] of Object.entries(expected)){
-            const value=state.levels[id];
-            if(!value||value.level!==level||value.sourceKind!=='baseline-levels'||value.sourcePath!=='site/competency-map-data.js'){
-              console.error('mastery mismatch',id,value,level);
-              process.exit(2);
-            }
-          }
-          console.log('Kiril physics mastery preserved:',ids.length);
-          NODE
+          node -e "const state=require('./students/kiril_zinoviev_physics/site/data/mastery-state.json'); const expected={\"measurement_09\":2,\"measurement_10\":3,\"measurement_11\":2,\"measurement_12\":3,\"measurement_13\":3,\"motion_04\":2,\"motion_05\":2,\"motion_06\":3,\"motion_08\":2,\"motion_09\":3,\"motion_10\":2,\"motion_11\":3,\"motion_12\":2,\"motion_13\":2,\"motion_15\":2,\"motion_16\":2,\"motion_17\":2,\"motion_18\":2,\"motion_19\":2,\"motion_20\":3,\"motion_23\":3,\"motion_24\":2,\"motion_25\":2,\"motion_26\":2,\"motion_27\":2}; const ids=Object.keys(state.levels); if(ids.length!==Object.keys(expected).length) process.exit(1); for(const [id,level] of Object.entries(expected)){const value=state.levels[id]; if(!value||value.level!==level||value.sourceKind!=='baseline-levels'||value.sourcePath!=='site/competency-map-data.js'){console.error('mastery mismatch',id,value,level);process.exit(2);}} console.log('Kiril physics mastery preserved:',ids.length);"
 
       - name: Run migration regression suite
         run: node --test pipeline/migration/test/*.test.mjs
