@@ -507,31 +507,66 @@ function loadIndexCatalogFallback({
   });
 }
 
+function detectEge2027RuntimeTransform({root,studentId}){
+  const studentRoot=path.join(root,'students',studentId);
+  const candidates=[
+    {
+      file:path.join(studentRoot,'site','dashboard.js'),
+      sourcePath:'site/dashboard.js',
+      matches:source=>
+        /ege-profile-2027\.js/.test(source)&&
+        /installEgeProfile2027ControllerHook\s*\(/.test(source)
+    },
+    {
+      file:path.join(studentRoot,'competency-map.js'),
+      sourcePath:'competency-map.js',
+      matches:source=>
+        /ege-profile-2027\.js/.test(source)&&
+        /transformEgeProfile2027Catalog\s*\(/.test(source),
+      adaptInput(source,value){
+        if(!/normalizeOrderedLegacyGroups\s*\(/.test(source))return value;
+        const groups=Array.isArray(value)
+          ?value
+          :plainObject(value)&&Array.isArray(value.groups)
+            ?value.groups
+            :null;
+        if(!groups)throw new TypeError('EGE runtime adapter expected catalog groups');
+        return groups.map((group,index)=>({...group,id:'task_'+String(index+1)}));
+      }
+    }
+  ];
+  for(const candidate of candidates){
+    if(!fs.existsSync(candidate.file)||!fs.statSync(candidate.file).isFile())continue;
+    const source=fs.readFileSync(candidate.file,'utf8');
+    if(candidate.matches(source))return {...candidate,source};
+  }
+  return null;
+}
+
 function applyKnownRuntimeCatalogTransforms({
   root,studentId,catalogCandidates,warnings
 }){
-  const dashboardPath=path.join(root,'students',studentId,'site','dashboard.js');
-  if(!fs.existsSync(dashboardPath)||!fs.statSync(dashboardPath).isFile())return [];
-  const source=fs.readFileSync(dashboardPath,'utf8');
-  const usesEge2027=
-    /ege-profile-2027\.js/.test(source)&&
-    /installEgeProfile2027ControllerHook\s*\(/.test(source);
-  if(!usesEge2027)return [];
+  const runtime=detectEge2027RuntimeTransform({root,studentId});
+  if(!runtime)return [];
 
   const transformed=[];
   for(const candidate of catalogCandidates){
     try{
-      candidate.value=transformEgeProfile2027Catalog(candidate.value);
+      const input=typeof runtime.adaptInput==='function'
+        ?runtime.adaptInput(runtime.source,candidate.value)
+        :candidate.value;
+      candidate.value=transformEgeProfile2027Catalog(input);
       candidate.items=catalogFromValue(candidate.value);
       transformed.push({
         sourcePath:candidate.sourcePath,
         symbol:candidate.symbol,
-        transform:'ege-profile-2027'
+        transform:'ege-profile-2027',
+        runtimeSourcePath:runtime.sourcePath
       });
     }catch(error){
       warnings.push({
         type:'catalog-transform-failed',
-        sourcePath:'site/dashboard.js',
+        sourcePath:runtime.sourcePath,
         transform:'ege-profile-2027',
         message:error.message
       });
