@@ -1,0 +1,81 @@
+name: Jaroslav migration branch apply
+
+on:
+  push:
+    branches:
+      - 'feat/student-platform-v2-p5-3-6-jaroslav-vereschagin'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout migration branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-p5-3-6-jaroslav-vereschagin
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate reviewed manifest
+        run: node scripts/student.mjs validate-manifest --manifest pipeline/migration/manifests/jaroslav_vereschagin.json --json
+
+      - name: Inspect legacy state
+        run: node scripts/student.mjs inspect-legacy-state jaroslav_vereschagin --json
+
+      - name: Validated dry-run
+        shell: bash
+        run: |
+          node scripts/student.mjs migrate jaroslav_vereschagin \
+            --manifest pipeline/migration/manifests/jaroslav_vereschagin.json \
+            --date 2026-10-02 \
+            --dry-run \
+            --json > /tmp/jaroslav-dry-run.json
+          node -e "const p=require('/tmp/jaroslav-dry-run.json'); const c=p.coverage; if(!p.executable||!c?.complete) process.exit(1); if(c.lessons?.source!==8||c.lessons?.candidate!==8) process.exit(2); if(c.competencies?.source!==324||c.competencies?.candidate!==324) process.exit(3); if(c.mastery?.resolvedSource!==0||c.mastery?.candidate!==0||c.mastery?.conflicts!==0||c.mastery?.orphans!==0) process.exit(4); console.log(JSON.stringify({executable:p.executable,coverage:c,projectedBaseline:p.projectedBaseline},null,2));"
+
+      - name: Transactional apply
+        run: |
+          node scripts/student.mjs migrate jaroslav_vereschagin \
+            --manifest pipeline/migration/manifests/jaroslav_vereschagin.json \
+            --date 2026-10-02 \
+            --apply \
+            --json
+
+      - name: Validate migrated package
+        run: node scripts/student.mjs validate jaroslav_vereschagin --json
+
+      - name: Verify empty canonical mastery
+        run: |
+          node -e "const s=require('./students/jaroslav_vereschagin/site/data/mastery-state.json'); if(Object.keys(s.levels).length!==0) process.exit(1); console.log('Jaroslav mastery preserved as empty');"
+
+      - name: Run migration regression suite
+        run: node --test pipeline/migration/test/*.test.mjs
+
+      - name: Enforce architecture ratchet
+        run: node pipeline/migration/audit-ratchet.mjs
+
+      - name: Commit generated migration state
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            pipeline/migration/baseline.json \
+            pipeline/migration/reports/jaroslav_vereschagin.json \
+            students/jaroslav_vereschagin/student-contract.json \
+            students/jaroslav_vereschagin/site/data \
+            students/jaroslav_vereschagin/site/lesson-registry.js \
+            students/jaroslav_vereschagin/site/tests/student-platform-v2.test.mjs
+          if git diff --cached --quiet; then
+            echo "Migration produced no generated changes"
+            exit 1
+          fi
+          git commit -m "P5.3-6: apply Jaroslav Student Platform v2 migration"
+          git push origin HEAD:feat/student-platform-v2-p5-3-6-jaroslav-vereschagin
