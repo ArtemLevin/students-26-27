@@ -3,14 +3,16 @@
 > **Current implementation state — 2026-10-02**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **9 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`, `sofya_kalney`, `nikol_sarkisyants`, `xenia_klykova`, `mark_gukin`, `ivan_petrachenkov`);
+> - Student Platform v2: **10 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`, `sofya_kalney`, `nikol_sarkisyants`, `xenia_klykova`, `mark_gukin`, `ivan_petrachenkov`, `kiril_zinoviev_physics`);
 > - текущий rollout: **P5.3 legacy-structured**;
-> - **P5.3-2** закрыл false-ready риск: unresolved inline mastery mutations теперь fail closed; реальные fixtures подтверждают blocker для `kristina` и отсутствие ложного blocker для `mark_gukin`;
-> - завершённый этап: **P5.3-3 Ivan Petrachenkov** — reviewed manifest, validated dry-run и transactional apply мигрировали 1/1 historical lesson, 268/268 competencies и **28/28 repository-authored mastery records**;
-> - все 28 mastery records сохранены на уровне 2 с provenance `baseline-levels @ site/competency-map-data.js`; conflicts/orphans=0, warnings/reviewItems/blockers=[], protectedFilesChanged=[];
-> - architecture ratchet после apply: **v2=9 / non-v2=15**, `legacy-structured=13`, `legacy-ktp=2`, `modern-shared=0`;
+> - **P5.3-2** закрыл false-ready риск: unresolved inline mastery mutations теперь fail closed;
+> - **P5.3-3 Ivan Petrachenkov** сохранил 1/1 historical lesson, 268/268 competencies и 28/28 repository-authored mastery records;
+> - завершённый этап: **P5.3-4 Kiril Zinoviev Physics** — reviewed manifest, validated dry-run и transactional apply мигрировали 2/2 historical lessons, 223/223 competencies и **25/25 repository-authored mastery records**;
+> - все 25 mastery records сохранены с точными исходными уровнями 2/3 и provenance `baseline-levels @ site/competency-map-data.js`; conflicts/orphans=0, warnings/reviewItems/blockers=[], protectedFilesChanged=[];
+> - architecture ratchet после apply: **v2=10 / non-v2=14**, `legacy-structured=12`, `legacy-ktp=2`, `modern-shared=0`;
 > - временный branch-only migration workflow удалён после успешного apply; production CI остаётся централизован в обязательном `merge gate`;
-> - после merge следующий rolling gate: **P5.3-4 `kiril_zinoviev_physics`**; затем простые `mastery=0` кабинеты, более крупные cases и `ekaterina` как полный mastery-preservation case;
+> - после merge следующий rolling gate: **P5.3-5 clean `mastery=0` cabinet**; `darya_savenkova` пока не использовать из-за роли design reference; предпочтительный следующий pilot — `anna_trapeznikova`;
+> - затем переходить к более крупным clean rolling cases и `ekaterina` как полному mastery-preservation case 235/235;
 > - blocked legacy-structured кабинеты мигрировать только после отдельного reconciliation источников; fixed-KTP кабинеты (`danil_kichuk`, `jaroslav_gavrilov`) вести отдельной волной;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
