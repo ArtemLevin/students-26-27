@@ -138,6 +138,7 @@ jobs:
           node --check pipeline/migration/inspect-legacy-state.mjs
           node --check pipeline/migration/migrate-student.mjs
           node --check pipeline/migration/audit-ratchet.mjs
+          node --check pipeline/migration/readiness-inventory.mjs
       - name: Parse student platform JSON Schemas
         run: |
           node -e "const fs=require('node:fs'); for (const name of ['student-contract-v2.schema.json','ktp-plan-v1.schema.json','ktp-state-v1.schema.json','lesson-metadata-v1.schema.json','lesson-publication-intent-v1.schema.json','student-migration-manifest-v1.schema.json','mastery-state-v1.schema.json','migration-coverage-v1.schema.json']) JSON.parse(fs.readFileSync('pipeline/schemas/'+name,'utf8')); console.log('Student Platform schemas OK')"
@@ -157,13 +158,24 @@ jobs:
             --markdown-output student-architecture-report.md \
             > /dev/null
           cat student-architecture-report.md >> "$GITHUB_STEP_SUMMARY"
-      - name: Upload architecture inventory
+      - name: Build migration readiness inventory
+        shell: bash
+        run: |
+          node scripts/student.mjs readiness \
+            --json-output student-migration-readiness.json \
+            --markdown-output student-migration-readiness.md \
+            > /dev/null
+          cat student-migration-readiness.md
+          cat student-migration-readiness.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload architecture and readiness inventories
         uses: actions/upload-artifact@v4
         with:
           name: student-architecture-report
           path: |
             student-architecture-report.json
             student-architecture-report.md
+            student-migration-readiness.json
+            student-migration-readiness.md
           if-no-files-found: error
       - name: Enforce architecture migration ratchet
         run: node pipeline/migration/audit-ratchet.mjs
