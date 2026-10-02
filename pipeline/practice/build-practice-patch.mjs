@@ -1,5 +1,5 @@
 function autoOutcomeMetadata(outcome){
-  const metadata={practiceDisposition:outcome.practiceDisposition};
+  const metadata={label:outcome.label,practiceDisposition:outcome.practiceDisposition};
   if(outcome.confidence==='exact'&&outcome.competencyId)metadata.competencyId=outcome.competencyId;
   if(outcome.confidence==='exact'&&outcome.practiceDisposition==='curated'&&outcome.bankKey)metadata.curatedBankKey=outcome.bankKey;
   if(outcome.level!==undefined)metadata.level=outcome.level;
@@ -25,8 +25,15 @@ function buildNewLesson(result,artifact){
 
 function updateExistingLesson(existing,result){
   const analysisByLabel=new Map(result.outcomes.map(item=>[item.label,item]));
+  const analysisByAnchor=new Map(
+    result.outcomes
+      .filter(item=>item.evidenceAnchor)
+      .map(item=>[item.evidenceAnchor,item])
+  );
   const outcomes=(existing.outcomes||[]).map(outcome=>{
-    const analysis=analysisByLabel.get(outcome.label);
+    const analysis=outcome.evidenceAnchor
+      ?analysisByAnchor.get(outcome.evidenceAnchor)
+      :analysisByLabel.get(outcome.label);
     return analysis?{...outcome,...autoOutcomeMetadata(analysis)}:outcome;
   });
   return {...existing,outcomes};
