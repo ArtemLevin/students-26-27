@@ -5,9 +5,10 @@
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
 > - Student Platform v2: **5 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`, `sofya_kalney`);
 > - текущий rollout: **P5.2**;
-> - завершённый этап: **P5.2-5** — `sofya_kalney` мигрирована с сохранением 20 исторических уроков, 324 competency IDs и 29 mastery values;
-> - P5.2-4 audit оставшихся modern-shared кабинетов выявил два независимых блокера: `nikol_sarkisyants` — legacy registry parser не принимает вычисляемый `LESSONS`; `xenia_klykova` — orphan mastery `t11_other`;
-> - следующий gate: **P5.2-6 Nikol registry compatibility** — сделать historical lesson discovery совместимым с безопасным вычисляемым registry форматом Никол и повторить automatic migration preflight;
+> - завершённый этап: **P5.2-6** — historical lesson discovery принимает точный безопасный wrapper `Object.freeze(array literal)`; произвольные вычисляемые/chained выражения остаются fail-closed;
+> - `nikol_sarkisyants`: automatic migration preflight теперь чистый — 22/22 уроков, 284 competency IDs, 103 mastery values, conflicts/orphans = 0;
+> - `xenia_klykova` остаётся заблокирована orphan mastery `t11_other`;
+> - следующий gate: **P5.2-7 Nikol migration** — выполнить reviewed manifest → dry-run → transactional apply → full merge gate;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
