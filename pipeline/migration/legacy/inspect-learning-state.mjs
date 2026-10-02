@@ -3,6 +3,7 @@ import path from 'node:path';
 import {inspectStudent} from '../inventory-students.mjs';
 import {createLegacySandbox,executeLegacyFile,executeLegacySource} from './sandbox.mjs';
 import {discoverLegacyLearningSources} from './discover-sources.mjs';
+import {transformEgeProfile2027Catalog} from '../../../shared/student-dashboard/ege-profile-2027.js';
 
 const LEVEL_MIN=0,LEVEL_MAX=4;
 const SOURCE_PRIORITY={
@@ -376,6 +377,39 @@ function loadIndexCatalogFallback({
   });
 }
 
+function applyKnownRuntimeCatalogTransforms({
+  root,studentId,catalogCandidates,warnings
+}){
+  const dashboardPath=path.join(root,'students',studentId,'site','dashboard.js');
+  if(!fs.existsSync(dashboardPath)||!fs.statSync(dashboardPath).isFile())return [];
+  const source=fs.readFileSync(dashboardPath,'utf8');
+  const usesEge2027=
+    /ege-profile-2027\.js/.test(source)&&
+    /installEgeProfile2027ControllerHook\s*\(/.test(source);
+  if(!usesEge2027)return [];
+
+  const transformed=[];
+  for(const candidate of catalogCandidates){
+    try{
+      candidate.value=transformEgeProfile2027Catalog(candidate.value);
+      candidate.items=catalogFromValue(candidate.value);
+      transformed.push({
+        sourcePath:candidate.sourcePath,
+        symbol:candidate.symbol,
+        transform:'ege-profile-2027'
+      });
+    }catch(error){
+      warnings.push({
+        type:'catalog-transform-failed',
+        sourcePath:'site/dashboard.js',
+        transform:'ege-profile-2027',
+        message:error.message
+      });
+    }
+  }
+  return transformed;
+}
+
 function loadEmbeddedCatalog({
   root,studentId,configSourcePath,sandbox,catalogCandidates,warnings
 }){
@@ -572,11 +606,18 @@ export function inspectLegacyLearningState({root=process.cwd(),studentId}={}){
     warnings
   });
 
+  const catalogTransforms=applyKnownRuntimeCatalogTransforms({
+    root,
+    studentId,
+    catalogCandidates,
+    warnings
+  });
+
   const catalogResult=resolveCatalog(catalogCandidates);
   const masteryResult=resolveClaims(claims,catalogResult.catalog);
   const conflicts=[...catalogResult.conflicts,...masteryResult.conflicts];
   const hardWarnings=warnings.filter(item=>
-    ['source-execution-failed','legacy-catalog-outside-student','legacy-catalog-missing','legacy-catalog-not-found']
+    ['source-execution-failed','legacy-catalog-outside-student','legacy-catalog-missing','legacy-catalog-not-found','catalog-transform-failed']
       .includes(item.type)
   );
   const automaticEligible=
@@ -598,6 +639,7 @@ export function inspectLegacyLearningState({root=process.cwd(),studentId}={}){
     diagnostics:{
       aliases,
       indirectSources,
+      catalogTransforms,
       orphanClaims:masteryResult.orphanClaims,
       warnings
     },
