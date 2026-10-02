@@ -270,11 +270,25 @@ test('real Volodia competence-config format detects baselineLevels→teacherSeed
   assert.equal(report.mastery.conflicts.length,0);
 });
 
-test('real Nikol format treats mastery-authority as an indirect dashboard-data wrapper',()=>{
-  const report=inspectLegacyLearningState({root:ROOT,studentId:'nikol_sarkisyants'});
-  assert.ok(report.catalog?.count>0);
-  assert.ok(report.mastery.resolved.some(item=>item.sourceKind==='dashboard-data'));
+test('real Nikol legacy sources resolve dashboard-data mastery and indirect authority after v2 migration',()=>{
+  const x=fixture('nikol_legacy_fixture');
+  for(const name of ['dashboard-data.js','mastery-authority.js','index-original.html']){
+    write(
+      path.join(x.site,name),
+      fs.readFileSync(
+        path.join(ROOT,'students','nikol_sarkisyants','site',name),
+        'utf8'
+      )
+    );
+  }
+  const report=inspectLegacyLearningState({root:x.root,studentId:x.studentId});
+  assert.equal(report.catalog?.count,284);
+  assert.equal(report.mastery.resolved.length,103);
+  assert.ok(report.mastery.resolved.every(item=>item.sourceKind==='dashboard-data'));
   assert.ok(report.diagnostics.indirectSources.some(item=>item.sourceKind==='mastery-authority'));
+  assert.equal(report.mastery.conflicts.length,0);
+  assert.deepEqual(report.diagnostics.orphanClaims,[]);
+  assert.equal(report.automaticEligible,true);
 });
 
 test('real Sofya legacy sources resolve their embedded competency catalog and stay migration-eligible',()=>{
