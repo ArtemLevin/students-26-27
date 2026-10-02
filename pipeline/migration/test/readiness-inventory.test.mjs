@@ -119,3 +119,22 @@ test('readiness CLI parser supports report outputs',()=>{
   assert.equal(parsed.markdownOutput,'readiness.md');
   assert.throws(()=>parseArgs(['--unknown']),/Unknown option/);
 });
+
+test('readiness blocks unresolved inline mastery mutation',()=>{
+  const repo=root();
+  scaffold(repo,'inline_student');
+  const index=path.join(repo,'students','inline_student','site','index.html');
+  write(
+    index,
+    "<!doctype html><script>const data=window.COMPETENCY_MAP_DATA;const item=data.groups[0].items[0];item.level=3;</script>"
+  );
+
+  const item=buildMigrationReadinessInventory({root:repo}).students[0];
+  assert.equal(item.status,'blocked');
+  assert.ok(
+    item.warnings.some(warning=>warning.type==='inline-mastery-mutation-unresolved')
+  );
+  assert.ok(
+    item.reasons.some(reason=>reason.includes('inline-mastery-mutation-unresolved'))
+  );
+});
