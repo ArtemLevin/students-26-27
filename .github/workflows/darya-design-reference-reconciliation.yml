@@ -1,0 +1,125 @@
+name: Darya design-reference reconciliation
+
+on:
+  push:
+    branches:
+      - 'feat/student-platform-v2-darya-design-reference-guard'
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-darya-design-reference-guard
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Generate design-reference snapshot
+        run: |
+          node --input-type=module - <<'NODE'
+          import crypto from 'node:crypto';
+          import fs from 'node:fs';
+          import path from 'node:path';
+
+          const ROOT=process.cwd();
+          const student='students/darya_savenkova';
+          const roots=[path.join(ROOT,student,'site'),path.join(ROOT,student,'images')];
+          const files=[];
+          const walk=directory=>{
+            for(const entry of fs.readdirSync(directory,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name,'en'))){
+              const file=path.join(directory,entry.name);
+              if(entry.isDirectory()){walk(file);continue;}
+              if(!entry.isFile())continue;
+              const relative=path.relative(ROOT,file).replaceAll('\\','/');
+              if(relative.startsWith(student+'/site/data/'))continue;
+              if(relative.startsWith(student+'/site/tests/'))continue;
+              if(relative===student+'/site/lesson-registry.js')continue;
+              files.push({
+                path:relative,
+                sha256:crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex')
+              });
+            }
+          };
+          for(const root of roots)walk(root);
+          files.sort((a,b)=>a.path.localeCompare(b.path,'en'));
+
+          const snapshot={
+            version:1,
+            studentId:'darya_savenkova',
+            role:'student-dashboard-design-reference',
+            capturedAt:'2026-10-02',
+            sourceCommit:'248e6b74f48d486bdd19ef34dd5eb6a8860ad25c',
+            designSystem:'LEVIN_ATLAS',
+            excludedGeneratedPaths:[
+              'students/darya_savenkova/site/data/**',
+              'students/darya_savenkova/site/tests/**',
+              'students/darya_savenkova/site/lesson-registry.js'
+            ],
+            files
+          };
+          fs.mkdirSync('pipeline/migration/design-references',{recursive:true});
+          fs.writeFileSync(
+            'pipeline/migration/design-references/darya_savenkova.json',
+            JSON.stringify(snapshot,null,2)+'\n'
+          );
+          console.log(JSON.stringify({referenceFiles:files.length,files:files.map(x=>x.path)},null,2));
+          NODE
+
+      - name: Syntax check
+        run: |
+          node --check pipeline/migration/legacy/discover-sources.mjs
+          node --check pipeline/migration/legacy/inspect-learning-state.mjs
+          node --check pipeline/migration/test/darya-design-reference.test.mjs
+
+      - name: Run focused migration tests
+        run: |
+          node --test pipeline/migration/test/legacy-state.test.mjs
+          node --test pipeline/migration/test/readiness-inventory.test.mjs
+          node --test pipeline/migration/test/darya-design-reference.test.mjs
+
+      - name: Verify Darya real-source recovery
+        shell: bash
+        run: |
+          node scripts/student.mjs inspect-legacy-state darya_savenkova --json > /tmp/darya.json
+          node - <<'NODE'
+          const r=require('/tmp/darya.json');
+          const counts={};
+          for(const item of r.mastery.resolved)counts[item.level]=(counts[item.level]||0)+1;
+          if(!r.automaticEligible)process.exit(1);
+          if(r.catalog?.count!==356||r.mastery?.resolved?.length!==7)process.exit(2);
+          if(counts[2]!==5||counts[3]!==2||Object.keys(counts).length!==2)process.exit(3);
+          if(r.mastery?.conflicts?.length||r.diagnostics?.orphanClaims?.length||r.diagnostics?.warnings?.length)process.exit(4);
+          if(!r.mastery.resolved.every(x=>x.sourceKind==='linked-progress-overlay'&&x.sourcePath==='site/lesson-14.09.26-progress.js'))process.exit(5);
+          if(!r.sources.some(x=>x.kind==='linked-progress-overlay'&&x.path==='site/lesson-14.09.26-progress.js'))process.exit(6);
+          console.log(JSON.stringify({catalog:r.catalog.count,mastery:r.mastery.resolved.length,levelCounts:counts},null,2));
+          NODE
+
+      - name: Verify readiness correction
+        shell: bash
+        run: |
+          node pipeline/migration/readiness-inventory.mjs --json > /tmp/readiness.json
+          node - <<'NODE'
+          const r=require('/tmp/readiness.json');
+          const x=r.students.find(s=>s.studentId==='darya_savenkova');
+          if(!x)process.exit(1);
+          if(x.status!=='ready'||x.lessons!==1||x.competencies!==356||x.mastery!==7)process.exit(2);
+          console.log(JSON.stringify(x,null,2));
+          NODE
+
+      - name: Commit design-reference snapshot
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add pipeline/migration/design-references/darya_savenkova.json
+          git diff --cached --quiet && exit 1 || true
+          git commit -m "Migration: snapshot Darya design-reference surface"
+          git push origin HEAD:feat/student-platform-v2-darya-design-reference-guard
