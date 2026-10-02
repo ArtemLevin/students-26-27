@@ -3,11 +3,11 @@
 > **Current implementation state — 2026-10-01**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **3 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`);
+> - Student Platform v2: **4 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`);
 > - текущий rollout: **P5.2**;
-> - завершённый этап: **P5.2-1** — `kirill_zinoviev` мигрирован с сохранением 15 исторических уроков, 230 competency IDs и 85 mastery values;
-> - следующий gate: **P5.2-2 Timofey catalog reconciliation** для шести `ege2027_t17_*` competency IDs;
-> - миграция `timofey` остаётся заблокированной до устранения catalog drift и повторного automatic-eligibility gate;
+> - завершённый этап: **P5.2-3** — `timofey` мигрирован с сохранением 26 исторических уроков, 296 competency IDs и 47 mastery values;
+> - EGE-2027 runtime catalog Тимофея теперь используется migration preflight через общий `transformEgeProfile2027Catalog()`, поэтому production dashboard и migration pipeline разделяют один catalog contract;
+> - следующий gate: **P5.2-4 Remaining modern-shared candidate audit** — выбрать следующий автоматически мигрируемый кабинет по исполняемому inventory/preflight, без ручного предположения о кандидате;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 

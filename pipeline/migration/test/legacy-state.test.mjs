@@ -285,8 +285,18 @@ test('real Sofya format resolves its embedded legacy competency catalog',()=>{
 });
 
 
-test('real Timofey format applies the runtime EGE-2027 catalog transform and is migration-eligible',()=>{
-  const report=inspectLegacyLearningState({root:ROOT,studentId:'timofey'});
+test('real Timofey legacy sources apply the runtime EGE-2027 catalog transform and stay migration-eligible',()=>{
+  const x=fixture('timofey_legacy_fixture');
+  for(const name of ['competence-config.js','dashboard.js','index-legacy.html']){
+    write(
+      path.join(x.site,name),
+      fs.readFileSync(
+        path.join(ROOT,'students','timofey','site',name),
+        'utf8'
+      )
+    );
+  }
+  const report=inspectLegacyLearningState({root:x.root,studentId:x.studentId});
   const ids=new Set(report.catalog?.ids||[]);
   assert.ok(report.catalog?.count>0);
   assert.ok(report.mastery.resolved.length>0);
