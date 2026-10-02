@@ -3,15 +3,16 @@
 > **Current implementation state — 2026-10-02**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **19 / 24** кабинетов; rolling-clean и fixed-KTP waves завершены;
+> - Student Platform v2: **20 / 24** кабинетов; rolling-clean и fixed-KTP waves завершены;
 > - текущий этап: **reconciliation wave** для оставшихся legacy-structured источников;
 > - `ekaterina_gnedkova` reconciled и мигрирована: 7/7 historical lessons, 369/369 competencies, 369/369 mastery;
-> - следующий reconciliation gate завершён для `sofya_khomenko`: dated inline mastery overlay вынесен из `index.html` в явный `mastery-authority.js`, сохраняя тот же runtime order перед `competency-map.js`;
-> - real-source result Софьи: **343/343 competencies**, **343/343 mastery**, распределение **283×0 + 60×2**, conflicts/orphans/warnings=0, `automaticEligible=true`;
-> - следующий gate: отдельная Student Platform v2 migration `sofya_khomenko` после merge reconciliation PR;
-> - architecture baseline пока остаётся **v2=19 / non-v2=5**, `legacy-structured=5`, `legacy-ktp=0`;
+> - `sofya_khomenko` reconciled и мигрирована: dated inline overlay вынесен в явный `mastery-authority.js`, runtime load order сохранён;
+> - migration result Софьи: **4/4 historical lessons, 343/343 competencies, 343/343 mastery**, материалы 4 HTML / 4 PDF / 4 TeX / 2 lab;
+> - mastery distribution сохранён точно: **283×0 + 60×2**; conflicts/orphans=0, warnings/reviewItems/blockers=[], protectedFilesChanged=[];
+> - architecture ratchet: **v2=20 / non-v2=4**, `legacy-structured=4`, `legacy-ktp=0`;
 > - `darya_savenkova` остаётся автоматически ready, но отложена из-за роли design reference;
-> - после Софьи reconciliation targets: `kristina`, `matvey_gorbachev`, `nastya_pavlova`;
+> - remaining reconciliation targets: `kristina`, `matvey_gorbachev`, `nastya_pavlova`;
+> - следующий gate выбирается после свежего post-merge readiness и сравнения сложности inline mastery semantics;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
