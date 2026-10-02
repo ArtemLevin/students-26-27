@@ -192,8 +192,11 @@ export function loadCompetencyCatalog(filePath,{fsView=fs}={}){
 function extractLessonsArray(source,label){
   const match=/export\s+const\s+LESSONS\s*=\s*/.exec(source);
   if(!match)fail(label,'must export const LESSONS');
-  const start=match.index+match[0].length;
-  if(source[start]!=='[')fail(label,'LESSONS must be an array literal');
+  const expressionStart=match.index+match[0].length;
+  const freezePrefix='Object.freeze(';
+  const frozen=source.startsWith(freezePrefix,expressionStart);
+  const start=frozen?expressionStart+freezePrefix.length:expressionStart;
+  if(source[start]!=='[')fail(label,'LESSONS must be an array literal or Object.freeze(array literal)');
 
   let depth=0,quote=null,escaped=false;
   for(let i=start;i<source.length;i+=1){
@@ -209,6 +212,11 @@ function extractLessonsArray(source,label){
     else if(char===']'){
       depth-=1;
       if(depth===0){
+        if(frozen){
+          let closing=i+1;
+          while(/\s/.test(source[closing]||''))closing+=1;
+          if(source[closing]!==')')fail(label,'Object.freeze LESSONS wrapper must contain exactly one array literal');
+        }
         const literal=source.slice(start,i+1);
         try{
           const sandbox=Object.create(null);
