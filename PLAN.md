@@ -3,16 +3,16 @@
 > **Current implementation state — 2026-10-02**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
-> - Student Platform v2: **23 / 24** кабинетов; rolling-clean, fixed-KTP и reconciliation waves завершены;
-> - единственный оставшийся non-v2 кабинет: `darya_savenkova`;
-> - pre-migration audit Дарьи обнаружил скрытый repository-authored progress в подключённом `site/lesson-14.09.26-progress.js`, который прежний inspector не учитывал;
-> - migration inspector теперь обнаруживает подключённые `lesson-*-progress.js` и извлекает mastery как runtime delta относительно загруженного catalog;
-> - corrected real-source readiness Дарьи: **1/1 historical lesson, 356 competencies, 7 repository-authored mastery values**, распределение **5×2 + 2×3**, conflicts/orphans/warnings=0, `automaticEligible=true`;
-> - два repeat flags и evidence/material занятия 14.09 остаются в исходном legacy runtime и защищены regression-тестом;
-> - роль Дарьи как design reference формализована hash-snapshot contract'ом: **13 файлов** в `site/` и `images/`; v2-generated `site/data/**`, `site/tests/**` и `site/lesson-registry.js` исключены из reference surface;
-> - guard PR не изменяет ни одного файла `students/darya_savenkova/**`; следующий gate — отдельная Student Platform v2 migration с обязательной проверкой design-reference snapshot до и после apply;
-> - architecture baseline пока остаётся **v2=23 / non-v2=1**, `legacy-structured=1`, `legacy-ktp=0`;
-> - после успешной migration Дарьи ожидаемый ratchet: **v2=24 / non-v2=0**;
+> - Student Platform v2 migration wave завершена: **24 / 24** кабинетов;
+> - `legacy-structured=0`, `legacy-ktp=0`, `non-v2=0`;
+> - финальный migration case `darya_savenkova` завершён после отдельного design-reference gate;
+> - pre-migration audit выявил скрытый repository-authored progress в `site/lesson-14.09.26-progress.js`; inspector и Student Platform contracts расширены provenance kind `linked-progress-overlay`;
+> - migration result Дарьи: **1/1 historical lesson, 356/356 competencies, 7/7 repository-authored mastery**, распределение **5×2 + 2×3**, материалы 1 HTML / 1 PDF / 1 TeX / 1 lab;
+> - conflicts/orphans=0, warnings/reviewItems/blockers=[], protectedFilesChanged=[];
+> - role `student-dashboard-design-reference` защищена отдельным SHA-256 snapshot contract: **13 reference files** в `site/` и `images/`;
+> - hash guard прошёл до и после transactional apply; migration добавила только v2 sidecars и не изменила reference surface;
+> - architecture ratchet: **v2=24 / non-v2=0**, `byArchitecture={v2:24}`;
+> - следующий этап — post-migration consolidation: удалить временные migration-wave допущения/документальный drift и определить steady-state lifecycle для новых уроков и v2 maintenance;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
