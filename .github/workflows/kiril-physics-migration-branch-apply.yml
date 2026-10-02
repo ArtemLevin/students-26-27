@@ -1,0 +1,120 @@
+name: Kiril physics migration branch apply
+
+on:
+  push:
+    branches:
+      - 'feat/student-platform-v2-p5-3-4-kiril-zinoviev-physics'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout migration branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/student-platform-v2-p5-3-4-kiril-zinoviev-physics
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate reviewed manifest
+        run: node scripts/student.mjs validate-manifest --manifest pipeline/migration/manifests/kiril_zinoviev_physics.json --json
+
+      - name: Inspect legacy state
+        run: node scripts/student.mjs inspect-legacy-state kiril_zinoviev_physics --json
+
+      - name: Validated dry-run
+        shell: bash
+        run: |
+          node scripts/student.mjs migrate kiril_zinoviev_physics \
+            --manifest pipeline/migration/manifests/kiril_zinoviev_physics.json \
+            --date 2026-10-02 \
+            --dry-run \
+            --json > /tmp/kiril-physics-dry-run.json
+          node -e "const p=require('/tmp/kiril-physics-dry-run.json'); const c=p.coverage; if(!p.executable||!c?.complete) process.exit(1); if(c.lessons?.source!==2||c.lessons?.candidate!==2) process.exit(2); if(c.competencies?.source!==223||c.competencies?.candidate!==223) process.exit(3); if(c.mastery?.resolvedSource!==25||c.mastery?.candidate!==25||c.mastery?.conflicts!==0||c.mastery?.orphans!==0) process.exit(4); console.log(JSON.stringify({executable:p.executable,coverage:c,projectedBaseline:p.projectedBaseline},null,2));"
+
+      - name: Transactional apply
+        run: |
+          node scripts/student.mjs migrate kiril_zinoviev_physics \
+            --manifest pipeline/migration/manifests/kiril_zinoviev_physics.json \
+            --date 2026-10-02 \
+            --apply \
+            --json
+
+      - name: Validate migrated package
+        run: node scripts/student.mjs validate kiril_zinoviev_physics --json
+
+      - name: Verify preserved mastery
+        run: |
+          node - <<'NODE'
+          const state=require('./students/kiril_zinoviev_physics/site/data/mastery-state.json');
+          const expected={
+  "measurement_09": 2,
+  "measurement_10": 3,
+  "measurement_11": 2,
+  "measurement_12": 3,
+  "measurement_13": 3,
+  "motion_04": 2,
+  "motion_05": 2,
+  "motion_06": 3,
+  "motion_08": 2,
+  "motion_09": 3,
+  "motion_10": 2,
+  "motion_11": 3,
+  "motion_12": 2,
+  "motion_13": 2,
+  "motion_15": 2,
+  "motion_16": 2,
+  "motion_17": 2,
+  "motion_18": 2,
+  "motion_19": 2,
+  "motion_20": 3,
+  "motion_23": 3,
+  "motion_24": 2,
+  "motion_25": 2,
+  "motion_26": 2,
+  "motion_27": 2
+};
+          const ids=Object.keys(state.levels);
+          if(ids.length!==Object.keys(expected).length) process.exit(1);
+          for(const [id,level] of Object.entries(expected)){
+            const value=state.levels[id];
+            if(!value||value.level!==level||value.sourceKind!=='baseline-levels'||value.sourcePath!=='site/competency-map-data.js'){
+              console.error('mastery mismatch',id,value,level);
+              process.exit(2);
+            }
+          }
+          console.log('Kiril physics mastery preserved:',ids.length);
+          NODE
+
+      - name: Run migration regression suite
+        run: node --test pipeline/migration/test/*.test.mjs
+
+      - name: Enforce architecture ratchet
+        run: node pipeline/migration/audit-ratchet.mjs
+
+      - name: Commit generated migration state
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            pipeline/migration/baseline.json \
+            pipeline/migration/reports/kiril_zinoviev_physics.json \
+            students/kiril_zinoviev_physics/student-contract.json \
+            students/kiril_zinoviev_physics/site/data \
+            students/kiril_zinoviev_physics/site/lesson-registry.js \
+            students/kiril_zinoviev_physics/site/tests/student-platform-v2.test.mjs
+          if git diff --cached --quiet; then
+            echo "Migration produced no generated changes"
+            exit 1
+          fi
+          git commit -m "P5.3-4: apply Kiril physics Student Platform v2 migration"
+          git push origin HEAD:feat/student-platform-v2-p5-3-4-kiril-zinoviev-physics
