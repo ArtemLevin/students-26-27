@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {classifyStudentDashboardChanges,isDashboardRelevantPath} from './student-dashboard-scope.mjs';
+import {classifyStudentDashboardChanges,isDashboardRelevantPath,isMigrationRecoveryPath} from './student-dashboard-scope.mjs';
 
 test('dashboard and production contract changes are heavy',()=>{
   for(const file of [
@@ -59,4 +59,28 @@ test('material-only change set does not request heavy regression',()=>{
     ]).heavy,
     false
   );
+});
+
+
+test('migration recovery paths are classified independently from steady-state changes',()=>{
+  for(const file of [
+    'pipeline/migration/migrate-student.mjs',
+    'pipeline/prompts/migrate_student_architecture.md',
+    'pipeline/schemas/student-migration-manifest-v1.schema.json',
+    'pipeline/schemas/migration-coverage-v1.schema.json'
+  ])assert.equal(isMigrationRecoveryPath(file),true,file);
+
+  for(const file of [
+    'pipeline/student/audit-steady-state.mjs',
+    'pipeline/practice/run-stage-04.mjs',
+    'students/nastya_pavlova/student-contract.json'
+  ])assert.equal(isMigrationRecoveryPath(file),false,file);
+
+  const result=classifyStudentDashboardChanges([
+    'pipeline/migration/migrate-student.mjs',
+    'pipeline/student/audit-steady-state.mjs'
+  ]);
+  assert.equal(result.heavy,true);
+  assert.equal(result.migrationRecovery,true);
+  assert.deepEqual(result.migrationRecoveryPaths,['pipeline/migration/migrate-student.mjs']);
 });
