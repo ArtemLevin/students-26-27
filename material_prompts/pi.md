@@ -1,5 +1,5 @@
-ФИО: Анастасия Павлова
-STUDENT=nastya_pavlova
+ФИО: Марк Гукин
+STUDENT=mark_gukin
 Команды:
 
 1. "создай чек-лист" запускает работу промпта из файла: cheklist_prompt
