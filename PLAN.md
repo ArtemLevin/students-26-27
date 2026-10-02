@@ -1,14 +1,15 @@
 # PLAN — post-MVP развитие интервального повторения
 
-> **Current implementation state — 2026-10-01**
+> **Current implementation state — 2026-10-02**
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
 > - Student Platform v2: **6 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`, `sofya_kalney`, `nikol_sarkisyants`);
 > - текущий rollout: **P5.2**;
-> - завершённый этап: **P5.2-7** — `nikol_sarkisyants` мигрирована с сохранением 22 исторических уроков, 284 competency IDs и 103 mastery values;
-> - canonical migration registry теперь сохраняет общий dashboard API для recent/archive pagination, date formatting и registry validation; это закрывает найденную post-apply регрессию Никол и защищает следующие modern-shared миграции;
-> - `xenia_klykova` — последний modern-shared кабинет; migration preflight блокируется единственным orphan mastery `t11_other`;
-> - следующий gate: **P5.2-8 Xenia orphan reconciliation** — установить источник истины для `t11_other`, устранить catalog/mastery drift с regression guard и повторить automatic migration preflight;
+> - завершённый этап: **P5.2-8** — Xenia mastery authority reconciled: stale orphan `t11_other` удалён из repository-authored teacher seed, а подтверждённые runtime mastery `ege2027_t6_variance=2` и `ege2027_t6_stddev=2` закреплены в canonical legacy authority;
+> - regression guard на реальных legacy sources Ксении требует EGE-2027 catalog transform, отсутствие mastery conflicts/orphans и `automaticEligible=true`;
+> - обязательный `merge gate` теперь включает полный student-specific regression suite Никол; отдельный дублирующий workflow удалён;
+> - `xenia_klykova` остаётся последним modern-shared кабинетом;
+> - следующий gate: **P5.2-9 Xenia migration** — повторить automatic preflight, подготовить reviewed manifest, выполнить validated dry-run и transactional apply с сохранением lesson/mastery/practice runtime contracts;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
