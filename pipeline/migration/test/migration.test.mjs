@@ -69,6 +69,45 @@ test('write migration requires explicit future implementation and dry-run is par
   assert.throws(()=>parseArgs([]),/studentId is required/);
 });
 
+
+
+test('architecture ratchet keeps modern-shared closed once baseline reaches zero',()=>{
+  const baseline={
+    version:1,
+    minV2:7,
+    maxNonV2:17,
+    byArchitecture:{v2:7,'legacy-structured':15,'legacy-ktp':2}
+  };
+  const report={
+    summary:{
+      total:24,
+      byArchitecture:{v2:7,'modern-shared':1,'legacy-structured':14,'legacy-ktp':2}
+    }
+  };
+  const result=evaluateArchitectureRatchet(report,baseline);
+  assert.equal(result.ok,false);
+  assert.equal(result.modernShared,1);
+  assert.ok(result.violations.some(item=>item.includes('modern-shared count increased')));
+});
+
+test('architecture ratchet preserves backward compatibility for baselines without per-architecture counts',()=>{
+  const result=evaluateArchitectureRatchet(
+    {summary:{total:24,byArchitecture:{v2:7,'modern-shared':1,'legacy-structured':14,'legacy-ktp':2}}},
+    {version:1,minV2:7,maxNonV2:17}
+  );
+  assert.equal(result.ok,true);
+});
+
+test('architecture ratchet permits modern-shared at or below an older explicit baseline',()=>{
+  const result=evaluateArchitectureRatchet(
+    {summary:{total:24,byArchitecture:{v2:6,'modern-shared':1,'legacy-structured':15,'legacy-ktp':2}}},
+    {
+      version:1,minV2:6,maxNonV2:18,
+      byArchitecture:{v2:6,'modern-shared':1,'legacy-structured':15,'legacy-ktp':2}
+    }
+  );
+  assert.equal(result.ok,true);
+});
 test('architecture ratchet rejects regressions and requires immediate baseline tightening',()=>{
   const baseline={version:1,minV2:1,maxNonV2:23};
 

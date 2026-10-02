@@ -4,12 +4,13 @@
 >
 > - обязательный исполняемый Stage 04 реализован и включён в CI;
 > - Student Platform v2: **7 / 24** кабинетов (`grisha_arkhipov`, `volodia_khachaturian`, `kirill_zinoviev`, `timofey`, `sofya_kalney`, `nikol_sarkisyants`, `xenia_klykova`);
-> - текущий rollout: **P5.2**;
-> - завершённый этап: **P5.2-9** — `xenia_klykova` мигрирована из `modern-shared` в v2 через reviewed manifest, validated dry-run и transactional apply;
-> - migration coverage Ксении: 23/23 historical lessons, 296/296 effective EGE-2027 competencies, 69/69 repository-authored mastery values, conflicts/orphans=0, protectedFilesChanged=[];
-> - dashboard regression для Xenia/Timofey теперь проверяет effective runtime catalog после EGE-2027 transform; canonical и runtime catalog содержат 296 skills;
-> - architecture ratchet: **v2=7**, **non-v2=17**, `modern-shared=0`, `legacy-structured=15`, `legacy-ktp=2`;
-> - следующий gate: **P5.2-10 modern-shared closure** — запретить повторное появление `modern-shared` через architecture ratchet/regression, затем построить readiness inventory для P5.3 legacy-structured rollout;
+> - текущий rollout: **P5.3 preparation**;
+> - завершённый этап: **P5.2-10** — `modern-shared` закрыт архитектурным ratchet на baseline=0; старые v1 baseline без per-architecture counts сохраняют прежнюю семантику;
+> - CI публикует deterministic migration readiness inventory для всех non-v2 кабинетов;
+> - readiness на текущем `main`: **17 non-v2 = 16 ready / 0 review / 1 blocked**; blocker `ekaterina_gnedkova` — unresolved catalog (`source-execution-failed` + `index-catalog-not-found`);
+> - оставшийся состав: `legacy-structured=15`, `legacy-ktp=2`; `modern-shared=0`;
+> - следующий gate: **P5.3-1 Mark Gukin pilot** — минимальный clean legacy-structured case: 1 historical lesson, 356 competencies, 0 repository-authored mastery, rolling planning; выполнить reviewed manifest → validated dry-run → transactional apply → full merge gate;
+> - после пилота продолжить rollout по readiness inventory; `darya_savenkova` не использовать первой из-за роли design reference, fixed-KTP кабинеты вести отдельной волной;
 > - разделы ниже сохраняют исторический operational roadmap от 2026-08-31; при расхождении с текущим кодом и этим status block фактический `main` имеет приоритет.
 
 
