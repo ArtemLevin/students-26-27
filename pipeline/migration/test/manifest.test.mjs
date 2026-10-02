@@ -278,6 +278,13 @@ test('lesson-derived mastery claim requires exact assessed evidence',()=>{
   );
 });
 
+test('linked progress overlay is a valid preserved mastery source kind',()=>{
+  const value=manifest();
+  value.preserveMastery[0].sourceKind='linked-progress-overlay';
+  value.preserveMastery[0].sourcePath='site/lesson-30.09.26-progress.js';
+  assert.equal(validateStudentMigrationManifestData(value),value);
+});
+
 test('preserved mastery is restricted to exact repository authority',()=>{
   const value=manifest();
   value.preserveMastery[0].confidence='probable';
