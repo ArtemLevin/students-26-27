@@ -1,0 +1,62 @@
+name: P5.2-4 remaining modern-shared candidate audit
+
+on:
+  push:
+    branches:
+      - feat/student-platform-v2-p5-2-4-candidate-audit
+    paths:
+      - .github/workflows/p5-2-4-candidate-audit.yml
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Audit remaining modern-shared candidates
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import {inspectLegacyLearningState} from './pipeline/migration/legacy/inspect-learning-state.mjs';
+          import {discoverHistoricalLessons} from './pipeline/migration/legacy/discover-lessons.mjs';
+          import {inspectStudent} from './pipeline/migration/inventory-students.mjs';
+
+          const candidates=['nikol_sarkisyants','sofya_kalney','xenia_klykova'];
+          const results=[];
+          for(const studentId of candidates){
+            const inventory=inspectStudent(process.cwd(),studentId);
+            const item={studentId,architecture:inventory.architecture,features:inventory.features,counts:inventory.counts};
+            try{
+              const state=inspectLegacyLearningState({root:process.cwd(),studentId});
+              item.learningState={
+                automaticEligible:state.automaticEligible,
+                catalogCount:state.catalog?.count??0,
+                masteryResolved:state.mastery.resolved.length,
+                masteryConflicts:state.mastery.conflicts.length,
+                orphanClaims:state.diagnostics.orphanClaims.map(x=>x.competencyId),
+                warnings:state.diagnostics.warnings,
+                catalogTransforms:state.diagnostics.catalogTransforms??[],
+                sources:state.sources
+              };
+            }catch(error){
+              item.learningStateError=error.message;
+            }
+            try{
+              const history=discoverHistoricalLessons({root:process.cwd(),studentId});
+              item.history={
+                lessons:history.lessons.length,
+                diagnostics:history.diagnostics,
+                hrefs:history.lessons.map(x=>({date:x.date,href:x.href,sources:x.sources}))
+              };
+            }catch(error){
+              item.historyError=error.message;
+            }
+            results.push(item);
+          }
+          console.log(JSON.stringify({version:1,results},null,2));
+          NODE
