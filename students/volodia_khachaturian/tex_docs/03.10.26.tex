@@ -1,0 +1,325 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=18mm,top=17mm,bottom=19mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable,array}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{2E6F73}
+\definecolor{darkaccent}{HTML}{18484B}
+\definecolor{textgray}{HTML}{2E3133}
+\definecolor{softgray}{HTML}{EEF2F2}
+\definecolor{warn}{HTML}{8A5A2B}
+
+\color{textgray}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\setlist[itemize]{leftmargin=1.6em,itemsep=0.18em,topsep=0.2em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.35em,topsep=0.25em}
+\renewcommand{\arraystretch}{1.28}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{darkaccent}Физика: графики скорости и вертикальное движение}
+\fancyhead[R]{\small\color{darkaccent}03.10.26}
+\fancyfoot[C]{\small\thepage}
+\setlength{\headheight}{15pt}
+
+\newcommand{\sectionrule}{\par\vspace{0.25em}\noindent\color{accent}\rule{\linewidth}{0.55pt}\color{textgray}\par\vspace{0.25em}}
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\formula}[1]{\[\boxed{#1}\]}
+\newcommand{\ms}{\,\text{м/с}}
+\newcommand{\mss}{\,\text{м/с}^2}
+\newcommand{\metr}{\,\text{м}}
+\newcommand{\secnd}{\,\text{с}}
+
+\begin{document}
+
+% ---------- TITLE ----------
+\thispagestyle{empty}
+\begin{center}
+\vspace*{22mm}
+{\Large\color{darkaccent}\textbf{Чек-лист}}\\[7mm]
+{\Huge\bfseries Графики скорости\\[2mm] и вертикальное движение}\\[9mm]
+{\large Физика}\\[15mm]
+\color{accent}\rule{0.62\linewidth}{0.8pt}\\[12mm]
+{\Large Володя Хачатурян}\\[5mm]
+{\large 3 октября 2026 г.}\\[24mm]
+\begin{minipage}{0.78\linewidth}
+\centering
+\large
+Главная цель: уверенно читать график $v(t)$, находить ускорение по наклону, путь по площади и корректно выбирать знаки при вертикальном движении.
+\end{minipage}
+\end{center}
+
+\vfill
+\begin{center}
+{\small\color{darkaccent}Лёвин Артём Александрович эксклюзивно для Володи Хачатуряна}
+\end{center}
+\vspace{4mm}
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent,line width=1.2pt] ($(current page.south west)+(18mm,16mm)$)
+  .. controls ($(current page.south west)+(55mm,28mm)$) and ($(current page.south east)+(-55mm,5mm)$)
+  .. ($(current page.south east)+(-18mm,17mm)$);
+\end{tikzpicture}
+\clearpage
+
+% ---------- CHECKLIST ----------
+\section*{1. Ускорение по графику $v(t)$}
+\sectionrule
+
+Если известны две точки одного прямолинейного участка графика скорости,
+\formula{a_x=\frac{\Delta v_x}{\Delta t}=\frac{v_{2x}-v_{1x}}{t_2-t_1}}
+
+\begin{itemize}
+  \item На графике $v(t)$ ускорение равно \key{угловому коэффициенту прямой}: чем круче прямая, тем больше $|a_x|$.
+  \item Возрастающая прямая: $a_x>0$. Убывающая прямая: $a_x<0$. Горизонтальный участок: $a_x=0$.
+  \item Если сравнивают ускорения \key{по модулю}, сравнивайте $|a_x|$: знак показывает направление изменения скорости, а не величину модуля ускорения.
+  \item При прямой линии $v(t)$ ускорение постоянно на всём рассматриваемом участке. Поэтому фраза «в момент $t=2$ с» не меняет способ решения.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+ width=0.82\linewidth,height=6.0cm,
+ axis lines=middle,xmin=0,xmax=5.3,ymin=-0.7,ymax=7.2,
+ xlabel={$t,\ \text{с}$},ylabel={$v_x,\ \text{м/с}$},
+ xtick={0,1,2,3,4,5},ytick={0,1,2,3,4,5,6,7},
+ grid=both,major grid style={draw=gray!24},minor tick num=0,
+ clip=false]
+\addplot[accent,very thick,domain=0:4.5,samples=2]{1+1.2*x};
+\addplot[darkaccent,very thick,dashed,domain=0:4.5,samples=2]{1+0.45*x};
+\node[anchor=west,text=accent] at (axis cs:3.1,5.7) {$|a_1|>|a_2|$};
+\node[anchor=west,text=darkaccent] at (axis cs:3.1,2.6) {меньший наклон};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\key{Быстрая проверка:} единица ускорения должна получиться $\text{м/с}^2$.
+
+\section*{2. Путь как площадь под графиком скорости}
+\sectionrule
+
+Для графика $v(t)$ путь на промежутке времени удобно считать геометрически.
+\formula{S=\text{сумма модулей площадей между графиком }v(t)\text{ и осью времени}}
+
+\begin{itemize}
+  \item Прямоугольник: $S=vt$.
+  \item Треугольник: $S=\dfrac12 ah$.
+  \item Трапеция при линейном изменении скорости: $S=\dfrac{v_1+v_2}{2}\,\Delta t$, если $v_1$ и $v_2$ одного знака.
+  \item Участок ниже оси времени означает движение против выбранного направления оси. Для \key{пути} площадь этого участка всё равно берётся положительной.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+ width=0.82\linewidth,height=6.2cm,
+ axis lines=middle,xmin=0,xmax=6.2,ymin=-3.8,ymax=4.8,
+ xlabel={$t,\ \text{с}$},ylabel={$v_x,\ \text{м/с}$},
+ xtick={0,1,2,3,4,5,6},ytick={-3,-2,-1,0,1,2,3,4},
+ grid=both,major grid style={draw=gray!24},clip=false]
+\addplot[accent,very thick] coordinates {(0,4) (2,4) (4,0) (6,-3)};
+\addplot[accent!20,draw=none] coordinates {(0,0) (0,4) (2,4) (4,0)} \closedcycle;
+\addplot[darkaccent!15,draw=none] coordinates {(4,0) (6,-3) (6,0)} \closedcycle;
+\node[anchor=south west,text=darkaccent] at (axis cs:0.35,2.1) {положительная площадь};
+\node[anchor=north west,text=darkaccent] at (axis cs:4.25,-1.0) {для пути тоже ``+''};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\key{Связь с формулой равноускоренного движения:}
+\[
+S=\frac{v_{0x}+v_x}{2}\,t
+\]
+— это та же площадь трапеции под прямой $v(t)$, когда скорость сохраняет направление.
+
+\section*{3. Что означает отрицательная скорость}
+\sectionrule
+
+\begin{itemize}
+  \item $v_x>0$: тело движется вдоль положительного направления оси $x$.
+  \item $v_x=0$: в этот момент тело остановилось.
+  \item $v_x<0$: тело движется против положительного направления оси $x$.
+  \item Если после пересечения оси $v=0$ график уходит ниже, тело \key{сменило направление движения}.
+\end{itemize}
+
+Важно разделять два вопроса: \key{куда движется тело} определяет знак скорости; \key{как меняется скорость} определяет ускорение.
+
+\clearpage
+\section*{4. Вертикальное движение: сначала ось и знаки}
+\sectionrule
+
+Выбираем ось $Oy$ вертикально вверх. Тогда ускорение свободного падения направлено вниз:
+\formula{a_y=-g,\qquad g\approx 10\mss}
+
+Общие формулы равноускоренного движения:
+\[
+ v_y=v_{0y}+a_y t,\qquad
+ y=y_0+v_{0y}t+\frac{a_y t^2}{2}.
+\]
+
+После выбора оси формулы \key{адаптируются под конкретную ситуацию}.
+
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash\bfseries}p{0.25\linewidth}X X@{}}
+\toprule
+Ситуация & Скорость & Координата \\
+\midrule
+Тело отпустили с высоты $h$ & $v_y=-gt$ & $y=h-\dfrac{gt^2}{2}$ \\
+Бросили вниз со скоростью $v_0$ & $v_y=-v_0-gt$ & $y=h-v_0t-\dfrac{gt^2}{2}$ \\
+Бросили вверх со скоростью $v_0$ & $v_y=v_0-gt$ & $y=h+v_0t-\dfrac{gt^2}{2}$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\key{В верхней точке} при броске вверх $v_y=0$, поэтому
+\[
+ t_{\text{подъёма}}=\frac{v_0}{g}.
+\]
+Если тело возвращается на тот же уровень и сопротивлением воздуха пренебрегают, время подъёма равно времени падения:
+\[
+ t_{\text{полёта}}=2t_{\text{подъёма}}=\frac{2v_0}{g}.
+\]
+
+\section*{5. Типичные ошибки}
+\sectionrule
+\begin{itemize}
+  \item Подставлять в $a=\Delta v/\Delta t$ только конечную скорость вместо \key{изменения} скорости.
+  \item Считать, что отрицательное ускорение автоматически означает движение назад. Направление движения задаёт знак $v$, а не знак $a$.
+  \item При вычислении пути вычитать площадь участка, расположенного ниже оси $t$. Для пути нужны \key{модули площадей}.
+  \item На графике брать неудобные дробные точки, когда на той же прямой есть две точки с целыми координатами.
+  \item При вертикальном движении писать формулы до выбора оси и направления положительной координаты.
+  \item Считать $v=0$ в момент удара о землю. При броске вверх $v=0$ относится к \key{точке максимальной высоты}.
+\end{itemize}
+
+\section*{6. Два коротких образца}
+\sectionrule
+
+\key{Пример 1.} На прямой $v(t)$ взяты точки $(1;2)$ и $(5;8)$, где время в секундах, скорость в м/с.
+\[
+a_x=\frac{8-2}{5-1}=\frac{6}{4}=1{,}5\mss.
+\]
+
+\key{Пример 2.} Скорость линейно выросла от $3\ms$ до $9\ms$ за $4\secnd$.
+\[
+S=\frac{3+9}{2}\cdot 4=24\metr.
+\]
+
+\clearpage
+% ---------- FLOWCHART ONLY PAGE ----------
+\thispagestyle{plain}
+\begin{center}
+{\LARGE\bfseries\color{darkaccent}Алгоритм: как читать график $v(t)$}
+\end{center}
+\vspace{8mm}
+
+\tikzset{
+ startstop/.style={ellipse,draw=accent,line width=1pt,minimum width=45mm,minimum height=12mm,align=center,font=\small},
+ process/.style={rectangle,rounded corners=2mm,draw=accent,line width=1pt,minimum width=105mm,minimum height=13mm,text width=94mm,align=center,font=\small},
+ branch/.style={rectangle,rounded corners=2mm,draw=accent,line width=1pt,minimum width=66mm,minimum height=17mm,text width=58mm,align=center,font=\small},
+ decision/.style={diamond,aspect=2.1,draw=accent,line width=1pt,minimum width=55mm,minimum height=16mm,text width=44mm,align=center,font=\small},
+ arr/.style={-{Latex[length=3mm]},line width=1pt,draw=darkaccent}
+}
+\begin{center}
+\begin{tikzpicture}[node distance=10mm]
+\node[startstop] (start) {Начало: прочитайте, что требуется найти};
+\node[process,below=of start] (axes) {Проверьте оси: по горизонтали $t$, по вертикали $v$. Определите нужный промежуток времени.};
+\node[decision,below=12mm of axes] (what) {Что ищем?};
+\node[branch,below left=16mm and 1mm of what] (acc) {Ускорение: выберите две удобные точки одного прямого участка и вычислите $a=\Delta v/\Delta t$.};
+\node[branch,below right=16mm and 1mm of what] (path) {Путь: разбейте область между графиком и осью времени на простые фигуры.};
+\node[branch,below=12mm of acc] (accchk) {Проверьте знак $a$ и, если просят модуль, сравнивайте $|a|$.};
+\node[branch,below=12mm of path] (pathchk) {Сложите модули площадей: при $v<0$ вклад в путь остаётся положительным.};
+\node[startstop,below=20mm of $(accchk)!0.5!(pathchk)$] (finish) {Проверка единиц и физического смысла ответа};
+
+\draw[arr] (start) -- (axes);
+\draw[arr] (axes) -- (what);
+\draw[arr] (what.west) -| node[pos=0.25,above,font=\small]{ускорение} (acc.north);
+\draw[arr] (what.east) -| node[pos=0.25,above,font=\small]{путь} (path.north);
+\draw[arr] (acc) -- (accchk);
+\draw[arr] (path) -- (pathchk);
+\draw[arr] (accchk.south) |- (finish.west);
+\draw[arr] (pathchk.south) |- (finish.east);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------- TRAINING ----------
+\section*{Тренировочный блок — Путь А}
+\sectionrule
+\textbf{10 заданий.} В решениях указывайте формулу, подстановку и единицы. Для вертикального движения считайте $g=10\mss$.
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item На прямолинейном участке графика $v_x(t)$ отмечены точки $(0; -2)$ и $(4; 6)$. Найдите проекцию ускорения.
+
+  \item Для четырёх тел известны изменения скорости:\\
+  A: от $0$ до $8\ms$ за $2\secnd$;\quad
+  Б: от $2$ до $6\ms$ за $4\secnd$;\\
+  В: от $5$ до $1\ms$ за $2\secnd$;\quad
+  Г: от $-2$ до $4\ms$ за $3\secnd$.
+  У какого тела модуль ускорения наименьший?
+
+  \item График $v_x(t)$ — прямая, проходящая через точки $(0;3)$ и $(6;15)$. Найдите ускорение тела в момент $t=4\secnd$.
+
+  \item Скорость тела линейно возрастает от $4\ms$ до $10\ms$ за $3\secnd$. Найдите путь за эти $3\secnd$.
+
+  \item На промежутке $0\le t\le2\secnd$ скорость равна $4\ms$; затем от $t=2\secnd$ до $t=4\secnd$ она линейно уменьшается до нуля; от $t=4\secnd$ до $t=6\secnd$ линейно уменьшается от $0$ до $-3\ms$. Найдите путь за $6\secnd$.
+
+  \item Скорость тела меняется по одной прямой: $v=6\ms$ при $t=0$, $v=0$ при $t=3\secnd$, $v=-4\ms$ при $t=5\secnd$. В какой момент тело меняет направление и какой путь проходит за первые $5\secnd$?
+
+  \item Тело отпустили без начальной скорости с высоты $80\metr$. Найдите $v_y$ и высоту над землёй через $3\secnd$, если ось $Oy$ направлена вверх.
+
+  \item Тело бросили вертикально вниз с высоты $100\metr$ со скоростью $5\ms$. Найдите $v_y$ и высоту над землёй через $3\secnd$.
+
+  \item Тело бросили вертикально вверх с поверхности земли со скоростью $30\ms$. Найдите время подъёма до максимальной высоты и максимальную высоту.
+
+  \item Камень бросили вертикально вверх с поверхности земли со скоростью $20\ms$ и он вернулся на тот же уровень. Сопротивлением воздуха пренебречь. Найдите полное время полёта.
+\end{enumerate}
+
+\clearpage
+% ---------- ANSWERS ----------
+\section*{Ответы}
+\sectionrule
+\begin{longtable}{@{}>{\bfseries}p{0.10\linewidth}p{0.84\linewidth}@{}}
+\toprule
+№ & Ответ \\
+\midrule
+\endfirsthead
+\toprule
+№ & Ответ \\
+\midrule
+\endhead
+1 & $a_x=2\mss$. \\
+2 & Б, $|a|=1\mss$. \\
+3 & $a_x=2\mss$. \\
+4 & $S=21\metr$. \\
+5 & $S=15\metr$. \\
+6 & Смена направления при $t=3\secnd$; $S=13\metr$. \\
+7 & $v_y=-30\ms$, $y=35\metr$. \\
+8 & $v_y=-35\ms$, $y=40\metr$. \\
+9 & $t_{\text{подъёма}}=3\secnd$, $h_{\max}=45\metr$. \\
+10 & $t_{\text{полёта}}=4\secnd$. \\
+\bottomrule
+\end{longtable}
+
+\vfill
+\begin{center}
+\small\color{darkaccent}
+Лёвин Артём Александрович эксклюзивно для Володи Хачатуряна
+\end{center}
+
+\end{document}
