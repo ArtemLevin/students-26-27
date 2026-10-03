@@ -5,6 +5,66 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-02",
+    "ktpRefs": [],
+    "href": "02.10.26.html",
+    "title": "Оптимизация с помощью производной",
+    "navTitle": "Оптимизация: максимум и минимум",
+    "navSubtitle": "целевая функция · допустимая область · прикладные модели",
+    "summary": "На занятии продолжена прикладная оптимизация с помощью производной. Закреплён единый маршрут от выбора целевой величины и допустимой области до исследования знака производной и содержательного ответа; разобраны модели выручки, площади, мощности и минимального сноса лодки.",
+    "topics": [
+      "оптимизация",
+      "целевая функция",
+      "допустимая область",
+      "максимум и минимум",
+      "мощность",
+      "тригонометрическая модель"
+    ],
+    "outcomes": [
+      {
+        "label": "Прикладная оптимизация",
+        "level": 2,
+        "competencyId": "t12_applied",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "ОДЗ и допустимая область",
+        "level": 2,
+        "competencyId": "t12_domain",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Критические точки и границы",
+        "level": 2,
+        "competencyId": "t12_endpoints",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Произведения функций",
+        "level": 2,
+        "competencyId": "t12_product",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Частные функций",
+        "level": 2,
+        "competencyId": "t12_quotient",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "02.10.26.html",
+      "pdf": "../pdf_docs/02.10.26.pdf",
+      "tex": "../tex_docs/02.10.26.tex",
+      "lab": "02.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-09-28",
     "ktpRefs": [],
     "href": "28.09.26.html",

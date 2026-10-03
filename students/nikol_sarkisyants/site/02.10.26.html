@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Николь Саркисьянц — оптимизация с помощью производной: максимум, минимум, допустимая область и прикладные модели, 02.10.2026">
+<title>Оптимизация с помощью производной — Николь Саркисьянц</title>
+<style>
+:root{
+  color-scheme:light;
+  --page:#f3f0ea;--paper:#fffdf8;--paper-2:#f7f4ed;--text:#252526;--muted:#6e6b69;
+  --line:#d3cec5;--line-strong:#8e8981;--accent:#7b3541;--accent-soft:#eadcdf;
+  --signal:#8b6b2c;--graph:#3e6f74;--success:#356c56;--danger:#99554e;--focus:#aa7b31;
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#151414;--paper:#201e1d;--paper-2:#292625;--text:#f0ece7;--muted:#bbb3ad;
+  --line:#433d3a;--line-strong:#756a65;--accent:#d58d98;--accent-soft:#3b292d;
+  --signal:#d2b16c;--graph:#83b8bd;--success:#7dbb9b;--danger:#df968d;--focus:#e2bc73;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--page);color:var(--text);font:16px/1.62 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:inherit}button{font:inherit;color:inherit}.skip{position:fixed;left:1rem;top:-5rem;z-index:100;background:var(--text);color:var(--page);padding:.7rem 1rem}.skip:focus{top:1rem}
+.shell{width:min(100% - 2rem,1180px);margin:auto;padding:1rem 0 3rem}.toolbar{display:flex;align-items:center;gap:.25rem;flex-wrap:wrap;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);padding:.45rem 0}.toolbar a,.toolbar button{min-height:40px;padding:.55rem .7rem;border:0;border-right:1px solid var(--line);background:transparent;text-decoration:none;font-weight:760;cursor:pointer}.toolbar .grow{flex:1}.date{font:700 .72rem/1.2 ui-monospace,monospace;letter-spacing:.08em;color:var(--muted)}
+.hero{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(300px,.92fr);gap:clamp(2rem,5vw,5rem);padding:clamp(2.5rem,7vw,6rem) 0 2.2rem;border-bottom:1px solid var(--line-strong)}
+.kicker,.folio,.label{font:760 .69rem/1.2 ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif}h1{font-size:clamp(3.7rem,8vw,7.6rem);line-height:.86;letter-spacing:-.06em;font-weight:500;margin:.3rem 0 1rem}h2{font-size:clamp(1.9rem,3.8vw,3.25rem);line-height:1.02;font-weight:500;margin:.15rem 0 .7rem}h3{font-size:1.32rem;line-height:1.15;margin:.2rem 0 .55rem;font-weight:600}.lead{max-width:63ch;color:var(--muted);font-size:1.05rem}
+.hero-panel{align-self:end;border-top:3px solid var(--accent);padding-top:1rem}.hero-route{display:grid;gap:.4rem}.hero-route span{display:grid;grid-template-columns:2rem 1fr;gap:.7rem;padding:.55rem 0;border-bottom:1px solid var(--line);align-items:start}.hero-route b{color:var(--accent);font-family:ui-monospace,monospace}.hero-route small{display:block;color:var(--muted)}
+.hero-equation{margin-top:1rem;padding:1rem 0;border-bottom:1px solid var(--line-strong);font:500 clamp(1.25rem,2.5vw,1.9rem)/1.35 Georgia,serif;color:var(--accent)}
+.journey{display:flex;gap:.15rem;overflow-x:auto;border-bottom:1px solid var(--line-strong);padding:.5rem 0}.journey a{padding:.55rem .75rem;text-decoration:none;white-space:nowrap;border-right:1px solid var(--line);font-weight:740}.journey a:hover{text-decoration:underline}
+.poster{border-bottom:1px solid var(--line-strong)}.poster summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:1rem;padding:1rem 0;font-weight:780}.poster summary::-webkit-details-marker{display:none}.poster-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,.55fr);gap:1.4rem;padding:0 0 1.4rem}.poster-body p{color:var(--muted)}.poster-open{border:1px solid var(--line);background:var(--paper);padding:.4rem;cursor:zoom-in}.poster-open img{display:block;width:100%;height:auto}
+.section{padding:clamp(2.5rem,6vw,5rem) 0;border-bottom:1px solid var(--line-strong)}.section-head{display:grid;grid-template-columns:9rem 1fr;gap:1.3rem;align-items:start;margin-bottom:2rem}.section-head p{color:var(--muted);max-width:68ch}.section-head .folio{padding-top:.5rem}
+.route-grid{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.route-step{min-height:155px;padding:1rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper)}.route-step b{display:block;color:var(--accent);font:700 1.2rem/1.1 Georgia,serif;margin:.25rem 0 .5rem}.route-step p{margin:0;color:var(--muted);font-size:.92rem}
+.model-list{display:grid;gap:0;border-top:1px solid var(--line-strong)}.model{display:grid;grid-template-columns:9rem minmax(0,1fr) minmax(240px,.55fr);gap:1.4rem;padding:1.6rem 0;border-bottom:1px solid var(--line-strong);align-items:start}.model-index{font:760 .72rem/1.2 ui-monospace,monospace;color:var(--accent);letter-spacing:.1em}.formula{font:500 clamp(1.18rem,2.5vw,1.7rem)/1.45 Georgia,serif;color:var(--accent);overflow-x:auto;padding:.3rem 0}.model p{margin:.45rem 0}.model .muted{color:var(--muted)}.result{border-left:3px solid var(--accent);padding:.6rem 0 .6rem 1rem;font-weight:760}.signline{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem}.signline span{border:1px solid var(--line);padding:.35rem .55rem;font:700 .84rem/1.2 ui-monospace,monospace}
+.lab-callout{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1.5rem;align-items:center;padding:1.2rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:1.6rem}.lab-callout a{display:inline-block;background:var(--accent);color:var(--page);text-decoration:none;padding:.78rem 1rem;font-weight:780}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem}.note-block{padding:1.1rem 0;border-top:2px solid var(--line-strong)}.note-block ul{padding-left:1.15rem}.note-block li{margin:.45rem 0}.warning-list{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-left:1px solid var(--line)}.warning{padding:1rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper)}.warning b{color:var(--danger)}.warning p{margin:.35rem 0 0;color:var(--muted)}
+.checks{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-left:1px solid var(--line)}.check{display:flex;gap:.75rem;padding:1rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper);cursor:pointer}.check input{margin-top:.27rem;accent-color:var(--accent)}.check small{display:block;color:var(--muted);margin-top:.15rem}.progress{height:5px;background:var(--line);margin-top:1rem}.progress span{display:block;height:100%;width:0;background:var(--accent);transition:width .2s ease}.status{color:var(--muted);font-size:.9rem}
+.materials{display:flex;gap:.5rem;flex-wrap:wrap}.materials a{padding:.65rem .8rem;border:1px solid var(--line-strong);text-decoration:none;font-weight:760;background:var(--paper)}
+.footer{display:flex;justify-content:space-between;gap:1rem;color:var(--muted);font-size:.88rem;padding-top:1.5rem}
+dialog{width:min(96vw,1000px);border:0;background:var(--paper);color:var(--text);padding:1rem;box-shadow:0 20px 80px rgba(0,0,0,.35)}dialog::backdrop{background:rgba(0,0,0,.7)}.dialog-img{display:block;max-width:100%;max-height:80vh;margin:auto}.dialog-close{float:right;border:1px solid var(--line-strong);background:var(--paper);width:42px;height:42px;cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+@media(max-width:980px){.hero{grid-template-columns:1fr}.route-grid{grid-template-columns:repeat(2,1fr)}.model{grid-template-columns:6rem 1fr}.model>div:last-child{grid-column:2}.section-head{grid-template-columns:1fr;gap:.45rem}.two-col{grid-template-columns:1fr}.warning-list,.checks{grid-template-columns:1fr}}
+@media(max-width:620px){.shell{width:min(100% - 1rem,1180px)}h1{font-size:clamp(3.2rem,18vw,5.2rem)}.toolbar .grow{display:none}.toolbar>*{flex:1 1 auto}.date{flex-basis:100%;text-align:center}.route-grid{grid-template-columns:1fr}.model{grid-template-columns:1fr;gap:.6rem}.model>div:last-child{grid-column:auto}.model-index{padding-top:.4rem}.poster-body{grid-template-columns:1fr}.lab-callout{grid-template-columns:1fr}.footer{display:block}.footer span{display:block;margin:.35rem 0}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.progress span{transition:none}}
+@media print{body{background:white;color:black}.toolbar,.journey,.poster,.lab-callout,.materials,.checks,.progress,.status{display:none!important}.section{break-inside:avoid}.shell{width:100%;padding:0}.hero{padding-top:0}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">К содержанию</a>
+<div class="shell">
+<nav class="toolbar" aria-label="Навигация">
+<a href="index.html">← Кабинет</a>
+<a href="../pdf_docs/02.10.26.pdf">PDF</a>
+<a href="../tex_docs/02.10.26.tex">TeX</a>
+<a href="02.10.26-lab.html">Лаборатория</a>
+<span class="grow"></span><span class="date">02.10.2026</span><button id="printPage" type="button">Печать</button><button id="theme" type="button">Тема</button>
+</nav>
+
+<header class="hero">
+<div>
+<p class="kicker">Занятие · производная · прикладная оптимизация</p>
+<h1>Оптимизация</h1>
+<p class="lead">Максимум и минимум в прикладной задаче находятся только после того, как смысл условия переведён в функцию одной переменной. Главная работа здесь — правильно выбрать целевую величину, зафиксировать ограничения и доказать, что найденная критическая точка действительно даёт нужный экстремум.</p>
+</div>
+<aside class="hero-panel" aria-label="Главный маршрут решения">
+<span class="label">CORE ROUTE / 02.10</span>
+<div class="hero-equation">модель → F(x) → допустимая область → F′(x) → знак → экстремум → смысл</div>
+<div class="hero-route">
+<span><b>01</b><div>Выберите переменную<small>Что меняется и в каких единицах?</small></div></span>
+<span><b>02</b><div>Соберите целевую функцию<small>Выручка, площадь, мощность, снос.</small></div></span>
+<span><b>03</b><div>Проверьте область<small>Физические, геометрические и алгебраические ограничения.</small></div></span>
+<span><b>04</b><div>Докажите экстремум<small>Ноль производной — только кандидат.</small></div></span>
+</div>
+</aside>
+</header>
+
+<nav class="journey" aria-label="Маршрут по занятию">
+<a href="#route">01 · алгоритм</a><a href="#models">02 · модели</a><a href="#power">03 · рациональная</a><a href="#river">04 · тригонометрическая</a><a href="#limits">05 · ограничения</a><a href="#errors">06 · контроль</a>
+</nav>
+
+<details class="poster">
+<summary><span>Ментальная карта занятия</span><span>открыть</span></summary>
+<div class="poster-body">
+<p>Карта собирает ключевые идеи пособия в один обзор: целевая функция, допустимая область, производная, подтверждение экстремума и типичные ошибки.</p>
+<button class="poster-open" id="posterOpen" type="button" aria-label="Увеличить ментальную карту"><img src="../images/02.10.26.png" alt="Ментальная карта по оптимизации с помощью производной" loading="lazy"></button>
+</div>
+</details>
+
+<main id="content">
+<section class="section" id="route" data-journey-stop data-journey-label="Алгоритм">
+<div class="section-head"><span class="folio">01 / ROUTE</span><div><h2>Универсальный маршрут</h2><p>Производная включается после построения модели. Если целевая функция или допустимая область записаны неверно, дальнейшее дифференцирование уже не спасает решение.</p></div></div>
+<div class="route-grid">
+<div class="route-step"><span class="label">01</span><b>Переменная</b><p>Обозначьте величину x и её единицы.</p></div>
+<div class="route-step"><span class="label">02</span><b>Ограничения</b><p>Зафиксируйте x&gt;0, знаменатель ≠0, геометрию, физический смысл, натуральность.</p></div>
+<div class="route-step"><span class="label">03</span><b>Функция</b><p>Выразите целевую величину как F(x).</p></div>
+<div class="route-step"><span class="label">04</span><b>Производная</b><p>Найдите F′(x) и допустимые критические точки.</p></div>
+<div class="route-step"><span class="label">05</span><b>Знак</b><p>Определите, где функция растёт и убывает.</p></div>
+<div class="route-step"><span class="label">06</span><b>Экстремум</b><p>Сравните критические и, когда нужно, граничные значения.</p></div>
+<div class="route-step"><span class="label">07</span><b>Ответ</b><p>Вернитесь к смыслу задачи и укажите требуемые величины.</p></div>
+</div>
+<div class="lab-callout"><div><h3>Проверьте маршрут экспериментом</h3><p class="lead">В лаборатории можно двигать параметр внутри четырёх моделей занятия и видеть одновременно значение функции, производную и положение относительно оптимума.</p></div><a href="02.10.26-lab.html">Открыть лабораторию →</a></div>
+</section>
+
+<section class="section" id="models" data-journey-stop data-journey-label="Модели">
+<div class="section-head"><span class="folio">02 / MODELS</span><div><h2>Один метод — четыре разных сюжета</h2><p>Формулы различаются, структура решения остаётся одинаковой: модель → целевая функция → область → производная → знак → содержательный ответ.</p></div></div>
+<div class="model-list">
+<article class="model">
+<div class="model-index">MODEL 01</div>
+<div><h3>Максимальная выручка</h3><p>Цена зависит от количества: <b>p(q)=240−4q</b>, q∈ℕ. Целевая величина — выручка.</p><div class="formula">R(q)=p(q)q=240q−4q²</div><div class="formula">R′(q)=240−8q</div><div class="signline"><span>q&lt;30 → R′&gt;0</span><span>q=30 → R′=0</span><span>q&gt;30 → R′&lt;0</span></div></div>
+<div><p class="result">q=30, R<sub>max</sub>=3600.</p><p class="muted">Ключевой шаг: дифференцируется уже выручка R=pq, а не исходная формула цены.</p><p><a href="02.10.26-lab.html?mode=revenue">Исследовать модель →</a></p></div>
+</article>
+
+<article class="model">
+<div class="model-index">MODEL 02</div>
+<div><h3>Максимальная площадь</h3><p>Стороны прямоугольника связаны: <b>y=120−2x</b>. Из условий x&gt;0 и y&gt;0 следует 0&lt;x&lt;60.</p><div class="formula">S(x)=x(120−2x)=120x−2x²</div><div class="formula">S′(x)=120−4x</div></div>
+<div><p class="result">x=30, y=60, S<sub>max</sub>=1800.</p><p class="muted">После нахождения x необходимо восстановить вторую сторону и именно ту величину, которую спрашивает задача.</p><p><a href="02.10.26-lab.html?mode=area">Исследовать модель →</a></p></div>
+</article>
+
+<article class="model" id="power">
+<div class="model-index">MODEL 03</div>
+<div><h3>Максимальная мощность</h3><p>Сила тока: <b>I(R)=48/(4+R)</b>, R&gt;0. Мощность на нагрузке: P=I²R.</p><div class="formula">P(R)=48²R/(R+4)²</div><div class="formula">P′(R)=48²(4−R)/(R+4)³</div><p class="muted">На R&gt;0 знаменатель положителен, поэтому знак производной определяется множителем 4−R.</p></div>
+<div><p class="result">R=4 Ом, I=6 А, P<sub>max</sub>=144 Вт.</p><p class="muted">В дробно-рациональной модели полезно сначала факторизовать производную, затем читать её знак.</p><p><a href="02.10.26-lab.html?mode=power">Исследовать модель →</a></p></div>
+</article>
+
+<article class="model" id="river">
+<div class="model-index">MODEL 04</div>
+<div><h3>Минимальный снос лодки</h3><p>h=100 м, u=1 м/с, v=0,8 м/с, 0&lt;α&lt;π.</p><div class="formula">L(α)=100·(1+0,8 cos α)/(0,8 sin α)</div><div class="formula">L′(α)=−100(0,8+cos α)/(0,8 sin²α)</div><p class="muted">Область задаёт sin α&gt;0. Критическая точка определяется условием cos α=−0,8; тогда sin α=0,6.</p></div>
+<div><p class="result">cos α=−0,8, L<sub>min</sub>=75 м.</p><p class="muted">При скорости течения больше скорости лодки полностью устранить снос нельзя, но направление можно выбрать оптимально.</p><p><a href="02.10.26-lab.html?mode=river">Исследовать модель →</a></p></div>
+</article>
+</div>
+</section>
+
+<section class="section" id="limits" data-journey-stop data-journey-label="Ограничения">
+<div class="section-head"><span class="folio">03 / DOMAIN</span><div><h2>Допустимая область — часть решения</h2><p>Критическая точка имеет смысл только внутри модели. Ограничения лучше выписывать до производной, чтобы не исследовать невозможные состояния.</p></div></div>
+<div class="two-col">
+<div class="note-block"><h3>Непрерывная модель</h3><ul><li>Прямоугольник: 0&lt;x&lt;60.</li><li>Сопротивление: R&gt;0.</li><li>Лодка: 0&lt;α&lt;π, поэтому sin α&gt;0.</li><li>При наличии границ сравнивайте допустимые критические точки и граничные значения, когда границы входят в область.</li></ul></div>
+<div class="note-block"><h3>Натуральная переменная</h3><p>Если x∈ℕ, производная исследует непрерывную модель. Если оптимальная точка получилась нецелой, нужно проверить ближайшие допустимые целые значения — обычно ⌊x₀⌋ и ⌈x₀⌉.</p><p><b>Автоматическое округление не является доказательством.</b></p></div>
+</div>
+</section>
+
+<section class="section" id="errors" data-journey-stop data-journey-label="Контроль">
+<div class="section-head"><span class="folio">04 / CONTROL</span><div><h2>Что проверить перед ответом</h2><p>Большинство ошибок возникает до или после вычисления производной: при выборе целевой функции, области или интерпретации результата.</p></div></div>
+<div class="warning-list">
+<div class="warning"><b>Ошибка 01 · не та функция</b><p>Дифференцируют исходную цену или вспомогательную формулу вместо целевой величины.</p></div>
+<div class="warning"><b>Ошибка 02 · пропущена область</b><p>Формально найденная критическая точка может быть физически или геометрически недопустимой.</p></div>
+<div class="warning"><b>Ошибка 03 · F′(x)=0 считается доказательством</b><p>Нулевая производная даёт кандидата; экстремум подтверждается знаком или сравнением значений.</p></div>
+<div class="warning"><b>Ошибка 04 · потерян смысл</b><p>В ответе записывают x, хотя задача спрашивает площадь, выручку, мощность, вторую сторону или минимальный снос.</p></div>
+<div class="warning"><b>Ошибка 05 · дискретность</b><p>Для натуральной переменной нельзя просто округлить непрерывный оптимум.</p></div>
+<div class="warning"><b>Ошибка 06 · тригонометрия</b><p>После нахождения cos α забывают выбрать знак sin α по диапазону угла.</p></div>
+</div>
+
+<div style="margin-top:2rem">
+<h3>Самопроверка</h3>
+<div class="checks" id="checks">
+<label class="check"><input type="checkbox"><span>Я выделяю целевую величину.<small>Понимаю, что именно максимизируется или минимизируется.</small></span></label>
+<label class="check"><input type="checkbox"><span>Выражаю её через одну переменную.<small>Перед производной модель уже собрана.</small></span></label>
+<label class="check"><input type="checkbox"><span>Выписываю допустимую область.<small>Учитываю знаменатели, геометрию, физику и натуральность.</small></span></label>
+<label class="check"><input type="checkbox"><span>Проверяю знак производной.<small>F′(x)=0 само по себе не завершает решение.</small></span></label>
+<label class="check"><input type="checkbox"><span>При x∈ℕ сравниваю соседние целые.<small>Не округляю автоматически.</small></span></label>
+<label class="check"><input type="checkbox"><span>Возвращаюсь к условию.<small>Записываю требуемую величину и единицы измерения.</small></span></label>
+</div>
+<div class="progress" aria-hidden="true"><span id="progress"></span></div><p class="status" id="checkStatus" aria-live="polite"></p>
+</div>
+</section>
+
+<section class="section">
+<div class="section-head"><span class="folio">05 / MATERIALS</span><div><h2>Материалы занятия</h2><p>Полное пособие содержит разборы, алгоритм и тренировочный блок из 10 задач «Путь А» с ответами.</p></div></div>
+<div class="materials"><a href="../pdf_docs/02.10.26.pdf">Открыть PDF</a><a href="../tex_docs/02.10.26.tex">Открыть TeX</a><a href="02.10.26-lab.html">Открыть цифровую лабораторию</a></div>
+</section>
+</main>
+
+<footer class="footer"><span>Николь Саркисьянц · ЕГЭ по профильной математике</span><span>Лёвин Артём Александрович · 02.10.2026</span></footer>
+</div>
+
+<dialog id="posterDialog" aria-label="Ментальная карта занятия">
+<button class="dialog-close" id="posterClose" type="button" aria-label="Закрыть увеличенное изображение">×</button>
+<img class="dialog-img" src="../images/02.10.26.png" alt="Увеличенная ментальная карта по оптимизации с помощью производной">
+</dialog>
+<script src="../../../shared/student-dashboard/atlas-motion.js"></script>
+<script>
+(function(){
+  var root=document.documentElement,theme=document.getElementById('theme'),themeKey='nikol-lesson-theme';
+  try{var saved=localStorage.getItem(themeKey);if(saved==='dark'||saved==='light')root.dataset.theme=saved}catch(_){}
+  theme.addEventListener('click',function(){var next=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=next;try{localStorage.setItem(themeKey,next)}catch(_){}});
+  document.getElementById('printPage').addEventListener('click',function(){window.print()});
+  var checks=[].slice.call(document.querySelectorAll('#checks input[type="checkbox"]')),progress=document.getElementById('progress'),status=document.getElementById('checkStatus'),key='nikol-02-10-checks';
+  try{var states=JSON.parse(localStorage.getItem(key)||'[]');checks.forEach(function(box,i){box.checked=Boolean(states[i])})}catch(_){}
+  function update(){var done=checks.filter(function(box){return box.checked}).length;progress.style.width=(done/checks.length*100)+'%';status.textContent=done+' из '+checks.length+' пунктов отмечено';try{localStorage.setItem(key,JSON.stringify(checks.map(function(box){return box.checked})))}catch(_){}}
+  checks.forEach(function(box){box.addEventListener('change',update)});update();
+  var dialog=document.getElementById('posterDialog'),opener=document.getElementById('posterOpen'),close=document.getElementById('posterClose'),last=null;
+  if(opener&&dialog&&close){
+    opener.addEventListener('click',function(){last=opener;dialog.showModal();close.focus()});
+    close.addEventListener('click',function(){dialog.close()});
+    dialog.addEventListener('click',function(e){if(e.target===dialog)dialog.close()});
+    dialog.addEventListener('close',function(){if(last)last.focus()});
+  }
+})();
+</script>
+</body>
+</html>
