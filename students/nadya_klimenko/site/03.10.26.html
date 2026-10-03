@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Занятие Нади Клименко от 03.10.26: признаки делимости, делители, простые множители, НОД и НОК, алгоритм Евклида, чётность и дроби.">
+<title>Делимость, НОД и НОК — Надя Клименко</title>
+<style>
+:root{
+  color-scheme:light;
+  --page:#f4f0e8;--paper:#fffdf8;--paper-2:#f6eee6;--ink:#202725;--muted:#68716e;
+  --line:#d7d5ce;--line-strong:#9a9d98;--accent:#b24f3b;--accent-dark:#813829;--accent-soft:#f4ded7;
+  --support:#265f78;--support-soft:#deedf2;--good:#2c7358;--bad:#9d4547;--focus:#276d8a;
+  --shadow:0 14px 38px rgba(58,48,37,.08);--max:1180px;--progress:0;
+}
+html[data-theme="dark"]{
+  color-scheme:dark;
+  --page:#111817;--paper:#18211f;--paper-2:#2d241f;--ink:#edf3f1;--muted:#a9b5b1;
+  --line:#33423e;--line-strong:#667873;--accent:#ef8c73;--accent-dark:#ffab96;--accent-soft:#3a2622;
+  --support:#82bfd8;--support-soft:#19303a;--good:#82c5a5;--bad:#e18b8c;--focus:#9bd9ef;
+  --shadow:0 16px 42px rgba(0,0,0,.2);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--page)}body{margin:0;background:var(--page);color:var(--ink);font:16px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:inherit}button,input{font:inherit;color:inherit}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip-link{position:absolute;left:-9999px}.skip-link:focus{left:1rem;top:1rem;z-index:100;background:var(--paper);padding:.7rem 1rem;border:1px solid var(--line-strong)}
+.shell{width:min(calc(100% - 2rem),var(--max));margin:auto}
+.topbar{position:sticky;top:0;z-index:50;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--page) 92%,transparent);backdrop-filter:blur(12px)}
+.topbar-inner{min-height:58px;display:flex;align-items:center;gap:1rem}
+.brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;font-weight:760}.brand-mark{width:31px;height:31px;border:1px solid var(--line-strong);border-radius:50%;display:grid;place-items:center;color:var(--accent);font:700 .8rem Georgia,serif}
+.topnav{display:flex;gap:.08rem;margin-left:auto}.topnav a,.topbar button{min-height:42px;padding:.55rem .66rem;border:0;border-bottom:1px solid transparent;background:transparent;color:var(--muted);text-decoration:none}.topnav a:hover,.topnav a:focus-visible,.topbar button:hover{color:var(--ink);border-bottom-color:var(--accent)}
+.cover{display:grid;grid-template-columns:minmax(0,.82fr) minmax(360px,1.18fr);gap:clamp(2rem,6vw,5rem);align-items:center;padding:clamp(3.6rem,7vw,6rem) 0 clamp(2.4rem,5vw,4rem);border-bottom:1px solid var(--line-strong)}
+.kicker,.section-index{margin:0 0 .75rem;color:var(--accent);font:760 .72rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.12em;text-transform:uppercase}
+h1,h2,h3{font-family:Georgia,Cambria,serif;letter-spacing:-.025em}h1{font-size:clamp(3rem,6.5vw,6.6rem);line-height:.91;margin:.15rem 0 1.35rem;max-width:9ch;font-weight:540}h2{font-weight:540}
+.cover-lead{max-width:43rem;font-size:clamp(1.05rem,1.8vw,1.27rem);color:var(--muted)}.thesis{margin:1.8rem 0 0;padding:1rem 0 1rem 1.2rem;border-left:4px solid var(--accent);font:600 clamp(1.08rem,2vw,1.4rem)/1.45 Georgia,Cambria,serif}
+.folio{margin-top:1.7rem;display:grid;grid-template-columns:auto 1fr;gap:.35rem 1rem;max-width:36rem;border-top:1px solid var(--line-strong);padding-top:1rem}.folio dt{color:var(--muted);font-size:.82rem}.folio dd{margin:0;font-weight:650}
+.materials{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:1.2rem}.btn{min-height:44px;border:1px solid var(--line-strong);background:var(--paper);padding:.65rem .9rem;border-radius:.52rem;text-decoration:none}.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.btn:hover{border-color:var(--accent)}
+.number-sheet{position:relative;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);padding:1rem 0 1.15rem}.number-sheet::before{content:"";position:absolute;left:1.25rem;top:0;bottom:0;width:1px;background:var(--line)}
+.number-sheet-head{display:flex;justify-content:space-between;gap:1rem;align-items:end;padding:0 0 .9rem 3.3rem}.number-sheet-head strong{font:600 clamp(1.25rem,2vw,1.7rem)/1.2 Georgia,serif}.number-sheet-head span{font:760 .72rem ui-monospace,monospace;color:var(--support)}
+.number-line{position:relative;display:grid;grid-template-columns:4.2rem 1fr;gap:1rem;padding:.9rem 0 .9rem 3.3rem;border-top:1px solid var(--line)}.number-line::before{content:"";position:absolute;left:.92rem;top:50%;width:.65rem;height:.65rem;border:2px solid var(--accent);border-radius:50%;background:var(--page);transform:translateY(-50%)}.number-line b{color:var(--support);font:800 1rem ui-monospace,monospace}.number-line code{font:600 clamp(1rem,2vw,1.28rem)/1.35 "Cambria Math","Times New Roman",serif;white-space:normal}
+.poster-thumb{margin-top:1.2rem;display:grid;grid-template-columns:112px 1fr;gap:1rem;align-items:center}.poster-thumb img{width:112px;border:1px solid var(--line);background:var(--paper)}.poster-thumb p{margin:0;color:var(--muted)}
+.route{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--line);margin-bottom:3.6rem}.route a{padding:1rem .7rem;text-decoration:none;color:var(--muted);border-right:1px solid var(--line);font-size:.82rem}.route a:first-child{border-left:1px solid var(--line)}.route a:hover,.route a:focus-visible{color:var(--accent);background:var(--accent-soft)}
+main{position:relative}.journey{position:absolute;left:-2.2rem;top:0;bottom:0;width:1px;background:var(--line);display:none}.journey span{display:block;width:1px;height:calc(var(--progress)*1%);background:var(--accent)}
+.chapter{padding:0 0 3.6rem;margin:0 0 3.6rem;border-bottom:1px solid var(--line);transform:translate3d(0,var(--atlas-parallax-y,0),0)}.chapter-head{display:grid;grid-template-columns:minmax(185px,.34fr) minmax(0,1fr);gap:clamp(1.4rem,5vw,4rem);align-items:start;margin-bottom:2.2rem}.chapter-head h2{font-size:clamp(2rem,4vw,4rem);line-height:.98;margin:0;max-width:13ch}.chapter-intro{max-width:51rem;color:var(--muted);font-size:1.05rem;margin:0}
+.definition{border-top:4px solid var(--accent);padding:1.25rem 0;margin:1.2rem 0}.definition p{font:600 clamp(1.14rem,2vw,1.43rem)/1.5 Georgia,serif;max-width:65rem}
+.formula{margin:1rem 0;padding:1rem 1.15rem;background:var(--support-soft);border-left:3px solid var(--support);overflow-x:auto;font:600 clamp(1.05rem,2vw,1.35rem)/1.5 "Cambria Math","Times New Roman",serif}.formula.big{text-align:center;font-size:clamp(1.3rem,3vw,2rem)}
+.note,.warning{padding:1rem 1.15rem;margin:1.2rem 0}.note{border-left:4px solid var(--support);background:var(--support-soft)}.warning{border-left:4px solid var(--accent);background:var(--accent-soft)}
+.ledger{border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong)}.ledger-row{display:grid;grid-template-columns:minmax(165px,.3fr) minmax(0,1fr);gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line)}.ledger-row:last-child{border-bottom:0}.ledger-row strong{color:var(--accent)}.ledger-row p{margin:0}
+.div-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line-strong);border-left:1px solid var(--line-strong);margin:1.3rem 0}.div-cell{padding:1rem;border-right:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);min-height:112px}.div-cell b{display:block;color:var(--accent);font:800 1.25rem ui-monospace,monospace;margin-bottom:.35rem}.div-cell p{margin:0;color:var(--muted)}
+.factor-path{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:1.4rem 0;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong)}.factor-step{position:relative;padding:1.1rem 1rem;border-right:1px solid var(--line);min-height:110px}.factor-step:last-child{border-right:0}.factor-step small{display:block;color:var(--muted);font:700 .72rem ui-monospace,monospace}.factor-step b{display:block;margin-top:.25rem;font:600 1.3rem Georgia,serif;color:var(--support)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}.method{border-top:3px solid var(--support);padding-top:1rem}.method.alt{border-top-color:var(--accent)}.method h3{font-size:1.45rem;margin:.1rem 0 .8rem}.method p{margin:.45rem 0}
+.euclid{border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);margin:1.4rem 0}.euclid-row{display:grid;grid-template-columns:3.2rem 1fr auto;gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--line);align-items:center}.euclid-row:last-child{border-bottom:0}.euclid-row span{color:var(--muted);font:700 .78rem ui-monospace,monospace}.euclid-row code{font:600 1.08rem "Cambria Math",serif}.euclid-row b{color:var(--accent)}
+.analyzer{margin:1.8rem 0;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);padding:1.25rem 0}.analyzer-head{display:flex;justify-content:space-between;gap:1.2rem;align-items:end}.analyzer-head h3{font-size:1.6rem;margin:.1rem 0}.analyzer-head p{margin:0;color:var(--muted);max-width:48rem}.analyzer-control{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;margin:1.1rem 0}.analyzer-control label{font-weight:750}.analyzer-control input{width:150px;min-height:44px;border:1px solid var(--line-strong);background:var(--paper);padding:.55rem .7rem;border-radius:.4rem}
+.test-strip{display:grid;grid-template-columns:repeat(8,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line);margin-top:1rem}.test{padding:.75rem .45rem;text-align:center;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.test b{display:block;font:800 1rem ui-monospace,monospace}.test.good{background:color-mix(in srgb,var(--good) 10%,transparent)}.test.bad{color:var(--muted)}.test.good b{color:var(--good)}
+.analyzer-output{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}.out{padding:1rem 0;border-top:1px solid var(--line)}.out span{display:block;color:var(--muted);font-size:.82rem}.out strong{display:block;margin-top:.15rem;font:600 1.18rem Georgia,serif}
+.parity-table{width:100%;border-collapse:collapse;margin:1.25rem 0}.parity-table th,.parity-table td{padding:.82rem .65rem;border-bottom:1px solid var(--line);text-align:left}.parity-table th{color:var(--muted);font-size:.82rem}.parity-table td:last-child{font-weight:750;color:var(--support)}
+.fraction-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:.7rem;align-items:center;margin:1.4rem 0}.flow-box{padding:1rem;border-top:2px solid var(--support);border-bottom:1px solid var(--line);text-align:center}.flow-box b{display:block;font:600 1.2rem Georgia,serif}.flow-arrow{color:var(--accent);font-size:1.35rem}
+.checklist{display:grid;grid-template-columns:1fr 1fr;gap:.2rem 1.2rem;margin:1.2rem 0}.check{display:flex;gap:.7rem;align-items:flex-start;padding:.72rem 0;border-bottom:1px solid var(--line)}.check input{width:20px;height:20px;accent-color:var(--accent);flex:none}.progress{height:7px;background:var(--line);overflow:hidden;margin:.8rem 0}.progress span{display:block;width:0;height:100%;background:var(--accent);transition:width 180ms}
+.footer{padding:2rem 0 3rem;color:var(--muted);display:flex;justify-content:space-between;gap:1rem;border-top:1px solid var(--line);font-size:.88rem}
+@media(min-width:1260px){.journey{display:block}}
+@media(max-width:960px){.cover{grid-template-columns:1fr}.route{grid-template-columns:1fr 1fr}.chapter-head,.ledger-row{grid-template-columns:1fr}.div-grid{grid-template-columns:1fr 1fr}.factor-path{grid-template-columns:1fr 1fr}.two-col{grid-template-columns:1fr}.test-strip{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:640px){.shell{width:min(calc(100% - 1rem),var(--max))}.topnav{display:none}h1{font-size:clamp(2.7rem,14vw,4.2rem)}.route{grid-template-columns:1fr}.route a{border-left:1px solid var(--line)}.div-grid,.factor-path,.test-strip,.analyzer-output,.checklist{grid-template-columns:1fr 1fr}.euclid-row{grid-template-columns:2.6rem 1fr}.euclid-row b{grid-column:2}.fraction-flow{grid-template-columns:1fr}.flow-arrow{transform:rotate(90deg);text-align:center}.poster-thumb{grid-template-columns:82px 1fr}.poster-thumb img{width:82px}.footer{flex-direction:column}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+@media print{:root,html[data-theme="dark"]{--page:#fff;--paper:#fff;--paper-2:#fff;--ink:#111;--muted:#333;--line:#ccc;--line-strong:#888;--accent:#8a3f31;--support:#28566b}body{background:#fff;font-size:11pt}.topbar,.route,.materials,.analyzer{display:none!important}.shell{width:100%;max-width:none}.cover{grid-template-columns:1fr;padding:0 0 1.5rem}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#content">К содержанию</a>
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <a class="brand" href="index.html"><span class="brand-mark">Σ</span><span>Надя Клименко · 6 класс</span></a>
+    <nav class="topnav" aria-label="Разделы страницы">
+      <a href="#divisibility">Делимость</a><a href="#factors">Множители</a><a href="#gcd-lcm">НОД / НОК</a><a href="#parity">Чётность</a><a href="#fractions">Дроби</a><a href="#check">Самопроверка</a>
+    </nav>
+    <button id="themeToggle" type="button">Тёмная тема</button>
+  </div>
+</header>
+
+<div class="shell">
+<header class="cover" data-coordinate-field>
+  <div>
+    <p class="kicker">Занятие · 03.10.26</p>
+    <h1>Делимость, НОД и НОК</h1>
+    <p class="cover-lead">Повторение перед контрольной связывает признаки делимости, разложение на простые множители, количество делителей, НОД и НОК, чётность и работу с дробями в одну систему.</p>
+    <p class="thesis">Один и тот же язык простых множителей помогает понять, на что делится число, сколько у него делителей, как найти НОД и НОК и как работать с общим знаменателем.</p>
+    <dl class="folio"><dt>Ученица</dt><dd>Надя Клименко</dd><dt>Курс</dt><dd>6 класс · Математическая вертикаль</dd><dt>Преподаватель</dt><dd>Лёвин Артём Александрович</dd></dl>
+    <div class="materials">
+      <a class="btn primary" href="03.10.26-lab.html">Открыть лабораторию чисел</a>
+      <a class="btn" href="../pdf_docs/03.10.26.pdf" download>Скачать PDF</a>
+      <a class="btn" href="../tex_docs/03.10.26.tex">TeX</a>
+      <a class="btn" href="../images/03.10.26.png">Постер</a>
+    </div>
+  </div>
+  <div>
+    <div class="number-sheet" aria-label="Числовое досье для числа 756">
+      <div class="number-sheet-head"><strong>Числовое досье</strong><span>n = 756</span></div>
+      <div class="number-line"><b>01</b><code>756 = 2² · 3³ · 7</code></div>
+      <div class="number-line"><b>02</b><code>τ(756) = (2+1)(3+1)(1+1) = 24</code></div>
+      <div class="number-line"><b>03</b><code>756 делится на 2, 3, 4, 6, 9, 12 и 18</code></div>
+      <div class="number-line"><b>04</b><code>чётность и делимость читаются до полного вычисления</code></div>
+    </div>
+    <div class="poster-thumb">
+      <a href="../images/03.10.26.png"><img src="../images/03.10.26.png" alt="Постер по делимости, НОД и НОК"></a>
+      <p><strong>Постер занятия.</strong><br>Краткая карта связей между признаками делимости, простыми множителями, НОД, НОК, алгоритмом Евклида, чётностью и дробями.</p>
+    </div>
+  </div>
+</header>
+
+<nav class="route" aria-label="Маршрут занятия">
+  <a href="#divisibility">01 · Признаки</a><a href="#factors">02 · Делители</a><a href="#gcd-lcm">03 · НОД и НОК</a><a href="#euclid">04 · Евклид</a><a href="#parity">05 · Чётность</a><a href="#fractions">06 · Дроби</a>
+</nav>
+
+<main id="content">
+<div class="journey" aria-hidden="true"><span></span></div>
+
+<section class="chapter" id="divisibility" data-journey-stop data-journey-label="Признаки делимости">
+  <header class="chapter-head">
+    <div><p class="section-index">01 · Быстрое распознавание</p><h2>Делимость: что видно сразу</h2></div>
+    <p class="chapter-intro">Признак делимости позволяет решить вопрос без самого деления. В контрольной особенно важны признаки на 2, 3, 4, 5, 6, 9, 12 и 18.</p>
+  </header>
+  <div class="definition"><p>Если натуральное число <em>a</em> делится на <em>b</em> без остатка, то <em>b</em> — делитель числа <em>a</em>, а <em>a</em> — кратное числа <em>b</em>.</p></div>
+  <div class="div-grid">
+    <div class="div-cell"><b>÷ 2</b><p>Последняя цифра: 0, 2, 4, 6 или 8.</p></div>
+    <div class="div-cell"><b>÷ 3</b><p>Сумма цифр делится на 3.</p></div>
+    <div class="div-cell"><b>÷ 4</b><p>Число из двух последних цифр делится на 4.</p></div>
+    <div class="div-cell"><b>÷ 5</b><p>Последняя цифра 0 или 5.</p></div>
+    <div class="div-cell"><b>÷ 6</b><p>Одновременно работают признаки на 2 и на 3.</p></div>
+    <div class="div-cell"><b>÷ 9</b><p>Сумма цифр делится на 9.</p></div>
+    <div class="div-cell"><b>÷ 12</b><p>Число делится и на 3, и на 4.</p></div>
+    <div class="div-cell"><b>÷ 18</b><p>Число делится и на 2, и на 9.</p></div>
+  </div>
+  <div class="warning"><strong>Частая ошибка.</strong> Для делимости на 4 две последние цифры рассматриваются как одно число. Например, 144 делится на 4, потому что 44 делится на 4.</div>
+
+  <div class="analyzer" aria-labelledby="analyzerTitle">
+    <div class="analyzer-head">
+      <div><p class="section-index">Живое число</p><h3 id="analyzerTitle">Проверка признаков в реальном времени</h3></div>
+      <p>Измените число: признаки, разложение и количество делителей пересчитаются из одного состояния.</p>
+    </div>
+    <div class="analyzer-control"><label for="numberInput">Натуральное число</label><input id="numberInput" type="number" min="2" max="999999" value="756" inputmode="numeric"><button class="btn" id="resetNumber" type="button">Вернуть 756</button></div>
+    <div class="test-strip" id="divTests" aria-live="polite"></div>
+    <div class="analyzer-output">
+      <div class="out"><span>Разложение на простые множители</span><strong id="factorOutput">2² · 3³ · 7</strong></div>
+      <div class="out"><span>Количество натуральных делителей</span><strong id="tauOutput">24</strong></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="factors" data-journey-stop data-journey-label="Делители и множители">
+  <header class="chapter-head">
+    <div><p class="section-index">02 · Структура числа</p><h2>Делители и простые множители</h2></div>
+    <p class="chapter-intro">Разложение на простые множители показывает внутреннее устройство числа. Из него удобно читать НОД, НОК и количество делителей.</p>
+  </header>
+  <div class="ledger">
+    <div class="ledger-row"><strong>Простое число</strong><p>Имеет ровно два натуральных делителя: 1 и само число. Число 1 не является ни простым, ни составным.</p></div>
+    <div class="ledger-row"><strong>Поиск делителей</strong><p>Удобно идти парами. Для 36: 1·36, 2·18, 3·12, 4·9, 6·6. После √36 новые пары не появятся.</p></div>
+    <div class="ledger-row"><strong>Разложение</strong><p>Последовательно делим на простые числа 2, 3, 5, 7, …, пока не получим 1.</p></div>
+  </div>
+  <div class="factor-path" aria-label="Разложение 756 на простые множители">
+    <div class="factor-step"><small>Шаг 1</small><b>756 = 2 · 378</b></div>
+    <div class="factor-step"><small>Шаг 2</small><b>378 = 2 · 189</b></div>
+    <div class="factor-step"><small>Шаг 3</small><b>189 = 3³ · 7</b></div>
+    <div class="factor-step"><small>Итог</small><b>756 = 2² · 3³ · 7</b></div>
+  </div>
+  <div class="formula big">Если n = p₁ᵅ¹ · p₂ᵅ² · … · pₖᵅᵏ, то τ(n) = (α₁+1)(α₂+1)…(αₖ+1).</div>
+  <div class="note"><strong>Для 756:</strong> τ(756) = (2+1)(3+1)(1+1) = 24. Единица прибавляется к показателям степеней, а не к самим простым множителям.</div>
+</section>
+
+<section class="chapter" id="gcd-lcm" data-journey-stop data-journey-label="НОД и НОК">
+  <header class="chapter-head">
+    <div><p class="section-index">03 · Две операции</p><h2>НОД и НОК читаются из разложения</h2></div>
+    <p class="chapter-intro">Обе операции работают с теми же простыми множителями, но выбирают степени по противоположным правилам.</p>
+  </header>
+  <div class="two-col">
+    <article class="method">
+      <h3>НОД — минимальные степени</h3>
+      <p>Берём только общие простые множители и для каждого выбираем меньшую степень.</p>
+      <div class="formula">НОД(a,b) — наибольший общий делитель.</div>
+      <p>Если НОД(a,b)=1, числа взаимно простые. Например, 14 и 25.</p>
+    </article>
+    <article class="method alt">
+      <h3>НОК — максимальные степени</h3>
+      <p>Берём все простые множители, которые встречаются хотя бы в одном числе, и выбираем большую степень.</p>
+      <div class="formula">НОК(a,b) — наименьшее общее кратное.</div>
+      <p>Полезная проверка: НОД(a,b) · НОК(a,b) = a · b.</p>
+    </article>
+  </div>
+  <div class="note"><strong>Быстрый случай.</strong> Если одно число делится на другое, меньший элемент пары является НОД, а больший — НОК. Поэтому НОД(252,84)=84, НОК(252,84)=252.</div>
+</section>
+
+<section class="chapter" id="euclid" data-journey-stop data-journey-label="Алгоритм Евклида">
+  <header class="chapter-head">
+    <div><p class="section-index">04 · Для больших чисел</p><h2>Алгоритм Евклида</h2></div>
+    <p class="chapter-intro">Когда разложение большого числа неудобно, НОД находится последовательным делением с остатком. В новую пару переходят меньшее число и остаток.</p>
+  </header>
+  <div class="euclid" aria-label="Алгоритм Евклида для 1220 и 440">
+    <div class="euclid-row"><span>01</span><code>1220 = 2 · 440 + 340</code><b>r = 340</b></div>
+    <div class="euclid-row"><span>02</span><code>440 = 1 · 340 + 100</code><b>r = 100</b></div>
+    <div class="euclid-row"><span>03</span><code>340 = 3 · 100 + 40</code><b>r = 40</b></div>
+    <div class="euclid-row"><span>04</span><code>100 = 2 · 40 + 20</code><b>r = 20</b></div>
+    <div class="euclid-row"><span>05</span><code>40 = 2 · 20 + 0</code><b>НОД = 20</b></div>
+  </div>
+  <div class="warning"><strong>Остановка:</strong> нулевой остаток завершает алгоритм. НОД — предыдущий, последний ненулевой остаток.</div>
+  <p><a class="btn primary" href="03.10.26-lab.html?mode=pair">Исследовать свои пары чисел →</a></p>
+</section>
+
+<section class="chapter" id="parity" data-journey-stop data-journey-label="Чётность">
+  <header class="chapter-head">
+    <div><p class="section-index">05 · Без лишних вычислений</p><h2>Чётность как быстрый инструмент</h2></div>
+    <p class="chapter-intro">Для многих выражений достаточно определить чётность слагаемых или множителей — вычислять само значение не требуется.</p>
+  </header>
+  <table class="parity-table">
+    <thead><tr><th>Первое</th><th>Второе</th><th>Результат</th></tr></thead>
+    <tbody>
+      <tr><td>чётное</td><td>чётное</td><td>сумма чётная</td></tr>
+      <tr><td>нечётное</td><td>нечётное</td><td>сумма чётная</td></tr>
+      <tr><td>чётное</td><td>нечётное</td><td>сумма нечётная</td></tr>
+      <tr><td>чётное</td><td>любое целое</td><td>произведение чётное</td></tr>
+      <tr><td>нечётное</td><td>нечётное</td><td>произведение нечётное</td></tr>
+    </tbody>
+  </table>
+  <div class="formula">15 · 17 + 24 · 30: первое произведение нечётное, второе чётное ⇒ вся сумма нечётная.</div>
+  <div class="note">Сумма чётного количества нечётных слагаемых — чётная; сумма нечётного количества нечётных слагаемых — нечётная.</div>
+</section>
+
+<section class="chapter" id="fractions" data-journey-stop data-journey-label="Дроби">
+  <header class="chapter-head">
+    <div><p class="section-index">06 · Применение</p><h2>НОК и НОД возвращаются в дробях</h2></div>
+    <p class="chapter-intro">НОК знаменателей даёт общий знаменатель, а НОД числителя и знаменателя позволяет максимально сократить дробь.</p>
+  </header>
+  <div class="fraction-flow" aria-label="Общий знаменатель через НОК">
+    <div class="flow-box"><span>Знаменатели</span><b>210 и 104</b></div><div class="flow-arrow">→</div>
+    <div class="flow-box"><span>НОК</span><b>10920</b></div><div class="flow-arrow">→</div>
+    <div class="flow-box"><span>Доп. множители</span><b>52 и 105</b></div>
+  </div>
+  <div class="formula big">1/210 + 3/104 = 52/10920 + 315/10920 = 367/10920.</div>
+  <div class="two-col">
+    <article class="method"><h3>Сокращение через НОД</h3><p>НОД(105,84)=21, поэтому 105/84 = (105:21)/(84:21) = 5/4.</p></article>
+    <article class="method alt"><h3>Десятичная → обыкновенная</h3><p>0,38 = 38/100 = 19/50. После перевода всегда проверяем возможность сокращения.</p></article>
+  </div>
+</section>
+
+<section class="chapter" id="check" data-journey-stop data-journey-label="Самопроверка">
+  <header class="chapter-head">
+    <div><p class="section-index">07 · Перед контрольной</p><h2>Финальная самопроверка</h2></div>
+    <p class="chapter-intro">Отмечайте только те пункты, которые можете объяснить своими словами без подсказки. Отметки сохраняются в этом браузере.</p>
+  </header>
+  <div class="progress" aria-hidden="true"><span id="checkProgress"></span></div>
+  <p id="checkStatus" aria-live="polite">0 из 11 пунктов</p>
+  <div class="checklist" id="selfCheck">
+    <label class="check"><input type="checkbox" data-check="1">Я различаю делитель и кратное.</label>
+    <label class="check"><input type="checkbox" data-check="2">Я помню признаки делимости на 2, 3, 4, 5, 6, 9, 12 и 18.</label>
+    <label class="check"><input type="checkbox" data-check="3">Я умею выписывать делители числа без пропусков.</label>
+    <label class="check"><input type="checkbox" data-check="4">Я отличаю простые, составные числа и число 1.</label>
+    <label class="check"><input type="checkbox" data-check="5">Я раскладываю число на простые множители.</label>
+    <label class="check"><input type="checkbox" data-check="6">Я нахожу количество делителей по степеням в разложении.</label>
+    <label class="check"><input type="checkbox" data-check="7">Я определяю взаимно простые числа.</label>
+    <label class="check"><input type="checkbox" data-check="8">Я нахожу НОД и НОК по разложению.</label>
+    <label class="check"><input type="checkbox" data-check="9">Я применяю алгоритм Евклида.</label>
+    <label class="check"><input type="checkbox" data-check="10">Я определяю чётность выражения без вычисления.</label>
+    <label class="check"><input type="checkbox" data-check="11">Я использую НОК для общего знаменателя и НОД для сокращения.</label>
+  </div>
+</section>
+</main>
+
+<footer class="footer"><span>Лёвин Артём Александрович · эксклюзивно для Нади Клименко</span><a href="index.html">Вернуться в учебный кабинет</a></footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const root=document.documentElement;
+  const themeButton=document.getElementById("themeToggle");
+  const savedTheme=localStorage.getItem("nadya-theme");
+  if(savedTheme==="dark"||savedTheme==="light") root.dataset.theme=savedTheme;
+  const syncTheme=()=>{themeButton.textContent=root.dataset.theme==="dark"?"Светлая тема":"Тёмная тема";};
+  syncTheme();
+  themeButton.addEventListener("click",()=>{root.dataset.theme=root.dataset.theme==="dark"?"light":"dark";localStorage.setItem("nadya-theme",root.dataset.theme);syncTheme();});
+
+  const primeFactors=(n)=>{
+    const out=[];let x=n;
+    for(let p=2;p*p<=x;p+=(p===2?1:2)){
+      if(x%p) continue;
+      let power=0;while(x%p===0){x/=p;power++;}
+      out.push([p,power]);
+    }
+    if(x>1) out.push([x,1]);
+    return out;
+  };
+  const superscript=(n)=>String(n).replace(/0/g,"⁰").replace(/1/g,"¹").replace(/2/g,"²").replace(/3/g,"³").replace(/4/g,"⁴").replace(/5/g,"⁵").replace(/6/g,"⁶").replace(/7/g,"⁷").replace(/8/g,"⁸").replace(/9/g,"⁹");
+  const formatFactors=(pairs)=>pairs.map(([p,k])=>k===1?String(p):p+superscript(k)).join(" · ");
+  const tau=(pairs)=>pairs.reduce((acc,[,k])=>acc*(k+1),1);
+  const divisors=[2,3,4,5,6,9,12,18];
+  const input=document.getElementById("numberInput"),tests=document.getElementById("divTests"),factorOut=document.getElementById("factorOutput"),tauOut=document.getElementById("tauOutput");
+  const renderNumber=()=>{
+    let n=Math.trunc(Number(input.value));if(!Number.isFinite(n)||n<2)n=2;if(n>999999)n=999999;input.value=n;
+    tests.replaceChildren(...divisors.map(d=>{const el=document.createElement("div");const ok=n%d===0;el.className="test "+(ok?"good":"bad");el.innerHTML="<b>÷ "+d+"</b><span>"+(ok?"да":"нет")+"</span>";return el;}));
+    const f=primeFactors(n);factorOut.textContent=formatFactors(f);tauOut.textContent=String(tau(f));
+  };
+  input.addEventListener("input",renderNumber);
+  document.getElementById("resetNumber").addEventListener("click",()=>{input.value=756;renderNumber();input.focus();});
+  renderNumber();
+
+  const checks=[...document.querySelectorAll("[data-check]")],status=document.getElementById("checkStatus"),bar=document.getElementById("checkProgress");
+  let saved={};try{saved=JSON.parse(localStorage.getItem("nadya-031026-checks")||"{}")||{};}catch{saved={};}
+  checks.forEach(c=>{c.checked=Boolean(saved[c.dataset.check]);});
+  const renderChecks=()=>{const count=checks.filter(c=>c.checked).length;status.textContent=count+" из "+checks.length+" пунктов";bar.style.width=(count/checks.length*100)+"%";};
+  checks.forEach(c=>c.addEventListener("change",()=>{saved[c.dataset.check]=c.checked;localStorage.setItem("nadya-031026-checks",JSON.stringify(saved));renderChecks();}));
+  renderChecks();
+
+  const stops=[...document.querySelectorAll("[data-journey-stop]")],rail=document.querySelector(".journey span");
+  const updateProgress=()=>{if(!rail||!stops.length)return;const first=stops[0].getBoundingClientRect().top+scrollY,last=stops[stops.length-1].getBoundingClientRect().bottom+scrollY;const p=Math.max(0,Math.min(100,(scrollY+innerHeight*.35-first)/(last-first)*100));document.documentElement.style.setProperty("--progress",p);};
+  addEventListener("scroll",updateProgress,{passive:true});addEventListener("resize",updateProgress);updateProgress();
+})();
+</script>
+<script src="../../../shared/student-dashboard/atlas-motion.js"></script>
+</body>
+</html>
