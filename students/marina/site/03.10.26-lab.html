@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивная лаборатория Марины по кусочным функциям: двигайте горизонталь y=m и исследуйте число пересечений.">
+<title>Лаборатория: кусочные функции и y=m — Марина</title>
+<style>
+:root{color-scheme:light;--page:#f5f2ec;--raised:#fffdfa;--soft:#e5eef0;--ink:#243238;--muted:#617076;--line:#cedadd;--strong:#8da4ab;--accent:#176b87;--coral:#a6533b;--green:#386641;--focus:#65a9c1;--serif:Georgia,"Times New Roman",serif;--sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+html[data-theme="dark"]{color-scheme:dark;--page:#0e171b;--raised:#152126;--soft:#1d3037;--ink:#eef4f6;--muted:#a9b8bd;--line:#304249;--strong:#607780;--accent:#72bfd6;--coral:#e08b72;--green:#7cb889;--focus:#8bd8ef}
+*{box-sizing:border-box}body{margin:0;background:var(--page);color:var(--ink);font:16px/1.6 var(--sans)}a,button,input{font:inherit;color:inherit}button{cursor:pointer}
+.skip{position:fixed;left:1rem;top:-5rem;z-index:100;padding:.7rem 1rem;background:var(--ink);color:var(--page)}.skip:focus{top:1rem}
+.topbar{position:sticky;top:0;z-index:30;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--page) 92%,transparent);backdrop-filter:blur(14px)}
+.nav{width:min(1320px,calc(100% - 2rem));min-height:62px;margin:auto;display:flex;align-items:center;gap:.65rem}.brand{font-weight:800;text-decoration:none}.spacer{flex:1}.nav a,.theme{min-height:40px;padding:.55rem .8rem;border:1px solid var(--line);background:transparent;text-decoration:none}.nav a:focus-visible,.theme:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.shell{width:min(1320px,calc(100% - 2rem));margin:auto;padding:clamp(2.4rem,6vw,5.2rem) 0 3rem}.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.42fr);gap:clamp(2rem,6vw,6rem);align-items:end;border-bottom:1px solid var(--strong);padding-bottom:2.4rem}.eyebrow{margin:0 0 .65rem;color:var(--accent);font-size:.73rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.hero h1{margin:.1rem 0 1rem;font:600 clamp(3.2rem,7vw,7rem)/.86 var(--serif);letter-spacing:-.055em}.lead{max-width:62rem;color:var(--muted)}
+.hero-note{border-top:1px solid var(--strong)}.hero-note div{padding:.9rem 0;border-bottom:1px solid var(--line)}.hero-note span{display:block;color:var(--muted);font-size:.8rem}.hero-note strong{font-family:var(--serif)}
+.lab{display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,.35fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:2rem}.stage{background:var(--raised);min-width:0}.stage svg{display:block;width:100%;height:auto;min-height:560px}.controls{background:var(--raised);padding:1.2rem}.controls h2{margin:.1rem 0 1rem;font:600 1.8rem/1.1 var(--serif)}
+.presets{display:grid;gap:.5rem}.preset{width:100%;text-align:left;padding:.75rem;border:1px solid var(--line);background:transparent}.preset[aria-pressed="true"]{border-color:var(--accent);background:var(--soft);font-weight:800}
+.control{margin:1.4rem 0;padding-top:1.2rem;border-top:1px solid var(--line)}.control label{display:flex;justify-content:space-between;gap:1rem;font-weight:800}.control input[type=range]{width:100%;margin:1rem 0;accent-color:var(--accent)}
+.readout{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:end;padding:1rem 0;border-top:1px solid var(--strong);border-bottom:1px solid var(--strong)}.readout b{font:600 3rem/1 var(--serif);color:var(--accent)}.readout span{color:var(--muted)}
+.critical{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1rem}.critical button{min-height:38px;padding:.45rem .65rem;border:1px solid var(--line);background:transparent}.critical button:hover{border-color:var(--accent);background:var(--soft)}
+.predict{margin-top:1.2rem;padding:1rem;background:var(--soft)}.predict p{margin:.2rem 0 .8rem}.choices{display:flex;gap:.4rem;flex-wrap:wrap}.choices button{min-width:44px;min-height:40px;border:1px solid var(--line);background:var(--raised)}.feedback{min-height:1.6em;margin:.7rem 0 0;color:var(--muted)}
+.explain{margin-top:1rem;color:var(--muted)}.facts{margin-top:2rem;border-top:1px solid var(--strong)}.fact{display:grid;grid-template-columns:minmax(10rem,.3fr) 1fr;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--line)}.fact strong{color:var(--accent)}
+.axis{stroke:var(--strong);stroke-width:1.2}.grid{stroke:var(--line);stroke-width:.7}.a{stroke:var(--accent);stroke-width:4;fill:none}.b{stroke:var(--coral);stroke-width:4;fill:none}.c{stroke:var(--green);stroke-width:4;fill:none}.mline{stroke:var(--green);stroke-width:3;stroke-dasharray:9 7}.intersection{fill:var(--green);stroke:var(--raised);stroke-width:3}.boundary-open{fill:var(--raised);stroke-width:4}.boundary-closed{stroke:var(--raised);stroke-width:2}.svgtext{fill:var(--ink);font:700 15px var(--sans)}.mutedtext{fill:var(--muted);font:600 13px var(--sans)}
+@media(max-width:900px){.hero,.lab{grid-template-columns:1fr}.stage svg{min-height:430px}}@media(max-width:600px){.shell,.nav{width:min(100% - 1rem,1320px)}.stage svg{min-height:330px}.fact{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#lab">К лаборатории</a>
+<header class="topbar"><nav class="nav" aria-label="Навигация лаборатории">
+<a class="brand" href="03.10.26.html">← Занятие</a><span class="spacer"></span><a href="index.html">В кабинет</a><button class="theme" id="themeToggle" type="button" aria-label="Переключить тему">◐</button>
+</nav></header>
+
+<main class="shell">
+<section class="hero">
+  <div><p class="eyebrow">Исследование · 03.10.2026</p><h1>Двигайте y=m</h1><p class="lead">Здесь собраны только функции, разобранные на занятии. Меняйте высоту горизонтали и наблюдайте, как границы ветвей и вершины параболы меняют число общих точек.</p></div>
+  <aside class="hero-note"><div><span>Цикл исследования</span><strong>предположить → проверить → объяснить</strong></div><div><span>Главный объект</span><strong>число пересечений с y=m</strong></div><div><span>Границы</span><strong>всегда учитываются</strong></div></aside>
+</section>
+
+<section class="lab" id="lab" aria-label="Интерактивная модель кусочной функции">
+  <div class="stage"><svg id="plot" viewBox="0 0 820 620" role="img" aria-labelledby="plotTitle plotDesc"><title id="plotTitle">График кусочной функции и горизонталь y=m</title><desc id="plotDesc">Интерактивный график. Положение горизонтали задаётся ползунком. Точки пересечения выделяются.</desc></svg></div>
+  <aside class="controls">
+    <p class="eyebrow">Сценарий</p>
+    <h2 id="scenarioTitle">Три линейные ветви</h2>
+    <div class="presets" role="group" aria-label="Выбор разобранной функции">
+      <button class="preset" type="button" data-scenario="linear" aria-pressed="true">A · три прямые</button>
+      <button class="preset" type="button" data-scenario="up" aria-pressed="false">B · прямая + парабола вверх</button>
+      <button class="preset" type="button" data-scenario="down" aria-pressed="false">C · прямая + парабола вниз</button>
+    </div>
+
+    <div class="control" id="ym">
+      <label for="mRange"><span>Высота горизонтали</span><span id="mValue">m = 0</span></label>
+      <input id="mRange" type="range" min="-6" max="16" step="0.25" value="0">
+      <div class="critical" id="criticalButtons" aria-label="Критические значения m"></div>
+    </div>
+
+    <div class="readout" aria-live="polite"><div><span>Общих точек</span><br><b id="count">3</b></div><div id="status">обычный уровень</div></div>
+
+    <div class="predict">
+      <p><b>Предскажите результат.</b> Сколько пересечений будет при текущем m?</p>
+      <div class="choices" aria-label="Прогноз числа пересечений"><button type="button" data-guess="0">0</button><button type="button" data-guess="1">1</button><button type="button" data-guess="2">2</button><button type="button" data-guess="3">3</button></div>
+      <p class="feedback" id="feedback"></p>
+    </div>
+
+    <p class="explain" id="explain"></p>
+  </aside>
+</section>
+
+<section class="facts" aria-label="Что наблюдать">
+  <div class="fact"><strong>Граница ветвей</strong><span>На критической высоте одна точка может перейти от одной ветви к другой. Строгость неравенства решает, считается ли она.</span></div>
+  <div class="fact"><strong>Вершина параболы</strong><span>В вершине две симметричные точки параболы сливаются в одну, поэтому число пересечений меняется.</span></div>
+  <div class="fact"><strong>Проверка результата</strong><span>После подсчёта точек обязательно проверьте ограничения на x для каждой ветви.</span></div>
+</section>
+</main>
+
+<script>
+(function(){
+'use strict';
+var root=document.documentElement;
+try{root.setAttribute('data-theme',localStorage.getItem('marina-theme')||'light')}catch(_){}
+document.getElementById('themeToggle').addEventListener('click',function(){var next=root.getAttribute('data-theme')==='dark'?'light':'dark';root.setAttribute('data-theme',next);try{localStorage.setItem('marina-theme',next)}catch(_){};draw()});
+
+var svg=document.getElementById('plot'),range=document.getElementById('mRange'),mValue=document.getElementById('mValue'),countEl=document.getElementById('count'),statusEl=document.getElementById('status'),explain=document.getElementById('explain'),title=document.getElementById('scenarioTitle'),critical=document.getElementById('criticalButtons'),feedback=document.getElementById('feedback');
+var current='linear',W=820,H=620,pad={l:70,r:36,t:34,b:58},bounds={xmin:-9,xmax:5,ymin:-7,ymax:17};
+
+var scenarios={
+ linear:{
+  title:'Три линейные ветви',
+  formula:'2x+1 при x<0; −1,5x+1 при 0≤x<2; x−4 при x≥2',
+  critical:[-2,1],
+  count:function(m){return (m<1?1:0)+(m>-2&&m<=1?1:0)+(m>=-2?1:0)},
+  intersections:function(m){var a=[];var x=(m-1)/2;if(x<0)a.push([x,m]);x=(1-m)/1.5;if(x>=0&&x<2)a.push([x,m]);x=m+4;if(x>=2)a.push([x,m]);return a},
+  branches:[
+   {cls:'a',from:-9,to:0,openEnd:true,fn:function(x){return 2*x+1}},
+   {cls:'b',from:0,to:2,closedStart:true,openEnd:true,fn:function(x){return -1.5*x+1}},
+   {cls:'c',from:2,to:5,closedStart:true,fn:function(x){return x-4}}
+  ],
+  note:function(m){if(Math.abs(m+2)<.001)return 'm=−2: средняя ветвь уже не содержит x=2, а первая и третья дают по одной точке.';if(Math.abs(m-1)<.001)return 'm=1: первая ветвь не содержит x=0, зато средняя содержит x=0, и третья даёт вторую точку.';return 'Между критическими уровнями число пересечений не меняется.'}
+ },
+ up:{
+  title:'Прямая + парабола вверх',
+  formula:'x+9 при x<−3; x²+2x+3 при x≥−3',
+  critical:[2,6],
+  count:function(m){var c=m<6?1:0;if(m>=2){var s=Math.sqrt(m-2),r1=-1-s,r2=-1+s;if(s===0){if(r1>=-3)c++}else{if(r1>=-3)c++;if(r2>=-3)c++}}return c},
+  intersections:function(m){var a=[],x=m-9;if(x<-3)a.push([x,m]);if(m>=2){var s=Math.sqrt(m-2),r1=-1-s,r2=-1+s;if(r1>=-3)a.push([r1,m]);if(s>0&&r2>=-3)a.push([r2,m])}return a},
+  branches:[
+   {cls:'a',from:-9,to:-3,openEnd:true,fn:function(x){return x+9}},
+   {cls:'b',from:-3,to:3,closedStart:true,fn:function(x){return x*x+2*x+3}}
+  ],
+  note:function(m){if(Math.abs(m-2)<.001)return 'm=2 проходит через вершину (−1;2): парабола даёт одну точку, прямая — ещё одну.';if(Math.abs(m-6)<.001)return 'm=6: парабола даёт две допустимые точки, включая (−3;6); линейная ветвь в x=−3 открыта.';return 'Смотрите, сколько корней параболы попадает в область x≥−3, и отдельно проверяйте прямую.'}
+ },
+ down:{
+  title:'Прямая + парабола вниз',
+  formula:'−x−7 при x<−5; −x²−2x+13 при x≥−5',
+  critical:[-2,14],
+  count:function(m){var c=m>-2?1:0;if(m<=14){var s=Math.sqrt(14-m),r1=-1-s,r2=-1+s;if(s===0){if(r1>=-5)c++}else{if(r1>=-5)c++;if(r2>=-5)c++}}return c},
+  intersections:function(m){var a=[],x=-m-7;if(x<-5)a.push([x,m]);if(m<=14){var s=Math.sqrt(14-m),r1=-1-s,r2=-1+s;if(r1>=-5)a.push([r1,m]);if(s>0&&r2>=-5)a.push([r2,m])}return a},
+  branches:[
+   {cls:'a',from:-9,to:-5,openEnd:true,fn:function(x){return -x-7}},
+   {cls:'b',from:-5,to:4,closedStart:true,fn:function(x){return -x*x-2*x+13}}
+  ],
+  note:function(m){if(Math.abs(m+2)<.001)return 'm=−2: парабола пересекается в x=−5 и x=3; линейная ветвь в x=−5 не существует.';if(Math.abs(m-14)<.001)return 'm=14: одна точка — вершина параболы (−1;14), вторая лежит на линейной ветви.';return 'При m между −2 и 14 обычно видны три точки: одна на прямой и две на параболе.'}
+ }
+};
+
+function X(x){return pad.l+(x-bounds.xmin)/(bounds.xmax-bounds.xmin)*(W-pad.l-pad.r)}
+function Y(y){return pad.t+(bounds.ymax-y)/(bounds.ymax-bounds.ymin)*(H-pad.t-pad.b)}
+function node(tag,attrs){var e=document.createElementNS('http://www.w3.org/2000/svg',tag);Object.keys(attrs||{}).forEach(function(k){e.setAttribute(k,attrs[k])});return e}
+function textNode(x,y,t,cls){var e=node('text',{x:x,y:y,class:cls||'mutedtext'});e.textContent=t;return e}
+function pathFor(branch){var d='',n=180;for(var i=0;i<=n;i++){var x=branch.from+(branch.to-branch.from)*i/n,y=branch.fn(x);if(y<bounds.ymin-3||y>bounds.ymax+3)continue;d+=(d?' L':'M')+X(x).toFixed(1)+' '+Y(y).toFixed(1)}return d}
+function boundaryPoint(branch,at,start){var y=branch.fn(at),closed=start?branch.closedStart:!branch.openEnd;var c=node('circle',{cx:X(at),cy:Y(y),r:7,class:(closed?'boundary-closed ':'boundary-open ')+branch.cls});c.setAttribute('stroke','var(--'+(branch.cls==='a'?'accent':branch.cls==='b'?'coral':'green')+')');if(closed)c.setAttribute('fill','var(--'+(branch.cls==='a'?'accent':branch.cls==='b'?'coral':'green')+')');return c}
+function draw(){
+ var s=scenarios[current],m=Number(range.value);svg.replaceChildren();
+ var titleN=node('title',{id:'plotTitle'});titleN.textContent=s.title+'; '+s.formula;var desc=node('desc',{id:'plotDesc'});desc.textContent='Горизонталь y=m пересекает график в '+s.count(m)+' точках.';svg.append(titleN,desc);
+ for(var x=-8;x<=4;x+=1)svg.appendChild(node('line',{x1:X(x),y1:Y(bounds.ymin),x2:X(x),y2:Y(bounds.ymax),class:'grid','aria-hidden':'true'}));
+ for(var y=-6;y<=16;y+=2)svg.appendChild(node('line',{x1:X(bounds.xmin),y1:Y(y),x2:X(bounds.xmax),y2:Y(y),class:'grid','aria-hidden':'true'}));
+ svg.appendChild(node('line',{x1:X(bounds.xmin),y1:Y(0),x2:X(bounds.xmax),y2:Y(0),class:'axis','aria-hidden':'true'}));
+ svg.appendChild(node('line',{x1:X(0),y1:Y(bounds.ymin),x2:X(0),y2:Y(bounds.ymax),class:'axis','aria-hidden':'true'}));
+ svg.appendChild(textNode(W-28,Y(0)-8,'x','svgtext'));svg.appendChild(textNode(X(0)+10,28,'y','svgtext'));
+ s.branches.forEach(function(b){svg.appendChild(node('path',{d:pathFor(b),class:b.cls,'aria-hidden':'true'}));if(b.closedStart)svg.appendChild(boundaryPoint(b,b.from,true));if(b.openEnd)svg.appendChild(boundaryPoint(b,b.to,false))});
+ svg.appendChild(node('line',{x1:X(bounds.xmin),y1:Y(m),x2:X(bounds.xmax),y2:Y(m),class:'mline','aria-hidden':'true'}));svg.appendChild(textNode(W-92,Y(m)-10,'y = '+fmt(m),'svgtext'));
+ s.intersections(m).forEach(function(p){svg.appendChild(node('circle',{cx:X(p[0]),cy:Y(p[1]),r:8,class:'intersection','aria-hidden':'true'}))});
+ mValue.textContent='m = '+fmt(m);var c=s.count(m);countEl.textContent=String(c);statusEl.textContent=s.critical.some(function(v){return Math.abs(v-m)<.001})?'критический уровень':'обычный уровень';explain.textContent=s.note(m);feedback.textContent='';
+}
+function fmt(v){return Number.isInteger(v)?String(v):String(v).replace('.',',')}
+function renderCritical(){critical.replaceChildren();scenarios[current].critical.forEach(function(v){var b=document.createElement('button');b.type='button';b.textContent='m = '+fmt(v);b.addEventListener('click',function(){range.value=String(v);draw()});critical.appendChild(b)})}
+document.querySelectorAll('[data-scenario]').forEach(function(btn){btn.addEventListener('click',function(){current=btn.dataset.scenario;document.querySelectorAll('[data-scenario]').forEach(function(b){b.setAttribute('aria-pressed',String(b===btn))});title.textContent=scenarios[current].title;range.value=current==='up'?'4':current==='down'?'6':'0';renderCritical();draw()})});
+range.addEventListener('input',draw);
+document.querySelectorAll('[data-guess]').forEach(function(btn){btn.addEventListener('click',function(){var actual=scenarios[current].count(Number(range.value)),guess=Number(btn.dataset.guess);feedback.textContent=guess===actual?'Совпало: '+actual+'. Теперь объясните результат через области ветвей.':'Сейчас точек: '+actual+'. Проверьте границы и область каждой ветви.'})});
+renderCritical();draw();
+})();
+</script>
+</body>
+</html>
