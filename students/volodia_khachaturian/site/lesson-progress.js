@@ -276,6 +276,23 @@ data.topicMaterials={
   exam_28:material30
 };
 
+Object.assign(data.topicMaterials,{
+  kin_04:material03Oct,
+  kin_17:material03Oct,
+  kin_18:material03Oct,
+  kin_19:material03Oct,
+  kin_20:material03Oct,
+  kin_24:material03Oct,
+  kin_26:material03Oct,
+  kin_27:material03Oct,
+  kin_28:material03Oct,
+  exam_02:material03Oct,
+  exam_03:material03Oct,
+  exam_24:material03Oct,
+  exam_27:material03Oct,
+  exam_28:material03Oct
+});
+
 data.materials=[
   ...(data.materials||[]),
   {date:'03.10.26',title:'Графики скорости и вертикальное движение',href:'03.10.26.html',pdf:'../pdf_docs/03.10.26.pdf',tex:'../tex_docs/03.10.26.tex',lab:'03.10.26-lab.html'},
