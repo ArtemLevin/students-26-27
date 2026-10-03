@@ -16,7 +16,10 @@ const lessons=[
 {date:'16.09.26',href:'16.09.26.html',ids:['functions_4','functions_6','functions_14','models_6','models_14']},
 {date:'19.09.26',href:'19.09.26.html',ids:['percent_1','percent_2','equations_12','models_1','models_2','models_3','models_4','models_6','models_14','geo_reason_1','geo_reason_2']},
 {date:'23.09.26',href:'23.09.26.html',ids:['expr_5','expr_6','expr_7','expr_8','equations_1','equations_2']},
-{date:'30.09.26',href:'30.09.26.html',ids:['expr_6','expr_7','expr_8','equations_2','equations_4','equations_5','equations_7','equations_8','equations_12','models_3']}
+{date:'30.09.26',href:'30.09.26.html',ids:['expr_6','expr_7','expr_8','equations_2','equations_4','equations_5','equations_7','equations_8','equations_12','models_3']},
+{date:'03.10.26',href:'03.10.26.html#model',ids:['models_1','models_2','models_3','models_4']},
+{date:'03.10.26',href:'03.10.26.html#system',ids:['equations_12']},
+{date:'03.10.26',href:'03.10.26.html#check',ids:['models_5']}
 ];
 const teacherSeed={},evidence={};
 for(const lesson of lessons)for(const id of lesson.ids){teacherSeed[id]=Math.max(teacherSeed[id]||0,2);evidence[id]={text:`Тема подтверждена материалом занятия ${lesson.date}.`,href:lesson.href};}
