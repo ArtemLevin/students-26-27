@@ -13,15 +13,47 @@ export const LESSONS=[
     "summary": "Марина Селиверстова: кусочные функции — области ветвей, граничные точки, парабола и определение числа пересечений с горизонталью y=m.",
     "topics": ["кусочно заданная функция", "граничные точки", "парабола", "прямая y=m"],
     "outcomes": [
-      "строить каждую ветвь только на своей области x",
-      "различать открытые и закрашенные граничные точки",
-      "анализировать число пересечений кусочного графика с y=m"
+          {
+                "competencyId": "oge_22_07",
+                "evidenceAnchor": "piecewise",
+                "relation": "practiced",
+                "masteryClaim": null
+          },
+          {
+                "competencyId": "oge_22_02",
+                "evidenceAnchor": "parabola",
+                "relation": "practiced",
+                "masteryClaim": null
+          },
+          {
+                "competencyId": "oge_22_03",
+                "evidenceAnchor": "parabola",
+                "relation": "practiced",
+                "masteryClaim": null
+          },
+          {
+                "competencyId": "oge_22_04",
+                "evidenceAnchor": "parabola",
+                "relation": "practiced",
+                "masteryClaim": null
+          },
+          {
+                "competencyId": "oge_22_11",
+                "evidenceAnchor": "ym",
+                "relation": "practiced",
+                "masteryClaim": null
+          },
+          {
+                "competencyId": "oge_22_12",
+                "evidenceAnchor": "ym",
+                "relation": "practiced",
+                "masteryClaim": null
+          }
     ],
     "materials": {
       "html": "03.10.26.html",
       "pdf": "../pdf_docs/03.10.26.pdf",
       "tex": "../tex_docs/03.10.26.tex",
-      "image": "../images/03.10.26.png",
       "lab": "03.10.26-lab.html"
     }
   },
