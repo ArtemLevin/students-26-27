@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория Николь Саркисьянц: оптимизация с помощью производной, 02.10.2026">
+<title>Лаборатория оптимизации — Николь Саркисьянц</title>
+<style>
+:root{color-scheme:light;--page:#f3f0ea;--paper:#fffdf8;--soft:#eee8df;--text:#252526;--muted:#6e6b69;--line:#d2ccc3;--line-strong:#8d867f;--accent:#7b3541;--signal:#8a6a2c;--graph:#3e6f74;--good:#356c56;--before:#3e6f74;--after:#99554e;--focus:#aa7b31;--grid:#e8e2d9}
+html[data-theme="dark"]{color-scheme:dark;--page:#151414;--paper:#211f1e;--soft:#2a2725;--text:#f0ece7;--muted:#bbb3ad;--line:#433d3a;--line-strong:#756a65;--accent:#d58d98;--signal:#d2b16c;--graph:#83b8bd;--good:#7dbb9b;--before:#83b8bd;--after:#df968d;--focus:#e2bc73;--grid:#302b29}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--page);color:var(--text);font:16px/1.58 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}a{color:inherit}button,input{font:inherit;color:inherit}.skip{position:fixed;top:-5rem;left:1rem;z-index:100;background:var(--text);color:var(--page);padding:.7rem 1rem}.skip:focus{top:1rem}
+.shell{width:min(100% - 2rem,1280px);margin:auto;padding:1rem 0 3rem}.toolbar{display:flex;align-items:center;gap:.25rem;flex-wrap:wrap;padding:.45rem 0;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong)}.toolbar a,.toolbar button{min-height:40px;padding:.55rem .7rem;border:0;border-right:1px solid var(--line);background:transparent;text-decoration:none;font-weight:760;cursor:pointer}.toolbar .grow{flex:1}.date{color:var(--muted);font:700 .72rem/1.2 ui-monospace,monospace;letter-spacing:.08em}
+header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2rem;align-items:end;padding:clamp(2.2rem,6vw,5rem) 0 1.8rem;border-bottom:1px solid var(--line-strong)}.kicker,.label{color:var(--accent);font:760 .69rem/1.2 ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase}h1,h2,h3{font-family:Georgia,"Times New Roman",serif}h1{margin:.25rem 0 .7rem;font-size:clamp(3.4rem,7vw,6.7rem);line-height:.88;letter-spacing:-.055em;font-weight:500}h2{margin:.15rem 0 .65rem;font-size:clamp(1.8rem,3vw,2.8rem);line-height:1;font-weight:500}.lead{max-width:68ch;color:var(--muted)}.core{max-width:22rem;font:500 clamp(1.3rem,2.5vw,2rem)/1.25 Georgia,serif;color:var(--accent)}
+.modebar{display:flex;gap:.35rem;flex-wrap:wrap;padding:1rem 0;border-bottom:1px solid var(--line)}.modebar button{border:1px solid var(--line);background:transparent;padding:.65rem .8rem;cursor:pointer;font-weight:760}.modebar button[aria-pressed="true"]{background:var(--accent);color:var(--page);border-color:var(--accent)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(310px,.65fr);border-bottom:1px solid var(--line-strong)}.stage{padding:1.25rem 2rem 1.25rem 0;border-right:1px solid var(--line-strong)}.stage svg{display:block;width:100%;height:auto;background:var(--paper);border:1px solid var(--line)}.panel{padding:1.25rem 0 1.25rem 1.5rem}.panel-section{padding:0 0 1.15rem;margin:0 0 1.15rem;border-bottom:1px solid var(--line)}.control{display:grid;grid-template-columns:1fr 8.2rem;gap:.8rem;align-items:center}.control input[type="range"]{width:100%;accent-color:var(--accent)}.control input[type="number"]{width:100%;min-height:42px;padding:.55rem;border:1px solid var(--line-strong);background:var(--paper)}.readouts{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-left:1px solid var(--line)}.readout{padding:.85rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.readout small{display:block;color:var(--muted)}.readout b{display:block;margin-top:.15rem;color:var(--accent);font:500 1.32rem/1.15 Georgia,serif}.formula{padding:.65rem 0;border-top:1px solid var(--line);font:500 1.15rem/1.45 Georgia,serif;color:var(--accent);overflow-x:auto}.note{color:var(--muted)}.verdict{font-weight:770;padding:.7rem 0}.verdict.good{color:var(--good)}.verdict.before{color:var(--before)}.verdict.after{color:var(--after)}.reset{width:100%;min-height:43px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;font-weight:760}.legend{display:grid;grid-template-columns:auto 1fr;gap:.55rem .75rem;margin-top:1rem;color:var(--muted);font-size:.9rem}.swatch{width:28px;height:3px;align-self:center}.swatch.curve{background:var(--graph)}.swatch.point{background:var(--accent)}.swatch.opt{background:var(--signal)}.insight{margin-top:1rem;padding:1rem 0;border-top:1px solid var(--line-strong)}.insight b{color:var(--accent)}.footer{display:flex;justify-content:space-between;gap:1rem;padding-top:1.4rem;color:var(--muted);font-size:.88rem}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+@media(max-width:900px){header{grid-template-columns:1fr}.workspace{grid-template-columns:1fr}.stage{border-right:0;border-bottom:1px solid var(--line-strong);padding:1rem 0}.panel{padding:1rem 0}}
+@media(max-width:560px){.shell{width:min(100% - 1rem,1280px)}.toolbar .grow{display:none}.toolbar>*{flex:1 1 auto}.date{flex-basis:100%;text-align:center}.readouts{grid-template-columns:1fr}.control{grid-template-columns:1fr}.footer{display:block}.footer span{display:block;margin:.35rem 0}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#labContent">К рабочей области</a>
+<div class="shell">
+<nav class="toolbar" aria-label="Навигация лаборатории"><a href="02.10.26.html">← Вернуться к занятию</a><span class="grow"></span><span class="date">02.10.2026</span><button id="theme" type="button">Тема</button></nav>
+<header><div><p class="kicker">Цифровая лаборатория · оптимизация</p><h1>Где экстремум?</h1><p class="lead">Меняйте параметр внутри одной из четырёх моделей занятия. График, текущее значение, производная и положение относительно оптимума пересчитываются из одного состояния. Цель — увидеть, как знак производной превращается в доказательство максимума или минимума.</p></div><div class="core">изменили параметр → увидели знак F′ → сравнили с оптимумом</div></header>
+<nav class="modebar" aria-label="Выбор модели">
+<button type="button" data-mode="revenue" aria-pressed="true">Выручка</button>
+<button type="button" data-mode="area" aria-pressed="false">Площадь</button>
+<button type="button" data-mode="power" aria-pressed="false">Мощность</button>
+<button type="button" data-mode="river" aria-pressed="false">Снос лодки</button>
+</nav>
+<main class="workspace" id="labContent">
+<section class="stage" aria-label="График модели">
+<svg id="plot" viewBox="0 0 820 610" role="img" aria-labelledby="plotTitle plotDesc"><title id="plotTitle">График целевой функции</title><desc id="plotDesc">Интерактивный график выбранной целевой функции, текущая точка и оптимальное состояние.</desc><g id="grid"></g><g id="curve"></g></svg>
+<div class="legend"><span class="swatch curve"></span><span>целевая функция</span><span class="swatch point"></span><span>текущее состояние</span><span class="swatch opt"></span><span>оптимум из пособия</span></div>
+</section>
+<aside class="panel">
+<div class="panel-section"><span class="label" id="modelLabel">Модель</span><h2 id="modelTitle">Максимальная выручка</h2><p class="note" id="modelText"></p></div>
+<div class="panel-section"><span class="label">Изменяемый параметр</span><div class="control"><input id="xRange" type="range"><input id="xInput" type="number" inputmode="decimal" aria-label="Текущее значение параметра"></div><p class="note" id="domainText"></p></div>
+<div class="readouts">
+<div class="readout"><small id="xReadoutLabel">q</small><b id="xValue">30</b></div>
+<div class="readout"><small id="fReadoutLabel">R(q)</small><b id="fValue">3600</b></div>
+<div class="readout"><small>производная</small><b id="dValue">0</b></div>
+<div class="readout"><small id="extraLabel">оптимум</small><b id="extraValue">q=30</b></div>
+</div>
+<div class="panel-section"><div class="formula" id="functionFormula"></div><div class="formula" id="derivativeFormula"></div><p class="verdict" id="verdict"></p><div class="insight"><b>Наблюдение.</b> <span id="insightText"></span></div></div>
+<button class="reset" id="reset" type="button">Вернуть оптимальное состояние</button>
+</aside>
+</main>
+<footer class="footer"><span>Николь Саркисьянц · ЕГЭ по профильной математике</span><span>Лёвин Артём Александрович · цифровая лаборатория</span></footer>
+</div>
+<script>
+(function(){
+  var root=document.documentElement,theme=document.getElementById('theme'),themeKey='nikol-lesson-theme';
+  try{var saved=localStorage.getItem(themeKey);if(saved==='dark'||saved==='light')root.dataset.theme=saved}catch(_){}
+  theme.addEventListener('click',function(){var next=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=next;try{localStorage.setItem(themeKey,next)}catch(_){}});
+  var models={
+    revenue:{
+      title:'Максимальная выручка',label:'Цена × количество',symbol:'q',fLabel:'R(q)',
+      text:'p(q)=240−4q, поэтому R(q)=(240−4q)q. По условию q — натуральное количество товара.',
+      domain:'q∈ℕ; в показанном окне 1≤q≤59',min:1,max:59,step:1,start:30,opt:30,optLabel:'q=30',
+      f:function(x){return 240*x-4*x*x},d:function(x){return 240-8*x},
+      formula:'R(q)=240q−4q²',derivative:'R′(q)=240−8q',xMin:0,xMax:60,
+      insight:function(x){return x<30?'До q=30 увеличение количества повышает выручку.':x>30?'После q=30 увеличение количества снижает выручку.':'Знак производной меняется с «+» на «−»: получен максимум выручки.'}
+    },
+    area:{
+      title:'Максимальная площадь',label:'Прямоугольник',symbol:'x',fLabel:'S(x)',
+      text:'y=120−2x. Условия x>0 и y>0 дают 0<x<60; площадь S=xy.',
+      domain:'0<x<60',min:1,max:59,step:1,start:30,opt:30,optLabel:'x=30; y=60',
+      f:function(x){return x*(120-2*x)},d:function(x){return 120-4*x},
+      formula:'S(x)=120x−2x²',derivative:'S′(x)=120−4x',xMin:0,xMax:60,
+      extra:function(x){return 'y='+fmt(120-2*x)},
+      insight:function(x){return x<30?'При увеличении x площадь ещё растёт.':x>30?'После x=30 площадь уже уменьшается.':'При x=30 производная меняет знак с «+» на «−»; вторая сторона равна 60.'}
+    },
+    power:{
+      title:'Максимальная мощность',label:'Дробно-рациональная модель',symbol:'R',fLabel:'P(R)',
+      text:'I(R)=48/(4+R), P=I²R. На R>0 знак P′ определяется множителем 4−R.',
+      domain:'R>0',min:0.2,max:16,step:0.2,start:4,opt:4,optLabel:'R=4 Ом; P=144 Вт',
+      f:function(x){return 2304*x/Math.pow(x+4,2)},d:function(x){return 2304*(4-x)/Math.pow(x+4,3)},
+      formula:'P(R)=48²R/(R+4)²',derivative:'P′(R)=48²(4−R)/(R+4)³',xMin:0,xMax:16,
+      extra:function(x){return 'I='+fmt(48/(4+x))+' А'},
+      insight:function(x){return x<4?'Пока R<4 Ом, множитель 4−R положителен и мощность растёт.':x>4?'При R>4 Ом производная отрицательна и мощность убывает.':'При R=4 Ом знак меняется с «+» на «−»; мощность равна 144 Вт.'}
+    },
+    river:{
+      title:'Минимальный снос лодки',label:'Тригонометрическая модель',symbol:'α',fLabel:'L(α)',
+      text:'h=100 м, u=1 м/с, v=0,8 м/с. Область 0<α<π гарантирует sin α>0.',
+      domain:'0°<α<180°',min:5,max:175,step:1,start:143,opt:Math.acos(-0.8)*180/Math.PI,optLabel:'cos α=−0,8; L=75 м',
+      f:function(deg){var a=deg*Math.PI/180;return 100*(1+0.8*Math.cos(a))/(0.8*Math.sin(a))},
+      d:function(deg){var a=deg*Math.PI/180;return -100*(0.8+Math.cos(a))/(0.8*Math.pow(Math.sin(a),2))},
+      formula:'L(α)=100(1+0,8 cos α)/(0,8 sin α)',derivative:'L′(α)=−100(0,8+cos α)/(0,8 sin²α)',xMin:5,xMax:175,
+      extra:function(x){var a=x*Math.PI/180;return 'cos α='+fmt(Math.cos(a))},
+      insight:function(x){var d=this.d(x);return Math.abs(d)<0.8?'Здесь cos α≈−0,8: производная меняет знак с «−» на «+», поэтому снос минимален.':d<0?'При увеличении α снос уменьшается.':'После оптимального угла дальнейшее увеличение α снова увеличивает снос.'}
+    }
+  };
+  var mode='revenue',range=document.getElementById('xRange'),input=document.getElementById('xInput'),NS='http://www.w3.org/2000/svg',grid=document.getElementById('grid'),curve=document.getElementById('curve');
+  function svg(name,attrs,text){var n=document.createElementNS(NS,name);Object.keys(attrs||{}).forEach(function(k){n.setAttribute(k,attrs[k])});if(text!=null)n.textContent=text;return n}
+  function clear(node){while(node.firstChild)node.removeChild(node.firstChild)}
+  function fmt(v){var n=Math.round(v*100)/100;return String(n).replace('.',',')}
+  function clamp(v,m){if(!Number.isFinite(v))v=m.start;v=Math.max(m.min,v);v=Math.min(m.max,v);if(m.step===1)v=Math.round(v);else v=Math.round(v/m.step)*m.step;return v}
+  function syncInputs(v,m){range.value=String(v);input.value=String(Math.round(v*100)/100)}
+  function setMode(next,push){
+    mode=models[next]?next:'revenue';var m=models[mode];
+    document.querySelectorAll('[data-mode]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.mode===mode))});
+    [range,input].forEach(function(el){el.min=String(m.min);el.max=String(m.max);el.step=String(m.step)});
+    syncInputs(m.start,m);
+    document.getElementById('modelLabel').textContent=m.label;document.getElementById('modelTitle').textContent=m.title;document.getElementById('modelText').textContent=m.text;
+    document.getElementById('domainText').textContent='Допустимая область: '+m.domain;document.getElementById('xReadoutLabel').textContent=m.symbol;document.getElementById('fReadoutLabel').textContent=m.fLabel;
+    document.getElementById('functionFormula').textContent=m.formula;document.getElementById('derivativeFormula').textContent=m.derivative;
+    if(push){var u=new URL(location.href);u.searchParams.set('mode',mode);history.replaceState(null,'',u)}
+    render();
+  }
+  function drawAxes(m,yMin,yMax){
+    clear(grid);var left=70,right=785,top=42,bottom=545,w=right-left,h=bottom-top;
+    for(var i=0;i<=6;i++){var x=left+w*i/6;grid.appendChild(svg('line',{x1:x,y1:top,x2:x,y2:bottom,stroke:'var(--grid)','stroke-width':1}))}
+    for(var j=0;j<=5;j++){var y=top+h*j/5;grid.appendChild(svg('line',{x1:left,y1:y,x2:right,y2:y,stroke:'var(--grid)','stroke-width':1}))}
+    grid.appendChild(svg('line',{x1:left,y1:bottom,x2:right,y2:bottom,stroke:'var(--line-strong)','stroke-width':2}));
+    grid.appendChild(svg('line',{x1:left,y1:top,x2:left,y2:bottom,stroke:'var(--line-strong)','stroke-width':2}));
+    grid.appendChild(svg('text',{x:right-8,y:bottom+30,fill:'var(--muted)','font-size':16,'text-anchor':'end'},m.symbol));
+    grid.appendChild(svg('text',{x:left+8,y:top+20,fill:'var(--muted)','font-size':16},m.fLabel));
+    return {sx:function(x){return left+(x-m.xMin)/(m.xMax-m.xMin)*w},sy:function(y){return bottom-(y-yMin)/(yMax-yMin)*h},bottom:bottom}
+  }
+  function render(){
+    var m=models[mode],x=clamp(Number(input.value||range.value),m);syncInputs(x,m);var f=m.f(x),d=m.d(x),samples=220,yMin=Infinity,yMax=-Infinity,vals=[];
+    for(var i=0;i<=samples;i++){var xx=m.xMin+(m.xMax-m.xMin)*i/samples,yy=m.f(xx);if(Number.isFinite(yy)){vals.push([xx,yy]);yMin=Math.min(yMin,yy);yMax=Math.max(yMax,yy)}}
+    if(!Number.isFinite(yMin)||!Number.isFinite(yMax)){yMin=0;yMax=1}
+    var pad=Math.max(1,(yMax-yMin)*0.1);if(mode!=='river')yMin=Math.min(0,yMin);yMin-=pad*.15;yMax+=pad;
+    var map=drawAxes(m,yMin,yMax);clear(curve);var path='';
+    vals.forEach(function(pair,k){path+=(k?'L':'M')+map.sx(pair[0])+' '+map.sy(pair[1])});
+    curve.appendChild(svg('path',{d:path,fill:'none',stroke:'var(--graph)','stroke-width':5,'stroke-linecap':'round','stroke-linejoin':'round'}));
+    var opt=m.opt,optY=m.f(opt);curve.appendChild(svg('line',{x1:map.sx(opt),y1:map.sy(optY),x2:map.sx(opt),y2:map.bottom,stroke:'var(--signal)','stroke-width':2,'stroke-dasharray':'7 7'}));
+    curve.appendChild(svg('circle',{cx:map.sx(opt),cy:map.sy(optY),r:7,fill:'var(--signal)'}));
+    curve.appendChild(svg('circle',{cx:map.sx(x),cy:map.sy(f),r:8,fill:'var(--accent)',stroke:'var(--paper)','stroke-width':3}));
+    document.getElementById('xValue').textContent=mode==='river'?fmt(x)+'°':fmt(x);document.getElementById('fValue').textContent=fmt(f);document.getElementById('dValue').textContent=fmt(d);
+    document.getElementById('extraLabel').textContent=m.extra?'связанная величина':'оптимум';document.getElementById('extraValue').textContent=m.extra?m.extra(x):m.optLabel;
+    document.getElementById('insightText').textContent=m.insight(x);
+    var verdict=document.getElementById('verdict'),near=mode==='river'?Math.abs(Math.cos(x*Math.PI/180)+0.8)<0.02:Math.abs(x-opt)<=Math.max(m.step*.51,0.06);
+    if(near){verdict.textContent=mode==='river'?'Минимум: L′ меняет знак с «−» на «+».':'Максимум: F′ меняет знак с «+» на «−».';verdict.className='verdict good'}
+    else if((mode==='river'&&d<0)||(mode!=='river'&&d>0)){verdict.textContent=mode==='river'?'L′<0: при увеличении α снос уменьшается.':'F′>0: при увеличении параметра целевая функция растёт.';verdict.className='verdict before'}
+    else{verdict.textContent=mode==='river'?'L′>0: при увеличении α снос растёт.':'F′<0: при увеличении параметра целевая функция убывает.';verdict.className='verdict after'}
+  }
+  document.querySelectorAll('[data-mode]').forEach(function(b){b.addEventListener('click',function(){setMode(b.dataset.mode,true)})});
+  range.addEventListener('input',function(){input.value=range.value;render()});
+  input.addEventListener('input',function(){range.value=input.value;render()});
+  input.addEventListener('change',render);
+  document.getElementById('reset').addEventListener('click',function(){var m=models[mode];syncInputs(m.start,m);render()});
+  var requested=new URLSearchParams(location.search).get('mode');setMode(requested&&models[requested]?requested:'revenue',false);
+})();
+</script>
+</body>
+</html>
