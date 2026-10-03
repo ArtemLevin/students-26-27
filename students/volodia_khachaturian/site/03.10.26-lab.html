@@ -43,8 +43,8 @@ html[data-theme="dark"]{--paper:#0d1718;--surface:#142224;--ink:#edf6f5;--muted:
 <div class="workspace">
 <div>
 <div class="instrument">
-<div class="instrument-head"><b>V–T INSTRUMENT</b><span>перетаскивайте конечную точку или используйте ползунки</span></div>
-<div class="canvas-wrap"><canvas id="graphCanvas" aria-label="Интерактивный график скорости от времени"></canvas><span class="tip">Точка справа изменяет v₁ и T. Слайдеры доступны как клавиатурная альтернатива.</span></div>
+<div class="instrument-head"><b>V–T INSTRUMENT</b><span>перетаскивайте конечную точку по вертикали или используйте ползунки</span></div>
+<div class="canvas-wrap"><canvas id="graphCanvas" aria-label="Интерактивный график скорости от времени"></canvas><span class="tip">Точка справа изменяет v₁. Время T задаётся ползунком; все параметры доступны с клавиатуры.</span></div>
 <div class="readouts">
 <div class="readout"><span>ускорение a</span><b id="aOut">—</b></div>
 <div class="readout"><span>путь S</span><b id="sOut">—</b></div>
@@ -221,10 +221,9 @@ canvas.addEventListener('pointerdown',function(e){dragging=true;canvas.setPointe
 canvas.addEventListener('pointermove',function(e){
  if(!dragging)return;
  var rect=canvas.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
- var pad={l:58,r:28,t:24,b:44};var t=Math.max(1,Math.min(8,Math.round((x-pad.l)/(rect.width-pad.l-pad.r)*8)));
- var values=[+v0.value,+v1.value,-2,2],minV=Math.min.apply(null,values),maxV=Math.max.apply(null,values),span=maxV-minV;minV-=span*.18;maxV+=span*.18;
+ var pad={l:58,r:28,t:24,b:44};var values=[+v0.value,+v1.value,-2,2],minV=Math.min.apply(null,values),maxV=Math.max.apply(null,values),span=maxV-minV;minV-=span*.18;maxV+=span*.18;
  var vv=maxV-(y-pad.t)/(rect.height-pad.t-pad.b)*(maxV-minV);vv=Math.max(-10,Math.min(15,Math.round(vv)));
- duration.value=t;v1.value=vv;document.querySelectorAll('[data-graph]').forEach(function(x){x.classList.remove('active');});drawGraph();
+ v1.value=vv;document.querySelectorAll('[data-graph]').forEach(function(x){x.classList.remove('active');});drawGraph();
 });
 canvas.addEventListener('pointerup',function(){dragging=false;});
 canvas.addEventListener('pointercancel',function(){dragging=false;});
