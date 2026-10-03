@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Марина Селиверстова: кусочные функции — построение ветвей, граничные точки, парабола и исследование пересечений с прямой y=m.">
+<title>Кусочные функции и прямая y=m — Марина</title>
+<style>
+:root{
+  color-scheme:light;
+  --page:#f5f2ec;--raised:#fffdfa;--soft:#e5eef0;--ink:#243238;--muted:#617076;
+  --line:#cedadd;--line-strong:#8da4ab;--accent:#176b87;--accent-deep:#0f4c5c;
+  --coral:#a6533b;--green:#386641;--focus:#65a9c1;--serif:Georgia,"Times New Roman",serif;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--shadow:0 14px 36px rgba(32,54,62,.09)
+}
+html[data-theme="dark"]{
+  color-scheme:dark;--page:#0e171b;--raised:#152126;--soft:#1d3037;--ink:#eef4f6;--muted:#a9b8bd;
+  --line:#304249;--line-strong:#607780;--accent:#72bfd6;--accent-deep:#9bd9eb;--coral:#e08b72;--green:#7cb889;--focus:#8bd8ef;--shadow:0 18px 46px rgba(0,0,0,.28)
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--page);color:var(--ink);font:16px/1.65 var(--sans)}
+a,button{font:inherit;color:inherit}a{text-underline-offset:.18em}button{cursor:pointer}
+.skip{position:fixed;left:1rem;top:-5rem;z-index:100;padding:.7rem 1rem;background:var(--ink);color:var(--page)}.skip:focus{top:1rem}
+.topbar{position:sticky;top:0;z-index:40;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--page) 92%,transparent);backdrop-filter:blur(14px)}
+.nav{width:min(1320px,calc(100% - 2rem));min-height:62px;margin:auto;display:flex;align-items:center;gap:.65rem}
+.brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;font-weight:800}.brand-mark{width:2.05rem;height:2.05rem;display:grid;place-items:center;border:1px solid var(--line-strong);font-family:var(--serif);color:var(--accent)}
+.brand small{display:block;color:var(--muted);font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.spacer{flex:1}
+.nav-btn,.theme-btn{min-height:40px;padding:.55rem .8rem;border:1px solid var(--line);background:transparent;text-decoration:none}.theme-btn{min-width:42px}
+.nav-btn:hover,.nav-btn:focus-visible,.theme-btn:hover,.theme-btn:focus-visible{border-color:var(--accent);outline:2px solid color-mix(in srgb,var(--focus) 35%,transparent);outline-offset:2px}
+.page{width:min(1320px,calc(100% - 2rem));margin:auto}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.42fr);gap:clamp(2rem,6vw,7rem);padding:clamp(3.8rem,8vw,7.4rem) 0 clamp(2.8rem,6vw,5rem);border-bottom:1px solid var(--line-strong)}
+.eyebrow{margin:0 0 .7rem;color:var(--accent);font-size:.73rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.hero h1{max-width:8ch;margin:.1rem 0 1.2rem;font:600 clamp(4rem,8vw,8.4rem)/.83 var(--serif);letter-spacing:-.065em}
+.lead{max-width:60rem;margin:0;color:var(--muted);font-size:clamp(1rem,1.4vw,1.2rem)}
+.hero-equation{margin-top:clamp(2rem,5vw,4rem);padding:1.15rem 0;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);font:600 clamp(1.3rem,2.6vw,2.1rem)/1.3 var(--serif)}
+.hero-ledger{align-self:end;border-top:1px solid var(--line-strong)}.ledger-row{display:grid;grid-template-columns:8rem 1fr;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--line)}
+.ledger-row span{color:var(--muted);font-size:.82rem}.ledger-row strong{font-family:var(--serif);font-size:1.02rem}
+.route{display:flex;overflow:auto;border-bottom:1px solid var(--line-strong);scrollbar-width:thin}.route a{white-space:nowrap;padding:.9rem 1rem;text-decoration:none;color:var(--muted);border-right:1px solid var(--line)}
+.route a:hover,.route a:focus-visible{color:var(--accent);background:var(--soft);outline:none}
+.chapter{display:grid;grid-template-columns:minmax(215px,.27fr) minmax(0,.73fr);gap:clamp(2rem,6vw,6.5rem);padding:clamp(3.2rem,7vw,6.2rem) 0;border-bottom:1px solid var(--line-strong)}
+.chapter-index{position:sticky;top:92px;align-self:start}.chapter-index b{display:block;color:color-mix(in srgb,var(--accent) 36%,var(--ink));font:500 clamp(3.8rem,7vw,7rem)/.8 var(--serif);letter-spacing:-.07em}
+.chapter-index h2{margin:1rem 0 .45rem;font:600 clamp(1.65rem,3vw,2.8rem)/1.05 var(--serif);letter-spacing:-.035em}.chapter-index p{margin:0;color:var(--muted)}
+.content{min-width:0}.content h3{margin:2rem 0 .7rem;font:600 clamp(1.25rem,2vw,1.75rem)/1.15 var(--serif)}.prose{max-width:850px;color:var(--muted)}
+.formula{margin:1rem 0 1.35rem;padding:1.25rem 0;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);font:500 clamp(1.45rem,3vw,2.65rem)/1.3 var(--serif);overflow:auto}
+.rule{margin:1.25rem 0;padding:1rem 1.15rem;border-left:3px solid var(--accent);background:var(--soft)}.rule.warning{border-left-color:var(--coral);background:color-mix(in srgb,var(--coral) 8%,var(--page))}
+.steps{counter-reset:step;border-top:1px solid var(--line-strong)}.step{position:relative;padding:1rem 0 1rem 4rem;border-bottom:1px solid var(--line)}.step:before{counter-increment:step;content:counter(step,decimal-leading-zero);position:absolute;left:0;top:1.15rem;color:var(--accent);font:.75rem ui-monospace,SFMono-Regular,Consolas,monospace;font-weight:800;letter-spacing:.1em}
+.boundary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:1.3rem 0}.boundary-grid article{background:var(--raised);padding:1.15rem}.dot{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:.5rem;vertical-align:-1px;border:3px solid var(--coral)}.dot.closed{background:var(--coral)}
+.graph-card{margin:1.4rem 0;border:1px solid var(--line);background:var(--raised);box-shadow:var(--shadow)}.graph-card svg{display:block;width:100%;height:auto;min-height:320px}.graph-note{padding:1rem 1.15rem;border-top:1px solid var(--line);color:var(--muted)}
+.axis{stroke:var(--line-strong);stroke-width:1.4}.grid{stroke:var(--line);stroke-width:.7}.branch-a{stroke:var(--accent);stroke-width:4;fill:none}.branch-b{stroke:var(--coral);stroke-width:4;fill:none}.guide{stroke:var(--green);stroke-width:3;stroke-dasharray:8 7}.label{fill:var(--ink);font:700 16px var(--sans)}.softlabel{fill:var(--muted);font:600 14px var(--sans)}
+.callout{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:1rem;padding:1.2rem;border:1px solid var(--line);background:var(--raised)}.callout a{display:inline-flex;align-items:center;min-height:44px;padding:.65rem .85rem;background:var(--accent);color:#fff;text-decoration:none;font-weight:800}
+.error-list{border-top:1px solid var(--line-strong)}.error{display:grid;grid-template-columns:2rem 1fr;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--line)}.error b{color:var(--coral)}
+.practice{padding:clamp(3.2rem,7vw,6.2rem) 0}.practice h2{max-width:11ch;margin:.2rem 0 1rem;font:600 clamp(2.5rem,5vw,5rem)/.92 var(--serif);letter-spacing:-.055em}
+.exercise{padding:1.2rem 0;border-top:1px solid var(--line)}details{padding:.8rem 0;border-top:1px solid var(--line)}summary{cursor:pointer;color:var(--accent);font-weight:800}
+.resources{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:1.4rem}.resource,.primary{display:inline-flex;min-height:42px;align-items:center;padding:.6rem .8rem;text-decoration:none;border:1px solid var(--line)}.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:800}
+.poster{margin-top:1.6rem;border:1px solid var(--line);background:var(--raised)}.poster img{display:block;width:100%;height:auto}.poster figcaption{padding:.8rem 1rem;color:var(--muted)}
+.checks{margin-top:2rem;border-top:1px solid var(--line-strong)}.check{display:flex;gap:.7rem;align-items:flex-start;padding:.75rem 0;border-bottom:1px solid var(--line)}.check input{width:1.2rem;height:1.2rem;margin-top:.15rem;accent-color:var(--accent)}
+.progress{height:6px;margin-top:1rem;background:var(--line)}.progress span{display:block;height:100%;width:0;background:var(--green);transition:width .25s ease}
+footer{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.5rem 0 2.5rem;border-top:1px solid var(--line-strong);color:var(--muted);font-size:.88rem}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.chapter{grid-template-columns:1fr}.chapter-index{position:static}.boundary-grid{grid-template-columns:1fr}.ledger-row{grid-template-columns:7.2rem 1fr}}
+@media(max-width:600px){.nav{width:min(100% - 1rem,1320px)}.nav .brand small{display:none}.nav-btn.hide-mobile{display:none}.page{width:min(100% - 1.1rem,1320px)}.hero h1{font-size:clamp(3.2rem,17vw,5.4rem)}.graph-card svg{min-height:250px}.callout{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.progress span{transition:none}}
+@media print{.topbar,.route,.checks,.callout a{display:none!important}body{background:#fff;color:#000}.page{width:100%}.chapter,.practice{break-inside:avoid}.graph-card,.poster{box-shadow:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">К содержанию</a>
+<header class="topbar"><nav class="nav" aria-label="Навигация занятия">
+<a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">ƒ</span><span>Марина<small>ОГЭ · математика</small></span></a>
+<span class="spacer"></span>
+<a class="nav-btn hide-mobile" href="../pdf_docs/03.10.26.pdf">PDF</a>
+<a class="nav-btn hide-mobile" href="../tex_docs/03.10.26.tex">TeX</a>
+<a class="nav-btn" href="03.10.26-lab.html">Лаборатория</a>
+<a class="nav-btn" href="index.html">В кабинет</a>
+<button class="theme-btn" id="themeToggle" type="button" aria-label="Переключить тему">◐</button>
+</nav></header>
+
+<main class="page" id="content">
+<section class="hero" aria-labelledby="pageTitle">
+  <div>
+    <p class="eyebrow">Занятие · 03.10.2026</p>
+    <h1 id="pageTitle">Кусочные функции</h1>
+    <p class="lead">Одна функция может состоять из нескольких ветвей. На занятии разобрали, как ограничивать каждую ветвь её областью, работать с открытыми и закрашенными точками, подключать параболу и исследовать число пересечений с горизонталью <b>y=m</b>.</p>
+    <div class="hero-equation">формула ветви + условие для x → только нужная часть графика</div>
+  </div>
+  <aside class="hero-ledger" aria-label="Краткая карточка занятия">
+    <div class="ledger-row"><span>Ученица</span><strong>Марина Селиверстова</strong></div>
+    <div class="ledger-row"><span>Главная идея</span><strong>Каждая ветвь живёт только на своей области x</strong></div>
+    <div class="ledger-row"><span>Критическая точка</span><strong>Граница между ветвями</strong></div>
+    <div class="ledger-row"><span>Исследование</span><strong>Горизонталь y=m и число пересечений</strong></div>
+    <div class="ledger-row"><span>Тренировка</span><strong>1 комплексная задача: прямая + парабола</strong></div>
+  </aside>
+</section>
+
+<nav class="route" aria-label="Маршрут занятия">
+  <a href="#piecewise">01 · Кусочная функция</a>
+  <a href="#boundary">02 · Граница ветвей</a>
+  <a href="#ym">03 · Прямая y=m</a>
+  <a href="#parabola">04 · Парабола</a>
+  <a href="#errors">05 · Ошибки</a>
+  <a href="#practice">06 · Тренировка</a>
+</nav>
+
+<section class="chapter" id="piecewise">
+  <header class="chapter-index"><b>01</b><h2>Собираем график из ветвей</h2><p>Сначала строим знакомые графики, затем ограничиваем их по x.</p></header>
+  <div class="content">
+    <div class="formula">f(x) = { x + 1, если x ≤ −1; &nbsp; 2x + 3, если x &gt; −1 }</div>
+    <div class="steps">
+      <div class="step">Разделите функцию на ветви и выпишите условие для каждой.</div>
+      <div class="step">Постройте каждую формулу как обычный график.</div>
+      <div class="step">Оставьте только те точки, у которых x входит в область этой ветви.</div>
+      <div class="step">Отдельно проверьте граничное значение и соберите ветви на одной координатной плоскости.</div>
+    </div>
+    <div class="rule"><b>Главное:</b> формула говорит, какой график строить; условие говорит, какую часть этого графика оставить.</div>
+
+    <div class="graph-card">
+      <svg viewBox="0 0 760 380" role="img" aria-labelledby="g1t g1d">
+        <title id="g1t">Пример кусочной функции из двух прямых</title>
+        <desc id="g1d">Первая ветвь y=x+1 при x не больше минус одного заканчивается закрашенной точкой минус один, ноль. Вторая ветвь y=2x+3 при x больше минус одного начинается выколотой точкой минус один, один.</desc>
+        <g aria-hidden="true">
+          <line class="axis" x1="65" y1="300" x2="720" y2="300"/><line class="axis" x1="350" y1="35" x2="350" y2="345"/>
+          <line class="grid" x1="200" y1="35" x2="200" y2="345"/><line class="grid" x1="275" y1="35" x2="275" y2="345"/><line class="grid" x1="425" y1="35" x2="425" y2="345"/><line class="grid" x1="500" y1="35" x2="500" y2="345"/>
+          <line class="grid" x1="65" y1="225" x2="720" y2="225"/><line class="grid" x1="65" y1="150" x2="720" y2="150"/>
+          <path class="branch-a" d="M80 345 L275 300"/><circle cx="275" cy="300" r="7" fill="var(--accent)"/>
+          <path class="branch-b" d="M275 225 L505 35"/><circle cx="275" cy="225" r="8" fill="var(--raised)" stroke="var(--coral)" stroke-width="4"/>
+          <text class="label" x="105" y="318">y=x+1</text><text class="label" x="445" y="82">y=2x+3</text>
+          <text class="softlabel" x="284" y="292">(-1;0)</text><text class="softlabel" x="284" y="218">(-1;1)</text><text class="softlabel" x="704" y="290">x</text><text class="softlabel" x="360" y="50">y</text>
+        </g>
+      </svg>
+      <div class="graph-note">В одной вертикали x=−1 ветви подходят к разным значениям y, поэтому возникает разрыв.</div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="boundary">
+  <header class="chapter-index"><b>02</b><h2>Граница решает судьбу точки</h2><p>Строгость неравенства определяет, принадлежит ли точка ветви.</p></header>
+  <div class="content">
+    <div class="boundary-grid">
+      <article><h3><span class="dot closed" aria-hidden="true"></span>Закрашенная</h3><p class="prose">Если условие содержит ≤ или ≥, граничное значение x входит в область ветви.</p></article>
+      <article><h3><span class="dot" aria-hidden="true"></span>Выколотая</h3><p class="prose">Если условие содержит &lt; или &gt;, граничное значение x для этой ветви запрещено.</p></article>
+    </div>
+    <div class="rule warning"><b>Полезный приём:</b> даже запрещённое граничное x подставьте в формулу. Это показывает, куда подходит ветвь. После вычисления отметьте точку открытой или закрытой по условию.</div>
+    <h3>Когда одна ветвь открыта, а другая закрыта</h3>
+    <p class="prose">Если соседняя ветвь содержит ту же точку, итоговая функция в этой координате определена. Поэтому «выколотость» одной ветви не означает автоматически дырку во всём графике.</p>
+  </div>
+</section>
+
+<section class="chapter" id="ym">
+  <header class="chapter-index"><b>03</b><h2>Горизонталь y=m считает решения</h2><p>Двигаем прямую вверх-вниз и следим, где меняется число пересечений.</p></header>
+  <div class="content">
+    <div class="formula">y = m — горизонтальная прямая</div>
+    <p class="prose">Для функции из трёх линейных ветвей на занятии критическими уровнями стали m=−2 и m=1. Именно на этих высотах число общих точек меняется.</p>
+    <div class="steps">
+      <div class="step">Отметьте характерные высоты: точки стыка, вершины и экстремумы.</div>
+      <div class="step">Проверьте сам критический уровень.</div>
+      <div class="step">Проверьте промежутки между критическими уровнями.</div>
+      <div class="step">Считайте только реальные точки ветвей с учётом их областей по x.</div>
+    </div>
+    <div class="rule"><b>Разобранный результат:</b> для трёхветвевой функции из пособия ровно две общие точки получаются при m=−2 или m=1.</div>
+    <div class="callout">
+      <div><p class="eyebrow">Цифровая лаборатория</p><h3>Подвигайте y=m самостоятельно</h3><p class="prose">Переключайте ровно те функции, которые разбирались на занятии, и наблюдайте, как меняется число пересечений.</p></div>
+      <a href="03.10.26-lab.html#ym">Открыть эксперимент →</a>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="parabola">
+  <header class="chapter-index"><b>04</b><h2>Парабола остаётся параболой</h2><p>Строим привычным способом, затем применяем ограничение ветви.</p></header>
+  <div class="content">
+    <div class="formula">f(x) = { x + 9, если x &lt; −3; &nbsp; x² + 2x + 3, если x ≥ −3 }</div>
+    <p class="prose">Для параболы y=x²+2x+3 вершина находится в точке (−1;2). В точке перехода x=−3 обе формулы дают 6, поэтому ветви встречаются в координате (−3;6).</p>
+    <div class="graph-card">
+      <svg viewBox="0 0 760 420" role="img" aria-labelledby="g2t g2d">
+        <title id="g2t">Кусочная функция из прямой и параболы</title>
+        <desc id="g2d">Линейная ветвь y=x+9 существует при x меньше минус трёх. Парабола y=x квадрат плюс 2x плюс 3 существует при x не меньше минус трёх, имеет вершину минус один, два и проходит через точку минус три, шесть.</desc>
+        <g aria-hidden="true">
+          <line class="axis" x1="55" y1="340" x2="720" y2="340"/><line class="axis" x1="430" y1="35" x2="430" y2="385"/>
+          <line class="grid" x1="180" y1="35" x2="180" y2="385"/><line class="grid" x1="305" y1="35" x2="305" y2="385"/><line class="grid" x1="555" y1="35" x2="555" y2="385"/>
+          <line class="grid" x1="55" y1="260" x2="720" y2="260"/><line class="grid" x1="55" y1="180" x2="720" y2="180"/><line class="grid" x1="55" y1="100" x2="720" y2="100"/>
+          <path class="branch-a" d="M70 300 L305 180"/><circle cx="305" cy="180" r="8" fill="var(--raised)" stroke="var(--accent)" stroke-width="4"/>
+          <path class="branch-b" d="M305 180 C350 270 390 300 430 300 C470 300 515 270 590 65"/>
+          <circle cx="305" cy="180" r="7" fill="var(--coral)"/><circle cx="430" cy="300" r="7" fill="var(--coral)"/>
+          <text class="label" x="100" y="286">y=x+9</text><text class="label" x="545" y="82">y=x²+2x+3</text>
+          <text class="softlabel" x="315" y="168">(-3;6)</text><text class="softlabel" x="442" y="322">(-1;2)</text><text class="softlabel" x="705" y="330">x</text><text class="softlabel" x="440" y="50">y</text>
+        </g>
+      </svg>
+      <div class="graph-note">Для этой функции ровно две точки пересечения с y=m получаются при m=2 и m=6.</div>
+    </div>
+
+    <h3>Если корни «некрасивые»</h3>
+    <p class="prose">Во втором разобранном примере парабола имела нули x=−1±√14 ≈ −4,74 и 2,74. На эскизе их можно отметить приближённо. Важно сохранить симметрию относительно оси x=−1 и отдельно вычислить граничную точку x=−5.</p>
+    <div class="rule"><b>Разобранный результат:</b> для функции с ветвями −x−7 и −x²−2x+13 ровно две точки пересечения с y=m получаются при m=−2 и m=14.</div>
+  </div>
+</section>
+
+<section class="chapter" id="errors">
+  <header class="chapter-index"><b>05</b><h2>Пять ошибок, которые ломают график</h2><p>Проверка занимает меньше минуты.</p></header>
+  <div class="content">
+    <div class="error-list">
+      <div class="error"><b>01</b><span>Продолжить ветвь туда, где условие для x уже не выполняется.</span></div>
+      <div class="error"><b>02</b><span>Забыть вычислить значение в точке перехода.</span></div>
+      <div class="error"><b>03</b><span>Перепутать открытую и закрашенную граничную точку.</span></div>
+      <div class="error"><b>04</b><span>Считать выколотую точку одной ветви дыркой всего графика, не проверив соседнюю ветвь.</span></div>
+      <div class="error"><b>05</b><span>При параболе потерять ось симметрии или оставить запрещённую часть ветви.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="practice" id="practice" aria-labelledby="practiceTitle">
+  <p class="eyebrow">Путь А · итог занятия</p>
+  <h2 id="practiceTitle">Одна комплексная задача</h2>
+  <article class="exercise">
+    <h3>Прямая + парабола</h3>
+    <p>Для функции <b>f(x)=−x−7 при x&lt;−5</b> и <b>f(x)=−x²−2x+13 при x≥−5</b> найдите вершину параболы, её нули в точном и приближённом виде, постройте обе ветви с учётом областей и определите все значения m, при которых y=m имеет с графиком ровно две общие точки.</p>
+    <details><summary>Показать ответ</summary><p>Вершина (−1;14); нули x=−1±√14 ≈ −4,74 и 2,74; точка перехода (−5;−2), причём параболическая ветвь её содержит; m=−2 или m=14.</p></details>
+  </article>
+
+  <div class="checks" aria-labelledby="checkTitle"><h3 id="checkTitle">Самопроверка</h3>
+    <label class="check"><input type="checkbox" data-check="domains"><span>Каждая ветвь нарисована только на своей области x.</span></label>
+    <label class="check"><input type="checkbox" data-check="boundary"><span>Граничное значение подставлено в соседние формулы.</span></label>
+    <label class="check"><input type="checkbox" data-check="dots"><span>Открытые и закрашенные точки поставлены по знаку неравенства.</span></label>
+    <label class="check"><input type="checkbox" data-check="ym"><span>При подсчёте пересечений с y=m я учитываю ограничения ветвей.</span></label>
+    <div class="progress" aria-hidden="true"><span id="checkProgress"></span></div><p class="prose" id="checkText">0 из 4 пунктов отмечено.</p>
+  </div>
+
+  <div class="resources" aria-label="Материалы занятия">
+    <a class="primary" href="03.10.26-lab.html">Цифровая лаборатория</a>
+    <a class="resource" href="../pdf_docs/03.10.26.pdf">PDF пособия</a>
+    <a class="resource" href="../tex_docs/03.10.26.tex">TeX</a>
+    <a class="resource" href="../images/03.10.26.png">Постер</a>
+  </div>
+
+  <figure class="poster">
+    <img src="../images/03.10.26.png" alt="Учебный постер «Кусочные функции»: построение ветвей, граница, парабола, прямая y=m и частые ошибки." loading="lazy">
+    <figcaption>Постер занятия: короткая визуальная памятка по ключевым шагам.</figcaption>
+  </figure>
+</section>
+
+<footer><span>Марина Селиверстова · персональный материал</span><span>Лёвин Артём Александрович · 03.10.2026</span></footer>
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var root=document.documentElement;
+  try{root.setAttribute('data-theme',localStorage.getItem('marina-theme')||'light')}catch(_){root.setAttribute('data-theme','light')}
+  document.getElementById('themeToggle').addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem('marina-theme',next)}catch(_){}
+  });
+  var checks=[].slice.call(document.querySelectorAll('[data-check]')),state={};
+  try{state=JSON.parse(localStorage.getItem('marina-031026-checks')||'{}')||{}}catch(_){}
+  function sync(){
+    var done=0;state={};
+    checks.forEach(function(c){state[c.dataset.check]=c.checked;if(c.checked)done++});
+    try{localStorage.setItem('marina-031026-checks',JSON.stringify(state))}catch(_){}
+    document.getElementById('checkProgress').style.width=(done/checks.length*100)+'%';
+    document.getElementById('checkText').textContent=done+' из '+checks.length+' пунктов отмечено.';
+  }
+  checks.forEach(function(c){c.checked=!!state[c.dataset.check];c.addEventListener('change',sync)});
+  sync();
+})();
+</script>
+</body>
+</html>
