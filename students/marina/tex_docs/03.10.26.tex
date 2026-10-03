@@ -1,0 +1,385 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=18mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{array}
+
+\definecolor{accent}{HTML}{2F6F6D}
+\definecolor{darkaccent}{HTML}{1F4E4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{F3F5F4}
+\definecolor{warn}{HTML}{8B5A2B}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=5mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=5pt,topsep=4pt}
+\renewcommand{\arraystretch}{1.25}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{textgray}Кусочные функции}
+\fancyhead[R]{\small\color{textgray}03.10.2026}
+\fancyfoot[C]{\small\thepage}
+\setlength{\headheight}{15pt}
+
+\newcommand{\sectionline}{\par\vspace{1mm}{\color{accent}\rule{\linewidth}{0.6pt}}\par\vspace{1mm}}
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\warntext}[1]{\textbf{\color{warn}#1}}
+
+\tikzset{
+  startstop/.style={ellipse, draw=darkaccent, line width=0.9pt, align=center, minimum width=35mm, minimum height=10mm, fill=softgray},
+  process/.style={rectangle, rounded corners=2mm, draw=accent, line width=0.9pt, align=center, text width=52mm, minimum height=12mm, fill=white},
+  decision/.style={diamond, aspect=2.0, draw=warn, line width=0.9pt, align=center, text width=42mm, inner sep=1.5pt, fill=white},
+  arrow/.style={-{Latex[length=3mm]}, line width=0.9pt, draw=textgray}
+}
+
+\begin{document}
+
+% ---------- title ----------
+\thispagestyle{empty}
+\begin{center}
+\vspace*{18mm}
+{\Large\color{textgray}Математика • ОГЭ}\par
+\vspace{8mm}
+{\Huge\bfseries\color{darkaccent}Чек-лист}\par
+\vspace{5mm}
+{\LARGE\bfseries Кусочные функции и прямая $y=m$}\par
+\vspace{12mm}
+{\large Построение ветвей • границы • открытые и закрашенные точки • число пересечений}\par
+\vfill
+{\large 03.10.2026}\par
+\vspace{10mm}
+{\large\bfseries Лёвин Артём Александрович}\par
+{\large эксклюзивно для Марины Селиверстовой}\par
+\vspace{18mm}
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent!65,line width=1.2pt]
+    ([xshift=18mm,yshift=18mm]current page.south west)
+    .. controls ([xshift=62mm,yshift=31mm]current page.south west)
+    and ([xshift=-70mm,yshift=9mm]current page.south east)
+    .. ([xshift=-18mm,yshift=20mm]current page.south east);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{1. Что такое кусочная функция}
+\sectionline
+Кусочная функция задаётся \key{несколькими формулами}, причём каждая формула работает только на своей части оси $x$.
+
+Например,
+\[
+f(x)=
+\begin{cases}
+ x+1, & x\le -1,\\
+ 2x+3, & x>-1.
+\end{cases}
+\]
+
+Чтобы построить её график, нужно строить каждую ветвь как обычную функцию, но \key{оставлять только ту часть графика, которая удовлетворяет условию для $x$}.
+
+\subsection*{Главная мысль}
+\begin{itemize}
+  \item Формула отвечает на вопрос: \emph{какой график строим?}
+  \item Условие рядом с формулой отвечает на вопрос: \emph{какую часть этого графика оставляем?}
+  \item В точке перехода между ветвями нужно отдельно проверить обе формулы.
+\end{itemize}
+
+\subsection*{Граница ветви: закрашивать или выкалывать?}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{35mm}X@{}}
+\toprule
+Условие & Что происходит в граничной точке \\
+\midrule
+$x\le a$ или $x\ge a$ & Точка принадлежит ветви: ставим закрашенную точку. \\
+$x<a$ или $x>a$ & Точка не принадлежит ветви: ставим выколотую точку. \\
+Одна ветвь открыта, другая закрыта & Если закрытая ветвь содержит эту координату, точка функции существует. \\
+\bottomrule
+\end{tabularx}
+
+\warntext{Важно.} Даже если значение $x=a$ запрещено для одной ветви, его полезно подставить в формулу, чтобы понять, куда эта ветвь подходит к границе. После этого точку отмечают открытой или закрытой по условию.
+
+\clearpage
+\section*{2. Пример: две линейные ветви и разрыв}
+\sectionline
+Рассмотрим
+\[
+f(x)=
+\begin{cases}
+ x+1, & x\le -1,\\
+ 2x+3, & x>-1.
+\end{cases}
+\]
+
+\key{Шаг 1.} Для первой ветви $y=x+1$ берём, например, $x=-2$ и граничное $x=-1$:
+\[
+f(-2)=-1,\qquad f(-1)=0.
+\]
+Точка $(-1;0)$ закрашена, потому что $x=-1$ разрешён.
+
+\key{Шаг 2.} Для второй ветви $y=2x+3$ берём $x=0$ и снова считаем граничное значение:
+\[
+y(-1)=1,\qquad y(0)=3.
+\]
+Точка $(-1;1)$ выколота, потому что условие строгое: $x>-1$.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.78\linewidth,height=72mm,
+  axis lines=middle,xmin=-4,xmax=3,ymin=-4,ymax=6,
+  xtick={-3,-2,-1,0,1,2},ytick={-3,-2,-1,0,1,2,3,4,5},
+  grid=both,minor tick num=0,
+  xlabel={$x$},ylabel={$y$},
+  unit vector ratio=1 1,
+  clip=false]
+\addplot[accent,very thick,domain=-4:-1,samples=100]{x+1};
+\addplot[darkaccent,very thick,domain=-1:1.5,samples=100]{2*x+3};
+\addplot[only marks,mark=*,mark size=2.4pt,accent] coordinates {(-1,0)};
+\addplot[only marks,mark=o,mark size=3pt,darkaccent,mark options={fill=white}] coordinates {(-1,1)};
+\node[anchor=south east,text=accent] at (axis cs:-2.2,-1.2) {$y=x+1$};
+\node[anchor=west,text=darkaccent] at (axis cs:0.4,4.1) {$y=2x+3$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+В одной и той же вертикали $x=-1$ ветви приходят к разным значениям $y$. Поэтому график имеет \key{разрыв}.
+
+\subsection*{Быстрая самопроверка}
+Перед тем как продолжить график за границу, спросите себя: \emph{разрешены ли такие $x$ в условии этой ветви?}
+
+\clearpage
+\section*{3. Три ветви и «передача эстафеты»}
+\sectionline
+Рассмотрим функцию
+\[
+f(x)=
+\begin{cases}
+2x+1, & x<0,\\
+-\dfrac{3}{2}x+1, & 0\le x<2,\\
+x-4, & x\ge2.
+\end{cases}
+\]
+
+В граничных точках:
+\[
+\begin{aligned}
+x=0:&\quad 2\cdot0+1=1,\qquad -\frac32\cdot0+1=1;\\
+x=2:&\quad -\frac32\cdot2+1=-2,\qquad 2-4=-2.
+\end{aligned}
+\]
+
+Значения ветвей совпадают. Если одна ветвь в границе открыта, а соседняя закрыта, то на итоговом графике эта точка всё равно присутствует как закрашенная. Здесь обе «передачи эстафеты» происходят без скачка.
+
+\subsection*{Как искать значения $m$ в задаче про $y=m$}
+Прямая $y=m$ горизонтальна. Мысленно двигаем её снизу вверх и считаем точки пересечения с графиком.
+
+Для этой функции:
+\begin{itemize}
+  \item при $m<-2$ — одна точка;
+  \item при $m=-2$ — две точки;
+  \item при $-2<m<1$ — три точки;
+  \item при $m=1$ — две точки;
+  \item при $m>1$ — одна точка.
+\end{itemize}
+
+Следовательно, ровно две общие точки получаются при
+\[
+\boxed{m=-2\quad\text{или}\quad m=1}.
+\]
+
+\warntext{Ключевой приём.} Количество пересечений меняется в особых уровнях: на высотах граничных точек, вершин, максимумов, минимумов и других характерных точек графика.
+
+\clearpage
+\section*{4. Если одна из ветвей — парабола}
+\sectionline
+Кусочная функция не меняет правила построения знакомых графиков. Параболу строим по обычному алгоритму, а затем оставляем только разрешённую часть.
+
+Рассмотрим
+\[
+f(x)=
+\begin{cases}
+x+9, & x<-3,\\
+x^2+2x+3, & x\ge-3.
+\end{cases}
+\]
+
+Для параболы $y=x^2+2x+3$:
+\[
+x_{\text{в}}=-\frac{b}{2a}=-1,\qquad y_{\text{в}}=2.
+\]
+То есть вершина: $(-1;2)$.
+
+В точке перехода $x=-3$:
+\[
+(-3)+9=6,\qquad (-3)^2+2(-3)+3=6.
+\]
+Ветви встречаются в одной точке $(-3;6)$.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.8\linewidth,height=78mm,
+  axis lines=middle,xmin=-8,xmax=4,ymin=-2,ymax=11,
+  xtick={-7,-6,-5,-4,-3,-2,-1,0,1,2,3},
+  ytick={0,2,4,6,8,10},grid=both,
+  xlabel={$x$},ylabel={$y$},unit vector ratio=1 1,clip=false]
+\addplot[accent,very thick,domain=-8:-3,samples=100]{x+9};
+\addplot[darkaccent,very thick,domain=-3:2,samples=180]{x^2+2*x+3};
+\addplot[only marks,mark=o,mark size=3pt,accent,mark options={fill=white}] coordinates {(-3,6)};
+\addplot[only marks,mark=*,mark size=2.4pt,darkaccent] coordinates {(-3,6) (-1,2)};
+\node[anchor=north west,text=accent] at (axis cs:-6.7,3.0) {$y=x+9$};
+\node[anchor=west,text=darkaccent] at (axis cs:0.1,4.2) {$y=x^2+2x+3$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+Для горизонтальной прямой $y=m$ ровно две точки пересечения получаются при
+\[
+\boxed{m=2\quad\text{или}\quad m=6}.
+\]
+При $m=2$ одна точка — вершина параболы, вторая лежит на линейной ветви. При $m=6$ горизонталь пересекает параболу в двух допустимых точках, а линейная ветвь в $x=-3$ открыта.
+
+\clearpage
+\section*{5. Неприятные корни — это нормально}
+\sectionline
+Рассмотрим
+\[
+f(x)=
+\begin{cases}
+-x-7, & x<-5,\\
+-x^2-2x+13, & x\ge-5.
+\end{cases}
+\]
+
+Парабола имеет вершину
+\[
+(-1;14),
+\]
+а её нули находятся из
+\[
+-x^2-2x+13=0\quad\Longleftrightarrow\quad x^2+2x-13=0,
+\]
+поэтому
+\[
+x=-1\pm\sqrt{14}\approx -4{,}74\quad\text{и}\quad 2{,}74.
+\]
+
+\key{Что важно на эскизе:}
+\begin{itemize}
+  \item не требуется изображать иррациональные координаты идеально точно;
+  \item обе точки пересечения параболы с осью $x$ должны быть симметричны относительно вертикали $x=-1$;
+  \item точка перехода при $x=-5$ должна быть вычислена отдельно: $f(-5)=-2$;
+  \item на экзамене важна корректная геометрия эскиза и логика, а не художественная точность.
+\end{itemize}
+
+В задаче «при каких $m$ прямая $y=m$ имеет ровно две общие точки с графиком?» критические уровни здесь:
+\[
+\boxed{m=-2\quad\text{и}\quad m=14}.
+\]
+
+\subsection*{Частые ошибки}
+\begin{itemize}[itemsep=0.5pt,topsep=1pt]
+  \item продолжить ветвь в область, где её условие уже не выполняется;
+  \item забыть проверить граничное значение $x$;
+  \item закрасить точку при строгом неравенстве или выколоть её при нестрогом;
+  \item считать выколотую точку отсутствующей во всём графике, хотя соседняя ветвь может содержать ту же точку;
+  \item при анализе $y=m$ смотреть только на формулы и не учитывать ограничения на $x$;
+  \item строить параболу целиком, а затем забыть удалить запрещённую часть;
+  \item располагать корни параболы несимметрично относительно оси симметрии.
+\end{itemize}
+
+\clearpage
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: как строить и анализировать кусочную функцию}
+\end{center}
+\vspace{5mm}
+
+\begin{center}
+\begin{tikzpicture}[node distance=7mm, every node/.style={font=\small}]
+\node[startstop] (start) {Прочитать все формулы и условия для $x$};
+\node[process, text width=78mm, below=of start] (split) {Разделить функцию на ветви и для каждой записать её область по $x$};
+\node[process, text width=78mm, below=of split] (bounds) {Найти все граничные значения $x$ и подставить их в соседние формулы};
+\node[process, text width=78mm, below=of bounds] (build) {Построить знакомые графики по ключевым точкам и оставить только разрешённые части};
+\node[process, text width=78mm, below=of build] (points) {Отметить границы: нестрогое неравенство — точка закрашена; строгое — выколота};
+\node[process, text width=78mm, below=of points] (combine) {Объединить ветви и проверить, есть ли скачки, изломы или совпадение точек перехода};
+\node[decision, text width=36mm, below=10mm of combine] (param) {Нужно исследовать $y=m$?};
+\node[process, text width=60mm, below left=10mm and 8mm of param] (finish) {Проверить масштаб, подписи, области и граничные точки};
+\node[process, text width=60mm, below right=10mm and 8mm of param] (scan) {Отметить критические уровни $m$: значения в границах, вершинах и экстремумах};
+\node[process, text width=78mm, below=14mm of param] (count) {Для каждого промежутка между критическими уровнями посчитать число пересечений горизонтали $y=m$};
+\node[startstop, below=of count] (end) {Записать ответ и контрольным проходом пересчитать точки};
+
+\draw[arrow] (start) -- (split);
+\draw[arrow] (split) -- (bounds);
+\draw[arrow] (bounds) -- (build);
+\draw[arrow] (build) -- (points);
+\draw[arrow] (points) -- (combine);
+\draw[arrow] (combine) -- (param);
+\draw[arrow] (param) -| node[pos=0.25,above]{нет} (finish);
+\draw[arrow] (param) -| node[pos=0.25,above]{да} (scan);
+\draw[arrow] (finish) |- (count);
+\draw[arrow] (scan) |- (count);
+\draw[arrow] (count) -- (end);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{6. Тренировочный блок — Путь А}
+\sectionline
+\textbf{1 задача.} Постройте график кусочной функции. Обязательно отметьте граничную точку и учитывайте ограничения на $x$.
+
+\begin{enumerate}
+\item Для функции
+\[
+f(x)=\begin{cases}
+-x-7,&x<-5,\\
+-x^2-2x+13,&x\ge-5
+\end{cases}
+\]
+найдите вершину параболы, её нули в точном и приближённом виде, постройте обе ветви с учётом их областей и определите все значения $m$, при которых прямая $y=m$ имеет с графиком ровно две общие точки.
+\end{enumerate}
+
+\clearpage
+\section*{7. Ответы}
+\sectionline
+\begin{longtable}{@{}>{\bfseries}p{10mm}p{0.86\linewidth}@{}}
+\toprule
+№ & Ответ \\
+\midrule
+\endfirsthead
+\toprule
+№ & Ответ \\
+\midrule
+\endhead
+1 & Вершина $(-1;14)$; нули параболы $x=-1\pm\sqrt{14}\approx-4{,}74$ и $2{,}74$; в точке перехода $(-5;-2)$ параболическая ветвь закрашена, линейная подходит к той же точке, но при $x=-5$ не существует; $m=-2$ или $m=14$. \\
+\bottomrule
+\end{longtable}
+
+\subsection*{Финальная самопроверка}
+Перед сдачей любой задачи с кусочной функцией проверьте четыре вещи:
+\begin{enumerate}[label=\arabic*)]
+  \item каждая ветвь построена только на своей области;
+  \item все граничные $x$ подставлены в соседние формулы;
+  \item открытые и закрашенные точки отмечены по знаку неравенства;
+  \item в задаче про $y=m$ количество пересечений посчитано с учётом ограничений на $x$.
+\end{enumerate}
+
+\end{document}
