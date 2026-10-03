@@ -37,7 +37,7 @@ const levels={
   exam_28:2
 };
 data.baselineLevels={...(data.baselineLevels||{}),...levels};
-data.repeatTopics=[...new Set([...(data.repeatTopics||[]),'measure_03','kin_04','kin_06','kin_07','kin_08','kin_10','kin_12','kin_13','kin_15','kin_16','kin_17','kin_18','kin_19','kin_21','kin_22','kin_24','exam_02','exam_03','exam_23','exam_24','exam_25','exam_26','exam_27','exam_28'])];
+data.repeatTopics=[...new Set([...(data.repeatTopics||[]),'kin_26','kin_27','kin_28','measure_03','kin_04','kin_06','kin_07','kin_08','kin_10','kin_12','kin_13','kin_15','kin_16','kin_17','kin_18','kin_19','kin_21','kin_22','kin_24','exam_02','exam_03','exam_23','exam_24','exam_25','exam_26','exam_27','exam_28'])];
 
 const evidence={
   kin_01:['Тема разбиралась на занятии 22.08.26: критерий модели материальной точки, примеры с поездом и автомобилем.'],
@@ -134,8 +134,27 @@ const lesson30Evidence={
 };
 for(const [id,note] of Object.entries(lesson30Evidence))evidence[id]=[...(evidence[id]||[]),note];
 
+const lesson03OctEvidence={
+  kin_04:'03.10.26 путь по графику v(t) связывается с суммой модулей площадей; при пересечении v=0 отдельно фиксируется смена направления и различие пути и перемещения.',
+  kin_17:'03.10.26 ускорение систематизировано как наклон прямого участка графика v(t): aₓ=Δvₓ/Δt, с контролем знака и единицы м/с².',
+  kin_18:'03.10.26 равноускоренное движение рассматривается через линейный график v(t), постоянный наклон и формулы вертикального движения.',
+  kin_19:'03.10.26 закон скорости используется в вертикальном движении в форме vᵧ=v₀ᵧ−gt после выбора +Oy вверх.',
+  kin_20:'03.10.26 закон координаты/перемещения применяется к вертикальному движению: y=y₀+v₀ᵧt−gt²/2.',
+  kin_24:'03.10.26 график скорости читается по наклону, знаку v и пересечению v=0; путь вычисляется геометрически по площади между графиком и осью времени.',
+  kin_26:'03.10.26 в материале введено свободное падение при +Oy вверх: aᵧ=−g, vᵧ=−gt, y=h−gt²/2.',
+  kin_27:'03.10.26 в материале разобран вертикальный бросок вверх: vᵧ=v₀−gt, верхняя точка при vᵧ=0, tподъёма=v₀/g.',
+  kin_28:'03.10.26 отдельно закреплён выбор знаков при вертикальном движении: +Oy вверх, поэтому проекция ускорения свободного падения равна −g.',
+  exam_02:'03.10.26 выбор способа решения связывается с видом данных: наклон графика для ускорения, площадь для пути, кинематические формулы для вертикального движения.',
+  exam_03:'03.10.26 для ускорения отдельно используется размерностная проверка м/с².',
+  exam_24:'03.10.26 в тренировочном блоке требуется сначала записать формулу, затем выполнить подстановку.',
+  exam_27:'03.10.26 в тренировочном блоке требуется сопровождать численный ответ единицами измерения.',
+  exam_28:'03.10.26 физический смысл проверяется по знакам v и a, моменту v=0 и корректной интерпретации участков графика ниже оси времени.'
+};
+for(const [id,note] of Object.entries(lesson03OctEvidence))evidence[id]=[...(evidence[id]||[]),note];
+
 data.evidence={...(data.evidence||{}),...evidence};
 
+const material03Oct={href:'03.10.26.html',label:'Открыть занятие 03.10.26 →'};
 const material30={href:'30.09.26.html',label:'Открыть занятие 30.09.26 →'};
 const material26={href:'26.09.26.html',label:'Открыть занятие 26.09.26 →'};
 const material23={href:'23.09.26.html',label:'Открыть занятие 23.09.26 →'};
@@ -148,6 +167,20 @@ const material12={href:'12.09.26.html',label:'Открыть занятие 12.0
 const material16={href:'16.09.26.html',label:'Открыть занятие 16.09.26 →'};
 data.topicMaterials={
   ...(data.topicMaterials||{}),
+  kin_04:material03Oct,
+  kin_17:material03Oct,
+  kin_18:material03Oct,
+  kin_19:material03Oct,
+  kin_20:material03Oct,
+  kin_24:material03Oct,
+  kin_26:material03Oct,
+  kin_27:material03Oct,
+  kin_28:material03Oct,
+  exam_02:material03Oct,
+  exam_03:material03Oct,
+  exam_24:material03Oct,
+  exam_27:material03Oct,
+  exam_28:material03Oct,
   measure_03:material26,
   kin_04:material26,
   kin_05:material26,
@@ -243,8 +276,26 @@ data.topicMaterials={
   exam_28:material30
 };
 
+Object.assign(data.topicMaterials,{
+  kin_04:material03Oct,
+  kin_17:material03Oct,
+  kin_18:material03Oct,
+  kin_19:material03Oct,
+  kin_20:material03Oct,
+  kin_24:material03Oct,
+  kin_26:material03Oct,
+  kin_27:material03Oct,
+  kin_28:material03Oct,
+  exam_02:material03Oct,
+  exam_03:material03Oct,
+  exam_24:material03Oct,
+  exam_27:material03Oct,
+  exam_28:material03Oct
+});
+
 data.materials=[
   ...(data.materials||[]),
+  {date:'03.10.26',title:'Графики скорости и вертикальное движение',href:'03.10.26.html',pdf:'../pdf_docs/03.10.26.pdf',tex:'../tex_docs/03.10.26.tex',lab:'03.10.26-lab.html'},
   {date:'30.09.26',title:'Движение протяжённых тел и условие встречи',href:'30.09.26.html',pdf:'../pdf_docs/30.09.26.pdf',tex:'../tex_docs/30.09.26.tex',lab:'30.09.26-lab.html'},
   {date:'26.09.26',title:'Средняя скорость: полный путь, полное время и доли пути',href:'26.09.26.html',pdf:'../pdf_docs/26.09.26.pdf',tex:'../tex_docs/26.09.26.tex'},
   {date:'23.09.26',title:'Равноускоренное движение: x(t), v(t) и перемещение за n-ю секунду',href:'23.09.26.html',pdf:'../pdf_docs/23.09.26.pdf',tex:'../tex_docs/23.09.26.tex',lab:'23.09.26-lab.html'},

@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория к занятию 03.10.26: график v(t), ускорение, путь по площади и вертикальное движение.">
+<title>Лаборатория v(t) и вертикального движения — 03.10.26</title>
+<link rel="stylesheet" href="../../../design-system/tokens.css?v=20260919-2">
+<link rel="stylesheet" href="../../../design-system/foundations.css?v=20260919-2">
+<style>
+:root{--paper:#f3f6f5;--surface:#fff;--ink:#172727;--muted:#607070;--line:#c9d7d5;--soft:#e8f0ef;--teal:#2e6f73;--teal2:#18484b;--amber:#b6782d;--red:#9c5148;--good:#2e755b;--grid:#dde7e5;--shadow:0 18px 46px rgba(24,72,75,.09)}
+html[data-theme="dark"]{--paper:#0d1718;--surface:#142224;--ink:#edf6f5;--muted:#a9bcba;--line:#314849;--soft:#1b3032;--teal:#7fc0c3;--teal2:#b8dfe0;--amber:#e2b36f;--red:#e2968d;--good:#7ac7aa;--grid:#294043;--shadow:0 18px 48px rgba(0,0,0,.26)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.58 Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}a{color:inherit}.skip{position:absolute;left:-9999px}.skip:focus{left:16px;top:12px;z-index:99;background:var(--surface);padding:10px 14px;border:2px solid var(--teal)}button,input,select{font:inherit}.shell{width:min(1240px,calc(100% - 30px));margin:auto}
+.topbar{position:sticky;top:0;z-index:40;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--paper) 93%,transparent);backdrop-filter:blur(12px)}.topbar .shell{min-height:62px;display:flex;gap:12px;align-items:center}.back{font-weight:780;text-decoration:none}.folio{margin-left:auto;color:var(--muted);font:700 12px ui-monospace,Consolas,monospace;letter-spacing:.08em}.theme{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:8px 11px;cursor:pointer}
+.intro{padding:42px 0 24px}.eyebrow{margin:0 0 8px;color:var(--teal);font:800 12px ui-monospace,Consolas,monospace;letter-spacing:.11em;text-transform:uppercase}.intro h1{font-size:clamp(36px,5vw,64px);line-height:1;letter-spacing:-.045em;margin:0;max-width:920px}.intro p{color:var(--muted);font-size:18px;max-width:850px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}.tab{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:10px 14px;font-weight:780;cursor:pointer}.tab[aria-selected="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.lab{display:none}.lab.active{display:block}.workspace{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:22px;align-items:start;padding:18px 0 64px}.instrument{background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);padding:16px}.instrument-head{display:flex;justify-content:space-between;gap:12px;align-items:end;border-bottom:1px solid var(--line);padding-bottom:12px}.instrument-head b{font:800 12px ui-monospace,Consolas,monospace;letter-spacing:.09em}.instrument-head span{color:var(--muted);font-size:13px}.canvas-wrap{position:relative;min-height:440px;margin-top:12px;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;overflow:hidden}.canvas-wrap canvas{display:block;width:100%;height:440px;touch-action:none}.tip{position:absolute;left:16px;bottom:14px;padding:7px 9px;border:1px solid var(--line);background:color-mix(in srgb,var(--surface) 88%,transparent);color:var(--muted);font-size:12px}
+.readouts{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}.readout{padding:14px 12px;border-right:1px solid var(--line)}.readout:last-child{border-right:0}.readout span{display:block;color:var(--muted);font:700 10px ui-monospace,Consolas,monospace;text-transform:uppercase}.readout b{display:block;font-size:20px;margin-top:4px}
+.panel{background:var(--surface);border-top:3px solid var(--teal);padding:18px}.panel h2{font-size:24px;margin:0 0 8px}.panel p{color:var(--muted)}.control{padding:13px 0;border-top:1px solid var(--line)}.control label{display:flex;justify-content:space-between;gap:12px;font-weight:760}.control output{color:var(--teal);font-variant-numeric:tabular-nums}.control input[type=range]{width:100%;accent-color:var(--teal);margin-top:10px}.presets{display:grid;gap:8px;margin:10px 0 18px}.preset{border:1px solid var(--line);background:var(--surface);color:var(--ink);text-align:left;border-radius:8px;padding:10px 11px;cursor:pointer}.preset.active{border-color:var(--teal);box-shadow:inset 3px 0 var(--teal)}.btn{min-height:42px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:9px 12px;font-weight:760;cursor:pointer}.btn.primary{background:var(--teal);border-color:var(--teal);color:#fff}.btn-row{display:flex;gap:8px;flex-wrap:wrap}.explain{margin-top:18px;padding:14px 15px;background:var(--soft);border-left:4px solid var(--teal)}.explain strong{display:block;margin-bottom:4px}.explain p{margin:0;color:var(--ink)}.warn{background:color-mix(in srgb,var(--amber) 14%,var(--surface));border-left-color:var(--amber)}
+.formula{font-family:"Cambria Math","STIX Two Math",serif;font-size:24px;overflow-x:auto;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:14px 0}.challenge{margin-top:20px;border-top:2px solid var(--amber);padding-top:16px}.challenge h3{margin:0 0 8px}.choice{display:flex;gap:8px;flex-wrap:wrap}.choice button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:8px 11px;cursor:pointer}.choice button.good{border-color:var(--good);box-shadow:inset 3px 0 var(--good)}.choice button.bad{border-color:var(--red);box-shadow:inset 3px 0 var(--red)}.feedback{min-height:1.5em;color:var(--muted)}
+.vertical-stage{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:18px;align-items:stretch}.tower{position:relative;min-height:440px;border-left:2px solid var(--line);border-bottom:2px solid var(--line);margin:0 22px}.ground{position:absolute;left:0;right:0;bottom:0;border-bottom:4px solid var(--ink)}.ball{position:absolute;left:50%;transform:translate(-50%,50%);width:26px;height:26px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 7px color-mix(in srgb,var(--teal) 16%,transparent)}.height-label{position:absolute;left:calc(50% + 22px);transform:translateY(50%);color:var(--muted);font:700 12px ui-monospace,Consolas,monospace}.axis-y{position:absolute;right:8px;top:16px;bottom:16px;width:1px;background:var(--muted)}.axis-y:before{content:"↑ +Oy";position:absolute;right:-8px;top:-6px;transform:translateX(100%);color:var(--muted);font:700 11px ui-monospace,Consolas,monospace;white-space:nowrap}.vector{position:absolute;left:50%;width:3px;background:var(--amber);transform:translateX(-50%);transform-origin:top}.vector:after{content:"";position:absolute;left:50%;bottom:-1px;transform:translate(-50%,100%);border-top:10px solid var(--amber);border-left:6px solid transparent;border-right:6px solid transparent}
+.timeline{display:flex;align-items:center;gap:10px;margin-top:14px}.timeline input{flex:1;accent-color:var(--teal)}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--teal) 55%,transparent);outline-offset:3px}
+@media(max-width:900px){.workspace{grid-template-columns:1fr}.readouts{grid-template-columns:1fr 1fr}.canvas-wrap,.canvas-wrap canvas{height:390px}.canvas-wrap{min-height:390px}}
+@media(max-width:560px){.shell{width:min(100% - 20px,1240px)}.folio{display:none}.readouts{grid-template-columns:1fr}.readout{border-right:0;border-bottom:1px solid var(--line)}.canvas-wrap,.canvas-wrap canvas{height:330px}.canvas-wrap{min-height:330px}.vertical-stage{grid-template-columns:1fr}.tower{min-height:380px}.tabs .tab{flex:1}.btn{flex:1}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">К лаборатории</a>
+<header class="topbar"><div class="shell"><a class="back" href="03.10.26.html">← К занятию</a><span class="folio">ЛАБОРАТОРИЯ · 03.10.26</span><button class="theme" id="themeToggle" type="button" aria-pressed="false">◐ Тема</button></div></header>
+<section class="intro shell">
+<p class="eyebrow">Исследовательский режим</p>
+<h1>Меняйте состояние — наблюдайте формулу.</h1>
+<p>Лаборатория связывает картинку, число и физический смысл: график v(t) пересчитывает ускорение и путь, а вертикальная модель показывает, как выбранная ось задаёт знаки скорости и ускорения.</p>
+<div class="tabs" role="tablist" aria-label="Режим лаборатории">
+<button class="tab" id="tabGraph" role="tab" aria-selected="true" aria-controls="graphLab" type="button">График v(t)</button>
+<button class="tab" id="tabVertical" role="tab" aria-selected="false" aria-controls="verticalLab" type="button">Вертикальное движение</button>
+</div>
+</section>
+
+<main id="main" class="shell">
+<section class="lab active" id="graphLab" role="tabpanel" aria-labelledby="tabGraph">
+<div class="workspace">
+<div>
+<div class="instrument">
+<div class="instrument-head"><b>V–T INSTRUMENT</b><span>перетаскивайте конечную точку по вертикали или используйте ползунки</span></div>
+<div class="canvas-wrap"><canvas id="graphCanvas" aria-label="Интерактивный график скорости от времени"></canvas><span class="tip">Точка справа изменяет v₁. Время T задаётся ползунком; все параметры доступны с клавиатуры.</span></div>
+<div class="readouts">
+<div class="readout"><span>ускорение a</span><b id="aOut">—</b></div>
+<div class="readout"><span>путь S</span><b id="sOut">—</b></div>
+<div class="readout"><span>перемещение Δx</span><b id="dxOut">—</b></div>
+<div class="readout"><span>v = 0</span><b id="zeroOut">—</b></div>
+</div>
+</div>
+<div class="explain" id="graphExplain"><strong>Что меняется?</strong><p>Измените конечную скорость: наклон прямой и площадь пересчитаются одновременно.</p></div>
+</div>
+<aside class="panel">
+<h2>Параметры графика</h2>
+<p>Линейное изменение скорости соответствует постоянному ускорению.</p>
+<div class="presets" aria-label="Сценарии графика">
+<button class="preset active" data-graph="sample" type="button">Образец: 3 → 9 м/с за 4 с</button>
+<button class="preset" data-graph="turn" type="button">Разворот: 6 → −4 м/с за 5 с</button>
+<button class="preset" data-graph="task4" type="button">Задача 4: 4 → 10 м/с за 3 с</button>
+</div>
+<div class="control"><label for="v0">Начальная скорость v₀ <output id="v0Out">3 м/с</output></label><input id="v0" type="range" min="-10" max="15" step="1" value="3"></div>
+<div class="control"><label for="v1">Конечная скорость v₁ <output id="v1Out">9 м/с</output></label><input id="v1" type="range" min="-10" max="15" step="1" value="9"></div>
+<div class="control"><label for="duration">Время T <output id="tOut">4 с</output></label><input id="duration" type="range" min="1" max="8" step="1" value="4"></div>
+<div class="formula">a = (v₁ − v₀) / T</div>
+<div class="btn-row"><button class="btn" id="resetGraph" type="button">Сбросить</button><button class="btn primary" id="toggleArea" type="button" aria-pressed="true">Площадь: показана</button></div>
+<div class="challenge">
+<h3>Предскажите</h3>
+<p>В сценарии 6 → −4 м/с за 5 с тело меняет направление?</p>
+<div class="choice" id="prediction"><button type="button" data-answer="yes">Да</button><button type="button" data-answer="no">Нет</button></div>
+<p class="feedback" id="predictionFeedback" aria-live="polite"></p>
+</div>
+</aside>
+</div>
+</section>
+
+<section class="lab" id="verticalLab" role="tabpanel" aria-labelledby="tabVertical" hidden>
+<div class="workspace">
+<div>
+<div class="instrument">
+<div class="instrument-head"><b>VERTICAL MOTION</b><span>+Oy направлена вверх · aᵧ = −g</span></div>
+<div class="vertical-stage">
+<div class="tower" id="tower" aria-label="Вертикальная шкала положения тела">
+<div class="axis-y"></div><div class="ground"></div><div class="ball" id="ball"></div><div class="vector" id="velocityVector"></div><span class="height-label" id="heightLabel"></span>
+</div>
+<div class="readouts" style="grid-template-columns:1fr">
+<div class="readout"><span>время t</span><b id="vtOut">—</b></div>
+<div class="readout"><span>координата y</span><b id="vyPosOut">—</b></div>
+<div class="readout"><span>скорость vᵧ</span><b id="vyOut">—</b></div>
+<div class="readout"><span>ускорение aᵧ</span><b>−10 м/с²</b></div>
+</div>
+</div>
+<div class="timeline"><button class="btn" id="play" type="button">▶ Пуск</button><input id="timeSlider" type="range" min="0" max="4" step="0.05" value="0" aria-label="Время"><button class="btn" id="resetVertical" type="button">↺</button></div>
+</div>
+<div class="explain warn" id="verticalExplain"><strong>Сначала ось.</strong><p>После выбора +Oy вверх ускорение свободного падения во всех сценариях имеет проекцию −g.</p></div>
+</div>
+<aside class="panel">
+<h2>Сценарии из тренировки</h2>
+<div class="presets" aria-label="Сценарии вертикального движения">
+<button class="preset active" data-vertical="drop80" type="button">№7 · отпустили с 80 м</button>
+<button class="preset" data-vertical="down100" type="button">№8 · вниз с 100 м, v₀ = 5 м/с</button>
+<button class="preset" data-vertical="up30" type="button">№9 · вверх с земли, v₀ = 30 м/с</button>
+<button class="preset" data-vertical="up20" type="button">№10 · вверх с земли, v₀ = 20 м/с</button>
+</div>
+<div class="formula">vᵧ = v₀ᵧ − gt<br>y = y₀ + v₀ᵧt − gt²/2</div>
+<div class="explain"><strong id="scenarioTitle">Тело отпустили с высоты 80 м.</strong><p id="scenarioNote">При t = 3 с: vᵧ = −30 м/с, y = 35 м.</p></div>
+</aside>
+</div>
+</section>
+</main>
+
+<script>
+(function(){
+'use strict';
+var root=document.documentElement;
+var themeKey='volodia-lesson-theme';
+root.dataset.theme=localStorage.getItem(themeKey)||'light';
+var theme=document.getElementById('themeToggle');
+function syncTheme(){theme.setAttribute('aria-pressed',String(root.dataset.theme==='dark'));theme.textContent=root.dataset.theme==='dark'?'☀ Светлая':'◐ Тема';drawGraph();}
+theme.addEventListener('click',function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';localStorage.setItem(themeKey,root.dataset.theme);syncTheme();});
+function css(name){return getComputedStyle(root).getPropertyValue(name).trim();}
+
+var tabs=[document.getElementById('tabGraph'),document.getElementById('tabVertical')];
+var labs=[document.getElementById('graphLab'),document.getElementById('verticalLab')];
+function activate(mode,push){
+ var graph=mode==='graph';
+ tabs[0].setAttribute('aria-selected',String(graph));tabs[1].setAttribute('aria-selected',String(!graph));
+ labs[0].classList.toggle('active',graph);labs[1].classList.toggle('active',!graph);
+ labs[0].hidden=!graph;labs[1].hidden=graph;
+ if(push)history.replaceState(null,'','#'+mode);
+ if(graph)requestAnimationFrame(drawGraph);else requestAnimationFrame(renderVertical);
+}
+tabs[0].addEventListener('click',function(){activate('graph',true);});
+tabs[1].addEventListener('click',function(){activate('vertical',true);});
+
+var canvas=document.getElementById('graphCanvas');
+var ctx=canvas.getContext('2d');
+var v0=document.getElementById('v0'),v1=document.getElementById('v1'),duration=document.getElementById('duration');
+var areaShown=true,dragging=false;
+function n(x){return Math.abs(x)<1e-9?0:x;}
+function fmt(x,d){var y=n(x),digits=d==null?1:d,z=y.toFixed(digits).replace('.',',');return z.replace(/,0+$/,'').replace(/(,\d*?[1-9])0+$/,'$1');}
+function graphState(){return {v0:+v0.value,v1:+v1.value,T:+duration.value};}
+function pathLinear(s){
+ var dx=(s.v0+s.v1)*s.T/2;
+ var crosses=s.v0*s.v1<0;
+ var S;
+ var zero=null;
+ if(crosses){
+   zero=-s.v0*s.T/(s.v1-s.v0);
+   S=Math.abs(s.v0)*zero/2+Math.abs(s.v1)*(s.T-zero)/2;
+ }else if(s.v0===0||s.v1===0){
+   if(s.v0===0)zero=0;if(s.v1===0)zero=s.T;
+   S=Math.abs(dx);
+ }else S=Math.abs(dx);
+ return {a:(s.v1-s.v0)/s.T,dx:dx,S:S,zero:zero};
+}
+function updateGraphUI(){
+ var s=graphState(),r=pathLinear(s);
+ document.getElementById('v0Out').textContent=fmt(s.v0,0)+' м/с';
+ document.getElementById('v1Out').textContent=fmt(s.v1,0)+' м/с';
+ document.getElementById('tOut').textContent=fmt(s.T,0)+' с';
+ document.getElementById('aOut').textContent=fmt(r.a,2)+' м/с²';
+ document.getElementById('sOut').textContent=fmt(r.S,2)+' м';
+ document.getElementById('dxOut').textContent=fmt(r.dx,2)+' м';
+ document.getElementById('zeroOut').textContent=r.zero==null?'нет':fmt(r.zero,2)+' с';
+ var expl=document.getElementById('graphExplain');
+ if(r.zero!=null&&r.zero>0&&r.zero<s.T)expl.innerHTML='<strong>График пересекает v = 0.</strong><p>Знак скорости меняется, поэтому тело разворачивается. Для пути складываются модули двух площадей.</p>';
+ else if(r.a>0)expl.innerHTML='<strong>Скорость возрастает.</strong><p>Наклон положительный: a > 0. Если график не пересекает v = 0, путь равен модулю перемещения.</p>';
+ else if(r.a<0)expl.innerHTML='<strong>Скорость убывает.</strong><p>Наклон отрицательный: a < 0. Направление движения всё равно определяется знаком v.</p>';
+ else expl.innerHTML='<strong>Горизонтальный график.</strong><p>Скорость постоянна и a = 0.</p>';
+}
+function sizeCanvas(){
+ var d=window.devicePixelRatio||1,rect=canvas.getBoundingClientRect();
+ canvas.width=Math.max(1,Math.round(rect.width*d));canvas.height=Math.max(1,Math.round(rect.height*d));
+ ctx.setTransform(d,0,0,d,0,0);return rect;
+}
+function drawGraph(){
+ if(!ctx||document.getElementById('graphLab').hidden)return;
+ var rect=sizeCanvas(),W=rect.width,H=rect.height,s=graphState(),r=pathLinear(s);
+ var pad={l:58,r:28,t:24,b:44};
+ var minV=Math.min(-2,s.v0,s.v1),maxV=Math.max(2,s.v0,s.v1),span=maxV-minV;
+ minV-=span*.18;maxV+=span*.18;
+ function X(t){return pad.l+t/s.T*(W-pad.l-pad.r);}
+ function Y(v){return pad.t+(maxV-v)/(maxV-minV)*(H-pad.t-pad.b);}
+ ctx.clearRect(0,0,W,H);
+ ctx.strokeStyle=css('--grid');ctx.lineWidth=1;
+ for(var i=0;i<=6;i++){var xx=pad.l+i*(W-pad.l-pad.r)/6;ctx.beginPath();ctx.moveTo(xx,pad.t);ctx.lineTo(xx,H-pad.b);ctx.stroke();}
+ for(var j=0;j<=6;j++){var yy=pad.t+j*(H-pad.t-pad.b)/6;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(W-pad.r,yy);ctx.stroke();}
+ var y0=Y(0);ctx.strokeStyle=css('--muted');ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(pad.l,y0);ctx.lineTo(W-pad.r,y0);ctx.stroke();ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,H-pad.b);ctx.stroke();
+ if(areaShown){
+   var zeroT=r.zero!=null?r.zero:null;
+   if(zeroT!=null&&zeroT>0&&zeroT<s.T){
+     ctx.fillStyle='rgba(46,111,115,.16)';ctx.beginPath();ctx.moveTo(X(0),y0);ctx.lineTo(X(0),Y(s.v0));ctx.lineTo(X(zeroT),y0);ctx.closePath();ctx.fill();
+     ctx.fillStyle='rgba(182,120,45,.18)';ctx.beginPath();ctx.moveTo(X(zeroT),y0);ctx.lineTo(X(s.T),Y(s.v1));ctx.lineTo(X(s.T),y0);ctx.closePath();ctx.fill();
+   }else{
+     ctx.fillStyle='rgba(46,111,115,.16)';ctx.beginPath();ctx.moveTo(X(0),y0);ctx.lineTo(X(0),Y(s.v0));ctx.lineTo(X(s.T),Y(s.v1));ctx.lineTo(X(s.T),y0);ctx.closePath();ctx.fill();
+   }
+ }
+ ctx.strokeStyle=css('--teal');ctx.lineWidth=4;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(X(0),Y(s.v0));ctx.lineTo(X(s.T),Y(s.v1));ctx.stroke();
+ ctx.fillStyle=css('--teal');ctx.beginPath();ctx.arc(X(0),Y(s.v0),6,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(X(s.T),Y(s.v1),8,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle=css('--muted');ctx.font='12px ui-monospace,Consolas,monospace';ctx.fillText('v₀='+fmt(s.v0,0),X(0)+9,Y(s.v0)-8);ctx.textAlign='right';ctx.fillText('v₁='+fmt(s.v1,0),X(s.T)-8,Y(s.v1)-10);ctx.textAlign='left';ctx.fillText('t',W-pad.r-4,y0-8);ctx.fillText('v',pad.l+8,pad.t+12);
+ updateGraphUI();
+}
+function setGraph(a,b,t,name){
+ v0.value=a;v1.value=b;duration.value=t;
+ document.querySelectorAll('[data-graph]').forEach(function(x){x.classList.toggle('active',x.dataset.graph===name);});
+ drawGraph();
+}
+document.querySelectorAll('[data-graph]').forEach(function(b){b.addEventListener('click',function(){
+ if(b.dataset.graph==='sample')setGraph(3,9,4,'sample');
+ if(b.dataset.graph==='turn')setGraph(6,-4,5,'turn');
+ if(b.dataset.graph==='task4')setGraph(4,10,3,'task4');
+});});
+[v0,v1,duration].forEach(function(el){el.addEventListener('input',function(){document.querySelectorAll('[data-graph]').forEach(function(x){x.classList.remove('active');});drawGraph();});});
+document.getElementById('resetGraph').addEventListener('click',function(){setGraph(3,9,4,'sample');});
+document.getElementById('toggleArea').addEventListener('click',function(e){areaShown=!areaShown;e.currentTarget.setAttribute('aria-pressed',String(areaShown));e.currentTarget.textContent=areaShown?'Площадь: показана':'Площадь: скрыта';drawGraph();});
+canvas.addEventListener('pointerdown',function(e){dragging=true;canvas.setPointerCapture(e.pointerId);});
+canvas.addEventListener('pointermove',function(e){
+ if(!dragging)return;
+ var rect=canvas.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
+ var pad={l:58,r:28,t:24,b:44};var values=[+v0.value,+v1.value,-2,2],minV=Math.min.apply(null,values),maxV=Math.max.apply(null,values),span=maxV-minV;minV-=span*.18;maxV+=span*.18;
+ var vv=maxV-(y-pad.t)/(rect.height-pad.t-pad.b)*(maxV-minV);vv=Math.max(-10,Math.min(15,Math.round(vv)));
+ v1.value=vv;document.querySelectorAll('[data-graph]').forEach(function(x){x.classList.remove('active');});drawGraph();
+});
+canvas.addEventListener('pointerup',function(){dragging=false;});
+canvas.addEventListener('pointercancel',function(){dragging=false;});
+document.querySelectorAll('#prediction button').forEach(function(b){b.addEventListener('click',function(){
+ document.querySelectorAll('#prediction button').forEach(function(x){x.classList.remove('good','bad');});
+ var ok=b.dataset.answer==='yes';b.classList.add(ok?'good':'bad');
+ document.getElementById('predictionFeedback').textContent=ok?'Верно: график пересекает v=0 при t=3 с, после этого знак скорости меняется.':'Проверьте: в этом сценарии скорость проходит через ноль и становится отрицательной.';
+ if(ok)setGraph(6,-4,5,'turn');
+});});
+
+var scenarios={
+ drop80:{title:'Тело отпустили с высоты 80 м.',y0:80,v0:0,max:4,note:'При t = 3 с: vᵧ = −30 м/с, y = 35 м.'},
+ down100:{title:'Тело бросили вниз с высоты 100 м со скоростью 5 м/с.',y0:100,v0:-5,max:4,note:'При t = 3 с: vᵧ = −35 м/с, y = 40 м.'},
+ up30:{title:'Тело бросили вверх с поверхности земли со скоростью 30 м/с.',y0:0,v0:30,max:6,note:'Верхняя точка: t = 3 с, h = 45 м.'},
+ up20:{title:'Камень бросили вверх с поверхности земли со скоростью 20 м/с.',y0:0,v0:20,max:4,note:'Возвращение на тот же уровень: t = 4 с.'}
+};
+var current='drop80',timeSlider=document.getElementById('timeSlider'),playing=false,raf=0,last=0;
+function stateAt(sc,t){return {y:sc.y0+sc.v0*t-5*t*t,v:sc.v0-10*t};}
+function setScenario(name){
+ current=name;var sc=scenarios[name];timeSlider.max=sc.max;timeSlider.value=0;playing=false;document.getElementById('play').textContent='▶ Пуск';
+ document.querySelectorAll('[data-vertical]').forEach(function(x){x.classList.toggle('active',x.dataset.vertical===name);});
+ document.getElementById('scenarioTitle').textContent=sc.title;document.getElementById('scenarioNote').textContent=sc.note;renderVertical();
+}
+function renderVertical(){
+ if(document.getElementById('verticalLab').hidden)return;
+ var sc=scenarios[current],t=+timeSlider.value,st=stateAt(sc,t);
+ var maxY=Math.max(sc.y0,sc.y0+sc.v0*sc.v0/20,45,100),visibleY=Math.max(0,st.y);
+ var tower=document.getElementById('tower'),H=tower.clientHeight||440,groundPad=8,topPad=20;
+ var ypx=groundPad+visibleY/maxY*(H-topPad-groundPad);
+ var ball=document.getElementById('ball');ball.style.bottom=ypx+'px';
+ var label=document.getElementById('heightLabel');label.style.bottom=ypx+'px';label.textContent='y = '+fmt(st.y,1)+' м';
+ var vec=document.getElementById('velocityVector');var len=Math.min(90,Math.max(8,Math.abs(st.v)*2));vec.style.bottom=ypx+'px';vec.style.height=len+'px';
+ if(st.v>=0){vec.style.transform='translateX(-50%) rotate(180deg)';vec.style.background=css('--teal');}else{vec.style.transform='translateX(-50%)';vec.style.background=css('--amber');}
+ document.getElementById('vtOut').textContent=fmt(t,2)+' с';document.getElementById('vyPosOut').textContent=fmt(st.y,2)+' м';document.getElementById('vyOut').textContent=fmt(st.v,2)+' м/с';
+ var ex=document.getElementById('verticalExplain');
+ if(Math.abs(st.v)<.26&&sc.v0>0)ex.innerHTML='<strong>Верхняя точка.</strong><p>vᵧ = 0, но aᵧ = −g. После этого скорость станет отрицательной и тело начнёт двигаться вниз.</p>';
+ else if(st.v>0)ex.innerHTML='<strong>Тело движется вверх.</strong><p>vᵧ > 0, а aᵧ = −g: скорость уменьшается.</p>';
+ else ex.innerHTML='<strong>Тело движется вниз.</strong><p>vᵧ < 0 и aᵧ = −g. Знак скорости показывает направление относительно +Oy.</p>';
+}
+document.querySelectorAll('[data-vertical]').forEach(function(b){b.addEventListener('click',function(){setScenario(b.dataset.vertical);});});
+timeSlider.addEventListener('input',function(){playing=false;document.getElementById('play').textContent='▶ Пуск';renderVertical();});
+document.getElementById('resetVertical').addEventListener('click',function(){timeSlider.value=0;playing=false;document.getElementById('play').textContent='▶ Пуск';renderVertical();});
+document.getElementById('play').addEventListener('click',function(){playing=!playing;document.getElementById('play').textContent=playing?'Ⅱ Пауза':'▶ Пуск';if(playing){last=performance.now();raf=requestAnimationFrame(tick);}else cancelAnimationFrame(raf);});
+function tick(now){
+ if(!playing)return;var dt=(now-last)/1000;last=now;var next=+timeSlider.value+dt;var max=+timeSlider.max;if(next>=max){next=max;playing=false;document.getElementById('play').textContent='▶ Пуск';}
+ timeSlider.value=next;renderVertical();if(playing)raf=requestAnimationFrame(tick);
+}
+window.addEventListener('resize',function(){drawGraph();renderVertical();});
+var initial=location.hash==='#vertical'?'vertical':'graph';activate(initial,false);setGraph(3,9,4,'sample');setScenario('drop80');syncTheme();
+})();
+</script>
+</body>
+</html>
