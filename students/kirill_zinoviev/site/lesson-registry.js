@@ -21,47 +21,65 @@ export const LESSONS=[
       {
         "competencyId": "models_1",
         "evidenceAnchor": "model",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Выбор неизвестных величин",
+        "practiceDisposition": "manual"
       },
       {
         "competencyId": "models_2",
         "evidenceAnchor": "model",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Выражение одной величины через другую",
+        "practiceDisposition": "manual"
       },
       {
         "competencyId": "models_3",
         "evidenceAnchor": "translation",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Перевод текстового условия в уравнение",
+        "practiceDisposition": "manual"
       },
       {
         "competencyId": "equations_12",
         "evidenceAnchor": "system",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Составление уравнения по условию задачи",
+        "practiceDisposition": "manual"
       },
       {
         "competencyId": "systems_5",
         "evidenceAnchor": "system",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Система двух линейных уравнений",
+        "practiceDisposition": "manual"
       },
       {
         "competencyId": "systems_9",
         "evidenceAnchor": "substitution",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Решение системы способом подстановки",
+        "practiceDisposition": "manual"
       },
       {
         "competencyId": "systems_12",
         "evidenceAnchor": "system",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Составление системы по условию текстовой задачи",
+        "practiceDisposition": "manual"
       },
       {
         "competencyId": "systems_6",
         "evidenceAnchor": "check",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Проверка пары чисел как решения системы",
+        "practiceDisposition": "manual"
       },
       {
         "competencyId": "models_5",
         "evidenceAnchor": "check",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Запись ответа с единицами",
+        "practiceDisposition": "manual"
       }
     ],
     "materials": {
