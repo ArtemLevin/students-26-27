@@ -5,6 +5,59 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-03",
+    "ktpRefs": [],
+    "href": "03.10.26.html",
+    "title": "Кусочные функции и прямая y=m",
+    "navTitle": "Кусочные функции",
+    "summary": "Марина Селиверстова: кусочные функции — области ветвей, граничные точки, парабола и определение числа пересечений с горизонталью y=m.",
+    "topics": ["кусочно заданная функция", "граничные точки", "парабола", "прямая y=m"],
+    "outcomes": [
+          {
+                "competencyId": "oge_22_07",
+                "evidenceAnchor": "piecewise",
+                "relation": "practiced",
+                "masteryClaim": null
+          },
+          {
+                "competencyId": "oge_22_02",
+                "evidenceAnchor": "parabola",
+                "relation": "practiced",
+                "masteryClaim": null
+          },
+          {
+                "competencyId": "oge_22_03",
+                "evidenceAnchor": "parabola",
+                "relation": "practiced",
+                "masteryClaim": null
+          },
+          {
+                "competencyId": "oge_22_04",
+                "evidenceAnchor": "parabola",
+                "relation": "practiced",
+                "masteryClaim": null
+          },
+          {
+                "competencyId": "oge_22_11",
+                "evidenceAnchor": "ym",
+                "relation": "practiced",
+                "masteryClaim": null
+          },
+          {
+                "competencyId": "oge_22_12",
+                "evidenceAnchor": "ym",
+                "relation": "practiced",
+                "masteryClaim": null
+          }
+    ],
+    "materials": {
+      "html": "03.10.26.html",
+      "pdf": "../pdf_docs/03.10.26.pdf",
+      "tex": "../tex_docs/03.10.26.tex",
+      "lab": "03.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-09-28",
     "ktpRefs": [],
     "href": "28.09.26.html",
