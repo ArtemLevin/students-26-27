@@ -16,7 +16,7 @@ test('Anna Bannova satisfies Student Platform v2 contract',()=>{
   assert.equal(result.contractVersion,2);
   assert.equal(result.planningMode,'fixed');
   assert.equal(result.ktpLessons,174);
-  assert.equal(result.lessonMetadata,0);
+  assert.equal(result.lessonMetadata,1);
 });
 
 test('Anna dashboard inline module is syntactically valid JavaScript',()=>{
