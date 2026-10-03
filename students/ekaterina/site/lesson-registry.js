@@ -5,6 +5,23 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-03",
+    "ktpRefs": [],
+    "href": "03.10.26.html",
+    "title": "Границы, знаки и движение",
+    "navTitle": "Границы, знаки и движение",
+    "summary": "Екатерина Скелли · числовые промежутки, свойства неравенств и движение протяжённых тел · 03.10.2026",
+    "topics": ["числовые промежутки","свойства неравенств","пересечение промежутков","задачи на движение"],
+    "outcomes": [
+      {"label":"Свойства числовых неравенств","level":2,"competencyId":"alg_ineq_02","tone":"process","practiceDisposition":"manual"},
+      {"label":"Умножение на отрицательное число","level":2,"competencyId":"alg_ineq_05","tone":"process","practiceDisposition":"manual"},
+      {"label":"Числовой промежуток","level":2,"competencyId":"alg_ineq_07","tone":"process","practiceDisposition":"manual"},
+      {"label":"Пересечение промежутков","level":2,"competencyId":"alg_ineq_10","tone":"process","practiceDisposition":"manual"},
+      {"label":"Задачи на движение","level":2,"competencyId":"alg_models_03","tone":"process","practiceDisposition":"manual"}
+    ],
+    "materials": {"html":"03.10.26.html","pdf":"../pdf_docs/03.10.26.pdf","tex":"../tex_docs/03.10.26.tex"}
+  },
+  {
     "date": "2026-09-27",
     "ktpRefs": [],
     "href": "27.09.26.html",
