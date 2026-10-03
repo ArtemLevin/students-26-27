@@ -7,7 +7,7 @@ import {
   paginateArchive,
   formatShortDate,
   formatLongDateRu
-} from './lesson-registry.js?v=20260925-1';
+} from './lesson-registry.js?v=20261002-1';
 import {PRACTICE_CONFIG} from './practice-config.js';
 import {presentLessonOutcome} from '../../../shared/student-dashboard/outcome-adapter.js';
 
