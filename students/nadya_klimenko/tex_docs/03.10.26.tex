@@ -1,0 +1,354 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\geometry{top=18mm,bottom=18mm,left=18mm,right=18mm}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{tabularx,booktabs,array}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{titlesec}
+
+\definecolor{accent}{HTML}{1F6F78}
+\definecolor{darkaccent}{HTML}{174F56}
+\definecolor{textgray}{HTML}{2E3335}
+\definecolor{softgray}{HTML}{EEF3F4}
+\definecolor{warn}{HTML}{9A5B34}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\setlength{\headheight}{25pt}
+\onehalfspacing
+\color{textgray}
+\setlist[itemize]{leftmargin=1.35em,itemsep=0.22em,topsep=0.25em}
+\setlist[enumerate]{leftmargin=1.55em,itemsep=0.28em,topsep=0.3em}
+\titleformat{\section}{\Large\bfseries\color{darkaccent}}{}{0pt}{}[\vspace{-0.2em}\color{accent}\rule{\linewidth}{0.6pt}]
+\titleformat{\subsection}{\large\bfseries\color{darkaccent}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{1.0em}{0.6em}
+\titlespacing*{\subsection}{0pt}{0.8em}{0.25em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{darkaccent}Математика · чек-лист}
+\fancyhead[R]{\small\color{darkaccent}03.10.26}
+\fancyfoot[C]{\small\color{textgray}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\checkitem}[1]{\item[$\square$] #1}
+\newcommand{\nodtext}{\text{НОД}}
+\newcommand{\noktext}{\text{НОК}}
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\important}[1]{%
+  \par\vspace{0.25em}
+  \noindent\colorbox{softgray}{\parbox{0.965\linewidth}{\textbf{#1}}}\par\vspace{0.25em}}
+\newcommand{\errornote}[1]{%
+  \par\vspace{0.2em}
+  \noindent\textcolor{warn}{\textbf{Типичная ошибка.}} #1\par}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{22mm}
+
+{\large\color{accent}\textbf{МАТЕМАТИКА}}\\[10mm]
+{\fontsize{30}{34}\selectfont\bfseries\color{darkaccent}Чек-лист}\\[4mm]
+{\LARGE\bfseries Делимость натуральных чисел, НОД и НОК}\\[5mm]
+{\large Делители · простые множители · чётность · дроби}\\[16mm]
+
+\begin{minipage}{0.78\textwidth}
+\centering
+\large
+Короткое повторение перед контрольной: определения, признаки, алгоритмы, показательные примеры и места, где чаще всего возникает ошибка.
+\end{minipage}
+
+\vfill
+{\large 03.10.26}\\[8mm]
+{\normalsize\bfseries Лёвин Артём Александрович}\\[2mm]
+{\normalsize эксклюзивно для Нади Клименко}
+
+\vspace{15mm}
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent,line width=1.15pt]
+    ($(current page.south west)+(14mm,18mm)$)
+    .. controls ($(current page.south west)+(62mm,29mm)$)
+    and ($(current page.south east)+(-70mm,8mm)$)
+    .. ($(current page.south east)+(-14mm,21mm)$);
+  \draw[accent!55,line width=0.65pt]
+    ($(current page.south west)+(20mm,12mm)$)
+    .. controls ($(current page.south west)+(76mm,22mm)$)
+    and ($(current page.south east)+(-56mm,3mm)$)
+    .. ($(current page.south east)+(-19mm,14mm)$);
+\end{tikzpicture}
+\end{titlepage}
+
+\section{1. Делимость: что нужно видеть сразу}
+
+\subsection{Делитель и кратное}
+Если натуральное число $a$ делится на $b$ без остатка, то $b$ --- \key{делитель} числа $a$, а $a$ --- \key{кратное} числа $b$.
+
+Например, $6\mid 36$, поэтому $6$ --- делитель $36$, а $36$ --- кратное $6$.
+
+\important{У любого натурального числа есть делители $1$ и само это число. Число $1$ не является ни простым, ни составным.}
+
+\subsection{Признаки делимости, которые нужны на контрольной}
+\renewcommand{\arraystretch}{1.28}
+\begin{tabularx}{\linewidth}{>{\bfseries\color{darkaccent}}p{0.12\linewidth} X}
+\toprule
+На & Признак \\
+\midrule
+$2$ & последняя цифра чётная: $0,2,4,6,8$; \\
+$3$ & сумма цифр делится на $3$; \\
+$4$ & число, образованное двумя последними цифрами, делится на $4$; \\
+$5$ & последняя цифра $0$ или $5$; \\
+$6$ & число одновременно делится на $2$ и на $3$; \\
+$9$ & сумма цифр делится на $9$; \\
+$12$ & число одновременно делится на $3$ и на $4$; \\
+$18$ & число одновременно делится на $2$ и на $9$. \\
+\bottomrule
+\end{tabularx}
+
+\errornote{Для делимости на $4$ проверяют \emph{число из двух последних цифр}, а не каждую из этих цифр отдельно. Например, $144$ делится на $4$, потому что $44$ делится на $4$.}
+
+\subsection{Быстрая проверка на одном наборе}
+Для чисел $144,\ 315,\ 726,\ 935,\ 1248,\ 1725$:
+\begin{itemize}
+  \item на $4$ делятся $144$ и $1248$;
+  \item на $6$ делятся $144$, $726$, $1248$;
+  \item на $9$ делятся $144$ и $315$;
+  \item на $18$ из этого набора делится $144$.
+\end{itemize}
+
+\section{2. Делители и простые множители}
+
+\subsection{Простые и составные числа}
+\key{Простое число} имеет ровно два натуральных делителя: $1$ и само число.\\
+\key{Составное число} имеет больше двух натуральных делителей.
+
+Для числа $36$:
+\[
+1,\ 2,\ 3,\ 4,\ 6,\ 9,\ 12,\ 18,\ 36.
+\]
+Простые среди них: $2$ и $3$.
+
+\important{При поиске делителей удобно искать их парами: $1\cdot36$, $2\cdot18$, $3\cdot12$, $4\cdot9$, $6\cdot6$. После $\sqrt{36}=6$ новые пары уже не появятся.}
+
+\subsection{Разложение на простые множители}
+Делим число последовательно на простые числа $2,3,5,7,\ldots$, пока не получим $1$.
+
+Показательный пример:
+\[
+756=2\cdot378=2^2\cdot189=2^2\cdot3^3\cdot7.
+\]
+То есть
+\[
+\boxed{756=2^2\cdot3^3\cdot7}.
+\]
+
+\subsection{Количество натуральных делителей}
+Если
+\[
+n=p_1^{\alpha_1}p_2^{\alpha_2}\cdots p_k^{\alpha_k},
+\]
+то количество натуральных делителей равно
+\[
+\boxed{\tau(n)=(\alpha_1+1)(\alpha_2+1)\cdots(\alpha_k+1)}.
+\]
+
+Для $756=2^2\cdot3^3\cdot7^1$:
+\[
+\tau(756)=(2+1)(3+1)(1+1)=3\cdot4\cdot2=24.
+\]
+
+Проверка на знакомом числе:
+\[
+36=2^2\cdot3^2\quad\Rightarrow\quad \tau(36)=(2+1)(2+1)=9.
+\]
+
+\errornote{В формуле прибавляют единицу к \emph{показателям степеней}, а не к самим простым множителям.}
+
+\subsection{Взаимно простые числа}
+Два числа взаимно просты, если их единственный общий натуральный делитель --- $1$, то есть
+\[
+\nodtext(a,b)=1.
+\]
+Например, $14$ и $25$ взаимно просты.
+
+\section{3. НОД и НОК}
+
+\subsection{Через разложение на простые множители}
+Пусть числа разложены на простые множители.
+
+\begin{itemize}
+  \item \key{НОД}: берём только общие простые множители в \textbf{минимальных} степенях.
+  \item \key{НОК}: берём все встречающиеся простые множители в \textbf{максимальных} степенях.
+\end{itemize}
+
+\important{Полезная проверка: $\nodtext(a,b)\cdot\noktext(a,b)=a\cdot b$.}
+
+Например, поскольку $84\mid252$,
+\[
+\nodtext(252,84)=84,\qquad
+\noktext(252,84)=252.
+\]
+
+\subsection{Алгоритм Евклида для больших чисел}
+Когда разложение на простые множители становится неудобным, используйте остатки от деления:
+\begin{enumerate}
+  \item большее число делим на меньшее;
+  \item вместо пары чисел берём \emph{меньшее число и остаток};
+  \item повторяем, пока остаток не станет равен нулю;
+  \item последний ненулевой остаток --- НОД.
+\end{enumerate}
+
+Пример:
+\begin{align*}
+1220&=2\cdot440+340,\\
+440&=1\cdot340+100,\\
+340&=3\cdot100+40,\\
+100&=2\cdot40+20,\\
+40&=2\cdot20+0.
+\end{align*}
+Следовательно,
+\[
+\boxed{\nodtext(1220,440)=20}.
+\]
+
+\errornote{Останавливаемся только после появления нулевого остатка. Ответом является предыдущий, последний ненулевой остаток.}
+
+\subsection{Как выбирать НОД или НОК}
+\begin{tabularx}{\linewidth}{>{\bfseries\color{darkaccent}}p{0.22\linewidth} X}
+\toprule
+Ищем НОД & Когда нужно максимально крупно \emph{разделить} объекты на одинаковые части, сократить дробь, найти общий делитель. \\
+\midrule
+Ищем НОК & Когда нужно найти первый общий момент/шаг/кратное, общий знаменатель или число, кратное нескольким данным числам. \\
+\bottomrule
+\end{tabularx}
+
+\section{4. Чётность как быстрый инструмент}
+
+Вместо вычислений часто достаточно определить чётность каждого слагаемого или множителя.
+
+\begin{tabularx}{\linewidth}{>{\centering\arraybackslash}p{0.22\linewidth} >{\centering\arraybackslash}p{0.22\linewidth} X}
+\toprule
+Первое & Второе & Результат \\
+\midrule
+чётное & чётное & сумма чётная \\
+нечётное & нечётное & сумма чётная \\
+чётное & нечётное & сумма нечётная \\
+чётное & любое целое & произведение чётное \\
+нечётное & нечётное & произведение нечётное \\
+\bottomrule
+\end{tabularx}
+
+Отсюда:
+\begin{itemize}
+  \item сумма чётного количества нечётных слагаемых --- чётная;
+  \item сумма нечётного количества нечётных слагаемых --- нечётная;
+  \item произведение чётно, если среди множителей есть хотя бы один чётный.
+\end{itemize}
+
+Например,
+\[
+15\cdot17+24\cdot30
+\]
+не нужно вычислять: первое произведение нечётное, второе чётное, поэтому сумма нечётная.
+
+\section{5. НОД и НОК в действиях с дробями}
+
+\subsection{Общий знаменатель через НОК}
+Для сложения или вычитания дробей с разными знаменателями удобно брать \key{НОК знаменателей}.
+
+Пример:
+\[
+\frac{1}{210}+\frac{3}{104}.
+\]
+Разложения:
+\[
+210=2\cdot3\cdot5\cdot7,\qquad 104=2^3\cdot13.
+\]
+Поэтому
+\[
+\noktext(210,104)=2^3\cdot3\cdot5\cdot7\cdot13=10920.
+\]
+Дополнительные множители:
+\[
+\frac{10920}{210}=52,\qquad \frac{10920}{104}=105.
+\]
+Тогда
+\[
+\frac{1}{210}+\frac{3}{104}
+=\frac{52}{10920}+\frac{315}{10920}
+=\boxed{\frac{367}{10920}}.
+\]
+
+\important{Если знаменатели большие, разложение на простые множители помогает одновременно найти НОК и увидеть дополнительные множители.}
+
+\subsection{Сокращение дроби через НОД}
+Чтобы сократить дробь максимально, найдите НОД числителя и знаменателя и разделите оба числа на него.
+
+Например,
+\[
+\nodtext(105,84)=21,
+\qquad
+\frac{105}{84}=\frac{105:21}{84:21}=\boxed{\frac54}.
+\]
+
+Если числа уже разложены на простые множители, общие множители можно просто сократить в разложениях.
+
+\subsection{Десятичная дробь $\rightarrow$ обыкновенная}
+Количество цифр после запятой задаёт знаменатель:
+\[
+0{,}38=\frac{38}{100}=\boxed{\frac{19}{50}}.
+\]
+После перевода обязательно проверьте, можно ли сократить дробь.
+
+\section{6. Что особенно легко перепутать}
+
+\begin{itemize}[itemsep=0.12em,topsep=0.15em]
+  \item $1$ --- ни простое, ни составное число.
+  \item Признак делимости на $4$: проверяем две последние цифры как одно число.
+  \item Для делимости на $6$ нужны одновременно признаки на $2$ и на $3$.
+  \item Для делимости на $12$ нужны одновременно признаки на $3$ и на $4$.
+  \item Для делимости на $18$ нужны одновременно признаки на $2$ и на $9$.
+  \item В формуле количества делителей работаем с показателями степеней.
+  \item В алгоритме Евклида НОД --- последний ненулевой остаток.
+  \item Для общего знаменателя ищем НОК знаменателей; для максимального сокращения --- НОД числителя и знаменателя.
+\end{itemize}
+
+\section{7. Финальная самопроверка}
+
+Перед контрольной убедитесь, что каждый пункт можно объяснить своими словами без подсказки:
+
+{\small
+\begin{multicols}{2}
+\begin{itemize}[leftmargin=1.7em,itemsep=0.18em,topsep=0.18em]
+  \checkitem{Я различаю делитель и кратное.}
+  \checkitem{Я помню признаки делимости на $2,3,4,5,6,9,12$ и $18$.}
+  \checkitem{Я умею выписывать делители числа без пропусков.}
+  \checkitem{Я отличаю простые, составные числа и число $1$.}
+  \checkitem{Я раскладываю число на простые множители.}
+  \checkitem{Я нахожу количество делителей по степеням в разложении.}
+  \checkitem{Я определяю, являются ли два числа взаимно простыми.}
+  \checkitem{Я нахожу НОД и НОК по разложению на простые множители.}
+  \checkitem{Я применяю алгоритм Евклида для больших чисел.}
+  \checkitem{Я определяю чётность выражения без лишних вычислений.}
+  \checkitem{Я использую НОК для общего знаменателя и НОД для сокращения дроби.}
+\end{itemize}
+\end{multicols}
+}
+
+\end{document}
