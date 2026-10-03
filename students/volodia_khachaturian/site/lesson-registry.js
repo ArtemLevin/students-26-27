@@ -3,6 +3,41 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+    "date": "2026-10-03",
+    "ktpRefs": [],
+    "href": "03.10.26.html",
+    "title": "Графики скорости и вертикальное движение",
+    "navTitle": "Графики v(t) и вертикальное движение",
+    "navSubtitle": "ускорение по наклону, путь по площади, знак скорости и свободное падение",
+    "summary": "Чтение графика скорости: ускорение как наклон прямой, путь как сумма модулей площадей под v(t), смена направления при пересечении v=0; вертикальное движение при выборе +Oy вверх, знаки скорости и ускорения свободного падения.",
+    "topics": [
+      "график скорости v(t)",
+      "ускорение по наклону",
+      "путь как площадь",
+      "знак скорости",
+      "вертикальное движение"
+    ],
+    "outcomes": [
+      {"label":"Путь и перемещение","level":2,"competencyId":"kin_04","tone":"process","practiceDisposition":"manual"},
+      {"label":"Ускорение как изменение скорости","level":2,"competencyId":"kin_17","tone":"process","practiceDisposition":"manual"},
+      {"label":"Равноускоренное прямолинейное движение","level":2,"competencyId":"kin_18","tone":"process","practiceDisposition":"manual"},
+      {"label":"Закон скорости v = v₀ + at","level":2,"competencyId":"kin_19","tone":"process","practiceDisposition":"manual"},
+      {"label":"Перемещение s = v₀t + at²/2","level":3,"competencyId":"kin_20","tone":"good","practiceDisposition":"manual"},
+      {"label":"График скорости при равноускоренном движении","level":2,"competencyId":"kin_24","tone":"process","practiceDisposition":"manual"},
+      {"label":"Выбор формулы по условию задачи","level":2,"competencyId":"exam_02","tone":"process","practiceDisposition":"manual"},
+      {"label":"Проверка размерности","level":1,"competencyId":"exam_03","tone":"process","practiceDisposition":"manual"},
+      {"label":"Формула перед подстановкой","level":2,"competencyId":"exam_24","tone":"process","practiceDisposition":"manual"},
+      {"label":"Единицы и оформление результата","level":2,"competencyId":"exam_27","tone":"process","practiceDisposition":"manual"},
+      {"label":"Проверка физического смысла","level":2,"competencyId":"exam_28","tone":"process","practiceDisposition":"manual"}
+    ],
+    "materials": {
+      "html": "03.10.26.html",
+      "pdf": "../pdf_docs/03.10.26.pdf",
+      "tex": "../tex_docs/03.10.26.tex",
+      "lab": "03.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-09-30",
     "ktpRefs": [],
     "href": "30.09.26.html",
