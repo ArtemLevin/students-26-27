@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория Нади Клименко по делимости, простым множителям, НОД, НОК и алгоритму Евклида.">
+<title>Лаборатория чисел — 03.10.26</title>
+<style>
+:root{color-scheme:light;--page:#f4f0e8;--paper:#fffdf8;--ink:#202725;--muted:#69736f;--line:#d6d5cf;--line-strong:#959b96;--accent:#b24f3b;--accent-soft:#f4ded7;--support:#265f78;--support-soft:#deedf2;--good:#2c7358;--bad:#9d4547;--focus:#276d8a;--max:1180px}
+html[data-theme="dark"]{color-scheme:dark;--page:#111817;--paper:#18211f;--ink:#edf3f1;--muted:#a9b5b1;--line:#33423e;--line-strong:#667873;--accent:#ef8c73;--accent-soft:#3a2622;--support:#82bfd8;--support-soft:#19303a;--good:#82c5a5;--bad:#e18b8c;--focus:#9bd9ef}
+*{box-sizing:border-box}html{background:var(--page)}body{margin:0;background:var(--page);color:var(--ink);font:16px/1.62 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}a{color:inherit}button,input{font:inherit;color:inherit}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.shell{width:min(calc(100% - 2rem),var(--max));margin:auto}
+.topbar{border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--page) 92%,transparent);backdrop-filter:blur(12px)}.topbar-inner{min-height:58px;display:flex;align-items:center;gap:1rem}.brand{font-weight:760;text-decoration:none}.topbar button{margin-left:auto;border:0;border-bottom:1px solid transparent;background:transparent;min-height:42px;padding:.5rem .7rem;color:var(--muted)}.topbar button:hover{color:var(--ink);border-bottom-color:var(--accent)}
+.hero{display:grid;grid-template-columns:minmax(0,.8fr) minmax(330px,1.2fr);gap:clamp(2rem,6vw,5rem);align-items:end;padding:clamp(3rem,7vw,5.8rem) 0 2.8rem;border-bottom:1px solid var(--line-strong)}.eyebrow{color:var(--accent);font:760 .72rem ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase}.hero h1{font:540 clamp(3rem,6vw,6rem)/.92 Georgia,Cambria,serif;letter-spacing:-.035em;margin:.2rem 0 1rem;max-width:9ch}.lead{font-size:1.12rem;color:var(--muted);max-width:44rem}.hero-note{border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);padding:1rem 0}.hero-note strong{display:block;font:600 1.55rem Georgia,serif;margin-bottom:.5rem}.hero-note p{margin:.35rem 0;color:var(--muted)}
+.tabs{display:flex;gap:.2rem;border-bottom:1px solid var(--line);margin:2rem 0 0}.tab{min-height:48px;border:0;border-bottom:3px solid transparent;background:transparent;padding:.75rem 1rem;color:var(--muted);font-weight:750}.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.panel{padding:2.5rem 0 4rem}.panel[hidden]{display:none}.lab-grid{display:grid;grid-template-columns:minmax(270px,.36fr) minmax(0,1fr);gap:clamp(1.5rem,5vw,4rem);align-items:start}.controls{position:sticky;top:82px;border-top:3px solid var(--accent);padding-top:1rem}.controls h2{font:540 2rem/1.05 Georgia,serif;margin:.1rem 0 1rem}.controls p{color:var(--muted)}.field{margin:1rem 0}.field label{display:block;font-weight:750;margin-bottom:.35rem}.field input{width:100%;min-height:46px;border:1px solid var(--line-strong);background:var(--paper);padding:.6rem .75rem;border-radius:.42rem}.preset-row{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.9rem}.preset{min-height:40px;border:1px solid var(--line-strong);background:var(--paper);padding:.48rem .68rem;border-radius:.42rem}.preset:hover{border-color:var(--accent)}.btn{display:inline-block;min-height:44px;border:1px solid var(--line-strong);background:var(--paper);padding:.62rem .85rem;border-radius:.42rem;text-decoration:none}.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.readout{border-top:1px solid var(--line-strong)}.readout-section{padding:1.25rem 0;border-bottom:1px solid var(--line)}.readout-section h3{font:600 1.45rem Georgia,serif;margin:.1rem 0 1rem}.headline-value{font:540 clamp(2.2rem,5vw,5rem)/1 Georgia,serif;color:var(--support);overflow-wrap:anywhere}.meta{color:var(--muted)}.tests{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.test{padding:.9rem;text-align:center;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.test b{display:block;color:var(--muted);font:800 1rem ui-monospace,monospace}.test.good{background:color-mix(in srgb,var(--good) 9%,transparent)}.test.good b{color:var(--good)}.test small{color:var(--muted)}.pair-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-top:1px solid var(--line-strong);border-left:1px solid var(--line-strong)}.metric{padding:1rem;border-right:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong)}.metric span{display:block;color:var(--muted);font-size:.82rem}.metric strong{display:block;margin-top:.15rem;font:600 1.35rem Georgia,serif;color:var(--support);overflow-wrap:anywhere}.steps{border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong)}.step{display:grid;grid-template-columns:3rem 1fr auto;gap:1rem;align-items:center;padding:.85rem 0;border-bottom:1px solid var(--line)}.step:last-child{border-bottom:0}.step span{font:700 .76rem ui-monospace,monospace;color:var(--muted)}.step code{font:600 1.08rem "Cambria Math",serif}.step b{color:var(--accent)}.fraction{padding:1rem 0;border-top:1px solid var(--line);font:600 1.2rem "Cambria Math",serif}.legend{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem;color:var(--muted);font-size:.88rem}.dot{display:inline-block;width:.72rem;height:.72rem;border-radius:50%;margin-right:.35rem;border:1px solid var(--line-strong)}.dot.good{background:var(--good)}.dot.bad{background:transparent}.footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);display:flex;justify-content:space-between;gap:1rem}
+@media(max-width:900px){.hero,.lab-grid{grid-template-columns:1fr}.controls{position:static}.pair-metrics{grid-template-columns:1fr}.tests{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.shell{width:min(calc(100% - 1rem),var(--max))}.tests{grid-template-columns:1fr 1fr}.step{grid-template-columns:2.4rem 1fr}.step b{grid-column:2}.footer{flex-direction:column}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="shell topbar-inner"><a class="brand" href="03.10.26.html">← Занятие 03.10.26</a><button id="themeToggle" type="button">Тёмная тема</button></div></header>
+<main class="shell">
+  <section class="hero">
+    <div><p class="eyebrow">Цифровая лаборатория</p><h1>Лаборатория чисел</h1><p class="lead">Меняйте числа и наблюдайте, как одновременно перестраиваются признаки делимости, разложение на простые множители, количество делителей, НОД, НОК и алгоритм Евклида.</p></div>
+    <div class="hero-note"><strong>Один источник состояния</strong><p>Все значения вычисляются из введённых чисел: визуальные признаки, формулы и цепочка Евклида всегда относятся к одной и той же паре.</p><p><a class="btn" href="../images/03.10.26.png">Открыть постер</a></p></div>
+  </section>
+
+  <div class="tabs" role="tablist" aria-label="Режим лаборатории">
+    <button class="tab" id="tabNumber" role="tab" aria-selected="true" aria-controls="panelNumber" type="button">Одно число</button>
+    <button class="tab" id="tabPair" role="tab" aria-selected="false" aria-controls="panelPair" type="button">Пара чисел</button>
+  </div>
+
+  <section class="panel" id="panelNumber" role="tabpanel" aria-labelledby="tabNumber">
+    <div class="lab-grid">
+      <aside class="controls">
+        <p class="eyebrow">Режим 01</p><h2>Исследуйте число</h2>
+        <p>Вводите натуральное число от 2 до 999 999. Система покажет его структуру без заранее заготовленных ответов.</p>
+        <div class="field"><label for="nInput">Число n</label><input id="nInput" type="number" min="2" max="999999" value="756" inputmode="numeric"></div>
+        <div class="preset-row" aria-label="Готовые примеры"><button class="preset" data-number="144" type="button">144</button><button class="preset" data-number="315" type="button">315</button><button class="preset" data-number="756" type="button">756</button><button class="preset" data-number="1248" type="button">1248</button></div>
+      </aside>
+      <div class="readout" aria-live="polite">
+        <section class="readout-section"><p class="eyebrow">Разложение</p><h3>Простые множители</h3><div class="headline-value" id="factorization">2² · 3³ · 7</div><p class="meta" id="numberMeta">Чётное число · 24 натуральных делителя</p></section>
+        <section class="readout-section"><h3>Признаки делимости</h3><div class="tests" id="tests"></div><div class="legend"><span><i class="dot good"></i>признак выполняется</span><span><i class="dot bad"></i>признак не выполняется</span></div></section>
+        <section class="readout-section"><h3>Пары делителей</h3><p class="meta">Пары перечисляются до квадратного корня из числа: дальше они начинают повторяться в обратном порядке.</p><div id="divisorPairs"></div></section>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panelPair" role="tabpanel" aria-labelledby="tabPair" hidden>
+    <div class="lab-grid">
+      <aside class="controls">
+        <p class="eyebrow">Режим 02</p><h2>Сравните пару</h2>
+        <p>Меняйте два натуральных числа. НОД, НОК, сокращённая дробь и цепочка Евклида пересчитываются синхронно.</p>
+        <div class="field"><label for="aInput">Число a</label><input id="aInput" type="number" min="1" max="999999" value="1220" inputmode="numeric"></div>
+        <div class="field"><label for="bInput">Число b</label><input id="bInput" type="number" min="1" max="999999" value="440" inputmode="numeric"></div>
+        <div class="preset-row" aria-label="Готовые пары"><button class="preset" data-pair="1220,440" type="button">1220 и 440</button><button class="preset" data-pair="210,104" type="button">210 и 104</button><button class="preset" data-pair="252,84" type="button">252 и 84</button><button class="preset" data-pair="14,25" type="button">14 и 25</button></div>
+      </aside>
+      <div class="readout" aria-live="polite">
+        <section class="readout-section"><h3>Итог пары</h3><div class="pair-metrics"><div class="metric"><span>НОД(a,b)</span><strong id="gcdOut">20</strong></div><div class="metric"><span>НОК(a,b)</span><strong id="lcmOut">26840</strong></div><div class="metric"><span>Взаимно простые?</span><strong id="coprimeOut">нет</strong></div></div></section>
+        <section class="readout-section"><h3>Алгоритм Евклида</h3><div class="steps" id="euclidSteps"></div></section>
+        <section class="readout-section"><h3>Что происходит с дробью a/b</h3><div class="fraction" id="fractionOut">1220/440 = 61/22</div><p class="meta">Для максимального сокращения числитель и знаменатель делятся на НОД.</p></section>
+        <section class="readout-section"><h3>Проверка связи НОД и НОК</h3><div class="fraction" id="identityOut">20 · 26840 = 1220 · 440</div></section>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="shell footer"><span>Лёвин Артём Александрович · эксклюзивно для Нади Клименко</span><a href="index.html">Учебный кабинет</a></footer>
+
+<script>
+(() => {
+  "use strict";
+  const root=document.documentElement,themeButton=document.getElementById("themeToggle");
+  const saved=localStorage.getItem("nadya-theme");if(saved==="dark"||saved==="light")root.dataset.theme=saved;
+  const syncTheme=()=>themeButton.textContent=root.dataset.theme==="dark"?"Светлая тема":"Тёмная тема";syncTheme();
+  themeButton.addEventListener("click",()=>{root.dataset.theme=root.dataset.theme==="dark"?"light":"dark";localStorage.setItem("nadya-theme",root.dataset.theme);syncTheme();});
+
+  const clamp=(value,min,max)=>Math.min(max,Math.max(min,Math.trunc(Number(value)||min)));
+  const factors=(n)=>{const out=[];let x=n;for(let p=2;p*p<=x;p+=(p===2?1:2)){if(x%p)continue;let k=0;while(x%p===0){x/=p;k++;}out.push([p,k]);}if(x>1)out.push([x,1]);return out;};
+  const superNum=(n)=>String(n).replace(/0/g,"⁰").replace(/1/g,"¹").replace(/2/g,"²").replace(/3/g,"³").replace(/4/g,"⁴").replace(/5/g,"⁵").replace(/6/g,"⁶").replace(/7/g,"⁷").replace(/8/g,"⁸").replace(/9/g,"⁹");
+  const factorText=(f)=>f.map(([p,k])=>k===1?String(p):p+superNum(k)).join(" · ");
+  const tau=(f)=>f.reduce((a,[,k])=>a*(k+1),1);
+  const divisorWord=(n)=>{const m10=n%10,m100=n%100;return m10===1&&m100!==11?"натуральный делитель":m10>=2&&m10<=4&&(m100<12||m100>14)?"натуральных делителя":"натуральных делителей";};
+  const divisorPairs=(n)=>{const pairs=[];for(let d=1;d*d<=n;d++)if(n%d===0)pairs.push([d,n/d]);return pairs;};
+  const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a;};
+  const euclid=(a,b)=>{a=Math.abs(a);b=Math.abs(b);if(a<b)[a,b]=[b,a];const steps=[];while(b){const q=Math.floor(a/b),r=a%b;steps.push([a,b,q,r]);a=b;b=r;}return {g:a,steps};};
+
+  const nInput=document.getElementById("nInput"),tests=document.getElementById("tests"),factorization=document.getElementById("factorization"),numberMeta=document.getElementById("numberMeta"),pairsOut=document.getElementById("divisorPairs");
+  const divisors=[2,3,4,5,6,9,12,18];
+  function renderNumber(){
+    const n=clamp(nInput.value,2,999999);nInput.value=n;const f=factors(n);factorization.textContent=factorText(f);const count=tau(f);numberMeta.textContent=(n%2===0?"Чётное":"Нечётное")+" число · "+count+" "+divisorWord(count);
+    tests.replaceChildren(...divisors.map(d=>{const el=document.createElement("div");const ok=n%d===0;el.className="test "+(ok?"good":"");el.innerHTML="<b>÷ "+d+"</b><small>"+(ok?"делится":"не делится")+"</small>";return el;}));
+    const frag=document.createDocumentFragment();divisorPairs(n).forEach(([x,y])=>{const p=document.createElement("p");p.textContent=x+" · "+y+" = "+n;p.style.margin=".35rem 0";frag.appendChild(p);});pairsOut.replaceChildren(frag);
+  }
+  nInput.addEventListener("input",renderNumber);document.querySelectorAll("[data-number]").forEach(b=>b.addEventListener("click",()=>{nInput.value=b.dataset.number;renderNumber();nInput.focus();}));renderNumber();
+
+  const aInput=document.getElementById("aInput"),bInput=document.getElementById("bInput"),gcdOut=document.getElementById("gcdOut"),lcmOut=document.getElementById("lcmOut"),coprimeOut=document.getElementById("coprimeOut"),stepsOut=document.getElementById("euclidSteps"),fractionOut=document.getElementById("fractionOut"),identityOut=document.getElementById("identityOut");
+  function renderPair(){
+    const a=clamp(aInput.value,1,999999),b=clamp(bInput.value,1,999999);aInput.value=a;bInput.value=b;const data=euclid(a,b),g=data.g,l=a/g*b;gcdOut.textContent=g;lcmOut.textContent=l;coprimeOut.textContent=g===1?"да":"нет";
+    stepsOut.replaceChildren(...data.steps.map((s,i)=>{const [x,y,q,r]=s,el=document.createElement("div");el.className="step";el.innerHTML="<span>"+String(i+1).padStart(2,"0")+"</span><code>"+x+" = "+q+" · "+y+" + "+r+"</code><b>"+(r===0?"НОД = "+g:"r = "+r)+"</b>";return el;}));
+    fractionOut.textContent=a+"/"+b+" = "+(a/g)+"/"+(b/g);identityOut.textContent=g+" · "+l+" = "+a+" · "+b+" = "+(a*b);
+  }
+  [aInput,bInput].forEach(i=>i.addEventListener("input",renderPair));document.querySelectorAll("[data-pair]").forEach(btn=>btn.addEventListener("click",()=>{const [a,b]=btn.dataset.pair.split(",");aInput.value=a;bInput.value=b;renderPair();aInput.focus();}));renderPair();
+
+  const tabs=[document.getElementById("tabNumber"),document.getElementById("tabPair")],panels=[document.getElementById("panelNumber"),document.getElementById("panelPair")];
+  function selectTab(index,focus=false){tabs.forEach((t,i)=>{const active=i===index;t.setAttribute("aria-selected",active);panels[i].hidden=!active;});if(focus)tabs[index].focus();history.replaceState(null,"",index===1?"?mode=pair":"?mode=number");}
+  tabs.forEach((t,i)=>{t.addEventListener("click",()=>selectTab(i));t.addEventListener("keydown",e=>{if(e.key==="ArrowRight"||e.key==="ArrowLeft"){e.preventDefault();const next=e.key==="ArrowRight"?(i+1)%2:(i+1)%2;selectTab(next,true);}});});
+  const params=new URLSearchParams(location.search);if(params.get("mode")==="pair")selectTab(1);
+})();
+</script>
+</body>
+</html>
