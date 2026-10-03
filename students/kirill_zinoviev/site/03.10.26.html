@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Кирилл Зиновьев: текстовые задачи, составление системы двух уравнений и метод подстановки.">
+<title>Текст → система → подстановка — Кирилл Зиновьев</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23295c64'/%3E%3Cpath d='M14 20h17m5 0h14M14 32h36M14 44h17m5 0h14' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='m29 15 7 5-7 5m0 14 7 5-7 5' fill='none' stroke='%23d28a52' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f1eee6;--paper:#fbf8f1;--paper-2:#e8e2d7;--ink:#202725;--muted:#68716d;
+  --line:#cbc4b8;--line-strong:#929c97;--accent:#295c64;--accent-strong:#17434a;
+  --accent-soft:#dbe7e5;--warm:#a86134;--warm-soft:#f2dfcf;--danger:#9b4b43;
+  --ok:#416d5d;--focus:#1e6b74;--shadow:0 18px 46px rgba(39,45,42,.09);
+}
+html[data-theme="dark"]{
+  color-scheme:dark;--bg:#111715;--paper:#19201d;--paper-2:#242a26;--ink:#edf2ee;--muted:#a8b2ac;
+  --line:#354039;--line-strong:#66736b;--accent:#79b4b5;--accent-strong:#a7d7d4;
+  --accent-soft:#203836;--warm:#dea071;--warm-soft:#3b2c22;--danger:#df847c;
+  --ok:#82b49f;--focus:#91d1d1;--shadow:0 20px 52px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:inherit}button,input{font:inherit;color:inherit}button{cursor:pointer}
+.skip{position:fixed;left:1rem;top:-5rem;z-index:100;background:var(--ink);color:var(--paper);padding:.65rem 1rem;text-decoration:none}.skip:focus{top:1rem}
+.wrap{width:min(1180px,calc(100% - 40px));margin:auto}
+.eyebrow{margin:0 0 .62rem;color:var(--accent);font:800 .69rem/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.13em;text-transform:uppercase}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.06;color:var(--ink)}h1,h2,h3,p{margin-top:0}
+h1{font-size:clamp(3.2rem,8.2vw,7.7rem);letter-spacing:-.065em;max-width:8.6ch;margin-bottom:1.25rem}
+h2{font-size:clamp(2rem,4.3vw,3.6rem);letter-spacing:-.04em;margin-bottom:.7rem}
+h3{font-size:1.28rem;margin-bottom:.55rem}
+.hero{position:relative;margin:0 calc(50% - 50vw);padding:clamp(3rem,7vw,6.2rem) max(clamp(1.2rem,4vw,2rem),calc((100vw - 1180px)/2)) 2.7rem;min-height:clamp(38rem,66vw,49rem);display:grid;grid-template-columns:minmax(0,1fr) minmax(18rem,.62fr);gap:clamp(2rem,7vw,7rem);align-items:end;border-bottom:1px solid var(--line);overflow:hidden}
+.hero::before{content:"x + y";position:absolute;right:-.02em;top:.05em;color:var(--accent);opacity:.055;font:500 clamp(8rem,21vw,20rem)/1 Georgia,serif;letter-spacing:-.08em;pointer-events:none}
+.hero-copy{align-self:center;position:relative;z-index:1}.hero-lead{max-width:45rem;color:var(--muted);font-size:clamp(1rem,1.6vw,1.2rem)}
+.hero-path{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--line-strong);display:grid;grid-template-columns:auto 1fr;gap:1rem;max-width:46rem}.hero-path b{font:600 1.25rem Georgia,serif;color:var(--warm)}.hero-path span{color:var(--muted)}
+.hero-ledger{position:relative;z-index:1;border-left:1px solid var(--line-strong);padding:1rem 0 1rem 1.4rem;display:grid;gap:1.1rem;align-self:end}.hero-ledger .date{font:500 clamp(3.8rem,7vw,6.7rem)/.82 Georgia,serif;color:var(--warm);letter-spacing:-.06em}.hero-ledger small{color:var(--muted)}.hero-eq{padding:1rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font:600 clamp(1.45rem,2.8vw,2.2rem)/1.4 "Cambria Math",Georgia,serif}
+.route{grid-column:1/-1;position:relative;z-index:1;display:flex;flex-wrap:wrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:1rem}.route a{padding:.78rem 1rem;text-decoration:none;color:var(--muted);border-right:1px solid var(--line);font-size:.82rem}.route a:hover,.route a:focus-visible{background:var(--accent-soft);color:var(--ink)}
+.toolbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:0;margin:0 calc(50% - 50vw) clamp(2.5rem,5vw,4.6rem);padding:.55rem max(clamp(.75rem,4vw,2rem),calc((100vw - 1180px)/2));border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(12px)}
+.toolbar a,.toolbar button{min-height:42px;padding:.55rem .8rem;border:0;border-right:1px solid var(--line);background:transparent;text-decoration:none}.toolbar a:first-child{border-left:1px solid var(--line)}.toolbar a:hover,.toolbar button:hover{background:var(--accent-soft)}.toolbar .grow{flex:1;border:0}
+button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.section{padding:clamp(2.8rem,6vw,5.8rem) 0;border-bottom:1px solid var(--line)}
+.section-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.48fr);gap:clamp(1.5rem,5vw,4rem);align-items:end;margin-bottom:2rem}.section-head p{margin:0;color:var(--muted);max-width:31rem}
+.model-workbench{display:grid;grid-template-columns:minmax(230px,.36fr) minmax(0,1fr);gap:clamp(1.5rem,5vw,4rem);align-items:start}
+.scenario-list{border-top:1px solid var(--line-strong)}.scenario-list button{width:100%;display:grid;grid-template-columns:2.2rem 1fr auto;gap:.5rem;text-align:left;padding:1rem 0;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--muted)}.scenario-list button b{color:var(--warm);font:700 .8rem ui-monospace,monospace}.scenario-list button[aria-pressed="true"]{color:var(--ink)}.scenario-list button[aria-pressed="true"] span{font-weight:800}.scenario-list button[aria-pressed="true"]::after{content:"→";color:var(--accent);font-weight:900}
+.ledger{background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow);padding:clamp(1.3rem,4vw,3rem);min-height:27rem;position:relative;overflow:hidden}.ledger::before{content:"";position:absolute;left:3.2rem;top:0;bottom:0;width:1px;background:color-mix(in srgb,var(--warm) 35%,transparent)}.ledger-row{position:relative;padding:1rem 0 1rem 4.4rem;border-bottom:1px solid var(--line)}.ledger-row:last-child{border-bottom:0}.ledger-label{display:block;color:var(--muted);font:700 .68rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.09em;margin-bottom:.35rem}.ledger-text{font-family:Georgia,serif;font-size:1.1rem}.ledger-formula{font:600 clamp(1.55rem,3vw,2.5rem)/1.35 "Cambria Math",Georgia,serif;overflow-x:auto}.ledger-note{color:var(--muted);margin:.4rem 0 0}
+.sub-grid{display:grid;grid-template-columns:minmax(0,.78fr) minmax(260px,.32fr);gap:clamp(1.5rem,5vw,4rem);align-items:start}.sub-machine{border-top:1px solid var(--line-strong)}.sub-step{display:grid;grid-template-columns:3.1rem 1fr;gap:1rem;padding:1.15rem 0;border-bottom:1px solid var(--line);opacity:.5}.sub-step.active{opacity:1}.sub-step strong:first-child{color:var(--accent);font:700 .78rem ui-monospace,monospace}.sub-formula{font:600 clamp(1.35rem,2.5vw,2rem) "Cambria Math",Georgia,serif}.sub-controls{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem}.btn{border:1px solid var(--line-strong);background:transparent;padding:.65rem .9rem;font-weight:800}.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}.sub-aside{padding:1.2rem;border-left:3px solid var(--warm);background:var(--warm-soft)}.sub-aside p{margin:.4rem 0;color:var(--muted)}
+.algorithm{counter-reset:step;border-top:1px solid var(--line-strong)}.alg-step{counter-increment:step;display:grid;grid-template-columns:4rem minmax(0,1fr);gap:1.1rem;padding:1.2rem 0;border-bottom:1px solid var(--line)}.alg-step::before{content:counter(step,decimal-leading-zero);color:var(--accent);font:600 1.05rem Georgia,serif}.alg-step strong{font-family:Georgia,serif;font-size:1.12rem}
+.error-grid{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line-strong)}.error{display:grid;grid-template-columns:2.3rem 1fr;gap:.8rem;padding:1.05rem 1rem 1.05rem 0;border-bottom:1px solid var(--line)}.error:nth-child(even){padding-left:1rem;border-left:1px solid var(--line)}.error b{color:var(--danger);font:800 .78rem ui-monospace,monospace}
+.examples{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line-strong)}.example{padding:1.5rem 1.5rem 1.5rem 0;border-bottom:1px solid var(--line)}.example+.example{padding-left:1.5rem;border-left:1px solid var(--line)}.example p{color:var(--muted)}.formula{font:600 clamp(1.35rem,2.5vw,2rem)/1.5 "Cambria Math",Georgia,serif}.reveal{border:0;border-bottom:1px solid var(--accent);background:transparent;color:var(--accent-strong);padding:.3rem 0;font-weight:800}.reveal-panel{margin-top:1rem;padding-top:1rem;border-top:1px dashed var(--line);color:var(--muted)}.reveal-panel[hidden]{display:none}
+.poster{border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line)}.poster summary{cursor:pointer;display:flex;justify-content:space-between;gap:1rem;padding:1.1rem 0;font:600 1rem Georgia,serif}.poster summary span:last-child{color:var(--accent);font:700 .68rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em}.poster-body{display:grid;grid-template-columns:minmax(0,.34fr) minmax(0,.66fr);gap:2rem;align-items:start;padding:1rem 0 2rem}.poster-body p{color:var(--muted)}.poster-button{border:0;background:transparent;padding:0;width:100%}.poster img{width:100%;border:1px solid var(--line);background:var(--paper)}
+.practice-list{counter-reset:task;border-top:1px solid var(--line-strong)}.task{counter-increment:task;display:grid;grid-template-columns:3.2rem minmax(0,1fr) auto;gap:1rem;align-items:start;padding:1.15rem 0;border-bottom:1px solid var(--line)}.task::before{content:counter(task,decimal-leading-zero);color:var(--warm);font:700 .84rem ui-monospace,monospace;padding-top:.22rem}.task p{margin:0}.answer-toggle{border:0;border-bottom:1px solid var(--line-strong);background:transparent;padding:.25rem 0;color:var(--accent-strong);font-weight:800;white-space:nowrap}.task-answer{grid-column:2/-1;margin:.65rem 0 0;padding:.8rem 0 0;border-top:1px dashed var(--line);color:var(--muted)}.task-answer[hidden]{display:none}
+.selfcheck{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line-strong);margin-top:2rem}.selfcheck label{display:flex;gap:.7rem;align-items:flex-start;padding:1rem 1rem 1rem 0;border-bottom:1px solid var(--line)}.selfcheck label:nth-child(even){padding-left:1rem;border-left:1px solid var(--line)}.progress{height:4px;background:var(--line);margin-top:1.2rem}.progress span{display:block;width:0;height:100%;background:var(--accent);transition:width .18s ease}
+.footer{display:flex;justify-content:space-between;gap:1rem;color:var(--muted);font-size:.9rem;padding:2rem 0}
+dialog{width:min(1120px,calc(100% - 28px));max-height:92vh;padding:0;border:0;background:var(--paper);color:var(--ink);box-shadow:var(--shadow)}dialog::backdrop{background:rgba(4,10,8,.78)}.modal-bar{display:flex;justify-content:space-between;align-items:center;padding:.75rem 1rem;border-bottom:1px solid var(--line)}.modal-bar button{border:1px solid var(--line-strong);background:transparent;padding:.45rem .75rem}dialog img{width:100%;height:auto}
+@media(max-width:900px){.hero{grid-template-columns:1fr;min-height:auto}.hero-ledger{border-left:0;border-top:1px solid var(--line-strong);padding:1.2rem 0 0}.model-workbench,.section-head,.sub-grid,.poster-body{grid-template-columns:1fr}.scenario-list{display:grid;grid-template-columns:1fr 1fr}.scenario-list button:nth-child(even){padding-left:1rem;border-left:1px solid var(--line)}}
+@media(max-width:680px){.wrap{width:min(100% - 24px,1180px)}.hero{padding-left:12px;padding-right:12px}.hero::before{font-size:8rem;top:.5em}.route{display:grid;grid-template-columns:1fr 1fr}.route a:nth-child(even){border-right:0}.toolbar{overflow-x:auto;white-space:nowrap}.toolbar .grow{display:none}.scenario-list,.error-grid,.examples,.selfcheck{grid-template-columns:1fr}.scenario-list button:nth-child(even),.error:nth-child(even),.example+.example,.selfcheck label:nth-child(even){padding-left:0;border-left:0}.ledger{padding:1.1rem}.ledger::before{left:1.4rem}.ledger-row{padding-left:2.5rem}.task{grid-template-columns:2.7rem 1fr}.answer-toggle{grid-column:2;justify-self:start}.task-answer{grid-column:2}.footer{flex-direction:column}}
+@media(max-width:390px){body{font-size:15px}.wrap{width:min(100% - 18px,1180px)}h1{font-size:2.8rem}.hero-path{grid-template-columns:1fr}.ledger-formula{font-size:1.55rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.progress span{transition:none}}
+@media print{:root,html[data-theme="dark"]{--bg:#fff;--paper:#fff;--paper-2:#fff;--ink:#111;--muted:#333;--line:#bbb;--line-strong:#777;--accent:#295c64;--accent-strong:#295c64;--warm:#8b542f;--warm-soft:#fff;--shadow:none}body{background:#fff}.wrap{width:100%}.toolbar,.scenario-list,.sub-controls,.reveal,.answer-toggle,.poster summary,.modal-bar,dialog{display:none!important}.hero{min-height:auto;padding:0 0 2rem;display:block}.hero::before{display:none}.hero-ledger{margin-top:1.4rem}.model-workbench,.sub-grid{display:block}.ledger{box-shadow:none}.sub-step{opacity:1}.task-answer{display:block!important}.footer{padding-bottom:0}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">К содержанию</a>
+<div class="wrap">
+<header class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">Математика · 7 класс · занятие 16</p>
+    <h1>Текст → система → подстановка</h1>
+    <p class="hero-lead">Сегодня задача решается в три смысловых шага: обозначить неизвестные, перевести условие в связанные уравнения и заменить одну переменную равным ей выражением.</p>
+    <div class="hero-path"><b>Сначала модель</b><span>Вычисления начинаются только после того, как в уравнениях учтены все части условия.</span></div>
+  </div>
+  <aside class="hero-ledger" aria-label="Данные занятия">
+    <div class="date">03.10</div>
+    <strong>Кирилл Зиновьев</strong>
+    <small>Лёвин Артём Александрович · текстовые задачи и метод подстановки</small>
+    <div class="hero-eq">x + y = целое<br>x = y + разность</div>
+  </aside>
+  <nav class="route" aria-label="Маршрут занятия">
+    <a href="#translation">01 · Перевод</a><a href="#system">02 · Система</a><a href="#substitution">03 · Подстановка</a><a href="#algorithm">04 · Алгоритм</a><a href="#examples">05 · Примеры</a><a href="#practice">06 · Тренировка</a>
+  </nav>
+</header>
+
+<nav class="toolbar" aria-label="Инструменты страницы">
+  <a href="index.html">К кабинету</a><a href="../pdf_docs/03.10.26.pdf" download>PDF</a><a href="../tex_docs/03.10.26.tex">TeX</a>
+  <span class="grow"></span><button id="theme" type="button" aria-label="Переключить цветовую тему">Тёмная тема</button><button id="printPage" type="button">Печать</button>
+</nav>
+
+<main id="content">
+<section class="section" id="translation">
+  <header class="section-head"><div><p class="eyebrow">01 · Перевод условия</p><h2>Слова становятся связями</h2></div><p>Фразы «всего», «на больше», «на меньше», «периметр» и фиксированная часть задают структуру уравнений.</p></header>
+  <div class="model-workbench" id="model">
+    <div class="scenario-list" role="group" aria-label="Выбор модели задачи">
+      <button type="button" data-scenario="tickets" aria-pressed="true"><b>01</b><span>Билеты</span></button>
+      <button type="button" data-scenario="houses" aria-pressed="false"><b>02</b><span>Дома</span></button>
+      <button type="button" data-scenario="triangle" aria-pressed="false"><b>03</b><span>Треугольник</span></button>
+      <button type="button" data-scenario="route" aria-pressed="false"><b>04</b><span>Трасса</span></button>
+    </div>
+    <div class="ledger" aria-live="polite">
+      <div class="ledger-row"><span class="ledger-label">Что обозначаем</span><div class="ledger-text" id="modelVars"></div></div>
+      <div class="ledger-row"><span class="ledger-label">Фраза про целое</span><div class="ledger-formula" id="modelWhole"></div><p class="ledger-note" id="modelWholeNote"></p></div>
+      <div class="ledger-row"><span class="ledger-label">Связь неизвестных</span><div class="ledger-formula" id="modelLink"></div><p class="ledger-note" id="modelLinkNote"></p></div>
+      <div class="ledger-row"><span class="ledger-label">Что подставляем</span><div class="ledger-formula" id="modelSub"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="system">
+  <header class="section-head"><div><p class="eyebrow">02 · Два уравнения</p><h2>Система — это одна задача, записанная двумя связями</h2></div><p>Одно уравнение обычно описывает целое, второе связывает неизвестные между собой. Если часть условия потеряна, модель неполна.</p></header>
+  <div class="sub-aside">
+    <strong>Контрольный вопрос</strong>
+    <p>«Все ли части, о которых говорится в условии, я учёл?» Для трассы в сумму обязательно входит наземный участок 703 м.</p>
+  </div>
+</section>
+
+<section class="section" id="substitution">
+  <header class="section-head"><div><p class="eyebrow">03 · Главная идея</p><h2>Подстановка убирает одну неизвестную</h2></div><p>Если известно, чему равен y, его можно заменить этим выражением в другом уравнении.</p></header>
+  <div class="sub-grid">
+    <div>
+      <div class="sub-machine" aria-live="polite">
+        <div class="sub-step active"><strong>01</strong><div><strong>Система</strong><div class="sub-formula">x + y = 392<br>y = x − 36</div></div></div>
+        <div class="sub-step"><strong>02</strong><div><strong>Заменяем y</strong><div class="sub-formula">x + (x − 36) = 392</div></div></div>
+        <div class="sub-step"><strong>03</strong><div><strong>Решаем одно уравнение</strong><div class="sub-formula">2x − 36 = 392 → x = 214</div></div></div>
+        <div class="sub-step"><strong>04</strong><div><strong>Возвращаемся за y</strong><div class="sub-formula">y = 214 − 36 = 178</div></div></div>
+        <div class="sub-step" id="check"><strong>05</strong><div><strong>Проверяем</strong><div class="sub-formula">214 + 178 = 392<br>214 − 178 = 36</div></div></div>
+      </div>
+      <div class="sub-controls"><button class="btn primary" id="subNext" type="button">Следующий шаг</button><button class="btn" id="subReset" type="button">Сначала</button></div>
+    </div>
+    <aside class="sub-aside">
+      <strong>Что важно заметить</strong>
+      <p>Подставляется выражение, равное переменной. После нахождения одной переменной решение ещё не закончено: нужно найти вторую.</p>
+    </aside>
+  </div>
+</section>
+
+<section class="section" id="algorithm">
+  <header class="section-head"><div><p class="eyebrow">04 · Рабочий маршрут</p><h2>Алгоритм решения</h2></div><p>Эта последовательность подходит для задач занятия: суммы, разности, периметр и фиксированные части.</p></header>
+  <div class="algorithm">
+    <div class="alg-step"><div><strong>Прочитайте условие целиком.</strong><br><span>Определите, что именно неизвестно.</span></div></div>
+    <div class="alg-step"><div><strong>Введите x и y.</strong><br><span>Подпишите смысл каждой переменной и единицы измерения.</span></div></div>
+    <div class="alg-step"><div><strong>Переведите важные фразы в равенства.</strong><br><span>Получите два связанных уравнения.</span></div></div>
+    <div class="alg-step"><div><strong>Выразите одну переменную через другую.</strong></div></div>
+    <div class="alg-step"><div><strong>Выполните подстановку и решите уравнение с одной неизвестной.</strong></div></div>
+    <div class="alg-step"><div><strong>Вернитесь к связывающему уравнению и найдите вторую неизвестную.</strong></div></div>
+    <div class="alg-step"><div><strong>Проверьте исходные условия и запишите ответ с единицами.</strong></div></div>
+  </div>
+</section>
+
+<section class="section">
+  <header class="section-head"><div><p class="eyebrow">Перед решением</p><h2>Пять ошибок, которые ломают модель</h2></div><p>Проверка смысла важнее скорости вычислений.</p></header>
+  <div class="error-grid">
+    <div class="error"><b>01</b><span>Перепутать направление фразы «на a больше / меньше».</span></div>
+    <div class="error"><b>02</b><span>Ввести переменные, но не определить, что означает каждая.</span></div>
+    <div class="error"><b>03</b><span>Забыть одну из частей целого, например наземный участок трассы.</span></div>
+    <div class="error"><b>04</b><span>Подставить случайное число вместо выражения, связывающего x и y.</span></div>
+    <div class="error"><b>05</b><span>Найти только одну переменную и остановиться без проверки.</span></div>
+  </div>
+</section>
+
+<section class="section" id="examples">
+  <header class="section-head"><div><p class="eyebrow">05 · Опорные примеры</p><h2>Два решения целиком</h2></div><p>Сначала система, затем подстановка, затем возврат ко второй переменной.</p></header>
+  <div class="examples">
+    <article class="example">
+      <h3>Дома на двух улицах</h3>
+      <p>Всего 19 домов. На Парковой на 3 дома меньше, чем на Молодёжной.</p>
+      <div class="formula">x + y = 19<br>y = x + 3</div>
+      <button class="reveal" type="button" aria-expanded="false">Показать решение</button>
+      <div class="reveal-panel" hidden>x + (x + 3) = 19 → 2x = 16 → x = 8; y = 11. <strong>Ответ:</strong> 8 и 11 домов.</div>
+    </article>
+    <article class="example">
+      <h3>Трасса и два тоннеля</h3>
+      <p>Общая длина 6940 м, наземная часть 703 м, первый тоннель длиннее второго на 17 м.</p>
+      <div class="formula">x + y + 703 = 6940<br>x = y + 17</div>
+      <button class="reveal" type="button" aria-expanded="false">Показать решение</button>
+      <div class="reveal-panel" hidden>(y + 17) + y + 703 = 6940 → 2y = 6220 → y = 3110; x = 3127. Проверка: 3127 + 3110 + 703 = 6940.</div>
+    </article>
+  </div>
+</section>
+
+<section class="section">
+  <details class="poster">
+    <summary><span>Акварельная памятка по занятию</span><span>развернуть</span></summary>
+    <div class="poster-body">
+      <p>Постер собирает в одном поле главный маршрут: перевод слов в формулы, два уравнения, подстановка, типичные ошибки и четыре опорные модели.</p>
+      <button class="poster-button" type="button" id="openPoster" aria-label="Открыть постер крупно"><img src="../images/03.10.26.png" alt="Постер: текстовые задачи, составление уравнений и метод подстановки"></button>
+    </div>
+  </details>
+</section>
+
+<section class="section" id="practice">
+  <header class="section-head"><div><p class="eyebrow">06 · Путь А</p><h2>10 задач на закрепление</h2></div><p>Сначала подпишите смысл x и y, затем составьте систему. Ответ открывайте только после собственного решения.</p></header>
+  <div class="practice-list">
+    <div class="task"><p>В двух коробках 54 карандаша. В первой коробке на 8 карандашей больше, чем во второй. Сколько карандашей в каждой коробке?</p><button class="answer-toggle" type="button" aria-expanded="false">Ответ</button><div class="task-answer" hidden>31 карандаш в первой коробке, 23 — во второй.</div></div>
+    <div class="task"><p>На двух полках 71 книга. На первой полке на 13 книг меньше, чем на второй. Сколько книг на каждой полке?</p><button class="answer-toggle" type="button" aria-expanded="false">Ответ</button><div class="task-answer" hidden>29 книг на первой полке, 42 — на второй.</div></div>
+    <div class="task"><p>В двух кассах продали 426 билетов. В первой кассе продали на 38 билетов больше, чем во второй. Сколько билетов продали в каждой кассе?</p><button class="answer-toggle" type="button" aria-expanded="false">Ответ</button><div class="task-answer" hidden>232 билета в первой кассе, 194 — во второй.</div></div>
+    <div class="task"><p>На двух участках высадили 47 деревьев. На втором участке высадили на 9 деревьев больше, чем на первом. Сколько деревьев высадили на каждом участке?</p><button class="answer-toggle" type="button" aria-expanded="false">Ответ</button><div class="task-answer" hidden>19 деревьев на первом участке, 28 — на втором.</div></div>
+    <div class="task"><p>Периметр равнобедренного треугольника равен 28,6 см. Каждая из равных сторон на 2,9 см больше основания. Найдите длины сторон треугольника.</p><button class="answer-toggle" type="button" aria-expanded="false">Ответ</button><div class="task-answer" hidden>Равные стороны по 10,5 см, основание 7,6 см.</div></div>
+    <div class="task"><p>Периметр прямоугольника равен 74 см. Длина прямоугольника на 9 см больше ширины. Найдите длину и ширину.</p><button class="answer-toggle" type="button" aria-expanded="false">Ответ</button><div class="task-answer" hidden>Длина 23 см, ширина 14 см.</div></div>
+    <div class="task"><p>Длина трассы равна 5250 м. Она состоит из двух тоннелей и наземного участка длиной 620 м. Первый тоннель на 110 м длиннее второго. Найдите длину каждого тоннеля.</p><button class="answer-toggle" type="button" aria-expanded="false">Ответ</button><div class="task-answer" hidden>Первый тоннель 2370 м, второй 2260 м.</div></div>
+    <div class="task"><p>Три участка дороги имеют общую длину 184 км. Средний участок имеет длину 36 км, а первый участок на 12 км длиннее третьего. Найдите длины первого и третьего участков.</p><button class="answer-toggle" type="button" aria-expanded="false">Ответ</button><div class="task-answer" hidden>Первый участок 80 км, третий 68 км.</div></div>
+    <div class="task"><p>Периметр равнобедренного треугольника равен 42,5 см. Каждая из равных сторон на 4,75 см больше основания. Найдите длины всех сторон.</p><button class="answer-toggle" type="button" aria-expanded="false">Ответ</button><div class="task-answer" hidden>Равные стороны по 15,75 см, основание 11 см.</div></div>
+    <div class="task"><p>Общая длина маршрута равна 8420 м. Два открытых участка вместе имеют длину 920 м, а оставшаяся часть маршрута проходит по двум тоннелям. Первый тоннель на 140 м длиннее второго. Найдите длину каждого тоннеля.</p><button class="answer-toggle" type="button" aria-expanded="false">Ответ</button><div class="task-answer" hidden>Первый тоннель 3820 м, второй 3680 м.</div></div>
+  </div>
+
+  <div class="selfcheck" aria-label="Самопроверка">
+    <label><input type="checkbox" data-check="0">Я подписал, что означают x и y.</label>
+    <label><input type="checkbox" data-check="1">Я учёл все части целого.</label>
+    <label><input type="checkbox" data-check="2">Я правильно перевёл «на больше / меньше».</label>
+    <label><input type="checkbox" data-check="3">Я выполнил подстановку выражения, а не случайного числа.</label>
+    <label><input type="checkbox" data-check="4">Я нашёл обе неизвестные.</label>
+    <label><input type="checkbox" data-check="5">Я проверил сумму, разность и единицы.</label>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <p id="progressText" aria-live="polite">Отмечено: 0 из 6</p>
+</section>
+</main>
+
+<footer class="footer"><span>Лёвин Артём Александрович · эксклюзивно для Кирилла Зиновьева</span><span>03.10.2026</span></footer>
+</div>
+
+<dialog id="posterDialog" aria-label="Постер по текстовым задачам">
+  <div class="modal-bar"><strong>Памятка по занятию</strong><button id="closePoster" type="button">Закрыть</button></div>
+  <img src="../images/03.10.26.png" alt="Постер: текстовые задачи, составление уравнений и метод подстановки">
+</dialog>
+
+<script>
+(()=>{'use strict';
+const scenarios={
+ tickets:{vars:'x — билеты в первой кассе, y — во второй',whole:'x + y = 392',wholeNote:'«Всего» означает сумму двух частей.',link:'y = x − 36',linkNote:'В первой кассе на 36 билетов больше.',sub:'x + (x − 36) = 392'},
+ houses:{vars:'x — дома на Парковой, y — на Молодёжной',whole:'x + y = 19',wholeNote:'Всего восстановили 19 домов.',link:'y = x + 3',linkNote:'На Молодёжной на 3 дома больше.',sub:'x + (x + 3) = 19'},
+ triangle:{vars:'x — каждая равная сторона, y — основание',whole:'2x + y = 16',wholeNote:'Периметр — сумма всех трёх сторон.',link:'x = y + 2,9',linkNote:'Каждая равная сторона на 2,9 см больше основания.',sub:'(y + 2,9) + (y + 2,9) + y = 16'},
+ route:{vars:'x — первый тоннель, y — второй тоннель',whole:'x + 703 + y = 6940',wholeNote:'Наземные 703 м тоже входят в общую длину.',link:'x = y + 17',linkNote:'Первый тоннель на 17 м длиннее.',sub:'(y + 17) + 703 + y = 6940'}
+};
+const fields={vars:document.getElementById('modelVars'),whole:document.getElementById('modelWhole'),wholeNote:document.getElementById('modelWholeNote'),link:document.getElementById('modelLink'),linkNote:document.getElementById('modelLinkNote'),sub:document.getElementById('modelSub')};
+function renderScenario(key){const s=scenarios[key];fields.vars.textContent=s.vars;fields.whole.textContent=s.whole;fields.wholeNote.textContent=s.wholeNote;fields.link.textContent=s.link;fields.linkNote.textContent=s.linkNote;fields.sub.textContent=s.sub;document.querySelectorAll('[data-scenario]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.scenario===key)));}
+document.querySelectorAll('[data-scenario]').forEach(b=>b.addEventListener('click',()=>renderScenario(b.dataset.scenario)));renderScenario('tickets');
+
+const subSteps=[...document.querySelectorAll('.sub-step')];let step=0;
+function renderStep(){subSteps.forEach((el,i)=>el.classList.toggle('active',i<=step));document.getElementById('subNext').textContent=step===subSteps.length-1?'Сначала':'Следующий шаг';}
+document.getElementById('subNext').addEventListener('click',()=>{step=step===subSteps.length-1?0:step+1;renderStep();});
+document.getElementById('subReset').addEventListener('click',()=>{step=0;renderStep();});renderStep();
+
+document.querySelectorAll('.reveal').forEach(btn=>btn.addEventListener('click',()=>{const panel=btn.nextElementSibling;const open=panel.hidden;panel.hidden=!open;btn.setAttribute('aria-expanded',String(open));btn.textContent=open?'Скрыть решение':'Показать решение';}));
+document.querySelectorAll('.answer-toggle').forEach(btn=>btn.addEventListener('click',()=>{const panel=btn.nextElementSibling;const open=panel.hidden;panel.hidden=!open;btn.setAttribute('aria-expanded',String(open));btn.textContent=open?'Скрыть':'Ответ';}));
+
+const checks=[...document.querySelectorAll('[data-check]')],bar=document.getElementById('progressBar'),progressText=document.getElementById('progressText');
+checks.forEach(c=>{c.checked=localStorage.getItem('kirill-031026-check-'+c.dataset.check)==='1';c.addEventListener('change',()=>{localStorage.setItem('kirill-031026-check-'+c.dataset.check,c.checked?'1':'0');progress();});});
+function progress(){const n=checks.filter(c=>c.checked).length;bar.style.width=(n/checks.length*100)+'%';progressText.textContent='Отмечено: '+n+' из '+checks.length;}progress();
+
+const root=document.documentElement,theme=document.getElementById('theme');let t=localStorage.getItem('kirill-dashboard-theme-v1')||'light';
+function applyTheme(){root.dataset.theme=t;theme.textContent=t==='dark'?'Светлая тема':'Тёмная тема';}
+applyTheme();theme.addEventListener('click',()=>{t=t==='dark'?'light':'dark';localStorage.setItem('kirill-dashboard-theme-v1',t);applyTheme();});
+document.getElementById('printPage').addEventListener('click',()=>window.print());
+
+const dialog=document.getElementById('posterDialog'),openPoster=document.getElementById('openPoster'),closePoster=document.getElementById('closePoster');
+openPoster.addEventListener('click',()=>dialog.showModal());closePoster.addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&dialog.open)dialog.close();});
+})();
+</script>
+</body>
+</html>
