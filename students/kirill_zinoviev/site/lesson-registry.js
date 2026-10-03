@@ -3,6 +3,92 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+    "date": "2026-10-03",
+    "ktpRefs": [],
+    "href": "03.10.26.html",
+    "title": "Текстовые задачи: система и метод подстановки",
+    "navTitle": "Система и подстановка",
+    "navSubtitle": "текст → два уравнения → подстановка → проверка",
+    "summary": "Перевод условия текстовой задачи в две связанные математические связи: выбор x и y, составление системы, учёт всех частей целого, подстановка одного выражения в другое, нахождение обеих неизвестных и проверка ответа.",
+    "topics": [
+      "текстовые задачи",
+      "две неизвестные",
+      "система уравнений",
+      "метод подстановки",
+      "проверка модели"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "models_1",
+        "evidenceAnchor": "model",
+        "relation": "practiced",
+        "label": "Выбор неизвестных величин",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "models_2",
+        "evidenceAnchor": "model",
+        "relation": "practiced",
+        "label": "Выражение одной величины через другую",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "models_3",
+        "evidenceAnchor": "translation",
+        "relation": "practiced",
+        "label": "Перевод текстового условия в уравнение",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "equations_12",
+        "evidenceAnchor": "system",
+        "relation": "practiced",
+        "label": "Составление уравнения по условию задачи",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "systems_5",
+        "evidenceAnchor": "system",
+        "relation": "practiced",
+        "label": "Система двух линейных уравнений",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "systems_9",
+        "evidenceAnchor": "substitution",
+        "relation": "practiced",
+        "label": "Решение системы способом подстановки",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "systems_12",
+        "evidenceAnchor": "system",
+        "relation": "practiced",
+        "label": "Составление системы по условию текстовой задачи",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "systems_6",
+        "evidenceAnchor": "check",
+        "relation": "practiced",
+        "label": "Проверка пары чисел как решения системы",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "models_5",
+        "evidenceAnchor": "check",
+        "relation": "practiced",
+        "label": "Запись ответа с единицами",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "03.10.26.html",
+      "pdf": "../pdf_docs/03.10.26.pdf",
+      "tex": "../tex_docs/03.10.26.tex"
+    }
+  },
+  {
     "date": "2026-09-30",
     "ktpRefs": [],
     "href": "30.09.26.html",
