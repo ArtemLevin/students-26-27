@@ -117,14 +117,24 @@ const motionEvidence=new Map([
 ["Проверка реалистичности ответа","04.10.26.html#errors"],
 ["Интерпретация математического результата","04.10.26.html#errors"]
 ]);
+const motionAssessed=new Set([
+"Задачи на движение навстречу",
+"Задачи на движение вдогонку",
+"Задачи на движение по воде",
+"Составление уравнения по тексту",
+"Выбор переменной в прикладной модели",
+"Анализ размерностей"
+]);
 for(const g of d.groups)for(const item of g.items){
   const href=motionEvidence.get(item.title);
   if(href){
-    item.level=Math.max(2,item.level||0);
-    item.status="covered";
+    if(motionAssessed.has(item.title)){
+      item.level=Math.max(2,item.level||0);
+      item.status="covered";
+    }
     item.evidence=Array.isArray(item.evidence)?item.evidence:[];
     if(!item.evidence.some(e=>e.date==="04.10.26")){
-      item.evidence.push({date:"04.10.26",text:"Навык разбирался и применялся на занятии по текстовым задачам на движение табличным методом v–t–S.",href});
+      item.evidence.push({date:"04.10.26",text:"Навык разбирался или проверялся на занятии по текстовым задачам на движение табличным методом v–t–S.",href});
     }
   }
 }
