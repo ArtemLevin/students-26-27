@@ -35,7 +35,11 @@ test('Anna dashboard keeps canonical learning state outside index.html',()=>{
   const contract=JSON.parse(fs.readFileSync(path.join(root,'students','anna_bannova','student-contract.json'),'utf8'));
   const mastery=readJson('data/mastery-state.json');
   assert.equal(contract.competencies.mastery,'site/data/mastery-state.json');
-  assert.deepEqual(mastery.levels,{});
+  assert.equal(mastery.updated,'2026-10-04');
+  assert.equal(mastery.levels.calc_09.level,2);
+  assert.equal(mastery.levels.calc_10.level,3);
+  assert.equal(mastery.levels.expr_12.level,3);
+  assert.equal(mastery.levels.calc_10.sourceKind,'lesson-assessment');
   assert.match(html,/student-contract\.json/);
   assert.match(html,/contract\.competencies\.mastery/);
   assert.doesNotMatch(html,/baselineLevels\s*=/);

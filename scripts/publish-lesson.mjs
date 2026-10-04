@@ -162,6 +162,7 @@ export async function publishV2Lesson({
     conflicts:plan.conflicts,
     warnings:plan.warnings,
     ktpChanges:plan.changes.ktp,
+    masteryChanges:plan.changes.mastery||{},
     intentFile:loaded.file?path.relative(root,loaded.file).replaceAll('\\','/'):null
   };
   if(dryRun)return summary;
