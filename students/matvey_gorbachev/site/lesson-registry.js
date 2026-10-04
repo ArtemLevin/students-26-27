@@ -85,8 +85,7 @@ export const LESSONS=[
     "materials": {
       "html": "04.10.26.html",
       "pdf": "../pdf_docs/04.10.26.pdf",
-      "tex": "../tex_docs/04.10.26.tex",
-      "image": "../images/04.10.26.png"
+      "tex": "../tex_docs/04.10.26.tex"
     }
   },
   {
