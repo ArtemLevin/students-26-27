@@ -9,6 +9,7 @@ import {
   samePublicationContribution
 } from '../metadata.mjs';
 import {applyKtpPublication} from '../ktp-state.mjs';
+import {applyMasteryPublication} from '../mastery-state.mjs';
 import {deriveRegistrySource} from '../registry.mjs';
 import {buildV2PublicationPlan} from '../plan.mjs';
 import {validateLessonMetadataData,validateStudentPackage} from '../../contract.mjs';
@@ -303,6 +304,93 @@ test('one lesson can update several KTP items independently',()=>{
   assert.equal(result.records['ktp-002'].status,'done');
   assert.equal(result.records['ktp-003'].status,'in_progress');
   assert.equal(result.records['ktp-003'].coverage,'partial');
+});
+
+test('mastery publication applies exact assessed claims and preserves higher levels',()=>{
+  const initial={
+    version:1,
+    studentId:'test_student',
+    updated:'2026-09-30',
+    levels:{
+      text_15:{
+        level:4,
+        sourcePath:'site/data/seed.json',
+        sourceKind:'teacher-mastery',
+        basis:'Подтверждено преподавателем.'
+      }
+    }
+  };
+  const result=applyMasteryPublication({
+    state:initial,
+    lessonDate:'2026-10-07',
+    sourcePath:'site/data/lessons/2026-10-07.lesson.json',
+    outcomes:[
+      {
+        competencyId:'func_17',
+        relation:'assessed',
+        masteryClaim:{
+          level:3,
+          confidence:'exact',
+          basis:'Самостоятельная проверка.'
+        }
+      },
+      {
+        competencyId:'text_15',
+        relation:'assessed',
+        masteryClaim:{
+          level:2,
+          confidence:'exact',
+          basis:'Более низкая оценка одного урока.'
+        }
+      },
+      {
+        competencyId:'ignored',
+        relation:'practiced',
+        masteryClaim:null
+      }
+    ]
+  });
+
+  assert.equal(result.state.updated,'2026-10-07');
+  assert.equal(result.state.levels.func_17.level,3);
+  assert.equal(result.state.levels.func_17.sourceKind,'lesson-assessment');
+  assert.equal(result.state.levels.text_15.level,4);
+  assert.deepEqual(result.preservedDowngrades,[{
+    competencyId:'text_15',
+    existingLevel:4,
+    claimedLevel:2
+  }]);
+});
+
+test('equal mastery claim is idempotent and does not rewrite provenance',()=>{
+  const entry={
+    level:3,
+    sourcePath:'site/data/lessons/2026-10-01.lesson.json',
+    sourceKind:'lesson-assessment',
+    basis:'Ранее подтверждено.'
+  };
+  const initial={
+    version:1,
+    studentId:'test_student',
+    updated:'2026-10-01',
+    levels:{func_17:entry}
+  };
+  const result=applyMasteryPublication({
+    state:initial,
+    lessonDate:'2026-10-07',
+    sourcePath:'site/data/lessons/2026-10-07.lesson.json',
+    outcomes:[{
+      competencyId:'func_17',
+      relation:'assessed',
+      masteryClaim:{
+        level:3,
+        confidence:'exact',
+        basis:'Повторная проверка.'
+      }
+    }]
+  });
+  assert.deepEqual(result.state,initial);
+  assert.deepEqual(result.changes,{});
 });
 
 test('registry derivation preserves Stage 04 enrichment on canonical outcomes',()=>{
