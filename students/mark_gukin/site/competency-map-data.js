@@ -66,6 +66,24 @@ G.forEach(group=>group.items.forEach(item=>{
   item.material={href:`30.09.26.html#${update.anchor}`,label:'Занятие 30.09.26 →'};
 }));
 
+
+const lessonEvidenceText0410='04.10.26: продолжена серия задач на степенные преобразования — одинаковые основания, рациональные и отрицательные показатели, корни как степени и многошаговое упрощение. Навыки повышены консервативно до уровня 3: решения в целом самостоятельны, отдельные шаги и ограничения ещё требуют контроля.';
+const lessonUpdates0410={
+  ege08_02:{level:3,anchor:'rules'},
+  ege08_03:{level:3,anchor:'recognize'},
+  ege08_04:{level:3,anchor:'algorithm'},
+  ege08_05:{level:3,anchor:'recognize'},
+  ege08_06:{level:3,anchor:'examples'},
+  ege08_18:{level:3,anchor:'examples'}
+};
+G.forEach(group=>group.items.forEach(item=>{
+  const update=lessonUpdates0410[item.id];
+  if(!update)return;
+  item.level=Math.max(item.level,update.level);
+  item.evidence=[...item.evidence,{date:'04.10.2026',text:lessonEvidenceText0410}];
+  item.material={href:`04.10.26.html#${update.anchor}`,label:'Занятие 04.10.26 →'};
+}));
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'mark_gukin',
@@ -75,7 +93,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Используется проект КИМ ЕГЭ-2027 ФИПИ: 20 заданий, из них 13 с кратким и 7 с развёрнутым ответом. Проект опубликован 28.08.2026; до утверждения структура может быть уточнена.',
-    updated:'30.09.2026'
+    updated:'04.10.2026'
   },
   groups:G
 };
