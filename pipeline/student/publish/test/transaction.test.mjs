@@ -41,7 +41,7 @@ function fixture(){
     },
     competencies:{
       catalog:'site/competency-map-data.js',
-      mastery:'site/mastery-authority.js'
+      mastery:'site/data/mastery-state.json'
     },
     practice:{config:null}
   };
@@ -126,7 +126,12 @@ function fixture(){
     path.join(site,'competency-map-data.js'),
     "window.COMPETENCY_MAP_DATA={groups:[{id:'core',items:[{id:'text_15'},{id:'func_17'}]}]};\n"
   );
-  fs.writeFileSync(path.join(site,'mastery-authority.js'),'export const mastery={};\n');
+  writeJson(path.join(site,'data','mastery-state.json'),{
+    version:1,
+    studentId,
+    updated:'2026-09-30',
+    levels:{}
+  });
   fs.writeFileSync(path.join(site,'lesson-registry.js'),registrySource([oldRegistry]));
   fs.writeFileSync(
     path.join(site,'30.09.26.html'),
@@ -141,6 +146,7 @@ function fixture(){
     root,studentId,studentRoot,site,metadataDir,
     statePath:path.join(site,'data','ktp-state.json'),
     registryPath:path.join(site,'lesson-registry.js'),
+    masteryPath:path.join(site,'data','mastery-state.json'),
     metadataPath:path.join(metadataDir,'2026-10-07.lesson.json'),
     htmlPath:path.join(site,'07.10.26.html')
   };
@@ -162,11 +168,15 @@ function intent(studentId='test_student'){
     outcomes:[{
       competencyId:'func_17',
       evidenceAnchor:'graph-model',
-      relation:'practiced',
+      relation:'assessed',
       confidence:'exact',
       decision:'apply',
-      masteryClaim:null,
-      basis:'Навык отрабатывался на уроке.'
+      masteryClaim:{
+        level:3,
+        confidence:'exact',
+        basis:'Самостоятельно читает и интерпретирует график.'
+      },
+      basis:'Навык проверен самостоятельной задачей.'
     }],
     warnings:[]
   };
@@ -215,6 +225,15 @@ test('successful transaction commits metadata, KTP state and registry then passe
   assert.equal(state.records['ktp-002'].status,'done');
   assert.equal(state.records['ktp-002'].actualDate,'2026-10-07');
 
+  const mastery=JSON.parse(fs.readFileSync(x.masteryPath,'utf8'));
+  assert.equal(mastery.updated,'2026-10-07');
+  assert.deepEqual(mastery.levels.func_17,{
+    level:3,
+    sourcePath:'site/data/lessons/2026-10-07.lesson.json',
+    sourceKind:'lesson-assessment',
+    basis:'Самостоятельно читает и интерпретирует график.'
+  });
+
   const validated=validateStudentPackage({root:x.root,studentId:x.studentId});
   assert.equal(validated.lessonMetadata,2);
   assert.deepEqual(tempFiles(x.root),[]);
@@ -225,7 +244,7 @@ test('stale HTML precondition aborts before the first write',()=>{
   const plan=buildV2PublicationPlan({
     root:x.root,studentId:x.studentId,intent:intent(x.studentId)
   });
-  const before=snapshot([x.metadataPath,x.statePath,x.registryPath]);
+  const before=snapshot([x.metadataPath,x.statePath,x.masteryPath,x.registryPath]);
   fs.appendFileSync(x.htmlPath,'<!-- changed after plan -->\n');
 
   assert.throws(
@@ -245,7 +264,7 @@ test('stale state precondition aborts before staging publication writes',()=>{
   external.updated='2026-10-01';
   writeJson(x.statePath,external);
   const expectedState=fs.readFileSync(x.statePath);
-  const before=snapshot([x.metadataPath,x.registryPath]);
+  const before=snapshot([x.metadataPath,x.masteryPath,x.registryPath]);
 
   assert.throws(
     ()=>executeV2Publication({root:x.root,plan}),
@@ -304,12 +323,35 @@ test('state drift during plan construction is rejected as stale before publicati
   assert.deepEqual(tempFiles(x.root),[]);
 });
 
+test('stale mastery state aborts before publication writes',()=>{
+  const x=fixture();
+  const plan=buildV2PublicationPlan({
+    root:x.root,studentId:x.studentId,intent:intent(x.studentId)
+  });
+  const external=JSON.parse(fs.readFileSync(x.masteryPath,'utf8'));
+  external.updated='2026-10-01';
+  writeJson(x.masteryPath,external);
+  const expectedMastery=fs.readFileSync(x.masteryPath);
+  const before=snapshot([x.metadataPath,x.statePath,x.registryPath]);
+
+  assert.throws(
+    ()=>executeV2Publication({root:x.root,plan}),
+    error=>error instanceof StalePublicationPlanError&&
+      error.code==='STALE_PUBLICATION_PLAN'&&
+      /content changed since the publication plan was built/.test(error.message)
+  );
+
+  assert.deepEqual(fs.readFileSync(x.masteryPath),expectedMastery);
+  assertSnapshot(before);
+  assert.deepEqual(tempFiles(x.root),[]);
+});
+
 test('failure after partial application rolls every target back byte-for-byte',()=>{
   const x=fixture();
   const plan=buildV2PublicationPlan({
     root:x.root,studentId:x.studentId,intent:intent(x.studentId)
   });
-  const before=snapshot([x.metadataPath,x.statePath,x.registryPath]);
+  const before=snapshot([x.metadataPath,x.statePath,x.masteryPath,x.registryPath]);
 
   assert.throws(
     ()=>executeV2Publication({
@@ -334,7 +376,7 @@ test('postflight failure rolls back all committed targets',()=>{
   const plan=buildV2PublicationPlan({
     root:x.root,studentId:x.studentId,intent:intent(x.studentId)
   });
-  const before=snapshot([x.metadataPath,x.statePath,x.registryPath]);
+  const before=snapshot([x.metadataPath,x.statePath,x.masteryPath,x.registryPath]);
 
   assert.throws(
     ()=>executeV2Publication({
@@ -378,7 +420,7 @@ test('non-executable plan is rejected without touching files',()=>{
   const plan=buildV2PublicationPlan({
     root:x.root,studentId:x.studentId,intent:value
   });
-  const before=snapshot([x.metadataPath,x.statePath,x.registryPath]);
+  const before=snapshot([x.metadataPath,x.statePath,x.masteryPath,x.registryPath]);
   assert.equal(plan.executable,false);
 
   assert.throws(
