@@ -11,8 +11,77 @@ export const LESSONS=[
     "title": "Текстовые задачи на движение",
     "navTitle": "Текстовые задачи на движение",
     "summary": "Табличный метод v–t–S: встречное движение, догонка, круговая трасса, движение по воде, средняя скорость и протяжённые тела.",
-    "topics": ["табличный метод v–t–S","встречное движение","движение вдогонку","круговая трасса","движение по воде","средняя скорость","протяжённые тела"],
-    "outcomes": ["составлять таблицу v–t–S","переводить словесную связь в уравнение","согласовывать единицы измерения","учитывать тип движения","проверять смысл и размерность ответа"],
+    "topics": [
+      "табличный метод v–t–S",
+      "встречное движение",
+      "движение вдогонку",
+      "круговая трасса",
+      "движение по воде",
+      "средняя скорость",
+      "протяжённые тела"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "text_01",
+        "evidenceAnchor": "types",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_02",
+        "evidenceAnchor": "meeting",
+        "relation": "assessed"
+      },
+      {
+        "competencyId": "text_03",
+        "evidenceAnchor": "chase",
+        "relation": "assessed"
+      },
+      {
+        "competencyId": "text_04",
+        "evidenceAnchor": "water",
+        "relation": "assessed"
+      },
+      {
+        "competencyId": "text_05",
+        "evidenceAnchor": "average",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_15",
+        "evidenceAnchor": "route",
+        "relation": "assessed"
+      },
+      {
+        "competencyId": "text_17",
+        "evidenceAnchor": "errors",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "modeling_01",
+        "evidenceAnchor": "route",
+        "relation": "assessed"
+      },
+      {
+        "competencyId": "modeling_02",
+        "evidenceAnchor": "route",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "modeling_09",
+        "evidenceAnchor": "route",
+        "relation": "assessed"
+      },
+      {
+        "competencyId": "modeling_14",
+        "evidenceAnchor": "errors",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "modeling_15",
+        "evidenceAnchor": "errors",
+        "relation": "practiced"
+      }
+    ],
     "materials": {
       "html": "04.10.26.html",
       "pdf": "../pdf_docs/04.10.26.pdf",
