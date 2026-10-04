@@ -3,6 +3,65 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+    "date": "2026-10-04",
+    "ktpRefs": [],
+    "href": "04.10.26.html",
+    "title": "Математическая модель, график и векторный маршрут",
+    "navTitle": "Модель, график и векторный маршрут",
+    "navSubtitle": "круговое движение, модуль, ограничения и векторы",
+    "summary": "Движение по круговой трассе с выбором удобной неизвестной, график функции с модулем и параметр y=m, ограничения кусочной функции и сложение векторов по маршруту.",
+    "topics": [
+      "задачи на движение",
+      "графики с модулем",
+      "кусочные функции",
+      "параметр y=m",
+      "векторы"
+    ],
+    "outcomes": [
+      {
+        "label": "Таблица и модель движения",
+        "level": 2,
+        "competencyId": "oge_21_2_2",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Составление уравнения движения",
+        "level": 2,
+        "competencyId": "oge_21_2_3",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Кусочно заданная функция: построение",
+        "level": 3,
+        "competencyId": "oge_22_3_1",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "ОДЗ и ограничения ветви",
+        "level": 2,
+        "competencyId": "oge_22_3_2",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Параметр и число пересечений",
+        "level": 3,
+        "competencyId": "oge_22_3_5",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "04.10.26.html",
+      "pdf": "../pdf_docs/04.10.26.pdf",
+      "tex": "../tex_docs/04.10.26.tex",
+      "lab": "04.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-10-02",
     "ktpRefs": [],
     "href": "02.10.26.html",
