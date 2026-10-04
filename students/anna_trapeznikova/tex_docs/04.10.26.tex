@@ -1,0 +1,388 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=18mm,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{2B6F73}
+\definecolor{darkaccent}{HTML}{17494C}
+\definecolor{textgray}{HTML}{2D3338}
+\definecolor{softgray}{HTML}{6C747A}
+\definecolor{pale}{HTML}{EEF5F4}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+\setlist[itemize]{leftmargin=1.5em,itemsep=0.3em,topsep=0.4em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.45em,topsep=0.5em}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{softgray}Неравенства с модулем}
+\fancyhead[R]{\small\color{softgray}04.10.26}
+\fancyfoot[C]{\small\color{softgray}\thepage}
+\renewcommand{\headrulewidth}{0.2pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\union}{\;\cup\;}
+\newcommand{\lessonsection}[1]{%
+  \vspace{0.5em}
+  {\Large\bfseries\color{darkaccent}#1}\par\vspace{0.35em}
+  {\color{accent}\rule{\linewidth}{0.6pt}}\vspace{0.6em}
+}
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+
+\begin{document}
+
+% ---------- Title ----------
+\thispagestyle{empty}
+\begin{center}
+\vspace*{28mm}
+{\Large\color{softgray}ЧЕК-ЛИСТ}\par
+\vspace{8mm}
+{\fontsize{27}{32}\selectfont\bfseries\color{darkaccent}Неравенства с модулем}\par
+\vspace{4mm}
+{\Large системы, совокупности, вложенные модули и замена}\par
+\vspace{18mm}
+{\large Анна Трапезникова}\par
+\vspace{3mm}
+{\normalsize 10 класс · углублённый уровень}\par
+\vspace{16mm}
+{\large 04.10.26}\par
+\vfill
+{\normalsize\color{textgray}Лёвин Артём Александрович эксклюзивно для Анны Трапезниковой}\par
+\vspace{8mm}
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent!70,line width=1.1pt]
+    ($(current page.south west)+(12mm,16mm)$)
+    .. controls ($(current page.south west)+(65mm,30mm)$)
+    and ($(current page.south east)+(-70mm,3mm)$)
+    .. ($(current page.south east)+(-12mm,19mm)$);
+\end{tikzpicture}
+\clearpage
+
+% ---------- Main checklist ----------
+\lessonsection{1. Главная идея}
+
+Модуль переводит задачу в язык \key{расстояний} и почти всегда приводит к одному из двух логических объектов:
+\begin{itemize}
+  \item \key{система} --- должны выполняться все условия одновременно; на числовой прямой берём пересечение;
+  \item \key{совокупность} --- достаточно выполнения хотя бы одного условия; на числовой прямой берём объединение.
+\end{itemize}
+
+Для выражений $F(x)$ и $G(x)$ удобно помнить четыре равносильных перехода:
+\[
+\begin{aligned}
+|F(x)|<G(x)
+&\iff
+\begin{cases}
+F(x)<G(x),\\
+F(x)>-G(x),
+\end{cases}
+\\[1ex]
+|F(x)|\le G(x)
+&\iff
+\begin{cases}
+F(x)\le G(x),\\
+F(x)\ge -G(x),
+\end{cases}
+\\[1ex]
+|F(x)|>G(x)
+&\iff
+\left[
+\begin{array}{l}
+F(x)>G(x),\\
+F(x)<-G(x),
+\end{array}
+\right.
+\\[1ex]
+|F(x)|\ge G(x)
+&\iff
+\left[
+\begin{array}{l}
+F(x)\ge G(x),\\
+F(x)\le -G(x).
+\end{array}
+\right.
+\end{aligned}
+\]
+
+\key{Проверка здравым смыслом.} Если справа стоит отрицательное число, некоторые ветви могут сразу стать тождественно истинными или невозможными. Это полезно замечать до вычислений.
+
+\lessonsection{2. Двойное неравенство с модулем}
+
+Двойное неравенство сначала разбивается на \key{систему} двух условий.
+
+\textbf{Пример.} Решить
+\[
+1\le |x-2|<4.
+\]
+Записываем
+\[
+\begin{cases}
+|x-2|\ge1,\\
+|x-2|<4.
+\end{cases}
+\]
+Первое условие даёт совокупность $x\le1$ или $x\ge3$, второе --- систему $-2<x<6$. Пересекаем результаты:
+\[
+\boxed{x\in(-2;1]\cup[3;6)}.
+\]
+
+\key{Практическое правило.} Для сложной конструкции рисуйте отдельную числовую прямую для каждой системы или совокупности. Так проще контролировать пересечения и объединения.
+
+\lessonsection{3. Правая часть тоже содержит $x$}
+
+Равносильные переходы работают и тогда, когда справа стоит выражение с переменной.
+
+\textbf{Пример.}
+\[
+|-x+3|<x+5.
+\]
+Получаем систему
+\[
+\begin{cases}
+-x+3<x+5,\\
+-x+3>-(x+5).
+\end{cases}
+\]
+Второе неравенство превращается в $3>-5$ и выполняется при любом $x$, поэтому остаётся
+\[
+-2x<2\quad\Longrightarrow\quad x>-1.
+\]
+Ответ: $(-1;+\infty)$.
+
+\lessonsection{4. Вложенные модули}
+
+Если модуль вложен в модуль, двигайтесь \key{снаружи внутрь}: сначала раскрывается внешний модуль, затем внутренний.
+
+\textbf{Пример.}
+\[
+\bigl||x+5|-3\bigr|\ge4.
+\]
+Сначала
+\[
+\left[
+\begin{array}{l}
+|x+5|-3\ge4,\\
+|x+5|-3\le-4.
+\end{array}
+\right.
+\]
+То есть
+\[
+\left[
+\begin{array}{l}
+|x+5|\ge7,\\
+|x+5|\le-1.
+\end{array}
+\right.
+\]
+Вторая ветвь невозможна, потому что $|x+5|\ge0$. Первая даёт
+\[
+x\le-12\quad\text{или}\quad x\ge2.
+\]
+
+\lessonsection{5. Замена $t=|x|$}
+
+Если один и тот же фрагмент $|x|$ повторяется несколько раз, удобно ввести
+\[
+t=|x|,\qquad t\ge0.
+\]
+Далее задача решается относительно $t$. Обратную замену делайте \key{после полного решения неравенства относительно $t$}.
+
+\textbf{Пример.}
+\[
+\frac{|1-|x||}{1+|x|}\ge\frac12.
+\]
+Пусть $t=|x|\ge0$. Тогда $1+t\ge1>0$, поэтому можно умножать неравенство на $2(1+t)$ без изменения знака:
+\[
+2|1-t|\ge1+t.
+\]
+Отсюда
+\[
+t\in\left[0;\frac13\right]\cup[3;+\infty).
+\]
+Возвращаемся к $x$:
+\[
+\boxed{x\in(-\infty;-3]\cup\left[-\frac13;\frac13\right]\cup[3;+\infty)}.
+\]
+
+\key{Критическая проверка.} Умножать неравенство на выражение с переменной можно только тогда, когда его знак установлен. При умножении на отрицательное выражение знак неравенства меняется.
+
+\clearpage
+
+% ---------- Flowchart page ----------
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: как разбирать неравенство с модулем}\par
+\vspace{8mm}
+\end{center}
+
+\begin{tikzpicture}[
+  node distance=9mm,
+  startstop/.style={ellipse,draw=accent,line width=0.9pt,align=center,minimum width=42mm,minimum height=10mm,fill=pale},
+  process/.style={rectangle,rounded corners=2mm,draw=accent,line width=0.9pt,align=center,text width=118mm,minimum height=12mm},
+  decision/.style={diamond,aspect=2.7,draw=accent,line width=0.9pt,align=center,text width=45mm,inner sep=1.5mm,fill=pale},
+  arrow/.style={-{Stealth[length=2.4mm]},line width=0.9pt,color=darkaccent}
+]
+\node[startstop] (start) {Начало};
+\node[process,below=of start] (prep) {Упростите выражение. Зафиксируйте ОДЗ и знаки множителей или знаменателей, если они важны.};
+\node[decision,below=of prep] (repeat) {Повторяется фрагмент $|x|$?};
+\node[process,below left=13mm and -7mm of repeat,text width=55mm] (subst) {Введите $t=|x|$, обязательно запишите $t\ge0$.};
+\node[process,below right=13mm and -7mm of repeat,text width=55mm] (outer) {Работайте с внешним модулем напрямую.};
+\node[process,below=25mm of repeat] (rule) {Для знаков $<$, $\le$ используйте систему; для $>$, $\ge$ --- совокупность. Решите полученные линейные или рациональные неравенства.};
+\node[process,below=of rule] (combine) {На числовой прямой: система $\to$ пересечение, совокупность $\to$ объединение. Вложенные модули раскрывайте снаружи внутрь.};
+\node[decision,below=of combine] (wasSub) {Была замена $t=|x|$?};
+\node[process,below left=13mm and -7mm of wasSub,text width=55mm] (back) {Сделайте обратную замену и решите условия с $|x|$.};
+\node[process,below right=13mm and -7mm of wasSub,text width=55mm] (check) {Проверьте границы, строгие знаки и логическую структуру ответа.};
+\node[startstop,below=27mm of wasSub] (finish) {Ответ};
+
+\draw[arrow] (start) -- (prep);
+\draw[arrow] (prep) -- (repeat);
+\draw[arrow] (repeat) -- node[above left,font=\small]{да} (subst);
+\draw[arrow] (repeat) -- node[above right,font=\small]{нет} (outer);
+\draw[arrow] (subst) |- (rule);
+\draw[arrow] (outer) |- (rule);
+\draw[arrow] (rule) -- (combine);
+\draw[arrow] (combine) -- (wasSub);
+\draw[arrow] (wasSub) -- node[above left,font=\small]{да} (back);
+\draw[arrow] (wasSub) -- node[above right,font=\small]{нет} (check);
+\draw[arrow] (back) |- (finish);
+\draw[arrow] (check) |- (finish);
+\end{tikzpicture}
+
+\clearpage
+
+% ---------- Mistakes ----------
+\lessonsection{6. Частые ошибки}
+
+\begin{enumerate}
+  \item \key{Путаница системы и совокупности.} Система означает пересечение, совокупность --- объединение.
+  \item \key{Автоматическое умножение на выражение с переменной.} Сначала установите его знак. Для $t=|x|\ge0$ знаменатель $1+t$ всегда положителен.
+  \item \key{Игнорирование невозможной ветви.} Условие вида $|F(x)|<-2$ решений не имеет; условие $|F(x)|>-2$ выполняется при любом допустимом $x$.
+  \item \key{Слишком ранняя обратная замена.} Сначала полностью решите задачу относительно $t$, учтите $t\ge0$, затем возвращайтесь к $x$.
+  \item \key{Ошибка на последнем объединении.} После верных вычислений обязательно отдельно сформируйте итоговое множество решений.
+\end{enumerate}
+
+\lessonsection{7. Быстрая самопроверка}
+
+Перед записью ответа проверьте:
+\begin{itemize}
+  \item соответствует ли знак модуля системе или совокупности;
+  \item учтены ли строгие/нестрогие границы;
+  \item нет ли ветви, которая всегда истинна или всегда ложна;
+  \item установлен ли знак выражения, на которое вы умножали или делили;
+  \item при замене $t=|x|$ использовано ли ограничение $t\ge0$;
+  \item верно ли выполнены пересечение и объединение промежутков.
+\end{itemize}
+
+\clearpage
+
+% ---------- Training ----------
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Тренировочный блок · Путь А}\par
+\vspace{2mm}
+{\color{softgray}10 заданий · от базовых переходов к комбинированным задачам}\par
+\end{center}
+\vspace{5mm}
+
+\begin{enumerate}
+  \item Решите неравенство
+  \[
+  |x-4|<3.
+  \]
+
+  \item Решите неравенство
+  \[
+  |2x+1|\ge5.
+  \]
+
+  \item Решите двойное неравенство
+  \[
+  1\le|x-2|<4.
+  \]
+
+  \item Решите неравенство
+  \[
+  |-x+3|<x+5.
+  \]
+
+  \item Решите неравенство
+  \[
+  |4x+5|\ge2x-7.
+  \]
+
+  \item Решите неравенство
+  \[
+  \bigl||x+5|-3\bigr|\ge4.
+  \]
+
+  \item Решите неравенство
+  \[
+  |3-|x||\ge2.
+  \]
+
+  \item Решите неравенство
+  \[
+  \frac{|1-|x||}{1+|x|}\ge\frac12.
+  \]
+
+  \item Решите неравенство
+  \[
+  \frac{(|x|-2)(|x|-5)}{|x|+1}<0.
+  \]
+
+  \item Решите неравенство
+  \[
+  \frac{|2-|x||}{1+|x|}\le\frac13.
+  \]
+\end{enumerate}
+
+\clearpage
+
+% ---------- Answers ----------
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Ответы}\par
+\vspace{6mm}
+\end{center}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+1 & $x\in(1;7)$ \\
+2 & $x\in(-\infty;-3]\cup[2;+\infty)$ \\
+3 & $x\in(-2;1]\cup[3;6)$ \\
+4 & $x\in(-1;+\infty)$ \\
+5 & $x\in\R$ \\
+6 & $x\in(-\infty;-12]\cup[2;+\infty)$ \\
+7 & $x\in(-\infty;-5]\cup[-1;1]\cup[5;+\infty)$ \\
+8 & $x\in(-\infty;-3]\cup\left[-\frac13;\frac13\right]\cup[3;+\infty)$ \\
+9 & $x\in(-5;-2)\cup(2;5)$ \\
+10 & $x\in\left[-\frac72;-\frac54\right]\cup\left[\frac54;\frac72\right]$ \\
+\bottomrule
+\end{tabularx}
+
+\vfill
+{\small\color{softgray}Лёвин Артём Александрович эксклюзивно для Анны Трапезниковой}\par
+
+\end{document}

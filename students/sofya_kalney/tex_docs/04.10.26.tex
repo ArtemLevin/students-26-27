@@ -1,0 +1,360 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=18mm,top=19mm,bottom=20mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning}
+\usepackage{tkz-euclide}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{176B73}
+\definecolor{darkaccent}{HTML}{124A50}
+\definecolor{textgray}{HTML}{30383B}
+\definecolor{softgray}{HTML}{69767A}
+\definecolor{warm}{HTML}{B66A3C}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\onehalfspacing
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=5pt,topsep=3pt}
+\renewcommand{\arraystretch}{1.25}
+\renewcommand{\today}{4 октября 2026 г.}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\small\color{softgray}\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\newcommand{\sectiontitle}[1]{%
+  \vspace{2mm}%
+  {\Large\bfseries\color{darkaccent}#1}\par\vspace{2mm}%
+  {\color{accent!55}\rule{\linewidth}{0.6pt}}\par\vspace{2mm}%
+}
+\newcommand{\keyidea}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\vect}[2]{\overrightarrow{#1#2}}
+
+\begin{document}
+
+% ---------------- TITLE ----------------
+\thispagestyle{empty}
+\begin{center}
+\vspace*{28mm}
+{\small\color{softgray}МАТЕМАТИКА • ОГЭ}\par
+\vspace{9mm}
+{\fontsize{27}{31}\selectfont\bfseries\color{darkaccent}Чек-лист}\par
+\vspace{4mm}
+{\LARGE\bfseries Математическая модель, график и векторный маршрут}\par
+\vspace{8mm}
+{\large Движение по кругу • модуль и параметр • кусочные функции • векторы}\par
+\vspace{21mm}
+{\large София Кальней}\par
+\vspace{4mm}
+{\normalsize 4 октября 2026 г.}\par
+\vfill
+{\small\color{textgray}Лёвин Артём Александрович эксклюзивно для Софии Кальней}\par
+\vspace{22mm}
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent!55,line width=1.25pt]
+    ([xshift=8mm,yshift=20mm]current page.south west)
+    .. controls +(45mm,20mm) and +(-55mm,-5mm) ..
+    ([xshift=-8mm,yshift=28mm]current page.south east);
+  \draw[warm!45,line width=0.7pt]
+    ([xshift=16mm,yshift=14mm]current page.south west)
+    .. controls +(55mm,17mm) and +(-65mm,-8mm) ..
+    ([xshift=-16mm,yshift=20mm]current page.south east);
+\end{tikzpicture}
+
+\clearpage
+
+% ---------------- TEXT PROBLEMS ----------------
+\sectiontitle{1. Движение по кругу: сначала выберите правильный объект поиска}
+
+\keyidea{Главная идея.} Если задача спрашивает время одного круга, удобно именно это время обозначить через $x$. Если спрашивается скорость --- обозначайте скорость. Такой выбор часто убирает лишние неизвестные и делает уравнение коротким.
+
+\textbf{Базовая связь:}
+\[
+S=vt,\qquad v=\frac{S}{t},\qquad t=\frac{S}{v}.
+\]
+
+\textbf{Для круговой трассы особенно полезны две модели:}
+\begin{itemize}
+  \item обычные единицы: км/ч, м/с, минуты, километры;
+  \item \emph{круги в минуту}: если один круг проходится за $x$ минут, то скорость равна $\dfrac{1}{x}$ круга в минуту.
+\end{itemize}
+
+\textbf{Чек-лист перед уравнением:}
+\begin{enumerate}
+  \item Что требуется найти? Можно ли именно это обозначить через $x$?
+  \item Все ли времена приведены к одним единицам?
+  \item Что означает «опережает на один круг»? Это разность путей, равная длине круга.
+  \item Что означает «осталось $400$ м до конца круга»? Пройденный путь меньше длины круга на $0{,}4$ км.
+  \item Можно ли сократить неизвестную длину круга, разделив уравнение на неё?
+\end{enumerate}
+
+\subsection*{Показательный пример: лыжники}
+Второй лыжник проходит круг за $x$ минут, первый --- на $2$ минуты быстрее, то есть за $x-2$ минут. За час первый опережает второго ровно на один круг.
+
+Если длина круга равна $L$, то за $60$ минут:
+\[
+\frac{60L}{x-2}-\frac{60L}{x}=L.
+\]
+Делим на $L\ne0$:
+\[
+\frac{60}{x-2}-\frac{60}{x}=1,\qquad x>2.
+\]
+Отсюда
+\[
+\frac{120}{x(x-2)}=1
+\quad\Longrightarrow\quad
+x^2-2x-120=0
+\quad\Longrightarrow\quad
+x=12.
+\]
+
+\keyidea{Вывод:} второй лыжник проходит круг за $12$ минут. Здесь длина круга вообще не потребовалась.
+
+\subsection*{Типичные ошибки}
+\begin{itemize}
+  \item обозначить через $x$ величину, которую затем приходится долго исключать;
+  \item смешать минуты и часы в одном уравнении;
+  \item забыть, что разность путей при опережении на круг равна ровно длине круга;
+  \item получить отрицательное или слишком малое время и не проверить смысл ограничения $x>d$, где $d$ --- разница во времени прохождения круга.
+\end{itemize}
+
+% ---------------- MODULE GRAPH ----------------
+\sectiontitle{2. График с модулем: сначала раскрыть по случаям}
+
+Рассмотрим функцию занятия
+\[
+f(x)=|x|(x-1)-2x.
+\]
+
+Модуль раскрывается по знаку $x$:
+\[
+f(x)=
+\begin{cases}
+-x^2-x, & x<0,\\[2mm]
+x^2-3x, & x\ge0.
+\end{cases}
+\]
+
+\textbf{Левая часть, $x<0$:}
+\[
+y=-x^2-x.
+\]
+Ветви направлены вниз. Вершина:
+\[
+x_0=-\frac{b}{2a}=-\frac{-1}{2(-1)}=-\frac12,
+\qquad
+f\!\left(-\frac12\right)=\frac14.
+\]
+На допустимом промежутке нуль: $x=-1$.
+
+\textbf{Правая часть, $x\ge0$:}
+\[
+y=x^2-3x.
+\]
+Ветви направлены вверх. Вершина:
+\[
+x_0=\frac32,
+\qquad
+f\!\left(\frac32\right)=-\frac94.
+\]
+Нули: $x=0$ и $x=3$.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.90\linewidth,
+  height=0.50\linewidth,
+  axis lines=middle,
+  xmin=-3.5,xmax=4.2,
+  ymin=-4.2,ymax=2.0,
+  xtick={-3,-2,-1,0,1,2,3,4},
+  ytick={-4,-3,-2,-1,0,1,2},
+  xlabel={$x$},ylabel={$y$},
+  grid=both,
+  minor tick num=1,
+  grid style={line width=.2pt,draw=gray!20},
+  major grid style={line width=.3pt,draw=gray!30},
+  samples=220,
+  clip=true,
+]
+  \addplot[domain=-3.5:-0.001,very thick,color=accent] {-x^2-x};
+  \addplot[domain=0:4.2,very thick,color=accent] {x^2-3*x};
+  \addplot[domain=-3.5:4.2,dashed,color=warm] {0.25};
+  \addplot[domain=-3.5:4.2,dashed,color=warm] {-2.25};
+  \addplot[only marks,mark=*,mark size=2.3pt,color=darkaccent] coordinates {(-0.5,0.25) (1.5,-2.25)};
+  \node[anchor=south west,color=darkaccent] at (axis cs:-0.5,0.25) {$\left(-\frac12;\frac14\right)$};
+  \node[anchor=north west,color=darkaccent] at (axis cs:1.5,-2.25) {$\left(\frac32;-\frac94\right)$};
+  \node[anchor=south east,color=warm] at (axis cs:4.1,0.25) {$m=\frac14$};
+  \node[anchor=north east,color=warm] at (axis cs:4.1,-2.25) {$m=-\frac94$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsection*{Параметр $y=m$: сколько общих точек?}
+Горизонтальная прямая $y=m$ имеет с графиком ровно две общие точки в двух особых положениях --- когда касается одной из вершин и одновременно пересекает вторую ветвь:
+\[
+\boxed{m=\frac14\quad\text{или}\quad m=-\frac94}.
+\]
+
+\keyidea{Контрольная мысль:} недостаточно построить две полные параболы. Каждая формула действует только на своём промежутке: $x<0$ или $x\ge0$.
+
+\clearpage
+
+% ---------------- PIECEWISE + VECTORS ----------------
+\sectiontitle{3. Кусочная функция: сначала смотрите на промежуток}
+
+Для кусочной функции каждая формула работает только там, где указано условие рядом с ней.
+
+Например, если гиперболическая формула содержит знаменатель $x$, но ветвь задана условием
+\[
+x<-4,
+\]
+то отдельная запись $x\ne0$ уже не добавляет нового ограничения: из $x<-4$ автоматически следует $x\ne0$.
+
+\textbf{Проверяйте три вещи:}
+\begin{itemize}
+  \item границу промежутка: строгий знак $<$ или нестрогий $\le$;
+  \item ОДЗ самой формулы;
+  \item какие точки реально принадлежат конкретной ветви графика.
+\end{itemize}
+
+\vspace{4mm}
+\sectiontitle{4. Векторы: стройте маршрут от начала к концу}
+
+\keyidea{Правило сложения.} Чтобы сложить два вектора, совместите начало второго с концом первого. Вектор суммы соединяет начало первого с концом второго.
+
+В параллелограмме $ABCD$ требуется выразить $\vect{D}{B}$ через $\vect{A}{D}$ и $\vect{A}{B}$. Идём из $D$ в $B$ через точку $A$:
+\[
+\vect{D}{B}=\vect{D}{A}+\vect{A}{B}.
+\]
+Но
+\[
+\vect{D}{A}=-\vect{A}{D}.
+\]
+Поэтому
+\[
+\boxed{\vect{D}{B}=\vect{A}{B}-\vect{A}{D}}.
+\]
+
+\begin{center}
+\begin{tikzpicture}[scale=0.70]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(4.6,0){B}
+  \tkzDefPoint(1.2,2.8){D}
+  \tkzDefPoint(5.8,2.8){C}
+  \tkzDrawPolygon[line width=0.9pt,color=softgray](A,B,C,D)
+  \tkzLabelPoint[below left](A){$A$}
+  \tkzLabelPoint[below right](B){$B$}
+  \tkzLabelPoint[above left](D){$D$}
+  \tkzLabelPoint[above right](C){$C$}
+  \tkzDrawSegment[-{Stealth[length=3mm]},line width=1.5pt,color=accent](A,B)
+  \tkzDrawSegment[-{Stealth[length=3mm]},line width=1.5pt,color=accent](A,D)
+  \tkzDrawSegment[-{Stealth[length=3mm]},line width=1.6pt,color=warm](D,B)
+  \node[color=accent,below] at (2.3,-0.15) {$\vect{A}{B}$};
+  \node[color=accent,left] at (0.45,1.45) {$\vect{A}{D}$};
+  \node[color=warm,right] at (3.55,1.35) {$\vect{D}{B}$};
+\end{tikzpicture}
+\end{center}
+
+\textbf{Мини-памятка.} Направление важно: $\vect{D}{A}=-\vect{A}{D}$. Ищите маршрут от начала искомого вектора к его концу, записывайте векторы вдоль маршрута и учитывайте смену направления знаком «минус».
+
+\clearpage
+
+% ---------------- TRAINING 1 ----------------
+\sectiontitle{5. Тренировочный блок — Путь А}
+
+\textbf{10 заданий.} Сначала составьте модель или выполните построение самостоятельно. В задачах на движение следите за единицами и смыслом выбранной неизвестной.
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Два бегуна стартовали одновременно из одной точки круговой трассы в одном направлении. Скорость быстрого на $2$ км/ч больше скорости медленного. Быстрый завершил первый круг через $18$ минут. Через $20$ минут после старта медленному оставалось $500$ м до конца первого круга. Найдите скорость медленного бегуна.
+
+  \item Первый лыжник проходит круг на $3$ минуты быстрее второго. За $60$ минут первый опережает второго ровно на один круг. За сколько минут второй лыжник проходит один круг?
+
+  \item Первый спортсмен проходит круг на $4$ минуты быстрее второго. За $48$ минут первый опережает второго ровно на два круга. За сколько минут второй спортсмен проходит один круг?
+
+  \item Второй бегун проходит круг за $x$ минут, первый --- на $2$ минуты быстрее. За $45$ минут первый опережает второго на один круг. Запишите уравнение относительно $x$ и укажите ограничение на $x$. Решать уравнение не требуется.
+
+  \item Представьте функцию
+  \[
+  g(x)=|x|(x+2)-x
+  \]
+  в виде кусочной функции без знака модуля.
+\end{enumerate}
+
+\clearpage
+
+% ---------------- TRAINING 2 ----------------
+\sectiontitle{5. Тренировочный блок — продолжение}
+
+\begin{enumerate}[label=\textbf{\arabic*.},start=6]
+  \item Для функции
+  \[
+  f(x)=|x|(x-1)-2x
+  \]
+  найдите вершины обеих параболических частей и нули функции с учётом ограничений на $x$.
+
+  \item Для той же функции $f(x)=|x|(x-1)-2x$ найдите все значения $m$, при которых прямая $y=m$ имеет с графиком ровно две общие точки.
+
+  \item Дана кусочная функция, одна из ветвей которой задаётся формулой
+  \[
+  h(x)=\frac{4}{x}+2,\qquad x<-4.
+  \]
+  Нужно ли для этой ветви отдельно дописывать условие $x\ne0$? Кратко объясните.
+
+  \item В параллелограмме $ABCD$ выразите вектор $\vect{D}{B}$ через векторы $\vect{A}{B}$ и $\vect{A}{D}$.
+
+  \item В параллелограмме $ABCD$ пусть
+  \[
+  \vect{A}{B}=\vec a,\qquad \vect{A}{D}=\vec b.
+  \]
+  Выразите вектор $\vect{C}{A}$ через $\vec a$ и $\vec b$.
+\end{enumerate}
+
+\clearpage
+
+% ---------------- ANSWERS ----------------
+\sectiontitle{6. Ответы}
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{9mm}X@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $3$ км/ч. \\
+2 & $15$ минут. \\
+3 & $12$ минут. \\
+4 & $\displaystyle \frac{45}{x-2}-\frac{45}{x}=1$, при $x>2$. \\
+5 & $\displaystyle g(x)=\begin{cases}-x^2-3x,&x<0,\\x^2+x,&x\ge0.\end{cases}$ \\
+6 & Левая часть: вершина $\left(-\frac12;\frac14\right)$, нуль $x=-1$. Правая часть: вершина $\left(\frac32;-\frac94\right)$, нули $x=0$ и $x=3$. \\
+7 & $\displaystyle m=\frac14$ или $\displaystyle m=-\frac94$. \\
+8 & Нет. Условие $x<-4$ уже гарантирует $x\ne0$. \\
+9 & $\vect{D}{B}=\vect{A}{B}-\vect{A}{D}$. \\
+10 & $\vect{C}{A}=-\vec a-\vec b$. \\
+\bottomrule
+\end{tabularx}
+
+\vfill
+{\small\color{softgray}Перед экзаменом особенно проверьте: единицы времени, ограничения на $x$, принадлежность точки нужной ветви и направление вектора.}
+
+\end{document}
