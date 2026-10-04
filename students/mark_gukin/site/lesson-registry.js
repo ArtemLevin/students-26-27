@@ -5,6 +5,58 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-04",
+    "ktpRefs": [],
+    "href": "04.10.26.html",
+    "title": "Степени и корни. Преобразование выражений",
+    "navTitle": "Степени и корни",
+    "summary": "Интерактивное занятие Марка Гукина по преобразованию степенных выражений: свойства степеней, корни как дробные степени, отрицательные показатели, ограничения и тренировка.",
+    "topics": [
+      "Степень с целым показателем",
+      "Степень с рациональным показателем",
+      "Свойства степеней",
+      "Арифметический корень",
+      "Преобразование выражений с корнями"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "ege08_02",
+        "evidenceAnchor": "rules",
+        "relation": "assessed"
+      },
+      {
+        "competencyId": "ege08_03",
+        "evidenceAnchor": "recognize",
+        "relation": "assessed"
+      },
+      {
+        "competencyId": "ege08_04",
+        "evidenceAnchor": "algorithm",
+        "relation": "assessed"
+      },
+      {
+        "competencyId": "ege08_05",
+        "evidenceAnchor": "recognize",
+        "relation": "assessed"
+      },
+      {
+        "competencyId": "ege08_06",
+        "evidenceAnchor": "examples",
+        "relation": "assessed"
+      },
+      {
+        "competencyId": "ege08_18",
+        "evidenceAnchor": "examples",
+        "relation": "assessed"
+      }
+    ],
+    "materials": {
+      "html": "04.10.26.html",
+      "pdf": "../pdf_docs/04.10.26.pdf",
+      "tex": "../tex_docs/04.10.26.tex"
+    }
+  },
+  {
     "date": "2026-09-30",
     "ktpRefs": [],
     "href": "30.09.26.html",
