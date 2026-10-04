@@ -5,6 +5,33 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-02",
+    "href": "02.10.26.html",
+    "title": "Равноускоренное движение",
+    "navTitle": "Равноускоренное движение",
+    "navSubtitle": "Формулы, n-я секунда и координатный метод",
+    "summary": "Иван Петраченков · 02.10.26 · равноускоренное движение, три формулы перемещения, движение за n-ю секунду и координатный метод для встречи.",
+    "topics": [
+      "Равноускоренное движение",
+      "Три формулы перемещения",
+      "Движение за n-ю секунду",
+      "Координатный метод для встречи"
+    ],
+    "ktpRefs": [],
+    "outcomes": [
+      {"competencyId":"kinematics_24","evidenceAnchor":"acceleration","relation":"touched"},
+      {"competencyId":"kinematics_25","evidenceAnchor":"velocity","relation":"touched"},
+      {"competencyId":"kinematics_26","evidenceAnchor":"coordinate","relation":"touched"},
+      {"competencyId":"kinematics_27","evidenceAnchor":"displacement","relation":"touched"},
+      {"competencyId":"kinematics_28","evidenceAnchor":"stop","relation":"touched"}
+    ],
+    "materials": {
+      "html": "02.10.26.html",
+      "pdf": "../pdf_docs/02.10.26.pdf",
+      "tex": "../tex_docs/02.10.26.tex"
+    }
+  },
+  {
     "date": "2026-09-25",
     "ktpRefs": [],
     "href": "25.09.26.html",
