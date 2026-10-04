@@ -1,5 +1,57 @@
 export const LESSONS=[
 {
+  "date": "2026-10-04",
+  "href": "04.10.26.html",
+  "title": "Степени: общее основание",
+  "summary": "Занятие Анны Банновой 04.10.26: приведение степенных выражений к общему основанию, дробные и иррациональные показатели, отрицательная степень, скобки и выбор короткого маршрута преобразований.",
+  "topics": [
+    "степени",
+    "приведение к общему основанию",
+    "дробный показатель",
+    "иррациональный показатель",
+    "отрицательная степень",
+    "корни",
+    "преобразование степенных выражений",
+    "скобки в показателях"
+  ],
+  "ktpRefs": [
+    "ktp-029",
+    "ktp-030"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "calc_09",
+      "evidenceAnchor": "lesson-evidence",
+      "relation": "assessed"
+    },
+    {
+      "competencyId": "calc_10",
+      "evidenceAnchor": "evidence-rational",
+      "relation": "assessed"
+    },
+    {
+      "competencyId": "expr_12",
+      "evidenceAnchor": "lesson-evidence",
+      "relation": "assessed"
+    },
+    {
+      "competencyId": "calc_12",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "expr_13",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "04.10.26.html",
+    "pdf": "../pdf_docs/04.10.26.pdf",
+    "tex": "../tex_docs/04.10.26.tex"
+  }
+},
+{
   "date": "2026-10-02",
   "href": "02.10.26.html",
   "title": "Степени",
