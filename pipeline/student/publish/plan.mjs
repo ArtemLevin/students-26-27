@@ -7,6 +7,7 @@ import {
   validateKtpPlanData,
   validateKtpStateData,
   validateLessonMetadataData,
+  validateMasteryStateData,
   validateStudentContractData
 } from '../contract.mjs';
 import {
@@ -22,6 +23,7 @@ import {
   samePublicationContribution
 } from './metadata.mjs';
 import {applyKtpPublication} from './ktp-state.mjs';
+import {applyMasteryPublication} from './mastery-state.mjs';
 import {deriveRegistrySource} from './registry.mjs';
 
 function json(value){return JSON.stringify(value,null,2)+'\n';}
@@ -107,6 +109,7 @@ export function buildV2PublicationPlan({
   const registryPath=resolveStudentContractPath(root,studentId,contract.lessons.registry);
   const metadataDir=resolveStudentContractPath(root,studentId,contract.lessons.metadataDir);
   const catalogPath=resolveStudentContractPath(root,studentId,contract.competencies.catalog);
+  const masteryPath=resolveStudentContractPath(root,studentId,contract.competencies.mastery);
 
   const planSnapshot=fileSnapshot(planPath);
   const plan=validateKtpPlanData(
@@ -155,6 +158,25 @@ export function buildV2PublicationPlan({
     });
   }
 
+  const masteryIsJson=path.extname(masteryPath).toLowerCase()==='.json';
+  const masterySnapshot=masteryIsJson?fileSnapshot(masteryPath):null;
+  let masteryResult=null;
+  if(masteryIsJson){
+    const currentMastery=loadJson(
+      masteryPath,
+      path.basename(masteryPath),
+      snapshotFsView(masterySnapshot)
+    );
+    validateMasteryStateData(currentMastery,{studentId,catalogIds:catalog.ids});
+    masteryResult=applyMasteryPublication({
+      state:currentMastery,
+      lessonDate:intent.lessonDate,
+      sourcePath:path.relative(studentRoot,metadataPath).replaceAll('\\','/'),
+      outcomes:metadata.outcomes
+    });
+    validateMasteryStateData(masteryResult.state,{studentId,catalogIds:catalog.ids});
+  }
+
   const appliedMatches=intent.ktpMatches.filter(item=>item.decision==='apply');
   const stateResult=applyKtpPublication({
     state:currentState,
@@ -182,6 +204,8 @@ export function buildV2PublicationPlan({
   const metadataSource=json(metadata);
   const stateSource=json(stateResult.state);
   const beforeStateSource=stateSnapshot.source;
+  const masterySource=masteryResult?json(masteryResult.state):null;
+  const beforeMasterySource=masterySnapshot?.source??null;
 
   const candidates=[
     {
@@ -194,6 +218,11 @@ export function buildV2PublicationPlan({
       before:beforeStateSource,
       after:stateSource
     },
+    ...(masteryResult?[{
+      path:masteryPath,
+      before:beforeMasterySource,
+      after:masterySource
+    }]:[]),
     {
       path:registryPath,
       before:beforeRegistrySource,
@@ -209,6 +238,19 @@ export function buildV2PublicationPlan({
     .filter(item=>item.kind!==null);
 
   const reviewItems=[...preflight.reviewItems];
+  const warnings=[...preflight.warnings];
+  const hasMasteryClaims=metadata.outcomes.some(item=>item.masteryClaim!==null);
+  if(hasMasteryClaims&&!masteryIsJson){
+    warnings.push(
+      'Mastery claims were recorded in lesson metadata but not applied because the configured mastery authority is not JSON.'
+    );
+  }
+  if(masteryResult?.preservedDowngrades.length){
+    warnings.push(
+      'Automatic mastery publication preserved higher existing levels for '+
+      masteryResult.preservedDowngrades.map(item=>item.competencyId).join(', ')+'.'
+    );
+  }
   const executable=reviewItems.length===0&&conflicts.length===0;
 
   const changedKtp={};
@@ -223,6 +265,7 @@ export function buildV2PublicationPlan({
     {file:registryPath,snapshot:registrySnapshot},
     {file:metadataPath,snapshot:metadataSnapshot},
     {file:catalogPath,snapshot:catalogSnapshot},
+    ...(masterySnapshot?[{file:masteryPath,snapshot:masterySnapshot}]:[]),
     {
       file:artifact.htmlPath,
       snapshot:{exists:true,source:artifact.htmlSource}
@@ -255,13 +298,17 @@ export function buildV2PublicationPlan({
     planningMode:preflight.planningMode,
     reviewItems,
     conflicts,
-    warnings:[...preflight.warnings],
-    changes:{ktp:changedKtp},
+    warnings,
+    changes:{
+      ktp:changedKtp,
+      mastery:masteryResult?.changes||{}
+    },
     preconditions,
     writes,
     candidates:{
       metadata,
       state:stateResult.state,
+      mastery:masteryResult?.state||null,
       registrySource:registryResult.source
     }
   };
