@@ -22,7 +22,7 @@ const ANCHOR_RE=/^[A-Za-z][A-Za-z0-9_-]*$/;
 const PRIVATE_STATE_KEYS=new Set(['teacherPrivateNote','parentContact','healthNote','personalObservation']);
 const MASTERY_SOURCE_KINDS=new Set([
   'teacher-seed','teacher-mastery','baseline-levels',
-  'mastery-authority','linked-progress-overlay','stage04-mastery','dashboard-data'
+  'mastery-authority','linked-progress-overlay','stage04-mastery','dashboard-data','lesson-assessment'
 ]);
 
 function fail(label,message){throw new Error(label+': '+message);}
