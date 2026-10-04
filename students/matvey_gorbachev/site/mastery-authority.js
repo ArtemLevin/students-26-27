@@ -102,8 +102,35 @@
 ["Равносильные преобразования уравнений","27.09.26.html#roots"],
 ["Граничные точки и строгие знаки","27.09.26.html#practice"]
 ]);for(const g of d.groups)for(const item of g.items){const href=appliedEvidence.get(item.title)||appliedReinforced.get(item.title);if(href){item.evidence=Array.isArray(item.evidence)?item.evidence:[];if(!item.evidence.some(e=>e.date==="27.09.26"))item.evidence.push({date:"27.09.26",text:"Навык разбирался или применялся на занятии по прикладным формулам, единицам, квадратным уравнениям и отбору корней.",href})}}
+
+const motionEvidence=new Map([
+["Задачи на движение по прямой","04.10.26.html#types"],
+["Задачи на движение навстречу","04.10.26.html#meeting"],
+["Задачи на движение вдогонку","04.10.26.html#chase"],
+["Задачи на движение по воде","04.10.26.html#water"],
+["Задачи на среднюю скорость","04.10.26.html#average"],
+["Составление уравнения по тексту","04.10.26.html#route"],
+["Интерпретация ответа в условиях задачи","04.10.26.html#errors"],
+["Выбор переменной в прикладной модели","04.10.26.html#route"],
+["Перевод условия в формулы","04.10.26.html#route"],
+["Анализ размерностей","04.10.26.html#route"],
+["Проверка реалистичности ответа","04.10.26.html#errors"],
+["Интерпретация математического результата","04.10.26.html#errors"]
+]);
+for(const g of d.groups)for(const item of g.items){
+  const href=motionEvidence.get(item.title);
+  if(href){
+    item.level=Math.max(2,item.level||0);
+    item.status="covered";
+    item.evidence=Array.isArray(item.evidence)?item.evidence:[];
+    if(!item.evidence.some(e=>e.date==="04.10.26")){
+      item.evidence.push({date:"04.10.26",text:"Навык разбирался и применялся на занятии по текстовым задачам на движение табличным методом v–t–S.",href});
+    }
+  }
+}
+
 const stablePrefix="matvey_gorbachev-ege-profile-math";try{const suffixes=["-competency-map","-repeat","-theme"],legacyPrefixes=["matvey_gorbachev-ege-profile-math-20260927","matvey_gorbachev-ege-profile-math-20260924","matvey_gorbachev-ege-profile-math-20260920","matvey_gorbachev-ege-profile-math-20260917"];for(const suffix of suffixes){const stableKey=stablePrefix+suffix;if(localStorage.getItem(stableKey)==null){for(const legacy of legacyPrefixes){const value=localStorage.getItem(legacy+suffix);if(value!=null){localStorage.setItem(stableKey,value);break}}}}}catch(e){}
-d.student.name="Матвей Горбачев";d.updated="27.09.2026";d.storagePrefix=stablePrefix;d.nextAfterBaseline="functions_09";d.materials=[{date:"13.09.26",title:"Алгебраическая база и степени",pdf:"../pdf_docs/13.09.26.pdf",tex:"../tex_docs/13.09.26.tex"}]})();
+d.student.name="Матвей Горбачев";d.updated="04.10.2026";d.storagePrefix=stablePrefix;d.nextAfterBaseline="functions_09";d.materials=[{date:"13.09.26",title:"Алгебраическая база и степени",pdf:"../pdf_docs/13.09.26.pdf",tex:"../tex_docs/13.09.26.tex"}]})();
 
 (() => {
   "use strict";
@@ -126,7 +153,7 @@ d.student.name="Матвей Горбачев";d.updated="27.09.2026";d.storageP
   }
   window.STUDENT_MASTERY_AUTHORITY={
     version:1,
-    basis:"Repository-authored baseline levels after ambiguity-checked title overlays 17.09–27.09.",
+    basis:"Repository-authored baseline levels after ambiguity-checked lesson overlays through 04.10.",
     titleMappingCount:55,
     levels
   };
