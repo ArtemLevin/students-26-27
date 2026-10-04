@@ -18,9 +18,41 @@ export const LESSONS=[
       "Показательные уравнения"
     ],
     "outcomes": [
-      "Считывать узловые точки и переводить точку (x₀;y₀) в равенство f(x₀)=y₀",
-      "Восстанавливать параметры функций вида f(x)=a^x+b и f(x)=a^(x+b)",
-      "После восстановления функции находить f(k) или решать уравнение f(x)=c"
+      {
+        "competencyId": "ege12_12",
+        "evidenceAnchor": "studio",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege12_18",
+        "evidenceAnchor": "studio",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege07_13",
+        "evidenceAnchor": "algorithm",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege07_07",
+        "evidenceAnchor": "practice",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege08_02",
+        "evidenceAnchor": "powers",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege08_03",
+        "evidenceAnchor": "powers",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege08_04",
+        "evidenceAnchor": "powers",
+        "relation": "practiced"
+      }
     ],
     "materials": {
       "html": "02.10.26.html",
