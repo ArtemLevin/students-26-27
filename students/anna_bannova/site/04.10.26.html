@@ -107,10 +107,10 @@ dialog{border:0;padding:0;max-width:min(94vw,1400px);max-height:92vh;background:
   <div class="rule-grid">
     <div class="rule-tabs" role="tablist" aria-label="Свойства степеней">
       <button id="tab-mul" role="tab" aria-selected="true" aria-controls="rulePanel" data-rule="mul">Умножение одинаковых оснований</button>
-      <button role="tab" aria-selected="false" aria-controls="rulePanel" data-rule="div">Деление одинаковых оснований</button>
-      <button role="tab" aria-selected="false" aria-controls="rulePanel" data-rule="pow">Степень степени</button>
-      <button role="tab" aria-selected="false" aria-controls="rulePanel" data-rule="product">Степень произведения</button>
-      <button role="tab" aria-selected="false" aria-controls="rulePanel" data-rule="negative">Отрицательная степень</button>
+      <button id="tab-div" role="tab" aria-selected="false" aria-controls="rulePanel" data-rule="div">Деление одинаковых оснований</button>
+      <button id="tab-pow" role="tab" aria-selected="false" aria-controls="rulePanel" data-rule="pow">Степень степени</button>
+      <button id="tab-product" role="tab" aria-selected="false" aria-controls="rulePanel" data-rule="product">Степень произведения</button>
+      <button id="tab-negative" role="tab" aria-selected="false" aria-controls="rulePanel" data-rule="negative">Отрицательная степень</button>
     </div>
     <div class="rule-panel" id="rulePanel" role="tabpanel" aria-labelledby="tab-mul" tabindex="0">
       <div class="math" id="ruleMath">aᵐ · aⁿ = aᵐ⁺ⁿ</div>
@@ -240,7 +240,30 @@ const ruleData={
   product:{math:'(ab)ⁿ = aⁿbⁿ',text:'Сигнал: произведение целиком возводится в степень. Показатель распределяется на каждый множитель.',note:'Так (2·3)^(9/2) превращается в 2^(9/2)·3^(9/2).'},
   negative:{math:'a⁻ⁿ = 1/aⁿ',text:'Сигнал: после вычитания показателей получился минус. Это не ошибка, а промежуточная форма.',note:'Например, 2⁻² = 1/4 = 0,25.'}
 };
-$$('.rule-tabs button').forEach(btn=>btn.addEventListener('click',()=>{$$('.rule-tabs button').forEach(x=>x.setAttribute('aria-selected','false'));btn.setAttribute('aria-selected','true');const d=ruleData[btn.dataset.rule];$('#ruleMath').textContent=d.math;$('#ruleText').textContent=d.text;$('#ruleNote').textContent=d.note;$('#rulePanel').setAttribute('aria-labelledby',btn.id||'');}));
+const ruleTabs=$('.rule-tabs button');
+function selectRule(btn){
+  ruleTabs.forEach(x=>x.setAttribute('aria-selected','false'));
+  btn.setAttribute('aria-selected','true');
+  const d=ruleData[btn.dataset.rule];
+  $('#ruleMath').textContent=d.math;
+  $('#ruleText').textContent=d.text;
+  $('#ruleNote').textContent=d.note;
+  $('#rulePanel').setAttribute('aria-labelledby',btn.id);
+}
+ruleTabs.forEach((btn,index)=>{
+  btn.addEventListener('click',()=>selectRule(btn));
+  btn.addEventListener('keydown',event=>{
+    let next=index;
+    if(event.key==='ArrowRight'||event.key==='ArrowDown')next=(index+1)%ruleTabs.length;
+    else if(event.key==='ArrowLeft'||event.key==='ArrowUp')next=(index-1+ruleTabs.length)%ruleTabs.length;
+    else if(event.key==='Home')next=0;
+    else if(event.key==='End')next=ruleTabs.length-1;
+    else return;
+    event.preventDefault();
+    ruleTabs[next].focus();
+    selectRule(ruleTabs[next]);
+  });
+});
 
 const work=[
   ['(2^(7/2) · 3^(11/2)) / (2·3)^(9/2)','В знаменателе составное основание 6. Разлагаем его на 2·3 и сохраняем подстановку в скобках.','после разложения становятся видны те же основания 2 и 3, что уже есть в числителе.'],
