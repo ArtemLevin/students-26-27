@@ -88,9 +88,15 @@
     return data.baselineRepeat.includes(id);
   }
 
+  function isTouched(id) {
+    return Array.isArray(data.baselineTouched) && data.baselineTouched.includes(id);
+  }
+
   function getStatus(id) {
     if (isRepeat(id)) return 'repeat';
-    return getLevel(id) > 0 ? 'covered' : 'upcoming';
+    if (getLevel(id) > 0) return 'covered';
+    if (isTouched(id)) return 'touched';
+    return 'upcoming';
   }
 
   const levelLabel = level => [
@@ -100,6 +106,13 @@
     'Почти уверенно',
     'Освоено'
   ][level] || 'Ещё впереди';
+
+  function statusLabel(id) {
+    if (isRepeat(id)) return 'Пора повторить';
+    if (getLevel(id) > 0) return levelLabel(getLevel(id));
+    if (isTouched(id)) return 'Затронуто на занятии';
+    return 'Ещё впереди';
+  }
 
   function saveLevels() {
     localStorage.setItem(keys.levels, JSON.stringify(manualLevels));
@@ -179,12 +192,12 @@
         path.setAttribute('role', 'button');
         path.setAttribute(
           'aria-label',
-          `${item.title}. Раздел: ${group.name}. ${isRepeat(item.id) ? 'Пора повторить' : levelLabel(getLevel(item.id))}.`
+          `${item.title}. Раздел: ${group.name}. ${statusLabel(item.id)}.`
         );
         path.dataset.topicId = item.id;
 
         const title = document.createElementNS(svgNS, 'title');
-        title.textContent = `${item.title} · ${group.name} · ${isRepeat(item.id) ? 'Пора повторить' : levelLabel(getLevel(item.id))}`;
+        title.textContent = `${item.title} · ${group.name} · ${statusLabel(item.id)}`;
         path.appendChild(title);
 
         path.addEventListener('mouseenter', event => showTooltip(item, event.clientX, event.clientY));
@@ -225,15 +238,16 @@
     const items = [...byId.values()];
     const repeatCount = items.filter(item => isRepeat(item.id)).length;
     const coveredOnly = items.filter(item => getLevel(item.id) > 0 && !isRepeat(item.id)).length;
-    const touched = coveredOnly + repeatCount;
-    const coverage = Math.round(touched / items.length * 100);
+    const touchedOnly = items.filter(item => isTouched(item.id) && getLevel(item.id) === 0 && !isRepeat(item.id)).length;
+    const exposed = coveredOnly + repeatCount + touchedOnly;
+    const coverage = Math.round(exposed / items.length * 100);
 
     els.total.textContent = items.length;
     els.covered.textContent = coveredOnly;
     els.repeat.textContent = repeatCount;
     els.coverage.textContent = `${coverage}%`;
     els.centerPercent.textContent = `${coverage}%`;
-    els.centerCount.textContent = `${touched} из ${items.length} тем затронуто`;
+    els.centerCount.textContent = `${exposed} из ${items.length} тем затронуто`;
     els.desc.textContent =
       `Интерактивная круговая карта программы «${data.meta.program}»: ${data.groups.length} тематических секторов, ${items.length} конкретных тем и навыков.`;
   }
@@ -243,7 +257,7 @@
     data.groups.forEach((group, index) => {
       const details = document.createElement('details');
       details.className = 'topic-group';
-      const groupTouched = group.items.filter(item => getLevel(item.id) > 0 || isRepeat(item.id)).length;
+      const groupTouched = group.items.filter(item => getLevel(item.id) > 0 || isRepeat(item.id) || isTouched(item.id)).length;
       if (groupTouched || index === 0) details.open = true;
 
       const summary = document.createElement('summary');
@@ -261,7 +275,7 @@
         button.innerHTML = `
           <span class="topic-dot" data-status="${getStatus(item.id)}" aria-hidden="true"></span>
           <span>${item.title}</span>
-          <span class="topic-level">${isRepeat(item.id) ? 'повтор' : getLevel(item.id)}</span>`;
+          <span class="topic-level">${isRepeat(item.id) ? 'повтор' : (getLevel(item.id) > 0 ? getLevel(item.id) : (isTouched(item.id) ? 'урок' : 0))}</span>`;
         const {filterMatch, searchMatch} = itemMatches(item);
         button.classList.toggle('is-muted', !filterMatch || !searchMatch);
         button.classList.toggle('is-search-match', Boolean(searchTerm.trim()) && searchMatch);
@@ -281,10 +295,10 @@
       setCellClasses(path, item);
       path.setAttribute(
         'aria-label',
-        `${item.title}. Раздел: ${item.groupName}. ${isRepeat(item.id) ? 'Пора повторить' : levelLabel(getLevel(item.id))}.`
+        `${item.title}. Раздел: ${item.groupName}. ${statusLabel(item.id)}.`
       );
       const title = path.querySelector('title');
-      if (title) title.textContent = `${item.title} · ${item.groupName} · ${isRepeat(item.id) ? 'Пора повторить' : levelLabel(getLevel(item.id))}`;
+      if (title) title.textContent = `${item.title} · ${item.groupName} · ${statusLabel(item.id)}`;
     });
     renderCatalog();
     renderCenter();
@@ -295,7 +309,7 @@
     els.tooltip.innerHTML = `
       <strong>${item.title}</strong>
       <span>${item.groupName}</span>
-      <em>${isRepeat(item.id) ? 'Пора повторить' : levelLabel(getLevel(item.id))}</em>`;
+      <em>${statusLabel(item.id)}</em>`;
     els.tooltip.hidden = false;
     moveTooltip(x, y);
   }
@@ -326,7 +340,7 @@
 
     els.dialogGroup.textContent = `${item.groupCode} · ${item.groupName}`;
     els.dialogTitle.textContent = item.title;
-    els.dialogLevel.textContent = `${level} / 4 · ${levelLabel(level)}`;
+    els.dialogLevel.textContent = `${level} / 4 · ${statusLabel(item.id)}`;
     els.dialogDescription.textContent = item.description;
     els.dialogDiagnostic.textContent = item.diagnostic;
     els.dialogHistory.textContent = evidence
@@ -379,8 +393,8 @@
     const all = [...byId.values()];
     const repeat = all.find(item => isRepeat(item.id));
     const nextKinematics = data.groups.find(group => group.id === 'kinematics')?.items
-      .find(item => getLevel(item.id) === 0 && !isRepeat(item.id));
-    const upcoming = nextKinematics || all.find(item => getLevel(item.id) === 0 && !isRepeat(item.id));
+      .find(item => getStatus(item.id) === 'upcoming');
+    const upcoming = nextKinematics || all.find(item => getStatus(item.id) === 'upcoming');
     const low = all.find(item => getLevel(item.id) === 1);
     const target = repeat || upcoming || low || all[0];
 
