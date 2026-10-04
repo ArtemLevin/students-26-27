@@ -1,5 +1,5 @@
 /* Физика · ЕГЭ. Стабильные идентификаторы: существующие номера не переиспользовать.
-   Структура сверена с навигатором ФИПИ ЕГЭ–2026, содержание занятия — 25.09.26.tex. */
+   Структура сверена с навигатором ФИПИ ЕГЭ–2026, содержание занятий — 25.09.26.tex и 02.10.26.tex. */
 (() => {
   'use strict';
   const rawGroups = [
@@ -46,7 +46,9 @@
     kinematics:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,18,19,20,21,22,23],
     exam_skills:[1,2,4,14]
   };
+  const touched = {kinematics:[24,25,26,27,28]};
   const baselineLevels = {};
+  const baselineTouched = [];
   const evidence = {};
   const lessonHref = '25.09.26.html';
   const lessonDetails = {
@@ -67,12 +69,21 @@
     items:group.titles.map((title, i) => {
       const id = `${group.id}_${String(i + 1).padStart(2,'0')}`;
       const isCovered = (covered[group.id] || []).includes(i + 1);
+      const isTouched = (touched[group.id] || []).includes(i + 1);
+      if (isTouched) baselineTouched.push(id);
       if (isCovered) {
         baselineLevels[id] = 2;
         evidence[id] = {
           date:'25.09.26',
           text:`Тема «${title}» встречалась в чек-листе «Кинематика: путь, перемещение и описание движения». Это подтверждает знакомство с темой; уровень самостоятельного владения пока не проверен.`,
           href:lessonHref
+        };
+      }
+      if (isTouched) {
+        evidence[id] = {
+          date:'02.10.26',
+          text:`Тема «${title}» разобрана на занятии 02.10.26. Это подтверждает знакомство с формулой или методом; отдельная диагностика самостоятельного владения не проводилась.`,
+          href:'02.10.26.html'
         };
       }
       const isCalculation = /(формула|расчёт|задача|закон|проекция|скорость|время|работа|период|импульс|напряжение|КПД|энергия|соединение|сила|движение)/i.test(title);
@@ -89,9 +100,9 @@
     })
   }));
   window.IVAN_PETRACHENKOV_COMPETENCY_DATA = {
-    meta:{student:'Иван Петраченков',teacher:'Лёвин Артём Александрович',program:'Физика · ЕГЭ',updated:'25.09.2026',storagePrefix:'ivan_petrachenkov-physics-ege',
+    meta:{student:'Иван Петраченков',teacher:'Лёвин Артём Александрович',program:'Физика · ЕГЭ',updated:'02.10.2026',storagePrefix:'ivan_petrachenkov-physics-ege',
       sourceNote:'Структура сверена с навигатором самостоятельной подготовки ФИПИ к ЕГЭ–2026 по физике.',
-      latestLesson:{date:'25.09.26',title:'Кинематика: путь, перемещение и описание движения',lead:'Разобрали траекторию, векторы и проекции, равномерное движение, график координаты и среднюю скорость.',topics:['Путь и перемещение','Проекции векторов','Равномерное движение','Средняя скорость'],pdf:'../pdf_docs/25.09.26.pdf',tex:'../tex_docs/25.09.26.tex',mindmap:'../images/25.09.26.png'}},
-    groups, baselineLevels, baselineRepeat:[], evidence
+      latestLesson:{date:'02.10.26',title:'Равноускоренное движение: формулы и координатный метод',lead:'Разобрали ускорение, скорость и координату при постоянном ускорении, три формы перемещения, движение за n-ю секунду и условие встречи x₁=x₂.',topics:['Равноускоренное движение','Три формулы перемещения','n-я секунда','Координатный метод'],pdf:'../pdf_docs/02.10.26.pdf',tex:'../tex_docs/02.10.26.tex',mindmap:'../images/02.10.26.png'}},
+    groups, baselineLevels, baselineTouched, baselineRepeat:[], evidence
   };
 })();
