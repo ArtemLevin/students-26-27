@@ -11,8 +11,39 @@ export const LESSONS=[
     "title": "Неравенства с модулем",
     "navTitle": "Неравенства с модулем",
     "summary": "Неравенства с модулем: система и совокупность, двойные и вложенные модули, замена t = |x| и контроль знака при преобразованиях.",
-    "topics": ["неравенства с модулем", "система и совокупность", "вложенные модули", "замена t = |x|"],
-    "outcomes": ["выбирать систему или совокупность по знаку неравенства", "решать двойные и вложенные неравенства с модулем", "применять замену t = |x| с условием t ≥ 0", "контролировать знак выражения при умножении и делении неравенства"],
+    "topics": [
+      "неравенства с модулем",
+      "система и совокупность",
+      "вложенные модули",
+      "замена t = |x|"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "real_numbers_15",
+        "evidenceAnchor": "transitions",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "real_numbers_16",
+        "evidenceAnchor": "double",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "rational_equations_08",
+        "evidenceAnchor": "substitution",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "sets_logic_03",
+        "evidenceAnchor": "transitions",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "sets_logic_04",
+        "evidenceAnchor": "transitions",
+        "relation": "practiced"
+      }
+    ],
     "materials": {
       "html": "04.10.26.html",
       "pdf": "../pdf_docs/04.10.26.pdf",
