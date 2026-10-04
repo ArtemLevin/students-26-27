@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивное занятие Даниила Кичука: графики показательной функции, метод узловых точек и восстановление параметров функции по графику.">
+<title>Графики показательной функции · Даниил Кичук</title>
+<style>
+:root{
+  color-scheme:light;
+  --page:#f2efe7;--paper:#fffaf2;--ink:#172d32;--muted:#677478;--line:#d9d1c3;--line-strong:#a69d90;
+  --accent:#0f6b6d;--accent-dark:#07494b;--accent-soft:#dcebea;--ochre:#a6672d;--ochre-soft:#f0dfc7;
+  --warn:#9a5149;--success:#4c735e;--focus:#0b7188;--shadow:0 18px 52px rgba(40,36,29,.09);
+}
+html[data-theme="dark"]{
+  color-scheme:dark;--page:#101a1f;--paper:#18262c;--ink:#f1ece3;--muted:#b2bec1;--line:#34454b;--line-strong:#728085;
+  --accent:#7fc8c7;--accent-dark:#b6e0df;--accent-soft:#17363a;--ochre:#e3aa70;--ochre-soft:#3b2c20;
+  --warn:#df8b83;--success:#8fc0a1;--focus:#8bd8ed;--shadow:0 20px 58px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--page);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:inherit;text-underline-offset:.18em}button{font:inherit;color:inherit}button,a{touch-action:manipulation}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{position:fixed;left:1rem;top:.5rem;z-index:100;background:var(--paper);border:1px solid var(--line-strong);padding:.65rem .9rem;transform:translateY(-160%)}.skip:focus{transform:none}
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem clamp(1rem,4vw,3rem);background:color-mix(in srgb,var(--page) 92%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brand{text-decoration:none;font-weight:750;letter-spacing:.01em}.top-actions{display:flex;gap:.55rem;align-items:center}.icon-btn,.ghost-btn,.mode-btn,.step-btn{border:1px solid var(--line-strong);background:var(--paper);border-radius:999px;padding:.55rem .78rem;cursor:pointer}.icon-btn{width:2.45rem;height:2.45rem;padding:0}.ghost-btn:hover,.mode-btn:hover,.step-btn:hover,.icon-btn:hover{border-color:var(--accent);color:var(--accent-dark)}
+.shell{width:min(1180px,calc(100% - 2rem));margin:0 auto}.hero{padding:clamp(3.8rem,9vw,7.6rem) 0 3.1rem;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:clamp(2rem,5vw,5rem);align-items:end}
+.kicker{margin:0 0 .75rem;text-transform:uppercase;letter-spacing:.16em;font-weight:800;font-size:.76rem;color:var(--ochre)}h1{font-size:clamp(2.6rem,6vw,5.8rem);line-height:.96;letter-spacing:-.055em;margin:0;max-width:9ch}.lead{font-size:clamp(1.05rem,2vw,1.28rem);max-width:62ch;color:var(--muted);margin:1.45rem 0 0}.hero-aside{border-left:1px solid var(--line);padding-left:1.5rem}.hero-aside strong{display:block;font-size:1.25rem}.hero-aside p{color:var(--muted);margin:.5rem 0 1.25rem}.material-links{display:flex;flex-wrap:wrap;gap:.6rem}.material-links a{display:inline-flex;align-items:center;gap:.35rem;padding:.55rem .7rem;border:1px solid var(--line);border-radius:.6rem;text-decoration:none;background:var(--paper)}
+.rule{height:1px;background:var(--line);margin:0 0 1.25rem}.route{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-bottom:3.2rem}.route div{background:var(--paper);padding:1rem;min-height:112px}.route b{display:block;color:var(--accent-dark);font-size:.82rem;letter-spacing:.08em}.route span{display:block;margin-top:.35rem}.route small{display:block;margin-top:.45rem;color:var(--muted)}
+.section{margin:0 0 4.3rem}.section-head{display:grid;grid-template-columns:180px 1fr;gap:1rem;border-top:1px solid var(--line);padding-top:1rem;margin-bottom:1.4rem}.section-head .eyebrow{color:var(--ochre);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem}.section-head h2{font-size:clamp(1.75rem,3.2vw,3rem);line-height:1.04;letter-spacing:-.035em;margin:0}.section-head p{grid-column:2;color:var(--muted);max-width:70ch;margin:.25rem 0 0}
+.studio{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:1.3rem;align-items:stretch}.graph-card,.panel{background:var(--paper);border:1px solid var(--line);box-shadow:var(--shadow)}.graph-card{padding:1rem}.graph-top{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;margin-bottom:.75rem}.graph-top h3{margin:0;font-size:1.18rem}.mode-row{display:flex;gap:.45rem;flex-wrap:wrap}.mode-btn[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}#graph{display:block;width:100%;height:auto;aspect-ratio:16/10;background:color-mix(in srgb,var(--paper) 92%,var(--page));border:1px solid var(--line)}.graph-caption{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;color:var(--muted);font-size:.9rem;margin-top:.7rem}.legend{display:flex;gap:1rem;flex-wrap:wrap}.legend span::before{content:"";display:inline-block;width:.7rem;height:.7rem;border-radius:50%;background:var(--accent);margin-right:.35rem}.legend span:last-child::before{background:var(--ochre)}
+.panel{padding:1.15rem}.panel h3{margin:.15rem 0 .55rem;font-size:1.35rem}.formula{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:clamp(1.35rem,3vw,2.15rem);line-height:1.2;color:var(--accent-dark);margin:.65rem 0 1rem}.state-list{display:grid;gap:.8rem}.state-item{padding:.8rem 0;border-top:1px solid var(--line)}.state-item:first-child{border-top:0}.state-item b{color:var(--ochre)}.state-item p{margin:.18rem 0;color:var(--muted)}
+.walkthrough{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:1.2rem}.problem{padding:1.2rem;background:var(--accent-soft);border-left:4px solid var(--accent)}.problem h3{margin:0 0 .5rem}.steps{display:grid;gap:.55rem}.step{background:var(--paper);border:1px solid var(--line);padding:1rem;opacity:.42;transform:translateY(2px);transition:.18s ease}.step.active{opacity:1;transform:none;border-color:var(--accent)}.step strong{color:var(--accent-dark)}.step-controls{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem}.step-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.2rem}.callout{padding:1.25rem;border-top:4px solid var(--ochre);background:var(--paper);box-shadow:var(--shadow)}.callout h3{margin:.1rem 0 .6rem}.callout p{margin:.35rem 0;color:var(--muted)}.mathline{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:1.35rem;color:var(--accent-dark);margin:.55rem 0}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);background:var(--paper)}table{width:100%;border-collapse:collapse;min-width:720px}th,td{text-align:left;vertical-align:top;padding:.82rem .9rem;border-bottom:1px solid var(--line)}th{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}tbody tr:last-child td{border-bottom:0}
+.practice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}.exercise{background:var(--paper);border:1px solid var(--line);padding:1rem}.exercise b{color:var(--ochre)}.answers{margin-top:1rem;background:var(--paper);border:1px solid var(--line);padding:1rem}.answers summary{cursor:pointer;font-weight:800;color:var(--accent-dark)}.answer-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin-top:.8rem}.answer-grid div{padding:.7rem;border-top:1px solid var(--line)}
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}.check{display:flex;gap:.65rem;align-items:flex-start;background:var(--paper);border:1px solid var(--line);padding:.9rem}.check input{margin-top:.3rem;accent-color:var(--accent)}.progress{height:.55rem;background:var(--line);margin-top:1rem;overflow:hidden}.progress span{display:block;height:100%;width:0;background:var(--accent);transition:width .18s}.ready{margin:.55rem 0 0;color:var(--muted)}
+.poster{display:grid;grid-template-columns:minmax(220px,.68fr) minmax(0,1.32fr);gap:1rem;align-items:center}.poster img{display:block;width:100%;border:1px solid var(--line);background:var(--paper)}.poster-copy{padding:1rem}.poster-copy h3{font-size:1.55rem;margin:.1rem 0 .6rem}.poster-copy p{color:var(--muted)}
+.footer{border-top:1px solid var(--line);padding:1.35rem 0 2.7rem;display:flex;justify-content:space-between;gap:1rem;color:var(--muted);font-size:.9rem}
+@media(max-width:900px){.hero,.studio,.walkthrough,.poster{grid-template-columns:1fr}.hero-aside{border-left:0;border-top:1px solid var(--line);padding:1rem 0 0}.route{grid-template-columns:1fr}.route div{min-height:0}.section-head{grid-template-columns:1fr}.section-head p{grid-column:1}.split,.practice-grid,.checks{grid-template-columns:1fr}.answer-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.shell{width:min(100% - 1.15rem,1180px)}.topbar{padding:.65rem .7rem}.brand{font-size:.92rem}.ghost-btn{display:none}.hero{padding-top:2.8rem}.graph-top{display:block}.mode-row{margin-top:.7rem}.footer{display:block}.footer span{display:block;margin:.35rem 0}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.step,.progress span{transition:none}}
+@media print{.topbar,.skip,.step-controls,.mode-row{display:none!important}body{background:#fff}.shell{width:100%}.graph-card,.panel,.callout,.exercise,.answers{box-shadow:none;break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">К содержанию</a>
+<header class="topbar">
+  <a class="brand" href="index.html">← Кабинет Даниила</a>
+  <div class="top-actions">
+    <a class="ghost-btn" href="../pdf_docs/02.10.26.pdf">PDF</a>
+    <a class="ghost-btn" href="../tex_docs/02.10.26.tex">TeX</a>
+    <button id="themeBtn" class="icon-btn" type="button" aria-label="Переключить тему" aria-pressed="false">◐</button>
+  </div>
+</header>
+<main id="content" class="shell">
+  <section class="hero">
+    <div>
+      <p class="kicker">02.10.2026 · профильная математика</p>
+      <h1>Графики показательной функции</h1>
+      <p class="lead">Метод узловых точек: считываем точные координаты, превращаем их в уравнения для параметров, восстанавливаем формулу и только после этого считаем нужное значение или решаем уравнение.</p>
+    </div>
+    <aside class="hero-aside">
+      <strong>Главная идея занятия</strong>
+      <p>Точка <b>(x₀; y₀)</b> графика означает равенство <b>f(x₀)=y₀</b>. Две независимые точки позволяют восстановить два неизвестных параметра.</p>
+      <div class="material-links">
+        <a href="../pdf_docs/02.10.26.pdf">Открыть PDF ↗</a>
+        <a href="../tex_docs/02.10.26.tex">Исходник TeX ↗</a>
+        <a href="../images/02.10.26.png">Памятка ↗</a>
+      </div>
+    </aside>
+  </section>
+
+  <div class="rule"></div>
+  <nav class="route" aria-label="Маршрут занятия">
+    <div><b>01</b><span>Найдите узловые точки</span><small>Точные координаты, лучше близкие к нулю.</small></div>
+    <div><b>02</b><span>Запишите равенства</span><small>Для каждой точки: y₀=f(x₀).</small></div>
+    <div><b>03</b><span>Найдите параметры</span><small>Упростите степени и решите систему.</small></div>
+    <div><b>04</b><span>Соберите функцию</span><small>Подставьте найденные a и b.</small></div>
+    <div><b>05</b><span>Выполните вопрос</span><small>Найдите f(k) или решите f(x)=c.</small></div>
+  </nav>
+
+  <section class="section" id="studio">
+    <header class="section-head">
+      <div class="eyebrow">Визуальная модель</div>
+      <h2>Две функции из занятия — один метод</h2>
+      <p>График строится из формулы непосредственно в браузере. Переключайте примеры и следите, какие точки дают самые короткие вычисления.</p>
+    </header>
+    <div class="studio">
+      <article class="graph-card">
+        <div class="graph-top">
+          <div><p class="kicker">График</p><h3 id="graphTitle">f(x)=2ˣ−3</h3></div>
+          <div class="mode-row" role="group" aria-label="Выбрать пример">
+            <button class="mode-btn" type="button" data-mode="shift" aria-pressed="true">aˣ+b</button>
+            <button class="mode-btn" type="button" data-mode="inside" aria-pressed="false">aˣ⁺ᵇ</button>
+          </div>
+        </div>
+        <svg id="graph" viewBox="0 0 760 470" role="img" aria-labelledby="graphTitle graphDesc"><desc id="graphDesc">График показательной функции с отмеченными узловыми точками.</desc></svg>
+        <div class="graph-caption"><div class="legend"><span>график</span><span>узловые точки</span></div><span id="graphNote">A(0;−2), B(1;−1)</span></div>
+      </article>
+      <aside class="panel" aria-live="polite">
+        <p class="kicker">Текущее состояние</p>
+        <h3 id="stateHeading">Вид f(x)=aˣ+b</h3>
+        <div id="stateFormula" class="formula">f(x)=2ˣ−3</div>
+        <div id="stateList" class="state-list"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" id="algorithm">
+    <header class="section-head">
+      <div class="eyebrow">Алгоритм</div>
+      <h2>Восстановите функцию по графику</h2>
+      <p>Пройдите разбор базового примера шаг за шагом. На каждом шаге остаётся только одно математическое действие.</p>
+    </header>
+    <div class="walkthrough">
+      <div class="problem">
+        <h3>Дано</h3>
+        <p>Функция имеет вид <b>f(x)=aˣ+b</b> и проходит через точки <b>A(0;−2)</b> и <b>B(1;−1)</b>.</p>
+        <div class="formula">Найти f(6)</div>
+        <p>Точка с x=0 особенно удобна: a⁰=1.</p>
+      </div>
+      <div>
+        <div class="steps" id="steps">
+          <div class="step active"><strong>1. Переведите точки в уравнения.</strong><div class="mathline">−2=a⁰+b, &nbsp; −1=a¹+b</div></div>
+          <div class="step"><strong>2. Используйте a⁰=1.</strong><div class="mathline">−2=1+b ⟹ b=−3</div></div>
+          <div class="step"><strong>3. Подставьте b во второе уравнение.</strong><div class="mathline">−1=a−3 ⟹ a=2</div></div>
+          <div class="step"><strong>4. Соберите формулу.</strong><div class="mathline">f(x)=2ˣ−3</div></div>
+          <div class="step"><strong>5. Ответьте на вопрос задачи.</strong><div class="mathline">f(6)=2⁶−3=64−3=61</div></div>
+        </div>
+        <div class="step-controls">
+          <button id="stepPrev" class="step-btn" type="button">← Назад</button>
+          <button id="stepNext" class="step-btn primary" type="button">Следующий шаг</button>
+          <button id="stepAll" class="step-btn" type="button">Показать всё</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="special">
+    <header class="section-head">
+      <div class="eyebrow">Особые случаи</div>
+      <h2>Точка может быть верной, но бесполезной</h2>
+      <p>Если подстановка уничтожила неизвестный параметр, это сигнал заменить точку на другую узловую.</p>
+    </header>
+    <div class="split">
+      <article class="callout">
+        <h3>Ловушка: (0;1) для f(x)=aˣ</h3>
+        <div class="mathline">1=a⁰=1</div>
+        <p>Равенство истинно при любом допустимом a. Точка подтверждает принадлежность графику, но основание не определяет.</p>
+        <div class="mathline">(-1;2): 2=a⁻¹ ⟹ a=1/2</div>
+      </article>
+      <article class="callout">
+        <h3>Если параметр находится в показателе</h3>
+        <div class="mathline">f(x)=aˣ⁺ᵇ</div>
+        <p>Для точки (−3;1) используйте 1=a⁰: −3+b=0, значит b=3.</p>
+        <p>Для точки (−1;2): 2=a², поэтому a=√2.</p>
+        <div class="mathline">f(x)=2⁽ˣ⁺³⁾⁄²</div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="powers">
+    <header class="section-head">
+      <div class="eyebrow">Степени</div>
+      <h2>Короткие приёмы, которые экономят вычисления</h2>
+    </header>
+    <div class="split">
+      <article class="callout"><h3>Нулевая и отрицательная степень</h3><div class="mathline">a⁰=1</div><div class="mathline">a⁻ⁿ=1/aⁿ</div><p>В обратную сторону 1=a⁰ помогает сравнивать показатели при одинаковом основании.</p></article>
+      <article class="callout"><h3>Дробный показатель</h3><div class="mathline">a⁻²=4 ⟹ a=4⁻¹⁄²=1/2</div><p>Для основания показательной функции учитывайте условия a&gt;0 и a≠1. Дробное основание всегда берите в скобки.</p></article>
+    </div>
+  </section>
+
+  <section class="section" id="mistakes">
+    <header class="section-head"><div class="eyebrow">Контроль</div><h2>Типичные ошибки</h2><p>Короткий release-gate перед ответом.</p></header>
+    <div class="table-wrap"><table><thead><tr><th>Ошибка</th><th>Как исправить</th></tr></thead><tbody>
+      <tr><td>Взяли точку рядом с графиком</td><td>Используйте только точку, точно лежащую на графике.</td></tr>
+      <tr><td>Перепутали x и y</td><td>Для (x₀;y₀) всегда пишите f(x₀)=y₀.</td></tr>
+      <tr><td>Выбрали неудобные точки</td><td>Сначала ищите нули, единицы и небольшие координаты.</td></tr>
+      <tr><td>Параметр исчез после подстановки</td><td>Возьмите другую точку, которая даст новое независимое уравнение.</td></tr>
+      <tr><td>Получили отрицательное основание a</td><td>Для показательной функции такое основание не подходит.</td></tr>
+      <tr><td>Потеряли скобки</td><td>Пишите (1/2)^(x−3): составное основание должно быть заключено в скобки.</td></tr>
+      <tr><td>Нашли параметры и остановились</td><td>Соберите функцию и выполните финальное требование: f(k) или x.</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section class="section" id="practice">
+    <header class="section-head"><div class="eyebrow">Путь А</div><h2>10 задач из чек-листа</h2><p>Все условия перенесены из материала занятия без добавления новых примеров.</p></header>
+    <div class="practice-grid">
+      <div class="exercise"><b>1.</b> f(x)=aˣ+b проходит через (0;−2) и (1;−1). Найдите f(5).</div>
+      <div class="exercise"><b>2.</b> f(x)=aˣ+b проходит через (0;4) и (1;7). Найдите f(2).</div>
+      <div class="exercise"><b>3.</b> f(x)=aˣ+b проходит через (0;−3) и (−2;0). Найдите f(3).</div>
+      <div class="exercise"><b>4.</b> f(x)=aˣ+b проходит через (0;2) и (2;10). Решите f(x)=28.</div>
+      <div class="exercise"><b>5.</b> f(x)=aˣ+b проходит через (0;−1) и (2;3). Найдите f(4).</div>
+      <div class="exercise"><b>6.</b> f(x)=aˣ⁺ᵇ проходит через (−2;1) и (0;4). Найдите f(3).</div>
+      <div class="exercise"><b>7.</b> f(x)=aˣ⁺ᵇ проходит через (3;1) и (0;8). Найдите f(1).</div>
+      <div class="exercise"><b>8.</b> Для f(x)=aˣ отмечены (0;1) и (−2;9). Определите a и найдите f(3).</div>
+      <div class="exercise"><b>9.</b> f(x)=aˣ⁺ᵇ проходит через (−3;1) и (−1;2). Решите f(x)=8.</div>
+      <div class="exercise"><b>10.</b> f(x)=aˣ+b проходит через (0;5) и (−1;6). Решите f(x)=36.</div>
+    </div>
+    <details class="answers"><summary>Показать ответы для самопроверки</summary><div class="answer-grid">
+      <div><b>1.</b> 29</div><div><b>2.</b> 19</div><div><b>3.</b> −31/8</div><div><b>4.</b> x=3</div><div><b>5.</b> 23</div>
+      <div><b>6.</b> 32</div><div><b>7.</b> 4</div><div><b>8.</b> a=1/3, f(3)=1/27</div><div><b>9.</b> x=3</div><div><b>10.</b> x=−5</div>
+    </div></details>
+  </section>
+
+  <section class="section" id="poster">
+    <header class="section-head"><div class="eyebrow">Памятка</div><h2>Материал занятия в одном листе</h2></header>
+    <div class="poster panel"><a href="../images/02.10.26.png"><img src="../images/02.10.26.png" alt="Памятка к занятию 02.10.26 по графикам показательной функции"></a><div class="poster-copy"><h3>Быстрое повторение</h3><p>Откройте изображение отдельно, если нужен компактный визуальный конспект перед тренировкой.</p><a href="../images/02.10.26.png">Открыть памятку в полном размере →</a></div></div>
+  </section>
+
+  <section class="section" id="check">
+    <header class="section-head"><div class="eyebrow">Самопроверка</div><h2>Что должно воспроизводиться без подсказки</h2></header>
+    <div class="checks">
+      <label class="check"><input type="checkbox" data-check="points"><span>Я выбираю узловые точки и понимаю, почему удобны x=0 и небольшие координаты.</span></label>
+      <label class="check"><input type="checkbox" data-check="translate"><span>Я перевожу точку (x₀;y₀) в равенство f(x₀)=y₀.</span></label>
+      <label class="check"><input type="checkbox" data-check="system"><span>Я составляю и решаю систему для неизвестных параметров.</span></label>
+      <label class="check"><input type="checkbox" data-check="powers"><span>Я уверенно использую a⁰=1, отрицательные и дробные показатели.</span></label>
+      <label class="check"><input type="checkbox" data-check="finish"><span>Я после восстановления функции выполняю именно финальный вопрос задачи.</span></label>
+      <label class="check"><input type="checkbox" data-check="verify"><span>Я проверяю найденную функцию по исходным точкам.</span></label>
+    </div>
+    <div class="progress" aria-hidden="true"><span id="readyBar"></span></div><p id="readyText" class="ready" aria-live="polite">Готовность: 0 из 6.</p>
+  </section>
+</main>
+<footer class="shell footer"><span>Лёвин Артём Александрович · эксклюзивно для Даниила Кичука</span><span>02.10.2026 · профильная математика</span></footer>
+<script>
+(()=>{'use strict';
+const root=document.documentElement,themeBtn=document.getElementById('themeBtn'),themeKey='danil-021026-theme';
+function setTheme(v){root.dataset.theme=v;themeBtn.setAttribute('aria-pressed',String(v==='dark'));drawGraph(currentMode)}
+let saved;try{saved=localStorage.getItem(themeKey)}catch(_){};setTheme(saved||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));
+themeBtn.addEventListener('click',()=>{const v=root.dataset.theme==='dark'?'light':'dark';setTheme(v);try{localStorage.setItem(themeKey,v)}catch(_){}});
+
+const graph=document.getElementById('graph'),graphTitle=document.getElementById('graphTitle'),graphNote=document.getElementById('graphNote'),stateHeading=document.getElementById('stateHeading'),stateFormula=document.getElementById('stateFormula'),stateList=document.getElementById('stateList');
+const modes={
+ shift:{title:'f(x)=2ˣ−3',heading:'Вид f(x)=aˣ+b',formula:'f(x)=2ˣ−3',xMin:-2,xMax:4,yMin:-4,yMax:7,fn:x=>2**x-3,points:[[0,-2,'A(0;−2)'],[1,-1,'B(1;−1)']],note:'A(0;−2), B(1;−1)',items:[['Точка A','−2=a⁰+b ⟹ b=−3'],['Точка B','−1=a−3 ⟹ a=2'],['Итог','f(6)=2⁶−3=61']]},
+ inside:{title:'f(x)=2⁽ˣ⁺³⁾⁄²',heading:'Вид f(x)=aˣ⁺ᵇ',formula:'f(x)=2⁽ˣ⁺³⁾⁄²',xMin:-5,xMax:4,yMin:0,yMax:7,fn:x=>2**((x+3)/2),points:[[-3,1,'(−3;1)'],[-1,2,'(−1;2)'],[1,4,'(1;4)']],note:'(−3;1), (−1;2), (1;4)',items:[['y=1','−3+b=0 ⟹ b=3'],['Вторая точка','2=a² ⟹ a=√2'],['Проверка','f(−7)=2⁻²=1/4']]}
+};
+let currentMode='shift';
+function css(name){return getComputedStyle(root).getPropertyValue(name).trim()}
+function drawGraph(mode){currentMode=mode;const m=modes[mode];graph.replaceChildren();graphTitle.textContent=m.title;graphNote.textContent=m.note;stateHeading.textContent=m.heading;stateFormula.textContent=m.formula;stateList.replaceChildren(...m.items.map(([a,b])=>{const d=document.createElement('div');d.className='state-item';d.innerHTML=`<b>${a}</b><p>${b}</p>`;return d}));
+ const W=760,H=470,pad=56,plotW=W-pad*2,plotH=H-pad*2;const sx=x=>pad+(x-m.xMin)/(m.xMax-m.xMin)*plotW,sy=y=>H-pad-(y-m.yMin)/(m.yMax-m.yMin)*plotH;
+ const ns='http://www.w3.org/2000/svg';const add=(tag,attrs,parent=graph)=>{const e=document.createElementNS(ns,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,v);parent.appendChild(e);return e};
+ const line=css('--line'),ink=css('--muted'),accent=css('--accent'),ochre=css('--ochre');
+ for(let x=Math.ceil(m.xMin);x<=Math.floor(m.xMax);x++){add('line',{x1:sx(x),y1:pad,x2:sx(x),y2:H-pad,stroke:line,'stroke-width':'1'});const t=add('text',{x:sx(x),y:H-pad+22,fill:ink,'font-size':'13','text-anchor':'middle'});t.textContent=x}
+ for(let y=Math.ceil(m.yMin);y<=Math.floor(m.yMax);y++){add('line',{x1:pad,y1:sy(y),x2:W-pad,y2:sy(y),stroke:line,'stroke-width':'1'});if(y!==0){const t=add('text',{x:pad-12,y:sy(y)+4,fill:ink,'font-size':'13','text-anchor':'end'});t.textContent=y}}
+ if(m.yMin<=0&&m.yMax>=0)add('line',{x1:pad,y1:sy(0),x2:W-pad+8,y2:sy(0),stroke:ink,'stroke-width':'1.7'});if(m.xMin<=0&&m.xMax>=0)add('line',{x1:sx(0),y1:pad-8,x2:sx(0),y2:H-pad,stroke:ink,'stroke-width':'1.7'});
+ let d='';const N=260;for(let i=0;i<=N;i++){const x=m.xMin+(m.xMax-m.xMin)*i/N,y=m.fn(x);if(y<m.yMin-1||y>m.yMax+1)continue;d+=(d?'L':'M')+sx(x).toFixed(2)+' '+sy(y).toFixed(2)}add('path',{d,fill:'none',stroke:accent,'stroke-width':'4','stroke-linecap':'round'});
+ m.points.forEach(([x,y,label],idx)=>{add('circle',{cx:sx(x),cy:sy(y),r:'6',fill:ochre,stroke:css('--paper'),'stroke-width':'3'});const t=add('text',{x:sx(x)+(idx%2?10:-10),y:sy(y)-12,fill:css('--ink'),'font-size':'14','font-weight':'700','text-anchor':idx%2?'start':'end'});t.textContent=label});
+ const tx=add('text',{x:W-pad+15,y:sy(0)+4,fill:ink,'font-size':'15'});tx.textContent='x';const ty=add('text',{x:sx(0)+8,y:pad-15,fill:ink,'font-size':'15'});ty.textContent='y';
+}
+document.querySelectorAll('.mode-btn').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.mode-btn').forEach(b=>b.setAttribute('aria-pressed','false'));btn.setAttribute('aria-pressed','true');drawGraph(btn.dataset.mode)}));drawGraph(currentMode);
+
+const stepEls=[...document.querySelectorAll('.step')];let stepN=1;function paintSteps(){stepEls.forEach((s,i)=>s.classList.toggle('active',i<stepN));document.getElementById('stepPrev').disabled=stepN<=1;document.getElementById('stepNext').disabled=stepN>=stepEls.length}document.getElementById('stepPrev').addEventListener('click',()=>{stepN=Math.max(1,stepN-1);paintSteps()});document.getElementById('stepNext').addEventListener('click',()=>{stepN=Math.min(stepEls.length,stepN+1);paintSteps()});document.getElementById('stepAll').addEventListener('click',()=>{stepN=stepEls.length;paintSteps()});paintSteps();
+
+const checks=[...document.querySelectorAll('[data-check]')],checkKey='danil-021026-selfcheck';let state={};try{state=JSON.parse(localStorage.getItem(checkKey)||'{}')}catch(_){}function paintReady(){const n=checks.filter(c=>c.checked).length;document.getElementById('readyBar').style.width=(n/checks.length*100)+'%';document.getElementById('readyText').textContent=`Готовность: ${n} из ${checks.length}.`}checks.forEach(c=>{c.checked=!!state[c.dataset.check];c.addEventListener('change',()=>{state[c.dataset.check]=c.checked;try{localStorage.setItem(checkKey,JSON.stringify(state))}catch(_){}paintReady()})});paintReady();
+})();
+</script>
+</body>
+</html>
