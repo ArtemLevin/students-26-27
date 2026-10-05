@@ -113,6 +113,24 @@
     data.lesson.evidence = evidence2809;
     data.lesson.pdf = "site/28.09.26.html";
     data.lesson.tex = "tex_docs/28.09.26.tex";
+
+    const evidence0510 = "На занятии 05.10.26 отработаны задачи на производительность через модель A=pt и таблицу «производительность — время — работа»: совместная работа, трубы и резервуары, противоположные процессы, изменение состава бригад и составление смыслового уравнения; отдельно разобран приём поиска суммы производительностей трёх исполнителей по попарным условиям.";
+    const ids0510 = new Set(["text_09","text_10","text_11","text_12","text_20","text_22"]);
+    data.groups.flatMap(group => group.items).forEach(item => {
+      if (!ids0510.has(item.id)) return;
+      item.status = "covered";
+      item.level = Math.max(Number(item.level || 0), 2);
+      item.evidence = item.evidence || {};
+      item.evidence.text = evidence0510;
+      item.evidence.href = "05.10.26.html";
+      item.evidence.texHref = "../tex_docs/05.10.26.tex";
+    });
+
+    data.lesson.date = "05.10.26";
+    data.lesson.title = "Задачи на производительность";
+    data.lesson.evidence = evidence0510;
+    data.lesson.pdf = "site/05.10.26.html";
+    data.lesson.tex = "tex_docs/05.10.26.tex";
   })();
 
 (() => {
