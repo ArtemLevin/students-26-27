@@ -5,6 +5,31 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-05",
+    "ktpRefs": [],
+    "href": "05.10.26.html",
+    "title": "Парабола и рациональные функции",
+    "navTitle": "Парабола и рациональные функции",
+    "summary": "Интерактивное занятие Ярослава Верещагина: парабола, ОДЗ рациональной функции, сокращение и выколотая точка",
+    "topics": [
+      "Парабола",
+      "Рациональные функции",
+      "ОДЗ",
+      "Выколотая точка"
+    ],
+    "outcomes": [
+      {"competencyId":"oge_11_2_1","evidenceAnchor":"parabola","relation":"practiced"},
+      {"competencyId":"oge_8_3_2","evidenceAnchor":"rational","relation":"practiced"},
+      {"competencyId":"oge_8_3_3","evidenceAnchor":"hole","relation":"practiced"}
+    ],
+    "materials": {
+      "html": "05.10.26.html",
+      "pdf": "../pdf_docs/05.10.26.pdf",
+      "tex": "../tex_docs/05.10.26.tex",
+      "lab": "05.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-09-28",
     "ktpRefs": [],
     "href": "28.09.26.html",
