@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивное занятие Ярослава Верещагина: парабола, ОДЗ рациональной функции, сокращение и выколотая точка">
+<meta name="color-scheme" content="light dark">
+<title>Парабола и рациональные функции — Ярослав Верещагин · 05.10.26</title>
+<style>
+:root{
+  --surface-page:#f3efe6;
+  --surface-raised:#fffdf8;
+  --surface-soft:#e8eee9;
+  --surface-warm:#f3e5df;
+  --text-primary:#1f2926;
+  --text-secondary:#68736e;
+  --text-inverse:#f8fffc;
+  --border-subtle:#d8d6cc;
+  --border-strong:#aab8b1;
+  --accent:#2d6f67;
+  --accent-hover:#245a54;
+  --accent-soft:#dcebe6;
+  --accent-warm:#b96247;
+  --success:#3e7957;
+  --danger:#a44d3b;
+  --warning:#9b7338;
+  --focus-ring:#69a89d;
+  --shadow-low:0 12px 30px rgba(30,45,40,.08);
+  --shadow-high:0 20px 54px rgba(30,45,40,.13);
+  --radius-sm:.5rem;
+  --radius-md:1rem;
+  --radius-lg:1.5rem;
+  --space-1:.4rem;
+  --space-2:.75rem;
+  --space-3:1.15rem;
+  --space-4:1.8rem;
+  --space-5:2.8rem;
+  --space-6:4.4rem;
+  --motion-fast:140ms;
+  --motion-normal:240ms;
+  --grid-line:color-mix(in srgb,var(--text-primary) 9%,transparent);
+}
+html[data-theme="dark"]{
+  --surface-page:#101715;
+  --surface-raised:#18211e;
+  --surface-soft:#202c28;
+  --surface-warm:#30221d;
+  --text-primary:#eef4f1;
+  --text-secondary:#a9b5b0;
+  --text-inverse:#101715;
+  --border-subtle:#34423d;
+  --border-strong:#53645e;
+  --accent:#78c7b8;
+  --accent-hover:#9bd9ce;
+  --accent-soft:#1d3832;
+  --accent-warm:#e29a7c;
+  --success:#83c79a;
+  --danger:#e49582;
+  --warning:#d5ae6e;
+  --focus-ring:#8bd5c7;
+  --shadow-low:0 12px 30px rgba(0,0,0,.25);
+  --shadow-high:0 20px 54px rgba(0,0,0,.36);
+  --grid-line:color-mix(in srgb,var(--text-primary) 11%,transparent);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.62 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:inherit}
+button{font:inherit}
+img{max-width:100%;display:block}
+math{font-family:"Cambria Math","STIX Two Math",serif}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.skip-link{position:fixed;left:1rem;top:-5rem;z-index:100;padding:.65rem .9rem;background:var(--accent);color:var(--text-inverse);text-decoration:none}
+.skip-link:focus{top:1rem}
+.shell{width:min(100% - 2rem,1180px);margin:auto}
+.topbar{position:sticky;top:0;z-index:40;border-bottom:1px solid var(--border-subtle);background:color-mix(in srgb,var(--surface-page) 93%,transparent);backdrop-filter:blur(12px)}
+.topbar-inner{min-height:62px;display:flex;align-items:center;gap:.8rem}
+.brand{display:flex;align-items:center;gap:.75rem;text-decoration:none}
+.brand-mark{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--border-strong);border-radius:50%;font:800 .8rem ui-monospace,monospace;color:var(--accent)}
+.brand strong{display:block;font-family:Georgia,Cambria,serif;line-height:1.05}
+.brand small{display:block;color:var(--text-secondary);font-size:.72rem;margin-top:.18rem}
+.topnav{display:flex;gap:.2rem;margin-left:auto}
+.topnav a{padding:.45rem .6rem;text-decoration:none;color:var(--text-secondary);border-bottom:1px solid transparent;font-size:.86rem}
+.topnav a:hover,.topnav a:focus-visible{color:var(--text-primary);border-bottom-color:var(--accent)}
+.icon-button{min-height:40px;min-width:42px;border:1px solid var(--border-subtle);background:var(--surface-raised);color:var(--text-primary);cursor:pointer}
+.hero{position:relative;padding:clamp(3.2rem,8vw,7rem) 0 var(--space-5);border-bottom:1px solid var(--border-subtle);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:
+  linear-gradient(90deg,var(--grid-line) 1px,transparent 1px),
+  linear-gradient(var(--grid-line) 1px,transparent 1px);
+  background-size:42px 42px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.62),transparent 92%);pointer-events:none}
+.hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.85fr);gap:clamp(2rem,6vw,5rem);align-items:center}
+.eyebrow{margin:0 0 .7rem;color:var(--accent);font:800 .72rem/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.11em;text-transform:uppercase}
+h1,h2,h3{font-family:Georgia,Cambria,serif;letter-spacing:-.035em}
+h1{font-size:clamp(3rem,7vw,6.2rem);line-height:.94;margin:.25rem 0 1.2rem;max-width:780px}
+h2{font-size:clamp(2rem,4vw,3.45rem);line-height:1.04;margin:.2rem 0 1rem}
+h3{font-size:1.25rem;margin:0 0 .55rem}
+.lead{font-size:clamp(1.08rem,2vw,1.28rem);max-width:760px;color:var(--text-secondary);margin:0}
+.hero-actions{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.5rem}
+.primary-link,.secondary-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.65rem .9rem;border:1px solid var(--accent);text-decoration:none;font-weight:760}
+.primary-link{background:var(--accent);color:var(--text-inverse)}
+.primary-link:hover{background:var(--accent-hover)}
+.secondary-link{background:transparent;color:var(--text-primary);border-color:var(--border-strong)}
+.hero-plate{border:1px solid var(--border-subtle);background:color-mix(in srgb,var(--surface-raised) 92%,transparent);box-shadow:var(--shadow-low);padding:1rem}
+.hero-plate svg{width:100%;height:auto}
+.hero-plate .axis{stroke:var(--text-secondary);stroke-width:1.5}
+.hero-plate .curve{stroke:var(--accent);stroke-width:4;fill:none;stroke-linecap:round}
+.hero-plate .warm{stroke:var(--accent-warm)}
+.hero-plate text{fill:var(--text-secondary);font:13px system-ui}
+.folio{display:flex;flex-wrap:wrap;gap:1rem 1.6rem;padding:1rem 0;color:var(--text-secondary);font-size:.88rem;border-bottom:1px solid var(--border-subtle)}
+.folio b{color:var(--text-primary)}
+.route{display:flex;gap:.35rem;overflow:auto;padding:1rem 0 0;scrollbar-width:thin}
+.route a{flex:0 0 auto;text-decoration:none;padding:.42rem .58rem;border-bottom:1px solid var(--border-subtle);color:var(--text-secondary);font-size:.82rem}
+.route a:hover,.route a:focus-visible{color:var(--accent);border-color:var(--accent)}
+.chapter{display:grid;grid-template-columns:140px minmax(0,1fr);gap:clamp(1.2rem,4vw,3.5rem);padding:var(--space-6) 0;border-bottom:1px solid var(--border-subtle)}
+.chapter-index{position:sticky;top:84px;align-self:start;color:var(--accent);font:800 .72rem/1.5 ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase}
+.chapter-body{max-width:880px}
+.rule-line{display:grid;grid-template-columns:minmax(170px,.42fr) minmax(0,1fr);gap:1.2rem;padding:1rem 0;border-top:1px solid var(--border-subtle)}
+.rule-line:first-of-type{margin-top:1.2rem}
+.rule-key{font-weight:800;color:var(--accent)}
+.formula-feature{margin:1.5rem 0;padding:1.35rem 0;border-top:2px solid var(--accent);border-bottom:1px solid var(--border-subtle);font-size:clamp(1.55rem,3vw,2.3rem)}
+.formula-feature math{display:block}
+.note{padding:.8rem 1rem;border-left:3px solid var(--accent);background:var(--surface-soft);margin:1rem 0}
+.warning{border-left-color:var(--accent-warm);background:var(--surface-warm)}
+.graph-strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:1.3rem 0}
+.graph-panel{border-top:1px solid var(--border-strong);padding-top:.9rem}
+.graph-panel svg{width:100%;height:auto}
+.graph-panel .axis{stroke:var(--text-secondary);stroke-width:1.4}
+.graph-panel .grid{stroke:var(--grid-line);stroke-width:1}
+.graph-panel .curve{stroke:var(--accent);stroke-width:4;fill:none;stroke-linecap:round}
+.graph-panel .helper{stroke:var(--accent-warm);stroke-width:2;stroke-dasharray:6 5;fill:none}
+.graph-panel text{fill:var(--text-secondary);font:13px system-ui}
+.lab-link{display:inline-flex;align-items:center;gap:.5rem;color:var(--accent);font-weight:780;text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--accent) 45%,transparent);padding-bottom:.15rem}
+.poster{margin:1.4rem 0;border:1px solid var(--border-subtle);box-shadow:var(--shadow-low);cursor:zoom-in;background:var(--surface-raised)}
+.practice-list{counter-reset:exercise}
+.exercise{padding:1.15rem 0;border-top:1px solid var(--border-subtle)}
+.exercise::before{counter-increment:exercise;content:counter(exercise,decimal-leading-zero);display:block;color:var(--accent);font:800 .72rem ui-monospace,monospace;margin-bottom:.35rem}
+.exercise details{margin-top:.7rem}
+.exercise summary{cursor:pointer;color:var(--accent);font-weight:760}
+.quiz{display:grid;gap:.65rem;margin-top:1rem}
+.quiz-row{padding:1rem 0;border-top:1px solid var(--border-subtle)}
+.quiz-row button{min-height:42px;margin:.5rem .35rem 0 0;padding:.55rem .75rem;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);cursor:pointer}
+.quiz-row button.correct{border-color:var(--success);color:var(--success)}
+.quiz-row button.wrong{border-color:var(--danger);color:var(--danger)}
+.feedback{min-height:1.4em;margin:.45rem 0 0;color:var(--text-secondary)}
+.selfcheck{display:grid;gap:.65rem}
+.selfcheck label{display:flex;gap:.65rem;align-items:flex-start;padding:.65rem 0;border-top:1px solid var(--border-subtle)}
+.selfcheck input{margin-top:.35rem;accent-color:var(--accent)}
+.progress-track{height:5px;background:var(--border-subtle);margin-top:1rem;overflow:hidden}
+.progress-track span{display:block;height:100%;width:0;background:var(--accent);transition:width var(--motion-normal) ease}
+.page-footer{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:1.5rem 0 2.2rem;color:var(--text-secondary);font-size:.86rem}
+dialog{width:min(92vw,1100px);border:1px solid var(--border-subtle);background:var(--surface-raised);color:var(--text-primary);padding:0;box-shadow:var(--shadow-high)}
+dialog::backdrop{background:rgba(0,0,0,.68)}
+.dialog-head{display:flex;justify-content:flex-end;padding:.65rem;border-bottom:1px solid var(--border-subtle)}
+.dialog-close{min-height:40px;border:1px solid var(--border-subtle);background:var(--surface-page);color:var(--text-primary);cursor:pointer}
+dialog img{width:100%;height:auto}
+@media(max-width:900px){
+  .topnav{display:none}
+  .hero-grid{grid-template-columns:1fr}
+  .hero-plate{max-width:640px}
+  .chapter{grid-template-columns:1fr;gap:.8rem;padding:var(--space-5) 0}
+  .chapter-index{position:static}
+}
+@media(max-width:650px){
+  .shell{width:min(100% - 1rem,1180px)}
+  .graph-strip{grid-template-columns:1fr}
+  .rule-line{grid-template-columns:1fr;gap:.35rem}
+  h1{font-size:clamp(2.55rem,14vw,4.2rem)}
+  .hero{padding-top:2.5rem}
+}
+@media(prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+@media print{
+  :root{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--surface-warm:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#bbb;--border-strong:#777;--accent:#245a54;--accent-warm:#8a4d39}
+  .topbar,.route,.hero-actions,.lab-link,.icon-button,.quiz-row button,.poster{display:none!important}
+  body{background:#fff}
+  .hero{padding:1.2rem 0}
+  .hero::before{display:none}
+  .hero-grid{grid-template-columns:1fr}
+  .hero-plate{box-shadow:none}
+  .chapter{display:block;padding:1.4rem 0;break-inside:avoid}
+  .chapter-index{position:static;margin-bottom:.4rem}
+  .exercise details[open] summary{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#content">К содержанию</a>
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">9</span>
+      <span><strong>Ярослав Верещагин</strong><small>ОГЭ · математика</small></span>
+    </a>
+    <nav class="topnav" aria-label="Разделы занятия">
+      <a href="#parabola">Парабола</a>
+      <a href="#rational">ОДЗ</a>
+      <a href="#hole">Выколотая точка</a>
+      <a href="#practice">Тренировка</a>
+    </nav>
+    <button class="icon-button" id="themeToggle" type="button" aria-label="Включить тёмную тему">Тема</button>
+  </div>
+</header>
+
+<main id="content">
+<section class="hero">
+  <div class="shell hero-grid">
+    <div>
+      <p class="eyebrow">Учебная запись · 5 октября 2026</p>
+      <h1>Парабола и рациональные функции</h1>
+      <p class="lead">Главная связка занятия: восстановить параболу по ключевым точкам, у дробной функции сначала сохранить исходное ОДЗ, затем сократить общий множитель и правильно отметить выколотую точку.</p>
+      <div class="hero-actions">
+        <a class="primary-link" href="05.10.26-lab.html?mode=hole">Открыть цифровую лабораторию</a>
+        <a class="secondary-link" href="../pdf_docs/05.10.26.pdf">Пособие PDF</a>
+        <a class="secondary-link" href="../tex_docs/05.10.26.tex">TeX</a>
+      </div>
+    </div>
+    <div class="hero-plate" aria-label="Парабола с выколотой точкой">
+      <svg viewBox="0 0 560 410" role="img" aria-labelledby="heroPlotTitle heroPlotDesc">
+        <title id="heroPlotTitle">Парабола с выколотой точкой</title>
+        <desc id="heroPlotDesc">Парабола y равно x квадрат плюс 6x плюс 8 с выколотой точкой минус один, три.</desc>
+        <g transform="translate(45 35)">
+          <line class="axis" x1="0" y1="235" x2="455" y2="235"/><line class="axis" x1="340" y1="10" x2="340" y2="315"/>
+          <path class="curve" d="M35 34 C90 130 145 244 230 252 C315 244 370 130 425 34"/>
+          <circle cx="145" cy="235" r="6" fill="var(--accent-warm)"/>
+          <circle cx="315" cy="235" r="6" fill="var(--accent-warm)"/>
+          <circle cx="230" cy="252" r="6" fill="var(--accent)"/>
+          <circle cx="340" cy="190" r="10" fill="var(--surface-raised)" stroke="var(--accent-warm)" stroke-width="5"/>
+          <text x="242" y="282">V(−3; −1)</text>
+          <text x="355" y="185">выколото (−1; 3)</text>
+          <text x="44" y="350">y = x² + 6x + 8, но x ≠ −1</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="shell">
+  <div class="folio" aria-label="Метаданные занятия">
+    <span><b>Тема:</b> парабола и рациональные функции</span>
+    <span><b>Фокус:</b> ОДЗ, сокращение, выколотая точка</span>
+    <span><b>Преподаватель:</b> Лёвин Артём Александрович</span>
+  </div>
+  <nav class="route" aria-label="Маршрут занятия">
+    <a href="#parabola">01 · Парабола</a>
+    <a href="#rational">02 · ОДЗ и сокращение</a>
+    <a href="#hole">03 · Выколотая точка</a>
+    <a href="#algorithm">04 · Алгоритм</a>
+    <a href="#attention">05 · Внимательность</a>
+    <a href="#map">06 · Карта</a>
+    <a href="#practice">07 · Путь А</a>
+    <a href="#check">08 · Самопроверка</a>
+  </nav>
+
+  <section class="chapter" id="parabola">
+    <div class="chapter-index">01 · Парабола</div>
+    <div class="chapter-body">
+      <p class="eyebrow">y = ax² + bx + c, a ≠ 0</p>
+      <h2>Сначала найдите опорные точки</h2>
+      <p>До построения определите направление ветвей, вершину, ось симметрии и пересечения с осями. Если точек мало, используйте симметрию относительно прямой <strong>x = x<sub>в</sub></strong>.</p>
+      <div class="formula-feature"><strong>x<sub>в</sub> = −b/(2a)</strong><br><span>затем y<sub>в</sub> = f(x<sub>в</sub>)</span></div>
+      <div class="rule-line"><div class="rule-key">Ветви</div><div><strong>a &gt; 0</strong> — вверх; <strong>a &lt; 0</strong> — вниз.</div></div>
+      <div class="rule-line"><div class="rule-key">Ось симметрии</div><div><strong>x = x<sub>в</sub></strong>.</div></div>
+      <div class="rule-line"><div class="rule-key">Ox</div><div>Положите <strong>y = 0</strong> и решите квадратное уравнение.</div></div>
+      <div class="rule-line"><div class="rule-key">Oy</div><div>Положите <strong>x = 0</strong>: точка имеет координаты <strong>(0; c)</strong>.</div></div>
+      <div class="note"><strong>Опорный пример:</strong> для y = x² − x − 6 получаем V(1/2; −25/4), нули x = −2 и x = 3, точку (0; −6); ветви направлены вверх.</div>
+      <div class="note warning"><strong>Контроль:</strong> пересечений с Ox может быть два, одно или ни одного. Корни нельзя «дорисовывать» по форме графика.</div>
+    </div>
+  </section>
+
+  <section class="chapter" id="rational">
+    <div class="chapter-index">02 · Рациональная функция</div>
+    <div class="chapter-body">
+      <p class="eyebrow">Сначала ограничение</p>
+      <h2>ОДЗ записывается до сокращения</h2>
+      <p>Если функция содержит дробь, значения, обнуляющие <strong>исходный</strong> знаменатель, остаются запрещёнными и после сокращения одинаковых множителей.</p>
+      <div class="formula-feature">y = ((x + 4)(x² + 3x + 2))/(x + 1)</div>
+      <div class="rule-line"><div class="rule-key">ОДЗ</div><div><strong>x ≠ −1</strong>.</div></div>
+      <div class="rule-line"><div class="rule-key">Разложение</div><div><strong>x² + 3x + 2 = (x + 1)(x + 2)</strong>.</div></div>
+      <div class="rule-line"><div class="rule-key">Сокращение</div><div><strong>y = (x + 4)(x + 2) = x² + 6x + 8</strong>, при этом <strong>x ≠ −1</strong>.</div></div>
+      <div class="rule-line"><div class="rule-key">Парабола</div><div>V(−3; −1), нули −4 и −2, пересечение с Oy: (0; 8).</div></div>
+      <div class="note warning"><strong>Главный принцип:</strong> сокращение упрощает формулу, но исходное ОДЗ сохраняется.</div>
+    </div>
+  </section>
+
+  <section class="chapter" id="hole">
+    <div class="chapter-index">03 · Выколотая точка</div>
+    <div class="chapter-body">
+      <p class="eyebrow">x = −1 запрещён</p>
+      <h2>Координату «дырки» даёт упрощённая формула</h2>
+      <p>Подставьте запрещённое значение x = −1 в параболу y = x² + 6x + 8. Получается y = 3, поэтому на графике выколота точка <strong>(−1; 3)</strong>.</p>
+      <div class="graph-strip">
+        <div class="graph-panel">
+          <h3>Упрощённая формула</h3>
+          <p><strong>y = x² + 6x + 8</strong></p>
+          <p>Она описывает форму параболы.</p>
+        </div>
+        <div class="graph-panel">
+          <h3>Исходная функция</h3>
+          <p><strong>x ≠ −1</strong></p>
+          <p>Точка (−1; 3) исключена, поэтому отмечается пустым кружком.</p>
+        </div>
+      </div>
+      <p><a class="lab-link" href="05.10.26-lab.html?mode=hole">Исследовать пять примеров из тренировочного блока →</a></p>
+      <div class="note warning"><strong>Типичная ошибка:</strong> после сокращения забыть исходный нуль знаменателя и поставить в запрещённой точке обычную сплошную точку.</div>
+    </div>
+  </section>
+
+  <section class="chapter" id="algorithm">
+    <div class="chapter-index">04 · Алгоритм</div>
+    <div class="chapter-body">
+      <p class="eyebrow">Пять действий</p>
+      <h2>От дроби к корректному графику</h2>
+      <div class="rule-line"><div class="rule-key">1 · ОДЗ</div><div>Выпишите ограничения исходного знаменателя.</div></div>
+      <div class="rule-line"><div class="rule-key">2 · Множители</div><div>Разложите выражения на множители.</div></div>
+      <div class="rule-line"><div class="rule-key">3 · Сокращение</div><div>Сократите общий множитель, сохранив исходное ОДЗ.</div></div>
+      <div class="rule-line"><div class="rule-key">4 · График</div><div>Если получилась парабола, найдите вершину, ось симметрии и пересечения с осями.</div></div>
+      <div class="rule-line"><div class="rule-key">5 · Дырка</div><div>Подставьте запрещённый x в упрощённую формулу и отметьте выколотую точку.</div></div>
+      <div class="note"><strong>Разложение трёхчлена:</strong> если известны корни x₁ и x₂, то ax² + bx + c = a(x − x₁)(x − x₂). Для приведённого трёхчлена удобно искать два числа, произведение которых равно c, а сумма — b.</div>
+      <div class="note warning"><strong>Знаки и квадрат:</strong> (−3)² = 9, −3² = −9, −(−3)² = −9. Скобки определяют, что именно возводится в квадрат.</div>
+    </div>
+  </section>
+
+  <section class="chapter" id="attention">
+    <div class="chapter-index">05 · Внимательность</div>
+    <div class="chapter-body">
+      <p class="eyebrow">Перед записью ответа</p>
+      <h2>Две короткие проверки</h2>
+      <div class="graph-strip">
+        <div class="graph-panel"><h3>Произведение равно нулю</h3><p>(5x + 2)(−x − 4) = 0 даёт x = −0,4 и x = −4. Если требуется <strong>больший корень</strong>, ответ −0,4.</p></div>
+        <div class="graph-panel"><h3>Путь, скорость, время</h3><p>t = S/v. Если ответ нужен в минутах, часы переводятся по формуле <strong>t<sub>мин</sub> = 60t<sub>ч</sub></strong>.</p></div>
+      </div>
+      <div class="note"><strong>Финальная проверка:</strong> что именно спрашивают, в каких единицах и требуется ли выбрать один из нескольких корней.</div>
+    </div>
+  </section>
+
+  <section class="chapter" id="map">
+    <div class="chapter-index">06 · Карта</div>
+    <div class="chapter-body">
+      <p class="eyebrow">Визуальная памятка</p>
+      <h2>Ключевые идеи урока на одном листе</h2>
+      <p>Ментальная карта связывает опоры параболы, ОДЗ, сокращение, выколотую точку и типичные ошибки.</p>
+      <img class="poster" id="posterImage" src="../images/05.10.26.png" alt="Ментальная карта по параболе, рациональным функциям, ОДЗ и выколотой точке">
+    </div>
+  </section>
+
+  <section class="chapter" id="practice">
+    <div class="chapter-index">07 · Путь А</div>
+    <div class="chapter-body">
+      <p class="eyebrow">10 заданий</p>
+      <h2>Тренировочный блок</h2>
+      <div class="practice-list">
+        <article class="exercise"><strong>Для y = x² − 6x + 5 определите направление ветвей, вершину и ось симметрии.</strong><details><summary>Проверить ответ</summary><p>Ветви вверх; V(3; −4); x = 3.</p></details></article>
+        <article class="exercise"><strong>Для y = −2x² + 8x − 3 определите направление ветвей, вершину и точку пересечения с Oy.</strong><details><summary>Проверить ответ</summary><p>Ветви вниз; V(2; 5); (0; −3).</p></details></article>
+        <article class="exercise"><strong>Для y = x² + x − 6 найдите все точки пересечения с осями координат.</strong><details><summary>Проверить ответ</summary><p>(−3; 0), (2; 0), (0; −6).</p></details></article>
+        <article class="exercise"><strong>Постройте y = x² − 4x + 3 по ключевым точкам.</strong><details><summary>Проверить ответ</summary><p>V(2; −1); ось x = 2; нули 1 и 3; (0; 3); ветви вверх.</p></details></article>
+        <article class="exercise"><strong>Вычислите A = (−3)², B = −3², C = −(−3)² и объясните различие записи.</strong><details><summary>Проверить ответ</summary><p>A = 9, B = −9, C = −9.</p></details></article>
+        <article class="exercise"><strong>Упростите y = ((x − 1)(x² + x − 6))/(x + 3), выпишите ОДЗ и найдите выколотую точку.</strong><details><summary>Проверить ответ</summary><p>x ≠ −3; y = (x − 1)(x − 2); выколотая точка (−3; 20).</p></details></article>
+        <article class="exercise"><strong>Постройте y = ((x + 4)(x² + 3x + 2))/(x + 1). Укажите ОДЗ, вершину, пересечения с осями и выколотую точку.</strong><details><summary>Проверить ответ</summary><p>x ≠ −1; y = x² + 6x + 8; V(−3; −1); (−4; 0), (−2; 0), (0; 8); дырка (−1; 3).</p></details></article>
+        <article class="exercise"><strong>Постройте y = ((x − 5)(x² − 4))/(x − 2). Укажите ОДЗ, вершину, пересечения с осями и выколотую точку.</strong><details><summary>Проверить ответ</summary><p>x ≠ 2; y = x² − 3x − 10; V(3/2; −49/4); (−2; 0), (5; 0), (0; −10); дырка (2; −12).</p></details></article>
+        <article class="exercise"><strong>Постройте y = ((x + 3)(x² + 5x + 4))/(x + 3) и объясните, почему после сокращения остаётся выколотая точка.</strong><details><summary>Проверить ответ</summary><p>x ≠ −3; y = x² + 5x + 4; V(−5/2; −9/4); дырка (−3; −2). Запрет относится к исходной дроби.</p></details></article>
+        <article class="exercise"><strong>Постройте y = ((x + 1)(x² − 1))/(x − 1) и определите число общих точек с прямой y = 4.</strong><details><summary>Проверить ответ</summary><p>x ≠ 1; y = (x + 1)²; дырка (1; 4). С прямой y = 4 остаётся одна общая точка: (−3; 4).</p></details></article>
+      </div>
+
+      <h3 style="margin-top:2rem">Мини-квиз</h3>
+      <div class="quiz">
+        <div class="quiz-row" data-quiz><strong>Что делаем первым у дробной функции?</strong><br><button type="button" data-correct="true">Выписываем ОДЗ исходной дроби</button><button type="button" data-correct="false">Сразу сокращаем</button><p class="feedback" aria-live="polite"></p></div>
+        <div class="quiz-row" data-quiz><strong>Что происходит с запретом после сокращения?</strong><br><button type="button" data-correct="false">Исчезает</button><button type="button" data-correct="true">Сохраняется</button><p class="feedback" aria-live="polite"></p></div>
+        <div class="quiz-row" data-quiz><strong>Как найти y выколотой точки?</strong><br><button type="button" data-correct="true">Подставить запрещённый x в упрощённую формулу</button><button type="button" data-correct="false">Взять y вершины</button><p class="feedback" aria-live="polite"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter" id="check">
+    <div class="chapter-index">08 · Самопроверка</div>
+    <div class="chapter-body">
+      <p class="eyebrow">Перед следующим занятием</p>
+      <h2>Что должно воспроизводиться без подсказки</h2>
+      <div class="selfcheck" id="selfcheck">
+        <label><input type="checkbox">Я нахожу вершину, ось симметрии и пересечения параболы с осями.</label>
+        <label><input type="checkbox">Я выписываю ОДЗ до сокращения.</label>
+        <label><input type="checkbox">Я раскладываю квадратный трёхчлен на множители, если это нужно для сокращения.</label>
+        <label><input type="checkbox">Я сохраняю запрещённое значение и отмечаю выколотую точку пустым кружком.</label>
+        <label><input type="checkbox">Я проверяю знаки, единицы и точную формулировку вопроса перед ответом.</label>
+      </div>
+      <div class="progress-track" aria-hidden="true"><span id="readyBar"></span></div>
+      <p id="readyText" aria-live="polite">Отмечено 0 из 5 навыков.</p>
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    <span>Ярослав Верещагин · ОГЭ по математике</span>
+    <span>Лёвин Артём Александрович · 05.10.2026</span>
+  </footer>
+</div>
+</main>
+
+<dialog id="posterDialog" aria-labelledby="posterDialogTitle">
+  <div class="dialog-head">
+    <h2 id="posterDialogTitle" style="position:absolute;left:-9999px">Ментальная карта занятия</h2>
+    <button class="dialog-close" id="posterClose" type="button">Закрыть</button>
+  </div>
+  <img src="../images/05.10.26.png" alt="Увеличенная ментальная карта по параболе, рациональным функциям, ОДЗ и выколотой точке">
+</dialog>
+
+<script>
+(function(){
+  'use strict';
+  const root=document.documentElement;
+  const themeButton=document.getElementById('themeToggle');
+  function setTheme(theme){
+    root.dataset.theme=theme;
+    themeButton.setAttribute('aria-label',theme==='dark'?'Включить светлую тему':'Включить тёмную тему');
+    try{localStorage.setItem('jaroslav-theme',theme)}catch(e){}
+  }
+  try{
+    const saved=localStorage.getItem('jaroslav-theme');
+    if(saved==='dark'||saved==='light')setTheme(saved);
+  }catch(e){}
+  themeButton.addEventListener('click',()=>setTheme(root.dataset.theme==='dark'?'light':'dark'));
+
+  document.querySelectorAll('[data-quiz]').forEach((quiz)=>{
+    quiz.querySelectorAll('button').forEach((button)=>{
+      button.addEventListener('click',()=>{
+        quiz.querySelectorAll('button').forEach((b)=>b.classList.remove('correct','wrong'));
+        const ok=button.dataset.correct==='true';
+        button.classList.add(ok?'correct':'wrong');
+        quiz.querySelector('.feedback').textContent=ok?'Верно.':'Проверьте соответствующее правило ещё раз.';
+      });
+    });
+  });
+
+  const checks=[...document.querySelectorAll('#selfcheck input')];
+  const readyBar=document.getElementById('readyBar');
+  const readyText=document.getElementById('readyText');
+  function updateReady(){
+    const count=checks.filter((item)=>item.checked).length;
+    readyBar.style.width=(count/checks.length*100)+'%';
+    readyText.textContent='Отмечено '+count+' из '+checks.length+' навыков.';
+  }
+  checks.forEach((item)=>item.addEventListener('change',updateReady));
+  updateReady();
+
+  const poster=document.getElementById('posterImage');
+  const dialog=document.getElementById('posterDialog');
+  const close=document.getElementById('posterClose');
+  poster.tabIndex=0;
+  poster.setAttribute('role','button');
+  poster.setAttribute('aria-label','Увеличить ментальную карту');
+  function openPoster(){dialog.showModal()}
+  poster.addEventListener('click',openPoster);
+  poster.addEventListener('keydown',(event)=>{
+    if(event.key==='Enter'||event.key===' '){event.preventDefault();openPoster()}
+  });
+  close.addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('click',(event)=>{if(event.target===dialog)dialog.close()});
+
+  window.addEventListener('beforeprint',()=>document.querySelectorAll('.exercise details').forEach((d)=>d.open=true));
+})();
+</script>
+</body>
+</html>
