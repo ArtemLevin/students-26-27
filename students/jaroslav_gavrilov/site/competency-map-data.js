@@ -124,6 +124,22 @@ for (const [id, cfg] of Object.entries(LESSON_280926)) {
   item.material = { href: '28.09.26.html#' + cfg.section, label: 'Открыть нужный раздел занятия →' };
 }
 
+
+const LESSON_051026 = {
+  'ege08_13': { repeat: true, section: 'formulas', evidence: 'Основное тригонометрическое тождество применялось для перехода между sin²α и cos²α и для замены числа 1 тригонометрической суммой.' },
+  'ege08_14': { repeat: true, section: 'reduction', evidence: 'Формулы приведения отрабатывались через определение кофункции и знака исходной функции по четверти; отдельно контролировался знак после приведения.' },
+  'ege08_15': { repeat: true, section: 'formulas', evidence: 'Повторены три формы cos 2α и формула sin 2α; выбор формы связывался с тем, какая функция уже дана в условии.' },
+  'ege14_15': { repeat: true, section: 'reduction', evidence: 'При получении двух значений после извлечения корня выполнялся отбор по интервалу и знаку функции в соответствующей четверти.' }
+};
+for (const [id, cfg] of Object.entries(LESSON_051026)) {
+  const item = G.flatMap(group => group.items).find(topic => topic.id === id);
+  if (!item) continue;
+  if (Object.prototype.hasOwnProperty.call(cfg, 'repeat')) item.repeat = Boolean(cfg.repeat);
+  item.evidence = Array.isArray(item.evidence) ? item.evidence : [];
+  item.evidence.push({ text: cfg.evidence + ' Материал: занятие 05.10.26 «Тригонометрические преобразования: выбрать формулу и знак».' });
+  item.material = { href: '05.10.26.html#' + cfg.section, label: 'Открыть нужный раздел занятия →' };
+}
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'jaroslav_gavrilov',
@@ -133,7 +149,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Структура сверена 19.09.2026 с опубликованными ФИПИ проектами КИМ ЕГЭ-2027 по профильной математике.',
-    updated:'28.09.2026'
+    updated:'05.10.2026'
   },
   groups:G
 };
