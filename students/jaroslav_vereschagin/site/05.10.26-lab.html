@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория Ярослава Верещагина: рациональные функции, ОДЗ и выколотая точка">
+<meta name="color-scheme" content="light dark">
+<title>Лаборатория: ОДЗ и выколотая точка — Ярослав Верещагин · 05.10.26</title>
+<style>
+:root{
+  --surface-page:#f3efe6;
+  --surface-raised:#fffdf8;
+  --surface-soft:#e8eee9;
+  --surface-warm:#f3e5df;
+  --text-primary:#1f2926;
+  --text-secondary:#68736e;
+  --text-inverse:#f8fffc;
+  --border-subtle:#d8d6cc;
+  --border-strong:#aab8b1;
+  --accent:#2d6f67;
+  --accent-hover:#245a54;
+  --accent-soft:#dcebe6;
+  --accent-warm:#b96247;
+  --success:#3e7957;
+  --danger:#a44d3b;
+  --warning:#9b7338;
+  --focus-ring:#69a89d;
+  --shadow-low:0 12px 30px rgba(30,45,40,.08);
+  --radius-sm:.5rem;
+  --radius-md:1rem;
+  --radius-lg:1.5rem;
+  --space-1:.4rem;
+  --space-2:.75rem;
+  --space-3:1.15rem;
+  --space-4:1.8rem;
+  --space-5:2.8rem;
+  --motion-fast:140ms;
+  --motion-normal:240ms;
+  --grid-line:color-mix(in srgb,var(--text-primary) 9%,transparent);
+}
+html[data-theme="dark"]{
+  --surface-page:#101715;
+  --surface-raised:#18211e;
+  --surface-soft:#202c28;
+  --surface-warm:#30221d;
+  --text-primary:#eef4f1;
+  --text-secondary:#a9b5b0;
+  --text-inverse:#101715;
+  --border-subtle:#34423d;
+  --border-strong:#53645e;
+  --accent:#78c7b8;
+  --accent-hover:#9bd9ce;
+  --accent-soft:#1d3832;
+  --accent-warm:#e29a7c;
+  --success:#83c79a;
+  --danger:#e49582;
+  --warning:#d5ae6e;
+  --focus-ring:#8bd5c7;
+  --shadow-low:0 12px 30px rgba(0,0,0,.25);
+  --grid-line:color-mix(in srgb,var(--text-primary) 11%,transparent);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:16px/1.58 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button{font:inherit}
+a{color:inherit}
+math{font-family:"Cambria Math","STIX Two Math",serif}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:3px}
+.shell{width:min(100% - 2rem,1320px);margin:auto}
+.topbar{border-bottom:1px solid var(--border-subtle)}
+.topbar-inner{min-height:62px;display:flex;align-items:center;gap:.7rem}
+.topbar a{text-decoration:none;font-weight:800}
+.topbar span{color:var(--text-secondary)}
+.icon-button{margin-left:auto;min-height:40px;border:1px solid var(--border-subtle);background:var(--surface-raised);color:var(--text-primary);padding:.5rem .7rem;cursor:pointer}
+.lab-head{padding:2.6rem 0 1.4rem;border-bottom:1px solid var(--border-subtle)}
+.eyebrow{margin:0;color:var(--accent);font:800 .72rem/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.11em;text-transform:uppercase}
+h1,h2,h3{font-family:Georgia,Cambria,serif;letter-spacing:-.035em}
+h1{font-size:clamp(2.7rem,6vw,5.4rem);line-height:.96;margin:.45rem 0 1rem}
+h2{font-size:1.55rem;margin:.2rem 0 1rem}
+h3{font-size:1.05rem;margin:0 0 .45rem}
+.lead{max-width:900px;color:var(--text-secondary);font-size:1.08rem}
+.mode-nav{display:flex;flex-wrap:wrap;gap:.45rem;padding:1rem 0}
+.mode-button{min-height:42px;padding:.55rem .75rem;border:1px solid var(--border-strong);background:transparent;color:var(--text-primary);cursor:pointer}
+.mode-button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--text-inverse)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,.75fr);gap:1px;background:var(--border-subtle);border:1px solid var(--border-subtle);margin:0 0 2.7rem;min-height:650px}
+.stage,.controls{background:var(--surface-raised)}
+.stage{padding:clamp(1rem,2.5vw,2rem);display:flex;flex-direction:column}
+.controls{padding:1.35rem}
+.stage-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;padding-bottom:.8rem;border-bottom:1px solid var(--border-subtle)}
+.stage-head p{margin:.25rem 0 0;color:var(--text-secondary)}
+.current-formula{font-size:clamp(1.25rem,2.5vw,1.8rem);white-space:nowrap}
+.plot{width:100%;min-height:500px;flex:1;display:block}
+.plot .grid{stroke:var(--grid-line);stroke-width:1}
+.plot .axis{stroke:var(--text-secondary);stroke-width:1.7}
+.plot .curve{stroke:var(--accent);stroke-width:4.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.plot .base-curve{stroke:var(--accent-warm);stroke-width:2.4;stroke-dasharray:7 6;fill:none;opacity:.78}
+.plot .asymptote{stroke:var(--accent-warm);stroke-width:1.6;stroke-dasharray:8 7}
+.plot .point{fill:var(--accent-warm);stroke:var(--surface-raised);stroke-width:3}
+.plot text{fill:var(--text-primary);font:14px system-ui}
+.plot .soft{fill:var(--text-secondary)}
+.control-group{padding:1rem 0;border-bottom:1px solid var(--border-subtle)}
+.control-group:last-child{border-bottom:0}
+.control-group p{margin:.25rem 0 .7rem;color:var(--text-secondary)}
+.choice-row{display:flex;flex-wrap:wrap;gap:.45rem}
+.choice{min-height:42px;padding:.55rem .72rem;border:1px solid var(--border-strong);background:var(--surface-raised);color:var(--text-primary);cursor:pointer}
+.choice[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent)}
+.readout{margin:1rem 0;padding:1rem;border-left:3px solid var(--accent);background:var(--surface-soft)}
+.readout strong{display:block;margin-bottom:.25rem}
+.readout span{color:var(--text-secondary)}
+.warning{border-left-color:var(--accent-warm);background:var(--surface-warm)}
+.mode-panel[hidden]{display:none}
+.back-link{display:inline-flex;min-height:44px;align-items:center;padding:.65rem .85rem;background:var(--accent);color:var(--text-inverse);text-decoration:none;font-weight:800}
+.footer{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:0 0 2rem;color:var(--text-secondary);font-size:.86rem}
+@media(max-width:900px){
+  .workspace{grid-template-columns:1fr}
+  .plot{min-height:420px}
+  .controls{border-top:1px solid var(--border-subtle)}
+}
+@media(max-width:520px){
+  .shell{width:min(100% - 1rem,1320px)}
+  .stage-head{flex-direction:column}
+  .plot{min-height:350px}
+  h1{font-size:clamp(2.4rem,14vw,4rem)}
+}
+@media(prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+@media print{
+  .topbar,.mode-nav,.controls,.back-link{display:none!important}
+  body{background:#fff;color:#111}
+  .workspace{display:block;border:0;background:#fff}
+  .stage{padding:0;background:#fff}
+  .plot{min-height:520px}
+}
+
+.range-input{width:100%;accent-color:var(--accent)}
+.state-line{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border-subtle);border:1px solid var(--border-subtle);margin:.8rem 0}
+.state-line div{background:var(--surface-raised);padding:.75rem}
+.state-line small{display:block;color:var(--text-secondary)}
+.predict-row{display:grid;gap:.45rem}
+.predict-row .choice.good{border-color:var(--success);box-shadow:inset 0 -3px 0 var(--success)}
+.predict-row .choice.bad{border-color:var(--danger);box-shadow:inset 0 -3px 0 var(--danger)}
+.feedback{min-height:1.4rem;color:var(--text-secondary)}
+.hole-point{fill:var(--surface-raised);stroke:var(--accent-warm);stroke-width:4}
+@media(max-width:520px){.state-line{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <a href="05.10.26.html">Ярослав Верещагин</a>
+    <span>· лаборатория ОДЗ и выколотой точки</span>
+    <button class="icon-button" id="themeToggle" type="button" aria-label="Включить тёмную тему">Тема</button>
+  </div>
+</header>
+
+<div class="shell">
+  <section class="lab-head">
+    <p class="eyebrow">Цифровая лаборатория · 5 октября 2026</p>
+    <h1>ОДЗ оставляет след на графике</h1>
+    <p class="lead">Пять режимов взяты из заданий 6–10 чек-листа. Сравнивайте полную упрощённую параболу с исходной рациональной функцией и подводите маркер к запрещённому значению x.</p>
+  </section>
+
+  <nav class="mode-nav" aria-label="Пример из тренировочного блока">
+    <button class="mode-button" type="button" data-example="0" aria-pressed="false">Задание 6</button>
+    <button class="mode-button" type="button" data-example="1" aria-pressed="true">Задание 7</button>
+    <button class="mode-button" type="button" data-example="2" aria-pressed="false">Задание 8</button>
+    <button class="mode-button" type="button" data-example="3" aria-pressed="false">Задание 9</button>
+    <button class="mode-button" type="button" data-example="4" aria-pressed="false">Задание 10</button>
+  </nav>
+
+  <main class="workspace">
+    <section class="stage" aria-labelledby="stageTitle">
+      <div class="stage-head">
+        <div>
+          <p class="eyebrow" id="stageTitle">Рабочая плоскость</p>
+          <h2 id="stageHeading">Рациональная функция и её «дырка»</h2>
+          <p id="stageNote">Пунктир показывает полную упрощённую параболу. Сплошная линия — график исходной функции с сохранённым ОДЗ.</p>
+        </div>
+        <div class="current-formula" id="formulaDisplay">x ≠ −1</div>
+      </div>
+
+      <svg class="plot" id="plot" viewBox="0 0 860 560" role="img" aria-labelledby="stageHeading plotDesc">
+        <desc id="plotDesc">Интерактивный график рациональной функции после сокращения с выколотой точкой в запрещённом значении x.</desc>
+        <g id="gridLayer" class="grid"></g>
+        <line class="axis" id="axisX" x1="70" y1="280" x2="805" y2="280"/>
+        <line class="axis" id="axisY" x1="430" y1="40" x2="430" y2="520"/>
+        <path id="basePathA" class="base-curve" d=""/>
+        <path id="curveA" class="curve" d=""/>
+        <path id="curveB" class="curve" d=""/>
+        <circle id="holePoint" class="hole-point" cx="430" cy="280" r="9"/>
+        <circle id="keyPoint" class="point" cx="430" cy="280" r="7"/>
+        <text id="holeLabel" x="445" y="265"></text>
+        <text id="keyLabel" x="445" y="300"></text>
+      </svg>
+    </section>
+
+    <aside class="controls">
+      <section class="mode-panel">
+        <h2>Текущий пример</h2>
+        <div class="readout"><strong id="originalFormula"></strong><span>Исходная рациональная функция</span></div>
+        <div class="readout"><strong id="simpleFormula"></strong><span>Формула после сокращения</span></div>
+        <div class="readout warning"><strong id="domainText">x ≠ −1</strong><span id="holeText">Выколотая точка (−1; 3)</span></div>
+
+        <div class="control-group">
+          <h3>Положение маркера</h3>
+          <p>Подведите x к запрещённому значению.</p>
+          <input class="range-input" id="xRange" type="range" min="-6" max="6" step="0.1" value="0" aria-label="Текущее значение x">
+          <div class="state-line">
+            <div><small>x</small><strong id="currentX">0</strong></div>
+            <div><small>y по упрощённой формуле</small><strong id="currentY">8</strong></div>
+          </div>
+          <div class="readout" aria-live="polite"><strong id="stateText">Точка принадлежит графику</strong><span id="stateReason">x не запрещён ОДЗ.</span></div>
+        </div>
+
+        <div class="control-group">
+          <h3>Сравнение</h3>
+          <div class="choice-row">
+            <button class="choice" id="ghostToggle" type="button" aria-pressed="true">Пунктирная парабола: показана</button>
+            <button class="choice" id="labelToggle" type="button" aria-pressed="true">Подписи: показаны</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <h3>Предскажите</h3>
+          <p>Если x станет равен запрещённому значению, принадлежит ли вычисленная точка исходной функции?</p>
+          <div class="predict-row">
+            <button class="choice" type="button" data-answer="yes">Да, после сокращения запрет исчез</button>
+            <button class="choice" type="button" data-answer="no">Нет, исходное ОДЗ сохраняется</button>
+          </div>
+          <p class="feedback" id="predictFeedback" aria-live="polite"></p>
+        </div>
+
+        <a class="back-link" href="05.10.26.html#hole">Вернуться к занятию</a>
+      </section>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <span>Ярослав Верещагин · ОГЭ по математике</span>
+    <span>Лёвин Артём Александрович · 05.10.2026</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const root=document.documentElement;
+  const examples=[
+    {task:6,original:'y = ((x − 1)(x² + x − 6))/(x + 3)',simple:'y = (x − 1)(x − 2) = x² − 3x + 2',a:1,b:-3,c:2,hx:-3,hy:20},
+    {task:7,original:'y = ((x + 4)(x² + 3x + 2))/(x + 1)',simple:'y = (x + 4)(x + 2) = x² + 6x + 8',a:1,b:6,c:8,hx:-1,hy:3},
+    {task:8,original:'y = ((x − 5)(x² − 4))/(x − 2)',simple:'y = (x − 5)(x + 2) = x² − 3x − 10',a:1,b:-3,c:-10,hx:2,hy:-12},
+    {task:9,original:'y = ((x + 3)(x² + 5x + 4))/(x + 3)',simple:'y = x² + 5x + 4',a:1,b:5,c:4,hx:-3,hy:-2},
+    {task:10,original:'y = ((x + 1)(x² − 1))/(x − 1)',simple:'y = (x + 1)²',a:1,b:2,c:1,hx:1,hy:4}
+  ];
+  let current=1,showGhost=true,showLabels=true;
+  const grid=document.getElementById('gridLayer'),curveA=document.getElementById('curveA'),curveB=document.getElementById('curveB'),base=document.getElementById('basePathA'),hole=document.getElementById('holePoint'),key=document.getElementById('keyPoint'),holeLabel=document.getElementById('holeLabel'),keyLabel=document.getElementById('keyLabel'),xRange=document.getElementById('xRange');
+  const NS='http://www.w3.org/2000/svg',left=70,right=805,top=40,bottom=520,xmin=-6,xmax=6;
+  function fmt(v){const n=Math.round(v*100)/100;return String(n).replace('-', '−').replace('.', ',')}
+  function f(e,x){return e.a*x*x+e.b*x+e.c}
+  function bounds(e){
+    const ys=[];for(let x=xmin;x<=xmax;x+=.1)ys.push(f(e,x));ys.push(e.hy);
+    let ymin=Math.min.apply(null,ys),ymax=Math.max.apply(null,ys);const span=Math.max(8,ymax-ymin),pad=span*.1;
+    return {ymin:ymin-pad,ymax:ymax+pad};
+  }
+  function X(x){return left+(x-xmin)/(xmax-xmin)*(right-left)}
+  function Y(y,b){return bottom-(y-b.ymin)/(b.ymax-b.ymin)*(bottom-top)}
+  function pathFor(e,b,a,z){
+    let d='',first=true;for(let x=a;x<=z;x+=.035){const px=X(x),py=Y(f(e,x),b);if(py<top-60||py>bottom+60){first=true;continue}d+=(first?'M':'L')+px.toFixed(1)+' '+py.toFixed(1)+' ';first=false}return d
+  }
+  function drawGrid(e,b){
+    grid.textContent='';
+    for(let i=0;i<=12;i++){const x=xmin+i;const line=document.createElementNS(NS,'line');line.setAttribute('x1',X(x));line.setAttribute('x2',X(x));line.setAttribute('y1',top);line.setAttribute('y2',bottom);grid.appendChild(line)}
+    for(let i=0;i<=8;i++){const y=b.ymin+i*(b.ymax-b.ymin)/8;const line=document.createElementNS(NS,'line');line.setAttribute('x1',left);line.setAttribute('x2',right);line.setAttribute('y1',Y(y,b));line.setAttribute('y2',Y(y,b));grid.appendChild(line)}
+    document.getElementById('axisX').setAttribute('y1',Y(0,b));document.getElementById('axisX').setAttribute('y2',Y(0,b));document.getElementById('axisY').setAttribute('x1',X(0));document.getElementById('axisY').setAttribute('x2',X(0));
+  }
+  function draw(){
+    const e=examples[current],b=bounds(e),gap=.08;
+    drawGrid(e,b);
+    base.setAttribute('d',pathFor(e,b,xmin,xmax));base.hidden=!showGhost;
+    curveA.setAttribute('d',pathFor(e,b,xmin,e.hx-gap));curveB.setAttribute('d',pathFor(e,b,e.hx+gap,xmax));
+    const hx=X(e.hx),hy=Y(e.hy,b);hole.setAttribute('cx',hx);hole.setAttribute('cy',hy);
+    holeLabel.setAttribute('x',Math.min(right-185,hx+14));holeLabel.setAttribute('y',Math.max(top+18,hy-12));holeLabel.textContent=showLabels?'выколото ('+fmt(e.hx)+'; '+fmt(e.hy)+')':'';
+    const x=Number(xRange.value),y=f(e,x),blocked=Math.abs(x-e.hx)<.051;
+    key.setAttribute('cx',X(x));key.setAttribute('cy',Y(y,b));key.setAttribute('fill',blocked?'var(--surface-raised)':'var(--accent-warm)');
+    keyLabel.setAttribute('x',Math.min(right-120,X(x)+12));keyLabel.setAttribute('y',Math.min(bottom-8,Y(y,b)+26));keyLabel.textContent=showLabels?'x = '+fmt(x)+', y = '+fmt(y):'';
+    document.getElementById('currentX').textContent=fmt(x);document.getElementById('currentY').textContent=fmt(y);
+    document.getElementById('stateText').textContent=blocked?'Исходная функция не определена':'Точка принадлежит графику';
+    document.getElementById('stateReason').textContent=blocked?'Это исходный нуль знаменателя. На параболе здесь остаётся пустая точка.':'x не запрещён исходным ОДЗ.';
+  }
+  function load(index){
+    current=index;const e=examples[index];
+    document.querySelectorAll('[data-example]').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)));
+    document.getElementById('originalFormula').textContent=e.original;
+    document.getElementById('simpleFormula').textContent=e.simple;
+    document.getElementById('domainText').textContent='x ≠ '+fmt(e.hx);
+    document.getElementById('holeText').textContent='Выколотая точка ('+fmt(e.hx)+'; '+fmt(e.hy)+')';
+    document.getElementById('formulaDisplay').textContent='x ≠ '+fmt(e.hx);
+    xRange.value='0';if(Math.abs(e.hx)<.051)xRange.value='1';
+    document.querySelectorAll('[data-answer]').forEach(b=>b.classList.remove('good','bad'));document.getElementById('predictFeedback').textContent='';
+    draw();
+  }
+  document.querySelectorAll('[data-example]').forEach(b=>b.addEventListener('click',()=>load(Number(b.dataset.example))));
+  xRange.addEventListener('input',draw);
+  document.getElementById('ghostToggle').addEventListener('click',function(){showGhost=!showGhost;this.setAttribute('aria-pressed',String(showGhost));this.textContent='Пунктирная парабола: '+(showGhost?'показана':'скрыта');draw()});
+  document.getElementById('labelToggle').addEventListener('click',function(){showLabels=!showLabels;this.setAttribute('aria-pressed',String(showLabels));this.textContent='Подписи: '+(showLabels?'показаны':'скрыты');draw()});
+  document.querySelectorAll('[data-answer]').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('[data-answer]').forEach(q=>q.classList.remove('good','bad'));
+    const ok=b.dataset.answer==='no';b.classList.add(ok?'good':'bad');
+    document.getElementById('predictFeedback').textContent=ok?'Верно: сокращение не расширяет исходную область определения.':'Проверьте исходный знаменатель: его нуль остаётся запрещённым.';
+  }));
+  const themeButton=document.getElementById('themeToggle');
+  function setTheme(theme){root.dataset.theme=theme;themeButton.setAttribute('aria-label',theme==='dark'?'Включить светлую тему':'Включить тёмную тему');try{localStorage.setItem('jaroslav-theme',theme)}catch(e){}}
+  try{const saved=localStorage.getItem('jaroslav-theme');if(saved==='dark'||saved==='light')setTheme(saved)}catch(e){}
+  themeButton.addEventListener('click',()=>setTheme(root.dataset.theme==='dark'?'light':'dark'));
+  const params=new URLSearchParams(location.search);if(params.get('task')){const idx=examples.findIndex(e=>String(e.task)===params.get('task'));if(idx>=0)current=idx}
+  load(current);
+})();
+</script>
+</body>
+</html>
