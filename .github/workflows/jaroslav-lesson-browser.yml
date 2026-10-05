@@ -1,0 +1,41 @@
+name: Yaroslav October 5 lesson review
+on:
+  pull_request:
+    paths:
+      - 'students/jaroslav_vereschagin/**'
+      - '.github/workflows/jaroslav-lesson-browser.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'students/jaroslav_vereschagin/**'
+      - '.github/workflows/jaroslav-lesson-browser.yml'
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runner
+        run: |
+          mkdir -p /tmp/jaroslav-lesson-runner
+          cd /tmp/jaroslav-lesson-runner
+          npm init -y >/dev/null
+          npm install playwright@1.56.0 --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Start static site
+        run: python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/jaroslav-http.log 2>&1 &
+      - name: Review lesson and home page
+        run: |
+          cp students/jaroslav_vereschagin/site/tests/05.10.26.browser.cjs /tmp/jaroslav-lesson-runner/runner.cjs
+          node /tmp/jaroslav-lesson-runner/runner.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jaroslav-20261005-review
+          path: /tmp/jaroslav-20261005-screens/
+          if-no-files-found: warn
