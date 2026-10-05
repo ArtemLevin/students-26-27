@@ -5,6 +5,49 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-05",
+  "ktpRefs": [],
+  "href": "05.10.26.html",
+  "title": "Модуль и кусочные графики",
+  "navTitle": "Модуль и кусочные графики",
+  "navSubtitle": "Марина Селиверстова: раскрытие модуля по знаку всего выражения, внешние минусы, кусочные графики, границы ветвей и 10 заданий.",
+  "summary": "Марина Селиверстова: раскрытие модуля по знаку всего выражения, внешние минусы, кусочные графики, границы ветвей и 10 заданий.",
+  "topics": [
+    "раскрытие модуля",
+    "скобки со знаком минус",
+    "график функции с модулем",
+    "кусочные графики"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_06_09",
+      "evidenceAnchor": "rule",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_08_03",
+      "evidenceAnchor": "signs",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_22_08",
+      "evidenceAnchor": "shift",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_22_07",
+      "evidenceAnchor": "boundary",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "05.10.26.html",
+    "pdf": "../pdf_docs/05.10.26.pdf",
+    "tex": "../tex_docs/05.10.26.tex",
+    "lab": "05.10.26-lab.html"
+  }
+},
+{
     "date": "2026-10-03",
     "ktpRefs": [],
     "href": "03.10.26.html",
