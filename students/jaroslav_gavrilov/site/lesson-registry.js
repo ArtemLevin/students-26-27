@@ -5,6 +5,52 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-05",
+    "ktpRefs": [
+      "ktp-024"
+    ],
+    "href": "05.10.26.html",
+    "title": "Выбрать формулу. Удержать знак.",
+    "navTitle": "Тригонометрические преобразования",
+    "navSubtitle": "Выбор формулы, знака и ежедневная практика",
+    "summary": "Интерактивный конспект Ярослава Гаврилова: тригонометрические преобразования, выбор формулы, формулы двойного угла, приведения, знак по четверти и ежедневная практика.",
+    "topics": [
+      "Формулы двойного угла",
+      "Основное тригонометрическое тождество",
+      "Формулы приведения и знак по четверти",
+      "Тангенс и котангенс через синус и косинус",
+      "Выбор рационального преобразования",
+      "Ежедневная практика: формулы и упражнения"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "ege08_13",
+        "evidenceAnchor": "formulas",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege08_14",
+        "evidenceAnchor": "reduction",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege08_15",
+        "evidenceAnchor": "formulas",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege14_15",
+        "evidenceAnchor": "reduction",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "05.10.26.html",
+      "pdf": "../pdf_docs/05.10.26.pdf",
+      "tex": "../tex_docs/05.10.26.tex"
+    }
+  },
+  {
     "date": "2026-09-28",
     "ktpRefs": [],
     "href": "28.09.26.html",
