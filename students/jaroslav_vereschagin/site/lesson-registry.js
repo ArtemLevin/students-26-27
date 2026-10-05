@@ -5,6 +5,58 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-05",
+  "ktpRefs": [],
+  "href": "05.10.26.html",
+  "title": "Парабола и выколотые точки",
+  "navTitle": "Парабола и выколотые точки",
+  "navSubtitle": "Ярослав Верещагин: опорные точки параболы, симметрия, сокращение дроби с сохранением ОДЗ и выколотые точки. 10 проверенных задач.",
+  "summary": "Ярослав Верещагин: опорные точки параболы, симметрия, сокращение дроби с сохранением ОДЗ и выколотые точки. 10 проверенных задач.",
+  "topics": [
+    "Парабола: вершина и симметрия",
+    "Пересечения с осями",
+    "ОДЗ и выколотые точки",
+    "Знаки и единицы"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_11_2_1",
+      "evidenceAnchor": "parabola",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_22_1_1",
+      "evidenceAnchor": "parabola",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_22_1_2",
+      "evidenceAnchor": "holes",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_22_1_3",
+      "evidenceAnchor": "holes",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_9_2_5",
+      "evidenceAnchor": "warmup",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_3_1_3",
+      "evidenceAnchor": "warmup",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "05.10.26.html",
+    "pdf": "../pdf_docs/05.10.26.pdf",
+    "tex": "../tex_docs/05.10.26.tex"
+  }
+},
+{
     "date": "2026-09-28",
     "ktpRefs": [],
     "href": "28.09.26.html",
