@@ -5,6 +5,58 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-05",
+    "ktpRefs": [],
+    "href": "05.10.26.html",
+    "title": "Повторение ключевых тем ЕГЭ: геометрия, вероятность и модели",
+    "navTitle": "Повторение ключевых тем ЕГЭ",
+    "navSubtitle": "геометрия · векторы · вероятность · уравнения · движение",
+    "summary": "Смешанное повторение: вписанный угол, площадь треугольника, скалярное произведение, классическая и условная вероятность, формула Бернулли, уравнения с корнем и дробями, прикладные формулы и движение.",
+    "topics": [
+      "геометрия",
+      "векторы",
+      "условная вероятность",
+      "формула Бернулли",
+      "уравнения",
+      "движение"
+    ],
+    "outcomes": [
+      {
+        "label": "Скалярное произведение и угол между векторами",
+        "level": 2,
+        "competencyId": "t2_dot",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Условная вероятность: выбор правильного знаменателя",
+        "level": 2,
+        "competencyId": "t5_conditional",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Формула Бернулли и сокращение факториалов",
+        "level": 2,
+        "competencyId": "t5_bernoulli",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Движение по прямой: таблица S–v–t и разница во времени",
+        "level": 2,
+        "competencyId": "t10_line",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "05.10.26.html",
+      "pdf": "../pdf_docs/05.10.26.pdf",
+      "tex": "../tex_docs/05.10.26.tex"
+    }
+  },
+  {
     "date": "2026-09-30",
     "ktpRefs": [],
     "href": "30.09.26.html",
