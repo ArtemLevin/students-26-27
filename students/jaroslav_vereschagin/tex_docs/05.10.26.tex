@@ -1,0 +1,381 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage[unicode=true,colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent]{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{147D7E}
+\definecolor{darkaccent}{HTML}{0B5253}
+\definecolor{textgray}{HTML}{30383A}
+\definecolor{softgray}{HTML}{6B7375}
+\definecolor{rulegray}{HTML}{D7DEDE}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.5em,itemsep=0.25em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.7em,itemsep=0.45em,topsep=0.35em}
+\setlength{\headheight}{25pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{softgray}Парабола и рациональные функции}
+\fancyhead[R]{\small\color{softgray}05.10.26}
+\fancyfoot[C]{\small\color{softgray}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{rulegray}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\sectionrule}{\vspace{-0.4em}\noindent\color{rulegray}\rule{\linewidth}{0.6pt}\color{textgray}\vspace{0.4em}}
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\smallnote}[1]{\textcolor{softgray}{\small #1}}
+
+\tikzset{
+  flowstart/.style={ellipse,draw=darkaccent,line width=0.8pt,minimum width=35mm,minimum height=10mm,align=center,fill=white},
+  flowaction/.style={rounded corners=2pt,draw=accent,line width=0.8pt,text width=58mm,minimum height=12mm,align=center,fill=white},
+  flowdecision/.style={diamond,aspect=2.1,draw=accent,line width=0.8pt,text width=38mm,align=center,inner sep=1.5pt,fill=white},
+  flowarrow/.style={-{Stealth[length=3mm]},line width=0.9pt,draw=darkaccent}
+}
+
+\begin{document}
+\color{textgray}
+
+% ---------------- TITLE ----------------
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{24mm}
+
+{\large\color{softgray}Чек-лист}\par
+\vspace{5mm}
+{\Huge\bfseries\color{darkaccent}Парабола и графики\\[2mm]рациональных функций}\par
+\vspace{5mm}
+{\Large\color{accent}ОДЗ, упрощение и выколотая точка}\par
+
+\vspace{14mm}
+\rule{0.68\linewidth}{0.7pt}\par
+\vspace{9mm}
+
+{\large Ярослав Верещагин}\par
+\vspace{2mm}
+{\normalsize 05.10.26}\par
+
+\vfill
+
+\begin{minipage}{0.80\linewidth}
+\centering
+\small
+После повторения Вы должны уметь восстановить параболу по ключевым точкам, аккуратно упростить рациональную функцию с учётом ограничений и правильно отметить выколотую точку на итоговом графике.
+\end{minipage}
+
+\vfill
+
+{\small\color{softgray}Лёвин Артём Александрович эксклюзивно для Ярослава Верещагина}\par
+\vspace{9mm}
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent,line width=1.2pt,opacity=0.55]
+  ($(current page.south west)+(17mm,15mm)$)
+  .. controls ($(current page.south west)+(60mm,32mm)$) and ($(current page.south east)+(-60mm,3mm)$) ..
+  ($(current page.south east)+(-17mm,18mm)$);
+\end{tikzpicture}
+\end{titlepage}
+
+% ---------------- CORE CHECKLIST ----------------
+\section*{1. Парабола: что нужно увидеть до построения}
+\sectionrule
+
+Для квадратичной функции
+\[
+  y=ax^2+bx+c,\qquad a\ne0,
+\]
+держите в голове несколько опор.
+
+\begin{enumerate}
+  \item \key{Направление ветвей.} Если $a>0$, ветви направлены вверх; если $a<0$ --- вниз.
+  \item \key{Вершина.}
+  \[
+    x_{\text{в}}=-\frac{b}{2a},\qquad y_{\text{в}}=f(x_{\text{в}}).
+  \]
+  \item \key{Ось симметрии.} Это прямая $x=x_{\text{в}}$.
+  \item \key{Пересечения с осью $Ox$.} Положите $y=0$ и решите квадратное уравнение $ax^2+bx+c=0$.
+  \item \key{Пересечение с осью $Oy$.} Положите $x=0$: точка имеет координаты $(0;c)$.
+  \item \key{Дополнительные точки.} Если основных точек мало, выбирайте значения $x$, симметричные относительно $x_{\text{в}}$: у них будут одинаковые значения $y$.
+\end{enumerate}
+
+\smallnote{Важно: пересечений с $Ox$ может быть два, одно или ни одного. Не пытайтесь «дорисовывать» корни, если квадратное уравнение их не имеет.}
+
+\subsection*{Опорный пример}
+Для
+\[
+  y=x^2-x-6
+\]
+получаем
+\[
+  x_{\text{в}}=\frac12,\qquad y_{\text{в}}=-\frac{25}{4}=-6{,}25.
+\]
+Корни: $x=-2$ и $x=3$, поэтому точки пересечения с $Ox$ равны $(-2;0)$ и $(3;0)$. С осью $Oy$: $(0;-6)$. Коэффициент $a=1>0$, значит ветви направлены вверх.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.68\linewidth,
+  height=0.31\linewidth,
+  axis lines=middle,
+  xmin=-4,xmax=5,
+  ymin=-8,ymax=8,
+  xtick={-3,-2,-1,0,1,2,3,4},
+  ytick={-6,-4,-2,0,2,4,6},
+  samples=220,
+  grid=both,
+  minor tick num=1,
+  xlabel={$x$},ylabel={$y$},
+  xlabel style={at={(ticklabel* cs:1)},anchor=west},
+  ylabel style={at={(ticklabel* cs:1)},anchor=south},
+  clip=false
+]
+\addplot[darkaccent,very thick,domain=-3.5:4.5]{x^2-x-6};
+\addplot[only marks,mark=*,mark size=2.2pt] coordinates {(-2,0) (3,0) (0,-6) (0.5,-6.25)};
+\node[anchor=north east] at (axis cs:0.5,-6.25) {\small вершина};
+\draw[dashed,accent] (axis cs:0.5,-8) -- (axis cs:0.5,8);
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\section*{2. Рациональная функция: сначала ограничения, потом сокращение}
+\sectionrule
+
+Если функция содержит дробь, \key{первое действие --- выписать ОДЗ}. Значения, обнуляющие исходный знаменатель, остаются запрещёнными даже после сокращения одинаковых множителей.
+
+Рассмотрим пример занятия:
+\[
+ y=\frac{(x+4)(x^2+3x+2)}{x+1}.
+\]
+
+\begin{enumerate}
+  \item \key{ОДЗ:} $x+1\ne0$, то есть $x\ne-1$.
+  \item Разложим квадратный трёхчлен:
+  \[
+    x^2+3x+2=(x+1)(x+2).
+  \]
+  \item Сократим общий множитель, помня об ограничении:
+  \[
+    y=(x+4)(x+2)=x^2+6x+8,\qquad x\ne-1.
+  \]
+  \item Строим параболу $y=x^2+6x+8$:
+  \[
+    V(-3;-1),\qquad (-4;0),\qquad (-2;0),\qquad (0;8).
+  \]
+  \item Найдём координату выколотой точки. При запрещённом $x=-1$ упрощённая формула дала бы
+  \[
+    y=(-1)^2+6(-1)+8=3.
+  \]
+  Значит на графике нужно выколоть точку $(-1;3)$.
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.68\linewidth,
+  height=0.31\linewidth,
+  axis lines=middle,
+  xmin=-6,xmax=2,
+  ymin=-3,ymax=11,
+  xtick={-5,-4,-3,-2,-1,0,1},
+  ytick={-2,0,2,4,6,8,10},
+  samples=220,
+  grid=both,
+  minor tick num=1,
+  xlabel={$x$},ylabel={$y$},
+  clip=false
+]
+\addplot[darkaccent,very thick,domain=-5.5:1.5]{x^2+6*x+8};
+\addplot[only marks,mark=*,mark size=2.1pt] coordinates {(-3,-1) (-4,0) (-2,0) (0,8)};
+\addplot[only marks,mark=o,mark size=4pt,line width=1.1pt,accent] coordinates {(-1,3)};
+\node[anchor=west,text=accent] at (axis cs:-0.85,3) {\small выколотая точка};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\key{Главный принцип:} сокращение упрощает формулу, но исходное ОДЗ сохраняется.
+
+\subsection*{Как разложить квадратный трёхчлен}
+Если известны корни $x_1$ и $x_2$, то
+\[
+  ax^2+bx+c=a(x-x_1)(x-x_2).
+\]
+Для приведённого трёхчлена $x^2+bx+c$ удобно искать два числа, произведение которых равно $c$, а сумма --- $b$.
+
+\subsection*{Знаки и квадрат: место, где легко потерять балл}
+\[
+  (-3)^2=9,\qquad -3^2=-9,\qquad -(-3)^2=-9.
+\]
+Сначала определите, \key{что именно находится под знаком степени}. Скобки меняют смысл записи.
+
+\subsection*{График должен быть читаемым}
+\begin{itemize}
+  \item подписывайте оси $x$ и $y$;
+  \item отмечайте масштаб;
+  \item не соединяйте график через запрещённую точку сплошной точкой;
+  \item координату выколотой точки лучше вычислять подстановкой запрещённого $x$ в упрощённую формулу;
+  \item используйте симметрию параболы как проверку полученных точек.
+\end{itemize}
+
+\clearpage
+\section*{3. Алгоритм: график рациональной функции с сокращаемым множителем}
+\sectionrule
+
+\begin{center}
+\begin{tikzpicture}[node distance=5.5mm and 12mm]
+\node[flowstart] (start) {Дана рациональная функция};
+\node[flowaction,below=of start] (odz) {Выпишите ограничения исходного знаменателя};
+\node[flowaction,below=of odz] (factor) {Разложите выражения на множители};
+\node[flowdecision,below=7mm of factor] (common) {Есть общий множитель?};
+\node[flowaction,below=7mm of common,text width=52mm] (cancel) {Сократите его, сохранив исходное ОДЗ};
+\node[flowaction,right=14mm of common,text width=43mm,font=\small] (nocancel) {Нет: выберите другой способ анализа функции};
+\node[flowaction,below=of cancel,text width=52mm] (simple) {Приведите формулу к знакомому виду};
+\node[flowdecision,below=7mm of simple] (parabola) {Получилась парабола?};
+\node[flowaction,below=7mm of parabola,text width=54mm] (keys) {Найдите вершину, ось симметрии и пересечения с осями};
+\node[flowaction,right=14mm of parabola,text width=43mm,font=\small] (other) {Нет: используйте свойства полученного типа функции};
+\node[flowaction,below=of keys,text width=67mm] (hole) {Для запрещённого $x$ вычислите $y$ по упрощённой формуле и отметьте выколотую точку};
+\node[flowstart,below=of hole] (finish) {Проверьте ОДЗ, подписи осей и график};
+
+\draw[flowarrow] (start) -- (odz);
+\draw[flowarrow] (odz) -- (factor);
+\draw[flowarrow] (factor) -- (common);
+\draw[flowarrow] (common) -- node[right,font=\small]{да} (cancel);
+\draw[flowarrow] (common) -- node[above,font=\small]{нет} (nocancel);
+\draw[flowarrow] (cancel) -- (simple);
+\draw[flowarrow] (simple) -- (parabola);
+\draw[flowarrow] (parabola) -- node[right,font=\small]{да} (keys);
+\draw[flowarrow] (parabola) -- node[above,font=\small]{нет} (other);
+\draw[flowarrow] (keys) -- (hole);
+\draw[flowarrow] (hole) -- (finish);
+\draw[flowarrow] (nocancel.east) -- ++(8mm,0) |- (finish.east);
+\draw[flowarrow] (other.east) -- ++(8mm,0) |- (hole.east);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\section*{4. Экзаменационная внимательность}
+\sectionrule
+
+На занятии отдельно проявились две ситуации, где знание есть, а балл легко потерять из-за записи или единиц.
+
+\subsection*{Произведение равно нулю}
+Если
+\[
+  (5x+2)(-x-4)=0,
+\]
+то
+\[
+  5x+2=0 \quad\text{или}\quad -x-4=0.
+\]
+Отсюда $x=-0{,}4$ или $x=-4$. Если требуется \key{больший корень}, ответ $-0{,}4$.
+
+\subsection*{Путь, скорость, время}
+Для прямого участка сначала может потребоваться найти расстояние по теореме Пифагора, затем использовать
+\[
+  t=\frac{S}{v}.
+\]
+Если ответ требуется в минутах, часы обязательно переведите:
+\[
+  t_{\text{мин}}=60\,t_{\text{ч}}.
+\]
+
+\key{Финальная проверка перед записью ответа:} что именно спрашивают, в каких единицах и требуется ли выбрать один из нескольких корней.
+
+\clearpage
+\section*{5. Тренировочный блок — Путь А}
+\sectionrule
+
+\textbf{10 заданий.} Решайте последовательно: сначала базовые опоры параболы, затем ОДЗ, сокращение и выколотые точки.
+
+{\small
+\begin{enumerate}[itemsep=0.2em,topsep=0.25em]
+  \item Для функции $y=x^2-6x+5$ определите направление ветвей, координаты вершины и уравнение оси симметрии.
+
+  \item Для функции $y=-2x^2+8x-3$ определите направление ветвей, координаты вершины и точку пересечения с осью $Oy$.
+
+  \item Для функции $y=x^2+x-6$ найдите все точки пересечения графика с осями координат.
+
+  \item Постройте график функции $y=x^2-4x+3$ по ключевым точкам. На чертеже подпишите оси и отметьте вершину.
+
+  \item Вычислите три значения и кратко объясните различие записи:
+  \[
+    A=(-3)^2,\qquad B=-3^2,\qquad C=-(-3)^2.
+  \]
+
+  \item Упростите функцию
+  \[
+    y=\frac{(x-1)(x^2+x-6)}{x+3},
+  \]
+  выпишите ОДЗ и найдите координаты выколотой точки.
+
+  \item Постройте график функции
+  \[
+    y=\frac{(x+4)(x^2+3x+2)}{x+1}.
+  \]
+  В решении обязательно укажите ОДЗ, вершину полученной параболы, пересечения с осями и выколотую точку.
+
+  \item Постройте график функции
+  \[
+    y=\frac{(x-5)(x^2-4)}{x-2}.
+  \]
+  Укажите ОДЗ, вершину, пересечения с осями и выколотую точку.
+
+  \item Постройте график функции
+  \[
+    y=\frac{(x+3)(x^2+5x+4)}{x+3}.
+  \]
+  Отдельно объясните, почему после сокращения на графике всё равно остаётся выколотая точка.
+
+  \item Постройте график функции
+  \[
+    y=\frac{(x+1)(x^2-1)}{x-1}
+  \]
+  и определите количество общих точек этого графика с прямой $y=4$.
+\end{enumerate}
+}
+
+\clearpage
+\section*{6. Ответы}
+\sectionrule
+
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{@{}p{12mm}p{0.82\linewidth}@{}}
+\toprule
+\textbf{№} & \textbf{Ответ / контрольные данные}\\
+\midrule
+\endhead
+1 & Ветви вверх; $V(3;-4)$; ось симметрии $x=3$.\\
+2 & Ветви вниз; $V(2;5)$; пересечение с $Oy$: $(0;-3)$.\\
+3 & С $Ox$: $(-3;0)$ и $(2;0)$; с $Oy$: $(0;-6)$.\\
+4 & $V(2;-1)$; ось $x=2$; нули $x=1$ и $x=3$; $(0;3)$; ветви вверх.\\
+5 & $A=9$, $B=-9$, $C=-9$.\\
+6 & $x\ne-3$; $y=(x-1)(x-2)=x^2-3x+2$; выколотая точка $(-3;20)$.\\
+7 & $x\ne-1$; $y=x^2+6x+8$; $V(-3;-1)$; $(-4;0)$, $(-2;0)$, $(0;8)$; выколотая точка $(-1;3)$.\\
+8 & $x\ne2$; $y=(x-5)(x+2)=x^2-3x-10$; $V\left(\frac32;-\frac{49}{4}\right)$; $(-2;0)$, $(5;0)$, $(0;-10)$; выколотая точка $(2;-12)$.\\
+9 & $x\ne-3$; $y=x^2+5x+4$; $V\left(-\frac52;-\frac94\right)$; $(-4;0)$, $(-1;0)$, $(0;4)$; выколотая точка $(-3;-2)$. Ограничение относится к исходной дроби и после сокращения сохраняется.\\
+10 & $x\ne1$; $y=(x+1)^2$ при $x\ne1$; выколотая точка $(1;4)$. Прямая $y=4$ пересекает график только в точке $(-3;4)$, поэтому общая точка одна.\\
+\bottomrule
+\end{longtable}
+
+\vfill
+\smallnote{Самопроверка: перед завершением каждого построения перечитайте ОДЗ, проверьте симметрию параболы, подписи осей и координаты выколотой точки.}
+
+\end{document}
