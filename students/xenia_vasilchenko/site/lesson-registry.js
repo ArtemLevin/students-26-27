@@ -5,6 +5,73 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-06",
+    "ktpRefs": [],
+    "href": "06.10.26.html",
+    "title": "Приведение дробей к общему знаменателю",
+    "navTitle": "Общий знаменатель",
+    "summary": "Занятие Ксении Васильченко: приведение дробей к общему знаменателю через НОК, сложение, сравнение и упорядочивание дробей.",
+    "topics": [
+      "Общий знаменатель",
+      "НОК знаменателей",
+      "Сложение дробей",
+      "Сравнение дробей",
+      "Упорядочивание дробей"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "div_19",
+        "evidenceAnchor": "lcm",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "div_21",
+        "evidenceAnchor": "lcm",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_base_09",
+        "evidenceAnchor": "equivalent",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_base_10",
+        "evidenceAnchor": "equivalent",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_base_12",
+        "evidenceAnchor": "multipliers",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_ops_03",
+        "evidenceAnchor": "addition",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_base_13",
+        "evidenceAnchor": "comparison",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_base_15",
+        "evidenceAnchor": "comparison",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_base_16",
+        "evidenceAnchor": "comparison",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "06.10.26.html",
+      "pdf": "../pdf_docs/06.10.26.pdf",
+      "tex": "../tex_docs/06.10.26.tex"
+    }
+  },
+  {
     "date": "2026-09-29",
     "ktpRefs": [],
     "href": "29.09.26.html",
