@@ -1,0 +1,262 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\geometry{left=20mm,right=20mm,top=20mm,bottom=20mm}
+\setlength{\headheight}{25pt}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=5pt,topsep=4pt}
+
+\definecolor{accent}{HTML}{2A6F6B}
+\definecolor{darkaccent}{HTML}{174B48}
+\definecolor{textgray}{HTML}{2F3437}
+\definecolor{softgray}{HTML}{E9EEEE}
+\color{textgray}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Чек-лист: вклады и сложные проценты}
+\fancyhead[R]{\small 06.10.26}
+\fancyfoot[C]{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{softgray}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\formula}[1]{\[\boxed{#1}\]}
+
+\begin{document}
+
+%-------------------- TITLE --------------------
+\thispagestyle{empty}
+\begin{center}
+\vspace*{28mm}
+{\Large\textcolor{accent}{\textbf{Чек-лист}}}\\[8mm]
+{\Huge\textbf{Вклады и сложные проценты}}\\[5mm]
+{\large Таблица по годам, повышающий коэффициент, дополнительные взносы}\\[18mm]
+{\large 06.10.26}\\[28mm]
+{\large Лёвин Артём Александрович}\\[3mm]
+{\large\textcolor{darkaccent}{эксклюзивно для Екатерины Гнедковой}}
+\end{center}
+
+\vfill
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[accent!55,line width=1.2pt]
+    (-7,0) .. controls (-4,1.0) and (-1,-0.8) .. (1.5,0.15)
+           .. controls (3.5,0.9) and (5.0,-0.5) .. (7,0.25);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+%-------------------- CORE --------------------
+\section*{1. Главная идея}
+
+В задачах о вкладе деньги изменяются \key{по периодам}. В конце каждого года банк начисляет процент от суммы, которая находится на счёте в этот момент. Поэтому удобно вести таблицу: \textit{сумма в начале периода $\to$ начисленный процент $\to$ сумма в конце периода}.
+
+Если по условию есть дополнительный взнос, сначала определите \key{момент его внесения}. На занятии рассматривался вариант: взнос $D$ делается \key{в начале каждого года, начиная со второго}, и только после этого начисляются проценты.
+
+\section*{2. Обозначения, которые упрощают расчёты}
+
+Пусть:
+\begin{itemize}
+  \item $S$ --- первоначальная сумма вклада;
+  \item $p\%$ --- годовая процентная ставка;
+  \item $r=\dfrac{p}{100}$ --- та же ставка в виде десятичной дроби;
+  \item $k=1+r$ --- \key{повышающий коэффициент};
+  \item $D$ --- дополнительный взнос;
+  \item $n$ --- число лет.
+\end{itemize}
+
+Начисленный за год процент от суммы $A$:
+\formula{Ar}
+
+Сумма после начисления процентов:
+\formula{A+Ar=A(1+r)=Ak}
+
+Именно множитель $k$ удобно использовать в длинных вычислениях.
+
+\section*{3. Базовая таблица без дополнительных взносов}
+
+Пример: $S=100\,000$ руб., $p=10\%$, срок --- 3 года. Тогда $r=0{,}1$, $k=1{,}1$.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.28}
+\begin{tabularx}{\linewidth}{@{}c >{\raggedleft\arraybackslash}X >{\raggedleft\arraybackslash}X >{\raggedleft\arraybackslash}X@{}}
+\toprule
+Год & Сумма в начале, руб. & Процент за год, руб. & Сумма в конце, руб. \\
+\midrule
+1 & 100\,000 & 10\,000 & 110\,000 \\
+2 & 110\,000 & 11\,000 & 121\,000 \\
+3 & 121\,000 & 12\,100 & 133\,100 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Каждый год сумма умножается на один и тот же коэффициент $k$:
+\[
+S \to Sk \to Sk^2 \to Sk^3 \to \dots
+\]
+
+Отсюда формула сложных процентов:
+\formula{S_n=S\left(1+\frac{p}{100}\right)^n=Sk^n}
+
+\section*{4. Если есть дополнительные взносы}
+
+Пусть $D$ вносится в начале каждого года, начиная со второго. Тогда для четырёх лет:
+\[
+\begin{aligned}
+S_1&=Sk,\\
+S_2&=(Sk+D)k=Sk^2+Dk,\\
+S_3&=(Sk^2+Dk+D)k=Sk^3+Dk^2+Dk,\\
+S_4&=Sk^4+Dk^3+Dk^2+Dk.
+\end{aligned}
+\]
+
+Главный принцип: \key{сначала прибавьте взнос, затем начислите процент}, если именно такой порядок задан условием.
+
+Для $n$ лет:
+\formula{S_n=Sk^n+D\bigl(k+k^2+\dots+k^{n-1}\bigr)}
+
+Сумма в скобках образует геометрическую прогрессию. При $k\ne1$:
+\formula{S_n=Sk^n+Dk\,\frac{k^{n-1}-1}{k-1}}
+
+Эта формула полезна при большом числе лет. Для 3--4 лет часто надёжнее сначала составить таблицу и только затем сокращать запись.
+
+\clearpage
+\section*{5. Как читать условие внимательно}
+
+\begin{itemize}
+  \item \key{«В начале года»} --- взнос попадает под проценты этого года.
+  \item \key{«В конце года»} --- сначала начисляются проценты, затем выполняется взнос или снятие.
+  \item \key{«Начиная со второго года»} --- в первый год дополнительного взноса нет.
+  \item \key{«Ответ в миллионах рублей»} --- итог в рублях нужно разделить на $1\,000\,000$.
+  \item Если получились большие десятичные числа, можно убрать запятые домножением числителя и знаменателя на степень 10, затем сократить дробь или выполнить деление уголком.
+\end{itemize}
+
+\section*{6. Типичные ошибки}
+
+\begin{itemize}
+  \item Считать процент от первоначальной суммы каждый год. Процент берётся от \key{текущей} суммы.
+  \item Писать в колонке процентов только $r$ или $p$. В денежной колонке должно стоять \key{$A r$}.
+  \item Забывать, что $20\%=0{,}2$, а не $20$ и не $2$.
+  \item При дополнительном взносе перепутать порядок: $A\to A+D\to (A+D)k$.
+  \item Потерять единицы измерения: рубли, тысячи рублей, миллионы рублей.
+  \item Слишком рано разворачивать длинные скобки вместо использования $r$ и $k$.
+\end{itemize}
+
+\clearpage
+
+%-------------------- FLOWCHART --------------------
+\thispagestyle{plain}
+\begin{center}
+{\Large\textbf{Алгоритм решения задачи о вкладе}}
+\end{center}
+\vspace{6mm}
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=9mm,
+  startstop/.style={ellipse,draw=accent,line width=1pt,align=center,minimum width=44mm,minimum height=10mm},
+  process/.style={rectangle,rounded corners=2mm,draw=accent,line width=1pt,align=center,text width=108mm,minimum height=12mm,inner sep=3mm},
+  decision/.style={diamond,aspect=2.35,draw=accent,line width=1pt,align=center,text width=36mm,inner sep=1.5mm},
+  arrow/.style={-{Stealth[length=3mm]},line width=1pt,draw=darkaccent}
+]
+\node[startstop] (start) {Начало};
+\node[process,below=of start] (data) {Выпишите $S$, $p$, $n$, момент взносов/снятий и требуемые единицы ответа};
+\node[process,below=of data] (coef) {Введите $r=p/100$ и $k=1+r$};
+\node[decision,below=12mm of coef] (simple) {Есть только проценты, без дополнительных операций?};
+\node[process,below=14mm of simple,xshift=-37mm,text width=48mm] (formula) {Используйте $S_n=Sk^n$};
+\node[process,below=14mm of simple,xshift=37mm,text width=48mm] (table) {Составьте таблицу по годам};
+\node[process,below=of table,text width=48mm] (order) {Соблюдайте порядок операций из условия};
+\node[process,below=60mm of simple,text width=108mm] (equation) {Если неизвестна сумма, ставка или взнос --- составьте уравнение по конечному состоянию};
+\node[process,below=of equation] (units) {Посчитайте и переведите ответ в нужные единицы};
+\node[startstop,below=of units] (finish) {Проверка: порядок операций, проценты, единицы};
+
+\draw[arrow] (start)--(data);
+\draw[arrow] (data)--(coef);
+\draw[arrow] (coef)--(simple);
+\draw[arrow] (simple)--node[above left,font=\small]{да}(formula);
+\draw[arrow] (simple)--node[above right,font=\small]{нет}(table);
+\draw[arrow] (table)--(order);
+\draw[arrow] (formula.south) |- ($(equation.north west)+(28mm,0)$);
+\draw[arrow] (order.south) |- ($(equation.north east)+(-28mm,0)$);
+\draw[arrow] (equation)--(units);
+\draw[arrow] (units)--(finish);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+%-------------------- TRAINING --------------------
+\section*{Тренировочный блок --- Путь А}
+\textit{10 заданий. Решения оформляйте через обозначения и таблицу там, где она помогает контролировать порядок операций.}
+
+\begin{enumerate}
+  \item В банк положили $100\,000$ руб. под $10\%$ годовых на 3 года. Дополнительных взносов нет. Найдите сумму на счёте через 3 года.
+
+  \item В банк положили $200\,000$ руб. под $15\%$ годовых на 3 года. В начале второго и третьего года вносят дополнительно по $10\,000$ руб. Найдите итоговую сумму.
+
+  \item Вклад $500\,000$ руб. открыт на 4 года под $8\%$ годовых без дополнительных операций. Найдите сумму через 4 года.
+
+  \item Через 3 года на счёте оказалось $172\,800$ руб. Ставка всё время была $20\%$ годовых, дополнительных операций не было. Какова первоначальная сумма вклада?
+
+  \item Вклад $100\,000$ руб. за 2 года вырос до $121\,000$ руб. Процентная ставка в оба года была одинаковой, дополнительных операций не было. Найдите годовую ставку.
+
+  \item Вклад $300\,000$ руб. открыт на 4 года под $12\%$ годовых. В начале каждого года, начиная со второго, вносят по $20\,000$ руб. Найдите итоговую сумму.
+
+  \item На вклад положили $1{,}2$ млн руб. под $10\%$ годовых на 3 года без дополнительных операций. Ответ дайте в миллионах рублей.
+
+  \item Запишите итоговую сумму через $S$, $k$ и $D$ для вклада на 5 лет, если $D$ вносится в начале каждого года, начиная со второго. Выражение раскройте как сумму степеней $k$.
+
+  \item Вклад $100\,000$ руб. открыт под $10\%$ годовых на 3 года. В начале второго и третьего года вносили одну и ту же сумму $D$. Через 3 года на счёте оказалось $156\,200$ руб. Найдите $D$.
+
+  \item Сравните два вклада без дополнительных операций. Вклад A: $300\,000$ руб. под $10\%$ на 3 года. Вклад B: $280\,000$ руб. под $12\%$ на 3 года. Какой вклад даст большую итоговую сумму и на сколько рублей?
+\end{enumerate}
+
+\clearpage
+
+%-------------------- ANSWERS --------------------
+\section*{Ответы}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\linewidth}{@{}c X@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $133\,100$ руб. \\
+2 & $328\,900$ руб. \\
+3 & $680\,244{,}48$ руб. \\
+4 & $100\,000$ руб. \\
+5 & $10\%$ \\
+6 & $547\,642{,}368$ руб. \\
+7 & $1{,}5972$ млн руб. \\
+8 & $Sk^5+Dk^4+Dk^3+Dk^2+Dk$ \\
+9 & $10\,000$ руб. \\
+10 & Вклад A; на $5\,920{,}16$ руб. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vfill
+{\small\textcolor{darkaccent}{Лёвин Артём Александрович эксклюзивно для Екатерины Гнедковой}}
+
+\end{document}
