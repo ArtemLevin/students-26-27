@@ -1,0 +1,309 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{2F6F73}
+\definecolor{darkaccent}{HTML}{1F4E52}
+\definecolor{textgray}{HTML}{2F3335}
+\definecolor{softgray}{HTML}{F4F6F6}
+
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\geometry{headheight=15pt}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.6em,itemsep=0.35em,topsep=0.4em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.65em,topsep=0.5em}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{textgray}Неравенства с модулем}
+\fancyhead[R]{\small\color{textgray}06.10.26}
+\fancyfoot[C]{\small\thepage}
+
+\newcommand{\sectionline}{\par\vspace{0.25em}{\color{accent}\hrule height 0.7pt}\vspace{0.7em}}
+\newcommand{\R}{\mathbb{R}}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{26mm}
+{\Large\color{darkaccent}\textbf{Чек-лист}}\\[8mm]
+{\Huge\bfseries Неравенства с модулем}\\[5mm]
+{\large Замена, раскрытие по промежуткам, вложенные модули, сравнение модулей}\\[18mm]
+{\large 06.10.26}\\[24mm]
+\begin{minipage}{0.78\textwidth}
+\centering
+\large
+Главная цель: научиться быстро распознавать структуру неравенства и выбирать метод, который сокращает число вычислений и снижает риск ошибки.
+\end{minipage}
+\vfill
+{\large\textbf{Лёвин Артём Александрович}}\\[2mm]
+{\large эксклюзивно для Анны Трапезниковой}
+\vspace{15mm}
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent!60,line width=1.2pt]
+  ([xshift=24mm,yshift=17mm]current page.south west)
+  .. controls ([xshift=62mm,yshift=29mm]current page.south west)
+  and ([xshift=-72mm,yshift=8mm]current page.south east)
+  .. ([xshift=-24mm,yshift=19mm]current page.south east);
+\end{tikzpicture}
+\end{titlepage}
+
+\section*{1. Сначала распознайте структуру}
+\sectionline
+Перед вычислениями задайте себе четыре вопроса:
+\begin{enumerate}
+  \item Можно ли свести выражение к квадратному неравенству относительно $|x|$?
+  \item Есть ли несколько модулей с разными точками смены знака?
+  \item Есть ли модуль внутри модуля?
+  \item Стоят ли модули по обе стороны знака неравенства?
+\end{enumerate}
+
+Выбор метода обычно определяется именно ответом на эти вопросы.
+
+\section*{2. Замена $t=|x|$}
+\sectionline
+Если в неравенстве встречаются $x^2$ и $|x|$, полезно помнить:
+\[
+ x^2=|x|^2.
+\]
+Поэтому выражение часто становится квадратным относительно новой переменной
+\[
+ t=|x|,\qquad t\ge 0.
+\]
+Ограничение $t\ge0$ обязательно: оно позволяет сразу отбросить лишнюю часть решения квадратного неравенства.
+
+\textbf{Пример.}
+\[
+ x^2-|x|-6\ge0.
+\]
+Переходим к $t=|x|$:
+\[
+ t^2-t-6\ge0,\qquad t\ge0.
+\]
+Корни квадратного трёхчлена: $-2$ и $3$, поэтому
+\[
+ t\le-2\quad\text{или}\quad t\ge3.
+\]
+С учётом $t\ge0$ остаётся только $t\ge3$. Возвращаемся к $x$:
+\[
+ |x|\ge3\quad\Longrightarrow\quad x\le-3\;\text{или}\;x\ge3.
+\]
+
+\textbf{Полезная проверка.} Если после замены появляется граничное значение $t=0$, его можно проверить простой подстановкой в неравенство по $t$.
+
+\section*{3. Несколько модулей: разбиваем ось}
+\sectionline
+Для выражения с несколькими модулями найдите нули всех подмодульных выражений. Эти точки разбивают числовую ось на промежутки, внутри каждого из которых знаки выражений постоянны.
+
+\textbf{Пример.}
+\[
+ |x-3|+|x+1|\le10.
+\]
+Критические точки: $x=-1$ и $x=3$.
+
+\begin{center}
+\begin{tikzpicture}[x=1.25cm,y=1cm]
+  \draw[-{Stealth[length=3mm]},line width=0.9pt] (-4,0)--(4,0) node[right] {$x$};
+  \foreach \x/\lab in {-1.5/$-1$,1.5/$3$}{
+    \draw[line width=0.8pt] (\x,-0.11)--(\x,0.11);
+    \node[below=3pt] at (\x,0) {\lab};
+  }
+  \node[above] at (-2.75,0) {$x\le-1$};
+  \node[above] at (0,0) {$-1\le x\le3$};
+  \node[above] at (2.75,0) {$x\ge3$};
+\end{tikzpicture}
+\end{center}
+
+На каждом промежутке получаем \textbf{систему}: условие принадлежности промежутку и раскрытое неравенство должны выполняться одновременно.
+
+\begin{align*}
+ x\le-1:&\quad -x+3-x-1\le10 \Longrightarrow x\ge-4,\\
+ -1\le x\le3:&\quad -x+3+x+1\le10 \Longrightarrow 4\le10,\\
+ x\ge3:&\quad x-3+x+1\le10 \Longrightarrow x\le6.
+\end{align*}
+
+После пересечения внутри каждого случая и объединения всех подходящих случаев:
+\[
+ x\in[-4;6].
+\]
+
+\textbf{Запомните:} система означает пересечение условий; итог нескольких разобранных случаев собирается объединением.
+
+\section*{4. Вложенные модули: идём снаружи внутрь}
+\sectionline
+Если модуль вложен в другой модуль, последовательно избавляйтесь от внешних модулей.
+
+\textbf{Пример.}
+\[
+ \bigl||x|-3\bigr|\ge5.
+\]
+Сначала раскрываем внешний модуль:
+\[
+ |x|-3\ge5\quad\text{или}\quad |x|-3\le-5.
+\]
+То есть
+\[
+ |x|\ge8\quad\text{или}\quad |x|\le-2.
+\]
+Второе неравенство невозможно, поскольку $|x|\ge0$. Поэтому
+\[
+ x\le-8\quad\text{или}\quad x\ge8.
+\]
+
+\section*{5. Модуль против модуля: можно сравнить квадраты}
+\sectionline
+Если сравниваются два модуля,
+\[
+ |f(x)|\ \square\ |g(x)|,
+\]
+обе части неотрицательны. Поэтому знак сравнения сохраняется при возведении обеих частей в квадрат:
+\[
+ |f(x)|\ \square\ |g(x)|
+ \quad\Longleftrightarrow\quad
+ f^2(x)\ \square\ g^2(x),
+\]
+где $\square$ --- один и тот же знак $<,\le,>,\ge$.
+
+\textbf{Важно.} Возводить обе части произвольного неравенства в квадрат без проверки знаков нельзя. Здесь переход корректен именно благодаря неотрицательности модулей.
+
+\textbf{Пример.}
+\[
+ |x|\ge|2x-1|.
+\]
+Тогда
+\[
+ x^2\ge(2x-1)^2
+ \Longleftrightarrow
+ 3x^2-4x+1\le0.
+\]
+Корни: $\frac13$ и $1$, следовательно
+\[
+ x\in\left[\frac13;1\right].
+\]
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: как выбрать метод}
+\end{center}
+\vspace{5mm}
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\small,align=center},
+  startstop/.style={ellipse,draw=accent,line width=0.9pt,minimum width=39mm,minimum height=10mm},
+  action/.style={rectangle,rounded corners=2mm,draw=accent,line width=0.9pt,text width=47mm,minimum height=11mm,inner sep=3mm},
+  decision/.style={diamond,aspect=2.5,draw=accent,line width=0.9pt,text width=34mm,inner sep=1mm},
+  arrow/.style={-{Stealth[length=3mm]},line width=0.9pt,draw=darkaccent}
+]
+\node[startstop] (start) at (0,0) {Дано неравенство с модулем};
+\node[decision] (quad) at (0,-2.2) {Можно получить квадратное неравенство относительно $|x|$?};
+\node[action] (subst) at (-5.0,-4.7) {Замена $t=|x|$.\\Сразу добавить условие $t\ge0$};
+\node[decision] (multi) at (3.7,-4.7) {Несколько модулей с разными нулями?};
+\node[action] (split) at (3.7,-7.2) {Отметить нули, разбить ось, на каждом промежутке решить систему};
+\node[decision] (nested) at (0,-9.6) {Есть вложенный модуль?};
+\node[action] (outside) at (-4.6,-12.1) {Раскрывать последовательно:\\от внешнего модуля к внутреннему};
+\node[action] (square) at (4.6,-12.1) {Если модули по обе стороны, сравнить квадраты после фиксации неотрицательности};
+\node[startstop] (finish) at (0,-15.0) {Собрать ответ: пересечение внутри системы,\\объединение между случаями};
+
+\draw[arrow] (start)--(quad);
+\draw[arrow] (quad.west) -| node[pos=0.25,above]{да} (subst.north);
+\draw[arrow] (quad.east) -| node[pos=0.25,above]{нет} (multi.north);
+\draw[arrow] (multi)-- node[right]{да} (split);
+\draw[arrow] (multi.east) -- ++(13mm,0) |- node[pos=0.22,right]{нет} (nested.east);
+\draw[arrow] (split.south) |- (nested.east);
+\draw[arrow] (nested.west) -| node[pos=0.25,above]{да} (outside.north);
+\draw[arrow] (nested.east) -| node[pos=0.25,above]{нет} (square.north);
+\draw[arrow] (subst.south) |- (finish.west);
+\draw[arrow] (outside.south) |- (finish.west);
+\draw[arrow] (square.south) |- (finish.east);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{6. Типичные ошибки}
+\sectionline
+\begin{itemize}
+  \item После замены $t=|x|$ забывают условие $t\ge0$.
+  \item При разбиении оси решают раскрытое неравенство, но забывают пересечь его решение с промежутком текущего случая.
+  \item Путают систему и совокупность: система --- пересечение, совокупность --- объединение.
+  \item Неверно выбирают знак при раскрытии модуля на промежутке.
+  \item При объединении теряют граничную точку: если точка входит хотя бы в один из объединяемых промежутков, она входит в итоговое объединение.
+  \item Возводят обе части неравенства в квадрат, не проверив, что обе части неотрицательны.
+\end{itemize}
+
+\section*{7. Быстрая самопроверка}
+\sectionline
+Перед записью ответа проверьте:
+\begin{enumerate}
+  \item Все ли критические точки отмечены?
+  \item Все ли случаи разобраны?
+  \item В каждом ли случае выполнено пересечение с его промежутком?
+  \item Учтено ли $t\ge0$, если использовалась замена $t=|x|$?
+  \item Корректно ли объединены полученные множества?
+  \item Не потеряна ли граница из-за строгого/нестрогого знака?
+\end{enumerate}
+
+\clearpage
+\section*{Тренировочный блок — Путь А}
+\sectionline
+Решите неравенства. В заданиях 1--3 ищите возможность замены $t=|x|$; в 4--6 работайте по промежуткам; в 7--8 раскрывайте вложенные модули снаружи внутрь; в 9--10 используйте сравнение квадратов модулей.
+
+\begin{enumerate}
+  \item $x^2-5|x|+4\le0$.
+  \item $x^2-2|x|-3>0$.
+  \item $x^2-6|x|+5<0$.
+  \item $|x-2|+|x+2|\le8$.
+  \item $|x-1|-|x+3|<2$.
+  \item $|2x+1|+|x-4|\ge7$.
+  \item $\bigl||x|-4\bigr|<2$.
+  \item $\bigl|3-|x|\bigr|\ge1$.
+  \item $|x-2|\le|2x+1|$.
+  \item $|2x-3|>|x+4|$.
+\end{enumerate}
+
+\vfill
+{\small\color{textgray}Рекомендация: в заданиях с несколькими модулями сначала отдельно выпишите критические точки и интервалы. Это уменьшает количество знаковых ошибок.}
+
+\clearpage
+\section*{Ответы}
+\sectionline
+\renewcommand{\arraystretch}{1.45}
+\begin{longtable}{@{}>{\bfseries}p{13mm}p{0.78\linewidth}@{}}
+\toprule
+№ & Ответ \\
+\midrule
+\endhead
+1 & $[-4;-1]\cup[1;4]$ \\
+2 & $(-\infty;-3)\cup(3;+\infty)$ \\
+3 & $(-5;-1)\cup(1;5)$ \\
+4 & $[-4;4]$ \\
+5 & $(-2;+\infty)$ \\
+6 & $(-\infty;-\frac43]\cup[2;+\infty)$ \\
+7 & $(-6;-2)\cup(2;6)$ \\
+8 & $(-\infty;-4]\cup[-2;2]\cup[4;+\infty)$ \\
+9 & $(-\infty;-3]\cup[\frac13;+\infty)$ \\
+10 & $(-\infty;-\frac13)\cup(7;+\infty)$ \\
+\bottomrule
+\end{longtable}
+
+\end{document}
