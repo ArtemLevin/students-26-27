@@ -1,0 +1,467 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=18mm,headheight=25pt,headsep=5mm,includeheadfoot]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,longtable,array}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{2F6F73}
+\definecolor{darkaccent}{HTML}{1F4F52}
+\definecolor{textgray}{HTML}{2F3335}
+\definecolor{softgray}{HTML}{6E7477}
+\definecolor{linegray}{HTML}{D8DEDF}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.5em,itemsep=0.35em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.55em,topsep=0.45em}
+\renewcommand{\arraystretch}{1.28}
+\raggedbottom
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\setstretch{1}\small\textcolor{softgray}{Чек-лист: вклады и кредиты}}
+\fancyhead[R]{\setstretch{1}\small\textcolor{softgray}{06.10.26}}
+\fancyfoot[C]{\small\textcolor{softgray}{\thepage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{linegray}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\sectionline}{\vspace{-0.4em}\textcolor{linegray}{\rule{\linewidth}{0.5pt}}\vspace{0.35em}}
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\money}[1]{\text{#1}}
+
+\begin{document}
+
+% ---------- Title page ----------
+\thispagestyle{empty}
+\begin{center}
+\vspace*{2.8cm}
+{\Large\textcolor{softgray}{\textbf{ЧЕК-ЛИСТ}}}\par
+\vspace{0.7cm}
+{\Huge\bfseries\textcolor{darkaccent}{Вклады и кредиты}}\par
+\vspace{0.45cm}
+{\Large Таблицы, сложные проценты, коэффициент роста, платежи}\par
+\vspace{1.4cm}
+{\large 06.10.26}\par
+\vfill
+{\large\textbf{Лёвин Артём Александрович}}\par
+\vspace{0.2cm}
+{\large эксклюзивно для Тимофея Васильченко}\par
+\vspace{1.2cm}
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent!55,line width=1.4pt]
+  ($(current page.south west)+(18mm,22mm)$)
+  .. controls ($(current page.south west)+(62mm,35mm)$)
+  and ($(current page.south east)+(-72mm,10mm)$)
+  .. ($(current page.south east)+(-18mm,24mm)$);
+\end{tikzpicture}
+\clearpage
+
+% ---------- Core ideas ----------
+\section*{1. Базовая модель: проценты как коэффициент роста}
+\sectionline
+
+Пусть ставка за период равна $r\%$. Удобно сразу перейти к десятичной форме
+\[
+p=\frac{r}{100},
+\]
+а затем ввести \key{коэффициент роста}
+\[
+k=1+p=1+\frac{r}{100}.
+\]
+
+Если на начало периода на счёте находится сумма $S$, то:
+\[
+\text{проценты}=pS,\qquad
+\text{сумма после начисления}=S+pS=kS.
+\]
+
+\key{Важно.} В столбце «начисленный процент» записывается сумма денег, например $24$ тыс. руб., а не сама ставка $15\%$.
+
+\subsection*{Если ставка постоянна и пополнений нет}
+После $n$ периодов:
+\[
+\boxed{S_n=S_0\left(1+\frac{r}{100}\right)^n=S_0k^n.}
+\]
+
+Это формула сложных процентов. Она особенно полезна, когда условия из года в год не меняются.
+
+\subsection*{Если ставка меняется}
+При ставках $r_1,r_2,\ldots,r_n$:
+\[
+\boxed{S_n=S_0\prod_{i=1}^{n}\left(1+\frac{r_i}{100}\right).}
+\]
+
+\subsection*{Если есть пополнения}
+Если перед начислением процентов в начале очередного года вносится сумма $d_i$, то сначала учитывается пополнение, затем проценты:
+\[
+\boxed{S_i=(S_{i-1}+d_i)k_i.}
+\]
+
+Именно порядок событий определяет расчёт.
+
+\section*{2. Таблица для задач на вклады}
+\sectionline
+
+Универсальная структура:
+
+\begin{center}
+\begin{tabularx}{\linewidth}{>{\centering\arraybackslash}p{1.4cm} >{\centering\arraybackslash}p{2.3cm} >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X}
+\toprule
+Год & Пополнение & На начало года & Начисленные проценты & На конец года \\
+\midrule
+1 & $d_1$ & $S_0+d_1$ & $p_1(S_0+d_1)$ & $(S_0+d_1)k_1$ \\
+2 & $d_2$ & $S_1+d_2$ & $p_2(S_1+d_2)$ & $(S_1+d_2)k_2$ \\
+$\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\key{Контрольная мысль:} сумма на конец текущего года становится базой для следующего года; если в начале следующего года есть дополнительный взнос, его прибавляют \textbf{до} начисления процентов.
+
+\subsection*{Пример 1. Вклад с пополнениями}
+Открыт вклад $120$ млн руб. на $3$ года под $15\%$ годовых. В начале второго и третьего года вносится ещё по $10$ млн руб.
+
+\begin{center}
+\begin{tabular}{ccccc}
+\toprule
+Год & Пополнение & Начало & Проценты & Конец \\
+\midrule
+1 & $0$ & $120$ & $18$ & $138$ \\
+2 & $10$ & $148$ & $22{,}2$ & $170{,}2$ \\
+3 & $10$ & $180{,}2$ & $27{,}03$ & $207{,}23$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\[
+\boxed{207{,}23\ \text{млн руб.}}
+\]
+
+\key{Проверка здравого смысла:} при положительной ставке и дополнительных взносах сумма должна возрастать каждый год.
+
+\clearpage
+
+\section*{3. Как найти неизвестную процентную ставку}
+\sectionline
+
+Если вклад не пополняется и ставка постоянна, удобно работать через коэффициент $k$:
+\[
+S_n=S_0k^n.
+\]
+Отсюда
+\[
+k^n=\frac{S_n}{S_0},\qquad
+k=\sqrt[n]{\frac{S_n}{S_0}},\qquad
+r=100(k-1)\%.
+\]
+
+\subsection*{Пример 2. Восстановление ставки}
+Вклад $500$ тыс. руб. за $3$ года вырос до $665{,}5$ тыс. руб. Ставка постоянна.
+
+\[
+500k^3=665{,}5,
+\qquad
+k^3=\frac{665{,}5}{500}=1{,}331=\frac{1331}{1000}.
+\]
+
+Замечаем:
+\[
+1331=11^3,\qquad 1000=10^3.
+\]
+Поэтому
+\[
+k=\frac{11}{10}=1{,}1,
+\qquad
+r=100(1{,}1-1)=10\%.
+\]
+
+\key{Полезный приём.} Если дробь выглядит неудобно, попробуйте преобразовать её так, чтобы числитель и знаменатель стали точными степенями. Иногда помогает домножение числителя и знаменателя на одно и то же число.
+
+\section*{4. Сравнение двух вариантов вклада}
+\sectionline
+
+Для каждого варианта считайте итоговую сумму отдельно, затем сравнивайте в тех единицах, которые просит условие.
+
+\subsection*{Пример 3. Постоянная ставка против меняющейся}
+Начальная сумма --- $1\,000$ тыс. руб.
+
+\textbf{Вариант A:} по $10\%$ ежегодно:
+\[
+S_A=1000\cdot1{,}1^3=1331\ \text{тыс. руб.}
+\]
+
+\textbf{Вариант B:} $8\%$, затем $10\%$, затем $12\%$:
+\[
+S_B=1000\cdot1{,}08\cdot1{,}10\cdot1{,}12=1330{,}56\ \text{тыс. руб.}
+\]
+
+Разница:
+\[
+1331-1330{,}56=0{,}44\ \text{тыс. руб.}=440\ \text{руб.}
+\]
+
+\boxed{\text{Вариант A выгоднее на }440\ \text{руб.}}
+
+\key{Единицы.} Если вычисления велись в тысячах рублей, а ответ нужен в рублях, итоговую разницу надо умножить на $1000$.
+
+\clearpage
+
+% ---------- Deposit flowchart ----------
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries\textcolor{darkaccent}{Алгоритм: задача на вклад}}\par
+\vspace{1.0cm}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=9mm and 11mm,
+  every node/.style={font=\small,align=center},
+  start/.style={ellipse,draw=accent,thick,minimum width=38mm,minimum height=10mm},
+  action/.style={rectangle,rounded corners=2mm,draw=accent,thick,text width=112mm,minimum height=11mm,inner sep=3mm},
+  decision/.style={diamond,aspect=2.5,draw=accent,thick,text width=35mm,inner sep=1.5mm},
+  arr/.style={-{Stealth[length=2.2mm]},thick,draw=darkaccent}
+]
+\node[start] (a) {Прочитать условие и отметить единицы};
+\node[action,below=of a] (b) {Определить порядок событий: пополнение / начисление процентов / снятие};
+\node[decision,below=of b] (c) {Условия одинаковы\\каждый период?};
+\node[action,below left=12mm and 2mm of c,text width=48mm] (d) {Использовать $S_n=S_0k^n$};
+\node[action,below right=12mm and 2mm of c,text width=48mm] (e) {Составить таблицу по периодам};
+\node[action,below=22mm of c] (f) {Считать проценты от фактической суммы на начало периода};
+\node[action,below=of f] (g) {Проверить единицы и только затем записать ответ};
+\node[start,below=of g] (h) {Готово};
+
+\draw[arr] (a)--(b);
+\draw[arr] (b)--(c);
+\draw[arr] (c) -- node[above left]{да} (d);
+\draw[arr] (c) -- node[above right]{нет} (e);
+\coordinate (merge) at ($(f.north)+(0,7mm)$);
+\draw[thick,draw=darkaccent] (d.south) |- (merge);
+\draw[thick,draw=darkaccent] (e.south) |- (merge);
+\draw[arr] (merge) -- (f.north);
+\draw[arr] (f)--(g);
+\draw[arr] (g)--(h);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------- Credit ----------
+\section*{5. Кредиты: пять величин в одной строке}
+\sectionline
+
+Для каждого периода удобно держать в таблице пять величин:
+
+\begin{center}
+\begin{tabularx}{\linewidth}{>{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X}
+\toprule
+Долг на начало & Проценты & Общая задолженность & Платёж & Остаток \\
+\midrule
+$B_{i-1}$ & $pB_{i-1}$ & $(1+p)B_{i-1}$ & $A_i$ & $B_i$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+Связи между столбцами:
+\[
+\boxed{\text{общая задолженность}=\text{долг на начало}+\text{проценты}}
+\]
+\[
+\boxed{A_i=(1+p)B_{i-1}-B_i}
+\]
+
+То есть платёж --- это сумма, которую нужно убрать из общей задолженности, чтобы получить заданный остаток.
+
+\subsection*{Пример 4. Первый шаг кредитной таблицы}
+Пусть кредит равен $S$, ставка за месяц --- $5\%$, а после первого платежа должно остаться $0{,}9S$.
+
+\[
+\text{проценты}=0{,}05S,
+\qquad
+\text{общая задолженность}=1{,}05S.
+\]
+
+Тогда
+\[
+A_1=1{,}05S-0{,}9S=0{,}15S.
+\]
+
+На следующий месяц базой для начисления процентов становится уже остаток $0{,}9S$:
+\[
+0{,}9S\cdot0{,}05=0{,}045S,
+\qquad
+\text{общая задолженность}=0{,}945S.
+\]
+
+Если после второго платежа должно остаться $0{,}8S$, то
+\[
+A_2=0{,}945S-0{,}8S=0{,}145S.
+\]
+
+\subsection*{Полная схема для полугодового кредита из занятия}
+Ставка --- $5\%$ в месяц. Остатки после платежей: $0{,}9S$, $0{,}8S$, $0{,}7S$, $0{,}6S$, $0{,}5S$, $0$.
+
+\begin{center}
+\begin{tabular}{ccccc}
+\toprule
+Месяц & Начало & Общая задолженность & Остаток & Платёж \\
+\midrule
+1 & $1{,}0S$ & $1{,}05S$ & $0{,}9S$ & $0{,}15S$ \\
+2 & $0{,}9S$ & $0{,}945S$ & $0{,}8S$ & $0{,}145S$ \\
+3 & $0{,}8S$ & $0{,}84S$ & $0{,}7S$ & $0{,}14S$ \\
+4 & $0{,}7S$ & $0{,}735S$ & $0{,}6S$ & $0{,}135S$ \\
+5 & $0{,}6S$ & $0{,}63S$ & $0{,}5S$ & $0{,}13S$ \\
+6 & $0{,}5S$ & $0{,}525S$ & $0$ & $0{,}525S$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Сумма выплат:
+\[
+0{,}15S+0{,}145S+0{,}14S+0{,}135S+0{,}13S+0{,}525S=1{,}225S.
+\]
+
+Переплата:
+\[
+1{,}225S-S=0{,}225S,
+\]
+то есть
+\[
+\boxed{22{,}5\%\ \text{от суммы кредита}.}
+\]
+
+\clearpage
+
+% ---------- Credit flowchart ----------
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries\textcolor{darkaccent}{Алгоритм: кредитная таблица}}\par
+\vspace{1.0cm}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=8.5mm,
+  every node/.style={font=\small,align=center},
+  start/.style={ellipse,draw=accent,thick,minimum width=42mm,minimum height=10mm},
+  action/.style={rectangle,rounded corners=2mm,draw=accent,thick,text width=118mm,minimum height=11mm,inner sep=3mm},
+  arr/.style={-{Stealth[length=2.2mm]},thick,draw=darkaccent}
+]
+\node[start] (a) {Взять долг на начало периода $B_{i-1}$};
+\node[action,below=of a] (b) {Начислить проценты: $I_i=pB_{i-1}$};
+\node[action,below=of b] (c) {Найти общую задолженность: $T_i=B_{i-1}+I_i=(1+p)B_{i-1}$};
+\node[action,below=of c] (d) {По условию определить остаток после платежа $B_i$};
+\node[action,below=of d] (e) {Найти платёж: $A_i=T_i-B_i$};
+\node[action,below=of e] (f) {Перенести остаток $B_i$ в начало следующего периода};
+\node[action,below=of f] (g) {После последнего периода сложить платежи и сравнить с исходным кредитом};
+\node[start,below=of g] (h) {Готово};
+\draw[arr] (a)--(b);
+\draw[arr] (b)--(c);
+\draw[arr] (c)--(d);
+\draw[arr] (d)--(e);
+\draw[arr] (e)--(f);
+\draw[arr] (f)--(g);
+\draw[arr] (g)--(h);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{6. Частые ошибки и самопроверка}
+\sectionline
+
+\begin{itemize}
+\item \key{Ставка и деньги --- разные величины.} $15\%$ --- ставка; $24$ тыс. руб. --- начисленные проценты.
+\item \key{Проценты считаются от правильной базы.} После платежа или пополнения база меняется.
+\item \key{Коэффициент роста не равен ставке.} При $20\%$ коэффициент равен $1{,}2$, а не $0{,}2$.
+\item \key{Не округляйте рано.} Промежуточные значения лучше сохранять точно до финального ответа.
+\item \key{Следите за единицами.} «Млн руб.» или «тыс. руб.» в условии означает, что вычисления можно вести именно в этих единицах.
+\item \key{Формула сложных процентов применима только при одинаковой логике периодов.} Пополнения, снятия и меняющаяся ставка требуют отдельного учёта.
+\item \key{В кредите платёж считается как общая задолженность минус остаток.}
+\item \key{Проверка кредита:} после последнего платежа остаток должен стать равен нулю.
+\end{itemize}
+
+\subsection*{Мини-чек перед записью ответа}
+\begin{enumerate}
+\item Я правильно понял порядок событий в каждом периоде?
+\item Все проценты начислены от фактической суммы на начало периода?
+\item В таблице денежные величины отделены от процентной ставки?
+\item Я не потерял множитель $1+p$ при переходе к конечной сумме?
+\item Ответ записан в тех единицах, которые требует условие?
+\end{enumerate}
+
+\clearpage
+
+% ---------- Training ----------
+\section*{7. Тренировочный блок --- Путь А}
+\sectionline
+
+Решите 10 задач. В задачах на несколько периодов рекомендуется сначала определить, достаточно ли формулы сложных процентов или нужна таблица.
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+\item Вклад $200$ тыс. руб. открыт на один год под $12\%$ годовых. Найдите сумму на счёте в конце года.
+
+\item Вклад $150$ тыс. руб. открыт на три года под постоянные $10\%$ годовых. Пополнений и снятий нет. Найдите сумму к концу третьего года.
+
+\item Вклад $120$ млн руб. открыт на три года под $15\%$ годовых. В начале второго и третьего года вклад пополняют на $10$ млн руб. Найдите сумму к концу третьего года.
+
+\item На вклад внесли $400$ тыс. руб. под $5\%$ годовых на два года. В начале второго года дополнительно внесли $20$ тыс. руб. Найдите сумму к концу второго года.
+
+\item Вклад $500$ тыс. руб. за три года вырос до $665{,}5$ тыс. руб. Ставка каждый год была одинаковой. Найдите годовую процентную ставку.
+
+\item На три года размещают $1\,000\,000$ руб. Банк предлагает два варианта: A --- по $10\%$ ежегодно; B --- $8\%$ в первый год, $10\%$ во второй и $12\%$ в третий. Какой вариант выгоднее и на сколько рублей?
+
+\item Вклад под $20\%$ годовых за два года вырос до $172{,}8$ тыс. руб. Пополнений и снятий не было. Найдите первоначальную сумму вклада.
+
+\item Кредит равен $S$. За месяц банк начисляет $4\%$ на текущий долг. После первого платежа должно остаться $0{,}85S$. Какую долю от исходной суммы кредита составляет первый платёж?
+
+\item Кредит равен $S$, ставка --- $5\%$ в месяц. После трёх последовательных платежей остаток должен составлять соответственно $0{,}7S$, $0{,}4S$, $0$. Найдите сумму всех платежей в долях от $S$ и процент переплаты относительно исходной суммы кредита.
+
+\item Полугодовой кредит равен $S$, ставка --- $5\%$ в месяц. После платежей остаток долга последовательно равен $0{,}9S$, $0{,}8S$, $0{,}7S$, $0{,}6S$, $0{,}5S$, $0$. На сколько процентов сумма всех платежей больше исходной суммы кредита?
+\end{enumerate}
+
+\clearpage
+
+% ---------- Answers ----------
+\section*{8. Ответы}
+\sectionline
+
+\begin{center}
+\begin{tabularx}{\linewidth}{>{\centering\arraybackslash}p{1.4cm} X}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $224$ тыс. руб. \\
+2 & $199{,}65$ тыс. руб. \\
+3 & $207{,}23$ млн руб. \\
+4 & $462$ тыс. руб. \\
+5 & $10\%$ \\
+6 & Вариант A; на $440$ руб. \\
+7 & $120$ тыс. руб. \\
+8 & $0{,}19S$, то есть $19\%$ от исходной суммы кредита \\
+9 & $1{,}105S$; переплата $10{,}5\%$ \\
+10 & $22{,}5\%$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vfill
+\begin{center}
+\textcolor{softgray}{\small Лёвин Артём Александрович эксклюзивно для Тимофея Васильченко}
+\end{center}
+
+\end{document}
