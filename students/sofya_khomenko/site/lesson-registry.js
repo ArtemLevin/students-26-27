@@ -5,6 +5,75 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-06",
+    "ktpRefs": [],
+    "href": "06.10.26.html",
+    "title": "Задачи про террасы",
+    "navTitle": "Задачи про террасы",
+    "navSubtitle": "София Хоменко: задачи ОГЭ про террасы — теорема Пифагора, уклон в процентах, площади до и после террасирования, процентное уменьшение и расчёт массы урожая.",
+    "summary": "София Хоменко: задачи ОГЭ про террасы — теорема Пифагора, уклон в процентах, площади до и после террасирования, процентное уменьшение и расчёт массы урожая.",
+    "topics": [
+      "теорема Пифагора",
+      "извлечение квадратного корня",
+      "уклон в процентах",
+      "площади террас",
+      "процентное уменьшение",
+      "проценты и масса"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "oge_03_08",
+        "evidenceAnchor": "geometry",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_07_05",
+        "evidenceAnchor": "square-root",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_15_07",
+        "evidenceAnchor": "slope",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_17_11",
+        "evidenceAnchor": "areas",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_04_03",
+        "evidenceAnchor": "percent-change",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_12_05",
+        "evidenceAnchor": "percent-change",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_04_12",
+        "evidenceAnchor": "harvest",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_12_11",
+        "evidenceAnchor": "harvest",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_12_13",
+        "evidenceAnchor": "slope",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "06.10.26.html",
+      "pdf": "../pdf_docs/06.10.26.pdf",
+      "tex": "../tex_docs/06.10.26.tex"
+    }
+  },
+  {
     "date": "2026-09-29",
     "ktpRefs": [],
     "href": "29.09.26.html",
