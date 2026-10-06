@@ -5,6 +5,170 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-06",
+    "ktpRefs": [],
+    "href": "06.10.26.html",
+    "title": "Обыкновенные дроби: общий знаменатель, уравнения и задачи",
+    "navTitle": "Обыкновенные дроби",
+    "summary": "Практика общего знаменателя и рациональных вычислений с дробями, перевод десятичных дробей, дробные уравнения и текстовые модели на периметр, совместную работу и догонку.",
+    "topics": [
+      "обыкновенные дроби",
+      "общий знаменатель",
+      "сравнение дробей",
+      "десятичные дроби",
+      "уравнения",
+      "текстовые задачи"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "frac_08",
+        "evidenceAnchor": "simplify",
+        "relation": "assessed",
+        "masteryClaim": {
+          "level": 4,
+          "confidence": "exact",
+          "basis": "На занятии 06.10.26 Надя уверенно сокращала дроби и использовала сокращение как первый шаг перед дальнейшими вычислениями."
+        }
+      },
+      {
+        "competencyId": "frac_09",
+        "evidenceAnchor": "denominator",
+        "relation": "assessed",
+        "masteryClaim": {
+          "level": 4,
+          "confidence": "exact",
+          "basis": "На занятии 06.10.26 Надя уверенно приводила дроби к общему знаменателю и находила дополнительные множители через НОК знаменателей."
+        }
+      },
+      {
+        "competencyId": "frac_10",
+        "evidenceAnchor": "compare",
+        "relation": "assessed",
+        "masteryClaim": {
+          "level": 3,
+          "confidence": "exact",
+          "basis": "На занятии 06.10.26 Надя корректно сравнивала дроби через общий знаменатель; экспресс-сравнение через опорные дроби разбиралось с направляющими вопросами преподавателя."
+        }
+      },
+      {
+        "competencyId": "frac_11",
+        "evidenceAnchor": "simplify",
+        "relation": "assessed",
+        "masteryClaim": {
+          "level": 4,
+          "confidence": "exact",
+          "basis": "На занятии 06.10.26 сложение дробей с разными знаменателями выполнялось уверенно после приведения к общему знаменателю."
+        }
+      },
+      {
+        "competencyId": "frac_12",
+        "evidenceAnchor": "simplify",
+        "relation": "assessed",
+        "masteryClaim": {
+          "level": 3,
+          "confidence": "exact",
+          "basis": "На занятии 06.10.26 вычитание дробей с разными знаменателями выполнялось корректно, при составных выражениях преподаватель направлял выбор рационального порядка действий."
+        }
+      },
+      {
+        "competencyId": "dec_07",
+        "evidenceAnchor": "decimals",
+        "relation": "assessed",
+        "masteryClaim": {
+          "level": 4,
+          "confidence": "exact",
+          "basis": "На занятии 06.10.26 Надя уверенно переводила десятичные дроби 0,2; 0,25; 0,4; 0,75 в обыкновенные и сокращала результат."
+        }
+      },
+      {
+        "competencyId": "alg_11",
+        "evidenceAnchor": "equations",
+        "relation": "assessed",
+        "masteryClaim": {
+          "level": 4,
+          "confidence": "exact",
+          "basis": "На занятии 06.10.26 Надя уверенно восстанавливала неизвестный компонент действия и применяла правило к целой скобке в дробном уравнении."
+        }
+      },
+      {
+        "competencyId": "alg_13",
+        "evidenceAnchor": "equations",
+        "relation": "assessed",
+        "masteryClaim": {
+          "level": 4,
+          "confidence": "exact",
+          "basis": "На занятии 06.10.26 Надя самостоятельно доводила дробные линейные уравнения до этапа вычисления и получила положительную оценку решения без замечаний."
+        }
+      },
+      {
+        "competencyId": "nat_12",
+        "evidenceAnchor": "simplify",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "geo2_07",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_01",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_02",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_06",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_08",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_10",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_11",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "strategy_02",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "strategy_10",
+        "evidenceAnchor": "check",
+        "relation": "practiced",
+        "masteryClaim": null
+      }
+    ],
+    "materials": {
+      "html": "06.10.26.html",
+      "pdf": "../pdf_docs/06.10.26.pdf",
+      "tex": "../tex_docs/06.10.26.tex",
+      "image": "../images/06.10.26.png"
+    }
+  },
+  {
     "date": "2026-10-03",
     "ktpRefs": [],
     "href": "03.10.26.html",
