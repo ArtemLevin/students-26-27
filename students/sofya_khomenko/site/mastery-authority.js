@@ -28,6 +28,21 @@
       const history=Array.isArray(item.evidence)?item.evidence:[];if(!history.includes(batch.evidence))history.push(batch.evidence);item.evidence=history;
       if(batch.date==="29.09.26")currentMatched+=1;
     })));
+    currentMatched=0;
+    const evidenceOnly={
+      date:"06.10.26",
+      href:"06.10.26.html",
+      evidence:"Тема отрабатывалась на занятии 06.10.26: теорема Пифагора в прикладной схеме, оценка квадратного корня, уклон в процентах, площади террас, процентное изменение, округление, перевод единиц и многошаговый расчёт.",
+      ids:new Set(["oge_03_08","oge_07_05","oge_15_07","oge_17_11","oge_04_03","oge_12_05","oge_04_12","oge_12_11","oge_12_13"])
+    };
+    data.groups.forEach(group=>group.items.forEach(item=>{
+      if(!evidenceOnly.ids.has(item.id))return;
+      item.href=evidenceOnly.href;
+      const history=Array.isArray(item.evidence)?item.evidence:[];
+      if(!history.includes(evidenceOnly.evidence))history.push(evidenceOnly.evidence);
+      item.evidence=history;
+      currentMatched+=1;
+    }));
     const counter=document.getElementById("confirmedThisLesson");if(counter)counter.textContent=currentMatched;
   })();
 
