@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория к занятию Екатерины Гнедковой 06.10.26: сложные проценты и вклады с пополнением.">
+<title>Лаборатория сложных процентов · Екатерина Гнедкова</title>
+<style>
+:root{color-scheme:light;--page:#edf0eb;--paper:#fffef9;--ink:#1e2928;--muted:#66716e;--line:#d1d7d1;--line2:#92a9a2;--accent:#0b6f72;--accent2:#07595c;--accentSoft:#dcecea;--coral:#b7644f;--good:#2e7357;--focus:#168d90;--shadow:0 18px 44px rgba(28,42,40,.08);--r:.55rem}
+html[data-theme="dark"]{color-scheme:dark;--page:#17201f;--paper:#1d2927;--ink:#eef4f2;--muted:#aab8b4;--line:#344744;--line2:#5c756f;--accent:#6ac2c3;--accent2:#8ad7d7;--accentSoft:#203f3d;--coral:#dc8c77;--good:#7cc2a2;--focus:#8ddada;--shadow:0 18px 44px rgba(0,0,0,.22)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--page);color:var(--ink);font:400 1rem/1.6 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}a{color:var(--accent);text-underline-offset:.18em}button{font:inherit}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.skip{position:absolute;left:.8rem;top:-5rem;z-index:100;padding:.7rem 1rem;background:var(--paper);color:var(--ink);border:1px solid var(--line2)}.skip:focus{top:.8rem}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:.65rem;padding:.65rem clamp(.8rem,3vw,2rem);background:color-mix(in srgb,var(--page) 94%,transparent);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}.identity{margin-right:auto;display:flex;flex-direction:column;line-height:1.15}.identity strong{font-family:Georgia,Cambria,serif}.identity span{font-size:.72rem;color:var(--muted)}.topbar a,.topbar button{min-height:44px;padding:.5rem .72rem;border:1px solid transparent;border-radius:var(--r);background:transparent;color:var(--muted);text-decoration:none;cursor:pointer}.topbar a:hover,.topbar button:hover{border-color:var(--line);color:var(--ink)}
+main{width:min(100% - clamp(1.2rem,5vw,5rem),76rem);margin:0 auto}.hero{padding:clamp(3rem,7vw,6rem) 0 2.5rem;border-bottom:1px solid var(--line)}.kicker,.eyebrow{margin:0 0 .65rem;color:var(--accent);font:750 .76rem/1.3 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.1em;text-transform:uppercase}.hero h1{margin:0;font:700 clamp(2.8rem,7vw,5.8rem)/.95 Georgia,Cambria,serif;letter-spacing:-.05em;max-width:11ch}.hero p{max-width:48rem;color:var(--muted);font-size:1.08rem}
+.lab{padding:2rem 0 4rem}.scenario-bar{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:1.5rem}.scenario{min-height:44px;padding:.6rem .85rem;border:1px solid var(--line2);border-radius:var(--r);background:transparent;color:var(--ink);cursor:pointer}.scenario[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.instrument{display:grid;grid-template-columns:minmax(0,1fr) 18rem;gap:2rem;align-items:start}.panel{background:var(--paper);border-top:3px solid var(--accent);box-shadow:var(--shadow);padding:1.2rem}.panel h2,.panel h3{margin:.2rem 0 .6rem;font-family:Georgia,Cambria,serif}.panel p{color:var(--muted)}
+.readouts{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--line);border-top:1px solid var(--line);margin:1rem 0}.readout{padding:.85rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.readout small{display:block;color:var(--muted);font-size:.72rem}.readout strong{display:block;margin-top:.25rem;font:700 clamp(1rem,2.2vw,1.35rem)/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums}
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:.7rem;align-items:stretch;margin:1.2rem 0}.state{padding:1rem;border:1px solid var(--line);background:color-mix(in srgb,var(--paper) 88%,var(--accentSoft))}.state small{display:block;color:var(--muted)}.state strong{display:block;margin-top:.3rem;font:700 1.2rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace}.arrow{align-self:center;color:var(--accent);font-weight:800}.formula{margin-top:1rem;padding:1rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font:700 clamp(1.15rem,2.5vw,1.55rem)/1.4 "Cambria Math",Cambria,serif;overflow-x:auto}
+.year-controls{display:flex;gap:.45rem;align-items:center;flex-wrap:wrap;margin-top:1rem}.year-controls button{min-height:44px;padding:.55rem .8rem;border:1px solid var(--line2);border-radius:var(--r);background:transparent;color:var(--ink);cursor:pointer}.year-controls button:hover{background:var(--accentSoft);border-color:var(--accent)}.year-controls strong{margin:0 auto;color:var(--accent)}
+.timeline{display:grid;gap:.55rem}.year-row{display:grid;grid-template-columns:3.2rem 1fr;gap:.7rem;align-items:center}.year-label{color:var(--muted);font:700 .75rem/1.2 ui-monospace,SFMono-Regular,Consolas,monospace}.bar{height:14px;background:var(--line);overflow:hidden;border-radius:999px}.bar span{display:block;height:100%;background:var(--accent);transform-origin:left center}.year-row.current .year-label{color:var(--accent)}.year-row.current .bar{outline:2px solid var(--accent);outline-offset:2px}
+.predict{margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--line)}.predict fieldset{border:0;padding:0;margin:0}.predict legend{font-weight:700}.predict label{display:flex;gap:.55rem;align-items:flex-start;margin:.45rem 0;color:var(--muted)}.predict button{min-height:42px;padding:.55rem .8rem;border:1px solid var(--line2);border-radius:var(--r);background:transparent;color:var(--ink);cursor:pointer}.feedback{min-height:1.5em;margin:.65rem 0 0;color:var(--good);font-weight:700}
+.side-list{display:grid;gap:1rem}.rule{padding-top:1rem;border-top:1px solid var(--line)}.rule:first-child{padding-top:0;border-top:0}.rule b{display:block;color:var(--accent);margin-bottom:.3rem}.rule p{margin:0;color:var(--muted);font-size:.92rem}.legend{margin-top:1.4rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.9rem;color:var(--muted)}.footer{padding:2rem 0 3rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
+@media(max-width:920px){.instrument{grid-template-columns:1fr}.readouts{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){main{width:min(100% - 1.3rem,76rem)}.hero{padding-top:3.4rem}.flow{grid-template-columns:1fr}.arrow{text-align:center;transform:rotate(90deg)}.readouts{grid-template-columns:1fr}.year-controls strong{width:100%;order:-1;margin:0}.topbar .identity span{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#lab">К лаборатории</a>
+<header class="topbar">
+  <div class="identity"><strong>Екатерина Гнедкова</strong><span>Лаборатория · 06.10.26</span></div>
+  <a href="06.10.26.html">Вернуться к занятию</a>
+  <button id="themeToggle" type="button" aria-label="Включить тёмную тему">Тема</button>
+</header>
+<main>
+<section class="hero">
+  <p class="kicker">Цифровая лаборатория</p>
+  <h1>Как растёт вклад</h1>
+  <p>Выберите один из трёх сценариев из чек-листа и двигайтесь по годам. Лаборатория показывает один и тот же цикл: текущая сумма → взнос, если он есть → начисление процентов → новая сумма.</p>
+</section>
+
+<section class="lab" id="lab">
+  <div class="scenario-bar" role="group" aria-label="Сценарии">
+    <button class="scenario" type="button" data-scenario="base" aria-pressed="true">100 000 ₽ · 10% · 3 года</button>
+    <button class="scenario" type="button" data-scenario="topup" aria-pressed="false">200 000 ₽ · 15% · +10 000 ₽</button>
+    <button class="scenario" type="button" data-scenario="four" aria-pressed="false">300 000 ₽ · 12% · +20 000 ₽</button>
+  </div>
+
+  <div class="instrument">
+    <div class="panel">
+      <p class="eyebrow">Текущее состояние</p>
+      <h2 id="scenarioTitle">Без пополнения</h2>
+      <div class="readouts" aria-live="polite">
+        <div class="readout"><small>Год</small><strong id="yearOut">1 / 3</strong></div>
+        <div class="readout"><small>Ставка</small><strong id="rateOut">10%</strong></div>
+        <div class="readout"><small>r</small><strong id="rOut">0,1</strong></div>
+        <div class="readout"><small>k</small><strong id="kOut">1,1</strong></div>
+      </div>
+
+      <div class="flow" aria-label="Порядок операций">
+        <div class="state"><small>В начале</small><strong id="startOut">100 000 ₽</strong></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="state"><small>После взноса</small><strong id="afterTopupOut">100 000 ₽</strong></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="state"><small>В конце</small><strong id="endOut">110 000 ₽</strong></div>
+      </div>
+
+      <div class="formula" id="formulaOut">100 000 · 0,1 = 10 000; &nbsp; 100 000 + 10 000 = 110 000</div>
+
+      <div class="year-controls">
+        <button id="prevYear" type="button">← Год назад</button>
+        <strong id="stepCaption">Шаг 1 из 3</strong>
+        <button id="nextYear" type="button">Год вперёд →</button>
+      </div>
+
+      <div class="predict">
+        <fieldset>
+          <legend>Перед следующим шагом: от какой суммы банк возьмёт процент?</legend>
+          <label><input type="radio" name="prediction" value="initial"> От первоначальной суммы вклада.</label>
+          <label><input type="radio" name="prediction" value="current"> От суммы, которая находится на счёте после предусмотренного взноса.</label>
+        </fieldset>
+        <button id="checkPrediction" type="button">Проверить прогноз</button>
+        <p class="feedback" id="predictionFeedback" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <aside class="panel" id="topup">
+      <p class="eyebrow">Ключевые правила</p>
+      <div class="side-list">
+        <div class="rule"><b>r = p/100</b><p>Процентная ставка переводится в десятичную дробь.</p></div>
+        <div class="rule"><b>k = 1 + r</b><p>Без дополнительных операций каждый год текущая сумма умножается на k.</p></div>
+        <div class="rule"><b>A → A + D → (A + D)k</b><p>Если D вносится в начале года, взнос тоже попадает под проценты этого года.</p></div>
+        <div class="rule"><b>Sₙ = Skⁿ</b><p>Формула сложных процентов без дополнительных взносов.</p></div>
+      </div>
+      <div class="legend">Все три сценария взяты из тренировочного блока занятия 06.10.26; лаборатория не создаёт новые условия задач.</div>
+    </aside>
+  </div>
+
+  <div class="panel" style="margin-top:2rem">
+    <p class="eyebrow">История по годам</p>
+    <h3>Сравните масштабы сумм</h3>
+    <div class="timeline" id="timeline" aria-label="Рост итоговой суммы по годам"></div>
+  </div>
+</section>
+<footer class="footer"><span>Лёвин Артём Александрович эксклюзивно для Екатерины Гнедковой</span><span>06.10.26</span></footer>
+</main>
+<script>
+(function(){
+'use strict';
+var scenarios={
+ base:{title:'Без пополнения',S:100000,p:10,D:0,years:3,rows:[
+  {start:100000,topup:0,interest:10000,end:110000},
+  {start:110000,topup:0,interest:11000,end:121000},
+  {start:121000,topup:0,interest:12100,end:133100}
+ ]},
+ topup:{title:'Пополнение со второго года',S:200000,p:15,D:10000,years:3,rows:[
+  {start:200000,topup:0,interest:30000,end:230000},
+  {start:230000,topup:10000,interest:36000,end:276000},
+  {start:276000,topup:10000,interest:42900,end:328900}
+ ]},
+ four:{title:'Четыре года с пополнением',S:300000,p:12,D:20000,years:4,rows:[
+  {start:300000,topup:0,interest:36000,end:336000},
+  {start:336000,topup:20000,interest:42720,end:398720},
+  {start:398720,topup:20000,interest:50246.4,end:468966.4},
+  {start:468966.4,topup:20000,interest:58675.968,end:547642.368}
+ ]}
+};
+var current='base',year=0;
+var money=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:3});
+function fmt(v){return money.format(v)+' ₽';}
+function dec(v){return String(v).replace('.',',');}
+function render(){
+ var s=scenarios[current],row=s.rows[year],base=row.start+row.topup,r=s.p/100,k=1+r;
+ document.getElementById('scenarioTitle').textContent=s.title;
+ document.getElementById('yearOut').textContent=(year+1)+' / '+s.years;
+ document.getElementById('rateOut').textContent=s.p+'%';
+ document.getElementById('rOut').textContent=dec(r);
+ document.getElementById('kOut').textContent=dec(k);
+ document.getElementById('startOut').textContent=fmt(row.start);
+ document.getElementById('afterTopupOut').textContent=fmt(base);
+ document.getElementById('endOut').textContent=fmt(row.end);
+ var topupText=row.topup?fmt(row.start)+' + '+fmt(row.topup)+' = '+fmt(base)+'; ':'';
+ document.getElementById('formulaOut').textContent=topupText+fmt(base)+' · '+dec(r)+' = '+fmt(row.interest)+'; '+fmt(base)+' + '+fmt(row.interest)+' = '+fmt(row.end);
+ document.getElementById('stepCaption').textContent='Шаг '+(year+1)+' из '+s.years;
+ document.getElementById('prevYear').disabled=year===0;
+ document.getElementById('nextYear').disabled=year===s.years-1;
+ var max=Math.max.apply(null,s.rows.map(function(x){return x.end;}));
+ var timeline=document.getElementById('timeline');timeline.innerHTML='';
+ s.rows.forEach(function(x,i){
+  var item=document.createElement('div');item.className='year-row'+(i===year?' current':'');
+  var label=document.createElement('div');label.className='year-label';label.textContent='ГОД '+(i+1);
+  var bar=document.createElement('div');bar.className='bar';var fill=document.createElement('span');fill.style.width=(x.end/max*100)+'%';fill.title=fmt(x.end);bar.appendChild(fill);item.appendChild(label);item.appendChild(bar);timeline.appendChild(item);
+ });
+ document.getElementById('predictionFeedback').textContent='';
+ [].slice.call(document.querySelectorAll('input[name="prediction"]')).forEach(function(input){input.checked=false;});
+}
+[].slice.call(document.querySelectorAll('.scenario')).forEach(function(btn){btn.addEventListener('click',function(){current=btn.getAttribute('data-scenario');year=0;[].slice.call(document.querySelectorAll('.scenario')).forEach(function(b){b.setAttribute('aria-pressed',String(b===btn));});render();});});
+document.getElementById('prevYear').addEventListener('click',function(){if(year>0){year-=1;render();}});
+document.getElementById('nextYear').addEventListener('click',function(){var s=scenarios[current];if(year<s.years-1){year+=1;render();}});
+document.getElementById('checkPrediction').addEventListener('click',function(){var chosen=document.querySelector('input[name="prediction"]:checked');var out=document.getElementById('predictionFeedback');if(!chosen){out.textContent='Сначала выберите вариант.';return;}out.textContent=chosen.value==='current'?'Верно: процент берётся от текущей суммы после взноса, если взнос предусмотрен в начале года.':'Проверьте порядок: база для процента — текущая сумма после операции, которая по условию выполняется до начисления.';});
+var root=document.documentElement,theme=document.getElementById('themeToggle'),key='ekaterina-061026-theme';root.dataset.theme=localStorage.getItem(key)||'light';
+function sync(){var dark=root.dataset.theme==='dark';theme.textContent=dark?'Светлая':'Тёмная';theme.setAttribute('aria-label',dark?'Включить светлую тему':'Включить тёмную тему');}
+theme.addEventListener('click',function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';localStorage.setItem(key,root.dataset.theme);sync();});sync();render();
+})();
+</script>
+</body>
+</html>
