@@ -3,6 +3,84 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+    "date": "2026-10-06",
+    "ktpRefs": [],
+    "href": "06.10.26.html",
+    "title": "Вклады и кредиты",
+    "navTitle": "Вклады и кредиты",
+    "navSubtitle": "Финансовая математика ЕГЭ: вклады с пополнениями, сложные проценты, неизвестная ставка, сравнение вариантов и кредитная таблица. Занятие Тимофея Васильченко 06.10.26.",
+    "summary": "Финансовая математика ЕГЭ: вклады с пополнениями, сложные проценты, неизвестная ставка, сравнение вариантов и кредитная таблица. Занятие Тимофея Васильченко 06.10.26.",
+    "topics": [
+      "вклады и сложные проценты",
+      "пополнения и коэффициент роста",
+      "сравнение вариантов",
+      "кредитная таблица"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t16_deposits",
+        "evidenceAnchor": "deposit-basics",
+        "relation": "practiced",
+        "label": "Вклады и сложные проценты",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_deposit_contrib",
+        "evidenceAnchor": "deposit-contrib",
+        "relation": "practiced",
+        "label": "Вклад с пополнениями",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_model_equation",
+        "evidenceAnchor": "model-equation",
+        "relation": "practiced",
+        "label": "Уравнение финансовой модели",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_optimal",
+        "evidenceAnchor": "optimal-choice",
+        "relation": "practiced",
+        "label": "Сравнение банковских вариантов",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_credits",
+        "evidenceAnchor": "credit-model",
+        "relation": "practiced",
+        "label": "Кредиты и остаток долга",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_debt_table",
+        "evidenceAnchor": "debt-table",
+        "relation": "practiced",
+        "label": "Таблица изменения долга",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_payment_sum",
+        "evidenceAnchor": "payment-sum",
+        "relation": "touched",
+        "label": "Сумма выплат и переплата",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "06.10.26.html",
+      "pdf": "../pdf_docs/06.10.26.pdf",
+      "tex": "../tex_docs/06.10.26.tex"
+    }
+  },
+  {
     "date": "2026-09-27",
     "ktpRefs": [],
     "href": "27.09.26.html",
