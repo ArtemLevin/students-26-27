@@ -5,6 +5,29 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-06",
+    "ktpRefs": [],
+    "href": "06.10.26.html",
+    "title": "Вклады и сложные проценты",
+    "navTitle": "Вклады и сложные проценты",
+    "summary": "Вклады и сложные проценты: таблица по годам, повышающий коэффициент, дополнительные взносы и связь с геометрической прогрессией. Персональный конспект Екатерины Гнедковой от 06.10.26.",
+    "topics": ["сложные проценты","вклады","дополнительные взносы","таблица по годам","геометрическая прогрессия"],
+    "outcomes": [
+      {"competencyId":"ege27_10_012","evidenceAnchor":"coeff","relation":"practiced","masteryClaim":null},
+      {"competencyId":"ege27_11_012","evidenceAnchor":"ledger","relation":"practiced","masteryClaim":null},
+      {"competencyId":"ege27_11_014","evidenceAnchor":"topup","relation":"touched","masteryClaim":null},
+      {"competencyId":"ege27_13_002","evidenceAnchor":"ledger","relation":"practiced","masteryClaim":null},
+      {"competencyId":"ege27_13_003","evidenceAnchor":"ledger","relation":"practiced","masteryClaim":null},
+      {"competencyId":"ege27_13_004","evidenceAnchor":"topup","relation":"practiced","masteryClaim":null}
+    ],
+    "materials": {
+      "html": "06.10.26.html",
+      "pdf": "../pdf_docs/06.10.26.pdf",
+      "tex": "../tex_docs/06.10.26.tex",
+      "lab": "06.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-09-29",
     "ktpRefs": [],
     "href": "29.09.26.html",
