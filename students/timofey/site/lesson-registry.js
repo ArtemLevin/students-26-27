@@ -48,7 +48,6 @@ export const LESSONS=[
     ],
     "materials": {
       "html": "06.10.26.html",
-      "pdf": "../pdf_docs/06.10.26.pdf",
       "tex": "../tex_docs/06.10.26.tex",
       "lab": "06.10.26-lab.html"
     }
