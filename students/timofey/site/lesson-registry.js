@@ -3,6 +3,57 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+    "date": "2026-10-06",
+    "ktpRefs": [],
+    "href": "06.10.26.html",
+    "title": "Финансовые задачи ЕГЭ: вклады и кредитная таблица",
+    "navTitle": "Финансовые задачи: проценты и кредит",
+    "navSubtitle": "сложные проценты · неизвестная ставка · остаток долга",
+    "summary": "Продолжение финансовой линии: вклад с пополнениями, обратный расчёт начальной суммы, неизвестная ставка через коэффициент роста, сравнение тарифов и кредитная таблица по соседним остаткам долга.",
+    "topics": [
+      "вклады и сложные проценты",
+      "неизвестная начальная сумма и ставка",
+      "сравнение процентных схем",
+      "кредитная таблица и остаток долга"
+    ],
+    "outcomes": [
+      {
+        "label": "Вклады и порядок начисления процентов",
+        "level": 3,
+        "competencyId": "t16_deposits",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Модель уравнения для финансовой задачи",
+        "level": 2,
+        "competencyId": "t16_model_equation",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Кредиты и переход остатка между периодами",
+        "level": 2,
+        "competencyId": "t16_credits",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Таблица изменения долга",
+        "level": 2,
+        "competencyId": "t16_debt_table",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "06.10.26.html",
+      "pdf": "../pdf_docs/06.10.26.pdf",
+      "tex": "../tex_docs/06.10.26.tex",
+      "lab": "06.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-09-27",
     "ktpRefs": [],
     "href": "27.09.26.html",
