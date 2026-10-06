@@ -20,37 +20,58 @@ export const LESSONS=[
       {
         "competencyId": "t16_deposits",
         "evidenceAnchor": "deposit-basics",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Вклады и сложные проценты",
+        "tone": "good",
+        "practiceDisposition": "manual"
       },
       {
         "competencyId": "t16_deposit_contrib",
         "evidenceAnchor": "deposit-contrib",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Вклад с пополнениями",
+        "tone": "process",
+        "practiceDisposition": "manual"
       },
       {
         "competencyId": "t16_model_equation",
         "evidenceAnchor": "model-equation",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Уравнение финансовой модели",
+        "tone": "process",
+        "practiceDisposition": "manual"
       },
       {
         "competencyId": "t16_optimal",
         "evidenceAnchor": "optimal-choice",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Сравнение банковских вариантов",
+        "tone": "process",
+        "practiceDisposition": "manual"
       },
       {
         "competencyId": "t16_credits",
         "evidenceAnchor": "credit-model",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Кредиты и остаток долга",
+        "tone": "process",
+        "practiceDisposition": "manual"
       },
       {
         "competencyId": "t16_debt_table",
         "evidenceAnchor": "debt-table",
-        "relation": "practiced"
+        "relation": "practiced",
+        "label": "Таблица изменения долга",
+        "tone": "process",
+        "practiceDisposition": "manual"
       },
       {
         "competencyId": "t16_payment_sum",
         "evidenceAnchor": "payment-sum",
-        "relation": "touched"
+        "relation": "touched",
+        "label": "Сумма выплат и переплата",
+        "tone": "process",
+        "practiceDisposition": "manual"
       }
     ],
     "materials": {
