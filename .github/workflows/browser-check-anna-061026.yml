@@ -1,0 +1,88 @@
+name: Browser check Anna 06.10.26
+
+on:
+  push:
+    branches: [site-anna-061026]
+    paths:
+      - ".github/workflows/browser-check-anna-061026.yml"
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: site-anna-061026
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Playwright
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Run local server
+        shell: bash
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/http.log 2>&1 &
+          echo $! > /tmp/http.pid
+          sleep 2
+      - name: Browser audit
+        shell: bash
+        run: |
+          node <<'NODE'
+          const {chromium}=require('playwright');
+          const assert=require('assert');
+          (async()=>{
+            const browser=await chromium.launch({headless:true});
+            const cases=[
+              {w:390,h:844,name:'mobile'},
+              {w:1024,h:768,name:'tablet'},
+              {w:1440,h:900,name:'desktop'}
+            ];
+            for(const c of cases){
+              const page=await browser.newPage({viewport:{width:c.w,height:c.h}});
+              const errors=[];
+              page.on('console',msg=>{if(msg.type()==='error')errors.push('console: '+msg.text())});
+              page.on('pageerror',err=>errors.push('pageerror: '+err.message));
+              const response=await page.goto('http://127.0.0.1:4173/students/anna_trapeznikova/site/06.10.26.html',{waitUntil:'networkidle'});
+              assert(response&&response.ok(),c.name+' lesson response failed');
+              assert.equal(errors.length,0,c.name+' JS errors: '+errors.join(' | '));
+              for(const theme of ['light','dark']){
+                await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);
+                const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
+                assert(overflow<=1,c.name+' '+theme+' horizontal overflow '+overflow);
+              }
+              for(const method of ['sub','multi','nested','square']){
+                await page.locator('[data-method="'+method+'"]').click();
+                assert.equal(await page.locator('[data-method="'+method+'"]').getAttribute('aria-pressed'),'true');
+              }
+              const boxes=page.locator('#checklist input');
+              await boxes.nth(0).check(); await boxes.nth(1).check();
+              assert.equal((await page.locator('#progressText').textContent()).trim(),'2 / 6');
+              await page.locator('details.answers summary').click();
+              assert(await page.locator('details.answers').evaluate(el=>el.open));
+              const linkResults=await page.evaluate(async()=>{
+                const urls=[...document.querySelectorAll('a[href]')]
+                  .map(a=>a.href).filter((u,i,a)=>u.startsWith(location.origin)&&!u.includes('#')&&a.indexOf(u)===i);
+                const out=[];
+                for(const url of urls){const r=await fetch(url);out.push([url,r.status]);}
+                return out;
+              });
+              assert(!linkResults.some(([,status])=>status>=400),'broken lesson links: '+JSON.stringify(linkResults));
+              await page.close();
+            }
+            const page=await browser.newPage({viewport:{width:390,height:844}});
+            const indexErrors=[]; page.on('pageerror',e=>indexErrors.push(e.message));
+            const indexResponse=await page.goto('http://127.0.0.1:4173/students/anna_trapeznikova/site/index.html',{waitUntil:'networkidle'});
+            assert(indexResponse&&indexResponse.ok(),'index response failed');
+            assert.equal(indexErrors.length,0,'index JS errors: '+indexErrors.join(' | '));
+            assert((await page.locator('body').textContent()).includes('06 · 10 · 26'),'06.10 ledger entry missing');
+            assert((await page.locator('#materials').textContent()).includes('06.10.26'),'latest card not updated');
+            const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
+            assert(overflow<=1,'index mobile horizontal overflow '+overflow);
+            await page.close();
+            await browser.close();
+            console.log('Browser audit passed');
+          })().catch(error=>{console.error(error);process.exit(1)});
+          NODE
