@@ -5,6 +5,59 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-06",
+  "ktpRefs": [],
+  "href": "06.10.26.html",
+  "title": "Неравенства с модулем",
+  "navTitle": "Неравенства с модулем",
+  "navSubtitle": "Неравенства с модулем: замена t = |x|, несколько модулей, вложенные модули и сравнение модулей через квадраты. Учебная страница Анны Трапезниковой.",
+  "summary": "Неравенства с модулем: замена t = |x|, несколько модулей, вложенные модули и сравнение модулей через квадраты. Учебная страница Анны Трапезниковой.",
+  "topics": [
+    "неравенства с модулем",
+    "замена t = |x|",
+    "несколько модулей и интервалы",
+    "вложенные модули",
+    "сравнение модулей через квадраты"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "real_numbers_15",
+      "evidenceAnchor": "squares",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "real_numbers_16",
+      "evidenceAnchor": "nested",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_08",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_09",
+      "evidenceAnchor": "substitution",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "sets_logic_03",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "sets_logic_04",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "06.10.26.html",
+    "pdf": "../pdf_docs/06.10.26.pdf",
+    "tex": "../tex_docs/06.10.26.tex"
+  }
+},
+{
     "date": "2026-10-04",
     "ktpRefs": [],
     "href": "04.10.26.html",
