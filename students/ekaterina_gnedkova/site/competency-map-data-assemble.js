@@ -94,6 +94,22 @@ const lesson2909SectionByTitle = new Map([
   ["Моделирование условия системой уравнений","#algorithm"]
 ]);
 
+const lesson0610CoveredTitles = new Set([
+  "Формулы финансовых расчётов",
+  "Проценты и последовательные изменения",
+  "Сложный процент",
+  "Ежегодное начисление процентов",
+  "Вклад с пополнением"
+]);
+const lesson0610EvidenceTitles = new Set([...lesson0610CoveredTitles]);
+const lesson0610SectionByTitle = new Map([
+  ["Формулы финансовых расчётов","#coeff"],
+  ["Проценты и последовательные изменения","#ledger"],
+  ["Сложный процент","#ledger"],
+  ["Ежегодное начисление процентов","#ledger"],
+  ["Вклад с пополнением","#topup"]
+]);
+
 const evidence0809={date:'08.09.26',text:'Тема явно отработана в чек-листе и web-конспекте занятия 08.09.26 «Степени, корни и приведение к единому степенному виду».',web:'08.09.26.html',pdf:'../pdf_docs/08.09.26.pdf',tex:'../tex_docs/08.09.26.tex'};
 const evidence1109={date:'11.09.26',text:'Навык закреплён в чек-листе и интерактивном занятии 11.09.26 «Степенные преобразования и показательные уравнения».',web:'11.09.26.html',pdf:'../pdf_docs/11.09.26.pdf',tex:'../tex_docs/11.09.26.tex'};
 const evidence1509={date:'15.09.26',text:'Навык применён в прикладных задачах со степенями: перевод условия в формулу, факторизация, работа с порядком десятки, дробной и отрицательной степенью и проверка смысла ответа.',web:'15.09.26.html',lab:'15.09.26-lab.html',pdf:'../pdf_docs/15.09.26.pdf',tex:'../tex_docs/15.09.26.tex'};
@@ -118,6 +134,15 @@ const evidence2909For=(title)=>({
   tex:'../tex_docs/29.09.26.tex'
 });
 
+const evidence0610For=(title)=>({
+  date:'06.10.26',
+  text:'Навык представлен и практиковался на занятии 06.10.26 по вкладам и сложным процентам: использовались таблица по годам, повышающий коэффициент и схема пополнения. Отдельная оценка самостоятельности не фиксировалась, поэтому уровень мастерства автоматически не повышался.',
+  web:`06.10.26.html${lesson0610SectionByTitle.get(title)||''}`,
+  lab:'06.10.26-lab.html',
+  pdf:'../pdf_docs/06.10.26.pdf',
+  tex:'../tex_docs/06.10.26.tex'
+});
+
 const groups=groupDefs.map((def,groupIndex)=>{
   const number=groupIndex+1;
   const groupId=`ege27_${String(number).padStart(2,'0')}`;
@@ -139,6 +164,7 @@ const groups=groupDefs.map((def,groupIndex)=>{
       const isLesson2509Level2=(number===11||number===10)&&lesson2509Level2Titles.has(title);
       const isLesson2909Level2=(number===8||number===10||number===11)&&lesson2909Level2Titles.has(title);
       const hasLesson2909Evidence=(number===8||number===10||number===11)&&lesson2909EvidenceTitles.has(title);
+      const hasLesson0610Evidence=(number===10||number===11||number===13)&&lesson0610EvidenceTitles.has(title);
 
       const level=isMasteredPower?4:
         isLesson2509Level3?3:
@@ -163,6 +189,7 @@ const groups=groupDefs.map((def,groupIndex)=>{
       if(isLesson2509Level3) evidence.push(evidence2509For(title,3));
       if(isLesson2509Level2) evidence.push(evidence2509For(title,2));
       if(hasLesson2909Evidence) evidence.push(evidence2909For(title));
+      if(hasLesson0610Evidence) evidence.push(evidence0610For(title));
 
       const id=`${groupId}_${String(itemIndex+1).padStart(3,'0')}`;
       return{
@@ -183,7 +210,7 @@ window.COMPETENCY_MAP_DATA={
     teacher:'Лёвин Артём Александрович',
     program:'подготовка к ЕГЭ по профильной математике',
     examVersion:'проект ЕГЭ-2027',
-    updated:'29.09.26',
+    updated:'06.10.26',
     sourceNote:'Структура актуализирована по проектам документов ФИПИ ЕГЭ-2027; подтверждённые уровни уточняются по материалам занятий.'
   },
   storage:{
@@ -192,6 +219,7 @@ window.COMPETENCY_MAP_DATA={
     theme:'ekaterina_gnedkova-ege_profile_2027-theme'
   },
   materials:[
+    {date:'06.10.26',title:'Вклады и сложные проценты',summary:'Таблица по годам, сложные проценты, повышающий коэффициент и дополнительные взносы.',web:'06.10.26.html',lab:'06.10.26-lab.html',pdf:'../pdf_docs/06.10.26.pdf',tex:'../tex_docs/06.10.26.tex',image:'../images/06.10.26.png'},
     {date:'29.09.26',title:'Смеси, растворы и проценты',summary:'Баланс массы компонента, растворы и сплавы, вода и чистое вещество, высушивание, процентные коэффициенты и системы уравнений.',web:'29.09.26.html',pdf:'../pdf_docs/29.09.26.pdf',tex:'../tex_docs/29.09.26.tex'},
     {date:'25.09.26',title:'Текстовые задачи',summary:'Табличный метод: движение навстречу и вдогонку, круговая трасса, река, средняя скорость, протяжённые тела, производительность и перевод условия в уравнение.',web:'25.09.26.html',pdf:'../pdf_docs/25.09.26.pdf',tex:'../tex_docs/25.09.26.tex'},
     {date:'22.09.26',title:'Векторы',summary:'Координаты и длина вектора, действия и линейная комбинация, скалярное произведение, угол, перпендикулярность и геометрическое сложение.',web:'22.09.26.html',tex:'../tex_docs/22.09.26.tex'},
