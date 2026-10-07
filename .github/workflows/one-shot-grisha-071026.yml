@@ -1,0 +1,36 @@
+name: One-shot material upload
+on:
+  push:
+    paths:
+      - '.upload-temp/READY'
+
+permissions:
+  contents: write
+
+jobs:
+  decode-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Decode files
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p students/grisha_arkhipov/pdf_docs students/grisha_arkhipov/images
+          cat .upload-temp/pdf.* | base64 --decode > students/grisha_arkhipov/pdf_docs/07.10.26.pdf
+          cat .upload-temp/png.* | base64 --decode > students/grisha_arkhipov/images/07.10.26.png
+          test -s students/grisha_arkhipov/pdf_docs/07.10.26.pdf
+          test -s students/grisha_arkhipov/images/07.10.26.png
+      - name: Commit outputs and cleanup
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .upload-temp
+          rm -f .github/workflows/one-shot-grisha-071026.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Add 07.10.26 materials for Grigory Arkhipov"
+          git push origin HEAD:main
