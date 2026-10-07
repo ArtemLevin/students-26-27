@@ -1,5 +1,50 @@
 export const LESSONS=[
 {
+  "date": "2026-10-07",
+  "ktpRefs": [
+    "ktp-002"
+  ],
+  "href": "07.10.26.html",
+  "title": "Графики функций: метод узловых точек",
+  "navTitle": "Графики функций: метод узловых точек",
+  "navSubtitle": "Графики функций: метод узловых точек, линейная функция, пересечение графиков, парабола и гипербола. Занятие Григория Архипова от 07.10.2026.",
+  "summary": "Графики функций: метод узловых точек, линейная функция, пересечение графиков, парабола и гипербола. Занятие Григория Архипова от 07.10.2026.",
+  "topics": [
+    "метод узловых точек",
+    "линейная функция",
+    "пересечение графиков",
+    "квадратичная функция",
+    "обратная пропорциональность"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "func_08",
+      "evidenceAnchor": "linear",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "func_09",
+      "evidenceAnchor": "parabola",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "func_10",
+      "evidenceAnchor": "hyperbola",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_14",
+      "evidenceAnchor": "method",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "07.10.26.html",
+    "pdf": "../pdf_docs/07.10.26.pdf",
+    "tex": "../tex_docs/07.10.26.tex"
+  }
+},
+{
   "date": "2026-09-30",
   "ktpRefs": [
     "ktp-001"
