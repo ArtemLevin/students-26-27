@@ -48,10 +48,16 @@ const evaluate=async expression=>{
   return res.result?.value;
 };
 const navigate=async url=>{
-  const loaded=new Promise(resolve=>{loadResolve=resolve});
-  await send('Page.navigate',{url});
-  await Promise.race([loaded,delay(6000).then(()=>{throw new Error('Page load timeout')})]);
-  await delay(250);
+  const nav=await send('Page.navigate',{url});
+  if(nav.errorText)throw new Error('Navigation failed: '+nav.errorText);
+  for(let i=0;i<80;i+=1){
+    try{
+      const state=await evaluate("({href:location.href,ready:document.readyState})");
+      if(state?.href===url&&state?.ready==='complete'){await delay(250);return;}
+    }catch(_){}
+    await delay(100);
+  }
+  throw new Error('Page load timeout: '+url);
 };
 const screenshot=async name=>{
   const shot=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
