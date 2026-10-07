@@ -21,8 +21,16 @@ const lessons=[
 {date:'03.10.26',href:'03.10.26.html#system',ids:['equations_12']},
 {date:'03.10.26',href:'03.10.26.html#check',ids:['models_5']}
 ];
+const evidenceOnly=[
+{date:'07.10.26',href:'07.10.26.html#root',ids:['equations_1','equations_2']},
+{date:'07.10.26',href:'07.10.26.html#terms',ids:['expr_5','expr_6']},
+{date:'07.10.26',href:'07.10.26.html#brackets',ids:['expr_8']},
+{date:'07.10.26',href:'07.10.26.html#cases',ids:['expr_7','equations_7','equations_8','equations_11']},
+{date:'07.10.26',href:'07.10.26.html#translation',ids:['equations_12']}
+];
 const teacherSeed={},evidence={};
 for(const lesson of lessons)for(const id of lesson.ids){teacherSeed[id]=Math.max(teacherSeed[id]||0,2);evidence[id]={text:`Тема подтверждена материалом занятия ${lesson.date}.`,href:lesson.href};}
+for(const lesson of evidenceOnly)for(const id of lesson.ids){evidence[id]={text:`Тема подтверждена материалом занятия ${lesson.date}.`,href:lesson.href};}
 Object.assign(teacherSeed,teacherMastery);
 const source=URL.createObjectURL(new Blob([`const groups=${JSON.stringify(groups)};`],{type:'text/javascript'}));
 window.STUDENT_COMPETENCE_CONFIG={stateKey:'kirill-competence-state-v2',storageKey:'kirill-competence-map-v2',baselineKey:'kirill-competence-teacher-baseline-v1',legacyStorageKeys:[],legacyRepeatKeys:['kirill-competence-repeat-v1'],legacyUrl:source,fallbackHref:'competency-map-data.js',catalogNames:['groups'],summaryEvent:'kirill:competence-summary',teacherSeed,evidence};
