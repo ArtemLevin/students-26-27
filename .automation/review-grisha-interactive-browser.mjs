@@ -129,7 +129,7 @@ try{
   await nav(page);
   await exec("document.querySelector('[data-line-lab]').scrollIntoView({block:'start'});return true;");
   const mobile=await exec(`
-    const d=document.documentElement,lab=document.querySelector('[data-line-lab]'),buttons=[...lab.querySelectorAll('button')].filter(b=>getComputedStyle(b).display!=='none');
+    const d=document.documentElement,lab=document.querySelector('[data-line-lab]'),buttons=[...lab.querySelectorAll('button')].filter(b=>{const r=b.getBoundingClientRect();return getComputedStyle(b).display!=='none'&&r.width>0&&r.height>0});
     return {viewport:innerWidth,overflow:d.scrollWidth-innerWidth,labWidth:lab.getBoundingClientRect().width,minButton:Math.min(...buttons.map(b=>b.getBoundingClientRect().height)),modebarScroll:document.querySelector('.lab-modebar').scrollWidth>=document.querySelector('.lab-modebar').clientWidth};
   `);
   assert(mobile.overflow<=1,'mobile horizontal page overflow '+mobile.overflow);
