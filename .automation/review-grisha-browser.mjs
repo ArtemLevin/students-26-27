@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 
-const base='http://127.0.0.1:8000/students/grisha_arkhipov/site/07.10.26.html';
+const lesson='http://127.0.0.1:8000/students/grisha_arkhipov/site/07.10.26.html';
+const home='http://127.0.0.1:8000/students/grisha_arkhipov/site/index.html';
 const out='/tmp/grisha-browser';
 fs.mkdirSync(out,{recursive:true});
 
@@ -46,9 +47,9 @@ const evaluate=async expression=>{
   if(res.exceptionDetails)throw new Error(res.exceptionDetails.text||'Runtime.evaluate failed');
   return res.result?.value;
 };
-const navigate=async()=>{
+const navigate=async url=>{
   const loaded=new Promise(resolve=>{loadResolve=resolve});
-  await send('Page.navigate',{url:base});
+  await send('Page.navigate',{url});
   await Promise.race([loaded,delay(6000).then(()=>{throw new Error('Page load timeout')})]);
   await delay(250);
 };
@@ -71,7 +72,7 @@ const cases=[
 
 for(const [name,width,height,mobile,theme] of cases){
   await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile});
-  await navigate();
+  await navigate(lesson);
   await evaluate(`(()=>{document.documentElement.dataset.theme='${theme}';const b=document.getElementById('theme');b.setAttribute('aria-pressed',String('${theme}'==='dark'));b.textContent='${theme}'==='dark'?'Светлая тема':'Тёмная тема';return true})()`);
   const metrics=await evaluate(`(()=>{const d=document.documentElement;const visible=e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0};const focusables=[...document.querySelectorAll('a,button,input,summary')].filter(visible);return {width:innerWidth,scrollWidth:d.scrollWidth,overflow:d.scrollWidth-innerWidth,focusables:focusables.length,offscreen:focusables.filter(e=>{const r=e.getBoundingClientRect();return r.right<0||r.left>innerWidth}).length,theme:document.documentElement.dataset.theme,graph:[...document.querySelectorAll('.graph svg')].map(e=>{const r=e.getBoundingClientRect();return [Math.round(r.width),Math.round(r.height)]})}})()`);
   assert(metrics.overflow<=1,name+': horizontal overflow '+metrics.overflow);
@@ -82,8 +83,38 @@ for(const [name,width,height,mobile,theme] of cases){
   await screenshot(name);
 }
 
+for(const [name,width,height,mobile,theme] of [
+  ['home-desktop-light',1440,1100,false,'light'],
+  ['home-desktop-dark',1440,1100,false,'dark'],
+  ['home-mobile-light',390,844,true,'light'],
+  ['home-mobile-dark',390,844,true,'dark']
+]){
+  await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile});
+  await navigate(home);
+  const current=await evaluate("document.documentElement.dataset.theme");
+  if(current!==theme)await evaluate("document.getElementById('themeToggle').click()");
+  const state=await evaluate(`(()=>{const d=document.documentElement;const evidence=window.COMPETENCY_MAP_DATA?.evidence?.func_08;const levels=window.COMPETENCY_MAP_DATA?.baselineLevels||{};const material=window.COMPETENCY_MAP_DATA?.materials?.[0];return {overflow:d.scrollWidth-innerWidth,theme:d.dataset.theme,latest:document.querySelector('.latest-card')?.textContent.includes('07.10.2026'),lessonLink:!!document.querySelector('a[href="07.10.26.html"]'),cells:document.querySelectorAll('[data-topic-id]').length,evidence:evidence?.lesson,ktp:evidence?.ktp,level:Object.hasOwn(levels,'func_08')?levels.func_08:null,materialDate:material?.date}})()`);
+  assert(state.overflow<=1,name+': horizontal overflow '+state.overflow);
+  assert(state.theme===theme,name+': theme mismatch');
+  assert(state.latest&&state.lessonLink,name+': latest lesson integration missing');
+  assert(state.cells>100,name+': competency map did not render');
+  assert(state.evidence==='07.10.26.html#linear',name+': func_08 evidence link mismatch');
+  assert(state.ktp==='ktp.html?lesson=ktp-002',name+': func_08 KTP link mismatch');
+  assert(state.level===null,name+': practiced lesson incorrectly changed mastery');
+  assert(state.materialDate==='07.10.2026',name+': latest map material missing');
+  await screenshot(name);
+}
+
 await send('Emulation.setDeviceMetricsOverride',{width:1180,height:900,deviceScaleFactor:1,mobile:false});
-await navigate();
+await navigate(home);
+const homeInteraction=await evaluate(`(()=>{const target=document.querySelector('[data-topic-id="func_08"]');target?.dispatchEvent(new MouseEvent('click',{bubbles:true}));const dlg=document.getElementById('topicDialog');return {open:dlg?.open===true,history:document.getElementById('dialogHistory')?.textContent||'',links:[...document.querySelectorAll('#dialogMaterialLinks a')].map(a=>a.getAttribute('href'))}})()`);
+assert(homeInteraction.open,'home evidence dialog did not open');
+assert(homeInteraction.history.includes('07.10.2026'),'home evidence history is stale');
+assert(homeInteraction.links.includes('07.10.26.html#linear'),'home evidence lesson link missing');
+await evaluate("document.getElementById('topicDialog')?.close()");
+
+await send('Emulation.setDeviceMetricsOverride',{width:1180,height:900,deviceScaleFactor:1,mobile:false});
+await navigate(lesson);
 const interaction=await evaluate(`(()=>{const delta=document.querySelector('[data-layer="layerDelta"]');delta.click();const next=document.getElementById('nextStep');next.click();const reveal=document.querySelector('.reveal');reveal.click();const quiz=document.querySelector('.quiz-question button[data-choice="1"]');quiz.click();const check=document.querySelector('.check input');check.checked=true;check.dispatchEvent(new Event('change',{bubbles:true}));const theme=document.getElementById('theme');const before=document.documentElement.dataset.theme;theme.click();return {deltaPressed:delta.getAttribute('aria-pressed'),deltaHidden:document.getElementById('layerDelta').hidden,current:document.querySelector('.step-item[aria-current="step"]')?.dataset.step,reveal:reveal.getAttribute('aria-expanded'),answerVisible:getComputedStyle(document.getElementById('intersectionAnswer')).display,feedback:document.querySelector('.feedback').textContent.trim(),progress:document.getElementById('progressText').textContent.trim(),themeChanged:document.documentElement.dataset.theme!==before,themePressed:theme.getAttribute('aria-pressed')}})()`);
 assert(interaction.deltaPressed==='true'&&!interaction.deltaHidden,'graph layer toggle failed');
 assert(interaction.current==='1','stepper next failed');
