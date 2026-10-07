@@ -5,6 +5,57 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-07",
+    "ktpRefs": [],
+    "href": "07.10.26.html",
+    "title": "Быстрые методы первой части ЕГЭ",
+    "navTitle": "Быстрые методы первой части",
+    "navSubtitle": "тождества · тригонометрия · корни · векторы · вероятность",
+    "summary": "Повторение коротких приёмов первой части: сумма квадратов через тождества, дополнительные углы в прямоугольном треугольнике, точные корни, координатные операции с векторами и классическая вероятность.",
+    "topics": [
+      "алгебраические тождества",
+      "прямоугольный треугольник",
+      "точные корни",
+      "векторы",
+      "классическая вероятность"
+    ],
+    "outcomes": [
+      {
+        "label": "Прямоугольный треугольник: sin и cos дополнительных углов",
+        "level": 2,
+        "competencyId": "t1_right",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Тождества и короткие преобразования без поиска лишних неизвестных",
+        "level": 2,
+        "competencyId": "t7_power_actions",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Координаты, сумма и скалярное произведение векторов",
+        "level": 2,
+        "competencyId": "t2_dot",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "label": "Классическая вероятность после фиксации одного участника",
+        "level": 3,
+        "competencyId": "t4_classic",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "07.10.26.html",
+      "pdf": "../pdf_docs/07.10.26.pdf",
+      "tex": "../tex_docs/07.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-05",
     "ktpRefs": [],
     "href": "05.10.26.html",
