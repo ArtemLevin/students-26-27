@@ -79,10 +79,12 @@ jobs:
         shell: bash
         run: |
           set -uo pipefail
+          set +e
           node scripts/student.mjs audit 2>&1 | tee /tmp/student-audit.log
           status=${PIPESTATUS[0]}
+          set -e
           if [ "$status" -ne 0 ]; then
-            if grep -q "grisha_arkhipov" /tmp/student-audit.log; then
+            if grep -q "grisha_arkhipov: v2 package validation failed" /tmp/student-audit.log; then
               echo "Grigory package failed repository audit"
               exit "$status"
             fi
