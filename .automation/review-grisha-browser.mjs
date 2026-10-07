@@ -48,14 +48,19 @@ const evaluate=async expression=>{
   return res.result?.value;
 };
 const navigate=async url=>{
-  const nav=await send('Page.navigate',{url});
-  if(nav.errorText)throw new Error('Navigation failed: '+nav.errorText);
-  for(let i=0;i<80;i+=1){
-    try{
-      const state=await evaluate("({href:location.href,ready:document.readyState})");
-      if(state?.href===url&&state?.ready==='complete'){await delay(250);return;}
-    }catch(_){}
-    await delay(100);
+  for(let attempt=0;attempt<3;attempt+=1){
+    const nav=await send('Page.navigate',{url});
+    if(nav.errorText&&nav.errorText!=='net::ERR_ABORTED'){
+      throw new Error('Navigation failed: '+nav.errorText);
+    }
+    for(let i=0;i<80;i+=1){
+      try{
+        const state=await evaluate("({href:location.href,ready:document.readyState})");
+        if(state?.href===url&&state?.ready==='complete'){await delay(250);return;}
+      }catch(_){}
+      await delay(100);
+    }
+    await delay(250);
   }
   throw new Error('Page load timeout: '+url);
 };
