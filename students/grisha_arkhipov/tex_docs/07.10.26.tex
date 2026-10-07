@@ -1,0 +1,350 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,left=20mm,right=20mm,top=20mm,bottom=22mm]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\onehalfspacing
+
+\definecolor{accent}{HTML}{167C80}
+\definecolor{darkaccent}{HTML}{0D5558}
+\definecolor{textgray}{HTML}{2F3437}
+\definecolor{softgray}{HTML}{EEF3F3}
+\definecolor{warning}{HTML}{7A4E2D}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkaccent,
+  urlcolor=darkaccent,
+  pdftitle={Графики функций: метод узловых точек — чек-лист},
+  pdfauthor={Лёвин Артём Александрович}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\headheight}{15pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=3pt,topsep=3pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Графики функций: метод узловых точек}
+\fancyhead[R]{\small Григорий Архипов}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\newcommand{\heading}[1]{\section*{\color{darkaccent}#1}}
+\newcommand{\subheading}[1]{\subsection*{\color{darkaccent}#1}}
+\newcommand{\checkitem}[1]{%
+  \par\noindent
+  \makebox[7mm][l]{\raisebox{0.15ex}{$\square$}}%
+  \begin{minipage}[t]{\dimexpr\linewidth-7mm\relax}
+    #1
+  \end{minipage}\par\vspace{2mm}
+}
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\thinrule}{\par\vspace{1mm}{\color{accent!55}\hrule height 0.5pt}\vspace{3mm}}
+
+\tikzset{
+  terminal/.style={ellipse,draw=accent,thick,align=center,text width=5.7cm,minimum height=11mm,font=\small},
+  action/.style={rectangle,rounded corners=2mm,draw=accent,thick,align=center,text width=11.4cm,minimum height=12mm,font=\small,inner sep=3mm},
+  decision/.style={diamond,aspect=3.1,draw=accent,thick,align=center,text width=6.5cm,font=\small,inner sep=1.6mm},
+  arrow/.style={-{Stealth[length=3mm]},thick,draw=accent}
+}
+
+\begin{document}
+\color{textgray}
+\raggedright
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\centering
+\vspace*{22mm}
+{\large Профильная математика\par}
+\vspace{12mm}
+{\Huge\bfseries Чек-лист\par}
+\vspace{8mm}
+{\LARGE Графики функций\par}
+\vspace{3mm}
+{\Large Метод узловых точек\par}
+\vspace{10mm}
+{\large Линейная функция, пересечение графиков, парабола и гипербола\par}
+\vspace{18mm}
+{\large Григорий Архипов\par}
+\vspace{5mm}
+{\large 7 октября 2026 года\par}
+\vfill
+{\normalsize Лёвин Артём Александрович\\эксклюзивно для Григория Архипова\par}
+\vspace{14mm}
+\begin{tikzpicture}
+  \draw[accent,line width=0.8pt] (0,0) .. controls (3.0,0.55) and (7.2,-0.55) .. (11.2,0);
+\end{tikzpicture}
+\vspace*{5mm}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\heading{1. Главная идея: восстанавливаем формулу по графику}
+
+\checkitem{Я помню: значение на вертикальной оси можно обозначать как $y$ или как $f(x)$. Для точки графика запись $(x_0;y_0)$ означает $y_0=f(x_0)$.}
+
+\checkitem{Я умею находить \key{узловые точки}: это точки графика, у которых обе координаты читаются точно и являются целыми числами.}
+
+\checkitem{Я беру столько узловых точек, сколько неизвестных коэффициентов нужно определить. Если неизвестны $k$ и $b$, обычно достаточно двух точек.}
+
+\checkitem{Если подходящих точек много, я выбираю самые удобные: с координатой $0$ либо с небольшими по модулю координатами. Это сокращает вычисления и уменьшает риск арифметической ошибки.}
+
+\checkitem{Для каждой выбранной точки подставляю её координаты в формулу функции. Получаю уравнение; несколько неизвестных коэффициентов дают систему уравнений.}
+
+\subheading{Пример: линейная функция}
+Пусть график функции $f(x)=kx+b$ проходит через точки $(-1;-3)$ и $(3;4)$. Тогда
+\[
+\begin{cases}
+-3=-k+b,\\
+4=3k+b.
+\end{cases}
+\]
+Вычитая первое уравнение из второго, получаем $7=4k$, поэтому
+\[
+k=\frac74,\qquad b=-\frac54.
+\]
+Следовательно,
+\[
+f(x)=\frac74x-\frac54,
+\qquad
+f(-5)=-10.
+\]
+
+\thinrule
+\textbf{Самопроверка формулы.} Подставьте координаты обеих исходных точек обратно. Если хотя бы одна точка формуле не удовлетворяет, вычисления нужно перепроверить.
+
+\clearpage
+\heading{2. Универсальный алгоритм метода узловых точек}
+
+\begin{center}
+\begin{tikzpicture}[node distance=10mm]
+  \node[terminal] (start) {Начало: дана формула с неизвестными коэффициентами и график};
+  \node[action,below=of start] (count) {Определить, какие коэффициенты неизвестны, и посчитать их количество};
+  \node[action,below=of count] (points) {Выбрать столько точных узловых точек, сколько неизвестных коэффициентов};
+  \node[action,below=of points] (subst) {Подставить координаты каждой точки в исходную формулу};
+  \node[action,below=of subst] (solve) {Решить полученную систему и найти коэффициенты};
+  \node[action,below=of solve] (formula) {Собрать формулу функции и проверить её по исходным точкам};
+  \node[decision,below=12mm of formula] (task) {Что требуется в условии?};
+  \node[action,below left=15mm and -8mm of task,text width=5.2cm] (value) {Найти значение $f(x_0)$: подставить заданный $x_0$};
+  \node[action,below right=15mm and -8mm of task,text width=5.2cm] (arg) {Найти аргумент: составить уравнение $f(x)=y_0$ и решить его};
+  \node[terminal,below=24mm of task] (finish) {Проверить смысл ответа и знак};
+
+  \draw[arrow] (start)--(count);
+  \draw[arrow] (count)--(points);
+  \draw[arrow] (points)--(subst);
+  \draw[arrow] (subst)--(solve);
+  \draw[arrow] (solve)--(formula);
+  \draw[arrow] (formula)--(task);
+  \draw[arrow] (task)--node[above left,font=\scriptsize]{значение}(value);
+  \draw[arrow] (task)--node[above right,font=\scriptsize]{аргумент}(arg);
+  \draw[arrow] (value.south) |- (finish.west);
+  \draw[arrow] (arg.south) |- (finish.east);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\heading{3. Линейная функция: $f(x)=kx+b$}
+
+\checkitem{Я узнаю $k$ как \key{угловой коэффициент}. Его знак показывает направление: при $k>0$ прямая возрастает, при $k<0$ убывает.}
+
+\checkitem{Я использую связь
+\[
+k=\tg\alpha=\frac{\Delta y}{\Delta x},
+\]
+где $\alpha$ — угол между прямой и горизонтальным направлением. Для вычисления удобно построить прямоугольный треугольник по двум точным точкам прямой.}
+
+\checkitem{Я помню смысл свободного коэффициента:
+\[
+b=f(0).
+\]
+То есть $b$ — ордината точки пересечения прямой с осью $Oy$.}
+
+\checkitem{Если точка пересечения с $Oy$ читается неточно, сначала можно найти $k$, затем взять одну узловую точку $(x_0;y_0)$ и вычислить
+\[
+b=y_0-kx_0.
+\]}
+
+\subheading{Визуальный смысл коэффициентов}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=12.5cm,height=7.2cm,
+  axis lines=middle,
+  xmin=-4,xmax=4,ymin=-5,ymax=7,
+  xtick={-3,-2,-1,0,1,2,3},
+  ytick={-4,-2,0,2,4,6},
+  grid=both,
+  grid style={line width=.1pt, draw=gray!25},
+  major grid style={line width=.2pt,draw=gray!35},
+  xlabel={$x$},ylabel={$y$},
+  clip=false,
+  tick label style={font=\small}
+]
+\addplot[domain=-4:4,samples=100,accent,very thick]{1.5*x+1};
+\addplot[only marks,mark=*,mark size=2.2pt,accent] coordinates {(0,1) (2,4)};
+\node[anchor=west,font=\small] at (axis cs:0.15,1.05) {$b=1$};
+\draw[accent,thick] (axis cs:0,1)--(axis cs:2,1)--(axis cs:2,4);
+\node[font=\small] at (axis cs:1,0.55) {$\Delta x=2$};
+\node[font=\small,anchor=west] at (axis cs:2.05,2.5) {$\Delta y=3$};
+\node[font=\small,anchor=west] at (axis cs:1.1,5.7) {$k=\frac{3}{2}$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\thinrule
+\textbf{Контроль здравого смысла.} После вычислений сопоставьте знак $k$ и положение прямой на рисунке, а значение $b$ — с пересечением оси $Oy$.
+
+\clearpage
+\heading{4. Пересечение двух графиков}
+
+Пусть заданы две функции
+\[
+f_1(x)=k_1x+b_1,
+\qquad
+f_2(x)=k_2x+b_2.
+\]
+
+\checkitem{Я сначала восстанавливаю обе формулы: методом узловых точек или быстрыми приёмами для линейной функции.}
+
+\checkitem{Для точки пересечения выполняется
+\[
+f_1(x)=f_2(x).
+\]
+Решение этого уравнения даёт \key{абсциссу} точки пересечения.}
+
+\checkitem{Чтобы получить \key{ординату}, найденный $x$ можно подставить в любую из двух функций. овпадают.}
+
+\subheading{Пример}
+Пусть
+\[
+f_1(x)=4x+9,
+\qquad
+f_2(x)=\frac32x-\frac72.
+\]
+Тогда
+\[
+4x+9=\frac32x-\frac72.
+\]
+Умножим на $2$:
+\[
+8x+18=3x-7,
+\qquad 5x=-25,
+\qquad x=-5.
+\]
+Подстановка в любую формулу даёт
+\[
+y=-11.
+\]
+Точка пересечения: $(-5;-11)$.
+
+\thinrule
+\textbf{Внимание к формулировке.} «Найти $f(-5)$», «найти $x$, при котором $f(x)=y_0$» и «найти абсциссу точки пересечения» требуют разных последних шагов, хотя восстановление формулы может быть одинаковым.
+
+\clearpage
+\heading{5. Парабола: $f(x)=ax^2+bx+c$}
+
+\checkitem{Я использую тот же принцип: число выбранных узловых точек соответствует числу неизвестных коэффициентов. Если один коэффициент уже дан, уравнений потребуется меньше.}
+
+\checkitem{Свободный коэффициент параболы читается так же, как у прямой:
+\[
+c=f(0).
+\]
+Если график пересекает ось $Oy$ в точной точке, $c$ находится сразу.}
+
+\checkitem{Для вершины параболы с абсциссой $x_v$ выполняется
+\[
+x_v=-\frac{b}{2a},
+\qquad
+b=-2ax_v.
+\]
+Если $a$ и $x_v$ известны точно, коэффициент $b$ можно получить без системы.}
+
+\checkitem{Если вершина $V(x_v;y_v)$ и точка при $x=x_v\pm1$ читается точно, то
+\[
+a=f(x_v\pm1)-y_v.
+\]
+При сдвиге от вершины на одну единицу по $x$ вертикальное изменение равно $a$.}
+
+\checkitem{Если координаты вершины или соседней точки читаются неточно, я использую метод узловых точек.}
+
+\subheading{Пример с двумя неизвестными коэффициентами}
+Пусть
+\[
+f(x)=2x^2+bx+c
+\]
+и график проходит через точки $(0;-4)$ и $(1;1)$. Тогда
+\[
+c=-4,
+\]
+а из второй точки
+\[
+1=2\cdot1^2+b\cdot1-4,
+\qquad b=3.
+\]
+Итак,
+\[
+f(x)=2x^2+3x-4.
+\]
+
+\textbf{Быстрый пример с вершиной.} Если $a=1$ и $x_v=-1$, то $b=-2\cdot1\cdot(-1)=2$. При $c=-1$ получаем
+\[
+f(x)=x^2+2x-1.
+\]
+
+\clearpage
+\heading{6. Гипербола и другие знакомые формы}
+
+\checkitem{Если в условии формула гиперболы уже дана и в ней два неизвестных коэффициента, я выбираю две удобные узловые точки и подставляю их в эту формулу.}
+
+\checkitem{Я не пытаюсь угадывать коэффициенты только по внешнему виду кривой, когда рисунок не даёт точных значений. Коэффициенты должны следовать из координат и формулы.}
+
+\checkitem{После нахождения коэффициентов я обязательно подставляю исходные точки обратно и проверяю совпадение с графиком.}
+
+\checkitem{Универсальная идея остаётся той же для разных типов функций: известная форма функции $+$ точные точки графика $\rightarrow$ уравнения для коэффициентов $\rightarrow$ восстановленная формула.}
+
+\heading{7. Что особенно важно помнить}
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries\color{darkaccent}}p{0.31\linewidth}X@{}}
+\toprule
+Ситуация & Действие \\
+\midrule
+Нужно найти коэффициенты & Выберите столько точных точек, сколько неизвестных коэффициентов, и составьте систему. \\
+Прямая $kx+b$ & $k=\Delta y/\Delta x$, $b=f(0)$. \\
+Два графика пересекаются & Приравняйте значения функций: $f_1(x)=f_2(x)$. \\
+Нужна ордината пересечения & Подставьте найденный $x$ в любую из двух функций. \\
+Парабола & Используйте $c=f(0)$ и $x_v=-b/(2a)$, когда данные читаются точно. \\
+График убывает & Для прямой угловой коэффициент $k<0$. \\
+Получился странный результат & Сопоставьте формулу с рисунком и проверьте исходные точки. \\
+\bottomrule
+\end{tabularx}
+
+\vspace{7mm}
+\thinrule
+\textbf{Итоговая схема:}
+\[
+\begin{aligned}
+\text{точные точки}
+&\longrightarrow \text{уравнения для коэффициентов}
+\longrightarrow \text{формула функции}\\
+&\longrightarrow \text{ответ на конкретный вопрос}.
+\end{aligned}
+\]
+
+\end{document}
