@@ -98,3 +98,30 @@ test('07.10 graph lesson preserves source-backed math and robust interaction hoo
   assert.equal(result.status,0,result.stderr||result.stdout);
 });
 
+test('07.10 interactive lab is research-oriented and keeps one model state',()=>{
+  const html=read('07.10.26.html');
+  assert.match(html,/data-line-lab/);
+  assert.match(html,/id="labSvg"/);
+  assert.match(html,/data-lab-mode="free"/);
+  assert.match(html,/data-lab-mode="guide"/);
+  assert.match(html,/data-lab-mode="compare"/);
+  assert.match(html,/data-lab-mode="predict"/);
+  assert.match(html,/data-lab-mode="challenge"/);
+  for(const scenario of ['rise','fall','flat','origin','trap']){
+    assert.match(html,new RegExp('data-lab-scenario="'+scenario+'"'));
+  }
+  assert.match(html,/const state=\{k:1\.5,b:1,probeX:2/);
+  assert.match(html,/const scenarios=\{/);
+  assert.match(html,/const predictCases=\{/);
+  assert.match(html,/const challenges=\[/);
+  assert.match(html,/function segment\(k,b\)/);
+  assert.match(html,/function renderLab\(\)/);
+  assert.match(html,/addEventListener\('pointerdown'/);
+  assert.match(html,/requestAnimationFrame\(tick\)/);
+  assert.match(html,/prefers-reduced-motion: reduce/);
+  assert.match(html,/matchMedia\('\(prefers-reduced-motion: reduce\)'\)/);
+  assert.match(html,/aria-valuetext','b = '/);
+  assert.match(html,/Δy=2k/);
+  assert.match(html,/k=Δy\/Δx/);
+});
+
