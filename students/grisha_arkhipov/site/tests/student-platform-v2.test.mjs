@@ -81,13 +81,13 @@ test('07.10 graph lesson preserves source-backed math and robust interaction hoo
     assert.match(html,new RegExp("id=[\\\"']"+anchor+"[\\\"']"));
   }
   assert.doesNotMatch(html,/<mfenced\b/);
-  assert.match(html,/aria-labelledby="leaderGraphTitle leaderGraphDesc"/);
-  assert.match(html,/cx="264" cy="308"/);
-  assert.match(html,/cx="352" cy="176"/);
-  assert.match(html,/M176 440L451 27\.5/);
+  assert.match(html,/aria-labelledby="labSvgTitle labSvgDesc"/);
+  assert.match(html,/id="labHandleA"/);
+  assert.match(html,/id="labHandleB"/);
+  assert.match(html,/const state=\{k:1\.5,b:1,probeX:2/);
   assert.match(html,/<mtext>tg<\/mtext><mi>α<\/mi>/);
   assert.match(html,/ответ на конкретный вопрос/);
-  assert.match(html,/aria-controls="layerDelta"/);
+  assert.match(html,/aria-controls="labPanelGuide"/);
 
   const source=html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
   assert.ok(source,'07.10 inline script not found');
