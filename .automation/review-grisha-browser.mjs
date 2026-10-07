@@ -47,14 +47,16 @@ try{
     const metrics=await exec(`
       const d=document.documentElement;
       const visible=e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0};
-      const focusables=[...document.querySelectorAll('a,button,input,summary')].filter(visible);
+      const focusables=[...document.querySelectorAll('a,button,input,summary')].filter(e=>visible(e)&&!e.classList.contains('skip'));
+      const skip=document.querySelector('.skip'); skip.focus(); const skipRect=skip.getBoundingClientRect(); const skipFocusVisible=skipRect.left>=0&&skipRect.top>=0; skip.blur();
       const graph=document.querySelector('.graph svg').getBoundingClientRect();
       return {innerWidth,scrollWidth:d.scrollWidth,overflow:d.scrollWidth-innerWidth,
         offscreen:focusables.filter(e=>{const r=e.getBoundingClientRect();return r.right<0||r.left>innerWidth}).length,
-        focusables:focusables.length,theme:d.dataset.theme,graph:[Math.round(graph.width),Math.round(graph.height)]};
+        focusables:focusables.length,skipFocusVisible,theme:d.dataset.theme,graph:[Math.round(graph.width),Math.round(graph.height)]};
     `);
     assert(metrics.overflow<=1,name+': horizontal overflow '+metrics.overflow);
     assert(metrics.offscreen===0,name+': focusable control horizontally offscreen');
+    assert(metrics.skipFocusVisible,name+': skip link does not become visible on focus');
     assert(metrics.focusables>=15,name+': unexpectedly few focusable controls');
     assert(metrics.theme===theme,name+': theme mismatch');
     assert(metrics.graph[0]>250&&metrics.graph[1]>170,name+': graph collapsed');
