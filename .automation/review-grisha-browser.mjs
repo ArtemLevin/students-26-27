@@ -1,7 +1,9 @@
 import fs from 'node:fs';
+import path from 'node:path';
+import {pathToFileURL} from 'node:url';
 
-const lesson='http://127.0.0.1:8000/students/grisha_arkhipov/site/07.10.26.html';
-const home='http://127.0.0.1:8000/students/grisha_arkhipov/site/index.html';
+const lesson=pathToFileURL(path.resolve('students/grisha_arkhipov/site/07.10.26.html')).href;
+const home=pathToFileURL(path.resolve('students/grisha_arkhipov/site/index.html')).href;
 const out='/tmp/grisha-browser';
 fs.mkdirSync(out,{recursive:true});
 
