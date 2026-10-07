@@ -3,6 +3,85 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+    "date": "2026-10-07",
+    "ktpRefs": [],
+    "href": "07.10.26.html",
+    "title": "Кредитные задачи: модель и ограничения",
+    "navTitle": "Кредитные задачи",
+    "navSubtitle": "таблица долга · равные платежи · ограничения",
+    "summary": "Кредитные задачи ЕГЭ: таблица изменения долга, равные и разные платежи, ограничения на выплаты, уменьшение остатка и отбор целого ответа. Занятие Тимофея Васильченко 07.10.26.",
+    "topics": [
+      "таблица изменения долга",
+      "ограничения на выплаты",
+      "равные платежи",
+      "неравные платежи",
+      "уменьшение остатка долга"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t16_credits",
+        "evidenceAnchor": "credit-ledger",
+        "relation": "practiced",
+        "label": "Кредиты и остаток долга",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_debt_table",
+        "evidenceAnchor": "credit-ledger",
+        "relation": "assessed",
+        "label": "Таблица изменения долга",
+        "tone": "good",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_payment_sum",
+        "evidenceAnchor": "payment-constraints",
+        "relation": "assessed",
+        "label": "Сумма выплат и ограничения",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_annuity",
+        "evidenceAnchor": "equal-payments",
+        "relation": "practiced",
+        "label": "Равные платежи",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_model_equation",
+        "evidenceAnchor": "equal-payments",
+        "relation": "practiced",
+        "label": "Уравнение финансовой модели",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_variable",
+        "evidenceAnchor": "variable-payments",
+        "relation": "touched",
+        "label": "Неравные платежи",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_equal_reduction",
+        "evidenceAnchor": "debt-reduction",
+        "relation": "practiced",
+        "label": "Уменьшение остатка долга",
+        "tone": "process",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "07.10.26.html",
+      "pdf": "../pdf_docs/07.10.26.pdf",
+      "tex": "../tex_docs/07.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-06",
     "ktpRefs": [],
     "href": "06.10.26.html",
