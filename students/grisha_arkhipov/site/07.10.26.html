@@ -58,7 +58,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{o
 </div>
 </header>
 
-<nav class="toolbar" aria-label="Действия страницы"><a href="index.html">К материалам</a><a href="../pdf_docs/07.10.26.pdf" download>Скачать пособие</a><a href="../tex_docs/07.10.26.tex" download>TeX</a><span class="spacer"></span><button id="theme" type="button">Тёмная тема</button><button id="printBtn" type="button">Печать</button></nav>
+<nav class="toolbar" aria-label="Действия страницы"><a href="index.html">К материалам</a><a href="../pdf_docs/07.10.26.pdf" download>Скачать пособие</a><a href="../tex_docs/07.10.26.tex" download>TeX</a><span class="spacer"></span><button id="theme" type="button" aria-pressed="false">Тёмная тема</button><button id="printBtn" type="button">Печать</button></nav>
 <nav class="route" aria-label="Маршрут занятия"><a href="#method"><b>01</b><span>Узловые точки</span></a><a href="#linear"><b>02</b><span>Линейная функция</span></a><a href="#intersection"><b>03</b><span>Пересечение</span></a><a href="#parabola"><b>04</b><span>Парабола</span></a><a href="#hyperbola"><b>05</b><span>Гипербола и проверка</span></a></nav>
 
 <details class="poster">
@@ -118,7 +118,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{o
 <script>
 (()=>{const qs=(s,r=document)=>r.querySelector(s),qsa=(s,r=document)=>[...r.querySelectorAll(s)];
 const theme=qs('#theme');try{const t=localStorage.getItem('grisha-071026-theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}
-function themeLabel(){theme.textContent=document.documentElement.dataset.theme==='dark'?'Светлая тема':'Тёмная тема'}themeLabel();
+function themeLabel(){const dark=document.documentElement.dataset.theme==='dark';theme.textContent=dark?'Светлая тема':'Тёмная тема';theme.setAttribute('aria-pressed',String(dark))}themeLabel();
 theme.addEventListener('click',()=>{const t=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=t;try{localStorage.setItem('grisha-071026-theme',t)}catch(e){}themeLabel()});qs('#printBtn').onclick=()=>window.print();
 qsa('[data-layer]').forEach(btn=>btn.addEventListener('click',()=>{const el=qs('#'+btn.dataset.layer);if(!el)return;const on=btn.getAttribute('aria-pressed')==='true';btn.setAttribute('aria-pressed',String(!on));el.hidden=on}));
 let step=0,all=false;const steps=qsa('.step-item');function showStep(){steps.forEach((el,i)=>{el.classList.toggle('is-visible',all||i===step);if(!all&&i===step)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current')});qs('#prevStep').disabled=!all&&step===0;qs('#nextStep').disabled=!all&&step===steps.length-1}
