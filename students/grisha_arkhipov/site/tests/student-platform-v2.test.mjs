@@ -66,6 +66,35 @@ test('dashboard and competency evidence expose the KTP route',()=>{
   assert.match(index,/href="ktp\.html"/);
   assert.match(index,/ktp\.html\?lesson=ktp-002/);
   assert.match(index,/07\.10\.26\.html/);
+  assert.match(index,/competency-map-baseline\.js\?v=20261007-1/);
   assert.match(baseline,/ktp:\s*'ktp\.html\?lesson=ktp-001'/);
+  assert.match(baseline,/ktp:\s*'ktp\.html\?lesson=ktp-002'/);
+  assert.match(baseline,/data\.updated = '07\.10\.2026'/);
+  assert.match(baseline,/func_08:\s*'linear'/);
+  assert.match(baseline,/func_10:\s*'hyperbola'/);
   assert.match(map,/Открыть в КТП/);
 });
+
+test('07.10 graph lesson preserves source-backed math and robust interaction hooks',()=>{
+  const html=read('07.10.26.html');
+  for(const anchor of ['method','linear','intersection','parabola','hyperbola']){
+    assert.match(html,new RegExp("id=[\\\"']"+anchor+"[\\\"']"));
+  }
+  assert.doesNotMatch(html,/<mfenced\b/);
+  assert.match(html,/aria-labelledby="leaderGraphTitle leaderGraphDesc"/);
+  assert.match(html,/cx="264" cy="308"/);
+  assert.match(html,/cx="352" cy="176"/);
+  assert.match(html,/M176 440L451 27\.5/);
+  assert.match(html,/<mtext>tg<\/mtext><mi>α<\/mi>/);
+  assert.match(html,/ответ на конкретный вопрос/);
+  assert.match(html,/aria-controls="layerDelta"/);
+
+  const source=html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+  assert.ok(source,'07.10 inline script not found');
+  const temp=path.join(os.tmpdir(),'grisha-071026-'+process.pid+'.js');
+  fs.writeFileSync(temp,source);
+  const result=spawnSync(process.execPath,['--check',temp],{encoding:'utf8'});
+  fs.rmSync(temp,{force:true});
+  assert.equal(result.status,0,result.stderr||result.stdout);
+});
+
