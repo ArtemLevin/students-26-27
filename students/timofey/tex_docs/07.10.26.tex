@@ -1,0 +1,409 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{icomma}
+\usepackage[a4paper,margin=18mm,headheight=25pt,headsep=5mm,includeheadfoot]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,array}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{2F6F73}
+\definecolor{darkaccent}{HTML}{1F4F52}
+\definecolor{textgray}{HTML}{2F3335}
+\definecolor{softgray}{HTML}{6E7477}
+\definecolor{linegray}{HTML}{D8DEDF}
+
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=1.5em,itemsep=0.35em,topsep=0.35em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.6em,topsep=0.45em}
+\renewcommand{\arraystretch}{1.28}
+\raggedbottom
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\setstretch{1}\small\textcolor{softgray}{Чек-лист: кредиты}}
+\fancyhead[R]{\setstretch{1}\small\textcolor{softgray}{07.10.26}}
+\fancyfoot[C]{\small\textcolor{softgray}{\thepage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{linegray}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\sectionline}{\vspace{-0.4em}\textcolor{linegray}{\rule{\linewidth}{0.5pt}}\vspace{0.35em}}
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+
+\begin{document}
+
+% ---------- Title page ----------
+\thispagestyle{empty}
+\begin{center}
+\vspace*{2.8cm}
+{\Large\textcolor{softgray}{\textbf{ЧЕК-ЛИСТ}}}\par
+\vspace{0.7cm}
+{\Huge\bfseries\textcolor{darkaccent}{Кредиты}}\par
+\vspace{0.45cm}
+{\Large Таблица платежей, равные выплаты, ограничения и остаток долга}\par
+\vspace{1.4cm}
+{\large 07.10.26}\par
+\vfill
+{\large\textbf{Лёвин Артём Александрович}}\par
+\vspace{0.2cm}
+{\large эксклюзивно для Тимофея Васильченко}\par
+\vspace{1.2cm}
+\end{center}
+
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent!55,line width=1.4pt]
+  ($(current page.south west)+(18mm,22mm)$)
+  .. controls ($(current page.south west)+(62mm,35mm)$)
+  and ($(current page.south east)+(-72mm,10mm)$)
+  .. ($(current page.south east)+(-18mm,24mm)$);
+\end{tikzpicture}
+\clearpage
+
+% ---------- Model ----------
+\section*{1. Главная модель кредитной задачи}
+\sectionline
+
+Пусть на начало очередного кредитного периода долг равен $B_{i-1}$, а ставка за период --- $r\%$.
+Удобно сразу ввести
+\[
+p=\frac{r}{100},\qquad k=1+p.
+\]
+Тогда после начисления процентов общая задолженность равна
+\[
+T_i=kB_{i-1}.
+\]
+Если в конце периода вносится платёж $X_i$, то остаток долга
+\[
+\boxed{B_i=kB_{i-1}-X_i.}
+\]
+Отсюда эквивалентная формула для платежа:
+\[
+\boxed{X_i=kB_{i-1}-B_i.}
+\]
+
+\begin{center}
+\begin{tabularx}{\linewidth}{>{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X}
+\toprule
+Долг на начало & Начисленные проценты & Общая задолженность & Платёж & Остаток \\
+\midrule
+$B_{i-1}$ & $pB_{i-1}$ & $kB_{i-1}$ & $X_i$ & $B_i$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\key{Ключевой принцип.} Проценты каждого нового периода начисляются на долг, который остался после предыдущего платежа.
+
+\subsection*{Мини-пример}
+Кредит равен $S$, ставка --- $20\%$ за период, после первого платежа должно остаться $0{,}6S$.
+Тогда
+\[
+1{,}2S-X_1=0{,}6S,
+\]
+поэтому
+\[
+\boxed{X_1=0{,}6S.}
+\]
+
+\section*{2. Если задано, как меняется остаток долга}
+\sectionline
+
+Фраза «долг стал на $q\%$ меньше» означает, что осталось
+\[
+\left(1-\frac{q}{100}\right)\cdot\text{предыдущий долг}.
+\]
+Например, если долг каждый раз становится на $70\%$ меньше, то остаётся $30\%$:
+\[
+B_i=0{,}3B_{i-1}.
+\]
+
+При ставке $20\%$ и трёх периодах:
+\[
+B_0=S,\qquad B_1=0{,}3S,\qquad B_2=0{,}09S,\qquad B_3=0.
+\]
+Тогда платежи равны
+\[
+X_1=1{,}2S-0{,}3S=0{,}9S,
+\]
+\[
+X_2=1{,}2\cdot0{,}3S-0{,}09S=0{,}27S,
+\]
+\[
+X_3=1{,}2\cdot0{,}09S=0{,}108S.
+\]
+Сумма выплат:
+\[
+\boxed{X_1+X_2+X_3=1{,}278S.}
+\]
+
+\key{Типичная ошибка.} Во втором периоде $30\%$ берут от исходного кредита $S$. Нужно брать $30\%$ от долга на начало текущего периода.
+
+\clearpage
+
+% ---------- Equal payments ----------
+\section*{3. Равные платежи: короткая формула}
+\sectionline
+
+Если кредит $S$ погашается за $n$ периодов \textbf{равными платежами} $X$ при одной и той же ставке $r\%$, то
+\[
+B_i=kB_{i-1}-X,\qquad k=1+\frac{r}{100}.
+\]
+После полного погашения $B_n=0$. Последовательно раскрывая рекуррентную формулу, получаем
+\[
+0=Sk^n-Xk^{n-1}-Xk^{n-2}-\dots-Xk-X.
+\]
+Значит,
+\[
+\boxed{Sk^n=X\left(k^{n-1}+k^{n-2}+\dots+k+1\right).}
+\]
+
+Для трёх равных платежей:
+\[
+\boxed{Sk^3=Xk^2+Xk+X,}
+\]
+откуда
+\[
+\boxed{S=\frac{X(k^2+k+1)}{k^3}.}
+\]
+
+Для двух равных платежей:
+\[
+\boxed{Sk^2=Xk+X.}
+\]
+
+Для четырёх равных платежей:
+\[
+\boxed{Sk^4=Xk^3+Xk^2+Xk+X.}
+\]
+
+\key{Когда формулу можно использовать.} В условии должно быть явно сказано, что кредит полностью погашается за указанное число периодов \textbf{равными} платежами. Если платежи различаются или есть дополнительные условия на остаток долга, безопаснее работать через таблицу.
+
+\subsection*{Пример: три равных платежа}
+Ставка --- $20\%$, то есть $k=1{,}2$. Кредит погашается тремя равными платежами по $216$ тыс. руб.
+\[
+S=\frac{216(1{,}2^2+1{,}2+1)}{1{,}2^3}
+=\frac{216\cdot3{,}64}{1{,}728}=455.
+\]
+\[
+\boxed{S=455\ \text{тыс. руб.}}
+\]
+
+\section*{4. Если платежи различаются}
+\sectionline
+
+Для трёх периодов с платежами $X_1$, $X_2$, $X_3$:
+\[
+\boxed{Sk^3-X_1k^2-X_2k-X_3=0.}
+\]
+Следовательно,
+\[
+\boxed{S=\frac{X_1k^2+X_2k+X_3}{k^3}.}
+\]
+
+Если первые два платежа равны $X$, а третий равен $Y$, то
+\[
+\boxed{S=\frac{Xk^2+Xk+Y}{k^3}.}
+\]
+
+\subsection*{Пример: два одинаковых платежа и один другой}
+Ставка --- $10\%$, поэтому $k=1{,}1$. Первые два платежа равны $150$ тыс. руб., третий --- $185{,}9$ тыс. руб.
+\[
+S=\frac{150\cdot1{,}1^2+150\cdot1{,}1+185{,}9}{1{,}1^3}
+=\frac{532{,}4}{1{,}331}=400.
+\]
+\[
+\boxed{S=400\ \text{тыс. руб.}}
+\]
+
+\clearpage
+
+% ---------- Inequalities ----------
+\section*{5. Ограничения на выплаты: система или одно неравенство}
+\sectionline
+
+Формулировка условия определяет математическую модель.
+
+\subsection*{«Каждая выплата меньше $M$»}
+Если платежи равны $X_1(S)$, $X_2(S)$, $X_3(S)$, требуется одновременно
+\[
+\begin{cases}
+X_1(S)<M,\\
+X_2(S)<M,\\
+X_3(S)<M.
+\end{cases}
+\]
+Это \key{система неравенств}: должны выполняться все ограничения сразу.
+
+Например, если
+\[
+X_1=0{,}4S,\qquad X_2=0{,}48S,\qquad X_3=0{,}56S,
+\]
+и каждая выплата должна быть меньше $5$ млн руб., то
+\[
+S<12{,}5,\qquad S<10{,}41\ldots,\qquad S<8{,}92\ldots
+\]
+Следовательно,
+\[
+S<8{,}92\ldots
+\]
+Если $S$ требуется указать целым числом миллионов рублей, наибольшее значение:
+\[
+\boxed{S=8.}
+\]
+
+\subsection*{«Общая сумма выплат меньше $M$»}
+Здесь складываются платежи:
+\[
+\boxed{X_1(S)+X_2(S)+\dots+X_n(S)<M.}
+\]
+Система не нужна, поскольку ограничение наложено на одну сумму.
+
+\subsection*{Строгость неравенства}
+\begin{itemize}
+\item «меньше $5$» $\Rightarrow X<5$;
+\item «не более $5$» $\Rightarrow X\le 5$;
+\item «больше $5$» $\Rightarrow X>5$;
+\item «не менее $5$» $\Rightarrow X\ge 5$.
+\end{itemize}
+
+\key{Финальный отбор.} Если требуется наибольшее целое значение, сначала найдите числовую границу, затем выберите целое число, которое действительно удовлетворяет строгому или нестрогому условию.
+
+\clearpage
+
+% ---------- Flowchart ----------
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries\textcolor{darkaccent}{Алгоритм: как выбрать модель кредитной задачи}}\par
+\vspace{0.8cm}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=9mm,
+  every node/.style={font=\small,align=center},
+  start/.style={ellipse,draw=accent,thick,text width=100mm,minimum height=11mm,inner sep=3mm},
+  action/.style={rectangle,rounded corners=2mm,draw=accent,thick,text width=98mm,minimum height=12mm,inner sep=3mm},
+  side/.style={rectangle,rounded corners=2mm,draw=accent,thick,text width=42mm,minimum height=13mm,inner sep=3mm},
+  decision/.style={diamond,aspect=2.4,draw=accent,thick,text width=31mm,inner sep=1.5mm},
+  arr/.style={-{Stealth[length=2.2mm]},thick,draw=darkaccent}
+]
+\node[start] (a) {Выписать ставку, число периодов, платежи и условия на остаток долга};
+\node[decision,below=of a] (b) {Все платежи равны?};
+\node[action,below=14mm of b] (d) {Если нет: составить таблицу и применять $B_i=kB_{i-1}-X_i$};
+\node[side,right=13mm of b] (c) {Если да: использовать\\$Sk^n=X(k^{n-1}+\dots+1)$};
+\node[action,below=of d] (e) {Получить выражения для нужных платежей и остатков};
+\node[decision,below=of e] (f) {Что ограничено?};
+\node[action,below=14mm of f] (g) {Если общая сумма: сложить платежи и составить одно уравнение или неравенство};
+\node[side,right=13mm of f] (h) {Если каждая выплата: составить систему неравенств};
+\node[action,below=of g] (i) {Проверить знак $</\le$, единицы измерения и полное погашение $B_n=0$};
+\node[start,below=of i,text width=44mm] (j) {Записать ответ};
+
+\draw[arr] (a)--(b);
+\draw[arr] (b) -- node[left]{нет} (d);
+\draw[arr] (b.east) -- node[above]{да} (c.west);
+\draw[arr] (c.south) |- (e.east);
+\draw[arr] (d)--(e);
+\draw[arr] (e)--(f);
+\draw[arr] (f) -- node[left]{сумма} (g);
+\draw[arr] (f.east) -- node[above]{каждая} (h.west);
+\draw[arr] (h.south) |- (i.east);
+\draw[arr] (g)--(i);
+\draw[arr] (i)--(j);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+% ---------- Errors ----------
+\section*{6. Частые ошибки и самопроверка}
+\sectionline
+
+\begin{itemize}
+\item \key{Проценты начислены не на тот долг.} База каждого периода --- остаток после предыдущего платежа.
+\item \key{«На $70\%$ меньше» перепутано с «равно $70\%$».} Если величина уменьшилась на $70\%$, осталось $30\%$.
+\item \key{Формула равных платежей применена при разных платежах.} В этом случае используйте общую формулу с $X_1,X_2,\ldots$ или таблицу.
+\item \key{Условие «каждая выплата» заменено суммой выплат.} Для каждой выплаты нужна система ограничений.
+\item \key{Потеряна строгость.} «Меньше» и «не более» приводят к разным знакам.
+\item \key{Неверно выбран целый ответ.} После решения неравенства обязательно проверяйте ближайшее целое число подстановкой.
+\item \key{Не проверено полное погашение.} После последнего платежа остаток должен быть равен нулю.
+\end{itemize}
+
+\subsection*{Мини-чек перед ответом}
+\begin{enumerate}
+\item Я ввёл $k=1+r/100$ и использую одну систему единиц?
+\item Каждый следующий процент начислен на актуальный остаток долга?
+\item Если платежи равны, это явно сказано в условии?
+\item Если ограничена каждая выплата, я составил систему?
+\item Я правильно различил $<$ и $\le$?
+\item После последнего платежа долг действительно равен нулю?
+\end{enumerate}
+
+\clearpage
+
+% ---------- Training ----------
+\section*{7. Тренировочный блок --- Путь А}
+\sectionline
+
+Решите 10 задач. Где это удобно, используйте коэффициент $k=1+r/100$. В задачах с разными платежами или заданным остатком долга составляйте таблицу.
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+\item Кредит составляет $1\,000\,000$ руб. Ставка за год --- $10\%$. После начисления процентов и первого платежа долг должен стать равен $800\,000$ руб. Найдите первый платёж.
+
+\item Кредит равен $S$. Ставка за период --- $20\%$. После первого платежа остаётся $0{,}5S$, после второго кредит погашается полностью. Найдите оба платежа и сумму выплат в долях от $S$.
+
+\item Три выплаты по кредиту равны соответственно $0{,}4S$, $0{,}48S$ и $0{,}56S$ млн руб. Каждая выплата должна быть меньше $5$ млн руб. Найдите наибольшее целое значение $S$.
+
+\item Выплаты по кредиту равны $0{,}3S$, $0{,}4S$ и $0{,}5S$ млн руб. Общая сумма выплат должна быть меньше $50$ млн руб. Найдите наибольшее целое значение $S$.
+
+\item Кредит погашается двумя равными ежегодными платежами по $250$ тыс. руб. Годовая ставка --- $25\%$. Найдите первоначальную сумму кредита.
+
+\item Кредит погашается тремя равными ежегодными платежами по $216$ тыс. руб. Годовая ставка --- $20\%$. Найдите первоначальную сумму кредита.
+
+\item Кредит $455$ тыс. руб. взят под $20\%$ годовых и погашается тремя равными ежегодными платежами. Найдите величину каждого платежа.
+
+\item Кредит взят на три года под $10\%$ годовых. Первые два платежа равны по $150$ тыс. руб., третий --- $185{,}9$ тыс. руб. После третьего платежа кредит погашен полностью. Найдите первоначальную сумму кредита.
+
+\item Кредит взят на три года под $20\%$ годовых. После первого и второго платежей долг каждый раз становится на $70\%$ меньше долга на начало соответствующего года. После третьего платежа кредит погашается полностью. Сумма всех платежей равна $11\,502$ тыс. руб. Найдите первоначальную сумму кредита.
+
+\item Кредит погашается четырьмя равными ежегодными платежами по $625$ тыс. руб. Годовая ставка --- $25\%$. Найдите первоначальную сумму кредита.
+\end{enumerate}
+
+\clearpage
+
+% ---------- Answers ----------
+\section*{8. Ответы}
+\sectionline
+
+\begin{center}
+\begin{tabularx}{\linewidth}{>{\centering\arraybackslash}p{1.2cm} X}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $300\,000$ руб. \\
+2 & $0{,}7S$ и $0{,}6S$; сумма $1{,}3S$ \\
+3 & $8$ млн руб. \\
+4 & $41$ млн руб. \\
+5 & $360$ тыс. руб. \\
+6 & $455$ тыс. руб. \\
+7 & $216$ тыс. руб. \\
+8 & $400$ тыс. руб. \\
+9 & $9\,000$ тыс. руб. $=9$ млн руб. \\
+10 & $1\,476$ тыс. руб. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vfill
+\begin{center}
+\textcolor{softgray}{\small Лёвин Артём Александрович эксклюзивно для Тимофея Васильченко}
+\end{center}
+
+\end{document}
