@@ -35,7 +35,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test -s students/grisha_arkhipov/pdf_docs/07.10.26.pdf || cp 07.10.26.pdf students/grisha_arkhipov/pdf_docs/07.10.26.pdf
+          PDF_SRC="$(find . -type f -name '07.10.26.pdf' ! -path './students/grisha_arkhipov/pdf_docs/*' -print -quit)"
+          test -n "$PDF_SRC"
+          cp "$PDF_SRC" students/grisha_arkhipov/pdf_docs/07.10.26.pdf
           test -s students/grisha_arkhipov/pdf_docs/07.10.26.pdf
           rm -rf .upload-temp
           rm -f .github/workflows/one-shot-grisha-071026.yml
