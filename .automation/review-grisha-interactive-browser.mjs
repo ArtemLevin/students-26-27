@@ -116,7 +116,7 @@ try{
   `);
   assert(keyboard.active&&keyboard.before!==keyboard.after,'keyboard alternative for drag failed');
 
-  await exec("document.querySelector('[data-lab-mode="free"]').click();document.getElementById('labReplay').click();return document.getElementById('labStateK').textContent;");
+  await exec(`document.querySelector('[data-lab-mode="free"]').click();document.getElementById('labReplay').click();return document.getElementById('labStateK').textContent;`);
   await delay(500);
   const animation=await exec("const v=document.getElementById('labStateK').textContent;document.getElementById('labPause').click();return {v,disabled:document.getElementById('labPause').disabled};");
   assert(animation.v!=='-2'&&animation.disabled,'parameter sweep did not animate/pause');
