@@ -27,7 +27,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{o
 
 @media(max-width:900px){.lab-state-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.lab-controls{grid-template-columns:1fr}.lab-bars{grid-template-columns:1fr}.lab-live{grid-template-columns:1fr}.lab-modebar{margin-inline:-.25rem;padding-inline:.25rem}
 }
-@media(max-width:900px){.hero-grid,.two,.poster-body{grid-template-columns:1fr}.chapter-head{grid-template-columns:1fr}.route{grid-template-columns:1fr 1fr}.route a:nth-child(2n){border-right:0}.route a:last-child{grid-column:1/-1}.rail{border-left:0;border-top:1px solid var(--border-strong);padding:1rem 0 0}}
+@media(max-width:900px){.hero-grid,.two,.poster-body{grid-template-columns:1fr}.chapter-head{grid-template-columns:1fr}.route{grid-template-columns:1fr 1fr}.route a:nth-child(2n){border-right:0}.route a:last-child{grid-column:auto}.rail{border-left:0;border-top:1px solid var(--border-strong);padding:1rem 0 0}}
 @media(max-width:560px){.lab-state-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lab-stat:last-child{grid-column:1/-1}.lab-scenarios button{flex:1 1 8rem}.lab-panel-row>*{flex:1 1 8rem}.lab-timeline{grid-template-columns:1fr}.lab-timeline output{text-align:left}.wrap{width:min(100% - 1.3rem,1220px)}h1{font-size:clamp(2.8rem,14vw,4.6rem)}.hero{padding-top:2.4rem}.toolbar{position:static}.toolbar .spacer{display:none}.toolbar>*{flex:1}.route{grid-template-columns:1fr}.route a,.route a:nth-child(2n){border-right:0}.route a:last-child{grid-column:auto}.graph{padding:.6rem}.algorithm li{grid-template-columns:2.8rem 1fr}.chapter{padding:2.8rem 0}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 @media print{html{--surface-page:#fff;--surface-raised:#fff;--surface-soft:#fff;--surface-graph:#fff;--text-primary:#111;--text-secondary:#333;--border-subtle:#bbb;--border-strong:#888;--accent:#1d4f6a;--signal:#77511d;--shadow-low:none}body{background:#fff}.toolbar,.route,.poster,.graph-controls,.step-controls,.quiz,.progress,.progress-text,.reveal,.lab-modebar,.lab-controls,.lab-scenarios,.lab-panel,.lab-bars,.lab-limit-note{display:none!important}.hero{padding:1rem 0 2rem;min-height:auto}.graph{box-shadow:none}.chapter{break-inside:auto}.example{box-shadow:none;break-inside:avoid}.step-item,.reveal-body{display:block!important}}
@@ -334,7 +334,7 @@ function renderPrediction(){
 }
 function runPrediction(choice){
   const c=predictCases[state.predictCase],ok=choice===c.correct;
-  state.predictChoice=choice;state.snapshot={...c.before};Object.assign(state,c.after);state.showGhost=true;normalize();renderLab();
+  state.predictChoice=choice;state.snapshot={...c.before};Object.assign(state,c.after);state.showGhost=true;normalize();renderLab();renderPrediction();
   const fb=qs('#labPredictFeedback');fb.className='lab-feedback '+(ok?'good':'bad');fb.textContent=(ok?'Верно. ':'Проверьте результат на графике. ')+c.explain;
   announce('Эксперимент выполнен. '+fb.textContent);
 }
@@ -344,10 +344,10 @@ function renderLab(){
   const showGhost=!!state.snapshot&&state.showGhost;
   ghost.hidden=!showGhost;if(showGhost)setSvgLine(ghost,state.snapshot.k,state.snapshot.b);
   handleA.setAttribute('cx',sx(A.x));handleA.setAttribute('cy',sy(A.y));handleB.setAttribute('cx',sx(B.x));handleB.setAttribute('cy',sy(B.y));
-  handleA.setAttribute('aria-valuenow',fmt(b));handleA.setAttribute('aria-valuetext','b = '+fmt(b));
-  handleB.setAttribute('aria-valuenow',fmt(k));handleB.setAttribute('aria-valuetext','k = '+fmt(k));
+  handleA.setAttribute('aria-valuenow',String(b));handleA.setAttribute('aria-valuetext','b = '+fmt(b));
+  handleB.setAttribute('aria-valuenow',String(k));handleB.setAttribute('aria-valuetext','k = '+fmt(k));
   labelA.setAttribute('x',sx(A.x)+12);labelA.setAttribute('y',sy(A.y)-12);labelA.textContent='A(0; '+fmt(A.y)+')';
-  labelB.setAttribute('x',sx(B.x)+12);labelB.setAttribute('y',sy(B.y)-12);labelB.textContent='B(2; '+fmt(B.y)+')';
+  labelB.setAttribute('x',sx(B.x)+12);labelB.setAttribute('y',sy(B.y)+(B.y>5?22:-12));labelB.textContent='B(2; '+fmt(B.y)+')';
   dx.setAttribute('x1',sx(A.x));dx.setAttribute('y1',sy(A.y));dx.setAttribute('x2',sx(B.x));dx.setAttribute('y2',sy(A.y));
   dy.setAttribute('x1',sx(B.x));dy.setAttribute('y1',sy(A.y));dy.setAttribute('x2',sx(B.x));dy.setAttribute('y2',sy(B.y));
   dxLabel.setAttribute('x',(sx(A.x)+sx(B.x))/2-18);dxLabel.setAttribute('y',sy(A.y)+(k>=0?18:-8));dxLabel.textContent='Δx=2';
@@ -357,7 +357,7 @@ function renderLab(){
   probeGroup.hidden=!(guideForces?state.guideStep>=3:state.showProbe);
   probeGuide.setAttribute('x1',sx(state.probeX));probeGuide.setAttribute('y1',sy(0));probeGuide.setAttribute('x2',sx(state.probeX));probeGuide.setAttribute('y2',sy(Y));
   probePoint.setAttribute('cx',sx(state.probeX));probePoint.setAttribute('cy',sy(Y));
-  probeLabel.setAttribute('x',sx(state.probeX)+10);probeLabel.setAttribute('y',sy(Y)-10);probeLabel.textContent='f('+fmt(state.probeX)+')='+fmt(Y);
+  probeLabel.setAttribute('x',sx(state.probeX)+10);probeLabel.setAttribute('y',sy(Y)+(Y>5?20:-10));probeLabel.textContent='f('+fmt(state.probeX)+')='+fmt(Y);
   const f=formula(k,b);qs('#labFormula').textContent=f;qs('#labStateFormula').textContent=f;qs('#labStateK').textContent=fmt(k);qs('#labStateB').textContent='b='+fmt(b);qs('#labStateDelta').textContent='Δx=2 · Δy='+fmt(2*k);qs('#labStateProbe').textContent='f('+fmt(state.probeX)+')='+fmt(Y);
   qs('#labKOut').textContent=fmt(k);qs('#labBOut').textContent=fmt(b);qs('#labXOut').textContent=fmt(state.probeX);
   qs('#labK').value=String(k);qs('#labB').value=String(b);qs('#labX').value=String(state.probeX);
@@ -371,8 +371,8 @@ function renderLab(){
   renderModes();renderCompare();renderChallenge();
 }
 
-qsa('[data-lab-mode]',lab).forEach(btn=>btn.addEventListener('click',()=>{state.mode=btn.dataset.labMode;renderLab();announce('Режим: '+btn.textContent)}));
-qsa('[data-lab-scenario]',lab).forEach(btn=>btn.addEventListener('click',()=>{stopSweep();const sc=scenarios[btn.dataset.labScenario];state.snapshot=null;patch(sc,sc.msg)}));
+qsa('[data-lab-mode]',lab).forEach((btn,idx,arr)=>{btn.addEventListener('click',()=>{state.mode=btn.dataset.labMode;renderLab();announce('Режим: '+btn.textContent)});btn.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();let next=idx;if(e.key==='ArrowLeft')next=(idx-1+arr.length)%arr.length;if(e.key==='ArrowRight')next=(idx+1)%arr.length;if(e.key==='Home')next=0;if(e.key==='End')next=arr.length-1;arr[next].click();arr[next].focus()})});
+qsa('[data-lab-scenario]',lab).forEach(btn=>btn.addEventListener('click',()=>{stopSweep();const {msg,...values}=scenarios[btn.dataset.labScenario];state.snapshot=null;patch(values,msg)}));
 qs('#labK').addEventListener('input',e=>{stopSweep();patch({k:Number(e.target.value)},'k = '+fmt(Number(e.target.value)))});
 qs('#labB').addEventListener('input',e=>{stopSweep();patch({b:Number(e.target.value)},'b = '+fmt(Number(e.target.value)))});
 qs('#labX').addEventListener('input',e=>patch({probeX:Number(e.target.value)},'x = '+fmt(Number(e.target.value))));
@@ -383,7 +383,7 @@ qs('#labClearSnapshot').onclick=()=>{state.snapshot=null;renderLab();announce('�
 qsa('[data-lab-layer]',lab).forEach(btn=>btn.onclick=()=>{const key=btn.dataset.labLayer;if(key==='ghost'&&!state.snapshot)return;const prop=key==='delta'?'showDelta':key==='probe'?'showProbe':'showGhost';state[prop]=!state[prop];renderLab()});
 qs('#labPredictCase').onchange=e=>{state.predictCase=e.target.value;state.predictChoice=null;qs('#labPredictFeedback').textContent='';renderPrediction()};
 qs('#labChallengeNext').onclick=()=>{state.challenge=(state.challenge+1)%challenges.length;renderChallenge();announce('Следующая исследовательская задача')};
-qs('#labChallengeReset').onclick=()=>{const c=challenges[state.challenge];patch({k:1.5,b:1,probeX:2},'Параметры сброшены')};
+qs('#labChallengeReset').onclick=()=>patch({k:1.5,b:1,probeX:2},'Параметры сброшены');
 
 let drag=null;
 function pointerY(e){const r=svg.getBoundingClientRect();return (e.clientY-r.top)/r.height*520}
