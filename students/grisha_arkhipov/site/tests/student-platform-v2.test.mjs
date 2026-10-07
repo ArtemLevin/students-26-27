@@ -66,7 +66,12 @@ test('dashboard and competency evidence expose the KTP route',()=>{
   assert.match(index,/href="ktp\.html"/);
   assert.match(index,/ktp\.html\?lesson=ktp-002/);
   assert.match(index,/07\.10\.26\.html/);
+  assert.match(index,/competency-map-baseline\.js\?v=20261007-1/);
   assert.match(baseline,/ktp:\s*'ktp\.html\?lesson=ktp-001'/);
+  assert.match(baseline,/ktp:\s*'ktp\.html\?lesson=ktp-002'/);
+  assert.match(baseline,/data\.updated = '07\.10\.2026'/);
+  assert.match(baseline,/func_08:\s*'linear'/);
+  assert.match(baseline,/func_10:\s*'hyperbola'/);
   assert.match(map,/Открыть в КТП/);
 });
 
