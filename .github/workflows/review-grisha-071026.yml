@@ -95,21 +95,28 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          browser="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || true)"
-          if [ -z "$browser" ]; then
-            echo "No Chromium-family browser available on runner"
+          driver="$(command -v chromedriver || true)"
+          if [ -z "$driver" ]; then
+            echo "ChromeDriver is unavailable on runner"
             exit 1
           fi
-          echo "Browser: $browser"
-          "$browser" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --allow-file-access-from-files --remote-debugging-port=9222 --user-data-dir=/tmp/grisha-chrome about:blank >/tmp/grisha-chrome.log 2>&1 &
-          chrome_pid=$!
-          cleanup(){ kill "$chrome_pid" 2>/dev/null || true; }
+          echo "ChromeDriver: $driver"
+          python3 -m http.server 8000 --bind 127.0.0.1 >/tmp/grisha-http.log 2>&1 &
+          server_pid=$!
+          "$driver" --port=9515 --allowed-ips= >/tmp/grisha-chromedriver.log 2>&1 &
+          driver_pid=$!
+          cleanup(){ kill "$driver_pid" "$server_pid" 2>/dev/null || true; }
           trap cleanup EXIT
-          for i in {1..30}; do
-            if curl -fsS http://127.0.0.1:9222/json/version >/dev/null; then break; fi
-            sleep 1
+          for i in {1..40}; do
+            server_ok=0
+            driver_ok=0
+            curl -fsS http://127.0.0.1:8000/students/grisha_arkhipov/site/07.10.26.html >/dev/null && server_ok=1 || true
+            curl -fsS http://127.0.0.1:9515/status >/dev/null && driver_ok=1 || true
+            if [ "$server_ok" -eq 1 ] && [ "$driver_ok" -eq 1 ]; then break; fi
+            sleep 0.25
           done
-          curl -fsS http://127.0.0.1:9222/json/version >/dev/null
+          curl -fsS http://127.0.0.1:8000/students/grisha_arkhipov/site/07.10.26.html >/dev/null
+          curl -fsS http://127.0.0.1:9515/status >/dev/null
           node .automation/review-grisha-browser.mjs
 
       - uses: actions/upload-artifact@v4
