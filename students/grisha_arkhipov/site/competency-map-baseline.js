@@ -4,7 +4,7 @@
   if (!data) return;
 
   data.studentName = 'Григорий Архипов';
-  data.updated = '30.09.2026';
+  data.updated = '07.10.2026';
 
   const oldIds = [
     'eq_21','eq_22','eq_23','eq_24','eq_25','eq_26','eq_27','eq_28',
@@ -60,7 +60,31 @@
     };
   });
 
+  const graphLessonAnchor = {
+    func_08: 'linear',
+    func_09: 'parabola',
+    func_10: 'hyperbola',
+    eq_14: 'method'
+  };
+  Object.entries(graphLessonAnchor).forEach(([id, anchor]) => {
+    data.evidence[id] = {
+      text: 'Навык отрабатывался на занятии 07.10.2026. Уровень автоматически не повышается: отдельной диагностики самостоятельности на этом занятии не было.',
+      date: '07.10.2026',
+      lesson: `07.10.26.html#${anchor}`,
+      ktp: 'ktp.html?lesson=ktp-002',
+      href: '../pdf_docs/07.10.26.pdf',
+      tex: '../tex_docs/07.10.26.tex'
+    };
+  });
+
   data.materials = [
+    {
+      date: '07.10.2026',
+      title: 'Графики функций: метод узловых точек',
+      pdf: '../pdf_docs/07.10.26.pdf',
+      tex: '../tex_docs/07.10.26.tex',
+      lesson: '07.10.26.html'
+    },
     {
       date: '30.09.2026',
       title: 'Прикладные задачи с формулами: граничные значения и отбор корней',
