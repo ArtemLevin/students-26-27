@@ -1,4 +1,4 @@
-import {LESSONS} from './lesson-registry.js?v=20260927-finance';
+import {LESSONS} from './lesson-registry.js?v=20261007-credit';
 import {initStudentDashboard} from '../../../shared/student-dashboard/dashboard-core.js';
 import {installEgeProfile2027ControllerHook} from '../../../shared/student-dashboard/ege-profile-2027.js?v=20260903';
 import {PRACTICE_CONFIG} from './practice-config.js';
