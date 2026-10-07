@@ -14,21 +14,29 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Decode files
+
+      - name: Decode TeX and poster
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p students/grisha_arkhipov/tex_docs students/grisha_arkhipov/pdf_docs students/grisha_arkhipov/images
           cat .upload-temp/tex.* | base64 --decode > students/grisha_arkhipov/tex_docs/07.10.26.tex
-          cat .upload-temp/pdf.* | base64 --decode > students/grisha_arkhipov/pdf_docs/07.10.26.pdf
           cat .upload-temp/png.* | base64 --decode > students/grisha_arkhipov/images/07.10.26.png
           test -s students/grisha_arkhipov/tex_docs/07.10.26.tex
-          test -s students/grisha_arkhipov/pdf_docs/07.10.26.pdf
           test -s students/grisha_arkhipov/images/07.10.26.png
-      - name: Commit outputs and cleanup
+
+      - name: Compile PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: students/grisha_arkhipov/tex_docs/07.10.26.tex
+          latexmk_use_xelatex: false
+
+      - name: Verify and commit outputs
         shell: bash
         run: |
           set -euo pipefail
+          test -s students/grisha_arkhipov/pdf_docs/07.10.26.pdf || cp 07.10.26.pdf students/grisha_arkhipov/pdf_docs/07.10.26.pdf
+          test -s students/grisha_arkhipov/pdf_docs/07.10.26.pdf
           rm -rf .upload-temp
           rm -f .github/workflows/one-shot-grisha-071026.yml
           git config user.name "github-actions[bot]"
