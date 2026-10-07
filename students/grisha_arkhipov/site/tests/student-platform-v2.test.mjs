@@ -73,7 +73,7 @@ test('dashboard and competency evidence expose the KTP route',()=>{
 test('07.10 graph lesson preserves source-backed math and robust interaction hooks',()=>{
   const html=read('07.10.26.html');
   for(const anchor of ['method','linear','intersection','parabola','hyperbola']){
-    assert.match(html,new RegExp('id=["\\']'+anchor+'["\\']'));
+    assert.match(html,new RegExp("id=[\\\"']"+anchor+"[\\\"']"));
   }
   assert.doesNotMatch(html,/<mfenced\b/);
   assert.match(html,/aria-labelledby="leaderGraphTitle leaderGraphDesc"/);
