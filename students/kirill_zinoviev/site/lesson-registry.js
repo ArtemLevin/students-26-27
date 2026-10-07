@@ -3,6 +3,40 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+    "date": "2026-10-07",
+    "ktpRefs": [],
+    "href": "07.10.26.html",
+    "title": "Уравнения: корни, скобки и число решений",
+    "navTitle": "Корни и число решений",
+    "navSubtitle": "подстановка · подобные · скобки · 0=0 / 0=c",
+    "summary": "Комплексное повторение уравнений: понятие корня и проверка подстановкой, подобные слагаемые, знаки при раскрытии скобок, три случая для ax=b и перевод суммы и разности выражений в уравнение.",
+    "topics": [
+      "корень уравнения",
+      "проверка подстановкой",
+      "подобные слагаемые",
+      "скобки и знаки",
+      "число корней",
+      "текст → уравнение"
+    ],
+    "outcomes": [
+      {"competencyId":"equations_1","evidenceAnchor":"root","relation":"practiced","label":"Понимание корня уравнения","practiceDisposition":"manual"},
+      {"competencyId":"equations_2","evidenceAnchor":"root","relation":"practiced","label":"Проверка числа подстановкой","practiceDisposition":"manual"},
+      {"competencyId":"expr_5","evidenceAnchor":"terms","relation":"practiced","label":"Распознавание подобных слагаемых","practiceDisposition":"manual"},
+      {"competencyId":"expr_6","evidenceAnchor":"terms","relation":"practiced","label":"Приведение подобных слагаемых","practiceDisposition":"manual"},
+      {"competencyId":"expr_7","evidenceAnchor":"cases","relation":"practiced","label":"Раскрытие скобок по распределительному закону","practiceDisposition":"manual"},
+      {"competencyId":"expr_8","evidenceAnchor":"brackets","relation":"practiced","label":"Раскрытие скобок со знаком минус","practiceDisposition":"manual"},
+      {"competencyId":"equations_7","evidenceAnchor":"cases","relation":"practiced","label":"Уравнения с переменной в обеих частях","practiceDisposition":"manual"},
+      {"competencyId":"equations_8","evidenceAnchor":"cases","relation":"practiced","label":"Уравнения со скобками","practiceDisposition":"manual"},
+      {"competencyId":"equations_11","evidenceAnchor":"cases","relation":"assessed","label":"Тождество и отсутствие решений","practiceDisposition":"manual"},
+      {"competencyId":"equations_12","evidenceAnchor":"translation","relation":"practiced","label":"Составление уравнения по условию задачи","practiceDisposition":"manual"}
+    ],
+    "materials": {
+      "html": "07.10.26.html",
+      "pdf": "../pdf_docs/07.10.26.pdf",
+      "tex": "../tex_docs/07.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-03",
     "ktpRefs": [],
     "href": "03.10.26.html",
