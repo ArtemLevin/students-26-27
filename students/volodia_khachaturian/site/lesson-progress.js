@@ -25,6 +25,11 @@ const levels={
   kin_21:2,
   kin_22:2,
   kin_24:2,
+  kin_29:1,
+  kin_30:1,
+  kin_31:1,
+  kin_32:1,
+  kin_33:1,
   wave_01:2,
   exam_02:2,
   exam_03:1,
@@ -37,7 +42,7 @@ const levels={
   exam_28:2
 };
 data.baselineLevels={...(data.baselineLevels||{}),...levels};
-data.repeatTopics=[...new Set([...(data.repeatTopics||[]),'kin_26','kin_27','kin_28','measure_03','kin_04','kin_06','kin_07','kin_08','kin_10','kin_12','kin_13','kin_15','kin_16','kin_17','kin_18','kin_19','kin_21','kin_22','kin_24','exam_02','exam_03','exam_23','exam_24','exam_25','exam_26','exam_27','exam_28'])];
+data.repeatTopics=[...new Set([...(data.repeatTopics||[]),'kin_26','kin_27','kin_28','kin_29','kin_30','kin_31','kin_32','kin_33','measure_03','kin_04','kin_06','kin_07','kin_08','kin_10','kin_12','kin_13','kin_15','kin_16','kin_17','kin_18','kin_19','kin_21','kin_22','kin_24','exam_02','exam_03','exam_23','exam_24','exam_25','exam_26','exam_27','exam_28'])];
 
 const evidence={
   kin_01:['Тема разбиралась на занятии 22.08.26: критерий модели материальной точки, примеры с поездом и автомобилем.'],
@@ -152,8 +157,24 @@ const lesson03OctEvidence={
 };
 for(const [id,note] of Object.entries(lesson03OctEvidence))evidence[id]=[...(evidence[id]||[]),note];
 
+const lesson07OctEvidence={
+  kin_29:'07.10.26 систематизировано равномерное движение по окружности как движение с постоянным модулем скорости и непрерывным изменением её направления; самостоятельность по теме ещё не оценивалась.',
+  kin_30:'07.10.26 введены и связаны период и частота: ν=n/t, T=t/n, ν=1/T; самостоятельность по новым формулам ещё не оценивалась.',
+  kin_31:'07.10.26 линейная скорость получена из длины окружности: v=2πRν=2πR/T; тема новая, уровень оставлен консервативно на 1.',
+  kin_32:'07.10.26 разобрано центростремительное ускорение aц=v²/R=ω²R и проверка единиц; самостоятельное применение ещё не подтверждено.',
+  kin_33:'07.10.26 закреплены направления: v по касательной, aц к центру; навык отмечен как новый без повышения за одно касание темы.',
+  exam_02:'07.10.26 выбор формулы строился от известных n,t,T,ν,R,v,ω и требуемой величины.',
+  exam_03:'07.10.26 отдельно проверялась размерность центростремительного ускорения (м/с)²/м=м/с².',
+  exam_24:'07.10.26 в тренировочном блоке требуется сначала записывать исходную формулу, затем подставлять числа.',
+  exam_25:'07.10.26 выполнялись преобразования ν=n/t, T=t/n, n=νt, t=n/ν и связи v=ωR.',
+  exam_27:'07.10.26 контролируются секунды, герцы, м/с, рад/с и м/с².',
+  exam_28:'07.10.26 ответ проверяется по физическому смыслу: рост ν уменьшает T, а скорость направлена по касательной и ускорение к центру.'
+};
+for(const [id,note] of Object.entries(lesson07OctEvidence))evidence[id]=[...(evidence[id]||[]),note];
+
 data.evidence={...(data.evidence||{}),...evidence};
 
+const material07Oct={href:'07.10.26.html',label:'Открыть занятие 07.10.26 →'};
 const material03Oct={href:'03.10.26.html',label:'Открыть занятие 03.10.26 →'};
 const material30={href:'30.09.26.html',label:'Открыть занятие 30.09.26 →'};
 const material26={href:'26.09.26.html',label:'Открыть занятие 26.09.26 →'};
@@ -292,8 +313,23 @@ Object.assign(data.topicMaterials,{
   exam_27:material03Oct,
   exam_28:material03Oct
 });
+Object.assign(data.topicMaterials,{
+  kin_29:material07Oct,
+  kin_30:material07Oct,
+  kin_31:material07Oct,
+  kin_32:material07Oct,
+  kin_33:material07Oct,
+  exam_02:material07Oct,
+  exam_03:material07Oct,
+  exam_24:material07Oct,
+  exam_25:material07Oct,
+  exam_27:material07Oct,
+  exam_28:material07Oct
+});
+
 
 data.materials=[
+  {date:'07.10.26',title:'Равномерное движение по окружности',href:'07.10.26.html',pdf:'../pdf_docs/07.10.26.pdf',tex:'../tex_docs/07.10.26.tex',lab:'07.10.26-lab.html'},
   ...(data.materials||[]),
   {date:'03.10.26',title:'Графики скорости и вертикальное движение',href:'03.10.26.html',pdf:'../pdf_docs/03.10.26.pdf',tex:'../tex_docs/03.10.26.tex',lab:'03.10.26-lab.html'},
   {date:'30.09.26',title:'Движение протяжённых тел и условие встречи',href:'30.09.26.html',pdf:'../pdf_docs/30.09.26.pdf',tex:'../tex_docs/30.09.26.tex',lab:'30.09.26-lab.html'},

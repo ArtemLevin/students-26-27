@@ -3,6 +3,41 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+    "date": "2026-10-07",
+    "ktpRefs": [],
+    "href": "07.10.26.html",
+    "title": "Равномерное движение по окружности",
+    "navTitle": "Движение по окружности",
+    "navSubtitle": "период, частота, линейная и угловая скорость, центростремительное ускорение",
+    "summary": "Связь числа оборотов и времени с периодом и частотой; линейная и угловая скорости, соотношение v=ωR, направление скорости по касательной и центростремительного ускорения к центру, формулы aц=v²/R и aц=ω²R.",
+    "topics": [
+      "равномерное движение по окружности",
+      "период и частота",
+      "линейная скорость",
+      "угловая скорость",
+      "центростремительное ускорение"
+    ],
+    "outcomes": [
+      {"label":"Равномерное движение по окружности","level":1,"competencyId":"kin_29","tone":"process","practiceDisposition":"manual"},
+      {"label":"Период и частота обращения","level":1,"competencyId":"kin_30","tone":"process","practiceDisposition":"manual"},
+      {"label":"Линейная скорость v = 2πR/T","level":1,"competencyId":"kin_31","tone":"process","practiceDisposition":"manual"},
+      {"label":"Центростремительное ускорение a = v²/R","level":1,"competencyId":"kin_32","tone":"process","practiceDisposition":"manual"},
+      {"label":"Направления скорости и ускорения","level":1,"competencyId":"kin_33","tone":"process","practiceDisposition":"manual"},
+      {"label":"Выбор формулы по условию","level":2,"competencyId":"exam_02","tone":"process","practiceDisposition":"manual"},
+      {"label":"Проверка размерности","level":1,"competencyId":"exam_03","tone":"process","practiceDisposition":"manual"},
+      {"label":"Формула перед подстановкой","level":2,"competencyId":"exam_24","tone":"process","practiceDisposition":"manual"},
+      {"label":"Преобразование формул","level":2,"competencyId":"exam_25","tone":"process","practiceDisposition":"manual"},
+      {"label":"Единицы и оформление результата","level":2,"competencyId":"exam_27","tone":"process","practiceDisposition":"manual"},
+      {"label":"Проверка физического смысла","level":2,"competencyId":"exam_28","tone":"process","practiceDisposition":"manual"}
+    ],
+    "materials": {
+      "html": "07.10.26.html",
+      "pdf": "../pdf_docs/07.10.26.pdf",
+      "tex": "../tex_docs/07.10.26.tex",
+      "lab": "07.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-10-03",
     "ktpRefs": [],
     "href": "03.10.26.html",
