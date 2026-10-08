@@ -5,6 +5,69 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-08",
+  "ktpRefs": [],
+  "href": "08.10.26.html",
+  "title": "Сравнение дробных величин и задачи на работу",
+  "navTitle": "Сравнение дробных величин и задачи на работу",
+  "navSubtitle": "Математика 6 класса: дробные части минуты, сравнение долей, текстовые задачи на производительность, примеры и тренировка по уроку 8 октября.",
+  "summary": "Математика 6 класса: дробные части минуты, сравнение долей, текстовые задачи на производительность, примеры и тренировка по уроку 8 октября.",
+  "topics": [
+    "Сравнение дробных частей минуты",
+    "Доли одного целого",
+    "Перевод текстовой задачи на язык дробей",
+    "Задачи на работу и производительность"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "units_03",
+      "evidenceAnchor": "minutes",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "units_07",
+      "evidenceAnchor": "minutes",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_base_15",
+      "evidenceAnchor": "minutes",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_base_01",
+      "evidenceAnchor": "shares",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "word_17",
+      "evidenceAnchor": "shares",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_02",
+      "evidenceAnchor": "stories",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_04",
+      "evidenceAnchor": "work",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_16",
+      "evidenceAnchor": "work",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "08.10.26.html",
+    "pdf": "../pdf_docs/08.10.26.pdf",
+    "tex": "../tex_docs/08.10.26.tex",
+    "lab": "08.10.26-lab.html"
+  }
+},
+{
     "date": "2026-10-06",
     "ktpRefs": [],
     "href": "06.10.26.html",
