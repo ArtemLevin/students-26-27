@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Исследовательская лаборатория Ксении Васильченко: дроби минуты и сравнение результатов при постоянной производительности.">
+<title>Лаборатория дробных величин — Ксения Васильченко</title>
+<style>
+:root{color-scheme:light;--bg:#f6f1e8;--surface:#fffdf8;--muted-surface:#eee7dc;--ink:#282522;--muted:#6d655f;--line:#d9cec0;--accent:#833f50;--second:#416f82;--focus:#ca8537;--good:#47745e}
+html[data-theme=dark]{color-scheme:dark;--bg:#171515;--surface:#211e1e;--muted-surface:#2b2526;--ink:#f2ece8;--muted:#bdb1ab;--line:#403839;--accent:#d38b9c;--second:#8ab9c8;--focus:#efbd71;--good:#84bd99}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,"Segoe UI",Arial,sans-serif}
+a{color:inherit}
+button,select,input{font:inherit;color:inherit}button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{position:absolute;left:-9999px}.skip:focus{left:1rem;top:.5rem;z-index:10;background:var(--surface);padding:.7rem}
+.wrap{width:min(calc(100% - 2rem),1260px);margin:auto}
+.topbar{border-bottom:1px solid var(--line);background:var(--surface)}
+.topbar-in{display:flex;justify-content:space-between;align-items:center;gap:1rem;min-height:68px;flex-wrap:wrap;padding:.7rem 0}
+.topbar-in nav{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
+.brand{font-weight:800}.brand small{display:block;color:var(--muted);font-size:.8rem}
+.topbar a,.topbar button{padding:.55rem .8rem;min-height:44px;background:transparent;border:1px solid var(--line);border-radius:7px;text-decoration:none}
+.masthead{padding:clamp(2rem,4vw,3.5rem) 0 1.5rem;display:flex;justify-content:space-between;gap:2rem;align-items:end;border-bottom:1px solid var(--line)}
+.eyebrow{font:800 .73rem ui-monospace,monospace;letter-spacing:.13em;color:var(--accent);text-transform:uppercase}
+h1,h2,h3{letter-spacing:-.03em;line-height:1.15}h1{font:500 clamp(2.2rem,5vw,4.5rem)/1.06 Georgia,serif;margin:.5rem 0}h2{font:500 clamp(1.5rem,2.5vw,2.3rem) Georgia,serif;margin:.2rem 0 1rem}
+.masthead p{max-width:740px}.tabs{display:flex;gap:.5rem;margin:1rem 0 1.5rem;flex-wrap:wrap}
+.tabs button{min-height:44px;padding:.65rem 1rem;border:1px solid var(--line);background:transparent;border-radius:7px;font-weight:760}
+.tabs button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(275px,.7fr);gap:1.5rem;align-items:start}
+.board{border-top:2px solid var(--ink);padding:1.2rem 0 2rem;min-width:0}
+.controls{background:var(--surface);border:1px solid var(--line);padding:1.25rem;min-width:0}
+.controls h3{margin:.1rem 0 .8rem}.controls label{display:block;font-weight:650;margin:1rem 0 .35rem}
+.controls select,.controls input[type=range]{width:100%;accent-color:var(--accent)}
+.controls select{padding:.65rem;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.controls input[type=range]{min-height:32px}
+.dataline{display:flex;justify-content:space-between;gap:.7rem;flex-wrap:wrap}
+.dataline output{font:750 1.03rem ui-monospace,monospace;color:var(--accent)}
+.barbox{border-top:1px solid var(--line);padding:1.2rem 0}
+.barbox h3{font-size:1.1rem;margin:0 0 .6rem}
+.bar{height:40px;background:var(--muted-surface);position:relative;overflow:hidden;border:1px solid var(--line)}
+.fill{height:100%;width:0;background:var(--accent);transition:width .15s linear}
+.barbox:nth-of-type(2) .fill{background:var(--second)}
+.bar .ticks{pointer-events:none;position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(10% - 1px),var(--line) calc(10% - 1px),var(--line) 10%)}
+.numbers{display:flex;gap:1.2rem;flex-wrap:wrap;font-variant-numeric:tabular-nums;margin:.35rem 0;color:var(--muted)}
+.result{margin-top:1rem;border-left:3px solid var(--accent);padding:.85rem 1.1rem;background:var(--muted-surface)}
+.result strong{display:block;color:var(--accent);font-size:1.2rem}
+.instruction{color:var(--muted)}
+button.soft{border:1px solid var(--line);padding:.65rem 1rem;min-height:44px;background:transparent;border-radius:7px}
+button.soft:hover{border-color:var(--accent)}
+.follow{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.summary{max-width:760px;border-top:1px solid var(--line);margin:1.8rem 0;padding:1rem 0}
+.summary p{margin:.3rem 0}
+.hidden,[hidden]{display:none!important}
+.legend{display:flex;gap:1rem;flex-wrap:wrap;font-size:.9rem;color:var(--muted)}
+.legend i{display:inline-block;width:13px;height:13px;background:var(--accent);vertical-align:middle;margin-right:.3rem}.legend i.two{background:var(--second)}
+.segment{display:flex;gap:.5rem;flex-wrap:wrap;margin:.3rem 0}
+.segment button{min-width:74px;padding:.5rem;border:1px solid var(--line);background:transparent;min-height:44px;border-radius:6px}
+.segment button[aria-pressed=true]{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+small{color:var(--muted)}
+.footer{color:var(--muted);border-top:1px solid var(--line);padding:1.4rem 0;margin-top:3rem}
+@media(max-width:830px){.workspace{grid-template-columns:1fr}.controls{order:-1}.masthead{display:block}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.fill{transition:none}}
+@media print{.topbar,.tabs,.controls,.follow{display:none!important}.workspace{display:block}.board{break-inside:avoid}body{background:white}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="topbar"><div class="wrap topbar-in">
+<div class="brand">Ксения Васильченко<small>Математика · 6 класс</small></div>
+<nav aria-label="Возврат и оформление"><a href="08.10.26.html">← К занятию</a><a href="index.html">Навигатор</a><button id="theme" type="button">Тема</button></nav>
+</div></header>
+<main class="wrap" id="main">
+<header class="masthead"><div><div class="eyebrow">Виртуальная лаборатория · 08.10.26</div><h1>Сравнивайте, изменяя величины</h1><p>Выберите два промежутка времени или двух работников. Меняйте исходные значения и наблюдайте, как изменяется результат. Все вычисления привязаны к данным модели.</p></div></header>
+<div class="tabs" role="group" aria-label="Режим исследования"><button type="button" data-mode="time" aria-pressed="true">Доли минуты</button><button type="button" data-mode="work" aria-pressed="false">Производительность</button></div>
+<section id="timeMode" aria-labelledby="timeTitle">
+<div class="workspace"><div class="board"><div class="eyebrow">01 · Измеряем в одних единицах</div><h2 id="timeTitle">Какая часть минуты больше?</h2><p class="instruction">Полная полоса обозначает одну минуту, то есть 60 секунд. Длина заполнения пропорциональна доле минуты.</p>
+<div class="barbox"><h3>Первая величина</h3><div class="bar"><div class="fill" id="timeBarA"></div><div class="ticks"></div></div><div class="numbers"><span id="timeFractionA"></span><span id="timeSecA"></span></div></div>
+<div class="barbox"><h3>Вторая величина</h3><div class="bar"><div class="fill" id="timeBarB"></div><div class="ticks"></div></div><div class="numbers"><span id="timeFractionB"></span><span id="timeSecB"></span></div></div>
+<div class="legend"><span><i></i> Первая величина</span><span><i class="two"></i> Вторая величина</span></div>
+<div class="result" role="status" aria-live="polite"><strong id="timeCompare"></strong><span id="timeExplain"></span></div>
+<div class="summary"><h3>Что проверить самостоятельно</h3><p>При умножении обеих дробей на 60 знак сравнения сохраняется. Проверьте это на контрастной паре 1/3 и 2/5 минуты, затем на 11/20 и 8/15 минуты.</p></div></div>
+<aside class="controls"><h3>Данные эксперимента</h3><p>Все пары взяты из примеров или тренировки занятия.</p>
+<label for="fractionA">Первая доля минуты</label><select id="fractionA"></select>
+<label for="fractionB">Вторая доля минуты</label><select id="fractionB"></select>
+<div class="follow"><button id="timeReset" class="soft" type="button">Сбросить</button><button id="timeSwap" class="soft" type="button">Поменять местами</button></div>
+<p><small>В формулах показаны точные значения секунд, включая дробные, когда они возникают.</small></p></aside></div></section>
+<section id="workMode" aria-labelledby="workTitle" hidden>
+<div class="workspace"><div class="board"><div class="eyebrow">02 · Работа за выбранное время</div><h2 id="workTitle">Кто выполнил большую часть заказа?</h2><p class="instruction">Целая полоса = один одинаковый заказ. В каждом сценарии работники трудятся с постоянной производительностью. Время ограничено выполнением одного заказа.</p>
+<div class="barbox"><h3>Первый работник</h3><div class="bar"><div class="fill" id="workBarA"></div><div class="ticks"></div></div><div class="numbers"><span id="workFractionA"></span><span id="workProductA"></span></div></div>
+<div class="barbox"><h3>Второй работник</h3><div class="bar"><div class="fill" id="workBarB"></div><div class="ticks"></div></div><div class="numbers"><span id="workFractionB"></span><span id="workProductB"></span></div></div>
+<div class="legend"><span><i></i> Первый</span><span><i class="two"></i> Второй</span></div>
+<div class="result" role="status" aria-live="polite"><strong id="workCompare"></strong><span id="workExplain"></span></div>
+<div class="summary"><h3>Вывод</h3><p>При постоянной производительности доля выполненного заказа равна времени работы, делённому на время выполнения всего заказа. Сравните доли, даже если число деталей неизвестно.</p></div></div>
+<aside class="controls">
+<h3>Сценарий</h3><label for="workScenario">Исходные условия</label><select id="workScenario"></select>
+<label for="tA">Время работы первого</label><input id="tA" type="range" min="0" max="6" step="1"><div class="dataline"><small>0 ч — до всего заказа</small><output id="tAValue" for="tA">5 ч</output></div>
+<label for="tB">Время работы второго</label><input id="tB" type="range" min="0" max="8" step="1"><div class="dataline"><small>0 ч — до всего заказа</small><output id="tBValue" for="tB">7 ч</output></div>
+<div class="follow"><button id="workReset" class="soft" type="button">Вернуть сценарий</button><button id="workEqual" class="soft" type="button">Показать случай равенства</button></div>
+<p><small>Примеры взяты из заданий на производительность и доли выполненной работы.</small></p></aside></div></section>
+</main><footer class="wrap footer">Лёвин Артём Александрович · эксклюзивно для Ксении Васильченко · 08.10.26</footer>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const root=document.documentElement;
+try{let t=localStorage.getItem('xenia-theme');if(['light','dark'].includes(t))root.dataset.theme=t}catch(_){}
+$('theme').addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='light'?'dark':'light';try{localStorage.setItem('xenia-theme',root.dataset.theme)}catch(_){}});
+const gcd=(a,b)=>b===0?Math.abs(a):gcd(b,a%b);
+const reduce=(a,b)=>{const g=gcd(a,b);return [a/g,b/g]};
+const show=(a,b)=>b===1?String(a):a+'/'+b;
+const fracList=[[1,3],[2,5],[11,20],[8,15],[5,12],[7,18],[3,4],[7,16],[5,12]];
+const selectFill=(sel)=>{fracList.forEach(([a,b],i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=a+'/'+b;sel.append(o)})};
+selectFill($('fractionA'));selectFill($('fractionB'));
+const fractions=()=>[fracList[Number($('fractionA').value)],fracList[Number($('fractionB').value)]];
+function updateTime(){
+const [[a,b],[c,d]]=fractions();
+$('timeBarA').style.width=(100*a/b)+'%';$('timeBarB').style.width=(100*c/d)+'%';
+$('timeFractionA').textContent=a+'/'+b+' минуты';$('timeFractionB').textContent=c+'/'+d+' минуты';
+const [sa,sb]=reduce(60*a,b),[sc,sd]=reduce(60*c,d);
+$('timeSecA').textContent=show(sa,sb)+' с';$('timeSecB').textContent=show(sc,sd)+' с';
+const cmp=a*d-c*b;
+$('timeCompare').textContent=cmp>0?'Первая величина больше':cmp<0?'Вторая величина больше':'Величины равны';
+$('timeExplain').textContent=show(sa,sb)+' с '+(cmp>0?'>':cmp<0?'<':'=')+' '+show(sc,sd)+' с. При переводе обе величины умножаются на 60.';
+}
+$('fractionA').addEventListener('change',updateTime);$('fractionB').addEventListener('change',updateTime);
+$('timeReset').addEventListener('click',()=>{$('fractionA').value='0';$('fractionB').value='1';updateTime()});
+$('timeSwap').addEventListener('click',()=>{const x=$('fractionA').value;$('fractionA').value=$('fractionB').value;$('fractionB').value=x;updateTime()});
+const scenarios=[
+{label:'Мастер 6 ч, ученик 8 ч',a:6,b:8,x:5,y:7},
+{label:'Два работника: 5 ч и 10 ч',a:5,b:10,x:3,y:6},
+{label:'Два работника: 9 ч и 12 ч',a:9,b:12,x:4,y:6},
+{label:'Насосы: 18 ч и 15 ч',a:18,b:15,x:5,y:4}
+];
+scenarios.forEach((s,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=s.label;$('workScenario').append(o)});
+function loadScenario(i){const s=scenarios[i];$('tA').max=s.a;$('tB').max=s.b;$('tA').value=s.x;$('tB').value=s.y;updateWork()}
+function updateWork(){
+const s=scenarios[Number($('workScenario').value)],a=Number($('tA').value),b=Number($('tB').value);
+$('tAValue').textContent=a+' ч';$('tBValue').textContent=b+' ч';
+$('workBarA').style.width=(100*a/s.a)+'%';$('workBarB').style.width=(100*b/s.b)+'%';
+const [pa,pb]=reduce(a,s.a),[pc,pd]=reduce(b,s.b);
+$('workFractionA').textContent=show(pa,pb)+' заказа';$('workFractionB').textContent=show(pc,pd)+' заказа';
+$('workProductA').textContent=a+' ч из '+s.a+' ч';$('workProductB').textContent=b+' ч из '+s.b+' ч';
+const cmp=a*s.b-b*s.a;
+$('workCompare').textContent=cmp>0?'Первый выполнил больше':cmp<0?'Второй выполнил больше':'Выполнены равные доли';
+$('workExplain').textContent=show(pa,pb)+' '+(cmp>0?'>':cmp<0?'<':'=')+' '+show(pc,pd)+'. Производительность = 1 / время всего заказа.';
+}
+$('workScenario').addEventListener('change',()=>loadScenario(Number($('workScenario').value)));
+$('tA').addEventListener('input',updateWork);$('tB').addEventListener('input',updateWork);
+$('workReset').addEventListener('click',()=>loadScenario(Number($('workScenario').value)));
+$('workEqual').addEventListener('click',()=>{$('workScenario').value='1';loadScenario(1)});
+const modes=['time','work'];
+function setMode(mode,push){
+if(!modes.includes(mode))mode='time';
+$('timeMode').hidden=mode!=='time';$('workMode').hidden=mode!=='work';
+document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
+if(push){const u=new URL(location.href);u.searchParams.set('mode',mode);history.replaceState(null,'',u)}
+}
+document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode,true)));
+$('fractionA').value='0';$('fractionB').value='1';updateTime();
+$('workScenario').value='0';loadScenario(0);
+const chosen=new URLSearchParams(location.search).get('mode')||location.hash.replace('#','');
+setMode(chosen,false);
+})();
+</script>
+</body></html>
