@@ -1,0 +1,306 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[default]{lato}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,top=20mm,bottom=21mm,left=21mm,right=21mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\definecolor{accent}{HTML}{167978}
+\definecolor{darkaccent}{HTML}{164D50}
+\definecolor{textgray}{HTML}{394346}
+\definecolor{lightline}{HTML}{A5C4C1}
+\color{textgray}
+\onehalfspacing
+\setlist[enumerate]{leftmargin=*,itemsep=.55em,topsep=.35em}
+\setlist[itemize]{leftmargin=*,itemsep=.25em,topsep=.3em}
+\setlength{\parindent}{0pt}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\footnotesize Лёвин А.~А.\,·\,Анастасия Павлова}
+\fancyfoot[R]{\footnotesize\thepage}
+\renewcommand{\footrulewidth}{.3pt}
+\newcommand{\checkitem}[1]{\noindent\(\square\)\enspace #1\par}
+\newcommand{\keyterm}[1]{{\color{darkaccent}\textbf{#1}}}
+\newcommand{\workunit}{\text{работы}}
+\newcommand{\gap}{\vspace{.3em}}
+\newcommand{\linebreaksep}{\vspace{.3em}\par\noindent\color{lightline}\rule{\linewidth}{.35pt}\par\color{textgray}\vspace{.2em}}
+\tikzset{
+ flowstart/.style={ellipse,draw=accent,very thick,align=center,minimum width=3cm,minimum height=1.05cm,fill=white,font=\small},
+ flowstep/.style={rounded corners=2pt,draw=accent,thick,align=center,text width=10.2cm,minimum height=1.2cm,inner sep=7pt,fill=white,font=\small},
+ flowchoice/.style={diamond,aspect=2.25,draw=accent,thick,align=center,text width=4.2cm,inner sep=5pt,fill=white,font=\small},
+ flowbranch/.style={rounded corners=2pt,draw=accent,thick,align=center,text width=5.65cm,minimum height=2cm,inner sep=6pt,fill=white,font=\small},
+ flowarrow/.style={-{Stealth[length=2.8mm]},very thick,color=darkaccent}
+}
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{43mm}
+{\Large\color{accent}\bfseries ЧЕК-ЛИСТ\par}
+\vspace{11mm}
+{\Huge\color{darkaccent}\bfseries Задачи на совместную работу\par}
+\vspace{6mm}
+{\Large Производительность, рациональные уравнения\par}
+{\Large и системы для трёх исполнителей\par}
+\vspace{19mm}
+{\large Математика\par}
+\vspace{11mm}
+{\large 08.10.26\par}
+\vfill
+{\normalsize Лёвин Артём Александрович\par}
+{\normalsize эксклюзивно для Анастасии Павловой\par}
+\vspace{19mm}
+\begin{tikzpicture}[remember picture,overlay]
+ \draw[accent!45,line width=1.05pt] ([yshift=20mm,xshift=22mm]current page.south west)
+  .. controls ([yshift=29mm,xshift=68mm]current page.south west) and
+             ([yshift=7mm,xshift=-74mm]current page.south east) ..
+             ([yshift=20mm,xshift=-22mm]current page.south east);
+\end{tikzpicture}
+\end{center}
+\end{titlepage}
+\setcounter{page}{2}
+
+\section*{1. Главная идея: складываем производительности}
+\checkitem{\keyterm{Результат работы} обозначают \(A\), \keyterm{время} --- \(t\), \keyterm{производительность} --- \(p\).}
+\[
+\boxed{A=pt,\qquad p=\frac At,\qquad t=\frac Ap.}
+\]
+\checkitem{Если каждый исполнитель выполняет одну целую работу, удобно принять \(A=1\). Тогда \(p=1/t\).}
+\checkitem{При одновременной независимой работе исполнителей \(p_{\text{общ}}=p_1+p_2+\cdots\). \keyterm{Времена складывать нельзя.}}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.22}
+\begin{tabularx}{.93\linewidth}{@{}Xccc@{}}
+\toprule
+\textbf{Исполнитель} & \textbf{Производительность} & \textbf{Время} & \textbf{Работа}\\
+\midrule
+Первый & \(p_1=1/t_1\) & \(t_1\) & \(1\)\\
+Второй & \(p_2=1/t_2\) & \(t_2\) & \(1\)\\
+Совместно & \(p_1+p_2\) & \(T\) & \(1\)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection*{Пример 1. Два насоса}
+Первый насос наполняет резервуар за 12~ч, оба вместе --- за 4~ч. За сколько часов наполнит его второй насос?
+\[
+\frac1{12}+\frac1x=\frac14
+\quad\Longrightarrow\quad
+\frac1x=\frac14-\frac1{12}=\frac16
+\quad\Longrightarrow\quad x=6.
+\]
+\keyterm{Ответ:} 6~ч. При этом \(x>0\), поскольку время физически положительно.
+
+\section*{2. Рациональные выражения и уравнения}
+\checkitem{«Правило улыбки»: при сложении дробей \(ad+bc\) даёт числитель, \(bd\) --- знаменатель:}
+\[
+\boxed{\frac ab+\frac cd=\frac{ad+bc}{bd}},\qquad b\ne0,\ d\ne0.
+\]
+\checkitem{«Правило креста»: для равных дробей используйте равенство \(\frac AB=\frac CD\Rightarrow AD=BC\), если \(B\ne0\), \(D\ne0\).}
+\checkitem{При переводе десятичной дроби в обычную: \(3{,}6=\frac{18}{5}\), поэтому \(\frac1{3{,}6}=\frac5{18}\).}
+\checkitem{Перед решением записывайте ограничения на знаменатели; после решения проверяйте смысл найденных значений.}
+
+\subsection*{Пример 2. Насосы с разными временами}
+Один насос выполняет работу за \(x\) часов, второй --- за \(x+3\) часа. Вместе им требуется \(3{,}6\) часа. Найдём индивидуальные времена.
+\[
+\frac1x+\frac1{x+3}=\frac5{18},\qquad x>0.
+\]
+\[
+\frac{2x+3}{x(x+3)}=\frac5{18}
+\ \Longrightarrow\ 18(2x+3)=5x(x+3)
+\ \Longrightarrow\ 5x^2-21x-54=0.
+\]
+\[
+D=(-21)^2-4\cdot5\cdot(-54)=1521=39^2,
+\qquad x=\frac{21\pm39}{10}.
+\]
+Корни: \(6\) и \(-\frac95\). Отрицательное время исключаем. \keyterm{Ответ:} 6 и 9~ч.
+
+\section*{3. Задачи о двух станках}
+\checkitem{Если \(A\) деталей производится с постоянной скоростью \(p\) деталей/ч, то \(t=A/p\).}
+\checkitem{Разность времен берите в том порядке, который следует из текста: \(t_{\text{медленного}}-t_{\text{быстрого}}>0\).}
+\subsection*{Пример 3. Один станок быстрее другого}
+Каждый станок должен изготовить по 96 деталей. Второй выпускает на 4 детали в час больше первого и заканчивает на 2~ч раньше. Если скорость первого \(x\) деталей/ч, то
+\[
+\frac{96}{x}-\frac{96}{x+4}=2,\qquad x>0.
+\]
+Делим всё уравнение на 2, затем приводим дроби:
+\[
+\frac{48}{x}-\frac{48}{x+4}=1
+\ \Longrightarrow\ \frac{192}{x(x+4)}=1
+\ \Longrightarrow\ x^2+4x-192=0.
+\]
+\[
+D=4^2+4\cdot192=784=28^2,\qquad
+x=\frac{-4\pm28}{2}.
+\]
+Подходит \(x=12\), скорость второго --- 16 деталей/ч. Времена: \(96/12=8\)~ч и \(96/16=6\)~ч; разница действительно 2~ч.
+
+\clearpage
+\section*{4. Как извлекать корни из больших квадратов}
+\checkitem{Сначала заключите число между квадратами удобных десятков, например \(30^2=900\) и \(40^2=1600\).}
+\checkitem{По последней цифре числа определите возможные последние цифры корня: квадрат с последней цифрой 1 получается при окончании корня на 1 или 9; с цифрой 4 --- на 2 или 8; с цифрой 6 --- на 4 или 6.}
+\checkitem{Проверьте кандидатов возведением в квадрат. Приём ищет \keyterm{целочисленный} корень; не всякое число является точным квадратом.}
+\[
+\sqrt{1521}=39\quad(39^2=1521),\qquad
+\sqrt{5184}=72\quad(72^2=5184).
+\]
+Полезно опираться и на ближайший уже известный квадрат:
+\[
+160^2=25600,\quad 25600-1884=23716=154^2,
+\quad\boxed{\sqrt{23716}=154}.
+\]
+\checkitem{\keyterm{Расчёт дискриминанта} \(D=b^2-4ac\) сохраняйте точным. Если \(D\ge0\), корни квадратного уравнения \(ax^2+bx+c=0\) равны \(\displaystyle x=\frac{-b\pm\sqrt D}{2a}\), где \(a\ne0\).}
+
+\subsection*{Важная проверка перед записью ответа}
+\checkitem{В многоэтапной задаче \keyterm{полное время} равно сумме времён отдельных этапов. Например, 5 дней до перехода работников и ещё 10 дней после перехода --- всего 15 дней.}
+\checkitem{Уточните, требуется ли производительность, личное время, совместное время или доля выполненной работы. Не забудьте единицы измерения.}
+
+\clearpage
+\thispagestyle{fancy}
+\section*{Алгоритм: точный квадрат большого числа}
+\vspace{6mm}
+\begin{center}
+\begin{tikzpicture}[node distance=10mm]
+\node[flowstart] (s) {Начало};
+\node[flowstep,below=of s] (a) {Найдите соседние удобные квадраты: \\ \(k^2\le N<(k+10)^2\), где \(k\) кратно десяти};
+\node[flowstep,below=of a] (b) {Определите десятки возможного корня и найдите его последние цифры по последней цифре \(N\)};
+\node[flowstep,below=of b] (c) {Последовательно возведите в квадрат каждого допустимого кандидата \(m\)};
+\node[flowchoice,below=12mm of c] (d) {Найдено \(m\): \(m^2=N\)?};
+\node[flowbranch,below left=15mm and 5mm of d] (no) {Нет: ни один кандидат не подошёл, целого корня нет};
+\node[flowbranch,below right=15mm and 5mm of d] (yes) {Да: \(\sqrt N=m\), если \(m\ge0\)};
+\node[flowstart,below=26mm of d] (e) {Завершение};
+\draw[flowarrow] (s) -- (a);
+\draw[flowarrow] (a) -- (b);
+\draw[flowarrow] (b) -- (c);
+\draw[flowarrow] (c) -- (d);
+\draw[flowarrow] (d.west) -| node[pos=.25,above,font=\small]{нет} (no.north);
+\draw[flowarrow] (d.east) -| node[pos=.25,above,font=\small]{да} (yes.north);
+\draw[flowarrow] (no.south) |- (e.west);
+\draw[flowarrow] (yes.south) |- (e.east);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\section*{5. Три исполнителя: известны времена пар}
+Пусть \(p_1,p_2,p_3>0\) --- индивидуальные производительности. Если пары \((1,2)\), \((2,3)\), \((3,1)\) выполняют всю работу за \(T_{12}\), \(T_{23}\), \(T_{31}\), то
+\[
+\begin{cases}
+p_1+p_2=\dfrac1{T_{12}},\\[2mm]
+p_2+p_3=\dfrac1{T_{23}},\\[2mm]
+p_3+p_1=\dfrac1{T_{31}}.
+\end{cases}
+\]
+\checkitem{Если нужно время \keyterm{всех троих вместе}, сложите три равенства: каждая производительность встретится дважды.}
+\[
+\boxed{p_1+p_2+p_3=\frac12\!\left(\frac1{T_{12}}+\frac1{T_{23}}+\frac1{T_{31}}\right),\qquad
+T=\frac1{p_1+p_2+p_3}.}
+\]
+\subsection*{Пример 4. Время троих вместе}
+Если пары работают за 6, 8 и 12~ч соответственно, то
+\[
+2(p_1+p_2+p_3)=\frac16+\frac18+\frac1{12}
+=\frac4{24}+\frac3{24}+\frac2{24}=\frac9{24},
+\]
+\[
+p_1+p_2+p_3=\frac3{16},\qquad T=\frac{16}{3}\ \text{ч}=5\ \text{ч}\ 20\ \text{мин}.
+\]
+\checkitem{Если просят \keyterm{время каждого по отдельности}, найдите все три производительности из системы. Например, выразите \(p_1\) и \(p_3\) через \(p_2\) и подставьте в третье равенство. Затем \(t_i=1/p_i\).}
+
+\subsection*{Пример 5. Три индивидуальных времени}
+Пары \((1,2)\), \((2,3)\), \((3,1)\) справляются за \(6\), \(10\) и \(7{,}5\)~ч. Поэтому
+\[
+\begin{cases}
+p_1+p_2=1/6,\\
+p_2+p_3=1/10,\\
+p_3+p_1=2/15.
+\end{cases}
+\quad\Longrightarrow\quad
+\begin{cases}
+p_1=1/6-p_2,\\
+p_3=1/10-p_2.
+\end{cases}
+\]
+Подставляем в третье равенство:
+\[
+\left(\frac16-p_2\right)+\left(\frac1{10}-p_2\right)=\frac2{15}
+\ \Longrightarrow\ p_2=\frac1{15}.
+\]
+Отсюда \(p_1=1/10\), \(p_3=1/30\). \keyterm{Ответ:} 10, 15 и 30~ч.
+
+
+\clearpage
+\section*{Алгоритм: как решить задачу на работу}
+\vspace{6mm}
+\begin{center}
+\begin{tikzpicture}[node distance=10mm]
+\node[flowstart] (s) {Начало};
+\node[flowstep,below=of s] (a) {Прочитайте вопрос, выберите \(A\) и задайте переменные};
+\node[flowstep,below=of a] (b) {Составьте таблицу: \(p\), \(t\), \(A\). Используйте \(p=A/t\)};
+\node[flowchoice,below=12mm of b] (d) {Нужно время группы?};
+\node[flowbranch,below left=16mm and 6mm of d] (l) {Нет: составьте систему для индивидуальных \(p_i\), найдите нужные \(t_i=A/p_i\)};
+\node[flowbranch,below right=16mm and 6mm of d] (r) {Да: сложите производительности и найдите \(T=A/\sum p_i\)};
+\node[flowstep,below=58mm of d] (c) {Проверьте ОДЗ, положительность, единицы и вопрос задачи; сложите времена этапов, если требуется};
+\node[flowstart,below=of c] (e) {Ответ};
+\draw[flowarrow] (s)--(a);
+\draw[flowarrow] (a)--(b);
+\draw[flowarrow] (b)--(d);
+\draw[flowarrow] (d.west) -| node[pos=.25,above,font=\small]{нет} (l.north);
+\draw[flowarrow] (d.east) -| node[pos=.25,above,font=\small]{да} (r.north);
+\draw[flowarrow] (l.south) -- ++(0,-8mm) -| ($(c.north)+(-3cm,0)$);
+\draw[flowarrow] (r.south) -- ++(0,-8mm) -| ($(c.north)+(3cm,0)$);
+\draw[flowarrow] (c)--(e);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\section*{Тренировочный блок \hfill Путь А}
+\textit{10 заданий. Записывайте основные уравнения, ограничения и полный ответ с единицами.}
+\begin{enumerate}
+\item Первый насос наполняет резервуар за 12~ч, второй --- за 18~ч. За какое время они наполнят его вместе?
+\item Два насоса наполняют резервуар за 4~ч. Первый насос мог бы сделать это один за 6~ч. Сколько часов потребуется второму насосу?
+\item Бригада работала над заказом 5 дней, затем часть работников перевели в другую бригаду. После перехода заказ был завершён ещё за 10 дней. Сколько дней заняло выполнение заказа целиком?
+\item Один насос наполняет резервуар за \(x\) часов, другой --- за \(x+2\) часа. Вместе они наполняют его за \(2{,}4\) часа. Найдите оба индивидуальных времени.
+\item Два станка должны изготовить по 120 одинаковых деталей каждый. Второй производит на 5 деталей в час больше первого и заканчивает на 2~ч раньше. Найдите производительности станков.
+\item Найдите без калькулятора точные значения \(\sqrt{1521}\), \(\sqrt{5184}\) и \(\sqrt{23716}\). Кратко объясните подбор кандидатов.
+\item Решите уравнение \(u^2-160u+471=0\), используя рациональный подбор корня из дискриминанта.
+\item Первая и вторая бригады совместно выполняют работу за 6~ч, вторая и третья --- за 8~ч, третья и первая --- за 12~ч. За сколько часов выполнят работу все три бригады вместе?
+\item Три станка попарно выполняют одинаковую работу: первый со вторым за 6~ч, второй с третьим за 10~ч, третий с первым за \(7{,}5\)~ч. Сколько времени потребовалось бы каждому станку отдельно?
+\item Две бригады вместе могут выполнить заказ за 6 дней. Первые 2 дня они работали совместно, затем первую бригаду перевели на другой объект. Вторая закончила оставшуюся работу за 10 дней. За сколько дней могла бы выполнить весь заказ каждая бригада в отдельности?
+\end{enumerate}
+
+\clearpage
+\section*{Ответы для самопроверки}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+1 & \(\dfrac{36}{5}\) ч, или 7 ч 12 мин.\\
+2 & 12 ч.\\
+3 & 15 дней.\\
+4 & 4 ч и 6 ч.\\
+5 & 15 и 20 деталей/ч (первый и второй станки).\\
+6 & 39; 72; 154.\\
+7 & \(u=3\) и \(u=157\).\\
+8 & \(\dfrac{16}{3}\) ч, или 5 ч 20 мин.\\
+9 & 10, 15 и 30 ч (первый, второй и третий станки).\\
+10 & 10 дней и 15 дней (первая и вторая бригады).\\
+\bottomrule
+\end{tabularx}
+\vspace{8mm}
+\textit{Контрольный вопрос: какое найденное число отвечает именно на вопрос условия?}
+\end{document}
