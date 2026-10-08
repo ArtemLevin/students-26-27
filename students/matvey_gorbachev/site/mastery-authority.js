@@ -139,8 +139,34 @@ for(const g of d.groups)for(const item of g.items){
   }
 }
 
+
+// 08.10.26: evidence records the studied material; mastery levels remain unchanged without observed independent performance.
+const oct08Evidence=new Map([
+["Задачи на совместную работу","work"],
+["Задачи на производительность","work"],
+["Задачи на смеси и сплавы","mixtures"],
+["Задачи на концентрацию растворов","mixtures"],
+["Задачи на изменение величины в несколько этапов","changes"],
+["Составление уравнения по тексту","method"],
+["Составление системы по тексту","pair"],
+["Выбор переменной в прикладной модели","method"],
+["Перевод условия в формулы","method"],
+["Анализ размерностей","time"],
+["Проверка реалистичности ответа","changes"],
+["Интерпретация математического результата","practice"]
+]);
+for(const g of d.groups)for(const item of g.items){
+  const anchor=oct08Evidence.get(item.title);
+  if(anchor){
+    item.evidence=Array.isArray(item.evidence)?item.evidence:[];
+    if(!item.evidence.some(e=>e.date==="08.10.26")){
+      item.evidence.push({date:"08.10.26",text:"Навык разобран и представлен в пособии 08.10.26 по работе и растворам; самостоятельное освоение отдельно не оценивалось.",href:"08.10.26.html#"+anchor});
+    }
+  }
+}
+
 const stablePrefix="matvey_gorbachev-ege-profile-math";try{const suffixes=["-competency-map","-repeat","-theme"],legacyPrefixes=["matvey_gorbachev-ege-profile-math-20260927","matvey_gorbachev-ege-profile-math-20260924","matvey_gorbachev-ege-profile-math-20260920","matvey_gorbachev-ege-profile-math-20260917"];for(const suffix of suffixes){const stableKey=stablePrefix+suffix;if(localStorage.getItem(stableKey)==null){for(const legacy of legacyPrefixes){const value=localStorage.getItem(legacy+suffix);if(value!=null){localStorage.setItem(stableKey,value);break}}}}}catch(e){}
-d.student.name="Матвей Горбачев";d.updated="04.10.2026";d.storagePrefix=stablePrefix;d.nextAfterBaseline="functions_09";d.materials=[{date:"13.09.26",title:"Алгебраическая база и степени",pdf:"../pdf_docs/13.09.26.pdf",tex:"../tex_docs/13.09.26.tex"}]})();
+d.student.name="Матвей Горбачев";d.updated="08.10.2026";d.storagePrefix=stablePrefix;d.nextAfterBaseline="functions_09";d.materials=[{date:"13.09.26",title:"Алгебраическая база и степени",pdf:"../pdf_docs/13.09.26.pdf",tex:"../tex_docs/13.09.26.tex"}]})();
 
 (() => {
   "use strict";
@@ -163,7 +189,7 @@ d.student.name="Матвей Горбачев";d.updated="04.10.2026";d.storageP
   }
   window.STUDENT_MASTERY_AUTHORITY={
     version:1,
-    basis:"Repository-authored baseline levels after ambiguity-checked lesson overlays through 04.10.",
+    basis:"Repository-authored baseline levels after ambiguity-checked lesson overlays through 08.10 (08.10 is evidence-only).",
     titleMappingCount:55,
     levels
   };
