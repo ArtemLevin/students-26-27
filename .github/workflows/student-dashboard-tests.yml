@@ -218,6 +218,8 @@ jobs:
             test: node students/volodia_khachaturian/site/tests/dashboard-regression.mjs
           - student: xenia_klykova
             test: node students/xenia_klykova/site/tests/dashboard-regression.mjs
+          - student: xenia_vasilchenko
+            test: node --test students/xenia_vasilchenko/site/tests/*.test.mjs
           - student: nikol_sarkisyants
             test: node --test students/nikol_sarkisyants/site/tests/*.test.mjs
           - student: nastya_pavlova
@@ -245,8 +247,33 @@ jobs:
           node --check shared/student-dashboard/dashboard-core.js
           node --check shared/student-dashboard/outcome-adapter.js
           node --check shared/student-dashboard/legacy-competence-map.js
+      - name: Xenia October 8 publisher dry-run and apply (isolated CI checkout)
+        if: matrix.student == 'xenia_vasilchenko'
+        shell: bash
+        run: |
+          set -euo pipefail
+          INTENT=students/xenia_vasilchenko/review_docs/08.10.26.lesson-publication-intent.json
+          node scripts/publish-lesson.mjs xenia_vasilchenko 08.10.26 --intent "$INTENT" --dry-run
+          node scripts/publish-lesson.mjs xenia_vasilchenko 08.10.26 --intent "$INTENT"
+          node scripts/student.mjs validate xenia_vasilchenko
+          echo 'BEGIN_XENIA_METADATA'
+          cat students/xenia_vasilchenko/site/data/lessons/2026-10-08.lesson.json
+          echo 'END_XENIA_METADATA'
+          echo 'BEGIN_XENIA_REGISTRY'
+          cat students/xenia_vasilchenko/site/lesson-registry.js
+          echo 'END_XENIA_REGISTRY'
       - name: Run regression suite
         run: ${{ matrix.test }}
+      - name: Browser QA for Xenia's lesson and laboratory
+        if: matrix.student == 'xenia_vasilchenko'
+        run: node students/xenia_vasilchenko/site/tests/browser-20261008.mjs
+      - name: Upload Xenia browser QA screenshots
+        if: always() && matrix.student == 'xenia_vasilchenko'
+        uses: actions/upload-artifact@v4
+        with:
+          name: xenia-browser-20261008
+          path: xenia-browser-artifacts/*.png
+          if-no-files-found: warn
 
   index-inventory:
     name: index inventory
