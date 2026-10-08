@@ -14,7 +14,7 @@ const index=read('index.html');
 const intent=JSON.parse(fs.readFileSync(path.join(student,'review_docs','08.10.26.lesson-publication-intent.json'),'utf8'));
 const tex=fs.readFileSync(path.join(student,'tex_docs','08.10.26.tex'),'utf8');
 const pattern=(html,tag)=>[...html.matchAll(new RegExp('<'+tag+'\\b[^>]*>','gi'))].map(x=>x[0]);
-const ids=html=>[...html.matchAll(/\\bid=["']([^"']+)["']/g)].map(x=>x[1]);
+const ids=html=>[...html.matchAll(/\bid=["']([^"']+)["']/g)].map(x=>x[1]);
 const hasId=(html,id)=>ids(html).includes(id);
 
 test('dated lesson, lab and source materials exist',()=>{
@@ -22,7 +22,7 @@ test('dated lesson, lab and source materials exist',()=>{
   for(const [dir,ext] of [['pdf_docs','pdf'],['tex_docs','tex'],['images','png']]){
     assert.ok(fs.existsSync(path.join(student,dir,'08.10.26.'+ext)));
   }
-  assert.match(tex,/\\\\sectionline\\{4\\. Задачи на работу и производительность\\}/);
+  assert.match(tex,/\\sectionline\{4\. Задачи на работу и производительность\}/);
 });
 
 test('lesson is a proper accessible single document',()=>{
@@ -55,7 +55,7 @@ test('laboratory offers actual educational control over both models',()=>{
 
 test('inline JavaScript parses without syntax errors',()=>{
   for(const [name,source] of [['lesson',lesson],['lab',lab],['index',index]]){
-    const scripts=[...source.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/gi)];
+    const scripts=[...source.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
     for(const [,script] of scripts)new vm.Script(script,{filename:name+'.inline.js'});
   }
   new vm.Script(read('competency-map-lesson-20261008.js'),{filename:'competency-map-lesson-20261008.js'});
@@ -63,7 +63,7 @@ test('inline JavaScript parses without syntax errors',()=>{
 
 test('local links and images resolve, including #fragments',()=>{
   for(const [name,source] of [['08.10.26.html',lesson],['08.10.26-lab.html',lab],['index.html',index]]){
-    for(const m of source.matchAll(/\\b(?:href|src)=["']([^"']+)["']/g)){
+    for(const m of source.matchAll(/\b(?:href|src)=["']([^"']+)["']/g)){
       const raw=m[1];if(/^(?:https?:|data:|mailto:|javascript:)/i.test(raw))continue;
       const [location,fragment='']=raw.split('#');
       const filename=location.split('?')[0];
@@ -88,8 +88,8 @@ test('canonical evidence intent points to real lesson sections without mastery c
     assert.equal(outcome.decision,'apply');
   }
   const overlay=read('competency-map-lesson-20261008.js');
-  assert.doesNotMatch(overlay,/\\.baselineLevel\\s*=/);
-  assert.match(index,/08\\.10\\.26-lab\\.html/);
+  assert.doesNotMatch(overlay,/\.baselineLevel\s*=/);
+  assert.match(index,/08\.10\.26-lab\.html/);
 });
 
 test('source lesson arithmetic remains internally consistent',()=>{
