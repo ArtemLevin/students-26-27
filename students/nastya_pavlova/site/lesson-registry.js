@@ -5,6 +5,69 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-08",
+  "ktpRefs": [],
+  "href": "08.10.26.html",
+  "title": "Совместная работа: от модели к системе",
+  "navTitle": "Совместная работа: от модели к системе",
+  "navSubtitle": "Урок Анастасии Павловой от 08.10.26: совместная работа, рациональные уравнения, дискриминант и три исполнителя",
+  "summary": "Урок Анастасии Павловой от 08.10.26: совместная работа, рациональные уравнения, дискриминант и три исполнителя",
+  "topics": [
+    "Задачи на совместную работу",
+    "Рациональные уравнения",
+    "Квадратные уравнения и дискриминант",
+    "Три исполнителя: попарные производительности"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "text_09",
+      "evidenceAnchor": "base",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_10",
+      "evidenceAnchor": "base",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_05",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_06",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_02",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_20",
+      "evidenceAnchor": "machines",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_21",
+      "evidenceAnchor": "pairs",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_12",
+      "evidenceAnchor": "method",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "08.10.26.html",
+    "pdf": "../pdf_docs/08.10.26.pdf",
+    "tex": "../tex_docs/08.10.26.tex",
+    "lab": "08.10.26-lab.html"
+  }
+},
+{
     "date": "2026-10-05",
     "ktpRefs": [],
     "href": "05.10.26.html",
