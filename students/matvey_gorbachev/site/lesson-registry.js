@@ -5,6 +5,90 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-08",
+    "ktpRefs": [],
+    "href": "08.10.26.html",
+    "title": "Текстовые задачи на работу и растворы",
+    "navTitle": "Текстовые задачи на работу и растворы",
+    "summary": "Табличный метод A=pt и q=mc: совместная работа, производительность, системы по работе парами, трубы, изменение состава бригад и массовая доля раствора.",
+    "topics": [
+      "производительность и совместная работа",
+      "разность времени",
+      "работа трёх исполнителей",
+      "трубы и изменение состава бригад",
+      "массовая доля растворов",
+      "смешивание и разбавление водой"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "text_06",
+        "evidenceAnchor": "work",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_07",
+        "evidenceAnchor": "work",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_08",
+        "evidenceAnchor": "mixtures",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_09",
+        "evidenceAnchor": "mixtures",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_11",
+        "evidenceAnchor": "changes",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_15",
+        "evidenceAnchor": "method",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_16",
+        "evidenceAnchor": "pair",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "modeling_01",
+        "evidenceAnchor": "method",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "modeling_02",
+        "evidenceAnchor": "method",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "modeling_09",
+        "evidenceAnchor": "time",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "modeling_14",
+        "evidenceAnchor": "changes",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "modeling_15",
+        "evidenceAnchor": "practice",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "08.10.26.html",
+      "pdf": "../pdf_docs/08.10.26.pdf",
+      "tex": "../tex_docs/08.10.26.tex",
+      "lab": "08.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-10-04",
     "ktpRefs": [],
     "href": "04.10.26.html",
