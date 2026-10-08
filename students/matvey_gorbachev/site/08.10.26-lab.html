@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru" data-theme="light"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark"><meta name="description" content="Интерактивная математическая лаборатория: производительность совместной работы и массовая доля растворов.">
+<title>Лаборатория · Работа и растворы · 08.10.26</title>
+<style>
+:root{--page:#f4f3ee;--surface:#fffefa;--text:#222d30;--muted:#56686b;--line:#cbd4d2;--soft:#e8f0ee;--accent:#2f6f73;--focus:#bc8241;--warm:#aa714e;--water:#b8cdd0}
+html[data-theme="dark"]{--page:#131b1c;--surface:#1c2728;--text:#eaf2f0;--muted:#b2c4c1;--line:#3b5253;--soft:#263e3e;--accent:#8ac7c3;--focus:#e6ae69;--warm:#dcab87;--water:#688f94}
+*{box-sizing:border-box}body{margin:0;background:var(--page);color:var(--text);font-family:Segoe UI,Arial,sans-serif;line-height:1.55}a{color:var(--accent)}button,input,select{font:inherit}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{position:absolute;left:-9999px}.skip:focus{left:12px;top:10px;background:var(--surface);padding:8px;z-index:20}
+.header{padding:14px max(18px,calc((100vw - 1420px)/2));display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);gap:10px}.header a{text-decoration:none;font-weight:650}.header div{display:flex;gap:10px}
+button,.btn{border:1px solid var(--line);color:var(--text);background:var(--surface);padding:10px 14px;cursor:pointer;text-decoration:none}button:hover{border-color:var(--accent);background:var(--soft)}button[aria-pressed="true"]{background:var(--accent);color:var(--page);border-color:var(--accent)}button:disabled{opacity:.45;cursor:not-allowed}
+main{max-width:1420px;margin:0 auto;padding:22px 18px 70px}.intro{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:1px solid var(--line);padding-bottom:24px}.intro h1{font-family:Georgia,Cambria,serif;font-size:clamp(2.1rem,4.6vw,4.3rem);font-weight:500;line-height:1.14;margin:6px 0}.intro p{max-width:65ch;color:var(--muted);margin:10px 0 0}.eyebrow{font-size:.79rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}.modes{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0}
+.layout{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(285px,.85fr);gap:20px;align-items:start}
+.instrument{min-width:0;background:var(--surface);border:1px solid var(--line);padding:clamp(16px,3vw,30px)}.instrument h2{font-size:1.5rem;margin:0 0 10px}.instrument p{color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);padding:22px}.panel h2{font-size:1.15rem;margin:0 0 16px}.control{display:block;border-top:1px solid var(--line);padding:15px 0}.control:first-of-type{border-top:0}.control .head{display:flex;justify-content:space-between;gap:8px}.control output{font-variant-numeric:tabular-nums;font-weight:750}.control input[type=range]{display:block;width:100%;accent-color:var(--accent);margin-top:15px;cursor:pointer}.control small{color:var(--muted)}
+svg{display:block;width:100%;height:auto;overflow:visible}.plot{margin-top:18px;max-width:900px}.legend{display:flex;flex-wrap:wrap;gap:18px;color:var(--muted);font-size:.9rem;margin:14px 0}.swatch{display:inline-block;width:12px;height:12px;background:var(--accent);vertical-align:middle;margin-right:7px}.swatch.water{background:var(--water)}.swatch.warm{background:var(--warm)}
+.readouts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-block:1px solid var(--line);margin:24px 0 12px}.readouts div{padding:12px 18px;border-right:1px solid var(--line)}.readouts div:last-child{border-right:0}.readouts small{display:block;color:var(--muted)}.readouts strong{display:block;font-size:clamp(1.12rem,2vw,1.8rem);font-variant-numeric:tabular-nums}
+.formula{font-family:Cambria,"Cambria Math",Georgia,serif;font-size:clamp(1.15rem,2.2vw,1.55rem);padding:14px 0;overflow:auto}
+.explain{padding:12px 15px;border-left:3px solid var(--accent);background:var(--soft);margin-top:18px}.explain p{margin:0}
+.challenge{border-top:1px solid var(--line);margin-top:20px;padding-top:18px}.challenge h3{margin:0;font-size:1rem}.challenge label{display:block;margin:9px 0}.challenge select{width:100%;padding:9px;border:1px solid var(--line);color:var(--text);background:var(--surface)}.challenge button{margin-top:9px}.result{min-height:36px;margin:11px 0;color:var(--text)}
+[hidden]{display:none!important}.controls-footer{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}
+.plot .grid{stroke:var(--line);stroke-width:1;fill:none}.plot text{fill:var(--muted);font-family:Segoe UI,Arial,sans-serif;font-size:14px}.plot .axis{stroke:var(--muted);stroke-width:1.4}.plot .trend{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round}.plot .point{fill:var(--warm);stroke:var(--surface);stroke-width:3}.plot .solute{fill:var(--accent)}.plot .diluent{fill:var(--water)}
+footer{font-size:.86rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px;margin-top:42px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.panel{order:-1}.intro{display:block}.readouts{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:570px){.header{padding:10px 12px}.header .title{display:none}.readouts{grid-template-columns:1fr}.readouts div{border-right:0;border-bottom:1px solid var(--line)}.readouts div:last-child{border-bottom:0}.instrument,.panel{padding:15px}.intro h1{font-size:2.35rem}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}@media print{.panel,.modes,.controls-footer{display:none}.layout{display:block}body{background:white;color:black}.instrument{border:0}.header{position:static}}
+</style></head>
+<body><a href="#main" class="skip">К модели</a>
+<header class="header"><a href="08.10.26.html">← К уроку 08.10.26</a><span class="title">Матвей Горбачёв · лаборатория</span><div><button id="reset" type="button">Сброс</button><button id="theme" type="button" aria-label="Сменить тему">◐ Тема</button></div></header>
+<main id="main"><header class="intro"><div><span class="eyebrow">Исследовательская лаборатория · 08 октября 2026</span><h1>Что сохраняется?</h1><p>Меняйте входные данные, сравнивайте результат и проверяйте формулу. Работа зависит от суммы производительностей; концентрация — от отношения массы вещества к общей массе.</p></div></header>
+<div class="modes" role="group" aria-label="Выбор модели"><button type="button" data-mode="work" aria-pressed="true">Совместная работа</button><button type="button" data-mode="mix" aria-pressed="false">Растворы</button></div>
+<div class="layout">
+<section class="instrument" id="workView" aria-label="Модель совместной работы"><h2>Два мастера — один заказ</h2><p>Полный заказ равен 1. Полосы показывают, какую часть заказа успевает выполнить каждый мастер к общему моменту завершения.</p>
+<svg class="plot" id="workSvg" viewBox="0 0 760 265" role="img" aria-labelledby="workTitle workDesc"><title id="workTitle">Сравнение вкладов двух мастеров</title><desc id="workDesc">Части работы каждого мастера обновляются при изменении времени выполнения заказа.</desc>
+<line class="axis" x1="145" y1="225" x2="690" y2="225"/><text x="145" y="250">0%</text><text x="658" y="250">100%</text>
+<text x="10" y="70">Мастер 1</text><text x="10" y="135">Мастер 2</text><text x="10" y="200">Весь заказ</text>
+<rect x="145" y="43" width="545" height="33" rx="3" class="diluent"/><rect id="bar1" x="145" y="43" width="363.3" height="33" rx="3" class="solute"/>
+<rect x="145" y="108" width="545" height="33" rx="3" class="diluent"/><rect id="bar2" x="145" y="108" width="181.7" height="33" rx="3" class="solute"/>
+<rect x="145" y="173" width="545" height="33" rx="3" class="solute"/><text id="barLabel1" x="530" y="66">66,7%</text><text id="barLabel2" x="350" y="131">33,3%</text></svg>
+<div class="readouts"><div><small>Производительность 1</small><strong id="pw1">1/3</strong></div><div><small>Производительность 2</small><strong id="pw2">1/6</strong></div><div><small>Общее время</small><strong id="totalTime">2 ч</strong></div></div>
+<div class="formula"><math display="block"><mrow><mfrac><mn>1</mn><mi>T</mi></mfrac><mo>=</mo><mfrac><mn>1</mn><msub><mi>T</mi><mn>1</mn></msub></mfrac><mo>+</mo><mfrac><mn>1</mn><msub><mi>T</mi><mn>2</mn></msub></mfrac></mrow></math></div>
+<div class="explain"><p id="workInsight" aria-live="polite"></p></div>
+<div class="challenge"><h3>Предскажите: что произойдёт, если увеличить время первого мастера в одиночку?</h3><label for="workPrediction">Общее время выполнения заказа…</label><select id="workPrediction"><option value="">Выберите прогноз</option><option value="up">увеличится</option><option value="down">уменьшится</option><option value="same">не изменится</option></select><button type="button" id="workTest">Проверить прогноз</button><p class="result" id="workResult" role="status"></p></div>
+</section>
+<aside class="panel" id="workControls"><h2>Время каждого мастера</h2><label class="control" for="t1"><span class="head">Первый мастер <output id="t1val">3 ч</output></span><input id="t1" type="range" min="2" max="12" step="0.5" value="3"><small>Время работы в одиночку, 2–12 ч</small></label><label class="control" for="t2"><span class="head">Второй мастер <output id="t2val">6 ч</output></span><input id="t2" type="range" min="2" max="12" step="0.5" value="6"><small>Время работы в одиночку, 2–12 ч</small></label><div class="controls-footer"><button type="button" data-preset="classic">3 ч и 6 ч</button><button type="button" data-preset="equal">Одинаково быстро</button><button type="button" data-preset="contrast">Контраст</button></div><p>Каждый мастер выполняет одну и ту же работу. Если заданы времена в одиночку, сравниваем производительности 1/T.</p></aside>
+<section class="instrument" id="mixView" aria-label="Модель смешивания растворов" hidden><h2>Два раствора и вода</h2><p>Длина полосы соответствует массе раствора; закрашенная часть — массе растворённого вещества. После смешивания масса вещества сохраняется.</p>
+<svg class="plot" id="mixSvg" viewBox="0 0 760 285" role="img" aria-labelledby="mixTitle mixDesc"><title id="mixTitle">Баланс масс в двух растворах и итоговой смеси</title><desc id="mixDesc">Состав каждого раствора и смеси обновляется по массам и долям.</desc>
+<text x="8" y="61">Раствор 1</text><text x="8" y="124">Раствор 2</text><text x="8" y="187">Вода</text><text x="8" y="250">Итог</text>
+<g id="mixtureBars"></g></svg>
+<div class="legend"><span><i class="swatch"></i>Растворённое вещество</span><span><i class="swatch water"></i>Остальная масса раствора</span></div>
+<div class="readouts"><div><small>Масса вещества</small><strong id="soluteMass">2,1 кг</strong></div><div><small>Полная масса</small><strong id="totalMass">10 кг</strong></div><div><small>Массовая доля</small><strong id="mixPercent">21%</strong></div></div>
+<div class="formula"><math display="block"><mrow><msub><mi>c</mi><mtext>итог</mtext></msub><mo>=</mo><mfrac><mrow><msub><mi>m</mi><mn>1</mn></msub><msub><mi>c</mi><mn>1</mn></msub><mo>+</mo><msub><mi>m</mi><mn>2</mn></msub><msub><mi>c</mi><mn>2</mn></msub></mrow><mrow><msub><mi>m</mi><mn>1</mn></msub><mo>+</mo><msub><mi>m</mi><mn>2</mn></msub><mo>+</mo><msub><mi>m</mi><mtext>воды</mtext></msub></mrow></mfrac></mrow></math></div>
+<div class="explain"><p id="mixInsight" aria-live="polite"></p></div>
+<h3 style="margin:30px 0 0">Как вода меняет концентрацию</h3><svg class="plot" viewBox="0 0 760 265" role="img" aria-label="График зависимости концентрации от количества добавленной воды"><line x1="70" y1="20" x2="70" y2="220" class="axis"/><line x1="70" y1="220" x2="710" y2="220" class="axis"/><line x1="70" y1="120" x2="710" y2="120" class="grid"/><text x="10" y="27">c, %</text><text x="680" y="254">вода, кг</text><text x="58" y="238">0</text><text x="689" y="238">12</text><path id="mixCurve" class="trend" d=""/><circle id="mixDot" class="point" cx="70" cy="100" r="8"/><text id="mixDotLabel" x="88" y="90">21%</text></svg>
+<div class="challenge"><h3>Проверка гипотезы</h3><p>При добавлении чистой воды без потери вещества масса растворённого вещества…</p><select id="mixPrediction" aria-label="Выберите гипотезу"><option value="">Ваш прогноз</option><option value="same">остаётся прежней</option><option value="down">уменьшается</option><option value="up">увеличивается</option></select><button id="mixTest" type="button">Проверить ответ</button><p id="mixResult" class="result" role="status"></p></div>
+</section>
+<aside class="panel" id="mixControls" hidden><h2>Состав смеси</h2>
+<label class="control" for="m1"><span class="head">Масса 1 <output id="m1val">4 кг</output></span><input id="m1" type="range" min="1" max="12" step="1" value="4"></label>
+<label class="control" for="c1"><span class="head">Доля вещества 1 <output id="c1val">15%</output></span><input id="c1" type="range" min="0" max="60" step="1" value="15"></label>
+<label class="control" for="m2"><span class="head">Масса 2 <output id="m2val">6 кг</output></span><input id="m2" type="range" min="1" max="12" step="1" value="6"></label>
+<label class="control" for="c2"><span class="head">Доля вещества 2 <output id="c2val">25%</output></span><input id="c2" type="range" min="0" max="60" step="1" value="25"></label>
+<label class="control" for="water"><span class="head">Добавить воду <output id="waterval">0 кг</output></span><input id="water" type="range" min="0" max="12" step="1" value="0"></label>
+<div class="controls-footer"><button type="button" data-mixpreset="classic">4 и 6 частей</button><button type="button" data-mixpreset="equal">Равные массы</button><button type="button" data-mixpreset="dilution">Разбавление водой</button></div>
+<p>Проценты являются массовыми долями. В модели используются килограммы, смешивание без потерь и одно растворённое вещество.</p></aside>
+</div>
+<footer>Лёвин Артём Александрович · эксклюзивно для Матвея Горбачёва · <a href="08.10.26.html">Материал занятия</a></footer></main>
+<script>
+(function(){
+"use strict";
+var root=document.documentElement,themeKey="matvey_gorbachev-ege-profile-math-theme";
+try{var t=localStorage.getItem(themeKey);if(t==="dark"||t==="light")root.dataset.theme=t;}catch(e){}
+function id(v){return document.getElementById(v);}function num(v){return Number(id(v).value);}function fmt(n,max){return Number(n.toFixed(max==null?2:max)).toLocaleString("ru-RU");}
+function theme(){root.dataset.theme=root.dataset.theme==="dark"?"light":"dark";try{localStorage.setItem(themeKey,root.dataset.theme);}catch(e){}}
+id("theme").addEventListener("click",theme);
+var mode="work";
+function setMode(m){mode=m==="mix"?"mix":"work";["work","mix"].forEach(function(k){var shown=k===mode;id(k+"View").hidden=!shown;id(k+"Controls").hidden=!shown;document.querySelector('[data-mode="'+k+'"]').setAttribute("aria-pressed",String(shown));});try{history.replaceState(null,"","?mode="+mode);}catch(e){}}
+document.querySelectorAll("[data-mode]").forEach(function(b){b.addEventListener("click",function(){setMode(b.dataset.mode);});});
+function updateWork(){
+var t1=num("t1"),t2=num("t2"),p1=1/t1,p2=1/t2,combined=p1+p2,T=1/combined,share1=p1/combined,share2=p2/combined;
+id("t1val").textContent=fmt(t1,1)+" ч";id("t2val").textContent=fmt(t2,1)+" ч";
+id("pw1").textContent=fmt(p1,3)+" заказа/ч";id("pw2").textContent=fmt(p2,3)+" заказа/ч";id("totalTime").textContent=fmt(T)+" ч";
+id("bar1").setAttribute("width",String(545*share1));id("bar2").setAttribute("width",String(545*share2));id("barLabel1").textContent=fmt(100*share1,1)+"%";id("barLabel2").textContent=fmt(100*share2,1)+"%";
+id("barLabel1").setAttribute("x",String(Math.min(640,155+545*share1)));id("barLabel2").setAttribute("x",String(Math.min(640,155+545*share2)));
+id("workInsight").textContent="Вместе мастера выполняют "+fmt(combined,3)+" заказа за час. Первый выполняет "+fmt(share1*100,1)+"% общего заказа, второй — "+fmt(share2*100,1)+"%. Общее время всегда меньше времени каждого мастера.";
+}
+["t1","t2"].forEach(function(k){id(k).addEventListener("input",updateWork);});
+document.querySelectorAll("[data-preset]").forEach(function(b){b.addEventListener("click",function(){var p=b.dataset.preset==="equal"?[4,4]:b.dataset.preset==="contrast"?[2,12]:[3,6];id("t1").value=p[0];id("t2").value=p[1];updateWork();});});
+id("workTest").addEventListener("click",function(){var selected=id("workPrediction").value;if(!selected){id("workResult").textContent="Сначала выберите прогноз.";return;}var old=num("t1"),next=Math.min(12,old+1);if(next===old){id("workResult").textContent="Достигнута верхняя граница 12 ч. Уменьшите время первого мастера и повторите опыт.";return;}var oldT=1/(1/old+1/num("t2"));var nextT=1/(1/next+1/num("t2"));id("t1").value=next;updateWork();id("workResult").textContent=(selected==="up"?"Прогноз верен. ":"Проверьте прогноз. ")+"Время выросло с "+fmt(oldT)+" до "+fmt(nextT)+" ч: первый мастер работает медленнее.";});
+var ns="http://www.w3.org/2000/svg";
+function el(tag,attributes){var v=document.createElementNS(ns,tag);Object.keys(attributes).forEach(function(k){v.setAttribute(k,String(attributes[k]));});return v;}
+function updateMix(){
+var m1=num("m1"),m2=num("m2"),c1=num("c1")/100,c2=num("c2")/100,w=num("water"),q1=m1*c1,q2=m2*c2,q=q1+q2,m=m1+m2+w,c=q/m;
+["m1","m2","c1","c2","water"].forEach(function(k){id(k+"val").textContent=fmt(num(k),0)+(k[0]==="c"?"%":" кг");});
+id("soluteMass").textContent=fmt(q,2)+" кг";id("totalMass").textContent=fmt(m,0)+" кг";id("mixPercent").textContent=fmt(c*100,2)+"%";
+var bars=id("mixtureBars");bars.replaceChildren();
+[[m1,q1,43],[m2,q2,106],[w,0,169],[m,q,232]].forEach(function(item){var width=545*(item[0]/36),solid=item[0]===0?0:width*(item[1]/item[0]);bars.appendChild(el("rect",{x:145,y:item[2],width:width,height:32,rx:2,class:"diluent"}));if(solid>0)bars.appendChild(el("rect",{x:145,y:item[2],width:solid,height:32,rx:2,class:"solute"}));var lab=el("text",{x:Math.min(670,155+width),y:item[2]+22});lab.textContent=fmt(item[0],0)+" кг";bars.appendChild(lab);});
+id("mixInsight").textContent="Масса вещества: "+fmt(m1,0)+" × "+fmt(c1,2)+" + "+fmt(m2,0)+" × "+fmt(c2,2)+" = "+fmt(q,2)+" кг. Доля: "+fmt(q,2)+" / "+fmt(m,0)+" = "+fmt(c*100,2)+"%. Вода меняет знаменатель, масса вещества сохраняется.";
+var points=[];for(var z=0;z<=12;z+=.2){var yy=220-200*(q/(m1+m2+z)/.6);points.push((z===0?"M":"L")+(70+z/12*640).toFixed(2)+" "+yy.toFixed(2));}
+id("mixCurve").setAttribute("d",points.join(" "));var px=70+w/12*640,py=220-200*c/.6;id("mixDot").setAttribute("cx",String(px));id("mixDot").setAttribute("cy",String(py));id("mixDotLabel").setAttribute("x",String(Math.max(80,Math.min(650,px-14))));id("mixDotLabel").setAttribute("y",String(Math.max(24,py-16)));id("mixDotLabel").textContent=fmt(c*100,2)+"%";
+}
+["m1","m2","c1","c2","water"].forEach(function(k){id(k).addEventListener("input",updateMix);});
+document.querySelectorAll("[data-mixpreset]").forEach(function(b){b.addEventListener("click",function(){var v=b.dataset.mixpreset==="equal"?[5,15,5,19,0]:b.dataset.mixpreset==="dilution"?[8,30,1,0,4]:[4,15,6,25,0];["m1","c1","m2","c2","water"].forEach(function(k,i){id(k).value=v[i];});updateMix();});});
+id("mixTest").addEventListener("click",function(){id("mixResult").textContent=id("mixPrediction").value===""?"Выберите гипотезу.":id("mixPrediction").value==="same"?"Верно. В воде нет растворённого вещества; числитель q остаётся неизменным.":"Проверьте: при добавлении воды сохраняется масса растворённого вещества q, меняется лишь общая масса.";});
+id("reset").addEventListener("click",function(){[["t1",3],["t2",6],["m1",4],["c1",15],["m2",6],["c2",25],["water",0]].forEach(function(x){id(x[0]).value=x[1];});updateWork();updateMix();id("workResult").textContent="";id("mixResult").textContent="";id("workPrediction").value="";id("mixPrediction").value="";});
+var requested="work";try{requested=new URLSearchParams(location.search).get("mode")||"work";}catch(e){}
+setMode(requested);updateWork();updateMix();
+})();
+</script></body></html>
