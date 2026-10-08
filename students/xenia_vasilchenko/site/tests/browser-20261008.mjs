@@ -121,5 +121,10 @@ try{
       chromeProcess.once('exit',()=>{clearTimeout(timeout);resolve();});
     });
   }
-  fs.rmSync(profile,{recursive:true,force:true,maxRetries:15,retryDelay:100});
+  try{
+    fs.rmSync(profile,{recursive:true,force:true,maxRetries:15,retryDelay:100});
+  }catch(error){
+    if(error.code!=='ENOTEMPTY'&&error.code!=='EBUSY')throw error;
+    console.warn('Chromium profile cleanup deferred to ephemeral CI runner');
+  }
 }
