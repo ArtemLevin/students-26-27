@@ -10,6 +10,13 @@
   <link rel="stylesheet" href="../../../design-system/foundations.css?v=20260919-2">
   <link rel="stylesheet" href="../../../design-system/archetypes.css?v=20260919-2">
   <link rel="stylesheet" href="../../../design-system/student-sites.css?v=20260919-2">
+  <style>
+    .lesson-entry{padding:1.3rem 0;max-width:62rem}
+    .lesson-entry+.lesson-entry{border-top:1px solid var(--border,var(--line,#c9d1d0))}
+    .lesson-entry h3{font:600 clamp(1.14rem,2vw,1.45rem)/1.35 system-ui,sans-serif;margin:.3rem 0 .6rem}
+    .lesson-entry p:not(.eyebrow){max-width:65ch}
+    .lesson-entry .lesson-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.9rem;margin:.7rem 0}
+  </style>
 </head>
 <body data-atlas data-atlas-adapter="universal" data-atlas-composition="cartographer" data-atlas-accent="ochre" data-atlas-density="airy" data-atlas-motion="calm">
   <a class="skip-link" href="#main">К содержанию</a>
@@ -21,7 +28,7 @@
     </a>
     <div class="topbar-actions">
       <a class="ghost-btn" href="ktp.html" style="text-decoration:none">КТП 2026/27</a>
-      <a class="ghost-btn" href="../pdf_docs/30.09.26.pdf" style="text-decoration:none">Пособие 30.09</a>
+      <a class="ghost-btn" href="#lessonStream" style="text-decoration:none">Все занятия</a>
       <button class="ghost-btn" id="resetState" type="button">Вернуть подтверждённые статусы</button>
       <button class="theme-btn" id="themeToggle" type="button" aria-label="Переключить цветовую тему" aria-pressed="false">◐</button>
     </div>
@@ -45,30 +52,18 @@
       </aside>
     </section>
 
-    <section class="focus-card" aria-labelledby="lessonTitle">
+    <section class="focus-card" id="lessonStream" aria-labelledby="lessonsHeading">
       <div>
-        <p class="eyebrow">Последнее занятие · 30.09.2026</p>
-        <h2 id="lessonTitle">Степени в задачах прикладного характера</h2>
-        <p>Работа с готовой формулой: перевод текста на язык математики, подготовка чисел к степенному виду, показательная модель убывания, два состояния системы, четвёртая и кубическая степени, а также проверка ограничений «не менее / не более».</p>
-        <p><a class="primary-btn" href="30.09.26.html">Открыть интерактивное занятие</a></p>
-        <p>
-          <a class="text-link" href="../pdf_docs/30.09.26.pdf">Скачать пособие →</a>
-          <span aria-hidden="true"> · </span>
-          <a class="text-link" href="../tex_docs/30.09.26.tex">Исходник пособия →</a>
-        </p>
-      </div>
-    </section>
-
-    <section class="focus-card" aria-labelledby="previousLessonTitle">
-      <div>
-        <p class="eyebrow">Предыдущее занятие · 25.09.2026</p>
-        <h2 id="previousLessonTitle">Степени и показательные уравнения</h2>
-        <p>Свойства степеней, рациональные и отрицательные показатели, перевод корней в степени, разложение чисел на простые множители и решение простейших показательных уравнений через единое основание.</p>
-        <p>
-          <a class="text-link" href="25.09.26.html">Открыть занятие →</a>
-          <span aria-hidden="true"> · </span>
-          <a class="text-link" href="../pdf_docs/25.09.26.pdf">PDF →</a>
-        </p>
+        <p class="eyebrow">История занятий</p>
+        <h2 id="lessonsHeading">Ваши материалы</h2>
+        <div id="lessonsContainer">
+          <article class="lesson-entry">
+            <p class="eyebrow">Последнее занятие · 08.10.2026</p>
+            <h3>Логарифмы: свойства и преобразование выражений</h3>
+            <p>Смысл логарифма, свойства степеней, сложение и вычитание логарифмов, смена основания и десять заданий.</p>
+            <a class="primary-btn" href="08.10.26.html">Открыть занятие</a>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -142,7 +137,7 @@
 
     <footer>
       <span>Даниил Кичук · учебный кабинет</span>
-      <span>Лёвин Артём Александрович · обновлено 02.10.2026</span>
+      <span>Лёвин Артём Александрович · обновлено 08.10.2026</span>
     </footer>
   </main>
 
@@ -191,7 +186,49 @@
     </form>
   </dialog>
 
-  <script src="competency-map-data.js?v=20261002-1"></script>
+  <script src="competency-map-data.js?v=20261008-1"></script>
   <script src="competency-map.js?v=20260925-1"></script>
+  <script type="module">
+    import {sortedLessons,formatLongDateRu} from './lesson-registry.js?v=20261008';
+    const target=document.getElementById('lessonsContainer');
+    if(target){
+      const fragment=document.createDocumentFragment();
+      for(const [index,lesson] of sortedLessons().entries()){
+        const item=document.createElement('article');
+        item.className='lesson-entry';
+        const eyebrow=document.createElement('p');
+        eyebrow.className='eyebrow';
+        eyebrow.textContent=(index===0?'Последнее занятие':'Архив')+' · '+formatLongDateRu(lesson.date);
+        const title=document.createElement('h3');
+        title.textContent=lesson.navTitle||lesson.title;
+        const summary=document.createElement('p');
+        summary.textContent=lesson.summary;
+        const actions=document.createElement('div');
+        actions.className='lesson-actions';
+        const page=document.createElement('a');
+        page.className=index===0?'primary-btn':'text-link';
+        page.href=lesson.href;
+        page.textContent='Открыть занятие →';
+        actions.append(page);
+        if(lesson.materials?.pdf){
+          const pdf=document.createElement('a');
+          pdf.className='text-link';
+          pdf.href=lesson.materials.pdf;
+          pdf.textContent='Скачать пособие →';
+          actions.append(pdf);
+        }
+        if(lesson.materials?.tex){
+          const tex=document.createElement('a');
+          tex.className='text-link';
+          tex.href=lesson.materials.tex;
+          tex.textContent='Исходник TeX →';
+          actions.append(tex);
+        }
+        item.append(eyebrow,title,summary,actions);
+        fragment.append(item);
+      }
+      target.replaceChildren(fragment);
+    }
+  </script>
 </body>
 </html>
