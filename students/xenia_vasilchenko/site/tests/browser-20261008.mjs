@@ -115,5 +115,11 @@ try{
 }finally{
   try{ws?.close()}catch(_){}
   chromeProcess.kill('SIGKILL');server.close();
-  fs.rmSync(profile,{recursive:true,force:true});
+  if(chromeProcess.exitCode===null){
+    await new Promise(resolve=>{
+      const timeout=setTimeout(resolve,2500);
+      chromeProcess.once('exit',()=>{clearTimeout(timeout);resolve();});
+    });
+  }
+  fs.rmSync(profile,{recursive:true,force:true,maxRetries:15,retryDelay:100});
 }
