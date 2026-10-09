@@ -3,6 +3,71 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+    "date": "2026-10-09",
+    "ktpRefs": [],
+    "href": "09.10.26.html",
+    "title": "Высоты, касательные и отношения отрезков",
+    "navTitle": "Высоты, касательные и отношения отрезков",
+    "navSubtitle": "Высоты и площади, касательные к окружности, теорема Фалеса и отношения отрезков. Геометрия ОГЭ, занятие Софии Кальней 09.10.2026.",
+    "summary": "Высоты и площади, касательные к окружности, теорема Фалеса и отношения отрезков. Геометрия ОГЭ, занятие Софии Кальней 09.10.2026.",
+    "topics": [
+      "Высоты и площади",
+      "Формула Герона",
+      "Касательные к окружности",
+      "Теорема Фалеса",
+      "Отношения отрезков и подобие"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "oge_23_2_1",
+        "evidenceAnchor": "areas",
+        "relation": "touched",
+        "label": "Анализ чертежа и достроение треугольников",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_25_1_4",
+        "evidenceAnchor": "areas",
+        "relation": "practiced",
+        "label": "Разложение площади на сумму площадей",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_23_2_3",
+        "evidenceAnchor": "isosceles",
+        "relation": "practiced",
+        "label": "Две записи площади и прямоугольный треугольник",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_16_2_3",
+        "evidenceAnchor": "tangents",
+        "relation": "practiced",
+        "label": "Расстояние между точками касания",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_24_2_2",
+        "evidenceAnchor": "tangents",
+        "relation": "touched",
+        "label": "Доказательство перпендикулярности AO и BC",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_25_1_5",
+        "evidenceAnchor": "thales",
+        "relation": "practiced",
+        "label": "Пропорциональные отрезки на медиане",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "09.10.26.html",
+      "pdf": "../pdf_docs/09.10.26.pdf",
+      "tex": "../tex_docs/09.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-04",
     "ktpRefs": [],
     "href": "04.10.26.html",
