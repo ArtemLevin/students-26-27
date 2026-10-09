@@ -5,6 +5,59 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-09",
+    "ktpRefs": [],
+    "href": "09.10.26.html",
+    "title": "Кредитные задачи: три схемы погашения",
+    "navTitle": "Кредитные задачи: три схемы погашения",
+    "summary": "Аннуитетная, дифференцированная и произвольная схемы кредита: начисление процентов, таблица платежей, полное погашение и поиск ставки.",
+    "topics": [
+      "кредитные задачи",
+      "аннуитетные платежи",
+      "дифференцированное погашение",
+      "произвольные платежи",
+      "таблица кредита",
+      "поиск процентной ставки"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "ege27_10_012",
+        "evidenceAnchor": "model",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "ege27_13_006",
+        "evidenceAnchor": "annuity",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "ege27_13_007",
+        "evidenceAnchor": "differentiated",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "ege27_13_010",
+        "evidenceAnchor": "simulator",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "ege27_13_013",
+        "evidenceAnchor": "differentiated",
+        "relation": "practiced",
+        "masteryClaim": null
+      }
+    ],
+    "materials": {
+      "html": "09.10.26.html",
+      "pdf": "../pdf_docs/09.10.26.pdf",
+      "tex": "../tex_docs/09.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-06",
     "ktpRefs": [],
     "href": "06.10.26.html",
