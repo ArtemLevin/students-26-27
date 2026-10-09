@@ -55,10 +55,10 @@ test('mathematical values and training answer keys',()=>{
   assert.ok(close(255/(16-1)-255/(16+1),2));
   assert.ok(close(.05*13.5+.13*22.5,.10*36));
   assert.ok(close(1/3+1/6,1/2));
-  assert.ok(page.includes('0,8 &lt; t &lt; 2'));
-  assert.ok(page.includes('2 − 0,8 = 1,2 секунды'));
-  assert.ok(page.includes('<li>20 кг</li>'));
-  assert.ok(page.includes('<li>4,5 дня</li>'));
+  assert.match(page,/<mn>0,8<\/mn><mo>&lt;<\/mo><mi>t<\/mi><mo>&lt;<\/mo><mn>2<\/mn>/);
+  assert.ok(page.includes('<mn>1,2</mn>'));
+  assert.ok(page.includes('<mtext> кг</mtext>'));
+  assert.ok(page.includes('<mtext> дня</mtext>'));
 });
 
 test('both pages have unique IDs, valid inline scripts and existing local links',()=>{
@@ -88,4 +88,23 @@ test('graph accessibility, mobile scrolling, keyboard and theme contracts',()=>{
   assert.ok(lab.includes('data-t="1.4"'));
   assert.ok(lab.includes('data-t="2"'));
   assert.ok(!/eval\s*\(/.test(page+lab));
+});
+
+test('all published mathematical expressions have MathML semantics',()=>{
+  const roots=(html)=>[...html.matchAll(/<math\\b[^>]*>/g)].map(m=>m[0]);
+  const lessonMath=roots(page),labMath=roots(lab);
+  assert.ok(lessonMath.length>=75,'lesson formula coverage: '+lessonMath.length);
+  assert.ok(labMath.length>=19,'lab formula coverage: '+labMath.length);
+  assert.ok(lessonMath.every(m=>m.includes('xmlns="http://www.w3.org/1998/Math/MathML"')));
+  assert.ok(labMath.every(m=>m.includes('xmlns="http://www.w3.org/1998/Math/MathML"')));
+  assert.ok((page.match(/<mfrac>/g)||[]).length>=8,'fraction semantic structures required');
+  assert.ok((page.match(/<msup>/g)||[]).length>=15,'powers must use msup');
+  assert.ok((page.match(/<msub>/g)||[]).length>=2,'indices must use msub');
+  assert.ok(page.includes('<msqrt>'),'square root must use msqrt');
+  assert.ok(!/class="equation">[^<]/.test(page),'plain text in formula blocks');
+  assert.ok(!/class="equation">[^<]/.test(lab),'plain text in lab equation');
+  assert.ok(lab.includes('tValue.innerHTML=numberMath(t'));
+  assert.ok(lab.includes('hValue.innerHTML=numberMath(h'));
+  assert.ok(lab.includes('calculation.innerHTML='));
+  assert.ok(lab.includes("feedback.innerHTML='Верно:"));
 });
