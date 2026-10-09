@@ -25,6 +25,7 @@ import {
 import {applyKtpPublication} from './ktp-state.mjs';
 import {applyMasteryPublication} from './mastery-state.mjs';
 import {deriveRegistrySource} from './registry.mjs';
+import {parsePracticePublication,assertPracticePublicationReady} from './practice-enrichment.mjs';
 
 function json(value){return JSON.stringify(value,null,2)+'\n';}
 function relative(root,file){return path.relative(root,file).replaceAll('\\','/');}
@@ -187,12 +188,25 @@ export function buildV2PublicationPlan({
   });
   validateKtpStateData(stateResult.state,{studentId,plan});
 
+  // Practice Engine requires an explicit decision for each newly published outcome.
+  // A reviewed per-lesson sidecar can supply this before the transactional publish.
+  const practiceEnabled=contract.practice.config!==null;
+  const practicePublicationPath=path.join(
+    path.dirname(registryPath),'data','practice-publications',intent.lessonDate+'.json'
+  );
+  const practiceSnapshot=practiceEnabled?fileSnapshot(practicePublicationPath):null;
+  const reviewedPractice=practiceEnabled?parsePracticePublication(practiceSnapshot.source,{
+    studentId,lessonDate:intent.lessonDate,outcomes:metadata.outcomes
+  }):[];
+
   const registrySnapshot=fileSnapshot(registryPath);
   const beforeRegistrySource=registrySnapshot.source;
   const registryResult=deriveRegistrySource({
     source:beforeRegistrySource,
-    metadata
+    metadata,
+    practiceOutcomes:reviewedPractice
   });
+  if(practiceEnabled)assertPracticePublicationReady(registryResult.record,{outcomes:metadata.outcomes});
 
   const candidateMetadataMap=metadataMapFromDir(metadataDir);
   candidateMetadataMap.set(metadata.date,metadata);
@@ -264,6 +278,7 @@ export function buildV2PublicationPlan({
     {file:statePath,snapshot:stateSnapshot},
     {file:registryPath,snapshot:registrySnapshot},
     {file:metadataPath,snapshot:metadataSnapshot},
+    ...(practiceSnapshot?[{file:practicePublicationPath,snapshot:practiceSnapshot}]:[]),
     {file:catalogPath,snapshot:catalogSnapshot},
     ...(masterySnapshot?[{file:masteryPath,snapshot:masterySnapshot}]:[]),
     {

@@ -31,7 +31,7 @@ function practiceEnrichment(outcome){
   return result;
 }
 
-export function registryRecordFromMetadata(metadata,{existing=null}={}){
+export function registryRecordFromMetadata(metadata,{existing=null,practiceOutcomes=[]}={}){
   if(!metadata?.materials?.html)throw new Error('registry builder: metadata.materials.html is required');
   const title=metadata.title;
   const summary=metadata.summary||'';
@@ -41,13 +41,17 @@ export function registryRecordFromMetadata(metadata,{existing=null}={}){
     if(key)existingByCoreKey.set(key,outcome);
   }
 
+  const reviewedByCoreKey=new Map(practiceOutcomes.map(outcome=>[coreOutcomeKey(outcome),outcome]));
+
   const canonicalOutcomes=metadata.outcomes.map(outcome=>{
     const previous=existingByCoreKey.get(coreOutcomeKey(outcome))||null;
+    const reviewed=reviewedByCoreKey.get(coreOutcomeKey(outcome))||null;
     return {
       competencyId:outcome.competencyId,
       evidenceAnchor:outcome.evidenceAnchor,
       relation:outcome.relation,
-      ...practiceEnrichment(previous)
+      ...practiceEnrichment(previous),
+      ...practiceEnrichment(reviewed)
     };
   });
   const legacyOutcomes=(metadata.legacyOutcomes||[]).map(item=>structuredClone(item));
@@ -66,12 +70,12 @@ export function registryRecordFromMetadata(metadata,{existing=null}={}){
   };
 }
 
-export function deriveRegistrySource({source,metadata}={}){
+export function deriveRegistrySource({source,metadata,practiceOutcomes=[]}={}){
   if(typeof source!=='string')throw new Error('registry builder: source is required');
   if(!metadata)throw new Error('registry builder: metadata is required');
   const lessons=parseLessonRegistrySource(source);
   const existing=lessons.find(item=>item.date===metadata.date)||null;
-  const record=registryRecordFromMetadata(metadata,{existing});
+  const record=registryRecordFromMetadata(metadata,{existing,practiceOutcomes});
   const nextSource=replaceLessonRegistrySource(source,record);
   return {
     source:nextSource,
