@@ -95,6 +95,17 @@ try{
     }
   }
   await navigate('09.10.26.html',1440,900,false);
+  const mathmlBeforeInteractions=await run("(()=>{const a=[...document.querySelectorAll('main math')];return {count:a.length,allNative:a.every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML'),annotated:a.every(m=>m.querySelector('annotation[encoding=\"application/x-tex\"]')),fractions:document.querySelectorAll('main mfrac').length,radicals:document.querySelectorAll('main mroot').length,powers:document.querySelectorAll('main msup').length,legacyScripts:document.querySelectorAll('main sup,main sub').length,taskMath:document.querySelectorAll('#training math').length}})()");
+  assert.ok(mathmlBeforeInteractions.count>=80,JSON.stringify(mathmlBeforeInteractions));
+  assert.equal(mathmlBeforeInteractions.allNative,true,'All mathematics must use the MathML namespace');
+  assert.equal(mathmlBeforeInteractions.annotated,true,'Every MathML expression has a source annotation');
+  assert.ok(mathmlBeforeInteractions.fractions>=30&&mathmlBeforeInteractions.radicals>=5&&mathmlBeforeInteractions.powers>=40,'Structured fractions, roots and powers');
+  assert.equal(mathmlBeforeInteractions.legacyScripts,0,'No HTML sup/sub stand-ins');
+  assert.ok(mathmlBeforeInteractions.taskMath>=20,'Training and answer mathematics is MathML');
+  for(let i=0;i<4;i++){
+    const state=await run("(()=>{document.getElementById('stepTab"+i+"').click();const m=document.querySelector('#stepPanel .formula math');return {native:m?.namespaceURI==='http://www.w3.org/1998/Math/MathML',annotated:!!m?.querySelector('annotation[encoding=\"application/x-tex\"]'),block:m?.getAttribute('display')==='block'}})()");
+    assert.deepEqual(state,{native:true,annotated:true,block:true},'Dynamic MathML step '+i);
+  }
   assert.equal(await run("document.querySelectorAll('[data-step]').length"),4,'Stepper tabs');
   assert.equal(await run("document.querySelectorAll('[data-task]').length"),10,'Training count');
   assert.equal(await run("document.querySelector('#stepPanel').getAttribute('aria-labelledby')"),'stepTab0');
