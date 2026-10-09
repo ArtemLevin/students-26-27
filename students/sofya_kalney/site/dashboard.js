@@ -1,5 +1,5 @@
-import './competence-update-20261004.js?v=20261004-1';
-import {LESSONS} from './lesson-registry.js?v=20261004-1';
+import './competence-update-20261009.js?v=20261009-1';
+import {LESSONS} from './lesson-registry.js?v=20261009-1';
 import {initStudentDashboard} from '../../../shared/student-dashboard/dashboard-core.js';
 import {PRACTICE_CONFIG} from './practice-config.js';
 
