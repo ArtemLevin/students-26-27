@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
+import vm from 'node:vm';
 import {validateStudentPackage} from '../../../../pipeline/student/contract.mjs';
 
 const root=process.cwd();
@@ -74,4 +75,111 @@ test('Anna KTP plan remains complete and calendar-consistent',()=>{
     const day=new Date(lesson.plannedDate+'T00:00:00Z').getUTCDay();
     assert.ok(day===0||day===5,lesson.id+' must be Friday or Sunday');
   }
+});
+
+
+test('09.10.26 lesson and laboratory retain exact source exercise coverage and links',()=>{
+  const lesson=read('09.10.26.html');
+  const lab=read('09.10.26-lab.html');
+  const tex=fs.readFileSync(path.join(root,'students','anna_bannova','tex_docs','09.10.26.tex'),'utf8');
+  const metadata=readJson('data/lessons/2026-10-09.lesson.json');
+  assert.equal([...lesson.matchAll(/class="task"/g)].length,10,'10 practice problems');
+  assert.equal([...lesson.matchAll(/class="answer"/g)].length,10,'10 answer keys');
+  assert.equal([...tex.matchAll(/\\item (?:Упростите выражение|Найдите значение выражения|Если \$f|Решите уравнение)/g)].length,10,'10 source problems');
+  const ids=[...lesson.matchAll(/\bid="([^"]+)"/g)].map(match=>match[1]);
+  assert.equal(new Set(ids).size,ids.length,'duplicate IDs');
+  for(const outcome of metadata.outcomes){
+    assert.ok(ids.includes(outcome.evidenceAnchor),'missing competency anchor '+outcome.evidenceAnchor);
+    assert.equal(outcome.masteryClaim,null,'review should not elevate mastery without independent assessment');
+  }
+  for(const [html,file] of [[lesson,'09.10.26.html'],[lab,'09.10.26-lab.html']]){
+    const dirname=path.join(site,path.dirname(file));
+    for(const match of html.matchAll(/\b(?:src|href)="([^"]+)"/g)){
+      const href=match[1];
+      if(href.startsWith('#')){
+        assert.ok(html.includes('id="'+href.slice(1)+'"'),'broken local anchor '+href);
+      }else if(!/^(?:https?:|data:|mailto:)/.test(href)){
+        const target=path.resolve(dirname,href.split(/[?#]/,1)[0]);
+        assert.ok(fs.existsSync(target),'broken local resource '+href);
+      }
+    }
+  }
+  const registry=read('lesson-registry.js');
+  const dates=[...registry.matchAll(/"date": "(\d{4}-\d{2}-\d{2})"/g)].map(x=>x[1]);
+  assert.deepEqual(dates,['2026-10-09','2026-10-04','2026-10-02']);
+  assert.match(lesson,/aria-controls="training"/);
+  assert.match(lesson,/<math\b/,'accessible MathML for indexed radicals');
+  assert.match(lab,/\brole="status" aria-live="polite"/);
+  assert.doesNotMatch(lab,/\$\('currentFormula'\)\.innerHTML/,'no dynamic HTML for slider-generated formula');
+});
+
+test('09.10.26 lesson and laboratory inline scripts parse as JavaScript',()=>{
+  for(const file of ['09.10.26.html','09.10.26-lab.html']){
+    const html=read(file);
+    const scripts=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
+    assert.equal(scripts.length,1,file+': expected one inline script');
+    assert.doesNotThrow(()=>new vm.Script(scripts[0][1],{filename:file}),file+': syntax error');
+  }
+});
+
+test('09.10.26 laboratory: slider endpoints, reset, prediction and contextual return',()=>{
+  function element(dataset={}){
+    return {
+      dataset,attributes:{},handlers:{},textContent:'',hidden:false,value:'',
+      setAttribute(key,value){this.attributes[key]=String(value);},
+      getAttribute(key){return this.attributes[key]??null;},
+      addEventListener(event,callback){this.handlers[event]=callback;},
+      replaceChildren(...nodes){this.children=nodes;}
+    };
+  }
+  const keys=['theme','variable','variableValue','variableLabel','figureTitle',
+    'firstLabel','firstValue','secondLabel','secondValue','result','resultLabel',
+    'reason','prompt','predictionFeedback','currentFormula','backExplanation','reset'];
+  const items=new Map(keys.map(key=>[key,element()]));
+  const modes=[element({mode:'function'}),element({mode:'fraction'})];
+  const choices=[element({prediction:'constant'}),element({prediction:'changing'})];
+  let hash='';
+  const location={get hash(){return hash;},set hash(value){hash=value.startsWith('#')?value:'#'+value;}};
+  const doc={
+    documentElement:{dataset:{theme:'light'}},
+    getElementById(key){assert.ok(items.has(key),'missing mock '+key);return items.get(key);},
+    querySelectorAll(query){
+      if(query==='.mode')return modes;
+      if(query==='[data-prediction]')return choices;
+      throw new Error('unexpected selector '+query);
+    },
+    createElement(){return element();},
+    createTextNode(text){return {textContent:text};}
+  };
+  const events={};
+  const window={addEventListener(event,handler){events[event]=handler;}};
+  const source=read('09.10.26-lab.html').match(/<script>([\s\S]*?)<\/script>/)?.[1];
+  new vm.Script(source,{filename:'09.10.26-lab.html'}).runInNewContext({
+    document:doc,window,location,Math,Number,Intl
+  },{timeout:2000});
+  const $=id=>items.get(id);
+  assert.equal($('result').textContent,'64','initial function ratio');
+  assert.equal(location.hash,'#function');
+  for(const x of ['-4','0','4']){
+    $('variable').value=x;
+    $('variable').handlers.input();
+    assert.equal($('result').textContent,'64','function ratio at '+x);
+  }
+  modes[1].handlers.click();
+  assert.equal(location.hash,'#fraction');
+  assert.equal($('backExplanation').href,'09.10.26.html#fractional');
+  for(const x of ['0.25','1','4']){
+    $('variable').value=x;
+    $('variable').handlers.input();
+    assert.equal($('result').textContent,'6','fraction expression at '+x);
+  }
+  choices[0].handlers.click();
+  assert.match($('predictionFeedback').textContent,/Верно/);
+  $('reset').handlers.click();
+  assert.equal($('variable').value,'1','fraction reset value');
+  assert.equal($('result').textContent,'6');
+  modes[0].handlers.click();
+  assert.equal($('backExplanation').href,'09.10.26.html#functions');
+  assert.equal($('result').textContent,'64');
+  assert.equal($('currentFormula').children.length,3,'safe superscript DOM structure');
 });

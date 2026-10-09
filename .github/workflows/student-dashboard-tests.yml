@@ -224,6 +224,8 @@ jobs:
             test: node --test students/nikol_sarkisyants/site/tests/*.test.mjs
           - student: nastya_pavlova
             test: node students/nastya_pavlova/site/tests/practice-adapter.test.mjs
+          - student: mark_gukin
+            test: node --test students/mark_gukin/site/tests/*.test.mjs
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -264,6 +266,16 @@ jobs:
           echo 'END_XENIA_REGISTRY'
       - name: Run regression suite
         run: ${{ matrix.test }}
+      - name: Browser QA for Mark's October 9 lesson and cabinet
+        if: matrix.student == 'mark_gukin'
+        run: node students/mark_gukin/site/tests/browser-20261009.mjs
+      - name: Upload Mark browser QA screenshots
+        if: always() && matrix.student == 'mark_gukin'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mark-browser-20261009
+          path: mark-browser-artifacts/*.png
+          if-no-files-found: warn
       - name: Browser QA for Klykova's 09.10.26 lesson, lab and home
         if: matrix.student == 'xenia_klykova'
         run: node students/xenia_klykova/site/tests/browser-20261009.mjs
