@@ -4,6 +4,44 @@ export const ARCHIVE_PAGE_SIZE=10;
 const MONTHS_GENITIVE=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
 export const LESSONS=[
+{
+  "date": "2026-10-08",
+  "ktpRefs": [],
+  "href": "08.10.26.html",
+  "title": "НОД и НОК. От алгоритма к рассуждению",
+  "navTitle": "НОД и НОК",
+  "navSubtitle": "остатки · алгоритм Евклида · делимость · 4 дня тренировки",
+  "summary": "НОД и НОК, алгоритм Евклида, делимость и первые олимпиадные рассуждения. Путь Б: 9–12 октября, ежедневно по три задания.",
+  "topics": [
+    "НОД и НОК",
+    "алгоритм Евклида",
+    "делимость",
+    "простые числа",
+    "первые олимпиадные рассуждения"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t19_divisibility",
+      "evidenceAnchor": "principles",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "t19_remainders",
+      "evidenceAnchor": "euclid",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "t19_primes",
+      "evidenceAnchor": "olympiad",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "08.10.26.html",
+    "tex": "../tex_docs/08.10.26.tex"
+  }
+},
+
   {
     "date": "2026-10-07",
     "ktpRefs": [],
