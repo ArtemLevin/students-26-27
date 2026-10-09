@@ -1,0 +1,37 @@
+name: Sofia geometry site browser review
+on:
+  pull_request:
+    paths:
+      - 'students/sofya_kalney/site/09.10.26.html'
+      - 'students/sofya_kalney/site/index.html'
+      - 'students/sofya_kalney/site/tests/09.10.26.browser.mjs'
+      - '.github/workflows/sofya-geometry-review.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'students/sofya_kalney/site/09.10.26.html'
+      - 'students/sofya_kalney/site/index.html'
+      - 'students/sofya_kalney/site/tests/09.10.26.browser.mjs'
+      - '.github/workflows/sofya-geometry-review.yml'
+jobs:
+  browser:
+    name: Sofia lesson and dashboard Chromium QA
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify browser test syntax
+        run: node --check students/sofya_kalney/site/tests/09.10.26.browser.mjs
+      - name: Run responsive geometry and accessibility smoke
+        run: node students/sofya_kalney/site/tests/09.10.26.browser.mjs
+      - name: Upload review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sofya-geometry-browser-screenshots
+          path: sofya-review-artifacts/*.png
+          if-no-files-found: warn
