@@ -67,7 +67,7 @@ html[data-theme=dark]{color-scheme:dark;--paper:#111b20;--sheet:#1b292e;--ink:#f
 <section class="chapter" id="isosceles">
 <div class="chapter-head"><span class="n">02</span><div><h2>Одна площадь — две высоты</h2><p>В равнобедренном треугольнике высота к основанию одновременно делит основание пополам. Сравните два способа записи площади.</p></div></div>
 <div class="twocol"><div>
-<div class="rule"><div class="formula mathline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>a</mi><mi>h</mi><mo>=</mo><mi>b</mi><mi>k</mi></mrow></math><span aria-hidden="true">;&nbsp; </span><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>b</mi><mn>2</mn></msup><mo>=</mo><msup><mi>h</mi><mn>2</mn></msup><mo>+</mo><msup><mrow><mo>(</mo><mfrac><mi>a</mi><mn>2</mn></mfrac><mo>)</mo></mrow><mn>2</mn></msup></mrow></math></div><p>Здесь <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>a</mi></mrow></math> — основание, <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>b</mi></mrow></math> — боковая сторона, <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>h</mi></mrow></math> — высота к основанию, <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>k</mi></mrow></math> — высота к боковой стороне.</p></div>
+<div class="rule"><div class="formula mathline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>a</mi><mi>h</mi><mo>=</mo><mi>b</mi><mi>k</mi></mrow></math><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>;</mo></math><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>b</mi><mn>2</mn></msup><mo>=</mo><msup><mi>h</mi><mn>2</mn></msup><mo>+</mo><msup><mrow><mo>(</mo><mfrac><mi>a</mi><mn>2</mn></mfrac><mo>)</mo></mrow><mn>2</mn></msup></mrow></math></div><p>Здесь <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>a</mi></mrow></math> — основание, <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>b</mi></mrow></math> — боковая сторона, <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>h</mi></mrow></math> — высота к основанию, <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>k</mi></mrow></math> — высота к боковой стороне.</p></div>
 <p><strong>Пример с занятия:</strong> <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>h</mi><mo>=</mo><mn>10</mn></mrow></math>, <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>k</mi><mo>=</mo><mn>12</mn></mrow></math>. Из <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mn>10</mn><mi>a</mi><mo>=</mo><mn>12</mn><mi>b</mi></mrow></math> получаем <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>b</mi><mo>=</mo><mfrac><mrow><mn>5</mn><mi>a</mi></mrow><mn>6</mn></mfrac></mrow></math>. Подставляем в теорему Пифагора:</p>
 <div class="formula mathline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mfrac><mrow><mn>25</mn><msup><mi>a</mi><mn>2</mn></msup></mrow><mn>36</mn></mfrac><mo>=</mo><mn>100</mn><mo>+</mo><mfrac><msup><mi>a</mi><mn>2</mn></msup><mn>4</mn></mfrac></mrow></math></div>
 <p>Отсюда <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>a</mi><mo>=</mo><mn>15</mn></mrow></math>, <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>b</mi><mo>=</mo><mn>12,5</mn></mrow></math>; площадь <strong><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>S</mi><mo>=</mo><mn>75</mn></mrow></math></strong>.</p>
@@ -133,11 +133,17 @@ html[data-theme=dark]{color-scheme:dark;--paper:#111b20;--sheet:#1b292e;--ink:#f
  toggle.addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';showTheme();try{localStorage.setItem(key,theme)}catch(_){}});
  showTheme();
  const description=document.getElementById('thalesDesc'),slider=document.getElementById('pointRange'),kDot=document.getElementById('kDot'),jDot=document.getElementById('jDot'),kLabel=document.getElementById('kLabel'),jLabel=document.getElementById('jLabel'),line=document.getElementById('parallelLine'),ak=document.getElementById('akRatio'),bj=document.getElementById('bjRatio'),presets=[...document.querySelectorAll('[data-position]')];
- const gcd=(a,b)=>b?gcd(b,a%b):a, ratio=(a,b)=>{const d=gcd(a,b);return (a/d)+':'+(b/d);};
+ const gcd=(a,b)=>b?gcd(b,a%b):a;
+ const mathNS='http://www.w3.org/1998/Math/MathML';
+ const setMathRatio=(target,a,b)=>{
+  const divisor=gcd(a,b);
+  const item=(kind,value)=>{const node=document.createElementNS(mathNS,kind);node.textContent=String(value);return node;};
+  target.replaceChildren(item('mn',a/divisor),item('mo',':'),item('mn',b/divisor));
+ };
  function render(){const percent=Number(slider.value),t=percent/100,kx=110+156*t,ky=42+258*t,jx=266+234*(1-t);
   kDot.setAttribute('cx',kx);kDot.setAttribute('cy',ky);jDot.setAttribute('cx',jx);
   line.setAttribute('d','M'+kx+' '+ky+'L'+jx+' 300');kLabel.setAttribute('x',kx-24);kLabel.setAttribute('y',ky-5);jLabel.setAttribute('x',jx-6);
-  ak.textContent=ratio(percent,100-percent);bj.textContent=ratio(200-percent,percent);description.textContent=`Медиана AM, точка K внутри неё, KJ параллельно AC. AK к KM = ${ak.textContent}; BJ к JC = ${bj.textContent}.`;
+  setMathRatio(ak,percent,100-percent);setMathRatio(bj,200-percent,percent);description.textContent=`Медиана AM, точка K внутри неё, KJ параллельно AC. AK к KM = ${ak.textContent}; BJ к JC = ${bj.textContent}.`;
   presets.forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.position)===percent)));
  }
  slider.addEventListener('input',render);presets.forEach(button=>button.addEventListener('click',()=>{slider.value=button.dataset.position;render();slider.focus();}));render();
