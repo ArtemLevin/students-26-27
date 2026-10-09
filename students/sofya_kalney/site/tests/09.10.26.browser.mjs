@@ -106,7 +106,7 @@ try{
     ['40','2:3','4:1'],['60','3:2','7:3'],['90','9:1','11:9']
   ];
   for(const [position,expectedAK,expectedBJ] of tests){
-    const output=await run("(()=>{const el=document.querySelector('#pointRange');el.value='"+position+"';el.dispatchEvent(new Event('input',{bubbles:true}));let p=document.querySelector('#parallelLine').getAttribute('d');const c=p.match(/M([\d.]+) ([\d.]+)L([\d.]+) ([\d.]+)/);return {ak:document.querySelector('#akRatio').textContent,bj:document.querySelector('#bjRatio').textContent,desc:document.querySelector('#thalesDesc').textContent,coordinates:c?.slice(1).map(Number)}})()");
+    const output=await run("(()=>{const el=document.querySelector('#pointRange');el.value='"+position+"';el.dispatchEvent(new Event('input',{bubbles:true}));let p=document.querySelector('#parallelLine').getAttribute('d');const c=p.match(/[0-9.]+/g);return {ak:document.querySelector('#akRatio').textContent,bj:document.querySelector('#bjRatio').textContent,desc:document.querySelector('#thalesDesc').textContent,coordinates:c?.map(Number)}})()");
     assert.equal(output.ak,expectedAK);
     assert.equal(output.bj,expectedBJ);
     assert.ok(output.desc.includes(expectedAK)&&output.desc.includes(expectedBJ),'Stale screen-reader description');
