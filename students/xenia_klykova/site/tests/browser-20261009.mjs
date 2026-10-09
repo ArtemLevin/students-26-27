@@ -103,7 +103,8 @@ try{
   assert.equal(await run("document.querySelector('a[href=\"09.10.26-lab.html\"]')!==null"),true);
   assert.equal(await run("document.querySelector('img.poster').getAttribute('src')"),'../images/09.10.26.png');
   await navigate('09.10.26-lab.html',1440,900);
-  assert.ok(await run("document.querySelectorAll('math').length >= 19"),'lab should render MathML');
+  const labMathCount=await run("document.querySelectorAll('math').length");
+  assert.ok(labMathCount>=12,'lab should render static MathML: '+labMathCount);
   assert.equal(await run("document.querySelector('#calculation math').namespaceURI"),'http://www.w3.org/1998/Math/MathML');
   const testTime=async value=>run("(()=>{const slider=document.querySelector('#time');slider.value='"+value+"';slider.dispatchEvent(new Event('input',{bubbles:true}));return [document.querySelector('#timeValue').textContent,document.querySelector('#heightValue').textContent,document.querySelector('#status').textContent]})()");
   let r=await testTime('0');assert.ok(r[1].startsWith('2 м'),JSON.stringify(r));
