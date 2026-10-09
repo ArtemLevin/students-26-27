@@ -22,42 +22,58 @@ export const LESSONS=[
     {
       "competencyId": "text_09",
       "evidenceAnchor": "base",
-      "relation": "practiced"
+      "relation": "practiced",
+      "label": "Совместная работа двух исполнителей",
+      "practiceDisposition": "manual"
     },
     {
       "competencyId": "text_10",
       "evidenceAnchor": "base",
-      "relation": "practiced"
+      "relation": "practiced",
+      "label": "Производительность, время и объём работы",
+      "practiceDisposition": "manual"
     },
     {
       "competencyId": "eq_05",
       "evidenceAnchor": "equations",
-      "relation": "practiced"
+      "relation": "practiced",
+      "label": "Рациональные уравнения в задачах на работу",
+      "practiceDisposition": "manual"
     },
     {
       "competencyId": "eq_06",
       "evidenceAnchor": "equations",
-      "relation": "practiced"
+      "relation": "practiced",
+      "label": "ОДЗ и отбор допустимых решений",
+      "practiceDisposition": "manual"
     },
     {
       "competencyId": "eq_02",
       "evidenceAnchor": "roots",
-      "relation": "practiced"
+      "relation": "practiced",
+      "label": "Дискриминант и корни квадратного уравнения",
+      "practiceDisposition": "manual"
     },
     {
       "competencyId": "text_20",
       "evidenceAnchor": "machines",
-      "relation": "practiced"
+      "relation": "practiced",
+      "label": "Уравнение по условию о производительности",
+      "practiceDisposition": "manual"
     },
     {
       "competencyId": "text_21",
       "evidenceAnchor": "pairs",
-      "relation": "practiced"
+      "relation": "practiced",
+      "label": "Система попарных производительностей",
+      "practiceDisposition": "manual"
     },
     {
       "competencyId": "text_12",
       "evidenceAnchor": "method",
-      "relation": "touched"
+      "relation": "touched",
+      "label": "Изменение состава бригады и этапы работы",
+      "practiceDisposition": "none"
     }
   ],
   "materials": {

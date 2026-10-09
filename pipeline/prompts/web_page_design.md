@@ -79,6 +79,30 @@ node scripts/publish-lesson.mjs STUDENT DATE \
 - canonical mastery source или уровни heatmap ради визуального результата;
 - cache-busting/registry projection как обход publisher.
 
+### Предпубликационное решение по Practice Engine
+
+Если у ученика в `student-contract.json` указана `practice.config`, перед `publish-lesson.mjs` подготовьте рассмотренный преподавателем файл
+`students/STUDENT/site/data/practice-publications/YYYY-MM-DD.json`:
+
+```json
+{
+  "version": 1,
+  "studentId": "student_slug",
+  "lessonDate": "2026-10-08",
+  "outcomes": [
+    {
+      "competencyId": "text_09",
+      "evidenceAnchor": "base",
+      "relation": "practiced",
+      "label": "Совместная работа",
+      "practiceDisposition": "manual"
+    }
+  ]
+}
+```
+
+Тройка `competencyId + evidenceAnchor + relation` должна точно совпадать с применяемым lesson evidence. Для каждого нового outcome требуется непустой `label` и явное решение `practiceDisposition`. Если существующая запись уже содержит reviewed-поля, publisher сохраняет их и без нового sidecar. `generator` применяйте только при реальной доступности генератора, `manual` — при запланированной ручной проверке, `none` — при осознанном исключении практики. Для gap нужны `practiceGap.reason` и `practiceGap.issue`. Значения не генерировать автоматически. Publisher отвергает неполные данные до начала записи файлов. Sidecar участвует в stale-plan guards.
+
 ### Stage 04
 
 Если для ученика применим Practice Engine и подготовлен Stage 04 analysis artifact, запускать Stage 04 только после базовой publication.
