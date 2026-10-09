@@ -1,0 +1,302 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{needspace}
+\usepackage{xcolor}
+
+\geometry{left=20mm,right=20mm,top=19mm,bottom=20mm}
+\setlength{\headheight}{25pt}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=7mm,itemsep=1pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=4pt,topsep=4pt}
+\definecolor{accent}{HTML}{147D7E}
+\definecolor{darkaccent}{HTML}{0B5052}
+\definecolor{textgray}{HTML}{353C3D}
+\definecolor{warn}{HTML}{8B5946}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{textgray}НОД, НОК и алгоритм Евклида}
+\fancyhead[R]{\small\color{textgray}08.10.26}
+\fancyfoot[C]{\small\color{textgray}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+\newcommand{\topic}[1]{%
+ \Needspace{5\baselineskip}%
+ \vspace{0.6em}{\Large\bfseries\color{darkaccent}#1}\par
+ \vspace{0.15em}{\color{accent}\rule{\linewidth}{0.55pt}}\par\vspace{0.2em}}
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\warning}[1]{\par\textbf{\color{warn}Внимание.} #1\par}
+\newcommand{\checkitem}{\(\square\)}
+\renewcommand{\today}{08.10.26}
+\begin{document}
+\thispagestyle{empty}
+\vspace*{23mm}
+\begin{center}
+ {\fontsize{31}{35}\selectfont\bfseries\color{darkaccent}Чек-лист}\\[5mm]
+ {\fontsize{21}{26}\selectfont\bfseries НОД и НОК}\\[4mm]
+ {\Large Алгоритм Евклида и первые олимпиадные рассуждения}\\[15mm]
+ {\large Ксения Клыкова}\\[3mm]
+ {\large \today}\\[17mm]
+ \begin{minipage}{0.8\textwidth}\centering\color{textgray}
+ Научиться не только вычислять НОД и НОК, но и замечать
+ ограничения на числа, доказывать невозможность и находить
+ подходящий пример.
+ \end{minipage}
+\end{center}
+\vfill
+\begin{center}
+ {\large\bfseries\color{darkaccent}Лёвин Артём Александрович}\\[2mm]
+ {\large\color{textgray}эксклюзивно для Ксении Клыковой}
+\end{center}
+\vspace{8mm}
+\begin{tikzpicture}[remember picture,overlay]
+ \draw[accent,line width=1.2pt]
+ ([xshift=18mm,yshift=17mm]current page.south west)
+ .. controls ([xshift=65mm,yshift=28mm]current page.south west)
+ and ([xshift=-62mm,yshift=7mm]current page.south east)
+ .. ([xshift=-18mm,yshift=20mm]current page.south east);
+\end{tikzpicture}
+\clearpage
+
+\topic{1. Основные понятия и разложение на простые множители}
+\key{Наибольший общий делитель (НОД)} двух положительных целых чисел --- наибольшее положительное число, на которое делится каждое из них.
+
+\key{Наименьшее общее кратное (НОК)} --- наименьшее положительное число, которое делится на каждое из них.
+
+\begin{itemize}
+ \item \checkitem{} Разложите числа на простые множители.
+ \item \checkitem{} Для \key{НОД} возьмите каждый общий простой множитель в \emph{меньшей} степени.
+ \item \checkitem{} Для \key{НОК} возьмите каждый встречающийся простой множитель в \emph{большей} степени.
+\end{itemize}
+
+Пример:
+\[
+24=2^3\cdot3,\qquad32=2^5,
+\]
+\[
+\boxed{\gcd(24,32)=2^3=8},\qquad
+\boxed{\operatorname{lcm}(24,32)=2^5\cdot3=96}.
+\]
+Здесь и далее $\gcd(a,b)$ обозначает НОД, а $\operatorname{lcm}(a,b)$ --- НОК. В краткой записи также употребляют $(a,b)$ и $[a,b]$, когда смысл понятен из контекста.
+
+\topic{2. Алгоритм Евклида: НОД через остатки}
+Для положительных целых $a\ge b$ деление с остатком имеет вид
+\[
+a=qb+r,\qquad 0\le r<b,
+\]
+где $q$ --- неполное частное, $r$ --- остаток. Главное свойство:
+\[
+\boxed{\gcd(a,b)=\gcd(b,r)}.
+\]
+Повторяйте деление: новый делитель становится делимым, а ненулевой остаток --- новым делителем. \key{Последний ненулевой остаток равен НОД.}
+
+\key{Пример.} Найдём $\gcd(308,112)$:
+\[
+\begin{aligned}
+308&=2\cdot112+84,\\
+112&=1\cdot84+28,\\
+84&=3\cdot28+0.
+\end{aligned}
+\qquad\Longrightarrow\qquad \boxed{\gcd(308,112)=28}.
+\]
+\warning{Останавливайтесь при нулевом остатке. Сам ноль ответом не является.}
+
+\clearpage
+\vspace*{17mm}
+\thispagestyle{fancy}
+\begin{center}
+ {\LARGE\bfseries\color{darkaccent}Алгоритм Евклида}\par\vspace{4mm}
+ {\color{textgray}Последовательно заменяем пару чисел меньшим числом и остатком.}
+\end{center}
+\vspace{10mm}
+\begin{center}
+\begin{tikzpicture}[
+ >=Stealth, line width=.85pt,
+ term/.style={draw=darkaccent,ellipse,minimum width=46mm,minimum height=11mm,align=center,fill=white},
+ action/.style={draw=darkaccent,rounded corners=2mm,minimum width=53mm,minimum height=15mm,text width=49mm,align=center,fill=white},
+ test/.style={draw=darkaccent,diamond,aspect=2.3,inner sep=1mm,text width=28mm,align=center,fill=white},
+ note/.style={font=\small\bfseries,fill=white,inner sep=1pt},
+ arrow/.style={->,draw=accent,line width=1.1pt}
+]
+\node[term] (start) at (0,0) {Начало: $a,b>0$};
+\node[action] (norm) at (0,-2.0) {Если нужно, поменяйте числа местами: $a\ge b$};
+\node[action] (divide) at (0,-4.4) {Разделите с остатком: $a=qb+r$, $0\le r<b$};
+\node[test] (test) at (0,-7.0) {$r=0$?};
+\node[term] (end) at (0,-9.65) {Ответ: НОД $=b$};
+\node[action] (again) at (6.0,-7.0) {Замените пару: $a\gets b$, $b\gets r$};
+\draw[arrow] (start) -- (norm);
+\draw[arrow] (norm) -- (divide);
+\draw[arrow] (divide) -- (test);
+\draw[arrow] (test) -- node[note,left]{да} (end);
+\draw[arrow] (test) -- node[note,above]{нет} (again);
+\draw[arrow] (again.north) |- ([yshift=2mm]divide.east) -- (divide.east);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\topic{3. Как распознать НОД и НОК в текстовой задаче}
+\key{Одинаковые наборы без остатка.} Если $84$ помидора и $112$ огурцов нужно распределить по наибольшему числу одинаковых упаковок, то
+\[
+\gcd(84,112)=28.
+\]
+Получатся $28$ упаковок, в каждой $84:28=3$ помидора и $112:28=4$ огурца.
+
+\key{Первое одновременное повторение.} Если два действия повторяются каждые $12$ и $18$ минут и совпали в начальный момент, то следующее совпадение наступит через
+\[
+\operatorname{lcm}(12,18)=36\text{ минут}.
+\]
+\warning{Слова «упаковки» и «встретятся» сами по себе не гарантируют выбор метода. Проверьте, что требуются максимальное число равных групп или первое совместное кратное.}
+
+\topic{4. Главная связь между НОД и НОК}
+Для любых положительных целых чисел $a,b$:
+\[
+\boxed{\gcd(a,b)\cdot\operatorname{lcm}(a,b)=ab}.
+\]
+Поэтому, зная три величины, часто можно найти четвёртую без отдельного разложения на множители.
+
+\key{Пример.} Для $a=84$, $b=180$ и $\gcd(84,180)=12$:
+\[
+\operatorname{lcm}(84,180)=\frac{84\cdot180}{12}=1260.
+\]
+Почему формула работает? Для каждой простой основы $p$ показатели степеней удовлетворяют
+\[
+\min(\alpha,\beta)+\max(\alpha,\beta)=\alpha+\beta.
+\]
+\begin{itemize}
+ \item \checkitem{} В формуле НОД и НОК относятся к \emph{одной и той же паре} $a,b$.
+ \item \checkitem{} Следите, чтобы все найденные числа оставались положительными целыми.
+\end{itemize}
+
+\topic{5. Можно ли задать НОД и НОК произвольно?}
+\key{Необходимое условие:} НОД любых двух положительных целых чисел всегда делит их НОК:
+\[
+\boxed{\gcd(a,b)\mid\operatorname{lcm}(a,b)}.
+\]
+Например, условие $\gcd(a,b)=14$ и $\operatorname{lcm}(a,b)=90$ \key{невыполнимо}, так как $90$ не делится на $14$.
+
+И наоборот: если положительное $d$ делит положительное $m$, то пара $a=d$, $b=m$ даёт НОД $d$ и НОК $m$. Значит, это условие \emph{достаточно} для существования хотя бы одной пары.
+
+\key{Приём «оценка + пример»:} сначала доказать ограничение для всех возможных чисел, затем предъявить конкретные числа, которые этому ограничению удовлетворяют. Если ограничение нарушено, достаточно доказательства невозможности.
+
+\topic{6. Первые рассуждения олимпиадного типа}
+\key{Задача с неизвестным числом.} Пусть
+\[
+n=2^x3^y5^z7^w,\quad x,y,z,w\in\mathbb Z_{\ge0},
+\]
+причём $\gcd(n,360)=120$, $\operatorname{lcm}(n,360)=2520$. Тогда
+\[
+ n=\frac{120\cdot2520}{360}=\boxed{840}
+ =2^3\cdot3\cdot5\cdot7.
+\]
+Следовательно, $x=3$, $y=z=w=1$. Проверка исходных условий подтверждает результат.
+
+\key{Задача с простым числом.} Найти простое $p$, если $\operatorname{lcm}(18,p)=90$.
+Поскольку $p$ --- простой делитель $90=2\cdot3^2\cdot5$, возможны лишь $p=2,3,5$. При $p=2$ или $3$ НОК равен $18$; при $p=5$ --- $90$. Итак, $\boxed{p=5}$.
+
+\key{Что важно заметить:}
+\begin{itemize}
+ \item \checkitem{} Сначала запишите формулу или ограничение и лишь затем вычисляйте.
+ \item \checkitem{} Используйте дополнительные условия: «простое», «целое», «наименьшее», «все».
+ \item \checkitem{} Для существования предъявите пример; для невозможности найдите противоречие.
+ \item \checkitem{} Найденное из произведения число проверьте по исходным НОД и НОК.
+\end{itemize}
+
+\warning{Число $1$ простым не является. Простое число имеет ровно два различных положительных делителя.}
+
+
+\clearpage
+\topic{Тренировочный блок --- Путь Б}
+\textbf{09--12 октября 2026 года. По 3 задания каждый день.} Все задания средней сложности. Записывайте ход рассуждений, особенно там, где требуется доказательство или перечисление всех вариантов. Ответы помещены после тренировки.
+
+\vspace{2mm}
+\topic{09.10.26 --- пятница}
+\begin{enumerate}
+ \item Найдите $\gcd(672,462)$ алгоритмом Евклида. Запишите все деления с остатком.
+ \item Найдите $\operatorname{lcm}(84,126,180)$ через разложение на простые множители.
+ \item Для натурального $n$ известно, что $\gcd(n,72)=18$ и $\operatorname{lcm}(n,72)=360$. Найдите $n$ и проверьте оба условия.
+\end{enumerate}
+
+\vspace{4mm}
+\topic{10.10.26 --- суббота}
+\begin{enumerate}
+ \item Из $168$ карандашей, $210$ тетрадей и $294$ закладок составляют максимально возможное число одинаковых наборов без остатка. Сколько наборов получится? Сколько предметов каждого вида будет в одном наборе?
+ \item Три сигнала подаются каждые $18$, $24$ и $40$ минут. В $08{:}00$ они прозвучали одновременно. Когда они впервые прозвучат одновременно снова? Сколько раз сработает каждый сигнал за прошедшее время (не считая начального момента)?
+ \item Найдите \emph{все неупорядоченные пары} натуральных чисел $(a,b)$, для которых $\gcd(a,b)=18$ и $\operatorname{lcm}(a,b)=540$. Обоснуйте, что других пар нет.
+\end{enumerate}
+
+\clearpage
+\topic{11.10.26 --- воскресенье}
+\begin{enumerate}
+ \item Выясните, какие данные о двух натуральных числах могут быть верными: \\
+ (а) $\gcd(a,b)=18$, $\operatorname{lcm}(a,b)=450$; \\
+ (б) $\gcd(a,b)=18$, $\operatorname{lcm}(a,b)=455$. \\
+ Для возможного случая приведите конкретную пару чисел; невозможность обоснуйте.
+ \item Число $n=2^x3^y5^z7^w$, где $x,y,z,w$ --- целые неотрицательные числа, удовлетворяет условиям $\gcd(n,420)=84$ и $\operatorname{lcm}(n,420)=1260$. Найдите $n$ и все четыре показателя степени. Проверьте результат.
+ \item Найдите все простые числа $p$, для которых выполняется хотя бы одно из равенств:
+ \[
+ \operatorname{lcm}(84,p)=84\quad\text{или}\quad\operatorname{lcm}(84,p)=420.
+ \]
+ Укажите, для какого равенства подходит каждое найденное число.
+\end{enumerate}
+
+\vspace{3mm}
+\topic{12.10.26 --- понедельник}
+\begin{enumerate}
+ \item Найдите \emph{все} натуральные числа $n$, для которых
+ \[
+ \gcd(n,60)=60,\qquad \operatorname{lcm}(n,36)=180.
+ \]
+ Объясните, почему список полный.
+ \item Для натуральных $a,b$ известно: $\gcd(a,b)=12$, $\operatorname{lcm}(a,b)=420$. Найдите пару, у которой разность $|a-b|$ наименьшая. Обоснуйте выбор.
+ \item Найдите наименьшее натуральное число $N$, которое кратно $24$ и $36$, а при делении на $5$ даёт остаток $3$. Покажите, почему найденное число действительно наименьшее.
+\end{enumerate}
+
+\clearpage
+\topic{Ответы к тренировке --- Путь Б}
+\renewcommand{\arraystretch}{1.32}
+\begin{tabularx}{\linewidth}{@{}p{15mm}p{10mm}X@{}}
+\toprule
+Дата & № & Ответ и краткий ориентир \\
+\midrule
+\multicolumn{3}{@{}l}{\bfseries 09.10.26 --- пятница} \\
+ & 1 & $42$: $672=462+210$, $462=2\cdot210+42$, $210=5\cdot42$. \\
+ & 2 & $1260=2^2\cdot3^2\cdot5\cdot7$. \\
+ & 3 & $n=90$; НОД $=18$, НОК $=360$. \\
+\addlinespace[2mm]
+\multicolumn{3}{@{}l}{\bfseries 10.10.26 --- суббота} \\
+ & 1 & $42$ набора: по $4$ карандаша, $5$ тетрадей и $7$ закладок. \\
+ & 2 & $14{:}00$; за $360$ минут сигналы сработают $20$, $15$ и $9$ раз. \\
+ & 3 & $(18,540)$, $(36,270)$, $(54,180)$, $(90,108)$. Если $a=18u$, $b=18v$, то $uv=30$ и $\gcd(u,v)=1$. \\
+\addlinespace[2mm]
+\multicolumn{3}{@{}l}{\bfseries 11.10.26 --- воскресенье} \\
+ & 1 & (а) возможно: $(18,450)$; (б) невозможно, так как $18\nmid455$. \\
+ & 2 & $n=252=2^2\cdot3^2\cdot7$; $x=2$, $y=2$, $z=0$, $w=1$. \\
+ & 3 & Для НОК $=84$: $p=2,3,7$; для НОК $=420$: $p=5$. \\
+\addlinespace[2mm]
+\multicolumn{3}{@{}l}{\bfseries 12.10.26 --- понедельник} \\
+ & 1 & $n=60$ или $180$: из условий следует $60\mid n$ и $n\mid180$; оба числа подходят. \\
+ & 2 & $(60,84)$; минимальная разность $24$. Возможные пары: $(12,420)$ и $(60,84)$. \\
+ & 3 & $N=288$: число кратно $72=\operatorname{lcm}(24,36)$, а первые кратные $72,144,216,288$ дают остатки $2,4,1,3$ по модулю $5$. \\
+\bottomrule
+\end{tabularx}
+
+\vfill
+\begin{center}
+{\small\color{textgray}Лёвин Артём Александрович эксклюзивно для Ксении Клыковой}
+\end{center}
+\end{document}
