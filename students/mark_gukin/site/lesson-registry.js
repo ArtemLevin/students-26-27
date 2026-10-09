@@ -5,6 +5,63 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+      "date": "2026-10-09",
+      "ktpRefs": [],
+      "href": "09.10.26.html",
+      "title": "Показательные и степенные уравнения. Прикладная задача по формуле",
+      "navTitle": "Уравнения и формула",
+      "summary": "Решение показательных уравнений приведением к общему основанию, степенных уравнений с рациональными и отрицательными показателями; контроль двух корней и прикладная задача с ограничением «не более».",
+      "topics": [
+          "Показательное уравнение приведением к одному основанию",
+          "Степень с рациональным показателем",
+          "Свойства степеней",
+          "Выражение неизвестной величины из формулы",
+          "Ограничения на переменные в модели"
+      ],
+      "outcomes": [
+          {
+              "competencyId": "ege07_07",
+              "evidenceAnchor": "exponential",
+              "relation": "practiced"
+          },
+          {
+              "competencyId": "ege08_03",
+              "evidenceAnchor": "powers",
+              "relation": "practiced"
+          },
+          {
+              "competencyId": "ege08_04",
+              "evidenceAnchor": "tools",
+              "relation": "practiced"
+          },
+          {
+              "competencyId": "ege10_01",
+              "evidenceAnchor": "application",
+              "relation": "touched"
+          },
+          {
+              "competencyId": "ege10_02",
+              "evidenceAnchor": "application",
+              "relation": "practiced"
+          },
+          {
+              "competencyId": "ege10_09",
+              "evidenceAnchor": "inequality",
+              "relation": "touched"
+          },
+          {
+              "competencyId": "ege10_12",
+              "evidenceAnchor": "application",
+              "relation": "touched"
+          }
+      ],
+      "materials": {
+          "html": "09.10.26.html",
+          "pdf": "../pdf_docs/09.10.26.pdf",
+          "tex": "../tex_docs/09.10.26.tex"
+      }
+  },
+  {
     "date": "2026-10-04",
     "ktpRefs": [],
     "href": "04.10.26.html",
