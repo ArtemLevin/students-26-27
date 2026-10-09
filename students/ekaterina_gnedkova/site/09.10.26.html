@@ -72,14 +72,19 @@ arbitrary:{name:"Произвольная",units:"руб.",S:1000,r:0.1,pay:[600
 const selector=document.getElementById("scenario"),rows=document.getElementById("loanRows"),prev=document.getElementById("prevYear"),next=document.getElementById("nextYear"),reset=document.getElementById("resetYear");
 let position=0,computed=[];
 const format=value=>Number(value.toFixed(8)).toLocaleString("ru-RU",{maximumFractionDigits:2});
+const MATHML_NS="http://www.w3.org/1998/Math/MathML";
+function mathNumber(value){
+  const math=document.createElementNS(MATHML_NS,"math"),number=document.createElementNS(MATHML_NS,"mn");
+  math.setAttribute("display","inline");number.textContent=format(value);math.append(number);return math;
+}
 function update(){
 const s=scenarios[selector.value];
 rows.replaceChildren();computed=[];let start=s.S;
-for(let i=0;i<s.pay.length;i++){const percent=Number((start*s.r).toFixed(8));const total=Number((start+percent).toFixed(8));const balance=Number((total-s.pay[i]).toFixed(8));const values=[i+1,start,percent,total,s.pay[i],balance];computed.push({start,percent,total,payment:s.pay[i],balance});const tr=document.createElement("tr");tr.dataset.position=String(i);values.forEach((x,column)=>{const cell=document.createElement(column===0?"th":"td");if(column===0)cell.setAttribute("scope","row");cell.textContent=format(x);tr.append(cell)});rows.append(tr);start=balance;}
+for(let i=0;i<s.pay.length;i++){const percent=Number((start*s.r).toFixed(8));const total=Number((start+percent).toFixed(8));const balance=Number((total-s.pay[i]).toFixed(8));const values=[i+1,start,percent,total,s.pay[i],balance];computed.push({start,percent,total,payment:s.pay[i],balance});const tr=document.createElement("tr");tr.dataset.position=String(i);values.forEach((x,column)=>{const cell=document.createElement(column===0?"th":"td");if(column===0)cell.setAttribute("scope","row");cell.replaceChildren(mathNumber(x));tr.append(cell)});rows.append(tr);start=balance;}
 document.getElementById("scenarioDesc").textContent=s.explanation+" Единицы таблицы: "+s.units;
 syncPosition();
 }
-function syncPosition(){position=Math.max(0,Math.min(computed.length-1,position));const s=scenarios[selector.value],cur=computed[position];rows.querySelectorAll("tr").forEach((tr,i)=>tr.classList.toggle("active",i===position));document.getElementById("yearReadout").textContent="Год "+(position+1)+" из "+computed.length;document.getElementById("yearMeaning").textContent="Было "+format(cur.start)+", начислено "+format(cur.percent)+", долг перед платежом "+format(cur.total)+", внесено "+format(cur.payment)+", остаток "+format(cur.balance)+" "+s.units+".";prev.disabled=position===0;next.disabled=position===computed.length-1;}
+function syncPosition(){position=Math.max(0,Math.min(computed.length-1,position));const s=scenarios[selector.value],cur=computed[position];rows.querySelectorAll("tr").forEach((tr,i)=>tr.classList.toggle("active",i===position));document.getElementById("yearReadout").replaceChildren("Год ",mathNumber(position+1)," из ",mathNumber(computed.length));document.getElementById("yearMeaning").replaceChildren("Было ",mathNumber(cur.start),", начислено ",mathNumber(cur.percent),", долг перед платежом ",mathNumber(cur.total),", внесено ",mathNumber(cur.payment),", остаток ",mathNumber(cur.balance)," "+s.units+".");prev.disabled=position===0;next.disabled=position===computed.length-1;}
 selector.addEventListener("change",()=>{position=0;update()});prev.addEventListener("click",()=>{position--;syncPosition()});next.addEventListener("click",()=>{position++;syncPosition()});reset.addEventListener("click",()=>{position=0;syncPosition()});update();
 const checks=[...document.querySelectorAll(".selfcheck")];const bar=document.getElementById("progressBar");function renderChecks(){bar.style.width=(100*checks.filter(x=>x.checked).length/checks.length)+"%"}checks.forEach((el,i)=>{el.checked=read("check-"+i)==="1";el.addEventListener("change",()=>{write("check-"+i,el.checked?"1":"0");renderChecks()})});renderChecks();
 // На печати раскрываем ответы; после закрытия окна печати возвращаем исходное состояние.
