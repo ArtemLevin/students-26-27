@@ -143,6 +143,28 @@ const evidence0610For=(title)=>({
   tex:'../tex_docs/06.10.26.tex'
 });
 
+const lesson0910EvidenceTitles = new Set([
+  "Формулы финансовых расчётов",
+  "Кредит с аннуитетной схемой",
+  "Кредит с дифференцированными платежами",
+  "Таблица платежей по кредиту",
+  "Поиск процентной ставки"
+]);
+const lesson0910SectionByTitle = new Map([
+  ["Формулы финансовых расчётов","#model"],
+  ["Кредит с аннуитетной схемой","#annuity"],
+  ["Кредит с дифференцированными платежами","#differentiated"],
+  ["Таблица платежей по кредиту","#simulator"],
+  ["Поиск процентной ставки","#differentiated"]
+]);
+const evidence0910For = (title) => ({
+  date:'09.10.26',
+  text:'Навык представлен и практиковался при разборе кредитных задач: аннуитетной, дифференцированной и произвольной схем, таблицы платежей и определения процентной ставки. Отдельная оценка самостоятельности не фиксировалась; прежний уровень освоения сохранён.',
+  web:'09.10.26.html' + lesson0910SectionByTitle.get(title),
+  pdf:'../pdf_docs/09.10.26.pdf',
+  tex:'../tex_docs/09.10.26.tex'
+});
+
 const groups=groupDefs.map((def,groupIndex)=>{
   const number=groupIndex+1;
   const groupId=`ege27_${String(number).padStart(2,'0')}`;
@@ -165,6 +187,7 @@ const groups=groupDefs.map((def,groupIndex)=>{
       const isLesson2909Level2=(number===8||number===10||number===11)&&lesson2909Level2Titles.has(title);
       const hasLesson2909Evidence=(number===8||number===10||number===11)&&lesson2909EvidenceTitles.has(title);
       const hasLesson0610Evidence=(number===10||number===11||number===13)&&lesson0610EvidenceTitles.has(title);
+      const hasLesson0910Evidence=(number===10||number===13)&&lesson0910EvidenceTitles.has(title);
 
       const level=isMasteredPower?4:
         isLesson2509Level3?3:
@@ -190,6 +213,7 @@ const groups=groupDefs.map((def,groupIndex)=>{
       if(isLesson2509Level2) evidence.push(evidence2509For(title,2));
       if(hasLesson2909Evidence) evidence.push(evidence2909For(title));
       if(hasLesson0610Evidence) evidence.push(evidence0610For(title));
+      if(hasLesson0910Evidence) evidence.push(evidence0910For(title));
 
       const id=`${groupId}_${String(itemIndex+1).padStart(3,'0')}`;
       return{
@@ -210,7 +234,7 @@ window.COMPETENCY_MAP_DATA={
     teacher:'Лёвин Артём Александрович',
     program:'подготовка к ЕГЭ по профильной математике',
     examVersion:'проект ЕГЭ-2027',
-    updated:'06.10.26',
+    updated:'09.10.26',
     sourceNote:'Структура актуализирована по проектам документов ФИПИ ЕГЭ-2027; подтверждённые уровни уточняются по материалам занятий.'
   },
   storage:{
@@ -219,6 +243,7 @@ window.COMPETENCY_MAP_DATA={
     theme:'ekaterina_gnedkova-ege_profile_2027-theme'
   },
   materials:[
+    {date:'09.10.26',title:'Кредитные задачи: три схемы погашения',summary:'Аннуитетная, дифференцированная и произвольная схемы; таблица долга и платежей, поиск ставки.',web:'09.10.26.html',pdf:'../pdf_docs/09.10.26.pdf',tex:'../tex_docs/09.10.26.tex',image:'../images/09.10.26.png'},
     {date:'06.10.26',title:'Вклады и сложные проценты',summary:'Таблица по годам, сложные проценты, повышающий коэффициент и дополнительные взносы.',web:'06.10.26.html',lab:'06.10.26-lab.html',pdf:'../pdf_docs/06.10.26.pdf',tex:'../tex_docs/06.10.26.tex',image:'../images/06.10.26.png'},
     {date:'29.09.26',title:'Смеси, растворы и проценты',summary:'Баланс массы компонента, растворы и сплавы, вода и чистое вещество, высушивание, процентные коэффициенты и системы уравнений.',web:'29.09.26.html',pdf:'../pdf_docs/29.09.26.pdf',tex:'../tex_docs/29.09.26.tex'},
     {date:'25.09.26',title:'Текстовые задачи',summary:'Табличный метод: движение навстречу и вдогонку, круговая трасса, река, средняя скорость, протяжённые тела, производительность и перевод условия в уравнение.',web:'25.09.26.html',pdf:'../pdf_docs/25.09.26.pdf',tex:'../tex_docs/25.09.26.tex'},
