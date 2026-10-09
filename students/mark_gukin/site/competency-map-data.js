@@ -84,6 +84,24 @@ G.forEach(group=>group.items.forEach(item=>{
   item.material={href:`04.10.26.html#${update.anchor}`,label:'Занятие 04.10.26 →'};
 }));
 
+
+const lessonEvidenceText0910='09.10.26: показательные и степенные уравнения с дробными и отрицательными показателями, прикладная формула T=ρgL³−mg. Отмечены темы, затронутые и отработанные на занятии. Новых независимых диагностических оснований для повышения уровня освоения нет.';
+const lessonUpdates0910={
+  ege07_07:{anchor:'exponential',relation:'practiced'},
+  ege08_03:{anchor:'powers',relation:'practiced'},
+  ege08_04:{anchor:'tools',relation:'practiced'},
+  ege10_01:{anchor:'application',relation:'touched'},
+  ege10_02:{anchor:'application',relation:'practiced'},
+  ege10_09:{anchor:'inequality',relation:'touched'},
+  ege10_12:{anchor:'application',relation:'touched'}
+};
+G.forEach(group=>group.items.forEach(item=>{
+  const update=lessonUpdates0910[item.id];
+  if(!update)return;
+  item.evidence=[...item.evidence,{date:'09.10.2026',text:lessonEvidenceText0910}];
+  item.material={href:'09.10.26.html#'+update.anchor,label:'Занятие 09.10.26 →'};
+}));
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'mark_gukin',
@@ -93,7 +111,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Используется проект КИМ ЕГЭ-2027 ФИПИ: 20 заданий, из них 13 с кратким и 7 с развёрнутым ответом. Проект опубликован 28.08.2026; до утверждения структура может быть уточнена.',
-    updated:'04.10.2026'
+    updated:'09.10.2026'
   },
   groups:G
 };
