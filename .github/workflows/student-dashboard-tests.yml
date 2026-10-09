@@ -204,6 +204,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - student: ekaterina_gnedkova
+            test: node --test students/ekaterina_gnedkova/site/tests/*.test.mjs
           - student: anna_bannova
             test: node students/anna_bannova/site/tests/student-platform-v2.test.mjs
           - student: grisha_arkhipov
@@ -285,6 +287,16 @@ jobs:
         with:
           name: xenia-klykova-site-review-20261009
           path: xenia-site-review-artifacts/*.png
+          if-no-files-found: warn
+      - name: Browser QA for Ekaterina's credit lesson and navigator
+        if: matrix.student == 'ekaterina_gnedkova'
+        run: node students/ekaterina_gnedkova/site/tests/browser-20261009.mjs
+      - name: Upload Ekaterina browser QA screenshots
+        if: always() && matrix.student == 'ekaterina_gnedkova'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ekaterina-browser-20261009
+          path: ekaterina-browser-artifacts/*.png
           if-no-files-found: warn
       - name: Browser QA for Xenia's lesson and laboratory
         if: matrix.student == 'xenia_vasilchenko'
