@@ -108,7 +108,20 @@ test('09.10.26 lesson and laboratory retain exact source exercise coverage and l
   const dates=[...registry.matchAll(/"date": "(\d{4}-\d{2}-\d{2})"/g)].map(x=>x[1]);
   assert.deepEqual(dates,['2026-10-09','2026-10-04','2026-10-02']);
   assert.match(lesson,/aria-controls="training"/);
-  assert.match(lesson,/<math\b/,'accessible MathML for indexed radicals');
+  assert.match(lesson,/<mroot>/,'indexed radicals use mroot');
+  assert.match(lesson,/<msqrt>/,'square roots use msqrt');
+  assert.match(lesson,/<mfrac>/,'fractions use mfrac');
+  assert.match(lesson,/<msup>/,'exponents use msup');
+  assert.doesNotMatch(lesson,/<sup\b|class="frac"/,'no HTML superscripts or pseudo-fractions remain');
+  assert.doesNotMatch(lab,/<sup\b/,'laboratory uses MathML exclusively');
+  assert.match(lab,/createElementNS\(MATH_NS/,'dynamic math nodes are namespace aware');
+  assert.match(lab,/<math xmlns="http:\/\/www.w3.org\/1998\/Math\/MathML"/);
+  for(const expr of lesson.matchAll(/<div class="math">([\s\S]*?)<\/div>/g)){
+    assert.match(expr[1],/<math\b[^>]*display="block"/);
+  }
+  for(const answer of lesson.matchAll(/<span class="answer" hidden>([\s\S]*?)<\/span>/g)){
+    assert.match(answer[1],/<math\b/);
+  }
   assert.match(lab,/\brole="status" aria-live="polite"/);
   assert.doesNotMatch(lab,/\$\('currentFormula'\)\.innerHTML/,'no dynamic HTML for slider-generated formula');
 });
@@ -123,13 +136,13 @@ test('09.10.26 lesson and laboratory inline scripts parse as JavaScript',()=>{
 });
 
 test('09.10.26 laboratory: slider endpoints, reset, prediction and contextual return',()=>{
-  function element(dataset={}){
+  function element(dataset={},tagName=null,namespaceURI=null){
     return {
-      dataset,attributes:{},handlers:{},textContent:'',hidden:false,value:'',
+      dataset,tagName,namespaceURI,attributes:{},handlers:{},textContent:'',hidden:false,value:'',
       setAttribute(key,value){this.attributes[key]=String(value);},
       getAttribute(key){return this.attributes[key]??null;},
       addEventListener(event,callback){this.handlers[event]=callback;},
-      replaceChildren(...nodes){this.children=nodes;}
+      replaceChildren(...nodes){this.children=nodes;this.textContent=nodes.map(node=>node.textContent).join('');}
     };
   }
   const keys=['theme','variable','variableValue','variableLabel','figureTitle',
@@ -149,6 +162,7 @@ test('09.10.26 laboratory: slider endpoints, reset, prediction and contextual re
       throw new Error('unexpected selector '+query);
     },
     createElement(){return element();},
+    createElementNS(namespace,tag){return element({},tag,namespace);},
     createTextNode(text){return {textContent:text};}
   };
   const events={};
@@ -181,5 +195,11 @@ test('09.10.26 laboratory: slider endpoints, reset, prediction and contextual re
   modes[0].handlers.click();
   assert.equal($('backExplanation').href,'09.10.26.html#functions');
   assert.equal($('result').textContent,'64');
-  assert.equal($('currentFormula').children.length,3,'safe superscript DOM structure');
+  assert.equal($('currentFormula').children.length,1,'one MathML root per formula');
+  assert.equal($('currentFormula').children[0].tagName,'math');
+  assert.equal($('currentFormula').children[0].namespaceURI,'http://www.w3.org/1998/Math/MathML');
+  assert.equal($('result').children[0].tagName,'math','live result is MathML');
+  assert.equal($('firstValue').children[0].tagName,'math','live numerator is MathML');
+  assert.equal($('secondValue').children[0].tagName,'math','live denominator is MathML');
+  assert.equal($('variableValue').children[0].tagName,'math','slider readout is MathML');
 });
