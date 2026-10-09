@@ -191,6 +191,40 @@ function applyPlanForTest(root,plan){
   }
 }
 
+test('practice-enabled publication requires explicit reviewed outcomes before writing',()=>{
+  const x=repoFixture();
+  const contractPath=path.join(x.studentRoot,'student-contract.json');
+  const contract=JSON.parse(fs.readFileSync(contractPath,'utf8'));
+  contract.practice.config='site/practice-config.js';
+  writeJson(contractPath,contract);
+  fs.writeFileSync(path.join(x.site,'practice-config.js'),
+    "export const PRACTICE_CONFIG={enabled:true,studentId:'test_student',competencies:{}};\n");
+
+  // Without a reviewed sidecar, the first publication must fail before any writes.
+  assert.throws(
+    ()=>buildV2PublicationPlan({root:x.root,studentId:x.studentId,intent:intent(x.studentId)}),
+    /lacks label; provide reviewed practice-publications sidecar/
+  );
+  assert.equal(fs.existsSync(path.join(x.metadataDir,'2026-10-07.lesson.json')),false);
+
+  const sidecarPath=path.join(x.site,'data','practice-publications','2026-10-07.json');
+  writeJson(sidecarPath,{
+    version:1,studentId:'test_student',lessonDate:'2026-10-07',
+    outcomes:[{
+      competencyId:'func_17',evidenceAnchor:'graph-model',relation:'practiced',
+      label:'Работа с графиком',practiceDisposition:'manual'
+    }]
+  });
+  const ready=buildV2PublicationPlan({
+    root:x.root,studentId:x.studentId,intent:intent(x.studentId)
+  });
+  assert.equal(ready.executable,true);
+  assert.deepEqual(ready.candidates.registrySource.includes('"label": "Работа с графиком"'),true);
+  assert.ok(ready.candidates.registrySource.includes('"practiceDisposition": "manual"'));
+  assert.ok(ready.preconditions.some(item=>item.path.endsWith('practice-publications/2026-10-07.json')));
+});
+
+
 test('artifact discovery is deterministic and always includes lesson HTML',()=>{
   const x=repoFixture();
   const artifact=discoverLessonArtifact({
