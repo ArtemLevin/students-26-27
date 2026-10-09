@@ -25,7 +25,8 @@ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const origin='http://127.0.0.1:'+server.address().port;
 const profile=fs.mkdtempSync(path.join(os.tmpdir(),'xenia-browser-'));
 const chromeProcess=spawn(chrome,['--headless=new','--no-sandbox','--disable-dev-shm-usage',
-'--disable-gpu','--no-first-run','--remote-debugging-port=0','--user-data-dir='+profile],{stdio:'ignore'});
+'--disable-gpu','--no-first-run','--disable-extensions','--remote-debugging-port=0','--user-data-dir='+profile],{stdio:['ignore','pipe','pipe']});
+let chromeLog='';for(const stream of [chromeProcess.stdout,chromeProcess.stderr])stream.on('data',chunk=>{chromeLog=(chromeLog+chunk.toString()).slice(-12000)});
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 let ws;const pending=new Map();let serial=0;const jsErrors=[],badRequests=[];
 try{
@@ -36,7 +37,7 @@ try{
     if(chromeProcess.exitCode!==null)throw Error('Chrome terminated');
     await sleep(100);
   }
-  if(!port)throw Error('DevTools port unavailable');
+  if(!port)throw Error('DevTools port unavailable; chrome='+chrome+' exited='+chromeProcess.exitCode+' output='+chromeLog);
   const tabs=await (await fetch('http://127.0.0.1:'+port+'/json/list')).json();
   const target=tabs.find(x=>x.type==='page');
   assert.ok(target,'Page target missing');
