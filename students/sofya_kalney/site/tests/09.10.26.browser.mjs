@@ -99,7 +99,10 @@ try{
     }
   }
   await navigate('09.10.26.html',1440,900);
-  assert.ok(await run("document.querySelectorAll('math').length>=30"),'Use semantic MathML for formulas');
+  const mathAudit=await run("(()=>{\nconst list=[...document.querySelectorAll('#content section.chapter')];\nconst stray=[];\nfor(const section of list){\n const walker=document.createTreeWalker(section,NodeFilter.SHOW_TEXT);\n while(walker.nextNode()){\n   const node=walker.currentNode,element=node.parentElement;\n   if(!element||element.closest('math,svg,style,script,.n,.smalltask > strong'))continue;\n   const value=node.textContent.trim();\n   if(/\\b\\d+(?:[.,]\\d+)?\\b|\\b[A-Z]{1,3}\\s*[:=∥⊥]|(?:[A-Z]{1,3})\\s+и\\s+(?:[A-Z]{1,3})|(?:[a-z])²/.test(value))stray.push(value);\n }\n}\nreturn {stray,mathCount:document.querySelectorAll('section math').length,\ninvalidMath:[...document.querySelectorAll('section math')].filter(x=>x.namespaceURI!=='http://www.w3.org/1998/Math/MathML').length}\n})()");
+  assert.ok(mathAudit.mathCount>=120,'All lesson expressions should use native MathML');
+  assert.equal(mathAudit.invalidMath,0,'Invalid MathML namespace');
+  assert.deepEqual(mathAudit.stray,[],'Unwrapped mathematical expressions remain as plain text');
   assert.equal(await run("document.querySelectorAll('svg[role=img]').length"),4);
   const tests=[
     ['10','1:9','19:1'],['25','1:3','7:1'],
@@ -108,6 +111,8 @@ try{
   for(const [position,expectedAK,expectedBJ] of tests){
     const output=await run("(()=>{const el=document.querySelector('#pointRange');el.value='"+position+"';el.dispatchEvent(new Event('input',{bubbles:true}));let p=document.querySelector('#parallelLine').getAttribute('d');const c=p.match(/[0-9.]+/g);return {ak:document.querySelector('#akRatio').textContent,bj:document.querySelector('#bjRatio').textContent,desc:document.querySelector('#thalesDesc').textContent,coordinates:c?.map(Number)}})()");
     assert.equal(output.ak,expectedAK);
+    assert.equal(await run("document.querySelector('#akRatio').children.length"),3,'Dynamic ratio must retain MathML children');
+    assert.equal(await run("document.querySelector('#bjRatio').firstElementChild?.localName"),'mn','Dynamic ratio must use MathML tokens');
     assert.equal(output.bj,expectedBJ);
     assert.ok(output.desc.includes(expectedAK)&&output.desc.includes(expectedBJ),'Stale screen-reader description');
     const [kx,ky,jx,jy]=output.coordinates||[];
