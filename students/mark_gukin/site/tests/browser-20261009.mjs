@@ -106,6 +106,7 @@ try{
     const state=await run("(()=>{document.getElementById('stepTab"+i+"').click();const m=document.querySelector('#stepPanel .formula math');return {native:m?.namespaceURI==='http://www.w3.org/1998/Math/MathML',annotated:!!m?.querySelector('annotation[encoding=\"application/x-tex\"]'),block:m?.getAttribute('display')==='block'}})()");
     assert.deepEqual(state,{native:true,annotated:true,block:true},'Dynamic MathML step '+i);
   }
+  await run("document.getElementById('stepTab0').click()");
   assert.equal(await run("document.querySelectorAll('[data-step]').length"),4,'Stepper tabs');
   assert.equal(await run("document.querySelectorAll('[data-task]').length"),10,'Training count');
   assert.equal(await run("document.querySelector('#stepPanel').getAttribute('aria-labelledby')"),'stepTab0');
