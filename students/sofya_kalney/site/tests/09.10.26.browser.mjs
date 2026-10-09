@@ -82,6 +82,8 @@ try{
     if(m.scroll>m.client+2){
       const offenders=await run("([...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().right>innerWidth+2).slice(0,20).map(e=>({tag:e.tagName,id:e.id,className:typeof e.className==='string'?e.className:'svg',width:Math.round(e.getBoundingClientRect().width),right:Math.round(e.getBoundingClientRect().right),scroll:e.scrollWidth})))");
       console.error('Overflow offenders '+name+' '+width+': '+JSON.stringify(offenders));
+      const detail=await run("({innerWidth,visual:visualViewport?.width,client:document.documentElement.clientWidth,htmlScroll:document.documentElement.scrollWidth,body:({width:document.body.getBoundingClientRect().width,scroll:document.body.scrollWidth}),widths:[...document.querySelectorAll('.shell,.topbar,.mathline,.formula,math,.figure,.experiment,.chapter')].slice(0,60).map(e=>({tag:e.tagName,cls:typeof e.className==='string'?e.className:'math',width:Math.round(e.getBoundingClientRect().width),right:Math.round(e.getBoundingClientRect().right),scroll:e.scrollWidth,client:e.clientWidth})).filter(x=>x.right>325||x.scroll>x.client+20)})");
+      console.error('Overflow details: '+JSON.stringify(detail));
     }
     assert.ok(m.scroll<=m.client+2,name+' '+width+' '+(dark?'dark':'light')+
       ' horizontal overflow '+JSON.stringify(m));
