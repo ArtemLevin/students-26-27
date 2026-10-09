@@ -1,0 +1,314 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,left=19mm,right=19mm,top=19mm,bottom=20mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{parskip}
+\definecolor{accent}{HTML}{176B73}
+\definecolor{darkaccent}{HTML}{124A50}
+\definecolor{softgray}{HTML}{69767A}
+\definecolor{textgray}{HTML}{30383B}
+\definecolor{warm}{HTML}{B66A3C}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setstretch{1.28}
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=4pt,topsep=3pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\small\color{softgray}\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\newcommand{\sect}[1]{\vspace{2mm}{\Large\bfseries\color{darkaccent}#1}\par\vspace{1mm}{\color{accent!55}\rule{\linewidth}{0.55pt}}\par\vspace{1mm}}
+\newcommand{\idea}[1]{\textbf{\color{darkaccent}#1}}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{30mm}
+{\small\color{softgray}МАТЕМАТИКА \textbullet{} ОГЭ \textbullet{} ГЕОМЕТРИЯ}\par
+\vspace{11mm}
+{\fontsize{28}{32}\selectfont\bfseries\color{darkaccent}Чек-лист}\par
+\vspace{6mm}
+{\LARGE\bfseries Высоты, касательные и отношения отрезков}\par
+\vspace{7mm}
+{\large Площади треугольников \textbullet{} прямоугольные треугольники \\ Теорема Фалеса и подобие}\par
+\vspace{23mm}
+{\large София Кальней}\par
+\vspace{4mm}
+{\normalsize 9 октября 2026 г.}\par
+\vfill
+{\small\color{textgray}Лёвин Артём Александрович эксклюзивно для Софии Кальней}\par
+\vspace{20mm}
+\end{center}
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent!55,line width=1.15pt]
+ ([xshift=8mm,yshift=7mm]current page.south west)
+ .. controls +(47mm,21mm) and +(-56mm,-5mm) ..
+ ([xshift=-8mm,yshift=14mm]current page.south east);
+\draw[warm!45,line width=0.7pt]
+ ([xshift=16mm,yshift=5mm]current page.south west)
+ .. controls +(55mm,17mm) and +(-66mm,-8mm) ..
+ ([xshift=-16mm,yshift=11mm]current page.south east);
+\end{tikzpicture}
+\clearpage
+
+\sect{1. Высота, расстояние до прямой и площадь}
+\idea{Проверьте определения.} Расстояние от точки до прямой --- длина перпендикуляра, проведённого из этой точки к прямой. Высота треугольника --- такой перпендикуляр из вершины к прямой, содержащей противоположную сторону.
+
+\[
+S_{\triangle}=\frac12 ah,\qquad
+p=\frac{a+b+c}{2},\qquad
+S_{\triangle}=\sqrt{p(p-a)(p-b)(p-c)}.
+\]
+\textbf{Формула Герона} нужна, когда известны три стороны. Перед применением проверьте существование треугольника (сумма любых двух сторон больше третьей).
+
+\idea{Составление площади из частей.} Если $M$ лежит \emph{внутри} $\triangle ABC$, проведите $AM$, $BM$, $CM$. Получится разбиение без наложений:
+\[
+S_{ABC}=S_{ABM}+S_{BCM}+S_{CAM}.
+\]
+Если $d_{AB},d_{BC},d_{CA}$ --- расстояния от $M$ до прямых $AB,BC,CA$, то
+\[
+\boxed{\;2S_{ABC}=AB\cdot d_{AB}+BC\cdot d_{BC}+CA\cdot d_{CA}.\;}
+\]
+Эта формула справедлива при $M$ внутри треугольника: все три площади складываются.
+
+\textbf{Пример с занятия.} $AB=10$, $BC=17$, $AC=21$; расстояния от $M$ до $AC$ и $BC$ равны $2$ и $4$. Найдите расстояние $x$ до $AB$.
+\[
+p=24,\quad S=\sqrt{24\cdot14\cdot7\cdot3}=84;
+\qquad10x+17\cdot4+21\cdot2=168.
+\]
+\[
+10x=58\quad\Longrightarrow\quad\boxed{x=\frac{29}{5}}.
+\]
+\idea{Типичная ошибка.} Не подменяйте расстояние до стороны наклонным отрезком. Основание перпендикуляра к \emph{прямой} может находиться на продолжении стороны.
+
+\begin{center}
+\begin{tikzpicture}[scale=.73]
+\tkzDefPoint(0,3.2){A}
+\tkzDefPoint(-3.4,0){B}
+\tkzDefPoint(3.6,0){C}
+\tkzDefPoint(0.4,1.0){M}
+\tkzDrawPolygon[color=textgray,line width=.9pt](A,B,C)
+\tkzDrawSegments[color=accent,line width=.9pt](M,A M,B M,C)
+\tkzDrawPoints[size=2,fill=darkaccent](A,B,C,M)
+\tkzLabelPoint[above](A){$A$}
+\tkzLabelPoint[below left](B){$B$}
+\tkzLabelPoint[below right](C){$C$}
+\tkzLabelPoint[right](M){$M$}
+\end{tikzpicture}
+\quad\begin{minipage}[c]{.47\linewidth}
+\small \textbf{Три части одного треугольника.} Отрезки $AM$, $BM$, $CM$ превращают неизвестное расстояние от $M$ до стороны в высоту одного из трёх новых треугольников.
+\end{minipage}
+\end{center}
+\clearpage
+\sect{2. Равнобедренный треугольник: два способа найти площадь}
+Пусть боковые стороны равны $b$, основание равно $a$, высота к основанию равна $h$, высота к боковой стороне --- $k$. Тогда
+\[
+\frac12 ah=\frac12 bk\quad\Longrightarrow\quad ah=bk.
+\]
+Высота к основанию является медианой, поэтому по теореме Пифагора
+\[
+\boxed{b^2=h^2+\left(\frac a2\right)^2.}
+\]
+\textbf{Пример с занятия.} $h=10$, $k=12$. Из равенства площадей $b=\frac56 a$. Тогда
+\[
+\frac{25a^2}{36}=100+\frac{a^2}{4}
+\ \Longrightarrow\ a=15,\quad b=\frac{25}{2},\quad \boxed{S=75}.
+\]
+\idea{Приём.} Одна площадь, записанная через два разных основания и соответствующие высоты, даёт полезное отношение сторон.
+
+\sect{3. Две касательные из одной точки}
+Пусть из внешней точки $A$ к окружности с центром $O$ проведены касательные $AB$ и $AC$, $B,C$ --- точки касания, $F=AO\cap BC$.
+
+\begin{minipage}[c]{0.54\linewidth}
+\begin{itemize}
+\item $OB\perp AB$ и $OC\perp AC$ (радиусы к касательным).
+\item $AB=AC$ (касательные из точки $A$), $OB=OC$ (радиусы).
+\item Точки $A,O$ лежат на серединном перпендикуляре к $BC$; значит $AO\perp BC$ и $BF=FC$.
+\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.42\linewidth}
+\centering
+\begin{tikzpicture}[scale=0.72]
+\tkzDefPoint(0,0){O}
+\tkzDefPoint(4.25,0){A}
+\pgfmathsetmacro{\yy}{sqrt(2.89-0.68*0.68)}
+\tkzDefPoint(0.68,\yy){B}
+\tkzDefPoint(0.68,-\yy){C}
+\tkzDefPoint(0.68,0){F}
+\tkzDrawCircle[color=accent,line width=.8pt](O,B)
+\tkzDrawSegments[line width=.8pt](A,B A,C O,B O,C A,O B,C)
+\tkzDrawPoints[fill=darkaccent,size=2.3](A,B,C,O,F)
+\tkzLabelPoint[right](A){$A$}
+\tkzLabelPoint[above](B){$B$}
+\tkzLabelPoint[below](C){$C$}
+\tkzLabelPoint[left](O){$O$}
+\tkzLabelPoint[below right](F){$F$}
+\tkzMarkRightAngle[size=.18](A,B,O)
+\tkzMarkRightAngle[size=.18](O,C,A)
+\tkzMarkRightAngle[size=.18](B,F,O)
+\end{tikzpicture}
+\end{minipage}
+
+\textbf{Пример с занятия.} $OB=7$, $AO=25$. В $\triangle AOB$:
+\[
+AB=\sqrt{AO^2-OB^2}=\sqrt{625-49}=24.
+\]
+Поскольку $BF$ --- высота к гипотенузе $AO$, найдём её, приравняв два выражения для площади $\triangle AOB$:
+\[
+\frac12 AB\cdot OB=\frac12 AO\cdot BF,
+\qquad BF=\frac{24\cdot7}{25}=\frac{168}{25}.
+\]
+\[
+\boxed{BC=2BF=\frac{336}{25}.}
+\]
+\idea{Типичная ошибка.} Перпендикулярность $AO$ и $BC$ сначала \emph{обоснуйте}, затем используйте $BF=FC$.
+
+\sect{4. Теорема Фалеса и отношения отрезков}
+Если две параллельные прямые пересекают стороны угла, они отсекают \textbf{пропорциональные отрезки}. В треугольнике $ABC$ при $D\in AB$, $E\in AC$ и $DE\parallel BC$:
+\[
+\triangle ADE\sim\triangle ABC,
+\qquad\frac{AD}{AB}=\frac{AE}{AC}=\frac{DE}{BC},
+\qquad\boxed{\frac{AD}{DB}=\frac{AE}{EC}}.
+\]
+\idea{Проверяйте соответствие.} Сопоставляйте отрезки, занимающие одинаковое положение на сторонах угла.
+
+\sect{5. Медиана и параллельная прямая}
+Пусть $AM$ --- медиана $\triangle ABC$, $K\in AM$, а прямая через $K$, параллельная $AC$, пересекает $MC$ в точке $J$.
+
+\begin{minipage}[c]{0.55\linewidth}
+\begin{enumerate}
+\item Из $AM$ --- медиана следует $BM=MC$.
+\item Из $KJ\parallel AC$ следует $\triangle MKJ\sim\triangle MAC$.
+\item Поэтому $\displaystyle\frac{KM}{KA}=\frac{MJ}{JC}$.
+\item Выразите отрезки через части и сложите смежные отрезки на $BC$.
+\end{enumerate}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.43\linewidth}
+\centering
+\begin{tikzpicture}[scale=.93]
+\tkzDefPoint(0.3,3.5){A}
+\tkzDefPoint(-2.6,0){B}
+\tkzDefPoint(3.2,0){C}
+\tkzDefPoint(0.3,0){M}
+\tkzDefPoint(0.3,2.625){K}
+\tkzDefPoint(2.475,0){J}
+\tkzDrawPolygon[line width=.8pt](A,B,C)
+\tkzDrawSegments[line width=.8pt](A,M)
+\tkzDrawSegments[color=accent,line width=1.4pt](K,J)
+\tkzDrawPoints[fill=darkaccent,size=2.5](A,B,C,M,K,J)
+\tkzLabelPoint[above](A){$A$}
+\tkzLabelPoint[left](B){$B$}
+\tkzLabelPoint[right](C){$C$}
+\tkzLabelPoint[below](M){$M$}
+\tkzLabelPoint[left](K){$K$}
+\tkzLabelPoint[below](J){$J$}
+\end{tikzpicture}
+\end{minipage}
+
+\textbf{Пример с занятия.} Если $AK:KM=1:3$, то из пропорциональности $MJ:JC=3:1$. Обозначим $MJ=3t$, $JC=t$. Тогда $MC=4t$ и $BM=4t$.
+\[
+BJ=BM+MJ=7t,\quad\boxed{BJ:JC=7:1}.
+\]
+\idea{Обобщение.} Для $AK:KM=p:q$ (положительные $p,q$):
+\[
+MJ:JC=q:p,\qquad\boxed{BJ:JC=(p+2q):p}.
+\]
+
+\sect{6. Как действовать в задаче}
+\begin{enumerate}[itemsep=1pt]
+\item Отметьте известные длины, перпендикуляры и параллели.
+\item Найдите полезные треугольники; при необходимости проведите дополнительные отрезки.
+\item Выберите формулу: площадь, Пифагор, равенство или подобие треугольников.
+\item Введите неизвестную или доли отрезков, составьте равенство и проверьте ответ.
+\end{enumerate}
+\clearpage
+\thispagestyle{plain}
+\begin{center}{\Large\bfseries\color{darkaccent}Алгоритм: какой метод выбрать?}\end{center}
+\vspace{8mm}
+\begin{center}
+\begin{tikzpicture}[
+ >={Latex[length=2.6mm]},
+ node distance=11mm,
+ begin/.style={ellipse,draw=darkaccent,thick,align=center,minimum width=48mm,minimum height=10mm,fill=accent!5},
+ question/.style={diamond,draw=accent,thick,aspect=2.5,inner sep=2pt,align=center,text width=46mm,font=\small},
+ action/.style={rectangle,rounded corners=2pt,draw=accent,thick,align=center,text width=48mm,minimum height=13mm,inner sep=4pt,font=\small},
+ arrow/.style={->,thick,color=textgray}
+]
+\node[begin] (start) {Чертёж и данные};
+\node[question,below=13mm of start] (par) {Есть параллельные\\прямые?};
+\node[action,right=18mm of par] (paract) {Найдите подобные треугольники,\\составьте отношения};
+\node[question,below=18mm of par] (hei) {Есть высоты или\\расстояния?};
+\node[action,right=18mm of hei] (heiact) {Используйте площади,\\Пифагора или Герона};
+\node[question,below=18mm of hei] (tan) {Есть касательные\\к окружности?};
+\node[action,right=18mm of tan] (tanact) {Проведите радиусы к точкам касания, найдите прямые углы};
+\node[action,below=17mm of tan] (other) {Ищите полезные дополнительные треугольники};
+\node[begin,below=12mm of other] (end) {Составьте равенство\\и проверьте результат};
+\draw[arrow] (start)--(par);
+\draw[arrow] (par.east)--node[above,font=\scriptsize]{да}(paract.west);
+\draw[arrow] (par.south)--node[right,font=\scriptsize]{нет}(hei.north);
+\draw[arrow] (hei.east)--node[above,font=\scriptsize]{да}(heiact.west);
+\draw[arrow] (hei.south)--node[right,font=\scriptsize]{нет}(tan.north);
+\draw[arrow] (tan.east)--node[above,font=\scriptsize]{да}(tanact.west);
+\draw[arrow] (tan.south)--node[right,font=\scriptsize]{нет}(other.north);
+\draw[arrow] (other)--(end);
+\coordinate (merge) at ($(end.south)+(0,-5mm)$);
+\draw[arrow] (paract.east)--++(5mm,0)|-($(end.east)+(0,1mm)$);
+\draw[arrow] (heiact.east)--++(9mm,0)|-($(end.east)+(0,1mm)$);
+\draw[arrow] (tanact.east)--++(13mm,0)|-($(end.east)+(0,1mm)$);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\sect{Тренировочный блок. Путь А --- 10 заданий}
+\textit{Выполняйте задания последовательно. Записывайте обоснования построений и используемых теорем. Решения в этом блоке не приведены.}
+
+\begin{enumerate}[itemsep=7pt]
+\item В прямоугольном треугольнике $ABC$ стороны $AB=12$, $AC=5$, $BC=13$. Точка $M$ лежит внутри треугольника. Расстояния от $M$ до прямых $AB$ и $AC$ равны $2$ и $3$. Найдите расстояние до прямой $BC$.
+\item В треугольнике $ABC$ даны $AB=13$, $BC=14$, $AC=15$. Точка $M$ лежит внутри треугольника; расстояния от $M$ до $AC$ и $BC$ равны $2$ и $3$. Найдите расстояние от $M$ до $AB$.
+\item В равнобедренном треугольнике высота к основанию равна $20$, а высота к боковой стороне равна $24$. Найдите площадь треугольника.
+\item Из точки $A$ к окружности радиуса $8$ проведена касательная $AB$ ($B$ --- точка касания). Если расстояние от $A$ до центра $O$ равно $17$, найдите $AB$.
+\item Из точки $A$ к окружности радиуса $5$ проведены касательные $AB$ и $AC$, причём $AO=13$. Найдите расстояние между точками касания $B$ и $C$.
+\item На сторонах угла с вершиной $P$ отмечены точки $A,B$ и $C,D$ соответственно; на лучах они расположены в порядке $P,A,B$ и $P,C,D$. Известно, что $AC\parallel BD$, $PA=4$, $AB=6$, $PC=7$. Найдите $CD$.
+\item В треугольнике $ABC$ точки $D\in AB$ и $E\in AC$ таковы, что $DE\parallel BC$. Если $AD=6$, $DB=9$, $AE=4$, найдите $EC$.
+\item Из внешней точки $A$ к окружности с центром $O$ проведены касательные $AB$ и $AC$ ($B,C$ --- точки касания). Докажите, что прямая $AO$ перпендикулярна $BC$.
+\item В треугольнике $ABC$ проведена медиана $AM$. Точка $K$ лежит на $AM$ и $AK:KM=2:3$. Через $K$ проведена прямая, параллельная $AC$, пересекающая $MC$ в точке $J$. Найдите $BJ:JC$.
+\item В треугольнике $ABC$ медиана $AM$ содержит точку $K$, причём $AK:KM=3:2$. Прямая через $K$, параллельная $AC$, пересекает $MC$ в точке $J$. Если $BJ=21$, найдите $JC$.
+\end{enumerate}
+\clearpage
+
+\sect{Ответы и опорные шаги}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\linewidth}{@{}c p{27mm} X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} & \textbf{Ключевая идея для проверки} \\
+\midrule
+1 & $\dfrac{21}{13}$ & $S=30$; $12\cdot2+5\cdot3+13x=60$. \\
+2 & $\dfrac{96}{13}$ & $p=21$, $S=84$; $13x+14\cdot3+15\cdot2=168$. \\
+3 & $300$ & Если основание $a$, боковая сторона $b$, то $20a=24b$ и $b^2=20^2+(a/2)^2$; $a=30$. \\
+4 & $15$ & Примените Пифагора в прямоугольном $\triangle AOB$. \\
+5 & $\dfrac{120}{13}$ & $AB=12$, $BF=\dfrac{AB\cdot OB}{AO}=\dfrac{60}{13}$, $BC=2BF$. \\
+6 & $\dfrac{21}{2}$ & $\dfrac{PA}{AB}=\dfrac{PC}{CD}$. \\
+7 & $6$ & $\dfrac{AD}{DB}=\dfrac{AE}{EC}$. \\
+8 & $AO\perp BC$ & $AB=AC$ и $OB=OC$; точки $A,O$ лежат на серединном перпендикуляре к $BC$. \\
+9 & $4:1$ & $MJ:JC=3:2$, $BM=MC$; $BJ:JC=8:2$. \\
+10 & $9$ & $MJ:JC=2:3$, $BM=MC$; $BJ:JC=7:3$. \\
+\bottomrule
+\end{tabularx}
+\vspace{8mm}
+\idea{Итог самопроверки.} Вы можете объяснить каждое дополнительное построение, указать основание для подобия или перпендикулярности и получить ответ без опоры на рисунок «на глаз».
+\end{document}
