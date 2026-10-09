@@ -96,14 +96,21 @@ try{
     }
   }
   await navigate('09.10.26.html',1440,900);
+  assert.ok(await run("document.querySelectorAll('math').length >= 75"),'lesson should render MathML formulas');
+  assert.equal(await run("document.querySelector('.equation math').namespaceURI"),'http://www.w3.org/1998/Math/MathML');
   assert.equal(await run("(()=>{document.querySelector('#checks input').click();return document.querySelector('#progressText').textContent})()"),'1 из 5');
   assert.equal(await run("(()=>{document.querySelector('#answers').open=true;return document.querySelectorAll('#answers li').length})()"),10);
   assert.equal(await run("document.querySelector('a[href=\"09.10.26-lab.html\"]')!==null"),true);
   assert.equal(await run("document.querySelector('img.poster').getAttribute('src')"),'../images/09.10.26.png');
   await navigate('09.10.26-lab.html',1440,900);
+  const labMathCount=await run("document.querySelectorAll('math').length");
+  assert.ok(labMathCount>=12,'lab should render static MathML: '+labMathCount);
+  assert.equal(await run("document.querySelector('#calculation math').namespaceURI"),'http://www.w3.org/1998/Math/MathML');
   const testTime=async value=>run("(()=>{const slider=document.querySelector('#time');slider.value='"+value+"';slider.dispatchEvent(new Event('input',{bubbles:true}));return [document.querySelector('#timeValue').textContent,document.querySelector('#heightValue').textContent,document.querySelector('#status').textContent]})()");
   let r=await testTime('0');assert.ok(r[1].startsWith('2 м'),JSON.stringify(r));
   r=await testTime('1.4');assert.ok(r[1].startsWith('11,8 м')&&r[2].includes('Выше 10 м'),JSON.stringify(r));
+  assert.equal(await run("document.querySelector('#calculation math').namespaceURI"),'http://www.w3.org/1998/Math/MathML');
+  assert.equal(await run("document.querySelector('#calculation msup mn:last-child')?.textContent"),'2');
   r=await testTime('2');assert.ok(r[1].startsWith('10 м')&&r[2].includes('На границе'),JSON.stringify(r));
   r=await testTime('2.8');assert.ok(r[1].startsWith('2 м'),JSON.stringify(r));
   assert.equal(await run("(()=>{document.querySelector('#reset').click();return document.querySelector('#timeValue').textContent})()"),'0,8 с');
