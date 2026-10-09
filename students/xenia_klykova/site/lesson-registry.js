@@ -23,17 +23,23 @@ export const LESSONS=[
     {
       "competencyId": "t19_divisibility",
       "evidenceAnchor": "principles",
-      "relation": "practiced"
+      "relation": "practiced",
+      "label": "НОД, НОК и делимость: связь между величинами",
+      "practiceDisposition": "manual"
     },
     {
       "competencyId": "t19_remainders",
       "evidenceAnchor": "euclid",
-      "relation": "practiced"
+      "relation": "practiced",
+      "label": "Алгоритм Евклида и деление с остатком",
+      "practiceDisposition": "manual"
     },
     {
       "competencyId": "t19_primes",
       "evidenceAnchor": "olympiad",
-      "relation": "practiced"
+      "relation": "practiced",
+      "label": "Простые числа и проверка условий",
+      "practiceDisposition": "manual"
     }
   ],
   "materials": {
