@@ -5,6 +5,66 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-09",
+  "ktpRefs": [],
+  "href": "09.10.26.html",
+  "title": "Сначала смысл, потом вычисления",
+  "navTitle": "Повторение ЕГЭ: текстовые задачи",
+  "navSubtitle": "алгебра · прикладные формулы · корни · движение · сплавы · работа",
+  "summary": "Повторение профильного ЕГЭ: степени и преобразования, прикладные формулы, отбор корней по смыслу, движение по реке, сплавы и совместная работа.",
+  "topics": [
+    "Алгебраические преобразования",
+    "прикладные формулы",
+    "отбор корней",
+    "движение по воде",
+    "сплавы",
+    "совместная работа"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t7_power_actions",
+      "evidenceAnchor": "algebra",
+      "relation": "practiced",
+      "label": "Степени и преобразования",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t10_validation",
+      "evidenceAnchor": "selection",
+      "relation": "practiced",
+      "label": "Отбор корней и проверка ответа",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t10_water",
+      "evidenceAnchor": "river",
+      "relation": "practiced",
+      "label": "Движение по воде",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t10_alloys",
+      "evidenceAnchor": "alloys",
+      "relation": "practiced",
+      "label": "Сплавы и массовые доли",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t10_work",
+      "evidenceAnchor": "work",
+      "relation": "practiced",
+      "label": "Совместная работа",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "09.10.26.html",
+    "pdf": "../pdf_docs/09.10.26.pdf",
+    "tex": "../tex_docs/09.10.26.tex",
+    "lab": "09.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-08",
   "ktpRefs": [],
   "href": "08.10.26.html",
