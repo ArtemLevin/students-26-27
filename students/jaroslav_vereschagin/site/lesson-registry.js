@@ -5,6 +5,52 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-08",
+    "ktpRefs": [],
+    "href": "08.10.26.html",
+    "title": "Решение уравнений разложением на множители",
+    "navTitle": "Решение уравнений разложением на множители",
+    "summary": "Кубические уравнения, группировка четырёх слагаемых, вынесение скобок и общих множителей, разность квадратов и уравнения четвёртой степени; контроль знаков и полноты корней.",
+    "topics": [
+      "Группировка",
+      "Общий множитель",
+      "Разность квадратов",
+      "Уравнения четвёртой степени",
+      "Задание №20 ОГЭ"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "oge_20_1_1",
+        "evidenceAnchor": "grouping",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_20_1_3",
+        "evidenceAnchor": "factor",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_20_1_4",
+        "evidenceAnchor": "identities",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_20_1_5",
+        "evidenceAnchor": "check",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "oge_8_3_2",
+        "evidenceAnchor": "factor",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "08.10.26.html",
+      "tex": "../tex_docs/08.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-05",
     "ktpRefs": [],
     "href": "05.10.26.html",
