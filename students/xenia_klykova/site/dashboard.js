@@ -1,4 +1,5 @@
-import {LESSONS as BASE_LESSONS} from './lesson-registry.js?v=20261007-review-1';
+import {LESSONS as BASE_LESSONS} from './lesson-registry.js?v=20261009-review-2';
+import {composeLessons} from './lesson-sequence.js?v=20261009-review-2';
 import {LESSON_0710,applyLesson0710CompetenceUpdate} from './07.10.26-data.js';
 import {LESSON_0510,applyLesson0510CompetenceUpdate} from './05.10.26-data.js';
 import {LESSON_3009,applyLesson3009CompetenceUpdate} from './30.09.26-data.js';
@@ -17,7 +18,10 @@ applyLesson3009CompetenceUpdate();
 applyLesson2809CompetenceUpdate();
 applyLesson2109CompetenceUpdate();
 applyLesson2409CompetenceUpdate();
-const LESSONS=[LESSON_0710,LESSON_0510,LESSON_3009,LESSON_2809,LESSON_2409,LESSON_2109,LESSON_1709,...BASE_LESSONS.filter(lesson=>lesson.date!==LESSON_0710.date&&lesson.date!==LESSON_0510.date&&lesson.date!==LESSON_3009.date&&lesson.date!==LESSON_2809.date&&lesson.date!==LESSON_2409.date&&lesson.date!==LESSON_2109.date&&lesson.date!==LESSON_1709.date)];
+// Preserve the richer lesson snapshots for historical dates. The canonical registry
+// owns the chronology: no legacy snapshot may displace a newer published lesson.
+const LEGACY_SNAPSHOTS=[LESSON_0710,LESSON_0510,LESSON_3009,LESSON_2809,LESSON_2409,LESSON_2109,LESSON_1709];
+const LESSONS=composeLessons(BASE_LESSONS,LEGACY_SNAPSHOTS);
 installEgeProfile2027ControllerHook('__studentCompetenceMap');
 initStudentDashboard({lessons:LESSONS,themeKey:'xenia-dashboard-theme-v1',summaryEvent:'xenia:competence-summary'});
 import('../../../shared/practice/practice-ui.js?v=20260831-practice-2').then(({initPracticeDashboard})=>initPracticeDashboard({config:PRACTICE_CONFIG,lessons:LESSONS})).catch(error=>{console.error('Practice module unavailable',error);const root=document.getElementById('practiceRoot');if(root)root.textContent='Тренировка временно недоступна. Остальные материалы кабинета продолжают работать.';});
