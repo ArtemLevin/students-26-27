@@ -264,6 +264,16 @@ jobs:
           echo 'END_XENIA_REGISTRY'
       - name: Run regression suite
         run: ${{ matrix.test }}
+      - name: Browser QA for Sofia's geometry lesson and dashboard
+        if: matrix.student == 'sofya_kalney'
+        run: node students/sofya_kalney/site/tests/09.10.26.browser.mjs
+      - name: Upload Sofia browser QA screenshots
+        if: always() && matrix.student == 'sofya_kalney'
+        uses: actions/upload-artifact@v4
+        with:
+          name: sofya-browser-review-20261009
+          path: sofya-review-artifacts/*.png
+          if-no-files-found: warn
       - name: Browser QA for Xenia's lesson and laboratory
         if: matrix.student == 'xenia_vasilchenko'
         run: node students/xenia_vasilchenko/site/tests/browser-20261008.mjs
