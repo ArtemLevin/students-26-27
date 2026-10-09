@@ -92,6 +92,8 @@ try{
       });
       assert.ok(metrics.width<=metrics.viewport+2,view.name+'/'+theme+' horizontal overflow '+JSON.stringify(metrics));
       assert.equal(metrics.tasks,10);assert.equal(metrics.uniqueIds,true);
+      assert.ok((await run('document.querySelectorAll("math").length'))>140,'MathML missing');
+      assert.ok(await run('[...document.querySelectorAll("#loanRows tr")].every(tr=>[...tr.cells].every(c=>!!c.querySelector("math")))'),'Dynamic MathML missing');
       await screenshot('lesson-'+view.name+'-'+theme);
     }
     const state=await execute(()=>{
