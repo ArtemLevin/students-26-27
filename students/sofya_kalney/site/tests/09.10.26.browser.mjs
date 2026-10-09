@@ -79,6 +79,10 @@ try{
     await sleep(140);
     await run("document.documentElement.dataset.theme='"+(dark?'dark':'light')+"'");
     const m=await run('({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth})');
+    if(m.scroll>m.client+2){
+      const offenders=await run("([...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().right>innerWidth+2).slice(0,20).map(e=>({tag:e.tagName,id:e.id,className:typeof e.className==='string'?e.className:'svg',width:Math.round(e.getBoundingClientRect().width),right:Math.round(e.getBoundingClientRect().right),scroll:e.scrollWidth})))");
+      console.error('Overflow offenders '+name+' '+width+': '+JSON.stringify(offenders));
+    }
     assert.ok(m.scroll<=m.client+2,name+' '+width+' '+(dark?'dark':'light')+
       ' horizontal overflow '+JSON.stringify(m));
   }
