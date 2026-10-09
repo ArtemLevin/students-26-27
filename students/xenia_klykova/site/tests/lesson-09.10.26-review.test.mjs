@@ -91,7 +91,7 @@ test('graph accessibility, mobile scrolling, keyboard and theme contracts',()=>{
 });
 
 test('all published mathematical expressions have MathML semantics',()=>{
-  const roots=(html)=>[...html.matchAll(/<math\\b[^>]*>/g)].map(m=>m[0]);
+  const roots=(html)=>[...html.matchAll(/<math\b[^>]*>/g)].map(m=>m[0]);
   const lessonMath=roots(page),labMath=roots(lab);
   assert.ok(lessonMath.length>=75,'lesson formula coverage: '+lessonMath.length);
   assert.ok(labMath.length>=19,'lab formula coverage: '+labMath.length);
