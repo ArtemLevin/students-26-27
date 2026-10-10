@@ -5,6 +5,74 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-10",
+    "ktpRefs": [],
+    "href": "10.10.26.html",
+    "title": "Оценка выражений и неравенства",
+    "navTitle": "Оценка выражений и неравенства",
+    "navSubtitle": "Екатерина Скелли · оценка выражений, действия с промежутками, линейные неравенства и целые решения · 10.10.2026",
+    "summary": "Екатерина Скелли · оценка выражений, действия с промежутками, линейные неравенства и целые решения · 10.10.2026",
+    "topics": [
+      "оценка выражений",
+      "арифметика промежутков",
+      "линейные неравенства",
+      "целые решения",
+      "текстовые задачи"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "alg_ineq_02",
+        "evidenceAnchor": "estimates",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_ineq_05",
+        "evidenceAnchor": "inequalities",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_ineq_06",
+        "evidenceAnchor": "inequalities",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_ineq_07",
+        "evidenceAnchor": "inequalities",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "alg_ineq_08",
+        "evidenceAnchor": "inequalities",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_ineq_11",
+        "evidenceAnchor": "estimates",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_ineq_12",
+        "evidenceAnchor": "cases",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_models_07",
+        "evidenceAnchor": "cases",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "alg_models_08",
+        "evidenceAnchor": "cases",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "10.10.26.html",
+      "pdf": "../pdf_docs/10.10.26.pdf",
+      "lab": "10.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-10-03",
     "ktpRefs": [],
     "href": "03.10.26.html",
