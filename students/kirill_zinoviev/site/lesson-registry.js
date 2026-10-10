@@ -2,6 +2,94 @@ export const RECENT_LIMIT=3;
 export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
+{
+  "date": "2026-10-10",
+  "ktpRefs": [],
+  "href": "10.10.26.html",
+  "title": "Углы и отрезки",
+  "navTitle": "Углы и отрезки",
+  "navSubtitle": "Биссектриса, смежные и вертикальные углы, отрезки на одном луче, деление отрезка в отношении, согласованность чертежа и вычислений.",
+  "summary": "Биссектриса, смежные и вертикальные углы, отрезки на одном луче, деление отрезка в отношении, согласованность чертежа и вычислений.",
+  "topics": [
+    "биссектриса угла",
+    "смежные углы",
+    "вертикальные углы",
+    "отрезки на одном луче",
+    "деление отрезка в отношении",
+    "оформление геометрической задачи"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "geo_base_11",
+      "evidenceAnchor": "bisector",
+      "relation": "touched",
+      "label": "Биссектриса угла",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "geo_base_7",
+      "evidenceAnchor": "adjacent",
+      "relation": "practiced",
+      "label": "Распознавание смежных углов",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "geo_base_8",
+      "evidenceAnchor": "adjacent",
+      "relation": "practiced",
+      "label": "Сумма смежных углов",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "geo_base_9",
+      "evidenceAnchor": "vertical",
+      "relation": "practiced",
+      "label": "Распознавание вертикальных углов",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "geo_base_10",
+      "evidenceAnchor": "vertical",
+      "relation": "practiced",
+      "label": "Равенство вертикальных углов",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "geo_reason_8",
+      "evidenceAnchor": "segments",
+      "relation": "practiced",
+      "label": "Аккуратный чертёж по условию",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "percent_1",
+      "evidenceAnchor": "ratio",
+      "relation": "practiced",
+      "label": "Отношение величин",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "models_13",
+      "evidenceAnchor": "ratio",
+      "relation": "touched",
+      "label": "Пропорциональное деление",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "models_5",
+      "evidenceAnchor": "segments",
+      "relation": "touched",
+      "label": "Ответ с единицами измерения",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "10.10.26.html",
+    "pdf": "../pdf_docs/10.10.26.pdf",
+    "tex": "../tex_docs/10.10.26.tex",
+    "lab": "10.10.26-lab.html"
+  }
+},
   {
     "date": "2026-10-07",
     "ktpRefs": [],
