@@ -24,7 +24,7 @@ test('math expressions use native MathML and proper foreign namespace',()=>{
 
 test('every formula block contains MathML',()=>{
   const formulaOpen=(staticHtml.match(/<div class="formula(?: [^"]*)?">/g)||[]).length;
-  assert.equal(formulaOpen,18);
+  assert.equal(formulaOpen,17);
   const rootBlocks=(staticHtml.match(/<math\b[^>]*display="block"/g)||[]).length;
   assert.ok(rootBlocks>=formulaOpen);
 });
