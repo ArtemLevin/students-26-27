@@ -5,6 +5,96 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-10",
+    "ktpRefs": [],
+    "href": "10.10.26.html",
+    "title": "Смешанные числа: действия, скобки и задачи",
+    "navTitle": "Смешанные числа",
+    "navSubtitle": "Занимание единицы, скобки и уравнения",
+    "summary": "Сложение и вычитание смешанных чисел, занимание единицы, выражения со скобками, переход от десятичной дроби, уравнения и совместная работа.",
+    "topics": [
+      "смешанные числа",
+      "сложение и вычитание дробей",
+      "занимание единицы",
+      "скобки",
+      "десятичные дроби",
+      "уравнения",
+      "совместная работа"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "frac_04",
+        "evidenceAnchor": "mixed",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_06",
+        "evidenceAnchor": "carry",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_08",
+        "evidenceAnchor": "decimals",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_09",
+        "evidenceAnchor": "addition",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_11",
+        "evidenceAnchor": "addition",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_12",
+        "evidenceAnchor": "carry",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "dec_07",
+        "evidenceAnchor": "decimals",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_11",
+        "evidenceAnchor": "equations",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_13",
+        "evidenceAnchor": "equations",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "nat_09",
+        "evidenceAnchor": "brackets",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "model_10",
+        "evidenceAnchor": "pipes",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "model_11",
+        "evidenceAnchor": "pipes",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "strategy_10",
+        "evidenceAnchor": "check",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "10.10.26.html",
+      "pdf": "../pdf_docs/10.10.26.pdf",
+      "tex": "../tex_docs/10.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-06",
     "ktpRefs": [],
     "href": "06.10.26.html",
