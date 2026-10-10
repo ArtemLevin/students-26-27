@@ -1,4 +1,4 @@
-import {sortedLessons,formatLongDateRu} from './lesson-registry.js?v=20261005';
+import {sortedLessons,formatLongDateRu} from './lesson-registry.js?v=20261010';
 
 function node(tag,text,className){const el=document.createElement(tag);if(text)el.textContent=text;if(className)el.className=className;return el;}
 function links(lesson){const row=node('div');row.style.cssText='display:flex;gap:8px;flex-wrap:wrap;margin-block:12px';
