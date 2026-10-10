@@ -2,6 +2,86 @@ export const RECENT_LIMIT=3;
 export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
+{
+  "date": "2026-10-10",
+  "ktpRefs": [],
+  "href": "10.10.26.html",
+  "title": "Равномерное движение по окружности: диск и шестерни",
+  "navTitle": "Диск и шестерни",
+  "navSubtitle": "период, частота и выбор общего параметра при вращении",
+  "summary": "Практика равномерного движения по окружности: период и частота, линейная и угловая скорости, сравнение точек диска и сцепленных шестерён, центростремительное ускорение. Занятие Володи Хачатуряна 10.10.2026.",
+  "topics": [
+    "период и частота",
+    "линейная и угловая скорости",
+    "точки одного диска",
+    "сцепленные шестерни",
+    "центростремительное ускорение",
+    "перевод единиц"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "kin_29",
+      "evidenceAnchor": "compare",
+      "relation": "practiced",
+      "label": "Сравнение вращений",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_30",
+      "evidenceAnchor": "period",
+      "relation": "practiced",
+      "label": "Период и частота",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_31",
+      "evidenceAnchor": "speeds",
+      "relation": "practiced",
+      "label": "Линейная скорость",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_32",
+      "evidenceAnchor": "acceleration",
+      "relation": "practiced",
+      "label": "Центростремительное ускорение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_33",
+      "evidenceAnchor": "acceleration",
+      "relation": "touched",
+      "label": "Направление ускорения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_02",
+      "evidenceAnchor": "strategy",
+      "relation": "practiced",
+      "label": "Выбор формулы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_25",
+      "evidenceAnchor": "strategy",
+      "relation": "practiced",
+      "label": "Преобразование формул",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "measure_03",
+      "evidenceAnchor": "units",
+      "relation": "practiced",
+      "label": "Перевод единиц",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "10.10.26.html",
+    "pdf": "../pdf_docs/10.10.26.pdf",
+    "tex": "../tex_docs/10.10.26.tex"
+  }
+},
   {
     "date": "2026-10-07",
     "ktpRefs": [],
