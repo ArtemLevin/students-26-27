@@ -5,6 +5,70 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-10",
+  "href": "10.10.26.html",
+  "title": "Графики функций с модулем",
+  "navTitle": "Графики функций с модулем",
+  "navSubtitle": "Отражение параболы и гиперболы, влияние внешнего минуса и количество пересечений с y=m.",
+  "summary": "Марина Селиверстова: построение графиков с модулем, отражение параболы и гиперболы относительно Ox, внешний минус и число пересечений с горизонтальной прямой y=m.",
+  "topics": [
+    "график функции с модулем",
+    "отражение относительно оси Ox",
+    "парабола и гипербола",
+    "горизонтальная прямая y=m",
+    "число пересечений"
+  ],
+  "ktpRefs": [],
+  "outcomes": [
+    {
+      "competencyId": "oge_22_08",
+      "evidenceAnchor": "rule",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_22_02",
+      "evidenceAnchor": "parabola",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_22_03",
+      "evidenceAnchor": "parabola",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_22_04",
+      "evidenceAnchor": "parabola",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_22_05",
+      "evidenceAnchor": "hyperbola",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_22_06",
+      "evidenceAnchor": "minus",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_22_11",
+      "evidenceAnchor": "ym",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_22_12",
+      "evidenceAnchor": "ym",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "10.10.26.html",
+    "pdf": "../pdf_docs/10.10.26.pdf",
+    "tex": "../tex_docs/10.10.26.tex",
+    "lab": "10.10.26-lab.html"
+  }
+},
+  {
   "date": "2026-10-05",
   "ktpRefs": [],
   "href": "05.10.26.html",
