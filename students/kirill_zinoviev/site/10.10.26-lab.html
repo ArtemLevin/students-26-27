@@ -54,7 +54,7 @@ function values(){
  const a=state.alpha;
  if(state.mode==='bisector')return{firstName:'Весь угол',secondName:'Каждая половина',ruleName:'Сумма половин',first:a,second:a/2,rule:a,answer:'same'};
  if(state.mode==='adjacent')return{firstName:'Первый угол',secondName:'Смежный угол',ruleName:'Сумма',first:a,second:180-a,rule:180,answer:'down'};
- return{firstName:'Угол α',secondName:'Вертикальный к нему',ruleName:'Смежный угол',first:a,second:a,rule:180-a,answer:'up'};
+ return{firstName:'Угол',secondName:'Вертикальный к нему',ruleName:'Смежный угол',first:a,second:a,rule:180-a,answer:'up'};
 }
 function format(n){return Number.isInteger(n)?String(n):String(n).replace('.',',')}
 const MNS='http://www.w3.org/1998/Math/MathML';
@@ -62,19 +62,22 @@ function makeMath(parts){
  const math=document.createElementNS(MNS,'math'),row=document.createElementNS(MNS,'mrow');
  for(const token of parts){
   const value=String(token);
-  const type=typeof token==='number'?'mn':/^[αβ]$/.test(value)?'mi':/^-?\d+(?:[,.]\d+)?$/.test(value)?'mn':'mo';
+  const type=typeof token==='number'?'mn':/^[A-Za-zαβ]$/.test(value)?'mi':/^-?\d+(?:[,.]\d+)?$/.test(value)?'mn':'mo';
   const node=document.createElementNS(MNS,type);node.textContent=type==='mn'?value.replace('.',','):value;
   row.appendChild(node);
  }
  math.appendChild(row);return math;
 }
-function degreeMath(number){return makeMath([Number(String(number).replace('°','').replace(',','.')),'°'])}
-function degreeNumber(number){return makeMath([number,'°'])}
+function degreeMath(number){return degreeNumber(Number(String(number).replace('°','').replace(',','.')))}
+function degreeNumber(number){
+ const value=Number(number);
+ return value<0?makeMath(['−',-value,'°']):makeMath([value,'°']);
+}
 function replaceMath(id,num){const host=$(id);host.replaceChildren(degreeNumber(num))}
 function formulaDescription(parent,mode,a){
  let intro,formula;
  if(mode==='bisector'){intro='Биссектриса делит угол пополам: ';formula=[a,'°',':',2,'=',a/2,'°'];}
- else if(mode==='adjacent'){intro='Смежные углы дополняют друг друга до ';formula=[180,'°',':',a,'°','+',180-a,'°','=',180,'°'];}
+ else if(mode==='adjacent'){intro='Смежные углы: ';formula=[a,'°','+',180-a,'°','=',180,'°'];}
  else{intro='Вертикальные углы равны: ';formula=[a,'°','=',a,'°'];}
  parent.replaceChildren(document.createTextNode(intro),makeMath(formula),document.createTextNode('.'));
  if(mode==='vertical')parent.append(document.createTextNode(' Смежный угол равен '),degreeNumber(180-a),document.createTextNode('.'));
@@ -96,7 +99,9 @@ const pointHost=document.createElementNS('http://www.w3.org/1999/xhtml','div');
 pointHost.className='svg-math';pointHost.appendChild(makeMath(['O']));point.appendChild(pointHost);
 const [mx,my]=pt(a);add('circle',{cx:mx,cy:my,r:12,class:'mark',id:'handle','aria-label':'Подвижная точка'});
 range.value=String(a);replaceMath('angleValue',a);
-$('firstName').textContent=v.firstName;$('secondName').textContent=v.secondName;$('ruleName').textContent=v.ruleName;
+$('firstName').textContent=v.firstName;
+if(state.mode==='vertical')$('firstName').append(document.createTextNode(' '),makeMath(['α']));
+$('secondName').textContent=v.secondName;$('ruleName').textContent=v.ruleName;
 replaceMath('firstValue',v.first);replaceMath('secondValue',v.second);replaceMath('ruleValue',v.rule);formulaDescription($('explanation'),state.mode,a);
 renderQuestion(state.mode);document.querySelectorAll('[data-mode]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.mode===state.mode)));
 document.querySelectorAll('[data-preset]').forEach(x=>x.setAttribute('aria-pressed',String(Number(x.dataset.preset)===a)));
