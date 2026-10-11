@@ -102,6 +102,52 @@ G.forEach(group=>group.items.forEach(item=>{
   item.material={href:'09.10.26.html#'+update.anchor,label:'Занятие 09.10.26 →'};
 }));
 
+const lessonEvidenceText1110='11.10.2026: свойства степеней, модели pV^a=const и P=σST⁴, графики показательных функций и восстановление формулы по узловым точкам. Материалы занятия подтверждают изучение и практику, но не дают независимой диагностики для повышения уровня.';
+const lessonUpdates1110={
+  "ege08_02": {
+    "anchor": "powers",
+    "relation": "practiced"
+  },
+  "ege08_04": {
+    "anchor": "powers",
+    "relation": "practiced"
+  },
+  "ege08_18": {
+    "anchor": "powers",
+    "relation": "practiced"
+  },
+  "ege10_02": {
+    "anchor": "gas",
+    "relation": "practiced"
+  },
+  "ege10_05": {
+    "anchor": "gas",
+    "relation": "practiced"
+  },
+  "ege10_12": {
+    "anchor": "radiation",
+    "relation": "touched"
+  },
+  "ege12_12": {
+    "anchor": "graph",
+    "relation": "practiced"
+  },
+  "ege12_15": {
+    "anchor": "graph",
+    "relation": "touched"
+  },
+  "ege12_18": {
+    "anchor": "points",
+    "relation": "practiced"
+  }
+};
+G.forEach(group=>group.items.forEach(item=>{
+  const update=lessonUpdates1110[item.id];
+  if(!update)return;
+  item.evidence=[...item.evidence,{date:'11.10.2026',text:lessonEvidenceText1110}];
+  item.material={href:'11.10.26.html#'+update.anchor,label:'Занятие 11.10.26 →'};
+}));
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'mark_gukin',
@@ -111,7 +157,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Используется проект КИМ ЕГЭ-2027 ФИПИ: 20 заданий, из них 13 с кратким и 7 с развёрнутым ответом. Проект опубликован 28.08.2026; до утверждения структура может быть уточнена.',
-    updated:'09.10.2026'
+    updated:'11.10.2026'
   },
   groups:G
 };
