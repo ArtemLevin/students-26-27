@@ -126,12 +126,30 @@ try{
   await snapshot('sofya-lesson-mobile-dark');
   await navigate('index.html',390,844);
   await sleep(400);
-  assert.equal(await run("document.querySelector('#lesson-title')?.textContent.includes('Высоты, касательные')"),true,'New lesson not shown in dashboard');
+  assert.equal(await run("document.querySelector('#lesson-title')?.textContent.includes('Графики, неравенства')"),true,'New lesson not shown in dashboard');
   await snapshot('sofya-index-mobile');
   await navigate('index.html',1440,900);
   await sleep(400);
-  assert.equal(await run("document.querySelector('a[href^=\"09.10.26.html\"]')!==null"),true,'No lesson navigation link');
+  assert.equal(await run("document.querySelector('a[href^=\"09.10.26.html\"]')!==null"),true,'Previous lesson missing from archive');
+  assert.equal(await run("document.querySelector('a[href^=\"11.10.26.html\"]')!==null"),true,'New lesson missing from navigator');
   await snapshot('sofya-index-desktop');
+  // New lesson and 11 October laboratory: responsive, theme and interaction checks.
+  for(const [w,h] of [[375,812],[768,1024],[1440,900]]){
+    for(const name of ['11.10.26.html','11.10.26-lab.html']){
+      await navigate(name,w,h,false);
+      await navigate(name,w,h,true);
+    }
+  }
+  await navigate('11.10.26.html',1440,900);
+  assert.equal(await run("document.querySelectorAll('ol.practice > li').length"),10,'Expected ten training tasks');
+  assert.equal(await run("document.querySelector('#holes')!==null && document.querySelector('#altitudes')!==null"),true,'Lesson anchors missing');
+  await snapshot('sofya-20261011-lesson-desktop');
+  await navigate('11.10.26-lab.html',1440,900);
+  assert.equal(await run("document.querySelector('#intersectionCount').textContent.includes('0 общих')"),true,'Preset k=-9/4 should have zero intersections');
+  assert.equal(await run("(()=>{const el=document.querySelector('#kSlider');el.value='-1';el.dispatchEvent(new Event('input',{bubbles:true}));return document.querySelector('#intersectionCount').textContent})().includes('1 общая')"),true,'k=-1 should have a single intersection');
+  assert.equal(await run("(()=>{document.querySelector('[data-k=\"2.25\"]').click();return document.querySelector('#intersectionCount').textContent})().includes('0 общих')"),true,'k=9/4 should have no intersection');
+  assert.equal(await run("(()=>{document.querySelector('[data-k=\"0\"]').click();return document.querySelector('#intersectionCount').textContent})().includes('0 общих')"),true,'k=0 should have no intersection');
+  await snapshot('sofya-20261011-lab-desktop');
   assert.deepEqual(jsErrors,[],'JavaScript errors');
   assert.deepEqual(badRequests,[],'Network errors');
   console.log('Browser QA PASS: 5 viewports × 2 pages × 2 themes + interactive checks');
