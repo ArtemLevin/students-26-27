@@ -224,7 +224,7 @@ test('11.10.26 lesson and laboratory integrate with canonical publication and or
     assert.equal(outcome.masteryClaim,null,'no ungrounded mastery promotion');
   }
   for(const id of metadata.ktpRefs)assert.ok(state.records[id].lessonRefs.includes('2026-10-11'));
-  assert.match(lesson,/class="graph-tasks"/,'eight source graph tasks are generated as a group');
+  assert.match(lesson,/grid\.className='graph-tasks'/,'eight source graph tasks are generated as a group');
   for(let n=3;n<=10;n++)assert.match(lesson,new RegExp('\\{n:'+n+',q:'),'source exercise '+n+' exists');
   assert.match(lesson,/16<sup>1\/2<\/sup>/,'exercise 1 exists');
   assert.match(lesson,/4<sup>x−1<\/sup>/,'exercise 2 exists');
