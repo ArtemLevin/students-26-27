@@ -5,6 +5,76 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-11",
+    "ktpRefs": [],
+    "href": "11.10.26.html",
+    "title": "Степени, графики и прикладные задачи",
+    "navTitle": "Степени и графики",
+    "summary": "Свойства степеней; модели давления и объёма, излучения звезды; графики показательных функций и восстановление параметров по двум узловым точкам.",
+    "topics": [
+      "Степень с целым показателем",
+      "Свойства степеней",
+      "Числовое значение выражения с несколькими операциями",
+      "Выражение неизвестной величины из формулы",
+      "Модель температуры или давления",
+      "Показательная функция",
+      "Преобразования графиков y=f(x)+a",
+      "Чтение зависимости между величинами по графику"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "ege08_02",
+        "evidenceAnchor": "powers",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege08_04",
+        "evidenceAnchor": "powers",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege08_18",
+        "evidenceAnchor": "powers",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege10_02",
+        "evidenceAnchor": "gas",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege10_05",
+        "evidenceAnchor": "gas",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege10_12",
+        "evidenceAnchor": "radiation",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "ege12_12",
+        "evidenceAnchor": "graph",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege12_15",
+        "evidenceAnchor": "graph",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "ege12_18",
+        "evidenceAnchor": "points",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "11.10.26.html",
+      "pdf": "../pdf_docs/11.10.26.pdf",
+      "tex": "../tex_docs/11.10.26.tex"
+    }
+  },
+  {
       "date": "2026-10-09",
       "ktpRefs": [],
       "href": "09.10.26.html",
