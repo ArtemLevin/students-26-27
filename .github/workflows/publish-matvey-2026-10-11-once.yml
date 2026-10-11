@@ -1,0 +1,35 @@
+name: Matvey 11 October lesson publication (temporary)
+on:
+  push:
+    branches:
+      - codex/matvey-2026-10-11-site
+    paths:
+      - .github/workflows/publish-matvey-2026-10-11-once.yml
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate publication plan
+        run: node scripts/publish-lesson.mjs matvey_gorbachev 11.10.26 --intent students/matvey_gorbachev/site/data/lesson-publication-intents/2026-10-11.json --dry-run
+      - name: Publish using canonical v2 publisher
+        run: node scripts/publish-lesson.mjs matvey_gorbachev 11.10.26 --intent students/matvey_gorbachev/site/data/lesson-publication-intents/2026-10-11.json
+      - name: Validate student and lesson registry
+        run: node scripts/student.mjs validate matvey_gorbachev
+      - name: Persist publisher-generated files
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add students/matvey_gorbachev/site/lesson-registry.js students/matvey_gorbachev/site/data/lessons students/matvey_gorbachev/site/data/ktp-state.json students/matvey_gorbachev/site/data/mastery-state.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish Matvey 2026-10-11 lesson via v2 publisher'
+            git push
+          fi
