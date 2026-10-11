@@ -89,7 +89,7 @@ try{
 
   const sizes=[[375,812],[390,844],[768,1024],[1024,768],[1366,768],[1440,900],[1920,1080]];
   for(const [w,h] of sizes){
-    for(const page of ['09.10.26.html','index.html']){
+    for(const page of ['09.10.26.html','11.10.26.html','index.html']){
       await navigate(page,w,h,false);
       await navigate(page,w,h,true);
     }
@@ -134,6 +134,16 @@ try{
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('04.10.2026')"),true,'history retained');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('09.10.2026')"),true,'previous lesson retained');
   await snapshot('home-mobile-light');
+  await navigate('11.10.26.html',390,844,false);
+  assert.equal(await run("document.querySelectorAll('#taskList input[type=checkbox]').length"),10,'new lesson training count');
+  assert.equal(await run("document.querySelectorAll('[data-case]').length"),2,'new lesson graph presets');
+  assert.equal(await run("document.getElementById('graphCurve').getAttribute('d').length > 200"),true,'new lesson graph curve');
+  const switched=await run("(()=>{document.querySelector('[data-case=decrease]').click();return [document.getElementById('graphCaseTitle').textContent,document.getElementById('graphCaseResult').textContent]})()");
+  assert.deepEqual(switched,['Убывающая функция','f(x) = 12 → 2^(−x) = 16 → x = −4.'],'graph cases recalculate');
+  assert.equal(await run("(()=>{document.querySelector('#taskList input').click();return document.getElementById('progressText').textContent})()"),'Выполнено: 1 из 10','new lesson task progress');
+  await call('Page.reload',{ignoreCache:true});await sleep(220);
+  assert.equal(await run("document.querySelector('#taskList input').checked"),true,'new lesson persisted completion');
+  assert.equal(await run("document.querySelector('#materials a[href=\"../pdf_docs/11.10.26.pdf\"]')!==null"),true,'new lesson PDF link');
   const requests=await run("Promise.all(['../pdf_docs/09.10.26.pdf','../tex_docs/09.10.26.tex','../images/09.10.26.png'].map(async u=>({u,status:(await fetch(u)).status})))");
   assert.ok(requests.every(x=>x.status===200),'lesson materials: '+JSON.stringify(requests));
   await navigate('09.10.26.html#inequality',390,844,false);
