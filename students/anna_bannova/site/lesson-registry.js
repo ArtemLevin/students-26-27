@@ -1,5 +1,59 @@
 export const LESSONS=[
   {
+  "date": "2026-10-11",
+  "ktpRefs": [
+    "ktp-004",
+    "ktp-005",
+    "ktp-032"
+  ],
+  "href": "11.10.26.html",
+  "title": "График → формула",
+  "navTitle": "График → формула",
+  "navSubtitle": "Занятие Анны Банновой 11.10.26: показательные функции, метод узловых точек, восстановление формулы по графику, вычисление значений и решение показательных уравнений.",
+  "summary": "Занятие Анны Банновой 11.10.26: показательные функции, метод узловых точек, восстановление формулы по графику, вычисление значений и решение показательных уравнений.",
+  "topics": [
+    "показательная функция",
+    "узловые точки графика",
+    "восстановление коэффициентов по графику",
+    "значение функции в точке",
+    "показательные уравнения",
+    "нулевая, отрицательная и дробная степени"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "func_13",
+      "evidenceAnchor": "worked",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "func_17",
+      "evidenceAnchor": "models",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "eq_09",
+      "evidenceAnchor": "shift",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calc_09",
+      "evidenceAnchor": "review",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "expr_15",
+      "evidenceAnchor": "training",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "11.10.26.html",
+    "pdf": "../pdf_docs/11.10.26.pdf",
+    "tex": "../tex_docs/11.10.26.tex",
+    "lab": "11.10.26-lab.html"
+  }
+},
+  {
     "date": "2026-10-09",
     "ktpRefs": [
       "ktp-029",
