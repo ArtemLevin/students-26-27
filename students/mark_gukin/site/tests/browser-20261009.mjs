@@ -130,8 +130,9 @@ try{
   assert.equal(await run("getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()"),'#fff','print background from dark theme');
   await call('Emulation.setEmulatedMedia',{media:'screen'});
   await navigate('index.html',390,844,false);
-  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Показательные')"),true,'latest lesson on home');
+  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Степени, графики')"),true,'latest lesson on home');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('04.10.2026')"),true,'history retained');
+  assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('09.10.2026')"),true,'previous lesson retained');
   await snapshot('home-mobile-light');
   const requests=await run("Promise.all(['../pdf_docs/09.10.26.pdf','../tex_docs/09.10.26.tex','../images/09.10.26.png'].map(async u=>({u,status:(await fetch(u)).status})))");
   assert.ok(requests.every(x=>x.status===200),'lesson materials: '+JSON.stringify(requests));
