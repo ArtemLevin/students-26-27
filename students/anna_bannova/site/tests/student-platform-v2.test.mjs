@@ -17,7 +17,9 @@ test('Anna Bannova satisfies Student Platform v2 contract',()=>{
   assert.equal(result.contractVersion,2);
   assert.equal(result.planningMode,'fixed');
   assert.equal(result.ktpLessons,174);
-  assert.equal(result.lessonMetadata,3);
+  const metadataFiles=fs.readdirSync(path.join(site,'data','lessons')).filter(name=>name.endsWith('.lesson.json'));
+  assert.equal(result.lessonMetadata,metadataFiles.length);
+  assert.ok(metadataFiles.includes('2026-10-11.lesson.json'));
 });
 
 test('Anna dashboard inline module is syntactically valid JavaScript',()=>{
@@ -106,7 +108,9 @@ test('09.10.26 lesson and laboratory retain exact source exercise coverage and l
   }
   const registry=read('lesson-registry.js');
   const dates=[...registry.matchAll(/"date": "(\d{4}-\d{2}-\d{2})"/g)].map(x=>x[1]);
-  assert.deepEqual(dates,['2026-10-09','2026-10-04','2026-10-02']);
+  const canonicalDates=fs.readdirSync(path.join(site,'data','lessons')).filter(name=>name.endsWith('.lesson.json')).map(name=>name.slice(0,10)).sort().reverse();
+  assert.deepEqual(dates,canonicalDates);
+  assert.equal(dates[0],'2026-10-11');
   assert.match(lesson,/aria-controls="training"/);
   assert.match(lesson,/<mroot>/,'indexed radicals use mroot');
   assert.match(lesson,/<msqrt>/,'square roots use msqrt');
@@ -202,4 +206,38 @@ test('09.10.26 laboratory: slider endpoints, reset, prediction and contextual re
   assert.equal($('firstValue').children[0].tagName,'math','live numerator is MathML');
   assert.equal($('secondValue').children[0].tagName,'math','live denominator is MathML');
   assert.equal($('variableValue').children[0].tagName,'math','slider readout is MathML');
+});
+
+test('11.10.26 lesson and laboratory integrate with canonical publication and original exercises',()=>{
+  const lesson=read('11.10.26.html'),lab=read('11.10.26-lab.html');
+  const metadata=readJson('data/lessons/2026-10-11.lesson.json');
+  const intent=readJson('data/lessons/2026-10-11.intent.json');
+  const state=readJson('data/ktp-state.json');
+  assert.equal(metadata.materials.html,'11.10.26.html');
+  assert.equal(metadata.materials.lab,'11.10.26-lab.html');
+  assert.equal(metadata.date,'2026-10-11');
+  assert.equal(intent.lessonDate,metadata.date);
+  assert.equal(intent.ktpMatches.filter(x=>x.decision==='apply').length,3);
+  assert.equal(metadata.outcomes.length,5);
+  for(const outcome of metadata.outcomes){
+    assert.match(lesson,new RegExp('\\bid="'+outcome.evidenceAnchor+'"'),'evidence anchor');
+    assert.equal(outcome.masteryClaim,null,'no ungrounded mastery promotion');
+  }
+  for(const id of metadata.ktpRefs)assert.ok(state.records[id].lessonRefs.includes('2026-10-11'));
+  assert.match(lesson,/class="graph-tasks"/,'eight source graph tasks are generated as a group');
+  for(let n=3;n<=10;n++)assert.match(lesson,new RegExp('\\{n:'+n+',q:'),'source exercise '+n+' exists');
+  assert.match(lesson,/16<sup>1\/2<\/sup>/,'exercise 1 exists');
+  assert.match(lesson,/4<sup>x−1<\/sup>/,'exercise 2 exists');
+  assert.match(lesson,/\.\.\/images\/11\.10\.26\.png/);
+  assert.match(lesson,/\.\.\/pdf_docs\/11\.10\.26\.pdf/);
+  assert.match(lesson,/\.\.\/tex_docs\/11\.10\.26\.tex/);
+  assert.match(lab,/data-case="half"/);
+  assert.match(lab,/data-case="shift"/);
+  for(const [file,html,expected] of [['11.10.26.html',lesson,2],['11.10.26-lab.html',lab,1]]){
+    const scripts=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)];
+    assert.equal(scripts.length,expected,file+' script count');
+    for(const script of scripts)assert.doesNotThrow(()=>new vm.Script(script[1],{filename:file}),file+' has syntax error');
+    const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
+    assert.equal(new Set(ids).size,ids.length,file+' duplicate ids');
+  }
 });
