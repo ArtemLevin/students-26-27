@@ -25,18 +25,21 @@ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const origin='http://127.0.0.1:'+server.address().port;
 const profile=fs.mkdtempSync(path.join(os.tmpdir(),'mark-browser-'));
 const chromeProcess=spawn(chrome,['--headless=new','--no-sandbox','--disable-dev-shm-usage',
-'--disable-gpu','--no-first-run','--remote-debugging-port=0','--user-data-dir='+profile],{stdio:'ignore'});
+'--disable-gpu','--no-first-run','--no-zygote','--disable-extensions',
+'--remote-debugging-port=0','--user-data-dir='+profile],{stdio:['ignore','ignore','pipe']});
+let chromeStderr='';
+chromeProcess.stderr.on('data',chunk=>{chromeStderr=(chromeStderr+String(chunk)).slice(-5000);});
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 let ws;const pending=new Map();let serial=0;const jsErrors=[],badRequests=[];
 try{
   let port=0;
-  for(let i=0;i<150;i++){
+  for(let i=0;i<600;i++){
     const active=path.join(profile,'DevToolsActivePort');
     if(fs.existsSync(active)){port=Number(fs.readFileSync(active,'utf8').split('\n')[0]);break;}
     if(chromeProcess.exitCode!==null)throw Error('Chrome terminated');
     await sleep(100);
   }
-  if(!port)throw Error('DevTools port unavailable');
+  if(!port)throw Error('DevTools port unavailable after 60 seconds; chrome stderr: '+chromeStderr);
   const tabs=await (await fetch('http://127.0.0.1:'+port+'/json/list')).json();
   const target=tabs.find(x=>x.type==='page');
   assert.ok(target,'Page target missing');
