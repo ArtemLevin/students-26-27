@@ -5,6 +5,69 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-11",
+  "ktpRefs": [],
+  "href": "11.10.26.html",
+  "title": "Смеси, растворы и проценты",
+  "navTitle": "Смеси, растворы и проценты",
+  "navSubtitle": "Матвей Горбачёв. Смеси, растворы и проценты: массовая доля, сохранение сухого вещества, системы уравнений, повышение и снижение цены, сравнение стоимостей. Путь А — 10 задач.",
+  "summary": "Матвей Горбачёв. Смеси, растворы и проценты: массовая доля, сохранение сухого вещества, системы уравнений, повышение и снижение цены, сравнение стоимостей. Путь А — 10 задач.",
+  "topics": [
+    "смешивание растворов и сплавов",
+    "сохранение сухого вещества при сушке",
+    "системы уравнений по двум опытам",
+    "процентное повышение и снижение цены",
+    "сравнение стоимостей через отношение"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "text_08",
+      "evidenceAnchor": "mix",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_09",
+      "evidenceAnchor": "system",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_10",
+      "evidenceAnchor": "price",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_12",
+      "evidenceAnchor": "ratio",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_15",
+      "evidenceAnchor": "mix",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_16",
+      "evidenceAnchor": "system",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "numbers_07",
+      "evidenceAnchor": "price",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "numbers_08",
+      "evidenceAnchor": "ratio",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "11.10.26.html",
+    "pdf": "../pdf_docs/11.10.26.pdf",
+    "tex": "../tex_docs/11.10.26.tex"
+  }
+},
+{
     "date": "2026-10-08",
     "ktpRefs": [],
     "href": "08.10.26.html",
