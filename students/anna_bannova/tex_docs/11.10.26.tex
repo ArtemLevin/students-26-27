@@ -1,0 +1,355 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,left=22mm,right=22mm,top=20mm,bottom=23mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem,needspace}
+\usepackage{fancyhdr,setspace,xcolor}
+\definecolor{accent}{HTML}{246C70}
+\definecolor{darkaccent}{HTML}{16464C}
+\definecolor{pale}{HTML}{DAE7E6}
+\definecolor{textgray}{HTML}{333A3A}
+\color{textgray}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist[enumerate]{leftmargin=*,itemsep=7pt,topsep=4pt}
+\setlist[itemize]{leftmargin=*,itemsep=3pt,topsep=3pt}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.25pt}
+\fancyfoot[L]{\scriptsize \textcolor{darkaccent}{АННА БАННОВА \; / \; 11.10.26}}
+\fancyfoot[R]{\scriptsize\thepage}
+\setlength{\footskip}{13mm}
+\newcommand{\topic}[1]{\Needspace{5\baselineskip}\vspace{4mm}{\Large\bfseries\color{darkaccent}#1}\par\vspace{1mm}\textcolor{pale}{\rule{\linewidth}{0.7pt}}\vspace{1mm}}
+\newcommand{\subtopic}[1]{\Needspace{3\baselineskip}\vspace{2mm}{\normalsize\bfseries\color{accent}#1}\par\vspace{1mm}}
+\newcommand{\important}[1]{\textbf{\color{darkaccent}#1}}
+% Компактная координатная сетка тренировочной задачи.
+% Аргументы: выражение в синтаксисе pgfplots, точка A, точка B,
+% границы x_min, x_max, y_min, y_max.
+\newcommand{\taskplot}[7]{%
+\begin{tikzpicture}
+\begin{axis}[
+ width=\linewidth,height=53mm,
+ xmin=#4,xmax=#5,ymin=#6,ymax=#7,
+ axis lines=middle,axis line style={gray!70,line width=.45pt},
+ grid=major,grid style={gray!24,line width=.3pt},
+ xtick distance=1,ytick distance=1,
+ tick label style={font=\scriptsize},
+ label style={font=\scriptsize},
+ xlabel={$x$},ylabel={$y$},
+ xlabel style={at={(axis description cs:1.02,0.13)},anchor=west},
+ ylabel style={at={(axis description cs:0.10,1.01)},anchor=south},
+ clip=false,domain=#4:#5,samples=110,
+ enlargelimits=false]
+ \addplot[accent,line width=1.2pt] {#1};
+ \addplot+[only marks,mark=*,mark size=2.2pt,color=darkaccent] coordinates {(#2) (#3)};
+ \node[font=\scriptsize,fill=white,inner sep=1pt,anchor=south east] at (axis cs:#2) {$A$};
+ \node[font=\scriptsize,fill=white,inner sep=1pt,anchor=south east] at (axis cs:#3) {$B$};
+\end{axis}
+\end{tikzpicture}}
+\newcommand{\exercisegraph}[3]{%
+\begin{minipage}[t]{.475\linewidth}
+\raggedright\textbf{#1.}\quad #2\par\vspace{1mm}
+#3
+\end{minipage}}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{34mm}
+{\large\color{accent}\textbf{МАТЕМАТИКА \enspace / \enspace ЕГЭ}}\\[24mm]
+{\Huge\bfseries\color{darkaccent}Чек-лист}\\[8mm]
+{\LARGE\bfseries Показательная функция}\\[3mm]
+{\Large График, узловые точки и поиск коэффициентов}\\[26mm]
+{\normalsize\color{textgray}11 октября 2026 года}\\[8mm]
+{\small Путь А \enspace\textcolor{accent}{\textbullet}\enspace 10 заданий}\\[33mm]
+{\normalsize\bfseries Лёвин Артём Александрович}\\[3mm]
+{\normalsize эксклюзивно для Анны Банновой}
+\end{center}
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent!60,line width=1pt]
+ ($(current page.south west)+(12mm,11mm)$)
+ .. controls ($(current page.south west)+(75mm,35mm)$)
+ and ($(current page.south east)+(-75mm,5mm)$)
+ .. ($(current page.south east)+(-12mm,9mm)$);
+\draw[pale,line width=.45pt]
+ ($(current page.south west)+(12mm,5mm)$)
+ .. controls ($(current page.south west)+(83mm,25mm)$)
+ and ($(current page.south east)+(-73mm,5mm)$)
+ .. ($(current page.south east)+(-12mm,5mm)$);
+\end{tikzpicture}
+\clearpage
+
+\topic{1. Как прочитать условие}
+\important{Функция} $y=f(x)$ сопоставляет каждому допустимому $x$ определённое значение $y$.
+Запись $f(6)$ означает: вместо $x$ подставить $6$ и вычислить результат.
+Если требуется найти $x$, при котором $f(x)=29$, число $29$ подставляют \emph{вместо значения функции}.
+
+\subtopic{Два вида показательных функций}
+В сегодняшних заданиях встречаются:
+\[
+\boxed{f(x)=a^x+b}\qquad\text{и}\qquad
+\boxed{f(x)=a^{x+b}},\qquad a>0,\ a\ne1.
+\]
+\begin{center}
+\renewcommand{\arraystretch}{1.27}
+\begin{tabularx}{\linewidth}{@{}p{39mm}X X@{}}
+\toprule
+ & $a^x+b$ & $a^{x+b}$\\
+\midrule
+Где стоит $b$? & За пределами степени & В показателе степени\\
+Удобная точка & $x=0$: $f(0)=1+b$ & $f(x)=1$: тогда $x+b=0$\\
+Возможен ли $f(x)\le0$? & Да, при некоторых $b$ & Нет: всегда $f(x)>0$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\important{Скобки решают всё:} $a^x+b$ и $a^{x+b}$ --- разные функции.
+
+\topic{2. Метод узловых точек}
+\important{Узловая точка} --- точка графика с двумя целочисленными координатами: $A(x_A;y_A)$.
+Первая координата --- $x$, вторая --- $y=f(x)$.
+
+Если в формуле неизвестны два коэффициента $a$ и $b$, обычно достаточно двух подходящих точек графика.
+Удобнее начинать с точек, где $x=0$, $x=1$ или $f(x)=1$: так проще вычислять степени.
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+\item Найдите \important{две точки, лежащие именно на графике}, и запишите их координаты.
+\item Подставьте каждую пару $(x;y)$ в исходную формулу. Получится система из двух уравнений.
+\item Используйте $a^0=1$, $a^1=a$, свойства отрицательных и дробных степеней, найдите $a$ и $b$.
+\item Запишите окончательную функцию с найденными коэффициентами.
+\item Выполните последнее требование: вычислите $f(c)$ или решите $f(x)=m$; проверьте $a>0$, $a\ne1$.
+\end{enumerate}
+
+\clearpage
+\topic{3. Пример: $f(x)=a^x+b$}
+На графике отмечены узловые точки $A(0;-2)$ и $B(1;-1)$.
+Требуется найти $f(6)$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+ width=133mm,height=76mm,
+ xmin=-2.5,xmax=3.5,ymin=-3.6,ymax=6.5,
+ axis lines=middle,axis line style={gray!70},
+ grid=major,grid style={gray!24},
+ xtick distance=1,ytick distance=1,
+ xlabel={$x$},ylabel={$y$},
+ xlabel style={at={(axis description cs:1.02,.32)},anchor=west},
+ ylabel style={at={(axis description cs:.31,1.01)},anchor=south},
+ clip=false,domain=-2.3:3.25,samples=150]
+ \addplot[accent,line width=1.35pt] {pow(2,x)-3};
+ \addplot+[only marks,mark=*,mark size=2.1pt,color=darkaccent] coordinates {(0,-2) (1,-1) (2,1) (3,5)};
+ \node[anchor=east,font=\small,fill=white,inner sep=1pt] at (axis cs:0,-2) {$A$};
+ \node[anchor=north west,font=\small,fill=white,inner sep=1pt] at (axis cs:1,-1) {$B$};
+ \node[anchor=north west,font=\small,fill=white,inner sep=1pt] at (axis cs:2,1) {$C$};
+ \node[anchor=east,font=\small,fill=white,inner sep=1pt] at (axis cs:3,5) {$D$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\subtopic{Решение через систему}
+\[
+\begin{cases}
+-2=a^0+b,\\
+-1=a^1+b
+\end{cases}
+\ \Longrightarrow\ 
+\begin{cases}
+-2=1+b,\\
+-1=a+b
+\end{cases}
+\ \Longrightarrow\ 
+\begin{cases}
+b=-3,\\a=2.
+\end{cases}
+\]
+Следовательно, $f(x)=2^x-3$ и
+\[
+\boxed{f(6)=2^6-3=64-3=61}.
+\]
+\important{Проверка:} $f(0)=1-3=-2$, $f(1)=2-3=-1$ --- обе исходные точки принадлежат найденному графику.
+
+\topic{4. Основание меньше единицы}
+Для $f(x)=a^x+b$ даны точки $A(-2;0)$ и $B(0;-3)$.
+Из второй точки $-3=1+b$, поэтому $b=-4$. Первая точка даёт
+\[
+0=a^{-2}-4\ \Longrightarrow\ a^{-2}=4
+\ \Longrightarrow\ a=4^{-1/2}=\frac12,
+\]
+где выбран \important{положительный} корень, поскольку $a>0$.
+Получили $f(x)=\left(\frac12\right)^x-4=2^{-x}-4$.
+
+\clearpage
+\topic{5. Когда $b$ внутри показателя}
+Дана функция $f(x)=a^{x+b}$; на графике точки $A(-3;1)$ и $B(1;4)$.
+\[
+\begin{cases}
+1=a^{-3+b},\\
+4=a^{1+b}.
+\end{cases}
+\]
+Поскольку $a>0$ и $a\ne1$, равенство $a^t=1$ означает $t=0$.
+Поэтому $-3+b=0$, откуда $b=3$.
+\[
+4=a^{1+3}=a^4
+\ \Longrightarrow\
+a=4^{1/4}=2^{1/2}.
+\]
+\[
+\boxed{f(x)=\left(2^{1/2}\right)^{x+3}=2^{(x+3)/2}}.
+\]
+Если теперь нужно найти $x$, при котором $f(x)=8$, то
+\[
+2^{(x+3)/2}=2^3
+\ \Longrightarrow\ \frac{x+3}{2}=3
+\ \Longrightarrow\ \boxed{x=3}.
+\]
+
+\topic{6. Что повторить из предыдущего занятия}
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}X X@{}}
+\toprule
+\textbf{Правило} & \textbf{Пример}\\
+\midrule
+Нулевая степень: $a^0=1$ для $a\ne0$ & $7^0=1$\\
+Отрицательная степень: $a^{-r}=1/a^r$ & $2^{-3}=1/8$\\
+Дробная степень: $a^{1/n}=\sqrt[n]{a}$ для $a>0$ & $9^{1/2}=3$\\
+Степень степени: $(a^r)^s=a^{rs}$ для $a>0$ & $(4^{1/2})^2=4$\\
+Равенство степеней: $a^u=a^v\Rightarrow u=v$ для $a>0$, $a\ne1$ & $2^x=32\Rightarrow x=5$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\subtopic{Типичные ошибки}
+\begin{itemize}
+\item Переставлять местами $x$ и $y$ при подстановке координат точки.
+\item Считать, что $f(6)$ означает умножение $f$ на $6$.
+\item Путать $a^x+b$ и $a^{x+b}$.
+\item При решении $a^{2}=c$ забывать ограничение $a>0$ для основания показательной функции.
+\item Удалять основания в уравнении $a^u=a^v$, не проверив $a>0$ и $a\ne1$.
+\end{itemize}
+
+\clearpage
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: восстановление функции по графику}\\[3mm]
+{\small\color{accent}От узловых точек к ответу}
+\end{center}
+\vspace{0mm}
+\begin{center}
+\begin{tikzpicture}[
+ >=Stealth,
+ node distance=8mm,
+ term/.style={ellipse,draw=accent,line width=.8pt,fill=pale!22,align=center,text width=75mm,minimum height=13mm,inner sep=3mm,font=\small},
+ action/.style={rectangle,rounded corners=2pt,draw=accent!85,line width=.75pt,align=center,text width=86mm,minimum height=14mm,inner sep=3mm,font=\small},
+ decision/.style={diamond,aspect=2.4,draw=darkaccent,line width=.8pt,align=center,text width=34mm,inner sep=1.5mm,font=\small},
+ side/.style={rectangle,rounded corners=2pt,draw=accent!85,align=center,text width=54mm,minimum height=16mm,inner sep=3mm,font=\small},
+ arr/.style={->,line width=.9pt,draw=accent}
+]
+\node[term] (start) {Даны график и формула\\ с неизвестными $a$ и $b$};
+\node[action,below=of start] (dots) {Выберите две узловые точки\\ $A(x_1;y_1)$ и $B(x_2;y_2)$};
+\node[decision,below=10mm of dots] (kind) {Как записана функция?};
+\node[side,below left=12mm and 1mm of kind] (left) {$f(x)=a^x+b$\\ $y_i=a^{x_i}+b$};
+\node[side,below right=12mm and 1mm of kind] (right) {$f(x)=a^{x+b}$\\ $y_i=a^{x_i+b}$};
+\node[action,below=39mm of kind] (system) {Составьте систему и найдите $a$ и $b$.\\ Запишите формулу $f(x)$};
+\node[action,below=11mm of system] (goal) {Нужно найти $f(c)$? Подставьте $x=c$.\\ Нужно найти $x$? Решите $f(x)=m$.};
+\node[term,below=11mm of goal] (last) {Проверьте $a>0$, $a\ne1$,\\ координаты точек и ответ};
+\draw[arr] (start)--(dots);
+\draw[arr] (dots)--(kind);
+\draw[arr] (kind.south west) -| (left.north);
+\draw[arr] (kind.south east) -| (right.north);
+\draw[arr] (left.south) |- (system.west);
+\draw[arr] (right.south) |- (system.east);
+\draw[arr] (system)--(goal);
+\draw[arr] (goal)--(last);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\begin{center}
+{\LARGE\bfseries\color{darkaccent}Тренировочный блок}\\[2mm]
+{\small Путь А \quad\textcolor{accent}{\textbullet}\quad 10 заданий}
+\end{center}
+\textbf{Порядок работы.} Для каждой задачи на график сначала выпишите координаты точек $A$ и $B$, затем найдите $a$ и $b$. Запишите вычисления и окончательный ответ. Масштаб делений указан на осях.
+\begin{enumerate}[label=\textbf{\arabic*.}]
+\item Найдите значение выражения:
+\[16^{1/2}+8^{2/3}-2^{-2}.\]
+\item Решите показательное уравнение:
+\[4^{x-1}=8^{x/2}.\]
+\end{enumerate}
+\vspace{3mm}
+\begin{center}
+{\normalsize\bfseries\color{accent}Задания 3--6. По графику восстановите $f(x)=a^x+b$.}
+\end{center}
+\vspace{2mm}
+\exercisegraph{3}{По графику $f(x)=a^x+b$ найдите $f(2)$.}{%
+\taskplot{pow(3,x)-3}{0,-2}{1,0}{-1.7}{2.3}{-3.5}{7.5}}
+\hfill
+\exercisegraph{4}{По графику $f(x)=a^x+b$ найдите $f(3)$.}{%
+\taskplot{pow(3,x)}{0,1}{1,3}{-1.7}{2.3}{-0.8}{9.5}}
+\par\vspace{6mm}
+\exercisegraph{5}{По графику $f(x)=a^x+b$ найдите $f(2)$.}{%
+\taskplot{pow(0.5,x)-2}{-1,0}{0,-1}{-2.2}{2.8}{-2.5}{3.4}}
+\hfill
+\exercisegraph{6}{По графику $f(x)=a^x+b$ найдите $f(4)$.}{%
+\taskplot{pow(10,x/2)-3}{0,-2}{2,7}{-1.5}{2.18}{-3.6}{8.5}}
+\par
+\clearpage
+\begin{center}
+{\LARGE\bfseries\color{darkaccent}Тренировка: продолжение}\\[2mm]
+{\small Задания 7--10}
+\end{center}
+\vspace{2mm}
+\exercisegraph{7}{Для $f(x)=a^x+b$ найдите $x$, при котором $f(x)=22$.}{%
+\taskplot{pow(3,x)-5}{0,-4}{1,-2}{-1.5}{1.5}{-5.5}{1.4}}
+\hfill
+\exercisegraph{8}{Для $f(x)=a^{x+b}$ найдите $f(1)$.}{%
+\taskplot{pow(2,x+2)}{-2,1}{0,4}{-3.3}{0.8}{-0.3}{8.2}}
+\par\vspace{7mm}
+\exercisegraph{9}{Для $f(x)=a^{x+b}$ найдите $x$, при котором $f(x)=32$.}{%
+\taskplot{pow(2,x+3)}{-3,1}{0,8}{-4.3}{0.15}{-0.2}{9.7}}
+\hfill
+\exercisegraph{10}{Для $f(x)=a^{x+b}$ найдите $x$, при котором $f(x)=27$.}{%
+\taskplot{pow(3,(x+1)/2)}{-1,1}{3,9}{-2.5}{3.18}{-0.3}{10.5}}
+\par
+\vfill
+\important{Самопроверка хода решения:} в заданиях 7, 9 и 10 требуется найти аргумент $x$ по известному значению функции. После получения формулы решите показательное уравнение.
+\clearpage
+\begin{center}
+{\LARGE\bfseries\color{darkaccent}Ответы для самопроверки}
+\end{center}
+\vspace{6mm}
+\renewcommand{\arraystretch}{1.65}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{16mm}X@{}}
+\toprule
+№ & Ответ\\
+\midrule
+1 & $\dfrac{31}{4}$\\
+2 & $x=4$\\
+3 & $f(2)=6$\\
+4 & $f(3)=27$\\
+5 & $f(2)=-\dfrac74$\\
+6 & $f(4)=97$\\
+7 & $x=3$\\
+8 & $f(1)=8$\\
+9 & $x=2$\\
+10 & $x=5$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vspace{8mm}
+\important{Проверьте дополнительно:} восстановленная функция проходит через обе заданные точки; основание положительно и отличается от единицы; в конце вычислена именно та величина, о которой спрашивали в задаче.
+\vfill
+\begin{center}
+\small\color{darkaccent}Лёвин Артём Александрович эксклюзивно для Анны Банновой
+\end{center}
+\end{document}

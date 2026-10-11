@@ -1,0 +1,271 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{cmap}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,left=22mm,right=22mm,top=23mm,bottom=22mm,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{2F6F73}
+\definecolor{darkaccent}{HTML}{204B4D}
+\definecolor{textgray}{HTML}{343C3E}
+\definecolor{lightaccent}{HTML}{E9F2F1}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\setstretch{1.18}
+\setlength{\parindent}{0pt}
+\setlist[enumerate]{leftmargin=1.65em,itemsep=0.45em,topsep=0.3em}
+\setlist[itemize]{leftmargin=1.6em,itemsep=0.2em,topsep=0.2em}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{textgray}Деление многочленов и схема Горнера}
+\fancyhead[R]{\small\color{textgray}11.10.26}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\lessonsection}[1]{\vspace{0.35em}\section*{\color{darkaccent}#1}\vspace{-0.75em}{\color{accent}\rule{\linewidth}{0.55pt}}\vspace{0.25em}}
+\newcommand{\hint}[1]{\par\smallskip\textbf{Внимание.} #1\par}
+\newcommand{\mathtask}[2]{\item \textbf{#1}\\[-0.4em]\[#2\]}
+
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{28mm}
+{\Large\color{darkaccent}\textbf{Чек-лист}}\\[10mm]
+{\Huge\bfseries Деление многочленов}\\[4mm]
+{\LARGE\bfseries и схема Горнера}\\[8mm]
+{\large Уравнения, метод интервалов и замена переменной}\\[22mm]
+{\large 11.10.2026}\\[27mm]
+\begin{minipage}{0.79\textwidth}
+\centering\large
+Подбор рационального корня, деление на линейный множитель,\par
+проверка остатка и переход от многочлена к произведению.
+\end{minipage}
+\vfill
+{\large\textbf{Лёвин Артём Александрович}}\\[3mm]
+{\large эксклюзивно для Анны Трапезниковой}
+\vspace{16mm}
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent!65,line width=1.1pt]
+  ([xshift=23mm,yshift=15mm]current page.south west)
+  .. controls ([xshift=65mm,yshift=31mm]current page.south west)
+  and ([xshift=-74mm,yshift=8mm]current page.south east)
+  .. ([xshift=-23mm,yshift=18mm]current page.south east);
+\end{tikzpicture}
+\end{titlepage}
+
+\lessonsection{1. Что нужно знать до деления}
+Для многочлена $P(x)$ число $r$ является корнем, если $P(r)=0$. По теореме Безу:
+\[
+\boxed{P(r)=0\quad\Longleftrightarrow\quad P(x)=(x-r)Q(x)}.
+\]
+Значит, найденный корень позволяет понизить степень многочлена на единицу.
+
+\textbf{Как подобрать корень.} Если старший коэффициент многочлена равен $1$, а все коэффициенты --- целые числа, каждый \emph{целый} корень делит свободный член. Например, для $P(x)=x^3-x^2-2x+2$ достаточно начать с $\pm1,\pm2$.
+\[
+P(1)=1-1-2+2=0 \quad\Longrightarrow\quad x-1\text{ --- множитель.}
+\]
+Для общего многочлена с целыми коэффициентами $a_nx^n+\cdots+a_0$ рациональный корень $p/q$ в несократимой дроби удовлетворяет $p\mid a_0$, $q\mid a_n$. Если $a_0=0$, сначала вынесите $x$.
+
+\hint{Перебор делителей даёт \emph{кандидатов} на корень. Если $P(r)\ne0$, это число не является корнем.}
+
+\lessonsection{2. Деление многочлена уголком}
+Делим $P(x)=x^3-x^2-2x+2$ на $x-1$.
+\begin{enumerate}
+\item Выбираем первое слагаемое частного: $x^3:x=x^2$.
+\item Умножаем и вычитаем:
+\[
+(x^3-x^2-2x+2)-x^2(x-1)=-2x+2.
+\]
+\item Берём следующее слагаемое: $(-2x):x=-2$.
+\item Повторяем вычитание: $(-2x+2)-(-2)(x-1)=0$.
+\end{enumerate}
+Следовательно, частное $Q(x)=x^2-2$, остаток $0$ и
+\[
+\boxed{x^3-x^2-2x+2=(x-1)(x^2-2)}.
+\]
+Уравнение $P(x)=0$ имеет три корня:
+\[
+\boxed{x=1,\qquad x=-\sqrt2,\qquad x=\sqrt2.}
+\]
+\hint{При вычитании меняйте знаки всех слагаемых.}
+
+\clearpage
+\lessonsection{3. Схема Горнера: те же вычисления короче}
+Рассмотрим $P(x)=x^3-13x-12$. Проверка показывает $P(-1)=0$, значит, делим на $x+1$. Отсутствующий член $x^2$ обязательно записываем с коэффициентом $0$.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.33}
+\begin{tabular}{c@{\hspace{8mm}}rrrr}
+\toprule
+$r=-1$ & $1$ & $0$ & $-13$ & $-12$\\
+\midrule
+Произведения & & $-1$ & $1$ & $12$\\
+\addlinespace[2pt]
+\textbf{Результат} & $\mathbf{1}$ & $\mathbf{-1}$ & $\mathbf{-12}$ & $\mathbf{0}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\textbf{Правило заполнения:} первый коэффициент сносим; каждый следующий результат умножаем на $r$ и прибавляем следующий исходный коэффициент. Последнее число --- остаток, остальные --- коэффициенты частного.
+\[
+\boxed{P(x)=(x+1)(x^2-x-12)=(x+1)(x-4)(x+3).}
+\]
+\hint{Остаток равен $P(r)$. Если заранее точно установлено, что $P(r)=0$, ненулевой остаток указывает на ошибку вычислений. Иначе он лишь означает, что $r$ не корень.}
+
+\lessonsection{4. От разложения к методу интервалов}
+На занятии рассматривалось неравенство
+\[
+x(x^3-13x-12)\ge0.
+\]
+После разложения получаем
+\[
+x(x+1)(x-4)(x+3)\ge0.
+\]
+Нули произведения: $-3$, $-1$, $0$, $4$. Все имеют нечётную кратность, поэтому знак при переходе через каждый нуль меняется.
+
+\begin{center}
+\begin{tikzpicture}[x=1.16cm,y=1cm,>=Stealth]
+\draw[->,thick,accent] (-4,0)--(5.2,0) node[below right] {$x$};
+\foreach \x/\v in {-3/-3,-1/-1,0/0,4/4}{
+ \fill[darkaccent] (\x,0) circle (2.4pt);
+ \node[below=5pt] at (\x,0) {$\v$};
+}
+\node[above=5pt] at (-3.55,0) {$+$};
+\node[above=5pt] at (-2,0) {$-$};
+\node[above=5pt] at (-0.5,0) {$+$};
+\node[above=5pt] at (2,0) {$-$};
+\node[above=5pt] at (4.6,0) {$+$};
+\end{tikzpicture}
+\end{center}
+Учитывая нестрогий знак, включаем все нули:
+\[
+\boxed{x\in(-\infty;-3]\cup[-1;0]\cup[4;+\infty).}
+\]
+\hint{Знаки чередуются лишь при прохождении корня нечётной кратности. У корня чётной кратности знак произведения не меняется.}
+
+\lessonsection{5. Повторяющееся выражение: замена переменной}
+Пусть $u=x^3-x^2$. Для неравенства
+\[
+(x^3-x^2)^2+8(x^3-x^2)-48<0
+\]
+выполняем замену и получаем обычное квадратное неравенство:
+\[
+u^2+8u-48<0\ \Longleftrightarrow\ (u+12)(u-4)<0.
+\]
+Отсюда $-12<u<4$. Возвращаемся к исходной переменной:
+\[
+\begin{cases}
+x^3-x^2>-12,\\
+x^3-x^2<4.
+\end{cases}
+\]
+Каждое неравенство раскладывается с помощью найденного корня:
+\[
+\begin{aligned}
+x^3-x^2+12&=(x+2)(x^2-3x+6),\\
+x^3-x^2-4&=(x-2)(x^2+x+2).
+\end{aligned}
+\]
+Оба квадратных множителя положительны при всех $x\in\R$ (их дискриминанты $-15$ и $-7$). Поэтому первое условие эквивалентно $x>-2$, второе --- $x<2$. Ответ:
+\[
+\boxed{x\in(-2;2).}
+\]
+\textbf{Главное различие:} для системы берите \emph{пересечение} решений; для нескольких альтернативных случаев --- \emph{объединение}.
+
+\lessonsection{6. Краткая самопроверка}
+\begin{itemize}
+\item Все степени записаны в убывающем порядке, пропущенные коэффициенты равны нулю.
+\item Делитель имеет вид $x-r$ с правильным знаком.
+\item Частное имеет степень на единицу меньше, остаток совпадает с $P(r)$.
+\item Раскрытие скобок возвращает исходный многочлен.
+\item В неравенстве учтены кратности корней и строгость знака.
+\item После замены переменной решение переведено обратно к $x$.
+\end{itemize}
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: от корня к разложению}
+\end{center}
+\vspace{5mm}
+\begin{center}
+\begin{tikzpicture}[
+ every node/.style={font=\small,align=center},
+ startstop/.style={ellipse,draw=accent,line width=0.9pt,minimum width=43mm,minimum height=10mm,inner sep=3mm},
+ act/.style={rounded corners=2mm,rectangle,draw=accent,line width=0.9pt,text width=77mm,minimum height=12mm,inner sep=3mm},
+ dec/.style={diamond,aspect=3.7,draw=accent,line width=0.9pt,text width=44mm,inner sep=1.2mm},
+ arrow/.style={-{Stealth[length=2.5mm]},line width=0.85pt,accent},
+ node distance=11mm and 23mm]
+\node[startstop] (start) {Дан многочлен $P(x)$};
+\node[act,below=of start] (norm) {Упорядочьте степени; восстановите нулевые коэффициенты; вынесите общий множитель};
+\node[act,below=of norm] (candidate) {Найдите кандидата $r$ на рациональный корень и вычислите $P(r)$};
+\node[dec,below=of candidate] (check) {$P(r)=0$?};
+\node[startstop,right=18mm of check,text width=37mm] (other) {Следующий кандидат или другой метод};
+\node[act,below=13mm of check] (divide) {Разделите $P(x)$ на $x-r$ уголком или по схеме Горнера};
+\node[act,below=of divide] (factor) {Запишите $P(x)=(x-r)Q(x)$; проверьте умножением};
+\node[act,below=of factor] (end) {Решайте уравнение по множителям либо неравенство методом интервалов};
+\node[startstop,below=of end] (finish) {Проверьте ответ};
+\draw[arrow] (start)--(norm);
+\draw[arrow] (norm)--(candidate);
+\draw[arrow] (candidate)--(check);
+\draw[arrow] (check)--node[left,pos=0.5]{да}(divide);
+\draw[arrow] (check)--node[above,pos=0.5]{нет}(other);
+\draw[arrow] (divide)--(factor);
+\draw[arrow] (factor)--(end);
+\draw[arrow] (end)--(finish);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\lessonsection{Тренировочный блок \texorpdfstring{\textit{\normalsize Путь А}}{Путь А}}
+\textbf{10 заданий.} Выполните вычисления самостоятельно. Там, где указан метод, используйте именно его. Рекомендуется оформлять промежуточные шаги.
+\begin{enumerate}
+\mathtask{Найдите один целый корень, разделите на соответствующий множитель и решите уравнение.}{x^3-x^2-4x+4=0.}
+\mathtask{Выполните деление уголком на $x+1$ и решите уравнение.}{x^3+2x^2-5x-6=0.}
+\mathtask{Разложите многочлен на множители и найдите все корни.}{x^3-4x^2+x+6=0.}
+\mathtask{Используйте схему Горнера с $r=1$, затем решите уравнение.}{x^3-6x^2+11x-6=0.}
+\mathtask{Восстановите пропущенный коэффициент и решите уравнение схемой Горнера.}{x^3-7x+6=0.}
+\mathtask{Найдите рациональный корень, примените схему Горнера и решите уравнение.}{2x^3-3x^2-8x+12=0.}
+\mathtask{Разложите на множители и решите неравенство методом интервалов.}{x^3-4x^2+x+6\le0.}
+\mathtask{Сначала вынесите $x$, затем примените метод интервалов.}{x(x^3-4x^2-x+4)\ge0.}
+\mathtask{Учтите кратность корня при расстановке знаков.}{(x-1)^2(x+2)\ge0.}
+\mathtask{Сделайте замену $u=x^3-x^2$ и решите неравенство.}{(x^3-x^2)^2-2(x^3-x^2)-8<0.}
+\end{enumerate}
+
+\clearpage
+\lessonsection{Ответы для самопроверки}
+\renewcommand{\arraystretch}{1.42}
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+№ & Ответ\\
+\midrule
+1 & $x\in\{-2;1;2\}$\\
+2 & Частное при делении на $x+1$: $x^2+x-6$; $x\in\{-3;-1;2\}$\\
+3 & $x\in\{-1;2;3\}$\\
+4 & Частное: $x^2-5x+6$; $x\in\{1;2;3\}$\\
+5 & $x\in\{-3;1;2\}$\\
+6 & $x\in\{-2;\frac32;2\}$\\
+7 & $x\in(-\infty;-1]\cup[2;3]$\\
+8 & $x\in(-\infty;-1]\cup[0;1]\cup[4;+\infty)$\\
+9 & $x\in[-2;+\infty)$\\
+10 & $x\in(-1;2)$\\
+\bottomrule
+\end{tabularx}
+
+\bigskip
+\textbf{Проверьте именно метод:} в заданиях 2, 4 и 6 должны появиться корректные коэффициенты частного; в заданиях 7--9 --- объяснение знаков; в задании 10 --- переход от $u$ обратно к $x$.
+
+\end{document}
