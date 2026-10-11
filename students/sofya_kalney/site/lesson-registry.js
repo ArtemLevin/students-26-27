@@ -3,6 +3,95 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+    "date": "2026-10-11",
+    "ktpRefs": [],
+    "href": "11.10.26.html",
+    "title": "Графики, неравенства и геометрические доказательства",
+    "navTitle": "Графики, неравенства и геометрические доказательства",
+    "navSubtitle": "Графики с модулем, выколотые точки, неравенства, смеси и доказательства в геометрии. Математика ОГЭ, София Кальней, 11 октября 2026.",
+    "summary": "Графики с модулем, выколотые точки, неравенства, смеси и доказательства в геометрии. Математика ОГЭ, София Кальней, 11 октября 2026.",
+    "topics": [
+      "Модуль и преобразования графиков",
+      "ОДЗ и выколотые точки",
+      "Прямая y = kx и параметр",
+      "Метод интервалов",
+      "Смеси и концентрации",
+      "Биссектрисы трапеции",
+      "Высоты и подобие"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "oge_22_3_1",
+        "evidenceAnchor": "graphs",
+        "relation": "practiced",
+        "label": "Преобразование графика с модулем",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_22_3_3",
+        "evidenceAnchor": "holes",
+        "relation": "practiced",
+        "label": "ОДЗ и выколотые точки после сокращения",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_22_3_5",
+        "evidenceAnchor": "lines",
+        "relation": "touched",
+        "label": "Прямая с параметром и число пересечений",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_13_2_3",
+        "evidenceAnchor": "inequality",
+        "relation": "practiced",
+        "label": "Метод интервалов для рационального неравенства",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_21_1_2",
+        "evidenceAnchor": "mixtures",
+        "relation": "practiced",
+        "label": "Таблицы масс и концентраций",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_21_1_3",
+        "evidenceAnchor": "mixtures",
+        "relation": "touched",
+        "label": "Система уравнений для двух способов смешивания",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_17_4_1",
+        "evidenceAnchor": "trapezoid",
+        "relation": "practiced",
+        "label": "Сумма углов трапеции и биссектрисы",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_24_2_2",
+        "evidenceAnchor": "altitudes",
+        "relation": "practiced",
+        "label": "Признак подобия треугольников",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_16_4_1",
+        "evidenceAnchor": "altitudes",
+        "relation": "touched",
+        "label": "Вписанные углы и окружность с диаметром",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "11.10.26.html",
+      "pdf": "../pdf_docs/11.10.26.pdf",
+      "tex": "../tex_docs/11.10.26.tex",
+      "lab": "11.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-10-09",
     "ktpRefs": [],
     "href": "09.10.26.html",
