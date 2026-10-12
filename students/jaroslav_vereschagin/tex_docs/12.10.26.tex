@@ -1,0 +1,303 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm,headheight=25pt,headsep=7mm,footskip=12mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage[unicode=true,colorlinks=true,linkcolor=black]{hyperref}
+
+\definecolor{accent}{HTML}{147D7E}
+\definecolor{darkaccent}{HTML}{0B5253}
+\definecolor{ink}{HTML}{293538}
+\definecolor{quiet}{HTML}{697578}
+\definecolor{hairline}{HTML}{D5DDDD}
+\color{ink}
+\setstretch{1.12}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlist[itemize]{leftmargin=1.5em,itemsep=0.15em,topsep=0.25em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.4em,topsep=0.30em}
+\AtBeginDocument{\setlength{\abovedisplayskip}{7pt}\setlength{\belowdisplayskip}{7pt}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{quiet}Уравнения. Метод замены переменной}
+\fancyhead[R]{\small\color{quiet}12.10.26}
+\fancyfoot[C]{\small\color{quiet}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{hairline}\leaders\hrule height \headrulewidth\hfill}}
+\newcommand{\key}[1]{{\color{darkaccent}\textbf{#1}}}
+\newcommand{\note}[1]{{\small\color{quiet}#1}}
+\newcommand{\headsec}[1]{\section*{\color{darkaccent}#1}\vspace{-5pt}{\color{hairline}\rule{\linewidth}{0.55pt}}\par\vspace{1pt}}
+\newcommand{\headsub}[1]{\subsection*{\color{accent}#1}}
+
+\tikzset{
+  fstart/.style={ellipse,draw=darkaccent,line width=0.9pt,fill=white,
+      minimum width=45mm,minimum height=11mm,align=center,font=\small},
+  faction/.style={rounded corners=2.2pt,draw=accent,line width=0.85pt,fill=white,
+      text width=104mm,minimum height=14mm,align=center,font=\small,inner sep=3.2mm},
+  farrow/.style={-{Stealth[length=2.7mm]},draw=darkaccent,line width=0.85pt}
+}
+
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{28mm}
+{\large\color{quiet}Чек-лист}\par
+\vspace{7mm}
+{\fontsize{29}{34}\selectfont\bfseries\color{darkaccent}
+Решение уравнений\\[2mm]методом замены переменной}\par
+\vspace{9mm}
+{\Large\color{accent}Повторяющиеся выражения\\и обратная замена}\par
+\vspace{17mm}
+{\color{hairline}\rule{0.73\linewidth}{0.7pt}}\par
+\vspace{10mm}
+{\large Ярослав Верещагин}\par
+\vspace{3mm}
+{\normalsize 12.10.26}\par
+\vfill
+\begin{minipage}{0.82\linewidth}
+\centering\normalsize
+Научиться замечать скрытую структуру уравнения, выбирать удачную замену,
+учитывать ограничения и находить все допустимые корни.
+\end{minipage}
+\vspace{13mm}
+\begin{tikzpicture}
+  \draw[accent!65,line width=1.4pt]
+   (-6.5,0) .. controls (-3.5,0.7) and (-1.1,-0.45) .. (1.4,0.1)
+     .. controls (3.1,0.53) and (4.7,0.18) .. (6.5,0.55);
+\end{tikzpicture}\par
+\vspace{9mm}
+{\small\color{quiet}Лёвин Артём Александрович эксклюзивно для Ярослава Верещагина}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\headsec{1. Узнайте повторяющуюся конструкцию}
+Замена переменной полезна, когда одно и то же выражение встречается в уравнении несколько раз.
+Вместо громоздкой конструкции \(u(x)\) вводят короткое обозначение \(t=u(x)\).
+\[
+  F\bigl(u(x)\bigr)=0\quad\longrightarrow\quad F(t)=0.
+\]
+\key{Обязательные шаги:} выбрать \(t\), записать его допустимые значения, решить уравнение для \(t\), выполнить обратную замену и проверить корни.
+
+\headsub{Пример 1. Замена квадрата}
+\[
+ (x+2)^4-4(x+2)^2-5=0.
+\]
+Заметим, что \((x+2)^4=\bigl((x+2)^2\bigr)^2\). Положим
+\[
+ t=(x+2)^2,\qquad t\ge0.
+\]
+Тогда \(t^2-4t-5=0\), откуда \(t=5\) или \(t=-1\). Второе значение исключаем:
+\(t\) обозначает квадрат действительного числа.
+\[
+ (x+2)^2=5\quad\Longleftrightarrow\quad x+2=\pm\sqrt5.
+\]
+\key{Ответ:} \(x=-2-\sqrt5\), \(x=-2+\sqrt5\).
+
+\note{Важно: из \(A^2=c>0\) следуют оба равенства \(A=\sqrt c\) и \(A=-\sqrt c\).}
+
+\headsub{Пример 2. Замена дроби целиком}
+\[
+ \frac{1}{(x-2)^2}-\frac{1}{x-2}-6=0,\qquad x\ne2.
+\]
+Пусть \(t=\dfrac1{x-2}\). Здесь \(t\ne0\), но отрицательные значения допустимы.
+\[
+ t^2-t-6=0\quad\Longleftrightarrow\quad(t-3)(t+2)=0.
+\]
+\[
+ \begin{aligned}
+ t=3&\Longrightarrow\frac1{x-2}=3\Longrightarrow x=\frac73;\\
+ t=-2&\Longrightarrow\frac1{x-2}=-2\Longrightarrow x=\frac32.
+ \end{aligned}
+\]
+\key{Ответ:} \(\dfrac32\), \(\dfrac73\).
+
+\clearpage
+\headsec{2. Проверьте: нужна ли замена вообще?}
+Если одинаковые слагаемые стоят по разные стороны равенства, сначала посмотрите,
+можно ли их сократить. \key{При этом ограничения исходного выражения сохраняются.}
+
+\headsub{Пример 3. Радикалы исчезли, ОДЗ осталась}
+\[
+ x^2-2x+\sqrt{3-x}=8+\sqrt{3-x}.
+\]
+Из корня следует \(3-x\ge0\), то есть \(x\le3\). После сокращения одинаковых
+радикалов получаем
+\[
+ x^2-2x-8=0\quad\Longleftrightarrow\quad(x-4)(x+2)=0.
+\]
+Кандидаты: \(4\) и \(-2\). При \(x=4\) радикал в исходном уравнении не определён,
+поэтому этот кандидат исключается. \key{Ответ:} \(x=-2\).
+
+\headsec{3. Узнавайте другие полезные структуры}
+\headsub{Пример 4. Сумма двух неотрицательных выражений}
+Для действительных \(A\) и \(B\):
+\[
+ A^2+B^2=0\quad\Longleftrightarrow\quad
+ \begin{cases}A=0,\\B=0.\end{cases}
+\]
+Например,
+\[
+ (x^2-25)^2+(x^2+3x-10)^2=0
+\]
+превращается в систему
+\[
+ \begin{cases}x^2-25=0,\\x^2+3x-10=0.\end{cases}
+ \qquad\Longleftrightarrow\qquad
+ \begin{cases}x=\pm5,\\x=-5\ \text{или}\ x=2.\end{cases}
+\]
+Подходят только \emph{общие} решения обоих уравнений. \key{Ответ:} \(x=-5\).
+
+\note{Тот же принцип работает для суммы модулей, а также для суммы арифметических корней,
+если все подкоренные выражения неотрицательны.}
+
+\headsub{Пример 5. Разность квадратов}
+\[
+ x^4=(4x-5)^2\quad\Longleftrightarrow\quad
+ \underbrace{\bigl(x^2-(4x-5)\bigr)}_{A-B}
+ \underbrace{\bigl(x^2+(4x-5)\bigr)}_{A+B}=0.
+\]
+Получаются два уравнения: \(x^2-4x+5=0\) (действительных корней нет) и
+\(x^2+4x-5=0\) (корни \(-5\) и \(1\)).
+\key{Ответ:} \(x=-5\), \(x=1\).
+
+\note{Следите за скобками: \(x^2-(4x-5)=x^2-4x+5\).}
+
+\clearpage
+\headsec{4. Подготовьте выражение к замене}
+Повторяющаяся часть иногда скрыта. Удачная перегруппировка позволяет получить одно и то же \(t\)
+в нескольких местах уравнения.
+
+\headsub{Пример 6. Разница в одну единицу}
+\[
+ (x^2-5x+7)^2-(x-2)(x-3)=3.
+\]
+Поскольку \((x-2)(x-3)=x^2-5x+6\), обозначим
+\[
+ t=x^2-5x+7=\left(x-\frac52\right)^2+\frac34,\qquad t\ge\frac34.
+\]
+Тогда \((x-2)(x-3)=t-1\) и
+\[
+ t^2-(t-1)=3\quad\Longleftrightarrow\quad
+ t^2-t-2=0\quad\Longleftrightarrow\quad t=2\ \text{или}\ t=-1.
+\]
+Остаётся только \(t=2\). Обратная замена:
+\[
+ x^2-5x+7=2\quad\Longleftrightarrow\quad x^2-5x+5=0.
+\]
+\key{Ответ:} \(x=\dfrac{5-\sqrt5}{2}\), \(x=\dfrac{5+\sqrt5}{2}\).
+
+\headsub{Пример 7. Похожие знаменатели}
+\[
+ \frac1{x(x+3)}-\frac1{x^2+3x+2}=\frac1{60}.
+\]
+Положим \(t=x^2+3x\). Тогда \(t\ne0\), \(t\ne-2\) и
+\[
+ \frac1t-\frac1{t+2}=\frac1{60}
+ \quad\Longleftrightarrow\quad
+ \frac2{t(t+2)}=\frac1{60}.
+\]
+Следовательно, \(t^2+2t-120=0\), то есть \(t=10\) либо \(t=-12\).
+Однако
+\[
+ t=x^2+3x=\left(x+\frac32\right)^2-\frac94\ge-\frac94,
+\]
+поэтому \(t=-12\) невозможно. При \(t=10\):
+\[
+ x^2+3x-10=0\quad\Longleftrightarrow\quad x=2\ \text{или}\ x=-5.
+\]
+Оба значения допустимы в исходном уравнении. \key{Ответ:} \(x=-5\), \(x=2\).
+
+\vspace{1mm}
+\noindent\textbf{\color{darkaccent}Самопроверка.} Найдена удобная замена; сохранены ограничения;
+учтены все ветви обратной замены; корни проверены в исходном уравнении.
+
+\clearpage
+\thispagestyle{plain}
+\vspace*{9mm}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм решения уравнения заменой переменной}\par
+\vspace{15mm}
+\begin{tikzpicture}[node distance=12mm]
+\node[fstart] (s) {Начало};
+\node[faction,below=of s] (a) {Найдите повторяющуюся конструкцию \(u(x)\).\\При необходимости сгруппируйте или упростите выражения.};
+\node[faction,below=of a] (b) {Введите \(t=u(x)\).\\Запишите ОДЗ исходного уравнения и ограничения для \(t\).};
+\node[faction,below=of b] (c) {Получите уравнение относительно \(t\) и решите его.};
+\node[faction,below=of c] (d) {Отберите допустимые значения \(t\).\\Для каждого из них решите \(u(x)=t\).};
+\node[faction,below=of d] (e) {Проверьте найденные \(x\) в исходном уравнении.\\Исключите недопустимые значения.};
+\node[fstart,below=of e] (f) {Запишите ответ};
+\draw[farrow] (s)--(a);
+\draw[farrow] (a)--(b);
+\draw[farrow] (b)--(c);
+\draw[farrow] (c)--(d);
+\draw[farrow] (d)--(e);
+\draw[farrow] (e)--(f);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\headsec{Тренировочный блок · Путь А}
+\note{Решите десять уравнений. Оформляйте замену, ограничения, обратную замену и ответ.
+Задания расположены от простых к более содержательным.}
+\vspace{4mm}
+\begin{enumerate}[label=\textbf{\arabic*.},itemsep=7mm]
+ \item \(\displaystyle (x+1)^4-5(x+1)^2+4=0.\)
+ \item \(\displaystyle (x-3)^4-3(x-3)^2-4=0.\)
+ \item \(\displaystyle \frac1{(x-2)^2}-\frac2{x-2}-3=0.\)
+ \item \(\displaystyle \frac2{(x+1)^2}+\frac1{x+1}-3=0.\)
+ \item \(\displaystyle x^2-3x+\sqrt{2-x}=4+\sqrt{2-x}.\)
+ \item \(\displaystyle (x^2-9)^2+(x^2+x-12)^2=0.\)
+ \item \(\displaystyle x^4=(2x+3)^2.\)
+ \item \(\displaystyle (x^2-4x+4)^2-(x^2-4x+2)=4.\)
+ \item \(\displaystyle x^2-2x+2=\frac2{x^2-2x+1}.\)
+ \item \(\displaystyle \frac1{x(x+4)}-\frac1{x^2+4x+3}=\frac1{18}.\)
+\end{enumerate}
+\vfill
+\note{Упражнения нацелены на распознавание структуры: прежде чем раскрывать скобки или
+приводить дроби к общему знаменателю, попробуйте найти удачную замену.}
+\clearpage
+
+\headsec{Ответы к тренировочному блоку}
+\renewcommand{\arraystretch}{1.38}
+\begin{tabularx}{\linewidth}{@{}c>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{0.35\linewidth}@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} & \textbf{Ключ к самопроверке}\\
+\midrule
+1 & \(x=-3,-2,0,1\) & \(t=(x+1)^2\ge0\)\\
+2 & \(x=1,5\) & \(t=(x-3)^2\ge0\)\\
+3 & \(x=1,\;\dfrac73\) & \(x\ne2\)\\
+4 & \(x=-\dfrac53,\;0\) & \(x\ne-1\)\\
+5 & \(x=-1\) & Учитывайте \(x\le2\)\\
+6 & \(x=3\) & Требуется пересечение корней двух уравнений\\
+7 & \(x=-1,3\) & Разность квадратов\\
+8 & \(x=2-\sqrt2,\;2+\sqrt2\) & \(t=(x-2)^2\ge0\)\\
+9 & \(x=0,2\) & \(t=(x-1)^2>0\)\\
+10 & \(x=-2-\sqrt{10},\;-2+\sqrt{10}\) & \(t=x^2+4x\ge-4\)\\
+\bottomrule
+\end{tabularx}
+\vspace{10mm}
+\textbf{Особенно проверьте:}
+\begin{itemize}
+\item В задаче 5 корень \(x=4\) возникает после сокращения радикалов, но нарушает ОДЗ.
+\item В задачах 8--10 ограничения для \(t\) помогают исключать лишние ветви.
+\item В задачах 3, 4, 9 и 10 проверка знаменателей обязательна.
+\end{itemize}
+\vfill
+\begin{center}\small\color{quiet}
+Лёвин Артём Александрович эксклюзивно для Ярослава Верещагина
+\end{center}
+\end{document}
