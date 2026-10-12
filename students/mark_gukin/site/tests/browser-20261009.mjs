@@ -141,8 +141,22 @@ try{
   assert.equal(await run("document.querySelectorAll('#taskList input[type=checkbox]').length"),10,'new lesson training count');
   assert.equal(await run("document.querySelectorAll('[data-case]').length"),2,'new lesson graph presets');
   assert.equal(await run("document.getElementById('graphCurve').getAttribute('d').length > 200"),true,'new lesson graph curve');
-  const switched=await run("(()=>{document.querySelector('[data-case=decrease]').click();return [document.getElementById('graphCaseTitle').textContent,document.getElementById('graphCaseResult').textContent]})()");
-  assert.deepEqual(switched,['Убывающая функция','f(x) = 12 → 2^(−x) = 16 → x = −4.'],'graph cases recalculate');
+
+  const newLessonMathML=await run("(()=>{const maths=[...document.querySelectorAll('main math')];const templates=[...document.querySelectorAll('main template math')];return {count:maths.length,semantic:maths.every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML'&&m.querySelector('semantics > annotation[encoding=\"application/x-tex\"]')),fractions:document.querySelectorAll('main mfrac').length,powers:document.querySelectorAll('main msup').length,subscripts:document.querySelectorAll('main msub').length,legacy:document.querySelectorAll('main sup,main sub').length,training:document.querySelectorAll('#taskList math').length,templates:templates.length,graphFormula:document.querySelector('#graphCaseFormula math')?.namespaceURI}})()");
+  assert.ok(newLessonMathML.count>=90,'11 October MathML coverage: '+JSON.stringify(newLessonMathML));
+  assert.equal(newLessonMathML.semantic,true,'11 October native MathML with LaTeX semantics');
+  assert.ok(newLessonMathML.fractions>=8&&newLessonMathML.powers>=20&&newLessonMathML.subscripts>=5,'structured fractions, powers and indices');
+  assert.equal(newLessonMathML.legacy,0,'no legacy HTML superscripts/subscripts in new lesson');
+  assert.ok(newLessonMathML.training>=20,'all training tasks and answer keys use MathML');
+  assert.equal(newLessonMathML.templates,6,'MathML templates for graph state');
+  assert.equal(newLessonMathML.graphFormula,'http://www.w3.org/1998/Math/MathML','graph formula is native MathML');
+  
+  const switched=await run("(()=>{document.querySelector('[data-case=decrease]').click();const result=document.querySelector('#graphCaseResult math');const formula=document.querySelector('#graphCaseFormula math');const text=[...document.querySelectorAll('#graphCaseText math')];return {title:document.getElementById('graphCaseTitle').textContent,result:result?.querySelector('annotation')?.textContent,formula:formula?.querySelector('annotation')?.textContent,native:result?.namespaceURI,descriptionMath:text.length}})()");
+  assert.equal(switched.title,'Убывающая функция','graph case switch title');
+  assert.equal(switched.result,String.raw`f(x)=12\to 2^{-x}=16\to x=-4`,'graph cases recalculate with MathML');
+  assert.equal(switched.formula,String.raw`f(x)=2^{-x}-4`,'graph formula changes');
+  assert.equal(switched.native,'http://www.w3.org/1998/Math/MathML','dynamic graph result is native MathML');
+  assert.equal(switched.descriptionMath,4,'dynamic graph labels retain MathML');
   assert.equal(await run("(()=>{document.querySelector('#taskList input').click();return document.getElementById('progressText').textContent})()"),'Выполнено: 1 из 10','new lesson task progress');
   await call('Page.reload',{ignoreCache:true});await sleep(220);
   assert.equal(await run("document.querySelector('#taskList input').checked"),true,'new lesson persisted completion');
