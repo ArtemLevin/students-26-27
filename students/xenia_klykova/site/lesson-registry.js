@@ -5,6 +5,51 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-12",
+  "ktpRefs": [],
+  "href": "12.10.26.html",
+  "title": "НОД и НОК: от алгоритма к идее",
+  "navTitle": "НОД и НОК: от алгоритма к идее",
+  "navSubtitle": "Олимпиадная математика: НОД и НОК, простые множители, алгоритм Евклида, взаимная простота и восстановление пары чисел. Урок Ксении Клыковой 12 октября 2026 года.",
+  "summary": "Олимпиадная математика: НОД и НОК, простые множители, алгоритм Евклида, взаимная простота и восстановление пары чисел. Урок Ксении Клыковой 12 октября 2026 года.",
+  "topics": [
+    "НОД и НОК",
+    "простые множители",
+    "алгоритм Евклида",
+    "взаимная простота",
+    "олимпиадные задачи с параметром"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t19_divisibility",
+      "evidenceAnchor": "factorization",
+      "relation": "practiced",
+      "label": "Простые множители: НОД и НОК",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_remainders",
+      "evidenceAnchor": "euclid",
+      "relation": "practiced",
+      "label": "Алгоритм Евклида",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_primes",
+      "evidenceAnchor": "coprime",
+      "relation": "practiced",
+      "label": "Взаимная простота",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "12.10.26.html",
+    "pdf": "../pdf_docs/12.10.26.pdf",
+    "tex": "../tex_docs/12.10.26.tex",
+    "lab": "12.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-09",
   "ktpRefs": [],
   "href": "09.10.26.html",

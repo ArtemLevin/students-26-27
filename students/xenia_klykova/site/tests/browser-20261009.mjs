@@ -116,16 +116,37 @@ try{
   assert.equal(await run("(()=>{document.querySelector('#reset').click();return document.querySelector('#timeValue').textContent})()"),'0,8 с');
   assert.ok((await run("(()=>{document.querySelector('#same').click();return document.querySelector('#feedback').textContent})()")).includes('Верно'));
   assert.equal(await run("(()=>{const e=document.querySelector('#time');e.focus();return document.activeElement===e})()"),true);
+
+  // New 12 October publication: independent visual and interactive regression.
+  for(const [w,h] of [[1440,900],[390,844],[375,812]]){
+    for(const page of ['12.10.26.html','12.10.26-lab.html']){
+      await navigate(page,w,h,false);
+      await snapshot(page.replace('.html','')+'-'+w+'-light');
+      await navigate(page,w,h,true);
+      await snapshot(page.replace('.html','')+'-'+w+'-dark');
+    }
+  }
+  await navigate('12.10.26.html',1440,900);
+  assert.equal(await run("document.querySelectorAll('#tasklist input').length"),10);
+  assert.equal(await run("(()=>{document.querySelector('#tasklist input').click();return document.querySelector('#progressText').textContent})()"),'Выполнено: 1 из 10');
+  assert.equal(await run("document.querySelector('a[href=\"12.10.26-lab.html#euclid\"]')!==null"),true);
+  await navigate('12.10.26-lab.html',1440,900);
+  assert.equal(await run("document.querySelector('#gcd').textContent"),'24');
+  assert.equal(await run("(()=>{document.querySelector('#next').click();return document.querySelector('#stepCount').textContent})()"),'1 / 3');
+  assert.equal(await run("(()=>{location.hash='#pairs';return location.hash})()"),'#pairs');
+  await sleep(100);
+  assert.equal(await run("document.querySelector('#pairCount').textContent"),'2');
+  assert.equal(await run("(()=>{const e=document.querySelector('#pairScenario');e.value='12,360';e.dispatchEvent(new Event('change'));return document.querySelector('#pairCount').textContent})()"),'4');
   await navigate('index.html',1440,900);
   await sleep(400);
-  assert.equal(await run("document.querySelector('#lesson-title').textContent"),'Сначала смысл, потом вычисления');
-  assert.equal(await run("document.querySelector('#latestLessonCta').getAttribute('href')"),'09.10.26.html');
-  assert.equal(await run("document.querySelector('#latestPdfLink').getAttribute('href')"),'../pdf_docs/09.10.26.pdf');
-  assert.equal(await run("document.querySelector('#latestTexLink').getAttribute('href')"),'../tex_docs/09.10.26.tex');
+  assert.equal(await run("document.querySelector('#lesson-title').textContent"),'НОД и НОК: от алгоритма к идее');
+  assert.equal(await run("document.querySelector('#latestLessonCta').getAttribute('href')"),'12.10.26.html');
+  assert.equal(await run("document.querySelector('#latestPdfLink').getAttribute('href')"),'../pdf_docs/12.10.26.pdf');
+  assert.equal(await run("document.querySelector('#latestTexLink').getAttribute('href')"),'../tex_docs/12.10.26.tex');
   assert.equal(await run("document.querySelectorAll('#recentLessons a').length"),3);
   assert.deepEqual(jsErrors,[],'JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Network errors');
-  console.log('Xenia 09.10 browser QA PASS: 18 layouts (3 viewports x 3 pages x 2 themes), interactive checks and network');
+  console.log('Xenia 09.10 and 12.10 browser QA PASS: 30 layouts, interactive checks and network');
 }finally{
   try{ws?.close()}catch(_){}
   chromeProcess.kill('SIGKILL');server.close();
