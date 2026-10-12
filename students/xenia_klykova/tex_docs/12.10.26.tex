@@ -1,0 +1,266 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\geometry{left=24mm,right=24mm,top=23mm,bottom=24mm}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{booktabs,tabularx}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{needspace}
+\usepackage{array}
+
+\definecolor{accent}{HTML}{147A7C}
+\definecolor{darkaccent}{HTML}{155457}
+\definecolor{textgray}{HTML}{30383A}
+\definecolor{muted}{HTML}{687576}
+\definecolor{soft}{HTML}{D5E7E5}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent,pdfauthor={Артём Александрович Лёвин},pdftitle={Чек-лист. НОД и НОК: олимпиадные приёмы. 12.10.26}}
+\setstretch{1.28}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=5pt,topsep=3pt}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}Математика \,$\cdot$\, олимпиадная подготовка}
+\fancyhead[R]{\small\color{muted}12.10.2026}
+\fancyfoot[C]{\small\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\newcommand{\topic}[1]{\needspace{6\baselineskip}\vspace{9pt}{\Large\bfseries\color{darkaccent}#1}\par\vspace{2pt}\noindent\color{soft}\rule{\linewidth}{0.6pt}\color{textgray}\par\vspace{5pt}}
+\newcommand{\subtopic}[1]{\needspace{3\baselineskip}\vspace{4pt}{\large\bfseries\color{darkaccent}#1}\par}
+\newcommand{\idea}[1]{\noindent\makebox[6mm][l]{\color{accent}$\square$}\begin{minipage}[t]{\dimexpr\linewidth-7mm}\raggedright #1\end{minipage}\par\vspace{3pt}}
+\newcommand{\formula}[1]{\[\boxed{#1}\]}
+\newcommand{\gcdop}{\mathop{\text{НОД}}\nolimits}
+\newcommand{\lcmop}{\mathop{\text{НОК}}\nolimits}
+\newcommand{\pair}[2]{(#1;\,#2)}
+\AtBeginDocument{\color{textgray}}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{28mm}
+{\small\color{accent}\bfseries ОЛИМПИАДНАЯ МАТЕМАТИКА}\par
+\vspace{13mm}
+{\fontsize{31}{37}\selectfont\bfseries\color{darkaccent}Чек-лист}\par
+\vspace{8mm}
+{\fontsize{21}{28}\selectfont\bfseries НОД и НОК:}\par
+\vspace{2mm}
+{\fontsize{19}{26}\selectfont олимпиадные приёмы}\par
+\vspace{13mm}
+{\large Разложение на простые множители}\par
+{\large Алгоритм Евклида и взаимная простота}\par
+{\large Задачи с параметром и восстановление чисел}\par
+\vspace{17mm}
+{\color{accent}\rule{38mm}{0.7pt}}\par
+\vspace{9mm}
+{\large\bfseries Ксения Клыкова}\par
+\vspace{3mm}
+{\normalsize 12 октября 2026 года}\par
+\vfill
+{\small\color{muted}Лёвин Артём Александрович}\par
+{\small\color{darkaccent}\bfseries эксклюзивно для Ксении Клыковой}\par
+\vspace{20mm}
+\end{center}
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent!55,line width=1.1pt] ([xshift=25mm,yshift=25mm]current page.south west)
+    .. controls ([xshift=65mm,yshift=41mm]current page.south west)
+    and ([xshift=-65mm,yshift=11mm]current page.south east)
+    .. ([xshift=-24mm,yshift=27mm]current page.south east);
+\end{tikzpicture}
+\clearpage
+
+\topic{1. Простые множители: минимум и максимум}
+\idea{Каждое натуральное число больше $1$ можно представить как произведение степеней простых чисел. Для сравнения разложений удобно использовать \emph{один и тот же набор} простых оснований; отсутствующий множитель имеет степень $0$.}
+\idea{В \textbf{НОД} каждого простого множителя берём \textbf{минимальную} степень; в \textbf{НОК} --- \textbf{максимальную}. Правило действует для любого конечного числа положительных целых чисел.}
+
+\textbf{Пример из занятия.} Разложим $72$ и $120$:
+\[
+\begin{aligned}
+72&=2^3\cdot3^2\cdot5^0,\\[-1pt]
+120&=2^3\cdot3^1\cdot5^1.
+\end{aligned}
+\]
+\[
+\begin{aligned}
+\gcdop(72,120)&=2^3\cdot3^1\cdot5^0=\mathbf{24},\\
+\lcmop(72,120)&=2^3\cdot3^2\cdot5^1=\mathbf{360}.
+\end{aligned}
+\]
+\textit{Проверка:} $24\cdot360=72\cdot120$.
+
+\topic{2. Алгоритм Евклида: сохраняем НОД}
+\idea{Если $a,b$ --- положительные целые числа и $a>b$, то вычитание меньшего числа из большего сохраняет общие делители:}
+\formula{\gcdop(a,b)=\gcdop(a-b,b).}
+\idea{Более общий и особенно полезный приём: для \textbf{любого целого} $k$}
+\formula{\gcdop(a,b)=\gcdop(a-kb,b).}
+Если $a=qb+r$ и $0\le r<b$, то $\gcdop(a,b)=\gcdop(b,r)$. Повторяем деление с остатком до нулевого остатка; \textbf{последний ненулевой остаток} и есть НОД.
+
+\textbf{Пример.} $\gcdop(252,105)$:
+\[
+252=2\cdot105+42,\qquad
+105=2\cdot42+21,\qquad
+42=2\cdot21+0.
+\]
+Следовательно, $\gcdop(252,105)=\mathbf{21}$.
+
+\subtopic{Числа на фиксированном расстоянии}
+\idea{Для любых натуральных $n$ и $k$ верно $\gcdop(n,n+k)=\gcdop(n,k)$.}
+\[
+\gcdop(n,n+1)=\gcdop(n,1)=\mathbf1.
+\]
+\textbf{Вывод:} соседние натуральные числа всегда взаимно просты.
+\[
+\gcdop(n,n+2)=\gcdop(n,2)=
+\begin{cases}
+2,&\text{если $n$ чётное},\\
+1,&\text{если $n$ нечётное}.
+\end{cases}
+\]
+
+\topic{3. Доказываем взаимную простоту}
+Два натуральных числа взаимно просты тогда и только тогда, когда их НОД равен $1$.
+
+\idea{Главный приём: подобрать \emph{кратное} одного выражения так, чтобы при вычитании из другого получилась небольшая константа --- особенно $1$ или $-1$.}
+
+\textbf{Пример 1.} Для любого натурального $n$:
+\[
+\begin{aligned}
+\gcdop(3n+2,3n+5)
+ &=\gcdop(3n+2,3)\\
+ &=\gcdop(2,3)=\mathbf1.
+\end{aligned}
+\]
+Значит, $3n+2$ и $3n+5$ взаимно просты.
+
+\textbf{Пример 2.} Для любого натурального $n$:
+\[
+(12n+5)-2(6n+2)=1.
+\]
+Любой общий делитель исходных выражений делит их разность, равную $1$. Поэтому $\gcdop(12n+5,6n+2)=\mathbf1$.
+
+\subtopic{Важное уточнение о линейных комбинациях}
+Если $d$ делит одновременно $a$ и $b$, то $d$ делит также $xa+yb$ для любых целых $x,y$. \textbf{Но произвольная замена одного числа на $xa+yb$ может изменить НОД.}
+
+\textbf{Контрпример:} $\gcdop(12,20)=4$, а $\gcdop(5\cdot12+20,20)=\gcdop(80,20)=20$.
+
+Безусловно сохраняет НОД замена $a\mapsto a+kb$ (или $a\mapsto -a+kb$), где $k$ --- целое. Для доказательства взаимной простоты достаточно найти \textbf{любую} целочисленную комбинацию исходных чисел, равную $\pm1$.
+
+\clearpage
+\begin{center}
+{\LARGE\bfseries\color{darkaccent}Алгоритм: поиск НОД}\par
+\vspace{3pt}
+{\small\color{muted}Метод Евклида для положительных целых чисел}\par
+\end{center}
+\vspace{11mm}
+\begin{center}
+\begin{tikzpicture}[
+    >=Stealth,
+    base/.style={draw=darkaccent,thick,align=center,inner sep=7pt,font=\small},
+    terminal/.style={base,ellipse,minimum width=46mm,minimum height=11mm,fill=soft!45},
+    action/.style={base,rounded corners=2pt,text width=54mm,minimum height=14mm},
+    decision/.style={base,diamond,aspect=2.25,text width=27mm,inner sep=3pt},
+    arrow/.style={-Stealth,thick,draw=accent},
+    every node/.style={font=\small}
+]
+\node[terminal] (start) at (0,0) {Начало: $a,b>0$};
+\node[action] (sort) at (0,-1.9) {Если $a<b$, поменяйте числа местами};
+\node[action] (divide) at (0,-4.1) {Разделите $a$ на $b$:\\ $a=qb+r$, $0\le r<b$};
+\node[decision] (check) at (0,-7.0) {$r=0$?};
+\node[action,text width=42mm] (update) at (-4.0,-10.2) {Замените пару\\ $(a,b)\leftarrow(b,r)$};
+\node[action,text width=42mm] (answer) at (4.0,-10.2) {$\gcdop(a,b)=b$};
+\node[terminal,minimum width=39mm] (finish) at (4.0,-12.3) {Конец};
+\draw[arrow] (start)--(sort);
+\draw[arrow] (sort)--(divide);
+\draw[arrow] (divide)--(check);
+\draw[arrow] (check.west)-| node[pos=0.23,above]{нет} (update.north);
+\draw[arrow] (check.east)-| node[pos=0.23,above]{да} (answer.north);
+\draw[arrow] (update.west)-- ++(-1.55,0) |- (divide.west);
+\draw[arrow] (answer)--(finish);
+\end{tikzpicture}
+\end{center}
+\vfill
+\noindent\textbf{Почему алгоритм работает.} После каждого деления НОД пары сохраняется, а меньший положительный аргумент убывает. Поэтому процесс заканчивается, когда остаток станет нулевым.
+\clearpage
+
+\topic{4. Выделяем НОД как общий множитель}
+\idea{Пусть $d=\gcdop(a,b)$. Тогда $a=dx$ и $b=dy$, где $\gcdop(x,y)=1$. После деления обоих исходных чисел на их НОД остаётся взаимно простая пара.}
+
+\textbf{Пример из занятия:} $16=4\cdot4$ и $36=4\cdot9$; после выделения $d=4$ получаем взаимно простые $4$ и $9$.
+
+\idea{Для любых положительных целых $a,b$ верно тождество}
+\formula{\gcdop(a,b)\cdot\lcmop(a,b)=ab.}
+Обозначая $m=\lcmop(a,b)$ и пользуясь $a=dx$, $b=dy$, получаем:
+\[
+d\cdot m=d^2xy\quad\Longrightarrow\quad
+\boxed{m=dxy,\qquad xy=\frac md.}
+\]
+
+\topic{5. Восстанавливаем пару по НОД и НОК}
+\idea{Если известны $d=\gcdop(a,b)$ и $m=\lcmop(a,b)$, сначала вычислите $P=m/d$. Затем найдите \textbf{все} пары натуральных взаимно простых множителей $x,y$, для которых $xy=P$. Восстановите $a=dx$, $b=dy$.}
+
+\textbf{Пример из занятия.} $d=4$, $m=36$:
+\[
+xy=\frac{36}{4}=9,\qquad (x,y)=(1,9).
+\]
+Поэтому единственная \textbf{неупорядоченная} пара исходных чисел --- $\pair{4}{36}$.
+
+\textbf{Ещё один пример.} $d=6$, $m=210$. Тогда $xy=35$. Подходят пары $\pair{1}{35}$ и $\pair{5}{7}$, поскольку числа внутри каждой пары взаимно просты. Искомые пары: $\pair{6}{210}$ и $\pair{30}{42}$.
+
+\textbf{Ограничения.} Необходимо, чтобы $d\mid m$; иначе искомых пар нет. Если порядок чисел учитывается, пару с разными числами следует посчитать в двух порядках.
+
+\clearpage
+
+\topic{Тренировочный блок \quad $\cdot$ \quad Путь А}
+\textcolor{muted}{10 заданий. Двигайтесь последовательно. Для доказательств записывайте ключевые преобразования; для задач на пары чисел указывайте все варианты.}
+\begin{enumerate}[label=\textcolor{accent}{\bfseries\arabic*.},itemsep=7pt]
+\item Разложите $48$ и $180$ на простые множители. Найдите их НОД и НОК.
+\item По простым множителям найдите $\gcdop(84,126,210)$ и $\lcmop(84,126,210)$.
+\item Алгоритмом Евклида вычислите $\gcdop(1105,478)$. Запишите цепочку делений с остатком.
+\item Докажите, что для любого натурального $n$ числа $n$ и $n+1$ взаимно просты.
+\item Найдите \textbf{все возможные значения} $\gcdop(n,n+6)$ при натуральном $n$. Укажите условие для каждого значения.
+\item Найдите $\gcdop(5n+1,5n+6)$ для произвольного натурального $n$ и обоснуйте результат.
+\item Докажите, что числа $14n+9$ и $7n+4$ взаимно просты при любом натуральном $n$.
+\item Выразите $\gcdop(17n+8,5n+2)$ через НОД небольшого числа и выражения от $n$. Перечислите все возможные значения.
+\item Найдите все \textbf{неупорядоченные пары} натуральных чисел $(a,b)$, для которых\[\gcdop(a,b)=6,\qquad\lcmop(a,b)=210.\]
+\item Найдите количество и перечислите все \textbf{неупорядоченные пары} натуральных чисел $(a,b)$, для которых\[\gcdop(a,b)=12,\qquad\lcmop(a,b)=360.\]
+\end{enumerate}
+\vspace{6pt}
+\textcolor{muted}{Проверьте: для каждой найденной пары произведение чисел равно произведению её НОД и НОК.}
+\clearpage
+
+\topic{Ответы и ориентиры для проверки}
+{\small\color{muted}Задания на доказательство содержат главный проверочный шаг.}\par\vspace{7pt}
+\renewcommand{\arraystretch}{1.44}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries\color{accent}}p{9mm}X@{}}
+\toprule
+№ & Ответ или ключевой результат \\
+\midrule
+1 & $\gcdop(48,180)=12$, $\lcmop(48,180)=720$. \\
+2 & $\gcdop(84,126,210)=42$, $\lcmop(84,126,210)=1260$. \\
+3 & $1$; последние остатки: $25,\;6,\;1,\;0$. \\
+4 & $\gcdop(n,n+1)=\gcdop(n,1)=1$. \\
+5 & $\gcdop(n,6)\in\{1,2,3,6\}$. Значения по $n\bmod6$:\newline $1$: $n\equiv1,5$; $2$: $n\equiv2,4$; $3$: $n\equiv3$; $6$: $n\equiv0$. \\
+6 & $\gcdop(5n+1,5n+6)=\gcdop(5n+1,5)=1$. \\
+7 & $(14n+9)-2(7n+4)=1$, поэтому НОД равен $1$. \\
+8 & $\gcdop(17n+8,5n+2)=\gcdop(|n-2|,6)$; возможны $1,2,3,6$. \\
+9 & Две пары: $\pair{6}{210}$ и $\pair{30}{42}$. \\
+10 & Четыре пары: $\pair{12}{360}$, $\pair{24}{180}$, $\pair{36}{120}$, $\pair{60}{72}$. \\
+\bottomrule
+\end{tabularx}
+
+\vspace{12mm}
+{\color{accent}\rule{\linewidth}{0.65pt}}\par
+\small\textcolor{muted}{При переборе пар важно одновременно проверить произведение, взаимную простоту множителей $x,y$ и отсутствие повторов при перестановке чисел.}
+\end{document}
