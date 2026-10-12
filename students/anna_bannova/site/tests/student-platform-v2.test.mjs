@@ -226,8 +226,12 @@ test('11.10.26 lesson and laboratory integrate with canonical publication and or
   for(const id of metadata.ktpRefs)assert.ok(state.records[id].lessonRefs.includes('2026-10-11'));
   assert.match(lesson,/grid\.className='graph-tasks'/,'eight source graph tasks are generated as a group');
   for(let n=3;n<=10;n++)assert.match(lesson,new RegExp('\\{n:'+n+',q:'),'source exercise '+n+' exists');
-  assert.match(lesson,/16<sup>1\/2<\/sup>/,'exercise 1 exists');
-  assert.match(lesson,/4<sup>x−1<\/sup>/,'exercise 2 exists');
+  assert.match(lesson,/<msup><mn>16<\/mn>/,'exercise 1 is a MathML power');
+  assert.match(lesson,/<mfrac><mn>1<\/mn><mn>2<\/mn><\/mfrac>/,'exercise 1 uses a true MathML fraction');
+  assert.match(lesson,/<msup><mn>4<\/mn>/,'exercise 2 is a MathML power');
+  assert.doesNotMatch(lesson,/<sup\b|[ˣᵇ⁽⁾¹]/,'no visual-only HTML powers or Unicode exponent lookalikes');
+  assert.doesNotMatch(lab,/<sup\b|[ˣᵇ⁽⁾¹]/,'lab does not use HTML or Unicode superscript hacks');
+  assert.doesNotMatch(lab,/\.innerHTML\s*=/,'math is assembled as namespace-aware DOM nodes');
   assert.match(lesson,/\.\.\/images\/11\.10\.26\.png/);
   assert.match(lesson,/\.\.\/pdf_docs\/11\.10\.26\.pdf/);
   assert.match(lesson,/\.\.\/tex_docs\/11\.10\.26\.tex/);
@@ -240,4 +244,49 @@ test('11.10.26 lesson and laboratory integrate with canonical publication and or
     const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
     assert.equal(new Set(ids).size,ids.length,file+' duplicate ids');
   }
+});
+
+test('11.10.26 renders static mathematical objects using semantic MathML throughout',()=>{
+ const lesson=read('11.10.26.html'),lab=read('11.10.26-lab.html');
+ const beforeScript=file=>file.slice(0,file.indexOf('<script>'));
+ for(const [name,html] of [['lesson',lesson],['lab',lab]]){
+   const source=beforeScript(html),maths=[...source.matchAll(/<math\b[^>]*>[\s\S]*?<\/math>/g)];
+   assert.ok(maths.length>=30,name+' mathematical expressions are MathML');
+   for(const [index,expression] of maths.entries()){
+     assert.match(expression[0],/xmlns="http:\/\/www\.w3\.org\/1998\/Math\/MathML"/,name+' expression '+index+' has MathML namespace');
+     assert.match(expression[0],/<(?:mi|mn|msup|mfrac|msqrt|mroot|mrow)>/,name+' expression '+index+' contains semantic content');
+   }
+   assert.doesNotMatch(source,/<sup\b|ⁿ√a|[ˣᵇ⁽⁾¹]/,name+' contains no HTML/unicode faux mathematics');
+ }
+ assert.match(lesson,/<mroot>/,'nth root uses a proper MathML node');
+ assert.match(lesson,/<mfrac>/,'fractions use MathML fraction nodes');
+ assert.match(lesson,/<msup>/,'powers use proper superscript elements');
+ assert.match(lab,/<msup>/);
+ assert.match(lab,/function fillMath\(el,expr\)/);
+ assert.match(lab,/function fillMixed\(el,source\)/);
+ assert.doesNotMatch(lab,/\.innerHTML\s*=/,'no string-to-HTML assignment');
+});
+
+test('11.10.26 live mathematical formula builders create namespaced MathML',()=>{
+ for(const name of ['11.10.26.html','11.10.26-lab.html']){
+  const html=read(name),src=html.match(/const MATH_NS='http:\/\/www\.w3\.org\/1998\/Math\/MathML';[\s\S]*?function fillMath\(el,expr\)\{[^\n]*\}/)?.[0];
+  assert.ok(src,name+' math builder source exists');
+  const doc={
+   createElementNS(namespaceURI,tagName){return {namespaceURI,tagName,children:[],attrs:{},append(...parts){this.children.push(...parts)},setAttribute(k,v){this.attrs[k]=v},replaceChildren(...nodes){this.children=nodes}}},
+   createTextNode(textContent){return {tagName:'#text',textContent}}
+  };
+  const make=new vm.Script(src+';mathNode');
+  const build=make.runInNewContext({document:doc,Math,Number}, {timeout:1000});
+  function tags(root){return [root.tagName,...(root.children||[]).flatMap(tags)]}
+  for(const [expr,expected] of [
+   ['f(x)=a^(x+b)','msup'],['16^(1/2)+8^(2/3)-2^(-2)','mfrac'],
+   ['f(x)=2^((x+3)/2)','mfrac'],['a=sqrt(2);b=3','msqrt'],
+   ['(-3;1)','mn'],['0,5^(-1,25)-4=0','msup']
+  ]){
+   const root=build(expr);
+   assert.equal(root.tagName,'math',name+': '+expr);
+   assert.equal(root.namespaceURI,'http://www.w3.org/1998/Math/MathML');
+   assert.ok(tags(root).includes(expected),name+': '+expr+' lacks '+expected);
+  }
+ }
 });
