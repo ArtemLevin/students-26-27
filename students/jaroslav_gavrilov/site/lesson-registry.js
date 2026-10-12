@@ -5,6 +5,69 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-12",
+  "ktpRefs": [
+    "ktp-027"
+  ],
+  "href": "12.10.26.html",
+  "title": "Из формулы — к углу. Из неравенства — ко времени.",
+  "navTitle": "Из формулы — к углу. Из неравенства — ко времени.",
+  "navSubtitle": "Занятие Ярослава Гаврилова от 12.10.2026: тригонометрия в прикладных задачах, дифракция, энергия, пороговые неравенства, фаза и доля времени. Путь В на 13–14 октября.",
+  "summary": "Занятие Ярослава Гаврилова от 12.10.2026: тригонометрия в прикладных задачах, дифракция, энергия, пороговые неравенства, фаза и доля времени. Путь В на 13–14 октября.",
+  "topics": [
+    "Тригонометрическая зависимость в прикладных задачах",
+    "Дифракционная решётка и минимальный угол",
+    "Квадрат синуса и удвоенный угол",
+    "Колебания и кинетическая энергия",
+    "Пороговые тригонометрические неравенства",
+    "Доля времени и ограничение первой секундой",
+    "Фазовый сдвиг в моделях напряжения"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege10_01",
+      "evidenceAnchor": "diffraction",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege10_03",
+      "evidenceAnchor": "read",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege10_07",
+      "evidenceAnchor": "energy",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege10_09",
+      "evidenceAnchor": "phase",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege10_04",
+      "evidenceAnchor": "threshold",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_12",
+      "evidenceAnchor": "models",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege08_15",
+      "evidenceAnchor": "practice",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "12.10.26.html",
+    "pdf": "../pdf_docs/12.10.26.pdf",
+    "tex": "../tex_docs/12.10.26.tex",
+    "lab": "12.10.26-lab.html"
+  }
+},
+{
     "date": "2026-10-05",
     "ktpRefs": [
       "ktp-024"
