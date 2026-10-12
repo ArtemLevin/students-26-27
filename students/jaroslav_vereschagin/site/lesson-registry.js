@@ -5,6 +5,60 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-12",
+    "ktpRefs": [],
+    "href": "12.10.26.html",
+    "title": "Замена переменной в уравнениях",
+    "navTitle": "Замена переменной в уравнениях",
+    "navSubtitle": "Ярослав Верещагин: метод замены переменной, семь разобранных примеров, алгоритм, ОДЗ и 10 задач с ответами. Занятие 12.10.26.",
+    "summary": "Ярослав Верещагин: метод замены переменной, семь разобранных примеров, алгоритм, ОДЗ и 10 задач с ответами. Занятие 12.10.26.",
+    "topics": [
+      "Метод замены переменной",
+      "ОДЗ и ограничения",
+      "Обратная замена",
+      "Рациональные выражения",
+      "Разность квадратов",
+      "Задание № 20 ОГЭ"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "oge_20_1_1",
+        "evidenceAnchor": "idea",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_20_1_2",
+        "evidenceAnchor": "example-3",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "oge_20_1_3",
+        "evidenceAnchor": "example-6",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_20_1_4",
+        "evidenceAnchor": "example-1",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_20_1_5",
+        "evidenceAnchor": "check",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "oge_8_3_2",
+        "evidenceAnchor": "example-2",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "12.10.26.html",
+      "pdf": "../pdf_docs/12.10.26.pdf",
+      "tex": "../tex_docs/12.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-08",
     "ktpRefs": [],
     "href": "08.10.26.html",
