@@ -118,10 +118,10 @@ try{
   assert.equal(await run("(()=>{const e=document.querySelector('#time');e.focus();return document.activeElement===e})()"),true);
   await navigate('index.html',1440,900);
   await sleep(400);
-  assert.equal(await run("document.querySelector('#lesson-title').textContent"),'Сначала смысл, потом вычисления');
-  assert.equal(await run("document.querySelector('#latestLessonCta').getAttribute('href')"),'09.10.26.html');
-  assert.equal(await run("document.querySelector('#latestPdfLink').getAttribute('href')"),'../pdf_docs/09.10.26.pdf');
-  assert.equal(await run("document.querySelector('#latestTexLink').getAttribute('href')"),'../tex_docs/09.10.26.tex');
+  assert.equal(await run("document.querySelector('#lesson-title').textContent"),'НОД и НОК: от алгоритма к идее');
+  assert.equal(await run("document.querySelector('#latestLessonCta').getAttribute('href')"),'12.10.26.html');
+  assert.equal(await run("document.querySelector('#latestPdfLink').getAttribute('href')"),'../pdf_docs/12.10.26.pdf');
+  assert.equal(await run("document.querySelector('#latestTexLink').getAttribute('href')"),'../tex_docs/12.10.26.tex');
   assert.equal(await run("document.querySelectorAll('#recentLessons a').length"),3);
   assert.deepEqual(jsErrors,[],'JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Network errors');
