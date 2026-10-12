@@ -44,4 +44,4 @@ try {
  const phase=await run('(()=>{document.querySelector("[data-case=phase]").click();const x=document.querySelector("#moment");x.value="0.75";x.dispatchEvent(new Event("input"));return {share:document.querySelector("#share").textContent,status:document.querySelector("#status").textContent,interval:document.querySelector("#interval").textContent}})()');assert.deepEqual(phase,{share:'50 %',status:'Не ниже порога',interval:'[0,5; 1]'});
  const lamp=await run('(()=>{document.querySelector("[data-case=lamp-start]").click();return document.querySelector("#share").textContent})()');assert.equal(lamp,'70 %');
  assert.deepEqual(errors,[],'Runtime exceptions');assert.deepEqual(bad,[],'HTTP errors');console.log('BROWSER_QA_PASS',JSON.stringify({analysis,first,phase,lamp,screenshots:fs.readdirSync(shots).length}));
-} finally {try{ws?.close()}catch(_){}processChrome.kill('SIGKILL');server.close();fs.rmSync(profile,{recursive:true,force:true})}
+} finally {try{ws?.close()}catch(_){}processChrome.kill('SIGKILL');server.close();fs.rmSync(profile,{recursive:true,force:true,maxRetries:10,retryDelay:150})}
