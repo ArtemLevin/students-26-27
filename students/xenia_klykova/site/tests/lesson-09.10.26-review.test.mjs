@@ -18,12 +18,10 @@ const mastery=fs.readFileSync(path.join(site,'data/mastery-state.json'),'utf8');
 const close=(a,b)=>Math.abs(a-b)<1e-9;
 
 test('canonical registry always controls latest lesson order',()=>{
-  assert.equal(LESSONS[0].date,'2026-10-09');
   const historical=[{date:'2026-10-07',href:'07.10.26.html',title:'Historical enriched lesson'}];
   const composed=composeLessons(LESSONS,historical);
-  assert.equal(composed[0].date,'2026-10-09');
-  assert.equal(composed[1].date,'2026-10-08');
-  assert.equal(composed[2].title,'Historical enriched lesson');
+  assert.deepEqual(composed.slice(0,3).map(x=>x.date),['2026-10-12','2026-10-09','2026-10-08']);
+  assert.equal(composed.find(x=>x.date==='2026-10-07').title,'Historical enriched lesson');
   assert.equal(composed.length,LESSONS.length);
   assert.equal(new Set(composed.map(x=>x.date)).size,composed.length);
   assert.ok(dashboard.includes('composeLessons(BASE_LESSONS,LEGACY_SNAPSHOTS)'));
