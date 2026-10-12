@@ -5,6 +5,71 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-12",
+    "ktpRefs": [],
+    "href": "12.10.26.html",
+    "title": "Растворы, смеси и сплавы",
+    "navTitle": "Растворы, смеси и сплавы",
+    "navSubtitle": "Урок по задачам на растворы, смеси и сплавы: массовая доля, баланс масс при смешивании и разбавлении, равные порции, системы для сплавов, сохранение сухого вещества при высушивании и два эксперимента с общей исходной смесью.",
+    "summary": "Урок по задачам на растворы, смеси и сплавы: массовая доля, баланс масс при смешивании и разбавлении, равные порции, системы для сплавов, сохранение сухого вещества при высушивании и два эксперимента с общей исходной смесью.",
+    "topics": [
+      "Массовая доля и концентрация",
+      "Смешивание и разбавление растворов",
+      "Сплавы и сохранение массы вещества",
+      "Высушивание и сухое вещество",
+      "Системы уравнений для двух опытов"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "text_13",
+        "evidenceAnchor": "mixing",
+        "relation": "practiced",
+        "label": "Смеси и сплавы",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "text_14",
+        "evidenceAnchor": "base",
+        "relation": "practiced",
+        "label": "Концентрация вещества",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "text_15",
+        "evidenceAnchor": "water",
+        "relation": "practiced",
+        "label": "Разбавление раствора",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "text_20",
+        "evidenceAnchor": "alloys",
+        "relation": "practiced",
+        "label": "Уравнение по условию о сплавах",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "eq_20",
+        "evidenceAnchor": "double",
+        "relation": "practiced",
+        "label": "Система уравнений по двум опытам",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "text_16",
+        "evidenceAnchor": "drying",
+        "relation": "touched",
+        "label": "Проценты при высушивании",
+        "practiceDisposition": "none"
+      }
+    ],
+    "materials": {
+      "html": "12.10.26.html",
+      "pdf": "../pdf_docs/12.10.26.pdf",
+      "tex": "../tex_docs/12.10.26.tex"
+    }
+  },
+  {
   "date": "2026-10-08",
   "ktpRefs": [],
   "href": "08.10.26.html",
