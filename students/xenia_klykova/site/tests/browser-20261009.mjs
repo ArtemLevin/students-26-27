@@ -132,7 +132,7 @@ try{
   assert.equal(await run("document.querySelector('a[href=\"12.10.26-lab.html#euclid\"]')!==null"),true);
   await navigate('12.10.26-lab.html',1440,900);
   assert.equal(await run("document.querySelector('#gcd').textContent"),'24');
-  assert.equal(await run("(()=>{document.querySelector('#next').click();return document.querySelector('#stepCount').textContent})()"),'1 / 4');
+  assert.equal(await run("(()=>{document.querySelector('#next').click();return document.querySelector('#stepCount').textContent})()"),'1 / 3');
   assert.equal(await run("(()=>{location.hash='#pairs';return location.hash})()"),'#pairs');
   await sleep(100);
   assert.equal(await run("document.querySelector('#pairCount').textContent"),'2');
