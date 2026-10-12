@@ -1,0 +1,35 @@
+name: Jaroslav 12 October lesson browser QA
+on:
+  push:
+    branches:
+      - codex/jaroslav-lesson-20261012
+    paths:
+      - students/jaroslav_gavrilov/site/12.10.26.html
+      - students/jaroslav_gavrilov/site/12.10.26-lab.html
+      - students/jaroslav_gavrilov/site/tests/12.10.26.browser.mjs
+      - .github/workflows/browser-jaroslav-20261012.yml
+  pull_request:
+    paths:
+      - students/jaroslav_gavrilov/site/12.10.26.html
+      - students/jaroslav_gavrilov/site/12.10.26-lab.html
+      - students/jaroslav_gavrilov/site/tests/12.10.26.browser.mjs
+      - .github/workflows/browser-jaroslav-20261012.yml
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Desktop, mobile, themes, interaction and link QA
+        run: node students/jaroslav_gavrilov/site/tests/12.10.26.browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jaroslav-20261012-browser-screenshots
+          path: jaroslav-review-artifacts/*.png
+          if-no-files-found: ignore
