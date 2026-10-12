@@ -1,0 +1,37 @@
+name: Matvey MathML one-time audit
+on:
+  push:
+    branches:
+      - codex/matvey-2026-10-11-mathml
+    paths:
+      - .github/workflows/matvey-mathml-audit-once.yml
+permissions:
+  contents: read
+jobs:
+  mathml-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run MathML regression tests
+        run: node --test students/matvey_gorbachev/site/tests/mathml-11-10-26.test.mjs
+      - name: Parse all MathML as namespace-aware XML
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+          html = Path('students/matvey_gorbachev/site/11.10.26.html').read_text()
+          lesson = html.split('<main class="wrap" id="main">',1)[1].split('</main>',1)[0]
+          matches = re.findall(r'<math\b[^>]*>[\s\S]*?</math>',lesson)
+          ns='{http://www.w3.org/1998/Math/MathML}'
+          assert len(matches)>=100, len(matches)
+          for index,value in enumerate(matches):
+              root = ET.fromstring(value)
+              assert root.tag == ns+'math',(index,root.tag)
+              assert all(e.tag.startswith(ns) for e in root.iter()), index
+          print(f'Parsed {len(matches)} native MathML expressions successfully')
+          PY
