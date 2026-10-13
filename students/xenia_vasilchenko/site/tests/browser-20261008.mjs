@@ -87,10 +87,19 @@ try{
     fs.writeFileSync(path.join(screenshotDir,filename+'.png'),Buffer.from(shot.data,'base64'));
   }
   for(const [w,h] of [[375,812],[390,844],[768,1024],[1024,768],[1440,900],[1920,1080]]){
-    for(const page of ['08.10.26.html','08.10.26-lab.html','index.html']){
+    for(const page of ['08.10.26.html','08.10.26-lab.html','13.10.26.html','index.html']){
       await navigate(page,w,h,false);await navigate(page,w,h,true);
     }
   }
+
+  await navigate('13.10.26.html',1440,900);
+  assert.equal(await run("document.querySelectorAll('li.task').length"),10);
+  assert.equal(await run("(()=>{document.querySelector('#nextStep').click();return document.querySelector('#stepCount').textContent})()"),'2 / 4');
+  assert.equal(await run("(()=>{document.querySelector('#resetSteps').click();return document.querySelector('#stepCount').textContent})()"),'1 / 4');
+  assert.equal(await run("(()=>{document.querySelector('[data-complete=\\\"0\\\"]').click();return document.querySelector('#progressText').textContent})()"),'Решено 1 из 10');
+  await snapshot('lesson-20261013-desktop');
+  await navigate('13.10.26.html',375,812,true);
+  await snapshot('lesson-20261013-mobile-dark');
   await navigate('08.10.26.html',1440,900);
   assert.equal(await run("(()=>{document.querySelector('[data-guess=c]').click();return document.querySelector('#quizFeedback').textContent.includes('Верно')})()"),true);
   assert.equal(await run("(()=>{document.querySelector('#skills input').click();return document.querySelector('#skillProgress').textContent.includes('1 из 4')})()"),true);
@@ -111,7 +120,7 @@ try{
   await snapshot('lab-work-mobile');
   assert.deepEqual(jsErrors,[],'JavaScript errors');
   assert.deepEqual(badRequests,[],'Network errors');
-  console.log('Browser QA PASS: 6 viewports × 3 pages × 2 themes + interactive checks');
+  console.log('Browser QA PASS: 6 viewports × 4 pages × 2 themes + interactive checks');
 }finally{
   try{ws?.close()}catch(_){}
   chromeProcess.kill('SIGKILL');server.close();
