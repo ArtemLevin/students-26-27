@@ -96,7 +96,7 @@ try{
   assert.equal(await run("document.querySelectorAll('li.task').length"),10);
   assert.equal(await run("(()=>{document.querySelector('#nextStep').click();return document.querySelector('#stepCount').textContent})()"),'2 / 4');
   assert.equal(await run("(()=>{document.querySelector('#resetSteps').click();return document.querySelector('#stepCount').textContent})()"),'1 / 4');
-  assert.equal(await run("(()=>{document.querySelector('[data-complete=\\\"0\\\"]').click();return document.querySelector('#progressText').textContent})()"),'Решено 1 из 10');
+  assert.equal(await run("(()=>{document.querySelector('[data-complete]').click();return document.querySelector('#progressText').textContent})()"),'Решено 1 из 10');
   await snapshot('lesson-20261013-desktop');
   await navigate('13.10.26.html',375,812,true);
   await snapshot('lesson-20261013-mobile-dark');
