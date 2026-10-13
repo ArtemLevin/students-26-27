@@ -5,6 +5,77 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-13",
+  "ktpRefs": [],
+  "href": "13.10.26.html",
+  "title": "Уравнения с дробями и вычитание смешанных чисел",
+  "navTitle": "Уравнения с дробями и вычитание смешанных чисел",
+  "navSubtitle": "Уравнения с обыкновенными дробями, вычитание смешанных чисел с заниманием единицы, порядок действий со скобками и 10 упражнений для закрепления.",
+  "summary": "Уравнения с обыкновенными дробями, вычитание смешанных чисел с заниманием единицы, порядок действий со скобками и 10 упражнений для закрепления.",
+  "topics": [
+    "Уравнения с обыкновенными дробями",
+    "Вычитание смешанных чисел",
+    "Занимание единицы",
+    "Действия со скобками"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "eq_03",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_04",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_05",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_base_07",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_04",
+      "evidenceAnchor": "mixed",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_06",
+      "evidenceAnchor": "mixed",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_07",
+      "evidenceAnchor": "borrow",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_13",
+      "evidenceAnchor": "brackets",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_05",
+      "evidenceAnchor": "brackets",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_base_11",
+      "evidenceAnchor": "equations",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "13.10.26.html",
+    "pdf": "../pdf_docs/13.10.26.pdf"
+  }
+},
+  {
   "date": "2026-10-08",
   "ktpRefs": [],
   "href": "08.10.26.html",
