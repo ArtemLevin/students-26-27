@@ -73,7 +73,8 @@
         date: lesson.date,
         title: lesson.title,
         href: lesson.href || null,
-        note: lesson.note || null
+        note: lesson.note || null,
+        contributesMastery: lesson.masteryEvidence !== false
       });
     }
   }
@@ -112,7 +113,7 @@
   validateCatalog();
 
   const baselineLevels = Object.fromEntries(allItems.map((item) => {
-    const evidenceLevel = itemEvidence(item).length ? 2 : 0;
+    const evidenceLevel = itemEvidence(item).some((entry) => entry.contributesMastery !== false) ? 2 : 0;
     return [item.id, Math.max(clampLevel(item.baseLevel), evidenceLevel)];
   }));
   const baselineRepeat = new Set((DATA.baselineRepeatTopics || []).filter((id) => itemById.has(id)));
@@ -155,7 +156,7 @@
 
   function statusOf(item) {
     if (repeatTopics.has(item.id)) return 'repeat';
-    if (clampLevel(levels[item.id]) > 0) return 'covered';
+    if (clampLevel(levels[item.id]) > 0 || itemEvidence(item).length > 0) return 'covered';
     return 'upcoming';
   }
 
@@ -423,7 +424,7 @@
   function getSummary() {
     const covered = allItems.filter((item) => clampLevel(levels[item.id]) > 0).length;
     const repeat = allItems.filter((item) => repeatTopics.has(item.id)).length;
-    const touched = allItems.filter((item) => clampLevel(levels[item.id]) > 0 || repeatTopics.has(item.id)).length;
+    const touched = allItems.filter((item) => clampLevel(levels[item.id]) > 0 || repeatTopics.has(item.id) || itemEvidence(item).length > 0).length;
     const coverage = allItems.length ? Math.round(touched / allItems.length * 100) : 0;
     const visible = allItems.filter(itemMatches).length;
     return { covered, repeat, touched, coverage, visible, total: allItems.length };
@@ -527,8 +528,8 @@
     const statusBadge = $('#dialogStatus');
     statusBadge.className = `status-${status}`;
     statusBadge.textContent = STATUS_LABELS[status];
-    $('#dialogLevel').textContent = `${level} / 4 · ${LEVEL_LABELS[level]}`;
-    $('#levelExplanation').textContent = LEVEL_EXPLANATIONS[level];
+    $('#dialogLevel').textContent = `${level} / 4 · ${level === 0 && itemEvidence(item).length ? 'Навык затронут, уровень не оценён' : LEVEL_LABELS[level]}`;
+    $('#levelExplanation').textContent = level === 0 && itemEvidence(item).length ? 'Материал этого навыка изучался, но самостоятельное освоение пока не подтверждено.' : LEVEL_EXPLANATIONS[level];
     $$('.level-button', dialog).forEach((button) => {
       const buttonLevel = clampLevel(button.dataset.level);
       button.setAttribute('aria-pressed', String(buttonLevel === level));
