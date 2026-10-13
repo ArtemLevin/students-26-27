@@ -1,0 +1,307 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\sfdefault}{cmss}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\geometry{left=19mm,right=19mm,top=21mm,bottom=20mm}
+\setlength{\headheight}{25pt}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=7pt,topsep=4pt}
+\setlist[itemize]{leftmargin=7mm,itemsep=2pt,topsep=3pt}
+\definecolor{accent}{HTML}{2A6F6B}
+\definecolor{darkaccent}{HTML}{174B48}
+\definecolor{textgray}{HTML}{2F3437}
+\definecolor{softgray}{HTML}{DCE8E6}
+\color{textgray}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Кредиты: произвольные схемы погашения}
+\fancyhead[R]{\small 13.10.26}
+\fancyfoot[C]{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{softgray}\leaders\hrule height \headrulewidth\hfill}}
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\fboxeq}[1]{\[\boxed{#1}\]}
+\newcommand{\mln}{\,\text{млн руб.}}
+\newcommand{\rub}{\,\text{руб.}}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{30mm}
+{\Large\textcolor{accent}{\textbf{Чек-лист}}}\\[10mm]
+{\Huge\textbf{Кредитные задачи}}\\[7mm]
+{\Large\textbf{Произвольные схемы погашения}}\\[5mm]
+{\large Долг, проценты, платежи и ограничения}\\[20mm]
+{\large 13.10.26}\\[29mm]
+{\large Лёвин Артём Александрович}\\[4mm]
+{\large\textcolor{darkaccent}{эксклюзивно для Екатерины Гнедковой}}
+\end{center}
+\vfill
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent!60,line width=1.1pt]
+(-7,0) .. controls (-4.1,0.95) and (-1.3,-0.75) .. (1.45,0.18)
+.. controls (3.65,0.85) and (5.25,-0.5) .. (7,0.25);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{1. Из чего складывается каждый платёж}
+
+В задачах на \key{произвольную схему погашения} остаток долга или размер платежа задаётся особым правилом. Удобнее всего работать с таблицей, одинаковой для всех периодов.
+
+Пусть $S$ --- первоначальная сумма кредита, $p$ --- ставка в процентах \emph{за один период начисления}, $r=\frac{p}{100}$ --- ставка в долях, $k=1+r$ --- коэффициент роста долга.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\toprule
+Столбец таблицы & Как найти \\
+\midrule
+Долг в начале периода & $B_{i-1}$ \\
+Начисленные проценты & $I_i=rB_{i-1}$ \\
+Общая задолженность & $D_i=B_{i-1}+I_i=kB_{i-1}$ \\
+Платёж & $P_i=D_i-B_i$ \\
+Остаток после платежа & $B_i=D_i-P_i$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\key{Основное равенство} для $i$-го периода:
+\fboxeq{B_i=kB_{i-1}-P_i,\qquad B_0=S.}
+Долг после платежа становится начальным долгом следующего периода. Если кредит погашен полностью, $B_n=0$.
+
+Если по условию известны остатки как доли начальной суммы,
+\[
+B_{i-1}=aS,\qquad B_i=bS,
+\]
+то \key{платёж находится сразу}:
+\fboxeq{P_i=(ka-b)S.}
+
+\textbf{Проверяйте порядок событий.} В рассматриваемых задачах сначала начисляют проценты, затем происходит платёж. Месячную ставку применяют к месяцам, годовую --- к годам.
+
+\section*{2. Переплата: два равноценных способа}
+
+Пусть $T=P_1+\dots+P_n$ --- сумма всех платежей. Если кредит погашен полностью и дополнительных комиссий нет, переплата равна сумме начисленных процентов:
+\[
+T-S=\sum_{i=1}^{n}I_i,\qquad
+q=\frac{T-S}{S}\cdot100\%=\frac{\sum_{i=1}^{n}I_i}{S}\cdot100\%.
+\]
+Сравнивать переплату в процентах нужно \key{с суммой выданного кредита} $S$.
+
+\clearpage
+\section*{3. Пример: график остатка задан заранее}
+
+Кредит $S$ выдан 15 января на полгода. В конце каждого месяца долг до внесения платежа увеличивается на $5\%$. Остатки на 15 февраля, марта, апреля, мая, июня и июля равны соответственно
+\[
+0{,}9S;\quad 0{,}8S;\quad 0{,}7S;\quad
+0{,}6S;\quad 0{,}5S;\quad 0.
+\]
+Найдём платежи и процентную переплату.
+
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.42}
+\begin{tabular}{@{}c c c c c c@{}}
+\toprule
+Период & Начало & Проценты & Всего & Платёж & Остаток \\
+\midrule
+1 & $S$ & $0{,}05S$ & $1{,}05S$ & $0{,}15S$ & $0{,}9S$ \\
+2 & $0{,}9S$ & $0{,}045S$ & $0{,}945S$ & $0{,}145S$ & $0{,}8S$ \\
+3 & $0{,}8S$ & $0{,}04S$ & $0{,}84S$ & $0{,}14S$ & $0{,}7S$ \\
+4 & $0{,}7S$ & $0{,}035S$ & $0{,}735S$ & $0{,}135S$ & $0{,}6S$ \\
+5 & $0{,}6S$ & $0{,}03S$ & $0{,}63S$ & $0{,}13S$ & $0{,}5S$ \\
+6 & $0{,}5S$ & $0{,}025S$ & $0{,}525S$ & $0{,}525S$ & $0$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Например, первый платёж:
+\[
+P_1=1{,}05S-0{,}9S=0{,}15S.
+\]
+В последнем месяце остаток после платежа равен нулю, поэтому платёж составляет всю начисленную задолженность $0{,}525S$.
+
+\key{Быстрый путь} --- сложить проценты:
+\[
+\sum I_i=(0{,}05+0{,}045+0{,}04+0{,}035+0{,}03+0{,}025)S
+=0{,}225S.
+\]
+\fboxeq{q=\frac{0{,}225S}{S}\cdot100\%=22{,}5\%.}
+
+\textbf{Самопроверка:} сумма шести платежей равна $1{,}225S$. Это на $0{,}225S$ больше суммы кредита.
+
+\section*{4. Как переводить ограничения в математику}
+
+\begin{itemize}
+\item \key{«Каждый платёж меньше 5 млн»} означает \emph{систему} $P_i<5$ для каждого $i$ (если платежи измерены в миллионах рублей).
+\item \key{«Все платежи вместе меньше 15 млн»} означает \emph{одно} неравенство $P_1+\dots+P_n<15$.
+\item \key{«Остаток на 70\% меньше прежнего»} означает $B_{i}=0{,}30B_{i-1}$, то есть сохранилось $30\%$ прежней суммы.
+\end{itemize}
+
+\clearpage
+\section*{5. Пример: ограничение на каждый платёж}
+
+Кредит $S$ (в млн руб.) выдан под $20\%$ годовых на три года. Остатки после первого, второго и третьего платежей: $0{,}8S$, $0{,}4S$, $0$.
+
+\[
+\begin{aligned}
+P_1&=1{,}2S-0{,}8S=0{,}4S,\\
+P_2&=1{,}2\cdot0{,}8S-0{,}4S=0{,}56S,\\
+P_3&=1{,}2\cdot0{,}4S=0{,}48S.
+\end{aligned}
+\]
+
+Требование «каждый платёж меньше $5$ млн руб.» записывается системой:
+\[
+\begin{cases}
+0{,}4S<5,\\
+0{,}56S<5,\\
+0{,}48S<5.
+\end{cases}
+\quad\Longleftrightarrow\quad
+0<S<\frac{125}{14}\approx8{,}93.
+\]
+
+\key{Внимание к строгости знака!} Если $S$ --- произвольное положительное действительное число, наибольшего значения нет: верхняя граница не достигается. Если по условию $S$ обязано быть \emph{целым числом миллионов рублей}, наибольшее значение $S=8$.
+
+\section*{6. Смешанная схема: сначала только проценты}
+
+Кредит $S=3{,}3\mln$ взят на пять лет под $20\%$ годовых. После платежей первых трёх лет долг остаётся равным $S$. В четвёртом и пятом годах платежи равны; к концу пятого года кредит погашен.
+
+Пусть $k=1{,}2$, $r=0{,}2$. В первые три года выплачиваются \key{только проценты}: $P_1=P_2=P_3=rS=0{,}66\mln$. Поэтому основной долг остаётся равным $S$.
+
+Два последних платежа обозначим $X$. Для четвёртого и пятого годов:
+\[
+\begin{aligned}
+B_4&=kS-X,\\
+B_5&=k(kS-X)-X=k^2S-(k+1)X=0.
+\end{aligned}
+\]
+
+Следовательно,
+\[
+X=\frac{k^2S}{k+1}
+=\frac{1{,}2^2\cdot3{,}3}{2{,}2}=2{,}16\mln.
+\]
+
+Разница последнего и первого платежей:
+\fboxeq{2{,}16-0{,}66=1{,}50\mln.}
+
+\textbf{Вывод:} схема смешанная; равны только два последних платежа.
+
+\clearpage
+\section*{Алгоритм: произвольная кредитная схема}
+\vspace{8mm}
+\begin{center}
+\begin{tikzpicture}[
+  >=Latex,
+  start/.style={ellipse,draw=accent,very thick,minimum width=38mm,minimum height=10mm,align=center,fill=accent!5},
+  action/.style={rectangle,rounded corners=2pt,draw=accent,thick,text width=108mm,minimum height=11mm,align=center,inner sep=5pt},
+  branch/.style={diamond,aspect=2.9,draw=darkaccent,thick,align=center,text width=39mm,inner sep=2pt},
+  split/.style={rectangle,rounded corners=2pt,draw=accent,thick,text width=60mm,minimum height=18mm,align=center,inner sep=4pt},
+  arr/.style={-{Latex[length=2.4mm]},thick,color=darkaccent},
+  font=\small
+]
+\node[start] (begin) at (0,0) {Начало};
+\node[action] (data) at (0,-1.6) {Определите $S$, ставку за период $r$ и даты начислений и платежей};
+\node[action] (balances) at (0,-3.2) {Выпишите $B_0=S$ и все известные остатки долга};
+\node[action] (interest) at (0,-4.8) {Для очередного периода: $I_i=rB_{i-1}$, $D_i=(1+r)B_{i-1}$};
+\node[branch] (known) at (0,-7.0) {Известен остаток $B_i$?};
+\node[split] (yes) at (-4.05,-9.5) {Найдите платёж:\par $P_i=D_i-B_i$};
+\node[split] (no) at (4.05,-9.5) {Обозначьте платёж $P_i$ (при равенстве --- $X$);\par $B_i=D_i-P_i$};
+\node[action] (next) at (0,-12.0) {Повторите расчёт для остальных периодов; используйте $B_n=0$, если кредит погашен};
+\node[action] (condition) at (0,-13.9) {Составьте требуемое уравнение или неравенство; проверьте единицы измерения и строгие границы};
+\node[start] (end) at (0,-15.6) {Ответ и проверка};
+\draw[arr] (begin)--(data);
+\draw[arr] (data)--(balances);
+\draw[arr] (balances)--(interest);
+\draw[arr] (interest)--(known);
+\draw[arr] (known.west) -| node[pos=0.20,above] {да} (yes.north);
+\draw[arr] (known.east) -| node[pos=0.20,above] {нет} (no.north);
+\coordinate (join) at (0,-11.1);
+\draw[thick,color=darkaccent] (yes.south) |- (join);
+\draw[thick,color=darkaccent] (no.south) |- (join);
+\draw[arr] (join)--(next.north);
+\draw[arr] (next)--(condition);
+\draw[arr] (condition)--(end);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\section*{7. Тренировочный блок --- Путь А}
+\textbf{10 задач по нарастающей сложности.} В каждом задании проценты начисляются \emph{перед} очередным платежом; если указана ставка $p\%$, она действует за один соответствующий период.
+
+\begin{enumerate}
+\item В начале месяца долг составлял $200\,000\rub$. За месяц он вырос на $5\%$. После платежа осталось $180\,000\rub$. Найдите платёж.
+
+\item В начале года долг составлял $400\,000\rub$. Банк начислил $10\%$, затем заёмщик заплатил $170\,000\rub$. Каков остаток долга?
+
+\item Кредит $1\mln$ выдан на три года под $20\%$ годовых. После платежей первого, второго и третьего годов остатки составляют соответственно $0{,}7S$, $0{,}4S$ и $0$. Найдите все три платежа в миллионах рублей.
+
+\item Кредит $S$ выдан на три месяца под $4\%$ в месяц. Остатки после первого, второго и третьего платежей равны $0{,}75S$, $0{,}25S$, $0$. На сколько процентов общая сумма платежей больше суммы кредита?
+
+\item В начале года долг составлял $800\,000\rub$. За год банк начислил $15\%$. После платежа долг стал на $30\%$ меньше суммы, имевшейся \emph{в начале года}. Найдите платёж.
+
+\item Кредит $S$ миллионов рублей выдан на три года под $20\%$ годовых. Остатки после платежей равны $0{,}8S$, $0{,}4S$, $0$. Каждый платёж строго меньше $5\mln$. Найдите наибольшее $S$, если $S$ --- положительное целое число миллионов рублей.
+
+\item Кредит $S$ миллионов рублей выдан на три года под $10\%$ годовых. Остатки после платежей равны $0{,}6S$, $0{,}3S$, $0$. Общая сумма платежей строго меньше $15\mln$. Найдите наибольшее $S$, если $S$ --- положительное целое число миллионов рублей.
+
+\item Кредит $2{,}2\mln$ выдан на четыре года под $20\%$ годовых. В первые два года остаток долга после каждого платежа равен первоначальной сумме кредита. В третьем и четвёртом годах платежи одинаковы; к концу четвёртого года долг равен нулю. На сколько миллионов рублей последний платёж больше первого?
+
+\item Кредит $S$ выдан на два года под $25\%$ годовых. После первого платежа осталось $0{,}6S$, после второго --- $0$. Общая сумма двух платежей равна $7\mln$. Найдите первоначальную сумму кредита.
+
+\item Кредит $S$ выдан на три года под $20\%$ годовых. В конце первого года остаток долга стал на $70\%$ меньше начального, в конце второго --- на $70\%$ меньше остатка после первого года, а в конце третьего долг выплачен полностью. На сколько процентов общая сумма платежей больше первоначального кредита?
+\end{enumerate}
+
+\clearpage
+\section*{Ответы к тренировочному блоку}
+\begin{center}
+\renewcommand{\arraystretch}{1.65}
+\begin{tabularx}{\linewidth}{@{}c >{\raggedright\arraybackslash}X@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $30\,000\rub$ \\
+2 & $270\,000\rub$ \\
+3 & $P_1=0{,}50\mln$; $P_2=0{,}44\mln$; $P_3=0{,}48\mln$ \\
+4 & $8\%$ \\
+5 & $360\,000\rub$ \\
+6 & $8\mln$ \\
+7 & $12\mln$ \\
+8 & $1\mln$ \\
+9 & $5\mln$ \\
+10 & $27{,}8\%$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vspace{7mm}
+\key{Контрольные вопросы для самостоятельной проверки}
+\begin{itemize}
+\item Учитывали ли Вы проценты до каждого платежа?
+\item Отличали ли Вы условие на \emph{каждый} платёж от условия на \emph{сумму} платежей?
+\item Проверили ли Вы смысл выражений «на $70\%$ меньше» и «равен $70\%$»?
+\item Если использовалось строгое неравенство, проверили ли Вы, достигается ли найденная граница?
+\end{itemize}
+
+\end{document}
