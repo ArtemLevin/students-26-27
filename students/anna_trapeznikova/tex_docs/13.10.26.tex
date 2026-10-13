@@ -1,0 +1,250 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{cmap}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,left=22mm,right=22mm,top=22mm,bottom=21mm,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{426B74}
+\definecolor{darkaccent}{HTML}{264C55}
+\definecolor{textgray}{HTML}{394145}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\setstretch{1.17}
+\setlength{\parindent}{0pt}
+\setlist[enumerate]{leftmargin=1.65em,itemsep=0.42em,topsep=0.2em}
+\setlist[itemize]{leftmargin=1.5em,itemsep=0.16em,topsep=0.15em}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{textgray}Многочлены и рациональные неравенства}
+\fancyhead[R]{\small\color{textgray}13.10.26}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\lessonsection}[1]{\vspace{0.3em}\section*{\color{darkaccent}#1}\vspace{-0.75em}{\color{accent}\rule{\linewidth}{0.5pt}}\vspace{0.18em}}
+\newcommand{\note}[1]{\par\smallskip\textbf{Важно.} #1\par}
+\newcommand{\task}[2]{\item \textbf{#1}\par\vspace{-0.2em}\[#2\]\vspace{-0.45em}}
+
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{24mm}
+{\Large\color{darkaccent}\bfseries Чек-лист}\\[10mm]
+{\Huge\bfseries Многочлены}\\[3mm]
+{\Huge\bfseries и рациональные неравенства}\\[10mm]
+{\large Схема Горнера · кратность корней · метод интервалов · замена переменной}\\[21mm]
+{\large 13 октября 2026 года}\\[23mm]
+\begin{minipage}{0.79\linewidth}
+\centering\large
+Как перейти от уравнения к разложению, правильно расставить знаки и сократить вычисления, заметив повторяющееся выражение.
+\end{minipage}
+\vfill
+{\large\bfseries Лёвин Артём Александрович}\\[3mm]
+{\large эксклюзивно для Анны Трапезниковой}
+\vspace{17mm}
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent!70,line width=1.1pt]
+([xshift=23mm,yshift=14mm]current page.south west)
+.. controls ([xshift=69mm,yshift=32mm]current page.south west)
+and ([xshift=-75mm,yshift=8mm]current page.south east)
+.. ([xshift=-23mm,yshift=18mm]current page.south east);
+\end{tikzpicture}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\lessonsection{1. Корни многочлена и схема Горнера}
+Если $P(r)=0$, то по теореме Безу многочлен $P(x)$ делится на $x-r$ без остатка:
+\[
+\boxed{P(x)=(x-r)Q(x).}
+\]
+Для многочлена с целыми коэффициентами и старшим коэффициентом $1$ каждый \emph{целый} корень делит свободный член. Это даёт кандидатов, которых необходимо проверить подстановкой.
+
+\textbf{Пример.} Решим $x^3-x^2-8x+12=0$. Число $2$ подходит:
+\[
+P(2)=8-4-16+12=0.
+\]
+Делим на $x-2$ по схеме Горнера:
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}c@{\hspace{7mm}}rrrr@{}}
+\toprule
+$r=2$ & $1$ & $-1$ & $-8$ & $12$\\
+\midrule
+Произведения & & $2$ & $2$ & $-12$\\
+\textbf{Результат} & $\mathbf{1}$ & $\mathbf{1}$ & $\mathbf{-6}$ & $\mathbf{0}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Последнее число --- остаток; остальные --- коэффициенты частного $x^2+x-6$.
+\[
+\begin{aligned}
+P(x)&=(x-2)(x^2+x-6)\\
+&=(x-2)^2(x+3).
+\end{aligned}
+\]
+Корни уравнения: $-3$ и $2$. Корень $2$ имеет \emph{кратность $2$}. В множестве решений его записывают один раз.
+
+\note{Если пропущена степень, обязательно запишите нулевой коэффициент. Для многочлена четвёртой степени после первого деления получится кубический; при необходимости схему Горнера можно применить повторно.}
+
+\lessonsection{2. Неравенство с корнем чётной кратности}
+Рассмотрим $x^3-x^2-5x-3\ge0$. Подбор корня $-1$ и схема Горнера дают
+\[
+(x+1)(x^2-2x-3)=(x+1)^2(x-3)\ge0.
+\]
+В точке $x=-1$ множитель $(x+1)^2$ обнуляется, но его знак при проходе через точку \emph{не меняется}. При $x<3$, кроме $x=-1$, произведение отрицательно; при $x>3$ оно положительно.
+\[
+\boxed{x\in\{-1\}\cup[3;+\infty).}
+\]
+\note{На числовой прямой сначала находят нули соответствующего уравнения. Затем определяют знаки на промежутках и отдельно решают, какие граничные точки включаются в ответ.}
+
+\lessonsection{3. Рациональное неравенство: ОДЗ прежде знаков}
+Решим пример с корнем кратности $3$:
+\[
+\frac{(x-2)^3(x+4)}{x(x-5)}\ge0,
+\qquad x\ne0,\quad x\ne5.
+\]
+Нули числителя: $-4$ и $2$; запрещённые точки знаменателя: $0$ и $5$. Корень $2$ имеет нечётную кратность, поэтому при переходе через него знак меняется.
+\begin{center}
+\begin{tikzpicture}[x=0.94cm,y=1cm,>=Stealth]
+\draw[->,thick,accent] (-5,0)--(6.4,0) node[below right] {$x$};
+\foreach \x/\v in {-4/-4,2/2}{\fill[darkaccent] (\x,0) circle (2.7pt);\node[below=5pt] at (\x,0) {$\v$};}
+\foreach \x/\v in {0/0,5/5}{\draw[darkaccent,thick,fill=white] (\x,0) circle (2.8pt);\node[below=5pt] at (\x,0) {$\v$};}
+\node[above=5pt] at (-4.55,0) {$+$};
+\node[above=5pt] at (-2.0,0) {$-$};
+\node[above=5pt] at (1,0) {$+$};
+\node[above=5pt] at (3.4,0) {$-$};
+\node[above=5pt] at (5.7,0) {$+$};
+\end{tikzpicture}
+\end{center}
+Знаки «плюс» с учётом нулей числителя и ОДЗ дают
+\[
+\boxed{x\in(-\infty;-4]\cup(0;2]\cup(5;+\infty).}
+\]
+\textbf{Особый случай: сокращение.} В дроби
+\[
+\frac{(x+2)(2x^2-x-1)}{7x^2-4x-3}
+=\frac{(x+2)(2x+1)(x-1)}{(7x+3)(x-1)}
+\]
+точки $x=1$ и $x=-\frac37$ запрещены \emph{до сокращения}. Даже если множитель $x-1$ исчез из записи, значение $x=1$ нельзя возвращать в ОДЗ.
+
+\lessonsection{4. Замена переменной в дробном неравенстве}
+Если знаменатели отличаются лишь константой, ищите повторяющееся выражение. Пример:
+\[
+\frac{1}{x^2+2x+2}-\frac{1}{x^2+2x+3}<\frac16.
+\]
+Положим $t=x^2+2x+2=(x+1)^2+1$. Здесь \emph{обязательно} $t\ge1$, а второй знаменатель равен $t+1$. Получаем:
+\[
+\frac1t-\frac1{t+1}<\frac16
+\quad\Longleftrightarrow\quad
+\frac{(t+3)(t-2)}{t(t+1)}>0.
+\]
+Если решать методом интервалов на всей числовой прямой, получим
+\[
+t\in(-\infty;-3)\cup(-1;0)\cup(2;+\infty).
+\]
+Но реальный диапазон $t\ge1$ оставляет только $t>2$. Обратная подстановка:
+\[
+(x+1)^2+1>2 \quad\Longleftrightarrow\quad
+(x+1)^2>1.
+\]
+\[
+\boxed{x\in(-\infty;-2)\cup(0;+\infty).}
+\]
+\note{Нельзя автоматически предполагать $t\ge0$ для любого квадратного трёхчлена. Диапазон замены устанавливается по конкретному выражению. Нельзя также умножать неравенство на знаменатель с неизвестным знаком без анализа ОДЗ и знака.}
+
+\lessonsection{5. Что проверять в конце решения}
+\begin{itemize}
+\item В схеме Горнера остаток равен $P(r)$, а степень частного уменьшилась на $1$.
+\item При переходе через корень \emph{чётной} кратности знак сохраняется; через корень нечётной кратности --- меняется.
+\item Нули числителя включаются только при нестрогом знаке; нули знаменателя всегда исключаются.
+\item После сокращения дроби все исходные запреты по ОДЗ сохраняются.
+\item Решение после замены возвращено к $x$; учтён реальный диапазон значений $t$.
+\item Несколько отдельных промежутков записаны \emph{объединением}; одновременные условия --- \emph{системой}.
+\end{itemize}
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: рациональное неравенство}
+\end{center}
+\vspace{3mm}
+\begin{center}
+\begin{tikzpicture}[
+ every node/.style={font=\small,align=center},
+ startstop/.style={ellipse,draw=accent,line width=0.9pt,minimum width=52mm,minimum height=11mm,inner sep=2.8mm},
+ act/.style={rounded corners=1.7mm,rectangle,draw=accent,line width=0.9pt,text width=116mm,minimum height=13mm,inner sep=3mm},
+ arrow/.style={-{Stealth[length=2.5mm]},line width=0.85pt,accent},
+ node distance=9mm]
+\node[startstop] (start) {Дано рациональное неравенство};
+\node[act,below=of start] (norm) {Перенесите всё влево и получите одну дробь, сравниваемую с нулём};
+\node[act,below=of norm] (factor) {Разложите числитель и знаменатель на множители; при необходимости примените схему Горнера};
+\node[act,below=of factor] (domain) {Запишите ОДЗ исходной дроби: все нули знаменателя исключены даже после сокращения};
+\node[act,below=of domain] (roots) {Найдите нули числителя, отметьте все критические точки на числовой прямой};
+\node[act,below=of roots] (signs) {Определите знак на одном промежутке и учитывайте кратность каждой точки при переходе};
+\node[act,below=of signs] (select) {Выберите промежутки нужного знака; проверьте включение нулей и исключение запрещённых точек};
+\node[startstop,below=of select] (finish) {Запишите ответ};
+\draw[arrow] (start)--(norm);
+\draw[arrow] (norm)--(factor);
+\draw[arrow] (factor)--(domain);
+\draw[arrow] (domain)--(roots);
+\draw[arrow] (roots)--(signs);
+\draw[arrow] (signs)--(select);
+\draw[arrow] (select)--(finish);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\lessonsection{Тренировочный блок. Путь А}
+\textbf{10 заданий.} Решайте последовательно. Для неравенств указывайте ОДЗ и критические точки; для задач с заменой --- диапазон новой переменной. В тренировочном блоке решения не приводятся.
+\begin{enumerate}
+\task{Найдите целый корень и решите уравнение с помощью схемы Горнера.}{x^3-2x^2-5x+6=0.}
+\task{Используйте схему Горнера с $r=2$, затем теорему Виета.}{x^3-3x^2-10x+24=0.}
+\task{Примените схему Горнера последовательно дважды и найдите все корни.}{x^4-2x^3-13x^2+14x+24=0.}
+\task{Учитывайте кратность корня при решении неравенства.}{x^3+x^2-8x-12\ge0.}
+\task{Решите неравенство методом интервалов. Объясните поведение знака в точке $x=1$.}{(x+3)(x-1)^2(x-4)\le0.}
+\task{Решите дробно-рациональное неравенство; отметьте все запрещённые точки.}{\frac{(x-1)^3(x+3)}{x(x-4)}\ge0.}
+\task{Разложите числитель и знаменатель; при сокращении сохраните исходную ОДЗ.}{\frac{(x+3)(x^2-1)}{(x-1)(x+4)}\ge0.}
+\task{Сделайте замену $t=x^2+2x+2$ и решите неравенство.}{\frac{1}{x^2+2x+2}-\frac{1}{x^2+2x+3}<\frac1{12}.}
+\task{Используйте замену $t=x^2-4x+5$; найдите допустимый диапазон $t$.}{\frac{2}{x^2-4x+5}-\frac{2}{x^2-4x+7}\le\frac12.}
+\task{Выберите замену самостоятельно и решите неравенство.}{\frac{3}{x^2+x+1}-\frac{3}{x^2+x+2}>\frac12.}
+\end{enumerate}
+
+\clearpage
+\lessonsection{Ответы для самопроверки}
+\renewcommand{\arraystretch}{1.47}
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+№ & Ответ\\
+\midrule
+1 & $x\in\{-2;1;3\}$\\
+2 & $x\in\{-3;2;4\}$\\
+3 & $x\in\{-3;-1;2;4\}$\\
+4 & $x\in\{-2\}\cup[3;+\infty)$\\
+5 & $x\in[-3;4]$\\
+6 & $x\in(-\infty;-3]\cup(0;1]\cup(4;+\infty)$\\
+7 & $x\in(-4;-3]\cup[-1;1)\cup(1;+\infty)$; $x=1$ запрещён\\
+8 & $x\in(-\infty;-1-\sqrt2)\cup(-1+\sqrt2;+\infty)$\\
+9 & $x\in(-\infty;1]\cup[3;+\infty)$\\
+10 & $x\in\left(\dfrac{-1-\sqrt5}{2};\dfrac{-1+\sqrt5}{2}\right)$\\
+\bottomrule
+\end{tabularx}
+
+\bigskip
+\textbf{Самопроверка метода.} В заданиях 1--3 обратите внимание на коэффициенты частного и остаток. В заданиях 4--7 --- на кратность корней, знаки и ОДЗ. В заданиях 8--10 --- на диапазон новой переменной и обратную подстановку.
+
+\end{document}
