@@ -5,6 +5,65 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-13",
+    "ktpRefs": [],
+    "href": "13.10.26.html",
+    "title": "Уравнения повышенной сложности",
+    "navTitle": "Уравнения повышенной сложности",
+    "navSubtitle": "Решение уравнений повышенной сложности: группировка, общий множитель, формулы сокращённого умножения, разность квадратов, нулевое произведение и сумма квадратов.",
+    "summary": "Решение уравнений повышенной сложности: группировка, общий множитель, формулы сокращённого умножения, разность квадратов, нулевое произведение и сумма квадратов.",
+    "topics": [
+      "разложение на множители",
+      "группировка",
+      "вынесение общего множителя",
+      "формулы сокращённого умножения",
+      "разность квадратов",
+      "нулевое произведение",
+      "сумма квадратов"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "oge_08_03",
+        "evidenceAnchor": "common-factor",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_08_04",
+        "evidenceAnchor": "common-factor",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_08_05",
+        "evidenceAnchor": "grouping",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_08_06",
+        "evidenceAnchor": "formulas",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_08_07",
+        "evidenceAnchor": "formulas",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "oge_08_08",
+        "evidenceAnchor": "difference",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_09_05",
+        "evidenceAnchor": "strategy",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "13.10.26.html",
+      "pdf": "../pdf_docs/13.10.26.pdf"
+    }
+  },
+  {
     "date": "2026-10-06",
     "ktpRefs": [],
     "href": "06.10.26.html",
