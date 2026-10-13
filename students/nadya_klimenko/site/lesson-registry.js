@@ -5,6 +5,115 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-13",
+    "ktpRefs": [],
+    "href": "13.10.26.html",
+    "title": "Смешанные числа и текстовые задачи",
+    "navTitle": "Смешанные числа и текстовые задачи",
+    "navSubtitle": "Уравнения, лодка, три рейса и совместная работа",
+    "summary": "Надя Клименко, 13.10.26. Смешанные числа и математические модели: уравнения, движение по реке, три рейса и совместная работа.",
+    "topics": [
+      "смешанные числа",
+      "сложение и вычитание дробей",
+      "уравнения по тексту",
+      "движение по реке",
+      "задачи на части",
+      "совместная работа"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "frac_04",
+        "evidenceAnchor": "arithmetic",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_08",
+        "evidenceAnchor": "arithmetic",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_09",
+        "evidenceAnchor": "arithmetic",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_11",
+        "evidenceAnchor": "arithmetic",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_12",
+        "evidenceAnchor": "arithmetic",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "dec_07",
+        "evidenceAnchor": "arithmetic",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "nat_09",
+        "evidenceAnchor": "arithmetic",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_11",
+        "evidenceAnchor": "equations",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_13",
+        "evidenceAnchor": "equations",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "model_01",
+        "evidenceAnchor": "models",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "model_02",
+        "evidenceAnchor": "models",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "model_03",
+        "evidenceAnchor": "trips",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "model_09",
+        "evidenceAnchor": "river",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "model_10",
+        "evidenceAnchor": "joint",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "model_11",
+        "evidenceAnchor": "joint",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "strategy_02",
+        "evidenceAnchor": "trips",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "strategy_10",
+        "evidenceAnchor": "reflect",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "13.10.26.html",
+      "pdf": "../pdf_docs/13.10.26.pdf",
+      "tex": "../tex_docs/13.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-10",
     "ktpRefs": [],
     "href": "10.10.26.html",
