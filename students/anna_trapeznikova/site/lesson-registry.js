@@ -4,6 +4,94 @@ export const ARCHIVE_PAGE_SIZE=10;
 const MONTHS_GENITIVE=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
 export const LESSONS=[
+{
+  "date": "2026-10-13",
+  "ktpRefs": [],
+  "href": "13.10.26.html",
+  "title": "Многочлены и рациональные неравенства",
+  "navTitle": "Многочлены и рациональные неравенства",
+  "navSubtitle": "Многочлены и рациональные неравенства: схема Горнера, кратность корней, ОДЗ, метод интервалов и замена переменной. Занятие Анны Трапезниковой 13 октября 2026 года.",
+  "summary": "Многочлены и рациональные неравенства: схема Горнера, кратность корней, ОДЗ, метод интервалов и замена переменной. Занятие Анны Трапезниковой 13 октября 2026 года.",
+  "topics": [
+    "схема Горнера и корни многочлена",
+    "кратность корней",
+    "метод интервалов в рациональных неравенствах",
+    "область допустимых значений",
+    "замена переменной в дробном неравенстве"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "polynomials_06",
+      "evidenceAnchor": "horner",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "polynomials_07",
+      "evidenceAnchor": "horner",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "polynomials_08",
+      "evidenceAnchor": "horner",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "polynomials_09",
+      "evidenceAnchor": "horner",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_02",
+      "evidenceAnchor": "multiplicity",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_10",
+      "evidenceAnchor": "multiplicity",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_11",
+      "evidenceAnchor": "rational",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_12",
+      "evidenceAnchor": "rational",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_13",
+      "evidenceAnchor": "multiplicity",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_14",
+      "evidenceAnchor": "rational",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "polynomials_13",
+      "evidenceAnchor": "rational",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "sets_logic_03",
+      "evidenceAnchor": "substitution",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "sets_logic_04",
+      "evidenceAnchor": "substitution",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "13.10.26.html",
+    "pdf": "../pdf_docs/13.10.26.pdf",
+    "lab": "13.10.26-lab.html"
+  }
+},
   {
   "date": "2026-10-06",
   "ktpRefs": [],
