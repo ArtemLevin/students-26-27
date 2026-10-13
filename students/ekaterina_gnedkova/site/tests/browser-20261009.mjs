@@ -122,6 +122,47 @@ try{
     assert.equal(state.length,3);
     assert.ok(state.every(x=>x.rowHeaders===x.count));
   }
+  // The October 9 lesson remains independently tested above.
+  // The new October 13 lesson must render and recompute without regressions.
+  for(const view of [{name:'desktop',w:1440,h:900},{name:'mobile',w:375,h:812},{name:'narrow',w:320,h:700}]){
+    await call('Emulation.setDeviceMetricsOverride',{width:view.w,height:view.h,deviceScaleFactor:1,mobile:view.w<500});
+    await navigate('13.10.26.html');
+    await wait('document.querySelectorAll("#loanRows tr").length===6');
+    for(const theme of ['light','dark']){
+      await run('document.documentElement.dataset.theme="'+theme+'"');
+      const metrics=await execute(()=>({
+        width:document.documentElement.scrollWidth,
+        viewport:innerWidth,
+        rows:document.querySelectorAll('#loanRows tr').length,
+        tasks:document.querySelectorAll('.tasks>li').length,
+        overpay:document.querySelector('#overPct').textContent,
+        uniqueIds:(()=>{const ids=[...document.querySelectorAll('[id]')].map(x=>x.id);return new Set(ids).size===ids.length;})()
+      }));
+      assert.ok(metrics.width<=metrics.viewport+2,'New lesson overflow '+view.name+'/'+theme+' '+JSON.stringify(metrics));
+      assert.equal(metrics.rows,6);
+      assert.equal(metrics.tasks,10);
+      assert.equal(metrics.overpay,'22,5%');
+      assert.equal(metrics.uniqueIds,true);
+      await screenshot('lesson-131026-'+view.name+'-'+theme);
+    }
+    const interaction=await execute(()=>{
+      const sum=document.querySelector('#loanSum'),rate=document.querySelector('#loanRate');
+      sum.value='2';rate.value='10';rate.dispatchEvent(new Event('input',{bubbles:true}));
+      const result={overpay:document.querySelector('#overPct').textContent,
+        total:document.querySelector('#totalPaid').textContent};
+      document.querySelector('#loanReset').click();
+      result.reset=document.querySelector('#overPct').textContent;
+      for(const [name,value] of [['q1','b'],['q2','c'],['q3','b']]){
+        document.querySelector('input[name="'+name+'"][value="'+value+'"]').checked=true;
+      }
+      document.querySelector('#quiz').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+      result.quiz=document.querySelector('#quizFeedback').textContent;
+      return result;
+    });
+    assert.equal(interaction.overpay,'45%');
+    assert.equal(interaction.reset,'22,5%');
+    assert.match(interaction.quiz,/Все три ответа верны/);
+  }
   await call('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});
   await navigate('index.html');await wait('!!window.COMPETENCY_MAP_DATA && !!document.querySelector("#latestLessonTitle")');
   const home=await execute(()=>{
@@ -131,11 +172,13 @@ try{
     return {latest:data.materials[0].date,
       visibleLatest:document.querySelector('#latestLessonTitle').textContent,
       links:[...document.querySelectorAll('a[href*="09.10.26"]')].length,
+       latestLinks:[...document.querySelectorAll('a[href*="13.10.26"]')].length,
       evidence:credit.map(i=>({title:i.title,exists:i.evidence?.some(e=>e.date==='09.10.26')})),
       horizontalOverflow:document.documentElement.scrollWidth>innerWidth+2};
   });
-  assert.equal(home.latest,'09.10.26');
-  assert.match(home.visibleLatest,/Кредитные задачи/);
+  assert.equal(home.latest,'13.10.26');
+  assert.match(home.visibleLatest,/Произвольные схемы/);
+   assert.ok(home.latestLinks>=4,'New lesson links missing');
   assert.ok(home.links>=4);
   assert.equal(home.evidence.length,3);
   assert.ok(home.evidence.every(x=>x.exists),'Missing credit evidence '+JSON.stringify(home.evidence));
