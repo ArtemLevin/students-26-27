@@ -43,6 +43,20 @@
       item.evidence=history;
       currentMatched+=1;
     }));
+    currentMatched=0;
+    const october13={
+      date:"13.10.26",href:"13.10.26.html",
+      evidence:"Тема отрабатывалась на занятии 13.10.26: группировка многочленов, вынесение общих множителей, использование формул сокращённого умножения, разность квадратов, нулевое произведение и сумма квадратов.",
+      ids:new Set(["oge_08_03","oge_08_04","oge_08_05","oge_08_06","oge_08_07","oge_08_08","oge_09_05"])
+    };
+    data.groups.forEach(group=>group.items.forEach(item=>{
+      if(!october13.ids.has(item.id))return;
+      item.href=october13.href;
+      const history=Array.isArray(item.evidence)?item.evidence:[];
+      if(!history.includes(october13.evidence))history.push(october13.evidence);
+      item.evidence=history;
+      currentMatched+=1;
+    }));
     const counter=document.getElementById("confirmedThisLesson");if(counter)counter.textContent=currentMatched;
   })();
 
