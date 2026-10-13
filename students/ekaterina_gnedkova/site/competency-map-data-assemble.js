@@ -165,6 +165,35 @@ const evidence0910For = (title) => ({
   tex:'../tex_docs/09.10.26.tex'
 });
 
+
+const lesson1310EvidenceTitles = new Set([
+  "Формулы финансовых расчётов",
+  "Долг после очередного платежа",
+  "Таблица платежей по кредиту",
+  "Сумма выплат по кредиту",
+  "Переплата по кредиту",
+  "Поиск размера платежа",
+  "Оптимизация финансового решения",
+  "Сравнение финансовых сценариев"
+]);
+const lesson1310AnchorByTitle = new Map([
+  ["Формулы финансовых расчётов","#model"],
+  ["Долг после очередного платежа","#model"],
+  ["Таблица платежей по кредиту","#simulator"],
+  ["Сумма выплат по кредиту","#overpay"],
+  ["Переплата по кредиту","#overpay"],
+  ["Поиск размера платежа","#model"],
+  ["Оптимизация финансового решения","#bounds"],
+  ["Сравнение финансовых сценариев","#mixed"]
+]);
+const evidence1310For = (title)=>({
+  date:'13.10.26',
+  text:'Тема разобрана на занятии 13.10.26: произвольная схема погашения кредита, вычисление платежей по остаткам, переплата, система ограничений и смешанная схема. Обсуждение и работа с преподавателем сами по себе не подтверждают новый уровень самостоятельности.',
+  web:'13.10.26.html'+lesson1310AnchorByTitle.get(title),
+  pdf:'../pdf_docs/13.10.26.pdf',
+  tex:'../tex_docs/13.10.26.tex'
+});
+
 const groups=groupDefs.map((def,groupIndex)=>{
   const number=groupIndex+1;
   const groupId=`ege27_${String(number).padStart(2,'0')}`;
@@ -188,6 +217,7 @@ const groups=groupDefs.map((def,groupIndex)=>{
       const hasLesson2909Evidence=(number===8||number===10||number===11)&&lesson2909EvidenceTitles.has(title);
       const hasLesson0610Evidence=(number===10||number===11||number===13)&&lesson0610EvidenceTitles.has(title);
       const hasLesson0910Evidence=(number===10||number===13)&&lesson0910EvidenceTitles.has(title);
+      const hasLesson1310Evidence=(number===10||number===13)&&lesson1310EvidenceTitles.has(title);
 
       const level=isMasteredPower?4:
         isLesson2509Level3?3:
@@ -214,6 +244,7 @@ const groups=groupDefs.map((def,groupIndex)=>{
       if(hasLesson2909Evidence) evidence.push(evidence2909For(title));
       if(hasLesson0610Evidence) evidence.push(evidence0610For(title));
       if(hasLesson0910Evidence) evidence.push(evidence0910For(title));
+      if(hasLesson1310Evidence) evidence.push(evidence1310For(title));
 
       const id=`${groupId}_${String(itemIndex+1).padStart(3,'0')}`;
       return{
@@ -234,7 +265,7 @@ window.COMPETENCY_MAP_DATA={
     teacher:'Лёвин Артём Александрович',
     program:'подготовка к ЕГЭ по профильной математике',
     examVersion:'проект ЕГЭ-2027',
-    updated:'09.10.26',
+    updated:'13.10.26',
     sourceNote:'Структура актуализирована по проектам документов ФИПИ ЕГЭ-2027; подтверждённые уровни уточняются по материалам занятий.'
   },
   storage:{
@@ -243,6 +274,7 @@ window.COMPETENCY_MAP_DATA={
     theme:'ekaterina_gnedkova-ege_profile_2027-theme'
   },
   materials:[
+    {date:'13.10.26',title:'Произвольные схемы погашения кредита',summary:'Расчёт платежей по остаткам долга, переплата, система неравенств и смешанная схема.',web:'13.10.26.html',pdf:'../pdf_docs/13.10.26.pdf',tex:'../tex_docs/13.10.26.tex',image:'../images/13.10.26.png'},
     {date:'09.10.26',title:'Кредитные задачи: три схемы погашения',summary:'Аннуитетная, дифференцированная и произвольная схемы; таблица долга и платежей, поиск ставки.',web:'09.10.26.html',pdf:'../pdf_docs/09.10.26.pdf',tex:'../tex_docs/09.10.26.tex',image:'../images/09.10.26.png'},
     {date:'06.10.26',title:'Вклады и сложные проценты',summary:'Таблица по годам, сложные проценты, повышающий коэффициент и дополнительные взносы.',web:'06.10.26.html',lab:'06.10.26-lab.html',pdf:'../pdf_docs/06.10.26.pdf',tex:'../tex_docs/06.10.26.tex',image:'../images/06.10.26.png'},
     {date:'29.09.26',title:'Смеси, растворы и проценты',summary:'Баланс массы компонента, растворы и сплавы, вода и чистое вещество, высушивание, процентные коэффициенты и системы уравнений.',web:'29.09.26.html',pdf:'../pdf_docs/29.09.26.pdf',tex:'../tex_docs/29.09.26.tex'},
