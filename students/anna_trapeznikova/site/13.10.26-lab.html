@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Интерактивная лаборатория Анны Трапезниковой: исследование знаков рационального неравенства и ограничений при замене переменной.">
+<title>Лаборатория знаков и замены — Анна Трапезникова</title>
+<link rel="stylesheet" href="../../../design-system/tokens.css?v=20260919-2">
+<link rel="stylesheet" href="../../../design-system/foundations.css?v=20260919-2">
+<link rel="stylesheet" href="anna-atlas.css?v=20260921-1">
+<style>
+:root{--bg:#f5f0ea;--paper:#fffcf7;--ink:#282423;--muted:#645d5b;--line:#d4c9c2;--burgundy:#763b49;--green:#266351;--red:#aa524a;--wash:#ede0e0;--focus:#dc885d}
+html[data-theme=dark]{--bg:#181615;--paper:#25211f;--ink:#f0e9e3;--muted:#b8ada7;--line:#514642;--burgundy:#dfadba;--green:#93d1b3;--red:#ea9e96;--wash:#372b2e;--focus:#f7b78d}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,Segoe UI,Arial,sans-serif}
+button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}a{color:var(--burgundy);text-underline-offset:3px}
+.skip{position:absolute;left:1rem;top:-6rem;background:var(--ink);color:var(--paper);padding:.5rem;z-index:40}.skip:focus{top:.5rem}
+.head{border-bottom:1px solid var(--line);background:var(--bg)}.head>div,.wrap,footer{width:min(1100px,calc(100% - 2rem));margin:auto}
+.head>div{display:flex;align-items:center;gap:1rem;min-height:61px}
+.head a{margin-right:auto;font-size:.85rem;text-decoration:none}
+button{border:1px solid var(--line);border-radius:3px;background:var(--paper);color:var(--ink);padding:.58rem .82rem}
+button:hover{border-color:var(--burgundy)}
+button[aria-pressed=true]{color:var(--paper);background:var(--burgundy);border-color:var(--burgundy)}
+button:disabled{opacity:.5;cursor:default}
+.eyebrow{font:.8rem ui-monospace,monospace;letter-spacing:.12em;color:var(--burgundy);text-transform:uppercase}
+h1{font:500 clamp(2.6rem,6vw,5.7rem)/1 Georgia,serif;letter-spacing:-.04em;max-width:14ch;margin:.6rem 0 1.2rem}
+h2{font:500 clamp(1.9rem,3vw,3rem)/1.1 Georgia,serif;margin:.5rem 0 1.5rem}
+h3{font:600 1.16rem Georgia,serif;margin:.25rem 0 .65rem}.lead{max-width:46rem;color:var(--muted);font-size:1.1rem}
+.intro{padding:clamp(2.5rem,5vw,4.5rem) 0 2.2rem;border-bottom:1px solid var(--line)}
+.tabs{display:flex;flex-wrap:wrap;gap:.6rem;margin:2rem 0}
+.tabpanel[hidden]{display:none!important}
+.grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:1.8rem;align-items:start;margin-bottom:3rem}
+.panel{background:var(--paper);border:1px solid var(--line);padding:clamp(1rem,2.5vw,2rem);min-width:0}.panel>:first-child{margin-top:0}
+.math{font:500 clamp(1rem,2.2vw,1.55rem)/1.5 Cambria Math,Georgia,serif;overflow-x:auto;white-space:nowrap}
+.formula{padding:.8rem 0;border-bottom:1px solid var(--line);margin:.5rem 0 1.3rem}
+.note{background:var(--wash);padding:1rem 1.2rem;border-left:3px solid var(--burgundy);margin-top:1rem}
+.slider-label{display:flex;justify-content:space-between;gap:1rem;align-items:center;margin-top:1.5rem}
+output{font:700 1.25rem Cambria Math,Georgia,serif;color:var(--burgundy)}
+input[type=range]{display:block;width:100%;margin:1.2rem 0;accent-color:var(--burgundy);min-height:28px}
+.rapid{display:flex;gap:.5rem;flex-wrap:wrap}.rapid button{padding:.42rem .6rem;font-size:.83rem}
+.axis{max-width:100%;overflow-x:auto;margin:2rem 0 1rem}.axis svg{display:block;width:100%;min-width:530px;height:auto}.axis text{fill:var(--ink);font:15px system-ui,sans-serif}
+.axis .pointer{stroke:var(--burgundy);stroke-width:2.5}
+.result{font-size:1.1rem;font-weight:700;border-top:1px solid var(--line);padding-top:1rem;margin-top:1.3rem}
+.result.pos{color:var(--green)}.result.neg{color:var(--red)}.result.hole{color:var(--red)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.stat{border-top:2px solid var(--line);padding-top:.6rem}.stat b{display:block;font:500 1.7rem Cambria Math,Georgia,serif}.stat span{font-size:.84rem;color:var(--muted)}
+.hint{color:var(--muted);font-size:.9rem}.list{padding-left:1.3rem}.list li{margin:.7rem 0}
+footer{padding:2rem 0 3rem;color:var(--muted);font-size:.86rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;border-top:1px solid var(--line)}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.intro{padding-top:2rem}h1{font-size:clamp(2.6rem,12vw,4.4rem)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="head"><div><a href="13.10.26.html">← Вернуться к занятию</a><button type="button" id="theme" aria-label="Переключить цветовую тему">◐ Тема</button></div></header>
+<main class="wrap" id="main">
+<section class="intro"><p class="eyebrow">Анна Трапезникова · 13.10.2026 · исследовательский режим</p><h1>Лаборатория знаков и замены</h1><p class="lead">Передвигайте точку x. Наблюдайте, как изменяется знак дроби, почему некоторые точки запрещены и как диапазон новой переменной меняет ответ.</p></section>
+<div class="tabs" role="group" aria-label="Режим исследования"><button type="button" id="tabSign" aria-pressed="true">01 · Знаки дроби</button><button type="button" id="tabSub" aria-pressed="false">02 · Замена переменной</button></div>
+<section class="tabpanel" id="modeSign" aria-labelledby="signTitle">
+<div class="grid"><div class="panel"><p class="eyebrow">Режим 01 · метод интервалов</p><h2 id="signTitle">Что происходит с дробью?</h2><p class="math formula">F(x) = (x − 2)³(x + 4) / [x(x − 5)]</p><p>Исследуем неравенство <strong>F(x) ≥ 0</strong>. Нули числителя: <strong>−4</strong> и <strong>2</strong>. Запрещённые точки: <strong>0</strong> и <strong>5</strong>.</p>
+<div class="slider-label"><label for="xSign">Положение x</label><output id="xSignOut" for="xSign">1</output></div>
+<input id="xSign" type="range" min="-6" max="7" value="1" step="0.1">
+<div class="rapid" aria-label="Особые точки"><button type="button" data-at="-4">x = −4</button><button type="button" data-at="0">x = 0</button><button type="button" data-at="2">x = 2</button><button type="button" data-at="5">x = 5</button><button type="button" id="resetSign">Сброс</button></div>
+<div class="axis"><svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Числовая ось от минус шести до семи с подвижным маркером">
+<path d="M40 89H720" stroke="currentColor" stroke-width="2"/><path d="m720 89-10-6v12z" fill="currentColor"/>
+<g fill="var(--burgundy)"><circle cx="145" cy="89" r="6"/><circle cx="460" cy="89" r="6"/></g>
+<g fill="var(--paper)" stroke="var(--burgundy)" stroke-width="2"><circle cx="355" cy="89" r="6"/><circle cx="617" cy="89" r="6"/></g>
+<g text-anchor="middle"><text x="145" y="124">−4</text><text x="355" y="124">0</text><text x="460" y="124">2</text><text x="617" y="124">5</text></g>
+<line id="probeLine" class="pointer" x1="407" x2="407" y1="40" y2="80"/><path id="probeArrow" d="M401 72L413 72L407 85Z" fill="var(--burgundy)"/>
+</svg></div>
+<div class="result" id="signResult" role="status" aria-live="polite">Функция положительна.</div><p class="hint" id="signExplain"></p></div>
+<aside class="panel"><h3>Как читать эксперимент</h3><ol class="list"><li>Сравните знак слева и справа от точки <strong>x = 2</strong>. Кратность 3 нечётная: знак меняется.</li><li>Передвиньте маркер к <strong>x = 0</strong> или <strong>x = 5</strong>. Значение дроби здесь не определено.</li><li>В точках <strong>−4</strong> и <strong>2</strong> дробь обращается в нуль и подходит для нестрогого знака ≥.</li></ol><div class="note"><strong>Ответ исходного неравенства</strong><p class="math">x ∈ (−∞; −4] ∪ (0; 2] ∪ (5; +∞).</p></div><p class="hint">При x близком к нулю знаменателя значение дроби может резко возрастать по модулю. Сравнивайте знак и допустимость отдельно.</p></aside></div>
+</section>
+<section class="tabpanel" id="modeSub" aria-labelledby="subTitle" hidden>
+<div class="grid"><div class="panel"><p class="eyebrow">Режим 02 · замена переменной</p><h2 id="subTitle">Почему важно t ≥ 1?</h2>
+<p class="math formula">1/(x² + 2x + 2) − 1/(x² + 2x + 3) &lt; 1/6</p>
+<p>Заменим <span class="math">t = (x + 1)² + 1</span>. При любом действительном x выполняется <strong>t ≥ 1</strong>.</p>
+<div class="slider-label"><label for="xSub">Положение x</label><output id="xSubOut" for="xSub">−1</output></div>
+<input id="xSub" type="range" min="-4" max="2" step="0.1" value="-1">
+<div class="rapid"><button data-sub="-2" type="button">x = −2</button><button data-sub="-1" type="button">x = −1</button><button data-sub="0" type="button">x = 0</button><button type="button" id="resetSub">Сброс</button></div>
+<div class="stats" style="margin-top:2rem"><div class="stat"><span>Новая переменная t</span><b id="tValue">1</b></div><div class="stat"><span>Левая часть</span><b id="leftValue">0,5</b></div></div>
+<div class="result" id="subResult" role="status" aria-live="polite">Неравенство не выполняется.</div><div class="note" id="subExplanation"></div>
+</div><aside class="panel"><h3>Маршрут решения</h3><ol class="list"><li>После замены имеем <span class="math">1/t − 1/(t + 1) &lt; 1/6</span>.</li><li>Метод интервалов даёт <span class="math">t ∈ (−∞; −3) ∪ (−1; 0) ∪ (2; +∞)</span>.</li><li>С учётом <strong>t ≥ 1</strong> остаётся <strong>t &gt; 2</strong>.</li><li>Получаем <span class="math">(x + 1)² &gt; 1</span>, откуда <strong>x &lt; −2 или x &gt; 0</strong>.</li></ol><p class="note">Исследуйте границы x = −2 и x = 0: при них левая часть равна 1/6, поэтому строгое неравенство не выполняется.</p></aside></div>
+</section>
+</main>
+<footer><span>13.10.2026 · Анна Трапезникова</span><span>Лёвин Артём Александрович · учебная лаборатория</span><a href="13.10.26.html">Вернуться к занятию ↑</a></footer>
+<script>
+(function(){
+'use strict';
+var root=document.documentElement,theme=document.getElementById('theme');
+try{var saved=localStorage.getItem('anna-lesson-theme');if(saved==='light'||saved==='dark')root.dataset.theme=saved;}catch(_){}
+theme.addEventListener('click',function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('anna-lesson-theme',root.dataset.theme);}catch(_){}});
+var tabs={sign:document.getElementById('tabSign'),substitution:document.getElementById('tabSub')},panels={sign:document.getElementById('modeSign'),substitution:document.getElementById('modeSub')};
+function choose(mode,updateUrl){mode=mode==='substitution'?'substitution':'sign';Object.keys(tabs).forEach(function(key){tabs[key].setAttribute('aria-pressed',String(key===mode));panels[key].hidden=key!==mode;});if(updateUrl){var url=new URL(location.href);url.searchParams.set('mode',mode);history.replaceState(null,'',url);} }
+Object.keys(tabs).forEach(function(key){tabs[key].addEventListener('click',function(){choose(key,true);});});
+var initial=new URLSearchParams(location.search).get('mode');choose(initial,false);
+function number(value){var rounded=Math.round(value*10000)/10000;return String(rounded).replace('.',',').replace('-','−');}
+var xSign=document.getElementById('xSign'),xSignOut=document.getElementById('xSignOut'),sRes=document.getElementById('signResult'),sExp=document.getElementById('signExplain');
+function renderSign(){
+ var x=+xSign.value; xSignOut.textContent=number(x);
+ var px=40+(x+6)/13*680;
+ document.getElementById('probeLine').setAttribute('x1',String(px));document.getElementById('probeLine').setAttribute('x2',String(px));
+ document.getElementById('probeArrow').setAttribute('d','M'+(px-6)+' 72L'+(px+6)+' 72L'+px+' 85Z');
+ var hole=Math.abs(x)<1e-7||Math.abs(x-5)<1e-7;var val=hole?null:Math.pow(x-2,3)*(x+4)/(x*(x-5));
+ var positive=val!==null&&val>=0;
+ sRes.className='result '+(hole?'hole':positive?'pos':'neg');
+ sRes.textContent=hole?'x = '+number(x)+': знаменатель равен нулю, точка запрещена.':'F('+number(x)+') = '+number(val)+'. '+(positive?'Условие F(x) ≥ 0 выполнено.':'Условие F(x) ≥ 0 не выполнено.');
+ sExp.textContent=hole?'Точка никогда не входит в ОДЗ.':Math.abs(val)<1e-8?'Это нуль числителя: точка включена при знаке ≥.':'Текущее значение подтверждает знак на выбранном промежутке.';
+}
+xSign.addEventListener('input',renderSign);
+document.querySelectorAll('[data-at]').forEach(function(btn){btn.addEventListener('click',function(){xSign.value=btn.getAttribute('data-at');renderSign();});});
+document.getElementById('resetSign').addEventListener('click',function(){xSign.value='1';renderSign();});renderSign();
+var xSub=document.getElementById('xSub'),subRes=document.getElementById('subResult');
+function renderSub(){
+ var x=+xSub.value,t=(x+1)*(x+1)+1,lhs=1/t-1/(t+1),holds=lhs<1/6-1e-10;
+ document.getElementById('xSubOut').textContent=number(x);
+ document.getElementById('tValue').textContent=number(t);
+ document.getElementById('leftValue').textContent=number(lhs);
+ subRes.className='result '+(holds?'pos':'neg');
+ subRes.textContent=holds?'t > 2: исходное неравенство выполняется.':'t ≤ 2: исходное неравенство не выполняется.';
+ document.getElementById('subExplanation').textContent='Здесь t = '+number(t)+', а 1/t − 1/(t + 1) = '+number(lhs)+'. Для строгого неравенства требуется значение меньше 1/6.';
+}
+xSub.addEventListener('input',renderSub);document.querySelectorAll('[data-sub]').forEach(function(b){b.addEventListener('click',function(){xSub.value=b.getAttribute('data-sub');renderSub();});});document.getElementById('resetSub').addEventListener('click',function(){xSub.value='-1';renderSub();});renderSub();
+})();
+</script>
+</body></html>
