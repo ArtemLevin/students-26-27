@@ -73,7 +73,8 @@
         date: lesson.date,
         title: lesson.title,
         href: lesson.href || null,
-        note: lesson.note || null
+        note: lesson.note || null,
+        contributesMastery: lesson.masteryEvidence !== false
       });
     }
   }
@@ -112,7 +113,7 @@
   validateCatalog();
 
   const baselineLevels = Object.fromEntries(allItems.map((item) => {
-    const evidenceLevel = itemEvidence(item).length ? 2 : 0;
+    const evidenceLevel = itemEvidence(item).some((entry) => entry.contributesMastery !== false) ? 2 : 0;
     return [item.id, Math.max(clampLevel(item.baseLevel), evidenceLevel)];
   }));
   const baselineRepeat = new Set((DATA.baselineRepeatTopics || []).filter((id) => itemById.has(id)));
