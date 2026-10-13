@@ -5,6 +5,68 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-13",
+    "ktpRefs": [],
+    "href": "13.10.26.html",
+    "title": "Произвольные схемы погашения кредита",
+    "navTitle": "Произвольные схемы погашения кредита",
+    "navSubtitle": "Произвольные схемы кредитования: таблица платежей, переплата, ограничения и смешанные схемы.",
+    "summary": "Произвольные схемы кредитования: таблица платежей, переплата, ограничения и смешанные схемы.",
+    "topics": [
+      "произвольная схема кредита",
+      "переплата по кредиту",
+      "ограничения на платежи",
+      "смешанная схема погашения"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "ege27_10_012",
+        "evidenceAnchor": "model",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege27_13_008",
+        "evidenceAnchor": "model",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege27_13_010",
+        "evidenceAnchor": "simulator",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege27_13_011",
+        "evidenceAnchor": "overpay",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "ege27_13_012",
+        "evidenceAnchor": "overpay",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege27_13_014",
+        "evidenceAnchor": "model",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege27_13_015",
+        "evidenceAnchor": "bounds",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege27_13_017",
+        "evidenceAnchor": "mixed",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "13.10.26.html",
+      "pdf": "../pdf_docs/13.10.26.pdf",
+      "tex": "../tex_docs/13.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-09",
     "ktpRefs": [],
     "href": "09.10.26.html",
