@@ -77,6 +77,34 @@ test('inline JavaScript and evidence overlay parse', () => {
   assert.doesNotMatch(source, /\.level\s*=/);
 });
 
+
+test('all mathematical expressions use semantic native MathML', () => {
+  const nodes = [...lesson.matchAll(/<math\\b[^>]*>[\\s\\S]*?<\\/math>/g)].map(match => match[0]);
+  assert.ok(nodes.length >= 48, 'missing MathML equations or inline fragments');
+  assert.ok((lesson.match(/<mfrac>/g) || []).length >= 120, 'fractions must use mfrac');
+  assert.ok((lesson.match(/<mi>x<\\/mi>/g) || []).length >= 10, 'variables must use mi');
+  assert.doesNotMatch(lesson, /class="(?:fraction|mixed)"/, 'legacy visual-only math spans remain');
+  const allowed = new Set(['math','mrow','mi','mn','mo','mfrac','mspace','mtext']);
+  for (const fragment of nodes) {
+    assert.match(fragment, /^<math xmlns="http:\/\/www\\.w3\\.org\/1998\/Math\/MathML">/);
+    const stack = [];
+    for (const token of fragment.matchAll(/<(\\/)?(math|mrow|mi|mn|mo|mfrac|mspace|mtext)\\b[^>]*>/g)) {
+      const closing = Boolean(token[1]), name = token[2];
+      assert.ok(allowed.has(name));
+      if (closing) assert.equal(stack.pop(), name, 'unbalanced MathML element: ' + name);
+      else if (!token[0].endsWith('/>')) stack.push(name);
+    }
+    assert.deepEqual(stack, [], 'unclosed MathML nodes');
+  }
+  assert.match(lesson, /<mrow><mn>4<\\/mn><mspace width="0\\.16em"\\/><mfrac>/,
+    'mixed numbers should keep whole and fractional parts together');
+  const textOutsideMath = lesson
+    .replace(/<math\\b[^>]*>[\\s\\S]*?<\\/math>/g, '')
+    .replace(/<style>[\\s\\S]*?<\\/style>/g, '')
+    .replace(/<script>[\\s\\S]*?<\\/script>/g, '');
+  assert.doesNotMatch(textOutsideMath, /\\b(?:24\\/24|d\\/d|x\\s*[+−=]\\s*a)\\b/);
+});
+
 test('worked examples and all ten answers agree arithmetically', () => {
   const {Fraction} = {Fraction: (numerator, denominator=1) => numerator/denominator};
   const near = (left,right) => assert.ok(Math.abs(left-right) < 1e-9);
