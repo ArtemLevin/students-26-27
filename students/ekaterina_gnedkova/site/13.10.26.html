@@ -46,8 +46,8 @@ math[display="block"]{display:block;min-width:max-content;font-size:1.07em}
 <div class="note warning"><strong>Отличайте платёж от процентов.</strong><p>Платёж одновременно покрывает начисленный процент и может уменьшать основной долг. Если после платежа долг не изменился, платёж равен только процентам.</p></div></div></section>
 <section class="chapter" id="simulator" aria-labelledby="h-simulator"><header class="chapter-head"><span class="number">02 / Эксперимент</span><h2 id="h-simulator">Таблица движется вслед за процентной ставкой</h2></header><div class="body">
 <p>В примере занятия кредит выдан на шесть месяцев. После первых пяти платежей остаток последовательно равен <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>90</mn><mo>%</mo></math>, <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>80</mn><mo>%</mo></math>, <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>70</mn><mo>%</mo></math>, <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>60</mn><mo>%</mo></math>, <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>50</mn><mo>%</mo></math> суммы <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>S</mi></math>. После шестого долг погашается полностью. В конце каждого периода начисляются проценты.</p>
-<div class="lab"><h3 class="lab-title">Лабораторная таблица / шесть периодов</h3><p class="muted">Измените ставку или сумму. Сверьте платежи с обновлённой таблицей и суммарной переплатой.</p><div class="controls"><label for="loanSum">Сумма кредита, млн руб.<input id="loanSum" type="number" min="0.1" max="100" step="0.1" value="1"></label><label for="loanRate">Ставка за месяц, %<input id="loanRate" type="number" min="0" max="30" step="0.5" value="5"></label><label for="loanCase">График остатка<select id="loanCase"><option value="original">Исходный график занятия</option><option value="even">Плавное сокращение долга</option><option value="slow">С отсрочкой погашения</option></select></label><button id="loanReset" type="button" class="pill">Сброс</button></div>
-<div class="tablewrap"><table class="ledger"><thead><tr><th scope="col">Период</th><th scope="col">Долг до %</th><th scope="col">Начислено</th><th scope="col">Задолженность</th><th scope="col">Платёж</th><th scope="col">Остаток</th></tr></thead><tbody id="loanRows"></tbody><tfoot><tr><th scope="row" colspan="4">Общая сумма выплат</th><td id="totalPaid"></td><td><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>0</mn></math></td></tr></tfoot></table></div>
+<div class="lab"><h3 class="lab-title">Лабораторная таблица / шесть периодов</h3><p class="muted">Измените ставку или сумму. Сверьте платежи с обновлённой таблицей и суммарной переплатой.</p><div class="controls"><label for="loanSum">Сумма кредита, млн руб.<input id="loanSum" type="number" min="0.1" max="100" step="0.1" value="1"></label><label for="loanRate">Ставка за месяц, <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>%</mo></math><input id="loanRate" type="number" min="0" max="30" step="0.5" value="5"></label><label for="loanCase">График остатка<select id="loanCase"><option value="original">Исходный график занятия</option><option value="even">Плавное сокращение долга</option><option value="slow">С отсрочкой погашения</option></select></label><button id="loanReset" type="button" class="pill">Сброс</button></div><p class="muted" id="scheduleReadout" aria-live="polite"></p>
+<div class="tablewrap"><table class="ledger"><thead><tr><th scope="col">Период</th><th scope="col">Долг до начисления</th><th scope="col">Начислено</th><th scope="col">Задолженность</th><th scope="col">Платёж</th><th scope="col">Остаток</th></tr></thead><tbody id="loanRows"></tbody><tfoot><tr><th scope="row" colspan="4">Общая сумма выплат</th><td id="totalPaid"></td><td><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>0</mn></math></td></tr></tfoot></table></div>
 <dl class="readouts"><div><dt>Сумма процентов, млн</dt><dd id="intSum">—</dd></div><div><dt>Переплата, <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>%</mo></math> от <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>S</mi></math></dt><dd id="overPct">—</dd></div><div><dt>Наибольший платёж, млн</dt><dd id="maxPay">—</dd></div></dl><p class="muted">Размер платежей по периодам</p><div class="bars" id="paymentBars" role="img" aria-label="Сравнение платежей по периодам"></div><p class="lab-end" id="experimentExplanation" aria-live="polite"></p></div>
 <div class="note"><strong>Проверка из урока.</strong><p>При <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>S</mi><mo>=</mo><mn>1</mn></math> млн руб., ставке <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>5</mn><mo>%</mo></math> и исходном графике сумма начисленных процентов равна <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>0,225</mn><mi>S</mi></math>, переплата — <strong><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>22,5</mn><mo>%</mo></math></strong>. Сумма всех платежей равна <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>1,225</mn><mi>S</mi></math>.</p></div>
 </div></section>
@@ -100,22 +100,47 @@ try{const saved=localStorage.getItem(key);if(saved==="dark"){document.documentEl
 theme.addEventListener("click",function(){const next=document.documentElement.dataset.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=next;theme.textContent=next==="dark"?"Светлая тема":"Тёмная тема";try{localStorage.setItem(key,next)}catch(e){}});
 const fixed={original:[.9,.8,.7,.6,.5,0],even:[.8,.6,.4,.2,.1,0],slow:[1,1,.8,.6,.4,0]};
 const fmt=function(x){return new Intl.NumberFormat("ru-RU",{maximumFractionDigits:5}).format(x)};
+const mathNS="http://www.w3.org/1998/Math/MathML";
+function mathValue(value){
+  const root=document.createElementNS(mathNS,"math");
+  const raw=String(value);
+  const hasPercent=raw.endsWith("%");
+  const number=document.createElementNS(mathNS,"mn");
+  number.textContent=hasPercent?raw.slice(0,-1):raw;
+  root.append(number);
+  if(hasPercent){const sign=document.createElementNS(mathNS,"mo");sign.textContent="%";root.append(sign);}
+  return root;
+}
+function showMath(element,value){element.replaceChildren(mathValue(value));}
+function showSchedule(shares){
+  const nodes=[document.createTextNode("Остаток после каждого периода: ")];
+  shares.forEach(function(value,index){
+    if(index)nodes.push(document.createTextNode(" → "));
+    nodes.push(mathValue(Math.round(100*value)+"%"));
+  });
+  nodes.push(document.createTextNode(" от первоначального кредита."));
+  q("scheduleReadout").replaceChildren(...nodes);
+}
 function update(){
 const sum=Number(q("loanSum").value),rate=Number(q("loanRate").value);
 const valid=Number.isFinite(sum)&&sum>0&&sum<=100&&Number.isFinite(rate)&&rate>=0&&rate<=30;
-if(!valid){q("experimentExplanation").textContent="Укажите сумму от 0,1 до 100 млн руб. и ставку от 0 до 30%.";return;}
+if(!valid){q("experimentExplanation").replaceChildren(document.createTextNode("Укажите сумму от "),mathValue("0,1"),document.createTextNode(" до "),mathValue("100"),document.createTextNode(" млн руб. и ставку от "),mathValue("0"),document.createTextNode(" до "),mathValue("30%"),document.createTextNode("."));return;}
 const schedule=fixed[q("loanCase").value]||fixed.original;
+showSchedule(schedule);
 let previous=sum,paid=0,interestSum=0,maxPay=0;const tbody=q("loanRows");tbody.replaceChildren();const bars=q("paymentBars");bars.replaceChildren();const payments=[];
 schedule.forEach(function(share,i){
 const interest=previous*rate/100,total=previous+interest,balance=sum*share,payment=total-balance;
 interestSum+=interest;paid+=payment;maxPay=Math.max(maxPay,payment);payments.push(payment);
 const row=document.createElement("tr");const values=[String(i+1),fmt(previous),fmt(interest),fmt(total),fmt(payment),fmt(balance)];
-values.forEach(function(v,j){const cell=document.createElement(j===0?"th":"td");if(j===0)cell.scope="row";cell.textContent=v;row.append(cell)});tbody.append(row);previous=balance;
+values.forEach(function(v,j){const cell=document.createElement(j===0?"th":"td");if(j===0)cell.scope="row";cell.replaceChildren(mathValue(v));row.append(cell)});tbody.append(row);previous=balance;
 });
-q("totalPaid").textContent=fmt(paid);q("intSum").textContent=fmt(interestSum);q("overPct").textContent=fmt(100*interestSum/sum)+"%";q("maxPay").textContent=fmt(maxPay);
+showMath(q("totalPaid"),fmt(paid));showMath(q("intSum"),fmt(interestSum));showMath(q("overPct"),fmt(100*interestSum/sum)+"%");showMath(q("maxPay"),fmt(maxPay));
 payments.forEach(function(p,i){const bar=document.createElement("span");bar.style.height=(maxPay>0?Math.max(3,100*p/maxPay):0)+"%";bar.dataset.label=String(i+1);bar.title="Период "+(i+1)+": платёж "+fmt(p)+" млн руб.";bars.append(bar)});
 bars.setAttribute("aria-label","Платежи по периодам: "+payments.map((p,i)=>(i+1)+": "+fmt(p)).join("; ")+", млн рублей.");
-q("experimentExplanation").textContent="Сумма платежей: "+fmt(paid)+" млн руб. Разность с телом кредита: "+fmt(paid-sum)+" млн руб. Она равна сумме начисленных процентов (с точностью округления).";
+q("experimentExplanation").replaceChildren(
+document.createTextNode("Сумма платежей: "),mathValue(fmt(paid)),
+document.createTextNode(" млн руб. Разность с телом кредита: "),mathValue(fmt(paid-sum)),
+document.createTextNode(" млн руб. Она равна сумме начисленных процентов (с точностью округления)."));
 }
 ["loanSum","loanRate","loanCase"].forEach(function(id){q(id).addEventListener("input",update);q(id).addEventListener("change",update)});
 q("loanReset").addEventListener("click",function(){q("loanSum").value="1";q("loanRate").value="5";q("loanCase").value="original";update()});update();
