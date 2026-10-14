@@ -93,6 +93,12 @@ try{
   }
 
   await navigate('13.10.26.html',1440,900);
+  assert.equal(await run("(()=>{const nodes=[...document.querySelectorAll('math')];return nodes.length>=48&&nodes.every(n=>n.namespaceURI==='http://www.w3.org/1998/Math/MathML')})()"),true,'MathML namespace and coverage');
+  assert.equal(await run("document.querySelectorAll('math mfrac').length>=120"),true,'semantic fraction rendering');
+  assert.equal(await run("document.querySelectorAll('.fraction,.mixed').length"),0,'legacy fraction spans removed');
+  assert.equal(await run("(()=>{const m=document.querySelector('#practice .task-main math');return m&&m.querySelector('mfrac')!==null})()"),true,'exercise is native MathML');
+  assert.equal(await run("(()=>{const n=document.querySelector('.hero-note math');return n&&n.getBoundingClientRect().height>5})()"),true,'MathML equations have a visible layout');
+
   assert.equal(await run("document.querySelectorAll('li.task').length"),10);
   assert.equal(await run("(()=>{document.querySelector('#nextStep').click();return document.querySelector('#stepCount').textContent})()"),'2 / 4');
   assert.equal(await run("(()=>{document.querySelector('#resetSteps').click();return document.querySelector('#stepCount').textContent})()"),'1 / 4');
