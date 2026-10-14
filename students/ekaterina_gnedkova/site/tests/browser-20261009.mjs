@@ -136,12 +136,22 @@ try{
         rows:document.querySelectorAll('#loanRows tr').length,
         tasks:document.querySelectorAll('.tasks>li').length,
         overpay:document.querySelector('#overPct').textContent,
+        mathml:document.querySelectorAll('main math').length,
+        fractions:document.querySelectorAll('main math mfrac').length,
+        subscript:document.querySelectorAll('main math msub').length,
+        semantic: [...document.querySelectorAll('main math')].every(el=>el.namespaceURI==='http://www.w3.org/1998/Math/MathML'),
+        dynamic: [...document.querySelectorAll('#loanRows tr')].every(tr=>[...tr.cells].every(cell=>cell.querySelector('math')?.namespaceURI==='http://www.w3.org/1998/Math/MathML')),
         uniqueIds:(()=>{const ids=[...document.querySelectorAll('[id]')].map(x=>x.id);return new Set(ids).size===ids.length;})()
       }));
       assert.ok(metrics.width<=metrics.viewport+2,'New lesson overflow '+view.name+'/'+theme+' '+JSON.stringify(metrics));
       assert.equal(metrics.rows,6);
       assert.equal(metrics.tasks,10);
       assert.equal(metrics.overpay,'22,5%');
+      assert.ok(metrics.mathml>=150,'MathML coverage missing '+JSON.stringify(metrics));
+      assert.ok(metrics.fractions>=5,'Semantic MathML fractions missing');
+      assert.ok(metrics.subscript>=10,'MathML subscripts missing');
+      assert.equal(metrics.semantic,true,'MathML namespace is invalid');
+      assert.equal(metrics.dynamic,true,'Interactive table has raw numeric cells');
       assert.equal(metrics.uniqueIds,true);
       await screenshot('lesson-131026-'+view.name+'-'+theme);
     }
@@ -149,7 +159,8 @@ try{
       const sum=document.querySelector('#loanSum'),rate=document.querySelector('#loanRate');
       sum.value='2';rate.value='10';rate.dispatchEvent(new Event('input',{bubbles:true}));
       const result={overpay:document.querySelector('#overPct').textContent,
-        total:document.querySelector('#totalPaid').textContent};
+        total:document.querySelector('#totalPaid').textContent,
+        tableMath:[...document.querySelectorAll('#loanRows tr')].every(tr=>[...tr.cells].every(cell=>!!cell.querySelector('math')))};
       document.querySelector('#loanReset').click();
       result.reset=document.querySelector('#overPct').textContent;
       for(const [name,value] of [['q1','b'],['q2','c'],['q3','b']]){
@@ -160,6 +171,7 @@ try{
       return result;
     });
     assert.equal(interaction.overpay,'45%');
+    assert.equal(interaction.tableMath,true);
     assert.equal(interaction.reset,'22,5%');
     assert.match(interaction.quiz,/Все три ответа верны/);
   }
