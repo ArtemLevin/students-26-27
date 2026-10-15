@@ -1,5 +1,86 @@
 export const LESSONS=[
 {
+  "date": "2026-10-14",
+  "ktpRefs": [
+    "ktp-003"
+  ],
+  "href": "14.10.26.html",
+  "title": "Текстовые задачи на движение: табличный метод",
+  "navTitle": "Текстовые задачи на движение: табличный метод",
+  "navSubtitle": "движение · табличный метод · степени · графики",
+  "summary": "Таблица скорость–время–путь, встреча, догонка и круговая трасса. Повторение степеней, корней и пересечения графиков. Прикладные квадратичные модели.",
+  "topics": [
+    "табличный метод",
+    "встречное движение",
+    "движение вдогонку",
+    "круговая трасса",
+    "дробные степени",
+    "корни",
+    "пересечение графиков",
+    "прикладная квадратичная модель"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "calc_10",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calc_11",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "func_08",
+      "evidenceAnchor": "graphs",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "func_10",
+      "evidenceAnchor": "graphs",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_04",
+      "evidenceAnchor": "table",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_05",
+      "evidenceAnchor": "table",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_06",
+      "evidenceAnchor": "table",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_07",
+      "evidenceAnchor": "circle",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_19",
+      "evidenceAnchor": "table",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_21",
+      "evidenceAnchor": "table",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_02",
+      "evidenceAnchor": "training",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "14.10.26.html"
+  }
+},
+{
   "date": "2026-10-07",
   "ktpRefs": [
     "ktp-002"

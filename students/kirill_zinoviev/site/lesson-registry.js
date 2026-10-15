@@ -3,6 +3,65 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-14",
+  "ktpRefs": [],
+  "href": "14.10.26.html",
+  "title": "Числовые промежутки",
+  "navTitle": "Числовые промежутки",
+  "navSubtitle": "границы · неравенства · промежутки · текст → уравнение",
+  "summary": "Числовые промежутки: числовая ось, строгие и нестрогие неравенства, скобки, бесконечности и текстовая задача. Кирилл Зиновьев, 14 октября 2026.",
+  "topics": [
+    "числовая ось и лучи",
+    "строгие и нестрогие неравенства",
+    "интервальная запись",
+    "включённость границ",
+    "скобки и бесконечности",
+    "составление уравнения по тексту"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "rational_1",
+      "evidenceAnchor": "one-sided",
+      "relation": "practiced",
+      "label": "Отметка рациональных чисел на числовой оси",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "rational_2",
+      "evidenceAnchor": "bounded",
+      "relation": "practiced",
+      "label": "Сравнение чисел и проверка границ",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "models_3",
+      "evidenceAnchor": "word-problem",
+      "relation": "practiced",
+      "label": "Перевод текстового отношения в уравнение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "equations_12",
+      "evidenceAnchor": "word-problem",
+      "relation": "practiced",
+      "label": "Составление уравнения по условию задачи",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "equations_7",
+      "evidenceAnchor": "word-problem",
+      "relation": "touched",
+      "label": "Уравнение с переменной в обеих частях",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "14.10.26.html",
+    "tex": "../tex_docs/14.10.26.tex",
+    "lab": "14.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-10",
   "ktpRefs": [],
   "href": "10.10.26.html",
