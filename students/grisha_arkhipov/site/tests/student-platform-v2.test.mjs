@@ -19,7 +19,7 @@ test('Grigory is a valid Student Platform v2 package',()=>{
   assert.equal(result.planningMode,'fixed');
   assert.equal(result.ktpLessons,88);
   assert.equal(result.ktpRecords,88);
-  assert.equal(result.lessonMetadata,3);
+  assert.equal(result.lessonMetadata,4);
 });
 
 test('KTP state is repository-backed and first plan item links to the real lesson',()=>{
@@ -51,9 +51,10 @@ test('KTP module script is syntactically valid JavaScript',()=>{
 });
 
 test('lesson registry covers every real Grigory lesson page and KTP mapping',()=>{
-  assert.deepEqual(LESSONS.map(item=>item.date),['2026-10-07','2026-09-30','2026-09-17']);
-  assert.deepEqual(LESSONS[0].ktpRefs,['ktp-002']);
-  assert.deepEqual(LESSONS[1].ktpRefs,['ktp-001']);
+  assert.deepEqual(LESSONS.map(item=>item.date),['2026-10-14','2026-10-07','2026-09-30','2026-09-17']);
+  assert.deepEqual(LESSONS[0].ktpRefs,['ktp-003']);
+  assert.deepEqual(LESSONS[1].ktpRefs,['ktp-002']);
+  assert.deepEqual(LESSONS[2].ktpRefs,['ktp-001']);
   for(const lesson of LESSONS){
     assert.ok(fs.existsSync(path.join(site,lesson.href)),lesson.href);
   }
@@ -64,14 +65,16 @@ test('dashboard and competency evidence expose the KTP route',()=>{
   const baseline=read('competency-map-baseline.js');
   const map=read('competency-map.js');
   assert.match(index,/href="ktp\.html"/);
-  assert.match(index,/ktp\.html\?lesson=ktp-002/);
+  assert.match(index,/ktp\.html\?lesson=ktp-003/);
   assert.match(index,/07\.10\.26\.html/);
-  assert.match(index,/competency-map-baseline\.js\?v=20261007-1/);
+  assert.match(index,/competency-map-baseline\.js\?v=20261015-1/);
   assert.match(baseline,/ktp:\s*'ktp\.html\?lesson=ktp-001'/);
   assert.match(baseline,/ktp:\s*'ktp\.html\?lesson=ktp-002'/);
-  assert.match(baseline,/data\.updated = '07\.10\.2026'/);
+  assert.match(baseline,/data\.updated = '14\.10\.2026'/);
   assert.match(baseline,/func_08:\s*'linear'/);
   assert.match(baseline,/func_10:\s*'hyperbola'/);
+  assert.match(baseline,/ktp:\s*'ktp\.html\?lesson=ktp-003'/);
+  assert.match(index,/14\.10\.26\.html/);
   assert.match(map,/Открыть в КТП/);
 });
 
