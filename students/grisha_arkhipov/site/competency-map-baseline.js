@@ -4,7 +4,7 @@
   if (!data) return;
 
   data.studentName = 'Григорий Архипов';
-  data.updated = '07.10.2026';
+  data.updated = '14.10.2026';
 
   const oldIds = [
     'eq_21','eq_22','eq_23','eq_24','eq_25','eq_26','eq_27','eq_28',
@@ -77,7 +77,27 @@
     };
   });
 
+
+  const oct14Anchors = {
+    calc_10: 'powers', calc_11: 'powers', func_08: 'graphs', func_10: 'graphs',
+    text_04: 'table', text_05: 'table', text_06: 'table',
+    text_07: 'circle', text_19: 'table', text_21: 'table', eq_02: 'training'
+  };
+  Object.entries(oct14Anchors).forEach(([id, anchor]) => {
+    data.evidence[id] = {
+      text: 'Навык отрабатывался 14.10.2026. Диагностический уровень остаётся без изменений.',
+      date: '14.10.2026',
+      lesson: '14.10.26.html#' + anchor,
+      ktp: 'ktp.html?lesson=ktp-003'
+    };
+  });
+
   data.materials = [
+    {
+      date: '14.10.2026',
+      title: 'Текстовые задачи на движение: табличный метод',
+      lesson: '14.10.26.html'
+    },
     {
       date: '07.10.2026',
       title: 'Графики функций: метод узловых точек',
