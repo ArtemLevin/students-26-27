@@ -82,7 +82,7 @@ try{
     const m=await run('({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth})');
     let offenders=[];
     if(m.scroll>m.client+2){
-      offenders=await run("([...document.body.querySelectorAll('*')].filter(e=>{const r=e.getBoundingClientRect();return r.right>document.documentElement.clientWidth+2||r.left< -2}).slice(0,16).map(e=>({tag:e.localName,class:String(e.className?.baseVal||e.className||'').slice(0,60),id:e.id,left:Math.round(e.getBoundingClientRect().left),right:Math.round(e.getBoundingClientRect().right),width:Math.round(e.getBoundingClientRect().width)})))");
+      offenders=await run("([...document.body.querySelectorAll('*')].filter(e=>{const r=e.getBoundingClientRect();return r.right>document.documentElement.clientWidth+2||r.left< -2}).slice(0,16).map(e=>({tag:e.localName,class:String(e.className?.baseVal||e.className||'').slice(0,60),id:e.id,left:Math.round(e.getBoundingClientRect().left),right:Math.round(e.getBoundingClientRect().right),width:Math.round(e.getBoundingClientRect().width),formula:e.closest('math')?.getAttribute('aria-label')?.slice(0,140),parents:[e.parentElement?.localName,e.parentElement?.className?.baseVal||e.parentElement?.className,e.parentElement?.parentElement?.localName,e.parentElement?.parentElement?.className?.baseVal||e.parentElement?.parentElement?.className]})))");
     }
     assert.ok(m.scroll<=m.client+2,name+' '+width+' '+(dark?'dark':'light')+
       ' horizontal overflow '+JSON.stringify({m,offenders}));
