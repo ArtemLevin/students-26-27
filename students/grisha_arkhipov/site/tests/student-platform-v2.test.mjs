@@ -19,7 +19,7 @@ test('Grigory is a valid Student Platform v2 package',()=>{
   assert.equal(result.planningMode,'fixed');
   assert.equal(result.ktpLessons,88);
   assert.equal(result.ktpRecords,88);
-  assert.equal(result.lessonMetadata,3);
+  assert.equal(result.lessonMetadata,4);
 });
 
 test('KTP state is repository-backed and first plan item links to the real lesson',()=>{
@@ -51,9 +51,10 @@ test('KTP module script is syntactically valid JavaScript',()=>{
 });
 
 test('lesson registry covers every real Grigory lesson page and KTP mapping',()=>{
-  assert.deepEqual(LESSONS.map(item=>item.date),['2026-10-07','2026-09-30','2026-09-17']);
-  assert.deepEqual(LESSONS[0].ktpRefs,['ktp-002']);
-  assert.deepEqual(LESSONS[1].ktpRefs,['ktp-001']);
+  assert.deepEqual(LESSONS.map(item=>item.date),['2026-10-14','2026-10-07','2026-09-30','2026-09-17']);
+  assert.deepEqual(LESSONS[0].ktpRefs,['ktp-003']);
+  assert.deepEqual(LESSONS[1].ktpRefs,['ktp-002']);
+  assert.deepEqual(LESSONS[2].ktpRefs,['ktp-001']);
   for(const lesson of LESSONS){
     assert.ok(fs.existsSync(path.join(site,lesson.href)),lesson.href);
   }
@@ -64,14 +65,16 @@ test('dashboard and competency evidence expose the KTP route',()=>{
   const baseline=read('competency-map-baseline.js');
   const map=read('competency-map.js');
   assert.match(index,/href="ktp\.html"/);
-  assert.match(index,/ktp\.html\?lesson=ktp-002/);
+  assert.match(index,/ktp\.html\?lesson=ktp-003/);
   assert.match(index,/07\.10\.26\.html/);
-  assert.match(index,/competency-map-baseline\.js\?v=20261007-1/);
+  assert.match(index,/competency-map-baseline\.js\?v=20261015-1/);
   assert.match(baseline,/ktp:\s*'ktp\.html\?lesson=ktp-001'/);
   assert.match(baseline,/ktp:\s*'ktp\.html\?lesson=ktp-002'/);
-  assert.match(baseline,/data\.updated = '07\.10\.2026'/);
+  assert.match(baseline,/data\.updated = '14\.10\.2026'/);
   assert.match(baseline,/func_08:\s*'linear'/);
   assert.match(baseline,/func_10:\s*'hyperbola'/);
+  assert.match(baseline,/ktp:\s*'ktp\.html\?lesson=ktp-003'/);
+  assert.match(index,/14\.10\.26\.html/);
   assert.match(map,/Открыть в КТП/);
 });
 
@@ -125,3 +128,42 @@ test('07.10 interactive lab is research-oriented and keeps one model state',()=>
   assert.match(html,/k=Δy\/Δx/);
 });
 
+
+test('14.10 lesson renders native MathML throughout the lesson and retains interactive hooks',()=>{
+  const html=read('14.10.26.html');
+  for(const anchor of ['powers','graphs','table','circle','training']){
+    assert.match(html,new RegExp('id="'+anchor+'"'));
+  }
+  const mathBlocks=[...html.matchAll(/<math\b[^>]*>[\s\S]*?<\/math>/g)];
+  assert.ok(mathBlocks.length>=90,'Every formula, answer and table value must use MathML');
+  for(const [idx,block] of mathBlocks.entries()){
+    assert.match(block[0],/xmlns="http:\/\/www\.w3\.org\/1998\/Math\/MathML"/);
+    const stack=[];
+    for(const token of block[0].matchAll(/<(\/)?([a-z]+)(?:\s[^>]*)?>/g)){
+      if(!token[1]) stack.push(token[2]);
+      else assert.equal(stack.pop(),token[2],'Mismatched MathML tags in block '+idx);
+    }
+    assert.deepEqual(stack,[],'Unclosed MathML tags in block '+idx);
+  }
+  for(const tag of ['mfrac','msup','mroot','msub','mtable','mtext']){
+    assert.match(html,new RegExp('<'+tag+'[ >]'));
+  }
+  assert.doesNotMatch(html,/<(?:sup|sub)\b|<span class="math"/);
+  assert.doesNotMatch(html,/\d+[²³⁴]|∛/);
+  assert.match(html,/<mn id="slowVal">59<\/mn>/);
+  assert.match(html,/<mn id="minuteVal">40<\/mn>/);
+  assert.match(html,/<mn id="distance">14<\/mn>/);
+  for(const id of ['slow','minutes','chart','reset']){
+    assert.match(html,new RegExp('id="'+id+'"'));
+  }
+  assert.match(html,/aria-live="polite"/);
+  assert.match(html,/prefers-reduced-motion:reduce/);
+  assert.doesNotMatch(html,/<script[^>]+src="https?:/);
+  const source=html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+  assert.ok(source);
+  const temp=path.join(os.tmpdir(),'grisha-141026-'+process.pid+'.js');
+  fs.writeFileSync(temp,source);
+  const result=spawnSync(process.execPath,['--check',temp],{encoding:'utf8'});
+  fs.rmSync(temp,{force:true});
+  assert.equal(result.status,0,result.stderr||result.stdout);
+});

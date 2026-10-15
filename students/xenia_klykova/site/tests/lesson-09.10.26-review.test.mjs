@@ -20,12 +20,12 @@ const close=(a,b)=>Math.abs(a-b)<1e-9;
 test('canonical registry always controls latest lesson order',()=>{
   const historical=[{date:'2026-10-07',href:'07.10.26.html',title:'Historical enriched lesson'}];
   const composed=composeLessons(LESSONS,historical);
-  assert.deepEqual(composed.slice(0,3).map(x=>x.date),['2026-10-12','2026-10-09','2026-10-08']);
+  assert.deepEqual(composed.slice(0,3).map(x=>x.date),['2026-10-14','2026-10-12','2026-10-09']);
   assert.equal(composed.find(x=>x.date==='2026-10-07').title,'Historical enriched lesson');
   assert.equal(composed.length,LESSONS.length);
   assert.equal(new Set(composed.map(x=>x.date)).size,composed.length);
   assert.ok(dashboard.includes('composeLessons(BASE_LESSONS,LEGACY_SNAPSHOTS)'));
-  assert.ok(homepage.includes('dashboard.js?v=20261009-review-2'));
+  assert.ok(homepage.includes('dashboard.js?v=20261014-1'));
 });
 
 test('exact evidence anchors and practice dispositions are consistent',()=>{
