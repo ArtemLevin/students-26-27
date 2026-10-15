@@ -128,3 +128,27 @@ test('07.10 interactive lab is research-oriented and keeps one model state',()=>
   assert.match(html,/k=Δy\/Δx/);
 });
 
+
+test('14.10 lesson links checked mathematics and interactive table method',()=>{
+  const html=read('14.10.26.html');
+  for(const anchor of ['powers','graphs','table','circle','training']){
+    assert.match(html,new RegExp('id="'+anchor+'"'));
+  }
+  assert.match(html,/t<sup>4<\/sup> = 16/);
+  assert.match(html,/минус 3 м|не менее 3 метров/);
+  assert.match(html,/1,2 секунды/);
+  assert.match(html,/h\(t\) = 1,6 \+ 8t − 5t²/);
+  assert.match(html,/id="slow"/);
+  assert.match(html,/id="minutes"/);
+  assert.match(html,/id="chart"/);
+  assert.match(html,/aria-live="polite"/);
+  assert.match(html,/prefers-reduced-motion:reduce/);
+  assert.doesNotMatch(html,/<script[^>]+src="https?:/);
+  const source=html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+  assert.ok(source);
+  const temp=path.join(os.tmpdir(),'grisha-141026-'+process.pid+'.js');
+  fs.writeFileSync(temp,source);
+  const result=spawnSync(process.execPath,['--check',temp],{encoding:'utf8'});
+  fs.rmSync(temp,{force:true});
+  assert.equal(result.status,0,result.stderr||result.stdout);
+});
