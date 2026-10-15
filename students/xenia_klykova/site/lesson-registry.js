@@ -5,6 +5,57 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-14",
+  "ktpRefs": [],
+  "href": "14.10.26.html",
+  "title": "Многочлены. Корень меняет ход решения",
+  "navTitle": "Многочлены и метод интервалов",
+  "navSubtitle": "деление с остатком · Безу · Горнер · кратность корней",
+  "summary": "Алгебра: деление многочленов с остатком, теорема Безу, схема Горнера, разложение на множители, кратность корней, рациональные неравенства и замена переменной. Урок 14 октября 2026 года.",
+  "topics": [
+    "деление многочленов с остатком",
+    "теорема Безу",
+    "схема Горнера",
+    "метод интервалов и кратности",
+    "замена переменной"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t7_algebra",
+      "evidenceAnchor": "division",
+      "relation": "practiced",
+      "label": "Деление многочленов с остатком",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t6_factor",
+      "evidenceAnchor": "horner",
+      "relation": "practiced",
+      "label": "Теорема Безу и схема Горнера",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t15_intervals",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced",
+      "label": "Метод интервалов: знаки и кратности",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t6_linear_quad",
+      "evidenceAnchor": "substitution",
+      "relation": "touched",
+      "label": "Замена переменной в многочленных уравнениях",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "14.10.26.html",
+    "tex": "../tex_docs/14.10.26.tex",
+    "lab": "14.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-12",
   "ktpRefs": [],
   "href": "12.10.26.html",
