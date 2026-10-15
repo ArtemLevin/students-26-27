@@ -25,7 +25,7 @@ test('canonical registry always controls latest lesson order',()=>{
   assert.equal(composed.length,LESSONS.length);
   assert.equal(new Set(composed.map(x=>x.date)).size,composed.length);
   assert.ok(dashboard.includes('composeLessons(BASE_LESSONS,LEGACY_SNAPSHOTS)'));
-  assert.ok(homepage.includes('dashboard.js?v=20261009-review-2'));
+  assert.ok(homepage.includes('dashboard.js?v=20261014-1'));
 });
 
 test('exact evidence anchors and practice dispositions are consistent',()=>{
