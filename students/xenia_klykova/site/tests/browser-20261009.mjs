@@ -80,8 +80,12 @@ try{
     await sleep(140);
     await run((name==="index.html"?"document.body.dataset.theme=":"document.documentElement.dataset.theme=")+"'"+(dark?"dark":"light")+"'");
     const m=await run('({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth})');
+    let offenders=[];
+    if(m.scroll>m.client+2){
+      offenders=await run("([...document.body.querySelectorAll('*')].filter(e=>{const r=e.getBoundingClientRect();return r.right>document.documentElement.clientWidth+2||r.left< -2}).slice(0,16).map(e=>({tag:e.localName,class:String(e.className?.baseVal||e.className||'').slice(0,60),id:e.id,left:Math.round(e.getBoundingClientRect().left),right:Math.round(e.getBoundingClientRect().right),width:Math.round(e.getBoundingClientRect().width),formula:e.closest('math')?.getAttribute('aria-label')?.slice(0,140),parents:[e.parentElement?.localName,e.parentElement?.className?.baseVal||e.parentElement?.className,e.parentElement?.parentElement?.localName,e.parentElement?.parentElement?.className?.baseVal||e.parentElement?.parentElement?.className]})))");
+    }
     assert.ok(m.scroll<=m.client+2,name+' '+width+' '+(dark?'dark':'light')+
-      ' horizontal overflow '+JSON.stringify(m));
+      ' horizontal overflow '+JSON.stringify({m,offenders}));
   }
   async function snapshot(filename){
     const shot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
@@ -147,11 +151,24 @@ try{
     }
   }
   await navigate('14.10.26.html',1440,900);
+  assert.ok(await run("document.querySelectorAll('math').length >= 90"),'lesson should render native MathML');
+  assert.ok(await run("document.querySelectorAll('msup').length >= 40"));
+  assert.ok(await run("document.querySelectorAll('mfrac').length >= 5"));
+  assert.equal(await run("document.querySelector('.eq math').namespaceURI"),'http://www.w3.org/1998/Math/MathML');
+  assert.equal(await run("document.querySelectorAll('#tasklist math').length >= 10"),true);
+  assert.equal(await run("document.querySelectorAll('.answers math').length >= 10"),true);
+  assert.equal(await run("document.querySelectorAll('.logic foreignObject math').length"),7);
   assert.equal(await run("document.querySelectorAll('#tasklist input').length"),10);
   assert.ok(await run("document.querySelector('a[href=\"14.10.26-lab.html#intervals\"]')!==null"));
   await navigate('14.10.26-lab.html',1440,900);
+  assert.ok(await run("document.querySelectorAll('math').length >= 45"),'lab should render native MathML');
+  assert.ok(await run("document.querySelector('mfrac')!==null && document.querySelector('msup')!==null"));
+  assert.equal(await run("document.querySelector('#tableR math').namespaceURI"),'http://www.w3.org/1998/Math/MathML');
+  assert.equal(await run("document.querySelectorAll('.graph foreignObject math').length"),8);
   assert.equal(await run("document.querySelector('#tableR').textContent"),'0');
   assert.equal(await run("(()=>{const r=document.querySelector('#aRange');r.value='1';r.dispatchEvent(new Event('input'));return document.querySelector('#tableR').textContent})()"),'84');
+  assert.equal(await run("document.querySelector('#quotient math').namespaceURI"),'http://www.w3.org/1998/Math/MathML');
+  assert.equal(await run("document.querySelector('#remainder math').namespaceURI"),'http://www.w3.org/1998/Math/MathML');
   assert.ok(await run("(()=>{const r=document.querySelector('#xRange');r.value='1.5';r.dispatchEvent(new Event('input'));return document.querySelector('#signExplanation').textContent.includes('исключается')})()"));
   await navigate('index.html',1440,900);
   await sleep(400);
