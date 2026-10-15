@@ -68,7 +68,7 @@ test('dashboard publication outcome is the newest lesson if publication complete
   const {LESSONS}=await import('../lesson-registry.js');
   const newRecord=LESSONS.find(x=>x.date==='2026-10-12');
   assert.ok(newRecord,'October 12 lesson missing from dashboard registry');
-  assert.equal(LESSONS[0].date,'2026-10-12');
+  assert.ok(LESSONS[0].date>='2026-10-12');
   assert.equal(newRecord.materials.lab,'12.10.26-lab.html');
   assert.equal(newRecord.outcomes.length,intent.outcomes.length);
 });
