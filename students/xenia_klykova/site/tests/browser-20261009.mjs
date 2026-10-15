@@ -147,11 +147,24 @@ try{
     }
   }
   await navigate('14.10.26.html',1440,900);
+  assert.ok(await run("document.querySelectorAll('math').length >= 90"),'lesson should render native MathML');
+  assert.ok(await run("document.querySelectorAll('msup').length >= 40"));
+  assert.ok(await run("document.querySelectorAll('mfrac').length >= 5"));
+  assert.equal(await run("document.querySelector('.eq math').namespaceURI"),'http://www.w3.org/1998/Math/MathML');
+  assert.equal(await run("document.querySelectorAll('#tasklist math').length >= 10"),true);
+  assert.equal(await run("document.querySelectorAll('.answers math').length >= 10"),true);
+  assert.equal(await run("document.querySelectorAll('.logic foreignObject math').length"),7);
   assert.equal(await run("document.querySelectorAll('#tasklist input').length"),10);
   assert.ok(await run("document.querySelector('a[href=\"14.10.26-lab.html#intervals\"]')!==null"));
   await navigate('14.10.26-lab.html',1440,900);
+  assert.ok(await run("document.querySelectorAll('math').length >= 45"),'lab should render native MathML');
+  assert.ok(await run("document.querySelector('mfrac')!==null && document.querySelector('msup')!==null"));
+  assert.equal(await run("document.querySelector('#tableR math').namespaceURI"),'http://www.w3.org/1998/Math/MathML');
+  assert.equal(await run("document.querySelectorAll('.graph foreignObject math').length"),8);
   assert.equal(await run("document.querySelector('#tableR').textContent"),'0');
   assert.equal(await run("(()=>{const r=document.querySelector('#aRange');r.value='1';r.dispatchEvent(new Event('input'));return document.querySelector('#tableR').textContent})()"),'84');
+  assert.equal(await run("document.querySelector('#quotient math').namespaceURI"),'http://www.w3.org/1998/Math/MathML');
+  assert.equal(await run("document.querySelector('#remainder math').namespaceURI"),'http://www.w3.org/1998/Math/MathML');
   assert.ok(await run("(()=>{const r=document.querySelector('#xRange');r.value='1.5';r.dispatchEvent(new Event('input'));return document.querySelector('#signExplanation').textContent.includes('исключается')})()"));
   await navigate('index.html',1440,900);
   await sleep(400);
