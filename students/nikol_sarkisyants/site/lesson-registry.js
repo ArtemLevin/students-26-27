@@ -5,6 +5,65 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-14",
+  "ktpRefs": [],
+  "href": "14.10.26.html",
+  "title": "Тригонометрические уравнения",
+  "navTitle": "Тригонометрия: методы и ограничения",
+  "navSubtitle": "двойной угол · однородность · ОДЗ · движение",
+  "summary": "Повторение ЕГЭ: формулы двойного угла, однородные тригонометрические уравнения, ограниченность, логарифмы и задача о движении. Занятие Николь Саркисьянц 14.10.2026.",
+  "topics": [
+    "тригонометрические уравнения",
+    "формулы двойного угла",
+    "однородные уравнения",
+    "ограниченность функции",
+    "логарифмы",
+    "квадратичная модель движения"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t7_double_angle",
+      "evidenceAnchor": "formulas",
+      "relation": "practiced",
+      "label": "Формулы двойного угла",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t13_trig_homogeneous",
+      "evidenceAnchor": "homogeneous",
+      "relation": "practiced",
+      "label": "Однородные тригонометрические уравнения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t13_trig_domain",
+      "evidenceAnchor": "bounds",
+      "relation": "touched",
+      "label": "Ограниченность и допустимые случаи",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t6_logarithmic",
+      "evidenceAnchor": "log",
+      "relation": "practiced",
+      "label": "Логарифмы и ОДЗ",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t9_formula_transform",
+      "evidenceAnchor": "motion",
+      "relation": "touched",
+      "label": "Квадратичная модель движения",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "14.10.26.html",
+    "lab": "14.10.26-lab.html",
+      "tex": "../tex_docs/14.10.26.tex"
+  }
+},
+  {
     "date": "2026-10-02",
     "ktpRefs": [],
     "href": "02.10.26.html",
