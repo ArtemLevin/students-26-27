@@ -80,8 +80,12 @@ try{
     await sleep(140);
     await run((name==="index.html"?"document.body.dataset.theme=":"document.documentElement.dataset.theme=")+"'"+(dark?"dark":"light")+"'");
     const m=await run('({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth})');
+    let offenders=[];
+    if(m.scroll>m.client+2){
+      offenders=await run("([...document.body.querySelectorAll('*')].filter(e=>{const r=e.getBoundingClientRect();return r.right>document.documentElement.clientWidth+2||r.left< -2}).slice(0,16).map(e=>({tag:e.localName,class:String(e.className?.baseVal||e.className||'').slice(0,60),id:e.id,left:Math.round(e.getBoundingClientRect().left),right:Math.round(e.getBoundingClientRect().right),width:Math.round(e.getBoundingClientRect().width)})))");
+    }
     assert.ok(m.scroll<=m.client+2,name+' '+width+' '+(dark?'dark':'light')+
-      ' horizontal overflow '+JSON.stringify(m));
+      ' horizontal overflow '+JSON.stringify({m,offenders}));
   }
   async function snapshot(filename){
     const shot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
