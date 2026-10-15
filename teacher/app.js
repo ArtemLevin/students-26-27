@@ -92,9 +92,7 @@
   if (savedTheme === "dark" || savedTheme === "light") document.documentElement.dataset.theme = savedTheme;
 
   document.getElementById("themeToggle").addEventListener("click", () => {
-    const dark = document.documentElement.dataset.theme === "dark"
-      || (!document.documentElement.dataset.theme
-        && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    const dark = document.documentElement.dataset.theme === "dark";
     const next = dark ? "light" : "dark";
     document.documentElement.dataset.theme = next;
     setStored(themeKey, next);
