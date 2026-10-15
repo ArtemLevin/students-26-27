@@ -137,12 +137,28 @@ try{
   await sleep(100);
   assert.equal(await run("document.querySelector('#pairCount').textContent"),'2');
   assert.equal(await run("(()=>{const e=document.querySelector('#pairScenario');e.value='12,360';e.dispatchEvent(new Event('change'));return document.querySelector('#pairCount').textContent})()"),'4');
+  // 14 October: responsive page, live Horner division and rational sign experiment.
+  for(const [w,h] of [[1440,900],[390,844],[375,812]]){
+    for(const page of ['14.10.26.html','14.10.26-lab.html']){
+      await navigate(page,w,h,false);
+      await snapshot(page.replace('.html','')+'-'+w+'-light');
+      await navigate(page,w,h,true);
+      await snapshot(page.replace('.html','')+'-'+w+'-dark');
+    }
+  }
+  await navigate('14.10.26.html',1440,900);
+  assert.equal(await run("document.querySelectorAll('#tasklist input').length"),10);
+  assert.ok(await run("document.querySelector('a[href=\"14.10.26-lab.html#intervals\"]')!==null"));
+  await navigate('14.10.26-lab.html',1440,900);
+  assert.equal(await run("document.querySelector('#tableR').textContent"),'0');
+  assert.equal(await run("(()=>{const r=document.querySelector('#aRange');r.value='1';r.dispatchEvent(new Event('input'));return document.querySelector('#tableR').textContent})()"),'84');
+  assert.ok(await run("(()=>{const r=document.querySelector('#xRange');r.value='1.5';r.dispatchEvent(new Event('input'));return document.querySelector('#signExplanation').textContent.includes('исключается')})()"));
   await navigate('index.html',1440,900);
   await sleep(400);
-  assert.equal(await run("document.querySelector('#lesson-title').textContent"),'НОД и НОК: от алгоритма к идее');
-  assert.equal(await run("document.querySelector('#latestLessonCta').getAttribute('href')"),'12.10.26.html');
-  assert.equal(await run("document.querySelector('#latestPdfLink').getAttribute('href')"),'../pdf_docs/12.10.26.pdf');
-  assert.equal(await run("document.querySelector('#latestTexLink').getAttribute('href')"),'../tex_docs/12.10.26.tex');
+  assert.equal(await run("document.querySelector('#lesson-title').textContent"),'Многочлены. Корень меняет ход решения');
+  assert.equal(await run("document.querySelector('#latestLessonCta').getAttribute('href')"),'14.10.26.html');
+  assert.equal(await run("document.querySelector('#latestPdfLink').hidden"),true);
+  assert.equal(await run("document.querySelector('#latestTexLink').getAttribute('href')"),'../tex_docs/14.10.26.tex');
   assert.equal(await run("document.querySelectorAll('#recentLessons a').length"),3);
   assert.deepEqual(jsErrors,[],'JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Network errors');
