@@ -1,0 +1,479 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{cmap}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{DejaVuSerif}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{left=20mm,right=20mm,top=20mm,bottom=22mm}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usepackage{xcolor}
+\usepackage{tabularx,array,booktabs}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{needspace}
+\usepackage{setspace}
+\usepackage{hyperref}
+\hypersetup{hidelinks,pdftitle={Свойства делимости целых чисел},pdfauthor={Учебно-методическое пособие}}
+
+\definecolor{ink}{HTML}{263746}
+\definecolor{navy}{HTML}{304E69}
+\definecolor{slate}{HTML}{758A9B}
+\definecolor{muted}{HTML}{5F6E79}
+\definecolor{pale}{HTML}{E7EDF1}
+\color{ink}
+\setstretch{1.10}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=2pt,topsep=3pt}
+\setcounter{secnumdepth}{0}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{muted} ЕГЭ по математике\,|\,Целые числа}
+\fancyhead[R]{\footnotesize\color{muted} Свойства делимости}
+\fancyfoot[C]{\small\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{14pt}
+\renewcommand{\arraystretch}{1.35}
+
+\newcommand{\blocktitle}[2]{\clearpage\section{Блок #1. #2}\vspace{-2mm}\noindent\color{slate}\rule{\linewidth}{.6pt}\color{ink}\vspace{3mm}}
+\newcommand{\concept}[1]{\par\needspace{4\baselineskip}{\color{navy}\bfseries #1.}\enspace}
+\newcommand{\example}[1]{\par\needspace{7\baselineskip}{\color{navy}\bfseries Разобранный пример.} #1\par}
+\newcommand{\warning}[1]{\par\needspace{3\baselineskip}{\color{muted}\bfseries Типичная ошибка.} #1\par}
+\newcommand{\selfcheck}[1]{\par\needspace{3\baselineskip}{\color{muted}\bfseries Проверка себя.} #1\par}
+\newcommand{\minitrain}{\par\needspace{6\baselineskip}\vspace{1mm}{\color{navy}\bfseries Три мини-упражнения}\par\vspace{-1mm}}
+\newcommand{\mini}[2]{\par\noindent\hspace*{2mm}\textbf{#1)}\enspace #2\par}
+\newcommand{\task}[2]{\par\needspace{2\baselineskip}\noindent\makebox[8mm][l]{\color{navy}\bfseries #1.}#2\par\vspace{2mm}}
+\newcommand{\training}[2]{\clearpage\section*{Тренировочный блок #1}\addcontentsline{toc}{section}{Тренировочный блок #1}\textcolor{muted}{#2}\par\vspace{3mm}\rule{\linewidth}{.4pt}\vspace{2mm}}
+\newcommand{\answers}[2]{\clearpage\section*{Ответы к тренировочному блоку #1}\addcontentsline{toc}{section}{Ответы к тренировочному блоку #1}\vspace{3mm}#2}
+\newcommand{\anstable}[1]{\begin{center}\small\begin{tabularx}{\linewidth}{>{\centering\arraybackslash}p{9mm}X>{\centering\arraybackslash}p{9mm}X}\toprule\textbf{№}&\textbf{Ответ}&\textbf{№}&\textbf{Ответ}\\\midrule #1\\\bottomrule\end{tabularx}\end{center}}
+
+\tikzset{
+ st/.style={ellipse,draw=navy,line width=.8pt,fill=pale,align=center,minimum height=10mm,text width=46mm,font=\small},
+ pr/.style={rectangle,rounded corners=2mm,draw=slate,line width=.8pt,align=center,minimum height=13mm,text width=66mm,font=\small},
+ de/.style={diamond,aspect=2.35,draw=navy,line width=.8pt,align=center,text width=34mm,inner sep=1.9mm,font=\small},
+ ar/.style={-{Stealth[length=2.5mm,width=1.8mm]},line width=.8pt,draw=navy},
+ ann/.style={font=\small\bfseries,inner sep=1.5pt,color=navy}
+}
+\newcommand{\schemetitle}[1]{\clearpage\thispagestyle{fancy}\section*{Алгоритм: #1}\vspace{14mm}}
+
+\begin{document}
+
+% Титульный лист
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{20mm}
+{\color{navy}\large УЧЕБНО-МЕТОДИЧЕСКОЕ ПОСОБИЕ}\par
+\vspace{12mm}
+{\fontsize{27}{32}\selectfont\bfseries Свойства делимости\\[2mm] целых чисел}\par
+\vspace{7mm}
+{\Large Задачи на целые числа. Подготовка к ЕГЭ\par}
+\vspace{16mm}
+{\color{muted}\large Теория, доказательства, алгоритмы, тренировки и контроль}\par
+\vspace{13mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[navy,line width=1.0pt] (0,0) .. controls (2.8,.9) and (6,-.65) .. (8.4,.14) .. controls (10.5,.77) and (12.8,.28) .. (15.6,.48);
+\draw[slate,line width=.35pt] (0,-.36) -- (15.6,-.36);
+\end{tikzpicture}\par
+\vfill
+
+\end{titlepage}
+
+\clearpage
+\section*{Карта темы}
+\addcontentsline{toc}{section}{Карта темы}
+\textbf{Главный вопрос:} по каким признакам можно доказать, что целое число делится на заданное натуральное число, не выполняя громоздкого деления?
+
+\begin{center}
+\begin{tikzpicture}[node distance=8mm, every node/.style={align=center}]
+\node[pr,text width=115mm] (a) {\textbf{1. Язык делимости}\quad $m\mid a\iff a=mk$, $k\in\mathbb Z$};
+\node[pr,text width=115mm,below=of a] (b) {\textbf{2. Сумма и линейная комбинация}\quad $m\mid a,\ m\mid b\Rightarrow m\mid (ra+sb)$};
+\node[pr,text width=115mm,below=of b] (c) {\textbf{3. Произведение и взаимная простота}\quad делимость произведения; свойство Евклида};
+\node[pr,text width=115mm,below=of c] (d) {\textbf{4. Доказательства}\quad последовательные числа, чётность, оценки и контрпримеры};
+\draw[ar] (a)--(b);\draw[ar] (b)--(c);\draw[ar] (c)--(d);
+\end{tikzpicture}
+\end{center}
+
+\concept{Обозначения} Запись $m\mid a$ означает «$m$ делит $a$»; $m\nmid a$ означает «$m$ не делит $a$». Всюду $a,b,k,r,s\in\mathbb Z$, а делитель $m$ предполагается \textbf{положительным}.
+
+\concept{Маршрут освоения} Сначала учимся \emph{узнавать} делимость, затем \emph{доказывать} её с помощью определений, \emph{комбинировать} несколько условий и, наконец, \emph{самостоятельно выбирать} способ доказательства.
+
+\concept{Точный смысл ответа} В задачах «может ли» достаточно одного корректного примера для «да», но для «нет» необходимо доказательство невозможности. В задачах «найдите все» нужны и проверка найденных значений, и доказательство отсутствия других.
+
+
+
+\blocktitle{1}{Что означает делимость}
+\subsection{1.1. Определение, делитель и кратное}
+\concept{Определение} Натуральное число $m>0$ является \emph{делителем} целого числа $a$, если существует целое $k$ такое, что
+\[
+ a=mk. \tag{1}
+\]
+Говорят также, что $a$ \emph{кратно} $m$. Число $k$ может быть положительным, отрицательным или нулём.
+
+\concept{Сравнение случаев} Число $-42$ делится на $7$, потому что $-42=7\cdot(-6)$. Число $44$ на $7$ не делится: целого $k$, удовлетворяющего $44=7k$, нет. При любом $m>0$ имеем $0=m\cdot0$, поэтому $m\mid0$. При этом деление на нуль в данной теме не рассматривается.
+
+\example{Проверим, делится ли $-132$ на $12$. Ищем целое частное:
+\[
+-132=12\cdot(-11).
+\]
+Следовательно, $12\mid(-132)$. Проверка: $12\cdot(-11)=-132$.}
+
+\minitrain
+\mini{1}{Верно ли $7\mid(-56)$? (\textbf{Да}, $-56=7\cdot(-8)$.)}
+\mini{2}{Найдите $k\in\mathbb Z$, если $-63=9k$. ($\boldsymbol{k=-7}$.)}
+\mini{3}{Верно ли $17\mid0$? (\textbf{Да}.)}
+
+\clearpage
+\subsection{1.2. Умножение и цепочка делителей}
+\concept{Свойство умножения} Если $m\mid a$, то $m\mid ac$ для любого целого $c$: из $a=mk$ следует $ac=m(kc)$.
+
+\concept{Переход к делителю делителя} Если $m\mid a$ и $d\mid m$, то $d\mid a$. Действительно, при $a=mk$ и $m=dt$ получаем $a=d(tk)$.
+
+\concept{Одновременное умножение} Если $m\mid a$ и $c$ --- положительное целое число, то $mc\mid ac$:
+\[
+a=mk\quad\Longrightarrow\quad ac=(mc)k.
+\]
+Свойство не позволяет автоматически утверждать, что $mc\mid a$.
+
+\example{Из $18\mid234$ ($234=18\cdot13$) следует $6\mid234$, так как $18=6\cdot3$. Кроме того, $18\cdot4\mid234\cdot4$, то есть $72\mid936$.}
+
+\warning{Из $6\mid a$ не следует $12\mid a$: для $a=6$ первое утверждение верно, а второе ложно. Умножать надо \emph{и делимое, и делитель}, либо отдельно доказывать новую кратность.}
+
+\minitrain
+\mini{1}{Если $12\mid84$, верно ли $3\mid84$? (\textbf{Да}.)}
+\mini{2}{Из $7\mid(-28)$ следует ли $21\mid(-84)$? (\textbf{Да}.)}
+\mini{3}{Если $4\mid a$, верно ли $4\mid9a$? (\textbf{Да}.)}
+
+\schemetitle{проверка делимости по определению}
+\begin{center}
+\begin{tikzpicture}[node distance=15mm]
+\node[st] (s) {Даны целое $a$ и натуральное $m$};
+\node[pr,below=of s] (p) {Представьте $a=mq+r$, где $q\in\mathbb Z$, $0\le r<m$};
+\node[de,below=18mm of p] (q) {$r=0$?};
+\node[pr,text width=34mm,below=29mm of q,xshift=49mm] (yes) {$m\mid a$};
+\node[pr,text width=34mm,below=29mm of q,xshift=-49mm] (no) {$m\nmid a$};
+\node[st,text width=29mm,below=15mm of yes] (ey) {Вывод сделан};
+\node[st,text width=29mm,below=15mm of no] (en) {Вывод сделан};
+\draw[ar] (s)--(p);\draw[ar] (p)--(q);
+\draw[ar] (q.south)--(yes.north);\node[ann] at ([xshift=28mm,yshift=-18mm]q.south) {да};
+\draw[ar] (q.south)--(no.north);\node[ann] at ([xshift=-28mm,yshift=-18mm]q.south) {нет};
+\draw[ar] (yes)--(ey);\draw[ar] (no)--(en);
+\end{tikzpicture}
+\end{center}
+
+\training{1}{От прямого применения определения --- к сочетанию умножения и перехода к делителям.}
+\task{1}{Делится ли число $-91$ на $7$? Запишите частное.}
+\task{2}{Найдите целое $q$, если $144=(-12)q$.}
+\task{3}{Верно ли, что $19\mid0$? Объясните одной формулой.}
+\task{4}{Представьте $-102$ в виде $6k$, где $k$ --- целое число.}
+\task{5}{Следует ли из $6\mid a$, что $12\mid a$? Приведите обоснование или контрпример.}
+\task{6}{Известно, что $8\mid a$. Следует ли $8\mid(-3a)$?}
+\task{7}{Число $a$ кратно $18$. Докажите, что оно кратно одновременно $6$ и $9$.}
+\task{8}{Известно, что $12\mid b$. Следует ли $36\mid3b$?}
+\task{9}{Известно, что $24\mid a$. Докажите, что $8\mid7a$.}
+\task{10}{Известно, что $a/9$ --- целое число. Докажите, что $45\mid5a$.}
+
+\answers{1}{\anstable{
+1&Да, $-91=7\cdot(-13)$&6&Да\\
+2&$q=-12$&7&Да: $6\mid a$ и $9\mid a$\\
+3&Да, $0=19\cdot0$&8&Да, $3b=36k$\\
+4&$k=-17$&9&Да, $7a=8\cdot21k$\\
+5&Нет: $a=6$&10&Да, $a=9k\Rightarrow5a=45k$
+}}
+
+\blocktitle{2}{Сумма, разность и линейные комбинации}
+\subsection{2.1. Складываем и вычитаем кратные числа}
+\concept{Свойство суммы и разности} Если $m\mid a$ и $m\mid b$, то
+\[
+ m\mid(a+b),\qquad m\mid(a-b).
+\]
+\textbf{Доказательство.} Пусть $a=mp$, $b=mq$. Тогда
+\[
+a+b=m(p+q),\qquad a-b=m(p-q).
+\]
+Оба выражения в скобках целые, что и требовалось.
+
+\concept{Когда одно слагаемое не кратно} Если $m\mid a$, но $m\nmid b$, то $m\nmid(a+b)$ и $m\nmid(a-b)$. Иначе, например, из $m\mid(a+b)$ и $m\mid a$ следовало бы $m\mid((a+b)-a)=b$ --- противоречие.
+
+\example{Числа $104$ и $56$ кратны $8$. Поэтому $104+56=160$ и $104-56=48$ кратны $8$. Но $35$ кратно $7$, а $9$ нет, поэтому ни $35+9=44$, ни $35-9=26$ на $7$ не делятся.}
+
+\warning{Из делимости суммы не следует делимость каждого слагаемого. Например, $5\mid(2+3)$, но $5\nmid2$ и $5\nmid3$.}
+
+\minitrain
+\mini{1}{Если $9\mid18$ и $9\mid45$, делится ли $18-45$ на $9$? (\textbf{Да}.)}
+\mini{2}{Если $7\mid35$, но $7\nmid9$, делится ли $35+9$ на $7$? (\textbf{Нет}.)}
+\mini{3}{Из $11\mid a$ и $11\mid(a+b)$ следует ли $11\mid b$? (\textbf{Да}.)}
+
+\clearpage
+\subsection{2.2. Целочисленные линейные комбинации}
+\concept{Главный инструмент} Если $m\mid a$ и $m\mid b$, то при любых $r,s\in\mathbb Z$
+\[
+ \boxed{m\mid(ra+sb).} \tag{2}
+\]
+В самом деле, $ra+sb=m(rp+sq)$ при $a=mp$, $b=mq$.
+
+\concept{Идея метода} Коэффициенты $r$ и $s$ подбирают так, чтобы \emph{исчезла неизвестная} или получилось небольшое фиксированное число. Тогда общий делитель исходных выражений обязан делить и это число.
+
+\example{Разберём пример из исходной книги. Натуральные числа $3n+2$ и $8n+3$ делятся на натуральное $p>1$. Найдём $p$. Из (2) следует
+\begin{align*}
+p&\mid\bigl(8(3n+2)-3(8n+3)\bigr),\\
+p&\mid(24n+16-24n-9),\\
+p&\mid7.
+\end{align*}
+Поскольку $7$ --- простое и $p>1$, получаем $p=7$. \textbf{Проверка существования:} при $n=4$ исходные числа равны $14$ и $35$ и оба делятся на $7$.}
+
+\selfcheck{Важно не пропускать существование примера, если требуется найти \emph{все возможные} значения делителя: условие «$p$ делит $7$» само по себе ещё не доказывает, что $p=7$ достижимо.}
+
+\minitrain
+\mini{1}{Если $4\mid a$ и $4\mid b$, верно ли $4\mid(7a-3b)$? (\textbf{Да}.)}
+\mini{2}{Если $d>1$ делит $5n+1$ и $2n+1$, найдите $d$. ($\boldsymbol{d=3}$, например при $n=1$.)}
+\mini{3}{Из $m\mid(3a+2b)$ и $m\mid(a-b)$ следует ли $m\mid(4a+b)$? (\textbf{Да}.)}
+
+\schemetitle{линейная комбинация}
+\begin{center}
+\begin{tikzpicture}[node distance=13mm]
+\node[st] (s) {Нужно доказать $m\mid E$ или найти общий делитель};
+\node[pr,below=of s] (a) {Запишите исходные кратные выражения};
+\node[pr,below=of a] (b) {Подберите целые коэффициенты: сложите или вычтите выражения};
+\node[de,below=17mm of b] (q) {Получилось нужное $E$ или число без неизвестной?};
+\node[pr,text width=38mm,below=29mm of q,xshift=49mm] (yes) {Сделайте вывод о делимости};
+\node[pr,text width=38mm,below=29mm of q,xshift=-49mm] (no) {Поищите другую комбинацию};
+\node[st,text width=29mm,below=12mm of yes] (end1) {Проверка};
+\node[st,text width=29mm,below=12mm of no] (end2) {Новый выбор};
+\draw[ar](s)--(a);\draw[ar](a)--(b);\draw[ar](b)--(q);
+\draw[ar](q.south)--(yes.north);\node[ann] at ([xshift=28mm,yshift=-18mm]q.south) {да};
+\draw[ar](q.south)--(no.north);\node[ann] at ([xshift=-28mm,yshift=-18mm]q.south) {нет};
+\draw[ar](yes)--(end1);\draw[ar](no)--(end2);
+\end{tikzpicture}
+\end{center}
+
+\training{2}{Освоение свойства (2), поиск общего делителя и простое исключение переменной.}
+\task{1}{Числа $28$ и $63$ кратны $7$. Делится ли их сумма на $7$?}
+\task{2}{Число $80$ делится на $5$, а $23$ --- нет. Делится ли $80-23$ на $5$?}
+\task{3}{Если $6\mid a$ и $6\mid b$, докажите, что $6\mid(2a-5b)$.}
+\task{4}{Приведите два положительных числа $a,b$, каждое из которых не делится на $9$, но их сумма делится на $9$.}
+\task{5}{Даны $13\mid a$ и $13\mid(a+b)$. Что можно утверждать о $b$?}
+\task{6}{Докажите для любого целого $n$, что $5\mid(15n+40)$.}
+\task{7}{Может ли натуральное $d>1$ делить одновременно $4n+3$ и $7n+5$ при некотором целом $n$?}
+\task{8}{Натуральное $d>1$ делит и $5n+4$, и $8n+7$. Найдите все возможные $d$ и приведите пример $n$.}
+\task{9}{Известно: $m\mid(2a+3b)$ и $m\mid(5a+7b)$. Докажите, что $m$ делит и $a$, и $b$.}
+\task{10}{Найдите все натуральные $n$, для которых $3n+2$ и $8n+3$ одновременно делятся на $7$.}
+
+\answers{2}{\anstable{
+1&Да: $28+63=91$&6&$15n+40=5(3n+8)$\\
+2&Нет: $80-23=57$&7&Нет: общий делитель делил бы $1$\\
+3&Да, свойство (2)&8&$d=3$; например, $n=1$\\
+4&Например, $a=4$, $b=5$&9&$m\mid a$ и $m\mid b$\\
+5&$13\mid b$&10&$n=7k+4$, $k=0,1,2,\ldots$
+}}
+
+\blocktitle{3}{Произведение и взаимная простота}
+\subsection{3.1. Что можно заключить о множителях}
+\concept{Прямое свойство} Если $m\mid a$, то $m\mid ab$. Но из $m\mid ab$ вообще \emph{не следует}, что $m\mid a$ или $m\mid b$: например, $6\mid(2\cdot3)$, однако $6\nmid2$ и $6\nmid3$.
+
+\concept{Взаимная простота} Два натуральных числа $u,v$ называют взаимно простыми, если $\text{НОД}(u,v)=1$. Например, $8$ и $15$ взаимно просты, а $6$ и $15$ --- нет, поскольку их НОД равен $3$.
+
+\concept{Важное свойство (лемма Евклида)} Если $m\mid ab$ и $\text{НОД}(m,a)=1$, то $m\mid b$. Для простого $p$ это даёт знакомую форму:
+\[
+p\mid ab\quad\Longrightarrow\quad p\mid a\;\text{или}\;p\mid b.
+\]
+\textbf{Почему?} Для взаимно простых $m$ и $a$ существуют целые $u,v$ такие, что $um+va=1$ (тождество Безу). Умножаем на $b$: $umb+vab=b$. Оба слагаемых слева кратны $m$, так как $m\mid ab$. Поэтому $m\mid b$. Если же простое $p$ не делит $a$, то $p$ и $a$ взаимно просты и применим доказанный результат.
+
+\example{Пусть $13\mid5a$. Числа $13$ и $5$ взаимно просты, поэтому из делимости произведения следует $13\mid a$. Такой вывод нельзя делать, заменив $13$ и $5$ на числа с общим делителем больше $1$.}
+
+\minitrain
+\mini{1}{Из $8\mid40$ следует ли $8\mid(40\cdot13)$? (\textbf{Да}.)}
+\mini{2}{Верно ли: $6\mid(2\cdot3)$, значит, $6\mid2$ или $6\mid3$? (\textbf{Нет}.)}
+\mini{3}{Если $5\mid ab$ и $5\nmid a$, следует ли $5\mid b$? (\textbf{Да}.)}
+
+\clearpage
+\subsection{3.2. Когда можно перемножить делители}
+\concept{Произведение взаимно простых делителей} Если $m\mid a$, $k\mid a$ и $\text{НОД}(m,k)=1$, то
+\[
+\boxed{mk\mid a.} \tag{3}
+\]
+\textbf{Доказательство.} Из $m\mid a$ имеем $a=mt$. Так как $k\mid a$, то $k\mid mt$. По взаимной простоте $m$ и $k$ и лемме Евклида получаем $k\mid t$, то есть $t=ks$. Значит, $a=mks$.
+
+\concept{Сравнение двух ситуаций} Если $8\mid N$ и $15\mid N$, то $120\mid N$, поскольку $\text{НОД}(8,15)=1$. Если же $6\mid N$ и $10\mid N$, то вывод $60\mid N$ неверен: число $N=30$ делится на $6$ и $10$, но не на $60$.
+
+\example{Известно, что целое число $N$ делится на $4$, $9$ и $5$. Числа $4$, $9$ и $5$ попарно взаимно просты. Сначала по (3) получаем $36\mid N$, затем, поскольку $\text{НОД}(36,5)=1$, получаем $180\mid N$.}
+
+\warning{Условие взаимной простоты нельзя пропускать. Для чисел $6$ и $10$ общий кратный делится на $30$, но не обязательно на $60$.}
+
+\minitrain
+\mini{1}{Если $4\mid a$ и $9\mid a$, верно ли $36\mid a$? (\textbf{Да}.)}
+\mini{2}{Если $6\mid a$ и $10\mid a$, обязательно ли $60\mid a$? (\textbf{Нет}, $a=30$.)}
+\mini{3}{Если $7\mid ab$ и $\text{НОД}(a,7)=1$, верно ли $7\mid b$? (\textbf{Да}.)}
+
+\schemetitle{делимость произведения}
+\begin{center}
+\begin{tikzpicture}[node distance=15mm]
+\node[st] (s) {Известно, что $m\mid ab$};
+\node[pr,below=of s] (a) {Проверьте взаимную простоту $m$ и $a$};
+\node[de,below=18mm of a] (q) {$\text{НОД}(m,a)=1$?};
+\node[pr,text width=38mm,below=29mm of q,xshift=49mm] (yes) {По лемме Евклида $m\mid b$};
+\node[pr,text width=40mm,below=29mm of q,xshift=-49mm] (no) {Вывод $m\mid b$ не обоснован};
+\node[st,text width=30mm,below=16mm of yes] (end1) {Готово};
+\node[st,text width=30mm,below=16mm of no] (end2) {Ищите иной ход};
+\draw[ar](s)--(a);\draw[ar](a)--(q);
+\draw[ar](q.south)--(yes.north);\node[ann] at ([xshift=28mm,yshift=-18mm]q.south) {да};
+\draw[ar](q.south)--(no.north);\node[ann] at ([xshift=-28mm,yshift=-18mm]q.south) {нет};
+\draw[ar](yes)--(end1);\draw[ar](no)--(end2);
+\end{tikzpicture}
+\end{center}
+
+\training{3}{Сначала распознайте направление утверждения, затем проверьте взаимную простоту.}
+\task{1}{Из $3\mid12$ следует ли $3\mid(12\cdot17)$?}
+\task{2}{Верно ли, что из $10\mid(2\cdot5)$ следует $10\mid2$ или $10\mid5$?}
+\task{3}{Число $7$ простое, $7\mid ab$, но $7\nmid a$. Что можно сказать о $b$?}
+\task{4}{Известно, что $4\mid n$ и $9\mid n$. Докажите, что $36\mid n$.}
+\task{5}{Известно, что $6\mid n$ и $15\mid n$. Обязательно ли $90\mid n$?}
+\task{6}{Известно, что $13\mid5a$. Докажите, что $13\mid a$.}
+\task{7}{Если $6\mid n$ и $35\mid n$, следует ли $210\mid n$?}
+\task{8}{Известно, что $4\mid3a$. Докажите, что $4\mid a$.}
+\task{9}{Найдите наименьшее положительное число, одновременно кратное $8$ и $15$.}
+\task{10}{Найдите все натуральные $n$, для которых $5\mid n(n+1)$, но $5\nmid n$.}
+
+\answers{3}{\anstable{
+1&Да&6&Да, $\text{НОД}(13,5)=1$\\
+2&Нет, ни $2$, ни $5$ не кратны $10$&7&Да, $\text{НОД}(6,35)=1$\\
+3&$7\mid b$&8&Да, $\text{НОД}(4,3)=1$\\
+4&Да, $\text{НОД}(4,9)=1$&9&$120$\\
+5&Нет: $n=30$&10&$n=5k+4$, $k=0,1,2,\ldots$
+}}
+
+\blocktitle{4}{Доказательные задачи: последовательные числа и чётность}
+\subsection{4.1. Среди последовательных чисел обязательно есть кратное}
+\concept{Два последовательных числа} Среди $n$ и $n+1$ одно чётно. Поэтому при любом целом $n$
+\[
+2\mid n(n+1).
+\]
+\concept{Три последовательных числа} Среди $n-1,n,n+1$ одно кратно $3$, а хотя бы одно чётно. Поэтому произведение кратно $2$ и $3$; так как $\text{НОД}(2,3)=1$, оно кратно $6$:
+\[
+\boxed{6\mid(n^3-n),\quad n\in\mathbb Z.}
+\]
+Это связывает свойства произведения с разложением $n^3-n=(n-1)n(n+1)$.
+
+\example{Докажем, что произведение четырёх последовательных целых чисел делится на $24$. Среди них есть число, кратное $4$, и ещё одно чётное: произведение кратно $8$. Есть также число, кратное $3$: произведение кратно $3$. Поскольку $\text{НОД}(8,3)=1$, произведение кратно $8\cdot3=24$.}
+
+\selfcheck{Почему недостаточно найти \emph{одно} чётное число? Для делимости на $8$ нужны три множителя $2$ (с учётом кратности): их обеспечивают одно кратное $4$ и другое чётное.}
+
+\minitrain
+\mini{1}{Верно ли $2\mid n(n+1)$ при любом целом $n$? (\textbf{Да}.)}
+\mini{2}{Верно ли $6\mid(n^3-n)$ при любом целом $n$? (\textbf{Да}.)}
+\mini{3}{Верно ли $3\mid[n+(n+1)+(n+2)]$? (\textbf{Да}.)}
+
+\clearpage
+\subsection{4.2. Чётные, нечётные числа и их квадраты}
+\concept{Определение} Чётное целое число записывается как $2k$, нечётное --- как $2k+1$, где $k\in\mathbb Z$. Квадрат чётного числа кратен $4$, поскольку $(2k)^2=4k^2$.
+
+\concept{Квадрат нечётного числа} Для $n=2k+1$ получаем
+\begin{align*}
+n^2&=4k^2+4k+1=4k(k+1)+1.
+\end{align*}
+Следовательно, квадрат нечётного числа при делении на $4$ даёт остаток $1$. Более того, $k(k+1)$ чётно, поэтому $4k(k+1)$ делится на $8$ и $n^2$ при делении на $8$ также даёт остаток $1$.
+
+\example{Докажем, что $8\mid[(2k+1)^2-1]$ при любом целом $k$:
+\[
+(2k+1)^2-1=4k(k+1)=8t,
+\]
+где $t=k(k+1)/2$ --- целое число ввиду чётности $k(k+1)$.}
+
+\warning{Утверждение $4\mid a^2\Rightarrow4\mid a$ неверно: при $a=2$ имеем $4\mid a^2$, но $4\nmid2$. Не путайте кратность числа и его квадрата.}
+
+\minitrain
+\mini{1}{Может ли квадрат нечётного числа быть чётным? (\textbf{Нет}.)}
+\mini{2}{Верно ли $4\mid(2k)^2$? (\textbf{Да}.)}
+\mini{3}{Следует ли из $4\mid a^2$, что $4\mid a$? (\textbf{Нет}, $a=2$.)}
+
+\schemetitle{доказательство делимости произведения}
+\begin{center}
+\begin{tikzpicture}[node distance=12mm]
+\node[st] (s) {Требуется доказать $M\mid P(n)$};
+\node[pr,below=of s] (a) {Разложите $M$ на взаимно простые множители};
+\node[pr,below=of a] (b) {Найдите нужные кратные среди множителей $P(n)$};
+\node[de,below=17mm of b] (q) {Каждая часть $M$ делит $P(n)$?};
+\node[pr,text width=37mm,below=29mm of q,xshift=49mm] (yes) {Объедините делимости по свойству (3)};
+\node[pr,text width=38mm,below=29mm of q,xshift=-49mm] (no) {Проверьте группировку или контрпример};
+\node[st,text width=30mm,below=13mm of yes] (ey) {$M\mid P(n)$};
+\node[st,text width=30mm,below=13mm of no] (en) {Иной метод};
+\draw[ar](s)--(a);\draw[ar](a)--(b);\draw[ar](b)--(q);
+\draw[ar](q.south)--(yes.north);\node[ann] at ([xshift=28mm,yshift=-18mm]q.south) {да};
+\draw[ar](q.south)--(no.north);\node[ann] at ([xshift=-28mm,yshift=-18mm]q.south) {нет};
+\draw[ar](yes)--(ey);\draw[ar](no)--(en);
+\end{tikzpicture}
+\end{center}
+
+\training{4}{В первых заданиях найдите кратные множители; в последних соедините несколько изученных идей.}
+\task{1}{Докажите для любого целого $n$, что $n(n+1)$ чётно.}
+\task{2}{Докажите, что среди $n,n+1,n+2$ всегда есть число, кратное $3$.}
+\task{3}{Докажите для любого целого $n$, что $6\mid(n^3-n)$.}
+\task{4}{Какой остаток при делении на $4$ может иметь квадрат нечётного числа?}
+\task{5}{Существует ли нечётное целое $n$, квадрат которого кратен $4$?}
+\task{6}{Докажите, что $8\mid[(2k+1)^2-1]$ при любом целом $k$.}
+\task{7}{Докажите, что произведение четырёх последовательных целых чисел кратно $8$.}
+\task{8}{Докажите, что произведение четырёх последовательных целых чисел кратно $24$.}
+\task{9}{Найдите все возможные положительные общие делители чисел $5n+2$ и $7n+3$ при целом $n$.}
+\task{10}{Докажите, что произведение любых пяти последовательных целых чисел кратно $120$.}
+
+\answers{4}{\anstable{
+1&Да: одно из чисел чётно&6&Да, $4k(k+1)$ кратно $8$\\
+2&Да: одно из трёх кратно $3$&7&Да: есть кратное $4$ и ещё чётное\\
+3&Да, $n^3-n=(n-1)n(n+1)$&8&Да: кратно $8$ и $3$\\
+4&Остаток $1$&9&Только $1$\\
+5&Нет&10&Да: кратно $24$ и $5$
+}}
+
+\clearpage
+\section*{Итоговая обзорная контрольная работа}
+\addcontentsline{toc}{section}{Итоговая обзорная контрольная работа}
+\textcolor{muted}{Задания 1--3 --- базовые, 4--7 --- среднего уровня, 8--9 --- повышенного, 10 --- комплексное. Дайте обоснование там, где это требуется.}\par\vspace{2mm}
+\task{1}{Делится ли $-84$ на $7$? Укажите целое частное.}
+\task{2}{Известно: $6\mid a$ и $6\mid b$. Докажите, что $6\mid(a-b)$.}
+\task{3}{Известно, что $5\mid a$. Следует ли $5\mid12a$?}
+\task{4}{Известно, что $12\mid a$. Обязательно ли $3\mid a$?}
+\task{5}{Возможна ли ситуация $6\mid ab$, но ни $a$, ни $b$ на $6$ не делятся?}
+\task{6}{Если $8\mid a$ и $9\mid a$, докажите, что $72\mid a$.}
+\task{7}{Найдите все натуральные $n$, для которых $5\mid(2n+1)$.}
+\task{8}{Найдите все простые числа $p$, для которых существует натуральное $n$ такое, что $p\mid(5n+1)$ и $p\mid(8n+2)$.}
+\task{9}{Докажите для всякого целого $n$, что $12\mid(n^4-n^2)$.}
+\task{10}{Найдите все натуральные $n$, удовлетворяющие условиям $6\mid n(n+1)$ и $5\mid(2n+1)$. Затем докажите, что для каждого найденного $n$ число $n(n+1)(2n+1)$ кратно $30$.}
+
+\clearpage
+\section*{Ответы к итоговой обзорной контрольной работе}
+\addcontentsline{toc}{section}{Ответы к итоговой обзорной контрольной работе}
+\anstable{
+1&Да, частное $-12$&6&Да, $\text{НОД}(8,9)=1$\\
+2&Да: $a-b=6(k-l)$&7&$n=5k+2$, $k=0,1,2,\ldots$\\
+3&Да&8&Только $p=2$ (подходит $n=1$)\\
+4&Да&9&Да: делимость на $3$ и $4$\\
+5&Да: $a=2$, $b=3$&10&$n=15k+2$ или $15k+12$, $k\ge0$; кратно $30$
+}
+\vspace{9mm}
+\concept{Самопроверка контрольной} Для заданий на невозможность убедитесь, что получено противоречие. Для заданий «найдите все» покажите, что каждое указанное значение подходит и иных решений нет. Для доказательств делимости напишите нужную целочисленную факторизацию или явно используемое свойство.
+
+\clearpage
+\section*{Памятка: восемь свойств делимости}
+\addcontentsline{toc}{section}{Памятка: восемь свойств делимости}
+\vspace{3mm}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=8mm,itemsep=7pt]
+\item Если $m\mid a$ и $m\mid b$, то $m\mid(a+b)$ и $m\mid(a-b)$.
+\item Если $m\mid a$ и $m\mid b$, то $m\mid(ra+sb)$ для любых $r,s\in\mathbb Z$.
+\item Если $m\mid a$, но $m\nmid b$, то $m\nmid(a+b)$ и $m\nmid(a-b)$.
+\item Если $m\mid a$ и $d\mid m$, то $d\mid a$.
+\item Если $m\mid a$, то $m\mid ab$ для любого целого $b$.
+\item Если $m\mid a$, $k\mid a$ и $\text{НОД}(m,k)=1$, то $mk\mid a$.
+\item Если $m\mid a$, то $mt\mid at$ для любого натурального $t$.
+\item Если $m\mid ab$ и $\text{НОД}(m,b)=1$, то $m\mid a$.
+\end{enumerate}
+\vspace{8mm}
+{\color{navy}\bfseries Как выбрать метод?}\par
+Если даны \textbf{две кратности} --- сложите или вычтите выражения. Если дана \textbf{кратность произведения} --- проверьте взаимную простоту. Если нужно получить кратность \textbf{большого числа} --- разложите его на взаимно простые части. Если есть \textbf{последовательные числа} --- ищите обязательные чётные и кратные $3$, $4$, $5$. Если утверждение вызывает сомнение --- сначала проверьте небольшой \textbf{контрпример}.
+
+
+\end{document}
