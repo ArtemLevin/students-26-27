@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import {spawnSync} from 'node:child_process';
 
 const root=process.cwd();
 const site=path.join(root,'students/xenia_klykova/site');
@@ -71,4 +72,15 @@ test('Horner arithmetic and signs coincide with the source cases',()=>{
   const big=x=>Math.pow(x-1,41)*(x*x+3)/
     (Math.pow(4*x-10,19)*Math.pow(x-10,24));
   assert.ok(big(1.5)<0);assert.ok(big(2.8)>0);
+});
+
+test('v2 publisher dry-run accepts the reviewed 14 October intent',()=>{
+  const run=spawnSync(process.execPath,[
+    'scripts/publish-lesson.mjs','xenia_klykova','14.10.26',
+    '--intent','students/xenia_klykova/site/data/publication-intents/2026-10-14.json',
+    '--dry-run'
+  ],{cwd:root,encoding:'utf8'});
+  assert.equal(run.status,0,String(run.stderr||run.stdout));
+  assert.ok(run.stdout.includes('transactional-v2'),run.stdout);
+  assert.ok(run.stdout.includes('"executable": true'),run.stdout);
 });
