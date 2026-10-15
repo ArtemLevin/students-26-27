@@ -45,27 +45,63 @@ html[data-theme=dark]{color-scheme:dark;--bg:#1a171b;--paper:#262229;--text:#f5e
 <script>
 (function(){
 'use strict';
-const byId=id=>document.getElementById(id);const root=document.documentElement,theme=byId('theme');
+const byId=id=>document.getElementById(id);
+const m=window.XeniaMathML;
+if(!m)throw Error('MathML formatter must load before the laboratory');
+const root=document.documentElement,theme=byId('theme');
 try{if(localStorage.getItem('xenia-lesson-theme')==='dark')root.dataset.theme='dark'}catch(_){}
 function themeDraw(){theme.textContent=root.dataset.theme==='dark'?'Светлая тема':'Тёмная тема'}
 themeDraw();theme.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';themeDraw();try{localStorage.setItem('xenia-lesson-theme',root.dataset.theme)}catch(_){}});
 const ru=n=>Number(n).toLocaleString('ru-RU',{maximumFractionDigits:2});
-const signed=(n)=>n<0?'− '+ru(-n):'+ '+ru(n);
-function horner(){const a=Number(byId('aRange').value);const q=15-3*a,r=-3*a*a+15*a+72;
-byId('aLabel').textContent=ru(a);byId('tableA').textContent=ru(a);byId('tableQ').textContent=ru(q);byId('tableR').textContent=ru(r);
-byId('divisor').textContent='x '+signed(-a);byId('quotient').textContent='Q(x) = −3x '+signed(q);byId('remainder').textContent='R = P(a) = '+ru(r);
-byId('rootStatus').textContent=r===0?'a = '+ru(a)+' — корень многочлена.':'a = '+ru(a)+' не является корнем: остаток отличен от нуля.';
+const signed=n=>n<0?'− '+ru(-n):'+ '+ru(n);
+const render=(id,expr)=>m.mount(byId(id),expr);
+function horner(){
+ const a=Number(byId('aRange').value),q=15-3*a,r=-3*a*a+15*a+72;
+ for(const id of ['aLabel','tableA'])render(id,ru(a));
+ render('tableQ',ru(q));render('tableR',ru(r));
+ render('divisor','x '+signed(-a));
+ render('quotient','Q(x) = −3x '+signed(q));
+ render('remainder','R = P(a) = '+ru(r));
+ byId('rootStatus').innerHTML=m.markup('a = '+ru(a))+
+  (r===0?' — корень многочлена.':' не является корнем: остаток отличен от нуля.');
 }
-byId('aRange').addEventListener('input',horner);document.querySelectorAll('[data-a]').forEach(b=>b.addEventListener('click',()=>{byId('aRange').value=b.dataset.a;horner()}));horner();
-byId('hintRoot').addEventListener('click',()=>{byId('hintText').textContent='Помимо a = −3, попробуйте a = 8.'});
-function interval(){const x=Number(byId('xRange').value);const den=2*x-3;const numerator=Math.pow(x-1,10)*Math.pow(x+2,9);const undefinedPoint=den===0;const value=undefinedPoint?null:numerator/den;
-byId('xLabel').textContent=ru(x);byId('xCursor').setAttribute('x1',String(52+(x+4)*88));byId('xCursor').setAttribute('x2',String(52+(x+4)*88));
-byId('cursorCaption').setAttribute('x',String(Math.max(64,Math.min(739,52+(x+4)*88))));byId('cursorCaption').textContent='x = '+ru(x);
-const status=undefinedPoint?'не определено':value===0?'= 0':value>0?'> 0':'< 0';
-byId('signValue').textContent='F('+ru(x)+') '+status;
-byId('signExplanation').textContent=undefinedPoint?'Знаменатель равен нулю — эта точка исключается всегда.':value===0?'Нуль числителя включается в ответ для нестрогого неравенства.':value>0?'Положительное значение входит в ответ для ≥ 0.':'Отрицательное значение не входит в ответ для ≥ 0.';
+byId('aRange').addEventListener('input',horner);
+document.querySelectorAll('[data-a]').forEach(button=>button.addEventListener('click',()=>{
+ byId('aRange').value=button.dataset.a;horner();
+}));
+horner();
+byId('hintRoot').addEventListener('click',()=>{
+ byId('hintText').innerHTML='Помимо '+m.markup('a = −3')+', попробуйте '+m.markup('a = 8')+'.';
+});
+function interval(){
+ const x=Number(byId('xRange').value),den=2*x-3;
+ const numerator=Math.pow(x-1,10)*Math.pow(x+2,9);
+ const undefinedPoint=den===0,value=undefinedPoint?null:numerator/den;
+ render('xLabel',ru(x));
+ const coordinate=52+(x+4)*88;
+ byId('xCursor').setAttribute('x1',String(coordinate));
+ byId('xCursor').setAttribute('x2',String(coordinate));
+ byId('cursorCaption').setAttribute('x',String(Math.max(38,Math.min(685,coordinate-38))));
+ m.mount(byId('cursorCaption').querySelector('.svg-math'),'x = '+ru(x));
+ const status=undefinedPoint?null:value===0?'= 0':value>0?'> 0':'< 0';
+ byId('signValue').innerHTML=m.markup('F('+ru(x)+')')+
+  (undefinedPoint?' — значение не определено':m.markup(status));
+ const condition=m.markup('F(x) ≥ 0');
+ byId('signExplanation').innerHTML=undefinedPoint?
+  'Знаменатель равен нулю — эта точка исключается всегда.':
+  value===0?'Нуль числителя включается в ответ для '+condition+'.':
+  value>0?'Положительное значение входит в ответ для '+condition+'.':
+  'Отрицательное значение не входит в ответ для '+condition+'.';
 }
-byId('xRange').addEventListener('input',interval);document.querySelectorAll('[data-x]').forEach(b=>b.addEventListener('click',()=>{byId('xRange').value=b.dataset.x;interval()}));interval();
-document.querySelectorAll('[data-prediction]').forEach(b=>b.addEventListener('click',()=>{byId('predictionResult').textContent=b.dataset.prediction==='same'?'Верно. Кратность 10 чётная: на обеих сторонах x = 1 знак остаётся отрицательным.':'Проверьте кратность 10: при чётной кратности знак сохраняется.'}));
+byId('xRange').addEventListener('input',interval);
+document.querySelectorAll('[data-x]').forEach(button=>button.addEventListener('click',()=>{
+ byId('xRange').value=button.dataset.x;interval();
+}));
+interval();
+document.querySelectorAll('[data-prediction]').forEach(button=>button.addEventListener('click',()=>{
+ byId('predictionResult').innerHTML=button.dataset.prediction==='same'?
+  'Верно. Кратность '+m.markup('10')+' чётная: по обе стороны от '+m.markup('x = 1')+' знак отрицательный.':
+  'Проверьте кратность '+m.markup('10')+': при чётной кратности знак сохраняется.';
+}));
 })();
 </script></body></html>
