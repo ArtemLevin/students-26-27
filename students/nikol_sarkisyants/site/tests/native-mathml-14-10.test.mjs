@@ -9,10 +9,10 @@ const site=resolve(fileURLToPath(new URL('..',import.meta.url)));
 const read=name=>readFileSync(resolve(site,name),'utf8');
 const lesson=read('14.10.26.html');
 const laboratory=read('14.10.26-lab.html');
-const matchMath=html=>[...html.matchAll(/<math\\b[^>]*>[\\s\\S]*?<\\/math>/g)].map(m=>m[0]);
+const matchMath=html=>[...html.matchAll(/<math\b[^>]*>[\s\S]*?<\/math>/g)].map(m=>m[0]);
 
 function validateMathML(fragment){
- const tags=[...fragment.matchAll(/<\\/?([a-z][a-z0-9]*)\\b[^>]*>/g)];
+ const tags=[...fragment.matchAll(/<\/?([a-z][a-z0-9]*)\b[^>]*>/g)];
  const stack=[];
  for(const match of tags){
   const complete=match[0],name=match[1];
@@ -23,8 +23,8 @@ function validateMathML(fragment){
   }
  }
  assert.deepEqual(stack,[]);
- assert.match(fragment,/^<math xmlns="http:\/\/www\\.w3\\.org\/1998\/Math\/MathML"/);
- assert.match(fragment,/<(?:mi|mn|mo|mrow|mfrac|msup|msub|msqrt)\\b/);
+ assert.match(fragment,/^<math xmlns="http:\/\/www\.w3\.org\/1998\/Math\/MathML"/);
+ assert.match(fragment,/<(?:mi|mn|mo|mrow|mfrac|msup|msub|msqrt)\b/);
 }
 
 test('the lesson has native semantic MathML for every formula and all ten exercises',()=>{
@@ -34,15 +34,15 @@ test('the lesson has native semantic MathML for every formula and all ten exerci
  for(const structuralTag of ['mfrac','msup','msub','msqrt']){
   assert.ok(expressions.some(x=>x.includes('<'+structuralTag+'>')),structuralTag);
  }
- const exerciseBlocks=[...lesson.matchAll(/<article class="problem">([\\s\\S]*?)<\\/article>/g)].map(x=>x[1]);
+ const exerciseBlocks=[...lesson.matchAll(/<article class="problem">([\s\S]*?)<\/article>/g)].map(x=>x[1]);
  assert.equal(exerciseBlocks.length,10);
  for(const exercise of exerciseBlocks){
   assert.match(exercise,/<math xmlns=/);
   assert.match(exercise,/<p class="answer"><math xmlns=/);
  }
- const visible=lesson.replace(/<math\\b[^>]*>[\\s\\S]*?<\\/math>/g,'[math]').replace(/<style>[\\s\\S]*?<\\/style>/g,'').replace(/<script>[\\s\\S]*?<\\/script>/g,'');
- assert.doesNotMatch(visible,/\\b(?:sin|cos|arctg)\\s+[a-z]/);
- assert.doesNotMatch(visible,/Δt\\s*=|log[₂ₐ_]|sin[⁴²]|cos[⁴²]/);
+ const visible=lesson.replace(/<math\b[^>]*>[\s\S]*?<\/math>/g,'[math]').replace(/<style>[\s\S]*?<\/style>/g,'').replace(/<script>[\s\S]*?<\/script>/g,'');
+ assert.doesNotMatch(visible,/\b(?:sin|cos|arctg)\s+[a-z]/);
+ assert.doesNotMatch(visible,/Δt\s*=|log[₂ₐ_]|sin[⁴²]|cos[⁴²]/);
 });
 
 function runLab(){
@@ -74,7 +74,7 @@ function runLab(){
   location:{href:'https://example.test/14.10.26-lab.html?mode=trig',search:'?mode=trig'},
   history:{replaceState(){}},localStorage:{getItem(){return null},setItem(){}}
  });
- const js=laboratory.match(/<script>([\\s\\S]*?)<\\/script>/)?.[1];
+ const js=laboratory.match(/<script>([\s\S]*?)<\/script>/)?.[1];
  assert.ok(js,'lab inline JS must exist');
  new vm.Script(js,{filename:'nikol-14.10.26-lab.js'}).runInContext(ctx);
  return {ctx,elements,mock};
@@ -85,7 +85,7 @@ test('laboratory renders native MathML on every mode switch and numeric update',
  for(const mode of ['trig','bound','motion']){
   vm.runInContext('choose('+JSON.stringify(mode)+')',ctx);
   for(const id of ['modelTitle','formula','parameterName','parameterOut','valueOut','targetOut','deltaOut','challenge','insight']){
-   assert.match(mock(id).innerHTML,/<math xmlns="http:\/\/www\\.w3\\.org\/1998\/Math\/MathML"/,mode+' '+id);
+   assert.match(mock(id).innerHTML,/<math xmlns="http:\/\/www\.w3\.org\/1998\/Math\/MathML"/,mode+' '+id);
   }
   for(const id of ['axisMin','axisMax','axisUpper','axisLower']){
    assert.match(mock(id).firstElementChild.innerHTML,/<math xmlns=/,mode+' '+id);
@@ -107,7 +107,7 @@ test('native lab number rendering handles decimals, units and signed values',()=
   const markup=vm.runInContext('numberMath('+JSON.stringify(value)+'," м")',ctx);
   validateMathML(markup);
   assert.match(markup,/<mn>/);
-  assert.match(markup,/<mtext> м<\\/mtext>/);
+  assert.match(markup,/<mtext> м<\/mtext>/);
  }
  assert.throws(()=>vm.runInContext('numberMath("not-a-number")',ctx),/Non-numeric display value/);
 });
