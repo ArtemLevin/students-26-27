@@ -1,0 +1,281 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm,headheight=27pt,headsep=10mm,footskip=12mm]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{booktabs,tabularx}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{accent}{HTML}{2A7775}
+\definecolor{darkaccent}{HTML}{1B5553}
+\definecolor{textgray}{HTML}{303536}
+\definecolor{lightgray}{HTML}{697476}
+\definecolor{pale}{HTML}{E9F2F0}
+\color{textgray}
+\setstretch{1.24}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\setlist[itemize]{leftmargin=1.4em,topsep=0.15em,itemsep=0.15em}
+\setlist[enumerate]{leftmargin=1.65em,topsep=0.3em,itemsep=0.48em}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{darkaccent}Числовые промежутки}
+\fancyhead[R]{\small\color{darkaccent}Кирилл Зиновьев}
+\fancyfoot[C]{\small\color{lightgray}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height\headrulewidth\hfill}}
+\newcommand{\headingrule}{\vspace{-0.5em}{\color{accent}\hrule height 0.55pt}\vspace{0.5em}}
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\axes}[1]{\begin{tikzpicture}[x=0.65cm,y=0.65cm,baseline=-0.15cm]
+  \draw[->,line width=.5pt,lightgray] (-4.2,0)--(4.35,0) node[right,scale=.78] {$x$};
+  #1
+\end{tikzpicture}}
+\newcommand{\dotfull}[1]{\fill[accent] (#1,0) circle (2.6pt);}
+\newcommand{\dotopen}[1]{\fill[white] (#1,0) circle (2.6pt);\draw[accent,line width=1.05pt] (#1,0) circle (2.6pt);}
+\tikzset{fcstart/.style={ellipse,draw=darkaccent,thick,align=center,minimum width=36mm,minimum height=10mm,fill=pale},
+ fcact/.style={rounded corners=2pt,rectangle,draw=darkaccent,align=center,thick,minimum width=49mm,minimum height=12mm,text width=48mm,inner sep=3.5pt},
+ fcdecision/.style={diamond,aspect=2.15,draw=darkaccent,thick,align=center,inner sep=2pt,text width=32mm},
+ fcline/.style={-Latex,thick,draw=accent}}
+
+\begin{document}
+% --- Титульный лист ---
+\thispagestyle{empty}
+\begin{center}
+\vspace*{26mm}
+{\Large\color{darkaccent}\bfseries ЧЕК-ЛИСТ}\\[11mm]
+{\huge\bfseries Числовые промежутки}\\[5mm]
+{\Large Неравенства, числовая ось и скобки}\\[13mm]
+{\large Математика, 7 класс}\\[3mm]
+{\large 14 октября 2026 года}\\[19mm]
+{\LARGE\bfseries Кирилл Зиновьев}\\[14mm]
+\begin{minipage}{0.78\linewidth}
+\centering
+Как переходить от рисунка на числовой оси к неравенству и записи промежутка; как проверять границы и переводить текстовую задачу на язык уравнения.
+\end{minipage}
+\vfill
+{\large Лёвин Артём Александрович}\\[2mm]
+{\normalsize эксклюзивно для Кирилла Зиновьева}\\[13mm]
+\begin{tikzpicture}
+\draw[accent,line width=1.2pt]
+(-6.05,0) .. controls (-4.05,.65) and (-1.9,-.52) .. (0,0)
+.. controls (2.2,.67) and (4.3,-.42) .. (6.05,.13);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{1. Что означает штриховка на числовой оси}
+\headingrule
+На оси отмечают \key{все подходящие значения $x$}. Штриховка вправо от точки означает числа больше границы, влево --- числа меньше границы. Граница может \emph{входить} или \emph{не входить} в промежуток.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.55}
+\begin{tabularx}{\linewidth}{@{}p{63mm}X@{}}
+\toprule
+\textbf{Рисунок на оси} & \textbf{Неравенство и промежуток}\\
+\midrule
+\axes{\draw[accent,line width=2.4pt] (-4.05,0)--(1.2,0);\dotfull{1.2}\node[below,font=\scriptsize] at (1.2,-.1) {$5$};}
+& $x\le 5$ \quad $x\in(-\infty;5]$\\
+\axes{\draw[accent,line width=2.4pt] (-4.05,0)--(1.2,0);\dotopen{1.2}\node[below,font=\scriptsize] at (1.2,-.1) {$5$};}
+& $x<5$ \quad $x\in(-\infty;5)$\\
+\axes{\draw[accent,line width=2.4pt] (-1.2,0)--(4.1,0);\dotfull{-1.2}\node[below,font=\scriptsize] at (-1.2,-.1) {$5$};}
+& $x\ge 5$ \quad $x\in[5;+\infty)$\\
+\axes{\draw[accent,line width=2.4pt] (-1.2,0)--(4.1,0);\dotopen{-1.2}\node[below,font=\scriptsize] at (-1.2,-.1) {$5$};}
+& $x>5$ \quad $x\in(5;+\infty)$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\key{Как читать:} $x\in[5;+\infty)$ --- «$x$ принадлежит промежутку от $5$ включительно до плюс бесконечности».
+
+\key{Запомните связь трёх обозначений:}
+\begin{itemize}
+\item Закрашенная точка $\longleftrightarrow$ знаки $\le$, $\ge$ $\longleftrightarrow$ квадратная скобка $[\,]$.
+\item Выколотая точка $\longleftrightarrow$ знаки $<$, $>$ $\longleftrightarrow$ круглая скобка $(\,)$.
+\item При $-\infty$ и $+\infty$ скобка \textbf{всегда круглая}: бесконечность не является числом, которое можно включить.
+\end{itemize}
+
+\key{Важно.} Рисунки схематичны: место числа $5$ на каждом рисунке выбрано для наглядности. Значение границы задаёт подпись под точкой, направление --- штриховка.
+\clearpage
+
+\section*{2. Промежуток между двумя числами}
+\headingrule
+Если штриховка находится \key{между двумя границами}, используйте \key{двойное неравенство}. Слева записывайте меньшую границу, справа --- большую.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.68}
+\begin{tabularx}{\linewidth}{@{}p{63mm}X@{}}
+\toprule
+\textbf{Границы на оси} & \textbf{Запись}\\
+\midrule
+\axes{\draw[accent,line width=2.4pt] (-2.4,0)--(2.5,0);\dotfull{-2.4}\dotfull{2.5}\node[below,font=\scriptsize] at (-2.4,-.1) {$-2$};\node[below,font=\scriptsize] at (2.5,-.1) {$2{,}5$};}
+& $-2\le x\le 2{,}5$\\[-1mm]
+& $x\in[-2;2{,}5]$\\
+\addlinespace[2mm]
+\axes{\draw[accent,line width=2.4pt] (-2.4,0)--(2.5,0);\dotopen{-2.4}\dotopen{2.5}\node[below,font=\scriptsize] at (-2.4,-.1) {$-2$};\node[below,font=\scriptsize] at (2.5,-.1) {$2{,}5$};}
+& $-2<x<2{,}5$\\[-1mm]
+& $x\in(-2;2{,}5)$\\
+\addlinespace[2mm]
+\axes{\draw[accent,line width=2.4pt] (-2.4,0)--(2.5,0);\dotfull{-2.4}\dotopen{2.5}\node[below,font=\scriptsize] at (-2.4,-.1) {$4$};\node[below,font=\scriptsize] at (2.5,-.1) {$12$};}
+& $4\le x<12$\\[-1mm]
+& $x\in[4;12)$\\
+\addlinespace[2mm]
+\axes{\draw[accent,line width=2.4pt] (-2.4,0)--(2.5,0);\dotopen{-2.4}\dotfull{2.5}\node[below,font=\scriptsize] at (-2.4,-.1) {$4$};\node[below,font=\scriptsize] at (2.5,-.1) {$12$};}
+& $4<x\le 12$\\[-1mm]
+& $x\in(4;12]$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\key{Проверка по границам.} Если $x\in[4;12)$, число $4$ подходит, число $12$ --- нет; при этом число $11{,}99$ подходит. Между двумя разными числами лежит бесконечно много действительных чисел.
+
+\key{Почему в скобках точка с запятой?} В русской записи $2{,}5$ --- одно десятичное число. Точка с запятой помогает однозначно разделять \emph{границы} промежутка.
+
+\section*{3. Мини-чек-лист перед записью ответа}
+\headingrule
+\begin{itemize}
+\item[$\square$] Я вижу, какая часть оси выделена: влево, вправо или между границами.
+\item[$\square$] Я выяснил, входит ли каждая конечная граница.
+\item[$\square$] Я выбрал строгий или нестрогий знак.
+\item[$\square$] Я записал границы промежутка слева направо.
+\item[$\square$] Я использовал круглые скобки рядом с $\pm\infty$.
+\end{itemize}
+\clearpage
+
+\section*{4. Алгоритм: от рисунка к записи промежутка}
+\headingrule
+\vspace{2mm}
+\begin{center}
+\begin{tikzpicture}[node distance=10mm and 18mm,font=\small]
+\node[fcstart] (start) {Начало};
+\node[fcact,below=of start] (bounds) {Найдите выделенную часть оси. Запишите её левую и правую границы.};
+\node[fcdecision,below=13mm of bounds] (inf) {Граница --- $\pm\infty$?};
+\node[fcact,right=23mm of inf,minimum width=30mm,text width=29mm] (roundinf) {Круглая\\скобка};
+\node[fcdecision,below=16mm of inf] (fill) {Точка на границе закрашена?};
+\node[fcact,left=12mm of fill,minimum width=32mm,text width=31mm] (square) {Квадратная\\скобка};
+\node[fcact,right=12mm of fill,minimum width=32mm,text width=31mm] (round) {Круглая\\скобка};
+\node[fcact,below=19mm of fill,minimum width=66mm,text width=64mm] (write) {Запишите границу с выбранной скобкой. Повторите для другой границы.};
+\node[fcstart,below=of write] (end) {Получили $x\in\text{промежуток}$};
+\draw[fcline] (start)--(bounds);
+\draw[fcline] (bounds)--(inf);
+\draw[fcline] (inf)--node[above,font=\scriptsize]{да}(roundinf);
+\draw[fcline] (inf)--node[right,font=\scriptsize]{нет}(fill);
+\draw[fcline] (fill)--node[above,font=\scriptsize]{да}(square);
+\draw[fcline] (fill)--node[above,font=\scriptsize]{нет}(round);
+\draw[fcline] (square.south)|- (write.west);
+\draw[fcline] (round.south)|- (write.east);
+\draw[fcline] (roundinf.east)--++(0.4,0)|-([yshift=-2mm]write.east);
+\draw[fcline] (write)--(end);
+\end{tikzpicture}
+\end{center}
+\vspace{4mm}
+\key{Пример алгоритма.} На оси закрашена точка $-1$, а штриховка идёт вправо. Левая граница $-1$ включена, правая --- $+\infty$. Значит,
+\[
+x\ge -1,\qquad x\in[-1;+\infty).
+\]
+\clearpage
+
+\section*{5. Дополнительный сюжет урока: текстовая задача}
+\headingrule
+\key{Дано.} У Маши и Васи сначала было поровну денег. Маша потратила 6~рублей, Вася --- 14~рублей. После этого у Маши осталось в 3 раза больше денег, чем у Васи. Сколько рублей было у каждого сначала?
+
+\begin{center}
+\renewcommand{\arraystretch}{1.33}
+\begin{tabularx}{.87\linewidth}{@{}Xcc@{}}
+\toprule
+& \textbf{До покупок} & \textbf{После покупок}\\
+\midrule
+Маша & $x$ & $x-6$\\
+Вася & $x$ & $x-14$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\key{Как перевести фразу «у Маши в 3 раза больше».} После покупок у Маши \emph{большая} сумма, у Васи --- \emph{меньшая}; поэтому
+\[
+\underbrace{x-6}_{\text{Маша}}
+=3\cdot\underbrace{(x-14)}_{\text{Вася}}.
+\]
+Неравенство сумм здесь превращаем в \emph{точное равенство с множителем $3$}. Умножить нужно сумму Васи --- она меньше.
+
+\key{Решение.}
+\[
+\begin{aligned}
+x-6&=3x-42,\\
+x-3x&=6-42,\\
+-2x&=-36,\\
+x&=18.
+\end{aligned}
+\]
+\key{Проверка.} У Маши осталось $18-6=12$ рублей, у Васи --- $18-14=4$ рубля. Действительно, $12=3\cdot4$. Изначально у каждого было по \key{18 рублей}.
+
+\key{Типичная ошибка.} Равенство $x-6=x-14$ неверно: деньги после покупок уже \emph{не равны}. Соотношение «в 3 раза больше» необходимо отразить сразу при составлении уравнения.
+
+\section*{6. Ошибки, которые важно предупреждать}
+\headingrule
+\begin{itemize}
+\item \key{Смешение скобок.} У выколотой конечной точки круглая скобка; у закрашенной --- квадратная.
+\item \key{Перепутанные знаки.} Штриховка справа означает $>$ или $\ge$, слева --- $<$ или $\le$.
+\item \key{«Включили бесконечность».} Записи $[-\infty;5]$ и $[5;+\infty]$ неверны.
+\item \key{Перечислены лишь целые числа.} Промежуток может содержать дробные числа, например $4{,}01$.
+\item \key{Ошибочный множитель в задаче.} Фраза «у Маши в 3 раза больше» означает $\text{Маша}=3\cdot\text{Вася}$.
+\end{itemize}
+\clearpage
+
+\section*{Тренировочный блок. Путь А}
+\headingrule
+\textit{10 заданий по возрастанию сложности. Для задач 1--8 используйте изученную связь между осью, неравенством и промежутком; в задаче 10 обязательно составьте уравнение.}
+
+\begin{enumerate}[label=\textbf{\arabic*.},itemsep=1.0em]
+\item Запишите промежуток $x\ge -1$ с помощью знака $\in$ и изобразите его на числовой оси.
+\item Запишите промежуток $x<5$ с помощью знака $\in$ и изобразите его на числовой оси.
+\item Запишите неравенство, задающее промежуток $x\in(-3;+\infty)$. Укажите, подходит ли число $-3$.
+\item Запишите неравенство, задающее промежуток $x\in(-\infty;2]$. Укажите, подходит ли число $2$.
+\item Запишите в виде промежутка двойное неравенство $-2\le x\le 2{,}5$. Назовите обе включённые границы.
+\item Запишите в виде промежутка двойное неравенство $4\le x<12$. Какие из чисел $4$, $11{,}9$ и $12$ ему принадлежат?
+\item Запишите двойным неравенством $x\in(4;12]$. Составьте \emph{два примера} подходящих чисел, одно из которых --- целое, другое --- дробное.
+\item По рисунку запишите \emph{и} двойное неравенство, \emph{и} промежуток:
+\begin{center}
+\axes{\draw[accent,line width=2.4pt] (-2.2,0)--(2.5,0);\dotfull{-2.2}\dotopen{2.5}\node[below,font=\small] at (-2.2,-.1) {$-3$};\node[below,font=\small] at (2.5,-.1) {$1$};}
+\end{center}
+\item Для $x\in(-1;3]$ выберите \emph{все} подходящие значения из списка:
+$-1$; $-0{,}5$; $0$; $3$; $3{,}1$. Объясните выбор каждого из двух граничных значений $-1$ и $3$.
+\item У Алины и Димы изначально было одинаковое количество денег. Алина потратила 8~рублей, Дима --- 20~рублей. После покупок у Алины осталось в 3 раза больше денег, чем у Димы. Сколько рублей было у каждого до покупок? Составьте уравнение и выполните проверку.
+\end{enumerate}
+\clearpage
+
+\section*{Ответы к тренировочному блоку}
+\headingrule
+\begin{center}
+\renewcommand{\arraystretch}{1.7}
+\begin{tabularx}{\linewidth}{@{}c X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ}\\
+\midrule
+1 & $x\in[-1;+\infty)$; точка $-1$ закрашена, луч вправо.\\
+2 & $x\in(-\infty;5)$; точка $5$ выколота, луч влево.\\
+3 & $x>-3$; число $-3$ не подходит.\\
+4 & $x\le 2$; число $2$ подходит.\\
+5 & $x\in[-2;2{,}5]$; включены $-2$ и $2{,}5$.\\
+6 & $x\in[4;12)$; подходят $4$ и $11{,}9$; $12$ не подходит.\\
+7 & $4<x\le 12$; например, $5$ и $4{,}5$.\\
+8 & $-3\le x<1$; $x\in[-3;1)$.\\
+9 & Подходят $-0{,}5$; $0$; $3$. Число $-1$ исключено, $3$ включено.\\
+10 & У каждого по $26$ рублей. Уравнение: $x-8=3(x-20)$. Проверка: $18=3\cdot 6$.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vspace{1.2em}
+\key{Самопроверка.} В задачах с промежутками обязательно сверьте тип каждой скобки с условием. В текстовой задаче проверьте, какая сумма после покупок больше и во сколько раз.
+
+\end{document}
