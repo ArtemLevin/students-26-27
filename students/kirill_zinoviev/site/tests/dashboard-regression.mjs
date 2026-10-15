@@ -118,3 +118,6 @@ for(const runtimeMarker of [
 ]) assert.ok(reviewHtml.includes(runtimeMarker),`29.08 architecture marker is missing: ${runtimeMarker}`);
 assert.ok(!/<script[^>]+src=["']https?:/i.test(reviewHtml),'29.08 lesson must remain autonomous without remote scripts');
 assert.ok(!/<link[^>]+href=["']https?:/i.test(reviewHtml),'29.08 lesson must remain autonomous without remote styles');
+
+// Keep October 14 native MathML rendering under the student dashboard regression gate.
+await import('./lesson-14.10.26-mathml.test.mjs');
