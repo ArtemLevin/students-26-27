@@ -65,7 +65,7 @@ test('Horner arithmetic and signs coincide with the source cases',()=>{
   const f=x=>Math.pow(x-1,10)*Math.pow(x+2,9)/(2*x-3);
   for(const x of [-5,-3])assert.ok(f(x)>0);
   for(const x of [-1,0,1.25])assert.ok(f(x)<0);
-  assert.equal(f(-2),0);assert.equal(f(1),0);
+  assert.ok(f(-2)===0);assert.ok(f(1)===0);
   assert.ok(f(2)>0);assert.ok(f(4)>0);
   assert.equal(2*1.5-3,0);
   // The high-degree case has two forbidden points but only one negative interval.
