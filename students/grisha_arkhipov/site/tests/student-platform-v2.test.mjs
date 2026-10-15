@@ -134,32 +134,32 @@ test('14.10 lesson renders native MathML throughout the lesson and retains inter
   for(const anchor of ['powers','graphs','table','circle','training']){
     assert.match(html,new RegExp('id="'+anchor+'"'));
   }
-  const mathBlocks=[...html.matchAll(/<math\\b[^>]*>[\\s\\S]*?<\\/math>/g)];
+  const mathBlocks=[...html.matchAll(/<math\b[^>]*>[\s\S]*?<\/math>/g)];
   assert.ok(mathBlocks.length>=90,'Every formula, answer and table value must use MathML');
   for(const [idx,block] of mathBlocks.entries()){
-    assert.match(block[0],/xmlns="http:\/\/www\\.w3\\.org\/1998\/Math\/MathML"/);
+    assert.match(block[0],/xmlns="http:\/\/www\.w3\.org\/1998\/Math\/MathML"/);
     const stack=[];
-    for(const token of block[0].matchAll(/<(\\/)?([a-z]+)(?:\\s[^>]*)?>/g)){
+    for(const token of block[0].matchAll(/<(\/)?([a-z]+)(?:\s[^>]*)?>/g)){
       if(!token[1]) stack.push(token[2]);
       else assert.equal(stack.pop(),token[2],'Mismatched MathML tags in block '+idx);
     }
     assert.deepEqual(stack,[],'Unclosed MathML tags in block '+idx);
   }
   for(const tag of ['mfrac','msup','mroot','msub','mtable','mtext']){
-    assert.match(html,new RegExp('<'+tag+'(?:\\s|>)'));
+    assert.match(html,new RegExp('<'+tag+'(?:\s|>)'));
   }
-  assert.doesNotMatch(html,/<(?:sup|sub)\\b|<span class="math"/);
-  assert.doesNotMatch(html,/\\d+[²³⁴]|∛/);
-  assert.match(html,/<mn id="slowVal">59<\\/mn>/);
-  assert.match(html,/<mn id="minuteVal">40<\\/mn>/);
-  assert.match(html,/<mn id="distance">14<\\/mn>/);
+  assert.doesNotMatch(html,/<(?:sup|sub)\b|<span class="math"/);
+  assert.doesNotMatch(html,/\d+[²³⁴]|∛/);
+  assert.match(html,/<mn id="slowVal">59<\/mn>/);
+  assert.match(html,/<mn id="minuteVal">40<\/mn>/);
+  assert.match(html,/<mn id="distance">14<\/mn>/);
   for(const id of ['slow','minutes','chart','reset']){
     assert.match(html,new RegExp('id="'+id+'"'));
   }
   assert.match(html,/aria-live="polite"/);
   assert.match(html,/prefers-reduced-motion:reduce/);
   assert.doesNotMatch(html,/<script[^>]+src="https?:/);
-  const source=html.match(/<script>([\\s\\S]*?)<\\/script>/)?.[1];
+  const source=html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
   assert.ok(source);
   const temp=path.join(os.tmpdir(),'grisha-141026-'+process.pid+'.js');
   fs.writeFileSync(temp,source);
