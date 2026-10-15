@@ -146,7 +146,7 @@ test('14.10 lesson renders native MathML throughout the lesson and retains inter
     assert.deepEqual(stack,[],'Unclosed MathML tags in block '+idx);
   }
   for(const tag of ['mfrac','msup','mroot','msub','mtable','mtext']){
-    assert.match(html,new RegExp('<'+tag+'(?:\s|>)'));
+    assert.match(html,new RegExp('<'+tag+'[ >]'));
   }
   assert.doesNotMatch(html,/<(?:sup|sub)\b|<span class="math"/);
   assert.doesNotMatch(html,/\d+[²³⁴]|∛/);
