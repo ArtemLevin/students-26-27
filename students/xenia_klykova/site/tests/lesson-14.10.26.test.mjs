@@ -84,3 +84,28 @@ test('v2 publisher dry-run accepts the reviewed 14 October intent',()=>{
   assert.ok(run.stdout.includes('transactional-v2'),run.stdout);
   assert.ok(run.stdout.includes('"executable": true'),run.stdout);
 });
+
+test('lesson equations, practice and answers are fully semantic MathML',()=>{
+  assert.ok((page.match(/<math\b/g)||[]).length>=90);
+  assert.ok((lab.match(/<math\b/g)||[]).length>=45);
+  assert.ok((page.match(/<msup>/g)||[]).length>=40);
+  assert.ok((page.match(/<mfrac>/g)||[]).length>=5);
+  assert.ok(lab.includes('<msup>')&&lab.includes('<mfrac>'));
+  assert.ok(page.includes('xmlns="http://www.w3.org/1998/Math/MathML"'));
+  assert.ok(lab.includes('14.10.26-mathml.js'));
+  const tasks=page.match(/<ol class="tasklist"[\s\S]+?<\/ol>/)?.[0]||'';
+  const taskNodes=[...tasks.matchAll(/<li>([\s\S]*?)<\/li>/g)];
+  assert.equal(taskNodes.length,10);
+  for(const [i,node] of taskNodes.entries())assert.ok(node[1].includes('<math '),'practice '+(i+1)+' needs MathML');
+  const answerList=page.match(/<details class="answers">[\s\S]*?<ol>([\s\S]*?)<\/ol>/)?.[1]||'';
+  const answers=[...answerList.matchAll(/<li>([\s\S]*?)<\/li>/g)];
+  assert.equal(answers.length,10);
+  for(const [i,answer] of answers.entries())assert.ok(answer[1].includes('<math '),'answer '+(i+1)+' needs MathML');
+  for(const html of [page,lab]){
+    assert.ok(!/<div class="eq">[^(<)]/.test(html),'raw math inside equation block');
+    for(const [,fragment] of html.matchAll(/<math\b[^>]*>([\s\S]*?)<\/math>/g)){
+      assert.ok(fragment.includes('<mrow>')||fragment.includes('<mn>')||fragment.includes('<mi>')||fragment.includes('<mo>'));
+      assert.ok(!fragment.includes('<span')&&!fragment.includes('<div'));
+    }
+  }
+});
