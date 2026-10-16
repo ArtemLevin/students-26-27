@@ -89,7 +89,8 @@ test('canonical evidence intent points to real lesson sections without mastery c
   }
   const overlay=read('competency-map-lesson-20261008.js');
   assert.doesNotMatch(overlay,/\.baselineLevel\s*=/);
-  assert.match(index,/08\.10\.26-lab\.html/);
+  assert.match(index,/href="archive\.html"/);
+  assert.match(read("lesson-registry.js"),/08\.10\.26-lab\.html/);
 });
 
 test('source lesson arithmetic remains internally consistent',()=>{
