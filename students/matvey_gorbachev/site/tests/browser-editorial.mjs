@@ -77,6 +77,10 @@ try{
     await page.locator('#themeToggle').click();
     assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','theme toggle did not work');
   }
+  // The modal and keyboard checks move focus down the long page.
+  // Restore the genuine initial viewport before taking full-page screenshots.
+  await page.evaluate(()=>{document.activeElement?.blur?.();window.scrollTo(0,0);});
+  await page.waitForTimeout(80);
   await page.screenshot({path:path.join(artifactDir,'index-'+width+'.png'),fullPage:true});
   await page.goto(origin+'archive.html',{waitUntil:'networkidle'});
   await page.waitForFunction(()=>document.querySelectorAll('.archive-tile').length>=9,{timeout:15000});
