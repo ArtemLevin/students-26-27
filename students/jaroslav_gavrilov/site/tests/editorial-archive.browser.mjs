@@ -120,6 +120,7 @@ try{
       assert.equal(Number(mainMetrics.total),mainMetrics.map,'total must come from map');
       assert.ok(mainMetrics.latest?.endsWith('.html'),'latest real lesson');
       assert.ok(mainMetrics.visible>0,'lesson outcomes use catalogue labels');
+      if((width===390||width===1440)&&!dark)await screenshot('index-'+width+'-light');
       await visit('archive.html',width,dark);
       await wait(170);
       const archive=await evalJS('(()=>{const tiles=[...document.querySelectorAll(".archive-tile")];const heights=tiles.map(t=>Math.round(t.getBoundingClientRect().height));const grid=document.querySelector(".archive-month-grid");const columns=getComputedStyle(grid).gridTemplateColumns.split(" ").length;return {count:tiles.length,months:document.querySelectorAll(".archive-month").length,columns,delta:Math.max(...heights)-Math.min(...heights),dates:tiles.map(t=>t.querySelector("time").dateTime),clipped:tiles.some(t=>t.scrollHeight>t.clientHeight+4)}})()');
