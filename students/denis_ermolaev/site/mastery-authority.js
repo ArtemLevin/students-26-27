@@ -1,2 +1,2 @@
-const mastery={};
-default mastery;
+export const mastery={};
+export default mastery;
