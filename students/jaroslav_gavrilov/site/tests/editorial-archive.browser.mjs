@@ -130,7 +130,7 @@ try{
       assert.ok(archive.delta<=3,'tiles should be equal height '+width+': '+JSON.stringify(archive));
       assert.equal(archive.clipped,false,'archive card clipped '+width);
       assert.ok(archive.dates.every((d,i)=>!i||archive.dates[i-1]>=d),'chronological order');
-      archiveMeasures.push({width,dark,count:archive.count,delta:archive.delta,columns});
+      archiveMeasures.push({width,dark,count:archive.count,delta:archive.delta,columns:archive.columns});
       if((width===390||width===1440)&&!dark)await screenshot('archive-'+width+'-light');
     }
   }
