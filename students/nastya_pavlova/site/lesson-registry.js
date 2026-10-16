@@ -4,6 +4,72 @@ export const ARCHIVE_PAGE_SIZE=10;
 const MONTHS_GENITIVE=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
 export const LESSONS=[
+{
+  "date": "2026-10-15",
+  "ktpRefs": [],
+  "href": "15.10.26.html",
+  "title": "Проценты меняют базу",
+  "navTitle": "Проценты меняют базу",
+  "navSubtitle": "Процентные изменения и текстовые задачи: повышение и снижение цены, первоначальная стоимость, последовательные проценты, повторение смесей и систем. Занятие Анастасии Павловой 15.10.26.",
+  "summary": "Процентные изменения и текстовые задачи: повышение и снижение цены, первоначальная стоимость, последовательные проценты, повторение смесей и систем. Занятие Анастасии Павловой 15.10.26.",
+  "topics": [
+    "Процент от числа",
+    "Изменение цены на процент",
+    "Поиск начальной величины и процента снижения",
+    "Последовательные процентные изменения",
+    "Вычитание уравнений системы",
+    "Удаление воды и добавление раствора"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "app_06",
+      "evidenceAnchor": "percent",
+      "relation": "practiced",
+      "label": "Процент от величины",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "app_07",
+      "evidenceAnchor": "change",
+      "relation": "practiced",
+      "label": "Изменение величины на несколько процентов",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "text_16",
+      "evidenceAnchor": "inverse",
+      "relation": "practiced",
+      "label": "Задачи на проценты",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "app_08",
+      "evidenceAnchor": "sequential",
+      "relation": "practiced",
+      "label": "Последовательные процентные изменения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "eq_20",
+      "evidenceAnchor": "system",
+      "relation": "practiced",
+      "label": "Система двух уравнений",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "text_15",
+      "evidenceAnchor": "solution",
+      "relation": "practiced",
+      "label": "Разбавление раствора",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "15.10.26.html",
+    "pdf": "../pdf_docs/15.10.26.pdf",
+    "tex": "../tex_docs/15.10.26.tex"
+  }
+},
   {
     "date": "2026-10-12",
     "ktpRefs": [],
