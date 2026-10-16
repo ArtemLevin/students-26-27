@@ -50,8 +50,7 @@ function link(href,text,className){
 }
 function tile(lesson,index){
   const card=document.createElement('article');
-  const kind=index===0?'featured':index===1||index===2?'compact':index%5===0?'wide':'standard';
-  card.className='archive-tile archive-tile--'+kind;
+  card.className='archive-tile';
   const shownTitle=lesson.title||lesson.navTitle||'Материалы занятия';
   const cardMain=link(localHref(lesson.href)||'#content','','archive-tile-main');
   const meta=span('div','archive-tile-meta');
@@ -84,7 +83,7 @@ function tile(lesson,index){
 }
 export function groupLessonsByMonth(lessons){
   const grouped=new Map();
-  for(const lesson of lessons){
+  for(const lesson of [...lessons].sort((a,b)=>b.date.localeCompare(a.date))){
     if(!/^\d{4}-\d{2}-\d{2}$/.test(lesson.date))throw new Error('Invalid lesson date');
     const key=lesson.date.slice(0,7);
     if(!grouped.has(key))grouped.set(key,[]);
@@ -108,6 +107,25 @@ function makeSection(month,lessons){
   section.append(head,grid);
   return section;
 }
+// Measure the tallest untruncated card and use that height across every month.
+// Measurements are repeated at breakpoints and after web fonts load.
+function equalizeTiles(){
+  const root=$('archiveRoot');
+  const tiles=[...root.querySelectorAll('.archive-tile')];
+  const sections=[...root.querySelectorAll('.archive-month')];
+  if(!tiles.length)return;
+  const hiddenTiles=tiles.filter(card=>card.hidden);
+  const hiddenSections=sections.filter(section=>section.hidden);
+  for(const section of hiddenSections)section.hidden=false;
+  for(const card of hiddenTiles)card.hidden=false;
+  root.style.removeProperty('--archive-card-height');
+  // Trigger layout at natural height, then apply one height to ALL monthly grids.
+  const naturalHeight=Math.max(320,...tiles.map(card=>Math.ceil(card.scrollHeight)+2));
+  root.style.setProperty('--archive-card-height',naturalHeight+'px');
+  for(const card of hiddenTiles)card.hidden=true;
+  for(const section of hiddenSections)section.hidden=true;
+}
+
 function render(){
   const months=groupLessonsByMonth(LESSONS);
   const nav=$('archiveMonths'),root=$('archiveRoot');
@@ -123,6 +141,13 @@ function render(){
   nav.replaceChildren(...anchors);
   root.replaceChildren(...sections);
   root.setAttribute('aria-busy','false');
+  equalizeTiles();
+  let frame=0;
+  window.addEventListener('resize',()=>{
+    cancelAnimationFrame(frame);
+    frame=requestAnimationFrame(equalizeTiles);
+  },{passive:true});
+  document.fonts?.ready.then(equalizeTiles);
   function filter(){
     const query=normal($('archiveSearch').value);
     let visible=0,activeMonths=0;
