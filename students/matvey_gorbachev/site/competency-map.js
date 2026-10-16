@@ -33,6 +33,9 @@
     coveragePercent: document.getElementById("coveragePercent"),
     repeatCount: document.getElementById("repeatCount"),
     totalCount: document.getElementById("totalCount"),
+    confidentCount: document.getElementById("confidentCount"),
+    processCount: document.getElementById("processCount"),
+    masteredCount: document.getElementById("masteredCount"),
     centerPercent: document.getElementById("centerPercent"),
     centerTotal: document.getElementById("centerTotal"),
     catalogCounter: document.getElementById("catalogCounter"),
@@ -311,6 +314,13 @@
     els.coveragePercent.textContent = `${summary.coverage}%`;
     els.repeatCount.textContent = summary.repeat;
     els.totalCount.textContent = summary.total;
+    // Derived from Matvey's existing level state; no authored or synthetic metrics.
+    els.confidentCount.textContent = allItems.filter(item => levelOf(item) === 3).length;
+    els.processCount.textContent = allItems.filter(item => {
+      const level = levelOf(item);
+      return level === 1 || level === 2;
+    }).length;
+    els.masteredCount.textContent = allItems.filter(item => levelOf(item) === 4).length;
     els.centerPercent.textContent = `${summary.coverage}%`;
     els.centerTotal.textContent = `${summary.total} тем`;
   }
