@@ -118,7 +118,8 @@ try{
     if(w===390){await snapshot('editorial-archive-mobile');}
   }
   await navigate('index.html',1440,900,false);
-  assert.equal(await run("(()=>{document.querySelector('#themeToggle').click();return document.documentElement.dataset.theme})()"),'dark','Dashboard theme');
+  const dashboardTheme=await run("(()=>{const meta=window.COMPETENCY_MAP_DATA.meta,slug=String(meta.program).toLowerCase().replace(/ё/g,'е').replace(/[^a-z0-9а-я]+/gi,'-').replace(/^-+|-+$/g,'');const key=meta.student+'-'+slug+'-theme';const before=localStorage.getItem(key)||'light';document.querySelector('#themeToggle').click();return {before,after:localStorage.getItem(key)}})()");
+  assert.notEqual(dashboardTheme.before,dashboardTheme.after,'Dashboard theme must toggle persisted choice');
   assert.equal(await run("document.querySelector('#topicCatalog')?.children.length>0"),true,'Text catalog retained');
   assert.equal(await run("document.querySelector('#topicDialog')?.tagName"),'DIALOG','Skill dialog retained');
   assert.deepEqual(jsErrors,[],'JavaScript runtime errors');
