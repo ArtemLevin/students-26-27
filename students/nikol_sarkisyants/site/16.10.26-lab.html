@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Лаборатория дифференцированного кредита Николь Саркисьянц, занятие 16.10.2026.">
+<title>Дифференцированный кредит · Лаборатория Николь</title>
+<style>
+:root{color-scheme:light;--bg:#f3f0e9;--card:#fffdf8;--ink:#292b2f;--muted:#666269;--line:#c9bdb6;--burg:#7b3541;--teal:#306976}
+html[data-theme=dark]{color-scheme:dark;--bg:#181b1c;--card:#242829;--ink:#f0eee9;--muted:#bcb3b1;--line:#555a5a;--burg:#e7a5af;--teal:#9bced2}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,sans-serif}.wrap{width:min(1100px,calc(100% - 2rem));margin:auto}
+header{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;padding:1rem 0;border-bottom:1px solid var(--line)}
+a{color:var(--teal)}header a,header button{border:1px solid var(--line);padding:.6rem .8rem;background:var(--card);text-decoration:none;color:var(--ink)}
+button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--burg);outline-offset:3px}
+h1,h2,h3{font-family:Georgia,serif;font-weight:500;line-height:1.13}h1{font-size:clamp(2.5rem,6vw,5rem);margin:.5rem 0}h2{font-size:2rem}h3{font-size:1.3rem}.hero{padding:3rem 0 2rem}.hero p{max-width:70ch;color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(240px,300px) 1fr;gap:1.7rem;align-items:start}.controls,.chartbox,.metric{background:var(--card);border-top:2px solid var(--burg);padding:1.2rem}
+.controls label{display:flex;justify-content:space-between;font-weight:700;gap:.5rem}.controls output{color:var(--burg)}.control{margin-bottom:1.8rem}input[type=range]{width:100%;accent-color:var(--burg)}.hint{color:var(--muted);font-size:.86rem}
+.presets{display:flex;flex-wrap:wrap;gap:.5rem}.presets button{padding:.55rem .75rem;background:var(--card);border:1px solid var(--line)}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}.metric{font-size:.85rem;color:var(--muted)}.metric strong{display:block;font:600 clamp(1.1rem,2vw,1.65rem)/1.4 Georgia,serif;color:var(--burg);overflow-wrap:anywhere}
+.chartbox{margin-top:1rem}svg{width:100%;height:auto}table{border-collapse:collapse;min-width:520px;width:100%}th,td{padding:.55rem;border-bottom:1px solid var(--line);text-align:right}th:first-child,td:first-child{text-align:left}th{font-size:.8rem;color:var(--muted)}.tablewrap{overflow-x:auto}.sub{padding:2.5rem 0}.sub p{max-width:75ch}.formula{font:500 1.22rem/1.6 Georgia,serif;color:var(--teal)}footer{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted);font-size:.85rem}
+@media(max-width:790px){.layout{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.metrics{grid-template-columns:1fr}.wrap{width:calc(100% - 1.25rem)}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style></head><body><div class="wrap">
+<header><a href="16.10.26.html#formula">← К занятию</a><a href="index.html">В кабинет</a><button id="reset" type="button">Сброс</button><button id="theme" type="button">◐ Тема</button></header>
+<main><div class="hero"><p style="color:var(--burg);font-weight:700;letter-spacing:.08em">ЕГЭ · 16 ОКТЯБРЯ 2026</p><h1>Кредит: от остатка<br>к платежу</h1><p>Изменяйте сумму, срок и ставку кредита. Следите, как меняются проценты, первый и последний платежи и общая переплата. Начальные данные — из задачи занятия.</p></div>
+<div class="layout"><section class="controls"><h2>Параметры</h2>
+<div class="control"><label for="sum">Сумма, тыс. ₽ <output id="sv" for="sum">1400</output></label><input id="sum" type="range" min="200" max="6000" step="100" value="1400"></div>
+<div class="control"><label for="years">Срок, лет <output id="yv" for="years">2</output></label><input id="years" type="range" min="1" max="20" step="1" value="2"></div>
+<div class="control"><label for="rate">Ставка, % в год <output id="rv" for="rate">16</output></label><input id="rate" type="range" min="0" max="30" step=".5" value="16"></div>
+<h3>Сценарии занятия</h3><div class="presets"><button id="example" type="button">1400 · 2 года · 16%</button><button id="limits" type="button">6000 · 15 лет · 25%</button></div>
+</section><section aria-label="Результат расчёта"><div class="metrics" aria-live="polite">
+<div class="metric">Все платежи, тыс. ₽<strong id="total"></strong></div><div class="metric">Переплата, тыс. ₽<strong id="over"></strong></div><div class="metric">Переплата от суммы<strong id="share"></strong></div>
+<div class="metric">Первый платёж, тыс. ₽<strong id="first"></strong></div><div class="metric">Последний платёж, тыс. ₽<strong id="last"></strong></div><div class="metric">Разница, тыс. ₽<strong id="diff"></strong></div></div>
+<div class="chartbox"><h3>Состав ежегодного платежа</h3><p class="hint"><span style="color:var(--burg)">■</span> Доля основного долга <span style="color:var(--teal)">■</span> Проценты</p>
+<svg id="bars" viewBox="0 0 780 255" role="img" aria-labelledby="chartTitle chartDesc"><title id="chartTitle">Структура платежей</title><desc id="chartDesc">Сравнение равной доли основного долга и уменьшающихся процентов.</desc></svg></div>
+<h3>Таблица выплат</h3><div class="tablewrap"><table><thead><tr><th>Год</th><th>Долг до %</th><th>Тело кредита</th><th>Проценты</th><th>Платёж</th><th>Остаток</th></tr></thead><tbody id="rows"></tbody></table></div>
+</section></div>
+<section class="sub"><h2>Проверьте предположение</h2><p>Что произойдёт с переплатой при увеличении срока и неизменных сумме и ставке? Сравните полученные суммы.</p><details><summary style="cursor:pointer;color:var(--burg);font-weight:700">Показать объяснение</summary><p>Переплата равна Sp(n + 1)/2. При положительной ставке она растёт с увеличением числа периодов; основной долг за период S/n уменьшается.</p></details>
+<p class="formula">Pᵢ = S/n + pS(1 − (i − 1)/n)</p><p class="formula">A = S + Sp(n + 1)/2</p><p class="hint">Ставка p = r/100, где r — процент за один период; основной долг погашается равными долями.</p></section></main>
+<footer>Артём Александрович Лёвин · эксклюзивно для Николь Саркисьянц</footer></div>
+<script>
+(function(){
+'use strict';
+var s=document.getElementById('sum'),n=document.getElementById('years'),r=document.getElementById('rate');
+var svg=document.getElementById('bars'),ns='http://www.w3.org/2000/svg';
+var root=document.documentElement,t='light';try{t=localStorage.getItem('nikol-lesson-theme')||'light'}catch(e){}
+root.dataset.theme=t==='dark'?'dark':'light';
+document.getElementById('theme').onclick=function(){root.dataset.theme=root.dataset.theme==='light'?'dark':'light';try{localStorage.setItem('nikol-lesson-theme',root.dataset.theme)}catch(e){}};
+function fmt(v){return new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2}).format(v)}
+function put(id,v){document.getElementById(id).textContent=v}
+function el(tag,attrs,text){var node=document.createElementNS(ns,tag);Object.keys(attrs).forEach(function(k){node.setAttribute(k,attrs[k])});if(text!==undefined)node.textContent=text;return node}
+function calc(){var S=+s.value,N=+n.value,p=(+r.value)/100,principal=S/N,rows=[];
+for(var i=1;i<=N;i++){var before=S*(N-i+1)/N,interest=p*before;rows.push({i:i,before:before,interest:interest,payment:principal+interest,remaining:S*(N-i)/N})}
+var total=S+S*p*(N+1)/2;
+put('sv',fmt(S));put('yv',N);put('rv',fmt(+r.value));put('total',fmt(total));put('over',fmt(total-S));put('share',fmt((total-S)/S*100)+'%');put('first',fmt(rows[0].payment));put('last',fmt(rows[N-1].payment));put('diff',fmt(rows[0].payment-rows[N-1].payment));
+var tb=document.getElementById('rows');tb.replaceChildren();rows.forEach(function(row){var tr=document.createElement('tr');[row.i,row.before,principal,row.interest,row.payment,row.remaining].forEach(function(v){var td=document.createElement('td');td.textContent=fmt(v);tr.append(td)});tb.append(tr)});
+svg.replaceChildren(el('title',{id:'chartTitle'},'Структура платежей за '+N+' лет'),el('desc',{id:'chartDesc'},'Первый платёж '+fmt(rows[0].payment)+' тыс. руб., последний '+fmt(rows[N-1].payment)+' тыс. руб.'));
+var gap=14,width=750/N,bar=Math.min(52,width*.66),h=215,base=230,max=rows[0].payment;
+rows.forEach(function(row,j){var x=15+j*width+(width-bar)/2,low=principal/max*h,high=row.interest/max*h;
+var a=el('rect',{x:x,y:base-low,width:bar,height:low,fill:'#7b3541'}),b=el('rect',{x:x,y:base-low-high,width:bar,height:high,fill:'#498992'});
+a.append(el('title',{},'Основной долг: '+fmt(principal)));b.append(el('title',{},'Проценты: '+fmt(row.interest)));svg.append(a,b);
+if(N<=10||j===0||j===N-1||j%5===0)svg.append(el('text',{x:x+bar/2,y:249,'text-anchor':'middle','font-size':12,fill:'var(--ink)'},String(row.i)))});
+}
+[s,n,r].forEach(function(input){input.addEventListener('input',calc)});
+function preset(S,N,R){s.value=S;n.value=N;r.value=R;calc()}
+document.getElementById('example').onclick=function(){preset(1400,2,16)};
+document.getElementById('limits').onclick=function(){preset(6000,15,25)};
+document.getElementById('reset').onclick=function(){preset(1400,2,16)};
+calc();
+})();
+</script></body></html>
