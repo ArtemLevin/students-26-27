@@ -126,11 +126,15 @@ test('Xenia atlas landing page exposes a standalone monthly archive and retains 
   assert.ok(homepage.includes('id="archivePageCta"'));
   assert.ok(homepage.includes('id="archivePageCta" href="archive.html"'));
   assert.ok(homepage.includes('href="archive.html"'),'navigation must lead to archive page');
+  for(const marker of ['id="latestPdfLink"','id="latestTexLink"','Кабинет по химии','href="../chemistry/site/index.html"']){
+    assert.ok(!homepage.includes(marker),'header shortcut must be absent: '+marker);
+  }
+
   assert.ok(!homepage.includes('id="lessonArchive"'),'archive section must be removed from homepage');
   for(const retired of ['recentLessons','archiveToggle','archiveMore','archivePage','archivePrev','archiveNext']){
     assert.ok(!homepage.includes('id="'+retired+'"'),'retired archive control should not appear: '+retired);
   }
-  for(const id of ['lesson-title','latestLessonCta','latestPdfLink','latestTexLink','totalCount','evaluatedCount','confidentCountMain','processCountMain','masteredCountMain','radialMap','topicIndex','competenceMap','competencyDialog','practiceRoot','menuButton','sidebar','themeToggle']){
+  for(const id of ['lesson-title','latestLessonCta','latestReviewLink','totalCount','evaluatedCount','confidentCountMain','processCountMain','masteredCountMain','radialMap','topicIndex','competenceMap','competencyDialog','practiceRoot','menuButton','sidebar','themeToggle']){
     assert.ok(homepage.includes('id="'+id+'"'),'missing dashboard control '+id);
   }
   const ids=[...homepage.matchAll(/\bid="([^"]+)"/g)].map(match=>match[1]);
