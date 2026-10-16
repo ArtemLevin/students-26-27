@@ -5,6 +5,44 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-15",
+  "ktpRefs": [],
+  "href": "15.10.26.html",
+  "title": "Делимость. Искусство исключать",
+  "navTitle": "Делимость и линейные комбинации",
+  "navSubtitle": "целые числа · остатки · свойства делимости · олимпиадный приём",
+  "summary": "Делимость целых чисел: запись m | a, деление с остатком, свойства делимости и линейные комбинации. Олимпиадное занятие Ксении Клыковой от 15 октября 2026 года.",
+  "topics": [
+    "определение делимости",
+    "деление с остатком",
+    "свойства делимости",
+    "целочисленные линейные комбинации",
+    "исключение неизвестного"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t19_divisibility",
+      "evidenceAnchor": "properties",
+      "relation": "practiced",
+      "label": "Свойства делимости и целочисленные линейные комбинации",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_remainders",
+      "evidenceAnchor": "remainder",
+      "relation": "touched",
+      "label": "Делимость как нулевой остаток",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "15.10.26.html",
+    "pdf": "../pdf_docs/15.10.26.pdf",
+    "tex": "../tex_docs/15.10.26.tex",
+    "lab": "15.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-14",
   "ktpRefs": [],
   "href": "14.10.26.html",

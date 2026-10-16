@@ -170,12 +170,31 @@ try{
   assert.equal(await run("document.querySelector('#quotient math').namespaceURI"),'http://www.w3.org/1998/Math/MathML');
   assert.equal(await run("document.querySelector('#remainder math').namespaceURI"),'http://www.w3.org/1998/Math/MathML');
   assert.ok(await run("(()=>{const r=document.querySelector('#xRange');r.value='1.5';r.dispatchEvent(new Event('input'));return document.querySelector('#signExplanation').textContent.includes('исключается')})()"));
+  // 15 October: new number-theory lesson, interactive remainders and candidate verification.
+  for(const [w,h] of [[1440,900],[390,844]]){
+    for(const page of ['15.10.26.html','15.10.26-lab.html']){
+      await navigate(page,w,h,false);
+      await snapshot(page.replace('.html','')+'-'+w+'-light');
+      await navigate(page,w,h,true);
+      await snapshot(page.replace('.html','')+'-'+w+'-dark');
+    }
+  }
+  await navigate('15.10.26-lab.html?case=seven',1440,900);
+  assert.equal(await run("document.querySelector('#aValue').textContent"),'14');
+  assert.equal(await run("document.querySelector('#bValue').textContent"),'35');
+  assert.ok(await run("document.querySelector('#conclusion').textContent.includes('Оба выражения')"));
+  assert.equal(await run("(()=>{const x=document.querySelector('#nRange');x.value='1';x.dispatchEvent(new Event('input'));return document.querySelector('#aValue').textContent})()"),'5');
+  assert.ok(await run("document.querySelector('#explanation').textContent.includes('не гарантирует')"));
+  await navigate('15.10.26-lab.html?case=three',1440,900);
+  assert.equal(await run("document.querySelector('#aValue').textContent"),'6');
+  assert.equal(await run("document.querySelector('#bValue').textContent"),'3');
+  assert.equal(await run("document.querySelector('#identityValue').textContent"),'2 × 6 − 5 × 3 = -3');
   await navigate('index.html',1440,900);
   await sleep(400);
-  assert.equal(await run("document.querySelector('#lesson-title').textContent"),'Многочлены. Корень меняет ход решения');
-  assert.equal(await run("document.querySelector('#latestLessonCta').getAttribute('href')"),'14.10.26.html');
-  assert.equal(await run("document.querySelector('#latestPdfLink').hidden"),true);
-  assert.equal(await run("document.querySelector('#latestTexLink').getAttribute('href')"),'../tex_docs/14.10.26.tex');
+  assert.equal(await run("document.querySelector('#lesson-title').textContent"),'Делимость. Искусство исключать');
+  assert.equal(await run("document.querySelector('#latestLessonCta').getAttribute('href')"),'15.10.26.html');
+  assert.equal(await run("document.querySelector('#latestPdfLink').hidden"),false);
+  assert.equal(await run("document.querySelector('#latestTexLink').getAttribute('href')"),'../tex_docs/15.10.26.tex');
   assert.equal(await run("document.querySelectorAll('#recentLessons a').length"),3);
   assert.deepEqual(jsErrors,[],'JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Network errors');
