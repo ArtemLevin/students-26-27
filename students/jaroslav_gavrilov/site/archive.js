@@ -162,7 +162,7 @@ function render(){
 }
 const key='jaroslav_gavrilov-ege-profile-math-theme';
 function theme(value){
-  if(value==='dark')document.body.removeAttribute('data-theme');
+  if(value==='dark')document.body.dataset.theme='dark';
   else document.body.dataset.theme='light';
   $('archiveTheme').setAttribute('aria-label',value==='dark'?'Включить светлую тему':'Включить тёмную тему');
 }
