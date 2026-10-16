@@ -205,9 +205,20 @@ try{
     labLink:!!document.querySelector('a[href="16.10.26-lab.html"]'),
     pdfLink:!!document.querySelector('a[href="../pdf_docs/16.10.26.pdf"]'),
     posterLink:!!document.querySelector('a[href="../images/16.10.26.png"]'),
-    overflow:document.documentElement.scrollWidth>innerWidth+2
+    overflow:document.documentElement.scrollWidth>innerWidth+2,
+    mathCount:document.querySelectorAll('#content math').length,
+    fractionCount:document.querySelectorAll('#content mfrac').length,
+    subscriptCount:document.querySelectorAll('#content msub').length,
+    badHtmlSubscripts:document.querySelectorAll('#content sub').length,
+    mathNamespace:document.querySelector('#content math')?.namespaceURI,
+    numericTableCells:[...document.querySelectorAll('.ledger tbody td')].every(td=>td.querySelector('math > mn, math > mrow > mn'))
   }));
   assert.equal(lesson16.tasks,10);
+  assert.ok(lesson16.mathCount>=130,'Expected every task, answer and formula to use MathML');
+  assert.ok(lesson16.fractionCount>=14&&lesson16.subscriptCount>=10,'Expected native fraction and subscript nodes');
+  assert.equal(lesson16.badHtmlSubscripts,0);
+  assert.equal(lesson16.mathNamespace,'http://www.w3.org/1998/Math/MathML');
+  assert.equal(lesson16.numericTableCells,true);
   assert.ok(lesson16.formulas&&lesson16.labLink&&lesson16.pdfLink&&lesson16.posterLink);
   assert.equal(lesson16.overflow,false);
   await screenshot('lesson-16-desktop');
@@ -219,12 +230,19 @@ try{
     first:document.querySelector('#first').textContent,
     last:document.querySelector('#last').textContent,
     extra:document.querySelector('#extra').textContent,
-    interestStyle:document.querySelector('.interest-part')?.style.height
+    interestStyle:document.querySelector('.interest-part')?.style.height,
+    numericCells:[...document.querySelectorAll('#rows td')].every(td=>td.querySelector('math')),
+    mathNamespace:document.querySelector('#first math')?.namespaceURI,
+    inputMath:[...document.querySelectorAll('#sValue,#nValue,#rValue')].every(el=>!!el.querySelector('math')),
+    paymentMath:[...document.querySelectorAll('#first,#last,#extra')].every(el=>!!el.querySelector('math')),
+    controlMath:!!document.querySelector('#verify math')
   }));
   assert.equal(constant16.rows,4);
   assert.equal(constant16.first,'0,6');
   assert.equal(constant16.last,'0,43125');
   assert.equal(constant16.extra,'0,5625');
+  assert.equal(constant16.mathNamespace,'http://www.w3.org/1998/Math/MathML');
+  assert.ok(constant16.numericCells&&constant16.inputMath&&constant16.paymentMath&&constant16.controlMath);
   assert.match(constant16.interestStyle,/^[\d.]+%$/);
   const variable16=await execute(()=>{
     document.querySelector('#variable').click();
@@ -233,13 +251,16 @@ try{
       first:document.querySelector('#first').textContent,
       second:document.querySelectorAll('#rows tr')[1]?.cells[5]?.textContent,
       extra:document.querySelector('#extra').textContent,
-      overflow:document.documentElement.scrollWidth>innerWidth+2
+      overflow:document.documentElement.scrollWidth>innerWidth+2,
+      dynamicMath:[...document.querySelectorAll('#rows td')].every(cell=>cell.querySelector('math')),
+      variablePresetMath:document.querySelectorAll('#scenarioNote math').length===3
     };
   });
   assert.equal(variable16.rows,3);
   assert.equal(variable16.first,'0,52');
   assert.equal(variable16.second,'0,56');
   assert.equal(variable16.extra,'0,32');
+  assert.ok(variable16.dynamicMath&&variable16.variablePresetMath);
   assert.equal(variable16.overflow,false);
   await screenshot('lab-16-variable');
 
