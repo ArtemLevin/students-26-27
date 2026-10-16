@@ -5,6 +5,70 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-15",
+  "ktpRefs": [
+    "ktp-005",
+    "ktp-026"
+  ],
+  "href": "15.10.26.html",
+  "title": "Метод опорных точек",
+  "navTitle": "Метод опорных точек",
+  "navSubtitle": "Занятие Ярослава Гаврилова от 15.10.2026: метод опорных точек, восстановление формул тригонометрических и линейных функций по графикам, пересечение прямых и контроль масштаба.",
+  "summary": "Занятие Ярослава Гаврилова от 15.10.2026: метод опорных точек, восстановление формул тригонометрических и линейных функций по графикам, пересечение прямых и контроль масштаба.",
+  "topics": [
+    "Восстановление формулы функции по графику методом опорных точек",
+    "Чтение масштаба координатных осей и выбор удобных точек",
+    "Графики синуса, косинуса и тангенса с коэффициентами a и b",
+    "Линейная функция по двум точкам",
+    "Нахождение абсциссы пересечения прямых",
+    "Подстановка аргумента и решение уравнения по значению функции",
+    "Контроль табличных тригонометрических значений"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege12_14",
+      "evidenceAnchor": "cos",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege12_17",
+      "evidenceAnchor": "sin",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege12_15",
+      "evidenceAnchor": "tan",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege12_07",
+      "evidenceAnchor": "line",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege12_18",
+      "evidenceAnchor": "crossing",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_12",
+      "evidenceAnchor": "recall",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege12_01",
+      "evidenceAnchor": "tan",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "15.10.26.html",
+    "pdf": "../pdf_docs/15.10.26.pdf",
+    "tex": "../tex_docs/15.10.26.tex",
+    "lab": "15.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-12",
   "ktpRefs": [
     "ktp-027"
