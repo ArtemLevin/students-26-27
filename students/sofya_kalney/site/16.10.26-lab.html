@@ -62,6 +62,15 @@ const ab=$('ratioAB'),nc=$('ratioNC');let saved=null;
 const fmt=x=>x.toLocaleString('ru-RU',{minimumFractionDigits:2,maximumFractionDigits:2});
 const pt=(p,q,t)=>({x:p.x+(q.x-p.x)*t,y:p.y+(q.y-p.y)*t});
 const xy=p=>p.x.toFixed(4)+','+p.y.toFixed(4);
+
+const MATH_NS='http://www.w3.org/1998/Math/MathML';
+const node=(tag,value)=>{const el=document.createElementNS(MATH_NS,tag);if(value!==undefined)el.textContent=String(value);return el;};
+const mn=value=>node('mn',value),mo=value=>node('mo',value),mi=value=>{const el=node('mi',value);if(String(value).length>1)el.setAttribute('mathvariant','normal');return el;};
+const frac=(top,bottom)=>{const el=node('mfrac');el.append(top,bottom);return el;};
+const ratio=(value,unit='1')=>[mn(value),mo(' : '),mn(unit)];
+const mathInline=(...pieces)=>{const root=node('math'),row=node('mrow');row.append(...pieces.flat());root.append(row);return root;};
+const mathSet=(id,...pieces)=>$(id).replaceChildren(mathInline(...pieces));
+const text=value=>document.createTextNode(value);
 const render=()=>{
 const alpha=Number(ab.value),s=Number(nc.value);
 const K=pt(A,B,alpha/(1+alpha)),N={x:C.x+D*s,y:C.y};
@@ -71,20 +80,40 @@ for(const [id,p] of [['kDot',K],['jDot',J],['nDot',N]]){ $(id).setAttribute('cx'
 $('kLab').setAttribute('x',K.x-30);$('kLab').setAttribute('y',K.y-12);
 $('jLab').setAttribute('x',J.x+9);$('jLab').setAttribute('y',J.y-10);
 $('nLab').setAttribute('x',N.x-6);$('nLab').setAttribute('y',N.y+30);
-$('ratioABOut').textContent=fmt(alpha)+' : 1';$('ratioNCOut').textContent=fmt(s)+' : 1';
-$('whole').textContent=fmt(1+s)+' : 1';$('outside').textContent=fmt(s/(1+s))+' : 1';
-$('answer').textContent=fmt(r)+' : 1';
-const check=alpha*r*(s/(1+s));$('product').textContent=check.toFixed(4).replace('.',',');
-$('equation').textContent=fmt(alpha)+' × '+fmt(r)+' × '+fmt(s/(1+s))+' = 1';
-$('insight').textContent='Чем больше CN : AC при неизменном AK : KB, тем ближе J к B и тем меньше BJ : JC. Сейчас BJ : JC = '+fmt(r)+' : 1.';
+
+mathSet('ratioABOut',ratio(fmt(alpha)));
+mathSet('ratioNCOut',ratio(fmt(s)));
+mathSet('whole',ratio(fmt(1+s)));
+mathSet('outside',ratio(fmt(s/(1+s))));
+mathSet('answer',ratio(fmt(r)));
+const check=alpha*r*(s/(1+s));
+mathSet('product',mn(check.toFixed(4).replace('.',',')));
+mathSet('equation',frac(mi('AK'),mi('KB')),mo('×'),frac(mi('BJ'),mi('JC')),mo('×'),frac(mi('CN'),mi('AN')),mo('='),mn('1'));
+$('insight').replaceChildren(text('Чем больше '),mathInline(mi('CN'),mo(' : '),mi('AC')),
+ text(' при неизменном '),mathInline(mi('AK'),mo(' : '),mi('KB')),
+ text(', тем ближе '),mathInline(mi('J')),text(' к '),mathInline(mi('B')),
+ text(' и тем меньше '),mathInline(mi('BJ'),mo(' : '),mi('JC')),
+ text('. Сейчас '),mathInline(mi('BJ'),mo(' : '),mi('JC'),mo('='),...ratio(fmt(r))),text('.'));
 document.querySelectorAll('[data-a][data-n]').forEach(btn=>{const active=Math.abs(Number(btn.dataset.a)-alpha)<0.03&&Math.abs(Number(btn.dataset.n)-s)<0.03;btn.setAttribute('aria-pressed',String(active));});
-const cmp=$('comparison');if(saved){cmp.hidden=false;const delta=r-saved.r;$('comparisonContent').textContent='Было BJ : JC = '+fmt(saved.r)+' : 1; стало '+fmt(r)+' : 1. '+(Math.abs(delta)<1e-6?'Отношение не изменилось.':delta>0?'Увеличилось на '+fmt(delta)+'.':'Уменьшилось на '+fmt(-delta)+'.');}else cmp.hidden=true;
+const cmp=$('comparison');if(saved){
+ cmp.hidden=false;const delta=r-saved.r,parts=[
+ text('Было '),mathInline(mi('BJ'),mo(' : '),mi('JC'),mo('='),...ratio(fmt(saved.r))),
+ text('; стало '),mathInline(mi('BJ'),mo(' : '),mi('JC'),mo('='),...ratio(fmt(r))),text('. ')
+ ];
+ if(Math.abs(delta)<1e-6)parts.push(text('Отношение не изменилось.'));
+ else{parts.push(text(delta>0?'Увеличилось на ':'Уменьшилось на '));parts.push(mathInline(mn(fmt(Math.abs(delta)))));parts.push(text('.'));}
+ $('comparisonContent').replaceChildren(...parts);
+}else cmp.hidden=true;
 };
 ab.addEventListener('input',render);nc.addEventListener('input',render);
 document.querySelectorAll('[data-a][data-n]').forEach(btn=>btn.addEventListener('click',()=>{ab.value=btn.dataset.a;nc.value=btn.dataset.n;render()}));
 $('reset').addEventListener('click',()=>{ab.value=1;nc.value=1;saved=null;$('predictionFeedback').textContent='';render()});
 $('save').addEventListener('click',()=>{saved={r:(1+Number(nc.value))/(Number(ab.value)*Number(nc.value))};render()});
-document.querySelectorAll('[data-answer]').forEach(btn=>btn.addEventListener('click',()=>{$('predictionFeedback').textContent=btn.dataset.answer==='down'?'Верно: отношение BJ : JC уменьшается, поскольку множитель CN : AN увеличивается, а их произведение остаётся постоянным.':'Проверьте формулу: при фиксированном AK : KB произведение (BJ/JC)·(CN/AN) остаётся постоянным. Попробуйте увеличить второй параметр.';}));
+document.querySelectorAll('[data-answer]').forEach(btn=>btn.addEventListener('click',()=>{
+ const feedback=$('predictionFeedback');
+ if(btn.dataset.answer==='down')feedback.replaceChildren(text('Верно: отношение '),mathInline(mi('BJ'),mo(' : '),mi('JC')),text(' уменьшается, поскольку множитель '),mathInline(frac(mi('CN'),mi('AN'))),text(' увеличивается, а их произведение остаётся постоянным.'));
+ else feedback.replaceChildren(text('Проверьте формулу: при фиксированном '),mathInline(mi('AK'),mo(' : '),mi('KB')),text(' произведение '),mathInline(frac(mi('BJ'),mi('JC')),mo('×'),frac(mi('CN'),mi('AN'))),text(' остаётся постоянным. Попробуйте увеличить второй параметр.'));
+}));
 render();
 })();
 </script>
