@@ -5,6 +5,81 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-15",
+  "ktpRefs": [],
+  "href": "15.10.26.html",
+  "title": "Системы уравнений и метод интервалов",
+  "navTitle": "Системы уравнений и метод интервалов",
+  "navSubtitle": "Ярослав Верещагин: системы уравнений методом подстановки и сложения, метод интервалов КОЗА, десять заданий и ответы. Занятие 15.10.26.",
+  "summary": "Ярослав Верещагин: системы уравнений методом подстановки и сложения, метод интервалов КОЗА, десять заданий и ответы. Занятие 15.10.26.",
+  "topics": [
+    "Системы уравнений: подстановка",
+    "Системы уравнений: сложение и вычитание",
+    "Квадратные неравенства",
+    "Метод интервалов",
+    "Корни и граничные точки",
+    "Оформление промежутков"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_20_3_1",
+      "evidenceAnchor": "methods",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_3_3",
+      "evidenceAnchor": "addition",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_3_4",
+      "evidenceAnchor": "substitution",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_3_5",
+      "evidenceAnchor": "systems",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_13_2_1",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_13_2_2",
+      "evidenceAnchor": "quadratic",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_13_2_3",
+      "evidenceAnchor": "quadratic",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_13_2_4",
+      "evidenceAnchor": "boundaries",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_1",
+      "evidenceAnchor": "four-roots",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_20_2_4",
+      "evidenceAnchor": "two-quadratics",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "15.10.26.html",
+    "pdf": "../pdf_docs/15.10.26.pdf",
+    "tex": "../tex_docs/15.10.26.tex",
+    "lab": "15.10.26-lab.html"
+  }
+},
+  {
     "date": "2026-10-12",
     "ktpRefs": [],
     "href": "12.10.26.html",
