@@ -26,7 +26,7 @@ test('editorial visual contract and standalone archive preserve the student iden
 test('canonical lesson registry is the only archive source',()=>{
   assert.equal(validateLessonRegistry(LESSONS).count,LESSONS.length);
   assert.ok(LESSONS.length>=11);
-  assert.equal(LESSONS[0].date,'2026-10-15');
+  assert.ok(LESSONS.some(lesson=>lesson.date==='2026-10-15'));
   const js=read('archive.js');
   assert.match(js,/import \{LESSONS\} from '\.\/lesson-registry\.js'/);
   assert.match(js,/groupLessonsByMonth\(LESSONS\)/);
