@@ -222,7 +222,7 @@ try{
   assert.equal(await run("getComputedStyle(document.querySelector('.mobile-bar')).display"),'flex');
   assert.equal(await run("getComputedStyle(document.querySelector('#sidebar')).position"),'fixed');
   assert.ok(await run("(()=>{const a=document.querySelector('.lesson-copy').getBoundingClientRect(),b=document.querySelector('#latestLessonStatus').getBoundingClientRect(),c=document.querySelector('#practiceSection').getBoundingClientRect(),d=document.querySelector('#lesson').getBoundingClientRect();return b.top>=a.bottom-2&&c.top>=d.bottom-2})()"),'mobile outcomes must stack without overlapping practice');
-  assert.equal(await run("document.querySelector('#lessonArchive').contains(document.querySelector('#recentLessons'))"),true);
+  assert.equal(await run("document.querySelector('#lessonArchive')===null && document.querySelector('#recentLessons')===null"),true);
   assert.equal(await run("(()=>{document.querySelector('#menuButton').click();return document.querySelector('#menuButton').getAttribute('aria-expanded')})()"),'true');
   assert.equal(await run("(()=>{document.querySelector('#sidebarClose').click();return document.querySelector('#menuButton').getAttribute('aria-expanded')})()"),'false');
 
