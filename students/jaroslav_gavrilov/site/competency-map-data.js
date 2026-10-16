@@ -140,6 +140,24 @@ for (const [id, cfg] of Object.entries(LESSON_051026)) {
   item.material = { href: '05.10.26.html#' + cfg.section, label: 'Открыть нужный раздел занятия →' };
 }
 
+// 15.10.2026: evidence only. No automatic level or repeat-state changes.
+const LESSON_151026 = {
+  'ege12_14': { section: 'cos', evidence: 'По двум опорным точкам графика косинуса составлена система для коэффициентов a и b; отдельная демонстрация графика синуса и тангенса продолжает тему.' },
+  'ege12_17': { section: 'sin', evidence: 'На графике y=−2sin x−1 проработаны отражение при отрицательном a и вертикальный сдвиг b.' },
+  'ege12_15': { section: 'tan', evidence: 'При tg 0=0 свободный член b считывается непосредственно по ординате точки на оси y.' },
+  'ege12_07': { section: 'line', evidence: 'Коэффициент наклона прямой найден по двум точкам: k=(4−(−3))/(3−(−1))=7/4.' },
+  'ege12_18': { section: 'crossing', evidence: 'Абсцисса пересечения двух прямых определена через равенство f₁(x)=f₂(x), получено x=−5.' },
+  'ege08_12': { section: 'recall', evidence: 'Повторены значения cos π=−1, sin(−π/2)=−1, tg(π/4)=1, а также равенство 1/√2=√2/2.' },
+  'ege12_01': { section: 'tan', evidence: 'Вспомнили область определения тангенса x≠π/2+πn.' }
+};
+for (const [id,cfg] of Object.entries(LESSON_151026)) {
+  const item=G.flatMap(group=>group.items).find(topic=>topic.id===id);
+  if(!item)continue;
+  item.evidence=Array.isArray(item.evidence)?item.evidence:[];
+  item.evidence.push({text:cfg.evidence+' Материал: занятие 15.10.2026 «Графики функций. Метод опорных точек».'});
+  item.material={href:'15.10.26.html#'+cfg.section,label:'Открыть связанный раздел занятия →'};
+}
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'jaroslav_gavrilov',
@@ -149,7 +167,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Структура сверена 19.09.2026 с опубликованными ФИПИ проектами КИМ ЕГЭ-2027 по профильной математике.',
-    updated:'05.10.2026'
+    updated:'15.10.2026'
   },
   groups:G
 };
