@@ -1,0 +1,42 @@
+name: Jaroslav editorial cabinet and archive QA
+on:
+  push:
+    branches:
+      - feat/jaroslav-editorial-archive-20261016
+    paths:
+      - students/jaroslav_gavrilov/site/index.html
+      - students/jaroslav_gavrilov/site/archive.html
+      - students/jaroslav_gavrilov/site/archive.css
+      - students/jaroslav_gavrilov/site/archive.js
+      - students/jaroslav_gavrilov/site/editorial-dashboard.js
+      - students/jaroslav_gavrilov/site/editorial-adapter.css
+      - students/jaroslav_gavrilov/site/atlas-editorial.css
+      - students/jaroslav_gavrilov/site/competency-map.js
+      - students/jaroslav_gavrilov/site/tests/editorial-archive.browser.mjs
+      - .github/workflows/jaroslav-editorial-qa.yml
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Static syntax checks
+        run: |
+          node --check students/jaroslav_gavrilov/site/archive.js
+          node --check students/jaroslav_gavrilov/site/editorial-dashboard.js
+          node --check students/jaroslav_gavrilov/site/competency-map.js
+          node --check students/jaroslav_gavrilov/site/tests/editorial-archive.browser.mjs
+          node scripts/student.mjs validate jaroslav_gavrilov
+      - name: Desktop and mobile Chromium regression
+        run: node students/jaroslav_gavrilov/site/tests/editorial-archive.browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jaroslav-editorial-browser-screenshots
+          path: jaroslav-editorial-qa-artifacts/*.png
+          if-no-files-found: warn
