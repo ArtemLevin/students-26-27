@@ -100,7 +100,7 @@
         start+=span;
       });
     }
-    svgNode('circle',{cx:420,cy:420,r:106,class:'radial-center'},svg);
+    svgNode('circle',{cx:420,cy:420,r:106,class:'denis-radial-center-disc'},svg);
     svgNode('text',{x:420,y:406,class:'radial-center-primary'},svg).textContent=state.items.length||'—';
     svgNode('text',{x:420,y:434,class:'radial-center-small'},svg).textContent='НАВЫКОВ';
     svgNode('text',{x:420,y:454,class:'radial-center-caption'},svg).textContent=Object.keys(state.levels).filter(id=>state.items.some(x=>x.id===id)).length+' имеют оценку';
