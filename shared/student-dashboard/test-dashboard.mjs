@@ -138,7 +138,7 @@ export async function runDashboardTests({student,catalog,stateKey,storageKey,cat
   const archiveControls=archiveMode==='standalone'?[]:['id="recentLessons"','id="archivePage"'];
   assert.ok(['embedded','standalone'].includes(archiveMode),`${student}: unknown archive layout mode`);
   for(const required of [
-    'id="menuButton"','aria-controls="sidebar"','id="sidebar"',...archiveControls,'aria-live="polite"','id="latestLessonCta"','id="competenceMap",
+    'id="menuButton"','aria-controls="sidebar"','id="sidebar"',...archiveControls,'aria-live="polite"','id="latestLessonCta"','id="competenceMap"',
     'id="masteredCount"','id="masteredCountMain"','data-filter="unseen"','data-filter="help"','data-filter="confident"','aria-labelledby="radialTitle radialDescription"','id="levelExplanation"','aria-labelledby="dialogTitle"'
   ])assert.ok(html.includes(required),`${student}: missing ${required}`);
   if(archiveMode==='standalone'){
