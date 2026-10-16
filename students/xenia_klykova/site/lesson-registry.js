@@ -5,6 +5,44 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-15",
+  "ktpRefs": [],
+  "href": "15.10.26.html",
+  "title": "Делимость: от записи к доказательству",
+  "navTitle": "Делимость и линейные комбинации",
+  "navSubtitle": "целые числа · остатки · свойства делимости · олимпиадный приём",
+  "summary": "Делимость целых чисел, остатки, транзитивность, суммы и линейные комбинации. Олимпиадный приём исключения неизвестного из двух выражений с проверкой всех возможных делителей.",
+  "topics": [
+    "определение делимости",
+    "деление с остатком",
+    "свойства делимости",
+    "линейные комбинации",
+    "исключение неизвестного"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t19_divisibility",
+      "evidenceAnchor": "properties",
+      "relation": "practiced",
+      "label": "Свойства делимости и целочисленные линейные комбинации",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_remainders",
+      "evidenceAnchor": "remainder",
+      "relation": "touched",
+      "label": "Делимость как нулевой остаток",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "15.10.26.html",
+    "pdf": "../pdf_docs/15.10.26.pdf",
+    "tex": "../tex_docs/15.10.26.tex",
+    "lab": "15.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-14",
   "ktpRefs": [],
   "href": "14.10.26.html",
