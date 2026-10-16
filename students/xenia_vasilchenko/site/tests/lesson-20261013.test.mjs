@@ -52,9 +52,10 @@ test('source materials and local links resolve', () => {
 test('the latest lesson is registered once and is featured on the dashboard', () => {
   assert.equal((registry.match(/"date": "2026-10-13"/g) || []).length, 1);
   assert.match(registry, /"href": "13\.10\.26\.html"/);
-  assert.match(index, /href="13\.10\.26\.html"/);
+  assert.match(index, /href="archive\.html"/);
+  assert.match(fs.readFileSync(path.join(site,"archive.js"),"utf8"), /lesson-registry\.js/);
   assert.match(index, /competency-map-lesson-20261013\.js/);
-  assert.match(index, /href="08\.10\.26-lab\.html/);
+  assert.match(registry, /08\.10\.26-lab\.html/);
   assert.equal(metadata.date, '2026-10-13');
   assert.equal(intent.lessonDate, metadata.date);
   assert.deepEqual(intent.topics, metadata.topics);
