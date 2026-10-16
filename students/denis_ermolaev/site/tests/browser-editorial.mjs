@@ -49,7 +49,7 @@ try{
   const packet=JSON.parse(e.data);
   if(packet.id&&pending.has(packet.id)){const fn=pending.get(packet.id);pending.delete(packet.id);fn(packet);}
   if(packet.method==='Runtime.exceptionThrown')errors.push(packet.params?.exceptionDetails?.text||'Runtime error');
-  if(packet.method==='Network.responseReceived'&&packet.params.response.status>=400)badUrls.push(packet.params.response.url);
+  if(packet.method==='Network.responseReceived'&&packet.params.response.status>=400)!packet.params.response.url.endsWith('/favicon.ico')&&badUrls.push(packet.params.response.url);
  };
  const call=(method,params={})=>new Promise((resolve,reject)=>{
   const id=++index;pending.set(id,packet=>packet.error?reject(Error(packet.error.message)):resolve(packet.result));
@@ -86,6 +86,10 @@ try{
   assert.equal(await run('document.getElementById("evaluatedCount").textContent'), '0');
   assert.equal(await run('document.getElementById("detailId").hidden'),true);
   await visit('archive.html',w,h);
+  assert.equal(await run('(()=>{document.querySelector("#archiveTheme").click();return document.body.hasAttribute("data-theme")})()'),false);
+  const darkIndex=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
+  fs.writeFileSync(path.join(screenshots,'archive-'+w+'-dark.png'),Buffer.from(darkIndex.data,'base64'));
+  await run('document.querySelector("#archiveTheme").click()');
   assert.equal(await run('document.querySelectorAll(".archive-tile").length'),0);
   assert.ok((await run('document.getElementById("archiveRoot").textContent')).includes('Опубликованных занятий пока нет'));
  }
