@@ -30,7 +30,8 @@ test('lesson route, 4 study steps and 10 practice tasks are accessible',()=>{
 test('canonical v2 lesson publication matches metadata and source evidence',()=>{
   assert.match(registry,/"date": "2026-10-15"/);
   assert.equal((registry.match(/"date": "2026-10-15"/g)||[]).length,1);
-  assert.match(index,/href="15\.10\.26\.html"/);
+  assert.match(index,/href="archive\.html"/);
+  assert.match(fs.readFileSync(path.join(site,"atlas-editorial.js"),"utf8"), /getLatestLesson\(LESSONS\)/);
   assert.match(index,/competency-map-lesson-20261015\.js/);
   assert.equal(meta.date,'2026-10-15');
   assert.equal(intent.lessonDate,meta.date);
