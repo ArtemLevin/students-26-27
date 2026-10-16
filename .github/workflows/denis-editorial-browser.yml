@@ -1,0 +1,32 @@
+name: Denis editorial browser QA
+on:
+  pull_request:
+    paths:
+      - 'students/denis_ermolaev/site/**'
+      - '.github/workflows/denis-editorial-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  denis-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify syntax and fixed student program
+        run: |
+          node --check students/denis_ermolaev/site/heatmap.js
+          node --check students/denis_ermolaev/site/archive.js
+          node --test students/denis_ermolaev/site/tests/heatmap-program.test.mjs
+      - name: Chromium regression at desktop, tablet and mobile sizes
+        run: node students/denis_ermolaev/site/tests/browser-editorial.mjs
+      - name: Publish browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: denis-editorial-browser-screenshots
+          path: denis-editorial-artifacts/*.png
+          if-no-files-found: warn
