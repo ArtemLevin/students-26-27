@@ -75,7 +75,7 @@ try{
   }
   const size=await run('({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth})');
   assert.ok(size.scroll<=size.client+2,page+' '+width+' overflow '+JSON.stringify(size));
-  assert.equal(await run('document.querySelectorAll("a[href^=\"students/xenia\"]").length'),0,'foreign links');
+  assert.equal(await run('document.querySelectorAll("a[href*=xenia_klykova]").length'),0,'foreign links');
   const filename=page.replace('.html','')+'-'+width;
   const png=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
   fs.writeFileSync(path.join(screenshots,filename+'.png'),Buffer.from(png.data,'base64'));
