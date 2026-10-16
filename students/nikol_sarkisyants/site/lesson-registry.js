@@ -4,6 +4,73 @@ export const ARCHIVE_PAGE_SIZE=10;
 const MONTHS_GENITIVE=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
 export const LESSONS=[
+{
+  "date": "2026-10-16",
+  "ktpRefs": [],
+  "href": "16.10.26.html",
+  "title": "Финансы и тригонометрия",
+  "navTitle": "Кредит и тригонометрия",
+  "navSubtitle": "переплата · платежи · понижение степени · замена",
+  "summary": "Повторение ЕГЭ: дифференцированные кредиты, сумма выплат и переплата, ограничения на первый и последний платежи, формулы понижения степени и решение показательно-тригонометрического уравнения заменой.",
+  "topics": [
+    "дифференцированный кредит",
+    "проценты и переплата",
+    "ограничения на платежи",
+    "формулы понижения степени",
+    "показательно-тригонометрическое уравнение",
+    "проверка преобразований"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t16_diff",
+      "evidenceAnchor": "finance",
+      "relation": "practiced",
+      "label": "Дифференцированная схема кредита",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_model_equation",
+      "evidenceAnchor": "formula",
+      "relation": "practiced",
+      "label": "Формулы платежей и переплаты",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_credits",
+      "evidenceAnchor": "constraints",
+      "relation": "practiced",
+      "label": "Система ограничений на платежи",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_double_angle",
+      "evidenceAnchor": "trig",
+      "relation": "practiced",
+      "label": "Понижение степени и двойной угол",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t13_trig_exp",
+      "evidenceAnchor": "exponent",
+      "relation": "practiced",
+      "label": "Показательно-тригонометрические уравнения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t13_trig_homogeneous",
+      "evidenceAnchor": "errors",
+      "relation": "touched",
+      "label": "Контроль деления на косинус",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "16.10.26.html",
+    "lab": "16.10.26-lab.html",
+    "pdf": "../pdf_docs/16.10.26.pdf",
+    "tex": "../tex_docs/16.10.26.tex"
+  }
+},
   {
   "date": "2026-10-14",
   "ktpRefs": [],
