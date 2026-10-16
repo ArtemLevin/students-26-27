@@ -194,6 +194,40 @@ const evidence1310For = (title)=>({
   tex:'../tex_docs/13.10.26.tex'
 });
 
+
+const lesson1610EvidenceTitles = new Set([
+  "Формулы финансовых расчётов",
+  "Кредит с дифференцированными платежами",
+  "Долг после очередного платежа",
+  "Процент от остатка долга",
+  "Таблица платежей по кредиту",
+  "Сумма выплат по кредиту",
+  "Переплата по кредиту",
+  "Поиск процентной ставки",
+  "Поиск размера платежа",
+  "Сравнение финансовых сценариев"
+]);
+const lesson1610AnchorByTitle = new Map([
+  ["Формулы финансовых расчётов","#formulas"],
+  ["Кредит с дифференцированными платежами","#model"],
+  ["Долг после очередного платежа","#ledger"],
+  ["Процент от остатка долга","#ledger"],
+  ["Таблица платежей по кредиту","#ledger"],
+  ["Сумма выплат по кредиту","#formulas"],
+  ["Переплата по кредиту","#formulas"],
+  ["Поиск процентной ставки","#translation"],
+  ["Поиск размера платежа","#formulas"],
+  ["Сравнение финансовых сценариев","#choice"]
+]);
+const evidence1610For = (title)=>({
+  date:'16.10.26',
+  text:'На занятии 16.10.26 разобрана дифференцированная схема кредита: равное погашение основного долга, таблица, пять формул, переплата и перевод ограничений в уравнения. Задачи решались с поддержкой преподавателя; оснований для повышения уровня самостоятельного освоения нет.',
+  web:'16.10.26.html'+lesson1610AnchorByTitle.get(title),
+  lab:'16.10.26-lab.html',
+  pdf:'../pdf_docs/16.10.26.pdf',
+  tex:'../tex_docs/16.10.26.tex'
+});
+
 const groups=groupDefs.map((def,groupIndex)=>{
   const number=groupIndex+1;
   const groupId=`ege27_${String(number).padStart(2,'0')}`;
@@ -218,6 +252,7 @@ const groups=groupDefs.map((def,groupIndex)=>{
       const hasLesson0610Evidence=(number===10||number===11||number===13)&&lesson0610EvidenceTitles.has(title);
       const hasLesson0910Evidence=(number===10||number===13)&&lesson0910EvidenceTitles.has(title);
       const hasLesson1310Evidence=(number===10||number===13)&&lesson1310EvidenceTitles.has(title);
+      const hasLesson1610Evidence=(number===10||number===13)&&lesson1610EvidenceTitles.has(title);
 
       const level=isMasteredPower?4:
         isLesson2509Level3?3:
@@ -245,6 +280,7 @@ const groups=groupDefs.map((def,groupIndex)=>{
       if(hasLesson0610Evidence) evidence.push(evidence0610For(title));
       if(hasLesson0910Evidence) evidence.push(evidence0910For(title));
       if(hasLesson1310Evidence) evidence.push(evidence1310For(title));
+      if(hasLesson1610Evidence) evidence.push(evidence1610For(title));
 
       const id=`${groupId}_${String(itemIndex+1).padStart(3,'0')}`;
       return{
@@ -265,7 +301,7 @@ window.COMPETENCY_MAP_DATA={
     teacher:'Лёвин Артём Александрович',
     program:'подготовка к ЕГЭ по профильной математике',
     examVersion:'проект ЕГЭ-2027',
-    updated:'13.10.26',
+    updated:'16.10.26',
     sourceNote:'Структура актуализирована по проектам документов ФИПИ ЕГЭ-2027; подтверждённые уровни уточняются по материалам занятий.'
   },
   storage:{
@@ -274,6 +310,7 @@ window.COMPETENCY_MAP_DATA={
     theme:'ekaterina_gnedkova-ege_profile_2027-theme'
   },
   materials:[
+    {date:'16.10.26',title:'Дифференцированное погашение кредита',summary:'Пять формул, равное уменьшение основного долга, переплата и ограничения по платежам.',web:'16.10.26.html',lab:'16.10.26-lab.html',pdf:'../pdf_docs/16.10.26.pdf',tex:'../tex_docs/16.10.26.tex',image:'../images/16.10.26.png'},
     {date:'13.10.26',title:'Произвольные схемы погашения кредита',summary:'Расчёт платежей по остаткам долга, переплата, система неравенств и смешанная схема.',web:'13.10.26.html',pdf:'../pdf_docs/13.10.26.pdf',tex:'../tex_docs/13.10.26.tex',image:'../images/13.10.26.png'},
     {date:'09.10.26',title:'Кредитные задачи: три схемы погашения',summary:'Аннуитетная, дифференцированная и произвольная схемы; таблица долга и платежей, поиск ставки.',web:'09.10.26.html',pdf:'../pdf_docs/09.10.26.pdf',tex:'../tex_docs/09.10.26.tex',image:'../images/09.10.26.png'},
     {date:'06.10.26',title:'Вклады и сложные проценты',summary:'Таблица по годам, сложные проценты, повышающий коэффициент и дополнительные взносы.',web:'06.10.26.html',lab:'06.10.26-lab.html',pdf:'../pdf_docs/06.10.26.pdf',tex:'../tex_docs/06.10.26.tex',image:'../images/06.10.26.png'},
