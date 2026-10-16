@@ -10,6 +10,9 @@ const page=fs.readFileSync(path.join(site,'09.10.26.html'),'utf8');
 const lab=fs.readFileSync(path.join(site,'09.10.26-lab.html'),'utf8');
 const dashboard=fs.readFileSync(path.join(site,'dashboard.js'),'utf8');
 const homepage=fs.readFileSync(path.join(site,'index.html'),'utf8');
+const archivePage=fs.readFileSync(path.join(site,'archive.html'),'utf8');
+const archiveJS=fs.readFileSync(path.join(site,'archive.js'),'utf8');
+const archiveCSS=fs.readFileSync(path.join(site,'archive.css'),'utf8');
 const metadata=JSON.parse(fs.readFileSync(path.join(site,'data/lessons/2026-10-09.lesson.json'),'utf8'));
 const intent=JSON.parse(fs.readFileSync('pipeline/publication-intents/xenia_klykova/2026-10-09.json','utf8'));
 const practice=JSON.parse(fs.readFileSync(path.join(site,'data/practice-publications/2026-10-09.json'),'utf8'));
@@ -108,7 +111,7 @@ test('all published mathematical expressions have MathML semantics',()=>{
   assert.ok(lab.includes("feedback.innerHTML='Верно:"));
 });
 
-test('Xenia atlas homepage mirrors Anna editorial composition and preserves interactive contracts',()=>{
+test('Xenia atlas landing page exposes a standalone monthly archive and retains dashboard controls',()=>{
   const css=fs.readFileSync(path.join(site,'atlas-bannova-reference.css'),'utf8');
   const design=JSON.parse(fs.readFileSync(path.join(site,'design.json'),'utf8'));
   assert.equal(design.system,'LEVIN_ATLAS');
@@ -118,20 +121,47 @@ test('Xenia atlas homepage mirrors Anna editorial composition and preserves inte
   assert.ok(homepage.includes('atlas-bannova-reference.css'));
   assert.ok(homepage.includes('data-atlas-accent="graphite"'));
   assert.ok(homepage.includes('id="atlasTitle"'));
-  assert.ok(homepage.includes('id="lessonArchive"'));
   assert.ok(homepage.includes('class="atlas-ledger"'));
   assert.ok(homepage.includes('class="atlas-catalog"'));
-  assert.ok(homepage.indexOf('id="recentLessons"')>homepage.indexOf('id="lessonArchive"'));
-  assert.ok(homepage.indexOf('id="lessonArchive"')>homepage.indexOf('id="radialMap"'));
-  for(const id of ['lesson-title','latestLessonCta','latestPdfLink','latestTexLink','recentLessonCount','recentLessons','archiveToggle','archiveMore','archivePage','archivePrev','archiveNext','totalCount','evaluatedCount','confidentCountMain','processCountMain','masteredCountMain','radialMap','topicIndex','competenceMap','competencyDialog','practiceRoot','menuButton','sidebar','themeToggle']){
+  assert.ok(homepage.includes('id="archivePageCta"'));
+  assert.ok(homepage.includes('id="archivePageCta" href="archive.html"'));
+  assert.ok(homepage.includes('href="archive.html"'),'navigation must lead to archive page');
+  assert.ok(!homepage.includes('id="lessonArchive"'),'archive section must be removed from homepage');
+  for(const retired of ['recentLessons','archiveToggle','archiveMore','archivePage','archivePrev','archiveNext']){
+    assert.ok(!homepage.includes('id="'+retired+'"'),'retired archive control should not appear: '+retired);
+  }
+  for(const id of ['lesson-title','latestLessonCta','latestPdfLink','latestTexLink','totalCount','evaluatedCount','confidentCountMain','processCountMain','masteredCountMain','radialMap','topicIndex','competenceMap','competencyDialog','practiceRoot','menuButton','sidebar','themeToggle']){
     assert.ok(homepage.includes('id="'+id+'"'),'missing dashboard control '+id);
   }
   const ids=[...homepage.matchAll(/\bid="([^"]+)"/g)].map(match=>match[1]);
   assert.equal(new Set(ids).size,ids.length,'all page IDs must be unique');
+  assert.ok(css.includes('.atlas-archive-portal-link'));
   assert.ok(css.includes('grid-template-columns:repeat(5,minmax(0,1fr))'));
-  assert.ok(css.includes('.atlas-section-head'));
   assert.ok(css.includes('@media(max-width:680px)'));
   assert.ok(css.includes('prefers-reduced-motion'));
+});
+
+test('monthly tile archive is data-driven, safe and reachable',()=>{
+  for(const id of ['archiveRoot','archiveSearch','archiveMonths','archiveTotal','archiveMonthTotal','archiveTheme','archiveEmpty']){
+    assert.ok(archivePage.includes('id="'+id+'"'),'archive page missing '+id);
+  }
+  assert.ok(archivePage.includes('archive.js?v=20261016-1'));
+  assert.ok(archivePage.includes('archive.css?v=20261016-1'));
+  assert.ok(archivePage.includes('href="index.html"'));
+  const ids=[...archivePage.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
+  assert.equal(new Set(ids).size,ids.length,'duplicate archive page IDs');
+  assert.ok(archiveJS.includes("composeLessons(BASE_LESSONS"),'same chronology as dashboard');
+  assert.ok(archiveJS.includes("groupLessonsByMonth"),'month groups derived from dates');
+  assert.ok(archiveJS.includes("document.createElement"),'construct tile text safely');
+  assert.ok(archiveJS.includes("tile.hidden=!matched"),'search filters tile visibility');
+  assert.ok(!archiveJS.includes('innerHTML'),'titles and topics must never inject HTML');
+  assert.ok(archiveCSS.includes('grid-auto-flow:dense'),'dense tile paving');
+  assert.ok(archiveCSS.includes('grid-template-columns:repeat(12,minmax(0,1fr))'));
+  assert.ok(archiveCSS.includes('.archive-tile--featured'));
+  assert.ok(archiveCSS.includes('@media(max-width:700px)'));
+  assert.ok(archiveCSS.includes('prefers-reduced-motion'));
+  assert.ok(LESSONS.length>=30,'all historical lessons remain accessible');
+  assert.ok(new Set(LESSONS.map(x=>x.date.slice(0,7))).size>=4,'multiple months available');
 });
 
 test('latest lesson presents readable evidence and valid editorial layout markup',async()=>{
