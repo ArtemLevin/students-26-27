@@ -39,7 +39,8 @@ function tile(lesson,index){
   const card=document.createElement('article');
   card.className='archive-tile';
   const shownTitle=lesson.title||lesson.navTitle||'Материалы занятия';
-  const cardMain=link(localHref(lesson.href)||'#content','','archive-tile-main');
+  const href=localHref(lesson.href);
+  const cardMain=href?link(href,'','archive-tile-main'):span('div','archive-tile-main');
   const meta=span('div','archive-tile-meta');
   const date=span('time','archive-tile-date',fullDate(lesson.date));
   date.dateTime=lesson.date;
@@ -50,7 +51,7 @@ function tile(lesson,index){
   const availableTopics=(lesson.topics||[]).filter(t=>typeof t==='string'&&t.trim()).slice(0,2);
   for(const value of availableTopics)topics.append(span('span','archive-tile-topic',value));
   if((lesson.topics||[]).length>2)topics.append(span('span','archive-tile-more','+'+((lesson.topics||[]).length-2)));
-  const go=span('span','archive-tile-open','Открыть занятие ↗');
+  const go=span('span','archive-tile-open',href?'Открыть занятие ↗':'Материал уточняется');
   cardMain.append(meta,title,tagline,topics,go);
   card.append(cardMain);
   const m=lesson.materials||{};
