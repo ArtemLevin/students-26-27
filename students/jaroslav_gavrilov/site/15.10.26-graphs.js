@@ -95,7 +95,7 @@
     trace(x=>s.fn(x,a,b),'var(--plot-primary)');
     if(s.second)trace(s.second,'var(--plot-secondary)');
     if(s.asymptotes&&Math.abs(a)>1e-9)for(const x of s.asymptotes)
-      plot.append(el('line',{x1:X(x),y1:T,x2:X(x),y2:T+h,stroke:'var(--plot-asymptote)','stroke-width':1.8,'stroke-dasharray':'8 5'}));
+      plot.append(el('line',{x1:X(x),y1:T,x2:X(x),y2:T+h,stroke:'var(--plot-asymptote, var(--plot-secondary))','stroke-width':1.8,'stroke-dasharray':'8 5'}));
     svg.append(plot);
     if(!(override&&override.hidePoints)){
       for(const p of s.points){
