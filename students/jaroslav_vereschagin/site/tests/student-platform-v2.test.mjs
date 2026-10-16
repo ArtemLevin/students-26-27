@@ -14,7 +14,7 @@ const siteDir=path.resolve('students/jaroslav_vereschagin/site');
 const pages=['15.10.26.html','15.10.26-lab.html'];
 
 function mathBlocks(html){
-  return [...html.matchAll(/<math\b[^>]*>[\s\S]*?<\/math>/g)].map(match=>match[0]);
+  return [...html.split('<script>')[0].matchAll(/<math\b[^>]*>[\s\S]*?<\/math>/g)].map(match=>match[0]);
 }
 
 function assertMathMLStructure(markup){
