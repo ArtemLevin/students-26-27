@@ -94,7 +94,9 @@ try{
   assert.ok((await run('document.getElementById("archiveRoot").textContent')).includes('Опубликованных занятий пока нет'));
  }
  await visit('index.html',390,844);
- assert.equal(await run('(()=>{document.querySelector("#menuButton").click();return document.querySelector("#sidebar").getBoundingClientRect().right>0 && document.querySelector("#menuButton").getAttribute("aria-expanded")==="true"})()'),true);
+ await run('document.querySelector("#menuButton").click()');
+ await sleep(300); // CSS drawer animation needs time before measuring rendered geometry.
+ assert.equal(await run('document.querySelector("#sidebar").getBoundingClientRect().right>0 && document.querySelector("#menuButton").getAttribute("aria-expanded")==="true"'),true);
  assert.equal(await run('(()=>{document.querySelector("#sidebarClose").click();return document.querySelector("#menuButton").getAttribute("aria-expanded")==="false"})()'),true);
  assert.equal(await run('(()=>{document.querySelector("#mobileThemeToggle").click();return document.body.dataset.theme})()'),'dark');
  assert.equal(await run('document.querySelectorAll("#catalogList .atlas-item").length'),354);
@@ -106,6 +108,7 @@ try{
 }finally{
  try{ws?.close();}catch(_){}
  child.kill();
+ await new Promise(resolve=>child.exitCode!==null?resolve():child.once('exit',resolve));
  server.close();
  try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:10,retryDelay:120});}catch(cleanupError){console.warn('Chromium temporary profile cleanup:',cleanupError.message);}
 }
