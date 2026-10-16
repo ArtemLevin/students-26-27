@@ -1,0 +1,41 @@
+name: Publish Volodia 16 October lesson
+on:
+  push:
+    branches:
+      - codex/volodia-lesson-2026-10-16
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: codex/volodia-lesson-2026-10-16
+          persist-credentials: true
+      - name: Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax and mapping preflight
+        run: |
+          node --check students/volodia_khachaturian/site/lesson-progress.js
+          node --check students/volodia_khachaturian/site/dashboard.js
+          node scripts/publish-lesson.mjs volodia_khachaturian 16.10.26 --intent students/volodia_khachaturian/site/data/publication-intents/2026-10-16.json --dry-run
+      - name: Transactional publish
+        run: |
+          node scripts/publish-lesson.mjs volodia_khachaturian 16.10.26 --intent students/volodia_khachaturian/site/data/publication-intents/2026-10-16.json
+      - name: Validate student and practice configuration
+        run: |
+          node scripts/student.mjs validate volodia_khachaturian
+          node shared/practice/validate-configs.mjs
+          node shared/practice/audit-lesson-coverage.mjs
+      - name: Commit published projections and clean one-off workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/volodia-publish-2026-10-16.yml
+          git add students/volodia_khachaturian
+          git commit -m "chore(volodia): transactional publish 16.10.26 and remove temporary workflow"
+          git push origin HEAD:codex/volodia-lesson-2026-10-16
