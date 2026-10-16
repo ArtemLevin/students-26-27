@@ -51,7 +51,13 @@ try{
   if(width<=760){
     const button=page.locator('#menuButton');await button.click();
     assert.equal(await button.getAttribute('aria-expanded'),'true','menu did not open '+width);
-    assert.ok(await page.locator('#primaryNav').isVisible(),'mobile nav hidden '+width);
+    await page.waitForTimeout(280); // Respect the CSS transition before inspecting visibility.
+    const navState=await page.locator('#primaryNav').evaluate(el=>{
+      const cs=getComputedStyle(el),box=el.getBoundingClientRect();
+      return {display:cs.display,visibility:cs.visibility,transform:cs.transform,
+        left:box.left,right:box.right,bodyOpen:document.body.classList.contains('nav-open')};
+    });
+    assert.ok(await page.locator('#primaryNav').isVisible(),'mobile nav hidden '+width+': '+JSON.stringify(navState));
     await page.keyboard.press('Escape');
     assert.equal(await button.getAttribute('aria-expanded'),'false','menu did not close '+width);
   }
