@@ -123,7 +123,7 @@ try{
       await visit('archive.html',width,dark);
       await wait(170);
       const archive=await evalJS('(()=>{const tiles=[...document.querySelectorAll(".archive-tile")];const heights=tiles.map(t=>Math.round(t.getBoundingClientRect().height));const grid=document.querySelector(".archive-month-grid");const columns=getComputedStyle(grid).gridTemplateColumns.split(" ").length;return {count:tiles.length,months:document.querySelectorAll(".archive-month").length,columns,delta:Math.max(...heights)-Math.min(...heights),dates:tiles.map(t=>t.querySelector("time").dateTime),clipped:tiles.some(t=>t.scrollHeight>t.clientHeight+4)}})()');
-      const expected=width>=900?3:width>=640?2:1;
+      const expected=width>1030?3:width>700?2:1;
       assert.equal(archive.columns,expected,'archive columns '+width);
       assert.ok(archive.count>=7,'published lessons loaded');
       assert.ok(archive.months>=2,'history across months');
