@@ -27,7 +27,7 @@ const latest=getLatestLesson(LESSONS);
 if(latest){
   find('latestLessonEyebrow').textContent='01 / Последнее занятие · '+formatLongDateRu(latest.date);
   find('lesson-title').textContent=latest.navTitle||latest.title||'Занятие';
-  let summary=String(latest.summary||'Учебный материал занятия').replace(/^Матвей Горбач[её]в\\.\\s*/i,'');
+  let summary=String(latest.summary||'Учебный материал занятия').replace(/^Матвей Горбач[её]в\.\s*/i,'');
   const title=String(latest.navTitle||latest.title||'');
   if(summary.toLocaleLowerCase('ru').startsWith(title.toLocaleLowerCase('ru')+':')){
     summary=summary.slice(title.length+1).trim();
