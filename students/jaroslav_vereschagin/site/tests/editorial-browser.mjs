@@ -87,8 +87,8 @@ try{
     await delay(160);
     if(dark){
       await evaluate(file==='archive.html'
-        ? 'document.getElementById("archiveTheme").click()'
-        : 'document.getElementById("themeToggle").click()');
+        ? 'document.body.hasAttribute("data-theme") && document.getElementById("archiveTheme").click()'
+        : 'document.documentElement.dataset.theme !== "dark" && document.getElementById("themeToggle").click()');
     }
     const shape=await evaluate('({width:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth})');
     assert.ok(shape.scroll<=shape.width+2,file+' @ '+w+' '+JSON.stringify(shape));
