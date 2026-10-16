@@ -133,3 +133,22 @@ test('Xenia atlas homepage mirrors Anna editorial composition and preserves inte
   assert.ok(css.includes('@media(max-width:680px)'));
   assert.ok(css.includes('prefers-reduced-motion'));
 });
+
+test('latest lesson presents readable evidence and valid editorial layout markup',async()=>{
+  const {LESSONS}=await import('../lesson-registry.js');
+  const {presentLessonOutcome}=await import('../../../../shared/student-dashboard/outcome-adapter.js');
+  const latest=LESSONS[0];
+  assert.equal(latest.date,'2026-10-15');
+  for(const evidence of latest.outcomes){
+    const view=presentLessonOutcome(evidence,{lessonDate:latest.date});
+    assert.ok(evidence.label?.trim(),'outcome lacks reviewed human-readable label');
+    assert.equal(view.label,evidence.label);
+    assert.notEqual(view.label,evidence.competencyId,'internal IDs must not be shown to students');
+  }
+  assert.equal(presentLessonOutcome({competencyId:'t19_example',evidenceAnchor:'lesson',relation:'touched'}).label,'Навык занятия','a missing label must never leak an internal key');
+  assert.equal(presentLessonOutcome(latest.outcomes[0],{resolveCompetencyLabel:()=> 'Делимость целых чисел'}).label,'Делимость целых чисел','catalog title should take priority when available');
+  assert.ok(homepage.includes('<section class="lesson-summary" id="lesson"'));
+  assert.ok(!homepage.includes('class="lesson-summary\''));
+  assert.ok(homepage.includes('id="latestLessonStatus"'));
+  assert.ok(homepage.includes('atlas-bannova-reference.css'));
+});

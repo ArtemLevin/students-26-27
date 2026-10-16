@@ -29,7 +29,7 @@ test('legacy outcome presentation remains unchanged',()=>{
   );
 });
 
-test('canonical v2 outcome renders relation without inventing mastery',()=>{
+test('canonical v2 outcome renders relation without exposing internal IDs or inventing mastery',()=>{
   const outcome={
     competencyId:'func_17',
     evidenceAnchor:'graph-model',
@@ -41,7 +41,7 @@ test('canonical v2 outcome renders relation without inventing mastery',()=>{
     {
       schema:'v2',
       competencyId:'func_17',
-      label:'func_17',
+      label:'Навык занятия',
       tone:'process',
       mark:'◇',
       detail:'проверено'
@@ -115,4 +115,14 @@ test('canonical relation vocabulary is strict',()=>{
     }),
     /invalid legacy\/v2 outcome/
   );
+});
+
+test('canonical v2 outcome prioritizes resolved titles and reviewed labels',()=>{
+  const outcome={
+    competencyId:'func_17',evidenceAnchor:'graph-model',relation:'practiced',
+    label:'Чтение графика функции'
+  };
+  assert.equal(presentLessonOutcome(outcome).label,'Чтение графика функции');
+  assert.equal(presentLessonOutcome(outcome,{resolveCompetencyLabel:()=> 'Анализ графиков'}).label,'Анализ графиков');
+  assert.equal(presentLessonOutcome({...outcome,label:'  '}).label,'Навык занятия');
 });

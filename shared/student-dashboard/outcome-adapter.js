@@ -59,7 +59,9 @@ export function presentLessonOutcome(outcome,{resolveCompetencyLabel=null,lesson
   return {
     schema:'v2',
     competencyId:outcome.competencyId,
-    label:resolved||outcome.competencyId,
+    // Never expose internal competency IDs to students. Prefer a reviewed display label;
+    // generic copy is safer than leaking a service key when metadata is incomplete.
+    label:resolved||cleanLabel(outcome.label)||'Навык занятия',
     tone:'process',
     mark:relation.mark,
     detail:relation.detail
