@@ -22,15 +22,17 @@ test("has one tile per student and links to every subject navigator", async () =
   }
 
   assert.equal(slugs.length, new Set(slugs).size, "student tiles must be unique");
-  assert.equal(slugs.length, 24, "expected 24 distinct student tiles");
+  assert.equal(slugs.length, 25, "expected 25 distinct student tiles");
   assert.equal(urls.length, new Set(urls).size, "links must be unique");
-  assert.equal(urls.length, 26, "include two additional subject navigators");
+  assert.equal(urls.length, 27, "include two additional subject navigators");
 
   const standardPages = new Set(available.map(slug => "../students/" + slug + "/site/index.html"));
   for (const standardPage of standardPages) {
     assert.ok(urls.includes(standardPage), "missing navigator: " + standardPage);
   }
   assert.ok(urls.includes("../students/xenia_klykova/chemistry/site/index.html"));
+  assert.ok(urls.includes("../students/denis_ermolaev/site/index.html"), "Denis cabinet must be reachable");
+  assert.match(page, /data-slug="denis_ermolaev"[^>]*data-level="ЕГЭ"[^>]*data-topics="math"/, "Denis tile must support exam and subject filters");
   for (const url of urls) {
     const resolved = path.resolve(teacherDir, url);
     assert.ok(resolved.startsWith(path.join(repoRoot, "students") + path.sep), "link escapes student tree");
