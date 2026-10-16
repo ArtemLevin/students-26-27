@@ -203,6 +203,20 @@ try{
   assert.equal(await run("document.querySelector('#latestPdfLink').hidden"),false);
   assert.equal(await run("document.querySelector('#latestTexLink').getAttribute('href')"),'../tex_docs/15.10.26.tex');
   assert.equal(await run("document.querySelectorAll('#recentLessons a').length"),3);
+  // Anna Bannova visual reference: open editorial layout instead of permanent desktop sidebar.
+  assert.equal(await run("getComputedStyle(document.querySelector('#sidebar')).position"),'relative');
+  assert.equal(await run("getComputedStyle(document.querySelector('.atlas-ledger .map-stats')).display"),'grid');
+  assert.ok(await run("document.querySelector('#lessonArchive').contains(document.querySelector('#recentLessons'))"));
+  assert.ok(await run("document.querySelector('.atlas-catalog').contains(document.querySelector('#topicIndex'))"));
+  assert.equal(await run("getComputedStyle(document.querySelector('#atlasTitle')).fontFamily.includes('Georgia')"),true);
+  assert.ok(await run("document.querySelectorAll('#radialMap .radial-cell').length>200"),'circular skills must load');
+  await navigate('index.html',390,844,false);
+  await sleep(300);
+  assert.equal(await run("getComputedStyle(document.querySelector('.mobile-bar')).display"),'flex');
+  assert.equal(await run("getComputedStyle(document.querySelector('#sidebar')).position"),'fixed');
+  assert.equal(await run("document.querySelector('#lessonArchive').contains(document.querySelector('#recentLessons'))"),true);
+  assert.equal(await run("(()=>{document.querySelector('#menuButton').click();return document.querySelector('#menuButton').getAttribute('aria-expanded')})()"),'true');
+  assert.equal(await run("(()=>{document.querySelector('#sidebarClose').click();return document.querySelector('#menuButton').getAttribute('aria-expanded')})()"),'false');
   assert.deepEqual(jsErrors,[],'JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Network errors');
   console.log('Xenia 09.10 and 12.10 browser QA PASS: 30 layouts, interactive checks and network');
