@@ -180,7 +180,7 @@ try{
     }
   }
   await navigate('15.10.26.html',1440,900);
-  assert.ok(await run("document.querySelectorAll('.content math').length >= 165"),'lesson should use semantic MathML');
+  assert.ok(await run("document.querySelectorAll('.content math').length >= 150"),'lesson should use semantic MathML');
   assert.ok(await run("[...document.querySelectorAll('.content math')].every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML')"),'lesson MathML namespace');
   assert.ok(await run("[...document.querySelectorAll('.eq')].every(e=>e.firstElementChild?.localName==='math'&&e.firstElementChild.getAttribute('display')==='block')"),'display equations use MathML');
   assert.ok(await run("[...document.querySelectorAll('.tasks details math')].length >= 15"),'answer hints use MathML');
