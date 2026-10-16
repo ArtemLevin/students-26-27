@@ -17,14 +17,17 @@ h1,h2,h3{font-family:Georgia,serif;font-weight:500;line-height:1.13}h1{font-size
 .chartbox{margin-top:1rem}svg{width:100%;height:auto}table{border-collapse:collapse;min-width:520px;width:100%}th,td{padding:.55rem;border-bottom:1px solid var(--line);text-align:right}th:first-child,td:first-child{text-align:left}th{font-size:.8rem;color:var(--muted)}.tablewrap{overflow-x:auto}.sub{padding:2.5rem 0}.sub p{max-width:75ch}.formula{font:500 1.22rem/1.6 Georgia,serif;color:var(--teal)}footer{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted);font-size:.85rem}
 @media(max-width:790px){.layout{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.metrics{grid-template-columns:1fr}.wrap{width:calc(100% - 1.25rem)}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+math{font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif;font-size:1em;line-height:normal;color:inherit}math[display="block"]{display:block;overflow-x:auto;max-width:100%}
+.formula math{color:var(--teal)}.metric math,.controls math{color:inherit}td math{font-variant-numeric:tabular-nums}
 </style></head><body><div class="wrap">
 <header><a href="16.10.26.html#formula">← К занятию</a><a href="index.html">В кабинет</a><button id="reset" type="button">Сброс</button><button id="theme" type="button">◐ Тема</button></header>
 <main><div class="hero"><p style="color:var(--burg);font-weight:700;letter-spacing:.08em">ЕГЭ · 16 ОКТЯБРЯ 2026</p><h1>Кредит: от остатка<br>к платежу</h1><p>Изменяйте сумму, срок и ставку кредита. Следите, как меняются проценты, первый и последний платежи и общая переплата. Начальные данные — из задачи занятия.</p></div>
-<div class="layout"><section class="controls"><h2>Параметры</h2>
-<div class="control"><label for="sum">Сумма, тыс. ₽ <output id="sv" for="sum">1400</output></label><input id="sum" type="range" min="200" max="6000" step="100" value="1400"></div>
-<div class="control"><label for="years">Срок, лет <output id="yv" for="years">2</output></label><input id="years" type="range" min="1" max="20" step="1" value="2"></div>
-<div class="control"><label for="rate">Ставка, % в год <output id="rv" for="rate">16</output></label><input id="rate" type="range" min="0" max="30" step=".5" value="16"></div>
-<h3>Сценарии занятия</h3><div class="presets"><button id="example" type="button">1400 · 2 года · 16%</button><button id="limits" type="button">6000 · 15 лет · 25%</button></div>
+<div class="layout" id="schedule"><section class="controls"><h2>Параметры</h2>
+<div class="control"><label for="sum">Сумма, тыс. ₽ <output id="sv" for="sum"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="1400"><mn>1400</mn></math></output></label><input id="sum" type="range" min="200" max="6000" step="100" value="1400"></div>
+<div class="control"><label for="years">Срок, лет <output id="yv" for="years"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="2"><mn>2</mn></math></output></label><input id="years" type="range" min="1" max="20" step="1" value="2"></div>
+<div class="control"><label for="rate">Ставка, % в год <output id="rv" for="rate"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="16"><mn>16</mn></math></output></label><input id="rate" type="range" min="0" max="30" step=".5" value="16"></div>
+<h3>Сценарии занятия</h3><div class="presets"><button id="example" type="button"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="1400"><mn>1400</mn></math> · <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="2"><mn>2</mn></math> года · <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="16 процентов"><mrow><mn>16</mn><mo>%</mo></mrow></math></button><button id="limits" type="button"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="6000"><mn>6000</mn></math> · <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="15"><mn>15</mn></math> лет · <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="25 процентов"><mrow><mn>25</mn><mo>%</mo></mrow></math></button></div>
 </section><section aria-label="Результат расчёта"><div class="metrics" aria-live="polite">
 <div class="metric">Все платежи, тыс. ₽<strong id="total"></strong></div><div class="metric">Переплата, тыс. ₽<strong id="over"></strong></div><div class="metric">Переплата от суммы<strong id="share"></strong></div>
 <div class="metric">Первый платёж, тыс. ₽<strong id="first"></strong></div><div class="metric">Последний платёж, тыс. ₽<strong id="last"></strong></div><div class="metric">Разница, тыс. ₽<strong id="diff"></strong></div></div>
@@ -32,8 +35,8 @@ h1,h2,h3{font-family:Georgia,serif;font-weight:500;line-height:1.13}h1{font-size
 <svg id="bars" viewBox="0 0 780 255" role="img" aria-labelledby="chartTitle chartDesc"><title id="chartTitle">Структура платежей</title><desc id="chartDesc">Сравнение равной доли основного долга и уменьшающихся процентов.</desc></svg></div>
 <h3>Таблица выплат</h3><div class="tablewrap"><table><thead><tr><th>Год</th><th>Долг до %</th><th>Тело кредита</th><th>Проценты</th><th>Платёж</th><th>Остаток</th></tr></thead><tbody id="rows"></tbody></table></div>
 </section></div>
-<section class="sub"><h2>Проверьте предположение</h2><p>Что произойдёт с переплатой при увеличении срока и неизменных сумме и ставке? Сравните полученные суммы.</p><details><summary style="cursor:pointer;color:var(--burg);font-weight:700">Показать объяснение</summary><p>Переплата равна Sp(n + 1)/2. При положительной ставке она растёт с увеличением числа периодов; основной долг за период S/n уменьшается.</p></details>
-<p class="formula">Pᵢ = S/n + pS(1 − (i − 1)/n)</p><p class="formula">A = S + Sp(n + 1)/2</p><p class="hint">Ставка p = r/100, где r — процент за один период; основной долг погашается равными долями.</p></section></main>
+<section class="sub"><h2>Проверьте предположение</h2><p>Что произойдёт с переплатой при увеличении срока и неизменных сумме и ставке? Сравните полученные суммы.</p><details><summary style="cursor:pointer;color:var(--burg);font-weight:700">Показать объяснение</summary><p>Переплата равна <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="S p умножить на n плюс один, делить на два"><mfrac><mrow><mi>S</mi><mi>p</mi><mrow><mo>(</mo><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mn>2</mn></mfrac></math>. При положительной ставке она растёт с увеличением числа периодов; основной долг за период <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="S делить на n"><mfrac><mi>S</mi><mi>n</mi></mfrac></math> уменьшается.</p></details>
+<p class="formula"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="P с индексом i равно S делить на n плюс pS, умноженное на единица минус дробь i минус единица делить на n"><mrow><msub><mi>P</mi><mi>i</mi></msub><mo>=</mo><mfrac><mi>S</mi><mi>n</mi></mfrac><mo>+</mo><mi>p</mi><mi>S</mi><mrow><mo>(</mo><mrow><mn>1</mn><mo>−</mo><mfrac><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><mi>n</mi></mfrac></mrow><mo>)</mo></mrow></mrow></math></p><p class="formula"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="A равно S плюс дробь Sp умножить на n плюс единица, разделить на два"><mrow><mi>A</mi><mo>=</mo><mi>S</mi><mo>+</mo><mfrac><mrow><mi>S</mi><mi>p</mi><mrow><mo>(</mo><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mn>2</mn></mfrac></mrow></math></p><p class="hint">Ставка <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="p равно r делить на сто"><mrow><mi>p</mi><mo>=</mo><mfrac><mi>r</mi><mn>100</mn></mfrac></mrow></math>, где <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline" aria-label="r"><mi>r</mi></math> — процент за один период; основной долг погашается равными долями.</p></section></main>
 <footer>Артём Александрович Лёвин · эксклюзивно для Николь Саркисьянц</footer></div>
 <script>
 (function(){
@@ -44,13 +47,23 @@ var root=document.documentElement,t='light';try{t=localStorage.getItem('nikol-le
 root.dataset.theme=t==='dark'?'dark':'light';
 document.getElementById('theme').onclick=function(){root.dataset.theme=root.dataset.theme==='light'?'dark':'light';try{localStorage.setItem('nikol-lesson-theme',root.dataset.theme)}catch(e){}};
 function fmt(v){return new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2}).format(v)}
-function put(id,v){document.getElementById(id).textContent=v}
+function mathNumber(value){
+  var label=String(value),percent=label.endsWith('%');
+  var math=document.createElementNS('http://www.w3.org/1998/Math/MathML','math');
+  math.setAttribute('display','inline');math.setAttribute('aria-label',label);
+  var digit=document.createElementNS('http://www.w3.org/1998/Math/MathML','mn');
+  digit.textContent=percent?label.slice(0,-1):label;
+  math.append(digit);
+  if(percent){var unit=document.createElementNS('http://www.w3.org/1998/Math/MathML','mo');unit.textContent='%';math.append(unit);}
+  return math;
+}
+function put(id,v){document.getElementById(id).replaceChildren(mathNumber(v))}
 function el(tag,attrs,text){var node=document.createElementNS(ns,tag);Object.keys(attrs).forEach(function(k){node.setAttribute(k,attrs[k])});if(text!==undefined)node.textContent=text;return node}
 function calc(){var S=+s.value,N=+n.value,p=(+r.value)/100,principal=S/N,rows=[];
 for(var i=1;i<=N;i++){var before=S*(N-i+1)/N,interest=p*before;rows.push({i:i,before:before,interest:interest,payment:principal+interest,remaining:S*(N-i)/N})}
 var total=S+S*p*(N+1)/2;
 put('sv',fmt(S));put('yv',N);put('rv',fmt(+r.value));put('total',fmt(total));put('over',fmt(total-S));put('share',fmt((total-S)/S*100)+'%');put('first',fmt(rows[0].payment));put('last',fmt(rows[N-1].payment));put('diff',fmt(rows[0].payment-rows[N-1].payment));
-var tb=document.getElementById('rows');tb.replaceChildren();rows.forEach(function(row){var tr=document.createElement('tr');[row.i,row.before,principal,row.interest,row.payment,row.remaining].forEach(function(v){var td=document.createElement('td');td.textContent=fmt(v);tr.append(td)});tb.append(tr)});
+var tb=document.getElementById('rows');tb.replaceChildren();rows.forEach(function(row){var tr=document.createElement('tr');[row.i,row.before,principal,row.interest,row.payment,row.remaining].forEach(function(v){var td=document.createElement('td');td.append(mathNumber(fmt(v)));tr.append(td)});tb.append(tr)});
 svg.replaceChildren(el('title',{id:'chartTitle'},'Структура платежей за '+N+' лет'),el('desc',{id:'chartDesc'},'Первый платёж '+fmt(rows[0].payment)+' тыс. руб., последний '+fmt(rows[N-1].payment)+' тыс. руб.'));
 var gap=14,width=750/N,bar=Math.min(52,width*.66),h=215,base=230,max=rows[0].payment;
 rows.forEach(function(row,j){var x=15+j*width+(width-bar)/2,low=principal/max*h,high=row.interest/max*h;
