@@ -103,7 +103,7 @@ try{
   assert.equal(await run("document.querySelectorAll('math msub').length>=2"),true);
   assert.equal(await run("(()=>{document.querySelector('#nextStep').click();return document.querySelector('#stepCount').textContent})()"),'2 / 4');
   assert.equal(await run("(()=>{document.querySelector('#resetSteps').click();return document.querySelector('#stepCount').textContent})()"),'1 / 4');
-  assert.equal(await run("(()=>{document.querySelector('[data-task=1]').click();return document.querySelector('#progressText').textContent})()"),'Выполнено 1 из 10');
+  assert.equal(await run("(()=>{document.querySelector('[data-task=\"1\"]').click();return document.querySelector('#progressText').textContent})()"),'Выполнено 1 из 10');
   assert.equal(await run("(()=>{const d=document.querySelector('.task details');d.open=true;return !!d.querySelector('.answer math')})()"),true);
   assert.equal(await run("(()=>{document.querySelector('#themeButton').click();return document.documentElement.dataset.theme})()"),'dark');
   await snapshot('lesson-20261015-desktop-dark-mathml');
