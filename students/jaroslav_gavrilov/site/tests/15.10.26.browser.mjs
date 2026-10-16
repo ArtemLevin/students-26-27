@@ -86,21 +86,29 @@ try{
     }
   }
   await visit('15.10.26.html',1440,false);
-  const lesson=await evalJS('({charts:document.querySelectorAll("svg[data-graph] path").length,anchors:["method","cos","sin","tan","line","crossing","recall"].every(x=>document.getElementById(x))})');
+  const lesson=await evalJS('({charts:document.querySelectorAll("svg[data-graph] path").length,anchors:["method","cos","sin","tan","line","crossing","recall"].every(x=>document.getElementById(x)),math:document.querySelectorAll("main math").length,plotMath:document.querySelectorAll("svg[data-graph] foreignObject math").length,fractions:document.querySelectorAll("main mfrac").length,semantic:[...document.querySelectorAll("main math")].every(x=>x.namespaceURI==="http://www.w3.org/1998/Math/MathML"),work:[...document.querySelectorAll(".math")].every(x=>x.querySelector("math"))})');
   assert.equal(lesson.anchors,true);assert.ok(lesson.charts>=5,'all five plots rendered');
+  assert.ok(lesson.math>=100,'lesson and chart labels use native MathML');
+  assert.ok(lesson.plotMath>=35,'chart coordinates and ticks use MathML');
+  assert.ok(lesson.fractions>=20,'fractions use mfrac');
+  assert.equal(lesson.semantic,true);assert.equal(lesson.work,true);
   await visit('15.10.26-lab.html?mode=cos',1440,false);
-  let data=await evalJS('({mode:document.querySelector("[data-mode=cos]").getAttribute("aria-pressed"),a:document.querySelector("#point-a").textContent,b:document.querySelector("#point-b").textContent})');
+  let data=await evalJS('({mode:document.querySelector("[data-mode=cos]").getAttribute("aria-pressed"),a:document.querySelector("#point-a math").getAttribute("aria-label"),b:document.querySelector("#point-b math").getAttribute("aria-label"),formula:document.querySelector("#formula math").getAttribute("aria-label"),semantic:document.querySelector("#formula math").namespaceURI})');
   assert.equal(data.mode,'true');assert.equal(data.a,'A (0; 0,5)');assert.equal(data.b,'B (π; −2,5)');
-  const edited=await evalJS('(()=>{const b=document.querySelector("#b");b.value="0";b.dispatchEvent(new Event("input",{bubbles:true}));return {a:document.querySelector("#point-a").textContent,b:document.querySelector("#point-b").textContent};})()');
+  assert.equal(data.semantic,'http://www.w3.org/1998/Math/MathML');
+  assert.ok(data.formula.includes('3/2'));
+  const edited=await evalJS('(()=>{const b=document.querySelector("#b");b.value="0";b.dispatchEvent(new Event("input",{bubbles:true}));return {a:document.querySelector("#point-a math").getAttribute("aria-label"),b:document.querySelector("#point-b math").getAttribute("aria-label")};})()');
   assert.equal(edited.a,'A (0; 1,5)');assert.equal(edited.b,'B (π; −1,5)');
-  const reset=await evalJS('(()=>{document.querySelector("#reset").click();return document.querySelector("#point-a").textContent;})()');
+  const reset=await evalJS('(()=>{document.querySelector("#reset").click();return document.querySelector("#point-a math").getAttribute("aria-label");})()');
   assert.equal(reset,'A (0; 0,5)');
-  const tan=await evalJS('(()=>{document.querySelector("[data-mode=tan]").click();return {a:document.querySelector("#point-a").textContent,b:document.querySelector("#point-b").textContent};})()');
+  const tan=await evalJS('(()=>{document.querySelector("[data-mode=tan]").click();return {a:document.querySelector("#point-a math").getAttribute("aria-label"),b:document.querySelector("#point-b math").getAttribute("aria-label")};})()');
   assert.equal(tan.a,'A (0; −1,5)');assert.equal(tan.b,'B (π/4; 0,5)');
-  const crossing=await evalJS('(()=>{document.querySelector("[data-mode=crossing]").click();return {a:document.querySelector("#point-a").textContent,hidden:document.querySelector("#sliders").hidden};})()');
-  assert.equal(crossing.a,'P (−5; −11)');assert.equal(crossing.hidden,true);
+  const crossing=await evalJS('(()=>{document.querySelector("[data-mode=crossing]").click();return {a:document.querySelector("#point-a math").getAttribute("aria-label"),hidden:document.querySelector("#sliders").hidden,math:document.querySelectorAll("#formula math msub").length};})()');
+  assert.equal(crossing.a,'P (−5; −11)');assert.equal(crossing.hidden,true);assert.equal(crossing.math,2);
   const compare=await evalJS('(()=>{document.querySelector("#compare-toggle").click();return {hidden:document.querySelector("#compare").hidden,plot:document.querySelector("#baseline-chart path")!==null};})()');
   assert.deepEqual(compare,{hidden:false,plot:true});
+  const mathLab=await evalJS('({native:[...document.querySelectorAll("math")].every(x=>x.namespaceURI==="http://www.w3.org/1998/Math/MathML"),svg:document.querySelectorAll("#lab-chart foreignObject math").length,base:document.querySelector("#baseline-formula math")!==null})');
+  assert.equal(mathLab.native,true);assert.ok(mathLab.svg>=8);assert.equal(mathLab.base,true);
   assert.deepEqual(errors,[],'JavaScript errors');assert.deepEqual(bad,[],'HTTP failures');
   console.log('JAROSLAV_1510_BROWSER_PASS',JSON.stringify({lesson,data,edited,tan,crossing,compare,screenshots:fs.readdirSync(artifact).length}));
 } finally {
