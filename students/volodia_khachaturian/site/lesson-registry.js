@@ -3,6 +3,134 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-16",
+  "ktpRefs": [],
+  "href": "16.10.26.html",
+  "title": "Второй закон Ньютона",
+  "navTitle": "Второй закон Ньютона",
+  "navSubtitle": "равнодействующая, ускорение и сравнение состояний",
+  "summary": "Второй закон Ньютона, равнодействующая, ускорение по графику скорости, пути и времени, сравнение двух состояний. Занятие Володи Хачатуряна 16.10.2026.",
+  "topics": [
+    "второй закон Ньютона",
+    "равнодействующая сила",
+    "сила и ускорение",
+    "сравнение двух состояний",
+    "график скорости",
+    "выбор формулы кинематики",
+    "повторение движения по окружности"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "dyn_07",
+      "evidenceAnchor": "dynamics",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Равнодействующая сил",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_08",
+      "evidenceAnchor": "dynamics",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Второй закон Ньютона",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_09",
+      "evidenceAnchor": "balance",
+      "relation": "touched",
+      "masteryClaim": null,
+      "label": "Нулевая равнодействующая",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_17",
+      "evidenceAnchor": "path",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Ускорение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_20",
+      "evidenceAnchor": "path",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Перемещение при ускорении",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_21",
+      "evidenceAnchor": "path",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Связь скорости и пути",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_24",
+      "evidenceAnchor": "graph",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "График скорости",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_30",
+      "evidenceAnchor": "circle",
+      "relation": "touched",
+      "masteryClaim": null,
+      "label": "Период и частота",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_31",
+      "evidenceAnchor": "circle",
+      "relation": "touched",
+      "masteryClaim": null,
+      "label": "Линейная скорость",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_32",
+      "evidenceAnchor": "circle",
+      "relation": "touched",
+      "masteryClaim": null,
+      "label": "Центростремительное ускорение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_02",
+      "evidenceAnchor": "path",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Выбор формулы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_25",
+      "evidenceAnchor": "states",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Отношения величин",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "measure_03",
+      "evidenceAnchor": "units",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Единицы СИ",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "16.10.26.html",
+    "lab": "16.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-10",
   "ktpRefs": [],
   "href": "10.10.26.html",
