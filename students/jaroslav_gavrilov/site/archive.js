@@ -159,7 +159,7 @@ function render(){
   $('archiveSearch').addEventListener('input',filter);
   filter();
 }
-const key='jaroslav-editorial-theme-v1';
+const key='jaroslav_gavrilov-ege-profile-math-theme';
 function theme(value){
   if(value==='dark')document.body.removeAttribute('data-theme');
   else document.body.dataset.theme='light';
