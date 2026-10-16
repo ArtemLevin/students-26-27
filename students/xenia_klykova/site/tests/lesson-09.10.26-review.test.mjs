@@ -107,3 +107,29 @@ test('all published mathematical expressions have MathML semantics',()=>{
   assert.ok(lab.includes('calculation.innerHTML='));
   assert.ok(lab.includes("feedback.innerHTML='Верно:"));
 });
+
+test('Xenia atlas homepage mirrors Anna editorial composition and preserves interactive contracts',()=>{
+  const css=fs.readFileSync(path.join(site,'atlas-bannova-reference.css'),'utf8');
+  const design=JSON.parse(fs.readFileSync(path.join(site,'design.json'),'utf8'));
+  assert.equal(design.system,'LEVIN_ATLAS');
+  assert.equal(design.accent,'graphite');
+  assert.equal(design.density,'airy');
+  assert.equal(design.typography,'editorial');
+  assert.ok(homepage.includes('atlas-bannova-reference.css'));
+  assert.ok(homepage.includes('data-atlas-accent="graphite"'));
+  assert.ok(homepage.includes('id="atlasTitle"'));
+  assert.ok(homepage.includes('id="lessonArchive"'));
+  assert.ok(homepage.includes('class="atlas-ledger"'));
+  assert.ok(homepage.includes('class="atlas-catalog"'));
+  assert.ok(homepage.indexOf('id="recentLessons"')>homepage.indexOf('id="lessonArchive"'));
+  assert.ok(homepage.indexOf('id="lessonArchive"')>homepage.indexOf('id="radialMap"'));
+  for(const id of ['lesson-title','latestLessonCta','latestPdfLink','latestTexLink','recentLessonCount','recentLessons','archiveToggle','archiveMore','archivePage','archivePrev','archiveNext','totalCount','evaluatedCount','confidentCountMain','processCountMain','masteredCountMain','radialMap','topicIndex','competenceMap','competencyDialog','practiceRoot','menuButton','sidebar','themeToggle']){
+    assert.ok(homepage.includes('id="'+id+'"'),'missing dashboard control '+id);
+  }
+  const ids=[...homepage.matchAll(/\bid="([^"]+)"/g)].map(match=>match[1]);
+  assert.equal(new Set(ids).size,ids.length,'all page IDs must be unique');
+  assert.ok(css.includes('grid-template-columns:repeat(5,minmax(0,1fr))'));
+  assert.ok(css.includes('.atlas-section-head'));
+  assert.ok(css.includes('@media(max-width:680px)'));
+  assert.ok(css.includes('prefers-reduced-motion'));
+});
