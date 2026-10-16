@@ -1,0 +1,333 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=19mm,headheight=26pt,headsep=7mm,footskip=11mm]{geometry}
+\usepackage{microtype}
+\usepackage{needspace}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage[unicode=true,colorlinks=true,linkcolor=black]{hyperref}
+\definecolor{accent}{HTML}{147D7E}
+\definecolor{darkaccent}{HTML}{0B5253}
+\definecolor{ink}{HTML}{293538}
+\definecolor{quiet}{HTML}{697578}
+\definecolor{hairline}{HTML}{D5DDDD}
+\color{ink}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist[itemize]{leftmargin=1.45em,itemsep=0.05em,topsep=0.10em}
+\setlist[enumerate]{leftmargin=1.65em,itemsep=0.20em,topsep=0.15em}
+\AtBeginDocument{\setlength{\abovedisplayskip}{6pt}\setlength{\belowdisplayskip}{6pt}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{quiet}Системы уравнений и метод интервалов}
+\fancyhead[R]{\small\color{quiet}15.10.26}
+\fancyfoot[C]{\small\color{quiet}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{hairline}\leaders\hrule height \headrulewidth\hfill}}
+\newcommand{\key}[1]{{\color{darkaccent}\textbf{#1}}}
+\newcommand{\note}[1]{{\small\color{quiet}#1}}
+\newcommand{\headsec}[1]{\section*{\color{darkaccent}#1}\vspace{-6pt}{\color{hairline}\rule{\linewidth}{0.55pt}}\par\vspace{1pt}}
+\newcommand{\headsub}[1]{\subsection*{\color{accent}#1}\vspace{-4pt}}
+\newcommand{\task}[1]{\item #1\vspace{3pt}}
+\tikzset{
+ fstart/.style={ellipse,draw=darkaccent,line width=0.9pt,fill=white,minimum width=44mm,minimum height=12mm,align=center,font=\small},
+ faction/.style={rounded corners=2.5pt,draw=accent,line width=0.85pt,fill=white,text width=106mm,minimum height=14mm,align=center,font=\small,inner sep=3.0mm},
+ fchoice/.style={diamond,aspect=2.1,draw=darkaccent,line width=0.85pt,fill=white,text width=62mm,align=center,font=\small,inner sep=1.7mm},
+ farrow/.style={-{Stealth[length=2.7mm]},draw=darkaccent,line width=0.9pt}
+}
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{29mm}
+{\large\color{quiet}Чек-лист}\par
+\vspace{8mm}
+{\fontsize{29}{35}\selectfont\bfseries\color{darkaccent}
+Системы уравнений\\[2mm]и метод интервалов}\par
+\vspace{8mm}
+{\Large\color{accent}Подстановка, сложение и знаки выражений}\par
+\vspace{17mm}
+{\color{hairline}\rule{0.76\linewidth}{0.7pt}}\par
+\vspace{10mm}
+{\large Ярослав Верещагин}\par
+\vspace{3mm}
+{\normalsize 15.10.26}\par
+\vfill
+\begin{minipage}{0.87\linewidth}
+\centering\normalsize
+Научиться находить все решения системы и уверенно определять,
+на каких промежутках выражение положительно или отрицательно.
+\end{minipage}
+\vspace{13mm}
+\begin{tikzpicture}
+\draw[accent!70,line width=1.4pt]
+(-6.2,0) .. controls (-3.9,0.55) and (-1.1,-0.45) .. (1.35,0.12)
+  .. controls (3.4,0.58) and (4.5,0.14) .. (6.2,0.52);
+\end{tikzpicture}\par
+\vspace{9mm}
+{\small\color{quiet}Лёвин Артём Александрович эксклюзивно для Ярослава Верещагина}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\headsec{1. Система уравнений: что считать ответом}
+Система требует найти \key{все пары} \((x;y)\), при которых верны оба уравнения одновременно.
+Каждую найденную пару можно проверить подстановкой в исходную систему.
+
+\headsub{Метод подстановки}
+\begin{enumerate}
+\item Выразите одну неизвестную через другую из удобного уравнения.
+\item Подставьте полученное выражение во второе уравнение \key{в скобках}.
+\item Найдите первую неизвестную; вернитесь к подстановке за второй.
+\item Запишите все пары \((x;y)\).
+\end{enumerate}
+\key{Пример.} Решим систему:
+\[
+\begin{cases}
+x^2+y=5,\\
+6x^2-y=2.
+\end{cases}
+\quad\Longrightarrow\quad y=5-x^2.
+\]
+\[
+6x^2-(5-x^2)=2\quad\Longrightarrow\quad 7x^2=7
+\quad\Longrightarrow\quad x=\pm1.
+\]
+При каждом из двух значений \(x\) имеем \(y=5-1=4\).
+\key{Ответ:} \((1;4)\), \((-1;4)\).
+
+\note{Ошибка: заменить \(-y\) на \(-5-x^2\). Правильная подстановка:
+\(-y=-(5-x^2)=-5+x^2\).}
+
+\headsub{Метод сложения (или вычитания)}
+Если коэффициенты при одной неизвестной противоположны, сложение уравнений уничтожает её.
+Для той же системы:
+\[
+\underbrace{(x^2+y)}_{=5}+\underbrace{(6x^2-y)}_{=2}=5+2
+\quad\Longrightarrow\quad 7x^2=7.
+\]
+Затем найдём \(x=\pm1\) и для каждого \(x\) восстановим \(y=4\).
+\key{Важно:} при сложении складывают левые части друг с другом и правые части друг с другом.
+
+\Needspace{10\baselineskip}
+\headsec{2. Как подготовить систему к сложению}
+Когда коэффициенты при \(y\) различаются по модулю, можно \key{домножить обе части уравнения} на подходящее ненулевое число.
+
+\key{Пример.} Рассмотрим систему
+\[
+\begin{cases}
+x^2+2y=5,\\6x^2-3y=2.
+\end{cases}
+\]
+Первое уравнение умножим на \(3\), второе --- на \(2\):
+\[
+\begin{cases}
+3x^2+6y=15,\\12x^2-6y=4.
+\end{cases}
+\quad\Longrightarrow\quad 15x^2=19.
+\]
+\[
+x=\pm\sqrt{\frac{19}{15}},\qquad
+2y=5-\frac{19}{15}=\frac{56}{15},\qquad y=\frac{28}{15}.
+\]
+\key{Ответ:} \(\left(\sqrt{\frac{19}{15}};\frac{28}{15}\right)\),
+\(\left(-\sqrt{\frac{19}{15}};\frac{28}{15}\right)\).
+
+\headsub{Иногда исчезают сразу обе квадратные части}
+\[
+\begin{cases}2x^2+3y^2=11,\\4x^2+6y^2=11x.\end{cases}
+\]
+Умножим первое уравнение на \(2\) и вычтем его из второго:
+\[
+11x-22=0\quad\Longrightarrow\quad x=2.
+\]
+Вернёмся к первому: \(2\cdot4+3y^2=11\), откуда \(y^2=1\) и \(y=\pm1\).
+\key{Ответ:} \((2;1)\), \((2;-1)\).
+
+\note{После нахождения \(x^2\) обязательно найдите сам \(x\). При \(x^2=a>0\) существуют два значения \(x=\pm\sqrt a\).}
+
+\clearpage
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм выбора метода для системы}\par
+\vspace{2mm}
+{\small\color{quiet}Цель --- получить уравнение с одной неизвестной.}
+\end{center}
+\vspace{8mm}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\node[fstart] (s) at (0,0) {Система из двух уравнений};
+\node[fchoice] (d) at (0,-3.5) {Удобно устранить неизвестную сложением или вычитанием?};
+\node[faction,text width=60mm] (l) at (-4.0,-6.8) {При необходимости домножьте уравнения. Сложите или вычтите их.};
+\node[faction,text width=60mm] (r) at (4.0,-6.8) {Выразите одну переменную. Подставьте в другое уравнение со скобками.};
+\node[faction,text width=107mm] (m) at (0,-10.2) {Решите уравнение с одной неизвестной. Если найден квадрат, учтите оба значения корня.};
+\node[faction,text width=107mm] (n) at (0,-12.7) {Найдите вторую переменную для каждого значения первой.};
+\node[fstart] (e) at (0,-15.05) {Проверьте и запишите все пары};
+\draw[farrow] (s) -- (d);
+\draw[farrow] (d.west) -| node[pos=0.20,above,font=\small]{да} (l.north);
+\draw[farrow] (d.east) -| node[pos=0.20,above,font=\small]{нет} (r.north);
+\draw[farrow] (l.south) -- ++(0,-0.6) -| ([xshift=-8mm]m.north);
+\draw[farrow] (r.south) -- ++(0,-0.6) -| ([xshift=8mm]m.north);
+\draw[farrow] (m) -- (n);
+\draw[farrow] (n) -- (e);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\headsec{3. Метод интервалов для целых неравенств}
+Если требуется решить \(f(x)>0\), \(f(x)<0\), \(f(x)\ge0\) или \(f(x)\le0\), нужно установить \key{знак выражения} на промежутках числовой оси.
+
+\key{Сначала нормализуйте неравенство:} перенесите все слагаемые влево, чтобы справа стоял \(0\).
+Например,
+\[
+x^2\le x+2 \quad\Longleftrightarrow\quad x^2-x-2\le0.
+\]
+
+\headsub{Мнемоника «КОЗА»}
+\begin{enumerate}
+\item \key{К --- корни.} Решите вспомогательное уравнение \(f(x)=0\).
+\item \key{О --- ось.} Отметьте корни по возрастанию на оси \(x\).
+\item \key{З --- знаки.} Проверьте знак в одном промежутке подстановкой пробного числа и определите знаки на остальных.
+\item \key{А --- ответ.} Выберите промежутки, где знак соответствует неравенству, и правильно включите или исключите корни.
+\end{enumerate}
+\key{Строгое} неравенство \(>,<\): корни не входят в ответ (пустые кружки, круглые скобки).
+\key{Нестрогое} \(\ge,\le\): нули многочлена входят в ответ (закрашенные точки, квадратные скобки у конечных корней).
+\note{Точки \(\pm\infty\) никогда не включаются: рядом с бесконечностью всегда круглые скобки.}
+
+\headsub{Пример. Квадратное неравенство}
+Решим \(x^2-x-6>0\).
+\[
+x^2-x-6=0 \quad\Longleftrightarrow\quad (x+2)(x-3)=0;
+\qquad x_1=-2,\quad x_2=3.
+\]
+Число \(0\) лежит между корнями. \(f(0)=-6<0\), поэтому центральный промежуток имеет знак «\(-\)». По обе стороны --- «\(+\)».
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm,baseline]
+\draw[-{Stealth[length=2.3mm]},line width=0.8pt,quiet] (-5,0) -- (5,0) node[right] {$x$};
+\draw[fill=white,draw=darkaccent,line width=1.0pt] (-2,0) circle (0.08);
+\draw[fill=white,draw=darkaccent,line width=1.0pt] (2,0) circle (0.08);
+\node[below] at (-2,-.13) {$-2$};\node[below] at (2,-.13) {$3$};
+\node[above] at (-3.5,.12) {$+$};\node[above] at (0,.12) {$-$};\node[above] at (3.5,.12) {$+$};
+\end{tikzpicture}
+\end{center}
+\key{Ответ:} \(x\in(-\infty;-2)\cup(3;+\infty)\).
+
+\headsub{Пример. Нестрогое неравенство}
+\[
+x^2-x-2\le0 \quad\Longleftrightarrow\quad (x+1)(x-2)\le0.
+\]
+Корни \(-1\) и \(2\). Для \(x=0\) значение \(-2<0\); берём промежуток между корнями \key{включая} их.
+\key{Ответ:} \(x\in[-1;2]\).
+
+\Needspace{9\baselineskip}
+\headsec{4. Несколько множителей --- тот же метод}
+\[
+(x-1)(x+1)(x-2)(x+5)\ge0.
+\]
+\key{Корни:} \(-5,-1,1,2\). В промежутке \((-1;1)\) удобно проверить \(x=0\): произведение \((-1)\cdot1\cdot(-2)\cdot5=10>0\).
+У всех четырёх корней кратность \(1\), поэтому при переходе через каждый знак \key{меняется}.
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm,baseline]
+\draw[-{Stealth[length=2.3mm]},line width=0.8pt,quiet] (-6.6,0) -- (6.3,0) node[right] {$x$};
+\foreach \xx/\txt in {-4.7/{-5},-2.2/{-1},.4/{1},2.8/{2}} {\filldraw[fill=darkaccent,draw=darkaccent] (\xx,0) circle (0.075);\node[below] at (\xx,-.12) {$\txt$};}
+\node[above] at (-5.6,.11) {$+$};\node[above] at (-3.4,.11) {$-$};\node[above] at (-.9,.11) {$+$};\node[above] at (1.6,.11) {$-$};\node[above] at (4.3,.11) {$+$};
+\end{tikzpicture}
+\end{center}
+\key{Ответ:} \(x\in(-\infty;-5]\cup[-1;1]\cup[2;+\infty)\).
+
+\note{Осторожно: чередование знаков работает при переходе через корни нечётной кратности. Если множитель имеет чётную степень, знак при переходе через соответствующий корень не меняется.}
+
+\headsub{Пример. Произведение двух квадратных трёхчленов}
+Решим \((x^2-x-2)(x^2-x-6)<0\). Найдём корни \key{каждого} множителя:
+\[
+\begin{aligned}
+x^2-x-2&=(x-2)(x+1),\\
+x^2-x-6&=(x-3)(x+2).
+\end{aligned}
+\]
+На одной числовой оси получаем четыре точки: \(-2,-1,2,3\). При \(x=0\) произведение равно \((-2)\cdot(-6)=12>0\). Все четыре корня простые, поэтому знаки поочерёдно меняются. Нужны промежутки с минусом.
+\key{Ответ:} \(x\in(-2;-1)\cup(2;3)\).
+
+\note{Если корни квадратного множителя не находятся подбором, используйте дискриминант: \(D=b^2-4ac\), \(x_{1,2}=\dfrac{-b\pm\sqrt D}{2a}\) при \(D\ge0\).}
+
+\clearpage
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм «КОЗА»: метод интервалов}\par
+\vspace{2mm}
+{\small\color{quiet}Работает после приведения неравенства к виду \(f(x)\mathrel{\gtrless}0\).}
+\end{center}
+\vspace{6mm}
+\begin{center}
+\begin{tikzpicture}[node distance=10mm]
+\node[fstart] (s) {Неравенство};
+\node[faction,below=of s] (n) {\textbf{Нормализуйте:} все слагаемые слева, справа \(0\).};
+\node[faction,below=of n] (k) {\textbf{К --- корни:} решите \(f(x)=0\).};
+\node[faction,below=of k] (o) {\textbf{О --- ось:} отметьте корни по возрастанию.};
+\node[faction,below=of o] (z) {\textbf{З --- знаки:} подставьте пробное число; расставьте знаки на остальных промежутках.};
+\node[faction,below=of z] (a) {\textbf{А --- ответ:} выберите промежутки нужного знака. При \(\le\) и \(\ge\) включите нули; при \(<\) и \(>\) исключите.};
+\node[fstart,below=of a] (e) {Запишите \(x\in\ldots\)};
+\draw[farrow] (s)--(n);\draw[farrow] (n)--(k);\draw[farrow] (k)--(o);
+\draw[farrow] (o)--(z);\draw[farrow] (z)--(a);\draw[farrow] (a)--(e);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\headsec{5. Путь А. Тренировка (10 заданий)}
+\note{Решите самостоятельно. В № 1--4 найдите \emph{все пары} \((x;y)\); в № 5--10 запишите множество значений \(x\) в интервальной форме. Покажите основные преобразования.}
+\vspace{2mm}
+\textbf{Системы уравнений}
+\begin{enumerate}[label=\textbf{\arabic*.},start=1]
+\task{$\displaystyle\begin{cases}x^2+y=7,\\4x^2-y=13.\end{cases}$}
+\task{$\displaystyle\begin{cases}2x^2+y=9,\\x^2-y=3.\end{cases}$}
+\task{$\displaystyle\begin{cases}x^2+2y=8,\\2x^2-3y=2.\end{cases}$}
+\task{$\displaystyle\begin{cases}3x^2+2y^2=14,\\6x^2+4y^2=14x.\end{cases}$}
+\end{enumerate}
+\textbf{Неравенства методом интервалов}
+\begin{enumerate}[label=\textbf{\arabic*.},start=5]
+\task{$x^2-4x+3>0$.}
+\task{$x^2+x-6\le0$.}
+\task{$x^2-5x+6<0$.}
+\task{$(x+3)(x-1)(x-4)\ge0$.}
+\task{$(x-3)(x+2)(x-1)(x+4)\le0$.}
+\task{$(x^2-5x+6)(x^2+x-2)<0$.}
+\end{enumerate}
+
+\clearpage
+\headsec{6. Ответы для самопроверки}
+\note{Сначала выполните все задания; затем сверьте ответы. Порядок пар в ответах к системам значения не имеет.}\par
+\renewcommand{\arraystretch}{1.55}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{12mm}X@{}}
+\toprule
+№ & Ответ\\
+\midrule
+1 & $(-2;3)$, $(2;3)$\\
+2 & $(-2;1)$, $(2;1)$\\
+3 & $(-2;2)$, $(2;2)$\\
+4 & $(2;-1)$, $(2;1)$\\
+5 & $x\in(-\infty;1)\cup(3;+\infty)$\\
+6 & $x\in[-3;2]$\\
+7 & $x\in(2;3)$\\
+8 & $x\in[-3;1]\cup[4;+\infty)$\\
+9 & $x\in[-4;-2]\cup[1;3]$\\
+10 & $x\in(-2;1)\cup(2;3)$\\
+\bottomrule
+\end{tabularx}\par
+\vspace{8mm}
+\key{Проверка по смыслу:}
+для системы каждую пару подставьте в \emph{оба} уравнения;
+для неравенства проверьте знак в одном числе каждого выбранного промежутка.
+\end{document}

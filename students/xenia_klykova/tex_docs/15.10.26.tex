@@ -1,0 +1,227 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\geometry{left=24mm,right=24mm,top=23mm,bottom=24mm}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{booktabs,tabularx}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{needspace}
+
+\definecolor{accent}{HTML}{147A7C}
+\definecolor{darkaccent}{HTML}{155457}
+\definecolor{textgray}{HTML}{30383A}
+\definecolor{muted}{HTML}{687576}
+\definecolor{soft}{HTML}{D5E7E5}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent,
+  pdfauthor={Артём Александрович Лёвин},
+  pdftitle={Чек-лист. Делимость целых чисел. 15.10.26}}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=8pt,topsep=4pt}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}Математика \,$\cdot$\, олимпиадная подготовка}
+\fancyhead[R]{\small\color{muted}15.10.2026}
+\fancyfoot[C]{\small\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\newcommand{\topic}[1]{\Needspace{5\baselineskip}\vspace{7pt}{\Large\bfseries\color{darkaccent}#1}\par\vspace{2pt}\noindent\color{soft}\rule{\linewidth}{0.6pt}\color{textgray}\par\vspace{3pt}}
+\newcommand{\subtopic}[1]{\Needspace{3\baselineskip}\vspace{5pt}{\large\bfseries\color{darkaccent}#1}\par}
+\newcommand{\idea}[1]{\noindent\makebox[6mm][l]{\color{accent}$\square$}\begin{minipage}[t]{\dimexpr\linewidth-7mm}\raggedright #1\end{minipage}\par\vspace{4pt}}
+\newcommand{\important}[1]{\par\textbf{Обратите внимание.} #1\par}
+\AtBeginDocument{\color{textgray}}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{26mm}
+{\small\color{accent}\bfseries ОЛИМПИАДНАЯ МАТЕМАТИКА}\par
+\vspace{13mm}
+{\fontsize{31}{37}\selectfont\bfseries\color{darkaccent}Чек-лист}\par
+\vspace{8mm}
+{\fontsize{22}{30}\selectfont\bfseries Делимость}\par
+\vspace{2mm}
+{\fontsize{18}{27}\selectfont целых чисел}\par
+\vspace{13mm}
+{\large Язык делимости и деление с остатком}\par
+{\large Свойства и доказательства}\par
+{\large Линейные комбинации и исключение неизвестного}\par
+\vspace{17mm}
+{\color{accent}\rule{38mm}{0.7pt}}\par
+\vspace{9mm}
+{\large\bfseries Ксения Клыкова}\par
+\vspace{3mm}
+{\normalsize 15 октября 2026 года}\par
+\vfill
+{\small\color{muted}Лёвин Артём Александрович}\par
+{\small\color{darkaccent}\bfseries эксклюзивно для Ксении Клыковой}\par
+\vspace{19mm}
+\end{center}
+\begin{tikzpicture}[remember picture,overlay]
+  \draw[accent!55,line width=1.1pt]
+    ([xshift=25mm,yshift=25mm]current page.south west)
+    .. controls ([xshift=66mm,yshift=41mm]current page.south west)
+    and ([xshift=-65mm,yshift=11mm]current page.south east)
+    .. ([xshift=-24mm,yshift=27mm]current page.south east);
+\end{tikzpicture}
+\clearpage
+
+\topic{1. Что означает запись $m\mid a$}
+\idea{Для целых $a$ и $m\ne0$ запись $m\mid a$ читается как «$m$ делит $a$» и означает, что существует \textbf{целое} $k$ такое, что
+\[\boxed{a=mk,\qquad k\in\mathbb Z.}\]}
+\idea{Множитель $k$ может быть положительным, отрицательным или нулевым. Например,
+\[4\mid20\ (20=4\cdot5),\quad 7\mid(-56)\ (-56=7\cdot(-8)),\quad17\mid0\ (0=17\cdot0).\]}
+\idea{Число $0$ делится на любое \textbf{ненулевое} целое число. На нуль делить нельзя: в записи $m\mid a$ всегда $m\ne0$.}
+
+\topic{2. Деление с остатком}
+\idea{Если $a\in\mathbb Z$, а делитель $m\in\mathbb N$ положителен, то существуют единственные целые $q,r$ такие, что
+\[\boxed{a=mq+r,\qquad0\le r<m.}\]
+$q$ --- \textbf{неполное частное}, $r$ --- \textbf{остаток}.}
+\idea{Критерий делимости: $m\mid a$ тогда и только тогда, когда $r=0$. При ненулевом остатке запись $m\mid a$ неверна.}
+\textbf{Пример.} $29=4\cdot7+1$: остаток $1$, поэтому $4\nmid29$. Напротив, $28=4\cdot7+0$, значит $4\mid28$.
+
+\topic{3. Свойства, которые можно доказывать}
+\subtopic{Умножение и цепочка делителей}
+\idea{Из $m\mid a$ следует $m\mid ca$ для \textbf{любого целого} $c$: если $a=mk$, то $ca=m(ck)$.}
+\idea{Если $d\mid m$ и $m\mid a$, то $d\mid a$ (\textbf{транзитивность}): $m=dt$, $a=mk$, откуда $a=d(tk)$.}
+\idea{При $c\ne0$ справедливо также $m\mid a\iff cm\mid ca$. Однако из одного лишь $m\mid a$ нельзя заключать, что $cm\mid a$.}
+\textbf{Пример.} Из $24\mid a$ следует $8\mid a$, а затем $8\mid7a$. Если $2\mid x$, то и $2\mid101x$.
+
+\subtopic{Сумма, разность и линейная комбинация}
+\idea{Если $m\mid a$ и $m\mid b$, то при любых $u,v\in\mathbb Z$:
+\[\boxed{m\mid(ua+vb).}\]
+В частности, $m\mid(a+b)$ и $m\mid(a-b)$.}
+\textbf{Почему?} При $a=mk$, $b=mt$ получаем
+\[ua+vb=u(mk)+v(mt)=m(uk+vt).\]
+\idea{Если $m\mid a$ и $m\mid(a+b)$, то $m\mid b$, поскольку $b=(a+b)-a$. Аналогично из $m\mid a$ и $m\mid(a-b)$ следует $m\mid b$.}
+\important{Из одного лишь $m\mid(a+b)$ \textbf{не следует}, что $m\mid a$ и $m\mid b$. Например, $5\mid(2+3)$, хотя $5\nmid2$ и $5\nmid3$. Делимость каждого слагаемого --- достаточное, но не обязательное условие делимости суммы.}
+
+\topic{4. Доказательства через линейные комбинации}
+\textbf{Пример из занятия.} Из $2\mid x$ и $2\mid y$ докажем $2\mid(3x-10y)$.
+Пишем $x=2k$, $y=2t$, где $k,t\in\mathbb Z$. Тогда
+\[3x-10y=3(2k)-10(2t)=2(3k-10t),\]
+что и требовалось доказать.
+
+\textbf{Другой пример.} Пусть
+\[m\mid(3a+2b),\qquad m\mid(a-b).\]
+Сложив два кратных $m$ выражения, сразу получаем
+\[m\mid\bigl((3a+2b)+(a-b)\bigr),\quad\boxed{m\mid(4a+b).}\]
+
+\topic{5. Олимпиадный приём: убрать неизвестное}
+\idea{Если одно и то же число $p>1$ делит $A(n)=\alpha n+\beta$ и $B(n)=\gamma n+\delta$, то оно делит и комбинацию, где $n$ сокращается:
+\[\boxed{p\mid\bigl(\gamma A(n)-\alpha B(n)\bigr)=\gamma\beta-\alpha\delta.}\]
+Если полученная константа отлична от нуля, кандидаты на $p$ --- её натуральные делители, большие $1$. Каждый кандидат необходимо проверить в первоначальных условиях.}
+\textbf{Пример из занятия.} Пусть $p>1$ и
+\[p\mid(3n+2),\qquad p\mid(8n+3).\]
+Тогда
+\[p\mid\bigl(8(3n+2)-3(8n+3)\bigr)=7.\]
+Следовательно, $p=7$. Остаётся проверить, \textbf{при каких $n$} оба исходных числа кратны $7$:
+\[3n+2\equiv0\pmod7\iff n\equiv4\pmod7.\]
+При $n=7t+4$, $t\in\mathbb Z_{\ge0}$, действительно
+\[3n+2=7(3t+2),\qquad8n+3=7(8t+5).\]
+Таким образом, \textbf{$p=7$, а $n$ имеет вид $7t+4$}. Например, $n=4$ даёт $14$ и $35$.
+\important{Из $p\mid7$ получается необходимое условие для $p$. Оно \textbf{не означает}, что оба выражения делятся на $7$ при любом $n$. Подстановка или анализ остатков обязательны.}
+
+\subtopic{Второй пример: найти общий делитель}
+Если $d>1$ делит $5n+1$ и $2n+1$, то
+\[d\mid\bigl(2(5n+1)-5(2n+1)\bigr)=-3.\]
+Значит, $d=3$. Из $2n+1\equiv0\pmod3$ следует $n\equiv1\pmod3$; при таких $n$ оба выражения действительно делятся на $3$.
+
+
+\topic{6. Типичные ошибки: проверьте себя}
+\idea{Не заменяйте запись $m\mid a$ дробью без проверки, что частное является \textbf{целым} числом.}
+\idea{Не переносите делимость произведения на сумму: из $m\mid a$ следует $m\mid ab$, но $m\mid(a+b)$ в общем случае неверно.}
+\idea{Не делите произвольно обе части утверждения о делимости. Например, $2\mid6$, но $2\nmid(6/2)$.}
+\idea{Не выводите делимость каждого слагаемого из делимости суммы. Для вывода $m\mid b$ из $m\mid(a+b)$ требуется дополнительное знание $m\mid a$.}
+\idea{После исключения неизвестного сначала получите \textbf{кандидатов} на делитель, а затем проверьте существование подходящих значений параметра.}
+
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: исключение неизвестного}\par
+\vspace{5mm}
+{\small\color{muted}Как найти возможный общий делитель двух линейных выражений}\par
+\end{center}
+\vspace{6mm}
+\centering
+\begin{tikzpicture}[
+  font=\small,
+  node distance=10mm,
+  act/.style={draw=darkaccent,rounded corners=2pt,line width=.8pt,align=center,text width=113mm,minimum height=13mm,inner sep=3mm},
+  cond/.style={diamond,draw=darkaccent,line width=.8pt,aspect=2.2,align=center,text width=38mm,inner sep=1.5mm},
+  oval/.style={ellipse,draw=accent,line width=.85pt,align=center,text width=80mm,minimum height=12mm},
+  arr/.style={-{Stealth[length=2.8mm]},draw=darkaccent,line width=.8pt}
+]
+  \node[oval] (start) {$p>1$, \ $p\mid A(n)$ и $p\mid B(n)$};
+  \node[act,below=of start] (names) {Запишите $A(n)=\alpha n+\beta$ и $B(n)=\gamma n+\delta$};
+  \node[act,below=of names] (comb) {Составьте $\gamma A(n)-\alpha B(n)=D$, где $D=\gamma\beta-\alpha\delta$};
+  \node[cond,below=11mm of comb] (test) {$D\ne0$?};
+  \node[act,below=12mm of test] (divs) {Переберите натуральные делители $|D|$, большие $1$};
+  \node[act,below=of divs] (check) {Проверьте каждый кандидат в \textbf{обоих} исходных выражениях; найдите допустимые $n$};
+  \node[oval,below=of check] (end) {Оставьте только подтверждённые значения};
+  \node[act,right=13mm of test,text width=36mm,minimum height=23mm] (other) {$D=0$: этот приём не ограничивает $p$. Ищите другое условие.};
+  \draw[arr] (start)--(names);
+  \draw[arr] (names)--(comb);
+  \draw[arr] (comb)--(test);
+  \draw[arr] (test)--node[left,fill=white,inner sep=1pt]{да}(divs);
+  \draw[arr] (divs)--(check);
+  \draw[arr] (check)--(end);
+  \draw[arr] (test.east)--node[above,fill=white,inner sep=1pt]{нет}(other.west);
+\end{tikzpicture}
+\clearpage
+
+\clearpage
+\topic{7. Тренировочный блок: Путь А}
+\textit{10 упражнений. Решения оформляйте самостоятельно; сначала обоснуйте делимость, затем запишите вывод.}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+\item Найдите целое число $k$, для которого $-72=9k$. Запишите соответствующее утверждение о делимости.
+\item Представьте число $95$ в виде $7q+r$, где $0\le r<7$. Найдите $q$ и $r$; выясните, делится ли $95$ на $7$.
+\item Известно, что $12\mid a$. Докажите, что $3\mid5a$.
+\item Известно, что $6\mid x$ и $6\mid y$. Докажите, что $6\mid(5x-2y)$.
+\item Известно, что $11\mid a$ и $11\mid(a+b)$. Докажите, что $11\mid b$.
+\item Верно ли, что из $7\mid(a+b)$ следует $7\mid a$ и $7\mid b$? Докажите ответ или приведите контрпример.
+\item Известно, что $m\mid(3a+2b)$ и $m\mid(a-b)$, где $m\ne0$. Докажите, что $m\mid(4a+b)$.
+\item Натуральное $p>1$ делит оба числа $3n+2$ и $8n+3$, где $n\in\mathbb N$. Найдите $p$ и все возможные $n$.
+\item Натуральное $d>1$ делит оба числа $5n+1$ и $2n+1$, где $n\in\mathbb N$. Найдите $d$ и все возможные $n$.
+\item Существуют ли натуральные $n$ и $d>1$, для которых одновременно $d\mid(4n+3)$ и $d\mid(10n+7)$? Обоснуйте вывод с помощью линейной комбинации.
+\end{enumerate}
+\clearpage
+
+\topic{8. Ответы и ориентиры проверки}
+\renewcommand{\arraystretch}{1.33}
+\small
+\begin{tabularx}{\linewidth}{@{}p{10mm}X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ или ключевой шаг} \\
+\midrule
+1 & $k=-8$; верно $9\mid(-72)$, поскольку $-72=9\cdot(-8)$. \\
+2 & $95=7\cdot13+4$; $q=13$, $r=4$, следовательно, $7\nmid95$. \\
+3 & $3\mid12$, $12\mid a\Rightarrow3\mid a\Rightarrow3\mid5a$. \\
+4 & $x=6k$, $y=6t$, поэтому $5x-2y=6(5k-2t)$. \\
+5 & $b=(a+b)-a$, значит, $11\mid b$. \\
+6 & Нет. Например, $a=3$, $b=4$: $7\mid(3+4)$, но $7\nmid3$ и $7\nmid4$. \\
+7 & $(3a+2b)+(a-b)=4a+b$; сумма кратных $m$ кратна $m$. \\
+8 & $8(3n+2)-3(8n+3)=7$; $p=7$, $n=7t+4$, $t=0,1,2,\ldots$ \\
+9 & $2(5n+1)-5(2n+1)=-3$; $d=3$, $n=3t+1$, $t=0,1,2,\ldots$ \\
+10 & Нет. Общий делитель $d>1$ обязан делить $10(4n+3)-4(10n+7)=2$, значит $d=2$. Но $4n+3$ нечётно. \\
+\bottomrule
+\end{tabularx}
+\normalsize
+\vspace{8mm}
+\textbf{Главный результат занятия.} Делимость выражений можно исследовать через целочисленные линейные комбинации. Исключение неизвестного даёт возможный делитель; проверка исходных условий определяет, реализуется ли он.
+\end{document}
