@@ -13,6 +13,7 @@ const fullDate=isoDate=>{
   const [y,m,d]=isoDate.split('-');
   return d+'.'+m+'.'+y;
 };
+const shortDate=isoDate=>{const [year,month,day]=isoDate.split('-');return day+'.'+month+'.'+year.slice(-2);};
 const normal=s=>String(s||'').toLocaleLowerCase('ru-RU').replaceAll('ё','е').trim();
 const localHref=value=>{
   if(typeof value!=='string')return null;
@@ -66,7 +67,7 @@ function tile(lesson,index){
     }
     card.append(footer);
   }
-  card.dataset.search=normal([lesson.date,fullDate(lesson.date),shownTitle,lesson.navTitle,lesson.navSubtitle,lesson.summary,...(lesson.topics||[])].join(' '));
+  card.dataset.search=normal([lesson.date,fullDate(lesson.date),shortDate(lesson.date),shownTitle,lesson.navTitle,lesson.navSubtitle,lesson.summary,...(lesson.topics||[])].join(' '));
   return card;
 }
 export function groupLessonsByMonth(lessons){
