@@ -203,6 +203,11 @@ try{
   assert.equal(await run("document.querySelector('#latestPdfLink').hidden"),false);
   assert.equal(await run("document.querySelector('#latestTexLink').getAttribute('href')"),'../tex_docs/15.10.26.tex');
   assert.equal(await run("document.querySelectorAll('#recentLessons a').length"),3);
+  // Student-facing lesson evidence must render reviewed titles, not internal IDs.
+  assert.ok(await run("document.querySelector('#lesson').classList.contains('lesson-summary')"),'latest lesson class must be valid');
+  assert.deepEqual(await run("[...document.querySelectorAll('#latestLessonStatus .outcome span:nth-child(2)')].map(el=>el.textContent)"),['Свойства делимости и целочисленные линейные комбинации','Делимость как нулевой остаток']);
+  assert.ok(await run("!document.querySelector('#latestLessonStatus').textContent.includes('t19_')"),'no service IDs in learner-facing lesson results');
+  assert.ok(await run("(()=>{const a=document.querySelector('.lesson-copy').getBoundingClientRect(),b=document.querySelector('#latestLessonStatus').getBoundingClientRect(),c=document.querySelector('#practiceSection').getBoundingClientRect(),d=document.querySelector('#lesson').getBoundingClientRect();return b.left>=a.right-3&&c.top>=d.bottom-2})()"),'desktop outcomes must stay right of lesson, above practice');
   // Anna Bannova visual reference: open editorial layout instead of permanent desktop sidebar.
   assert.equal(await run("getComputedStyle(document.querySelector('#sidebar')).position"),'relative');
   assert.equal(await run("getComputedStyle(document.querySelector('.atlas-ledger .map-stats')).display"),'grid');
@@ -214,6 +219,7 @@ try{
   await sleep(300);
   assert.equal(await run("getComputedStyle(document.querySelector('.mobile-bar')).display"),'flex');
   assert.equal(await run("getComputedStyle(document.querySelector('#sidebar')).position"),'fixed');
+  assert.ok(await run("(()=>{const a=document.querySelector('.lesson-copy').getBoundingClientRect(),b=document.querySelector('#latestLessonStatus').getBoundingClientRect(),c=document.querySelector('#practiceSection').getBoundingClientRect(),d=document.querySelector('#lesson').getBoundingClientRect();return b.top>=a.bottom-2&&c.top>=d.bottom-2})()"),'mobile outcomes must stack without overlapping practice');
   assert.equal(await run("document.querySelector('#lessonArchive').contains(document.querySelector('#recentLessons'))"),true);
   assert.equal(await run("(()=>{document.querySelector('#menuButton').click();return document.querySelector('#menuButton').getAttribute('aria-expanded')})()"),'true');
   assert.equal(await run("(()=>{document.querySelector('#sidebarClose').click();return document.querySelector('#menuButton').getAttribute('aria-expanded')})()"),'false');
