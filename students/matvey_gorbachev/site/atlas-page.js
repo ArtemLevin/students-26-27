@@ -27,7 +27,12 @@ const latest=getLatestLesson(LESSONS);
 if(latest){
   find('latestLessonEyebrow').textContent='01 / Последнее занятие · '+formatLongDateRu(latest.date);
   find('lesson-title').textContent=latest.navTitle||latest.title||'Занятие';
-  find('lessonLead').textContent=latest.summary||'Учебный материал занятия';
+  let summary=String(latest.summary||'Учебный материал занятия').replace(/^Матвей Горбач[её]в\\.\\s*/i,'');
+  const title=String(latest.navTitle||latest.title||'');
+  if(summary.toLocaleLowerCase('ru').startsWith(title.toLocaleLowerCase('ru')+':')){
+    summary=summary.slice(title.length+1).trim();
+  }
+  find('lessonLead').textContent=summary;
   const href=String(latest.href||'');
   const cta=find('latestLessonCta');
   if(/^[a-zA-Z0-9._-]+\.html$/.test(href)){cta.href=href;cta.hidden=false;}else cta.hidden=true;
@@ -37,7 +42,7 @@ if(latest){
     const span=document.createElement('span');span.textContent=topic;topics.append(span);
   }
   const status=find('latestLessonStatus');status.replaceChildren();
-  const title=document.createElement('p');title.className='status-title';title.textContent='Работа на занятии';status.append(title);
+  const statusHeading=document.createElement('p');statusHeading.className='status-title';statusHeading.textContent='Работа на занятии';status.append(statusHeading);
   const items=new Map((window.COMPETENCY_MAP_DATA?.groups||[]).flatMap(group=>(group.items||[]).map(item=>[item.id,item.title])));
   const labels={assessed:'Проверено',practiced:'Практика',touched:'Разбор'};
   const valid=(latest.outcomes||[]).filter(o=>items.has(o.competencyId));
