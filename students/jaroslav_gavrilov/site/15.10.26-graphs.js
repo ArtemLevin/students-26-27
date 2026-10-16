@@ -37,8 +37,14 @@
     const b=override&&Number.isFinite(override.b)?override.b:s.b;
     const W=720,H=360,L=64,R=22,T=19,B=49,w=W-L-R,h=H-T-B;
     const X=(x)=>L+(x-s.domain[0])/(s.domain[1]-s.domain[0])*w;
-    const Y=(y)=>T+(s.yrange[1]-y)/(s.yrange[1]-s.yrange[0])*h;
-    const minY=s.yrange[0],maxY=s.yrange[1],minX=s.domain[0],maxX=s.domain[1];
+    const minX=s.domain[0],maxX=s.domain[1];
+    let minY=s.yrange[0],maxY=s.yrange[1];
+    if(override&&!s.second&&kind!=='tan'){
+      const values=kind==='line'?[s.fn(minX,a,b),s.fn(maxX,a,b)]:[b-Math.abs(a),b+Math.abs(a)];
+      minY=Math.min(minY,...values.map(v=>v-.6));
+      maxY=Math.max(maxY,...values.map(v=>v+.6));
+    }
+    const Y=(y)=>T+(maxY-y)/(maxY-minY)*h;
     svg.replaceChildren();svg.setAttribute('viewBox','0 0 '+W+' '+H);
     svg.setAttribute('role','img');svg.setAttribute('aria-label',s.name+' — точный график функции');
     svg.append(el('title',{},s.name+' — график по координатам и формуле'));
@@ -76,7 +82,7 @@
     }
     trace(x=>s.fn(x,a,b),'var(--plot-primary)');
     if(s.second)trace(s.second,'var(--plot-secondary)');
-    if(s.asymptotes)for(const x of s.asymptotes)
+    if(s.asymptotes&&Math.abs(a)>1e-9)for(const x of s.asymptotes)
       plot.append(el('line',{x1:X(x),y1:T,x2:X(x),y2:T+h,stroke:'var(--plot-asymptote)','stroke-width':1.8,'stroke-dasharray':'8 5'}));
     svg.append(plot);
     if(!(override&&override.hidePoints)){
