@@ -179,11 +179,18 @@ try{
       await snapshot(page.replace('.html','')+'-'+w+'-dark');
     }
   }
+  await navigate('15.10.26.html',1440,900);
+  assert.ok(await run("document.querySelectorAll('.content math').length >= 170"),'lesson should use semantic MathML');
+  assert.ok(await run("[...document.querySelectorAll('.content math')].every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML')"),'lesson MathML namespace');
+  assert.ok(await run("[...document.querySelectorAll('.eq')].every(e=>e.firstElementChild?.localName==='math'&&e.firstElementChild.getAttribute('display')==='block')"),'display equations use MathML');
+  assert.ok(await run("[...document.querySelectorAll('.tasks details math')].length >= 15"),'answer hints use MathML');
   await navigate('15.10.26-lab.html?case=seven',1440,900);
+  assert.ok(await run("['aLabel','bLabel','aValue','bValue','aDivision','bDivision','identity','identityValue','rule'].every(id=>document.getElementById(id).querySelector('math')?.namespaceURI==='http://www.w3.org/1998/Math/MathML')"),'lab must render MathML for every live mathematical result');
   assert.equal(await run("document.querySelector('#aValue').textContent"),'14');
   assert.equal(await run("document.querySelector('#bValue').textContent"),'35');
   assert.ok(await run("document.querySelector('#conclusion').textContent.includes('Оба выражения')"));
   assert.equal(await run("(()=>{const x=document.querySelector('#nRange');x.value='1';x.dispatchEvent(new Event('input'));return document.querySelector('#aValue').textContent})()"),'5');
+  assert.ok(await run("document.querySelector('#aDivision math mn')!==null && document.querySelector('#identityValue math')?.namespaceURI==='http://www.w3.org/1998/Math/MathML'"),'MathML survives reactive recomputation');
   assert.ok(await run("document.querySelector('#explanation').textContent.includes('не гарантирует')"));
   await navigate('15.10.26-lab.html?case=three',1440,900);
   assert.equal(await run("document.querySelector('#aValue').textContent"),'6');
