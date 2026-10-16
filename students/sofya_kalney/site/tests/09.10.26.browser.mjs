@@ -126,7 +126,7 @@ try{
   await snapshot('sofya-lesson-mobile-dark');
   await navigate('index.html',390,844);
   await sleep(400);
-  assert.equal(await run("document.querySelector('#lesson-title')?.textContent.includes('Графики, неравенства')"),true,'New lesson not shown in dashboard');
+  assert.equal(await run("document.querySelector('#lesson-title')?.textContent.includes('Теорема Менелая')"),true,'New lesson not shown in dashboard');
   await snapshot('sofya-index-mobile');
   await navigate('index.html',1440,900);
   await sleep(400);
