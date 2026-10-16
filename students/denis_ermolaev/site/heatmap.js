@@ -128,6 +128,14 @@
     $('visibleCount').textContent=state.items.filter(visible).length+' / '+state.items.length;
     $('catalogCount').textContent=state.items.length+' ЗАПИСЕЙ';
     $('totalCount').textContent=state.items.length;
+    const scores=state.items.map(item=>level(item.id)).filter(score=>score!==null);
+    $('evaluatedCount').textContent=scores.length;
+    $('confidentCountMain').textContent=scores.filter(score=>score===3).length;
+    $('processCountMain').textContent=scores.filter(score=>score===2).length;
+    $('masteredCountMain').textContent=scores.filter(score=>score===4).length;
+    $('confidentCount').textContent=scores.filter(score=>score===3).length;
+    $('processCount').textContent=scores.filter(score=>score===2).length;
+    $('masteredCount').textContent=scores.filter(score=>score===4).length;
   }
   function renderCatalog(){
     els.catalog.replaceChildren();
@@ -136,19 +144,19 @@
       return;
     }
     state.groups.forEach((g,i)=>{
-      const details=append(els.catalog,'details');
+      const details=append(els.catalog,'details',undefined,'topic-group');
       details.open=i===0;
       const summary=append(details,'summary');
       append(summary,'span',String(i+1).padStart(2,'0')+' / '+g.name);
       append(summary,'small',g.items.length+' навыков');
-      const box=append(details,'div',undefined,'atlas-items');
+      const box=append(details,'div',undefined,'atlas-items topic-list');
       g.items.forEach(item=>{
-        const button=append(box,'button',undefined,'atlas-item');
+        const button=append(box,'button',undefined,'atlas-item topic-row');
         button.type='button';button.dataset.id=item.id;button.dataset.level=level(item.id)===null?'unknown':String(level(item.id));
         button.setAttribute('aria-pressed','false');
-        append(button,'i').setAttribute('aria-hidden','true');
-        append(button,'span',item.title);
-        append(button,'strong',level(item.id)===null?'—':level(item.id)+'/4');
+        append(button,'i',undefined,'topic-dot').setAttribute('aria-hidden','true');
+        append(button,'span',item.title,'topic-label');
+        append(button,'strong',level(item.id)===null?'Без оценки':level(item.id)+'/4','topic-level');
       });
     });
     refreshMapState();
@@ -219,38 +227,77 @@
     });
     els.svg.addEventListener('mouseover',e=>{const path=e.target.closest('.radial-cell');if(path)path.classList.add('is-active')});
     els.svg.addEventListener('mouseout',e=>{const path=e.target.closest('.radial-cell');if(path && path.dataset.id!==state.selected)path.classList.remove('is-active')});
-    const toggle=$('themeToggle'),storageKey='denis_ermolaev_atlas_theme';
-    try{const v=localStorage.getItem(storageKey);if(v==='dark'||v==='light')document.documentElement.dataset.theme=v}catch(_){}
-    const updateButton=()=>{toggle.textContent=document.documentElement.dataset.theme==='dark'?'Светлая тема':'Тёмная тема'};
-    updateButton();
-    toggle.addEventListener('click',()=>{
-      const v=document.documentElement.dataset.theme==='dark'?'light':'dark';
-      document.documentElement.dataset.theme=v;updateButton();
-      try{localStorage.setItem(storageKey,v)}catch(_){}
+    const storageKey='denis_ermolaev_atlas_theme';
+    const themeButtons=[$('themeToggle'),$('mobileThemeToggle')].filter(Boolean);
+    let initial='light';
+    try{if(localStorage.getItem(storageKey)==='dark')initial='dark';}catch(_){}
+    const setTheme=value=>{
+      document.body.dataset.theme=value==='dark'?'dark':'light';
+      for(const button of themeButtons){
+        button.setAttribute('aria-label',value==='dark'?'Включить светлую тему':'Включить тёмную тему');
+        const label=button.querySelector('.theme-label');
+        if(label)label.textContent=value==='dark'?'Светлая тема':'Тёмная тема';
+      }
+    };
+    setTheme(initial);
+    for(const button of themeButtons)button.addEventListener('click',()=>{
+      const next=document.body.dataset.theme==='dark'?'light':'dark';
+      setTheme(next);
+      try{localStorage.setItem(storageKey,next);}catch(_){}
+    });
+    const menu=$('menuButton'),backdrop=$('sidebarBackdrop'),close=$('sidebarClose'),sidebar=$('sidebar');
+    const setMenu=open=>{
+      document.body.classList.toggle('sidebar-open',open);
+      backdrop.hidden=!open;
+      menu.setAttribute('aria-expanded',String(open));
+      menu.setAttribute('aria-label',open?'Закрыть навигацию':'Открыть навигацию');
+      if(open)close.focus();
+    };
+    menu.addEventListener('click',()=>setMenu(!document.body.classList.contains('sidebar-open')));
+    close.addEventListener('click',()=>{setMenu(false);menu.focus();});
+    backdrop.addEventListener('click',()=>{setMenu(false);menu.focus();});
+    sidebar.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>setMenu(false)));
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape' && document.body.classList.contains('sidebar-open')){setMenu(false);menu.focus();}
     });
   }
   async function renderLessonData(contract){
+    const root=$('latestLesson'),result=$('lessonResult');
+    const line=(host,tag,value,cls)=>append(host,tag,value,cls);
     try{
       const module=await moduleData(contract.lessons.registry);
       const lessons=Array.isArray(module.LESSONS)?module.LESSONS:[];
-      state.lessons=[...lessons].sort((a,b)=>String(b.date).localeCompare(String(a.date)));
-      const root=$('latestLesson');root.replaceChildren();
-      if(!state.lessons.length){append(root,'p','Опубликованных занятий пока нет. Материалы появятся здесь после первого занятия.');return}
+      state.lessons=[...lessons].filter(item=>/^\\d{4}-\\d{2}-\\d{2}$/.test(String(item.date||'')))
+        .sort((a,b)=>b.date.localeCompare(a.date));
+      root.replaceChildren();result.replaceChildren();
+      if(!state.lessons.length){
+        const heading=line(root,'h2','Первое занятие впереди');heading.id='lesson-title';
+        line(root,'p','Опубликованных занятий пока нет. Материалы будут добавляться по мере обучения.','lead');
+        line(result,'p','Учебные результаты','status-title');
+        line(result,'p','Подтверждённых результатов занятий пока нет.');
+        return;
+      }
       const lesson=state.lessons[0];
-      append(root,'p',String(lesson.date||'').split('-').reverse().join('.'),'atlas-technical');
-      append(root,'h3',lesson.title||'Занятие');
-      if(lesson.summary)append(root,'p',lesson.summary);
-      if(lesson.href && /^[\w.-]+\.html$/.test(lesson.href)){
-        const r=await fetch(new URL(lesson.href,location.href),{method:'HEAD'});
-        if(r.ok){const a=append(root,'a','Открыть занятие ↗');a.href=lesson.href}
+      const date=lesson.date.split('-').reverse().join('.');
+      line(root,'p',date,'eyebrow');
+      const heading=line(root,'h2',lesson.title||lesson.navTitle||'Материалы занятия');heading.id='lesson-title';
+      if(lesson.summary||lesson.navSubtitle)line(root,'p',lesson.summary||lesson.navSubtitle,'lead');
+      const topics=(lesson.topics||[]).filter(x=>typeof x==='string'&&x.trim());
+      if(topics.length){const host=line(root,'div',undefined,'lesson-topics');for(const topic of topics)line(host,'span',topic);}
+      if(typeof lesson.href==='string'&&/^[a-zA-Z0-9._-]+\\.html$/.test(lesson.href)){
+        const link=line(root,'a','Открыть занятие ↗','lesson-cta');
+        link.href=lesson.href;
       }
-      const arch=$('archive');arch.replaceChildren();
-      for(const item of state.lessons.slice(1,15)){
-        if(item.href&&/^[\w.-]+\.html$/.test(item.href)){
-          const a=append(arch,'a',(item.date||'')+' · '+(item.title||'Занятие'));a.href=item.href;
-        }
+      line(result,'p','Результаты занятия','status-title');
+      line(result,'p','Освоение навыков отображается на карте только после подтверждённой оценки.');
+      const review=(lesson.materials||{}).review;
+      if(typeof review==='string'&&/^[a-zA-Z0-9._/-]+\\.(?:html|pdf)$/.test(review)&&!review.split('/').includes('..')){
+        const link=line(result,'a','Комментарий преподавателя ↗');link.href=review;
       }
-    }catch(err){msg($('latestLesson'),'Не удалось загрузить журнал занятий: '+err.message)}
+    }catch(_){
+      root.replaceChildren();const heading=line(root,'h2','Занятия временно недоступны');heading.id='lesson-title';
+      result.textContent='Материалы появятся после восстановления журнала.';
+    }
   }
   async function renderRoute(contract){
     try{
@@ -263,7 +310,7 @@
       const upcoming=items.find(x=>!records[x.id]||records[x.id].status==='planned'||records[x.id].status==='in_progress');
       if(upcoming)append(host,'p','Ближайший шаг: '+upcoming.topic);
       const a=append(host,'a','Смотреть полный маршрут ↗');a.href='ktp.html';
-    }catch(err){msg($('routeStatus'),'Не удалось загрузить учебный маршрут: '+err.message)}
+    }catch(err){msg($('routeStatus'),'Учебный маршрут временно недоступен.')}
   }
   async function start(){
     attachEvents();
@@ -281,7 +328,7 @@
         (g.items||[]).forEach(raw=>{
           if(!raw.id||seen.has(raw.id))throw Error('Отсутствует или повторяется competency ID');
           seen.add(raw.id);
-          const item={id:raw.id,title:raw.title||raw.name||raw.id,description:raw.description||'',diagnostic:raw.diagnostic||'',group};
+          const item={id:raw.id,title:raw.title||raw.name||'Навык программы',description:raw.description||'',diagnostic:raw.diagnostic||'',group};
           group.items.push(item);state.items.push(item);
         });
         return group;
@@ -295,9 +342,9 @@
       msg(els.status,state.items.length?'Выберите компетенцию. Уровни показаны из канонического mastery state.':'Структура кабинета готова. Каталог компетенций ещё не заполнен; учебные оценки отсутствуют.');
       renderLessonData(contract);renderRoute(contract);
     }catch(error){
-      msg(els.status,'Данные карты недоступны: '+error.message+'. Уровни не отображаются, чтобы не подменять отсутствие данных оценкой 0.');
+      msg(els.status,'Карта временно недоступна. Оценки скрыты до восстановления источника учебных данных.');
       els.status.setAttribute('data-error','true');
-      msg($('detailSummary'),'Проверьте Student Platform v2 contract, каталог и источник mastery.');
+      msg($('detailSummary'),'Данные о навыке временно недоступны.');
     }
   }
   start();
