@@ -145,8 +145,8 @@ test('monthly tile archive is data-driven, safe and reachable',()=>{
   for(const id of ['archiveRoot','archiveSearch','archiveMonths','archiveTotal','archiveMonthTotal','archiveTheme','archiveEmpty']){
     assert.ok(archivePage.includes('id="'+id+'"'),'archive page missing '+id);
   }
-  assert.ok(archivePage.includes('archive.js?v=20261016-1'));
-  assert.ok(archivePage.includes('archive.css?v=20261016-1'));
+  assert.ok(archivePage.includes('archive.js?v=20261016-2'));
+  assert.ok(archivePage.includes('archive.css?v=20261016-2'));
   assert.ok(archivePage.includes('href="index.html"'));
   const ids=[...archivePage.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
   assert.equal(new Set(ids).size,ids.length,'duplicate archive page IDs');
@@ -155,9 +155,13 @@ test('monthly tile archive is data-driven, safe and reachable',()=>{
   assert.ok(archiveJS.includes("document.createElement"),'construct tile text safely');
   assert.ok(archiveJS.includes("tile.hidden=!matched"),'search filters tile visibility');
   assert.ok(!archiveJS.includes('innerHTML'),'titles and topics must never inject HTML');
-  assert.ok(archiveCSS.includes('grid-auto-flow:dense'),'dense tile paving');
-  assert.ok(archiveCSS.includes('grid-template-columns:repeat(12,minmax(0,1fr))'));
-  assert.ok(archiveCSS.includes('.archive-tile--featured'));
+  assert.ok(archiveCSS.includes('grid-auto-flow:row'),'strict chronological reading order');
+  assert.ok(archiveCSS.includes('grid-template-columns:repeat(3,minmax(0,1fr))'));
+  assert.ok(archiveCSS.includes('grid-auto-rows:var(--archive-card-height,auto)'));
+  assert.ok(!archiveCSS.includes('-webkit-line-clamp'),'lesson titles and descriptions must be fully visible');
+  assert.ok(!archiveCSS.includes('grid-row:span'),'cards must not span multiple rows');
+  assert.ok(archiveJS.includes("card.className='archive-tile'"),'all lesson cards share one size');
+  assert.ok(archiveJS.includes("equalizeTiles()"),'shared card height recalculates responsively');
   assert.ok(archiveCSS.includes('@media(max-width:700px)'));
   assert.ok(archiveCSS.includes('prefers-reduced-motion'));
   assert.ok(LESSONS.length>=30,'all historical lessons remain accessible');
