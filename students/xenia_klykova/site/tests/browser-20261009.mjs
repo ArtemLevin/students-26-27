@@ -213,7 +213,7 @@ try{
   // Anna Bannova visual reference: open editorial layout instead of permanent desktop sidebar.
   assert.equal(await run("getComputedStyle(document.querySelector('#sidebar')).position"),'relative');
   assert.equal(await run("getComputedStyle(document.querySelector('.atlas-ledger .map-stats')).display"),'grid');
-  assert.equal(await run("document.querySelectorAll('a[href=\\\"archive.html\\\"]').length>0"),true);
+  assert.equal(await run("[...document.querySelectorAll('a')].some(a=>a.getAttribute('href')==='archive.html')"),true);
   assert.ok(await run("document.querySelector('.atlas-catalog').contains(document.querySelector('#topicIndex'))"));
   assert.equal(await run("getComputedStyle(document.querySelector('#atlasTitle')).fontFamily.includes('Georgia')"),true);
   assert.ok(await run("document.querySelectorAll('#radialMap .radial-cell').length>200"),'circular skills must load');
