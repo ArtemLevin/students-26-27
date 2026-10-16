@@ -310,3 +310,70 @@ test('16.10.26 lesson has the reviewed source exercises and publication anchors'
   assert.match(lab,/id="decayPlot"/);
   assert.match(lab,/Math\.pow\(2,-t\/10\)/);
 });
+
+
+test('16.10.26 lesson and interactive laboratory use structural MathML for displayed mathematics',()=>{
+  const lesson=read('16.10.26.html'),lab=read('16.10.26-lab.html');
+  for(const [name,source,minCount] of [['lesson',lesson,100],['lab',lab,30]]){
+    const staticMarkup=source.split('<script>')[0];
+    const maths=[...staticMarkup.matchAll(/<math\b[^>]*>[\s\S]*?<\/math>/g)];
+    assert.ok(maths.length>=minCount,name+': all mathematical expressions are MathML');
+    for(const [n,match] of maths.entries()){
+      const expression=match[0];
+      assert.match(expression,/^<math xmlns="http:\/\/www\.w3\.org\/1998\/Math\/MathML"/,name+' mathematical namespace '+n);
+      const stack=[];
+      for(const token of expression.match(/<\/?[a-zA-Z0-9-]+(?:\s[^<>]*?)?\/?>/g)||[]){
+        if(/^<\//.test(token)){
+          const tag=token.slice(2,-1),node=stack.pop();
+          assert.equal(node?.tag,tag,name+' matching tag '+n);
+          if(['msup','msub','mfrac','mroot'].includes(tag))assert.equal(node.children,2,name+' MathML '+tag+' arity '+n);
+          if(stack.length)stack.at(-1).children+=1;
+        }else{
+          const tag=token.match(/^<([a-zA-Z0-9-]+)/)?.[1];
+          assert.ok(tag,name+' MathML tag '+n);
+          if(token.endsWith('/>')){if(stack.length)stack.at(-1).children++}
+          else stack.push({tag,children:0});
+        }
+      }
+      assert.equal(stack.length,0,name+' closed MathML '+n);
+    }
+    const withoutMath=staticMarkup.replace(/<math\b[^>]*>[\s\S]*?<\/math>/g,'');
+    assert.doesNotMatch(withoutMath,/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻ᵗᐟᵀ₀₁₂₃√]|\^\(|\bx\s*=\s*[−\d]|\bm₀\b/i,name+' must not fall back to typographic formulas');
+    assert.doesNotMatch(source,/<sup\b/,'no HTML superscript');
+    const scripts=[...source.matchAll(/<script>([\s\S]*?)<\/script>/g)];
+    assert.equal(scripts.length,1,name+' inline script count');
+    assert.doesNotThrow(()=>new vm.Script(scripts[0][1],{filename:'16.10.26'+(name==='lab'?'-lab':'')+'.html'}),name+' JavaScript syntax');
+  }
+  const questions=[...lesson.matchAll(/<li class="task">([\s\S]*?)<\/li>/g)];
+  assert.equal(questions.length,10);
+  for(const [n,question] of questions.entries()){
+    assert.match(question[1],/<div class="math">[\s\S]*?<math\b/,'exercise '+(n+1)+' has semantic MathML');
+    assert.match(question[1],/<div class="answer-value"><math\b/,'answer '+(n+1)+' is MathML');
+  }
+  assert.match(lab,/function fillMath\(id,\.\.\.children\)/,'dynamic formula renderer exists');
+  assert.match(lab,/document\.createElementNS\(MATH_NS,tag\)/,'live mathematical notation uses MathML namespace');
+  assert.doesNotMatch(lab,/\$\('(probeFormula|decayFormula)'\)\.textContent/,'dynamic formulas never become plain text');
+  assert.doesNotMatch(lab,/\.innerHTML\s*=/,'no HTML-string math rendering');
+});
+
+test('16.10.26 laboratory MathML builder creates correct namespaces and nested exponent/fraction nodes',()=>{
+  const lab=read('16.10.26-lab.html');
+  const builder=lab.match(/const MATH_NS='http:\/\/www\.w3\.org\/1998\/Math\/MathML';[\s\S]*?const num=\(x,places=2\)[^;]+;/)?.[0];
+  assert.ok(builder,'live MathML builder source');
+  const document={
+    createElementNS(namespaceURI,tagName){return {namespaceURI,tagName,children:[],append(...parts){this.children.push(...parts)},replaceChildren(...parts){this.children=parts}}}
+  };
+  const fn=new vm.Script(builder+';({mathNode,mnum,mid,mop,mfrac,msup,mrow})')
+    .runInNewContext({document,Number,Math},{timeout:1000});
+  const nested=fn.mathNode(fn.mnum(40),fn.mop('·'),fn.msup(fn.mnum(2),fn.mfrac(fn.mrow(fn.mop('−'),fn.mid('t')),fn.mnum(10))));
+  const nodes=[];
+  function visit(node){nodes.push(node);for(const part of node.children||[])visit(part)}
+  visit(nested);
+  assert.equal(nested.tagName,'math');
+  assert.ok(nodes.some(node=>node.tagName==='msup'));
+  assert.ok(nodes.some(node=>node.tagName==='mfrac'));
+  assert.ok(nodes.some(node=>node.tagName==='mrow'));
+  assert.ok(nodes.every(node=>node.namespaceURI==='http://www.w3.org/1998/Math/MathML'));
+  assert.equal(10000*(0.5**3)-250,1000);
+  assert.equal(40*2**(-30/10),5);
+});
