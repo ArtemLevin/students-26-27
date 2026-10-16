@@ -101,6 +101,8 @@ try{
       assert.equal(await run("(()=>{const b=document.querySelector('#menuButton');b.click();return b.getAttribute('aria-expanded')==='true'&&!document.querySelector('#mobileMenu').hidden})()"),true,'menu open');
       assert.equal(await run("(()=>{document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));return document.querySelector('#mobileMenu').hidden&&document.querySelector('#menuButton').getAttribute('aria-expanded')==='false'})()"),true,'menu close');
     }
+    if(w===1440)await snapshot('editorial-home-desktop');
+    if(w===390)await snapshot('editorial-home-mobile');
     await navigate('index.html',w,h,true);
     await navigate('archive.html',w,h,false);
     await run("document.fonts.ready.then(()=>true)");
@@ -115,7 +117,7 @@ try{
     assert.equal(await run("(()=>{const x=document.querySelector('#archiveSearch');x.value='';x.dispatchEvent(new Event('input',{bubbles:true}));return document.querySelectorAll('.archive-tile:not([hidden])').length})()"),LESSONS.length,'Clear archive search');
     const theme=await run("(()=>{const before=document.body.dataset.theme||'dark';document.querySelector('#archiveTheme').click();return {before,after:document.body.dataset.theme||'dark'}})()");
     assert.notEqual(theme.before,theme.after,'Archive theme toggle must switch modes');
-    if(w===1440){await snapshot('editorial-home-archive-desktop');}
+    if(w===1440){await sleep(220);await snapshot('editorial-archive-desktop');}
     if(w===390){await snapshot('editorial-archive-mobile');}
   }
   await navigate('index.html',1440,900,false);
