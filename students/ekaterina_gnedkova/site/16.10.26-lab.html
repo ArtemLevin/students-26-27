@@ -29,7 +29,7 @@ get('first').textContent=fmt(table[0].paid);get('last').textContent=fmt(table.at
 const tbody=get('rows');tbody.replaceChildren();for(const x of table){const tr=document.createElement('tr');
 for(const v of [x.k,fmt(x.before),fmt(x.rate*100,1)+'%',fmt(x.I),fmt(x.owed),fmt(x.paid),fmt(x.after)])appendText('td',String(v),tr);tbody.appendChild(tr)}
 const bars=get('bars');bars.replaceChildren();const max=Math.max(...table.map(x=>x.paid))||1;
-for(const x of table){const cell=appendText('div','',bars);cell.className='bar-cell';const b=appendText('span','',cell);b.className='bar';b.style.height=Math.max(1,(x.paid/max)*100)+'%';const ib=appendText('span','',b);ib.className='interest-part';ib.style.height=fmt(100*x.I/x.paid,3)+'%';const label=appendText('span',String(x.k),cell);label.className='tick'}
+for(const x of table){const cell=appendText('div','',bars);cell.className='bar-cell';const b=appendText('span','',cell);b.className='bar';b.style.height=Math.max(1,(x.paid/max)*100)+'%';const ib=appendText('span','',b);ib.className='interest-part';ib.style.height=(100*x.I/x.paid).toFixed(3)+'%';const label=appendText('span',String(x.k),cell);label.className='tick'}
 bars.setAttribute('aria-label',table.map(x=>'Год '+x.k+': '+fmt(x.paid)+' млн').join('; '));
 get('verify').textContent='Контроль: сумма платежей '+fmt(total)+' млн = первоначальные '+fmt(S)+' млн + проценты '+fmt(interest)+' млн; конечный долг '+fmt(table.at(-1).after)+' млн.';
 if(mode==='variable'){get('insight').textContent='Особый случай: меняющаяся ставка';get('explain').textContent='Во втором году ставка выше. Из-за этого платёж может оказаться больше предыдущего, хотя часть основного долга остаётся равной. Формулу для общей переплаты при постоянной ставке применять нельзя.'}
