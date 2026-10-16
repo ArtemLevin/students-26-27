@@ -203,7 +203,7 @@
         const matchClass = state.query && matchSearch ? ' is-match' : '';
         const dimClass = dimmed ? ' is-dimmed' : '';
         const level = levelOf(item);
-        markup += `<path class="radial-cell${dimClass}${matchClass}" data-id="${esc(item.id)}" data-status="${status}" d="${arcPath(ringInner, ringOuter, sectorStart, sectorEnd)}" tabindex="0" role="button" aria-label="${esc(item.title)}. Раздел ${esc(group.title)}. ${statusLabel(status)}. Уровень ${level} из 4."><title>${esc(item.title)} · ${esc(group.title)} · ${statusLabel(status)}</title></path>`;
+        markup += `<path class="radial-cell${dimClass}${matchClass}" data-id="${esc(item.id)}" data-status="${status}" data-level="${level}" d="${arcPath(ringInner, ringOuter, sectorStart, sectorEnd)}" tabindex="0" role="button" aria-label="${esc(item.title)}. Раздел ${esc(group.title)}. ${statusLabel(status)}. Уровень ${level} из 4."><title>${esc(item.title)} · ${esc(group.title)} · ${statusLabel(status)}</title></path>`;
       });
 
       const labelPoint = polar(394, sectorStart + (sectorEnd - sectorStart) / 2);
@@ -267,6 +267,14 @@
     els.coverageStat.textContent = `${s.coverage}%`;
     els.repeatStat.textContent = s.repeat;
     els.totalStat.textContent = s.total;
+    // Editorial five-metric ledger: derive exclusively from the active student state.
+    const countAt = level => items.filter(item => levelOf(item) === level).length;
+    const confident = document.getElementById('confidentStat');
+    const progress = document.getElementById('processStat');
+    const mastered = document.getElementById('masteredStat');
+    if (confident) confident.textContent = String(countAt(3));
+    if (progress) progress.textContent = String(countAt(1) + countAt(2));
+    if (mastered) mastered.textContent = String(countAt(4));
     els.centerPercent.textContent = `${s.coverage}%`;
     els.centerTotal.textContent = `${s.total} тем`;
     els.sourceNote.textContent = meta.sourceNote;
@@ -435,6 +443,8 @@
   function applyTheme(theme) {
     const resolved = theme === 'dark' ? 'dark' : 'light';
     document.documentElement.dataset.theme = resolved;
+    // Keep the editorial reference palette and archive in sync with the legacy map.
+    document.body.dataset.theme = resolved;
     themeToggle.setAttribute('aria-pressed', String(resolved === 'dark'));
     themeToggle.title = resolved === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему';
   }
