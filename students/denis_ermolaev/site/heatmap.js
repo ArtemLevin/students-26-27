@@ -287,6 +287,10 @@
         return group;
       }).filter(g=>g.items.length);
       state.isReady=true;
+      const availableLevels=new Set(state.items.map(item=>level(item.id)===null?'unknown':String(level(item.id))));
+      els.filters.querySelectorAll('button[data-filter]').forEach(button=>{
+        if(button.dataset.filter!=='all')button.hidden=!availableLevels.has(button.dataset.filter);
+      });
       renderCatalog();renderMap();
       msg(els.status,state.items.length?'Выберите компетенцию. Уровни показаны из канонического mastery state.':'Структура кабинета готова. Каталог компетенций ещё не заполнен; учебные оценки отсутствуют.');
       renderLessonData(contract);renderRoute(contract);
