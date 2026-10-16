@@ -165,8 +165,28 @@ for(const g of d.groups)for(const item of g.items){
   }
 }
 
+// 15.10.26: new finance lesson evidence; no mastery increase without independent assessment.
+const oct15Evidence=new Map([
+["finance_02","principle"],
+["finance_03","table"],
+["finance_09","contributions"],
+["finance_10","rates"],
+["finance_12","unknowns"]
+]);
+for(const group of d.groups)for(const item of group.items){
+  const anchor=oct15Evidence.get(item.id);
+  if(!anchor)continue;
+  item.evidence=Array.isArray(item.evidence)?item.evidence:[];
+  if(!item.evidence.some(entry=>entry.date==="15.10.26")){
+    item.evidence.push({
+      date:"15.10.26",
+      text:"Навык разбирался или практиковался на занятии по вкладам; уровень самостоятельного освоения отдельно не повышался.",
+      href:"15.10.26.html#"+anchor
+    });
+  }
+}
 const stablePrefix="matvey_gorbachev-ege-profile-math";try{const suffixes=["-competency-map","-repeat","-theme"],legacyPrefixes=["matvey_gorbachev-ege-profile-math-20260927","matvey_gorbachev-ege-profile-math-20260924","matvey_gorbachev-ege-profile-math-20260920","matvey_gorbachev-ege-profile-math-20260917"];for(const suffix of suffixes){const stableKey=stablePrefix+suffix;if(localStorage.getItem(stableKey)==null){for(const legacy of legacyPrefixes){const value=localStorage.getItem(legacy+suffix);if(value!=null){localStorage.setItem(stableKey,value);break}}}}}catch(e){}
-d.student.name="Матвей Горбачев";d.updated="08.10.2026";d.storagePrefix=stablePrefix;d.nextAfterBaseline="functions_09";d.materials=[{date:"13.09.26",title:"Алгебраическая база и степени",pdf:"../pdf_docs/13.09.26.pdf",tex:"../tex_docs/13.09.26.tex"}]})();
+d.student.name="Матвей Горбачев";d.updated="15.10.2026";d.storagePrefix=stablePrefix;d.nextAfterBaseline="functions_09";d.materials=[{date:"13.09.26",title:"Алгебраическая база и степени",pdf:"../pdf_docs/13.09.26.pdf",tex:"../tex_docs/13.09.26.tex"}]})();
 
 (() => {
   "use strict";
@@ -189,7 +209,7 @@ d.student.name="Матвей Горбачев";d.updated="08.10.2026";d.storageP
   }
   window.STUDENT_MASTERY_AUTHORITY={
     version:1,
-    basis:"Repository-authored baseline levels after ambiguity-checked lesson overlays through 08.10 (08.10 is evidence-only).",
+    basis:"Repository-authored baseline levels after ambiguity-checked lesson overlays through 15.10 (08.10 and 15.10 are evidence-only).",
     titleMappingCount:55,
     levels
   };
