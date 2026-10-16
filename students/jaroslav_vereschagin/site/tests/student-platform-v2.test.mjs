@@ -61,3 +61,44 @@ test('interval lab renders fixed and changing values via MathML',()=>{
   assert.doesNotMatch(html,/getElementById\('(?:formula|answer)'\)\.textContent/);
   assert.match(html,/Math\/MathML/,'built-in MathML markup is required');
 });
+
+test('editorial navigator retains the existing map contract',()=>{
+  const home=fs.readFileSync(path.join(siteDir,'index.html'),'utf8');
+  const previousIds=['radialMap','topicIndex','mapStatus','catalogMatchCount','topicDialog',
+    'focusHeading','focusOpen','repeatToggle','dialogMaterial','themeToggle','resetMap','topicSearch'];
+  for(const id of previousIds)assert.match(home,new RegExp('id="'+id+'"'),id+' must be preserved');
+  for(const id of ['evaluatedCount','confidentCount','processCount','masteredCount',
+    'menuButton','primaryNav','lessonOutcomes'])assert.match(home,new RegExp('id="'+id+'"'));
+  assert.match(home,/href="archive\.html" class="editorial-archive-link"/);
+  assert.match(home,/data-atlas-composition="archive"/);
+  assert.doesNotMatch(home,/Ксения|Клыкова|xenia_klykova/);
+  assert.match(home,/Лёвин Артём Александрович эксклюзивно для Ярослава Верещагина/);
+});
+
+test('archive uses only this student registry and preserves full-length tiles',()=>{
+  const directory=siteDir;
+  const html=fs.readFileSync(path.join(directory,'archive.html'),'utf8');
+  const script=fs.readFileSync(path.join(directory,'archive.js'),'utf8');
+  const css=fs.readFileSync(path.join(directory,'archive.css'),'utf8');
+  assert.match(html,/<h1 id="archiveTitle">Архив/);
+  assert.match(script,/import \{LESSONS as PUBLISHED\} from '\.\/lesson-registry\.js'/);
+  assert.match(script,/groupLessonsByMonth/);
+  assert.match(script,/sort\(\(a,b\)=>b\.date\.localeCompare\(a\.date\)\)/);
+  assert.match(script,/equalizeTiles/);
+  assert.match(css,/grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+  assert.match(css,/grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(css,/grid-template-columns:minmax\(0,1fr\)/);
+  assert.doesNotMatch(css,/webkit-line-clamp|line-clamp/);
+  assert.doesNotMatch(html+script,/Ксения|Клыкова|xenia_klykova/);
+});
+
+test('new editorial scripts never rewrite student mastery or learning records',()=>{
+  const shell=fs.readFileSync(path.join(siteDir,'dashboard-editorial.js'),'utf8');
+  const logic=fs.readFileSync(path.join(siteDir,'competency-map.js'),'utf8');
+  assert.match(shell,/MutationObserver\(updateStats\)/);
+  assert.match(shell,/data-level/);
+  assert.match(shell,/import\('\.\/lesson-registry\.js'\)/);
+  assert.match(logic,/LEVELS_KEY/);
+  assert.match(logic,/REPEAT_KEY/);
+  assert.doesNotMatch(shell,/localStorage\.setItem|fetch\(.+method:.+POST/);
+});
