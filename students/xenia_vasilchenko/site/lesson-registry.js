@@ -5,6 +5,119 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-15",
+  "ktpRefs": [],
+  "href": "15.10.26.html",
+  "title": "Дроби, уравнения и текстовые задачи",
+  "navTitle": "Дроби, уравнения и текстовые задачи",
+  "navSubtitle": "Удобные вычисления с дробями, НОД и НОК, уравнения, математический язык, периметр, урожайность и движение по реке. 10 заданий для самостоятельной тренировки.",
+  "summary": "Удобные вычисления с дробями, НОД и НОК, уравнения, математический язык, периметр, урожайность и движение по реке. 10 заданий для самостоятельной тренировки.",
+  "topics": [
+    "Удобные вычисления и действия со скобками",
+    "Десятичные и смешанные дроби",
+    "Нахождение НОК и НОД",
+    "Уравнения и математический язык",
+    "Текстовые задачи: периметр, урожайность, движение по реке"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "frac_ops_03",
+      "evidenceAnchor": "smart",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_13",
+      "evidenceAnchor": "smart",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_base_05",
+      "evidenceAnchor": "decimal",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_base_11",
+      "evidenceAnchor": "decimal",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_07",
+      "evidenceAnchor": "decimal",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "div_19",
+      "evidenceAnchor": "factors",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "div_20",
+      "evidenceAnchor": "factors",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "div_21",
+      "evidenceAnchor": "factors",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_03",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_04",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_05",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_06",
+      "evidenceAnchor": "equations",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "eq_07",
+      "evidenceAnchor": "equations",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "eq_08",
+      "evidenceAnchor": "equations",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "word_02",
+      "evidenceAnchor": "stories",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_08",
+      "evidenceAnchor": "stories",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "units_06",
+      "evidenceAnchor": "stories",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "word_16",
+      "evidenceAnchor": "stories",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "15.10.26.html",
+    "pdf": "../pdf_docs/15.10.26.pdf",
+    "tex": "../tex_docs/15.10.26.tex"
+  }
+},
+{
   "date": "2026-10-13",
   "ktpRefs": [],
   "href": "13.10.26.html",
