@@ -107,5 +107,5 @@ try{
  try{ws?.close();}catch(_){}
  child.kill();
  server.close();
- fs.rmSync(profile,{recursive:true,force:true});
+ try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:10,retryDelay:120});}catch(cleanupError){console.warn('Chromium temporary profile cleanup:',cleanupError.message);}
 }
