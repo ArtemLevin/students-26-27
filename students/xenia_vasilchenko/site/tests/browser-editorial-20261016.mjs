@@ -112,8 +112,8 @@ try{
     assert.equal(layout.root,'false','Archive has not loaded '+JSON.stringify(layout));
     assert.equal(await run("(()=>{const x=document.querySelector('#archiveSearch');x.value='НОД';x.dispatchEvent(new Event('input',{bubbles:true}));return document.querySelectorAll('.archive-tile:not([hidden])').length>0&&document.querySelectorAll('.archive-tile[hidden]').length>0})()"),true,'Archive search filter');
     assert.equal(await run("(()=>{const x=document.querySelector('#archiveSearch');x.value='';x.dispatchEvent(new Event('input',{bubbles:true}));return document.querySelectorAll('.archive-tile:not([hidden])').length})()"),11,'Clear archive search');
-    const theme=await run("(()=>{document.querySelector('#archiveTheme').click();return document.body.dataset.theme||'dark'})()");
-    assert.equal(theme,'dark','Archive dark mode toggle');
+    const theme=await run("(()=>{const before=document.body.dataset.theme||'dark';document.querySelector('#archiveTheme').click();return {before,after:document.body.dataset.theme||'dark'}})()");
+    assert.notEqual(theme.before,theme.after,'Archive theme toggle must switch modes');
     if(w===1440){await snapshot('editorial-home-archive-desktop');}
     if(w===390){await snapshot('editorial-archive-mobile');}
   }
