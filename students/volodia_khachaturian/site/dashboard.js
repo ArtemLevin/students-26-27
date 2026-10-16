@@ -1,4 +1,4 @@
-import {LESSONS} from './lesson-registry.js?v=20261010';
+import {LESSONS} from './lesson-registry.js?v=20261016';
 import {initStudentDashboard} from '../../../shared/student-dashboard/dashboard-core.js';
 import {PRACTICE_CONFIG} from './practice-config.js';
 initStudentDashboard({lessons:LESSONS,themeKey:'volodia-dashboard-theme-v1',summaryEvent:'volodia:competence-summary'});
