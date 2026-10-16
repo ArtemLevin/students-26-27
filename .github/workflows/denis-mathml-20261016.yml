@@ -1,0 +1,32 @@
+name: Denis October 16 native MathML
+on:
+  pull_request:
+    paths:
+      - 'students/denis_ermolaev/site/16.10.26.html'
+      - 'students/denis_ermolaev/site/16.10.26-lab.html'
+      - 'students/denis_ermolaev/site/tests/*mathml-20261016*'
+      - '.github/workflows/denis-mathml-20261016.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'students/denis_ermolaev/site/16.10.26.html'
+      - 'students/denis_ermolaev/site/16.10.26-lab.html'
+      - 'students/denis_ermolaev/site/tests/*mathml-20261016*'
+      - '.github/workflows/denis-mathml-20261016.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mathml:
+    name: Semantic MathML / browser QA
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Static semantic MathML regression
+        run: node --test students/denis_ermolaev/site/tests/mathml-20261016.test.mjs
+      - name: Chrome layout, light/dark, graph mode checks
+        run: node students/denis_ermolaev/site/tests/browser-mathml-20261016.mjs
