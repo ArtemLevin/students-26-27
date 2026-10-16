@@ -285,8 +285,10 @@
       const topics=(lesson.topics||[]).filter(x=>typeof x==='string'&&x.trim());
       if(topics.length){const host=line(root,'div',undefined,'lesson-topics');for(const topic of topics)line(host,'span',topic);}
       if(typeof lesson.href==='string'&&/^[a-zA-Z0-9._-]+\.html$/.test(lesson.href)){
-        const link=line(root,'a','Открыть занятие ↗','lesson-cta');
-        link.href=lesson.href;
+        try{
+          const exists=await fetch(new URL(lesson.href,location.href),{method:'HEAD'});
+          if(exists.ok){const link=line(root,'a','Открыть занятие ↗','lesson-cta');link.href=lesson.href;}
+        }catch(_){}
       }
       line(result,'p','Результаты занятия','status-title');
       line(result,'p','Освоение навыков отображается на карте только после подтверждённой оценки.');
@@ -339,7 +341,7 @@
         if(button.dataset.filter!=='all')button.hidden=!availableLevels.has(button.dataset.filter);
       });
       renderCatalog();renderMap();
-      msg(els.status,state.items.length?'Выберите компетенцию. Уровни показаны из канонического mastery state.':'Структура кабинета готова. Каталог компетенций ещё не заполнен; учебные оценки отсутствуют.');
+      msg(els.status,state.items.length?'Выберите навык на карте или в индексе. Оценки появляются после проверки.':'Каталог пока не опубликован. Уровни освоения отсутствуют.');
       renderLessonData(contract);renderRoute(contract);
     }catch(error){
       msg(els.status,'Карта временно недоступна. Оценки скрыты до восстановления источника учебных данных.');
