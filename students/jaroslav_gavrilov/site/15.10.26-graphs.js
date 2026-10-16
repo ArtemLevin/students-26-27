@@ -35,7 +35,7 @@
     const s=schemes[kind];if(!svg||!s)return;
     const a=override&&Number.isFinite(override.a)?override.a:s.a;
     const b=override&&Number.isFinite(override.b)?override.b:s.b;
-    const W=720,H=360,L=64,R=22,T=19,B=49,w=W-L-R,h=H-T-B;
+    const W=720,H=360,L=78,R=42,T=19,B=49,w=W-L-R,h=H-T-B;
     const X=(x)=>L+(x-s.domain[0])/(s.domain[1]-s.domain[0])*w;
     const minX=s.domain[0],maxX=s.domain[1];
     let minY=s.yrange[0],maxY=s.yrange[1];
@@ -50,21 +50,33 @@
     svg.append(el('title',{},s.name+' — график по координатам и формуле'));
     const defs=el('defs'),clip=el('clipPath',{id:'clip-'+svg.id});
     clip.append(el('rect',{x:L,y:T,width:w,height:h}));defs.append(clip);svg.append(defs);
+
     svg.append(el('rect',{x:L,y:T,width:w,height:h,fill:'var(--plot-paper)',stroke:'var(--plot-border)'}));
+    // Native MathML inside SVG foreignObject: axis positions stay on the exact computed grid.
+    const mathAt=(expression,x,y,width,height,align='center',cls='axis-math')=>{
+      const fo=el('foreignObject',{x,y,width,height});
+      const holder=document.createElementNS('http://www.w3.org/1999/xhtml','div');
+      holder.setAttribute('class',cls);
+      holder.style.cssText='width:100%;height:100%;display:flex;align-items:center;justify-content:'+
+        (align==='end'?'flex-end':align==='start'?'flex-start':'center')+
+        ';white-space:nowrap;color:var(--ink);font:12px system-ui,Arial,sans-serif';
+      holder.innerHTML=window.JaroslavMath.markup(expression);
+      fo.append(holder);svg.append(fo);
+    };
     const grid=el('g',{stroke:'var(--plot-grid)','stroke-width':'1'});
     for(const [x,label] of s.xticks){
       const px=X(x);grid.append(el('line',{x1:px,y1:T,x2:px,y2:T+h}));
-      svg.append(el('text',{x:px,y:H-22,'text-anchor':'middle',class:'axis-text'},label));
+      mathAt(label,px-37,H-35,74,23);
     }
     for(const y of s.yticks){
       const py=Y(y);grid.append(el('line',{x1:L,y1:py,x2:W-R,y2:py}));
-      svg.append(el('text',{x:L-12,y:py+4,'text-anchor':'end',class:'axis-text'},String(y).replace('-','−')));
+      mathAt(String(y).replace('-','−'),L-62,py-12,49,24,'end');
     }
     svg.append(grid);
     if(minY<0&&maxY>0)svg.append(el('line',{x1:L,y1:Y(0),x2:W-R,y2:Y(0),stroke:'var(--plot-axis)','stroke-width':'1.8'}));
     if(minX<0&&maxX>0)svg.append(el('line',{x1:X(0),y1:T,x2:X(0),y2:T+h,stroke:'var(--plot-axis)','stroke-width':'1.8'}));
-    svg.append(el('text',{x:W-R-4,y:H-4,'text-anchor':'end',class:'axis-text'},'x'));
-    svg.append(el('text',{x:L-25,y:T+8,'text-anchor':'middle',class:'axis-text'},'y'));
+    mathAt('x',W-R-20,H-18,24,18);
+    mathAt('y',L-49,T-7,24,18);
     const plot=el('g',{'clip-path':'url(#clip-'+svg.id+')'});
     function trace(fn,color){
       let d='',connected=false,lastY=0;
@@ -83,18 +95,18 @@
     trace(x=>s.fn(x,a,b),'var(--plot-primary)');
     if(s.second)trace(s.second,'var(--plot-secondary)');
     if(s.asymptotes&&Math.abs(a)>1e-9)for(const x of s.asymptotes)
-      plot.append(el('line',{x1:X(x),y1:T,x2:X(x),y2:T+h,stroke:'var(--plot-asymptote)','stroke-width':1.8,'stroke-dasharray':'8 5'}));
+      plot.append(el('line',{x1:X(x),y1:T,x2:X(x),y2:T+h,stroke:'var(--plot-asymptote, var(--plot-secondary))','stroke-width':1.8,'stroke-dasharray':'8 5'}));
     svg.append(plot);
     if(!(override&&override.hidePoints)){
       for(const p of s.points){
         const val=s.second?p.y:s.fn(p.x,a,b),cx=X(p.x),cy=Y(val);
         if(val<minY||val>maxY)continue;
         svg.append(el('circle',{cx,cy,r:5.5,fill:'var(--plot-point)',stroke:'var(--plot-paper)','stroke-width':2}));
-        let tx=cx+9,ty=cy-11,anchor='start';
-        if(cx>W-125){tx=cx-9;anchor='end';}
-        if(cy<T+25)ty=cy+22;
+        const right=cx<W-185;
+        const px=right?cx+8:cx-190;
+        const py=cy<T+32?cy+8:cy-32;
         const label=p.label+' ('+formatX(p.x)+'; '+formatNumber(val)+')';
-        svg.append(el('text',{x:tx,y:ty,'text-anchor':anchor,class:'point-text'},label));
+        mathAt(label,px,py,182,24,right?'start':'end','point-math');
       }
     }
   }
