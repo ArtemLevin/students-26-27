@@ -93,7 +93,7 @@ try{
     fs.writeFileSync(path.join(screenshotDir,filename+'.png'),Buffer.from(shot.data,'base64'));
   }
   for(const [w,h] of [[320,760],[390,844],[768,1024],[1024,768],[1440,900]]){
-    for(const name of ['09.10.26.html','index.html']){
+    for(const name of ['09.10.26.html','index.html','16.10.26.html','16.10.26-lab.html']){
       await navigate(name,w,h,false);
       await navigate(name,w,h,true);
     }
@@ -126,7 +126,7 @@ try{
   await snapshot('sofya-lesson-mobile-dark');
   await navigate('index.html',390,844);
   await sleep(400);
-  assert.equal(await run("document.querySelector('#lesson-title')?.textContent.includes('Графики, неравенства')"),true,'New lesson not shown in dashboard');
+  assert.equal(await run("document.querySelector('#lesson-title')?.textContent.includes('Теорема Менелая')"),true,'New lesson not shown in dashboard');
   await snapshot('sofya-index-mobile');
   await navigate('index.html',1440,900);
   await sleep(400);
@@ -164,6 +164,22 @@ try{
   assert.equal(await run("document.querySelector('#coordinates math')?.namespaceURI"),'http://www.w3.org/1998/Math/MathML','Dynamic coordinate pair must be MathML');
   assert.equal(await run("(()=>{document.querySelector('input[name=\"guess\"][value=\"none\"]').checked=true;document.querySelector('#checkPrediction').click();return document.querySelectorAll('#feedback math mfrac').length})()"),2,'Prediction feedback must use MathML fractions');
   await snapshot('sofya-20261011-lab-desktop');
+
+  // 16 October: newly published material, teaching geometry and live Menelaus invariant.
+  await navigate('16.10.26.html',390,844);
+  assert.equal(await run("document.querySelectorAll('.training li').length"),10,'October 16 training must contain 10 tasks');
+  assert.equal(await run("!!document.querySelector('#menelaus') && !!document.querySelector('#first') && !!document.querySelector('#second') && !!document.querySelector('#check')"),true,'October 16 evidence anchors missing');
+  await snapshot('sofya-20261016-lesson-mobile');
+  await navigate('16.10.26-lab.html',1440,900);
+  assert.equal(await run("document.querySelector('#answer').textContent.includes('2,00')"),true,'Default Menelaus example must return 2:1');
+  await run("document.querySelector('[data-a=\"0.6666666667\"]').click()");
+  const presetValue=await run("Number(document.querySelector('#answer').textContent.replace(',','.').split(' ')[0])");
+  assert.ok(Math.abs(presetValue-4.5)<0.01,'Exact 2:3 and 1:2 example must return 9:2');
+  const collinear=await run("(()=>{const pt=id=>{const el=document.querySelector(id);return [Number(el.getAttribute('cx')),Number(el.getAttribute('cy'))]};const k=pt('#kDot'),j=pt('#jDot'),n=pt('#nDot');return (j[0]-k[0])*(n[1]-k[1])-(j[1]-k[1])*(n[0]-k[0])})()");
+  assert.ok(Math.abs(collinear)<0.001,'Menelaus K, J, N must remain mathematically collinear');
+  await run("document.querySelector('#reset').click()");
+  assert.equal(await run("document.querySelector('#answer').textContent.includes('2,00')"),true,'Lab reset must restore first example');
+  await snapshot('sofya-20261016-menelaus-lab');
   assert.deepEqual(jsErrors,[],'JavaScript errors');
   assert.deepEqual(badRequests,[],'Network errors');
   console.log('Browser QA PASS: 5 viewports × 2 pages × 2 themes + interactive checks');

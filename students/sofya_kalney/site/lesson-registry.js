@@ -3,6 +3,69 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+    "date": "2026-10-16",
+    "ktpRefs": [],
+    "href": "16.10.26.html",
+    "title": "Теорема Менелая и отношения отрезков",
+    "navTitle": "Теорема Менелая и отношения отрезков",
+    "navSubtitle": "Отношения отрезков, вспомогательная параллельная, подобие и теорема Менелая: урок геометрии Софии Кальней от 16 октября 2026 года.",
+    "summary": "Отношения отрезков, вспомогательная параллельная, подобие и теорема Менелая: урок геометрии Софии Кальней от 16 октября 2026 года.",
+    "topics": [
+      "Отношения отрезков в треугольнике",
+      "Вспомогательная параллельная и подобие",
+      "Теорема Менелая"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "oge_23_2_1",
+        "evidenceAnchor": "menelaus",
+        "relation": "practiced",
+        "label": "Чтение чертежа с секущей и внешней точкой",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_23_2_2",
+        "evidenceAnchor": "menelaus",
+        "relation": "practiced",
+        "label": "Выбор теоремы Менелая",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_23_2_3",
+        "evidenceAnchor": "second",
+        "relation": "practiced",
+        "label": "Цепочка отношений в геометрической задаче",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_24_2_3",
+        "evidenceAnchor": "first",
+        "relation": "touched",
+        "label": "Дополнительная параллельная прямая",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_25_1_2",
+        "evidenceAnchor": "second",
+        "relation": "practiced",
+        "label": "Метрические соотношения отрезков",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "oge_23_2_4",
+        "evidenceAnchor": "check",
+        "relation": "touched",
+        "label": "Проверка порядка отношения",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "16.10.26.html",
+      "pdf": "../pdf_docs/16.10.26.pdf",
+      "lab": "16.10.26-lab.html"
+    }
+  },
+    {
     "date": "2026-10-11",
     "ktpRefs": [],
     "href": "11.10.26.html",
