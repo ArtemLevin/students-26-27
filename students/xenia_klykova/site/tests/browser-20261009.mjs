@@ -202,7 +202,7 @@ try{
   assert.equal(await run("document.querySelector('#latestLessonCta').getAttribute('href')"),'15.10.26.html');
   assert.equal(await run("document.querySelector('#latestPdfLink')===null"),true);
   assert.equal(await run("document.querySelector('#latestTexLink')===null"),true);
-  assert.equal(await run("document.querySelector('a[href=\\\"../chemistry/site/index.html\\\"]')===null"),true);
+  assert.equal(await run("[...document.querySelectorAll('a')].some(a=>a.getAttribute('href')==='../chemistry/site/index.html')"),false);
   assert.ok(await run("document.querySelector('#latestReviewLink')!==null"),'review link must remain');
   assert.ok(await run("document.querySelector('#latestLessonCta').getAttribute('href')==='15.10.26.html'"),'lesson materials are still available on the lesson page');
   assert.equal(await run("document.querySelector('#archivePageCta').getAttribute('href')"),'archive.html');
