@@ -232,10 +232,19 @@ try{
   assert.equal(await run("document.querySelectorAll('.archive-month').length"),4);
   assert.equal(await run("document.querySelectorAll('.archive-tile').length"),30);
   assert.deepEqual(await run("[...document.querySelectorAll('.archive-month h2')].map(x=>x.textContent)"),['октябрь 2026','сентябрь 2026','август 2026','июль 2026']);
-  assert.equal(await run("document.querySelectorAll('.archive-tile--featured').length"),4);
+  assert.equal(await run("document.querySelectorAll('.archive-tile').length"),30);
   assert.equal(await run("document.querySelector('.archive-tile-main').getAttribute('href')"),'15.10.26.html');
-  assert.equal(await run("getComputedStyle(document.querySelector('.archive-month-grid')).gridTemplateColumns.split(' ').length"),12);
+  assert.equal(await run("getComputedStyle(document.querySelector('.archive-month-grid')).gridTemplateColumns.split(' ').length"),3);
   assert.ok(await run("document.querySelectorAll('.archive-resource').length>=10"),'lesson-specific resource links');
+  await sleep(250);
+  // All tiles must have matching dimensions, natural text flow and newest-first order.
+  const desktopTiles=await run("(()=>{const tiles=[...document.querySelectorAll('.archive-tile')];const rects=tiles.map(t=>t.getBoundingClientRect());const clipped=tiles.filter(t=>{const title=t.querySelector('.archive-tile-title'),sub=t.querySelector('.archive-tile-subtitle');return t.scrollHeight>t.clientHeight+2||title.scrollHeight>title.clientHeight+2||sub.scrollHeight>sub.clientHeight+2});return {heightSpread:Math.max(...rects.map(x=>x.height))-Math.min(...rects.map(x=>x.height)),widthSpread:Math.max(...rects.map(x=>x.width))-Math.min(...rects.map(x=>x.width)),clipped:clipped.length,clamped:[...document.querySelectorAll('.archive-tile-title,.archive-tile-subtitle')].filter(x=>getComputedStyle(x).webkitLineClamp!=='none').length,monthDates:[...document.querySelectorAll('.archive-month')].map(m=>[...m.querySelectorAll('.archive-tile-date')].map(x=>x.dateTime))}})()");
+  assert.ok(desktopTiles.heightSpread<=2,'all months must use equal-height cards: '+JSON.stringify(desktopTiles));
+  assert.ok(desktopTiles.widthSpread<=2,'all cards must have equal width: '+JSON.stringify(desktopTiles));
+  assert.equal(desktopTiles.clipped,0,'no clipped card/title/description');
+  assert.equal(desktopTiles.clamped,0,'no line clamp on card copy');
+  for(const month of desktopTiles.monthDates)assert.deepEqual(month,[...month].sort().reverse(),'chronological order within each month');
+
   assert.equal(await run("(()=>{let x=document.querySelector('#archiveSearch');x.value='Делимость';x.dispatchEvent(new Event('input',{bubbles:true}));return [...document.querySelectorAll('.archive-tile')].filter(c=>!c.hidden).length})()")>0,true);
   assert.equal(await run("(()=>{let x=document.querySelector('#archiveSearch');x.value='невозможный_поисковый_запрос';x.dispatchEvent(new Event('input',{bubbles:true}));return [...document.querySelectorAll('.archive-tile')].filter(c=>!c.hidden).length})()"),0);
   assert.equal(await run("document.querySelector('#archiveEmpty').hidden"),false);
@@ -243,6 +252,12 @@ try{
   assert.equal(await run("document.querySelector('#archiveEmpty').hidden"),true);
   await navigate('archive.html',390,844,false);
   assert.equal(await run("getComputedStyle(document.querySelector('.archive-month-grid')).gridTemplateColumns.split(' ').length"),1);
+  await sleep(250);
+  const mobileTiles=await run("(()=>{const tiles=[...document.querySelectorAll('.archive-tile')],rects=tiles.map(x=>x.getBoundingClientRect());return {heights:Math.max(...rects.map(x=>x.height))-Math.min(...rects.map(x=>x.height)),widths:Math.max(...rects.map(x=>x.width))-Math.min(...rects.map(x=>x.width)),clipped:tiles.filter(t=>t.scrollHeight>t.clientHeight+2||[...t.querySelectorAll('.archive-tile-title,.archive-tile-subtitle')].some(x=>x.scrollHeight>x.clientHeight+2)).length}})()");
+  assert.ok(mobileTiles.heights<=2,'mobile tiles must be equally tall: '+JSON.stringify(mobileTiles));
+  assert.ok(mobileTiles.widths<=2,'mobile tiles must be equally wide: '+JSON.stringify(mobileTiles));
+  assert.equal(mobileTiles.clipped,0,'no clipped copy on mobile');
+
   assert.equal(await run("document.querySelectorAll('.archive-tile').length"),30);
   assert.equal(await run("document.querySelector('#archiveTheme').getAttribute('aria-label')"),'Включить тёмную тему');
   assert.equal(await run("(()=>{document.querySelector('#archiveTheme').click();return document.body.hasAttribute('data-theme')})()"),false);
