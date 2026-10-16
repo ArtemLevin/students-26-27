@@ -267,7 +267,7 @@
     try{
       const module=await moduleData(contract.lessons.registry);
       const lessons=Array.isArray(module.LESSONS)?module.LESSONS:[];
-      state.lessons=[...lessons].filter(item=>/^\\d{4}-\\d{2}-\\d{2}$/.test(String(item.date||'')))
+      state.lessons=[...lessons].filter(item=>/^\d{4}-\d{2}-\d{2}$/.test(String(item.date||'')))
         .sort((a,b)=>b.date.localeCompare(a.date));
       root.replaceChildren();result.replaceChildren();
       if(!state.lessons.length){
@@ -284,14 +284,14 @@
       if(lesson.summary||lesson.navSubtitle)line(root,'p',lesson.summary||lesson.navSubtitle,'lead');
       const topics=(lesson.topics||[]).filter(x=>typeof x==='string'&&x.trim());
       if(topics.length){const host=line(root,'div',undefined,'lesson-topics');for(const topic of topics)line(host,'span',topic);}
-      if(typeof lesson.href==='string'&&/^[a-zA-Z0-9._-]+\\.html$/.test(lesson.href)){
+      if(typeof lesson.href==='string'&&/^[a-zA-Z0-9._-]+\.html$/.test(lesson.href)){
         const link=line(root,'a','Открыть занятие ↗','lesson-cta');
         link.href=lesson.href;
       }
       line(result,'p','Результаты занятия','status-title');
       line(result,'p','Освоение навыков отображается на карте только после подтверждённой оценки.');
       const review=(lesson.materials||{}).review;
-      if(typeof review==='string'&&/^[a-zA-Z0-9._/-]+\\.(?:html|pdf)$/.test(review)&&!review.split('/').includes('..')){
+      if(typeof review==='string'&&/^[a-zA-Z0-9._/-]+\.(?:html|pdf)$/.test(review)&&!review.split('/').includes('..')){
         const link=line(result,'a','Комментарий преподавателя ↗');link.href=review;
       }
     }catch(_){
