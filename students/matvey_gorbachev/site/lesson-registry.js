@@ -5,6 +5,55 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-15",
+    "ktpRefs": [],
+    "href": "15.10.26.html",
+    "title": "Вклады. Часть 2",
+    "navTitle": "Вклады. Часть 2",
+    "navSubtitle": "Матвей Горбачёв. Вклады. Часть 2: сложные проценты, таблица капитализации, пополнения и снятия, неизвестные ставка и срок, переменные ставки. Путь А — 10 задач.",
+    "summary": "Матвей Горбачёв. Вклады. Часть 2: сложные проценты, таблица капитализации, пополнения и снятия, неизвестные ставка и срок, переменные ставки. Путь А — 10 задач.",
+    "topics": [
+      "сложные проценты и капитализация вклада",
+      "таблица расчёта по годам",
+      "дополнительные взносы и снятия",
+      "нахождение неизвестной суммы, ставки и срока",
+      "вклад с переменной процентной ставкой"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "finance_02",
+        "evidenceAnchor": "principle",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "finance_03",
+        "evidenceAnchor": "table",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "finance_09",
+        "evidenceAnchor": "contributions",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "finance_10",
+        "evidenceAnchor": "rates",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "finance_12",
+        "evidenceAnchor": "unknowns",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "15.10.26.html",
+      "pdf": "../pdf_docs/15.10.26.pdf",
+      "tex": "../tex_docs/15.10.26.tex",
+      "lab": "15.10.26-lab.html"
+    }
+  },
+  {
   "date": "2026-10-11",
   "ktpRefs": [],
   "href": "11.10.26.html",
