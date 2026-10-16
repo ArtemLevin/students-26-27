@@ -48,6 +48,18 @@ try{
   assert.ok(basic.map>200,'competency map not populated '+width);
   assert.ok(basic.focus,'focus control missing '+width);
   assert.ok(basic.lesson==='Вклады. Часть 2','latest lesson wrong '+width);
+  if(width===1440){
+    const cell=page.locator('#competencyMap .radial-cell').first();
+    await cell.focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#topicDialog').evaluate(d=>d.open),true,'competency dialog did not open');
+    await page.locator('#dialogClose').click();
+    assert.equal(await page.locator('#topicDialog').evaluate(d=>d.open),false,'competency dialog did not close');
+    const repeatFilter=page.locator('.filter[data-filter="repeat"]');
+    await repeatFilter.click();
+    assert.equal(await repeatFilter.getAttribute('aria-pressed'),'true','repeat filter not selected');
+    await page.locator('.filter[data-filter="all"]').click();
+  }
   if(width<=760){
     const button=page.locator('#menuButton');await button.click();
     assert.equal(await button.getAttribute('aria-expanded'),'true','menu did not open '+width);
