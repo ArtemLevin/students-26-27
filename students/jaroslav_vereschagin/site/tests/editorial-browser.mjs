@@ -136,5 +136,6 @@ try{
   console.log('Jaroslav editorial QA passed: all five viewport sizes, tiles, search, mobile nav, themes and map');
 }finally{
   try{ws?.close()}catch(_){}
-  processChrome.kill('SIGTERM');server.close();fs.rmSync(profile,{recursive:true,force:true});
+  processChrome.kill('SIGTERM');server.close();
+  try { fs.rmSync(profile,{recursive:true,force:true,maxRetries:5,retryDelay:200}); } catch (_) { /* Chrome may still own its profile. */ }
 }
