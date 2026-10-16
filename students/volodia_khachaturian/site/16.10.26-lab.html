@@ -48,32 +48,91 @@ h1{font:700 clamp(35px,5vw,60px)/1.1 Georgia,serif;letter-spacing:-.025em;margin
 <footer class="footer">Лёвин Артём Александрович эксклюзивно для Володи Хачатуряна · 16.10.2026</footer></main>
 <script>
 (function(){'use strict';
-var $=function(id){return document.getElementById(id)},data={mass:3,force:6,initial:0,time:4},saved={mass:3,force:6},fmt=function(n){return Number(n.toFixed(3)).toLocaleString('ru-RU')};
-function show(id,value){$(id).textContent=value}
-function calc(m,f){return f/m}
+const $=id=>document.getElementById(id);
+const data={mass:3,force:6,initial:0,time:4};
+let saved={mass:3,force:6};
+const fmt=n=>Number(n.toFixed(3)).toLocaleString('ru-RU');
+const mathNS='http://www.w3.org/1998/Math/MathML';
+const mi=x=>'<mi>'+x+'</mi>', mn=x=>'<mn>'+x+'</mn>', mo=x=>'<mo>'+x+'</mo>', mt=x=>'<mtext>'+x+'</mtext>';
+const row=(...nodes)=>'<mrow>'+nodes.join('')+'</mrow>';
+const sub=(a,b)=>'<msub>'+a+b+'</msub>';
+const sup=(a,b)=>'<msup>'+a+b+'</msup>';
+const frac=(a,b)=>'<mfrac>'+a+b+'</mfrac>';
+const eq=(a,b)=>row(a,mo('='),b);
+const aX=sub(mi('a'),mi('x')),fX=sub(mi('F'),mi('x')),v0X=sub(mi('v'),row(mn(0),mi('x')));
+const a1=sub(mi('a'),mn(1)),a2=sub(mi('a'),mn(2));
+const f1=sub(mi('F'),mn(1)),f2=sub(mi('F'),mn(2));
+const m1=sub(mi('m'),mn(1)),m2=sub(mi('m'),mn(2));
+const units={кг:mt('кг'),Н:mt('Н'),м:mt('м'),с:mt('с'),'м/с':frac(mt('м'),mt('с')),'м/с²':frac(mt('м'),sup(mt('с'),mn(2)))};
+const qty=(n,u)=>row(mn(fmt(n)),'<mspace width=".25em"/>',units[u]);
+const math=expression=>'<math xmlns="'+mathNS+'" display="inline">'+expression+'</math>';
+const setMath=(id,expression)=>{$(id).innerHTML=math(expression);};
+const acceleration=(mass,force)=>force/mass;
 function render(){
-var a=calc(data.mass,data.force),v=data.initial+a*data.time,x=data.initial*data.time+a*data.time*data.time/2;
-show('massOut',fmt(data.mass)+' кг');show('forceOut',fmt(data.force)+' Н');show('initialOut',fmt(data.initial)+' м/с');show('timeOut',fmt(data.time)+' с');
-show('aValue',fmt(a)+' м/с²');show('vValue',fmt(v)+' м/с');show('xValue',fmt(x)+' м');
-var start=data.initial,lo=Math.min(start,v,0),hi=Math.max(start,v,0),range=Math.max(2,hi-lo);
-var y=function(value){return 280-230*(value-lo)/range},y0=y(start),y1=y(v);
-$('zero').setAttribute('y1',y(0));$('zero').setAttribute('y2',y(0));
-$('curve').setAttribute('points','65,'+y0.toFixed(2)+' 620,'+y1.toFixed(2));$('point').setAttribute('cy',String(y1));
-$('vstart').setAttribute('y',String(Math.max(20,Math.min(314,y0+18))));$('vfinish').setAttribute('y',String(Math.max(20,Math.min(310,y1-11))));show('vstart',fmt(start));show('vfinish',fmt(v)+' м/с');
-show('explanation',data.force===0?'Равнодействующая равна нулю: ускорение отсутствует, проекция скорости постоянна.':'По второму закону Ньютона: aₓ = Fₓ/m = '+fmt(data.force)+' / '+fmt(data.mass)+' = '+fmt(a)+' м/с².');
-show('m1',fmt(saved.mass)+' кг');show('f1',fmt(saved.force)+' Н');show('ac1',fmt(calc(saved.mass,saved.force))+' м/с²');
-show('m2',fmt(data.mass)+' кг');show('f2',fmt(data.force)+' Н');show('ac2',fmt(a)+' м/с²');
-var a1=calc(saved.mass,saved.force);
-show('ratio',a1===0?'В первом состоянии ускорение равно нулю: отношение a₂/a₁ не определено.':'Отношение ускорений a₂/a₁ = '+fmt(a/a1)+'. Формула: (F₂/F₁)·(m₁/m₂), если F₁ ≠ 0.');
+  const a=acceleration(data.mass,data.force);
+  const v=data.initial+a*data.time;
+  const dx=data.initial*data.time+a*data.time*data.time/2;
+  setMath('massOut',qty(data.mass,'кг'));
+  setMath('forceOut',qty(data.force,'Н'));
+  setMath('initialOut',qty(data.initial,'м/с'));
+  setMath('timeOut',qty(data.time,'с'));
+  setMath('aValue',qty(a,'м/с²'));
+  setMath('vValue',qty(v,'м/с'));
+  setMath('xValue',qty(dx,'м'));
+  const start=data.initial,lo=Math.min(start,v,0),hi=Math.max(start,v,0),range=Math.max(2,hi-lo);
+  const y=value=>280-230*(value-lo)/range;
+  const y0=y(start),y1=y(v);
+  $('zero').setAttribute('y1',String(y(0)));
+  $('zero').setAttribute('y2',String(y(0)));
+  $('curve').setAttribute('points','65,'+y0.toFixed(2)+' 620,'+y1.toFixed(2));
+  $('point').setAttribute('cy',String(y1));
+  $('startLabel').setAttribute('y',String(Math.max(20,Math.min(284,y0+3))));
+  $('finishLabel').setAttribute('y',String(Math.max(15,Math.min(281,y1-24))));
+  $('startLabel').firstElementChild.innerHTML=math(mn(fmt(start)));
+  $('finishLabel').firstElementChild.innerHTML=math(qty(v,'м/с'));
+  if(data.force===0){
+    $('explanation').innerHTML='Равнодействующая равна нулю: '+math(eq(aX,mn(0)))+
+      '. Ускорение отсутствует, проекция скорости постоянна.';
+  }else{
+    $('explanation').innerHTML='По второму закону Ньютона: '+
+      math(eq(aX,eq(frac(fX,mi('m')),eq(frac(mn(fmt(data.force)),mn(fmt(data.mass))),qty(a,'м/с²')))))+
+      '.';
+  }
+  setMath('m1',qty(saved.mass,'кг'));setMath('f1',qty(saved.force,'Н'));
+  setMath('ac1',qty(acceleration(saved.mass,saved.force),'м/с²'));
+  setMath('m2',qty(data.mass,'кг'));setMath('f2',qty(data.force,'Н'));
+  setMath('ac2',qty(a,'м/с²'));
+  const first=acceleration(saved.mass,saved.force);
+  if(first===0){
+    $('ratio').innerHTML='В первом состоянии '+math(eq(a1,mn(0)))+
+      '. Отношение '+math(frac(a2,a1))+' не определено.';
+  }else{
+    // The result formula uses (F2/F1)×(m1/m2); it applies only when F1 ≠ 0.
+    const correct=eq(frac(a2,a1),row(frac(f2,f1),mo('·'),frac(m1,m2)));
+    $('ratio').innerHTML='Отношение ускорений '+
+      math(eq(frac(a2,a1),mn(fmt(a/first))))+'. Формула: '+math(correct)+
+      ', если '+math(row(f1,mo('≠'),mn(0)))+'.';
+  }
 }
-['mass','force','initial','time'].forEach(function(id){$(id).addEventListener('input',function(){data[id]=Number(this.value);render()})});
-function setFields(){['mass','force','initial','time'].forEach(function(id){$(id).value=String(data[id])});render()}
-$('reset').addEventListener('click',function(){Object.assign(data,{mass:3,force:6,initial:0,time:4});saved={mass:3,force:6};setFields()});
-$('snapshot').addEventListener('click',function(){saved={mass:data.mass,force:data.force};render()});
-$('caseEqual').addEventListener('click',function(){saved={mass:3,force:6};Object.assign(data,{mass:6,force:12});setFields()});
-$('caseQuad').addEventListener('click',function(){saved={mass:3,force:6};Object.assign(data,{mass:1.5,force:12});setFields()});
-$('caseZero').addEventListener('click',function(){Object.assign(data,{mass:3,force:0});setFields()});
-$('prediction').addEventListener('submit',function(e){e.preventDefault();var chosen=this.querySelector('input[name="guess"]:checked');if(!chosen)return;show('feedback',(chosen.value==='same'?'Верно. ':'Результат другой. ')+'При удвоении силы и массы a₂/a₁ = 2/2 = 1.');});
+for(const id of ['mass','force','initial','time']){
+  $(id).addEventListener('input',function(){data[id]=Number(this.value);render();});
+}
+function sync(){
+  for(const id of ['mass','force','initial','time'])$(id).value=String(data[id]);
+  render();
+}
+$('reset').addEventListener('click',()=>{Object.assign(data,{mass:3,force:6,initial:0,time:4});saved={mass:3,force:6};sync();});
+$('snapshot').addEventListener('click',()=>{saved={mass:data.mass,force:data.force};render();});
+$('caseEqual').addEventListener('click',()=>{saved={mass:3,force:6};Object.assign(data,{mass:6,force:12});sync();});
+$('caseQuad').addEventListener('click',()=>{saved={mass:3,force:6};Object.assign(data,{mass:1.5,force:12});sync();});
+$('caseZero').addEventListener('click',()=>{Object.assign(data,{mass:3,force:0});sync();});
+$('prediction').addEventListener('submit',function(event){
+  event.preventDefault();
+  const choice=this.querySelector('input[name="guess"]:checked');
+  if(!choice)return;
+  $('feedback').innerHTML=(choice.value==='same'?'Верно. ':'Результат другой. ')+
+    'При удвоении силы и массы '+math(eq(frac(a2,a1),eq(frac(mn(2),mn(2)),mn(1))))+'.';
+});
 render();
 })();
 </script></body></html>
