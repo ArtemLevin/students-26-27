@@ -1,0 +1,267 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\sfdefault}{cmss}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\geometry{left=19mm,right=19mm,top=21mm,bottom=20mm}
+\setlength{\headheight}{25pt}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=9pt,topsep=5pt}
+\setlist[itemize]{leftmargin=7mm,itemsep=3pt,topsep=4pt}
+\definecolor{accent}{HTML}{2A6F6B}
+\definecolor{darkaccent}{HTML}{174B48}
+\definecolor{textgray}{HTML}{2F3437}
+\definecolor{softgray}{HTML}{DCE8E6}
+\color{textgray}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Кредиты: дифференцированное погашение}
+\fancyhead[R]{\small 16.10.26}
+\fancyfoot[C]{\small \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{softgray}\leaders\hrule height \headrulewidth\hfill}}
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\fboxeq}[1]{\[\boxed{#1}\]}
+\newcommand{\mln}{\,\text{млн руб.}}
+\newcommand{\yr}{\,\text{год}}
+\newcommand{\yes}{\textcolor{darkaccent}{\textbf{да}}}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{27mm}
+{\Large\textcolor{accent}{\textbf{Чек-лист}}}\\[11mm]
+{\Huge\textbf{Кредитные задачи}}\\[8mm]
+{\Large\textbf{Дифференцированная схема погашения}}\\[5mm]
+{\large Таблица, формулы и ограничения}\\[22mm]
+{\large 16.10.26}\\[27mm]
+{\large Лёвин Артём Александрович}\\[4mm]
+{\large\textcolor{darkaccent}{эксклюзивно для Екатерины Гнедковой}}
+\end{center}
+\vfill
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent!60,line width=1.1pt]
+(-7,0) .. controls (-4.1,0.95) and (-1.3,-0.75) .. (1.45,0.18)
+.. controls (3.65,0.85) and (5.25,-0.5) .. (7,0.25);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{1. Как узнать дифференцированную схему}
+
+Главный признак: \key{основной долг уменьшается каждый год на одну и ту же сумму}. Если кредит $S$ взят на $n$ лет, ежегодно погашается $S/n$ основного долга. Начисленные за год проценты добавляются к этой сумме.
+
+Обозначения:
+\begin{itemize}
+\item $S$ --- первоначальная сумма кредита, $n$ --- число лет ($n\in\mathbb N$, $n\ge1$);
+\item $r$ --- годовая ставка, записанная в процентах, $p=r/100$ --- та же ставка в долях ($p\ge0$);
+\item $B_{k-1}$ --- остаток долга перед начислением процентов за год $k$;
+\item $I_k$ --- начисленные проценты, $P_k$ --- платёж, $B_k$ --- долг после платежа.
+\end{itemize}
+
+В начале каждого года вычисления идут в одном порядке:
+\[
+\underbrace{B_{k-1}}_{\text{начальный долг}}
+\longrightarrow\underbrace{B_{k-1}+I_k}_{\text{задолженность}}
+\longrightarrow\underbrace{B_k}_{\text{остаток после платежа}}.
+\]
+\key{Платёж} равен начисленной задолженности минус новый остаток. Для дифференцированной схемы его удобно представлять суммой $S/n+I_k$.
+
+\section*{2. Строка таблицы для произвольного года}
+
+Основной долг убывает равномерно, поэтому перед годом $k$ остаётся $n-k+1$ равных частей, а после платежа --- $n-k$ частей:
+\[
+B_{k-1}=\frac{S(n-k+1)}{n},\qquad
+B_k=\frac{S(n-k)}{n}.
+\]
+Отсюда получаем все столбцы:
+\begin{center}
+\renewcommand{\arraystretch}{1.16}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\toprule
+Столбец & Выражение для года $k$ \\
+\midrule
+Долг в начале года & $\displaystyle B_{k-1}=\frac{S(n-k+1)}{n}$ \\
+Начисленные проценты & $\displaystyle I_k=p\,\frac{S(n-k+1)}{n}$ \\
+Общая задолженность & $\displaystyle (1+p)\,\frac{S(n-k+1)}{n}$ \\
+Платёж & $\displaystyle P_k=\frac Sn+p\,\frac{S(n-k+1)}n$ \\
+Остаток после платежа & $\displaystyle B_k=\frac{S(n-k)}{n}$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\textbf{Три способа заполнения:} только числами, только буквами либо смешанно (например, $S$, $p$ оставлены буквами, а $n=4$ подставлено сразу). Выбирайте наиболее удобный.
+
+\clearpage
+\section*{3. Пример: кредит на четыре года}
+
+Пусть $S=1{,}5\mln$, $n=4$, ставка $r=15\%$, то есть $p=0{,}15$. Каждый год возвращается $S/4=0{,}375\mln$ основного долга.
+
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.40}
+\begin{tabular}{@{}c c c c c c@{}}
+\toprule
+Год & Начало & Проценты & Всего & Платёж & Остаток \\
+\midrule
+1 & $1{,}5$ & $0{,}225$ & $1{,}725$ & $0{,}6$ & $1{,}125$ \\
+2 & $1{,}125$ & $0{,}16875$ & $1{,}29375$ & $0{,}54375$ & $0{,}75$ \\
+3 & $0{,}75$ & $0{,}1125$ & $0{,}8625$ & $0{,}4875$ & $0{,}375$ \\
+4 & $0{,}375$ & $0{,}05625$ & $0{,}43125$ & $0{,}43125$ & $0$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{center}\small Все денежные величины указаны в миллионах рублей.\end{center}
+
+Первый платёж равен $0{,}375+0{,}225=0{,}6\mln$. Во втором году проценты считаются уже от остатка $1{,}125\mln$, поэтому платёж уменьшается.
+
+\key{Проверка:} сумма платежей равна $2{,}0625\mln$, переплата --- $0{,}5625\mln$. Конечный остаток строго равен нулю.
+
+\section*{4. Пять формул для постоянной ставки}
+
+Если ежегодно возвращается одинаковая доля \emph{основного долга}, а процентная ставка постоянна, используйте готовые формулы. Они следуют из того, что процент начисляется на остатки $S$, $S(n-1)/n$, $\ldots$, $S/n$.
+
+\begin{align*}
+\text{Общая сумма платежей:}\quad & T=S+Sp\,\frac{n+1}{2};\\[4pt]
+\text{Переплата в рублях:}\quad & Q=T-S=Sp\,\frac{n+1}{2};\\[4pt]
+\text{Доля переплаты:}\quad & q=\frac{Q}{S}=p\,\frac{n+1}{2};\\[4pt]
+\text{Первый платёж (наибольший):}\quad & P_1=\frac Sn+Sp;\\[4pt]
+\text{Последний платёж (наименьший):}\quad & P_n=\frac Sn+\frac{Sp}{n}.
+\end{align*}
+
+\key{Важное различие:} $q$ записан долей единицы; \emph{процент переплаты} равен $100q\%$. Например, $q=0{,}15$ означает переплату $15\%$ от первоначального кредита.
+
+\clearpage
+\section*{5. Алгоритм: когда применять формулы}
+
+\vspace{5mm}
+\begin{center}
+\begin{tikzpicture}[
+  >={Latex[length=2.8mm]},
+  line width=.9pt,
+  start/.style={ellipse,draw=darkaccent,fill=softgray!35,minimum width=44mm,minimum height=11mm,align=center,font=\normalsize},
+  question/.style={diamond,aspect=2.4,draw=darkaccent,fill=softgray!22,inner xsep=3mm,inner ysep=2mm,text width=49mm,align=center,font=\small},
+  action/.style={rectangle,rounded corners=2mm,draw=darkaccent,minimum width=49mm,minimum height=14mm,align=center,text width=47mm,font=\small},
+  link/.style={->,draw=darkaccent}
+]
+\node[start] (begin) at (0,0) {Прочитайте условие};
+\node[question] (a) at (0,-3.0) {Основной долг уменьшается на равные части?};
+\node[question] (b) at (0,-7.9) {Ставка постоянна, нет дополнительных условий?};
+\node[action] (formula) at (-3.0,-12.0) {Используйте пять формул и выражение для $P_k$};
+\node[action] (table) at (4.0,-12.0) {Составьте таблицу по каждому году};
+\node[start] (check) at (0,-15.0) {Проверьте ответ};
+\draw[link] (begin) -- (a);
+\draw[link] (a.south) -- node[left,font=\small]{да} (b.north);
+\draw[link] (b.south) -- node[left,font=\small]{да} (formula.north);
+\draw[darkaccent] (a.east) -- node[above,font=\small]{нет} (7.5,-3.0) -- (7.5,-7.9);
+\draw[darkaccent] (b.east) -- node[above,font=\small]{нет} (7.5,-7.9);
+\draw[link] (7.5,-7.9) |- (table.east);
+\draw[link] (formula.south) |- (check.west);
+\draw[link] (table.south) |- (check.east);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{6. Перевод текста задачи в формулу}
+
+\begin{itemize}
+\item \key{«Общая сумма выплат на $15\%$ больше суммы кредита»} означает $T=1{,}15S$ или, что проще, $q=0{,}15$. Здесь $15\%$ вычисляются от $S$.
+\item \key{«Первый платёж не превышает $1{,}9$ млн»} означает $P_1\le1{,}9$ (миллиона рублей).
+\item \key{«Каждый платёж не меньше $0{,}5$ млн»} при постоянной неотрицательной ставке достаточно проверить для \emph{последнего} платежа: $P_n\ge0{,}5$.
+\item \key{«Каждый платёж не больше $1{,}9$ млн»} достаточно проверить для \emph{первого} платежа: $P_1\le1{,}9$.
+\end{itemize}
+
+\textbf{Пример 1.} Кредит выплачивается $14$ лет, а общая сумма выплат на $15\%$ больше начальной суммы. Найдите годовую ставку.
+\[
+\frac{15p}{2}=0{,}15\quad\Longrightarrow\quad
+p=0{,}02\quad\Longrightarrow\quad r=2\%.
+\]
+
+\textbf{Пример 2.} $S=6\mln$, $n=15$. Первый платёж не больше $1{,}9\mln$, последний не меньше $0{,}5\mln$. Найдите ставку.
+\[
+\begin{cases}
+\dfrac6{15}+6p\le1{,}9,\\[3pt]
+\dfrac6{15}+\dfrac6{15}p\ge0{,}5
+\end{cases}
+\iff
+\begin{cases}p\le0{,}25,\\p\ge0{,}25.
+\end{cases}
+\]
+Единственное возможное значение $p=0{,}25$, следовательно, $r=25\%$.
+
+\section*{7. Типичные ошибки и быстрая самопроверка}
+
+\begin{itemize}
+\item \key{Путаница ставки и переплаты.} Годовая ставка $r$ и суммарный процент переплаты $100q\%$ обычно различаются.
+\item \key{Неправильная база процента.} Если выплаты больше суммы кредита на $15\%$, берите $0{,}15S$, а не $0{,}15T$.
+\item \key{Перепутаны годы.} В начале года $k$ остаток $S(n-k+1)/n$, в конце --- $S(n-k)/n$.
+\item \key{Неуместное использование формулы.} При изменяющейся ставке сумму процентов вычисляйте по годам: $I_k=p_k B_{k-1}$.
+\item \key{Забыты крайние платежи.} При $p>0$ платежи убывают: $P_1>P_2>\dots>P_n$; при $p=0$ все равны $S/n$.
+\end{itemize}
+
+\clearpage
+\section*{Тренировочный блок --- Путь А}
+\textit{Десять заданий по нарастающей сложности. Если не указано иное, кредит погашается дифференцированными платежами раз в год, ставка постоянна, комиссий нет. Денежные суммы даны в миллионах рублей. Решения оформляйте самостоятельно.}
+\begin{enumerate}
+\item Кредит $S=1{,}5$ взят на $4$ года. Найдите остаток долга \emph{после} второго платежа и долг \emph{перед} начислением процентов в четвёртом году.
+\item Для кредита $S=1{,}5$ на $4$ года ставка равна $15\%$ годовых. Найдите первый и последний платежи.
+\item Кредит $S=3$ выдан на $6$ лет под $8\%$ годовых. Найдите переплату и общую сумму платежей.
+\item Кредит $S=2{,}4$ взят на $5$ лет под $10\%$ годовых. Каков размер третьего платежа?
+\item Кредит погашается $9$ лет. Общая сумма платежей на $25\%$ превышает начальную сумму кредита. Найдите годовую процентную ставку.
+\item За $5$ лет погашения кредита $S=4$ общая сумма выплат составила $5{,}2$. Найдите годовую процентную ставку.
+\item Кредит $S=2$ взят на $4$ года. Первый платёж равен $0{,}7$. Определите годовую ставку и последний платёж.
+\item Кредит $S=6$ взят на $15$ лет. Первый платёж не превышает $1{,}9$, а последний составляет не менее $0{,}5$. Найдите все возможные годовые процентные ставки.
+\item Кредит $S=1{,}2$ выплачивается за $3$ года с равным уменьшением основного долга. Ставки по годам: $10\%$, $20\%$, $10\%$. Найдите все три платежа и их сумму. Объясните, почему формулу для постоянной ставки применять нельзя.
+\item Кредит погашается за $8$ лет под $12{,}5\%$ годовых. Общая сумма выплат равна $4{,}5$. Найдите первоначальную сумму кредита, первый и последний платежи.
+\end{enumerate}
+
+\clearpage
+\section*{Ответы к тренировочному блоку}
+\begin{center}
+\renewcommand{\arraystretch}{1.55}
+\begin{tabularx}{\linewidth}{@{}c >{\raggedright\arraybackslash}X@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $0{,}75$ млн руб.; $0{,}375$ млн руб. \\
+2 & $0{,}6$ млн руб.; $0{,}43125$ млн руб. \\
+3 & Переплата $0{,}84$ млн руб.; общая сумма $3{,}84$ млн руб. \\
+4 & $0{,}624$ млн руб. \\
+5 & $5\%$ годовых. \\
+6 & $10\%$ годовых. \\
+7 & $10\%$ годовых; $0{,}55$ млн руб. \\
+8 & Единственная возможная ставка --- $25\%$ годовых. \\
+9 & $0{,}52$; $0{,}56$; $0{,}44$ млн руб.; всего $1{,}52$ млн руб. Формула с постоянной ставкой неприменима. \\
+10 & $2{,}88$ млн руб.; $0{,}72$ млн руб.; $0{,}405$ млн руб. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vspace{6mm}
+\textbf{Контрольные соотношения:}
+\[
+T=S+Q,\qquad B_n=0,\qquad
+P_k=\frac Sn+p\,\frac{S(n-k+1)}n.
+\]
+
+При постоянной положительной ставке самый большой платёж --- первый, самый маленький --- последний. Эти проверки позволяют быстро заметить арифметическую ошибку.
+
+\end{document}
