@@ -184,18 +184,77 @@ try{
     return {latest:data.materials[0].date,
       visibleLatest:document.querySelector('#latestLessonTitle').textContent,
       links:[...document.querySelectorAll('a[href*="09.10.26"]')].length,
-       latestLinks:[...document.querySelectorAll('a[href*="13.10.26"]')].length,
+       latestLinks:[...document.querySelectorAll('a[href*="16.10.26"]')].length,
       evidence:credit.map(i=>({title:i.title,exists:i.evidence?.some(e=>e.date==='09.10.26')})),
       horizontalOverflow:document.documentElement.scrollWidth>innerWidth+2};
   });
-  assert.equal(home.latest,'13.10.26');
-  assert.match(home.visibleLatest,/Произвольные схемы/);
+  assert.equal(home.latest,'16.10.26');
+  assert.match(home.visibleLatest,/Дифференцированное погашение/);
    assert.ok(home.latestLinks>=4,'New lesson links missing');
   assert.ok(home.links>=4);
   assert.equal(home.evidence.length,3);
   assert.ok(home.evidence.every(x=>x.exists),'Missing credit evidence '+JSON.stringify(home.evidence));
   assert.equal(home.horizontalOverflow,false);
   await screenshot('home-desktop');
+
+  // Latest published lesson and its mathematical laboratory.
+  await navigate('16.10.26.html');
+  const lesson16=await execute(()=>({
+    tasks:document.querySelectorAll('.questions li').length,
+    formulas:!!document.querySelector('#formulas'),
+    labLink:!!document.querySelector('a[href="16.10.26-lab.html"]'),
+    pdfLink:!!document.querySelector('a[href="../pdf_docs/16.10.26.pdf"]'),
+    posterLink:!!document.querySelector('a[href="../images/16.10.26.png"]'),
+    overflow:document.documentElement.scrollWidth>innerWidth+2
+  }));
+  assert.equal(lesson16.tasks,10);
+  assert.ok(lesson16.formulas&&lesson16.labLink&&lesson16.pdfLink&&lesson16.posterLink);
+  assert.equal(lesson16.overflow,false);
+  await screenshot('lesson-16-desktop');
+
+  await navigate('16.10.26-lab.html');
+  await wait('document.querySelectorAll("#rows tr").length===4');
+  const constant16=await execute(()=>({
+    rows:document.querySelectorAll('#rows tr').length,
+    first:document.querySelector('#first').textContent,
+    last:document.querySelector('#last').textContent,
+    extra:document.querySelector('#extra').textContent,
+    interestStyle:document.querySelector('.interest-part')?.style.height
+  }));
+  assert.equal(constant16.rows,4);
+  assert.equal(constant16.first,'0,6');
+  assert.equal(constant16.last,'0,43125');
+  assert.equal(constant16.extra,'0,5625');
+  assert.match(constant16.interestStyle,/^[\d.]+%$/);
+  const variable16=await execute(()=>{
+    document.querySelector('#variable').click();
+    return {
+      rows:document.querySelectorAll('#rows tr').length,
+      first:document.querySelector('#first').textContent,
+      second:document.querySelectorAll('#rows tr')[1]?.cells[5]?.textContent,
+      extra:document.querySelector('#extra').textContent,
+      overflow:document.documentElement.scrollWidth>innerWidth+2
+    };
+  });
+  assert.equal(variable16.rows,3);
+  assert.equal(variable16.first,'0,52');
+  assert.equal(variable16.second,'0,56');
+  assert.equal(variable16.extra,'0,32');
+  assert.equal(variable16.overflow,false);
+  await screenshot('lab-16-variable');
+
+  await call('Emulation.setDeviceMetricsOverride',{width:375,height:780,deviceScaleFactor:1,mobile:true});
+  await navigate('16.10.26.html');
+  const lessonMobile16=await execute(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth}));
+  assert.ok(lessonMobile16.width<=lessonMobile16.viewport+2,'16 October lesson mobile overflow '+JSON.stringify(lessonMobile16));
+  await screenshot('lesson-16-mobile');
+  await navigate('16.10.26-lab.html');
+  await wait('document.querySelectorAll("#rows tr").length===4');
+  const labMobile16=await execute(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth}));
+  assert.ok(labMobile16.width<=labMobile16.viewport+2,'16 October lab mobile overflow '+JSON.stringify(labMobile16));
+  await screenshot('lab-16-mobile');
+  await call('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});
+
   await call('Emulation.setDeviceMetricsOverride',{width:375,height:780,deviceScaleFactor:1,mobile:true});
   await navigate('index.html');await wait('!!window.COMPETENCY_MAP_DATA');
   await screenshot('home-mobile');

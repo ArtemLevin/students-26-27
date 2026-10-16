@@ -4,6 +4,81 @@ export const ARCHIVE_PAGE_SIZE=10;
 const MONTHS_GENITIVE=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
 export const LESSONS=[
+{
+  "date": "2026-10-16",
+  "ktpRefs": [],
+  "href": "16.10.26.html",
+  "title": "Кредит: равные доли долга, разные платежи",
+  "navTitle": "Кредит: равные доли долга, разные платежи",
+  "navSubtitle": "Дифференцированное погашение кредита: формулы, таблица и 10 задач. Персональный урок Екатерины Гнедковой от 16 октября 2026 года.",
+  "summary": "Дифференцированное погашение кредита: формулы, таблица и 10 задач. Персональный урок Екатерины Гнедковой от 16 октября 2026 года.",
+  "topics": [
+    "дифференцированная схема кредита",
+    "долг после платежа",
+    "процент от остатка",
+    "таблица платежей",
+    "переплата по кредиту",
+    "поиск ставки и ограничений"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege27_13_007",
+      "evidenceAnchor": "model",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_13_008",
+      "evidenceAnchor": "ledger",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_13_009",
+      "evidenceAnchor": "ledger",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_13_010",
+      "evidenceAnchor": "ledger",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_13_011",
+      "evidenceAnchor": "formulas",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_13_012",
+      "evidenceAnchor": "formulas",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_13_013",
+      "evidenceAnchor": "translation",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_13_014",
+      "evidenceAnchor": "formulas",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_10_012",
+      "evidenceAnchor": "formulas",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_13_017",
+      "evidenceAnchor": "choice",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "16.10.26.html",
+    "pdf": "../pdf_docs/16.10.26.pdf",
+    "tex": "../tex_docs/16.10.26.tex",
+    "lab": "16.10.26-lab.html"
+  }
+},
   {
     "date": "2026-10-13",
     "ktpRefs": [],
