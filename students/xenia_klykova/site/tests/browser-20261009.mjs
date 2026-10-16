@@ -78,7 +78,7 @@ try{
       await sleep(70);
     }
     await sleep(140);
-    await run((name==="index.html"?"document.body.dataset.theme=":"document.documentElement.dataset.theme=")+"'"+(dark?"dark":"light")+"'");
+    await run(((name==="index.html"||name==="archive.html")?"document.body.dataset.theme=":"document.documentElement.dataset.theme=")+"'"+(dark?"dark":"light")+"'");
     const m=await run('({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth})');
     let offenders=[];
     if(m.scroll>m.client+2){
@@ -92,7 +92,7 @@ try{
     fs.writeFileSync(path.join(screenshotDir,filename+'.png'),Buffer.from(shot.data,'base64'));
   }
   for(const [w,h] of [[1440,900],[390,844],[375,812]]){
-    for(const page of ['09.10.26.html','09.10.26-lab.html','index.html']){
+    for(const page of ['09.10.26.html','09.10.26-lab.html','index.html','archive.html']){
       await navigate(page,w,h,false);
       await snapshot(page.replace('.html','')+'-'+w+'-light');
       await navigate(page,w,h,true);
@@ -202,7 +202,9 @@ try{
   assert.equal(await run("document.querySelector('#latestLessonCta').getAttribute('href')"),'15.10.26.html');
   assert.equal(await run("document.querySelector('#latestPdfLink').hidden"),false);
   assert.equal(await run("document.querySelector('#latestTexLink').getAttribute('href')"),'../tex_docs/15.10.26.tex');
-  assert.equal(await run("document.querySelectorAll('#recentLessons a').length"),3);
+  assert.equal(await run("document.querySelector('#archivePageCta').getAttribute('href')"),'archive.html');
+  assert.equal(await run("document.querySelector('#lessonArchive')===null"),true);
+  assert.equal(await run("document.querySelector('#recentLessons')===null"),true);
   // Student-facing lesson evidence must render reviewed titles, not internal IDs.
   assert.ok(await run("document.querySelector('#lesson').classList.contains('lesson-summary')"),'latest lesson class must be valid');
   assert.deepEqual(await run("[...document.querySelectorAll('#latestLessonStatus .outcome span:nth-child(2)')].map(el=>el.textContent)"),['Свойства делимости и целочисленные линейные комбинации','Делимость как нулевой остаток']);
@@ -211,7 +213,7 @@ try{
   // Anna Bannova visual reference: open editorial layout instead of permanent desktop sidebar.
   assert.equal(await run("getComputedStyle(document.querySelector('#sidebar')).position"),'relative');
   assert.equal(await run("getComputedStyle(document.querySelector('.atlas-ledger .map-stats')).display"),'grid');
-  assert.ok(await run("document.querySelector('#lessonArchive').contains(document.querySelector('#recentLessons'))"));
+  assert.equal(await run("document.querySelectorAll('a[href=\\\"archive.html\\\"]').length>0"),true);
   assert.ok(await run("document.querySelector('.atlas-catalog').contains(document.querySelector('#topicIndex'))"));
   assert.equal(await run("getComputedStyle(document.querySelector('#atlasTitle')).fontFamily.includes('Georgia')"),true);
   assert.ok(await run("document.querySelectorAll('#radialMap .radial-cell').length>200"),'circular skills must load');
@@ -223,6 +225,28 @@ try{
   assert.equal(await run("document.querySelector('#lessonArchive').contains(document.querySelector('#recentLessons'))"),true);
   assert.equal(await run("(()=>{document.querySelector('#menuButton').click();return document.querySelector('#menuButton').getAttribute('aria-expanded')})()"),'true');
   assert.equal(await run("(()=>{document.querySelector('#sidebarClose').click();return document.querySelector('#menuButton').getAttribute('aria-expanded')})()"),'false');
+
+  // Standalone tile archive: 30 lessons grouped into 4 chronological months.
+  await navigate('archive.html',1440,900,false);
+  assert.equal(await run("document.querySelector('#archiveRoot').getAttribute('aria-busy')"),'false');
+  assert.equal(await run("document.querySelectorAll('.archive-month').length"),4);
+  assert.equal(await run("document.querySelectorAll('.archive-tile').length"),30);
+  assert.deepEqual(await run("[...document.querySelectorAll('.archive-month h2')].map(x=>x.textContent)"),['октябрь 2026','сентябрь 2026','август 2026','июль 2026']);
+  assert.equal(await run("document.querySelectorAll('.archive-tile--featured').length"),4);
+  assert.equal(await run("document.querySelector('.archive-tile-main').getAttribute('href')"),'15.10.26.html');
+  assert.equal(await run("getComputedStyle(document.querySelector('.archive-month-grid')).gridTemplateColumns.split(' ').length"),12);
+  assert.ok(await run("document.querySelectorAll('.archive-resource').length>=10"),'lesson-specific resource links');
+  assert.equal(await run("(()=>{let x=document.querySelector('#archiveSearch');x.value='Делимость';x.dispatchEvent(new Event('input',{bubbles:true}));return [...document.querySelectorAll('.archive-tile')].filter(c=>!c.hidden).length})()")>0,true);
+  assert.equal(await run("(()=>{let x=document.querySelector('#archiveSearch');x.value='невозможный_поисковый_запрос';x.dispatchEvent(new Event('input',{bubbles:true}));return [...document.querySelectorAll('.archive-tile')].filter(c=>!c.hidden).length})()"),0);
+  assert.equal(await run("document.querySelector('#archiveEmpty').hidden"),false);
+  assert.equal(await run("(()=>{let x=document.querySelector('#archiveSearch');x.value='';x.dispatchEvent(new Event('input',{bubbles:true}));return [...document.querySelectorAll('.archive-tile')].filter(c=>!c.hidden).length})()"),30);
+  assert.equal(await run("document.querySelector('#archiveEmpty').hidden"),true);
+  await navigate('archive.html',390,844,false);
+  assert.equal(await run("getComputedStyle(document.querySelector('.archive-month-grid')).gridTemplateColumns.split(' ').length"),1);
+  assert.equal(await run("document.querySelectorAll('.archive-tile').length"),30);
+  assert.equal(await run("document.querySelector('#archiveTheme').getAttribute('aria-label')"),'Включить тёмную тему');
+  assert.equal(await run("(()=>{document.querySelector('#archiveTheme').click();return document.body.hasAttribute('data-theme')})()"),false);
+  assert.equal(await run("(()=>{document.querySelector('#archiveTheme').click();return document.body.dataset.theme})()"),'light');
   assert.deepEqual(jsErrors,[],'JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Network errors');
   console.log('Xenia 09.10 and 12.10 browser QA PASS: 30 layouts, interactive checks and network');
