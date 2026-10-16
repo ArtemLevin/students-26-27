@@ -1,0 +1,580 @@
+
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[scaled=0.92]{DejaVuSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[margin=20mm,top=18mm,bottom=19mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs,array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{087A7B}
+\definecolor{darkaccent}{HTML}{124D55}
+\definecolor{textgray}{HTML}{30383E}
+\definecolor{muted}{HTML}{677780}
+\definecolor{lightaccent}{HTML}{E4F0EF}
+\color{textgray}
+\hypersetup{hidelinks,pdftitle={Графики функций. Метод опорных точек},
+pdfauthor={Артём Александрович Лёвин}}
+\setstretch{1.05}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlist[itemize]{leftmargin=*,topsep=2pt,itemsep=1pt}
+\setlist[enumerate]{leftmargin=*,topsep=2pt,itemsep=2pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted} Графики функций · метод опорных точек}
+\fancyhead[R]{\small\color{muted} 15.10.2026}
+\fancyfoot[L]{\footnotesize\color{muted} Лёвин Артём Александрович}
+\fancyfoot[R]{\footnotesize\color{muted} \thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{15pt}
+\newcommand{\sectiontitle}[1]{\vspace{4pt}{\Large\bfseries\color{darkaccent}#1}\par
+ \vspace{1pt}{\color{accent}\rule{\linewidth}{0.55pt}}\vspace{4pt}}
+\newcommand{\subsectiontitle}[1]{\vspace{3pt}{\large\bfseries\color{darkaccent}#1}\par\vspace{1pt}}
+\newcommand{\key}[1]{{\color{darkaccent}\bfseries #1}}
+\newcommand{\smallnote}[1]{{\small\color{muted}#1}}
+\newcommand{\graphnote}[1]{{\small\color{muted}#1}}
+\pgfplotsset{
+  myaxis/.style={
+    width=0.92\linewidth,
+    height=5.7cm,
+    axis lines=middle,
+    axis line style={muted!90},
+    tick style={muted!90},
+    xlabel={$x$}, ylabel={$y$},
+    xlabel style={font=\small}, ylabel style={font=\small},
+    ticklabel style={font=\scriptsize},
+    every axis plot/.append style={line width=1.2pt},
+    grid=both, grid style={draw=lightaccent},
+    minor grid style={draw=lightaccent!70},
+    clip=true,
+    samples=220,
+    enlargelimits=false,
+    legend style={draw=none,fill=none,font=\scriptsize,at={(0.98,0.98)},anchor=north east}
+  }
+}
+
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{22mm}
+{\color{accent}\large МАТЕМАТИКА \textperiodcentered{} ЕГЭ ПРОФИЛЬНОГО УРОВНЯ}\par
+\vspace{25mm}
+{\Huge\bfseries\color{darkaccent} Чек-лист}\par
+\vspace{7mm}
+{\LARGE\bfseries Графики функций}\par
+\vspace{2mm}
+{\Large Метод опорных точек}\par
+\vspace{13mm}
+{\color{accent}\rule{79mm}{0.8pt}}\par
+\vspace{13mm}
+{\large Прочитайте точки графика.\\
+Составьте формулу.\\
+Ответьте точно на поставленный вопрос.}\par
+\vspace{18mm}
+{\large 15 октября 2026 года}\par
+\vfill
+{\normalsize\bfseries Лёвин Артём Александрович}\par
+{\normalsize эксклюзивно для Ярослава Гаврилова}\par
+\vspace{19mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent!65,line width=1.15pt] (-7,0) .. controls (-4,1.15) and (-2,-1) .. (0,0)
+ .. controls (2,1) and (4,-1.15) .. (7,0);
+\end{tikzpicture}
+\end{center}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\sectiontitle{01. Как извлечь формулу из графика}
+\key{Главная идея.} Координаты точки $(x_0;y_0)$ графика функции
+$y=f(x)$ удовлетворяют равенству $y_0=f(x_0)$.
+Это позволяет найти неизвестные коэффициенты формулы.
+
+\subsectiontitle{Как читать точки}
+\begin{itemize}
+\item \key{Сначала проверьте масштаб каждой оси.} Одна клетка необязательно равна единице. Особенно внимательно читайте ось $x$ у тригонометрических графиков: там бывают $\pi$, $\frac{\pi}{2}$, $\frac{\pi}{4}$.
+\item Точку записывайте строго в порядке $(x;y)$: первая координата --- абсцисса, вторая --- ордината.
+\item Выбирайте \key{опорные (узловые) точки}, координаты которых точно считываются по сетке. Они могут иметь дробные координаты и координаты с $\pi$.
+\item Предпочитайте точки с $x=0$, $y=0$ или табличным значением аргумента: вычисления будут короче.
+\end{itemize}
+
+\subsectiontitle{Сколько точек нужно?}
+Число искомых независимых коэффициентов подсказывает, сколько
+независимых уравнений нужно составить. Для $y=a\cos x+b$
+неизвестны $a,b$, поэтому обычно используют \key{две точки}.
+Точки должны давать разные коэффициенты при $a$: например,
+$\cos0=1$ и $\cos\pi=-1$.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.24}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{37mm}
+>{\raggedright\arraybackslash}p{62mm}X@{}}
+\toprule
+Вид графика & Общая формула & Коэффициенты\\
+\midrule
+Прямая & $y=kx+b$ & $k,\ b$\\
+Косинусоида & $y=a\cos x+b$ & $a,\ b$\\
+Синусоида & $y=a\sin x+b$ & $a,\ b$\\
+Тангенсоида & $y=a\tg x+b$ & $a,\ b$\\
+Парабола & $y=ax^2+bx+c$ & $a,\ b,\ c$\\
+Гипербола со сдвигом & $y=\dfrac{a}{x-h}+k$ & $a,\ h,\ k$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\smallnote{В последних двух строках приведены общие формы для распознавания.
+Для смещённой гиперболы дополнительно требуется $x\ne h$;
+её коэффициенты не всегда удобно искать простой линейной системой.}
+
+\subsectiontitle{Обязательная логика решения}
+\begin{enumerate}
+\item Узнайте семейство функции и выпишите его общую формулу.
+\item Выберите точки с удобными, точно считываемыми координатами.
+\item Для каждой точки запишите равенство $y_i=f(x_i)$.
+\item Вычислите известные значения функций и решите систему.
+\item Подставьте найденные коэффициенты в общую формулу.
+\item Прочитайте вопрос ещё раз: требуется коэффициент, $f(x_0)$,
+неизвестный $x$ или точка пересечения?
+\end{enumerate}
+\clearpage
+\thispagestyle{fancy}
+\vspace*{5mm}
+\begin{center}
+{\LARGE\bfseries\color{darkaccent} Алгоритм: метод опорных точек}\par
+\vspace{3mm}
+{\small\color{muted} Универсальный маршрут для задач на восстановление формулы}
+\end{center}
+\vspace{6mm}
+\tikzset{
+flowstart/.style={ellipse,draw=accent,fill=lightaccent,
+ line width=.85pt,minimum width=57mm,minimum height=11mm,align=center,font=\small\bfseries},
+flowact/.style={rounded corners=3pt,draw=accent,line width=.8pt,
+ text width=100mm,minimum height=12mm,align=center,inner sep=4pt,font=\small},
+flowcheck/.style={diamond,aspect=2.85,draw=accent,line width=.8pt,
+ fill=lightaccent,text width=59mm,align=center,inner sep=1.8pt,font=\small\bfseries},
+flowarrow/.style={-{Stealth[length=2.4mm]},draw=darkaccent,line width=.8pt},
+flowlabel/.style={font=\scriptsize\bfseries,color=darkaccent}
+}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\node[flowstart] (a) at (0,0) {Прочитайте условие};
+\node[flowact] (b) at (0,-1.95) {Определите вид функции и неизвестные коэффициенты};
+\node[flowact] (c) at (0,-3.90) {Проверьте масштаб осей; выберите удобные точки};
+\node[flowact] (d) at (0,-5.85) {Для каждой точки запишите $y_i=f(x_i)$};
+\node[flowact] (e) at (0,-7.80) {Вычислите значения и решите систему};
+\node[flowcheck] (f) at (0,-10.0) {Какой результат требуется?};
+\node[flowact,text width=49mm,minimum height=18mm] (left) at (-3.55,-12.75)
+ {Коэффициент?\\Запишите его значение};
+\node[flowact,text width=49mm,minimum height=18mm] (right) at (3.55,-12.75)
+ {Функция, аргумент или\\пересечение?\\Найдите формулы};
+\node[flowact,text width=90mm,minimum height=14mm] (g) at (0,-15.35)
+ {Подставьте значение или приравняйте функции};
+\node[flowstart] (h) at (0,-18.15) {Сверьте результат с вопросом};
+\draw[flowarrow](a)--(b);
+\draw[flowarrow](b)--(c);
+\draw[flowarrow](c)--(d);
+\draw[flowarrow](d)--(e);
+\draw[flowarrow](e)--(f);
+\draw[flowarrow](f.south west)--node[left,flowlabel]{коэффициент}(left.north);
+\draw[flowarrow](f.south east)--node[right,flowlabel]{другой результат}(right.north);
+\draw[flowarrow](left.south) -- ++(0,-.55) -| (-5.2,-16.7) |- (h.west);
+\draw[flowarrow](right.south)--(g.north east);
+\draw[flowarrow](g.south)--(h.north);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\sectiontitle{02. График косинуса: два опорных значения}
+\subsectiontitle{Разобранный пример: $y=a\cos x+b$}
+По графику считаны точки $A(0;\frac12)$ и $B(\pi;-\frac52)$.
+Подставим их координаты:
+\[
+\begin{cases}
+\frac12=a\cos0+b,\\[2pt]
+-\frac52=a\cos\pi+b.
+\end{cases}
+\quad\Longleftrightarrow\quad
+\begin{cases}
+a+b=\frac12,\\[2pt]
+-a+b=-\frac52.
+\end{cases}
+\]
+Вычитаем второе уравнение из первого:
+\[
+2a=\frac12+\frac52=3,\qquad
+\boxed{a=\frac32}.
+\]
+Затем $b=\frac12-\frac32=-1$. Полная формула:
+\[
+\boxed{f(x)=\frac32\cos x-1}.
+\]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+myaxis,
+ height=7.0cm,
+ xmin=-1.8,xmax=5.0,
+ ymin=-3.2,ymax=0.8,
+ xtick={-1.5708,0,1.5708,3.1416,4.7124},
+ xticklabels={$-\frac{\pi}{2}$,$0$,$\frac{\pi}{2}$,$\pi$,$\frac{3\pi}{2}$},
+ ytick={-3,-2,-1,0},
+ legend entries={$y=\frac32\cos x-1$}
+]
+\addplot[accent,domain=-1.57:4.71]{1.5*cos(deg(x))-1};
+\addplot[only marks,mark=*,mark size=2.2pt,darkaccent] coordinates {(0,0.5) (3.1416,-2.5)};
+\node[font=\scriptsize,anchor=south west] at (axis cs:0,0.5) {$A(0;\frac12)$};
+\node[font=\scriptsize,anchor=north west] at (axis cs:3.1416,-2.5) {$B(\pi;-\frac52)$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\graphnote{На графике видно, почему удобно брать точки с $x=0$ и $x=\pi$: значения косинуса табличные, а координаты читаются без двусмысленности.}
+
+\subsectiontitle{Случай, когда неизвестный исчезает}
+Пусть график $y=a\cos x+b$ проходит через
+$A(0;\frac32)$ и $B(\frac\pi2;-\frac12)$.
+Тогда
+\[
+\begin{cases}
+\frac32=a\cos0+b,\\
+-\frac12=a\cos\frac\pi2+b
+\end{cases}
+\Longleftrightarrow
+\begin{cases}
+\frac32=a+b,\\
+-\frac12=b.
+\end{cases}
+\]
+Следовательно, $\boxed{b=-\frac12}$ и $\boxed{a=2}$.
+Здесь полезнее начинать со второго уравнения:
+$\cos\frac\pi2=0$, поэтому коэффициент $a$ исчезает.
+
+\clearpage
+\sectiontitle{03. График синуса: знаки и периодичность}
+\subsectiontitle{Разобранный пример: $y=a\sin x+b$}
+Пусть известны $A(0;-1)$ и $B(-\frac\pi2;1)$.
+Тогда
+\[
+\begin{cases}
+-1=a\sin0+b,\\
+1=a\sin(-\frac\pi2)+b
+\end{cases}
+\Longleftrightarrow
+\begin{cases}
+-1=b,\\
+1=-a+b.
+\end{cases}
+\]
+Отсюда $b=-1$, $1=-a-1$, значит $a=-2$:
+\[
+\boxed{f(x)=-2\sin x-1}.
+\]
+При необходимости вычислить $f(\frac{25\pi}{6})$:
+\[
+\frac{25\pi}{6}=4\pi+\frac\pi6,\quad
+\sin\frac{25\pi}{6}=\sin\frac\pi6=\frac12,\quad
+f\!\left(\frac{25\pi}{6}\right)=\boxed{-2}.
+\]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+myaxis,
+ height=8.3cm,
+ xmin=-3.4,xmax=6.6,
+ ymin=-3.4,ymax=1.4,
+ xtick={-3.1416,-1.5708,0,1.5708,3.1416,4.7124,6.2832},
+ xticklabels={$-\pi$,$-\frac{\pi}{2}$,$0$,$\frac{\pi}{2}$,$\pi$,$\frac{3\pi}{2}$,$2\pi$},
+ ytick={-3,-2,-1,0,1},
+ legend entries={$y=-2\sin x-1$}
+]
+\addplot[accent,domain=-3.1416:6.2832]{-2*sin(deg(x))-1};
+\addplot[only marks,mark=*,mark size=2.2pt,darkaccent] coordinates {(0,-1) (-1.5708,1)};
+\node[font=\scriptsize,anchor=south west] at (axis cs:0,-1) {$A(0;-1)$};
+\node[font=\scriptsize,anchor=south east] at (axis cs:-1.5708,1) {$B(-\frac{\pi}{2};1)$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\graphnote{График помогает проконтролировать знак коэффициента $a$: при переходе от $x=-\frac\pi2$ к $x=0$ функция убывает, значит перед синусом действительно стоит отрицательный множитель.}
+
+\clearpage
+\sectiontitle{04. Тангенс: когда ответ находится сразу}
+\subsectiontitle{Разобранный пример: $y=a\tg x+b$}
+График проходит через $A(0;-\frac32)$ и
+$B(\frac\pi4;\frac12)$:
+\[
+\begin{cases}
+-\frac32=a\tg0+b,\\
+\frac12=a\tg\frac\pi4+b
+\end{cases}
+\Longleftrightarrow
+\begin{cases}
+-\frac32=b,\\
+\frac12=a+b.
+\end{cases}
+\]
+Если требуется найти $b$, ответ \key{уже получен}:
+$\boxed{b=-\frac32}$. Если нужна вся формула, то
+\[
+a=\frac12+\frac32=2,\qquad
+\boxed{f(x)=2\tg x-\frac32}.
+\]
+\smallnote{Область определения тангенса:
+$x\ne\frac\pi2+\pi n$, где $n\in\mathbb Z$.}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+myaxis,
+ height=8.6cm,
+ xmin=-1.8,xmax=1.8,
+ ymin=-6.2,ymax=3.2,
+ xtick={-1.5708,0,0.7854,1.5708},
+ xticklabels={$-\frac{\pi}{2}$,$0$,$\frac{\pi}{4}$,$\frac{\pi}{2}$},
+ ytick={-6,-4,-2,0,2},
+ legend entries={$y=2\tg x-\frac32$}
+]
+\addplot[muted,dashed] coordinates {(-1.5708,-6.2) (-1.5708,3.2)};
+\addplot[muted,dashed] coordinates {(1.5708,-6.2) (1.5708,3.2)};
+\addplot[accent,domain=-1.45:1.45]{2*tan(deg(x))-1.5};
+\addplot[only marks,mark=*,mark size=2.2pt,darkaccent] coordinates {(0,-1.5) (0.7854,0.5)};
+\node[font=\scriptsize,anchor=north west] at (axis cs:0,-1.5) {$A(0;-\frac32)$};
+\node[font=\scriptsize,anchor=south west] at (axis cs:0.7854,0.5) {$B(\frac{\pi}{4};\frac12)$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\graphnote{Пунктиром показаны вертикальные асимптоты. На таком графике особенно важно брать точки внутри области определения.}
+
+\clearpage
+\sectiontitle{05. Прямая: та же система без тригонометрии}
+\subsectiontitle{Разобранный пример: $y=kx+b$}
+По графику считываем $A(-1;-3)$ и $B(3;4)$:
+\[
+\begin{cases}
+-3=-k+b,\\
+4=3k+b.
+\end{cases}
+\]
+Вычтем первое равенство из второго:
+\[
+7=4k,\quad k=\frac74,\qquad
+b=-3+\frac74=-\frac54.
+\]
+Формула восстановлена:
+\[
+\boxed{f(x)=\frac74x-\frac54}.
+\]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+myaxis,
+ height=8.0cm,
+ xmin=-3.4,xmax=4.4,
+ ymin=-5.2,ymax=5.4,
+ xtick={-3,-2,-1,0,1,2,3,4},
+ ytick={-5,-4,-3,-2,-1,0,1,2,3,4,5},
+ legend entries={$y=\frac74x-\frac54$}
+]
+\addplot[accent,domain=-3.2:4.2]{1.75*x-1.25};
+\addplot[only marks,mark=*,mark size=2.2pt,darkaccent] coordinates {(-1,-3) (3,4)};
+\node[font=\scriptsize,anchor=south west] at (axis cs:-1,-3) {$A(-1;-3)$};
+\node[font=\scriptsize,anchor=south east] at (axis cs:3,4) {$B(3;4)$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\subsectiontitle{Два разных вопроса к одному графику}
+\begin{itemize}
+\item \key{«Найдите $f(-5)$».} Известен аргумент:
+\[
+f(-5)=\frac74\cdot(-5)-\frac54
+=-\frac{40}{4}=\boxed{-10}.
+\]
+\item \key{«Найдите $x$, при котором $f(x)=-13{,}5$».}
+Известно значение функции; требуется решить уравнение:
+\[
+-\frac{27}{2}=\frac74x-\frac54
+\Longleftrightarrow -54=7x-5
+\Longleftrightarrow \boxed{x=-7}.
+\]
+\end{itemize}
+\key{Запомните различие:}
+«найдите $f(x_0)$» означает подстановку $x_0$;
+«найдите $x$ при $f(x)=c$» означает решение уравнения.
+
+\clearpage
+\sectiontitle{06. Пересечение двух графиков}
+Если показаны две прямые, формулы которых в условии отсутствуют,
+каждую можно восстановить по двум точкам:
+\[
+f_1(x)=k_1x+b_1,\qquad f_2(x)=k_2x+b_2.
+\]
+В общей точке графиков их ординаты совпадают:
+\[
+\boxed{f_1(x)=f_2(x)}.
+\]
+\subsectiontitle{Разобранный пример}
+Пусть после восстановления формул получено
+\[
+f_1(x)=4x+9,\qquad
+f_2(x)=\frac32x-\frac72.
+\]
+Приравниваем правые части:
+\[
+4x+9=\frac32x-\frac72
+\quad\Longleftrightarrow\quad
+\frac52x=-\frac{25}{2}
+\quad\Longleftrightarrow\quad
+\boxed{x=-5}.
+\]
+Это \key{абсцисса} точки пересечения.
+Если нужна ещё и ордината, подставляем $x=-5$:
+\[
+y=f_1(-5)=4(-5)+9=\boxed{-11}.
+\]
+Точка пересечения: $\boxed{(-5;-11)}$.
+Приблизительное положение точки на рисунке полезно для проверки знака и порядка величины.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+myaxis,
+ height=8.8cm,
+ xmin=-7.2,xmax=1.2,
+ ymin=-15.2,ymax=11.8,
+ xtick={-7,-6,-5,-4,-3,-2,-1,0,1},
+ ytick={-15,-10,-5,0,5,10},
+ legend entries={$y=4x+9$,$y=\frac32x-\frac72$}
+]
+\addplot[accent,domain=-7.2:1.0]{4*x+9};
+\addplot[darkaccent,domain=-7.2:1.0]{1.5*x-3.5};
+\addplot[only marks,mark=*,mark size=2.5pt,black] coordinates {(-5,-11)};
+\node[font=\scriptsize,anchor=north west] at (axis cs:-5,-11) {$(-5;-11)$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\graphnote{На рисунке точка пересечения находится левее нуля и ниже оси $x$. Такой визуальный контроль помогает заметить грубую вычислительную ошибку.}
+
+\clearpage
+\sectiontitle{07. Тригонометрический минимум для графиков}
+\begin{center}
+\renewcommand{\arraystretch}{1.30}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+$x$ & $-\frac\pi2$ & $0$ & $\frac\pi4$ & $\frac\pi2$ & $\pi$\\
+\midrule
+$\sin x$ & $-1$ & $0$ & $\frac{\sqrt2}{2}$ & $1$ & $0$\\
+$\cos x$ & $0$ & $1$ & $\frac{\sqrt2}{2}$ & $0$ & $-1$\\
+$\tg x$ & --- & $0$ & $1$ & --- & $0$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\[
+\sin(x+2\pi n)=\sin x,\qquad
+\cos(x+2\pi n)=\cos x,\qquad
+\tg(x+\pi n)=\tg x.
+\]
+\key{Чётные и нечётные кратные $\pi$:}
+$\cos(2\pi n)=1$; $\cos((2n+1)\pi)=-1$;
+синус любого целого кратного $\pi$ равен нулю.
+
+\subsectiontitle{Как вычислять сложный аргумент}
+Пусть $f(x)=2\cos x-\frac12$, требуется $f(\frac{13\pi}{4})$.
+Сначала считаем косинус:
+\[
+\cos\frac{13\pi}{4}
+=\cos\!\left(3\pi+\frac\pi4\right)
+=-\frac{\sqrt2}{2}.
+\]
+Поэтому
+\[
+f\!\left(\frac{13\pi}{4}\right)
+=2\!\left(-\frac{\sqrt2}{2}\right)-\frac12
+=\boxed{-\sqrt2-\frac12}.
+\]
+
+\sectiontitle{08. Что важно удержать из прикладных задач}
+\subsectiontitle{Дифракционная решётка}
+Для максимума порядка $m$:
+\[
+d\sin\varphi=m\lambda.
+\]
+Здесь $d$ --- период решётки, $\lambda$ --- длина волны,
+$m$ --- номер максимума, $\varphi$ --- угол.
+Например, при $d=2000$ нм, $\lambda=500$ нм, $m=2$:
+\[
+\sin\varphi=\frac{2\cdot500}{2000}=\frac12
+\quad\Longrightarrow\quad
+\boxed{\varphi=30^\circ}
+\quad (0^\circ\le\varphi\le90^\circ).
+\]
+Условие существования максимума: $m\lambda\le d$.
+
+\subsectiontitle{Квадрат синуса и выбор угла}
+Если прикладная формула имеет вид
+$Q=mv^2\sin^2\alpha$, то при $Q=75$, $m=3$, $v=10$
+\[
+\sin^2\alpha=\frac{75}{3\cdot100}
+=\frac14.
+\]
+На интервале $0^\circ\le\alpha\le90^\circ$
+$\sin\alpha\ge0$, поэтому
+\[
+\sin\alpha=\frac12,\qquad \boxed{\alpha=30^\circ}.
+\]
+\key{Важно:} из $\sin^2\alpha=\frac14$ без дополнительных
+условий следует $|\sin\alpha|=\frac12$.
+Знак и окончательный угол определяются заданным интервалом.
+
+\subsectiontitle{Корень в знаменателе}
+Приём рационализации знаменателя:
+\[
+\frac{1}{\sqrt2}
+=\frac{1}{\sqrt2}\cdot\frac{\sqrt2}{\sqrt2}
+=\boxed{\frac{\sqrt2}{2}}.
+\]
+Именно это табличное значение синуса и косинуса угла $45^\circ$.
+
+\sectiontitle{09. Финальная самопроверка}
+\subsectiontitle{Какую операцию выбирать по формулировке?}
+\begin{center}
+\renewcommand{\arraystretch}{1.24}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries\raggedright\arraybackslash}p{54mm}X@{}}
+\toprule
+Формулировка & Что делать\\
+\midrule
+«Найдите коэффициент» & Остановиться, как только коэффициент найден из системы.\\
+«Найдите $f(x_0)$» & Сначала восстановить формулу, затем подставить известный $x_0$.\\
+«Найдите $x$, при котором $f(x)=c$» & Восстановить формулу и решить уравнение относительно $x$.\\
+«Найдите абсциссу точки пересечения» & Восстановить формулы обеих функций и приравнять их.\\
+«Найдите ординату точки пересечения» & После нахождения $x$ подставить его в любую из функций.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsectiontitle{Контроль перед записью ответа}
+\begin{itemize}
+\item Верно ли считан масштаб обеих осей, включая обозначения с $\pi$?
+\item Правильно ли записаны координаты в порядке $(x;y)$?
+\item Дают ли опорные точки независимые уравнения?
+\item Не перепутаны ли $\sin0=0$ и $\cos0=1$?
+\item Не потерян ли минус при $\cos\pi=-1$ или $\sin(-\frac\pi2)=-1$?
+\item Доведена ли система лишь до той величины, которую просят найти?
+\item Различены ли $f(x_0)$, неизвестный $x$ и абсцисса пересечения?
+\item Проверены ли ограничения области определения и диапазон углов?
+\end{itemize}
+\vfill
+{\color{accent}\rule{\linewidth}{0.5pt}}\par
+{\small\color{muted} Лёвин Артём Александрович · эксклюзивно для Ярослава Гаврилова · 15.10.2026}
+\end{document}
