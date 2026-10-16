@@ -169,16 +169,33 @@ try{
   await navigate('16.10.26.html',390,844);
   assert.equal(await run("document.querySelectorAll('.training li').length"),10,'October 16 training must contain 10 tasks');
   assert.equal(await run("!!document.querySelector('#menelaus') && !!document.querySelector('#first') && !!document.querySelector('#second') && !!document.querySelector('#check')"),true,'October 16 evidence anchors missing');
+
+  const menelausMath=await run("(()=>{const ns='http://www.w3.org/1998/Math/MathML';const math=[...document.querySelectorAll('main math')];const bad=math.filter(x=>x.namespaceURI!==ns||[...x.querySelectorAll('*')].some(y=>y.namespaceURI!==ns)).length;const stray=[];const walker=document.createTreeWalker(document.querySelector('main'),NodeFilter.SHOW_TEXT);while(walker.nextNode()){const p=walker.currentNode.parentElement;if(!p||p.closest('svg,math,script,style'))continue;const v=walker.currentNode.textContent.trim();if(/\\b(?:ABC|AB|AC|AN|AK|BJ|BK|CN|JC|KB|KM|KN|MC|BM|BF|FKB|NKA)\\b|\\d+\\s*:\\s*\\d+/.test(v))stray.push(v)}return {count:math.length,frac:document.querySelectorAll('main math mfrac').length,bad,stray}})()");
+  assert.ok(menelausMath.count>=140,'Expected full MathML coverage of 16 October lesson: '+JSON.stringify(menelausMath));
+  assert.ok(menelausMath.frac>=20,'Menelaus theorem fractions must be native mfrac elements');
+  assert.equal(menelausMath.bad,0,'16 October MathML namespace mismatch');
+  assert.deepEqual(menelausMath.stray,[],'Unwrapped mathematical notation in 16 October lesson');
   await snapshot('sofya-20261016-lesson-mobile');
   await navigate('16.10.26-lab.html',1440,900);
   assert.equal(await run("document.querySelector('#answer').textContent.includes('2,00')"),true,'Default Menelaus example must return 2:1');
   await run("document.querySelector('[data-a=\"0.6666666667\"]').click()");
   const presetValue=await run("Number(document.querySelector('#answer').textContent.replace(',','.').split(' ')[0])");
   assert.ok(Math.abs(presetValue-4.5)<0.01,'Exact 2:3 and 1:2 example must return 9:2');
+
+  const liveMath=await run("(()=>{const ns='http://www.w3.org/1998/Math/MathML';const ids=['ratioABOut','ratioNCOut','whole','outside','answer','product','equation'];const nodes=ids.map(id=>document.querySelector('#'+id+' > math'));return {valid:nodes.every(n=>n&&n.namespaceURI===ns&&[...n.querySelectorAll('*')].every(x=>x.namespaceURI===ns)),frac:document.querySelectorAll('#equation math mfrac').length,answer:document.querySelector('#answer math')?.textContent}})()");
+  assert.equal(liveMath.valid,true,'All dynamic Menelaus readouts must be genuine MathML nodes');
+  assert.equal(liveMath.frac,3,'Live theorem formula must have three native MathML fractions');
+  assert.ok(liveMath.answer.includes('4,50'),'Live MathML ratio must update with the slider');
   const collinear=await run("(()=>{const pt=id=>{const el=document.querySelector(id);return [Number(el.getAttribute('cx')),Number(el.getAttribute('cy'))]};const k=pt('#kDot'),j=pt('#jDot'),n=pt('#nDot');return (j[0]-k[0])*(n[1]-k[1])-(j[1]-k[1])*(n[0]-k[0])})()");
   assert.ok(Math.abs(collinear)<0.001,'Menelaus K, J, N must remain mathematically collinear');
   await run("document.querySelector('#reset').click()");
   assert.equal(await run("document.querySelector('#answer').textContent.includes('2,00')"),true,'Lab reset must restore first example');
+
+  await run("document.querySelector('#save').click();document.querySelector('#ratioNC').value='0.75';document.querySelector('#ratioNC').dispatchEvent(new Event('input',{bubbles:true}))");
+  assert.ok(await run("document.querySelectorAll('#comparisonContent math').length")>=3,'Comparison must update as MathML');
+  await run("document.querySelector('[data-answer=down]').click()");
+  assert.ok(await run("document.querySelectorAll('#predictionFeedback math').length")>=2,'Prediction feedback must have MathML');
+  await run("document.querySelector('#reset').click()");
   await snapshot('sofya-20261016-menelaus-lab');
   assert.deepEqual(jsErrors,[],'JavaScript errors');
   assert.deepEqual(badRequests,[],'Network errors');
