@@ -121,7 +121,7 @@ try{
       assert.ok(mainMetrics.latest?.endsWith('.html'),'latest real lesson');
       assert.ok(mainMetrics.visible>0,'lesson outcomes use catalogue labels');
       await visit('archive.html',width,dark);
-      await pause(170);
+      await wait(170);
       const archive=await evalJS('(()=>{const tiles=[...document.querySelectorAll(".archive-tile")];const heights=tiles.map(t=>Math.round(t.getBoundingClientRect().height));const grid=document.querySelector(".archive-month-grid");const columns=getComputedStyle(grid).gridTemplateColumns.split(" ").length;return {count:tiles.length,months:document.querySelectorAll(".archive-month").length,columns,delta:Math.max(...heights)-Math.min(...heights),dates:tiles.map(t=>t.querySelector("time").dateTime),clipped:tiles.some(t=>t.scrollHeight>t.clientHeight+4)}})()');
       const expected=width>=900?3:width>=640?2:1;
       assert.equal(archive.columns,expected,'archive columns '+width);
@@ -131,7 +131,7 @@ try{
       assert.equal(archive.clipped,false,'archive card clipped '+width);
       assert.ok(archive.dates.every((d,i)=>!i||archive.dates[i-1]>=d),'chronological order');
       archiveMeasures.push({width,dark,count:archive.count,delta:archive.delta,columns});
-      if((width===390||width===1440)&&!dark)await shot('archive-'+width+'-light');
+      if((width===390||width===1440)&&!dark)await screenshot('archive-'+width+'-light');
     }
   }
   await visit('index.html',390,false);
