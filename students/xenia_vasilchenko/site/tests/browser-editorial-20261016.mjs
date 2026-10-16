@@ -1,3 +1,4 @@
+import {LESSONS} from '../lesson-registry.js';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -90,10 +91,10 @@ try{
     await navigate('index.html',w,h,false);
     const home=await run("(()=>({id:document.querySelector('#pageTitle')?.textContent,lessons:document.querySelector('#lesson-title')?.textContent,skills:document.querySelectorAll('.map-cell').length,stat:document.querySelector('#totalCount')?.textContent,practice:document.querySelector('#latestPracticeLink')?.getAttribute('href'),layout:document.querySelector('.map-layout')?.getBoundingClientRect().width}))()");
     assert.match(home.id,/6 класса/,JSON.stringify(home));
-    assert.match(home.lessons,/Дроби, уравнения/,JSON.stringify(home));
+    assert.equal(home.lessons,LESSONS[0].navTitle||LESSONS[0].title,JSON.stringify(home));
     assert.ok(home.skills>=200,'Skill map not loaded '+JSON.stringify(home));
     assert.equal(Number(home.stat),home.skills,'Real skill total mismatch');
-    assert.equal(home.practice,'15.10.26.html#practice');
+    assert.equal(home.practice,LESSONS[0].date==='2026-10-15'?'15.10.26.html#practice':LESSONS[0].href);
     const personal=await run("document.querySelector('#latestLessonStatus')?.textContent");
     assert.ok(!/\b(?:[a-z]+_\d+|t19_divisibility)\b/i.test(personal),'Raw internal skill IDs');
     if(w<=390){
@@ -104,7 +105,7 @@ try{
     await navigate('archive.html',w,h,false);
     await run("document.fonts.ready.then(()=>true)");
     const layout=await run("(()=>{const cards=[...document.querySelectorAll('.archive-tile')],heights=cards.map(c=>Math.round(c.getBoundingClientRect().height)),grid=document.querySelector('.archive-month-grid');return {cards:cards.length,heights:[...new Set(heights)],clipped:cards.filter(c=>c.scrollHeight>c.clientHeight+2).length,columns:grid?getComputedStyle(grid).gridTemplateColumns.split(' ').length:0,root:document.querySelector('#archiveRoot').getAttribute('aria-busy'),months:document.querySelectorAll('.archive-month').length}})()");
-    assert.equal(layout.cards,11,'Archive must follow current registry '+JSON.stringify(layout));
+    assert.equal(layout.cards,LESSONS.length,'Archive must follow current registry '+JSON.stringify(layout));
     assert.ok(layout.months>=2,'Grouped by month '+JSON.stringify(layout));
     assert.equal(layout.columns,cols,'Breakpoints '+JSON.stringify(layout));
     assert.equal(layout.heights.length,1,'Unequal archive tile heights '+JSON.stringify(layout));
