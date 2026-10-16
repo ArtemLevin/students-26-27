@@ -30,6 +30,6 @@ Current migration roster for all `students/*/site/index.html` pages.
 | xenia_klykova / chemistry | lab | plum | compact | orthogonal | technical | mechanical |
 | xenia_vasilchenko | cartographer | burgundy | airy | circular | editorial | calm |
 | anna_bannova — Анна Баннова | archive | graphite | airy | orthogonal | editorial | calm |
-| denis_ermolaev — Денис Ермолаев | blueprint | vermilion | compact | orthogonal | technical-editorial | mechanical |
+| denis_ermolaev — Денис Ермолаев | archive | graphite | airy | orthogonal | editorial | calm |
 
 The roster is a deliberate diversity matrix. Change at least three axes when a newly created page is too close to a recent neighbor.
