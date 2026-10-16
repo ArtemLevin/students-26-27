@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23116477'/%3E%3Cpath d='M8 36Q20 9 32 36T56 36' fill='none' stroke='white' stroke-width='5'/%3E%3C/svg%3E"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория Ярослава Гаврилова: точные графики синуса, косинуса, тангенса и прямой, влияние коэффициентов a и b, контроль опорных точек и пересечение прямых.">
+<title>Лаборатория графиков · 15.10.26 · Ярослав Гаврилов</title>
+<style>
+:root{color-scheme:light;--page:#f4f1e9;--paper:#fffdf8;--soft:#edf0e9;--ink:#193037;--secondary:#55666b;--rule:#cad4ce;--accent:#116477;--accent2:#a65a43;--plot-paper:#fffefa;--plot-grid:#d9e0dc;--plot-border:#bdc8c3;--plot-axis:#344d53;--plot-primary:#116477;--plot-secondary:#b8694f;--plot-point:#9d432f}
+html[data-theme=dark]{color-scheme:dark;--page:#151d20;--paper:#202b2e;--soft:#26373b;--ink:#edf3ee;--secondary:#b1c0c1;--rule:#44575b;--accent:#94cfda;--accent2:#eb9a7d;--plot-paper:#233035;--plot-grid:#405155;--plot-border:#576b70;--plot-axis:#c2d0cf;--plot-primary:#89cbdc;--plot-secondary:#efa181;--plot-point:#ffc398}
+*{box-sizing:border-box}body{margin:0;background:var(--page);color:var(--ink);font:16px/1.6 system-ui,"Segoe UI",Arial,sans-serif}a{color:var(--accent)}:focus-visible{outline:3px solid var(--accent2);outline-offset:3px}button,input{font:inherit}button{cursor:pointer}.skip{position:absolute;top:-6rem;left:1rem;background:var(--paper);padding:.8rem;z-index:50}.skip:focus{top:1rem}.wrap{width:min(1280px,calc(100% - 2.4rem));margin:auto}.topbar{background:var(--paper);border-bottom:1px solid var(--rule)}.top-inner{min-height:65px;display:flex;align-items:center;justify-content:space-between;gap:1rem}.top-inner a{text-decoration:none}.nav-actions{display:flex;flex-wrap:wrap;gap:.5rem}.button,.nav-actions a,.nav-actions button{display:inline-block;border:1px solid var(--rule);border-radius:3px;background:var(--paper);color:var(--ink);min-height:43px;padding:.55rem .9rem;text-decoration:none}.button:hover,.nav-actions button:hover,.nav-actions a:hover{border-color:var(--accent)}.lead{padding:2.3rem 0 1.6rem;border-bottom:1px solid var(--rule);display:flex;align-items:end;justify-content:space-between;gap:1rem}.eyebrow{font:700 .78rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--accent)}h1{font:500 clamp(2.1rem,5vw,4.7rem)/1.05 Georgia,serif;letter-spacing:-.05em;margin:.5rem 0}.lead p{max-width:65ch;margin:.5rem 0;color:var(--secondary)}.counter{font:700 clamp(2rem,5vw,4rem) Georgia,serif;color:var(--accent)}
+.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(270px,.75fr);gap:2rem;padding:2rem 0}.pane{min-width:0}.pane h2{font:500 1.75rem Georgia,serif;margin:.2rem 0 1rem}.modes{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0 1.5rem}.mode{background:transparent;border:1px solid var(--rule);padding:.6rem .8rem;min-height:42px;color:var(--ink)}.mode[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--page);font-weight:700}.chart{background:var(--plot-paper);border:1px solid var(--rule);padding:clamp(.4rem,1.5vw,1.1rem)}.chart svg{width:100%;display:block;height:auto}.axis-text{font:13px system-ui,Arial;fill:var(--ink)}.point-text{font:700 13px system-ui,Arial;paint-order:stroke;stroke:var(--plot-paper);stroke-width:4px;fill:var(--ink)}.chart figcaption{font-size:.88rem;color:var(--secondary);margin:.5rem 0}.formula{font:600 clamp(1.15rem,2.5vw,1.45rem) Georgia,serif;padding:1rem 0;border-bottom:1px solid var(--rule);margin-bottom:1rem}.readout{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}.readout div{background:var(--soft);padding:.8rem}.readout span{display:block;font-size:.77rem;color:var(--secondary)}.readout strong{font:600 1.15rem Georgia,serif}.compare{margin:1rem 0;border-top:1px solid var(--rule);padding-top:1rem}.compare[hidden]{display:none}.compare h3{font:500 1.35rem Georgia,serif}.aside{border-top:3px solid var(--accent);padding:1rem 0}.aside h2{margin:0 0 .5rem;font:500 1.6rem Georgia,serif}.field{margin:1.3rem 0}.field label{display:flex;justify-content:space-between;gap:.6rem;font-weight:700}.field input{width:100%;accent-color:var(--accent);min-height:30px}.field p{font-size:.85rem;color:var(--secondary);margin:.2rem 0}.actions{display:flex;gap:.7rem;flex-wrap:wrap;margin:1.5rem 0}.actions button{padding:.6rem 1rem;min-height:44px;border:1px solid var(--accent);background:var(--paper);color:var(--ink)}.actions .primary{background:var(--accent);color:var(--page)}.note{border-left:3px solid var(--accent2);background:var(--soft);padding:1rem;font-size:.92rem}.status{font-size:.9rem;line-height:1.5;color:var(--secondary)}footer{border-top:1px solid var(--rule);padding:2rem 0;color:var(--secondary);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.88rem}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.aside{order:-1}.lead{align-items:start}.counter{display:none}}@media(max-width:500px){.wrap{width:calc(100% - 1.2rem)}.top-inner{flex-wrap:wrap;padding:.7rem 0}.nav-actions{width:100%}.lead{padding-top:1.4rem}.readout{grid-template-columns:1fr}.modes{gap:.35rem}.mode{flex:1}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">К лаборатории</a>
+<header class="topbar"><div class="wrap top-inner"><a href="15.10.26.html"><strong>← Вернуться к занятию</strong></a><div class="nav-actions"><a href="index.html">Кабинет</a><button id="theme" type="button" aria-pressed="false">Тёмная тема</button></div></div></header>
+<main id="main" class="wrap">
+<header class="lead"><div><p class="eyebrow">Цифровая лаборатория / 15.10.2026</p><h1>Исследуйте коэффициенты графика</h1><p>Измените коэффициент a или b и проследите, как перестраивается график. Одновременно обновятся координаты опорных точек и значения функции.</p></div><div class="counter" aria-hidden="true">12 / ЕГЭ</div></header>
+<div class="layout">
+<section class="pane" aria-labelledby="stage-title"><p class="eyebrow">Исследовательское поле</p><h2 id="stage-title">График и опорные точки</h2>
+<div class="modes" role="group" aria-label="Выберите вид функции">
+<button class="mode" type="button" data-mode="cos" aria-pressed="true">Косинус</button>
+<button class="mode" type="button" data-mode="sin" aria-pressed="false">Синус</button>
+<button class="mode" type="button" data-mode="tan" aria-pressed="false">Тангенс</button>
+<button class="mode" type="button" data-mode="line" aria-pressed="false">Прямая</button>
+<button class="mode" type="button" data-mode="crossing" aria-pressed="false">Пересечение</button>
+</div>
+<div class="formula" id="formula" aria-live="polite">y = 1,5 cos x − 1</div>
+<figure class="chart"><svg id="lab-chart" role="img" aria-label="Координатная плоскость"></svg><figcaption>Все кривые вычислены по формулам. Длина клеток по x и y может отличаться, поэтому читайте подписанные деления осей.</figcaption></figure>
+<div class="readout" aria-live="polite"><div><span id="point-a-name">Точка A</span><strong id="point-a">A(0; 0,5)</strong></div><div><span id="point-b-name">Точка B</span><strong id="point-b">B(π; −2,5)</strong></div></div>
+<div class="compare" id="compare" hidden><h3>Исходное состояние занятия</h3><p class="status" id="baseline-formula"></p><figure class="chart"><svg id="baseline-chart"></svg><figcaption>Эталонный график по разобранному примеру. Сравните координаты отмеченных точек с текущим состоянием.</figcaption></figure></div>
+</section>
+<aside class="aside" aria-labelledby="controls-title"><p class="eyebrow">Режим исследования</p><h2 id="controls-title">Изменяйте параметры</h2>
+<div id="sliders">
+<div class="field"><label for="a">Коэффициент <span id="a-name">a</span>: <output id="a-output" for="a">1,5</output></label><input type="range" id="a" min="-3" max="3" step="0.5" value="1.5"><p id="a-description">Меняет высоту и направление колебаний относительно средней линии.</p></div>
+<div class="field"><label for="b">Свободный член b: <output id="b-output" for="b">−1</output></label><input type="range" id="b" min="-3" max="3" step="0.5" value="-1"><p>Сдвигает график вверх или вниз на выбранное число единиц.</p></div>
+</div>
+<p class="note" id="question">Измените b и проверьте, на сколько изменятся обе ординаты опорных точек.</p>
+<div class="actions"><button id="reset" class="primary" type="button">Вернуть исходный график</button><button id="compare-toggle" type="button" aria-pressed="false">Сравнить с исходным</button></div>
+<p class="status" id="status" role="status">Исходные коэффициенты взяты из пособия. Выберите параметр и начните исследование.</p>
+<p class="status">Отметки A и B вычисляются из формулы при фиксированных абсциссах. Для тангенса помните ограничения x ≠ π/2 + πn.</p>
+<p><a href="15.10.26.html#method">Повторить метод опорных точек →</a></p>
+</aside>
+</div></main>
+<footer class="wrap"><span>Артём Александрович Лёвин · эксклюзивно для Ярослава Гаврилова</span><span>15 октября 2026</span></footer>
+<script src="15.10.26-graphs.js"></script>
+<script>
+(function(){
+'use strict';
+const G=window.JaroslavGraph;if(!G)return;
+const params=new URLSearchParams(location.search);
+const known=['cos','sin','tan','line','crossing'];
+let mode=known.includes(params.get('mode'))?params.get('mode'):'cos';
+const svg=document.getElementById('lab-chart'),baseline=document.getElementById('baseline-chart');
+const aInput=document.getElementById('a'),bInput=document.getElementById('b');
+const sliders=document.getElementById('sliders'),compare=document.getElementById('compare');
+const compareButton=document.getElementById('compare-toggle');
+const nf=(n)=>G.formatNumber(n);
+const names={cos:'cos x',sin:'sin x',tan:'tg x',line:'x'};
+function formula(kind,a,b){
+ if(kind==='crossing')return 'f₁(x) = 4x + 9;  f₂(x) = 1,5x − 3,5';
+ return 'y = '+nf(a)+' · '+names[kind]+' '+(b<0?'− ':'+ ')+nf(Math.abs(b));
+}
+function readouts(s,a,b){
+ const pts=s.points;
+ for(let i=0;i<2;i++){
+   if(s.second&&i===1){
+     document.getElementById('point-b-name').textContent='Равенство значений';
+     document.getElementById('point-b').textContent='f₁(−5) = f₂(−5) = −11';
+     continue;
+   }
+   const p=pts[i],x=p.x,y=s.second?p.y:s.fn(x,a,b);
+   document.getElementById(i?'point-b-name':'point-a-name').textContent=i?'Опорная точка B':'Опорная точка A';
+   document.getElementById(i?'point-b':'point-a').textContent=p.label+' ('+xLabel(x)+'; '+nf(y)+')';
+ }
+}
+function xLabel(x){
+ const pi=Math.PI;
+ if(Math.abs(x)<1e-6)return '0';
+ if(Math.abs(x-pi)<1e-6)return 'π';
+ if(Math.abs(x-pi/4)<1e-6)return 'π/4';
+ if(Math.abs(x+pi/2)<1e-6)return '−π/2';
+ return nf(x);
+}
+function setMode(next){
+ mode=next;
+ document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
+ const s=G.schemes[mode];
+ aInput.value=s.a===undefined?0:s.a;bInput.value=s.b===undefined?0:s.b;
+ sliders.hidden=mode==='crossing';
+ document.getElementById('a-name').textContent=mode==='line'?'k':'a';
+ document.getElementById('a-description').textContent=mode==='line'?'Изменяет наклон прямой.':'Изменяет амплитуду или направление ветви; при a = 0 зависимость становится постоянной.';
+ document.getElementById('question').textContent=mode==='crossing'?'В точке пересечения две прямые имеют одинаковое значение функции.': 'Измените b и проверьте, на сколько изменятся обе ординаты опорных точек.';
+ try{history.replaceState(null,'','?mode='+encodeURIComponent(mode))}catch(e){}
+ update();
+}
+function update(){
+ const s=G.schemes[mode],a=Number(aInput.value),b=Number(bInput.value);
+ document.getElementById('a-output').textContent=nf(a);
+ document.getElementById('b-output').textContent=nf(b);
+ document.getElementById('formula').textContent=formula(mode,a,b);
+ G.render(svg,mode,mode==='crossing'?null:{a,b});
+ G.render(baseline,mode);
+ document.getElementById('baseline-formula').textContent=formula(mode,s.a,s.b);
+ readouts(s,a,b);
+ const message=mode==='crossing'?'Точка пересечения: (−5; −11). Проверка: обе формулы дают −11 при x = −5.':
+   (a===s.a&&b===s.b?'Исходные коэффициенты совпадают с разобранным примером.':'Текущая ордината каждой точки вычислена из изменённой формулы.');
+ document.getElementById('status').textContent=message;
+}
+document.querySelectorAll('[data-mode]').forEach(btn=>btn.addEventListener('click',()=>setMode(btn.dataset.mode)));
+aInput.addEventListener('input',update);bInput.addEventListener('input',update);
+document.getElementById('reset').addEventListener('click',()=>setMode(mode));
+compareButton.addEventListener('click',()=>{
+ const show=compare.hidden;compare.hidden=!show;compareButton.setAttribute('aria-pressed',String(show));
+ compareButton.textContent=show?'Скрыть сравнение':'Сравнить с исходным';
+ if(show)update();
+});
+const root=document.documentElement,theme=document.getElementById('theme');
+try{root.dataset.theme=localStorage.getItem('jaroslav-lesson-theme')==='dark'?'dark':'light'}catch(e){}
+function syncTheme(){let dark=root.dataset.theme==='dark';theme.textContent=dark?'Светлая тема':'Тёмная тема';theme.setAttribute('aria-pressed',String(dark));}
+theme.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('jaroslav-lesson-theme',root.dataset.theme)}catch(e){}syncTheme()});syncTheme();
+setMode(mode);
+})();
+</script>
+</body></html>
