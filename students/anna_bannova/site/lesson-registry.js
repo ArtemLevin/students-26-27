@@ -1,5 +1,65 @@
 export const LESSONS=[
   {
+  "date": "2026-10-16",
+  "ktpRefs": [
+    "ktp-029",
+    "ktp-030",
+    "ktp-032",
+    "ktp-035"
+  ],
+  "href": "16.10.26.html",
+  "title": "Степени → прикладные задачи",
+  "navTitle": "Степени → прикладные задачи",
+  "navSubtitle": "Занятие Анны Банновой 16.10.26: свойства степеней, действительные корни степенных уравнений, кубический зонд и радиоактивный распад.",
+  "summary": "Занятие Анны Банновой 16.10.26: свойства степеней, действительные корни степенных уравнений, кубический зонд и радиоактивный распад.",
+  "topics": [
+    "преобразование степенных выражений",
+    "дробные и отрицательные показатели",
+    "степенные уравнения и полнота корней",
+    "прикладные задачи на кубическую зависимость",
+    "показательная модель радиоактивного распада",
+    "пороговые неравенства"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "calc_09",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calc_10",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "expr_12",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "expr_13",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_09",
+      "evidenceAnchor": "decay",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ineq_11",
+      "evidenceAnchor": "decay",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "16.10.26.html",
+    "pdf": "../pdf_docs/16.10.26.pdf",
+    "tex": "../tex_docs/16.10.26.tex",
+    "lab": "16.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-11",
   "ktpRefs": [
     "ktp-004",
