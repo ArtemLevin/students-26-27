@@ -27,10 +27,13 @@ test('14 October publication is complete, linked and pedagogically conservative'
     assert.ok(practice.outcomes.some(x=>x.competencyId===evidence.competencyId&&x.evidenceAnchor===evidence.evidenceAnchor&&x.relation===evidence.relation&&x.practiceDisposition==='manual'));
   }
   const {LESSONS}=await import('../lesson-registry.js');
-  assert.equal(LESSONS[0].date,'2026-10-14');
+  const lesson1410=LESSONS.find(x=>x.date==='2026-10-14');
+  assert.ok(lesson1410,'14 October lesson remains in the archive');
+  assert.ok(LESSONS[0].date>='2026-10-14','newer lessons may be published');
+  assert.ok(LESSONS.every((x,i)=>i===0||LESSONS[i-1].date>=x.date),'lessons remain newest-first');
   assert.equal(new Set(LESSONS.map(x=>x.date)).size,LESSONS.length);
-  assert.equal(LESSONS[0].materials.lab,'14.10.26-lab.html');
-  assert.ok(!('pdf' in LESSONS[0].materials),'do not publish a missing PDF link');
+  assert.equal(lesson1410.materials.lab,'14.10.26-lab.html');
+  assert.ok(!('pdf' in lesson1410.materials),'do not publish a missing PDF link');
 });
 
 test('new page and interactive lab parse, have unique ids and only valid file links',()=>{
