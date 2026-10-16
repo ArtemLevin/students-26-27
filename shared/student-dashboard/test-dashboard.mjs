@@ -116,7 +116,7 @@ function loadCatalog(root,spec,transform=null){
   return normalizeGroups(transform?transform(groups):groups);
 }
 
-export async function runDashboardTests({student,catalog,stateKey,storageKey,catalogTransform=null,canonicalCatalogPath=null}){
+export async function runDashboardTests({student,catalog,stateKey,storageKey,catalogTransform=null,canonicalCatalogPath=null,archiveMode='embedded'}){
   const root=process.cwd(),site=path.join(root,'students',student,'site');
   assert.ok(fs.existsSync(path.join(site,'index.html')),`${student}: index missing`);
   const registry=await loadRegistry(site),lessons=registry.LESSONS;
@@ -135,10 +135,22 @@ export async function runDashboardTests({student,catalog,stateKey,storageKey,cat
 
   const html=fs.readFileSync(path.join(site,'index.html'),'utf8');
   for(const forbidden of ['<iframe','contentDocument','contentWindow','.map-frame','id="base"'])assert.ok(!html.includes(forbidden),`${student}: forbidden legacy architecture ${forbidden}`);
+  const archiveControls=archiveMode==='standalone'?[]:['id="recentLessons"','id="archivePage"'];
+  assert.ok(['embedded','standalone'].includes(archiveMode),`${student}: unknown archive layout mode`);
   for(const required of [
-    'id="menuButton"','aria-controls="sidebar"','id="sidebar"','id="recentLessons"','id="archivePage"','aria-live="polite"','id="latestLessonCta"','id="competenceMap"',
+    'id="menuButton"','aria-controls="sidebar"','id="sidebar"',...archiveControls,'aria-live="polite"','id="latestLessonCta"','id="competenceMap",
     'id="masteredCount"','id="masteredCountMain"','data-filter="unseen"','data-filter="help"','data-filter="confident"','aria-labelledby="radialTitle radialDescription"','id="levelExplanation"','aria-labelledby="dialogTitle"'
   ])assert.ok(html.includes(required),`${student}: missing ${required}`);
+  if(archiveMode==='standalone'){
+    assert.ok(html.includes('id="archivePageCta"')&&html.includes('href="archive.html"'),`${student}: standalone archive CTA missing`);
+    assert.ok(!html.includes('id="lessonArchive"'),`${student}: archive must live outside the homepage`);
+    const archiveFile=path.join(site,'archive.html');
+    assert.ok(fs.existsSync(archiveFile),`${student}: archive.html missing`);
+    const archive=fs.readFileSync(archiveFile,'utf8');
+    for(const id of ['archiveRoot','archiveMonths','archiveSearch']){
+      assert.ok(archive.includes('id="'+id+'"'),`${student}: archive missing ${id}`);
+    }
+  }
   for(let level=0;level<=4;level+=1)assert.ok(html.includes(`dot l${level}`),`${student}: legend level ${level}`);
 
   const dashboard=fs.readFileSync(path.join(site,'dashboard.js'),'utf8'),configText=fs.readFileSync(path.join(site,'competence-config.js'),'utf8');
