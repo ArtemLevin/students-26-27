@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ru" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<meta name="description" content="Интерактивная лаборатория Анны Банновой: кубическая зависимость натяжения троса и экспоненциальный распад.">
+<title>Лаборатория степенных моделей · Анна Баннова</title>
+<link rel="stylesheet" href="../../../design-system/tokens.css"><link rel="stylesheet" href="../../../design-system/foundations.css"><link rel="stylesheet" href="../../../design-system/archetypes.css"><link rel="stylesheet" href="../../../design-system/student-sites.css">
+<style>
+:root{--paper:#f3f1eb;--surface:#faf9f5;--ink:#242725;--sub:#59615c;--hair:#c5c7c2;--line:#797f7a;--focus:#20639b;--accent:#414f4a;--good:#326d57;--bad:#a34335}
+html[data-theme=dark]{--paper:#151916;--surface:#1c231f;--ink:#f1f0e8;--sub:#b5bdb7;--hair:#44514a;--line:#9ba69e;--focus:#8eccff;--accent:#c8d2cd;--good:#86d3ae;--bad:#f09a85}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}button,input{font:inherit;color:inherit}a{color:inherit}button{cursor:pointer}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.shell{width:min(1260px,calc(100% - 36px));margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--hair);padding:15px 0}.brand{text-decoration:none;font-weight:800}.brand small{display:block;color:var(--sub);font:700 .68rem Consolas,monospace}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{background:transparent;text-decoration:none;border:1px solid var(--line);border-radius:2px;padding:9px 14px;min-height:44px;display:inline-flex;align-items:center;font-weight:700;font-size:.8rem}.btn:hover{background:var(--surface)}
+.hero{padding:38px 0;border-bottom:2px solid var(--ink)}.index{font:750 .65rem Consolas,monospace;color:var(--sub);letter-spacing:.07em;text-transform:uppercase}
+h1{font:600 clamp(2.65rem,7vw,5.6rem)/.99 Georgia,"Times New Roman",serif;letter-spacing:-.055em;margin:12px 0 16px}.hero p{max-width:76ch;color:var(--sub)}
+.modes{display:flex;gap:0;flex-wrap:wrap;border-bottom:1px solid var(--hair)}.modes a{padding:12px 18px;min-height:44px;text-decoration:none;border-right:1px solid var(--hair)}.modes a[aria-current=page]{box-shadow:inset 0 -3px 0 var(--ink);font-weight:800}
+.experiment{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(250px,.6fr);gap:32px;padding:34px 0 54px;border-bottom:1px solid var(--hair);scroll-margin-top:15px}
+h2{font:600 clamp(1.85rem,4vw,2.8rem)/1.15 Georgia,serif;margin:0 0 11px}.desc{color:var(--sub);max-width:65ch}.chart{border:1px solid var(--hair);background:var(--surface);width:100%;height:auto;display:block;aspect-ratio:12/7;margin:20px 0 7px}
+.axis{stroke:var(--line);stroke-width:1.4}.limit{stroke:var(--bad);stroke-width:1.5;stroke-dasharray:6 4}.curve{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round}.marker{fill:var(--ink);stroke:var(--surface);stroke-width:3}.gridline{stroke:var(--hair);stroke-width:.75}
+.tick,.label{font:12px Consolas,monospace;fill:var(--sub)}.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.78rem;color:var(--sub)}.legend b{color:var(--ink)}
+.controls{border-top:2px solid var(--ink);padding-top:12px}.controls label{display:block;font-weight:800;margin:17px 0 8px}.controls input{width:100%;min-height:44px;accent-color:var(--accent);cursor:pointer}
+.readout{border-top:1px solid var(--hair);padding-top:13px;margin-top:14px}.readout strong{font:600 2.3rem Georgia,serif;letter-spacing:-.045em}.status{font-weight:780;min-height:30px;margin:14px 0}.status.ok{color:var(--good)}.status.over{color:var(--bad)}.note{font-size:.84rem;color:var(--sub);border-left:2px solid var(--line);padding:4px 0 4px 14px}
+.figformula{font:600 1.35rem Georgia,serif;overflow-x:auto;white-space:nowrap}.footer{padding:24px 0 48px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font:.67rem Consolas,monospace;color:var(--sub)}
+@media(max-width:860px){.experiment{grid-template-columns:1fr}.controls{max-width:620px}}
+@media(max-width:480px){.shell{width:calc(100% - 24px)}.hero{padding:25px 0}.experiment{padding:24px 0 38px}.tick,.label{font-size:13px}.chart{aspect-ratio:12/8}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{.actions,.modes,.controls input,.btn{display:none!important}body{background:white;color:black}.shell{width:100%}.experiment{break-inside:avoid;grid-template-columns:1fr 1fr}.chart{max-width:100%}}
+</style></head>
+<body data-atlas data-atlas-adapter="universal" data-atlas-composition="archive" data-atlas-accent="graphite" data-atlas-density="airy" data-atlas-motion="calm">
+<div class="shell"><nav class="top" aria-label="Навигация"><a class="brand" href="16.10.26.html">Анна Баннова<small>СТЕПЕНИ / МАТЕМАТИЧЕСКИЙ ЭКСПЕРИМЕНТ</small></a><div class="actions"><a class="btn" href="16.10.26.html">К занятию</a><a class="btn" href="index.html">К кабинету</a><button class="btn" type="button" id="theme" aria-pressed="false">◐ Тема</button></div></nav>
+<header class="hero"><div class="index">Цифровая лаборатория / 16.10.2026</div><h1>Две зависимости</h1><p>Перемещайте ползунок: наблюдайте, как меняются модель, числовое значение и выполнение условия. Найдите границу и проверьте результат подстановкой.</p></header>
+<nav class="modes" aria-label="Режимы лаборатории"><a href="#probe" id="navProbe">01 / Зонд</a><a href="#decay" id="navDecay">02 / Распад</a></nav>
+<main>
+<section id="probe" class="experiment" aria-labelledby="probe-title"><div><div class="index">01 / L³</div><h2 id="probe-title">Размер кубического зонда</h2><p class="desc">В модели F = ρgL³ − mg задаём ρ = 1000 кг/м³, g = 10 м/с², m = 25 кг. Допустимое натяжение: F ≤ 1000 Н. Размер L ≥ 0.</p>
+<svg class="chart" id="probeChart" viewBox="0 0 600 350" role="img" aria-labelledby="probeChartTitle probeChartDesc"><title id="probeChartTitle">Зависимость натяжения троса от размера зонда</title><desc id="probeChartDesc">График F = 10000L в кубе минус 250. Горизонтальная линия показывает допустимый уровень 1000 ньютонов; точка соответствует выбранному размеру.</desc><g id="probePlot"></g></svg>
+<div class="legend"><span><b>Сплошная:</b> F(L)</span><span><b>Пунктир:</b> 1000 Н</span><span><b>Критическая точка:</b> L = 0,5 м</span></div></div>
+<div class="controls"><div class="index">Параметр</div><label for="length">Линейный размер L, м: <output id="lengthValue" for="length">0,50</output></label><input type="range" id="length" min="0.30" max="0.80" step="0.01" value="0.50"><div class="readout"><span class="index">Натяжение троса</span><div><strong id="forceValue">1000</strong> <span>Н</span></div><p id="probeStatus" class="status" role="status" aria-live="polite">Достигнута граница</p></div><p class="figformula" id="probeFormula">10000 · (0,5)³ − 250 = 1000</p><p class="note">Увеличение размера увеличивает натяжение. Максимальный допустимый размер достигается при граничном равенстве F = 1000 Н.</p><button class="btn" type="button" id="probeReset">Вернуть L = 0,5</button></div></section>
+<section id="decay" class="experiment" aria-labelledby="decay-title"><div><div class="index">02 / 2⁻ᵗᐟᵀ</div><h2 id="decay-title">Распад изотопа</h2><p class="desc">Модель m(t) = 40 · 2⁻ᵗᐟ¹⁰. Начальная масса 40 мг, период полураспада 10 мин. Масса должна быть не меньше 5 мг.</p>
+<svg class="chart" id="decayChart" viewBox="0 0 600 350" role="img" aria-labelledby="decayChartTitle decayChartDesc"><title id="decayChartTitle">Убывание массы изотопа со временем</title><desc id="decayChartDesc">График m(t) = 40 умножить на 2 в степени минус t делить на 10. Пороговая линия 5 миллиграммов и точка выбранного времени.</desc><g id="decayPlot"></g></svg>
+<div class="legend"><span><b>Сплошная:</b> m(t)</span><span><b>Пунктир:</b> 5 мг</span><span><b>Критическая точка:</b> t = 30 мин</span></div></div>
+<div class="controls"><div class="index">Параметр</div><label for="time">Прошло времени t, мин: <output id="timeValue" for="time">30</output></label><input type="range" id="time" min="0" max="60" step="1" value="30"><div class="readout"><span class="index">Масса изотопа</span><div><strong id="massValue">5</strong> <span>мг</span></div><p id="decayStatus" class="status" role="status" aria-live="polite">Достигнута граница</p></div><p class="figformula" id="decayFormula">40 · 2^(−30/10) = 5</p><p class="note">Масса убывает с течением времени. Условие «не меньше 5 мг» выполняется на промежутке от 0 до 30 минут включительно.</p><button class="btn" type="button" id="decayReset">Вернуть t = 30</button></div></section>
+</main><footer class="footer"><span>Лёвин Артём Александрович эксклюзивно для Анны Банновой</span><a href="16.10.26.html#training">Перейти к тренировке ↗</a></footer></div>
+<script>
+(function(){
+const $=id=>document.getElementById(id),root=document.documentElement,theme=$('theme');
+function themeSet(v){root.dataset.theme=v;theme.setAttribute('aria-pressed',String(v==='dark'));theme.textContent=v==='dark'?'☀ Светлая тема':'◐ Тёмная тема'}
+try{themeSet(localStorage.getItem('anna-bannova-theme')==='dark'?'dark':'light')}catch(e){themeSet('light')}
+theme.addEventListener('click',()=>{let v=root.dataset.theme==='dark'?'light':'dark';themeSet(v);try{localStorage.setItem('anna-bannova-theme',v)}catch(e){}});
+const ns='http://www.w3.org/2000/svg';
+function el(name,attrs,contents){const node=document.createElementNS(ns,name);Object.entries(attrs||{}).forEach(([k,v])=>node.setAttribute(k,String(v)));if(contents!==undefined)node.textContent=contents;return node}
+function graph(container,xMax,yMin,yMax,curveFn,xSel,yThreshold,xTitle,yTitle){
+  const g=$(container);g.replaceChildren();const left=64,right=564,top=22,bottom=290;
+  const sx=x=>left+(x/xMax)*(right-left),sy=y=>bottom-(y-yMin)/(yMax-yMin)*(bottom-top);
+  for(let k=0;k<=4;k++){let y=yMin+(yMax-yMin)*k/4;g.append(el('line',{x1:left,y1:sy(y),x2:right,y2:sy(y),class:'gridline'}));g.append(el('text',{x:58,y:sy(y)+4,'text-anchor':'end',class:'tick'},Number(y.toFixed(1)).toLocaleString('ru-RU')))}
+  for(let k=0;k<=4;k++){let x=xMax*k/4;g.append(el('text',{x:sx(x),y:bottom+22,'text-anchor':'middle',class:'tick'},Number(x.toFixed(2)).toLocaleString('ru-RU')))}
+  g.append(el('line',{x1:left,y1:bottom,x2:right,y2:bottom,class:'axis'}));g.append(el('line',{x1:left,y1:top,x2:left,y2:bottom,class:'axis'}));g.append(el('text',{x:315,y:340,'text-anchor':'middle',class:'label'},xTitle));g.append(el('text',{x:12,y:18,class:'label'},yTitle));
+  const data=[];for(let i=0;i<=160;i++){let x=xMax*i/160;data.push((i?'L':'M')+sx(x).toFixed(2)+' '+sy(curveFn(x)).toFixed(2))}
+  g.append(el('path',{d:data.join(' '),class:'curve'}));g.append(el('line',{x1:left,y1:sy(yThreshold),x2:right,y2:sy(yThreshold),class:'limit'}));g.append(el('line',{x1:sx(xSel),y1:top,x2:sx(xSel),y2:bottom,class:'gridline'}));g.append(el('circle',{cx:sx(xSel),cy:sy(curveFn(xSel)),r:6,class:'marker'}));
+}
+const num=(x,places=2)=>Number(x.toFixed(places)).toLocaleString('ru-RU',{maximumFractionDigits:places});
+function updateProbe(){let L=Number($('length').value),F=10000*L*L*L-250;$('lengthValue').textContent=num(L);$('forceValue').textContent=num(F,1);let s=$('probeStatus');s.textContent=Math.abs(L-.5)<.00001?'Граничный допустимый размер':L<.5?'Условие F ≤ 1000 Н выполнено':'Предел 1000 Н превышен';s.className='status '+(L<=.5?'ok':'over');$('probeFormula').textContent='10000 · ('+num(L)+')³ − 250 = '+num(F,1);graph('probePlot',.8,-250,4900,x=>10000*x*x*x-250,L,1000,'L, м','F, Н')}
+function updateDecay(){let t=Number($('time').value),m=40*Math.pow(2,-t/10);$('timeValue').textContent=String(t);$('massValue').textContent=num(m,3);let s=$('decayStatus');s.textContent=t===30?'Масса равна порогу 5 мг':t<30?'Условие m(t) ≥ 5 мг выполнено':'Масса меньше 5 мг';s.className='status '+(t<=30?'ok':'over');$('decayFormula').textContent='40 · 2^(−'+t+'/10) = '+num(m,3);graph('decayPlot',60,0,42,x=>40*Math.pow(2,-x/10),t,5,'t, мин','m, мг')}
+$('length').addEventListener('input',updateProbe);$('time').addEventListener('input',updateDecay);
+$('probeReset').addEventListener('click',()=>{$('length').value='.50';updateProbe();$('length').focus()});
+$('decayReset').addEventListener('click',()=>{$('time').value='30';updateDecay();$('time').focus()});
+function nav(){const decay=location.hash==='#decay';$('navProbe').setAttribute('aria-current',decay?'false':'page');$('navDecay').setAttribute('aria-current',decay?'page':'false')}
+window.addEventListener('hashchange',nav);nav();updateProbe();updateDecay();
+})();
+</script></body></html>

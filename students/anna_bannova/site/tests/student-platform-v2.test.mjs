@@ -110,7 +110,7 @@ test('09.10.26 lesson and laboratory retain exact source exercise coverage and l
   const dates=[...registry.matchAll(/"date": "(\d{4}-\d{2}-\d{2})"/g)].map(x=>x[1]);
   const canonicalDates=fs.readdirSync(path.join(site,'data','lessons')).filter(name=>name.endsWith('.lesson.json')).map(name=>name.slice(0,10)).sort().reverse();
   assert.deepEqual(dates,canonicalDates);
-  assert.equal(dates[0],'2026-10-11');
+  assert.equal(dates[0],'2026-10-16');
   assert.match(lesson,/aria-controls="training"/);
   assert.match(lesson,/<mroot>/,'indexed radicals use mroot');
   assert.match(lesson,/<msqrt>/,'square roots use msqrt');
@@ -289,4 +289,24 @@ test('11.10.26 live mathematical formula builders create namespaced MathML',()=>
    assert.ok(tags(root).includes(expected),name+': '+expr+' lacks '+expected);
   }
  }
+});
+
+
+test('16.10.26 lesson has the reviewed source exercises and publication anchors',()=>{
+  const html=read('16.10.26.html');
+  const lab=read('16.10.26-lab.html');
+  const metadata=readJson('data/lessons/2026-10-16.lesson.json');
+  const intent=readJson('data/lessons/2026-10-16.intent.json');
+  assert.equal([...html.matchAll(/class="task"/g)].length,10);
+  assert.equal([...html.matchAll(/class="answer"/g)].length,10);
+  assert.deepEqual(metadata.outcomes.map(x=>x.competencyId),intent.outcomes.filter(x=>x.decision==='apply').map(x=>x.competencyId));
+  for(const outcome of metadata.outcomes){
+    assert.ok(html.includes('id="'+outcome.evidenceAnchor+'"'),outcome.evidenceAnchor);
+    assert.equal(outcome.masteryClaim,null);
+  }
+  assert.match(html,/16\.10\.26\.pdf/);
+  assert.match(html,/16\.10\.26\.png/);
+  assert.match(lab,/id="probePlot"/);
+  assert.match(lab,/id="decayPlot"/);
+  assert.match(lab,/Math\.pow\(2,-t\/10\)/);
 });
