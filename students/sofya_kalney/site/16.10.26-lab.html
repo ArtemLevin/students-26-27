@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Учебная лаборатория Софии Кальней: исследуйте теорему Менелая, меняя отношения отрезков и наблюдая точную геометрию секущей.">
+<title>Лаборатория Менелая — София Кальней</title>
+<link rel="stylesheet" href="../../../design-system/tokens.css?v=20260919-2">
+<link rel="stylesheet" href="../../../design-system/foundations.css?v=20260919-2">
+<style>
+:root{color-scheme:light;--paper:#f4f1eb;--sheet:#fffdf7;--ink:#25353c;--muted:#586b70;--rule:#cdd2cf;--accent:#176b73;--soft:#e3efed;--warm:#a05a3c;--focus:#945023}
+html[data-theme=dark]{color-scheme:dark;--paper:#111b21;--sheet:#1c2c33;--ink:#f0f3f0;--muted:#b6c9cb;--rule:#52646a;--accent:#82d0cb;--soft:#26444a;--warm:#f0b393;--focus:#ffd092}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}h1,h2,h3{font-family:Georgia,serif;line-height:1.18;font-weight:550}button,input{font:inherit}button{cursor:pointer}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}a{color:var(--accent)}.shell{width:min(1160px,calc(100% - 2.2rem));margin:auto}.skip{position:fixed;z-index:30;top:0;left:1rem;background:var(--ink);color:var(--paper);padding:.6rem;transform:translateY(-160%)}.skip:focus{transform:none}
+.top{border-bottom:1px solid var(--rule);padding:.8rem 0}.top .shell{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}.top a{text-decoration:none;font-weight:740}
+.hero{padding:3.2rem 0 1.6rem;border-bottom:1px solid var(--rule)}.eyebrow{font-size:.76rem;text-transform:uppercase;letter-spacing:.12em;color:var(--warm);font-weight:750}.hero h1{font-size:clamp(2.3rem,5.8vw,4.9rem);margin:.15em 0}.hero p{max-width:760px;color:var(--muted)}
+.workspace{padding:2.5rem 0;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,.85fr);gap:2.2rem;align-items:start}.canvas{background:var(--sheet);border:1px solid var(--rule);padding:.8rem}.canvas svg{display:block;width:100%;height:auto;min-height:240px}.canvas figcaption{font-size:.83rem;color:var(--muted);padding:.4rem}.edge{fill:none;stroke:var(--ink);stroke-width:2.25}.transversal{fill:none;stroke:var(--warm);stroke-width:3}.fill{fill:var(--soft);stroke:none}.vertex{fill:var(--ink)}.point{fill:var(--warm)}.label{font:22px Georgia,serif;fill:var(--ink)}.legend{display:flex;gap:1.1rem;flex-wrap:wrap;margin:1rem 0;color:var(--muted);font-size:.88rem}.legend i{display:inline-block;width:20px;height:4px;vertical-align:middle;margin-right:.35rem;background:var(--warm)}
+.panel{border-top:3px solid var(--accent);padding-top:1rem}.control{margin:1.45rem 0}.control label{display:block;font-weight:760;margin-bottom:.4rem}.control input{width:100%;accent-color:var(--accent);height:35px}.control output{color:var(--accent);font-weight:760;font-variant-numeric:tabular-nums}.presets{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:.8rem}.presets button,.reset,.save{background:transparent;color:var(--ink);border:1px solid var(--rule);padding:.55rem .8rem;min-height:44px}.presets button[aria-pressed=true]{background:var(--soft);border-color:var(--accent)}.reset{border-color:var(--accent);font-weight:740}.stats{margin-top:1.3rem;border-top:1px solid var(--rule)}.stat{display:flex;gap:1rem;justify-content:space-between;border-bottom:1px solid var(--rule);padding:.65rem 0}.stat b{color:var(--accent);font-variant-numeric:tabular-nums}
+.equation{font:normal clamp(1.1rem,2.25vw,1.55rem)/1.6 Georgia,serif;text-align:center;border-block:1px solid var(--accent);padding:.9rem .3rem;margin:1.2rem 0;overflow-x:auto;white-space:nowrap}.explain{background:var(--soft);border-left:3px solid var(--accent);padding:.85rem 1rem}.compare{border-top:1px solid var(--rule);margin:2rem 0 0;padding-top:1rem}.compare p{margin:.4rem 0}.challenge{margin-top:2.5rem;border-top:1px solid var(--rule);padding-top:1rem}.challenge h2{font-size:1.6rem}.challenge .question{max-width:680px}.challenge button{border:1px solid var(--rule);color:var(--ink);background:var(--sheet);padding:.6rem .8rem;min-height:44px;margin:.2rem}.challenge p[role=status]{min-height:2rem}.footer{padding:2.2rem 0 4rem;border-top:1px solid var(--rule);font-size:.85rem;color:var(--muted)}[hidden]{display:none!important}
+@media(max-width:950px){.workspace{grid-template-columns:1fr}.canvas svg{min-height:0}}@media(max-width:450px){.shell{width:calc(100% - 1.4rem)}.canvas{padding:.3rem}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{.panel,.presets,.reset,.save,.challenge{display:none}.workspace{display:block}.canvas{border:0}body{background:#fff;color:#111}}
+</style></head>
+<body>
+<a class="skip" href="#model">К модели</a>
+<header class="top"><div class="shell"><a href="16.10.26.html">← Вернуться к занятию</a><a href="index.html">Кабинет Софии ↗</a></div></header>
+<main class="shell">
+<header class="hero"><p class="eyebrow">Виртуальная лаборатория · геометрия</p><h1>Проверьте Менелая сами</h1><p>Меняйте два отношения. Точка K будет двигаться по AB, точка N — по продолжению AC, а пересечение J и все вычисления изменятся согласованно.</p></header>
+<div class="workspace">
+<div id="model">
+<figure class="canvas"><svg id="geometry" viewBox="0 0 970 365" role="img" aria-labelledby="svgTitle svgDesc">
+<title id="svgTitle">Интерактивный треугольник и секущая Менелая</title>
+<desc id="svgDesc">Точки A, B, C образуют треугольник. K на AB, J на BC, N на продолжении AC. Их координаты точно вычисляются из выбранных отношений.</desc>
+<path class="fill" d="M80 300L225 65 445 300Z"/><path class="edge" d="M80 300L225 65 445 300 80 300M445 300H810"/>
+<path id="secant" class="transversal" d="M152.5 182.5L810 300"/>
+<g class="vertex"><circle cx="80" cy="300" r="5"/><circle cx="225" cy="65" r="5"/><circle cx="445" cy="300" r="5"/></g>
+<g class="point"><circle id="kDot" cx="152.5" cy="182.5" r="6"/><circle id="jDot" cx="371.67" cy="221.67" r="6"/><circle id="nDot" cx="810" cy="300" r="6"/></g>
+<g class="label"><text x="66" y="331">A</text><text x="223" y="49">B</text><text x="440" y="330">C</text><text id="nLab" x="804" y="330">N</text><text id="kLab" x="124" y="174">K</text><text id="jLab" x="377" y="211">J</text></g>
+</svg><figcaption>Порядок точек: A–C–N, K ∈ AB, J ∈ BC. K, J, N всегда точно лежат на одной прямой.</figcaption></figure>
+<div class="legend"><span><i></i> Секущая K–J–N</span><span>Заливка — треугольник ABC</span></div>
+<div class="equation" aria-live="polite" id="equation">AK/KB × BJ/JC × CN/AN = 1</div>
+<div class="explain" id="insight" aria-live="polite">Когда K — середина AB и CN = AC, получается BJ : JC = 2 : 1.</div>
+<div class="challenge"><h2>Предскажите результат</h2><p class="question">Если оставить отношение AK : KB прежним, но увеличить CN : AC, как изменится BJ : JC?</p>
+<div role="group" aria-label="Прогноз об изменении отношения"><button type="button" data-answer="up">Увеличится</button><button type="button" data-answer="down">Уменьшится</button><button type="button" data-answer="same">Не изменится</button></div>
+<p role="status" id="predictionFeedback"></p></div>
+</div>
+<aside class="panel" aria-labelledby="controlsTitle"><h2 id="controlsTitle">Параметры</h2>
+<div class="control"><label for="ratioAB">Отношение AK : KB — <output id="ratioABOut">1,00 : 1</output></label><input id="ratioAB" type="range" min="0.4" max="2.4" step="0.05" value="1"></div>
+<div class="control"><label for="ratioNC">Отношение CN : AC — <output id="ratioNCOut">1,00 : 1</output></label><input id="ratioNC" type="range" min="0.25" max="1.25" step="0.05" value="1"></div>
+<p><strong>Сценарии занятия</strong></p><div class="presets"><button type="button" data-a="1" data-n="1">Середина и равные</button><button type="button" data-a="0.6666666667" data-n="0.5">2 : 3 и 1 : 2</button><button type="button" data-a="1" data-n="0.5">Середина и половина</button></div>
+<div class="stats" aria-label="Текущие отношения"><div class="stat"><span>AN : AC</span><b id="whole">2,00 : 1</b></div><div class="stat"><span>CN : AN</span><b id="outside">0,50 : 1</b></div><div class="stat"><span>BJ : JC</span><b id="answer">2,00 : 1</b></div><div class="stat"><span>Проверка произведения</span><b id="product">1,0000</b></div></div>
+<div class="presets"><button class="save" id="save" type="button">Запомнить состояние</button><button class="reset" id="reset" type="button">Сбросить</button></div>
+<div id="comparison" class="compare" hidden aria-live="polite"><strong>Сравнение со снимком</strong><p id="comparisonContent"></p></div>
+</aside>
+</div>
+<footer class="footer">Лёвин Артём Александрович · эксклюзивно для Софии Кальной · <a href="16.10.26.html#menelaus">К теореме</a></footer>
+</main>
+<script>
+(()=>{
+'use strict';
+const A={x:80,y:300},B={x:225,y:65},C={x:445,y:300},D=365;
+const $=id=>document.getElementById(id);
+const ab=$('ratioAB'),nc=$('ratioNC');let saved=null;
+const fmt=x=>x.toLocaleString('ru-RU',{minimumFractionDigits:2,maximumFractionDigits:2});
+const pt=(p,q,t)=>({x:p.x+(q.x-p.x)*t,y:p.y+(q.y-p.y)*t});
+const xy=p=>p.x.toFixed(4)+','+p.y.toFixed(4);
+const render=()=>{
+const alpha=Number(ab.value),s=Number(nc.value);
+const K=pt(A,B,alpha/(1+alpha)),N={x:C.x+D*s,y:C.y};
+const r=(1+s)/(alpha*s),J=pt(B,C,r/(1+r));
+$('secant').setAttribute('d','M'+xy(K)+'L'+xy(N));
+for(const [id,p] of [['kDot',K],['jDot',J],['nDot',N]]){ $(id).setAttribute('cx',p.x);$(id).setAttribute('cy',p.y);}
+$('kLab').setAttribute('x',K.x-30);$('kLab').setAttribute('y',K.y-12);
+$('jLab').setAttribute('x',J.x+9);$('jLab').setAttribute('y',J.y-10);
+$('nLab').setAttribute('x',N.x-6);$('nLab').setAttribute('y',N.y+30);
+$('ratioABOut').textContent=fmt(alpha)+' : 1';$('ratioNCOut').textContent=fmt(s)+' : 1';
+$('whole').textContent=fmt(1+s)+' : 1';$('outside').textContent=fmt(s/(1+s))+' : 1';
+$('answer').textContent=fmt(r)+' : 1';
+const check=alpha*r*(s/(1+s));$('product').textContent=check.toFixed(4).replace('.',',');
+$('equation').textContent=fmt(alpha)+' × '+fmt(r)+' × '+fmt(s/(1+s))+' = 1';
+$('insight').textContent='Чем больше CN : AC при неизменном AK : KB, тем ближе J к C и тем меньше BJ : JC. Сейчас BJ : JC = '+fmt(r)+' : 1.';
+document.querySelectorAll('[data-a][data-n]').forEach(btn=>{const active=Math.abs(Number(btn.dataset.a)-alpha)<0.03&&Math.abs(Number(btn.dataset.n)-s)<0.03;btn.setAttribute('aria-pressed',String(active));});
+const cmp=$('comparison');if(saved){cmp.hidden=false;const delta=r-saved.r;$('comparisonContent').textContent='Было BJ : JC = '+fmt(saved.r)+' : 1; стало '+fmt(r)+' : 1. '+(Math.abs(delta)<1e-6?'Отношение не изменилось.':delta>0?'Увеличилось на '+fmt(delta)+'.':'Уменьшилось на '+fmt(-delta)+'.');}else cmp.hidden=true;
+};
+ab.addEventListener('input',render);nc.addEventListener('input',render);
+document.querySelectorAll('[data-a][data-n]').forEach(btn=>btn.addEventListener('click',()=>{ab.value=btn.dataset.a;nc.value=btn.dataset.n;render()}));
+$('reset').addEventListener('click',()=>{ab.value=1;nc.value=1;saved=null;$('predictionFeedback').textContent='';render()});
+$('save').addEventListener('click',()=>{saved={r:(1+Number(nc.value))/(Number(ab.value)*Number(nc.value))};render()});
+document.querySelectorAll('[data-answer]').forEach(btn=>btn.addEventListener('click',()=>{$('predictionFeedback').textContent=btn.dataset.answer==='down'?'Верно: отношение BJ : JC уменьшается, поскольку множитель CN : AN увеличивается, а их произведение остаётся постоянным.':'Проверьте формулу: при фиксированном AK : KB произведение (BJ/JC)·(CN/AN) остаётся постоянным. Попробуйте увеличить второй параметр.';}));
+render();
+})();
+</script>
+</body></html>
