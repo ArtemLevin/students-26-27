@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="КТП Денис Ермолаев: Математика">
+  <title>КТП · Денис Ермолаев · Математика</title>
+  <link rel="stylesheet" href="../../../design-system/tokens.css">
+  <link rel="stylesheet" href="../../../design-system/foundations.css">
+  <link rel="stylesheet" href="../../../design-system/archetypes.css">
+  <link rel="stylesheet" href="../../../design-system/student-sites.css">
+  <link rel="stylesheet" href="../../../design-system/scaffold.css">
+  <style>
+    .ktp-shell{max-width:1100px;margin:auto;padding:clamp(1rem,3vw,2rem)}
+    .ktp-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;border-bottom:1px solid currentColor;padding-bottom:1rem}
+    .ktp-head h1{margin:.35rem 0;font-size:clamp(2rem,6vw,4rem)}
+    .ktp-status{margin:2rem 0;padding:1rem 0;border-block:1px solid color-mix(in srgb,currentColor 22%,transparent)}
+    .ktp-list{display:grid;gap:0}.ktp-item{padding:1rem 0;border-bottom:1px solid color-mix(in srgb,currentColor 16%,transparent)}
+    .ktp-item h2{margin:.25rem 0;font-size:1.15rem}.ktp-meta{font-family:monospace;font-size:.8rem;opacity:.72}
+    a{color:inherit}.repo-note{max-width:70ch;line-height:1.55}
+    @media(max-width:700px){.ktp-head{display:block}}
+  </style>
+</head>
+<body>
+<main class="ktp-shell" id="main">
+  <header class="ktp-head"><div><small>Математика</small><h1>Денис Ермолаев</h1><p>Календарно-тематический план</p></div><a href="index.html">← Навигатор</a></header>
+  <section class="ktp-status" aria-live="polite"><strong id="planStatus">Загрузка плана…</strong><p class="repo-note">Источник истины — репозиторий. Эта страница отображает <code>ktp-plan.json</code> и <code>ktp-state.json</code>; учебное состояние в браузере не сохраняется.</p></section>
+  <section id="ktpList" class="ktp-list" aria-label="План занятий"></section>
+</main>
+<footer class="ktp-shell"><small>Лёвин Артём Александрович эксклюзивно для Денис Ермолаев</small></footer>
+<script type="module">
+const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const dateLabel=value=>value?value.split('-').reverse().join('.'): 'дата уточняется';
+async function load(url){const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw new Error('HTTP '+response.status+' · '+url);return response.json();}
+try{
+  const [plan,state]=await Promise.all([load('./data/ktp-plan.json'),load('./data/ktp-state.json')]);
+  if(plan.studentId!=="denis_ermolaev"||state.studentId!=="denis_ermolaev")throw new Error('studentId mismatch');
+  if(plan.programVersion!==state.programVersion)throw new Error('programVersion mismatch');
+  const host=document.getElementById('ktpList'),status=document.getElementById('planStatus');
+  status.textContent=plan.lessons.length?('В плане: '+plan.lessons.length+' занятий'):'План готов к содержательному заполнению';
+  if(!plan.lessons.length){host.innerHTML='<p>Структура кабинета готова. Персональный маршрут будет добавлен через repository pipeline.</p>';}
+  else host.innerHTML=plan.lessons.map(item=>{const record=state.records[item.id]||{status:'planned'};return '<article class="ktp-item"><div class="ktp-meta">'+esc(item.id)+' · '+esc(dateLabel(record.scheduledDate||item.plannedDate))+' · '+esc(record.status)+'</div><h2>'+esc(item.topic)+'</h2><p>'+esc(item.content)+'</p></article>';}).join('');
+}catch(error){
+  document.getElementById('planStatus').textContent='КТП временно недоступен';
+  document.getElementById('ktpList').innerHTML='<p>'+esc(error.message)+'</p>';
+}
+</script>
+</body>
+</html>
