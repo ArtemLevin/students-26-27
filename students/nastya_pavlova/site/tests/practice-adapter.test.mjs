@@ -33,3 +33,6 @@ for(const file of ['students/nastya_pavlova/index.html','students/nastya_pavlova
 }
 
 console.log('✓ nastya_pavlova: EGE-2027 migration, practice adapter, config and entry points');
+
+// Keep the editorial dashboard and archive covered by the student CI matrix.
+import './editorial-regression.test.mjs';
