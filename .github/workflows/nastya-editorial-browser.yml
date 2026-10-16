@@ -1,0 +1,42 @@
+name: Nastya editorial cabinet browser QA
+on:
+  pull_request:
+    paths:
+      - 'students/nastya_pavlova/site/**'
+      - '.github/workflows/nastya-editorial-browser.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'students/nastya_pavlova/site/**'
+      - '.github/workflows/nastya-editorial-browser.yml'
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Ensure headless Chromium is installed
+        run: |
+          if ! command -v google-chrome >/dev/null && ! command -v chromium >/dev/null; then
+            npm install --no-save --no-package-lock playwright@1.56.1
+            npx playwright install --with-deps chromium
+            mkdir -p "$HOME/.local/bin"
+            CHROME=$(find "$HOME/.cache/ms-playwright" -type f -name chrome | head -n 1)
+            test -n "$CHROME"
+            ln -s "$CHROME" "$HOME/.local/bin/chromium"
+            echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          fi
+      - name: Five viewport geometry and interaction checks
+        run: node students/nastya_pavlova/site/tests/browser-editorial.mjs
+      - name: Save responsive QA screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nastya-editorial-qa
+          path: nastya-editorial-artifacts/*.png
+          if-no-files-found: warn
