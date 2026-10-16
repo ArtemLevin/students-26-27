@@ -1,0 +1,47 @@
+name: Jaroslav Vereschagin editorial browser QA
+
+on:
+  pull_request:
+    paths:
+      - 'students/jaroslav_vereschagin/site/index.html'
+      - 'students/jaroslav_vereschagin/site/atlas-editorial.css'
+      - 'students/jaroslav_vereschagin/site/dashboard-editorial.js'
+      - 'students/jaroslav_vereschagin/site/archive.html'
+      - 'students/jaroslav_vereschagin/site/archive.css'
+      - 'students/jaroslav_vereschagin/site/archive.js'
+      - 'students/jaroslav_vereschagin/site/tests/editorial-browser.mjs'
+      - '.github/workflows/browser-jaroslav-vereschagin-editorial.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'students/jaroslav_vereschagin/site/**'
+      - '.github/workflows/browser-jaroslav-vereschagin-editorial.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  jaroslav-browser:
+    name: Five-viewport editorial browser QA
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax and student contract tests
+        run: |
+          node --check students/jaroslav_vereschagin/site/archive.js
+          node --check students/jaroslav_vereschagin/site/dashboard-editorial.js
+          node --check students/jaroslav_vereschagin/site/competency-map.js
+          node --check students/jaroslav_vereschagin/site/tests/editorial-browser.mjs
+          node --test students/jaroslav_vereschagin/site/tests/student-platform-v2.test.mjs
+      - name: Validate desktop, tablet, mobile, dark theme and interaction
+        run: node students/jaroslav_vereschagin/site/tests/editorial-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jaroslav-editorial-browser-screenshots
+          path: jaroslav-editorial-browser-artifacts/*.png
+          if-no-files-found: ignore
