@@ -52,21 +52,46 @@ var components=[["f1x","f1y"],["f2x","f2y"],["f3x","f3y"]], group=document.getEl
 function node(tag,atts,parent){var el=document.createElementNS(Ns,tag);Object.keys(atts).forEach(function(k){el.setAttribute(k,String(atts[k]))});(parent||group).appendChild(el);return el}
 for(var p=-12;p<=12;p+=2){var q=center+p*scale;node("line",{x1:q,y1:32,x2:q,y2:488,stroke:"var(--grid)","stroke-width":1},grid);node("line",{x1:32,y1:q,x2:488,y2:q,stroke:"var(--grid)","stroke-width":1},grid)}
 node("line",{x1:25,y1:center,x2:495,y2:center,stroke:"var(--muted)","stroke-width":1.8},axes);node("line",{x1:center,y1:495,x2:center,y2:25,stroke:"var(--muted)","stroke-width":1.8},axes);
-node("text",{x:482,y:250,fill:"var(--ink)","font-size":16},axes).textContent="+x";node("text",{x:274,y:34,fill:"var(--ink)","font-size":16},axes).textContent="+y";
+svgMath(479,227,'<mo>+</mo><mi>x</mi>');svgMath(275,15,'<mo>+</mo><mi>y</mi>');
 var g=(function(){var o={};components.flat().concat(["mass"]).forEach(function(k){o[k]=document.getElementById(k)});return o})();
+
+var MNS="http://www.w3.org/1998/Math/MathML";
+function math(inner){return '<math xmlns="'+MNS+'" display="inline"><mrow>'+inner+'</mrow></math>';}
+function mn(value){var v=String(value);return (v[0]==="-"||v[0]==="−"?'<mo>−</mo>':'')+'<mn>'+(v[0]==="-"||v[0]==="−"?v.slice(1):v)+'</mn>';}
+function quantity(value,unit){return math(mn(value)+'<mtext> '+unit+'</mtext>');}
+function variable(base,index){return index===undefined?'<mi>'+base+'</mi>':'<msub><mi>'+base+'</mi><mi>'+index+'</mi></msub>';}
+function showMath(id,html){document.getElementById(id).innerHTML=html;}
+function svgMath(x,y,inner,ink){
+  var fo=node("foreignObject",{x:x,y:y,width:84,height:42,style:"overflow:visible;pointer-events:none"});
+  var span=document.createElementNS("http://www.w3.org/1999/xhtml","span");
+  span.style.color=ink||"var(--ink)";span.style.fontSize="16px";span.style.fontWeight="700";span.innerHTML=math(inner);fo.appendChild(span);
+}
+function projectionMath(forces,index,total){
+  var sum=forces.map(function(v,i){var term=mn(v[index]);return i?'<mo>+</mo><mo>(</mo>'+term+'<mo>)</mo>':term;}).join('');
+  return math('<mo>∑</mo>'+variable('F',index===0?'x':'y')+'<mo>=</mo>'+sum+'<mo>=</mo>'+mn(total)+'<mtext> Н</mtext>');
+}
+
 var fmt=function(n){if(Math.abs(n)<.001)n=0;return String(Math.round(n*100)/100).replace(".",",")};
 function read(){return {f:components.map(function(ids){return ids.map(function(k){return Number(g[k].value)})}),m:Number(g.mass.value)}}
 function paint(){
 var s=read(),x=s.f.reduce(function(a,p){return a+p[0]},0),y=s.f.reduce(function(a,p){return a+p[1]},0),length=Math.hypot(x,y),a=length/s.m;
-var far=Math.max(10,Math.abs(x),Math.abs(y),...s.f.flat().map(Math.abs));scale=Math.min(18,212/far);document.getElementById("scaleNote").textContent="Масштаб: 1 Н ≈ "+fmt(scale)+" пикс. Все векторы имеют общий масштаб; при больших силах он уменьшается.";
+var far=Math.max(10,Math.abs(x),Math.abs(y),...s.f.flat().map(Math.abs));scale=Math.min(18,212/far);document.getElementById("scaleNote").innerHTML="Масштаб: "+math(mn(1)+'<mtext> Н</mtext><mo>≈</mo>'+mn(fmt(scale))+'<mtext> пикс.</mtext>')+". Все векторы имеют общий масштаб; при больших силах он уменьшается.";
 grid.replaceChildren();for(var k=-Math.floor(220/(scale*2));k<=Math.floor(220/(scale*2));k++){var pos=center+k*scale*2;node("line",{x1:pos,y1:32,x2:pos,y2:488,stroke:"var(--grid)","stroke-width":1},grid);node("line",{x1:32,y1:pos,x2:488,y2:pos,stroke:"var(--grid)","stroke-width":1},grid);}
 
-components.forEach(function(ids,i){ids.forEach(function(k,j){document.getElementById("v"+(i+1)+(j?"y":"x")).textContent=g[k].value+" Н"})});
-document.getElementById("mval").textContent=s.m+" кг";document.getElementById("fx").textContent=fmt(x)+" Н";document.getElementById("fy").textContent=fmt(y)+" Н";document.getElementById("force").textContent=fmt(length)+" Н";document.getElementById("massDisplay").textContent=s.m+" кг";document.getElementById("acc").textContent=fmt(a)+" м/с²";
-var direction=length===0?"—":(y>0?"↑":y<0?"↓":"")+(x>0?"→":x<0?"←":"");document.getElementById("direction").textContent=direction||"—";
-group.replaceChildren();var colors=["var(--f1)","var(--f2)","var(--f3)"];s.f.forEach(function(f,i){if(f[0]===0&&f[1]===0)return;var ex=center+f[0]*scale,ey=center-f[1]*scale;node("line",{x1:center,y1:center,x2:ex,y2:ey,stroke:colors[i],"stroke-width":4.2,"marker-end":"url(#head"+["A","B","C"][i]+")"});var handle=node("circle",{cx:ex,cy:ey,r:12,fill:colors[i],opacity:.8,"data-index":i,role:"presentation"});handle.style.cursor="grab";node("text",{x:ex+13,y:ey-12,fill:"var(--ink)","font-weight":700,"font-size":17},group).textContent="F"+(i+1)});
-if(length>0){var mx=center+x*scale,my=center-y*scale;node("line",{x1:center,y1:center,x2:mx,y2:my,stroke:"var(--orange)","stroke-width":6,"marker-end":"url(#headR)"});node("text",{x:mx+8,y:my+19,fill:"var(--orange)","font-weight":800,"font-size":18},group).textContent="ΣF"}
-document.getElementById("explanation").textContent="ΣFₓ = "+s.f.map(function(f){return fmt(f[0])}).join(" + ")+" = "+fmt(x)+" Н. ΣFᵧ = "+s.f.map(function(f){return fmt(f[1])}).join(" + ")+" = "+fmt(y)+" Н. Модуль ΣF = √(("+fmt(x)+")² + ("+fmt(y)+")²) = "+fmt(length)+" Н. Ускорение |a| = "+fmt(length)+"/"+s.m+" = "+fmt(a)+" м/с². "+(length?"Ускорение сонаправлено оранжевой стрелке равнодействующей.":"Силы уравновешены: ускорение равно нулю.");
+
+components.forEach(function(ids,i){ids.forEach(function(k,j){showMath("v"+(i+1)+(j?"y":"x"),quantity(g[k].value,"Н"));})});
+showMath("mval",quantity(s.m,"кг"));
+showMath("fx",quantity(fmt(x),"Н"));showMath("fy",quantity(fmt(y),"Н"));
+showMath("force",quantity(fmt(length),"Н"));showMath("massDisplay",quantity(s.m,"кг"));
+showMath("acc",quantity(fmt(a),"м/с²"));
+var direction=length===0?"—":(y>0?"↑":y<0?"↓":"")+(x>0?"→":x<0?"←":"");
+showMath("direction",math('<mo>'+ (direction||"—")+'</mo>'));
+group.replaceChildren();var colors=["var(--f1)","var(--f2)","var(--f3)"];s.f.forEach(function(f,i){if(f[0]===0&&f[1]===0)return;var ex=center+f[0]*scale,ey=center-f[1]*scale;node("line",{x1:center,y1:center,x2:ex,y2:ey,stroke:colors[i],"stroke-width":4.2,"marker-end":"url(#head"+["A","B","C"][i]+")"});var handle=node("circle",{cx:ex,cy:ey,r:12,fill:colors[i],opacity:.8,"data-index":i,role:"presentation"});handle.style.cursor="grab";svgMath(ex+13,ey-32,'<msub><mi>F</mi><mn>'+(i+1)+'</mn></msub>')});
+if(length>0){var mx=center+x*scale,my=center-y*scale;node("line",{x1:center,y1:center,x2:mx,y2:my,stroke:"var(--orange)","stroke-width":6,"marker-end":"url(#headR)"});svgMath(mx+8,my-7,'<mo>∑</mo><mi>F</mi>',"var(--orange)")}
+
+var mag=math('<msub><mi>F</mi><mtext>рез</mtext></msub><mo>=</mo><msqrt><msup><mrow><mo>(</mo>'+mn(x)+'<mo>)</mo></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mo>(</mo>'+mn(y)+'<mo>)</mo></mrow><mn>2</mn></msup></msqrt><mo>=</mo>'+mn(fmt(length))+'<mtext> Н</mtext>');
+var accel=math('<mo>|</mo><mi>a</mi><mo>|</mo><mo>=</mo><mfrac>'+mn(fmt(length))+mn(s.m)+'</mfrac><mo>=</mo>'+mn(fmt(a))+'<mtext> м/с²</mtext>');
+document.getElementById("explanation").innerHTML='<p>'+projectionMath(s.f,0,x)+'. '+projectionMath(s.f,1,y)+'.</p><p>Модуль равнодействующей: '+mag+'. Ускорение: '+accel+'.</p><p>'+(length?'Ускорение сонаправлено оранжевой стрелке равнодействующей.':'Силы уравновешены: ускорение равно нулю.')+'</p>';
 document.querySelectorAll("[data-preset]").forEach(function(b){b.setAttribute("aria-pressed","false")});
 }
 function set(p){components.forEach(function(pair,i){pair.forEach(function(k,j){g[k].value=p.f["f"+(i+1)][j]})});g.mass.value=p.m;paint()}
@@ -77,11 +102,19 @@ var active=-1;
 svg.addEventListener("pointerdown",function(e){var v=e.target.closest("[data-index]");if(!v)return;active=Number(v.getAttribute("data-index"));if(!Number.isInteger(active))return;svg.setPointerCapture(e.pointerId);e.preventDefault()});
 svg.addEventListener("pointermove",function(e){if(active<0)return;var pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;var matrix=svg.getScreenCTM();if(!matrix)return;var pos=pt.matrixTransform(matrix.inverse());var vx=Math.max(-10,Math.min(10,Math.round((pos.x-center)/scale))),vy=Math.max(-10,Math.min(10,Math.round((center-pos.y)/scale)));g[components[active][0]].value=vx;g[components[active][1]].value=vy;paint()});
 function stop(){active=-1}svg.addEventListener("pointerup",stop);svg.addEventListener("pointercancel",stop);svg.addEventListener("lostpointercapture",stop);
-document.getElementById("check").addEventListener("click",function(){var s=read(),x=s.f.reduce(function(a,f){return a+f[0]},0),y=s.f.reduce(function(a,f){return a+f[1]},0),z=Math.hypot(x,y);var nonzero=s.f.filter(function(f){return f[0]!==0||f[1]!==0}).length;var f;
-if(z===0&&nonzero>=2)f="Равновесие достигнуто: сумма всех сил равна нулю, ускорение тоже равно нулю.";
-else if((function(){var a=s.f.filter(function(v){return v[0]!==0||v[1]!==0});return Math.abs(z-5)<.01&&s.m===2&&a.length===2&&(a[0][0]*a[1][0]+a[0][1]*a[1][1]===0);})())f="Первый эксперимент выполнен: две ненулевые силы взаимно перпендикулярны, их сумма 5 Н, ускорение 2,5 м/с².";
-else f="Сейчас |ΣF| = "+fmt(z)+" Н, |a| = "+fmt(z/s.m)+" м/с². Первый эксперимент требует ровно двух ненулевых взаимно перпендикулярных сил, массы 2 кг и результирующей 5 Н.";
-document.getElementById("feedback").textContent=f});
+
+document.getElementById("check").addEventListener("click",function(){
+  var s=read(),x=s.f.reduce(function(v,f){return v+f[0]},0),y=s.f.reduce(function(v,f){return v+f[1]},0),z=Math.hypot(x,y);
+  var nonzero=s.f.filter(function(f){return f[0]!==0||f[1]!==0}).length,first=s.f.filter(function(f){return f[0]!==0||f[1]!==0}),feedback;
+  if(z===0&&nonzero>=2){
+    feedback="Равновесие достигнуто: "+math('<mo>∑</mo><mi>F</mi><mo>=</mo>'+mn(0)+'<mtext> Н</mtext>')+", ускорение "+quantity(0,"м/с²")+".";
+  }else if(Math.abs(z-5)<.01&&s.m===2&&first.length===2&&(first[0][0]*first[1][0]+first[0][1]*first[1][1]===0)){
+    feedback="Первый эксперимент выполнен: две ненулевые силы взаимно перпендикулярны, их сумма "+quantity(5,"Н")+", ускорение "+quantity("2,5","м/с²")+".";
+  }else{
+    feedback="Сейчас "+math('<mo>|</mo><mo>∑</mo><mi>F</mi><mo>|</mo><mo>=</mo>'+mn(fmt(z))+'<mtext> Н</mtext>')+", "+math('<mo>|</mo><mi>a</mi><mo>|</mo><mo>=</mo>'+mn(fmt(z/s.m))+'<mtext> м/с²</mtext>')+". Первый эксперимент требует ровно двух ненулевых взаимно перпендикулярных сил, массы "+quantity(2,"кг")+" и результирующей "+quantity(5,"Н")+".";
+  }
+  document.getElementById("feedback").innerHTML=feedback;
+});
 var initialScenario=new URLSearchParams(location.search).get("scenario");var initialPreset=Object.prototype.hasOwnProperty.call(presets,initialScenario)?initialScenario:"perpendicular";set({f:presets[initialPreset],m:presets[initialPreset].m});document.querySelector('[data-preset="'+initialPreset+'"]').setAttribute("aria-pressed","true");
 })();
 </script></body></html>
