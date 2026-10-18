@@ -69,7 +69,7 @@ document.querySelectorAll("[data-preset]").forEach(function(b){b.setAttribute("a
 }
 function set(p){components.forEach(function(pair,i){pair.forEach(function(k,j){g[k].value=p.f["f"+(i+1)][j]})});g.mass.value=p.m;paint()}
 document.querySelectorAll("[data-preset]").forEach(function(b){b.addEventListener("click",function(){var p=presets[b.dataset.preset];set({f:{f1:p.f1,f2:p.f2,f3:p.f3},m:p.m});b.setAttribute("aria-pressed","true");document.getElementById("feedback").textContent=""})});
-document.getElementById("reset").addEventListener("click",function(){var query=new URLSearchParams(location.search).get("scenario");var preset=Object.prototype.hasOwnProperty.call(presets,query)?query:"perpendicular";set({f:presets[preset],m:presets[preset].m});document.querySelector('[data-preset="'+preset+'"]').setAttribute("aria-pressed","true");document.getElementById("feedback").textContent=""});
+document.getElementById("reset").addEventListener("click",function(){set({f:presets.perpendicular,m:2});document.querySelector('[data-preset="perpendicular"]').setAttribute("aria-pressed","true");document.getElementById("feedback").textContent=""});
 Object.values(g).forEach(function(input){input.addEventListener("input",paint)});
 var active=-1;
 svg.addEventListener("pointerdown",function(e){var v=e.target.closest("[data-index]");if(!v)return;active=Number(v.getAttribute("data-index"));if(!Number.isInteger(active))return;svg.setPointerCapture(e.pointerId);e.preventDefault()});
@@ -80,6 +80,6 @@ if(z===0&&nonzero>=2)f="Равновесие достигнуто: сумма в
 else if((function(){var a=s.f.filter(function(v){return v[0]!==0||v[1]!==0});return Math.abs(z-5)<.01&&s.m===2&&a.length===2&&(a[0][0]*a[1][0]+a[0][1]*a[1][1]===0);})())f="Первый эксперимент выполнен: две ненулевые силы взаимно перпендикулярны, их сумма 5 Н, ускорение 2,5 м/с².";
 else f="Сейчас |ΣF| = "+fmt(z)+" Н, |a| = "+fmt(z/s.m)+" м/с². Первый эксперимент требует ровно двух ненулевых взаимно перпендикулярных сил, массы 2 кг и результирующей 5 Н.";
 document.getElementById("feedback").textContent=f});
-set({f:presets.perpendicular,m:2});document.querySelector('[data-preset="perpendicular"]').setAttribute("aria-pressed","true");
+var initialScenario=new URLSearchParams(location.search).get("scenario");var initialPreset=Object.prototype.hasOwnProperty.call(presets,initialScenario)?initialScenario:"perpendicular";set({f:presets[initialPreset],m:presets[initialPreset].m});document.querySelector('[data-preset="'+initialPreset+'"]').setAttribute("aria-pressed","true");
 })();
 </script></body></html>
