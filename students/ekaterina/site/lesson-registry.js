@@ -5,6 +5,59 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-17",
+    "ktpRefs": [],
+    "href": "17.10.26.html",
+    "title": "Параллелограмм, прямоугольник и системы счисления",
+    "navTitle": "Геометрия и системы счисления",
+    "navSubtitle": "Екатерина Скелли · свойства и признаки параллелограмма, доказательства, прямоугольник и перевод чисел между системами счисления · 17.10.2026",
+    "summary": "Екатерина Скелли · свойства и признаки параллелограмма, доказательства, прямоугольник и перевод чисел между системами счисления · 17.10.2026",
+    "topics": [
+      "параллелограмм: свойства и признаки",
+      "геометрические доказательства",
+      "прямоугольник",
+      "позиционные системы счисления",
+      "триады и тетрады"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "geo_quads_02",
+        "evidenceAnchor": "geometry",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "geo_quads_03",
+        "evidenceAnchor": "geometry",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "geo_quads_04",
+        "evidenceAnchor": "geometry",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "geo_quads_05",
+        "evidenceAnchor": "geometry",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "geo_quads_06",
+        "evidenceAnchor": "proofs",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "geo_quads_07",
+        "evidenceAnchor": "rectangle",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "17.10.26.html",
+      "pdf": "../pdf_docs/17.10.26.pdf",
+      "tex": "../tex_docs/17.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-10",
     "ktpRefs": [],
     "href": "10.10.26.html",
