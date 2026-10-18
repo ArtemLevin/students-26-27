@@ -1,4 +1,4 @@
-import {LESSONS} from './lesson-registry.js?v=20261007-credit';
+import {LESSONS} from './lesson-registry.js?v=20261017-finance';
 import {initStudentDashboard} from '../../../shared/student-dashboard/dashboard-core.js';
 import {installEgeProfile2027ControllerHook} from '../../../shared/student-dashboard/ege-profile-2027.js?v=20260903';
 import {PRACTICE_CONFIG} from './practice-config.js';
@@ -6,7 +6,7 @@ installEgeProfile2027ControllerHook('__studentCompetenceMap');
 initStudentDashboard({lessons:LESSONS,themeKey:'timofey-dashboard-theme-v1',summaryEvent:'timofey:competence-summary'});
 const latestLabLink=document.getElementById('latestLabLink');
 if(latestLabLink){
-  const lab=LESSONS[0]?.lab;
+  const lab=LESSONS[0]?.materials?.lab || LESSONS[0]?.lab;
   latestLabLink.hidden=!lab;
   if(lab)latestLabLink.href=lab;
 }
