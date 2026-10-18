@@ -132,5 +132,6 @@ try{
     processChrome.once('exit',resolve);
     setTimeout(resolve,3000);
   });
-  fs.rmSync(profile,{recursive:true,force:true,maxRetries:12,retryDelay:200});
+  try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:2,retryDelay:120});}
+  catch(error){console.warn('Chromium temporary profile cleanup deferred to CI runner:',error.code);}
 }
