@@ -56,11 +56,14 @@ var fmt=function(n){if(Math.abs(n)<.001)n=0;return String(Math.round(n*100)/100)
 function read(){return {f:components.map(function(ids){return ids.map(function(k){return Number(g[k].value)})}),m:Number(g.mass.value)}}
 function paint(){
 var s=read(),x=s.f.reduce(function(a,p){return a+p[0]},0),y=s.f.reduce(function(a,p){return a+p[1]},0),length=Math.hypot(x,y),a=length/s.m;
+var far=Math.max(10,Math.abs(x),Math.abs(y),...s.f.flat().map(Math.abs));scale=Math.min(18,212/far);
+grid.replaceChildren();for(var k=-Math.floor(220/(scale*2));k<=Math.floor(220/(scale*2));k++){var pos=center+k*scale*2;node("line",{x1:pos,y1:32,x2:pos,y2:488,stroke:"var(--grid)","stroke-width":1},grid);node("line",{x1:32,y1:pos,x2:488,y2:pos,stroke:"var(--grid)","stroke-width":1},grid);}
+
 components.forEach(function(ids,i){ids.forEach(function(k,j){document.getElementById("v"+(i+1)+(j?"y":"x")).textContent=g[k].value+" Н"})});
 document.getElementById("mval").textContent=s.m+" кг";document.getElementById("fx").textContent=fmt(x)+" Н";document.getElementById("fy").textContent=fmt(y)+" Н";document.getElementById("force").textContent=fmt(length)+" Н";document.getElementById("massDisplay").textContent=s.m+" кг";document.getElementById("acc").textContent=fmt(a)+" м/с²";
 var direction=length===0?"—":(y>0?"↑":y<0?"↓":"")+(x>0?"→":x<0?"←":"");document.getElementById("direction").textContent=direction||"—";
 group.replaceChildren();var colors=["#247e66","#1f83a8","#9272a2"];s.f.forEach(function(f,i){if(f[0]===0&&f[1]===0)return;var ex=center+f[0]*scale,ey=center-f[1]*scale;node("line",{x1:center,y1:center,x2:ex,y2:ey,stroke:colors[i],"stroke-width":4.2,"marker-end":"url(#head"+["A","B","C"][i]+")"});var handle=node("circle",{cx:ex,cy:ey,r:12,fill:colors[i],opacity:.8,"data-index":i,role:"presentation"});handle.style.cursor="grab";node("text",{x:ex+13,y:ey-12,fill:"var(--ink)","font-weight":700,"font-size":17},group).textContent="F"+(i+1)});
-if(length>0){var mx=Math.max(24,Math.min(496,center+x*scale)),my=Math.max(24,Math.min(496,center-y*scale));node("line",{x1:center,y1:center,x2:mx,y2:my,stroke:"#b45436","stroke-width":6,"marker-end":"url(#headR)"});node("text",{x:mx+8,y:my+19,fill:"var(--orange)","font-weight":800,"font-size":18},group).textContent="ΣF"}
+if(length>0){var mx=center+x*scale,my=center-y*scale;node("line",{x1:center,y1:center,x2:mx,y2:my,stroke:"#b45436","stroke-width":6,"marker-end":"url(#headR)"});node("text",{x:mx+8,y:my+19,fill:"var(--orange)","font-weight":800,"font-size":18},group).textContent="ΣF"}
 document.getElementById("explanation").textContent="ΣFₓ = "+s.f.map(function(f){return fmt(f[0])}).join(" + ")+" = "+fmt(x)+" Н. ΣFᵧ = "+s.f.map(function(f){return fmt(f[1])}).join(" + ")+" = "+fmt(y)+" Н. Модуль ΣF = √("+fmt(x)+"² + "+fmt(y)+"²) = "+fmt(length)+" Н. Ускорение |a| = "+fmt(length)+"/"+s.m+" = "+fmt(a)+" м/с². "+(length?"Ускорение сонаправлено оранжевой стрелке равнодействующей.":"Силы уравновешены: ускорение равно нулю.");
 document.querySelectorAll("[data-preset]").forEach(function(b){b.setAttribute("aria-pressed","false")});
 }
