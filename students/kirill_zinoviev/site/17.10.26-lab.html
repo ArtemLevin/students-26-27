@@ -15,6 +15,15 @@ math[display="block"]{display:block;max-width:100%;margin:auto;overflow-x:auto;f
 .formula-preview math{font-size:1.4em}
 .state strong math{font-size:1em}
 .graph math{font-size:1em}
+
+.formula-picker{border:1px solid var(--line);margin:0 0 13px;padding:11px 13px 13px;min-width:0}
+.formula-picker legend{color:var(--green);font-weight:750;padding:0 5px}
+.formula-options{display:grid;gap:3px}
+.formula-choice{display:flex!important;align-items:center;gap:10px;min-height:42px;cursor:pointer;font-weight:normal!important;margin:0!important;padding:6px;border:1px solid transparent}
+.formula-choice:has(input:checked){background:var(--soft);border-color:var(--line)}
+.formula-choice input{width:17px;height:17px;flex:none;accent-color:var(--green)}
+.formula-choice math{font-size:1.06em}
+.formula-picker[hidden]{display:none}
 </style></head><body><a class="skip" href="#main">К модели</a><div class="wrap">
 <header class="head"><span class="kicker">Лаборатория / 17 октября 2026 / 7 класс</span><h1>Проверьте функцию</h1><p>Меняйте аргумент и наблюдайте, как изменяются вычисление, результат и таблица. Найдите значения, при которых знаменатель становится нулём.</p><nav class="nav"><a href="17.10.26.html">← К занятию</a><a href="index.html">Кабинет</a><button id="theme" type="button">Тёмная тема</button></nav></header>
 <main id="main"><div class="tabs" role="group" aria-label="Режимы лаборатории"><button type="button" data-mode="value" aria-pressed="true">Значение</button><button type="button" data-mode="square" aria-pressed="false">Скобки</button><button type="button" data-mode="table" aria-pressed="false">Таблица</button><button type="button" data-mode="domain" aria-pressed="false">Область определения</button></div>
@@ -28,7 +37,7 @@ math[display="block"]{display:block;max-width:100%;margin:auto;overflow-x:auto;f
 <div id="graphArea"><h3>Как меняется результат</h3><div class="graph" id="graph" role="group" aria-label="Выберите аргумент на диаграмме"></div><p class="muted">Высота столбца показывает модуль значения функции; недопустимые точки оставлены пустыми.</p></div>
 </section>
 <aside class="control" aria-labelledby="controls-title"><span class="tag">Настройки опыта</span><h2 id="controls-title">Измените <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>x</mi></math></h2>
-<div id="formula-wrap"><label for="formula">Формула функции</label><select id="formula"></select></div><div id="formulaPreview" class="formula-preview" role="status" aria-label="Выбранная формула"></div>
+<fieldset id="formula-wrap" class="formula-picker"><legend>Выберите формулу функции</legend><div id="formula" class="formula-options"></div></fieldset><div id="formulaPreview" class="formula-preview" role="status" aria-label="Выбранная формула"></div>
 <label for="argumentRange">Значение аргумента: <strong id="rangeValue"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mo>−</mo><mn>6</mn></mrow></math></strong></label><input type="range" id="argumentRange" min="0" max="8" value="0" step="1"><div class="range-end"><span id="minArg"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mo>−</mo><mn>6</mn></mrow></math></span><span id="maxArg"><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>12</mn></math></span></div><p>Можно также выбрать число в таблице или столбец диаграммы.</p>
 <div class="actions"><button id="prev" type="button">← Ранее</button><button id="next" type="button">Далее →</button><button id="reset" type="button">Сброс</button></div>
 </aside></div>
@@ -93,7 +102,13 @@ if(state.mode==='value')$('instruction').replaceChildren(...formulaLine('Для 
 else if(state.mode==='table')$('instruction').replaceChildren(...formulaLine('Для ',Mnode('y = x(x − 3,5)'),' шаг аргумента равен ',Mnode('0,5'),'; значения ',Mnode('y'),' меняются иначе.'));
 else if(state.mode==='domain')$('instruction').replaceChildren(...formulaLine('Посмотрите, при каком ',Mnode('x'),' знаменатель равен нулю. Такое число исключается.'));
 else $('instruction').textContent=m.c.instruction;
-const select=$('formula');select.replaceChildren();m.c.formulas.forEach((f,i)=>{const option=document.createElement('option');option.value=String(i);option.textContent=f.text;select.append(option)});select.value=String(state.formula);$('formula-wrap').hidden=m.c.formulas.length===1;put('formulaPreview',m.f.text,true);
+const choices=$('formula');choices.replaceChildren();m.c.formulas.forEach((f,i)=>{
+const label=document.createElement('label'),input=document.createElement('input');
+label.className='formula-choice';input.type='radio';input.name='chosen-formula';input.value=String(i);input.checked=i===state.formula;
+input.addEventListener('change',()=>{state.formula=i;render()});
+label.append(input,Mnode(f.text));choices.append(label);
+});
+$('formula-wrap').hidden=m.c.formulas.length===1;put('formulaPreview',m.f.text,true);
 const range=$('argumentRange');range.max=m.c.xs.length-1;range.value=state.index;range.setAttribute('aria-valuetext','x = '+fmt(m.x));put('rangeValue',fmt(m.x));put('minArg',fmt(m.c.xs[0]));put('maxArg',fmt(m.c.xs[m.c.xs.length-1]));
 const equation=eq(m);
 if(m.valid)put('equation',equation,true);
@@ -113,7 +128,6 @@ function chooseIndex(i){const c=config[state.mode];state.index=Math.max(0,Math.m
 function setMode(mode){state.mode=mode;state.formula=0;state.snapshot=null;const c=config[mode];state.index=c.xs.indexOf(c.defaultX);if(state.index<0)state.index=0;history.replaceState(null,'','?mode='+mode);render()}
 q('[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
 $('argumentRange').addEventListener('input',e=>chooseIndex(e.target.value));
-$('formula').addEventListener('change',e=>{state.formula=Number(e.target.value);render()});
 $('prev').addEventListener('click',()=>chooseIndex(state.index-1));$('next').addEventListener('click',()=>chooseIndex(state.index+1));$('reset').addEventListener('click',()=>setMode(state.mode));
 $('capture').addEventListener('click',()=>{state.snapshot={...model()};render()});$('clear-capture').addEventListener('click',()=>{state.snapshot=null;render()});
 q('[data-prediction]').forEach(b=>b.addEventListener('click',()=>{const m=model(),yes=b.dataset.prediction==='yes',correct=yes===m.valid;q('[data-prediction]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));$('feedback').replaceChildren(...formulaLine(correct?'Верно. ':'Проверьте знаменатель. ','При ',Mnode('x = '+fmt(m.x)),m.valid?' значение существует.':' знаменатель равен нулю, значение не существует.'))}));
