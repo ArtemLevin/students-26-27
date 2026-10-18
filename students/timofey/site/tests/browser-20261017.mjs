@@ -130,6 +130,17 @@ try{
   }
 
   await navigate('17.10.26.html');
+  // All mathematical notation on the static lesson page must use native MathML.
+  assert.ok(await run("document.querySelectorAll('main math').length >= 140"));
+  assert.ok(await run("document.querySelectorAll('mfrac').length >= 7"));
+  assert.ok(await run("document.querySelectorAll('msup').length >= 4"));
+  assert.ok(await run("document.querySelectorAll('msub').length >= 8"));
+  assert.equal(await run("[...document.querySelectorAll('math')].every(e=>e.namespaceURI==='http://www.w3.org/1998/Math/MathML')"),true);
+  assert.equal(await run("[...document.querySelectorAll('.equation')].every(e=>e.querySelector('math[display=block]'))"),true);
+  assert.equal(await run("[...document.querySelectorAll('main .table-scroll td')].every(e=>e.querySelector('math'))"),true);
+  assert.equal(await run("[...document.querySelectorAll('#practice .practice-list li')].every(e=>e.querySelector('math'))"),true);
+  assert.equal(await run("[...document.querySelectorAll('#practice .answers > div')].every(e=>e.querySelector('math'))"),true);
+  assert.ok(await run("document.querySelectorAll('.hero-formula math').length===2"));
   assert.equal(await run("(()=>{document.querySelector('[data-choice=arbitrary]').click();return document.querySelector('#quizResult').textContent.includes('Верно')})()"),true);
   assert.equal(await run("(()=>{document.querySelector('[data-choice=annuity]').click();return document.querySelector('#quizResult').textContent.includes('Проверьте')})()"),true);
   assert.equal(await run("(()=>{document.querySelector('#theme').click();return document.documentElement.dataset.theme})()"),'light');
@@ -142,6 +153,12 @@ try{
     assert.equal(await run("document.querySelectorAll('#ledger tr').length"),1);
     assert.equal(await run("(()=>{document.querySelector('#all').click();return document.querySelectorAll('#ledger tr').length})()"),years);
     assert.ok((await run("document.querySelector('#ledger tr:last-child td:last-child').textContent")).includes('0'));
+    assert.equal(await run("document.querySelectorAll('math[display=block][data-for]:not([hidden])').length"),1);
+    assert.equal(await run("document.querySelectorAll('.metrics math').length"),3);
+    assert.equal(await run("[...document.querySelectorAll('#ledger td')].every(c=>c.querySelector('math'))"),true);
+    assert.equal(await run("[...document.querySelectorAll('#ledger math')].every(e=>e.namespaceURI==='http://www.w3.org/1998/Math/MathML')"),true);
+    assert.ok(await run("document.querySelectorAll('#step p math').length >= 5"));
+    assert.equal(await run("document.querySelectorAll('.bar-row b math').length"),years*2);
     assert.equal(await run("document.querySelectorAll('.bar-rem').length"),years);
     await run("document.querySelector('#bars').scrollIntoView()");
     await screenshot('lab-'+mode+'-all-years');
