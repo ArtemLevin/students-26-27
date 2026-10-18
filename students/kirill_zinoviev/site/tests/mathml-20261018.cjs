@@ -23,7 +23,8 @@ return texts.slice(0,8)})()};
 console.log('MATHML',file,mode,width,state);
 assert.equal(state.nonNamespace,0,'All math nodes must be MathML');
 assert.ok(state.mathCount>(file==='lesson'?100:20),'Missing semantic math');
-assert.ok(state.numberFractions>0,'Fractions must use mfrac');
+if(file==='lesson'||['value','domain'].includes(mode))assert.ok(state.numberFractions>0,'Fractions must use mfrac');
+if(mode==='square')assert.ok(state.powers>0,'Squares must use msup');
 assert.ok(state.overhang<=1,'Horizontal overhang');
 assert.deepEqual(state.plainVariables,[],'Visible math variable outside MathML');
 }
