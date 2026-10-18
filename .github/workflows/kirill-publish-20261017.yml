@@ -1,0 +1,32 @@
+name: Kirill 2026-10-17 canonical publish
+on:
+  push:
+    branches: [feat/kirill-functions-20261017]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preview canonical publication
+        run: node scripts/publish-lesson.mjs kirill_zinoviev 17.10.26 --intent students/kirill_zinoviev/site/data/publication-intents/2026-10-17.json --dry-run
+      - name: Publish lesson through Student Platform v2
+        run: node scripts/publish-lesson.mjs kirill_zinoviev 17.10.26 --intent students/kirill_zinoviev/site/data/publication-intents/2026-10-17.json
+      - name: Verify student
+        run: node scripts/student.mjs validate kirill_zinoviev
+      - name: Commit publisher output
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/kirill_zinoviev/site/lesson-registry.js students/kirill_zinoviev/site/dashboard.js students/kirill_zinoviev/site/data/lessons students/kirill_zinoviev/site/data/ktp-state.json students/kirill_zinoviev/site/data/mastery-state.json students/kirill_zinoviev/site/data/practice-publications
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(kirill): publish 2026-10-17 through v2 pipeline"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
