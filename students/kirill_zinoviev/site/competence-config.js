@@ -26,7 +26,11 @@ const evidenceOnly=[
 {date:'07.10.26',href:'07.10.26.html#terms',ids:['expr_5','expr_6']},
 {date:'07.10.26',href:'07.10.26.html#brackets',ids:['expr_8']},
 {date:'07.10.26',href:'07.10.26.html#cases',ids:['expr_7','equations_7','equations_8','equations_11']},
-{date:'07.10.26',href:'07.10.26.html#translation',ids:['equations_12']}
+{date:'07.10.26',href:'07.10.26.html#translation',ids:['equations_12']},
+{date:'17.10.26',href:'17.10.26.html#argument',ids:['functions_2','expr_2']},
+{date:'17.10.26',href:'17.10.26.html#negative',ids:['powers_3']},
+{date:'17.10.26',href:'17.10.26.html#table',ids:['functions_3']},
+{date:'17.10.26',href:'17.10.26.html#domain',ids:['fractions_2']}
 ];
 const teacherSeed={},evidence={};
 for(const lesson of lessons)for(const id of lesson.ids){teacherSeed[id]=Math.max(teacherSeed[id]||0,2);evidence[id]={text:`Тема подтверждена материалом занятия ${lesson.date}.`,href:lesson.href};}

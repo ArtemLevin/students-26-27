@@ -3,6 +3,65 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-17",
+  "ktpRefs": [],
+  "href": "17.10.26.html",
+  "title": "Функция и её значения",
+  "navTitle": "Функция и её значения",
+  "navSubtitle": "Кирилл Зиновьев, 17 октября 2026: аргумент и значение функции, таблицы с шагом и область определения. Примеры, алгоритм и 10 задач Путь А.",
+  "summary": "Кирилл Зиновьев, 17 октября 2026: аргумент и значение функции, таблицы с шагом и область определения. Примеры, алгоритм и 10 задач Путь А.",
+  "topics": [
+    "аргумент и значение функции",
+    "подстановка отрицательных чисел",
+    "таблицы значений с шагом",
+    "область определения функции",
+    "исключение нулей знаменателя"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "functions_2",
+      "evidenceAnchor": "argument",
+      "relation": "practiced",
+      "label": "Различать аргумент и значение функции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "expr_2",
+      "evidenceAnchor": "argument",
+      "relation": "practiced",
+      "label": "Находить значение выражения подстановкой",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "powers_3",
+      "evidenceAnchor": "negative",
+      "relation": "practiced",
+      "label": "Вычислять степень отрицательного числа в скобках",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_3",
+      "evidenceAnchor": "table",
+      "relation": "practiced",
+      "label": "Заполнять таблицу значений",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fractions_2",
+      "evidenceAnchor": "domain",
+      "relation": "touched",
+      "label": "Проверять условие ненулевого знаменателя",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "17.10.26.html",
+    "pdf": "../pdf_docs/17.10.26.pdf",
+    "tex": "../tex_docs/17.10.26.tex",
+    "lab": "17.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-14",
   "ktpRefs": [],
   "href": "14.10.26.html",
