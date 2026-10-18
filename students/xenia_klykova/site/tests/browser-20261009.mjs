@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {LESSONS} from '../lesson-registry.js';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -198,19 +199,19 @@ try{
   assert.equal(await run("document.querySelector('#identityValue').textContent"),'2 × 6 − 5 × 3 = -3');
   await navigate('index.html',1440,900);
   await sleep(400);
-  assert.equal(await run("document.querySelector('#lesson-title').textContent"),'Делимость. Искусство исключать');
-  assert.equal(await run("document.querySelector('#latestLessonCta').getAttribute('href')"),'15.10.26.html');
+  assert.equal(await run("document.querySelector('#lesson-title').textContent"),LESSONS[0].title);
+  assert.equal(await run("document.querySelector('#latestLessonCta').getAttribute('href')"),LESSONS[0].href);
   assert.equal(await run("document.querySelector('#latestPdfLink')===null"),true);
   assert.equal(await run("document.querySelector('#latestTexLink')===null"),true);
   assert.equal(await run("[...document.querySelectorAll('a')].some(a=>a.getAttribute('href')==='../chemistry/site/index.html')"),false);
   assert.ok(await run("document.querySelector('#latestReviewLink')!==null"),'review link must remain');
-  assert.ok(await run("document.querySelector('#latestLessonCta').getAttribute('href')==='15.10.26.html'"),'lesson materials are still available on the lesson page');
+  assert.equal(await run("document.querySelector('#latestLessonCta').getAttribute('href')"),LESSONS[0].href,'lesson materials are still available on the lesson page');
   assert.equal(await run("document.querySelector('#archivePageCta').getAttribute('href')"),'archive.html');
   assert.equal(await run("document.querySelector('#lessonArchive')===null"),true);
   assert.equal(await run("document.querySelector('#recentLessons')===null"),true);
   // Student-facing lesson evidence must render reviewed titles, not internal IDs.
   assert.ok(await run("document.querySelector('#lesson').classList.contains('lesson-summary')"),'latest lesson class must be valid');
-  assert.deepEqual(await run("[...document.querySelectorAll('#latestLessonStatus .outcome span:nth-child(2)')].map(el=>el.textContent)"),['Свойства делимости и целочисленные линейные комбинации','Делимость как нулевой остаток']);
+  assert.deepEqual(await run("[...document.querySelectorAll('#latestLessonStatus .outcome span:nth-child(2)')].map(el=>el.textContent)"),LESSONS[0].outcomes.map(item=>item.label));
   assert.ok(await run("!document.querySelector('#latestLessonStatus').textContent.includes('t19_')"),'no service IDs in learner-facing lesson results');
   assert.ok(await run("(()=>{const a=document.querySelector('.lesson-copy').getBoundingClientRect(),b=document.querySelector('#latestLessonStatus').getBoundingClientRect(),c=document.querySelector('#practiceSection').getBoundingClientRect(),d=document.querySelector('#lesson').getBoundingClientRect();return b.left>=a.right-3&&c.top>=d.bottom-2})()"),'desktop outcomes must stay right of lesson, above practice');
   // Anna Bannova visual reference: open editorial layout instead of permanent desktop sidebar.
@@ -233,10 +234,10 @@ try{
   await navigate('archive.html',1440,900,false);
   assert.equal(await run("document.querySelector('#archiveRoot').getAttribute('aria-busy')"),'false');
   assert.equal(await run("document.querySelectorAll('.archive-month').length"),4);
-  assert.equal(await run("document.querySelectorAll('.archive-tile').length"),30);
+  assert.equal(await run("document.querySelectorAll('.archive-tile').length"),LESSONS.length);
   assert.deepEqual(await run("[...document.querySelectorAll('.archive-month h2')].map(x=>x.textContent)"),['октябрь 2026','сентябрь 2026','август 2026','июль 2026']);
-  assert.equal(await run("document.querySelectorAll('.archive-tile').length"),30);
-  assert.equal(await run("document.querySelector('.archive-tile-main').getAttribute('href')"),'15.10.26.html');
+  assert.equal(await run("document.querySelectorAll('.archive-tile').length"),LESSONS.length);
+  assert.equal(await run("document.querySelector('.archive-tile-main').getAttribute('href')"),LESSONS[0].href);
   assert.equal(await run("getComputedStyle(document.querySelector('.archive-month-grid')).gridTemplateColumns.split(' ').length"),3);
   assert.ok(await run("document.querySelectorAll('.archive-resource').length>=10"),'lesson-specific resource links');
   await sleep(250);
@@ -251,7 +252,7 @@ try{
   assert.equal(await run("(()=>{let x=document.querySelector('#archiveSearch');x.value='Делимость';x.dispatchEvent(new Event('input',{bubbles:true}));return [...document.querySelectorAll('.archive-tile')].filter(c=>!c.hidden).length})()")>0,true);
   assert.equal(await run("(()=>{let x=document.querySelector('#archiveSearch');x.value='невозможный_поисковый_запрос';x.dispatchEvent(new Event('input',{bubbles:true}));return [...document.querySelectorAll('.archive-tile')].filter(c=>!c.hidden).length})()"),0);
   assert.equal(await run("document.querySelector('#archiveEmpty').hidden"),false);
-  assert.equal(await run("(()=>{let x=document.querySelector('#archiveSearch');x.value='';x.dispatchEvent(new Event('input',{bubbles:true}));return [...document.querySelectorAll('.archive-tile')].filter(c=>!c.hidden).length})()"),30);
+  assert.equal(await run("(()=>{let x=document.querySelector('#archiveSearch');x.value='';x.dispatchEvent(new Event('input',{bubbles:true}));return [...document.querySelectorAll('.archive-tile')].filter(c=>!c.hidden).length})()"),LESSONS.length);
   assert.equal(await run("document.querySelector('#archiveEmpty').hidden"),true);
   await navigate('archive.html',390,844,false);
   assert.equal(await run("getComputedStyle(document.querySelector('.archive-month-grid')).gridTemplateColumns.split(' ').length"),1);
@@ -261,13 +262,13 @@ try{
   assert.ok(mobileTiles.widths<=2,'mobile tiles must be equally wide: '+JSON.stringify(mobileTiles));
   assert.equal(mobileTiles.clipped,0,'no clipped copy on mobile');
 
-  assert.equal(await run("document.querySelectorAll('.archive-tile').length"),30);
+  assert.equal(await run("document.querySelectorAll('.archive-tile').length"),LESSONS.length);
   assert.equal(await run("document.querySelector('#archiveTheme').getAttribute('aria-label')"),'Включить тёмную тему');
   assert.equal(await run("(()=>{document.querySelector('#archiveTheme').click();return document.body.hasAttribute('data-theme')})()"),false);
   assert.equal(await run("(()=>{document.querySelector('#archiveTheme').click();return document.body.dataset.theme})()"),'light');
   assert.deepEqual(jsErrors,[],'JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Network errors');
-  console.log('Xenia 09.10 and 12.10 browser QA PASS: 30 layouts, interactive checks and network');
+  console.log('Xenia dashboard browser QA PASS: '+LESSONS.length+' archive tiles, interactive checks and network');
 }finally{
   try{ws?.close()}catch(_){}
   chromeProcess.kill('SIGKILL');server.close();

@@ -1,4 +1,4 @@
-import {LESSONS as BASE_LESSONS} from './lesson-registry.js?v=20261015-1';
+import {LESSONS as BASE_LESSONS} from './lesson-registry.js?v=20261017-1';
 import {composeLessons} from './lesson-sequence.js?v=20261009-review-2';
 import {LESSON_0710,applyLesson0710CompetenceUpdate} from './07.10.26-data.js';
 import {LESSON_0510,applyLesson0510CompetenceUpdate} from './05.10.26-data.js';
