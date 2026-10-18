@@ -3,6 +3,93 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+    "date": "2026-10-17",
+    "ktpRefs": [],
+    "href": "17.10.26.html",
+    "title": "Финансовые задачи",
+    "navTitle": "Финансовые задачи",
+    "navSubtitle": "вклады · три схемы кредита · 10 задач",
+    "summary": "Финансовые задачи ЕГЭ: вклад с пополнением, произвольная, аннуитетная и дифференцированная схемы кредитования, таблицы расчёта и десять заданий. 17.10.2026.",
+    "topics": [
+      "вклад с пополнением",
+      "универсальная кредитная таблица",
+      "произвольная схема погашения",
+      "аннуитетные платежи",
+      "дифференцированная схема"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t16_deposits",
+        "evidenceAnchor": "deposit-model",
+        "relation": "practiced",
+        "label": "Вклады и коэффициент роста",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_deposit_contrib",
+        "evidenceAnchor": "deposit-model",
+        "relation": "practiced",
+        "label": "Вклад с дополнительным взносом",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_credits",
+        "evidenceAnchor": "scheme-key",
+        "relation": "practiced",
+        "label": "Различение кредитных схем",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_debt_table",
+        "evidenceAnchor": "arbitrary-ledger",
+        "relation": "practiced",
+        "label": "Таблица изменения долга",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_variable",
+        "evidenceAnchor": "arbitrary-ledger",
+        "relation": "practiced",
+        "label": "Нестандартное погашение",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_annuity",
+        "evidenceAnchor": "annuity-ledger",
+        "relation": "practiced",
+        "label": "Равные платежи",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_model_equation",
+        "evidenceAnchor": "annuity-ledger",
+        "relation": "practiced",
+        "label": "Уравнение кредитной модели",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_equal_reduction",
+        "evidenceAnchor": "differentiated-ledger",
+        "relation": "touched",
+        "label": "Равномерное уменьшение долга",
+        "practiceDisposition": "none"
+      },
+      {
+        "competencyId": "t16_payment_sum",
+        "evidenceAnchor": "annuity-ledger",
+        "relation": "touched",
+        "label": "Общая сумма платежей",
+        "practiceDisposition": "none"
+      }
+    ],
+    "materials": {
+      "html": "17.10.26.html",
+      "pdf": "../pdf_docs/17.10.26.pdf",
+      "tex": "../tex_docs/17.10.26.tex",
+      "lab": "17.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-10-07",
     "ktpRefs": [],
     "href": "07.10.26.html",
