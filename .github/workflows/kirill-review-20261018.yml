@@ -1,0 +1,31 @@
+name: Kirill lesson release-gate browser audit
+on:
+  push:
+    branches: [review/kirill-functions-20261018]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install review-only Playwright
+        run: |
+          npm install --prefix /tmp/kirill-review --no-save playwright@1.56.1 @axe-core/playwright
+          PLAYWRIGHT_BROWSERS_PATH=/tmp/kirill-playwright /tmp/kirill-review/node_modules/.bin/playwright install --with-deps chromium
+      - name: Audit lesson, lab, dashboard at 7 viewport sizes
+        env:
+          NODE_PATH: /tmp/kirill-review/node_modules
+          PLAYWRIGHT_BROWSERS_PATH: /tmp/kirill-playwright
+        run: node students/kirill_zinoviev/site/tests/review-20261017.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kirill-review-screens
+          path: /tmp/kirill-review-screens/*.png
+          if-no-files-found: ignore
