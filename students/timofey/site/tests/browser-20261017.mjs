@@ -27,6 +27,8 @@ const server=http.createServer((request,response)=>{
 });
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const origin='http://127.0.0.1:'+server.address().port;
+const screenshots=path.join(root,'timofey-site-review-artifacts');
+fs.mkdirSync(screenshots,{recursive:true});
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 let processChrome=null,profile=null,ws=null;
 const errors=[],badNetwork=[],requests=[];
@@ -84,6 +86,8 @@ try{
   await call('Page.enable');
   await call('Network.enable');
 
+  async function screenshot(name){const result=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});fs.writeFileSync(path.join(screenshots,name+'.png'),Buffer.from(result.data,'base64'));}
+
   async function navigate(filename,width=1440,height=900,theme='dark'){
     const pageUrl=origin+'/students/timofey/site/'+filename;
     await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<=768});
@@ -114,6 +118,7 @@ try{
     for(const [width,height] of [[1440,900],[390,844]]){
       for(const theme of ['light','dark']){
         await navigate(page,width,height,theme);
+        await screenshot(page.replace('.html','')+'-'+width+'-'+theme);
         if(page==='17.10.26.html'){
           assert.equal(await run("document.querySelectorAll('#practice .practice-list li').length"),10);
           assert.equal(await run("document.querySelectorAll('a[href*=\"?mode=\"]').length >= 4"),true);
@@ -137,6 +142,8 @@ try{
     assert.equal(await run("(()=>{document.querySelector('#all').click();return document.querySelectorAll('#ledger tr').length})()"),years);
     assert.ok((await run("document.querySelector('#ledger tr:last-child td:last-child').textContent")).includes('0'));
     assert.equal(await run("document.querySelectorAll('.bar-rem').length"),years);
+    await run("document.querySelector('#bars').scrollIntoView()");
+    await screenshot('lab-'+mode+'-all-years');
     assert.equal(await run("document.querySelectorAll('.bar-pay').length"),years);
     assert.equal(await run("(()=>{document.querySelector('#prev').click();return document.querySelectorAll('#ledger tr').length})()"),years-1);
     assert.equal(await run("(()=>{document.querySelector('#reset').click();return document.querySelectorAll('#ledger tr').length})()"),1);
