@@ -1,0 +1,42 @@
+name: Ekaterina October 17 lesson review
+on:
+  pull_request:
+    paths:
+      - 'students/ekaterina/site/17.10.26.html'
+      - 'students/ekaterina/site/index.html'
+      - 'students/ekaterina/site/competency-map*.js'
+      - 'students/ekaterina/site/tests/17.10.26.browser.mjs'
+      - '.github/workflows/ekaterina-171026-review.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'students/ekaterina/site/17.10.26.html'
+      - 'students/ekaterina/site/index.html'
+      - 'students/ekaterina/site/competency-map*.js'
+      - 'students/ekaterina/site/tests/17.10.26.browser.mjs'
+      - '.github/workflows/ekaterina-171026-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser-release-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate student platform
+        run: node scripts/student.mjs validate ekaterina
+      - name: Verify browser test syntax
+        run: node --check students/ekaterina/site/tests/17.10.26.browser.mjs
+      - name: Chromium browser review
+        run: node students/ekaterina/site/tests/17.10.26.browser.mjs
+      - name: Save lesson and home screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ekaterina-171026-review-screenshots
+          path: ekaterina-171026-review-artifacts/*.png
+          if-no-files-found: ignore
