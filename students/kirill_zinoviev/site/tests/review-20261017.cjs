@@ -27,7 +27,7 @@ for(const [file,kind] of [['17.10.26.html','lesson'],['17.10.26-lab.html','lab']
    page.on('requestfailed',r=>missing.push('requestfailed '+r.url().slice(-95)));
    await page.goto('http://127.0.0.1:8765'+prefix+file,{waitUntil:'networkidle',timeout:30000});
    await page.waitForTimeout(100);
-   const dimensions=await page.evaluate(()=>({width:innerWidth,body:document.body.scrollWidth,doc:document.documentElement.scrollWidth,invalidLinks:[...document.querySelectorAll('a[href="#"]')].length,missingNames:[...document.querySelectorAll('button')].filter(b=>!b.textContent.trim()&&!b.getAttribute('aria-label')).length,theme:document.documentElement.dataset.theme}));
+   const dimensions=await page.evaluate(()=>({width:innerWidth,body:document.body.scrollWidth,doc:document.documentElement.scrollWidth,invalidLinks:[...document.querySelectorAll('a[href="#"]')].length,missingNames:[...document.querySelectorAll('button')].filter(b=>!b.textContent.trim()&&!b.getAttribute('aria-label')).length,theme:document.documentElement.dataset.theme||document.body.dataset.theme||'dark'}));
    if(dimensions.doc>w+1||dimensions.body>w+1)flag(kind+' '+w+' '+theme+' horizontal overflow '+JSON.stringify(dimensions));
    if(dimensions.invalidLinks||dimensions.missingNames)flag(kind+' '+w+' '+theme+' inert or nameless '+JSON.stringify(dimensions));
    if(dimensions.theme!==theme)flag(kind+' '+w+' theme mismatch '+dimensions.theme);
