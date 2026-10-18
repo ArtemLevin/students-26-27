@@ -197,6 +197,36 @@ try{
   assert.equal(await run("document.querySelector('#aValue').textContent"),'6');
   assert.equal(await run("document.querySelector('#bValue').textContent"),'3');
   assert.equal(await run("document.querySelector('#identityValue').textContent"),'2 × 6 − 5 × 3 = -3');
+  // 17 October: semantic lesson mathematics and the threshold-height experiment.
+  for(const [width,height] of [[1440,900],[390,844],[375,812]]){
+    for(const dark of [false,true]){
+      await navigate('17.10.26.html',width,height,dark);
+      await snapshot('17.10.26-'+width+'-'+(dark?'dark':'light'));
+      assert.equal(await run("document.querySelectorAll('.exercise').length"),10);
+      assert.equal(await run("document.querySelectorAll('math.math').length"),26);
+      assert.ok(await run("[...document.querySelectorAll('math')].every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML')"),'all mathematical markup must use MathML namespace');
+    }
+  }
+  await navigate('17.10.26.html',1440,900,false);
+  assert.ok(await run("document.querySelector('math mfrac')!==null && document.querySelector('math msup')!==null && document.querySelector('math msqrt')!==null"));
+  assert.equal(await run("document.querySelectorAll('.exercise').length"),10);
+  assert.equal(await run("document.querySelector('.key').open"),false);
+  assert.equal(await run("(()=>{const a=document.querySelector('.key');a.open=true;return a.querySelectorAll('li').length})()"),10);
+  const sliderOutcome=async value=>run("(()=>{const s=document.querySelector('#threshold');s.value='"+value+"';s.dispatchEvent(new Event('input',{bubbles:true}));return {label:document.querySelector('#thresholdLabel').textContent,output:document.querySelector('#graphResult').textContent,first:Number(document.querySelector('#graphStart').getAttribute('cx')),last:Number(document.querySelector('#graphEnd').getAttribute('cx'))}})()");
+  let heightCase=await sliderOutcome('10');
+  assert.ok(heightCase.output.includes('0,4 с')&&heightCase.output.includes('2,2 с')&&heightCase.output.includes('1,8 с'),JSON.stringify(heightCase));
+  heightCase=await sliderOutcome('5');assert.equal(heightCase.label,'5');
+  assert.ok(heightCase.last>heightCase.first,'ordered time intersections');
+  heightCase=await sliderOutcome('18');assert.equal(heightCase.label,'18');
+  assert.ok(heightCase.output.includes('Длительность выше 18 м:'),JSON.stringify(heightCase));
+  assert.equal(await run("(()=>{document.querySelector('#resetGraph').click();return document.querySelector('#threshold').value})()"),'10');
+  assert.ok(await run("document.querySelector('#graphResult').textContent.includes('1,8 с')"));
+  assert.ok(await run("(()=>{const e=document.querySelector('#threshold');e.focus();return document.activeElement===e&&e.labels?.length===1})()"),'slider keyboard focus and visible label');
+  assert.equal(await run("(()=>{document.querySelector('#theme').click();return document.documentElement.dataset.theme})()"),'dark');
+  await call('Emulation.setEmulatedMedia',{media:'print'});
+  assert.equal(await run("getComputedStyle(document.querySelector('.top')).display"),'none');
+  await call('Emulation.setEmulatedMedia',{media:'screen'});
+
   await navigate('index.html',1440,900);
   await sleep(400);
   assert.equal(await run("document.querySelector('#lesson-title').textContent"),LESSONS[0].title);
