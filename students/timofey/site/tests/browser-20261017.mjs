@@ -117,7 +117,7 @@ try{
         if(page==='17.10.26.html'){
           assert.equal(await run("document.querySelectorAll('#practice .practice-list li').length"),10);
           assert.equal(await run("document.querySelectorAll('a[href*=\"?mode=\"]').length >= 4"),true);
-          assert.equal(await run("new Promise(resolve=>{const image=document.querySelector('img[src=\\\"../images/17.10.26.png\\\"]');image.loading='eager';image.scrollIntoView();if(image.complete)return resolve(image.naturalWidth>0);image.addEventListener('load',()=>resolve(image.naturalWidth>0),{once:true});image.addEventListener('error',()=>resolve(false),{once:true});})"),true,'Poster loads when requested');
+          assert.equal(await run("new Promise(resolve=>{const image=document.querySelector('.figure img');image.loading='eager';image.scrollIntoView();if(image.complete)return resolve(image.naturalWidth>0);image.addEventListener('load',()=>resolve(image.naturalWidth>0),{once:true});image.addEventListener('error',()=>resolve(false),{once:true});})"),true,'Poster loads when requested');
         }
       }
     }
