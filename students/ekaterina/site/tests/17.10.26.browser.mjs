@@ -127,5 +127,10 @@ try{
 }finally{
   if(ws)ws.close();
   processChrome.kill('SIGTERM');server.close();
-  fs.rmSync(profile,{recursive:true,force:true});
+  await new Promise(resolve=>{
+    if(processChrome.exitCode!==null){resolve();return;}
+    processChrome.once('exit',resolve);
+    setTimeout(resolve,3000);
+  });
+  fs.rmSync(profile,{recursive:true,force:true,maxRetries:12,retryDelay:200});
 }
