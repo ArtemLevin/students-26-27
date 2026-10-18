@@ -29,7 +29,7 @@ test('canonical registry always controls latest lesson order',()=>{
   assert.equal(composed.length,LESSONS.length);
   assert.equal(new Set(composed.map(x=>x.date)).size,composed.length);
   assert.ok(dashboard.includes('composeLessons(BASE_LESSONS,LEGACY_SNAPSHOTS)'));
-  assert.ok(homepage.includes('dashboard.js?v=20261015-1'));
+  assert.match(homepage,/dashboard\.js\?v=\d{8}-\d+/, 'homepage imports a versioned dashboard');
 });
 
 test('exact evidence anchors and practice dispositions are consistent',()=>{
@@ -176,7 +176,8 @@ test('latest lesson presents readable evidence and valid editorial layout markup
   const {LESSONS}=await import('../lesson-registry.js');
   const {presentLessonOutcome}=await import('../../../../shared/student-dashboard/outcome-adapter.js');
   const latest=LESSONS[0];
-  assert.equal(latest.date,'2026-10-15');
+  assert.equal(latest.date,'2026-10-17');
+   assert.ok(LESSONS.some(lesson=>lesson.date==='2026-10-15'),'the previous latest lesson remains in archive');
   for(const evidence of latest.outcomes){
     const view=presentLessonOutcome(evidence,{lessonDate:latest.date});
     assert.ok(evidence.label?.trim(),'outcome lacks reviewed human-readable label');
