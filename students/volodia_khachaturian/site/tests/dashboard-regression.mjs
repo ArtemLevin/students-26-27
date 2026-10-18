@@ -2,3 +2,4 @@ import {runDashboardTests} from '../../../../shared/student-dashboard/test-dashb
 await runDashboardTests({student:'volodia_khachaturian',stateKey:'competence-state-v2',storageKey:'competency-map',catalog:{kind:'window-script',path:'students/volodia_khachaturian/competency-map-data.js',global:'COMPETENCY_MAP_DATA'}});
 await import('./kinematics-model-regression.mjs');
 await import('./mathml-20261016.test.mjs');
+await import('./physics-forces-20261017.test.mjs');
