@@ -165,7 +165,8 @@ try{
   console.log('Timofey 17.10.26 browser QA: desktop/mobile, themes, URL modes, calculations, controls, network, console and navigator PASS');
 }finally{
   if(ws){try{ws.close();}catch(_){}}
-  if(processChrome){processChrome.kill('SIGKILL');}
+  if(processChrome){processChrome.kill('SIGKILL');await sleep(450);}
   await new Promise(resolve=>server.close(resolve));
-  if(profile)fs.rmSync(profile,{recursive:true,force:true});
+  if(profile){try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:10,retryDelay:100});}
+    catch(error){console.warn('Chrome temp profile cleanup delayed: '+error.message);}}
 }
