@@ -252,7 +252,7 @@ try{
   assert.equal(await run("(()=>{let x=document.querySelector('#archiveSearch');x.value='Делимость';x.dispatchEvent(new Event('input',{bubbles:true}));return [...document.querySelectorAll('.archive-tile')].filter(c=>!c.hidden).length})()")>0,true);
   assert.equal(await run("(()=>{let x=document.querySelector('#archiveSearch');x.value='невозможный_поисковый_запрос';x.dispatchEvent(new Event('input',{bubbles:true}));return [...document.querySelectorAll('.archive-tile')].filter(c=>!c.hidden).length})()"),0);
   assert.equal(await run("document.querySelector('#archiveEmpty').hidden"),false);
-  assert.equal(await run("(()=>{let x=document.querySelector('#archiveSearch');x.value='';x.dispatchEvent(new Event('input',{bubbles:true}));return [...document.querySelectorAll('.archive-tile')].filter(c=>!c.hidden).length})()"),30);
+  assert.equal(await run("(()=>{let x=document.querySelector('#archiveSearch');x.value='';x.dispatchEvent(new Event('input',{bubbles:true}));return [...document.querySelectorAll('.archive-tile')].filter(c=>!c.hidden).length})()"),LESSONS.length);
   assert.equal(await run("document.querySelector('#archiveEmpty').hidden"),true);
   await navigate('archive.html',390,844,false);
   assert.equal(await run("getComputedStyle(document.querySelector('.archive-month-grid')).gridTemplateColumns.split(' ').length"),1);
@@ -268,7 +268,7 @@ try{
   assert.equal(await run("(()=>{document.querySelector('#archiveTheme').click();return document.body.dataset.theme})()"),'light');
   assert.deepEqual(jsErrors,[],'JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Network errors');
-  console.log('Xenia 09.10 and 12.10 browser QA PASS: 30 layouts, interactive checks and network');
+  console.log('Xenia dashboard browser QA PASS: '+LESSONS.length+' archive tiles, interactive checks and network');
 }finally{
   try{ws?.close()}catch(_){}
   chromeProcess.kill('SIGKILL');server.close();
