@@ -204,6 +204,10 @@ try{
       await snapshot('17.10.26-'+width+'-'+(dark?'dark':'light'));
       assert.equal(await run("document.querySelectorAll('.exercise').length"),10);
       assert.equal(await run("document.querySelectorAll('math.math').length"),26);
+      assert.ok(await run("document.querySelectorAll('article math').length>=150"),'all lesson mathematics is MathML');
+      assert.equal(await run("document.querySelectorAll('#heightGraph foreignObject math').length"),6);
+      assert.equal(await run("document.querySelectorAll('#graphResult math').length"),4);
+      assert.ok(await run("[...document.querySelectorAll('#heightGraph foreignObject')].every(el=>el.getBoundingClientRect().width>0&&el.getBoundingClientRect().height>0)"),'graph MathML labels remain rendered');
       assert.ok(await run("[...document.querySelectorAll('math')].every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML')"),'all mathematical markup must use MathML namespace');
     }
   }
@@ -215,9 +219,12 @@ try{
   const sliderOutcome=async value=>run("(()=>{const s=document.querySelector('#threshold');s.value='"+value+"';s.dispatchEvent(new Event('input',{bubbles:true}));return {label:document.querySelector('#thresholdLabel').textContent,output:document.querySelector('#graphResult').textContent,first:Number(document.querySelector('#graphStart').getAttribute('cx')),last:Number(document.querySelector('#graphEnd').getAttribute('cx'))}})()");
   let heightCase=await sliderOutcome('10');
   assert.ok(heightCase.output.includes('0,4 с')&&heightCase.output.includes('2,2 с')&&heightCase.output.includes('1,8 с'),JSON.stringify(heightCase));
-  heightCase=await sliderOutcome('5');assert.equal(heightCase.label,'5');
+  heightCase=await sliderOutcome('5');assert.equal(heightCase.label,'5 м');
   assert.ok(heightCase.last>heightCase.first,'ordered time intersections');
-  heightCase=await sliderOutcome('18');assert.equal(heightCase.label,'18');
+  heightCase=await sliderOutcome('18');assert.equal(heightCase.label,'18 м');
+  assert.equal(await run("document.querySelector('#graphLevelLabel math mn').textContent"),'18');
+  assert.equal(await run("document.querySelector('#resultLevel mn').textContent"),'18');
+  assert.equal(await run("document.querySelectorAll('#graphResult math').length"),4,'slider must preserve MathML');
   assert.ok(heightCase.output.includes('Длительность выше 18 м:'),JSON.stringify(heightCase));
   assert.equal(await run("(()=>{document.querySelector('#resetGraph').click();return document.querySelector('#threshold').value})()"),'10');
   assert.ok(await run("document.querySelector('#graphResult').textContent.includes('1,8 с')"));

@@ -47,7 +47,17 @@ test('source parity, MathML semantics, local assets, visible practice',()=>{
   assert.match(tex,/Повторение задач первой части/);
   assert.match(tex,/Путь А/);
   assert.equal((html.match(/class="exercise"/g)||[]).length,10);
-  assert.ok((html.match(/<math\b/g)||[]).length>=33);
+  assert.ok((html.match(/<math\b/g)||[]).length>=150,'all mathematical expressions including narrative values use MathML');
+  const article=html.split('<article class="article">')[1]?.split('</article>')[0]||'';
+  const nonMathProse=article.replace(/<math\b[^>]*>[\s\S]*?<\/math>/g,'').replace(/<svg\b[^>]*>[\s\S]*?<\/svg>/g,'').replace(/<[^>]+>/g,' ');
+  assert.doesNotMatch(nonMathProse,/(?:[√²³⅓⅔]|\d+[,/]\d+|(?:[a-zA-Z])\s*[=<>≥≤≠+−]\s*\d+)/u,'raw mathematical notation must never appear outside MathML');
+  assert.doesNotMatch(article,/<(?:sup|sub)\b/,'avoid HTML superscripts for mathematics');
+  const svg=html.split('<svg id="heightGraph"')[1]?.split('</svg>')[0]||'';
+  assert.equal((svg.match(/<foreignObject\b/g)||[]).length,6,'every graph tick is MathML');
+  assert.equal((svg.match(/<math\b/g)||[]).length,6);
+  assert.equal((svg.match(/<text\b/g)||[]).length,0,'graph mathematical labels do not use plain SVG text');
+  assert.match(html,/<output id="graphResult"[^>]*>[\s\S]*?<math\b/);
+  assert.doesNotMatch(html,/labOutput\.textContent\s*=/,'live graph must update MathML nodes instead of replacing them with text');
   assert.equal((html.match(/<span class="math\b/g)||[]).length,0);
   assert.ok((html.match(/<mfrac>/g)||[]).length>=8);
   assert.ok((html.match(/<msup>/g)||[]).length>=6);
