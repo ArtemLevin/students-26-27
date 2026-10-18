@@ -58,7 +58,15 @@ for(const [file,kind] of [['17.10.26.html','lesson'],['17.10.26-lab.html','lab']
      assert.match(await page.locator('#snapshot').innerText(),/Было:/);
      await page.locator('#clear-capture').click();
     }
-    await page.goto('http://127.0.0.1:8765'+prefix+'17.10.26-lab.html?mode=domain');assert.match(await page.locator('#mode-label').innerText(),/область определения/);
+    await page.goto('http://127.0.0.1:8765'+prefix+'17.10.26-lab.html?mode=domain');assert.match(await page.locator('#mode-label').innerText(),/область определения/i);
+    await page.locator('#argumentRange').evaluate(e=>{e.value='0';e.dispatchEvent(new Event('input',{bubbles:true}))});
+    assert.equal(await page.locator('#argument').innerText(),'−6');
+    assert.equal(await page.locator('#value').innerText(),'−1/13','non-terminating rational must display as exact fraction');
+    assert.equal(await page.locator('#argumentRange').getAttribute('aria-valuetext'),'x = −6');
+    await page.locator('#formula').selectOption('1');
+    assert.equal(await page.locator('#value').innerText(),'−2/3');
+    assert.equal(await page.locator('#graph button[aria-pressed=true]').count(),1);
+
    }
    if(kind==='home'&&w===1440&&theme==='light'){
     const title=await page.locator('#lesson-title').innerText();console.log('HOME LATEST',title);
