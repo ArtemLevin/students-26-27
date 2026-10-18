@@ -49,26 +49,38 @@ const state={mode:allowed.includes(params.get('mode'))?params.get('mode'):'value
 const storage='kirill-dashboard-theme-v1';const get=k=>{try{return localStorage.getItem(k)}catch{return null}},set=(k,v)=>{try{localStorage.setItem(k,v)}catch{}};
 let theme=get(storage)==='dark'?'dark':'light';function themeDraw(){document.documentElement.dataset.theme=theme;$('theme').textContent=theme==='dark'?'Светлая тема':'Тёмная тема'}themeDraw();$('theme').addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';set(storage,theme);themeDraw()});
 function fmt(x){if(x===null||x===undefined||!Number.isFinite(x))return '—';if(Math.abs(x)<1e-10)x=0;return new Intl.NumberFormat('ru-RU',{maximumFractionDigits:3}).format(x).replace(/-/g,'−')}
+function exact(f,x){
+  const denominator=f.den(x);
+  if(denominator===0)return '—';
+  const numerators={reciprocal:12,shift0:5,shift7:1,shiftm3:2,shift3:12};
+  const numerator=f.id==='linear'?x:numerators[f.id];
+  if(numerator===undefined||!Number.isInteger(numerator)||!Number.isInteger(denominator))return fmt(f.fn(x));
+  const gcd=(a,b)=>b===0?a:gcd(b,a%b);
+  const div=gcd(Math.abs(numerator),Math.abs(denominator))||1;
+  let n=numerator/div,d=denominator/div;
+  if(d<0){n=-n;d=-d}
+  return d===1?fmt(n):fmt(n)+'/'+fmt(d);
+}
 function model(){const c=config[state.mode],f=c.formulas[state.formula],x=c.xs[state.index],valid=f.den(x)!==0;return {c,f,x,valid,y:valid?f.fn(x):null}}
 function eq(m){const a=fmt(m.x);
-if(m.f.id==='reciprocal'||m.f.id==='shift0')return 'y('+a+') = '+(m.f.id==='reciprocal'?'12':'5')+'/('+a+')'+(m.valid?' = '+fmt(m.y):' — невозможно');
-if(m.f.id==='square')return 'y('+a+') = ('+a+')² − 9 = '+fmt(m.y);
-if(m.f.id==='parabola')return 'y('+a+') = '+a+'·('+a+' − 3,5) = '+fmt(m.y);
-if(m.f.id==='shift7'||m.f.id==='shiftm3'||m.f.id==='shift3'){const b={shift7:[1,' − 7'],shiftm3:[2,' + 3'],shift3:[12,' − 3']}[m.f.id];return 'y('+a+') = '+b[0]+'/('+a+b[1]+')'+(m.valid?' = '+fmt(m.y):' — невозможно')}
-if(m.f.id==='linear')return 'y('+a+') = '+a+'/5 = '+fmt(m.y);
-return 'y('+a+') = '+a+' + 5 = '+fmt(m.y);
+if(m.f.id==='reciprocal'||m.f.id==='shift0')return 'y('+a+') = '+(m.f.id==='reciprocal'?'12':'5')+'/('+a+')'+(m.valid?' = '+exact(m.f,m.x):' — невозможно');
+if(m.f.id==='square')return 'y('+a+') = ('+a+')² − 9 = '+exact(m.f,m.x);
+if(m.f.id==='parabola')return 'y('+a+') = '+a+'·('+a+' − 3,5) = '+exact(m.f,m.x);
+if(m.f.id==='shift7'||m.f.id==='shiftm3'||m.f.id==='shift3'){const b={shift7:[1,' − 7'],shiftm3:[2,' + 3'],shift3:[12,' − 3']}[m.f.id];return 'y('+a+') = '+b[0]+'/('+a+b[1]+')'+(m.valid?' = '+exact(m.f,m.x):' — невозможно')}
+if(m.f.id==='linear')return 'y('+a+') = '+a+'/5 = '+exact(m.f,m.x);
+return 'y('+a+') = '+a+' + 5 = '+exact(m.f,m.x);
 }
 function createCell(tag,txt,cls){const el=document.createElement(tag);el.textContent=txt;if(cls)el.className=cls;return el}
-function renderTable(m){const head=$('thead'),body=$('tbody');head.replaceChildren();body.replaceChildren();const tr1=document.createElement('tr'),tr2=document.createElement('tr');tr1.append(createCell('th','x'));tr2.append(createCell('th','y(x)'));for(let i=0;i<m.c.xs.length;i++){const x=m.c.xs[i],good=m.f.den(x)!==0,v=good?fmt(m.f.fn(x)):'—',selected=i===state.index?'active':'';const h=createCell('th',fmt(x),selected),t=createCell('td',v,selected);h.scope='col';tr1.append(h);tr2.append(t)}head.append(tr1);body.append(tr2)}
-function renderGraph(m){const chart=$('graph');chart.replaceChildren();const ys=m.c.xs.map(x=>m.f.den(x)===0?null:Math.abs(m.f.fn(x)));const max=Math.max(1,...ys.filter(v=>v!==null));ys.forEach((y,i)=>{const b=document.createElement('button');b.type='button';b.className=i===state.index?'current':'';b.setAttribute('aria-label','Аргумент '+fmt(m.c.xs[i])+', '+(y===null?'значение не существует':'значение '+fmt(m.f.fn(m.c.xs[i]))));b.title=b.getAttribute('aria-label');b.addEventListener('click',()=>chooseIndex(i));const bar=document.createElement('span');bar.className='bar';if(y!==null){bar.style.height=Math.max(2,(y/max)*77)+'%';bar.style.bottom='18px';bar.style.background='var(--green)'}b.append(bar);const small=createCell('span',fmt(m.c.xs[i]));b.append(small);chart.append(b)})}
+function renderTable(m){const head=$('thead'),body=$('tbody');head.replaceChildren();body.replaceChildren();const tr1=document.createElement('tr'),tr2=document.createElement('tr');tr1.append(createCell('th','x'));tr2.append(createCell('th','y(x)'));for(let i=0;i<m.c.xs.length;i++){const x=m.c.xs[i],good=m.f.den(x)!==0,v=good?exact(m.f,x):'—',selected=i===state.index?'active':'';const h=createCell('th',fmt(x),selected),t=createCell('td',v,selected);h.scope='col';if(i===state.index)h.setAttribute('aria-current','true');tr1.append(h);tr2.append(t)}head.append(tr1);body.append(tr2)}
+function renderGraph(m){const chart=$('graph');chart.replaceChildren();const ys=m.c.xs.map(x=>m.f.den(x)===0?null:Math.abs(m.f.fn(x)));const max=Math.max(1,...ys.filter(v=>v!==null));ys.forEach((y,i)=>{const b=document.createElement('button');b.type='button';b.className=i===state.index?'current':'';b.setAttribute('aria-pressed',String(i===state.index));b.setAttribute('aria-label','Аргумент '+fmt(m.c.xs[i])+', '+(y===null?'значение не существует':'значение '+exact(m.f,m.c.xs[i])));b.title=b.getAttribute('aria-label');b.addEventListener('click',()=>chooseIndex(i));const bar=document.createElement('span');bar.className='bar';if(y!==null){bar.style.height=Math.max(2,(y/max)*77)+'%';bar.style.bottom='18px';bar.style.background='var(--green)'}b.append(bar);const small=createCell('span',fmt(m.c.xs[i]));b.append(small);chart.append(b)})}
 function render(){const m=model();q('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===state.mode)));$('mode-label').textContent=m.c.name;$('instruction').textContent=m.c.instruction;
 const select=$('formula');select.replaceChildren();m.c.formulas.forEach((f,i)=>{const option=document.createElement('option');option.value=String(i);option.textContent=f.text;select.append(option)});select.value=String(state.formula);$('formula-wrap').hidden=m.c.formulas.length===1;
-const range=$('argumentRange');range.max=m.c.xs.length-1;range.value=state.index;$('rangeValue').textContent=fmt(m.x);$('minArg').textContent=fmt(m.c.xs[0]);$('maxArg').textContent=fmt(m.c.xs[m.c.xs.length-1]);
+const range=$('argumentRange');range.max=m.c.xs.length-1;range.value=state.index;range.setAttribute('aria-valuetext','x = '+fmt(m.x));$('rangeValue').textContent=fmt(m.x);$('minArg').textContent=fmt(m.c.xs[0]);$('maxArg').textContent=fmt(m.c.xs[m.c.xs.length-1]);
 $('equation').textContent=eq(m);$('reason').textContent=m.valid?'Подставили аргумент в формулу и вычислили значение.':'Знаменатель равен нулю. Это значение x исключается из области определения.';
-$('reason').className=m.valid?'reason':'reason warning';$('argument').textContent=fmt(m.x);$('value').textContent=fmt(m.y);$('valid').textContent=m.valid?'Да':'Нет';
+$('reason').className=m.valid?'reason':'reason warning';$('argument').textContent=fmt(m.x);$('value').textContent=exact(m.f,m.x);$('valid').textContent=m.valid?'Да':'Нет';
 $('prev').disabled=state.index===0;$('next').disabled=state.index===m.c.xs.length-1;
 renderTable(m);renderGraph(m);
-const snap=$('snapshot');if(state.snapshot){const s=state.snapshot;snap.textContent='Было: '+s.f.text+', x = '+fmt(s.x)+', y = '+fmt(s.y)+'. Сейчас: '+m.f.text+', x = '+fmt(m.x)+', y = '+fmt(m.y)+'.'}else snap.textContent='Зафиксируйте исходное состояние, затем измените аргумент или формулу.';
+const snap=$('snapshot');if(state.snapshot){const s=state.snapshot;snap.textContent='Было: '+s.f.text+', x = '+fmt(s.x)+', y = '+exact(s.f,s.x)+'. Сейчас: '+m.f.text+', x = '+fmt(m.x)+', y = '+exact(m.f,m.x)+'.'}else snap.textContent='Зафиксируйте исходное состояние, затем измените аргумент или формулу.';
 $('feedback').textContent='';q('[data-prediction]').forEach(b=>b.setAttribute('aria-pressed','false'));
 }
 function chooseIndex(i){const c=config[state.mode];state.index=Math.max(0,Math.min(c.xs.length-1,Number(i)));render()}
