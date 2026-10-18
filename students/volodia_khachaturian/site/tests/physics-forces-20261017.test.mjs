@@ -30,8 +30,12 @@ assert.equal((answers.match(/<tr>/g)||[]).length,10);
 assert.ok(original.includes('Тренировочный блок'));
 assert.match(lesson,/17\.10\.26-lab\.html\?scenario=three/);
 assert.doesNotMatch(lesson,/\.\.\/images\/17\.10\.26\.png/,'incorrect 17 October infographic must not be linked');
-assert.ok((lesson.match(/<math xmlns="http:\/\/www.w3.org\/1998\/Math\/MathML"/g)||[]).length>=16);
+assert.ok((lesson.match(/<math xmlns="http:\/\/www.w3.org\/1998\/Math\/MathML"/g)||[]).length>=100);
 assert.ok(lesson.includes('Трение скольжения'));
+assert.ok((lab.slice(0,lab.indexOf('<script>')).match(/<math xmlns="http:\/\/www.w3.org\/1998\/Math\/MathML"/g)||[]).length>=40);
+assert.doesNotMatch(lesson,/<(?:sub|sup)\b/i);
+for(const body of [...taskSection.matchAll(/<li>([\s\S]*?)<\/li>/g)].map(x=>x[1]))assert.match(body,/<math\b/,'exercise lacks MathML');
+for(const body of [...answers.matchAll(/<tr><td>\d+<\/td><td>([\s\S]*?)<\/td><\/tr>/g)].map(x=>x[1]))assert.match(body,/<math\b/,'answer lacks MathML');
 const allIds=[...lesson.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
 const canonical=JSON.parse(state);
 assert.equal(canonical.date,'2026-10-17');
@@ -47,6 +51,8 @@ const script=lab.match(/<script>([\s\S]*?)<\/script>/)?.[1];
 assert.ok(script?.length);
 class Element{
   constructor(id=''){this.id=id;this.value='0';this.dataset={};this.attributes={};this.listeners={};this.children=[];this.style={};this.textContent='';}
+  set innerHTML(value){this._innerHTML=value;this.textContent=value.replace(/<[^>]*>/g,'').replace(/&nbsp;|\u00a0/g,' ');}
+  get innerHTML(){return this._innerHTML||'';}
   appendChild(child){this.children.push(child);return child;}
   replaceChildren(){this.children=[];}
   setAttribute(k,v){this.attributes[k]=String(v);}
@@ -86,9 +92,10 @@ assert.equal(c.get('fx').textContent,'1 Н');
 assert.equal(c.get('fy').textContent,'4 Н');
 assert.match(c.get('force').textContent,/4,12 Н/);
 c.change('f1x',-10);c.change('f2x',-10);c.change('f3x',-10);
-assert.equal(c.get('fx').textContent,'-30 Н');
+assert.match(c.get('fx').innerHTML,/<mo>−<\/mo><mn>30<\/mn>/);
 assert.match(c.get('scaleNote').textContent,/Масштаб/);
-assert.match(c.get('explanation').textContent,/\(-30\)²/);
+assert.match(c.get('explanation').innerHTML,/<msqrt>.*<msup>/);
+assert.match(c.get('explanation').innerHTML,/<mo>−<\/mo><mn>30<\/mn>/);
 c.get('reset').listeners.click();
 assert.equal(c.get('force').textContent,'5 Н');
 console.log('17.10.26 release-gate: lessons, MathML, lab physics and presets OK');
