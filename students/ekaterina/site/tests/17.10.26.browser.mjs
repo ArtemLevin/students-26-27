@@ -90,6 +90,12 @@ try{
       await navigate('17.10.26.html',width,height);
       await run('(()=>{const desired='+JSON.stringify(dark?'dark':'light')+';if(document.documentElement.dataset.theme!==desired)document.getElementById("themeToggle").click()})()');
       const data=await run('(()=>{const doc=document.documentElement;const figures=[...document.querySelectorAll("figure.diagram svg")];return {scrollWidth:doc.scrollWidth,clientWidth:doc.clientWidth,svg:figures.length,a11y:figures.every(s=>s.getAttribute("role")==="img"&&s.querySelector("title")&&s.querySelector("desc")&&s.hasAttribute("aria-labelledby")),count:document.querySelectorAll(".task").length,theme:doc.dataset.theme,buttonColor:getComputedStyle(document.getElementById("themeToggle")).color,headerColor:getComputedStyle(document.querySelector("header.topbar")).color,badAnchors:[...document.querySelectorAll("a[href^=\'#\']")].filter(a=>!document.getElementById(a.getAttribute("href").slice(1))).length,oversized:[...document.querySelectorAll("figure.diagram")].filter(el=>el.getBoundingClientRect().right>innerWidth+2||el.getBoundingClientRect().left < -2).length};})()');
+      const mathAudit=await run('(()=>{const math=[...document.querySelectorAll("main math")];const ns="http://www.w3.org/1998/Math/MathML";return {count:math.length,sub:document.querySelectorAll("main msub").length,frac:document.querySelectorAll("main mfrac").length,sup:document.querySelectorAll("main msup").length,invalid:math.filter(el=>el.namespaceURI!==ns||[...el.querySelectorAll("*")].some(c=>c.namespaceURI!==ns)).length,unrendered:math.filter(el=>el.getClientRects().length===0||el.getBoundingClientRect().height<1||el.getBoundingClientRect().width<1).length,legacy:document.querySelectorAll("main sub,main .math").length}})()');
+      assert.ok(mathAudit.count>=170,'MathML count '+JSON.stringify(mathAudit));
+      assert.ok(mathAudit.sub>=25 && mathAudit.frac>=3 && mathAudit.sup>=1,'Semantic MathML structure '+JSON.stringify(mathAudit));
+      assert.equal(mathAudit.invalid,0,'MathML namespace integrity');
+      assert.equal(mathAudit.unrendered,0,'Unrendered MathML elements');
+      assert.equal(mathAudit.legacy,0,'Legacy HTML math markup');
       assert.equal(data.theme,dark?'dark':'light');
       assert.equal(data.svg,3);
       assert.equal(data.a11y,true,'SVG a11y '+JSON.stringify(data));
@@ -123,7 +129,7 @@ try{
   for(const link of links)assert.ok(link.status>=200&&link.status<400,'Broken lesson link '+JSON.stringify(link));
   assert.deepEqual(errors,[],'Browser JS exceptions');
   assert.deepEqual(failed,[],'HTTP errors');
-  console.log('Ekaterina 17.10.26 browser release-gate PASS: 5 viewports × 2 themes, links, map, progress, SVG.');
+  console.log('Ekaterina 17.10.26 browser release-gate PASS: native MathML, 5 viewports × 2 themes, links, map, progress, SVG.');
 }finally{
   if(ws)ws.close();
   processChrome.kill('SIGTERM');server.close();
