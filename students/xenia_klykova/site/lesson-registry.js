@@ -5,6 +5,94 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-17",
+  "ktpRefs": [],
+  "href": "17.10.26.html",
+  "title": "Смысл условия → математическая модель",
+  "navTitle": "Повторение ЕГЭ: семь методов",
+  "navSubtitle": "геометрия · векторы · вероятность · статистика · алгебра · движение",
+  "summary": "Ксения Клыкова · повторение профильного ЕГЭ 17 октября 2026: площадь треугольника, векторы, вероятности, математическое ожидание, степени, квадратичная модель движения и текстовые задачи.",
+  "topics": [
+    "площади треугольников",
+    "векторы и скалярное произведение",
+    "вложенные события и два испытания",
+    "математическое ожидание",
+    "степени с общим основанием",
+    "квадратичная модель движения",
+    "текстовая задача на скорость"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t1_areas",
+      "evidenceAnchor": "area",
+      "relation": "practiced",
+      "label": "Формулы площади треугольника",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t2_dot",
+      "evidenceAnchor": "vectors",
+      "relation": "practiced",
+      "label": "Скалярное произведение и знаки координат",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t5_sum",
+      "evidenceAnchor": "probability",
+      "relation": "practiced",
+      "label": "Вложенные события и сумма вероятностей",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t5_product",
+      "evidenceAnchor": "probability",
+      "relation": "practiced",
+      "label": "Произведение независимых результатов двух матчей",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "ege2027_t6_expectation",
+      "evidenceAnchor": "expectation",
+      "relation": "practiced",
+      "label": "Математическое ожидание дискретной величины",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_power_actions",
+      "evidenceAnchor": "powers",
+      "relation": "touched",
+      "label": "Степени с общим основанием",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t9_power",
+      "evidenceAnchor": "trajectory",
+      "relation": "practiced",
+      "label": "Квадратичная модель высоты и временной интервал",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t10_line",
+      "evidenceAnchor": "motion",
+      "relation": "practiced",
+      "label": "Таблица скорость — время — расстояние",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t9_units",
+      "evidenceAnchor": "motion",
+      "relation": "practiced",
+      "label": "Перевод минут в часы в текстовой задаче",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "17.10.26.html",
+    "pdf": "../pdf_docs/17.10.26.pdf",
+    "tex": "../tex_docs/17.10.26.tex"
+  }
+},
+{
   "date": "2026-10-15",
   "ktpRefs": [],
   "href": "15.10.26.html",
