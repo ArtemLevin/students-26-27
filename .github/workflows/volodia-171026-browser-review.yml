@@ -1,0 +1,38 @@
+name: Volodia October 17 browser QA
+on:
+  pull_request:
+    paths:
+      - 'students/volodia_khachaturian/site/17.10.26*'
+      - 'students/volodia_khachaturian/site/tests/physics-forces-20261017*'
+      - '.github/workflows/volodia-171026-browser-review.yml'
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source and lab model
+        run: node students/volodia_khachaturian/site/tests/physics-forces-20261017.test.mjs
+      - name: Install Playwright and Chromium
+        run: |
+          mkdir -p /tmp/volodia-browser-runner
+          cd /tmp/volodia-browser-runner
+          npm init -y >/dev/null
+          npm install playwright@1.56.0 --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Start static web server
+        run: |
+          python3 -m http.server 8766 --bind 127.0.0.1 >/tmp/volodia-http.log 2>&1 &
+      - name: Browser review of lesson, lab and cabinet
+        run: |
+          cp students/volodia_khachaturian/site/tests/physics-forces-20261017.browser.mjs /tmp/volodia-browser-runner/runner.mjs
+          node /tmp/volodia-browser-runner/runner.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: volodia-17-oct-browser-screenshots
+          path: /tmp/volodia-171026-screens/*.png
+          if-no-files-found: ignore
