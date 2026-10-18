@@ -3,6 +3,152 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-17",
+  "ktpRefs": [],
+  "href": "17.10.26.html",
+  "title": "Равнодействующая сил и второй закон Ньютона",
+  "navTitle": "Равнодействующая и закон Ньютона",
+  "navSubtitle": "векторное сложение сил, направления, проекции и движение лифта",
+  "summary": "Векторно складывали две и три силы, определяли модуль и направление равнодействующей, находили среднюю силу удара по ускорению, называли силы, действующие на тело, и составляли уравнения в проекциях для лифта. Повторили кинематику и движение по окружности.",
+  "topics": [
+    "равнодействующая сил",
+    "второй закон Ньютона",
+    "сложение сил как векторов",
+    "направления сил",
+    "закон Ньютона в проекциях",
+    "лифт: ускорение вверх и вниз",
+    "повторение кинематики и движения по окружности"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "kin_17",
+      "evidenceAnchor": "kinematics",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Ускорение как изменение скорости",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_20",
+      "evidenceAnchor": "kinematics",
+      "relation": "touched",
+      "masteryClaim": null,
+      "label": "Перемещение за время и за отдельную секунду",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_30",
+      "evidenceAnchor": "circle",
+      "relation": "touched",
+      "masteryClaim": null,
+      "label": "Период и частота",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_31",
+      "evidenceAnchor": "circle",
+      "relation": "touched",
+      "masteryClaim": null,
+      "label": "Линейная и угловая скорости",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_32",
+      "evidenceAnchor": "circle",
+      "relation": "touched",
+      "masteryClaim": null,
+      "label": "Центростремительное ускорение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_06",
+      "evidenceAnchor": "vectors",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Сложение сил на одной прямой",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_07",
+      "evidenceAnchor": "vectors",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Равнодействующая нескольких сил",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_08",
+      "evidenceAnchor": "forces",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Второй закон Ньютона",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_12",
+      "evidenceAnchor": "directions",
+      "relation": "touched",
+      "masteryClaim": null,
+      "label": "Сила тяжести",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_13",
+      "evidenceAnchor": "elevator",
+      "relation": "touched",
+      "masteryClaim": null,
+      "label": "Сила реакции опоры",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_22",
+      "evidenceAnchor": "directions",
+      "relation": "touched",
+      "masteryClaim": null,
+      "label": "Сила трения скольжения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_02",
+      "evidenceAnchor": "forces",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Выбор физической формулы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_07",
+      "evidenceAnchor": "vectors",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Работа с векторной схемой",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_25",
+      "evidenceAnchor": "elevator",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Уравнения в проекциях",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "measure_03",
+      "evidenceAnchor": "forces",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Перевод в СИ",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "17.10.26.html",
+    "pdf": "../pdf_docs/17.10.26.pdf",
+    "tex": "../tex_docs/17.10.26.tex",
+    "lab": "17.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-16",
   "ktpRefs": [],
   "href": "16.10.26.html",
