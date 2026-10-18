@@ -14,10 +14,11 @@ const math=[...document.querySelectorAll('math')];
 return {mathCount:math.length,nonNamespace:math.filter(e=>e.namespaceURI!=='http://www.w3.org/1998/Math/MathML').length,
 numberFractions:document.querySelectorAll('mfrac').length,powers:document.querySelectorAll('msup').length,
 overhang:document.documentElement.scrollWidth-innerWidth,
-plainVariables:[...document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT)].filter(n=>{
-const el=n.parentElement;if(!el||el.closest('math,script,style,option'))return false;
-return /(^|[\s(,])(?:x|y)(?=($|[\s).,:]))/.test(n.nodeValue)
-}).map(n=>n.nodeValue.trim()).slice(0,8)};
+plainVariables:(()=>{
+const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),texts=[];let n;
+while((n=walker.nextNode())){const el=n.parentElement;if(!el||el.closest('math,script,style,option'))continue;
+if(/(^|[\s(,])(?:x|y)(?=($|[\s).,:]))/.test(n.nodeValue))texts.push(n.nodeValue.trim())}
+return texts.slice(0,8)})()};
 });
 console.log('MATHML',file,mode,width,state);
 assert.equal(state.nonNamespace,0,'All math nodes must be MathML');
