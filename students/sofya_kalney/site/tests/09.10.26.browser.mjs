@@ -126,7 +126,7 @@ try{
   await snapshot('sofya-lesson-mobile-dark');
   await navigate('index.html',390,844);
   await sleep(400);
-  assert.equal(await run("document.querySelector('#lesson-title')?.textContent.includes('Теорема Менелая')"),true,'New lesson not shown in dashboard');
+  assert.equal(await run("document.querySelector('#lesson-title')?.textContent.includes('Четыре метода решения задач')"),true,'New lesson not shown in dashboard');
   await snapshot('sofya-index-mobile');
   await navigate('index.html',1440,900);
   await sleep(400);
@@ -197,6 +197,28 @@ try{
   assert.ok(await run("document.querySelectorAll('#predictionFeedback math').length")>=2,'Prediction feedback must have MathML');
   await run("document.querySelector('#reset').click()");
   await snapshot('sofya-20261016-menelaus-lab');
+
+  // 18 October: four lesson themes and a mathematically grounded graph laboratory.
+  await navigate('18.10.26.html',390,844);
+  assert.equal(await run("document.querySelectorAll('.training > li').length"),10,'October 18 training must contain 10 tasks');
+  assert.equal(await run("['equations','river','graphs','geometry','practice'].every(x=>!!document.getElementById(x))"),true,'October 18 evidence anchors missing');
+  assert.equal(await run("!!document.querySelector('a[href='../pdf_docs/18.10.26.pdf']') && !!document.querySelector('a[href='../tex_docs/18.10.26.tex']')"),true,'Lesson materials absent');
+  await snapshot('sofya-20261018-lesson-mobile');
+  await navigate('18.10.26-lab.html',1440,900);
+  assert.equal(await run("document.querySelector('#count').textContent"),'2','At m=-7.5 the line must intersect twice');
+  await run("document.querySelector('[data-m=\"-5\"]').click()");
+  assert.equal(await run("document.querySelector('#count').textContent"),'3','At m=-5 the line must intersect three times');
+  await run("document.querySelector('[data-m=\"-3\"]').click()");
+  assert.equal(await run("document.querySelector('#count').textContent"),'2','At m=-3 the line must intersect twice');
+  await run("(()=>{const el=document.querySelector('#mSlider');el.value='0';el.dispatchEvent(new Event('input',{bubbles:true}));return true})()");
+  assert.equal(await run("document.querySelector('#count').textContent"),'1','At m=0 the line must intersect once');
+  await run("document.querySelector('#reset').click()");
+  assert.equal(await run("document.querySelector('#count').textContent"),'2','Lab reset must restore m=-7.5');
+  await snapshot('sofya-20261018-graph-lab-desktop');
+  await navigate('18.10.26-lab.html',390,844,true);
+  assert.ok(await run("document.documentElement.scrollWidth<=innerWidth+2"),'October 18 lab horizontal overflow on mobile');
+  await snapshot('sofya-20261018-graph-lab-mobile-dark');
+
   assert.deepEqual(jsErrors,[],'JavaScript errors');
   assert.deepEqual(badRequests,[],'Network errors');
   console.log('Browser QA PASS: 5 viewports × 2 pages × 2 themes + interactive checks');
