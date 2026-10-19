@@ -5,6 +5,60 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-18",
+    "ktpRefs": [],
+    "href": "18.10.26.html",
+    "title": "Кредитные платежи",
+    "navTitle": "Кредитные платежи",
+    "navSubtitle": "Кредитные задачи: дифференцированные и аннуитетные платежи, расчётная таблица, переплата, переменная ставка. Путь А — 10 заданий.",
+    "summary": "Кредитные задачи: дифференцированные и аннуитетные платежи, расчётная таблица, переплата, переменная ставка. Путь А — 10 заданий.",
+    "topics": [
+      "дифференцированная схема и погашение долга равными долями",
+      "таблица начисления процентов на остаток",
+      "формулы выплат, переплаты и процента переплаты",
+      "аннуитетные платежи и рекуррентная модель",
+      "выбор периода, изменение ставки и сравнение схем"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "finance_05",
+        "evidenceAnchor": "diff",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "finance_11",
+        "evidenceAnchor": "model",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "finance_04",
+        "evidenceAnchor": "annuity",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "finance_06",
+        "evidenceAnchor": "recurrence",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "finance_10",
+        "evidenceAnchor": "rates",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "finance_08",
+        "evidenceAnchor": "compare",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "18.10.26.html",
+      "pdf": "../pdf_docs/18.10.26.pdf",
+      "tex": "../tex_docs/18.10.26.tex",
+      "lab": "18.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-10-15",
     "ktpRefs": [],
     "href": "15.10.26.html",
