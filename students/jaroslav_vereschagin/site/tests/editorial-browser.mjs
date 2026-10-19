@@ -111,7 +111,8 @@ try{
     if(w===1440||w===390)await screen('index-'+w);
     await visit('archive.html',w,h,false);
     const cards=await evaluate('([...document.querySelectorAll(".archive-tile")].map(x=>({h:Math.round(x.getBoundingClientRect().height),scroll:x.scrollHeight,client:x.clientHeight,title:x.querySelector(".archive-tile-title").textContent})))');
-    assert.equal(cards.length,12,'Expected the twelve current real lessons of Jaroslav');
+    const {LESSONS: registeredLessons} = await import('../lesson-registry.js');
+    assert.equal(cards.length,registeredLessons.length,'Archive should display every published lesson');
     assert.ok(Math.max(...cards.map(c=>c.h))-Math.min(...cards.map(c=>c.h))<=2,'All archive tiles must be uniform across months');
     for(const card of cards)assert.ok(card.scroll<=card.client+2,'Archive text must remain uncut: '+card.title);
     const columns=await evaluate('getComputedStyle(document.querySelector(".archive-month-grid")).gridTemplateColumns.split(" ").length');
