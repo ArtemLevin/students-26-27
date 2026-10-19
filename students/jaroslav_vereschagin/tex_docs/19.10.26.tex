@@ -1,0 +1,313 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{PTSans}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm,headheight=26pt,headsep=7mm,footskip=11mm]{geometry}
+\usepackage{microtype}
+\usepackage{needspace}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage[unicode=true,colorlinks=true,linkcolor=black]{hyperref}
+\definecolor{accent}{HTML}{147D7E}
+\definecolor{darkaccent}{HTML}{0B5253}
+\definecolor{ink}{HTML}{273538}
+\definecolor{quiet}{HTML}{647478}
+\definecolor{hair}{HTML}{CFD9D9}
+\color{ink}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist[itemize]{leftmargin=1.35em,itemsep=0.08em,topsep=0.12em}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=0.23em,topsep=0.20em}
+\AtBeginDocument{\setlength{\abovedisplayskip}{6pt}\setlength{\belowdisplayskip}{6pt}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{quiet}Метод интервалов: кратные корни}
+\fancyhead[R]{\small\color{quiet}19.10.26}
+\fancyfoot[C]{\small\color{quiet}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{hair}\leaders\hrule height \headrulewidth\hfill}}
+\newcommand{\key}[1]{{\color{darkaccent}\textbf{#1}}}
+\newcommand{\note}[1]{{\small\color{quiet}#1}}
+\newcommand{\headsec}[1]{\section*{\color{darkaccent}#1}\vspace{-6pt}{\color{hair}\rule{\linewidth}{0.55pt}}\par\vspace{2pt}}
+\newcommand{\headsub}[1]{\subsection*{\color{accent}#1}\vspace{-4pt}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\task}[1]{\item #1\par\vspace{4pt}}
+\tikzset{
+  flowstart/.style={ellipse,draw=darkaccent,line width=.85pt,minimum width=48mm,minimum height=11mm,align=center,font=\small,fill=white},
+  flowstep/.style={rounded corners=2.2pt,draw=accent,line width=.82pt,text width=105mm,minimum height=12mm,inner sep=2.4mm,align=center,font=\small,fill=white},
+  flowbranch/.style={rounded corners=2.2pt,draw=accent,line width=.82pt,text width=47mm,minimum height=14mm,inner sep=2.2mm,align=center,font=\small,fill=white},
+  flowcheck/.style={diamond,aspect=2.45,draw=darkaccent,line width=.82pt,text width=61mm,inner sep=1.6mm,align=center,font=\small,fill=white},
+  flowarrow/.style={-{Stealth[length=2.4mm]},draw=darkaccent,line width=.87pt}
+}
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{25mm}
+{\large\color{quiet}ЧЕК-ЛИСТ ПО МАТЕМАТИКЕ}\par
+\vspace{9mm}
+{\fontsize{29}{36}\selectfont\bfseries\color{darkaccent}Метод интервалов:\\[1mm]кратные корни\\[1mm]и особые случаи}\par
+\vspace{9mm}
+{\Large\color{accent}Кратность корня, знаки, границы ответа}\par
+\vspace{15mm}
+{\color{hair}\rule{0.76\linewidth}{.8pt}}\par
+\vspace{9mm}
+{\Large Ярослав Верещагин}\par
+\vspace{3mm}
+{\large 19.10.26}\par
+\vfill
+\begin{minipage}{.83\linewidth}\centering
+Повторить метод интервалов, научиться учитывать чётные и нечётные
+кратности корней и точно записывать ответы для четырёх видов неравенств.
+\end{minipage}\par
+\vspace{13mm}
+\begin{tikzpicture}
+\draw[accent!75,line width=1.35pt]
+(-6.1,0) .. controls (-3.7,.58) and (-1.0,-.39) .. (1.3,.10)
+  .. controls (3.0,.52) and (4.6,.13) .. (6.1,.48);
+\end{tikzpicture}\par
+\vspace{9mm}
+{\small\color{quiet}Лёвин Артём Александрович эксклюзивно для Ярослава Верещагина}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\headsec{1. Основа метода: «КОЗА»}
+Решая неравенство \(f(x)>0\), \(f(x)<0\), \(f(x)\ge0\) или \(f(x)\le0\), определите,
+\key{где выражение положительно, отрицательно или равно нулю}.
+
+\begin{enumerate}
+\item \key{К --- корни.} Приведите неравенство к виду \(f(x)\mathrel{\gtrless}0\) (или \(f(x)\ge0\), \(f(x)\le0\)); решите уравнение \(f(x)=0\).
+\item \key{О --- ось.} Отметьте найденные действительные корни на числовой оси по возрастанию.
+\item \key{З --- знаки.} Возьмите число \emph{внутри} одного промежутка, отличное от корней, и вычислите знак \(f(x)\). Затем установите знаки на других промежутках.
+\item \key{А --- ответ.} Выберите промежутки с требуемым знаком и решите, включать ли граничные корни.
+\end{enumerate}
+\key{Пример.} \(x^2-x-6<0\). Корни: \(-2\) и \(3\). При \(x=0\) получаем
+\(f(0)=-6<0\). Между корнями выражение отрицательно.
+\[
+\boxed{x\in(-2;3)}.
+\]
+\note{«Привести к нулю» означает перенести все слагаемые в одну часть. Например,
+\(x^2\le x+2\iff x^2-x-2\le0\).}
+
+\headsub{Как записывать границы}
+\begin{itemize}
+\item При \(>0\) и \(<0\) корни \key{исключаются}: \((\,\,)\), пустые точки.
+\item При \(\ge0\) и \(\le0\) нули \emph{многочлена} \key{включаются}: \([\,]\), закрашенные точки.
+\item У \(\pm\infty\) всегда круглые скобки; единственное изолированное решение записывайте \(\{a\}\).
+\end{itemize}
+
+\headsec{2. Если действительных корней нет}
+\key{Отсутствие корней уравнения} \(f(x)=0\) само по себе не означает,
+что неравенство не имеет решений. Знак непрерывного многочлена без
+действительных корней остаётся одинаковым на всей оси.
+
+\key{Пример.} \(f(x)=4x^2+x+1\):
+\[
+D=1-4\cdot4\cdot1=-15<0,\qquad f(0)=1>0.
+\]
+Следовательно, \(f(x)>0\) при любом действительном \(x\):
+\[
+4x^2+x+1>0\ \Longrightarrow\ x\in\R,\qquad
+4x^2+x+1<0\ \Longrightarrow\ \emptyset.
+\]
+\note{Если \(D<0\), квадратный трёхчлен сохраняет знак коэффициента при \(x^2\).}
+
+\clearpage
+\headsec{3. Чётные и нечётные кратности корней}
+Если \(f(x)=(x-a)^m g(x)\) и \(g(a)\ne0\), число \(m\) называется
+\key{кратностью корня} \(a\).
+\begin{itemize}
+\item \key{Нечётная кратность} (\(1,3,5,\ldots\)): при переходе через корень знак \key{меняется}.
+\item \key{Чётная кратность} (\(2,4,6,\ldots\)): при переходе через корень знак \key{сохраняется}.
+\end{itemize}
+\note{Причина: множитель \((x-a)^m\) меняет знак при нечётном \(m\), а при чётном остаётся неотрицательным по обе стороны от \(a\).}
+
+\headsub{Разбор ключевого случая}
+Решим
+\[
+f(x)=x^2(x-1)^3(x+3)^5(x-4)^4\ge0.
+\]
+Нули и их кратности:
+\[
+\begin{array}{c|cccc}
+\text{корень}&-3&0&1&4\\ \hline
+\text{кратность}&5&2&3&4
+\end{array}
+\]
+Справа от \(4\) все множители положительны, поэтому знак «\(+\)».
+При движении влево через \(4\) знак сохраняется, через \(1\) меняется,
+через \(0\) сохраняется, через \(-3\) меняется.
+
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth]
+\draw[->,color=quiet,line width=.9pt] (-6.7,0)--(6.7,0) node[above]{\(x\)};
+\foreach \x/\lab/\m in {-4.3/-3/5,-1.6/0/2,1/1/3,4.2/4/4}{
+  \fill[darkaccent] (\x,0) circle (2.5pt);
+  \node[below=5pt,font=\small] at (\x,0){\(\lab\)};
+  \node[below=24pt,font=\scriptsize,color=quiet] at (\x,0){кр. \(\m\)};
+}
+\node[above=8pt,font=\large,color=darkaccent] at (-5.4,0){\(+\)};
+\node[above=8pt,font=\large,color=darkaccent] at (-3.0,0){\(-\)};
+\node[above=8pt,font=\large,color=darkaccent] at (-.3,0){\(-\)};
+\node[above=8pt,font=\large,color=darkaccent] at (2.5,0){\(+\)};
+\node[above=8pt,font=\large,color=darkaccent] at (5.3,0){\(+\)};
+\end{tikzpicture}
+\end{center}
+Для \(\ge0\) подходят положительные промежутки \emph{и все четыре нуля}.
+Особенно важно включить \(0\), хотя по обе стороны от него стоит «\(-\)»:
+\[
+\boxed{x\in(-\infty;-3]\cup\{0\}\cup[1;+\infty)}.
+\]
+\note{Корень \(4\) уже включён в промежуток \([1;+\infty)\). Дополнительные скобки вокруг него не нужны.}
+
+\clearpage
+\headsec{4. Четыре знака --- четыре разных ответа}
+Пусть \(g(x)=(x-3)^2(x+5)^3\). Корни: \(-5\) (нечётная кратность),
+\(3\) (чётная). Знаки: «\(-\)» при \(x<-5\) и «\(+\)» при \(x>-5\),
+кроме нуля \(x=3\).
+\renewcommand{\arraystretch}{1.28}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+\textbf{Неравенство} & \textbf{Множество решений}\\
+\midrule
+\(g(x)>0\) & \((-5;3)\cup(3;+\infty)\)\\
+\(g(x)\ge0\) & \([-5;+\infty)\)\\
+\(g(x)<0\) & \((-\infty;-5)\)\\
+\(g(x)\le0\) & \((-\infty;-5]\cup\{3\}\)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\note{Для строгого неравенства обязательно исключите даже корень, через который знак не меняется.}
+
+
+\headsec{5. Многочлен сначала можно разложить на множители}
+\key{Пример.} Решим \(x^3-64x>0\). Вспомогательное уравнение:
+\[
+x(x^2-64)=x(x-8)(x+8)=0
+\quad\Longrightarrow\quad x=-8,\ 0,\ 8.
+\]
+Все три корня простые (кратность \(1\)). На крайнем правом промежутке знак «\(+\)»;
+при переходе через каждый корень знак меняется.
+\[
+\begin{array}{c|cccc}
+\text{Промежуток} & (-\infty;-8)&(-8;0)&(0;8)&(8;+\infty)\\ \hline
+\text{Знак}&-&+&-&+
+\end{array}
+\]
+Отбираем интервалы с «\(+\)», концы исключаем, так как неравенство строгое:
+\[
+\boxed{x\in(-8;0)\cup(8;+\infty)}.
+\]
+
+\headsec{6. Типичные ошибки}
+\begin{itemize}[itemsep=0pt,topsep=0pt]
+\item \key{Чётный корень:} знак сохраняется; \key{нечётный корень:} знак меняется.
+\item \key{Пробное число} берите внутри промежутка, но никогда в самом корне.
+\item \key{Строгое неравенство:} все нули исключаются. \key{Нестрогое:} все нули многочлена включаются, в том числе изолированные.
+\item \key{Нет действительных корней:} исследуйте знак выражения --- решения могут быть всей осью или пустым множеством.
+\item Из \(x^2=8\) следует \(x=\pm\sqrt8\), а \key{не} \(\pm8\). У \(\pm\infty\) скобки только круглые.
+\end{itemize}
+\clearpage
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм решения: метод интервалов}\par
+\vspace{2mm}
+{\small\color{quiet}Для целых (многочленных) неравенств.}
+\end{center}
+\vspace{4mm}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\node[flowstart] (start) at (0,0) {Неравенство};
+\node[flowstep] (norm) at (0,-1.8) {Перенесите всё влево, справа оставьте \(0\).\ Решите \(f(x)=0\), определите кратности корней.};
+\node[flowstep] (axis) at (0,-4.0) {Отметьте корни на оси. Выберите число, которое не является корнем, и найдите знак \(f(x)\).};
+\node[flowcheck] (odd) at (0,-7.2) {При переходе через очередной корень его кратность нечётная?};
+\node[flowbranch] (flip) at (-3.5,-10.1) {Смените знак на противоположный.};
+\node[flowbranch] (keep) at (3.5,-10.1) {Сохраните прежний знак.};
+\node[flowstep] (select) at (0,-12.6) {Повторите для остальных корней. Выберите промежутки с нужным знаком.};
+\node[flowcheck] (weak) at (0,-15.8) {Неравенство нестрогое (\(\ge\) или \(\le\))?};
+\node[flowbranch] (yes) at (-3.5,-18.7) {Включите все нули многочлена.};
+\node[flowbranch] (no) at (3.5,-18.7) {Исключите все нули многочлена.};
+\node[flowstart] (end) at (0,-21.2) {Запишите ответ};
+\draw[flowarrow] (start)--(norm);
+\draw[flowarrow] (norm)--(axis);
+\draw[flowarrow] (axis)--(odd);
+\draw[flowarrow] (odd.west)-| node[pos=.20,above,font=\small]{да} (flip.north);
+\draw[flowarrow] (odd.east)-| node[pos=.20,above,font=\small]{нет} (keep.north);
+\draw[flowarrow] (flip.south)--++(0,-.38)-| ([xshift=-15mm]select.north);
+\draw[flowarrow] (keep.south)--++(0,-.38)-| ([xshift=15mm]select.north);
+\draw[flowarrow] (select)--(weak);
+\draw[flowarrow] (weak.west)-| node[pos=.20,above,font=\small]{да} (yes.north);
+\draw[flowarrow] (weak.east)-| node[pos=.20,above,font=\small]{нет} (no.north);
+\draw[flowarrow] (yes.south)--++(0,-.36)-| ([xshift=-13mm]end.north);
+\draw[flowarrow] (no.south)--++(0,-.36)-| ([xshift=13mm]end.north);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\headsec{7. Самостоятельная тренировка --- Путь А}
+\note{10 заданий по возрастанию сложности. Решите методом интервалов; там, где возможно, разложите многочлен на множители. В ответе используйте интервалы и объединение множеств.}
+\vspace{3mm}
+\begin{enumerate}[label=\textbf{\arabic*.},itemsep=6pt]
+\task{\(x^2-x-6<0.\)}
+\task{\((x-2)(x-3)(x-7)(x-10)\ge0.\)}
+\task{\(4x^2+x+1<0.\)}
+\task{\((x-4)^2\le0.\)}
+\task{\((x+1)^2(x-3)>0.\)}
+\task{\((x-3)^2(x+5)^3\le0.\)}
+\task{\((x+4)^2(x-1)^3(x-5)^2\le0.\)}
+\task{\(x^3-25x<0.\)}
+\task{\((x+1)^{20}(x-3)^2(x+4)^{1001}>0.\)}
+\task{\(x^2(x-3)(x+2)\ge x^2(x-3).\)}
+\end{enumerate}
+\vspace{12mm}
+\textcolor{quiet}{\rule{\linewidth}{.5pt}}\par
+\vspace{3mm}
+\textbf{Контрольные вопросы.}
+Почему у корня чётной кратности знак сохраняется? Как нуль может попасть
+в ответ, если по обе стороны от него стоит «\(-\)»? Можно ли выбрать \(0\)
+как пробную точку, если \(0\) является корнем?
+
+\clearpage
+\headsec{8. Ответы к тренировочному блоку}
+\note{Сначала закончите самостоятельное решение, затем сверьте интервалы и включение границ.}\par
+\vspace{7mm}
+\renewcommand{\arraystretch}{1.8}
+\begin{tabularx}{\linewidth}{@{}p{12mm}X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+1 & \(x\in(-2;3)\).\\
+2 & \(x\in(-\infty;2]\cup[3;7]\cup[10;+\infty)\).\\
+3 & \(\emptyset\).\\
+4 & \(x\in\{4\}\).\\
+5 & \(x\in(3;+\infty)\).\\
+6 & \(x\in(-\infty;-5]\cup\{3\}\).\\
+7 & \(x\in(-\infty;1]\cup\{5\}\).\\
+8 & \(x\in(-\infty;-5)\cup(0;5)\).\\
+9 & \(x\in(-4;-1)\cup(-1;3)\cup(3;+\infty)\).\\
+10 & \(x\in(-\infty;-1]\cup\{0\}\cup[3;+\infty)\).\\
+\bottomrule
+\end{tabularx}
+\vspace{11mm}
+\textbf{Короткие ориентиры для самопроверки.}
+\begin{itemize}
+\item №\,3: дискриминант отрицателен, а коэффициент при \(x^2\) положителен.
+\item №\,4: квадрат равен нулю только при \(x=4\).
+\item №\,7: точка \(5\) является изолированным решением.
+\item №\,9: степень \(1001\) нечётная, степени \(20\) и \(2\) чётные.
+\item №\,10: перенесите правую часть влево и вынесите \(x^2(x-3)\) за скобки.
+\end{itemize}
+\end{document}

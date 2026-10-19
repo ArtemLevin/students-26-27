@@ -1,0 +1,262 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,left=22mm,right=22mm,top=22mm,bottom=24mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{booktabs,tabularx}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{accent}{HTML}{1F7076}
+\definecolor{darkaccent}{HTML}{164B50}
+\definecolor{textgray}{HTML}{30373A}
+\definecolor{lightgray}{HTML}{727B80}
+\color{textgray}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+\setlist[itemize]{leftmargin=*,itemsep=0.28em,topsep=0.3em}
+\setlist[enumerate]{leftmargin=*,itemsep=0.52em,topsep=0.4em}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{lightgray} Олимпиадная математика · Ксения Клыкова}
+\fancyhead[R]{\footnotesize\color{lightgray}19.10.2026}
+\fancyfoot[C]{\footnotesize\color{lightgray}\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\setlength{\headheight}{16pt}
+\newcommand{\tick}{\(\square\)}
+\newcommand{\unit}[1]{\textcolor{accent}{\bfseries #1}}
+\newcommand{\step}[1]{\par\medskip{\large\color{darkaccent}\bfseries #1}\par\smallskip}
+\newcommand{\criterion}[1]{\par\textcolor{darkaccent}{\bfseries #1}\par}
+\newcommand{\mathitem}[1]{\item \textbf{#1}}
+
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{29mm}
+{\small\color{accent}\bfseries МАТЕМАТИКА · ОЛИМПИАДНАЯ ПОДГОТОВКА}\par
+\vspace{22mm}
+{\Huge\color{darkaccent}\bfseries Чек-лист}\par
+\vspace{12mm}
+{\LARGE\bfseries Простые и составные числа}\par
+\vspace{4mm}
+{\Large Доказательства делимости и разложение на множители}\par
+\vspace{20mm}
+{\large\bfseries Ксения Клыкова}\par
+\vspace{7mm}
+{\normalsize 19 октября 2026 года}\par
+\vfill
+{\small\color{lightgray}Теория · Разобранные примеры · Алгоритм · 10 упражнений · Ответы}\par
+\vspace{18mm}
+{\small\color{darkaccent}\bfseries Лёвин Артём Александрович эксклюзивно для Ксении Клыковой}\par
+\end{center}
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent!50,line width=1.25pt] ([xshift=20mm,yshift=22mm]current page.south west)
+.. controls ([xshift=75mm,yshift=35mm]current page.south west)
+       and ([xshift=-75mm,yshift=10mm]current page.south east)
+.. ([xshift=-20mm,yshift=22mm]current page.south east);
+\end{tikzpicture}
+\end{titlepage}
+
+\step{1. Натуральные, простые и составные числа}
+\tick\; Я различаю натуральные числа и простые числа.
+\[
+\mathbb N=\{1,2,3,\ldots\}.
+\]
+\textbf{Простое число} --- натуральное число, имеющее ровно два различных натуральных делителя: 1 и само себя. Например, \(5\) --- простое.
+
+\textbf{Составное число} --- натуральное число, которое можно записать в виде
+\[
+ n=ab,\qquad a,b\in\mathbb N,\quad a>1,\quad b>1.
+\]
+Например, \(6=2\cdot3\) --- составное.
+
+\criterion{Запомните: единица не является ни простым, ни составным числом.}
+
+\step{2. Сколько делителей нужно проверить?}
+\tick\; Я могу обосновать границу \(\sqrt n\).
+
+Если \(n=ab\) --- составное число и \(a,b>1\), то хотя бы один из множителей \textbf{не превосходит} \(\sqrt n\). В самом деле, если бы \(a>\sqrt n\) и \(b>\sqrt n\), то \(ab>n\), что противоречит равенству \(ab=n\).
+
+\criterion{Критерий простоты}
+Чтобы проверить натуральное число \(n\ge2\), достаточно испытать его делимость на \emph{все простые числа} \(p\le\sqrt n\). Если ни одно не подошло, \(n\) простое.
+
+\textbf{Пример 1.} Проверим \(97\). Поскольку \(9^2<97<10^2\), имеем \(\lfloor\sqrt{97}\rfloor=9\). Достаточно проверить \(2,3,5,7\). Ни одно из этих чисел не делит \(97\), следовательно, \(97\) простое.
+
+\textbf{Пример 2.} Для \(143\) имеем \(11^2<143<12^2\). При проверке делимости обнаруживаем \(143=11\cdot13\), поэтому \(143\) составное.
+
+\textbf{Где применяется.} Можно ли расположить 113 фишек прямоугольником, имеющим не менее двух строк и двух столбцов? Это означало бы представить \(113=ab\) с \(a,b\ge2\). Но \(113\) не делится на \(2,3,5,7\), а \(\sqrt{113}<11\). Значит, число простое и такой прямоугольник невозможен.
+
+\clearpage
+\begin{center}
+{\Large\color{darkaccent}\bfseries Алгоритм проверки простоты числа}\par
+\vspace{6mm}
+\end{center}
+\tikzset{
+ startstop/.style={ellipse,draw=accent,thick,align=center,minimum width=43mm,minimum height=12mm,font=\small},
+ action/.style={rectangle,rounded corners=3pt,draw=accent,thick,align=center,text width=40mm,minimum height=14mm,inner sep=4pt,font=\small},
+ decision/.style={diamond,aspect=1.8,draw=darkaccent,thick,align=center,text width=26mm,inner sep=1pt,font=\small},
+ arr/.style={-{Stealth[length=3mm]},thick,draw=darkaccent}
+}
+\begin{center}
+\begin{tikzpicture}[node distance=15mm and 23mm]
+\node[startstop] (start) {Дано целое число \(n\)};
+\node[decision,below=17mm of start] (first) {\(n\ge2\)?};
+\node[action,right=10mm of first] (nope) {Не является простым};
+\node[action,below=18mm of first] (check) {Проверьте делимость на простые \(p\le\lfloor\sqrt n\rfloor\)};
+\node[decision,below=18mm of check] (second) {Нашёлся делитель \(p\)?};
+\node[action,left=10mm of second] (composite) {Число составное};
+\node[action,below=18mm of second] (prime) {Число простое};
+\draw[arr] (start) -- (first);
+\draw[arr] (first.east) -- node[above,font=\small]{нет} (nope.west);
+\draw[arr] (first.south) -- node[right,font=\small]{да} (check.north);
+\draw[arr] (check.south) -- (second.north);
+\draw[arr] (second.west) -- node[above,font=\small]{да} (composite.east);
+\draw[arr] (second.south) -- node[right,font=\small]{нет} (prime.north);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\step{3. Разложение на множители доказывает составность}
+\tick\; Я ищу общий множитель, формулы сокращённого умножения и разложение квадратного трёхчлена.
+
+Если при любом допустимом \(n\) удаётся представить выражение в виде \(A(n)B(n)\), где \(A(n),B(n)\) --- целые числа, \emph{оба больше 1}, то получаемое число составное.
+
+\textbf{Пример 3.} Для любого \(n\in\mathbb N\):
+\[
+8n^2+10n+3=(2n+1)(4n+3).
+\]
+Так как \(2n+1\ge3\) и \(4n+3\ge7\), число составное для всех \(n\ge1\).
+
+\textbf{Пример 4.} Аналогично
+\[
+n^2+5n+6=(n+2)(n+3),\qquad n\in\mathbb N.
+\]
+Оба множителя больше единицы, значит, составность доказана \emph{сразу для всех} натуральных \(n\).
+
+\criterion{Важное различие}
+Проверка нескольких значений \(n\) помогает найти идею, но сама по себе не доказывает утверждение для всех натуральных \(n\).
+
+\step{4. Разность квадратов и степеней}
+\tick\; Я узнаю и правильно применяю формулу
+\[
+a^2-b^2=(a-b)(a+b).
+\]
+Если показатель чётный, её можно применять к степеням:
+\[
+a^{2k}-b^{2k}=(a^k-b^k)(a^k+b^k),\qquad k\in\mathbb N.
+\]
+\textbf{Пример 5.} \(2^{100}-1\) составное, потому что
+\[
+2^{100}-1=(2^{50}-1)(2^{50}+1),
+\]
+причём каждый множитель --- целое число больше единицы.
+
+\textbf{Ещё один полезный приём:} при \(a\in\mathbb Z\), \(m\in\mathbb N\)
+\[
+a^m-1=(a-1)(1+a+\cdots+a^{m-1}).
+\]
+Для \(m=1\) сумма в скобках состоит из одного слагаемого \(1\).
+
+\clearpage
+\step{5. Произведение последовательных целых чисел}
+\tick\; Я замечаю в произведении соседние целые числа.
+
+Из любых \textbf{двух последовательных целых чисел} одно чётное, поэтому
+\[
+2\mid n(n+1),\qquad n\in\mathbb Z.
+\]
+Среди \textbf{трёх последовательных целых чисел} одно кратно трём; среди них также есть чётное. Поэтому
+\[
+6\mid(n-1)n(n+1),\qquad n\in\mathbb Z.
+\]
+\textbf{Пример 6.} Докажем, что \(6\mid(n^3-n)\) при любом целом \(n\):
+\[
+ n^3-n=n(n^2-1)=(n-1)n(n+1).
+\]
+Здесь три последовательных целых множителя. Их произведение делится одновременно на 2 и на 3, следовательно, делится на 6.
+
+\step{6. Делимость степенных выражений}
+\tick\; Я могу перейти от большой степени к удобному основанию.
+
+\textbf{Пример 7.} Докажем, что \(15\mid(2^{4n}-1)\) для всех \(n\in\mathbb N\):
+\[
+\begin{aligned}
+2^{4n}-1&=16^n-1\\
+&=(16-1)\bigl(1+16+\cdots+16^{n-1}\bigr)\\
+&=15\bigl(1+16+\cdots+16^{n-1}\bigr).
+\end{aligned}
+\]
+При \(n=1\) сумма в скобках равна \(1\). Во всех случаях скобка --- целое число, поэтому делимость на \(15\) доказана.
+
+\criterion{Контроль перед ответом}
+\begin{itemize}[label=\(\square\)]
+\item Для проверки простоты я использовал только нужные простые делители до \(\sqrt n\).
+\item В доказательстве составности оба множителя целые и больше 1.
+\item Если утверждение должно выполняться «для всех», приведено общее доказательство.
+\item При доказательстве делимости указано, почему появился нужный множитель.
+\item Область значений переменной \(n\) записана точно.
+\end{itemize}
+
+\clearpage
+\begin{center}
+{\LARGE\color{darkaccent}\bfseries Тренировочный блок}\par
+{\normalsize\color{lightgray}Путь А · 10 заданий · от базового к повышенному уровню}\par
+\end{center}
+\vspace{3mm}
+\textbf{Выполните самостоятельно.} Для утверждений о всех значениях переменной требуется доказательство.
+\begin{enumerate}[label=\textcolor{accent}{\bfseries\arabic*.},itemsep=0.65em]
+\item Распределите числа \(1,\ 2,\ 9,\ 17,\ 25\) на простые, составные и не относящиеся ни к одной группе.
+\item Докажите, что \(89\) --- простое число. Явно укажите достаточный набор проверяемых делителей.
+\item Докажите, что \(221\) --- составное число. Найдите его разложение на два натуральных множителя больше 1.
+\item Можно ли расположить \(127\) одинаковых фишек в прямоугольник, имеющий как минимум 2 строки и 2 столбца? Обоснуйте ответ.
+\item Докажите, что \(n^2+7n+10\) --- составное число при каждом \(n\in\mathbb N\).
+\item Докажите, что \(6n^2+11n+3\) --- составное число при каждом \(n\in\mathbb N\).
+\item Докажите, что \(5^{18}-1\) --- составное число, не вычисляя его десятичную запись.
+\item Докажите, что \(n^3-n\) делится на \(6\) при каждом \(n\in\mathbb Z\).
+\item Докажите, что \(n^5-n\) делится на \(6\) при каждом \(n\in\mathbb Z\).
+\item Докажите, что \(2^{4n}-1\) делится на \(15\) при каждом \(n\in\mathbb N\).
+\end{enumerate}
+
+\vspace{5mm}
+\textcolor{accent}{\rule{\linewidth}{0.6pt}}
+\small
+\textbf{Самопроверка решения:} указаны ли множители? обоснована ли их делимость? учтены ли ограничения на \(n\)? соответствует ли вывод исходному вопросу?
+\normalsize
+
+\clearpage
+\begin{center}
+{\LARGE\color{darkaccent}\bfseries Ответы и контрольные идеи}\par
+\end{center}
+\vspace{7mm}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{10mm}X@{}}
+\toprule
+№ & Ответ или ключевой шаг \\
+\midrule
+1 & Простые: \(2,17\). Составные: \(9,25\). Число \(1\) --- ни простое, ни составное. \\
+2 & \(89\) простое: \(\lfloor\sqrt{89}\rfloor=9\), достаточно простых \(2,3,5,7\); ни одно не делит \(89\). \\
+3 & \(221=13\cdot17\), следовательно, составное. \\
+4 & Нет. \(127\) простое: \(\lfloor\sqrt{127}\rfloor=11\), проверяем \(2,3,5,7,11\). \\
+5 & \(n^2+7n+10=(n+2)(n+5)\). При \(n\ge1\) оба множителя больше \(1\). \\
+6 & \(6n^2+11n+3=(3n+1)(2n+3)\). При \(n\ge1\) оба множителя больше \(1\). \\
+7 & \(5^{18}-1=(5^9-1)(5^9+1)\); оба множителя --- натуральные числа больше \(1\). \\
+8 & \(n^3-n=(n-1)n(n+1)\); произведение трёх последовательных целых чисел кратно \(6\). \\
+9 & \(n^5-n=(n-1)n(n+1)(n^2+1)\); первые три множителя дают делимость на \(6\). \\
+10 & \(2^{4n}-1=16^n-1=15(1+16+\cdots+16^{n-1})\). \\
+\bottomrule
+\end{tabularx}
+\vfill
+{\footnotesize\color{lightgray}Тема: простые и составные числа, разложение на множители, признаки делимости и доказательства для произвольного \(n\).}
+\end{document}
