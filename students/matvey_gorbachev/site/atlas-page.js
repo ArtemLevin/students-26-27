@@ -1,4 +1,4 @@
-import {LESSONS,getLatestLesson,formatLongDateRu} from './lesson-registry.js?v=20261016-1';
+import {LESSONS,getLatestLesson,formatLongDateRu} from './lesson-registry.js?v=20261019-1';
 
 /* Presentation adapter only: preserves Matvey's canonical lessons and mastery. */
 const find=id=>document.getElementById(id);
