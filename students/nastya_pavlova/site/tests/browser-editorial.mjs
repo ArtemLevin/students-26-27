@@ -69,9 +69,12 @@ try{
    await sleep(90);
   }
   for(let i=0;i<70;i++){
-   const ready=await evaluate(name==='index.html'?
+   const expression=name==='index.html'?
      "document.querySelector('#lessonTitle')?.textContent!=='Загрузка занятия…'":
-     "name==='archive.html'?"document.querySelectorAll('.archive-tile').length>0":name.endsWith('-lab.html')?"document.querySelector('#finalSum')?.textContent.length>0":"!!document.querySelector('#pageTitle')");
+     name==='archive.html'?"document.querySelectorAll('.archive-tile').length>0":
+     name.endsWith('-lab.html')?"document.querySelector('#finalSum')?.textContent.length>0":
+     "!!document.querySelector('#pageTitle')";
+   const ready=await evaluate(expression);
    if(ready)break;await sleep(100);
   }
   await sleep(180);
