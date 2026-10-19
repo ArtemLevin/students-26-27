@@ -4,6 +4,86 @@ export const ARCHIVE_PAGE_SIZE=10;
 const MONTHS_GENITIVE=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
 export const LESSONS=[
+{
+  "date": "2026-10-19",
+  "ktpRefs": [
+    "ktp-011",
+    "ktp-012",
+    "ktp-024"
+  ],
+  "href": "19.10.26.html",
+  "title": "Степени как язык преобразований",
+  "navTitle": "Степени как язык преобразований",
+  "navSubtitle": "Ярослав Гаврилов: свойства степеней, преобразования корней, показательные уравнения и прикладная задача ЕГЭ. Материал занятия 18.10.2026.",
+  "summary": "Ярослав Гаврилов: свойства степеней, преобразования корней, показательные уравнения и прикладная задача ЕГЭ. Материал занятия 18.10.2026.",
+  "topics": [
+    "Формулы приведения и двойной угол в тригонометрических выражениях",
+    "Свойства степеней и условия их применения",
+    "Перевод составных чисел, корней и дробей в степенной вид",
+    "Вычисления со степенями и правило скобок ВУПС",
+    "Показательные уравнения с одинаковым основанием",
+    "Уравнения с дробными и отрицательными показателями",
+    "Прикладная формула степенной зависимости",
+    "Самостоятельная тренировка: Путь А, 10 заданий"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege08_04",
+      "evidenceAnchor": "laws",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_03",
+      "evidenceAnchor": "strategy",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_02",
+      "evidenceAnchor": "strategy",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_05",
+      "evidenceAnchor": "strategy",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege08_06",
+      "evidenceAnchor": "calculations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege07_07",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege10_01",
+      "evidenceAnchor": "application",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege10_02",
+      "evidenceAnchor": "application",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_14",
+      "evidenceAnchor": "trig",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_15",
+      "evidenceAnchor": "trig",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "19.10.26.html",
+    "pdf": "../pdf_docs/19.10.26.pdf",
+    "tex": "../tex_docs/19.10.26.tex"
+  }
+},
   {
   "date": "2026-10-15",
   "ktpRefs": [
