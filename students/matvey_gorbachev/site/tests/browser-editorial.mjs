@@ -47,7 +47,7 @@ try{
   assert.ok(Number(basic.total)>0,'stats missing '+width);
   assert.ok(basic.map>200,'competency map not populated '+width);
   assert.ok(basic.focus,'focus control missing '+width);
-  assert.ok(basic.lesson==='Вклады. Часть 2','latest lesson wrong '+width);
+  assert.ok(basic.lesson==='Кредитные платежи','latest lesson wrong '+width);
   if(width===1440){
     const cell=page.locator('#competencyMap .radial-cell').first();
     await cell.focus();
@@ -95,7 +95,7 @@ try{
       titles:visible.filter(t=>t.querySelector('.archive-tile-title').scrollHeight>t.querySelector('.archive-tile-title').clientHeight+2).length};
   });
   assert.ok(archive.width<=archive.viewport+2,'archive overflow '+width+': '+JSON.stringify(archive));
-  assert.equal(archive.counts,9,'archive lesson count '+width);
+  assert.equal(archive.counts,10,'archive lesson count '+width);
   assert.equal(archive.months,2,'archive month groups '+width);
   assert.ok(Math.max(...archive.heights)-Math.min(...archive.heights)<=2,'unequal tiles '+width+': '+JSON.stringify(archive.heights));
   assert.equal(archive.clipped,0,'clipped archive card '+width);
@@ -104,8 +104,42 @@ try{
   await page.locator('#archiveSearch').fill('вклады');
   assert.equal(await page.locator('.archive-tile:visible').count(),1,'archive search failed '+width);
   await page.locator('#archiveSearch').fill('');
-  assert.equal(await page.locator('.archive-tile:visible').count(),9,'archive reset failed '+width);
+  assert.equal(await page.locator('.archive-tile:visible').count(),10,'archive reset failed '+width);
   await page.screenshot({path:path.join(artifactDir,'archive-'+width+'.png'),fullPage:true});
+  await page.goto(origin+'18.10.26.html',{waitUntil:'networkidle'});
+  await page.locator('.poster img').scrollIntoViewIfNeeded();
+  await page.locator('.poster img').evaluate(image=>image.decode());
+  const lessonState=await page.evaluate(()=>({
+    width:document.documentElement.scrollWidth,
+    viewport:window.innerWidth,
+    title:document.querySelector('h1')?.textContent.trim(),
+    tasks:document.querySelectorAll('.tasks li').length,
+    poster:document.querySelector('.poster img')?.complete && document.querySelector('.poster img')?.naturalWidth>0
+  }));
+  assert.ok(lessonState.width<=lessonState.viewport+2,'new lesson overflow '+width+': '+JSON.stringify(lessonState));
+  assert.equal(lessonState.title,'Кредитные платежи','new lesson title '+width);
+  assert.equal(lessonState.tasks,10,'new lesson task count '+width);
+  assert.ok(lessonState.poster,'new lesson poster missing '+width);
+  await page.locator('.answers summary').click();
+  assert.equal(await page.locator('.answers li').count(),10,'new lesson answer count '+width);
+
+  await page.goto(origin+'18.10.26-lab.html?mode=compare',{waitUntil:'networkidle'});
+  assert.equal(await page.locator('[data-mode="compare"]').getAttribute('aria-pressed'),'true','lab deep link '+width);
+  assert.equal(await page.locator('#scheduleBody tr').count(),4,'lab initial schedule '+width);
+  await page.locator('[data-preset="annuity"]').click();
+  assert.equal(await page.locator('#scheduleBody tr').count(),3,'lab annuity schedule '+width);
+  assert.ok((await page.locator('#total').textContent()).includes('399'), 'lab annuity total '+width);
+  await page.locator('[data-preset="mixed"]').click();
+  assert.equal(await page.locator('#rateTwoValue').textContent(),'15%','lab variable-rate scenario '+width);
+  assert.equal(await page.locator('#scheduleBody tr').count(),4,'lab variable-rate schedule '+width);
+  await page.locator('#swap').click();
+  assert.equal(await page.locator('[data-mode="compare"]').getAttribute('aria-pressed'),'true','lab comparison '+width);
+  const labSize=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth}));
+  assert.ok(labSize.width<=labSize.viewport+2,'lab overflow '+width+': '+JSON.stringify(labSize));
+  if(width===390){
+    await page.locator('#theme').click();
+    assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','lab dark theme toggle');
+  }
   assert.deepEqual(failures,[],'browser console/page errors '+width+': '+failures.join('; '));
   console.log('PASS',width+'x'+height,JSON.stringify({map:basic.map,tiles:archive.counts,heights:archive.heights,theme:width===390?'dark':'light'}));
   completed++;await page.close();

@@ -1,4 +1,4 @@
-import {LESSONS as CANONICAL_LESSONS} from './lesson-registry.js?v=20261016-1';
+import {LESSONS as CANONICAL_LESSONS} from './lesson-registry.js?v=20261019-1';
 /* Matvey: a single reviewed lesson registry, sorted and deduplicated by publication date. */
 export const LESSONS=[...new Map(CANONICAL_LESSONS.map(lesson=>[lesson.date,lesson])).values()].sort((a,b)=>b.date.localeCompare(a.date));
 
