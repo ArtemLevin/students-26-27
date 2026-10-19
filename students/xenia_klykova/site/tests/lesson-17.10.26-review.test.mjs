@@ -19,7 +19,7 @@ const roots=(a,b,c,target)=>{const D=b*b-4*a*(c-target);return [(-b-Math.sqrt(D)
 
 test('one canonical 17 October lesson and all older lessons retained',()=>{
   assert.equal(LESSONS.filter(item=>item.date==='2026-10-17').length,1);
-  assert.equal(LESSONS[0].date,'2026-10-17');
+  assert.ok(LESSONS[0].date>='2026-10-17','17 October lesson must remain accessible as new lessons are added');
   assert.ok(LESSONS.some(item=>item.date==='2026-10-15'));
   assert.deepEqual([...LESSONS].map(item=>item.date),[...LESSONS].map(item=>item.date).sort().reverse());
   assert.equal(current.href,'17.10.26.html');
