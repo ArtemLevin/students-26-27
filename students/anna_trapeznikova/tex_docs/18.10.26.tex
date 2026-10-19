@@ -1,0 +1,378 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\renewcommand{\sfdefault}{cmss}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[margin=23mm,headheight=23pt,footskip=16mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{enumitem}
+\usepackage{tabularx,booktabs}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\definecolor{accent}{HTML}{087B7B}
+\definecolor{darkaccent}{HTML}{075455}
+\definecolor{textgray}{HTML}{343A3D}
+\definecolor{softgray}{HTML}{707D80}
+\definecolor{fine}{HTML}{D5DFDF}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,pdfauthor={Лёвин Артём Александрович},
+pdftitle={Чек-лист. Метод Крамера и метод Гаусса}}
+\setstretch{1.18}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.53em}
+\setlist[enumerate]{leftmargin=*,itemsep=0.65em,topsep=0.5em}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{softgray} Математика \,\textbullet\, 10 класс}
+\fancyhead[R]{\footnotesize\color{softgray} 18.10.26}
+\fancyfoot[C]{\footnotesize\color{softgray}\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{fine}\leaders\hrule height \headrulewidth\hfill}}
+\newcommand{\subnote}[1]{{\color{softgray}\small #1}}
+\newcommand{\strong}[1]{{\color{darkaccent}\textbf{#1}}}
+\newcommand{\task}[1]{\item #1}
+\newcommand{\aug}[2]{\left(\begin{array}{#1|r}#2\end{array}\right)}
+\tikzset{
+  flowstart/.style={ellipse,draw=darkaccent,very thick,align=center,
+    minimum width=32mm,minimum height=10mm,fill=white,font=\small},
+  flowact/.style={rounded corners=2pt,rectangle,draw=accent,very thick,
+    align=center,text width=82mm,minimum height=15mm,inner sep=6pt,font=\small},
+  flowwide/.style={rounded corners=2pt,rectangle,draw=accent,very thick,
+    align=center,text width=100mm,minimum height=15mm,inner sep=6pt,font=\small},
+  flowcond/.style={diamond,aspect=2.4,draw=darkaccent,very thick,
+    align=center,inner sep=2pt,text width=34mm,font=\small},
+  arr/.style={-{Latex[length=3mm,width=2mm]},thick,color=darkaccent}
+}
+
+\begin{document}
+\thispagestyle{empty}
+\vspace*{32mm}
+\begin{center}
+{\color{accent}\large МАТЕМАТИКА \,\textbullet\, 10 КЛАСС}\\[14mm]
+{\color{softgray}\large Персональный учебный материал}\\[8mm]
+{\Huge\bfseries Чек-лист}\\[8mm]
+{\LARGE\bfseries\color{darkaccent} Метод Крамера\\[2mm] и метод Гаусса}\\[15mm]
+{\Large Системы линейных уравнений}\\[19mm]
+{\color{textgray}\large 18 октября 2026 года}
+\end{center}
+\vfill
+\begin{center}
+{\color{darkaccent}\large Лёвин Артём Александрович}\\[2mm]
+{\large эксклюзивно для Анны Трапезниковой}
+\end{center}
+\vspace{14mm}
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent!60,line width=1.0pt]
+([xshift=23mm,yshift=19mm]current page.south west)
+.. controls ([xshift=65mm,yshift=32mm]current page.south west)
+and ([xshift=-64mm,yshift=5mm]current page.south east)
+.. ([xshift=-23mm,yshift=20mm]current page.south east);
+\end{tikzpicture}
+\clearpage
+
+\section*{\color{darkaccent}01.\quad Что необходимо понимать}
+Систему двух линейных уравнений можно записать как
+\[
+\begin{cases}
+a_1x+b_1y=c_1,\\
+a_2x+b_2y=c_2.
+\end{cases}
+\]
+\strong{Совместная система} имеет хотя бы одно решение. Если решений нет, система \strong{несовместна}.
+
+\textbf{Проверочный список}
+\begin{enumerate}[label=$\square$,leftmargin=11mm,itemsep=0.3em]
+\task Различаю основную матрицу коэффициентов и столбец свободных членов.
+\task Умею вычислить определитель второго порядка:
+\[
+\Delta=\begin{vmatrix}a&b\\c&d\end{vmatrix}=ad-bc.
+\]
+\task Помню: равенство нулю главного определителя требует \emph{дополнительного анализа}.
+\task Понимаю смысл элементарных преобразований строк: они сохраняют множество решений.
+\task Умею восстановить уравнения по строкам расширенной матрицы.
+\end{enumerate}
+
+\section*{\color{darkaccent}02.\quad Метод Крамера}
+Для системы двух уравнений вычислим три определителя:
+\[
+\Delta=\begin{vmatrix}a_1&b_1\\a_2&b_2\end{vmatrix},\qquad
+\Delta_x=\begin{vmatrix}c_1&b_1\\c_2&b_2\end{vmatrix},\qquad
+\Delta_y=\begin{vmatrix}a_1&c_1\\a_2&c_2\end{vmatrix}.
+\]
+В $\Delta_x$ заменяем \textbf{столбец при $x$}, в $\Delta_y$ ---
+\textbf{столбец при $y$}; порядок строк сохраняем.
+
+\subnote{Нельзя делить на $\Delta$, если $\Delta=0$.
+Нулевые частные определители при $\Delta\ne0$ допустимы.}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{46mm}X@{}}
+\toprule
+Условие & Вывод\\
+\midrule
+$\Delta\ne0$ & Единственное решение:
+$x=\dfrac{\Delta_x}{\Delta}$,\enspace
+$y=\dfrac{\Delta_y}{\Delta}$.\\[2mm]
+$\Delta=0$; хотя бы один из $\Delta_x,\Delta_y$ ненулевой
+& Решений нет.\\
+$\Delta=\Delta_x=\Delta_y=0$ & Бесконечно много решений
+(для системы из двух уравнений с двумя неизвестными).\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\clearpage
+\section*{\color{darkaccent}03.\quad Два показательных случая}
+\textbf{Единственное решение:}
+\[
+\begin{cases}2x+y=5,\\x-y=1.\end{cases}
+\quad
+\Delta=-3,\quad\Delta_x=-6,\quad\Delta_y=-3.
+\quad\Rightarrow\quad (x,y)=(2,1).
+\]
+
+\textbf{Решений нет:}
+\[
+\begin{cases}-7x-y=13,\\21x+3y=0.\end{cases}
+\quad
+\Delta=0,\quad\Delta_x=39,\quad\Delta_y=-273.
+\]
+Поскольку $\Delta=0$, но $\Delta_x\ne0$, система несовместна.
+
+\strong{Однородная система}: справа во всех уравнениях стоят нули.
+Решение, в котором все неизвестные равны нулю, существует всегда.
+Если $\Delta\ne0$, оно единственное; если $\Delta=0$, есть также
+ненулевые решения.
+
+\clearpage
+\section*{\color{darkaccent}Алгоритм 1.\quad Метод Крамера}
+\vspace{8mm}
+\begin{center}
+\begin{tikzpicture}[node distance=11mm and 22mm]
+\node[flowstart] (a) {Начало};
+\node[flowact,below=of a] (b) {Вычислить $\Delta$, $\Delta_x$, $\Delta_y$};
+\node[flowcond,below=13mm of b] (c) {$\Delta\ne0$?};
+\node[flowact,text width=38mm] (d) at ($(c.south)+(-4.1cm,-3.0cm)$)
+{$x=\Delta_x/\Delta$\\$y=\Delta_y/\Delta$};
+\node[flowcond] (e) at ($(c.south)+(2.6cm,-3.0cm)$)
+{$\Delta_x=0$\\ и $\Delta_y=0$?};
+\node[flowact,text width=35mm] (f) at ($(e.south)+(-2.3cm,-2.6cm)$)
+{Бесконечно\\ много решений};
+\node[flowact,text width=34mm] (g) at ($(e.south)+(2.3cm,-2.6cm)$)
+{Решений нет};
+\draw[arr] (a)--(b);
+\draw[arr] (b)--(c);
+\draw[arr] (c.west) -| node[pos=0.26,above,font=\small]{да} (d.north);
+\draw[arr] (c.south) |- node[pos=0.26,right,font=\small]{нет} (e.west);
+\draw[arr] (e.south) -| node[pos=0.25,above,font=\small]{да} (f.north);
+\draw[arr] (e.south) -| node[pos=0.25,above,font=\small]{нет} (g.north);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{\color{darkaccent}04.\quad Метод Гаусса: главная идея}
+Систему из трёх уравнений записывают \strong{расширенной матрицей}:
+после вертикальной черты помещают свободные члены.
+\[
+\left(
+\begin{array}{rrr|r}
+2&3&-5&4\\
+3&-4&2&21\\
+7&8&-6&1
+\end{array}
+\right).
+\]
+Нужно последовательно получить \strong{ступенчатый вид}:
+нули под ведущими элементами строк. Затем найти неизвестные
+\strong{обратным ходом} --- от последней строки к первой.
+
+\textbf{Допустимые преобразования строк}
+\begin{enumerate}[label=\arabic*.,itemsep=0.25em]
+\task Переставить две строки.
+\task Умножить строку на ненулевое число.
+\task Прибавить к одной строке другую, умноженную на любое число.
+\end{enumerate}
+
+\textbf{Разбор того же примера.} Сначала обнуляем элементы под
+первой двойкой. Обозначение $R_i$ означает строку с номером $i$.
+\[
+\begin{aligned}
+R_2&\leftarrow 2R_2-3R_1,\\
+R_3&\leftarrow 2R_3-7R_1.
+\end{aligned}
+\qquad\Rightarrow\qquad
+\left(
+\begin{array}{rrr|r}
+2&3&-5&4\\
+0&-17&19&30\\
+0&-5&23&-26
+\end{array}
+\right).
+\]
+В частности, второй новый ряд равен
+\[
+(6,-8,4\mid42)-(6,9,-15\mid12)
+=(0,-17,19\mid30).
+\]
+Для обнуления $-5$ в третьей строке приводим $-17$ и $-5$
+к общему значению $-85$:
+\[
+R_3\leftarrow 17R_3-5R_2.
+\]
+\[
+\Rightarrow\qquad
+\left(
+\begin{array}{rrr|r}
+2&3&-5&4\\
+0&-17&19&30\\
+0&0&296&-592
+\end{array}
+\right).
+\]
+\textbf{Обратный ход:}
+\[
+\begin{aligned}
+296z&=-592 &&\Rightarrow z=-2,\\
+-17y+19(-2)&=30 &&\Rightarrow y=-4,\\
+2x+3(-4)-5(-2)&=4 &&\Rightarrow x=3.
+\end{aligned}
+\]
+\strong{Ответ}: $(x,y,z)=(3,-4,-2)$.
+Проверка подстановкой в первоначальные три уравнения даёт
+соответственно $4$, $21$, $1$.
+
+\section*{\color{darkaccent}05.\quad На что обращать внимание}
+\begin{enumerate}[label=$\square$,leftmargin=11mm,itemsep=0.35em]
+\task Выполняю действие \emph{со всеми} элементами строки,
+включая число справа от черты.
+\task Заменяю именно ту строку, для которой вычисляю новую запись.
+\task Выбираю множители так, чтобы нужные коэффициенты сократились.
+\task В выражении $-12-(-35)$ получаю $23$, учитывая оба минуса.
+\task Не считаю дробный ответ признаком ошибки.
+\task Если появилась строка $(0,0,0\mid c)$ при $c\ne0$,
+записываю противоречие $0=c$: решений нет.
+\task Если появляется строка $(0,0,0\mid0)$,
+проверяю количество свободных переменных: возможны бесконечно многие решения.
+\end{enumerate}
+
+\clearpage
+\section*{\color{darkaccent}Алгоритм 2.\quad Прямой и обратный ход Гаусса}
+\vspace{5mm}
+\begin{center}
+\begin{tikzpicture}[node distance=9mm]
+\node[flowstart] (a) {Начало};
+\node[flowwide,below=of a] (b) {Записать расширенную матрицу};
+\node[flowwide,below=of b] (c)
+{Выбрать ведущий ненулевой коэффициент.\\При необходимости переставить строки};
+\node[flowwide,below=of c] (d)
+{Обнулить элементы \emph{под} ведущим элементом,
+выполняя преобразования целых строк};
+\node[flowwide,below=of d] (e)
+{Повторить для следующих столбцов,\\получить ступенчатый вид};
+\node[flowcond,below=13mm of e] (f)
+{Есть строка\\$0=c$, $c\ne0$?};
+\node[flowact,right=20mm of f,text width=32mm] (g) {Решений нет};
+\node[flowwide,below=19mm of f] (h)
+{Обратный ход: найти ведущие переменные снизу вверх};
+\node[flowwide,below=of h] (i)
+{Если есть свободные переменные, задать параметры;
+иначе получить единственное решение};
+\node[flowstart,below=of i] (j) {Проверка};
+\draw[arr] (a)--(b);
+\draw[arr] (b)--(c);
+\draw[arr] (c)--(d);
+\draw[arr] (d)--(e);
+\draw[arr] (e)--(f);
+\draw[arr] (f) -- node[above,font=\small]{да} (g);
+\draw[arr] (f) -- node[right,font=\small]{нет} (h);
+\draw[arr] (h)--(i);
+\draw[arr] (i)--(j);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{\color{darkaccent}06.\quad Самостоятельная тренировка}
+\textbf{Путь А \,\textbullet\, 10 заданий}
+
+\subnote{Решайте последовательно. Для заданий 1--5 используйте метод Крамера;
+для заданий 6--10 --- метод Гаусса. При отсутствии единственного решения
+обязательно укажите, сколько решений имеет система.}
+
+\subsection*{\color{darkaccent}Часть I. Метод Крамера}
+\renewcommand{\arraystretch}{1.65}
+\begin{tabular}{@{}p{.48\linewidth}p{.48\linewidth}@{}}
+\textbf{1.}\quad $\displaystyle\begin{cases}2x+y=5,\\x-y=1.\end{cases}$ &
+\textbf{2.}\quad $\displaystyle\begin{cases}3x-2y=5,\\x+2y=7.\end{cases}$\\
+\textbf{3.}\quad $\displaystyle\begin{cases}2x-y=0,\\3x+4y=0.\end{cases}$ &
+\textbf{4.}\quad $\displaystyle\begin{cases}-7x-y=13,\\21x+3y=0.\end{cases}$\\
+\textbf{5.}\quad $\displaystyle\begin{cases}2x+y=6,\\4x+2y=12.\end{cases}$ & \\
+\end{tabular}
+\renewcommand{\arraystretch}{1.0}
+
+\subsection*{\color{darkaccent}Часть II. Метод Гаусса}
+\begin{enumerate}[label=\textbf{\arabic*.},start=6,itemsep=0.4em]
+\task $\displaystyle\begin{cases}
+x+y+z=6,\\2x-y+z=3,\\-x+2y+3z=12.
+\end{cases}$
+\task $\displaystyle\begin{cases}
+x+y-z=4,\\2x-y+3z=0,\\-x+3y-2z=3.
+\end{cases}$
+\task $\displaystyle\begin{cases}
+2y+z=4,\\x-y+z=3,\\2x+y-z=3.
+\end{cases}$
+\task $\displaystyle\begin{cases}
+x+y+z=0,\\2x+2y+2z=0,\\x-y+z=0.
+\end{cases}$
+\task $\displaystyle\begin{cases}
+x+y+z=3,\\2x+2y+2z=7,\\x-y+z=1.
+\end{cases}$
+\end{enumerate}
+\clearpage
+
+\section*{\color{darkaccent}07.\quad Ответы для самопроверки}
+\subnote{Сначала завершите вычисления самостоятельно; затем сверьте итог.
+В системах с бесконечно многими решениями параметр $t$ --- произвольное
+действительное число.}
+
+\vspace{6mm}
+\renewcommand{\arraystretch}{1.55}
+\begin{tabularx}{\linewidth}{@{}p{15mm}X@{}}
+\toprule
+№ & Ответ\\
+\midrule
+1 & $(x,y)=(2,1)$.\\
+2 & $(x,y)=(3,2)$.\\
+3 & $(x,y)=(0,0)$; единственное решение.\\
+4 & Решений нет.\\
+5 & Бесконечно много решений:
+$(x,y)=\left(3-\dfrac{t}{2},\,t\right)$, $t\in\mathbb R$.\\
+6 & $(x,y,z)=(1,2,3)$.\\
+7 & $(x,y,z)=(2,1,-1)$.\\
+8 & $(x,y,z)=(2,1,2)$.\\
+9 & Бесконечно много решений:
+$(x,y,z)=(-t,0,t)$, $t\in\mathbb R$.\\
+10 & Решений нет.\\
+\bottomrule
+\end{tabularx}
+
+\vspace{10mm}
+\textbf{Ключевые самопроверки}
+
+\begin{itemize}[leftmargin=7mm,itemsep=0.55em]
+\item В задании 3: $\Delta=11\ne0$ и
+$\Delta_x=\Delta_y=0$. Поэтому $(0,0)$ --- \emph{единственное} решение.
+\item В задании 4: $\Delta=0$, но $\Delta_x=39$.
+\item В задании 5: $\Delta=\Delta_x=\Delta_y=0$.
+\item В задании 9 последняя строка при исключении переменных
+превращается в тождество $0=0$.
+\item В задании 10 второе уравнение противоречит первому:
+$2(x+y+z)=6$, а в условии стоит $7$.
+\end{itemize}
+\end{document}

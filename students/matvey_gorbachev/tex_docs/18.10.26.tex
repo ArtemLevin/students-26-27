@@ -1,0 +1,337 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{left=19mm,right=19mm,top=19mm,bottom=21mm,headheight=26pt}
+\usepackage{microtype}
+\usepackage{icomma}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\definecolor{accent}{HTML}{247B78}
+\definecolor{darkaccent}{HTML}{205B59}
+\definecolor{textgray}{HTML}{393F43}
+\definecolor{softgray}{HTML}{686E73}
+\definecolor{hair}{HTML}{CBD7D5}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent,pdfauthor={Артём Александрович Лёвин},pdftitle={Чек-лист: Кредитные задачи. Матвей Горбачев. 18.10.2026}}
+\color{textgray}
+\setstretch{1.17}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5.5pt}
+\setlist[itemize]{leftmargin=*,topsep=3pt,itemsep=3pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=*,topsep=4pt,itemsep=7pt,parsep=0pt}
+\newcommand{\Term}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\Important}[1]{\textbf{#1}}
+\newcommand{\secname}[1]{\vspace{4pt}{\Large\bfseries\color{darkaccent}#1}\par\vspace{5pt}\noindent\textcolor{hair}{\rule{\linewidth}{0.7pt}}\vspace{3pt}}
+\newcommand{\minorname}[1]{\vspace{4pt}{\bfseries\color{darkaccent}#1}\par\vspace{2pt}}
+\newcommand{\captionnote}[1]{{\small\color{softgray}#1}}
+\newcommand{\mathline}[1]{\[\displaystyle #1\]}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{softgray} Кредитные задачи · 18.10.2026}
+\fancyhead[R]{\small\color{softgray} Матвей Горбачев}
+\fancyfoot[C]{\small\color{softgray}\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{hair}\leaders\hrule height \headrulewidth\hfill}}
+\begin{document}
+\thispagestyle{empty}
+\vspace*{27mm}
+\begin{center}
+{\small\bfseries\color{darkaccent} МАТЕМАТИКА · ЗАДАЧИ С ЭКОНОМИЧЕСКИМ СОДЕРЖАНИЕМ}\par
+\vspace{22mm}
+{\fontsize{31}{37}\selectfont\bfseries\color{darkaccent} Чек-лист}\par
+\vspace{9mm}
+{\fontsize{23}{30}\selectfont\bfseries Дифференцированные\\[2mm] и аннуитетные платежи}\par
+\vspace{14mm}
+{\large 18 октября 2026 года}\par
+\vspace{21mm}
+{\normalsize Основные определения, расчётные таблицы,\\ формулы и самостоятельная тренировка}\par
+\vfill
+{\normalsize\color{darkaccent} Лёвин Артём Александрович}\par
+\vspace{2mm}
+{\normalsize эксклюзивно для Матвея Горбачева}\par
+\end{center}
+\vspace{18mm}
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent,line width=1.1pt,opacity=.62]
+  ([xshift=-3mm,yshift=31mm]current page.south west)
+  .. controls ([xshift=67mm,yshift=45mm]current page.south west)
+            and ([xshift=-71mm,yshift=20mm]current page.south east)
+  .. ([xshift=4mm,yshift=28mm]current page.south east);
+\end{tikzpicture}
+\clearpage
+
+\secname{1. Общая модель кредита}
+\Important{Главный принцип:} проценты каждого периода начисляются на сумму долга, оставшуюся \emph{к началу этого периода}. После внесения платежа остаток уменьшается и переносится в следующую строку таблицы.
+
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{18mm}X@{}}
+\toprule
+$S$ & первоначальная сумма кредита (основной долг);\\
+$n$ & количество периодов \emph{начисления процентов и платежей};\\
+$r\%$ & ставка \emph{за один период}; $p=r/100$ — та же ставка десятичной дробью;\\
+$k=1+p$ & коэффициент увеличения долга за период;\\
+$B_j$ & долг перед начислением процентов в периоде $j$;\\
+$I_j$ & начисленные за период проценты;\\
+$A_j$ & платёж в конце периода;\\
+$T$ & общая сумма всех платежей; $W=T-S$ — переплата.\\
+\bottomrule
+\end{tabularx}
+
+\minorname{Одна строка расчётной таблицы}
+\mathline{\underbrace{B_j}_{\text{долг в начале}}\longrightarrow
+\underbrace{I_j=pB_j}_{\text{проценты}}\longrightarrow
+\underbrace{D_j=B_j+I_j}_{\text{начисленный долг}}}
+\mathline{\underbrace{B_{j+1}=D_j-A_j}_{\text{остаток после платежа}}.}
+Для полного погашения за $n$ периодов обязательно $B_{n+1}=0$.
+
+\minorname{Как определить тип схемы по условию}
+\begin{itemize}
+\item \Term{Дифференцированная:} основной долг погашают \textbf{равными частями}, а платёж включает эту часть и проценты на остаток. Сами платежи обычно убывают.
+\item \Term{Аннуитетная:} кредит погашают \textbf{равными платежами}. Обозначаем каждый платёж через $x$.
+\end{itemize}
+\Important{Важное различие:} «равные части долга» и «равные платежи» означают разные расчётные схемы.
+
+\minorname{Не перепутайте период расчёта}
+Если проценты начисляют \emph{каждый месяц}, то $n$ измеряют в месяцах, а $p$ — ставка за месяц. Например, $14$ ежемесячных начислений и платежей означают $n=14$; если ставка $1\%$ в месяц, то $p=0{,}01$. Нельзя подставить годовую ставку вместо месячной без соответствующего пересчёта по условию.
+\clearpage
+
+\secname{2. Дифференцированная схема}
+В каждом периоде возвращаем одну и ту же часть основного долга:
+\mathline{\frac{S}{n}.}
+Проценты начисляются на текущий остаток, поэтому при положительной постоянной ставке очередной платёж меньше предыдущего.
+
+\minorname{Таблица для четырёх периодов}
+Пусть ставка $p$ постоянна. Долг в начале периода обозначим $B_j$.
+\par\medskip\noindent
+\small
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{0.97\linewidth}{@{}c>{\centering\arraybackslash}X>{\centering\arraybackslash}X>{\centering\arraybackslash}X>{\centering\arraybackslash}X@{}}
+\toprule
+Период & $B_j$ & Проценты $I_j$ & Платёж $A_j$ & Остаток $B_{j+1}$\\
+\midrule
+$1$ & $S$ & $Sp$ & $\frac{S}{4}+Sp$ & $\frac{3S}{4}$\\[3pt]
+$2$ & $\frac{3S}{4}$ & $\frac{3Sp}{4}$ & $\frac{S}{4}+\frac{3Sp}{4}$ & $\frac{2S}{4}$\\[3pt]
+$3$ & $\frac{2S}{4}$ & $\frac{2Sp}{4}$ & $\frac{S}{4}+\frac{2Sp}{4}$ & $\frac{S}{4}$\\[3pt]
+$4$ & $\frac{S}{4}$ & $\frac{Sp}{4}$ & $\frac{S}{4}+\frac{Sp}{4}$ & $0$\\
+\bottomrule
+\end{tabularx}
+\setlength{\tabcolsep}{6pt}
+\normalsize
+
+\minorname{Основные формулы при постоянной ставке $p$}
+\begin{align*}
+\text{Общая сумма платежей:}\qquad T&=S+\frac{Sp(n+1)}{2},\\
+\text{Переплата:}\qquad W&=\frac{Sp(n+1)}{2},\\
+\text{Процент переплаты:}\qquad q&=\frac{W}{S}\cdot100\%=\frac{p(n+1)}2\cdot100\%,\\
+\text{Первый (наибольший) платёж:}\qquad A_1&=\frac Sn+Sp,\\
+\text{Последний (наименьший) платёж:}\qquad A_n&=\frac Sn+\frac{Sp}{n}.
+\end{align*}
+\captionnote{Здесь $q$ — отношение переплаты к первоначальной сумме кредита, выраженное в процентах; $p$ — десятичная дробь, например $0{,}15$. При $p=0$ все платежи равны $S/n$.}
+
+\minorname{Почему возникает $n+1$?}
+\mathline{W=\frac{Sp}{n}\,(n+(n-1)+\dots+1)
+=\frac{Sp}{n}\cdot\frac{n(n+1)}{2}=\frac{Sp(n+1)}2.}
+В формуле использована сумма первых $n$ натуральных чисел — арифметическая прогрессия.
+\clearpage
+
+\secname{3. Дифференцированная схема: применение}
+\minorname{Полный числовой пример}
+Кредит $S=2{,}5$ млн руб. погашается за $4$ года равными частями основного долга. Ставка $15\%$ годовых, проценты начисляются раз в год на остаток.
+\mathline{n=4,\qquad p=0{,}15,\qquad
+T=2{,}5+\frac{2{,}5\cdot0{,}15\cdot(4+1)}2
+=3{,}4375\ \text{млн руб}.}
+Следовательно, $W=0{,}9375$ млн руб., а процент переплаты $q=37{,}5\%$.
+\mathline{A_1=\frac{2{,}5}{4}+2{,}5\cdot0{,}15
+=1\ \text{млн руб},\qquad
+A_4=\frac{2{,}5}{4}+\frac{2{,}5\cdot0{,}15}{4}
+=0{,}71875\ \text{млн руб}.}
+
+\minorname{Когда обязательно возвращаться к таблице}
+При \Important{переменной процентной ставке} (например, сначала $15\%$, затем $20\%$) использовать формулу $W=Sp(n+1)/2$ с одним значением $p$ нельзя. Таблица остаётся надёжным способом.
+\mathline{B_j=\frac{S(n-j+1)}n,\qquad
+I_j=p_jB_j,\qquad A_j=\frac Sn+I_j.}
+Переплата при таком графике равна $W=\sum_{j=1}^{n}I_j$, а $T=S+W$.
+
+\minorname{Внимание к словам в условии}
+\begin{itemize}
+\item «\textbf{Не более}» переводим как $\le$, «\textbf{не менее}» — как $\ge$.
+\item Если ищем число лет или месяцев $n$, то $n$ — \textbf{положительное целое число}. Решение неравенства нужно пересечь с $n\in\mathbb{N}$.
+\item Не смешивайте \textbf{переплату в рублях} $W$ и \textbf{процент переплаты} $q$.
+\end{itemize}
+\minorname{Пример с ограничением}
+При $p=0{,}1$ процент переплаты $q=5(n+1)\%$. Если он должен быть \emph{не более $25\%$}, то
+\mathline{5(n+1)\le25\quad\Longrightarrow\quad n\le4.}
+С учётом $n\ge1$: $n\in\{1,2,3,4\}$.
+\clearpage
+
+\secname{4. Аннуитетная схема}
+При аннуитетной схеме \Important{каждый платёж равен $x$}. В отличие от дифференцированной схемы размер части платежа, погашающей основной долг, от периода к периоду меняется.
+
+\minorname{Переход от периода к периоду}
+Обозначим $k=1+p$. Тогда
+\mathline{B_{j+1}=kB_j-x,\qquad B_1=S.}
+Для трёх периодов получаем
+\begin{align*}
+B_2&=Sk-x,\\
+B_3&=(Sk-x)k-x=Sk^2-xk-x,\\
+B_4&=(Sk^2-xk-x)k-x=Sk^3-x(k^2+k+1).
+\end{align*}
+После последнего платежа остаток равен нулю: $B_4=0$. Отсюда
+\mathline{\boxed{x=\frac{Sk^3}{k^2+k+1}}.}
+
+\minorname{Формула для $n$ периодов при постоянной ставке}
+\mathline{\boxed{x=\frac{Sk^n}{k^{n-1}+k^{n-2}+\dots+k+1}},\qquad k=1+p.}
+\mathline{T=nx,\qquad W=nx-S,\qquad q=\frac{nx-S}{S}\cdot100\%.}
+При $n=2$: $x=Sk^2/(k+1)$; при $n=4$: $x=Sk^4/(k^3+k^2+k+1)$. Если $p=0$, получаем $x=S/n$.
+
+\minorname{Пример: три равных ежегодных платежа}
+$S=331\,000$ руб., $p=0{,}1$, $k=1{,}1$, $n=3$.
+\mathline{x=\frac{331\,000\cdot1{,}1^3}{1{,}1^2+1{,}1+1}=133\,100\ \text{руб}.}
+\par\noindent
+\small
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.22}
+\begin{tabularx}{0.99\linewidth}{@{}c>{\centering\arraybackslash}X>{\centering\arraybackslash}X>{\centering\arraybackslash}X>{\centering\arraybackslash}X@{}}
+\toprule
+Период & Долг в начале & Проценты & Платёж & Остаток\\
+\midrule
+$1$ & $331\,000$ & $33\,100$ & $133\,100$ & $231\,000$\\
+$2$ & $231\,000$ & $23\,100$ & $133\,100$ & $121\,000$\\
+$3$ & $121\,000$ & $12\,100$ & $133\,100$ & $0$\\
+\bottomrule
+\end{tabularx}
+\setlength{\tabcolsep}{6pt}
+\normalsize
+\mathline{T=3\cdot133\,100=399\,300\ \text{руб},\qquad
+W=399\,300-331\,000=68\,300\ \text{руб}.}
+\clearpage
+
+\secname{5. Алгоритм выбора схемы}
+\vspace{17mm}
+\begin{center}
+\begin{tikzpicture}[
+    >=Latex,
+    start/.style={ellipse,draw=darkaccent,thick,align=center,text width=55mm,minimum height=12mm,inner sep=2mm,font=\small},
+    decision/.style={diamond,aspect=2.15,draw=darkaccent,thick,align=center,inner sep=1.8mm,text width=39mm,font=\small},
+    process/.style={rectangle,rounded corners=2pt,draw=accent,thick,align=center,text width=43mm,minimum height=26mm,inner sep=2.5mm,font=\small},
+    link/.style={-Latex,thick,color=darkaccent},
+    every node/.style={text=textgray}]
+\node[start] (begin) at (0,0) {Прочитайте условие кредита};
+\node[decision] (parts) at (0,-2.5) {Основной долг гасят равными частями?};
+\node[process] (diff) at (-4.6,-6.0) {\textbf{Дифференцированная схема}\\[1.5mm]Часть долга $S/n$ постоянна.\\[1mm]$A_j=\dfrac Sn+p_jB_j$};
+\node[decision] (equal) at (3.5,-6.0) {Все платежи одинаковы?};
+\node[process] (ann) at (0.2,-9.75) {\textbf{Аннуитетная схема}\\[1.5mm]Платёж $x$ постоянен.\\[1mm]$B_{j+1}=(1+p_j)B_j-x$};
+\node[process] (other) at (5.6,-9.75) {\textbf{Особые условия}\\[1.5mm]Определите платежи из текста и ведите расчётную таблицу};
+\draw[link] (begin)--(parts);
+\draw[link] (parts.west) -| node[pos=.28,above,font=\small]{да} (diff.north);
+\draw[link] (parts.east) -| node[pos=.24,above,font=\small]{нет} (equal.north);
+\draw[link] (equal.west) -| node[pos=.26,above,font=\small]{да} (ann.north);
+\draw[link] (equal.east) -| node[pos=.25,above,font=\small]{нет} (other.north);
+\end{tikzpicture}
+\end{center}
+\vfill
+\captionnote{Если ставка постоянна и платежи выполняются в конце равных периодов, обычно достаточно готовой формулы. Если ставка меняется или присутствуют особые условия, надёжнее составить таблицу периодов и проверить итоговый остаток.}
+\clearpage
+
+\secname{6. Что помнить при решении}
+\begin{tabularx}{\linewidth}{@{}p{42mm}XX@{}}
+\toprule
+ & \textbf{Дифференцированная} & \textbf{Аннуитетная}\\
+\midrule
+Что одинаково? & Часть основного долга $S/n$ & Платёж $x$\\
+Что меняется? & Весь платёж $A_j$ & Соотношение основного долга и процентов в $x$\\
+Полное погашение & Остаток после $n$ частей равен нулю & $B_{n+1}=0$\\
+Итоговые выплаты & $S+Sp(n+1)/2$ & $nx$\\
+Переплата & $Sp(n+1)/2$ & $nx-S$\\
+\bottomrule
+\end{tabularx}
+
+\minorname{Пять контрольных вопросов к любой задаче}
+\begin{enumerate}[label=\textcolor{accent}{\arabic*.},itemsep=5pt]
+\item Как именно в условии описано погашение долга: равные \emph{части} или равные \emph{платежи}?
+\item Каков период начисления процентов: год или месяц? Совпадает ли он с периодом платежа?
+\item Чему равны $p$ и $k$? \Important{$p=0{,}16$, но $k=1{,}16$ при ставке $16\%$.}
+\item Постоянна ли ставка? Выполняются ли условия готовой формулы?
+\item В чём должен быть ответ: рубли, тысячи рублей, миллионы рублей или проценты?
+\end{enumerate}
+
+\minorname{Частые ошибки}
+\begin{itemize}
+\item Считать проценты от исходной суммы $S$ в каждом периоде, хотя остаток долга уменьшается.
+\item Принимать $p$ за $1+p$ или подставлять $15$ вместо $0{,}15$.
+\item Называть «равными платежами» дифференцированную схему.
+\item Использовать формулу постоянной ставки при меняющейся ставке.
+\item Принимать год за период, когда по условию проценты начисляются ежемесячно.
+\item Забывать, что «не менее» и «не более» задают неравенства.
+\end{itemize}
+
+\minorname{Самопроверка результата}
+При полном погашении остаток должен стать нулём; $T=S+W$; для положительной ставки $W>0$. В дифференцированной схеме при $p>0$ первый платёж больше последнего, в аннуитетной — все платежи одинаковы.
+\clearpage
+
+\secname{Тренировочный блок · Путь А}
+\captionnote{10 упражнений, от распознавания схемы до комбинированных расчётов. Решайте с указанием используемых величин, формулы и единиц измерения.}
+\begin{enumerate}[label=\textbf{\arabic*.},itemsep=11pt]
+\item В условии сказано: «Основной долг погашается пятью равными частями, проценты начисляют на остаток». Укажите схему, число периодов $n$ и значение $p$, если ставка равна $12\%$ за период.
+
+\item Кредит $360\,000$ руб. выдан на три года под $10\%$ годовых. Основной долг погашается равными частями раз в год. Найдите размер погашаемой части основного долга, первого и последнего платежей.
+
+\item Кредит $600\,000$ руб. погашается дифференцированными платежами за четыре года при ставке $8\%$ годовых. Найдите общую сумму платежей и переплату.
+
+\item Кредит $280\,000$ руб. погашается четырнадцатью дифференцированными \emph{ежемесячными} платежами. Ставка равна $1\%$ в месяц. Найдите переплату в рублях и процент переплаты.
+
+\item При дифференцированном погашении кредита $1\,000\,000$ руб. за пять лет общая сумма выплат составила $1\,150\,000$ руб. Найдите постоянную годовую процентную ставку.
+
+\item Кредит $400\,000$ руб. погашается четырьмя равными частями основного долга. За первые два года ставка $10\%$ в год, за следующие два — $15\%$. Проценты начисляются ежегодно на остаток. Найдите общую сумму платежей и переплату.
+\end{enumerate}
+\clearpage
+\secname{Тренировочный блок · продолжение}
+\begin{enumerate}[label=\textbf{\arabic*.},start=7,itemsep=15pt]
+\item Кредит $210\,000$ руб. погашается двумя равными \emph{ежегодными платежами} при ставке $10\%$ годовых. Найдите величину одного платежа и переплату.
+
+\item Кредит $331\,000$ руб. погашается тремя равными ежегодными платежами под $10\%$ годовых. Найдите размер ежегодного платежа и общую сумму выплат.
+
+\item Кредит выдан на два года под $20\%$ годовых и погашен двумя одинаковыми ежегодными платежами по $144\,000$ руб. Найдите первоначальную сумму кредита и переплату.
+
+\item Банк предлагает два варианта кредита $210\,000$ руб. на два года под $10\%$ годовых: \emph{А} — погашение основного долга равными частями; \emph{Б} — два равных ежегодных платежа. Для каждого варианта найдите общую сумму выплат и определите, какой из них дешевле и на сколько рублей.
+\end{enumerate}
+\vspace{12mm}
+\captionnote{Перед сверкой ответов убедитесь, что во всех задачах использовали правильное количество периодов $n$ и ставку $p$ за \emph{один} период.}
+\clearpage
+\secname{Ответы к тренировочному блоку}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries\color{darkaccent}}p{16mm}X@{}}
+\toprule
+№ & Ответ\\
+\midrule
+1 & Дифференцированная схема; $n=5$, $p=0{,}12$.\\
+2 & $120\,000$ руб.; первый платёж $156\,000$ руб.; последний $132\,000$ руб.\\
+3 & Всего $720\,000$ руб.; переплата $120\,000$ руб.\\
+4 & Переплата $21\,000$ руб.; процент переплаты $7{,}5\%$.\\
+5 & $5\%$ годовых.\\
+6 & Всего $515\,000$ руб.; переплата $115\,000$ руб.\\
+7 & Ежегодный платёж $121\,000$ руб.; переплата $32\,000$ руб.\\
+8 & Ежегодный платёж $133\,100$ руб.; общая сумма $399\,300$ руб.\\
+9 & Первоначальная сумма $220\,000$ руб.; переплата $68\,000$ руб.\\
+10 & Вариант А: $241\,500$ руб.; вариант Б: $242\,000$ руб. Вариант А дешевле на $500$ руб.\\
+\bottomrule
+\end{tabularx}
+\vspace{13mm}
+\minorname{Формулы для быстрой проверки}
+\mathline{\begin{array}{c@{\qquad}c}
+\text{Дифференцированная:}&\displaystyle T=S+\frac{Sp(n+1)}2,\\[8pt]
+\text{Аннуитетная:}&\displaystyle x=\frac{Sk^n}{k^{n-1}+\cdots+1},\quad T=nx.
+\end{array}}
+\vfill
+\begin{center}\captionnote{Лёвин Артём Александрович · эксклюзивно для Матвея Горбачева}\end{center}
+\end{document}
