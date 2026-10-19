@@ -1,0 +1,55 @@
+name: Publish Jaroslav lesson 19 October
+
+on:
+  push:
+    branches:
+      - codex/jaroslav-vereschagin-lesson-2026-10-19
+    paths:
+      - "students/jaroslav_vereschagin/site/19.10.26.html"
+      - "students/jaroslav_vereschagin/site/19.10.26-lab.html"
+      - "students/jaroslav_vereschagin/site/data/publication-intents/2026-10-19.json"
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Dry-run canonical publisher
+        shell: bash
+        run: |
+          node scripts/publish-lesson.mjs jaroslav_vereschagin 19.10.26 \
+            --intent students/jaroslav_vereschagin/site/data/publication-intents/2026-10-19.json \
+            --dry-run > /tmp/jv-lesson-plan.json
+          cat /tmp/jv-lesson-plan.json
+          node -e 'const p=require("/tmp/jv-lesson-plan.json");if(!p.executable||p.conflicts?.length||p.reviewItems?.length)process.exit(1)'
+      - name: Publish by Student Platform v2 contract
+        run: |
+          node scripts/publish-lesson.mjs jaroslav_vereschagin 19.10.26 \
+            --intent students/jaroslav_vereschagin/site/data/publication-intents/2026-10-19.json
+      - name: Validate Jaroslav student package
+        run: |
+          node scripts/student.mjs validate jaroslav_vereschagin
+          node shared/practice/validate-configs.mjs
+          node shared/practice/audit-lesson-coverage.mjs
+      - name: Commit canonical publication files
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/jaroslav_vereschagin/site/data/lessons/2026-10-19.lesson.json \
+                  students/jaroslav_vereschagin/site/data/ktp-state.json \
+                  students/jaroslav_vereschagin/site/data/mastery-state.json \
+                  students/jaroslav_vereschagin/site/lesson-registry.js
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(jaroslav): publish 19 October lesson via v2 publisher"
+            git push
+          fi
