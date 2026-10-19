@@ -158,6 +158,67 @@ for (const [id,cfg] of Object.entries(LESSON_151026)) {
   item.material={href:'15.10.26.html#'+cfg.section,label:'Открыть связанный раздел занятия →'};
 }
 
+// 19.10.2026: links to lesson evidence. Previous mastery levels remain unchanged.
+const LESSON_191026 = {
+  "ege08_04": {
+    "section": "laws",
+    "evidence": "Разобраны восемь свойств степеней и их применение к преобразованиям.",
+    "relation": "practiced"
+  },
+  "ege08_03": {
+    "section": "strategy",
+    "evidence": "Корни переводились в рациональные показатели на примерах √8 и корня пятой степени из 81.",
+    "relation": "practiced"
+  },
+  "ege08_02": {
+    "section": "strategy",
+    "evidence": "Записаны отрицательные целые степени для обратных дробей 1/8 и 0,2.",
+    "relation": "practiced"
+  },
+  "ege08_05": {
+    "section": "strategy",
+    "evidence": "Повторены квадратный корень и корень степени k при положительном основании.",
+    "relation": "touched"
+  },
+  "ege08_06": {
+    "section": "calculations",
+    "evidence": "Преобразовывали корни и смешанные степени, отрабатывали скобки ВУПС.",
+    "relation": "practiced"
+  },
+  "ege07_07": {
+    "section": "equations",
+    "evidence": "Решались 2^x=8, 2·2^x=8, 40·2^(−x/3)=5 и 16·2^(−x/5)=1.",
+    "relation": "practiced"
+  },
+  "ege10_01": {
+    "section": "application",
+    "evidence": "В прикладной формуле Pv^(5/3)=C подставлены числовые данные и выражена неизвестная.",
+    "relation": "practiced"
+  },
+  "ege10_02": {
+    "section": "application",
+    "evidence": "Искали v возведением обеих частей уравнения в обратную степень 3/5.",
+    "relation": "practiced"
+  },
+  "ege08_14": {
+    "section": "trig",
+    "evidence": "tg 163° выражен через tg 17°, sin 170° через sin 10°.",
+    "relation": "practiced"
+  },
+  "ege08_15": {
+    "section": "trig",
+    "evidence": "10 sin85° cos85° преобразовано в 5 sin170° по формуле двойного угла.",
+    "relation": "practiced"
+  }
+};
+for (const [id,cfg] of Object.entries(LESSON_191026)) {
+  const item=G.flatMap(group=>group.items).find(topic=>topic.id===id);
+  if(!item)continue;
+  item.evidence=Array.isArray(item.evidence)?item.evidence:[];
+  item.evidence.push({text:cfg.evidence+' Связано с занятием 18.10.2026, пособие 19.10.26 «Свойства степеней и показательные уравнения». Формат: '+(cfg.relation==='practiced'?'разбирали и отрабатывали.':'обсуждали.')});
+  item.material={href:'19.10.26.html#'+cfg.section,label:'Открыть связанный раздел занятия →'};
+}
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'jaroslav_gavrilov',
@@ -167,7 +228,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Структура сверена 19.09.2026 с опубликованными ФИПИ проектами КИМ ЕГЭ-2027 по профильной математике.',
-    updated:'15.10.2026'
+    updated:'19.10.2026'
   },
   groups:G
 };
