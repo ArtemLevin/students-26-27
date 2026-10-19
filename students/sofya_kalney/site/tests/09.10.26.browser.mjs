@@ -202,7 +202,7 @@ try{
   await navigate('18.10.26.html',390,844);
   assert.equal(await run("document.querySelectorAll('.training > li').length"),10,'October 18 training must contain 10 tasks');
   assert.equal(await run("['equations','river','graphs','geometry','practice'].every(x=>!!document.getElementById(x))"),true,'October 18 evidence anchors missing');
-  assert.equal(await run("!!document.querySelector('a[href='../pdf_docs/18.10.26.pdf']') && !!document.querySelector('a[href='../tex_docs/18.10.26.tex']')"),true,'Lesson materials absent');
+  assert.equal(await run("(()=>{const paths=[...document.querySelectorAll('a[href]')].map(a=>a.getAttribute('href'));return paths.includes('../pdf_docs/18.10.26.pdf') && paths.includes('../tex_docs/18.10.26.tex')})()"),true,'Lesson materials absent');
   await snapshot('sofya-20261018-lesson-mobile');
   await navigate('18.10.26-lab.html',1440,900);
   assert.equal(await run("document.querySelector('#count').textContent"),'2','At m=-7.5 the line must intersect twice');
