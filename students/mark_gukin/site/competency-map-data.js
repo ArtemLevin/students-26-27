@@ -148,6 +148,23 @@ G.forEach(group=>group.items.forEach(item=>{
   item.material={href:'11.10.26.html#'+update.anchor,label:'Занятие 11.10.26 →'};
 }));
 
+// Занятие 18.10.2026: карта обновляет evidence и ссылку, без изменения mastery.
+const logarithmUpdates1810={
+  ege08_08:{anchor:'intro',relation:'touched'},
+  ege08_03:{anchor:'powers',relation:'practiced'},
+  ege08_09:{anchor:'identity',relation:'practiced'},
+  ege08_10:{anchor:'combine',relation:'practiced'},
+  ege08_11:{anchor:'change-base',relation:'practiced'},
+  ege08_18:{anchor:'example',relation:'practiced'}
+};
+const logarithmEvidence1810='18.10.2026: понятие логарифма, свойства, степени у основания и аргумента, переход к новому основанию, основное тождество и комбинированные вычисления. Занятие отражает знакомство и практику; независимой диагностики для повышения уровня нет.';
+G.forEach(group=>group.items.forEach(item=>{
+  const update=logarithmUpdates1810[item.id];
+  if(!update)return;
+  item.evidence=[...item.evidence,{date:'18.10.2026',text:logarithmEvidence1810}];
+  item.material={href:'18.10.26.html#'+update.anchor,label:'Занятие 18.10.26 →'};
+}));
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'mark_gukin',
@@ -157,7 +174,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Используется проект КИМ ЕГЭ-2027 ФИПИ: 20 заданий, из них 13 с кратким и 7 с развёрнутым ответом. Проект опубликован 28.08.2026; до утверждения структура может быть уточнена.',
-    updated:'11.10.2026'
+    updated:'18.10.2026'
   },
   groups:G
 };
