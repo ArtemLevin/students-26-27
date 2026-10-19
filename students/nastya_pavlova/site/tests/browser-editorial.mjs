@@ -32,7 +32,9 @@ try{
  for(let i=0;i<180;i++){
   const active=path.join(profile,'DevToolsActivePort');
   if(fs.existsSync(active)){port=Number(fs.readFileSync(active,'utf8').split('\n')[0]);break;}
-  if(processChrome.exitCode!==null)throw Error('Chromium exited: '+chromeLog);
+  const fallback=chromeLog.match(/DevTools listening on ws:\/\/127\.0\.0\.1:(\d+)\//);
+  if(fallback){port=Number(fallback[1]);break;}
+  if(processChrome.exitCode!==null)throw Error('Chromium exited before opening DevTools: '+chromeLog);
   await sleep(100);
  }
  if(!port)throw Error('Unable to start Chromium: '+chromeLog);
