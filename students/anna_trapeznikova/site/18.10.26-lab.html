@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Цифровая лаборатория метода Крамера: меняйте коэффициенты системы, наблюдайте взаимное положение прямых, определители и число решений.">
+<title>Лаборатория линейных систем — Анна Трапезникова</title>
+<link rel="stylesheet" href="../../../design-system/tokens.css?v=20260919-2">
+<link rel="stylesheet" href="../../../design-system/foundations.css?v=20260919-2">
+<link rel="stylesheet" href="anna-atlas.css?v=20260921-1">
+<style>
+:root{--bg:#f5efe9;--paper:#fffdf9;--ink:#292423;--soft:#615a57;--line:#d5c8c1;--accent:#793d50;--green:#28715d;--blue:#2e7394;--red:#bd6d4a;--grid:#e6ddd5;--focus:#ce8753}
+html[data-theme=dark]{--bg:#191615;--paper:#282321;--ink:#f4e9e4;--soft:#bdb0aa;--line:#554841;--accent:#e2a8b8;--green:#a1d2b3;--blue:#91ccea;--red:#ffc18c;--grid:#463b37;--focus:#f2b883}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,Segoe UI,Arial,sans-serif}
+a{color:var(--accent);text-underline-offset:3px}button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{position:absolute;top:-7rem;left:.6rem;background:var(--paper);padding:.6rem}.skip:focus{top:.5rem}
+.head{background:var(--paper);border-bottom:1px solid var(--line)}.head>div{display:flex;justify-content:space-between;gap:1rem;align-items:center;max-width:1170px;margin:auto;padding:.8rem 1rem;flex-wrap:wrap}
+main,footer{max-width:1170px;margin:auto;padding:1rem}h1{font:700 clamp(2rem,5vw,3.6rem)/1.1 Georgia,serif;letter-spacing:-.045em;margin:.8rem 0}h2{font:700 1.3rem/1.25 Georgia,serif;margin:0 0 .8rem}
+.eyebrow{font-size:.78rem;text-transform:uppercase;letter-spacing:.11em;font-weight:800;color:var(--accent)}
+.intro{padding:1.5rem 0}.intro p:last-child{max-width:800px;color:var(--soft)}
+.preset{display:flex;gap:.55rem;flex-wrap:wrap;margin:1.2rem 0}
+.preset button,.action button,#theme{background:var(--paper);border:1px solid var(--line);padding:.65rem .8rem;border-radius:5px}
+.preset button[aria-pressed=true]{border-color:var(--accent);background:var(--accent);color:var(--paper)}
+.lab{display:grid;grid-template-columns:minmax(290px,.8fr) minmax(0,1.2fr);gap:1.25rem;align-items:start}
+.panel{min-width:0;border:1px solid var(--line);background:var(--paper);padding:1.3rem;border-radius:6px}
+.input-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.3rem .8rem}
+label.slider{display:flex;flex-direction:column;gap:.3rem;font-size:.88rem}
+.slider strong{font-variant-numeric:tabular-nums;font-size:1.12rem;color:var(--accent)}
+.slider input{width:100%;accent-color:var(--accent)}
+.equations{font:1.13rem/1.8 "Cambria Math",Georgia,serif;border-left:3px solid var(--accent);padding:.7rem 1rem;background:var(--bg);overflow:auto;white-space:nowrap}
+.output{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin:1rem 0}
+.output>div{border-top:1px solid var(--line);padding-top:.5rem}
+.output span{display:block;font-size:.78rem;color:var(--soft)}.output strong{display:block;font:700 1.35rem Georgia,serif;color:var(--accent);font-variant-numeric:tabular-nums}
+#state{font-weight:800;color:var(--green);font-size:1.15rem}#why{font-size:.9rem;color:var(--soft)}
+svg{display:block;width:100%;height:auto;border:1px solid var(--line);background:var(--paper);border-radius:4px}
+#plotTitle,#plotDesc{font-size:14px}
+.axis{stroke:var(--soft);stroke-width:1.5}.grid{stroke:var(--grid);stroke-width:1}.line-one{stroke:var(--blue);stroke-width:3;fill:none}.line-two{stroke:var(--red);stroke-width:3;stroke-dasharray:10 6;fill:none}
+#point{fill:var(--green);stroke:var(--paper);stroke-width:2}#pointLabel{fill:var(--green);font:700 16px system-ui}.tick{fill:var(--soft);font:11px system-ui}
+.legend{display:flex;flex-wrap:wrap;gap:1rem;font-size:.86rem;margin-top:.7rem}.swatch{display:inline-block;width:1.6rem;border-top:3px solid var(--blue);vertical-align:middle;margin-right:.3rem}.swatch.second{border-color:var(--red);border-top-style:dashed}
+.action{display:flex;gap:.7rem;margin-top:1.4rem;flex-wrap:wrap}
+.exercise{margin:1.3rem 0;display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.exercise .panel{min-width:0}
+fieldset{border:0;padding:0;margin:0}legend{font-weight:700;margin-bottom:.5rem}.choices{display:grid;gap:.6rem}.choices label{display:flex;gap:.5rem;align-items:center}
+button:disabled{cursor:not-allowed;opacity:.55}
+#feedback{min-height:1.5rem;font-weight:600;color:var(--green)}
+footer{color:var(--soft);border-top:1px solid var(--line);font-size:.86rem}
+@media(max-width:870px){.lab,.exercise{grid-template-columns:1fr}}
+@media(max-width:500px){.panel{padding:.8rem}.input-grid{gap:1rem .5rem}.output strong{font-size:1.1rem}.legend{gap:.5rem}button{min-height:44px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a href="#lab" class="skip">К лаборатории</a>
+<header class="head"><div><a href="18.10.26.html">← Вернуться к занятию</a><div><a href="index.html">Карта программы</a> <button id="theme" type="button" aria-label="Переключить цветовую тему">◐ Тема</button></div></div></header>
+<main>
+<section class="intro"><p class="eyebrow">Исследовательская лаборатория · 18.10.2026</p><h1>Когда у системы есть решение?</h1><p>Меняйте коэффициенты двух линейных уравнений. Наблюдайте, как изменение одного числа одновременно изменяет прямые, определители и количество решений. Затем проверьте собственный прогноз.</p></section>
+<div class="preset" role="group" aria-label="Готовые сценарии">
+<button type="button" data-scenario="unique">Пересекаются</button>
+<button type="button" data-scenario="parallel">Параллельны</button>
+<button type="button" data-scenario="coincident">Совпадают</button>
+<button type="button" data-scenario="homogeneous">Однородная</button>
+<button type="button" data-scenario="degenerate">Особый случай</button>
+</div>
+<div class="lab" id="lab">
+<section class="panel" aria-labelledby="controlTitle">
+<h2 id="controlTitle">Управление коэффициентами</h2>
+<p>Система имеет вид a₁x + b₁y = c₁, a₂x + b₂y = c₂. Вы можете регулировать все шесть коэффициентов.</p>
+<div class="input-grid">
+<label class="slider">a₁ <strong id="v0">2</strong><input type="range" min="-8" max="8" step="1" value="2" data-i="0"></label>
+<label class="slider">b₁ <strong id="v1">1</strong><input type="range" min="-8" max="8" step="1" value="1" data-i="1"></label>
+<label class="slider">c₁ <strong id="v2">5</strong><input type="range" min="-8" max="8" step="1" value="5" data-i="2"></label>
+<label class="slider">a₂ <strong id="v3">1</strong><input type="range" min="-8" max="8" step="1" value="1" data-i="3"></label>
+<label class="slider">b₂ <strong id="v4">−1</strong><input type="range" min="-8" max="8" step="1" value="-1" data-i="4"></label>
+<label class="slider">c₂ <strong id="v5">1</strong><input type="range" min="-8" max="8" step="1" value="1" data-i="5"></label>
+</div>
+<div class="action"><button id="save" type="button">Запомнить состояние</button><button id="reset" type="button">Сбросить эксперимент</button></div>
+<p id="comparison" aria-live="polite">Сохранённого состояния пока нет.</p>
+<h2>Текущая система</h2>
+<div id="equations" class="equations" aria-live="polite"></div>
+<div class="output" aria-label="Значения определителей">
+<div><span>Δ</span><strong id="d">—</strong></div><div><span>Δₓ</span><strong id="dx">—</strong></div><div><span>Δᵧ</span><strong id="dy">—</strong></div>
+</div>
+<p id="state" role="status" aria-live="polite"></p>
+<p id="solution"></p><p id="why"></p>
+</section>
+<section class="panel" aria-labelledby="plotHeading"><h2 id="plotHeading">Две прямые в одной системе координат</h2>
+<svg id="graph" viewBox="0 0 700 510" role="img" aria-labelledby="plotTitle plotDesc">
+<title id="plotTitle">Плоскость с прямыми двух линейных уравнений</title>
+<desc id="plotDesc">Изменяйте коэффициенты: линии и точка пересечения перестраиваются синхронно. Числовой результат также приведён текстом под графиком.</desc>
+<g id="grid"></g><path class="axis" d="M30 255H670 M350 24V486"></path>
+<path id="l1" class="line-one"></path><path id="l2" class="line-two"></path>
+<circle id="point" r="7" cx="0" cy="0" visibility="hidden"></circle><text id="pointLabel" x="0" y="0"></text>
+</svg>
+<div class="legend"><span><i class="swatch"></i> Первое уравнение</span><span><i class="swatch second"></i> Второе уравнение</span></div>
+<p id="plotNote">Масштаб: x от −10 до 10, y от −7 до 7. За границами показанной области прямые продолжаются.</p>
+</section>
+</div>
+<div class="exercise">
+<section class="panel" aria-labelledby="forecast"><p class="eyebrow">Активное исследование</p><h2 id="forecast">Предскажите результат</h2>
+<p>Каким станет число решений, если второе уравнение будет <strong>2x + y = 7</strong>, а первое останется <strong>2x + y = 5</strong>?</p>
+<fieldset><legend>Ваш прогноз</legend><div class="choices"><label><input type="radio" name="prediction" value="one"> Одно решение</label><label><input type="radio" name="prediction" value="none"> Решений нет</label><label><input type="radio" name="prediction" value="infinite"> Бесконечно много</label></div></fieldset>
+<div class="action"><button id="check" type="button">Проверить предположение</button></div><p id="feedback" role="status" aria-live="polite"></p>
+</section>
+<section class="panel"><p class="eyebrow">Проверьте границы метода</p><h2>Что означает Δ = 0?</h2>
+<p>У двух прямых может оказаться одинаковое направление. Тогда они либо параллельны, либо совпадают. В обоих случаях Δ = 0.</p>
+<p>Если обе строки коэффициентов нулевые, требуется отдельно рассмотреть свободные члены: уравнение вида 0 = 3 несовместно, а 0 = 0 верно для любой пары чисел.</p>
+<p><a href="18.10.26.html#classification">Вернуться к разбору нулевого определителя →</a></p>
+</section>
+</div>
+</main>
+<footer>Лёвин Артём Александрович · эксклюзивно для Анны Трапезниковой · 18.10.2026</footer>
+<script>
+(function(){
+'use strict';
+const presets={
+unique:[2,1,5,1,-1,1],
+parallel:[2,1,5,4,2,1],
+coincident:[2,1,5,4,2,10],
+homogeneous:[2,1,0,4,2,0],
+degenerate:[0,0,3,0,0,0]};
+let coefficients=[...presets.unique], saved=null;
+const fields=[...document.querySelectorAll('input[type=range]')];
+const $=id=>document.getElementById(id), W=700,H=510, left=30,right=670,top=24,bottom=486;
+const xMin=-10,xMax=10,yMin=-7,yMax=7;
+function sx(x){return left+(x-xMin)/(xMax-xMin)*(right-left)}
+function sy(y){return bottom-(y-yMin)/(yMax-yMin)*(bottom-top)}
+function fmt(n){const v=Math.abs(n)<1e-8?0:n;return Number.isInteger(v)?String(v):v.toFixed(3).replace(/0+$/,'').replace(/\.$/,'')}
+function signed(n){return fmt(n).replaceAll('-','−')}
+function eq(a,b,c){return signed(a)+'x '+(b<0?'− ':'+ ')+signed(Math.abs(b))+'y = '+signed(c)}
+function line(a,b,c){
+ if(!a&&!b)return '';
+ const pts=[];
+ const accept=(x,y)=>{if(x>=xMin-1e-9&&x<=xMax+1e-9&&y>=yMin-1e-9&&y<=yMax+1e-9&&!pts.some(p=>Math.abs(p[0]-x)+Math.abs(p[1]-y)<1e-8))pts.push([x,y])};
+ if(b){accept(xMin,(c-a*xMin)/b);accept(xMax,(c-a*xMax)/b)}
+ if(a){accept((c-b*yMin)/a,yMin);accept((c-b*yMax)/a,yMax)}
+ if(pts.length<2)return '';
+ return 'M'+sx(pts[0][0])+','+sy(pts[0][1])+' L'+sx(pts[1][0])+','+sy(pts[1][1]);
+}
+const grid=$('grid');
+const ns='http://www.w3.org/2000/svg';
+function append(tag,attrs,text){let el=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,String(v)));if(text!==undefined)el.textContent=text;grid.appendChild(el)}
+for(let x=-10;x<=10;x+=2){append('line',{x1:sx(x),y1:top,x2:sx(x),y2:bottom,class:'grid'});if(x)append('text',{x:sx(x)+3,y:sy(0)+17,class:'tick'},String(x))}
+for(let y=-6;y<=6;y+=2){append('line',{x1:left,y1:sy(y),x2:right,y2:sy(y),class:'grid'});if(y)append('text',{x:sx(0)+7,y:sy(y)-5,class:'tick'},String(y))}
+append('text',{x:sx(0)+8,y:sy(0)+16,class:'tick'},'0');
+function classify(a,b,c,d,e,f){
+ const det=a*e-d*b,dx=c*e-f*b,dy=a*f-d*c;
+ if(det){return {det,dx,dy,type:'one',x:dx/det,y:dy/det,label:'Единственное решение',why:'Определитель Δ ≠ 0, поэтому прямые пересекаются в одной точке.'}}
+ if(a===0&&b===0&&d===0&&e===0){
+  if(c===0&&f===0)return {det,dx,dy,type:'infinite',label:'Бесконечно много решений',why:'Оба уравнения имеют вид 0 = 0. Решение — любая точка плоскости.'};
+  return {det,dx,dy,type:'none',label:'Решений нет',why:'Хотя все три определителя равны нулю, одно из уравнений имеет вид 0 = ненулевое число.'};
+ }
+ if(dx!==0||dy!==0)return {det,dx,dy,type:'none',label:'Решений нет',why:'Δ = 0, но один из частных определителей не равен нулю: система несовместна.'};
+ return {det,dx,dy,type:'infinite',label:'Бесконечно много решений',why:'Δ = Δₓ = Δᵧ = 0, и есть ненулевая строка коэффициентов: уравнения задают одну и ту же прямую.'};
+}
+function render(){
+ const [a,b,c,d,e,f]=coefficients;
+ fields.forEach((node,i)=>{node.value=coefficients[i];$('v'+i).textContent=signed(coefficients[i])});
+ $('equations').textContent=eq(a,b,c)+'\n'+eq(d,e,f);
+ const r=classify(a,b,c,d,e,f);
+ $('d').textContent=signed(r.det);$('dx').textContent=signed(r.dx);$('dy').textContent=signed(r.dy);
+ $('state').textContent=r.label;$('why').textContent=r.why;
+ $('solution').textContent=r.type==='one'?'x = '+signed(r.x)+'; y = '+signed(r.y)+'.':'Чтобы проверить вывод, подставьте коэффициенты в исходную систему.';
+ $('l1').setAttribute('d',line(a,b,c));$('l2').setAttribute('d',line(d,e,f));
+ const inside=r.type==='one'&&r.x>=xMin&&r.x<=xMax&&r.y>=yMin&&r.y<=yMax;
+ $('point').setAttribute('visibility',inside?'visible':'hidden');
+ $('pointLabel').textContent=inside?'('+signed(r.x)+'; '+signed(r.y)+')':'';
+ if(inside){$('point').setAttribute('cx',sx(r.x));$('point').setAttribute('cy',sy(r.y));$('pointLabel').setAttribute('x',Math.min(right-95,sx(r.x)+10));$('pointLabel').setAttribute('y',Math.max(top+18,sy(r.y)-10))}
+ $('plotNote').textContent=r.type==='one'&&!inside?'Точка пересечения существует за пределами видимого окна. Координаты приведены слева.':'Масштаб: x от −10 до 10, y от −7 до 7. За границами показанной области прямые продолжаются.';
+ document.querySelectorAll('[data-scenario]').forEach(btn=>btn.setAttribute('aria-pressed',String(JSON.stringify(coefficients)===JSON.stringify(presets[btn.dataset.scenario]))));
+ if(saved){const old=classify(...saved);$('comparison').textContent='Запомнено: Δ = '+signed(old.det)+', '+old.label.toLowerCase()+'. Сейчас: Δ = '+signed(r.det)+', '+r.label.toLowerCase()+'.'}
+}
+function set(values,scenario){coefficients=[...values];render();try{history.replaceState(null,'',scenario?'?scenario='+encodeURIComponent(scenario):location.pathname)}catch(_){}}
+fields.forEach(f=>f.addEventListener('input',()=>{coefficients[Number(f.dataset.i)]=Number(f.value);set(coefficients,null)}));
+document.querySelectorAll('[data-scenario]').forEach(b=>b.addEventListener('click',()=>set(presets[b.dataset.scenario],b.dataset.scenario)));
+$('reset').addEventListener('click',()=>{saved=null;$('comparison').textContent='Сохранённого состояния пока нет.';set(presets.unique,'unique')});
+$('save').addEventListener('click',()=>{saved=[...coefficients];$('comparison').textContent='Текущее состояние сохранено для сравнения. Измените любой параметр.'});
+$('check').addEventListener('click',()=>{const selected=document.querySelector('input[name=prediction]:checked');if(!selected){$('feedback').textContent='Сначала выберите прогноз.';return}set(presets.parallel,'parallel');$('feedback').textContent=selected.value==='none'?'Верно. Δ = 0 и Δₓ ≠ 0: прямые параллельны.':'Проверьте результат: Δ = 0 и Δₓ ≠ 0. Эти прямые параллельны и решений нет.'});
+const theme=$('theme'),root=document.documentElement;
+try{const stored=localStorage.getItem('anna-lesson-theme');if(stored==='light'||stored==='dark')root.dataset.theme=stored;}catch(_){}
+theme.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('anna-lesson-theme',root.dataset.theme)}catch(_){}});
+const selected=new URLSearchParams(location.search).get('scenario');set(presets[selected]?presets[selected]:presets.unique,presets[selected]?selected:'unique');
+})();
+</script></body></html>
