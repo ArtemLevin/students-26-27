@@ -5,6 +5,73 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-19",
+  "ktpRefs": [],
+  "href": "19.10.26.html",
+  "title": "Банковские вклады и сложные проценты",
+  "navTitle": "Банковские вклады и сложные проценты",
+  "navSubtitle": "Банковские вклады и сложные проценты: капитализация, пополнения, снятия, обратные задачи, изменение ставки. Урок Анастасии Павловой 19.10.26.",
+  "summary": "Банковские вклады и сложные проценты: капитализация, пополнения, снятия, обратные задачи, изменение ставки. Урок Анастасии Павловой 19.10.26.",
+  "topics": [
+    "Начисление процентов и капитализация",
+    "Коэффициент роста и формула сложных процентов",
+    "Ежегодные пополнения в начале года",
+    "Снятие средств и отрицательный взнос",
+    "Обратная задача на первоначальную сумму",
+    "Изменение процентной ставки по годам"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "fin_02",
+      "evidenceAnchor": "formula",
+      "relation": "practiced",
+      "label": "Сложные проценты",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_03",
+      "evidenceAnchor": "growth",
+      "relation": "practiced",
+      "label": "Вклад с ежегодной капитализацией",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "app_09",
+      "evidenceAnchor": "deposits",
+      "relation": "practiced",
+      "label": "Формула сложных процентов с пополнениями",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "text_16",
+      "evidenceAnchor": "inverse",
+      "relation": "practiced",
+      "label": "Обратная задача на проценты",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_04",
+      "evidenceAnchor": "variable",
+      "relation": "touched",
+      "label": "Изменение ставки по периодам",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "app_08",
+      "evidenceAnchor": "growth",
+      "relation": "practiced",
+      "label": "Последовательные процентные изменения",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "19.10.26.html",
+    "pdf": "../pdf_docs/19.10.26.pdf",
+    "tex": "../tex_docs/19.10.26.tex",
+    "lab": "19.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-15",
   "ktpRefs": [],
   "href": "15.10.26.html",
