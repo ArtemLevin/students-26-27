@@ -176,7 +176,7 @@ test('latest lesson presents readable evidence and valid editorial layout markup
   const {LESSONS}=await import('../lesson-registry.js');
   const {presentLessonOutcome}=await import('../../../../shared/student-dashboard/outcome-adapter.js');
   const latest=LESSONS[0];
-  assert.equal(latest.date,'2026-10-17');
+  assert.equal(latest.date,[...LESSONS].map(item=>item.date).sort().at(-1),'latest lesson must match newest available date');
    assert.ok(LESSONS.some(lesson=>lesson.date==='2026-10-15'),'the previous latest lesson remains in archive');
   for(const evidence of latest.outcomes){
     const view=presentLessonOutcome(evidence,{lessonDate:latest.date});

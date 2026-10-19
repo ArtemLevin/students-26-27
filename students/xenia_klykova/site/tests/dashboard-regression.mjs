@@ -8,3 +8,5 @@ await import('./lesson-09.10.26-review.test.mjs');
 await import('./lesson-14.10.26.test.mjs');
 
 await import('./lesson-17.10.26-review.test.mjs');
+
+await import('./lesson-19.10.26-review.test.mjs');
