@@ -5,6 +5,66 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-19",
+  "ktpRefs": [],
+  "href": "19.10.26.html",
+  "title": "Простые и составные числа",
+  "navTitle": "Простые числа и доказательства делимости",
+  "navSubtitle": "олимпиадная математика · √n · множители · степени",
+  "summary": "Олимпиадная математика, 19 октября 2026: простые и составные числа, критерий корня, разложения на множители, доказательства делимости и 10 задач для самостоятельной работы.",
+  "topics": [
+    "простые и составные числа",
+    "критерий проверки простоты до √n",
+    "разложение квадратных трёхчленов",
+    "разность квадратов и степеней",
+    "делимость произведений последовательных целых",
+    "доказательство кратности 6 и 15"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t19_primes",
+      "evidenceAnchor": "criterion",
+      "relation": "practiced",
+      "label": "Простые числа и проверка делителей до квадратного корня",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_divisibility",
+      "evidenceAnchor": "consecutive",
+      "relation": "practiced",
+      "label": "Доказательства делимости через разложение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_parity",
+      "evidenceAnchor": "consecutive",
+      "relation": "touched",
+      "label": "Чётность произведения последовательных целых чисел",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_algebra",
+      "evidenceAnchor": "factor",
+      "relation": "practiced",
+      "label": "Разложение квадратного трёхчлена на множители",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_power_actions",
+      "evidenceAnchor": "powers",
+      "relation": "touched",
+      "label": "Разность степеней и разность квадратов",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "19.10.26.html",
+    "pdf": "../pdf_docs/19.10.26.pdf",
+    "tex": "../tex_docs/19.10.26.tex",
+    "lab": "19.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-17",
   "ktpRefs": [],
   "href": "17.10.26.html",
