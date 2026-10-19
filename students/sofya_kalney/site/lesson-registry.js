@@ -2,6 +2,92 @@ export const RECENT_LIMIT=3;
 export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
+{
+  "date": "2026-10-18",
+  "ktpRefs": [],
+  "href": "18.10.26.html",
+  "title": "Четыре метода решения задач",
+  "navTitle": "Четыре метода решения задач",
+  "navSubtitle": "Разность кубов и неотрицательность, движение по реке с отсрочкой старта, графики с модулем и подобие треугольников. Занятие Софии Кальней 18 октября 2026 года.",
+  "summary": "Разность кубов и неотрицательность, движение по реке с отсрочкой старта, графики с модулем и подобие треугольников. Занятие Софии Кальней 18 октября 2026 года.",
+  "topics": [
+    "Разность кубов и неотрицательность",
+    "Движение по реке и разновременный старт",
+    "График функции с модулем и пересечения с прямой",
+    "Подобие треугольников в трапеции"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_20_1_1",
+      "evidenceAnchor": "equations",
+      "relation": "practiced",
+      "label": "Выбор метода решения уравнения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_9_2_2",
+      "evidenceAnchor": "equations",
+      "relation": "practiced",
+      "label": "Сведение степенного уравнения к квадратному",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_20_1_3",
+      "evidenceAnchor": "equations",
+      "relation": "practiced",
+      "label": "Неотрицательность и система условий",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_21_3_2",
+      "evidenceAnchor": "river",
+      "relation": "practiced",
+      "label": "Таблица пути, скорости и времени",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_21_3_3",
+      "evidenceAnchor": "river",
+      "relation": "practiced",
+      "label": "Уравнение с разными временами старта",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_22_3_1",
+      "evidenceAnchor": "graphs",
+      "relation": "practiced",
+      "label": "Разбиение графика с модулем на участки",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_22_3_5",
+      "evidenceAnchor": "graphs",
+      "relation": "practiced",
+      "label": "Пересечение графика и горизонтальной прямой",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_24_2_2",
+      "evidenceAnchor": "geometry",
+      "relation": "practiced",
+      "label": "Признак подобия по двум сторонам и углу",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_24_2_4",
+      "evidenceAnchor": "geometry",
+      "relation": "touched",
+      "label": "Последовательность геометрического доказательства",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "18.10.26.html",
+    "pdf": "../pdf_docs/18.10.26.pdf",
+    "tex": "../tex_docs/18.10.26.tex",
+    "lab": "18.10.26-lab.html"
+  }
+},
   {
     "date": "2026-10-16",
     "ktpRefs": [],
