@@ -133,7 +133,8 @@ try{
   assert.equal(await run("getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()"),'#fff','print background from dark theme');
   await call('Emulation.setEmulatedMedia',{media:'screen'});
   await navigate('index.html',390,844,false);
-  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Степени, графики')"),true,'latest lesson on home');
+  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Логарифмы')"),true,'latest lesson on home');
+  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"18.10.26.html\"]')!==null"),true,'new lesson appears in journal');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('04.10.2026')"),true,'history retained');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('09.10.2026')"),true,'previous lesson retained');
   await snapshot('home-mobile-light');
@@ -167,6 +168,21 @@ try{
   await sleep(170);
   const anchorTop=await run("Math.round(document.getElementById('inequality').getBoundingClientRect().top)");
   assert.ok(anchorTop>=30,'sticky nav obscures evidence anchor: '+anchorTop);
+  // Занятие 18 октября: новая страница и сохранение прогресса.
+  await navigate('18.10.26.html',390,844,false);
+  assert.equal(await run("document.querySelectorAll('[data-task]').length"),10,'18 October original training exercises');
+  assert.equal(await run("document.querySelectorAll('#materials img').length"),1,'18 October poster');
+  assert.equal(await run("document.getElementById('stepCount').textContent"),'Шаг 1 из 4','18 October stepper initialization');
+  assert.equal(await run("(()=>{document.getElementById('nextStep').click();return document.getElementById('stepCount').textContent})()"),'Шаг 2 из 4','18 October stepper advance');
+  assert.equal(await run("(()=>{document.querySelector('[data-task=\\\"1\\\"]').click();return document.getElementById('doneText').textContent})()"),'Выполнено: 1 из 10','18 October task progress');
+  await call('Page.reload',{ignoreCache:true});await sleep(200);
+  assert.equal(await run("document.querySelector('[data-task=\\\"1\\\"]').checked"),true,'18 October progress persists');
+  const lesson1810Materials=await run("Promise.all(['../pdf_docs/18.10.26.pdf','../tex_docs/18.10.26.tex','../images/18.10.26.png'].map(async u=>({u,status:(await fetch(u)).status})))");
+  assert.ok(lesson1810Materials.every(x=>x.status===200),'18 October materials: '+JSON.stringify(lesson1810Materials));
+  await snapshot('lesson-18-mobile-light');
+  await navigate('18.10.26.html',1440,900,true);
+  assert.equal(await run("document.querySelectorAll('section.chapter').length"),9,'18 October full lesson content');
+  await snapshot('lesson-18-desktop-dark');
   assert.deepEqual(jsErrors,[],'Browser JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Browser network failures');
   console.log('Mark review browser PASS: seven viewports x two pages x two themes, stepper, keyboard, persistence, print, links, anchors');
