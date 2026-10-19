@@ -47,7 +47,7 @@ try{
   assert.ok(Number(basic.total)>0,'stats missing '+width);
   assert.ok(basic.map>200,'competency map not populated '+width);
   assert.ok(basic.focus,'focus control missing '+width);
-  assert.ok(basic.lesson==='Вклады. Часть 2','latest lesson wrong '+width);
+  assert.ok(basic.lesson==='Кредитные платежи','latest lesson wrong '+width);
   if(width===1440){
     const cell=page.locator('#competencyMap .radial-cell').first();
     await cell.focus();
@@ -95,7 +95,7 @@ try{
       titles:visible.filter(t=>t.querySelector('.archive-tile-title').scrollHeight>t.querySelector('.archive-tile-title').clientHeight+2).length};
   });
   assert.ok(archive.width<=archive.viewport+2,'archive overflow '+width+': '+JSON.stringify(archive));
-  assert.equal(archive.counts,9,'archive lesson count '+width);
+  assert.equal(archive.counts,10,'archive lesson count '+width);
   assert.equal(archive.months,2,'archive month groups '+width);
   assert.ok(Math.max(...archive.heights)-Math.min(...archive.heights)<=2,'unequal tiles '+width+': '+JSON.stringify(archive.heights));
   assert.equal(archive.clipped,0,'clipped archive card '+width);
@@ -104,7 +104,7 @@ try{
   await page.locator('#archiveSearch').fill('вклады');
   assert.equal(await page.locator('.archive-tile:visible').count(),1,'archive search failed '+width);
   await page.locator('#archiveSearch').fill('');
-  assert.equal(await page.locator('.archive-tile:visible').count(),9,'archive reset failed '+width);
+  assert.equal(await page.locator('.archive-tile:visible').count(),10,'archive reset failed '+width);
   await page.screenshot({path:path.join(artifactDir,'archive-'+width+'.png'),fullPage:true});
   assert.deepEqual(failures,[],'browser console/page errors '+width+': '+failures.join('; '));
   console.log('PASS',width+'x'+height,JSON.stringify({map:basic.map,tiles:archive.counts,heights:archive.heights,theme:width===390?'dark':'light'}));
