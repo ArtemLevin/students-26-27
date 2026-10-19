@@ -5,6 +5,76 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-19",
+  "ktpRefs": [],
+  "href": "19.10.26.html",
+  "title": "Метод интервалов: кратные корни и особые случаи",
+  "navTitle": "Метод интервалов: кратные корни и особые случаи",
+  "navSubtitle": "Ярослав Верещагин. Метод интервалов: корни чётной и нечётной кратности, четыре вида неравенств, алгоритм «КОЗА», 10 заданий Пути А. Занятие 19.10.26.",
+  "summary": "Ярослав Верещагин. Метод интервалов: корни чётной и нечётной кратности, четыре вида неравенств, алгоритм «КОЗА», 10 заданий Пути А. Занятие 19.10.26.",
+  "topics": [
+    "Метод интервалов",
+    "Неравенства без действительных корней",
+    "Корни чётной и нечётной кратности",
+    "Строгие и нестрогие неравенства",
+    "Разложение многочлена на множители",
+    "Запись множества решений"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_13_2_1",
+      "evidenceAnchor": "koza",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_13_2_2",
+      "evidenceAnchor": "no-roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_13_2_3",
+      "evidenceAnchor": "multiplicity",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_13_2_4",
+      "evidenceAnchor": "four-signs",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_1",
+      "evidenceAnchor": "koza",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_3",
+      "evidenceAnchor": "factor",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_4",
+      "evidenceAnchor": "multiplicity",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_5",
+      "evidenceAnchor": "training",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_8_3_2",
+      "evidenceAnchor": "factor",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "19.10.26.html",
+    "pdf": "../pdf_docs/19.10.26.pdf",
+    "tex": "../tex_docs/19.10.26.tex",
+    "lab": "19.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-15",
   "ktpRefs": [],
   "href": "15.10.26.html",
