@@ -95,7 +95,7 @@
     note.textContent = 'История занятия описывает работу над навыками, а уровень самостоятельности определяется отдельно.';
     results.append(note);
   }
-  import('./lesson-registry.js?v=20261019').then(module => {
+  import('./lesson-registry.js').then(module => {
     const records = [...module.LESSONS].sort((a,b) => b.date.localeCompare(a.date));
     if (records.length) showLesson(records[0]);
   }).catch(() => {
