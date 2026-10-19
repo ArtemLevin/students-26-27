@@ -66,7 +66,7 @@
     for (const [key, label] of [['lab','Лаборатория'],['pdf','PDF'],['tex','TeX'],['review','Ревью']]) {
       if (validHref(lesson.materials?.[key])) resources.append(createLink(lesson.materials[key], label));
     }
-    if (lesson.date === '2026-10-15') resources.append(createLink('../images/15.10.26.png', 'Постер'));
+    if (['2026-10-15','2026-10-19'].includes(lesson.date)) resources.append(createLink('../images/' + formatDate(lesson.date) + '.png', 'Постер'));
     const results = $('lessonOutcomes');
     results.replaceChildren();
     const heading = document.createElement('p'); heading.className='editorial-kicker';
@@ -95,7 +95,7 @@
     note.textContent = 'История занятия описывает работу над навыками, а уровень самостоятельности определяется отдельно.';
     results.append(note);
   }
-  import('./lesson-registry.js').then(module => {
+  import('./lesson-registry.js?v=20261019').then(module => {
     const records = [...module.LESSONS].sort((a,b) => b.date.localeCompare(a.date));
     if (records.length) showLesson(records[0]);
   }).catch(() => {
