@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Системы линейных уравнений: определитель 2×2, метод Крамера, исключение переменных методом Гаусса, проверка ответов и самостоятельная тренировка. Занятие Анны Трапезниковой 18 октября 2026 года.">
+<title>Метод Крамера и метод Гаусса — Анна Трапезникова</title>
+<link rel="stylesheet" href="../../../design-system/tokens.css?v=20260919-2">
+<link rel="stylesheet" href="../../../design-system/foundations.css?v=20260919-2">
+<link rel="stylesheet" href="anna-atlas.css?v=20260921-1">
+<style>
+:root{--bg:#f6f0ea;--paper:#fffdf9;--ink:#292525;--soft:#645c58;--line:#d8cbc3;--accent:#773b4e;--green:#276656;--wash:#f1e4df;--focus:#cf7f4d}
+html[data-theme=dark]{--bg:#191716;--paper:#292321;--ink:#f6ece7;--soft:#c3b5af;--line:#554640;--accent:#e0a6b4;--green:#9fd4bc;--wash:#392b2d;--focus:#f3b482}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.64 system-ui,Segoe UI,Arial,sans-serif}
+a{color:var(--accent);text-underline-offset:.22em}button{font:inherit;cursor:pointer;color:inherit}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{position:absolute;top:-5rem;left:1rem;background:var(--paper);padding:.5rem;z-index:20}.skip:focus{top:.4rem}
+header.top{background:var(--paper);border-bottom:1px solid var(--line)}
+.top-inner{max-width:1100px;min-height:68px;margin:auto;padding:.7rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.top-inner a{text-decoration:none;font-weight:700}.top-actions{display:flex;align-items:center;gap:.85rem;flex-wrap:wrap}
+.top button,.controls button,.trial button{border:1px solid var(--line);background:var(--paper);padding:.48rem .75rem;border-radius:5px}
+main,footer .inside{max-width:1100px;margin:auto;padding:0 1.1rem}
+.hero{padding:4.8rem 0 2.6rem;border-bottom:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1.35fr) minmax(230px,.65fr);gap:2rem;align-items:end}
+.eyebrow{font-size:.77rem;color:var(--accent);text-transform:uppercase;letter-spacing:.13em;font-weight:800}
+h1{font-family:Georgia,serif;font-size:clamp(2.6rem,7vw,5.3rem);letter-spacing:-.055em;line-height:1.04;margin:.4rem 0 1.2rem}
+.lead{font-size:1.16rem;max-width:45rem;color:var(--soft)}
+.hero aside{border-top:3px solid var(--accent);padding-top:1rem}
+.links{display:flex;flex-wrap:wrap;gap:.65rem}.links a{font-size:.87rem;padding:.54rem .75rem;border:1px solid var(--line);border-radius:5px;text-decoration:none;background:var(--paper)}
+.toc{display:flex;flex-wrap:wrap;gap:.5rem;padding:1.2rem 0 2rem;border-bottom:1px solid var(--line)}
+.toc a{font-size:.82rem;padding:.4rem .65rem;color:var(--soft);border-bottom:1px solid var(--line);text-decoration:none}
+section.chapter{padding:3rem 0;border-bottom:1px solid var(--line)}
+.chapter-head{display:grid;grid-template-columns:80px minmax(0,1fr);gap:1rem;max-width:970px;margin-bottom:1.7rem}
+.num{font:600 2.2rem Georgia,serif;color:var(--accent)}
+h2{font:700 clamp(1.7rem,4vw,2.6rem)/1.13 Georgia,serif;margin:.2rem 0 .7rem}
+h3{font:700 1.19rem/1.3 system-ui;margin:1.6rem 0 .7rem}
+p{margin:.6rem 0 1.1rem}ul,ol{padding-left:1.4rem}li{margin:.35rem 0}
+article.reading{max-width:790px;margin-left:96px}
+.eq{font-family:"Cambria Math","STIX Two Math",Georgia,serif;font-size:clamp(1.01rem,2vw,1.26rem);line-height:1.8;background:var(--paper);border-left:3px solid var(--accent);padding:1rem 1.2rem;margin:1.1rem 0;overflow-x:auto;white-space:nowrap}
+.rule{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:1.5rem 0}
+.rule>div{background:var(--paper);padding:1.3rem}.rule strong{display:block;color:var(--accent);font-size:1.18rem}
+.note{border-left:3px solid var(--green);padding:.8rem 1.2rem;background:var(--wash)}
+.matrix{font:1.13rem/1.8 "Cambria Math",Georgia,serif;white-space:pre;overflow-x:auto;max-width:100%;padding:1.15rem;background:var(--paper);border:1px solid var(--line);border-radius:4px}
+.controls{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin:1rem 0}
+#stageText{font-size:.95rem;color:var(--soft);max-width:720px}
+.trial{border-top:1px solid var(--line);padding:1.25rem 0}.trial summary{font-weight:700;cursor:pointer;padding:.4rem 0}
+.trial p{margin:.5rem 0}
+details.answer{margin-top:.5rem;border-left:2px solid var(--green);padding:.5rem 1rem}
+.checks{display:grid;gap:.55rem}.checks label{display:block;padding:.48rem;border-bottom:1px solid var(--line)}.checks input{accent-color:var(--accent);margin-right:.6rem}
+footer{padding:2.1rem 0;color:var(--soft)}footer .inside{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:2.6rem}.chapter-head{grid-template-columns:1fr;gap:.2rem}article.reading{margin-left:0}.rule{grid-template-columns:1fr}.top-inner{align-items:flex-start}.top-actions{justify-content:flex-end}.eq{padding:.7rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+@media print{.top,.toc,.controls,.skip{display:none}body{background:white;color:black}section.chapter{break-inside:avoid}.eq,.matrix{border:1px solid #777;background:white}a{color:#111}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Перейти к материалу</a>
+<header class="top"><div class="top-inner"><a href="index.html">← Учебный навигатор Анны</a><div class="top-actions"><a href="18.10.26-lab.html">Лаборатория</a><button id="theme" type="button" aria-label="Переключить цветовую тему">◐ Тема</button></div></div></header>
+<main id="main">
+<section class="hero" aria-labelledby="title">
+<div><p class="eyebrow">Запись занятия · 18 октября 2026 · углублённая математика</p><h1 id="title">Метод Крамера<br>и метод Гаусса</h1><p class="lead">Как определить число решений системы, устранить переменные и восстановить ответ. Особое внимание — точности вычислений и проверке каждого преобразования.</p></div>
+<aside><p class="eyebrow">Материалы</p><p>Теория, алгоритмы, десять упражнений и исследование взаимного положения прямых.</p><nav class="links" aria-label="Файлы и задания"><a href="../pdf_docs/18.10.26.pdf">Пособие PDF</a><a href="../tex_docs/18.10.26.tex">TeX</a><a href="../images/18.10.26.png">Памятка</a><a href="18.10.26-lab.html?scenario=unique">Открыть лабораторию ↗</a></nav></aside>
+</section>
+<nav class="toc" aria-label="По разделам"><a href="#cramer">01 Определители</a><a href="#classification">02 Число решений</a><a href="#gauss">03 Исключение строк</a><a href="#practice">04 Тренировка</a><a href="#selfcheck">05 Самопроверка</a></nav>
+<section class="chapter" id="cramer"><div class="chapter-head"><span class="num">01</span><div><p class="eyebrow">Два уравнения · две переменные</p><h2>Метод Крамера</h2><p>Определитель основной матрицы показывает, можно ли найти единственное решение делением.</p></div></div>
+<article class="reading">
+<p>Для системы <strong>a₁x + b₁y = c₁</strong> и <strong>a₂x + b₂y = c₂</strong> сначала вычисляем главный определитель.</p>
+<div class="eq" role="img" aria-label="Дельта равна a один умножить на b два минус a два умножить на b один">Δ = a₁b₂ − a₂b₁</div>
+<p>Частный определитель Δₓ получаем, заменяя столбец коэффициентов при x свободными членами. Для Δᵧ заменяем столбец при y.</p>
+<div class="eq">Δₓ = c₁b₂ − c₂b₁;<br>Δᵧ = a₁c₂ − a₂c₁</div>
+<div class="rule"><div><strong>Δ ≠ 0</strong><p>Одно решение: x = Δₓ/Δ; y = Δᵧ/Δ.</p></div><div><strong>Δ = 0, Δₓ ≠ 0 или Δᵧ ≠ 0</strong><p>Решений нет.</p></div><div><strong>Δ = Δₓ = Δᵧ = 0</strong><p>При ненулевой строке коэффициентов — бесконечно много решений. Если обе строки нулевые, отдельно проверьте свободные члены.</p></div></div>
+<p class="note">Нулевой главный определитель сам по себе не означает отсутствие решений. При Δ = 0 формулы деления применять нельзя.</p>
+<p><a href="18.10.26-lab.html?scenario=parallel">Проверьте случай параллельных прямых →</a></p>
+</article></section>
+<section class="chapter" id="classification"><div class="chapter-head"><span class="num">02</span><div><p class="eyebrow">Разбор случая с нулевым определителем</p><h2>Почему решений нет?</h2></div></div><article class="reading">
+<div class="eq">−7x − y = 13<br>21x + 3y = 0</div>
+<p>Вторые коэффициенты получаются умножением левых частей первого уравнения на −3. Свободные члены при этом не совпадают: −3 · 13 = −39, а справа стоит 0.</p>
+<div class="eq">Δ = (−7) · 3 − 21 · (−1) = 0<br>Δₓ = 13 · 3 − 0 · (−1) = 39<br>Δᵧ = (−7) · 0 − 21 · 13 = −273</div>
+<p class="note"><strong>Вывод:</strong> Δ = 0 и Δₓ ≠ 0. Система несовместна. Для однородной системы (справа оба нуля) нулевое решение существует всегда.</p>
+<p><a href="18.10.26-lab.html?scenario=coincident">Сравните с совпадающими прямыми →</a></p>
+</article></section>
+<section class="chapter" id="gauss"><div class="chapter-head"><span class="num">03</span><div><p class="eyebrow">Три уравнения · три переменные</p><h2>Метод Гаусса: нули ступенькой</h2><p>Прямой ход устраняет неизвестные из нижних строк. Обратный ход возвращает их значения снизу вверх.</p></div></div>
+<article class="reading">
+<p>Начнём с системы занятия. В матрице столбцы отвечают за x, y, z, а справа от черты стоят свободные члены.</p>
+<div class="matrix" id="matrixView" role="img" aria-label="Матрица системы и преобразования Гаусса">(  2    3   −5 |   4 )
+(  3   −4    2 |  21 )
+(  7    8   −6 |   1 )</div>
+<div class="controls" role="group" aria-label="Шаги решения"><button id="prev" type="button" disabled>← Назад</button><strong id="stage">Этап 1 из 4</strong><button id="next" type="button">Следующий шаг →</button><button id="reset" type="button">Сначала</button></div>
+<p id="stageText" role="status" aria-live="polite">Записываем расширенную матрицу и выбираем первый ведущий элемент 2.</p>
+<p>Разрешены перестановка строк, умножение строки на ненулевое число и прибавление к строке кратной другой строки. Каждое преобразование применяется ко <strong>всей строке</strong>, в том числе к свободному члену.</p>
+<p><strong>Ключевая проверка:</strong> −12 − (−35) = 23. Именно эта разность появляется при преобразовании третьей строки; ошибка в знаке меняет весь результат.</p>
+<p class="note">Если в конце получается строка 0 0 0 | c при c ≠ 0, система несовместна. Строка 0 0 0 | 0 означает зависимое уравнение; при наличии свободной переменной решений бесконечно много.</p>
+</article></section>
+<section class="chapter" id="practice"><div class="chapter-head"><span class="num">04</span><div><p class="eyebrow">Путь А</p><h2>10 задач для закрепления</h2><p>Сначала решите самостоятельно. Ответ каждой задачи раскрывается отдельно.</p></div></div>
+<article class="reading">
+<h3>Крамер · задания 1–5</h3>
+<div class="trial"><strong>1.</strong><div class="eq">2x + y = 5<br>x − y = 1</div><details class="answer"><summary>Показать ответ</summary>(x, y) = (2, 1)</details></div>
+<div class="trial"><strong>2.</strong><div class="eq">3x − 2y = 5<br>x + 2y = 7</div><details class="answer"><summary>Показать ответ</summary>(x, y) = (3, 2)</details></div>
+<div class="trial"><strong>3.</strong><div class="eq">2x − y = 0<br>3x + 4y = 0</div><details class="answer"><summary>Показать ответ</summary>(x, y) = (0, 0); решение единственное</details></div>
+<div class="trial"><strong>4.</strong><div class="eq">−7x − y = 13<br>21x + 3y = 0</div><details class="answer"><summary>Показать ответ</summary>Решений нет</details></div>
+<div class="trial"><strong>5.</strong><div class="eq">2x + y = 6<br>4x + 2y = 12</div><details class="answer"><summary>Показать ответ</summary>Бесконечно много: (x, y) = (3 − t/2, t), t ∈ ℝ</details></div>
+<h3>Гаусс · задания 6–10</h3>
+<div class="trial"><strong>6.</strong><div class="eq">x + y + z = 6<br>2x − y + z = 3<br>−x + 2y + 3z = 12</div><details class="answer"><summary>Показать ответ</summary>(x, y, z) = (1, 2, 3)</details></div>
+<div class="trial"><strong>7.</strong><div class="eq">x + y − z = 4<br>2x − y + 3z = 0<br>−x + 3y − 2z = 3</div><details class="answer"><summary>Показать ответ</summary>(x, y, z) = (2, 1, −1)</details></div>
+<div class="trial"><strong>8.</strong><div class="eq">2y + z = 4<br>x − y + z = 3<br>2x + y − z = 3</div><details class="answer"><summary>Показать ответ</summary>(x, y, z) = (2, 1, 2)</details></div>
+<div class="trial"><strong>9.</strong><div class="eq">x + y + z = 0<br>2x + 2y + 2z = 0<br>x − y + z = 0</div><details class="answer"><summary>Показать ответ</summary>Бесконечно много: (x, y, z) = (−t, 0, t), t ∈ ℝ</details></div>
+<div class="trial"><strong>10.</strong><div class="eq">x + y + z = 3<br>2x + 2y + 2z = 7<br>x − y + z = 1</div><details class="answer"><summary>Показать ответ</summary>Решений нет: удвоение первого уравнения даёт 6, а во втором стоит 7</details></div>
+</article></section>
+<section class="chapter" id="selfcheck"><div class="chapter-head"><span class="num">05</span><div><p class="eyebrow">Перед завершением</p><h2>Контроль внимательности</h2></div></div><article class="reading">
+<div class="checks" id="checks"><label><input type="checkbox">Я различаю Δ, Δₓ и Δᵧ и правильно заменяю столбец.</label><label><input type="checkbox">Я не делю на определитель, если он равен нулю.</label><label><input type="checkbox">Я выполняю операции со всей строкой расширенной матрицы.</label><label><input type="checkbox">Я проверяю знаки и свободный член в каждом преобразовании.</label><label><input type="checkbox">Я понимаю, как распознать несовместную и зависимую систему.</label><label><input type="checkbox">Я проверяю конечные значения подстановкой.</label></div>
+<p id="progress" role="status" aria-live="polite">Отмечено: 0 из 6.</p>
+<p><a href="18.10.26-lab.html?scenario=unique">Открыть исследовательскую лабораторию для проверки понимания →</a></p>
+</article></section>
+</main>
+<footer><div class="inside"><span>18.10.2026 · Анна Трапезникова</span><span>Лёвин Артём Александрович · персональное пособие</span><a href="index.html">К карте программы ↑</a></div></footer>
+<script>
+(function(){
+'use strict';
+const root=document.documentElement, theme=document.getElementById('theme');
+try{const stored=localStorage.getItem('anna-lesson-theme');if(stored==='light'||stored==='dark')root.dataset.theme=stored;}catch(_){}
+theme.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('anna-lesson-theme',root.dataset.theme)}catch(_){}});
+const states=[
+{rows:['(  2    3   −5 |    4 )','(  3   −4    2 |   21 )','(  7    8   −6 |    1 )'],label:'Записываем расширенную матрицу и выбираем первый ведущий элемент 2.'},
+{rows:['(  2    3   −5 |    4 )','(  0  −17   19 |   30 )','(  0   −5   23 |  −26 )'],label:'Обнуляем столбец x: R₂ ← 2R₂ − 3R₁, R₃ ← 2R₃ − 7R₁. Второй и третий первые элементы стали нулями.'},
+{rows:['(  2    3   −5 |    4 )','(  0  −17   19 |   30 )','(  0    0  296 | −592 )'],label:'Обнуляем y в третьей строке: R₃ ← 17R₃ − 5R₂. Получили ступенчатую матрицу.'},
+{rows:['296z = −592  →  z = −2','−17y + 19z = 30  →  y = −4','2x + 3y − 5z = 4  →  x = 3'],label:'Обратный ход: сначала z = −2, затем y = −4 и x = 3. Подстановка в исходную систему даёт 4, 21 и 1.'}
+];let step=0;
+const prev=document.getElementById('prev'),next=document.getElementById('next'),reset=document.getElementById('reset');
+function render(){let state=states[step];document.getElementById('matrixView').textContent=state.rows.join('\n');document.getElementById('matrixView').setAttribute('aria-label',state.label);document.getElementById('stage').textContent='Этап '+(step+1)+' из '+states.length;document.getElementById('stageText').textContent=state.label;prev.disabled=step===0;next.disabled=step===states.length-1}
+prev.addEventListener('click',()=>{step=Math.max(0,step-1);render()});next.addEventListener('click',()=>{step=Math.min(states.length-1,step+1);render()});reset.addEventListener('click',()=>{step=0;render()});render();
+const checks=[...document.querySelectorAll('#checks input')];checks.forEach(c=>c.addEventListener('change',()=>{document.getElementById('progress').textContent='Отмечено: '+checks.filter(x=>x.checked).length+' из '+checks.length+'.'}));
+})();
+</script>
+</body></html>

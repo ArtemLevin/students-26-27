@@ -5,6 +5,50 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-18",
+  "ktpRefs": [],
+  "href": "18.10.26.html",
+  "title": "Метод Крамера и метод Гаусса",
+  "navTitle": "Метод Крамера и метод Гаусса",
+  "navSubtitle": "Системы линейных уравнений: определитель 2×2, метод Крамера, исключение переменных методом Гаусса, проверка ответов и самостоятельная тренировка. Занятие Анны Трапезниковой 18 октября 2026 года.",
+  "summary": "Системы линейных уравнений: определитель 2×2, метод Крамера, исключение переменных методом Гаусса, проверка ответов и самостоятельная тренировка. Занятие Анны Трапезниковой 18 октября 2026 года.",
+  "topics": [
+    "системы двух линейных уравнений",
+    "метод Крамера и определители 2×2",
+    "число решений при нулевом определителе",
+    "прямой и обратный ход метода Гаусса",
+    "проверка вычислений"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "systems_models_04",
+      "evidenceAnchor": "gauss",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "systems_models_05",
+      "evidenceAnchor": "cramer",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "systems_models_07",
+      "evidenceAnchor": "cramer",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "systems_models_08",
+      "evidenceAnchor": "classification",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "18.10.26.html",
+    "pdf": "../pdf_docs/18.10.26.pdf",
+    "tex": "../tex_docs/18.10.26.tex",
+    "lab": "18.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-13",
   "ktpRefs": [],
   "href": "13.10.26.html",
