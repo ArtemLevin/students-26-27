@@ -71,7 +71,7 @@ try{
   for(let i=0;i<70;i++){
    const ready=await evaluate(name==='index.html'?
      "document.querySelector('#lessonTitle')?.textContent!=='Загрузка занятия…'":
-     "document.querySelectorAll('.archive-tile').length>0");
+     "name==='archive.html'?"document.querySelectorAll('.archive-tile').length>0":name.endsWith('-lab.html')?"document.querySelector('#finalSum')?.textContent.length>0":"!!document.querySelector('#pageTitle')");
    if(ready)break;await sleep(100);
   }
   await sleep(180);
@@ -96,7 +96,7 @@ try{
    }else{
     const state=await evaluate("({map:!!document.querySelector('#radialMap'),practice:!!document.querySelector('#practiceRoot'),lesson:document.querySelector('#lessonTitle')?.textContent,ids:document.querySelectorAll('#practiceSection').length})");
     assert.ok(state.map&&state.practice&&state.ids===1);
-    assert.match(state.lesson,/Проценты/);
+    assert.match(state.lesson,/Банковские вклады и сложные проценты/);
    }
    // Both themes must leave content accessible, without horizontal scroll.
    if(page==='archive.html')await evaluate("document.querySelector('#archiveTheme').click()");
@@ -107,6 +107,22 @@ try{
    fs.writeFileSync(path.join(output,page.replace('.html','')+'-'+w+'.png'),Buffer.from(image.data,'base64'));
   }
  }
+ for(const [w,h] of [[1440,900],[390,844]]){
+  for(const page of ['19.10.26.html','19.10.26-lab.html']){
+   await navigate(page,w,h);
+   const structural=await evaluate(page.endsWith('-lab.html')?
+    "({heading:document.querySelector('h1')?.textContent,chart:!!document.querySelector('#growthChart'),controls:document.querySelectorAll('input[type=range]').length})":
+    "({heading:document.querySelector('#pageTitle')?.textContent,sections:document.querySelectorAll('.chapter').length,exercises:document.querySelectorAll('.practice details').length})");
+   if(page.endsWith('-lab.html')){assert.ok(structural.chart&&structural.controls===4);assert.match(structural.heading,/Как растёт вклад/);}
+   else{assert.equal(structural.exercises,10);assert.equal(structural.sections,7);}
+   await evaluate("document.querySelector('#themeToggle').click()");
+   const afterDark=await evaluate("({overflow:document.documentElement.scrollWidth>document.documentElement.clientWidth+2,theme:document.documentElement.dataset.theme})");
+   assert.ok(!afterDark.overflow,'New pages have no dark theme overflow: '+page+' '+w);
+  }
+ }
+ await navigate('19.10.26-lab.html',390,844);
+ const scenarios=await evaluate("(()=>{const get=()=>document.querySelector('#finalSum').textContent;document.querySelector('[data-preset=base]').click();const base=get();document.querySelector('[data-preset=deposits]').click();const deposits=get();document.querySelector('[data-preset=withdrawal]').click();const withdrawal=get();document.querySelector('[data-preset=variable]').click();const variable=get();return {base,deposits,withdrawal,variable}})()");
+ assert.deepEqual(scenarios,{base:'133,1',deposits:'179,3',withdrawal:'128,205',variable:'145,95'},'Deposit model scenario parity');
  await navigate('index.html',390,844);
  const menu=await evaluate("(()=>{const b=document.querySelector('#cabinetMenuToggle');b.click();const opened=b.getAttribute('aria-expanded')==='true'&&getComputedStyle(document.querySelector('#cabinetNavigation')).display!=='none';document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));return {opened,closed:b.getAttribute('aria-expanded')==='false'};})()");
  assert.deepEqual(menu,{opened:true,closed:true},'Mobile menu must open and close with Escape');
