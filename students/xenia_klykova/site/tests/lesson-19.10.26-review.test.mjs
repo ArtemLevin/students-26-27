@@ -76,8 +76,8 @@ test('10 original exercises, checked arithmetic and interactive sqrt criterion',
    assert.equal((2n**(4n*BigInt(n))-1n)%15n,0n);
  }
  for(let n=-100;n<=100;n++){
-   assert.equal((n*n*n-n)%6,0);
-   assert.equal((n**5-n)%6,0);
+   assert.equal(Math.abs((n*n*n-n)%6),0);
+   assert.equal(Math.abs((n**5-n)%6),0);
  }
  assert.match(lab,/candidatesFor/);
  assert.match(lab,/Math\.floor\(Math\.sqrt\(n\)\)/);
