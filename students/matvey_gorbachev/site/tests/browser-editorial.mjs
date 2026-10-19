@@ -107,12 +107,14 @@ try{
   assert.equal(await page.locator('.archive-tile:visible').count(),10,'archive reset failed '+width);
   await page.screenshot({path:path.join(artifactDir,'archive-'+width+'.png'),fullPage:true});
   await page.goto(origin+'18.10.26.html',{waitUntil:'networkidle'});
+  await page.locator('.poster img').scrollIntoViewIfNeeded();
+  await page.locator('.poster img').evaluate(image=>image.decode());
   const lessonState=await page.evaluate(()=>({
     width:document.documentElement.scrollWidth,
     viewport:window.innerWidth,
     title:document.querySelector('h1')?.textContent.trim(),
     tasks:document.querySelectorAll('.tasks li').length,
-    poster:document.querySelector('.poster img')?.complete
+    poster:document.querySelector('.poster img')?.complete && document.querySelector('.poster img')?.naturalWidth>0
   }));
   assert.ok(lessonState.width<=lessonState.viewport+2,'new lesson overflow '+width+': '+JSON.stringify(lessonState));
   assert.equal(lessonState.title,'Кредитные платежи','new lesson title '+width);
