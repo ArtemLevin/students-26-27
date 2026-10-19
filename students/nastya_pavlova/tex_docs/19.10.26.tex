@@ -1,0 +1,277 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,top=19mm,bottom=19mm,left=21mm,right=21mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{187A78}
+\definecolor{darkaccent}{HTML}{195052}
+\definecolor{textgray}{HTML}{303D3E}
+\definecolor{lightline}{HTML}{A9C7C3}
+\color{textgray}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[enumerate]{leftmargin=*,itemsep=.75em,topsep=.35em}
+\setlist[itemize]{leftmargin=*,itemsep=.22em,topsep=.3em}
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{.3pt}
+\fancyfoot[L]{\footnotesize Лёвин А.~А.\,\textbullet\,Анастасия Павлова}
+\fancyfoot[R]{\footnotesize\thepage}
+\newcommand{\checkitem}[1]{\noindent\(\square\)\enspace #1\par}
+\newcommand{\keyterm}[1]{{\color{darkaccent}\textbf{#1}}}
+\newcommand{\smallrule}{\par\vspace{.15em}{\color{lightline}\rule{\linewidth}{.35pt}}\vspace{.15em}}
+\newcommand{\answer}[2]{#1 & #2 \\}
+\tikzset{
+  flowstart/.style={ellipse,draw=accent,thick,minimum width=39mm,minimum height=10mm,align=center,font=\small},
+  flowstep/.style={rectangle,rounded corners=2.5pt,draw=accent,thick,text width=113mm,align=center,minimum height=14mm,inner sep=5pt,font=\small},
+  flowchoice/.style={diamond,aspect=2.3,draw=accent,thick,align=center,text width=42mm,inner sep=2.2pt,font=\small},
+  flowarrow/.style={-{Stealth[length=2.8mm]},thick,color=darkaccent}
+}
+\begin{document}
+\setlength{\abovedisplayskip}{7pt}
+\setlength{\belowdisplayskip}{7pt}
+\setlength{\abovedisplayshortskip}{4pt}
+\setlength{\belowdisplayshortskip}{5pt}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{37mm}
+{\Large\color{accent}\bfseries ЧЕК-ЛИСТ\par}
+\vspace{12mm}
+{\Huge\color{darkaccent}\bfseries Банковские вклады\par}
+\vspace{6mm}
+{\LARGE\color{darkaccent}\bfseries и сложные проценты\par}
+\vspace{11mm}
+{\large Начисление процентов, пополнения и снятия,\par}
+{\large обратные задачи и изменение ставки\par}
+\vspace{23mm}
+{\large Математика\par}
+\vspace{10mm}
+{\large 19.10.26\par}
+\vfill
+{\normalsize Лёвин Артём Александрович\par}
+{\normalsize эксклюзивно для Анастасии Павловой\par}
+\vspace{22mm}
+\begin{tikzpicture}[remember picture,overlay]
+ \draw[accent!48,line width=1.1pt]
+  ([xshift=22mm,yshift=19mm]current page.south west)
+  .. controls ([xshift=78mm,yshift=28mm]current page.south west) and
+             ([xshift=-65mm,yshift=8mm]current page.south east) ..
+             ([xshift=-22mm,yshift=19mm]current page.south east);
+\end{tikzpicture}
+\end{center}
+\end{titlepage}
+\setcounter{page}{2}
+
+\section*{1. Как работают сложные проценты}
+\checkitem{\keyterm{Вклад} --- деньги, размещённые в банке. По условию задачи банк начисляет проценты на сумму, находящуюся на вкладе в течение расчётного периода.}
+\checkitem{При \keyterm{капитализации} начисленные проценты прибавляют к вкладу. На следующий год процент рассчитывают уже от \emph{увеличившейся} суммы.}
+
+\textbf{Пример.} На вклад внесли 100~руб. под 10\% годовых на три года. В конце каждого года проценты присоединяются к вкладу.
+\begin{center}
+\renewcommand{\arraystretch}{1.33}
+\begin{tabularx}{\linewidth}{@{}cXXX@{}}
+\toprule
+\textbf{Год} & \textbf{В начале года, руб.} & \textbf{Начислено 10\%, руб.} & \textbf{В конце года, руб.} \\
+\midrule
+1 & 100 & 10 & 110 \\
+2 & 110 & 11 & 121 \\
+3 & 121 & 12{,}1 & 133{,}1 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\checkitem{Ставка осталась равной 10\% во все три года. Выросла \keyterm{база начисления}: 100, затем 110, затем 121~руб. Поэтому сумма процентов тоже увеличивается.}
+
+\smallrule
+\section*{2. Формула сложных процентов}
+Пусть \(S\) --- первоначальная сумма, \(P\) --- годовая ставка \emph{в процентах}, \(n\) --- количество лет. Введём обозначения:
+\[
+\boxed{p=\frac{P}{100}},\qquad \boxed{k=1+p}.
+\]
+Здесь \(p\) --- ставка в виде десятичной дроби, \(k\) --- \keyterm{повышающий коэффициент}.
+\[
+\begin{aligned}
+\text{После 1-го года: }&S_1=Sk,\\
+\text{после 2-го года: }&S_2=Sk^2,\\
+\text{после 3-го года: }&S_3=Sk^3.
+\end{aligned}
+\]
+\checkitem{Если ставка постоянна, пополнений и снятий нет, сумма к концу \(n\)-го года равна}
+\[
+\boxed{S_n=S\left(1+\frac{P}{100}\right)^n=Sk^n.}
+\]
+\textbf{Пример.} 200~руб. под 20\% на три года: \(k=1{,}2\), поэтому
+\[
+S_3=200\cdot1{,}2^3=\boxed{345{,}6\text{ руб.}}
+\]
+
+\clearpage
+\section*{3. Дополнительные взносы в начале года}
+\checkitem{В начале первого года на счёте лежит \(S\). В начале \emph{каждого последующего} года вносят одинаковую сумму \(a\), после чего банк начисляет процент на всю имеющуюся сумму.}
+\checkitem{\keyterm{Порядок важен:} сначала внести деньги, затем начислить проценты за очередной год.}
+
+\textbf{Пример.} Первоначальный вклад --- 100~руб.; ставка --- 10\%; в начале второго и третьего годов добавляют по 20~руб.
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{@{}cXXXX@{}}
+\toprule
+\textbf{Год} & \textbf{Взнос, руб.} & \textbf{Перед \% , руб.} & \textbf{Проценты, руб.} & \textbf{Итог, руб.}\\
+\midrule
+1 & 0 & 100 & 10 & 110\\
+2 & 20 & 130 & 13 & 143\\
+3 & 20 & 163 & 16{,}3 & 179{,}3\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\checkitem{Для любого года: \(\text{конец года}=(\text{итог прошлого года}+\text{взнос})\cdot k\).}
+
+\smallrule
+\section*{4. Формулы для двух, трёх и четырёх лет}
+Обозначения прежние: \(S\) --- первоначальный вклад, \(a\) --- ежегодный взнос \emph{с начала второго года}, \(k=1+P/100\).
+\[
+\boxed{S_2=Sk^2+ak}
+\]
+\[
+\boxed{S_3=Sk^3+ak^2+ak}
+\]
+\[
+\boxed{S_4=Sk^4+ak^3+ak^2+ak}
+\]
+\checkitem{Первоначальная сумма умножается на \(k^n\), ведь она находится на вкладе все \(n\) лет. Каждый дополнительный взнос приносит проценты только за оставшиеся годы.}
+\checkitem{За \(n\) лет будет ровно \(n-1\) дополнительных взносов, если они начинаются со второго года.}
+
+\textbf{Пример.} Первоначально 120~тыс. руб., ежегодный взнос 10~тыс. руб., ставка 15\%, срок три года:
+\[
+\begin{aligned}
+S_3&=120\cdot1{,}15^3+10\cdot1{,}15^2+10\cdot1{,}15\\
+&=182{,}505+13{,}225+11{,}5\\
+&=\boxed{207{,}23\text{ тыс. руб.}}
+\end{aligned}
+\]
+\checkitem{Таблица универсальнее готовой формулы. Особенно она нужна, если ставка или величина взноса меняется от года к году.}
+
+\clearpage
+\section*{5. Снятие денег и отрицательный взнос}
+\checkitem{Снятие со счёта учитывается тем же способом, что и пополнение, но со знаком минус: \(a<0\). Перед начислением процентов на счёте должна оставаться допустимая по условию сумма.}
+
+\textbf{Пример.} На вклад поместили 100~тыс. руб. под 10\%. В начале второго, третьего и четвёртого годов снимают по 5~тыс. руб. Найдём остаток в конце четвёртого года:
+\[
+\begin{aligned}
+S_4&=100\cdot1{,}1^4-5\cdot1{,}1^3
+ -5\cdot1{,}1^2-5\cdot1{,}1\\
+&=146{,}41-6{,}655-6{,}05-5{,}5\\
+&=128{,}205\text{ тыс. руб.}
+=\boxed{128\,205\text{ руб.}}
+\end{aligned}
+\]
+\checkitem{\keyterm{Единицы измерения:} если исходные данные в тысячах рублей, все промежуточные вычисления тоже выполняют в тысячах. Для ответа в рублях умножьте результат на 1000.}
+
+\smallrule
+\section*{6. Обратная задача: найти первоначальный вклад}
+\checkitem{Если конечная сумма известна, подставьте все данные в ту же формулу и решите полученное уравнение относительно \(S\).}
+
+\textbf{Пример.} Вклад размещён на три года под 20\%, в начале второго и третьего годов добавляют по 10~тыс. руб. В конце третьего года получилось 173{,}28~тыс. руб. Сколько внесли первоначально?
+\[
+\begin{aligned}
+173{,}28&=S\cdot1{,}2^3+10\cdot1{,}2^2+10\cdot1{,}2,\\
+1{,}728S&=173{,}28-14{,}4-12=146{,}88,\\
+S&=\boxed{85\text{ тыс. руб.}}
+\end{aligned}
+\]
+
+\section*{7. Если ставка меняется}
+\checkitem{Проводите расчёт \keyterm{по годам}. Пусть \(S_0=S\), \(a_1=0\), \(a_i\) --- взнос (или снятие с минусом) в начале года \(i\), \(P_i\) --- ставка этого года. Тогда}
+\[
+\boxed{S_i=(S_{i-1}+a_i)\left(1+\frac{P_i}{100}\right).}
+\]
+\checkitem{Каждый год обновляйте \(S_i\): итог предыдущего года переходит в начало следующего. При разных ставках нельзя использовать одну и ту же степень постоянного \(k\).}
+
+\clearpage
+\thispagestyle{plain}
+\begin{center}
+{\Large\color{darkaccent}\bfseries Алгоритм: как рассчитать вклад по годам}\par
+\vspace{4mm}
+{\small Этот алгоритм подходит и для постоянной, и для переменной ставки.}
+\end{center}
+\vspace{5mm}
+\begin{center}
+\begin{tikzpicture}[node distance=9mm]
+\node[flowstart] (start) {Начало};
+\node[flowstep,below=of start] (input) {Выпишите \(S\), число лет \(n\), годовые ставки \(P_i\) и взносы \(a_i\). Для первого года \(a_1=0\). Снятие: \(a_i<0\).};
+\node[flowstep,below=of input] (init) {Положите \(S_0=S\), \(i=1\).};
+\node[flowchoice,below=12mm of init] (test) {\(i\le n\)?};
+\node[flowstep,below=13mm of test] (basis) {В начале года: \(B_i=S_{i-1}+a_i\).};
+\node[flowstep,below=of basis] (interest) {Начислите проценты: \(S_i=B_i\left(1+\dfrac{P_i}{100}\right)\).};
+\node[flowstep,below=of interest] (next) {Перейдите к следующему году: \(i\leftarrow i+1\).};
+\node[flowstep,right=18mm of test,text width=37mm,minimum height=13mm] (output) {Ответ: \(S_n\). Уточните единицы измерения.};
+\node[flowstart,below=12mm of output] (finish) {Конец};
+\draw[flowarrow] (start) -- (input);
+\draw[flowarrow] (input) -- (init);
+\draw[flowarrow] (init) -- (test);
+\draw[flowarrow] (test) -- node[right,font=\small]{да} (basis);
+\draw[flowarrow] (basis) -- (interest);
+\draw[flowarrow] (interest) -- (next);
+\draw[flowarrow] (next.west) -- ++(-14mm,0) |- (test.west);
+\draw[flowarrow] (test.east) -- node[above,font=\small]{нет} (output.west);
+\draw[flowarrow] (output) -- (finish);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\section*{Тренировочный блок. Путь А}
+\textit{10 заданий: от простого к более сложному. При вычислениях можно пользоваться калькулятором. Все дополнительные взносы и снятия выполняются в начале соответствующего года; проценты капитализируются в конце каждого года.}
+\begin{enumerate}
+\item На вклад внесли 200~руб. под 20\% годовых на три года. Составьте таблицу с колонками «Начальная сумма», «Начисленные проценты», «Конечная сумма» для каждого года. Найдите итоговую сумму.
+\item На вклад поместили 1500~руб. под 8\% годовых на два года. Какова сумма в конце второго года, если пополнений и снятий нет?
+\item Через три года вклад без пополнений составил 1331~руб. Процентная ставка равна 10\% годовых. Найдите первоначальную сумму.
+\item На счёт внесли 100~тыс. руб. под 10\% годовых на три года. В начале второго и третьего годов добавляли по 20~тыс. руб. Сколько тысяч рублей будет на счёте в конце срока?
+\item Первоначальный вклад --- 200~тыс. руб., ставка 20\% годовых, срок три года. В начале второго и третьего годов пополняют вклад на 10~тыс. руб. Найдите итоговую сумму в тысячах рублей.
+\item На вклад внесли 120~тыс. руб. под 15\% годовых на три года. В начале второго и третьего годов добавляют по 10~тыс. руб. Найдите остаток в конце третьего года. \emph{Ответ дайте в рублях.}
+\item На вклад внесли 100~тыс. руб. под 10\% годовых на четыре года. В начале второго, третьего и четвёртого годов снимают по 5~тыс. руб. Сколько рублей останется к концу четвёртого года?
+\item На вкладе первоначально было 80~тыс. руб. Ставка --- 5\% годовых, срок три года. В начале второго и третьего годов снимают по 10~тыс. руб. Сколько рублей останется в конце срока?
+\item Вклад открыли на три года под 20\% годовых. В начале второго и третьего годов добавляли по 10~тыс. руб. В конце третьего года на счёте оказалось 173{,}28~тыс. руб. Найдите первоначальную сумму в тысячах рублей.
+\item Первоначально на вклад внесли 100~тыс. руб. В первый год ставка составляла 10\%, во второй --- 20\%, в третий --- 5\%. В начале второго года добавили 10~тыс. руб., в начале третьего сняли 5~тыс. руб. Найдите итоговую сумму в рублях.
+\end{enumerate}
+
+\clearpage
+\section*{Ответы к тренировочному блоку}
+\begin{center}
+\renewcommand{\arraystretch}{1.55}
+\begin{tabularx}{.95\linewidth}{@{}cX@{}}
+\toprule
+\textbf{№} & \textbf{Ответ}\\
+\midrule
+\answer{1}{Конец 1-го года: 240~руб.; 2-го: 288~руб.; 3-го: \(345{,}6\)~руб. Начисленные проценты: 40; 48; \(57{,}6\)~руб.}
+\answer{2}{\(1749{,}6\)~руб.}
+\answer{3}{\(1000\)~руб.}
+\answer{4}{\(179{,}3\)~тыс. руб.}
+\answer{5}{\(372\)~тыс. руб.}
+\answer{6}{\(207\,230\)~руб.}
+\answer{7}{\(128\,205\)~руб.}
+\answer{8}{\(71\,085\)~руб.}
+\answer{9}{\(85\)~тыс. руб.}
+\answer{10}{\(145\,950\)~руб.}
+\bottomrule
+\end{tabularx}
+\end{center}
+\vspace{6mm}
+\textbf{Самопроверка:} для каждого года выпишите сумму \emph{перед} начислением процентов. Убедитесь, что все дополнительные операции учтены в нужный момент, а результат переведён в единицы, указанные в вопросе.
+\end{document}
