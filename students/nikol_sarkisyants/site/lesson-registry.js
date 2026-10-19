@@ -5,6 +5,80 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-19",
+  "ktpRefs": [],
+  "href": "19.10.26.html",
+  "title": "Уравнения и неравенства",
+  "navTitle": "Уравнения и неравенства",
+  "navSubtitle": "Повторение ЕГЭ: дифференцированный кредит, тригонометрические уравнения, формулы корней и вложенные логарифмические неравенства. Занятие Николь Саркисьянц 19.10.2026.",
+  "summary": "Повторение ЕГЭ: дифференцированный кредит, тригонометрические уравнения, формулы корней и вложенные логарифмические неравенства. Занятие Николь Саркисьянц 19.10.2026.",
+  "topics": [
+    "дифференцированный кредит",
+    "показательно-тригонометрическое уравнение",
+    "формулы корней",
+    "двойной угол и формулы приведения",
+    "логарифмические неравенства",
+    "двухступенчатая ОДЗ"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t16_diff",
+      "evidenceAnchor": "finance",
+      "relation": "practiced",
+      "label": "Дифференцированный кредит",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t13_trig_exp",
+      "evidenceAnchor": "substitution",
+      "relation": "practiced",
+      "label": "Показательно-тригонометрическое уравнение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t6_trig_special",
+      "evidenceAnchor": "roots",
+      "relation": "touched",
+      "label": "Формулы корней тригонометрических уравнений",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_trig_num",
+      "evidenceAnchor": "transform",
+      "relation": "practiced",
+      "label": "Тригонометрические числовые преобразования",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_reduction",
+      "evidenceAnchor": "transform",
+      "relation": "practiced",
+      "label": "Формулы приведения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t15_log_other",
+      "evidenceAnchor": "logs",
+      "relation": "practiced",
+      "label": "Вложенные логарифмические неравенства",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t15_log_radical",
+      "evidenceAnchor": "logs",
+      "relation": "touched",
+      "label": "Основания логарифмов с радикалами",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "19.10.26.html",
+    "pdf": "../pdf_docs/19.10.26.pdf",
+    "tex": "../tex_docs/19.10.26.tex",
+    "lab": "19.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-16",
   "ktpRefs": [],
   "href": "16.10.26.html",
