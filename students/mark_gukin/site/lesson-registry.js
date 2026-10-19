@@ -5,6 +5,60 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-18",
+  "ktpRefs": [],
+  "href": "18.10.26.html",
+  "title": "Логарифмы и преобразования",
+  "navTitle": "Логарифмы",
+  "navSubtitle": "Марк Гукин · 18.10.2026: определение и свойства логарифмов, основное логарифмическое тождество, переход к новому основанию, преобразования выражений и 10 заданий Пути А.",
+  "summary": "Марк Гукин · 18.10.2026: определение и свойства логарифмов, основное логарифмическое тождество, переход к новому основанию, преобразования выражений и 10 заданий Пути А.",
+  "topics": [
+    "Логарифм по определению",
+    "Степень с рациональным показателем",
+    "Основное логарифмическое тождество",
+    "Свойства логарифмов",
+    "Переход к новому основанию логарифма",
+    "Числовое значение выражения с несколькими операциями"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege08_08",
+      "evidenceAnchor": "intro",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege08_03",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_09",
+      "evidenceAnchor": "identity",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_10",
+      "evidenceAnchor": "combine",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_11",
+      "evidenceAnchor": "change-base",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_18",
+      "evidenceAnchor": "example",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "18.10.26.html",
+    "pdf": "../pdf_docs/18.10.26.pdf",
+    "tex": "../tex_docs/18.10.26.tex"
+  }
+},
+  {
     "date": "2026-10-11",
     "ktpRefs": [],
     "href": "11.10.26.html",
