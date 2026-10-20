@@ -114,11 +114,19 @@ try{
   }
 
   // Responsive and color-scheme matrix for lesson, lab and personal dashboard.
-  for(const page of ['17.10.26.html','17.10.26-lab.html','index.html']){
+  for(const page of ['17.10.26.html','17.10.26-lab.html','20.10.26.html','20.10.26-lab.html','index.html']){
     for(const [width,height] of [[1440,900],[390,844]]){
       for(const theme of ['light','dark']){
         await navigate(page,width,height,theme);
         await screenshot(page.replace('.html','')+'-'+width+'-'+theme);
+        if(page==='20.10.26.html'){
+          assert.equal(await run("document.querySelectorAll('#practice .exercises li').length"),10);
+          assert.equal(await run("new Promise(resolve=>{const image=document.querySelector('img[src$=\"20.10.26.svg\"]');image.loading='eager';image.scrollIntoView();if(image.complete)return resolve(image.naturalWidth>0);image.addEventListener('load',()=>resolve(image.naturalWidth>0),{once:true});image.addEventListener('error',()=>resolve(false),{once:true});})"),true,'Oct 20 poster loads');
+        }
+        if(page==='20.10.26-lab.html'){
+          assert.equal(await run("document.querySelector('#diffTotal').textContent !== '—'"),true);
+          assert.equal(await run("document.querySelector('#annTotal').textContent !== '—'"),true);
+        }
         if(page==='17.10.26.html'){
           assert.equal(await run("document.querySelectorAll('#practice .practice-list li').length"),10);
           assert.equal(await run("([...document.querySelectorAll('.hero-formula > div')].length===2 && [...document.querySelectorAll('.hero-formula > div')].every(el=>{const label=el.querySelector('small').getBoundingClientRect();const formula=el.querySelector('strong').getBoundingClientRect();return formula.top>=label.bottom && formula.width<=document.documentElement.clientWidth;}))"),true,'Hero formula labels are visually separated from values');
@@ -180,11 +188,11 @@ try{
   assert.equal(await run("(()=>{dispatchEvent(new Event('afterprint'));return document.querySelectorAll('#ledger tr').length})()"),1);
 
   await navigate('index.html');
-  assert.ok(await run("document.querySelector('#lesson-title').textContent.includes('Финансовые задачи')"));
-  assert.ok(await run("document.querySelector('#latestLessonCta').href.endsWith('/17.10.26.html')"));
-  assert.ok(await run("document.querySelector('#latestLabLink').href.endsWith('/17.10.26-lab.html')"));
-  assert.ok(await run("document.querySelector('#latestPdfLink').href.endsWith('/17.10.26.pdf')"));
-  assert.ok(await run("document.querySelector('#latestTexLink').href.endsWith('/17.10.26.tex')"));
+  assert.ok(await run("document.querySelector('#lesson-title').textContent.includes('Финансовая математика')"));
+  assert.ok(await run("document.querySelector('#latestLessonCta').href.endsWith('/20.10.26.html')"));
+  assert.ok(await run("document.querySelector('#latestLabLink').href.endsWith('/20.10.26-lab.html')"));
+  assert.ok(await run("document.querySelector('#latestPdfLink').hidden"));
+  assert.ok(await run("document.querySelector('#latestTexLink').href.endsWith('/20.10.26.tex')"));
   assert.equal(await run("document.querySelectorAll('#recentLessons a[href=\"17.10.26.html\"]').length"),1);
 
   console.log('Timofey 17.10.26 browser QA: desktop/mobile, themes, URL modes, calculations, controls, network, console and navigator PASS');
