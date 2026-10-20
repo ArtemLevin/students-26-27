@@ -188,8 +188,8 @@ try{
       evidence:credit.map(i=>({title:i.title,exists:i.evidence?.some(e=>e.date==='09.10.26')})),
       horizontalOverflow:document.documentElement.scrollWidth>innerWidth+2};
   });
-  assert.equal(home.latest,'16.10.26');
-  assert.match(home.visibleLatest,/Дифференцированное погашение/);
+  assert.equal(home.latest,'20.10.26');
+  assert.match(home.visibleLatest,/Вклады и аннуитетный кредит/);
    assert.ok(home.latestLinks>=4,'New lesson links missing');
   assert.ok(home.links>=4);
   assert.equal(home.evidence.length,3);
@@ -197,7 +197,46 @@ try{
   assert.equal(home.horizontalOverflow,false);
   await screenshot('home-desktop');
 
-  // Latest published lesson and its mathematical laboratory.
+  // New 20 October lesson: formulas, interactive credit comparison and controlled answers.
+  await navigate('20.10.26.html');
+  await wait('document.querySelectorAll("#ledger tr").length===3');
+  const newLesson=await execute(()=>({
+    title:document.querySelector('h1').textContent,
+    tasks:document.querySelectorAll('.practice>li').length,
+    anchors:['deposit','annuity','simulator','compare','practice'].every(id=>!!document.getElementById(id)),
+    payment:document.querySelector('#payment').textContent.replace(/\s/g,''),
+    totalA:document.querySelector('#totalA').textContent.replace(/\s/g,''),
+    totalD:document.querySelector('#totalD').textContent.replace(/\s/g,''),
+    overflow:document.documentElement.scrollWidth>innerWidth+2
+  }));
+  assert.match(newLesson.title,/Вклады и аннуитетный кредит/);
+  assert.equal(newLesson.tasks,10);
+  assert.equal(newLesson.anchors,true);
+  assert.match(newLesson.payment,/47472,53/);
+  assert.match(newLesson.totalA,/142417,58/);
+  assert.match(newLesson.totalD,/140000/);
+  assert.equal(newLesson.overflow,false);
+  await screenshot('lesson-20-desktop');
+  const recalculated20=await execute(()=>{
+    document.querySelector('[data-case="210000,10,2"]').click();
+    const payment=document.querySelector('#payment').textContent.replace(/\s/g,'');
+    const rows=document.querySelectorAll('#ledger tr').length;
+    document.querySelector('#theme').click();
+    return {payment,rows,theme:document.documentElement.dataset.theme};
+  });
+  assert.match(recalculated20.payment,/121000/);
+  assert.equal(recalculated20.rows,2);
+  assert.equal(recalculated20.theme,'dark');
+  await screenshot('lesson-20-dark');
+  await call('Emulation.setDeviceMetricsOverride',{width:375,height:812,deviceScaleFactor:1,mobile:true});
+  await navigate('20.10.26.html');
+  const mobile20=await execute(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth,rows:document.querySelectorAll('#ledger tr').length}));
+  assert.ok(mobile20.width<=mobile20.viewport+2,'20 October lesson mobile overflow '+JSON.stringify(mobile20));
+  assert.equal(mobile20.rows,3);
+  await screenshot('lesson-20-mobile');
+  await call('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});
+
+  // Previous published lesson and its mathematical laboratory.
   await navigate('16.10.26.html');
   const lesson16=await execute(()=>({
     tasks:document.querySelectorAll('.questions li').length,
