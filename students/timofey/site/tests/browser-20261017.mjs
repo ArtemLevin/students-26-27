@@ -121,7 +121,7 @@ try{
         await screenshot(page.replace('.html','')+'-'+width+'-'+theme);
         if(page==='20.10.26.html'){
           assert.equal(await run("document.querySelectorAll('#practice .exercises li').length"),10);
-          assert.equal(await run("document.querySelector('img[src$=\"20.10.26.svg\"]').complete && document.querySelector('img[src$=\"20.10.26.svg\"]').naturalWidth>0"),true,'Oct 20 poster loads');
+          assert.equal(await run("new Promise(resolve=>{const image=document.querySelector('img[src$=\"20.10.26.svg\"]');image.loading='eager';image.scrollIntoView();if(image.complete)return resolve(image.naturalWidth>0);image.addEventListener('load',()=>resolve(image.naturalWidth>0),{once:true});image.addEventListener('error',()=>resolve(false),{once:true});})"),true,'Oct 20 poster loads');
         }
         if(page==='20.10.26-lab.html'){
           assert.equal(await run("document.querySelector('#diffTotal').textContent !== '—'"),true);
