@@ -51,15 +51,11 @@ if(lesson){
   if(href){$('latestLessonCta').href=href;$('latestLessonCta').hidden=false;}
   const pdf=safeHref(lesson.materials?.pdf);
   if(pdf){$('latestLessonPdf').href=pdf;$('latestLessonPdf').hidden=false;}
-  if(lesson.date==='2026-10-15'){
-    $('latestLessonPoster').href='../images/15.10.26.png';
-    $('latestLessonPoster').hidden=false;
-    $('latestPracticeLink').href='15.10.26.html#practice';
-  }else if(href){
-    $('latestPracticeLink').href=href;
-    $('latestPracticeLink').textContent='Открыть последнее занятие ↗';
+  if(href){
+    $('latestPracticeLink').href=href+'#practice';
+    $('latestPracticeLink').textContent='Открыть тренировку ↗';
     const label=document.querySelector('.practice-label');
-    if(label)label.textContent='МАТЕРИАЛЫ ПОСЛЕДНЕГО УРОКА';
+    if(label)label.textContent='ПУТЬ А · 10 ЗАДАНИЙ';
   }
   const status=$('latestLessonStatus');
   const outcomeIds=(lesson.outcomes||[])

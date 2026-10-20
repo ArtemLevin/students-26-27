@@ -4,6 +4,88 @@ export const ARCHIVE_PAGE_SIZE=10;
 const MONTHS_GENITIVE=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
 export const LESSONS=[
+{
+  "date": "2026-10-20",
+  "ktpRefs": [],
+  "href": "20.10.26.html",
+  "title": "Умножение дробей и смешанных чисел",
+  "navTitle": "Умножение дробей и смешанных чисел",
+  "navSubtitle": "Умножение и сокращение обыкновенных дробей, перевод смешанных чисел, действия со скобками, задачи на движение и 10 упражнений.",
+  "summary": "Умножение и сокращение обыкновенных дробей, перевод смешанных чисел, действия со скобками, задачи на движение и 10 упражнений.",
+  "topics": [
+    "Умножение обыкновенных дробей",
+    "Сокращение перед умножением",
+    "Умножение смешанных чисел",
+    "Порядок действий со скобками",
+    "Текстовые задачи на движение"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "frac_ops_08",
+      "evidenceAnchor": "basic",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_09",
+      "evidenceAnchor": "multi",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_base_06",
+      "evidenceAnchor": "mixed",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_base_07",
+      "evidenceAnchor": "mixed",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "frac_ops_12",
+      "evidenceAnchor": "mixed",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_13",
+      "evidenceAnchor": "brackets",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_14",
+      "evidenceAnchor": "word",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_02",
+      "evidenceAnchor": "word",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_06",
+      "evidenceAnchor": "motion",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_07",
+      "evidenceAnchor": "motion",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_16",
+      "evidenceAnchor": "jumps",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "units_06",
+      "evidenceAnchor": "word",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "20.10.26.html",
+    "pdf": "../pdf_docs/20.10.26.pdf"
+  }
+},
   {
   "date": "2026-10-15",
   "ktpRefs": [],
