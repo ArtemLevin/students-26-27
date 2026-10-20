@@ -228,6 +228,28 @@ const evidence1610For = (title)=>({
   tex:'../tex_docs/16.10.26.tex'
 });
 
+
+const lesson2010AnchorByTitle=new Map([
+ ["Вклад с пополнением","#deposit"],
+ ["Вклад со снятием","#deposit"],
+ ["Кредит с аннуитетной схемой","#annuity"],
+ ["Кредит с дифференцированными платежами","#compare"],
+ ["Долг после очередного платежа","#annuity"],
+ ["Процент от остатка долга","#annuity"],
+ ["Таблица платежей по кредиту","#simulator"],
+ ["Сумма выплат по кредиту","#compare"],
+ ["Переплата по кредиту","#compare"],
+ ["Поиск размера платежа","#annuity"],
+ ["Сравнение финансовых сценариев","#compare"],
+ ["Формулы финансовых расчётов","#annuity"]
+]);
+const lesson2010EvidenceTitles=new Set(lesson2010AnchorByTitle.keys());
+const evidence2010For=title=>({
+ date:'20.10.26',
+ text:'Вклады с пополнением и снятием; вывод аннуитетного платежа, сумма выплат и переплата; сравнение с дифференцированной схемой. Разбирались примеры с поддержкой преподавателя. Повышать уровень освоения без отдельной диагностики оснований нет.',
+ web:'20.10.26.html'+lesson2010AnchorByTitle.get(title)
+});
+
 const groups=groupDefs.map((def,groupIndex)=>{
   const number=groupIndex+1;
   const groupId=`ege27_${String(number).padStart(2,'0')}`;
@@ -253,6 +275,7 @@ const groups=groupDefs.map((def,groupIndex)=>{
       const hasLesson0910Evidence=(number===10||number===13)&&lesson0910EvidenceTitles.has(title);
       const hasLesson1310Evidence=(number===10||number===13)&&lesson1310EvidenceTitles.has(title);
       const hasLesson1610Evidence=(number===10||number===13)&&lesson1610EvidenceTitles.has(title);
+      const hasLesson2010Evidence=(number===10||number===13)&&lesson2010EvidenceTitles.has(title);
 
       const level=isMasteredPower?4:
         isLesson2509Level3?3:
@@ -281,6 +304,7 @@ const groups=groupDefs.map((def,groupIndex)=>{
       if(hasLesson0910Evidence) evidence.push(evidence0910For(title));
       if(hasLesson1310Evidence) evidence.push(evidence1310For(title));
       if(hasLesson1610Evidence) evidence.push(evidence1610For(title));
+      if(hasLesson2010Evidence) evidence.push(evidence2010For(title));
 
       const id=`${groupId}_${String(itemIndex+1).padStart(3,'0')}`;
       return{
@@ -301,7 +325,7 @@ window.COMPETENCY_MAP_DATA={
     teacher:'Лёвин Артём Александрович',
     program:'подготовка к ЕГЭ по профильной математике',
     examVersion:'проект ЕГЭ-2027',
-    updated:'16.10.26',
+    updated:'20.10.26',
     sourceNote:'Структура актуализирована по проектам документов ФИПИ ЕГЭ-2027; подтверждённые уровни уточняются по материалам занятий.'
   },
   storage:{
@@ -310,6 +334,7 @@ window.COMPETENCY_MAP_DATA={
     theme:'ekaterina_gnedkova-ege_profile_2027-theme'
   },
   materials:[
+    {date:'20.10.26',title:'Вклады и аннуитетный кредит',summary:'Равный платёж, проценты и остаток долга, переплата, сравнение двух схем; интерактивный расчёт и 10 заданий.',web:'20.10.26.html'},
     {date:'16.10.26',title:'Дифференцированное погашение кредита',summary:'Пять формул, равное уменьшение основного долга, переплата и ограничения по платежам.',web:'16.10.26.html',lab:'16.10.26-lab.html',pdf:'../pdf_docs/16.10.26.pdf',tex:'../tex_docs/16.10.26.tex',image:'../images/16.10.26.png'},
     {date:'13.10.26',title:'Произвольные схемы погашения кредита',summary:'Расчёт платежей по остаткам долга, переплата, система неравенств и смешанная схема.',web:'13.10.26.html',pdf:'../pdf_docs/13.10.26.pdf',tex:'../tex_docs/13.10.26.tex',image:'../images/13.10.26.png'},
     {date:'09.10.26',title:'Кредитные задачи: три схемы погашения',summary:'Аннуитетная, дифференцированная и произвольная схемы; таблица долга и платежей, поиск ставки.',web:'09.10.26.html',pdf:'../pdf_docs/09.10.26.pdf',tex:'../tex_docs/09.10.26.tex',image:'../images/09.10.26.png'},
