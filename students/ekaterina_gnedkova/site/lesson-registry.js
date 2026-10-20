@@ -5,6 +5,88 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-20",
+  "ktpRefs": [],
+  "href": "20.10.26.html",
+  "title": "Вклады и аннуитетный кредит",
+  "navTitle": "Вклады и аннуитетный кредит",
+  "navSubtitle": "Вклады с пополнением, аннуитетные кредиты и сравнение схем погашения. Формулы, интерактивная таблица и 10 упражнений. Занятие Екатерины Гнедковой 20 октября 2026 года.",
+  "summary": "Вклады с пополнением, аннуитетные кредиты и сравнение схем погашения. Формулы, интерактивная таблица и 10 упражнений. Занятие Екатерины Гнедковой 20 октября 2026 года.",
+  "topics": [
+    "вклад с пополнением",
+    "аннуитетная схема погашения",
+    "равный ежегодный платёж",
+    "остаток долга по годам",
+    "общая сумма и переплата",
+    "сравнение способов погашения"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege27_13_004",
+      "evidenceAnchor": "deposit",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_13_005",
+      "evidenceAnchor": "deposit",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_13_006",
+      "evidenceAnchor": "annuity",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_13_007",
+      "evidenceAnchor": "compare",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_13_008",
+      "evidenceAnchor": "annuity",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_13_009",
+      "evidenceAnchor": "annuity",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_13_010",
+      "evidenceAnchor": "annuity",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_13_011",
+      "evidenceAnchor": "compare",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_13_012",
+      "evidenceAnchor": "compare",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_13_014",
+      "evidenceAnchor": "annuity",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_13_017",
+      "evidenceAnchor": "compare",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_10_012",
+      "evidenceAnchor": "annuity",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "20.10.26.html"
+  }
+},
+{
   "date": "2026-10-16",
   "ktpRefs": [],
   "href": "16.10.26.html",
