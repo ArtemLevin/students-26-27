@@ -94,7 +94,7 @@ try{
     assert.equal(home.lessons,LESSONS[0].navTitle||LESSONS[0].title,JSON.stringify(home));
     assert.ok(home.skills>=200,'Skill map not loaded '+JSON.stringify(home));
     assert.equal(Number(home.stat),home.skills,'Real skill total mismatch');
-    assert.equal(home.practice,LESSONS[0].date==='2026-10-15'?'15.10.26.html#practice':LESSONS[0].href);
+    assert.equal(home.practice,LESSONS[0].href+'#practice');
     const personal=await run("document.querySelector('#latestLessonStatus')?.textContent");
     assert.ok(!/\b(?:[a-z]+_\d+|t19_divisibility)\b/i.test(personal),'Raw internal skill IDs');
     if(w<=390){
