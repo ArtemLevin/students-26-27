@@ -5,6 +5,65 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-20",
+    "ktpRefs": [],
+    "href": "20.10.26.html",
+    "title": "Уравнения: увидеть замену",
+    "navTitle": "Уравнения: увидеть замену",
+    "navSubtitle": "София Хоменко: замена переменной в уравнениях четвёртой степени, ОДЗ, дробные уравнения, общий знаменатель и разность кубов. Занятие 20 октября 2026 года.",
+    "summary": "София Хоменко: замена переменной в уравнениях четвёртой степени, ОДЗ, дробные уравнения, общий знаменатель и разность кубов. Занятие 20 октября 2026 года.",
+    "topics": [
+      "замена переменной в уравнениях четвёртой степени",
+      "обратная замена",
+      "ограничения новой переменной",
+      "ОДЗ радикалов и рациональных выражений",
+      "общий знаменатель алгебраических дробей",
+      "разность кубов"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "oge_08_11",
+        "evidenceAnchor": "substitution",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "oge_09_07",
+        "evidenceAnchor": "substitution",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_09_08",
+        "evidenceAnchor": "substitution",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_08_10",
+        "evidenceAnchor": "denominators",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_09_10",
+        "evidenceAnchor": "denominators",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_09_11",
+        "evidenceAnchor": "fraction-substitution",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_09_12",
+        "evidenceAnchor": "domain",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "20.10.26.html",
+      "pdf": "../pdf_docs/20.10.26.pdf",
+      "tex": "../tex_docs/20.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-13",
     "ktpRefs": [],
     "href": "13.10.26.html",

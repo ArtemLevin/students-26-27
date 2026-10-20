@@ -57,6 +57,20 @@
       item.evidence=history;
       currentMatched+=1;
     }));
+    currentMatched=0;
+    const october20={
+      date:"20.10.26",href:"20.10.26.html",
+      evidence:"Замена переменной, ограничение для t, ОДЗ радикалов и алгебраических дробей, общий знаменатель и отбор допустимых корней; занятие 20.10.26.",
+      ids:new Set(["oge_08_11","oge_09_07","oge_09_08","oge_08_10","oge_09_10","oge_09_11","oge_09_12"])
+    };
+    data.groups.forEach(group=>group.items.forEach(item=>{
+      if(!october20.ids.has(item.id))return;
+      item.href=october20.href;
+      const history=Array.isArray(item.evidence)?item.evidence:[];
+      if(!history.includes(october20.evidence))history.push(october20.evidence);
+      item.evidence=history;
+      currentMatched+=1;
+    }));
     const counter=document.getElementById("confirmedThisLesson");if(counter)counter.textContent=currentMatched;
   })();
 
