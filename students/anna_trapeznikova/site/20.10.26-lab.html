@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Цифровая лаборатория Анны Трапезниковой: четыре варианта неравенства с кратными корнями и пошаговый метод Гаусса.">
+<title>Лаборатория: интервалы и метод Гаусса — Анна Трапезникова</title>
+<link rel="stylesheet" href="../../../design-system/tokens.css?v=20260919-2">
+<link rel="stylesheet" href="anna-atlas.css?v=20260921-1">
+<style>
+:root{--bg:#f7f2ed;--paper:#fffdf9;--ink:#292322;--soft:#635b57;--line:#d6cbc5;--accent:#783f50;--green:#317662;--muted:#f0e3e2;--focus:#d27a45}
+html[data-theme=dark]{--bg:#1a1717;--paper:#2b2624;--ink:#f4ece6;--soft:#c8bab5;--line:#584b48;--accent:#e5adb9;--green:#a5d4bc;--muted:#382c30;--focus:#ffbe84}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,Segoe UI,Arial,sans-serif;overflow-wrap:anywhere}
+a{color:var(--accent);text-underline-offset:.23em}button{cursor:pointer;font:inherit;color:inherit}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{position:absolute;top:-8rem;left:1rem;z-index:40;padding:.5rem;background:var(--paper)}.skip:focus{top:.5rem}
+.wrap{width:min(1100px,calc(100% - 2rem));margin:auto}.top{border-bottom:1px solid var(--line);background:var(--paper)}
+.top-inner{width:min(1100px,calc(100% - 2rem));min-height:65px;margin:auto;display:flex;gap:1rem;justify-content:space-between;align-items:center}
+.top-inner .home{text-decoration:none;font-weight:750;color:var(--ink)}#theme{border:1px solid var(--line);padding:.45rem .8rem;border-radius:3px;background:var(--paper)}
+.hero{padding:3.8rem 0 2.5rem;border-bottom:1px solid var(--line)}.eyebrow{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:800}
+h1{font:500 clamp(2.4rem,5.2vw,4.6rem)/1.08 Georgia,serif;letter-spacing:-.04em;max-width:14ch;margin:.5rem 0}
+h2{font:500 clamp(1.9rem,4vw,2.9rem)/1.16 Georgia,serif;letter-spacing:-.02em;margin:.3rem 0 .8rem}p{max-width:72ch}
+.mode-switch,.choices,.step-actions{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;margin:1.2rem 0}
+.mode-switch button,.choices button,.step-actions button{padding:.6rem .9rem;border:1px solid var(--line);border-radius:3px;background:var(--paper);min-height:42px}
+button[aria-pressed=true]{border-color:var(--accent);background:var(--accent);color:var(--bg)}
+button:disabled{opacity:.45;cursor:default}.screen{padding:2rem 0 4rem}.screen[hidden]{display:none}
+.formula{font:500 clamp(1.2rem,2.9vw,1.9rem)/1.6 "Cambria Math","STIX Two Math",Georgia,serif;background:var(--paper);border-left:3px solid var(--accent);padding:1rem 1.2rem;overflow-x:auto;white-space:nowrap}
+.visual{margin:1.5rem 0;border:1px solid var(--line);background:var(--paper);padding:1rem;overflow-x:auto}
+.visual svg{display:block;width:100%;min-width:540px;height:auto}.visual .axis{stroke:var(--ink);stroke-width:2}.visual .selected{stroke:var(--green);stroke-width:8;stroke-linecap:round}.visual .off{fill:var(--paper);stroke:var(--accent);stroke-width:2.8}.visual .on{fill:var(--green);stroke:var(--green);stroke-width:2}.visual text{fill:var(--ink);font:18px system-ui,sans-serif}.visual .sign{font:700 24px Georgia,serif}
+.legend{color:var(--soft);font-size:.82rem}.subtle{color:var(--soft)}.result{padding:1.3rem 1.2rem;border-left:3px solid var(--green);background:var(--muted);margin:1.3rem 0}
+#answer{font:500 clamp(1.12rem,2.4vw,1.6rem) "Cambria Math",Georgia,serif}.note{border-top:1px solid var(--line);padding:1.4rem 0;max-width:80ch}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:1.8rem;margin:1.2rem 0}.compare > div{padding:1rem;border:1px solid var(--line)}.compare strong{color:var(--accent)}
+.matrix{white-space:pre;font:500 clamp(1rem,2.6vw,1.5rem)/1.85 "Cambria Math",ui-monospace,monospace;background:var(--paper);padding:1rem;max-width:100%;overflow-x:auto;border-left:3px solid var(--accent);min-height:9em}
+.step-counter{font-size:.85rem;font-weight:800;color:var(--accent)}details{margin:2rem 0;padding:1rem;border-top:1px solid var(--line)}summary{cursor:pointer;color:var(--accent);font-weight:700}
+footer{padding:2rem 0;border-top:1px solid var(--line);font-size:.84rem;color:var(--soft)}footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+@media(max-width:650px){.compare{grid-template-columns:1fr}.hero{padding:2rem 0}.top-inner{align-items:flex-start;padding:.8rem 0}.screen{padding:1.3rem 0 3rem}.visual{padding:.4rem}.matrix{font-size:1rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style></head>
+<body data-atlas data-anna-atlas data-anna-page="lab">
+<a class="skip" href="#work">К эксперименту</a>
+<header class="top"><div class="top-inner"><a class="home" href="20.10.26.html">← К занятию 20.10.26</a><button type="button" id="theme" aria-label="Переключить цветовую тему">◐ Тема</button></div></header>
+<main class="wrap" id="work">
+<section class="hero"><p class="eyebrow">Цифровая лаборатория · 20 октября 2026</p><h1>Меняйте условие. Проверяйте вывод.</h1><p class="subtle">Две модели из одного занятия: знак произведения с кратными корнями и последовательные преобразования расширенной матрицы. Каждый шаг связан с вычислениями из пособия.</p>
+<div class="mode-switch" role="group" aria-label="Выбор исследовательского режима">
+<button id="tabIntervals" type="button" data-mode="intervals" aria-pressed="true" aria-controls="intervals">Корни и знаки</button>
+<button id="tabGauss" type="button" data-mode="gauss" aria-pressed="false" aria-controls="gauss">Метод Гаусса</button>
+</div></section>
+<section class="screen" id="intervals" aria-labelledby="intervalsTitle">
+<p class="eyebrow">Опыт 01 / метод интервалов</p><h2 id="intervalsTitle">Четыре неравенства — один многочлен</h2>
+<p>Изменяйте только знак сравнения. Обратите внимание: корень −5 имеет нечётную кратность 3, а корень 4 — чётную кратность 2.</p>
+<div class="formula" id="inequality" aria-live="polite">(x − 4)²(x + 5)³ &gt; 0</div>
+<div class="choices" role="group" aria-label="Знак неравенства">
+<button type="button" data-sign="gt" aria-pressed="true">&gt; 0</button><button type="button" data-sign="ge" aria-pressed="false">≥ 0</button>
+<button type="button" data-sign="lt" aria-pressed="false">&lt; 0</button><button type="button" data-sign="le" aria-pressed="false">≤ 0</button>
+</div>
+<div class="visual" aria-label="Числовая ось: слева от −5 знак отрицателен, между −5 и 4 и справа от 4 положителен.">
+<svg viewBox="0 0 740 225" role="img" aria-labelledby="chartTitle chartDesc">
+<title id="chartTitle">Знаки многочлена с корнями −5 и 4</title><desc id="chartDesc">Выделенные участки соответствуют выбранному неравенству. При кратности 2 знак у корня 4 не меняется.</desc>
+<line class="axis" x1="32" y1="115" x2="710" y2="115"/><path d="M700 108L712 115L700 122" fill="none" stroke="currentColor" stroke-width="2"/>
+<g id="highlight"></g>
+<circle id="rootMinus5" class="off" cx="216" cy="115" r="7"/><circle id="root4" class="off" cx="512" cy="115" r="7"/>
+<line x1="216" y1="101" x2="216" y2="129" stroke="currentColor"/><line x1="512" y1="101" x2="512" y2="129" stroke="currentColor"/>
+<text x="196" y="153">−5</text><text x="505" y="153">4</text><text x="70" y="80" class="sign">−</text><text x="352" y="80" class="sign">+</text><text x="625" y="80" class="sign">+</text>
+<text x="38" y="188" class="legend">Чётная кратность у 4: знак сохраняется</text>
+</svg>
+</div>
+<div class="result" role="status" aria-live="polite"><strong>Множество решений</strong><div id="answer">x ∈ (−5; 4) ∪ (4; +∞)</div></div>
+<div class="compare"><div><strong>Что меняется</strong><p id="comparison">Знак «&gt;»: выбираем положительные промежутки, но оба корня выколоты.</p></div><div><strong>Что остаётся</strong><p>Сами корни (−5 и 4) и знаки на открытых промежутках сохраняются при любом выборе неравенства.</p></div></div>
+<details><summary>Предскажите: почему точка 4 входит в ответ при ≥ 0?</summary><p>В точке 4 множитель (x − 4)² равен нулю. Неравенство нестрогое, поэтому нуль допускается. Знак по обе стороны корня сохраняется.</p></details>
+</section>
+<section class="screen" id="gauss" aria-labelledby="gaussTitle" hidden>
+<p class="eyebrow">Опыт 02 / метод Гаусса</p><h2 id="gaussTitle">Как получается ступенчатая матрица</h2>
+<p>Изменяйте шаг преобразования. Все коэффициенты и свободные члены пересчитываются одновременно; в исходной системе отсутствующий коэффициент при z равен 0.</p>
+<div class="formula">x + y + z = 6;&nbsp; 2x − y + z = 3;&nbsp; 3x − y = 1.</div>
+<div id="matrix" class="matrix" role="img" aria-label="Расширенная матрица системы"></div>
+<div class="step-actions" role="group" aria-label="Управление этапами">
+<button type="button" id="prev">← Назад</button><strong class="step-counter" id="count">Шаг 1 из 4</strong><button type="button" id="next">Следующий →</button><button type="button" id="reset">Сначала</button>
+</div>
+<div class="result" role="status" aria-live="polite" id="stepText"></div>
+<div class="note"><strong>Критерий совместности.</strong> Строка (0, 0, 0 | c), где c ≠ 0, означала бы противоречие 0 = c. Это сигнал отсутствия решений. В данном примере получаем однозначный ответ (1, 2, 3).</div>
+<details><summary>Почему нельзя преобразовывать только коэффициенты слева от черты?</summary><p>Строка расширенной матрицы представляет уравнение целиком. Все операции применяются и к свободному члену справа, иначе исходное множество решений может измениться.</p></details>
+</section>
+</main><footer><div class="wrap"><span>Лёвин Артём Александрович · эксклюзивно для Анны Трапезниковой</span><a href="20.10.26.html">Вернуться к уроку ↑</a></div></footer>
+<script>
+(function(){'use strict';var root=document.documentElement,theme=document.getElementById('theme');try{var saved=localStorage.getItem('anna-lesson-theme');if(saved==='light'||saved==='dark')root.dataset.theme=saved}catch(_){}
+theme.addEventListener('click',function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('anna-lesson-theme',root.dataset.theme)}catch(_){}});
+var params=new URLSearchParams(location.search),mode=params.get('mode')==='gauss'?'gauss':'intervals';
+function showMode(m){mode=m;['intervals','gauss'].forEach(function(id){document.getElementById(id).hidden=id!==m;document.querySelector('[data-mode="'+id+'"]').setAttribute('aria-pressed',String(id===m))});try{var url=new URL(location.href);url.searchParams.set('mode',m);history.replaceState(null,'',url)}catch(_){}}
+document.querySelectorAll('[data-mode]').forEach(function(b){b.addEventListener('click',function(){showMode(b.dataset.mode)})});
+var choices={gt:{sign:'>',answer:'x ∈ (−5; 4) ∪ (4; +∞)',description:'Строго больше: оставляем положительные промежутки, но точки −5 и 4 выколоты.',segments:[[226,502],[522,696]],closed:[]},ge:{sign:'≥',answer:'x ∈ [−5; +∞)',description:'Больше либо равно: оба корня включены, поэтому положительные промежутки объединяются в один.',segments:[[216,696]],closed:[-5,4]},lt:{sign:'<',answer:'x ∈ (−∞; −5)',description:'Строго меньше: подходит только левый отрицательный промежуток, −5 исключаем.',segments:[[44,206]],closed:[]},le:{sign:'≤',answer:'x ∈ (−∞; −5] ∪ {4}',description:'Меньше либо равно: включаем −5 и отдельную точку 4, где значение равно нулю.',segments:[[44,216]],closed:[-5,4]}};
+function renderSign(key){var choice=choices[key],group=document.getElementById('highlight');while(group.firstChild)group.removeChild(group.firstChild);
+choice.segments.forEach(function(v){var line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('class','selected');line.setAttribute('x1',v[0]);line.setAttribute('x2',v[1]);line.setAttribute('y1','115');line.setAttribute('y2','115');group.appendChild(line)});
+document.getElementById('rootMinus5').setAttribute('class',choice.closed.includes(-5)?'on':'off');document.getElementById('root4').setAttribute('class',choice.closed.includes(4)?'on':'off');
+document.getElementById('inequality').textContent='(x − 4)²(x + 5)³ '+choice.sign+' 0';document.getElementById('answer').textContent=choice.answer;document.getElementById('comparison').textContent=choice.description;
+document.querySelectorAll('[data-sign]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.sign===key))});
+}
+document.querySelectorAll('[data-sign]').forEach(function(b){b.addEventListener('click',function(){renderSign(b.dataset.sign)})});renderSign('gt');
+var states=[
+{rows:[' 1   1   1 |   6',' 2  −1   1 |   3',' 3  −1   0 |   1'],label:'Исходная расширенная матрица. В третьей строке коэффициент при z равен 0.'},
+{rows:[' 1   1   1 |   6',' 0  −3  −1 |  −9',' 0  −4  −3 | −17'],label:'Обнуляем первый столбец: R₂ ← R₂ − 2R₁, R₃ ← R₃ − 3R₁. Строки обрабатываются целиком.'},
+{rows:[' 1   1   1 |   6',' 0  −3  −1 |  −9',' 0   0  −5 | −15'],label:'R₃ ← 3R₃ − 4R₂. Под ведущими элементами стоят нули: матрица ступенчатая.'},
+{rows:[' z = 3',' y = 2',' x = 1'],label:'Обратный ход: −5z = −15, затем −3y − z = −9, затем x + y + z = 6. Проверка подтверждает (1, 2, 3).'}
+];var step=0,prev=document.getElementById('prev'),next=document.getElementById('next'),reset=document.getElementById('reset');
+function renderStep(){var s=states[step];document.getElementById('matrix').textContent=s.rows.join('\n');document.getElementById('matrix').setAttribute('aria-label',s.label);document.getElementById('count').textContent='Шаг '+(step+1)+' из '+states.length;document.getElementById('stepText').textContent=s.label;prev.disabled=step===0;next.disabled=step===states.length-1}
+prev.addEventListener('click',function(){step=Math.max(0,step-1);renderStep()});next.addEventListener('click',function(){step=Math.min(states.length-1,step+1);renderStep()});reset.addEventListener('click',function(){step=0;renderStep()});renderStep();showMode(mode);
+})();
+</script></body></html>
