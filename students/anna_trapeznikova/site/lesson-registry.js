@@ -5,6 +5,75 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-20",
+  "ktpRefs": [],
+  "href": "20.10.26.html",
+  "title": "Метод интервалов, рациональные уравнения и Гаусс",
+  "navTitle": "Метод интервалов, рациональные уравнения и Гаусс",
+  "navSubtitle": "Метод интервалов с учётом кратности и строгости, замена в рациональных уравнениях, разность квадратов, ступенчатая матрица и метод Гаусса. Повторение 20 октября 2026 года.",
+  "summary": "Метод интервалов с учётом кратности и строгости, замена в рациональных уравнениях, разность квадратов, ступенчатая матрица и метод Гаусса. Повторение 20 октября 2026 года.",
+  "topics": [
+    "метод интервалов и кратность корней",
+    "строгие и нестрогие неравенства",
+    "замена переменной в рациональном уравнении",
+    "область допустимых значений",
+    "разность квадратов",
+    "прямой и обратный ход метода Гаусса"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "rational_equations_10",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_13",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_14",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_04",
+      "evidenceAnchor": "substitution",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_06",
+      "evidenceAnchor": "substitution",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_07",
+      "evidenceAnchor": "substitution",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "rational_equations_05",
+      "evidenceAnchor": "squares",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "systems_models_04",
+      "evidenceAnchor": "gauss",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "systems_models_08",
+      "evidenceAnchor": "gauss",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "20.10.26.html",
+    "pdf": "../pdf_docs/20.10.26.pdf",
+    "lab": "20.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-18",
   "ktpRefs": [],
   "href": "18.10.26.html",
