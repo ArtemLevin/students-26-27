@@ -1,0 +1,362 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\geometry{left=18mm,right=18mm,top=18mm,bottom=19mm}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+
+\definecolor{accent}{HTML}{2B6F73}
+\definecolor{darkaccent}{HTML}{19484B}
+\definecolor{textgray}{HTML}{2E3335}
+\definecolor{softgray}{HTML}{6D777A}
+\definecolor{linegray}{HTML}{D8DEDF}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=1pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=3pt,topsep=3pt}
+\setlength{\headheight}{14.5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{softgray}София Хоменко}
+\fancyhead[R]{\small\color{softgray}20.10.26}
+\fancyfoot[C]{\small\color{softgray}\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\newcommand{\topic}[1]{%
+  \par\vspace{0.4em}\noindent{\Large\bfseries\color{darkaccent}#1}\par
+  \vspace{0.15em}\noindent\color{linegray}\rule{\linewidth}{0.6pt}\color{textgray}\vspace{0.2em}
+}
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\warn}{\textbf{\color{darkaccent}Важно: }}
+\newcommand{\answer}[1]{\noindent\key{Ответ:} \(#1\).}
+\newcommand{\example}{\noindent\textbf{Пример.} }
+
+\begin{document}
+\color{textgray}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{23mm}
+{\Large\color{softgray}Математика \textbullet\ ОГЭ}\par
+\vspace{11mm}
+{\Huge\bfseries\color{darkaccent}Чек-лист}\par
+\vspace{8mm}
+{\LARGE\bfseries Уравнения повышенной сложности}\par
+\vspace{5mm}
+{\Large Замена переменной, ограничения,\par общий знаменатель}\par
+\vspace{20mm}
+{\large София Хоменко}\par
+\vspace{4mm}
+{\normalsize 20 октября 2026 года}\par
+\vfill
+{\small Лёвин Артём Александрович эксклюзивно для Софии Хоменко}\par
+\vspace{12mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[accent,line width=1.15pt]
+  (0,0) .. controls (3.2,0.8) and (7.3,-0.8) .. (10.5,0)
+  .. controls (13.1,0.6) and (15.6,0.2) .. (17.3,-0.15);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\topic{1. Как узнать уравнение с заменой переменной}
+
+\key{Главный признак:} одно и то же выражение встречается в разных степенях. Обозначьте повторяющуюся часть новой переменной \(t\). Так уравнение четвёртой степени может стать квадратным.
+
+\[
+\underbrace{x^4}_{(x^2)^2}-\underbrace{x^2}_{x^2}-6=0,
+\qquad \boxed{t=x^2\ge 0}.
+\]
+\[
+ t^2-t-6=0\quad\Longleftrightarrow\quad(t-3)(t+2)=0.
+\]
+Корни нового уравнения: \(t=3\) и \(t=-2\). Значение \(t=-2\) не подходит, так как квадрат действительного числа неотрицателен. Делаем \key{обратную замену}:
+\[
+ x^2=3\quad\Longrightarrow\quad x=\pm\sqrt3.
+\]
+\answer{-\sqrt3;\ \sqrt3}
+
+\warn \(x^2\ge0\), а не \(x^2>0\): при \(x=0\) квадрат равен нулю. \emph{Каждый} корень \(t\) проверяйте по ограничению до обратной замены.
+
+\topic{2. Внутри замены может быть скобка}
+
+\example Решим
+\[
+ (x-2)^4-(x-2)^2-6=0.
+\]
+Положим \(t=(x-2)^2\ge0\). Тогда вновь
+\[
+ t^2-t-6=0\quad\Longrightarrow\quad t\in\{-2,3\}.
+\]
+Допустимо только \(t=3\). Возвращаем исходное выражение:
+\[
+ (x-2)^2=3\quad\Longleftrightarrow\quad
+ \begin{cases}
+ x-2=\sqrt3,\\
+ \text{или}\quad x-2=-\sqrt3.
+ \end{cases}
+\]
+\answer{2-\sqrt3;\ 2+\sqrt3}
+
+\key{Универсальная форма:}
+\[
+ [A(x)]^4+b[A(x)]^2+c=0
+ \quad\xrightarrow{\ t=[A(x)]^2\ge0\ }\quad t^2+bt+c=0.
+\]
+
+\clearpage
+\topic{3. Иногда выгоднее заменить всю дробь}
+
+\example Рассмотрим
+\[
+ \frac{1}{(x-3)^4}-\frac{1}{(x-3)^2}-6=0.
+\]
+Здесь \(x\ne3\). Если заменить лишь \((x-3)^2\), дроби останутся. Удобнее взять
+\[
+ \boxed{t=\frac{1}{(x-3)^2}>0}.
+\]
+Тогда \(\dfrac{1}{(x-3)^4}=t^2\), поэтому
+\[
+ t^2-t-6=0\quad\Longrightarrow\quad t=3
+ \quad\bigl(t=-2\ \text{не подходит}\bigr).
+\]
+Обратная замена:
+\[
+ \frac{1}{(x-3)^2}=3
+ \quad\Longleftrightarrow\quad (x-3)^2=\frac13
+ \quad\Longleftrightarrow\quad x-3=\pm\frac{1}{\sqrt3}.
+\]
+\answer{3-\frac{\sqrt3}{3};\ 3+\frac{\sqrt3}{3}}
+
+\warn Поскольку дробь вида \(1/A(x)^2\) определена только при \(A(x)\ne0\), её значение \emph{строго положительно}: \(t>0\).
+
+\topic{4. Памятка: выбор замены}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+Исходная структура & Удобная замена и ограничение\\
+\midrule
+\(x^4+bx^2+c\) & \(t=x^2,\ t\ge0\)\\
+\([A(x)]^4+b[A(x)]^2+c\) & \(t=[A(x)]^2,\ t\ge0\)\\
+\(\dfrac1{[A(x)]^4}+\dfrac b{[A(x)]^2}+c\) & \(t=\dfrac1{[A(x)]^2},\ t>0;\ A(x)\ne0\)\\
+\bottomrule
+\end{tabularx}
+
+После решения уравнения для \(t\): \key{отбор по ограничению \(\to\) обратная замена \(\to\) проверка корней \(x\)}.
+
+\clearpage
+\topic{5. Ограничения: корни и знаменатели}
+
+Две обязательные проверки ещё \emph{до} преобразований:
+\[
+ \boxed{\sqrt{A(x)}\ \text{определён при}\ A(x)\ge0},
+ \qquad \boxed{\frac1{B(x)}\ \text{определена при}\ B(x)\ne0}.
+\]
+
+\example Решим уравнение
+\[
+ x^2-3x+\sqrt{x-3}=4+\sqrt{x-3}.
+\]
+Исходное ограничение: \(x-3\ge0\), то есть \(x\ge3\). Одинаковые радикалы можно сократить в двух частях равенства:
+\[
+ x^2-3x=4\quad\Longleftrightarrow\quad
+ x^2-3x-4=0\quad\Longleftrightarrow\quad(x-4)(x+1)=0.
+\]
+Получены кандидаты \(x=4\) и \(x=-1\). Первый удовлетворяет \(x\ge3\), второй --- нет.
+
+\answer{4}
+
+\key{Практический приём:} если сложное подкоренное выражение исчезло при сокращении одинаковых слагаемых, решите оставшееся уравнение, а затем \emph{подставьте кандидатов в условие под корнем}. Не всегда необходимо решать само неравенство с радикалом.
+
+\topic{6. Как готовить дроби к общему знаменателю}
+
+\key{Шаг 1.} Разложите каждый знаменатель на множители:
+\[
+\begin{aligned}
+ x^2-9&=(x-3)(x+3),\\
+ x^2-6x+9&=(x-3)^2,\\
+ 2x^2+6x&=2x(x+3).
+\end{aligned}
+\]
+\key{Шаг 2.} Запишите ограничения: \(x\ne -3,0,3\).
+
+\key{Шаг 3.} Возьмите все \emph{различные множители в наибольшей степени}:
+\[
+\boxed{\text{НОЗ}=2x(x-3)^2(x+3)}.
+\]
+\key{Шаг 4.} Найдите дополнительный множитель каждой дроби: недостающую часть до НОЗ.
+
+\clearpage
+\topic{7. Общий знаменатель: подробный пример}
+
+\example Рассмотрим уравнение
+\[
+ \frac3{x^2-9}-\frac1{x^2-6x+9}=\frac3{2x^2+6x}.
+\]
+\key{ОДЗ:} \(x\ne-3,0,3\). Перенесём все дроби влево. Для \(\text{НОЗ}=2x(x-3)^2(x+3)\) дополнительные множители таковы:
+\[
+\begin{array}{c|c}
+\text{Знаменатель} & \text{Дополнительный множитель}\\ \hline
+(x-3)(x+3) & 2x(x-3)\\
+(x-3)^2 & 2x(x+3)\\
+2x(x+3) & (x-3)^2
+\end{array}
+\]
+Домножая числитель и знаменатель каждой дроби, получаем
+\[
+ \frac{6x(x-3)-2x(x+3)-3(x-3)^2}
+ {2x(x-3)^2(x+3)}=0.
+\]
+При записанной ОДЗ знаменатель не равен нулю. Значит, достаточно приравнять к нулю числитель:
+\[
+\begin{aligned}
+ 6x(x-3)-2x(x+3)-3(x-3)^2&=0,\\
+ x^2-6x-27&=0,\\
+ (x-9)(x+3)&=0.
+\end{aligned}
+\]
+Кандидат \(x=-3\) запрещён исходным знаменателем; \(x=9\) допустим.
+\answer{9}
+
+\warn Умножение дробного уравнения на общий знаменатель сохраняет равносильность \emph{только при ранее учтённой ОДЗ}. Проверка корней обязательна.
+
+\clearpage
+\topic{8. Не забывайте разность кубов}
+
+\[
+\boxed{a^3-b^3=(a-b)(a^2+ab+b^2)}.
+\]
+Например, \(x^3-27=x^3-3^3=(x-3)(x^2+3x+9)\).
+
+\example Приведём к общему знаменателю:
+\[
+ \frac1{x-3}+\frac{10}{x^2+3x+9}=\frac{27}{x^3-27}.
+\]
+Для действительных \(x\): \(x^2+3x+9=(x+\frac32)^2+\frac{27}4>0\), поэтому ОДЗ: \(x\ne3\). Общий знаменатель: \((x-3)(x^2+3x+9)\). Получаем
+\[
+\begin{aligned}
+ (x^2+3x+9)+10(x-3)-27&=0,\\
+ x^2+13x-48&=0,\\
+ (x+16)(x-3)&=0.
+\end{aligned}
+\]
+Значение \(3\) исключаем по ОДЗ. \answer{-16}
+
+\clearpage
+\begin{center}
+{\LARGE\bfseries\color{darkaccent}Алгоритм: замена переменной}\par
+\vspace{3mm}
+{\small\color{softgray}От наблюдения повторяющейся части до записи допустимых корней.}
+\end{center}
+\vspace{5mm}
+\centering
+\begin{tikzpicture}[
+  >=Latex, line width=0.8pt, draw=textgray,
+  start/.style={ellipse,draw=accent,align=center,text width=53mm,minimum height=11mm,font=\small},
+  process/.style={rectangle,rounded corners=2mm,draw=accent,align=center,text width=61mm,minimum height=12mm,font=\small},
+  test/.style={diamond,aspect=2.4,draw=accent,align=center,text width=36mm,inner sep=0.8pt,font=\small},
+  flow/.style={-{Latex[length=2.3mm]},line width=0.85pt}
+]
+\node[start] (begin) at (0,0) {Повторяющийся\\ фрагмент найден};
+\node[process] (domain) at (0,-1.7) {Запишите ОДЗ\\ исходного уравнения};
+\node[process] (sub) at (0,-3.4) {Выберите удобное $t$ и его допустимый диапазон};
+\node[process] (solve) at (0,-5.1) {Решите уравнение относительно $t$};
+\node[process] (filter) at (0,-6.8) {Отберите корни $t$ по ограничению};
+\node[test] (valid) at (0,-9.1) {Все значения $t$ отброшены?};
+\node[start] (none) at (8.2,-9.1) {Действительных\\ решений нет};
+\node[process] (back) at (0,-11.5) {Для оставшихся $t$\\ сделайте обратную замену};
+\node[process] (check) at (0,-13.25) {Проверьте найденные $x$ по исходной ОДЗ};
+\node[start] (finish) at (0,-14.95) {Запишите все\\ допустимые корни};
+\draw[flow] (begin) -- (domain);
+\draw[flow] (domain) -- (sub);
+\draw[flow] (sub) -- (solve);
+\draw[flow] (solve) -- (filter);
+\draw[flow] (filter) -- (valid);
+\draw[flow] (valid.east) -- node[above,font=\small]{да} (none.west);
+\draw[flow] (valid.south) -- node[near start,left,font=\small]{нет} (back.north);
+\draw[flow] (back) -- (check);
+\draw[flow] (check) -- (finish);
+\end{tikzpicture}
+\par\vspace{5mm}
+\noindent\begin{minipage}{0.89\linewidth}
+\small\raggedright
+\textbf{Если корней $t$ несколько,} проверьте каждое значение. При обратной замене обязательно найдите все соответствующие значения $x$.
+\end{minipage}
+\clearpage
+
+\raggedright
+\topic{Тренировочный блок: Путь А}
+\textbf{10 заданий.} Решите уравнения. Записывайте ограничения до преобразований. При замене указывайте, чему равно \(t\), при работе с дробями --- ОДЗ и общий знаменатель. В ответ включайте все действительные корни по возрастанию.
+
+\begin{enumerate}[leftmargin=9mm,itemsep=11pt]
+\item \(x^4-5x^2+4=0.\)
+\item \(x^4-3x^2-4=0.\)
+\item \((x-1)^4-5(x-1)^2+4=0.\)
+\item \((x+2)^4-3(x+2)^2-4=0.\)
+\item \(\displaystyle\frac1{(x-4)^4}-\frac3{(x-4)^2}-4=0.\)
+\item \(\displaystyle\frac1{(x+1)^4}-\frac5{(x+1)^2}+4=0.\)
+\item \(x^2-3x+\sqrt{x-3}=4+\sqrt{x-3}.\)
+\item \(x^2-3x+\sqrt{x-5}=4+\sqrt{x-5}.\)
+\item \(\displaystyle\frac3{x^2-9}-\frac1{x^2-6x+9}=\frac3{2x^2+6x}.\)
+\item \(\displaystyle\frac1{x-3}+\frac{10}{x^2+3x+9}=\frac{27}{x^3-27}.\)
+\end{enumerate}
+
+\vfill
+\noindent\key{Самопроверка перед сдачей}\par
+\begin{itemize}
+\item Я выбрала замену, которая действительно упрощает выражение.
+\item Я проверила \(t\ge0\) или \(t>0\), когда это необходимо.
+\item Я не забыла второй знак при \(A(x)^2=c>0\).
+\item Я проверила подкоренные выражения и знаменатели.
+\item Я исключила запрещённые корни и записала ответ полностью.
+\end{itemize}
+\clearpage
+
+\topic{Ответы к тренировочному блоку}
+\renewcommand{\arraystretch}{1.42}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{13mm}X@{}}
+\toprule
+№ & Все действительные корни (по возрастанию)\\
+\midrule
+1 & \(-2;\ -1;\ 1;\ 2\)\\
+2 & \(-2;\ 2\)\\
+3 & \(-1;\ 0;\ 2;\ 3\)\\
+4 & \(-4;\ 0\)\\
+5 & \(\frac72;\ \frac92\)\\
+6 & \(-2;\ -\frac32;\ -\frac12;\ 0\)\\
+7 & \(4\)\\
+8 & \(\emptyset\) (действительных решений нет)\\
+9 & \(9\)\\
+10 & \(-16\)\\
+\bottomrule
+\end{tabularx}
+
+\vspace{4mm}
+\key{Опорные результаты для проверки}\par
+\begin{enumerate}[leftmargin=9mm,itemsep=3pt]
+\item \(t=x^2\): \(t=1\) или \(4\).
+\item \(t=x^2\): \(t=4\), значение \(-1\) отклоняется.
+\item \(t=(x-1)^2\): \(t=1\) или \(4\).
+\item \(t=(x+2)^2\): \(t=4\).
+\item \(t=1/(x-4)^2\): \(t=4\), \(x\ne4\).
+\item \(t=1/(x+1)^2\): \(t=1\) или \(4\), \(x\ne-1\).
+\item \(x^2-3x-4=(x-4)(x+1)=0\); условие \(x\ge3\).
+\item То же квадратное уравнение; условие \(x\ge5\).
+\item \(\text{НОЗ}=2x(x-3)^2(x+3)\), \(x\ne-3,0,3\). Кандидаты: \(-3,9\).
+\item \(x^3-27=(x-3)(x^2+3x+9)\), \(x\ne3\). Кандидаты: \(-16,3\).
+\end{enumerate}
+
+\end{document}
