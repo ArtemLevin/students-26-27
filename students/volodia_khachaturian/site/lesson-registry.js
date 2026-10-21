@@ -3,6 +3,128 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-21",
+  "ktpRefs": [],
+  "href": "21.10.26.html",
+  "title": "Баланс сил. Второй закон Ньютона в задачах",
+  "navTitle": "Баланс сил и закон Ньютона",
+  "navSubtitle": "лифт, нить, сопротивление воздуха, сила Архимеда",
+  "summary": "Составляли баланс сил и выбирали знаки проекций для движущегося лифта, груза на нити, падения с сопротивлением и аэростата. Нашли ускорение из второго закона Ньютона и время падения по формуле кинематики.",
+  "topics": [
+    "баланс сил",
+    "второй закон Ньютона в проекциях",
+    "лифт с ускорением вверх и вниз",
+    "сила натяжения нити",
+    "падение с сопротивлением воздуха",
+    "сила Архимеда и воздухоплавание",
+    "связь динамики с кинематикой"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "dyn_08",
+      "evidenceAnchor": "axis",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Второй закон Ньютона",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_12",
+      "evidenceAnchor": "axis",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Сила тяжести",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_13",
+      "evidenceAnchor": "elevator",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Реакция опоры",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_15",
+      "evidenceAnchor": "elevator",
+      "relation": "touched",
+      "masteryClaim": null,
+      "label": "Невесомость",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_09",
+      "evidenceAnchor": "fall",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Нулевая равнодействующая",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "mech_13",
+      "evidenceAnchor": "buoyancy",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Сила Архимеда",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "mech_15",
+      "evidenceAnchor": "buoyancy",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Воздухоплавание",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_18",
+      "evidenceAnchor": "combined",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Равноускоренное движение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_07",
+      "evidenceAnchor": "axis",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Схема действующих сил",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_13",
+      "evidenceAnchor": "combined",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Составная расчётная задача",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_25",
+      "evidenceAnchor": "axis",
+      "relation": "practiced",
+      "masteryClaim": null,
+      "label": "Преобразование уравнений",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_28",
+      "evidenceAnchor": "fall",
+      "relation": "touched",
+      "masteryClaim": null,
+      "label": "Проверка физического смысла",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "21.10.26.html",
+    "pdf": "../pdf_docs/21.10.26.pdf",
+    "lab": "21.10.26-lab.html"
+  }
+},
+
+{
   "date": "2026-10-17",
   "ktpRefs": [],
   "href": "17.10.26.html",
