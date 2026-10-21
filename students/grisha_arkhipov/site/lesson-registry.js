@@ -1,5 +1,80 @@
 export const LESSONS=[
 {
+  "date": "2026-10-21",
+  "ktpRefs": [
+    "ktp-003"
+  ],
+  "href": "21.10.26.html",
+  "title": "Движение по реке, средняя скорость, поезда",
+  "navTitle": "Движение по реке, средняя скорость, поезда",
+  "navSubtitle": "река · время и путь · средняя скорость · поезда",
+  "summary": "Движение по реке, стоянки и разновременный старт; отношения скоростей, средняя скорость при равных временах и путях, движение протяжённых тел. 10 задач для самостоятельной практики.",
+  "topics": [
+    "движение по реке",
+    "скорость течения",
+    "плот и разный старт",
+    "отношение скоростей",
+    "средняя скорость",
+    "движение протяжённых тел",
+    "относительная скорость",
+    "единицы измерения",
+    "табличный метод"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "text_08",
+      "evidenceAnchor": "river",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_09",
+      "evidenceAnchor": "average",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_04",
+      "evidenceAnchor": "trains",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "text_06",
+      "evidenceAnchor": "trains",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "text_17",
+      "evidenceAnchor": "method",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_19",
+      "evidenceAnchor": "method",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calc_07",
+      "evidenceAnchor": "ratio",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "expr_10",
+      "evidenceAnchor": "calculations",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "text_21",
+      "evidenceAnchor": "calculations",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+      "html": "21.10.26.html",
+      "pdf": "../pdf_docs/21.10.26.pdf",
+      "tex": "../tex_docs/21.10.26.tex",
+      "lab": "21.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-14",
   "ktpRefs": [
     "ktp-003"

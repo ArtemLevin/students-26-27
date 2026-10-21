@@ -4,7 +4,7 @@
   if (!data) return;
 
   data.studentName = 'Григорий Архипов';
-  data.updated = '14.10.2026';
+  data.updated = '21.10.2026';
 
   const oldIds = [
     'eq_21','eq_22','eq_23','eq_24','eq_25','eq_26','eq_27','eq_28',
@@ -92,7 +92,37 @@
     };
   });
 
+
+  // Занятие 21 октября продолжает КТП №003. Evidence обновляется без повышения уровней.
+  const oct21Anchors = {
+  "text_08": "river",
+  "text_09": "average",
+  "text_04": "trains",
+  "text_06": "trains",
+  "text_17": "method",
+  "text_19": "method",
+  "calc_07": "ratio",
+  "expr_10": "calculations",
+  "text_21": "calculations"
+};
+  Object.entries(oct21Anchors).forEach(([id, anchor]) => {
+    data.evidence[id] = {
+      text: 'Навык разбирался или отрабатывался 21.10.2026. Диагностический уровень автоматически не повышается.',
+      date: '21.10.2026',
+      lesson: '21.10.26.html#' + anchor,
+      ktp: 'ktp.html?lesson=ktp-003'
+    };
+  });
+
   data.materials = [
+    {
+      date: '21.10.2026',
+      title: 'Движение по реке, средняя скорость, поезда',
+      lesson: '21.10.26.html',
+      lab: '21.10.26-lab.html',
+      pdf: '../pdf_docs/21.10.26.pdf',
+      tex: '../tex_docs/21.10.26.tex'
+    },
     {
       date: '14.10.2026',
       title: 'Текстовые задачи на движение: табличный метод',

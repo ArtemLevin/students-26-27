@@ -19,7 +19,7 @@ test('Grigory is a valid Student Platform v2 package',()=>{
   assert.equal(result.planningMode,'fixed');
   assert.equal(result.ktpLessons,88);
   assert.equal(result.ktpRecords,88);
-  assert.equal(result.lessonMetadata,4);
+  assert.equal(result.lessonMetadata,5);
 });
 
 test('KTP state is repository-backed and first plan item links to the real lesson',()=>{
@@ -51,10 +51,11 @@ test('KTP module script is syntactically valid JavaScript',()=>{
 });
 
 test('lesson registry covers every real Grigory lesson page and KTP mapping',()=>{
-  assert.deepEqual(LESSONS.map(item=>item.date),['2026-10-14','2026-10-07','2026-09-30','2026-09-17']);
+  assert.deepEqual(LESSONS.map(item=>item.date),['2026-10-21','2026-10-14','2026-10-07','2026-09-30','2026-09-17']);
   assert.deepEqual(LESSONS[0].ktpRefs,['ktp-003']);
-  assert.deepEqual(LESSONS[1].ktpRefs,['ktp-002']);
-  assert.deepEqual(LESSONS[2].ktpRefs,['ktp-001']);
+  assert.deepEqual(LESSONS[1].ktpRefs,['ktp-003']);
+  assert.deepEqual(LESSONS[2].ktpRefs,['ktp-002']);
+  assert.deepEqual(LESSONS[3].ktpRefs,['ktp-001']);
   for(const lesson of LESSONS){
     assert.ok(fs.existsSync(path.join(site,lesson.href)),lesson.href);
   }
@@ -67,13 +68,15 @@ test('dashboard and competency evidence expose the KTP route',()=>{
   assert.match(index,/href="ktp\.html"/);
   assert.match(index,/ktp\.html\?lesson=ktp-003/);
   assert.match(index,/07\.10\.26\.html/);
-  assert.match(index,/competency-map-baseline\.js\?v=20261015-1/);
+  assert.match(index,/competency-map-baseline\.js\?v=20261021-1/);
   assert.match(baseline,/ktp:\s*'ktp\.html\?lesson=ktp-001'/);
   assert.match(baseline,/ktp:\s*'ktp\.html\?lesson=ktp-002'/);
-  assert.match(baseline,/data\.updated = '14\.10\.2026'/);
+  assert.match(baseline,/data\.updated = '21\.10\.2026'/);
   assert.match(baseline,/func_08:\s*'linear'/);
   assert.match(baseline,/func_10:\s*'hyperbola'/);
   assert.match(baseline,/ktp:\s*'ktp\.html\?lesson=ktp-003'/);
+  assert.match(index,/21\.10\.26\.html/);
+  assert.match(index,/21\.10\.26-lab\.html/);
   assert.match(index,/14\.10\.26\.html/);
   assert.match(map,/Открыть в КТП/);
 });
@@ -166,4 +169,45 @@ test('14.10 lesson renders native MathML throughout the lesson and retains inter
   const result=spawnSync(process.execPath,['--check',temp],{encoding:'utf8'});
   fs.rmSync(temp,{force:true});
   assert.equal(result.status,0,result.stderr||result.stdout);
+});
+
+
+test('21.10 lesson, laboratory and materials remain linked to reviewed evidence',()=>{
+  const html=read('21.10.26.html');
+  const lab=read('21.10.26-lab.html');
+  const metadata=readJson('data/lessons/2026-10-21.lesson.json');
+  const state=readJson('data/ktp-state.json');
+  assert.equal(metadata.ktpRefs[0],'ktp-003');
+  assert.equal(state.records['ktp-004'].status,'planned');
+  assert.ok(state.records['ktp-003'].lessonRefs.includes('2026-10-21'));
+  assert.deepEqual(metadata.materials,{
+    html:'21.10.26.html',
+    pdf:'../pdf_docs/21.10.26.pdf',
+    tex:'../tex_docs/21.10.26.tex',
+    lab:'21.10.26-lab.html'
+  });
+  for(const item of metadata.outcomes){
+    assert.match(html,new RegExp('id="'+item.evidenceAnchor+'"'));
+    assert.equal(item.masteryClaim,null);
+  }
+  for(const id of ['method','river','ratio','average','trains','calculations','training']){
+    assert.match(html,new RegExp('id="'+id+'"'));
+  }
+  for(const id of ['river','average','trains']){
+    assert.match(lab,new RegExp('id="tab-'+id+'"'));
+  }
+  assert.match(html,/href="21\.10\.26-lab\.html"/);
+  assert.match(html,/href="\.\.\/images\/21\.10\.26\.png"/);
+  const answers=html.match(/<details class="answers">([\s\S]*?)<\/details>/)?.[1];
+  assert.ok(answers,'Answers block is missing');
+  assert.equal((answers.match(/<li>/g)||[]).length,10);
+  for(const page of [html,lab]){
+    const script=page.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+    assert.ok(script,'inline script absent');
+    const temp=path.join(os.tmpdir(),'grisha-211026-'+process.pid+'.js');
+    fs.writeFileSync(temp,script);
+    const result=spawnSync(process.execPath,['--check',temp],{encoding:'utf8'});
+    fs.rmSync(temp,{force:true});
+    assert.equal(result.status,0,result.stderr||result.stdout);
+  }
 });
