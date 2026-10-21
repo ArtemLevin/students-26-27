@@ -1,0 +1,29 @@
+name: Grigory October 21 release browser QA
+on:
+  pull_request:
+    paths:
+      - 'students/grisha_arkhipov/site/**'
+      - '.github/workflows/grisha-oct21-release-review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inspect Chromium availability
+        run: command -v google-chrome || command -v chromium
+      - name: Run Grigory release browser QA
+        run: node students/grisha_arkhipov/site/tests/browser-20261021.mjs
+      - name: Upload audit screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grigory-21-oct-browser-review
+          path: grisha-review-artifacts/*.png
+          if-no-files-found: warn
