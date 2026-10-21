@@ -104,8 +104,8 @@ try{
     for(const page of ['21.10.26.html','21.10.26-lab.html','index.html']){
       for(const dark of [false,true]){
         await navigate(page,width,height,dark);
-        if((width===375||width===1440)&&!dark)await screenshot(page.split('.')[0]+'-'+width+'-light');
-        if(width===390&&dark)await screenshot(page.split('.')[0]+'-390-dark');
+        if((width===375||width===1440)&&!dark)await screenshot(page.replace('.html','').replaceAll('.','-')+'-'+width+'-light');
+        if(width===390&&dark)await screenshot(page.replace('.html','').replaceAll('.','-')+'-390-dark');
       }
     }
   }
@@ -134,12 +134,15 @@ try{
   assert.equal(await js("document.getElementById('atime').textContent"),'70');
   assert.equal(await js("document.getElementById('adistance').textContent"),'67,2');
   assert.equal(await js("(()=>{document.getElementById('acontrast').click();return document.getElementById('adistance').textContent})()"),'57,6');
+  const avgEdges=await js("(()=>{document.getElementById('av1').value='30';document.getElementById('av2').value='90';document.getElementById('av1').dispatchEvent(new Event('input',{bubbles:true}));return {t:document.getElementById('atime').textContent,d:document.getElementById('adistance').textContent}})()");
+  assert.deepEqual(avgEdges,{t:'60',d:'45'},'Equal times and equal distances must differ at extrema');
   assert.equal(await js("(()=>{document.getElementById('areset').click();return document.getElementById('atime').textContent})()"),'70');
   await navigate('21.10.26-lab.html#trains',390,844,true);
   assert.equal(await js("document.getElementById('trains').hidden"),false);
   assert.equal(await js("document.getElementById('tpole').textContent"),'30');
   assert.equal(await js("document.getElementById('tbridge').textContent"),'78');
   assert.equal(await js("(()=>{document.getElementById('tcontrast').click();return document.getElementById('tbridge').textContent})()"),'75');
+  assert.equal(await js("(()=>{document.getElementById('tb').value='0';document.getElementById('tb').dispatchEvent(new Event('input',{bubbles:true}));return document.getElementById('tbridge').textContent})()"),'30','Zero-length bridge equals pole case');
   assert.equal(await js("(()=>{document.getElementById('treset').click();return document.getElementById('tpole').textContent})()"),'30');
   assert.equal(await js("(()=>{document.querySelector('#tab-river').focus();document.querySelector('.tabs').dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));return document.getElementById('average').hidden})()"),false,'Keyboard tab navigation');
   await call('Emulation.setEmulatedMedia',{media:'print'});
