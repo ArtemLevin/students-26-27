@@ -33,6 +33,7 @@ math[display="inline"]{font-family:"Cambria Math","STIX Two Math",serif;vertical
  function sym(value){return M('mi',value)}
  function op(value){return M('mo',value)}
  function txt(value){return M('mtext',value)}
+ function space(){const n=M('mspace');n.setAttribute('width','0.2em');return n}
  function group(...elements){return M('mrow',elements)}
  function frac(a,b){return M('mfrac',[group(...a),group(...b)])}
  function mathNode(children,display='inline'){const root=M('math',Array.isArray(children)?children:[children]);root.setAttribute('display',display);return root}
@@ -42,7 +43,7 @@ math[display="inline"]{font-family:"Cambria Math","STIX Two Math",serif;vertical
    const parts=[];let offset=0,match;
    while((match=pattern.exec(source))!==null){
      if(match.index>offset)parts.push(document.createTextNode(source.slice(offset,match.index)));
-     parts.push(mathNode([num(match[1]),txt(' '+match[2])]));
+     parts.push(mathNode([num(match[1]),space(),txt(match[2])]));
      offset=pattern.lastIndex;
    }
    if(offset<source.length)parts.push(document.createTextNode(source.slice(offset)));
@@ -54,9 +55,9 @@ math[display="inline"]{font-family:"Cambria Math","STIX Two Math",serif;vertical
    else el(id).textContent=String(value);
  }
  function bar(id,value,total){el(id).style.width=(Math.max(0,Math.min(1,value/total))*100)+'%'}
- function river(){var x=val('rv'),u=val('rc'),down=24/(x+u),up=24/(x-u);out('rvv',x);out('rcv',u);out('rdown',fmt(x+u));out('rup',fmt(x-u));out('rtimeDown',fmt(down));out('rtimeUp',fmt(up));bar('rbarDown',down,Math.max(down,up));bar('rbarUp',up,Math.max(down,up));putMath('rformula',[frac([num(24)],[num(x),op('−'),num(u)]),op('−'),frac([num(24)],[num(x),op('+'),num(u)]),op('='),num(fmt(up-down)),txt(' ч')]);out('rinsight','Течение ускоряет движение по реке и замедляет движение против течения. Длина каждой полосы пропорциональна времени на участке; большая полоса соответствует большему времени.')}
+ function river(){var x=val('rv'),u=val('rc'),down=24/(x+u),up=24/(x-u);out('rvv',x);out('rcv',u);out('rdown',fmt(x+u));out('rup',fmt(x-u));out('rtimeDown',fmt(down));out('rtimeUp',fmt(up));bar('rbarDown',down,Math.max(down,up));bar('rbarUp',up,Math.max(down,up));putMath('rformula',[frac([num(24)],[num(x),op('−'),num(u)]),op('−'),frac([num(24)],[num(x),op('+'),num(u)]),op('='),num(fmt(up-down)),space(),txt('ч')]);out('rinsight','Течение ускоряет движение по реке и замедляет движение против течения. Длина каждой полосы пропорциональна времени на участке; большая полоса соответствует большему времени.')}
  function average(){var a=val('av1'),b=val('av2'),t=(a+b)/2,d=2*a*b/(a+b);out('av1v',a);out('av2v',b);out('atime',fmt(t));out('adistance',fmt(d));bar('atimebar',t,90);bar('adistancebar',d,90);out('ainsight',a===b?'Скорости одинаковы: средняя скорость не зависит от способа деления пути.':'При равных путях медленный участок требует больше времени: средняя скорость '+fmt(d)+' км/ч меньше '+fmt(t)+' км/ч.')}
- function trains(){var v=val('tv'),l=val('tl'),b=val('tb'),pole=l*3.6/v,bridge=(l+b)*3.6/v;out('tvv',v);out('tlv',l);out('tbv',b);out('tpole',fmt(pole));out('tbridge',fmt(bridge));bar('tpolebar',l,l+b);bar('tbridgebar',l+b,l+b);putMath('tformula',[sym('S'),op('='),num(l),txt(' м'),op(';'),sym('S'),op('='),num(l+b),txt(' м'),op(';'),sym('t'),op('='),frac([sym('S')],[frac([sym('v')],[num('3,6')])])]);out('tinsight',b===0?'Мост имеет нулевую длину: оба случая совпадают.':'Мост добавляет '+b+' м к пути, поэтому полное прохождение длится на '+fmt(bridge-pole)+' с дольше. Длина полосы пропорциональна относительному пути.')}
+ function trains(){var v=val('tv'),l=val('tl'),b=val('tb'),pole=l*3.6/v,bridge=(l+b)*3.6/v;out('tvv',v);out('tlv',l);out('tbv',b);out('tpole',fmt(pole));out('tbridge',fmt(bridge));bar('tpolebar',l,l+b);bar('tbridgebar',l+b,l+b);putMath('tformula',[sym('S'),op('='),num(l),space(),txt('м'),op(';'),sym('S'),op('='),num(l+b),space(),txt('м'),op(';'),sym('t'),op('='),frac([sym('S')],[frac([sym('v')],[num('3,6')])])]);out('tinsight',b===0?'Мост имеет нулевую длину: оба случая совпадают.':'Мост добавляет '+b+' м к пути, поэтому полное прохождение длится на '+fmt(bridge-pole)+' с дольше. Длина полосы пропорциональна относительному пути.')}
  var cfg={river:{controls:['rv','rc'],render:river},average:{controls:['av1','av2'],render:average},trains:{controls:['tv','tl','tb'],render:trains}};
  for(const mode in cfg){cfg[mode].controls.forEach(function(id){el(id).addEventListener('input',cfg[mode].render)})}
  function preset(data){Object.entries(data).forEach(function(pair){el(pair[0]).value=pair[1]});river();average();trains()}
