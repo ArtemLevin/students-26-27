@@ -3,6 +3,86 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-21",
+  "ktpRefs": [],
+  "href": "21.10.26.html",
+  "title": "Зависимости величин, формулы и графики",
+  "navTitle": "Зависимости величин и графики",
+  "navSubtitle": "зависимость от величины · формула · таблица · график",
+  "summary": "Зависимости величин: как перевести условие в формулу, составить таблицу, построить график и найти значения. Кирилл Зиновьев, 21 октября 2026.",
+  "topics": [
+    "зависимая и независимая величины",
+    "путь, скорость и время",
+    "масса и объём",
+    "таблицы значений функций",
+    "координаты и построение графика"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "functions_1",
+      "evidenceAnchor": "dependency",
+      "relation": "practiced",
+      "label": "Понимать зависимость одной величины от другой",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "models_2",
+      "evidenceAnchor": "motion",
+      "relation": "practiced",
+      "label": "Выражать одну величину через другую",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "models_3",
+      "evidenceAnchor": "mass",
+      "relation": "touched",
+      "label": "Переводить текстовое условие в формулу",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_3",
+      "evidenceAnchor": "table",
+      "relation": "practiced",
+      "label": "Заполнять таблицу значений",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "expr_2",
+      "evidenceAnchor": "table",
+      "relation": "practiced",
+      "label": "Находить значение выражения подстановкой",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_4",
+      "evidenceAnchor": "graph",
+      "relation": "touched",
+      "label": "Читать координаты точки",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_5",
+      "evidenceAnchor": "graph",
+      "relation": "touched",
+      "label": "Отмечать точку по координатам",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_6",
+      "evidenceAnchor": "graph",
+      "relation": "touched",
+      "label": "Читать значение функции по графику",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "21.10.26.html",
+    "pdf": "../pdf_docs/21.10.26.pdf",
+    "tex": "../tex_docs/21.10.26.tex",
+    "lab": "21.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-17",
   "ktpRefs": [],
   "href": "17.10.26.html",

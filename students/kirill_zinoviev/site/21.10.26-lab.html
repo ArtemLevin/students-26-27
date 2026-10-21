@@ -1,0 +1,99 @@
+<!doctype html><html lang="ru" data-theme="light"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивная лаборатория зависимостей: движение, время от пути, масса от объёма и парабола. Кирилл Зиновьев.">
+<title>Лаборатория зависимостей — Кирилл Зиновьев</title>
+<style>
+:root{color-scheme:light;--bg:#edf0eb;--paper:#fffefa;--ink:#1d322c;--muted:#516a60;--line:#b8c8be;--accent:#227b6d;--soft:#e2f0e9;--focus:#155db0;--warn:#975d40;--warnbg:#fbf1e8}
+html[data-theme=dark]{color-scheme:dark;--bg:#131d19;--paper:#202e27;--ink:#eff8f0;--muted:#b7cdc0;--line:#506c5a;--accent:#90d8b2;--soft:#2a4738;--focus:#a7ccff;--warn:#f5ba8e;--warnbg:#433329}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,Segoe UI,sans-serif}button,input,select{font:inherit}button{cursor:pointer}a{color:var(--accent)}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.wrap{width:min(1200px,calc(100% - 32px));margin:auto}.skip{position:absolute;left:10px;top:-100px;padding:10px;background:var(--paper)}.skip:focus{top:5px}
+.kicker{font:700 .78rem/1.4 ui-monospace,monospace;color:var(--accent);letter-spacing:.08em;text-transform:uppercase}.head{border-bottom:1px solid var(--line);padding:30px 0 34px}h1,h2,h3{font-family:Georgia,serif;line-height:1.15}h1{font-size:clamp(2.3rem,6vw,4.8rem);margin:12px 0}h2{font-size:clamp(1.3rem,3vw,2.1rem)}.head p{max-width:67ch;color:var(--muted)}
+.nav,.tabs,.actions{display:flex;flex-wrap:wrap;gap:9px}.nav a,.nav button,.tabs button,.actions button,.predict button{min-height:44px;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:9px 15px;text-decoration:none}
+.nav a:hover,.nav button:hover,.tabs button:hover,.actions button:hover,.predict button:hover{border-color:var(--accent);background:var(--soft)}
+.nav{margin:23px 0 0}.tabs{margin:27px 0 16px}.tabs button[aria-pressed=true]{border-color:var(--accent);background:var(--accent);color:var(--paper)}html[data-theme=dark] .tabs button[aria-pressed=true]{color:#142319}
+.workspace{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(270px,.7fr);gap:17px;align-items:start}.visual,.panel,.exercise{background:var(--paper);border:1px solid var(--line);padding:clamp(16px,3vw,28px);min-width:0}
+.formula{font:clamp(1.6rem,3.5vw,2.7rem) Georgia,serif;margin:12px 0 8px}.hint{color:var(--muted);margin:8px 0 16px}
+.plot{width:100%;height:auto;max-height:420px;touch-action:pan-y;display:block;cursor:crosshair}
+.plot .grid{stroke:var(--line);stroke-width:1}.plot .axis{stroke:var(--ink);stroke-width:2}.plot .curve{fill:none;stroke:var(--accent);stroke-width:3}.plot .point{fill:var(--accent);stroke:var(--paper);stroke-width:3}.plot .trace{stroke:var(--accent);stroke-width:1.6;stroke-dasharray:5 5}.plot text{font:14px system-ui,sans-serif;fill:var(--ink)}
+.readout{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 0}.readout>div{flex:1;min-width:110px;padding:14px;border-top:2px solid var(--accent);background:var(--soft)}.readout strong{display:block;font:1.6rem Georgia,serif}.readout span{font-size:.83rem;color:var(--muted)}
+.panel label{display:block;font-weight:700}.panel input[type=range]{display:block;width:100%;accent-color:var(--accent);margin:25px 0}.ticks{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted)}.actions{margin-top:21px}.actions button{flex:1}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{border-bottom:1px solid var(--line);padding:8px;text-align:center}th{color:var(--accent)}.table-wrap{overflow-x:auto;margin:20px 0 0}.active{background:var(--soft);font-weight:750}
+.comparison,.predict{margin:20px 0;padding-top:16px;border-top:1px solid var(--line)}.comparison p,.predict p{color:var(--muted)}.predict select{min-height:45px;width:100%;padding:7px;background:var(--paper);color:var(--ink);border:1px solid var(--line)}.predict button{margin-top:8px}
+.message{border-left:3px solid var(--accent);background:var(--soft);padding:10px 14px;color:var(--ink)!important}.message.warning{background:var(--warnbg);border-color:var(--warn)}
+.footer{border-top:1px solid var(--line);padding:30px 0;margin-top:45px;color:var(--muted);font-size:.88rem}
+@media(max-width:860px){.workspace{grid-template-columns:1fr}}@media(max-width:510px){.readout>div{min-width:95px}.head{padding:20px 0 26px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{body{background:#fff;color:#111}.tabs,.actions,.predict,.nav button{display:none}.workspace{display:block}.visual,.panel{border:0;padding:10px 0}}
+</style></head>
+<body><a class="skip" href="#main">К содержанию</a><div class="wrap">
+<header class="head"><span class="kicker">21 октября 2026 · 7 класс · исследовательская лаборатория</span>
+<h1>Измените аргумент. Увидьте результат.</h1><p>Путь, время, масса и значения функции на графике — четыре сюжета, один принцип. Выберите аргумент ползунком или нажмите на график, затем сравните результат с прогнозом.</p>
+<nav class="nav"><a href="21.10.26.html#graph">← Вернуться к уроку</a><a href="index.html">Кабинет Кирилла</a><button type="button" id="theme">Тёмная тема</button></nav></header>
+<main id="main">
+<div class="tabs" role="group" aria-label="Сценарии"><button type="button" data-mode="motion" aria-pressed="true">Путь от времени</button><button type="button" data-mode="inverse" aria-pressed="false">Время от пути</button><button type="button" data-mode="mass" aria-pressed="false">Масса от объёма</button><button type="button" data-mode="parabola" aria-pressed="false">Парабола</button></div>
+<div class="workspace">
+<section class="visual" aria-labelledby="chart-title"><span class="kicker">График ↔ значение</span><h2 id="chart-title">Зависимость величин</h2><p class="formula" id="formula">s(t) = 80t</p>
+<p class="hint" id="hint">Переместите ползунок: время определяет пройденный путь.</p>
+<svg id="plot" class="plot" viewBox="0 0 720 430" role="img" aria-labelledby="plot-title plot-desc" tabindex="0">
+<title id="plot-title">Интерактивный график зависимости</title><desc id="plot-desc">Текущее значение независимой переменной показано точкой. Для изменения воспользуйтесь ползунком либо нажмите на график.</desc></svg>
+<div class="readout" aria-live="polite"><div><strong id="xValue">0</strong><span id="xName">t, ч</span></div><div><strong id="yValue">0</strong><span id="yName">s, км</span></div><div><strong id="delta">—</strong><span>изменение относительно снимка</span></div></div>
+<div class="table-wrap"><table aria-label="Контрольные значения функции"><thead><tr><th>Аргумент</th><th>Значение</th><th></th></tr></thead><tbody id="tableBody"></tbody></table></div>
+</section>
+<section class="panel" aria-labelledby="control-title"><span class="kicker">Эксперимент</span><h2 id="control-title">Управление</h2><label for="xRange" id="rangeLabel">Время t, ч</label><input type="range" min="0" max="3" step="0.25" value="1" id="xRange"><div class="ticks"><span id="rangeMin">0</span><span id="rangeMax">3</span></div>
+<div class="actions"><button type="button" id="snapshot">Сохранить снимок</button><button type="button" id="reset">Сбросить</button></div>
+<div class="comparison" id="comparison"><h3>Сравнение</h3><p id="compareText">Зафиксируйте исходную точку, затем переместите аргумент.</p></div>
+<div class="predict"><h3>Предскажите результат</h3><p id="predictText">Что станет с результатом, если немного увеличить аргумент?</p>
+<label for="prediction">Ваш прогноз</label><select id="prediction"><option value="">Выберите ответ</option><option value="more">Увеличится</option><option value="less">Уменьшится</option><option value="equal">Не изменится</option></select><button type="button" id="check">Проверить прогноз</button><p id="predictionResult" role="status" aria-live="polite"></p></div>
+</section></div>
+<section class="exercise" aria-labelledby="exercise-title" style="margin-top:18px"><h2 id="exercise-title">Исследуйте самостоятельно</h2><p>При скорости 80 км/ч найдите положение точки для 2 часов. Затем переключитесь на время от пути и проверьте, сколько часов займёт путь 48 км. В режиме параболы найдите среди табличных значений наименьшее.</p><p><strong>Наблюдение:</strong> при линейной зависимости рост аргумента приводит к росту результата, а для параболы значение сначала уменьшается, а затем снова увеличивается. На отрезке [−2; 2] минимум находится при x = 1,5.</p></section>
+</main><footer class="footer">Артём Александрович Лёвин · эксклюзивно для Кирилла Зиновьева · 21.10.2026</footer></div>
+<script>
+(()=>{'use strict';
+const cases={
+motion:{title:'Путь от времени',formula:'s(t) = 80t',explain:'При постоянной скорости 80 км/ч путь равен 80t. Время выбираем, путь вычисляем.',x:'t, ч',y:'s, км',min:0,max:3,step:.25,start:1,yMin:0,yMax:240,f:x=>80*x,format:2},
+inverse:{title:'Время от пути',formula:'t(s) = s / 12',explain:'При скорости 12 км/ч время вычисляем, разделив путь на 12.',x:'s, км',y:'t, ч',min:0,max:60,step:1,start:24,yMin:0,yMax:5,f:x=>x/12,format:2},
+mass:{title:'Масса от объёма',formula:'m(V) = 0,18V',explain:'При плотности пробки 0,18 г/см³ масса пропорциональна объёму.',x:'V, см³',y:'m, г',min:0,max:300,step:10,start:100,yMin:0,yMax:54,f:x=>.18*x,format:2},
+parabola:{title:'Часть параболы',formula:'y = x(x − 3)',explain:'Подставляйте x в обе скобки. График строим только от −2 до 2.',x:'x',y:'y',min:-2,max:2,step:.5,start:-1.5,yMin:-3,yMax:11,f:x=>x*(x-3),format:2}
+};
+const $=id=>document.getElementById(id);
+const root=document.documentElement,btns=[...document.querySelectorAll('[data-mode]')],plot=$('plot'),range=$('xRange'),prediction=$('prediction');
+const themeKey='kirill-dashboard-theme-v1';
+function read(k){try{return localStorage.getItem(k)}catch{return null}}
+function save(k,v){try{localStorage.setItem(k,v)}catch{}}
+function showTheme(){root.dataset.theme=read(themeKey)==='dark'?'dark':'light';$('theme').textContent=root.dataset.theme==='dark'?'Светлая тема':'Тёмная тема'}
+showTheme();$('theme').addEventListener('click',()=>{save(themeKey,root.dataset.theme==='dark'?'light':'dark');showTheme()});
+let mode='motion',x=1,snapshot=null;
+const fmt=(value,digits=2)=>Number(Number(value).toFixed(digits)).toLocaleString('ru-RU',{maximumFractionDigits:digits});
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function snap(v,c){return Number((Math.round((v-c.min)/c.step)*c.step+c.min).toFixed(5))}
+function selectMode(id){if(!cases[id])return;mode=id;const c=cases[mode];x=c.start;snapshot=null;prediction.value='';$('predictionResult').textContent='';range.min=c.min;range.max=c.max;range.step=c.step;range.value=x;$('rangeMin').textContent=fmt(c.min);$('rangeMax').textContent=fmt(c.max);$('rangeLabel').textContent='Аргумент: '+c.x;$('chart-title').textContent=c.title;$('formula').textContent=c.formula;$('hint').textContent=c.explain;$('xName').textContent=c.x;$('yName').textContent=c.y;btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));try{history.replaceState(null,'',location.pathname+'?mode='+mode)}catch{}render()}
+btns.forEach(b=>b.addEventListener('click',()=>selectMode(b.dataset.mode)));
+range.addEventListener('input',()=>{x=Number(range.value);$('predictionResult').textContent='';render()});
+function render(){
+const c=cases[mode],y=c.f(x),sx=v=>62+(v-c.min)/(c.max-c.min)*625,sy=v=>354-(v-c.yMin)/(c.yMax-c.yMin)*300;
+$('xValue').textContent=fmt(x);$('yValue').textContent=fmt(y);$('delta').textContent=snapshot?fmt(y-snapshot.y):'—';
+let grid='',ticks='';
+for(let i=0;i<=5;i++){const v=c.min+(c.max-c.min)*i/5,X=sx(v);grid+='<line class="grid" x1="'+X+'" y1="46" x2="'+X+'" y2="354"/>';ticks+='<text text-anchor="middle" x="'+X+'" y="384">'+fmt(v,1)+'</text>'}
+for(let i=0;i<=5;i++){const v=c.yMin+(c.yMax-c.yMin)*i/5,Y=sy(v);grid+='<line class="grid" x1="62" y1="'+Y+'" x2="687" y2="'+Y+'"/>';ticks+='<text text-anchor="end" x="51" y="'+(Y+5)+'">'+fmt(v,1)+'</text>'}
+const N=120,pts=[];for(let i=0;i<=N;i++){const v=c.min+(c.max-c.min)*i/N;pts.push(sx(v).toFixed(2)+','+sy(c.f(v)).toFixed(2))}
+const X=sx(x),Y=sy(y);
+let prev='';if(snapshot){const p=snapshot;prev='<circle cx="'+sx(p.x)+'" cy="'+sy(p.y)+'" r="7" fill="none" stroke="var(--warn)" stroke-width="3"/>'}
+plot.innerHTML='<title id="plot-title">'+c.title+'</title><desc id="plot-desc">'+c.explain+'</desc>'+grid+
+'<line class="axis" x1="62" y1="354" x2="695" y2="354"/><line class="axis" x1="62" y1="354" x2="62" y2="35"/>'+ticks+
+'<text x="670" y="411" text-anchor="end">'+c.x+'</text><text x="69" y="30">'+c.y+'</text>'+
+'<polyline class="curve" points="'+pts.join(' ')+'"/><line class="trace" x1="'+X+'" y1="354" x2="'+X+'" y2="'+Y+'"/><line class="trace" x1="62" y1="'+Y+'" x2="'+X+'" y2="'+Y+'"/>'+prev+'<circle class="point" cx="'+X+'" cy="'+Y+'" r="8"/>';
+const samples=mode==='parabola'?[-2,-1.5,-1,-.5,0,.5,1,1.5,2]:Array.from({length:6},(_,i)=>c.min+(c.max-c.min)*i/5);
+$('tableBody').innerHTML=samples.map(v=>'<tr'+(Math.abs(v-x)<.00001?' class="active"':'')+'><td>'+fmt(v)+'</td><td>'+fmt(c.f(v))+'</td><td>'+(Math.abs(v-x)<.00001?'← текущая':'')+'</td></tr>').join('');
+$('compareText').textContent=snapshot?'Было: '+c.x+' = '+fmt(snapshot.x)+', '+c.y+' = '+fmt(snapshot.y)+'. Сейчас: '+c.x+' = '+fmt(x)+', '+c.y+' = '+fmt(y)+'. Разница: '+fmt(y-snapshot.y)+'.':'Зафиксируйте исходную точку, затем переместите аргумент.';
+$('predictText').textContent=x>=c.max?'На правой границе увеличивать аргумент нельзя. Переместите точку левее.':'Что произойдёт с результатом, если увеличить аргумент на '+fmt(c.step)+'?';
+$('check').disabled=x>=c.max;
+}
+const graphClick=e=>{const bounds=plot.getBoundingClientRect(),px=(e.clientX-bounds.left)*720/bounds.width,c=cases[mode];x=clamp(snap(c.min+(px-62)/625*(c.max-c.min),c),c.min,c.max);range.value=x;$('predictionResult').textContent='';render()};
+plot.addEventListener('click',graphClick);
+plot.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight'].includes(e.key))return;e.preventDefault();const c=cases[mode];x=clamp(Number((x+(e.key==='ArrowRight'?1:-1)*c.step).toFixed(5)),c.min,c.max);range.value=x;render()});
+$('snapshot').addEventListener('click',()=>{snapshot={x,y:cases[mode].f(x)};render()});
+$('reset').addEventListener('click',()=>selectMode(mode));
+$('check').addEventListener('click',()=>{const c=cases[mode],pick=prediction.value,output=$('predictionResult');if(!pick){output.textContent='Выберите один из трёх вариантов.';return}if(x>=c.max){output.textContent='Вы на границе допустимого промежутка.';return}
+const next=clamp(Number((x+c.step).toFixed(5)),c.min,c.max),dy=c.f(next)-c.f(x),right=Math.abs(dy)<1e-9?'equal':dy>0?'more':'less',labels={more:'увеличится',less:'уменьшится',equal:'не изменится'};output.className=pick===right?'message':'message warning';output.textContent=(pick===right?'Верно. ':'Проверьте ещё раз. ')+'При '+c.x+' = '+fmt(x)+' значение '+fmt(c.f(x))+', при '+fmt(next)+' значение '+fmt(c.f(next))+'. Результат '+labels[right]+'.';});
+const urlMode=new URLSearchParams(location.search).get('mode');selectMode(cases[urlMode]?urlMode:'motion');
+})();
+</script></body></html>

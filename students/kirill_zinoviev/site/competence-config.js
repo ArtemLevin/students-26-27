@@ -22,6 +22,14 @@ const lessons=[
 {date:'03.10.26',href:'03.10.26.html#check',ids:['models_5']}
 ];
 const evidenceOnly=[
+{date:'21.10.26',href:'21.10.26.html#dependency',ids:['functions_1']},
+{date:'21.10.26',href:'21.10.26.html#motion',ids:['models_2']},
+{date:'21.10.26',href:'21.10.26.html#mass',ids:['models_3']},
+{date:'21.10.26',href:'21.10.26.html#table',ids:['functions_3']},
+{date:'21.10.26',href:'21.10.26.html#table',ids:['expr_2']},
+{date:'21.10.26',href:'21.10.26.html#graph',ids:['functions_4']},
+{date:'21.10.26',href:'21.10.26.html#graph',ids:['functions_5']},
+{date:'21.10.26',href:'21.10.26.html#graph',ids:['functions_6']},
 {date:'07.10.26',href:'07.10.26.html#root',ids:['equations_1','equations_2']},
 {date:'07.10.26',href:'07.10.26.html#terms',ids:['expr_5','expr_6']},
 {date:'07.10.26',href:'07.10.26.html#brackets',ids:['expr_8']},
