@@ -68,8 +68,10 @@ export const LESSONS=[
     }
   ],
   "materials": {
-    "html": "21.10.26.html",
-    "lab": "21.10.26-lab.html"
+      "html": "21.10.26.html",
+      "pdf": "../pdf_docs/21.10.26.pdf",
+      "tex": "../tex_docs/21.10.26.tex",
+      "lab": "21.10.26-lab.html"
   }
 },
 {
