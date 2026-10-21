@@ -185,7 +185,16 @@ try{
   await snapshot('lesson-18-desktop-dark');
 
   // Занятие 21 октября: новый материал, 10 заданий, лаборатория и сохранение прогресса.
+  for(const [w,h] of sizes){
+    await navigate('21.10.26.html',w,h,false);
+    await navigate('21.10.26.html',w,h,true);
+    await navigate('21.10.26-lab.html',w,h,false);
+    await navigate('21.10.26-lab.html',w,h,true);
+  }
   await navigate('21.10.26.html',390,844,false);
+  const mathml2110=await run("(()=>{const expressions=[...document.querySelectorAll('main math')];return {count:expressions.length,semantic:expressions.every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML'&&m.querySelector('semantics > annotation[encoding=\\\"application/x-tex\\\"]')),superscripts:document.querySelectorAll('main math msup').length,subscripts:document.querySelectorAll('main math msub').length}})()");
+  assert.equal(mathml2110.count,4,'21 October core formulas in semantic MathML');
+  assert.equal(mathml2110.semantic,true,'21 October semantic MathML annotations');
   assert.equal(await run("document.querySelectorAll('[data-task]').length"),10,'21 October training count');
   assert.equal(await run("document.getElementById('stepCount').textContent"),'Шаг 1 из 6','21 October stepper initialization');
   assert.equal(await run("(()=>{document.getElementById('nextStep').click();return document.getElementById('stepCount').textContent})()"),'Шаг 2 из 6','21 October stepper advancement');
@@ -204,6 +213,22 @@ try{
   await navigate('21.10.26-lab.html#horizontal',1440,900,true);
   assert.equal(await run("document.getElementById('scenario').value"),'horizontal','21 October lab deep link');
   await snapshot('lesson-21-lab-desktop-dark');
+  const guess=await run("(()=>{const a=document.getElementById('aGuess'),b=document.getElementById('bGuess'),form=document.getElementById('parameterForm'),feedback=document.getElementById('parameterFeedback');a.value='2';b.value='-3';form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));return {message:feedback.textContent,kind:feedback.dataset.kind}})()");
+  assert.equal(guess.kind,'wrong','wrong graph parameters are rejected');
+  const correct=await run("(()=>{document.getElementById('bGuess').value='5';document.getElementById('parameterForm').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));return document.getElementById('parameterFeedback').dataset.kind})()");
+  assert.equal(correct,'correct','correct graph parameters accepted');
+  const extremes=await run("(()=>{const s=document.getElementById('scenario'),slider=document.getElementById('xValue'),arr=[];for(const mode of ['vertical','horizontal']){s.value=mode;s.dispatchEvent(new Event('change',{bubbles:true}));for(const endpoint of ['min','max']){slider.value=slider[endpoint];slider.dispatchEvent(new Event('input',{bubbles:true}));const dot=document.querySelector('#markers .plot-target');const label=document.getElementById('valueOutput').textContent;arr.push({mode,endpoint,dot:!!dot,y:Number(dot?.getAttribute('cy')),label,accessible:slider.getAttribute('aria-valuetext')});}}return arr})()");
+  assert.equal(extremes.length,4,'both graph boundaries');
+  for(const item of extremes){assert.equal(item.dot,true,'visible selected point '+JSON.stringify(item));assert.ok(item.y>=24&&item.y<=435,'selected point stays in chart area '+JSON.stringify(item));assert.ok(item.accessible.includes('f(x)'),'graph slider accessible value '+JSON.stringify(item));}
+  await run("(()=>{const s=document.getElementById('scenario');s.value='horizontal';s.dispatchEvent(new Event('change',{bubbles:true}));document.getElementById('xValue').value='15';document.getElementById('xValue').dispatchEvent(new Event('input',{bubbles:true}))})()");
+  assert.equal(await run("document.getElementById('valueOutput').textContent"),'f(15) = 4,32','21 October slider recomputes function value');
+  await run("document.getElementById('reset').click()");
+  assert.equal(await run("document.getElementById('valueOutput').textContent"),'f(11) = 4','lab reset restores preset');
+  await call('Emulation.setEmulatedMedia',{media:'print'});
+  assert.equal(await run("getComputedStyle(document.querySelector('.parameter-form')).display"),'none','lab form hidden in print');
+  await call('Emulation.setEmulatedMedia',{media:'screen'});
+  await navigate('21.10.26-lab.html',390,844,true);
+  await snapshot('lesson-21-lab-mobile-dark');
   assert.deepEqual(jsErrors,[],'Browser JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Browser network failures');
   console.log('Mark review browser PASS: seven viewports x two pages x two themes, stepper, keyboard, persistence, print, links, anchors');
