@@ -113,6 +113,12 @@ try{
   const maths=await js("(()=>{const all=[...document.querySelectorAll('.formula math')];return {count:all.length,native:all.every(x=>x.namespaceURI==='http://www.w3.org/1998/Math/MathML'),fractions:document.querySelectorAll('.formula mfrac').length,source:all.every(x=>x.querySelector('annotation[encoding=\"application/x-tex\"]'))}})()");
   assert.ok(maths.count>=12&&maths.fractions>=12&&maths.native&&maths.source,
     'Semantic MathML regression '+JSON.stringify(maths));
+  const allMath=await js("(()=>{const ns='http://www.w3.org/1998/Math/MathML',nodes=[...document.querySelectorAll('main math')],tasks=[...document.querySelectorAll('.practice>li')];return {count:nodes.length,native:nodes.every(m=>m.namespaceURI===ns),annotated:nodes.every(m=>m.querySelector('annotation[encoding=\\\"application/x-tex\\\"]')),tasks:tasks.map(task=>task.querySelectorAll('math').length),answers:document.querySelectorAll('.answers math').length,table:document.querySelectorAll('table math').length,legacy:document.querySelectorAll('main sup, main sub').length}})()");
+  assert.ok(allMath.count>=130&&allMath.native&&allMath.annotated&&allMath.table>=9&&allMath.answers>=10&&allMath.tasks.every(n=>n>=1)&&allMath.legacy===0,
+    'Lesson-wide MathML coverage '+JSON.stringify(allMath));
+  const residuals=await js("(()=>{const rx=/(?:\\d+(?:[,.]\\d+)?\\s*(?:км\\/ч|км|метр|час|минут|секунд)|[a-zA-Z]\\s*[=\\/]\\s*[a-zA-Z0-9]|[¹²³₁₂₃])/;const problems=[];document.querySelectorAll('.block p,.block td,.block th,.practice>li,.answers li').forEach(host=>{const walk=document.createTreeWalker(host,NodeFilter.SHOW_TEXT);let node;while(node=walk.nextNode()){if(node.parentElement.closest('math,annotation,script,style'))continue;if(rx.test(node.nodeValue))problems.push(node.nodeValue.trim().slice(0,80));}});return problems})()");
+  assert.deepEqual(residuals,[],'Unwrapped lesson mathematics');
+
   assert.equal(await js("document.querySelectorAll('.practice>li').length"),10);
   const links=await js("(()=>[...document.querySelectorAll('a[href]')].filter(x=>x.getAttribute('href').startsWith('#')).every(x=>document.getElementById(x.getAttribute('href').slice(1))))()");
   assert.equal(links,true,'Invalid lesson anchors');
@@ -122,6 +128,8 @@ try{
   assert.equal(await js("document.getElementById('river').hidden"),false);
   assert.equal(await js("document.getElementById('rtimeDown').textContent"),'3');
   assert.equal(await js("document.getElementById('rtimeUp').textContent"),'6');
+  assert.equal(await js("(()=>{const ns='http://www.w3.org/1998/Math/MathML',nums=[...document.querySelectorAll('.metric b math,.range output math')];return nums.length>=6&&nums.every(m=>m.namespaceURI===ns)})()"),true,'Dynamic numeric displays must use MathML');
+  assert.equal(await js("document.querySelectorAll('#rformula math mfrac').length"),2,'River equation uses MathML fractions');
   assert.equal(await js("document.getElementById('rbarUp').style.width"),'100%');
   const extremes=await js("(()=>{document.querySelector('#rv').value='6';document.querySelector('#rc').value='5';document.querySelector('#rc').dispatchEvent(new Event('input',{bubbles:true}));return {time:document.querySelector('#rtimeUp').textContent,up:document.querySelector('#rbarUp').style.width,down:parseFloat(document.querySelector('#rbarDown').style.width)}})()");
   assert.equal(extremes.time,'24');
@@ -132,6 +140,7 @@ try{
   await navigate('21.10.26-lab.html#average');
   assert.equal(await js("document.getElementById('average').hidden"),false,'hash deep link to average');
   assert.equal(await js("document.getElementById('atime').textContent"),'70');
+  assert.equal(await js("document.querySelectorAll('#average .f math mfrac').length"),1,'Average-speed formula uses MathML');
   assert.equal(await js("document.getElementById('adistance').textContent"),'67,2');
   assert.equal(await js("(()=>{document.getElementById('acontrast').click();return document.getElementById('adistance').textContent})()"),'57,6');
   const avgEdges=await js("(()=>{document.getElementById('av1').value='30';document.getElementById('av2').value='90';document.getElementById('av1').dispatchEvent(new Event('input',{bubbles:true}));return {t:document.getElementById('atime').textContent,d:document.getElementById('adistance').textContent}})()");
@@ -141,6 +150,7 @@ try{
   assert.equal(await js("document.getElementById('trains').hidden"),false);
   assert.equal(await js("document.getElementById('tpole').textContent"),'30');
   assert.equal(await js("document.getElementById('tbridge').textContent"),'78');
+  assert.equal(await js("document.querySelectorAll('#tformula math mfrac').length>=2"),true,'Train dynamic formula uses nested MathML fractions');
   assert.equal(await js("(()=>{document.getElementById('tcontrast').click();return document.getElementById('tbridge').textContent})()"),'75');
   assert.equal(await js("(()=>{document.getElementById('tb').value='0';document.getElementById('tb').dispatchEvent(new Event('input',{bubbles:true}));return document.getElementById('tbridge').textContent})()"),'30','Zero-length bridge equals pole case');
   assert.equal(await js("(()=>{document.getElementById('treset').click();return document.getElementById('tpole').textContent})()"),'30');
