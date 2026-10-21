@@ -15,12 +15,13 @@ const sidecar=JSON.parse(fs.readFileSync(path.join(site,'data/practice-publicati
 const intent=JSON.parse(fs.readFileSync(path.join(site,'data/publication-intents/2026-10-19.json'),'utf8'));
 
 test('19 October is unique, canonical, published and keeps 17 October',()=>{
- assert.equal(LESSONS[0].date,'2026-10-19');
+ const lesson=LESSONS.find(l=>l.date==='2026-10-19');
+ assert.ok(lesson,'The 19 October lesson remains in the archive');
  assert.equal(LESSONS.filter(l=>l.date==='2026-10-19').length,1);
  assert.ok(LESSONS.some(l=>l.date==='2026-10-17'));
- assert.equal(LESSONS[0].href,metadata.materials.html);
- assert.deepEqual(LESSONS[0].topics,metadata.topics);
- assert.deepEqual(LESSONS[0].materials,metadata.materials);
+ assert.equal(lesson.href,metadata.materials.html);
+ assert.deepEqual(lesson.topics,metadata.topics);
+ assert.deepEqual(lesson.materials,metadata.materials);
  assert.deepEqual([...LESSONS].map(l=>l.date),[...LESSONS].map(l=>l.date).sort().reverse());
 });
 
