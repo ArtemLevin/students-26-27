@@ -134,7 +134,9 @@ try{
   await call('Emulation.setEmulatedMedia',{media:'screen'});
   await navigate('index.html',390,844,false);
   assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Логарифмические функции и уравнения')"),true,'latest lesson on home');
-  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"18.10.26.html\"]')!==null"),true,'new lesson appears in journal');
+  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"18.10.26.html\"]')!==null"),true,'previous lesson remains in journal');
+  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"21.10.26.html\"]')!==null"),true,'latest lesson appears in journal');
+  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"21.10.26-lab.html\"]')!==null"),true,'home links directly to log laboratory');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('04.10.2026')"),true,'history retained');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('09.10.2026')"),true,'previous lesson retained');
   await snapshot('home-mobile-light');
@@ -202,6 +204,9 @@ try{
   await snapshot('lesson-21-mobile-light');
   await navigate('21.10.26.html',1440,900,true);
   await snapshot('lesson-21-desktop-dark');
+  await call('Emulation.setEmulatedMedia',{media:'print'});
+  assert.equal(await run("getComputedStyle(document.querySelector('#training')).breakInside"),'auto','long lesson chapters may split across printed pages');
+  await call('Emulation.setEmulatedMedia',{media:'screen'});
   const materials2110=await run("Promise.all(['../pdf_docs/21.10.26.pdf','../tex_docs/21.10.26.tex','../images/21.10.26.png'].map(async u=>({u,status:(await fetch(u)).status})))");
   assert.ok(materials2110.every(x=>x.status===200),'21 October materials: '+JSON.stringify(materials2110));
   await navigate('21.10.26-lab.html',390,844,false);
