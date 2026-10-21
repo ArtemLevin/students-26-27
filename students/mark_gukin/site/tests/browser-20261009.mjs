@@ -134,7 +134,9 @@ try{
   await call('Emulation.setEmulatedMedia',{media:'screen'});
   await navigate('index.html',390,844,false);
   assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Логарифмические функции и уравнения')"),true,'latest lesson on home');
-  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"18.10.26.html\"]')!==null"),true,'new lesson appears in journal');
+  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"18.10.26.html\"]')!==null"),true,'previous lesson remains in journal');
+  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"21.10.26.html\"]')!==null"),true,'latest lesson appears in journal');
+  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"21.10.26-lab.html\"]')!==null"),true,'home links directly to log laboratory');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('04.10.2026')"),true,'history retained');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('09.10.2026')"),true,'previous lesson retained');
   await snapshot('home-mobile-light');
@@ -185,7 +187,22 @@ try{
   await snapshot('lesson-18-desktop-dark');
 
   // Занятие 21 октября: новый материал, 10 заданий, лаборатория и сохранение прогресса.
+  for(const [w,h] of sizes){
+    await navigate('21.10.26.html',w,h,false);
+    await navigate('21.10.26.html',w,h,true);
+    await navigate('21.10.26-lab.html',w,h,false);
+    await navigate('21.10.26-lab.html',w,h,true);
+  }
   await navigate('21.10.26.html',390,844,false);
+  const mathml2110=await run("(()=>{const expressions=[...document.querySelectorAll('main math')];return {count:expressions.length,semantic:expressions.every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML'&&m.querySelector('semantics > annotation[encoding=\\\"application/x-tex\\\"]')),superscripts:document.querySelectorAll('main math msup').length,subscripts:document.querySelectorAll('main math msub').length}})()");
+  assert.ok(mathml2110.count>=85,'21 October all mathematical statements in semantic MathML: '+JSON.stringify(mathml2110));
+  assert.ok(mathml2110.superscripts>=5,'MathML powers are structural');
+  assert.ok(mathml2110.subscripts>=12,'MathML logarithm bases are structural');
+  assert.equal(mathml2110.semantic,true,'21 October semantic MathML annotations');
+  assert.equal(await run("document.querySelectorAll('main sup,main sub,main .frac').length"),0,'21 October has no superscript, subscript or CSS fractions left');
+  assert.equal(await run("document.querySelectorAll('#training math').length>=34"),true,'every training prompt and answer has MathML');
+  assert.equal(await run("document.querySelectorAll('#stepMath math').length"),1,'stepper displays a real MathML element');
+  assert.equal(await run("document.querySelector('#stepMath math annotation[encoding=\"application/x-tex\"]')!==null"),true,'stepper supplies LaTeX annotation');
   assert.equal(await run("document.querySelectorAll('[data-task]').length"),10,'21 October training count');
   assert.equal(await run("document.getElementById('stepCount').textContent"),'Шаг 1 из 6','21 October stepper initialization');
   assert.equal(await run("(()=>{document.getElementById('nextStep').click();return document.getElementById('stepCount').textContent})()"),'Шаг 2 из 6','21 October stepper advancement');
@@ -193,17 +210,40 @@ try{
   await snapshot('lesson-21-mobile-light');
   await navigate('21.10.26.html',1440,900,true);
   await snapshot('lesson-21-desktop-dark');
+  await call('Emulation.setEmulatedMedia',{media:'print'});
+  assert.equal(await run("getComputedStyle(document.querySelector('#training')).breakInside"),'auto','long lesson chapters may split across printed pages');
+  await call('Emulation.setEmulatedMedia',{media:'screen'});
   const materials2110=await run("Promise.all(['../pdf_docs/21.10.26.pdf','../tex_docs/21.10.26.tex','../images/21.10.26.png'].map(async u=>({u,status:(await fetch(u)).status})))");
   assert.ok(materials2110.every(x=>x.status===200),'21 October materials: '+JSON.stringify(materials2110));
   await navigate('21.10.26-lab.html',390,844,false);
-  assert.equal(await run("document.getElementById('valueOutput').textContent"),'f(32) = 2','21 October original graph');
+  assert.equal(await run("document.getElementById('valueOutput').getAttribute('aria-label')"),'f(32) = 2','21 October original graph');
+  assert.equal(await run("document.querySelectorAll('#formula math,#valueOutput math,#domain math,#xOutput math').length"),4,'lab formula, value, domain and x are semantic MathML');
+  assert.equal(await run("document.querySelector('#valueOutput math').namespaceURI"),'http://www.w3.org/1998/Math/MathML','lab live MathML namespace');
   assert.equal(await run("document.getElementById('curve').getAttribute('d').length>1000"),true,'21 October graph path');
-  const case2=await run("(()=>{const s=document.getElementById('scenario');s.value='horizontal';s.dispatchEvent(new Event('change',{bubbles:true}));return {formula:document.getElementById('formula').textContent,value:document.getElementById('valueOutput').textContent}})()");
-  assert.deepEqual(case2,{formula:'f(x) = log₂(x + 5)',value:'f(11) = 4'},'21 October second graph');
+  const case2=await run("(()=>{const s=document.getElementById('scenario');s.value='horizontal';s.dispatchEvent(new Event('change',{bubbles:true}));return {formula:document.querySelector('#formula math annotation').textContent,value:document.getElementById('valueOutput').getAttribute('aria-label'),structured:document.querySelector('#formula math msub')!==null}})()");
+  assert.deepEqual(case2,{formula:'f(x) = \\log_{2}(x + 5)',value:'f(11) = 4',structured:true},'21 October second graph semantic MathML');
   await snapshot('lesson-21-lab-mobile-light');
   await navigate('21.10.26-lab.html#horizontal',1440,900,true);
   assert.equal(await run("document.getElementById('scenario').value"),'horizontal','21 October lab deep link');
   await snapshot('lesson-21-lab-desktop-dark');
+  const guess=await run("(()=>{const a=document.getElementById('aGuess'),b=document.getElementById('bGuess'),form=document.getElementById('parameterForm'),feedback=document.getElementById('parameterFeedback');a.value='2';b.value='-3';form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));return {message:feedback.textContent,kind:feedback.dataset.kind}})()");
+  assert.equal(guess.kind,'wrong','wrong graph parameters are rejected');
+  const correct=await run("(()=>{document.getElementById('bGuess').value='5';document.getElementById('parameterForm').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));return document.getElementById('parameterFeedback').dataset.kind})()");
+  assert.equal(correct,'correct','correct graph parameters accepted');
+  assert.equal(await run("document.querySelector('#parameterFeedback math')!==null"),true,'feedback contains semantic MathML formula');
+  assert.equal(await run("document.querySelector('#parameterFeedback math annotation')!==null"),true,'feedback has LaTeX annotation');
+  const extremes=await run("(()=>{const s=document.getElementById('scenario'),slider=document.getElementById('xValue'),arr=[];for(const mode of ['vertical','horizontal']){s.value=mode;s.dispatchEvent(new Event('change',{bubbles:true}));for(const endpoint of ['min','max']){slider.value=slider[endpoint];slider.dispatchEvent(new Event('input',{bubbles:true}));const dot=document.querySelector('#markers .plot-target');const label=document.getElementById('valueOutput').getAttribute('aria-label');arr.push({mode,endpoint,dot:!!dot,y:Number(dot?.getAttribute('cy')),label,accessible:slider.getAttribute('aria-valuetext')});}}return arr})()");
+  assert.equal(extremes.length,4,'both graph boundaries');
+  for(const item of extremes){assert.equal(item.dot,true,'visible selected point '+JSON.stringify(item));assert.ok(item.y>=24&&item.y<=435,'selected point stays in chart area '+JSON.stringify(item));assert.ok(item.accessible.includes('f(x)'),'graph slider accessible value '+JSON.stringify(item));}
+  await run("(()=>{const s=document.getElementById('scenario');s.value='horizontal';s.dispatchEvent(new Event('change',{bubbles:true}));document.getElementById('xValue').value='15';document.getElementById('xValue').dispatchEvent(new Event('input',{bubbles:true}))})()");
+  assert.equal(await run("document.getElementById('valueOutput').getAttribute('aria-label')"),'f(15) = 4,32','21 October slider recomputes function value');
+  await run("document.getElementById('reset').click()");
+  assert.equal(await run("document.getElementById('valueOutput').getAttribute('aria-label')"),'f(11) = 4','lab reset restores preset');
+  await call('Emulation.setEmulatedMedia',{media:'print'});
+  assert.equal(await run("getComputedStyle(document.querySelector('.parameter-form')).display"),'none','lab form hidden in print');
+  await call('Emulation.setEmulatedMedia',{media:'screen'});
+  await navigate('21.10.26-lab.html',390,844,true);
+  await snapshot('lesson-21-lab-mobile-dark');
   assert.deepEqual(jsErrors,[],'Browser JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Browser network failures');
   console.log('Mark review browser PASS: seven viewports x two pages x two themes, stepper, keyboard, persistence, print, links, anchors');

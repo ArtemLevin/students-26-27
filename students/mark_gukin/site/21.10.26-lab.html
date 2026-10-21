@@ -16,7 +16,7 @@ html[data-theme="dark"]{color-scheme:dark;--paper:#12211c;--surface:#1b3027;--in
 .skip{position:absolute;top:-6rem;left:1rem;z-index:30;background:var(--ink);color:var(--paper);padding:.7rem}.skip:focus{top:1rem}
 .wrap{width:min(1120px,calc(100% - 2.2rem));margin:auto}.top{border-bottom:1px solid var(--line);display:flex;gap:1rem;align-items:center;justify-content:space-between;padding:1rem 0;flex-wrap:wrap}
 .brand{font-weight:700;text-decoration:none}.brand small{display:block;font-size:.78rem;font-weight:400;color:var(--muted)}.tools{display:flex;flex-wrap:wrap;gap:.55rem}
-.action{display:inline-flex;align-items:center;justify-content:center;min-height:42px;border:1px solid var(--line);padding:.42rem .85rem;background:transparent;text-decoration:none;border-radius:3px;color:var(--ink);font-size:.86rem;font-weight:650}
+.action{display:inline-flex;align-items:center;justify-content:center;min-height:44px;border:1px solid var(--line);padding:.42rem .85rem;background:transparent;text-decoration:none;border-radius:3px;color:var(--ink);font-size:.86rem;font-weight:650}
 .action:hover{border-color:var(--forest);color:var(--forest)}.action.primary{border-color:var(--forest);background:var(--forest);color:var(--paper)}
 html[data-theme=dark] .action.primary{color:#0d1d16}.eye{font-size:.75rem;font-family:ui-monospace,Consolas,monospace;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--forest)}
 .hero{padding:clamp(3rem,7vw,6.8rem) 0 2.3rem;display:grid;grid-template-columns:minmax(0,1.65fr) minmax(190px,.45fr);gap:1.5rem;align-items:end}
@@ -80,6 +80,21 @@ h1{max-width:18ch}
 .results strong{display:block;font:500 1.35rem Georgia,serif}
 .results p{color:var(--muted);margin:.5rem 0}
 .helper{font-size:.85rem;color:var(--muted)}
+.meta math,.panel math,.grid-two math{font-family:"Cambria Math","STIX Two Math",serif;font-size:1em;vertical-align:middle}
+.panel output math{font-size:.95em}
+.panel strong math{font-size:1.15em}
+#nodesMath{min-height:1.5em}
+@media(max-width:420px){.panel output math{font-size:.84em}}
+.parameter-form{border-top:1px solid var(--line);margin-top:1.7rem;padding-top:1.25rem}
+.parameter-form h3{font-size:1.2rem;margin:.1rem 0 .5rem}
+.parameter-form label{display:block;font-size:.85rem;margin:.85rem 0 .2rem}
+.parameter-form input[type=number]{min-height:44px;width:100%;max-width:13rem;display:block;background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:.4rem .7rem;font:inherit;border-radius:2px}
+.parameter-form button{margin-top:1rem}
+.parameter-form [role=status]{min-height:3.2em;font-size:.9rem;color:var(--ink);margin:.8rem 0 0}
+.parameter-form [role=status][data-kind=correct]{color:var(--forest);font-weight:650}
+.parameter-form [role=status][data-kind=wrong]{color:var(--danger)}
+.panel select:focus-visible,.panel input:focus-visible{outline:3px solid var(--forest);outline-offset:3px}
+@media print{.tools,.panel select,.panel input,.panel button,.panel label,.parameter-form{display:none!important}.lab-layout{display:block}.graph-frame{break-inside:avoid}.chapter{break-inside:avoid}body{background:white;color:black}.panel{border:0}.panel .readout{display:block}}
 @media(max-width:840px){.lab-layout{grid-template-columns:1fr}.panel{border-left:0;border-top:2px solid var(--forest);padding:1rem 0 0}}
 </style></head>
 <body data-atlas data-atlas-adapter="universal" data-atlas-composition="editorial" data-atlas-accent="forest" data-atlas-density="balanced" data-atlas-motion="calm">
@@ -90,7 +105,7 @@ h1{max-width:18ch}
 <main id="content">
 <div class="hero"><div><p class="eye">Цифровая лаборатория / метод двух точек</p><h1>Два логарифмических графика</h1><p class="lead">Переключайте примеры из занятия и перемещайте значение аргумента. Точка на графике, значение функции и область определения изменяются согласованно.</p></div>
 <aside class="hero-side"><strong>02</strong><p>Готовых сценария</p></aside></div>
-<div class="meta"><span>f(x) = b + logₐ x</span><span>f(x) = logₐ(x + b)</span><span>Примеры из чек-листа</span></div>
+<div class="meta"><span><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mi>b</mi><mo>+</mo><mi mathvariant="normal">log</mi><mo>ₐ</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">f(x) = b + \log_{a} x</annotation></semantics></math></span><span><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mi mathvariant="normal">log</mi><mo>ₐ</mo><mo>(</mo><mi>x</mi><mo>+</mo><mi>b</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">f(x) = \log_{a}(x + b)</annotation></semantics></math></span><span>Примеры из чек-листа</span></div>
 <div class="lab-layout">
 <div class="graph-frame">
 <svg id="plot" viewBox="0 0 900 490" role="img" aria-labelledby="chartTitle chartDesc">
@@ -107,22 +122,33 @@ h1{max-width:18ch}
 <option value="vertical">A(1; −3), B(4; −1)</option>
 <option value="horizontal">A(−4; 0), B(−1; 2)</option>
 </select>
+<p id="nodesMath" class="helper" aria-live="off"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>A</mi><mo>(</mo><mn>1</mn><mo>;</mo><mo>−</mo><mn>3</mn><mo>)</mo><mo>,</mo><mi>B</mi><mo>(</mo><mn>4</mn><mo>;</mo><mo>−</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">A(1; -3), B(4; -1)</annotation></semantics></math></p>
 <label for="xValue">Исследуемый аргумент x</label>
 <input id="xValue" type="range" min="0.125" max="32" step="0.125" value="32" aria-describedby="domain">
-<output id="xOutput" for="xValue">32</output>
-<p id="domain" class="helper">Допустимая область: x &gt; 0.</p>
+<output id="xOutput" for="xValue" aria-label="x = 32"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mn>32</mn></mrow><annotation encoding="application/x-tex">32</annotation></semantics></math></output>
+<p id="domain" class="helper">Область определения: <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>x</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x &gt; 0</annotation></semantics></math>.</p>
 <label class="check" for="showPoints"><input id="showPoints" type="checkbox" checked> Показывать исходные точки</label>
 <div class="readout" aria-live="polite" aria-atomic="true">
-<small>Формула функции</small><strong id="formula" class="math">f(x) = −3 + log₂ x</strong>
-<small style="margin-top:1rem">Текущее значение</small><output id="valueOutput" for="xValue">f(32) = 2</output>
+<small>Формула функции</small><strong id="formula" class="math"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mo>−</mo><mn>3</mn><mo>+</mo><msub><mi mathvariant="normal">log</mi><mn>2</mn></msub><mi>x</mi></mrow><annotation encoding="application/x-tex">f(x) = -3 + \log_{2} x</annotation></semantics></math></strong>
+<small style="margin-top:1rem">Текущее значение</small><output id="valueOutput" for="xValue" aria-label="f(32) = 2"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>f</mi><mo>(</mo><mn>32</mn><mo>)</mo><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">f(32) = 2</annotation></semantics></math></output>
 </div>
-<div class="results"><strong>Попробуйте сами</strong><p>Измените аргумент и сравните положение точки с числом справа. Затем откройте второй пример и проследите смещение границы области определения.</p><button type="button" class="action" id="reset">Исходные значения</button></div>
+<div class="results"><strong>Исследуйте график</strong><p>Меняйте x и сопоставляйте значение f(x) с положением точки. Переключите пример: посмотрите, почему меняется граница ОДЗ.</p><button type="button" class="action" id="reset">Сбросить x выбранного примера</button></div>
+<form id="parameterForm" class="parameter-form" novalidate>
+<h3>Восстановите формулу</h3>
+<p class="helper">Используйте две узловые точки из выбранного примера. Определите a и b, затем проверьте ответ без просмотра решения.</p>
+<label for="aGuess">Основание a</label>
+<input id="aGuess" type="number" inputmode="decimal" step="any" required autocomplete="off">
+<label for="bGuess">Параметр b</label>
+<input id="bGuess" type="number" inputmode="decimal" step="any" required autocomplete="off">
+<button type="submit" class="action primary">Проверить параметры</button>
+<p id="parameterFeedback" role="status" aria-live="polite" aria-atomic="true"></p>
+</form>
 </aside>
 </div>
 <section class="chapter">
 <div class="chapter-head"><div><p class="eye">Наблюдение / материал урока</p><h2>Что следует из двух точек?</h2></div><p>Система из двух уравнений определяет два неизвестных параметра. Для каждого примера восстановленная формула уже известна из пособия.</p></div>
-<div class="grid-two"><div><h3>Вертикальный сдвиг</h3><p>По <span class="math">A(1;−3)</span> находим <span class="math">b = −3</span>; по <span class="math">B(4;−1)</span> получаем <span class="math">a² = 4</span> и <span class="math">a = 2</span>.</p><p><b>Проверочная точка:</b> <span class="math">f(32) = 2</span>.</p></div>
-<div><h3>Сдвиг внутри аргумента</h3><p>По <span class="math">A(−4;0)</span> находим <span class="math">b = 5</span>; по <span class="math">B(−1;2)</span> получаем <span class="math">a² = 4</span> и <span class="math">a = 2</span>.</p><p><b>Проверочная точка:</b> <span class="math">f(11) = 4</span>.</p></div></div>
+<div class="grid-two"><div><h3>Вертикальный сдвиг</h3><p>По <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>A</mi><mo>(</mo><mn>1</mn><mo>;</mo><mo>−</mo><mn>3</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">A(1;-3)</annotation></semantics></math> находим <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>b</mi><mo>=</mo><mo>−</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">b = -3</annotation></semantics></math>; по <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>B</mi><mo>(</mo><mn>4</mn><mo>;</mo><mo>−</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">B(4;-1)</annotation></semantics></math> получаем <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><msup><mi>a</mi><mrow><mn>2</mn></mrow></msup><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">a^{2} = 4</annotation></semantics></math> и <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>a</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">a = 2</annotation></semantics></math>.</p><p><b>Проверочная точка:</b> <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>f</mi><mo>(</mo><mn>32</mn><mo>)</mo><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">f(32) = 2</annotation></semantics></math>.</p></div>
+<div><h3>Сдвиг внутри аргумента</h3><p>По <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>A</mi><mo>(</mo><mo>−</mo><mn>4</mn><mo>;</mo><mn>0</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">A(-4;0)</annotation></semantics></math> находим <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>b</mi><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">b = 5</annotation></semantics></math>; по <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>B</mi><mo>(</mo><mo>−</mo><mn>1</mn><mo>;</mo><mn>2</mn><mo>)</mo></mrow><annotation encoding="application/x-tex">B(-1;2)</annotation></semantics></math> получаем <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><msup><mi>a</mi><mrow><mn>2</mn></mrow></msup><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">a^{2} = 4</annotation></semantics></math> и <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>a</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">a = 2</annotation></semantics></math>.</p><p><b>Проверочная точка:</b> <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mrow><mi>f</mi><mo>(</mo><mn>11</mn><mo>)</mo><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">f(11) = 4</annotation></semantics></math>.</p></div></div>
 </section></main>
 <footer class="footer"><span>Марк Гукин · профильная математика</span><span>Лёвин Артём Александрович · эксклюзивно для Марка Гукина</span></footer>
 </div>
@@ -130,7 +156,22 @@ h1{max-width:18ch}
 (function(){
 "use strict";
 var $=function(id){return document.getElementById(id)},svgNS="http://www.w3.org/2000/svg",theme=$("theme"),scenario=$("scenario"),slider=$("xValue"),points=$("showPoints");
-var presets={vertical:{a:2,b:-3,mode:"vertical",min:.125,max:32,step:.125,x:32,domain:"x > 0",formula:"f(x) = −3 + log₂ x",bounds:[0,34,-5.5,5.5],ref:[[1,-3],[4,-1]]},horizontal:{a:2,b:5,mode:"horizontal",min:-4.75,max:22,step:.25,x:11,domain:"x > −5",formula:"f(x) = log₂(x + 5)",bounds:[-5,24,-5.5,6.5],ref:[[-4,0],[-1,2]]}};
+var presets={vertical:{a:2,b:-3,mode:"vertical",min:.125,max:32,step:.125,x:32,domain:"x > 0",formula:"f(x) = −3 + log₂ x",bounds:[0,34,-7.5,5.5],ref:[[1,-3],[4,-1]]},horizontal:{a:2,b:5,mode:"horizontal",min:-4.75,max:22,step:.25,x:11,domain:"x > −5",formula:"f(x) = log₂(x + 5)",bounds:[-5,24,-5.5,6.5],ref:[[-4,0],[-1,2]]}};
+var mathPreset={
+ vertical:{formula:"<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><semantics><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mo>−</mo><mn>3</mn><mo>+</mo><msub><mi mathvariant=\"normal\">log</mi><mn>2</mn></msub><mi>x</mi></mrow><annotation encoding=\"application/x-tex\">f(x) = -3 + \\log_{2} x</annotation></semantics></math>",nodes:"<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><semantics><mrow><mi>A</mi><mo>(</mo><mn>1</mn><mo>;</mo><mo>−</mo><mn>3</mn><mo>)</mo><mo>,</mo><mi>B</mi><mo>(</mo><mn>4</mn><mo>;</mo><mo>−</mo><mn>1</mn><mo>)</mo></mrow><annotation encoding=\"application/x-tex\">A(1; -3), B(4; -1)</annotation></semantics></math>"},
+ horizontal:{formula:"<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><semantics><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><msub><mi mathvariant=\"normal\">log</mi><mn>2</mn></msub><mo>(</mo><mi>x</mi><mo>+</mo><mn>5</mn><mo>)</mo></mrow><annotation encoding=\"application/x-tex\">f(x) = \\log_{2}(x + 5)</annotation></semantics></math>",nodes:"<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"inline\"><semantics><mrow><mi>A</mi><mo>(</mo><mo>−</mo><mn>4</mn><mo>;</mo><mn>0</mn><mo>)</mo><mo>,</mo><mi>B</mi><mo>(</mo><mo>−</mo><mn>1</mn><mo>;</mo><mn>2</mn><mo>)</mo></mrow><annotation encoding=\"application/x-tex\">A(-4; 0), B(-1; 2)</annotation></semantics></math>"}
+};
+var mns="http://www.w3.org/1998/Math/MathML";
+function makeLiveMath(tokens,tex){
+  var math=document.createElementNS(mns,"math"),sem=document.createElementNS(mns,"semantics"),row=document.createElementNS(mns,"mrow"),ann=document.createElementNS(mns,"annotation");
+  math.setAttribute("display","inline");math.appendChild(sem);sem.appendChild(row);
+  tokens.forEach(function(token){var e=document.createElementNS(mns,token[0]);e.textContent=token[1];row.appendChild(e);});
+  ann.setAttribute("encoding","application/x-tex");ann.textContent=tex;sem.appendChild(ann);return math;
+}
+function replaceMath(el,m){el.replaceChildren(m)}
+function liveResult(x,y){return makeLiveMath([["mi","f"],["mo","("],["mn",x],["mo",")"],["mo","="],["mn",y]],"f("+x+")="+y)}
+function liveNumber(x){return makeLiveMath([["mn",x]],x)}
+function liveDomain(p){return makeLiveMath([["mi","x"],["mo",">"],["mn",p.mode==="vertical"?"0":"−5"]],"x>"+(p.mode==="vertical"?"0":"-5"))}
 var storage={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 function setTheme(v){document.documentElement.dataset.theme=v==="dark"?"dark":"light";theme.setAttribute("aria-pressed",String(v==="dark"))}
 setTheme(storage.get("mark-gukin-theme")||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));
@@ -144,26 +185,59 @@ function xy(p,x,y){var b=p.bounds;return [P.left+(x-b[0])/(b[1]-b[0])*(P.W-P.lef
 function line(par,x1,y1,x2,y2,cls){var a=xy(par,x1,y1),b=xy(par,x2,y2);node("line",{x1:a[0],y1:a[1],x2:b[0],y2:b[1],class:cls},$("axes"))}
 function refresh(){
 var p=presets[scenario.value],val=Number(slider.value),b=p.bounds;
-$("formula").textContent=p.formula;$("domain").textContent="Область определения: "+p.domain;
-$("xOutput").textContent=fmt(val);
-var y=value(p,val);$("valueOutput").textContent="f("+fmt(val)+") = "+fmt(y);
+$("formula").innerHTML=mathPreset[scenario.value].formula;
+$("nodesMath").innerHTML=mathPreset[scenario.value].nodes;
+$("domain").replaceChildren(document.createTextNode("Область определения: "),liveDomain(p));
+replaceMath($("xOutput"),liveNumber(fmt(val)));$("xOutput").setAttribute("aria-label","x = "+fmt(val));
+var y=value(p,val);replaceMath($("valueOutput"),liveResult(fmt(val),fmt(y)));$("valueOutput").setAttribute("aria-label","f("+fmt(val)+") = "+fmt(y));slider.setAttribute("aria-valuetext","x = "+fmt(val)+"; f(x) = "+fmt(y));
 var grid=$("grid"),axes=$("axes"),marks=$("markers");clear(grid);clear(axes);clear(marks);
 for(var k=Math.ceil(b[0]/5)*5;k<=b[1];k+=5){var a=xy(p,k,b[2]),z=xy(p,k,b[3]);node("line",{x1:a[0],y1:a[1],x2:z[0],y2:z[1],class:"grid-line"},grid);node("text",{x:a[0]+3,y:P.H-P.bottom+21,class:"plot-label"},axes,String(k))}
 for(var j=Math.ceil(b[2]/2)*2;j<=b[3];j+=2){var l=xy(p,b[0],j),r=xy(p,b[1],j);node("line",{x1:l[0],y1:l[1],x2:r[0],y2:r[1],class:"grid-line"},grid);node("text",{x:15,y:l[1]+5,class:"plot-label"},axes,String(j))}
 line(p,0,b[2],0,b[3],"axis");line(p,b[0],0,b[1],0,"axis");
+var o=xy(p,0,0);
+node("text",{x:P.W-P.right+7,y:o[1]-12,class:"plot-label","text-anchor":"middle"},axes,"x");
+node("text",{x:o[0]+13,y:P.top+10,class:"plot-label"},axes,"y");
 var path="",segment=false;
 for(var i=0;i<=1100;i++){var x=b[0]+i*(b[1]-b[0])/1100,yy=value(p,x);
 if(Number.isFinite(yy)&&yy>=b[2]&&yy<=b[3]){var z=xy(p,x,yy);path+=(segment?"L":"M")+z[0].toFixed(2)+","+z[1].toFixed(2)+" ";segment=true}else segment=false}
 $("curve").setAttribute("d",path);
 if(points.checked){p.ref.forEach(function(pt,i){var u=xy(p,pt[0],pt[1]);node("circle",{cx:u[0],cy:u[1],r:7,class:"plot-point"},marks);node("text",{x:u[0]+12,y:u[1]-12,class:"plot-label"},marks,(i===0?"A":"B")+"("+fmt(pt[0])+"; "+fmt(pt[1])+")")})}
-if(Number.isFinite(y)){var q=xy(p,val,y);node("circle",{cx:q[0],cy:q[1],r:8,class:"plot-target"},marks);var ty=q[1]<60?q[1]+27:q[1]-14;node("text",{x:Math.min(q[0]+12,730),y:ty,class:"plot-label"},marks,"f("+fmt(val)+") = "+fmt(y))}
+if(Number.isFinite(y)){var q=xy(p,val,y);node("circle",{cx:q[0],cy:q[1],r:8,class:"plot-target"},marks);var ty=q[1]<60?q[1]+29:q[1]-14,align=q[0]>(P.W-210)?"end":"start";node("text",{x:q[0]+(align==="end"?-14:14),y:ty,"text-anchor":align,class:"plot-label"},marks,"f("+fmt(val)+") = "+fmt(y))}
 $("chartDesc").textContent=p.formula+"; задан x="+fmt(val)+", f(x)="+fmt(y)+". Исходные точки: "+p.ref.map(function(a){return "("+fmt(a[0])+";"+fmt(a[1])+")"}).join(", ");
 }
-function applyPreset(){var p=presets[scenario.value];slider.min=p.min;slider.max=p.max;slider.step=p.step;slider.value=p.x;refresh()}
+function clearGuess(){$("aGuess").value="";$("bGuess").value="";$("parameterFeedback").textContent="";$("parameterFeedback").removeAttribute("data-kind")}
+function applyPreset(){var p=presets[scenario.value];slider.min=p.min;slider.max=p.max;slider.step=p.step;slider.value=p.x;clearGuess();refresh()}
 var initial=(location.hash==="#horizontal"?"horizontal":"vertical");scenario.value=initial;
 scenario.addEventListener("change",function(){history.replaceState(null,"",scenario.value==="horizontal"?"#horizontal":"#vertical");applyPreset()});
 slider.addEventListener("input",refresh);points.addEventListener("change",refresh);
 $("reset").addEventListener("click",function(){slider.value=presets[scenario.value].x;points.checked=true;refresh()});
+$("parameterForm").addEventListener("submit",function(event){
+  event.preventDefault();
+  var aInput=$("aGuess"),bInput=$("bGuess"),feedback=$("parameterFeedback");
+  var a=Number(aInput.value),b=Number(bInput.value),preset=presets[scenario.value];
+  if(!aInput.value.trim()||!bInput.value.trim()||!Number.isFinite(a)||!Number.isFinite(b)){
+    feedback.textContent="Введите оба параметра числами.";feedback.dataset.kind="wrong";return;
+  }
+  if(a<=0||a===1){
+    feedback.textContent="Основание логарифма должно быть положительным и отличным от единицы.";
+    feedback.dataset.kind="wrong";return;
+  }
+  function candidate(x){var argument=preset.mode==="vertical"?x:x+b;
+    return argument>0?(preset.mode==="vertical"?b:0)+Math.log(argument)/Math.log(a):NaN;
+  }
+  var admissible=preset.ref.every(function(pt){return Number.isFinite(candidate(pt[0]))});
+  if(!admissible){
+    feedback.textContent="Проверьте ОДЗ: аргумент логарифма должен быть положительным в обеих узловых точках.";
+    feedback.dataset.kind="wrong";return;
+  }
+  if(preset.ref.every(function(pt){return Math.abs(candidate(pt[0])-pt[1])<1e-8})){
+    feedback.replaceChildren(document.createTextNode("Верно. Обе исходные точки удовлетворяют найденной формуле: "));var holder=document.createElement("span");holder.innerHTML=mathPreset[scenario.value].formula;feedback.appendChild(holder.firstElementChild);
+    feedback.dataset.kind="correct";
+  }else{
+    feedback.textContent="Пока неверно. Подставьте первую узловую точку: при x = 1 или при f(x) = 0 получается простое уравнение для b.";
+    feedback.dataset.kind="wrong";
+  }
+});
 window.addEventListener("hashchange",function(){scenario.value=location.hash==="#horizontal"?"horizontal":"vertical";applyPreset()});
 applyPreset();
 })();
