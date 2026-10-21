@@ -3,6 +3,71 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-21",
+  "ktpRefs": [],
+  "href": "21.10.26.html",
+  "title": "Биссектриса и отношения отрезков",
+  "navTitle": "Биссектриса и отношения отрезков",
+  "navSubtitle": "Биссектриса и отношения отрезков. Центр вписанной окружности, вычисление CI:ID и задачи по геометрии. Занятие Софии Кальней 21 октября 2026 года.",
+  "summary": "Биссектриса и отношения отрезков. Центр вписанной окружности, вычисление CI:ID и задачи по геометрии. Занятие Софии Кальней 21 октября 2026 года.",
+  "topics": [
+    "Теорема о биссектрисе и обратное утверждение",
+    "Центр вписанной окружности",
+    "Две последовательные пропорции в треугольнике",
+    "Отношения отрезков и периметр"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_15_2_3",
+      "evidenceAnchor": "theorem",
+      "relation": "practiced",
+      "label": "Деление стороны биссектрисой",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_16_3_2",
+      "evidenceAnchor": "incenter",
+      "relation": "practiced",
+      "label": "Центр вписанной окружности и биссектрисы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_23_2_2",
+      "evidenceAnchor": "method",
+      "relation": "practiced",
+      "label": "Выбор теоремы в треугольнике",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_23_2_3",
+      "evidenceAnchor": "incenter",
+      "relation": "practiced",
+      "label": "Цепочка отношений и вычислений",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_25_1_2",
+      "evidenceAnchor": "perimeter",
+      "relation": "touched",
+      "label": "Метрическое отношение через периметр",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_23_2_4",
+      "evidenceAnchor": "method",
+      "relation": "touched",
+      "label": "Проверка геометрического отношения",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "21.10.26.html",
+    "pdf": "../pdf_docs/21.10.26.pdf",
+    "tex": "../tex_docs/21.10.26.tex",
+    "lab": "21.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-18",
   "ktpRefs": [],
   "href": "18.10.26.html",

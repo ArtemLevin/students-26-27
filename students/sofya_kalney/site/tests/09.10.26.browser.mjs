@@ -126,7 +126,7 @@ try{
   await snapshot('sofya-lesson-mobile-dark');
   await navigate('index.html',390,844);
   await sleep(400);
-  assert.equal(await run("document.querySelector('#lesson-title')?.textContent.includes('Четыре метода решения задач')"),true,'New lesson not shown in dashboard');
+  assert.equal(await run("document.querySelector('#lesson-title')?.textContent.includes('Биссектриса и отношения отрезков')"),true,'New lesson not shown in dashboard');
   await snapshot('sofya-index-mobile');
   await navigate('index.html',1440,900);
   await sleep(400);
@@ -218,6 +218,31 @@ try{
   await navigate('18.10.26-lab.html',390,844,true);
   assert.ok(await run("document.documentElement.scrollWidth<=innerWidth+2"),'October 18 lab horizontal overflow on mobile');
   await snapshot('sofya-20261018-graph-lab-mobile-dark');
+
+  // 21 October: bisector lesson and geometric simulator; older lessons stay in archive.
+  for(const [w,h] of [[320,760],[390,844],[768,1024],[1440,900]]){
+    for(const name of ['21.10.26.html','21.10.26-lab.html']){
+      await navigate(name,w,h,false);
+      await navigate(name,w,h,true);
+    }
+  }
+  await navigate('21.10.26.html',1440,900);
+  assert.equal(await run("document.querySelectorAll('.training > li').length"),10,'October 21 training must contain exactly ten tasks');
+  assert.equal(await run("['theorem','incenter','perimeter','method','training','poster'].every(id=>!!document.getElementById(id))"),true,'October 21 anchors missing');
+  assert.equal(await run("document.querySelector('a[href=\"../images/21.10.26.png\"]')!==null"),true,'October 21 poster link missing');
+  await snapshot('sofya-20261021-lesson-desktop');
+  await navigate('21.10.26-lab.html',1440,900);
+  const bisector=await run("(()=>({ratio:document.querySelector('#ratioValue').textContent,side:document.querySelector('#aValue').textContent,formula:document.querySelector('#formula').textContent}))()");
+  assert.ok(bisector.formula.includes('1,67'),'October 21 lab formula must match 7/8/9 triangle');
+  await run("document.querySelector('[data-scenario=second]').click()");
+  assert.ok(await run("document.querySelector('#formula').textContent.includes('1,53')"),'10/13/15 scenario ratio');
+  await run("document.querySelector('#snapshot').click();document.querySelector('[data-scenario=third]').click()");
+  assert.ok(await run("document.querySelector('#savedRatio').textContent.includes('1,53') && document.querySelector('#ratioValue').textContent.includes('1,5')"),'October 21 snapshot comparison');
+  await run("document.querySelector('#reset').click()");
+  assert.ok(await run("document.querySelector('#formula').textContent.includes('1,67')"),'October 21 lab reset');
+  await snapshot('sofya-20261021-lab-desktop');
+  await navigate('21.10.26-lab.html',390,844,true);
+  await snapshot('sofya-20261021-lab-mobile-dark');
 
   assert.deepEqual(jsErrors,[],'JavaScript errors');
   assert.deepEqual(badRequests,[],'Network errors');
