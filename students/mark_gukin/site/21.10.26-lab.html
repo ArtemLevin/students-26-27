@@ -192,8 +192,20 @@ $("parameterForm").addEventListener("submit",function(event){
   if(!aInput.value.trim()||!bInput.value.trim()||!Number.isFinite(a)||!Number.isFinite(b)){
     feedback.textContent="Введите оба параметра числами.";feedback.dataset.kind="wrong";return;
   }
-  if(Math.abs(a-preset.a)<1e-8&&Math.abs(b-preset.b)<1e-8){
-    feedback.textContent="Верно. "+preset.formula+"; проверьте формулу на обеих исходных точках.";
+  if(a<=0||a===1){
+    feedback.textContent="Основание логарифма должно быть положительным и отличным от единицы.";
+    feedback.dataset.kind="wrong";return;
+  }
+  function candidate(x){var argument=preset.mode==="vertical"?x:x+b;
+    return argument>0?(preset.mode==="vertical"?b:0)+Math.log(argument)/Math.log(a):NaN;
+  }
+  var admissible=preset.ref.every(function(pt){return Number.isFinite(candidate(pt[0]))});
+  if(!admissible){
+    feedback.textContent="Проверьте ОДЗ: аргумент логарифма должен быть положительным в обеих узловых точках.";
+    feedback.dataset.kind="wrong";return;
+  }
+  if(preset.ref.every(function(pt){return Math.abs(candidate(pt[0])-pt[1])<1e-8})){
+    feedback.textContent="Верно. Обе исходные точки удовлетворяют найденной формуле: "+preset.formula+".";
     feedback.dataset.kind="correct";
   }else{
     feedback.textContent="Пока неверно. Подставьте первую узловую точку: при x = 1 или при f(x) = 0 получается простое уравнение для b.";
