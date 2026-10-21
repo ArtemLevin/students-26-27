@@ -5,6 +5,74 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-21",
+  "ktpRefs": [],
+  "href": "21.10.26.html",
+  "title": "От условия задачи к допустимому ответу",
+  "navTitle": "От условия задачи к допустимому ответу",
+  "navSubtitle": "ЕГЭ для Ксении Клыковой: колодец, вращение ведра, опорожнение бака, сплавы, сухофрукты и отбор допустимого ответа. Занятие 21 октября 2026.",
+  "summary": "ЕГЭ для Ксении Клыковой: колодец, вращение ведра, опорожнение бака, сплавы, сухофрукты и отбор допустимого ответа. Занятие 21 октября 2026.",
+  "topics": [
+    "прикладные формулы и моделирование",
+    "падение камня и разность квадратов",
+    "вращение ведра и граничное условие",
+    "опорожнение цилиндрического бака",
+    "сплавы и массовые доли",
+    "высушивание и сохранение сухого вещества",
+    "отбор допустимых значений"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t9_power",
+      "evidenceAnchor": "tank",
+      "relation": "practiced",
+      "label": "Квадратичная модель высоты воды и корни уравнения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t9_units",
+      "evidenceAnchor": "bucket",
+      "relation": "practiced",
+      "label": "Согласование сантиметров и метров в прикладной задаче",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t9_formula_transform",
+      "evidenceAnchor": "bucket",
+      "relation": "practiced",
+      "label": "Выражение минимальной скорости из физической формулы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t10_validation",
+      "evidenceAnchor": "tank",
+      "relation": "practiced",
+      "label": "Физический отбор корней квадратного уравнения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t10_alloys",
+      "evidenceAnchor": "mixtures",
+      "relation": "practiced",
+      "label": "Баланс массы и массовой доли в двух сплавах",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t10_percent",
+      "evidenceAnchor": "drying",
+      "relation": "practiced",
+      "label": "Проценты и неизменность сухого вещества при высушивании",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "21.10.26.html",
+    "pdf": "../pdf_docs/21.10.26.pdf",
+    "tex": "../tex_docs/21.10.26.tex",
+    "lab": "21.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-19",
   "ktpRefs": [],
   "href": "19.10.26.html",
