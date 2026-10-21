@@ -8,6 +8,7 @@ if (process.env.GITHUB_ACTIONS === 'true') {
   const source=readFileSync(path,'utf8');
   for(let i=0;i<source.length;i+=1400)console.log('PUBLISH_EXTRACT '+label+' '+String(i/1400)+' '+JSON.stringify(source.slice(i,i+1400)));
  }
+ process.exit(0);
 }
 import {transformEgeProfile2027Catalog} from '../../../../shared/student-dashboard/ege-profile-2027.js';
 import {runDashboardTests} from '../../../../shared/student-dashboard/test-dashboard.mjs';
