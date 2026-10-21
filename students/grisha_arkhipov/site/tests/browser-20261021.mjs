@@ -153,6 +153,8 @@ try{
   assert.equal(await js("document.querySelector('.latest-card').textContent.includes('21.10.2026')"),true);
   assert.equal(await js("document.querySelector('a[href=\"21.10.26-lab.html\"]')!==null"),true);
   assert.equal(await js("document.querySelectorAll('#radialMap path').length>0"),true,'Heatmap missing');
+  assert.equal(await js("getComputedStyle(document.body).backgroundImage"),'none','Notebook grid should be removed');
+  assert.equal(await js("document.querySelector('.hero-lead').textContent.includes('Канонические')"),false,'Internal jargon in navigator');
   assert.deepEqual(exceptions,[],'JS exceptions');
   assert.deepEqual(httpErrors,[],'HTTP failures');
   assert.deepEqual(consoleErrors,[],'Console errors');
