@@ -133,7 +133,7 @@ try{
   assert.equal(await run("getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()"),'#fff','print background from dark theme');
   await call('Emulation.setEmulatedMedia',{media:'screen'});
   await navigate('index.html',390,844,false);
-  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Логарифмы')"),true,'latest lesson on home');
+  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Логарифмические функции и уравнения')"),true,'latest lesson on home');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"18.10.26.html\"]')!==null"),true,'new lesson appears in journal');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('04.10.2026')"),true,'history retained');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('09.10.2026')"),true,'previous lesson retained');
@@ -183,6 +183,27 @@ try{
   await navigate('18.10.26.html',1440,900,true);
   assert.equal(await run("document.querySelectorAll('section.chapter').length"),9,'18 October full lesson content');
   await snapshot('lesson-18-desktop-dark');
+
+  // Занятие 21 октября: новый материал, 10 заданий, лаборатория и сохранение прогресса.
+  await navigate('21.10.26.html',390,844,false);
+  assert.equal(await run("document.querySelectorAll('[data-task]').length"),10,'21 October training count');
+  assert.equal(await run("document.getElementById('stepCount').textContent"),'Шаг 1 из 6','21 October stepper initialization');
+  assert.equal(await run("(()=>{document.getElementById('nextStep').click();return document.getElementById('stepCount').textContent})()"),'Шаг 2 из 6','21 October stepper advancement');
+  assert.equal(await run("document.querySelector('#materials img')!==null"),true,'21 October poster');
+  await snapshot('lesson-21-mobile-light');
+  await navigate('21.10.26.html',1440,900,true);
+  await snapshot('lesson-21-desktop-dark');
+  const materials2110=await run("Promise.all(['../pdf_docs/21.10.26.pdf','../tex_docs/21.10.26.tex','../images/21.10.26.png'].map(async u=>({u,status:(await fetch(u)).status})))");
+  assert.ok(materials2110.every(x=>x.status===200),'21 October materials: '+JSON.stringify(materials2110));
+  await navigate('21.10.26-lab.html',390,844,false);
+  assert.equal(await run("document.getElementById('valueOutput').textContent"),'f(32) = 2','21 October original graph');
+  assert.equal(await run("document.getElementById('curve').getAttribute('d').length>1000"),true,'21 October graph path');
+  const case2=await run("(()=>{const s=document.getElementById('scenario');s.value='horizontal';s.dispatchEvent(new Event('change',{bubbles:true}));return {formula:document.getElementById('formula').textContent,value:document.getElementById('valueOutput').textContent}})()");
+  assert.deepEqual(case2,{formula:'f(x) = log₂(x + 5)',value:'f(11) = 4'},'21 October second graph');
+  await snapshot('lesson-21-lab-mobile-light');
+  await navigate('21.10.26-lab.html#horizontal',1440,900,true);
+  assert.equal(await run("document.getElementById('scenario').value"),'horizontal','21 October lab deep link');
+  await snapshot('lesson-21-lab-desktop-dark');
   assert.deepEqual(jsErrors,[],'Browser JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Browser network failures');
   console.log('Mark review browser PASS: seven viewports x two pages x two themes, stepper, keyboard, persistence, print, links, anchors');

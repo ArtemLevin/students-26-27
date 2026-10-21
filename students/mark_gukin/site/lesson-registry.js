@@ -5,6 +5,81 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-21",
+    "ktpRefs": [],
+    "href": "21.10.26.html",
+    "title": "Логарифмические функции и уравнения",
+    "navTitle": "Логарифмические функции",
+    "navSubtitle": "Марк Гукин · 21.10.2026: подстановка чисел в прикладную формулу, восстановление двух видов логарифмической функции по узловым точкам, логарифмические уравнения, ОДЗ и 10 заданий Пути А.",
+    "summary": "Марк Гукин · 21.10.2026: подстановка чисел в прикладную формулу, восстановление двух видов логарифмической функции по узловым точкам, логарифмические уравнения, ОДЗ и 10 заданий Пути А.",
+    "topics": [
+      "Переход от логарифмической записи к показательной",
+      "Вычисления с десятичными дробями и степенями десяти",
+      "Свойства логарифмов",
+      "Логарифмическая функция по двум точкам",
+      "Преобразования логарифмического графика",
+      "Логарифмические уравнения",
+      "Область допустимых значений и отбор корней"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "ege08_08",
+        "evidenceAnchor": "intro",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "ege08_02",
+        "evidenceAnchor": "calculation",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege08_10",
+        "evidenceAnchor": "rules",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege12_13",
+        "evidenceAnchor": "graphs",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege12_15",
+        "evidenceAnchor": "graphs",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege12_16",
+        "evidenceAnchor": "graphs",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege12_18",
+        "evidenceAnchor": "graphs",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege07_08",
+        "evidenceAnchor": "equations",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege07_15",
+        "evidenceAnchor": "algorithm",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege07_16",
+        "evidenceAnchor": "algorithm",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "21.10.26.html",
+      "pdf": "../pdf_docs/21.10.26.pdf",
+      "tex": "../tex_docs/21.10.26.tex"
+    }
+  },
+  {
   "date": "2026-10-18",
   "ktpRefs": [],
   "href": "18.10.26.html",

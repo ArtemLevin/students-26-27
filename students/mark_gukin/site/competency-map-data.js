@@ -165,6 +165,57 @@ G.forEach(group=>group.items.forEach(item=>{
   item.material={href:'18.10.26.html#'+update.anchor,label:'Занятие 18.10.26 →'};
 }));
 
+// Занятие 21.10.2026: только evidence и новые ссылки, без повышения mastery.
+const lessonUpdates2110={
+  "ege08_08": {
+    "anchor": "intro",
+    "relation": "touched"
+  },
+  "ege08_02": {
+    "anchor": "calculation",
+    "relation": "practiced"
+  },
+  "ege08_10": {
+    "anchor": "rules",
+    "relation": "practiced"
+  },
+  "ege12_13": {
+    "anchor": "graphs",
+    "relation": "practiced"
+  },
+  "ege12_15": {
+    "anchor": "graphs",
+    "relation": "practiced"
+  },
+  "ege12_16": {
+    "anchor": "graphs",
+    "relation": "practiced"
+  },
+  "ege12_18": {
+    "anchor": "graphs",
+    "relation": "practiced"
+  },
+  "ege07_08": {
+    "anchor": "equations",
+    "relation": "practiced"
+  },
+  "ege07_15": {
+    "anchor": "algorithm",
+    "relation": "practiced"
+  },
+  "ege07_16": {
+    "anchor": "algorithm",
+    "relation": "practiced"
+  }
+};
+const lessonEvidence2110='21.10.2026: прикладные вычисления, два вида логарифмических графиков по узловым точкам, уравнения по определению и проверка области допустимых значений. Зафиксированы знакомство и практическая отработка без достаточных оснований для повышения mastery.';
+G.forEach(group=>group.items.forEach(item=>{
+  const update=lessonUpdates2110[item.id];
+  if(!update)return;
+  item.evidence=[...item.evidence,{date:'21.10.2026',text:lessonEvidence2110}];
+  item.material={href:'21.10.26.html#'+update.anchor,label:'Занятие 21.10.26 →'};
+}));
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'mark_gukin',
@@ -174,7 +225,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Используется проект КИМ ЕГЭ-2027 ФИПИ: 20 заданий, из них 13 с кратким и 7 с развёрнутым ответом. Проект опубликован 28.08.2026; до утверждения структура может быть уточнена.',
-    updated:'18.10.2026'
+    updated:'21.10.2026'
   },
   groups:G
 };
