@@ -127,6 +127,13 @@ try{
       if(width===390||width===1440)await screenshot('lesson-221026-'+width+'-'+(dark?'dark':'light'));
     }
   }
+  await visit('22.10.26.html',390,false);
+  await evalJS('document.getElementById("star").scrollIntoView({block:"start",behavior:"instant"})');
+  await wait(60);
+  await screenshot('lesson-221026-star-390-light');
+  await evalJS('document.getElementById("graph").scrollIntoView({block:"start",behavior:"instant"})');
+  await wait(60);
+  await screenshot('lesson-221026-graph-390-light');
   await visit('22.10.26.html',1440,false);
   const printTest=await evalJS('(()=>{const tasks=[...document.querySelectorAll("details.task")];tasks[0].open=true;const prior=tasks.map(t=>t.open);window.dispatchEvent(new Event("beforeprint"));const visible=tasks.every(t=>t.open);window.dispatchEvent(new Event("afterprint"));return {visible,prior,restored:tasks.map(t=>t.open)}})()');
   assert.equal(printTest.visible,true,'print exposes all 10 answers');
