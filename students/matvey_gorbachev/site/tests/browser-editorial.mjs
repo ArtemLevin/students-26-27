@@ -222,6 +222,9 @@ try{
   assert.ok((await page.locator('#comparison').textContent()).includes('Изменение'),'new lab compare state '+width);
   await page.locator('[data-mode="limits"]').click();
   assert.equal(await page.locator('#rows tr').count(),3,'new lab limits schedule '+width);
+  assert.ok(await page.locator('#principalUnit math').count()>=1,'limits variable S should use MathML '+width);
+  assert.ok(await page.locator('#insightHead math').count()>=1,'limits heading should use MathML '+width);
+  assert.ok(await page.locator('#tableCaption math').count()>=1,'schedule caption should use MathML '+width);
   assert.ok((await page.locator('#insightText').textContent()).includes('каждый < 5: да'),'new lab limits baseline '+width);
   await page.locator('#principal').evaluate(el=>{el.value='10';el.dispatchEvent(new Event('input',{bubbles:true}));});
   assert.ok((await page.locator('#insightText').textContent()).includes('каждый < 5: нет'),'new lab limits threshold '+width);
