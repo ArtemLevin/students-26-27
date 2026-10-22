@@ -147,6 +147,10 @@ try{
       assert.ok(mathAudit.mathPowers>=20,'powers use msup');
       assert.ok(mathAudit.mathRoots>=1,'nth roots use mroot');
       assert.ok(mathAudit.svgMath>=12,'SVG labels use MathML');
+      const namespaces=await evalJS('({native:[...document.querySelectorAll("main math")].every(x=>x.namespaceURI==="http://www.w3.org/1998/Math/MathML"),svg:[...document.querySelectorAll("#exampleGraph foreignObject math")].every(x=>x.namespaceURI==="http://www.w3.org/1998/Math/MathML"),taskAnswers:[...document.querySelectorAll("details.task")].every(x=>x.querySelector("summary math")&&x.querySelector(".ans math"))})');
+      assert.equal(namespaces.native,true,'all fragments have MathML namespace');
+      assert.equal(namespaces.svg,true,'plot labels are MathML');
+      assert.equal(namespaces.taskAnswers,true,'each task and answer contains native MathML');
       assert.equal(mathAudit.legacy,0,'no legacy HTML math');
 
       if(width===390||width===1440)await screenshot('lesson-221026-'+width+'-'+(dark?'dark':'light'));
