@@ -24,20 +24,37 @@ const server=http.createServer((req,res)=>{
 });
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const host='http://127.0.0.1:'+server.address().port;
-const profile=fs.mkdtempSync(path.join(os.tmpdir(),'jaroslav1510-'));
-const chromeProcess=spawn(chrome,['--headless=new','--no-sandbox','--disable-dev-shm-usage','--disable-gpu',
-  '--no-first-run','--remote-debugging-port=0','--user-data-dir='+profile],{stdio:'ignore'});
+let profile=fs.mkdtempSync(path.join(os.tmpdir(),'jaroslav1510-'));
+let chromeProcess;
+let chromeStderr='';
+function launchChrome(){
+  chromeStderr='';
+  chromeProcess=spawn(chrome,['--headless=new','--no-sandbox','--disable-dev-shm-usage','--disable-gpu',
+    '--no-first-run','--remote-debugging-port=0','--user-data-dir='+profile],{stdio:['ignore','ignore','pipe']});
+  chromeProcess.stderr.on('data',chunk=>{chromeStderr=(chromeStderr+String(chunk)).slice(-3500);});
+}
+launchChrome();
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 let ws;const pending=new Map(),errors=[],bad=[];let id=0;
 try{
   let port;
-  for(let i=0;i<130;i++){
-    const file=path.join(profile,'DevToolsActivePort');
-    if(fs.existsSync(file)){port=Number(fs.readFileSync(file,'utf8').split('\n')[0]);break;}
-    if(chromeProcess.exitCode!==null)throw new Error('Chrome exited');
-    await wait(100);
+  for(let attempt=1;attempt<=3&&!port;attempt++){
+    if(attempt>1){
+      console.warn('CHROME_START_RETRY',JSON.stringify({attempt,exitCode:chromeProcess.exitCode,stderr:chromeStderr.slice(-1000)}));
+      chromeProcess.kill('SIGKILL');
+      await wait(180);
+      try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:4,retryDelay:150})}catch(_){}
+      profile=fs.mkdtempSync(path.join(os.tmpdir(),'jaroslav1510-retry-'));
+      launchChrome();
+    }
+    for(let i=0;i<170;i++){
+      const file=path.join(profile,'DevToolsActivePort');
+      if(fs.existsSync(file)){port=Number(fs.readFileSync(file,'utf8').split('\n')[0]);break;}
+      if(chromeProcess.exitCode!==null)break;
+      await wait(100);
+    }
   }
-  assert.ok(port,'Chrome DevTools port available');
+  assert.ok(port,'Chrome DevTools port available; stderr: '+chromeStderr.slice(-1800));
   const tabs=await(await fetch('http://127.0.0.1:'+port+'/json/list')).json();
   const target=tabs.find(x=>x.type==='page');assert.ok(target);
   ws=new WebSocket(target.webSocketDebuggerUrl);
@@ -109,6 +126,48 @@ try{
   assert.deepEqual(compare,{hidden:false,plot:true});
   const mathLab=await evalJS('({native:[...document.querySelectorAll("math")].every(x=>x.namespaceURI==="http://www.w3.org/1998/Math/MathML"),svg:document.querySelectorAll("#lab-chart foreignObject math").length,base:document.querySelector("#baseline-formula math")!==null})');
   assert.equal(mathLab.native,true);assert.ok(mathLab.svg>=8);assert.equal(mathLab.base,true);
+
+  // 22 October: full lesson release gate (including printed answers and graph semantics).
+  for (const width of [360,390,768,1024,1440]) {
+    for (const dark of [false,true]) {
+      await visit('22.10.26.html',width,dark);
+      const lesson22=await evalJS('(()=>{const sections=[...document.querySelectorAll("main .section")];const tasks=[...document.querySelectorAll("details.task")];const ids=[...document.querySelectorAll("[id]")].map(el=>el.id);const points=[...document.querySelectorAll("#graphPoints circle")].map(el=>({x:Number(el.getAttribute("cx")),y:Number(el.getAttribute("cy"))}));return {sections:sections.length,tasks:tasks.length,closed:tasks.every(t=>!t.open),duplicates:ids.length-new Set(ids).size,graph:document.getElementById("curve").getAttribute("d").length,points,svgAccessible:document.getElementById("exampleGraph").getAttribute("aria-labelledby")==="chartTitle chartDesc",links:[...document.querySelectorAll("a[href]")].filter(a=>a.href.includes("22.10.26")).length,theme:document.documentElement.dataset.theme}})()');
+      assert.equal(lesson22.sections,8,'lesson has eight editorial sections');
+      assert.equal(lesson22.tasks,10,'Path A has ten native disclosure tasks');
+      assert.equal(lesson22.closed,true,'answer disclosures are initially closed');
+      assert.equal(lesson22.duplicates,0,'lesson has no duplicate IDs');
+      assert.ok(lesson22.graph>100,'computed exponential chart is drawn');
+      assert.deepEqual(lesson22.points,[{x:250,y:284},{x:325,y:262}],'graph points match f(x)=2^x-3');
+      assert.equal(lesson22.svgAccessible,true,'SVG has a readable description');
+      assert.ok(lesson22.links>=2,'existing PDF and TeX lesson resources');
+      assert.equal(lesson22.theme,dark?'dark':'light','lesson theme state');
+      if(width===390||width===1440)await screenshot('lesson-221026-'+width+'-'+(dark?'dark':'light'));
+    }
+  }
+  await visit('22.10.26.html',390,false);
+  await evalJS('document.getElementById("star").scrollIntoView({block:"start",behavior:"instant"})');
+  await wait(60);
+  await screenshot('lesson-221026-star-390-light');
+  await evalJS('document.getElementById("graph").scrollIntoView({block:"start",behavior:"instant"})');
+  await wait(60);
+  await screenshot('lesson-221026-graph-390-light');
+  await visit('22.10.26.html',1440,false);
+  const printTest=await evalJS('(()=>{const tasks=[...document.querySelectorAll("details.task")];tasks[0].open=true;const prior=tasks.map(t=>t.open);window.dispatchEvent(new Event("beforeprint"));const visible=tasks.every(t=>t.open);window.dispatchEvent(new Event("afterprint"));return {visible,prior,restored:tasks.map(t=>t.open)}})()');
+  assert.equal(printTest.visible,true,'print exposes all 10 answers');
+  assert.deepEqual(printTest.restored,printTest.prior,'print restores exact disclosure state');
+  await call('Page.bringToFront');
+  await evalJS('(()=>{const task=document.querySelector("details.task");task.open=false;task.querySelector("summary").focus();})()');
+  assert.equal(await evalJS('document.activeElement?.tagName'),'SUMMARY','disclosure receives keyboard focus');
+  await evalJS('document.querySelector("details.task summary").click()');
+  assert.equal(await evalJS('document.querySelector("details.task").open'),true,'focused native disclosure remains interactive');
+  await evalJS('document.getElementById("themeToggle").click()');
+  assert.equal(await evalJS('document.documentElement.dataset.theme'),'dark','lesson toggle activates dark mode');
+  await visit('index.html',1440,false);
+  const lesson22Linked=await evalJS('(()=>{const latest=document.getElementById("latestLessonCta").getAttribute("href");const ids=["ege08_04","ege08_02","ege08_03","ege08_06","ege07_07","ege10_01","ege10_02","ege10_09","ege10_05","ege10_12","ege12_12","ege12_15"];const items=window.COMPETENCY_MAP_DATA.groups.flatMap(g=>g.items);return {latest,allEvidence:ids.every(id=>{const item=items.find(x=>x.id===id);return item?.evidence?.some(e=>e.text?.includes("22.10.2026"))&&item.material?.href.startsWith("22.10.26.html#");}),graphLink:items.find(x=>x.id==="ege12_12")?.material?.href}})()');
+  assert.equal(lesson22Linked.latest,'22.10.26.html','the cabinet shows 22 October as the latest lesson');
+  assert.equal(lesson22Linked.allEvidence,true,'all 12 linked competencies reference this lesson');
+  assert.equal(lesson22Linked.graphLink,'22.10.26.html#graph');
+  console.log('JAROSLAV_221026_RELEASE_GATE_PASS',JSON.stringify({printTest,lesson22Linked}));
 
   // Independent QA of the redesigned student cabinet and monthly archive.
   const archiveMeasures=[];
