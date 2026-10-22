@@ -141,6 +141,14 @@ try{
       assert.equal(lesson22.svgAccessible,true,'SVG has a readable description');
       assert.ok(lesson22.links>=2,'existing PDF and TeX lesson resources');
       assert.equal(lesson22.theme,dark?'dark':'light','lesson theme state');
+      const mathAudit=await evalJS('({total:document.querySelectorAll("main math").length,mathFractions:document.querySelectorAll("main mfrac").length,mathPowers:document.querySelectorAll("main msup").length,mathRoots:document.querySelectorAll("main mroot").length,svgMath:document.querySelectorAll("#exampleGraph foreignObject math").length,legacy:document.querySelectorAll("main sup,main sub,main .frac,main .math").length})');
+      assert.ok(mathAudit.total>=100,'all formulas use MathML');
+      assert.ok(mathAudit.mathFractions>=15,'fractions use mfrac');
+      assert.ok(mathAudit.mathPowers>=20,'powers use msup');
+      assert.ok(mathAudit.mathRoots>=1,'nth roots use mroot');
+      assert.ok(mathAudit.svgMath>=12,'SVG labels use MathML');
+      assert.equal(mathAudit.legacy,0,'no legacy HTML math');
+
       if(width===390||width===1440)await screenshot('lesson-221026-'+width+'-'+(dark?'dark':'light'));
     }
   }
