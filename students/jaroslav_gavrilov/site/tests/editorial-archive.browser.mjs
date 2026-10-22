@@ -24,20 +24,37 @@ const server=http.createServer((req,res)=>{
 });
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const host='http://127.0.0.1:'+server.address().port;
-const profile=fs.mkdtempSync(path.join(os.tmpdir(),'jaroslav1510-'));
-const chromeProcess=spawn(chrome,['--headless=new','--no-sandbox','--disable-dev-shm-usage','--disable-gpu',
-  '--no-first-run','--remote-debugging-port=0','--user-data-dir='+profile],{stdio:'ignore'});
+let profile=fs.mkdtempSync(path.join(os.tmpdir(),'jaroslav1510-'));
+let chromeProcess;
+let chromeStderr='';
+function launchChrome(){
+  chromeStderr='';
+  chromeProcess=spawn(chrome,['--headless=new','--no-sandbox','--disable-dev-shm-usage','--disable-gpu',
+    '--no-first-run','--remote-debugging-port=0','--user-data-dir='+profile],{stdio:['ignore','ignore','pipe']});
+  chromeProcess.stderr.on('data',chunk=>{chromeStderr=(chromeStderr+String(chunk)).slice(-3500);});
+}
+launchChrome();
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 let ws;const pending=new Map(),errors=[],bad=[];let id=0;
 try{
   let port;
-  for(let i=0;i<130;i++){
-    const file=path.join(profile,'DevToolsActivePort');
-    if(fs.existsSync(file)){port=Number(fs.readFileSync(file,'utf8').split('\n')[0]);break;}
-    if(chromeProcess.exitCode!==null)throw new Error('Chrome exited');
-    await wait(100);
+  for(let attempt=1;attempt<=3&&!port;attempt++){
+    if(attempt>1){
+      console.warn('CHROME_START_RETRY',JSON.stringify({attempt,exitCode:chromeProcess.exitCode,stderr:chromeStderr.slice(-1000)}));
+      chromeProcess.kill('SIGKILL');
+      await wait(180);
+      try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:4,retryDelay:150})}catch(_){}
+      profile=fs.mkdtempSync(path.join(os.tmpdir(),'jaroslav1510-retry-'));
+      launchChrome();
+    }
+    for(let i=0;i<170;i++){
+      const file=path.join(profile,'DevToolsActivePort');
+      if(fs.existsSync(file)){port=Number(fs.readFileSync(file,'utf8').split('\n')[0]);break;}
+      if(chromeProcess.exitCode!==null)break;
+      await wait(100);
+    }
   }
-  assert.ok(port,'Chrome DevTools port available');
+  assert.ok(port,'Chrome DevTools port available; stderr: '+chromeStderr.slice(-1800));
   const tabs=await(await fetch('http://127.0.0.1:'+port+'/json/list')).json();
   const target=tabs.find(x=>x.type==='page');assert.ok(target);
   ws=new WebSocket(target.webSocketDebuggerUrl);
