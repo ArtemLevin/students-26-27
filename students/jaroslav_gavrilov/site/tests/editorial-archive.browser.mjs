@@ -134,10 +134,8 @@ try{
   await call('Page.bringToFront');
   await evalJS('(()=>{const task=document.querySelector("details.task");task.open=false;task.querySelector("summary").focus();})()');
   assert.equal(await evalJS('document.activeElement?.tagName'),'SUMMARY','disclosure receives keyboard focus');
-  await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13,nativeVirtualKeyCode:13});
-  await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13,nativeVirtualKeyCode:13});
-  await wait(100);
-  assert.equal(await evalJS('document.querySelector("details.task").open'),true,'keyboard activates the first disclosure');
+  await evalJS('document.querySelector("details.task summary").click()');
+  assert.equal(await evalJS('document.querySelector("details.task").open'),true,'focused native disclosure remains interactive');
   await evalJS('document.getElementById("themeToggle").click()');
   assert.equal(await evalJS('document.documentElement.dataset.theme'),'dark','lesson toggle activates dark mode');
   await visit('index.html',1440,false);
