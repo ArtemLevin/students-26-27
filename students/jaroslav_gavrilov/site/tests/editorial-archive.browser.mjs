@@ -141,6 +141,18 @@ try{
       assert.equal(lesson22.svgAccessible,true,'SVG has a readable description');
       assert.ok(lesson22.links>=2,'existing PDF and TeX lesson resources');
       assert.equal(lesson22.theme,dark?'dark':'light','lesson theme state');
+      const mathAudit=await evalJS('({total:document.querySelectorAll("main math").length,mathFractions:document.querySelectorAll("main mfrac").length,mathPowers:document.querySelectorAll("main msup").length,mathRoots:document.querySelectorAll("main mroot").length,svgMath:document.querySelectorAll("#exampleGraph foreignObject math").length,legacy:document.querySelectorAll("main sup,main sub,main .frac,main .math").length})');
+      assert.ok(mathAudit.total>=100,'all formulas use MathML');
+      assert.ok(mathAudit.mathFractions>=15,'fractions use mfrac');
+      assert.ok(mathAudit.mathPowers>=20,'powers use msup');
+      assert.ok(mathAudit.mathRoots>=1,'nth roots use mroot');
+      assert.ok(mathAudit.svgMath>=12,'SVG labels use MathML');
+      const namespaces=await evalJS('({native:[...document.querySelectorAll("main math")].every(x=>x.namespaceURI==="http://www.w3.org/1998/Math/MathML"),svg:[...document.querySelectorAll("#exampleGraph foreignObject math")].every(x=>x.namespaceURI==="http://www.w3.org/1998/Math/MathML"),taskAnswers:[...document.querySelectorAll("details.task")].every(x=>x.querySelector("summary math")&&x.querySelector(".ans math"))})');
+      assert.equal(namespaces.native,true,'all fragments have MathML namespace');
+      assert.equal(namespaces.svg,true,'plot labels are MathML');
+      assert.equal(namespaces.taskAnswers,true,'each task and answer contains native MathML');
+      assert.equal(mathAudit.legacy,0,'no legacy HTML math');
+
       if(width===390||width===1440)await screenshot('lesson-221026-'+width+'-'+(dark?'dark':'light'));
     }
   }
