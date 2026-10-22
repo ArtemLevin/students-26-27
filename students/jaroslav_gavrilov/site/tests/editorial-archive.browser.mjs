@@ -131,9 +131,12 @@ try{
   const printTest=await evalJS('(()=>{const tasks=[...document.querySelectorAll("details.task")];tasks[0].open=true;const prior=tasks.map(t=>t.open);window.dispatchEvent(new Event("beforeprint"));const visible=tasks.every(t=>t.open);window.dispatchEvent(new Event("afterprint"));return {visible,prior,restored:tasks.map(t=>t.open)}})()');
   assert.equal(printTest.visible,true,'print exposes all 10 answers');
   assert.deepEqual(printTest.restored,printTest.prior,'print restores exact disclosure state');
+  await call('Page.bringToFront');
   await evalJS('(()=>{const task=document.querySelector("details.task");task.open=false;task.querySelector("summary").focus();})()');
-  await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
-  await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+  assert.equal(await evalJS('document.activeElement?.tagName'),'SUMMARY','disclosure receives keyboard focus');
+  await call('Input.dispatchKeyEvent',{type:'rawKeyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13,nativeVirtualKeyCode:13});
+  await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13,nativeVirtualKeyCode:13});
+  await wait(100);
   assert.equal(await evalJS('document.querySelector("details.task").open'),true,'keyboard activates the first disclosure');
   await evalJS('document.getElementById("themeToggle").click()');
   assert.equal(await evalJS('document.documentElement.dataset.theme'),'dark','lesson toggle activates dark mode');
