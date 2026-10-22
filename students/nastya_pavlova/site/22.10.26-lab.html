@@ -63,7 +63,7 @@ html[data-theme=dark] button[aria-pressed=true]{color:#12222b}
 (function(){
 'use strict';
 var $=function(id){return document.getElementById(id);}, scenarios={two:{sum:210000,p:10,n:2},three:{sum:496500,p:10,n:3},four:{sum:464100,p:10,n:4}};
-var chosen='three',baseline=null,state={sum:496500,p:10,n:3};
+var chosen='three',lastPreset='three',baseline=null,state={sum:496500,p:10,n:3};
 function clone(s){return {sum:s.sum,p:s.p,n:s.n};}
 function fmt(v){if(Math.abs(v)<1e-7)v=0;return Number(v).toLocaleString('ru-RU',{maximumFractionDigits:2});}
 function money(v){return fmt(v)+' ₽';}
@@ -103,10 +103,10 @@ function render(){
  $('educationalNote').textContent='Проценты в 1-м году: '+money(x.rows[0].interest)+'; в последнем: '+money(x.rows[x.rows.length-1].interest)+'. Они начисляются на остаток долга.';
  document.querySelectorAll('[data-scenario]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.scenario===chosen));});
 }
-function setScenario(name){chosen=name;state=clone(scenarios[name]);baseline=calculate(state);render();$('feedback').textContent='';}
+function setScenario(name){chosen=name;lastPreset=name;state=clone(scenarios[name]);baseline=calculate(state);render();$('feedback').textContent='';}
 document.querySelectorAll('[data-scenario]').forEach(function(b){b.addEventListener('click',function(){setScenario(b.dataset.scenario);if(history.replaceState)history.replaceState(null,'','#'+b.dataset.scenario);});});
 [['principal','sum'],['rate','p'],['years','n']].forEach(function(pair){$(pair[0]).addEventListener('input',function(){state[pair[1]]=Number(this.value);chosen='';render();$('feedback').textContent='';});});
-$('reset').addEventListener('click',function(){setScenario(chosen||'three');});
+$('reset').addEventListener('click',function(){setScenario(lastPreset);});
 $('checkForecast').addEventListener('click',function(){var opt=document.querySelector('input[name=guess]:checked');if(!opt){$('feedback').textContent='Сначала выберите прогноз.';return;}var more=clone(state);more.p=state.p+1;var before=calculate(state),after=calculate(more),diff=after.payment-before.payment;var correct=Math.abs(diff)<1e-7?'same':diff>0?'more':'less';$('feedback').textContent=(opt.value===correct?'Верно. ':'Сравните с вычислением. ')+'При увеличении годовой ставки с '+state.p+'% до '+more.p+'% платёж меняется с '+money(before.payment)+' на '+money(after.payment)+'.';});
 var theme=$('themeToggle');function setTheme(isDark){document.documentElement.dataset.theme=isDark?'dark':'light';theme.setAttribute('aria-pressed',String(isDark));theme.textContent=isDark?'Светлая тема':'Тёмная тема';}
 var saved=false;try{saved=localStorage.getItem('nastya-lesson-theme')==='dark';}catch(_){}setTheme(saved);
