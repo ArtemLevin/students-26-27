@@ -162,9 +162,24 @@ try{
     tasks:document.querySelectorAll('.tasks li').length,
     image:document.querySelector('.book img')?.naturalWidth>0
   }));
-  assert.ok(latestLesson.width<=latestLesson.viewport+2,'22 Oct lesson overflow '+width+': '+JSON.stringify(latestLesson));
+  if(latestLesson.width>latestLesson.viewport+2){const offenders=await page.evaluate(()=>[...document.querySelectorAll('main *')].filter(el=>{const b=el.getBoundingClientRect();return b.right>innerWidth+2&&getComputedStyle(el).overflowX!=='auto'&&getComputedStyle(el).overflowX!=='scroll';}).slice(0,8).map(el=>({tag:el.tagName,cls:el.className?.baseVal??el.className,text:(el.textContent||'').slice(0,55),right:Math.round(el.getBoundingClientRect().right)})));assert.fail('22 Oct lesson overflow '+width+': '+JSON.stringify({...latestLesson,offenders}));}
   assert.equal(latestLesson.title,'Как устроен платёж','22 Oct lesson title '+width);
   assert.equal(latestLesson.tasks,10,'22 Oct task count '+width);
+  const mathStats=await page.evaluate(()=>({
+    count:document.querySelectorAll('#models math,#annuity math,#deposit math,#diff math,#model math,#constraints math,#mixed math,#practice math').length,
+    fraction:document.querySelectorAll('math mfrac').length,
+    indexed:document.querySelectorAll('math msub').length,
+    power:document.querySelectorAll('math msup').length,
+    invalid:[...document.querySelectorAll('math')].filter(el=>el.namespaceURI!=='http://www.w3.org/1998/Math/MathML').length,
+    cell:document.querySelectorAll('.ledger td math').length,
+    practice:document.querySelectorAll('.tasks math').length,
+    question:document.querySelector('.equation math[display="block"]')?.textContent
+  }));
+  assert.ok(mathStats.count>=130,'MathML lesson coverage '+width+': '+JSON.stringify(mathStats));
+  assert.ok(mathStats.fraction>=5&&mathStats.indexed>=10&&mathStats.power>=5,'MathML semantic structures '+width);
+  assert.equal(mathStats.invalid,0,'MathML must be browser-native '+width);
+  assert.ok(mathStats.cell>=18&&mathStats.practice>=30,'MathML table and exercises '+width);
+
   assert.ok(latestLesson.image,'22 Oct poster missing '+width);
   if(width===390)assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','new lesson does not inherit cabinet theme');
   if(width===1440||width===390){
@@ -178,6 +193,17 @@ try{
   await page.goto(origin+'22.10.26-lab.html?mode=arbitrary',{waitUntil:'networkidle'});
   assert.equal(await page.locator('[data-mode="arbitrary"]').getAttribute('aria-pressed'),'true','new lab default mode '+width);
   assert.equal(await page.locator('#rows tr').count(),3,'new lab arbitrary schedule '+width);
+  const mathDynamic=await page.evaluate(()=>({
+    fields:document.querySelectorAll('#principalOut math,#rateOut math,#retentionOut math').length,
+    totals:document.querySelectorAll('#total math,#overpay math,#overpayPct math').length,
+    rows:document.querySelectorAll('#rows td math').length,
+    graph:document.querySelectorAll('#graph .amount math').length,
+    invalid:[...document.querySelectorAll('math')].filter(el=>el.namespaceURI!=='http://www.w3.org/1998/Math/MathML').length
+  }));
+  assert.ok(mathDynamic.fields>=3&&mathDynamic.totals>=3,'MathML missing from dynamic lab metrics '+width);
+  assert.ok(mathDynamic.rows>=18&&mathDynamic.graph>=3,'MathML missing from updated lab table or chart '+width);
+  assert.equal(mathDynamic.invalid,0,'MathML dynamic nodes must use the MathML namespace '+width);
+
   assert.ok((await page.locator('#total').textContent()).includes('969'),'new lab reference total '+width);
   if(width===390)assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','new lab does not inherit cabinet theme');
   for(const value of ['300','1200','750']){
@@ -196,10 +222,15 @@ try{
   assert.ok((await page.locator('#comparison').textContent()).includes('Изменение'),'new lab compare state '+width);
   await page.locator('[data-mode="limits"]').click();
   assert.equal(await page.locator('#rows tr').count(),3,'new lab limits schedule '+width);
+  assert.ok(await page.locator('#principalUnit math').count()>=1,'limits variable S should use MathML '+width);
+  assert.ok(await page.locator('#insightHead math').count()>=1,'limits heading should use MathML '+width);
+  assert.ok(await page.locator('#tableCaption math').count()>=1,'schedule caption should use MathML '+width);
   assert.ok((await page.locator('#insightText').textContent()).includes('каждый < 5: да'),'new lab limits baseline '+width);
   await page.locator('#principal').evaluate(el=>{el.value='10';el.dispatchEvent(new Event('input',{bubbles:true}));});
   assert.ok((await page.locator('#insightText').textContent()).includes('каждый < 5: нет'),'new lab limits threshold '+width);
   await page.locator('[data-mode="mixed"]').click();
+  assert.ok(await page.locator('#rows td math').count()>=18,'MathML must regenerate on mode change '+width);
+
   assert.equal(await page.locator('#rows tr').count(),5,'new lab mixed schedule '+width);
   assert.ok((await page.locator('#insightText').textContent()).includes('2,16'),'new lab mixed calculation '+width);
   const newLabSize=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth}));
