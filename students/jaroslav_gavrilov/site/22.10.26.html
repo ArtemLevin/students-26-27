@@ -26,7 +26,7 @@ html[data-theme="dark"]{color-scheme:dark;--bg:#111b1e;--paper:#1d2a2d;--ink:#ed
 @media(max-width:810px){.hero,.section{grid-template-columns:1fr}.section{gap:.6rem;padding:2.4rem 0}.section-desc{max-width:65ch}.hero{padding:2.8rem 0;gap:1.5rem}.signature{max-width:580px}.top-inner{align-items:flex-start;flex-direction:column;padding:1rem 0}.headlinks{justify-content:flex-start}.container{width:calc(100% - 2rem)}}
 @media(max-width:470px){body{font-size:15px}.rule-columns{grid-template-columns:1fr}.rule-columns>div:nth-child(even){padding-left:0;border-left:0}.formula{font-size:1.06rem}.headlinks a,.headlinks button{font-size:.83rem}.task .ans{margin-left:0}h1{max-width:15ch}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-@media print{body{background:white;color:black}.top,.toc,.headlinks,.links{display:none!important}.hero,.section{break-inside:avoid}.section{display:block}.formula{white-space:normal}.container{width:100%;max-width:100%}.task .ans{display:block}.footer{border-top:1px solid #888}a{text-decoration:underline}}
+@media print{body{background:white;color:black}.top,.toc,.headlinks,.links{display:none!important}.hero,.section{break-inside:auto}.section{display:block}.formula{white-space:normal;overflow:visible;break-inside:avoid}.graphpanel,.task{break-inside:avoid}.task summary:after{display:none}.container{width:100%;max-width:100%}.task .ans{display:block}.footer{border-top:1px solid #888}a{text-decoration:underline}}
 </style>
 </head>
 <body>
@@ -98,7 +98,7 @@ html[data-theme="dark"]{color-scheme:dark;--bg:#111b1e;--paper:#1d2a2d;--ink:#ed
 <figure class="graphpanel"><svg id="exampleGraph" viewBox="0 0 630 380" role="img" aria-labelledby="chartTitle chartDesc">
 <title id="chartTitle">График функции y равно два в степени x минус три</title>
 <desc id="chartDesc">Возрастающая показательная кривая проходит через A(0; −2) и B(1; −1), имеет горизонтальную асимптоту y = −3.</desc>
-<g id="gridGroup"></g><line class="graphaxis" x1="48" y1="240" x2="604" y2="240"/><line class="graphaxis" x1="250" y1="350" x2="250" y2="22"/><line class="graphdash" x1="48" y1="306" x2="604" y2="306"/><path class="graphcurve" id="curve" d="M80,303 L250,284 L350,262 L450,218 L550,130"/><g id="graphPoints"></g>
+<g id="gridGroup"></g><line class="graphaxis" x1="48" y1="240" x2="604" y2="240"/><line class="graphaxis" x1="250" y1="350" x2="250" y2="22"/><line class="graphdash" x1="48" y1="306" x2="604" y2="306"/><path class="graphcurve" id="curve" d="M62.5 302.1 L100 300.5 L175 295 L250 284 L325 262 L400 218 L475 130 L512.5 57.2 L524 29"/><g id="graphPoints"><circle class="graphpoint" cx="250" cy="284" r="5.7"/><text class="graphlabel" x="258" y="273">A(0; −2)</text><circle class="graphpoint" cx="325" cy="262" r="5.7"/><text class="graphlabel" x="333" y="251">B(1; −1)</text></g>
 <text class="graphlabel" x="606" y="233">x</text><text class="graphlabel" x="260" y="25">y</text><text class="graphlabel" x="55" y="297">y = −3</text></svg><figcaption class="caption">Иллюстрация по данным двух опорных точек из пособия; горизонтальная асимптота y = −3.</figcaption></figure>
 <div class="formula">f(x) = 2<sup>x</sup> − 3 &nbsp; → &nbsp; <strong>f(6) = 64 − 3 = 61</strong></div>
 <p>При a &gt; 1 показательная функция возрастает. При 0 &lt; a &lt; 1 она убывает. Сдвиг b изменяет уровень горизонтальной асимптоты.</p>
@@ -125,6 +125,18 @@ html[data-theme="dark"]{color-scheme:dark;--bg:#111b1e;--paper:#1d2a2d;--ink:#ed
 <script>
 (function(){
   const root=document.documentElement;
+  const printState=new Map();
+  window.addEventListener('beforeprint',()=>{
+    if(printState.size)return;
+    document.querySelectorAll('details.task').forEach(details=>{
+      printState.set(details,details.open);
+      details.open=true;
+    });
+  });
+  window.addEventListener('afterprint',()=>{
+    for(const [details,wasOpen] of printState)details.open=wasOpen;
+    printState.clear();
+  });
   const btn=document.getElementById('themeToggle');
   try{const saved=localStorage.getItem('jaroslav-lesson-theme');if(saved==='dark'||saved==='light')root.dataset.theme=saved;}catch(e){}
   function sync(){const dark=root.dataset.theme==='dark';btn.textContent=dark?'Светлая тема':'Тёмная тема';btn.setAttribute('aria-pressed',String(dark));}
@@ -140,6 +152,7 @@ html[data-theme="dark"]{color-scheme:dark;--bg:#111b1e;--paper:#1d2a2d;--ink:#ed
   [-3,-2,-1,0,1,2,3,4,5,6,7,8,9].forEach(y=>{const py=screenY(y);if(py>22&&py<351){grid.appendChild(element('line',{class:'graphgrid',x1:48,x2:604,y1:py,y2:py}));if(y!==0)grid.appendChild(element('text',{class:'graphlabel',x:228,y:py-4},String(y)));}});
   const coords=[];for(let x=-2.55;x<=4.5;x+=.025){const y=Math.pow(2,x)-3;const px=screenX(x),py=screenY(y);if(px>=48&&px<=604&&py>=22&&py<=350)coords.push([px,py]);}
   if(coords.length)curve.setAttribute('d',coords.map((xy,i)=>(i?'L':'M')+xy[0].toFixed(2)+' '+xy[1].toFixed(2)).join(' '));
+  pts.replaceChildren();
   [[0,-2,'A(0; −2)'],[1,-1,'B(1; −1)']].forEach(([x,y,label])=>{const px=screenX(x),py=screenY(y);pts.appendChild(element('circle',{class:'graphpoint',cx:px,cy:py,r:5.7}));pts.appendChild(element('text',{class:'graphlabel',x:px+8,y:py-11},label));});
 })();
 </script>
