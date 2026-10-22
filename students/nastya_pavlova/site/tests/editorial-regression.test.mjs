@@ -29,7 +29,7 @@ test('composition and orientation match editorial archive fingerprint',()=>{
 
 test('archive derives lesson cards and recent lesson from Nastya canonical registry',()=>{
  assert.ok(LESSONS.length>1);
- assert.equal(LESSONS[0].date,'2026-10-19');
+ assert.equal(LESSONS[0].date,'2026-10-22');
  assert.ok(LESSONS.every(x=>x.href.startsWith(x.date.split('-').reverse().map((x,i)=>i===2?x.slice(-2):x).join('.') )));
  assert.match(script,/import \{LESSONS\} from '\.\/lesson-registry\.js'/);
  assert.match(arcJs,/import \{LESSONS\} from '\.\/lesson-registry\.js'/);
