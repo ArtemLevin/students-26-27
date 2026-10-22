@@ -55,7 +55,7 @@ if(lesson){
     const image=lesson.date==='2026-10-22'?'22.10.26.png':'15.10.26.png';
     $('latestLessonPoster').href='../images/'+image;
     $('latestLessonPoster').hidden=false;
-    $('latestPracticeLink').href=href+'#practice';
+    $('latestPracticeLink').href=lesson.date==='2026-10-15'?href+'#practice':href;
   }else if(href){
     $('latestPracticeLink').href=href;
     $('latestPracticeLink').textContent='Открыть последнее занятие ↗';
