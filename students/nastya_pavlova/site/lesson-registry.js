@@ -5,6 +5,73 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-22",
+  "ktpRefs": [],
+  "href": "22.10.26.html",
+  "title": "Вклады и кредиты",
+  "navTitle": "Вклады и кредиты",
+  "navSubtitle": "Анастасия Павлова: вклады, сложные проценты, изменение ставок, аннуитетный кредит, равные платежи и переплата. Занятие 22 октября 2026 года.",
+  "summary": "Анастасия Павлова: вклады, сложные проценты, изменение ставок, аннуитетный кредит, равные платежи и переплата. Занятие 22 октября 2026 года.",
+  "topics": [
+    "Капитализация и сложные проценты",
+    "Вклад с ежегодными пополнениями",
+    "Изменение ставок по годам",
+    "Начисление процентов на остаток долга",
+    "Аннуитетная модель равных платежей",
+    "Общая сумма платежей и переплата"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "fin_02",
+      "evidenceAnchor": "compound",
+      "relation": "practiced",
+      "label": "Сложные проценты",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "app_09",
+      "evidenceAnchor": "deposits",
+      "relation": "practiced",
+      "label": "Пополнения вклада",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_04",
+      "evidenceAnchor": "rates",
+      "relation": "practiced",
+      "label": "Плавающая ставка по годам",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_05",
+      "evidenceAnchor": "credit",
+      "relation": "practiced",
+      "label": "Остаток кредитного долга",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_07",
+      "evidenceAnchor": "annuity",
+      "relation": "practiced",
+      "label": "Аннуитетная модель",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_09",
+      "evidenceAnchor": "overpay",
+      "relation": "touched",
+      "label": "Платёж, проценты и погашение долга",
+      "practiceDisposition": "none"
+    }
+  ],
+  "materials": {
+    "html": "22.10.26.html",
+    "pdf": "../pdf_docs/22.10.26.pdf",
+    "tex": "../tex_docs/22.10.26.tex",
+    "lab": "22.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-19",
   "ktpRefs": [],
   "href": "19.10.26.html",
