@@ -162,7 +162,7 @@ try{
     tasks:document.querySelectorAll('.tasks li').length,
     image:document.querySelector('.book img')?.naturalWidth>0
   }));
-  assert.ok(latestLesson.width<=latestLesson.viewport+2,'22 Oct lesson overflow '+width+': '+JSON.stringify(latestLesson));
+  if(latestLesson.width>latestLesson.viewport+2){const offenders=await page.evaluate(()=>[...document.querySelectorAll('main *')].filter(el=>{const b=el.getBoundingClientRect();return b.right>innerWidth+2&&getComputedStyle(el).overflowX!=='auto'&&getComputedStyle(el).overflowX!=='scroll';}).slice(0,8).map(el=>({tag:el.tagName,cls:el.className?.baseVal??el.className,text:(el.textContent||'').slice(0,55),right:Math.round(el.getBoundingClientRect().right)})));assert.fail('22 Oct lesson overflow '+width+': '+JSON.stringify({...latestLesson,offenders}));}
   assert.equal(latestLesson.title,'Как устроен платёж','22 Oct lesson title '+width);
   assert.equal(latestLesson.tasks,10,'22 Oct task count '+width);
   const mathStats=await page.evaluate(()=>({
