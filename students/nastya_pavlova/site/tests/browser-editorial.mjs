@@ -74,6 +74,7 @@ try{
    const expression=name==='index.html'?
      "document.querySelector('#lessonTitle')?.textContent!=='Загрузка занятия…'":
      name==='archive.html'?"document.querySelectorAll('.archive-tile').length>0":
+     name==='22.10.26-lab.html'?"document.querySelector('#payment')?.textContent.length>0":
      name.endsWith('-lab.html')?"document.querySelector('#finalSum')?.textContent.length>0":
      "!!document.querySelector('#pageTitle')";
    const ready=await evaluate(expression);
@@ -101,7 +102,7 @@ try{
    }else{
     const state=await evaluate("({map:!!document.querySelector('#radialMap'),practice:!!document.querySelector('#practiceRoot'),lesson:document.querySelector('#lessonTitle')?.textContent,ids:document.querySelectorAll('#practiceSection').length})");
     assert.ok(state.map&&state.practice&&state.ids===1);
-    assert.match(state.lesson,/Банковские вклады и сложные проценты/);
+    assert.match(state.lesson,/Вклады и кредиты/);
    }
    // Both themes must leave content accessible, without horizontal scroll.
    if(page==='archive.html')await evaluate("document.querySelector('#archiveTheme').click()");
@@ -124,6 +125,20 @@ try{
    const afterDark=await evaluate("({overflow:document.documentElement.scrollWidth>document.documentElement.clientWidth+2,theme:document.documentElement.dataset.theme})");
    assert.ok(!afterDark.overflow,'New pages have no dark theme overflow: '+page+' '+w);
   }
+ }
+ for(const [w,h] of [[1440,900],[390,844]]){
+  await navigate('22.10.26.html',w,h);
+  const lesson=await evaluate("({heading:document.querySelector('#pageTitle')?.textContent,sections:document.querySelectorAll('.chapter').length,exercises:document.querySelectorAll('.practice details').length,labLink:[...document.querySelectorAll('a')].some(x=>x.getAttribute('href')==='22.10.26-lab.html')})");
+  assert.match(lesson.heading,/Вклады/);assert.equal(lesson.sections,10);assert.equal(lesson.exercises,10);assert.ok(lesson.labLink);
+  await evaluate("document.querySelector('#themeToggle').click()");
+  assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'22 October lesson dark overflow at '+w);
+  await navigate('22.10.26-lab.html',w,h);
+  const credit=await evaluate("({heading:document.querySelector('h1')?.textContent,chart:!!document.querySelector('#debtChart'),controls:document.querySelectorAll('input[type=range]').length,years:document.querySelectorAll('#yearRows tr').length,payment:document.querySelector('#payment')?.textContent.replace(/[^0-9]/g,'')})");
+  assert.match(credit.heading,/Как погашается кредит/);assert.equal(credit.controls,3);assert.ok(credit.chart);assert.equal(credit.years,3);assert.equal(credit.payment,'199650');
+  const presets=await evaluate("(()=>{const get=()=>document.querySelector('#payment').textContent.replace(/[^0-9]/g,'');document.querySelector('[data-scenario=two]').click();const two=get();document.querySelector('[data-scenario=four]').click();const four=get();const rate=document.querySelector('#rate');rate.value='12';rate.dispatchEvent(new Event('input',{bubbles:true}));document.querySelector('#reset').click();return {two,four,reset:get(),rows:document.querySelectorAll('#yearRows tr').length}})()");
+  assert.deepEqual(presets,{two:'121000',four:'146410',reset:'146410',rows:4},'Annuity scenario and reset parity');
+  await evaluate("document.querySelector('#themeToggle').click()");
+  assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'22 October lab dark overflow at '+w);
  }
  await navigate('19.10.26-lab.html',390,844);
  const scenarios=await evaluate("(()=>{const get=()=>document.querySelector('#finalSum').textContent;document.querySelector('[data-preset=base]').click();const base=get();document.querySelector('[data-preset=deposits]').click();const deposits=get();document.querySelector('[data-preset=withdrawal]').click();const withdrawal=get();document.querySelector('[data-preset=variable]').click();const variable=get();return {base,deposits,withdrawal,variable}})()");
