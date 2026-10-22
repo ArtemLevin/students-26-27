@@ -219,6 +219,78 @@ for (const [id,cfg] of Object.entries(LESSON_191026)) {
   item.material={href:'19.10.26.html#'+cfg.section,label:'Открыть связанный раздел занятия →'};
 }
 
+
+// 22.10.2026: append reviewed learning evidence, preserve all existing mastery and repeat states.
+const LESSON_221026 = {
+  "ege08_04": {
+    "section": "laws",
+    "evidence": "Использованы законы степеней и упрощение 10^21/(10^-9·10^20).",
+    "relation": "practiced"
+  },
+  "ege08_02": {
+    "section": "laws",
+    "evidence": "Повторены целые отрицательные показатели и дроби как степени.",
+    "relation": "practiced"
+  },
+  "ege08_03": {
+    "section": "root",
+    "evidence": "В прикладной формуле применена обратная степень 1/3.",
+    "relation": "practiced"
+  },
+  "ege08_06": {
+    "section": "star",
+    "evidence": "Четвёртый корень из произведения степеней 2 и 5.",
+    "relation": "practiced"
+  },
+  "ege07_07": {
+    "section": "models",
+    "evidence": "Показательное уравнение 40·2^(-t/10)=5 решено приведением к одному основанию.",
+    "relation": "practiced"
+  },
+  "ege10_01": {
+    "section": "gas",
+    "evidence": "В формулу p1V1^a=p2V2^a подставлены данные для двух состояний.",
+    "relation": "practiced"
+  },
+  "ege10_02": {
+    "section": "methods",
+    "evidence": "Отработано выделение искомой переменной в прикладной модели.",
+    "relation": "practiced"
+  },
+  "ege10_09": {
+    "section": "root",
+    "evidence": "Обсуждены неравенство F≤1000 и условие L≥0.",
+    "relation": "touched"
+  },
+  "ege10_05": {
+    "section": "star",
+    "evidence": "Применена модель температуры и излучаемой мощности P=σST^4.",
+    "relation": "practiced"
+  },
+  "ege10_12": {
+    "section": "star",
+    "evidence": "Вычислена положительная температура T по значению T^4.",
+    "relation": "practiced"
+  },
+  "ege12_12": {
+    "section": "graph",
+    "evidence": "На графике f(x)=a^x+b по точкам найдены a=2 и b=-3.",
+    "relation": "practiced"
+  },
+  "ege12_15": {
+    "section": "graph",
+    "evidence": "Вертикальный сдвиг графика показательной функции на b=-3.",
+    "relation": "practiced"
+  }
+};
+for (const [id,cfg] of Object.entries(LESSON_221026)) {
+  const item=G.flatMap(group=>group.items).find(topic=>topic.id===id);
+  if(!item)continue;
+  item.evidence=Array.isArray(item.evidence)?item.evidence:[];
+  item.evidence.push({text:cfg.evidence+' Материал: занятие 22.10.2026 «Степени и прикладные модели». Формат: '+(cfg.relation==='practiced'?'разбор и практика.':'обсуждение.')});
+  item.material={href:'22.10.26.html#'+cfg.section,label:'Открыть раздел занятия от 22.10 →'};
+}
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'jaroslav_gavrilov',
