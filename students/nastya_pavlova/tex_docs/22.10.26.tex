@@ -1,0 +1,388 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[default]{lato}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,top=20mm,bottom=21mm,left=21mm,right=21mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,longtable}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\definecolor{accent}{HTML}{167978}
+\definecolor{darkaccent}{HTML}{164D50}
+\definecolor{textgray}{HTML}{303D3E}
+\definecolor{lightline}{HTML}{A5C4C1}
+\color{textgray}
+\setstretch{1.14}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist[enumerate]{leftmargin=*,itemsep=.55em,topsep=.3em}
+\setlist[itemize]{leftmargin=*,itemsep=.25em,topsep=.3em}
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{.3pt}
+\fancyfoot[L]{\footnotesize Лёвин А.~А.\,\textbullet\,Анастасия Павлова}
+\fancyfoot[R]{\footnotesize\thepage}
+\newcommand{\checkitem}[1]{\noindent\(\square\)\enspace #1\par}
+\newcommand{\keyterm}[1]{{\color{darkaccent}\textbf{#1}}}
+\newcommand{\smallrule}{\par\smallskip\noindent{\color{lightline}\rule{\linewidth}{.4pt}}\par\smallskip}
+\newcommand{\rub}{\text{ руб.}}
+\newcommand{\answer}[2]{#1 & #2\\}
+\tikzset{
+ flowstart/.style={ellipse,draw=accent,thick,minimum width=38mm,minimum height=10mm,align=center,font=\small},
+ flowstep/.style={rectangle,rounded corners=2pt,draw=accent,thick,text width=107mm,minimum height=12mm,inner sep=5pt,align=center,font=\small},
+ flowchoice/.style={diamond,aspect=2.35,draw=accent,thick,text width=40mm,inner sep=3pt,align=center,font=\small},
+ flowaside/.style={rectangle,rounded corners=2pt,draw=accent,thick,text width=38mm,minimum height=13mm,inner sep=5pt,align=center,font=\small},
+ flowarrow/.style={-{Stealth[length=2.8mm]},thick,color=darkaccent}
+}
+\begin{document}
+\setlength{\abovedisplayskip}{7pt}
+\setlength{\belowdisplayskip}{7pt}
+\setlength{\abovedisplayshortskip}{4pt}
+\setlength{\belowdisplayshortskip}{5pt}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{37mm}
+{\Large\color{accent}\bfseries ЧЕК-ЛИСТ\par}
+\vspace{11mm}
+{\Huge\color{darkaccent}\bfseries Банковские вклады\par}
+\vspace{5mm}
+{\LARGE\color{darkaccent}\bfseries и кредиты\par}
+\vspace{12mm}
+{\large Сложные проценты, изменение ставки,\par}
+{\large аннуитетные платежи и переплата\par}
+\vspace{23mm}
+{\large Профильная математика · подготовка к ЕГЭ\par}
+\vspace{9mm}
+{\large 22.10.26\par}
+\vfill
+{\normalsize Лёвин Артём Александрович\par}
+{\normalsize эксклюзивно для Анастасии Павловой\par}
+\vspace{21mm}
+\begin{tikzpicture}[remember picture,overlay]
+ \draw[accent!48,line width=1.1pt]
+  ([xshift=22mm,yshift=19mm]current page.south west)
+  .. controls ([xshift=78mm,yshift=28mm]current page.south west) and
+             ([xshift=-65mm,yshift=8mm]current page.south east) ..
+             ([xshift=-22mm,yshift=19mm]current page.south east);
+\end{tikzpicture}
+\end{center}
+\end{titlepage}
+\setcounter{page}{2}
+
+\section*{1. Главные идеи занятия}
+\checkitem{В задаче на \keyterm{вклад} проценты банк прибавляет к деньгам клиента. В задаче на \keyterm{кредит} проценты увеличивают долг клиента перед банком.}
+\checkitem{При \keyterm{постоянной ставке} и отсутствии дополнительных операций удобно использовать степень повышающего коэффициента. При \keyterm{изменяющейся ставке} или пополнениях полезно вести расчёт по годам.}
+\checkitem{При \keyterm{аннуитетном кредите} долг погашается \emph{равными платежами}. Каждый следующий процент начисляют на \emph{остаток} долга.}
+\checkitem{Сумма всех платежей, переплата и процент переплаты --- разные величины. Всегда проверяйте, что именно требуется найти и в каких единицах записать ответ.}
+\smallrule
+\section*{2. Единые обозначения}
+Пусть \(P\) --- годовая процентная ставка, указанная в процентах. Тогда
+\[
+\boxed{p=\frac{P}{100}},\qquad
+\boxed{k=1+p}.
+\]
+\(p\) --- ставка в виде десятичной дроби, \(k\) --- \keyterm{повышающий коэффициент}. Например, если \(P=10\%\), то \(p=0{,}1\) и \(k=1{,}1\).
+
+\checkitem{Для вклада обозначим начальную сумму через \(S\), конечную через \(S_n\), число лет через \(n\).}
+\checkitem{Для кредита \(S\) --- сумма, взятая в долг; \(x\) --- одинаковый ежегодный платёж; \(B_j\) --- долг после платежа за \(j\)-й год.}
+\checkitem{Ставка \(P\%\) превращается в дробь \(P/100\), \emph{а не} в число \(P\). При росте на 10\% коэффициент равен \(1{,}1\), при росте на 20\% --- \(1{,}2\).}
+\smallrule
+\section*{3. Вклад: постоянные сложные проценты}
+Если проценты присоединяются к сумме вклада каждый год и дополнительных операций нет, то
+\[
+S_1=Sk,\qquad S_2=Sk^2,\qquad
+\boxed{S_n=Sk^n=S\left(1+\frac{P}{100}\right)^n}.
+\]
+\checkitem{Степень равна \keyterm{числу начислений}, а не количеству дополнительных взносов. Сначала выясните, сколько лет деньги находились на вкладе.}
+\textbf{Пример 1.} В начале вложили 50\,000 руб. Через три года сумма стала равной 66\,550 руб. Найдём годовую ставку:
+\[
+66\,550=50\,000\,k^3,\qquad
+k^3=1{,}331=1{,}1^3,\qquad
+k=1{,}1.
+\]
+\[
+\boxed{p=k-1=0{,}1,\qquad P=10\%.}
+\]
+\checkitem{Чтобы перейти от \(k=1{,}1\) к ставке, вычтите \emph{единицу}: \(p=0{,}1\). Запись \(1+p=0{,}1\) ошибочна.}
+
+\section*{4. Вклад с дополнительными взносами}
+\checkitem{Для каждого пополнения выясните \emph{момент внесения денег}: от этого зависит, сколько раз на него начислят проценты.}
+
+\textbf{Пример 2.} На вклад внесли 100\,000 руб. под 10\% годовых на три года. \emph{В конце первого и второго года, после начисления процентов}, внесли ещё по 10\,000 руб. В конце третьего года вклад закрыли.
+\begin{center}
+\renewcommand{\arraystretch}{1.27}
+\begin{tabularx}{\linewidth}{@{}cXXX@{}}
+\toprule
+\textbf{Год} & \textbf{Сумма в начале} & \textbf{После начисления 10\%} & \textbf{После пополнения}\\
+\midrule
+1 & 100\,000 & 110\,000 & 120\,000\\
+2 & 120\,000 & 132\,000 & 142\,000\\
+3 & 142\,000 & 156\,200 & ---\\
+\bottomrule
+\end{tabularx}
+\end{center}
+Один взнос увеличивался ещё два года, второй --- один год. Поэтому
+\[
+\boxed{S_3=Sk^3+Ak^2+Ak}
+\]
+и для данных примера
+\[
+100\,000\cdot1{,}1^3+10\,000\cdot1{,}1^2+
+10\,000\cdot1{,}1=\boxed{156\,200\rub}.
+\]
+\checkitem{Формула верна при \emph{двух} равных взносах \(A\), сделанных в конце первого и второго года. Если сроки пополнений другие, показатели степеней изменятся.}
+\smallrule
+\section*{5. Вклад с меняющейся ставкой}
+\checkitem{Если ставка разная по годам, для каждого года используйте свой коэффициент \(k_j=1+P_j/100\).}
+\[
+\boxed{S_n=S\cdot k_1k_2\ldots k_n.}
+\]
+\textbf{Пример 3.} Сравним два варианта вклада 1000 тыс. руб. на три года:
+постоянные 10\% и ежегодные ставки 8\%, 10\%, 12\%.
+\begin{center}
+\renewcommand{\arraystretch}{1.24}
+\begin{tabularx}{\linewidth}{@{}cXXXX@{}}
+\toprule
+\textbf{Год} & \textbf{В начале, тыс. руб.} & \textbf{Ставка} & \textbf{Начислено, тыс. руб.} & \textbf{В конце, тыс. руб.}\\
+\midrule
+1 & 1000 & 8\% & 80 & 1080\\
+2 & 1080 & 10\% & 108 & 1188\\
+3 & 1188 & 12\% & 142{,}56 & 1330{,}56\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\[
+\begin{aligned}
+S_{\text{пост.}}&=1000\cdot1{,}1^3=1331\ \text{тыс. руб.},\\
+S_{\text{плав.}}&=1330{,}56\ \text{тыс. руб.},\\
+\Delta S&=1331-1330{,}56=0{,}44\ \text{тыс. руб.}
+=\boxed{440\rub}.
+\end{aligned}
+\]
+\checkitem{Для разницы между двумя результатами используйте \emph{больший минус меньший}. Для ответа в рублях тысячи рублей умножайте на 1000.}
+
+\section*{6. Чем кредит отличается от вклада}
+При кредите банк начисляет процент на текущую сумму долга. После начисления процентов клиент вносит платёж. Остаток долга переносится на следующий год.
+\begin{center}
+\renewcommand{\arraystretch}{1.32}
+\begin{tabularx}{\linewidth}{@{}XXXXX@{}}
+\toprule
+\textbf{Долг в начале} & \textbf{Начислено \(P\%\)} & \textbf{Долг с процентами} & \textbf{Платёж} & \textbf{Остаток}\\
+\midrule
+\(B\) & \(Bp\) & \(B+Bp=Bk\) & \(x\) & \(Bk-x\)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\checkitem{\keyterm{Общая задолженность} \(=\) начальная задолженность данного года \(+\) начисленный за год процент.}
+\checkitem{\keyterm{Остаток долга} \(=\) общая задолженность \(-\) внесённый платёж.}
+\checkitem{На следующий год проценты начисляются на \emph{остаток}, а не на исходную сумму \(S\).}
+\smallrule
+\section*{7. Как распознать аннуитетную схему}
+\checkitem{Ищите в условии слова \keyterm{«погашен равными платежами»}, \keyterm{«выплаты одинаковы»}, \keyterm{«ежегодно вносили одну и ту же сумму»}.}
+\checkitem{Аннуитет: \(x_1=x_2=\ldots=x_n=x\). Платёж одинаковый, но его доли, уходящие на проценты и погашение основного долга, меняются.}
+\checkitem{В задачах занятия платёж производится \emph{в конце каждого года} после начисления процентов; через \(n\) лет кредит полностью погашен.}
+
+\textbf{Трёхлетний кредит.} В начале \(B_0=S\). Каждый год выполняется одно правило:
+\[
+\boxed{B_j=kB_{j-1}-x,\qquad B_n=0.}
+\]
+Таблица раскрывает его смысл:
+\begin{center}
+\renewcommand{\arraystretch}{1.29}
+\begin{tabularx}{\linewidth}{@{}cXXXX@{}}
+\toprule
+\textbf{Год} & \textbf{Начальный долг} & \textbf{Долг с процентами} & \textbf{Платёж} & \textbf{Остаток}\\
+\midrule
+1 & \(S\) & \(Sk\) & \(x\) & \(Sk-x\)\\
+2 & \(Sk-x\) & \((Sk-x)k\) & \(x\) & \(Sk^2-xk-x\)\\
+3 & \(Sk^2-xk-x\) & \((Sk^2-xk-x)k\) & \(x\) & \(Sk^3-xk^2-xk-x\)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+Последняя сумма равна нулю, потому что долг закрыт:
+\[
+\boxed{Sk^3-xk^2-xk-x=0.}
+\]
+\checkitem{Внимательно проследите чередование: \emph{начислить проценты} \(\rightarrow\) \emph{внести платёж} \(\rightarrow\) \emph{перенести остаток}.}
+
+\section*{8. Формула равных ежегодных платежей}
+Из уравнения трёхлетнего кредита выносим \(x\):
+\[
+Sk^3=x(k^2+k+1),\qquad
+\boxed{x=\frac{Sk^3}{k^2+k+1}}.
+\]
+\checkitem{Знаменатель \(k^2+k+1\) --- сумма множителей при трёх равных платежах. Она положительна при \(k>0\).}
+
+\textbf{Полезная закономерность для разных сроков:}
+\[
+\begin{array}{@{}rl@{}}
+2\ \text{года:}&Sk^2-xk-x=0;\\[4pt]
+3\ \text{года:}&Sk^3-xk^2-xk-x=0;\\[4pt]
+4\ \text{года:}&Sk^4-xk^3-xk^2-xk-x=0;\\[4pt]
+5\ \text{лет:}&Sk^5-xk^4-xk^3-xk^2-xk-x=0.
+\end{array}
+\]
+В общем случае:
+\[
+\boxed{Sk^n=x\bigl(k^{n-1}+k^{n-2}+\cdots+k+1\bigr).}
+\]
+\checkitem{Слева степень \(k\) равна числу лет. Справа степени при \(x\) убывают от \(n-1\) до нуля. Последний член всегда просто \(x\).}
+\checkitem{Можно как вывести формулу по таблице, так и использовать готовое равенство, если условия задачи точно соответствуют аннуитетной схеме.}
+\smallrule
+\clearpage
+\section*{9. Алгоритм: задача на кредит с равными платежами}
+\vspace{2mm}
+\begin{center}
+\begin{tikzpicture}[node distance=10mm]
+\node[flowstart] (start) {Прочитать условие};
+\node[flowchoice,below=13mm of start] (cond) {Платежи равные?};
+\node[flowaside,right=14mm of cond] (other) {Нужна другая схема; составьте таблицу};
+\node[flowstart,below=8mm of other,minimum width=28mm] (otherend) {Другой алгоритм};
+\node[flowstep,below=15mm of cond] (params) {Записать \(S\), \(P\), \(n\); вычислить \(p=P/100\) и \(k=1+p\)};
+\node[flowstep,below=9mm of params] (formula) {Составить \(Sk^n=x(k^{n-1}+\cdots+k+1)\)};
+\node[flowstep,below=9mm of formula] (solve) {Выразить искомую величину и выполнить расчёты};
+\node[flowstep,below=9mm of solve] (target) {Если требуется: \(\text{ОСП}=nx\), переплата \(=nx-S\)};
+\node[flowstep,below=9mm of target] (units) {Проверить число лет, размерность, положительность платежа и нулевой конечный остаток};
+\node[flowstart,below=10mm of units] (end) {Записать ответ};
+\draw[flowarrow] (start) -- (cond);
+\draw[flowarrow] (cond.east) -- node[above,font=\small]{нет} (other.west);
+\draw[flowarrow] (other.south) -- (otherend.north);
+\draw[flowarrow] (cond.south) -- node[right,font=\small]{да} (params.north);
+\draw[flowarrow] (params) -- (formula);
+\draw[flowarrow] (formula) -- (solve);
+\draw[flowarrow] (solve) -- (target);
+\draw[flowarrow] (target) -- (units);
+\draw[flowarrow] (units) -- (end);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\section*{10. Разобранный пример ЕГЭ}
+\textbf{Условие.} Кредит 496\,500 руб. взят под 10\% годовых на три года и полностью погашен тремя равными платежами. Найдите общую сумму платежей.
+\[
+S=496\,500,\quad n=3,\quad k=1{,}1.
+\]
+Поскольку платежи равные, используем формулу:
+\[
+\begin{aligned}
+x&=\frac{496\,500\cdot1{,}1^3}{1{,}1^2+1{,}1+1}
+ =\frac{496\,500\cdot1{,}331}{3{,}31}\\
+ &=\boxed{199\,650\rub}.
+\end{aligned}
+\]
+Всего сделано три одинаковых платежа:
+\[
+\boxed{\text{ОСП}=3x=598\,950\rub}.
+\]
+\checkitem{Число \(496{,}5\) в тысячах рублей и \(496\,500\) в рублях описывают один и тот же кредит. С самого начала выберите единицы и придерживайтесь их.}
+
+\section*{11. Общая сумма платежей и переплата}
+Если кредит погашается \(n\) равными ежегодными платежами \(x\), то
+\[
+\boxed{\text{ОСП}=nx},\qquad
+\boxed{\text{переплата}=nx-S}.
+\]
+Процент переплаты вычисляют относительно \emph{исходной} суммы кредита:
+\[
+\boxed{\text{процент переплаты}=\frac{nx-S}{S}\cdot100\%},\qquad S>0.
+\]
+\textbf{Продолжение примера.} Для \(S=496\,500\) руб., \(n=3\), \(x=199\,650\) руб.:
+\[
+\begin{aligned}
+\text{ОСП}&=598\,950\rub,\\
+\text{переплата}&=598\,950-496\,500=102\,450\rub,\\
+\text{процент переплаты}&=\frac{102\,450}{496\,500}\cdot100\%
+\approx20{,}63\%.
+\end{aligned}
+\]
+\checkitem{Процентная ставка \(10\%\) в год и процент \emph{общей переплаты} \(\approx20{,}63\%\) --- разные показатели: кредит существовал три года, а остаток долга изменялся после платежей.}
+\smallrule
+\clearpage
+\section*{12. Типичные ошибки и способы проверки}
+\checkitem{\keyterm{Потеря одного года.} Если срок четыре года, нужно четыре платежа и четыре начисления процентов, а в формуле стоит \(Sk^4\).}
+\checkitem{\keyterm{Деление вместо вычитания.} Из \(a=b+c+d\) получаем \(a-c-d=b\), а деление здесь не применяется.}
+\checkitem{\keyterm{Забытый коэффициент при переносе.} Второй и последующие платежи при выводе формулы умножаются на соответствующие степени \(k\).}
+\checkitem{\keyterm{Проценты от исходной суммы долга.} В новом году банк начисляет их на остаток \(B\), поэтому используйте \(Bp\) и \(Bk\).}
+\checkitem{\keyterm{Ошибки в разрядах.} При работе с 173{,}28 и 173{,}528 лишняя или потерянная цифра меняет результат. Перепроверьте десятичные знаки.}
+\checkitem{\keyterm{Единицы и округление.} Если считали в тысячах рублей, переводите итог в рубли лишь после всех вычислений; не округляйте промежуточные суммы без указания в условии.}
+\checkitem{\keyterm{Вклад или кредит?} По смыслу различайте, кому начисляются проценты, и учитывайте дополнительные взносы или платежи строго в их момент времени.}
+\smallrule
+\clearpage
+\section*{Тренировочный блок · Путь А}
+\textbf{10 заданий по нарастающей сложности.} Выполните расчёты самостоятельно; в ответе укажите единицы измерения. Для кредитов все платежи в конце соответствующего года, после начисления процентов. Промежуточные результаты не округляйте.
+\begin{enumerate}
+\item На вклад внесли 40\,000 руб. под 5\% годовых с ежегодной капитализацией. Сколько будет на вкладе через два года без дополнительных операций?
+\item В начале на вклад внесли 50\,000 руб. Через три года с ежегодной капитализацией получили 66\,550 руб. Найдите постоянную годовую процентную ставку.
+\item Через три года вклад под 10\% годовых составил 79\,860 руб. Пополнений и снятий не было. Какова первоначальная сумма?
+\item На вклад внесли 100\,000 руб. под 10\% годовых. После начисления процентов в конце первого и второго года добавляли по 10\,000 руб. Сколько денег оказалось на вкладе в конце третьего года?
+\item Сумма вклада 1000 тыс. руб., срок три года. Сравните варианты: \textbf{А} --- ставка 10\% ежегодно; \textbf{Б} --- ставки 7\%, 10\%, 13\% по годам. Какой вариант выгоднее и на сколько \emph{рублей}?
+\end{enumerate}
+\vspace{3mm}
+\textit{После решения задач 1--5 убедитесь, что различаете постоянную ставку, последовательное изменение ставок и пополнение.}
+\vspace{5mm}
+\subsection*{Самопроверка перед ответом}
+\begin{enumerate}
+\item Какая операция описана: вклад или кредит? Ставка постоянная или меняющаяся?
+\item Сколько раз начисляются проценты и сколько раз совершается платёж либо пополнение?
+\item Использована ли правильная база для процента в каждом году?
+\item При аннуитетном кредите одинаковы ли все платежи и равен ли конечный долг нулю?
+\item Найдена ли именно требуемая величина? Проверены ли единицы ответа?
+\end{enumerate}
+
+
+
+\clearpage
+\section*{Тренировочный блок · продолжение}
+\begin{enumerate}[start=6]
+\item Взят кредит 210\,000 руб. под 10\% годовых на два года. Долг погашается \emph{двумя равными ежегодными платежами}. Найдите размер одного платежа.
+\item Кредит 496\,500 руб. взят под 10\% годовых на три года и погашен тремя одинаковыми годовыми платежами. Найдите размер платежа и общую сумму всех платежей.
+\item Кредит полностью погашен \emph{тремя равными годовыми платежами} по 133\,100 руб. Годовая ставка 10\%. Найдите первоначальную сумму кредита.
+\item Для кредита из задания 7 найдите переплату в рублях и процент переплаты от первоначальной суммы. Процент округлите до сотых.
+\item Кредит погашен \emph{четырьмя равными ежегодными платежами} по 146\,410 руб. Годовая ставка 10\%. Найдите первоначальную сумму, общую сумму платежей и переплату.
+\end{enumerate}
+\vspace{8mm}
+\smallrule
+\textbf{Памятка по расчётам.} Для трёх лет \(k^3=1{,}331\) при \(k=1{,}1\); для четырёх лет \(k^4=1{,}4641\). Это степени, а не процентные ставки. Проверьте, насколько уверенно Вы получаете эти значения вручную.
+
+\clearpage
+\section*{Ответы к тренировочному блоку}
+\renewcommand{\arraystretch}{1.43}
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+\textbf{№} & \textbf{Ответ}\\
+\midrule
+\answer{1}{44\,100 руб.}
+\answer{2}{10\% годовых.}
+\answer{3}{60\,000 руб.}
+\answer{4}{156\,200 руб.}
+\answer{5}{Вариант А, на 990 руб.}
+\answer{6}{121\,000 руб.}
+\answer{7}{199\,650 руб.; общая сумма --- 598\,950 руб.}
+\answer{8}{331\,000 руб.}
+\answer{9}{102\,450 руб.; приблизительно 20{,}63\%.}
+\answer{10}{464\,100 руб.; общая сумма --- 585\,640 руб.; переплата --- 121\,540 руб.}
+\bottomrule
+\end{tabularx}
+\vspace{8mm}
+\textbf{Дополнительная самопроверка для кредита:}
+\[
+B_0=S,\qquad B_j=kB_{j-1}-x,\qquad
+\boxed{B_n=0}.
+\]
+После подстановки найденных данных остаток после последнего платежа должен быть равен нулю. Это помогает обнаружить потерянный год, неверную степень или ошибку в знаке.
+
+\end{document}
