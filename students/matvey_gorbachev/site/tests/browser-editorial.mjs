@@ -55,6 +55,15 @@ try{
     assert.equal(await page.locator('#topicDialog').evaluate(d=>d.open),true,'competency dialog did not open');
     await page.locator('#dialogClose').click();
     assert.equal(await page.locator('#topicDialog').evaluate(d=>d.open),false,'competency dialog did not close');
+    const financeCell=page.locator('#competencyMap .radial-cell[data-id="finance_11"]');
+    assert.equal(await financeCell.getAttribute('data-level'),'0','evidence cannot raise mastery automatically');
+    await financeCell.focus();
+    await page.keyboard.press('Enter');
+    const financeHistory=await page.locator('#dialogHistory').innerText();
+    assert.ok(financeHistory.includes('18.10.26'),'18 Oct finance evidence missing');
+    assert.ok(financeHistory.includes('22.10.26'),'22 Oct finance evidence missing');
+    assert.equal(await page.locator('#dialogLevel').innerText().then(x=>x.trim().startsWith('0 / 4')),true,'lesson history must preserve diagnostic level');
+    await page.locator('#dialogClose').click();
     const repeatFilter=page.locator('.filter[data-filter="repeat"]');
     await repeatFilter.click();
     assert.equal(await repeatFilter.getAttribute('aria-pressed'),'true','repeat filter not selected');
@@ -155,12 +164,31 @@ try{
   assert.equal(latestLesson.title,'Как устроен платёж','22 Oct lesson title '+width);
   assert.equal(latestLesson.tasks,10,'22 Oct task count '+width);
   assert.ok(latestLesson.image,'22 Oct poster missing '+width);
+  if(width===390)assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','new lesson does not inherit cabinet theme');
+  if(width===1440||width===390){
+    await page.screenshot({path:path.join(artifactDir,'lesson-22-'+width+'.png'),fullPage:true});
+    await page.locator('#themeToggle').click();
+    await page.screenshot({path:path.join(artifactDir,'lesson-22-alternate-theme-'+width+'.png'),fullPage:true});
+    await page.locator('#themeToggle').click();
+  }
   await page.locator('.answers summary').click();
   assert.equal(await page.locator('.answers li').count(),10,'22 Oct answer count '+width);
   await page.goto(origin+'22.10.26-lab.html?mode=arbitrary',{waitUntil:'networkidle'});
   assert.equal(await page.locator('[data-mode="arbitrary"]').getAttribute('aria-pressed'),'true','new lab default mode '+width);
   assert.equal(await page.locator('#rows tr').count(),3,'new lab arbitrary schedule '+width);
   assert.ok((await page.locator('#total').textContent()).includes('969'),'new lab reference total '+width);
+  if(width===390)assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','new lab does not inherit cabinet theme');
+  for(const value of ['300','1200','750']){
+    await page.locator('#principal').evaluate((el,value)=>{el.value=value;el.dispatchEvent(new Event('input',{bubbles:true}));},value);
+    const data=await page.locator('#rows tr').count();
+    assert.equal(data,3,'arbitrary schedule missing at principal '+value+' / '+width);
+    const pay=await page.locator('#total').textContent();
+    assert.ok(!pay.includes('NaN')&&!pay.includes('Infinity'),'invalid payment at principal '+value+' / '+width);
+  }
+  await page.emulateMedia({media:'print'});
+  assert.equal(await page.locator('.controls').evaluate(el=>getComputedStyle(el).display),'none','lab print controls must be hidden '+width);
+  await page.emulateMedia({media:'screen'});
+  if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lab-22-'+width+'.png'),fullPage:true});
   await page.locator('#snapshot').click();
   await page.locator('#rate').evaluate(el=>{el.value='15';el.dispatchEvent(new Event('input',{bubbles:true}));});
   assert.ok((await page.locator('#comparison').textContent()).includes('Изменение'),'new lab compare state '+width);
