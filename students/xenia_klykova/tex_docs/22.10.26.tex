@@ -1,0 +1,380 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[margin=19mm,top=21mm,bottom=22mm]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{needspace}
+\definecolor{accent}{HTML}{17696E}
+\definecolor{deepaccent}{HTML}{12464A}
+\definecolor{textgray}{HTML}{37434A}
+\definecolor{lightline}{HTML}{D8E5E5}
+\hypersetup{colorlinks=true,linkcolor=deepaccent,urlcolor=accent}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist[itemize]{topsep=2pt,itemsep=3pt,leftmargin=6mm}
+\setlist[enumerate]{topsep=4pt,itemsep=9pt,leftmargin=8mm}
+\setcounter{secnumdepth}{0}
+\newcommand{\checkitem}{\(\square\)\enspace}
+\newcommand{\important}[1]{\textcolor{deepaccent}{\textbf{#1}}}
+\newcommand{\method}[1]{\medskip\noindent\textcolor{deepaccent}{\textbf{#1}}\quad}
+\newcommand{\sectiontitle}[1]{\needspace{5\baselineskip}\section*{\color{deepaccent}#1}}
+\newcommand{\subtopic}[1]{\medskip\textbf{\color{accent}#1}\par\vspace{-2pt}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{textgray} Теория чисел · Делимость и делители}
+\fancyhead[R]{\footnotesize\color{textgray} 22.10.2026}
+\fancyfoot[C]{\footnotesize\color{textgray} \thepage}
+\renewcommand{\headrulewidth}{0.25pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{15pt}
+\begin{document}
+
+% Титульный лист
+\thispagestyle{empty}
+\begin{center}
+\vspace*{27mm}
+{\color{accent}\large МАТЕМАТИКА · ТЕОРИЯ ЧИСЕЛ}\par
+\vspace{20mm}
+{\Huge\bfseries Чек-лист}\par
+\vspace{9mm}
+{\LARGE\color{deepaccent}\bfseries Делимость чисел и количество делителей}\par
+\vspace{6mm}
+{\large Разность степеней · Каноническое разложение · Функция $\tau$}\par
+\vspace{17mm}
+\rule{0.68\textwidth}{0.5pt}\par
+\vspace{10mm}
+{\Large Ксения Клыкова}\par
+\vspace{4mm}
+{\large 22 октября 2026 года}\par
+\vfill
+{\normalsize\color{textgray} Лёвин Артём Александрович\\[3pt]
+эксклюзивно для Ксении Клыковой}\par
+\vspace{12mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent!65,line width=1.2pt] (-5,0) .. controls (-2.8,0.65) and (-1.1,-0.42) .. (0.45,0.03)
+  .. controls (2.1,0.47) and (3.2,-0.14) .. (5,0.30);
+\end{tikzpicture}
+\vspace*{7mm}
+\end{center}
+\clearpage
+
+\sectiontitle{Маршрут повторения}
+Отмечайте пункт после того, как сможете выполнить действие самостоятельно и объяснить причину каждого шага.
+\begin{itemize}[label={}]
+\item \checkitem Раскладываю $n^5-n$ на множители и объясняю делимость на $6$.
+\item \checkitem Узнаю разность степеней $a^m-b^m$ и правильно строю вторую скобку.
+\item \checkitem Превращаю $2^{4n}-1$ в $16^n-1$ и доказываю делимость без вычисления числа.
+\item \checkitem Представляю натуральное число как произведение степеней простых чисел.
+\item \checkitem Читаю записи с $\prod$ и $\sum$; различаю произведение и сумму.
+\item \checkitem Проверяю делимость двух чисел сравнением показателей простых множителей.
+\item \checkitem Вычисляю число натуральных делителей с помощью $\tau(n)$.
+\item \checkitem Нахожу неизвестный показатель степени по известному числу делителей.
+\end{itemize}
+
+\sectiontitle{1. Доказательство делимости через множители}
+\important{Главная идея.} Если выражение удалось представить как произведение и среди множителей обнаружился делитель требуемого числа, делимость доказана.
+
+\subtopic{Пример: докажем, что $6\mid(n^5-n)$ для любого целого $n$}
+Вынесем $n$ за скобки, а затем дважды используем разность квадратов:
+\begin{align*}
+n^5-n &= n(n^4-1)\\
+      &= n(n^2-1)(n^2+1)\\
+      &= \underbrace{(n-1)n(n+1)}_{\text{три последовательных целых числа}}(n^2+1).
+\end{align*}
+Среди трёх последовательных целых чисел обязательно есть число, кратное $3$, и хотя бы одно чётное число. Поэтому произведение $(n-1)n(n+1)$ делится одновременно на $2$ и $3$, а следовательно, на $6$.
+\[
+\boxed{6\mid(n^5-n)\quad\text{для всех }n\in\mathbb Z.}
+\]
+\method{Проверка логики.} Мы обосновали сразу два обязательных множителя $2$ и $3$. Взаимная простота этих чисел позволяет заключить делимость на $6$.
+
+\subtopic{Типичная ошибка}
+После вынесения $n$ за скобки остаётся $n^4-1$, потому что $n^5:n=n^4$. Нельзя сохранять пятую степень внутри скобок или превращать её в дробный показатель без основания.
+
+\sectiontitle{2. Формула разности одинаковых степеней}
+Для любых чисел $a,b$ и натурального $m\ge1$ верно тождество
+\[
+\boxed{a^m-b^m=(a-b)\bigl(a^{m-1}+a^{m-2}b+\cdots+ab^{m-2}+b^{m-1}\bigr).}
+\]
+Вторая скобка содержит \important{ровно $m$ слагаемых}. В каждом сумма показателей степеней у $a$ и $b$ равна $m-1$: показатель $a$ последовательно уменьшается, показатель $b$ увеличивается.
+
+\subtopic{Построение формулы на конкретных степенях}
+\begin{align*}
+a^3-b^3 &= (a-b)(a^2+ab+b^2),\\
+a^4-b^4 &= (a-b)(a^3+a^2b+ab^2+b^3),\\
+a^5-b^5 &= (a-b)(a^4+a^3b+a^2b^2+ab^3+b^4).
+\end{align*}
+Можно явно записывать крайние степени: $a^{m-1}b^0$ и $a^0b^{m-1}$. Поскольку $x^0=1$ при $x\ne0$, такие записи удобны для отслеживания закономерности; в окончательной формуле крайние члены обычно пишут без множителя $b^0$ или $a^0$.
+
+\subtopic{Почему формула работает}
+После раскрытия скобок промежуточные члены взаимно уничтожаются:
+\begin{align*}
+&(a-b)(a^2+ab+b^2)\\
+&\qquad =a^3+a^2b+ab^2-a^2b-ab^2-b^3=a^3-b^3.
+\end{align*}
+Тот же принцип действует для любой натуральной степени.
+
+\important{Следствие о делимости.} Для целых $a,b$ и натурального $m$ выражение $a^m-b^m$ кратно $a-b$, \emph{если $a\ne b$}. При $a=b$ разность $a-b$ равна нулю, поэтому о делении на неё говорить нельзя, хотя само тождество остаётся верным.
+\clearpage
+
+\sectiontitle{3. Большие степени: доказываем делимость без вычисления}
+\subtopic{Пример 1: $15\mid(2^{4n}-1)$, $n\in\mathbb N$}
+Используем свойство степеней $(a^r)^n=a^{rn}$:
+\[
+2^{4n}-1=(2^4)^n-1^n=16^n-1^n.
+\]
+Применим формулу разности степеней:
+\begin{align*}
+16^n-1^n &= (16-1)(16^{n-1}+16^{n-2}+\cdots+16+1)\\
+ &= 15\bigl(16^{n-1}+16^{n-2}+\cdots+16+1\bigr).
+\end{align*}
+Второй множитель целый; значит, исходное выражение делится на $15$. При $n=1$ скобка равна $1$.
+
+\subtopic{Пример 2: $16\mid(3^{4n}-1)$, $n\in\mathbb N$}
+\[
+3^{4n}-1=(3^4)^n-1^n=81^n-1^n.
+\]
+Так как $81-1=80=16\cdot5$, получаем
+\[
+81^n-1^n=80(81^{n-1}+\cdots+81+1),
+\]
+то есть выражение делится на $16$ (и, кстати, на $80$).
+
+\subtopic{Пример 3: $100\mid(1001^{26}-1)$}
+\[
+1001^{26}-1^{26}=(1001-1)(1001^{25}+1001^{24}+\cdots+1001+1).
+\]
+Первый множитель равен $1000$, а $1000$ делится на $100$. Следовательно, всё произведение также кратно $100$.
+
+\method{Короткий алгоритм.} Приведите выражение к виду $A^n-B^n$; выделите множитель $A-B$; проверьте, делится ли он на требуемое число; сформулируйте вывод.
+
+\subtopic{На что обратить внимание}
+\begin{itemize}
+\item $2^{4n}-1$ и $2^{4n-1}$ --- разные выражения. Во всех трёх примерах вычитается единица \emph{после} возведения в степень.
+\item Вторая скобка --- конечная сумма из $n$ слагаемых. Многоточие скрывает промежуточные члены, число которых зависит от $n$.
+\item Чтобы доказать кратность, достаточно обнаружить нужный целый множитель. Выписывать все члены суммы необязательно.
+\end{itemize}
+
+\sectiontitle{4. Каноническое разложение натурального числа}
+\important{Определение.} Каноническое разложение натурального числа $N\ge2$ --- запись в виде произведения степеней \emph{различных простых чисел}:
+\[
+\boxed{N=p_1^{\alpha_1}p_2^{\alpha_2}\cdots p_k^{\alpha_k},\qquad\alpha_i\in\mathbb N.}
+\]
+Здесь $p_i$ --- различные простые числа; $\alpha_i$ показывает, сколько раз соответствующее простое число входит в разложение. Разложение единственно с точностью до перестановки множителей.
+
+\subtopic{Примеры}
+\begin{align*}
+72&=2\cdot2\cdot2\cdot3\cdot3=\boxed{2^3\cdot3^2},\\
+180&=2\cdot2\cdot3\cdot3\cdot5=\boxed{2^2\cdot3^2\cdot5},\\
+2160&=\boxed{2^4\cdot3^3\cdot5}.
+\end{align*}
+Проверка последней записи: $16\cdot27\cdot5=2160$.
+
+\subtopic{Компактная запись произведения}
+\[
+\prod_{i=1}^{k}p_i^{\alpha_i}=p_1^{\alpha_1}\cdot p_2^{\alpha_2}\cdots p_k^{\alpha_k}.
+\]
+Буква $\prod$ обозначает \emph{произведение}; индекс $i$ пробегает значения $1,2,\ldots,k$. Для сравнения:
+\[
+\sum_{i=1}^{k}p_i^{\alpha_i}=p_1^{\alpha_1}+p_2^{\alpha_2}+\cdots+p_k^{\alpha_k}.
+\]
+Здесь $\sum$ обозначает \emph{сумму}. В каноническом разложении применяется именно произведение.
+\clearpage
+
+\sectiontitle{5. Как проверить делимость по простым множителям}
+Пусть $A,B$ --- натуральные числа. Запишем их разложения по одним и тем же простым основаниям, добавляя при необходимости отсутствующий множитель с показателем $0$:
+\[
+A=\prod_{i=1}^{k}p_i^{\alpha_i},\qquad
+B=\prod_{i=1}^{k}p_i^{\beta_i}.
+\]
+\[
+\boxed{B\mid A\quad\Longleftrightarrow\quad
+\beta_i\le\alpha_i\text{ для всех }i.}
+\]
+Иными словами, в делителе не может быть больше экземпляров простого числа, чем в делимом.
+
+\subtopic{Пример 1: делится ли $2160$ на $72$?}
+\[
+2160=2^4\cdot3^3\cdot5^1,\qquad72=2^3\cdot3^2\cdot5^0.
+\]
+Сравним показатели: $3\le4$, $2\le3$, $0\le1$. Условие выполнено, следовательно, $72\mid2160$. Более того,
+\[
+\frac{2160}{72}=2^{4-3}3^{3-2}5^{1-0}=2\cdot3\cdot5=\boxed{30}.
+\]
+
+\subtopic{Пример 2: какие из $12$, $16$, $18$ делят $360$?}
+\[
+360=2^3\cdot3^2\cdot5,\quad
+12=2^2\cdot3,\quad16=2^4,\quad18=2\cdot3^2.
+\]
+\begin{itemize}
+\item $12\mid360$: показатели $2$ и $3$ не превосходят соответствующие показатели у $360$.
+\item $16\nmid360$: для делимости требуется четыре двойки, а в $360$ их только три.
+\item $18\mid360$: достаточно одной двойки и двух троек.
+\end{itemize}
+\important{Вывод.} Делителями $360$ среди предложенных чисел являются $12$ и $18$.
+
+\subtopic{Пример 3: наименьшее число, кратное $12$, с тремя различными простыми делителями}
+Раз $12=2^2\cdot3$, искомое число обязательно содержит $2^2$ и $3$. Для третьего \emph{различного} простого делителя возьмём наименьшее возможное простое число $5$:
+\[
+\boxed{N=2^2\cdot3\cdot5=60.}
+\]
+Число $60$ кратно $12$ и имеет ровно три различных простых делителя: $2$, $3$, $5$.
+
+\method{Важно.} Количество \emph{различных простых делителей} не совпадает с количеством \emph{всех натуральных делителей}. Например, у $12$ два различных простых делителя ($2$, $3$), но шесть натуральных делителей.
+
+\sectiontitle{6. Сколько натуральных делителей у числа?}
+Пусть $N=p_1^{\alpha_1}\cdots p_k^{\alpha_k}$. Обозначим через $\tau(N)$ количество его \emph{положительных} делителей. Тогда
+\[
+\boxed{\tau(N)=(\alpha_1+1)(\alpha_2+1)\cdots(\alpha_k+1).}
+\]
+Почему появляется прибавление единицы: показатель степени каждого простого числа в делителе можно выбрать от $0$ до $\alpha_i$ включительно, то есть имеется $\alpha_i+1$ вариантов.
+
+\subtopic{Пример 1: число $12$}
+\[
+12=2^2\cdot3^1,\qquad\tau(12)=(2+1)(1+1)=\boxed{6}.
+\]
+Проверка перебором: $1$, $2$, $3$, $4$, $6$, $12$ --- ровно шесть делителей.
+
+\subtopic{Пример 2: число $72$}
+\[
+72=2^3\cdot3^2,\qquad\tau(72)=(3+1)(2+1)=\boxed{12}.
+\]
+
+\subtopic{Частный случай: степень простого числа}
+Если $p$ --- простое число, то
+\[
+\boxed{\tau(p^m)=m+1.}
+\]
+Например, $\tau(7^{25})=25+1=\boxed{26}$. Формула не распространяется в таком виде на степень \emph{составного} основания: сначала следует разложить основание.
+\clearpage
+
+\begingroup\setstretch{1.21}\setlength{\parskip}{2pt}
+\sectiontitle{7. Степень составного числа и обратные задачи}
+\subtopic{Пример: сколько делителей у $100^{25}$?}
+Сначала разложим основание:
+\[
+100=10^2=2^2\cdot5^2.
+\]
+Затем возведём произведение в степень:
+\[
+100^{25}=(2^2\cdot5^2)^{25}=2^{50}\cdot5^{50}.
+\]
+Применим формулу количества делителей:
+\[
+\boxed{\tau(100^{25})=(50+1)(50+1)=51^2=2601.}
+\]
+\important{Сравните.} $7^{25}$ уже является степенью простого числа, а $100^{25}$ сперва требует разложения основания. Поэтому $\tau(7^{25})=26$, а $\tau(100^{25})=2601$.
+
+\subtopic{Пример: найдём неизвестный показатель $\alpha$}
+Известно, что
+\[
+N=2^{\alpha}\cdot3^2\cdot5,\qquad\tau(N)=30,
+\]
+где $\alpha$ --- натуральное число. По формуле
+\[
+(\alpha+1)(2+1)(1+1)=30.
+\]
+Отсюда
+\[
+6(\alpha+1)=30,\qquad \alpha+1=5,\qquad\boxed{\alpha=4}.
+\]
+Проверка: $(4+1)\cdot3\cdot2=30$.
+
+\sectiontitle{8. Пять типичных ошибок}
+\begin{enumerate}[leftmargin=9mm,itemsep=2pt]
+\item \important{Путаница со степенями.} При вынесении $n$ из $n^5-n$ остаётся $n^4-1$; при записи $2^{4n}$ получаем $(2^4)^n$.
+\item \important{Неверное число слагаемых.} У разности $a^m-b^m$ во второй скобке ровно $m$ слагаемых, а сумма показателей в каждом из них равна $m-1$.
+\item \important{Пропущенный простой множитель.} Чтобы сравнить разложения, представьте отсутствующий простой множитель показателем $0$.
+\item \important{Перепутаны делимое и делитель.} Для $B\mid A$ показатели числа $B$ должны быть \emph{не больше} показателей числа $A$.
+\item \important{Формула $\tau$ применена слишком рано.} Запись $100^{25}$ надо сначала привести к простым основаниям; только после этого прибавлять единицы к показателям.
+\end{enumerate}
+\endgroup
+\clearpage
+
+% Отдельная страница блок-схемы.
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries\color{deepaccent}Алгоритм: задачи на разложение и делители}
+\end{center}
+\vspace{5mm}
+\begin{center}
+\begin{tikzpicture}[
+ >=Latex, line width=.85pt,
+ process/.style={draw=deepaccent,rounded corners=2.5pt,align=center,text width=7.3cm,inner sep=7pt,fill=white,font=\small},
+ decision/.style={draw=accent,diamond,aspect=2.7,align=center,text width=4cm,inner sep=2pt,font=\small},
+ terminator/.style={draw=deepaccent,rectangle,rounded corners=8pt,align=center,text width=5.5cm,inner sep=6pt,fill=lightline!35,font=\small},
+ every node/.style={text=textgray}]
+ \node[terminator] (start) {Записать условие задачи};
+ \node[process,below=9mm of start] (factor) {Разложить натуральное число\\ на степени простых множителей};
+ \node[decision,below=9mm of factor] (question) {Что требуется найти?};
+ \node[process,below left=16mm and 6mm of question,text width=5cm] (div) {Проверить делимость:\\ сопоставить показатели\\ одинаковых простых чисел};
+ \node[process,below right=16mm and 6mm of question,text width=5cm] (tau) {Найти $\tau(N)$:\\ умножить числа\\ $(\alpha_i+1)$};
+ \node[process,below=15mm of div,text width=5cm] (checkd) {Сравнить показатели: если хотя бы один больше,\\ число не является делителем};
+ \node[process,below=15mm of tau,text width=5cm] (checkt) {Пересчитать разложение\\ и значения множителей\\ в формуле $\tau$};
+ \node[terminator,below right=15mm and -1mm of checkd] (finish) {Записать обоснованный вывод\\ и ответ};
+ \draw[->] (start) -- (factor);
+ \draw[->] (factor) -- (question);
+ \draw[->] (question.west) -| node[pos=.22,above left,font=\scriptsize]{делимость} (div.north);
+ \draw[->] (question.east) -| node[pos=.22,above right,font=\scriptsize]{число делителей} (tau.north);
+ \draw[->] (div) -- (checkd);
+ \draw[->] (tau) -- (checkt);
+ \draw[->] (checkd.south) |- (finish.west);
+ \draw[->] (checkt.south) |- (finish.east);
+\end{tikzpicture}
+\end{center}
+\vspace{5mm}
+\begin{center}\color{textgray}\small При доказательствах делимости разности степеней\\ сначала выделите множитель по формуле $a^m-b^m$.\end{center}
+\clearpage
+
+\sectiontitle{Тренировочный блок · Путь А}
+\textit{10 заданий от базового уровня к более содержательному. Решения выполняйте письменно; объясняйте, почему каждый вывод верен.}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=10mm,itemsep=12pt]
+\item Разложите на множители $a^5-b^5$ по формуле разности степеней. Укажите количество слагаемых во второй скобке.
+\item Докажите, что число $n^5-n$ делится на $6$ при любом целом $n$.
+\item Докажите, что для любого натурального $n$ число $3^{4n}-1$ делится на $16$.
+\item Не вычисляя степень, докажите, что число $1001^{26}-1$ делится на $100$.
+\item Представьте число $180$ в каноническом виде и назовите все его различные простые делители.
+\item Используя только каноническое разложение, установите, какие из чисел $12$, $16$, $18$ делят $360$.
+\item Найдите наименьшее натуральное число, кратное $12$ и имеющее ровно три различных простых делителя.
+\item Найдите количество натуральных делителей числа $72$ двумя способами: по формуле $\tau$ и явным перечислением.
+\item Вычислите количество натуральных делителей числа $100^{12}$.
+\item Известно, что $N=2^{\alpha}\cdot3^2\cdot5$, причём $\tau(N)=30$. Найдите натуральное число $\alpha$.
+\end{enumerate}
+\vfill
+\noindent\textcolor{accent}{\rule{\linewidth}{0.35pt}}
+\textbf{Перед проверкой ответов:} убедитесь, что в задачах на делимость показано требуемое кратное, а в задачах на $\tau$ использованы только показатели \emph{простых} множителей.
+\clearpage
+
+\sectiontitle{Ответы и краткие ориентиры}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=10mm,itemsep=9pt]
+\item $(a-b)(a^4+a^3b+a^2b^2+ab^3+b^4)$; во второй скобке $5$ слагаемых.
+\item $n^5-n=(n-1)n(n+1)(n^2+1)$. Среди трёх последовательных чисел есть чётное и кратное $3$, поэтому произведение делится на $6$.
+\item $3^{4n}-1=81^n-1=80(81^{n-1}+\cdots+1)$; поскольку $16\mid80$, делимость доказана.
+\item $1001^{26}-1=1000(1001^{25}+\cdots+1)$, значит, выражение кратно $100$.
+\item $180=2^2\cdot3^2\cdot5$. Различные простые делители: $2$, $3$, $5$.
+\item $360=2^3\cdot3^2\cdot5$. Делят: $12=2^2\cdot3$ и $18=2\cdot3^2$. Не делит: $16=2^4$.
+\item $\boxed{60=2^2\cdot3\cdot5}$.
+\item $72=2^3\cdot3^2$, поэтому $\tau(72)=4\cdot3=\boxed{12}$. Делители: $1$, $2$, $3$, $4$, $6$, $8$, $9$, $12$, $18$, $24$, $36$, $72$.
+\item $100^{12}=2^{24}\cdot5^{24}$, поэтому $\tau(100^{12})=25^2=\boxed{625}$.
+\item $(\alpha+1)(2+1)(1+1)=30$, откуда $6(\alpha+1)=30$ и $\boxed{\alpha=4}$.
+\end{enumerate}
+\vfill
+\noindent\textcolor{accent}{\rule{\linewidth}{0.35pt}}
+\begin{center}
+\small\color{textgray} Лёвин Артём Александрович · эксклюзивно для Ксении Клыковой
+\end{center}
+\end{document}
