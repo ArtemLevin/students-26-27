@@ -162,12 +162,12 @@ try{
   assert.equal(await page.locator('#rows tr').count(),3,'new lab arbitrary schedule '+width);
   assert.ok((await page.locator('#total').textContent()).includes('969'),'new lab reference total '+width);
   await page.locator('#snapshot').click();
-  await page.locator('#rate').fill('15');
+  await page.locator('#rate').evaluate(el=>{el.value='15';el.dispatchEvent(new Event('input',{bubbles:true}));});
   assert.ok((await page.locator('#comparison').textContent()).includes('Изменение'),'new lab compare state '+width);
   await page.locator('[data-mode="limits"]').click();
   assert.equal(await page.locator('#rows tr').count(),3,'new lab limits schedule '+width);
   assert.ok((await page.locator('#insightText').textContent()).includes('каждый < 5: да'),'new lab limits baseline '+width);
-  await page.locator('#principal').fill('10');
+  await page.locator('#principal').evaluate(el=>{el.value='10';el.dispatchEvent(new Event('input',{bubbles:true}));});
   assert.ok((await page.locator('#insightText').textContent()).includes('каждый < 5: нет'),'new lab limits threshold '+width);
   await page.locator('[data-mode="mixed"]').click();
   assert.equal(await page.locator('#rows tr').count(),5,'new lab mixed schedule '+width);
