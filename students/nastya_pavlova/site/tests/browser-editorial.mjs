@@ -128,7 +128,7 @@ try{
  }
  for(const [w,h] of [[1440,900],[390,844]]){
   await navigate('22.10.26.html',w,h);
-  const lesson=await evaluate("({heading:document.querySelector('#pageTitle')?.textContent,sections:document.querySelectorAll('.chapter').length,exercises:document.querySelectorAll('.practice details').length,labLink:!!document.querySelector('a[href=\\\"22.10.26-lab.html\\\"]')})");
+  const lesson=await evaluate("({heading:document.querySelector('#pageTitle')?.textContent,sections:document.querySelectorAll('.chapter').length,exercises:document.querySelectorAll('.practice details').length,labLink:[...document.querySelectorAll('a')].some(x=>x.getAttribute('href')==='22.10.26-lab.html')})");
   assert.match(lesson.heading,/Вклады/);assert.equal(lesson.sections,10);assert.equal(lesson.exercises,10);assert.ok(lesson.labLink);
   await evaluate("document.querySelector('#themeToggle').click()");
   assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'22 October lesson dark overflow at '+w);
