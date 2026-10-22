@@ -1,0 +1,364 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+% Sans-serif T2A: outline CM-LGC glyphs for Cyrillic pdfLaTeX.
+\renewcommand{\sfdefault}{fcs}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,left=23mm,right=22mm,top=22mm,bottom=25mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{booktabs,tabularx}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{softgray}{HTML}{647277}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent,hypertexnames=false}
+\setstretch{1.25}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlist[itemize]{leftmargin=1.9em,itemsep=4pt,topsep=4pt}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=7pt,topsep=5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C]{\footnotesize\color{softgray} Лёвин Артём Александрович эксклюзивно для Ярослава Гаврилова}
+\fancyfoot[R]{\footnotesize\thepage}
+\newcommand{\sectionline}{\par\vspace{2pt}\noindent\textcolor{accent}{\rule{\linewidth}{0.5pt}}\par\vspace{3pt}}
+\newcommand{\focus}[1]{\textbf{\textcolor{darkaccent}{#1}}}
+\newcommand{\checklist}[1]{\par\smallskip\textcolor{darkaccent}{\textbf{Проверьте себя.}}\par\begin{itemize}[label=$\square$]#1\end{itemize}}
+\newcommand{\tgfun}{\operatorname{tg}}
+\newcommand{\ctgfun}{\operatorname{ctg}}
+\newcommand{\arctgfun}{\operatorname{arctg}}
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{40mm}
+{\large\color{softgray} МАТЕМАТИКА \enspace / \enspace ПРОФИЛЬНЫЙ ЕГЭ}\par
+\vspace{13mm}
+{\fontsize{36}{42}\selectfont\bfseries\color{darkaccent} Чек-лист}\par
+\vspace{7mm}
+{\LARGE\bfseries Степени, прикладные задачи\par и показательная функция}\par
+\vspace{14mm}
+{\large Ярослав Гаврилов}\par
+\vspace{3mm}
+{\large 22 октября 2026 года}\par
+\vspace{15mm}
+{\large\color{textgray} Правила \(\longrightarrow\) разобранные примеры \\ \(\longrightarrow\) самостоятельная тренировка}\par
+\vfill
+{\normalsize\color{softgray} Лёвин Артём Александрович}\par
+{\normalsize\color{softgray} эксклюзивно для Ярослава Гаврилова}\par
+\end{center}
+\begin{tikzpicture}[remember picture,overlay]
+\draw[accent!58,line width=1.2pt] 
+([xshift=23mm,yshift=12mm]current page.south west)
+.. controls ([xshift=69mm,yshift=25mm]current page.south west) and
+([xshift=-70mm,yshift=3mm]current page.south east) ..
+([xshift=-22mm,yshift=15mm]current page.south east);
+\end{tikzpicture}
+\end{titlepage}
+\setcounter{page}{1}
+\section*{1. Степени: инструменты для вычислений}
+\sectionline
+Для решения задач со степенями удобно \focus{сначала представить числа через степени}, затем выполнить преобразования и только в конце переходить к вычислениям.
+\[
+\begin{aligned}
+ a^m\cdot a^n&=a^{m+n}, &\frac{a^m}{a^n}&=a^{m-n},\\
+ (a^m)^n&=a^{mn}, &(ab)^n&=a^n b^n,\\
+ a^{-n}&=\frac{1}{a^n}, &a^{1/n}&=\sqrt[n]{a}.
+\end{aligned}
+\]
+Здесь в формулах с дробями основания и знаменатели не равны нулю. Для дробного показателя \(1/n\) и чётного \(n\) требуется \(a\ge 0\); при работе с \(a^x\) для произвольного действительного \(x\) берут \(a>0\).
+
+\textbf{Пример.} Упростите выражение:
+\[
+\frac{10^{21}}{10^{-9}\cdot10^{20}}
+=10^{21-(-9)-20}=10^{10}.
+\]
+При делении показатель степени \focus{вычитают целиком}: \(21-(-9)-20=10\).
+
+\textbf{Пример.} Разложите коэффициент на простые множители:
+\[
+15625=5^6,\qquad 228=2^2\cdot3\cdot19,\qquad 57=3\cdot19,
+\qquad 10^{10}=2^{10}\cdot5^{10}.
+\]
+
+\checklist{
+\item Умеете приводить произведения и частные степеней к одному основанию.
+\item Различаете \(10^{-9}\) и \(-10^9\); помните про двойной минус в показателе.
+\item Умеете переходить от десятичной записи к целому коэффициенту: \(5{,}7\cdot10^{-8}=57\cdot10^{-9}\).
+\item Перед извлечением корня проверяете знак числа и смысл искомой величины.
+}
+
+\section*{2. Показательные уравнения и распад}
+\sectionline
+При \(a>0\), \(a\ne 1\) из \(a^u=a^v\) следует \(u=v\).
+
+\textbf{Пример.} Масса вещества изменяется по закону
+\[
+m(t)=m_0\cdot 2^{-t/T},\qquad m_0=40,\quad T=10.
+\]
+Найдите время \(t\), когда масса станет равной \(5\).
+\[
+5=40\cdot2^{-t/10}\quad\Longleftrightarrow\quad
+2^{-t/10}=\frac18=2^{-3}\quad\Longleftrightarrow\quad
+t=30.
+\]
+Запись \(m(t)\) означает \focus{значение массы в момент \(t\)}; это запись функции, а не произведение \(m\cdot t\).
+
+\checklist{
+\item Умеете из формулы выделять степень с неизвестным показателем.
+\item Представляете дроби вида \(1/8\), \(1/16\), \(1/27\) как степени.
+\item Проверяете знак ответа: время распада не может быть отрицательным.
+}
+
+\section*{3. Два состояния: давление и объём газа}
+\sectionline
+Если \(pV^a=C\), то для двух состояний одного газа выполняется
+\[
+p_1V_1^a=p_2V_2^a,\qquad p_1,p_2,V_1,V_2>0.
+\]
+\textbf{Пример.} Объём уменьшился вдвое, давление увеличилось вчетверо. Найдите \(a\).
+\[
+V_2=\frac{V_1}{2}\quad\Longleftrightarrow\quad V_1=2V_2,
+\qquad p_2=4p_1.
+\]
+\[
+\begin{aligned}
+p_1(2V_2)^a&=(4p_1)V_2^a,\\
+p_1\cdot2^a\cdot V_2^a&=4p_1V_2^a,\\
+2^a&=4=2^2,\qquad \boxed{a=2}.
+\end{aligned}
+\]
+Сокращение допустимо, поскольку \(p_1>0\) и \(V_2^a>0\). При подстановке \focus{составного выражения} обязательно ставьте скобки: \((2V_2)^a\).
+
+\checklist{
+\item Умеете переводить «уменьшился в \(k\) раз» в \(V_2=V_1/k\).
+\item Составляете равенство для состояний «до» и «после».
+\item Корректно возводите произведение в степень и сокращаете общий ненулевой множитель.
+}
+
+\section*{4. Степень неизвестной: извлечение корня}
+\sectionline
+\textbf{Пример.} Сила натяжения троса определяется формулой
+\[
+F=\rho gL^3-mg.
+\]
+Пусть \(\rho=1000\), \(g=10\), \(m=25\). Найдите наибольшее физически допустимое \(L\ge0\), при котором \(F\le1000\).
+\[
+10000L^3-250\le1000
+\quad\Longleftrightarrow\quad L^3\le\frac{1250}{10000}=\frac18.
+\]
+Так как функция \(L^3\) возрастает, то
+\[
+L\le\sqrt[3]{\frac18}=\frac12.
+\qquad\boxed{L_{\max}=0{,}5}.
+\]
+\focus{Пограничное значение} находят из равенства \(F=1000\), а знак неравенства сохраняют, чтобы обосновать, почему найденная величина максимальна.
+
+\textbf{Правило.} Если \(x^n=A\) и \(n\) нечётно, то \(x=\sqrt[n]{A}\). Если \(n\) чётно и \(A>0\), уравнение имеет два действительных корня \(x=\pm\sqrt[n]{A}\). Для длины и абсолютной температуры отрицательное значение исключается по смыслу.
+
+\checklist{
+\item Различаете \(L\) и \(L^3\): после нахождения \(L^3\) извлекаете кубический корень.
+\item Понимаете, почему «не более» означает \(\le\), а «не менее» --- \(\ge\).
+\item Учитываете ограничения физической задачи при выборе корня.
+}
+
+\clearpage
+\section*{Алгоритм: как решать прикладную задачу со степенями}
+\vspace{3mm}
+\begin{center}
+\begin{tikzpicture}[
+ node distance=9mm and 13mm,
+ >=Stealth,
+ start/.style={ellipse,draw=darkaccent,thick,align=center,minimum width=46mm,minimum height=10mm,font=\small},
+ action/.style={rectangle,rounded corners=2pt,draw=accent,thick,align=center,text width=102mm,inner sep=6pt,font=\small},
+ test/.style={diamond,aspect=3.2,draw=darkaccent,thick,align=center,text width=40mm,inner sep=1.5pt,font=\small},
+ arrow/.style={->,>=Stealth,line width=0.9pt,draw=darkaccent}
+]
+\node[start] (start) {Начало};
+\node[action,below=of start] (data) {Выпишите формулу, данные, искомую величину и ограничения};
+\node[test,below=of data] (states) {Есть два состояния?};
+\node[action,below left=13mm and 8mm of states,text width=43mm] (two) {Запишите связь\\[2pt]$p_1V_1^a=p_2V_2^a$};
+\node[action,below right=13mm and 8mm of states,text width=43mm] (one) {Подставьте данные в одну формулу};
+\node[action,below=32mm of states] (isolate) {Упростите коэффициенты и оставьте искомую степень отдельно};
+\node[test,below=of isolate] (unknown) {Неизвестная в показателе?};
+\node[action,below left=13mm and 8mm of unknown,text width=43mm] (exp) {Приведите к одному основанию и приравняйте показатели};
+\node[action,below right=13mm and 8mm of unknown,text width=43mm] (root) {Выделите \(x^n\) и извлеките допустимый корень};
+\node[action,below=35mm of unknown] (check) {Проверьте вычисления, ограничения и смысл результата};
+\node[start,below=of check] (end) {Ответ};
+\draw[arrow] (start)--(data);
+\draw[arrow] (data)--(states);
+\draw[arrow] (states.south west) -| node[pos=0.26,above,sloped,font=\scriptsize]{да} (two.north);
+\draw[arrow] (states.south east) -| node[pos=0.26,above,sloped,font=\scriptsize]{нет} (one.north);
+\draw[arrow] (two.south) |- ([yshift=8mm]isolate.north) -- (isolate.north);
+\draw[arrow] (one.south) |- ([yshift=8mm]isolate.north);
+\draw[arrow] (isolate)--(unknown);
+\draw[arrow] (unknown.south west) -| node[pos=0.25,above,sloped,font=\scriptsize]{да} (exp.north);
+\draw[arrow] (unknown.south east) -| node[pos=0.25,above,sloped,font=\scriptsize]{нет} (root.north);
+\draw[arrow] (exp.south) |- ([yshift=7mm]check.north) -- (check.north);
+\draw[arrow] (root.south) |- ([yshift=7mm]check.north);
+\draw[arrow] (check)--(end);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\section*{5. Большие числа и четвёртая степень: температура звезды}
+\sectionline
+Закон Стефана--Больцмана:
+\[
+P=\sigma S T^4,\qquad\sigma>0,\quad S>0,\quad T>0.
+\]
+\textbf{Пример.} Даны
+\[
+\sigma=5{,}7\cdot10^{-8},\qquad
+S=\frac{10^{20}}{228},\qquad
+P\ge 1{,}5625\cdot10^{25}.
+\]
+Определите наименьшую возможную температуру \(T\) (в кельвинах).
+
+\textbf{Шаг 1.} Для минимальной температуры используем граничное равенство и выделяем \(T^4\):
+\[
+T^4=\frac{P}{\sigma S}.
+\]
+Здесь \(P=\sigma ST^4\) возрастает по \(T>0\), поэтому равенство действительно даёт минимум.
+
+\textbf{Шаг 2.} Убираем десятичные дроби и оформляем одну дробь:
+\[
+5{,}7\cdot10^{-8}=57\cdot10^{-9},\qquad
+1{,}5625\cdot10^{25}=15625\cdot10^{21},
+\]
+\[
+T^4=\frac{15625\cdot10^{21}\cdot228}
+{57\cdot10^{-9}\cdot10^{20}}.
+\]
+\textbf{Шаг 3.} Раскладываем и сокращаем множители:
+\[
+\begin{aligned}
+T^4
+&=\frac{5^6\cdot10^{21}\cdot(2^2\cdot3\cdot19)}
+{(3\cdot19)\cdot10^{-9}\cdot10^{20}}\\
+&=5^6\cdot2^2\cdot10^{21-(-9)-20}\\
+&=5^6\cdot2^2\cdot(2\cdot5)^{10}
+=2^{12}\cdot5^{16}.
+\end{aligned}
+\]
+\textbf{Шаг 4.} Извлекаем корень четвёртой степени:
+\[
+T=(2^{12}\cdot5^{16})^{1/4}
+=2^3\cdot5^4=8\cdot625=\boxed{5000\ \text{К}}.
+\]
+\focus{Проверка.} \(5000^4=6{,}25\cdot10^{14}\); подстановка в \(P=\sigma ST^4\) возвращает \(1{,}5625\cdot10^{25}\) Вт.
+
+\checklist{
+\item Переносите десятичную запятую согласованно с показателем десяти.
+\item Понимаете, почему \(\frac{10^{21}}{10^{-9}\cdot10^{20}}=10^{10}\).
+\item Можете восстановить все шаги факторизации и извлечения корня.
+\item Проверяете последний числовой результат, даже если преобразования степеней правильны.
+}
+
+\section*{6. Показательная функция по графику}
+\sectionline
+Рассмотрим \(f(x)=a^x+b\), где \(a>0\), \(a\ne1\). По графику видны точки \(A(0;-2)\) и \(B(1;-1)\).
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+width=0.78\linewidth,height=62mm,
+axis lines=middle, axis line style={->,black},
+xmin=-1.6,xmax=3.2,ymin=-3.5,ymax=6.2,
+xtick={-1,0,1,2,3},ytick={-3,-2,-1,0,1,3,5},
+xlabel={$x$},ylabel={$y$},
+clip=false, grid=major, grid style={gray!18},
+tick label style={font=\small},xlabel style={at={(axis description cs:0.99,0.23)},anchor=east},
+ylabel style={at={(axis description cs:0.48,0.99)},anchor=north}]
+\addplot[accent,thick,samples=220,domain=-1.5:3.1]{2^x-3};
+\addplot[only marks,mark=*,mark size=2.4pt,black] coordinates {(0,-2) (1,-1)};
+\node[anchor=north west,font=\small] at (axis cs:0.10,-2.08) {$A$};
+\node[anchor=north west,font=\small] at (axis cs:1,-1) {$B$};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\[
+\begin{cases}
+-2=a^0+b=1+b,\\
+-1=a^1+b=a+b
+\end{cases}
+\quad\Longrightarrow\quad
+b=-3,\ a=2.
+\]
+Следовательно,
+\[
+f(x)=2^x-3,\qquad f(6)=64-3=\boxed{61}.
+\]
+\checklist{
+\item Узнаёте, что \(a^0=1\), и находите сдвиг \(b\) по точке с \(x=0\).
+\item Определяете \(a\) по второй точке и затем вычисляете \(f(x)\).
+\item Учитываете: при \(a>1\) график возрастает, при \(0<a<1\) --- убывает.
+}
+
+\clearpage
+\section*{Тренировочный блок \hfill Путь А}
+\sectionline
+\textcolor{softgray}{10 задач. Решайте по порядку; в задачах 5--10 записывайте основные преобразования, а не только ответ.}
+\begin{enumerate}
+\item Решите уравнение \(2^{3x-5}=\dfrac1{16}\).
+\item Найдите \(t\ge0\), если \(6=48\cdot2^{-t/12}\).
+\item Вычислите \(\dfrac{10^{14}}{10^{-4}\cdot10^{12}}\).
+\item Вычислите \(\dfrac{3^4\cdot9^2}{27}\).
+\item Давление газа и его объём связаны законом \(pV^a=C\). При уменьшении объёма втрое давление выросло в 27 раз. Найдите \(a\).
+\item Время полураспада равно 8 дням, начальная масса равна 96 г. Через сколько дней масса, изменяющаяся по формуле \(m(t)=96\cdot2^{-t/8}\), станет равной 12 г?
+\item Сила определяется формулой \(F=\rho gL^3-mg\), где \(\rho=1000\), \(g=10\), \(m=20\). Найдите наибольшее \(L\ge0\), при котором \(F\le1050\).
+\item График функции \(f(x)=a^x+b\) проходит через точки \((0;-4)\) и \((1;-2)\). Найдите \(f(4)\) (\(a>0\), \(a\ne1\)).
+\item Мощность излучения равна \(P=\sigma ST^4\). Известно, что \(\sigma=5{,}7\cdot10^{-8}\), \(S=\dfrac{10^{20}}{64}\), \(P\ge2{,}28\cdot10^{25}\). Найдите наименьшую температуру \(T>0\) в кельвинах.
+\item Найдите положительное число \(x\), если
+\[
+x^4=\frac{15625\cdot228\cdot10^{17}}{57\cdot10^{-3}\cdot10^{14}}.
+\]
+Представьте все множители в виде степеней и приведите вычисление к простым основаниям.
+\end{enumerate}
+
+\clearpage
+\section*{Ответы к тренировочному блоку}
+\sectionline
+\renewcommand{\arraystretch}{1.55}
+\begin{center}
+\begin{tabularx}{0.88\linewidth}{@{}cX@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+1 & \(x=\dfrac13\) \\
+2 & \(t=36\) \\
+3 & \(10^6=1\,000\,000\) \\
+4 & \(243\) \\
+5 & \(a=3\) \\
+6 & \(24\) дня \\
+7 & \(L_{\max}=0{,}5\) \\
+8 & \(f(4)=76\) \\
+9 & \(4000\) К \\
+10 & \(x=500\) \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vspace{9mm}
+\textbf{Самоконтроль по сложным заданиям.}
+
+В задаче 7 должно получиться \(L^3\le\frac18\). В задаче 9 при граничной мощности получится \(T^4=2{,}56\cdot10^{14}=4000^4\). В задаче 10 перед извлечением корня получится \(x^4=2^8\cdot5^{12}\).
+
+\vfill
+\begin{center}
+\textcolor{darkaccent}{\rule{.5\linewidth}{.5pt}}\\[6pt]
+\small Повторите задания, в которых понадобилась подсказка или был потерян знак степени.
+\end{center}
+\end{document}
