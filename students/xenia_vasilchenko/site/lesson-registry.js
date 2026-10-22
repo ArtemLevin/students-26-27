@@ -5,6 +5,84 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-22",
+  "ktpRefs": [],
+  "href": "22.10.26.html",
+  "title": "Деление дробей и уравнения",
+  "navTitle": "Деление дробей и уравнения",
+  "navSubtitle": "Деление обыкновенных, смешанных и десятичных дробей, порядок действий, уравнения с дробями и 10 заданий по материалам занятия Ксении Васильченко 22 октября 2026 года.",
+  "summary": "Деление обыкновенных, смешанных и десятичных дробей, порядок действий, уравнения с дробями и 10 заданий по материалам занятия Ксении Васильченко 22 октября 2026 года.",
+  "topics": [
+    "Деление обыкновенных дробей",
+    "Деление с натуральными числами",
+    "Деление смешанных и десятичных дробей",
+    "Порядок действий со скобками",
+    "Уравнения с дробными коэффициентами"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "frac_ops_10",
+      "evidenceAnchor": "rule",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_11",
+      "evidenceAnchor": "rule",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_09",
+      "evidenceAnchor": "rule",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_12",
+      "evidenceAnchor": "forms",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_base_06",
+      "evidenceAnchor": "forms",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_base_11",
+      "evidenceAnchor": "forms",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dec_05",
+      "evidenceAnchor": "forms",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_13",
+      "evidenceAnchor": "order",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_06",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_03",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_05",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "22.10.26.html",
+    "pdf": "../pdf_docs/22.10.26.pdf",
+    "tex": "../tex_docs/22.10.26.tex"
+  }
+},
+{
   "date": "2026-10-15",
   "ktpRefs": [],
   "href": "15.10.26.html",
