@@ -16,8 +16,8 @@ const metadata=JSON.parse(fs.readFileSync(path.join(site,'data/lessons/2026-10-2
 const sidecar=JSON.parse(fs.readFileSync(path.join(site,'data/practice-publications/2026-10-21.json'),'utf8'));
 const intent=JSON.parse(fs.readFileSync(path.join(site,'data/publication-intents/2026-10-21.json'),'utf8'));
 
-test('21 October is latest exactly once; the 19 October lesson remains in archive',()=>{
- assert.equal(LESSONS[0].date,day);
+test('21 October remains registered exactly once as newer lessons are published',()=>{
+ assert.ok(LESSONS[0].date>=day);
  assert.equal(LESSONS.filter(x=>x.date===day).length,1);
  assert.ok(LESSONS.some(x=>x.date==='2026-10-19'));
  assert.deepEqual(LESSONS.map(x=>x.date),[...LESSONS.map(x=>x.date)].sort().reverse());
