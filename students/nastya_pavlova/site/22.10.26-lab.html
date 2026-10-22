@@ -30,6 +30,12 @@ html[data-theme=dark] button[aria-pressed=true]{color:#12222b}
 @media(max-width:860px){.lab{grid-template-columns:1fr}.intro{padding-top:34px}.sums{gap:20px}}@media(max-width:480px){.sums{grid-template-columns:1fr}.presets button{flex:1}.chart text{font-size:11px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*:before,*:after{transition:none!important;animation:none!important}}
 @media print{body{background:#fff;color:#000}.presets,.control,.reset,.forecast,.top button{display:none!important}.lab{display:block}.panel{border:0}.chart{max-height:180px}}
+
+/* Native MathML: built-in browser layout, including dynamic recurrence equations. */
+math{font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif;line-height:normal}
+.formula{white-space:normal;overflow-x:auto;scrollbar-width:thin}
+.formula math[display="block"]{display:block;width:max-content;max-width:none;margin:0 0 7px}
+.big math{color:inherit;font-size:inherit}.sums math{color:inherit}.numbers math{white-space:nowrap}
 </style></head>
 <body><a class="skip" href="#lab">К лаборатории</a>
 <div class="shell">
@@ -48,7 +54,7 @@ html[data-theme=dark] button[aria-pressed=true]{color:#12222b}
 <section class="panel" aria-labelledby="resultsTitle"><p class="eyebrow">Результаты в реальном времени</p><h2 id="resultsTitle">Структура ежегодного платежа</h2>
 <small class="muted">Один платёж</small><div class="big" id="payment" aria-live="polite">199 650 ₽</div>
 <div class="sums"><div><small>Всего выплачено</small><b id="totalPaid">598 950 ₽</b></div><div><small>Переплата</small><b id="overpaid">102 450 ₽</b></div><div><small>Переплата к сумме кредита</small><b id="overpaidPercent">20,63%</b></div><div><small>Долг после последнего платежа</small><b id="balance">0 ₽</b></div></div>
-<div id="formula" class="formula">S·k³ = x(k² + k + 1)<small>В уравнении S — долг, k = 1 + P/100, x — одинаковый ежегодный платёж.</small></div>
+<div id="formula" class="formula" aria-label="Равенство будущей стоимости долга и равных ежегодных платежей"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>S</mi><mo>·</mo><msup><mi>k</mi><mn>3</mn></msup><mo>=</mo><mi>x</mi><mo>(</mo><msup><mi>k</mi><mn>2</mn></msup><mo>+</mo><mi>k</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow></math><small>В уравнении <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>S</mi></math> — долг, <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>k</mi><mo>=</mo><mn>1</mn><mo>+</mo><mfrac><mi>P</mi><mn>100</mn></mfrac></mrow></math>, <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>x</mi></math> — одинаковый ежегодный платёж.</small></div>
 <svg class="chart" id="debtChart" viewBox="0 0 700 285" role="img" aria-labelledby="chartTitle chartDesc"><title id="chartTitle">Проценты и погашение основного долга по годам</title><desc id="chartDesc">На диаграмме ежегодный платёж разбит на проценты и уменьшение основного долга. Числа для каждого года приведены в таблице ниже.</desc></svg>
 <div class="legend"><span>Часть платежа — основной долг</span><span>Часть платежа — проценты</span></div>
 <div class="tablebox" role="region" tabindex="0" aria-label="Подробная таблица аннуитетного кредита"><table class="numbers"><thead><tr><th>Год</th><th>Долг в начале, ₽</th><th>Проценты, ₽</th><th>После %, ₽</th><th>Платёж, ₽</th><th>Остаток, ₽</th></tr></thead><tbody id="yearRows"></tbody></table></div>
@@ -79,6 +85,39 @@ function calculate(s){
  return {rows:rows,payment:payment,total:payment*s.n,overpay:payment*s.n-s.sum,percent:(payment*s.n-s.sum)/s.sum*100,k:k,last:balance};
 }
 function node(name,txt){var e=document.createElement(name);e.textContent=txt;return e;}
+const MATH_NS='http://www.w3.org/1998/Math/MathML';
+function mathNode(tag,children){
+ var el=document.createElementNS(MATH_NS,tag);
+ if(Array.isArray(children)){children.forEach(function(child){el.append(child);});}
+ else if(children!==undefined){el.textContent=String(children);}
+ return el;
+}
+function mathRow(){return mathNode('mrow',Array.from(arguments));}
+function mathVar(v){return mathNode('mi',v);}
+function mathNum(v){return mathNode('mn',String(v));}
+function mathOp(v){return mathNode('mo',v);}
+function mathText(v){return mathNode('mtext',v);}
+function mathInline(content){var el=mathNode('math',[content]);el.setAttribute('display','inline');return el;}
+function mathDisplay(content){var el=mathNode('math',[content]);el.setAttribute('display','block');return el;}
+function mathAmount(value,unit){return mathInline(mathRow(mathNum(fmt(value)),mathText(unit)));}
+function setAmount(id,value,unit){$(id).replaceChildren(mathAmount(value,unit));}
+function powerK(degree){
+ if(degree===0)return mathNum('1');
+ if(degree===1)return mathVar('k');
+ return mathNode('msup',[mathVar('k'),mathNum(degree)]);
+}
+function annuityEquation(years){
+ var sum=mathRow(mathVar('S'),mathOp('·'),powerK(years),mathOp('='),mathVar('x'),mathOp('('));
+ for(var j=years-1;j>=0;j--){if(j<years-1)sum.append(mathOp('+'));sum.append(powerK(j));}
+ sum.append(mathOp(')'));
+ return mathDisplay(sum);
+}
+function annuityCaption(s,result){
+ var label=node('small','Сумма: ');
+ label.append(mathAmount(s.sum,' ₽'),document.createTextNode('; коэффициент: '),mathInline(mathNum(fmt(result.k))),document.createTextNode('; срок: '),mathInline(mathNum(s.n)),document.createTextNode(' года/лет.'));
+ return label;
+}
+
 function draw(rows,payment){
  var svg=$('debtChart'),ns='http://www.w3.org/2000/svg';while(svg.lastChild&&svg.lastChild.tagName!=='desc')svg.removeChild(svg.lastChild);
  var top=20,bottom=241,left=45,right=665,scale=(bottom-top)/Math.max(payment,1),width=(right-left)/rows.length;
@@ -92,22 +131,21 @@ function draw(rows,payment){
 }
 function render(){
  var x=calculate(state);
- $('principalOut').textContent=money(state.sum);$('rateOut').textContent=state.p+'%';$('yearsOut').textContent=String(state.n);
+ setAmount('principalOut',state.sum,' ₽');setAmount('rateOut',state.p,'%');$('yearsOut').replaceChildren(mathInline(mathNum(state.n)));
  $('principal').value=state.sum;$('rate').value=state.p;$('years').value=state.n;
- $('payment').textContent=money(x.payment);$('totalPaid').textContent=money(x.total);$('overpaid').textContent=money(x.overpay);$('overpaidPercent').textContent=fmt(x.percent)+'%';$('balance').textContent=money(x.last);
- var terms=[];for(var i=state.n-1;i>=0;i--)terms.push(i===0?'1':i===1?'k':'k^'+i);
- $('formula').replaceChildren(document.createTextNode('S·k^'+state.n+' = x('+terms.join(' + ')+')'),node('small','S = '+money(state.sum)+'; k = '+fmt(x.k)+'; n = '+state.n+'.'));
- var body=$('yearRows');body.replaceChildren();x.rows.forEach(function(r){var tr=node('tr','');[String(r.y),money(r.begin),money(r.interest),money(r.debt),money(r.payment),money(r.remaining)].forEach(function(v){tr.append(node('td',v));});body.append(tr);});
+ setAmount('payment',x.payment,' ₽');setAmount('totalPaid',x.total,' ₽');setAmount('overpaid',x.overpay,' ₽');setAmount('overpaidPercent',x.percent,'%');setAmount('balance',x.last,' ₽');
+ $('formula').replaceChildren(annuityEquation(state.n),annuityCaption(state,x));
+ var body=$('yearRows');body.replaceChildren();x.rows.forEach(function(r){var tr=node('tr','');[r.y,r.begin,r.interest,r.debt,r.payment,r.remaining].forEach(function(v,j){var cell=node('td','');cell.append(j===0?mathInline(mathNum(v)):mathAmount(v,' ₽'));tr.append(cell);});body.append(tr);});
  draw(x.rows,x.payment);
- var d=x.payment-baseline.payment;$('basePayment').textContent=money(baseline.payment);$('deltaPayment').textContent=(d>1e-7?'+':'')+money(d);
- $('educationalNote').textContent='Проценты в 1-м году: '+money(x.rows[0].interest)+'; в последнем: '+money(x.rows[x.rows.length-1].interest)+'. Они начисляются на остаток долга.';
+ var d=x.payment-baseline.payment;setAmount('basePayment',baseline.payment,' ₽');setAmount('deltaPayment',d,' ₽');
+ $('educationalNote').replaceChildren(document.createTextNode('Проценты в 1-м году: '),mathAmount(x.rows[0].interest,' ₽'),document.createTextNode('; в последнем: '),mathAmount(x.rows[x.rows.length-1].interest,' ₽'),document.createTextNode('. Они начисляются на остаток долга.'));
  document.querySelectorAll('[data-scenario]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.scenario===chosen));});
 }
 function setScenario(name){chosen=name;lastPreset=name;state=clone(scenarios[name]);baseline=calculate(state);render();$('feedback').textContent='';}
 document.querySelectorAll('[data-scenario]').forEach(function(b){b.addEventListener('click',function(){setScenario(b.dataset.scenario);if(history.replaceState)history.replaceState(null,'','#'+b.dataset.scenario);});});
 [['principal','sum'],['rate','p'],['years','n']].forEach(function(pair){$(pair[0]).addEventListener('input',function(){state[pair[1]]=Number(this.value);chosen='';render();$('feedback').textContent='';});});
 $('reset').addEventListener('click',function(){setScenario(lastPreset);});
-$('checkForecast').addEventListener('click',function(){var opt=document.querySelector('input[name=guess]:checked');if(!opt){$('feedback').textContent='Сначала выберите прогноз.';return;}var more=clone(state);more.p=state.p+1;var before=calculate(state),after=calculate(more),diff=after.payment-before.payment;var correct=Math.abs(diff)<1e-7?'same':diff>0?'more':'less';$('feedback').textContent=(opt.value===correct?'Верно. ':'Сравните с вычислением. ')+'При увеличении годовой ставки с '+state.p+'% до '+more.p+'% платёж меняется с '+money(before.payment)+' на '+money(after.payment)+'.';});
+$('checkForecast').addEventListener('click',function(){var opt=document.querySelector('input[name=guess]:checked');if(!opt){$('feedback').textContent='Сначала выберите прогноз.';return;}var more=clone(state);more.p=state.p+1;var before=calculate(state),after=calculate(more),diff=after.payment-before.payment;var correct=Math.abs(diff)<1e-7?'same':diff>0?'more':'less';$('feedback').replaceChildren(document.createTextNode((opt.value===correct?'Верно. ':'Сравните с вычислением. ')+'При увеличении годовой ставки с '),mathInline(mathRow(mathNum(state.p),mathOp('%'))),document.createTextNode(' до '),mathInline(mathRow(mathNum(more.p),mathOp('%'))),document.createTextNode(' платёж меняется с '),mathAmount(before.payment,' ₽'),document.createTextNode(' на '),mathAmount(after.payment,' ₽'),document.createTextNode('.'));});
 var theme=$('themeToggle');function setTheme(isDark){document.documentElement.dataset.theme=isDark?'dark':'light';theme.setAttribute('aria-pressed',String(isDark));theme.textContent=isDark?'Светлая тема':'Тёмная тема';}
 var saved=false;try{saved=localStorage.getItem('nastya-lesson-theme')==='dark';}catch(_){}setTheme(saved);
 theme.addEventListener('click',function(){var dark=document.documentElement.dataset.theme!=='dark';setTheme(dark);try{localStorage.setItem('nastya-lesson-theme',dark?'dark':'light');}catch(_){}});
