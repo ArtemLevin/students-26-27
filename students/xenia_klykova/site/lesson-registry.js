@@ -5,6 +5,57 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-22",
+  "ktpRefs": [],
+  "href": "22.10.26.html",
+  "title": "Делимость чисел и количество делителей",
+  "navTitle": "Делимость чисел и количество делителей",
+  "navSubtitle": "Ксения Клыкова. Делимость чисел, разность степеней, каноническое разложение, функция количества делителей. Занятие 22 октября 2026 года.",
+  "summary": "Ксения Клыкова. Делимость чисел, разность степеней, каноническое разложение, функция количества делителей. Занятие 22 октября 2026 года.",
+  "topics": [
+    "разность одинаковых степеней и доказательство делимости",
+    "каноническое разложение натурального числа",
+    "условие делимости через простые множители",
+    "количество натуральных делителей τ(N)",
+    "обратные задачи на показатель степени"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t19_divisibility",
+      "evidenceAnchor": "divisibility",
+      "relation": "practiced",
+      "label": "Проверка делимости сравнением показателей простых множителей",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_primes",
+      "evidenceAnchor": "canonical",
+      "relation": "practiced",
+      "label": "Каноническое разложение натуральных чисел",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_divisor_count",
+      "evidenceAnchor": "divisor-count",
+      "relation": "practiced",
+      "label": "Формула числа делителей τ(N) и неизвестная степень",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_power_actions",
+      "evidenceAnchor": "difference",
+      "relation": "practiced",
+      "label": "Разность одинаковых степеней и доказательство кратности",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "22.10.26.html",
+    "pdf": "../pdf_docs/22.10.26.pdf",
+    "tex": "../tex_docs/22.10.26.tex"
+  }
+},
+{
   "date": "2026-10-21",
   "ktpRefs": [],
   "href": "21.10.26.html",
