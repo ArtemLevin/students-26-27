@@ -46,6 +46,8 @@ try{
   assert.ok(basic.width<=basic.viewport+2,'main overflow at '+width+': '+JSON.stringify(basic));
   assert.ok(Number(basic.total)>0,'stats missing '+width);
   assert.ok(basic.map>200,'competency map not populated '+width);
+  assert.equal(await page.locator('#competencyMap').getAttribute('role'),'group','interactive map should expose child buttons to assistive technology');
+  assert.equal(await page.locator('#competencyMap .radial-cell').first().getAttribute('role'),'button','map cell accessibility semantics');
   assert.ok(basic.focus,'focus control missing '+width);
   assert.ok(basic.lesson==='Как устроен платёж','latest lesson wrong '+width);
   if(width===1440){
