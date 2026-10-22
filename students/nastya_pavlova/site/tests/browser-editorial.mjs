@@ -130,13 +130,21 @@ try{
   await navigate('22.10.26.html',w,h);
   const lesson=await evaluate("({heading:document.querySelector('#pageTitle')?.textContent,sections:document.querySelectorAll('.chapter').length,exercises:document.querySelectorAll('.practice details').length,labLink:[...document.querySelectorAll('a')].some(x=>x.getAttribute('href')==='22.10.26-lab.html')})");
   assert.match(lesson.heading,/Вклады/);assert.equal(lesson.sections,10);assert.equal(lesson.exercises,10);assert.ok(lesson.labLink);
+  const mathAudit=await evaluate("(()=>{const nodes=[...document.querySelectorAll('math')];return {count:nodes.length,namespace:nodes.every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML'),equations:document.querySelectorAll('.eq math[display=block]').length,fractions:document.querySelectorAll('mfrac').length,legacy:document.querySelectorAll('sup,sub').length,tableMath:document.querySelectorAll('.reading-table math').length}})()");
+  assert.ok(mathAudit.count>=65&&mathAudit.namespace&&mathAudit.fractions>=4,'Native lesson MathML contract '+JSON.stringify(mathAudit));
+  assert.equal(mathAudit.equations,12);assert.equal(mathAudit.legacy,0);assert.ok(mathAudit.tableMath>=12);
   await evaluate("document.querySelector('#themeToggle').click()");
   assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'22 October lesson dark overflow at '+w);
   await navigate('22.10.26-lab.html',w,h);
   const credit=await evaluate("({heading:document.querySelector('h1')?.textContent,chart:!!document.querySelector('#debtChart'),controls:document.querySelectorAll('input[type=range]').length,years:document.querySelectorAll('#yearRows tr').length,payment:document.querySelector('#payment')?.textContent.replace(/[^0-9]/g,'')})");
   assert.match(credit.heading,/Как погашается кредит/);assert.equal(credit.controls,3);assert.ok(credit.chart);assert.equal(credit.years,3);assert.equal(credit.payment,'199650');
+  const labMath=await evaluate("({native:[...document.querySelectorAll('math')].every(x=>x.namespaceURI==='http://www.w3.org/1998/Math/MathML'),formula:!!document.querySelector('#formula math[display=block] msup'),rowMath:document.querySelectorAll('#yearRows td math').length,answerMath:!!document.querySelector('#payment math mn')})");
+  assert.ok(labMath.native&&labMath.formula&&labMath.answerMath,'Interactive native MathML contract '+JSON.stringify(labMath));
+  assert.equal(labMath.rowMath,18);
   const presets=await evaluate("(()=>{const get=()=>document.querySelector('#payment').textContent.replace(/[^0-9]/g,'');document.querySelector('[data-scenario=two]').click();const two=get();document.querySelector('[data-scenario=four]').click();const four=get();const rate=document.querySelector('#rate');rate.value='12';rate.dispatchEvent(new Event('input',{bubbles:true}));document.querySelector('#reset').click();return {two,four,reset:get(),rows:document.querySelectorAll('#yearRows tr').length}})()");
   assert.deepEqual(presets,{two:'121000',four:'146410',reset:'146410',rows:4},'Annuity scenario and reset parity');
+  const labAfterChange=await evaluate("({rows:document.querySelectorAll('#yearRows td math').length,formula:document.querySelector('#formula math[display=block]')?.textContent,namespace:[...document.querySelectorAll('#formula math')].every(x=>x.namespaceURI==='http://www.w3.org/1998/Math/MathML')})");
+  assert.equal(labAfterChange.rows,24);assert.ok(labAfterChange.formula.includes('4'));assert.ok(labAfterChange.namespace);
   await evaluate("document.querySelector('#themeToggle').click()");
   assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'22 October lab dark overflow at '+w);
  }
