@@ -47,7 +47,7 @@ try{
   assert.ok(Number(basic.total)>0,'stats missing '+width);
   assert.ok(basic.map>200,'competency map not populated '+width);
   assert.ok(basic.focus,'focus control missing '+width);
-  assert.ok(basic.lesson==='Кредитные платежи','latest lesson wrong '+width);
+  assert.ok(basic.lesson==='Как устроен платёж','latest lesson wrong '+width);
   if(width===1440){
     const cell=page.locator('#competencyMap .radial-cell').first();
     await cell.focus();
@@ -95,16 +95,16 @@ try{
       titles:visible.filter(t=>t.querySelector('.archive-tile-title').scrollHeight>t.querySelector('.archive-tile-title').clientHeight+2).length};
   });
   assert.ok(archive.width<=archive.viewport+2,'archive overflow '+width+': '+JSON.stringify(archive));
-  assert.equal(archive.counts,10,'archive lesson count '+width);
+  assert.equal(archive.counts,11,'archive lesson count '+width);
   assert.equal(archive.months,2,'archive month groups '+width);
   assert.ok(Math.max(...archive.heights)-Math.min(...archive.heights)<=2,'unequal tiles '+width+': '+JSON.stringify(archive.heights));
   assert.equal(archive.clipped,0,'clipped archive card '+width);
   assert.equal(archive.titles,0,'clipped archive title '+width);
   if(width===390){assert.equal(await page.locator('body').getAttribute('data-theme'),null,'archive theme not retained');}
   await page.locator('#archiveSearch').fill('вклады');
-  assert.equal(await page.locator('.archive-tile:visible').count(),1,'archive search failed '+width);
+  assert.equal(await page.locator('.archive-tile:visible').count(),2,'archive search failed '+width);
   await page.locator('#archiveSearch').fill('');
-  assert.equal(await page.locator('.archive-tile:visible').count(),10,'archive reset failed '+width);
+  assert.equal(await page.locator('.archive-tile:visible').count(),11,'archive reset failed '+width);
   await page.screenshot({path:path.join(artifactDir,'archive-'+width+'.png'),fullPage:true});
   await page.goto(origin+'18.10.26.html',{waitUntil:'networkidle'});
   await page.locator('.poster img').scrollIntoViewIfNeeded();
@@ -140,6 +140,40 @@ try{
     await page.locator('#theme').click();
     assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','lab dark theme toggle');
   }
+
+  // The latest published lesson has its own responsive and interactive smoke tests.
+  await page.goto(origin+'22.10.26.html',{waitUntil:'networkidle'});
+  await page.locator('.book img').scrollIntoViewIfNeeded();
+  await page.locator('.book img').evaluate(image=>image.decode());
+  const latestLesson=await page.evaluate(()=>({
+    width:document.documentElement.scrollWidth,viewport:innerWidth,
+    title:document.querySelector('h1')?.textContent.trim(),
+    tasks:document.querySelectorAll('.tasks li').length,
+    image:document.querySelector('.book img')?.naturalWidth>0
+  }));
+  assert.ok(latestLesson.width<=latestLesson.viewport+2,'22 Oct lesson overflow '+width+': '+JSON.stringify(latestLesson));
+  assert.equal(latestLesson.title,'Как устроен платёж','22 Oct lesson title '+width);
+  assert.equal(latestLesson.tasks,10,'22 Oct task count '+width);
+  assert.ok(latestLesson.image,'22 Oct poster missing '+width);
+  await page.locator('.answers summary').click();
+  assert.equal(await page.locator('.answers li').count(),10,'22 Oct answer count '+width);
+  await page.goto(origin+'22.10.26-lab.html?mode=arbitrary',{waitUntil:'networkidle'});
+  assert.equal(await page.locator('[data-mode="arbitrary"]').getAttribute('aria-pressed'),'true','new lab default mode '+width);
+  assert.equal(await page.locator('#rows tr').count(),3,'new lab arbitrary schedule '+width);
+  assert.ok((await page.locator('#total').textContent()).includes('969'),'new lab reference total '+width);
+  await page.locator('#snapshot').click();
+  await page.locator('#rate').fill('15');
+  assert.ok((await page.locator('#comparison').textContent()).includes('Изменение'),'new lab compare state '+width);
+  await page.locator('[data-mode="limits"]').click();
+  assert.equal(await page.locator('#rows tr').count(),3,'new lab limits schedule '+width);
+  assert.ok((await page.locator('#insightText').textContent()).includes('каждый < 5: да'),'new lab limits baseline '+width);
+  await page.locator('#principal').fill('10');
+  assert.ok((await page.locator('#insightText').textContent()).includes('каждый < 5: нет'),'new lab limits threshold '+width);
+  await page.locator('[data-mode="mixed"]').click();
+  assert.equal(await page.locator('#rows tr').count(),5,'new lab mixed schedule '+width);
+  assert.ok((await page.locator('#insightText').textContent()).includes('2,16'),'new lab mixed calculation '+width);
+  const newLabSize=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth}));
+  assert.ok(newLabSize.width<=newLabSize.viewport+2,'22 Oct lab overflow '+width+': '+JSON.stringify(newLabSize));
   assert.deepEqual(failures,[],'browser console/page errors '+width+': '+failures.join('; '));
   console.log('PASS',width+'x'+height,JSON.stringify({map:basic.map,tiles:archive.counts,heights:archive.heights,theme:width===390?'dark':'light'}));
   completed++;await page.close();
