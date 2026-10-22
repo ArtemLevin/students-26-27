@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория аннуитетного кредита для Анастасии Павловой: процент, срок, платёж, остаток долга и переплата.">
+<title>Лаборатория аннуитетного кредита · Анастасия Павлова</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+:root{color-scheme:light;--bg:#f3f4f0;--paper:#fffdf8;--text:#25363e;--muted:#586c73;--border:#cbd7d9;--primary:#1e6170;--accent:#a65a3a;--wash:#e2edf0;--good:#216b55;--due:#b26b3f;--button:#f4f5f0}
+html[data-theme=dark]{color-scheme:dark;--bg:#121f26;--paper:#1b2d36;--text:#edf3f3;--muted:#bed2d6;--border:#3f5864;--primary:#a7dce7;--accent:#ffbd9d;--wash:#29434c;--good:#a5e7c9;--due:#ffbd92;--button:#243943}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);margin:0}a{color:var(--primary);text-underline-offset:3px}button,input{font:inherit}button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.skip{position:absolute;left:-9999px;top:4px;padding:8px;background:var(--paper);z-index:2}.skip:focus{left:8px}
+.shell{max-width:1200px;margin:0 auto;padding:0 clamp(16px,3vw,40px)}.top{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:17px 0;border-bottom:1px solid var(--border);flex-wrap:wrap}.top strong{font-size:.94rem}.top nav{display:flex;gap:8px;flex-wrap:wrap}.top nav a,.top button{padding:9px 12px;min-height:43px;display:inline-flex;align-items:center;background:var(--paper);border:1px solid var(--border);color:var(--text);text-decoration:none;border-radius:4px}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;letter-spacing:-.025em;line-height:1.18}h1{font-size:clamp(2.55rem,5.5vw,4.8rem);margin:12px 0}h2{font-size:clamp(1.5rem,2.7vw,2.1rem);margin:0 0 15px}h3{font-size:1.26rem}
+.eyebrow{color:var(--accent);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800}.intro{padding:55px 0 25px;max-width:900px}.intro p:not(.eyebrow){color:var(--muted);font-size:1.1rem}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin:9px 0 25px}.presets button,.reset,.forecast button{padding:10px 14px;min-height:44px;border:1px solid var(--border);border-radius:4px;background:var(--paper);color:var(--text)}button[aria-pressed=true]{background:var(--primary);color:var(--paper);border-color:var(--primary)}
+html[data-theme=dark] button[aria-pressed=true]{color:#12222b}
+.lab{display:grid;grid-template-columns:minmax(265px,.79fr) minmax(0,1.21fr);gap:18px;align-items:start}.panel{background:var(--paper);border:1px solid var(--border);padding:clamp(20px,3vw,32px);min-width:0}
+.control{margin:27px 0}.control label{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-weight:650}.control output{font-variant-numeric:tabular-nums;color:var(--primary);font-weight:800}
+.control input{display:block;width:100%;min-height:32px;accent-color:var(--primary);margin:12px 0 5px}.muted,.control small{color:var(--muted);font-size:.85rem}.reset{width:100%}
+.big{font:700 clamp(2.3rem,5vw,4rem)/1.15 Georgia,serif;color:var(--primary);font-variant-numeric:tabular-nums;margin:6px 0 10px}
+.sums{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:15px 0;border-block:1px solid var(--border);margin:20px 0}.sums b{display:block;color:var(--primary);font-size:1.22rem;font-variant-numeric:tabular-nums}.sums small{display:block;color:var(--muted)}
+.formula{margin:18px 0;padding:12px 14px;border-left:3px solid var(--primary);background:var(--wash);overflow-x:auto;font:600 clamp(1rem,2vw,1.25rem)/1.6 Georgia,serif;white-space:nowrap}.formula small{display:block;white-space:normal;font:400 .83rem/1.5 system-ui;color:var(--muted)}
+.chart{width:100%;height:auto;display:block;margin:20px 0;overflow:visible}.chart text{font-family:system-ui,sans-serif;fill:var(--muted);font-size:13px}.chart .axis{stroke:var(--border);stroke-width:1}.chart .rest{fill:var(--primary)}.chart .interest{fill:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:18px;font-size:.82rem;color:var(--muted)}.legend span:before{content:"";display:inline-block;width:12px;height:12px;margin-right:7px;vertical-align:-1px;background:var(--primary)}.legend span+span:before{background:var(--accent)}
+.tablebox{max-width:100%;overflow-x:auto}.numbers{border-collapse:collapse;width:100%;min-width:620px;font-variant-numeric:tabular-nums;font-size:.86rem}.numbers td,.numbers th{padding:11px 9px;border-bottom:1px solid var(--border);text-align:right}.numbers th{color:var(--muted);font-size:.77rem}.numbers td:first-child,.numbers th:first-child{text-align:left}.numbers td:last-child{font-weight:750;color:var(--primary)}.numbers tr:last-child td{border-bottom:2px solid var(--primary)}
+.compare{border-top:1px solid var(--border);padding-top:18px;margin-top:22px}.compare strong{color:var(--primary)}.forecast{margin:24px 0 36px;background:var(--paper);border:1px solid var(--border);padding:clamp(20px,3vw,30px)}.forecast .options{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}.forecast label{display:inline-flex;align-items:center;gap:7px;min-height:40px}.forecast input{accent-color:var(--primary)}.forecast button{background:var(--primary);color:var(--paper);border-color:var(--primary)}html[data-theme=dark] .forecast button{color:#12222b}
+.feedback{color:var(--good);font-weight:650;min-height:24px;margin-top:13px}.steps{padding-left:24px}.steps li{margin:10px 0}.foot{padding:26px 0 36px;border-top:1px solid var(--border);color:var(--muted);font-size:.85rem}
+@media(max-width:860px){.lab{grid-template-columns:1fr}.intro{padding-top:34px}.sums{gap:20px}}@media(max-width:480px){.sums{grid-template-columns:1fr}.presets button{flex:1}.chart text{font-size:11px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*:before,*:after{transition:none!important;animation:none!important}}
+@media print{body{background:#fff;color:#000}.presets,.control,.reset,.forecast,.top button{display:none!important}.lab{display:block}.panel{border:0}.chart{max-height:180px}}
+</style></head>
+<body><a class="skip" href="#lab">К лаборатории</a>
+<div class="shell">
+<header class="top"><strong>Анастасия Павлова · LEVIN / ATLAS</strong><nav><a href="22.10.26.html#annuity">← К уроку</a><a href="index.html">В кабинет</a><button type="button" id="themeToggle" aria-pressed="false">Тёмная тема</button></nav></header>
+<main><div class="intro"><p class="eyebrow">22 октября 2026 / цифровая лаборатория</p><h1>Как погашается кредит</h1><p>Меняйте сумму кредита, годовую ставку и число лет. Модель пересчитает одинаковый ежегодный платёж, общую переплату и остаток долга после каждого платежа. Все операции происходят в конце года после начисления процентов.</p></div>
+<section aria-label="Готовые сценарии"><p class="eyebrow">Сценарии из пособия</p><div class="presets" role="group" aria-label="Выбрать кредит"><button type="button" data-scenario="two" aria-pressed="false">2 года · 210 000 руб.</button><button type="button" data-scenario="three" aria-pressed="true">3 года · 496 500 руб.</button><button type="button" data-scenario="four" aria-pressed="false">4 года · 464 100 руб.</button></div></section>
+<div class="lab" id="lab">
+<section class="panel" aria-labelledby="controlsTitle"><h2 id="controlsTitle">Параметры кредита</h2>
+<div class="control"><label for="principal">Начальная сумма <output id="principalOut" for="principal">496 500 ₽</output></label><input id="principal" type="range" min="50000" max="600000" step="500" value="496500"><small>Размер долга до начисления процентов</small></div>
+<div class="control"><label for="rate">Годовая ставка <output id="rateOut" for="rate">10%</output></label><input id="rate" type="range" min="0" max="20" step="1" value="10"><small>Каждый год ставка постоянна</small></div>
+<div class="control"><label for="years">Число лет <output id="yearsOut" for="years">3</output></label><input id="years" type="range" min="2" max="5" step="1" value="3"><small>Число платежей равно числу лет</small></div>
+<button type="button" class="reset" id="reset">Вернуть исходные параметры сценария</button>
+<p class="muted">Свободное изменение ползунков позволяет исследовать модель. Для любого срока платёж x один и тот же в конце каждого года.</p>
+<h3>Что вычисляет модель</h3><ol class="steps"><li>Сначала начисляет проценты на остаток.</li><li>Вычитает равный ежегодный платёж.</li><li>Передаёт остаток в следующий год. После последнего платежа остаток равен нулю.</li></ol>
+</section>
+<section class="panel" aria-labelledby="resultsTitle"><p class="eyebrow">Результаты в реальном времени</p><h2 id="resultsTitle">Структура ежегодного платежа</h2>
+<small class="muted">Один платёж</small><div class="big" id="payment" aria-live="polite">199 650 ₽</div>
+<div class="sums"><div><small>Всего выплачено</small><b id="totalPaid">598 950 ₽</b></div><div><small>Переплата</small><b id="overpaid">102 450 ₽</b></div><div><small>Переплата к сумме кредита</small><b id="overpaidPercent">20,63%</b></div><div><small>Долг после последнего платежа</small><b id="balance">0 ₽</b></div></div>
+<div id="formula" class="formula">S·k³ = x(k² + k + 1)<small>В уравнении S — долг, k = 1 + P/100, x — одинаковый ежегодный платёж.</small></div>
+<svg class="chart" id="debtChart" viewBox="0 0 700 285" role="img" aria-labelledby="chartTitle chartDesc"><title id="chartTitle">Проценты и погашение основного долга по годам</title><desc id="chartDesc">На диаграмме ежегодный платёж разбит на проценты и уменьшение основного долга. Числа для каждого года приведены в таблице ниже.</desc></svg>
+<div class="legend"><span>Часть платежа — основной долг</span><span>Часть платежа — проценты</span></div>
+<div class="tablebox" role="region" tabindex="0" aria-label="Подробная таблица аннуитетного кредита"><table class="numbers"><thead><tr><th>Год</th><th>Долг в начале, ₽</th><th>Проценты, ₽</th><th>После %, ₽</th><th>Платёж, ₽</th><th>Остаток, ₽</th></tr></thead><tbody id="yearRows"></tbody></table></div>
+<div class="compare"><p>Опорный сценарий: <strong id="basePayment">199 650 ₽</strong> за платёж. Отличие: <strong id="deltaPayment">0 ₽</strong>.</p><p class="muted" id="educationalNote">Доля процентов в платеже падает по мере уменьшения долга.</p></div>
+</section></div>
+<section class="forecast" aria-labelledby="forecastTitle"><p class="eyebrow">Предскажите результат</p><h2 id="forecastTitle">Что станет с ежегодным платежом при повышении ставки на 1 процентный пункт?</h2><p class="muted">Срок и сумма кредита сохраняются. Выберите прогноз и проверьте его расчётом.</p>
+<div class="options" role="radiogroup" aria-label="Прогноз ежегодного платежа"><label><input type="radio" name="guess" value="more"> Увеличится</label><label><input type="radio" name="guess" value="same"> Не изменится</label><label><input type="radio" name="guess" value="less"> Уменьшится</label></div>
+<button type="button" id="checkForecast">Проверить прогноз</button><p class="feedback" id="feedback" role="status" aria-live="polite"></p></section>
+</main><footer class="foot">Лёвин Артём Александрович · эксклюзивно для Анастасии Павловой · <a href="22.10.26.html">К занятию</a></footer>
+</div>
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id);}, scenarios={two:{sum:210000,p:10,n:2},three:{sum:496500,p:10,n:3},four:{sum:464100,p:10,n:4}};
+var chosen='three',baseline=null,state={sum:496500,p:10,n:3};
+function clone(s){return {sum:s.sum,p:s.p,n:s.n};}
+function fmt(v){if(Math.abs(v)<1e-7)v=0;return Number(v).toLocaleString('ru-RU',{maximumFractionDigits:2});}
+function money(v){return fmt(v)+' ₽';}
+function calculate(s){
+ var k=1+s.p/100, power=Math.pow(k,s.n), factor=0;
+ for(var i=0;i<s.n;i++)factor+=Math.pow(k,i);
+ var payment=s.sum*power/factor,balance=s.sum,rows=[];
+ for(var y=1;y<=s.n;y++){
+   var begin=balance,interest=begin*(k-1),debt=begin+interest,principal=payment-interest;
+   balance=debt-payment;if(y===s.n&&Math.abs(balance)<1e-7)balance=0;
+   rows.push({y:y,begin:begin,interest:interest,debt:debt,payment:payment,principal:principal,remaining:balance});
+ }
+ return {rows:rows,payment:payment,total:payment*s.n,overpay:payment*s.n-s.sum,percent:(payment*s.n-s.sum)/s.sum*100,k:k,last:balance};
+}
+function node(name,txt){var e=document.createElement(name);e.textContent=txt;return e;}
+function draw(rows,payment){
+ var svg=$('debtChart'),ns='http://www.w3.org/2000/svg';while(svg.lastChild&&svg.lastChild.tagName!=='desc')svg.removeChild(svg.lastChild);
+ var top=20,bottom=241,left=45,right=665,scale=(bottom-top)/Math.max(payment,1),width=(right-left)/rows.length;
+ var axis=document.createElementNS(ns,'line');axis.setAttribute('x1',left);axis.setAttribute('x2',right);axis.setAttribute('y1',bottom);axis.setAttribute('y2',bottom);axis.setAttribute('class','axis');svg.append(axis);
+ rows.forEach(function(r,i){
+   var x=left+width*(i+.5),bar=Math.min(67,width*.49),ph=r.principal*scale,ih=r.interest*scale;
+   var a=document.createElementNS(ns,'rect');a.setAttribute('x',x-bar/2);a.setAttribute('y',bottom-ph);a.setAttribute('width',bar);a.setAttribute('height',Math.max(0,ph));a.setAttribute('class','rest');svg.append(a);
+   var b=document.createElementNS(ns,'rect');b.setAttribute('x',x-bar/2);b.setAttribute('y',bottom-ph-ih);b.setAttribute('width',bar);b.setAttribute('height',Math.max(0,ih));b.setAttribute('class','interest');svg.append(b);
+   var label=document.createElementNS(ns,'text');label.textContent='Год '+r.y;label.setAttribute('x',x);label.setAttribute('y',bottom+23);label.setAttribute('text-anchor','middle');svg.append(label);
+ });
+}
+function render(){
+ var x=calculate(state);
+ $('principalOut').textContent=money(state.sum);$('rateOut').textContent=state.p+'%';$('yearsOut').textContent=String(state.n);
+ $('principal').value=state.sum;$('rate').value=state.p;$('years').value=state.n;
+ $('payment').textContent=money(x.payment);$('totalPaid').textContent=money(x.total);$('overpaid').textContent=money(x.overpay);$('overpaidPercent').textContent=fmt(x.percent)+'%';$('balance').textContent=money(x.last);
+ var terms=[];for(var i=state.n-1;i>=0;i--)terms.push(i===0?'1':i===1?'k':'k^'+i);
+ $('formula').replaceChildren(document.createTextNode('S·k^'+state.n+' = x('+terms.join(' + ')+')'),node('small','S = '+money(state.sum)+'; k = '+fmt(x.k)+'; n = '+state.n+'.'));
+ var body=$('yearRows');body.replaceChildren();x.rows.forEach(function(r){var tr=node('tr','');[String(r.y),money(r.begin),money(r.interest),money(r.debt),money(r.payment),money(r.remaining)].forEach(function(v){tr.append(node('td',v));});body.append(tr);});
+ draw(x.rows,x.payment);
+ var d=x.payment-baseline.payment;$('basePayment').textContent=money(baseline.payment);$('deltaPayment').textContent=(d>1e-7?'+':'')+money(d);
+ $('educationalNote').textContent='Проценты в 1-м году: '+money(x.rows[0].interest)+'; в последнем: '+money(x.rows[x.rows.length-1].interest)+'. Они начисляются на остаток долга.';
+ document.querySelectorAll('[data-scenario]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.scenario===chosen));});
+}
+function setScenario(name){chosen=name;state=clone(scenarios[name]);baseline=calculate(state);render();$('feedback').textContent='';}
+document.querySelectorAll('[data-scenario]').forEach(function(b){b.addEventListener('click',function(){setScenario(b.dataset.scenario);if(history.replaceState)history.replaceState(null,'','#'+b.dataset.scenario);});});
+[['principal','sum'],['rate','p'],['years','n']].forEach(function(pair){$(pair[0]).addEventListener('input',function(){state[pair[1]]=Number(this.value);chosen='';render();$('feedback').textContent='';});});
+$('reset').addEventListener('click',function(){setScenario(chosen||'three');});
+$('checkForecast').addEventListener('click',function(){var opt=document.querySelector('input[name=guess]:checked');if(!opt){$('feedback').textContent='Сначала выберите прогноз.';return;}var more=clone(state);more.p=state.p+1;var before=calculate(state),after=calculate(more),diff=after.payment-before.payment;var correct=Math.abs(diff)<1e-7?'same':diff>0?'more':'less';$('feedback').textContent=(opt.value===correct?'Верно. ':'Сравните с вычислением. ')+'При увеличении годовой ставки с '+state.p+'% до '+more.p+'% платёж меняется с '+money(before.payment)+' на '+money(after.payment)+'.';});
+var theme=$('themeToggle');function setTheme(isDark){document.documentElement.dataset.theme=isDark?'dark':'light';theme.setAttribute('aria-pressed',String(isDark));theme.textContent=isDark?'Светлая тема':'Тёмная тема';}
+var saved=false;try{saved=localStorage.getItem('nastya-lesson-theme')==='dark';}catch(_){}setTheme(saved);
+theme.addEventListener('click',function(){var dark=document.documentElement.dataset.theme!=='dark';setTheme(dark);try{localStorage.setItem('nastya-lesson-theme',dark?'dark':'light');}catch(_){}});
+var preset=location.hash.slice(1);setScenario(Object.prototype.hasOwnProperty.call(scenarios,preset)?preset:'three');
+})();
+</script></body></html>
