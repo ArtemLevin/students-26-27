@@ -5,6 +5,70 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-22",
+    "ktpRefs": [],
+    "href": "22.10.26.html",
+    "title": "Как устроен платёж",
+    "navTitle": "Как устроен платёж",
+    "navSubtitle": "Матвей Горбачёв. Финансовые задачи ЕГЭ: кредиты и вклады, аннуитетная, дифференцированная, произвольная и смешанная схемы, таблица долга, переплата и целочисленные ограничения. Путь А — 10 заданий.",
+    "summary": "Матвей Горбачёв. Финансовые задачи ЕГЭ: кредиты и вклады, аннуитетная, дифференцированная, произвольная и смешанная схемы, таблица долга, переплата и целочисленные ограничения. Путь А — 10 заданий.",
+    "topics": [
+      "распознавание аннуитетной и дифференцированной схем",
+      "вклады с пополнением и аннуитетная формула",
+      "произвольные остатки долга и таблица платежей",
+      "переплата и строгие ограничения на каждый платёж",
+      "смешанная схема: сначала проценты, затем равные платежи"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "finance_04",
+        "evidenceAnchor": "annuity",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "finance_05",
+        "evidenceAnchor": "diff",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "finance_06",
+        "evidenceAnchor": "recurrence",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "finance_07",
+        "evidenceAnchor": "model",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "finance_08",
+        "evidenceAnchor": "models",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "finance_09",
+        "evidenceAnchor": "deposit",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "finance_11",
+        "evidenceAnchor": "model",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "finance_12",
+        "evidenceAnchor": "constraints",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "22.10.26.html",
+      "pdf": "../pdf_docs/22.10.26.pdf",
+      "tex": "../tex_docs/22.10.26.tex",
+      "lab": "22.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-10-18",
     "ktpRefs": [],
     "href": "18.10.26.html",
