@@ -134,7 +134,7 @@ try{
   await call('Page.bringToFront');
   await evalJS('(()=>{const task=document.querySelector("details.task");task.open=false;task.querySelector("summary").focus();})()');
   assert.equal(await evalJS('document.activeElement?.tagName'),'SUMMARY','disclosure receives keyboard focus');
-  await call('Input.dispatchKeyEvent',{type:'rawKeyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13,nativeVirtualKeyCode:13});
+  await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13,nativeVirtualKeyCode:13});
   await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13,nativeVirtualKeyCode:13});
   await wait(100);
   assert.equal(await evalJS('document.querySelector("details.task").open'),true,'keyboard activates the first disclosure');
