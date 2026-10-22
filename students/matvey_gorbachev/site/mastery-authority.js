@@ -185,8 +185,53 @@ for(const group of d.groups)for(const item of group.items){
     });
   }
 }
+// Reviewed lesson evidence projections: recorded history only; levels are not changed.
+const financeLessonEvidence=[
+  {
+    date:"18.10.26",
+    href:"18.10.26.html",
+    map:[
+      ["finance_05","diff","practiced"],
+      ["finance_11","model","practiced"],
+      ["finance_04","annuity","touched"],
+      ["finance_06","recurrence","touched"],
+      ["finance_10","rates","touched"],
+      ["finance_08","compare","touched"]
+    ]
+  },
+  {
+    date:"22.10.26",
+    href:"22.10.26.html",
+    map:[
+      ["finance_04","annuity","touched"],
+      ["finance_05","diff","touched"],
+      ["finance_06","recurrence","touched"],
+      ["finance_07","model","practiced"],
+      ["finance_08","models","touched"],
+      ["finance_09","deposit","touched"],
+      ["finance_11","model","practiced"],
+      ["finance_12","constraints","practiced"]
+    ]
+  }
+];
+const financeById=new Map(d.groups.flatMap(group=>(group.items||[]).map(item=>[item.id,item])));
+for(const lesson of financeLessonEvidence){
+  for(const [competencyId,anchor,relation] of lesson.map){
+    const item=financeById.get(competencyId);
+    if(!item)throw new Error("Unknown finance competency in evidence: "+competencyId);
+    item.evidence=Array.isArray(item.evidence)?item.evidence:[];
+    if(item.evidence.some(entry=>entry.date===lesson.date))continue;
+    item.evidence.push({
+      date:lesson.date,
+      text:relation==="practiced"
+        ?"Навык отрабатывался на занятии совместно с преподавателем; уровень самостоятельного освоения не оценивался."
+        :"Навык обсуждался и объяснялся на занятии; самостоятельное освоение отдельно не оценивалось.",
+      href:lesson.href+"#"+anchor
+    });
+  }
+}
 const stablePrefix="matvey_gorbachev-ege-profile-math";try{const suffixes=["-competency-map","-repeat","-theme"],legacyPrefixes=["matvey_gorbachev-ege-profile-math-20260927","matvey_gorbachev-ege-profile-math-20260924","matvey_gorbachev-ege-profile-math-20260920","matvey_gorbachev-ege-profile-math-20260917"];for(const suffix of suffixes){const stableKey=stablePrefix+suffix;if(localStorage.getItem(stableKey)==null){for(const legacy of legacyPrefixes){const value=localStorage.getItem(legacy+suffix);if(value!=null){localStorage.setItem(stableKey,value);break}}}}}catch(e){}
-d.student.name="Матвей Горбачев";d.updated="15.10.2026";d.storagePrefix=stablePrefix;d.nextAfterBaseline="functions_09";d.materials=[{date:"13.09.26",title:"Алгебраическая база и степени",pdf:"../pdf_docs/13.09.26.pdf",tex:"../tex_docs/13.09.26.tex"}]})();
+d.student.name="Матвей Горбачев";d.updated="22.10.2026";d.storagePrefix=stablePrefix;d.nextAfterBaseline="functions_09";d.materials=[{date:"13.09.26",title:"Алгебраическая база и степени",pdf:"../pdf_docs/13.09.26.pdf",tex:"../tex_docs/13.09.26.tex"}]})();
 
 (() => {
   "use strict";
@@ -209,7 +254,7 @@ d.student.name="Матвей Горбачев";d.updated="15.10.2026";d.storageP
   }
   window.STUDENT_MASTERY_AUTHORITY={
     version:1,
-    basis:"Repository-authored baseline levels after ambiguity-checked lesson overlays through 15.10 (08.10 and 15.10 are evidence-only).",
+    basis:"Repository-authored baseline levels; reviewed evidence overlays through 22.10 are history-only, with no automatic mastery increase.",
     titleMappingCount:55,
     levels
   };
