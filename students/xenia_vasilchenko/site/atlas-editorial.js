@@ -51,10 +51,11 @@ if(lesson){
   if(href){$('latestLessonCta').href=href;$('latestLessonCta').hidden=false;}
   const pdf=safeHref(lesson.materials?.pdf);
   if(pdf){$('latestLessonPdf').href=pdf;$('latestLessonPdf').hidden=false;}
-  if(lesson.date==='2026-10-15'){
-    $('latestLessonPoster').href='../images/15.10.26.png';
+  if(lesson.date==='2026-10-15'||lesson.date==='2026-10-22'){
+    const image=lesson.date==='2026-10-22'?'22.10.26.png':'15.10.26.png';
+    $('latestLessonPoster').href='../images/'+image;
     $('latestLessonPoster').hidden=false;
-    $('latestPracticeLink').href='15.10.26.html#practice';
+    $('latestPracticeLink').href=lesson.date==='2026-10-15'?href+'#practice':href;
   }else if(href){
     $('latestPracticeLink').href=href;
     $('latestPracticeLink').textContent='Открыть последнее занятие ↗';
