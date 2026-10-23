@@ -27,8 +27,9 @@
   <header class="ktp-head"><div><small>ЕГЭ, профильная математика</small><h1>Даниил Хрястов</h1><p>Календарно-тематический план</p></div><a href="index.html">← Навигатор</a></header>
   <section class="ktp-status" aria-live="polite"><strong id="planStatus">Загрузка плана…</strong><p class="repo-note">Источник истины — репозиторий. Эта страница отображает <code>ktp-plan.json</code> и <code>ktp-state.json</code>; учебное состояние в браузере не сохраняется.</p></section>
   <section id="ktpList" class="ktp-list" aria-label="План занятий"></section>
+  <noscript><p>Для отображения КТП требуется JavaScript. Пособия доступны в навигаторе ученика.</p></noscript>
 </main>
-<footer class="ktp-shell"><small>Лёвин Артём Александрович эксклюзивно для Даниил Хрястов</small></footer>
+<footer class="ktp-shell"><small>Лёвин Артём Александрович · эксклюзивно для Даниила Хрястова</small></footer>
 <script type="module">
 const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const dateLabel=value=>value?value.split('-').reverse().join('.'): 'дата уточняется';
@@ -38,8 +39,8 @@ try{
   if(plan.studentId!=="daniil_khriastov"||state.studentId!=="daniil_khriastov")throw new Error('studentId mismatch');
   if(plan.programVersion!==state.programVersion)throw new Error('programVersion mismatch');
   const host=document.getElementById('ktpList'),status=document.getElementById('planStatus');
-  status.textContent=plan.lessons.length?('В плане: '+plan.lessons.length+' занятий'):'План готов к содержательному заполнению';
-  if(!plan.lessons.length){host.innerHTML='<p>Структура кабинета готова. Персональный маршрут будет добавлен через repository pipeline.</p>';}
+  status.textContent=plan.lessons.length?('В плане: '+plan.lessons.length+' занятий'):'КТП пока не опубликован';
+  if(!plan.lessons.length){host.innerHTML='<p>Персональный маршрут появится после утверждения и публикации КТП.</p>';}
   else host.innerHTML=plan.lessons.map(item=>{const record=state.records[item.id]||{status:'planned'};return '<article class="ktp-item"><div class="ktp-meta">'+esc(item.id)+' · '+esc(dateLabel(record.scheduledDate||item.plannedDate))+' · '+esc(record.status)+'</div><h2>'+esc(item.topic)+'</h2><p>'+esc(item.content)+'</p></article>';}).join('');
 }catch(error){
   document.getElementById('planStatus').textContent='КТП временно недоступен';
