@@ -10,7 +10,7 @@
     'Навык устойчив в смешанных и отсроченных заданиях.'
   ];
   const $ = id => document.getElementById(id);
-  const state = {items:[], groups:[], levels:{}, selected:null, filter:'all', query:'', lessons:[], contract:null, isReady:false, evidenceRequest:0};
+  const state = {items:[], byId:new Map(), groups:[], levels:{}, selected:null, mapFocus:null, lastSelectionSource:null, filter:'all', query:'', lessons:[], contract:null, isReady:false, evidenceRequest:0};
   const els = {svg:$('radialMap'), catalog:$('catalogList'), status:$('dataStatus'), filters:$('filters')};
   const safePath = p => typeof p==='string' && /^site\/[a-zA-Z0-9/_\-.]+$/.test(p) && !p.split('/').includes('..');
   const siteUrl = p => new URL('../'+p, location.href).href;
@@ -89,7 +89,7 @@
         g.items.forEach((item,i)=>{
           const row=i%ringCount,col=Math.floor(i/ringCount),rIn=110+row*220/ringCount,rOut=110+(row+1)*220/ringCount-2;
           const d=arc(rIn,rOut,sectorStart+col*step+.15,sectorStart+(col+1)*step-.15);
-          const attributes={d,class:'radial-cell',tabindex:'0',role:'button','data-id':item.id,'data-level':level(item.id)===null?'unknown':level(item.id),'aria-label':item.title+'; '+g.name+'; '+levelName(level(item.id))};
+          const attributes={d,class:'radial-cell',tabindex:'-1',role:'button','data-id':item.id,'data-level':level(item.id)===null?'unknown':level(item.id),'aria-label':item.title+'; '+g.name+'; '+levelName(level(item.id))};
           const path=svgNode('path',attributes,svg);
           svgNode('title',{},path).textContent=item.title+' — '+levelName(level(item.id));
         });
@@ -107,18 +107,20 @@
     refreshMapState();
   }
   function refreshMapState(){
-    const all=els.svg.querySelectorAll('.radial-cell');
+    const all=[...els.svg.querySelectorAll('.radial-cell')];
+    const available=all.filter(path=>visible(state.byId.get(path.dataset.id)));
+    if(!available.some(path=>path.dataset.id===state.mapFocus))state.mapFocus=available[0]?.dataset.id||null;
     all.forEach(path=>{
-      const id=path.dataset.id,item=state.items.find(x=>x.id===id);
+      const id=path.dataset.id,item=state.byId.get(id);
       const show=visible(item);
       path.classList.toggle('is-dim',!show);
-      path.setAttribute('tabindex',show?'0':'-1');
+      path.setAttribute('tabindex',show&&id===state.mapFocus?'0':'-1');
       path.setAttribute('aria-hidden',String(!show));
       path.classList.toggle('is-active',state.selected===id);
       path.setAttribute('aria-pressed',String(state.selected===id));
     });
     els.catalog.querySelectorAll('.atlas-item').forEach(button=>{
-      const item=state.items.find(x=>x.id===button.dataset.id);
+      const item=state.byId.get(button.dataset.id);
       button.hidden=!visible(item);
       button.classList.toggle('is-active',chosen(item));
       button.setAttribute('aria-pressed',String(chosen(item)));
@@ -197,13 +199,31 @@
       append(ev,'p','Ссылка на подтверждение недоступна или не прошла проверку.','atlas-muted');
     }
   }
-  function select(id){
-    const item=state.items.find(x=>x.id===id);
+  function select(id,source){
+    const item=state.byId.get(id);
     if(!item)return;
     state.selected=id;
+    state.mapFocus=id;
+    if(source)state.lastSelectionSource=source;
     showDetail(item);refreshMapState();
     const btn=[...els.catalog.querySelectorAll('.atlas-item')].find(x=>x.dataset.id===id);
     if(btn && !btn.closest('details').open)btn.closest('details').open=true;
+    if(source==='catalog'||(source==='map'&&window.matchMedia('(max-width:1100px)').matches)){
+      const detail=$('detail');
+      $('returnToSelection').hidden=false;
+      detail.focus({preventScroll:true});
+      detail.scrollIntoView({block:'start',behavior:'instant'});
+    }
+  }
+  function restoreSelectionFocus(){
+    if(!state.selected)return;
+    let target;
+    if(state.lastSelectionSource==='map')target=[...els.svg.querySelectorAll('.radial-cell')].find(node=>node.dataset.id===state.selected);
+    else target=[...els.catalog.querySelectorAll('.atlas-item')].find(node=>node.dataset.id===state.selected);
+    if(!target)return;
+    if(target.closest('details'))target.closest('details').open=true;
+    target.focus({preventScroll:true});
+    target.scrollIntoView({block:'center',behavior:'instant'});
   }
   function attachEvents(){
     els.filters.addEventListener('click',event=>{
@@ -214,7 +234,7 @@
       refreshMapState();
     });
     $('search').addEventListener('input',e=>{state.query=e.target.value.trim().toLocaleLowerCase('ru');refreshMapState()});
-    els.catalog.addEventListener('click',e=>{const b=e.target.closest('button[data-id]');if(b)select(b.dataset.id)});
+    els.catalog.addEventListener('click',e=>{const b=e.target.closest('button[data-id]');if(b)select(b.dataset.id,'catalog')});
     const crossHighlight=(event,active)=>{
       const button=event.target.closest('button[data-id]');
       if(!button)return;
@@ -225,11 +245,23 @@
     els.catalog.addEventListener('mouseout',event=>crossHighlight(event,false));
     els.catalog.addEventListener('focusin',event=>crossHighlight(event,true));
     els.catalog.addEventListener('focusout',event=>crossHighlight(event,false));
-    els.svg.addEventListener('click',e=>{const path=e.target.closest('.radial-cell');if(path)select(path.dataset.id)});
+    els.svg.addEventListener('click',e=>{const path=e.target.closest('.radial-cell');if(path)select(path.dataset.id,'map')});
     els.svg.addEventListener('keydown',e=>{
       const path=e.target.closest('.radial-cell');
-      if(path&&(e.key==='Enter'||e.key===' ')){e.preventDefault();select(path.dataset.id)}
+      if(!path)return;
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();select(path.dataset.id,'map');return}
+      const delta={'ArrowRight':1,'ArrowDown':1,'ArrowLeft':-1,'ArrowUp':-1}[e.key];
+      if(delta===undefined&&e.key!=='Home'&&e.key!=='End')return;
+      e.preventDefault();
+      const paths=[...els.svg.querySelectorAll('.radial-cell')].filter(x=>x.getAttribute('aria-hidden')!=='true');
+      if(!paths.length)return;
+      const index=Math.max(0,paths.findIndex(x=>x===path));
+      const next=e.key==='Home'?0:e.key==='End'?paths.length-1:(index+delta+paths.length)%paths.length;
+      state.mapFocus=paths[next].dataset.id;
+      refreshMapState();
+      paths[next].focus();
     });
+    $('returnToSelection').addEventListener('click',restoreSelectionFocus);
     els.svg.addEventListener('mouseover',e=>{const path=e.target.closest('.radial-cell');if(path)path.classList.add('is-active')});
     els.svg.addEventListener('mouseout',e=>{const path=e.target.closest('.radial-cell');if(path && path.dataset.id!==state.selected)path.classList.remove('is-active')});
     els.svg.addEventListener('focusin',e=>{const path=e.target.closest('.radial-cell');if(path)path.classList.add('is-active')});
@@ -250,7 +282,7 @@
       const lessons=Array.isArray(module.LESSONS)?module.LESSONS:[];
       state.lessons=[...lessons].sort((a,b)=>String(b.date).localeCompare(String(a.date)));
       const root=$('latestLesson');root.replaceChildren();
-      if(!state.lessons.length){append(root,'p','Опубликованных занятий пока нет. Материалы появятся здесь после первого занятия.');return}
+      if(!state.lessons.length){append(root,'p','Опубликованных веб-занятий пока нет. Пособие от 23 октября доступно ниже.');return}
       const lesson=state.lessons[0];
       append(root,'p',String(lesson.date||'').split('-').reverse().join('.'),'atlas-technical');
       append(root,'h3',lesson.title||'Занятие');
@@ -297,7 +329,7 @@
           if(!raw.id||seen.has(raw.id))throw Error('Отсутствует или повторяется competency ID');
           seen.add(raw.id);
           const item={id:raw.id,title:raw.title||raw.name||raw.id,description:raw.description||'',diagnostic:raw.diagnostic||'',group};
-          group.items.push(item);state.items.push(item);
+          group.items.push(item);state.items.push(item);state.byId.set(item.id,item);
         });
         return group;
       }).filter(g=>g.items.length);
