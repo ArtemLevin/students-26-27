@@ -62,7 +62,7 @@ math{font-family:"Cambria Math","STIX Two Math","DejaVu Serif",serif;max-width:1
 <p>Число 1 не является простым или составным. Составное число не обязательно представимо единственной целой степенью с показателем больше единицы.</p>
 <h3>Скобки «ВУПС»</h3><p>Вычитаемое, умножаемое, подставляемое — скобки. Особенно проверяйте границы показателей при вычитании.</p>
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><msup><mn>5</mn><mrow><msqrt><mn>7</mn></msqrt><mo>−</mo><mn>1</mn></mrow></msup><msup><mn>5</mn><mrow><mn>2</mn><mo>−</mo><msqrt><mn>7</mn></msqrt></mrow></msup></mfrac><mo>=</mo><msup><mn>5</mn><mrow><mn>2</mn><msqrt><mn>7</mn></msqrt><mo>−</mo><mn>3</mn></mrow></msup></mrow></math>
-<div class="experiment" id="experiment"><p class="index">МИКРОЛАБОРАТОРИЯ / ДВА РАЗНЫХ ПРАВИЛА</p><h3>Измените показатели</h3><p>Посмотрите, чем отличается произведение степеней от степени степени. Значения и показатели пересчитываются одновременно.</p><div class="controlgrid"><div><label for="base">Основание <output id="baseOut" for="base">2</output></label><input type="range" id="base" min="2" max="6" step="1" value="2"></div><div><label for="powerM">Показатель m <output id="mOut" for="powerM">2</output></label><input type="range" id="powerM" min="-2" max="4" step="1" value="2"></div><div><label for="powerN">Показатель n <output id="nOut" for="powerN">3</output></label><input type="range" id="powerN" min="-2" max="4" step="1" value="3"></div></div><div class="experiment-result"><p>При умножении — сумма показателей:</p><div id="multiplyMath"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mn>2</mn><mn>2</mn></msup><mo>·</mo><msup><mn>2</mn><mn>3</mn></msup><mo>=</mo><msup><mn>2</mn><mn>5</mn></msup><mo>=</mo><mn>32</mn></mrow></math></div><p>При возведении степени в степень — произведение показателей:</p><div id="powerMath"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mrow><mo>(</mo><msup><mn>2</mn><mn>2</mn></msup><mo>)</mo></mrow><mn>3</mn></msup><mo>=</mo><msup><mn>2</mn><mn>6</mn></msup><mo>=</mo><mn>64</mn></mrow></math></div></div></div>
+<div class="experiment" id="experiment"><p class="index">МИКРОЛАБОРАТОРИЯ / ДВА РАЗНЫХ ПРАВИЛА</p><h3>Измените показатели</h3><p>Посмотрите, чем отличается произведение степеней от степени степени. Значения и показатели пересчитываются одновременно.</p><div class="controlgrid"><div><label for="base">Основание <output id="baseOut" for="base">2</output></label><input type="range" id="base" min="2" max="6" step="1" value="2"></div><div><label for="powerM">Показатель m <output id="mOut" for="powerM">2</output></label><input type="range" id="powerM" min="-2" max="4" step="1" value="2"></div><div><label for="powerN">Показатель n <output id="nOut" for="powerN">3</output></label><input type="range" id="powerN" min="-2" max="4" step="1" value="3"></div></div><div class="experiment-result" role="region" aria-label="Результаты эксперимента"><p>При умножении — сумма показателей:</p><div id="multiplyMath"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mn>2</mn><mn>2</mn></msup><mo>·</mo><msup><mn>2</mn><mn>3</mn></msup><mo>=</mo><msup><mn>2</mn><mn>5</mn></msup><mo>=</mo><mn>32</mn></mrow></math></div><p>При возведении степени в степень — произведение показателей:</p><div id="powerMath"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mrow><mo>(</mo><msup><mn>2</mn><mn>2</mn></msup><mo>)</mo></mrow><mn>3</mn></msup><mo>=</mo><msup><mn>2</mn><mn>6</mn></msup><mo>=</mo><mn>64</mn></mrow></math></div><p id="experimentInsight" class="fine" role="status" aria-live="polite">Сумма показателей — 5, произведение — 6.</p><button id="resetExperiment" type="button" class="theme">Сбросить параметры</button></div></div>
 </div></div></section>
 <section id="worked" class="chapter"><div class="wrap chapter-grid"><header><p class="index">03 / РАЗБОР</p><h2>Два пути — один результат</h2></header><div class="prose"><p class="chapter-lead">Вычислим выражение. Можно раскрыть основание знаменателя или сначала свернуть числитель.</p>
 <div class="mathline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>E</mi><mo>=</mo><mfrac><mrow><msup><mn>6</mn><msqrt><mn>3</mn></msqrt></msup><mo>·</mo><msup><mn>7</mn><msqrt><mn>3</mn></msqrt></msup></mrow><msup><mn>42</mn><mrow><msqrt><mn>3</mn></msqrt><mo>−</mo><mn>1</mn></mrow></msup></mfrac></mrow></math></div>
@@ -118,16 +118,24 @@ const NS='http://www.w3.org/1998/Math/MathML';
 const entity=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 const mi=s=>'<mn>'+entity(s)+'</mn>';
 const mo=s=>'<mo>'+entity(s)+'</mo>';
-const power=(b,e)=>'<msup><mn>'+b+'</mn><mrow><mn>'+e+'</mn></mrow></msup>';
+const exponent=e=>e<0?'<mrow>'+mo('−')+mi(-e)+'</mrow>':mi(e);
+const power=(b,e)=>'<msup>'+mi(b)+exponent(e)+'</msup>';
 const val=(b,e)=>e>=0?mi(b**e):'<mfrac><mn>1</mn><mn>'+b**(-e)+'</mn></mfrac>';
 const math=x=>'<math xmlns="'+NS+'" display="block"><mrow>'+x+'</mrow></math>';
 function refresh(){
 const b=Number(base.value),p=Number(m.value),q=Number(n.value);
 document.getElementById('baseOut').textContent=b;document.getElementById('mOut').textContent=p;document.getElementById('nOut').textContent=q;
 document.getElementById('multiplyMath').innerHTML=math(power(b,p)+mo('·')+power(b,q)+mo('=')+power(b,p+q)+mo('=')+val(b,p+q));
-document.getElementById('powerMath').innerHTML=math('<msup><mrow>'+mo('(')+power(b,p)+mo(')')+'</mrow><mn>'+q+'</mn></msup>'+mo('=')+power(b,p*q)+mo('=')+val(b,p*q));
+document.getElementById('powerMath').innerHTML=math('<msup><mrow>'+mo('(')+power(b,p)+mo(')')+'</mrow>'+exponent(q)+'</msup>'+mo('=')+power(b,p*q)+mo('=')+val(b,p*q));
+const sum=p+q,product=p*q;
+document.getElementById('experimentInsight').textContent=sum===product?'При этих показателях сумма и произведение совпадают: '+sum+'. Попробуйте найти другой такой случай.':'Сумма показателей: '+sum+'; произведение показателей: '+product+'.';
 }
-[base,m,n].forEach(el=>el.addEventListener('input',refresh));refresh();
+[base,m,n].forEach(el=>el.addEventListener('input',refresh));
+document.getElementById('resetExperiment').addEventListener('click',()=>{base.value='2';m.value='2';n.value='3';refresh();base.focus()});
+refresh();
+const printableAnswers=document.querySelector('details.answer');let wasOpen=null;
+addEventListener('beforeprint',()=>{wasOpen=printableAnswers.open;printableAnswers.open=true});
+addEventListener('afterprint',()=>{if(wasOpen!==null)printableAnswers.open=wasOpen;wasOpen=null});
 document.querySelectorAll('[data-answer]').forEach(b=>b.addEventListener('click',()=>{
 document.querySelectorAll('[data-answer]').forEach(el=>el.setAttribute('aria-pressed',String(el===b)));
 document.getElementById('choiceFeedback').textContent=b.dataset.answer==='right'
