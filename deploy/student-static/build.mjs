@@ -90,6 +90,9 @@ export async function buildStatic({ repoRoot, outputDir, studentUrlMap }) {
     }
   }
 
+  // Every Student Platform v2 page imports shared LEVIN / ATLAS styles from the site root.
+  await copyIfPresent(path.join(repoRoot, 'design-system'), path.join(outputDir, 'design-system'));
+
   let deployed = 0;
   for (const [student, token] of Object.entries(studentUrlMap)) {
     const studentDir = path.join(studentsRoot, student);
@@ -104,6 +107,9 @@ export async function buildStatic({ repoRoot, outputDir, studentUrlMap }) {
     for (const dir of PUBLIC_DIRS) {
       await copyIfPresent(path.join(studentDir, dir), path.join(destinationRoot, dir));
     }
+
+    // The contract is one level above site/index.html and is authoritative for map paths.
+    await copyIfPresent(path.join(studentDir, 'student-contract.json'), path.join(destinationRoot, 'student-contract.json'));
 
     await copyChemistry(studentDir, destinationRoot);
 
