@@ -50,3 +50,24 @@ test('navigator preserves accessible map/list symmetry and existing resources',(
   }
   assert.doesNotMatch(html,/<script[^>]*>[^<]*mastery\s*=/i);
 });
+
+test('one keyboard entry into the radial map, arrow navigation and a return path',()=>{
+  const script=fs.readFileSync(path.join(site,'heatmap.js'),'utf8');
+  assert.match(script,/tabindex:'-1',role:'button'/);
+  assert.match(script,/show&&id===state\.mapFocus\?'0':'-1'/);
+  assert.match(script,/e\.key==='ArrowRight'|ArrowRight':1/);
+  assert.match(script,/state\.mapFocus=paths\[next\]\.dataset\.id/);
+  assert.match(script,/restoreSelectionFocus/);
+  assert.match(html,/id="returnToSelection"[^>]*hidden/);
+  assert.match(html,/Степени и их свойства/);
+  assert.match(html,/\.\.\/pdf_docs\/23\.10\.26\.pdf/);
+});
+
+test('unpublished lesson and KTP are described without claiming confirmed progress',()=>{
+  const script=fs.readFileSync(path.join(site,'heatmap.js'),'utf8');
+  const ktp=fs.readFileSync(path.join(site,'ktp.html'),'utf8');
+  assert.match(script,/Опубликованных веб-занятий пока нет/);
+  assert.match(ktp,/КТП пока не опубликован/);
+  assert.match(ktp,/эксклюзивно для Даниила Хрястова/);
+  assert.doesNotMatch(ktp,/эксклюзивно для Даниил Хрястов/);
+});
