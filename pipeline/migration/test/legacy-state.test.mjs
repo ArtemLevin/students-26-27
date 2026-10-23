@@ -630,7 +630,7 @@ test('real Nastya Pavlova source reconciles ID overlays before root EGE-2027 run
 
   assert.equal(report.catalog?.count,379);
   assert.equal(report.mastery.resolved.length,367);
-  assert.deepEqual(levelCounts,{0:314,2:53});
+  assert.deepEqual(levelCounts,{0:310,2:57});
   assert.ok(report.mastery.resolved.every(item=>
     item.sourceKind==='mastery-authority'&&
     item.sourcePath==='mastery-authority.js'
@@ -718,7 +718,7 @@ test('real Matvey Gorbachev source resolves title overlays uniquely and fails cl
 
   assert.equal(report.catalog?.count,342);
   assert.equal(report.mastery.resolved.length,342);
-  assert.deepEqual(levelCounts,{0:281,2:61});
+  assert.deepEqual(levelCounts,{0:275,2:67});
   assert.ok(report.mastery.resolved.every(item=>
     item.sourceKind==='mastery-authority'&&
     item.sourcePath==='site/mastery-authority.js'
