@@ -1,0 +1,47 @@
+name: Bootstrap Daniil Student Platform v2
+on:
+  push:
+    branches:
+      - feat/daniil-atlas-heatmap-20261023
+    paths:
+      - .github/workflows/bootstrap-daniil-20261023.yml
+permissions:
+  contents: write
+jobs:
+  scaffold:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Scaffold via repository-native pipeline; preserve existing educational files
+        shell: bash
+        run: |
+          set -euo pipefail
+          student=students/daniil_khriastov
+          mkdir -p /tmp/daniil-backup
+          mv "$student" /tmp/daniil-backup/legacy
+          node scripts/create-student.mjs daniil_khriastov \
+            --name "Даниил Хрястов" \
+            --profile ege-profile-math \
+            --program "ЕГЭ, профильная математика" \
+            --composition cosmos \
+            --accent forest \
+            --dry-run
+          node scripts/create-student.mjs daniil_khriastov \
+            --name "Даниил Хрястов" \
+            --profile ege-profile-math \
+            --program "ЕГЭ, профильная математика" \
+            --composition cosmos \
+            --accent forest
+          cp -an /tmp/daniil-backup/legacy/. "$student/"
+          node scripts/student.mjs validate daniil_khriastov
+          node scripts/student.mjs audit
+          git add "$student" design-system/STUDENT_ROSTER.md pipeline/migration/baseline.json
+          if ! git diff --cached --quiet; then
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "Scaffold Daniil Student Platform v2 from repository pipeline"
+            git push origin HEAD:feat/daniil-atlas-heatmap-20261023
+          fi
