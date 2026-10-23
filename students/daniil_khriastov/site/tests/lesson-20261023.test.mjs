@@ -73,3 +73,9 @@ test('All local links exist and hash fragments resolve',()=>{
     }
   }
 });
+
+test('Home navigator directly links to the published-capable lesson page',()=>{
+  const index=fs.readFileSync(path.join(site,'index.html'),'utf8');
+  assert.match(index,/href="23\.10\.26\.html"/);
+  assert.ok(fs.existsSync(path.join(site,'23.10.26.html')));
+});
