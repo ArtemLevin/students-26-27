@@ -204,6 +204,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - student: daniil_khriastov
+            test: node --test students/daniil_khriastov/site/tests/*.test.mjs
           - student: ekaterina_gnedkova
             test: node --test students/ekaterina_gnedkova/site/tests/*.test.mjs
           - student: anna_bannova
@@ -268,6 +270,16 @@ jobs:
           echo 'END_XENIA_REGISTRY'
       - name: Run regression suite
         run: ${{ matrix.test }}
+      - name: Browser QA for Daniil 23 October lesson
+        if: matrix.student == 'daniil_khriastov'
+        run: node students/daniil_khriastov/site/tests/browser-20261023.mjs
+      - name: Upload Daniil browser screenshots
+        if: always() && matrix.student == 'daniil_khriastov'
+        uses: actions/upload-artifact@v4
+        with:
+          name: daniil-site-review-20261023
+          path: daniil-site-review-artifacts/*.png
+          if-no-files-found: warn
       - name: Upload Timofey 17 October browser QA screenshots
         if: always() && matrix.student == 'timofey'
         uses: actions/upload-artifact@v4
