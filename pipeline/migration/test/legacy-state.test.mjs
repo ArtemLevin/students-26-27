@@ -667,10 +667,10 @@ test('real Nastya Pavlova source reconciles ID overlays before root EGE-2027 run
   const byId=new Map(data.groups.flatMap(group=>group.items).map(item=>[item.id,item]));
 
   assert.equal(Object.keys(sandbox.window.STUDENT_MASTERY_AUTHORITY.levels).length,367);
-  assert.equal(data.lesson.date,'28.09.26');
-  assert.equal(data.lesson.title,'Круговая трасса, движение по воде и средняя скорость');
-  assert.equal(data.lesson.pdf,'site/28.09.26.html');
-  assert.equal(data.lesson.tex,'tex_docs/28.09.26.tex');
+  assert.equal(data.lesson.date,'05.10.26');
+  assert.equal(data.lesson.title,'Задачи на производительность');
+  assert.equal(data.lesson.pdf,'site/05.10.26.html');
+  assert.equal(data.lesson.tex,'tex_docs/05.10.26.tex');
 
   assert.equal(byId.get('calc_01').level,2);
   assert.equal(byId.get('calc_01').evidence.href,'pdf_docs/26.08.26.pdf');
@@ -744,7 +744,7 @@ test('real Matvey Gorbachev source resolves title overlays uniquely and fails cl
 
   assert.equal(sandbox.window.STUDENT_MASTERY_AUTHORITY.titleMappingCount,55);
   assert.equal(Object.keys(sandbox.window.STUDENT_MASTERY_AUTHORITY.levels).length,342);
-  assert.equal(data.updated,'27.09.2026');
+  assert.equal(data.updated,'22.10.2026');
   assert.equal(data.storagePrefix,'matvey_gorbachev-ege-profile-math');
   assert.equal(data.nextAfterBaseline,'functions_09');
 
