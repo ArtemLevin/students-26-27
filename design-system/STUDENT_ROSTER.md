@@ -31,5 +31,6 @@ Current migration roster for all `students/*/site/index.html` pages.
 | xenia_vasilchenko | cartographer | burgundy | airy | circular | editorial | calm |
 | anna_bannova — Анна Баннова | archive | graphite | airy | orthogonal | editorial | calm |
 | denis_ermolaev — Денис Ермолаев | blueprint | vermilion | compact | orthogonal | technical-editorial | mechanical |
+| daniil_khriastov — Даниил Хрястов | cosmos | forest | balanced | circular | editorial | calm |
 
 The roster is a deliberate diversity matrix. Change at least three axes when a newly created page is too close to a recent neighbor.
