@@ -1,0 +1,76 @@
+name: Fast Chromium review for Daniil
+on:
+  push:
+    branches: [ci/daniil-review-chrome-20261023]
+    paths: [.github/workflows/daniil-chrome-review.yml]
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install lightweight controller and find Chrome
+        run: |
+          command -v google-chrome
+          mkdir -p /tmp/daniil-chrome
+          cd /tmp/daniil-chrome
+          npm init -y >/dev/null
+          npm install --no-audit --no-fund playwright-core@1.56.1
+      - name: Real browser test
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 8973 --directory . >/tmp/daniil-serve.log 2>&1 &
+          sleep 2
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {chromium} from '/tmp/daniil-chrome/node_modules/playwright-core/index.mjs';
+          const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox']});
+          try {
+            for(const [width,height] of [[375,812],[768,1024],[1440,900],[1920,1080]]){
+              const page=await browser.newPage({viewport:{width,height}});
+              const problems=[];
+              page.on('pageerror',e=>problems.push(e.message));
+              page.on('response',r=>{if(r.status()>=400)problems.push('HTTP '+r.status()+' '+r.url())});
+              await page.goto('http://localhost:8973/students/daniil_khriastov/site/index.html',{waitUntil:'networkidle'});
+              await page.waitForSelector('.radial-cell');
+              assert.equal(await page.locator('.radial-cell').count(),354);
+              assert.equal(await page.locator('.atlas-item').count(),354);
+              assert.equal(await page.locator('.radial-cell[tabindex="0"]').count(),1);
+              const current=page.locator('.radial-cell[tabindex="0"]');
+              const initial=await current.getAttribute('data-id');
+              await current.focus();
+              await current.press('ArrowRight');
+              const moved=await page.evaluate(()=>document.activeElement?.dataset.id);
+              assert.ok(moved&&moved!==initial,'focus moved with ArrowRight');
+              await page.keyboard.press('Enter');
+              assert.equal(await page.locator('#detailId').innerText(),moved);
+              if(width<=1100){
+                assert.equal(await page.evaluate(()=>document.activeElement?.id),'detail');
+                await page.locator('#returnToSelection').click();
+                assert.equal(await page.evaluate(()=>document.activeElement?.dataset.id),moved);
+              }
+              await page.locator('.atlas-item').first().click();
+              assert.equal(await page.evaluate(()=>document.activeElement?.id),'detail');
+              await page.locator('#returnToSelection').click();
+              assert.equal(await page.evaluate(()=>document.activeElement?.dataset.id),await page.locator('.atlas-item').first().getAttribute('data-id'));
+              await page.locator('[data-filter="unknown"]').click();
+              assert.equal(await page.locator('#visibleCount').innerText(),'354 / 354');
+              await page.locator('#search').fill('_NO_SUCH_COMPETENCY_');
+              assert.equal(await page.locator('#visibleCount').innerText(),'0 / 354');
+              await page.locator('#search').fill('');
+              await page.locator('#themeToggle').click();
+              assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+              const doc=await page.evaluate(()=>({w:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth}));
+              assert.ok(doc.scroll<=doc.w+1,JSON.stringify({width,...doc}));
+              assert.deepEqual(problems,[]);
+              console.log('PASS',width,'Chrome light/dark, map, search, keyboard, return, overflow');
+              await page.close();
+            }
+          } finally {await browser.close()}
+          JS
