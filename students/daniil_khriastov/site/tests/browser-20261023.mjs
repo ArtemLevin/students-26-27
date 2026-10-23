@@ -75,7 +75,8 @@ try{
     await pause(150);
     await run("document.documentElement.dataset.theme='"+(dark?'dark':'light')+"'");
     const view=await run('({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth})');
-    assert.ok(view.scroll<=view.client+2,'Horizontal overflow '+width+'x'+height+' theme '+(dark?'dark':'light')+': '+JSON.stringify(view));
+    const offenders=view.scroll>view.client+2 ? await run("[...document.body.querySelectorAll('*')].filter(el=>{const x=el.getBoundingClientRect();return x.right>document.documentElement.clientWidth+2}).slice(0,18).map(el=>({tag:el.localName,id:el.id,cls:typeof el.className==='string'?el.className.slice(0,45):'',left:Math.round(el.getBoundingClientRect().left),right:Math.round(el.getBoundingClientRect().right),parent:el.parentElement?.localName,parentCls:typeof el.parentElement?.className==='string'?el.parentElement.className.slice(0,30):''}))") : [];
+    assert.ok(view.scroll<=view.client+2,'Horizontal overflow '+width+'x'+height+' theme '+(dark?'dark':'light')+': '+JSON.stringify({view,offenders}));
   }
   const sizes=[[375,812],[390,844],[768,1024],[1024,768],[1366,768],[1440,900],[1920,1080]];
   for(const [w,h] of sizes)for(const dark of [false,true])await navigate(w,h,dark);
