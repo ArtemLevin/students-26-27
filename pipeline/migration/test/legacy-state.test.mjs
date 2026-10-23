@@ -690,7 +690,7 @@ test('real Nastya Pavlova source reconciles ID overlays before root EGE-2027 run
 
   assert.equal(byId.get('text_05').level,2);
   assert.equal(byId.get('text_05').evidence.href,'28.09.26.html');
-  assert.equal(byId.get('text_20').evidence.href,'28.09.26.html');
+  assert.equal(byId.get('text_20').evidence.href,'05.10.26.html');
 });
 
 test('real Matvey Gorbachev source resolves title overlays uniquely and fails closed on title drift',()=>{
