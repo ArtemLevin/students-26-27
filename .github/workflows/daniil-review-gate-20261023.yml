@@ -1,0 +1,95 @@
+name: Daniil site review release gate
+on:
+  push:
+    branches:
+      - review/daniil-site-20261023
+    paths:
+      - .github/workflows/daniil-review-gate-20261023.yml
+permissions:
+  contents: read
+jobs:
+  browser-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Contract and source checks
+        run: |
+          node scripts/student.mjs validate daniil_khriastov
+          node scripts/student.mjs audit
+          node --check students/daniil_khriastov/site/heatmap.js
+          node --test students/daniil_khriastov/site/tests/*.test.mjs
+          node --test teacher/navigation.test.mjs
+      - name: Set up browser
+        run: |
+          mkdir -p /tmp/daniil-review
+          cd /tmp/daniil-review
+          npm init -y >/dev/null
+          npm install --no-audit --no-fund playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Browser interaction, accessibility, overflow and assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 8973 --directory . >/tmp/daniil-review-http.log 2>&1 &
+          sleep 2
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {chromium} from '/tmp/daniil-review/node_modules/playwright/index.mjs';
+          const browser=await chromium.launch({headless:true});
+          try{
+            for(const [width,height] of [[375,812],[390,844],[768,1024],[1100,800],[1440,900],[1920,1080]]){
+              const page=await browser.newPage({viewport:{width,height}});
+              const errors=[];
+              page.on('pageerror',e=>errors.push('JS '+e.message));
+              page.on('response',r=>{if(r.status()>=400)errors.push('HTTP '+r.status()+' '+r.url())});
+              await page.goto('http://127.0.0.1:8973/students/daniil_khriastov/site/index.html',{waitUntil:'networkidle'});
+              await page.locator('.radial-cell').first().waitFor();
+              assert.equal(await page.locator('.radial-cell').count(),354);
+              assert.equal(await page.locator('.atlas-item').count(),354);
+              assert.equal(await page.locator('.radial-cell[tabindex="0"]').count(),1,'one tab stop for radial map');
+              const dimensions=await page.evaluate(()=>({screen:document.documentElement.clientWidth,content:document.documentElement.scrollWidth}));
+              assert.ok(dimensions.content<=dimensions.screen+1,'overflow '+JSON.stringify({width,...dimensions}));
+              const active=page.locator('.radial-cell[tabindex="0"]');
+              const firstId=await active.getAttribute('data-id');
+              await active.focus();
+              await active.press('ArrowRight');
+              const nextId=await page.evaluate(()=>document.activeElement?.getAttribute('data-id'));
+              assert.ok(nextId&&nextId!==firstId,'ArrowRight must move SVG focus');
+              assert.equal(await page.locator('.radial-cell[tabindex="0"]').count(),1);
+              await page.keyboard.press('Enter');
+              assert.equal(await page.locator('#detailId').innerText(),nextId);
+              if(width<=1100){
+                assert.equal(await page.evaluate(()=>document.activeElement?.id),'detail');
+                assert.equal(await page.locator('#returnToSelection').isVisible(),true);
+                await page.locator('#returnToSelection').click();
+                assert.equal(await page.evaluate(()=>document.activeElement?.getAttribute('data-id')),nextId);
+              }
+              await page.locator('.atlas-item').first().click();
+              assert.equal(await page.evaluate(()=>document.activeElement?.id),'detail');
+              await page.locator('#returnToSelection').click();
+              assert.equal(await page.evaluate(()=>document.activeElement?.getAttribute('data-id')),await page.locator('.atlas-item').first().getAttribute('data-id'));
+              await page.locator('[data-filter="unknown"]').click();
+              assert.equal(await page.locator('#visibleCount').innerText(),'354 / 354');
+              await page.locator('#search').fill('__no_match__');
+              assert.equal(await page.locator('#visibleCount').innerText(),'0 / 354');
+              await page.locator('#search').fill('');
+              await page.locator('#themeToggle').click();
+              assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+              const dark=await page.evaluate(()=>({screen:document.documentElement.clientWidth,content:document.documentElement.scrollWidth}));
+              assert.ok(dark.content<=dark.screen+1,'dark theme overflow '+JSON.stringify({width,...dark}));
+              await page.screenshot({path:'/tmp/daniil-review-'+width+'.png'});
+              assert.deepEqual(errors,[]);
+              console.log('PASS',width,'pixels, keyboard, focus, data, theme, network');
+              await page.close();
+            }
+            const page=await browser.newPage({viewport:{width:375,height:812}});
+            await page.goto('http://127.0.0.1:8973/students/daniil_khriastov/site/ktp.html',{waitUntil:'networkidle'});
+            await page.waitForFunction(()=>document.getElementById('planStatus').textContent!=='Загрузка плана…');
+            assert.match(await page.locator('#planStatus').innerText(),/КТП пока не опубликован/);
+            await page.close();
+          } finally {await browser.close()}
+          JS
