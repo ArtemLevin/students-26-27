@@ -73,7 +73,9 @@ try{
       await pause(70);
     }
     await pause(150);
-    await run("document.documentElement.dataset.theme='"+(dark?'dark':'light')+"'");
+    const theme=await run("(()=>{const wanted='"+(dark?'dark':'light')+"';if(document.documentElement.dataset.theme!==wanted)document.querySelector('#themeToggle').click();return {actual:document.documentElement.dataset.theme,label:document.querySelector('#themeToggle').textContent}})()");
+    assert.equal(theme.actual,dark?'dark':'light');
+    assert.equal(theme.label,dark?'Светлая тема':'Тёмная тема');
     const view=await run('({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth})');
     const offenders=view.scroll>view.client+2 ? await run("[...document.body.querySelectorAll('*')].filter(el=>{const x=el.getBoundingClientRect();return x.right>document.documentElement.clientWidth+2}).slice(0,18).map(el=>({tag:el.localName,id:el.id,cls:typeof el.className==='string'?el.className.slice(0,45):'',left:Math.round(el.getBoundingClientRect().left),right:Math.round(el.getBoundingClientRect().right),parent:el.parentElement?.localName,parentCls:typeof el.parentElement?.className==='string'?el.parentElement.className.slice(0,30):''}))") : [];
     assert.ok(view.scroll<=view.client+2,'Horizontal overflow '+width+'x'+height+' theme '+(dark?'dark':'light')+': '+JSON.stringify({view,offenders}));
