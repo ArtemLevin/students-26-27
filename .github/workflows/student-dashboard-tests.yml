@@ -270,6 +270,21 @@ jobs:
           echo 'END_XENIA_REGISTRY'
       - name: Run regression suite
         run: ${{ matrix.test }}
+      - name: Publish Daniil lesson transactionally in isolated CI checkout
+        if: matrix.student == 'daniil_khriastov'
+        shell: bash
+        run: |
+          set -euo pipefail
+          INTENT=pipeline/publication-intents/daniil-khriastov-2026-10-23.json
+          node scripts/publish-lesson.mjs daniil_khriastov 23.10.26 --intent "$INTENT" --dry-run
+          node scripts/publish-lesson.mjs daniil_khriastov 23.10.26 --intent "$INTENT"
+          node scripts/student.mjs validate daniil_khriastov
+          node scripts/student.mjs audit
+          for p in students/daniil_khriastov/site/data/lessons/2026-10-23.lesson.json students/daniil_khriastov/site/lesson-registry.js students/daniil_khriastov/site/data/ktp-state.json; do
+            echo "BEGIN_DANIIL_GENERATED_FILE $p"
+            base64 -w0 "$p"
+            printf '\\nEND_DANIIL_GENERATED_FILE\\n'
+          done
       - name: Browser QA for Daniil 23 October lesson
         if: matrix.student == 'daniil_khriastov'
         run: node students/daniil_khriastov/site/tests/browser-20261023.mjs
