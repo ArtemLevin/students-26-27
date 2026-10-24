@@ -130,7 +130,11 @@ try{
   console.log('Daniil 23.10.26 browser QA PASS: 7 sizes, 2 themes, MathML, model, print, links, screenshots');
 }finally{
   try{ws?.close();}catch{}
-  browser.kill('SIGTERM');
+  if(browser){
+    browser.kill('SIGTERM');
+    // Chromium may still write its Default profile during shutdown.
+    await pause(500);
+  }
   server.close();
-  fs.rmSync(profile,{force:true,recursive:true});
+  if(profile)fs.rmSync(profile,{force:true,recursive:true,maxRetries:20,retryDelay:150});
 }
