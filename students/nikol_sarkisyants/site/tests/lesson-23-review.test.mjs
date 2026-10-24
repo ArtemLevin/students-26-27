@@ -91,7 +91,7 @@ function runLab(search='?mode=factors'){
 }
 
 test('laboratory plots the full trigonometric function and overlays the correct identity',()=>{
-  assert.match(lab,/yMin=-3\.3,yMax=1\.5/);
+  assert.match(lab,/yMin=-3\.3,yMax=1\.65/);
   assert.match(lab,/step="any"/);
   assert.match(lab,/clipPath id="plotClip"/);
   const {make,modes,presets}=runLab('?mode=identity');
