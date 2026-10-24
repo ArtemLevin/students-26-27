@@ -130,8 +130,9 @@ try{
   }
   await navigate('11.10.26-lab.html',375,812);
   assert.ok(await run("document.querySelectorAll('input[type=range]').length>0"),'Previous linked laboratory opens');
-  assert.deepEqual(errors,[],'Browser console/runtime');
+  if(errors.length||failed.length)console.error('ANNA NETWORK DIAGNOSTIC',JSON.stringify({errors,failed}));
   assert.deepEqual(failed,[],'Network errors');
+  assert.deepEqual(errors,[],'Browser console/runtime');
   console.log('ANNA 23.10.26 BROWSER RELEASE GATE PASS');
 }finally{
   try{ws?.close()}catch{}
