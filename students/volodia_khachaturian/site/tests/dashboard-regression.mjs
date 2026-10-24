@@ -3,3 +3,6 @@ await runDashboardTests({student:'volodia_khachaturian',stateKey:'competence-sta
 await import('./kinematics-model-regression.mjs');
 await import('./mathml-20261016.test.mjs');
 await import('./physics-forces-20261017.test.mjs');
+
+await import('./gravity-20261024.test.mjs');
+await import('./gravity-browser-20261024.test.mjs');
