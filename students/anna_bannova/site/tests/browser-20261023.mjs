@@ -120,7 +120,12 @@ try{
     await wait("document.getElementById('latestLink').getAttribute('href')==='23.10.26.html'");
     const h=await run("({href:document.getElementById('latestLink').getAttribute('href'),cells:document.querySelectorAll('svg .cell').length,errors:document.getElementById('dataError').hidden,scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth})");
     assert.equal(h.href,'23.10.26.html');assert.ok(h.cells>300,'Heatmap '+JSON.stringify(h));
-    assert.equal(h.errors,true);assert.ok(h.scroll<=h.client+2,'Navigator overflow '+JSON.stringify(h));
+    assert.equal(h.errors,true);
+    if(h.scroll>h.client+2){
+      const offenders=await run("[...document.body.querySelectorAll('*')].map(x=>({tag:x.tagName,cls:typeof x.className==='string'?x.className.slice(0,45):'',id:x.id,rect:x.getBoundingClientRect()})).filter(x=>x.rect.right>document.documentElement.clientWidth+2||x.rect.left< -2).slice(0,18).map(x=>({tag:x.tag,cls:x.cls,id:x.id,left:Math.round(x.rect.left),right:Math.round(x.rect.right)}))");
+      console.error('ANNA HOME MOBILE OVERFLOW:',JSON.stringify({h,offenders}));
+    }
+    assert.ok(h.scroll<=h.client+2,'Navigator overflow '+JSON.stringify(h));
     await screenshot('home-'+width);
   }
   await navigate('11.10.26-lab.html',375,812);
