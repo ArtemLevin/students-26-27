@@ -202,6 +202,18 @@ try{
       assert.ok(await evaluate('document.getElementById("normal") && document.getElementById("substitute")'),'lesson sections');
     }
     if(width===390)await screen(file.replace('.html','')+'-390');
+
+    // Explicitly inspect both visual themes and print output for every new page.
+    const toggleId=file.endsWith('-lab.html')?'theme':'themeButton';
+    const themes=await evaluate('(()=>{const b=document.getElementById("'+toggleId+'");if(document.documentElement.dataset.theme!=="light")b.click();const light=getComputedStyle(document.body).backgroundColor;b.click();const dark=getComputedStyle(document.body).backgroundColor;return {light,dark,selected:document.documentElement.dataset.theme,label:b.getAttribute("aria-label")}})()');
+    assert.equal(themes.selected,'dark',file+' dark theme must be enabled');
+    assert.notEqual(themes.light,themes.dark,file+' light and dark backgrounds must differ');
+    assert.match(themes.label,/светлую/,file+' theme control must announce the reverse action');
+    if(width===390)await screen(file.replace('.html','')+'-dark-390');
+    await evaluate('document.getElementById("'+toggleId+'").click()');
+    const pdf=await call('Page.printToPDF',{printBackground:true});
+    assert.ok(pdf.data.length>1500,file+' print preview should produce a real PDF');
+
     assert.deepEqual(errors,[],file+' JS errors after interactions');
   }
   console.log('Jaroslav QA passed: dashboard, archive, 23 October lesson and interactive laboratory');
