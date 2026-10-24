@@ -4,6 +4,72 @@ export const ARCHIVE_PAGE_SIZE=10;
 const MONTHS_GENITIVE=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
 export const LESSONS=[
+{
+  "date": "2026-10-23",
+  "ktpRefs": [],
+  "href": "23.10.26.html",
+  "title": "Дробно-рациональные неравенства: метод интервалов",
+  "navTitle": "Дробно-рациональные неравенства",
+  "navSubtitle": "23.10.26 · Дробно-рациональные неравенства, метод интервалов, ОДЗ, приведение к нулю и замена t=x²",
+  "summary": "Дробно-рациональные неравенства методом интервалов: исходное ОДЗ, граничные точки, приведение к нулю, числитель без действительных корней и замена t=x². Десять заданий Пути А.",
+  "topics": [
+    "Дробно-рациональные неравенства",
+    "Метод интервалов и ОДЗ",
+    "Нули числителя и знаменателя",
+    "Приведение дроби к нулю",
+    "Замена t = x²",
+    "Запись объединения промежутков"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_20_2_1",
+      "evidenceAnchor": "normal",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_2",
+      "evidenceAnchor": "normal",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_3",
+      "evidenceAnchor": "common",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_4",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_5",
+      "evidenceAnchor": "pitfalls",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_13_2_3",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_13_2_4",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_8_3_2",
+      "evidenceAnchor": "substitute",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "23.10.26.html",
+    "pdf": "../pdf_docs/23.10.26.pdf",
+    "tex": "../tex_docs/23.10.26.tex",
+    "lab": "23.10.26-lab.html"
+  }
+},
+
   {
   "date": "2026-10-19",
   "ktpRefs": [],
