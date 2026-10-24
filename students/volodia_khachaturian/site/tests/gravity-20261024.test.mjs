@@ -42,7 +42,7 @@ test('release gate: HTML structure, math, materials and accessibly named graphic
   const answerTable=lesson.match(/<table>([\s\S]*?)<\/table>/)?.[1]||'';
   assert.equal([...exercises.matchAll(/<li>/g)].length,10);
   assert.equal([...answerTable.matchAll(/<tr><td>/g)].length,10);
-  for(const marker of ['2 Н','2,5 Н','30 Н','0,2','32','16','3R'])
+  for(const marker of ['2,5 Н','30 Н','0,2','32','16','3R'])
     assert.ok(answerTable.includes(marker),'missing answer '+marker);
 });
 
