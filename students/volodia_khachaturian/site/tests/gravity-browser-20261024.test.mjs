@@ -76,7 +76,7 @@ test('Gravity 24.10 browser: 7 sizes, dark/light, live modes, links and home int
         await sleep(50);
       }
       await sleep(60);
-      if(dark){await evaluate("document.getElementById('theme')?.click()");}
+      await evaluate("(()=>{const wanted='"+(dark?'dark':'light')+"';if(document.documentElement.dataset.theme!==wanted)document.getElementById('theme').click()})()");
       const result=await evaluate('({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth,theme:document.documentElement.dataset.theme})');
       assert.ok(result.scroll<=result.client+2,'Overflow '+filename+' '+width+' '+(dark?'dark':'light')+' '+JSON.stringify(result));
       assert.equal(result.theme,dark?'dark':'light','Theme mismatch '+filename);
