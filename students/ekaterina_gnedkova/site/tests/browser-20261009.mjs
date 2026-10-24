@@ -188,8 +188,8 @@ try{
       evidence:credit.map(i=>({title:i.title,exists:i.evidence?.some(e=>e.date==='09.10.26')})),
       horizontalOverflow:document.documentElement.scrollWidth>innerWidth+2};
   });
-  assert.equal(home.latest,'20.10.26');
-  assert.match(home.visibleLatest,/Вклады и аннуитетный кредит/);
+  assert.equal(home.latest,'23.10.26');
+  assert.match(home.visibleLatest,/Тотальное повторение/);
    assert.ok(home.latestLinks>=4,'New lesson links missing');
   assert.ok(home.links>=4);
   assert.equal(home.evidence.length,3);
@@ -197,7 +197,51 @@ try{
   assert.equal(home.horizontalOverflow,false);
   await screenshot('home-desktop');
 
-  // New 20 October lesson: formulas, interactive credit comparison and controlled answers.
+  // 23 October lesson: revision, interactive motion and work models.
+  await navigate('23.10.26.html');
+  await wait('!!document.querySelector("#drive-range") && !!document.querySelector("#pump-range")');
+  const new23=await execute(()=>{
+    const d=document.querySelector('#drive-range'),p=document.querySelector('#pump-range');
+    const start={title:document.querySelector('h1').textContent,
+      anchors:['powers','exponential','vectors','motion','work','check'].every(id=>!!document.getElementById(id)),
+      a:document.getElementById('drive-a').textContent,b:document.getElementById('drive-b').textContent,
+      finalPump:document.getElementById('pump-fill').textContent};
+    d.value='2';d.dispatchEvent(new Event('input',{bubbles:true}));
+    const remaining=document.getElementById('drive-left').textContent;
+    p.value='120';p.dispatchEvent(new Event('input',{bubbles:true}));
+    const pump120=document.getElementById('pump-fill').textContent;
+    p.value='280';p.dispatchEvent(new Event('input',{bubbles:true}));
+    document.querySelector('.answers [data-value="3"]').click();
+    document.querySelector('#checks input').click();
+    document.documentElement.dataset.theme='light';document.querySelector('#theme').click();
+    return {...start,remaining,pump120,pumpFinal:document.getElementById('pump-fill').textContent,
+      feedback:document.getElementById('answer-feedback').textContent,
+      checked:document.getElementById('check-progress').textContent,
+      theme:document.documentElement.dataset.theme,
+      overflow:document.documentElement.scrollWidth>innerWidth+2};
+  });
+  assert.match(new23.title,/Комплексное повторение/);
+  assert.equal(new23.anchors,true);
+  assert.equal(new23.a,'180 км');assert.equal(new23.b,'160 км');
+  assert.equal(new23.remaining,'140 км');
+  assert.equal(new23.pump120,'55,6%');
+  assert.equal(new23.pumpFinal,'100%');
+  assert.match(new23.feedback,/Верно/);
+  assert.match(new23.checked,/Отмечено 1/);
+  assert.equal(new23.theme,'dark');
+  assert.equal(new23.overflow,false);
+  await screenshot('lesson-23-desktop-dark');
+  await call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+  await navigate('23.10.26.html');
+  const mobile23=await execute(()=>({overflow:document.documentElement.scrollWidth>innerWidth+2,
+    title:document.querySelector('h1').textContent,
+    ranges:document.querySelectorAll('input[type="range"]').length}));
+  assert.equal(mobile23.overflow,false,'23 Oct mobile overflow');
+  assert.equal(mobile23.ranges,2);
+  await screenshot('lesson-23-mobile');
+  await call('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});
+
+  // Previous 20 October lesson: formulas, interactive credit comparison and controlled answers.
   await navigate('20.10.26.html');
   await wait('document.querySelectorAll("#ledger tr").length===3');
   const newLesson=await execute(()=>({
