@@ -134,7 +134,45 @@ try{
   assert.ok(testMap,'Clicking a competence must open its existing dialog');
   await evaluate('document.getElementById("dialogClose").click()');
   assert.deepEqual(errors,[],'No JS exceptions after interactions');
-  console.log('Jaroslav editorial QA passed: all five viewport sizes, tiles, search, mobile nav, themes and map');
+
+  // Regression checks for the 23 October rational-inequality lesson and its simulator.
+  for(const [file,width,height] of [
+    ['23.10.26.html',1440,900],['23.10.26.html',390,844],
+    ['23.10.26-lab.html',1440,900],['23.10.26-lab.html',390,844]
+  ]){
+    errors.length=0;
+    await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<=768});
+    const url=origin+'/students/jaroslav_vereschagin/site/'+file;
+    await call('Page.navigate',{url});
+    for(let i=0;i<120;i++){
+      const done=await evaluate('({url:location.href,ready:document.readyState})');
+      if(done.url.startsWith(url)&&done.ready==='complete')break;
+      if(i===119)throw Error('New lesson/lab did not finish loading: '+file);
+      await delay(80);
+    }
+    await delay(100);
+    const state=await evaluate('({width:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth})');
+    assert.ok(state.scroll<=state.width+2,file+' viewport overflow @ '+width+': '+JSON.stringify(state));
+    assert.deepEqual(errors,[],file+' JS exceptions');
+    if(file.endsWith('-lab.html')){
+      const basic=await evaluate('({n:document.getElementById("num").value,d:document.getElementById("den").value,v:document.getElementById("value").value})');
+      assert.deepEqual(basic,{n:'1',d:'-1',v:'-1'},'basic sample x=0 must equal -1');
+      const hole=await evaluate('(()=>{const i=document.getElementById("x");i.value="1";i.dispatchEvent(new Event("input",{bubbles:true}));return document.getElementById("sampleResult").textContent})()');
+      assert.match(hole,/Вне ОДЗ/,'denominator x=1 should be excluded');
+      const derived=await evaluate('(()=>{document.querySelector("[data-mode=constant]").click();const i=document.getElementById("x");i.value="-4";i.dispatchEvent(new Event("input",{bubbles:true}));return {n:document.getElementById("num").value,d:document.getElementById("den").value,v:document.getElementById("value").value}})()');
+      assert.equal(derived.n,'-20');assert.equal(derived.d,'-12');
+      assert.ok(Number(derived.v.replace(',','.'))>0,'negative numerator / negative denominator must be positive');
+      const canceled=await evaluate('(()=>{document.querySelector("[data-mode=cancellation]").click();const i=document.getElementById("x");i.value="3";i.dispatchEvent(new Event("input",{bubbles:true}));return document.getElementById("sampleResult").textContent})()');
+      assert.match(canceled,/Вне ОДЗ/,'canceled x=3 must remain excluded');
+    }else{
+      assert.equal(await evaluate('document.querySelectorAll("#taskList input").length'),10,'10 Path A tasks');
+      assert.ok(await evaluate('document.getElementById("normal") && document.getElementById("substitute")'),'lesson sections');
+    }
+    if(width===390)await screen(file.replace('.html','')+'-390');
+    assert.deepEqual(errors,[],file+' JS errors after interactions');
+  }
+  console.log('Jaroslav QA passed: dashboard, archive, 23 October lesson and interactive laboratory');
+
 }finally{
   try{ws?.close()}catch(_){}
   processChrome.kill('SIGTERM');server.close();
