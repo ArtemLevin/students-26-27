@@ -3,6 +3,81 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-24",
+  "ktpRefs": [],
+  "href": "24.10.26.html",
+  "title": "Гравитация: одна сила, разные расстояния",
+  "navTitle": "Гравитация: одна сила, разные расстояния",
+  "navSubtitle": "Закон всемирного тяготения, сила тяжести и ускорение свободного падения. Формулы, пять примеров, десять заданий и исследование силы притяжения.",
+  "summary": "Закон всемирного тяготения, сила тяжести и ускорение свободного падения. Формулы, пять примеров, десять заданий и исследование силы притяжения.",
+  "topics": [
+    "закон всемирного тяготения",
+    "расстояние между центрами тел",
+    "третий закон Ньютона",
+    "отношение сил притяжения",
+    "сила тяжести F = mg",
+    "ускорение свободного падения на высоте",
+    "алгебраические преобразования в задачах"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "dyn_27",
+      "evidenceAnchor": "law",
+      "relation": "practiced",
+      "label": "Закон всемирного тяготения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_10",
+      "evidenceAnchor": "law",
+      "relation": "touched",
+      "label": "Третий закон Ньютона",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_11",
+      "evidenceAnchor": "law",
+      "relation": "touched",
+      "label": "Силы действия и противодействия",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_12",
+      "evidenceAnchor": "weight",
+      "relation": "practiced",
+      "label": "Сила тяжести",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_28",
+      "evidenceAnchor": "weight",
+      "relation": "practiced",
+      "label": "Тяготение у других небесных тел",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_25",
+      "evidenceAnchor": "ratio",
+      "relation": "practiced",
+      "label": "Преобразование формул",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_02",
+      "evidenceAnchor": "ratio",
+      "relation": "practiced",
+      "label": "Выбор физической формулы",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "24.10.26.html",
+    "pdf": "../pdf_docs/24.10.26.pdf",
+    "tex": "../tex_docs/24.10.26.tex",
+    "lab": "24.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-21",
   "ktpRefs": [],
   "href": "21.10.26.html",
