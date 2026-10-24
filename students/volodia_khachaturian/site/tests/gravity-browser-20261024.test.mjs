@@ -11,7 +11,7 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../../.
 const chrome=['google-chrome','google-chrome-stable','chromium','chromium-browser']
   .map(name=>spawnSync('which',[name],{encoding:'utf8'})).find(x=>x.status===0)?.stdout.trim();
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
-const types={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/javascript','.json':'application/json','.png':'image/png','.pdf':'application/pdf','.tex':'text/plain'};
+const types={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/javascript','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.pdf':'application/pdf','.tex':'text/plain'};
 
 test('Gravity 24.10 browser: 7 sizes, dark/light, live modes, links and home integration',{skip:!chrome?'Chromium is unavailable in the test environment':false,timeout:180000},async()=>{
   const errors=[],failedRequests=[];
