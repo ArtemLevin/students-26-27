@@ -27,7 +27,7 @@ footer{display:flex;justify-content:space-between;gap:1rem;padding:2rem 0 3rem;f
 @media(max-width:830px){.hero,.split,.poster{grid-template-columns:1fr;gap:1.5rem}.chapter-head{grid-template-columns:1fr;gap:.4rem}.call{align-items:flex-start;flex-direction:column}.call a{flex-shrink:1}}
 @media(max-width:540px){.shell{width:calc(100% - 1.2rem)}.toolbar .date{margin-left:0;width:100%;text-align:center}.checks{grid-template-columns:1fr}.answers ol{columns:1}footer{display:block}.hero{padding:3rem 0}.hero-math .hero-equation{font-size:1.7rem}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-@media print{.formula math{display:block;white-space:normal}body{background:white;color:black}.toolbar,.route,.call,.checks,progress,.skip{display:none}.chapter{break-inside:avoid}.poster img{max-height:11cm;object-fit:contain}}
+@media print{html,html[data-theme=dark]{--math:#111;--accent:#222;--ink:#111;--sheet:#fff;--bg:#fff;--muted:#333}.formula math{display:block;white-space:normal}body{background:white;color:black}.toolbar,.route,.call,.checks,progress,.skip{display:none}.chapter{break-inside:avoid}.poster img{max-height:11cm;object-fit:contain}}
 
 :root{--accent:#783f34;--math:#245c63;--focus:#b15a18;--autumn:#ad713b}
 html[data-theme=dark]{--accent:#edb597;--math:#a5d8d7;--autumn:#dbab73}
@@ -117,6 +117,11 @@ let saved='light';try{saved=localStorage.getItem('nikol-lesson-theme')||'light'}
 root.dataset.theme=saved==='dark'?'dark':'light';
 document.getElementById('theme').addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('nikol-lesson-theme',root.dataset.theme)}catch(e){}});
 document.getElementById('print').addEventListener('click',()=>window.print());
+const printableAnswers=document.querySelector('details.answers');let answersOpenBeforePrint=false;
+if(typeof window.addEventListener==='function'){
+ window.addEventListener('beforeprint',()=>{if(printableAnswers){answersOpenBeforePrint=printableAnswers.open;printableAnswers.open=true;}});
+ window.addEventListener('afterprint',()=>{if(printableAnswers)printableAnswers.open=answersOpenBeforePrint;});
+}
 function mathMarkup(text){
  const source=String(text).replace(/&nbsp;/g,' ').replace(/\u00a0/g,' ').trim();
  const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
