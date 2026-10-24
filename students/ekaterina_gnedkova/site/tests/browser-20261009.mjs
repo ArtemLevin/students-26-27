@@ -189,7 +189,7 @@ try{
       horizontalOverflow:document.documentElement.scrollWidth>innerWidth+2};
   });
   assert.equal(home.latest,'23.10.26');
-  assert.match(home.visibleLatest,/Тотальное повторение/);
+  assert.match(home.visibleLatest,/Комплексное повторение/);
    assert.ok(home.latestLinks>=4,'New lesson links missing');
   assert.ok(home.links>=4);
   assert.equal(home.evidence.length,3);
@@ -220,7 +220,7 @@ try{
       theme:document.documentElement.dataset.theme,
       overflow:document.documentElement.scrollWidth>innerWidth+2};
   });
-  assert.match(new23.title,/Комплексное повторение/);
+  assert.match(new23.title,/Комплексное\s*повторение/);
   assert.equal(new23.anchors,true);
   assert.equal(new23.a,'180 км');assert.equal(new23.b,'160 км');
   assert.equal(new23.remaining,'140 км');
