@@ -22,6 +22,10 @@ const lessons=[
 {date:'03.10.26',href:'03.10.26.html#check',ids:['models_5']}
 ];
 const evidenceOnly=[
+{date:'24.10.26',href:'24.10.26.html#terms',ids:['triangles_11']},
+{date:'24.10.26',href:'24.10.26.html#proof',ids:['triangles_8','geo_reason_12','geo_reason_11']},
+{date:'24.10.26',href:'24.10.26.html#diagram',ids:['geo_reason_8']},
+{date:'24.10.26',href:'24.10.26.html#parallel',ids:['parallel_5']},
 {date:'21.10.26',href:'21.10.26.html#dependency',ids:['functions_1']},
 {date:'21.10.26',href:'21.10.26.html#motion',ids:['models_2']},
 {date:'21.10.26',href:'21.10.26.html#mass',ids:['models_3']},
