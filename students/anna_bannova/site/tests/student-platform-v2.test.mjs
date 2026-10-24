@@ -409,4 +409,14 @@ test('23.10.26 method of anchor points: two tasks, materials and evidence anchor
   const script=lesson.match(/<script>([\s\S]*?)<\/script>/)?.[1];
   assert.ok(script);
   assert.doesNotThrow(()=>new vm.Script(script));
+  const source=lesson.split('<script>')[0];
+  const formulas=[...source.matchAll(/<math\b[^>]*>[\s\S]*?<\/math>/g)];
+  assert.ok(formulas.length>=45,'lesson should use semantic MathML for its mathematical expressions');
+  assert.doesNotMatch(source,/<sup\b/,'HTML superscripts must not be used for mathematics');
+  for(const formula of formulas){
+    assert.match(formula[0],/^<math xmlns="http:\/\/www\.w3\.org\/1998\/Math\/MathML"/);
+    assert.match(formula[0],/<mrow>/,'MathML contains a mathematical row');
+  }
+  assert.match(script,/r\.hidden=i>current/,'Stepper reveals only completed steps');
+  assert.match(script,/aria-current/,'Stepper declares the current step to assistive technology');
 });
