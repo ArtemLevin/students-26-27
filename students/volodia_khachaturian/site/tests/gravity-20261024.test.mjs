@@ -21,7 +21,7 @@ test('release gate: HTML structure, math, materials and accessibly named graphic
     assert.match(html,/<h1\b/);
     assert.match(html,/<a class="skip" href="#/);
     assert.match(html,/prefers-reduced-motion/);
-    assert.match(html,/data-theme="dark"/);
+    assert.match(html,/html\[data-theme=dark\]/);
     const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
     assert.equal(ids.length,new Set(ids).size,name+' contains duplicate IDs');
     assert.doesNotMatch(html,/href="#"|href=""|javascript:|lorem ipsum|\bTODO\b|\bFIXME\b/i,name);
