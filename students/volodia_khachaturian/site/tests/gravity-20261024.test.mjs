@@ -46,6 +46,10 @@ test('release gate: HTML structure, math, materials and accessibly named graphic
     assert.ok(answerTable.includes(marker),'missing answer '+marker);
 });
 
+test('legacy lesson-progress script parses as standalone JavaScript',()=>{
+  new vm.Script(fs.readFileSync(path.join(dir,'lesson-progress.js'),'utf8'));
+});
+
 test('navigator loads the refreshed 24 October registry version',()=>{
   const dashboard=fs.readFileSync(path.join(dir,'dashboard.js'),'utf8');
   const home=fs.readFileSync(path.join(dir,'index.html'),'utf8');
