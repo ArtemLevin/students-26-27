@@ -96,7 +96,7 @@ test('research lab: source formulas, preset, geometric scale and height',()=>{
   const x=boot();
   assert.equal(x.get('metricValue').textContent,'9');
   assert.equal(Number(x.get('orbiter').getAttribute('cx')),300);
-  assert.equal(Number(x.get('referenceOrbit').getAttribute('cx')),160);
+  assert.match(lab,/id="referenceOrbit" cx="160"/);
   x.set('orbitalRatio',1);
   assert.equal(x.get('metricValue').textContent,'1');
   assert.match(x.get('explain').textContent,/силы равны/);
