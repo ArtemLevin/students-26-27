@@ -47,7 +47,7 @@ function tick(p,q,f){const x=p.x+(q.x-p.x)*f,y=p.y+(q.y-p.y)*f,dx=q.x-p.x,dy=q.y
 function render(){
  const ab=Number(part.value),aDeg=Number(apex.value),a=aDeg*Math.PI/180,t=ab/20,R=230,A=pt(360,36),C=pt(360-R*Math.sin(a/2),36+R*Math.cos(a/2)),D=pt(360+R*Math.sin(a/2),36+R*Math.cos(a/2)),B=pt(A.x+(C.x-A.x)*t,A.y+(C.y-A.y)*t),E=pt(A.x+(D.x-A.x)*t,A.y+(D.y-A.y)*t),beta=(180-aDeg)/2;
  $('outer').setAttribute('d','M '+A.x+' '+A.y+' L '+C.x+' '+C.y+' L '+D.x+' '+D.y+' Z');$('inner').setAttribute('d','M '+B.x+' '+B.y+' L '+E.x+' '+E.y);
- $('marks').setAttribute('d',tick(A,C,.65)+' '+tick(A,D,.65)+' '+tick(A,B,.52)+' '+tick(A,E,.52));
+ $('marks').setAttribute('d',tick(A,C,.64)+' '+tick(A,C,.68)+' '+tick(A,D,.64)+' '+tick(A,D,.68)+' '+tick(A,B,.52)+' '+tick(A,E,.52));
  for(const [id,p] of [['pA',A],['pB',B],['pE',E],['pC',C],['pD',D]])place(id,p);
  textAt('nameA',A,-8,-14);textAt('nameB',B,-30,7);textAt('nameE',E,12,7);textAt('nameC',C,-22,28);textAt('nameD',D,10,28);
  $('partNumber').textContent=ab+' см';$('apexNumber').textContent=aDeg+'°';$('remain').textContent=(20-ab)+' см = '+(20-ab)+' см';$('innerSide').textContent=ab+' см = '+ab+' см';$('baseAngle').textContent=number(beta)+'° = '+number(beta)+'°';
@@ -61,7 +61,7 @@ $('reset').addEventListener('click',()=>{part.value='7';apex.value='64';render()
 $('preset20').addEventListener('click',()=>{part.value='7';apex.value='64';render();part.focus()});
 $('preset44').addEventListener('click',()=>{part.value='7';apex.value='44';render();apex.focus()});
 $('snapshot').addEventListener('click',()=>{snapshot={ab:Number(part.value),deg:Number(apex.value)};$('snapshotStatus').textContent='Состояние сохранено для сравнения.';render()});
-$('quiz').addEventListener('submit',event=>{event.preventDefault();const selected=$('quiz').querySelector('input[name=prediction]:checked');if(!selected)return;const correct=selected.value==='smaller';const now=Number(part.value);if(now<17)part.value=now+1;else part.value=16;render();$('quizStatus').textContent=(correct?'Верно. ':'Проверьте остатки. ')+'При увеличении AB и AE отрезки BC и DE уменьшаются одинаково. Равенство сохраняется.'});
+$('quiz').addEventListener('submit',event=>{event.preventDefault();const selected=$('quiz').querySelector('input[name=prediction]:checked');if(!selected)return;const correct=selected.value==='smaller';const now=Number(part.value);if(now<17)part.value=now+1;render();$('quizStatus').textContent=(correct?'Верно. ':'Проверьте остатки. ')+(now===17?'Достигнута верхняя граница ползунка. Уменьшите AB и AE, затем повторите эксперимент.':'При увеличении AB и AE отрезки BC и DE уменьшаются одинаково. Равенство сохраняется.');});
 render();})();
 </script>
 </body></html>
