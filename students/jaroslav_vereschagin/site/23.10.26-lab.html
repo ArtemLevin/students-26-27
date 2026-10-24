@@ -14,7 +14,30 @@ html[data-theme=dark]{--bg:#14211e;--page:#1e322d;--ink:#edf3ef;--sub:#bfcdc4;--
 @media(max-width:790px){.layout{grid-template-columns:1fr}.presets{gap:.4rem}.preset{font-size:.86rem}.nav-actions{gap:.4rem}.nav-actions a{font-size:.75rem}.wrap{width:calc(100% - 1.3rem)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 @media print{.nav,.presets,.controls{display:none}body{background:white;color:#111}.layout{display:block}.display{border:0}.foot{margin-top:2rem}}
-</style></head>
+
+/* Legible diagram on narrow screens; only the axis panel scrolls horizontally. */
+.axis-wrap{overflow-x:auto;overscroll-behavior-inline:contain;padding-bottom:.35rem}
+.axis-wrap svg{min-width:680px}
+.root-jump{display:flex;gap:.5rem;flex-wrap:wrap;margin:.65rem 0 1.3rem;align-items:center}
+.root-jump .root-label{font-size:.82rem;color:var(--sub);width:100%;font-weight:700}
+.root-jump button{border:1px solid var(--rule);min-height:44px;padding:.55rem .7rem;background:var(--page);color:var(--ink)}
+.root-jump button:hover{border-color:var(--a);color:var(--a)}
+.axis-scroll-note{font-size:.78rem;color:var(--sub);margin-top:-.5rem}
+@media print{.root-jump,.control-grid,.axis-scroll-note{display:none}.axis-wrap svg{min-width:0;max-width:100%}}
+
+/* A wide number line must scroll inside its panel, never widen the CSS grid or page. */
+.layout>.display,.layout>.controls{min-width:0;max-width:100%}
+.axis-wrap{min-width:0;max-width:100%;overflow-x:auto}
+@media(max-width:790px){.layout{grid-template-columns:minmax(0,1fr)}}
+
+/* Compact mode index on phones: the mathematical instrument stays close to the first screen. */
+@media(max-width:790px){
+ .presets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem}
+ .preset{width:100%;min-width:0;min-height:56px;line-height:1.25;font-size:.84rem;padding:.5rem .45rem;text-align:center}
+}
+.nav-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:44px}
+ .theme,.small-btn{min-height:44px}
+ </style></head>
 <body><a class="skip" href="#experiment">Перейти к эксперименту</a>
 <header class="nav"><div class="wrap nav-row"><a class="brand" href="23.10.26.html">Ярослав Верещагин<small>LEVIN / ATLAS · ЛАБОРАТОРИЯ · ОГЭ</small></a><nav class="nav-actions" aria-label="Ссылки"><a href="23.10.26.html">← К занятию</a><a href="index.html">Кабинет</a><button class="theme" id="theme" type="button" aria-label="Переключить тему">◐</button></nav></div></header>
 <header class="hero wrap"><p class="kicker">Математический эксперимент · 23.10.26</p><h1>Знак дроби <em>под контролем</em></h1><p>Выберите один из примеров занятия и двигайте пробную точку по числовой оси. Сравните знак дроби, значение выражения, запрещённые значения и ответ неравенства.</p></header>
@@ -26,10 +49,13 @@ html[data-theme=dark]{--bg:#14211e;--page:#1e322d;--ink:#edf3ef;--sub:#bfcdc4;--
 <button class="preset" type="button" data-mode="constant" aria-pressed="false">Постоянный числитель</button>
 <button class="preset" type="button" data-mode="cubic" aria-pressed="false">Кубический числитель</button>
 <button class="preset" type="button" data-mode="cancellation" aria-pressed="false">Запрет после сокращения</button>
+<button class="preset" type="button" data-mode="double" aria-pressed="false">Двойной корень</button>
 </div>
 <div class="layout">
 <section class="display" aria-labelledby="displayHeading"><p class="kicker" id="chapter">02 / Числовая прямая</p><h2 id="displayHeading">Отметьте критические точки</h2><div class="equation" id="formula" aria-label="Исследуемое неравенство">(x + 1)/(x − 1) ≥ 0</div>
 <div class="axis-wrap"><svg id="axis" viewBox="0 0 760 170" role="img" aria-labelledby="axisTitle axisDesc"><title id="axisTitle">Интерактивная числовая прямая</title><desc id="axisDesc">Знаки на интервалах, критические точки и выбранное пробное число. Текстовый эквивалент указан под рисунком.</desc></svg></div>
+<p class="axis-scroll-note">На узком экране числовую прямую можно прокручивать вбок.</p>
+<div id="rootJump" class="root-jump" role="group" aria-label="Точное значение критической точки"></div>
 <p id="signDescription" class="caption" aria-live="polite">Подпись к числовой прямой</p>
 <p class="callout" id="lessonNote">Корень числителя может быть включён. Нуль знаменателя запрещён всегда.</p>
 <h3>Ответ к неравенству</h3><p class="status-line" id="answer"> </p>
@@ -59,28 +85,131 @@ const cases={
  quadratic:{formula:"(x² − 5x + 6)/(x² − 12x + 35)",n:x=>x*x-5*x+6,d:x=>x*x-12*x+35,roots:[2,3],holes:[5,7],answer:"(−∞; 2] ∪ [3; 5) ∪ (7; +∞)",note:"Числитель имеет нули 2 и 3, знаменатель — 5 и 7. Вычисление при x = 0 даёт 6/35 > 0.",op:">=",title:"Четыре критические точки"},
  constant:{formula:"−20/((x + 1)(x + 8))",n:x=>-20,d:x=>(x+1)*(x+8),roots:[],holes:[-8,-1],answer:"(−8; −1)",note:"Это дробь после переноса двойки из исходного неравенства. Числитель постоянно отрицателен.",op:">",title:"Перенос числа и постоянный числитель"},
  cubic:{formula:"(x³ + x² + x)/(9x² − 25)",n:x=>x*x*x+x*x+x,d:x=>9*x*x-25,roots:[0],holes:[-5/3,5/3],answer:"(−5/3; 0] ∪ (5/3; +∞)",note:"x² + x + 1 всегда положителен. Нуль числителя x = 0; для калибровки используйте x = 1.",op:">=",title:"Кубический числитель"},
- cancellation:{formula:"((x − 3)(x + 2))/((x − 3)(x − 1))",n:x=>(x-3)*(x+2),d:x=>(x-3)*(x-1),roots:[-2],holes:[1,3],answer:"(−∞; −2] ∪ (1; 3) ∪ (3; +∞)",note:"Сокращение на (x − 3) сохраняет исходное ограничение x ≠ 3; в точке x = 3 получаем 0/0.",op:">=",title:"Выколотая точка после сокращения"}
+ cancellation:{formula:"((x − 3)(x + 2))/((x − 3)(x − 1))",n:x=>(x-3)*(x+2),d:x=>(x-3)*(x-1),roots:[-2],holes:[1,3],answer:"(−∞; −2] ∪ (1; 3) ∪ (3; +∞)",note:"Сокращение на (x − 3) сохраняет исходное ограничение x ≠ 3; в точке x = 3 получаем 0/0.",op:">=",title:"Выколотая точка после сокращения"},
+ double:{formula:"((x + 1)²(x − 4))/(x − 2)",n:x=>(x+1)*(x+1)*(x-4),d:x=>x-2,roots:[-1,4],holes:[2],answer:"(−∞; −1) ∪ (−1; 2) ∪ (4; +∞)",note:"Нуль x = −1 имеет чётную кратность: при переходе через него знак дроби сохраняется; для строгого неравенства точка исключается.",op:">",title:"Двойной корень и сохранение знака"}
 };
-let mode="basic";const svg=$("axis"),NS="http://www.w3.org/2000/svg";const EPS=1e-7;
-function fmt(x){if(!Number.isFinite(x))return "не определено";if(Math.abs(x)<1e-8)x=0;return Number.isInteger(x)?String(x):Number(x.toFixed(3)).toLocaleString("ru-RU",{maximumFractionDigits:3});}
+let mode="basic",probe=0;
+const svg=$("axis"),NS="http://www.w3.org/2000/svg",EPS=1e-9;
 function near(a,b){return Math.abs(a-b)<EPS;}
-function symbol(v){return v>EPS?"+":v<-EPS?"−":"0";}
-function test(value,op){return op===">"?value>EPS:op===">="?value>=-EPS:op==="<"?value<-EPS:value<=EPS;}
-function el(tag,attrs,text){const n=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs||{}))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=text;svg.appendChild(n);return n;}
-function draw(){const item=cases[mode],x=Number($("x").value),op=$("operator").value;const parts=[...new Set([...item.roots,...item.holes])].sort((a,b)=>a-b);const minimum=-10,maximum=10;const sx=v=>42+(v-minimum)/(maximum-minimum)*675;
-svg.replaceChildren();el("line",{x1:38,y1:89,x2:736,y2:89,stroke:"var(--ink)","stroke-width":2});el("path",{d:"M 736 89 L 725 83 L 725 95 Z",fill:"var(--ink)"});
-const points=[minimum,...parts,maximum];
-const signWords=[];
-for(let i=0;i<points.length-1;i++){const a=points[i],b=points[i+1],z=(a+b)/2,sg=symbol(item.n(z)*item.d(z)),word=sg==="+"?"плюс":sg==="−"?"минус":"нуль";signWords.push("("+fmt(a)+"; "+fmt(b)+"): "+word);const left=sx(a)+6,right=sx(b)-6;el("line",{x1:left,y1:84,x2:right,y2:84,stroke:sg==="+"?"var(--green)":"var(--red)","stroke-width":7,"stroke-linecap":"round"});el("text",{x:(left+right)/2,y:65,"text-anchor":"middle","font-size":24,fill:sg==="+"?"var(--green)":"var(--red)","font-weight":700},sg);}
-for(const v of parts){const hole=item.holes.some(t=>near(t,v));el("circle",{cx:sx(v),cy:89,r:6.8,fill:hole?"var(--page)":"var(--a)",stroke:"var(--a)","stroke-width":2.5});el("text",{x:sx(v),y:125,"text-anchor":"middle","font-size":14,fill:"var(--ink)","font-weight":600},Math.abs(v-5/3)<EPS?"5/3":Math.abs(v+5/3)<EPS?"−5/3":fmt(v));}
-el("line",{x1:sx(x),y1:26,x2:sx(x),y2:104,stroke:"var(--a)","stroke-width":2,"stroke-dasharray":"4 4"});el("circle",{cx:sx(x),cy:89,r:4.5,fill:"var(--a)"});el("text",{x:sx(x),y:17,"text-anchor":"middle","font-size":14,fill:"var(--a)","font-weight":800},"x = "+fmt(x));
-const numerator=item.n(x),denominator=item.d(x),undefinedValue=Math.abs(denominator)<EPS,val=undefinedValue?NaN:numerator/denominator,passes=!undefinedValue&&test(val,op);
-$("num").value=fmt(numerator);$("den").value=fmt(denominator);$("value").value=fmt(val);$("sign").value=undefinedValue?"—":symbol(val);$("xLabel").value=fmt(x);
-const status=$("sampleResult");status.dataset.bad=String(!passes);status.querySelector("strong").textContent=undefinedValue?"Вне ОДЗ":passes?"Условие выполнено":"Условие не выполнено";status.querySelector("span").textContent=undefinedValue?"Знаменатель равен нулю: деление невозможно.":(val===0?"Дробь равна нулю.":"Знак дроби: "+(val>0?"плюс.":"минус."));$("signDescription").textContent="Знаки слева направо: "+signWords.join("; ")+". Выбранное x = "+fmt(x)+".";
-const check=document.querySelector("#answer");check.textContent=mode=== "basic"&&op===">="||mode!=="basic"&&op===item.op?item.answer:"Определите интервалы выбранного знака по числовой прямой. Показанный в пособии ответ относится к исходному знаку: "+item.op.replace(">=","≥").replace("<=","≤")+" 0.";
+function rootName(x){
+ if(x===-Infinity)return "−∞";
+ if(x===Infinity)return "+∞";
+ if(near(x,5/3))return "5/3";
+ if(near(x,-5/3))return "−5/3";
+ if(near(x,3/2))return "3/2";
+ if(near(x,-3/2))return "−3/2";
+ return (Number.isInteger(x)?String(x):Number(x.toFixed(4)).toLocaleString("ru-RU",{maximumFractionDigits:4})).replace(/-/g,"−");
 }
-function changeMode(next){if(!cases[next])return;mode=next;const item=cases[next];$("formula").textContent=item.formula+" "+item.op.replace(">=","≥").replace("<=","≤")+" 0";$("displayHeading").textContent=item.title;$("lessonNote").textContent=item.note;$("operator").value=item.op;document.querySelectorAll(".preset").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===mode)));$("x").value="0";if(mode==="cubic")$("x").value="1";location.hash=mode;draw();}
-document.querySelectorAll(".preset").forEach(button=>button.addEventListener("click",()=>changeMode(button.dataset.mode)));$("x").addEventListener("input",draw);$("operator").addEventListener("change",draw);$("reset").addEventListener("click",()=>changeMode(mode));$("sampleLeft").addEventListener("click",()=>{$("x").value=String(Math.max(-10,Number($("x").value)-0.5));draw();});$("sampleRight").addEventListener("click",()=>{$("x").value=String(Math.min(10,Number($("x").value)+0.5));draw();});
+function fmt(x){
+ if(!Number.isFinite(x))return "не определено";
+ if(near(x,0))x=0;
+ return Number.isInteger(x)?String(x):Number(x.toFixed(4)).toLocaleString("ru-RU",{maximumFractionDigits:4});
+}
+function showOp(op){return op===">="?"≥":op==="<="?"≤":op;}
+function symbol(v){return v>EPS?"+":v<-EPS?"−":"0";}
+function satisfied(value,op){
+ if(op===">")return value>EPS;
+ if(op==="<")return value<-EPS;
+ if(op===">=")return value>=-EPS;
+ return value<=EPS;
+}
+function critical(item){return [...new Set([...item.roots,...item.holes])].sort((a,b)=>a-b);}
+function f(item,x){return item.n(x)/item.d(x);}
+function atPoint(item,x,op){
+ return (op===">="||op==="<=")&&item.roots.some(a=>near(a,x))&&!item.holes.some(a=>near(a,x))&&Math.abs(item.n(x))<EPS&&Math.abs(item.d(x))>=EPS;
+}
+// A real-line partition: alternating open intervals and candidate zero points.
+function solve(item,op){
+ const roots=critical(item),bounds=[-Infinity,...roots,Infinity],atoms=[];
+ for(let i=0;i<bounds.length-1;i++){
+  const a=bounds[i],b=bounds[i+1],sample=!Number.isFinite(a)?b-1:!Number.isFinite(b)?a+1:(a+b)/2;
+  atoms.push({kind:"range",left:a,right:b,on:satisfied(f(item,sample),op)});
+  if(i<roots.length)atoms.push({kind:"point",left:b,right:b,on:atPoint(item,b,op)});
+ }
+ const chunks=[];
+ for(let i=0;i<atoms.length;){
+  if(!atoms[i].on){i++;continue;}
+  const start=i;while(i+1<atoms.length&&atoms[i+1].on)i++;
+  const first=atoms[start],last=atoms[i];
+  chunks.push(start===i&&first.kind==="point"
+   ? "{"+rootName(first.left)+"}"
+   : (first.kind==="point"?"[":"(")+rootName(first.left)+"; "+rootName(last.right)+(last.kind==="point"?"]":")"));
+  i++;
+ }
+ return chunks.length?chunks.join(" ∪ "):"∅";
+}
+function el(tag,attrs,text){
+ const n=document.createElementNS(NS,tag);
+ for(const [key,value] of Object.entries(attrs||{}))n.setAttribute(key,String(value));
+ if(text!==undefined)n.textContent=text;
+ svg.appendChild(n);return n;
+}
+function renderCritical(item){
+ const jump=$("rootJump");jump.replaceChildren();
+ const caption=document.createElement("span");caption.className="root-label";
+ caption.textContent="Выберите критическую точку точно:";jump.append(caption);
+ for(const x of critical(item)){
+  const button=document.createElement("button");button.type="button";
+  button.textContent="x = "+rootName(x);
+  button.setAttribute("aria-label","Установить точное x = "+rootName(x));
+  button.addEventListener("click",()=>{probe=x;$("x").value=String(x);draw();});
+  jump.append(button);
+ }
+}
+function draw(){
+ const item=cases[mode],x=probe,op=$("operator").value,parts=critical(item);
+ const minimum=-10,maximum=10,sx=v=>42+(v-minimum)/(maximum-minimum)*675;
+ svg.replaceChildren();
+ el("title",{id:"axisTitle"},"Числовая прямая: "+item.title);
+ el("desc",{id:"axisDesc"},"Показаны корни числителя, исключённые точки знаменателя, знаки дроби и выбранное x; подробное описание следует за графиком.");
+ el("line",{x1:38,y1:89,x2:736,y2:89,stroke:"var(--ink)","stroke-width":2});
+ el("path",{d:"M 736 89 L 725 83 L 725 95 Z",fill:"var(--ink)"});
+ const windowBounds=[minimum,...parts,maximum],mathBounds=[-Infinity,...parts,Infinity],signWords=[];
+ for(let i=0;i<windowBounds.length-1;i++){
+  const a=windowBounds[i],b=windowBounds[i+1],z=(a+b)/2;
+  const sign=symbol(f(item,z)),word=sign==="+"?"плюс":sign==="−"?"минус":"нуль";
+  signWords.push("("+rootName(mathBounds[i])+"; "+rootName(mathBounds[i+1])+"): "+word);
+  const left=sx(a)+6,right=sx(b)-6;
+  el("line",{x1:left,y1:84,x2:right,y2:84,stroke:sign==="+"?"var(--green)":"var(--red)","stroke-width":7,"stroke-linecap":"round"});
+  el("text",{x:(left+right)/2,y:65,"text-anchor":"middle","font-size":24,fill:sign==="+"?"var(--green)":"var(--red)","font-weight":700},sign);
+ }
+ for(const value of parts){
+  const hole=item.holes.some(t=>near(t,value));
+  el("circle",{cx:sx(value),cy:89,r:6.8,fill:hole?"var(--page)":"var(--a)",stroke:"var(--a)","stroke-width":2.5});
+  el("text",{x:sx(value),y:125,"text-anchor":"middle","font-size":14,fill:"var(--ink)","font-weight":600},rootName(value));
+ }
+ el("line",{x1:sx(x),y1:26,x2:sx(x),y2:104,stroke:"var(--a)","stroke-width":2,"stroke-dasharray":"4 4"});
+ el("circle",{cx:sx(x),cy:89,r:4.5,fill:"var(--a)"});
+ el("text",{x:sx(x),y:17,"text-anchor":"middle","font-size":14,fill:"var(--a)","font-weight":800},"x = "+rootName(x));
+ const numerator=item.n(x),denominator=item.d(x);
+ const undefinedValue=item.holes.some(t=>near(t,x))||Math.abs(denominator)<EPS;
+ const val=undefinedValue?NaN:numerator/denominator,passes=!undefinedValue&&satisfied(val,op);
+ $("num").value=fmt(numerator);$("den").value=fmt(denominator);
+ $("value").value=fmt(val);$("sign").value=undefinedValue?"—":symbol(val);$("xLabel").value=rootName(x);
+ const status=$("sampleResult");status.dataset.bad=String(!passes);
+ status.querySelector("strong").textContent=undefinedValue?"Вне ОДЗ":passes?"Условие выполнено":"Условие не выполнено";
+ status.querySelector("span").textContent=undefinedValue?"Знаменатель равен нулю: деление невозможно.":Math.abs(val)<EPS?"Дробь равна нулю.":"Знак дроби: "+(val>0?"плюс.":"минус.");
+ $("signDescription").textContent="Знаки дроби слева направо: "+signWords.join("; ")+". Выбрано x = "+rootName(x)+".";
+ $("formula").textContent=item.formula+" "+showOp(op)+" 0";
+ $("answer").textContent="x ∈ "+solve(item,op);
+}
+function changeMode(next){
+ if(!cases[next])return;
+ mode=next;const item=cases[next];
+ $("displayHeading").textContent=item.title;$("lessonNote").textContent=item.note;
+ $("operator").value=item.op;
+ document.querySelectorAll(".preset").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.mode===mode)));
+ probe=mode==="cubic"?1:0;$("x").value=String(probe);
+ renderCritical(item);
+ if(location.hash.slice(1)!==mode)location.hash=mode;
+ draw();
+}
+document.querySelectorAll(".preset").forEach(button=>button.addEventListener("click",()=>changeMode(button.dataset.mode)));
+$("x").addEventListener("input",()=>{probe=Number($("x").value);draw();});
+$("operator").addEventListener("change",draw);
+$("reset").addEventListener("click",()=>changeMode(mode));
+$("sampleLeft").addEventListener("click",()=>{probe=Math.max(-10,probe-.5);$("x").value=String(probe);draw();});
+$("sampleRight").addEventListener("click",()=>{probe=Math.min(10,probe+.5);$("x").value=String(probe);draw();});
 try{const saved=localStorage.getItem("jv-lesson-theme");if(saved==="dark"||saved==="light")root.dataset.theme=saved;}catch(_){}const theme=$("theme");function themeLabel(){theme.setAttribute("aria-label",root.dataset.theme==="dark"?"Включить светлую тему":"Включить тёмную тему");}theme.addEventListener("click",()=>{root.dataset.theme=root.dataset.theme==="dark"?"light":"dark";try{localStorage.setItem("jv-lesson-theme",root.dataset.theme);}catch(_){}themeLabel();});themeLabel();
 changeMode((location.hash||"").slice(1)||"basic");window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(cases[h]&&h!==mode)changeMode(h);});
 })();
