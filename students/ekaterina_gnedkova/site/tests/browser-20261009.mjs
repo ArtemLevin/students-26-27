@@ -241,6 +241,51 @@ try{
   await screenshot('lesson-23-mobile');
   await call('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});
 
+  // Release-gate pass: responsive light/dark, MathML, exact vector scale, and ARIA progress.
+  for (const view of [
+    {width:1280,height:900,mobile:false,theme:'light',label:'desktop-light'},
+    {width:1280,height:900,mobile:false,theme:'dark',label:'desktop-dark'},
+    {width:390,height:844,mobile:true,theme:'light',label:'mobile-light'},
+    {width:390,height:844,mobile:true,theme:'dark',label:'mobile-dark'},
+    {width:320,height:720,mobile:true,theme:'light',label:'narrow-light'}
+  ]) {
+    await call('Emulation.setDeviceMetricsOverride',{width:view.width,height:view.height,
+      deviceScaleFactor:1,mobile:view.mobile});
+    await navigate('23.10.26.html');
+    await run('document.documentElement.dataset.theme="'+view.theme+'"');
+    const scan=await execute(()=>{
+      const ids=[...document.querySelectorAll('[id]')].map(n=>n.id);
+      const v=document.querySelector('svg.plot path[marker-end]');
+      const d=document.getElementById('drive-range'),p=document.getElementById('pump-range');
+      d.value='1';d.dispatchEvent(new Event('input',{bubbles:true}));
+      const drive=document.getElementById('drive-track');
+      p.value='120';p.dispatchEvent(new Event('input',{bubbles:true}));
+      const pump=document.getElementById('pump-track');
+      return {
+        overflow:document.documentElement.scrollWidth>innerWidth+2,
+        mathCount:document.querySelectorAll('math').length,
+        fractions:document.querySelectorAll('mfrac').length,
+        svgPath:v?.getAttribute('d'),
+        uniqueIds:ids.length===new Set(ids).size,
+        progress:drive?.getAttribute('aria-valuenow'),
+        capacity:pump?.getAttribute('aria-valuenow'),
+        labelledRanges:[...document.querySelectorAll('input[type="range"]')].every(el=>!!document.querySelector('label[for="'+el.id+'"]')),
+        headings:document.querySelectorAll('h1').length,
+        backgrounds:getComputedStyle(document.body).backgroundColor
+      };
+    });
+    assert.equal(scan.overflow,false,'23 Oct layout '+view.label);
+    assert.equal(scan.uniqueIds,true,'Duplicate IDs '+view.label);
+    assert.ok(scan.mathCount>=5 && scan.fractions>=10,'Missing native math fractions '+view.label);
+    assert.equal(scan.svgPath,'M104 210 L224 50','Vector plotted in wrong scale');
+    assert.equal(scan.progress,'60');
+    assert.equal(scan.capacity,'56');
+    assert.equal(scan.labelledRanges,true);
+    assert.equal(scan.headings,1);
+    await screenshot('lesson-23-review-'+view.label);
+  }
+  await call('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});
+
   // Previous 20 October lesson: formulas, interactive credit comparison and controlled answers.
   await navigate('20.10.26.html');
   await wait('document.querySelectorAll("#ledger tr").length===3');
