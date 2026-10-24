@@ -2,6 +2,96 @@ export const RECENT_LIMIT=3;
 export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
+{
+  "date": "2026-10-24",
+  "ktpRefs": [],
+  "href": "24.10.26.html",
+  "title": "Повторение. Восемь методов",
+  "navTitle": "Повторение. Восемь методов",
+  "navSubtitle": "Повторение математики ЕГЭ: площадь треугольника, векторы, шар в цилиндре, вероятность, степени, логарифмы, графики и движение. Чек-лист Тимофея Васильченко от 24.10.2026, 10 задач пути А.",
+  "summary": "Повторение математики ЕГЭ: площадь треугольника, векторы, шар в цилиндре, вероятность, степени, логарифмы, графики и движение. Чек-лист Тимофея Васильченко от 24.10.2026, 10 задач пути А.",
+  "topics": [
+    "Площади треугольников",
+    "Скалярное произведение",
+    "Шар и цилиндр",
+    "Независимые события и вероятность",
+    "Степени и показательные уравнения",
+    "Логарифмы и ОДЗ",
+    "Логарифмические функции",
+    "Задачи на движение"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t1_areas",
+      "evidenceAnchor": "geometry",
+      "relation": "touched",
+      "label": "Площадь треугольника и выбор формулы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t2_dot",
+      "evidenceAnchor": "vectors",
+      "relation": "touched",
+      "label": "Скалярное произведение векторов",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_sphere",
+      "evidenceAnchor": "volume",
+      "relation": "touched",
+      "label": "Объём вписанного шара",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t4_enumeration",
+      "evidenceAnchor": "probability",
+      "relation": "touched",
+      "label": "Перебор исходов и произведение вероятностей",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t6_exponential",
+      "evidenceAnchor": "powers",
+      "relation": "touched",
+      "label": "Показательные уравнения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t6_logarithmic",
+      "evidenceAnchor": "logarithms",
+      "relation": "touched",
+      "label": "Логарифмические уравнения и ОДЗ",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_log_num",
+      "evidenceAnchor": "logarithms",
+      "relation": "touched",
+      "label": "Логарифмические преобразования",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t11_exp_log",
+      "evidenceAnchor": "graph",
+      "relation": "touched",
+      "label": "График логарифмической функции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t10_line",
+      "evidenceAnchor": "motion",
+      "relation": "touched",
+      "label": "Модель задачи на движение",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "24.10.26.html",
+    "pdf": "../pdf_docs/24.10.26.pdf",
+    "tex": "../tex_docs/24.10.26.tex"
+  }
+},
+
   {
   "date": "2026-10-20",
   "ktpRefs": [],
