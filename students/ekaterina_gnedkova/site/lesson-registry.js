@@ -5,6 +5,131 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-23",
+  "ktpRefs": [],
+  "href": "23.10.26.html",
+  "title": "Тотальное повторение: степени, функции, векторы и текстовые задачи",
+  "navTitle": "Тотальное повторение",
+  "navSubtitle": "Комплексное повторение по транскрипту 23.10.26: свойства степеней, показательные уравнения и функция по точкам, векторы, движение и совместная производительность. Две интерактивные временные модели. Без тренировочного блока.",
+  "summary": "Комплексное повторение по транскрипту 23.10.26: свойства степеней, показательные уравнения и функция по точкам, векторы, движение и совместная производительность. Две интерактивные временные модели. Без тренировочного блока.",
+  "topics": [
+    "степени с дробными и отрицательными показателями",
+    "показательные уравнения",
+    "показательная функция по двум точкам",
+    "координаты и действия с векторами",
+    "скалярное произведение и перпендикулярность",
+    "встречное движение с задержкой старта",
+    "движение по окружности",
+    "движение по реке",
+    "совместная работа насосов"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege27_08_005",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_08_006",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_08_007",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_08_011",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_08_012",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_08_015",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_07_007",
+      "evidenceAnchor": "exponential",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_12_015",
+      "evidenceAnchor": "exponential",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_12_001",
+      "evidenceAnchor": "exponential",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_02_001",
+      "evidenceAnchor": "vectors",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_02_002",
+      "evidenceAnchor": "vectors",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_02_005",
+      "evidenceAnchor": "vectors",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_02_007",
+      "evidenceAnchor": "vectors",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_02_009",
+      "evidenceAnchor": "vectors",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_11_002",
+      "evidenceAnchor": "motion",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_11_004",
+      "evidenceAnchor": "motion",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_11_005",
+      "evidenceAnchor": "motion",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_11_015",
+      "evidenceAnchor": "motion",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_11_007",
+      "evidenceAnchor": "work",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_11_008",
+      "evidenceAnchor": "work",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "23.10.26.html"
+  }
+},
+{
   "date": "2026-10-20",
   "ktpRefs": [],
   "href": "20.10.26.html",
