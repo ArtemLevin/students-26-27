@@ -164,11 +164,56 @@ try{
       assert.ok(Number(derived.v.replace(',','.'))>0,'negative numerator / negative denominator must be positive');
       const canceled=await evaluate('(()=>{document.querySelector("[data-mode=cancellation]").click();const i=document.getElementById("x");i.value="3";i.dispatchEvent(new Event("input",{bubbles:true}));return document.getElementById("sampleResult").textContent})()');
       assert.match(canceled,/Вне ОДЗ/,'canceled x=3 must remain excluded');
+      const expectations=[
+        ['basic','(−∞; −1] ∪ (1; +∞)'],
+        ['quadratic','(−∞; 2] ∪ [3; 5) ∪ (7; +∞)'],
+        ['constant','(−8; −1)'],
+        ['cubic','(−5/3; 0] ∪ (5/3; +∞)'],
+        ['cancellation','(−∞; −2] ∪ (1; 3) ∪ (3; +∞)'],
+        ['double','(−∞; −1) ∪ (−1; 2) ∪ (4; +∞)']
+      ];
+      for(const [mode,want] of expectations){
+        const state=await evaluate('(()=>{document.querySelector("[data-mode='+mode+']").click();return {formula:document.getElementById("formula").textContent,answer:document.getElementById("answer").textContent,hash:location.hash,title:document.querySelector("#axis title")?.textContent,desc:document.querySelector("#axis desc")?.textContent,labels:document.querySelectorAll("#rootJump button").length}})()');
+        assert.equal(state.answer,'x ∈ '+want,mode+' computed solution');
+        assert.equal(state.hash,'#'+mode,mode+' deep link');
+        assert.ok(state.title&&state.desc,mode+' SVG accessible name and description');
+        assert.ok(state.labels>=2,mode+' critical-point buttons');
+      }
+      const signSwitch=await evaluate('(()=>{document.querySelector("[data-mode=basic]").click();const op=document.getElementById("operator");op.value="<=";op.dispatchEvent(new Event("change",{bubbles:true}));return {formula:document.getElementById("formula").textContent,answer:document.getElementById("answer").textContent}})()');
+      assert.match(signSwitch.formula,/≤ 0$/,'operator and rendered formula must stay synchronized');
+      assert.equal(signSwitch.answer,'x ∈ [−1; 1)','switching operator must solve the new inequality');
+      const exactBoundary=await evaluate('(()=>{document.querySelector("[data-mode=cubic]").click();const b=[...document.querySelectorAll("#rootJump button")].find(b=>b.textContent.includes("−5/3"));b.click();return {x:document.getElementById("xLabel").value,result:document.getElementById("sampleResult").textContent}})()');
+      assert.equal(exactBoundary.x,'−5/3','root controls must select exact rational values');
+      assert.match(exactBoundary.result,/Вне ОДЗ/,'exact rational denominator root must be excluded');
+      const reset=await evaluate('(()=>{document.getElementById("reset").click();return {x:document.getElementById("xLabel").value,operator:document.getElementById("operator").value}})()');
+      assert.equal(reset.x,'1','cubic reset returns to explanatory sample x=1');
+      assert.equal(reset.operator,'>=','reset restores source inequality sign');
+      if(width===390)await screen('23.10.26-lab-mobile-after-all-modes');
+
     }else{
       assert.equal(await evaluate('document.querySelectorAll("#taskList input").length'),10,'10 Path A tasks');
+      const typeset=await evaluate('({count:document.querySelectorAll("#taskList math mfrac").length,labels:document.querySelectorAll("#taskList input[aria-label]").length})');
+      assert.equal(typeset.count,10,'every Path A fraction must be MathML');
+      assert.equal(typeset.labels,0,'wrapped checkbox label must include mathematical expression');
+      const fullLesson=await evaluate('({first:document.querySelector("#roots .problem")?.textContent,repeat:document.getElementById("double-root-example")?.textContent,deep:document.querySelector("#double-root-example a")?.getAttribute("href")})');
+      assert.match(fullLesson.first,/x = 3/,'source example is restored');
+      assert.match(fullLesson.repeat,/двойной корень/i,'source repeated-root example is restored');
+      assert.equal(fullLesson.deep,'23.10.26-lab.html#double','repeated root deep link');
       assert.ok(await evaluate('document.getElementById("normal") && document.getElementById("substitute")'),'lesson sections');
     }
     if(width===390)await screen(file.replace('.html','')+'-390');
+
+    // Explicitly inspect both visual themes and print output for every new page.
+    const toggleId=file.endsWith('-lab.html')?'theme':'themeButton';
+    const themes=await evaluate('(()=>{const b=document.getElementById("'+toggleId+'");if(document.documentElement.dataset.theme!=="light")b.click();const light=getComputedStyle(document.body).backgroundColor;b.click();const dark=getComputedStyle(document.body).backgroundColor;return {light,dark,selected:document.documentElement.dataset.theme,label:b.getAttribute("aria-label")}})()');
+    assert.equal(themes.selected,'dark',file+' dark theme must be enabled');
+    assert.notEqual(themes.light,themes.dark,file+' light and dark backgrounds must differ');
+    assert.match(themes.label,/светлую/,file+' theme control must announce the reverse action');
+    if(width===390)await screen(file.replace('.html','')+'-dark-390');
+    await evaluate('document.getElementById("'+toggleId+'").click()');
+    const pdf=await call('Page.printToPDF',{printBackground:true});
+    assert.ok(pdf.data.length>1500,file+' print preview should produce a real PDF');
+
     assert.deepEqual(errors,[],file+' JS errors after interactions');
   }
   console.log('Jaroslav QA passed: dashboard, archive, 23 October lesson and interactive laboratory');

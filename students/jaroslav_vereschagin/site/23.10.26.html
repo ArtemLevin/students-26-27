@@ -32,7 +32,23 @@ html[data-theme=dark]{--green:#a2e2d9;--mint:#294744;--peach:#f5c0a0;--paper:#15
 .brace{font-size:.92rem;color:var(--muted)}.highlight{border-inline-start:3px solid var(--green);padding:.5rem 1rem;margin:1.5rem 0}.poster img{max-height:800px;object-fit:contain;object-position:left}.exercise-note{color:var(--muted);font-size:.9rem}
 @media(max-width:760px){.math-stage,.steps{grid-template-columns:1fr}.formula-line{font-size:1rem}.math-stage{gap:.3rem}.mini-table{font-size:.85rem}.mini-table th,.mini-table td{padding:.6rem .3rem}}
 
-</style>
+
+/* Native fractional mathematical typesetting is used for primary working expressions. */
+.rational{font-family:"Cambria Math","STIX Two Math",serif;font-size:1.13em}
+.equation .rational,.formula-line .rational{font-size:1.07em}
+.expression .rational{font-size:1.04em}
+.problem h3:has(.rational){font-size:clamp(1.05rem,2.3vw,1.55rem)}
+.math-stage .equation{white-space:normal}
+.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media print{.tasks input{display:none}.tasks li{break-inside:avoid}.poster img{max-height:none}}
+
+/* Keep large built-up fractions within their own reading area at narrow widths. */
+.problem h3{max-width:100%;overflow-x:auto;white-space:nowrap;padding-bottom:.25rem}
+.tasks .expression{display:block;min-width:0;max-width:100%;overflow-x:auto}
+@media print{.problem h3,.tasks .expression{overflow:visible;white-space:normal}}
+.top nav a,.route a{display:inline-flex;align-items:center;min-height:44px}
+ @media(max-width:760px){.top nav{gap:.25rem}}
+ </style>
 </head>
 <body>
 <a class="skip" href="#content">К содержанию занятия</a>
@@ -53,7 +69,7 @@ html[data-theme=dark]{--green:#a2e2d9;--mint:#294744;--peach:#f5c0a0;--paper:#15
 <div class="wrap"><nav class="route" aria-label="Маршрут занятия"><a href="#normal">01 · Форма и ОДЗ</a><a href="#roots">02 · Границы</a><a href="#common">03 · К нулю</a><a href="#substitute">04 · Замена</a><a href="#pitfalls">05 · Ошибки</a><a href="#training">06 · Путь А</a></nav></div>
 <section id="normal" class="section wrap" data-journey-stop data-journey-label="Основная форма">
 <div class="section-head"><div><p class="numbering">01 / Конструкция метода</p><h2>Справа — нуль.<br>Слева — одна дробь.</h2></div><p>Универсальная отправная точка: привести выражение к одному отношению многочленов и сохранить исходное ОДЗ.</p></div>
-<div class="math-stage"><div class="equation">P(x) / Q(x) ⋚ 0, &nbsp; Q(x) ≠ 0</div><aside class="side-note">Нули числителя могут войти в ответ. Нули знаменателя запрещены при <strong>любом</strong> знаке неравенства.</aside></div>
+<div class="math-stage"><div class="equation"><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="P от x делить на Q от x, знак неравенства, нуль; Q от x не равно нулю"><mrow><mfrac><mrow><mi>P</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow><mrow><mi>Q</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mfrac><mo>⋚</mo><mn>0</mn><mo>,</mo><mspace width="1em"/><mi>Q</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>≠</mo><mn>0</mn></mrow></math></div><aside class="side-note">Нули числителя могут войти в ответ. Нули знаменателя запрещены при <strong>любом</strong> знаке неравенства.</aside></div>
 <ol class="steps"><li><strong>Приведение</strong><p>Перенести всё влево, справа оставить 0. Если надо — общий знаменатель.</p></li><li><strong>Критические точки</strong><p>Отдельно решить P(x)=0 и Q(x)=0; выколоть нули знаменателя.</p></li><li><strong>Метод интервалов</strong><p>Определить знаки на промежутках и выбрать нужные, проверив границы.</p></li></ol>
 <p class="highlight"><strong>Запомните:</strong> нельзя умножать неравенство на знаменатель неизвестного знака без разбора случаев. Его знак участвует в результате.</p>
 <a class="button" href="23.10.26-lab.html#basic">Проверить влияние знаменателя ↗</a>
@@ -64,23 +80,33 @@ html[data-theme=dark]{--green:#a2e2d9;--mint:#294744;--peach:#f5c0a0;--paper:#15
 <tr><td><strong>Числитель P(x)=0</strong></td><td>Для ≥ или ≤, если Q(x) ≠ 0</td><td>Закрашенная</td></tr>
 <tr><td><strong>Знаменатель Q(x)=0</strong></td><td>Никогда</td><td>Выколотая</td></tr>
 </tbody></table>
-<div class="problem"><p class="kicker">Разбор 01 / Две границы</p><h3>(x + 1)/(x − 1) ≥ 0</h3>
+<div class="problem"><p class="kicker">От простого к сложному / Знак «меньше или равно»</p>
+<h3><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="(x − 3) / (x − 5) ≤ 0"><mrow><mfrac><mrow><mi>x</mi><mo>−</mo><mn>3</mn></mrow><mrow><mi>x</mi><mo>−</mo><mn>5</mn></mrow></mfrac><mo>≤</mo><mn>0</mn></mrow></math></h3>
+<p>Нуль числителя x = 3, нуль знаменателя x = 5. При x = 4 получаем отрицательное значение −1. Поэтому промежуток между точками подходит, число 3 включается, а 5 исключается.</p>
+<div class="answer-band">Ответ: [3; 5)</div></div>
+<div class="problem"><p class="kicker">Разбор 01 / Две границы</p><h3><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="(x + 1) / (x − 1) ≥ 0"><mrow><mfrac><mrow><mi>x</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>x</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mo>≥</mo><mn>0</mn></mrow></math></h3>
 <p>Числитель обнуляется при x = −1, знаменатель при x = 1. Калибровка: x = 0 → 1/(−1) = −1, значит средний интервал отрицательный. Внешние промежутки — положительные.</p>
 <div class="answer-band">Ответ: (−∞; −1] ∪ (1; +∞)</div>
 </div>
-<div class="problem"><p class="kicker">Разбор 02 / Четыре границы</p><h3>(x² − 5x + 6)/(x² − 12x + 35) ≥ 0</h3>
-<div class="formula-line">(x − 2)(x − 3) / ((x − 5)(x − 7)) ≥ 0</div>
+<div class="problem"><p class="kicker">Разбор 02 / Четыре границы</p><h3><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="(x² − 5x + 6) / (x² − 12x + 35) ≥ 0"><mrow><mfrac><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>5</mn><mi>x</mi><mo>+</mo><mn>6</mn></mrow><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>12</mn><mi>x</mi><mo>+</mo><mn>35</mn></mrow></mfrac><mo>≥</mo><mn>0</mn></mrow></math></h3>
+<div class="formula-line"><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="((x − 2)(x − 3)) / ((x − 5)(x − 7)) ≥ 0"><mrow><mfrac><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>2</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>−</mo><mn>3</mn><mo>)</mo></mrow><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>5</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>−</mo><mn>7</mn><mo>)</mo></mrow></mfrac><mo>≥</mo><mn>0</mn></mrow></math></div>
 <p>Числитель: 2, 3. Знаменатель: 5, 7. При x = 0 значение 6/35 &gt; 0. Для простых корней знак меняется при каждом переходе: +, −, +, −, +.</p>
 <div class="answer-band">Ответ: (−∞; 2] ∪ [3; 5) ∪ (7; +∞)</div>
 </div>
+<div class="problem" id="double-root-example"><p class="kicker">Отдельный случай / Двойной корень</p>
+<h3><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="((x + 1)²(x − 4)) / (x − 2) &gt; 0"><mrow><mfrac><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo>)</mo><mo>²</mo><mo>(</mo><mi>x</mi><mo>−</mo><mn>4</mn><mo>)</mo></mrow><mrow><mi>x</mi><mo>−</mo><mn>2</mn></mrow></mfrac><mo>&gt;</mo><mn>0</mn></mrow></math></h3>
+<p>Числитель обнуляется при x = −1 (кратность 2) и x = 4; знаменатель — при x = 2. Пробное значение x = 0 даёт 2 &gt; 0.</p>
+<p>Слева направо знаки: <strong>+</strong> до −1; <strong>+</strong> между −1 и 2; <strong>−</strong> между 2 и 4; <strong>+</strong> после 4. При переходе через двойной корень −1 знак сохраняется, но точка исключается из строгого неравенства.</p>
+<div class="answer-band">Ответ: (−∞; −1) ∪ (−1; 2) ∪ (4; +∞)</div>
+<p><a class="button" href="23.10.26-lab.html#double">Проверить на числовой прямой ↗</a></p></div>
 <p class="note">При чётной кратности корня знак может сохраняться. Если сомневаетесь, возьмите отдельное пробное число из каждого интервала.</p>
 <a class="button" href="23.10.26-lab.html#quadratic">Исследовать четыре точки ↗</a>
 </section>
 <section id="common" class="section wrap section--ink" data-journey-stop data-journey-label="К нулю">
 <div class="section-head"><div><p class="numbering">03 / Преобразование</p><h2>Что делать, если справа 2?</h2></div><p>Дробь должна быть приведена к виду с нулём справа. Именно получившееся выражение проверяют пробным числом.</p></div>
-<div class="equation">(2x² + 18x − 4)/(x² + 9x + 8) &gt; 2</div>
+<div class="equation"><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="(2x² + 18x − 4) / (x² + 9x + 8) &gt; 2"><mrow><mfrac><mrow><mn>2</mn><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>18</mn><mi>x</mi><mo>−</mo><mn>4</mn></mrow><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>9</mn><mi>x</mi><mo>+</mo><mn>8</mn></mrow></mfrac><mo>&gt;</mo><mn>2</mn></mrow></math></div>
 <div class="formula-line">⇔ [2x² + 18x − 4 − 2(x² + 9x + 8)] / (x² + 9x + 8) &gt; 0</div>
-<div class="equation">⇔ −20 / ((x + 1)(x + 8)) &gt; 0</div>
+<div class="equation">⇔ <math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="(−20) / ((x + 1)(x + 8)) &gt; 0"><mrow><mfrac><mrow><mo>−</mo><mn>20</mn></mrow><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>+</mo><mn>8</mn><mo>)</mo></mrow></mfrac><mo>&gt;</mo><mn>0</mn></mrow></math></div>
 <p>Числитель −20 отрицателен при любом x. Дробь положительна тогда, когда знаменатель отрицателен. Корни знаменателя: −8 и −1.</p>
 <div class="answer-band">Ответ: (−8; −1)</div>
 <p class="note">Подстановка x = −4 в преобразованную дробь даёт −20/(−12) &gt; 0. Границы выколоты: в этих точках деление невозможно.</p>
@@ -91,7 +117,7 @@ html[data-theme=dark]{--green:#a2e2d9;--mint:#294744;--peach:#f5c0a0;--paper:#15
 <div class="twocol"><article class="plane"><h3>Положительный множитель</h3><div class="equation">x² + x + 1</div><p>D = 1 − 4 = −3; многочлен всегда положителен.</p></article>
 <article class="plane"><h3>Ненулевой числитель</h3><div class="equation">−20</div><p>Нулей нет. Для знака дроби достаточно знака знаменателя.</p></article></div>
 <h3>Третий множитель и выбор пробного числа</h3>
-<div class="equation">(x³ + x² + x)/(9x² − 25) ≥ 0</div>
+<div class="equation"><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="(x³ + x² + x) / (9x² − 25) ≥ 0"><mrow><mfrac><mrow><msup><mi>x</mi><mn>3</mn></msup><mo>+</mo><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>x</mi></mrow><mrow><mn>9</mn><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>25</mn></mrow></mfrac><mo>≥</mo><mn>0</mn></mrow></math></div>
 <p>Сверху x(x² + x + 1), снизу (3x − 5)(3x + 5). Корни: −5/3 и 5/3 — выколоты, 0 — нуль числителя. Число 0 для калибровки не подходит; при x = 1 дробь равна −3/16.</p>
 <div class="answer-band">Ответ: (−5/3; 0] ∪ (5/3; +∞)</div>
 <h3>Замена t = x²</h3>
@@ -103,7 +129,7 @@ html[data-theme=dark]{--green:#a2e2d9;--mint:#294744;--peach:#f5c0a0;--paper:#15
 <div class="section-head"><div><p class="numbering">05 / Контроль ошибок</p><h2>Шесть проверок перед ответом</h2></div><p>Отметьте эти пункты на собственном решении, прежде чем сравнивать с готовым ответом.</p></div>
 <ul class="warn-list"><li>Справа записан 0; знаменатель после переноса не потерян.</li><li>Исходные нули знаменателя учтены в ОДЗ даже после сокращения.</li><li>Пробное число выбрано внутри интервала и не является корнем.</li><li>При кратном корне знак проверен: чётная кратность сохраняет знак.</li><li>Уравнение AB + 1 = 0 не разбито по правилу нулевого произведения.</li><li>Скобки, бесконечности и знак объединения ∪ указаны корректно.</li></ul>
 <h3>Осторожно с сокращением</h3>
-<div class="equation">((x − 3)(x + 2))/((x − 3)(x − 1)) ≥ 0</div>
+<div class="equation"><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="((x − 3)(x + 2)) / ((x − 3)(x − 1)) ≥ 0"><mrow><mfrac><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>3</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>3</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow></mfrac><mo>≥</mo><mn>0</mn></mrow></math></div>
 <p>Исходное ОДЗ: x ≠ 3 и x ≠ 1. После сокращения x − 3 запрет x ≠ 3 сохраняется.</p>
 <div class="answer-band">Ответ: (−∞; −2] ∪ (1; 3) ∪ (3; +∞)</div>
 <figure class="poster"><img src="../images/23.10.26.png" alt="Акварельная памятка по дробно-рациональным неравенствам: нули числителя и знаменателя, таблица знаков, алгоритм и типичные ошибки" loading="lazy" decoding="async"><figcaption>Акварельная ментальная карта · <a href="../images/23.10.26.png">Открыть изображение</a></figcaption></figure>
@@ -112,16 +138,16 @@ html[data-theme=dark]{--green:#a2e2d9;--mint:#294744;--peach:#f5c0a0;--paper:#15
 <div class="section-head"><div><p class="numbering">06 / Самостоятельная тренировка</p><h2>Путь А. Десять задач</h2></div><p>Отмечайте выполненные задания. После решения откройте ответы и проверьте исключённые точки.</p></div>
 <p id="taskProgress" class="micro" role="status" aria-live="polite">Выполнено: 0 из 10</p>
 <ol class="tasks" id="taskList">
-<li><label><input type="checkbox" aria-label="Задание 1 выполнено"><span class="expression">(x + 2)/(x − 4) ≥ 0</span></label></li>
-<li><label><input type="checkbox" aria-label="Задание 2 выполнено"><span class="expression">(x − 5)/(x + 1) ≤ 0</span></label></li>
-<li><label><input type="checkbox" aria-label="Задание 3 выполнено"><span class="expression">(x² − 5x + 4)/(x² − 9x + 18) ≥ 0</span></label></li>
-<li><label><input type="checkbox" aria-label="Задание 4 выполнено"><span class="expression">(2x² + 8x − 3)/(x² + 4x + 3) &gt; 2</span></label></li>
-<li><label><input type="checkbox" aria-label="Задание 5 выполнено"><span class="expression">(x² + 4)/(x² − 9) ≤ 0</span></label></li>
-<li><label><input type="checkbox" aria-label="Задание 6 выполнено"><span class="expression">−6/(x² − 5x + 6) ≥ 0</span></label></li>
-<li><label><input type="checkbox" aria-label="Задание 7 выполнено"><span class="expression">(x³ + x² + x)/(4x² − 9) ≥ 0</span></label></li>
-<li><label><input type="checkbox" aria-label="Задание 8 выполнено"><span class="expression">((x − 1)²(x + 2))/(x − 3) &lt; 0</span></label></li>
-<li><label><input type="checkbox" aria-label="Задание 9 выполнено"><span class="expression">((x − 3)(x + 2))/((x − 3)(x − 1)) ≥ 0</span></label></li>
-<li><label><input type="checkbox" aria-label="Задание 10 выполнено"><span class="expression">(x⁴ − 2x² − 8)/(x² + 1) &gt; 0</span></label></li>
+<li><label><input type="checkbox"><span class="expression"><span class="sr-only">Задание 1. </span><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="(x + 2) / (x − 4) ≥ 0"><mrow><mfrac><mrow><mi>x</mi><mo>+</mo><mn>2</mn></mrow><mrow><mi>x</mi><mo>−</mo><mn>4</mn></mrow></mfrac><mo>≥</mo><mn>0</mn></mrow></math></span></label></li>
+<li><label><input type="checkbox"><span class="expression"><span class="sr-only">Задание 2. </span><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="(x − 5) / (x + 1) ≤ 0"><mrow><mfrac><mrow><mi>x</mi><mo>−</mo><mn>5</mn></mrow><mrow><mi>x</mi><mo>+</mo><mn>1</mn></mrow></mfrac><mo>≤</mo><mn>0</mn></mrow></math></span></label></li>
+<li><label><input type="checkbox"><span class="expression"><span class="sr-only">Задание 3. </span><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="(x² − 5x + 4) / (x² − 9x + 18) ≥ 0"><mrow><mfrac><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>5</mn><mi>x</mi><mo>+</mo><mn>4</mn></mrow><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>9</mn><mi>x</mi><mo>+</mo><mn>18</mn></mrow></mfrac><mo>≥</mo><mn>0</mn></mrow></math></span></label></li>
+<li><label><input type="checkbox"><span class="expression"><span class="sr-only">Задание 4. </span><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="(2x² + 8x − 3) / (x² + 4x + 3) &gt; 2"><mrow><mfrac><mrow><mn>2</mn><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>8</mn><mi>x</mi><mo>−</mo><mn>3</mn></mrow><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>4</mn><mi>x</mi><mo>+</mo><mn>3</mn></mrow></mfrac><mo>&gt;</mo><mn>2</mn></mrow></math></span></label></li>
+<li><label><input type="checkbox"><span class="expression"><span class="sr-only">Задание 5. </span><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="(x² + 4) / (x² − 9) ≤ 0"><mrow><mfrac><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>4</mn></mrow><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>9</mn></mrow></mfrac><mo>≤</mo><mn>0</mn></mrow></math></span></label></li>
+<li><label><input type="checkbox"><span class="expression"><span class="sr-only">Задание 6. </span><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="(−6) / (x² − 5x + 6) ≥ 0"><mrow><mfrac><mrow><mo>−</mo><mn>6</mn></mrow><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>5</mn><mi>x</mi><mo>+</mo><mn>6</mn></mrow></mfrac><mo>≥</mo><mn>0</mn></mrow></math></span></label></li>
+<li><label><input type="checkbox"><span class="expression"><span class="sr-only">Задание 7. </span><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="(x³ + x² + x) / (4x² − 9) ≥ 0"><mrow><mfrac><mrow><msup><mi>x</mi><mn>3</mn></msup><mo>+</mo><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>x</mi></mrow><mrow><mn>4</mn><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>9</mn></mrow></mfrac><mo>≥</mo><mn>0</mn></mrow></math></span></label></li>
+<li><label><input type="checkbox"><span class="expression"><span class="sr-only">Задание 8. </span><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="((x − 1)²(x + 2)) / (x − 3) &lt; 0"><mrow><mfrac><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>)</mo><mo>²</mo><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow><mrow><mi>x</mi><mo>−</mo><mn>3</mn></mrow></mfrac><mo>&lt;</mo><mn>0</mn></mrow></math></span></label></li>
+<li><label><input type="checkbox"><span class="expression"><span class="sr-only">Задание 9. </span><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="((x − 3)(x + 2)) / ((x − 3)(x − 1)) ≥ 0"><mrow><mfrac><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>3</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow><mrow><mo>(</mo><mi>x</mi><mo>−</mo><mn>3</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>−</mo><mn>1</mn><mo>)</mo></mrow></mfrac><mo>≥</mo><mn>0</mn></mrow></math></span></label></li>
+<li><label><input type="checkbox"><span class="expression"><span class="sr-only">Задание 10. </span><math class="rational" xmlns="http://www.w3.org/1998/Math/MathML" aria-label="(x⁴ − 2x² − 8) / (x² + 1) &gt; 0"><mrow><mfrac><mrow><msup><mi>x</mi><mn>4</mn></msup><mo>−</mo><mn>2</mn><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>8</mn></mrow><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn></mrow></mfrac><mo>&gt;</mo><mn>0</mn></mrow></math></span></label></li>
 </ol>
 <details class="answers" id="answers"><summary>Сверить ответы (10 заданий)</summary>
 <ol><li>(−∞; −2] ∪ (4; +∞)</li><li>(−1; 5]</li><li>(−∞; 1] ∪ (3; 4] ∪ (6; +∞)</li><li>(−3; −1)</li><li>(−3; 3)</li><li>(2; 3)</li><li>(−3/2; 0] ∪ (3/2; +∞)</li><li>(−2; 1) ∪ (1; 3)</li><li>(−∞; −2] ∪ (1; 3) ∪ (3; +∞)</li><li>(−∞; −2) ∪ (2; +∞)</li></ol>
