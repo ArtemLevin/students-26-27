@@ -3,6 +3,73 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-24",
+  "ktpRefs": [],
+  "href": "24.10.26.html",
+  "title": "Равнобедренный треугольник",
+  "navTitle": "Равнобедренный треугольник",
+  "navSubtitle": "Равнобедренный треугольник и первый признак равенства: теория, доказательства и 10 заданий для Кирилла Зиновьева, 24 октября 2026 года.",
+  "summary": "Равнобедренный треугольник и первый признак равенства: теория, доказательства и 10 заданий для Кирилла Зиновьева, 24 октября 2026 года.",
+  "topics": [
+    "равнобедренный треугольник",
+    "углы при основании",
+    "первый признак равенства треугольников",
+    "общая сторона и разность отрезков",
+    "соответствие вершин",
+    "параллельные прямые"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "triangles_11",
+      "evidenceAnchor": "terms",
+      "relation": "practiced",
+      "label": "Использовать свойства равнобедренного треугольника",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "triangles_8",
+      "evidenceAnchor": "proof",
+      "relation": "practiced",
+      "label": "Применять первый признак равенства треугольников",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "geo_reason_8",
+      "evidenceAnchor": "diagram",
+      "relation": "practiced",
+      "label": "Выполнять аккуратный чертёж по условию",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "geo_reason_12",
+      "evidenceAnchor": "proof",
+      "relation": "practiced",
+      "label": "Строить логическую цепочку из нескольких утверждений",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "parallel_5",
+      "evidenceAnchor": "parallel",
+      "relation": "touched",
+      "label": "Применять признак параллельности по соответственным углам",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "geo_reason_11",
+      "evidenceAnchor": "proof",
+      "relation": "touched",
+      "label": "Ссылаться на определение или теорему в доказательстве",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "24.10.26.html",
+    "pdf": "../pdf_docs/24.10.26.pdf",
+    "tex": "../tex_docs/24.10.26.tex",
+    "lab": "24.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-21",
   "ktpRefs": [],
   "href": "21.10.26.html",
