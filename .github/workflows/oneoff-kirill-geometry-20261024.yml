@@ -1,0 +1,39 @@
+name: Publish Kirill 2026-10-24 geometry lesson
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: [main]
+    paths:
+      - 'students/kirill_zinoviev/site/24.10.26.html'
+      - 'students/kirill_zinoviev/site/24.10.26-lab.html'
+      - 'students/kirill_zinoviev/site/data/publication-intents/2026-10-24.json'
+      - '.github/workflows/oneoff-kirill-geometry-20261024.yml'
+jobs:
+  publish:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Canonical publication plan
+        run: node scripts/publish-lesson.mjs kirill_zinoviev 24.10.26 --intent students/kirill_zinoviev/site/data/publication-intents/2026-10-24.json --dry-run
+      - name: Publish lesson transactionally
+        run: node scripts/publish-lesson.mjs kirill_zinoviev 24.10.26 --intent students/kirill_zinoviev/site/data/publication-intents/2026-10-24.json
+      - name: Student validation
+        run: node scripts/student.mjs validate kirill_zinoviev
+      - name: Commit publisher projections to PR
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/kirill_zinoviev/site/data/lessons students/kirill_zinoviev/site/lesson-registry.js students/kirill_zinoviev/site/data/ktp-state.json students/kirill_zinoviev/site/data/mastery-state.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish Kirill 24.10.26 lesson via canonical Student Platform v2 publisher"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
