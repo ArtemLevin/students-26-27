@@ -5,6 +5,73 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-23",
+  "ktpRefs": [],
+  "href": "23.10.26.html",
+  "title": "Тригонометрические преобразования",
+  "navTitle": "Тригонометрические преобразования",
+  "navSubtitle": "сумма и разность · двойной угол · два метода · множители",
+  "summary": "Повторение ЕГЭ: тригонометрические тождества, двойной угол, преобразование сумм и произведений, два способа решения уравнения и контроль типичных ошибок.",
+  "topics": [
+    "тригонометрические преобразования",
+    "формулы суммы и разности",
+    "формулы двойного угла",
+    "произведение в сумму",
+    "сумма в произведение",
+    "разложение на множители"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t7_trig_values",
+      "evidenceAnchor": "recognize",
+      "relation": "practiced",
+      "label": "Табличные значения тригонометрических функций",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_sum_difference",
+      "evidenceAnchor": "formulas",
+      "relation": "practiced",
+      "label": "Формулы суммы и разности",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_double_angle",
+      "evidenceAnchor": "methods",
+      "relation": "practiced",
+      "label": "Формулы двойного угла",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t13_trig_factor",
+      "evidenceAnchor": "methods",
+      "relation": "practiced",
+      "label": "Факторизация тригонометрического уравнения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_trig_var",
+      "evidenceAnchor": "errors",
+      "relation": "practiced",
+      "label": "Преобразования выражений с переменной",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t13_trig_other",
+      "evidenceAnchor": "practice",
+      "relation": "touched",
+      "label": "Сравнение методов решения",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "23.10.26.html",
+    "pdf": "../pdf_docs/23.10.26.pdf",
+    "tex": "../tex_docs/23.10.26.tex",
+    "lab": "23.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-19",
   "ktpRefs": [],
   "href": "19.10.26.html",
