@@ -110,7 +110,7 @@ test('09.10.26 lesson and laboratory retain exact source exercise coverage and l
   const dates=[...registry.matchAll(/"date": "(\d{4}-\d{2}-\d{2})"/g)].map(x=>x[1]);
   const canonicalDates=fs.readdirSync(path.join(site,'data','lessons')).filter(name=>name.endsWith('.lesson.json')).map(name=>name.slice(0,10)).sort().reverse();
   assert.deepEqual(dates,canonicalDates);
-  assert.equal(dates[0],'2026-10-16');
+  assert.equal(dates[0],'2026-10-23');
   assert.match(lesson,/aria-controls="training"/);
   assert.match(lesson,/<mroot>/,'indexed radicals use mroot');
   assert.match(lesson,/<msqrt>/,'square roots use msqrt');
@@ -376,4 +376,37 @@ test('16.10.26 laboratory MathML builder creates correct namespaces and nested e
   assert.ok(nodes.every(node=>node.namespaceURI==='http://www.w3.org/1998/Math/MathML'));
   assert.equal(10000*(0.5**3)-250,1000);
   assert.equal(40*2**(-30/10),5);
+});
+
+
+test('23.10.26 method of anchor points: two tasks, materials and evidence anchors',()=>{
+  const lesson=read('23.10.26.html');
+  const metadata=readJson('data/lessons/2026-10-23.lesson.json');
+  const intent=readJson('data/lessons/2026-10-23.publication-intent.json');
+  assert.match(lesson,/<h1>Метод опорных точек<\/h1>/);
+  assert.equal([...lesson.matchAll(/class="task"/g)].length,2,'two assigned problems');
+  assert.equal([...lesson.matchAll(/class="answer"/g)].length,2,'two answer keys');
+  assert.match(lesson,/f\(3\) = 62/);
+  assert.match(lesson,/x = −1/);
+  assert.equal(metadata.date,'2026-10-23');
+  assert.equal(intent.lessonDate,metadata.date);
+  assert.deepEqual(metadata.ktpRefs,['ktp-004','ktp-005','ktp-032']);
+  assert.ok(metadata.outcomes.every(x=>x.masteryClaim===null),'no inferred mastery upgrades');
+  for(const outcome of metadata.outcomes){
+    assert.ok(lesson.includes('id="'+outcome.evidenceAnchor+'"'),'missing '+outcome.evidenceAnchor);
+  }
+  for(const match of lesson.matchAll(/\b(?:src|href)="([^"]+)"/g)){
+    const href=match[1];
+    if(href.startsWith('#')){
+      assert.ok(lesson.includes('id="'+href.slice(1)+'"'),'invalid local anchor '+href);
+    }else if(!/^(?:https?:|data:|mailto:)/.test(href)){
+      assert.ok(fs.existsSync(path.resolve(site,href.split(/[?#]/,1)[0])),'missing linked material '+href);
+    }
+  }
+  for(const key of ['html','pdf','tex']){
+    assert.ok(metadata.materials[key],key+' must be published');
+  }
+  const script=lesson.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+  assert.ok(script);
+  assert.doesNotThrow(()=>new vm.Script(script));
 });
