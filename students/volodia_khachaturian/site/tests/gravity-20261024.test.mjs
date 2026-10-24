@@ -46,6 +46,13 @@ test('release gate: HTML structure, math, materials and accessibly named graphic
     assert.ok(answerTable.includes(marker),'missing answer '+marker);
 });
 
+test('navigator loads the refreshed 24 October registry version',()=>{
+  const dashboard=fs.readFileSync(path.join(dir,'dashboard.js'),'utf8');
+  const home=fs.readFileSync(path.join(dir,'index.html'),'utf8');
+  assert.match(dashboard,/lesson-registry\.js\?v=20261024/);
+  assert.match(home,/dashboard\.js\?v=20261024/);
+});
+
 test('release gate: publication metadata and evidence parity',()=>{
   assert.equal(meta.date,'2026-10-24');
   assert.equal(meta.outcomes.length,7);
