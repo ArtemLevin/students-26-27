@@ -90,8 +90,7 @@ try{
     const screenshot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
     fs.writeFileSync(path.join(screenshots,name+'.png'),Buffer.from(screenshot.data,'base64'));
   }
-  for(const width of [375,390,768,1024,1366,1440]){
-    const height=width<=390?844:width<=768?1024:900;
+  for(const [width,height] of [[375,812],[390,844],[768,1024],[1024,768],[1366,768],[1440,900],[1920,1080]]){
     for(const dark of (width===375||width===1366?[false,true]:[false])){
       await navigate('23.10.26.html',width,height,dark);
       const check=await run('({math:document.querySelectorAll("main math").length,steps:document.querySelectorAll("#stepper button").length,poster:!!document.querySelector("#poster img")})');
