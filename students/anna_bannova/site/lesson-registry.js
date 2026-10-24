@@ -1,4 +1,62 @@
 export const LESSONS=[
+{
+  "date": "2026-10-23",
+  "ktpRefs": [
+    "ktp-004",
+    "ktp-005",
+    "ktp-032"
+  ],
+  "href": "23.10.26.html",
+  "title": "Метод опорных точек",
+  "navTitle": "Метод опорных точек",
+  "navSubtitle": "Занятие Анны Банновой 23.10.26: восстановление показательной функции по двум точкам, различие a^x+b и a^(x+b), решение систем, вычисление значения и поиск аргумента.",
+  "summary": "Занятие Анны Банновой 23.10.26: восстановление показательной функции по двум точкам, различие a^x+b и a^(x+b), решение систем, вычисление значения и поиск аргумента.",
+  "topics": [
+    "показательная функция по графику",
+    "метод опорных точек",
+    "восстановление коэффициентов a и b",
+    "нулевая, отрицательная и дробная степень",
+    "показательные уравнения",
+    "два тренировочных задания"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "func_13",
+      "evidenceAnchor": "worked",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "func_17",
+      "evidenceAnchor": "shift",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "eq_09",
+      "evidenceAnchor": "questions",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calc_09",
+      "evidenceAnchor": "principle",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calc_10",
+      "evidenceAnchor": "shift",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "expr_15",
+      "evidenceAnchor": "training",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "23.10.26.html",
+    "pdf": "../pdf_docs/23.10.26.pdf",
+    "tex": "../tex_docs/23.10.26.tex"
+  }
+},
   {
   "date": "2026-10-16",
   "ktpRefs": [
