@@ -64,7 +64,7 @@ export const LESSONS=[
       "practiceDisposition": "manual"
     },
     {
-      "competencyId": "t7_log_num",
+      "competencyId": "t7_log_var",
       "evidenceAnchor": "logarithms",
       "relation": "touched",
       "label": "Логарифмические преобразования",
