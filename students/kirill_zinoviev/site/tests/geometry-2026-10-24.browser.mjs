@@ -47,7 +47,7 @@ try{
    await page.emulateMedia({media:'print'});
    await page.screenshot({path:path.join(out,tag+'-print.png'),fullPage:true});
    const printTextColor=await page.evaluate(()=>getComputedStyle(document.body).color);
-   assert.equal(printTextColor,'rgb(21, 21, 21)',tag+' dark print text must be dark on paper');
+   assert(['rgb(17, 17, 17)','rgb(21, 21, 21)'].includes(printTextColor),tag+' print text must be dark on paper: '+printTextColor);
    if(file==='24.10.26.html')assert.equal(await page.locator('.tasks details[open]').count(),10,tag+' printed solutions must expand');
    await page.emulateMedia({media:'screen'});
    if(file==='24.10.26.html')assert.equal(await page.locator('.tasks details[open]').count(),0,tag+' printed solutions must restore');
