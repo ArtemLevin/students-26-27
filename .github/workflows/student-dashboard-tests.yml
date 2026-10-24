@@ -270,6 +270,16 @@ jobs:
           echo 'END_XENIA_REGISTRY'
       - name: Run regression suite
         run: ${{ matrix.test }}
+      - name: Browser QA for Anna 23 October lesson and navigator
+        if: matrix.student == 'anna_bannova'
+        run: node students/anna_bannova/site/tests/browser-20261023.mjs
+      - name: Upload Anna browser screenshots
+        if: always() && matrix.student == 'anna_bannova'
+        uses: actions/upload-artifact@v4
+        with:
+          name: anna-23oct-site-review
+          path: anna-review-20261023-artifacts/*.png
+          if-no-files-found: warn
       - name: Browser QA for Daniil 23 October lesson
         if: matrix.student == 'daniil_khriastov'
         run: node students/daniil_khriastov/site/tests/browser-20261023.mjs
