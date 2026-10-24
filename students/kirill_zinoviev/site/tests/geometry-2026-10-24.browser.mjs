@@ -50,6 +50,9 @@ try{
    assert(['rgb(17, 17, 17)','rgb(21, 21, 21)'].includes(printTextColor),tag+' print text must be dark on paper: '+printTextColor);
    if(file==='24.10.26.html')assert.equal(await page.locator('.tasks details[open]').count(),10,tag+' printed solutions must expand');
    await page.emulateMedia({media:'screen'});
+   // Chromium's emulateMedia does not guarantee an afterprint event;
+   // emulate closing a real print dialog to verify restoration.
+   await page.evaluate(()=>dispatchEvent(new Event('afterprint')));
    if(file==='24.10.26.html')assert.equal(await page.locator('.tasks details[open]').count(),0,tag+' printed solutions must restore');
    if(process.env.AXE_SCRIPT){
       await page.addScriptTag({path:process.env.AXE_SCRIPT});
