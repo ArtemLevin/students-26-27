@@ -137,5 +137,6 @@ try{
   try{ws?.close()}catch{}
   chromeProcess.kill('SIGTERM');
   server.close();
-  fs.rmSync(profile,{recursive:true,force:true});
+  try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:8,retryDelay:120})}
+  catch(error){console.warn('Temporary Chromium profile cleanup skipped:',error.message)}
 }
