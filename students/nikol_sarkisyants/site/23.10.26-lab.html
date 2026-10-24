@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивная лаборатория: исследуйте факторизацию тригонометрического уравнения, сравните значения выражений, найдите нули множителей.">
+<title>Лаборатория тригонометрического уравнения · Николь Саркисьянц</title>
+<style>
+:root{color-scheme:light;--bg:#f3eee7;--paper:#fffcf7;--ink:#322a29;--muted:#6b6060;--line:#c8bdb5;--a:#af633d;--b:#147883;--c:#7653a2;--focus:#b45416}
+html[data-theme=dark]{color-scheme:dark;--bg:#171b1c;--paper:#252a2b;--ink:#f3edeb;--muted:#c4b9b5;--line:#526064;--a:#efa77f;--b:#85d0d8;--c:#d3b9fa;--focus:#e7ab5a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}a{color:var(--b)}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+main{max-width:1250px;margin:auto;padding:0 1.5rem 4rem}
+header{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;padding:1.1rem 0;border-bottom:1px solid var(--line)}header span{margin-left:auto;color:var(--muted)}
+button{border:1px solid var(--line);border-radius:0;background:var(--paper);color:var(--ink);padding:.6rem 1rem;cursor:pointer;min-height:44px;font:inherit}
+button[aria-pressed=true]{background:var(--b);color:var(--paper)}.skip{position:absolute;top:-8rem;left:1rem}.skip:focus{top:1rem;background:var(--paper);padding:.5rem;z-index:9}
+h1,h2{font-family:Georgia,serif;font-weight:500;line-height:1.12}h1{font-size:clamp(2.4rem,5.7vw,5.2rem);max-width:19ch;margin:2rem 0 1.5rem}h2{font-size:1.75rem;margin:.2rem 0 1.2rem}.lead{color:var(--muted);max-width:70ch;font-size:1.1rem}
+.lab{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);gap:2rem;align-items:start;margin-top:2.7rem}
+.scope{background:var(--paper);border:1px solid var(--line);min-width:0;padding:1.3rem}
+.scope svg{width:100%;height:auto;display:block;touch-action:pan-y}
+.legend{display:flex;flex-wrap:wrap;gap:1rem;font-size:.91rem}
+.legend span:before{content:'';display:inline-block;width:1.4rem;height:3px;margin-right:.3rem;vertical-align:middle;background:var(--b)}
+.legend .la:before{background:var(--a)}.legend .lb:before{background:var(--b)}.legend .lc:before{background:var(--c)}
+.panel{border-top:3px solid var(--a);padding-top:1rem}.controls{display:flex;gap:.6rem;flex-wrap:wrap}
+.readout{font-size:1rem;display:grid;gap:.4rem;padding:1rem 0;border-block:1px solid var(--line)}.readout div{display:flex;align-items:baseline;justify-content:space-between;gap:.7rem}.readout output{font:600 1.15rem ui-monospace,monospace;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--a);min-height:32px}.hint{font-size:.9rem;color:var(--muted)}.status{padding:1rem;background:var(--paper);border-left:4px solid var(--a);margin-top:1.3rem}.status strong{color:var(--a)}.mathline{font:500 1.22rem/1.8 Georgia,serif;color:var(--b);overflow-x:auto}#xValue{font-variant-numeric:tabular-nums}.grid{stroke:var(--line);stroke-width:.75}.axis{stroke:var(--muted);stroke-width:1.3}.curveA{fill:none;stroke:var(--a);stroke-width:2.7}.curveB{fill:none;stroke:var(--b);stroke-width:2.7}.curveC{fill:none;stroke:var(--c);stroke-width:1.9}.cursor{stroke:var(--ink);stroke-width:1;stroke-dasharray:5 5}.spot{fill:var(--paper);stroke:var(--b);stroke-width:2}.ticks{fill:var(--muted);font:12px system-ui}.challenge{margin-top:2rem;border-top:1px solid var(--line);padding-top:1.4rem}
+#tip{min-height:3rem;font-weight:650}.result{color:var(--b)}
+@media(max-width:800px){.lab{grid-template-columns:1fr}.scope{padding:.7rem}.panel{border-top:1px solid var(--line)}}
+@media print{header button,.controls,input{display:none!important}main{max-width:none}.lab{grid-template-columns:1fr 1fr;gap:1rem}.scope{break-inside:avoid}}
+</style></head><body>
+<a class="skip" href="#main">К содержанию</a>
+<main id="main"><header><a href="23.10.26.html#methods">← К решению занятия</a><a href="index.html">Кабинет</a><button type="button" id="theme">◐ Тема</button><span>23.10.2026 · Николь Саркисьянц</span></header>
+<p style="margin-top:2rem;color:var(--a);font-weight:700;letter-spacing:.08em">ЦИФРОВАЯ ЛАБОРАТОРИЯ</p>
+<h1>Почему появляется общий множитель?</h1>
+<p class="lead">Перемещайте x и наблюдайте, как произведение двух множителей превращается в нуль. Сравните значение исходного уравнения с факторизованным выражением: они совпадают при любом x.</p>
+<div class="lab">
+<section class="scope" aria-labelledby="plot-title"><h2 id="plot-title">График и нули</h2><div class="legend"><span class="la">cos 4x</span><span class="lb">2 sin 2x − 1</span><span class="lc">½ cos 4x(2 sin 2x − 1)</span></div>
+<svg id="chart" role="img" aria-labelledby="svg-title svg-desc" viewBox="0 0 790 410"><title id="svg-title">Графики множителей и их произведения</title><desc id="svg-desc">График синхронизирован с ползунком x. Нули любого множителя дают нули произведения.</desc><g id="grid"></g><path id="a" class="curveA"></path><path id="b" class="curveB"></path><path id="c" class="curveC"></path><line class="cursor" id="cursor" x1="60" y1="20" x2="60" y2="360"></line><circle id="point" class="spot" r="5" cx="60" cy="190"></circle></svg>
+<p class="hint">Визуализация: 0 ≤ x ≤ 2π. Выберите удобный угол ниже либо перемещайте ползунок.</p></section>
+<aside class="panel"><h2>Эксперимент</h2>
+<div class="controls" role="group" aria-label="Режим отображения"><button type="button" data-mode="factors" aria-pressed="true">Множители</button><button type="button" data-mode="identity" aria-pressed="false">Тождество</button></div>
+<label for="x">Значение x: <strong id="xValue"></strong></label>
+<input id="x" type="range" min="0" max="6.283185307179586" step="0.001" value="0.393" aria-describedby="sliderHelp"><p class="hint" id="sliderHelp">Для точных значений используйте кнопки π/8, π/12 и 0.</p>
+<div class="controls" role="group" aria-label="Характерные значения"><button type="button" data-x="0">0</button><button type="button" data-x="0.2617993877991494">π/12</button><button type="button" data-x="0.39269908169872414">π/8</button><button type="button" data-x="1.1780972450961724">3π/8</button><button type="button" id="reset">Сброс</button></div>
+<div class="readout"><div><span>cos 4x</span><output id="f1">—</output></div><div><span>2 sin 2x − 1</span><output id="f2">—</output></div><div><span>½ · произведение</span><output id="product">—</output></div><div><span>Исходная левая часть − правая</span><output id="original">—</output></div><div><span>Разница выражений</span><output id="difference">—</output></div></div>
+<div class="status" id="interpretation" role="status" aria-live="polite"></div>
+</aside></div>
+<section class="challenge"><h2>Предскажите нуль</h2><p>При каком положении x произведение обращается в нуль за счёт множителя cos 4x?</p>
+<div class="controls" id="challenge"><button data-v="0.2617993877991494" type="button">π/12</button><button data-v="0.39269908169872414" type="button">π/8</button><button data-v="0.5235987755982988" type="button">π/6</button><button id="again" type="button">Повторить</button></div><p id="tip" role="status" aria-live="polite"></p></section>
+<section style="margin-top:2rem;border-top:1px solid var(--line);padding-top:1rem"><h2>Математический вывод</h2><p>Для любого действительного x выполняется равенство</p>
+<div class="mathline">cos 2x · sin 4x − ½cos 4x − sin 2x = ½cos 4x(2sin 2x − 1).</div>
+<p>Поэтому решение исходного уравнения равносильно условию <b>cos 4x = 0</b> или <b>sin 2x = ½</b>. На графике этому соответствуют все пересечения фиолетовой кривой с горизонтальной осью. Деление на cos 4x исключило бы часть этих точек.</p>
+<p><a href="23.10.26.html#practice">Вернуться к тренировочным задачам →</a></p>
+</section><footer style="border-top:1px solid var(--line);margin-top:3rem;padding-top:1rem;color:var(--muted)">Лёвин Артём Александрович · эксклюзивно для Николь Саркисьянц</footer>
+</main>
+<script>
+(()=>{'use strict';
+const xInput=document.getElementById('x'),root=document.documentElement;const fmt=v=>Math.abs(v)<5e-10?'0':v.toFixed(4).replace('.',',');
+let mode=new URLSearchParams(location.search).get('mode')==='identity'?'identity':'factors';
+try{root.dataset.theme=localStorage.getItem('nikol-lesson-theme')==='dark'?'dark':'light'}catch(e){}
+document.getElementById('theme').onclick=()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('nikol-lesson-theme',root.dataset.theme)}catch(e){}};
+const original=t=>Math.cos(2*t)*Math.sin(4*t)-.5*Math.cos(4*t)-Math.sin(2*t);
+const fa=t=>Math.cos(4*t),fb=t=>2*Math.sin(2*t)-1,fc=t=>.5*fa(t)*fb(t);
+const xMin=0,xMax=2*Math.PI,yMin=-2.1,yMax=2.1,xScale=t=>60+690*(t-xMin)/(xMax-xMin),yScale=v=>360-340*(v-yMin)/(yMax-yMin);
+const chart=document.getElementById('chart'),grid=document.getElementById('grid');
+const S=(tag,atts,text)=>{const n=document.createElementNS('http://www.w3.org/2000/svg',tag);Object.entries(atts).forEach(([a,b])=>n.setAttribute(a,String(b)));if(text!==undefined)n.textContent=text;return n;};
+for(let v=-2;v<=2;v+=.5){const y=yScale(v);grid.append(S('line',{x1:60,x2:750,y1:y,y2:y,class:v===0?'axis':'grid'}));if(Number.isInteger(v))grid.append(S('text',{x:15,y:y+4,class:'ticks'},String(v)));}
+for(let k=0;k<=8;k++){const t=k*Math.PI/4,pos=xScale(t);grid.append(S('line',{x1:pos,x2:pos,y1:20,y2:360,class:k%2===0?'axis':'grid'}));grid.append(S('text',{x:pos-13,y:385,class:'ticks'},k===0?'0':k===8?'2π':k===4?'π':k+'π/4'));}
+const path=fn=>{const arr=[];for(let i=0;i<=700;i++){let t=xMin+(xMax-xMin)*i/700;arr.push((i?'L':'M')+xScale(t).toFixed(2)+' '+yScale(fn(t)).toFixed(2))}return arr.join(' ');};
+document.getElementById('a').setAttribute('d',path(fa));
+document.getElementById('b').setAttribute('d',path(fb));
+document.getElementById('c').setAttribute('d',path(fc));
+function render(){const t=Number(xInput.value),a=fa(t),b=fb(t),c=fc(t),o=original(t);
+document.getElementById('xValue').textContent=fmt(t)+' рад';
+for(const [id,v] of Object.entries({f1:a,f2:b,product:c,original:o,difference:Math.abs(o-c)}))document.getElementById(id).textContent=fmt(v);
+const cx=xScale(t),cy=yScale(c);document.getElementById('cursor').setAttribute('x1',cx);document.getElementById('cursor').setAttribute('x2',cx);
+document.getElementById('point').setAttribute('cx',cx);document.getElementById('point').setAttribute('cy',cy);
+const nearA=Math.abs(a)<.01,nearB=Math.abs(b)<.01;
+document.getElementById('interpretation').innerHTML=nearA?'<strong>cos 4x ≈ 0.</strong> Первый множитель равен нулю: произведение тоже равно нулю.':nearB?'<strong>2 sin 2x − 1 ≈ 0.</strong> Второй множитель равен нулю: произведение тоже равно нулю.':'Оба множителя отличны от нуля. Произведение меняет знак в зависимости от их знаков.';
+document.getElementById('a').style.opacity=mode==='identity'?'.35':'1';document.getElementById('b').style.opacity=mode==='identity'?'.35':'1';
+document.getElementById('c').style.strokeWidth=mode==='identity'?'3.6':'1.9';
+document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
+}
+xInput.addEventListener('input',render);
+document.querySelectorAll('[data-mode]').forEach(btn=>btn.onclick=()=>{mode=btn.dataset.mode;render()});
+document.querySelectorAll('[data-x]').forEach(btn=>btn.onclick=()=>{xInput.value=btn.dataset.x;render()});
+document.getElementById('reset').onclick=()=>{xInput.value=0.39269908169872414;mode='factors';render();document.getElementById('tip').textContent=''};
+document.querySelectorAll('#challenge button[data-v]').forEach(b=>b.onclick=()=>{xInput.value=b.dataset.v;render();const correct=Math.abs(Number(b.dataset.v)-Math.PI/8)<.0001;document.getElementById('tip').textContent=correct?'Верно: 4 · π/8 = π/2, поэтому cos 4x = 0.':'Проверьте: cos u = 0 при u = π/2 + πk. Найдите x из 4x = π/2.'});
+document.getElementById('again').onclick=()=>{document.getElementById('tip').textContent='';xInput.value=0.1;render()};
+render();
+})();
+</script></body></html>
