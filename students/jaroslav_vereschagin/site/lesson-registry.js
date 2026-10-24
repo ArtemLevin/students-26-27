@@ -4,6 +4,72 @@ export const ARCHIVE_PAGE_SIZE=10;
 const MONTHS_GENITIVE=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
 export const LESSONS=[
+{
+  "date": "2026-10-23",
+  "ktpRefs": [],
+  "href": "23.10.26.html",
+  "title": "Дробно-рациональные неравенства: метод интервалов",
+  "navTitle": "Дробно-рациональные неравенства",
+  "navSubtitle": "Ярослав Верещагин. Две группы граничных точек, ОДЗ, приведение к нулю, замена t=x² и десять заданий Пути А. Занятие 23.10.26.",
+  "summary": "Ярослав Верещагин. Дробно-рациональные неравенства: нули числителя и знаменателя, ОДЗ, приведение к нулю, замена t=x² и десять заданий Пути А.",
+  "topics": [
+    "Дробно-рациональные неравенства",
+    "Метод интервалов",
+    "ОДЗ",
+    "Нули числителя и знаменателя",
+    "Приведение к нулю",
+    "Замена t=x²"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_20_2_1",
+      "evidenceAnchor": "normal",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_2",
+      "evidenceAnchor": "normal",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_3",
+      "evidenceAnchor": "common",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_4",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_5",
+      "evidenceAnchor": "pitfalls",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_13_2_3",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_13_2_4",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_8_3_2",
+      "evidenceAnchor": "substitute",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "23.10.26.html",
+    "pdf": "../pdf_docs/23.10.26.pdf",
+    "tex": "../tex_docs/23.10.26.tex",
+    "lab": "23.10.26-lab.html"
+  }
+},
+
   {
   "date": "2026-10-19",
   "ktpRefs": [],
