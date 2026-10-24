@@ -149,5 +149,11 @@ try{
   try{ws?.close()}catch(_){}
   chromeProcess.kill('SIGKILL');
   server.close();
-  fs.rmSync(profile,{recursive:true,force:true});
+  try{
+    fs.rmSync(profile,{recursive:true,force:true,maxRetries:12,retryDelay:150});
+  }catch(error){
+    // The runner deletes its temporary profile after the job; Chromium subprocesses
+    // can race with immediate directory cleanup after an otherwise successful test.
+    console.warn('Temporary Chromium profile cleanup:',error.message);
+  }
 }
