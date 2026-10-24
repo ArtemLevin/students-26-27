@@ -131,7 +131,7 @@ try{
           assert.equal(await run("(()=>{document.querySelector('#toggleAnswers').click();return !document.querySelector('#answerTable').hidden})()"),true);
           assert.equal(await run("(()=>{document.querySelector('#plotNegative').click();return document.querySelector('#plotNegative').getAttribute('aria-pressed')})()"),'true');
           assert.ok(await run("document.querySelector('#plotDesc').textContent.includes('убывает')"));
-          assert.equal(await run("(()=>{const c=document.querySelector('.task-list input[data-task=1]');c.checked=true;c.dispatchEvent(new Event('change'));return document.querySelector('#progressTrack').getAttribute('aria-valuenow')})()"),'1');
+          assert.equal(await run("(()=>{const c=document.querySelector('.task-list input[data-task]');c.checked=true;c.dispatchEvent(new Event('change'));return document.querySelector('#progressTrack').getAttribute('aria-valuenow')})()"),'1');
           assert.equal(await run("(()=>{document.querySelector('#toggleAnswers').click();return document.querySelector('#answerTable').hidden})()"),true);
           await call('Emulation.setEmulatedMedia',{media:'print'});
           assert.equal(await run("getComputedStyle(document.querySelector('#answerTable')).display"),'none','Hidden answers must stay hidden when printing');
