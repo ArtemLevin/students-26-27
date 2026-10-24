@@ -20,12 +20,13 @@ jobs:
       - name: Install browser harness
         run: |
           mkdir -p /tmp/kirillqa
-          npm install --no-audit --no-fund --prefix /tmp/kirillqa playwright@1.56.1
+          npm install --no-audit --no-fund --prefix /tmp/kirillqa playwright@1.56.1 axe-core@4
           /tmp/kirillqa/node_modules/.bin/playwright install --with-deps chromium
       - name: Run browser release gate
         env:
           PLAYWRIGHT_MODULE: /tmp/kirillqa/node_modules/playwright/index.mjs
           QA_OUT: /tmp/kirill-geometry-qa
+          AXE_SCRIPT: /tmp/kirillqa/node_modules/axe-core/axe.min.js
         run: node students/kirill_zinoviev/site/tests/geometry-2026-10-24.browser.mjs
       - name: Collect review screenshots
         if: always()
