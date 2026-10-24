@@ -112,8 +112,8 @@ try{
   const a=await run("(()=>{const b=document.getElementById('showAnswers'),x=document.getElementById('answerList');const before=x.hidden;b.click();const open=!x.hidden&&b.getAttribute('aria-expanded')==='true';b.click();return {before,open,closed:x.hidden&&b.getAttribute('aria-expanded')==='false'}})()");
   assert.equal(a.before,true);assert.equal(a.open,true);assert.equal(a.closed,true);
   await call('Emulation.setEmulatedMedia',{media:'print'});
-  const print=await run("({nav:getComputedStyle(document.querySelector('.top')).display,answers:getComputedStyle(document.getElementById('answerList')).display})");
-  assert.equal(print.nav,'none');assert.notEqual(print.answers,'none');
+  const print=await run("({nav:getComputedStyle(document.querySelector('.top')).display,answers:getComputedStyle(document.getElementById('answerList')).display,allSteps:[...document.querySelectorAll('#steps li')].every(x=>getComputedStyle(x).display!=='none')})");
+  assert.equal(print.nav,'none');assert.notEqual(print.answers,'none');assert.equal(print.allSteps,true);
   await call('Emulation.setEmulatedMedia',{media:'screen'});
   for(const [width,height] of [[375,812],[1440,900]]){
     await navigate('index.html',width,height);
