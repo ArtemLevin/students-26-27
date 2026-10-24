@@ -50,7 +50,7 @@ test('Gravity 24.10 browser: 7 sizes, dark/light, live modes, links and home int
     ws.onmessage=e=>{
       const m=JSON.parse(e.data);
       if(m.id&&pending.has(m.id)){pending.get(m.id)(m);pending.delete(m.id)}
-      if(m.method==='Runtime.exceptionThrown')errors.push(m.params?.exceptionDetails?.text||'Uncaught exception');
+      if(m.method==='Runtime.exceptionThrown')errors.push((m.params?.exceptionDetails?.exception?.description||m.params?.exceptionDetails?.text||'Uncaught exception')+' @ '+(m.params?.exceptionDetails?.url||'unknown')+':'+(m.params?.exceptionDetails?.lineNumber??'?'));
       if(m.method==='Network.responseReceived'&&m.params?.response?.status>=400)failedRequests.push(m.params.response.url);
     };
     const call=(method,params={})=>new Promise((resolve,reject)=>{
