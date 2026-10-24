@@ -68,6 +68,17 @@ try{
       await page.reload({waitUntil:'networkidle'});assert(await page.locator('.check').first().isChecked());
       await page.locator('a[href="24.10.26-lab.html"]').first().focus();assert.equal(await page.evaluate(()=>document.activeElement?.getAttribute('href')),'24.10.26-lab.html');
    } else {
+      const expectedViewport=config.width<=580?'135 0 450 340':'0 0 720 355';
+      assert.equal(await page.locator('#figure').getAttribute('viewBox'),expectedViewport,tag+' responsive diagram viewport');
+      if(config.width<=580){
+        const baseToSvgRatio=await page.evaluate(()=>{
+          const c=document.getElementById('pC').getBoundingClientRect();
+          const d=document.getElementById('pD').getBoundingClientRect();
+          const svg=document.getElementById('figure').getBoundingClientRect();
+          return (d.x-c.x)/svg.width;
+        });
+        assert(baseToSvgRatio>.5,tag+' diagram too small: '+baseToSvgRatio);
+      }
       const part=page.locator('#part'),apex=page.locator('#apex');
       for(const [value,expected] of [[3,'17 см = 17 см'],[7,'13 см = 13 см'],[17,'3 см = 3 см']]){
          await part.evaluate((e,value)=>{e.value=String(value);e.dispatchEvent(new Event('input',{bubbles:true}))},value);
