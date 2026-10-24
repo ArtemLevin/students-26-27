@@ -44,6 +44,21 @@ try{
    if(config.dark){await page.locator('#theme').click();assert.equal(await page.locator('html').getAttribute('data-theme'),'dark')}
    await assertClean(page,tag);
    await page.screenshot({path:path.join(out,tag+'.png'),fullPage:true});
+   await page.emulateMedia({media:'print'});
+   await page.screenshot({path:path.join(out,tag+'-print.png'),fullPage:true});
+   const printTextColor=await page.evaluate(()=>getComputedStyle(document.body).color);
+   assert.equal(printTextColor,'rgb(21, 21, 21)',tag+' dark print text must be dark on paper');
+   if(file==='24.10.26.html')assert.equal(await page.locator('.tasks details[open]').count(),10,tag+' printed solutions must expand');
+   await page.emulateMedia({media:'screen'});
+   if(file==='24.10.26.html')assert.equal(await page.locator('.tasks details[open]').count(),0,tag+' printed solutions must restore');
+   if(process.env.AXE_SCRIPT){
+      await page.addScriptTag({path:process.env.AXE_SCRIPT});
+      const violations=await page.evaluate(async()=>{
+        const result=await window.axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa']}});
+        return result.violations.filter(v=>['critical','serious'].includes(v.impact)).map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>n.target).slice(0,5)}));
+      });
+      assert.deepEqual(violations,[],tag+' WCAG A/AA serious failures');
+   }
    if(file==='24.10.26.html'){
       assert.equal(await page.locator('.tasks>li').count(),10);
       await page.locator('.check').first().check();assert.match(await page.locator('#progressText').innerText(),/1 из 4/);
@@ -80,7 +95,10 @@ try{
   await page.screenshot({path:path.join(out,'home-mobile.png'),fullPage:true});
   assert.match(await page.locator('#lesson-title').innerText(),/Равнобедренный треугольник/);
   assert.equal(await page.locator('#latestLessonCta').getAttribute('href'),'24.10.26.html');
-  await fileChecks(page);await context.close();
+  await fileChecks(page);
+  await page.setViewportSize({width:320,height:700});
+  await assertClean(page,'home-narrow-320');
+  await context.close();
  }
  assert.deepEqual(errors,[],'Browser console / HTTP failures');
  console.log('PASS browser QA: lesson, lab and home. Responsive screenshots '+fs.readdirSync(out).length+'; no 404/JS errors/overflow; controls correct.');
