@@ -19,7 +19,7 @@ h1,h2{font-family:Georgia,serif;font-weight:500;line-height:1.12}h1{font-size:cl
 .legend .la:before{background:var(--a)}.legend .lb:before{background:var(--b)}.legend .lc:before{background:var(--c)}
 .panel{border-top:3px solid var(--a);padding-top:1rem}.controls{display:flex;gap:.6rem;flex-wrap:wrap}
 .readout{font-size:1rem;display:grid;gap:.4rem;padding:1rem 0;border-block:1px solid var(--line)}.readout div{display:flex;align-items:baseline;justify-content:space-between;gap:.7rem}.readout output{font:600 1.15rem ui-monospace,monospace;font-variant-numeric:tabular-nums}
-input[type=range]{width:100%;accent-color:var(--a);min-height:32px}.hint{font-size:.9rem;color:var(--muted)}.status{padding:1rem;background:var(--paper);border-left:4px solid var(--a);margin-top:1.3rem}.status strong{color:var(--a)}.mathline{font:500 1.22rem/1.8 Georgia,serif;color:var(--b);overflow-x:auto}#xValue{font-variant-numeric:tabular-nums}.grid{stroke:var(--line);stroke-width:.75}.axis{stroke:var(--muted);stroke-width:1.3}.curveA{fill:none;stroke:var(--a);stroke-width:2.7}.curveB{fill:none;stroke:var(--b);stroke-width:2.7}.curveC{fill:none;stroke:var(--c);stroke-width:1.9}.cursor{stroke:var(--ink);stroke-width:1;stroke-dasharray:5 5}.spot{fill:var(--paper);stroke:var(--b);stroke-width:2}.ticks{fill:var(--muted);font:12px system-ui}.challenge{margin-top:2rem;border-top:1px solid var(--line);padding-top:1.4rem}
+input[type=range]{width:100%;accent-color:var(--a);min-height:32px}.hint{font-size:.9rem;color:var(--muted)}.status{padding:1rem;background:var(--paper);border-left:4px solid var(--a);margin-top:1.3rem}.status strong{color:var(--a)}.mathline{font:500 1.22rem/1.8 Georgia,serif;color:var(--b);overflow-x:auto}#xValue{font-variant-numeric:tabular-nums}.grid{stroke:var(--line);stroke-width:.75}.axis{stroke:var(--muted);stroke-width:1.3}.curveA{fill:none;stroke:var(--a);stroke-width:2.7}.curveB{fill:none;stroke:var(--b);stroke-width:2.7}.curveC{fill:none;stroke:var(--c);stroke-width:1.9}.curveOriginal{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-dasharray:7 5;opacity:0;pointer-events:none}.cursor{stroke:var(--ink);stroke-width:1;stroke-dasharray:5 5}.spot{fill:var(--paper);stroke:var(--b);stroke-width:2}.ticks{fill:var(--muted);font:12px system-ui}.challenge{margin-top:2rem;border-top:1px solid var(--line);padding-top:1.4rem}
 #tip{min-height:3rem;font-weight:650}.result{color:var(--b)}
 @media(max-width:800px){.lab{grid-template-columns:1fr}.scope{padding:.7rem}.panel{border-top:1px solid var(--line)}}
 @media print{header button,.controls,input{display:none!important}main{max-width:none}.lab{grid-template-columns:1fr 1fr;gap:1rem}.scope{break-inside:avoid}}
@@ -30,13 +30,14 @@ input[type=range]{width:100%;accent-color:var(--a);min-height:32px}.hint{font-si
 <h1>Почему появляется общий множитель?</h1>
 <p class="lead">Перемещайте x и наблюдайте, как произведение двух множителей превращается в нуль. Сравните значение исходного уравнения с факторизованным выражением: они совпадают при любом x.</p>
 <div class="lab">
-<section class="scope" aria-labelledby="plot-title"><h2 id="plot-title">График и нули</h2><div class="legend"><span class="la">cos 4x</span><span class="lb">2 sin 2x − 1</span><span class="lc">½ cos 4x(2 sin 2x − 1)</span></div>
-<svg id="chart" role="img" aria-labelledby="svg-title svg-desc" viewBox="0 0 790 410"><title id="svg-title">Графики множителей и их произведения</title><desc id="svg-desc">График синхронизирован с ползунком x. Нули любого множителя дают нули произведения.</desc><g id="grid"></g><path id="a" class="curveA"></path><path id="b" class="curveB"></path><path id="c" class="curveC"></path><line class="cursor" id="cursor" x1="60" y1="20" x2="60" y2="360"></line><circle id="point" class="spot" r="5" cx="60" cy="190"></circle></svg>
+<section class="scope" aria-labelledby="plot-title"><h2 id="plot-title">График и нули</h2><div class="legend"><span class="la">cos 4x</span><span class="lb">2 sin 2x − 1</span><span class="lc">½ cos 4x(2 sin 2x − 1)</span><span class="lo" id="originalLegend" hidden>Пунктир: исходная разность</span></div>
+<svg id="chart" role="img" aria-labelledby="svg-title svg-desc" viewBox="0 0 790 410"><title id="svg-title">Графики множителей и их произведения</title><desc id="svg-desc">График синхронизирован с ползунком x. Нули любого множителя дают нули произведения. В режиме тождества пунктир исходного выражения накладывается на линию факторизации.</desc><defs><clipPath id="plotClip"><rect x="60" y="20" width="690" height="340"></rect></clipPath></defs><g id="grid"></g><g clip-path="url(#plotClip)"><path id="a" class="curveA"></path><path id="b" class="curveB"></path><path id="c" class="curveC"></path><path id="o" class="curveOriginal"></path></g><line class="cursor" id="cursor" x1="60" y1="20" x2="60" y2="360"></line><circle id="point" class="spot" r="5" cx="60" cy="190"></circle></svg>
 <p class="hint">Визуализация: 0 ≤ x ≤ 2π. Выберите удобный угол ниже либо перемещайте ползунок.</p></section>
 <aside class="panel"><h2>Эксперимент</h2>
 <div class="controls" role="group" aria-label="Режим отображения"><button type="button" data-mode="factors" aria-pressed="true">Множители</button><button type="button" data-mode="identity" aria-pressed="false">Тождество</button></div>
+<p class="hint" id="modeNote" role="status" aria-live="polite">Изменяйте аргумент и следите за нулями обоих множителей.</p>
 <label for="x">Значение x: <strong id="xValue"></strong></label>
-<input id="x" type="range" min="0" max="6.283185307179586" step="0.001" value="0.393" aria-describedby="sliderHelp"><p class="hint" id="sliderHelp">Для точных значений используйте кнопки π/8, π/12 и 0.</p>
+<input id="x" type="range" min="0" max="6.283185307179586" step="any" value="0.39269908169872414" aria-describedby="sliderHelp"><p class="hint" id="sliderHelp">Для точных значений используйте кнопки π/8, π/12 и 0.</p>
 <div class="controls" role="group" aria-label="Характерные значения"><button type="button" data-x="0">0</button><button type="button" data-x="0.2617993877991494">π/12</button><button type="button" data-x="0.39269908169872414">π/8</button><button type="button" data-x="1.1780972450961724">3π/8</button><button type="button" id="reset">Сброс</button></div>
 <div class="readout"><div><span>cos 4x</span><output id="f1">—</output></div><div><span>2 sin 2x − 1</span><output id="f2">—</output></div><div><span>½ · произведение</span><output id="product">—</output></div><div><span>Исходная левая часть − правая</span><output id="original">—</output></div><div><span>Разница выражений</span><output id="difference">—</output></div></div>
 <div class="status" id="interpretation" role="status" aria-live="polite"></div>
@@ -51,30 +52,41 @@ input[type=range]{width:100%;accent-color:var(--a);min-height:32px}.hint{font-si
 </main>
 <script>
 (()=>{'use strict';
-const xInput=document.getElementById('x'),root=document.documentElement;const fmt=v=>Math.abs(v)<5e-10?'0':v.toFixed(4).replace('.',',');
+const xInput=document.getElementById('x'),root=document.documentElement;const fmt=v=>Math.abs(v)<1e-8?'0':Math.abs(v)<.00005?v.toExponential(2).replace('.',','):v.toFixed(4).replace('.',',');
 let mode=new URLSearchParams(location.search).get('mode')==='identity'?'identity':'factors';
 try{root.dataset.theme=localStorage.getItem('nikol-lesson-theme')==='dark'?'dark':'light'}catch(e){}
 document.getElementById('theme').onclick=()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('nikol-lesson-theme',root.dataset.theme)}catch(e){}};
 const original=t=>Math.cos(2*t)*Math.sin(4*t)-.5*Math.cos(4*t)-Math.sin(2*t);
 const fa=t=>Math.cos(4*t),fb=t=>2*Math.sin(2*t)-1,fc=t=>.5*fa(t)*fb(t);
-const xMin=0,xMax=2*Math.PI,yMin=-2.1,yMax=2.1,xScale=t=>60+690*(t-xMin)/(xMax-xMin),yScale=v=>360-340*(v-yMin)/(yMax-yMin);
+const xMin=0,xMax=2*Math.PI,yMin=-3.3,yMax=1.5,xScale=t=>60+690*(t-xMin)/(xMax-xMin),yScale=v=>360-340*(v-yMin)/(yMax-yMin);
 const chart=document.getElementById('chart'),grid=document.getElementById('grid');
 const S=(tag,atts,text)=>{const n=document.createElementNS('http://www.w3.org/2000/svg',tag);Object.entries(atts).forEach(([a,b])=>n.setAttribute(a,String(b)));if(text!==undefined)n.textContent=text;return n;};
-for(let v=-2;v<=2;v+=.5){const y=yScale(v);grid.append(S('line',{x1:60,x2:750,y1:y,y2:y,class:v===0?'axis':'grid'}));if(Number.isInteger(v))grid.append(S('text',{x:15,y:y+4,class:'ticks'},String(v)));}
+for(let v=-3;v<=1;v+=.5){const y=yScale(v);grid.append(S('line',{x1:60,x2:750,y1:y,y2:y,class:v===0?'axis':'grid'}));if(Number.isInteger(v))grid.append(S('text',{x:15,y:y+4,class:'ticks'},String(v)));}
 for(let k=0;k<=8;k++){const t=k*Math.PI/4,pos=xScale(t);grid.append(S('line',{x1:pos,x2:pos,y1:20,y2:360,class:k%2===0?'axis':'grid'}));grid.append(S('text',{x:pos-13,y:385,class:'ticks'},k===0?'0':k===8?'2π':k===4?'π':k+'π/4'));}
 const path=fn=>{const arr=[];for(let i=0;i<=700;i++){let t=xMin+(xMax-xMin)*i/700;arr.push((i?'L':'M')+xScale(t).toFixed(2)+' '+yScale(fn(t)).toFixed(2))}return arr.join(' ');};
 document.getElementById('a').setAttribute('d',path(fa));
 document.getElementById('b').setAttribute('d',path(fb));
 document.getElementById('c').setAttribute('d',path(fc));
+document.getElementById('o').setAttribute('d',path(original));
 function render(){const t=Number(xInput.value),a=fa(t),b=fb(t),c=fc(t),o=original(t);
 document.getElementById('xValue').textContent=fmt(t)+' рад';
 for(const [id,v] of Object.entries({f1:a,f2:b,product:c,original:o,difference:Math.abs(o-c)}))document.getElementById(id).textContent=fmt(v);
 const cx=xScale(t),cy=yScale(c);document.getElementById('cursor').setAttribute('x1',cx);document.getElementById('cursor').setAttribute('x2',cx);
 document.getElementById('point').setAttribute('cx',cx);document.getElementById('point').setAttribute('cy',cy);
 const nearA=Math.abs(a)<.01,nearB=Math.abs(b)<.01;
-document.getElementById('interpretation').innerHTML=nearA?'<strong>cos 4x ≈ 0.</strong> Первый множитель равен нулю: произведение тоже равно нулю.':nearB?'<strong>2 sin 2x − 1 ≈ 0.</strong> Второй множитель равен нулю: произведение тоже равно нулю.':'Оба множителя отличны от нуля. Произведение меняет знак в зависимости от их знаков.';
+const closeZero=Math.abs(a)<1e-8?'cos 4x = 0.':Math.abs(a)<.02?'cos 4x близок к нулю.':'';
+const closeSecond=Math.abs(b)<1e-8?'2 sin 2x − 1 = 0.':Math.abs(b)<.02?'2 sin 2x − 1 близок к нулю.':'';
+document.getElementById('interpretation').textContent=closeZero
+?closeZero+(Math.abs(a)<1e-8?' Первый множитель обращается в нуль, поэтому произведение равно нулю.':' Уточните аргумент, чтобы проверить точный корень.')
+:closeSecond?closeSecond+(Math.abs(b)<1e-8?' Второй множитель обращается в нуль, поэтому произведение равно нулю.':' Уточните аргумент, чтобы проверить точный корень.')
+:'Оба множителя отличны от нуля. Знак произведения определяется их знаками.';
 document.getElementById('a').style.opacity=mode==='identity'?'.35':'1';document.getElementById('b').style.opacity=mode==='identity'?'.35':'1';
-document.getElementById('c').style.strokeWidth=mode==='identity'?'3.6':'1.9';
+document.getElementById('c').style.strokeWidth=mode==='identity'?'3':'1.9';
+document.getElementById('o').style.opacity=mode==='identity'?'1':'0';
+document.getElementById('originalLegend').hidden=mode!=='identity';
+document.getElementById('modeNote').textContent=mode==='identity'
+?'Пунктир показывает исходную разность, фиолетовая кривая — преобразованное произведение. Совпадение кривых и нулевая разность чисел подтверждают тождество.'
+:'Изменяйте аргумент и следите за нулями обоих множителей. Смените режим для сравнения выражений.';
 document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
 }
 xInput.addEventListener('input',render);
