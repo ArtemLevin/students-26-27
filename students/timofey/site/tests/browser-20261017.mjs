@@ -115,16 +115,27 @@ try{
 
   // Responsive and color-scheme matrix for lesson, lab and personal dashboard.
   for(const page of ['17.10.26.html','17.10.26-lab.html','20.10.26.html','20.10.26-lab.html','24.10.26.html','index.html']){
-    for(const [width,height] of [[1440,900],[390,844]]){
+    for(const [width,height] of (page==='24.10.26.html'?[[1440,900],[768,1024],[390,844],[320,720]]:[[1440,900],[390,844]])){
       for(const theme of ['light','dark']){
         await navigate(page,width,height,theme);
         await screenshot(page.replace('.html','')+'-'+width+'-'+theme);
         if(page==='24.10.26.html'){
+          assert.ok(await run("document.querySelectorAll('.rule math[display=block]').length >= 9"),'MathML formula coverage');
+          assert.equal(await run("[...document.querySelectorAll('.rule math')].every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML')"),true);
+          assert.equal(await run("document.querySelector('#plotCaption').getAttribute('aria-live')"),'polite');
+          assert.equal(await run("document.querySelector('.probtable').getAttribute('tabindex')"),'0');
+          assert.ok(await run("document.querySelector('#cylTitle').textContent.includes('Шар')"));
           assert.equal(await run("document.querySelectorAll('.task-list input[data-task]').length"),10);
           assert.equal(await run("document.querySelectorAll('#answerTable tbody tr').length"),10);
           assert.equal(await run("document.querySelector('#answerTable').hidden"),true);
           assert.equal(await run("(()=>{document.querySelector('#toggleAnswers').click();return !document.querySelector('#answerTable').hidden})()"),true);
           assert.equal(await run("(()=>{document.querySelector('#plotNegative').click();return document.querySelector('#plotNegative').getAttribute('aria-pressed')})()"),'true');
+          assert.ok(await run("document.querySelector('#plotDesc').textContent.includes('убывает')"));
+          assert.equal(await run("(()=>{const c=document.querySelector('.task-list input[data-task=1]');c.checked=true;c.dispatchEvent(new Event('change'));return document.querySelector('#progressTrack').getAttribute('aria-valuenow')})()"),'1');
+          assert.equal(await run("(()=>{document.querySelector('#toggleAnswers').click();return document.querySelector('#answerTable').hidden})()"),true);
+          await call('Emulation.setEmulatedMedia',{media:'print'});
+          assert.equal(await run("getComputedStyle(document.querySelector('#answerTable')).display"),'none','Hidden answers must stay hidden when printing');
+          await call('Emulation.setEmulatedMedia',{media:'screen'});
         }
         if(page==='20.10.26.html'){
           assert.equal(await run("document.querySelectorAll('#practice .exercises li').length"),10);
