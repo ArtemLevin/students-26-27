@@ -1,0 +1,36 @@
+name: Kirill geometry browser review
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'students/kirill_zinoviev/site/24.10.26.html'
+      - 'students/kirill_zinoviev/site/24.10.26-lab.html'
+      - 'students/kirill_zinoviev/site/tests/geometry-2026-10-24.browser.mjs'
+      - '.github/workflows/kirill-geometry-review.yml'
+  workflow_dispatch:
+jobs:
+  browser-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser harness
+        run: |
+          mkdir -p /tmp/kirillqa
+          npm install --no-audit --no-fund --prefix /tmp/kirillqa playwright@1.56.1
+          /tmp/kirillqa/node_modules/.bin/playwright install --with-deps chromium
+      - name: Run browser release gate
+        env:
+          PLAYWRIGHT_MODULE: /tmp/kirillqa/node_modules/playwright/index.mjs
+          QA_OUT: /tmp/kirill-geometry-qa
+        run: node students/kirill_zinoviev/site/tests/geometry-2026-10-24.browser.mjs
+      - name: Collect review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kirill-geometry-review-screenshots
+          path: /tmp/kirill-geometry-qa/*.png
+          if-no-files-found: ignore
