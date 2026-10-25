@@ -56,11 +56,11 @@ function f(t,A=a,C=c){return t*t*t-3*A*t+C}
 function d(t,A=a){return 3*t*t-3*A}
 function tag(name,attrs){const e=document.createElementNS(svgNs,name);for(const [k,v] of Object.entries(attrs||{}))e.setAttribute(k,String(v));return e}
 function plot(svg,func,baseFunc,isDerivative){
- const vals=[];for(let i=0;i<=180;i++)vals.push(func(XMIN+(XMAX-XMIN)*i/180));const extent=Math.max(4,...vals.map(v=>Math.abs(v)),Math.abs(func(x)));const yLim=Math.ceil(extent*1.12);const px=t=>P+(t-XMIN)/(XMAX-XMIN)*(W-2*P);const py=v=>H/2-v/yLim*(H/2-P/2);
+ const vals=[];for(let i=0;i<=180;i++){const t=XMIN+(XMAX-XMIN)*i/180;vals.push(Math.abs(func(t)));if(compare.checked)vals.push(Math.abs(baseFunc(t)))}const extent=Math.max(4,...vals,Math.abs(func(x)));const yLim=Math.ceil(extent*1.12);const px=t=>P+(t-XMIN)/(XMAX-XMIN)*(W-2*P);const py=v=>H/2-v/yLim*(H/2-P/2);
  svg.replaceChildren();
  const mk=(name,attrs)=>{const el=tag(name,attrs);svg.appendChild(el);return el};
  for(let n=-2;n<=2;n++){let gx=px(n);mk('line',{x1:gx,x2:gx,y1:10,y2:H-14,class:'grid'})}
- for(let n=-1;n<=1;n++){const gy=py(n*yLim/2);mk('line',{x1:P,x2:W-P,y1:gy,y2:gy,class:'grid'})}
+ for(let n=-1;n<=1;n++){const val=n*yLim/2,gy=py(val);mk('line',{x1:P,x2:W-P,y1:gy,y2:gy,class:'grid'});if(n!==0){const label=mk('text',{x:P+6,y:gy-5});label.textContent=fmt(val)}}
  mk('line',{x1:P,x2:W-P,y1:py(0),y2:py(0),class:'axis'});mk('line',{x1:px(0),x2:px(0),y1:10,y2:H-14,class:'axis'});
  for(let n=-3;n<=3;n++){const t=mk('text',{x:px(n),y:py(0)+15,'text-anchor':'middle'});t.textContent=n}
  const draw=(fn,klass)=>{let coords=[];for(let i=0;i<=240;i++){const t=XMIN+(XMAX-XMIN)*i/240;coords.push((i===0?'M':'L')+px(t).toFixed(2)+','+py(fn(t)).toFixed(2))}mk('path',{d:coords.join(' '),class:klass})};
@@ -76,7 +76,7 @@ function render(){
  $('readX').textContent=fmt(x);$('readF').textContent=fmt(f(x));$('readD').textContent=fmt(d(x));
  const dx=d(x);$('readSign').textContent=dx>0.000001?'Возрастает':dx< -0.000001?'Убывает':'Стационарная точка';
  $('formula').textContent='f′(x) = 3x² − 3·('+fmt(a)+')';
- if(a>0){const t=fmt(Math.sqrt(a));$('conclusion').textContent='Слева от −'+t+' функция возрастает; между −'+t+' и '+t+' убывает; справа возрастает. Максимум при x = −'+t+', минимум при x = '+t+'.';$('intervals').textContent='f′: (+) на (−∞; −'+t+'), (−) на (−'+t+'; '+t+'), (+) на ('+t+'; +∞).'}
+ if(a>0){const root=Math.sqrt(a);const exact=Math.abs(root-Math.round(root))<1e-10;const boundary=exact?fmt(root):'√('+fmt(a)+')';const approx=exact?'':' (примерно '+fmt(root)+')';$('conclusion').textContent='Функция возрастает при x < −'+boundary+' и x > '+boundary+', убывает между ними. Максимум при x = −'+boundary+', минимум при x = '+boundary+'. Границы '+(exact?'точные.':'точные: ±'+boundary+approx+'.');$('intervals').textContent='f′(x) > 0 на (−∞; −'+boundary+') и ('+boundary+'; +∞); f′(x) < 0 на (−'+boundary+'; '+boundary+').'}
  else if(a===0){$('conclusion').textContent='В x = 0 производная равна 0, но знак остаётся положительным с обеих сторон. Экстремума нет.';$('intervals').textContent='f′(x) ≥ 0 при всех x; f′(0) = 0.';}
  else{$('conclusion').textContent='Производная положительна на всей числовой прямой. Функция строго возрастает, экстремумов нет.';$('intervals').textContent='f′(x) > 0 для любого x.'}
  plot($('plotF'),t=>f(t),t=>f(t,1,0),false);plot($('plotD'),t=>d(t),t=>d(t,1),true);
