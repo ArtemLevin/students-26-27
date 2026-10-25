@@ -244,6 +244,24 @@ try{
   await call('Emulation.setEmulatedMedia',{media:'screen'});
   await navigate('21.10.26-lab.html',390,844,true);
   await snapshot('lesson-21-lab-mobile-dark');
+  // 25 October: lesson and unit-circle laboratory regression.
+  await navigate('25.10.26.html',390,844,false);
+  assert.equal(await run("document.querySelector('h1').textContent.includes('Основы тригонометрии')"),true,'25 Oct lesson title');
+  assert.equal(await run("document.querySelectorAll('.exercise').length"),10,'25 Oct training count');
+  assert.equal(await run("document.querySelector('#values table tbody tr:nth-child(2)').textContent.includes('√3/2')"),true,'25 Oct sine/cosine table');
+  assert.equal(await run("document.querySelector('#equations').textContent.includes('α = πn')"),true,'25 Oct equation solutions');
+  await snapshot('lesson-25-mobile-light');
+  await navigate('25.10.26-lab.html#equations',390,844,false);
+  assert.equal(await run("document.getElementById('dOut').textContent"),'0°','equation deep link selects zero');
+  assert.equal(await run("document.getElementById('cosOut').textContent"),'1','lab cos(0)');
+  await run("document.querySelector('[data-angle=\\\"60\\\"]').click()");
+  assert.equal(await run("document.getElementById('cosOut').textContent"),'0,5','lab cos 60°');
+  assert.equal(await run("document.getElementById('sinOut').textContent"),'0,866','lab sin 60°');
+  await run("document.getElementById('minus').click()");
+  assert.equal(await run("document.getElementById('dOut').textContent"),'45°','lab minus 15°');
+  await run("document.getElementById('reset').click()");
+  assert.equal(await run("document.getElementById('dOut').textContent"),'60°','lab reset restores 60°');
+  await snapshot('lesson-25-lab-mobile-light');
   assert.deepEqual(jsErrors,[],'Browser JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Browser network failures');
   console.log('Mark review browser PASS: seven viewports x two pages x two themes, stepper, keyboard, persistence, print, links, anchors');
