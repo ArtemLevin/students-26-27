@@ -518,7 +518,13 @@
     const item = itemById.get(id);
     if (!item) return;
     const level = levelOf(item);
-    const evidence = Array.isArray(item.evidence) ? item.evidence : [];
+    // The atlas module adds lesson history asynchronously after this classic
+    // script takes its initial snapshots. Resolve evidence from the live
+    // catalog so newly published lessons also appear in dialog history.
+    const canonicalItem = DATA.groups.find(group => group.id === item.groupId)
+      ?.items.find(entry => entry.id === id);
+    const evidence = Array.isArray(canonicalItem?.evidence)
+      ? canonicalItem.evidence : (Array.isArray(item.evidence) ? item.evidence : []);
 
     els.dialogGroup.textContent = `${item.groupShort} · ${item.groupTitle}`;
     els.dialogTitle.textContent = item.title;

@@ -24,21 +24,33 @@ window.addEventListener('keydown',event=>{
 });
 window.matchMedia('(max-width:760px)').addEventListener?.('change',()=>setOpen(false));
 const latest=getLatestLesson(LESSONS);
-// Lesson history is evidence, not a mastery-level update. Keep the canonical
-// registry as the only source of dates and outcome-to-competency links.
-if(latest&&Array.isArray(latest.outcomes)){
-  const index=new Map((window.COMPETENCY_MAP_DATA?.groups||[]).flatMap(group=>(group.items||[]).map(item=>[item.id,item])));
-  const labels={touched:'Разбор',practiced:'Практика',assessed:'Диагностика'};
-  for(const outcome of latest.outcomes){
-    const item=index.get(outcome.competencyId);
+// Build the study history from the canonical registry, without changing
+// diagnostic levels. This runs after the map's classic script, so map dialogs
+// must read live evidence from COMPETENCY_MAP_DATA when opened.
+const competencyIndex=new Map((window.COMPETENCY_MAP_DATA?.groups||[])
+  .flatMap(group=>(group.items||[]).map(item=>[item.id,item])));
+const historyByCompetency=new Map();
+const evidenceLabels={touched:'Разбор',practiced:'Практика',assessed:'Диагностика'};
+for(const lesson of LESSONS){
+  if(!/^\d{2}\.\d{2}\.\d{2}\.html$/.test(String(lesson.href||'')))continue;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(String(lesson.date||'')))continue;
+  const day=lesson.date.slice(8,10)+'.'+lesson.date.slice(5,7)+'.'+lesson.date.slice(2,4);
+  for(const outcome of lesson.outcomes||[]){
+    if(!competencyIndex.has(outcome.competencyId))continue;
     const anchor=String(outcome.evidenceAnchor||'');
-    if(!item||!/^[a-zA-Z][\w-]*$/.test(anchor))continue;
-    const href=String(latest.href||'')+'#'+anchor;
-    if(!Array.isArray(item.evidence))item.evidence=[];
-    if(item.evidence.some(e=>e.href===href))continue;
-    const date=latest.date.slice(8,10)+'.'+latest.date.slice(5,7)+'.'+latest.date.slice(2,4);
-    item.evidence.unshift({date,text:(labels[outcome.relation]||'Занятие')+': '+(latest.navTitle||latest.title),href});
+    if(!/^[a-zA-Z][\w-]*$/.test(anchor))continue;
+    const href=lesson.href+'#'+anchor;
+    if(!historyByCompetency.has(outcome.competencyId))historyByCompetency.set(outcome.competencyId,[]);
+    const records=historyByCompetency.get(outcome.competencyId);
+    if(records.some(record=>record.href===href))continue;
+    records.push({date:day,text:(evidenceLabels[outcome.relation]||'Занятие')+': '+(lesson.navTitle||lesson.title),href});
   }
+}
+for(const [competencyId,history] of historyByCompetency){
+  const item=competencyIndex.get(competencyId);
+  const existing=Array.isArray(item.evidence)?item.evidence:[];
+  const known=new Set(history.map(record=>record.href));
+  item.evidence=[...history,...existing.filter(record=>!known.has(record.href))];
 }
 if(latest){
   find('latestLessonEyebrow').textContent='01 / Последнее занятие · '+formatLongDateRu(latest.date);
