@@ -5,6 +5,56 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-25",
+    "ktpRefs": [],
+    "href": "25.10.26.html",
+    "title": "Основы тригонометрии",
+    "navTitle": "Тригонометрия · основы",
+    "navSubtitle": "Марк Гукин · 25.10.2026: единичная окружность, координаты sin и cos, градусы и радианы, табличные значения, простейшие уравнения, ОТТ, формулы сложения и 10 заданий Пути А.",
+    "summary": "Марк Гукин · 25.10.2026: единичная окружность, координаты sin и cos, градусы и радианы, табличные значения, простейшие уравнения, ОТТ, формулы сложения и 10 заданий Пути А.",
+    "topics": [
+        "Единичная окружность, координаты точки и направление углов",
+        "Градусы и радианы",
+        "Табличные значения синуса и косинуса",
+        "Простейшие уравнения sin α = c и cos α = c",
+        "Основное тригонометрическое тождество",
+        "Формулы синуса и косинуса суммы и разности"
+    ],
+    "outcomes": [
+        {
+            "competencyId": "ege08_12",
+            "evidenceAnchor": "values",
+            "relation": "practiced"
+        },
+        {
+            "competencyId": "ege08_13",
+            "evidenceAnchor": "identity",
+            "relation": "practiced"
+        },
+        {
+            "competencyId": "ege07_09",
+            "evidenceAnchor": "equations",
+            "relation": "practiced"
+        },
+        {
+            "competencyId": "ege07_10",
+            "evidenceAnchor": "equations",
+            "relation": "practiced"
+        },
+        {
+            "competencyId": "ege14_13",
+            "evidenceAnchor": "equations",
+            "relation": "touched"
+        }
+    ],
+    "materials": {
+        "html": "25.10.26.html",
+        "lab": "25.10.26-lab.html",
+        "pdf": "../pdf_docs/25.10.26.pdf",
+        "tex": "../tex_docs/25.10.26.tex"
+    }
+},
+  {
     "date": "2026-10-21",
     "ktpRefs": [],
     "href": "21.10.26.html",
