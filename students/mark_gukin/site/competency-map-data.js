@@ -216,6 +216,22 @@ G.forEach(group=>group.items.forEach(item=>{
   item.material={href:'21.10.26.html#'+update.anchor,label:'Занятие 21.10.26 →'};
 }));
 
+// 25.10.2026: тригонометрия. Только знакомство и практика, без повышения уровня.
+const trigonometryEvidence2510={
+  ege08_12:{anchor:'values',relation:'practiced'},
+  ege08_13:{anchor:'identity',relation:'practiced'},
+  ege07_09:{anchor:'equations',relation:'practiced'},
+  ege07_10:{anchor:'equations',relation:'practiced'},
+  ege14_13:{anchor:'equations',relation:'touched'}
+};
+const trigonometryNote2510='25.10.2026: единичная окружность, значения синуса и косинуса, таблица углов, простейшие тригонометрические уравнения, тождество и формулы суммы/разности. На уроке было объяснение и совместная отработка; независимой диагностики для повышения mastery нет.';
+G.forEach(group=>group.items.forEach(item=>{
+  const lesson=trigonometryEvidence2510[item.id];
+  if(!lesson)return;
+  item.evidence=[...item.evidence,{date:'25.10.2026',text:trigonometryNote2510}];
+  item.material={href:'25.10.26.html#'+lesson.anchor,label:'Занятие 25.10.26 →'};
+}));
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'mark_gukin',
@@ -225,7 +241,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Используется проект КИМ ЕГЭ-2027 ФИПИ: 20 заданий, из них 13 с кратким и 7 с развёрнутым ответом. Проект опубликован 28.08.2026; до утверждения структура может быть уточнена.',
-    updated:'21.10.2026'
+    updated:'25.10.2026'
   },
   groups:G
 };
