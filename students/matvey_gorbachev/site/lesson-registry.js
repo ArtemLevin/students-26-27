@@ -5,6 +5,65 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-25",
+    "ktpRefs": [],
+    "href": "25.10.26.html",
+    "title": "Производная и графики",
+    "navTitle": "Производная и графики",
+    "navSubtitle": "Матвей Горбачёв. Производная и графики: знак производной, монотонность, экстремумы, чтение графиков f и f′, задачи ЕГЭ на целые абсциссы, суммы, длины интервалов и крайние значения. Путь А — 10 заданий.",
+    "summary": "Матвей Горбачёв. Производная и графики: знак производной, монотонность, экстремумы, чтение графиков f и f′, задачи ЕГЭ на целые абсциссы, суммы, длины интервалов и крайние значения. Путь А — 10 заданий.",
+    "topics": [
+      "различение графиков функции и её производной",
+      "знак производной и промежутки монотонности",
+      "стационарные точки, максимумы и минимумы",
+      "отбор целых абсцисс, их суммы и длины промежутков",
+      "наибольшее и наименьшее значения функции на отрезке"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "functions_05",
+        "evidenceAnchor": "sign",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_01",
+        "evidenceAnchor": "sign",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "calculus_10",
+        "evidenceAnchor": "extrema",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "calculus_11",
+        "evidenceAnchor": "sign",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_12",
+        "evidenceAnchor": "extrema",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_13",
+        "evidenceAnchor": "ends",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_14",
+        "evidenceAnchor": "practice",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "25.10.26.html",
+      "pdf": "../pdf_docs/25.10.26.pdf",
+      "tex": "../tex_docs/25.10.26.tex",
+      "lab": "25.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-10-22",
     "ktpRefs": [],
     "href": "22.10.26.html",

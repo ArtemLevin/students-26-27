@@ -49,7 +49,7 @@ try{
   assert.equal(await page.locator('#competencyMap').getAttribute('role'),'group','interactive map should expose child buttons to assistive technology');
   assert.equal(await page.locator('#competencyMap .radial-cell').first().getAttribute('role'),'button','map cell accessibility semantics');
   assert.ok(basic.focus,'focus control missing '+width);
-  assert.ok(basic.lesson==='Как устроен платёж','latest lesson wrong '+width);
+  assert.ok(basic.lesson==='Производная и графики','latest lesson wrong '+width);
   if(width===1440){
     const cell=page.locator('#competencyMap .radial-cell').first();
     await cell.focus();
@@ -106,7 +106,7 @@ try{
       titles:visible.filter(t=>t.querySelector('.archive-tile-title').scrollHeight>t.querySelector('.archive-tile-title').clientHeight+2).length};
   });
   assert.ok(archive.width<=archive.viewport+2,'archive overflow '+width+': '+JSON.stringify(archive));
-  assert.equal(archive.counts,11,'archive lesson count '+width);
+  assert.equal(archive.counts,12,'archive lesson count '+width);
   assert.equal(archive.months,2,'archive month groups '+width);
   assert.ok(Math.max(...archive.heights)-Math.min(...archive.heights)<=2,'unequal tiles '+width+': '+JSON.stringify(archive.heights));
   assert.equal(archive.clipped,0,'clipped archive card '+width);
@@ -115,7 +115,7 @@ try{
   await page.locator('#archiveSearch').fill('вклады');
   assert.equal(await page.locator('.archive-tile:visible').count(),2,'archive search failed '+width);
   await page.locator('#archiveSearch').fill('');
-  assert.equal(await page.locator('.archive-tile:visible').count(),11,'archive reset failed '+width);
+  assert.equal(await page.locator('.archive-tile:visible').count(),12,'archive reset failed '+width);
   await page.screenshot({path:path.join(artifactDir,'archive-'+width+'.png'),fullPage:true});
   await page.goto(origin+'18.10.26.html',{waitUntil:'networkidle'});
   await page.locator('.poster img').scrollIntoViewIfNeeded();
@@ -235,6 +235,41 @@ try{
   assert.ok((await page.locator('#insightText').textContent()).includes('2,16'),'new lab mixed calculation '+width);
   const newLabSize=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth}));
   assert.ok(newLabSize.width<=newLabSize.viewport+2,'22 Oct lab overflow '+width+': '+JSON.stringify(newLabSize));
+  // The 25 October derivative lesson and lab extend, rather than replace, 22 October materials.
+  await page.goto(origin+'25.10.26.html',{waitUntil:'networkidle'});
+  await page.locator('.book img').scrollIntoViewIfNeeded();
+  await page.locator('.book img').evaluate(image=>image.decode());
+  const lesson25=await page.evaluate(()=>({
+    width:document.documentElement.scrollWidth,viewport:innerWidth,
+    title:document.querySelector('h1')?.textContent.trim(),
+    inputs:document.querySelectorAll('.answer-field').length,
+    graphs:document.querySelectorAll('.graph svg .curve').length,
+    poster:document.querySelector('.book img')?.naturalWidth>0
+  }));
+  assert.ok(lesson25.width<=lesson25.viewport+2,'25 Oct lesson overflow '+width+': '+JSON.stringify(lesson25));
+  assert.equal(lesson25.title,'Производная и графики','25 Oct lesson title '+width);
+  assert.equal(lesson25.inputs,10,'25 Oct practice inputs '+width);
+  assert.ok(lesson25.graphs>=4,'25 Oct graphs missing '+width);
+  assert.ok(lesson25.poster,'25 Oct poster missing '+width);
+  await page.locator('#ans1').fill('1');
+  await page.locator('#ans3').fill('-1');
+  await page.locator('#checkAnswers').click();
+  assert.ok((await page.locator('#checkFeedback').textContent()).includes('Верно: 2 из 10'),'25 Oct answer checking '+width);
+  if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lesson-25-'+width+'.png'),fullPage:true});
+  await page.goto(origin+'25.10.26-lab.html?scenario=zero',{waitUntil:'networkidle'});
+  assert.equal(await page.locator('#valA').textContent(),'0','25 Oct lab deep link '+width);
+  assert.ok((await page.locator('#conclusion').textContent()).includes('Экстремума нет'),'stationary point without extremum '+width);
+  await page.locator('#scenario').selectOption('minus');
+  assert.equal(await page.locator('#valA').textContent(),'-1','25 Oct all-increasing scenario '+width);
+  await page.locator('#scenario').selectOption('one');
+  const derivativeBefore=await page.locator('#readD').textContent();
+  await page.locator('#paramC').evaluate(el=>{el.value='2';el.dispatchEvent(new Event('input',{bubbles:true}));});
+  assert.equal(await page.locator('#readD').textContent(),derivativeBefore,'vertical shift changed derivative '+width);
+  assert.equal(await page.locator('#readF').textContent(),'2','vertical shift did not move f '+width);
+  assert.equal(await page.locator('#plotD path.deriv').count(),1,'25 Oct derivative plot missing '+width);
+  const lab25=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth}));
+  assert.ok(lab25.width<=lab25.viewport+2,'25 Oct lab overflow '+width+': '+JSON.stringify(lab25));
+  if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lab-25-'+width+'.png'),fullPage:true});
   assert.deepEqual(failures,[],'browser console/page errors '+width+': '+failures.join('; '));
   console.log('PASS',width+'x'+height,JSON.stringify({map:basic.map,tiles:archive.counts,heights:archive.heights,theme:width===390?'dark':'light'}));
   completed++;await page.close();
