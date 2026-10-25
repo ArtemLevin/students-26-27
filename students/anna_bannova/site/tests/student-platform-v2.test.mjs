@@ -410,3 +410,32 @@ test('23.10.26 method of anchor points: two tasks, materials and evidence anchor
   assert.ok(script);
   assert.doesNotThrow(()=>new vm.Script(script));
 });
+
+
+test('25.10.26 reviewed graph models and accessible readouts preserve canonical evidence',()=>{
+  const lesson=read('25.10.26.html');
+  const metadata=readJson('data/lessons/2026-10-25.lesson.json');
+  const intent=readJson('data/lessons/2026-10-25.publication-intent.json');
+  assert.equal(metadata.date,'2026-10-25');
+  assert.equal(intent.lessonDate,metadata.date);
+  assert.deepEqual(metadata.ktpRefs,['ktp-004','ktp-005']);
+  assert.equal(metadata.outcomes.length,5);
+  assert.ok(metadata.outcomes.every(x=>x.masteryClaim===null),'no mastery inferred from guided exercises');
+  for(const o of metadata.outcomes)assert.ok(lesson.includes('id="'+o.evidenceAnchor+'"'),'missing anchor '+o.evidenceAnchor);
+  for(const model of ['line','parabola','hyperbola']){
+    assert.match(lesson,new RegExp('button data-model="'+model+'"'),'model selector '+model);
+  }
+  assert.match(lesson,/const mathViews=/,'trusted pre-defined MathML for model readouts');
+  assert.match(lesson,/xmlns=\\"http:\/\/www\.w3\.org\/1998\/Math\/MathML\\"/,'MathML is namespaced');
+  assert.match(lesson,/model-system'\)\.innerHTML=mathViews\[key\]\.system/);
+  assert.match(lesson,/model-result'\)\.innerHTML=mathViews\[key\]\.result/);
+  assert.match(lesson,/html\[data-theme\],:root\{--paper:#fff/,'print theme is light even when dark mode is active');
+  assert.doesNotMatch(lesson,/id="theme" aria-label="Переключить тему"/,'theme button uses its visible action name');
+  for(const href of ['../pdf_docs/25.10.26.pdf','../tex_docs/25.10.26.tex','../images/25.10.26.png']){
+    assert.ok(lesson.includes('href="'+href+'"'),'missing resource '+href);
+    assert.ok(fs.existsSync(path.resolve(site,href)),'broken resource '+href);
+  }
+  const script=lesson.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+  assert.ok(script);
+  assert.doesNotThrow(()=>new vm.Script(script,{filename:'25.10.26.html'}));
+});
