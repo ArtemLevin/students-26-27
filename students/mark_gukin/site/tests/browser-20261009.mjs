@@ -254,7 +254,7 @@ try{
   await navigate('25.10.26-lab.html#equations',390,844,false);
   assert.equal(await run("document.getElementById('dOut').textContent"),'0°','equation deep link selects zero');
   assert.equal(await run("document.getElementById('cosOut').textContent"),'1','lab cos(0)');
-  await run("document.querySelector('[data-angle=\\\"60\\\"]').click()");
+  await run("(()=>{const s=document.getElementById('deg');s.value='60';s.dispatchEvent(new Event('input',{bubbles:true}))})()");
   assert.equal(await run("document.getElementById('cosOut').textContent"),'0,5','lab cos 60°');
   assert.equal(await run("document.getElementById('sinOut').textContent"),'0,866','lab sin 60°');
   await run("document.getElementById('minus').click()");
