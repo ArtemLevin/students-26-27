@@ -1,4 +1,4 @@
-import {LESSONS,getLatestLesson,formatLongDateRu} from './lesson-registry.js?v=20261019-1';
+import {LESSONS,getLatestLesson,formatLongDateRu} from './lesson-registry.js?v=20261025-1';
 
 /* Presentation adapter only: preserves Matvey's canonical lessons and mastery. */
 const find=id=>document.getElementById(id);
@@ -24,6 +24,22 @@ window.addEventListener('keydown',event=>{
 });
 window.matchMedia('(max-width:760px)').addEventListener?.('change',()=>setOpen(false));
 const latest=getLatestLesson(LESSONS);
+// Lesson history is evidence, not a mastery-level update. Keep the canonical
+// registry as the only source of dates and outcome-to-competency links.
+if(latest&&Array.isArray(latest.outcomes)){
+  const index=new Map((window.COMPETENCY_MAP_DATA?.groups||[]).flatMap(group=>(group.items||[]).map(item=>[item.id,item])));
+  const labels={touched:'Разбор',practiced:'Практика',assessed:'Диагностика'};
+  for(const outcome of latest.outcomes){
+    const item=index.get(outcome.competencyId);
+    const anchor=String(outcome.evidenceAnchor||'');
+    if(!item||!/^[a-zA-Z][\w-]*$/.test(anchor))continue;
+    const href=String(latest.href||'')+'#'+anchor;
+    if(!Array.isArray(item.evidence))item.evidence=[];
+    if(item.evidence.some(e=>e.href===href))continue;
+    const date=latest.date.slice(8,10)+'.'+latest.date.slice(5,7)+'.'+latest.date.slice(2,4);
+    item.evidence.unshift({date,text:(labels[outcome.relation]||'Занятие')+': '+(latest.navTitle||latest.title),href});
+  }
+}
 if(latest){
   find('latestLessonEyebrow').textContent='01 / Последнее занятие · '+formatLongDateRu(latest.date);
   find('lesson-title').textContent=latest.navTitle||latest.title||'Занятие';
