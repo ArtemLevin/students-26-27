@@ -133,10 +133,10 @@ try{
   assert.equal(await run("getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()"),'#fff','print background from dark theme');
   await call('Emulation.setEmulatedMedia',{media:'screen'});
   await navigate('index.html',390,844,false);
-  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Логарифмические функции и уравнения')"),true,'latest lesson on home');
+  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Основы тригонометрии')"),true,'latest lesson on home');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"18.10.26.html\"]')!==null"),true,'previous lesson remains in journal');
-  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"21.10.26.html\"]')!==null"),true,'latest lesson appears in journal');
-  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"21.10.26-lab.html\"]')!==null"),true,'home links directly to log laboratory');
+  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"21.10.26.html\"]')!==null"),true,'previous logarithm lesson remains in journal');
+  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"25.10.26-lab.html\"]')!==null"),true,'home links directly to trigonometry laboratory');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('04.10.2026')"),true,'history retained');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('09.10.2026')"),true,'previous lesson retained');
   await snapshot('home-mobile-light');
