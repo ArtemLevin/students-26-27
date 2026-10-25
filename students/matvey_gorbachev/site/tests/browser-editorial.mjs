@@ -33,6 +33,7 @@ try{
   const failures=[];
   page.on('pageerror',error=>failures.push(error.message));
   page.on('console',message=>{if(message.type()==='error')failures.push(message.text());});
+  page.on('response',response=>{if(response.status()>=400&&response.url().startsWith(origin))failures.push('HTTP '+response.status()+' '+response.url());});
   await page.goto(origin+'index.html',{waitUntil:'networkidle'});
   await page.waitForFunction(()=>document.querySelectorAll('#competencyMap .radial-cell').length>0,{timeout:15000});
   const basic=await page.evaluate(()=>({
@@ -65,6 +66,13 @@ try{
     assert.ok(financeHistory.includes('18.10.26'),'18 Oct finance evidence missing');
     assert.ok(financeHistory.includes('22.10.26'),'22 Oct finance evidence missing');
     assert.equal(await page.locator('#dialogLevel').innerText().then(x=>x.trim().startsWith('0 / 4')),true,'lesson history must preserve diagnostic level');
+    await page.locator('#dialogClose').click();
+    const derivCell=page.locator('#competencyMap .radial-cell[data-id="calculus_12"]');
+    await derivCell.focus();await page.keyboard.press('Enter');
+    const derivHistory=await page.locator('#dialogHistory').innerText();
+    assert.ok(derivHistory.includes('25.10.26'),'25 October derivative evidence absent from live map dialog');
+    assert.equal(await page.locator('#dialogHistory a[href="25.10.26.html#extrema"]').count(),1,'derivative evidence must link to the correct section');
+    assert.ok(derivHistory.includes('25.10.26'),'derivative lesson history must be visible');
     await page.locator('#dialogClose').click();
     const repeatFilter=page.locator('.filter[data-filter="repeat"]');
     await repeatFilter.click();
@@ -255,13 +263,36 @@ try{
   await page.locator('#ans3').fill('-1');
   await page.locator('#checkAnswers').click();
   assert.ok((await page.locator('#checkFeedback').textContent()).includes('Верно: 2 из 10'),'25 Oct answer checking '+width);
-  if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lesson-25-'+width+'.png'),fullPage:true});
+  if(width===1440||width===390){
+    const before=await page.locator('html').getAttribute('data-theme');
+    await page.screenshot({path:path.join(artifactDir,'lesson-25-'+width+'.png'),fullPage:true});
+    await page.locator('#themeToggle').click();
+    assert.notEqual(await page.locator('html').getAttribute('data-theme'),before,'25 Oct theme toggle '+width);
+    await page.screenshot({path:path.join(artifactDir,'lesson-25-other-theme-'+width+'.png'),fullPage:true});
+    await page.locator('#themeToggle').click();
+    assert.equal(await page.locator('html').getAttribute('data-theme'),before,'25 Oct theme restore '+width);
+  }
   await page.goto(origin+'25.10.26-lab.html?scenario=zero',{waitUntil:'networkidle'});
   assert.equal(await page.locator('#valA').textContent(),'0','25 Oct lab deep link '+width);
   assert.ok((await page.locator('#conclusion').textContent()).includes('Экстремума нет'),'stationary point without extremum '+width);
   await page.locator('#scenario').selectOption('minus');
   assert.equal(await page.locator('#valA').textContent(),'-1','25 Oct all-increasing scenario '+width);
   await page.locator('#scenario').selectOption('one');
+  await page.locator('#paramA').evaluate(el=>{el.value='0.1';el.dispatchEvent(new Event('input',{bubbles:true}));});
+  assert.ok((await page.locator('#conclusion').textContent()).includes('√(0,1)'),'non-square a must show exact radical '+width);
+  assert.ok((await page.locator('#intervals').textContent()).includes('√(0,1)'),'interval endpoints must stay exact '+width);
+  await page.locator('#paramA').evaluate(el=>{el.value='2';el.dispatchEvent(new Event('input',{bubbles:true}));});
+  const visual=await page.locator('#plotF path.ghost').evaluate(path=>{
+    const values=Array.from(path.getAttribute('d').matchAll(/[ML](-?\\d+(?:\\.\\d+)?),(-?\\d+(?:\\.\\d+)?)/g),m=>Number(m[2]));
+    return {total:values.length,min:Math.min(...values),max:Math.max(...values)};
+  });
+  assert.ok(visual.total>200&&visual.min>=0&&visual.max<=240,'comparison curve clips in SVG '+width+': '+JSON.stringify(visual));
+  for(const value of ['-2','0','2']){await page.locator('#paramA').evaluate((el,v)=>{el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));},value);assert.ok(!(await page.locator('#readD').textContent()).includes('NaN'),'derivative range '+width);}
+  for(const value of ['-4','0','4']){await page.locator('#paramC').evaluate((el,v)=>{el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));},value);assert.ok(!(await page.locator('#readF').textContent()).includes('NaN'),'function range '+width);}
+  for(const value of ['-3','0','3']){await page.locator('#probeX').evaluate((el,v)=>{el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));},value);assert.ok(!(await page.locator('#readF').textContent()).includes('NaN'),'probe range '+width);}
+  await page.locator('#reset').click();
+  assert.equal(await page.locator('#valA').textContent(),'1','lab reset a '+width);
+  assert.equal(await page.locator('#valC').textContent(),'0','lab reset c '+width);
   const derivativeBefore=await page.locator('#readD').textContent();
   await page.locator('#paramC').evaluate(el=>{el.value='2';el.dispatchEvent(new Event('input',{bubbles:true}));});
   assert.equal(await page.locator('#readD').textContent(),derivativeBefore,'vertical shift changed derivative '+width);
@@ -269,7 +300,17 @@ try{
   assert.equal(await page.locator('#plotD path.deriv').count(),1,'25 Oct derivative plot missing '+width);
   const lab25=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth}));
   assert.ok(lab25.width<=lab25.viewport+2,'25 Oct lab overflow '+width+': '+JSON.stringify(lab25));
-  if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lab-25-'+width+'.png'),fullPage:true});
+  await page.emulateMedia({media:'print'});
+  assert.equal(await page.locator('.controls').evaluate(el=>getComputedStyle(el).display),'none','25 Oct laboratory print hides controls '+width);
+  await page.emulateMedia({media:'screen'});
+  if(width===1440||width===390){
+    const before=await page.locator('html').getAttribute('data-theme');
+    await page.screenshot({path:path.join(artifactDir,'lab-25-'+width+'.png'),fullPage:true});
+    await page.locator('#themeToggle').click();
+    assert.notEqual(await page.locator('html').getAttribute('data-theme'),before,'25 Oct lab theme toggle '+width);
+    await page.screenshot({path:path.join(artifactDir,'lab-25-other-theme-'+width+'.png'),fullPage:true});
+    await page.locator('#themeToggle').click();
+  }
   assert.deepEqual(failures,[],'browser console/page errors '+width+': '+failures.join('; '));
   console.log('PASS',width+'x'+height,JSON.stringify({map:basic.map,tiles:archive.counts,heights:archive.heights,theme:width===390?'dark':'light'}));
   completed++;await page.close();
