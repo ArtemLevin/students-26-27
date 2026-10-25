@@ -110,7 +110,7 @@ test('09.10.26 lesson and laboratory retain exact source exercise coverage and l
   const dates=[...registry.matchAll(/"date": "(\d{4}-\d{2}-\d{2})"/g)].map(x=>x[1]);
   const canonicalDates=fs.readdirSync(path.join(site,'data','lessons')).filter(name=>name.endsWith('.lesson.json')).map(name=>name.slice(0,10)).sort().reverse();
   assert.deepEqual(dates,canonicalDates);
-  assert.equal(dates[0],'2026-10-23');
+  assert.equal(dates[0],'2026-10-25');
   assert.match(lesson,/aria-controls="training"/);
   assert.match(lesson,/<mroot>/,'indexed radicals use mroot');
   assert.match(lesson,/<msqrt>/,'square roots use msqrt');
