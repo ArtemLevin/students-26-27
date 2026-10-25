@@ -7,6 +7,7 @@
 \usepackage{amsmath,amssymb,mathtools}
 \usepackage{array,booktabs,longtable}
 \usepackage{xcolor,hyperref,tikz}
+\usetikzlibrary{arrows.meta,calc,angles,quotes}
 \hypersetup{colorlinks=true,linkcolor=blue!55!black,urlcolor=blue!55!black}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt}
@@ -17,6 +18,8 @@
 \newcommand{\keyidea}[1]{\par\textcolor{blue!60!black}{\textbf{Ключевая идея:}} #1\par}
 \newcommand{\conclusion}[1]{\par\textcolor{teal!60!black}{\textbf{Итог:}} #1\par}
 \newcommand{\itemhead}[1]{\par\medskip\textbf{#1}\par}
+\newcommand{\vishead}[1]{\par\medskip{\color{blue!55!black}\textbf{Наглядная схема: #1}}\par\smallskip}
+\newcommand{\viscaption}[1]{\par\smallskip{\small\color{black!65}#1}\par\medskip}
 \begin{document}
 \thispagestyle{empty}
 \vspace*{49mm}
@@ -80,6 +83,36 @@
 Периметр сам по себе не задаёт высоту произвольной трапеции. Нужно воспользоваться дополнительным условием касания всех четырёх сторон окружности.
 У описанного четырёхугольника суммы противоположных сторон равны. Кроме того, в прямоугольной трапеции одна боковая сторона перпендикулярна основаниям и является высотой; наклонная боковая сторона не короче высоты.
 \keyidea{Сумма оснований равна сумме боковых сторон. Из периметра можно определить их сумму, затем найти высоту и радиус.}
+
+\vishead{прямоугольная трапеция и вписанная окружность}
+\begin{center}
+\begin{tikzpicture}[scale=.84,line cap=round]
+  % Размеры строго согласованы: высота 7, наклонная боковая сторона 9,
+  % сумма оснований 16 (единицы рисунка масштабированы в 5/7 раза).
+  \coordinate (A) at (0,0);
+  \coordinate (B) at (7.7346,0);
+  \coordinate (C) at (3.6940,5);
+  \coordinate (D) at (0,5);
+  \fill[blue!3] (A)--(B)--(C)--(D)--cycle;
+  \draw[thick,blue!65!black] (A)--(B)--(C)--(D)--cycle;
+  \draw[teal!70!black,thick] (2.5,2.5) circle (2.5);
+  \fill[teal!70!black] (2.5,2.5) circle (1.4pt);
+  \draw[teal!65!black,dashed] (2.5,2.5)--(2.5,0);
+  \draw[teal!65!black,-{Stealth[length=2.5mm]}] (2.5,2.5)--(4.27,4.27)
+    node[pos=.55,below left] {$r=3{,}5$};
+  \draw (0,.35)--(.35,.35)--(.35,0);
+  \node[below left] at (A) {$A$};
+  \node[below right] at (B) {$B$};
+  \node[above right] at (C) {$C$};
+  \node[above left] at (D) {$D$};
+  \node[left] at (0,2.5) {$h=7$};
+  \node[right] at (5.7,2.65) {$9$};
+  \node[below] at (3.9,0) {$a$};
+  \node[above] at (1.8,5) {$b$};
+\end{tikzpicture}
+\viscaption{Поскольку окружность касается обоих оснований, её диаметр равен высоте трапеции: $2r=h$.}
+\end{center}
+
 \itemhead{Исправление}
 Обозначим основания через $a,b$, боковые стороны через $c,d$.
 Начать следует с $a+b=c+d$ и $a+b+c+d=32$.
@@ -120,6 +153,34 @@ h=2r,\qquad r=\frac{7}{2}=3{,}5.
 \itemhead{Почему это важно}
 Полная поверхность прямой призмы состоит из двух равных оснований и боковой поверхности. Если посчитать только площадь треугольника, боковые грани останутся неучтёнными. Чтобы найти боковую поверхность, нужны периметр основания и высота призмы.
 \keyidea{Использовать теорему Пифагора и формулу $S_{\text{полн}}=2S_{\text{осн}}+P_{\text{осн}}h$.}
+
+\vishead{прямая треугольная призма}
+\begin{center}
+\begin{tikzpicture}[scale=.95,line join=round]
+  \coordinate (A) at (0,0); \coordinate (B) at (4.4,0);
+  \coordinate (C) at (1.65,1.55);
+  \coordinate (A1) at (0,3.15); \coordinate (B1) at (4.4,3.15);
+  \coordinate (C1) at (1.65,4.70);
+  \fill[blue!6] (A)--(B)--(B1)--(A1)--cycle;
+  \fill[teal!8] (A1)--(B1)--(C1)--cycle;
+  \draw[blue!70!black,thick] (A)--(B)--(B1)--(A1)--cycle;
+  \draw[blue!70!black,thick] (A1)--(C1)--(B1);
+  \draw[blue!70!black,thick] (B)--(C)--(C1);
+  \draw[blue!70!black,dashed] (A)--(C)--(C1);
+  \draw[blue!70!black,dashed] (A)--(A1);
+  \node[below left] at (A) {$A$}; \node[below right] at (B) {$B$};
+  \node[right] at (C) {$C$};
+  \node[left] at (A1) {$A_1$}; \node[right] at (B1) {$B_1$};
+  \node[above] at (C1) {$C_1$};
+  \node[below] at (2.1,0) {$3\sqrt3$};
+  \node[above left] at (.75,.82) {$4\sqrt3$};
+  \node[right] at (3.3,.88) {$5\sqrt3$};
+  \node[left] at (-.1,1.58) {$h=5\sqrt3$};
+  \node[font=\scriptsize,teal!60!black] at (.8,.2) {$\angle BAC=90^\circ$};
+\end{tikzpicture}
+\viscaption{Трёхмерная схема дана в проекции: треугольник основания прямоугольный, боковые рёбра перпендикулярны основаниям.}
+\end{center}
+
 \itemhead{Исправление}
 Сначала определить гипотенузу прямоугольного треугольника. По условию именно она равна высоте призмы.
 \itemhead{Полное правильное решение}
@@ -168,6 +229,21 @@ S_{\text{полн}}=2\cdot18+180=216.
 \itemhead{Почему простого сложения недостаточно}
 Для мишени, в которую стреляют дважды, событие «попасть хотя бы один раз» включает три возможных сочетания результатов. Удобнее рассмотреть противоположное событие: оба раза промахнуться. Затем вероятность поражения обеих мишеней при независимых выстрелах получают умножением вероятностей соответствующих попаданий.
 \keyidea{Для двух выстрелов вероятность хотя бы одного попадания равна единице минус вероятность двух промахов. Затем сравнить произведения для обоих вариантов.}
+
+\vishead{сравнение двух вариантов стрельбы}
+{\small\setlength{\tabcolsep}{4pt}
+\begin{center}
+\begin{tabular}{@{}p{38mm}p{42mm}p{39mm}p{29mm}@{}}
+\toprule
+\textbf{Вариант} & \textbf{Мишень с двумя выстрелами} & \textbf{Мишень с одним выстрелом} & \textbf{Обе мишени}\\
+\midrule
+Два по первой, один по второй & $1-0{,}5\cdot0{,}4=0{,}8$ & $0{,}6$ & $\boldsymbol{0{,}48}$\\
+Один по первой, два по второй & $1-0{,}4\cdot0{,}3=0{,}88$ & $0{,}5$ & $0{,}44$\\
+\bottomrule
+\end{tabular}
+\end{center}}
+\viscaption{Для двух выстрелов сначала считаем вероятность хотя бы одного попадания. Итог по двум мишеням --- произведение.}
+
 \itemhead{Исправление}
 Записать отдельно вероятность успеха для варианта с двумя выстрелами по первой мишени и варианта с двумя выстрелами по второй мишени.
 \itemhead{Полное правильное решение}
@@ -219,6 +295,23 @@ P_2=0{,}5\cdot0{,}88=0{,}44.
 \itemhead{Почему нужно учесть два исхода}
 Страховая компания получает стоимость полиса в любом случае, но только при страховом случае дополнительно выплачивает клиенту $100000$ рублей. Значит, доход при двух исходах отличается; математическое ожидание является взвешенным средним этих доходов.
 \keyidea{Ожидаемый доход равен цене полиса за вычетом ожидаемой страховой выплаты.}
+
+\vishead{исходы страхового договора}
+{\small\setlength{\tabcolsep}{4pt}
+\begin{center}
+\begin{tabular}{@{}p{45mm}p{24mm}p{38mm}p{43mm}@{}}
+\toprule
+\textbf{Исход} & \textbf{Вероятность} & \textbf{Доход компании} & \textbf{Вклад в ожидание}\\
+\midrule
+Выплаты нет & $0{,}99$ & $C$ & $0{,}99C$\\
+Выплата есть & $0{,}01$ & $C-100000$ & $0{,}01(C-100000)$\\
+\midrule
+\multicolumn{3}{@{}l}{\textbf{Сумма вкладов}} & $\boldsymbol{C-1000}$\\
+\bottomrule
+\end{tabular}
+\end{center}}
+\viscaption{Стоимость полиса $C$ поступает при любом исходе; страховая выплата возможна только во втором случае.}
+
 \itemhead{Исправление}
 Обозначить стоимость полиса через $C$ и составить уравнение ожидания дохода.
 \itemhead{Полное правильное решение}
@@ -258,6 +351,24 @@ $1{,}5$.
 \keyidea{Выбирать две узловые точки именно на нарисованной касательной и вычислять отношение вертикального изменения к горизонтальному.}
 \itemhead{Исправление}
 По клеткам касательная проходит, например, через точки $(-3;-2)$ и $(-1;-3)$. При движении вправо на $2$ клетки она опускается на $1$ клетку.
+
+\vishead{отрицательный наклон касательной}
+\begin{center}
+\begin{tikzpicture}[x=.85cm,y=.72cm]
+ \draw[step=1,gray!23,very thin] (-5,-5) grid (3,1);
+ \draw[-{Stealth},gray!75] (-5.35,0)--(3.35,0) node[right] {$x$};
+ \draw[-{Stealth},gray!75] (0,-5.25)--(0,1.4) node[above] {$y$};
+ \draw[blue!70!black,line width=1.15pt] (-5,-1)--(3,-5);
+ \fill[blue!70!black] (-3,-2) circle (2.2pt) node[above left] {$A(-3;-2)$};
+ \fill[blue!70!black] (-1,-3) circle (2.2pt) node[below right] {$B(-1;-3)$};
+ \draw[teal!75!black,dashed,thick] (-3,-2)--(-1,-2)--(-1,-3);
+ \node[above,teal!75!black] at (-2,-2) {$\Delta x=2$};
+ \node[right,teal!75!black] at (-1,-2.52) {$\Delta y=-1$};
+ \node[font=\small,blue!70!black] at (1.4,-4.35) {касательная};
+\end{tikzpicture}
+\viscaption{Опорные точки лежат на касательной. При перемещении вправо на $2$ клетки ордината уменьшается на $1$ клетку: $k=\Delta y/\Delta x=-1/2$.}
+\end{center}
+
 \itemhead{Полное правильное решение}
 Возьмём две точки касательной:
 \[
@@ -327,6 +438,27 @@ f(-5)&=0{,}4\cdot(-5)^2-0{,}8\cdot(-5)-2\\
 &=10+4-2=12.
 \end{aligned}
 \]
+
+\vishead{график найденной квадратичной функции}
+\begin{center}
+\begin{tikzpicture}[x=.82cm,y=.38cm]
+ \begin{scope}
+ \clip (-5.45,-3.45) rectangle (4.85,13.0);
+ \draw[step=1,gray!22,very thin] (-5.45,-3.45) grid (4.85,13);
+ \draw[-{Stealth},gray!75] (-5.45,0)--(4.65,0) node[right] {$x$};
+ \draw[-{Stealth},gray!75] (0,-3.45)--(0,12.65) node[above] {$y$};
+ \draw[blue!70!black,line width=1.4pt,samples=120,domain=-5.45:4.85,smooth,variable=\x]
+  plot (\x,{.4*\x*\x-.8*\x-2});
+ \end{scope}
+ \fill[teal!75!black] (0,-2) circle (2.8pt) node[below right] {$(0;-2)$};
+ \fill[teal!75!black] (2,-2) circle (2.8pt) node[below right] {$(2;-2)$};
+ \fill[blue!70!black] (-5,12) circle (2.8pt) node[right] {$(-5;12)$};
+ \draw[blue!70!black,dashed] (-5,0)--(-5,12)--(0,12);
+ \node[below] at (-5,0) {$-5$}; \node[left] at (0,12) {$12$};
+\end{tikzpicture}
+\viscaption{Точки $(0;-2)$ и $(2;-2)$ задают коэффициенты; значение $f(-5)=12$ отмечено на той же параболе.}
+\end{center}
+
 \itemhead{Проверка}
 Найденная функция принимает в узловых точках нужные значения: $f(0)=-2$ и $f(2)=1{,}6-1{,}6-2=-2$. Поэтому коэффициенты согласуются с графиком.
 \conclusion{Искомое значение равно $12$.}
@@ -470,6 +602,36 @@ f(-5)&=0{,}4\cdot(-5)^2-0{,}8\cdot(-5)-2\\
 \boxed{2\pi,\quad\frac{10\pi}{3},\quad\frac{14\pi}{3}}.
 \]
 
+
+\vishead{таблица отбора корней}
+{\small\setlength{\tabcolsep}{4pt}
+\begin{center}
+\begin{tabular}{@{}p{31mm}p{53mm}p{31mm}p{40mm}@{}}
+\toprule
+\textbf{Серия} & \textbf{Выражение для $x$} & \textbf{Подходящие параметры} & \textbf{Корни на отрезке}\\
+\midrule
+Первая & $\dfrac{2\pi}{3}+\dfrac{4\pi k}{3}$ & $k=1,2,3$ & $2\pi,\ \dfrac{10\pi}{3},\ \dfrac{14\pi}{3}$\\[2pt]
+Вторая & $2\pi+4\pi n$ & $n=0$ & $2\pi$ (повтор)\\
+\bottomrule
+\end{tabular}
+\end{center}}
+\smallskip
+\begin{center}
+\begin{tikzpicture}[x=1.75cm,y=1cm]
+ \draw[-{Stealth},gray!80,thick] (.72,0)--(5.25,0) node[right] {$x$};
+ \foreach \a in {1,2,3,4,5} {
+   \draw[gray!65] (\a,-.08)--(\a,.08);
+   \node[below] at (\a,-.1) {$\a\pi$};
+ }
+ \draw[blue!50!black,line width=2pt] (1,0)--(5,0);
+ \foreach \a in {2,3.3333333,4.6666667} {\fill[teal!70!black] (\a,0) circle (2.6pt);}
+ \node[above,teal!70!black] at (2,.16) {$2\pi$};
+ \node[above,teal!70!black] at (3.3333,.16) {$\frac{10\pi}{3}$};
+ \node[above,teal!70!black] at (4.6667,.16) {$\frac{14\pi}{3}$};
+\end{tikzpicture}
+\end{center}
+\viscaption{Закрашены только различные корни, принадлежащие отрезку $[\pi;5\pi]$; значение $2\pi$ совпало в обеих сериях.}
+
 \itemhead{Проверка}
 Каждый из найденных корней принадлежит отрезку $[\pi;5\pi]$:
 \[
@@ -585,6 +747,39 @@ z<\frac35\quad\text{или}\quad z>\frac{25}{9}.
 \[
 x\in(-3;0)\cup\left(0;\frac32\right).
 \]
+
+\vishead{знаки квадратного трёхчлена после замены}
+\begin{center}
+\begin{tikzpicture}[x=1.75cm,y=.9cm]
+ \draw[-{Stealth},gray!75,thick] (-.08,0)--(4.05,0) node[right] {$z$};
+ \draw[-{Stealth},gray!75] (0,-1.75)--(0,1.5) node[above] {$Q(z)$};
+ \begin{scope}
+ \clip (0,-1.73) rectangle (3.82,1.49);
+ \draw[blue!70!black,line width=1.3pt,domain=0:3.9,samples=100,smooth,variable=\z]
+   plot (\z,{.013*(45*\z*\z-152*\z+75)});
+ \end{scope}
+ \fill[teal!75!black] (.6,0) circle (2.4pt);
+ \fill[teal!75!black] (2.77778,0) circle (2.4pt);
+ \node[above left] at (.6,.02) {$\frac35$};
+ \node[above right] at (2.77778,.02) {$\frac{25}{9}$};
+ \node[font=\small,blue!65!black] at (1.7,-1.57) {$Q(z)<0$};
+ \node[font=\small,teal!75!black] at (3.46,.85) {$Q(z)>0$};
+\end{tikzpicture}
+\viscaption{Здесь $Q(z)=45z^2-152z+75$. Парабола направлена вверх, поэтому $Q(z)>0$ вне корней; отдельно учитываем $z>0$.}
+\end{center}
+\vishead{перевод условий обратно к переменной $x$}
+{\small\setlength{\tabcolsep}{5pt}
+\begin{center}
+\begin{tabular}{@{}p{40mm}p{47mm}p{65mm}@{}}
+\toprule
+\textbf{Условие для $z$} & \textbf{Неравенство для $3/x$} & \textbf{Промежуток $x$}\\
+\midrule
+$0<z<\frac35$ & $\frac3x<-1$ & $-3<x<0$\\[2pt]
+$z>\frac{25}{9}$ & $\frac3x>2$ & $0<x<\frac32$\\
+\bottomrule
+\end{tabular}
+\end{center}}
+
 \itemhead{Проверка}
 При $x=-1$ имеем $t=-3$, значит $z=(5/3)^{-3}<3/5$ и неравенство выполняется.
 При $x=1$ получаем $t=3$ и $z=(5/3)^3>25/9$, неравенство выполняется.
@@ -627,6 +822,36 @@ $180$ м.
 Если $l=u/v$, где $v\ne0$, то $l'=(u'v-uv')/v^2$.
 Порядок вычитания принципиален: он определяет знак производной слева и справа от критической точки. Без корректного знака нельзя обосновать, что точка даёт минимум, а не максимум.
 \keyidea{Сначала точно применить правило производной частного, затем проверить смену знака с минуса на плюс на физически допустимом промежутке $0<\alpha<\pi$.}
+
+\vishead{модель переправы и сложения скоростей}
+\begin{center}
+\begin{tikzpicture}[scale=.81,>=Stealth]
+  % Изображён оптимальный угол: cos(alpha)=-5/13, sin(alpha)=12/13;
+  % результирующий путь имеет отношение l/h=180/75=2.4.
+  \coordinate (A) at (2,0.75); \coordinate (B) at (2,3.75);
+  \coordinate (C) at (9.2,3.75);
+  \draw[gray!70,very thick] (.1,.75)--(10,.75);
+  \draw[gray!70,very thick] (.1,3.75)--(10,3.75);
+  \draw[dashed,gray!80] (A)--(B);
+  \draw[teal!75!black,line width=1.3pt,-{Stealth}] (A)--(C)
+    node[pos=.70,below right] {путь лодки};
+  \draw[red!65!black,thick,-{Stealth}] (A)--(1.38,2.24)
+    node[above left] {$\vec v$};
+  \draw[blue!75!black,thick,-{Stealth}] (A)--(6.2,.75)
+    node[pos=.62,below] {$\vec u$ (течение)};
+  \draw[orange!65!black,thick,-{Stealth}] (2.0,0.75) ++(.71,0) arc[start angle=0,end angle=112.62,radius=.71];
+  \node[orange!70!black] at (2.55,1.60) {$\alpha$};
+  \draw[blue!55!black,line width=1.2pt] (B)--(C);
+  \node[above] at (5.6,3.75) {$l=180\ \text{м}$};
+  \node[right] at (2,2.55) {$h=75\ \text{м}$};
+  \node[below left] at (A) {$A$};
+  \node[above left] at (B) {$B$};
+  \node[above right] at (C) {$C$};
+  \draw (2,3.49)--(2.26,3.49)--(2.26,3.75);
+\end{tikzpicture}
+\viscaption{Схема для найденного оптимального угла: красная стрелка --- собственная скорость лодки $\vec v$, синяя --- течение $\vec u$. Угол $\alpha$ отсчитывается от направления течения, поэтому $\cos\alpha=-5/13<0$ и лодка направлена немного против течения.}
+\end{center}
+
 \itemhead{Исправление}
 Пусть $u(\alpha)=195+75\cos\alpha$, $v(\alpha)=\sin\alpha$.
 Тогда $u'(\alpha)=-75\sin\alpha$ и $v'(\alpha)=\cos\alpha$.
@@ -670,6 +895,22 @@ l_{\min}
 =75\cdot\frac{12}{5}=180\ \text{м}.
 \end{aligned}
 \]
+
+\vishead{знаки производной и минимум}
+{\small\setlength{\tabcolsep}{5pt}
+\begin{center}
+\begin{tabular}{@{}p{40mm}p{42mm}p{31mm}p{37mm}@{}}
+\toprule
+\textbf{Угол} & \textbf{$75+195\cos\alpha$} & \textbf{$l'(\alpha)$} & \textbf{Поведение $l$}\\
+\midrule
+$0<\alpha<\alpha_0$ & $+$ & $-$ & убывает\\
+$\alpha=\alpha_0$ & $0$ & $0$ & минимум\\
+$\alpha_0<\alpha<\pi$ & $-$ & $+$ & возрастает\\
+\bottomrule
+\end{tabular}
+\end{center}}
+\viscaption{Здесь $\cos\alpha_0=-5/13$. Знак производной меняется с минуса на плюс --- это доказывает минимум.}
+
 \itemhead{Проверка}
 При приближении $\alpha$ к $0$ или к $\pi$ знаменатель $\sin\alpha$ стремится к нулю, а числитель остаётся положительным, поэтому $l$ неограниченно возрастает. Таким образом, найденный локальный минимум является наименьшим значением на всём допустимом промежутке.
 \conclusion{Наименьшее расстояние равно $180$ м; числовой ответ совпал с Вашим, однако знак производной необходимо исправить.}
