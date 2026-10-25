@@ -1,176 +1,228 @@
 export const LESSONS=[
-{
-  "date": "2026-10-23",
-  "ktpRefs": [
-    "ktp-004",
-    "ktp-005",
-    "ktp-032"
-  ],
-  "href": "23.10.26.html",
-  "title": "Метод опорных точек",
-  "navTitle": "Метод опорных точек",
-  "navSubtitle": "Занятие Анны Банновой 23.10.26: восстановление показательной функции по двум точкам, различие a^x+b и a^(x+b), решение систем, вычисление значения и поиск аргумента.",
-  "summary": "Занятие Анны Банновой 23.10.26: восстановление показательной функции по двум точкам, различие a^x+b и a^(x+b), решение систем, вычисление значения и поиск аргумента.",
-  "topics": [
-    "показательная функция по графику",
-    "метод опорных точек",
-    "восстановление коэффициентов a и b",
-    "нулевая, отрицательная и дробная степень",
-    "показательные уравнения",
-    "два тренировочных задания"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "func_13",
-      "evidenceAnchor": "worked",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "func_17",
-      "evidenceAnchor": "shift",
-      "relation": "touched"
-    },
-    {
-      "competencyId": "eq_09",
-      "evidenceAnchor": "questions",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "calc_09",
-      "evidenceAnchor": "principle",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "calc_10",
-      "evidenceAnchor": "shift",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "expr_15",
-      "evidenceAnchor": "training",
-      "relation": "touched"
-    }
-  ],
-  "materials": {
-    "html": "23.10.26.html",
-    "pdf": "../pdf_docs/23.10.26.pdf",
-    "tex": "../tex_docs/23.10.26.tex"
-  }
-},
   {
-  "date": "2026-10-16",
-  "ktpRefs": [
-    "ktp-029",
-    "ktp-030",
-    "ktp-032",
-    "ktp-035"
-  ],
-  "href": "16.10.26.html",
-  "title": "Степени → прикладные задачи",
-  "navTitle": "Степени → прикладные задачи",
-  "navSubtitle": "Занятие Анны Банновой 16.10.26: свойства степеней, действительные корни степенных уравнений, кубический зонд и радиоактивный распад.",
-  "summary": "Занятие Анны Банновой 16.10.26: свойства степеней, действительные корни степенных уравнений, кубический зонд и радиоактивный распад.",
-  "topics": [
-    "преобразование степенных выражений",
-    "дробные и отрицательные показатели",
-    "степенные уравнения и полнота корней",
-    "прикладные задачи на кубическую зависимость",
-    "показательная модель радиоактивного распада",
-    "пороговые неравенства"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "calc_09",
-      "evidenceAnchor": "powers",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "calc_10",
-      "evidenceAnchor": "powers",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "expr_12",
-      "evidenceAnchor": "powers",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "expr_13",
-      "evidenceAnchor": "equations",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "eq_09",
-      "evidenceAnchor": "decay",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "ineq_11",
-      "evidenceAnchor": "decay",
-      "relation": "touched"
+    "date": "2026-10-25",
+    "ktpRefs": [
+      "ktp-004",
+      "ktp-005"
+    ],
+    "href": "25.10.26.html",
+    "title": "Три графика. Один метод.",
+    "navTitle": "Три графика. Один метод.",
+    "navSubtitle": "Занятие Анны Банновой 25.10.26: метод опорных точек для прямой, параболы и гиперболы, восстановление коэффициентов по двум точкам, системы уравнений, знаки, дроби и скобки.",
+    "summary": "Занятие Анны Банновой 25.10.26: метод опорных точек для прямой, параболы и гиперболы, восстановление коэффициентов по двум точкам, системы уравнений, знаки, дроби и скобки.",
+    "topics": [
+      "метод опорных точек",
+      "линейная функция по двум точкам",
+      "квадратичная функция с известным старшим коэффициентом",
+      "гипербола k/x+a и ограничение x ≠ 0",
+      "решение системы подстановкой",
+      "знаки, скобки и дроби"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "func_08",
+        "evidenceAnchor": "line",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "func_09",
+        "evidenceAnchor": "parabola",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "func_10",
+        "evidenceAnchor": "hyperbola",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "func_01",
+        "evidenceAnchor": "hyperbola",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "expr_02",
+        "evidenceAnchor": "algebra",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "25.10.26.html",
+      "pdf": "../pdf_docs/25.10.26.pdf",
+      "tex": "../tex_docs/25.10.26.tex"
     }
-  ],
-  "materials": {
-    "html": "16.10.26.html",
-    "pdf": "../pdf_docs/16.10.26.pdf",
-    "tex": "../tex_docs/16.10.26.tex",
-    "lab": "16.10.26-lab.html"
-  }
-},
-{
-  "date": "2026-10-11",
-  "ktpRefs": [
-    "ktp-004",
-    "ktp-005",
-    "ktp-032"
-  ],
-  "href": "11.10.26.html",
-  "title": "График → формула",
-  "navTitle": "График → формула",
-  "navSubtitle": "Занятие Анны Банновой 11.10.26: показательные функции, метод узловых точек, восстановление формулы по графику, вычисление значений и решение показательных уравнений.",
-  "summary": "Занятие Анны Банновой 11.10.26: показательные функции, метод узловых точек, восстановление формулы по графику, вычисление значений и решение показательных уравнений.",
-  "topics": [
-    "показательная функция",
-    "узловые точки графика",
-    "восстановление коэффициентов по графику",
-    "значение функции в точке",
-    "показательные уравнения",
-    "нулевая, отрицательная и дробная степени"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "func_13",
-      "evidenceAnchor": "worked",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "func_17",
-      "evidenceAnchor": "models",
-      "relation": "touched"
-    },
-    {
-      "competencyId": "eq_09",
-      "evidenceAnchor": "shift",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "calc_09",
-      "evidenceAnchor": "review",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "expr_15",
-      "evidenceAnchor": "training",
-      "relation": "touched"
+  },
+  {
+    "date": "2026-10-23",
+    "ktpRefs": [
+      "ktp-004",
+      "ktp-005",
+      "ktp-032"
+    ],
+    "href": "23.10.26.html",
+    "title": "Метод опорных точек",
+    "navTitle": "Метод опорных точек",
+    "navSubtitle": "Занятие Анны Банновой 23.10.26: восстановление показательной функции по двум точкам, различие a^x+b и a^(x+b), решение систем, вычисление значения и поиск аргумента.",
+    "summary": "Занятие Анны Банновой 23.10.26: восстановление показательной функции по двум точкам, различие a^x+b и a^(x+b), решение систем, вычисление значения и поиск аргумента.",
+    "topics": [
+      "показательная функция по графику",
+      "метод опорных точек",
+      "восстановление коэффициентов a и b",
+      "нулевая, отрицательная и дробная степень",
+      "показательные уравнения",
+      "два тренировочных задания"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "func_13",
+        "evidenceAnchor": "worked",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "func_17",
+        "evidenceAnchor": "shift",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "eq_09",
+        "evidenceAnchor": "questions",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calc_09",
+        "evidenceAnchor": "principle",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calc_10",
+        "evidenceAnchor": "shift",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "expr_15",
+        "evidenceAnchor": "training",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "23.10.26.html",
+      "pdf": "../pdf_docs/23.10.26.pdf",
+      "tex": "../tex_docs/23.10.26.tex"
     }
-  ],
-  "materials": {
-    "html": "11.10.26.html",
-    "pdf": "../pdf_docs/11.10.26.pdf",
-    "tex": "../tex_docs/11.10.26.tex",
-    "lab": "11.10.26-lab.html"
-  }
-},
+  },
+  {
+    "date": "2026-10-16",
+    "ktpRefs": [
+      "ktp-029",
+      "ktp-030",
+      "ktp-032",
+      "ktp-035"
+    ],
+    "href": "16.10.26.html",
+    "title": "Степени → прикладные задачи",
+    "navTitle": "Степени → прикладные задачи",
+    "navSubtitle": "Занятие Анны Банновой 16.10.26: свойства степеней, действительные корни степенных уравнений, кубический зонд и радиоактивный распад.",
+    "summary": "Занятие Анны Банновой 16.10.26: свойства степеней, действительные корни степенных уравнений, кубический зонд и радиоактивный распад.",
+    "topics": [
+      "преобразование степенных выражений",
+      "дробные и отрицательные показатели",
+      "степенные уравнения и полнота корней",
+      "прикладные задачи на кубическую зависимость",
+      "показательная модель радиоактивного распада",
+      "пороговые неравенства"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "calc_09",
+        "evidenceAnchor": "powers",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calc_10",
+        "evidenceAnchor": "powers",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "expr_12",
+        "evidenceAnchor": "powers",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "expr_13",
+        "evidenceAnchor": "equations",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "eq_09",
+        "evidenceAnchor": "decay",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ineq_11",
+        "evidenceAnchor": "decay",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "16.10.26.html",
+      "pdf": "../pdf_docs/16.10.26.pdf",
+      "tex": "../tex_docs/16.10.26.tex",
+      "lab": "16.10.26-lab.html"
+    }
+  },
+  {
+    "date": "2026-10-11",
+    "ktpRefs": [
+      "ktp-004",
+      "ktp-005",
+      "ktp-032"
+    ],
+    "href": "11.10.26.html",
+    "title": "График → формула",
+    "navTitle": "График → формула",
+    "navSubtitle": "Занятие Анны Банновой 11.10.26: показательные функции, метод узловых точек, восстановление формулы по графику, вычисление значений и решение показательных уравнений.",
+    "summary": "Занятие Анны Банновой 11.10.26: показательные функции, метод узловых точек, восстановление формулы по графику, вычисление значений и решение показательных уравнений.",
+    "topics": [
+      "показательная функция",
+      "узловые точки графика",
+      "восстановление коэффициентов по графику",
+      "значение функции в точке",
+      "показательные уравнения",
+      "нулевая, отрицательная и дробная степени"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "func_13",
+        "evidenceAnchor": "worked",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "func_17",
+        "evidenceAnchor": "models",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "eq_09",
+        "evidenceAnchor": "shift",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calc_09",
+        "evidenceAnchor": "review",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "expr_15",
+        "evidenceAnchor": "training",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "11.10.26.html",
+      "pdf": "../pdf_docs/11.10.26.pdf",
+      "tex": "../tex_docs/11.10.26.tex",
+      "lab": "11.10.26-lab.html"
+    }
+  },
   {
     "date": "2026-10-09",
     "ktpRefs": [
