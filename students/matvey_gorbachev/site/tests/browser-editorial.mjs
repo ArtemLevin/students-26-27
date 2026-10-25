@@ -237,6 +237,8 @@ try{
   assert.ok(newLabSize.width<=newLabSize.viewport+2,'22 Oct lab overflow '+width+': '+JSON.stringify(newLabSize));
   // The 25 October derivative lesson and lab extend, rather than replace, 22 October materials.
   await page.goto(origin+'25.10.26.html',{waitUntil:'networkidle'});
+  await page.locator('.book img').scrollIntoViewIfNeeded();
+  await page.locator('.book img').evaluate(image=>image.decode());
   const lesson25=await page.evaluate(()=>({
     width:document.documentElement.scrollWidth,viewport:innerWidth,
     title:document.querySelector('h1')?.textContent.trim(),
