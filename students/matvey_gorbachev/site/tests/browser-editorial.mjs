@@ -283,7 +283,7 @@ try{
   assert.ok((await page.locator('#intervals').textContent()).includes('√(0,1)'),'interval endpoints must stay exact '+width);
   await page.locator('#paramA').evaluate(el=>{el.value='2';el.dispatchEvent(new Event('input',{bubbles:true}));});
   const visual=await page.locator('#plotF path.ghost').evaluate(path=>{
-    const values=Array.from(path.getAttribute('d').matchAll(/[ML](-?\\d+(?:\\.\\d+)?),(-?\\d+(?:\\.\\d+)?)/g),m=>Number(m[2]));
+    const values=Array.from(path.getAttribute('d').matchAll(/[ML](-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/g),m=>Number(m[2]));
     return {total:values.length,min:Math.min(...values),max:Math.max(...values)};
   });
   assert.ok(visual.total>200&&visual.min>=0&&visual.max<=240,'comparison curve clips in SVG '+width+': '+JSON.stringify(visual));
