@@ -3,6 +3,57 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-25",
+  "ktpRefs": [],
+  "href": "25.10.26.html",
+  "title": "Среднее, медиана и размах",
+  "navTitle": "Среднее, медиана, размах",
+  "navSubtitle": "Три характеристики числового ряда · примеры и 10 заданий",
+  "summary": "Статистика, 7 класс: упорядочивание данных, среднее арифметическое, медиана, размах, обратные задачи и влияние крайних значений. 10 заданий и интерактивный числовой ряд.",
+  "topics": [
+    "упорядоченный числовой ряд",
+    "среднее арифметическое и обратные задачи",
+    "медиана для чётного и нечётного количества значений",
+    "размах",
+    "влияние крайних значений на статистические характеристики"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "stats_5",
+      "evidenceAnchor": "mean",
+      "relation": "practiced",
+      "label": "Вычислять среднее арифметическое и решать обратные задачи",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "stats_6",
+      "evidenceAnchor": "median",
+      "relation": "practiced",
+      "label": "Находить медиану при чётном и нечётном числе наблюдений",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "stats_8",
+      "evidenceAnchor": "range",
+      "relation": "practiced",
+      "label": "Находить размах, в том числе для отрицательных чисел",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "stats_12",
+      "evidenceAnchor": "compare",
+      "relation": "touched",
+      "label": "Сравнивать среднее арифметическое и медиану разных рядов",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "25.10.26.html",
+    "pdf": "../pdf_docs/25.10.26.pdf",
+    "tex": "../tex_docs/25.10.26.tex"
+  }
+},
+{
   "date": "2026-10-24",
   "ktpRefs": [],
   "href": "24.10.26.html",
