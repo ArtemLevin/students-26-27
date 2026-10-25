@@ -68,7 +68,7 @@ function plot(svg,func,baseFunc,isDerivative){
  draw(func,isDerivative?'deriv':'base');
  mk('line',{x1:px(x),x2:px(x),y1:10,y2:H-14,class:'probe'});mk('circle',{cx:px(x),cy:py(func(x)),r:5.5,class:'point'});
  if(isDerivative&&a>=0){const points=a===0?[0]:[-Math.sqrt(a),Math.sqrt(a)];for(const t of points){if(t>=XMIN&&t<=XMAX)mk('circle',{cx:px(t),cy:py(0),r:4,fill:'var(--warm)',stroke:'var(--surface-raised)','stroke-width':1.5})}}
- svg.onpointerdown=e=>{const rect=svg.getBoundingClientRect();const local=(e.clientX-rect.left)*W/rect.width; x=Math.max(XMIN,Math.min(XMAX,XMIN+(local-P)/(W-2*P)*(XMAX-XMIN)));x=Math.round(x*20)/20;render()};
+ svg.onpointerdown=e=>{const rect=svg.getBoundingClientRect();const local=(e.clientX-rect.left)*W/rect.width; x=Math.max(XMIN,Math.min(XMAX,XMIN+(local-P)/(W-2*P)*(XMAX-XMIN)));x=Math.round(x*20)/20;xInput.value=String(x);render()};
 }
 function render(){
  a=+aInput.value;c=+cInput.value;x=+xInput.value;
@@ -87,6 +87,7 @@ selector.addEventListener('change',()=>{if(presets[selector.value]){const p=pres
 xInput.addEventListener('input',render);compare.addEventListener('change',render);
 $('reset').addEventListener('click',()=>{selector.value='one';aInput.value=1;cInput.value=0;xInput.value=0;compare.checked=true;render()});
 document.querySelectorAll('[data-pred]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-pred]').forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));$('predictionFeedback').textContent=btn.dataset.pred==='same'?'Верно. Слагаемое c исчезает при дифференцировании: f′(x) не зависит от вертикального сдвига.':'Проверьте формулу производной: сдвиг c не входит в выражение 3x² − 3a.'}));
+const requested=new URLSearchParams(location.search).get('scenario');if(requested&&presets[requested]){selector.value=requested;aInput.value=presets[requested][0];cInput.value=presets[requested][1];xInput.value=presets[requested][2]}
 render();
 })();
 </script>
