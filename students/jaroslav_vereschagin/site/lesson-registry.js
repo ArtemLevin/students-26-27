@@ -5,6 +5,71 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-26",
+  "ktpRefs": [],
+  "href": "26.10.26.html",
+  "title": "Метод интервалов: корень, знак, интервал.",
+  "navTitle": "Метод интервалов: кратные корни и рациональные неравенства",
+  "navSubtitle": "26.10.26 · Метод интервалов, кратность корней, нули знаменателя, строгие знаки, t=x² и 10 заданий Пути А",
+  "summary": "26.10.26. Метод интервалов и рациональные неравенства: критические точки, кратность корней, сокращение с сохранением ОДЗ, замена t=x², десять задач Пути А.",
+  "topics": [
+    "Метод интервалов",
+    "Рациональные неравенства и ОДЗ",
+    "Нули числителя и знаменателя",
+    "Кратность корней и знаки",
+    "Сокращение дроби с сохранением ограничений",
+    "Замена t = x² и обратная замена"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_20_2_1",
+      "evidenceAnchor": "method",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_2",
+      "evidenceAnchor": "boundaries",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_3",
+      "evidenceAnchor": "method",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_4",
+      "evidenceAnchor": "multiplicity",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_5",
+      "evidenceAnchor": "errors",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_13_2_3",
+      "evidenceAnchor": "multiplicity",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_13_2_4",
+      "evidenceAnchor": "boundaries",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_8_3_2",
+      "evidenceAnchor": "substitution",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "26.10.26.html",
+    "pdf": "../pdf_docs/26.10.26.pdf",
+    "tex": "../tex_docs/26.10.26.tex",
+    "lab": "26.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-23",
   "ktpRefs": [],
   "href": "23.10.26.html",

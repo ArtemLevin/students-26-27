@@ -66,7 +66,7 @@
     for (const [key, label] of [['lab','Лаборатория'],['pdf','PDF'],['tex','TeX'],['review','Ревью']]) {
       if (validHref(lesson.materials?.[key])) resources.append(createLink(lesson.materials[key], label));
     }
-    if (['2026-10-15','2026-10-19'].includes(lesson.date)) resources.append(createLink('../images/' + formatDate(lesson.date) + '.png', 'Постер'));
+    if (['2026-10-15','2026-10-19','2026-10-23','2026-10-26'].includes(lesson.date)) resources.append(createLink('../images/' + formatDate(lesson.date) + '.png', 'Постер'));
     const results = $('lessonOutcomes');
     results.replaceChildren();
     const heading = document.createElement('p'); heading.className='editorial-kicker';
