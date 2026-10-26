@@ -1,0 +1,39 @@
+name: Volodia math lesson temporary publication
+on:
+  push:
+    branches:
+      - feat/volodia-math-lesson-261026
+    paths:
+      - .github/workflows/volodia-math-publish-temp.yml
+      - students/volodia_khachaturian_math/site/26.10.26.html
+jobs:
+  publish-canonical:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Transactional publication dry run
+        run: |
+          node scripts/publish-lesson.mjs volodia_khachaturian_math 26.10.26 \
+            --intent students/volodia_khachaturian_math/site/data/lesson-publication-intents/2026-10-26.json \
+            --dry-run
+      - name: Publish and verify Student Platform v2
+        run: |
+          node scripts/publish-lesson.mjs volodia_khachaturian_math 26.10.26 \
+            --intent students/volodia_khachaturian_math/site/data/lesson-publication-intents/2026-10-26.json
+      - name: Commit canonical publisher outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/volodia_khachaturian_math/site/lesson-registry.js
+          git add students/volodia_khachaturian_math/site/data
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish Volodia mathematics lesson through Student Platform v2"
+            git push origin HEAD:feat/volodia-math-lesson-261026
+          fi
