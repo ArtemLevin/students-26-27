@@ -1,6 +1,67 @@
 /* 26.10.26 · Worksheet-based lesson interaction; never writes canonical mastery. */
 'use strict';
 const $=id=>document.getElementById(id);
+const MATH_NS='http://www.w3.org/1998/Math/MathML';
+const mathNode=(tag,content='')=>{
+  const node=document.createElementNS(MATH_NS,tag);
+  if(content)node.textContent=content;
+  return node;
+};
+function mathRow(expression){
+  const row=mathNode('mrow'),tokens=String(expression).match(/\d+(?:[.,]\d+)?|[A-Za-zА-Яа-яЁё][₀₁₂₃₄₅₆₇₈₉]*[²³]?|[^\s]/gu)||[];
+  for(const token of tokens){
+    let node;
+    const superscript=token.match(/^([A-Za-zА-Яа-яЁё])([²³])$/u);
+    const subscript=token.match(/^([A-Za-zА-Яа-яЁё])([₀₁₂₃₄₅₆₇₈₉]+)$/u);
+    if(superscript){
+      node=mathNode('msup');node.append(mathNode('mi',superscript[1]),mathNode('mn',superscript[2]==='²'?'2':'3'));
+    }else if(subscript){
+      node=mathNode('msub');
+      const chars='₀₁₂₃₄₅₆₇₈₉';
+      node.append(mathNode('mi',subscript[1]),mathNode('mn',Array.from(subscript[2]).map(c=>chars.indexOf(c)).join('')));
+    }else if(/^\d+(?:[.,]\d+)?$/u.test(token)){node=mathNode('mn',token);}
+    else if(/^[A-Za-zА-Яа-яЁё]$/u.test(token)){node=mathNode('mi',token);}
+    else node=mathNode('mo',token);
+    row.append(node);
+  }
+  return row;
+}
+function mathML(expression,label=expression){
+  const math=mathNode('math');math.setAttribute('aria-label',String(label));
+  math.append(mathRow(expression));return math;
+}
+function convertStaticMath(){
+  document.querySelectorAll('.frac').forEach(frac=>{
+    const [top,bottom]=Array.from(frac.children);
+    if(!top||!bottom)return;
+    const math=mathNode('math'),mfrac=mathNode('mfrac');
+    math.setAttribute('aria-label',top.textContent+' делённое на '+bottom.textContent);
+    mfrac.append(mathRow(top.textContent),mathRow(bottom.textContent));
+    math.append(mfrac);frac.replaceWith(math);
+  });
+  document.querySelectorAll('.inline-math,.math-display,.math-spot,.solution-strip code,.result-line strong,.hero-math-small').forEach(host=>{
+    if(host.children.length===0&&host.textContent.trim()){
+      const expression=host.textContent.trim();
+      host.replaceChildren(mathML(expression));
+    }
+  });
+}
+function appendFormattedQuestion(host,question){
+  const patterns=[
+    /^(Решите уравнение\s+)(.+)$/u,
+    /^(Найдите x из пропорции\s+)(.+)$/u,
+    /^(Найдите (?:вычитаемое|множитель|делимое|делитель) [ab]:\s+)(.+)$/u
+  ];
+  for(const pattern of patterns){
+    const found=question.match(pattern);
+    if(found){
+      host.replaceChildren(document.createTextNode(found[1]),mathML(found[2].replace(/\.$/u,'')));
+      return;
+    }
+  }
+  host.textContent=question;
+}
+
 const methodTexts=[
   {tag:'СПОСОБ 01 · ПЕРЕВОРОТ ОБЕИХ ДРОБЕЙ',text:'(4x + 1)/3 = 1/10 → 4x + 1 = 3/10'},
   {tag:'СПОСОБ 02 · НАХОДИМ ЗНАМЕНАТЕЛЬ',text:'a/b = c  ⇒  b = a/c; поэтому 4x + 1 = 3/10'},
@@ -98,7 +159,7 @@ function make(tag,cl,txt=''){const n=document.createElement(tag);if(cl)n.classNa
 function showMethod(index){
   const entry=methodTexts[index],output=$('methodOutput');
   if(!entry||!output)return;
-  output.replaceChildren(make('p','index-label',entry.tag),make('p','math-display',entry.text));
+  const formula=make('p','math-display');formula.append(mathML(entry.text));output.replaceChildren(make('p','index-label',entry.tag),formula);
   $('methodTabs').querySelectorAll('button[data-method]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.method)===index)));
 }
 function progress(){
@@ -113,11 +174,11 @@ function showDay(index){
     const item=make('li','exercise');
     item.dataset.wups=String(i>=7);
     const inside=make('div','exercise-body');
-    inside.append(make('div','exercise-text',question));
+    const questionNode=make('div','exercise-text');appendFormattedQuestion(questionNode,question);inside.append(questionNode);
     const actions=make('div','exercise-actions');
     const reveal=make('button','answer-toggle','Показать ответ');
     reveal.type='button';reveal.setAttribute('aria-expanded','false');
-    const answerHost=make('div','answer',answer);answerHost.hidden=true;
+    const answerHost=make('div','answer');answerHost.append(mathML(answer));answerHost.hidden=true;
     answerHost.id='answer-'+index+'-'+i;
     reveal.setAttribute('aria-controls',answerHost.id);
     reveal.addEventListener('click',()=>{
@@ -160,6 +221,6 @@ function start(){
     for(let i=0;i<10;i++)completed.delete(currentDay+':'+i);
     showDay(currentDay);
   });
-  showMethod(0);showDay(0);
+  convertStaticMath();showMethod(0);showDay(0);
 }
 start();
