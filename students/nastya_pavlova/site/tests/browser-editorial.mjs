@@ -86,7 +86,7 @@ try{
   await sleep(180);
   const geometry=await evaluate("({documentWidth:document.documentElement.scrollWidth,viewportWidth:document.documentElement.clientWidth,screen:innerWidth})");
   if(geometry.documentWidth>geometry.viewportWidth+2){
-   const offenders=await evaluate("([...document.querySelectorAll('body *')].filter(x=>{const r=x.getBoundingClientRect();return r.right>innerWidth+2||r.left< -2}).slice(0,14).map(x=>({tag:x.tagName,selector:x.id||x.className?.baseVal||x.className,left:Math.round(x.getBoundingClientRect().left),right:Math.round(x.getBoundingClientRect().right)})))");
+   const offenders=await evaluate("([...document.querySelectorAll('body *')].filter(x=>{const r=x.getBoundingClientRect();return r.right>document.documentElement.clientWidth+2||r.left< -2}).slice(0,14).map(x=>({tag:x.tagName,selector:x.id||x.className?.baseVal||x.className,left:Math.round(x.getBoundingClientRect().left),right:Math.round(x.getBoundingClientRect().right)})))");
    throw Error(name+' '+width+' viewport overflow '+JSON.stringify({geometry,offenders}));
   }
   return geometry;
