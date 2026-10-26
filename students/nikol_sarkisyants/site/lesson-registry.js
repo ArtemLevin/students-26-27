@@ -5,6 +5,59 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-26",
+  "ktpRefs": [],
+  "href": "26.10.26.html",
+  "title": "Показательные неравенства",
+  "navTitle": "Показательные неравенства",
+  "navSubtitle": "две замены · k>0 · интервалы · обратная подстановка",
+  "summary": "Николь Саркисьянц, 26.10.2026: показательные неравенства, две замены, положительные делители, метод интервалов и обратная подстановка; упражнения для ЕГЭ.",
+  "topics": [
+    "показательные неравенства",
+    "двойная замена",
+    "квадратное неравенство с k>0",
+    "метод интервалов",
+    "обратная подстановка",
+    "рациональные неравенства"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t15_exp",
+      "evidenceAnchor": "rules",
+      "relation": "practiced",
+      "label": "Показательные неравенства",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t15_exp_rational",
+      "evidenceAnchor": "methods",
+      "relation": "practiced",
+      "label": "Сведение к квадратному неравенству",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t15_rational",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced",
+      "label": "Метод интервалов и ОДЗ",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_power_actions",
+      "evidenceAnchor": "rules",
+      "relation": "practiced",
+      "label": "Преобразования степеней",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "26.10.26.html",
+    "lab": "26.10.26-lab.html",
+    "pdf": "../pdf_docs/26.10.26.pdf",
+    "tex": "../tex_docs/26.10.26.tex"
+  }
+},
+{
   "date": "2026-10-23",
   "ktpRefs": [],
   "href": "23.10.26.html",
