@@ -110,7 +110,7 @@ test('09.10.26 lesson and laboratory retain exact source exercise coverage and l
   const dates=[...registry.matchAll(/"date": "(\d{4}-\d{2}-\d{2})"/g)].map(x=>x[1]);
   const canonicalDates=fs.readdirSync(path.join(site,'data','lessons')).filter(name=>name.endsWith('.lesson.json')).map(name=>name.slice(0,10)).sort().reverse();
   assert.deepEqual(dates,canonicalDates);
-  assert.equal(dates[0],'2026-10-25');
+  assert.equal(dates[0],canonicalDates[0],'most recent lesson follows canonical metadata');
   assert.match(lesson,/aria-controls="training"/);
   assert.match(lesson,/<mroot>/,'indexed radicals use mroot');
   assert.match(lesson,/<msqrt>/,'square roots use msqrt');
@@ -438,4 +438,29 @@ test('25.10.26 reviewed graph models and accessible readouts preserve canonical 
   const script=lesson.match(/<script>([\s\S]*?)<\/script>/)?.[1];
   assert.ok(script);
   assert.doesNotThrow(()=>new vm.Script(script,{filename:'25.10.26.html'}));
+});
+
+
+test('26.10.26 applied models: sources, answers and evidence anchors',()=>{
+  const lesson=read('26.10.26.html');
+  const metadata=readJson('data/lessons/2026-10-26.lesson.json');
+  const intent=readJson('data/lessons/2026-10-26.publication-intent.json');
+  assert.match(lesson,/Три модели\. Один маршрут/);
+  assert.equal([...lesson.matchAll(/class="task"/g)].length,10);
+  assert.equal([...lesson.matchAll(/class="detail solution"/g)].length,10);
+  assert.deepEqual(metadata.ktpRefs,['ktp-002','ktp-003']);
+  assert.equal(metadata.outcomes.length,7);
+  const ids=[...lesson.matchAll(/\bid="([^"]+)"/g)].map(match=>match[1]);
+  assert.equal(new Set(ids).size,ids.length,'no duplicate evidence IDs');
+  for(const outcome of metadata.outcomes){
+    assert.ok(ids.includes(outcome.evidenceAnchor),'missing competency anchor '+outcome.evidenceAnchor);
+    assert.equal(outcome.masteryClaim,null,'do not inflate unassessed mastery');
+  }
+  assert.equal(intent.lessonDate,'2026-10-26');
+  for(const href of ['../pdf_docs/26.10.26.pdf','../tex_docs/26.10.26.tex','../images/26.10.26.png']){
+    assert.ok(lesson.includes('href="'+href+'"'),'missing material link '+href);
+    assert.ok(fs.existsSync(path.resolve(site,href)),'missing file '+href);
+  }
+  assert.match(lesson,/prefers-reduced-motion/);
+  assert.match(lesson,/aria-pressed/);
 });
