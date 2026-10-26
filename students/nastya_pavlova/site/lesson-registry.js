@@ -5,6 +5,94 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-26",
+  "ktpRefs": [],
+  "href": "26.10.26.html",
+  "title": "Дифференцированная схема кредитования",
+  "navTitle": "Дифференцированная схема кредитования",
+  "navSubtitle": "Анастасия Павлова · 26 октября: дифференцированный кредит, таблица погашения, сумма платежей, ставка и ограничения на платежи.",
+  "summary": "Равные части основного долга и убывающие платежи; общая сумма выплат, переплата, поиск ставки и система ограничений «не более» и «не менее».",
+  "topics": [
+    "Дифференцированное погашение тела кредита",
+    "Начисление процентов на текущий остаток",
+    "Таблица движения долга",
+    "Формулы суммы платежей и переплаты",
+    "Поиск процентной ставки и срока",
+    "Система ограничений на первый и последний платежи"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "fin_06",
+      "evidenceAnchor": "scheme",
+      "relation": "practiced",
+      "label": "Дифференцированные платежи",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_08",
+      "evidenceAnchor": "table",
+      "relation": "practiced",
+      "label": "Равномерное уменьшение долга",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_09",
+      "evidenceAnchor": "table",
+      "relation": "practiced",
+      "label": "Части кредитного платежа",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_11",
+      "evidenceAnchor": "table",
+      "relation": "practiced",
+      "label": "Таблица движения долга",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_12",
+      "evidenceAnchor": "formulas",
+      "relation": "touched",
+      "label": "Арифметическая прогрессия платежей",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "fin_14",
+      "evidenceAnchor": "formulas",
+      "relation": "practiced",
+      "label": "Общая сумма платежей",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_15",
+      "evidenceAnchor": "formulas",
+      "relation": "practiced",
+      "label": "Переплата по кредиту",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_16",
+      "evidenceAnchor": "rate",
+      "relation": "practiced",
+      "label": "Вычисление процентной ставки",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_18",
+      "evidenceAnchor": "bounds",
+      "relation": "practiced",
+      "label": "Ограничения на величину платежа",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "26.10.26.html",
+    "pdf": "../pdf_docs/26.10.26.pdf",
+    "tex": "../tex_docs/26.10.26.tex",
+    "lab": "26.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-22",
   "ktpRefs": [],
   "href": "22.10.26.html",
