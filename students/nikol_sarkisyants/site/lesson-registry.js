@@ -52,6 +52,7 @@ export const LESSONS=[
   ],
   "materials": {
     "html": "26.10.26.html",
+    "lab": "26.10.26-lab.html",
     "pdf": "../pdf_docs/26.10.26.pdf",
     "tex": "../tex_docs/26.10.26.tex"
   }
