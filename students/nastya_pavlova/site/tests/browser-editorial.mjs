@@ -5,6 +5,7 @@ import path from 'node:path';
 import http from 'node:http';
 import {spawn,spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {LESSONS} from '../lesson-registry.js';
 
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../../../');
 const executable=['google-chrome','google-chrome-stable','chromium','chromium-browser']
@@ -75,6 +76,8 @@ try{
      "document.querySelector('#lessonTitle')?.textContent!=='Загрузка занятия…'":
      name==='archive.html'?"document.querySelectorAll('.archive-tile').length>0":
      name==='22.10.26-lab.html'?"document.querySelector('#payment')?.textContent.length>0":
+     name==='26.10.26-lab.html'?"document.querySelector('#firstMetric')?.textContent!=='—'":
+     name==='26.10.26.html'?"!!document.querySelector('.cover h1')":
      name.endsWith('-lab.html')?"document.querySelector('#finalSum')?.textContent.length>0":
      "!!document.querySelector('#pageTitle')";
    const ready=await evaluate(expression);
@@ -83,7 +86,7 @@ try{
   await sleep(180);
   const geometry=await evaluate("({documentWidth:document.documentElement.scrollWidth,viewportWidth:document.documentElement.clientWidth,screen:innerWidth})");
   if(geometry.documentWidth>geometry.viewportWidth+2){
-   const offenders=await evaluate("([...document.querySelectorAll('body *')].filter(x=>{const r=x.getBoundingClientRect();return r.right>innerWidth+2||r.left< -2}).slice(0,14).map(x=>({tag:x.tagName,selector:x.id||x.className?.baseVal||x.className,left:Math.round(x.getBoundingClientRect().left),right:Math.round(x.getBoundingClientRect().right)})))");
+   const offenders=await evaluate("([...document.querySelectorAll('body *')].filter(x=>{const r=x.getBoundingClientRect();return r.right>document.documentElement.clientWidth+2||r.left< -2}).slice(0,14).map(x=>({tag:x.tagName,selector:x.id||x.className?.baseVal||x.className,left:Math.round(x.getBoundingClientRect().left),right:Math.round(x.getBoundingClientRect().right)})))");
    throw Error(name+' '+width+' viewport overflow '+JSON.stringify({geometry,offenders}));
   }
   return geometry;
@@ -102,7 +105,7 @@ try{
    }else{
     const state=await evaluate("({map:!!document.querySelector('#radialMap'),practice:!!document.querySelector('#practiceRoot'),lesson:document.querySelector('#lessonTitle')?.textContent,ids:document.querySelectorAll('#practiceSection').length})");
     assert.ok(state.map&&state.practice&&state.ids===1);
-    assert.match(state.lesson,/Вклады и кредиты/);
+    assert.equal(state.lesson,LESSONS[0].title,'Latest lesson title must follow the registry');
    }
    // Both themes must leave content accessible, without horizontal scroll.
    if(page==='archive.html')await evaluate("document.querySelector('#archiveTheme').click()");
@@ -139,6 +142,25 @@ try{
   assert.deepEqual(presets,{two:'121000',four:'146410',reset:'146410',rows:4},'Annuity scenario and reset parity');
   await evaluate("document.querySelector('#themeToggle').click()");
   assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'22 October lab dark overflow at '+w);
+ }
+
+ // Newly published differentiated-credit lesson must render on desktop and mobile.
+ for(const [w,h] of [[1440,900],[390,844]]){
+  await navigate('26.10.26.html',w,h);
+  const lesson=await evaluate("({heading:document.querySelector('.cover h1')?.textContent,chapters:document.querySelectorAll('.chapter').length,exercises:document.querySelectorAll('.practice details').length,lab:[...document.querySelectorAll('a')].some(a=>a.getAttribute('href')==='26.10.26-lab.html')})");
+  assert.match(lesson.heading,/Когда платёж/);
+  assert.equal(lesson.chapters,7);
+  assert.equal(lesson.exercises,10);
+  assert.equal(lesson.lab,true);
+  await evaluate("document.querySelector('#themeToggle').click()");
+  assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'26 October lesson dark overflow at '+w);
+  await navigate('26.10.26-lab.html',w,h);
+  const initial=await evaluate("({rows:document.querySelectorAll('#scheduleRows tr').length,total:document.querySelector('#totalMetric')?.textContent,first:document.querySelector('#firstMetric')?.textContent,last:document.querySelector('#lastMetric')?.textContent})");
+  assert.deepEqual(initial,{rows:3,total:'144',first:'52',last:'44'},'Differentiated initial schedule');
+  const scenarios=await evaluate("(()=>{document.querySelector('[data-preset=five]').click();const five={rows:document.querySelectorAll('#scheduleRows tr').length,total:document.querySelector('#totalMetric').textContent};document.querySelector('[data-preset=bounds]').click();const bounds={rows:document.querySelectorAll('#scheduleRows tr').length,first:document.querySelector('#firstMetric').textContent,last:document.querySelector('#lastMetric').textContent,good:document.querySelector('#boundsResult').textContent.includes('Оба ограничения выполняются')};const r=document.querySelector('#rateInput');r.value='20';r.dispatchEvent(new Event('input',{bubbles:true}));const failed=document.querySelector('#boundsResult').textContent.includes('нарушены');document.querySelector('#next').click();return {five,bounds,failed,selected:document.querySelector('#stepLabel').textContent}})()");
+  assert.deepEqual(scenarios,{five:{rows:5,total:'240'},bounds:{rows:15,first:'1,9',last:'0,5',good:true},failed:true,selected:'Год 2 из 15'},'Differentiated scenario and bounds parity');
+  await evaluate("document.querySelector('#themeToggle').click()");
+  assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'26 October lab dark overflow at '+w);
  }
  await navigate('19.10.26-lab.html',390,844);
  const scenarios=await evaluate("(()=>{const get=()=>document.querySelector('#finalSum').textContent;document.querySelector('[data-preset=base]').click();const base=get();document.querySelector('[data-preset=deposits]').click();const deposits=get();document.querySelector('[data-preset=withdrawal]').click();const withdrawal=get();document.querySelector('[data-preset=variable]').click();const variable=get();return {base,deposits,withdrawal,variable}})()");
