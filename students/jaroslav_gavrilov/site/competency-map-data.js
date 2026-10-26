@@ -291,6 +291,25 @@ for (const [id,cfg] of Object.entries(LESSON_221026)) {
   item.material={href:'22.10.26.html#'+cfg.section,label:'Открыть раздел занятия от 22.10 →'};
 }
 
+
+// 26.10.2026: lesson evidence only; existing mastery levels and repeat flags are unchanged.
+const LESSON_261026 = {
+  "ege08_08": { section: "meaning", relation: "practiced", evidence: "Разобрано определение логарифма и перевод записи log_a b=x в a^x=b." },
+  "ege08_09": { section: "identity", relation: "practiced", evidence: "Основное логарифмическое тождество использовано в вычислениях со степенями." },
+  "ege08_10": { section: "combine", relation: "practiced", evidence: "Отработаны свойства аргумента и основания, сумма и разность логарифмов." },
+  "ege08_11": { section: "change", relation: "practiced", evidence: "Разобраны переход к новому основанию и формула взаимно обратных логарифмов." },
+  "ege08_02": { section: "route", relation: "touched", evidence: "Повторены отрицательные степени у дробей при приведении оснований." },
+  "ege08_03": { section: "powers", relation: "practiced", evidence: "Корни переведены в рациональные показатели для вычисления логарифмов." },
+  "ege08_06": { section: "powers", relation: "touched", evidence: "Корни пятой и третьей степени использованы в преобразованиях." }
+};
+for(const [id,cfg] of Object.entries(LESSON_261026)){
+  const item=G.flatMap(group=>group.items).find(topic=>topic.id===id);
+  if(!item)continue;
+  item.evidence=Array.isArray(item.evidence)?item.evidence:[];
+  item.evidence.push({text:cfg.evidence+' Материал: занятие 26.10.2026 «Свойства логарифмов». Формат: '+(cfg.relation==='practiced'?'разбор и практика.':'обсуждение.')});
+  item.material={href:'26.10.26.html#'+cfg.section,label:'Открыть соответствующий раздел занятия →'};
+}
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'jaroslav_gavrilov',
@@ -300,7 +319,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Структура сверена 19.09.2026 с опубликованными ФИПИ проектами КИМ ЕГЭ-2027 по профильной математике.',
-    updated:'19.10.2026'
+    updated:'26.10.2026'
   },
   groups:G
 };

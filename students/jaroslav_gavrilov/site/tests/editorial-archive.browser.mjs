@@ -174,11 +174,30 @@ try{
   assert.equal(await evalJS('document.querySelector("details.task").open'),true,'focused native disclosure remains interactive');
   await evalJS('document.getElementById("themeToggle").click()');
   assert.equal(await evalJS('document.documentElement.dataset.theme'),'dark','lesson toggle activates dark mode');
+  // 26 October: verify the newly published logarithm lesson on mobile and desktop.
+  for (const width of [390,768,1440]) {
+    for (const dark of [false,true]) {
+      await visit('26.10.26.html',width,dark);
+      const logMetrics=await evalJS('(()=>({chapters:document.querySelectorAll("main .chapter").length,tasks:document.querySelectorAll(".tasks li").length,ids:(()=>{const x=[...document.querySelectorAll("[id]")].map(el=>el.id);return x.length-new Set(x).size})(),poster:[...document.querySelectorAll("img")].some(img=>img.getAttribute("src")==="../images/26.10.26.png"),answersHidden:document.getElementById("answers").hidden,links:[...document.querySelectorAll("a[href]")].filter(el=>/(26\.10\.26\.(pdf|tex|png))/.test(el.getAttribute("href"))).length}))()');
+      assert.equal(logMetrics.chapters,8,'eight grounded sections');
+      assert.equal(logMetrics.tasks,10,'ten tasks from the checklist');
+      assert.equal(logMetrics.ids,0,'new lesson has unique IDs');
+      assert.equal(logMetrics.poster,true,'poster exists');
+      assert.equal(logMetrics.answersHidden,true,'answers start concealed');
+      assert.equal(logMetrics.links,3,'published PDF, TeX and poster');
+      if((width===390||width===1440)&&!dark)await screenshot('lesson-261026-'+width+'-light');
+    }
+  }
+  await visit('26.10.26.html',1440,false);
+  const logInteraction=await evalJS('(()=>{const count=document.getElementById("stepCount");const before=count.textContent;document.getElementById("nextStep").click();const after=count.textContent;document.getElementById("toggleAnswers").click();const answersVisible=!document.getElementById("answers").hidden;document.getElementById("themeToggle").click();return {before,after,answersVisible,dark:document.documentElement.dataset.theme==="dark"}})()');
+  assert.deepEqual(logInteraction,{before:'1 / 4',after:'2 / 4',answersVisible:true,dark:true},'stepper, answer disclosure and theme are functional');
   await visit('index.html',1440,false);
-  const lesson22Linked=await evalJS('(()=>{const latest=document.getElementById("latestLessonCta").getAttribute("href");const ids=["ege08_04","ege08_02","ege08_03","ege08_06","ege07_07","ege10_01","ege10_02","ege10_09","ege10_05","ege10_12","ege12_12","ege12_15"];const items=window.COMPETENCY_MAP_DATA.groups.flatMap(g=>g.items);return {latest,allEvidence:ids.every(id=>{const item=items.find(x=>x.id===id);return item?.evidence?.some(e=>e.text?.includes("22.10.2026"))&&item.material?.href.startsWith("22.10.26.html#");}),graphLink:items.find(x=>x.id==="ege12_12")?.material?.href}})()');
-  assert.equal(lesson22Linked.latest,'22.10.26.html','the cabinet shows 22 October as the latest lesson');
+  const lesson22Linked=await evalJS('(()=>{const latest=document.getElementById("latestLessonCta").getAttribute("href");const ids=["ege08_04","ege08_02","ege08_03","ege08_06","ege07_07","ege10_01","ege10_02","ege10_09","ege10_05","ege10_12","ege12_12","ege12_15"];const items=window.COMPETENCY_MAP_DATA.groups.flatMap(g=>g.items);return {latest,allEvidence:ids.every(id=>{const item=items.find(x=>x.id===id);return item?.evidence?.some(e=>e.text?.includes("22.10.2026"));}),graphLink:items.find(x=>x.id==="ege12_12")?.material?.href}})()');
+  assert.equal(lesson22Linked.latest,'26.10.26.html','the cabinet shows 26 October as the latest lesson');
   assert.equal(lesson22Linked.allEvidence,true,'all 12 linked competencies reference this lesson');
   assert.equal(lesson22Linked.graphLink,'22.10.26.html#graph');
+  const logEvidence=await evalJS('(()=>{const ids=["ege08_08","ege08_09","ege08_10","ege08_11","ege08_02","ege08_03","ege08_06"];const items=window.COMPETENCY_MAP_DATA.groups.flatMap(g=>g.items);return ids.every(id=>{const item=items.find(x=>x.id===id);return item?.evidence?.some(e=>e.text?.includes("26.10.2026"))&&item?.material?.href.startsWith("26.10.26.html#")})})()');
+  assert.equal(logEvidence,true,'all seven logarithm lesson outcomes have evidence and deep links');
   console.log('JAROSLAV_221026_RELEASE_GATE_PASS',JSON.stringify({printTest,lesson22Linked}));
 
   // Independent QA of the redesigned student cabinet and monthly archive.
