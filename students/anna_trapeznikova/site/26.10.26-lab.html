@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark">
+<meta name="description" content="Цифровая лаборатория прикладных задач: термическое расширение, прибыль, уровень воды, спрос и безопасная скорость вращения ведра.">
+<title>Прикладные задачи: цифровая лаборатория — Анна Трапезникова</title>
+<link rel="stylesheet" href="../../../design-system/tokens.css?v=20260919-2"><link rel="stylesheet" href="../../../design-system/foundations.css?v=20260919-2"><link rel="stylesheet" href="anna-atlas.css?v=20260921-1">
+<style>
+:root{--bg:#f7f2ed;--card:#fffcf7;--ink:#2f292b;--sub:#645c60;--line:#d4c5c8;--accent:#743f50;--ok:#226d5d;--warn:#a45044;--soft:#efe7e6;--focus:#e58d45}
+html[data-theme=dark]{--bg:#1b191a;--card:#2c2529;--ink:#f8ecee;--sub:#cabdc1;--line:#68565d;--accent:#e7afc1;--ok:#9bd9c4;--warn:#e7aa9a;--soft:#3a2f35;--focus:#ffc687}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+a{color:var(--accent);text-underline-offset:.2em}button{font:inherit;color:inherit;cursor:pointer}input{accent-color:var(--accent)}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.wrap{width:min(1050px,calc(100% - 32px));margin:0 auto}.skip{position:absolute;top:-110px;left:10px;background:var(--card);padding:10px}.skip:focus{top:10px}
+header{border-bottom:1px solid var(--line);background:var(--card)}.top{min-height:65px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{text-decoration:none;font-weight:700;color:var(--ink)}.top-actions{display:flex;gap:16px;align-items:center}.theme{border:1px solid var(--line);padding:7px 12px;background:var(--card);border-radius:3px}
+.hero{padding:55px 0 25px;border-bottom:1px solid var(--line)}.kicker{font-size:.75rem;color:var(--accent);font-weight:800;letter-spacing:.13em;text-transform:uppercase}h1{font:500 clamp(2.8rem,5.8vw,5.2rem)/1.09 Georgia,serif;letter-spacing:-.04em;margin:10px 0 18px}h2{font:500 clamp(1.7rem,3.1vw,2.7rem) Georgia,serif;margin:0 0 10px}.lead{max-width:64ch;color:var(--sub);font-size:1.1rem}
+.mode-tabs{display:flex;flex-wrap:wrap;gap:8px;padding:26px 0 30px}.mode-tabs button{border:1px solid var(--line);background:var(--card);padding:10px 13px;border-radius:3px}.mode-tabs button[aria-selected=true]{border-color:var(--accent);background:var(--soft);font-weight:750}
+.lab{display:grid;grid-template-columns:minmax(0,390px) minmax(0,1fr);gap:30px;align-items:start}
+.controls{border-top:3px solid var(--accent);padding:20px 0}.explain{color:var(--sub)}.field{margin:20px 0}.field label{display:block;font-weight:700;font-size:.9rem;margin-bottom:7px}.field input{display:block;width:100%;margin:12px 0}.field output{font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}.bounds{display:flex;justify-content:space-between;color:var(--sub);font-size:.72rem}.reset{background:var(--card);border:1px solid var(--line);padding:9px 15px;border-radius:3px;margin-top:12px}
+.viz{background:var(--card);border:1px solid var(--line);padding:clamp(15px,3vw,27px);min-height:385px}
+.viz svg{width:100%;height:auto;display:block;margin:auto;max-height:280px}.readout{border-top:1px solid var(--line);padding-top:16px;margin-top:12px}.answer{font:500 clamp(1.7rem,3.7vw,3rem) Georgia,serif;color:var(--accent);margin:6px 0;font-variant-numeric:tabular-nums}.formula{background:var(--soft);padding:10px 14px;overflow-x:auto;white-space:nowrap;font:1.08rem/1.7 "Cambria Math",Georgia,serif}.callout{border-left:3px solid var(--ok);padding:11px 14px;margin-top:15px;background:var(--soft)}
+#stat{font-weight:650;color:var(--ok)}.panel[hidden]{display:none!important}.axis{stroke:var(--sub);stroke-width:1.4;fill:none}.plot{stroke:var(--accent);stroke-width:3;fill:none;stroke-linecap:round}.threshold{stroke:var(--warn);stroke-width:1.5;stroke-dasharray:5 4}.marker{fill:var(--accent);stroke:var(--card);stroke-width:3}.svg-label{font:14px system-ui,sans-serif;fill:var(--sub)}
+.reflections{margin:44px 0;padding:28px 0;border-top:1px solid var(--line)}.reflections ul{padding-left:23px}.reflections li{margin:9px 0}footer{font-size:.82rem;color:var(--sub);border-top:1px solid var(--line);padding:20px 0 40px}
+@media(max-width:750px){.lab{grid-template-columns:1fr}.viz{min-height:280px}.top{padding:12px 0}.hero{padding:35px 0 20px}.mode-tabs button{flex:1 1 150px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body data-anna-atlas data-anna-page="lab">
+<a class="skip" href="#experiment">К эксперименту</a>
+<header><div class="wrap top"><a class="brand" href="26.10.26.html">← Вернуться к занятию</a><div class="top-actions"><a href="index.html">Навигатор</a><button type="button" id="theme" class="theme" aria-label="Переключить тему">◐ Тема</button></div></div></header>
+<main class="wrap" id="experiment">
+<section class="hero"><p class="kicker">Анна Трапезникова · 26 октября 2026</p><h1>Исследуйте формулу.</h1><p class="lead">Изменяйте исходные величины и наблюдайте, как меняется ответ. Все значения выводятся из одной математической зависимости. Начальные значения повторяют примеры занятия.</p></section>
+<div class="mode-tabs" role="tablist" aria-label="Выбор модели">
+<button id="tab-rail" type="button" role="tab" aria-selected="true" aria-controls="panel-rail" data-mode="rail">01 · Рельс</button>
+<button id="tab-profit" type="button" role="tab" aria-selected="false" aria-controls="panel-profit" data-mode="profit">02 · Прибыль</button>
+<button id="tab-well" type="button" role="tab" aria-selected="false" aria-controls="panel-well" data-mode="well">03 · Колодец</button>
+<button id="tab-demand" type="button" role="tab" aria-selected="false" aria-controls="panel-demand" data-mode="demand">04 · Спрос</button>
+<button id="tab-bucket" type="button" role="tab" aria-selected="false" aria-controls="panel-bucket" data-mode="bucket">05 · Ведро</button>
+</div>
+<section id="panel-rail" role="tabpanel" aria-labelledby="tab-rail" class="lab panel">
+<div class="controls"><p class="kicker">01 / Тепловое расширение</p><h2>Температура меняет длину</h2><p class="explain">Исходная длина 10 м; коэффициент α = 1,2 · 10⁻⁵ °C⁻¹. Двигайте температуру: формула рассчитает удлинение.</p>
+<div class="field"><label for="rail-t">Температура, °C: <output id="rail-t-out" for="rail-t">37,5</output></label><input id="rail-t" type="range" min="0" max="80" step=".5" value="37.5"><div class="bounds"><span>0</span><span>80</span></div></div>
+<button class="reset" type="button" data-reset="rail">Вернуть пример занятия</button></div>
+<div class="viz"><svg viewBox="0 0 520 220" role="img" aria-labelledby="rail-svg-title"><title id="rail-svg-title">Удлинение рельса при увеличении температуры</title><rect x="55" y="70" width="380" height="36" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="2"/><rect id="rail-length" x="55" y="70" width="382" height="36" fill="none" stroke="var(--accent)" stroke-width="4"/><line x1="55" y1="124" x2="435" y2="124" stroke="var(--sub)" stroke-width="2"/><line x1="435" y1="60" x2="435" y2="153" stroke="var(--sub)" stroke-dasharray="4 4"/><line id="rail-tip" x1="437" y1="60" x2="437" y2="153" stroke="var(--accent)" stroke-width="3"/><text x="55" y="163" class="svg-label">L₀ = 10 м</text><text x="55" y="188" class="svg-label">Визуальное удлинение увеличено для наглядности</text></svg>
+<div class="readout"><p class="kicker">Вычисленное удлинение</p><div class="answer" id="rail-result" aria-live="polite">4,5 мм</div><div class="formula" id="rail-formula">ΔL = 10 · 1,2 · 10⁻⁵ · 37,5 = 0,0045 м</div><p class="callout">Рельс становится длиннее, потому что при увеличении температуры возрастает ΔL = L₀αt.</p></div></div>
+</section>
+<section id="panel-profit" role="tabpanel" aria-labelledby="tab-profit" class="lab panel" hidden>
+<div class="controls"><p class="kicker">02 / Экономическая модель</p><h2>Когда прибыль достигает цели?</h2><p class="explain">Цена 600 руб., затраты 300 руб. на изделие, постоянные расходы 700 000 руб. Целевая прибыль 500 000 руб.</p>
+<div class="field"><label for="profit-q">Количество изделий: <output id="profit-q-out" for="profit-q">4000</output></label><input id="profit-q" type="range" min="0" max="7000" step="100" value="4000"><div class="bounds"><span>0</span><span>7000</span></div></div>
+<button class="reset" type="button" data-reset="profit">Вернуть пример занятия</button></div>
+<div class="viz"><svg viewBox="0 0 520 210" role="img" aria-labelledby="profit-svg-title"><title id="profit-svg-title">Прибыль по сравнению с целевой величиной</title><line x1="30" y1="168" x2="495" y2="168" class="axis"/><rect x="64" y="45" width="392" height="26" fill="var(--soft)"/><rect id="profit-bar" x="64" y="45" width="224" height="26" fill="var(--accent)"/><line x1="288" y1="32" x2="288" y2="91" class="threshold"/><text class="svg-label" x="65" y="118">Шкала объёма выпуска</text><text class="svg-label" x="260" y="26">4000 — порог</text><text class="svg-label" x="60" y="192">0</text><text class="svg-label" x="445" y="192">7000</text></svg>
+<div class="readout"><p class="kicker">Прибыль</p><div class="answer" id="profit-result" aria-live="polite">500 000 руб.</div><div class="formula" id="profit-formula">Π = 4000 · (600 − 300) − 700 000</div><p id="profit-stat" class="callout">Целевая прибыль достигнута.</p></div></div>
+</section>
+<section id="panel-well" role="tabpanel" aria-labelledby="tab-well" class="lab panel" hidden>
+<div class="controls"><p class="kicker">03 / Изменение уровня воды</p><h2>Время падения и глубина</h2><p class="explain">До дождя камень падал 0,6 с. Меняйте время после дождя: разность глубин покажет подъём воды.</p>
+<div class="field"><label for="well-t">Время после дождя, с: <output id="well-t-out" for="well-t">0,4</output></label><input id="well-t" type="range" min="0" max=".6" step=".02" value=".4"><div class="bounds"><span>0</span><span>0,6</span></div></div>
+<button class="reset" type="button" data-reset="well">Вернуть пример занятия</button></div>
+<div class="viz"><svg viewBox="0 0 520 230" role="img" aria-labelledby="well-svg-title"><title id="well-svg-title">До и после дождя: поверхность воды становится выше</title><path d="M76 28 V207 M210 28 V207 M310 28 V207 M444 28 V207" fill="none" stroke="var(--sub)" stroke-width="8"/><rect id="well-before" x="80" y="187" width="126" height="16" fill="var(--accent)" opacity=".5"/><rect id="well-after" x="314" y="145" width="126" height="58" fill="var(--accent)" opacity=".75"/><text x="87" y="21" class="svg-label">До дождя, 0,6 с</text><text x="322" y="21" class="svg-label">После дождя</text><text x="92" y="222" class="svg-label">h₁ = 1,8 м</text><text x="323" y="222" class="svg-label" id="well-depth">h₂ = 0,8 м</text></svg>
+<div class="readout"><p class="kicker">Подъём уровня воды</p><div class="answer" id="well-result" aria-live="polite">1 м</div><div class="formula" id="well-formula">Δh = 5(0,6² − 0,4²) = 1 м</div><p class="callout">Если время падения уменьшается, до поверхности воды становится ближе.</p></div></div>
+</section>
+<section id="panel-demand" role="tabpanel" aria-labelledby="tab-demand" class="lab panel" hidden>
+<div class="controls"><p class="kicker">04 / Выручка и спрос</p><h2>Цена влияет и на спрос, и на выручку</h2><p class="explain">Спрос q=60−5p, выручка R=qp. Изменяйте цену и сравнивайте выручку с порогом 160 тыс. руб.</p>
+<div class="field"><label for="demand-p">Цена, тыс. руб.: <output id="demand-p-out" for="demand-p">8</output></label><input id="demand-p" type="range" min="0" max="12" step=".25" value="8"><div class="bounds"><span>0</span><span>12</span></div></div>
+<button class="reset" type="button" data-reset="demand">Вернуть пример занятия</button></div>
+<div class="viz"><svg id="demand-svg" viewBox="0 0 520 280" role="img" aria-labelledby="demand-svg-title"><title id="demand-svg-title">График выручки R = p(60−5p), область R не меньше 160</title><path d="M40 20 V237 H490" class="axis"/><line x1="40" y1="53" x2="490" y2="53" class="threshold"/><path class="plot" id="demand-path" d="M40 237 Q265 -130 490 237"/><circle id="demand-dot" class="marker" cx="340" cy="67" r="7"/><text x="45" y="39" class="svg-label">160</text><text x="40" y="260" class="svg-label">0</text><text x="467" y="260" class="svg-label">12 · p</text><text x="10" y="16" class="svg-label">R</text></svg>
+<div class="readout"><p class="kicker">Выручка</p><div class="answer" id="demand-result" aria-live="polite">160 тыс. руб.</div><div class="formula" id="demand-formula">R = 8 · (60 − 5 · 8) = 160</div><p id="demand-stat" class="callout">Выручка не ниже порога 160 тыс. руб.</p></div></div>
+</section>
+<section id="panel-bucket" role="tabpanel" aria-labelledby="tab-bucket" class="lab panel" hidden>
+<div class="controls"><p class="kicker">05 / Давление в верхней точке</p><h2>Когда вода удерживается?</h2><p class="explain">В верхней точке P=m(v²/L−g), L=0,625 м, g=10 м/с². Масса положительна. Критическая скорость равна 2,5 м/с.</p>
+<div class="field"><label for="bucket-v">Скорость, м/с: <output id="bucket-v-out" for="bucket-v">2,5</output></label><input id="bucket-v" type="range" min="0" max="4" step=".1" value="2.5"><div class="bounds"><span>0</span><span>4</span></div></div>
+<button class="reset" type="button" data-reset="bucket">Вернуть пример занятия</button></div>
+<div class="viz"><svg viewBox="0 0 520 220" role="img" aria-labelledby="bucket-svg-title"><title id="bucket-svg-title">Скорость сравнивается с порогом удержания воды</title><path d="M120 182 A120 120 0 0 1 360 182" fill="none" stroke="var(--line)" stroke-width="15" stroke-linecap="round"/><path id="bucket-arc" d="M120 182 A120 120 0 0 1 360 182" fill="none" stroke="var(--accent)" stroke-width="15" stroke-linecap="round"/><text x="165" y="165" class="svg-label">Порог 2,5 м/с</text><text x="182" y="205" class="svg-label">L = 0,625 м</text></svg>
+<div class="readout"><p class="kicker">Условие P ≥ 0</p><div class="answer" id="bucket-result" aria-live="polite">Порог достигнут</div><div class="formula" id="bucket-formula">P / m = 2,5² / 0,625 − 10 = 0</div><p class="callout" id="bucket-stat">При выбранной скорости вода удерживается на границе условия.</p></div></div>
+</section>
+<section class="reflections"><h2>Сравните результаты</h2><ul><li>В какой модели ответ зависит от разности <em>двух</em> состояний?</li><li>Почему увеличение цены иногда уменьшает выручку?</li><li>Какие значения требуют дополнительной проверки по физическому смыслу?</li><li>Когда задача требует найти границу по равенству, а когда — проверить целый объём выпуска?</li></ul><p><a href="26.10.26.html#practice">Вернуться к 10 тренировочным задачам ↗</a></p></section>
+</main><footer><div class="wrap">Лёвин Артём Александрович · эксклюзивно для Анны Трапезниковой · 26 октября 2026</div></footer>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const fmt=(n,d=2)=>Number(n.toFixed(d)).toLocaleString('ru-RU',{maximumFractionDigits:d});
+const tabs=[...document.querySelectorAll('[data-mode]')], panels=[...document.querySelectorAll('.panel')], defaults={rail:37.5,profit:4000,well:.4,demand:8,bucket:2.5};
+function modeFromUrl(){const v=new URLSearchParams(location.search).get('mode');return Object.hasOwn(defaults,v)?v:'rail'}
+function show(mode,updateHistory=true){
+tabs.forEach(t=>{const active=t.dataset.mode===mode;t.setAttribute('aria-selected',String(active));t.tabIndex=active?0:-1});
+panels.forEach(p=>{p.hidden=p.id!=='panel-'+mode});
+if(updateHistory){const url=new URL(location.href);url.searchParams.set('mode',mode);history.replaceState(null,'',url.pathname+url.search+url.hash)}
+}
+tabs.forEach((t,i)=>{t.addEventListener('click',()=>show(t.dataset.mode));t.addEventListener('keydown',ev=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(ev.key))return;ev.preventDefault();const j=ev.key==='Home'?0:ev.key==='End'?tabs.length-1:(i+(ev.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;tabs[j].focus();show(tabs[j].dataset.mode)})});
+function set(k,n){$(k).value=String(n);render(k)}
+function render(k){const inp=$(k),v=Number(inp.value);$(k+'-out').textContent=fmt(v,k==='profit-q'?0:2);
+if(k==='rail-t'){const dl=10*1.2e-5*v;const mm=dl*1000;$('rail-result').textContent=fmt(mm,2)+' мм';$('rail-formula').textContent='ΔL = 10 · 1,2 · 10⁻⁵ · '+fmt(v)+' = '+fmt(dl,6)+' м';$('rail-length').setAttribute('width',String(380+mm*8));$('rail-tip').setAttribute('x1',String(435+mm*8));$('rail-tip').setAttribute('x2',String(435+mm*8));}
+if(k==='profit-q'){const pi=v*300-700000;$('profit-result').textContent=fmt(pi,0)+' руб.';$('profit-formula').textContent='Π = '+fmt(v,0)+' · (600 − 300) − 700 000';$('profit-stat').textContent=pi>=500000?'Порог достигнут: прибыль не меньше 500 000 руб.':'До заданной прибыли пока не хватает '+fmt(500000-pi,0)+' руб.';$('profit-bar').setAttribute('width',String(Math.round(v/7000*392)))}
+if(k==='well-t'){const h2=5*v*v,delta=1.8-h2;$('well-result').textContent=fmt(delta)+' м';$('well-formula').textContent='Δh = 5(0,6² − '+fmt(v)+'²) = '+fmt(delta)+' м';$('well-depth').textContent='h₂ = '+fmt(h2)+' м';const y=187-(delta/1.8)*125;$('well-after').setAttribute('y',String(y));$('well-after').setAttribute('height',String(203-y));}
+if(k==='demand-p'){const q=60-5*v,r=v*q;$('demand-result').textContent=fmt(r,2)+' тыс. руб.';$('demand-formula').textContent='R = '+fmt(v)+' · (60 − 5 · '+fmt(v)+') = '+fmt(r);$('demand-stat').textContent=r>=160-1e-8?'Порог достигнут: выручка не меньше 160 тыс. руб.':'Выручка ниже порога 160 тыс. руб.';const x=40+v*37.5,y=237-r/180*188;$('demand-dot').setAttribute('cx',String(x));$('demand-dot').setAttribute('cy',String(y));}
+if(k==='bucket-v'){const perMass=v*v/.625-10,ok=perMass>=-1e-8;$('bucket-result').textContent=ok?'Условие выполнено':'Скорость недостаточна';$('bucket-formula').textContent='P / m = '+fmt(v)+'² / 0,625 − 10 = '+fmt(perMass);$('bucket-stat').textContent=ok?(Math.abs(perMass)<1e-7?'На границе: давление в верхней точке равно нулю.':'Давление неотрицательно: вода удерживается.'):'Давление отрицательно по формуле: условие удержания не выполнено.';$('bucket-arc').setAttribute('stroke-dasharray',fmt(Math.min(v/4,1)*380,1)+' 420')}
+}
+function demandCurve(){const points=[];for(let i=0;i<=120;i++){let p=i/10,rev=p*(60-5*p),x=40+p*37.5,y=237-rev/180*188;points.push((i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1))}$('demand-path').setAttribute('d',points.join(' '))}
+demandCurve();
+Object.keys(defaults).forEach(k=>{const id={rail:'rail-t',profit:'profit-q',well:'well-t',demand:'demand-p',bucket:'bucket-v'}[k];$(id).addEventListener('input',()=>render(id));render(id);document.querySelector('[data-reset="'+k+'"]').addEventListener('click',()=>set(id,defaults[k]))});
+window.addEventListener('popstate',()=>show(modeFromUrl(),false));show(modeFromUrl(),false);
+const theme=$('theme'),root=document.documentElement;try{if(localStorage.getItem('anna-theme')==='dark')root.dataset.theme='dark'}catch(_){}
+theme.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('anna-theme',root.dataset.theme)}catch(_){}});
+})();
+</script>
+</body></html>
