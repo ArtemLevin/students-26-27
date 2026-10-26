@@ -1,0 +1,413 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{icomma}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{parskip}
+
+\geometry{left=24mm,right=24mm,top=24mm,bottom=23mm,headheight=23pt}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{006B70}
+\definecolor{ink}{HTML}{30343A}
+\definecolor{quiet}{HTML}{686D72}
+\hypersetup{hidelinks}
+\setstretch{1.21}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=4pt,topsep=3pt}
+\renewcommand{\arraystretch}{1.17}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{quiet}Дифференцированная схема кредитования}
+\fancyhead[R]{\footnotesize\color{quiet}Анастасия Павлова}
+\fancyfoot[C]{\footnotesize\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+
+\newcommand{\mysection}[1]{%
+  \vspace{8pt}\refstepcounter{section}%
+  {\large\color{darkaccent}\thesection.\ #1}\par\vspace{3pt}%
+  {\color{accent}\hrule height 0.45pt}\vspace{8pt}}
+\newcommand{\term}[1]{\textcolor{darkaccent}{#1}}
+\newcommand{\ex}[1]{\vspace{3pt}\textcolor{darkaccent}{\textbf{#1}}\par}
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{center}
+\vspace*{24mm}
+{\large\color{darkaccent}МАТЕМАТИКА}
+
+\vspace{25mm}
+{\Huge Чек-лист}
+
+\vspace{14mm}
+{\LARGE\color{accent} Дифференцированная}\\[3pt]
+{\LARGE\color{accent} схема кредитования}
+
+\vspace{18mm}
+{\large Подготовка к ЕГЭ по профильной математике}
+
+\vfill
+{\large Анастасия Павлова}
+
+\vspace{11mm}
+{\large 26 октября 2026 г.}
+
+\vspace{21mm}
+{\small Лёвин Артём Александрович}\\[2pt]
+{\small эксклюзивно для Анастасии Павловой}
+
+\vspace{16mm}
+\begin{tikzpicture}
+\draw[accent,line width=0.7pt] (0,0)
+  .. controls (1.05,0.53) and (1.7,-0.32) .. (2.9,0)
+  .. controls (4.05,0.31) and (4.6,-0.45) .. (5.8,0);
+\fill[accent] (2.9,0) circle (1.5pt);
+\end{tikzpicture}
+\vspace{9mm}
+\end{center}
+\clearpage
+
+\mysection{Как распознать схему}
+
+\textbf{Дифференцированная схема кредитования:} основной долг
+(\term{тело кредита}) уменьшается \textbf{на одну и ту же сумму}
+в каждом платёжном периоде. Проценты начисляются на оставшуюся задолженность.
+
+\textbf{Сигнал в задаче ЕГЭ:} «долг на определённую дату каждого года
+(месяца) должен быть на одну и ту же сумму меньше долга на эту дату
+предыдущего года».
+
+\textbf{Сравнение:} в аннуитетной схеме общий платёж постоянен; в
+дифференцированной схеме постоянна доля \emph{основного долга} в платеже.
+При положительной ставке общий платёж постепенно уменьшается.
+
+\mysection{Обозначения и пять колонок таблицы}
+
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+$S$ & первоначальная сумма кредита;\\
+$n$ & число платёжных периодов (лет или месяцев);\\
+$r$ & ставка \emph{за один период}, записанная десятичной дробью;\\
+$d=S/n$ & постоянная часть платежа, погашающая тело кредита;\\
+$A_k$ & полный платёж за $k$-й период.\\
+\bottomrule
+\end{tabularx}
+
+Например, $10\%=0{,}10$. Если платят \emph{ежемесячно}, ставка $r$
+должна относиться к месяцу; если \emph{ежегодно}~--- к году.
+
+\ex{Пять колонок, общих для финансовых задач}
+\begin{center}
+\small
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+Начальный долг & Проценты & Общий долг & Платёж & Остаток\\
+\midrule
+$D_{k-1}$ & $rD_{k-1}$ & $D_{k-1}(1+r)$ &
+$rD_{k-1}+d$ & $D_{k-1}-d$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\mysection{Как устроен платёж}
+
+Каждый платёж состоит ровно из двух частей:
+\[
+\boxed{\quad A_k=
+  \underbrace{\frac{S}{n}}_{\text{погашение тела}}
+ +\underbrace{r\left(S-\frac{(k-1)S}{n}\right)}_
+  {\text{проценты на остаток}}\quad}
+\]
+
+После $k$ платежей долг равен
+\[
+D_k=S-\frac{kS}{n}.
+\]
+Поэтому $D_n=0$: за $n$ периодов тело кредита погашено полностью.
+
+\ex{Пример 1. Таблица занятия: $S=120$, $r=10\%$, $n=3$}
+Постоянная доля тела кредита: $d=120:3=40$.
+
+\begin{center}
+\begin{tabular}{@{}rrrrrr@{}}
+\toprule
+Год & Начало & Проценты & С процентами & Платёж & Остаток\\
+\midrule
+1 & 120 & 12 & 132 & $12+40=52$ & 80\\
+2 &  80 &  8 &  88 & $8+40=48$  & 40\\
+3 &  40 &  4 &  44 & $4+40=44$  &  0\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Общая сумма платежей $52+48+44=144$.
+Переплата: $144-120=24=12+8+4$.
+
+\mysection{Формулы, которые нужно знать}
+
+В классической схеме с одной выплатой процентов и части тела за
+каждый период, постоянной ставкой и равномерным погашением тела:
+
+\[
+\boxed{\text{ОСП}=S+\frac{Sr(n+1)}{2}}
+\qquad
+\boxed{\text{Переплата}=\frac{Sr(n+1)}{2}}
+\]
+\[
+\boxed{\text{Процент переплаты}
+   =\frac{r(n+1)}{2}\cdot100\%}
+\]
+\[
+\boxed{A_1=Sr+\frac Sn}
+\qquad
+\boxed{A_n=\frac Sn\,r+\frac Sn}
+\]
+
+Здесь \term{ОСП}~--- \textbf{общая сумма платежей}, то есть все деньги,
+отданные банку за весь срок. Первый платёж $A_1$~--- наибольший,
+последний $A_n$~--- наименьший (при $r>0$ и $n>1$).
+
+\textbf{Почему появляется $n+1$?} Проценты начисляются на
+$S,\;S(n-1)/n,\;\ldots,\;S/n$. Это арифметическая прогрессия;
+сумма её $n$ членов равна $S(n+1)/2$.
+
+Соседние платежи различаются на постоянную сумму:
+\[
+A_k-A_{k+1}=\frac{Sr}{n}.
+\]
+
+\mysection{Три прикладных приёма из занятия}
+
+\ex{Пример 2. Известен процент переплаты}
+Кредит взят на $14$ месяцев, общая сумма выплат на $15\%$ больше
+первоначальной суммы. Найдём \emph{месячную} ставку:
+\[
+\frac{r(14+1)}2\cdot100\%=15\%,
+\qquad
+r=\frac{2\cdot0{,}15}{15}=0{,}02.
+\]
+\term{Ответ:} $2\%$ в месяц.
+
+\textbf{Важно:} $15\%$~--- переплата за весь срок, а $r$~--- ставка за период.
+
+\ex{Пример 3. Неизвестен срок кредита}
+Кредит $20$ млн рублей, ставка $15\%$ годовых, общая сумма выплат
+$38$ млн рублей. Из формулы ОСП:
+\[
+38=20+\frac{20\cdot0{,}15(n+1)}2
+=20+1{,}5(n+1).
+\]
+Отсюда $18=1{,}5(n+1)$, поэтому $n+1=12$.
+\term{Ответ:} $11$ лет.
+
+\ex{Пример 4. Неравенства для первого и последнего платежей}
+Кредит $6$ млн рублей на $15$ лет. Наибольший платёж
+\emph{не более} $1{,}9$ млн, наименьший~--- \emph{не менее} $0{,}5$ млн.
+Постоянная доля тела равна $6:15=0{,}4$ млн.
+
+\[
+\begin{cases}
+6r+0{,}4\le 1{,}9,\\
+0{,}4r+0{,}4\ge 0{,}5
+\end{cases}
+\Longleftrightarrow
+\begin{cases}
+6r\le1{,}5,\\
+0{,}4r\ge0{,}1
+\end{cases}
+\Longleftrightarrow
+\begin{cases}
+r\le0{,}25,\\
+r\ge0{,}25.
+\end{cases}
+\]
+Оба ограничения выполняются одновременно только при $r=0{,}25$.
+\term{Ответ:} $25\%$ годовых.
+
+\mysection{Четыре ошибки, которых нужно избежать}
+
+\begin{enumerate}[label=\arabic*.]
+\item \textbf{Ставка и переплата.} Процент переплаты за весь срок
+и ставка за один период~--- разные величины. Отдельно подписывайте,
+какая из них дана, а какая неизвестна.
+\item \textbf{«Не более» и «не менее».} Записывайте неравенство
+сначала словами: платёж \emph{не более} $b$ означает $A\le b$;
+платёж \emph{не менее} $b$ означает $A\ge b$.
+\item \textbf{Система неравенств.} Каждое неравенство решается
+самостоятельно, а затем находится \emph{пересечение} множества решений.
+Метод подстановки для систем уравнений здесь не применяется.
+\item \textbf{Десятичные дроби.} Если ищете ставку $r$, сначала
+найдите число $0{,}25$, затем переведите его в $25\%$.
+Деление «процентного ответа» ещё на $100$ приводит к ошибке.
+\end{enumerate}
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\Large\color{darkaccent}Алгоритм решения задачи о кредите}\\[3mm]
+{\small Дифференцированная схема: равные доли основного долга}
+\end{center}
+\vspace{7mm}
+
+\begin{center}
+\begin{tikzpicture}[
+  >=Stealth,
+  node distance=10mm,
+  action/.style={draw=accent,rounded corners=2pt,line width=.65pt,
+    text width=100mm,minimum height=11mm,align=center,font=\normalsize},
+  decision/.style={diamond,draw=accent,line width=.65pt,aspect=3.4,
+    text width=50mm,inner sep=1.5mm,align=center,font=\small},
+  terminal/.style={ellipse,draw=accent,line width=.65pt,
+    text width=46mm,minimum height=10mm,align=center,font=\normalsize},
+  arrow/.style={->,line width=.65pt,draw=darkaccent}
+]
+\node[terminal] (a) {Прочитайте условие};
+\node[decision,below=of a] (b) {Долг уменьшается на одну и ту же сумму?};
+\node[action,below=14mm of b] (c) {Запишите $S$, число периодов $n$, ставку $r$\\(если ставка неизвестна, оставьте букву $r$)};
+\node[action,below=of c] (d) {Найдите постоянную долю тела: $d=S/n$};
+\node[action,below=of d] (e) {Выберите нужную формулу: ОСП, переплата,\\первый или последний платёж};
+\node[action,below=of e] (f) {Подставьте данные; при ограничениях запишите\\систему неравенств и найдите пересечение};
+\node[action,below=of f] (g) {Проверьте ставку, единицы времени,\\направления знаков и итоговый ответ};
+\node[terminal,below=of g] (h) {Ответ};
+\node[action,right=12mm of b,text width=36mm,minimum height=13mm,font=\small] (other)
+ {Уточните схему\\кредитования};
+\draw[arrow] (a)--(b);
+\draw[arrow] (b)--node[right,font=\scriptsize]{да}(c);
+\draw[arrow] (b)--node[above,font=\scriptsize]{нет}(other);
+\draw[arrow] (c)--(d);
+\draw[arrow] (d)--(e);
+\draw[arrow] (e)--(f);
+\draw[arrow] (f)--(g);
+\draw[arrow] (g)--(h);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\begin{center}
+{\LARGE\color{darkaccent}Тренировочный блок}\\[2mm]
+{\small Путь А \,---\, 10 заданий от базовых к сложным}
+\end{center}
+\vspace{3mm}
+Записывайте ставку как десятичную дробь при подстановке в формулу.
+Если денежные суммы указаны в тысячах или миллионах рублей,
+ответ сохраняйте в тех же единицах.
+
+\textcolor{darkaccent}{\textbf{Базовый уровень}}
+
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=8mm,itemsep=7pt]
+\item Кредит $90$ тыс.\ руб.\ выдан на $3$ года под $10\%$ годовых.
+Найдите ежегодно погашаемую часть тела кредита и первый платёж.
+
+\item Кредит $180$ тыс.\ руб.\ выдан на $3$ года под $10\%$
+годовых. Составьте таблицу из пяти колонок, найдите ежегодные
+платежи и общую сумму платежей.
+
+\item Кредит $150$ тыс.\ руб.\ выдан на $5$ лет под $20\%$
+годовых. Найдите платёж за третий год и долг после этого платежа.
+\end{enumerate}
+
+\textcolor{darkaccent}{\textbf{Применение формул}}
+
+\begin{enumerate}[label=\textbf{\arabic*.},start=4,leftmargin=8mm,itemsep=7pt]
+\item Кредит $480$ тыс.\ руб.\ выдан на $4$ года под $8\%$
+годовых. Найдите переплату и общую сумму платежей.
+
+\item Кредит $300$ тыс.\ руб.\ выдан на $5$ лет под $12\%$
+годовых. Найдите наибольший и наименьший платежи и их разность.
+
+\item Кредит $240$ тыс.\ руб.\ погашается равными долями тела за
+$4$ года. Общая сумма платежей равна $300$ тыс.\ руб.
+Найдите годовую процентную ставку.
+
+\item Кредит взят на $8$ месяцев с равномерным уменьшением долга.
+После его полного погашения сумма всех выплат оказалась на $18\%$
+больше первоначальной суммы. Найдите месячную процентную ставку.
+\end{enumerate}
+
+\textcolor{darkaccent}{\textbf{Уровень выше среднего}}
+
+\begin{enumerate}[label=\textbf{\arabic*.},start=8,leftmargin=8mm,itemsep=7pt]
+\item В июле взят кредит $2$ млн руб.\ под $15\%$ годовых.
+Ежегодно долг уменьшается на одну и ту же сумму.
+После полного погашения общая сумма выплат равна $2{,}75$ млн руб.
+На сколько лет был взят кредит?
+
+\item Кредит $3$ млн руб.\ выдан на $6$ лет с равномерным
+погашением тела. Наибольший платёж не превышает $0{,}85$ млн руб.,
+наименьший составляет не менее $0{,}55$ млн руб.
+Найдите все возможные годовые процентные ставки.
+
+\item Кредит $5$ млн руб.\ выдан на $10$ лет с равномерным
+погашением тела. Наибольший годовой платёж не более $1{,}25$ млн руб.,
+наименьший~--- не менее $0{,}575$ млн руб.
+Найдите годовую процентную ставку.
+\end{enumerate}
+
+\clearpage
+\begin{center}
+{\LARGE\color{darkaccent}Ответы}\\[3mm]
+{\small Для самостоятельной проверки}
+\end{center}
+
+\begin{tabularx}{\linewidth}{@{}cX@{}}
+\toprule
+№ & Ответ\\
+\midrule
+1 & $30$ тыс.\ руб.; $39$ тыс.\ руб.\\
+2 & Платежи $78$, $72$, $66$ тыс.\ руб.;
+общая сумма $216$ тыс.\ руб.\\
+3 & $48$ тыс.\ руб.; остаток $60$ тыс.\ руб.\\
+4 & Переплата $96$ тыс.\ руб.; ОСП $576$ тыс.\ руб.\\
+5 & $96$ тыс.\ руб.; $72$ тыс.\ руб.; разность $24$ тыс.\ руб.\\
+6 & $10\%$ годовых.\\
+7 & $4\%$ в месяц.\\
+8 & $4$ года.\\
+9 & От $10\%$ до $11\frac23\%$ годовых включительно.\\
+10 & $15\%$ годовых.\\
+\bottomrule
+\end{tabularx}
+
+\vspace{12mm}
+{\large\color{darkaccent}Итоговая памятка}
+
+\begin{tabularx}{\linewidth}{@{}p{49mm}X@{}}
+\toprule
+Сигнал в условии & Действие\\
+\midrule
+«На одну и ту же сумму меньше» &
+Проверить дифференцированную схему; $d=S/n$.\\
+Просят все выплаты & $\text{ОСП}=S+\frac{Sr(n+1)}2$.\\
+Просят переплату & $\text{Переплата}=\frac{Sr(n+1)}2$.\\
+Просят ставку при известной переплате &
+Использовать $\frac{r(n+1)}2\cdot100\%$; отличать ставку от переплаты.\\
+«Наибольший» / «наименьший» &
+Применить формулу первого / последнего платежа.\\
+«Не более» / «не менее» &
+Записать $\le$ / $\ge$, решить систему неравенств.\\
+\bottomrule
+\end{tabularx}
+
+\vfill
+\begin{center}
+\footnotesize\color{quiet}
+Лёвин Артём Александрович\\
+эксклюзивно для Анастасии Павловой
+\end{center}
+
+\end{document}
