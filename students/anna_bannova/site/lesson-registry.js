@@ -1,5 +1,69 @@
 export const LESSONS=[
   {
+    "date": "2026-10-26",
+    "ktpRefs": [
+      "ktp-002",
+      "ktp-003"
+    ],
+    "href": "26.10.26.html",
+    "title": "Три модели. Один маршрут.",
+    "navTitle": "Три модели. Один маршрут.",
+    "navSubtitle": "Анна Баннова · 26.10.26: применение формул в задачах на тепловое расширение, прибыль предприятия и подъём воды. Перевод величин, вычисления со степенями десяти, пороговое неравенство, разность квадратов и проверка результата.",
+    "summary": "Анна Баннова · 26.10.26: применение формул в задачах на тепловое расширение, прибыль предприятия и подъём воды. Перевод величин, вычисления со степенями десяти, пороговое неравенство, разность квадратов и проверка результата.",
+    "topics": [
+      "прикладные задачи по формулам",
+      "тепловое расширение рельса",
+      "единицы длины и степени десяти",
+      "прибыль предприятия и минимальный выпуск",
+      "увеличение и уменьшение величины",
+      "подъём уровня воды",
+      "вынесение общего множителя и разность квадратов",
+      "10 тренировочных задач"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "text_15",
+        "evidenceAnchor": "reading",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_17",
+        "evidenceAnchor": "rail",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calc_15",
+        "evidenceAnchor": "powers",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "expr_01",
+        "evidenceAnchor": "algebra",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "expr_05",
+        "evidenceAnchor": "well",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_21",
+        "evidenceAnchor": "well",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "calc_14",
+        "evidenceAnchor": "threshold",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "26.10.26.html",
+      "pdf": "../pdf_docs/26.10.26.pdf",
+      "tex": "../tex_docs/26.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-25",
     "ktpRefs": [
       "ktp-004",
