@@ -150,7 +150,9 @@ test('manifest cannot omit a nested historical lesson',()=>{
 test('real Nikol frozen registry is readable and covers every dated lesson HTML',()=>{
   const report=discoverHistoricalLessons({root:ROOT,studentId:'nikol_sarkisyants'});
   const inventory=inspectStudent(ROOT,'nikol_sarkisyants');
-  assert.equal(report.lessons.length,26);
+  // Historical lesson inventory grows as new lessons are published.
+  // Preserve the original minimum and verify every dated HTML is represented.
+  assert.ok(report.lessons.length>=26);
   assert.equal(inventory.counts.lessonHtml,report.lessons.length);
   assert.deepEqual(report.diagnostics,[]);
 });
