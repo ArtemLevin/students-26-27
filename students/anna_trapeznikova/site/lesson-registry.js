@@ -5,6 +5,76 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-26",
+  "ktpRefs": [],
+  "href": "26.10.26.html",
+  "title": "Задачи прикладного характера в профильном ЕГЭ",
+  "navTitle": "Задачи прикладного характера в профильном ЕГЭ",
+  "navSubtitle": "Работа с формулами и единицами; линейные и квадратные модели, физический смысл и выбор ответа. Занятие 26 октября 2026 года.",
+  "summary": "Прикладные задачи профильного ЕГЭ: тепловое расширение рельса, прибыль, уровень воды в колодце, спрос и выручка, давление в ведре и траектория камня. Формулы, ограничения, проверка единиц, Путь А — 10 заданий.",
+  "topics": [
+    "перевод условия прикладной задачи в уравнение",
+    "единицы измерения и степени десяти",
+    "линейная модель прибыли и изменение величин",
+    "подстановка в квадратное уравнение",
+    "квадратное неравенство и отбор корней",
+    "проверка физического смысла решения"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "systems_models_09",
+      "evidenceAnchor": "translation",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "systems_models_11",
+      "evidenceAnchor": "units",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "systems_models_12",
+      "evidenceAnchor": "physics",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "real_numbers_20",
+      "evidenceAnchor": "units",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "powers_roots_01",
+      "evidenceAnchor": "units",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "polynomials_09",
+      "evidenceAnchor": "quadratic",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_07",
+      "evidenceAnchor": "quadratic",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_09",
+      "evidenceAnchor": "quadratic",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "functions_01",
+      "evidenceAnchor": "translation",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "26.10.26.html",
+    "pdf": "../pdf_docs/26.10.26.pdf",
+    "tex": "../tex_docs/26.10.26.tex",
+    "lab": "26.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-20",
   "ktpRefs": [],
   "href": "20.10.26.html",
