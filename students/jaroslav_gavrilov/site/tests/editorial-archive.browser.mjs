@@ -178,7 +178,7 @@ try{
   for (const width of [390,768,1440]) {
     for (const dark of [false,true]) {
       await visit('26.10.26.html',width,dark);
-      const logMetrics=await evalJS('(()=>({chapters:document.querySelectorAll("main .chapter").length,tasks:document.querySelectorAll(".tasks li").length,ids:(()=>{const x=[...document.querySelectorAll("[id]")].map(el=>el.id);return x.length-new Set(x).size})(),poster:!!document.querySelector("img[src=\"../images/26.10.26.png\"]"),answersHidden:document.getElementById("answers").hidden,links:[...document.querySelectorAll("a[href]")].filter(el=>/(26\.10\.26\.(pdf|tex|png))/.test(el.getAttribute("href"))).length}))()');
+      const logMetrics=await evalJS('(()=>({chapters:document.querySelectorAll("main .chapter").length,tasks:document.querySelectorAll(".tasks li").length,ids:(()=>{const x=[...document.querySelectorAll("[id]")].map(el=>el.id);return x.length-new Set(x).size})(),poster:[...document.querySelectorAll("img")].some(img=>img.getAttribute("src")==="../images/26.10.26.png"),answersHidden:document.getElementById("answers").hidden,links:[...document.querySelectorAll("a[href]")].filter(el=>/(26\.10\.26\.(pdf|tex|png))/.test(el.getAttribute("href"))).length}))()');
       assert.equal(logMetrics.chapters,8,'eight grounded sections');
       assert.equal(logMetrics.tasks,10,'ten tasks from the checklist');
       assert.equal(logMetrics.ids,0,'new lesson has unique IDs');
