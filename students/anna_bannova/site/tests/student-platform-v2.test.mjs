@@ -450,7 +450,7 @@ test('26.10.26 applied models: sources, answers and evidence anchors',()=>{
   assert.equal([...lesson.matchAll(/class="detail solution"/g)].length,10);
   assert.deepEqual(metadata.ktpRefs,['ktp-002','ktp-003']);
   assert.equal(metadata.outcomes.length,7);
-  const ids=[...lesson.matchAll(/\\bid="([^"]+)"/g)].map(match=>match[1]);
+  const ids=[...lesson.matchAll(/\bid="([^"]+)"/g)].map(match=>match[1]);
   assert.equal(new Set(ids).size,ids.length,'no duplicate evidence IDs');
   for(const outcome of metadata.outcomes){
     assert.ok(ids.includes(outcome.evidenceAnchor),'missing competency anchor '+outcome.evidenceAnchor);
