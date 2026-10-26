@@ -1,5 +1,53 @@
 export const LESSONS=[
 {
+  "date": "2026-10-26",
+  "ktpRefs": [],
+  "href": "26.10.26.html",
+  "title": "Логарифмы. Формулы и вычисления.",
+  "navTitle": "Логарифмы. Формулы и вычисления.",
+  "navSubtitle": "Логарифмы: формулы и вычисления. Определение, свойства, переход к новому основанию, вычисления с корнями и переменными, прикладная модель, 10 упражнений. Денис Ермолаев, 26 октября 2026 года.",
+  "summary": "Логарифмы: формулы и вычисления. Определение, свойства, переход к новому основанию, вычисления с корнями и переменными, прикладная модель, 10 упражнений. Денис Ермолаев, 26 октября 2026 года.",
+  "topics": [
+    "Определение и свойства логарифмов",
+    "Вычисление логарифмов с корнями и дробными степенями",
+    "Переход к новому основанию и взаимно обратные логарифмы",
+    "Преобразования логарифмических выражений",
+    "Прикладная модель с логарифмом отношения объёмов"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "expr_16",
+      "evidenceAnchor": "rules",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "expr_17",
+      "evidenceAnchor": "reciprocal",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "expr_18",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calc_10",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_17",
+      "evidenceAnchor": "applications",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "26.10.26.html",
+    "pdf": "../pdf_docs/26.10.26.pdf",
+    "tex": "../tex_docs/26.10.26.tex"
+  }
+},
+{
   "date": "2026-10-16",
   "ktpRefs": [],
   "href": "16.10.26.html",

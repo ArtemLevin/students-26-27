@@ -5,6 +5,7 @@ import path from 'node:path';
 import http from 'node:http';
 import {spawn,spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {LESSONS,getLatestLesson} from '../lesson-registry.js';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../../..');
 const chrome=['google-chrome','google-chrome-stable','chromium','chromium-browser']
@@ -128,12 +129,24 @@ try{
   })()`);
   assert.equal(preset.zeroA,'0');assert.equal(preset.zeroB,'0');
   assert.equal(preset.identity,true);assert.equal(preset.diff,'0');
+  // The browser QA covers the 23 October lesson, but the cabinet must always
+  // show the current newest published lesson, which may be a later date.
+  const latest=getLatestLesson(LESSONS);
+  assert.ok(latest,'Published lesson registry must not be empty');
   await navigate('index.html',1366,900);
+  let cabinetLatest=null;
   for(let i=0;i<40;i++){
-    if(await run('document.getElementById("lesson-title").textContent.includes("Тригонометрические")'))break;
+    cabinetLatest=await run(`({
+      title:document.getElementById("lesson-title")?.textContent.trim(),
+      href:document.getElementById("latestLessonCta")?.getAttribute("href"),
+      eyebrow:document.getElementById("latestLessonEyebrow")?.textContent.trim()
+    })`);
+    if(cabinetLatest.title===latest.title&&cabinetLatest.href===latest.href)break;
     await sleep(150);
   }
-  assert.match(await run('document.getElementById("lesson-title").textContent'),/Тригонометрические/);
+  assert.equal(cabinetLatest.title,latest.title,'Cabinet headline must match the latest published lesson');
+  assert.equal(cabinetLatest.href,latest.href,'Cabinet CTA must open the latest published lesson');
+  assert.ok(cabinetLatest.eyebrow.includes('Последнее занятие'),'Cabinet must identify its latest lesson');
   await shot('cabinet-1366-light');
   await navigate('index.html',375,812,true);
   await shot('cabinet-375-dark');
