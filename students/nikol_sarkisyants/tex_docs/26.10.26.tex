@@ -1,0 +1,363 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T2A]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage[scaled=0.97]{helvet}
+  \renewcommand{\familydefault}{\sfdefault}
+\else
+  \usepackage{fontspec}
+  \setmainfont{DejaVu Sans}
+  \setsansfont{DejaVu Sans}
+\fi
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{geometry}
+\geometry{left=23mm,right=23mm,top=22mm,bottom=23mm}
+\usepackage{microtype}
+\usepackage{icomma}
+\usepackage{setspace}
+\setstretch{1.11}
+\usepackage{enumitem}
+\setlist{topsep=3pt,itemsep=3pt,parsep=0pt}
+\usepackage{booktabs,tabularx,array}
+\usepackage{xcolor}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{005F63}
+\definecolor{ink}{HTML}{30383B}
+\definecolor{muted}{HTML}{657177}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true,linkcolor=darkaccent]{hyperref}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{muted} Показательные неравенства}
+\fancyhead[R]{\footnotesize\color{muted} Николь Саркисьянц}
+\fancyfoot[C]{\footnotesize\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.25pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{15pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\newcommand{\idea}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\ans}[1]{\textcolor{darkaccent}{\textbf{Ответ:}}\ #1}
+\newcommand{\sect}[1]{\section*{\color{darkaccent}#1}}
+\ifPDFTeX\pdfmapfile{+cm-super-extended-t2a.map}\fi
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+  \vspace*{13mm}
+  {\large\color{darkaccent} МАТЕМАТИКА\par}
+  \vspace{10mm}
+  {\fontsize{26}{30}\selectfont\color{ink} Чек-лист\par}
+  \vspace{9mm}
+  {\fontsize{22}{27}\selectfont\color{accent} Показательные неравенства\par}
+  \vspace{6mm}
+  {\Large\color{accent} Замена переменной и метод интервалов\par}
+  \vspace{12mm}
+  {\large\color{ink} Подготовка к ЕГЭ по профильной математике\par}
+  \vfill
+  {\large Николь Саркисьянц\par}
+  \vspace{8mm}
+  {\large 26 октября 2026 г.\par}
+  \vspace{11mm}
+  {\normalsize Лёвин Артём Александрович\par}
+  {\normalsize эксклюзивно для Николь Саркисьянц\par}
+  \vspace{10mm}
+  \begin{tikzpicture}
+    \draw[accent,line width=1pt] (0,0) .. controls (1.0,.65) and (2.0,-.65) .. (3,0)
+       .. controls (4,.65) and (5,-.65) .. (6,0)
+       .. controls (7,.65) and (8,-.65) .. (9,0);
+    \fill[darkaccent] (4.5,0) circle (1.8pt);
+  \end{tikzpicture}
+  \vspace{2mm}
+\end{center}
+\clearpage
+
+\sect{1. Что нужно уметь}
+После повторения темы проверьте, что Вы можете выполнить каждый шаг самостоятельно.
+\begin{itemize}[label=$\square$,leftmargin=9mm]
+  \item Выделить повторяющееся выражение в показателе и ввести замену $t$.
+  \item Представить степени через два основания и объединить одинаковые показатели.
+  \item Разделить неравенство на заведомо положительную степень, сохранив знак.
+  \item Решить квадратное неравенство с условием $k>0$, выполнить обратную замену.
+  \item Решить полученные дробно-рациональные неравенства методом интервалов.
+\end{itemize}
+
+\sect{2. Правила, от которых зависит знак}
+Показательная функция $a^u$ определена и \emph{строго положительна} при $a>0$. При $a\ne1$ её монотонность определяется основанием:
+\[
+\begin{array}{ll}
+ a>1: & a^{f(x)}>a^{g(x)}\ \Longleftrightarrow\ f(x)>g(x),\\[4pt]
+ 0<a<1: & a^{f(x)}>a^{g(x)}\ \Longleftrightarrow\ f(x)<g(x).
+\end{array}
+\]
+\idea{Запомните:} при сравнении степеней с основанием между нулём и единицей знак неравенства меняется.
+
+Степени удобно преобразовывать по формулам
+\[
+ (ab)^t=a^t b^t,\qquad a^{2t}=(a^t)^2,\qquad
+ \frac{a^t}{b^t}=\left(\frac ab\right)^t\quad(a,b>0).
+\]
+Например,
+\[
+ 25^t=(5^t)^2,\qquad 15^t=3^t5^t,\qquad
+ 3^{2+2t}=9(3^t)^2.
+\]
+
+\sect{3. Допустимые преобразования}
+\begin{itemize}[label=\textcolor{accent}{\textbullet},leftmargin=7mm]
+\item \textbf{Деление.} Делить обе части неравенства на $(3^t)^2$ можно: это число положительно при любом действительном $t$.
+\item \textbf{Произвольная переменная.} Деление на $x$ без выяснения его знака недопустимо: при отрицательном $x$ знак неравенства должен измениться. Если $x=0$, деление вообще невозможно.
+\item \textbf{Новая переменная.} Если $k=(5/3)^t$, обязательно записать $k>0$.
+\end{itemize}
+\clearpage
+
+\sect{4. Главный пример: две замены}
+Решите неравенство
+\begin{equation}\label{eq:main}
+ 3\cdot25^{1-\frac3x}-152\cdot15^{-\frac3x}
+ +5\cdot3^{2-\frac6x}>0.
+\end{equation}
+\textbf{Шаг 1. ОДЗ и замена.} В показателях присутствует дробь, поэтому $x\ne0$. Обозначим
+\[
+ t=-\frac3x,\qquad x\ne0.
+\]
+Тогда получим
+\[
+ 3\cdot25^{1+t}-152\cdot15^t+5\cdot3^{2+2t}>0.
+\]
+\textbf{Шаг 2. Приведение к основаниям $3$ и $5$.}
+\begin{align*}
+ 3\cdot25\cdot25^t-152\cdot(3\cdot5)^t
+    +5\cdot9\cdot3^{2t}&>0,\\
+ 75(5^t)^2-152\cdot3^t5^t+45(3^t)^2&>0.
+\end{align*}
+\textbf{Шаг 3. Деление на положительное выражение.}
+Поскольку $(3^t)^2>0$, делим на него \emph{каждое} слагаемое и сохраняем знак:
+\[
+ 75\left(\frac53\right)^{2t}
+ -152\left(\frac53\right)^t+45>0.
+\]
+\textbf{Шаг 4. Вторая замена.} Пусть
+\[
+ k=\left(\frac53\right)^t>0.
+\]
+Неравенство принимает вид
+\begin{equation}\label{eq:quad}
+ 75k^2-152k+45>0,\qquad k>0.
+\end{equation}
+\textbf{Шаг 5. Корни трёхчлена.}
+\[
+ D=(-152)^2-4\cdot75\cdot45=23104-13500=9604,
+ \qquad\sqrt D=98.
+\]
+При устном поиске корня можно заметить $90^2<9604<100^2$, затем проверить $98^2=9604$.
+\[
+ k_1=\frac{152-98}{150}=\frac9{25}=\left(\frac35\right)^2,
+ \qquad k_2=\frac{152+98}{150}=\frac53.
+\]
+\clearpage
+
+\sect{5. Обратные подстановки и ответ}
+\textbf{Шаг 6. Метод интервалов для $k$.} Поскольку старший коэффициент $75>0$, трёхчлен положителен снаружи своих корней. С учётом $k>0$:
+\[
+ k\in\left(0;\frac9{25}\right)\cup\left(\frac53;+\infty\right).
+\]
+\begin{center}
+\begin{tikzpicture}[>=Latex,x=1cm]
+ \draw[->,thick] (-.15,0)--(11,0) node[right] {$k$};
+ \foreach \x/\txt in {0/0,3/{$\frac9{25}$},6/{$\frac53$}}{
+  \draw (\x,0.11)--(\x,-0.11);
+  \node[below=4pt] at (\x,0) {\txt};
+ }
+ \draw[accent,line width=2pt] (0.1,0)--(2.91,0);
+ \draw[accent,line width=2pt,->] (6.11,0)--(10.1,0);
+ \foreach \x in {0,3,6}{\draw[fill=white,thick] (\x,0) circle (2.6pt);}
+ \node[above] at (1.5,.13) {$+$};\node[above] at (4.5,.13) {$-$};\node[above] at (8.3,.13) {$+$};
+\end{tikzpicture}
+\end{center}
+\textbf{Шаг 7. Вернёмся к $t$.} Основание $5/3>1$, поэтому при сравнении показателей знак сохраняется:
+\[
+\left[\begin{gathered}
+\left(\frac53\right)^t<\left(\frac53\right)^{-2},\\
+\left(\frac53\right)^t>\left(\frac53\right)^1
+\end{gathered}\right.
+\quad\Longleftrightarrow\quad
+\left[\begin{gathered}t<-2,\\t>1.\end{gathered}\right.
+\]
+\textbf{Шаг 8. Вернёмся к $x$.} Подставим $t=-3/x$:
+\[
+\left[\begin{gathered}-\dfrac3x<-2,\\[4pt]-\dfrac3x>1.\end{gathered}\right.
+\]
+Приведём левую часть каждого неравенства к одной дроби:
+\[
+\left[\begin{gathered}\dfrac{2x-3}{x}<0,\\[7pt]\dfrac{-x-3}{x}>0.\end{gathered}\right.
+\]
+\textbf{Шаг 9. Метод интервалов.}
+Для первой дроби критические точки $0$ и $3/2$. Её знак отрицателен на $(0;3/2)$.
+Для второй дроби критические точки $-3$ и $0$. Её знак положителен на $(-3;0)$.
+В обоих случаях $0$ исключаем, поскольку $x$ находится в знаменателе.
+
+\ans{$\displaystyle x\in(-3;0)\cup\left(0;\frac32\right).$}
+
+\vspace{2mm}
+\idea{Контроль:} сначала неравенство решалось относительно $k$. После обеих обратных замен ответ должен быть записан через $x$.
+\clearpage
+
+\sect{6. Второй приём: одинаковая структура степеней}
+Решите неравенство, разобранное на занятии:
+\[
+ 2\cdot12^x+9^x>3\cdot16^x.
+\]
+Выделим основания $3$ и $4$:
+\[
+ 2\cdot3^x4^x+(3^x)^2>3(4^x)^2.
+\]
+Разделим на $(3^x)^2>0$ и обозначим $k=(4/3)^x>0$:
+\[
+ 2k+1>3k^2
+ \quad\Longleftrightarrow\quad 3k^2-2k-1<0
+ \quad\Longleftrightarrow\quad (3k+1)(k-1)<0.
+\]
+Корни $-1/3$ и $1$. Для решения квадратного неравенства нужен промежуток $-1/3<k<1$; с учётом $k>0$ остаётся $0<k<1$.
+Поскольку $4/3>1$, получаем
+\[
+ \left(\frac43\right)^x<1=\left(\frac43\right)^0
+ \quad\Longleftrightarrow\quad x<0.
+\]
+\ans{$x\in(-\infty;0)$.}
+
+\sect{7. Что делать, если дискриминант отрицателен?}
+Рассмотрим квадратный трёхчлен $4k^2-5k+4$:
+\[
+ D=(-5)^2-4\cdot4\cdot4=-39<0.
+\]
+Корней нет, поэтому знак трёхчлена постоянен и совпадает со знаком старшего коэффициента. Здесь $4>0$, следовательно,
+\[
+ 4k^2-5k+4>0\qquad\text{для всех }k\in\mathbb R.
+\]
+\idea{Важно:} отрицательный дискриминант допустим для неравенства. Необходимо выяснить знак всего выражения; отсутствие корней само по себе не означает отсутствие решений.
+
+\clearpage
+\sect{8. Финальный этап: рациональная дробь}
+Решите неравенство
+\[
+ \frac{x+1}{3x+5}\ge4,\qquad x\ne-\frac53.
+\]
+Переносим всё влево, приводим к общему знаменателю:
+\[
+ \frac{x+1-4(3x+5)}{3x+5}\ge0
+ \quad\Longleftrightarrow\quad
+ \frac{-11x-19}{3x+5}\ge0.
+\]
+Критические точки: $-19/11$ (нуль числителя, включаем) и $-5/3$ (нуль знаменателя, исключаем). Проверка знака на трёх промежутках даёт
+\[
+ \displaystyle x\in\left[-\frac{19}{11};-\frac53\right).
+\]
+\clearpage
+
+\begin{center}
+{\LARGE\color{darkaccent} Алгоритм решения показательного неравенства}
+\end{center}
+\vspace{12mm}
+\begin{center}
+\begin{tikzpicture}[
+ >=Latex,
+ action/.style={draw=darkaccent,rounded corners=3pt,align=center,text width=11.6cm,
+ minimum height=1.11cm,inner sep=5pt,font=\small},
+ decision/.style={draw=accent,diamond,aspect=3.6,align=center,text width=5.6cm,
+ inner sep=1.5pt,font=\small},
+ smallaction/.style={draw=darkaccent,rounded corners=3pt,align=center,text width=5.3cm,
+ minimum height=1.48cm,inner sep=4pt,font=\small},
+ arrow/.style={->,thick,color=darkaccent,shorten >=2pt}
+ ]
+ \node[action] (a) {Проверить ОДЗ; выделить повторяющийся показатель и при необходимости ввести $t$};
+ \node[action,below=10mm of a] (b) {Привести все степени к двум основаниям $a$ и $b$; собрать $a^t$, $b^t$ и их квадраты};
+ \node[action,below=10mm of b] (c) {Разделить на $(b^t)^2>0$, затем обозначить $k=(a/b)^t>0$};
+ \node[decision,below=12mm of c] (d) {Есть действительные корни\ квадратного трёхчлена?};
+ \node[smallaction,below left=16mm and -7mm of d] (l) {Да: найти корни и определить нужные интервалы знакопостоянства};
+ \node[smallaction,below right=16mm and -7mm of d] (r) {Нет: определить постоянный знак по старшему коэффициенту};
+ \coordinate (joint) at ($(l.south)!0.5!(r.south)+(0,-9mm)$);
+ \node[action,below=15mm of joint] (e) {Учесть $k>0$. Выполнить обратную замену $k\to t$ и сравнить показатели};
+ \node[action,below=10mm of e] (f) {Вернуть $t\to x$. Дробные неравенства привести к одной дроби и решить методом интервалов};
+ \node[action,below=10mm of f] (g) {Объединить подходящие промежутки; проверить выколотые точки и записать ответ};
+ \draw[arrow] (a)--(b);
+ \draw[arrow] (b)--(c);
+ \draw[arrow] (c)--(d);
+ \draw[arrow] (d.south west)--node[near start,left,font=\scriptsize]{да}(l.north);
+ \draw[arrow] (d.south east)--node[near start,right,font=\scriptsize]{нет}(r.north);
+ \draw[thick,color=darkaccent] (l.south)--(l.south |- joint);
+ \draw[thick,color=darkaccent] (r.south)--(r.south |- joint);
+ \draw[arrow] (joint)--(e);
+ \draw[arrow] (e)--(f);
+ \draw[arrow] (f)--(g);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\sect{Тренировочный блок}
+\textcolor{muted}{Путь А. 10 заданий по нарастающей сложности. Во всех заданиях решить неравенство.}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=11mm,itemsep=9pt]
+\item $3^{x+1}>81.$
+\item $\displaystyle\left(\frac14\right)^{2x-1}\le16.$
+\item $4^x-5\cdot2^x+4<0.$
+\item $9^x-4\cdot3^x+3\ge0.$
+\item $4\cdot9^x-5\cdot6^x+4\cdot4^x>0.$
+\item $3\cdot4^x-5\cdot6^x+2\cdot9^x<0.$
+\item $9\cdot16^x-25\cdot12^x+16\cdot9^x<0.$
+\item $\displaystyle\frac{x+2}{2x+3}>2.$
+\item $\displaystyle\frac{2x+1}{x-4}\ge3.$
+\item $\displaystyle15\cdot25^{-\frac1x}-34\cdot15^{-\frac1x}
+ +15\cdot9^{-\frac1x}>0.$
+\end{enumerate}
+\vspace{7mm}
+\idea{Самопроверка перед ответом}
+\begin{itemize}[label=\textcolor{accent}{\textbullet},leftmargin=7mm]
+\item У новой переменной $k$ учтено условие $k>0$.
+\item При основании меньше единицы знак сравнения показателей изменён.
+\item Дроби приведены к общему знаменателю без неразрешённого умножения на $x$.
+\item Нули знаменателей исключены; при нестрогом знаке нули числителя включены.
+\item Ответ дан относительно $x$ как объединение нужных промежутков.
+\end{itemize}
+\clearpage
+
+\sect{Ответы к тренировочному блоку}
+\renewcommand{\arraystretch}{1.19}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{14mm}X@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $x\in(3;+\infty)$ \\
+2 & $x\in\left[-\frac12;+\infty\right)$ \\
+3 & $x\in(0;2)$ \\
+4 & $x\in(-\infty;0]\cup[1;+\infty)$ \\
+5 & $x\in\mathbb R$ \\
+6 & $x\in(0;1)$ \\
+7 & $x\in(0;2)$ \\
+8 & $x\in\left(-\frac32;-\frac43\right)$ \\
+9 & $x\in(4;13]$ \\
+10 & $x\in(-1;0)\cup(0;1)$ \\
+\bottomrule
+\end{tabularx}
+\vspace{8mm}
+\sect{Короткая памятка}
+\begin{tabularx}{\linewidth}{@{}p{53mm}X@{}}
+\toprule
+Сигнал в неравенстве & Ваше действие \\
+\midrule
+Повторяется дробь в показателе & Введите $t$ и запишите ОДЗ исходной переменной.\\
+Два несводимых основания & Выделите степени $a^t$, $b^t$; разделите на положительную степень.\\
+Получили квадратный трёхчлен & Введите $k>0$; найдите интервалы нужного знака.\\
+$D<0$ & Определите постоянный знак по коэффициенту при $k^2$.\\
+Вернулись к дроби с $x$ & Общий знаменатель, критические точки, метод интервалов.\\
+Системы и совокупности & В системе берите пересечение; в совокупности --- объединение.\\
+\bottomrule
+\end{tabularx}
+\vfill
+\begin{center}
+{\footnotesize\color{muted} Лёвин Артём Александрович эксклюзивно для Николь Саркисьянц}
+\end{center}
+\end{document}
