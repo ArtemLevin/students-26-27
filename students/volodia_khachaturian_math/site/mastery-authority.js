@@ -1,0 +1,2 @@
+const mastery={};
+default mastery;
