@@ -206,14 +206,28 @@ try{
   assert.equal(await run("(()=>{dispatchEvent(new Event('afterprint'));return document.querySelectorAll('#ledger tr').length})()"),1);
 
   await navigate('index.html');
-  assert.ok(await run("document.querySelector('#lesson-title').textContent.includes('Повторение')"));
-  assert.ok(await run("document.querySelector('#latestLessonCta').href.endsWith('/24.10.26.html')"));
-  assert.equal(await run("document.querySelector('#latestLabLink').hidden"),true);
-  assert.ok(await run("document.querySelector('#latestPdfLink').href.endsWith('/24.10.26.pdf')"));
-  assert.ok(await run("document.querySelector('#latestTexLink').href.endsWith('/24.10.26.tex')"));
-  assert.equal(await run("document.querySelectorAll('#recentLessons a[href=\"17.10.26.html\"]').length"),1);
+  assert.ok(await run("document.querySelector('#lesson-title').textContent.includes('Тригонометрические')"));
+  assert.ok(await run("document.querySelector('#latestLessonCta').href.endsWith('/27.10.26.html')"));
+  assert.equal(await run("document.querySelector('#latestLabLink').hidden"),false);
+  assert.ok(await run("document.querySelector('#latestLabLink').href.endsWith('/27.10.26-lab.html')"));
+  assert.ok(await run("document.querySelector('#latestPdfLink').href.endsWith('/27.10.26.pdf')"));
+  assert.ok(await run("document.querySelector('#latestTexLink').href.endsWith('/27.10.26.tex')"));
+  assert.equal(await run("document.querySelectorAll('#recentLessons a[href=\"24.10.26.html\"]').length"),1);
 
-  console.log('Timofey through 24.10.26 browser QA: desktop/mobile, themes, URL modes, calculations, controls, network, console and navigator PASS');
+  await navigate('27.10.26.html');
+  assert.equal(await run("document.querySelectorAll('input[data-task]').length"),10);
+  assert.equal(await run("document.querySelectorAll('.answer-list dt').length"),10);
+  assert.equal(await run("document.querySelector('img[src=\"../images/27.10.26.png\"]')!==null"),true);
+  assert.equal(await run("document.querySelector('#progress-label').textContent"),'0 из 10');
+  assert.equal(await run("(()=>{document.querySelector('input[data-task=\"1\"]').click();return document.querySelector('#progress-label').textContent})()"),'1 из 10');
+  await navigate('27.10.26-lab.html#experiment');
+  assert.equal(await run("document.querySelector('#angle').value"),'30');
+  assert.equal(await run("document.querySelector('#tReading').textContent"),'0,25');
+  assert.equal(await run("(()=>{document.querySelector('[data-angle=\"22.5\"]').click();return document.querySelector('#tReading').textContent})()"),'0,5');
+  assert.equal(await run("document.querySelector('#status').textContent.includes('Решение найдено')"),true);
+  assert.equal(await run("(()=>{document.querySelector('[data-angle=\"45\"]').click();return document.querySelector('#tReading').textContent})()"),'0');
+  await screenshot('timofey-trig-lab-20261027');
+  console.log('Timofey through 27.10.26 browser QA: desktop/mobile, themes, navigation, 10 tasks, cosine-square lab PASS');
 }finally{
   if(ws){try{ws.close();}catch(_){}}
   if(processChrome){processChrome.kill('SIGKILL');await sleep(450);}
