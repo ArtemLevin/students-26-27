@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Интерактивная лаборатория Анны Трапезниковой: время полёта мяча, нагревание прибора, опустошение бака. 27 октября 2026.">
+<title>Время и допустимые корни — лаборатория Анны Трапезниковой</title>
+<link rel="stylesheet" href="../../../design-system/tokens.css?v=20260919-2">
+<link rel="stylesheet" href="../../../design-system/foundations.css?v=20260919-2">
+<link rel="stylesheet" href="anna-atlas.css?v=20260921-1">
+<style>
+:root{color-scheme:light;--bg:#f7f2ed;--paper:#fffcf8;--ink:#30272b;--sub:#65565b;--line:#c9b9be;--accent:#783e50;--teal:#247164;--soft:#e9dedf;--focus:#c27639}
+html[data-theme=dark]{color-scheme:dark;--bg:#1c191b;--paper:#292328;--ink:#f7eeed;--sub:#d2bdc6;--line:#79616b;--accent:#f0b6c6;--teal:#a0d7c6;--soft:#372d34;--focus:#ffcc8b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+a{color:var(--accent);text-underline-offset:.18em}button,input{font:inherit}
+button{cursor:pointer;color:var(--ink)}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{position:absolute;top:-100px;left:15px;background:var(--paper);padding:8px}.skip:focus{top:7px}
+.shell{width:min(1020px,calc(100% - 32px));margin:auto}
+.top{background:var(--paper);border-bottom:1px solid var(--line)}.top-in{min-height:66px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+#theme,.tab,.reset{padding:9px 14px;background:var(--paper);border:1px solid var(--line);border-radius:3px}
+#theme:hover,.tab:hover,.reset:hover{border-color:var(--accent)}
+.kicker{color:var(--accent);text-transform:uppercase;letter-spacing:.12em;font-size:.79rem;font-weight:800}
+.hero{padding:65px 0 30px;border-bottom:1px solid var(--line)}
+h1{font:500 clamp(2.6rem,6vw,5rem)/1.06 Georgia,serif;letter-spacing:-.04em;margin:12px 0}
+.lead{max-width:66ch;color:var(--sub);font-size:1.1rem}
+.tabs{display:flex;gap:9px;flex-wrap:wrap;margin:28px 0 12px}.tab[aria-selected=true]{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+html[data-theme=dark] .tab[aria-selected=true]{color:#281c23}
+.panel[hidden]{display:none}.panel{padding:30px 0 70px}
+.layout{display:grid;grid-template-columns:minmax(250px,.8fr) minmax(0,1.2fr);gap:30px;align-items:start}
+h2{font:500 clamp(1.7rem,3.5vw,2.5rem)/1.15 Georgia,serif;margin:0 0 12px}
+.field{border-top:1px solid var(--line);padding-top:20px;margin:25px 0}
+label{display:block;font-weight:650}input[type=range]{width:100%;margin:18px 0;accent-color:var(--accent);touch-action:pan-y}
+.bounds{display:flex;justify-content:space-between;color:var(--sub);font-size:.82rem}
+.chart{background:var(--paper);border:1px solid var(--line);padding:10px;min-width:0}
+.chart svg{display:block;width:100%;height:auto}
+.axis{stroke:var(--sub);stroke-width:1.5}.guide{stroke:var(--teal);stroke-width:1.5;stroke-dasharray:6 5}
+.plot{fill:none;stroke:var(--accent);stroke-width:3}
+.point{fill:var(--teal);stroke:var(--paper);stroke-width:2}
+.svg-label{font:14px system-ui,Arial,sans-serif;fill:var(--ink)}
+.readout{border-top:1px solid var(--line);margin-top:15px;padding:14px 0}
+.value{font:500 clamp(1.45rem,3.5vw,2.2rem) Georgia,serif;color:var(--accent)}
+.formula{font:500 1.04rem/1.7 "Cambria Math",Georgia,serif;overflow-x:auto;white-space:nowrap}
+.status{color:var(--teal);font-weight:650}
+.foot{border-top:1px solid var(--line);padding:18px 0 40px;font-size:.85rem;color:var(--sub)}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.hero{padding-top:34px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+</style></head>
+<body data-anna-atlas data-anna-page="lab">
+<a class="skip" href="#experiments">К экспериментам</a>
+<header class="top"><div class="shell top-in"><a href="27.10.26.html">← К занятию 27 октября</a><div><a href="index.html">Навигатор</a> <button id="theme" aria-label="Переключить цветовую тему" type="button">◐ Тема</button></div></div></header>
+<main class="shell" id="experiments">
+<section class="hero"><p class="kicker">27 октября 2026 · цифровая лаборатория</p><h1>Два корня. Один вопрос.</h1><p class="lead">Изменяйте момент времени и прослеживайте положение точки на графике, значение формулы и условие задачи. Сравните интервал над заданным уровнем с первым моментом достижения порога.</p></section>
+<div class="tabs" role="tablist" aria-label="Выберите эксперимент">
+<button type="button" class="tab" id="tab-ball" data-mode="ball" role="tab" aria-controls="panel-ball" aria-selected="true">Мяч · интервал</button>
+<button type="button" class="tab" id="tab-heat" data-mode="heat" role="tab" aria-controls="panel-heat" aria-selected="false">Прибор · отключение</button>
+<button type="button" class="tab" id="tab-tank" data-mode="tank" role="tab" aria-controls="panel-tank" aria-selected="false">Бак · физический корень</button>
+</div>
+<section class="panel" id="panel-ball" role="tabpanel" aria-labelledby="tab-ball"><div class="layout">
+<div><p class="kicker">01 / Промежуток времени</p><h2>Мяч выше 9 метров</h2><p>Высота задаётся формулой <strong>h(t) = 1 + 10t − 2t²</strong>. Порог пересекается при t = 1 и t = 4. Найдите продолжительность пребывания не ниже 9 метров.</p>
+<div class="field"><label for="ball-t">Время: <output id="ball-t-out" for="ball-t">2,5</output> с</label><input id="ball-t" type="range" min="0" max="5" step=".05" value="2.5"><div class="bounds"><span>0 с</span><span>5 с</span></div></div>
+<button type="button" class="reset" data-reset="ball">Вернуть исходное положение</button>
+<div class="readout"><p class="value" id="ball-value">13,5 м</p><p class="formula" id="ball-formula">h(2,5) = 1 + 10·2,5 − 2·2,5²</p><p class="status" id="ball-status" aria-live="polite">Порог достигнут</p><strong>Ответ: 4 − 1 = 3 с.</strong></div>
+</div><div class="chart"><svg id="svg-ball" viewBox="0 0 550 330" role="img" aria-labelledby="ball-svg-title"><title id="ball-svg-title">Высота мяча как функция времени с порогом 9 метров, выделен промежуток от 1 до 4 секунд</title><path class="axis" d="M50 20V278H525"/><line class="guide" x1="50" y1="118" x2="525" y2="118"/><path id="ball-path" class="plot"/><line id="ball-vline" class="guide" x1="0" y1="0" x2="0" y2="278"/><circle id="ball-point" class="point" r="7"/><text class="svg-label" x="10" y="123">9 м</text><text class="svg-label" x="100" y="304">t₁=1</text><text class="svg-label" x="385" y="304">t₂=4</text><text class="svg-label" x="484" y="317">t, с</text></svg></div>
+</div></section>
+<section class="panel" id="panel-heat" role="tabpanel" aria-labelledby="tab-heat" hidden><div class="layout">
+<div><p class="kicker">02 / Длительность</p><h2>Прибор при температуре не ниже 80 °C</h2><p>По модели <strong>T(t) = −t² + 16t + 20</strong> температура достигает 80 °C через 6 минут, а при охлаждении вновь становится равной 80 °C через 10 минут. Рассматривается продолжительность промежутка.</p>
+<div class="field"><label for="heat-t">Время: <output id="heat-t-out" for="heat-t">8</output> мин</label><input id="heat-t" type="range" min="0" max="16" step=".1" value="8"><div class="bounds"><span>0 мин</span><span>16 мин</span></div></div><button type="button" class="reset" data-reset="heat">Вернуть исходное положение</button>
+<div class="readout"><p class="value" id="heat-value">84 °C</p><p class="formula" id="heat-formula">T(8) = −8² + 16·8 + 20</p><p class="status" id="heat-status" aria-live="polite">Не ниже 80 °C</p><strong>Ответ: 10 − 6 = 4 мин.</strong></div>
+</div><div class="chart"><svg id="svg-heat" viewBox="0 0 550 330" role="img" aria-labelledby="heat-svg-title"><title id="heat-svg-title">Температура прибора по времени, порог 80 градусов пересекается через 6 и 10 минут</title><path class="axis" d="M50 20V278H525"/><line class="guide" x1="50" y1="95" x2="525" y2="95"/><path id="heat-path" class="plot"/><line id="heat-vline" class="guide" x1="0" y1="0" x2="0" y2="278"/><circle id="heat-point" class="point" r="7"/><text class="svg-label" x="2" y="99">80 °C</text><text class="svg-label" x="206" y="305">6</text><text class="svg-label" x="321" y="305">10</text><text class="svg-label" x="484" y="317">t, мин</text></svg></div>
+</div></section>
+<section class="panel" id="panel-tank" role="tabpanel" aria-labelledby="tab-tank" hidden><div class="layout">
+<div><p class="kicker">03 / Отбор корня</p><h2>Когда останется четверть воды?</h2><p>В цилиндрическом баке H₀ = 20 м, g = 10 м/с², k = 1/250. Принимаем высоту <strong>H(t) = 20 − 0,08t + 0,00008t²</strong> до опустошения бака.</p>
+<div class="field"><label for="tank-t">Время: <output id="tank-t-out" for="tank-t">250</output> с</label><input id="tank-t" type="range" min="0" max="750" step="5" value="250"><div class="bounds"><span>0 с</span><span>750 с</span></div></div><button type="button" class="reset" data-reset="tank">Вернуть исходное положение</button>
+<div class="readout"><p class="value" id="tank-value">5 м</p><p class="formula" id="tank-formula">H(250) = 20 − 0,08·250 + 0,00008·250²</p><p class="status" id="tank-status" aria-live="polite">В баке остаётся четверть воды</p><strong>Ответ: 250 с.</strong><p>Уравнение H(t)=5 даёт t=250 и t=750. Второй корень не подходит: бак уже опустел к t=500 с.</p></div>
+</div><div class="chart"><svg id="svg-tank" viewBox="0 0 550 330" role="img" aria-labelledby="tank-svg-title"><title id="tank-svg-title">Высота воды с течением времени: физическая модель действует до опустошения бака в 500 секунд</title><path class="axis" d="M50 20V278H525"/><line class="guide" x1="50" y1="219" x2="525" y2="219"/><path id="tank-path" class="plot"/><line id="tank-vline" class="guide" x1="0" y1="0" x2="0" y2="278"/><circle id="tank-point" class="point" r="7"/><text class="svg-label" x="9" y="224">5 м</text><text class="svg-label" x="335" y="305">500 · пустой бак</text><text class="svg-label" x="487" y="317">t, с</text></svg></div>
+</div></section>
+</main>
+<footer class="foot"><div class="shell">Лёвин Артём Александрович · эксклюзивно для Анны Трапезниковой · 27 октября 2026</div></footer>
+<script>
+(function(){'use strict';
+const $=id=>document.getElementById(id), root=document.documentElement, modes=['ball','heat','tank'], tabs=[...document.querySelectorAll('[data-mode]')];
+const fmt=n=>Number(n.toFixed(2)).toLocaleString('ru-RU',{maximumFractionDigits:2});
+try{if(localStorage.getItem('anna-theme')==='dark')root.dataset.theme='dark'}catch(_){}
+$('theme').addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('anna-theme',root.dataset.theme)}catch(_){}});
+const conf={
+ ball:{min:0,max:5,ymax:15.5,fun:t=>1+10*t-2*t*t,threshold:9,unit:'м',time:'с'},
+ heat:{min:0,max:16,ymax:90,fun:t=>-t*t+16*t+20,threshold:80,unit:'°C',time:'мин'},
+ tank:{min:0,max:750,ymax:21,fun:t=>20-.08*t+.00008*t*t,threshold:5,unit:'м',time:'с'}
+};
+function plot(m){const c=conf[m],x=t=>50+(t-c.min)/(c.max-c.min)*475,y=v=>278-v/c.ymax*240;
+let p=[];const xmax=m==='tank'?500:c.max;for(let i=0;i<=160;i++){const t=c.min+(xmax-c.min)*i/160;p.push((i?'L':'M')+x(t).toFixed(2)+' '+y(c.fun(t)).toFixed(2));}
+$(m+'-path').setAttribute('d',p.join(' '));$(m+'-path').setAttribute('stroke-dasharray','none');
+const line=$('svg-'+m).querySelector('.guide');line.setAttribute('y1',y(c.threshold));line.setAttribute('y2',y(c.threshold));
+}
+function render(m){const c=conf[m],t=Number($(m+'-t').value),v=c.fun(t),x=50+(t-c.min)/(c.max-c.min)*475,y=278-v/c.ymax*240;
+$(m+'-t-out').textContent=fmt(t);$(m+'-value').textContent=fmt(v)+' '+c.unit;
+$(m+'-point').setAttribute('cx',x);$(m+'-point').setAttribute('cy',y);
+$(m+'-vline').setAttribute('x1',x);$(m+'-vline').setAttribute('x2',x);$(m+'-vline').setAttribute('y1',y);
+if(m==='ball'){$('ball-formula').textContent='h('+fmt(t)+') = 1 + 10·'+fmt(t)+' − 2·'+fmt(t)+'²';$('ball-status').textContent=v>=9-1e-8?'Высота не ниже 9 м':'Высота ниже 9 м';}
+if(m==='heat'){$('heat-formula').textContent='T('+fmt(t)+') = −'+fmt(t)+'² + 16·'+fmt(t)+' + 20';$('heat-status').textContent=v>=80-1e-8?'Температура не ниже 80 °C':'Температура ниже 80 °C';}
+if(m==='tank'){$('tank-formula').textContent='H('+fmt(t)+') = 20 − 0,08·'+fmt(t)+' + 0,00008·'+fmt(t)+'²';$('tank-status').textContent=t>500?'Математическая ветвь после опустошения; физически неприменима':Math.abs(v-5)<1e-6?'В баке четверть исходного объёма':t===500?'Бак пуст':v>5?'Больше четверти начального объёма':'Меньше четверти начального объёма';}
+}
+function choose(m,historyChange=true){if(!modes.includes(m))m='ball';tabs.forEach(t=>{const a=t.dataset.mode===m;t.setAttribute('aria-selected',String(a));t.tabIndex=a?0:-1});modes.forEach(k=>{$('panel-'+k).hidden=k!==m});if(historyChange){const url=new URL(location.href);url.searchParams.set('mode',m);history.replaceState(null,'',url.pathname+url.search+url.hash)}}
+modes.forEach(m=>{plot(m);$(m+'-t').addEventListener('input',()=>render(m));document.querySelector('[data-reset="'+m+'"]').addEventListener('click',()=>{$(m+'-t').value=m==='ball'?2.5:m==='heat'?8:250;render(m)});render(m)});
+tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>choose(tab.dataset.mode));tab.addEventListener('keydown',e=>{if(!['ArrowRight','ArrowLeft','Home','End'].includes(e.key))return;e.preventDefault();const j=e.key==='Home'?0:e.key==='End'?tabs.length-1:(i+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;tabs[j].focus();choose(tabs[j].dataset.mode)})});
+const current=()=>new URLSearchParams(location.search).get('mode')||'ball';addEventListener('popstate',()=>choose(current(),false));choose(current(),false);
+})();
+</script>
+</body></html>
