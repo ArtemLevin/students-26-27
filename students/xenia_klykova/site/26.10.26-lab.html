@@ -44,7 +44,7 @@ topup:{name:'Пополнения · млн руб., 15 %',S:120,r:15,n:3,ops:[0
 withdraw:{name:'Снятия · тыс. руб., 10 %',S:100,r:10,n:4,ops:[0,-5,-5,-5],unit:'тыс. руб.'},
 mixed:{name:'Разные операции · тыс. руб., 10 %',S:200,r:10,n:3,ops:[0,20,-10,0],unit:'тыс. руб.'},
 reverse:{name:'Обратная задача · тыс. руб., 10 %',S:500,r:10,n:3,ops:[0,0,0,0],unit:'тыс. руб.'}};
-let mode='plain',state={...scenarios.plain,ops:scenarios.plain.ops.slice()},active=3;
+let mode='plain',lastPreset='plain',state={...scenarios.plain,ops:scenarios.plain.ops.slice()},active=3;
 const ns='http://www.w3.org/2000/svg';
 const round=x=>Math.round((x+Number.EPSILON)*1e6)/1e6;
 const num=x=>new Intl.NumberFormat('ru-RU',{maximumFractionDigits:6}).format(round(x));
@@ -58,14 +58,14 @@ let terms=['S · k^'+active];for(let year=2;year<=active;year++){const a=o.rows[
 $('explain').textContent=o.rows.slice(1,active).some(x=>x.op!==0)?'Каждая операция влияет на результат в течение оставшихся начислений. В начале года сумма операции добавляется к базе (или вычитается из неё).':'Начисления остаются на счёте. Каждый следующий процент считается от увеличенной суммы.';
 document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
 $('reverseSolution').hidden=true;$('solveRate').textContent='Показать вычисление'}
-function select(id){if(!scenarios[id])id='plain';mode=id;let x=scenarios[id];state={...x,ops:x.ops.slice()};active=x.n;location.hash=id;render()}
+function select(id){if(!scenarios[id])id='plain';mode=id;lastPreset=id;let x=scenarios[id];state={...x,ops:x.ops.slice()};active=x.n;location.hash=id;render()}
 document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>select(b.dataset.mode)));
-function change(id,value){const n=Number(value);if(!Number.isFinite(n))return;if(id==='principal')state.S=Math.max(20,Math.min(500,n));if(id==='rate')state.r=Math.max(0,Math.min(25,n));if(id==='years')state.n=Math.max(1,Math.min(4,n));if(id==='operation'){for(let i=1;i<4;i++)state.ops[i]=n;mode='custom';state.name='Ваш эксперимент · '+state.unit;}active=state.n;render()}
+function change(id,value){const n=Number(value);if(!Number.isFinite(n))return;if(id==='principal')state.S=Math.max(20,Math.min(500,n));if(id==='rate')state.r=Math.max(0,Math.min(25,n));if(id==='years')state.n=Math.max(1,Math.min(4,n));if(id==='operation'){for(let i=1;i<4;i++)state.ops[i]=n;}mode='custom';state.name='Ваш эксперимент · '+state.unit;active=state.n;render()}
 ['principal','rate','years','operation'].forEach(id=>$(id).addEventListener('input',()=>change(id,$(id).value)));
 $('selectedYear').addEventListener('input',()=>{active=Number($('selectedYear').value);render()});
 $('prev').addEventListener('click',()=>{active=Math.max(1,active-1);render()});
 $('next').addEventListener('click',()=>{active=Math.min(state.n,active+1);render()});
-$('reset').addEventListener('click',()=>select(scenarios[mode]?mode:'plain'));
+$('reset').addEventListener('click',()=>select(lastPreset));
 $('solveRate').addEventListener('click',()=>{let v=$('reverseSolution');v.hidden=!v.hidden;$('solveRate').textContent=v.hidden?'Показать вычисление':'Скрыть вычисление'});
 const themeKey='xenia-lesson-theme-v1';try{document.documentElement.dataset.theme=localStorage.getItem(themeKey)==='dark'?'dark':'light'}catch(_){}
 $('theme').addEventListener('click',()=>{const root=document.documentElement;root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem(themeKey,root.dataset.theme)}catch(_){}});
