@@ -212,7 +212,7 @@ try{
   assert.ok(await run("document.querySelector('#latestLabLink').href.endsWith('/27.10.26-lab.html')"));
   assert.ok(await run("document.querySelector('#latestPdfLink').href.endsWith('/27.10.26.pdf')"));
   assert.ok(await run("document.querySelector('#latestTexLink').href.endsWith('/27.10.26.tex')"));
-  assert.equal(await run("document.querySelectorAll('#recentLessons a[href=\"17.10.26.html\"]').length"),1);
+  assert.equal(await run("document.querySelectorAll('#recentLessons a[href=\"24.10.26.html\"]').length"),1);
 
   await navigate('27.10.26.html');
   assert.equal(await run("document.querySelectorAll('input[data-task]').length"),10);
