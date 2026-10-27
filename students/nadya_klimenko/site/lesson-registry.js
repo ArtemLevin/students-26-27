@@ -5,6 +5,109 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-27",
+    "ktpRefs": [],
+    "href": "27.10.26.html",
+    "title": "Деление дробей, уравнения и сложные задачи",
+    "navTitle": "Деление дробей и составные уравнения",
+    "navSubtitle": "Обратные действия · подобные · задачи на возраст и догонку",
+    "summary": "Надя Клименко, 27.10.26. Деление обыкновенных и десятичных дробей, обратные действия, приведение подобных, составные уравнения и текстовые задачи на возраст, части и догонку.",
+    "topics": [
+      "деление обыкновенных дробей",
+      "десятичное деление и порядок действий",
+      "неизвестный множитель и делитель",
+      "приведение подобных слагаемых",
+      "составные уравнения со скобками",
+      "задачи на возраст и части",
+      "движение в одном направлении и догонка"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "frac_05",
+        "evidenceAnchor": "fractions",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "frac_14",
+        "evidenceAnchor": "fractions",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "dec_06",
+        "evidenceAnchor": "fractions",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "dec_07",
+        "evidenceAnchor": "fractions",
+        "relation": "touched",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "alg_05",
+        "evidenceAnchor": "like",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "alg_13",
+        "evidenceAnchor": "equations",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "alg_14",
+        "evidenceAnchor": "check",
+        "relation": "touched",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "alg_12",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_03",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_12",
+        "evidenceAnchor": "parts",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_08",
+        "evidenceAnchor": "catchup",
+        "relation": "touched",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_06",
+        "evidenceAnchor": "catchup",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "strategy_01",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      }
+    ],
+    "materials": {
+      "html": "27.10.26.html",
+      "pdf": "../pdf_docs/27.10.26.pdf",
+      "tex": "../tex_docs/27.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-20",
     "ktpRefs": [],
     "href": "20.10.26.html",
