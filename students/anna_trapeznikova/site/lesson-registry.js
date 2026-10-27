@@ -5,6 +5,71 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-27",
+  "ktpRefs": [],
+  "href": "27.10.26.html",
+  "title": "Прикладные задачи: время, границы и смысл корней",
+  "navTitle": "Прикладные задачи: время, границы и смысл корней",
+  "navSubtitle": "Полёт мяча, опустошение бака, нагревание, момент инерции и архимедова сила. Занятие 27 октября 2026 года.",
+  "summary": "Прикладные модели профильного ЕГЭ: перевод текста в уравнение, две временные границы, выбор допустимого корня, 10 развёрнутых заданий «Путь А» и интерактивная лаборатория.",
+  "topics": [
+    "математическая модель по описанию процесса",
+    "отбор корней квадратного уравнения по физическому смыслу",
+    "продолжительность процесса и разность двух моментов времени",
+    "квадратные неравенства в задачах на высоту и температуру",
+    "кубическое уравнение для радиуса и момент инерции",
+    "согласование единиц и ограничений"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "systems_models_09",
+      "evidenceAnchor": "model",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "systems_models_11",
+      "evidenceAnchor": "model",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "systems_models_12",
+      "evidenceAnchor": "tank",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_07",
+      "evidenceAnchor": "height",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_09",
+      "evidenceAnchor": "heating",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "polynomials_09",
+      "evidenceAnchor": "physics",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "functions_01",
+      "evidenceAnchor": "height",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "powers_roots_01",
+      "evidenceAnchor": "physics",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "27.10.26.html",
+    "pdf": "../pdf_docs/27.10.26.pdf",
+    "tex": "../tex_docs/27.10.26.tex",
+    "lab": "27.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-26",
   "ktpRefs": [],
   "href": "26.10.26.html",
