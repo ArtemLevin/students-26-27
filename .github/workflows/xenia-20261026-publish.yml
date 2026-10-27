@@ -1,0 +1,42 @@
+name: Publish Xenia deposit lesson (temporary)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'students/xenia_klykova/site/26.10.26.html'
+      - 'students/xenia_klykova/site/26.10.26-lab.html'
+      - 'students/xenia_klykova/site/data/publication-intents/2026-10-26.json'
+permissions:
+  contents: write
+  pull-requests: read
+jobs:
+  publish:
+    if: github.head_ref == 'lesson-xenia-20261026-deposits' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate publication plan
+        run: node scripts/publish-lesson.mjs xenia_klykova 26.10.26 --intent students/xenia_klykova/site/data/publication-intents/2026-10-26.json --dry-run
+      - name: Publish through v2 transaction
+        run: node scripts/publish-lesson.mjs xenia_klykova 26.10.26 --intent students/xenia_klykova/site/data/publication-intents/2026-10-26.json
+      - name: Validate student
+        run: |
+          node scripts/student.mjs validate xenia_klykova
+          node scripts/student.mjs audit
+      - name: Commit canonical publication artifacts
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A students/xenia_klykova/site/lesson-registry.js students/xenia_klykova/site/data/lessons students/xenia_klykova/site/data/ktp-state.json students/xenia_klykova/site/data/mastery-state.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(xenia): publish 26.10 deposit lesson via v2 publisher'
+            git push origin HEAD:lesson-xenia-20261026-deposits
+          fi
