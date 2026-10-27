@@ -5,6 +5,52 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-26",
+  "ktpRefs": [],
+  "href": "26.10.26.html",
+  "title": "Вклады и сложные проценты",
+  "navTitle": "Вклады и сложные проценты",
+  "navSubtitle": "Финансовая математика для Ксении Клыковой: сложные проценты, пополнения, снятия, обратные задачи и 10 упражнений. Занятие 26 октября 2026 года.",
+  "summary": "Финансовая математика для Ксении Клыковой: сложные проценты, пополнения, снятия, обратные задачи и 10 упражнений. Занятие 26 октября 2026 года.",
+  "topics": [
+    "сложные проценты и повышающий коэффициент",
+    "ежегодная капитализация процентов",
+    "вклады с регулярными пополнениями и снятиями",
+    "формула суммы и таблица начислений",
+    "обратные задачи на вклад и годовую ставку",
+    "проверка денежных единиц"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t16_deposits",
+      "evidenceAnchor": "formula",
+      "relation": "practiced",
+      "label": "Формула сложных процентов и связь показателя со сроком",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_deposit_contrib",
+      "evidenceAnchor": "contrib",
+      "relation": "practiced",
+      "label": "Вклад с пополнениями и снятиями в начале года",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_model_equation",
+      "evidenceAnchor": "inverse",
+      "relation": "practiced",
+      "label": "Обратные задачи на начальный вклад и процентную ставку",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "26.10.26.html",
+    "pdf": "../pdf_docs/26.10.26.pdf",
+    "tex": "../tex_docs/26.10.26.tex",
+    "lab": "26.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-22",
   "ktpRefs": [],
   "href": "22.10.26.html",
