@@ -5,6 +5,87 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-27",
+  "ktpRefs": [],
+  "href": "27.10.26.html",
+  "title": "Задачи прикладного характера",
+  "navTitle": "Прикладные задачи",
+  "navSubtitle": "Тепловое расширение и уровень воды; квадратичные модели траектории и температуры, неравенства, выбор допустимого корня и проверка размерности. Восемь разборов без тренировочного блока.",
+  "summary": "Тепловое расширение и уровень воды; квадратичные модели траектории и температуры, неравенства, выбор допустимого корня и проверка размерности. Восемь разборов без тренировочного блока.",
+  "topics": [
+    "прикладные задачи по формуле",
+    "изменение линейной величины и перевод единиц",
+    "квадратичная зависимость и график параболы",
+    "квадратные уравнения и неравенства",
+    "продолжительность нахождения выше порога",
+    "физически допустимые корни",
+    "проверка размерности"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege27_10_001",
+      "evidenceAnchor": "linear",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_10_002",
+      "evidenceAnchor": "linear",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_10_003",
+      "evidenceAnchor": "linear",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_10_004",
+      "evidenceAnchor": "linear",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_10_005",
+      "evidenceAnchor": "quadratic",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_10_014",
+      "evidenceAnchor": "domain",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_07_002",
+      "evidenceAnchor": "quadratic",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_07_016",
+      "evidenceAnchor": "domain",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_16_002",
+      "evidenceAnchor": "quadratic",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_12_012",
+      "evidenceAnchor": "quadratic",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_17_002",
+      "evidenceAnchor": "domain",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "27.10.26.html",
+    "pdf": "../pdf_docs/27.10.26.pdf",
+    "tex": "../tex_docs/27.10.26.tex",
+    "lab": "27.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-23",
   "ktpRefs": [],
   "href": "23.10.26.html",
