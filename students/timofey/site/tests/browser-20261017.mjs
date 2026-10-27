@@ -222,6 +222,13 @@ try{
   assert.equal(await run("(()=>{document.querySelector('input[data-task=\"1\"]').click();return document.querySelector('#progress-label').textContent})()"),'1 из 10');
   await navigate('27.10.26-lab.html#experiment');
   assert.equal(await run("document.querySelector('#angle').value"),'30');
+  assert.equal(await run("document.querySelector('#angleNumber').value"),'30');
+  assert.equal(await run("(()=>{const field=document.querySelector('#angleNumber');field.value='67.5';field.dispatchEvent(new Event('change'));return document.querySelector('#tReading').textContent})()"),'0,5');
+  assert.equal(await run("document.querySelector('#angle').value"),'67.5');
+  assert.equal(await run("document.querySelector('#graphDesc').textContent.includes('67,5')"),true);
+  assert.equal(await run("(()=>{const field=document.querySelector('#angleNumber');field.value='200';field.dispatchEvent(new Event('change'));return field.validity.customError})()"),true);
+  assert.equal(await run("document.querySelector('#angle').value"),'67.5');
+  await run("(()=>{document.querySelector('#angleNumber').value='30';document.querySelector('#angleNumber').dispatchEvent(new Event('change'));})()");
   assert.equal(await run("document.querySelector('#tReading').textContent"),'0,25');
   assert.equal(await run("(()=>{document.querySelector('[data-angle=\"22.5\"]').click();return document.querySelector('#tReading').textContent})()"),'0,5');
   assert.equal(await run("document.querySelector('#status').textContent.includes('Решение найдено')"),true);
