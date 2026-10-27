@@ -253,6 +253,10 @@ const evidence2010For=title=>({
 const lesson2310EvidenceById=new Map(Object.entries({"ege27_08_005":{"anchor":"powers","relation":"practiced"},"ege27_08_006":{"anchor":"powers","relation":"practiced"},"ege27_08_007":{"anchor":"powers","relation":"practiced"},"ege27_08_011":{"anchor":"powers","relation":"practiced"},"ege27_08_012":{"anchor":"powers","relation":"practiced"},"ege27_08_015":{"anchor":"powers","relation":"practiced"},"ege27_07_007":{"anchor":"exponential","relation":"practiced"},"ege27_12_015":{"anchor":"exponential","relation":"practiced"},"ege27_12_001":{"anchor":"exponential","relation":"touched"},"ege27_02_001":{"anchor":"vectors","relation":"practiced"},"ege27_02_002":{"anchor":"vectors","relation":"practiced"},"ege27_02_005":{"anchor":"vectors","relation":"practiced"},"ege27_02_007":{"anchor":"vectors","relation":"practiced"},"ege27_02_009":{"anchor":"vectors","relation":"practiced"},"ege27_11_002":{"anchor":"motion","relation":"practiced"},"ege27_11_004":{"anchor":"motion","relation":"touched"},"ege27_11_005":{"anchor":"motion","relation":"practiced"},"ege27_11_015":{"anchor":"motion","relation":"practiced"},"ege27_11_007":{"anchor":"work","relation":"practiced"},"ege27_11_008":{"anchor":"work","relation":"practiced"}}));
 const evidence2310For=(skill)=>({date:'23.10.26',text:'Комплексное повторение по занятию 23.10.26: метод разбирался с преподавателем. Новый уровень самостоятельного освоения по факту повторения не устанавливается.',web:'23.10.26.html#'+skill.anchor});
 
+
+const lesson2710EvidenceById=new Map(Object.entries({"ege27_10_001":{"anchor":"linear","relation":"touched"},"ege27_10_002":{"anchor":"linear","relation":"touched"},"ege27_10_003":{"anchor":"linear","relation":"touched"},"ege27_10_004":{"anchor":"linear","relation":"touched"},"ege27_10_005":{"anchor":"quadratic","relation":"touched"},"ege27_10_014":{"anchor":"domain","relation":"touched"},"ege27_07_002":{"anchor":"quadratic","relation":"touched"},"ege27_07_016":{"anchor":"domain","relation":"touched"},"ege27_16_002":{"anchor":"quadratic","relation":"touched"},"ege27_12_012":{"anchor":"quadratic","relation":"touched"},"ege27_17_002":{"anchor":"domain","relation":"touched"}}));
+const evidence2710For=skill=>({date:'27.10.26',text:'На занятии рассмотрены прикладные формулы, квадратичные модели и проверка физической допустимости ответа. Самостоятельная диагностика не проводилась, подтверждённые уровни освоения сохраняются.',web:'27.10.26.html#'+skill.anchor,pdf:'../pdf_docs/27.10.26.pdf',tex:'../tex_docs/27.10.26.tex'});
+
 const groups=groupDefs.map((def,groupIndex)=>{
   const number=groupIndex+1;
   const groupId=`ege27_${String(number).padStart(2,'0')}`;
@@ -311,6 +315,7 @@ const groups=groupDefs.map((def,groupIndex)=>{
 
       const id=`${groupId}_${String(itemIndex+1).padStart(3,'0')}`;
       if(lesson2310EvidenceById.has(id)) evidence.push(evidence2310For(lesson2310EvidenceById.get(id)));
+       if(lesson2710EvidenceById.has(id)) evidence.push(evidence2710For(lesson2710EvidenceById.get(id)));
       return{
         id,title,
         description:`${title}. Конкретный навык сектора «${def.title}»: распознать тип задачи, выбрать корректный метод и получить проверяемый результат.`,
@@ -329,7 +334,7 @@ window.COMPETENCY_MAP_DATA={
     teacher:'Лёвин Артём Александрович',
     program:'подготовка к ЕГЭ по профильной математике',
     examVersion:'проект ЕГЭ-2027',
-    updated:'23.10.26',
+    updated:'27.10.26',
     sourceNote:'Структура актуализирована по проектам документов ФИПИ ЕГЭ-2027; подтверждённые уровни уточняются по материалам занятий.'
   },
   storage:{
@@ -338,6 +343,7 @@ window.COMPETENCY_MAP_DATA={
     theme:'ekaterina_gnedkova-ege_profile_2027-theme'
   },
   materials:[
+    {date:'27.10.26',title:'Задачи прикладного характера',summary:'Приращение величин, парабола и порог, температура, допустимость физических корней. Восемь разобранных примеров, без тренировки.',web:'27.10.26.html',lab:'27.10.26-lab.html',pdf:'../pdf_docs/27.10.26.pdf',tex:'../tex_docs/27.10.26.tex'},
     {date:'23.10.26',title:'Комплексное повторение',summary:'Степени, показательные уравнения и функция по точкам, векторы, движение и этапы совместной работы.',web:'23.10.26.html'},
     {date:'20.10.26',title:'Вклады и аннуитетный кредит',summary:'Равный платёж, проценты и остаток долга, переплата, сравнение двух схем; интерактивный расчёт и 10 заданий.',web:'20.10.26.html'},
     {date:'16.10.26',title:'Дифференцированное погашение кредита',summary:'Пять формул, равное уменьшение основного долга, переплата и ограничения по платежам.',web:'16.10.26.html',lab:'16.10.26-lab.html',pdf:'../pdf_docs/16.10.26.pdf',tex:'../tex_docs/16.10.26.tex',image:'../images/16.10.26.png'},

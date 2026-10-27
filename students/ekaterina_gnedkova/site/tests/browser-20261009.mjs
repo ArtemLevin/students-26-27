@@ -5,6 +5,7 @@ import path from 'node:path';
 import http from 'node:http';
 import {spawn,spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {getLatestLesson} from '../lesson-registry.js';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../../../');
 const lessonHTML=fs.readFileSync(path.join(root,'students/ekaterina_gnedkova/site/09.10.26.html'),'utf8');
@@ -188,14 +189,67 @@ try{
       evidence:credit.map(i=>({title:i.title,exists:i.evidence?.some(e=>e.date==='09.10.26')})),
       horizontalOverflow:document.documentElement.scrollWidth>innerWidth+2};
   });
-  assert.equal(home.latest,'23.10.26');
-  assert.match(home.visibleLatest,/Комплексное повторение/);
+  const current=getLatestLesson();
+  const currentShortDate=current.date.slice(8,10)+'.'+current.date.slice(5,7)+'.'+current.date.slice(2,4);
+  assert.equal(home.latest,currentShortDate);
+  assert.equal(home.visibleLatest.trim(),current.title);
    assert.ok(home.latestLinks>=4,'New lesson links missing');
   assert.ok(home.links>=4);
   assert.equal(home.evidence.length,3);
   assert.ok(home.evidence.every(x=>x.exists),'Missing credit evidence '+JSON.stringify(home.evidence));
   assert.equal(home.horizontalOverflow,false);
   await screenshot('home-desktop');
+
+  // Current lesson: modelling, deep links, and the physically bounded lab.
+  await navigate('27.10.26.html');
+  const currentLesson=await execute(()=>({
+    title:document.querySelector('h1')?.textContent||'',
+    sections:['algorithm','linear','quadratic','temperature','domain','check'].every(id=>!!document.getElementById(id)),
+    examples:document.querySelectorAll('.example').length,
+    labLinks:document.querySelectorAll('a[href^="27.10.26-lab.html"]').length,
+    overflow:document.documentElement.scrollWidth>innerWidth+2
+  }));
+  assert.match(currentLesson.title,/Задачи прикладного характера/);
+  assert.equal(currentLesson.sections,true);
+  assert.equal(currentLesson.examples,8);
+  assert.ok(currentLesson.labLinks>=3);
+  assert.equal(currentLesson.overflow,false);
+  await screenshot('lesson-27-desktop');
+  await navigate('27.10.26-lab.html#tank');
+  await wait('document.querySelector("#parameter") && document.querySelector("#formula").textContent.includes("500")');
+  const newLab=await execute(()=>{
+    const slider=document.querySelector('#parameter');
+    const startingLevel=document.querySelector('#metric1').textContent;
+    slider.value='1000';slider.dispatchEvent(new Event('input',{bubbles:true}));
+    const emptyLevel=document.querySelector('#metric1').textContent;
+    const message=document.querySelector('#conclusion').textContent;
+    document.querySelector('[data-mode="ball"]').click();
+    const ballLabel=document.querySelector('#modelTitle').textContent;
+    const ballThreshold=document.querySelector('#metric2').textContent;
+    return {startingLevel,emptyLevel,message,ballLabel,ballThreshold,overflow:document.documentElement.scrollWidth>innerWidth+2};
+  });
+  assert.equal(newLab.startingLevel,'5,00 м');
+  assert.equal(newLab.emptyLevel,'0,00 м');
+  assert.match(newLab.message,/Бак опустошён/);
+  assert.match(newLab.ballLabel,/Подброшенный мяч/);
+  assert.equal(newLab.ballThreshold,'от 0,2 до 1,6 с');
+  assert.equal(newLab.overflow,false);
+  await screenshot('lab-27-desktop');
+  await call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+  await navigate('27.10.26.html');
+  const currentMobile=await execute(()=>({overflow:document.documentElement.scrollWidth>innerWidth+2}));
+  assert.equal(currentMobile.overflow,false,'27 Oct lesson mobile overflow');
+  await screenshot('lesson-27-mobile');
+  await navigate('27.10.26-lab.html#rail');
+  const currentLabMobile=await execute(()=>({
+    overflow:document.documentElement.scrollWidth>innerWidth+2,
+    rail:document.querySelector('#metric1').textContent
+  }));
+  assert.equal(currentLabMobile.overflow,false,'27 Oct lab mobile overflow');
+  assert.equal(currentLabMobile.rail,'3,00 мм');
+  await screenshot('lab-27-mobile');
+  await call('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});
+
 
   // 23 October lesson: revision, interactive motion and work models.
   await navigate('23.10.26.html');
