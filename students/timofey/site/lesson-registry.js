@@ -3,6 +3,100 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-27",
+  "ktpRefs": [],
+  "href": "27.10.26.html",
+  "title": "Тригонометрические и смешанные уравнения",
+  "navTitle": "Тригонометрические и смешанные уравнения",
+  "navSubtitle": "Тригонометрические и смешанные уравнения: логарифмы и ОДЗ, формулы половинного угла, однородные уравнения, показательная замена и десять задач. Тимофей Васильченко, 27.10.2026.",
+  "summary": "Тригонометрические и смешанные уравнения: логарифмы и ОДЗ, формулы половинного угла, однородные уравнения, показательная замена и десять задач. Тимофей Васильченко, 27.10.2026.",
+  "topics": [
+    "Тригонометрические уравнения",
+    "Формулы половинного угла",
+    "Однородные уравнения",
+    "Логарифмы и ОДЗ",
+    "Показательные уравнения с тригонометрической заменой"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t6_logarithmic",
+      "evidenceAnchor": "logarithm",
+      "relation": "practiced",
+      "label": "Логарифмы и ОДЗ",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t6_trigonometric",
+      "evidenceAnchor": "half-angle",
+      "relation": "practiced",
+      "label": "Метод половинного угла",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_trig_var",
+      "evidenceAnchor": "half-angle",
+      "relation": "practiced",
+      "label": "Тригонометрические преобразования",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t13_trig_homogeneous",
+      "evidenceAnchor": "homogeneous",
+      "relation": "practiced",
+      "label": "Однородные тригонометрические уравнения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t13_trig_quad",
+      "evidenceAnchor": "homogeneous",
+      "relation": "practiced",
+      "label": "Сведение к квадратному уравнению",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t13_trig_domain",
+      "evidenceAnchor": "logarithm",
+      "relation": "practiced",
+      "label": "Область допустимых значений",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t13_trig_log",
+      "evidenceAnchor": "logarithm",
+      "relation": "practiced",
+      "label": "Смешанное логарифмическое уравнение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t13_trig_exp",
+      "evidenceAnchor": "exponential",
+      "relation": "practiced",
+      "label": "Показательная тригонометрическая замена",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t6_exponential",
+      "evidenceAnchor": "exponential",
+      "relation": "practiced",
+      "label": "Свойства степеней",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t6_trig_special",
+      "evidenceAnchor": "half-angle",
+      "relation": "touched",
+      "label": "Базовые серии корней",
+      "practiceDisposition": "none"
+    }
+  ],
+  "materials": {
+    "html": "27.10.26.html",
+    "pdf": "../pdf_docs/27.10.26.pdf",
+    "tex": "../tex_docs/27.10.26.tex",
+    "lab": "27.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-24",
   "ktpRefs": [],
   "href": "24.10.26.html",
