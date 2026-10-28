@@ -133,13 +133,23 @@ try{
   assert.equal(await run("getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()"),'#fff','print background from dark theme');
   await call('Emulation.setEmulatedMedia',{media:'screen'});
   await navigate('index.html',390,844,false);
-  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Основы тригонометрии')"),true,'latest lesson on home');
+  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Тригонометрические преобразования')"),true,'latest lesson on home');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"18.10.26.html\"]')!==null"),true,'previous lesson remains in journal');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"21.10.26.html\"]')!==null"),true,'previous logarithm lesson remains in journal');
-  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"25.10.26-lab.html\"]')!==null"),true,'home links directly to trigonometry laboratory');
+  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"../pdf_docs/28.10.26.pdf\"]')!==null"),true,'home links to latest lesson PDF');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('04.10.2026')"),true,'history retained');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('09.10.2026')"),true,'previous lesson retained');
   await snapshot('home-mobile-light');
+  // 28 October: current lesson and independent training block.
+  await navigate('28.10.26.html',390,844,false);
+  assert.equal(await run("document.querySelectorAll('#practice .exercise').length"),10,'28 Oct original training exercises');
+  assert.equal(await run("document.querySelectorAll('[data-choice]').length"),3,'28 Oct formula selection modes');
+  assert.equal(await run("document.querySelectorAll('[data-result]:not([hidden])').length"),1,'28 Oct one selected formula');
+  assert.equal(await run("(()=>{document.querySelector('[data-choice=cos]').click();return document.querySelector('[data-result=cos]').hidden})()"),false,'28 Oct cosine formula switches');
+  assert.equal(await run("(()=>{document.getElementById('theme').click();return document.documentElement.dataset.theme})()"),'dark','28 Oct theme switch');
+  assert.equal(await run("document.querySelector('a[href=\"../pdf_docs/28.10.26.pdf\"]')!==null"),true,'28 Oct PDF reference');
+  await navigate('28.10.26.html',1440,900,true);
+
   await navigate('11.10.26.html',390,844,false);
   assert.equal(await run("document.querySelectorAll('#taskList input[type=checkbox]').length"),10,'new lesson training count');
   assert.equal(await run("document.querySelectorAll('[data-case]').length"),2,'new lesson graph presets');
