@@ -52,7 +52,8 @@ export const LESSONS=[
   ],
   "materials": {
     "html": "28.10.26.html",
-    "lab": "28.10.26-lab.html"
+    "lab": "28.10.26-lab.html",
+    "tex": "../tex_docs/28.10.26.tex"
   }
 },
 {
