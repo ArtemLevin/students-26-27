@@ -82,6 +82,10 @@ try{
     await sleep(140);
     await run("document.documentElement.dataset.theme='"+(dark?'dark':'light')+"'");
     const m=await run('({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth})');
+    if(m.scroll>m.client+2){
+      const overflow=await run("(()=>[...document.querySelectorAll('body *')].map(e=>({tag:e.tagName,cls:String(e.className||'').slice(0,60),right:Math.round(e.getBoundingClientRect().right),left:Math.round(e.getBoundingClientRect().left),width:Math.round(e.getBoundingClientRect().width)})).filter(x=>x.right>innerWidth+2).sort((a,b)=>b.right-a.right).slice(0,10))()");
+      console.error('Mobile overflow offenders:',JSON.stringify(overflow));
+    }
     assert.ok(m.scroll<=m.client+2,name+' '+width+' '+(dark?'dark':'light')+
       ' horizontal overflow '+JSON.stringify(m));
   }
@@ -148,6 +152,8 @@ try{
   assert.equal(await run("(()=>{document.querySelector('[data-choice=cos]').click();return document.querySelector('[data-result=cos]').hidden})()"),false,'28 Oct cosine formula switches');
   assert.equal(await run("(()=>{document.getElementById('theme').click();return document.documentElement.dataset.theme})()"),'dark','28 Oct theme switch');
   assert.equal(await run("document.querySelector('a[href=\"../pdf_docs/28.10.26.pdf\"]')!==null"),true,'28 Oct PDF reference');
+  await navigate('28.10.26.html',375,812,true);
+  await navigate('28.10.26.html',768,1024,false);
   await navigate('28.10.26.html',1440,900,true);
 
   await navigate('11.10.26.html',390,844,false);
