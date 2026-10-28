@@ -32,7 +32,7 @@ const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 let ws;const pending=new Map();let serial=0;const jsErrors=[],badRequests=[];
 try{
   let port=0;
-  for(let i=0;i<150;i++){
+  for(let i=0;i<600;i++){
     const active=path.join(profile,'DevToolsActivePort');
     if(fs.existsSync(active)){port=Number(fs.readFileSync(active,'utf8').split('\n')[0]);break;}
     if(chromeProcess.exitCode!==null)throw Error('Chrome terminated');
