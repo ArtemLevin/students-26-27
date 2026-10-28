@@ -257,6 +257,8 @@ const evidence2310For=(skill)=>({date:'23.10.26',text:'Комплексное п
 const lesson2710EvidenceById=new Map(Object.entries({"ege27_10_001":{"anchor":"linear","relation":"touched"},"ege27_10_002":{"anchor":"linear","relation":"touched"},"ege27_10_003":{"anchor":"linear","relation":"touched"},"ege27_10_004":{"anchor":"linear","relation":"touched"},"ege27_10_005":{"anchor":"quadratic","relation":"touched"},"ege27_10_014":{"anchor":"domain","relation":"touched"},"ege27_07_002":{"anchor":"quadratic","relation":"touched"},"ege27_07_016":{"anchor":"domain","relation":"touched"},"ege27_16_002":{"anchor":"quadratic","relation":"touched"},"ege27_12_012":{"anchor":"quadratic","relation":"touched"},"ege27_17_002":{"anchor":"domain","relation":"touched"}}));
 const evidence2710For=skill=>({date:'27.10.26',text:'На занятии рассмотрены прикладные формулы, квадратичные модели и проверка физической допустимости ответа. Самостоятельная диагностика не проводилась, подтверждённые уровни освоения сохраняются.',web:'27.10.26.html#'+skill.anchor,pdf:'../pdf_docs/27.10.26.pdf',tex:'../tex_docs/27.10.26.tex'});
 
+const lesson2810EvidenceById=new Map(Object.entries({"ege27_04_014":{"anchor":"positions","relation":"practiced"},"ege27_20_015":{"anchor":"order","relation":"practiced"}}));
+const evidence2810For=skill=>({date:'28.10.26',text:'На занятии отработаны метод позиций, правило умножения, различение выбора с учётом и без учёта порядка. Уровни освоения не повышаются без отдельной диагностики.',web:'28.10.26.html#'+skill.anchor,lab:'28.10.26-lab.html',pdf:'../pdf_docs/28.10.26.pdf',tex:'../tex_docs/28.10.26.tex'});
 const groups=groupDefs.map((def,groupIndex)=>{
   const number=groupIndex+1;
   const groupId=`ege27_${String(number).padStart(2,'0')}`;
@@ -316,6 +318,7 @@ const groups=groupDefs.map((def,groupIndex)=>{
       const id=`${groupId}_${String(itemIndex+1).padStart(3,'0')}`;
       if(lesson2310EvidenceById.has(id)) evidence.push(evidence2310For(lesson2310EvidenceById.get(id)));
        if(lesson2710EvidenceById.has(id)) evidence.push(evidence2710For(lesson2710EvidenceById.get(id)));
+      if(lesson2810EvidenceById.has(id)) evidence.push(evidence2810For(lesson2810EvidenceById.get(id)));
       return{
         id,title,
         description:`${title}. Конкретный навык сектора «${def.title}»: распознать тип задачи, выбрать корректный метод и получить проверяемый результат.`,
@@ -334,7 +337,7 @@ window.COMPETENCY_MAP_DATA={
     teacher:'Лёвин Артём Александрович',
     program:'подготовка к ЕГЭ по профильной математике',
     examVersion:'проект ЕГЭ-2027',
-    updated:'27.10.26',
+    updated:'28.10.26',
     sourceNote:'Структура актуализирована по проектам документов ФИПИ ЕГЭ-2027; подтверждённые уровни уточняются по материалам занятий.'
   },
   storage:{
@@ -343,6 +346,7 @@ window.COMPETENCY_MAP_DATA={
     theme:'ekaterina_gnedkova-ege_profile_2027-theme'
   },
   materials:[
+    {date:'28.10.26',title:'Основы комбинаторики',summary:'Метод позиций, факториал, порядок выбора, ограничения на цифры и число диагоналей. 10 задач и цифровая лаборатория.',web:'28.10.26.html',lab:'28.10.26-lab.html',pdf:'../pdf_docs/28.10.26.pdf',tex:'../tex_docs/28.10.26.tex'},
     {date:'27.10.26',title:'Задачи прикладного характера',summary:'Приращение величин, парабола и порог, температура, допустимость физических корней. Восемь разобранных примеров, без тренировки.',web:'27.10.26.html',lab:'27.10.26-lab.html',pdf:'../pdf_docs/27.10.26.pdf',tex:'../tex_docs/27.10.26.tex'},
     {date:'23.10.26',title:'Комплексное повторение',summary:'Степени, показательные уравнения и функция по точкам, векторы, движение и этапы совместной работы.',web:'23.10.26.html'},
     {date:'20.10.26',title:'Вклады и аннуитетный кредит',summary:'Равный платёж, проценты и остаток долга, переплата, сравнение двух схем; интерактивный расчёт и 10 заданий.',web:'20.10.26.html'},
