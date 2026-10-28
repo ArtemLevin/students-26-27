@@ -5,6 +5,58 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-28",
+  "ktpRefs": [],
+  "href": "28.10.26.html",
+  "title": "Делители натурального числа и ограничения на показатели",
+  "navTitle": "Делители с дополнительными условиями",
+  "navSubtitle": "Кратность, чётность, квадраты и кубы: выбор допустимых показателей и 10 задач.",
+  "summary": "Теория чисел: от канонического разложения к подсчёту делителей с условиями кратности, чётности, квадрата и куба; десять заданий «Путь А». Занятие 28 октября 2026 года.",
+  "topics": [
+    "каноническое разложение и выбор показателей простых множителей",
+    "условие кратности и границы для показателей делителя",
+    "чётные и нечётные делители",
+    "делители-квадраты и делители-кубы",
+    "пересечение ограничений и запрет кратности",
+    "подсчёт числа подходящих делителей"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t19_primes",
+      "evidenceAnchor": "canonical",
+      "relation": "practiced",
+      "label": "Каноническое разложение 72 и запись простых степеней",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_divisibility",
+      "evidenceAnchor": "multiples",
+      "relation": "practiced",
+      "label": "Границы показателей при кратности делителя",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_divisor_count",
+      "evidenceAnchor": "powers",
+      "relation": "practiced",
+      "label": "Число делителей и формула квадратов и кубов",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_parity",
+      "evidenceAnchor": "parity",
+      "relation": "practiced",
+      "label": "Подсчёт чётных и нечётных делителей",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "28.10.26.html",
+    "lab": "28.10.26-lab.html",
+    "tex": "../tex_docs/28.10.26.tex"
+  }
+},
+{
   "date": "2026-10-26",
   "ktpRefs": [],
   "href": "26.10.26.html",

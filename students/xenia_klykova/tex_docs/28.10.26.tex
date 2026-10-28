@@ -1,0 +1,315 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage{geometry}
+\geometry{left=23mm,right=23mm,top=22mm,bottom=23mm,headheight=24pt,headsep=5mm}
+\usepackage{microtype}
+\usepackage{needspace}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{00565B}
+\definecolor{textgray}{HTML}{353535}
+\definecolor{lightgray}{HTML}{6B7575}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent,pdfauthor={Лёвин Артём Александрович},pdftitle={Чек-лист: делители натурального числа, 28 октября 2026}}
+\setstretch{1.08}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlist[enumerate]{leftmargin=*,itemsep=8pt,topsep=4pt}
+\setlist[itemize]{leftmargin=*,itemsep=3pt,topsep=4pt}
+\renewcommand{\arraystretch}{1.25}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{lightgray}Делители натурального числа}
+\fancyhead[R]{\footnotesize\color{lightgray}Ксения Клыкова}
+\renewcommand{\headrulewidth}{0.45pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+\fancyfoot[C]{\footnotesize\color{lightgray}\thepage}
+\newcommand{\Section}[1]{\vspace{4pt}\section{\textcolor{darkaccent}{#1}}\vspace{-4pt}}
+\newcommand{\Key}[1]{\textcolor{darkaccent}{#1}}
+\newcommand{\Example}[1]{\par\needspace{6\baselineskip}\medskip\Key{\textbf{#1}}\par\smallskip}
+\newcommand{\dd}{\mathrel{\mid}}
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{28mm}
+{\large\textcolor{darkaccent}{МАТЕМАТИКА}}\par
+\vspace{17mm}
+{\LARGE Чек-лист}\par
+\vspace{12mm}
+{\Large\textcolor{accent}{Делители натурального числа}}\par
+\vspace{3mm}
+{\Large\textcolor{accent}{и ограничения на показатели степеней}}\par
+\vspace{17mm}
+{\normalsize Подготовка к ЕГЭ по профильной математике}\par
+\vspace{39mm}
+{\large Ксения Клыкова}\par
+\vspace{12mm}
+{28 октября 2026 г.}\par
+\vfill
+{\small Лёвин Артём Александрович}\par
+{\small эксклюзивно для Ксении Клыковой}\par
+\vspace{14mm}
+\begin{tikzpicture}
+\draw[accent,line width=0.9pt] (0,0) .. controls (1.5,0.55) and (2.2,-0.55) .. (3.7,0)
+ .. controls (5.1,0.6) and (5.8,-0.55) .. (7.35,0)
+ .. controls (8.5,0.42) and (9.8,-0.55) .. (11.2,0);
+\end{tikzpicture}
+\vspace{3mm}
+\end{center}
+\end{titlepage}
+\setcounter{page}{1}
+
+\Section{Каноническое разложение и все делители}
+Любое натуральное число $n>1$ единственным образом раскладывается на простые множители (с точностью до их порядка):
+\[
+ n=p_1^{\alpha_1}p_2^{\alpha_2}\cdots p_k^{\alpha_k},
+ \qquad \alpha_i\in\mathbb N.
+\]
+Любой \textbf{положительный делитель} $d$ числа $n$ имеет вид
+\[
+ d=p_1^{x_1}p_2^{x_2}\cdots p_k^{x_k},
+ \qquad 0\le x_i\le\alpha_i,
+ \quad x_i\in\mathbb Z.
+\]
+Нулевая степень разрешена: $p_i^0=1$. Для каждого простого множителя показатель выбирается независимо. Поэтому количество положительных делителей равно
+\[
+ \boxed{\tau(n)=(\alpha_1+1)(\alpha_2+1)\cdots(\alpha_k+1).}
+\]
+\Example{Пример 1. Все делители числа 360}
+\[
+360=2^3\cdot3^2\cdot5^1,
+\qquad \tau(360)=(3+1)(2+1)(1+1)=24.
+\]
+Здесь у двойки четыре допустимых показателя: $0,1,2,3$; у тройки три: $0,1,2$; у пятёрки два: $0,1$.
+
+\Example{Пример 2. Большое число без перебора}
+\[
+10^6=2^6\cdot5^6,
+\qquad \tau(10^6)=(6+1)(6+1)=49.
+\]
+\Key{Главная идея:} считаем варианты показателей степеней, а не выписываем сами делители.
+
+\Section{Делитель, кратный заданному числу}
+Пусть число $m$ разложено по тем же простым основаниям:
+\[
+m=p_1^{\beta_1}\cdots p_k^{\beta_k},\qquad \beta_i\ge0.
+\]
+Условие «$d$ делит $n$ и кратно $m$» означает \(m\mid d\mid n\). Для каждого показателя одновременно выполняются две границы:
+\[
+\boxed{\beta_i\le x_i\le\alpha_i.}
+\]
+Если $m\nmid n$, таких делителей нет. В противном случае число подходящих делителей:
+\[
+\boxed{\prod_{i=1}^{k}(\alpha_i-\beta_i+1).}
+\]
+\Example{Пример 3. Сколько делителей числа 360 кратны 12?}
+\[
+360=2^3\cdot3^2\cdot5,
+\qquad12=2^2\cdot3.
+\]
+Подходящий делитель имеет вид $d=2^x3^y5^z$, причём
+\[
+2\le x\le3,\qquad1\le y\le2,\qquad0\le z\le1.
+\]
+У каждого показателя два варианта, следовательно, \(2\cdot2\cdot2=\boxed{8}\) делителей.
+
+\Example{Пример 4. Сколько делителей числа 72 кратны 6?}
+\[
+72=2^3\cdot3^2,\qquad6=2\cdot3.
+\]
+Нужны $x\in\{1,2,3\}$ и $y\in\{1,2\}$. Поэтому \(3\cdot2=\boxed{6}\).
+
+\Section{Чётные и нечётные делители}
+Для \(n=2^a m\), где $m$ нечётно, показатель двойки в делителе определяет его чётность:
+\begin{itemize}
+\item \textbf{нечётный делитель:} показатель двойки равен $0$;
+\item \textbf{чётный делитель:} показатель двойки не меньше $1$.
+\end{itemize}
+\Example{Пример 5. Нечётные делители числа 360}
+\[
+360=2^3\cdot3^2\cdot5.
+\]
+Выбираем $x=0$, для тройки остаются три варианта, для пятёрки два. Ответ: \(1\cdot3\cdot2=\boxed{6}\).
+\Example{Пример 6. Чётные делители числа 72}
+Всего делителей \(72=2^3\cdot3^2\) — $4\cdot3=12$. Нечётных — $1\cdot3=3$. Чётных: \(12-3=\boxed{9}\).\par
+\Key{Проверка:} можно посчитать напрямую: для двойки $3$ варианта ($1,2,3$), для тройки $3$ варианта ($0,1,2$).
+
+\Section{Делители — квадраты и кубы}
+Натуральное число является \textbf{точным квадратом}, когда \emph{все} показатели в его разложении на простые множители чётные. Для \textbf{точного куба} показатели кратны трём. В частности, число $1$ является и квадратом, и кубом.
+\[
+\begin{aligned}
+\text{квадрат:}&\quad x_i\in\{0,2,4,\ldots\},\\
+\text{куб:}&\quad x_i\in\{0,3,6,\ldots\}.
+\end{aligned}
+\]
+Для любого целого $r\ge2$ число делителей, являющихся $r$-ми степенями натуральных чисел, равно
+\[
+\boxed{Q_r(n)=\prod_{i=1}^{k}\left(\left\lfloor\frac{\alpha_i}{r}\right\rfloor+1\right).}
+\]
+Обозначение $\lfloor t\rfloor$ означает \textbf{наибольшее целое число, не превосходящее} $t$: например, $\lfloor2{,}5\rfloor=2$, $\lfloor1{,}3\rfloor=1$.
+\Example{Пример 7. Квадраты среди делителей}
+Для \(n=2^5\cdot3^4\cdot7\):
+\[
+Q_2(n)=\left(\left\lfloor\frac52\right\rfloor+1\right)
+\left(\left\lfloor\frac42\right\rfloor+1\right)
+\left(\left\lfloor\frac12\right\rfloor+1\right)
+=3\cdot3\cdot1=\boxed{9}.
+\]
+\Example{Пример 8. Кубы среди делителей того же числа}
+\[
+Q_3(n)=(1+1)(1+1)(0+1)=\boxed{4}.
+\]
+\Key{Объяснение:} показатели, отвечающие точной степени, выбираются с шагом $r$ — от нуля до максимально разрешённого показателя.
+
+\Section{Несколько условий одновременно}
+Если делитель должен быть квадратом и делиться на заданное число, для каждого простого множителя \textbf{пересекаем} допустимые множества показателей.
+\Example{Пример 9. Кратность 45 и условие квадрата}
+Пусть \(n=2^4\cdot3^3\cdot5^2\). Сколько его делителей кратны $45$ и являются квадратами?
+\[
+45=3^2\cdot5,\qquad d=2^x3^y5^z.
+\]
+\[
+\begin{array}{c|ccc}
+ & x & y & z\\\midrule
+\text{делитель }n & 0,1,2,3,4 & 0,1,2,3 & 0,1,2\\
+\text{кратен }45 & 0,1,2,3,4 & 2,3 & 1,2\\
+\text{и квадрат} & \mathbf{0,2,4} & \mathbf{2} & \mathbf{2}
+\end{array}
+\]
+Получаем \(3\cdot1\cdot1=\boxed{3}\): это делители $225$, $900$, $3600$.
+\Key{Важно:} формулу для квадратов нельзя применять к количеству уже отобранных \emph{вариантов}; учитывать нужно сами допустимые значения показателей.
+
+\Example{Пример 10. Кратно 18, но не кратно 4}
+Пусть \(n=2^5\cdot3^4\cdot5^2\). Для делителя \(d=2^x3^y5^z\) условия дают
+\[
+\begin{aligned}
+18\mid d&\ \Longrightarrow\ x\ge1,\ y\ge2,\\
+4\nmid d&\ \Longrightarrow\ x<2.
+\end{aligned}
+\]
+Следовательно, $x=1$, $y\in\{2,3,4\}$, $z\in\{0,1,2\}$. Ответ: \(1\cdot3\cdot3=\boxed{9}\).
+
+\Section{Запрет кратности: когда нужно вычитание}
+Отрицательное условие часто удобнее учесть с помощью разности двух количеств:
+\[
+\boxed{N_{\text{итог}}=N_{\text{основное}}-N_{\text{с запрещённым условием}}.}
+\]
+Например, если требуется «делится на $6$, но не делится на $60$», сначала считаем делители, кратные $6$, затем вычитаем из них делители, кратные $60$. Это корректно, потому что каждый делитель, кратный $60$, обязательно кратен $6$.
+
+\Section{Типичные ошибки и самопроверка}
+\begin{itemize}
+\item \textbf{Не учтена нулевая степень.} У отсутствующего простого множителя показатель $0$, поэтому единица всегда делит натуральное число.
+\item \textbf{Перепутаны границы.} Из $d\mid n$ следует $x_i\le\alpha_i$, а из $m\mid d$ — $x_i\ge\beta_i$.
+\item \textbf{Квадрат смешан с чётностью.} Чётность делителя относится лишь к показателю двойки; квадрат требует чётности \emph{всех} показателей.
+\item \textbf{Условия применены по очереди без пересечения.} Для каждого $x_i$ должны выполняться все ограничения одновременно.
+\item \textbf{Запрет кратности разобран неверно.} Если число не делится на произведение нескольких простых степеней, достаточно нарушения хотя бы одного требования; полезно вычитание.
+\end{itemize}
+\Key{Итоговый маршрут:} разложите число на простые множители, задайте показатели делителя, выпишите все ограничения, пересеките допустимые наборы и перемножьте количества вариантов.
+
+\clearpage
+\thispagestyle{plain}
+\begin{center}
+{\Large\textcolor{darkaccent}{Алгоритм: подсчёт делителей с условиями}}\par
+\vspace{5mm}
+\end{center}
+\begin{center}
+\tikzset{
+ startend/.style={ellipse,draw=accent,very thick,align=center,minimum height=10mm,text width=64mm,inner sep=3pt},
+ action/.style={rounded corners=2pt,draw=accent,align=center,minimum height=13mm,text width=113mm,inner sep=6pt},
+ decision/.style={diamond,draw=accent,aspect=3.3,align=center,text width=65mm,inner xsep=2pt,inner ysep=2pt},
+ arr/.style={-{Latex[length=3mm]},thick,draw=darkaccent}
+}
+\begin{tikzpicture}[node distance=8mm, font=\small]
+\node[startend] (s) {Начало};
+\node[action,below=of s] (a) {Разложите $n$ на простые множители: $n=\prod p_i^{\alpha_i}$};
+\node[action,below=of a] (b) {Запишите возможный делитель $d=\prod p_i^{x_i}$\\и первоначальные границы $0\le x_i\le\alpha_i$};
+\node[action,below=of b] (c) {Добавьте условия кратности, чётности, точной степени\\и запреты кратности};
+\node[action,below=of c] (d) {Для каждого $p_i$ найдите \textbf{пересечение}\\всех допустимых значений показателя $x_i$};
+\node[decision,below=11mm of d] (e) {Для каждого $x_i$ есть допустимые значения?};
+\node[action,below=11mm of e] (f) {Умножьте количества допустимых значений:\\$N=c_1c_2\cdots c_k$};
+\node[startend,below=of f] (t) {Ответ: $N$};
+\node[action,right=12mm of e,text width=23mm,minimum height=12mm] (z) {Ответ: $0$};
+\draw[arr] (s)--(a);
+\draw[arr] (a)--(b);
+\draw[arr] (b)--(c);
+\draw[arr] (c)--(d);
+\draw[arr] (d)--(e);
+\draw[arr] (e)--node[right,font=\footnotesize]{да}(f);
+\draw[arr] (f)--(t);
+\draw[arr] (e.east)--node[above,font=\footnotesize]{нет}(z.west);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\section*{\textcolor{darkaccent}{Тренировочный блок — Путь А}}
+\addcontentsline{toc}{section}{Тренировочный блок}
+\noindent\Key{10 заданий по нарастающей сложности.} Все делители считаются положительными. Там, где число уже дано как произведение степеней простых множителей, вычислять само число не требуется.
+\subsection*{Базовый уровень}
+\begin{enumerate}[label=\textcolor{accent}{\textbf{\arabic*.}},start=1]
+\item Сколько положительных делителей имеет число $2^3\cdot3^2$?
+\item Сколько положительных делителей имеет число $540$?
+\item Сколько делителей числа $360$ кратны $6$?
+\subsection*{Средний уровень}
+\item Сколько нечётных делителей имеет число $180$?
+\item Сколько чётных делителей имеет число $432$?
+\item Сколько делителей числа $2^6\cdot3^3\cdot5$ являются квадратами натуральных чисел?
+\item Сколько делителей числа $2^5\cdot3^6\cdot7^2$ являются кубами натуральных чисел?
+\subsection*{Повышенный уровень}
+\item Сколько делителей числа $2^6\cdot3^5\cdot5^3$ одновременно кратны $45$ и являются квадратами натуральных чисел?
+\item Сколько делителей числа $2^5\cdot3^4\cdot5^3$ делятся на $6$, но не делятся на $60$?
+\item Сколько делителей числа $2^7\cdot3^6\cdot5^4$ одновременно являются квадратами натуральных чисел, кратны $72$, но не кратны $64$?
+\end{enumerate}
+
+\clearpage
+\section*{\textcolor{darkaccent}{Ответы к тренировочному блоку}}
+\vspace{7mm}
+\begin{center}
+\begin{tabular}{@{}p{25mm}p{105mm}@{}}
+\toprule
+\textbf{№} & \textbf{Ответ}\\
+\midrule
+1 & $12$\\
+2 & $24$\\
+3 & $12$\\
+4 & $6$\\
+5 & $16$\\
+6 & $8$\\
+7 & $6$\\
+8 & $8$\\
+9 & $32$\\
+10 & $9$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{13mm}
+\subsection*{Итоговая памятка}
+\begin{tabularx}{\linewidth}{@{}p{54mm}X@{}}
+\toprule
+\textbf{Условие} & \textbf{Ограничение на показатели}\\
+\midrule
+$d$ делит $n$ & $0\le x_i\le\alpha_i$\\
+$d$ кратно $m$ & $x_i\ge\beta_i$, если $m=\prod p_i^{\beta_i}$\\
+$d$ нечётно & показатель двойки $x_2=0$\\
+$d$ чётно & показатель двойки $x_2\ge1$\\
+$d$ является квадратом & каждый $x_i$ кратен $2$\\
+$d$ является кубом & каждый $x_i$ кратен $3$\\
+$d$ не кратно $m$ & примените отрицание условия или вычитание\\
+\bottomrule
+\end{tabularx}
+\vfill
+\begin{center}
+{\footnotesize\color{lightgray}Лёвин Артём Александрович · эксклюзивно для Ксении Клыковой}
+\end{center}
+\end{document}
