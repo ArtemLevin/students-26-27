@@ -232,6 +232,21 @@ G.forEach(group=>group.items.forEach(item=>{
   item.material={href:'25.10.26.html#'+lesson.anchor,label:'Занятие 25.10.26 →'};
 }));
 
+// 28.10.2026: тригонометрические преобразования, без изменения уровней mastery.
+const trigonometryEvidence2810={
+  ege08_12:{anchor:'angles',relation:'practiced'},
+  ege08_13:{anchor:'identity',relation:'practiced'},
+  ege08_15:{anchor:'double',relation:'practiced'},
+  ege08_18:{anchor:'methods',relation:'practiced'}
+};
+const trigonometryNote2810='28.10.2026: формулы суммы и разности, нестандартные углы, двойной угол, основное тригонометрическое тождество, выбор знака и составные преобразования. Была практика с подсказками и исправлениями; уровень освоения не повышается.';
+G.forEach(group=>group.items.forEach(item=>{
+  const update=trigonometryEvidence2810[item.id];
+  if(!update)return;
+  item.evidence=[...item.evidence,{date:'28.10.2026',text:trigonometryNote2810}];
+  item.material={href:'28.10.26.html#'+update.anchor,label:'Занятие 28.10.26 →'};
+}));
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'mark_gukin',
@@ -241,7 +256,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Используется проект КИМ ЕГЭ-2027 ФИПИ: 20 заданий, из них 13 с кратким и 7 с развёрнутым ответом. Проект опубликован 28.08.2026; до утверждения структура может быть уточнена.',
-    updated:'25.10.2026'
+    updated:'28.10.2026'
   },
   groups:G
 };
