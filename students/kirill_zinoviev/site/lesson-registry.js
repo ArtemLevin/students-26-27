@@ -3,6 +3,65 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-28",
+  "ktpRefs": [],
+  "href": "28.10.26.html",
+  "title": "Медиана, биссектриса и высота",
+  "navTitle": "Медиана, биссектриса и высота",
+  "navSubtitle": "Медиана, биссектриса и высота треугольника: геометрия 7 класса, разбор, схемы, 10 упражнений и интерактивная лаборатория для Кирилла Зиновьева.",
+  "summary": "Медиана, биссектриса и высота треугольника: геометрия 7 класса, разбор, схемы, 10 упражнений и интерактивная лаборатория для Кирилла Зиновьева.",
+  "topics": [
+    "медиана треугольника и середина стороны",
+    "биссектриса и равные углы",
+    "высота и перпендикуляр к стороне или её продолжению",
+    "три точки пересечения",
+    "обозначения и чтение чертежа"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "triangles_5",
+      "evidenceAnchor": "median",
+      "relation": "practiced",
+      "label": "Построение и свойства медианы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "triangles_6",
+      "evidenceAnchor": "bisector",
+      "relation": "practiced",
+      "label": "Построение биссектрисы и равные углы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "triangles_7",
+      "evidenceAnchor": "altitude",
+      "relation": "practiced",
+      "label": "Построение высоты и прямой угол",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "triangles_13",
+      "evidenceAnchor": "reading",
+      "relation": "touched",
+      "label": "Сумма углов треугольника",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "geo_reason_8",
+      "evidenceAnchor": "reading",
+      "relation": "practiced",
+      "label": "Оформление геометрического чертежа",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "28.10.26.html",
+    "pdf": "../pdf_docs/28.10.26.pdf",
+    "tex": "../tex_docs/28.10.26.tex",
+    "lab": "28.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-25",
   "ktpRefs": [],
   "href": "25.10.26.html",
