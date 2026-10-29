@@ -5,6 +5,91 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-29",
+  "ktpRefs": [],
+  "href": "29.10.26.html",
+  "title": "Кредиты и вклады: схемы, формулы, расчёты",
+  "navTitle": "Кредиты и вклады: схемы, формулы, расчёты",
+  "navSubtitle": "Анастасия Павлова · 29 октября: схемы кредитования, пять формул, вклады и квадратные уравнения.",
+  "summary": "Три схемы кредитования, расчёт дифференцированных платежей, двухлетний вклад с пополнением, поиск ставки по квадратному уравнению и вычисление больших корней.",
+  "topics": [
+    "Признаки трёх схем кредитования",
+    "Пять формул дифференцированного кредита",
+    "Вклад с капитализацией и пополнением",
+    "Квадратное уравнение для определения ставки",
+    "Извлечение больших квадратных корней"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "fin_06",
+      "evidenceAnchor": "scheme",
+      "relation": "practiced",
+      "label": "Распознавание дифференцированной схемы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_07",
+      "evidenceAnchor": "scheme",
+      "relation": "touched",
+      "label": "Аннуитетная схема",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "fin_14",
+      "evidenceAnchor": "formulas",
+      "relation": "practiced",
+      "label": "Сумма выплат по кредиту",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_15",
+      "evidenceAnchor": "formulas",
+      "relation": "practiced",
+      "label": "Переплата по кредиту",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_02",
+      "evidenceAnchor": "deposits",
+      "relation": "practiced",
+      "label": "Капитализация вклада",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "app_09",
+      "evidenceAnchor": "deposits",
+      "relation": "practiced",
+      "label": "Пополнение или снятие",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "eq_02",
+      "evidenceAnchor": "quadratic",
+      "relation": "practiced",
+      "label": "Квадратное уравнение по вкладу",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_16",
+      "evidenceAnchor": "quadratic",
+      "relation": "practiced",
+      "label": "Восстановление ставки",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "calc_16",
+      "evidenceAnchor": "roots",
+      "relation": "touched",
+      "label": "Разложение больших квадратных корней",
+      "practiceDisposition": "none"
+    }
+  ],
+  "materials": {
+    "html": "29.10.26.html",
+    "lab": "29.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-26",
   "ktpRefs": [],
   "href": "26.10.26.html",
