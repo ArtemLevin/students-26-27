@@ -5,6 +5,79 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-29",
+  "ktpRefs": [
+    "ktp-019",
+    "ktp-020",
+    "ktp-021"
+  ],
+  "href": "29.10.26.html",
+  "title": "Логарифмы: от уравнения к графику",
+  "navTitle": "Логарифмы: от уравнения к графику",
+  "navSubtitle": "Ярослав Гаврилов — логарифмические уравнения, ОДЗ, прикладные формулы, метод узловых точек и 10 упражнений. 29 октября 2026.",
+  "summary": "Ярослав Гаврилов — логарифмические уравнения, ОДЗ, прикладные формулы, метод узловых точек и 10 упражнений. 29 октября 2026.",
+  "topics": [
+    "Логарифмическое уравнение по определению и проверка ОДЗ",
+    "Объединение логарифмов, коэффициенты и разные основания",
+    "Прикладная задача по готовой логарифмической формуле",
+    "Метод узловых точек для f(x) = log_a x + b",
+    "Самостоятельная тренировка: Путь А, 10 заданий"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege07_08",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_08",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_10",
+      "evidenceAnchor": "transform",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_11",
+      "evidenceAnchor": "transform",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege07_02",
+      "evidenceAnchor": "transform",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege10_09",
+      "evidenceAnchor": "models",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege10_12",
+      "evidenceAnchor": "models",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege12_13",
+      "evidenceAnchor": "graph",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege12_15",
+      "evidenceAnchor": "graph",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "29.10.26.html",
+    "pdf": "../pdf_docs/29.10.26.pdf",
+    "tex": "../tex_docs/29.10.26.tex",
+    "lab": "29.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-26",
   "ktpRefs": [
     "ktp-018"
