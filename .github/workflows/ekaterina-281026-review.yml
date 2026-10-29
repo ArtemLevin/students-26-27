@@ -34,6 +34,12 @@ jobs:
           node --check students/ekaterina/site/tests/28.10.26.review.test.mjs
       - name: Run source, MathML, links and mathematical QA
         run: node --test students/ekaterina/site/tests/28.10.26.review.test.mjs
+      - name: Dry-run transactional Student Platform v2 publication
+        run: |
+          node scripts/publish-lesson.mjs ekaterina 28.10.26 \
+            --intent students/ekaterina/site/data/publication-intents/2026-10-28.json \
+            --dry-run > /tmp/ekaterina-281026-plan.json
+          node -e 'const p=require("/tmp/ekaterina-281026-plan.json"); console.log(JSON.stringify({executable:p.executable,conflicts:p.conflicts,warnings:p.warnings,changedFiles:p.changedFiles},null,2)); if(!p.executable) process.exit(1)'
       - name: Run Chromium release QA
         run: node students/ekaterina/site/tests/28.10.26.browser.mjs
       - name: Upload responsive screenshots
