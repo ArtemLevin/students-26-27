@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Лаборатория оптимизации: изменяйте положительный коэффициент b и аргумент, сравнивайте максимум функций √x e^(−bx) и x² e^(−bx²), наблюдайте знак производной.">
+<title>Лаборатория оптимизации · Николь Саркисьянц · 29.10.2026</title>
+<style>
+:root{color-scheme:light;--bg:#f3efe9;--paper:#fffcf7;--ink:#292f32;--muted:#63676a;--line:#cbc3bb;--wine:#793d47;--teal:#176068;--soft:#e8f0ee;--focus:#925600}
+html[data-theme=dark]{color-scheme:dark;--bg:#191c1e;--paper:#282c2d;--ink:#f4efe9;--muted:#c4beb9;--line:#66615e;--wine:#eab0b6;--teal:#a2e0e2;--soft:#28383b;--focus:#ffd078}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:var(--teal);text-underline-offset:3px}button,input{font:inherit}button{cursor:pointer;color:inherit}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.skip{position:absolute;top:-5rem;left:1rem;z-index:5;background:var(--paper);padding:.7rem}.skip:focus{top:1rem}
+.shell{width:min(1130px,calc(100% - 3rem));margin:auto}.bar{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;padding:1rem 0;border-bottom:1px solid var(--line)}.bar a,.bar button{min-height:44px;display:inline-flex;align-items:center;padding:.65rem .85rem;border:1px solid var(--line);background:var(--paper);color:var(--ink);text-decoration:none}.bar span{margin-left:auto;color:var(--muted);font-size:.86rem}.eyebrow{font:750 .78rem/1.45 ui-monospace,Consolas,monospace;letter-spacing:.09em;color:var(--wine);text-transform:uppercase}.hero{padding:3.3rem 0 2.3rem}.hero h1{font:500 clamp(2.6rem,6vw,5.5rem)/1.09 Georgia,serif;letter-spacing:-.035em;margin:.3rem 0 1rem}.hero p:last-child{color:var(--muted);max-width:70ch;font-size:1.12rem}
+.lab{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(285px,.7fr);gap:2.5rem;border-top:1px solid var(--line);padding:2rem 0 3rem}.plot{background:var(--paper);border:1px solid var(--line);padding:1rem;min-width:0}.plot svg{width:100%;height:auto;display:block;touch-action:pan-y;cursor:crosshair}.plot .axis{stroke:var(--muted);stroke-width:1.5}.plot .grid{stroke:var(--line);stroke-width:.8;stroke-dasharray:2 6}.plot .current{stroke:var(--teal);stroke-width:4;fill:none}.plot .reference{stroke:var(--wine);stroke-width:2.5;fill:none;stroke-dasharray:8 7}.plot .guide{stroke:var(--wine);stroke-width:1.8;stroke-dasharray:4 5}.plot .point{fill:var(--teal);stroke:var(--paper);stroke-width:3}.plot .star{fill:var(--wine)}.plot text{fill:var(--ink);font:13px system-ui}.plot .legend{display:flex;gap:1.25rem;flex-wrap:wrap;font-size:.83rem;color:var(--muted);margin:1rem 0}.plot .legend i{display:inline-block;width:24px;border-top:3px solid var(--teal);vertical-align:middle;margin-right:.4rem}.plot .legend .ref{border-top:3px dashed var(--wine)}
+.panel{border-top:3px solid var(--wine);padding-top:1rem}.panel h2{font:500 1.8rem/1.2 Georgia,serif;margin:.3rem 0 1rem}.modes,.presets{display:flex;flex-wrap:wrap;gap:.5rem;margin:.9rem 0}.modes button,.presets button,.reset{min-height:44px;padding:.55rem .75rem;border:1px solid var(--line);background:var(--paper)}.modes button[aria-pressed=true]{border-color:var(--teal);background:var(--soft);font-weight:750}.panel label{display:block;font-weight:700;margin:1.2rem 0 .35rem}.panel input[type=range]{width:100%;height:40px;accent-color:var(--wine)}.numbers{border-block:1px solid var(--line);padding:.8rem 0;margin:1.1rem 0}.numbers p{display:flex;justify-content:space-between;gap:1rem;margin:.48rem 0}.numbers output{font:700 1.05rem ui-monospace,monospace;color:var(--teal);text-align:right}.formula{font:500 clamp(1.15rem,2.4vw,1.5rem)/1.6 Georgia,serif;color:var(--teal);overflow-x:auto;white-space:nowrap}.message{background:var(--soft);border-left:3px solid var(--teal);padding:.85rem 1rem;min-height:4rem}.explain{border-top:1px solid var(--line);padding:2rem 0 3rem;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2rem}.explain h3{font:500 1.5rem/1.2 Georgia,serif}.explain p{color:var(--muted)}.quiz{border-block:1px solid var(--line);padding:1.5rem 0 2rem}.quiz h2{font:500 1.8rem Georgia,serif}.quiz button{background:var(--paper);border:1px solid var(--line);min-height:44px;margin:.3rem .35rem .3rem 0;padding:.6rem .85rem}.quiz button[aria-pressed=true]{border:2px solid var(--wine)}.quiz .feedback{min-height:2rem;color:var(--teal)}.footer{padding:2rem 0 3rem;color:var(--muted);font-size:.84rem;border-top:1px solid var(--line)}
+@media(max-width:880px){.lab{grid-template-columns:1fr}.explain{grid-template-columns:1fr;gap:.7rem}}
+@media(max-width:550px){.shell{width:calc(100% - 1.25rem)}.bar span{width:100%;margin-left:0}.plot{padding:.3rem}.hero h1{font-size:2.7rem}.numbers p{gap:.4rem}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+@media print{html,html[data-theme=dark]{--bg:#fff;--paper:#fff;--ink:#111;--muted:#555;--line:#aaa;--wine:#333;--teal:#111;--soft:#eee}.modes,.presets,.reset,input,.bar button,.quiz{display:none!important}.lab{grid-template-columns:1fr 1fr}.explain{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<div class="shell">
+<nav class="bar" aria-label="Навигация"><a href="29.10.26.html#speed">← К объяснению</a><a href="index.html">Учебный кабинет</a><button id="theme" type="button">Тёмная тема</button><span>29 октября 2026 · Николь Саркисьянц</span></nav>
+<main id="main">
+<header class="hero"><p class="eyebrow">Цифровая лаборатория / Задача 12</p><h1>Где находится<br>вершина?</h1><p>Исследуйте зависимость положения максимума от коэффициента b. Выделяйте аргумент, меняйте параметры, наблюдайте знак производной и сопоставляйте два типа распределений.</p></header>
+<div class="lab">
+<div class="plot">
+<p class="eyebrow">График / относительная высота</p>
+<svg id="plot" viewBox="0 0 680 360" role="img" aria-labelledby="plotTitle plotDesc">
+<title id="plotTitle">Графики функций энергии и скорости в зависимости от выбранных параметров</title><desc id="plotDesc">Сплошная линия — текущий коэффициент, пунктир — опорный коэффициент b=1. Показаны точка максимума и выбранный аргумент. Значения нормированы на собственный максимум каждой кривой.</desc>
+<g id="grid"></g><line x1="52" y1="308" x2="653" y2="308" class="axis"/><line x1="52" y1="308" x2="52" y2="25" class="axis"/>
+<path id="refCurve" class="reference"/><path id="curve" class="current"/><line id="maxLine" y1="34" y2="308" class="guide"/><circle id="maxMark" r="6" class="star"/><circle id="selectedMark" r="7" class="point"/><text id="markLabel" y="27"></text><text x="618" y="335">x</text><text x="8" y="26">f/f*</text></svg>
+<div class="legend"><span><i></i>текущая модель</span><span><i class="ref"></i>коэффициент b=1</span></div>
+<p id="chart-note">Графики нормированы: высота вершины каждой кривой равна единице. Изменение высоты исходной функции смотрите в показателях справа.</p>
+</div>
+<div class="panel">
+<h2>Настройка опыта</h2>
+<div class="modes" role="group" aria-label="Тип функции"><button type="button" data-model="energy" aria-pressed="true">Энергия</button><button type="button" data-model="speed" aria-pressed="false">Скорость</button></div>
+<div class="formula" id="equation">f(x) = √x · e<sup>−bx</sup></div>
+<label for="b">Коэффициент b (положительный)</label><input type="range" id="b" min="0.2" max="2" step="0.05" value="1">
+<div class="presets" aria-label="Значения коэффициента"><button type="button" data-b="0.4">b = 0,4</button><button type="button" data-b="1">b = 1</button><button type="button" data-b="1.6">b = 1,6</button></div>
+<label for="x">Аргумент x</label><input type="range" id="x" min="0" max="6" step="0.02" value="0.5">
+<div class="numbers"><p><span>Коэффициент</span><output id="outB">1</output></p><p><span>Аргумент</span><output id="outX">0,5</output></p><p><span>Точка максимума</span><output id="outMax">0,5</output></p><p><span>Значение функции</span><output id="outF"></output></p><p><span>Знак производной</span><output id="outSign"></output></p></div>
+<p class="message" role="status" aria-live="polite" id="status"></p>
+<button class="reset" id="reset" type="button">Сбросить эксперимент</button>
+</div>
+</div>
+<section class="explain">
+<div><p class="eyebrow">01 / Энергия</p><h3>Корень и экспонента</h3><div class="formula">f(x)=√x·e<sup>−bx</sup></div><div class="formula">x*=1/(2b)</div><p>При x&gt;0 знак производной определяется выражением 1−2bx. В нуле корень имеет особую производную, сам x=0 допустим.</p></div>
+<div><p class="eyebrow">02 / Скорость</p><h3>Квадрат и экспонента</h3><div class="formula">f(x)=x²e<sup>−bx²</sup></div><div class="formula">x*=1/√b</div><p>При x&gt;0 знак определяется выражением 1−bx². На границе x=0 производная равна нулю, но максимум находится при x&gt;0.</p></div>
+<div><p class="eyebrow">03 / Сравнение</p><h3>Где сдвигается вершина</h3><p>При увеличении b экспонента убывает быстрее, поэтому положительная точка максимума обеих функций сдвигается влево. Пунктирная кривая b=1 помогает сравнить положение.</p></div>
+</section>
+<section class="quiz"><h2>Предскажите результат</h2><p>Если увеличить b с 0,4 до 1,6, куда сместится положительная точка максимума?</p><div id="quizOptions"><button type="button" data-answer="left" aria-pressed="false">Влево</button><button type="button" data-answer="right" aria-pressed="false">Вправо</button><button type="button" data-answer="same" aria-pressed="false">Останется на месте</button></div><p class="feedback" role="status" aria-live="polite" id="feedback"></p></section>
+</main>
+<footer class="footer">Лёвин Артём Александрович эксклюзивно для Николь Саркисьянц · <a href="29.10.26.html#practice">10 заданий</a></footer>
+</div>
+<script>
+(function(){
+'use strict';
+const root=document.documentElement,theme=document.getElementById('theme'),models=[...document.querySelectorAll('[data-model]')],bInput=document.getElementById('b'),xInput=document.getElementById('x'),equation=document.getElementById('equation'),curve=document.getElementById('curve'),refCurve=document.getElementById('refCurve'),maxLine=document.getElementById('maxLine'),maxMark=document.getElementById('maxMark'),selectedMark=document.getElementById('selectedMark'),markLabel=document.getElementById('markLabel'),status=document.getElementById('status'),out={b:document.getElementById('outB'),x:document.getElementById('outX'),max:document.getElementById('outMax'),f:document.getElementById('outF'),sign:document.getElementById('outSign')};
+const fmt=v=>Number.isFinite(v)?v.toFixed(3).replace(/\.?0+$/,'').replace('.',','):'—';
+const modelFn=(x,b,m)=>m==='energy'?Math.sqrt(x)*Math.exp(-b*x):x*x*Math.exp(-b*x*x);
+const maxX=(b,m)=>m==='energy'?1/(2*b):1/Math.sqrt(b);
+const deriv=(x,b,m)=>m==='energy'?x===0?NaN:Math.exp(-b*x)*(1-2*b*x)/(2*Math.sqrt(x)):2*x*Math.exp(-b*x*x)*(1-b*x*x);
+const px=x=>52+x/6*590,py=y=>308-y*258;
+let model='energy';
+function render(){
+const b=Number(bInput.value),x=Number(xInput.value),peak=maxX(b,model),pHeight=modelFn(peak,b,model),refPeak=maxX(1,model),refHeight=modelFn(refPeak,1,model),f=modelFn(x,b,model),d=deriv(x,b,model);
+function pathFor(coef,height){let parts=[];for(let i=0;i<=240;i++){const v=6*i/240,y=modelFn(v,coef,model)/height;parts.push((i===0?'M':'L')+px(v).toFixed(2)+' '+py(y).toFixed(2))}return parts.join(' ')}
+curve.setAttribute('d',pathFor(b,pHeight));refCurve.setAttribute('d',pathFor(1,refHeight));
+maxLine.setAttribute('x1',px(peak));maxLine.setAttribute('x2',px(peak));maxMark.setAttribute('cx',px(peak));maxMark.setAttribute('cy',py(1));selectedMark.setAttribute('cx',px(x));selectedMark.setAttribute('cy',py(f/pHeight));markLabel.setAttribute('x',Math.min(580,Math.max(60,px(peak)+8)));markLabel.textContent='x* = '+fmt(peak);
+out.b.textContent=fmt(b);out.x.textContent=fmt(x);out.max.textContent=fmt(peak);out.f.textContent=fmt(f);
+const delta=x-peak;let sign= x===0&&model==='energy'?'не определена':Math.abs(delta)<0.000001?'0':d>0?'+':'−';out.sign.textContent=sign;
+status.textContent=x===0&&model==='energy'?'При x=0 функция определена и равна нулю; формула производной с 1/√x используется только при x>0.':x===0?'Это граница области: f(0)=0 и f′(0)=0. Наибольшее значение достигается при положительном x*.':Math.abs(delta)<0.000001?'Вы на вершине: производная равна нулю, знак меняется с плюса на минус.':delta<0?'Точка левее максимума. Производная положительна: функция возрастает.':'Точка правее максимума. Производная отрицательна: функция убывает.';
+document.getElementById('plotDesc').textContent='Текущий режим: '+(model==='energy'?'энергия':'скорость')+'. Коэффициент b='+fmt(b)+', точка максимума x*='+fmt(peak)+', выбран x='+fmt(x)+'. Пунктир: b=1.';
+}
+function setModel(value){model=value;models.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.model===model)));equation.innerHTML=model==='energy'?'f(x) = √x · e<sup>−bx</sup>':'f(x) = x² · e<sup>−bx²</sup>';xInput.value=String(Math.round(maxX(Number(bInput.value),model)*50)/50);render()}
+models.forEach(button=>button.addEventListener('click',()=>setModel(button.dataset.model)));
+bInput.addEventListener('input',render);xInput.addEventListener('input',render);
+document.querySelectorAll('[data-b]').forEach(button=>button.addEventListener('click',()=>{bInput.value=button.dataset.b;render()}));
+document.getElementById('reset').addEventListener('click',()=>{bInput.value='1';xInput.value='0.5';setModel('energy')});
+const svg=document.getElementById('plot');svg.addEventListener('click',event=>{const box=svg.getBoundingClientRect();if(!box.width)return;let local=(event.clientX-box.left)*680/box.width;let x=Math.min(6,Math.max(0,(local-52)/590*6));xInput.value=String(Math.round(x*50)/50);render()});
+const grid=document.getElementById('grid');for(let i=1;i<=5;i++){let line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('x1',px(i));line.setAttribute('x2',px(i));line.setAttribute('y1','30');line.setAttribute('y2','308');line.setAttribute('class','grid');grid.appendChild(line);let t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',px(i)-4);t.setAttribute('y','329');t.textContent=String(i);grid.appendChild(t)}
+const query=new URLSearchParams(location.search);setModel(query.get('model')==='speed'?'speed':'energy');
+try{if(localStorage.getItem('nikol-optimization-theme')==='dark')root.dataset.theme='dark'}catch(e){}
+function updateTheme(){theme.textContent=root.dataset.theme==='dark'?'Светлая тема':'Тёмная тема'}
+theme.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('nikol-optimization-theme',root.dataset.theme)}catch(e){}updateTheme()});updateTheme();
+document.querySelectorAll('[data-answer]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-answer]').forEach(x=>x.setAttribute('aria-pressed',String(x===button)));document.getElementById('feedback').textContent=button.dataset.answer==='left'?'Верно: в обеих формулах x* убывает при увеличении b.':'Посмотрите на формулы x*=1/(2b) и x*=1/√b. При увеличении положительного b обе величины уменьшаются.'}));
+})();
+</script>
+</body></html>
