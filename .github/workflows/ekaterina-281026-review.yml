@@ -40,6 +40,21 @@ jobs:
             --intent students/ekaterina/site/data/publication-intents/2026-10-28.json \
             --dry-run > /tmp/ekaterina-281026-plan.json
           node -e 'const p=require("/tmp/ekaterina-281026-plan.json"); console.log(JSON.stringify({executable:p.executable,conflicts:p.conflicts,warnings:p.warnings,changedFiles:p.changedFiles},null,2)); if(!p.executable) process.exit(1)'
+      - name: Publish lesson transactionally in CI workspace
+        run: |
+          node scripts/publish-lesson.mjs ekaterina 28.10.26 \
+            --intent students/ekaterina/site/data/publication-intents/2026-10-28.json > /tmp/ekaterina-281026-publication.json
+          node scripts/student.mjs validate ekaterina
+          node --input-type=module -e '
+            import fs from "node:fs";
+            const output=JSON.parse(fs.readFileSync("/tmp/ekaterina-281026-publication.json","utf8"));
+            console.log("CANONICAL_PUBLISH_BEGIN");
+            for(const file of output.changedFiles){
+              const bytes=fs.readFileSync(file);
+              console.log("CANONICAL_FILE:"+file+":"+bytes.toString("base64"));
+            }
+            console.log("CANONICAL_PUBLISH_END");
+          '
       - name: Run Chromium release QA
         run: node students/ekaterina/site/tests/28.10.26.browser.mjs
       - name: Upload responsive screenshots
