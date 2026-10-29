@@ -147,6 +147,15 @@ try{
   // 28 October: current lesson and independent training block.
   await navigate('28.10.26.html',390,844,false);
   assert.equal(await run("document.querySelectorAll('#practice .exercise').length"),10,'28 Oct original training exercises');
+  const trigMath=await run("(()=>{const m=[...document.querySelectorAll('main math')];return {count:m.length,allNative:m.every(x=>x.namespaceURI==='http://www.w3.org/1998/Math/MathML'),annotated:m.every(x=>!!x.querySelector('semantics > annotation[encoding=\"application/x-tex\"]')),fractions:document.querySelectorAll('main mfrac').length,squares:document.querySelectorAll('main msup').length,worked:document.querySelectorAll('#methods .worked-examples h3').length}})()");
+  assert.ok(trigMath.count>=40,'28 Oct semantic math coverage: '+JSON.stringify(trigMath));
+  assert.equal(trigMath.allNative,true,'28 Oct all mathematics in native MathML namespace');
+  assert.equal(trigMath.annotated,true,'28 Oct every MathML expression has editable LaTeX annotation');
+  assert.ok(trigMath.fractions>=12&&trigMath.squares>=6,'28 Oct fractions and powers are structural');
+  assert.equal(trigMath.worked,2,'28 Oct sign examples restored from source');
+  const controls=await run("(()=>{const b=[...document.querySelectorAll('[data-choice]')];return b.every(x=>document.getElementById(x.getAttribute('aria-controls'))!==null)})()");
+  assert.equal(controls,true,'formula choice buttons link to results for assistive technology');
+
   assert.equal(await run("document.querySelectorAll('[data-choice]').length"),3,'28 Oct formula selection modes');
   assert.equal(await run("document.querySelectorAll('[data-result]:not([hidden])').length"),1,'28 Oct one selected formula');
   assert.equal(await run("(()=>{document.querySelector('[data-choice=cos]').click();return document.querySelector('[data-result=cos]').hidden})()"),false,'28 Oct cosine formula switches');
