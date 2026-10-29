@@ -5,6 +5,71 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-29",
+  "ktpRefs": [],
+  "href": "29.10.26.html",
+  "title": "Сначала нуль. Потом знаки.",
+  "navTitle": "Метод интервалов: нормализация, дроби и замена",
+  "navSubtitle": "29.10.26 · Знаки, ОДЗ, общий знаменатель, правило ВУПС и 10 заданий Пути А",
+  "summary": "29.10.26. Метод интервалов: нормализация квадратных и рациональных неравенств, общий множитель, скобки ВУПС, ОДЗ, общие знаменатели, замена повторяющегося квадратного выражения. Десять заданий Пути А.",
+  "topics": [
+    "Нормализация квадратных неравенств",
+    "Вынесение общего множителя",
+    "ОДЗ и нули знаменателя",
+    "Приведение к общему знаменателю и правило ВУПС",
+    "Метод интервалов и знаки",
+    "Замена повторяющегося квадратного выражения"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_20_2_1",
+      "evidenceAnchor": "method",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_2",
+      "evidenceAnchor": "domain",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_3",
+      "evidenceAnchor": "fractions",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_4",
+      "evidenceAnchor": "method",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_20_2_5",
+      "evidenceAnchor": "training",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_13_2_3",
+      "evidenceAnchor": "normal",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_13_2_4",
+      "evidenceAnchor": "factor",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_8_3_2",
+      "evidenceAnchor": "substitution",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "29.10.26.html",
+    "pdf": "../pdf_docs/29.10.26.pdf",
+    "tex": "../tex_docs/29.10.26.tex"
+  }
+},
+
+{
   "date": "2026-10-26",
   "ktpRefs": [],
   "href": "26.10.26.html",
