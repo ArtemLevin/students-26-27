@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import http from 'node:http';
 import {spawn,spawnSync} from 'node:child_process';
-import {fileURLToPath} from 'node:url';
+import {fileURLToPath,pathToFileURL} from 'node:url';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../../../');
 const chrome=['google-chrome','google-chrome-stable','chromium','chromium-browser']
@@ -15,6 +15,10 @@ const types={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/ja
 
 test('Gravity 24.10 browser: 7 sizes, dark/light, live modes, links and home integration',{skip:!chrome?'Chromium is unavailable in the test environment':false,timeout:180000},async()=>{
   const errors=[],failedRequests=[];
+  const registryPath=path.join(root,'students','volodia_khachaturian','site','lesson-registry.js');
+  const {getLatestLesson}=await import(pathToFileURL(registryPath).href);
+  const latest=getLatestLesson();
+  assert.ok(latest?.href&&latest?.title,'Latest registered lesson is missing');
   const server=http.createServer((req,res)=>{
     try{
       const filename=path.resolve(root,'.'+decodeURIComponent(new URL(req.url,'http://localhost').pathname));
@@ -110,13 +114,13 @@ test('Gravity 24.10 browser: 7 sizes, dark/light, live modes, links and home int
     await call('Page.navigate',{url:home});
     for(let i=0;i<180;i++){
       const status=await evaluate("({ready:document.readyState,title:document.querySelector('#lesson-title')?.textContent})");
-      if(status.ready==='complete'&&status.title?.includes('Гравитация'))break;
+      if(status.ready==='complete'&&status.title?.includes(latest.title))break;
       if(i===179)throw Error('Home latest lesson was not displayed: '+JSON.stringify(status));
       await sleep(100);
     }
     const dashboard=await evaluate("({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth,href:document.querySelector('#latestLessonCta')?.getAttribute('href')})");
     assert.ok(dashboard.scroll<=dashboard.client+2,'Home mobile overflow');
-    assert.ok(dashboard.href?.includes('24.10.26.html'),'Home link wrong');
+    assert.ok(dashboard.href?.includes(latest.href),'Home link wrong: expected '+latest.href);
     assert.deepEqual(errors,[],'Uncaught JS errors');
     assert.deepEqual(failedRequests,[],'4xx/5xx network requests');
   }finally{
