@@ -46,6 +46,7 @@ function renderLatest(){
     [m.pdf,'PDF-пособие'],[m.tex,'TeX-исходник'],[m.lab,'Интерактив']
   ];
   if(latest.date==='2026-10-15')resources.push(['../images/15.10.26.png','Постер']);
+  if(latest.date==='2026-10-29')resources.push(['../images/29.10.26.png','Акварельная карта']);
   materials.replaceChildren();
   for(const [href,label] of resources){
     const safe=safeLocalHref(href);
