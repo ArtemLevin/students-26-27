@@ -200,6 +200,88 @@ try{
   assert.equal(home.horizontalOverflow,false);
   await screenshot('home-desktop');
 
+
+  // October 28 release gate: mathematics, responsive presentation, theme and lab state.
+  for (const view of [
+    {w:375,h:812,mobile:true,label:'375'},
+    {w:390,h:844,mobile:true,label:'390'},
+    {w:768,h:1024,mobile:false,label:'768'},
+    {w:1024,h:768,mobile:false,label:'1024'},
+    {w:1366,h:768,mobile:false,label:'1366'},
+    {w:1440,h:900,mobile:false,label:'1440'},
+    {w:1920,h:1080,mobile:false,label:'1920'}
+  ]) {
+    await call('Emulation.setDeviceMetricsOverride',{width:view.w,height:view.h,deviceScaleFactor:1,mobile:view.mobile});
+    for (const theme of ['light','dark']) {
+      await navigate('28.10.26.html');
+      await run('document.documentElement.dataset.theme="'+theme+'"');
+      const lesson28=await execute(()=>{
+        const ids=[...document.querySelectorAll('[id]')].map(el=>el.id);
+        return {
+          overflow:document.documentElement.scrollWidth>innerWidth+2,
+          sections:['positions','repeats','order','constraints','geometry','practice','recap'].every(id=>!!document.getElementById(id)),
+          tasks:document.querySelectorAll('.exercise').length,
+          answers:document.querySelectorAll('.exercise details').length,
+          mathml:[...document.querySelectorAll('math')].every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML'),
+          mathCount:document.querySelectorAll('math').length,
+          idsUnique:ids.length===new Set(ids).size,
+          hasLab:!!document.querySelector('a[href="28.10.26-lab.html"]')
+        };
+      });
+      assert.equal(lesson28.overflow,false,'28 Oct lesson overflow '+view.label+'/'+theme);
+      assert.ok(lesson28.sections&&lesson28.idsUnique&&lesson28.hasLab,'28 Oct document architecture');
+      assert.equal(lesson28.tasks,10);assert.equal(lesson28.answers,10);
+      assert.ok(lesson28.mathml&&lesson28.mathCount>=5,'MathML incorrect on 28 Oct');
+      if(view.label==='1440'||view.label==='390')await screenshot('lesson-28-'+view.label+'-'+theme);
+      await navigate('28.10.26-lab.html#diagonals');
+      await run('document.documentElement.dataset.theme="'+theme+'"');
+      const initialLab=await execute(()=>({
+        visible:!document.getElementById('panel-diagonals').hidden,
+        count:document.querySelectorAll('#polygon line').length,
+        aria:[...document.querySelectorAll('[role="tab"]')].map(el=>[el.getAttribute('aria-selected'),el.tabIndex]),
+        overflow:document.documentElement.scrollWidth>innerWidth+2
+      }));
+      assert.equal(initialLab.visible,true);
+      assert.equal(initialLab.count,9);
+      assert.equal(initialLab.overflow,false,'28 Oct lab overflow '+view.label+'/'+theme);
+      assert.deepEqual(initialLab.aria,[['false',-1],['false',-1],['true',0]]);
+      const labModes=await execute(()=>{
+        const result={};
+        document.querySelector('[data-vertices="20"]').click();
+        result.twenty=document.querySelectorAll('#polygon line').length;
+        document.querySelector('[data-vertices="15"]').click();
+        result.fifteen=document.querySelectorAll('#polygon line').length;
+        document.querySelector('#tab-order').click();
+        document.querySelector('[data-order="no"]').click();
+        result.pairs=document.getElementById('order-math').textContent;
+        document.querySelector('#tab-numbers').click();
+        document.querySelector('[data-number-mode="3"]').click();
+        result.noRepeats=document.getElementById('number-list').children.length;
+        result.count=document.getElementById('count').textContent;
+        document.getElementById('resetLab').click();
+        result.reset=document.getElementById('count').textContent;
+        result.resetTab=document.getElementById('tab-numbers').getAttribute('aria-selected');
+        return result;
+      });
+      assert.equal(labModes.twenty,170);assert.equal(labModes.fifteen,90);
+      assert.match(labModes.pairs,/45/);
+      assert.equal(labModes.noRepeats,18);assert.match(labModes.count,/18/);
+      assert.match(labModes.reset,/12/);assert.equal(labModes.resetTab,'true');
+      if(view.label==='1440'||view.label==='390')await screenshot('lab-28-'+view.label+'-'+theme);
+    }
+  }
+  await call('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false});
+  await navigate('28.10.26.html');
+  const print28=await execute(()=>{
+    const details=[...document.querySelectorAll('.exercise details')];
+    const before=details.map(el=>el.open);
+    window.dispatchEvent(new Event('beforeprint'));
+    const openForPrint=details.every(el=>el.open);
+    window.dispatchEvent(new Event('afterprint'));
+    return {openForPrint,restored:details.every((el,i)=>el.open===before[i])};
+  });
+  assert.ok(print28.openForPrint&&print28.restored,'28 Oct print state incorrect');
+
   // Current lesson: modelling, deep links, and the physically bounded lab.
   await navigate('27.10.26.html');
   const currentLesson=await execute(()=>({
