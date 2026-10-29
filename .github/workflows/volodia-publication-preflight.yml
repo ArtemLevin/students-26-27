@@ -1,0 +1,20 @@
+name: Volodia publication preflight
+on:
+  push:
+    branches:
+      - lesson/volodia-2026-10-28-hooke
+    paths:
+      - .github/workflows/volodia-publication-preflight.yml
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run official publisher dry-run
+        run: |
+          node scripts/publish-lesson.mjs volodia_khachaturian 28.10.26 --intent students/volodia_khachaturian/site/data/publication-intents/2026-10-28.json --dry-run
