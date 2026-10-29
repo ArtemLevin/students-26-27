@@ -3,6 +3,89 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-28",
+  "ktpRefs": [],
+  "href": "28.10.26.html",
+  "title": "Сила упругости и закон Гука",
+  "navTitle": "Сила упругости и закон Гука",
+  "navSubtitle": "Сила упругости и закон Гука. Деформация, сравнение опытов, равновесие, график силы и 10 задач. Володя Хачатурян, 28 октября 2026.",
+  "summary": "Сила упругости и закон Гука. Деформация, сравнение опытов, равновесие, график силы и 10 задач. Володя Хачатурян, 28 октября 2026.",
+  "topics": [
+    "сила упругости",
+    "упругая и пластическая деформация",
+    "закон Гука",
+    "жёсткость пружины",
+    "равновесие подвешенного груза",
+    "график силы упругости",
+    "метод двух опытов",
+    "осевое растяжение прямой проволоки"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "dyn_20",
+      "evidenceAnchor": "deformation",
+      "relation": "practiced",
+      "label": "Виды деформации",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_17",
+      "evidenceAnchor": "law",
+      "relation": "practiced",
+      "label": "Сила упругости",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_18",
+      "evidenceAnchor": "law",
+      "relation": "practiced",
+      "label": "Закон Гука",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_19",
+      "evidenceAnchor": "graph",
+      "relation": "practiced",
+      "label": "Жёсткость пружины",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_12",
+      "evidenceAnchor": "equilibrium",
+      "relation": "practiced",
+      "label": "Сила тяжести",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "measure_03",
+      "evidenceAnchor": "law",
+      "relation": "practiced",
+      "label": "Перевод величин в СИ",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_25",
+      "evidenceAnchor": "method",
+      "relation": "practiced",
+      "label": "Преобразование формул",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_02",
+      "evidenceAnchor": "graph",
+      "relation": "practiced",
+      "label": "Выбор физической формулы",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "28.10.26.html",
+    "pdf": "../pdf_docs/28.10.26.pdf",
+    "tex": "../tex_docs/28.10.26.tex",
+    "lab": "28.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-24",
   "ktpRefs": [],
   "href": "24.10.26.html",
