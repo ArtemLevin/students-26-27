@@ -48,7 +48,7 @@ try{
   if(msg.method==='Network.responseReceived'&&msg.params?.response?.status>=400)badResponses.push(msg.params.response.status+' '+msg.params.response.url);
  };
  const call=(method,params={})=>new Promise((resolve,reject)=>{const id=++seq;pending.set(id,msg=>msg.error?reject(Error(msg.error.message)):resolve(msg.result));ws.send(JSON.stringify({id,method,params}));});
- const evaluate=async expression=>{const r=await call('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(r.exceptionDetails.text);return r.result.value;};
+ const evaluate=async expression=>{const r=await call('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error((r.exceptionDetails.exception?.description||r.exceptionDetails.text)+" while evaluating "+expression.slice(0,240));return r.result.value;};
  const wait=async expression=>{for(let n=0;n<100;n++){if(await evaluate(expression))return;await sleep(80);}throw Error('Wait condition failed: '+expression);};
  const navigate=async(file,width,height,query='')=>{
   await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<800});
@@ -61,7 +61,7 @@ try{
   for(const dark of [false,true]){
    await navigate('28.10.26.html',width,height);
    await evaluate('(()=>{const d='+JSON.stringify(dark)+';if((document.documentElement.dataset.theme==="dark")!==d)document.getElementById("theme").click()})()');
-   const data=await evaluate('(()=>({overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,count:document.querySelectorAll(".task").length,answers:document.querySelectorAll(".answer").length,math:[...document.querySelectorAll("main math")].length,invalid:[...document.querySelectorAll("main math")].filter(el=>el.namespaceURI!=="http://www.w3.org/1998/Math/MathML").length,theme:document.documentElement.dataset.theme,brokenAnchors:[...document.querySelectorAll("a[href^=\"#\"]")].filter(el=>!document.getElementById(el.getAttribute("href").slice(1))).length}))()');
+   const data=await evaluate('(()=>({overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,count:document.querySelectorAll(".task").length,answers:document.querySelectorAll(".answer").length,math:[...document.querySelectorAll("main math")].length,invalid:[...document.querySelectorAll("main math")].filter(el=>el.namespaceURI!=="http://www.w3.org/1998/Math/MathML").length,theme:document.documentElement.dataset.theme,brokenAnchors:[...document.querySelectorAll("a[href]")].filter(el=>el.getAttribute("href").startsWith("#")&&!document.getElementById(el.getAttribute("href").slice(1))).length}))()');
    assert.ok(data.overflow<=2,'Lesson horizontal overflow at '+width+': '+JSON.stringify(data));
    assert.equal(data.count,10);assert.equal(data.answers,10);
    assert.ok(data.math>=75,'Missing native MathML: '+JSON.stringify(data));
