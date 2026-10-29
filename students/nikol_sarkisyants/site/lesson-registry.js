@@ -5,6 +5,73 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-29",
+  "ktpRefs": [],
+  "href": "29.10.26.html",
+  "title": "Оптимизация функций",
+  "navTitle": "Оптимизация функций",
+  "navSubtitle": "константы · экспонента · максимум · 10 заданий",
+  "summary": "Оптимизация функций: производная произведения и сложной экспоненты, распределение энергии и скоростей молекул, сложный корень и 10 заданий. Николь Саркисьянц, 29 октября 2026.",
+  "topics": [
+    "оптимизация функций",
+    "производная произведения",
+    "экспонента и сложная функция",
+    "энергия и скорость молекулы",
+    "исследование знаков производной",
+    "вынесение множителя"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t12_product",
+      "evidenceAnchor": "derivatives",
+      "relation": "practiced",
+      "label": "Производная произведения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t12_exp_log",
+      "evidenceAnchor": "energy",
+      "relation": "practiced",
+      "label": "Экспонента и максимум",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t12_applied",
+      "evidenceAnchor": "speed",
+      "relation": "practiced",
+      "label": "Прикладная оптимизация",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t12_domain",
+      "evidenceAnchor": "energy",
+      "relation": "practiced",
+      "label": "Область определения и границы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t12_quotient",
+      "evidenceAnchor": "direct",
+      "relation": "touched",
+      "label": "Производная частного",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_algebra",
+      "evidenceAnchor": "derivatives",
+      "relation": "practiced",
+      "label": "Вынесение общего множителя",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "29.10.26.html",
+    "pdf": "../pdf_docs/29.10.26.pdf",
+    "tex": "../tex_docs/29.10.26.tex",
+    "lab": "29.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-26",
   "ktpRefs": [],
   "href": "26.10.26.html",
