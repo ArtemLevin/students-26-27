@@ -5,6 +5,105 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-29",
+    "ktpRefs": [],
+    "href": "29.10.26.html",
+    "title": "Дроби и уравнения с дробными коэффициентами",
+    "navTitle": "Дроби и уравнения с дробными коэффициентами",
+    "navSubtitle": "Дроби в разных формах, вычисления со скобками и степенями, неизвестные компоненты уравнений и приведение подобных слагаемых. Пошаговые разборы и 10 задач.",
+    "summary": "Дроби в разных формах, вычисления со скобками и степенями, неизвестные компоненты уравнений и приведение подобных слагаемых. Пошаговые разборы и 10 задач.",
+    "topics": [
+      "Перевод обыкновенных, смешанных и десятичных дробей",
+      "Сложение и деление дробей",
+      "Порядок действий со скобками и степенями",
+      "Неизвестные компоненты уравнения",
+      "Приведение подобных слагаемых"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "dec_05",
+        "evidenceAnchor": "forms",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "dec_19",
+        "evidenceAnchor": "forms",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "frac_base_06",
+        "evidenceAnchor": "forms",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_base_11",
+        "evidenceAnchor": "forms",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_ops_03",
+        "evidenceAnchor": "operations",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_ops_09",
+        "evidenceAnchor": "operations",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_ops_11",
+        "evidenceAnchor": "operations",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_ops_12",
+        "evidenceAnchor": "order",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_ops_13",
+        "evidenceAnchor": "order",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "dec_14",
+        "evidenceAnchor": "order",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "eq_06",
+        "evidenceAnchor": "equations",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "eq_08",
+        "evidenceAnchor": "equations",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "eq_03",
+        "evidenceAnchor": "equations",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "eq_05",
+        "evidenceAnchor": "equations",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "eq_09",
+        "evidenceAnchor": "equations",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "29.10.26.html",
+      "pdf": "../pdf_docs/29.10.26.pdf",
+      "tex": "../tex_docs/29.10.26.tex"
+    }
+  },
+
+  {
   "date": "2026-10-22",
   "ktpRefs": [],
   "href": "22.10.26.html",
