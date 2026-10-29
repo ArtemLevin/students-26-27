@@ -193,12 +193,48 @@ try{
   assert.deepEqual(logInteraction,{before:'1 / 4',after:'2 / 4',answersVisible:true,dark:true},'stepper, answer disclosure and theme are functional');
   await visit('index.html',1440,false);
   const lesson22Linked=await evalJS('(()=>{const latest=document.getElementById("latestLessonCta").getAttribute("href");const ids=["ege08_04","ege08_02","ege08_03","ege08_06","ege07_07","ege10_01","ege10_02","ege10_09","ege10_05","ege10_12","ege12_12","ege12_15"];const items=window.COMPETENCY_MAP_DATA.groups.flatMap(g=>g.items);return {latest,allEvidence:ids.every(id=>{const item=items.find(x=>x.id===id);return item?.evidence?.some(e=>e.text?.includes("22.10.2026"));}),graphLink:items.find(x=>x.id==="ege12_12")?.material?.href}})()');
-  assert.equal(lesson22Linked.latest,'26.10.26.html','the cabinet shows 26 October as the latest lesson');
+  assert.equal(lesson22Linked.latest,'29.10.26.html','the cabinet shows 29 October as the latest lesson');
   assert.equal(lesson22Linked.allEvidence,true,'all 12 linked competencies reference this lesson');
   assert.equal(lesson22Linked.graphLink,'22.10.26.html#graph');
-  const logEvidence=await evalJS('(()=>{const ids=["ege08_08","ege08_09","ege08_10","ege08_11","ege08_02","ege08_03","ege08_06"];const items=window.COMPETENCY_MAP_DATA.groups.flatMap(g=>g.items);return ids.every(id=>{const item=items.find(x=>x.id===id);return item?.evidence?.some(e=>e.text?.includes("26.10.2026"))&&item?.material?.href.startsWith("26.10.26.html#")})})()');
+  const logEvidence=await evalJS('(()=>{const ids=["ege08_08","ege08_09","ege08_10","ege08_11","ege08_02","ege08_03","ege08_06"];const items=window.COMPETENCY_MAP_DATA.groups.flatMap(g=>g.items);return ids.every(id=>{const item=items.find(x=>x.id===id);return item?.evidence?.some(e=>e.text?.includes("26.10.2026"))})})()');
   assert.equal(logEvidence,true,'all seven logarithm lesson outcomes have evidence and deep links');
+  const newEvidence=await evalJS('(()=>{const ids=["ege07_08","ege08_08","ege08_10","ege08_11","ege07_02","ege10_09","ege10_12","ege12_13","ege12_15"];const all=window.COMPETENCY_MAP_DATA.groups.flatMap(g=>g.items);return ids.every(id=>{const x=all.find(t=>t.id===id);return x?.evidence?.some(e=>e.text?.includes("29.10.2026"))&&x?.material?.href.startsWith("29.10.26.html#")})})()');
+  assert.equal(newEvidence,true,'all nine 29 October competencies have evidence and deep links');
   console.log('JAROSLAV_221026_RELEASE_GATE_PASS',JSON.stringify({printTest,lesson22Linked}));
+
+
+  // 29 October: new lesson, poster, linked laboratory and graphical state.
+  for (const width of [390,768,1440]) {
+    for (const dark of [false,true]) {
+      await visit('29.10.26.html',width,dark);
+      const lesson29=await evalJS('(()=>{const ids=[...document.querySelectorAll("[id]")].map(x=>x.id);return {tasks:document.querySelectorAll(".tasks li").length,sections:document.querySelectorAll("main .section").length,poster:document.querySelector(".poster")?.getAttribute("src"),lab:!!document.querySelector("a[href=\\"29.10.26-lab.html\\"]"),duplicates:ids.length-new Set(ids).size,answersHidden:document.getElementById("answers").hidden,overflow:document.documentElement.scrollWidth>innerWidth+2}})()');
+      assert.equal(lesson29.tasks,10,'29 October checklist has 10 tasks');
+      assert.equal(lesson29.sections,6,'six lesson chapters including poster');
+      assert.equal(lesson29.poster,'../images/29.10.26.png','watercolor poster available');
+      assert.equal(lesson29.lab,true,'laboratory link available');
+      assert.equal(lesson29.duplicates,0,'unique lesson IDs');
+      assert.equal(lesson29.answersHidden,true,'answers concealed initially');
+      assert.equal(lesson29.overflow,false,'lesson viewport safe '+width);
+      if((width===390||width===1440)&&!dark)await screenshot('lesson-291026-'+width+'-light');
+    }
+  }
+  await visit('29.10.26.html',1440,false);
+  const taskInteraction=await evalJS('(()=>{document.getElementById("toggle").click();return {shown:!document.getElementById("answers").hidden,expanded:document.getElementById("toggle").getAttribute("aria-expanded")}})()');
+  assert.deepEqual(taskInteraction,{shown:true,expanded:'true'},'29 October answer disclosure');
+  for (const width of [390,1440]) {
+    for (const dark of [false,true]) {
+      await visit('29.10.26-lab.html',width,dark);
+      const labMetrics=await evalJS('(()=>({path:document.getElementById("curve").getAttribute("d").length,dots:document.querySelectorAll("#markers circle").length,a:document.getElementById("base").value,b:document.getElementById("shift").value,overflow:document.documentElement.scrollWidth>innerWidth+2}))()');
+      assert.ok(labMetrics.path>100,'lab graph path rendered');
+      assert.equal(labMetrics.dots,2,'both node points shown');
+      assert.equal(labMetrics.a,'2','initial logarithm base');
+      assert.equal(labMetrics.b,'-3','initial vertical shift');
+      assert.equal(labMetrics.overflow,false,'lab viewport safe '+width);
+    }
+  }
+  await visit('29.10.26-lab.html',1440,false);
+  const labChange=await evalJS('(()=>{const base=document.getElementById("base");document.getElementById("snapshot").click();base.value="0.5";base.dispatchEvent(new Event("change",{bubbles:true}));const direction=document.getElementById("direction").textContent;const visible=!document.getElementById("comparison").hidden;document.getElementById("reset").click();return {direction,visible,reset:document.getElementById("base").value}})()');
+  assert.deepEqual(labChange,{direction:'Убывает',visible:true,reset:'2'},'graph recalculation, comparison and reset');
 
   // Independent QA of the redesigned student cabinet and monthly archive.
   const archiveMeasures=[];

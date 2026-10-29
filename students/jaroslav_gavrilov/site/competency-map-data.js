@@ -310,6 +310,62 @@ for(const [id,cfg] of Object.entries(LESSON_261026)){
   item.material={href:'26.10.26.html#'+cfg.section,label:'Открыть соответствующий раздел занятия →'};
 }
 
+// 29.10.2026: learning evidence only. Confirmed mastery levels remain unchanged.
+const LESSON_291026 = {
+  "ege07_08": {
+    "section": "equations",
+    "relation": "practiced",
+    "evidence": "Решались логарифмические уравнения переходом к степени и приравниванием аргументов с проверкой ОДЗ."
+  },
+  "ege08_08": {
+    "section": "equations",
+    "relation": "practiced",
+    "evidence": "Определение логарифма применено к уравнению log_3(x+1)=2."
+  },
+  "ege08_10": {
+    "section": "transform",
+    "relation": "practiced",
+    "evidence": "Использованы сумма логарифмов, свойства степени и вынесение коэффициента."
+  },
+  "ege08_11": {
+    "section": "transform",
+    "relation": "practiced",
+    "evidence": "Показано приведение оснований 8=2^3 и 0,5=2^(-1)."
+  },
+  "ege07_02": {
+    "section": "transform",
+    "relation": "touched",
+    "evidence": "Получено квадратное уравнение x²+x−6=0 с отбором корней по ОДЗ."
+  },
+  "ege10_09": {
+    "section": "models",
+    "relation": "practiced",
+    "evidence": "Проверена положительность логарифмического аргумента в прикладной формуле."
+  },
+  "ege10_12": {
+    "section": "models",
+    "relation": "touched",
+    "evidence": "Проверен допустимый результат T=30 в модели."
+  },
+  "ege12_13": {
+    "section": "graph",
+    "relation": "practiced",
+    "evidence": "Функция f(x)=log_a x+b восстановлена по точкам A(1;−3) и B(4;−1)."
+  },
+  "ege12_15": {
+    "section": "graph",
+    "relation": "practiced",
+    "evidence": "Вертикальный сдвиг b=−3 получен из опорной точки x=1."
+  }
+};
+for (const [id,cfg] of Object.entries(LESSON_291026)) {
+  const item=G.flatMap(group=>group.items).find(topic=>topic.id===id);
+  if(!item)continue;
+  item.evidence=Array.isArray(item.evidence)?item.evidence:[];
+  item.evidence.push({text:cfg.evidence+' Материал: занятие 29.10.2026 «Логарифмические уравнения, прикладные задачи и графики». Формат: '+(cfg.relation==='practiced'?'разбор и практика.':'обсуждение.')});
+  item.material={href:'29.10.26.html#'+cfg.section,label:'Открыть раздел занятия от 29.10 →'};
+}
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'jaroslav_gavrilov',
@@ -319,7 +375,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Структура сверена 19.09.2026 с опубликованными ФИПИ проектами КИМ ЕГЭ-2027 по профильной математике.',
-    updated:'26.10.2026'
+    updated:'29.10.2026'
   },
   groups:G
 };
