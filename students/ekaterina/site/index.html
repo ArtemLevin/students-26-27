@@ -206,6 +206,24 @@
       article.append(time,title,desc,links);
       fragment.appendChild(article);
     }
+    const archived=LESSONS.filter(lesson=>!recent.some(item=>item.date===lesson.date));
+    if(archived.length){
+      const details=document.createElement('details');
+      details.className='material-archive';
+      details.style.cssText='margin:1rem 0;padding:.75rem 0;border-top:1px solid var(--border)';
+      const summary=document.createElement('summary');
+      summary.textContent='Архив занятий ('+archived.length+')';
+      summary.style.cssText='cursor:pointer;font-weight:650';
+      details.appendChild(summary);
+      for(const lesson of archived){
+        const link=document.createElement('a');
+        link.href=lesson.href;
+        link.textContent=short(lesson.date)+' · '+lesson.title;
+        link.style.cssText='display:block;padding:.45rem 0;font-size:.83rem;line-height:1.35';
+        details.appendChild(link);
+      }
+      fragment.appendChild(details);
+    }
     target.replaceChildren(fragment);
     // Latest lesson evidence is descriptive: touched/practiced cannot raise mastery.
     const preservedEvidence=new Set(Object.keys(data.evidence||{}));
