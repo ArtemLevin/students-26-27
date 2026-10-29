@@ -52,6 +52,14 @@ t.addEventListener('click',function(){document.documentElement.dataset.theme=doc
 var items=[...document.querySelectorAll('#checks input')];try{var saved=JSON.parse(localStorage.getItem('ekaterina-comb-checks')||'[]');items.forEach(function(x,i){x.checked=Boolean(saved[i])})}catch(e){}
 function progress(){var n=items.filter(function(x){return x.checked}).length;document.getElementById('progress').textContent=n+' из 6 пунктов';try{localStorage.setItem('ekaterina-comb-checks',JSON.stringify(items.map(function(x){return x.checked})))}catch(e){}}
 items.forEach(function(x){x.addEventListener('change',progress)});progress();
+var printableAnswers=[...document.querySelectorAll('.exercise details')],printState=[];
+window.addEventListener('beforeprint',function(){
+  printState=printableAnswers.map(function(node){return node.open});
+  printableAnswers.forEach(function(node){node.open=true});
+});
+window.addEventListener('afterprint',function(){
+  printableAnswers.forEach(function(node,i){node.open=Boolean(printState[i])});
+});
 })();
 </script>
 </body></html>
