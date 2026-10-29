@@ -26,7 +26,7 @@ html[data-theme=dark]{color-scheme:dark;--bg:#1e2423;--paper:#28312e;--ink:#f3ee
 <div class="workbench">
 <div class="panel">
 <div class="group"><p><strong>Выберите уровень сравнения</strong></p><div class="switch" role="group" aria-label="Уровень сравнения"><button type="button" data-level="0" aria-pressed="false">y = 0 · знак</button><button type="button" data-level="1" aria-pressed="true">y = 1 · пример</button></div><p class="hint">Уровень 0 показывает знак функции; уровень 1 помогает решить f(x) &lt; 1.</p></div>
-<div class="group"><label for="xrange">Переменная x</label><div class="control-line"><input id="xrange" type="range" min="-1" max="5" step="0.1" value="3" aria-describedby="hint"><input id="xnum" type="number" min="-1" max="5" step="0.1" value="3" aria-label="Точное значение x"></div><p class="hint" id="hint">Диапазон x от −1 до 5. Можно использовать стрелки клавиатуры.</p><p><button type="button" class="btn" id="reset">Сбросить к примеру x = 3</button></p></div>
+<div class="group"><label for="xrange">Переменная x</label><div class="control-line"><input id="xrange" type="range" min="-1" max="5" step="any" value="3" aria-describedby="hint"><input id="xnum" type="number" min="-1" max="5" step="any" value="3" aria-label="Точное значение x"></div><p class="hint" id="hint">Диапазон x от −1 до 5. Можно использовать стрелки клавиатуры.</p><p class="actions"><button type="button" class="btn" id="at-boundary">Показать точную границу</button> <button type="button" class="btn" id="reset">Сбросить к примеру x = 3</button></p><p class="hint" id="boundary-help">При y = 1 граница x = 3; при y = 0 граница x = 8/3. Кнопка устанавливает точное значение.</p></div>
 <div class="group"><p class="eyebrow">Текущие координаты</p><p class="readout"><output id="coords" aria-live="polite">(3; 1)</output></p><p id="calculation">f(3) = 3 · 3 − 8 = 1</p></div>
 </div>
 <div class="visual">
@@ -47,7 +47,7 @@ html[data-theme=dark]{color-scheme:dark;--bg:#1e2423;--paper:#28312e;--ink:#f3ee
 <p class="conclusion"><strong>Что видно:</strong> <output id="conclusion" aria-live="polite">Точка на уровне y = 1; строгое неравенство f(x) &lt; 1 не выполняется.</output></p>
 <p class="hint">Часть прямой ниже уровня выделена терракотовым цветом. Окружность на линии уровня показывает точку равенства.</p>
 </div></div>
-<div class="steps"><h2>Порядок исследования</h2><ol><li>Выберите уровень 0 или 1.</li><li>Двигайте x и наблюдайте, как одновременно меняются точка, значение функции и вывод.</li><li>Найдите границу равенства и определите, при каких x график ниже выбранного уровня.</li></ol><p>Для примера f(x) = 3x − 8 граница при y = 1 находится в x = 3: строгое неравенство f(x) &lt; 1 выполняется при x &lt; 3.</p><p><a href="28.10.26.html#level">Открыть теоретический разбор</a></p></div>
+<div class="steps"><h2>Порядок исследования</h2><ol><li>Выберите уровень 0 или 1.</li><li>Двигайте x и наблюдайте, как одновременно меняются точка, значение функции и вывод.</li><li>Найдите границу равенства кнопкой «Показать точную границу» и определите, при каких x график ниже выбранного уровня.</li></ol><p>Для примера f(x) = 3x − 8 граница при y = 1 находится в x = 3: строгое неравенство f(x) &lt; 1 выполняется при x &lt; 3.</p><p><a href="28.10.26.html#level">Открыть теоретический разбор</a></p></div>
 </section></main>
 <footer class="wrap">Лёвин Артём Александрович · эксклюзивно для Екатерины Скелли</footer>
 <script>
@@ -60,8 +60,14 @@ theme.addEventListener("click",function(){var v=document.documentElement.getAttr
 function fmt(v){return Math.abs(v)<1e-8?"0":Number(v.toFixed(1)).toLocaleString("ru-RU",{maximumFractionDigits:1});}
 function sx(x){return 65+(x+1)*585/7;}function sy(y){return 182.5-y*12.5;}
 function update(raw){
-var x=Math.max(-1,Math.min(5,Math.round(Number(raw)*10)/10));if(!Number.isFinite(x))x=3;
-range.value=x;num.value=x;var y=3*x-8,c=level,px=sx(x),py=sy(y);
+var exact=raw==="boundary";
+var x=exact?(level+8)/3:Number(raw);
+if(!Number.isFinite(x))x=3;
+x=Math.max(-1,Math.min(5,x));
+if(!exact)x=Math.round(x*10)/10;
+range.value=String(x);num.value=String(x);
+var y=exact?level:3*x-8,c=level,px=sx(x),py=sy(y);
+var printedX=exact&&level===0?"8/3":fmt(x);
 var P=document.getElementById("point");P.setAttribute("cx",px);P.setAttribute("cy",py);
 var V=document.getElementById("vertical");V.setAttribute("x1",px);V.setAttribute("x2",px);V.setAttribute("y1",py);V.setAttribute("y2",182.5);
 var H=document.getElementById("horizontal");H.setAttribute("x1",148.6);H.setAttribute("x2",px);H.setAttribute("y1",py);H.setAttribute("y2",py);
@@ -69,13 +75,15 @@ var line=document.getElementById("threshold");line.setAttribute("y1",sy(c));line
 var clip=document.getElementById("cliprect");clip.setAttribute("y",sy(c));clip.setAttribute("height",360-sy(c));
 var bound=document.getElementById("boundary");bound.setAttribute("cx",sx((c+8)/3));bound.setAttribute("cy",sy(c));
 var label=document.getElementById("level-label");label.textContent="y = "+fmt(c);label.setAttribute("y",sy(c)-7);
-document.getElementById("coords").textContent="("+fmt(x)+"; "+fmt(y)+")";document.getElementById("calculation").textContent="f("+fmt(x)+") = 3 · ("+fmt(x)+") − 8 = "+fmt(y);document.getElementById("yout").textContent=fmt(y);document.getElementById("cout").textContent=fmt(c);
+document.getElementById("coords").textContent="("+printedX+"; "+fmt(y)+")";
+document.getElementById("calculation").textContent=exact&&level===0?"f(8/3) = 3 · (8/3) − 8 = 0":"f("+printedX+") = 3 · ("+printedX+") − 8 = "+fmt(y);document.getElementById("yout").textContent=fmt(y);document.getElementById("cout").textContent=fmt(c);
 var relation=y<c-1e-8?"ниже":y>c+1e-8?"выше":"на границе";
-document.getElementById("conclusion").textContent="При x = "+fmt(x)+" график "+relation+" уровня y = "+fmt(c)+". Неравенство f(x) < "+fmt(c)+(y<c-1e-8?" выполняется.":" не выполняется.");
+document.getElementById("conclusion").textContent="При x = "+printedX+" график "+relation+" уровня y = "+fmt(c)+". Неравенство f(x) < "+fmt(c)+(y<c-1e-8?" выполняется.":" не выполняется.");
 }
 function setLevel(v,changeUrl){level=v;buttons.forEach(function(b){b.setAttribute("aria-pressed",String(Number(b.getAttribute("data-level"))===v));});if(changeUrl){try{history.replaceState(null,"",location.pathname+"?mode="+(v===0?"sign":"level"));}catch(e){}}update(range.value);}
 buttons.forEach(function(b){b.addEventListener("click",function(){setLevel(Number(b.getAttribute("data-level")),true);});});
 range.addEventListener("input",function(){update(range.value);});num.addEventListener("change",function(){update(num.value);});
+document.getElementById("at-boundary").addEventListener("click",function(){update("boundary");});
 document.getElementById("reset").addEventListener("click",function(){setLevel(1,true);update(3);});
 var query=new URLSearchParams(location.search);setLevel(query.get("mode")==="sign"?0:1,false);
 })();
