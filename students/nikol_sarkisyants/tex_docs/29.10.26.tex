@@ -1,0 +1,326 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,margin=20mm,headheight=25pt,headsep=9pt,footskip=12mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{parskip}
+\definecolor{accent}{HTML}{087C80}
+\definecolor{accentdark}{HTML}{14565B}
+\definecolor{ink}{HTML}{28363C}
+\definecolor{subtle}{HTML}{6A7A7C}
+\definecolor{redink}{HTML}{A84637}
+\hypersetup{colorlinks=true,linkcolor=accentdark,urlcolor=accent}
+\setstretch{1.15}
+\setlength{\parskip}{6pt}
+\setlist[enumerate]{leftmargin=*,itemsep=9pt,topsep=4pt}
+\setlist[itemize]{leftmargin=*,itemsep=3pt,topsep=3pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{subtle}{ОПТИМИЗАЦИЯ ФУНКЦИЙ}}
+\fancyhead[R]{\small\textcolor{subtle}{Николь Саркисьянц}}
+\fancyfoot[C]{\small\textcolor{subtle}{\thepage}}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent!30}\leaders\hrule height \headrulewidth\hfill}}
+\newcommand{\idea}[1]{\par\noindent\textcolor{accentdark}{\textbf{Главная идея.}}\ #1\par}
+\newcommand{\note}[1]{\par\noindent\textcolor{redink}{\textbf{Проверьте себя.}}\ #1\par}
+\newcommand{\ex}[1]{\par\noindent\textcolor{accentdark}{\textbf{Пример.}}\ #1\par}
+\newcommand{\task}[2]{\item \textbf{#1}\\[-1pt]#2}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{19mm}
+{\small\bfseries\textcolor{accent}{МАТЕМАТИКА}}\par
+\vspace{27mm}
+{\fontsize{34}{39}\selectfont\bfseries Чек-лист}\par
+\vspace{12mm}
+{\LARGE\bfseries Оптимизация функций}\par
+\vspace{4mm}
+{\Large Производная, экспонента и работа с константами}\par
+\vspace{20mm}
+{\normalsize Подготовка к ЕГЭ по профильной математике}\par
+\vspace{21mm}
+{\Large\bfseries Николь Саркисьянц}\par
+\vspace{7mm}
+29 октября 2026 г.\par
+\vfill
+{\small Лёвин Артём Александрович}\par
+{\small эксклюзивно для Николь Саркисьянц}\par
+\vspace{12mm}
+\begin{tikzpicture}
+\draw[accent!60,line width=1pt] (-6.6,0) .. controls (-4.5,0.7) and (-2.3,-0.6) .. (0,0)
+  .. controls (2.4,0.6) and (4.5,-0.4) .. (6.6,0.06);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{1. Что мы ищем в задачах на оптимизацию}
+\idea{Если требуется найти, при каком значении величины функция достигает наибольшего или наименьшего значения, сначала определите переменную и её допустимые значения.}
+
+\begin{itemize}
+\item Запись $f(v)$ подсказывает, что изменяется $v$; остальные буквы могут быть заданными константами.
+\item Постоянные коэффициенты удобно объединять: сложная формула после замены часто превращается в короткое произведение.
+\item Производная показывает, на каких промежутках функция возрастает и убывает; найденные стационарные точки необходимо проверить по знакам производной и границам области.
+\end{itemize}
+
+\ex{Пусть при фиксированных $M,R,T>0$ дана функция
+\[
+ f(v)=4\pi v^2\left(\frac{M}{2\pi RT}\right)^{3/2}
+   e^{-\frac{Mv^2}{2RT}},\qquad v\ge0.
+\]
+Здесь переменная --- $v$. Обозначим
+\[
+ A=4\pi\left(\frac{M}{2\pi RT}\right)^{3/2}>0,
+ \qquad B=-\frac{M}{2RT}<0.
+\]
+Тогда $f(v)=Av^2e^{Bv^2}$. Именно такую форму удобнее дифференцировать.}
+
+\section*{2. Четыре правила, которые нужны чаще всего}
+\begin{tabularx}{\linewidth}{@{}p{0.36\linewidth}X@{}}
+\toprule
+\textbf{Правило} & \textbf{Запись} \\ \midrule
+Произведение & $(uv)'=u'v+uv'$ \\[3pt]
+Сложная экспонента & $(e^{g(x)})'=g'(x)e^{g(x)}$ \\[3pt]
+Корень & $(\sqrt{x})'=\dfrac{1}{2\sqrt{x}}$ при $x>0$ \\[5pt]
+Частное & $\displaystyle\left(\frac{u}{v}\right)'=\frac{u'v-uv'}{v^2}$ при $v\ne0$ \\ 
+\bottomrule
+\end{tabularx}
+
+\ex{Для $g(v)=Bv^2$, где $B$ постоянно, имеем $g'(v)=2Bv$, поэтому
+\[
+\boxed{\bigl(e^{Bv^2}\bigr)'=2Bv\,e^{Bv^2}.}
+\]
+\textbf{Обязательно} сохраняйте множитель $e^{Bv^2}$ после дифференцирования показателя.}
+
+\section*{3. Вынесение общего множителя}
+Можно вынести множитель за скобки, только если \textbf{каждое слагаемое} содержит этот множитель.
+\[
+2x^2+3x+5=\underbrace{x(2x+3)}_{\text{первые два слагаемых}}+5.
+\]
+\note{Равенство $2x^2+3x+5=x(2x+3+5)$ неверно: у числа $5$ нет множителя $x$.}
+
+\section*{4. Разобранный тип I: энергия молекулы}
+В задаче с плотностью распределения кинетической энергии встречается функция
+\[
+ f(\varepsilon)=\frac{2}{\sqrt\pi}\left(\frac1{kT}\right)^{3/2}
+ \sqrt\varepsilon\,e^{-\varepsilon/(kT)},\qquad \varepsilon\ge0,
+\]
+где $k,T>0$ --- постоянные. Обозначив
+\[
+ A=\frac2{\sqrt\pi}\left(\frac1{kT}\right)^{3/2}>0,
+ \quad B=\frac1{kT}>0,
+\]
+получим $f(\varepsilon)=A\sqrt\varepsilon\,e^{-B\varepsilon}$.
+
+\textbf{Шаг 1.} При $\varepsilon>0$ применяем правило произведения:
+\begin{align*}
+ f'(\varepsilon)
+ &=A\frac1{2\sqrt\varepsilon}e^{-B\varepsilon}
+ -AB\sqrt\varepsilon\,e^{-B\varepsilon}\\
+ &=A e^{-B\varepsilon}\left(\frac1{2\sqrt\varepsilon}-B\sqrt\varepsilon\right)\\
+ &=\frac{Ae^{-B\varepsilon}}{2\sqrt\varepsilon}\,(1-2B\varepsilon).
+\end{align*}
+
+\textbf{Шаг 2.} Первые множители положительны при $\varepsilon>0$, поэтому знак производной определяется выражением $1-2B\varepsilon$. Приравниваем его к нулю:
+\[
+1-2B\varepsilon=0
+\quad\Longrightarrow\quad
+\varepsilon_*=\frac1{2B}=\boxed{\frac{kT}{2}}.
+\]
+
+\textbf{Шаг 3.} На числовой прямой отмечаем $0$ и $\varepsilon_*$.
+\begin{center}
+\begin{tikzpicture}[>=Latex,scale=1]
+\draw[->,accent,line width=.9pt] (0,0)--(12,0) node[right] {$\varepsilon$};
+\draw (1,-.12)--(1,.12) node[below=5pt] {$0$};
+\draw (6,-.12)--(6,.12) node[below=5pt] {$\varepsilon_*=\dfrac{kT}{2}$};
+\node[accentdark] at (3.2,.42) {$f'(\varepsilon)>0$};
+\node[redink] at (9,.42) {$f'(\varepsilon)<0$};
+\draw[->,line width=1.1pt,accent] (1.7,-.65)--(5.7,-.14);
+\draw[->,line width=1.1pt,redink] (6.3,-.14)--(10.3,-.65);
+\end{tikzpicture}
+\end{center}
+Слева функция возрастает, справа убывает. При $\varepsilon=0$ значение равно нулю; при $\varepsilon\to+\infty$ оно стремится к нулю. Значит, в $\varepsilon_*$ достигается \textbf{наибольшее} значение.
+
+\ex{Если $k=1{,}38\cdot10^{-23}$ Дж/К и $T=80$ К, то
+\[
+\varepsilon_*=\frac{1{,}38\cdot10^{-23}\cdot80}{2}
+=\boxed{5{,}52\cdot10^{-22}\text{ Дж}}.
+\]
+Сначала сокращаем символические выражения, затем подставляем числа.}
+\section*{5. Разобранный тип II: скорость молекулы}
+После объединения констант получаем функцию
+\[
+ f(v)=Av^2e^{Bv^2},\qquad A>0,\ B<0,\ v\ge0.
+\]
+Разложим её на множители $u=Av^2$ и $w=e^{Bv^2}$:
+\[
+ u'=2Av,\qquad w'=2Bv\,e^{Bv^2}.
+\]
+Тогда
+\begin{align*}
+ f'(v)&=2Av\,e^{Bv^2}+Av^2\cdot2Bv\,e^{Bv^2}\\
+ &=2Av\,e^{Bv^2}\underbrace{(1+Bv^2)}_{\text{определяет знак при }v>0}.
+\end{align*}
+
+Решаем $f'(v)=0$. Первый вариант --- $v=0$ --- граница области. На $v>0$ требуется
+\[
+1+Bv^2=0\quad\Longrightarrow\quad
+ v^2=-\frac1B\quad\Longrightarrow\quad
+ \boxed{v_*=\sqrt{-\frac1B}}.
+\]
+Знак $1+Bv^2$ положителен до $v_*$ и отрицателен после $v_*$. Поэтому найденная положительная скорость даёт наибольшее значение функции.
+
+Возвращаем постоянные $B=-M/(2RT)$:
+\[
+\boxed{v_*=\sqrt{\frac{2RT}{M}}}\qquad
+(R,T,M>0).
+\]
+\note{В скобках после дифференцирования должно быть $1+Bv^2$. Следовательно, решается уравнение для $v^2$, а не для $v^3$. Величина $B$ уже содержит знак минус.}
+
+\section*{6. Когда подстановка констант не помогает}
+Рассмотрим характерную форму, встречавшуюся в задачах о колебаниях:
+\[
+F(\omega)=\frac{UL\omega}
+{\sqrt{R^2+\left(L\omega-\frac1{C\omega}\right)^2}},\qquad\omega>0.
+\]
+Здесь $U,L,R,C$ постоянны, однако $\omega$ встречается и в числителе, и под корнем, и в знаменателе внутренней дроби. Обозначения $A,B$ почти не упростят производную. Полезный маршрут:
+\begin{enumerate}
+ \item Укажите ОДЗ: $\omega>0$ (в частности, $\omega\ne0$).
+ \item Найдите производную выражения под корнем по правилу сложной функции.
+ \item Примените правило частного или перепишите деление как умножение на степень $-\frac12$.
+ \item Вынесите общий множитель только там, где он действительно присутствует.
+\end{enumerate}
+\idea{Начинайте вычисления с буквами. Числа подставляйте тогда, когда выражение уже упрощено.}
+
+\textbf{Как выглядит прямое дифференцирование.}
+Пусть $h(\omega)=L\omega-\frac1{C\omega}$,
+$Q(\omega)=R^2+h(\omega)^2$; тогда
+\[
+ h'(\omega)=L+\frac1{C\omega^2},\qquad
+ Q'(\omega)=2h(\omega)h'(\omega).
+\]
+Перепишем $F(\omega)=UL\omega\,Q(\omega)^{-1/2}$. Правило
+произведения вместе с правилом сложной функции даёт
+\begin{align*}
+ F'(\omega)
+ &=UL\left(\frac1{\sqrt Q}-\frac{\omega Q'}{2Q^{3/2}}\right)\\
+ &=\frac{UL\bigl(Q-\omega h h'\bigr)}{Q^{3/2}}.
+\end{align*}
+Здесь $Q=Q(\omega)$, $h=h(\omega)$. Только теперь раскрываем
+скобки и сокращаем подобные члены:
+\[
+\boxed{F'(\omega)=\frac{UL\left(R^2-\dfrac{2L}{C}
+   +\dfrac{2}{C^2\omega^2}\right)}
+ {\left(R^2+\left(L\omega-\dfrac1{C\omega}\right)^2\right)^{3/2}}.}
+\]
+Это пример, когда производная частного и сложной функции
+полезнее случайных числовых подстановок.
+\clearpage
+
+\thispagestyle{fancy}
+\begin{center}
+{\LARGE\bfseries Алгоритм поиска максимума}\par
+\vspace{4mm}
+{\small Для функций с произведением степенного и показательного множителей}\par
+\end{center}
+\vspace{6mm}
+\begin{center}
+\begin{tikzpicture}[
+ node distance=10mm,
+ start/.style={ellipse,draw=accent,line width=.9pt,align=center,minimum width=56mm,minimum height=10mm,fill=white},
+ stage/.style={rectangle,rounded corners=2pt,draw=accent!70,line width=.8pt,align=center,text width=93mm,inner sep=8pt,fill=white},
+ decision/.style={diamond,aspect=2.5,draw=accentdark,line width=.9pt,align=center,inner sep=3pt,text width=41mm,fill=white},
+ arr/.style={-{Latex[length=3mm]},line width=.9pt,draw=accentdark}
+]
+\node[start] (start) {Начало};
+\node[stage,below=of start] (var) {Выделить переменную и ОДЗ; отделить постоянные коэффициенты};
+\node[decision,below=11mm of var] (choice) {Замена упрощает формулу?};
+\node[stage,below left=17mm and 7mm of choice,text width=35mm] (yes) {Ввести постоянные $A,B$};
+\node[stage,below right=17mm and 7mm of choice,text width=35mm] (no) {Оставить исходные коэффициенты};
+\node[stage,below=37mm of choice] (der) {Найти $f'(x)$: произведение, цепное правило, частное};
+\node[stage,below=of der] (zeros) {Решить $f'(x)=0$; проверить допустимость найденных точек};
+\node[stage,below=of zeros] (signs) {Исследовать знак $f'$ слева и справа; учесть границы ОДЗ};
+\node[start,below=of signs] (end) {Записать максимум и ответ};
+\draw[arr] (start)--(var);
+\draw[arr] (var)--(choice);
+\draw[arr] (choice) -| node[pos=.18,above left]{\small да} (yes);
+\draw[arr] (choice) -| node[pos=.18,above right]{\small нет} (no);
+\draw[arr] (yes.south) |- ($(der.north)+(0,5mm)$) -- (der.north);
+\draw[arr] (no.south) |- ($(der.north)+(0,5mm)$);
+\draw[arr] (der)--(zeros);
+\draw[arr] (zeros)--(signs);
+\draw[arr] (signs)--(end);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{7. Типичные ошибки и самопроверка}
+\begin{enumerate}
+ \item \textbf{Потеря экспоненты.} Правильно: $(e^{Bv^2})'=2Bv\,e^{Bv^2}$.
+ \item \textbf{Путаница степеней при вынесении.} Из $2Av+2ABv^3$ выносим $2Av$ и получаем $2Av(1+Bv^2)$.
+ \item \textbf{Общий множитель отсутствует у одного слагаемого.} Тогда выносить его из всей суммы нельзя.
+ \item \textbf{Неверный знак константы.} Для $e^{-Mv^2/(2RT)}$ удобно брать $B=-M/(2RT)<0$.
+ \item \textbf{Найден только корень производной.} Обязательно убедитесь, что знак $f'$ меняется с плюса на минус; проверьте границы области.
+ \item \textbf{Слишком ранняя подстановка чисел.} Сохраняйте буквенный вид, чтобы не потерять степень десяти и не усложнять дроби.
+\end{enumerate}
+\idea{Итоговая проверка: названа переменная; указана ОДЗ; производная посчитана по правилам; множители раскрыты и вынесены корректно; доказан максимум; ответ имеет нужные единицы измерения.}
+
+\clearpage
+\section*{Тренировочный блок --- Путь А}
+\setlength{\abovedisplayskip}{5pt}\setlength{\belowdisplayskip}{5pt}
+\textcolor{subtle}{10 заданий, от отработки правил к задачам на оптимизацию. Решения запишите последовательно; в задачах на максимум обоснуйте изменение знака производной.}
+\begin{enumerate}[itemsep=3pt,topsep=3pt]
+\task{Определите переменную и коэффициенты.}{Дана функция
+\[
+F(v)=3v^2\left(\frac{m}{4\pi RT}\right)^{3/2}e^{-\frac{mv^2}{4RT}},\quad v\ge0,
+\]
+где $m,R,T>0$ фиксированы. Запишите её в виде $F(v)=Av^2e^{Bv^2}$. Найдите $A$, $B$ и укажите знак каждого.}
+\task{Вынесите общий множитель.}{Представьте выражение $4x^2+6x+7$ в виде $x(\ldots)+7$. Объясните, почему нельзя вынести $x$ из всей суммы.}
+\task{Производная сложной функции.}{Вычислите производную $y=e^{-3x^2}$.}
+\task{Корень и экспонента.}{Найдите производную $y=4\sqrt{x}\,e^{-x/3}$ при $x>0$ и вынесите общий показательный множитель.}
+\task{Два правила одновременно.}{Найдите и разложите на множители производную $y=5v^2e^{-v^2/8}$.}
+\task{Простейшая оптимизация.}{Найдите точку наибольшего значения функции $y=xe^{-2x}$ при $x\ge0$.}
+\task{Максимум с корнем.}{Найдите точку наибольшего значения $y=\sqrt{x}\,e^{-x/6}$ при $x\ge0$.}
+\task{Производная с корнем в знаменателе.}{Вычислите и упростите производную функции $y=\dfrac{t}{\sqrt{t^2+4}}$.}
+\task{Энергия молекулы.}{Функция плотности имеет вид $f(\varepsilon)=A\sqrt\varepsilon\,e^{-\varepsilon/(kT)}$ при $A,k,T>0$ и $\varepsilon\ge0$. Найдите энергию максимума при $k=1{,}38\cdot10^{-23}$ Дж/К, $T=80$ К.}
+\task{Скорость молекулы.}{При $v\ge0$ функция задана формулой
+\[
+ f(v)=4\pi v^2\left(\frac{M}{2\pi RT}\right)^{3/2}e^{-Mv^2/(2RT)}.
+\]
+Найдите скорость, при которой она максимальна, если $R=8{,}31$ Дж/(моль$\cdot$К), $T=450$ К, $M=0{,}004$ кг/моль. Округлите до целого м/с.}
+\end{enumerate}
+\clearpage
+\section*{Ответы к тренировочному блоку}
+\renewcommand{\arraystretch}{1.42}
+\begin{tabularx}{\linewidth}{@{}p{.075\linewidth}X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\ \midrule
+1 & $A=3\left(\dfrac{m}{4\pi RT}\right)^{3/2}>0$, $B=-\dfrac{m}{4RT}<0$; переменная $v$.\\
+2 & $x(4x+6)+7$; число $7$ не содержит множителя $x$.\\
+3 & $y'=-6xe^{-3x^2}$.\\
+4 & $y'=4e^{-x/3}\left(\dfrac1{2\sqrt{x}}-\dfrac{\sqrt{x}}3\right)$.\\
+5 & $y'=10ve^{-v^2/8}\left(1-\dfrac{v^2}{8}\right)$.\\
+6 & $x_*=\dfrac12$.\\
+7 & $x_*=3$.\\
+8 & $y'=\dfrac{4}{(t^2+4)^{3/2}}$.\\
+9 & $\varepsilon_*=\dfrac{kT}{2}=5{,}52\cdot10^{-22}$ Дж.\\
+10 & $v_*=\sqrt{\dfrac{2RT}{M}}\approx1367$ м/с.\\
+\bottomrule
+\end{tabularx}
+\vspace{10mm}
+\textcolor{accentdark}{\textbf{Последняя самопроверка}}\par
+Если в условии спрашивают \emph{наибольшее значение функции}, после нахождения точки максимума нужно дополнительно подставить эту точку в исходную функцию. Если спрашивают, \emph{при каком значении переменной} достигается максимум, достаточно найденной точки с обоснованием.
+\end{document}
