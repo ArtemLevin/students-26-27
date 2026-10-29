@@ -234,6 +234,42 @@ try{
   assert.equal(await run("getComputedStyle(document.querySelector('.top')).display"),'none');
   await call('Emulation.setEmulatedMedia',{media:'screen'});
 
+  // Release-gate browser QA for the 28 October 2026 lesson and exponent laboratory.
+  for(const [width,height] of [[1440,900],[390,844]]){
+    for(const dark of [false,true]){
+      await navigate('28.10.26.html',width,height,dark);
+      await snapshot('28-10-lesson-'+width+(dark?'-dark':'-light'));
+      assert.equal(await run("document.querySelectorAll('#practice .task-list > li').length"),10);
+      assert.ok(await run("[...document.querySelectorAll('#check a')].some(a=>a.getAttribute('href')==='28.10.26-lab.html#model')"));
+      await navigate('28.10.26-lab.html',width,height,dark);
+      await snapshot('28-10-lab-'+width+(dark?'-dark':'-light'));
+      assert.equal(await run("document.querySelector('#expression math')?.namespaceURI"),'http://www.w3.org/1998/Math/MathML');
+    }
+  }
+  await navigate('28.10.26.html',1440,900,false);
+  assert.deepEqual(await run("[...document.querySelectorAll('#answers .answer')].map(e=>Number(e.textContent.split('·')[1].trim()))"),[12,24,12,6,16,8,6,8,32,9]);
+  assert.equal(await run("document.querySelector('#answers').open"),false);
+  assert.equal(await run("(()=>{document.querySelector('#answers summary').click();return document.querySelector('#answers').open})()"),true);
+  assert.equal(await run("[...document.querySelectorAll('a')].some(a=>a.getAttribute('href')==='../tex_docs/28.10.26.tex')"),true);
+  await navigate('28.10.26-lab.html',1440,900,false);
+  assert.equal(await run("document.querySelector('#count').textContent"),'8','360 multiples of 12');
+  assert.equal(await run("(()=>{const el=document.querySelector('#scenario');el.value='72';el.dispatchEvent(new Event('change',{bubbles:true}));return document.querySelector('#count').textContent})()"),'6');
+  assert.equal(await run("(()=>{const el=document.querySelector('#scenario');el.value='square';el.dispatchEvent(new Event('change',{bubbles:true}));return document.querySelector('#count').textContent})()"),'3');
+  assert.deepEqual(await run("[...document.querySelectorAll('#all li')].map(el=>Number(el.textContent))"),[225,900,3600]);
+  assert.ok(await run("document.querySelector('#rule').textContent.includes('каждый показатель должен быть чётным')"));
+  assert.equal(await run("(()=>{const cb=document.querySelector('#squareOnly');cb.click();return document.querySelector('#count').textContent})()"),'20');
+  assert.ok(await run("document.querySelector('#rule').textContent.includes('Условие квадрата выключено')"),'rule must agree with live checkbox');
+  assert.equal(await run("(()=>{const els=[...document.querySelectorAll('#params select')];[2,2,2].forEach((v,i)=>{els[i].value=v;els[i].dispatchEvent(new Event('change',{bubbles:true}))});return document.querySelector('#current').textContent.replaceAll(' ','')})()"),'900');
+  assert.ok(await run("document.querySelector('#status').classList.contains('ok')"));
+  assert.equal(await run("document.querySelector('#expression math msup mn:last-child')?.textContent"),'2');
+  assert.equal(await run("(()=>{document.querySelector('#reset').click();return document.querySelector('#current').textContent})()"),'1');
+  assert.ok(await run("!document.querySelector('#status').classList.contains('ok')"));
+  assert.ok(await run("(()=>{const el=document.querySelector('#scenario');el.focus();return document.activeElement===el&&el.labels?.length===1})()"));
+  assert.equal(await run("(()=>{document.querySelector('#theme').click();return document.documentElement.dataset.theme})()"),'dark');
+  await call('Emulation.setEmulatedMedia',{media:'print'});
+  assert.equal(await run("getComputedStyle(document.querySelector('.top')).display"),'none');
+  await call('Emulation.setEmulatedMedia',{media:'screen'});
+
   await navigate('index.html',1440,900);
   await sleep(400);
   assert.equal(await run("document.querySelector('#lesson-title').textContent"),LESSONS[0].title);
