@@ -87,6 +87,7 @@ try{
   if([375,1440].includes(width))await screenshot('lab-'+width);
  }
  await navigate('index.html',375,812);
+ await wait('document.querySelector(".material-card time")?.getAttribute("datetime")==="2026-10-28"');
  const home=await evaluate('(()=>({overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,map:!!document.getElementById("map"),latest:document.querySelector(".material-card time")?.getAttribute("datetime"),lessonLink:document.querySelector(".material-card a")?.getAttribute("href")}))()');
  assert.ok(home.overflow<=2,'Home overflow '+JSON.stringify(home));assert.ok(home.map,'Dashboard competence map missing');assert.equal(home.latest,'2026-10-28');assert.equal(home.lessonLink,'28.10.26.html');
  assert.deepEqual(exceptions,[],'Uncaught browser exceptions');assert.deepEqual(badResponses,[],'HTTP resource errors');
