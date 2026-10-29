@@ -1,0 +1,45 @@
+name: Ekaterina October 28 lesson release review
+on:
+  pull_request:
+    paths:
+      - 'students/ekaterina/site/28.10.26.html'
+      - 'students/ekaterina/site/28.10.26-lab.html'
+      - 'students/ekaterina/site/data/publication-intents/2026-10-28.json'
+      - 'students/ekaterina/tex_docs/28.10.26.tex'
+      - 'students/ekaterina/site/tests/28.10.26.*.mjs'
+      - '.github/workflows/ekaterina-281026-review.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'students/ekaterina/site/28.10.26.html'
+      - 'students/ekaterina/site/28.10.26-lab.html'
+      - 'students/ekaterina/site/tests/28.10.26.*.mjs'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser-release-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate student platform v2
+        run: node scripts/student.mjs validate ekaterina
+      - name: Verify test syntax
+        run: |
+          node --check students/ekaterina/site/tests/28.10.26.browser.mjs
+          node --check students/ekaterina/site/tests/28.10.26.review.test.mjs
+      - name: Run source, MathML, links and mathematical QA
+        run: node --test students/ekaterina/site/tests/28.10.26.review.test.mjs
+      - name: Run Chromium release QA
+        run: node students/ekaterina/site/tests/28.10.26.browser.mjs
+      - name: Upload responsive screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ekaterina-281026-review-screenshots
+          path: ekaterina-281026-review-artifacts/*.png
+          if-no-files-found: warn
