@@ -5,6 +5,86 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-10-28",
+  "ktpRefs": [],
+  "href": "28.10.26.html",
+  "title": "График показывает. Неравенство уточняет.",
+  "navTitle": "График показывает. Неравенство уточняет.",
+  "navSubtitle": "Екатерина Скелли · 28.10.2026 · графики функций, линейные неравенства, скобки, числовые промежутки и текстовые задачи. Теория, примеры, 10 заданий.",
+  "summary": "Екатерина Скелли · 28.10.2026 · графики функций, линейные неравенства, скобки, числовые промежутки и текстовые задачи. Теория, примеры, 10 заданий.",
+  "topics": [
+    "знак функции по графику",
+    "сравнение функции с горизонтальным уровнем",
+    "линейные неравенства и скобки",
+    "числовые промежутки и целочисленные решения",
+    "текстовые задачи на неравенства",
+    "неравенства с параметром"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "alg_functions_06",
+      "evidenceAnchor": "sign",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_functions_07",
+      "evidenceAnchor": "level",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_ineq_05",
+      "evidenceAnchor": "language",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_ineq_06",
+      "evidenceAnchor": "brackets",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_ineq_07",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_ineq_08",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_ineq_10",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_ineq_12",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_models_05",
+      "evidenceAnchor": "models",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_models_07",
+      "evidenceAnchor": "models",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_models_08",
+      "evidenceAnchor": "models",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "28.10.26.html",
+    "pdf": "../pdf_docs/28.10.26.pdf",
+    "tex": "../tex_docs/28.10.26.tex",
+    "lab": "28.10.26-lab.html"
+  }
+},
+{
     "date": "2026-10-17",
     "ktpRefs": [],
     "href": "17.10.26.html",
