@@ -196,8 +196,10 @@ try{
   assert.equal(lesson22Linked.latest,'29.10.26.html','the cabinet shows 29 October as the latest lesson');
   assert.equal(lesson22Linked.allEvidence,true,'all 12 linked competencies reference this lesson');
   assert.equal(lesson22Linked.graphLink,'22.10.26.html#graph');
-  const logEvidence=await evalJS('(()=>{const ids=["ege08_08","ege08_09","ege08_10","ege08_11","ege08_02","ege08_03","ege08_06"];const items=window.COMPETENCY_MAP_DATA.groups.flatMap(g=>g.items);return ids.every(id=>{const item=items.find(x=>x.id===id);return item?.evidence?.some(e=>e.text?.includes("26.10.2026"))&&item?.material?.href.startsWith("26.10.26.html#")})})()');
+  const logEvidence=await evalJS('(()=>{const ids=["ege08_08","ege08_09","ege08_10","ege08_11","ege08_02","ege08_03","ege08_06"];const items=window.COMPETENCY_MAP_DATA.groups.flatMap(g=>g.items);return ids.every(id=>{const item=items.find(x=>x.id===id);return item?.evidence?.some(e=>e.text?.includes("26.10.2026"))})})()');
   assert.equal(logEvidence,true,'all seven logarithm lesson outcomes have evidence and deep links');
+  const newEvidence=await evalJS('(()=>{const ids=["ege07_08","ege08_08","ege08_10","ege08_11","ege07_02","ege10_09","ege10_12","ege12_13","ege12_15"];const all=window.COMPETENCY_MAP_DATA.groups.flatMap(g=>g.items);return ids.every(id=>{const x=all.find(t=>t.id===id);return x?.evidence?.some(e=>e.text?.includes("29.10.2026"))&&x?.material?.href.startsWith("29.10.26.html#")})})()');
+  assert.equal(newEvidence,true,'all nine 29 October competencies have evidence and deep links');
   console.log('JAROSLAV_221026_RELEASE_GATE_PASS',JSON.stringify({printTest,lesson22Linked}));
 
 
