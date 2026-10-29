@@ -95,5 +95,6 @@ try{
  try{ws?.close();}catch{}
  if(child&&child.exitCode===null)child.kill('SIGTERM');
  await new Promise(resolve=>server.close(resolve));
- fs.rmSync(profile,{recursive:true,force:true});
+ await new Promise(resolve=>setTimeout(resolve,200));
+ try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:8,retryDelay:250});}catch(error){console.warn('Could not remove disposable Chromium profile: '+error.message);}
 }
