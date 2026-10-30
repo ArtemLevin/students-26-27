@@ -5,6 +5,59 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-10-29",
+  "ktpRefs": [],
+  "href": "29.10.26.html",
+  "title": "Аннуитетные кредиты: равные платежи и переплата",
+  "navTitle": "Аннуитетные кредиты и переплата",
+  "navSubtitle": "Равные платежи, остаток долга, формулы на два и три года, поиск ставки.",
+  "summary": "Финансовые задачи ЕГЭ: аннуитетная схема, годовая таблица долга, формулы платежа, поиск ставки через дискриминант, переплата и 10 упражнений «Путь А».",
+  "topics": [
+    "аннуитетный кредит и равные ежегодные платежи",
+    "таблица задолженности и начисление процентов на остаток",
+    "формулы платежа для двух и трёх лет",
+    "квадратное уравнение для поиска неизвестной ставки",
+    "общая сумма выплат, переплата и её процент",
+    "проверка расчётов и дискриминанта"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t16_annuity",
+      "evidenceAnchor": "formulas",
+      "relation": "practiced",
+      "label": "Формулы аннуитетного платежа для двух и трёх лет",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_debt_table",
+      "evidenceAnchor": "table",
+      "relation": "practiced",
+      "label": "Таблица изменения долга с начислением на остаток",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_model_equation",
+      "evidenceAnchor": "rate",
+      "relation": "practiced",
+      "label": "Поиск ставки через квадратное уравнение и проверку дискриминанта",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_payment_sum",
+      "evidenceAnchor": "overpay",
+      "relation": "practiced",
+      "label": "Сумма выплат, переплата и процент переплаты",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "29.10.26.html",
+    "lab": "29.10.26-lab.html",
+    "pdf": "../pdf_docs/29.10.26.pdf",
+    "tex": "../tex_docs/29.10.26.tex"
+  }
+},
+{
   "date": "2026-10-28",
   "ktpRefs": [],
   "href": "28.10.26.html",
