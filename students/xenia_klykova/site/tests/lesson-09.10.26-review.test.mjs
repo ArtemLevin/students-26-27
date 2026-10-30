@@ -149,7 +149,7 @@ test('monthly tile archive is data-driven, safe and reachable',()=>{
   for(const id of ['archiveRoot','archiveSearch','archiveMonths','archiveTotal','archiveMonthTotal','archiveTheme','archiveEmpty']){
     assert.ok(archivePage.includes('id="'+id+'"'),'archive page missing '+id);
   }
-  assert.ok(archivePage.includes('archive.js?v=20261016-2'));
+  assert.match(archivePage, /archive\.js\?v=20\d{6}-\d+/, 'archive module must have a dated cache-busting version');
   assert.ok(archivePage.includes('archive.css?v=20261016-2'));
   assert.ok(archivePage.includes('href="index.html"'));
   const ids=[...archivePage.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);

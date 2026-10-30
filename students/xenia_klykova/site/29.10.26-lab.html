@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Цифровая лаборатория аннуитетного кредита для Ксении Клыковой: годовые проценты, равный платёж и остаток задолженности.">
+<title>Лаборатория аннуитетного кредита · Ксения Клыкова</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../design-system/tokens.css">
+<link rel="stylesheet" href="../../../design-system/foundations.css">
+<style>
+:root{color-scheme:light;--bg:#f7f7f0;--sheet:#fffefa;--ink:#213339;--soft:#52666a;--line:#d1d9d3;--green:#165e57;--mint:#e7eee7;--amber:#b57947;--focus:#0f7185}
+html[data-theme=dark]{color-scheme:dark;--bg:#14272a;--sheet:#20383c;--ink:#f1f4ef;--soft:#c0d2cf;--line:#526c69;--green:#b0e5d6;--mint:#294640;--amber:#ffbc85;--focus:#a2e6f1}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg)}
+main,footer,.bar-inner{width:min(1090px,calc(100% - 34px));margin:auto}
+.bar{border-bottom:1px solid var(--line);background:var(--sheet)}.bar-inner{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;min-height:62px}
+a{color:var(--green);text-underline-offset:.2em}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+button,select,input{font:inherit}button{cursor:pointer}button,select{min-height:44px;border:1px solid var(--line);color:var(--ink);background:var(--sheet);padding:8px 13px}
+button:hover{background:var(--mint)}button[aria-pressed="true"]{background:var(--green);color:var(--sheet);border-color:var(--green)}html[data-theme=dark] button[aria-pressed="true"]{color:#14272a}
+a.skip{position:absolute;top:-999px}a.skip:focus{top:0;background:var(--sheet);z-index:99;padding:10px}
+.hero{padding:49px 0 34px;border-bottom:1px solid var(--line)}.kicker{font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--green);font-weight:800}.hero h1{font:400 clamp(2.6rem,5vw,4.8rem)/1.08 Georgia,serif;letter-spacing:-.035em;margin:10px 0 20px}.hero p{max-width:710px;color:var(--soft)}
+.section{padding:35px 0;border-bottom:1px solid var(--line);scroll-margin-top:18px}.section h2{font:400 clamp(1.8rem,3vw,2.6rem)/1.25 Georgia,serif;margin:0 0 16px}.controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px;margin:25px 0}.control{min-width:0;border-top:2px solid var(--green);padding-top:13px}.control label{display:flex;justify-content:space-between;gap:12px;font-weight:700}.control output{font-variant-numeric:tabular-nums;color:var(--green)}.control input{width:100%;margin-top:16px;accent-color:var(--green)}.control p{font-size:.85rem;color:var(--soft);margin:6px 0}.presets{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}.hint{border-left:3px solid var(--amber);padding:3px 0 3px 16px;color:var(--soft)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:26px 0}.stat{border-top:2px solid var(--line);padding-top:10px}.stat span{display:block;color:var(--soft);font-size:.82rem}.stat strong{font:400 clamp(1.5rem,2.2vw,2rem) Georgia,serif;color:var(--green);font-variant-numeric:tabular-nums}
+.panel{background:var(--sheet);border:1px solid var(--line);padding:20px 24px;margin-top:22px}.math{font-family:"Cambria Math",Georgia,serif;font-size:1.13em;font-variant-numeric:tabular-nums}.equation{font-size:clamp(1.2rem,2.5vw,1.8rem);overflow-x:auto;white-space:nowrap;padding:12px 0;color:var(--green)}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:620px;font-variant-numeric:tabular-nums}th,td{padding:11px 10px;text-align:right;border-bottom:1px solid var(--line)}th{color:var(--soft);font-size:.83rem}th:first-child,td:first-child{text-align:left}tr.selected{background:var(--mint)}.controls-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:15px 0}.year-state{font-size:1.05rem;color:var(--green);font-weight:700}
+.diagram{width:100%;height:auto;min-height:230px;display:block}.legend{display:flex;flex-wrap:wrap;gap:19px;font-size:.87rem;color:var(--soft)}.dot{display:inline-block;width:12px;height:12px;margin-right:5px;border-radius:50%;vertical-align:middle;background:var(--green)}.dot.orange{background:var(--amber)}.bar-label{fill:var(--ink);font:13px system-ui}.bar-background{fill:var(--mint)}.bar-debt{fill:var(--green)}.bar-interest{fill:var(--amber)}
+footer{font-size:.85rem;color:var(--soft);padding:24px 0 50px}
+@media(max-width:780px){.controls{grid-template-columns:1fr;gap:10px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:30px 0}.panel{padding:15px}}
+@media(max-width:390px){.stats{grid-template-columns:1fr 1fr}.stat strong{font-size:1.33rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{.bar,.controls,.presets,.controls-row{display:none!important}.section{break-inside:avoid}body{background:white}.panel{border-color:#ccc}}
+</style></head>
+<body><a class="skip" href="#model">К исследованию</a>
+<header class="bar"><div class="bar-inner"><a href="29.10.26.html#table">← Вернуться к занятию</a><button type="button" id="theme" aria-label="Переключить светлую и тёмную тему">◐ Тема</button></div></header>
+<main><header class="hero"><p class="kicker">29 октября 2026 · цифровая лаборатория</p><h1>Как меняется долг <em>по годам</em></h1><p>Изменяйте сумму кредита, годовую ставку и число лет. Платёж останется одинаковым в каждом году, а сумма процентов и остаток долга будут пересчитываться. Проследите каждое начисление.</p></header>
+<section class="section" id="model" aria-labelledby="model-title"><h2 id="model-title">01 / Параметры кредита</h2><div class="presets" aria-label="Примеры из пособия"><button type="button" id="presetPayment">455 тыс. · 20 % · 3 года</button><button type="button" id="presetRate">2150 тыс. · 15 % · 2 года</button><button type="button" id="reset">Сбросить параметры</button></div>
+<div class="controls"><div class="control"><label for="sum">Сумма кредита <output id="sumOut" for="sum">455 тыс. руб.</output></label><input id="sum" type="range" min="100" max="2150" step="5" value="455"><p>В тысячах рублей</p></div><div class="control"><label for="rate">Годовая ставка <output id="rateOut" for="rate">20 %</output></label><input id="rate" type="range" min="0" max="50" step="1" value="20"><p>Начисляется на текущий остаток</p></div><div class="control"><label for="years">Число лет <output id="yearsOut" for="years">3</output></label><input id="years" type="range" min="2" max="3" step="1" value="3"><p>Платёж в конце каждого года</p></div></div>
+<div class="stats" aria-live="polite"><div class="stat"><span>Коэффициент k</span><strong id="coefOut">1,2</strong></div><div class="stat"><span>Равный платёж x · тыс.</span><strong id="payOut">216</strong></div><div class="stat"><span>Переплата · тыс.</span><strong id="extraOut">193</strong></div><div class="stat"><span>Процент переплаты</span><strong id="percentOut">42,42 %</strong></div></div>
+<div class="panel"><p class="kicker">Расчёт по формуле</p><div class="equation" id="equation" aria-live="polite">x = Sk³ / (k² + k + 1)</div><p class="hint">Сумма платежей: <strong id="totalOut">648</strong> тыс. руб. При полном погашении последний остаток равен нулю. Все значения рассчитаны без округления промежуточных сумм.</p></div></section>
+<section class="section" id="schedule"><h2>02 / Таблица по годам</h2><p>Выберите год. Посмотрите, как остаток предыдущего года становится началом следующего, проценты начисляются на него, затем вычитается одинаковый платёж.</p><div class="controls-row"><button id="prev" type="button">← Предыдущий год</button><strong class="year-state" id="activeLabel" aria-live="polite">Год 1 из 3</strong><button id="next" type="button">Следующий год →</button></div>
+<div class="table-wrap"><table><caption>Динамика аннуитетного кредита. Суммы в тысячах рублей</caption><thead><tr><th>Год</th><th>В начале</th><th>Проценты</th><th>Перед платежом</th><th>Платёж</th><th>После платежа</th></tr></thead><tbody id="tbody"></tbody></table></div>
+<div class="panel"><p class="kicker">Текущий шаг</p><p id="stepText" aria-live="polite"></p></div></section>
+<section class="section" id="chart"><h2>03 / Изменение остатка</h2><p>Тёмная полоса показывает задолженность после платежа. Охристая полоска — проценты, начисленные за соответствующий год. Все столбцы пересчитываются из той же таблицы.</p>
+<svg class="diagram" id="diagram" viewBox="0 0 720 280" role="img" aria-labelledby="diagramTitle diagramDesc"><title id="diagramTitle">Динамика долга и начисленных процентов</title><desc id="diagramDesc">Диаграмма задолженности по годам; числовые значения доступны в таблице выше.</desc><g id="bars"></g></svg>
+<div class="legend"><span><i class="dot"></i>Остаток долга после платежа</span><span><i class="dot orange"></i>Проценты за год</span></div></section>
+<section class="section" id="conclusion"><h2>04 / Что запомнить</h2><p>В каждом году выполняется одно и то же действие: <span class="math">Bᵢ = kBᵢ₋₁ − x</span>. Когда меняются сумма или ставка, пересчитывается годовой платёж. Если срок увеличивается, число равных платежей тоже растёт.</p><p class="hint">Проверьте на модели два примера из пособия, затем вернитесь к <a href="29.10.26.html#practice">десяти заданиям «Пути А»</a>.</p></section></main>
+<footer>Лёвин Артём Александрович · эксклюзивно для Ксении Клыковой</footer>
+<script>
+(()=>{
+const $=id=>document.getElementById(id), sum=$('sum'),rate=$('rate'),years=$('years');
+let active=1,rows=[];
+const ru=(n,d=2)=>new Intl.NumberFormat('ru-RU',{maximumFractionDigits:d}).format(Math.abs(n)<1e-9?0:n);
+const set=(s,r,n)=>{sum.value=s;rate.value=r;years.value=n;active=1;render()};
+function render(){
+const S=Number(sum.value),r=Number(rate.value),n=Number(years.value),k=1+r/100;
+const den=Array.from({length:n},(_,i)=>Math.pow(k,i)).reduce((a,b)=>a+b,0);
+const x=S*Math.pow(k,n)/den;
+let balance=S;rows=[];
+for(let i=1;i<=n;i++){const start=balance,interest=start*(k-1),before=start+interest;
+ balance=before-x;if(Math.abs(balance)<1e-8)balance=0;
+ rows.push({year:i,start,interest,before,payment:x,end:balance})}
+active=Math.min(active,n);
+$('sumOut').textContent=ru(S,0)+' тыс. руб.';$('rateOut').textContent=ru(r,0)+' %';$('yearsOut').textContent=n;
+$('coefOut').textContent=ru(k,2);$('payOut').textContent=ru(x);$('extraOut').textContent=ru(n*x-S);
+$('percentOut').textContent=ru((n*x-S)/S*100)+' %';$('totalOut').textContent=ru(n*x);
+$('equation').textContent=n===2?'x = Sk² / (k + 1) = '+ru(x)+' тыс. руб.':'x = Sk³ / (k² + k + 1) = '+ru(x)+' тыс. руб.';
+$('tbody').replaceChildren(...rows.map(row=>{const tr=document.createElement('tr');if(row.year===active)tr.className='selected';
+[ row.year,ru(row.start),ru(row.interest),ru(row.before),ru(row.payment),ru(row.end) ].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});return tr}));
+const current=rows[active-1];
+$('activeLabel').textContent='Год '+active+' из '+n;
+$('stepText').textContent='В начале года: '+ru(current.start)+' тыс. руб. → проценты: '+ru(current.interest)+' тыс. руб. → перед платежом: '+ru(current.before)+' тыс. руб. → платёж: '+ru(x)+' тыс. руб. → остаток: '+ru(current.end)+' тыс. руб.';
+$('prev').disabled=active===1;$('next').disabled=active===n;
+const root=$('bars');root.replaceChildren();const ns='http://www.w3.org/2000/svg';
+const make=(tag,attrs,txt)=>{const e=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v)));if(txt!==undefined)e.textContent=txt;root.append(e);return e};
+const max=Math.max(S,...rows.map(z=>z.start),...rows.map(z=>z.interest));
+const unit=160/Math.max(1,max);
+rows.forEach((row,i)=>{const x0=95+i*190,base=215;let dh=row.end*unit,ih=row.interest*unit;const w=52;
+make('rect',{x:x0,y:base-dh,width:w,height:Math.max(dh,0),class:'bar-debt',opacity:i+1===active?1:0.55});
+make('rect',{x:x0+62,y:base-ih,width:w,height:Math.max(ih,0),class:'bar-interest',opacity:i+1===active?1:0.55});
+make('text',{x:x0+28,y:base+25,'text-anchor':'middle',class:'bar-label'},'Год '+row.year);
+make('text',{x:x0+57,y:base-dh-9,'text-anchor':'middle',class:'bar-label'},ru(row.end));
+});
+}
+[sum,rate,years].forEach(el=>el.addEventListener('input',()=>{active=1;render()}));
+$('presetPayment').addEventListener('click',()=>set(455,20,3));$('presetRate').addEventListener('click',()=>set(2150,15,2));$('reset').addEventListener('click',()=>set(455,20,3));
+$('prev').addEventListener('click',()=>{active=Math.max(1,active-1);render()});
+$('next').addEventListener('click',()=>{active=Math.min(rows.length,active+1);render()});
+const theme=$('theme');try{document.documentElement.dataset.theme=localStorage.getItem('xenia-lesson-theme-v1')==='dark'?'dark':'light'}catch(_){}
+theme.addEventListener('click',()=>{const root=document.documentElement;root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('xenia-lesson-theme-v1',root.dataset.theme)}catch(_){}});
+const hash=location.hash;if(hash==='#schedule'||hash==='#chart')document.querySelector(hash)?.scrollIntoView();
+render();
+})();
+</script></body></html>
