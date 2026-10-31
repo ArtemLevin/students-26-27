@@ -1,0 +1,199 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{geometry}
+\geometry{left=23mm,right=22mm,top=22mm,bottom=24mm}
+\usepackage{microtype}
+\usepackage{array,tabularx,booktabs}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{parskip}
+\definecolor{accent}{HTML}{007F83}
+\definecolor{darkaccent}{HTML}{285E65}
+\definecolor{ink}{HTML}{303A40}
+\definecolor{warn}{HTML}{9B3737}
+\hypersetup{colorlinks=true,linkcolor=accent,pdfauthor={Лёвин Артём Александрович},pdftitle={Ревью домашней работы — Николь Саркисьянц}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5.5pt}
+\renewcommand{\arraystretch}{1.25}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\footnotesize\color{ink} Лёвин Артём Александрович эксклюзивно для Николь Саркисьянц}
+\fancyfoot[R]{\footnotesize\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\footskip}{17pt}
+\newcommand{\keyidea}{\textcolor{darkaccent}{\textbf{Ключевая идея.}}}
+\newcommand{\errorlabel}{\textcolor{warn}{\textbf{Ошибка.}}}
+\newcommand{\resultlabel}{\textcolor{accent}{\textbf{Итог.}}}
+\begin{document}
+\thispagestyle{empty}
+\vspace*{29mm}
+\begin{center}
+  {\small\color{darkaccent} МАТЕМАТИКА}\par
+  \vspace{24mm}
+  {\LARGE\color{ink} Ревью домашней работы}\par
+  \vspace{11mm}
+  {\large\color{accent} Производная и задачи на максимум}\par
+  \vspace{25mm}
+  {\normalsize Автор: Лёвин Артём Александрович}\par
+  \vspace{9mm}
+  {\normalsize 31 октября 2026 г.}\par
+\end{center}
+\vfill
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[accent,line width=.9pt] (0,0) .. controls (1.2,.55) and (2.6,-.40) .. (3.8,.04)
+                                  .. controls (5.0,.48) and (6.2,-.48) .. (7.5,.02);
+\end{tikzpicture}
+\end{center}
+\newpage
+\begin{center}
+  {\large\color{darkaccent}\textbf{Сводная таблица}}\par
+  \vspace{3mm}
+  {\small В таблице представлены задания, в которых требуется исправление.}
+\end{center}
+\vspace{6mm}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\centering\arraybackslash}p{10mm} >{\raggedright\arraybackslash}p{27mm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{29mm} >{\raggedright\arraybackslash}p{31mm}@{}}
+\toprule
+\textbf{№} & \textbf{Тема} & \textbf{Суть ошибки} & \textbf{Ваш ответ} & \textbf{Правильный ответ}\\
+\midrule
+\hyperref[task:8]{8} & Производная частного & Потерян множитель $2t$ при дифференцировании корня; затем нарушены преобразования дроби. & Производная не найдена; получено $D=-63$. & $\displaystyle\frac{4}{(t^2+4)^{3/2}}$\\[5pt]
+\hyperref[task:9]{9} & Максимум функции & При объединении дробей исчезла единица в числителе. & Получено $2B\varepsilon=0$; итог не указан. & $\displaystyle\varepsilon_{\max}=5{,}52\cdot10^{-22}$ Дж\\
+\bottomrule
+\end{tabularx}
+\normalsize
+\newpage
+\thispagestyle{empty}
+\vspace*{0.34\textheight}
+\begin{center}
+{\LARGE\color{darkaccent} Разбор ошибок}
+\end{center}
+\newpage
+\phantomsection\label{task:8}
+{\large\textbf{Задание 8. Производная с корнем в знаменателе}}\par
+\textbf{Условие.} Вычислите и упростите производную функции
+\[
+ y=\frac{t}{\sqrt{t^2+4}}.
+\]
+\textbf{Ваше решение.} Вы применили правило производной частного. В записи присутствуют шаги
+\[
+ u=t,\quad v=\sqrt{t^2+4},\quad
+ u'=1,\quad \color{warn}v'=\frac{1}{2\sqrt{t^2+4}}.
+\]
+Далее возникло выражение с числителем $2t^2-t+8$, после чего Вы приравняли его к нулю и получили отрицательный дискриминант $D=-63$.
+
+\errorlabel\ Первый неверный шаг --- вычисление $v'$. Внутри корня стоит выражение $t^2+4$, поэтому при дифференцировании требуется умножить на его производную, равную $2t$.
+
+\textbf{Где возникает ошибка.} До записи $u=t$, $v=\sqrt{t^2+4}$ и $u'=1$ действия корректны. Переход к $v'=1/(2\sqrt{t^2+4})$ ошибочен: это была бы производная $\sqrt{t+4}$, но внутри нашего корня другое выражение.
+
+\textbf{Почему это неверно.} Для сложной функции действует правило
+\[
+ \bigl(\sqrt{g(t)}\bigr)'=\frac{g'(t)}{2\sqrt{g(t)}}.
+\]
+Здесь $g(t)=t^2+4$, а значит, $g'(t)=2t$. Получаем
+\[
+ v'=\frac{2t}{2\sqrt{t^2+4}}=\frac{t}{\sqrt{t^2+4}}.
+\]
+Из-за пропущенного множителя изменился числитель производной частного. Последующие преобразования и полученное квадратное уравнение поэтому уже не описывают производную исходной функции.
+
+\keyidea\ Сначала найдите производную всего знаменателя как сложной функции, затем применяйте правило частного. По условию требуется вычислить производную; приравнивать её к нулю здесь не нужно.
+
+\newpage
+\textbf{Исправление и полное решение.} Знаменатель $\sqrt{t^2+4}$ положителен при любом действительном $t$, так как $t^2+4>0$. Поэтому область определения --- все действительные числа. По правилу частного
+\[
+ y'=\frac{u'v-uv'}{v^2}
+ =\frac{\sqrt{t^2+4}-t\dfrac{t}{\sqrt{t^2+4}}}{t^2+4}.
+\]
+Приведём числитель к общему знаменателю:
+\[
+ \sqrt{t^2+4}=\frac{t^2+4}{\sqrt{t^2+4}},
+\]
+\[
+ y'=\frac{\dfrac{t^2+4-t^2}{\sqrt{t^2+4}}}{t^2+4}
+ =\frac{4}{\sqrt{t^2+4}(t^2+4)}.
+\]
+Итак,
+\[
+ \boxed{y'=\frac{4}{(t^2+4)^{3/2}}}.
+\]
+\textbf{Проверка.} Проверим вычисление другим способом: $y=t(t^2+4)^{-1/2}$. По правилу произведения получаем $y'=(t^2+4)^{-1/2}-t^2(t^2+4)^{-3/2}=4(t^2+4)^{-3/2}$. Результат совпадает. В частности, при $t=0$ производная равна $1/2$.
+
+\resultlabel\ Производная существует при любом $t\in\mathbb R$ и равна $4/(t^2+4)^{3/2}$.
+
+\textbf{Задача на закрепление.} Вычислите и упростите производную функции
+\[
+ g(x)=\frac{x}{\sqrt{x^2+9}}.
+\]
+\newpage
+\phantomsection\label{task:9}
+{\large\textbf{Задание 9. Энергия молекулы}}\par
+\textbf{Условие.} Плотность распределения задана функцией
+\[
+ f(\varepsilon)=A\sqrt{\varepsilon}\,e^{-\varepsilon/(kT)},\qquad
+ A,k,T>0,\quad \varepsilon\ge0.
+\]
+Найдите энергию максимума при $k=1{,}38\cdot10^{-23}$ Дж/К, $T=80$ К.
+
+\textbf{Ваше решение.} Вы правильно ввели $B=-1/(kT)$ и представили функцию как $f(\varepsilon)=A\sqrt{\varepsilon}\,e^{B\varepsilon}$. Верно применили правило производной произведения:
+\[
+ f'(\varepsilon)=Ae^{B\varepsilon}
+ \left(\frac{1}{2\sqrt{\varepsilon}}+B\sqrt{\varepsilon}\right).
+\]
+Следующим шагом Вы попытались привести сумму к общему знаменателю, после чего в записи осталось $2B\varepsilon=0$.
+
+\errorlabel\ Потерян первый член суммы --- единица в числителе. Именно она определяет ненулевое значение энергии, при котором достигается максимум.
+
+\textbf{Где возникает ошибка.} Последний верный переход:
+\[
+ \frac{1}{2\sqrt{\varepsilon}}+B\sqrt{\varepsilon}=0.
+\]
+Первый неверный переход --- замена этой суммы выражением, числитель которого равен только $2B\varepsilon$. На самом деле
+\[
+ B\sqrt{\varepsilon}=\frac{2B\varepsilon}{2\sqrt{\varepsilon}},
+ \qquad
+ \frac{1}{2\sqrt{\varepsilon}}+B\sqrt{\varepsilon}
+ =\frac{\color{warn}1+2B\varepsilon}{2\sqrt{\varepsilon}}.
+\]
+\textbf{Почему это важно.} При сложении дробей с одинаковым знаменателем складывают \emph{все} числители. Если опустить единицу, уравнение изменится. Значение $\varepsilon=0$ также нельзя подставлять в полученную формулу производной: в ней стоит $\sqrt{\varepsilon}$ в знаменателе. Граничное значение функции $f(0)$ проверяется отдельно.
+
+\keyidea\ На промежутке $\varepsilon>0$ положительны множители $A$ и $e^{B\varepsilon}$, а также знаменатель $2\sqrt{\varepsilon}$. Поэтому знак производной определяется выражением $1+2B\varepsilon$.
+
+\newpage
+\textbf{Исправление и полное решение.} При $\varepsilon>0$:
+\[
+ f'(\varepsilon)=\frac{Ae^{B\varepsilon}}{2\sqrt{\varepsilon}}
+ \left(1+2B\varepsilon\right).
+\]
+Уравнение для стационарной точки:
+\[
+ 1+2B\varepsilon=0
+ \quad\Longrightarrow\quad
+ \varepsilon=-\frac{1}{2B}.
+\]
+Подставляем $B=-1/(kT)$:
+\[
+ \varepsilon=-\frac{1}{2\bigl(-1/(kT)\bigr)}=\frac{kT}{2}.
+\]
+При $0<\varepsilon<kT/2$ имеем $1-2\varepsilon/(kT)>0$: функция возрастает. При $\varepsilon>kT/2$ выражение отрицательно: функция убывает. В точке $\varepsilon=0$ значение $f(0)=0$, тогда как при $kT/2$ значение положительно. Следовательно, найденная точка даёт максимум на всём промежутке $\varepsilon\ge0$.
+
+\textbf{Числовой расчёт.}
+\[
+ \varepsilon_{\max}=\frac{1{,}38\cdot10^{-23}\cdot80}{2}
+ =\boxed{5{,}52\cdot10^{-22}\ \text{Дж}}.
+\]
+\textbf{Проверка.} Единицы: $(\text{Дж/К})\cdot\text{К}=\text{Дж}$. Поскольку $k,T>0$, найденная энергия положительна и допустима.
+
+\resultlabel\ Максимум достигается при энергии $\varepsilon_{\max}=kT/2=5{,}52\cdot10^{-22}$ Дж.
+
+\textbf{Задача на закрепление.} Найдите значение $E\ge0$, при котором функция
+\[
+ h(E)=3\sqrt{E}\,e^{-E/12}
+\]
+принимает наибольшее значение.
+\end{document}
