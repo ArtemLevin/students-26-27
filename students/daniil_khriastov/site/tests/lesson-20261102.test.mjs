@@ -77,6 +77,17 @@ test('models reproduce physical calculations from the November checklist',()=>{
   assert.ok(Math.abs(.016/(32**(3/5))-.002)<1e-12);
 });
 
+test('published lesson is discoverable through canonical metadata and registry',()=>{
+  const metadata=JSON.parse(fs.readFileSync(path.join(site,'data/lessons/2026-11-02.lesson.json'),'utf8'));
+  const registry=fs.readFileSync(path.join(site,'lesson-registry.js'),'utf8');
+  assert.equal(metadata.date,'2026-11-02');
+  assert.equal(metadata.materials.html,'02.11.26.html');
+  assert.equal(metadata.materials.lab,'02.11.26-lab.html');
+  assert.deepEqual(metadata.ktpRefs,[]);
+  assert.match(registry,/"date": "2026-11-02"/);
+  assert.match(registry,/"href": "02.11.26.html"/);
+});
+
 test('interactive lab has keyboard tabs, reset controls, live outputs and anchors',()=>{
   for(const id of ['tab-decay','tab-gas','decay','gas','massInitial','halfTime','elapsed','compression','exponent','remaining','pressureRatio','resetGas','resetDecay'])
     assert.match(lab,new RegExp('id="'+id+'"'));
