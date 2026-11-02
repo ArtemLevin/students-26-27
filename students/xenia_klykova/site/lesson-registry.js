@@ -5,6 +5,73 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-02",
+  "ktpRefs": [],
+  "href": "02.11.26.html",
+  "title": "Дифференцированная схема погашения кредита",
+  "navTitle": "Дифференцированная схема погашения кредита",
+  "navSubtitle": "Дифференцированная схема погашения кредита: равные доли основного долга, пять формул, таблица платежей, поиск ставки и 10 заданий для Ксении Клыковой.",
+  "summary": "Дифференцированная схема погашения кредита: равные доли основного долга, пять формул, таблица платежей, поиск ставки и 10 заданий для Ксении Клыковой.",
+  "topics": [
+    "равные доли основного долга и уменьшающиеся платежи",
+    "проценты на остаток и таблица трёх периодов",
+    "формулы суммы платежей, переплаты и первого/последнего платежа",
+    "ставка из процента переплаты за 14 месяцев",
+    "сопоставление с аннуитетом и вкладом",
+    "10 задач «Путь А»"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t16_diff",
+      "evidenceAnchor": "recognize",
+      "relation": "practiced",
+      "label": "Распознавание дифференцированной схемы по равным долям долга",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_equal_reduction",
+      "evidenceAnchor": "debt",
+      "relation": "practiced",
+      "label": "Уменьшение тела кредита на S/n каждый период",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_debt_table",
+      "evidenceAnchor": "debt-table",
+      "relation": "touched",
+      "label": "Таблица остатка долга, процентов и платежа",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_payment_sum",
+      "evidenceAnchor": "formulas",
+      "relation": "practiced",
+      "label": "Формулы общей выплаты и процента переплаты",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_model_equation",
+      "evidenceAnchor": "rate",
+      "relation": "practiced",
+      "label": "Нахождение ставки по доле переплаты",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_annuity",
+      "evidenceAnchor": "comparison",
+      "relation": "touched",
+      "label": "Сравнение постоянного платежа с постоянной долей долга",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "02.11.26.html",
+    "pdf": "../pdf_docs/02.11.26.pdf",
+    "tex": "../tex_docs/02.11.26.tex",
+    "lab": "02.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-01",
   "ktpRefs": [],
   "href": "01.11.26.html",
