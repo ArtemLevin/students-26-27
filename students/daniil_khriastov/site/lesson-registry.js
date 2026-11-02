@@ -1,5 +1,53 @@
 export const LESSONS=[
 {
+  "date": "2026-11-02",
+  "ktpRefs": [],
+  "href": "02.11.26.html",
+  "title": "Степени в физических формулах.",
+  "navTitle": "Степени в физических формулах.",
+  "navSubtitle": "Прикладные задачи со степенями: физические формулы, степень объёма, излучение, радиоактивный распад и десять задач с полными условиями. Занятие Даниила Хрястова от 2 ноября 2026 года.",
+  "summary": "Прикладные задачи со степенями: физические формулы, степень объёма, излучение, радиоактивный распад и десять задач с полными условиями. Занятие Даниила Хрястова от 2 ноября 2026 года.",
+  "topics": [
+    "Свойства степеней и стандартный вид числа",
+    "Выражение неизвестной из физических формул",
+    "Радиоактивный распад и показательные уравнения",
+    "Степенной закон давления и объёма газа"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "calc_09",
+      "evidenceAnchor": "powers",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "calc_10",
+      "evidenceAnchor": "powers",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "expr_12",
+      "evidenceAnchor": "methods",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "expr_13",
+      "evidenceAnchor": "powers",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "eq_09",
+      "evidenceAnchor": "decay",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "02.11.26.html",
+    "pdf": "../pdf_docs/02.11.26.pdf",
+    "tex": "../tex_docs/02.11.26.tex",
+    "lab": "02.11.26-lab.html"
+  }
+},
+{
   "date": "2026-10-23",
   "ktpRefs": [],
   "href": "23.10.26.html",
