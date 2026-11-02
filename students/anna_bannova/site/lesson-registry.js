@@ -1,5 +1,58 @@
 export const LESSONS=[
   {
+  "date": "2026-11-01",
+  "ktpRefs": [
+    "ktp-003",
+    "ktp-006"
+  ],
+  "href": "01.11.26.html",
+  "title": "Два автомобиля. Одно уравнение.",
+  "navTitle": "Два автомобиля. Одно уравнение.",
+  "navSubtitle": "Анна Баннова · 01.11.26: прикладные формулы ЕГЭ, текстовые задачи на встречное движение, одновременный и разновременный выезд, таблица скорость–время–расстояние.",
+  "summary": "Анна Баннова · 01.11.26: прикладные формулы ЕГЭ, текстовые задачи на встречное движение, одновременный и разновременный выезд, таблица скорость–время–расстояние.",
+  "topics": [
+    "прикладные задачи: подстановка в формулу",
+    "скорость, время и расстояние",
+    "движение навстречу и сумма путей",
+    "таблица скорость–время–расстояние",
+    "одновременный и разновременный выезд",
+    "выбор неизвестной и составление уравнения"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "text_05",
+      "evidenceAnchor": "same",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_19",
+      "evidenceAnchor": "motion",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_17",
+      "evidenceAnchor": "method",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "text_21",
+      "evidenceAnchor": "delay",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "text_04",
+      "evidenceAnchor": "motion",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "01.11.26.html",
+    "pdf": "../pdf_docs/01.11.26.pdf",
+    "tex": "../tex_docs/01.11.26.tex",
+    "lab": "01.11.26-lab.html"
+  }
+},
+{
     "date": "2026-10-25",
     "ktpRefs": [
       "ktp-004",
