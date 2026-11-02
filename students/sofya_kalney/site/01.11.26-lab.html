@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head><meta charset="utf-8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%23176b73%22%2F%3E%3Cpath%20d%3D%22M16%2015h32L30%2032l18%2017H16%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%225%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивная лаборатория Софии Кальней по кусочным функциям: исследуйте пересечения графика с прямой y=kx, граничные и выколотые точки.">
+<title>Лаборатория · кусочные функции и y=kx — София Кальней</title>
+<link rel="stylesheet" href="../../../design-system/tokens.css?v=20260919-2">
+<link rel="stylesheet" href="../../../design-system/foundations.css?v=20260919-2">
+<style>
+:root{color-scheme:light;--bg:#f5f2ed;--panel:#fffefa;--ink:#24393e;--muted:#566b6d;--line:#c3d0cb;--grid:#dce4de;--teal:#136c71;--orange:#b2553a;--faint:#e6f0ef;--focus:#a64624}
+html[data-theme=dark]{color-scheme:dark;--bg:#14252a;--panel:#23383e;--ink:#f1f4f0;--muted:#c4d1d0;--line:#5b7376;--grid:#41575b;--teal:#8adbd0;--orange:#ffc0a2;--faint:#2e484e;--focus:#ffe3a1}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--teal)}button,select,input{font:inherit;accent-color:var(--teal)}button{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+.wrap{width:min(1210px,calc(100% - 32px));margin:auto}.skip{position:absolute;left:10px;top:-90px;background:var(--panel);padding:12px;z-index:80}.skip:focus{top:10px}
+nav{display:flex;align-items:center;flex-wrap:wrap;gap:10px 30px;min-height:66px;border-bottom:1px solid var(--line)}nav a{text-decoration:none;font-size:.9rem;font-weight:750}nav button{margin-left:auto;border:0;background:transparent;color:var(--ink)}
+.hero{padding:34px 0 24px}.eyebrow{color:var(--orange);font-size:.79rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em}
+h1,h2{font:500 clamp(2rem,4vw,3.4rem)/1.14 Georgia,serif;margin:12px 0}h2{font-size:1.9rem}.lead{max-width:750px;color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(0,1.64fr) minmax(300px,.83fr);gap:24px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line)}.plot{padding:13px}.plot svg{display:block;width:100%;height:auto;aspect-ratio:720/480;min-height:270px;max-height:70vh}
+.axis{stroke:var(--muted);stroke-width:1.5}.grid{stroke:var(--grid);stroke-width:1}.fn{stroke:var(--teal);stroke-width:3.1;fill:none;stroke-linejoin:round}.line{stroke:var(--orange);stroke-width:2.8;fill:none;stroke-dasharray:10 5}.intersection{fill:var(--orange);stroke:var(--panel);stroke-width:2.5}.filled{fill:var(--teal);stroke:var(--panel);stroke-width:2}.open{fill:var(--panel);stroke:var(--teal);stroke-width:3}
+.plot-caption{border-top:1px solid var(--line);padding:12px 15px;display:flex;gap:20px;flex-wrap:wrap;font-size:.84rem;color:var(--muted)}.swatch{display:inline-block;width:23px;height:2px;vertical-align:middle;margin-right:6px;background:var(--teal)}.swatch.dashed{background:var(--orange)}
+.side{padding:22px}.side h2{margin:0 0 20px}.fieldset{margin:0 0 24px;padding:0;border:0}.fieldset legend{font-weight:740;margin-bottom:12px}
+.segment{display:flex;gap:6px;flex-wrap:wrap}.segment button,.presets button{border:1px solid var(--line);padding:10px 12px;color:var(--ink);background:var(--panel);min-height:44px;border-radius:5px}.segment button[aria-pressed=true],.presets button[aria-pressed=true]{background:var(--faint);border-color:var(--teal);font-weight:750}
+.slider-line{display:flex;align-items:center;gap:15px;margin-bottom:5px}.slider-line output{font-size:1.35rem;font-weight:800;color:var(--teal);min-width:70px;text-align:right}
+#k{display:block;width:100%;min-height:36px}.presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.presets button{font-size:.83rem}
+.count{font-size:clamp(2.2rem,5vw,3.3rem);font-weight:700;line-height:1.2;color:var(--teal)}
+.math{font:1.13rem/1.65 "Cambria Math",Georgia,serif;word-wrap:break-word}.detail{border-top:1px solid var(--line);padding-top:14px;margin-top:16px}.detail p{margin:5px 0}.detail small{color:var(--muted)}.foot{padding:28px 0 60px;color:var(--muted)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:27px 0}.steps div{border-top:2px solid var(--line);padding-top:12px}.steps strong{color:var(--teal)}
+@media(max-width:930px){.layout{grid-template-columns:1fr}.side{padding:18px}.steps{grid-template-columns:1fr}.plot svg{max-height:58vh}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+@media print{nav button,.presets,#k,.segment{display:none}.layout{grid-template-columns:1fr}.plot svg{max-height:none}body{background:white}}
+</style>
+</head>
+<body><a class="skip" href="#main">К эксперименту</a>
+<nav class="wrap" aria-label="Навигация"><a href="01.11.26.html">← Вернуться к занятию</a><a href="index.html">Кабинет</a><button id="theme" type="button">Тёмная тема</button></nav>
+<header class="wrap hero"><div class="eyebrow">Цифровая лаборатория · 01.11.2026</div><h1>Сколько общих точек?</h1><p class="lead">Меняйте наклон прямой <span class="math">y = kx</span> и наблюдайте, как пересекаются графики. Сначала изучите соединённые фрагменты, затем — разрывы и выколы.</p></header>
+<main class="wrap" id="main">
+<div class="layout">
+<section class="panel plot" aria-label="График функции и прямой y равно kx">
+<svg id="chart" viewBox="0 0 720 480" role="img" aria-labelledby="plotTitle plotDesc">
+<title id="plotTitle">Кусочная функция и наклонная прямая y = kx</title><desc id="plotDesc">График обновляется при изменении параметра; текстовое количество и координаты общих точек приведены справа.</desc>
+<defs><clipPath id="plotClip"><rect x="35" y="24" width="650" height="430"/></clipPath></defs>
+<g id="grid"></g><g id="axis"></g><g clip-path="url(#plotClip)"><g id="curves"></g><path id="paramLine" class="line"></path><g id="dots"></g></g><g id="endpoints"></g>
+<text x="691" y="268" fill="var(--muted)" font-size="15">x</text><text x="364" y="19" fill="var(--muted)" font-size="15">y</text>
+</svg>
+<div class="plot-caption"><span><i class="swatch"></i> Кусочная функция</span><span><i class="swatch dashed"></i> y = kx</span><span>● включённая точка · ○ исключённая</span></div>
+</section>
+<aside class="panel side">
+<h2>Эксперимент</h2>
+<fieldset class="fieldset"><legend>Выберите функцию</legend><div class="segment" role="group" aria-label="Режим графика"><button id="modeF" type="button" aria-pressed="true">f(x) · соединение</button><button id="modeG" type="button" aria-pressed="false">g(x) · разрывы</button></div></fieldset>
+<div class="fieldset"><div class="slider-line"><label for="k"><strong>Коэффициент k</strong></label><output id="kValue" for="k">−1</output></div><input id="k" type="range" min="-4" max="1" step="0.05" value="-1"><small>Сдвигайте ползунок или выбирайте критические значения ниже.</small><div class="presets" id="presets" aria-label="Граничные и исследуемые значения"></div></div>
+<p class="muted">Количество различных общих точек</p><div class="count" id="count" role="status" aria-live="polite" aria-atomic="true">3</div>
+<div class="detail"><strong id="formula">f(x)</strong><p id="description" class="math"></p><p id="boundaries" class="muted"></p></div>
+<div class="detail"><strong>Абсциссы пересечений</strong><p id="coordinates" class="math" aria-live="polite"></p><small>В расчёт включаются только точки из разрешённой области каждого фрагмента.</small></div>
+<div class="detail"><strong>Что показывает опыт</strong><p id="explanation"></p></div>
+<button type="button" id="reset" class="segment" style="padding:11px 16px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:5px;min-height:44px">Вернуть исходное состояние</button>
+</aside></div>
+<div class="steps"><div><strong>1 · Измените k</strong><p>Посмотрите, куда переместится прямая и сколько появится общих точек.</p></div><div><strong>2 · Выберите границу</strong><p>Сравните значения непосредственно до и после критического коэффициента.</p></div><div><strong>3 · Проверьте ОДЗ</strong><p>Убедитесь, что выколотые точки не учитываются как пересечения.</p></div></div>
+</main>
+<footer class="wrap foot">Лёвин Артём Александрович · эксклюзивно для Софии Кальней</footer>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id),root=document.documentElement,slider=$('k');
+const ns='http://www.w3.org/2000/svg', xmin=-6,xmax=6,ymin=-7,ymax=7,left=35,right=685,top=24,bottom=454;
+const X=x=>left+(x-xmin)*(right-left)/(xmax-xmin),Y=y=>bottom-(y-ymin)*(bottom-top)/(ymax-ymin);
+const svg=(tag,attrs={})=>{const e=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,String(v));return e;};
+const fmt=n=>Number(n.toFixed(3)).toLocaleString('ru-RU',{maximumFractionDigits:3});
+const near=(a,b)=>Math.abs(a-b)<1e-7;let mode='f',k=-1;
+const newPath=(fn,start,end)=>{const N=145;let d='';let begun=false;for(let i=0;i<=N;i++){const x=start+(end-start)*i/N,y=fn(x);if(!Number.isFinite(y)||y<ymin-.25||y>ymax+.25){begun=false;continue;}d+=(begun?' L ':'M ')+X(x).toFixed(2)+' '+Y(y).toFixed(2);begun=true;}return d;};
+function addPath(parent,fn,a,b){parent.appendChild(svg('path',{d:newPath(fn,a,b),class:'fn'}))}
+function addMark(parent,x,y,isOpen){parent.appendChild(svg('circle',{cx:X(x),cy:Y(y),r:5.5,class:isOpen?'open':'filled'}))}
+function intersections(){
+const pts=[];
+if(mode==='f'){
+ if(k<0){const s=Math.sqrt(-6/k);if(-s < -2-1e-8)pts.push([-s,6/s]);if(s>1+1e-8)pts.push([s,-6/s]);}
+ if(!near(k,-3)){const x=-3/(k+3);if(x>=-2-1e-8&&x<=1+1e-8)pts.push([x,-3*x-3]);}
+}else{
+ if(k>0.5+1e-8){const s=Math.sqrt(2/k);pts.push([-s,-2/s],[s,2/s]);}
+ if(!near(k,-2)){const x=1/(k+2);if(x<=-2+1e-8||x>=2-1e-8)pts.push([x,-2*x+1]);}
+}
+return pts.filter((p,i)=>pts.findIndex(q=>near(p[0],q[0])&&near(p[1],q[1]))===i).sort((a,b)=>a[0]-b[0]);
+}
+function drawStatic(){
+const g=$('grid'),ax=$('axis');g.replaceChildren();ax.replaceChildren();
+for(let x=-6;x<=6;x++){g.appendChild(svg('line',{x1:X(x),y1:top,x2:X(x),y2:bottom,class:'grid'}));if(x%2===0&&x!==0){let label=svg('text',{x:X(x),y:Y(0)+19,'text-anchor':'middle','font-size':12,fill:'var(--muted)'});label.textContent=x;g.appendChild(label);}}
+for(let y=-6;y<=6;y+=2){g.appendChild(svg('line',{x1:left,y1:Y(y),x2:right,y2:Y(y),class:'grid'}));if(y!==0){let label=svg('text',{x:X(0)-8,y:Y(y)+4,'text-anchor':'end','font-size':12,fill:'var(--muted)'});label.textContent=y;g.appendChild(label);}}
+ax.appendChild(svg('line',{x1:left,y1:Y(0),x2:right,y2:Y(0),class:'axis'}));ax.appendChild(svg('line',{x1:X(0),y1:top,x2:X(0),y2:bottom,class:'axis'}));
+}
+function setMode(m){mode=m;$('modeF').setAttribute('aria-pressed',String(m==='f'));$('modeG').setAttribute('aria-pressed',String(m==='g'));render()}
+function presetValues(){return mode==='f'?[-1.5,-1,0,0.5]:[-3,-2.5,-2,-1.5,0.5,0.75]}
+function render(){
+const curves=$('curves'),endpoints=$('endpoints'),dots=$('dots');curves.replaceChildren();endpoints.replaceChildren();dots.replaceChildren();
+if(mode==='f'){
+ addPath(curves,x=>-6/x,-6,-2);addPath(curves,x=>-3*x-3,-2,1);addPath(curves,x=>-6/x,1,6);
+ addMark(endpoints,-2,3,false);addMark(endpoints,1,-6,false);
+ $('description').textContent='−6/x (x < −2 или x > 1); −3x−3 (−2 ≤ x ≤ 1)';
+ $('boundaries').textContent='Границы (−2; 3) и (1; −6) включены в средний фрагмент.';
+ $('explanation').textContent=near(k,-1.5)?'На границе k = −1,5 остаются две различные точки: общий узел фрагментов считается один раз.':k> -1.5&&k<0?'Это интервал трёх общих точек: обе внешние ветви и средний отрезок.':'Для этого коэффициента три общие точки не возникают. Сравните с k = −1.';
+ $('formula').textContent='f(x) · соединённые фрагменты';
+}else{
+ addPath(curves,x=>-2*x+1,-6,-2);addPath(curves,x=>2/x,-2,-.23);addPath(curves,x=>2/x,.23,2);addPath(curves,x=>-2*x+1,2,6);
+ addMark(endpoints,-2,-1,true);addMark(endpoints,2,1,true);addMark(endpoints,-2,5,false);addMark(endpoints,2,-3,false);
+ $('description').textContent='−2x+1 (x ≤ −2 или x ≥ 2); 2/x (−2 < x < 0 или 0 < x < 2)';
+ $('boundaries').textContent='Выколоты (−2; −1) и (2; 1); включены (−2; 5) и (2; −3).';
+ $('explanation').textContent=near(k,-2)?'При k = −2 внешние прямые параллельны, а с внутренними ветвями пересечений нет.':k>0.5?'Прямая пересекает обе внутренние ветви гиперболы.':'Крайние точки гиперболы исключены: при k = 0,5 они не становятся пересечениями.';
+ $('formula').textContent='g(x) · разрывы и выколы';
+}
+$('paramLine').setAttribute('d','M '+X(xmin)+' '+Y(k*xmin)+' L '+X(xmax)+' '+Y(k*xmax));
+const pts=intersections();for(const [x,y] of pts)dots.appendChild(svg('circle',{cx:X(x),cy:Y(y),r:6,class:'intersection'}));
+$('count').textContent=pts.length+' '+(pts.length===1?'точка':pts.length>=2&&pts.length<=4?'точки':'точек');
+$('coordinates').textContent=pts.length?pts.map(([x,y])=>'('+fmt(x)+'; '+fmt(y)+')').join(' · '):'Общих точек нет';
+$('kValue').textContent=fmt(k);slider.value=String(k);
+const presets=$('presets');presets.replaceChildren();for(const val of presetValues()){const btn=document.createElement('button');btn.type='button';btn.textContent='k = '+fmt(val);btn.setAttribute('aria-pressed',String(near(val,k)));btn.addEventListener('click',()=>setK(val));presets.appendChild(btn);}
+const url=new URL(location.href);url.searchParams.set('mode',mode);url.searchParams.set('k',String(k));history.replaceState(null,'',url.pathname+url.search+url.hash);
+}
+function setK(v){k=Math.max(-4,Math.min(1,Math.round(Number(v)*100)/100));render()}
+for(const [id,m] of [['modeF','f'],['modeG','g']])$(id).addEventListener('click',()=>setMode(m));
+slider.addEventListener('input',()=>setK(slider.value));
+$('reset').addEventListener('click',()=>{mode='f';k=-1;setMode('f')});
+const theme=$('theme');try{const saved=localStorage.getItem('sofya-lesson-theme');if(saved==='light'||saved==='dark')root.dataset.theme=saved}catch{}
+function themeSync(){theme.textContent=root.dataset.theme==='dark'?'Светлая тема':'Тёмная тема'}theme.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('sofya-lesson-theme',root.dataset.theme)}catch{}themeSync()});themeSync();
+const query=new URLSearchParams(location.search);const qm=query.get('mode'),qk=Number(query.get('k'));if(qm==='g')mode='g';if(query.has('k')&&Number.isFinite(qk))k=Math.max(-4,Math.min(1,qk));
+drawStatic();setMode(mode);
+})();
+</script></body></html>
