@@ -3,6 +3,104 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-31",
+  "ktpRefs": [],
+  "href": "31.10.26.html",
+  "title": "Пружины, трение и баланс сил",
+  "navTitle": "Пружины, трение и баланс сил",
+  "navSubtitle": "Соединение пружин, трение покоя и скольжения, второй закон Ньютона на горизонтали. Чек-лист и десять задач. Володя Хачатурян, 31 октября 2026 года.",
+  "summary": "Соединение пружин, трение покоя и скольжения, второй закон Ньютона на горизонтали. Чек-лист и десять задач. Володя Хачатурян, 31 октября 2026 года.",
+  "topics": [
+    "параллельное соединение пружин",
+    "последовательное соединение пружин",
+    "эквивалентная жёсткость",
+    "сила трения покоя",
+    "сила трения скольжения",
+    "коэффициент трения",
+    "сила реакции опоры",
+    "второй закон Ньютона в проекциях",
+    "равнодействующая сил"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "dyn_19",
+      "evidenceAnchor": "springs",
+      "relation": "practiced",
+      "label": "Жёсткость пружины",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_18",
+      "evidenceAnchor": "springs",
+      "relation": "touched",
+      "label": "Закон Гука",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_21",
+      "evidenceAnchor": "friction",
+      "relation": "practiced",
+      "label": "Трение покоя",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_22",
+      "evidenceAnchor": "friction",
+      "relation": "practiced",
+      "label": "Трение скольжения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_23",
+      "evidenceAnchor": "friction",
+      "relation": "practiced",
+      "label": "Коэффициент трения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_24",
+      "evidenceAnchor": "friction",
+      "relation": "touched",
+      "label": "Зависимость трения от реакции опоры",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_08",
+      "evidenceAnchor": "balance",
+      "relation": "practiced",
+      "label": "Второй закон Ньютона",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_07",
+      "evidenceAnchor": "balance",
+      "relation": "practiced",
+      "label": "Равнодействующая сил",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_13",
+      "evidenceAnchor": "balance",
+      "relation": "practiced",
+      "label": "Сила реакции опоры",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "measure_05",
+      "evidenceAnchor": "balance",
+      "relation": "touched",
+      "label": "Скалярные и векторные величины",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "31.10.26.html",
+    "pdf": "../pdf_docs/31.10.26.pdf",
+    "tex": "../tex_docs/31.10.26.tex",
+    "lab": "31.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-28",
   "ktpRefs": [],
   "href": "28.10.26.html",
