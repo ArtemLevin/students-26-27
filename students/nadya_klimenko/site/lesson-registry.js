@@ -5,6 +5,91 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-10-31",
+    "ktpRefs": [],
+    "href": "31.10.26.html",
+    "title": "Доли, целое и расход топлива",
+    "navTitle": "Доли числа и расход топлива",
+    "navSubtitle": "Часть и целое · столб · литры на километр",
+    "summary": "Надя Клименко, 31.10.26. Нахождение части и целого, оставшаяся доля, два способа модели для столба, расход в л/км, сравнение 1,3 и 1⅓, проверка правдоподобия.",
+    "topics": [
+      "нахождение доли от числа",
+      "нахождение целого по части",
+      "оставшаяся доля",
+      "моделирование длины столба",
+      "расход топлива в л/км",
+      "увеличение расхода в несколько раз",
+      "проверка результата"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "frac_15",
+        "evidenceAnchor": "part",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "frac_16",
+        "evidenceAnchor": "part",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "frac_14",
+        "evidenceAnchor": "part",
+        "relation": "touched",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_01",
+        "evidenceAnchor": "fuel",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_03",
+        "evidenceAnchor": "fuel",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_04",
+        "evidenceAnchor": "fuel",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_12",
+        "evidenceAnchor": "pole",
+        "relation": "touched",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_15",
+        "evidenceAnchor": "fuel",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_16",
+        "evidenceAnchor": "pole",
+        "relation": "touched",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "strategy_01",
+        "evidenceAnchor": "part",
+        "relation": "practiced",
+        "masteryClaim": null
+      }
+    ],
+    "materials": {
+      "html": "31.10.26.html",
+      "pdf": "../pdf_docs/31.10.26.pdf",
+      "tex": "../tex_docs/31.10.26.tex"
+    }
+  },
+  {
     "date": "2026-10-27",
     "ktpRefs": [],
     "href": "27.10.26.html",
