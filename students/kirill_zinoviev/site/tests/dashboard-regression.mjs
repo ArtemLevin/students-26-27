@@ -121,3 +121,4 @@ assert.ok(!/<link[^>]+href=["']https?:/i.test(reviewHtml),'29.08 lesson must rem
 
 // Keep October 14 native MathML rendering under the student dashboard regression gate.
 await import('./lesson-14.10.26-mathml.test.mjs');
+await import('./statistics-2026-11-01.test.mjs');
