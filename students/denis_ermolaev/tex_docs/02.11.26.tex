@@ -1,0 +1,331 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{needspace}
+\usepackage{icomma}
+\geometry{left=25mm,right=25mm,top=23mm,bottom=24mm}
+\setstretch{1.20}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{005B5C}
+\definecolor{maintext}{HTML}{333333}
+\definecolor{muted}{HTML}{666666}
+\color{maintext}
+\hypersetup{colorlinks=true,linkcolor=darkaccent}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5.5pt}
+\setlist[itemize]{itemsep=2pt,topsep=2pt,leftmargin=6mm}
+\setlist[enumerate]{itemsep=5pt,topsep=4pt,leftmargin=7mm}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{muted}Логарифмические функции}
+\fancyhead[R]{\footnotesize\color{muted}Денис Ермолаев}
+\fancyfoot[C]{\footnotesize\thepage}
+\renewcommand{\headrulewidth}{0.30pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent!60}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{22pt}
+\newcommand{\sectionrule}{\par\vspace{2pt}{\color{accent!65}\hrule height 0.42pt}\vspace{7pt}}
+\newcommand{\topic}[1]{\needspace{7\baselineskip}\par\vspace{11pt}{\large\color{darkaccent}#1}\sectionrule}
+\newcommand{\mini}[1]{\par\vspace{5pt}{\color{darkaccent}\bfseries #1}\par}
+\newcommand{\note}[1]{{\color{darkaccent}\bfseries #1}}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{27mm}
+{\small\color{darkaccent}\MakeUppercase{Математика}}\par
+\vspace{18mm}
+{\LARGE Чек-лист}\par
+\vspace{12mm}
+{\Large\color{accent} Графики логарифмических функций\\[2mm]
+и метод узловых точек}\par
+\vspace{14mm}
+{\normalsize Подготовка к ЕГЭ по профильной математике}\par
+\vspace{43mm}
+{\large Денис Ермолаев}\par
+\vspace{12mm}
+{\normalsize 2 ноября 2026 г.}\par
+\vfill
+{\small Лёвин Артём Александрович\\[2pt]
+эксклюзивно для Дениса Ермолаева}\par
+\vspace{16mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent,line width=.78pt] (0,0) .. controls (1.35,.58) and (3.05,-.52) .. (4.75,0)
+ .. controls (6.40,.57) and (8.05,-.54) .. (9.7,.08);
+\fill[darkaccent] (4.75,0) circle (1.1pt);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\topic{1. Что нужно знать о логарифме}
+По определению логарифм \(\log_a u\) --- это показатель степени, в которую нужно возвести \(a\), чтобы получить \(u\):
+\[
+\boxed{\log_a u=c\quad\Longleftrightarrow\quad a^c=u.}
+\]
+Условия существования действительного логарифма:
+\[
+\boxed{a>0,\qquad a\ne1,\qquad u>0.}
+\]
+Особенно полезны равенства
+\[
+\log_a1=0,\qquad \log_a a=1,\qquad
+\log_{a}a^t=t,\qquad \log_{a^m}a^n=\frac{n}{m}\quad(m\ne0).
+\]
+\mini{Пример. Основание и аргумент --- степени одного числа}
+\[
+\log_8 4=\log_{2^3}2^2=\frac23.
+\]
+\note{Проверка:} \(8^{2/3}=4\). Замена \(\log_a u=c\) на \(a^c=u\) помогает избежать путаницы с показателями.
+
+\topic{2. Как читать запрос в условии}
+\begin{itemize}
+\item \(f(32)\) --- требуется \emph{значение функции}: подставьте \(x=32\).
+\item \(f(x)=1\) --- требуется \emph{аргумент}: решите уравнение относительно \(x\).
+\end{itemize}
+\mini{Пример}
+Если \(f(x)=\log_2x-3\), то
+\[
+f(32)=\log_232-3=5-3=2.
+\]
+Если для той же функции \(f(x)=1\), то
+\[
+\log_2x-3=1\ \Longrightarrow\ \log_2x=4\ \Longrightarrow\ x=16.
+\]
+Второй пример требует также проверки \(x>0\); найденное значение допустимо.
+
+\topic{3. Два разных вида логарифмической функции}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}X X@{}}
+\textcolor{darkaccent}{\(f(x)=\log_a x+b\)} & \textcolor{darkaccent}{\(g(x)=\log_a(x+b)\)}\\[4pt]
+Число \(b\) стоит \textbf{после} логарифма: сдвиг графика вверх/вниз. ОДЗ: \(x>0\). & Число \(b\) находится \textbf{под} логарифмом: сдвиг по горизонтали. ОДЗ: \(x+b>0\).\\
+\end{tabularx}
+\end{center}
+При подстановке координат \((x_0;y_0)\) важно сначала точно записать формулу функции и только затем заменить \(x\) на \(x_0\), \(f(x)\) на \(y_0\).
+
+\topic{4. Метод узловых точек}
+\textbf{Узловая точка} --- достоверная точка графика с целочисленными координатами. Удобно выбирать точки, у которых координаты малы по модулю, но главное условие --- \emph{получить независимые уравнения}.
+
+Если в функции два неизвестных параметра, обычно берут две подходящие точки, подставляют их координаты и решают систему. Затем проверяют ограничения и вычисляют искомое значение функции.
+
+\topic{5. Модель \(f(x)=\log_a x+b\)}
+Пусть графику принадлежат точки \(A(1;-3)\) и \(B(4;-1)\). Найдём функцию и \(f(32)\).
+\[
+\begin{cases}
+-3=\log_a1+b,\\
+-1=\log_a4+b.
+\end{cases}
+\quad\Longrightarrow\quad
+\begin{cases}
+b=-3,\\
+\log_a4=2.
+\end{cases}
+\]
+\(\log_a4=2\) означает \(a^2=4\). Из двух алгебраических корней \(a=2\) и \(a=-2\) остаётся только \(a=2\), потому что основание логарифма положительно.
+\[
+\boxed{f(x)=\log_2 x-3},\qquad
+f(32)=5-3=\boxed{2}.
+\]
+\mini{Проверка по исходным точкам}
+\(f(1)=0-3=-3\), \(f(4)=2-3=-1\). Обе точки подходят.
+
+\topic{6. Модель \(g(x)=\log_a(x+b)\)}
+Пусть графику принадлежат \(A(-4;0)\) и \(B(-1;2)\). Найдём \(g(11)\).
+\[
+\begin{cases}
+0=\log_a(-4+b),\\
+2=\log_a(-1+b).
+\end{cases}
+\]
+\(0=\log_a1\), следовательно \(-4+b=1\) и \(b=5\). Тогда
+\[
+2=\log_a4\ \Longrightarrow\ a^2=4\ \Longrightarrow\ a=2.
+\]
+\[
+\boxed{g(x)=\log_2(x+5)},\qquad
+ g(11)=\log_216=\boxed{4}.
+\]
+\note{ОДЗ:} \(x>-5\). Проверка: \(g(-4)=\log_21=0\), \(g(-1)=\log_24=2\).
+
+\topic{7. Знак «минус» и отрицательная степень}
+Если \(h(x)=-\log_2(x+2)\) и \(h(x)=-4\), сначала уберите внешний минус:
+\[
+-\log_2(x+2)=-4\ \Longrightarrow\
+\log_2(x+2)=4\ \Longrightarrow\ x+2=16.
+\]
+Отсюда \(\boxed{x=14}\), и \(14>-2\).
+
+\note{Важно:} \(-\log_a u=\log_a(1/u)\), но \(-\log_a u\ne\log_a(-u)\). Кроме того, \(a^{-1}=1/a\): это свойство относится к основанию степени, если \(-1\) стоит в показателе.
+
+\topic{8. Типичные ошибки и самопроверка}
+\begin{itemize}
+\item \textbf{Перепутать запрос:} \(f(16)\) и \(f(x)=16\) требуют разных действий.
+\item \textbf{Подменить аргумент:} для \(\log_a(x+b)\) под логарифмом стоит целиком \(x+b\).
+\item \textbf{Забыть ОДЗ:} основание \(a>0\), \(a\ne1\), аргумент положителен.
+\item \textbf{Принять лишнюю точку за узловую:} координаты надо считывать точно, а не приблизительно.
+\item \textbf{Поделить уравнения на ноль:} допустимы лишь преобразования с ненулевым делителем; система должна содержать независимые сведения.
+\item \textbf{Пытаться найти оба коэффициента} в \(k\log_a x\): здесь параметры могут оказаться неидентифицируемыми.
+\end{itemize}
+\mini{Короткая разминка из начала занятия}
+Для вычислений полезно переносить числа в степенной вид:
+\[
+0{,}6=6\cdot10^{-1},\qquad
+4200=4{,}2\cdot10^3=42\cdot10^2.
+\]
+В стандартной научной записи перед \(10^n\) стоит число, модуль которого от \(1\) до \(10\) (не включая \(10\)).
+
+\vspace{5mm}
+\begin{center}\color{darkaccent}\textit{Сначала восстановите вид функции, затем найдите параметры,\\ после этого выполняйте действие, указанное в вопросе.}\end{center}
+
+\clearpage
+\topic{9. Два разных сдвига графика}
+Сравните графики \(y=\log_2x-2\) и \(y=\log_2(x+2)\). Первый определён при \(x>0\), второй --- при \(x>-2\).
+\vspace{1mm}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+width=.92\linewidth,height=7.2cm,
+xmin=-3,xmax=9,ymin=-4,ymax=4,
+axis lines=middle, axis line style={gray!75,->},
+xtick={-2,0,1,2,4,8},ytick={-3,-2,-1,0,1,2,3},
+minor tick num=0,ticklabel style={font=\scriptsize},
+grid=major,grid style={gray!12},
+legend style={at={(.98,.04)},anchor=south east,draw=none,fill=white,font=\footnotesize},
+clip=false]
+\addplot[accent,thick,domain=.12:9,samples=200] {ln(x)/ln(2)-2};
+\addlegendentry{\(y=\log_2x-2\)}
+\addplot[darkaccent,densely dashed,thick,domain=-1.88:9,samples=220] {ln(x+2)/ln(2)};
+\addlegendentry{\(y=\log_2(x+2)\)}
+\addplot[only marks,mark=*,mark size=2pt,color=accent] coordinates {(1,-2) (4,0)};
+\addplot[only marks,mark=square*,mark size=2pt,color=darkaccent] coordinates {(-1,0) (2,2)};
+\draw[dotted,gray!70] (axis cs:-2,-4)--(axis cs:-2,4);
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\note{Наблюдение:} \(\log_a(x+b)=0\) при \(x+b=1\). Для \(\log_a x+b=0\) требуется решить \(\log_a x=-b\).
+
+\topic{10. Когда точки не позволяют найти параметры}
+Если функция задана как
+\[
+f(x)=k\log_a x,\qquad a>0,\quad a\ne1,
+\]
+то из всех её точек вообще нельзя по отдельности восстановить оба неизвестных числа \(k\) и \(a\):
+\[
+ k\log_a x=\frac{k}{\log_2 a}\,\log_2x.
+\]
+График определяет лишь \emph{отношение} \(k/\log_2 a\). Например, функции \(3\log_2x\) и \(6\log_4x\) совпадают.
+
+\mini{Как извлечь пользу из точек}
+Если \(A(2;3)\) и \(B(4;6)\) принадлежат графику \(k\log_a x\), то
+\[
+f(8)=k\log_a 2^3=3k\log_a2=3f(2)=\boxed{9}.
+\]
+Нужное значение однозначно, хотя \(a\) и \(k\) по отдельности неизвестны.
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\Large\color{darkaccent}Алгоритм: функция по узловым точкам}
+\end{center}
+\vspace{9mm}
+\begin{center}
+\tikzset{
+startstop/.style={ellipse,draw=darkaccent!70,very thin,align=center,text width=5.7cm,minimum height=10mm,fill=white},
+action/.style={rectangle,rounded corners=2pt,draw=accent!68,very thin,align=center,text width=8.1cm,minimum height=12mm,fill=white},
+branch/.style={diamond,aspect=2.6,draw=darkaccent!75,very thin,align=center,text width=4.5cm,inner ysep=5pt,fill=white},
+arr/.style={-{Latex[length=2.1mm]},line width=.7pt,color=darkaccent!78}}
+\begin{tikzpicture}[node distance=10mm and 13mm, every node/.style={font=\small}]
+\node[startstop] (s) {Начало: прочитайте вид функции\\и то, что требуется найти};
+\node[action,below=of s] (t) {Выберите точные узловые точки;\\учтите ОДЗ и ограничения основания};
+\node[action,below=of t] (u) {Подставьте \((x_i;y_i)\): составьте\\уравнения для неизвестных параметров};
+\node[branch,below=10mm of u] (d) {Данных достаточно?\\Условия независимы?};
+\node[action,below=13mm of d] (v) {Решите систему, проверьте \(a>0\), \(a\ne1\);\\восстановите функцию и проверьте точки};
+\node[action,right=13mm of d,text width=4.2cm] (w) {Смените точки. Если параметры неразличимы, ищите нужное значение напрямую};
+\node[action,below=11mm of v] (f) {Подставьте заданный \(x\) или\\решите уравнение \(f(x)=c\)};
+\node[startstop,below=of f] (e) {Проверьте ответ и ОДЗ};
+\draw[arr] (s)--(t);
+\draw[arr] (t)--(u);
+\draw[arr] (u)--(d);
+\draw[arr] (d)--node[left,font=\footnotesize]{да}(v);
+\draw[arr] (d.east)--node[above,font=\footnotesize]{нет}(w.west);
+\draw[arr] (w.south) |- (f.east);
+\draw[arr] (v)--(f);
+\draw[arr] (f)--(e);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\clearpage
+
+\begin{center}
+{\Large\color{darkaccent}Тренировочный блок}\par
+\vspace{2mm}
+{\small Путь А \(\cdot\) 10 заданий \(\cdot\) от базовых к содержательным}
+\end{center}
+\vspace{5mm}
+В задачах с неизвестным основанием проверяйте ограничения для логарифма. Если требуется, укажите ОДЗ.
+
+\mini{Базовый уровень}
+\begin{enumerate}[label=\textcolor{darkaccent}{\arabic*.},start=1]
+\item Вычислите \(\displaystyle \log_8 4\).
+\item Вычислите \(\displaystyle \log_3\frac1{27}\).
+\item Для \(f(x)=\log_2x-3\) найдите \(f(16)\).
+\item Для \(f(x)=\log_2(x+3)\) найдите \(x\), если \(f(x)=3\).
+\end{enumerate}
+\mini{Средний уровень}
+\begin{enumerate}[label=\textcolor{darkaccent}{\arabic*.},start=5]
+\item Функция \(f(x)=\log_ax+b\) проходит через \(A(1;-2)\) и \(B(9;0)\). Найдите \(f(27)\).
+\item Функция \(g(x)=\log_a(x+b)\) проходит через \(A(-1;0)\) и \(B(2;2)\). Найдите \(g(6)\).
+\item Функция \(f(x)=\log_ax+b\) проходит через \(A(1;1)\) и \(B(8;4)\). Найдите \(x\), если \(f(x)=2\).
+\end{enumerate}
+\mini{Уровень выше среднего}
+\begin{enumerate}[label=\textcolor{darkaccent}{\arabic*.},start=8]
+\item Функция \(g(x)=\log_a(x+b)\) проходит через \(A(0;0)\) и \(B(3;2)\). Найдите \(x\), если \(g(x)=-3\).
+\item Функция \(f(x)=k\log_2x\) проходит через \(A(8;-6)\). Вычислите \(f(4)\).
+\item График \(f(x)=k\log_ax\) проходит через \(A(2;3)\) и \(B(4;6)\). Найдите \(f(8)\). Можно ли по этим данным однозначно определить \(a\) и \(k\) по отдельности?
+\end{enumerate}
+\clearpage
+
+\begin{center}
+{\Large\color{darkaccent}Ответы}\par
+\vspace{3mm}
+{\small К тренировочному блоку из 10 заданий}
+\end{center}
+\vspace{13mm}
+\renewcommand{\arraystretch}{1.65}
+\begin{center}
+\begin{tabularx}{.92\linewidth}{@{}>{\centering\arraybackslash}p{20mm} X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ}\\
+\midrule
+1 & \(\displaystyle \frac23\)\\
+2 & \(-3\)\\
+3 & \(1\)\\
+4 & \(x=5\)\\
+5 & \(1\)\\
+6 & \(3\)\\
+7 & \(x=2\)\\
+8 & \(\displaystyle x=-\frac78\)\\
+9 & \(-4\)\\
+10 & \(f(8)=9\). Нет: \(a\) и \(k\) по отдельности не определяются.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vfill
+\begin{center}
+{\small\color{muted}Лёвин Артём Александрович\\
+эксклюзивно для Дениса Ермолаева}
+\end{center}
+\end{document}
