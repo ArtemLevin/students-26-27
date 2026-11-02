@@ -96,7 +96,7 @@ let baseline=null;
 function calculate(counts){const N=counts.reduce((s,n)=>s+n,0);if(!N)return null;const sum=counts.reduce((s,n,i)=>s+(i+1)*n,0);const sumSq=counts.reduce((s,n,i)=>s+(i+1)*(i+1)*n,0);const mean=sum/N, variance=Math.max(0,sumSq/N-mean*mean),sigma=Math.sqrt(variance);
 const sorted=[];counts.forEach((n,i)=>{for(let j=0;j<n;j++)sorted.push(i+1)});const median=N%2?sorted[(N-1)/2]:(sorted[N/2-1]+sorted[N/2])/2;
 const max=Math.max(...counts);const modes=counts.map((n,i)=>n===max?i+1:null).filter(x=>x!==null);
-return{N,sum,sumSq,mean,median,variance,sigma,modes:modes.length===counts.filter(x=>x>0).length?[]:modes,range:[mean-sigma,mean+sigma]};}
+return{N,sum,sumSq,mean,median,variance,sigma,modes:modes.length>1&&modes.length===counts.filter(x=>x>0).length?[]:modes,range:[mean-sigma,mean+sigma]};}
 baseline=calculate([3,2,5,1]);
 function update(){const counts=controls.map(x=>Number(x.value));const s=calculate(counts),N=counts.reduce((a,b)=>a+b,0);
 controls.forEach((ctl,i)=>{$('n'+(i+1)).textContent=ctl.value;const p=N?counts[i]*100/N:0;$('p'+(i+1)).textContent=fmt(p)+'%';$('fill'+(i+1)).style.width=clamp(p)+'%'});
@@ -108,7 +108,7 @@ $('meanPin').style.left=s?clamp(s.mean*20)+'%':'0%';$('medianPin').style.left=s?
 $('meanPin').hidden=!s;$('medianPin').hidden=!s;$('range').hidden=!s;
 const tbody=$('tableBody');tbody.textContent='';
 counts.forEach((n,i)=>{const x=i+1;const tr=document.createElement('tr');[x,n,s?fmt(n/N,3):'—',n*x,n*x*x].forEach(value=>{const td=document.createElement('td');td.textContent=String(value);tr.appendChild(td)});tbody.appendChild(tr)});
-$('sumN').textContent=N;$('sumP').textContent=s?'1':'—';$('sumX').textContent=s.sum;$('sumX2').textContent=s.sumSq;
+$('sumN').textContent=N;$('sumP').textContent=s?'1':'—';$('sumX').textContent=s?s.sum:'—';$('sumX2').textContent=s?s.sumSq:'—';
 $('formula').textContent=s?('x̄ = '+s.sum+'/'+s.N+' ≈ '+fmt(s.mean)+'; D = '+s.sumSq+'/'+s.N+' − ('+s.sum+'/'+s.N+')² ≈ '+fmt(s.variance,3)+'; σ ≈ '+fmt(s.sigma)+'. Интервал: ['+fmt(s.range[0])+'; '+fmt(s.range[1])+'].'):'Выборка пуста. Добавьте хотя бы одно наблюдение.';
 $('insight').textContent=!s?'При нулевых частотах статистические характеристики не определены.':s.variance===0?'Все наблюдения имеют одно значение: дисперсия и стандартное отклонение равны нулю.':'Среднее '+fmt(s.mean)+'; медиана '+fmt(s.median)+'. Измените только одну частоту и проследите, что изменится.';
 }
