@@ -1,0 +1,310 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{top=23mm,bottom=24mm,left=24mm,right=24mm}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{needspace}
+\usepackage{hyperref}
+\definecolor{accent}{HTML}{087B83}
+\definecolor{darkaccent}{HTML}{075B62}
+\definecolor{ink}{HTML}{242D32}
+\definecolor{soft}{HTML}{69767A}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,pdfauthor={Лёвин Артём Александрович},pdftitle={Чек-лист. Делители числа и ограничения на показатели степеней}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setstretch{1.16}
+\setlist[itemize]{leftmargin=6mm,itemsep=3pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=6pt,topsep=4pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{soft} Делители числа и ограничения}
+\fancyhead[R]{\small\color{soft} Ксения Клыкова}
+\fancyfoot[C]{\small\color{soft}\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+\setlength{\headheight}{25pt}
+\newcommand{\sectionhead}[1]{\needspace{5\baselineskip}\vspace{7pt}\noindent{\Large\color{darkaccent}#1}\par\vspace{2pt}\noindent\textcolor{accent}{\rule{\linewidth}{0.35pt}}\vspace{3pt}}
+\newcommand{\subhead}[1]{\vspace{7pt}{\color{darkaccent}\bfseries #1}\par\vspace{1pt}}
+\newcommand{\idea}[1]{\par\noindent{\color{darkaccent}\bfseries Ключевая идея.} #1\par}
+\newcommand{\warn}[1]{\par\noindent{\color{darkaccent}\bfseries Обратите внимание.} #1\par}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{19mm}
+{\normalsize\color{darkaccent}\MakeUppercase{Математика}}\par
+\vspace{17mm}
+{\LARGE\color{ink}Чек-лист}\par
+\vspace{12mm}
+{\Large\color{accent}Делители числа, полные квадраты\\[3pt]и ограничения на делимость}\par
+\vspace{19mm}
+{\normalsize Олимпиадная математика: методы подсчёта}\par
+\vfill
+{\large Ксения Клыкова}\par
+\vspace{10mm}
+{\normalsize 1 ноября 2026 г.}\par
+\vspace{16mm}
+{\small Лёвин Артём Александрович\\[2pt]эксклюзивно для Ксении Клыковой}\par
+\vspace{18mm}
+\begin{tikzpicture}
+\draw[accent,line width=.8pt] (0,0) .. controls (1.4,.40) and (2.6,-.35) .. (4,0)
+ .. controls (5.6,.35) and (6.9,-.30) .. (8.1,.05);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\sectionhead{1. Что именно мы считаем}
+Пусть натуральное число разложено на простые множители:
+\[
+N=2^A\cdot3^B\cdot5^C.
+\]
+Каждый его положительный делитель можно записать в виде
+\[
+d=2^x\cdot3^y\cdot5^z,
+\qquad
+\begin{cases}
+0\le x\le A,\\
+0\le y\le B,\\
+0\le z\le C.
+\end{cases}
+\]
+Показатели $x,y,z$~--- целые числа. Нуль допустим, поскольку $2^0=3^0=5^0=1$: соответствующий простой множитель может отсутствовать в делителе.
+
+\idea{Вместо перебора самих делителей мы перебираем допустимые показатели простых множителей.}
+
+\subhead{Правило произведения}
+Если для $x$ есть $p$ вариантов, для $y$~--- $q$, для $z$~--- $r$, то делителей будет $pqr$. Каждая тройка $(x,y,z)$ задаёт ровно одно число.
+
+\subhead{Пример 1. Все делители}
+Найдём количество делителей числа $N=2^4\cdot3^2\cdot5^3$.
+\[
+\begin{array}{c|c|c}
+\text{Показатель}&\text{Возможные значения}&\text{Вариантов}\\\hline
+x&0,1,2,3,4&5\\
+y&0,1,2&3\\
+z&0,1,2,3&4
+\end{array}
+\qquad\Longrightarrow\qquad 5\cdot3\cdot4=\boxed{60}.
+\]
+
+\sectionhead{2. Кратность и сравнение показателей}
+Если требуется, чтобы делитель $d$ был кратен числу
+\[
+m=2^a\cdot3^b\cdot5^c,
+\]
+то к ограничениям из $d\mid N$ добавляются условия
+\[
+x\ge a,\qquad y\ge b,\qquad z\ge c.
+\]
+Иными словами, показатели в $d$ должны быть \emph{не меньше} соответствующих показателей в $m$.
+
+\subhead{Пример 2. Делитель, кратный 45}
+Поскольку $45=2^0\cdot3^2\cdot5^1$, для кратности 45 нужны
+\[
+x\ge0,\qquad y\ge2,\qquad z\ge1.
+\]
+Если $N=2^6\cdot3^5\cdot5^3$, одновременно получаем
+\[
+0\le x\le6,\qquad2\le y\le5,\qquad1\le z\le3.
+\]
+Следовательно, число таких делителей равно $7\cdot4\cdot3=\boxed{84}$.
+
+\sectionhead{3. Как распознать полный квадрат}
+Число $d=2^x3^y5^z$ является квадратом натурального числа \textbf{тогда и только тогда}, когда каждый показатель $x,y,z$ чётен.
+\[
+2^{2u}3^{2v}5^{2w}=\bigl(2^u3^v5^w\bigr)^2.
+\]
+Число нуль является чётным показателем степени: $0=2\cdot0$. Поэтому $x=0$, $y=0$ и $z=0$ допустимы, если не исключены условием кратности.
+
+\subhead{Пример 3. Квадраты среди делителей, кратных 45}
+Рассмотрим $N=2^6\cdot3^5\cdot5^3$. Требуется $d\mid N$, $45\mid d$, и $d$~--- полный квадрат.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{}p{29mm}p{45mm}p{49mm}c@{}}
+\toprule
+ & Интервал после кратности & Допустимые чётные показатели & Число\\
+\midrule
+$x$ & от 0 до 6 & $0,2,4,6$ & $4$\\
+$y$ & от 2 до 5 & $2,4$ & $2$\\
+$z$ & от 1 до 3 & $2$ & $1$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Ответ: $4\cdot2\cdot1=\boxed{8}$.
+
+\warn{Сначала объединяйте \emph{все} ограничения на показатели и лишь затем выписывайте подходящие значения. Так легче не потерять условие задачи.}
+
+\sectionhead{4. Как исключить нежелательную кратность}
+\subhead{Способ I. Вычитание вложенных множеств}
+Требуется найти делители $N=2^5\cdot3^4\cdot5^3$, кратные 6, но не кратные 60.
+
+Кратных $6=2\cdot3$ среди делителей:
+\[
+(5-1+1)(4-1+1)(3-0+1)=5\cdot4\cdot4=80.
+\]
+Кратных $60=2^2\cdot3\cdot5$:
+\[
+(5-2+1)(4-1+1)(3-1+1)=4\cdot4\cdot3=48.
+\]
+Каждое число, кратное 60, кратно и 6. Значит, можно вычесть:
+\[
+\boxed{80-48=32}.
+\]
+
+\subhead{Когда вычитание работает}
+Сначала убеждаемся, что все числа из исключаемой группы входят в основную. Здесь это верно, поскольку $60$ кратно $6$.
+
+\sectionhead{5. Прямое ограничение показателя}
+\subhead{Способ II. Запрет делимости на степень простого числа}
+Пусть
+\[
+N=2^7\cdot3^6\cdot5^4.
+\]
+Считаем делители, которые являются квадратами, делятся на $72$, но \textbf{не делятся на $64$}.
+
+Разложения:
+\[
+72=2^3\cdot3^2,\qquad64=2^6.
+\]
+Требование $72\mid d$ даёт $x\ge3$, $y\ge2$. Запрет $64\mid d$ даёт $x<6$, так как $64$~--- степень только двойки. Совмещаем с $d\mid N$:
+\[
+3\le x<6,\qquad2\le y\le6,\qquad0\le z\le4.
+\]
+Отбираем чётные показатели для полного квадрата:
+\[
+\begin{array}{c|l|c}
+ & \text{Допустимые значения} & \text{Вариантов}\\\hline
+x&4&1\\
+y&2,4,6&3\\
+z&0,2,4&3
+\end{array}
+\]
+Итого $\boxed{1\cdot3\cdot3=9}$.
+
+\warn{Запрет кратности $2^6$ удобно заменить условием $x<6$. Если запрещённый делитель содержит несколько различных простых множителей, условие «не делится» означает, что хотя бы один показатель слишком мал. Тогда часто удобнее способ вычитания.}
+
+\sectionhead{6. Как перевести текст задачи в математику}
+Из $38\,880\,000$ светодиодов делают одинаковые квадратные панно, используя все светодиоды. Одно панно должно содержать целое число кассет по 90 светодиодов; раскладка панно на блоки $8\times8$ запрещена.
+
+Обозначим число светодиодов в одном панно через $d$.
+\begin{itemize}
+\item Все светодиоды использованы, панно одинаковые: $d\mid38\,880\,000$.
+\item Квадратная решётка: $d=s^2$ для натурального $s$.
+\item Кассеты по 90: $90\mid d$.
+\item Запрещены блоки $8\times8$: $64\nmid d$ (при $d=s^2$ это означает $8\nmid s$).
+\end{itemize}
+Разложение исходного числа:
+\[
+38\,880\,000=2^8\cdot3^5\cdot5^4.
+\]
+Получаем $x\in\{2,4\}$, $y\in\{2,4\}$, $z\in\{2,4\}$, поэтому возможно $\boxed{8}$ размеров одного панно (по числу светодиодов).
+\clearpage
+
+\sectionhead{7. Алгоритм решения задач с ограничениями}
+\vspace{5mm}
+\begin{center}
+\begin{tikzpicture}[
+  node distance=9mm,
+  >={Stealth[length=2.7mm]},
+  action/.style={draw=accent,rounded corners=2.2mm,align=center,text width=112mm,minimum height=13mm,inner sep=4mm,font=\normalsize},
+  initial/.style={draw=accent,ellipse,align=center,text width=83mm,minimum height=11mm,inner sep=3mm,font=\normalsize},
+  flow/.style={->,draw=darkaccent,line width=.75pt}
+]
+\node[initial] (a) {Прочитайте задачу и выделите требования к делителю $d$};
+\node[action,below=of a] (b) {Разложите $N$ и числа из условий\\на простые множители};
+\node[action,below=of b] (c) {Запишите $d=2^x3^y5^z$\\и границы $0\le x\le A$, $0\le y\le B$, $0\le z\le C$};
+\node[action,below=of c] (d) {Учтите обязательную кратность:\\увеличьте нижние границы показателей};
+\node[action,below=of d] (e) {Если требуется полный квадрат,\\оставьте только чётные показатели};
+\node[action,below=of e] (f) {Учтите запрет кратности:\\сузьте диапазон или вычтите неподходящие случаи};
+\node[action,below=of f] (g) {Посчитайте варианты каждого показателя\\и перемножьте их количества};
+\node[initial,below=of g] (h) {Проверьте все условия и запишите ответ};
+\foreach \u/\v in {a/b,b/c,c/d,d/e,e/f,f/g,g/h}{\draw[flow] (\u.south)--(\v.north);}
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\sectionhead{8. Типичные ошибки и самопроверка}
+\begin{itemize}
+\item \textbf{Забыли показатель 0.} Любое простое число может отсутствовать в делителе, если условие кратности этого не запрещает.
+\item \textbf{Смешали две направленности делимости.} Из $d\mid N$ получаем \emph{верхние} границы; из $m\mid d$~--- \emph{нижние}.
+\item \textbf{Проверили кратность, но забыли квадрат.} Для квадрата все показатели должны быть чётными.
+\item \textbf{Неверно поняли «не делится».} Запрет кратности $60$ не требует одновременно $x<2$, $y<1$ и $z<1$: достаточно нарушения хотя бы одного условия кратности 60.
+\item \textbf{Вычли неподходящие случаи без проверки вложенности.} Перед вычитанием удостоверьтесь, что исключаемое множество является частью подсчитанного.
+\item \textbf{Умножили количества вариантов, не проверив независимость.} После перехода к показателям ограничения должны быть учтены, чтобы любая комбинация разрешённых показателей подходила.
+\end{itemize}
+\subhead{Итоговая памятка}
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.43\linewidth}X@{}}
+\toprule
+\textbf{Сигнал в условии} & \textbf{Действие}\\
+\midrule
+$d$ делит $N$ & Верхние границы показателей\\
+$d$ кратно $m$ & Нижние границы показателей\\
+$d$~--- полный квадрат & Выбирайте чётные показатели\\
+$d$ не кратно $2^t$ & Показатель двойки меньше $t$\\
+$d$ кратно $a$, но не $b$ & Если $a\mid b$, вычтите кратные $b$ из кратных $a$\\
+Сколько делителей? & Перемножьте количества независимых вариантов\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\clearpage
+
+\sectionhead{Тренировочный блок. Путь А}
+\textcolor{soft}{10 заданий: от базового подсчёта до комбинированных ограничений.}
+\vspace{2mm}
+\begin{enumerate}[label=\textcolor{darkaccent}{\bfseries\arabic*.},itemsep=8pt]
+\item Сколько положительных делителей имеет число $N=2^4\cdot3^2\cdot5^3$?
+\item Сколько делителей числа $N=2^5\cdot3^4\cdot5^2$ являются полными квадратами?
+\item Сколько делителей числа $N=2^6\cdot3^5\cdot5^4$ кратны $45$?
+\item Сколько делителей числа $N=2^6\cdot3^5\cdot5^4$ одновременно кратны $45$ и являются полными квадратами?
+\item Сколько делителей числа $N=2^6\cdot3^3\cdot5^2$ делятся на $6$, но не делятся на $30$?
+\item Сколько делителей числа $N=2^7\cdot3^4\cdot5^2$ кратны $12$, но не кратны $72$?
+\item Сколько делителей числа $N=2^8\cdot3^5\cdot5^4$ являются полными квадратами, кратны $72$, но не кратны $64$?
+\item Сколько делителей числа $N=2^7\cdot3^6\cdot5^4$ являются полными квадратами, кратны $72$, но не кратны $32$?
+\item Сколько делителей числа $N=2^9\cdot3^7\cdot5^5$ являются полными квадратами, кратны $45$, но не кратны $125$?
+\item Для светового оформления есть $58\,320\,000$ светодиодов. Все их используют для изготовления одинаковых панно, каждое из которых представляет собой квадратную решётку $s\times s$. Число светодиодов в одном панно должно быть кратно $90$. Панно, которое можно целиком разбить на квадраты $8\times8$, запрещено. Сколько различных размеров панно можно выбрать?
+\end{enumerate}
+\clearpage
+
+\sectionhead{Ответы к тренировочному блоку}
+\vspace{5mm}
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{@{}>{\centering\arraybackslash}p{23mm}>{\centering\arraybackslash}p{65mm}@{}}
+\toprule
+\textbf{№} & \textbf{Ответ}\\
+\midrule
+1 & $60$\\
+2 & $18$\\
+3 & $112$\\
+4 & $16$\\
+5 & $18$\\
+6 & $27$\\
+7 & $6$\\
+8 & $9$\\
+9 & $15$\\
+10 & $12$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{11mm}
+\textcolor{darkaccent}{\bfseries Правило итоговой проверки}\par
+Для каждого решения отдельно убедитесь, что выполнены все требования: делитель исходного числа, кратность, квадратность и исключённая кратность. После этого пересчитайте число допустимых показателей.
+\vfill
+\begin{center}
+{\small\color{soft}Лёвин Артём Александрович\quad\textbullet\quad эксклюзивно для Ксении Клыковой}
+\end{center}
+\end{document}

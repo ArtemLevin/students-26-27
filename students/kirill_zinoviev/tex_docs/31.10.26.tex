@@ -1,0 +1,254 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[a4paper,left=22mm,right=22mm,top=23mm,bottom=23mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{tkz-euclide}
+\usepackage{booktabs,tabularx}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{33383A}
+\definecolor{softgray}{HTML}{667477}
+\color{textgray}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=3pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=8pt,topsep=4pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{softgray}Геометрия: свойства и вычисления}
+\fancyhead[R]{\footnotesize\color{softgray}Кирилл Зиновьев}
+\fancyfoot[C]{\footnotesize\color{softgray}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\headheight}{16pt}
+\newcommand{\mysection}[1]{\par\vspace{5pt}{\large\bfseries\color{darkaccent}#1}\par\vspace{1pt}{\color{accent}\hrule height .5pt}\vspace{7pt}}
+\newcommand{\key}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\ang}[1]{\angle #1}
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{28mm}
+{\large\color{darkaccent}МАТЕМАТИКА}\par\vspace{18mm}
+{\LARGE Чек-лист}\par\vspace{12mm}
+{\LARGE\color{accent}Медиана, биссектриса и высота:\\[2mm]
+от свойства к уравнению}\par\vspace{18mm}
+{\normalsize Геометрия. 7 класс}\par
+\vfill
+{\large Кирилл Зиновьев}\par\vspace{13mm}
+{31 октября 2026 г.}\par\vspace{23mm}
+{\small Лёвин Артём Александрович\\[2mm]
+эксклюзивно для Кирилла Зиновьева}\par\vspace{18mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent,line width=.8pt] (0,0) .. controls (1.7,.70) and (3.1,-.58) .. (4.9,0)
+ .. controls (6.8,.62) and (8.0,-.60) .. (9.8,0);
+\end{tikzpicture}
+\end{center}
+\end{titlepage}
+\setcounter{page}{1}
+
+\mysection{1. Три свойства, на которых строится решение}
+Сначала прочитайте условие и сделайте \key{чертёж}: подпишите вершины, точки на сторонах, известные длины и углы. Затем выпишите точное геометрическое свойство.
+
+\key{Медиана} соединяет вершину с серединой противоположной стороны. Если $AM$ --- медиана $\triangle ABC$, то
+\[
+BM=MC=\frac{BC}{2},\qquad BC=BM+MC=2BM.
+\]
+\key{Биссектриса} делит угол на два равных угла. Если $BD$ --- биссектриса $\ang{ABC}$, то
+\[
+\ang{ABD}=\ang{DBC},\qquad
+\ang{ABC}=\ang{ABD}+\ang{DBC}.
+\]
+\key{Высота} перпендикулярна прямой, содержащей противоположную сторону. Если $AD\perp BC$, то угол между $AD$ и $BC$ равен $90^\circ$.
+
+\begin{center}
+\begin{tikzpicture}[scale=.82]
+\tkzDefPoint(0,0){B}
+\tkzDefPoint(5.4,0){C}
+\tkzDefPoint(1.7,3.2){A}
+\tkzDefMidPoint(B,C)\tkzGetPoint{M}
+\tkzDrawPolygon[line width=.9pt](A,B,C)
+\tkzDrawSegment[accent,line width=1.3pt](A,M)
+\tkzDrawPoints(A,B,C,M)
+\tkzLabelPoint[above](A){$A$}
+\tkzLabelPoints[below](B,M,C)
+\tkzMarkSegments[mark=|,size=4pt](B,M M,C)
+\end{tikzpicture}
+\hspace{12mm}
+\begin{tikzpicture}[scale=.82]
+\tkzDefPoint(0,0){A}
+\tkzDefPoint(5.8,0){C}
+\tkzDefPoint(1.6,3.0){B}
+\tkzDefLine[bisector](A,B,C)\tkzGetPoint{T}
+\tkzInterLL(B,T)(A,C)\tkzGetPoint{D}
+\tkzDrawPolygon[line width=.9pt](A,B,C)
+\tkzDrawSegment[accent,line width=1.3pt](B,D)
+\tkzDrawPoints(A,B,C,D)
+\tkzLabelPoint[above](B){$B$}
+\tkzLabelPoints[below](A,D,C)
+\tkzMarkAngles[size=.65](A,B,D D,B,C)
+\end{tikzpicture}
+\end{center}
+{\small\color{softgray}Слева отмечены равные части стороны; справа --- равные части угла. Эти признаки нельзя подменять друг другом.}
+
+\mysection{2. Геометрическое свойство превращается в уравнение}
+\key{Пример 1.} В $\triangle ABC$ проведена медиана $AM$; $BM=3x+2$, $MC=5x-8$. Найдите $x$ и $BC$.
+
+По определению медианы $BM=MC$. Подставляем данные:
+\[
+3x+2=5x-8,\quad 2+8=5x-3x,\quad 10=2x,\quad x=5.
+\]
+Теперь находим \emph{обе} половины стороны:
+\[
+BM=3\cdot5+2=17,\qquad MC=5\cdot5-8=17.
+\]
+Значит, $BC=17+17=\boxed{34}$.
+
+\key{Проверка по смыслу:} если $AM$ --- медиана, числа $BM$ и $MC$ обязаны совпасть. Если получились разные длины, ищите ошибку в подстановке или вычислении.
+
+\clearpage
+\mysection{3. Биссектриса и переменная в записи углов}
+\key{Пример 2.} В $\triangle ABC$ отрезок $BD$ --- биссектриса $\ang{ABC}$, причём
+\[
+\ang{ABD}=4x-3,\qquad \ang{DBC}=2x+17.
+\]
+Найдите $x$ и $\ang{ABC}$.
+
+Биссектриса делит угол пополам, поэтому
+\[
+4x-3=2x+17,\qquad 4x-2x=17+3,\qquad 2x=20,\quad x=10.
+\]
+Находим части угла и обязательно проверяем равенство:
+\[
+\ang{ABD}=4\cdot10-3=37^\circ,\quad
+\ang{DBC}=2\cdot10+17=37^\circ.
+\]
+Весь угол равен сумме его частей:
+\[
+\boxed{\ang{ABC}=37^\circ+37^\circ=74^\circ}.
+\]
+\key{Важно:} равенство частей угла возникает из определения биссектрисы, а равенство частей стороны --- из определения медианы.
+
+\mysection{4. Периметр: сначала формула}
+\key{Пример 3.} В $\triangle ABC$ медиана $AM$, $AB=10$ см, $BC=12$ см, $AM=8$ см. Найдите периметр $\triangle ABM$.
+
+Периметр --- сумма \emph{сторон нужного треугольника}:
+\[
+P_{ABM}=AB+BM+AM.
+\]
+Здесь $BM=BC:2=12:2=6$ см. Поэтому
+\[
+\boxed{P_{ABM}=10+6+8=24\text{ см}}.
+\]
+\key{Типичная ошибка:} вместо $BM$ подставить всю сторону $BC$. Следите за буквами в индексе периметра и проверяйте каждую сторону по чертежу.
+
+\clearpage
+\mysection{5. Когда один отрезок выполняет три роли}
+В равнобедренном треугольнике медиана, проведённая к основанию, является одновременно биссектрисой и высотой. Верно и обратное: если медиана из вершины перпендикулярна противоположной стороне, то треугольник равнобедренный.
+
+Если в $\triangle ABC$ точка $D$ лежит на $BC$ и
+\[
+BD=DC,\qquad \ang{BAD}=\ang{DAC},\qquad AD\perp BC,
+\]
+то $AD$ одновременно \key{медиана, биссектриса и высота}. Если $\ang{BAD}=32^\circ$, то $\ang{BAC}=64^\circ$.
+
+\mysection{6. Самопроверка и границы вывода}
+\begin{itemize}
+\item После нахождения $x$ подставьте его \emph{во все} выражения из условия.
+\item Проверьте, положительны ли найденные длины и согласуются ли равные части стороны или угла.
+\item Если нужна формульная величина, сначала запишите её формулу: так станет ясно, каких данных не хватает.
+\item Не приписывайте медиане свойства биссектрисы или высоты, если они не даны и не доказаны.
+\item Если данных недостаточно, укажите это и назовите недостающую величину.
+\end{itemize}
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: от чертежа к ответу}\par\vspace{9mm}
+{\small\color{softgray}Единый маршрут для вычислительных задач с медианой, биссектрисой и высотой}
+\end{center}
+\vspace{9mm}
+\begin{center}
+\begin{tikzpicture}[
+  >=Stealth,
+  s/.style={ellipse,draw=darkaccent,line width=.8pt,align=center,text width=5.6cm,minimum height=1cm,font=\small},
+  a/.style={rounded corners=2pt,rectangle,draw=accent,line width=.8pt,align=center,text width=8.3cm,minimum height=1.15cm,inner sep=5pt,font=\small},
+  d/.style={diamond,aspect=2.6,draw=darkaccent,line width=.8pt,align=center,text width=4cm,inner sep=1.6pt,font=\small},
+  side/.style={rectangle,rounded corners=2pt,draw=accent,line width=.7pt,align=center,text width=3.4cm,minimum height=1.5cm,inner sep=4pt,font=\small},
+  arr/.style={-Stealth,line width=.8pt,color=darkaccent},
+  node distance=10mm]
+\node[s] (start) {Начало задачи};
+\node[a,below=of start] (drawing) {Сделайте чертёж, отметьте известные данные и нужный отрезок или угол};
+\node[a,below=of drawing] (theory) {Запишите свойство медианы, биссектрисы или высоты; если нужно, формулу периметра};
+\node[d,below=13mm of theory] (q) {Известны все величины для вычисления?};
+\node[side,right=21mm of q] (solve) {Нет: составьте уравнение и найдите $x$};
+\node[a,below=20mm of q] (calc) {Подставьте найденные значения; вычислите нужную величину};
+\node[a,below=of calc] (check) {Проверьте равенства, положительность длин и смысл результата};
+\node[s,below=of check] (end) {Запишите ответ};
+\foreach \f/\t in {start/drawing,drawing/theory,theory/q,calc/check,check/end}{\draw[arr] (\f.south)--(\t.north);}
+\draw[arr] (q.south)--node[right,font=\footnotesize]{да}(calc.north);
+\draw[arr] (q.east)--node[above,font=\footnotesize]{нет}(solve.west);
+\draw[arr] (solve.south) |- ([yshift=8mm]calc.east) -- (calc.east);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\mysection{Тренировочный блок --- Путь А}
+\textbf{10 заданий.} Выполняйте их по порядку. В расчётных задачах сделайте чертёж, запишите свойство и только после этого составляйте уравнение или формулу.
+\begin{enumerate}[label=\textbf{\color{accent}\arabic*.},itemsep=12pt]
+\item В $\triangle ABC$ отрезок $AM$ --- медиана, $BC=22$ см. Найдите $BM$ и $MC$.
+\item В $\triangle ABC$ отрезок $BD$ --- биссектриса $\ang{ABC}$, равного $86^\circ$. Найдите $\ang{ABD}$ и $\ang{DBC}$.
+\item В $\triangle ABC$ проведена медиана $AM$, $BM=3x+4$, $MC=5x-8$. Найдите $x$ и длину $BC$.
+\item В $\triangle ABC$ отрезок $BD$ --- биссектриса $\ang{ABC}$, $\ang{ABD}=4x-7$, $\ang{DBC}=2x+17$. Найдите $x$ и $\ang{ABC}$.
+\item В $\triangle ABC$ медиана $AM$, $AB=12$ см, $BC=18$ см, $AM=10$ см. Найдите периметр $\triangle ABM$.
+\item В $\triangle ABC$ проведена медиана $BK$, $AB=15$ см, $AC=20$ см, $BK=8$ см. Найдите периметр $\triangle ABK$.
+\item В $\triangle ABC$ медиана $AM$, $BM=4x+1$, $MC=6x-7$. При $x=4$ записали: $BM=17$, $MC=5$, $BC=22$. Найдите ошибку и правильную длину $BC$.
+\item В $\triangle ABC$ медиана $AM$, $AB=10$ см, $BC=12$ см. Можно ли однозначно вычислить периметр $\triangle ABM$? Объясните, какой величины не хватает.
+\item В $\triangle ABC$ точка $D$ лежит на стороне $BC$, $BD=DC$, $\ang{BAD}=\ang{DAC}$ и $AD\perp BC$. Чем является $AD$? Найдите $\ang{BAC}$, если $\ang{BAD}=28^\circ$.
+\item В $\triangle ABC$ медиана $AM$, $BC=2x+14$, $BM=3x-1$, $AB=12$ см, $AM=9$ см. Найдите $x$, $BC$ и периметр $\triangle ABM$.
+\end{enumerate}
+
+\clearpage
+\mysection{Ответы к тренировочному блоку}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{10mm}X@{}}
+\toprule
+№ & Ответ или контрольный вывод \\
+\midrule
+1 & $BM=MC=11$ см. \\
+2 & $\ang{ABD}=\ang{DBC}=43^\circ$. \\
+3 & $x=6$; $BC=44$. \\
+4 & $x=12$; $\ang{ABC}=82^\circ$. \\
+5 & $P_{ABM}=31$ см. \\
+6 & $P_{ABK}=33$ см. \\
+7 & Неверно вычислен $MC$: $6\cdot4-7=17$. Поэтому $BC=34$. \\
+8 & Нет: известно $BM=6$ см, но длина $AM$ не задана и не определяется указанными данными. \\
+9 & $AD$ --- медиана, биссектриса и высота; $\ang{BAC}=56^\circ$. \\
+10 & $x=4$; $BC=22$ см; $P_{ABM}=32$ см. \\
+\bottomrule
+\end{tabularx}
+\vspace{13mm}
+\mysection{Памятка перед сдачей}
+\begin{tabularx}{\linewidth}{@{}p{45mm}X@{}}
+\toprule
+Признак в условии & Что можно сразу записать \\
+\midrule
+Медиана $AM$ & $BM=MC=BC/2$. \\
+Биссектриса $BD$ & $\ang{ABD}=\ang{DBC}$. \\
+Высота $AD$ & $AD\perp BC$ (или прямой, содержащей $BC$). \\
+Периметр $\triangle ABM$ & $P_{ABM}=AB+BM+AM$. \\
+\bottomrule
+\end{tabularx}
+\end{document}
