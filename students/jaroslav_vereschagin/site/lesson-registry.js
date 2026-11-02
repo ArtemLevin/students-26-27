@@ -5,6 +5,52 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-02",
+  "ktpRefs": [],
+  "href": "02.11.26.html",
+  "title": "Движение: встреча и догонка",
+  "navTitle": "Задачи на движение: встреча и догонка",
+  "navSubtitle": "02.11.26 · Таблица скорость–время–путь, поздний выезд, догонка и 10 заданий Пути А",
+  "summary": "02.11.26. Скорость, время и путь; выбор неизвестной, встречное движение и задержка выезда, движение вдогонку, проверка размерностей и десять задач Пути А.",
+  "topics": [
+    "Скорость, время и путь",
+    "Таблица скорость–время–путь",
+    "Встречное движение",
+    "Встреча при неодновременном выезде",
+    "Движение вдогонку",
+    "Проверка размерностей"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_21_2_1",
+      "evidenceAnchor": "table",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_2_2",
+      "evidenceAnchor": "table",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_2_3",
+      "evidenceAnchor": "delay",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_2_4",
+      "evidenceAnchor": "errors",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "02.11.26.html",
+    "pdf": "../pdf_docs/02.11.26.pdf",
+    "tex": "../tex_docs/02.11.26.tex",
+    "lab": "02.11.26-lab.html"
+  }
+},
+
+{
   "date": "2026-10-29",
   "ktpRefs": [],
   "href": "29.10.26.html",
