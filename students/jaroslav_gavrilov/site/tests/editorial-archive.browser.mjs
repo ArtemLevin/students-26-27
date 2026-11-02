@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {spawn,spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {LESSONS as EXPECTED_LESSONS} from '../lesson-registry.js';
 
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../../../');
 const chrome=['google-chrome','google-chrome-stable','chromium','chromium-browser']
@@ -193,7 +194,8 @@ try{
   assert.deepEqual(logInteraction,{before:'1 / 4',after:'2 / 4',answersVisible:true,dark:true},'stepper, answer disclosure and theme are functional');
   await visit('index.html',1440,false);
   const lesson22Linked=await evalJS('(()=>{const latest=document.getElementById("latestLessonCta").getAttribute("href");const ids=["ege08_04","ege08_02","ege08_03","ege08_06","ege07_07","ege10_01","ege10_02","ege10_09","ege10_05","ege10_12","ege12_12","ege12_15"];const items=window.COMPETENCY_MAP_DATA.groups.flatMap(g=>g.items);return {latest,allEvidence:ids.every(id=>{const item=items.find(x=>x.id===id);return item?.evidence?.some(e=>e.text?.includes("22.10.2026"));}),graphLink:items.find(x=>x.id==="ege12_12")?.material?.href}})()');
-  assert.equal(lesson22Linked.latest,'29.10.26.html','the cabinet shows 29 October as the latest lesson');
+  const expectedLatest=[...EXPECTED_LESSONS].sort((a,b)=>b.date.localeCompare(a.date))[0].href;
+  assert.equal(lesson22Linked.latest,expectedLatest,'the cabinet shows the latest registered lesson');
   assert.equal(lesson22Linked.allEvidence,true,'all 12 linked competencies reference this lesson');
   assert.equal(lesson22Linked.graphLink,'22.10.26.html#graph');
   const logEvidence=await evalJS('(()=>{const ids=["ege08_08","ege08_09","ege08_10","ege08_11","ege08_02","ege08_03","ege08_06"];const items=window.COMPETENCY_MAP_DATA.groups.flatMap(g=>g.items);return ids.every(id=>{const item=items.find(x=>x.id===id);return item?.evidence?.some(e=>e.text?.includes("26.10.2026"))})})()');
@@ -235,6 +237,39 @@ try{
   await visit('29.10.26-lab.html',1440,false);
   const labChange=await evalJS('(()=>{const base=document.getElementById("base");document.getElementById("snapshot").click();base.value="0.5";base.dispatchEvent(new Event("change",{bubbles:true}));const direction=document.getElementById("direction").textContent;const visible=!document.getElementById("comparison").hidden;document.getElementById("reset").click();return {direction,visible,reset:document.getElementById("base").value}})()');
   assert.deepEqual(labChange,{direction:'Убывает',visible:true,reset:'2'},'graph recalculation, comparison and reset');
+
+  // 2 November: newest page, native MathML, answer disclosure and both research modes.
+  for(const width of [390,768,1440]){
+    for(const dark of [false,true]){
+      await visit('02.11.26.html',width,dark);
+      const lesson02=await evalJS('(()=>{const ids=[...document.querySelectorAll("[id]")].map(x=>x.id);return {tasks:document.querySelectorAll(".tasks li").length,sections:document.querySelectorAll("main .section").length,math:document.querySelectorAll("math").length,duplicates:ids.length-new Set(ids).size,answersHidden:document.getElementById("answers").hidden,overflow:document.documentElement.scrollWidth>innerWidth+2}})()');
+      assert.equal(lesson02.tasks,10,'2 November training: 10 exercises');
+      assert.equal(lesson02.sections,7,'2 November: seven thematic sections');
+      assert.ok(lesson02.math>=5,'2 November renders mathematical expressions in MathML');
+      assert.equal(lesson02.duplicates,0,'2 November: unique section and control IDs');
+      assert.equal(lesson02.answersHidden,true,'2 November answers initially hidden');
+      assert.equal(lesson02.overflow,false,'2 November lesson responsive viewport '+width);
+      await visit('02.11.26-lab.html',width,dark);
+      const graph02=await evalJS('(()=>({path:document.getElementById("logPath").getAttribute("d").length,points:document.querySelectorAll("#logMarkers circle").length,f3:document.getElementById("f3").textContent,f9:document.getElementById("f9").textContent,f27:document.getElementById("f27").textContent,overflow:document.documentElement.scrollWidth>innerWidth+2}))()');
+      assert.ok(graph02.path>100,'logarithmic function graph renders');
+      assert.equal(graph02.points,4,'logarithmic anchor points shown');
+      assert.deepEqual([graph02.f3,graph02.f9,graph02.f27],['2','4','6'],'node points agree with lesson');
+      assert.equal(graph02.overflow,false,'2 November laboratory responsive viewport '+width);
+    }
+  }
+  await visit('02.11.26.html',1440,false);
+  const novemberAnswers=await evalJS('(()=>{const t=document.getElementById("toggle");t.click();return {expanded:t.getAttribute("aria-expanded"),shown:!document.getElementById("answers").hidden}})()');
+  assert.deepEqual(novemberAnswers,{expanded:'true',shown:true},'2 November answers disclosure works');
+  await visit('02.11.26-lab.html',1440,false);
+  const graphChanged=await evalJS('(()=>{document.getElementById("a").value="2";document.getElementById("a").dispatchEvent(new Event("input",{bubbles:true}));const result=document.getElementById("f27").textContent;document.getElementById("resetGraph").click();return {result,reset:document.getElementById("a").value}})()');
+  assert.equal(graphChanged.reset,'3','log graph reset works');
+  assert.notEqual(graphChanged.result,'6','log parameter changes results');
+  await evalJS('location.hash="#time"');
+  await wait(120);
+  const timeInitial=await evalJS('(()=>({visible:!document.getElementById("timePanel").hidden,ratio:document.getElementById("ratio").textContent,good:document.getElementById("good").textContent}))()');
+  assert.deepEqual(timeInitial,{visible:true,ratio:'0,43',good:'1,5 с'},'observed time at 3.5 seconds');
+  const timeExtended=await evalJS('(()=>{document.querySelector("[data-duration=\"5\"]").click();return {ratio:document.getElementById("ratio").textContent,good:document.getElementById("good").textContent}})()');
+  assert.deepEqual(timeExtended,{ratio:'0,4',good:'2 с'},'longer observation includes second suitable interval');
 
   // Independent QA of the redesigned student cabinet and monthly archive.
   const archiveMeasures=[];
