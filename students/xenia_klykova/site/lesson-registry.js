@@ -5,6 +5,59 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-01",
+  "ktpRefs": [],
+  "href": "01.11.26.html",
+  "title": "Делители, полные квадраты и ограничения на делимость",
+  "navTitle": "Делители: кратность и полные квадраты",
+  "navSubtitle": "Ограничения показателей, два способа исключения, светодиодные панно.",
+  "summary": "Олимпиадная теория чисел: выбор допустимых показателей, квадратные делители, кратность, вычитание и прямой запрет, модель светодиодных панно, 10 задач «Путь А».",
+  "topics": [
+    "показатели простых множителей в положительном делителе",
+    "верхние и нижние границы при требованиях кратности",
+    "полный квадрат и чётные показатели",
+    "два метода исключения запрещённой кратности",
+    "текстовая модель квадратных светодиодных панно",
+    "10 задач «Пути А»"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t19_primes",
+      "evidenceAnchor": "canonical",
+      "relation": "practiced",
+      "label": "Запись делителя через показатели простых множителей",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_divisibility",
+      "evidenceAnchor": "multiples",
+      "relation": "practiced",
+      "label": "Нижние и верхние границы показателей при кратности",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_divisor_count",
+      "evidenceAnchor": "exclusion",
+      "relation": "practiced",
+      "label": "Подсчёт делителей с квадратностью и запретом кратности",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_story",
+      "evidenceAnchor": "text-model",
+      "relation": "touched",
+      "label": "Перевод текстовой задачи о панно в ограничения делимости",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "01.11.26.html",
+    "lab": "01.11.26-lab.html",
+    "pdf": "../pdf_docs/01.11.26.pdf",
+    "tex": "../tex_docs/01.11.26.tex"
+  }
+},
+{
   "date": "2026-10-29",
   "ktpRefs": [],
   "href": "29.10.26.html",
