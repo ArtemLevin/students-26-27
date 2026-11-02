@@ -268,7 +268,7 @@ try{
   await wait(120);
   const timeInitial=await evalJS('(()=>({visible:!document.getElementById("timePanel").hidden,ratio:document.getElementById("ratio").textContent,good:document.getElementById("good").textContent}))()');
   assert.deepEqual(timeInitial,{visible:true,ratio:'0,43',good:'1,5 с'},'observed time at 3.5 seconds');
-  const timeExtended=await evalJS('(()=>{document.querySelector("[data-duration=\"5\"]").click();return {ratio:document.getElementById("ratio").textContent,good:document.getElementById("good").textContent}})()');
+  const timeExtended=await evalJS('(()=>{document.querySelectorAll("[data-duration]")[1].click();return {ratio:document.getElementById("ratio").textContent,good:document.getElementById("good").textContent}})()');
   assert.deepEqual(timeExtended,{ratio:'0,4',good:'2 с'},'longer observation includes second suitable interval');
 
   // Independent QA of the redesigned student cabinet and monthly archive.
