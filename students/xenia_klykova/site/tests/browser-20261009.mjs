@@ -303,12 +303,14 @@ try{
   assert.equal(await run("(()=>{document.querySelector('#menuButton').click();return document.querySelector('#menuButton').getAttribute('aria-expanded')})()"),'true');
   assert.equal(await run("(()=>{document.querySelector('#sidebarClose').click();return document.querySelector('#menuButton').getAttribute('aria-expanded')})()"),'false');
 
-  // Standalone tile archive: 30 lessons grouped into 4 chronological months.
+  // Standalone tile archive: month count and labels derive from published lessons.
   await navigate('archive.html',1440,900,false);
   assert.equal(await run("document.querySelector('#archiveRoot').getAttribute('aria-busy')"),'false');
-  assert.equal(await run("document.querySelectorAll('.archive-month').length"),4);
+  const expectedMonths=[...new Set(LESSONS.map(item=>item.date.slice(0,7)))].sort().reverse();
+  const monthNames=['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь'];
+  assert.equal(await run("document.querySelectorAll('.archive-month').length"),expectedMonths.length);
   assert.equal(await run("document.querySelectorAll('.archive-tile').length"),LESSONS.length);
-  assert.deepEqual(await run("[...document.querySelectorAll('.archive-month h2')].map(x=>x.textContent)"),['октябрь 2026','сентябрь 2026','август 2026','июль 2026']);
+  assert.deepEqual(await run("[...document.querySelectorAll('.archive-month h2')].map(x=>x.textContent)"),expectedMonths.map(value=>monthNames[Number(value.slice(5,7))-1]+' '+value.slice(0,4)));
   assert.equal(await run("document.querySelectorAll('.archive-tile').length"),LESSONS.length);
   assert.equal(await run("document.querySelector('.archive-tile-main').getAttribute('href')"),LESSONS[0].href);
   assert.equal(await run("getComputedStyle(document.querySelector('.archive-month-grid')).gridTemplateColumns.split(' ').length"),3);
