@@ -50,7 +50,7 @@ try{
   assert.equal(await page.locator('#competencyMap').getAttribute('role'),'group','interactive map should expose child buttons to assistive technology');
   assert.equal(await page.locator('#competencyMap .radial-cell').first().getAttribute('role'),'button','map cell accessibility semantics');
   assert.ok(basic.focus,'focus control missing '+width);
-  assert.ok(basic.lesson==='Производная и графики','latest lesson wrong '+width);
+  assert.ok(basic.lesson==='Производная — наклон касательной','latest lesson wrong '+width);
   if(width===1440){
     const cell=page.locator('#competencyMap .radial-cell').first();
     await cell.focus();
@@ -114,8 +114,8 @@ try{
       titles:visible.filter(t=>t.querySelector('.archive-tile-title').scrollHeight>t.querySelector('.archive-tile-title').clientHeight+2).length};
   });
   assert.ok(archive.width<=archive.viewport+2,'archive overflow '+width+': '+JSON.stringify(archive));
-  assert.equal(archive.counts,12,'archive lesson count '+width);
-  assert.equal(archive.months,2,'archive month groups '+width);
+  assert.equal(archive.counts,13,'archive lesson count '+width);
+  assert.equal(archive.months,3,'archive month groups '+width);
   assert.ok(Math.max(...archive.heights)-Math.min(...archive.heights)<=2,'unequal tiles '+width+': '+JSON.stringify(archive.heights));
   assert.equal(archive.clipped,0,'clipped archive card '+width);
   assert.equal(archive.titles,0,'clipped archive title '+width);
@@ -123,7 +123,7 @@ try{
   await page.locator('#archiveSearch').fill('вклады');
   assert.equal(await page.locator('.archive-tile:visible').count(),2,'archive search failed '+width);
   await page.locator('#archiveSearch').fill('');
-  assert.equal(await page.locator('.archive-tile:visible').count(),12,'archive reset failed '+width);
+  assert.equal(await page.locator('.archive-tile:visible').count(),13,'archive reset failed '+width);
   await page.screenshot({path:path.join(artifactDir,'archive-'+width+'.png'),fullPage:true});
   await page.goto(origin+'18.10.26.html',{waitUntil:'networkidle'});
   await page.locator('.poster img').scrollIntoViewIfNeeded();
@@ -312,6 +312,32 @@ try{
     await page.locator('#themeToggle').click();
   }
   assert.deepEqual(failures,[],'browser console/page errors '+width+': '+failures.join('; '));
+  // New 1 November derivative/tangent lesson: source-driven tasks and interactive controls.
+  await page.goto(origin+'01.11.26.html',{waitUntil:'networkidle'});
+  const novelLesson=await page.evaluate(()=>({
+    title:document.querySelector('h1')?.textContent.replace(/\\s+/g,' ').trim(),
+    width:document.documentElement.scrollWidth,
+    viewport:innerWidth,
+    tasks:document.querySelectorAll('.tasks li').length
+  }));
+  assert.ok(novelLesson.title.includes('Производная'),'1 Nov lesson title '+width);
+  assert.equal(novelLesson.tasks,10,'1 Nov source exercise count '+width);
+  assert.ok(novelLesson.width<=novelLesson.viewport+2,'1 Nov lesson overflow '+width);
+  await page.locator('#stepForward').click();
+  assert.equal(await page.locator('#stepCount').textContent(),'2 из 4','stepper next '+width);
+  await page.locator('#stepAll').click();
+  assert.equal(await page.locator('#stepCount').textContent(),'Все 4 шага','stepper reveal '+width);
+  await page.locator('#practice details summary').click();
+  assert.equal(await page.locator('#practice .answers li').count(),10,'1 Nov answer key count '+width);
+  await page.goto(origin+'01.11.26-lab.html#explorer',{waitUntil:'networkidle'});
+  await page.locator('[data-x="-2"]').click();
+  assert.equal(await page.locator('#slope').textContent(),'0','horizontal tangent slope '+width);
+  await page.locator('[data-x="-3"]').click();
+  assert.equal(await page.locator('#slope').textContent(),'−2','negative tangent slope '+width);
+  await page.locator('[data-x="0"]').click();
+  assert.equal(await page.locator('#slope').textContent(),'4','positive tangent slope '+width);
+  const novelLab=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth}));
+  assert.ok(novelLab.width<=novelLab.viewport+2,'1 Nov lab overflow '+width);
   console.log('PASS',width+'x'+height,JSON.stringify({map:basic.map,tiles:archive.counts,heights:archive.heights,theme:width===390?'dark':'light'}));
   completed++;await page.close();
  }
