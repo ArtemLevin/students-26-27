@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория Николь: частоты, среднее, медиана, мода, дисперсия и стандартное отклонение.">
+<title>Лаборатория статистики · Николь Саркисьянц · 02.11.26</title>
+<style>
+:root{color-scheme:light;--bg:#f7f4ee;--paper:#fffdf8;--ink:#282329;--muted:#68636a;--line:#d9cfc9;--accent:#783e50;--alt:#286769;--wash:#f2e7e8;--soft:#e8f0ec;--focus:#ba783d}
+html[data-theme=dark]{color-scheme:dark;--bg:#17191c;--paper:#25272c;--ink:#f2ecea;--muted:#c5babe;--line:#505054;--accent:#e9acbb;--alt:#8ed6cb;--wash:#33272e;--soft:#263a3a;--focus:#ffca83}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--alt);text-underline-offset:3px}button{font:inherit;color:inherit;cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.shell{width:min(1100px,calc(100% - 2.6rem));margin:auto}.skip{position:absolute;top:-6rem;left:1rem;padding:.6rem;background:var(--paper);z-index:10}.skip:focus{top:1rem}
+.bar{padding:1.1rem 0;border-bottom:1px solid var(--line);display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.bar a,.bar button,.action{padding:.62rem .9rem;border:1px solid var(--line);background:var(--paper);color:var(--ink);text-decoration:none;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+.bar span{margin-left:auto;font-size:.82rem;color:var(--muted)}
+header{padding:clamp(2.7rem,5.5vw,4.5rem) 0 2rem;border-bottom:1px solid var(--line)}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.15;letter-spacing:-.02em;font-weight:500}
+h1{font-size:clamp(2.7rem,6.5vw,5.5rem);margin:.6rem 0}h2{font-size:clamp(1.9rem,3vw,2.7rem);margin:.4rem 0 1rem}h3{font-size:1.4rem;margin:.4rem 0 .8rem}
+.eyebrow{font:.77rem/1.4 ui-monospace,Consolas,monospace;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);font-weight:700}.lead{font-size:1.15rem;color:var(--muted);max-width:68ch}
+.tabs{border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:.5rem;padding:1.1rem 0}.tabs button{padding:.7rem 1.1rem;border:1px solid var(--line);background:var(--paper);min-height:44px}.tabs button[aria-pressed=true]{background:var(--wash);border:2px solid var(--accent);font-weight:700}
+.page{padding:clamp(2rem,5vw,4rem) 0;border-bottom:1px solid var(--line)}.layout{display:grid;grid-template-columns:minmax(260px,.82fr) minmax(0,1.18fr);gap:clamp(1.5rem,5vw,5rem)}.controls{border-top:3px solid var(--accent);padding-top:1.25rem}
+.control{padding:1.1rem 0;border-bottom:1px solid var(--line)}.control-head{display:flex;align-items:center;justify-content:space-between;gap:.8rem;font-weight:650}.control-head output{color:var(--accent);font:1.55rem Georgia,serif}
+input[type=range]{width:100%;accent-color:var(--accent);min-height:34px;cursor:pointer}
+.fig{background:var(--paper);padding:1.2rem;border-top:3px solid var(--alt);min-width:0}
+.frequency{display:grid;grid-template-columns:4.1rem minmax(0,1fr) 4.4rem;gap:.7rem;align-items:center;margin:1rem 0}
+.frequency .num{font:1.3rem Georgia,serif}.track{height:25px;background:var(--soft);position:relative}.fill{display:block;height:100%;width:0;background:var(--accent);transition:width .1s linear}.frequency output{text-align:right;font-variant-numeric:tabular-nums}
+.results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;margin:1.8rem 0}.metric{padding:.8rem 0;border-top:1px solid var(--line)}.metric b{font:clamp(1.35rem,2.5vw,2.05rem) Georgia,serif;color:var(--accent);display:block;font-variant-numeric:tabular-nums}.metric span{font-size:.85rem;color:var(--muted)}
+.scale{padding:1.6rem .9rem 1rem;margin:1rem 0 0;border-top:1px solid var(--line)}.scale-line{height:7px;background:var(--soft);position:relative;border-radius:6px;margin:3.4rem .5rem 2rem}
+.segment{position:absolute;top:0;height:7px;background:var(--alt);opacity:.45}.pin{position:absolute;top:-26px;width:2px;height:52px;background:var(--accent);transform:translateX(-50%)}.pin.median{background:var(--alt);height:31px;top:-12px}.pin .pin-label{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);white-space:nowrap;font:.75rem ui-monospace,Consolas,monospace;color:var(--ink);background:var(--paper);padding:.1rem .25rem}.ticks{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted)}
+.study-note{background:var(--soft);padding:1rem 1.2rem;border-left:3px solid var(--alt);margin:1.5rem 0}.study-note p{margin:.3rem 0}.study-note strong{color:var(--alt)}.muted{color:var(--muted)}.buttons{display:flex;gap:.6rem;flex-wrap:wrap;margin:1.3rem 0}.buttons button{background:var(--paper);border:1px solid var(--line);padding:.66rem .85rem;min-height:44px}
+table{width:100%;border-collapse:collapse}th{text-align:left;color:var(--accent);font-size:.86rem}td,th{padding:.6rem .5rem;border-bottom:1px solid var(--line)}tfoot td{font-weight:700}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem}.pair>div{border-top:2px solid var(--line);padding-top:1.1rem}.pair b{display:block;color:var(--accent);font:2rem Georgia,serif}
+.prediction{border-top:1px solid var(--line);margin-top:1.8rem;padding-top:1.2rem}.prediction button{border:1px solid var(--line);background:var(--paper);padding:.68rem .9rem;min-height:44px}.prediction p{margin:.8rem 0}#predictFeedback{min-height:1.6rem;font-weight:600;color:var(--alt)}
+[hidden]{display:none!important}footer{padding:2.3rem 0;color:var(--muted);font-size:.85rem}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.fig{padding:.95rem}}
+@media(max-width:520px){.shell{width:calc(100% - 1.2rem)}.bar span{margin-left:0;width:100%}.results{grid-template-columns:repeat(2,minmax(0,1fr))}.pair{grid-template-columns:1fr}.frequency{grid-template-columns:2rem 1fr 3.6rem;gap:.4rem}}
+@media(prefers-reduced-motion:reduce){.fill{transition:none}}
+@media print{html,html[data-theme=dark]{--bg:#fff;--paper:#fff;--ink:#111;--muted:#444;--line:#aaa;--accent:#333;--alt:#333;--wash:#fff;--soft:#eee}.bar,.buttons,.tabs,.prediction{display:none}.shell{width:auto;margin:0 15mm}.layout{grid-template-columns:1fr 1fr}.page{padding:1rem 0}section[hidden]{display:block!important}}
+</style>
+</head>
+<body>
+<a href="#main" class="skip">К эксперименту</a>
+<div class="shell">
+<nav class="bar" aria-label="Навигация"><a href="02.11.26.html">← Вернуться к занятию</a><a href="index.html">Кабинет</a><a href="../pdf_docs/02.11.26.pdf">Пособие PDF</a><button id="theme" type="button" aria-label="Переключить цветовую тему">Тёмная тема</button><span>02.11.2026 · Николь Саркисьянц</span></nav>
+<header><p class="eyebrow">Цифровая лаборатория / статистика</p><h1>Одни данные.<br>Разные характеристики.</h1><p class="lead">Меняйте количество повторений чисел 1, 2, 3 и 4. Смотрите, как одновременно изменяются частоты, мода, медиана, среднее и разброс. Все значения рассчитываются по одной и той же выборке.</p></header>
+<main id="main">
+<div class="tabs" role="group" aria-label="Режимы лаборатории"><button id="tabFrequency" type="button" aria-pressed="true" aria-controls="frequency">Частоты и разброс</button><button id="tabOutlier" type="button" aria-pressed="false" aria-controls="outlier">Эффект выброса</button></div>
+<section class="page" id="frequency" aria-labelledby="frequencyTitle">
+<div class="layout">
+<div class="controls"><p class="eyebrow">Режим 01 / управляйте частотами</p><h2 id="frequencyTitle">Состав выборки</h2><p>Числа взяты из таблицы пособия. Перемещайте ползунки; каждое наблюдение учитывается отдельно.</p>
+<div class="control"><label class="control-head" for="count1">Значение 1 <output id="n1">3</output></label><input id="count1" type="range" min="0" max="8" step="1" value="3"></div>
+<div class="control"><label class="control-head" for="count2">Значение 2 <output id="n2">2</output></label><input id="count2" type="range" min="0" max="8" step="1" value="2"></div>
+<div class="control"><label class="control-head" for="count3">Значение 3 <output id="n3">5</output></label><input id="count3" type="range" min="0" max="8" step="1" value="5"></div>
+<div class="control"><label class="control-head" for="count4">Значение 4 <output id="n4">1</output></label><input id="count4" type="range" min="0" max="8" step="1" value="1"></div>
+<div class="buttons"><button id="reset" type="button">Вернуть пример из пособия</button><button id="hideDetails" type="button" aria-expanded="true" aria-controls="details">Скрыть вычисления</button></div>
+<p class="muted">Минимальная частота — 0: можно убрать значение из выборки. Если убрать всё, расчёт временно недоступен.</p>
+</div>
+<div>
+<div class="fig" id="spread"><p class="eyebrow">Выборка / абсолютная и относительная частоты</p><div class="frequency"><span class="num">1</span><div class="track"><span class="fill" id="fill1"></span></div><output id="p1">27,27%</output></div>
+<div class="frequency"><span class="num">2</span><div class="track"><span class="fill" id="fill2"></span></div><output id="p2">18,18%</output></div>
+<div class="frequency"><span class="num">3</span><div class="track"><span class="fill" id="fill3"></span></div><output id="p3">45,45%</output></div>
+<div class="frequency"><span class="num">4</span><div class="track"><span class="fill" id="fill4"></span></div><output id="p4">9,09%</output></div>
+<div class="results" aria-live="polite"><div class="metric"><b id="N">11</b><span>объём N</span></div><div class="metric"><b id="mean">2,36</b><span>среднее x̄</span></div><div class="metric"><b id="median">3</b><span>медиана Me</span></div><div class="metric"><b id="mode">3</b><span>мода Mo</span></div><div class="metric"><b id="variance">0,96</b><span>дисперсия D</span></div><div class="metric"><b id="sigma">0,98</b><span>отклонение σ</span></div></div>
+<div class="scale" role="img" aria-label="Числовая ось от нуля до пяти; отмечены среднее и медиана и интервал среднего плюс-минус одно стандартное отклонение"><p class="eyebrow">x̄ ± σ / положение относительно медианы</p><div class="scale-line"><span id="range" class="segment"></span><span id="meanPin" class="pin"><span class="pin-label">x̄</span></span><span id="medianPin" class="pin median"><span class="pin-label">Me</span></span></div><div class="ticks"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div></div>
+</div>
+<div id="details">
+<h3>Таблица для проверки</h3>
+<table><thead><tr><th scope="col">xᵢ</th><th scope="col">nᵢ</th><th scope="col">nᵢ/N</th><th scope="col">nᵢ·xᵢ</th><th scope="col">nᵢ·xᵢ²</th></tr></thead><tbody id="tableBody"></tbody><tfoot><tr><td>Итого</td><td id="sumN"></td><td id="sumP"></td><td id="sumX"></td><td id="sumX2"></td></tr></tfoot></table>
+<p id="formula" class="study-note">Вычисления появятся после изменения частот.</p>
+</div>
+<div id="insight" class="study-note" aria-live="polite"><strong>Наблюдение.</strong> Измените один ползунок и сравните результаты.</div>
+</div></div>
+</section>
+<section class="page" id="outlier" aria-labelledby="outlierTitle" hidden>
+<p class="eyebrow">Режим 02 / сравнение состояния</p><h2 id="outlierTitle">Как влияет число 100?</h2><p class="lead">В пособии сравниваются ряды 2, 3, 4, 5, 6 и 2, 3, 4, 5, 6, 100. Добавление выброса меняет среднее гораздо сильнее медианы.</p>
+<div class="buttons"><button id="before" type="button" aria-pressed="true">Без 100</button><button id="after" type="button" aria-pressed="false">Добавить 100</button></div>
+<div class="pair">
+<div><h3>Исходный ряд</h3><p>2, 3, 4, 5, 6</p><b>4</b><span class="muted">среднее</span><b>4</b><span class="muted">медиана</span></div>
+<div><h3 id="currentLabel">Текущий ряд</h3><p id="currentSeries">2, 3, 4, 5, 6</p><b id="outlierMean">4</b><span class="muted">среднее</span><b id="outlierMedian">4</b><span class="muted">медиана</span></div>
+</div>
+<div class="prediction"><h3>Предскажите результат</h3><p>При добавлении 100 что изменится сильнее?</p><div class="buttons"><button type="button" data-guess="mean">Среднее</button><button type="button" data-guess="median">Медиана</button><button type="button" data-guess="same">Одинаково</button></div><p id="predictFeedback" role="status" aria-live="polite"></p></div>
+<p class="study-note">В этом примере среднее возрастает с 4 до 20, медиана — с 4 до 4,5. Медиана устойчивее к выбросу.</p>
+</section>
+</main>
+<footer>Лёвин Артём Александрович · эксклюзивно для Николь Саркисьянц</footer>
+</div>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id);const controls=[1,2,3,4].map(i=>$('count'+i));
+const fmt=(n,d=2)=>Number.isFinite(n)?n.toLocaleString('ru-RU',{minimumFractionDigits:0,maximumFractionDigits:d}):'—';
+const clamp=x=>Math.max(0,Math.min(100,x));
+const themeKey='nikol-statistics-02-11-theme',theme=$('theme');try{document.documentElement.dataset.theme=localStorage.getItem(themeKey)==='dark'?'dark':'light'}catch{document.documentElement.dataset.theme='light'}
+function syncTheme(){theme.textContent=document.documentElement.dataset.theme==='dark'?'Светлая тема':'Тёмная тема'}syncTheme();theme.addEventListener('click',()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';syncTheme();try{localStorage.setItem(themeKey,document.documentElement.dataset.theme)}catch{}});
+let baseline=null;
+function calculate(counts){const N=counts.reduce((s,n)=>s+n,0);if(!N)return null;const sum=counts.reduce((s,n,i)=>s+(i+1)*n,0);const sumSq=counts.reduce((s,n,i)=>s+(i+1)*(i+1)*n,0);const mean=sum/N, variance=Math.max(0,sumSq/N-mean*mean),sigma=Math.sqrt(variance);
+const sorted=[];counts.forEach((n,i)=>{for(let j=0;j<n;j++)sorted.push(i+1)});const median=N%2?sorted[(N-1)/2]:(sorted[N/2-1]+sorted[N/2])/2;
+const max=Math.max(...counts);const modes=counts.map((n,i)=>n===max?i+1:null).filter(x=>x!==null);
+return{N,sum,sumSq,mean,median,variance,sigma,modes:modes.length===counts.filter(x=>x>0).length?[]:modes,range:[mean-sigma,mean+sigma]};}
+baseline=calculate([3,2,5,1]);
+function update(){const counts=controls.map(x=>Number(x.value));const s=calculate(counts),N=counts.reduce((a,b)=>a+b,0);
+controls.forEach((ctl,i)=>{$('n'+(i+1)).textContent=ctl.value;const p=N?counts[i]*100/N:0;$('p'+(i+1)).textContent=fmt(p)+'%';$('fill'+(i+1)).style.width=clamp(p)+'%'});
+$('N').textContent=N;
+for(const [id,val] of [['mean',s?.mean],['median',s?.median],['variance',s?.variance],['sigma',s?.sigma]])$(id).textContent=s?fmt(val):'—';
+$('mode').textContent=s?(s.modes.length?s.modes.join(', '):'нет выделенной'):'—';
+$('range').style.left=s?clamp(s.range[0]*20)+'%':'0%';$('range').style.width=s?Math.max(0,clamp(s.range[1]*20)-clamp(s.range[0]*20))+'%':'0%';
+$('meanPin').style.left=s?clamp(s.mean*20)+'%':'0%';$('medianPin').style.left=s?clamp(s.median*20)+'%':'0%';
+$('meanPin').hidden=!s;$('medianPin').hidden=!s;$('range').hidden=!s;
+const tbody=$('tableBody');tbody.textContent='';
+counts.forEach((n,i)=>{const x=i+1;const tr=document.createElement('tr');[x,n,s?fmt(n/N,3):'—',n*x,n*x*x].forEach(value=>{const td=document.createElement('td');td.textContent=String(value);tr.appendChild(td)});tbody.appendChild(tr)});
+$('sumN').textContent=N;$('sumP').textContent=s?'1':'—';$('sumX').textContent=s.sum;$('sumX2').textContent=s.sumSq;
+$('formula').textContent=s?('x̄ = '+s.sum+'/'+s.N+' ≈ '+fmt(s.mean)+'; D = '+s.sumSq+'/'+s.N+' − ('+s.sum+'/'+s.N+')² ≈ '+fmt(s.variance,3)+'; σ ≈ '+fmt(s.sigma)+'. Интервал: ['+fmt(s.range[0])+'; '+fmt(s.range[1])+'].'):'Выборка пуста. Добавьте хотя бы одно наблюдение.';
+$('insight').textContent=!s?'При нулевых частотах статистические характеристики не определены.':s.variance===0?'Все наблюдения имеют одно значение: дисперсия и стандартное отклонение равны нулю.':'Среднее '+fmt(s.mean)+'; медиана '+fmt(s.median)+'. Измените только одну частоту и проследите, что изменится.';
+}
+controls.forEach(c=>c.addEventListener('input',update));
+$('reset').addEventListener('click',()=>{[3,2,5,1].forEach((x,i)=>controls[i].value=x);update()});
+$('hideDetails').addEventListener('click',()=>{const el=$('details'),next=el.hidden=!el.hidden;$('hideDetails').setAttribute('aria-expanded',String(!next));$('hideDetails').textContent=next?'Показать вычисления':'Скрыть вычисления'});
+const tab1=$('tabFrequency'),tab2=$('tabOutlier');
+function mode(name,push){const second=name==='outlier';$('frequency').hidden=second;$('outlier').hidden=!second;tab1.setAttribute('aria-pressed',String(!second));tab2.setAttribute('aria-pressed',String(second));if(push)history.replaceState(null,'','#'+(second?'outlier':'frequency'))}
+tab1.addEventListener('click',()=>mode('frequency',true));tab2.addEventListener('click',()=>mode('outlier',true));
+window.addEventListener('hashchange',()=>mode(location.hash==='#outlier'?'outlier':'frequency',false));
+mode(location.hash==='#outlier'?'outlier':'frequency',false);
+function showOutlier(added){$('before').setAttribute('aria-pressed',String(!added));$('after').setAttribute('aria-pressed',String(added));$('currentSeries').textContent=added?'2, 3, 4, 5, 6, 100':'2, 3, 4, 5, 6';$('outlierMean').textContent=added?'20':'4';$('outlierMedian').textContent=added?'4,5':'4'}
+$('before').addEventListener('click',()=>showOutlier(false));$('after').addEventListener('click',()=>showOutlier(true));
+document.querySelectorAll('[data-guess]').forEach(b=>b.addEventListener('click',()=>{const ok=b.dataset.guess==='mean';$('predictFeedback').textContent=ok?'Верно: среднее изменится на 16, медиана — на 0,5.':'Сравните два ряда: среднее изменится на 16, медиана — на 0,5.';showOutlier(true)}));
+update();
+})();
+</script>
+</body></html>
