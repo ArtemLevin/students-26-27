@@ -5,6 +5,109 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-02",
+  "ktpRefs": [
+    "ktp-011",
+    "ktp-012",
+    "ktp-018",
+    "ktp-019",
+    "ktp-020",
+    "ktp-024"
+  ],
+  "href": "02.11.26.html",
+  "title": "Степени. Логарифмы. Тригонометрия.",
+  "navTitle": "Степени. Логарифмы. Тригонометрия.",
+  "navSubtitle": "Ярослав Гаврилов — комплексное повторение степеней, логарифмов и тригонометрии, прикладное неравенство на время и 10 заданий. 2 ноября 2026.",
+  "summary": "Ярослав Гаврилов — комплексное повторение степеней, логарифмов и тригонометрии, прикладное неравенство на время и 10 заданий. 2 ноября 2026.",
+  "topics": [
+    "Показательные уравнения и преобразование степеней",
+    "Свойства логарифмов и смена основания",
+    "Логарифмические уравнения и проверка ОДЗ",
+    "Логарифмический график и опорные точки",
+    "Формулы приведения, периодичность, двойной угол",
+    "Прикладное тригонометрическое неравенство для скорости",
+    "Путь А: 10 заданий на комплексное повторение"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege07_07",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_03",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_04",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_10",
+      "evidenceAnchor": "logarithms",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_11",
+      "evidenceAnchor": "logarithms",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege07_08",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege07_15",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege12_13",
+      "evidenceAnchor": "graph",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_14",
+      "evidenceAnchor": "trig",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_15",
+      "evidenceAnchor": "trig",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege08_12",
+      "evidenceAnchor": "trig",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege10_06",
+      "evidenceAnchor": "time",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege10_09",
+      "evidenceAnchor": "time",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege10_10",
+      "evidenceAnchor": "time",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "02.11.26.html",
+    "pdf": "../pdf_docs/02.11.26.pdf",
+    "tex": "../tex_docs/02.11.26.tex",
+    "lab": "02.11.26-lab.html"
+  }
+},
+{
   "date": "2026-10-29",
   "ktpRefs": [
     "ktp-019",
