@@ -33,7 +33,7 @@ label[for=x]{font-weight:650;display:block;margin-bottom:15px}.slider{width:100%
 <p class="lead">Передвигайте точку x и наблюдайте, как одновременно меняются модуль, логарифм и квадратное выражение из примера занятия. Исследуйте обе границы и исключённую точку x = 4.</p>
 <div class="eq">2[log₂|4−x|]² − 5log₂|4−x| − 7 ≤ 0</div>
 <section class="study" aria-label="Управление экспериментом">
-<div><label for="x">Положение x на числовой прямой</label><input type="range" class="slider" id="x" min="-9" max="17" step=".01" value="3" aria-describedby="range-help"><div class="slider-ends"><span>−9</span><span>17</span></div><p id="range-help" class="note">При x = 4 аргумент логарифма обращается в нуль. Логарифм не определён.</p>
+<div><label for="x">Положение x на числовой прямой</label><input type="range" class="slider" id="x" min="-9" max="17" step="any" value="3" aria-describedby="range-help"><div class="slider-ends"><span>−9</span><span>17</span></div><p id="range-help" class="note">При x = 4 аргумент логарифма обращается в нуль. Логарифм не определён.</p>
 <div class="presets"><button type="button" data-x="-7.313708498984761">Левая граница</button><button type="button" data-x="3.5">Внутренняя граница</button><button type="button" data-x="4">Исключённая точка</button><button type="button" data-x="4.5">Правая граница</button><button type="button" data-x="15.313708498984761">Крайняя граница</button><button type="button" id="reset">Сбросить</button></div>
 </div><div><div class="code">Текущая точка</div><div class="readout" id="x-value" aria-live="off">3</div><p class="note" id="boundary-hint">Сравните положение точки с двумя отрезками ответа.</p></div></section>
 <div class="measurements" aria-label="Вычисляемые величины">
@@ -67,10 +67,10 @@ try{var saved=localStorage.getItem("timofey-lesson-theme-v1");if(saved==="dark"|
 theme.addEventListener("click",function(){root.dataset.theme=root.dataset.theme==="dark"?"light":"dark";try{localStorage.setItem("timofey-lesson-theme-v1",root.dataset.theme);}catch(e){}});
 function px(x){return 34+(x-min)/(max-min)*862;}
 leftBand.setAttribute("x1",px(left));leftBand.setAttribute("x2",px(b1));rightBand.setAttribute("x1",px(b2));rightBand.setAttribute("x2",px(right));
-var ticks=[{x:left,label:"4−8√2"},{x:b1,label:"7/2"},{x:4,label:"4"},{x:b2,label:"9/2"},{x:right,label:"4+8√2"}];
+var ticks=[{x:left,label:"4−8√2"},{x:b1,label:"7/2",y:123},{x:4,label:"4",y:165},{x:b2,label:"9/2",y:123},{x:right,label:"4+8√2"}];
 var tickLayer=document.getElementById("static-ticks"),ns="http://www.w3.org/2000/svg";
 ticks.forEach(function(t){var line=document.createElementNS(ns,"line");line.setAttribute("x1",px(t.x));line.setAttribute("x2",px(t.x));line.setAttribute("y1",76);line.setAttribute("y2",95);line.setAttribute("stroke","var(--rule)");tickLayer.appendChild(line);
-var label=document.createElementNS(ns,"text");label.setAttribute("x",px(t.x));label.setAttribute("y",123);label.setAttribute("text-anchor","middle");label.textContent=t.label;tickLayer.appendChild(label);});
+var label=document.createElementNS(ns,"text");label.setAttribute("x",px(t.x));label.setAttribute("y",t.y||123);label.setAttribute("text-anchor","middle");label.textContent=t.label;tickLayer.appendChild(label);});
 function fmt(v){return Math.abs(v)<1e-10?"0":Number(v.toFixed(4)).toLocaleString("ru-RU",{maximumFractionDigits:4});}
 function update(x){current=x;range.value=x;var a=Math.abs(4-x),defined=a>1e-9,t=defined?Math.log2(a):NaN,q=defined?2*t*t-5*t-7:NaN;
 var good=defined&&q<=1e-7;
