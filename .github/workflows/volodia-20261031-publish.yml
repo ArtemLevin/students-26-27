@@ -1,0 +1,38 @@
+name: One-time Volodia 31 Oct publisher
+on:
+  push:
+    branches:
+      - feature/volodia-2026-10-31-lesson
+    paths:
+      - .github/workflows/volodia-20261031-publish.yml
+permissions:
+  contents: write
+jobs:
+  canonical-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preflight
+        run: |
+          node scripts/publish-lesson.mjs volodia_khachaturian 31.10.26 --intent students/volodia_khachaturian/site/data/publication-intents/2026-10-31.json --dry-run
+      - name: Transactional publication
+        run: |
+          node scripts/publish-lesson.mjs volodia_khachaturian 31.10.26 --intent students/volodia_khachaturian/site/data/publication-intents/2026-10-31.json
+      - name: Validate student contract and dashboard
+        run: |
+          node scripts/student.mjs validate volodia_khachaturian
+          node students/volodia_khachaturian/site/tests/dashboard-regression.mjs
+          node --test students/volodia_khachaturian/site/tests/student-platform-v2.test.mjs
+      - name: Commit generated metadata and remove one-time workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/volodia-20261031-publish.yml
+          git add students/volodia_khachaturian/site/
+          git commit -m "chore(volodia): publish 2026-10-31 lesson via v2 pipeline"
+          git push origin HEAD:feature/volodia-2026-10-31-lesson
