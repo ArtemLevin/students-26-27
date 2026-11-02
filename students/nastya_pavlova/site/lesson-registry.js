@@ -5,6 +5,80 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-02",
+  "ktpRefs": [],
+  "href": "02.11.26.html",
+  "title": "Аннуитетная схема погашения кредита",
+  "navTitle": "Аннуитетная схема погашения кредита",
+  "navSubtitle": "Анастасия Павлова · 2 ноября: равные платежи, таблица аннуитета, формула для n лет и переплата.",
+  "summary": "Равные ежегодные платежи: таблица изменения долга, коэффициент 1 + p, формула платежа на n лет, сумма выплат, переплата и проверка остатка.",
+  "topics": [
+    "Аннуитетная схема равных ежегодных платежей",
+    "Таблица движения долга и текущий остаток",
+    "Вывод формулы платежа для n лет",
+    "Общая сумма выплат и переплата",
+    "Проверка погашения и 10 заданий"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "fin_07",
+      "evidenceAnchor": "recognition",
+      "relation": "practiced",
+      "label": "Равные платежи аннуитетного кредита",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_05",
+      "evidenceAnchor": "table",
+      "relation": "practiced",
+      "label": "Переход остатка долга к следующему году",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_10",
+      "evidenceAnchor": "table",
+      "relation": "practiced",
+      "label": "Проценты на текущий остаток",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_11",
+      "evidenceAnchor": "table",
+      "relation": "practiced",
+      "label": "Таблица погашения аннуитетного кредита",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_14",
+      "evidenceAnchor": "formula",
+      "relation": "practiced",
+      "label": "Формула ежегодного платежа и суммы выплат",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_15",
+      "evidenceAnchor": "formula",
+      "relation": "touched",
+      "label": "Переплата и её процент",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "fin_20",
+      "evidenceAnchor": "example",
+      "relation": "touched",
+      "label": "Проверка нулевого остатка и единиц ответа",
+      "practiceDisposition": "none"
+    }
+  ],
+  "materials": {
+    "html": "02.11.26.html",
+    "pdf": "../pdf_docs/02.11.26.pdf",
+    "tex": "../tex_docs/02.11.26.tex",
+    "lab": "02.11.26-lab.html"
+  }
+},
+
+{
   "date": "2026-10-29",
   "ktpRefs": [],
   "href": "29.10.26.html",
