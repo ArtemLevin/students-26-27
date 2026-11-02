@@ -5,6 +5,65 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-11-01",
+    "ktpRefs": [],
+    "href": "01.11.26.html",
+    "title": "Геометрический смысл производной и касательная",
+    "navTitle": "Геометрический смысл производной и касательная",
+    "navSubtitle": "Матвей Горбачёв. Геометрический смысл производной: угловой коэффициент касательной, знак производной, параллельные прямые, две проверки касания и задачи с параметром. Путь А — 10 заданий.",
+    "summary": "Матвей Горбачёв. Геометрический смысл производной: угловой коэффициент касательной, знак производной, параллельные прямые, две проверки касания и задачи с параметром. Путь А — 10 заданий.",
+    "topics": [
+      "производная как наклон касательной и тангенс угла",
+      "угловой коэффициент по двум точкам и проверка знака",
+      "параллельные прямые и геометрический смысл производной",
+      "чтение графиков функции и производной, точки экстремума",
+      "два условия касания, отбор кандидатов и задачи с параметром"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "calculus_17",
+        "evidenceAnchor": "slope",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_09",
+        "evidenceAnchor": "contact",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_02",
+        "evidenceAnchor": "parameter",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "calculus_03",
+        "evidenceAnchor": "contact",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "calculus_10",
+        "evidenceAnchor": "reading",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "calculus_11",
+        "evidenceAnchor": "reading",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "functions_05",
+        "evidenceAnchor": "reading",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "01.11.26.html",
+      "pdf": "../pdf_docs/01.11.26.pdf",
+      "tex": "../tex_docs/01.11.26.tex",
+      "lab": "01.11.26-lab.html"
+    }
+  },
+  {
     "date": "2026-10-25",
     "ktpRefs": [],
     "href": "25.10.26.html",
@@ -231,69 +290,69 @@ export const LESSONS=[
     }
   },
   {
-  "date": "2026-10-11",
-  "ktpRefs": [],
-  "href": "11.10.26.html",
-  "title": "Смеси, растворы и проценты",
-  "navTitle": "Смеси, растворы и проценты",
-  "navSubtitle": "Матвей Горбачёв. Смеси, растворы и проценты: массовая доля, сохранение сухого вещества, системы уравнений, повышение и снижение цены, сравнение стоимостей. Путь А — 10 задач.",
-  "summary": "Матвей Горбачёв. Смеси, растворы и проценты: массовая доля, сохранение сухого вещества, системы уравнений, повышение и снижение цены, сравнение стоимостей. Путь А — 10 задач.",
-  "topics": [
-    "смешивание растворов и сплавов",
-    "сохранение сухого вещества при сушке",
-    "системы уравнений по двум опытам",
-    "процентное повышение и снижение цены",
-    "сравнение стоимостей через отношение"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "text_08",
-      "evidenceAnchor": "mix",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "text_09",
-      "evidenceAnchor": "system",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "text_10",
-      "evidenceAnchor": "price",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "text_12",
-      "evidenceAnchor": "ratio",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "text_15",
-      "evidenceAnchor": "mix",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "text_16",
-      "evidenceAnchor": "system",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "numbers_07",
-      "evidenceAnchor": "price",
-      "relation": "practiced"
-    },
-    {
-      "competencyId": "numbers_08",
-      "evidenceAnchor": "ratio",
-      "relation": "practiced"
+    "date": "2026-10-11",
+    "ktpRefs": [],
+    "href": "11.10.26.html",
+    "title": "Смеси, растворы и проценты",
+    "navTitle": "Смеси, растворы и проценты",
+    "navSubtitle": "Матвей Горбачёв. Смеси, растворы и проценты: массовая доля, сохранение сухого вещества, системы уравнений, повышение и снижение цены, сравнение стоимостей. Путь А — 10 задач.",
+    "summary": "Матвей Горбачёв. Смеси, растворы и проценты: массовая доля, сохранение сухого вещества, системы уравнений, повышение и снижение цены, сравнение стоимостей. Путь А — 10 задач.",
+    "topics": [
+      "смешивание растворов и сплавов",
+      "сохранение сухого вещества при сушке",
+      "системы уравнений по двум опытам",
+      "процентное повышение и снижение цены",
+      "сравнение стоимостей через отношение"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "text_08",
+        "evidenceAnchor": "mix",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_09",
+        "evidenceAnchor": "system",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_10",
+        "evidenceAnchor": "price",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_12",
+        "evidenceAnchor": "ratio",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_15",
+        "evidenceAnchor": "mix",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_16",
+        "evidenceAnchor": "system",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "numbers_07",
+        "evidenceAnchor": "price",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "numbers_08",
+        "evidenceAnchor": "ratio",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "11.10.26.html",
+      "pdf": "../pdf_docs/11.10.26.pdf",
+      "tex": "../tex_docs/11.10.26.tex"
     }
-  ],
-  "materials": {
-    "html": "11.10.26.html",
-    "pdf": "../pdf_docs/11.10.26.pdf",
-    "tex": "../tex_docs/11.10.26.tex"
-  }
-},
-{
+  },
+  {
     "date": "2026-10-08",
     "ktpRefs": [],
     "href": "08.10.26.html",
