@@ -5,6 +5,66 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-01",
+  "ktpRefs": [],
+  "href": "01.11.26.html",
+  "title": "Практико-ориентированные задачи: чтение формул и степени десяти",
+  "navTitle": "Практико-ориентированные задачи: чтение формул и степени десяти",
+  "navSubtitle": "Формулы, проценты и КПД, степени десяти, допустимые корни; 1 ноября 2026 года.",
+  "summary": "Текстовые задачи профильной математики: интерпретация величин, проценты и КПД, степени десяти, отбор корней, работа с физическими формулами. Два исследовательских режима и 10 упражнений «Путь А».",
+  "topics": [
+    "понимание обозначений готовой формулы и текста условия",
+    "степени десяти и сокращение числовых множителей",
+    "перевод процентов в доли и формула КПД",
+    "отбор допустимого корня квадратного уравнения",
+    "прикладные модели давления, рейтинга, моста и излучения",
+    "проверка единиц измерения и ограничений"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "systems_models_09",
+      "evidenceAnchor": "method",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "systems_models_11",
+      "evidenceAnchor": "method",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "systems_models_12",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "real_numbers_20",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "powers_roots_01",
+      "evidenceAnchor": "powers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "polynomials_09",
+      "evidenceAnchor": "roots",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "functions_01",
+      "evidenceAnchor": "method",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "01.11.26.html",
+    "pdf": "../pdf_docs/01.11.26.pdf",
+    "tex": "../tex_docs/01.11.26.tex",
+    "lab": "01.11.26-lab.html"
+  }
+},
+{
   "date": "2026-10-27",
   "ktpRefs": [],
   "href": "27.10.26.html",
