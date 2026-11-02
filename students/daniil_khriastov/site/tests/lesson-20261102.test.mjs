@@ -67,7 +67,7 @@ test('publication intent anchors are real and do not claim mastery',()=>{
 test('models reproduce physical calculations from the November checklist',()=>{
   assert.equal((2**5*2**(-3))/2**(-2),16);
   assert.equal(4e-7*2.5e9,1000);
-  assert.equal(125**(2/3),25);
+  assert.ok(Math.abs(125**(2/3)-25)<1e-12);
   assert.ok(Math.abs(Math.cbrt((2000+16*10)/(1000*10))-.6)<1e-12);
   assert.equal(48*2**(-21/7),6);
   assert.ok(Math.abs((8e6/(5e-8*10))**(1/4)-2000)<1e-10);
