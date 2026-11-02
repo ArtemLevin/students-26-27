@@ -1,0 +1,40 @@
+name: Kirill 31 October geometry browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'students/kirill_zinoviev/site/31.10.26.html'
+      - 'students/kirill_zinoviev/site/31.10.26-lab.html'
+      - 'students/kirill_zinoviev/site/data/lessons/2026-10-31.lesson.json'
+      - 'students/kirill_zinoviev/site/tests/geometry-2026-10-31*'
+      - '.github/workflows/kirill-2026-10-31-geometry.yml'
+  workflow_dispatch:
+jobs:
+  lesson-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check source and publication contracts
+        run: node --test students/kirill_zinoviev/site/tests/geometry-2026-10-31.test.mjs
+      - name: Prepare Chromium and accessibility audit
+        run: |
+          mkdir -p /tmp/kirill-31-qa
+          npm install --no-audit --no-fund --prefix /tmp/kirill-31-qa playwright@1.56.1 axe-core@4
+          /tmp/kirill-31-qa/node_modules/.bin/playwright install chromium
+      - name: Browser release gate
+        env:
+          PLAYWRIGHT_MODULE: /tmp/kirill-31-qa/node_modules/playwright/index.mjs
+          AXE_SCRIPT: /tmp/kirill-31-qa/node_modules/axe-core/axe.min.js
+          QA_OUT: /tmp/kirill-31-geometry-qa
+        run: node students/kirill_zinoviev/site/tests/geometry-2026-10-31.browser.mjs
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kirill-31-oct-browser-screenshots
+          path: /tmp/kirill-31-geometry-qa/*.png
+          if-no-files-found: ignore
