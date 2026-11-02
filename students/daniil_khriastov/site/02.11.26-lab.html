@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Цифровая лаборатория Даниила Хрястова: радиоактивный распад и степенной закон давления и объёма газа. Интерактивные модели занятия 2 ноября 2026 года.">
+<title>Лаборатория степенных законов · 02.11.26 · Даниил Хрястов</title><link rel="icon" href="data:,">
+<link rel="stylesheet" href="../../../design-system/tokens.css"><link rel="stylesheet" href="../../../design-system/foundations.css"><link rel="stylesheet" href="../../../design-system/archetypes.css"><link rel="stylesheet" href="../../../design-system/student-sites.css">
+<style>
+:root{color-scheme:light;--bg:#f6f8f3;--ink:#193127;--muted:#536b5f;--line:#c6d4c8;--surface:#fdfefa;--green:#2a7350;--light:#e5eee7;--amber:#b27237;--focus:#c36e22}
+html[data-theme=dark]{color-scheme:dark;--bg:#101b15;--ink:#e7efe9;--muted:#adc5b4;--line:#3c5b47;--surface:#17281d;--green:#9bd7ac;--light:#233e2c;--amber:#efbb84;--focus:#f3bc72}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:inherit;text-underline-offset:4px}button,select,input{font:inherit}button{color:inherit;cursor:pointer}:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+.skip{position:absolute;left:12px;top:-100px;z-index:5;padding:10px;background:var(--surface)}.skip:focus{top:10px}
+.shell{max-width:1140px;margin:auto;padding:0 clamp(20px,5vw,60px)}
+.top{background:var(--surface);border-bottom:1px solid var(--line)}.top .shell{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:70px}.identity{text-decoration:none;font-weight:700}.identity small{display:block;letter-spacing:.12em;font-size:.67rem;color:var(--muted);font-weight:500}.nav{display:flex;flex-wrap:wrap;gap:17px;align-items:center}.nav a{font-size:.85rem}.theme{background:transparent;border:1px solid var(--line);padding:7px 12px}
+.eyebrow,.code{font:700 .73rem ui-monospace,Consolas,monospace;letter-spacing:.09em;color:var(--green);text-transform:uppercase}
+.intro{padding:55px 0 40px}.intro h1{font:500 clamp(2.6rem,6vw,5.4rem)/1.07 Georgia,serif;letter-spacing:-.035em;max-width:850px;margin:13px 0}.intro p{max-width:720px;color:var(--muted)}
+.tabs{display:flex;border-top:1px solid var(--line);border-bottom:1px solid var(--line);gap:24px;flex-wrap:wrap}.tabs button{background:transparent;border:0;border-bottom:3px solid transparent;padding:16px 6px;text-align:left}.tabs button[aria-selected=true]{border-color:var(--green);font-weight:700}
+.scene{padding:40px 0 70px}.scene[hidden]{display:none}.scene-header{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,.7fr);gap:55px;margin-bottom:30px}.scene h2{font:500 clamp(1.8rem,4vw,3rem)/1.16 Georgia,serif;margin:10px 0 12px}.scene-header p{color:var(--muted);max-width:640px}.formula{margin-top:13px;padding:12px 18px;background:var(--light);border-left:2px solid var(--green)}
+math{font-family:"STIX Two Math","Cambria Math","DejaVu Serif",serif;font-size:1.13em}math[display=block]{display:block;overflow-x:auto;padding:5px 0;max-width:100%}
+.instrument{display:grid;grid-template-columns:minmax(240px,.62fr) minmax(0,1.38fr);gap:45px;border-top:1px solid var(--line);padding-top:34px}
+.controls{border-right:1px solid var(--line);padding-right:31px}.control{margin-bottom:28px}.control label{font-weight:650;display:block;margin-bottom:8px;font-size:.9rem}.control input[type=range]{width:100%;accent-color:var(--green);min-height:37px}.control output{display:block;margin-top:5px;color:var(--green);font:700 1rem ui-monospace,Consolas,monospace}.controls select{width:100%;background:var(--surface);border:1px solid var(--line);padding:10px;color:var(--ink)}
+.reset{background:var(--surface);border:1px solid var(--line);padding:10px 19px}
+.visual{min-width:0}.graphic{display:block;width:100%;max-width:720px;height:auto;background:var(--surface);border:1px solid var(--line)}
+.graphic .axis{stroke:var(--line);stroke-width:1.5}.graphic .plot{stroke:var(--green);stroke-width:3;fill:none;stroke-linejoin:round;stroke-linecap:round}.graphic .current{fill:var(--amber);stroke:var(--surface);stroke-width:2}.graphic .soft{fill:var(--light)}.graphic .bar{fill:var(--green)}.graphic .frame{stroke:var(--line);stroke-width:2;fill:none}.graphic text{fill:var(--muted);font:15px system-ui,sans-serif}
+.measure{border-bottom:1px solid var(--line);display:flex;align-items:baseline;justify-content:space-between;gap:18px;padding:15px 0}.measure strong{font:500 clamp(1.4rem,3vw,2.5rem)/1.2 Georgia,serif}.measure span{color:var(--muted);font-size:.9rem}
+.insight{margin:21px 0;padding:16px 19px;border-left:2px solid var(--amber);background:var(--light)}
+.return{display:inline-block;margin-top:30px;font-weight:650}
+.footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted);font-size:.83rem}
+@media(max-width:780px){.top .shell{align-items:flex-start;flex-direction:column;padding-top:13px;padding-bottom:13px}.scene-header,.instrument{grid-template-columns:1fr;gap:15px}.controls{border:0;border-bottom:1px solid var(--line);padding:0 0 15px}.scene{padding-top:24px}.intro{padding-top:35px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{.top,.tabs,.controls,.skip{display:none!important}.scene[hidden]{display:block}.instrument{grid-template-columns:1fr}.scene{break-inside:avoid}.graphic{max-width:580px}}
+</style>
+</head>
+<body><a href="#main" class="skip">Перейти к моделям</a>
+<header class="top"><div class="shell"><a href="02.11.26.html" class="identity">LEVIN / ATLAS <small>ДАНИИЛ ХРЯСТОВ · 02.11.2026</small></a><nav class="nav"><a href="02.11.26.html">Вернуться к занятию</a><a href="index.html">Кабинет</a><button class="theme" id="themeToggle" type="button" aria-pressed="false">Тёмная тема</button></nav></div></header>
+<main id="main"><div class="shell">
+<section class="intro"><span class="eyebrow">ЦИФРОВАЯ ЛАБОРАТОРИЯ / 02.11.26</span><h1>Степенные законы <i>в действии.</i></h1><p>Меняйте исходные величины, наблюдайте, как изменяется результат, и сверяйте численное значение с формулой. Две модели соответствуют задачам занятия.</p></section>
+<div class="tabs" role="tablist" aria-label="Выбор исследовательской модели"><button type="button" id="tab-decay" role="tab" aria-selected="true" aria-controls="decay">01 · Радиоактивный распад</button><button type="button" id="tab-gas" role="tab" aria-selected="false" aria-controls="gas">02 · Давление и объём</button></div>
+<section class="scene" id="decay" role="tabpanel" aria-labelledby="tab-decay">
+<div class="scene-header"><div><span class="code">01 / ПЕРИОД ПОЛУРАСПАДА</span><h2>Как убывает масса образца</h2><p>Каждый период полураспада оставшаяся масса сокращается вдвое. Сдвиг времени вправо по графику уменьшает массу.</p></div><div class="formula"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>m</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><msub><mi>m</mi><mn>0</mn></msub><mo>·</mo><msup><mn>2</mn><mrow><mo>−</mo><mfrac><mi>t</mi><mi>τ</mi></mfrac></mrow></msup></mrow></math></div></div>
+<div class="instrument"><div class="controls">
+<div class="control"><label for="massInitial">Начальная масса</label><input id="massInitial" type="range" min="20" max="100" step="10" value="40"><output id="massInitialOut" for="massInitial">40 мг</output></div>
+<div class="control"><label for="halfTime">Период полураспада</label><input id="halfTime" type="range" min="5" max="20" step="1" value="10"><output id="halfTimeOut" for="halfTime">10 мин</output></div>
+<div class="control"><label for="elapsed">Время наблюдения</label><input id="elapsed" type="range" min="0" max="60" step="1" value="30"><output id="elapsedOut" for="elapsed">30 мин</output></div>
+<button type="button" class="reset" id="resetDecay">Сбросить параметры</button></div>
+<div class="visual">
+<svg id="decayGraph" class="graphic" viewBox="0 0 660 360" role="img" aria-labelledby="decayGraphTitle decayGraphDesc" xmlns="http://www.w3.org/2000/svg"><title id="decayGraphTitle">График уменьшения массы радиоактивного образца</title><desc id="decayGraphDesc">Текущая точка на графике соответствует выбранному времени и рассчитанной оставшейся массе.</desc>
+<line class="axis" x1="55" y1="312" x2="635" y2="312"/><line class="axis" x1="55" y1="22" x2="55" y2="312"/>
+<text x="560" y="344">Время, мин</text><text x="16" y="19">Масса</text><text x="48" y="336">0</text><text x="595" y="336">60</text>
+<path class="plot" id="decayCurve" d=""/><circle id="decayDot" class="current" cx="0" cy="0" r="7"/></svg>
+<div class="measure"><span>Осталось вещества</span><strong id="remaining">5 мг</strong></div>
+<div class="measure"><span>Прошло периодов полураспада</span><strong id="halves">3</strong></div>
+<div class="formula"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>m</mi><mo>=</mo><mn id="dInitial">40</mn><mo>·</mo><msup><mn>2</mn><mrow><mo>−</mo><mfrac><mn id="dElapsed">30</mn><mn id="dHalf">10</mn></mfrac></mrow></msup><mo>=</mo><mn id="dRemaining">5</mn></mrow></math></div>
+<p class="insight" id="decayInsight" aria-live="polite">За три периода масса уменьшается в восемь раз.</p>
+<a class="return" href="02.11.26.html#decay">Вернуться к объяснению распада</a>
+</div></div></section>
+<section class="scene" id="gas" role="tabpanel" aria-labelledby="tab-gas" hidden>
+<div class="scene-header"><div><span class="code">02 / СТЕПЕННОЙ ЗАКОН ГАЗА</span><h2>Что происходит при сжатии</h2><p>Сравните два состояния одного газа. Уменьшение объёма при постоянной величине из формулы сопровождается ростом давления.</p></div><div class="formula"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>p</mi><mn>1</mn></msub><msubsup><mi>V</mi><mn>1</mn><mi>k</mi></msubsup><mo>=</mo><msub><mi>p</mi><mn>2</mn></msub><msubsup><mi>V</mi><mn>2</mn><mi>k</mi></msubsup></mrow></math></div></div>
+<div class="instrument"><div class="controls">
+<div class="control"><label for="pInitial">Начальное давление</label><input id="pInitial" type="range" min="1" max="5" step="1" value="2"><output id="pInitialOut" for="pInitial">2 · 10⁵ Па</output></div>
+<div class="control"><label for="compression">Конечный объём относительно начального</label><select id="compression"><option value="1">Без сжатия · 1</option><option value="2">В 2 раза меньше · 1/2</option><option value="4">В 4 раза меньше · 1/4</option><option value="8" selected>В 8 раз меньше · 1/8</option></select></div>
+<div class="control"><label for="exponent">Показатель степени</label><select id="exponent"><option value="1">1</option><option value="1.6666666666666667" selected>5/3</option><option value="2">2</option></select></div>
+<button type="button" class="reset" id="resetGas">Сбросить параметры</button></div>
+<div class="visual"><svg class="graphic" viewBox="0 0 660 330" role="img" aria-labelledby="gasTitle gasDesc" xmlns="http://www.w3.org/2000/svg"><title id="gasTitle">Сравнение двух состояний газа</title><desc id="gasDesc">Две горизонтальные шкалы показывают относительные объёмы до и после сжатия. Отдельно показано отношение давлений.</desc>
+<text x="35" y="52">Объём в первом состоянии</text><rect class="soft" x="35" y="65" width="570" height="46"/><rect class="bar" x="35" y="65" width="570" height="46" id="vInitialBar"/>
+<text x="35" y="158">Объём во втором состоянии</text><rect class="soft" x="35" y="171" width="570" height="46"/><rect class="bar" x="35" y="171" width="71.25" height="46" id="vFinalBar"/>
+<text x="35" y="267" id="gasRatioLabel">Давление стало в 32 раза больше</text><line class="axis" x1="35" y1="285" x2="605" y2="285"/></svg>
+<div class="measure"><span>Объём до → после</span><strong id="volumePair">0,016 → 0,002 м³</strong></div>
+<div class="measure"><span>Давление до → после</span><strong id="pressurePair">2 · 10⁵ → 6,4 · 10⁶ Па</strong></div>
+<div class="measure"><span>Во сколько раз изменилось давление</span><strong id="pressureRatio">32</strong></div>
+<div class="formula"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><msub><mi>p</mi><mn>2</mn></msub><msub><mi>p</mi><mn>1</mn></msub></mfrac><mo>=</mo><msup><mrow><mo>(</mo><mfrac><msub><mi>V</mi><mn>1</mn></msub><msub><mi>V</mi><mn>2</mn></msub></mfrac><mo>)</mo></mrow><mi>k</mi></msup><mo>=</mo><msup><mn id="gCompress">8</mn><mfrac><mn id="gNumerator">5</mn><mn id="gDenominator">3</mn></mfrac></msup><mo>≈</mo><mn id="gRatio">32</mn></mrow></math></div>
+<p class="insight" id="gasInsight" aria-live="polite">При уменьшении объёма в восемь раз давление выросло в 32 раза.</p>
+<a class="return" href="02.11.26.html#gas">Вернуться к закону для газа</a></div></div></section>
+</div></main>
+<footer class="footer"><div class="shell">Лёвин Артём Александрович · эксклюзивно для Даниила Хрястова · 02.11.2026</div></footer>
+<script>
+(function(){
+'use strict';
+const root=document.documentElement,theme=document.getElementById('themeToggle');
+let current='light';try{if(localStorage.getItem('daniil-lesson-theme')==='dark')current='dark';}catch(e){}
+function paint(){root.dataset.theme=current;theme.textContent=current==='dark'?'Светлая тема':'Тёмная тема';theme.setAttribute('aria-pressed',String(current==='dark'));}
+theme.addEventListener('click',function(){current=current==='dark'?'light':'dark';paint();try{localStorage.setItem('daniil-lesson-theme',current);}catch(e){}});paint();
+const $=function(id){return document.getElementById(id);};
+const fmt=function(value,digits){return Number(value.toFixed(digits===undefined?3:digits)).toLocaleString('ru-RU',{maximumFractionDigits:digits===undefined?3:digits});};
+const ns='http://www.w3.org/2000/svg';
+const m0=$('massInitial'),tau=$('halfTime'),t=$('elapsed');
+function drawDecay(){
+const start=Number(m0.value),period=Number(tau.value),time=Number(t.value);
+const amount=start*Math.pow(2,-time/period),left=55,right=635,top=22,bottom=312;
+const dx=function(x){return left+(right-left)*x/60;},dy=function(y){return bottom-(bottom-top)*y/start;};
+const pts=[];for(let i=0;i<=120;i++){const ti=i/2;pts.push((i?'L':'M')+dx(ti).toFixed(2)+' '+dy(start*Math.pow(2,-ti/period)).toFixed(2));}
+$('decayCurve').setAttribute('d',pts.join(' '));$('decayDot').setAttribute('cx',dx(time));$('decayDot').setAttribute('cy',dy(amount));
+$('massInitialOut').textContent=fmt(start)+' мг';$('halfTimeOut').textContent=fmt(period)+' мин';$('elapsedOut').textContent=fmt(time)+' мин';
+$('remaining').textContent=fmt(amount,4)+' мг';$('halves').textContent=fmt(time/period,2);
+$('dInitial').textContent=fmt(start);$('dElapsed').textContent=fmt(time);$('dHalf').textContent=fmt(period);$('dRemaining').textContent=fmt(amount,4);
+$('decayInsight').textContent=time===0?'Начальный момент: распада ещё не было.':'За '+fmt(time/period,2)+' периода полураспада исходная масса уменьшилась в '+fmt(Math.pow(2,time/period),3)+' раза.';
+$('decayGraph').setAttribute('aria-label','Время '+time+' минут, начальная масса '+start+' мг, оставшаяся масса '+fmt(amount,4)+' мг.');
+}
+[m0,tau,t].forEach(function(el){el.addEventListener('input',drawDecay);});
+$('resetDecay').addEventListener('click',function(){m0.value=40;tau.value=10;t.value=30;drawDecay();m0.focus();});
+const p=$('pInitial'),compress=$('compression'),exponent=$('exponent');
+function drawGas(){
+const initial=Number(p.value)*100000,c=Number(compress.value),k=Number(exponent.value);
+const v1=.016,v2=v1/c,ratio=Math.pow(c,k),second=initial*ratio;
+$('pInitialOut').textContent=fmt(initial/100000)+' · 10⁵ Па';
+$('vFinalBar').setAttribute('width',570/c);
+$('volumePair').textContent=fmt(v1,4)+' → '+fmt(v2,5)+' м³';
+$('pressurePair').textContent=fmt(initial)+' → '+fmt(second,2)+' Па';
+$('pressureRatio').textContent=fmt(ratio,4);
+$('gasRatioLabel').textContent='Отношение давлений: '+fmt(ratio,4);
+$('gCompress').textContent=fmt(c);
+const rational=k===1?[1,1]:k===2?[2,1]:[5,3];
+$('gNumerator').textContent=rational[0];$('gDenominator').textContent=rational[1];$('gRatio').textContent=fmt(ratio,4);
+$('gasInsight').textContent=c===1?'Без изменения объёма давление остаётся прежним.':'Если объём уменьшается в '+c+' раза, давление при показателе '+(k===1?'1':k===2?'2':'5/3')+' увеличивается в '+fmt(ratio,4)+' раза.';
+}
+[p,compress,exponent].forEach(function(el){el.addEventListener('input',drawGas);el.addEventListener('change',drawGas);});
+$('resetGas').addEventListener('click',function(){p.value='2';compress.value='8';exponent.value='1.6666666666666667';drawGas();p.focus();});
+const tabs=[$('tab-decay'),$('tab-gas')],panels=[$('decay'),$('gas')];
+function switchMode(mode,focus){
+const ix=mode==='gas'?1:0;
+tabs.forEach(function(tab,i){tab.setAttribute('aria-selected',String(i===ix));tab.tabIndex=i===ix?0:-1;panels[i].hidden=i!==ix;});
+if(focus)tabs[ix].focus();
+}
+tabs.forEach(function(tab,i){
+tab.addEventListener('click',function(){location.hash=panels[i].id;switchMode(panels[i].id,false);});
+tab.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const j=(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length;location.hash=panels[j].id;switchMode(panels[j].id,true);}});
+});
+window.addEventListener('hashchange',function(){switchMode(location.hash==='#gas'?'gas':'decay',false);});
+switchMode(location.hash==='#gas'?'gas':'decay',false);
+drawDecay();drawGas();
+})();
+</script>
+</body></html>
