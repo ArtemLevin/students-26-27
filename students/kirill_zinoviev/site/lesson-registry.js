@@ -3,6 +3,80 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-01",
+  "ktpRefs": [],
+  "href": "01.11.26.html",
+  "title": "Статистические характеристики и частоты",
+  "navTitle": "Статистические характеристики и частоты",
+  "navSubtitle": "Статистика, 7 класс: повторение среднего арифметического, медианы и размаха; абсолютная и относительная частоты, таблица распределения, перевод долей в проценты и 10 заданий.",
+  "summary": "Статистика, 7 класс: повторение среднего арифметического, медианы и размаха; абсолютная и относительная частоты, таблица распределения, перевод долей в проценты и 10 заданий.",
+  "topics": [
+    "среднее арифметическое и неизвестное значение",
+    "медиана упорядоченного ряда",
+    "размах и крайние значения",
+    "объём выборки и абсолютные частоты",
+    "относительные частоты и проценты",
+    "проверка таблицы частот"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "stats_2",
+      "evidenceAnchor": "frequency",
+      "relation": "practiced",
+      "label": "Составлять таблицу распределения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "stats_3",
+      "evidenceAnchor": "frequency",
+      "relation": "practiced",
+      "label": "Находить абсолютную частоту",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "stats_4",
+      "evidenceAnchor": "relative",
+      "relation": "practiced",
+      "label": "Вычислять относительную частоту",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "stats_5",
+      "evidenceAnchor": "mean",
+      "relation": "practiced",
+      "label": "Среднее арифметическое и обратные задачи",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "stats_6",
+      "evidenceAnchor": "median",
+      "relation": "practiced",
+      "label": "Медиана числового ряда",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "stats_8",
+      "evidenceAnchor": "range",
+      "relation": "practiced",
+      "label": "Размах и крайние значения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "stats_12",
+      "evidenceAnchor": "mean",
+      "relation": "touched",
+      "label": "Сравнение статистических характеристик",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "01.11.26.html",
+    "pdf": "../pdf_docs/01.11.26.pdf",
+    "tex": "../tex_docs/01.11.26.tex",
+    "lab": "01.11.26-lab.html"
+  }
+},
+{
   "date": "2026-10-28",
   "ktpRefs": [],
   "href": "28.10.26.html",
