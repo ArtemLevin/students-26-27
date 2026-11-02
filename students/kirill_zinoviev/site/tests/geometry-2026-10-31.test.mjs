@@ -25,7 +25,7 @@ test('31 October geometry lesson has exactly 10 source exercises and valid evide
     assert.equal(outcome.masteryClaim,null);
   }
   assert.ok(page.includes('31.10.26-lab.html?mode=median'));
-  assert.ok(lab.includes('31.10.26.html#bisector'));
+  assert.ok(lab.includes("anchor:'#bisector'")&&lab.includes("'31.10.26.html'+c.anchor"));
   assert.ok(fs.existsSync('students/kirill_zinoviev/pdf_docs/31.10.26.pdf'));
   assert.ok(fs.existsSync('students/kirill_zinoviev/tex_docs/31.10.26.tex'));
 });
