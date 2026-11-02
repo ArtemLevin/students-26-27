@@ -77,6 +77,80 @@ export const LESSONS=[
   }
 },
 {
+  "date": "2026-10-31",
+  "ktpRefs": [],
+  "href": "31.10.26.html",
+  "title": "От геометрического свойства к уравнению",
+  "navTitle": "Медиана и биссектриса: уравнения",
+  "navSubtitle": "Геометрия, 7 класс: медиана и биссектриса в задачах с переменной; нахождение частей стороны и угла, периметр, проверка по смыслу, 10 упражнений и лаборатория.",
+  "summary": "Геометрия, 7 класс: медиана и биссектриса в задачах с переменной; нахождение частей стороны и угла, периметр, проверка по смыслу, 10 упражнений и лаборатория.",
+  "topics": [
+    "медиана: равенство частей стороны",
+    "биссектриса: равенство частей угла",
+    "уравнения с переменной в обеих частях",
+    "периметр треугольника с медианой",
+    "высота и совпадение трёх свойств",
+    "проверка решения подстановкой"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "triangles_5",
+      "evidenceAnchor": "median",
+      "relation": "practiced",
+      "label": "Применять свойство медианы в расчётах",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "triangles_6",
+      "evidenceAnchor": "bisector",
+      "relation": "practiced",
+      "label": "Применять свойство биссектрисы к углам",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "triangles_7",
+      "evidenceAnchor": "roles",
+      "relation": "touched",
+      "label": "Распознавать высоту по перпендикулярности",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "equations_7",
+      "evidenceAnchor": "median",
+      "relation": "practiced",
+      "label": "Решать уравнения с переменной в обеих частях",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "equations_2",
+      "evidenceAnchor": "check",
+      "relation": "practiced",
+      "label": "Проверять найденное значение подстановкой",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "geo_reason_1",
+      "evidenceAnchor": "perimeter",
+      "relation": "practiced",
+      "label": "Находить периметр указанного треугольника",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "geo_reason_8",
+      "evidenceAnchor": "median",
+      "relation": "practiced",
+      "label": "Выполнять чертёж и обозначать данные",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "31.10.26.html",
+    "pdf": "../pdf_docs/31.10.26.pdf",
+    "tex": "../tex_docs/31.10.26.tex",
+    "lab": "31.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-28",
   "ktpRefs": [],
   "href": "28.10.26.html",
