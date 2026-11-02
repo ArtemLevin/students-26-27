@@ -3,6 +3,91 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-01",
+  "ktpRefs": [],
+  "href": "01.11.26.html",
+  "title": "Кусочные функции и число пересечений",
+  "navTitle": "Кусочные функции и число пересечений",
+  "navSubtitle": "Занятие Софии Кальней 1 ноября 2026 года: замена переменной, движение с остановкой, кусочные функции, гиперболы и число пересечений с y=kx.",
+  "summary": "Занятие Софии Кальней 1 ноября 2026 года: замена переменной, движение с остановкой, кусочные функции, гиперболы и число пересечений с y=kx.",
+  "topics": [
+    "Замена переменной в дробно-рациональных уравнениях",
+    "Встречное движение с остановкой",
+    "Построение кусочных функций и граничных точек",
+    "Число пересечений с прямой y = kx"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_20_1_1",
+      "evidenceAnchor": "substitution",
+      "relation": "practiced",
+      "label": "Замена переменной в рациональном уравнении",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_20_1_2",
+      "evidenceAnchor": "substitution",
+      "relation": "touched",
+      "label": "ОДЗ при замене 1/x",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_21_2_2",
+      "evidenceAnchor": "motion",
+      "relation": "practiced",
+      "label": "Таблица движения с остановкой",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_21_2_3",
+      "evidenceAnchor": "motion",
+      "relation": "touched",
+      "label": "Уравнение для встречи велосипедистов",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_22_2_1",
+      "evidenceAnchor": "theory",
+      "relation": "practiced",
+      "label": "Построение ветвей гиперболы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_22_3_1",
+      "evidenceAnchor": "theory",
+      "relation": "practiced",
+      "label": "Построение кусочной функции по областям",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_22_3_3",
+      "evidenceAnchor": "discontinuity",
+      "relation": "practiced",
+      "label": "Граничные и выколотые точки",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_22_3_5",
+      "evidenceAnchor": "parameter",
+      "relation": "touched",
+      "label": "Число пересечений с прямой y = kx",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_22_2_5",
+      "evidenceAnchor": "parameter",
+      "relation": "touched",
+      "label": "Пересечение гиперболы с прямой y = kx",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "01.11.26.html",
+    "tex": "../tex_docs/01.11.26.tex",
+    "lab": "01.11.26-lab.html"
+  }
+},
+{
   "date": "2026-10-21",
   "ktpRefs": [],
   "href": "21.10.26.html",

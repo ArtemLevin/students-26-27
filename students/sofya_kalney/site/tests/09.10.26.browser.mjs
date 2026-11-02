@@ -126,7 +126,7 @@ try{
   await snapshot('sofya-lesson-mobile-dark');
   await navigate('index.html',390,844);
   await sleep(400);
-  assert.equal(await run("document.querySelector('#lesson-title')?.textContent.includes('Биссектриса и отношения отрезков')"),true,'New lesson not shown in dashboard');
+  assert.equal(await run("document.querySelector('#lesson-title')?.textContent.includes('Кусочные функции и число пересечений')"),true,'New lesson not shown in dashboard');
   await snapshot('sofya-index-mobile');
   await navigate('index.html',1440,900);
   await sleep(400);
@@ -243,6 +243,33 @@ try{
   await snapshot('sofya-20261021-lab-desktop');
   await navigate('21.10.26-lab.html',390,844,true);
   await snapshot('sofya-20261021-lab-mobile-dark');
+
+  // 1 November: new lesson + piecewise-graph laboratory; verify responsive and exact boundaries.
+  for(const [w,h] of [[375,812],[768,1024],[1440,900]]){
+    for(const name of ['01.11.26.html','01.11.26-lab.html']){
+      await navigate(name,w,h,false);
+      await navigate(name,w,h,true);
+    }
+  }
+  await navigate('01.11.26.html',1440,900);
+  assert.equal(await run("document.querySelectorAll('.workbook article').length"),10,'November 1 training must have ten tasks');
+  assert.equal(await run("['substitution','motion','theory','parameter','discontinuity','practice'].every(id=>!!document.getElementById(id))"),true,'November 1 evidence anchors missing');
+  assert.equal(await run("document.querySelector('a[href=\"../images/01.11.26.svg\"]')!==null"),true,'November 1 poster missing');
+  await snapshot('sofya-20261101-lesson-desktop');
+  await navigate('01.11.26-lab.html',1440,900);
+  assert.equal(await run("document.querySelector('#count').textContent"),'3 точки','At k=-1 f must have three intersections');
+  await run("(()=>{document.querySelector('#k').value='-1.5';document.querySelector('#k').dispatchEvent(new Event('input',{bubbles:true}));return true})()");
+  assert.equal(await run("document.querySelector('#count').textContent"),'2 точки','At k=-1.5 f must have two intersections');
+  await run("document.querySelector('#modeG').click()");
+  await run("(()=>{document.querySelector('#k').value='-2';document.querySelector('#k').dispatchEvent(new Event('input',{bubbles:true}));return true})()");
+  assert.equal(await run("document.querySelector('#count').textContent"),'0 точек','At k=-2 g must have no intersections');
+  await run("(()=>{document.querySelector('#k').value='0.75';document.querySelector('#k').dispatchEvent(new Event('input',{bubbles:true}));return true})()");
+  assert.equal(await run("document.querySelector('#count').textContent"),'2 точки','At k=0.75 g must have two intersections');
+  await run("document.querySelector('#reset').click()");
+  assert.equal(await run("document.querySelector('#count').textContent"),'3 точки','November 1 lab reset must restore initial state');
+  await snapshot('sofya-20261101-lab-desktop');
+  await navigate('01.11.26-lab.html',390,844,true);
+  await snapshot('sofya-20261101-lab-mobile-dark');
 
   assert.deepEqual(jsErrors,[],'JavaScript errors');
   assert.deepEqual(badRequests,[],'Network errors');
