@@ -3,6 +3,66 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-10-31",
+  "ktpRefs": [],
+  "href": "31.10.26.html",
+  "title": "Логарифмические неравенства",
+  "navTitle": "Логарифмические неравенства",
+  "navSubtitle": "Логарифмические неравенства: область допустимых значений, чётная степень и модуль, замена переменной, объединение промежутков и переменное основание. Чек-лист Тимофея Васильченко от 31 октября 2026 года.",
+  "summary": "Логарифмические неравенства: область допустимых значений, чётная степень и модуль, замена переменной, объединение промежутков и переменное основание. Чек-лист Тимофея Васильченко от 31 октября 2026 года.",
+  "topics": [
+    "Логарифмические неравенства",
+    "Область допустимых значений логарифма",
+    "Логарифмические преобразования и модуль",
+    "Замена переменной",
+    "Системы и совокупности промежутков",
+    "Неравенства с переменным основанием"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t7_log_var",
+      "evidenceAnchor": "powers",
+      "relation": "practiced",
+      "label": "Логарифмические преобразования",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t15_log_basic",
+      "evidenceAnchor": "variable-base",
+      "relation": "touched",
+      "label": "Логарифмические неравенства",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t15_log_rational",
+      "evidenceAnchor": "substitution",
+      "relation": "practiced",
+      "label": "Квадратное неравенство после замены",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t15_systems_log",
+      "evidenceAnchor": "modulus",
+      "relation": "practiced",
+      "label": "Системы, совокупности и модуль",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t15_log_other",
+      "evidenceAnchor": "variable-base",
+      "relation": "touched",
+      "label": "Основание, зависящее от переменной",
+      "practiceDisposition": "none"
+    }
+  ],
+  "materials": {
+    "html": "31.10.26.html",
+    "pdf": "../pdf_docs/31.10.26.pdf",
+    "tex": "../tex_docs/31.10.26.tex",
+    "lab": "31.10.26-lab.html"
+  }
+},
+{
   "date": "2026-10-27",
   "ktpRefs": [],
   "href": "27.10.26.html",
