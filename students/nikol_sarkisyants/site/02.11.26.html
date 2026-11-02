@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Занятие Николь Саркисьянц от 2 ноября 2026: описательная статистика, среднее, медиана, мода, частоты, дисперсия, стандартное отклонение и 10 упражнений.">
+<title>Описательная статистика · 02.11.26 · Николь Саркисьянц</title>
+<style>
+:root{color-scheme:light;--bg:#f7f4ee;--paper:#fffdf8;--ink:#282329;--muted:#68636a;--line:#d9cfc9;--accent:#783e50;--accent2:#225f62;--wash:#f2e7e8;--soft:#e8f0ec;--focus:#ba783d}
+html[data-theme=dark]{color-scheme:dark;--bg:#17191c;--paper:#25272c;--ink:#f2ecea;--muted:#c5babe;--line:#505054;--accent:#e9acbb;--accent2:#8ed6cb;--wash:#33272e;--soft:#263a3a;--focus:#ffca83}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:1.2rem}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.68 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--accent2);text-underline-offset:4px}a:hover{text-decoration-thickness:2px}button{font:inherit;color:inherit;cursor:pointer}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{position:absolute;left:1rem;top:-5rem;padding:.6rem;background:var(--paper);z-index:20}.skip:focus{top:1rem}
+.container{width:min(1120px,calc(100% - 3rem));margin:0 auto}
+.top{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;padding:1.15rem 0;border-bottom:1px solid var(--line)}
+.top a,.top button{font-size:.9rem;color:var(--ink);text-decoration:none;border:1px solid var(--line);padding:.52rem .78rem;min-height:44px;background:var(--paper);display:inline-flex;align-items:center}
+.top .folio{margin-left:auto;color:var(--muted);font:.82rem/1.5 ui-monospace,Consolas,monospace}
+.tag,.number{font:.75rem/1.4 ui-monospace,Consolas,monospace;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(260px,.95fr);gap:clamp(2rem,5vw,5rem);align-items:center;padding:clamp(3rem,7vw,6rem) 0}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:500;line-height:1.12;letter-spacing:-.025em}h1{font-size:clamp(3rem,7vw,6.3rem);margin:1rem 0 1.2rem;max-width:11ch}h2{font-size:clamp(2rem,4vw,3rem);margin:.3rem 0 1.1rem}h3{font-size:1.45rem;margin:1.1rem 0 .5rem}
+.lead{font-size:1.16rem;color:var(--muted);max-width:57ch}
+.byline{font-size:.88rem;color:var(--muted);margin-top:2.2rem}
+.hero-art{margin:0;position:relative;background:var(--paper);padding:2rem 1.2rem;border-top:4px solid var(--accent)}
+.hero-art figcaption{font:.83rem/1.5 ui-monospace,Consolas,monospace;color:var(--muted);margin:1rem .6rem 0}
+.hero-art svg{display:block;width:100%;height:auto;overflow:visible}
+.route{display:flex;flex-wrap:wrap;gap:0;border-block:1px solid var(--line)}
+.route a{padding:.82rem .88rem;border-right:1px solid var(--line);font-size:.86rem;color:var(--ink);font-weight:600;text-decoration:none}
+.route a:hover{background:var(--wash)}
+.chapter{padding:clamp(3.3rem,6.4vw,5.6rem) 0;border-bottom:1px solid var(--line)}
+.chapter-head{display:grid;grid-template-columns:9.3rem minmax(0,1fr);gap:2rem;align-items:start;margin-bottom:1.7rem}
+.chapter-head .intro{color:var(--muted);max-width:64ch;margin:0}
+.cols{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(230px,.85fr);gap:clamp(2rem,6vw,5.5rem)}
+p{margin:0 0 1.1rem}.pull{font:500 clamp(1.35rem,2.5vw,1.85rem)/1.48 Georgia,serif;color:var(--accent)}
+.example{border-top:2px solid var(--accent);padding:1rem 0;margin:1.5rem 0}
+.equation{display:block;max-width:100%;overflow-x:auto;font:1.28rem/1.7 Georgia,serif;color:var(--accent2);padding:.55rem 0;text-align:center;white-space:nowrap}
+.equation math{font-size:1.12em}.small{color:var(--muted);font-size:.92rem}.inline{white-space:nowrap}
+.data-row{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.15rem 0}.datum{min-width:2.8rem;text-align:center;font:1.3rem Georgia,serif;border-bottom:2px solid var(--line);padding:.45rem .45rem}.datum.active{color:var(--accent);border-color:var(--accent)}
+.rule{border-top:1px solid var(--line);padding:1.1rem 0}.rule strong{color:var(--accent)}.rule:last-child{border-bottom:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}caption{text-align:left;color:var(--muted);margin-bottom:.55rem;font-size:.85rem}th{text-align:left;font-size:.83rem;color:var(--accent)}td,th{padding:.72rem .55rem;border-bottom:1px solid var(--line)}tfoot td{font-weight:700}
+.method{padding-left:1.2rem;border-left:3px solid var(--accent)}.method p{margin:.7rem 0}
+.link-panel{display:flex;align-items:center;justify-content:space-between;gap:1rem;border-block:2px solid var(--accent);margin:2rem 0;padding:1.3rem 0;color:var(--ink);text-decoration:none}
+.link-panel strong{font:1.55rem Georgia,serif}.link-panel small{display:block;color:var(--muted)}.link-panel b{font-size:1.9rem;color:var(--accent)}
+.comparison{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}.comparison>div{border-top:2px solid var(--line);padding:1.1rem .25rem}.comparison b{font:2rem Georgia,serif;color:var(--accent);display:block}.comparison span{color:var(--muted)}
+.notice{padding:.9rem 1rem;border-left:3px solid var(--accent2);background:var(--soft)}
+.tasks{list-style:none;margin:0;padding:0;counter-reset:t}
+.tasks li{counter-increment:t;display:grid;grid-template-columns:3rem minmax(0,1fr);gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line)}
+.tasks li::before{content:counter(t,decimal-leading-zero);font:1.5rem Georgia,serif;color:var(--accent)}
+.answer{border-bottom:1px solid var(--line);padding:.4rem 0}.answer summary{cursor:pointer;list-style-position:outside;padding:.6rem;font-weight:650}.answer p{margin:.3rem 0 .7rem;padding-left:1.5rem}
+.checks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1.5rem 0}
+.checks label{display:flex;gap:.7rem;padding:1rem 0;border-top:1px solid var(--line);align-items:flex-start}
+.checks input{width:21px;height:21px;accent-color:var(--accent);flex:none;margin-top:.25rem}
+.poster{display:block;width:100%;height:auto;max-width:880px;margin:auto;border:1px solid var(--line)}
+footer{padding:2.5rem 0;color:var(--muted);font-size:.85rem}
+@media(max-width:800px){.hero,.cols{grid-template-columns:1fr}.hero-art{max-width:620px}.chapter-head{grid-template-columns:1fr;gap:.5rem}.checks{grid-template-columns:1fr}}
+@media(max-width:520px){.container{width:calc(100% - 1.4rem)}.top .folio{margin-left:0;width:100%}h1{font-size:clamp(2.65rem,12vw,3.5rem)}.comparison{grid-template-columns:1fr}.route a{padding:.7rem .55rem}.tasks li{gap:.3rem;grid-template-columns:2.3rem 1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{html,html[data-theme=dark]{--bg:#fff;--paper:#fff;--ink:#111;--muted:#444;--line:#bbb;--accent:#333;--accent2:#333;--wash:#fff;--soft:#fff}.top,.route,.link-panel{display:none}.container{width:auto;margin:0 14mm}.hero{padding:0}.chapter{padding:1.3rem 0}.tasks li,.rule,.comparison>div{break-inside:avoid}details.answer{display:block}details.answer>summary{font-weight:700}details.answer:not([open])>*:not(summary){display:block}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">К основному материалу</a>
+<div class="container">
+<nav class="top" aria-label="Материалы">
+<a href="index.html">← Кабинет Николь</a>
+<a href="../pdf_docs/02.11.26.pdf" download>Пособие PDF</a>
+<a href="../tex_docs/02.11.26.tex" download>Исходник TeX</a>
+<a href="02.11.26-lab.html">Цифровая лаборатория</a>
+<button id="theme" type="button" aria-label="Переключить цветовую тему">Тёмная тема</button>
+<span class="folio">02.11.2026 · Математика / ЕГЭ</span>
+</nav>
+<main id="content">
+<header class="hero">
+<div><p class="tag">Учебный атлас / глава 02.11</p>
+<h1>Описательная статистика</h1>
+<p class="lead">Один набор чисел можно описать разными способами: найти центр, увидеть повторения и измерить, насколько далеко данные разбросаны от среднего.</p>
+<p class="byline">Николь Саркисьянц · Лёвин Артём Александрович</p></div>
+<figure class="hero-art">
+<p class="tag">Данные занятия / упорядоченный ряд</p>
+<svg viewBox="0 0 540 280" role="img" aria-labelledby="hero-title hero-desc">
+<title id="hero-title">Числа и их положение в упорядоченном ряду</title>
+<desc id="hero-desc">Для ряда 1, 2, 3, 4, 5, 10, 15 медиана — 4, среднее — около 5,71. Точки расположены на числовой оси по значению.</desc>
+<line x1="48" y1="195" x2="493" y2="195" stroke="var(--muted)" stroke-width="1.5"/>
+<g fill="none" stroke="var(--line)" stroke-width="1">
+<path d="M48 189v13 M176 189v13 M304 189v13 M432 189v13"/>
+</g>
+<g font-size="15" fill="var(--muted)" text-anchor="middle"><text x="48" y="225">1</text><text x="176" y="225">5</text><text x="304" y="225">9</text><text x="432" y="225">13</text></g>
+<g fill="var(--accent2)"><circle cx="48" cy="195" r="8"/><circle cx="80" cy="195" r="8"/><circle cx="112" cy="195" r="8"/><circle cx="144" cy="195" r="10"/><circle cx="176" cy="195" r="8"/><circle cx="336" cy="195" r="8"/><circle cx="496" cy="195" r="8"/></g>
+<path d="M144 193V78" stroke="var(--accent)" stroke-width="2"/><path d="M198.86 195V115" stroke="var(--accent)" stroke-dasharray="5 5" stroke-width="2"/>
+<g fill="var(--accent)" font-family="Georgia,serif" font-size="23"><text x="110" y="57">Me = 4</text><text x="205" y="107">x̄ ≈ 5,71</text></g>
+<g fill="var(--muted)" font-size="14"><text x="48" y="262">минимум</text><text x="435" y="262">максимум</text></g>
+</svg>
+<figcaption>Медиана и среднее могут находиться в разных точках числового ряда.</figcaption>
+</figure>
+</header>
+<nav class="route" aria-label="Разделы занятия">
+<a href="#overview">01 · Ряд</a><a href="#center">02 · Центр</a><a href="#frequency">03 · Частоты</a><a href="#variance">04 · Разброс</a><a href="#outlier">05 · Выброс</a><a href="#practice">06 · Практика</a><a href="#answers">Ответы</a>
+</nav>
+<section class="chapter" id="overview">
+<div class="chapter-head"><p class="number">01 / первые действия</p><div><h2>От набора чисел к порядку</h2><p class="intro">Статистическое описание начинаем с упорядочивания всех значений. Повторяющиеся числа сохраняем.</p></div></div>
+<div class="cols">
+<div><p>Данные из занятия:</p><div class="data-row" aria-label="Исходный ряд: 1, 3, 5, 4, 10, 2, 15"><span class="datum">1</span><span class="datum">3</span><span class="datum">5</span><span class="datum">4</span><span class="datum">10</span><span class="datum">2</span><span class="datum">15</span></div>
+<p class="tag">Упорядоченный ряд</p><div class="data-row" aria-label="Упорядоченный ряд: 1, 2, 3, 4, 5, 10, 15"><span class="datum">1</span><span class="datum">2</span><span class="datum">3</span><span class="datum active">4</span><span class="datum">5</span><span class="datum">10</span><span class="datum">15</span></div>
+<p class="small">Объём выборки — количество всех элементов, здесь <strong>N = 7</strong>.</p></div>
+<div class="method"><p class="pull">«Сначала расположите числа по неубыванию».</p><p>Это позволит без лишних пересчётов найти медиану, крайние значения и размах.</p></div>
+</div>
+</section>
+<section class="chapter" id="center">
+<div class="chapter-head"><p class="number">02 / положения и повторения</p><div><h2>Среднее · медиана · мода · размах</h2><p class="intro">Каждая характеристика отвечает на свой вопрос о данных.</p></div></div>
+<div class="cols"><div>
+<div class="rule"><strong>Среднее арифметическое</strong><p>Сумма всех чисел, делённая на их количество.</p><div class="equation" role="math" aria-label="Среднее равно сорок седьмых, приблизительно пять целых семьдесят одна сотая"><math display="block"><mrow><mover><mi>x</mi><mo>¯</mo></mover><mo>=</mo><mfrac><mn>40</mn><mn>7</mn></mfrac><mo>≈</mo><mn>5,71</mn></mrow></math></div></div>
+<div class="rule"><strong>Медиана (Me)</strong><p>Число в середине <em>упорядоченного</em> ряда. При нечётном количестве берём центральное значение; при чётном — среднее двух центральных.</p><div class="equation">1, 2, 3, <strong>4</strong>, 5, 10, 15 → Me = 4</div><p class="small">Для ряда 1, 2, 3, 4, 5, 10 медиана равна (3 + 4) / 2 = 3,5.</p></div>
+<div class="rule"><strong>Мода (Mo)</strong><p>Наиболее часто встречающееся значение; мод может быть несколько. В ряду 1, 1, 3, 3, 3, 5, 5, 10, 10 мода равна 3.</p></div>
+<div class="rule"><strong>Размах (R)</strong><p>Максимум минус минимум.</p><div class="equation">R = 15 − 1 = 14</div></div>
+</div>
+<div><h3>Алгоритм нахождения медианы</h3><div class="method">
+<p><strong>1.</strong> Упорядочьте числа, сохраняя повторения.</p><p><strong>2.</strong> Посчитайте N.</p><p><strong>3.</strong> Нечётное N: найдите одно центральное число.</p><p><strong>4.</strong> Чётное N: сложите два центральных и разделите на 2.</p>
+</div><p class="notice">Среднее не обязано совпадать с элементом ряда. Медиана не обязана совпадать со средним.</p></div>
+</div>
+</section>
+<section class="chapter" id="frequency">
+<div class="chapter-head"><p class="number">03 / вес значений</p><div><h2>Таблица частот</h2><p class="intro">Когда значения повторяются, вместо длинного ряда можно указать, сколько раз встретилось каждое число.</p></div></div>
+<div class="cols"><div>
+<table><caption>Таблица из пособия: объём выборки N = 11</caption><thead><tr><th scope="col">Значение xᵢ</th><th scope="col">Частота nᵢ</th><th scope="col">Доля pᵢ</th><th scope="col">Проценты</th></tr></thead><tbody>
+<tr><td>1</td><td>3</td><td>3/11</td><td>27,27%</td></tr>
+<tr><td>2</td><td>2</td><td>2/11</td><td>18,18%</td></tr>
+<tr><td>3</td><td>5</td><td>5/11</td><td>45,45%</td></tr>
+<tr><td>4</td><td>1</td><td>1/11</td><td>9,09%</td></tr>
+</tbody><tfoot><tr><td>Итого</td><td>11</td><td>1</td><td>≈100%</td></tr></tfoot></table>
+</div>
+<div><div class="rule"><strong>Абсолютная частота nᵢ</strong><p>Количество появлений данного значения.</p></div>
+<div class="rule"><strong>Относительная частота pᵢ</strong><p>Абсолютная частота, делённая на объём выборки.</p><div class="equation">pᵢ = nᵢ / N</div><p>Чтобы получить проценты, умножьте долю на 100%.</p></div>
+<div class="rule"><strong>Контроль</strong><p>Сумма всех абсолютных частот равна N. Сумма всех долей равна единице (100%).</p></div></div></div>
+<a class="link-panel" href="02.11.26-lab.html#frequency"><span><strong>Исследовать частоты</strong><small>Изменяйте количество повторений и наблюдайте, как перестраиваются характеристики.</small></span><b aria-hidden="true">↗</b></a>
+</section>
+<section class="chapter" id="variance">
+<div class="chapter-head"><p class="number">04 / расстояние до среднего</p><div><h2>Дисперсия и стандартное отклонение</h2><p class="intro">Дисперсия усредняет квадраты расстояний от каждого значения до среднего, учитывая абсолютные частоты.</p></div></div>
+<div class="cols"><div>
+<p class="pull">Сначала среднее. Затем квадраты отклонений. Затем учёт частот. Затем деление на N.</p>
+<div class="equation" role="math" aria-label="Дисперсия равна сумме n и умножить на квадрат отклонения x и от среднего, делённой на N"><math display="block"><mrow><mi>D</mi><mo>=</mo><mfrac><mrow><mo>∑</mo><msub><mi>n</mi><mi>i</mi></msub><msup><mrow><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mover><mi>x</mi><mo>¯</mo></mover><mo>)</mo></mrow><mn>2</mn></msup></mrow><mi>N</mi></mfrac></mrow></math></div>
+<p>Для таблицы 1, 2, 3, 4 с частотами 3, 2, 5, 1:</p>
+<div class="method"><p><strong>Среднее:</strong> (3·1 + 2·2 + 5·3 + 1·4) / 11 = 26/11 ≈ 2,36.</p><p><strong>Сумма квадратов:</strong> 3·1² + 2·2² + 5·3² + 1·4² = 72.</p><p><strong>Дисперсия:</strong> D = 72/11 − (26/11)² = 116/121 ≈ 0,959.</p><p><strong>Отклонение:</strong> σ = √D ≈ 0,98.</p></div>
+</div><div>
+<div class="rule"><strong>Удобная формула</strong><div class="equation">D = (∑ nᵢxᵢ²) / N − (x̄)²</div><p>Вторая форма приводит к тому же результату.</p></div>
+<div class="rule"><strong>Интервал в одно отклонение</strong><div class="equation">[x̄ − σ; x̄ + σ]</div><p>Здесь приблизительно [1,38; 3,34]. Внутри находятся значения 2 и 3: вместе 7 наблюдений из 11.</p></div>
+<p class="notice">Интервал помогает оценить разброс. Он не гарантирует попадание случайного значения в эти границы.</p></div></div>
+<a class="link-panel" href="02.11.26-lab.html#spread"><span><strong>Как меняется разброс?</strong><small>Исследовательская модель одновременно пересчитывает среднее, медиану, дисперсию, σ и доли.</small></span><b aria-hidden="true">↗</b></a>
+</section>
+<section class="chapter" id="outlier">
+<div class="chapter-head"><p class="number">05 / устойчивость</p><div><h2>Выброс и два разных центра</h2><p class="intro">Очень большое или очень маленькое наблюдение может заметно сдвинуть среднее, при этом медиана изменится гораздо слабее.</p></div></div>
+<div class="comparison">
+<div><p class="tag">До добавления 100</p><h3>2, 3, 4, 5, 6</h3><b>4</b><span>среднее = 4 · медиана = 4</span></div>
+<div><p class="tag">После добавления 100</p><h3>2, 3, 4, 5, 6, 100</h3><b>20 / 4,5</b><span>среднее = 20 · медиана = 4,5</span></div></div>
+<p style="margin-top:1.6rem">Большой выброс изменяет среднее сильнее медианы. Выбор характеристики зависит от того, какую особенность распределения требуется описать.</p>
+<a class="link-panel" href="02.11.26-lab.html#outlier"><span><strong>Сравнить до и после</strong><small>Посмотрите на влияние сотни в цифровой лаборатории.</small></span><b aria-hidden="true">↗</b></a>
+</section>
+<section class="chapter" id="practice">
+<div class="chapter-head"><p class="number">06 / путь А</p><div><h2>10 упражнений</h2><p class="intro">Задания из чек-листа 02.11.2026: от простых характеристик к полному описанию выборки.</p></div></div>
+<ol class="tasks">
+<li>Упорядочьте числа 8, 2, 6, 4. Найдите медиану и размах.</li>
+<li>Для чисел 1, 3, 5, 7, 9 вычислите среднее арифметическое и медиану.</li>
+<li>Для ряда 5, 5, 5, 10, 10, 15 найдите моду, медиану, среднее и размах.</li>
+<li>Даны числа −4, −1, −1, 2, 4, 9. Найдите среднее, медиану, моду и размах.</li>
+<li>Среднее арифметическое пяти чисел 5, 11, x, 15, 19 равно 12. Найдите x.</li>
+<li>Даны числа 3, 4, 5, 6, 7. К ряду добавили 105. Найдите среднее и медиану до и после добавления.</li>
+<li>Дан ряд 4, 2, 4, 6, 2, 4. Составьте таблицу абсолютных и относительных частот; найдите среднее и моду.</li>
+<li>Для ряда 2, 4, 6, 8 вычислите дисперсию, стандартное отклонение и интервал [x̄ − σ; x̄ + σ].</li>
+<li>В выборке число 1 встречается 2 раза, число 3 — 3 раза, число 5 — 1 раз. По таблице частот вычислите среднее, дисперсию и стандартное отклонение.</li>
+<li>В выборке числа 1, 3, 5, 7 имеют абсолютные частоты 3, 2, 3, 2 соответственно. Найдите N, моду (или моды), медиану, среднее, размах, дисперсию, стандартное отклонение и интервал [x̄ − σ; x̄ + σ].</li>
+</ol>
+</section>
+<section class="chapter" id="answers">
+<div class="chapter-head"><p class="number">07 / самопроверка</p><div><h2>Ответы</h2><p class="intro">Раскройте только выполненное задание, чтобы сверить результат.</p></div></div>
+<details class="answer"><summary>Задание 1</summary><p>2, 4, 6, 8; Me = 5; R = 6.</p></details>
+<details class="answer"><summary>Задание 2</summary><p>x̄ = 5; Me = 5.</p></details>
+<details class="answer"><summary>Задание 3</summary><p>Mo = 5; Me = 7,5; x̄ = 25/3 ≈ 8,33; R = 10.</p></details>
+<details class="answer"><summary>Задание 4</summary><p>x̄ = 1,5; Me = 0,5; Mo = −1; R = 13.</p></details>
+<details class="answer"><summary>Задание 5</summary><p>x = 10.</p></details>
+<details class="answer"><summary>Задание 6</summary><p>До: x̄ = 5, Me = 5. После: x̄ = 65/3 ≈ 21,67, Me = 5,5.</p></details>
+<details class="answer"><summary>Задание 7</summary><p>Для значений 2, 4, 6: частоты 2, 3, 1; доли 1/3, 1/2, 1/6; x̄ = 11/3; Mo = 4.</p></details>
+<details class="answer"><summary>Задание 8</summary><p>D = 5; σ = √5 ≈ 2,24; интервал [5 − √5; 5 + √5] ≈ [2,76; 7,24].</p></details>
+<details class="answer"><summary>Задание 9</summary><p>x̄ = 8/3; D = 17/9; σ = √17/3 ≈ 1,37.</p></details>
+<details class="answer"><summary>Задание 10</summary><p>N = 10; моды 1 и 5; Me = 4; x̄ = 3,8; R = 6; D = 4,96; σ = 2√31/5 ≈ 2,23; интервал [1,57; 6,03].</p></details>
+</section>
+<section class="chapter" id="summary">
+<div class="chapter-head"><p class="number">08 / повторить</p><div><h2>Памятка</h2><p class="intro">Отметки сохраняются только на Вашем устройстве и не меняют оценку на карте компетенций.</p></div></div>
+<div class="checks"><label><input type="checkbox" data-check="central"><span>Различаю среднее, медиану, моду и размах.</span></label><label><input type="checkbox" data-check="frequency"><span>Составляю таблицу абсолютных и относительных частот.</span></label><label><input type="checkbox" data-check="spread"><span>Нахожу дисперсию, σ и интервал x̄ ± σ.</span></label></div>
+<h3>Акварельная карта темы</h3>
+<p class="small">Краткая визуальная памятка по материалу занятия.</p>
+<img class="poster" src="../images/02.11.26.png" alt="Акварельный постер: описательная статистика, среднее, медиана, мода, частоты, дисперсия, стандартное отклонение и основные ошибки" loading="lazy" decoding="async">
+</section>
+</main>
+<footer>Лёвин Артём Александрович · эксклюзивно для Николь Саркисьянц · 2 ноября 2026 года</footer>
+</div>
+<script>
+(()=>{'use strict';const root=document.documentElement,btn=document.getElementById('theme'),key='nikol-statistics-02-11-theme';
+try{root.dataset.theme=localStorage.getItem(key)==='dark'?'dark':'light'}catch{}function render(){btn.textContent=root.dataset.theme==='dark'?'Светлая тема':'Тёмная тема'}render();
+btn.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';render();try{localStorage.setItem(key,root.dataset.theme)}catch{}});
+document.querySelectorAll('input[data-check]').forEach(el=>{const k='nikol-statistics-02-11-'+el.dataset.check;try{el.checked=localStorage.getItem(k)==='1'}catch{}el.addEventListener('change',()=>{try{localStorage.setItem(k,el.checked?'1':'0')}catch{}})});
+})();
+</script>
+</body>
+</html>
