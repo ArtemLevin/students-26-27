@@ -206,13 +206,26 @@ try{
   assert.equal(await run("(()=>{dispatchEvent(new Event('afterprint'));return document.querySelectorAll('#ledger tr').length})()"),1);
 
   await navigate('index.html');
-  assert.ok(await run("document.querySelector('#lesson-title').textContent.includes('Тригонометрические')"));
-  assert.ok(await run("document.querySelector('#latestLessonCta').href.endsWith('/27.10.26.html')"));
+  assert.ok(await run("document.querySelector('#lesson-title').textContent.includes('Логарифмические')"));
+  assert.ok(await run("document.querySelector('#latestLessonCta').href.endsWith('/31.10.26.html')"));
   assert.equal(await run("document.querySelector('#latestLabLink').hidden"),false);
-  assert.ok(await run("document.querySelector('#latestLabLink').href.endsWith('/27.10.26-lab.html')"));
-  assert.ok(await run("document.querySelector('#latestPdfLink').href.endsWith('/27.10.26.pdf')"));
-  assert.ok(await run("document.querySelector('#latestTexLink').href.endsWith('/27.10.26.tex')"));
+  assert.ok(await run("document.querySelector('#latestLabLink').href.endsWith('/31.10.26-lab.html')"));
+  assert.ok(await run("document.querySelector('#latestPdfLink').href.endsWith('/31.10.26.pdf')"));
+  assert.ok(await run("document.querySelector('#latestTexLink').href.endsWith('/31.10.26.tex')"));
   assert.equal(await run("document.querySelectorAll('#recentLessons a[href=\"24.10.26.html\"]').length"),1);
+
+  await navigate('31.10.26.html');
+  assert.equal(await run("document.querySelectorAll('#tasks input[type=checkbox]').length"),10);
+  assert.equal(await run("document.querySelectorAll('.answer-grid dt').length"),10);
+  assert.equal(await run("document.querySelector('#progress-label').textContent"),'0 из 10');
+  assert.equal(await run("(()=>{document.querySelector('#task1').click();return document.querySelector('#progress-label').textContent})()"),'1 из 10');
+
+  await navigate('31.10.26-lab.html');
+  assert.equal(await run("document.querySelector('#t-value').textContent"),'0');
+  assert.equal(await run("document.querySelector('#status').dataset.valid"),'true');
+  assert.equal(await run("(()=>{document.querySelector('[data-x=\"4\"]').click();return document.querySelector('#status').textContent.includes('исключено')})()"),true);
+  assert.equal(await run("(()=>{document.querySelector('[data-x=\"4.5\"]').click();return document.querySelector('#status').dataset.valid})()"),'true');
+  await screenshot('timofey-inequality-lab-20261031');
 
   await navigate('27.10.26.html');
   assert.equal(await run("document.querySelectorAll('input[data-task]').length"),10);
