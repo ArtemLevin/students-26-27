@@ -1,0 +1,40 @@
+name: Kirill lesson publication 2026-11-04
+on:
+  push:
+    branches:
+      - feat/kirill-proportional-graph-20261104
+    paths:
+      - '.github/workflows/kirill-2026-11-04-publish.yml'
+      - 'students/kirill_zinoviev/site/04.11.26.html'
+      - 'students/kirill_zinoviev/site/04.11.26-lab.html'
+      - 'students/kirill_zinoviev/site/data/publication-intents/2026-11-04.json'
+      - 'students/kirill_zinoviev/site/data/practice-publications/2026-11-04.json'
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Dry-run canonical publisher
+        run: node scripts/publish-lesson.mjs kirill_zinoviev 04.11.26 --intent students/kirill_zinoviev/site/data/publication-intents/2026-11-04.json --dry-run
+      - name: Publish using canonical v2 publisher
+        run: node scripts/publish-lesson.mjs kirill_zinoviev 04.11.26 --intent students/kirill_zinoviev/site/data/publication-intents/2026-11-04.json
+      - name: Validate student site
+        run: |
+          node scripts/student.mjs validate kirill_zinoviev
+          node shared/practice/validate-configs.mjs
+          node shared/practice/audit-lesson-coverage.mjs
+      - name: Commit publisher output
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/kirill_zinoviev/site/
+          git diff --cached --quiet || git commit -m "Publish Kirill 04 Nov lesson through Student Platform v2"
+          git push
