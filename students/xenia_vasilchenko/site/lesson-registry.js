@@ -4,6 +4,95 @@ export const ARCHIVE_PAGE_SIZE=10;
 const MONTHS_GENITIVE=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
 export const LESSONS=[
+{
+  "date": "2026-11-03",
+  "ktpRefs": [],
+  "href": "03.11.26.html",
+  "title": "Дробь от числа и число по его дроби",
+  "navTitle": "Дробь от числа и число по его дроби",
+  "navSubtitle": "Дробь от числа и число по его дроби: три величины, три формулы, текстовые задачи, площадь и периметр прямоугольника, 10 упражнений. 3 ноября 2026 года.",
+  "summary": "Дробь от числа и число по его дроби: три величины, три формулы, текстовые задачи, площадь и периметр прямоугольника, 10 упражнений. 3 ноября 2026 года.",
+  "topics": [
+    "Дробь от числа",
+    "Число по известной доле",
+    "Распознавание целого и части в текстовой задаче",
+    "Десятичные дроби и проценты",
+    "Площадь и периметр прямоугольника"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "frac_base_01",
+      "evidenceAnchor": "relations",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "frac_ops_14",
+      "evidenceAnchor": "examples",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_15",
+      "evidenceAnchor": "examples",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_16",
+      "evidenceAnchor": "rectangle",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_01",
+      "evidenceAnchor": "language",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_17",
+      "evidenceAnchor": "examples",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_18",
+      "evidenceAnchor": "examples",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_16",
+      "evidenceAnchor": "relations",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "dec_04",
+      "evidenceAnchor": "examples",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "dec_14",
+      "evidenceAnchor": "examples",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "frac_ops_12",
+      "evidenceAnchor": "rectangle",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_15",
+      "evidenceAnchor": "rectangle",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "eq_16",
+      "evidenceAnchor": "rectangle",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "03.11.26.html",
+    "pdf": "../pdf_docs/03.11.26.pdf",
+    "tex": "../tex_docs/03.11.26.tex",
+    "lab": "03.11.26-lab.html"
+  }
+},
   {
     "date": "2026-10-29",
     "ktpRefs": [],
