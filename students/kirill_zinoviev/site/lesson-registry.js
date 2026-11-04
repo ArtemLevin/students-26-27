@@ -3,6 +3,73 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-04",
+  "ktpRefs": [],
+  "href": "04.11.26.html",
+  "title": "Прямая пропорциональность",
+  "navTitle": "Прямая пропорциональность",
+  "navSubtitle": "Алгебра, 7 класс: прямая пропорциональность y=kx, таблица значений, координаты точек, отрицательные коэффициенты, построение графика и 10 заданий.",
+  "summary": "Алгебра, 7 класс: прямая пропорциональность y=kx, таблица значений, координаты точек, отрицательные коэффициенты, построение графика и 10 заданий.",
+  "topics": [
+    "прямая пропорциональность y = kx",
+    "выбор значений аргумента и таблица",
+    "чтение и построение точек по координатам",
+    "отрицательный коэффициент и знаки",
+    "продолжение прямой за отмеченные точки",
+    "10 упражнений на построение и сравнение"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "functions_2",
+      "evidenceAnchor": "formula",
+      "relation": "touched",
+      "label": "Различать аргумент x и значение функции y",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_3",
+      "evidenceAnchor": "table",
+      "relation": "practiced",
+      "label": "Заполнять таблицу значений y = kx",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_4",
+      "evidenceAnchor": "coordinates",
+      "relation": "practiced",
+      "label": "Читать координаты точек графика",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_5",
+      "evidenceAnchor": "coordinates",
+      "relation": "practiced",
+      "label": "Отмечать две точки и проводить прямую",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_8",
+      "evidenceAnchor": "formula",
+      "relation": "practiced",
+      "label": "Распознавать и строить график y = kx",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_9",
+      "evidenceAnchor": "direction",
+      "relation": "touched",
+      "label": "Связывать знак k с направлением графика",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "04.11.26.html",
+    "pdf": "../pdf_docs/04.11.26.pdf",
+    "tex": "../tex_docs/04.11.26.tex",
+    "lab": "04.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-01",
   "ktpRefs": [],
   "href": "01.11.26.html",
