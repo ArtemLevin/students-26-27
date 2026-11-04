@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Лаборатория по множеству значений функций: f(x)=2x/(x²+1) и f(x)=(4x+8)/(x²+5). Анна Трапезникова.">
+<title>Лаборатория множества значений — Анна Трапезникова</title>
+<link rel="stylesheet" href="../../../design-system/tokens.css?v=20260919-2">
+<link rel="stylesheet" href="../../../design-system/foundations.css?v=20260919-2">
+<link rel="stylesheet" href="anna-atlas.css?v=20260921-1">
+<style>
+:root{--paper:#f7f4ef;--surface:#fffefa;--ink:#302b2f;--muted:#675f66;--rule:#d8cacb;--accent:#793e52;--green:#176a65;--warn:#9a5147;--focus:#bc6e3e;--tint:#f1e9e7}
+html[data-theme=dark]{--paper:#1d1a1d;--surface:#2a2529;--ink:#f7f0ef;--muted:#c7b8be;--rule:#62545c;--accent:#efb7c8;--green:#9fd5cb;--warn:#f1b6a7;--focus:#ffce8e;--tint:#362e34}
+*{box-sizing:border-box}body{background:var(--paper);color:var(--ink);margin:0;font:16px/1.65 system-ui,Segoe UI,Arial,sans-serif}a{color:var(--accent)}button,input{font:inherit}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{position:absolute;top:-110px;left:8px;padding:10px;background:var(--surface)}.skip:focus{top:8px}
+.shell{width:min(1080px,calc(100% - 36px));margin:auto}.top{background:var(--surface);border-bottom:1px solid var(--rule)}.top-inner{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:15px 0}
+.brand{color:var(--ink);font-weight:750;text-decoration:none}.top-inner>div{display:flex;gap:16px;align-items:center}#theme{background:transparent;color:var(--ink);border:1px solid var(--rule);border-radius:2px;padding:7px 13px;cursor:pointer}
+.hero{padding:clamp(45px,8vw,83px) 0 30px;border-bottom:1px solid var(--rule)}.eyebrow{font-weight:750;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;font-size:.76rem}
+h1,h2,h3{font-family:Georgia,serif;font-weight:500;letter-spacing:-.03em}h1{font-size:clamp(2.9rem,6.2vw,5.6rem);line-height:1.07;margin:12px 0 22px}h2{font-size:clamp(1.95rem,4.2vw,3rem);line-height:1.15;margin:0 0 12px}h3{font-size:1.38rem;margin:20px 0 7px}.lead{color:var(--muted);max-width:62ch;font-size:1.13rem}
+.modes{display:flex;gap:10px;margin:26px 0;flex-wrap:wrap}.mode{padding:11px 16px;background:var(--surface);color:var(--ink);border:1px solid var(--rule);cursor:pointer}.mode[aria-pressed=true]{border-color:var(--accent);background:var(--tint);box-shadow:inset 0 -3px var(--accent)}
+.lab{display:grid;grid-template-columns:minmax(260px,.76fr) minmax(0,1.24fr);gap:28px;padding:18px 0 58px;border-bottom:1px solid var(--rule)}
+.controls,.stage{border-top:2px solid var(--accent);padding-top:20px}.controls p,.stage p{color:var(--muted)}.controller{margin:27px 0}label{display:block;font-weight:700;margin-bottom:10px}input[type=range]{width:100%;accent-color:var(--accent)}.range-ends{display:flex;justify-content:space-between;color:var(--muted);font-size:.78rem}
+.value{font:500 clamp(2rem,4vw,3rem) Georgia,serif;color:var(--accent);margin:10px 0}.equation{background:var(--surface);border-left:3px solid var(--accent);padding:13px 15px;font:500 clamp(1rem,2.1vw,1.24rem)/1.7 "Cambria Math",Georgia,serif;overflow-x:auto;white-space:nowrap;margin:18px 0}
+.chart{background:var(--surface);border:1px solid var(--rule);padding:11px;margin-top:16px}.chart svg{width:100%;height:auto;max-height:340px;display:block}.chart-line{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chart-marker{fill:var(--green);stroke:var(--surface);stroke-width:3}.chart-grid{stroke:var(--rule);stroke-width:1}.chart-label{fill:var(--muted);font:14px system-ui}
+.status{padding:12px 15px;border-left:3px solid var(--green);background:var(--tint);color:var(--ink)!important;max-width:66ch}.status.bad{border-color:var(--warn)}
+.experiment{margin-top:24px;padding-top:20px;border-top:1px solid var(--rule)}.experiment details summary{cursor:pointer;color:var(--accent)}.reset{background:transparent;border:1px solid var(--rule);padding:9px 14px;color:var(--ink);cursor:pointer}
+.answer{color:var(--green)!important;font-weight:750}.facts{display:flex;gap:22px;flex-wrap:wrap;font-size:.86rem;color:var(--muted)}.facts span{border-top:1px solid var(--rule);padding-top:7px}
+.footer{padding:26px 0;color:var(--muted);font-size:.85rem}
+@media(max-width:760px){.lab{grid-template-columns:1fr;gap:20px}.top-inner>div{flex-wrap:wrap}h1{font-size:clamp(2.6rem,10vw,4.2rem)}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
+</style></head>
+<body data-atlas data-anna-atlas data-anna-page="lesson">
+<a class="skip" href="#main">К основному содержанию</a>
+<header class="top"><div class="shell top-inner"><a class="brand" href="03.11.26.html">← Вернуться к занятию</a><div><a href="index.html">Навигатор</a><button id="theme" type="button" aria-label="Переключить цветовую тему">◐ Тема</button></div></div></header>
+<main id="main" class="shell">
+<section class="hero"><p class="eyebrow">Цифровая лаборатория · 3 ноября 2026</p><h1>От x к y: исследование диапазона.</h1>
+<p class="lead">Передвигайте x и наблюдайте, как меняется значение дробно-рациональной функции. Сравнивайте график, формулу и границы, полученные на занятии.</p></section>
+<div class="modes" role="group" aria-label="Выбор функции">
+<button class="mode" type="button" data-mode="first" aria-pressed="true">01 · f(x) = 2x/(x²+1)</button>
+<button class="mode" type="button" data-mode="second" aria-pressed="false">02 · f(x) = (4x+8)/(x²+5)</button>
+</div>
+<section class="lab" aria-label="Математический эксперимент">
+<div class="controls">
+<p class="eyebrow">Управление аргументом</p><h2 id="model-title">Ограничение по модулю</h2>
+<p id="explanation">Выражение (|x|−1)² неотрицательно, поэтому |f(x)| ≤ 1.</p>
+<div class="controller"><label for="parameter">Аргумент x</label><input type="range" id="parameter" min="-10" max="10" step="0.1" value="0"><div class="range-ends"><span>−10</span><span>10</span></div><div class="value" id="parameter-value">x = 0</div></div>
+<button class="reset" type="button" id="reset">Вернуть x = 0</button>
+<div class="experiment"><p class="eyebrow">Ключевые значения x</p><div id="presets" class="modes" aria-label="Проверка крайних значений"></div><p id="reason">При x = −1 и x = 1 достигаются крайние значения y.</p></div>
+</div>
+<div class="stage">
+<p class="eyebrow">Наблюдаемое значение</p><h2 id="output-label">f(x) = 2x/(x²+1)</h2>
+<div class="value" id="output" aria-live="polite">y = 0</div>
+<div class="equation" id="formula">2·0 / (0²+1) = 0</div>
+<p id="baseline">Точное множество значений: [−1; 1].</p>
+<div class="chart"><svg id="chart" viewBox="0 0 650 340" role="img" aria-labelledby="chart-title chart-desc">
+<title id="chart-title">График исследуемой функции</title>
+<desc id="chart-desc">График дробно-рациональной функции от x = −10 до x = 10. Ползунок выбирает точку.</desc>
+<line class="chart-grid" x1="55" y1="280" x2="620" y2="280"></line>
+<line class="chart-grid" x1="55" y1="35" x2="55" y2="280"></line>
+<line class="chart-grid" id="zero-line" x1="55" y1="158" x2="620" y2="158"></line>
+<path id="curve" class="chart-line" d=""></path>
+<circle id="marker" class="chart-marker" cx="338" cy="158" r="7"></circle>
+<text class="chart-label" x="57" y="317">−10</text>
+<text class="chart-label" x="595" y="317">10</text>
+<text class="chart-label" x="334" y="333">x</text>
+<text class="chart-label" id="upper-y" x="10" y="40">1</text>
+<text class="chart-label" id="lower-y" x="10" y="280">−1</text>
+</svg></div>
+<p id="status" class="status" aria-live="polite">Любое значение y остаётся внутри [−1; 1].</p>
+<div class="facts" id="fixed-constants"><span>Область определения — ℝ</span><span>Знаменатель всегда положителен</span></div>
+</div></section>
+<section class="experiment"><h2>Что проверить самостоятельно</h2><p>В первом режиме исследуйте x = −1 и x = 1. Во втором — x = −5 и x = 1. Графики помогают увидеть экстремальные значения, а математическое обоснование выполнено в основном занятии.</p><p><a href="03.11.26.html#range">Метод оценки через квадрат</a> · <a href="03.11.26.html#discriminant">Метод дискриминанта</a></p></section>
+</main>
+<footer class="footer"><div class="shell">Лёвин Артём Александрович · эксклюзивно для Анны Трапезниковой · <a href="03.11.26.html#efficiency">Вернуться к теории</a></div></footer>
+<script>
+(function(){
+'use strict';
+const root=document.documentElement,theme=document.getElementById('theme');
+try{if(localStorage.getItem('anna-theme')==='dark')root.dataset.theme='dark';}catch(_){}
+theme.addEventListener('click',function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('anna-theme',root.dataset.theme);}catch(_){}});
+const byId=id=>document.getElementById(id);
+const models={
+first:{name:'Ограничение по модулю',formula:'f(x) = 2x / (x²+1)',desc:'Из (|x|−1)² ≥ 0 следует x²+1 ≥ 2|x|, поэтому |f(x)| ≤ 1.',range:'[−1; 1]',min:-1.2,max:1.2,extrema:[{x:-1,label:'x = −1, y = −1'},{x:1,label:'x = 1, y = 1'}],f:x=>2*x/(x*x+1)},
+second:{name:'Множество значений и дискриминант',formula:'f(x) = (4x+8) / (x²+5)',desc:'Из уравнения yx²−4x+5y−8=0 и условия Dₓ ≥ 0 получаем −2/5 ≤ y ≤ 2.',range:'[−2/5; 2]',min:-0.65,max:2.25,extrema:[{x:-5,label:'x = −5, y = −2/5'},{x:1,label:'x = 1, y = 2'}],f:x=>(4*x+8)/(x*x+5)}
+};
+let mode='first';
+const rangeInput=byId('parameter'),curve=byId('curve'),marker=byId('marker');
+const fmt=n=>{const v=Math.abs(n)<1e-9?0:n;return v.toLocaleString('ru-RU',{maximumFractionDigits:3});};
+function chart(){
+const m=models[mode],toX=x=>55+(x+10)/20*565,toY=y=>280-(y-m.min)/(m.max-m.min)*245;
+let data='';for(let i=0;i<=400;i++){const x=-10+i*.05,y=m.f(x);data+=(i?'L':'M')+toX(x).toFixed(2)+','+toY(y).toFixed(2)+' ';}
+curve.setAttribute('d',data.trim());const x=Number(rangeInput.value),y=m.f(x);
+marker.setAttribute('cx',toX(x));marker.setAttribute('cy',toY(y));
+byId('parameter-value').textContent='x = '+fmt(x);byId('output').textContent='y = '+fmt(y);
+byId('formula').textContent=mode==='first'?'2·('+fmt(x)+') / (('+fmt(x)+')²+1) = '+fmt(y):'(4·('+fmt(x)+')+8) / (('+fmt(x)+')²+5) = '+fmt(y);
+byId('status').textContent='При x = '+fmt(x)+' получаем y = '+fmt(y)+'. Доказанный диапазон: '+m.range+'.';
+byId('upper-y').textContent=fmt(m.max);byId('lower-y').textContent=fmt(m.min);
+byId('zero-line').setAttribute('y1',toY(0));byId('zero-line').setAttribute('y2',toY(0));
+byId('chart-desc').textContent=m.formula+', x от −10 до 10; выбран x = '+fmt(x)+', y = '+fmt(y)+'.';
+}
+function choose(name){
+mode=models[name]?name:'first';const m=models[mode];
+document.querySelectorAll('[data-mode]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.mode===mode)));
+byId('model-title').textContent=m.name;byId('explanation').textContent=m.desc;
+byId('output-label').textContent=m.formula;byId('baseline').textContent='Точное множество значений: '+m.range+'.';
+byId('reason').textContent=mode==='first'?'Края достигаются при x = −1 и x = 1.':'Края достигаются при x = −5 и x = 1.';
+const target=byId('presets');target.replaceChildren();m.extrema.forEach(p=>{const button=document.createElement('button');button.type='button';button.className='reset';button.textContent=p.label;button.addEventListener('click',()=>{rangeInput.value=p.x;chart();});target.appendChild(button)});
+rangeInput.value=0;try{const u=new URL(location.href);u.searchParams.set('mode',mode);history.replaceState(null,'',u);}catch(_){}chart();
+}
+document.querySelectorAll('[data-mode]').forEach(button=>button.addEventListener('click',()=>choose(button.dataset.mode)));
+rangeInput.addEventListener('input',chart);byId('reset').addEventListener('click',()=>{rangeInput.value=0;chart()});
+choose(new URLSearchParams(location.search).get('mode')||'first');
+})();
+</script>
+<script src="../../../shared/student-dashboard/atlas-motion.js?v=20260921-1"></script>
+</body></html>
