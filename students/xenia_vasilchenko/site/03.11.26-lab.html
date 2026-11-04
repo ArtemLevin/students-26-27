@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория дробей по занятию 3 ноября 2026: исследование связи между целым, долей и частью.">
+<title>Лаборатория долей — Ксения Васильченко</title>
+<style>
+:root{color-scheme:light;--bg:#f3f4ee;--paper:#fffefa;--ink:#23302e;--muted:#596965;--line:#cbd3cd;--accent:#166f70;--soft:#e1eee7;--highlight:#e3c48b;--focus:#a76a2b;--error:#944b38}
+html[data-theme=dark]{color-scheme:dark;--bg:#151f1e;--paper:#20302e;--ink:#eff4ed;--muted:#bbcbc5;--line:#425a55;--accent:#91d5ce;--soft:#29443c;--highlight:#d3ac68;--focus:#f0c678;--error:#e9af96}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:inherit}button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.wrap{width:min(1060px,calc(100% - 2.4rem));margin:auto}
+header{background:var(--paper);border-bottom:1px solid var(--line)}.head{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 0;flex-wrap:wrap}.head a{text-decoration:none;border-bottom:1px solid var(--accent)}
+h1,h2,h3{font-family:Georgia,serif;font-weight:500;letter-spacing:-.035em;line-height:1.14}
+h1{font-size:clamp(2.5rem,5.8vw,5.3rem);max-width:13ch;margin:.6rem 0 1.1rem}h2{font-size:clamp(1.75rem,3.2vw,2.8rem)}
+.eyebrow{font-size:.73rem;color:var(--accent);font-weight:800;text-transform:uppercase;letter-spacing:.14em}
+.lead{color:var(--muted);max-width:65ch;font-size:1.12rem}
+.hero{padding:clamp(2rem,5vw,4rem) 0 2.4rem}
+.choose{border-top:1px solid var(--line);padding:1.5rem 0 2rem}
+.scenarios{display:flex;gap:.6rem;flex-wrap:wrap}.scenarios button{background:var(--paper);border:1px solid var(--line);padding:.55rem .85rem;border-radius:3px;min-height:44px}
+.scenarios button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.scenarios button:hover{border-color:var(--accent)}
+.lab{display:grid;grid-template-columns:minmax(260px,.78fr) minmax(0,1.22fr);gap:2.2rem;padding:2.3rem 0 4rem;border-top:1px solid var(--line)}
+.controls{background:var(--paper);padding:1.6rem;border:1px solid var(--line);align-self:start}
+.controls h2{margin-top:0}.controls label{display:block;margin:1rem 0 .35rem;font-weight:700}
+.controls select,.controls input{display:block;width:100%;background:var(--bg);border:1px solid var(--line);border-radius:3px;padding:.72rem;min-height:44px}
+.controls small{color:var(--muted);display:block;font-size:.84rem}
+.controls button{margin-top:1rem;background:transparent;border:1px solid var(--accent);padding:.65rem 1rem;min-height:44px}
+.controls .error{color:var(--error);margin:.9rem 0 0;font-weight:650;min-height:2rem}
+.figure{background:var(--paper);border:1px solid var(--line);padding:clamp(1.2rem,4vw,2.4rem)}
+.figure .label{display:block;color:var(--muted);font-size:.85rem;margin-bottom:.5rem}
+.equation{font:500 clamp(1.45rem,3.4vw,2.35rem)/1.45 Georgia,serif;white-space:normal;overflow-wrap:anywhere;color:var(--accent);margin:1rem 0 1.8rem}
+.track{background:var(--soft);width:100%;height:62px;border:1px solid var(--line);overflow:hidden;position:relative}
+.fill{height:100%;width:40%;background:var(--accent);transition:width .16s ease}
+.legend{display:flex;justify-content:space-between;gap:.7rem;flex-wrap:wrap;margin:.6rem 0 1.4rem;font-size:.88rem;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem;margin-top:1.1rem}
+.stat{border-top:2px solid var(--line);padding:.8rem 0;min-width:0}.stat strong{display:block;font:500 clamp(1.4rem,2.6vw,2.3rem)/1.4 Georgia,serif;color:var(--ink);overflow-wrap:anywhere}
+.stat small{color:var(--muted);font-size:.8rem}
+.explain{margin-top:1.6rem;border-top:1px solid var(--line);padding-top:1.2rem;color:var(--muted)}
+.explain strong{color:var(--ink)}
+.details{border-top:1px solid var(--line);padding:2.5rem 0}.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2rem}
+.steps article{border-top:2px solid var(--accent);padding-top:1rem}
+.steps h3{font-size:1.35rem}.steps p{color:var(--muted)}
+footer{padding:2rem 0;color:var(--muted);font-size:.82rem;border-top:1px solid var(--line)}
+@media(max-width:750px){.lab{grid-template-columns:1fr}.steps{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:400px){.wrap{width:calc(100% - 1.4rem)}.stats{gap:.3rem}.stat strong{font-size:1.5rem}}
+@media(prefers-reduced-motion:reduce){.fill{transition:none}}
+</style></head>
+<body>
+<header><div class="wrap head"><a href="03.11.26.html">← Вернуться к занятию</a><a href="index.html">Кабинет Ксении</a><button type="button" id="theme" aria-label="Переключить светлую и тёмную тему">◐ Тема</button></div></header>
+<main class="wrap" id="models">
+<section class="hero"><p class="eyebrow">Цифровая лаборатория / 03.11.2026</p><h1>Целое, доля и часть</h1>
+<p class="lead">Измените известные величины и наблюдайте, как пересчитывается третья. Полоса показывает, какую долю целого занимает часть.</p></section>
+<section class="choose" aria-label="Готовые ситуации"><h2>Начните с примера занятия</h2>
+<div class="scenarios" role="group" aria-label="Примеры из чек-листа">
+<button type="button" data-case="fraction" aria-pressed="true">2/5 от 50</button>
+<button type="button" data-case="fields" aria-pressed="false">Подсолнечник · 3600 га</button>
+<button type="button" data-case="film" aria-pressed="false">Фильм · 1,55 ч</button>
+<button type="button" data-case="part" aria-pressed="false">18 из 72</button></div></section>
+<section class="lab" aria-label="Исследование связи величин">
+<div class="controls"><h2>Выберите, что искать</h2>
+<label for="mode">Неизвестная величина</label>
+<select id="mode"><option value="d">Часть d</option><option value="N">Целое N</option><option value="f">Доля f</option></select>
+<label for="a" id="labelA">Целое N</label>
+<input id="a" type="text" inputmode="decimal" autocomplete="off" value="50" aria-describedby="numberHint">
+<label for="b" id="labelB">Доля f</label>
+<input id="b" type="text" inputmode="decimal" autocomplete="off" value="0,4" aria-describedby="numberHint">
+<small id="numberHint">Введите числа через запятую или точку. Доля находится в пределах от 0 до 1.</small>
+<p id="error" class="error" role="status" aria-live="polite"></p>
+<button type="button" id="reset">Вернуть значения примера</button>
+</div>
+<div class="figure">
+<span class="eyebrow">Математическая модель</span>
+<span class="label">Вычисление по известным величинам</span>
+<div class="equation" id="eq" aria-live="polite">50 × 0,4 = 20</div>
+<div class="track" role="img" id="track" aria-label="Часть составляет 40 процентов целого"><div class="fill" id="fill"></div></div>
+<div class="legend"><span>Выделенная часть</span><span id="ratio">40% целого</span></div>
+<div class="stats">
+<div class="stat"><small>Целое · N</small><strong id="outN">50</strong></div>
+<div class="stat"><small>Доля · f</small><strong id="outF">0,4</strong></div>
+<div class="stat"><small>Часть · d</small><strong id="outD">20</strong></div>
+</div>
+<div class="explain" id="explanation" aria-live="polite"><strong>Проверка:</strong> 50 × 0,4 = 20.</div>
+</div>
+</section>
+<section class="details"><h2>Три правила для любого примера</h2>
+<div class="steps">
+<article><h3>Ищем часть</h3><p>Известны целое N и доля f. Вычислите произведение d = N × f.</p></article>
+<article><h3>Ищем целое</h3><p>Известны часть d и ненулевая доля f. Разделите: N = d : f.</p></article>
+<article><h3>Ищем долю</h3><p>Известны часть d и ненулевое целое N. Разделите: f = d : N.</p></article>
+</div><p>Проверяйте любой результат равенством <b>d = N × f</b>. Если доля меньше единицы, часть меньше целого.</p>
+</section>
+</main>
+<footer><div class="wrap">Лёвин Артём Александрович эксклюзивно для Ксении Васильченко · <a href="03.11.26.html#practice">10 заданий для самостоятельной работы</a></div></footer>
+<script>
+(function(){
+"use strict";
+var examples={fraction:{N:50,f:.4,d:20,mode:"d"},fields:{N:6000,f:.6,d:3600,mode:"N"},film:{N:2.5,f:.62,d:1.55,mode:"N"},part:{N:72,f:.25,d:18,mode:"f"}};
+var root=document.documentElement,select=document.getElementById("mode"),a=document.getElementById("a"),b=document.getElementById("b"),err=document.getElementById("error");
+var state={N:50,f:.4,d:20},chosen="fraction",valid=true;
+function fmt(x){if(!Number.isFinite(x))return "—";return String(Math.round(x*10000)/10000).replace(".",",")}
+function parse(s){var t=String(s).trim().replace(",",".");if(!/^\d+(?:\.\d+)?$/.test(t))return NaN;return Number(t)}
+function setup(force){var mode=select.value;document.getElementById("labelA").textContent=mode==="d"?"Целое N":"Часть d";document.getElementById("labelB").textContent=mode==="f"?"Целое N":"Доля f";
+if(force){a.value=fmt(mode==="d"?state.N:state.d);b.value=fmt(mode==="f"?state.N:state.f)}
+calculate()}
+function calculate(){var mode=select.value,first=parse(a.value),second=parse(b.value),N,f,d;
+if(!Number.isFinite(first)||!Number.isFinite(second)){err.textContent="Введите два неотрицательных числа.";valid=false;return}
+if(mode==="d"){N=first;f=second;d=N*f}
+else if(mode==="N"){d=first;f=second;N=f===0?NaN:d/f}
+else{d=first;N=second;f=N===0?NaN:d/N}
+if(!(N>0)||!Number.isFinite(N)||!(f>=0&&f<=1)||!(d>=0&&d<=N)||!Number.isFinite(d)){
+err.textContent="Проверьте данные: целое больше нуля, доля от 0 до 1, часть от 0 до целого. При поиске целого доля должна быть больше нуля.";
+valid=false;return}
+err.textContent="";valid=true;state={N:N,f:f,d:d};
+var expr=mode==="d"?fmt(N)+" × "+fmt(f)+" = "+fmt(d):mode==="N"?fmt(d)+" : "+fmt(f)+" = "+fmt(N):fmt(d)+" : "+fmt(N)+" = "+fmt(f);
+document.getElementById("eq").textContent=expr;
+document.getElementById("outN").textContent=fmt(N);
+document.getElementById("outF").textContent=fmt(f);
+document.getElementById("outD").textContent=fmt(d);
+document.getElementById("fill").style.width=(f*100)+"%";
+document.getElementById("ratio").textContent=fmt(f*100)+"% целого";
+document.getElementById("track").setAttribute("aria-label","Часть составляет "+fmt(f*100)+" процентов целого");
+document.getElementById("explanation").textContent="Проверка: "+fmt(N)+" × "+fmt(f)+" = "+fmt(d)+".";
+}
+function apply(k){chosen=k;state={N:examples[k].N,f:examples[k].f,d:examples[k].d};select.value=examples[k].mode;
+document.querySelectorAll("[data-case]").forEach(function(x){x.setAttribute("aria-pressed",String(x.dataset.case===k))});setup(true)}
+document.querySelectorAll("[data-case]").forEach(function(x){x.addEventListener("click",function(){apply(x.dataset.case)})});
+select.addEventListener("change",function(){if(valid)setup(true);else{state={N:examples[chosen].N,f:examples[chosen].f,d:examples[chosen].d};setup(true)}});
+a.addEventListener("input",calculate);b.addEventListener("input",calculate);
+document.getElementById("reset").addEventListener("click",function(){apply(chosen)});
+var theme=document.getElementById("theme");
+try{root.dataset.theme=localStorage.getItem("xenia-lesson-theme")||"light"}catch(e){}
+theme.addEventListener("click",function(){root.dataset.theme=root.dataset.theme==="dark"?"light":"dark";try{localStorage.setItem("xenia-lesson-theme",root.dataset.theme)}catch(e){}});
+apply("fraction");
+})();
+</script></body></html>
