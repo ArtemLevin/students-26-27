@@ -5,6 +5,82 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-03",
+  "ktpRefs": [],
+  "href": "03.11.26.html",
+  "title": "Где функция существует. Какие значения принимает.",
+  "navTitle": "ОДЗ и множество значений функций",
+  "navSubtitle": "Корни и знаменатели, замена t = x², оценка и дискриминант. Занятие 3 ноября 2026 года.",
+  "summary": "Анна Трапезникова: область определения, корни и знаменатели, множество значений, дискриминант, 10 заданий. 3 ноября 2026 года.",
+  "topics": [
+    "область определения корня чётной степени и знаменателя",
+    "совмещение ограничений и исключение запрещённых точек",
+    "изолирование квадратного корня и проверка посторонних решений",
+    "замена t = x² в иррациональном уравнении",
+    "неравенство с модулем как двойное ограничение",
+    "множество значений через оценку неотрицательного квадрата",
+    "множество значений через дискриминант относительно x"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "irrational_01",
+      "evidenceAnchor": "domain",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_04",
+      "evidenceAnchor": "intersection",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "irrational_03",
+      "evidenceAnchor": "radical",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "irrational_06",
+      "evidenceAnchor": "radical",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "irrational_08",
+      "evidenceAnchor": "radical",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "irrational_09",
+      "evidenceAnchor": "denominator",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "real_numbers_16",
+      "evidenceAnchor": "module",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "functions_02",
+      "evidenceAnchor": "domain",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "functions_03",
+      "evidenceAnchor": "discriminant",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_09",
+      "evidenceAnchor": "discriminant",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "03.11.26.html",
+    "pdf": "../pdf_docs/03.11.26.pdf",
+    "tex": "../tex_docs/03.11.26.tex",
+    "lab": "03.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-01",
   "ktpRefs": [],
   "href": "01.11.26.html",
