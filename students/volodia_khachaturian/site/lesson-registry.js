@@ -3,6 +3,95 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-04",
+  "ktpRefs": [],
+  "href": "04.11.26.html",
+  "title": "Силы и проекции при наклонной тяге",
+  "navTitle": "Силы и проекции при наклонной тяге",
+  "navSubtitle": "Наклонная сила тяги: проекции при 30°, реакция опоры, трение скольжения и второй закон Ньютона. Чек-лист и 10 задач Володи Хачатуряна, 4 ноября 2026 года.",
+  "summary": "Наклонная сила тяги: проекции при 30°, реакция опоры, трение скольжения и второй закон Ньютона. Чек-лист и 10 задач Володи Хачатуряна, 4 ноября 2026 года.",
+  "topics": [
+    "наклонная сила тяги",
+    "проекции силы при угле 30 градусов",
+    "реакция опоры",
+    "сила трения скольжения",
+    "второй закон Ньютона в проекциях",
+    "теорема Пифагора в физике",
+    "поиск силы трения массы и ускорения"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "dyn_22",
+      "evidenceAnchor": "balance",
+      "relation": "practiced",
+      "label": "Сила трения скольжения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_23",
+      "evidenceAnchor": "balance",
+      "relation": "practiced",
+      "label": "Коэффициент трения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_24",
+      "evidenceAnchor": "balance",
+      "relation": "practiced",
+      "label": "Зависимость силы трения от нормальной реакции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_13",
+      "evidenceAnchor": "balance",
+      "relation": "practiced",
+      "label": "Реакция опоры",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_08",
+      "evidenceAnchor": "balance",
+      "relation": "practiced",
+      "label": "Второй закон Ньютона",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_07",
+      "evidenceAnchor": "forces",
+      "relation": "touched",
+      "label": "Равнодействующая нескольких сил",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "measure_05",
+      "evidenceAnchor": "projections",
+      "relation": "practiced",
+      "label": "Скалярные и векторные величины",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_07",
+      "evidenceAnchor": "forces",
+      "relation": "practiced",
+      "label": "Работа со схемой физического процесса",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_25",
+      "evidenceAnchor": "examples",
+      "relation": "practiced",
+      "label": "Преобразование формул и выражение неизвестной величины",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "04.11.26.html",
+    "pdf": "../pdf_docs/04.11.26.pdf",
+    "tex": "../tex_docs/04.11.26.tex",
+    "lab": "04.11.26-lab.html"
+  }
+},
+{
   "date": "2026-10-31",
   "ktpRefs": [],
   "href": "31.10.26.html",
