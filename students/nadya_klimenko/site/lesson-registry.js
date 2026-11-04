@@ -5,6 +5,123 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-11-03",
+    "ktpRefs": [],
+    "href": "03.11.26.html",
+    "title": "Дробь от числа, проценты и задачи на составление уравнений",
+    "navTitle": "Доли, проценты и уравнения",
+    "navSubtitle": "Часть и целое · процентные изменения · встречное движение",
+    "summary": "Надежда Клименко, 03.11.26. Часть и целое, процентные изменения, десятичные и смешанные дроби в уравнениях, модели отношения величин, смежные углы и встречное движение. Путь А: 10 заданий.",
+    "topics": [
+      "нахождение дроби от числа",
+      "нахождение целого по его доле",
+      "проценты и восстановление первоначальной величины",
+      "увеличение и уменьшение на процент",
+      "деление десятичных дробей",
+      "уравнение со смешанным коэффициентом",
+      "составление уравнений по отношению величин",
+      "смежные углы",
+      "встречное движение"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "frac_15",
+        "evidenceAnchor": "part",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "frac_16",
+        "evidenceAnchor": "part",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "frac_14",
+        "evidenceAnchor": "part",
+        "relation": "touched",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "ratio_10",
+        "evidenceAnchor": "percent",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "ratio_11",
+        "evidenceAnchor": "percent",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "dec_06",
+        "evidenceAnchor": "fractions",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "dec_07",
+        "evidenceAnchor": "fractions",
+        "relation": "touched",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "alg_13",
+        "evidenceAnchor": "fractions",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "alg_14",
+        "evidenceAnchor": "fractions",
+        "relation": "touched",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_01",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_03",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_12",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_06",
+        "evidenceAnchor": "movement",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_07",
+        "evidenceAnchor": "movement",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "strategy_01",
+        "evidenceAnchor": "models",
+        "relation": "practiced",
+        "masteryClaim": null
+      }
+    ],
+    "materials": {
+      "html": "03.11.26.html",
+      "pdf": "../pdf_docs/03.11.26.pdf",
+      "tex": "../tex_docs/03.11.26.tex"
+    }
+  },
+  {
     "date": "2026-10-31",
     "ktpRefs": [],
     "href": "31.10.26.html",
