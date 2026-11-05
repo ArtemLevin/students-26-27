@@ -1,0 +1,288 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{icomma}
+\usepackage[a4paper,top=22mm,bottom=21mm,left=24mm,right=24mm,headheight=23pt,headsep=8mm]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\definecolor{accent}{HTML}{00827F}
+\definecolor{darkaccent}{HTML}{075B5D}
+\definecolor{bodytext}{HTML}{292F31}
+\definecolor{muted}{HTML}{687579}
+\hypersetup{hidelinks,pdftitle={Чек-лист. Сумма и количество делителей},pdfauthor={Артём Александрович Лёвин}}
+\color{bodytext}
+\setstretch{1.24}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlist[enumerate]{leftmargin=*,itemsep=6pt,topsep=5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{muted}Сумма и количество делителей}
+\fancyhead[R]{\footnotesize\color{muted}Ксения Клыкова}
+\renewcommand{\headrulewidth}{0.45pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+\fancyfoot[C]{\footnotesize\color{muted}\thepage}
+\newcommand{\secname}[1]{\vspace{8pt}{\large\color{darkaccent}\bfseries #1\par}\vspace{1pt}{\color{accent}\rule{\linewidth}{0.5pt}}\vspace{5pt}}
+\newcommand{\key}[1]{{\color{darkaccent}\bfseries #1}}
+\newcommand{\ex}[1]{{\color{darkaccent}\bfseries Пример.} #1}
+\begin{document}
+
+% Титульный лист
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{25mm}
+{\large\color{darkaccent}МАТЕМАТИКА\par}
+\vspace{18mm}
+{\LARGE Чек-лист\par}
+\vspace{13mm}
+{\LARGE\color{accent}Сумма и количество\\[3mm] делителей натурального числа\par}
+\vspace{13mm}
+{\normalsize Теория чисел: $\tau$-функция, $\sigma$-функция\\[2mm] и условия кратности\par}
+\vfill
+{\large Ксения Клыкова\par}
+\vspace{12mm}
+{\normalsize 5 ноября 2026 г.\par}
+\vspace{14mm}
+{\small Лёвин Артём Александрович\\[2mm] эксклюзивно для Ксении Клыковой\par}
+\vspace{18mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent,line width=0.95pt] (0,0) .. controls (1.2,0.46) and (2.5,-0.38) .. (4,0)
+.. controls (5.45,0.39) and (6.4,-0.45) .. (8,0);
+\fill[accent] (4,0) circle (1pt);
+\end{tikzpicture}
+\vspace{2mm}
+\end{center}
+\end{titlepage}
+
+\secname{1. Две функции одного натурального числа}
+Пусть $d\mid n$ означает, что положительное целое число $d$ является делителем натурального числа $n$.
+
+\[\boxed{\tau(n)=\text{количество положительных делителей }n}\]
+\[\boxed{\sigma(n)=\text{сумма положительных делителей }n}\]
+
+\ex{Для $12$ делители равны $1,2,3,4,6,12$, поэтому}
+\[
+\tau(12)=6,\qquad \sigma(12)=1+2+3+4+6+12=28.
+\]
+
+\secname{2. Каноническое разложение и основные формулы}
+Представим $n$ как произведение степеней \emph{различных простых чисел}:
+\[
+ n=p_1^{\alpha_1}p_2^{\alpha_2}\cdots p_k^{\alpha_k},
+ \qquad \alpha_i\in\mathbb N.
+\]
+Любой делитель получается независимым выбором показателя у каждого простого множителя: от нуля до $\alpha_i$.
+\[
+\boxed{\tau(n)=(\alpha_1+1)(\alpha_2+1)\cdots(\alpha_k+1)}
+\]
+\[
+\boxed{\sigma(n)=\prod_{i=1}^{k}(1+p_i+\cdots+p_i^{\alpha_i})}
+\]
+\key{Почему скобки перемножаются?} При раскрытии произведения один выбор слагаемого из каждой скобки даёт ровно один делитель $n$. Все делители появляются по одному разу.
+
+\ex{Для $72=2^3\cdot3^2$:}
+\[
+\begin{aligned}
+\tau(72)&=(3+1)(2+1)=12,\\
+\sigma(72)&=(1+2+4+8)(1+3+9)=15\cdot13=195.
+\end{aligned}
+\]
+
+\secname{3. Геометрическая прогрессия сокращает вычисления}
+Последовательность $1,p,p^2,\ldots,p^\alpha$ является геометрической прогрессией со знаменателем $p$ и содержит \emph{$\alpha+1$ член}.
+\[
+1+p+\cdots+p^\alpha=\frac{p^{\alpha+1}-1}{p-1},\qquad p>1.
+\]
+Следовательно, вторую форму $\sigma$-функции удобно использовать при больших показателях:
+\[
+\boxed{\displaystyle\sigma(n)=\prod_{i=1}^{k}
+\frac{p_i^{\alpha_i+1}-1}{p_i-1}}.
+\]
+\key{Проверка числа членов:} $1+2+4+8+16=31$ (пять членов), а $1+2+4+8+16+32=63$ (шесть членов). Показатель последней степени и число членов различаются на единицу.
+
+\secname{4. Суммы чётных и нечётных делителей}
+Если $n=2^a m$, где $m$ нечётно, то все нечётные делители числа $n$ совпадают с делителями $m$.
+\[
+\begin{aligned}
+ S_{\text{нечёт}}&=\sigma(m),& K_{\text{нечёт}}&=\tau(m),\\
+ S_{\text{чёт}}&=\sigma(n)-\sigma(m),&
+ K_{\text{чёт}}&=\tau(n)-\tau(m).
+\end{aligned}
+\]
+\ex{Для $72=2^3\cdot 9$:}
+\[
+\begin{aligned}
+ S_{\text{нечёт}}&=\sigma(9)=1+3+9=13,\\
+ S_{\text{чёт}}&=\sigma(72)-13=195-13=182.
+\end{aligned}
+\]
+Сравните с количеством: $K_{\text{нечёт}}=3$, $K_{\text{чёт}}=12-3=9$.
+
+\secname{5. Делители, кратные заданному числу}
+Пусть требуется найти сумму положительных делителей $d$ числа $n$, для которых $m\mid d$. Если $m\mid n$, любой такой делитель единственным образом записывается в виде $d=mk$, где $k\mid n/m$.
+\[
+\boxed{\displaystyle S_{m\mid d}=m\,\sigma\!\left(\frac nm\right)},\qquad
+\boxed{\displaystyle K_{m\mid d}=\tau\!\left(\frac nm\right)}.
+\]
+Если $m\nmid n$, подходящих делителей нет: и сумма, и количество равны нулю.
+
+\ex{Найдём сумму и количество делителей $180$, кратных $15$.}
+\[
+\frac{180}{15}=12=2^2\cdot3,\qquad
+S_{15\mid d}=15\sigma(12)=15\cdot28=420,
+\]
+\[
+K_{15\mid d}=\tau(12)=(2+1)(1+1)=6.
+\]
+Проверка перечислением: $15,30,45,60,90,180$; их сумма равна $420$.
+
+\secname{6. Делители, НЕ кратные заданному числу}
+Используем разность: все делители разбиваются на две группы --- кратные $m$ и не кратные $m$. Если $m\mid n$, получаем
+\[
+\boxed{S_{m\nmid d}=\sigma(n)-m\,\sigma\!\left(\frac nm\right)},
+\quad
+\boxed{K_{m\nmid d}=\tau(n)-\tau\!\left(\frac nm\right)}.
+\]
+\ex{Для $72$ делители, не кратные $6$, дают сумму}
+\[
+S_{6\nmid d}=\sigma(72)-6\sigma(12)=195-168=27.
+\]
+Это делители $1,2,3,4,8,9$: $1+2+3+4+8+9=27$.
+
+\secname{7. Два условия одновременно: кратны 12, но не 5}
+\ex{Найдём сумму и количество делителей числа $1080$, кратных $12$, но не кратных $5$.}
+
+\key{Шаг 1.} Разложим число на простые множители:
+\[
+1080=2^3\cdot3^3\cdot5.
+\]
+\key{Шаг 2.} Запрет делимости на $5$ означает, что показатель пятёрки у делителя должен быть нулевым. Убираем все множители $5$ из исходного числа:
+\[
+n_0=2^3\cdot3^3=216.
+\]
+\key{Шаг 3.} Теперь ищем среди делителей $216$ те, которые кратны $12$:
+\[
+\frac{216}{12}=18=2\cdot3^2.
+\]
+\key{Шаг 4.} Применяем обе функции:
+\[
+\begin{aligned}
+S&=12\sigma(18)=12(1+2)(1+3+9)=\boxed{468},\\
+K&=\tau(18)=(1+1)(2+1)=\boxed{6}.
+\end{aligned}
+\]
+\key{Проверка:} подходящие делители: $12,24,36,72,108,216$. Их ровно шесть; сумма равна $468$.
+
+\textbf{Когда приём работает.} Если запрещена кратность \emph{простому} числу $q$, удаляем из $n$ весь множитель $q^a$. Если обязательный множитель $m$ после этого уже не делит полученное число, подходящих делителей нет. Для запрета кратности составному числу требуется отдельный анализ.
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\Large\color{darkaccent}\bfseries Алгоритм: как выбрать формулу}\par
+\vspace{5mm}
+{\small В схеме $q$ --- простое число, делимость на которое запрещена; $m$ --- обязательный делитель.}\par
+\end{center}
+\vspace{4mm}
+\begin{center}
+\begin{tikzpicture}[
+  >=Latex, thick,
+  start/.style={ellipse,draw=accent,line width=.8pt,align=center,minimum width=45mm,minimum height=10mm,fill=white,font=\small},
+  process/.style={rectangle,rounded corners=2pt,draw=muted,line width=.7pt,align=center,text width=92mm,minimum height=11mm,fill=white,font=\small,inner sep=5pt},
+  test/.style={diamond,aspect=2.8,draw=accent,line width=.8pt,align=center,text width=42mm,inner sep=2pt,font=\small},
+  result/.style={rectangle,rounded corners=2pt,draw=accent,line width=.8pt,align=center,text width=62mm,minimum height=17mm,font=\small,inner sep=5pt},
+  arr/.style={-{Latex[length=3mm]},line width=.8pt,draw=muted}
+]
+\node[start] (start) at (0,0) {Начало};
+\node[process,below=10mm of start] (factor) {Разложить $n$ на простые множители};
+\node[test,below=11mm of factor] (exclude) {Запрещена кратность простому $q$?};
+\node[process,below left=15mm and 13mm of exclude,text width=43mm] (yes) {Удалить из $n$ все степени $q$: получить $n_0$};
+\node[process,below right=15mm and 13mm of exclude,text width=43mm] (no) {Оставить $n_0=n$};
+\coordinate (merge) at (0,-9.1);
+\node[test] (multiple) at (0,-10.9) {Требуется кратность $m$?};
+\node[result] (all) at (-4.1,-14.9) {Сумма: $\sigma(n_0)$\\Количество: $\tau(n_0)$};
+\node[test] (divis) at (4.0,-14.9) {$m\mid n_0$?};
+\node[result] (many) at (4.0,-18.2) {Сумма: $m\sigma(n_0/m)$\\Количество: $\tau(n_0/m)$};
+\node[result,text width=38mm] (zero) at (-4.3,-19.7) {Сумма $0$\\Количество $0$};
+\draw[arr] (start)--(factor);
+\draw[arr] (factor)--(exclude);
+\draw[arr] (exclude) -| node[pos=.18,above left]{\footnotesize да} (yes);
+\draw[arr] (exclude) -| node[pos=.18,above right]{\footnotesize нет} (no);
+\draw[arr] (yes.south) |- (merge);
+\draw[arr] (no.south) |- (merge);
+\draw[arr] (merge)--(multiple);
+\draw[arr] (multiple) -| node[pos=.15,above left]{\footnotesize нет} (all.north);
+\draw[arr] (multiple) -| node[pos=.15,above right]{\footnotesize да} (divis.north);
+\draw[arr] (divis) -- node[right]{\footnotesize да} (many);
+\draw[arr] (divis.west) -- ++(-16mm,0) node[pos=.5,above]{\footnotesize нет} |- (zero.east);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\secname{Тренировочный блок. Путь А}
+Во всех заданиях считайте делителями только \emph{положительные} натуральные числа. Используйте каноническое разложение, функции $\tau$ и $\sigma$; ответы запишите самостоятельно до просмотра следующей страницы.
+
+\begin{enumerate}[label=\textbf{\arabic*.},itemsep=13pt]
+\item Для числа $18$ найдите $\tau(18)$ и $\sigma(18)$.
+\item Найдите сумму всех положительных делителей числа $72$.
+\item Найдите сумму всех положительных делителей числа $540$.
+\item Вычислите $\sigma(2^8\cdot3^4)$, используя формулу суммы геометрической прогрессии.
+\item Найдите отдельно сумму нечётных и сумму чётных положительных делителей числа $360$.
+\item Найдите сумму и количество положительных делителей числа $180$, кратных $6$.
+\item Найдите сумму и количество положительных делителей числа $540$, \emph{не} кратных $3$.
+\item Найдите сумму и количество положительных делителей числа $720$, кратных $8$, но не кратных $3$.
+\item Найдите сумму и количество положительных делителей числа $900$, кратных $15$, но нечётных.
+\item Найдите сумму и количество положительных делителей числа $1440$, кратных $12$, но не кратных $5$.
+\end{enumerate}
+
+\vfill
+\begin{center}{\small\color{muted}Проверяйте оба результата: $\sigma$ отвечает за сумму, $\tau$ --- за количество.}\end{center}
+\clearpage
+
+\secname{Ответы к тренировочному блоку}
+\renewcommand{\arraystretch}{1.46}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}>{\centering\arraybackslash}p{11mm}X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ}\\
+\midrule
+1 & $\tau(18)=6$; $\sigma(18)=39$.\\
+2 & $195$.\\
+3 & $1680$.\\
+4 & $61\,831$.\\
+5 & Нечётные: $78$; чётные: $1092$.\\
+6 & Сумма $432$; количество $8$.\\
+7 & Сумма $42$; количество $6$.\\
+8 & Сумма $144$; количество $4$.\\
+9 & Сумма $360$; количество $4$.\\
+10 & Сумма $720$; количество $8$.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vspace{11mm}
+\secname{Итоговая памятка}
+\renewcommand{\arraystretch}{1.33}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{54mm}X@{}}
+\toprule
+\textbf{Условие} & \textbf{Что делать}\\
+\midrule
+Все делители & $\sigma(n)$ для суммы; $\tau(n)$ для количества.\\
+Кратные $m$ & Если $m\mid n$, используйте $m\sigma(n/m)$ и $\tau(n/m)$.\\
+Не кратные $m$ & Вычтите из общей суммы и общего количества результаты для кратных $m$.\\
+Нечётные & Удалите всю степень двойки из $n$, примените $\sigma$ и $\tau$.\\
+Кратные $m$, но не кратные простому $q$ & Сначала удалите из $n$ всю степень $q$, затем проверьте кратность $m$ и примените формулу.\\
+\bottomrule
+\end{tabularx}
+\par\vspace{5mm}\secname{На что обратить внимание}
+{\small В сумме геометрической прогрессии учитывайте член $1=p^0$ и показатель $\alpha+1$. При совместных условиях кратности сначала ограничивайте допустимые делители, затем вычисляйте $\sigma$ и $\tau$.}
+\end{document}

@@ -1,0 +1,329 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{icomma}
+\usepackage{geometry}
+\geometry{left=23mm,right=23mm,top=23mm,bottom=24mm}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{tabularx,booktabs,array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{needspace}
+\definecolor{accent}{HTML}{007F7F}
+\definecolor{darkaccent}{HTML}{005656}
+\definecolor{textgray}{HTML}{353535}
+\definecolor{muted}{HTML}{6C7777}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\headheight}{26pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{textgray}Статистика: математическое ожидание и дисперсия}
+\fancyhead[R]{\small\color{textgray}Николь Саркисьянц}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+\titleformat{\section}{\normalfont\Large\color{darkaccent}}{\thesection.}{.65em}{}[\vspace{.25em}{\color{accent}\titlerule}]
+\titlespacing*{\section}{0pt}{1.35em}{.8em}
+\titleformat{\subsection}{\normalfont\normalsize\color{darkaccent}}{}{0pt}{}
+\titlespacing*{\subsection}{0pt}{1em}{.2em}
+\newcommand{\key}[1]{\textcolor{darkaccent}{#1}}
+\newcommand{\Ex}[1]{\par\medskip\noindent\textcolor{darkaccent}{\textbf{Пример.}} #1\par\smallskip}
+\newcommand{\answer}[1]{\textcolor{darkaccent}{\textbf{Ответ:}}~#1}
+\setlist[enumerate]{leftmargin=*,itemsep=.95em,topsep=.5em}
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{24mm}
+{\Large\color{darkaccent} МАТЕМАТИКА\par}
+\vspace{12mm}
+{\LARGE Чек-лист\par}
+\vspace{12mm}
+{\LARGE\color{accent} Математическое ожидание,\par}
+{\LARGE\color{accent} дисперсия и стандартное отклонение\par}
+\vspace{17mm}
+{\normalsize Подготовка к ЕГЭ по профильной математике\par}
+\vfill
+{\large Николь Саркисьянц\par}
+\vspace{10mm}
+{5 ноября 2026 г.\par}
+\vspace{13mm}
+{\small Лёвин Артём Александрович\par}
+{\small эксклюзивно для Николь Саркисьянц\par}
+\vspace{4mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+ \draw[accent,line width=.8pt] (-5,0) .. controls (-3.3,1.0) and (-1.9,-.7) .. (0,0)
+ .. controls (1.6,.7) and (3.1,-1.1) .. (5,0);
+ \fill[darkaccent] (0,0) circle (1.3pt);
+\end{tikzpicture}
+\vspace{2mm}
+\end{center}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\Needspace{7\baselineskip}\section{Дискретная случайная величина}
+Случайная величина $X$ принимает числовые значения, зависящие от исхода случайного опыта. Если возможные значения можно перечислить, такую величину называют \key{дискретной}.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Значение $x_i$ & $0$ & $1$ & $2$ & $5$ \\
+\midrule
+Вероятность $p_i$ & $0{,}50$ & $0{,}40$ & $0{,}05$ & $0{,}05$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Например, $X$ может означать число литров воды, купленное одним посетителем магазина. При этом $p_i=P(X=x_i)$, все вероятности неотрицательны, и
+\[
+\boxed{p_1+p_2+\ldots+p_n=1.}
+\]
+
+\Needspace{7\baselineskip}\section{Математическое ожидание}
+\key{Математическое ожидание} --- среднее значение случайной величины при большом числе повторений опыта. Каждое значение умножается на вероятность его появления:
+\[
+\boxed{M(X)=x_1p_1+x_2p_2+\ldots+x_np_n.}
+\]
+\Ex{Честный игральный кубик.} Все шесть исходов равновероятны:
+\[
+M(X)=\frac{1+2+3+4+5+6}{6}=\frac{21}{6}=3{,}5.
+\]
+Это средний результат большого числа бросков. Число $3{,}5$ на грани кубика отсутствует; каждый отдельный исход $1,\ldots,6$ по-прежнему имеет вероятность $1/6$.
+
+\Ex{Покупка воды по таблице из начала раздела.}
+\[
+M(X)=0\cdot0{,}50+1\cdot0{,}40+2\cdot0{,}05+5\cdot0{,}05=0{,}75.
+\]
+В среднем на одного посетителя приходится $0{,}75$ л воды. \key{Единица измерения ожидания совпадает с единицей измерения $X$.}
+
+\Needspace{7\baselineskip}\section{Как найти неизвестную вероятность}
+Если одна из вероятностей обозначена буквой $p$, составьте уравнение по известному математическому ожиданию и обязательно проверьте $0\le p\le1$.
+
+\Ex{Пусть $X$ принимает значения $-2$, $1$, $6$ с вероятностями $0{,}2$, $p$, $0{,}8-p$ и $M(X)=1{,}9$.}
+\[
+-2\cdot0{,}2+1\cdot p+6(0{,}8-p)=1{,}9,
+\]
+\[
+4{,}4-5p=1{,}9,\qquad 5p=2{,}5,\qquad \boxed{p=0{,}5}.
+\]
+Проверка: $0{,}2+0{,}5+0{,}3=1$; все вероятности допустимы.
+
+\Needspace{7\baselineskip}\section{Вероятность попадания в интервал}
+Для дискретной величины сложите вероятности именно тех значений, которые входят в указанный промежуток. Отдельно проверьте строгие и нестрогие границы.
+
+\Ex{Пусть $X$ принимает значения $4$, $6$, $8$, $10$, $12$, $14$.} Вероятности соответственно равны $0{,}05$, $0{,}10$, $0{,}15$, $0{,}20$, $0{,}25$, $0{,}25$.
+\[
+P(8\le X\le 13)=P(X=8)+P(X=10)+P(X=12)
+\]
+\[
+=0{,}15+0{,}20+0{,}25=\boxed{0{,}60}.
+\]
+\clearpage
+
+\Needspace{7\baselineskip}\section{Дисперсия}
+Дисперсия $D(X)$ показывает, насколько значения случайной величины разбросаны относительно её математического ожидания. Для расчёта удобно использовать формулу
+\[
+\boxed{D(X)=M(X^2)-\bigl(M(X)\bigr)^2.}
+\]
+Здесь два разных действия:
+\begin{enumerate}[label=\arabic*.,itemsep=.2em]
+\item $M(X^2)=x_1^2p_1+\ldots+x_n^2p_n$: возводим в квадрат \textbf{значения}, вероятности оставляем прежними.
+\item $\bigl(M(X)\bigr)^2$: сначала находим обычное математическое ожидание, затем возводим результат в квадрат.
+\end{enumerate}
+\Ex{Пусть $P(X=0)=0{,}7$ и $P(X=2)=0{,}3$. Найдём дисперсию.}
+\[
+M(X)=0\cdot0{,}7+2\cdot0{,}3=0{,}6,
+\]
+\[
+M(X^2)=0^2\cdot0{,}7+2^2\cdot0{,}3=1{,}2,
+\]
+\[
+D(X)=1{,}2-(0{,}6)^2=1{,}2-0{,}36=\boxed{0{,}84}.
+\]
+\key{Дисперсия всегда неотрицательна.} Её единицы измерения --- квадрат единицы измерения $X$.
+
+\Needspace{7\baselineskip}\section{Стандартное отклонение}
+Стандартное отклонение характеризует типичный масштаб отклонений от среднего и измеряется в тех же единицах, что и $X$:
+\[
+\boxed{\sigma(X)=\sqrt{D(X)}.}
+\]
+В предыдущем примере $\sigma(X)=\sqrt{0{,}84}\approx0{,}92$.
+
+\clearpage
+\section{Два независимых испытания}
+Если вероятность успеха в каждом независимом испытании равна $0{,}8$, обозначим через $X$ количество успехов в двух испытаниях. Тогда $X$ принимает только $0$, $1$ или $2$:
+\[
+\begin{aligned}
+P(X=0)&=0{,}2\cdot0{,}2=0{,}04,\\
+P(X=1)&=0{,}8\cdot0{,}2+0{,}2\cdot0{,}8=0{,}32,\\
+P(X=2)&=0{,}8\cdot0{,}8=0{,}64.
+\end{aligned}
+\]
+\[
+M(X)=0\cdot0{,}04+1\cdot0{,}32+2\cdot0{,}64=\boxed{1{,}6}.
+\]
+\[
+\begin{aligned}
+M(X^2)&=1^2\cdot0{,}32+2^2\cdot0{,}64=2{,}88,\\
+D(X)&=2{,}88-1{,}6^2=\boxed{0{,}32}.
+\end{aligned}
+\]
+\key{Одному успеху соответствуют два исхода:} успех в первом испытании либо во втором.
+
+
+\Needspace{10\baselineskip}\section{Страхование: математическое ожидание дохода}
+Доход страховой компании от одного полиса равен цене полиса за вычетом страховой выплаты:
+\[
+Y=C-L,\qquad M(Y)=C-M(L).
+\]
+\Ex{При страховом случае компания выплачивает $400\,000$ руб. с вероятностью $0{,}02$, в остальных случаях выплата равна нулю. Какую цену полиса назначить, чтобы средний доход составлял $3\,000$ руб.?}
+\[
+M(L)=400\,000\cdot0{,}02=8\,000,\qquad
+C-8\,000=3\,000.
+\]
+\[\boxed{C=11\,000\ \text{руб.}}\]
+При нескольких взаимоисключающих вариантах выплат используйте $M(L)=\sum l_ip_i$. Не путайте \emph{выплату при событии} и \emph{среднюю выплату}.
+
+
+\clearpage
+\Needspace{7\baselineskip}\section{Лотереи: выигрыш и среднее значение}
+В лотерее 50\,000 билетов. Выигрыши и количество билетов заданы таблицей:
+\begin{center}
+\small\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}r r r@{}}
+\toprule
+Выигрыш, руб. & Билетов & Вероятность \\
+\midrule
+$0$ & $48\,838$ & $48\,838/50\,000$ \\
+$100$ & $1\,000$ & $1/50$ \\
+$500$ & $100$ & $1/500$ \\
+$1\,000$ & $50$ & $1/1\,000$ \\
+$50\,000$ & $10$ & $1/5\,000$ \\
+$100\,000$ & $2$ & $1/25\,000$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Количество билетов без выигрыша: $50\,000-(1\,000+100+50+10+2)=48\,838$.
+
+\Ex{Математическое ожидание выигрыша.}
+\[
+\begin{aligned}
+M(X)&=\frac{100\cdot1\,000+500\cdot100+1\,000\cdot50}{50\,000}\\
+&\quad+\frac{50\,000\cdot10+100\,000\cdot2}{50\,000}
+=\boxed{18\ \text{руб.}}
+\end{aligned}
+\]
+Это \key{средний выигрыш в расчёте на билет} при большом числе покупок; он не означает, что отдельный билет чаще всего приносит 18 рублей. Если билет платный, средний \emph{чистый} результат равен $18$ рублей минус цена билета.
+
+Для оценки разброса отдельно считаем
+\[
+\begin{aligned}
+M(X^2)&=\frac{100^2\cdot1\,000+500^2\cdot100+1\,000^2\cdot50}{50\,000}\\
+&\quad+\frac{50\,000^2\cdot10+100\,000^2\cdot2}{50\,000}
+=901\,700.
+\end{aligned}
+\]
+\[
+D(X)=901\,700-18^2=\boxed{901\,376\ \text{руб.}^2},
+\]
+\[
+\sigma(X)=\sqrt{901\,376}\approx949{,}41\ \text{руб.}
+\]
+Большое стандартное отклонение связано с редкими крупными выигрышами.
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+\vspace*{12mm}
+{\Large\color{darkaccent}Алгоритм вычисления статистических характеристик}\par
+\end{center}
+\vspace{16mm}
+\begin{center}
+\begin{tikzpicture}[
+ node distance=12mm,
+ >={Stealth[length=2.7mm]},
+ every node/.style={font=\normalsize,align=center},
+ start/.style={ellipse,draw=accent,line width=.8pt,minimum width=7cm,minimum height=12mm},
+ proc/.style={rectangle,rounded corners=1.8mm,draw=accent,line width=.65pt,text width=9.3cm,inner sep=8pt,minimum height=15mm},
+ arrow/.style={->,draw=darkaccent,line width=.9pt}]
+\node[start] (s) {Задана таблица значений $x_i$ и вероятностей $p_i$};
+\node[proc,below=of s] (check) {Проверьте: $p_i\ge0$ и $\sum p_i=1$};
+\node[proc,below=of check] (expect) {Найдите математическое ожидание\\ $M(X)=\sum x_ip_i$. Если этого достаточно, завершите расчёт};
+\node[proc,below=of expect] (square) {Если требуется дисперсия: найдите\\ $M(X^2)=\sum x_i^2p_i$};
+\node[proc,below=of square] (variance) {Вычислите $D(X)=M(X^2)-\bigl(M(X)\bigr)^2$\\ Проверьте, что $D(X)\ge0$};
+\node[proc,below=of variance] (sd) {Если требуется стандартное отклонение:\\ $\sigma(X)=\sqrt{D(X)}$};
+\node[start,below=of sd] (end) {Запишите ответ с нужной единицей измерения};
+\draw[arrow] (s)--(check);
+\draw[arrow] (check)--(expect);
+\draw[arrow] (expect)--(square);
+\draw[arrow] (square)--(variance);
+\draw[arrow] (variance)--(sd);
+\draw[arrow] (sd)--(end);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{Тренировочный блок --- Путь А}
+\textcolor{muted}{10 заданий. Выполняйте по порядку; в задачах с таблицами сначала проверьте сумму вероятностей.}
+\begin{enumerate}
+\item Случайная величина $X$ принимает значения $1$, $3$, $5$ с вероятностями $0{,}2$, $0{,}5$, $0{,}3$. Найдите $M(X)$.
+\item Случайная величина $X$ принимает значения $0$, $2$, $5$ с вероятностями $0{,}4$, $0{,}35$, $0{,}25$. Найдите $M(X)$.
+\item Величина $X$ принимает значения $0$ и $2$ с вероятностями $0{,}7$ и $0{,}3$. Найдите $D(X)$.
+\item Величина $X$ принимает значения $2$, $4$, $6$ с вероятностями $0{,}25$, $0{,}5$, $0{,}25$. Найдите $M(X)$, $D(X)$ и $\sigma(X)$.
+\item Величина $X$ принимает значения $-3$, $0$, $2$, $5$, $9$ с вероятностями $0{,}15$, $0{,}30$, $0{,}20$, $0{,}25$, $0{,}10$. Найдите $P(0\le X<9)$.
+\item Величина $X$ принимает значения $-1$, $2$, $6$ с вероятностями $0{,}25$, $p$, $0{,}75-p$. Известно, что $M(X)=2{,}25$. Найдите $p$.
+\item В лотерее $2\,000$ билетов. Выигрыш $100$ рублей получают $120$ билетов, $500$ рублей --- $30$ билетов, $5\,000$ рублей --- $2$ билета. Остальные билеты ничего не выигрывают. Найдите математическое ожидание выигрыша по одному случайно выбранному билету.
+\item Страховой полис стоит $3\,000$ рублей. Компания выплачивает $10\,000$ рублей с вероятностью $0{,}08$ либо $40\,000$ рублей с вероятностью $0{,}04$; в остальных случаях выплата равна нулю. Найдите математическое ожидание дохода компании от одного полиса.
+\item Две независимые проверки проходят успешно, каждая с вероятностью $0{,}8$. Пусть $X$ --- число успешных проверок. Составьте распределение $X$ и найдите $M(X)$ и $D(X)$.
+\item Случайная величина $X$ принимает значения $-2$, $1$, $4$ с вероятностями $p$, $0{,}5$, $0{,}5-p$. Известно, что $M(X)=1$. Найдите $p$, дисперсию и стандартное отклонение $X$.
+\end{enumerate}
+\clearpage
+\section*{Ответы к тренировочному блоку}
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\linewidth}{@{}p{11mm}X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+1 & $3{,}2$ \\
+2 & $1{,}95$ \\
+3 & $0{,}84$ \\
+4 & $M(X)=4$, $D(X)=2$, $\sigma(X)=\sqrt{2}$ \\
+5 & $0{,}75$ \\
+6 & $p=0{,}5$ \\
+7 & $18{,}5$ руб. \\
+8 & $600$ руб. \\
+9 & $P(X=0)=0{,}04$; $P(X=1)=0{,}32$; $P(X=2)=0{,}64$; $M(X)=1{,}6$, $D(X)=0{,}32$ \\
+10 & $p=0{,}25$; $D(X)=4{,}5$; $\sigma(X)=\sqrt{4{,}5}=\dfrac{3\sqrt{2}}{2}$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vspace{9mm}
+{\large\color{darkaccent}Итоговая памятка}\par\smallskip
+\begin{tabularx}{\linewidth}{@{}p{46mm}X@{}}
+\toprule
+\textbf{Что дано или требуется} & \textbf{Действие}\\
+\midrule
+Таблица распределения & Проверьте сумму вероятностей: она равна $1$.\\
+Математическое ожидание & Сложите произведения значений на их вероятности.\\
+Дисперсия & Найдите $M(X^2)$, затем вычтите $(M(X))^2$.\\
+Стандартное отклонение & Извлеките квадратный корень из дисперсии.\\
+Интервал & Сложите вероятности допустимых значений.\\
+Доход от страхования & Из цены полиса вычтите ожидаемую выплату.\\
+\bottomrule
+\end{tabularx}
+\vfill
+\begin{center}\small\color{muted}Лёвин Артём Александрович эксклюзивно для Николь Саркисьянц\end{center}
+\end{document}
