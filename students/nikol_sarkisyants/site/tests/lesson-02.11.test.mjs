@@ -61,9 +61,14 @@ test('reference frequency distribution and variance are consistent', () => {
   assert.ok(Math.abs(squareSum/N-(sum/N)**2-116/121)<1e-12);
 });
 
-test('lesson is newest in student registry; index loads dated evidence', () => {
-  assert.match(read('lesson-registry.js'), /export const LESSONS=\[\s*\{\s*"date": "2026-11-02"/);
+test('02.11 lesson remains in the archive after 05.11 publication; evidence stays linked', () => {
+  const registry = read('lesson-registry.js');
+  assert.match(registry, /export const LESSONS=\[\s*\{\s*"date": "2026-11-05"/);
+  const latestPosition = registry.indexOf('"date": "2026-11-05"');
+  const previousPosition = registry.indexOf('"date": "2026-11-02"');
+  assert.ok(previousPosition > latestPosition, '02.11 lesson must remain after the 05.11 lesson');
   assert.match(read('index.html'), /dashboard-data-02\.11\.js/);
-  assert.match(read('dashboard.js'), /lesson-registry\.js\?v=20261102-1/);
+  assert.match(read('index.html'), /dashboard-data-05\.11\.js/);
+  assert.match(read('dashboard.js'), /lesson-registry\.js\?v=20261105/);
   assert.match(read('dashboard-data-02.11.js'), /02\.11\.26\.html#frequency/);
 });
