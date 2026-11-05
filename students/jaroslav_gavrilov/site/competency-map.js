@@ -361,6 +361,27 @@
       material.removeAttribute('href');
     }
 
+    // Keep the historical primary material while exposing newer lesson evidence.
+    let extra = document.getElementById('dialogAdditionalMaterials');
+    if (!extra) {
+      extra = document.createElement('div');
+      extra.id = 'dialogAdditionalMaterials';
+      extra.setAttribute('aria-label', 'Дополнительные материалы по навыку');
+      material.after(extra);
+    }
+    extra.replaceChildren();
+    for (const linked of item.relatedMaterials || []) {
+      if (!linked || !linked.href || linked.href === (item.material && item.material.href)) continue;
+      const line = document.createElement('p');
+      const anchor = document.createElement('a');
+      anchor.className = 'text-link';
+      anchor.href = linked.href;
+      anchor.textContent = linked.label || 'Другой материал по навыку';
+      line.append(anchor);
+      extra.append(line);
+    }
+    extra.hidden = !extra.childElementCount;
+
     updateDialogState(item);
     if (typeof els.dialog.showModal === 'function') els.dialog.showModal();
   }
