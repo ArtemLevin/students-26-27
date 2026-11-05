@@ -318,6 +318,40 @@ try{
   assert.deepEqual(darkState,{html:'dark',body:'dark'},'theme sync');
   await visit('archive.html',1440,true);
   assert.equal(await evalJS('document.body.dataset.theme'),'dark','archive theme');
+
+  // 05 November: verify the new application lesson and the physical-root laboratory.
+  for (const width of [390,768,1440]) {
+    for (const dark of [false,true]) {
+      await visit('05.11.26.html',width,dark);
+      const page05=await evalJS('(()=>{const ids=[...document.querySelectorAll("[id]")].map(x=>x.id);return {tasks:document.querySelectorAll("ol.training > li").length,chapters:document.querySelectorAll("main .chapter").length,duplicateIds:ids.length-new Set(ids).size,labLink:[...document.querySelectorAll("a[href]")].some(x=>x.getAttribute("href")==="05.11.26-lab.html"),pdf:[...document.querySelectorAll("a[href]")].some(x=>x.getAttribute("href")==="../pdf_docs/05.11.26.pdf"),step:document.querySelector("#stepCounter").textContent.trim()}})()');
+      assert.equal(page05.tasks,10,'05 November: full-length training has ten exercises');
+      assert.ok(page05.chapters>=8,'05 November: theory and examples are present');
+      assert.equal(page05.duplicateIds,0,'05 November: all anchors unique');
+      assert.equal(page05.labLink,true,'05 November: lab is reachable');
+      assert.equal(page05.pdf,true,'05 November: linked PDF exists');
+      assert.equal(page05.step,'1 / 5','05 November: worked solution starts at first step');
+      if((width===390||width===1440)&&!dark)await screenshot('lesson-051126-'+width+'-light');
+      await visit('05.11.26-lab.html?mode=tank',width,dark);
+      const tank05=await evalJS('(()=>({mode:document.getElementById("modeTitle").textContent,secondDisabled:document.getElementById("secondBoundary").disabled,limit:document.getElementById("timeSlider").max,graph:document.querySelector("#plotObjects path.curve")?.getAttribute("d").length,note:document.getElementById("criticalNote").textContent,back:document.getElementById("backSection").getAttribute("href")}))()');
+      assert.equal(tank05.mode,'Высота воды в баке','tank mode selected via deep link');
+      assert.equal(tank05.secondDisabled,true,'the nonphysical root cannot be selected');
+      assert.equal(tank05.limit,'100','tank ends when physically empty');
+      assert.ok(tank05.graph>500,'tank graph is rendered');
+      assert.ok(tank05.note.includes('150 с'),'nonphysical root is explained');
+      assert.equal(tank05.back,'05.11.26.html#tank','context link returns to correct lesson section');
+      if((width===390||width===1440)&&!dark)await screenshot('lab-051126-'+width+'-light');
+    }
+  }
+  await visit('05.11.26.html',1440,false);
+  const pageInteraction05=await evalJS('(()=>{const counter=document.getElementById("stepCounter");const before=counter.textContent.trim();document.getElementById("stepNext").click();const after=counter.textContent.trim();document.getElementById("stepAll").click();const all=counter.textContent.trim();document.getElementById("stepReset").click();const reset=counter.textContent.trim();document.getElementById("themeToggle").click();return {before,after,all,reset,theme:document.documentElement.dataset.theme}})()');
+  assert.deepEqual(pageInteraction05,{before:'1 / 5',after:'2 / 5',all:'Все 5 шагов',reset:'1 / 5',theme:'dark'},'05 November stepper and theme');
+  await visit('05.11.26-lab.html?mode=ball',1440,false);
+  const ballChange05=await evalJS('(()=>{const s=document.getElementById("timeSlider");const initial=document.getElementById("currentValue").textContent;s.value="0.5";s.dispatchEvent(new Event("input",{bubbles:true}));const changed=document.getElementById("currentValue").textContent;document.getElementById("firstBoundary").click();const first=s.value;document.getElementById("reset").click();return {initial,changed,first,reset:s.value}})()');
+  assert.equal(ballChange05.initial,'1,6 м','initial ball height');
+  assert.equal(ballChange05.changed,'4,35 м','graph and reading recalculate when time changes');
+  assert.deepEqual({first:ballChange05.first,reset:ballChange05.reset},{first:'0.2',reset:'0'},'lab boundary and reset');
+  console.log('JAROSLAV_051126_BROWSER_PASS',JSON.stringify({pageInteraction05,ballChange05}));
+
   console.log('JAROSLAV_EDITORIAL_QA_PASS',JSON.stringify({mobile,names,found,archiveMeasures}));
 
   assert.deepEqual(errors,[],'JavaScript errors');assert.deepEqual(bad,[],'HTTP failures');
