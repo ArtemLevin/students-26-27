@@ -1,4 +1,4 @@
-import {LESSONS} from './lesson-registry.js';
+import {LESSONS} from './lesson-registry.js?v=20261105';
 
 /* Single canonical Student Platform v2 registry; no duplicate lesson inventory. */
 const $=id=>document.getElementById(id);
