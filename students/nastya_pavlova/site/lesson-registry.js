@@ -5,6 +5,115 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-05",
+  "ktpRefs": [],
+  "href": "05.11.26.html",
+  "title": "Финансовые задачи ЕГЭ: кредиты, вклады, проценты",
+  "navTitle": "Финансовые задачи ЕГЭ: кредиты, вклады, проценты",
+  "navSubtitle": "Анастасия Павлова · 5 ноября: аннуитет, вклад, дифференцированный кредит и ограничения на ставку.",
+  "summary": "Аннуитет и переплата, вклад с пополнением, дифференцированный кредит, ограничения на первый и последний платежи и поиск целой процентной ставки.",
+  "topics": [
+    "Аннуитетный кредит: ставка, равный ежегодный платёж и переплата",
+    "Вклад с пополнением и квадратное уравнение для ставки",
+    "Дифференцированная схема и уменьшение остатка долга",
+    "Ограничения на первый и последний платежи",
+    "Тренировка: Путь А, 10 заданий с ответами"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "fin_07",
+      "evidenceAnchor": "annuity",
+      "relation": "practiced",
+      "label": "Аннуитетная модель и равные платежи",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_14",
+      "evidenceAnchor": "annuity",
+      "relation": "practiced",
+      "label": "Общая сумма выплат",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_15",
+      "evidenceAnchor": "annuity",
+      "relation": "practiced",
+      "label": "Переплата по кредиту",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_02",
+      "evidenceAnchor": "deposit",
+      "relation": "practiced",
+      "label": "Сложные проценты при вкладе",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_03",
+      "evidenceAnchor": "deposit",
+      "relation": "practiced",
+      "label": "Вклад с капитализацией и пополнением",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_16",
+      "evidenceAnchor": "deposit",
+      "relation": "practiced",
+      "label": "Нахождение процентной ставки",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "eq_02",
+      "evidenceAnchor": "deposit",
+      "relation": "practiced",
+      "label": "Квадратное уравнение для ставки",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_06",
+      "evidenceAnchor": "differential",
+      "relation": "practiced",
+      "label": "Дифференцированная схема",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_08",
+      "evidenceAnchor": "differential",
+      "relation": "practiced",
+      "label": "Равные части основного долга",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_10",
+      "evidenceAnchor": "differential",
+      "relation": "practiced",
+      "label": "Проценты на текущий остаток",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_18",
+      "evidenceAnchor": "bounds",
+      "relation": "practiced",
+      "label": "Ограничения на величину платежа",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_20",
+      "evidenceAnchor": "bounds",
+      "relation": "touched",
+      "label": "Проверка ставки по условиям",
+      "practiceDisposition": "none"
+    }
+  ],
+  "materials": {
+    "html": "05.11.26.html",
+    "pdf": "../pdf_docs/05.11.26.pdf",
+    "tex": "../tex_docs/05.11.26.tex",
+    "lab": "05.11.26-lab.html"
+  }
+},
+
+{
   "date": "2026-11-02",
   "ktpRefs": [],
   "href": "02.11.26.html",
