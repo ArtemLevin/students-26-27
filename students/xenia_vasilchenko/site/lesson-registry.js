@@ -5,6 +5,89 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-05",
+  "ktpRefs": [],
+  "href": "05.11.26.html",
+  "title": "Целое. Часть. Доля.",
+  "navTitle": "Целое, часть и проценты",
+  "navSubtitle": "Нахождение дроби от числа и целого по известной части; проценты, оставшаяся доля, уменьшение цены и времени, 10 заданий для тренировки.",
+  "summary": "Нахождение дроби от числа и целого по известной части; проценты, оставшаяся доля, уменьшение цены и времени, 10 заданий для тренировки.",
+  "topics": [
+    "Дробь от числа и целое по известной части",
+    "Перевод процентов и смешанных чисел",
+    "Оставшаяся доля и текстовые схемы",
+    "Изменение величины в процентах"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "frac_base_01",
+      "evidenceAnchor": "relations",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "frac_ops_14",
+      "evidenceAnchor": "relations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_15",
+      "evidenceAnchor": "relations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_base_06",
+      "evidenceAnchor": "forms",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_12",
+      "evidenceAnchor": "forms",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_16",
+      "evidenceAnchor": "remaining",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_17",
+      "evidenceAnchor": "remaining",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_18",
+      "evidenceAnchor": "changes",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_16",
+      "evidenceAnchor": "algorithm",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "dec_04",
+      "evidenceAnchor": "percent",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dec_14",
+      "evidenceAnchor": "forms",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "word_03",
+      "evidenceAnchor": "algorithm",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "05.11.26.html",
+    "pdf": "../pdf_docs/05.11.26.pdf",
+    "tex": "../tex_docs/05.11.26.tex",
+    "lab": "05.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-03",
   "ktpRefs": [],
   "href": "03.11.26.html",
