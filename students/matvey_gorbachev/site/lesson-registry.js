@@ -5,6 +5,85 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-11-05",
+    "ktpRefs": [],
+    "href": "05.11.26.html",
+    "title": "От формулы производной к поведению функции",
+    "navTitle": "Производные и исследование функции",
+    "navSubtitle": "Матвей Горбачёв. Вычисление производных: базовые формулы, произведение, частное, сложная функция, синус, косинус и показательные функции. Исследование знака производной, монотонности, экстремумов и ОДЗ. Путь А — 10 заданий.",
+    "summary": "Матвей Горбачёв. Вычисление производных: базовые формулы, произведение, частное, сложная функция, синус, косинус и показательные функции. Исследование знака производной, монотонности, экстремумов и ОДЗ. Путь А — 10 заданий.",
+    "topics": [
+      "производная степени, суммы, постоянного множителя и константы",
+      "производные произведения и частного, правила для sin и cos",
+      "производная сложной и показательной функции",
+      "знаки производной, интервалы монотонности и локальные экстремумы",
+      "ОДЗ при исследовании дробно-рациональной функции"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "calculus_02",
+        "evidenceAnchor": "rules",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_03",
+        "evidenceAnchor": "rules",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "calculus_04",
+        "evidenceAnchor": "product",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_05",
+        "evidenceAnchor": "product",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_06",
+        "evidenceAnchor": "chain",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_07",
+        "evidenceAnchor": "trig",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_08",
+        "evidenceAnchor": "exponential",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_10",
+        "evidenceAnchor": "sign",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "calculus_11",
+        "evidenceAnchor": "sign",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_12",
+        "evidenceAnchor": "sign",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "functions_01",
+        "evidenceAnchor": "rational",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "05.11.26.html",
+      "pdf": "../pdf_docs/05.11.26.pdf",
+      "tex": "../tex_docs/05.11.26.tex",
+      "lab": "05.11.26-lab.html"
+    }
+  },
+  {
     "date": "2026-11-01",
     "ktpRefs": [],
     "href": "01.11.26.html",
