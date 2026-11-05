@@ -366,6 +366,32 @@ for (const [id,cfg] of Object.entries(LESSON_291026)) {
   item.material={href:'29.10.26.html#'+cfg.section,label:'Открыть раздел занятия от 29.10 →'};
 }
 
+
+// 05.11.2026: evidence of supervised practice in quadratic application models.
+// Do not infer independent mastery from a lesson or from assigned exercises.
+const LESSON_051126 = {
+  "ege07_02": {section:"ball",evidence:"Квадратное уравнение для высоты мяча решалось с дискриминантом и отбором моментов.",relation:"practiced"},
+  "ege10_01": {section:"strategy",evidence:"Подстановка известных данных в готовые формулы прикладных задач.",relation:"practiced"},
+  "ege10_02": {section:"bucket",evidence:"Неизвестная скорость выражена из формулы силы давления при ненулевой массе.",relation:"practiced"},
+  "ege10_03": {section:"bucket",evidence:"Радиус 40 сантиметров переведён в 0,4 метра.",relation:"practiced"},
+  "ege10_05": {section:"temperature",evidence:"Модель температуры использована для нахождения продолжительности при условии «не менее 70 градусов».",relation:"practiced"},
+  "ege10_06": {section:"ball",evidence:"Моменты пересечения высоты 3 метра найдены из квадратной модели движения.",relation:"practiced"},
+  "ege10_07": {section:"bucket",evidence:"При P=0 и m>0 найден квадрат скорости, выбран неотрицательный результат.",relation:"practiced"},
+  "ege10_09": {section:"tank",evidence:"Для модели опустошения бака выделен физически допустимый промежуток времени.",relation:"practiced"},
+  "ege10_12": {section:"tank",evidence:"Из математических корней 50 и 150 секунд выбран допустимый корень 50 секунд.",relation:"practiced"},
+  "ege08_06": {section:"roots",evidence:"Из большого точного квадрата извлечён корень с проверкой кандидатов.",relation:"practiced"},
+  "ege10_11": {section:"bucket",evidence:"Обсуждалась согласованность единиц в формуле скорости движения ведёрка.",relation:"touched"}
+};
+for(const [id,cfg] of Object.entries(LESSON_051126)){
+  const item=G.flatMap(group=>group.items).find(topic=>topic.id===id);
+  if(!item)continue;
+  item.evidence=Array.isArray(item.evidence)?item.evidence:[];
+  item.evidence.push({text:cfg.evidence+" Материал: занятие 05.11.2026 «Задачи прикладного характера». Формат: "+(cfg.relation==="practiced"?"разбор и практика с преподавателем.":"обсуждение.")});
+  item.relatedMaterials=Array.isArray(item.relatedMaterials)?item.relatedMaterials:[];
+  if(!item.relatedMaterials.some(material=>material.href==="05.11.26.html#"+cfg.section)) item.relatedMaterials.push({href:"05.11.26.html#"+cfg.section,label:"Занятие 05.11: "+cfg.evidence});
+  if(!item.material || !item.material.href) item.material={href:"05.11.26.html#"+cfg.section,label:"Открыть раздел занятия 05.11 →"};
+}
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'jaroslav_gavrilov',
@@ -375,7 +401,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Структура сверена 19.09.2026 с опубликованными ФИПИ проектами КИМ ЕГЭ-2027 по профильной математике.',
-    updated:'29.10.2026'
+    updated:'05.11.2026'
   },
   groups:G
 };
