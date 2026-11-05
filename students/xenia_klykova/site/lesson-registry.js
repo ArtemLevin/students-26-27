@@ -5,6 +5,59 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-05",
+  "ktpRefs": [],
+  "href": "05.11.26.html",
+  "title": "Сумма и количество делителей",
+  "navTitle": "Сумма и количество делителей",
+  "navSubtitle": "Ксения Клыкова, 5 ноября 2026: τ- и σ-функции, геометрическая прогрессия, сумма и количество делителей с ограничениями, разбор числа 1080 и 10 упражнений.",
+  "summary": "Ксения Клыкова, 5 ноября 2026: τ- и σ-функции, геометрическая прогрессия, сумма и количество делителей с ограничениями, разбор числа 1080 и 10 упражнений.",
+  "topics": [
+    "τ-функция и σ-функция положительных делителей",
+    "каноническое разложение и сумма степеней простого",
+    "формула геометрической прогрессии для σ(n)",
+    "суммы чётных, нечётных и кратных m делителей",
+    "совместные ограничения: кратны 12, но не кратны 5",
+    "10 упражнений «Путь А»"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t19_primes",
+      "evidenceAnchor": "canonical",
+      "relation": "practiced",
+      "label": "Каноническое разложение натурального числа",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_divisor_count",
+      "evidenceAnchor": "canonical",
+      "relation": "touched",
+      "label": "Количество делителей и τ-функция",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_progressions",
+      "evidenceAnchor": "progression",
+      "relation": "touched",
+      "label": "Геометрическая прогрессия в формуле σ-функции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_divisibility",
+      "evidenceAnchor": "combined",
+      "relation": "practiced",
+      "label": "Делители с ограничениями кратности",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "05.11.26.html",
+    "pdf": "../pdf_docs/05.11.26.pdf",
+    "tex": "../tex_docs/05.11.26.tex",
+    "lab": "05.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-04",
   "ktpRefs": [],
   "href": "04.11.26.html",
