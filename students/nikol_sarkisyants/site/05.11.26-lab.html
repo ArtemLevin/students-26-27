@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория Николь Саркисьянц: изменение вероятности в распределении X=0 или 2; математическое ожидание, дисперсия и стандартное отклонение.">
+<title>Лаборатория распределения · Николь Саркисьянц · 05.11.2026</title>
+<style>
+:root{color-scheme:light;--bg:#f6f2eb;--paper:#fffdf9;--ink:#28262b;--muted:#68636b;--line:#d9cfc8;--wine:#783e50;--teal:#20676a;--rose:#f2e5e9;--soft:#eaf0ec;--focus:#99521e}
+html[data-theme=dark]{color-scheme:dark;--bg:#191a1d;--paper:#25272b;--ink:#f4eee8;--muted:#c9bfc2;--line:#5b5259;--wine:#ecafbd;--teal:#98d7d6;--rose:#392b32;--soft:#253b3b;--focus:#ffca88}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:var(--teal);text-underline-offset:4px}
+button,input{font:inherit}button{color:inherit;cursor:pointer}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{position:absolute;left:1rem;top:-6rem;z-index:5;background:var(--paper);padding:.65rem}.skip:focus{top:1rem}
+.shell{width:min(1240px,calc(100% - 2.5rem));margin:auto}
+.bar{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;padding:1.1rem 0;border-bottom:1px solid var(--line)}
+.bar a,.bar button{color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;min-height:44px;border:1px solid var(--line);padding:.6rem .85rem;background:var(--paper);font-size:.88rem}
+.bar .folio{margin-left:auto;font:.77rem ui-monospace,Consolas,monospace;color:var(--muted)}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:500;line-height:1.14;letter-spacing:-.025em}
+h1{font-size:clamp(2.7rem,5.6vw,5rem);max-width:16ch;margin:.6rem 0 1rem}
+h2{font-size:clamp(1.75rem,2.7vw,2.6rem);margin:.2rem 0 1.2rem}
+h3{font-size:1.43rem;margin:0 0 .6rem}
+.eyebrow{font:750 .75rem/1.5 ui-monospace,Consolas,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--wine)}
+header{padding:clamp(2.5rem,5vw,4.5rem) 0 2.5rem}header p:last-child{color:var(--muted);font-size:1.08rem;max-width:70ch}
+.layout{display:grid;grid-template-columns:minmax(270px,.39fr) minmax(0,.61fr);gap:clamp(1.5rem,4vw,4.5rem);padding-bottom:3rem}
+.controls{border-top:3px solid var(--wine);padding-top:1.25rem}
+.controls p{margin:0 0 1.3rem}.control{margin:1.8rem 0 1rem}
+.labelrow{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:.75rem}
+label{font-weight:650}.value{font:500 2rem Georgia,serif;color:var(--wine)}
+input[type=range]{width:100%;accent-color:var(--wine);min-height:36px;cursor:pointer}
+.ends{display:flex;justify-content:space-between;color:var(--muted);font:.78rem ui-monospace,Consolas,monospace}
+.presets{display:flex;gap:.6rem;flex-wrap:wrap;margin:1.5rem 0}
+.presets button,.reset,.answer-btn{min-height:44px;padding:.64rem .83rem;border:1px solid var(--line);background:var(--paper)}
+.presets button[aria-pressed=true]{border-color:var(--wine);background:var(--rose);font-weight:700}
+.study-note{padding:1rem 0;border-top:1px solid var(--line);color:var(--muted)}
+.figure{border-top:3px solid var(--teal);padding-top:1.3rem}
+.scale{font-size:.83rem;color:var(--muted);text-align:center}
+.figure svg{display:block;width:100%;height:auto;overflow:visible;color:var(--ink)}
+.figure svg text{fill:currentColor;font:16px system-ui,-apple-system,"Segoe UI",Arial}
+.figure svg .axis{stroke:var(--line);stroke-width:2}
+.figure svg .bar0{fill:var(--teal)}
+.figure svg .bar2{fill:var(--wine)}
+.figure svg .mean{stroke:var(--ink);stroke-width:2.6;stroke-dasharray:6 5}
+.figure svg .meanText{font-weight:700;fill:var(--ink)}
+.figure figcaption{margin:.6rem 0 1.3rem;font-size:.85rem;color:var(--muted)}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-block:1px solid var(--line)}
+.metric{padding:1.1rem .7rem 1rem;border-right:1px solid var(--line)}
+.metric:last-child{border:0}
+.metric b{display:block;font:500 clamp(1.5rem,3vw,2.65rem) Georgia,serif;color:var(--wine);font-variant-numeric:tabular-nums}
+.metric span{display:block;font-size:.85rem;color:var(--muted)}
+.details{margin-top:1.8rem;border-top:1px solid var(--line)}
+summary{cursor:pointer;font-weight:700;min-height:44px;padding:1rem 0;color:var(--teal)}
+.step{border-top:1px solid var(--line);padding:.75rem 0}
+.step strong{color:var(--wine)}
+.quizz{border-top:1px solid var(--line);margin-top:2rem;padding-top:1.4rem}
+.quizz h3{margin-bottom:.7rem}
+.quizz .buttons{display:flex;flex-wrap:wrap;gap:.6rem;margin:1rem 0}
+.feedback{min-height:2.3rem;font-weight:650;color:var(--teal)}
+math{font-family:"Cambria Math",serif}
+.formula{max-width:100%;overflow-x:auto;padding:.8rem 0;color:var(--teal)}
+footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--muted);font-size:.85rem}
+@media(max-width:820px){.layout{grid-template-columns:1fr}.controls{max-width:600px}}
+@media(max-width:520px){.shell{width:calc(100% - 1.3rem)}.metrics{grid-template-columns:1fr}.metric{border-right:0;border-bottom:1px solid var(--line)}.metric:last-child{border:0}.bar .folio{width:100%;margin:0}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@media print{html,html[data-theme=dark]{--bg:white;--paper:white;--ink:#111;--muted:#444;--line:#bbb;--wine:#333;--teal:#333}.bar,.presets,.reset,.quizz,.control{display:none!important}.layout{display:block}.controls{border:0}.figure{break-inside:avoid}.metrics{grid-template-columns:repeat(3,1fr)}details>*{display:block!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#model">К исследованию</a>
+<div class="shell">
+<nav class="bar" aria-label="Навигация">
+<a href="05.11.26.html#variance">← Вернуться к объяснению</a>
+<a href="index.html">Кабинет</a>
+<a href="../pdf_docs/05.11.26.pdf">Скачать пособие</a>
+<button id="theme" type="button">Тёмная тема</button>
+<span class="folio">05.11.2026 · Николь Саркисьянц</span>
+</nav>
+<header>
+<p class="eyebrow">Лаборатория · дискретная случайная величина</p>
+<h1>Меняем вероятность. Наблюдаем разброс.</h1>
+<p>В пособии рассматривается величина X, принимающая значения 0 и 2 с вероятностями 0,7 и 0,3. Меняйте вероятность второго исхода: первый пересчитывается так, чтобы сумма всегда оставалась равной единице.</p>
+</header>
+<main class="layout" id="model">
+<section class="controls" aria-labelledby="controlTitle">
+<p class="eyebrow">01 / управление опытом</p>
+<h2 id="controlTitle">Два возможных значения</h2>
+<p>Значения X неизменны: <strong>0 или 2</strong>. Изменяется только вероятность появления каждого исхода.</p>
+<div class="control">
+<div class="labelrow"><label for="prob">Вероятность P(X = 2)</label><output id="p2" class="value" for="prob">0,30</output></div>
+<input id="prob" type="range" min="0" max="1" step="0.05" value="0.3" aria-describedby="probHelp">
+<div class="ends"><span>0</span><span>1</span></div>
+</div>
+<p id="probHelp" class="study-note">Вероятность P(X = 0) = <output id="p0">0,70</output>. Сумма двух вероятностей всегда равна 1.</p>
+<div class="presets" aria-label="Исходные состояния">
+<button type="button" data-p="0.3" aria-pressed="true">Из пособия · 0,30</button>
+<button type="button" data-p="0.5" aria-pressed="false">По 0,50</button>
+<button type="button" data-p="0.05" aria-pressed="false">0,05 для двойки</button>
+</div>
+<button type="button" id="reset" class="reset">Вернуться к примеру из пособия</button>
+<p class="study-note">На горизонтальной оси справа отмечается математическое ожидание. Оно перемещается вместе с вероятностью, а рассчитанные величины всегда соответствуют текущему распределению.</p>
+<h3>Что проверяется</h3>
+<div class="formula"><math display="block"><mi>M</mi><mo>(</mo><mi>X</mi><mo>)</mo><mo>=</mo><msub><mi>x</mi><mn>1</mn></msub><msub><mi>p</mi><mn>1</mn></msub><mo>+</mo><msub><mi>x</mi><mn>2</mn></msub><msub><mi>p</mi><mn>2</mn></msub></math></div>
+<div class="formula"><math display="block"><mi>D</mi><mo>(</mo><mi>X</mi><mo>)</mo><mo>=</mo><mi>M</mi><mo>(</mo><msup><mi>X</mi><mn>2</mn></msup><mo>)</mo><mo>−</mo><msup><mrow><mo>(</mo><mi>M</mi><mo>(</mo><mi>X</mi><mo>)</mo><mo>)</mo></mrow><mn>2</mn></msup></math></div>
+</section>
+<section class="figure" aria-labelledby="figureTitle">
+<p class="eyebrow">02 / зависимые значения</p>
+<h2 id="figureTitle">Распределение и среднее</h2>
+<figure>
+<svg id="chart" viewBox="0 0 650 340" role="img" aria-label="Два столбца вероятностей для значений 0 и 2 и положение математического ожидания">
+<line class="axis" x1="70" y1="245" x2="590" y2="245"></line>
+<line class="axis" x1="70" y1="55" x2="70" y2="245"></line>
+<g aria-hidden="true">
+<rect id="bar0" class="bar0" x="125" y="112" width="125" height="133" rx="1"></rect>
+<rect id="bar2" class="bar2" x="410" y="188" width="125" height="57" rx="1"></rect>
+<text x="188" y="265" text-anchor="middle">X = 0</text><text x="472" y="265" text-anchor="middle">X = 2</text>
+<text id="label0" x="188" y="102" text-anchor="middle">0,70</text><text id="label2" x="472" y="178" text-anchor="middle">0,30</text>
+<line class="axis" x1="80" y1="294" x2="580" y2="294"></line>
+<line id="meanLine" class="mean" x1="230" x2="230" y1="281" y2="310"></line>
+<text class="meanText" id="meanLabel" x="230" y="331" text-anchor="middle">M(X) = 0,60</text>
+<text x="80" y="286" text-anchor="middle">0</text><text x="580" y="286" text-anchor="middle">2</text>
+</g>
+</svg>
+<figcaption>Высота столбца — вероятность соответствующего исхода. На нижней оси показано математическое ожидание.</figcaption>
+</figure>
+<div class="metrics" aria-live="polite">
+<div class="metric"><b id="mean">0,60</b><span>математическое ожидание M(X)</span></div>
+<div class="metric"><b id="variance">0,84</b><span>дисперсия D(X)</span></div>
+<div class="metric"><b id="sigma">0,92</b><span>стандартное отклонение σ(X)</span></div>
+</div>
+<details class="details" id="details" open>
+<summary>Показать вычисления для текущего состояния</summary>
+<div class="step"><strong>Шаг 1.</strong> <span id="step1">M(X) = 0 · 0,70 + 2 · 0,30 = 0,60.</span></div>
+<div class="step"><strong>Шаг 2.</strong> <span id="step2">M(X²) = 0² · 0,70 + 2² · 0,30 = 1,20.</span></div>
+<div class="step"><strong>Шаг 3.</strong> <span id="step3">D(X) = 1,20 − (0,60)² = 0,84.</span></div>
+<div class="step"><strong>Шаг 4.</strong> <span id="step4">σ(X) = √0,84 ≈ 0,92.</span></div>
+</details>
+<p id="insight" class="study-note" role="status" aria-live="polite">При p = 0,30 получаем результат из пособия.</p>
+<section class="quizz" aria-labelledby="quizTitle">
+<h3 id="quizTitle">Предскажите, что возводится в квадрат</h3>
+<p>Когда вычисляется математическое ожидание квадрата X, какие элементы таблицы нужно возвести в квадрат?</p>
+<div class="buttons">
+<button class="answer-btn" data-answer="values" type="button">Значения X</button>
+<button class="answer-btn" data-answer="probabilities" type="button">Вероятности</button>
+</div>
+<p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+<button class="reset" type="button" id="quizReset">Повторить вопрос</button>
+</section>
+</section>
+</main>
+<footer>Лёвин Артём Александрович эксклюзивно для Николь Саркисьянц</footer>
+</div>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const slider=$('prob');
+const fmt=(n,d=2)=>n.toLocaleString('ru-RU',{minimumFractionDigits:2,maximumFractionDigits:d});
+const theme=$('theme');
+try{document.documentElement.dataset.theme=localStorage.getItem('nikol-lab-theme-05-11')==='dark'?'dark':'light'}catch{}
+function themeText(){theme.textContent=document.documentElement.dataset.theme==='dark'?'Светлая тема':'Тёмная тема'}themeText();
+theme.addEventListener('click',()=>{const newTheme=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=newTheme;themeText();try{localStorage.setItem('nikol-lab-theme-05-11',newTheme)}catch{}});
+function update(){
+ const p=Number(slider.value), q=1-p;
+ const mean=2*p, meanSquare=4*p, variance=Math.max(0,meanSquare-mean*mean),sigma=Math.sqrt(variance);
+ $('p0').textContent=fmt(q);$('p2').textContent=fmt(p);
+ $('mean').textContent=fmt(mean);$('variance').textContent=fmt(variance);$('sigma').textContent=fmt(sigma);
+ const baseY=245,maxH=190;
+ for(const [id,prob,label] of [['bar0',q,'label0'],['bar2',p,'label2']]){
+  const el=$(id),h=prob*maxH;el.setAttribute('y',String(baseY-h));el.setAttribute('height',String(h));$(label).setAttribute('y',String(Math.max(43,baseY-h-10)));$(label).textContent=fmt(prob);
+ }
+ const x=80+mean/2*500;
+ $('meanLine').setAttribute('x1',String(x));$('meanLine').setAttribute('x2',String(x));
+ $('meanLabel').setAttribute('x',String(Math.max(105,Math.min(555,x))));
+ $('meanLabel').textContent='M(X) = '+fmt(mean);
+ $('step1').textContent='M(X) = 0 · '+fmt(q)+' + 2 · '+fmt(p)+' = '+fmt(mean)+'.';
+ $('step2').textContent='M(X²) = 0² · '+fmt(q)+' + 2² · '+fmt(p)+' = '+fmt(meanSquare)+'.';
+ $('step3').textContent='D(X) = '+fmt(meanSquare)+' − ('+fmt(mean)+')² = '+fmt(variance)+'.';
+ $('step4').textContent='σ(X) = √'+fmt(variance)+' ≈ '+fmt(sigma)+'.';
+ $('chart').setAttribute('aria-label','Значение 0: вероятность '+fmt(q)+'; значение 2: вероятность '+fmt(p)+'; математическое ожидание '+fmt(mean));
+ $('insight').textContent=(p===.3?'Это исходный пример пособия. ':'')+'Сейчас сумма вероятностей '+fmt(q)+' + '+fmt(p)+' = 1; дисперсия '+fmt(variance)+'.';
+ document.querySelectorAll('[data-p]').forEach(btn=>btn.setAttribute('aria-pressed',String(Number(btn.dataset.p)===p)));
+}
+slider.addEventListener('input',update);
+document.querySelectorAll('[data-p]').forEach(btn=>btn.addEventListener('click',()=>{slider.value=btn.dataset.p;update();slider.focus()}));
+$('reset').addEventListener('click',()=>{slider.value='0.3';update();slider.focus()});
+document.querySelectorAll('[data-answer]').forEach(btn=>btn.addEventListener('click',()=>{$('feedback').textContent=btn.dataset.answer==='values'?'Верно: значения X возводятся в квадрат, вероятности остаются прежними.':'При вычислении M(X²) вероятности остаются прежними. Возводятся в квадрат только значения X.';}));
+$('quizReset').addEventListener('click',()=>{$('feedback').textContent='';document.querySelector('[data-answer]').focus()});
+update();
+})();
+</script>
+</body>
+</html>
