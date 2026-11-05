@@ -50,7 +50,7 @@ try{
   assert.equal(await page.locator('#competencyMap').getAttribute('role'),'group','interactive map should expose child buttons to assistive technology');
   assert.equal(await page.locator('#competencyMap .radial-cell').first().getAttribute('role'),'button','map cell accessibility semantics');
   assert.ok(basic.focus,'focus control missing '+width);
-  assert.ok(basic.lesson==='Производная — наклон касательной','latest lesson wrong '+width);
+  assert.ok(basic.lesson==='Производные и исследование функции','latest lesson wrong '+width);
   if(width===1440){
     const cell=page.locator('#competencyMap .radial-cell').first();
     await cell.focus();
@@ -114,7 +114,7 @@ try{
       titles:visible.filter(t=>t.querySelector('.archive-tile-title').scrollHeight>t.querySelector('.archive-tile-title').clientHeight+2).length};
   });
   assert.ok(archive.width<=archive.viewport+2,'archive overflow '+width+': '+JSON.stringify(archive));
-  assert.equal(archive.counts,13,'archive lesson count '+width);
+  assert.equal(archive.counts,14,'archive lesson count '+width);
   assert.equal(archive.months,3,'archive month groups '+width);
   assert.ok(Math.max(...archive.heights)-Math.min(...archive.heights)<=2,'unequal tiles '+width+': '+JSON.stringify(archive.heights));
   assert.equal(archive.clipped,0,'clipped archive card '+width);
@@ -123,7 +123,7 @@ try{
   await page.locator('#archiveSearch').fill('вклады');
   assert.equal(await page.locator('.archive-tile:visible').count(),2,'archive search failed '+width);
   await page.locator('#archiveSearch').fill('');
-  assert.equal(await page.locator('.archive-tile:visible').count(),13,'archive reset failed '+width);
+  assert.equal(await page.locator('.archive-tile:visible').count(),14,'archive reset failed '+width);
   await page.screenshot({path:path.join(artifactDir,'archive-'+width+'.png'),fullPage:true});
   await page.goto(origin+'18.10.26.html',{waitUntil:'networkidle'});
   await page.locator('.poster img').scrollIntoViewIfNeeded();
@@ -338,6 +338,53 @@ try{
   assert.equal(await page.locator('#slope').textContent(),'4','positive tangent slope '+width);
   const novelLab=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth}));
   assert.ok(novelLab.width<=novelLab.viewport+2,'1 Nov lab overflow '+width);
+
+  // The 5 November analytical derivative lesson and laboratory.
+  await page.goto(origin+'05.11.26.html',{waitUntil:'networkidle'});
+  const lesson05=await page.evaluate(()=>({
+    width:document.documentElement.scrollWidth,
+    viewport:innerWidth,
+    title:document.querySelector('h1')?.textContent.replace(/\s+/g,' ').trim(),
+    tasks:document.querySelectorAll('#practice .tasks li').length,
+    answers:document.querySelectorAll('#practice details').length,
+    math:[...document.querySelectorAll('math')].length,
+    nativeMath:[...document.querySelectorAll('math')].every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML')
+  }));
+  assert.ok(lesson05.width<=lesson05.viewport+2,'5 Nov lesson viewport overflow '+width+': '+JSON.stringify(lesson05));
+  assert.ok(lesson05.title.includes('производной'),'5 Nov lesson title '+width);
+  assert.equal(lesson05.tasks,10,'5 Nov tasks must match PDF '+width);
+  assert.equal(lesson05.answers,10,'5 Nov answer key count '+width);
+  assert.ok(lesson05.math>=12&&lesson05.nativeMath,'5 Nov MathML semantics '+width);
+  await page.locator('#stepForward').click();
+  assert.equal(await page.locator('#stepCount').textContent(),'2 из 4','5 Nov chain stepper '+width);
+  await page.locator('#stepAll').click();
+  assert.equal(await page.locator('#stepCount').textContent(),'Все шаги','5 Nov show-all '+width);
+  await page.locator('#practice details').first().locator('summary').click();
+  assert.ok((await page.locator('#practice details').first().innerText()).includes('28x³'),'5 Nov first answer '+width);
+  if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lesson-05-'+width+'.png'),fullPage:true});
+
+  await page.goto(origin+'05.11.26-lab.html#quadratic',{waitUntil:'networkidle'});
+  assert.equal(await page.locator('[data-mode="quadratic"]').getAttribute('aria-pressed'),'true','5 Nov lab deep link '+width);
+  assert.equal(await page.locator('#derivValue').textContent(),'0','5 Nov parabola stationary derivative '+width);
+  await page.locator('#slider').evaluate(el=>{el.value='-1';el.dispatchEvent(new Event('input',{bubbles:true}))});
+  assert.equal(await page.locator('#derivValue').textContent(),'−3','5 Nov parabola derivative at -1 '+width);
+  assert.equal(await page.locator('#trendValue').textContent(),'Функция убывает','5 Nov parabola sign '+width);
+  await page.locator('[data-mode="cubic"]').click();
+  assert.equal(await page.locator('#modelName').textContent(),'Кубическая функция','5 Nov cubic mode '+width);
+  assert.equal(await page.locator('#derivValue').textContent(),'0','5 Nov cubic stationary point '+width);
+  await page.locator('#slider').evaluate(el=>{el.value='0';el.dispatchEvent(new Event('input',{bubbles:true}))});
+  assert.equal(await page.locator('#signValue').textContent(),'−','5 Nov cubic middle interval sign '+width);
+  await page.locator('[data-mode="rational"]').click();
+  await page.locator('#slider').evaluate(el=>{el.value='2';el.dispatchEvent(new Event('input',{bubbles:true}))});
+  assert.equal(await page.locator('#fnValue').textContent(),'не определено','5 Nov rational OДЗ '+width);
+  assert.equal(await page.locator('#trendValue').textContent(),'Точка исключена из ОДЗ','5 Nov rational excluded status '+width);
+  await page.locator('#slider').evaluate(el=>{el.value='-3';el.dispatchEvent(new Event('input',{bubbles:true}))});
+  assert.equal(await page.locator('#signValue').textContent(),'+','5 Nov rational derivative sign '+width);
+  const lab05=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth,curves:document.querySelectorAll('#curveLayer path').length}));
+  assert.ok(lab05.width<=lab05.viewport+2,'5 Nov lab overflow '+width+': '+JSON.stringify(lab05));
+  assert.ok(lab05.curves>=3,'5 Nov rational plot must separate branches '+width);
+  if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lab-05-'+width+'.png'),fullPage:true});
+  assert.deepEqual(failures,[],'5 Nov browser console/network failures '+width+': '+failures.join('; '));
   console.log('PASS',width+'x'+height,JSON.stringify({map:basic.map,tiles:archive.counts,heights:archive.heights,theme:width===390?'dark':'light'}));
   completed++;await page.close();
  }
