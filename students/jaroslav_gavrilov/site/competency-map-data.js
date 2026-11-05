@@ -387,7 +387,7 @@ for(const [id,cfg] of Object.entries(LESSON_051126)){
   if(!item)continue;
   item.evidence=Array.isArray(item.evidence)?item.evidence:[];
   item.evidence.push({text:cfg.evidence+" Материал: занятие 05.11.2026 «Задачи прикладного характера». Формат: "+(cfg.relation==="practiced"?"разбор и практика с преподавателем.":"обсуждение.")});
-  item.material={href:"05.11.26.html#"+cfg.section,label:"Открыть раздел занятия 05.11 →"};
+  if(!item.material || !item.material.href) item.material={href:"05.11.26.html#"+cfg.section,label:"Открыть раздел занятия 05.11 →"};
 }
 
 window.COMPETENCY_MAP_DATA={
