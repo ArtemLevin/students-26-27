@@ -381,7 +381,14 @@ try{
   await page.locator('#slider').evaluate(el=>{el.value='-3';el.dispatchEvent(new Event('input',{bubbles:true}))});
   assert.equal(await page.locator('#signValue').textContent(),'+','5 Nov rational derivative sign '+width);
   const lab05=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth,curves:document.querySelectorAll('#curveLayer path').length}));
-  assert.ok(lab05.width<=lab05.viewport+2,'5 Nov lab overflow '+width+': '+JSON.stringify(lab05));
+  if(lab05.width>lab05.viewport+2){
+    const offenders=await page.evaluate(()=>[...document.querySelectorAll('body *')]
+      .filter(el=>{const box=el.getBoundingClientRect(),style=getComputedStyle(el);
+        return box.right>innerWidth+2&&style.overflowX!=='auto'&&style.overflowX!=='scroll';})
+      .slice(0,12).map(el=>({tag:el.tagName,cls:el.className?.baseVal??el.className,
+        id:el.id,right:Math.round(el.getBoundingClientRect().right),text:(el.textContent||'').slice(0,55)})));
+    assert.fail('5 Nov lab overflow '+width+': '+JSON.stringify({...lab05,offenders}));
+  }
   assert.ok(lab05.curves>=3,'5 Nov rational plot must separate branches '+width);
   if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lab-05-'+width+'.png'),fullPage:true});
   assert.deepEqual(failures,[],'5 Nov browser console/network failures '+width+': '+failures.join('; '));
