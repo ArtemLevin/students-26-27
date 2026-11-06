@@ -56,5 +56,5 @@ test('independent EGE reference calculations reproduce printed results',()=>{
  assert.ok(Math.abs(3*annuityPayment-598.95)<1e-7);
  assert.equal(Math.sqrt(2916),54);
  assert.equal(Math.sqrt(7056),84);
- assert.equal(210*1.1**2/(1+1.1)*2,242);
+ assert.ok(Math.abs(210*1.1**2/(1+1.1)*2-242)<1e-7);
 });
