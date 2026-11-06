@@ -1,0 +1,310 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\sfdefault}{cmss}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[margin=23mm,top=21mm,bottom=23mm,headheight=24pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+\usepackage{booktabs,tabularx}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage[hidelinks]{hyperref}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{00585A}
+\definecolor{midgray}{HTML}{555555}
+\definecolor{pale}{HTML}{D6E9E7}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setstretch{1.16}
+\setlist[enumerate]{leftmargin=*,itemsep=9pt,topsep=6pt,parsep=0pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{midgray}Отношения площадей треугольников}
+\fancyhead[R]{\footnotesize\color{midgray}Софья Кальней}
+\fancyfoot[C]{\footnotesize\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+\newcommand{\sect}[1]{\vspace{6pt}{\Large\color{darkaccent}#1}\par\vspace{3pt}{\color{accent}\rule{\linewidth}{0.55pt}}\vspace{6pt}}
+\newcommand{\subsect}[1]{\vspace{4pt}{\large\color{darkaccent}#1}\par\vspace{2pt}}
+\newcommand{\idea}[1]{\textcolor{darkaccent}{\textbf{Главная идея.}} #1}
+\newcommand{\good}[1]{\textcolor{darkaccent}{\textbf{Ответ:}} #1}
+\begin{document}
+
+% ----- Титульный лист -----
+\thispagestyle{empty}
+\begin{center}
+\vspace*{25mm}
+{\large\color{darkaccent} МАТЕМАТИКА}\par
+\vspace{23mm}
+{\LARGE Чек-лист}\par
+\vspace{13mm}
+{\LARGE\color{accent} Отношения площадей\\[4pt] треугольников}\par
+\vspace{18mm}
+{\normalsize Геометрия · Подготовка к ОГЭ}\par
+\vfill
+{\large Софья Кальней}\par
+\vspace{13mm}
+{6 ноября 2026 г.}\par
+\vspace{22mm}
+{\small Лёвин Артём Александрович\\[3pt]эксклюзивно для Софьи Кальней}\par
+\vspace{23mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \draw[accent,line width=0.9pt]
+    (0,0) .. controls (1.0,0.50) and (2.3,-0.50) .. (3.4,0)
+          .. controls (4.6,0.50) and (5.8,-0.50) .. (6.9,0);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\sect{1. Что связывает площади треугольников}
+\idea{Если в задаче есть несколько треугольников, найдите у них общий элемент: высоту или угол. Запишите две формулы площади и разделите одну на другую. Общий множитель сократится.}
+
+Площадь треугольника можно выражать двумя способами:
+\[
+\boxed{S=\frac12 ah}\qquad\text{или}\qquad
+\boxed{S=\frac12 ab\sin\gamma},
+\]
+где $a$~--- сторона, $h$~--- высота к ней; $a,b$~--- две стороны, а $\gamma$~--- угол между ними.
+
+\sect{2. Общая высота: сравниваем основания}
+Пусть точка $K$ лежит на стороне $AC$ треугольника $ABC$. У треугольников $ABK$ и $KBC$ высота из вершины $B$ к прямой $AC$ одна и та же.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.78]
+\tkzDefPoint(0,0){A}
+\tkzDefPoint(3.6,3.1){B}
+\tkzDefPoint(7.8,0){C}
+\tkzDefPoint(5.2,0){K}
+\tkzDefPoint(3.6,0){H}
+\tkzDrawPolygon[line width=0.85pt](A,B,C)
+\tkzDrawSegment[line width=0.95pt,color=accent](B,K)
+\tkzDrawSegment[dashed,color=midgray](B,H)
+\tkzMarkRightAngle[size=0.25](B,H,C)
+\tkzDrawPoints[size=1.6pt](A,B,C,K,H)
+\tkzLabelPoints[below](A,H,K,C)
+\tkzLabelPoints[above](B)
+\end{tikzpicture}
+\end{center}
+
+\[
+\frac{S_{ABK}}{S_{KBC}}=
+\frac{\frac12 AK\cdot BH}{\frac12 KC\cdot BH}
+=\boxed{\frac{AK}{KC}}.
+\]
+
+\subsect{Пример 1. Известны части основания}
+$AK:KC=2:3$, $S_{ABC}=40$. Тогда всё основание соответствует $2+3=5$ частям, поэтому
+\[
+S_{ABK}=\frac25\cdot40=16,\qquad
+S_{KBC}=\frac35\cdot40=24.
+\]
+\good{$16$ и $24$. Проверка: $16+24=40$.}
+
+\textcolor{darkaccent}{\textbf{Помните:}} если вершина общая, а основания расположены на одной прямой, отношение площадей равно отношению оснований.
+
+\clearpage
+\sect{3. Общий угол: сравниваем произведения сторон}
+Пусть $M$ лежит на $AB$, а $K$ лежит на $AC$. У треугольников $AMK$ и $ABC$ общий угол $A$.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.70]
+\tkzDefPoint(0,0){A}
+\tkzDefPoint(0,4.6){B}
+\tkzDefPoint(7.2,0){C}
+\tkzDefPoint(0,2.9){M}
+\tkzDefPoint(3.1,0){K}
+\tkzDrawPolygon[line width=0.85pt](A,B,C)
+\tkzDrawSegment[color=accent,line width=1pt](M,K)
+\tkzMarkAngle[size=0.72,color=accent](K,A,M)
+\tkzDrawPoints[size=1.6pt](A,B,C,M,K)
+\tkzLabelPoints[left](A,B,M)
+\tkzLabelPoints[below](K,C)
+\end{tikzpicture}
+\end{center}
+
+\[
+\frac{S_{AMK}}{S_{ABC}}=
+\frac{\frac12 AM\cdot AK\sin A}{\frac12 AB\cdot AC\sin A}
+=\boxed{\frac{AM}{AB}\cdot\frac{AK}{AC}}.
+\]
+Важны \emph{доли от целых сторон}. Например, если $AM:MB=3:2$, то $AM/AB=3/5$.
+
+\subsect{Пример 2. Найти площадь внутреннего треугольника}
+$AM:MB=3:2$, $AK:KC=2:1$, $S_{ABC}=75$.
+Значит, $AM/AB=3/5$ и $AK/AC=2/3$. Получаем
+\[
+S_{AMK}=\frac35\cdot\frac23\cdot75=30.
+\]
+\good{$30$.}
+
+\sect{4. Выбираем короткое разбиение фигуры}
+Если $A,M,N,B$ расположены на одной прямой именно в таком порядке, а $K$ лежит на $AC$, то
+\[
+S_{MNK}=S_{AKN}-S_{AKM}.
+\]
+Оба вычитаемых можно выразить через площадь $ABC$. После вынесения общего множителя:
+\[
+\boxed{S_{MNK}=S_{ABC}\cdot\frac{MN}{AB}\cdot\frac{AK}{AC}}.
+\]
+
+\subsect{Пример 3. Площадь треугольника $MNK$}
+$AM:MN:NB=2:2:1$, $AK:KC=1:2$, $S_{ABC}=75$.
+Тогда $MN/AB=2/5$, $AK/AC=1/3$ и
+\[
+S_{MNK}=75\cdot\frac25\cdot\frac13=10.
+\]
+\good{$10$.}
+
+\clearpage
+\sect{5. Четырёхугольник и пересечение диагоналей}
+Пусть диагонали $AC$ и $BD$ выпуклого четырёхугольника $ABCD$ пересекаются в точке $O$. Они делят его на четыре треугольника.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.71]
+\tkzDefPoint(-3.2,0){A}
+\tkzDefPoint(0,2.9){B}
+\tkzDefPoint(4.5,0){C}
+\tkzDefPoint(0,-2.6){D}
+\tkzDefPoint(0,0){O}
+\tkzDrawPolygon[line width=0.9pt](A,B,C,D)
+\tkzDrawSegment[color=accent,line width=0.9pt](A,C)
+\tkzDrawSegment[color=accent,line width=0.9pt](B,D)
+\tkzDrawPoints[size=1.6pt](A,B,C,D,O)
+\tkzLabelPoints[left](A)
+\tkzLabelPoints[above](B)
+\tkzLabelPoints[right](C)
+\tkzLabelPoints[below](D)
+\tkzLabelPoint[below right](O){$O$}
+\end{tikzpicture}
+\end{center}
+
+Треугольники $AOB$ и $BOC$ имеют общую высоту из $B$ к прямой $AC$. Аналогично для треугольников $AOD$ и $DOC$:
+\[
+\frac{S_{AOB}}{S_{BOC}}=\frac{AO}{OC}
+=\frac{S_{AOD}}{S_{DOC}}.
+\]
+Следовательно, работает важное свойство:
+\[
+\boxed{S_{AOB}\cdot S_{DOC}=S_{BOC}\cdot S_{AOD}}.
+\]
+\subsect{Пример 4. Три площади известны}
+$S_{AOB}=10$, $S_{BOC}=20$, $S_{AOD}=30$.
+Из равенства произведений
+\[
+10\cdot S_{DOC}=20\cdot30,
+\qquad S_{DOC}=60.
+\]
+Площадь всего четырёхугольника:
+\[
+S_{ABCD}=10+20+30+60=\boxed{120}.
+\]
+
+\sect{6. На что обращать внимание}
+\begin{itemize}[leftmargin=*,itemsep=4pt]
+\item Если $AM:MB=2:3$, то $AM/AB=2/5$: знаменатель содержит обе части.
+\item В формуле через синус берите угол \emph{между выбранными сторонами}.
+\item Выбирайте кратчайшее разбиение; проверяйте пары треугольников с общей высотой и разумность ответа.
+\end{itemize}
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\Large\color{darkaccent} Алгоритм: как сравнивать площади}\par
+\vspace{16mm}
+\begin{tikzpicture}[
+  >=Latex, line width=0.8pt,
+  action/.style={draw=darkaccent,rounded corners=2pt,minimum height=1.15cm,text width=5.6cm,align=center,font=\small,inner sep=6pt},
+  wide/.style={action,text width=8.0cm},
+  decision/.style={draw=darkaccent,diamond,aspect=2.4,text width=3.15cm,align=center,font=\small,inner sep=2pt},
+  arrow/.style={-{Latex[length=2.2mm]},color=darkaccent}
+]
+\node[wide] (start) at (0,0) {Выделите треугольники, площади которых надо связать};
+\node[decision] (height) at (0,-2.15) {Есть общая высота?};
+\node[action] (hyes) at (-3.8,-4.8) {$\dfrac{S_1}{S_2}=\dfrac{a_1}{a_2}$\\[8pt]сравните основания};
+\node[decision] (angle) at (3.85,-4.8) {Есть общий угол?};
+\node[action] (ayes) at (3.85,-7.3) {$\dfrac{S_1}{S_2}=\dfrac{a_1b_1}{a_2b_2}$\\[8pt]сравните произведения сторон};
+\node[action] (retry) at (3.85,-9.6) {Измените разбиение и повторите поиск общего элемента};
+\node[wide] (finish) at (0,-12.15) {Подставьте отношения, вычислите площадь, проверьте ответ};
+\draw[arrow] (start) -- (height);
+\draw[arrow] (height.west) -| node[pos=0.22,above,font=\small]{да} (hyes.north);
+\draw[arrow] (height.east) -| node[pos=0.22,above,font=\small]{нет} (angle.north);
+\draw[arrow] (angle.south) -- node[right,font=\small]{да} (ayes.north);
+\draw[arrow] (angle.east) -- ++(0.8,0) |- node[pos=0.18,right,font=\small]{нет} (retry.east);
+\draw[arrow] (hyes.south) |- (finish.west);
+\draw[arrow] (ayes.west) -- (-0.2,-7.3) -- (-0.2,-11.42) -- (finish.north);
+\draw[arrow] (retry.east) -- (7.55,-9.6) -- (7.55,0) -- (start.east);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\sect{Тренировочный блок · Путь А}
+\textcolor{midgray}{10 заданий от простого к сложному. Решайте по чертежу, если он требуется, и записывайте отношения площадей перед вычислениями.}
+
+\begin{enumerate}
+\item В треугольнике $ABC$ точка $K$ лежит на стороне $AC$, причём $AK:KC=2:5$. Площадь $ABC$ равна $42$. Найдите площадь $ABK$.
+
+\item В треугольнике $ABC$ точка $D$ лежит на стороне $AB$, причём $AD:DB=3:2$. Площадь $ACD$ равна $21$. Найдите площадь $BCD$.
+
+\item Точка $K$ лежит на стороне $AC$ треугольника $ABC$. Известно, что $S_{ABK}=15$ и $S_{KBC}=25$. Найдите отношение $AK:KC$.
+
+\item На стороне $AB$ треугольника $ABC$ расположены точки $M$ и $N$ в порядке $A,M,N,B$. Известно, что $AM:MN:NB=1:2:3$, а $S_{ABC}=72$. Найдите $S_{CMN}$.
+
+\item В треугольнике $ABC$ точки $M\in AB$, $K\in AC$. Известно, что $AM:MB=1:3$, $AK:KC=2:3$, а $S_{ABC}=100$. Найдите $S_{AMK}$.
+
+\item В треугольнике $ABC$ точки $N\in AB$, $K\in AC$. Известно, что $AN:NB=2:3$, $AK:KC=3:2$, а $S_{ABC}=75$. Найдите $S_{AKN}$.
+
+\item Точки $M,N$ лежат на стороне $AB$ треугольника $ABC$ в порядке $A,M,N,B$; точка $K$ лежит на $AC$. Если $AM:MN:NB=2:2:1$, $AK:KC=1:2$, $S_{ABC}=90$, найдите $S_{MNK}$.
+
+\item В треугольнике $ABC$ точки $M,N$ расположены на $AB$ в порядке $A,M,N,B$, а $K$ лежит на $AC$. Известно, что $AM:MN:NB=1:2:1$, $AK:KC=3:1$, $S_{ABC}=120$. Найдите $S_{MNK}$.
+
+\item Диагонали четырёхугольника $ABCD$ пересекаются в точке $O$. Известно, что $S_{AOB}=12$, $S_{BOC}=18$, $S_{AOD}=20$. Найдите площадь четырёхугольника $ABCD$.
+
+\item Диагонали выпуклого четырёхугольника разделили его на четыре треугольника. Площади трёх из них равны $12$, $18$ и $30$. Площадь четвёртого треугольника больше каждой из указанных трёх. Найдите площадь четырёхугольника.
+\end{enumerate}
+
+\clearpage
+\sect{Ответы к тренировочному блоку}
+\vspace{8pt}
+\begin{center}
+\renewcommand{\arraystretch}{1.7}
+\begin{tabular}{@{}>{\bfseries}c p{8cm}@{}}
+\toprule
+№ задания & Ответ \\
+\midrule
+1 & $12$ \\
+2 & $14$ \\
+3 & $3:5$ \\
+4 & $24$ \\
+5 & $10$ \\
+6 & $18$ \\
+7 & $12$ \\
+8 & $45$ \\
+9 & $80$ \\
+10 & $105$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{12mm}
+\sect{Итоговая памятка}
+\renewcommand{\arraystretch}{1.55}
+\begin{tabularx}{\linewidth}{@{}p{0.31\linewidth}X@{}}
+\toprule
+\textbf{Что заметили} & \textbf{Что сделать}\\
+\midrule
+Общая высота & Разделить площади; оставить отношение оснований.\\
+Общий угол & Разделить площади; оставить отношение произведений сторон.\\
+Точки на одной стороне & Перейти от отношения частей к доле всей стороны.\\
+Фигура составлена из частей & Подобрать самое короткое сложение или вычитание площадей.\\
+Диагонали четырёхугольника & Использовать $S_{AOB}S_{DOC}=S_{BOC}S_{AOD}$.\\
+\bottomrule
+\end{tabularx}
+\end{document}
