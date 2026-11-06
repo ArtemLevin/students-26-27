@@ -59,8 +59,8 @@ test('one keyboard entry into the radial map, arrow navigation and a return path
   assert.match(script,/state\.mapFocus=paths\[next\]\.dataset\.id/);
   assert.match(script,/restoreSelectionFocus/);
   assert.match(html,/id="returnToSelection"[^>]*hidden/);
-  assert.match(html,/Степени и их свойства/);
-  assert.match(html,/\.\.\/pdf_docs\/23\.10\.26\.pdf/);
+  assert.match(html,/Метод опорных точек/);
+  assert.match(html,/\.\.\/pdf_docs\/06\.11\.26\.pdf/);
 });
 
 test('unpublished lesson and KTP are described without claiming confirmed progress',()=>{
