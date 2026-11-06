@@ -3,6 +3,50 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-06",
+  "ktpRefs": [],
+  "href": "06.11.26.html",
+  "title": "Отношения площадей треугольников",
+  "navTitle": "Отношения площадей треугольников",
+  "navSubtitle": "София Кальней · 6 ноября 2026. Отношения площадей треугольников: общая высота, общий угол, разбиение фигуры, диагонали четырёхугольника. Теория, примеры и 10 задач.",
+  "summary": "София Кальней · 6 ноября 2026. Отношения площадей треугольников: общая высота, общий угол, разбиение фигуры, диагонали четырёхугольника. Теория, примеры и 10 задач.",
+  "topics": [
+    "Отношения площадей треугольников с общей высотой",
+    "Площади при общем угле",
+    "Разбиение фигуры и поиск короткого решения",
+    "Площади четырёх треугольников при пересечении диагоналей"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_25_1_4",
+      "evidenceAnchor": "angle",
+      "relation": "practiced",
+      "label": "Отношения площадей треугольников с общим углом",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_25_1_1",
+      "evidenceAnchor": "partition",
+      "relation": "touched",
+      "label": "Выбор разбиения фигуры и вычитание площадей",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_25_2_4",
+      "evidenceAnchor": "quadrilateral",
+      "relation": "touched",
+      "label": "Отношения площадей при пересечении диагоналей",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "06.11.26.html",
+    "pdf": "../pdf_docs/06.11.26.pdf",
+    "tex": "../tex_docs/06.11.26.tex",
+    "lab": "06.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-01",
   "ktpRefs": [],
   "href": "01.11.26.html",
