@@ -259,6 +259,8 @@ const evidence2710For=skill=>({date:'27.10.26',text:'На занятии рас�
 
 const lesson2810EvidenceById=new Map(Object.entries({"ege27_04_014":{"anchor":"positions","relation":"practiced"},"ege27_20_015":{"anchor":"order","relation":"practiced"}}));
 const evidence2810For=skill=>({date:'28.10.26',text:'На занятии отработаны метод позиций, правило умножения, различение выбора с учётом и без учёта порядка. Уровни освоения не повышаются без отдельной диагностики.',web:'28.10.26.html#'+skill.anchor,lab:'28.10.26-lab.html',pdf:'../pdf_docs/28.10.26.pdf',tex:'../tex_docs/28.10.26.tex'});
+const lesson0611EvidenceById=new Map(Object.entries({"ege27_04_002":{"anchor":"outcomes","relation":"practiced"},"ege27_04_003":{"anchor":"complement","relation":"practiced"},"ege27_04_004":{"anchor":"events","relation":"touched"},"ege27_04_006":{"anchor":"events","relation":"practiced"},"ege27_04_013":{"anchor":"complement","relation":"practiced"},"ege27_05_006":{"anchor":"trials","relation":"practiced"},"ege27_05_007":{"anchor":"bernoulli","relation":"practiced"},"ege27_05_008":{"anchor":"bernoulli","relation":"practiced"}}));
+const evidence0611For=skill=>({date:'06.11.26',text:'На занятии разобраны равновероятные исходы, противоположные события, независимые испытания и формула Бернулли. Результаты самостоятельной диагностики не фиксировались, уровень освоения не менялся.',web:'06.11.26.html#'+skill.anchor,lab:'06.11.26-lab.html',pdf:'../pdf_docs/06.11.26.pdf',tex:'../tex_docs/06.11.26.tex'});
 const groups=groupDefs.map((def,groupIndex)=>{
   const number=groupIndex+1;
   const groupId=`ege27_${String(number).padStart(2,'0')}`;
@@ -319,6 +321,7 @@ const groups=groupDefs.map((def,groupIndex)=>{
       if(lesson2310EvidenceById.has(id)) evidence.push(evidence2310For(lesson2310EvidenceById.get(id)));
        if(lesson2710EvidenceById.has(id)) evidence.push(evidence2710For(lesson2710EvidenceById.get(id)));
       if(lesson2810EvidenceById.has(id)) evidence.push(evidence2810For(lesson2810EvidenceById.get(id)));
+      if(lesson0611EvidenceById.has(id)) evidence.push(evidence0611For(lesson0611EvidenceById.get(id)));
       return{
         id,title,
         description:`${title}. Конкретный навык сектора «${def.title}»: распознать тип задачи, выбрать корректный метод и получить проверяемый результат.`,
@@ -337,7 +340,7 @@ window.COMPETENCY_MAP_DATA={
     teacher:'Лёвин Артём Александрович',
     program:'подготовка к ЕГЭ по профильной математике',
     examVersion:'проект ЕГЭ-2027',
-    updated:'28.10.26',
+    updated:'06.11.26',
     sourceNote:'Структура актуализирована по проектам документов ФИПИ ЕГЭ-2027; подтверждённые уровни уточняются по материалам занятий.'
   },
   storage:{
