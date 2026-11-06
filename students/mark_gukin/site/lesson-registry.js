@@ -5,6 +5,75 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-11-06",
+    "ktpRefs": [],
+    "href": "06.11.26.html",
+    "title": "Тригонометрические графики и прикладные задачи",
+    "navTitle": "Тригонометрия · графики и задачи",
+    "navSubtitle": "Марк Гукин · 06.11.2026: масштаб осей, две независимые опорные точки, графики синуса, косинуса и тангенса, периодичность и прикладные расчёты по формулам дифракции, столкновения и колебаний. 10 задач Пути А: 1–5 с графиками, 6–10 вычислительные.",
+    "summary": "Марк Гукин · 06.11.2026: масштаб осей, две независимые опорные точки, графики синуса, косинуса и тангенса, периодичность и прикладные расчёты по формулам дифракции, столкновения и колебаний. 10 задач Пути А: 1–5 с графиками, 6–10 вычислительные.",
+    "topics": [
+      "Масштаб координатных осей и опорные точки",
+      "Тригонометрические графики и восстановление двух коэффициентов",
+      "Системы уравнений по точкам графика",
+      "Периодичность и большие аргументы",
+      "Дифракционная решётка, столкновения и колебания: вычисления по формулам"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "ege12_14",
+        "evidenceAnchor": "graph-method",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege12_18",
+        "evidenceAnchor": "scale",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege12_06",
+        "evidenceAnchor": "period",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege08_12",
+        "evidenceAnchor": "graph-method",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege07_12",
+        "evidenceAnchor": "system",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege07_13",
+        "evidenceAnchor": "system",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege10_01",
+        "evidenceAnchor": "applied",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege10_02",
+        "evidenceAnchor": "applied",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ege10_07",
+        "evidenceAnchor": "applied",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "06.11.26.html",
+      "lab": "06.11.26-lab.html",
+      "pdf": "../pdf_docs/06.11.26.pdf",
+      "tex": "../tex_docs/06.11.26.tex"
+    }
+  },
+  {
     "date": "2026-10-28",
     "ktpRefs": [],
     "href": "28.10.26.html",
