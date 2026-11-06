@@ -247,6 +247,27 @@ G.forEach(group=>group.items.forEach(item=>{
   item.material={href:'28.10.26.html#'+update.anchor,label:'Занятие 28.10.26 →'};
 }));
 
+// 06.11.2026: визуальная тригонометрия и прикладные формулы.
+// Фиксируются изучение и совместная практика, уровни mastery не изменяются.
+const trigonometryEvidence0611={
+  ege12_14:{anchor:'graph-method',relation:'practiced'},
+  ege12_18:{anchor:'scale',relation:'practiced'},
+  ege12_06:{anchor:'period',relation:'practiced'},
+  ege08_12:{anchor:'graph-method',relation:'practiced'},
+  ege07_12:{anchor:'system',relation:'practiced'},
+  ege07_13:{anchor:'system',relation:'practiced'},
+  ege10_01:{anchor:'applied',relation:'practiced'},
+  ege10_02:{anchor:'applied',relation:'practiced'},
+  ege10_07:{anchor:'applied',relation:'touched'}
+};
+const trigonometryNote0611='06.11.2026: чтение масштаба тригонометрического графика, выбор независимых опорных точек, системы для коэффициентов синуса, косинуса и тангенса, периодичность и вычисления по прикладным формулам. В том числе разбирались типичные ошибки масштаба и подстановки. Новые уровни освоения без независимой диагностики не выставлялись.';
+G.forEach(group=>group.items.forEach(item=>{
+  const update=trigonometryEvidence0611[item.id];
+  if(!update)return;
+  item.evidence=[...item.evidence,{date:'06.11.2026',text:trigonometryNote0611}];
+  item.material={href:'06.11.26.html#'+update.anchor,label:'Занятие 06.11.26 →'};
+}));
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'mark_gukin',
@@ -256,7 +277,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Используется проект КИМ ЕГЭ-2027 ФИПИ: 20 заданий, из них 13 с кратким и 7 с развёрнутым ответом. Проект опубликован 28.08.2026; до утверждения структура может быть уточнена.',
-    updated:'28.10.2026'
+    updated:'06.11.2026'
   },
   groups:G
 };
