@@ -127,7 +127,7 @@ try{
   await navigate('index.html',390,844);
   await sleep(400);
   const registrySource=fs.readFileSync(path.join(root,'students/sofya_kalney/site/lesson-registry.js'),'utf8');
-  const expectedLatestTitle=registrySource.match(/export const LESSONS=\\[\\s*\\{[\\s\\S]*?"title": "([^"]+)"/)?.[1];
+  const expectedLatestTitle=registrySource.match(/"title": "([^"]+)"/)?.[1];
   assert.ok(expectedLatestTitle,'Latest lesson title not found in registry');
   const currentLessonTitle=await run("document.querySelector('#lesson-title')?.textContent || ''");
   assert.ok(currentLessonTitle.includes(expectedLatestTitle),'Latest lesson in dashboard differs from registry: '+currentLessonTitle);
