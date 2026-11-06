@@ -201,6 +201,62 @@ try{
   await screenshot('home-desktop');
 
 
+
+  // November 6: responsive page and live Bernoulli model.
+  for (const view of [
+    {w:390,h:844,mobile:true,label:'390'},
+    {w:1440,h:900,mobile:false,label:'1440'}
+  ]) {
+    await call('Emulation.setDeviceMetricsOverride',{width:view.w,height:view.h,deviceScaleFactor:1,mobile:view.mobile});
+    for (const theme of ['light','dark']) {
+      await navigate('06.11.26.html');
+      await run('document.documentElement.dataset.theme="'+theme+'"');
+      const lesson06=await execute(()=>({
+        title:document.querySelector('h1')?.textContent||'',
+        exercises:document.querySelectorAll('.exercise').length,
+        answers:document.querySelectorAll('.exercise details').length,
+        hasAllChapters:['outcomes','events','complement','trials','bernoulli','practice','recap'].every(x=>!!document.getElementById(x)),
+        labLinks:document.querySelectorAll('a[href*="06.11.26-lab.html"]').length,
+        overflow:document.documentElement.scrollWidth>innerWidth+2
+      }));
+      assert.match(lesson06.title,/Независимые/);
+      assert.equal(lesson06.exercises,10);
+      assert.equal(lesson06.answers,10);
+      assert.ok(lesson06.hasAllChapters&&lesson06.labLinks>=2);
+      assert.equal(lesson06.overflow,false,'Nov 6 lesson overflow '+view.label+'/'+theme);
+      await navigate('06.11.26-lab.html#bernoulli');
+      await run('document.documentElement.dataset.theme="'+theme+'"');
+      const laboratory06=await execute(()=>{
+        const result={
+          initial:document.querySelector('#result')?.textContent,
+          chartCount:document.querySelectorAll('#bars .bar').length,
+          overflow:document.documentElement.scrollWidth>innerWidth+2
+        };
+        document.querySelector('[data-n="3"][data-p="0.5"]').click();
+        result.coin= document.querySelector('#result').textContent;
+        result.outcomes=document.querySelectorAll('#outcomes span').length;
+        result.coinHighlights=document.querySelectorAll('#outcomes span.hit').length;
+        document.querySelector('[data-n="2"][data-p="0.2"]').click();
+        result.coffeeAtLeast=document.querySelector('#atleast').textContent;
+        document.querySelector('#reset').click();
+        result.reset=document.querySelector('#result').textContent;
+        result.seq=document.querySelectorAll('#sequence span').length;
+        return result;
+      });
+      assert.equal(laboratory06.initial,'0,05120');
+      assert.equal(laboratory06.chartCount,6);
+      assert.equal(laboratory06.coin,'0,37500');
+      assert.equal(laboratory06.outcomes,8);
+      assert.equal(laboratory06.coinHighlights,3);
+      assert.equal(laboratory06.coffeeAtLeast,'0,36000');
+      assert.equal(laboratory06.reset,'0,05120');
+      assert.equal(laboratory06.seq,5);
+      assert.equal(laboratory06.overflow,false,'Nov 6 lab overflow '+view.label+'/'+theme);
+      await screenshot('lab-06-'+view.label+'-'+theme);
+    }
+  }
+  await call('Emulation.setDeviceMetricsOverride',{width:1280,height:900,deviceScaleFactor:1,mobile:false});
+
   // October 28 release gate: mathematics, responsive presentation, theme and lab state.
   for (const view of [
     {w:375,h:812,mobile:true,label:'375'},
