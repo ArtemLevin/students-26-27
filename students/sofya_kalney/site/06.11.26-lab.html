@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ru" data-theme="light"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивная лаборатория по отношениям площадей: общий угол, доли сторон и диагонали четырёхугольника.">
+<title>Лаборатория отношений площадей — София Кальней</title>
+<link rel="stylesheet" href="../../../design-system/tokens.css?v=20260919-2">
+<link rel="stylesheet" href="../../../design-system/foundations.css?v=20260919-2">
+<style>
+:root{color-scheme:light;--paper:#f6f4ee;--sheet:#fffdf8;--ink:#22393e;--muted:#54686b;--line:#c8d3cf;--teal:#136f73;--gold:#a2753c;--wash:#e7f0ec;--focus:#b15b31;--soft:#bcd9d1;--goldsoft:#f0dfc4}
+html[data-theme=dark]{color-scheme:dark;--paper:#142529;--sheet:#22363b;--ink:#eef4f0;--muted:#c1d0cb;--line:#516e70;--teal:#a3ead9;--gold:#e6bc81;--wash:#29454a;--focus:#ffe4ab;--soft:#315f5f;--goldsoft:#66503c}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 system-ui,"Segoe UI",sans-serif}a{color:var(--teal)}button,input{font:inherit}button{cursor:pointer}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+.skip{position:absolute;top:-80px;left:10px;padding:10px;background:var(--sheet);z-index:50}.skip:focus{top:5px}
+.wrap{width:min(1370px,calc(100% - 40px));margin-inline:auto}
+.top{border-bottom:1px solid var(--line);background:var(--paper)}.top .wrap{display:flex;align-items:center;gap:20px;flex-wrap:wrap;min-height:64px}
+.top a,.top button{font-size:.88rem;font-weight:760;text-decoration:none;padding:10px 0;color:var(--ink);background:none;border:0}.top .brand{color:var(--teal);letter-spacing:.1em}.top .space{flex:1}
+.intro{padding:40px 0 26px}.kicker{font-size:.76rem;font-weight:850;letter-spacing:.16em;color:var(--gold);text-transform:uppercase}
+h1{font:500 clamp(2.3rem,5vw,4.7rem)/1.1 Georgia,serif;letter-spacing:-.04em;margin:10px 0 16px}
+.intro p{max-width:840px;color:var(--muted);font-size:1.06rem}
+.tabs{display:flex;gap:8px 30px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-top:23px}
+.tab{border:0;border-bottom:3px solid transparent;background:none;color:var(--muted);padding:12px 0;font-weight:760;cursor:pointer}
+.tab[aria-selected=true]{border-color:var(--teal);color:var(--ink)}
+.workspace{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(310px,.85fr);gap:clamp(24px,3vw,45px);align-items:start;padding:32px 0 65px}
+.stage{min-width:0;background:var(--sheet);border:1px solid var(--line);padding:15px 18px 12px}
+.stage svg{display:block;width:100%;height:auto;max-height:600px}.stage .caption{border-top:1px solid var(--line);padding-top:14px;font-size:.84rem;color:var(--muted);min-height:50px}
+.stage text{font-family:system-ui,sans-serif;fill:var(--ink);font-size:22px}.stage .measure{font-size:21px;font-weight:720;fill:var(--teal)}
+.panel{border-top:3px solid var(--teal);padding-top:16px}
+.panel h2{font:500 1.65rem/1.25 Georgia,serif;margin:4px 0 18px}
+.control{border-top:1px solid var(--line);padding:17px 0}
+.control label{display:flex;justify-content:space-between;gap:15px;align-items:center;font-weight:700}
+.control output{font-size:1.05rem;color:var(--teal);font-variant-numeric:tabular-nums}
+.control input[type=range]{width:100%;height:30px;accent-color:var(--teal);margin-top:10px}
+.result{background:var(--wash);padding:18px 18px;margin-top:18px}
+.result small{color:var(--muted);display:block}.result strong{font:500 clamp(2rem,4vw,3rem)/1.3 Georgia,serif;color:var(--teal);display:block}
+.eq{font-family:"Cambria Math",Georgia,serif;font-size:1.13rem;overflow-x:auto;white-space:nowrap}
+.buttons{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:20px}
+.buttons button{border:1px solid var(--line);color:var(--ink);background:transparent;padding:10px 14px;font-weight:750}
+.buttons button:hover{border-color:var(--teal)}.guidance{border-top:1px solid var(--line);padding-top:20px;margin-top:22px;color:var(--muted);font-size:.95rem}
+.guidance strong{color:var(--ink)}.line{border-top:1px solid var(--line);margin-top:18px;padding-top:20px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.86rem;margin-top:15px;color:var(--muted)}.legend span:before{content:"";display:inline-block;width:11px;height:11px;margin-right:7px;background:var(--soft);border:1px solid var(--teal)}.legend span:nth-child(2):before{background:var(--goldsoft);border-color:var(--gold)}
+.hint{font-size:.88rem;color:var(--muted)}
+.hidden{display:none!important}
+@media(max-width:930px){.workspace{grid-template-columns:1fr}.panel{max-width:690px}.stage svg{max-height:520px}}
+@media(max-width:650px){.wrap{width:min(100% - 24px,1370px)}.intro{padding-top:25px}.workspace{padding-top:20px}.stage{padding:10px 6px}.top .wrap{gap:11px}.top a,.top button{font-size:.79rem}.tabs{gap:8px 16px}.stage text{font-size:24px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+@media print{body{background:white;color:black}.top,.tabs,.buttons,.control{display:none}.workspace{display:block}.panel{break-before:page}.stage{border:0}.result{background:#eee}}
+</style></head><body>
+<a href="#main" class="skip">К модели</a>
+<header class="top"><div class="wrap"><a href="index.html" class="brand">Σ / СОФИЯ</a><a href="06.11.26.html">← К занятию</a><span class="space"></span><button id="theme" type="button">◐ Тема</button></div></header>
+<main id="main"><div class="wrap">
+<header class="intro"><div class="kicker">Цифровая геометрическая лаборатория · 06.11.2026</div><h1>Отношения площадей</h1><p>Изменяйте доли сторон или отношение отрезков диагонали. Наблюдайте, как одновременно меняются фигура, числовые площади и формула.</p>
+<div class="tabs" role="tablist" aria-label="Режимы лаборатории"><button type="button" class="tab" id="tab-angle" role="tab" aria-selected="true" aria-controls="panel-angle">Общий угол</button><button type="button" class="tab" id="tab-diagonals" role="tab" aria-selected="false" aria-controls="panel-diagonals">Диагонали</button></div></header>
+<div class="workspace" id="panel-angle" role="tabpanel" aria-labelledby="tab-angle"><section class="stage">
+<svg id="triSvg" viewBox="0 0 650 440" role="img" aria-labelledby="triTitle triDesc"><title id="triTitle">Динамический треугольник ABC с треугольником AMK</title><desc id="triDesc">Доли AM от AB и AK от AC меняются ползунками. Площадь внутреннего треугольника равна произведению долей, умноженному на площадь всего треугольника.</desc>
+<path d="M70 365L70 55L610 365Z" fill="none" stroke="currentColor" stroke-width="2.4"/>
+<path id="smallTri" d="M70 365L70 179L430 365Z" fill="var(--soft)" stroke="var(--teal)" stroke-width="3"/>
+<circle id="mDot" cx="70" cy="179" r="5" fill="var(--teal)"/><circle id="kDot" cx="430" cy="365" r="5" fill="var(--teal)"/>
+<text x="45" y="397">A</text><text x="46" y="44">B</text><text x="610" y="397">C</text><text id="mText" x="39" y="174">M</text><text id="kText" x="430" y="395">K</text>
+<text x="342" y="170" class="measure">S(ABC) = 75</text><text id="innerText" x="125" y="329" class="measure">30</text>
+</svg>
+<div class="caption">Режим «Общий угол». У ABC и AMK общий угол A, поэтому отношение площадей равно произведению долей двух сторон.</div>
+</section>
+<aside class="panel"><h2>Изменяем обе доли</h2>
+<div class="control"><label for="p">Доля AM/AB <output id="pOut" for="p">3/5</output></label><input type="range" min="0.1" max="0.9" step="0.01" value="0.6" id="p"><div class="hint">Точка M движется вдоль AB.</div></div>
+<div class="control"><label for="q">Доля AK/AC <output id="qOut" for="q">2/3</output></label><input type="range" min="0.1" max="0.9" step="0.01" value="0.6666667" id="q"><div class="hint">Точка K движется вдоль AC.</div></div>
+<div class="result" aria-live="polite"><small>Площадь внутреннего треугольника AMK</small><strong id="areaOut">30</strong><div id="areaFormula" class="eq">75 · 3/5 · 2/3 = 30</div></div>
+<div class="legend"><span>Внутренний треугольник AMK</span><span>Оставшаяся площадь</span></div>
+<div class="buttons"><button type="button" id="resetAngle">Вернуть пример 2</button><button type="button" id="saveAngle">Запомнить состояние</button><button type="button" id="compareAngle">Сравнить</button></div>
+<div id="compareOut" class="line hint" role="status" aria-live="polite">Исходный пример: AM/AB = 3/5, AK/AC = 2/3, площадь AMK = 30.</div>
+<p class="guidance"><strong>Что проверить:</strong> если одну долю увеличить, а другую сохранить, площадь внутреннего треугольника возрастает. Если обе доли уменьшаются, площадь также уменьшается.</p>
+</aside></div>
+<div class="workspace hidden" id="panel-diagonals" role="tabpanel" aria-labelledby="tab-diagonals" hidden><section class="stage">
+<svg id="quadSvg" viewBox="0 0 760 650" role="img" aria-labelledby="quadTitle quadDesc"><title id="quadTitle">Динамический четырёхугольник ABCD с пересекающимися диагоналями</title><desc id="quadDesc">Площади четырёх треугольников AOB, BOC, COD и AOD связаны равенством произведений противоположных площадей.</desc>
+<path id="aob" fill="var(--soft)" stroke="var(--teal)" stroke-width="2"/>
+<path id="boc" fill="var(--goldsoft)" stroke="var(--gold)" stroke-width="2"/>
+<path id="cod" fill="var(--soft)" stroke="var(--teal)" stroke-width="2"/>
+<path id="doa" fill="var(--goldsoft)" stroke="var(--gold)" stroke-width="2"/>
+<path id="edges" fill="none" stroke="currentColor" stroke-width="2.8"/>
+<path id="diags" fill="none" stroke="currentColor" stroke-width="1.7" stroke-dasharray="7 6"/>
+<text id="aLabel" x="370" y="217">A</text><text x="455" y="72">B</text><text x="650" y="220">C</text><text id="dLabel" x="455" y="540">D</text><text x="470" y="244">O</text>
+<text id="s1" class="measure" x="418" y="183">10</text><text x="545" y="180" class="measure">20</text><text id="s4" x="545" y="335" class="measure">60</text><text id="s3" x="403" y="335" class="measure">30</text>
+</svg><div class="caption">Режим «Диагонали». Встречные площади удовлетворяют равенству S(AOB) · S(DOC) = S(BOC) · S(AOD).</div>
+</section>
+<aside class="panel"><h2>Проверяем диагонали</h2><p>В основе — пример 4: S(BOC) = 20, S(AOD) = 30. Меняется отношение AO/OC, а две остальные площади вычисляются.</p>
+<div class="control"><label for="ratio">Отношение AO/OC <output id="ratioOut" for="ratio">0,50</output></label><input id="ratio" type="range" min="0.5" max="2" step="0.05" value="0.5"><div class="hint">Обе пары треугольников сравниваются по общей высоте.</div></div>
+<div class="result" aria-live="polite"><small>Площадь ABCD</small><strong id="totalOut">120</strong><div class="eq" id="quadFormula">10 + 20 + 30 + 60 = 120</div></div>
+<div class="control"><div><b>Общее правило:</b></div><div class="eq">S(AOB) · S(DOC) = 20 · 30</div></div>
+<div class="buttons"><button type="button" id="resetQuad">Вернуть пример 4</button></div>
+<p class="guidance"><strong>Что проверить:</strong> произведение площадей напротив остаётся равным 600, даже если меняется форма четырёхугольника.</p>
+</aside></div>
+<p class="hint" style="padding-bottom:45px">Лаборатория исследует формулы из пособия от 6 ноября. Числа, получающиеся при движении ползунков, вычисляются из текущих долей, поэтому соответствуют геометрическому чертежу.</p>
+</div></main>
+<script>
+(function(){
+ var root=document.documentElement;try{var theme=localStorage.getItem('sofya:theme');if(theme==='light'||theme==='dark')root.dataset.theme=theme;}catch(e){}
+ document.getElementById('theme').addEventListener('click',function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('sofya:theme',root.dataset.theme);}catch(e){}});
+ var tabs=Array.from(document.querySelectorAll('[role=tab]'));
+ function select(name,focus){var lab=name==='diagonals';tabs.forEach(function(t){var active=t.id==='tab-'+name;t.setAttribute('aria-selected',String(active));t.tabIndex=active?0:-1;});[['panel-angle',!lab],['panel-diagonals',lab]].forEach(function(a){var e=document.getElementById(a[0]);e.hidden=!a[1];e.classList.toggle('hidden',!a[1]);});if(focus)document.getElementById('tab-'+name).focus();try{history.replaceState(null,'','#'+(lab?'diagonals':'common-angle'));}catch(e){}}
+ tabs.forEach(function(t){t.addEventListener('click',function(){select(t.id.slice(4),false);});t.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();select(t.id==='tab-angle'?'diagonals':'angle',true);}});});
+ var p=document.getElementById('p'),q=document.getElementById('q'),areaOut=document.getElementById('areaOut');
+ var pOut=document.getElementById('pOut'),qOut=document.getElementById('qOut'),small=document.getElementById('smallTri');
+ function fmt(n){return Number(n.toFixed(2)).toLocaleString('ru-RU',{maximumFractionDigits:2});}
+ function neat(x,base){return Math.abs(x-base)<0.006;}
+ function updateAngle(){var a=+p.value,b=+q.value,ym=365-310*a,xk=70+540*b,area=75*a*b;
+  small.setAttribute('d','M70 365 L70 '+ym.toFixed(2)+' L'+xk.toFixed(2)+' 365 Z');
+  document.getElementById('mDot').setAttribute('cy',ym);document.getElementById('kDot').setAttribute('cx',xk);
+  document.getElementById('mText').setAttribute('y',ym-6);document.getElementById('kText').setAttribute('x',xk);
+  document.getElementById('innerText').textContent=fmt(area);
+  pOut.textContent=neat(a,.6)?'3/5':fmt(a);qOut.textContent=neat(b,2/3)?'2/3':fmt(b);
+  areaOut.textContent=fmt(area);document.getElementById('areaFormula').textContent='75 · '+pOut.textContent+' · '+qOut.textContent+' = '+fmt(area);
+  document.getElementById('triDesc').textContent='AM/AB = '+fmt(a)+', AK/AC = '+fmt(b)+', площадь AMK = '+fmt(area)+', площадь ABC = 75.';
+ }
+ p.addEventListener('input',updateAngle);q.addEventListener('input',updateAngle);
+ document.getElementById('resetAngle').addEventListener('click',function(){p.value='0.6';q.value=String(2/3);updateAngle();document.getElementById('compareOut').textContent='Исходный пример: площадь AMK = 30.';});
+ var snapshot=null;
+ document.getElementById('saveAngle').addEventListener('click',function(){snapshot={p:+p.value,q:+q.value,area:75*(+p.value)*(+q.value)};document.getElementById('compareOut').textContent='Состояние сохранено: площадь '+fmt(snapshot.area)+'. Измените ползунки и нажмите «Сравнить».';});
+ document.getElementById('compareAngle').addEventListener('click',function(){if(!snapshot){document.getElementById('compareOut').textContent='Сначала нажмите «Запомнить состояние».';return;}var now=75*(+p.value)*(+q.value),delta=now-snapshot.area;document.getElementById('compareOut').textContent='Было '+fmt(snapshot.area)+', стало '+fmt(now)+'. Изменение: '+(delta>=0?'+':'')+fmt(delta)+'.';});
+ var ratio=document.getElementById('ratio');
+ function updQuad(){var r=+ratio.value,ax=460-170*r,dy=225+150/r,aob=20*r,cod=30/r,sum=aob+20+30+cod;
+   var A=ax.toFixed(2)+',225',B='460,125',C='630,225',D='460,'+dy.toFixed(2),O='460,225';
+   function path(ids){return 'M'+ids.join(' L')+' Z';}
+   document.getElementById('aob').setAttribute('d',path([A,B,O]));document.getElementById('boc').setAttribute('d',path([B,C,O]));
+   document.getElementById('cod').setAttribute('d',path([C,D,O]));document.getElementById('doa').setAttribute('d',path([D,A,O]));
+   document.getElementById('edges').setAttribute('d',path([A,B,C,D]));document.getElementById('diags').setAttribute('d','M'+A+' L'+C+' M'+B+' L'+D);
+   document.getElementById('aLabel').setAttribute('x',ax-34);document.getElementById('dLabel').setAttribute('y',dy+29);
+   document.getElementById('s1').setAttribute('x',(ax+460)/2-13);document.getElementById('s1').textContent=fmt(aob);
+   document.getElementById('s4').setAttribute('y',225+(dy-225)*.45);document.getElementById('s4').textContent=fmt(cod);
+   document.getElementById('s3').setAttribute('x',(ax+460)/2-18);document.getElementById('s3').setAttribute('y',225+(dy-225)*.45);
+   document.getElementById('ratioOut').textContent=fmt(r);document.getElementById('totalOut').textContent=fmt(sum);
+   document.getElementById('quadFormula').textContent=fmt(aob)+' + 20 + 30 + '+fmt(cod)+' = '+fmt(sum);
+   document.getElementById('quadDesc').textContent='AO/OC равно '+fmt(r)+'. Площади AOB, BOC, AOD, DOC соответственно '+fmt(aob)+', 20, 30, '+fmt(cod)+'.';
+ }
+ ratio.addEventListener('input',updQuad);document.getElementById('resetQuad').addEventListener('click',function(){ratio.value='.5';updQuad();});
+ updateAngle();updQuad();select(location.hash==='#diagonals'?'diagonals':'angle',false);
+})();
+</script></body></html>
