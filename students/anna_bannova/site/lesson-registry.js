@@ -1,5 +1,68 @@
 export const LESSONS=[
   {
+    "date": "2026-11-06",
+    "ktpRefs": [
+      "ktp-006"
+    ],
+    "href": "06.11.26.html",
+    "title": "Маршруты движения",
+    "navTitle": "Маршруты движения",
+    "navSubtitle": "Анна Баннова · 06.11.26: текстовые задачи на движение, схема–таблица–уравнение, догоняющее движение, поворот обратно, разновременный старт и рациональное уравнение.",
+    "summary": "Анна Баннова · 06.11.26: текстовые задачи на движение, схема–таблица–уравнение, догоняющее движение, поворот обратно, разновременный старт и рациональное уравнение.",
+    "topics": [
+      "текстовые задачи на движение",
+      "догоняющее движение и относительная скорость",
+      "схема и таблица скорость–время–расстояние",
+      "согласование единиц измерения",
+      "поворот и возвращение",
+      "разновременный старт, разность времён",
+      "рациональное уравнение, дискриминант и проверка корней"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "text_06",
+        "evidenceAnchor": "catchup",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_19",
+        "evidenceAnchor": "method",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_17",
+        "evidenceAnchor": "delay",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_04",
+        "evidenceAnchor": "turn",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_21",
+        "evidenceAnchor": "check",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "calc_07",
+        "evidenceAnchor": "algebra",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "eq_05",
+        "evidenceAnchor": "algebra",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "06.11.26.html",
+      "pdf": "../pdf_docs/06.11.26.pdf",
+      "tex": "../tex_docs/06.11.26.tex",
+      "lab": "06.11.26-lab.html"
+    }
+  },
+  {
   "date": "2026-11-01",
   "ktpRefs": [
     "ktp-003",
