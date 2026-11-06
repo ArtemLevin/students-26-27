@@ -1,5 +1,58 @@
 export const LESSONS=[
 {
+  "date": "2026-11-06",
+  "ktpRefs": [],
+  "href": "06.11.26.html",
+  "title": "Метод опорных точек.",
+  "navTitle": "Метод опорных точек.",
+  "navSubtitle": "Метод опорных точек: графики показательных и линейных функций, параболы, теория, примеры, 10 графических задач.",
+  "summary": "Метод опорных точек: графики показательных и линейных функций, параболы, теория, примеры, 10 графических задач.",
+  "topics": [
+    "Восстановление формулы функции по опорным точкам графика",
+    "Показательные функции: основание, вертикальное смещение и смещение показателя",
+    "Линейная и квадратичная функции по координатам точек",
+    "Десять задач на чтение графиков и вычисление значений функции"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "func_13",
+      "evidenceAnchor": "examples",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "func_17",
+      "evidenceAnchor": "types",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "func_08",
+      "evidenceAnchor": "examples",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "func_09",
+      "evidenceAnchor": "examples",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "eq_14",
+      "evidenceAnchor": "algorithm",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calc_10",
+      "evidenceAnchor": "types",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "06.11.26.html",
+    "pdf": "../pdf_docs/06.11.26.pdf",
+    "tex": "../tex_docs/06.11.26.tex",
+    "lab": "06.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-02",
   "ktpRefs": [],
   "href": "02.11.26.html",
