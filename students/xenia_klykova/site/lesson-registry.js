@@ -5,6 +5,81 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-06",
+  "ktpRefs": [],
+  "href": "06.11.26.html",
+  "title": "Как устроены вклады и кредиты",
+  "navTitle": "Как устроены вклады и кредиты",
+  "navSubtitle": "Ксения Клыкова, 6 ноября 2026: как распознавать вклад, дифференцированный и аннуитетный кредит, находить ставку, полную сумму платежей и проверять вычисления. 10 задач Пути А.",
+  "summary": "Ксения Клыкова, 6 ноября 2026: как распознавать вклад, дифференцированный и аннуитетный кредит, находить ставку, полную сумму платежей и проверять вычисления. 10 задач Пути А.",
+  "topics": [
+    "распознавание вклада, дифференцированного и аннуитетного кредита по тексту",
+    "вклад с пополнением после начисления процентов и поиск ставки",
+    "корень из большого дискриминанта через полные квадраты",
+    "уменьшение тела кредита и формула суммы платежей",
+    "равные аннуитетные платежи и проверка остатков долга",
+    "перевод тысяч и миллионов в рубли, вычислительная аккуратность",
+    "10 упражнений Пути А"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t16_deposits",
+      "evidenceAnchor": "deposit",
+      "relation": "practiced",
+      "label": "Вклад с ежегодными процентами",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_deposit_contrib",
+      "evidenceAnchor": "deposit",
+      "relation": "practiced",
+      "label": "Вклад с пополнением после первого года",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_diff",
+      "evidenceAnchor": "differentiated",
+      "relation": "practiced",
+      "label": "Дифференцированная схема кредитования",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_payment_sum",
+      "evidenceAnchor": "differentiated",
+      "relation": "practiced",
+      "label": "Сумма выплат и процентов по кредиту",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_annuity",
+      "evidenceAnchor": "annuity",
+      "relation": "touched",
+      "label": "Аннуитетные ежегодные платежи",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_radical_num",
+      "evidenceAnchor": "root",
+      "relation": "practiced",
+      "label": "Извлечение корня из большого дискриминанта",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t9_units",
+      "evidenceAnchor": "notes",
+      "relation": "touched",
+      "label": "Согласование рублей, тысяч и миллионов",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "06.11.26.html",
+    "pdf": "../pdf_docs/06.11.26.pdf",
+    "tex": "../tex_docs/06.11.26.tex",
+    "lab": "06.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-05",
   "ktpRefs": [],
   "href": "05.11.26.html",

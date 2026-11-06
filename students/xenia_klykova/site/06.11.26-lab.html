@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивная финансовая лаборатория: двухлетний вклад с пополнением, дифференцированный и аннуитетный кредит; таблица платежей, проценты, долг и сравнение сценариев.">
+<title>Финансовая лаборатория · 06.11.2026 · Ксения Клыкова</title><link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../design-system/tokens.css"><link rel="stylesheet" href="../../../design-system/foundations.css">
+<style>
+:root{color-scheme:light;--bg:#f5f6f1;--paper:#fffefa;--ink:#223638;--muted:#54696a;--line:#cbd6d2;--primary:#176562;--interest:#bd8158;--wash:#e5f0eb;--focus:#0074b5;--low:#b2cec4}
+html[data-theme=dark]{color-scheme:dark;--bg:#142628;--paper:#213739;--ink:#eff4f1;--muted:#bfcfc9;--line:#4b6662;--primary:#9bd9cb;--interest:#e5ac81;--wash:#2a4945;--focus:#a9e3ff;--low:#416b63}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:var(--primary);text-underline-offset:4px}button,input,select{font:inherit;color:inherit}button{cursor:pointer}button:disabled{opacity:.48;cursor:default}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.skip{position:absolute;left:-100vw;background:var(--paper);padding:11px;z-index:20}.skip:focus{top:8px;left:8px}
+.wrap{width:min(1270px,calc(100% - 38px));margin:auto}.top{background:var(--paper);border-bottom:1px solid var(--line)}.top .wrap{display:flex;gap:18px;justify-content:space-between;align-items:center;min-height:65px}.top nav{display:flex;flex-wrap:wrap;gap:14px;align-items:center}.top a{font-size:.93rem}.top .back{font-weight:750;text-decoration:none}.theme,.btn{min-height:43px;border:1px solid var(--line);padding:8px 13px;background:var(--paper)}.btn.accent{background:var(--primary);border-color:var(--primary);color:var(--paper)}html[data-theme=dark] .btn.accent{color:#132927}
+.hero{padding:49px 0 31px}.kicker,.eyebrow{font-size:.77rem;letter-spacing:.13em;text-transform:uppercase;font-weight:800;color:var(--interest)}h1{font:400 clamp(2.4rem,5.1vw,5rem)/1.08 Georgia,serif;letter-spacing:-.04em;margin:12px 0 18px}h1 em{color:var(--primary);font-style:normal}.lead{color:var(--muted);font-size:1.08rem;max-width:850px}.shell{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(285px,.75fr);gap:36px;align-items:start;padding:18px 0 82px}.board{min-width:0}.controls{border:1px solid var(--line);background:var(--paper);padding:25px;position:sticky;top:15px}.controls h2,.surface h2{font:400 clamp(1.5rem,2.6vw,2.45rem)/1.18 Georgia,serif;margin:8px 0 15px}.surface{border-top:2px solid var(--primary);padding:20px 0 27px;margin-bottom:15px}.surface p{max-width:79ch}.toolbar{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-block:1px solid var(--line);margin:21px 0}.stats>div{padding:15px 12px;border-right:1px solid var(--line)}.stats>div:last-child{border-right:0}.stats strong{display:block;font:400 clamp(1.6rem,2.9vw,2.35rem) Georgia,serif;letter-spacing:-.035em;color:var(--primary);overflow-wrap:anywhere}.stats small{color:var(--muted)}.field{margin:17px 0}.field label{display:block;font-weight:750;font-size:.9rem;margin-bottom:7px}.field input,.field select{width:100%;min-height:45px;border:1px solid var(--line);padding:9px;background:var(--paper)}.field input[type=range]{min-height:30px;border:0;padding:0;accent-color:var(--primary)}.mini{font-size:.8rem;color:var(--muted)}.presets{display:grid;grid-template-columns:1fr;gap:7px}.presets button{text-align:left;min-height:44px;padding:8px 10px;border:1px solid var(--line);background:var(--paper)}.presets button[aria-pressed=true]{border-color:var(--primary);background:var(--wash)}.legend{display:flex;flex-wrap:wrap;gap:17px;color:var(--muted);font-size:.84rem}.swatch{display:inline-block;width:12px;height:12px;background:var(--primary);margin-right:7px}.swatch.interest{background:var(--interest)}.swatch.low{background:var(--low)}.bars{margin-top:21px}.bar-row{display:grid;grid-template-columns:64px minmax(0,1fr) minmax(105px,auto);gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.bar-track{height:25px;display:flex;background:var(--wash);width:100%;overflow:hidden}.bar-principal{background:var(--primary);height:100%}.bar-interest{background:var(--interest);height:100%}.bar-deposit{background:var(--primary);height:100%}.bar-row.focused{background:var(--wash)}.bar-row small{color:var(--muted);font-size:.8rem}.tablewrap{overflow-x:auto;max-width:100%}table{border-collapse:collapse;width:100%;font-size:.88rem;white-space:nowrap}th,td{text-align:right;padding:10px 11px;border-bottom:1px solid var(--line)}th:first-child,td:first-child{text-align:left}thead th{border-top:2px solid var(--primary);color:var(--muted)}tbody tr.focused{background:var(--wash)}.state{border-left:3px solid var(--interest);padding:8px 0 8px 15px;margin:20px 0}.state strong{color:var(--primary)}.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px}.snapshot{border-top:2px solid var(--primary);padding:12px 0}.snapshot strong{display:block;font-size:1.12rem}.snapshot p{margin:7px 0}.comparison-note{color:var(--muted);font-size:.88rem}.stepper{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.stepper button{min-height:43px;padding:8px 15px;background:var(--paper);border:1px solid var(--line)}.stepper output{font-weight:700}.formula{font:1.17rem/1.7 "Cambria Math",Georgia,serif;color:var(--primary);border-block:1px solid var(--line);padding:14px 0;overflow-x:auto;white-space:nowrap}.prompt{border-left:3px solid var(--primary);background:var(--wash);padding:13px 17px}footer{padding:25px 0 55px;color:var(--muted);font-size:.84rem}
+@media(max-width:960px){.shell{grid-template-columns:1fr}.controls{position:static;grid-row:1}.stats{grid-template-columns:repeat(3,1fr)}}@media(max-width:600px){.wrap{width:min(100% - 28px,1270px)}.hero{padding:32px 0 20px}.controls{padding:17px}.stats,.compare{grid-template-columns:1fr}.stats>div{border-right:0;border-bottom:1px solid var(--line)}.stats>div:last-child{border-bottom:0}.bar-row{grid-template-columns:44px minmax(0,1fr);gap:8px}.bar-row small{grid-column:2}.top .wrap{flex-wrap:wrap;padding-block:9px}}
+@media print{.controls,.top nav,.toolbar,.stepper{display:none!important}.shell{display:block}.hero{padding:18px 0}.surface{break-inside:avoid-page}body{background:#fff;color:#000}}
+</style></head><body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="top"><div class="wrap"><a class="back" href="06.11.26.html">← К занятию</a><nav><a href="index.html">Кабинет</a><a href="archive.html">Архив</a><button type="button" class="theme" id="theme">Тема ◐</button></nav></div></header>
+<header class="hero wrap"><p class="kicker">Ксения Клыкова / 06.11.2026 / Исследовательский инструмент</p><h1>Лаборатория <em>финансовых схем</em></h1><p class="lead">Изменяйте сумму, процентную ставку и срок. Наблюдайте, как меняются выплаты, проценты и остаток долга. Каждый столбец рассчитан из тех же данных, что и таблица.</p></header>
+<main id="main" class="wrap shell">
+<div class="board">
+<section id="compare" class="surface" aria-labelledby="boardTitle"><p class="eyebrow">Графическая ведомость</p><h2 id="boardTitle">Финансовый маршрут</h2>
+<div class="stats"><div><strong id="outTotal">—</strong><small id="totalLabel">Конечная сумма</small></div><div><strong id="outInterest">—</strong><small id="interestLabel">Проценты</small></div><div><strong id="outPayment">—</strong><small id="paymentLabel">Ежегодный платёж</small></div></div>
+<p id="formula" class="formula">S₂ = S₀k² + Ak</p>
+<div class="legend"><span><span class="swatch"></span><span id="legendPrincipal">Основной долг</span></span><span><span class="swatch interest"></span><span id="legendInterest">Проценты</span></span></div>
+<div class="bars" id="bars" role="img" aria-label="Диаграмма годовых платежей, значения продублированы в таблице"></div>
+<div class="stepper toolbar"><button id="prevYear" type="button">← Период назад</button><output id="currentYear" aria-live="polite">Период 1</output><button id="nextYear" type="button">Период вперёд →</button><button id="allYears" type="button">К последнему периоду</button></div>
+<div class="state"><strong id="stateHeading">Первый год</strong><p id="stateText">Выберите параметры справа.</p></div>
+</section>
+<section class="surface" id="schedule"><p class="eyebrow">Расчёт по периодам</p><h2>Таблица, из которой получается ответ</h2><div class="tablewrap"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div><p class="mini" id="tableHint">Денежные суммы указаны в тысячах рублей. Округление применяется только к отображению.</p></section>
+<section class="surface" id="snapshots"><p class="eyebrow">Самостоятельный эксперимент</p><h2>Сравните два состояния</h2>
+<p>Сохраните первый расчёт в A, измените схему или ставку и сохраните новый расчёт в B. Для корректного сравнения двух кредитов оставляйте одинаковыми сумму, срок и ставку.</p>
+<div class="toolbar"><button class="btn" type="button" id="captureA">Запомнить A</button><button class="btn" type="button" id="captureB">Запомнить B</button><button class="btn" type="button" id="clearCompare">Очистить сравнение</button></div>
+<div class="compare"><div class="snapshot"><span class="eyebrow">Состояние A</span><strong id="snapshotA">Пока не сохранено</strong><p id="detailsA" class="mini"></p></div><div class="snapshot"><span class="eyebrow">Состояние B</span><strong id="snapshotB">Пока не сохранено</strong><p id="detailsB" class="mini"></p></div></div><p id="comparison" class="comparison-note" aria-live="polite">Попробуйте изменить только тип кредита — это позволит увидеть разницу именно между схемами.</p></section>
+<section class="surface"><p class="eyebrow">Что проверить</p><h2>Три исследовательских наблюдения</h2><p class="prompt">При дифференцированном кредите выделите постоянную часть основного долга. Затем переключитесь на аннуитет: одинаков ли ежегодный платёж? Наконец, увеличьте ставку и сравните итоговые суммы.</p><p>Решения и формулы из урока — в <a href="06.11.26.html#differentiated">разборе дифференцированной схемы</a> и <a href="06.11.26.html#annuity">разборе аннуитета</a>.</p></section>
+</div>
+<aside class="controls" aria-labelledby="controlsTitle"><p class="eyebrow">Панель управления</p><h2 id="controlsTitle">Условия задачи</h2>
+<div class="field"><label for="mode">Тип финансовой схемы</label><select id="mode"><option value="deposit">Вклад с пополнением (2 года)</option><option value="diff">Дифференцированный кредит</option><option value="annuity">Аннуитетный кредит</option></select></div>
+<div class="field"><label for="amount">Первоначальная сумма, тыс. руб.</label><input id="amount" type="number" min="50" max="3000" step="0.5" value="750"></div>
+<div class="field"><label for="rate">Годовая ставка, %</label><input id="rate" type="number" min="0" max="30" step="0.5" value="14"><input type="range" id="rateRange" min="0" max="30" step="0.5" value="14" aria-label="Годовая процентная ставка — ползунок"></div>
+<div class="field" id="yearsField"><label for="years">Число ежегодных платежей</label><input id="years" type="number" min="2" max="7" step="1" value="2"></div>
+<div class="field" id="topupField"><label for="topup">Пополнение после первого года, тыс. руб.</label><input id="topup" type="number" min="0" max="1500" step="0.5" value="450"></div>
+<p class="mini">Все платежи происходят после начисления процентов за соответствующий год. У вклада пополнение в конце первого года.</p>
+<div class="field"><span class="eyebrow">Готовые сценарии</span><div class="presets">
+<button id="deposit" type="button" data-preset="deposit">Вклад · 750 / 14% / +450</button>
+<button id="differentiated" type="button" data-preset="diff">Дифференцированный · 2500 / 15% / 4 года</button>
+<button id="annuity" type="button" data-preset="annuity">Аннуитет · 496,5 / 10% / 3 года</button>
+</div></div><button id="reset" class="btn accent" type="button">Сбросить эксперимент</button>
+</aside>
+</main><footer class="wrap">Лёвин Артём Александрович · эксклюзивно для Ксении Клыковой · 6 ноября 2026 года</footer>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id),num=(v,min,max)=>Math.min(max,Math.max(min,Number.isFinite(Number(v))?Number(v):min));
+const defaults={deposit:{mode:'deposit',amount:750,rate:14,years:2,topup:450},diff:{mode:'diff',amount:2500,rate:15,years:4,topup:0},annuity:{mode:'annuity',amount:496.5,rate:10,years:3,topup:0}};
+const names={deposit:'Вклад с пополнением',diff:'Дифференцированный кредит',annuity:'Аннуитетный кредит'};
+const ru=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:3}),rub=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2});
+const money=v=>ru.format(Math.abs(v)<1e-8?0:v)+' тыс. ₽',short=v=>ru.format(Math.abs(v)<1e-8?0:v),ruble=v=>rub.format(v*1000)+' ₽';
+let state={...defaults.deposit},year=0,snapA=null,snapB=null,last=null;
+const doc=document.documentElement,key='xenia-lesson-theme-v1';
+try{doc.dataset.theme=localStorage.getItem(key)==='dark'?'dark':'light'}catch(_){doc.dataset.theme='light'}
+$('theme').addEventListener('click',()=>{doc.dataset.theme=doc.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem(key,doc.dataset.theme)}catch(_){}});
+function readState(){
+ const mode=$('mode').value;
+ state={mode,amount:num($('amount').value,50,3000),rate:num($('rate').value,0,30),years:Math.round(num($('years').value,2,7)),topup:num($('topup').value,0,1500)};
+ if(mode==='deposit')state.years=2;
+}
+function syncInputs(){
+ $('mode').value=state.mode;$('amount').value=state.amount;$('rate').value=state.rate;$('rateRange').value=state.rate;$('years').value=state.years;$('topup').value=state.topup;
+ $('yearsField').hidden=state.mode==='deposit';$('topupField').hidden=state.mode!=='deposit';
+ document.querySelectorAll('[data-preset]').forEach(b=>b.setAttribute('aria-pressed',String(JSON.stringify(state)===JSON.stringify(defaults[b.dataset.preset]))));
+}
+function calculate(s){
+ const p=s.rate/100,k=1+p,n=s.mode==='deposit'?2:s.years;let total=0,interest=0,periods=[],payment=0;
+ if(s.mode==='deposit'){
+  const first=s.amount*k+s.topup,last=first*k;
+  periods=[{year:1,before:s.amount,interest:s.amount*p,principal:0,payment:0,after:first,addition:s.topup},{year:2,before:first,interest:first*p,principal:0,payment:0,after:last,addition:0}];
+  total=last;interest=s.amount*p+first*p;payment=0;
+ }else{
+  let balance=s.amount; const fixedPrincipal=s.amount/n;
+  const constant=s.mode==='annuity'?(p===0?s.amount/n:s.amount*p/(1-Math.pow(k,-n))):0;
+  for(let y=1;y<=n;y++){
+   const before=balance,charge=before*p,principal=s.mode==='diff'?fixedPrincipal:constant-charge;
+   payment=principal+charge;balance=Math.abs(before*k-payment)<1e-8?0:before*k-payment;
+   periods.push({year:y,before,interest:charge,principal,payment,after:balance});
+   total+=payment;interest+=charge;
+  }
+  payment=s.mode==='annuity'?constant:periods[0].payment;
+ }
+ return {state:{...s},periods,total,interest,payment,overpay:interest};
+}
+function text(id,value){$(id).textContent=value;}
+function cell(row,label){const td=document.createElement('td');td.textContent=label;row.append(td)}
+function render(){
+ last=calculate(state);const d=last;year=Math.min(year,d.periods.length-1);
+ syncInputs();
+ text('boardTitle',names[state.mode]);
+ text('totalLabel',state.mode==='deposit'?'На вкладе через два года':'Все ежегодные платежи');
+ text('interestLabel',state.mode==='deposit'?'Начисленные проценты':'Переплата по процентам');
+ text('paymentLabel',state.mode==='deposit'?'Пополнение после года':state.mode==='diff'?'Первый ежегодный платёж':'Одинаковый ежегодный платёж');
+ text('outTotal',money(d.total));text('outInterest',money(d.interest));text('outPayment',money(state.mode==='deposit'?state.topup:d.payment));
+ text('formula',state.mode==='deposit'?'S₂ = S₀ · (1 + p)² + A · (1 + p)':state.mode==='diff'?'Sобщ = S₀ · (1 + p · (n + 1) / 2)':'x = S₀ · p / (1 − (1 + p)^(−n));   Sобщ = n · x');
+ text('legendPrincipal',state.mode==='deposit'?'Сумма на вкладе':'Возврат основного долга');text('legendInterest',state.mode==='deposit'?'Проценты включены в остаток':'Проценты в платеже');
+ const max=Math.max(1,...d.periods.map(a=>state.mode==='deposit'?a.after:a.payment));
+ const bars=$('bars');bars.replaceChildren();d.periods.forEach((a,i)=>{
+  const row=document.createElement('div');row.className='bar-row'+(i===year?' focused':'');
+  const y=document.createElement('strong');y.textContent=a.year+' год';
+  const track=document.createElement('div');track.className='bar-track';
+  if(state.mode==='deposit'){const b=document.createElement('div');b.className='bar-deposit';b.style.width=(100*a.after/max).toFixed(3)+'%';track.append(b)}
+  else{for(const part of ['principal','interest']){const b=document.createElement('div');b.className='bar-'+part;b.style.width=(100*a[part]/max).toFixed(3)+'%';track.append(b)}}
+  const caption=document.createElement('small');caption.textContent=state.mode==='deposit'?short(a.after)+' тыс. на счёте':short(a.payment)+' тыс. платёж';row.append(y,track,caption);bars.append(row);
+ });
+ const head=$('tableHead'),body=$('tableBody');head.replaceChildren();body.replaceChildren();
+ const tr=document.createElement('tr');
+ const heads=state.mode==='deposit'?['Год','До начисления','Проценты','Пополнение','В конце года']:['Год','Долг до','Проценты','Тело долга','Платёж','Долг после'];
+ heads.forEach(x=>{const th=document.createElement('th');th.scope='col';th.textContent=x;tr.append(th)});head.append(tr);
+ d.periods.forEach((a,i)=>{const row=document.createElement('tr');if(i===year)row.className='focused';const cols=state.mode==='deposit'?[a.year,short(a.before),short(a.interest),short(a.addition),short(a.after)]:[a.year,short(a.before),short(a.interest),short(a.principal),short(a.payment),short(a.after)];cols.forEach(x=>cell(row,x));body.append(row)});
+ text('currentYear','Год '+(year+1)+' из '+d.periods.length);$('prevYear').disabled=year===0;$('nextYear').disabled=year===d.periods.length-1;
+ const a=d.periods[year];text('stateHeading','Год '+a.year);
+ text('stateText',state.mode==='deposit'?'Перед начислением на счёте '+money(a.before)+'. Проценты '+money(a.interest)+', пополнение '+money(a.addition)+'. Конечная сумма '+money(a.after)+'.':'Долг до выплаты '+money(a.before)+'. Проценты '+money(a.interest)+', погашение основного долга '+money(a.principal)+'. Платёж '+money(a.payment)+', остаток '+money(a.after)+'.');
+ text('tableHint','Все числа в таблице — тысячи рублей; для ответа в рублях умножьте на 1000. Отображение округлено, расчёты ведутся с полной точностью.');
+ renderCompare();
+}
+function renderCompare(){
+ for(const [snap,id] of [[snapA,'A'],[snapB,'B']]){
+  text('snapshot'+id,snap?names[snap.state.mode]+' · '+ruble(snap.total):'Пока не сохранено');
+  text('details'+id,snap?'Начальная сумма: '+money(snap.state.amount)+'; ставка: '+snap.state.rate+'%; срок: '+snap.state.years+' г.; '+(snap.state.mode==='deposit'?'пополнение: '+money(snap.state.topup):'переплата: '+money(snap.interest)):'');
+ }
+ if(!snapA||!snapB){text('comparison','Для сравнения зафиксируйте два состояния. У кредитов одинаковые сумма, ставка и срок позволяют сравнить именно схемы.');return}
+ const comparable=snapA.state.mode!=='deposit'&&snapB.state.mode!=='deposit'&&snapA.state.amount===snapB.state.amount&&snapA.state.rate===snapB.state.rate&&snapA.state.years===snapB.state.years;
+ text('comparison',comparable?'Разница общих выплат: '+ruble(Math.abs(snapA.total-snapB.total))+'. Меньшую сумму даёт '+(Math.abs(snapA.total-snapB.total)<1e-8?'обе схемы (совпадение)':snapA.total<snapB.total?'схема A.':'схема B.'):'Сценарии отличаются исходными параметрами или включают вклад. Их итоги показаны отдельно; сравнение переплат между кредитами требует равных суммы, ставки и срока.');
+}
+function preset(which){state={...defaults[which]};year=0;render()}
+document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>preset(b.dataset.preset)));
+$('mode').addEventListener('change',()=>{readState();year=0;render()});
+for(const id of ['amount','rate','years','topup'])$(id).addEventListener('change',()=>{readState();year=0;render()});
+$('rateRange').addEventListener('input',()=>{$('rate').value=$('rateRange').value;readState();render()});
+$('prevYear').addEventListener('click',()=>{year=Math.max(0,year-1);render()});
+$('nextYear').addEventListener('click',()=>{year=Math.min(last.periods.length-1,year+1);render()});
+$('allYears').addEventListener('click',()=>{year=last.periods.length-1;render()});
+$('reset').addEventListener('click',()=>preset('deposit'));
+$('captureA').addEventListener('click',()=>{snapA=calculate(state);renderCompare()});
+$('captureB').addEventListener('click',()=>{snapB=calculate(state);renderCompare()});
+$('clearCompare').addEventListener('click',()=>{snapA=null;snapB=null;renderCompare()});
+const hash=location.hash.slice(1);preset(hash==='annuity'?'annuity':hash==='differentiated'?'diff':'deposit');
+})();
+</script></body></html>
