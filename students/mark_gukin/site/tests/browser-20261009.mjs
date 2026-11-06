@@ -137,13 +137,23 @@ try{
   assert.equal(await run("getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()"),'#fff','print background from dark theme');
   await call('Emulation.setEmulatedMedia',{media:'screen'});
   await navigate('index.html',390,844,false);
-  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Тригонометрические преобразования')"),true,'latest lesson on home');
+  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Тригонометрические графики и прикладные задачи')"),true,'latest lesson on home');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"18.10.26.html\"]')!==null"),true,'previous lesson remains in journal');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"21.10.26.html\"]')!==null"),true,'previous logarithm lesson remains in journal');
-  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"../pdf_docs/28.10.26.pdf\"]')!==null"),true,'home links to latest lesson PDF');
+  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"../pdf_docs/06.11.26.pdf\"]')!==null"),true,'home links to latest lesson PDF');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('04.10.2026')"),true,'history retained');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('09.10.2026')"),true,'previous lesson retained');
   await snapshot('home-mobile-light');
+  // November 6: five graph exercises and five calculation-only exercises.
+  await navigate('06.11.26.html',390,844,false);
+  assert.equal(await run("document.querySelectorAll('#practice .exercise').length"),10,'6 Nov ten training exercises');
+  assert.equal(await run("document.querySelectorAll('#practice svg[id^=chart]').length"),5,'6 Nov exactly five graphs');
+  assert.equal(await run("document.querySelector('#chart1 path.chart-curve')!==null"),true,'6 Nov first graph rendered');
+  assert.equal(await run("document.querySelector('#task-6 svg')===null && document.querySelector('#task-10 svg')===null"),true,'6 Nov calculation tasks have no graphs');
+  await navigate('06.11.26-lab.html',390,844,false);
+  assert.equal(await run("document.querySelectorAll('[data-f]').length"),3,'6 Nov three modes');
+  assert.equal(await run("(()=>{document.querySelector('[data-f=tan]').click();return document.getElementById('pt2').textContent.includes('1,5')})()"),true,'6 Nov tangent support point');
+  assert.equal(await run("(()=>{const slider=document.getElementById('a');slider.value='3';slider.dispatchEvent(new Event('input',{bubbles:true}));return document.getElementById('pt2').textContent.includes('2,5')})()"),true,'6 Nov slider recomputes support point');
   // 28 October: current lesson and independent training block.
   await navigate('28.10.26.html',390,844,false);
   assert.equal(await run("document.querySelectorAll('#practice .exercise').length"),10,'28 Oct original training exercises');
