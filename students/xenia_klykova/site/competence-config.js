@@ -2,6 +2,12 @@ window.STUDENT_COMPETENCE_CONFIG={
   stateKey:'xenia-competence-state-v2',storageKey:'xenia-competence-map-v1',baselineKey:'xenia-competence-teacher-baseline-v1',legacyStorageKeys:[],legacyUrl:'index-base-2026-07-29.html',fallbackHref:'index-base-2026-07-29.html#competencies',catalogNames:['groups','GROUPS'],summaryEvent:'xenia:competence-summary',
   teacherSeed:{t3_basic_sections:3,t2_coordinates:3,t2_length:3,t2_operations:3,t2_dot:3,t2_angle:3,t2_linear_combo:3,t4_classic:4,t4_coins:3,t4_selection:3,t4_order:3,t4_enumeration:4,t4_frequency:3,t5_sum:4,t5_product:4,t5_complement:4,t5_bernoulli:3,t5_combinatorics:2,ege2027_t6_variance:2,ege2027_t6_stddev:2,t6_linear_quad:3,t6_factor:3,t6_rational:2,t6_irrational:1,t7_power_values:3,t7_power_actions:3,t7_radical_num:3,t7_radical_var:2,t7_integers:2,t7_fractions:3,t7_natural_power:3,t7_integer_power:3,t7_nth_root:3,t7_rational_power:3,t9_linear:3,t9_power:3,t9_rational:3,t9_radical:3,t9_exponential:0,t9_logarithmic:0,t9_trig:0,t9_other:3,t9_units:3,t9_rounding:1,t9_table:3,t9_formula_transform:3,t10_percent:3,t10_line:3,t10_circle:3,t10_water:3,t10_work:3,t10_validation:3,t10_trains:3,t10_average_speed:3,t10_pipes:3,t10_alloys:3,t10_percent_change:0,t11_linear:3,t11_parabola:3,t11_hyperbola:3,t11_intersections:3,t11_domain:2,t11_roots:2,t11_radical:0,t11_exp_log:0,t11_trig:0,t11_piecewise:0,t11_combined:0,t11_transformations:0},
   evidence:{
+    t16_deposits:{text:"06.11 Ксения повторила модель вклада с двумя начислениями процентов, составила уравнение на ставку и разобрала связь S₀k² + Ak. Работа шла с разбором; уровень не повышался.",href:"06.11.26.html#deposit"},
+    t16_deposit_contrib:{text:"06.11 разобраны момент пополнения вклада и срок начисления процентов на каждый взнос; в похожей задаче исправляли ошибку при масштабировании коэффициентов.",href:"06.11.26.html#deposit"},
+    t16_diff:{text:"06.11 повторена дифференцированная схема: основной долг ежегодно уменьшается на одинаковую сумму, а проценты начисляются на остаток. Ксения практиковала вычисления при поддержке преподавателя.",href:"06.11.26.html#differentiated"},
+    t16_payment_sum:{text:"06.11 вычислена общая сумма выплат по дифференцированной формуле; отдельно разобрана неудачная попытка приведения десятичных чисел к общему знаменателю. Освоение без помощи ещё не проверено.",href:"06.11.26.html#differentiated"},
+    t16_annuity:{text:"06.11 повторены равные ежегодные платежи и формула аннуитета, показан расчёт для трёх лет. Самостоятельный результат в новом примере на уроке не подтверждён.",href:"06.11.26.html#annuity"},
+    t7_radical_num:{text:"06.11 отрабатывалось извлечение корня из большого дискриминанта: ближайшие квадраты, последняя цифра и проверка возведением в квадрат. Разбор проводился совместно.",href:"06.11.26.html#root"},
     t1_areas:{text:"17.10 повторены пять формул площади треугольника и пример с двумя боковыми сторонами и углом между ними. Самостоятельное освоение всех формул отдельно не диагностировалось.",href:"17.10.26.html#area"},
     ege2027_t6_expectation:{text:"17.10 разобрано математическое ожидание по таблице распределения числа бутылок; Ксения практиковала переход от частот к вероятностям.",href:"17.10.26.html#expectation"},
     t7_power_actions:{text:"17.10 повторена идея приведения степеней 25 и 125 к основанию 5 и сравнения показателей; самостоятельная проверка этого метода впереди.",href:"17.10.26.html#powers"},
@@ -33,7 +39,7 @@ window.STUDENT_COMPETENCE_CONFIG={
     t10_alloys:{text:'10.08 модель смесей перенесена на сплавы через баланс компонента.',href:'10.08.26.html'},
     t10_trains:{text:'10.08 повторены протяжённые тела, сумма длин и относительная скорость.',href:'10.08.26.html'},
     t10_work:{text:'10.08 повторена совместная работа двух исполнителей.',href:'10.08.26.html'},
-    t9_units:{text:'10.08 закреплены переводы единиц времени и длины.',href:'10.08.26.html'},
+    t9_units:{text:'10.08 повторялись переводы единиц времени и длины. 06.11 при экономических вычислениях Ксения практиковала перевод миллионов и тысяч рублей, разбирала потерянный ноль в расчёте; уровень компетенции сохранён.',href:'06.11.26.html#notes'},
     t10_percent:{text:'07.08 изучены растворы; 10.08 метод баланса компонента перенесён на сплавы.',href:'10.08.26.html'}
   }
 };
