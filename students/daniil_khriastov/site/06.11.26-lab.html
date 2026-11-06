@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Цифровая лаборатория Даниила Хрястова: графики функций, подбор опорных точек, влияние коэффициентов и чтение значения функции.">
+<title>Лаборатория опорных точек · 06.11.26 · Даниил Хрястов</title><link rel="icon" href="data:,">
+<link rel="stylesheet" href="../../../design-system/tokens.css"><link rel="stylesheet" href="../../../design-system/foundations.css"><link rel="stylesheet" href="../../../design-system/archetypes.css"><link rel="stylesheet" href="../../../design-system/student-sites.css">
+<style>
+:root{color-scheme:light;--bg:#f6f8f3;--ink:#193127;--muted:#536b5f;--line:#c6d4c8;--surface:#fdfefa;--green:#2a7350;--light:#e5eee7;--amber:#b27237;--focus:#c36e22}
+html[data-theme=dark]{color-scheme:dark;--bg:#101b15;--ink:#e7efe9;--muted:#adc5b4;--line:#3c5b47;--surface:#17281d;--green:#9bd7ac;--light:#233e2c;--amber:#efbb84;--focus:#f3bc72}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:inherit;text-underline-offset:4px}button,select,input{font:inherit}button{color:inherit;cursor:pointer}:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+.skip{position:absolute;left:12px;top:-100px;z-index:5;padding:10px;background:var(--surface)}.skip:focus{top:10px}
+.shell{max-width:1140px;margin:auto;padding:0 clamp(20px,5vw,60px)}
+.top{background:var(--surface);border-bottom:1px solid var(--line)}.top .shell{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:70px}.identity{text-decoration:none;font-weight:700}.identity small{display:block;letter-spacing:.12em;font-size:.67rem;color:var(--muted);font-weight:500}.nav{display:flex;flex-wrap:wrap;gap:17px;align-items:center}.nav a{font-size:.85rem}.theme{background:transparent;border:1px solid var(--line);padding:7px 12px}
+.eyebrow,.code{font:700 .73rem ui-monospace,Consolas,monospace;letter-spacing:.09em;color:var(--green);text-transform:uppercase}
+.intro{padding:55px 0 40px}.intro h1{font:500 clamp(2.6rem,6vw,5.4rem)/1.07 Georgia,serif;letter-spacing:-.035em;max-width:850px;margin:13px 0}.intro p{max-width:720px;color:var(--muted)}
+.tabs{display:flex;border-top:1px solid var(--line);border-bottom:1px solid var(--line);gap:24px;flex-wrap:wrap}.tabs button{background:transparent;border:0;border-bottom:3px solid transparent;padding:16px 6px;text-align:left}.tabs button[aria-selected=true]{border-color:var(--green);font-weight:700}
+.scene{padding:40px 0 70px}.scene[hidden]{display:none}.scene-header{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,.7fr);gap:55px;margin-bottom:30px}.scene h2{font:500 clamp(1.8rem,4vw,3rem)/1.16 Georgia,serif;margin:10px 0 12px}.scene-header p{color:var(--muted);max-width:640px}.formula{margin-top:13px;padding:12px 18px;background:var(--light);border-left:2px solid var(--green)}
+math{font-family:"STIX Two Math","Cambria Math","DejaVu Serif",serif;font-size:1.13em}math[display=block]{display:block;overflow-x:auto;padding:5px 0;max-width:100%}
+.instrument{display:grid;grid-template-columns:minmax(240px,.62fr) minmax(0,1.38fr);gap:45px;border-top:1px solid var(--line);padding-top:34px}
+.controls{border-right:1px solid var(--line);padding-right:31px}.control{margin-bottom:28px}.control label{font-weight:650;display:block;margin-bottom:8px;font-size:.9rem}.control input[type=range]{width:100%;accent-color:var(--green);min-height:37px}.control output{display:block;margin-top:5px;color:var(--green);font:700 1rem ui-monospace,Consolas,monospace}.controls select{width:100%;background:var(--surface);border:1px solid var(--line);padding:10px;color:var(--ink)}
+.reset{background:var(--surface);border:1px solid var(--line);padding:10px 19px}
+.visual{min-width:0}.graphic{display:block;width:100%;max-width:720px;height:auto;background:var(--surface);border:1px solid var(--line)}
+.graphic .axis{stroke:var(--line);stroke-width:1.5}.graphic .plot{stroke:var(--green);stroke-width:3;fill:none;stroke-linejoin:round;stroke-linecap:round}.graphic .current{fill:var(--amber);stroke:var(--surface);stroke-width:2}.graphic .soft{fill:var(--light)}.graphic .bar{fill:var(--green)}.graphic .frame{stroke:var(--line);stroke-width:2;fill:none}.graphic text{fill:var(--muted);font:15px system-ui,sans-serif}
+.measure{border-bottom:1px solid var(--line);display:flex;align-items:baseline;justify-content:space-between;gap:18px;padding:15px 0}.measure strong{font:500 clamp(1.4rem,3vw,2.5rem)/1.2 Georgia,serif}.measure span{color:var(--muted);font-size:.9rem}
+.insight{margin:21px 0;padding:16px 19px;border-left:2px solid var(--amber);background:var(--light)}
+.return{display:inline-block;margin-top:30px;font-weight:650}
+.footer{border-top:1px solid var(--line);padding:24px 0;color:var(--muted);font-size:.83rem}
+@media(max-width:780px){.top .shell{align-items:flex-start;flex-direction:column;padding-top:13px;padding-bottom:13px}.scene-header,.instrument{grid-template-columns:1fr;gap:15px}.controls{border:0;border-bottom:1px solid var(--line);padding:0 0 15px}.scene{padding-top:24px}.intro{padding-top:35px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{.top,.tabs,.controls,.skip{display:none!important}.scene[hidden]{display:block}.instrument{grid-template-columns:1fr}.scene{break-inside:avoid}.graphic{max-width:580px}}
+</style>
+<style>
+.lab{display:grid;grid-template-columns:minmax(260px,.58fr) minmax(0,1.42fr);gap:40px;margin-bottom:70px}
+.lab-controls{border-right:1px solid var(--line);padding-right:29px}.lab-controls h2{font:500 1.8rem Georgia,serif}
+.lab-controls label{display:block;font-size:.9rem;font-weight:650;margin-bottom:8px}.lab-controls select,.lab-controls input[type=range]{width:100%;color:var(--ink);accent-color:var(--green);min-height:40px}
+.lab-controls select{background:var(--surface);border:1px solid var(--line);padding:10px}
+.lab-controls output{display:block;text-align:right;color:var(--green);font:650 1rem ui-monospace,Consolas,monospace}
+.control[hidden]{display:none}.readout{padding:16px 0;border-bottom:1px solid var(--line)}.readout small{color:var(--muted);font-size:.79rem;display:block}.readout math{font-size:1.15em}
+.lab-chart{display:block;width:100%;height:auto;background:var(--surface);border:1px solid var(--line);touch-action:pan-y}.lab-chart .grid{stroke:var(--line);stroke-width:.9;opacity:.6}.lab-chart .axis{stroke:var(--muted);stroke-width:1.5}.lab-chart .curve{stroke:var(--green);stroke-width:3.3;fill:none}.lab-chart .pt{fill:var(--amber);stroke:var(--surface);stroke-width:2.4}.lab-chart .current{fill:var(--green);stroke:var(--surface);stroke-width:3}.lab-chart text{fill:var(--muted);font:15px system-ui,sans-serif}.lab-chart .small{font-size:12px}.lab-chart .pttext{font-size:14px;fill:var(--ink);stroke:var(--surface);stroke-width:4;paint-order:stroke}
+.lab-formula{padding:17px 0;border-bottom:1px solid var(--line);overflow-x:auto}.lab-formula math{display:block;font-size:1.2em}.lab-insight{margin:20px 0;border-left:2px solid var(--amber);padding:8px 0 8px 18px;color:var(--muted)}.lab-buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.lab-buttons button{background:var(--surface);border:1px solid var(--line);padding:10px 15px}.lab-meta{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:17px 0}.lab-meta p{font:.88rem/1.6 system-ui,sans-serif}
+@media(max-width:820px){.lab{grid-template-columns:1fr;gap:18px}.lab-controls{border-right:0;border-bottom:1px solid var(--line);padding:0 0 24px}.intro{padding-bottom:25px}}
+@media print{.lab{display:block}.lab-controls{display:none}.lab-chart{max-height:450px}}
+</style></head><body><a class="skip" href="#main">Перейти к исследованию</a>
+<header class="top"><div class="shell"><a class="identity" href="06.11.26.html">LEVIN / ATLAS <small>ДАНИИЛ ХРЯСТОВ · 06.11.2026</small></a><nav class="nav"><a href="06.11.26.html">Вернуться к занятию</a><a href="06.11.26.html#practice">10 графиков</a><a href="index.html">Кабинет</a><button class="theme" id="themeToggle" type="button" aria-pressed="false">Тёмная тема</button></nav></div></header>
+<main id="main"><div class="shell"><section class="intro"><span class="eyebrow">ЛАБОРАТОРИЯ / МЕТОД ОПОРНЫХ ТОЧЕК</span><h1>Координаты <i>под контролем.</i></h1><p>Меняйте параметры функции и аргумент. График, опорные точки, уравнения для коэффициентов и вычисленное значение будут согласованно обновляться.</p></section>
+<div class="lab" id="experiment">
+<section class="lab-controls" aria-label="Параметры функции"><h2>Исходная модель</h2>
+<div class="control"><label for="mode">Вид графика</label><select id="mode"><option value="exponential">Показательная со смещением</option><option value="shifted">Смещение внутри показателя</option><option value="linear">Линейная функция</option><option value="quadratic">Парабола, старший коэффициент известен</option></select></div>
+<div class="control" id="aControl"><label for="aValue" id="aLabel">Основание степени</label><input id="aValue" type="range" min="0.5" max="3" step="0.25" value="2"><output id="aOut" for="aValue"></output></div>
+<div class="control"><label for="bValue" id="bLabel">Вертикальное смещение</label><input id="bValue" type="range" min="-4" max="4" step="0.25" value="-3"><output id="bOut" for="bValue"></output></div>
+<div class="control" id="cControl" hidden><label for="cValue">Свободный член параболы</label><input id="cValue" type="range" min="-4" max="4" step="0.25" value="-4"><output id="cOut" for="cValue"></output></div>
+<div class="control"><label for="xValue">Аргумент, который исследуем</label><input id="xValue" type="range" min="-4" max="4" step="0.25" value="1"><output id="xOut" for="xValue"></output></div>
+<div class="lab-buttons"><button type="button" id="reset">Вернуть значения из занятия</button><button type="button" id="coords" aria-pressed="false">Показать координаты точек</button></div>
+</section>
+<section class="visual" aria-label="График и измерения"><div class="lab-formula" id="formula"></div><svg id="chart" class="lab-chart" role="img" aria-labelledby="chartTitle chartDesc" viewBox="0 0 760 440" xmlns="http://www.w3.org/2000/svg"><title id="chartTitle">Исследуемый график</title><desc id="chartDesc">График функции с двумя опорными точками и перемещаемым указателем аргумента.</desc><g id="grid"></g><g id="curve"></g><g id="points"></g></svg>
+<div class="lab-meta"><div class="readout"><small>Значение функции в выбранной точке</small><div id="measure"></div></div><div class="readout"><small>Две опорные точки</small><div id="anchors"></div></div></div>
+<p class="lab-insight" id="insight">Выберите вид функции и измените один параметр, чтобы увидеть, что произойдёт с графиком.</p>
+<p><a href="06.11.26.html#algorithm">Вернуться к шестишаговому алгоритму</a></p></section>
+</div></div></main><footer class="footer"><div class="shell">Лёвин Артём Александрович · эксклюзивно для Даниила Хрястова</div></footer>
+<script>
+"use strict";
+const NS="http://www.w3.org/1998/Math/MathML",S=document.getElementById.bind(document);
+const MODE={
+ exponential:{a:2,b:-3,c:0,x:1,xmin:-4,xmax:4,ymin:-5,ymax:13,pts:[0,1],hint:"Если у точки абсцисса равна нулю, степень основания равна единице. Поэтому ордината сразу показывает смещение."},
+ shifted:{a:Math.SQRT2,b:3,c:0,x:-3,xmin:-5,xmax:4,ymin:-1,ymax:8,pts:[-3,1],hint:"Единица на графике возникает при нулевом показателе степени: здесь это помогает определить горизонтальное смещение."},
+ linear:{a:1.75,b:-1.25,c:0,x:-1,xmin:-5,xmax:5,ymin:-9,ymax:9,pts:[-1,3],hint:"При изменении углового коэффициента меняется наклон прямой; при изменении свободного члена — пересечение с осью ординат."},
+ quadratic:{a:2,b:3,c:-4,x:1,xmin:-4,xmax:4,ymin:-8,ymax:16,pts:[0,1],hint:"Когда старший коэффициент известен, достаточно определить два оставшихся коэффициента из двух точек."}
+};
+let mode="exponential",state={...MODE.exponential},showCoords=false;
+const fmt=v=>{let n=Math.round(v*1000)/1000;return Object.is(n,-0)?"0":String(n).replace(".",",")};
+const m=s=>'<math xmlns="'+NS+'"><mrow>'+s+'</mrow></math>';
+const mn=v=>v<0?'<mo>−</mo><mn>'+fmt(-v)+'</mn>':'<mn>'+fmt(v)+'</mn>';
+const mi=s=>'<mi>'+s+'</mi>',mo=s=>'<mo>'+s+'</mo>',sup=(a,b)=>'<msup>'+a+b+'</msup>';
+function f(x){if(mode==="exponential")return Math.pow(state.a,x)+state.b;if(mode==="shifted")return Math.pow(state.a,x+state.b);if(mode==="linear")return state.a*x+state.b;return 2*x*x+state.b*x+state.c}
+function applyMode(next){
+ mode=next in MODE?next:"exponential";state={...MODE[mode]};S("mode").value=mode;
+ S("aLabel").textContent=mode==="linear"?"Угловой коэффициент":mode==="quadratic"?"Старший коэффициент (дан)": "Основание степени";
+ S("bLabel").textContent=mode==="shifted"?"Смещение внутри показателя":mode==="quadratic"?"Коэффициент при аргументе":"Свободный член";
+ S("aValue").min=mode==="linear"?"-3":"0.5";S("aValue").max=mode==="linear"?"3":"3";S("aValue").step="0.25";
+ S("aValue").disabled=mode==="quadratic";S("cControl").hidden=mode!=="quadratic";
+ S("aValue").value=state.a;S("bValue").value=state.b;S("cValue").value=state.c;
+ S("xValue").min=state.xmin;S("xValue").max=state.xmax;S("xValue").value=state.x;
+ render();
+}
+function formula(){
+ let x=mi("x"),a=mn(state.a),b=mn(state.b),c=mn(state.c);
+ let bPart=state.b<0?mo("−")+mn(-state.b):mo("+")+mn(state.b);
+ if(mode==="exponential")return m(mi("f")+mo("(")+x+mo(")")+mo("=")+sup(a,x)+bPart);
+ if(mode==="shifted")return m(mi("f")+mo("(")+x+mo(")")+mo("=")+sup(a,'<mrow>'+x+bPart+'</mrow>'));
+ if(mode==="linear")return m(mi("f")+mo("(")+x+mo(")")+mo("=")+a+x+bPart);
+ let cpart=state.c<0?mo("−")+mn(-state.c):mo("+")+mn(state.c);
+ return m(mi("f")+mo("(")+x+mo(")")+mo("=")+mn(2)+sup(x,mn(2))+bPart+x+cpart);
+}
+function draw(){
+ const W=760,H=440,L=54,R=29,T=23,B=37,w=W-L-R,h=H-T-B,{xmin,xmax,ymin,ymax}=state,X=x=>L+(x-xmin)/(xmax-xmin)*w,Y=y=>T+h-(y-ymin)/(ymax-ymin)*h;
+ let grid="",paths="",dots="",text="",xAxis=Y(0),yAxis=X(0);
+ for(let i=Math.ceil(xmin);i<=Math.floor(xmax);i++){let xx=X(i);grid+='<line class="grid" x1="'+xx+'" y1="'+T+'" x2="'+xx+'" y2="'+(T+h)+'"/>';if(i!==0)text+='<text class="small" x="'+xx+'" y="'+(T+h+19)+'" text-anchor="middle">'+i+'</text>'}
+ for(let i=Math.ceil(ymin/2)*2;i<=ymax;i+=2){let yy=Y(i);grid+='<line class="grid" x1="'+L+'" y1="'+yy+'" x2="'+(L+w)+'" y2="'+yy+'"/>';if(i!==0)text+='<text class="small" x="'+(L-11)+'" y="'+(yy+5)+'" text-anchor="end">'+i+'</text>'}
+ let path="",started=false;for(let i=0;i<=480;i++){let x=xmin+(xmax-xmin)*i/480,y=f(x);if(!Number.isFinite(y)||y<ymin-2||y>ymax+2){started=false;continue}path+=(started?" L ":"M ")+X(x).toFixed(2)+" "+Y(y).toFixed(2);started=true}
+ const clipId="plot-clip";paths='<defs><clipPath id="'+clipId+'"><rect x="'+L+'" y="'+T+'" width="'+w+'" height="'+h+'"/></clipPath></defs><g clip-path="url(#'+clipId+')"><path class="curve" d="'+path+'"/></g>';
+ state.pts.forEach((x,i)=>{let y=f(x),px=X(x),py=Y(y);if(y<ymin||y>ymax)return;dots+='<circle class="pt" r="6.5" cx="'+px+'" cy="'+py+'"/>';if(showCoords){const right=px>W*.7;dots+='<text class="pttext" x="'+(px+(right?-12:12))+'" y="'+(py+(i===0?-15:23))+'" text-anchor="'+(right?"end":"start")+'">('+fmt(x)+'; '+fmt(y)+')</text>'}});
+ const cx=X(state.x),cy=Y(f(state.x));if(Number.isFinite(cy)&&cy>=T&&cy<=T+h){dots+='<line stroke="var(--amber)" stroke-dasharray="5 5" x1="'+cx+'" x2="'+cx+'" y1="'+cy+'" y2="'+xAxis+'"/><circle class="current" cx="'+cx+'" cy="'+cy+'" r="7.7"/>'}
+ S("grid").innerHTML=grid+'<line class="axis" x1="'+L+'" y1="'+xAxis+'" x2="'+(L+w)+'" y2="'+xAxis+'"/><line class="axis" x1="'+yAxis+'" y1="'+T+'" x2="'+yAxis+'" y2="'+(T+h)+'"/>'+text+'<text x="'+(W-18)+'" y="'+(xAxis-11)+'">x</text><text x="'+(yAxis+11)+'" y="'+(T+15)+'">y</text>';
+ S("curve").innerHTML=paths;S("points").innerHTML=dots;
+}
+function render(){
+ S("formula").innerHTML=formula();
+ S("aOut").textContent=fmt(state.a);S("bOut").textContent=fmt(state.b);S("cOut").textContent=fmt(state.c);S("xOut").textContent=fmt(state.x);
+ S("measure").innerHTML=m(mi("f")+mo("(")+mn(state.x)+mo(")")+mo("=")+mn(f(state.x)));
+ S("anchors").innerHTML=m(mi("A")+mo("(")+mn(state.pts[0])+mo(";")+mn(f(state.pts[0]))+mo(")"))+' '+m(mi("B")+mo("(")+mn(state.pts[1])+mo(";")+mn(f(state.pts[1]))+mo(")"));
+ S("insight").textContent=MODE[mode].hint;
+ draw();
+}
+S("mode").onchange=e=>{applyMode(e.target.value);location.hash=e.target.value};
+for(const [id,key] of [["aValue","a"],["bValue","b"],["cValue","c"],["xValue","x"]])S(id).addEventListener("input",e=>{state[key]=Number(e.target.value);render()});
+S("reset").onclick=()=>applyMode(mode);
+S("coords").onclick=()=>{showCoords=!showCoords;S("coords").setAttribute("aria-pressed",String(showCoords));S("coords").textContent=showCoords?"Скрыть координаты":"Показать координаты точек";render()};
+function theme(v){document.documentElement.dataset.theme=v;S("themeToggle").setAttribute("aria-pressed",String(v==="dark"));S("themeToggle").textContent=v==="dark"?"Светлая тема":"Тёмная тема";}
+try{theme(localStorage.getItem("daniil-theme")==="dark"?"dark":"light")}catch{theme("light")}
+S("themeToggle").onclick=()=>{const v=document.documentElement.dataset.theme==="dark"?"light":"dark";theme(v);try{localStorage.setItem("daniil-theme",v)}catch{}};
+applyMode(location.hash.slice(1) in MODE?location.hash.slice(1):"exponential");
+window.addEventListener("hashchange",()=>{let next=location.hash.slice(1);if(next in MODE&&next!==mode)applyMode(next)});
+</script></body></html>
