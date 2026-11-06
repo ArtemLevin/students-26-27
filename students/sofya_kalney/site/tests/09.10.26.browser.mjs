@@ -126,7 +126,11 @@ try{
   await snapshot('sofya-lesson-mobile-dark');
   await navigate('index.html',390,844);
   await sleep(400);
-  assert.equal(await run("document.querySelector('#lesson-title')?.textContent.includes('Кусочные функции и число пересечений')"),true,'New lesson not shown in dashboard');
+  const registrySource=fs.readFileSync(path.join(root,'students/sofya_kalney/site/lesson-registry.js'),'utf8');
+  const expectedLatestTitle=registrySource.match(/export const LESSONS=\\[\\s*\\{[\\s\\S]*?"title": "([^"]+)"/)?.[1];
+  assert.ok(expectedLatestTitle,'Latest lesson title not found in registry');
+  const currentLessonTitle=await run("document.querySelector('#lesson-title')?.textContent || ''");
+  assert.ok(currentLessonTitle.includes(expectedLatestTitle),'Latest lesson in dashboard differs from registry: '+currentLessonTitle);
   await snapshot('sofya-index-mobile');
   await navigate('index.html',1440,900);
   await sleep(400);
