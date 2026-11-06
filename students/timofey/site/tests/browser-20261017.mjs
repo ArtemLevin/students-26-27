@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {getLatestLesson,sortedLessons} from '../lesson-registry.js';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -106,7 +107,7 @@ try{
     }else{
       await run("document.documentElement.dataset.theme='"+theme+"'");
     }
-    const sizes=await run('({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth})');
+    const sizes=await run('(()=>{const client=document.documentElement.clientWidth;return {scroll:document.documentElement.scrollWidth,client,offenders:[...document.querySelectorAll("body *")].map(el=>({tag:el.tagName,id:el.id,klass:typeof el.className==="string"?el.className:"",right:Math.round(el.getBoundingClientRect().right),width:Math.round(el.getBoundingClientRect().width)})).filter(q=>q.right>client+2).slice(0,12)}})()');
     assert.ok(sizes.scroll<=sizes.client+2,filename+' '+width+' '+theme+' horizontal overflow: '+JSON.stringify(sizes));
     assert.deepEqual(errors,[],filename+' JS exceptions');
     assert.deepEqual(badNetwork,[],filename+' unsuccessful network requests');
@@ -114,7 +115,7 @@ try{
   }
 
   // Responsive and color-scheme matrix for lesson, lab and personal dashboard.
-  for(const page of ['17.10.26.html','17.10.26-lab.html','20.10.26.html','20.10.26-lab.html','24.10.26.html','index.html']){
+  for(const page of ['17.10.26.html','17.10.26-lab.html','20.10.26.html','20.10.26-lab.html','24.10.26.html','06.11.26.html','06.11.26-lab.html','index.html']){
     for(const [width,height] of (page==='24.10.26.html'?[[1440,900],[768,1024],[390,844],[320,720]]:[[1440,900],[390,844]])){
       for(const theme of ['light','dark']){
         await navigate(page,width,height,theme);
@@ -205,14 +206,40 @@ try{
   assert.equal(await run("(()=>{dispatchEvent(new Event('beforeprint'));return document.querySelectorAll('#ledger tr').length})()"),4);
   assert.equal(await run("(()=>{dispatchEvent(new Event('afterprint'));return document.querySelectorAll('#ledger tr').length})()"),1);
 
+  // The navigator must always reflect the canonical newest registry record,
+  // rather than a hard-coded historical lesson title.
+  const newest=sortedLessons()[0];
+  const previous=sortedLessons()[1];
   await navigate('index.html');
-  assert.ok(await run("document.querySelector('#lesson-title').textContent.includes('Логарифмические')"));
-  assert.ok(await run("document.querySelector('#latestLessonCta').href.endsWith('/31.10.26.html')"));
-  assert.equal(await run("document.querySelector('#latestLabLink').hidden"),false);
-  assert.ok(await run("document.querySelector('#latestLabLink').href.endsWith('/31.10.26-lab.html')"));
-  assert.ok(await run("document.querySelector('#latestPdfLink').href.endsWith('/31.10.26.pdf')"));
-  assert.ok(await run("document.querySelector('#latestTexLink').href.endsWith('/31.10.26.tex')"));
-  assert.equal(await run("document.querySelectorAll('#recentLessons a[href=\"24.10.26.html\"]').length"),1);
+  assert.ok((await run("document.querySelector('#lesson-title').textContent")).includes(newest.title));
+  assert.ok((await run("document.querySelector('#latestLessonCta').href")).endsWith('/'+newest.href));
+  assert.equal(await run("document.querySelector('#latestLabLink').hidden"),!Boolean(newest.materials.lab));
+  if(newest.materials.lab){
+    assert.ok((await run("document.querySelector('#latestLabLink').href")).endsWith('/'+newest.materials.lab));
+  }
+  if(newest.materials.pdf){
+    assert.ok((await run("document.querySelector('#latestPdfLink').href")).endsWith('/'+newest.materials.pdf.split('/').pop()));
+  }
+  if(newest.materials.tex){
+    assert.ok((await run("document.querySelector('#latestTexLink').href")).endsWith('/'+newest.materials.tex.split('/').pop()));
+  }
+  assert.equal(await run("document.querySelectorAll('#recentLessons a[href=\\\""+previous.href+"\\\"]').length"),1);
+
+
+  // 06.11 regression: 10 unchanged tasks, correct sign classifier and boundary exclusions.
+  await navigate('06.11.26.html');
+  assert.equal(await run("document.querySelectorAll('#practice input[data-task]').length"),10);
+  assert.equal(await run("document.querySelectorAll('#answers dl dt').length"),10);
+  assert.ok(await run("document.querySelector('#domain math').namespaceURI==='http://www.w3.org/1998/Math/MathML'"));
+  assert.equal(await run("(()=>{dispatchEvent(new Event('beforeprint'));return document.querySelector('#answers-details').open})()"),true);
+  await run("dispatchEvent(new Event('afterprint'))");
+  await navigate('06.11.26-lab.html');
+  assert.ok((await run("document.querySelector('#statusTitle').textContent")).includes('отрицательна'));
+  assert.ok((await run("(()=>{document.querySelector('[data-x=\\\"0\\\"]').click();return document.querySelector('#statusTitle').textContent})()")).includes('Вне ОДЗ'));
+  assert.ok((await run("(()=>{document.querySelector('[data-x=\\\"2.52\\\"]').click();return document.querySelector('#statusTitle').textContent})()")).includes('нулю'));
+  assert.ok((await run("(()=>{const input=document.querySelector('#valueX');input.value='2.51';input.dispatchEvent(new Event('input'));return document.querySelector('#fracSign').textContent})()"))==='+');
+  assert.ok((await run("(()=>{const input=document.querySelector('#valueX');input.value='26';input.dispatchEvent(new Event('input'));return document.querySelector('#fracSign').textContent})()"))==='+');
+  await screenshot('timofey-inequality-lab-20261106');
 
   await navigate('31.10.26.html');
   assert.equal(await run("document.querySelectorAll('#tasks input[type=checkbox]').length"),10);
