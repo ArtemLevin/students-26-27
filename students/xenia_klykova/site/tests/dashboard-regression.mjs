@@ -12,3 +12,4 @@ await import('./lesson-17.10.26-review.test.mjs');
 await import('./lesson-19.10.26-review.test.mjs');
 
 await import('./lesson-21.10.26.test.mjs');
+await import('./lesson-06.11.26-finance.test.mjs');
