@@ -1,0 +1,305 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{PTSerif}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{geometry}
+\geometry{left=23mm,right=23mm,top=22mm,bottom=23mm}
+\usepackage{microtype}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\hypersetup{hidelinks,pdftitle={Теория вероятностей. Независимые испытания и формула Бернулли},pdfauthor={Лёвин Артём Александрович}}
+\definecolor{accent}{HTML}{007C80}
+\definecolor{darkaccent}{HTML}{005A5E}
+\definecolor{textgray}{HTML}{353535}
+\color{textgray}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.50em}
+\setlength{\headheight}{23pt}
+\setlength{\emergencystretch}{1.5em}
+\renewcommand{\arraystretch}{1.27}
+\setlist[itemize]{leftmargin=1.65em,topsep=0.25em,itemsep=0.14em,parsep=0em}
+\setlist[enumerate]{leftmargin=1.8em,topsep=0.25em,itemsep=0.38em,parsep=0em}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Независимые испытания и формула Бернулли}
+\fancyhead[R]{\small Екатерина Гнедкова}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.32pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrulewidth}{0pt}
+\newcommand{\edsection}[1]{\vspace{0.45em}\refstepcounter{section}\par\noindent{\color{darkaccent}\fontsize{16}{20}\selectfont \thesection.\ #1}\par\vspace{0.35em}\noindent{\color{accent}\rule{\linewidth}{0.55pt}}\par\vspace{0.35em}}
+\newcommand{\minititle}[1]{\par\vspace{0.28em}{\color{darkaccent}\large #1}\par\vspace{0.22em}}
+\newcommand{\prob}{\mathsf{P}}
+\newcommand{\comb}[2]{\binom{#1}{#2}}
+\begin{document}
+\thispagestyle{empty}
+\begingroup
+\centering
+\vspace*{0.12\textheight}
+{\color{darkaccent}\fontsize{17}{21}\selectfont МАТЕМАТИКА\par}
+\vspace{2.15cm}
+{\fontsize{25}{31}\selectfont Чек-лист\par}
+\vspace{1.15cm}
+{\color{accent}\fontsize{23}{29}\selectfont Теория вероятностей:\par}
+\vspace{0.1cm}
+{\color{accent}\fontsize{21}{27}\selectfont независимые испытания\par}
+{\color{accent}\fontsize{21}{27}\selectfont и формула Бернулли\par}
+\vspace{1.55cm}
+{\fontsize{13}{18}\selectfont Подготовка к ЕГЭ по профильной математике\par}
+\vfill
+{\fontsize{14}{18}\selectfont Екатерина Гнедкова\par}
+\vspace{0.68cm}
+{\fontsize{12}{17}\selectfont 6 ноября 2026 г.\par}
+\vspace{1.06cm}
+{\small Лёвин Артём Александрович\par}
+{\small эксклюзивно для Екатерины Гнедковой\par}
+\vspace{1.3cm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent,line width=0.9pt] (-4,0) .. controls (-2.85,0.65) and (-1.35,-0.55) .. (0,0) .. controls (1.40,0.63) and (2.85,-0.54) .. (4,0);
+\fill[accent] (0,0) circle (1.45pt);
+\end{tikzpicture}
+\vspace*{0.45cm}
+\endgroup
+\clearpage
+\setcounter{page}{1}
+
+\edsection{Что нужно уметь}
+После повторения темы Вы сможете выбирать способ подсчёта вероятности, различать \emph{ровно}, \emph{хотя бы}, \emph{ни разу}, учитывать заданный порядок и использовать формулу Бернулли.
+
+\edsection{Равновероятные исходы: броски монеты}
+Пусть \(\mathrm{O}\) обозначает орла, \(\mathrm{P}\)~--- решку. При двух бросках правильной монеты все четыре упорядоченных исхода равновероятны:
+\[
+\mathrm{OO},\qquad \mathrm{OP},\qquad \mathrm{PO},\qquad \mathrm{PP}.
+\]
+Событию «сначала орёл, затем решка» соответствует один исход, поэтому
+\[
+\prob(\mathrm{OP})=\frac14.
+\]
+А событию «орёл выпадет ровно один раз» соответствуют два исхода: \(\mathrm{OP}\) и \(\mathrm{PO}\). Следовательно,
+\[
+\prob(\text{ровно один орёл})=\frac24=\frac12.
+\]
+Слова «хотя бы один орёл» допускают три исхода: \(\mathrm{OO},\mathrm{OP},\mathrm{PO}\), значит
+\[
+\prob(\text{хотя бы один орёл})=\frac34.
+\]
+\minititle{Три броска}
+Всего имеется \(2\cdot2\cdot2=8\) равновероятных последовательностей:
+\[
+\begin{array}{cccc}
+\mathrm{OOO}&\mathrm{OOP}&\mathrm{OPO}&\mathrm{OPP}\\[3pt]
+\mathrm{POO}&\mathrm{POP}&\mathrm{PPO}&\mathrm{PPP}.
+\end{array}
+\]
+Например, \(\prob(\mathrm{OPO})=\frac18\); орёл \emph{ровно один раз} встречается в трёх исходах, а \emph{более одного раза}~--- в четырёх.
+\[
+\prob(\text{ровно один орёл})=\frac38,\qquad
+\prob(\text{более одного орла})=\frac48=\frac12.
+\]
+\textcolor{darkaccent}{\textbf{Главный ориентир:}} в серии из \(n\) бросков правильной монеты число равновероятных последовательностей равно \(2^n\).
+
+\clearpage
+\edsection{Когда умножать, когда складывать}
+\textcolor{darkaccent}{\textbf{«И» (одновременное выполнение условий).}} Для \emph{независимых} событий \(A\) и \(B\):
+\[
+\prob(A\text{ и }B)=\prob(A)\cdot\prob(B).
+\]
+\textcolor{darkaccent}{\textbf{«Или» (выбор из вариантов).}} Вероятности складываются напрямую, если варианты \emph{несовместны}: они не могут наступить одновременно. Если события пересекаются, необходимо отдельно учесть их общую часть.
+
+\edsection{Противоположное событие}
+Событие \(\overline A\) означает, что \(A\) не произошло. Всегда выполняется
+\[
+\boxed{\prob(A)=1-\prob(\overline A)}.
+\]
+Это особенно удобно для формулировки \emph{«хотя бы один»}: её противоположность~--- \emph{«ни одного»}.
+
+\minititle{Пример. Две кофемашины}
+Каждая машина независимо выходит из строя с вероятностью \(0{,}2\) и работает с вероятностью \(0{,}8\). Обозначим \(+\)~--- работает, \(-\)~--- сломалась.
+\begin{center}
+\begin{tabular}{@{}cccl@{}}
+\toprule
+Первая & Вторая & Вероятность & Событие \\
+\midrule
+\(+\) & \(+\) & \(0{,}8\cdot0{,}8=0{,}64\) & обе работают \\
+\(+\) & \(-\) & \(0{,}8\cdot0{,}2=0{,}16\) & сломалась вторая \\
+\(-\) & \(+\) & \(0{,}2\cdot0{,}8=0{,}16\) & сломалась первая \\
+\(-\) & \(-\) & \(0{,}2\cdot0{,}2=0{,}04\) & обе сломались \\
+\bottomrule
+\end{tabular}
+\end{center}
+Сумма четырёх вероятностей равна единице. Вероятность того, что \emph{хотя бы одна} машина сломается, удобнее считать через противоположное событие:
+\[
+\prob(\text{хотя бы одна сломается})=1-0{,}8^2=0{,}36.
+\]
+А хотя бы одна \emph{останется в строю} с вероятностью \(1-0{,}2^2=0{,}96\).
+
+\edsection{Повторные независимые испытания}
+Пусть каждое из \(n\) независимых испытаний заканчивается успехом с одной и той же вероятностью \(p\), а неудачей~--- с вероятностью \(q=1-p\).
+\[
+\begin{aligned}
+\prob(\text{все успешны})&=p^n,\\
+\prob(\text{ни одного успеха})&=q^n,\\
+\prob(\text{хотя бы один успех})&=1-q^n,\\
+\prob(\text{хотя бы одна неудача})&=1-p^n.
+\end{aligned}
+\]
+
+\clearpage
+\edsection{Заданные позиции и произвольные позиции}
+Биатлонист стреляет по пяти мишеням. Вероятность попадания в каждую равна \(p=0{,}8\), промаха~--- \(q=0{,}2\). Считаем выстрелы независимыми.
+
+\minititle{Первые две мишени поражены, остальные три~--- нет}
+Здесь задана \emph{конкретная последовательность} успехов и неудач:
+\[
+\underbrace{\text{попал, попал}}_{2}\,,\ \underbrace{\text{мимо, мимо, мимо}}_{3}.
+\]
+Её вероятность:
+\[
+\prob=p^2q^3=0{,}8^2\cdot0{,}2^3=0{,}00512.
+\]
+\minititle{Ровно две мишени из пяти поражены}
+Теперь попадания могут стоять \emph{на любых двух позициях}. Таких расположений
+\[
+\comb52=\frac{5!}{2!\,3!}=10.
+\]
+Вероятность каждого расположения та же, поэтому
+\[
+\prob=10\cdot0{,}8^2\cdot0{,}2^3=0{,}0512.
+\]
+Число \(10\) учитывает выбор позиций; при фиксированном порядке этот множитель отсутствует.
+
+\edsection{Формула Бернулли}
+Когда проводятся \(n\) \emph{независимых} испытаний с постоянной вероятностью успеха \(p\), вероятность получить \emph{ровно \(k\) успехов} равна
+\[
+\boxed{\prob_n(k)=\comb nk\,p^k(1-p)^{n-k}},\qquad 0\le k\le n.
+\]
+Здесь \(n\)~--- число испытаний, \(k\)~--- нужное число успехов,
+\(\displaystyle\comb nk=\frac{n!}{k!(n-k)!}\)~--- число способов выбрать позиции успехов; \(0!=1\).
+
+\minititle{Пример. Пять бросков кубика}
+Найдём вероятность того, что пятёрка выпадет \emph{ровно три раза}. Для одного броска \(p=\frac16\), \(q=\frac56\); порядок успешных бросков не задан:
+\[
+\prob_5(3)=\comb53\left(\frac16\right)^3\left(\frac56\right)^2
+=10\cdot\frac{25}{6^5}=\frac{125}{3888}.
+\]
+Если бы было сказано «пятёрка выпала \emph{в первых трёх} бросках и не выпала в остальных двух», ответ был бы \(\frac{25}{6^5}\), без множителя \(10\).
+
+\minititle{Перед записью ответа}
+Проверьте, независимы ли испытания, постоянна ли вероятность успеха и указан ли порядок. «Ровно $k$» и «хотя бы $k$» задают разные события.
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\color{darkaccent}\fontsize{17}{21}\selectfont Алгоритм выбора метода решения}\par
+\vspace{0.5cm}
+\end{center}
+\begin{center}
+\begin{tikzpicture}[
+>=Latex, thick,
+start/.style={ellipse,draw=accent,fill=white,align=center,text width=3.5cm,minimum height=0.9cm,font=\small},
+dec/.style={diamond,draw=accent,aspect=2.1,align=center,text width=3.3cm,inner sep=1pt,font=\small},
+act/.style={rectangle,rounded corners=2pt,draw=accent,align=center,text width=4.2cm,minimum height=1.1cm,font=\small},
+arr/.style={->,line width=0.85pt,draw=darkaccent}]
+\node[start] (s) at (-1.55,0) {Сформулируйте событие};
+\node[dec] (d1) at (-1.55,-2.10) {«Хотя бы один»?};
+\node[act] (a1) at (4.20,-2.10) {Найдите вероятность «ни одного» и вычтите из единицы};
+\node[dec] (d2) at (-1.55,-5.12) {«Ровно $k$» из $n$,\newline позиции не заданы?};
+\node[act] (a2) at (4.20,-5.12) {Примените формулу Бернулли};
+\node[dec] (d3) at (-1.55,-8.18) {Задан конкретный\newline порядок исходов?};
+\node[act] (a3) at (4.20,-8.18) {Перемножьте вероятности отдельных исходов};
+\node[dec] (d4) at (-1.55,-11.22) {Мало исходов,\newline все равновероятны?};
+\node[act] (a4) at (4.20,-11.22) {Составьте таблицу исходов и подсчитайте долю подходящих};
+\node[act] (a5) at (-1.55,-14.02) {Разбейте событие на несовместные случаи и сложите их вероятности};
+\draw[arr] (s)--(d1);
+\draw[arr] (d1.east)--node[above,font=\scriptsize]{да}(a1.west);
+\draw[arr] (d1.south)--node[left,font=\scriptsize]{нет}(d2.north);
+\draw[arr] (d2.east)--node[above,font=\scriptsize]{да}(a2.west);
+\draw[arr] (d2.south)--node[left,font=\scriptsize]{нет}(d3.north);
+\draw[arr] (d3.east)--node[above,font=\scriptsize]{да}(a3.west);
+\draw[arr] (d3.south)--node[left,font=\scriptsize]{нет}(d4.north);
+\draw[arr] (d4.east)--node[above,font=\scriptsize]{да}(a4.west);
+\draw[arr] (d4.south)--node[left,font=\scriptsize]{нет}(a5.north);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\begin{center}
+{\color{darkaccent}\fontsize{18}{23}\selectfont Тренировочный блок}\par
+\vspace{0.15cm}
+{\small Путь А \quad\textbullet\quad 10 заданий}\par
+\end{center}
+\vspace{0.3em}
+\textcolor{darkaccent}{\textbf{Указание.}} Если явно не оговорено иное, испытания независимы. Результат можно записать обыкновенной или десятичной дробью. Выберите для каждого задания удобный метод.
+\minititle{Базовый уровень}
+\begin{enumerate}
+\item Правильную монету бросают дважды. Найдите вероятность последовательности \(\mathrm{PO}\) (сначала решка, затем орёл).
+\item Правильную монету бросают дважды. Найдите вероятность того, что орёл выпадет ровно один раз.
+\item Правильную монету бросают трижды. Найдите вероятность того, что хотя бы один раз выпадет орёл.
+\end{enumerate}
+\minititle{Уровень выше среднего}
+\begin{enumerate}[start=4]
+\item Правильную монету бросают четыре раза. Найдите вероятность того, что орёл выпадет более одного раза.
+\item Две кофемашины независимо ломаются в течение дня с вероятностью \(0{,}15\) каждая. Какова вероятность того, что хотя бы одна выйдет из строя?
+\item Вероятность попадания при каждом из четырёх независимых выстрелов равна \(0{,}7\). Найдите вероятность того, что стрелок попадёт в первые две мишени и промахнётся по последним двум.
+\item Игральный кубик бросают шесть раз. Найдите вероятность того, что шестёрка выпадет хотя бы однажды. Ответ запишите в виде выражения, затем вычислите дробь.
+\end{enumerate}
+\minititle{Сложный уровень}
+\begin{enumerate}[start=8]
+\item Вероятность попадания при каждом из четырёх независимых выстрелов равна \(0{,}75\). Найдите вероятность ровно двух попаданий.
+\item Игральный кубик бросают пять раз. Найдите вероятность того, что шестёрка выпадет ровно дважды.
+\item Каждое из шести независимых устройств выходит из строя с вероятностью \(0{,}1\). Найдите вероятность того, что сломаются хотя бы два устройства.
+\end{enumerate}
+
+\clearpage
+\begin{center}
+{\color{darkaccent}\fontsize{18}{23}\selectfont Ответы}\par
+\vspace{0.2cm}
+{\small Тренировочный блок \(\cdot\) Путь А}\par
+\end{center}
+\vspace{0.6cm}
+\begin{center}
+\renewcommand{\arraystretch}{1.55}
+\begin{tabular}{@{}p{12mm}p{0.76\linewidth}@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & \(\dfrac14\) \\
+2 & \(\dfrac12\) \\
+3 & \(\dfrac78\) \\
+4 & \(\dfrac{11}{16}\) \\
+5 & \(1-0{,}85^2=0{,}2775\) \\
+6 & \(0{,}7^2\cdot0{,}3^2=0{,}0441\) \\
+7 & \(1-\left(\dfrac56\right)^6=\dfrac{31031}{46656}\) \\
+8 & \(\comb42\cdot0{,}75^2\cdot0{,}25^2=\dfrac{27}{128}\) \\
+9 & \(\comb52\left(\dfrac16\right)^2\left(\dfrac56\right)^3=\dfrac{625}{3888}\) \\
+10 & \(1-0{,}9^6-6\cdot0{,}1\cdot0{,}9^5=0{,}114265\) \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{1.1cm}
+\minititle{Краткая памятка}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{0.40\linewidth}X@{}}
+\toprule
+Сигнал в условии & Рекомендуемый приём \\
+\midrule
+«Хотя бы один» & Противоположное событие \\
+«Все» / «ни одного» & Произведение одинаковых вероятностей \\
+«Ровно $k$ из $n$» & Формула Бернулли \\
+«Первые два», «последний» & Фиксированная последовательность \\
+Два-три броска монеты & Таблица равновероятных исходов \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vfill
+\begin{center}
+{\small\color{textgray}Лёвин Артём Александрович\quad\textbullet\quad эксклюзивно для Екатерины Гнедковой}
+\end{center}
+\end{document}
