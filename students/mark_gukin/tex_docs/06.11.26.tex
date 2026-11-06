@@ -1,0 +1,360 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{geometry}
+\geometry{left=22mm,right=22mm,top=22mm,bottom=21mm,headheight=23pt,headsep=9pt}
+\usepackage{microtype}
+\usepackage{icomma}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{needspace}
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{1.1ex plus .3ex minus .2ex}{.6ex}
+\definecolor{accent}{HTML}{087B82}
+\definecolor{ink}{HTML}{263239}
+\definecolor{muted}{HTML}{596B70}
+\definecolor{linecolor}{HTML}{D8E3E3}
+\definecolor{curve}{HTML}{167E92}
+\definecolor{guide}{HTML}{C16B43}
+\color{ink}
+\hypersetup{colorlinks=true,linkcolor=accent,urlcolor=accent}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.30em}
+\linespread{1.10}
+\setlist[itemize]{leftmargin=1.4em,itemsep=0.16em,topsep=0.12em}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{muted} Тригонометрия: графики и прикладные задачи}
+\fancyhead[R]{\footnotesize\color{muted} Марк Гукин}
+\fancyfoot[C]{\footnotesize\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{linecolor}\leaders\hrule height \headrulewidth\hfill}}
+\newcommand{\key}[1]{\textcolor{accent}{\textbf{#1}}}
+\newcommand{\warning}[1]{\textcolor{guide}{\textbf{#1}}}
+\newcommand{\unit}[1]{\,\text{#1}}
+\newcommand{\taskhead}[3]{%
+ \clearpage\phantomsection\label{task:#1}
+ {\color{muted}\small ТРЕНИРОВОЧНЫЙ БЛОК \quad / \quad ЗАДАНИЕ \textbf{#1} ИЗ 10}\par
+ \vspace{1mm}\noindent{\LARGE\color{accent} #2}\par
+ \vspace{1mm}{\color{muted}\small #3}\par
+ \vspace{2mm}\noindent\color{linecolor}\rule{\textwidth}{0.45pt}\color{ink}\par\vspace{1mm}
+}
+
+\newcommand{\calchead}[3]{%
+ \Needspace{65mm}\phantomsection\label{task:#1}
+ \vspace{2mm}{\color{muted}\small ТРЕНИРОВОЧНЫЙ БЛОК \quad / \quad ЗАДАНИЕ \textbf{#1} ИЗ 10}\par
+ \vspace{1mm}\noindent{\Large\color{accent} #2}\par
+ \vspace{1mm}{\color{muted}\small #3}\par
+ \vspace{2mm}\noindent\color{linecolor}\rule{\textwidth}{0.45pt}\color{ink}\par\vspace{1mm}
+}
+\newcommand{\calcanswer}{%
+ \par\vspace{2mm}\noindent\textbf{Ответ:} \rule{32mm}{.35pt}\par\vspace{2mm}
+}
+\newcommand{\plotlabel}[1]{{\footnotesize\color{muted}#1}}
+\pgfplotsset{
+  commontrig/.style={
+    width=0.88\textwidth,height=69mm,
+    axis lines=middle,axis line style={draw=ink!75,thin},
+    xlabel={$x$},ylabel={$y$},
+    xlabel style={at={(axis description cs:1.005,0.46)},anchor=west},
+    ylabel style={at={(axis description cs:0.08,1.01)},anchor=south},
+    grid=major,grid style={draw=linecolor,thin},
+    tick label style={font=\scriptsize,color=muted},
+    yticklabel={\pgfmathprintnumber[use comma]{\tick}},
+    label style={font=\small},
+    every axis plot/.append style={very thick},
+    clip=false,minor tick num=0,
+  },
+  applied/.style={
+    width=0.88\textwidth,height=72mm,
+    axis lines=left,axis line style={draw=ink!75,thin},
+    grid=major,grid style={draw=linecolor,thin},
+    tick label style={font=\scriptsize,color=muted},
+    yticklabel={\pgfmathprintnumber[use comma]{\tick}},
+    label style={font=\small},
+    every axis plot/.append style={very thick},
+    clip=false,
+  }
+}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{26mm}
+{\small\color{accent}\MakeUppercase{Математика}}\\[17mm]
+{\Huge Чек-лист}\\[12mm]
+{\LARGE\color{accent} Тригонометрические графики\\[2mm] и прикладные задачи}\\[18mm]
+{\normalsize Подготовка к ЕГЭ по профильной математике}
+\vfill
+{\large Марк Гукин}\\[8mm]
+{6 ноября 2026 г.}\\[19mm]
+{\small Лёвин Артём Александрович}\\[2mm]
+{\small эксклюзивно для Марка Гукина}\\[17mm]
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent,line width=.65pt] (-4.1,0) .. controls (-2.9,0.65) and (-1.3,-.6) .. (0,0)
+ .. controls (1.2,.55) and (2.7,-.6) .. (4.1,0);
+\fill[accent] (0,0) circle (1pt);
+\end{tikzpicture}
+\vspace*{6mm}
+\end{center}
+\clearpage
+\section*{1. Как читать тригонометрический график}
+\key{Главная идея.} По графику можно восстановить неизвестные коэффициенты функции. Сначала необходимо прочитать координаты нескольких точек, затем подставить их в формулу и решить систему уравнений.
+
+\textbf{Шаг 1.} Определите цену деления каждой оси. Если по вертикали две клетки соответствуют одной единице, одна клетка означает $0{,}5$. По горизонтали одна и та же длина может соответствовать $\frac{\pi}{4}$, $\frac{\pi}{2}$ и т.\,д. Значения по осям считываются независимо.
+
+\textbf{Шаг 2.} Выберите точки с точно читаемыми координатами. Особенно удобны значения аргумента $0$, $\frac{\pi}{4}$, $\frac{\pi}{2}$ и $\pi$, для которых известны значения синуса, косинуса и тангенса.
+
+\textbf{Шаг 3.} При двух неизвестных коэффициентах $a,b$ обычно нужны две \emph{независимые} точки. Важно, чтобы после подстановки получились два различных уравнения относительно $a,b$. При совпадающих уравнениях выберите другую точку.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.28}
+\begin{tabular}{@{}lccc@{}}\toprule
+$x$ & $0$ & $\pi/4$ & $\pi$ \\ \midrule
+$\sin x$ & $0$ & $\sqrt2/2$ & $0$ \\
+$\cos x$ & $1$ & $\sqrt2/2$ & $-1$ \\
+$\operatorname{tg}x$ & $0$ & $1$ & $0$ \\ \bottomrule
+\end{tabular}
+\end{center}
+\textit{Помните:} тангенс определён только при $\cos x\neq0$, то есть $x\neq\frac\pi2+\pi k$, $k\in\mathbb Z$.
+
+\section*{2. Восстановление коэффициентов}
+Для графика $y=a\cos x+b$, проходящего через точки $(0;u)$ и $(\pi;v)$, получаем
+\[
+\begin{cases}a+b=u,\\-a+b=v.\end{cases}
+\qquad\Longrightarrow\qquad
+\boxed{a=\frac{u-v}{2},\quad b=\frac{u+v}{2}}.
+\]
+Например, если $(0;3)$ и $(\pi;-1)$ принадлежат графику, то $a=2$, $b=1$. Следовательно, $f(x)=2\cos x+1$.
+
+Для функции $y=a\operatorname{tg}x+b$ удобны точки при $x=0$ и $x=\frac\pi4$:
+\[
+y(0)=b,\qquad y\!\left(\frac\pi4\right)=a+b.
+\]
+Отсюда $b=y(0)$ и $a=y(\frac\pi4)-y(0)$. Точки берите с одной непрерывной ветви графика.
+
+\clearpage
+\section*{3. Синус, независимость точек и большие углы}
+Если $y=a\sin x+b$, то $y(0)=y(\pi)=b$: обе точки определяют только $b$. Для нахождения $a$ полезно взять точку при $x=\frac\pi2$, поскольку $\sin\frac\pi2=1$.
+\[
+\begin{cases}y(0)=b,\\y(\pi/2)=a+b.\end{cases}
+\quad\Longrightarrow\quad
+ a=y(\pi/2)-y(0).
+\]
+
+\key{Вычисление значения после восстановления формулы.} Если требуется найти $f(13\pi/3)$, сначала представьте угол в виде полного числа периодов и остатка:
+\[
+\frac{13\pi}{3}=4\pi+\frac\pi3,
+\qquad\cos\frac{13\pi}{3}=\cos\frac\pi3=\frac12.
+\]
+Для $\sin x$ и $\cos x$ период равен $2\pi$, для $\operatorname{tg}x$ --- $\pi$. Проверяйте, что значение аргумента лежит в области определения функции.
+
+\section*{4. Прикладная тригонометрия: три маршрута}
+\textbf{А. Дифракционная решётка.} При нормальном падении света максимум порядка $k$ удовлетворяет уравнению
+\[
+\boxed{d\sin\varphi=k\lambda},
+\qquad 0\leq\varphi\leq90^\circ.
+\]
+Здесь $d$ --- период решётки, $\lambda$ --- длина волны, $k$ --- целый неотрицательный номер максимума. Если $d$ и $\lambda$ измерены в одних единицах, их можно подставлять непосредственно. Обязательно проверяйте $0\leq k\lambda/d\leq1$.
+
+\textbf{Б. Неупругое столкновение.} Для модели из занятия выделившаяся энергия равна
+\[
+\boxed{Q=mv^2\sin^2\alpha}.
+\]
+Угол между направлениями движения тел равен $2\alpha$. При заданных $0^\circ\leq\alpha\leq90^\circ$ значение $\alpha$ определяется однозначно по положительному синусу. В бланк записывайте именно \emph{запрошенную величину}: $\alpha$ либо $2\alpha$.
+
+\textbf{В. Колебания.} Если скорость задана выражением
+\[
+\boxed{v(t)=v_0\sin\left(\frac{2\pi t}{T}\right)},
+\quad
+\boxed{E(t)=\frac{m\,v(t)^2}{2}},
+\]
+сначала найдите скорость в указанный момент, затем подставьте \emph{её} в формулу кинетической энергии. При $t$ и $T$ в секундах аргумент синуса безразмерен.
+
+\section*{5. Короткий контроль перед ответом}
+\begin{itemize}
+\item Считал ли я масштаб обеих осей, включая дробные клетки и кратные $\pi$?
+\item Действительно ли выбранные точки дают независимые уравнения?
+\item Учёл ли я знак коэффициента $a$, область определения тангенса и периодичность?
+\item Все ли величины из текста переписаны без пропусков и с правильными единицами?
+\item Совпадает ли найденная величина с тем, что просят записать в ответ?
+\end{itemize}
+
+\taskhead{1}{Косинус и масштаб}{Базовый уровень · восстановление амплитудного коэффициента}
+
+На рисунке показан график функции $f(x)=a\cos x+b$. Оси подписаны в радианах и единицах функции; между соседними горизонтальными целыми значениями нанесены дополнительные деления, соответствующие половине единицы. Точки $A$ и $B$ лежат на кривой и отмечены отдельно. Используя координаты этих двух точек, восстановите коэффициент $a$. Запишите в ответ только найденное число.
+
+\vspace{1mm}\begin{center}\begin{tikzpicture}
+\begin{axis}[commontrig,xmin=-.25,xmax=6.5,ymin=-2.1,ymax=3.15,xtick={0,1.570796,3.141593,4.712389,6.283185},xticklabels={$0$,$\frac\pi2$,$\pi$,$\frac{3\pi}{2}$,$2\pi$},ytick={-2,-1.5,-1,-.5,0,.5,1,1.5,2,2.5,3},yticklabel style={font=\tiny}]
+\addplot[curve,domain=0:6.283185,samples=240]{2*cos(deg(x))+0.5};
+\addplot[only marks,mark=*,mark size=2.5pt,draw=guide,fill=guide] coordinates {(0,2.5) (3.141593,-1.5)};
+\node[anchor=south west,font=\small] at (axis cs:0,2.5) {$A$};
+\node[anchor=north east,font=\small] at (axis cs:3.141593,-1.5) {$B$};
+\end{axis}
+\end{tikzpicture}\par\vspace{1mm}\plotlabel{График 1. Точки $A$ и $B$ принадлежат одной косинусоиде; вертикальные отметки даны через $0{,}5$.}\end{center}
+
+\vspace{2mm}\textbf{Ответ:} \rule{32mm}{.35pt}\hfill\footnotesize\color{muted}\textit{Решение выполняйте в тетради.}\color{ink}\normalsize
+
+\taskhead{2}{Знак коэффициента}{Базовый уровень · отражение графика косинуса}
+
+На координатной плоскости построен график функции $f(x)=a\cos x+b$. Видно, что при $x=0$ график находится ниже горизонтальной оси, а при $x=\pi$ --- выше неё. Точки $A$ и $B$ выбраны так, чтобы их координаты можно было прочитать точно. Определите вертикальный сдвиг $b$ по этим данным. В ответе укажите значение $b$, сохранив его знак.
+
+\vspace{1mm}\begin{center}\begin{tikzpicture}
+\begin{axis}[commontrig,xmin=-.25,xmax=6.5,ymin=-1.6,ymax=3.7,xtick={0,1.570796,3.141593,4.712389,6.283185},xticklabels={$0$,$\frac\pi2$,$\pi$,$\frac{3\pi}{2}$,$2\pi$},ytick={-1,0,1,2,3}]
+\addplot[curve,domain=0:6.283185,samples=240]{-2*cos(deg(x))+1};
+\addplot[only marks,mark=*,mark size=2.5pt,draw=guide,fill=guide] coordinates {(0,-1) (3.141593,3)};
+\node[anchor=north west,font=\small] at (axis cs:0,-1) {$A$};
+\node[anchor=south east,font=\small] at (axis cs:3.141593,3) {$B$};
+\end{axis}
+\end{tikzpicture}\par\vspace{1mm}\plotlabel{График 2. Сначала прочитайте ординаты при $0$ и $\pi$, затем решите систему.}\end{center}
+
+\vspace{2mm}\textbf{Ответ:} \rule{32mm}{.35pt}\hfill\footnotesize\color{muted}\textit{Решение выполняйте в тетради.}\color{ink}\normalsize
+
+\taskhead{3}{Когда двух точек недостаточно}{Средний уровень · восстановление синуса и большой аргумент}
+
+График функции $f(x)=a\sin x+b$ проходит через отмеченные точки $A$, $B$ и $C$. Если взять только точки $A$ и $B$, получится одно и то же уравнение: коэффициент $a$ останется неизвестным. Выберите дополнительную точку $C$, восстановите оба коэффициента, а затем вычислите $f(7\pi/2)$. При вычислении воспользуйтесь периодичностью синуса. В ответе запишите полученное значение функции.
+
+\vspace{1mm}\begin{center}\begin{tikzpicture}
+\begin{axis}[commontrig,xmin=-.25,xmax=6.5,ymin=-4.6,ymax=2.9,xtick={0,1.570796,3.141593,4.712389,6.283185},xticklabels={$0$,$\frac\pi2$,$\pi$,$\frac{3\pi}{2}$,$2\pi$},ytick={-4,-3,-2,-1,0,1,2}]
+\addplot[curve,domain=0:6.283185,samples=250]{3*sin(deg(x))-1};
+\addplot[only marks,mark=*,mark size=2.5pt,draw=guide,fill=guide] coordinates {(0,-1) (3.141593,-1) (1.570796,2)};
+\node[anchor=north west,font=\small] at (axis cs:0,-1) {$A$};
+\node[anchor=north west,font=\small] at (axis cs:3.141593,-1) {$B$};
+\node[anchor=south west,font=\small] at (axis cs:1.570796,2) {$C$};
+\end{axis}
+\end{tikzpicture}\par\vspace{1mm}\plotlabel{График 3. Точки $A$ и $B$ имеют одинаковую ординату; точка $C$ содержит новую информацию.}\end{center}
+
+\vspace{2mm}\textbf{Ответ:} \rule{32mm}{.35pt}\hfill\footnotesize\color{muted}\textit{Решение выполняйте в тетради.}\color{ink}\normalsize
+
+\taskhead{4}{Тангенс по двум точкам}{Средний уровень · периодический график с несколькими ветвями}
+
+Изображены две соседние ветви графика $f(x)=a\operatorname{tg}x+b$. Вертикальная пунктирная линия показывает асимптоту, через которую график не проходит. На центральной ветви отмечены точки $A$ при $x=0$ и $B$ при $x=\pi/4$. Прочитайте их ординаты, воспользуйтесь значениями тангенса соответствующих углов и найдите коэффициент $a$. Учитывайте, что область определения тангенса исключает асимптоты.
+
+\vspace{1mm}\begin{center}\begin{tikzpicture}
+\begin{axis}[commontrig,xmin=-1.47,xmax=4.58,ymin=-4.5,ymax=4.6,xtick={-0.785398,0,0.785398,1.570796,3.141593},xticklabels={$-\frac\pi4$,$0$,$\frac\pi4$,$\frac\pi2$,$\pi$},ytick={-4,-2,0,2,4},restrict y to domain=-4.7:4.7,unbounded coords=jump]
+\addplot[curve,domain=-1.38:1.38,samples=270]{2*tan(deg(x))-0.5};
+\addplot[curve,domain=1.80:4.48,samples=270]{2*tan(deg(x))-0.5};
+\draw[guide,dashed,thin] (axis cs:1.570796,-4.5)--(axis cs:1.570796,4.5);
+\addplot[only marks,mark=*,mark size=2.5pt,draw=guide,fill=guide] coordinates {(0,-0.5) (0.785398,1.5)};
+\node[anchor=north west,font=\small] at (axis cs:0,-0.5) {$A$};
+\node[anchor=south east,font=\small] at (axis cs:0.785398,1.5) {$B$};
+\end{axis}
+\end{tikzpicture}\par\vspace{1mm}\plotlabel{График 4. Пунктир --- асимптота $x=\pi/2$; обе отмеченные точки лежат на центральной ветви.}\end{center}
+
+\vspace{2mm}\textbf{Ответ:} \rule{32mm}{.35pt}\hfill\footnotesize\color{muted}\textit{Решение выполняйте в тетради.}\color{ink}\normalsize
+
+\taskhead{5}{Функция в нестандартной точке}{Уровень выше среднего · коэффициенты и периодичность}
+
+На рисунке дан график $f(x)=a\cos x+b$, где $a$ и $b$ --- целые числа. Точки $A$ и $B$ отмечают значения функции при $x=0$ и $x=\pi$. Сначала восстановите коэффициенты, затем вычислите $f(13\pi/3)$. Перед подстановкой приведите угол к значению в пределах одного периода косинуса. Ответ может оказаться дробным; запишите его как точную дробь или конечную десятичную дробь.
+
+\vspace{1mm}\begin{center}\begin{tikzpicture}
+\begin{axis}[commontrig,xmin=-.25,xmax=6.5,ymin=-1.9,ymax=5.8,xtick={0,1.570796,3.141593,4.712389,6.283185},xticklabels={$0$,$\frac\pi2$,$\pi$,$\frac{3\pi}{2}$,$2\pi$},ytick={-1,0,1,2,3,4,5}]
+\addplot[curve,domain=0:6.283185,samples=250]{3*cos(deg(x))+2};
+\addplot[only marks,mark=*,mark size=2.5pt,draw=guide,fill=guide] coordinates {(0,5) (3.141593,-1)};
+\node[anchor=south west,font=\small] at (axis cs:0,5) {$A$};
+\node[anchor=north east,font=\small] at (axis cs:3.141593,-1) {$B$};
+\end{axis}
+\end{tikzpicture}\par\vspace{1mm}\plotlabel{График 5. Восстановите формулу по двум опорным точкам, а затем используйте период $2\pi$.}\end{center}
+
+\vspace{2mm}\textbf{Ответ:} \rule{32mm}{.35pt}\hfill\footnotesize\color{muted}\textit{Решение выполняйте в тетради.}\color{ink}\normalsize
+
+
+\clearpage
+\section*{Расчётные задачи: применение тригонометрии}
+В заданиях 6--10 вся необходимая информация приведена в условии. Выпишите исходные данные, составьте уравнение, последовательно выполните вычисления и запишите указанную величину. Все задания решайте вычислениями, без построений.
+
+\calchead{6}{Второй максимум решётки}{Прикладной уровень · чтение данных и вычисление угла}
+
+В лаборатории на дифракционную решётку нормально падает монохроматический свет с длиной волны $\lambda=300$ нм. Период решётки равен $d=1200$ нм. Направления, в которых наблюдаются светлые максимумы, удовлетворяют формуле
+\[
+ d\sin\varphi=k\lambda,
+\]
+где $k$ --- номер максимума, а $\varphi$ --- угол отклонения луча от нормали к решётке. Найдите наименьший неотрицательный угол $\varphi$ в градусах, при котором наблюдается максимум \emph{второго порядка}. В ответ запишите число без знака градуса.
+\calcanswer
+
+\calchead{7}{Выбор периода решётки}{Прикладной уровень · неизвестный параметр и ограничение на угол}
+
+Для оптической установки нужно подобрать дифракционную решётку, на которой максимум \emph{третьего порядка} для света с длиной волны $\lambda=300$ нм будет наблюдаться под углом к нормали, \emph{не превышающим} $30^\circ$. При нормальном падении света действует формула
+\[
+ d\sin\varphi=k\lambda.
+\]
+Считайте, что $0^\circ<\varphi\leq30^\circ$ и $k=3$. Используя $\sin30^\circ=\frac12$ и возрастание синуса на промежутке от $0^\circ$ до $90^\circ$, найдите \emph{наименьший допустимый} период решётки $d$ в нанометрах.
+\calcanswer
+
+\calchead{8}{Угол столкновения}{Прикладной уровень · энергия неупругого столкновения}
+
+Два одинаковых тела массой $m=4$ кг каждое движутся со скоростями $v=5$ м/с. Угол между их направлениями равен $2\alpha$. При абсолютно неупругом столкновении выделяется энергия
+\[
+ Q=mv^2\sin^2\alpha.
+\]
+Измерено $Q=25$ Дж. При $0^\circ\leq\alpha\leq90^\circ$ сначала найдите $\sin^2\alpha$ и угол $\alpha$, затем определите $2\alpha$. Ответ дайте в градусах.
+\calcanswer
+
+\calchead{9}{Неизвестная масса}{Прикладной уровень · преобразование формулы энергии}
+
+В другом опыте два одинаковых тела неизвестной массы $m$ движутся со скоростью $v=12$ м/с каждое. Угол между скоростями равен $90^\circ$, энергия абсолютно неупругого столкновения $Q=144$ Дж. Используйте зависимость
+\[
+ Q=mv^2\sin^2\alpha,
+\]
+где $2\alpha$ --- угол между скоростями. Вычислите $\alpha$ и $\sin^2\alpha$, затем выразите и найдите массу \emph{одного} тела в килограммах.
+\calcanswer
+
+\calchead{10}{Скорость и энергия колебаний}{Уровень выше среднего · последовательное применение двух формул}
+
+Груз массой $m=1$ кг совершает гармонические колебания. Его скорость меняется по закону
+\[
+ v(t)=v_0\sin\!\left(\frac{2\pi t}{T}\right),
+\]
+где $v_0=4$ м/с --- амплитуда скорости, $T=8$ с --- период, $t$ --- время в секундах. Кинетическая энергия определяется формулой
+\[
+ E(t)=\frac{m\,v(t)^2}{2}.
+\]
+Найдите кинетическую энергию при $t=1$ с. Сначала рассчитайте скорость в этот момент, затем подставьте её во вторую формулу. Ответ дайте в джоулях.
+\calcanswer
+
+\clearpage
+\section*{Ответы к тренировочному блоку}
+\vspace{4mm}
+\renewcommand{\arraystretch}{1.48}
+\begin{center}
+\begin{tabularx}{0.93\textwidth}{@{}cXl@{}}
+\toprule
+\textbf{№} & \textbf{Проверяемый навык} & \textbf{Ответ} \\ \midrule
+1 & Коэффициент косинуса & $a=2$ \\
+2 & Вертикальный сдвиг & $b=1$ \\
+3 & Синус и период & $f(7\pi/2)=-4$ \\
+4 & Коэффициент тангенса & $a=2$ \\
+5 & Нестандартный аргумент & $f(13\pi/3)=\dfrac72$ \\
+6 & Второй максимум & $30^\circ$ \\
+7 & Период решётки & $d_{\min}=1800\unit{нм}$ \\
+8 & Угол между скоростями & $2\alpha=60^\circ$ \\
+9 & Масса тела & $m=2\unit{кг}$ \\
+10 & Кинетическая энергия & $E=4\unit{Дж}$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vspace{9mm}
+\section*{Итоговая памятка}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\textwidth}{@{}p{.34\textwidth}X@{}}\toprule
+\textbf{Сигнал в условии} & \textbf{Что делать}\\ \midrule
+$y=a\cos x+b$ & Возьмите $x=0$ и $x=\pi$, сравните максимальное и минимальное значения.\\
+$y=a\sin x+b$ & Для поиска $a$ нужны точки с разными значениями синуса.\\
+$y=a\operatorname{tg}x+b$ & Удобны точки при $x=0$ и $x=\pi/4$; помните об асимптотах.\\
+Большой аргумент & Вычтите целое число периодов, затем вычислите функцию.\\
+Дифракция & Запишите $d\sin\varphi=k\lambda$, проверьте единицы и диапазон синуса.\\
+Столкновение & Определите $\alpha$, но проверьте, не просят ли в ответе $2\alpha$.\\
+Колебания & Найдите скорость в указанный момент, затем энергию.\\
+\bottomrule\end{tabularx}
+\vfill
+\begin{center}{\footnotesize\color{muted}Лёвин Артём Александрович --- эксклюзивно для Марка Гукина}\end{center}
+\end{document}
