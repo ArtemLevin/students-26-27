@@ -65,3 +65,15 @@ test('lab is available and has interactive graph controls',()=>{
   assert.match(lab,/return '<svg|<svg id="chart"/);
   assert.ok(!/https?:\/\/[^"']+\.js/i.test(lab),'avoid external JS');
 });
+
+
+test('official publisher registered 6 November in canonical metadata and registry',()=>{
+  const metadata=JSON.parse(fs.readFileSync(path.join(ROOT,'data/lessons/2026-11-06.lesson.json'),'utf8'));
+  assert.equal(metadata.date,'2026-11-06');
+  assert.equal(metadata.studentId,'daniil_khriastov');
+  assert.equal(metadata.materials.html,'06.11.26.html');
+  assert.equal(metadata.outcomes.length,intent.outcomes.length);
+  const registry=fs.readFileSync(path.join(ROOT,'lesson-registry.js'),'utf8');
+  assert.match(registry,/2026-11-06/);
+  assert.match(registry,/06\.11\.26\.html/);
+});
