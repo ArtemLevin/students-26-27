@@ -26,6 +26,13 @@ jobs:
         run: node scripts/publish-lesson.mjs sofya_kalney 06.11.26 --intent students/sofya_kalney/site/data/publication-intents/2026-11-06.json
       - name: Validate Sofia package
         run: node scripts/student.mjs validate sofya_kalney
+      - name: Audit Student Platform and practice configuration
+        run: |
+          node scripts/student.mjs audit
+          node shared/practice/validate-configs.mjs
+          node shared/practice/audit-lesson-coverage.mjs
+      - name: Browser QA — Sofia lesson, lab, dashboard
+        run: node students/sofya_kalney/site/tests/06.11.26.browser.mjs
       - name: Commit generated canonical metadata and registry
         run: |
           git config user.name "github-actions[bot]"
