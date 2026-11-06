@@ -1,0 +1,457 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[margin=21mm,top=22mm,bottom=23mm]{geometry}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{booktabs,tabularx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{xcolor,fancyhdr,hyperref}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{005B61}
+\definecolor{muted}{HTML}{677074}
+\definecolor{gridline}{HTML}{E7ECEC}
+\definecolor{ink}{HTML}{303738}
+\hypersetup{hidelinks,pdfauthor={Лёвин Артём Александрович},pdftitle={Метод опорных точек: чек-лист для Даниила Хрястова}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\scriptsize\color{muted} Метод опорных точек}
+\fancyhead[R]{\scriptsize\color{muted} Даниил Хрястов}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\sectionmark}[1]{}
+\setcounter{secnumdepth}{0}
+\newcommand{\ssection}[1]{\vspace{10pt}{\large\color{darkaccent}\bfseries #1}\par\vspace{5pt}\textcolor{accent}{\rule{\linewidth}{0.35pt}}\vspace{6pt}}
+\newcommand{\checkitem}[1]{\noindent $\square$\enspace #1\par}
+\newcommand{\idea}[1]{\par\textcolor{darkaccent}{\textbf{Ключевая идея.}} #1\par}
+\newcommand{\smallrule}{\par\vspace{4pt}\noindent\textcolor{accent}{\rule{\linewidth}{0.25pt}}\par\vspace{3pt}}
+\pgfplotsset{training/.style={
+ width=12.15cm,height=6.2cm,
+ axis lines=middle, axis line style={line width=0.65pt,black!75,-{Stealth[length=2mm]}},
+ xlabel={$x$},ylabel={$y$},
+ xlabel style={at={(axis description cs:0.99,0.10)},anchor=west,font=\small},
+ ylabel style={at={(axis description cs:0.05,0.99)},anchor=south,font=\small},
+ grid=major,grid style={draw=gridline,line width=0.30pt},
+ xtick distance=1,ytick distance=1,
+ tick style={draw=black!45},ticklabel style={font=\scriptsize,fill=white,inner sep=1pt},
+ minor tick num=0,
+ clip=true,
+ axis background/.style={fill=white},
+ samples=220,
+ every axis plot/.append style={smooth,draw=accent,line width=1.4pt},
+ restrict y to domain=-20:30,
+ unbounded coords=jump,
+ enlargelimits=false
+}}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{19mm}
+{\normalsize\color{darkaccent}\MakeUppercase{Математика}}\par
+\vspace{16mm}
+{\huge Чек-лист}\par
+\vspace{10mm}
+{\LARGE\color{accent} Метод опорных точек}\par
+\vspace{2mm}
+{\Large\color{accent} Функции и их графики}\par
+\vspace{15mm}
+{\normalsize Подготовка к ЕГЭ по профильной математике}\par
+\vfill
+{\large Даниил Хрястов}\par
+\vspace{11mm}
+{\normalsize 6 ноября 2026 г.}\par
+\vspace{13mm}
+{\small Лёвин Артём Александрович}\par
+{\small эксклюзивно для Даниила Хрястова}\par
+\vspace{17mm}
+\begin{tikzpicture}
+\draw[accent,line width=.8pt] (0,0) .. controls (1.2,.65) and (2.5,-.55) .. (4,0) .. controls (5.4,.55) and (6.65,-.6) .. (8.2,.08);
+\end{tikzpicture}
+\end{center}
+\clearpage
+\ssection{1. Что означает запись $f(x)$}
+
+Функция связывает каждое допустимое значение аргумента $x$ с числом $y=f(x)$.
+Точка $A(x_0;y_0)$ принадлежит графику тогда и только тогда, когда
+\[f(x_0)=y_0.\]
+
+\checkitem{В записи $f(6)$ число $6$ подставляется \textbf{вместо $x$}.}
+\checkitem{Координаты точки читаются в порядке $(x;y)$: сначала аргумент, затем значение функции.}
+\checkitem{Если известна точка $A(1;-2)$, то всегда верно $f(1)=-2$.}
+\checkitem{Подстановка отрицательного аргумента требует скобок: $(-3)^2=9$, но $-3^2=-9$.}
+
+\ssection{2. Метод опорных точек}
+
+\textbf{Опорными} удобно называть точки графика с легко считываемыми координатами,
+обычно целочисленными. Они позволяют восстановить неизвестные коэффициенты функции.
+
+\checkitem{Определите вид формулы и количество неизвестных коэффициентов.}
+\checkitem{Выберите столько \emph{независимых} опорных точек, сколько неизвестных необходимо найти.}
+\checkitem{Предпочитайте точки с координатой $0$, $1$ или $-1$, если они дают полезные уравнения.}
+\checkitem{Подставьте $(x_i;y_i)$ в равенство $y_i=f(x_i)$ и составьте уравнения.}
+\checkitem{Решите систему, восстановите формулу, затем выполните то, что требует условие.}
+\checkitem{Проверьте найденную формулу по каждой выбранной точке.}
+
+\idea{Важна \emph{информативность} точек. Например, для $f(x)=a^x$ точка $(0;1)$ даёт $1=a^0=1$ и не позволяет найти $a$. В этом случае выберите точку с $x\ne 0$.}
+
+\ssection{3. Четыре формы, которые нужно распознавать}
+\vspace{-2mm}
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{@{}p{0.35\linewidth}Xp{0.16\linewidth}@{}}
+\toprule
+Функция & Что ищем & Точек \\
+\midrule
+$y=a^x+b$ & $a>0$, $a\ne1$, смещение $b$ & 2 \\
+$y=a^x$ & $a>0$, $a\ne1$ & 1$^*$ \\
+$y=a^{x+b}$ & $a>0$, $a\ne1$, смещение в показателе $b$ & 2 \\
+$y=kx+b$ & угловой коэффициент $k$, свободный член $b$ & 2 \\
+$y=Ax^2+bx+c$ & при \emph{известном} $A$ ищем $b,c$ & 2 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+{\footnotesize $^*$ Нужна точка с ненулевой первой координатой. Если в квадратном трёхчлене также неизвестен $A$, в общем случае требуются три точки.}
+
+\clearpage
+\ssection{4. Показательная функция: $y=a^x+b$}
+
+\textbf{Пример.} График проходит через $A(0;-2)$ и $B(1;-1)$. Найдите $f(6)$.
+\[
+\begin{cases}
+-2=a^0+b=1+b,\\
+-1=a^1+b=a+b.
+\end{cases}
+\quad\Longrightarrow\quad b=-3,\quad a=2.
+\]
+Следовательно, $f(x)=2^x-3$, поэтому
+\[f(6)=2^6-3=\boxed{61}.\]
+
+\checkitem{Используйте $a^0=1$ при $a>0$; тогда точка с $x=0$ сразу определяет $b$.}
+\checkitem{Если $a^2=3$, то для показательной функции берём $a=\sqrt3$, поскольку $a>0$.}
+\checkitem{Различайте $a^x+b$ и $a^{x+b}$: положение $b$ меняет формулу!}
+
+\ssection{5. Степени с дробными и отрицательными показателями}
+
+При $a>0$:
+\[
+a^{-n}=\frac{1}{a^n},\qquad a^{1/n}=\sqrt[n]{a},\qquad
+(a^m)^n=a^{mn}.
+\]
+
+\textbf{Пример.} Для функции $f(x)=a^x+b$ известны точки $A(0;-1)$,
+$B(2;1)$. Тогда $b=-2$, $a^2=3$, откуда $a=\sqrt3$. Искомое значение:
+\[
+f(8)=(\sqrt3)^8-2=3^4-2=\boxed{79}.
+\]
+
+\textbf{Пример с отрицательной степенью.} Если $a^{-2}=4$, то
+\[a=4^{-1/2}=\frac12.\]
+
+\ssection{6. Дано значение функции, требуется аргумент}
+
+Если $f(x)=2^x-3$ и $f(x)=29$, то ищем \emph{сам $x$}:
+\[
+2^x-3=29\ \Longrightarrow\ 2^x=32=2^5
+\ \Longrightarrow\ \boxed{x=5}.
+\]
+\checkitem{При поиске $f(4)$ подставляйте $x=4$; при поиске $x$ по $f(x)=29$ подставляйте число $29$ вместо \emph{всего значения функции}.}
+
+\clearpage
+\ssection{7. Смещение внутри показателя: $y=a^{x+b}$}
+
+\textbf{Пример.} График содержит точки $A(-3;1)$ и $B(1;4)$.
+\[
+\begin{cases}
+1=a^{-3+b},\\ 4=a^{1+b}.
+\end{cases}
+\]
+Так как $a>0$ и $a\ne1$, равенство $a^{-3+b}=1$ означает $-3+b=0$, то есть $b=3$.
+Поэтому $4=a^4$, и $a=\sqrt2$. Окончательно
+\[
+f(x)=(\sqrt2)^{x+3}=2^{\frac{x+3}{2}},\qquad
+f(-7)=2^{-2}=\boxed{\frac14}.
+\]
+
+\checkitem{Число $1$ можно записывать как $a^0$.}
+\checkitem{Если $a\ne1$, из $a^{x+b}=1$ следует $x+b=0$.}
+\checkitem{Корни удобно переводить в степени, чтобы упростить произведение показателей.}
+
+\ssection{8. Прямая: $y=kx+b$}
+
+\textbf{Пример.} Прямая проходит через $A(-1;-3)$, $B(3;4)$.
+\[
+\begin{cases}
+-k+b=-3,\\3k+b=4.
+\end{cases}
+\quad\Longrightarrow\quad 4k=7,\qquad
+k=\frac74,\quad b=-\frac54.
+\]
+Тогда $f(x)=\dfrac74x-\dfrac54$ и
+\[
+f(-5)=\frac74(-5)-\frac54=\boxed{-10}.\]
+
+\checkitem{Переменная $x$ и коэффициент $k$ имеют разные роли: число $x$ берётся из координаты точки, коэффициент $k$ требуется найти.}
+\checkitem{При переносе слагаемого через знак равенства меняйте его знак: из $-4k+1=4$ следует $-4k=3$.}
+
+\ssection{9. Парабола с известным старшим коэффициентом}
+
+\textbf{Пример.} $f(x)=2x^2+bx+c$, точки $A(0;-4)$, $B(1;1)$.
+\[
+\begin{cases}
+-4=2\cdot0^2+b\cdot0+c,\\
+1=2\cdot1^2+b\cdot1+c.
+\end{cases}
+\quad\Longrightarrow\quad c=-4,\quad b=3.
+\]
+Значит, $f(x)=2x^2+3x-4$, а
+\[f(-5)=2\cdot(-5)^2+3\cdot(-5)-4=\boxed{31}.\]
+
+\checkitem{В выражении $Ax^2$ квадрат относится к $x$; коэффициент $A$ в этом примере известен.}
+\checkitem{Подстановка $x=0$ немедленно даёт $c=f(0)$.}
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\Large\color{darkaccent}Алгоритм: как восстановить функцию по графику}
+\end{center}
+\vspace{10mm}
+\begin{center}
+\begin{tikzpicture}[
+ >=Stealth,
+ start/.style={ellipse,draw=accent!80,line width=.7pt,text width=7.5cm,align=center,minimum height=9mm,fill=white},
+ action/.style={rectangle,rounded corners=1pt,draw=accent!65,line width=.55pt,text width=8cm,align=center,minimum height=12mm,fill=white},
+ decision/.style={diamond,aspect=3.0,draw=accent,line width=.7pt,text width=5.0cm,align=center,inner sep=1pt,minimum height=14mm},
+ side/.style={rectangle,rounded corners=1pt,draw=accent!65,line width=.55pt,text width=2.8cm,align=center,minimum height=12mm,fill=white},
+ arrow/.style={-{Stealth[length=2.4mm]},draw=accent!85,line width=.8pt},
+ every node/.style={font=\small}
+ ]
+ \node[start] (start) at (0,0) {Прочитайте вид заданной функции};
+ \node[action] (count) at (0,-1.85) {Определите неизвестные коэффициенты\\и число нужных независимых точек};
+ \node[action] (choose) at (0,-3.7) {Выберите точки\\с удобными координатами};
+ \node[action] (subs) at (0,-5.55) {Подставьте в формулу $x_i$ и $y_i$\\и получите уравнения};
+ \node[decision] (valid) at (0,-8.0) {Можно ли однозначно\\найти коэффициенты?};
+ \node[side] (redo) at (6.35,-8.0) {Выберите другие\\опорные точки};
+ \node[action] (solve) at (0,-10.45) {Решите систему и восстановите формулу};
+ \node[action] (goal) at (0,-12.35) {Найдите запрошенное $f(t)$ или аргумент $x$};
+ \node[start] (end) at (0,-14.15) {Проверьте ответ по графику};
+ \draw[arrow] (start)--(count);
+ \draw[arrow] (count)--(choose);
+ \draw[arrow] (choose)--(subs);
+ \draw[arrow] (subs)--(valid);
+ \draw[arrow] (valid)-- node[left,font=\footnotesize]{да} (solve);
+ \draw[arrow] (valid)--node[above,font=\footnotesize]{нет}(redo);
+ \draw[arrow] (redo.north) -- ++(0,2.2) -| (choose.east);
+ \draw[arrow] (solve)--(goal);
+ \draw[arrow] (goal)--(end);
+\end{tikzpicture}
+\end{center}
+\clearpage
+\ssection{Тренировочный блок: Путь А}
+\textbf{10 задач по графикам.} В каждой задаче восстановите неизвестные коэффициенты
+по отмеченным на графике опорным точкам, запишите формулу функции и затем
+найдите требуемую величину. Точки отмечены цветными кружками;
+единица масштаба подписана на обеих осях.
+
+\textcolor{muted}{Условные обозначения: $a>0$, $a\ne1$ для всех показательных функций.}
+\smallrule
+\noindent {\large\color{darkaccent}\bfseries Задание 1.} \hfill {\small\color{muted}Показательная функция}
+
+На рисунке $f(x)=a^x+b$. Найдите $f(4)$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[training,xmin=-2.5,xmax=3.1,ymin=-4,ymax=6]
+\addplot[domain=-2.5:3.1] {pow(2,x)-3};
+\addplot[only marks,mark=*,mark size=2.65pt,draw=white,fill=accent,line width=.5pt] coordinates {(0,-2) (1,-1)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\vspace{0.1cm}
+\noindent\textcolor{muted}{Ответ:}\quad\rule{6cm}{0.35pt}
+\vspace{3mm}
+
+\smallrule
+\noindent {\large\color{darkaccent}\bfseries Задание 2.} \hfill {\small\color{muted}Показательная функция}
+
+На рисунке $f(x)=a^x+b$. Найдите $x$, если $f(x)=25$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[training,xmin=-2.5,xmax=2.15,ymin=-3,ymax=8]
+\addplot[domain=-2.5:2.15] {pow(3,x)-2};
+\addplot[only marks,mark=*,mark size=2.65pt,draw=white,fill=accent,line width=.5pt] coordinates {(0,-1) (1,1)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\vspace{0.1cm}
+\noindent\textcolor{muted}{Ответ:}\quad\rule{6cm}{0.35pt}
+\vspace{3mm}
+\clearpage
+\noindent {\large\color{darkaccent}\bfseries Задание 3.} \hfill {\small\color{muted}Убывающая экспонента}
+
+На рисунке $f(x)=a^x+b$. Найдите $f(-3)$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[training,xmin=-3.3,xmax=2.15,ymin=0,ymax=10]
+\addplot[domain=-3.3:2.15] {pow(0.5,x)+1};
+\addplot[only marks,mark=*,mark size=2.65pt,draw=white,fill=accent,line width=.5pt] coordinates {(-2,5) (0,2)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\vspace{0.1cm}
+\noindent\textcolor{muted}{Ответ:}\quad\rule{6cm}{0.35pt}
+\vspace{3mm}
+
+\smallrule
+\noindent {\large\color{darkaccent}\bfseries Задание 4.} \hfill {\small\color{muted}Степень без смещения}
+
+На рисунке $f(x)=a^x$. Найдите $f(-2)$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[training,xmin=-1.6,xmax=3.2,ymin=0,ymax=6]
+\addplot[domain=-1.6:3.2] {pow(1/3,x)};
+\addplot[only marks,mark=*,mark size=2.65pt,draw=white,fill=accent,line width=.5pt] coordinates {(-1,3) (0,1)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\vspace{0.1cm}
+\noindent\textcolor{muted}{Ответ:}\quad\rule{6cm}{0.35pt}
+\vspace{3mm}
+\clearpage
+\noindent {\large\color{darkaccent}\bfseries Задание 5.} \hfill {\small\color{muted}Смещение в показателе}
+
+На рисунке $f(x)=a^{x+b}$. Найдите $f(4)$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[training,xmin=-4.5,xmax=3.2,ymin=0,ymax=6]
+\addplot[domain=-4.5:3.2] {pow(2,(x+2)/2)};
+\addplot[only marks,mark=*,mark size=2.65pt,draw=white,fill=accent,line width=.5pt] coordinates {(-2,1) (0,2)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\vspace{0.1cm}
+\noindent\textcolor{muted}{Ответ:}\quad\rule{6cm}{0.35pt}
+\vspace{3mm}
+
+\smallrule
+\noindent {\large\color{darkaccent}\bfseries Задание 6.} \hfill {\small\color{muted}Смещение в показателе}
+
+На рисунке $f(x)=a^{x+b}$. Найдите $f(-5)$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[training,xmin=-5.5,xmax=0.4,ymin=0,ymax=9]
+\addplot[domain=-5.5:0.4] {pow(2,x+3)};
+\addplot[only marks,mark=*,mark size=2.65pt,draw=white,fill=accent,line width=.5pt] coordinates {(-3,1) (-1,4)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\vspace{0.1cm}
+\noindent\textcolor{muted}{Ответ:}\quad\rule{6cm}{0.35pt}
+\vspace{3mm}
+\clearpage
+\noindent {\large\color{darkaccent}\bfseries Задание 7.} \hfill {\small\color{muted}Линейная функция}
+
+На рисунке $f(x)=kx+b$. Найдите $f(-4)$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[training,xmin=-4.2,xmax=4.2,ymin=-2,ymax=7]
+\addplot[domain=-4.2:4.2] {-x+2};
+\addplot[only marks,mark=*,mark size=2.65pt,draw=white,fill=accent,line width=.5pt] coordinates {(-2,4) (2,0)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\vspace{0.1cm}
+\noindent\textcolor{muted}{Ответ:}\quad\rule{6cm}{0.35pt}
+\vspace{3mm}
+
+\smallrule
+\noindent {\large\color{darkaccent}\bfseries Задание 8.} \hfill {\small\color{muted}Линейная функция}
+
+На рисунке $f(x)=kx+b$. Найдите $x$, если $f(x)=10$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[training,xmin=-4.2,xmax=4.2,ymin=-5,ymax=8]
+\addplot[domain=-4.2:4.2] {-1.5*x+1};
+\addplot[only marks,mark=*,mark size=2.65pt,draw=white,fill=accent,line width=.5pt] coordinates {(-2,4) (2,-2)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\vspace{0.1cm}
+\noindent\textcolor{muted}{Ответ:}\quad\rule{6cm}{0.35pt}
+\vspace{3mm}
+\clearpage
+\noindent {\large\color{darkaccent}\bfseries Задание 9.} \hfill {\small\color{muted}Парабола}
+
+На рисунке $f(x)=2x^2+bx+c$. Найдите $f(-2)$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[training,xmin=-1.8,xmax=3.2,ymin=-4,ymax=9]
+\addplot[domain=-1.8:3.2] {2*x^2-3*x-2};
+\addplot[only marks,mark=*,mark size=2.65pt,draw=white,fill=accent,line width=.5pt] coordinates {(0,-2) (1,-3)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\vspace{0.1cm}
+\noindent\textcolor{muted}{Ответ:}\quad\rule{6cm}{0.35pt}
+\vspace{3mm}
+
+\smallrule
+\noindent {\large\color{darkaccent}\bfseries Задание 10.} \hfill {\small\color{muted}Парабола}
+
+На рисунке $f(x)=3x^2+bx+c$. Найдите $f(-3)$.
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[training,xmin=-2.3,xmax=2.0,ymin=-4,ymax=8]
+\addplot[domain=-2.3:2.0] {3*x^2+3*x-2};
+\addplot[only marks,mark=*,mark size=2.65pt,draw=white,fill=accent,line width=.5pt] coordinates {(0,-2) (1,4)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\vspace{0.1cm}
+\noindent\textcolor{muted}{Ответ:}\quad\rule{6cm}{0.35pt}
+\vspace{3mm}
+\clearpage
+\ssection{Ответы к тренировочному блоку}
+\vspace{7mm}
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{@{}c p{0.54\linewidth} l@{}}
+\toprule
+№ & Тип графика & Ответ \\
+\midrule
+1 & Показательная функция & $13$ \\
+2 & Показательная функция & $x=3$ \\
+3 & Показательная функция & $9$ \\
+4 & Показательная функция & $9$ \\
+5 & Показательная функция & $8$ \\
+6 & Показательная функция & $\frac14$ \\
+7 & Линейная функция & $6$ \\
+8 & Линейная функция & $x=-6$ \\
+9 & Квадратичная функция & $12$ \\
+10 & Квадратичная функция & $16$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{12mm}
+\ssection{10. Самопроверка перед ответом}
+\checkitem{Все выбранные точки действительно лежат на графике и легко считываются.}
+\checkitem{Все неизвестные коэффициенты найдены, ограничения ($a>0$, $a\ne1$) соблюдены.}
+\checkitem{При преобразованиях сохранены знаки и скобки.}
+\checkitem{Выполнено именно требование: значение $f(t)$ или аргумент $x$.}
+
+
+\textbf{Проверка результата.} После решения каждого упражнения
+подставьте координаты обеих отмеченных точек в полученную формулу.
+Так можно независимо проверить все найденные коэффициенты.
+\vfill
+\begin{center}
+{\small\color{muted} Лёвин Артём Александрович эксклюзивно для Даниила Хрястова}
+\end{center}
+\end{document}
