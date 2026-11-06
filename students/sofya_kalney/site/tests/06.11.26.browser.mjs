@@ -90,5 +90,7 @@ try{
  try{ws?.close();}catch(_){}
  chromeProcess.kill('SIGKILL');
  await new Promise(resolve=>server.close(resolve));
- fs.rmSync(profile,{recursive:true,force:true});
+ await sleep(400);
+ try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:8,retryDelay:200});}
+ catch(error){console.warn('Temporary Chromium profile cleanup:',error.message);}
 }
