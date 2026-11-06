@@ -107,7 +107,7 @@ try{
     }else{
       await run("document.documentElement.dataset.theme='"+theme+"'");
     }
-    const sizes=await run('({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth})');
+    const sizes=await run('(()=>{const client=document.documentElement.clientWidth;return {scroll:document.documentElement.scrollWidth,client,offenders:[...document.querySelectorAll("body *")].map(el=>({tag:el.tagName,id:el.id,klass:typeof el.className==="string"?el.className:"",right:Math.round(el.getBoundingClientRect().right),width:Math.round(el.getBoundingClientRect().width)})).filter(q=>q.right>client+2).slice(0,12)}})()');
     assert.ok(sizes.scroll<=sizes.client+2,filename+' '+width+' '+theme+' horizontal overflow: '+JSON.stringify(sizes));
     assert.deepEqual(errors,[],filename+' JS exceptions');
     assert.deepEqual(badNetwork,[],filename+' unsuccessful network requests');
