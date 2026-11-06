@@ -5,6 +5,71 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-06",
+  "ktpRefs": [],
+  "href": "06.11.26.html",
+  "title": "Независимые испытания",
+  "navTitle": "Независимые испытания",
+  "navSubtitle": "Теория вероятностей: равновероятные исходы, противоположные события, независимые испытания, формула Бернулли и 10 заданий Путь А. Екатерина Гнедкова, 6 ноября 2026 года.",
+  "summary": "Теория вероятностей: равновероятные исходы, противоположные события, независимые испытания, формула Бернулли и 10 заданий Путь А. Екатерина Гнедкова, 6 ноября 2026 года.",
+  "topics": [
+    "равновероятные исходы и порядок бросков",
+    "правила умножения и сложения вероятностей",
+    "противоположное событие и «хотя бы один»",
+    "независимые повторные испытания",
+    "фиксированная последовательность и произвольные позиции",
+    "формула Бернулли и ровно k успехов"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege27_04_002",
+      "evidenceAnchor": "outcomes",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_04_003",
+      "evidenceAnchor": "complement",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_04_004",
+      "evidenceAnchor": "events",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_04_006",
+      "evidenceAnchor": "events",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_04_013",
+      "evidenceAnchor": "complement",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_05_006",
+      "evidenceAnchor": "trials",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_05_007",
+      "evidenceAnchor": "bernoulli",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_05_008",
+      "evidenceAnchor": "bernoulli",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "06.11.26.html",
+    "pdf": "../pdf_docs/06.11.26.pdf",
+    "tex": "../tex_docs/06.11.26.tex",
+    "lab": "06.11.26-lab.html"
+  }
+},
+{
   "date": "2026-10-28",
   "ktpRefs": [],
   "href": "28.10.26.html",
