@@ -3,6 +3,72 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-06",
+  "ktpRefs": [],
+  "href": "06.11.26.html",
+  "title": "Смешанные неравенства",
+  "navTitle": "Смешанные неравенства",
+  "navSubtitle": "Неравенства со степенями и логарифмами: ОДЗ, нули, метод интервалов, рационализация и десять задач. Тимофей Васильченко, 6 ноября 2026.",
+  "summary": "Неравенства со степенями и логарифмами: ОДЗ, нули, метод интервалов, рационализация и десять задач. Тимофей Васильченко, 6 ноября 2026.",
+  "topics": [
+    "Смешанные показательные и логарифмические неравенства",
+    "Область допустимых значений",
+    "Метод интервалов",
+    "Рационализация знаков",
+    "Точные дробные границы"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t15_log_exp",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced",
+      "label": "Смешанные неравенства со степенями и логарифмами",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t15_intervals",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced",
+      "label": "Метод интервалов и проверка знака",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t15_log_rational",
+      "evidenceAnchor": "roots",
+      "relation": "practiced",
+      "label": "Нули логарифмического знаменателя",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_log_var",
+      "evidenceAnchor": "rationalization",
+      "relation": "touched",
+      "label": "Логарифмические преобразования",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t15_rationalization",
+      "evidenceAnchor": "rationalization",
+      "relation": "touched",
+      "label": "Рационализация смешанного неравенства",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t15_answer",
+      "evidenceAnchor": "precision",
+      "relation": "practiced",
+      "label": "Точные границы и запись множества решений",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "06.11.26.html",
+    "pdf": "../pdf_docs/06.11.26.pdf",
+    "tex": "../tex_docs/06.11.26.tex",
+    "lab": "06.11.26-lab.html"
+  }
+},
+{
   "date": "2026-10-31",
   "ktpRefs": [],
   "href": "31.10.26.html",
