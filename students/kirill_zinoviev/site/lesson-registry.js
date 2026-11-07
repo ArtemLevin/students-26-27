@@ -3,6 +3,88 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-07",
+  "ktpRefs": [],
+  "href": "07.11.26.html",
+  "title": "Построение графиков линейных функций",
+  "navTitle": "Линейная функция",
+  "navSubtitle": "Алгебра, 7 класс: линейная функция y=kx+b, координаты точек, таблица, удобный выбор x, масштаб и горизонтальные прямые. Десять заданий.",
+  "summary": "Алгебра 7 класс: линейная функция y=kx+b, координаты, таблица, удобные x, горизонтальные прямые, 10 задач.",
+  "topics": [
+    "линейная функция y = kx + b",
+    "координаты точки и чтение осей",
+    "таблица значений и две точки",
+    "удобный выбор x для десятичных коэффициентов",
+    "значение свободного члена b и горизонтали y = b",
+    "проверка знаков, масштаба и продолжения прямой",
+    "10 упражнений на построение и анализ"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "functions_2",
+      "evidenceAnchor": "formula",
+      "relation": "touched",
+      "label": "Различать аргумент x и значение функции y",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_3",
+      "evidenceAnchor": "table",
+      "relation": "practiced",
+      "label": "Заполнять таблицу значений линейной функции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_4",
+      "evidenceAnchor": "coordinates",
+      "relation": "practiced",
+      "label": "Читать координаты точки на плоскости",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_5",
+      "evidenceAnchor": "coordinates",
+      "relation": "practiced",
+      "label": "Отмечать точку по координатам",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_9",
+      "evidenceAnchor": "formula",
+      "relation": "touched",
+      "label": "Связывать знак k с направлением прямой",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_10",
+      "evidenceAnchor": "formula",
+      "relation": "practiced",
+      "label": "Распознавать линейную функцию y=kx+b",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_11",
+      "evidenceAnchor": "horizontal",
+      "relation": "touched",
+      "label": "Понимать роль свободного члена b",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_12",
+      "evidenceAnchor": "table",
+      "relation": "practiced",
+      "label": "Строить прямую по двум точкам",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "07.11.26.html",
+    "pdf": "../pdf_docs/07.11.26.pdf",
+    "tex": "../tex_docs/07.11.26.tex",
+    "lab": "07.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-04",
   "ktpRefs": [],
   "href": "04.11.26.html",
