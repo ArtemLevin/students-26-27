@@ -5,6 +5,93 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-11-07",
+    "ktpRefs": [],
+    "href": "07.11.26.html",
+    "title": "Проценты, доли и нахождение целого",
+    "navTitle": "Проценты от остатка и части",
+    "navSubtitle": "Найти целое · доля другой части · проценты остатка",
+    "summary": "Надя Клименко, 07.11.26. Нахождение целого по доле, процентные изменения, доли от другой части и проценты от остатка на задачах о жилье, беговой дистанции и отгрузке зерна. Путь А: 10 заданий.",
+    "topics": [
+      "нахождение целого по его части",
+      "проценты от исходной величины",
+      "увеличение и уменьшение на процент",
+      "проценты от остатка",
+      "доля части от целого",
+      "многошаговые задачи на проценты",
+      "обыкновенные дроби и доля остатка",
+      "графическое моделирование частей"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "frac_16",
+        "evidenceAnchor": "whole",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "frac_15",
+        "evidenceAnchor": "whole",
+        "relation": "touched",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "ratio_10",
+        "evidenceAnchor": "whole",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "ratio_11",
+        "evidenceAnchor": "increase",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "ratio_12",
+        "evidenceAnchor": "increase",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "ratio_14",
+        "evidenceAnchor": "remainder",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_12",
+        "evidenceAnchor": "parts",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_14",
+        "evidenceAnchor": "remainder",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_01",
+        "evidenceAnchor": "parts",
+        "relation": "practiced",
+        "masteryClaim": null
+      },
+      {
+        "competencyId": "model_15",
+        "evidenceAnchor": "fraction",
+        "relation": "touched",
+        "masteryClaim": null
+      }
+    ],
+    "materials": {
+      "html": "07.11.26.html",
+      "lab": "07.11.26-lab.html",
+      "pdf": "../pdf_docs/07.11.26.pdf",
+      "tex": "../tex_docs/07.11.26.tex"
+    }
+  },
+  {
     "date": "2026-11-03",
     "ktpRefs": [],
     "href": "03.11.26.html",
