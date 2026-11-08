@@ -1,0 +1,333 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+\geometry{left=24mm,right=24mm,top=23mm,bottom=23mm}
+\usepackage{microtype}
+\usepackage{icomma}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{muted}{HTML}{6B7780}
+\setstretch{1.22}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlist[enumerate]{leftmargin=7mm,itemsep=5pt,topsep=4pt}
+\setlist[itemize]{leftmargin=7mm,itemsep=3pt,topsep=3pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{muted}{Производная и оптимизация}}
+\fancyhead[R]{\small\textcolor{muted}{Тимофей Васильченко}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.25pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{15pt}
+\newcommand{\term}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\sect}[1]{\section*{\textcolor{darkaccent}{#1}}}
+\newcommand{\subsect}[1]{\subsection*{\textcolor{accent}{#1}}}
+\newcommand{\note}[1]{\textcolor{darkaccent}{\textbf{Важно.}} #1}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{24mm}
+{\large\textcolor{darkaccent}{МАТЕМАТИКА}}\par
+\vspace{13mm}
+{\LARGE Чек-лист}\par
+\vspace{13mm}
+{\Large\textcolor{accent}{Производная сложной функции}}\par
+{\Large\textcolor{accent}{и задачи на оптимизацию}}\par
+\vspace{17mm}
+{\normalsize Подготовка к ЕГЭ по профильной математике}\par
+\vfill
+{\large Тимофей Васильченко}\par
+\vspace{10mm}
+{7 ноября 2026 г.}\par
+\vspace{16mm}
+{\small Лёвин Артём Александрович}\par
+{\small эксклюзивно для Тимофея Васильченко}\par
+\vspace{21mm}
+\begin{tikzpicture}
+  \draw[accent,line width=.95pt] (0,0) .. controls (1.4,.75) and (3.0,-.62) .. (4.2,.04)
+        .. controls (5.7,.70) and (7.2,-.54) .. (8.7,.04);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\sect{1. Что даёт производная}
+Производная \(f'(x)\) показывает, как меняется функция вблизи точки. Для исследования функции используйте знак производной на каждом промежутке области определения.
+\begin{center}
+\begin{tabularx}{.94\linewidth}{@{}>{\bfseries}l X@{}}
+\toprule
+Условие & Вывод \\
+\midrule
+\(f'(x)>0\) & функция возрастает; \\
+\(f'(x)<0\) & функция убывает; \\
+\( +\to-\) & в точке перехода локальный максимум; \\
+\( -\to+\) & в точке перехода локальный минимум. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\note{Точка экстремума и значение функции --- разные ответы.} Если требуется \emph{точка минимума}, записывайте абсциссу \(x\); если требуется \emph{минимальное значение}, вычисляйте \(f(x)\).
+
+\subsect{Пример: исследование квадратичной функции}
+\[
+ f(x)=x^2-x-6,\qquad f'(x)=2x-1.
+\]
+\(f'(x)=0\) при \(x=\frac12\). Слева от \(\frac12\) знак минус, справа --- плюс. Поэтому функция убывает, затем возрастает. Точка минимума:
+\[
+\boxed{x_{\min}=\frac12},\qquad f\!\left(\frac12\right)=-\frac{25}{4}.
+\]
+
+\sect{2. Базовые формулы}
+\[
+\begin{aligned}
+ (c)'&=0,& (x^n)'&=nx^{n-1},\\[2pt]
+ (\sqrt{x})'&=\frac1{2\sqrt{x}}\quad(x>0),&
+ (\sin x)'&=\cos x,\\[2pt]
+ (\cos x)'&=-\sin x,&
+ (e^x)'&=e^x,\\[2pt]
+ (a^x)'&=a^x\ln a\quad(a>0,\ a\ne1).
+\end{aligned}
+\]
+\[
+ (u+v)'=u'+v',\qquad (uv)'=u'v+uv'.
+\]
+\note{Для степени \(x^n\) использована стандартная школьная формула там, где соответствующая функция дифференцируема.}
+\clearpage
+
+\sect{3. Дробно-рациональные функции}
+\term{Правило частного:} при \(v(x)\ne0\)
+\[
+\boxed{\left(\frac{u}{v}\right)'=\frac{u'v-uv'}{v^2}}.
+\]
+Например, для \(y=\dfrac{2x}{x^2-9}\) сначала запишите ОДЗ: \(x\ne-3\), \(x\ne3\). Затем
+\[
+\begin{aligned}
+ y'&=\frac{2(x^2-9)-2x\cdot2x}{(x^2-9)^2}\\
+   &=\frac{-2x^2-18}{(x^2-9)^2}
+    =-\frac{2(x^2+9)}{(x^2-9)^2}<0.
+\end{aligned}
+\]
+Значит, функция убывает \emph{на каждом из промежутков} \(( -\infty,-3)\), \((-3,3)\), \((3,+\infty)\). В точках \(\pm3\) она не определена.
+
+\subsect{Постоянный числитель: удобное сокращение пути}
+Если \(y=\dfrac{C}{g(x)}\), где \(C\) --- постоянная, то
+\[
+\boxed{y'=-\frac{C\,g'(x)}{g(x)^2}},\qquad g(x)\ne0.
+\]
+Для \(C>0\) знаки \(y'\) и \(g'(x)\) противоположны; для \(C<0\) --- совпадают. Сравнивайте поведение только внутри промежутков, на которых \(g(x)\ne0\).
+
+\textbf{Сравните два случая:}
+\[
+\begin{aligned}
+ y_1&=\frac{x-3}{2x-5},& y_1'&=\frac{1}{(2x-5)^2}>0,\\[3pt]
+ y_2&=\frac{3}{2x-5},& y_2'&=-\frac{6}{(2x-5)^2}<0.
+\end{aligned}
+\]
+В обеих функциях \(x\ne\frac52\). Первая возрастает, вторая убывает \emph{на каждом промежутке определения}, отделённом точкой \(\frac52\).
+
+\note{Квадрат знаменателя не меняет знак.} Если критическая точка в знаменателе, она исключается из ОДЗ; её нельзя объявлять точкой экстремума.
+\clearpage
+
+\sect{4. Переменная и константы}
+Буква внутри скобок \(f(x)\) указывает, по какой переменной берут производную. Остальные символы рассматриваются как постоянные, если в условии не сказано иное.
+
+\[
+ f(x)=ax^3-bx\quad\Longrightarrow\quad f'(x)=3ax^2-b.
+\]
+Если ту же формулу рассматривать как функцию аргумента \(a\), то
+\[
+ g(a)=ax^3-bx\quad\Longrightarrow\quad g'(a)=x^3,
+\]
+поскольку \(x\) и \(b\) теперь постоянны.
+
+\sect{5. Производная сложной функции}
+Сложная функция возникает, когда одно выражение помещено внутрь другой функции: \((g(x))^{10}\), \(\sin(g(x))\), \(e^{g(x)}\).
+
+\term{Правило цепочки:}
+\[
+\boxed{\bigl(F(g(x))\bigr)'=F'(g(x))\,g'(x)}.
+\]
+Сначала найдите производную внешней функции, сохранив внутреннее выражение; затем умножьте на производную внутреннего выражения.
+
+\subsect{Пример: степень выражения}
+\[
+\begin{aligned}
+ y&=(4x-5)^{10},\\
+ y'&=10(4x-5)^9\cdot4=\boxed{40(4x-5)^9}.
+\end{aligned}
+\]
+
+\subsect{Три важные формы}
+Для дифференцируемой функции \(g(x)\):
+\[
+\begin{aligned}
+ \bigl(\sqrt{g(x)}\bigr)'&=\frac{g'(x)}{2\sqrt{g(x)}}\quad (g(x)>0),\\
+ \bigl(\sin(g(x))\bigr)'&=g'(x)\cos(g(x)),\\
+ \bigl(e^{g(x)}\bigr)'&=g'(x)e^{g(x)}.
+\end{aligned}
+\]
+При \(g(x)=x^2-3x-4\) производная внутреннего выражения равна \(2x-3\). Для корня область определения: \(x\le-1\) или \(x\ge4\); формула производной применяется внутри этих промежутков, без граничных точек.
+\clearpage
+
+\sect{6. Задачи на оптимизацию}
+\term{Оптимизация} --- поиск наибольшего или наименьшего значения величины при заданных ограничениях. Типичный маршрут: выбрать переменную, выразить целевую функцию, вычислить производную, найти допустимые критические точки, обосновать экстремум.
+
+\subsect{Прикладной пример: распределение скоростей газа}
+В модели Максвелла плотность распределения по модулю скорости \(v\) имеет вид
+\[
+F(v)=4\pi\!\left(\frac{M}{2\pi RT}\right)^{3/2}
+ v^2\exp\!\left(-\frac{Mv^2}{2RT}\right),\qquad v\ge0.
+\]
+Здесь \(R>0\) --- газовая постоянная, \(T>0\) --- абсолютная температура, \(M>0\) --- молярная масса. Переменная --- \(v\). Чтобы упростить запись, обозначим
+\[
+ A=4\pi\!\left(\frac{M}{2\pi RT}\right)^{3/2}>0,
+ \qquad k=\frac{M}{2RT}>0.
+\]
+Тогда \(F(v)=Av^2e^{-kv^2}\). Используем правило произведения и правило цепочки:
+\[
+\begin{aligned}
+ F'(v)&=2Av\,e^{-kv^2}+Av^2\,e^{-kv^2}(-2kv)\\
+      &=\boxed{2Av\,e^{-kv^2}(1-kv^2)}.
+\end{aligned}
+\]
+Для \(v>0\) множители \(2Av\) и \(e^{-kv^2}\) положительны. Поэтому знак производной определяет только \(1-kv^2\):
+\[
+\begin{array}{c|ccc}
+ v&\left(0,\frac1{\sqrt{k}}\right)&\frac1{\sqrt{k}}&\left(\frac1{\sqrt{k}},+\infty\right)\\ \hline
+ F'(v)&+&0&-\\
+ F(v)&\nearrow&\text{максимум}&\searrow
+\end{array}
+\]
+Таким образом, \(F(v)\) достигает наибольшего значения при
+\[
+\boxed{v_*=\frac1{\sqrt{k}}=\sqrt{\frac{2RT}{M}}}.
+\]
+При \(R=8{,}31\ \text{Дж/(моль\,К)}\), \(T=500\ \text{К}\), \(M=0{,}032\ \text{кг/моль}\):
+\[
+ v_*=\sqrt{\frac{2\cdot8{,}31\cdot500}{0{,}032}}
+ \approx\boxed{510\ \text{м/с}}.
+\]
+\note{При вынесении общего множителя} \(2Av e^{-kv^2}\) в скобках остаётся \(1-kv^2\). Потеря или лишняя двойка в скобках меняет итоговый ответ. Дополнительно \(F(0)=0\), а при \(v\to+\infty\) функция стремится к нулю, что подтверждает глобальный максимум.
+\clearpage
+
+\thispagestyle{plain}
+\begin{center}
+{\Large\textcolor{darkaccent}{Алгоритм: исследование функции}}\\[5mm]
+\end{center}
+\vspace{2mm}
+\tikzset{
+ endpoint/.style={ellipse,draw=accent,thick,align=center,minimum width=48mm,minimum height=10mm,fill=white},
+ operation/.style={rectangle,rounded corners=2pt,draw=accent,thick,align=center,text width=92mm,minimum height=13mm,inner sep=3mm},
+ test/.style={diamond,aspect=2.5,draw=accent,thick,align=center,inner sep=1mm,text width=38mm},
+ branch/.style={rectangle,rounded corners=2pt,draw=accent,thick,align=center,text width=44mm,minimum height=13mm,inner sep=2mm},
+ arrow/.style={-{Latex[length=2.8mm]},thick,draw=darkaccent}
+}
+\begin{center}
+\begin{tikzpicture}[node distance=8mm and 13mm]
+\node[endpoint] (begin) {Начало};
+\node[operation,below=of begin] (dom) {Определить переменную, ОДЗ и допустимые промежутки};
+\node[operation,below=of dom] (der) {Найти \(f'(x)\), решить \(f'(x)=0\)};
+\node[operation,below=of der] (axis) {Отметить нули производной и исключённые точки};
+\node[test,below=13mm of axis] (sign) {Какой знак \(f'(x)\)?};
+\node[branch,below left=12mm and 11mm of sign] (pos) {\(f'(x)>0\)\\Возрастает};
+\node[branch,below right=12mm and 11mm of sign] (neg) {\(f'(x)<0\)\\Убывает};
+\node[operation,below=25mm of sign] (compare) {Сопоставить знаки по сторонам от критических точек};
+\node[endpoint,below=of compare] (end) {Определить экстремум и записать ответ};
+\draw[arrow] (begin)--(dom);
+\draw[arrow] (dom)--(der);
+\draw[arrow] (der)--(axis);
+\draw[arrow] (axis)--(sign);
+\draw[arrow] (sign.south west) -| (pos.north);
+\draw[arrow] (sign.south east) -| (neg.north);
+\draw[arrow] (pos.south) |- (compare.west);
+\draw[arrow] (neg.south) |- (compare.east);
+\draw[arrow] (compare)--(end);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\sect{7. Частые ошибки: контроль перед ответом}
+\begin{itemize}
+\item При \(f(x)=\dfrac{u(x)}{v(x)}\) забывают квадрат знаменателя или знак минус в правиле частного.
+\item Исследуют дробь через знаменатель, хотя в числителе тоже стоит переменная: тогда нужна полная производная частного (либо равносильное упрощение).
+\item Смешивают переменные и параметры. В \(f(x)\) производную берут по \(x\); остальные буквы --- константы.
+\item При дифференцировании \((g(x))^n\), \(\sin(g(x))\), \(e^{g(x)}\) пропускают множитель \(g'(x)\).
+\item Считают нуль знаменателя точкой экстремума. Сначала проверяют ОДЗ.
+\item Из \(f'(x)=0\) сразу делают вывод о максимуме. Необходимо проверить знак производной с двух сторон, границы и допустимые значения.
+\item В задачах на оптимизацию оставляют лишние корни, противоречащие смыслу величины (например, отрицательную скорость).
+\end{itemize}
+
+\clearpage
+\sect{Тренировочный блок --- Путь А}
+\textcolor{muted}{10 заданий: от основных правил к прикладной оптимизации. Решения запишите отдельно; при необходимости укажите ОДЗ.}
+\subsect{Базовый уровень}
+\begin{enumerate}
+\item Найдите производную \(f(x)=5x^2-3x+7\).
+\item Найдите производную \(f(x)=kx^3-tx^2\), считая \(k,t\) постоянными.
+\item Для \(g(a)=ax^3-bx\) найдите \(g'(a)\), считая \(x,b\) постоянными.
+\end{enumerate}
+\subsect{Средний уровень}
+\begin{enumerate}[start=4]
+\item Для \(y=\dfrac{x-4}{3x-7}\) найдите \(y'\) и ОДЗ.
+\item Исследуйте \(y=\dfrac{4}{x^2-16}\). Найдите абсциссу локального максимума и все промежутки возрастания.
+\item Найдите производную \(y=(3x-2)^8\).
+\item Найдите производную \(y=\sin(x^2-4x+1)\).
+\item Найдите производную \(y=e^{2x^2-3x}\).
+\end{enumerate}
+\subsect{Повышенный уровень}
+\begin{enumerate}[start=9]
+\item Найдите абсциссу минимума функции \(y=(x^2-4x+6)^2\).
+\item Для распределения \(F(v)=Cv^2 e^{-Mv^2/(2RT)}\), \(v\ge0\), \(C,R,T,M>0\), найдите скорость, при которой \(F\) максимальна. Вычислите её приближённо при \(R=8{,}31\), \(T=500\), \(M=0{,}032\) в единицах СИ. Обоснуйте максимум по знаку производной.
+\end{enumerate}
+\clearpage
+
+\sect{Ответы к тренировочному блоку}
+\renewcommand{\arraystretch}{1.48}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}>{\centering\arraybackslash}p{13mm}X@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & \(f'(x)=10x-3\).\\
+2 & \(f'(x)=3kx^2-2tx\).\\
+3 & \(g'(a)=x^3\).\\
+4 & \(y'=\dfrac{5}{(3x-7)^2}\); \(x\ne\dfrac73\).\\
+5 & \(x_{\max}=0\); возрастает на \(( -\infty,-4)\) и \((-4,0)\).\\
+6 & \(y'=24(3x-2)^7\).\\
+7 & \(y'=(2x-4)\cos(x^2-4x+1)\).\\
+8 & \(y'=(4x-3)e^{2x^2-3x}\).\\
+9 & \(x_{\min}=2\).\\
+10 & \(v_*=\sqrt{\dfrac{2RT}{M}}\approx510\ \text{м/с}\).\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\vspace{10mm}
+\subsect{Итоговая памятка}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{46mm}X@{}}
+\toprule
+Сигнал в задаче & Действие \\
+\midrule
+Дробь с переменными & Правило производной частного, ОДЗ. \\
+Постоянный числитель & Исследуйте знаменатель с учётом знака числителя. \\
+Выражение «внутри» & Правило цепочки: внешняя производная \(\times\) внутренняя. \\
+Много постоянных & Объедините их в краткие коэффициенты. \\
+Нужно наибольшее значение & Область определения, производная, знак, границы, ответ. \\
+\bottomrule
+\end{tabularx}
+\end{document}
