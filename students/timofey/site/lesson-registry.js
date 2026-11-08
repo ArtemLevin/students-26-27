@@ -3,6 +3,79 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-07",
+  "ktpRefs": [],
+  "href": "07.11.26.html",
+  "title": "Производная и оптимизация",
+  "navTitle": "Производная и оптимизация",
+  "navSubtitle": "Производная сложной функции, правило частного, параметры и оптимизация: занятие Тимофея Васильченко от 7 ноября 2026 года.",
+  "summary": "Производная сложной функции, правило частного, параметры и оптимизация: занятие Тимофея Васильченко от 7 ноября 2026 года.",
+  "topics": [
+    "Производная сложной функции",
+    "Правило производной частного",
+    "Параметры и константы",
+    "Возрастание и экстремумы",
+    "Оптимизация: распределение скоростей молекул"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t8_monotonicity",
+      "evidenceAnchor": "rules",
+      "relation": "practiced",
+      "label": "Возрастание и убывание по знаку производной",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t8_extrema",
+      "evidenceAnchor": "rules",
+      "relation": "practiced",
+      "label": "Точки минимума и максимума",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t8_derivative_rules",
+      "evidenceAnchor": "chain",
+      "relation": "practiced",
+      "label": "Правила дифференцирования и сложная функция",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t8_elementary_derivatives",
+      "evidenceAnchor": "chain",
+      "relation": "practiced",
+      "label": "Производные корня, синуса и экспоненты",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "ege2027_t17_variables",
+      "evidenceAnchor": "parameters",
+      "relation": "practiced",
+      "label": "Переменные и постоянные в модели",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "ege2027_t17_constraints",
+      "evidenceAnchor": "fractions",
+      "relation": "practiced",
+      "label": "Ограничения области определения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "ege2027_t17_optimization",
+      "evidenceAnchor": "optimization",
+      "relation": "touched",
+      "label": "Максимум прикладной функции",
+      "practiceDisposition": "none"
+    }
+  ],
+  "materials": {
+    "html": "07.11.26.html",
+    "pdf": "../pdf_docs/07.11.26.pdf",
+    "tex": "../tex_docs/07.11.26.tex",
+    "lab": "07.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-06",
   "ktpRefs": [],
   "href": "06.11.26.html",
