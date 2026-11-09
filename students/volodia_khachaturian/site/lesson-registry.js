@@ -3,6 +3,86 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-09",
+  "ktpRefs": [],
+  "href": "09.11.26.html",
+  "title": "Наклонная тяга: сила → трение → ускорение",
+  "navTitle": "Наклонная тяга: сила → трение → ускорение",
+  "navSubtitle": "Повторение физики: наклонная тяга, проекции силы, трение, ускорение. Чек-лист и десять задач Володи Хачатуряна от 9 ноября 2026 года.",
+  "summary": "Повторение физики: наклонная тяга, проекции силы, трение, ускорение. Чек-лист и десять задач Володи Хачатуряна от 9 ноября 2026 года.",
+  "topics": [
+    "наклонная сила тяги под углом 30 градусов",
+    "проекции силы тяги",
+    "реакция опоры",
+    "сила трения скольжения",
+    "второй закон Ньютона в проекциях",
+    "знак ускорения",
+    "алгоритм решения задач"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "dyn_22",
+      "evidenceAnchor": "balance",
+      "relation": "touched",
+      "label": "Сила трения скольжения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_23",
+      "evidenceAnchor": "balance",
+      "relation": "touched",
+      "label": "Коэффициент трения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_24",
+      "evidenceAnchor": "balance",
+      "relation": "touched",
+      "label": "Зависимость трения от реакции опоры",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_13",
+      "evidenceAnchor": "balance",
+      "relation": "touched",
+      "label": "Реакция опоры",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_08",
+      "evidenceAnchor": "balance",
+      "relation": "touched",
+      "label": "Второй закон Ньютона",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "measure_05",
+      "evidenceAnchor": "projections",
+      "relation": "touched",
+      "label": "Скалярные и векторные величины",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_07",
+      "evidenceAnchor": "forces",
+      "relation": "touched",
+      "label": "Схема сил",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_25",
+      "evidenceAnchor": "examples",
+      "relation": "touched",
+      "label": "Преобразование формул",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "09.11.26.html",
+    "tex": "../tex_docs/09.11.26.tex"
+  }
+},
+{
   "date": "2026-11-04",
   "ktpRefs": [],
   "href": "04.11.26.html",
