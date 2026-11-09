@@ -5,6 +5,52 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-09",
+  "ktpRefs": [],
+  "href": "09.11.26.html",
+  "title": "Движение по реке: рейсы, стоянки и плот",
+  "navTitle": "Движение по реке: рейсы, стоянки и плот",
+  "navSubtitle": "09.11.26 · Движение по реке, стоянки, плот и 10 задач Пути А",
+  "summary": "09.11.26. Скорости по течению и против течения, таблица скорость–время–расстояние, стоянка, расписание и ранний старт плота. Четыре разбора и 10 задач Пути А.",
+  "topics": [
+    "Связь S=vt, v=S/t, t=S/v",
+    "Скорость судна по течению x+u и против течения x−u",
+    "Сравнение времени рейсов на одинаковом расстоянии",
+    "Стоянка и суммарная продолжительность рейса",
+    "Задержка отправления и движение плота",
+    "Проверка x>u, подбор допустимых корней и контроль единиц"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_21_2_1",
+      "evidenceAnchor": "principle",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_2_2",
+      "evidenceAnchor": "cases",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_2_3",
+      "evidenceAnchor": "case-4",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_2_4",
+      "evidenceAnchor": "method",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "09.11.26.html",
+    "pdf": "../pdf_docs/09.11.26.pdf",
+    "tex": "../tex_docs/09.11.26.tex",
+    "lab": "09.11.26-lab.html"
+  }
+},
+
+{
   "date": "2026-11-05",
   "ktpRefs": [],
   "href": "05.11.26.html",
