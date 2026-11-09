@@ -39,7 +39,7 @@ const ids=['x','u','s','stop','delay'],state={x:15,u:3,s:72,stop:0,delay:3,t:0},
 function readInputs(){ids.forEach(k=>state[k]=Number($(k).value));if(state.u>=state.x){state.u=Math.max(1,state.x-1);$('u').value=String(state.u);$('limitNote').textContent='Скорость течения ограничена: для обратного рейса требуется x > u.'}else{$('limitNote').textContent='Скорость лодки в неподвижной воде превышает скорость течения: x > u.'} }
 function getDur(){const down=state.s/(state.x+state.u),up=state.s/(state.x-state.u);return{down,up,boat:down+state.stop+up,total:state.delay+down+state.stop+up}}
 function boatAt(t,d){const z=t-state.delay;if(z<=0)return{distance:0,status:'В A'};if(z<d.down)return{distance:Math.min(state.s,z*(state.x+state.u)),status:'Вниз'};if(z<d.down+state.stop)return{distance:state.s,status:'Стоянка'};if(z<d.boat)return{distance:Math.max(0,state.s-(z-d.down-state.stop)*(state.x-state.u)),status:'Вверх'};return{distance:0,status:'В A'}}
-function draw(){const d=getDur();state.t=Math.max(0,Math.min(d.total,state.t));const b=boatAt(state.t,d),r=state.u*state.t,show=$('showRaft').checked;
+function draw(){const d=getDur();state.t=Math.max(0,Math.min(d.total,state.t));const b=boatAt(state.t,d),r=state.u*state.t,show=$('showRaft').checked,maxDist=Math.max(state.s,state.u*d.total);
 ids.forEach(k=>$(k+'Val').textContent=num(state[k])+(k==='s'?' км':(k==='x'||k==='u'?' км/ч':' ч')));
 $('boatDist').textContent=num(b.distance)+' км';$('raftDist').textContent=show?num(r)+' км':'скрыт';$('boatState').textContent=b.status;
 $('boatMark').setAttribute('transform','translate('+(35+725*b.distance/maxDist)+' 0)');
@@ -47,7 +47,7 @@ $('raftMark').style.display=show?'':'none';$('raftMark').setAttribute('transform
 $('status').textContent='Момент '+p(state.t)+': лодка — '+b.status.toLowerCase()+', путь от A '+num(b.distance)+' км'+(show?'; плот — '+num(r)+' км.':'.');
 $('downSpeed').textContent=num(state.x+state.u)+' км/ч';$('upSpeed').textContent=num(state.x-state.u)+' км/ч';$('downTime').textContent=p(d.down);$('upTime').textContent=p(d.up);$('stopTime').textContent=p(state.stop);$('boatTotal').textContent=p(d.boat);$('allTime').textContent=p(d.total);
 $('equation').textContent='Движение вниз: '+num(state.s)+' / '+num(state.x+state.u)+' = '+p(d.down)+'. Стоянка: '+p(state.stop)+'. Движение вверх: '+num(state.s)+' / '+num(state.x-state.u)+' = '+p(d.up)+'. Итого '+p(d.boat)+'; с задержкой старта '+p(d.total)+'.';
-const maxDist=Math.max(state.s,state.u*d.total);const xDock=35+725*state.s/maxDist;
+const xDock=35+725*state.s/maxDist;
 $('dockB').setAttribute('x1',xDock);$('dockB').setAttribute('x2',xDock);$('dockBLabel').setAttribute('x',Math.max(20,Math.min(755,xDock-13)));
 const xcoord=t=>70+680*t/d.total,ycoord=s=>240-200*s/maxDist;
 $('stationLine').setAttribute('y1',ycoord(state.s));$('stationLine').setAttribute('y2',ycoord(state.s));
