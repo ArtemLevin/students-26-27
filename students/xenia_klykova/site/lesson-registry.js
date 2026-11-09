@@ -5,6 +5,66 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-09",
+  "ktpRefs": [],
+  "href": "09.11.26.html",
+  "title": "Кредит: от остатка долга к платежу",
+  "navTitle": "Кредит: от остатка долга к платежу",
+  "navSubtitle": "Ксения Клыкова · 9 ноября 2026: банковские кредиты, графики остатка долга, проценты, платежи, ограничения и 10 заданий Пути А.",
+  "summary": "Ксения Клыкова · 9 ноября 2026: банковские кредиты, графики остатка долга, проценты, платежи, ограничения и 10 заданий Пути А.",
+  "topics": [
+    "таблица остатков долга и последовательность начисления процентов",
+    "кредит на 750 тыс. рублей: три годовых платежа и переплата",
+    "ограничение каждого платежа и максимальная целая сумма кредита",
+    "ограничение общей суммы выплат за четыре года",
+    "ежемесячные 5% и процент переплаты за шесть месяцев",
+    "10 развёрнутых упражнений Пути А"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t16_credits",
+      "evidenceAnchor": "model",
+      "relation": "touched",
+      "label": "Периодическое начисление процентов по кредиту",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_debt_table",
+      "evidenceAnchor": "example",
+      "relation": "touched",
+      "label": "Таблица изменения остатка долга",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_payment_sum",
+      "evidenceAnchor": "sum",
+      "relation": "touched",
+      "label": "Общая сумма выплат и переплата",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t16_optimal",
+      "evidenceAnchor": "limits",
+      "relation": "touched",
+      "label": "Наибольшая сумма кредита при ограничениях",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t9_units",
+      "evidenceAnchor": "checks",
+      "relation": "touched",
+      "label": "Единицы измерения и строгое неравенство",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "09.11.26.html",
+    "pdf": "../pdf_docs/09.11.26.pdf",
+    "tex": "../tex_docs/09.11.26.tex",
+    "lab": "09.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-06",
   "ktpRefs": [],
   "href": "06.11.26.html",
