@@ -392,6 +392,30 @@ for(const [id,cfg] of Object.entries(LESSON_051126)){
   if(!item.material || !item.material.href) item.material={href:"05.11.26.html#"+cfg.section,label:"Открыть раздел занятия 05.11 →"};
 }
 
+// 09.11.2026: source-grounded topic evidence from the lesson board and checklist.
+// No independent diagnostic evidence; retain all existing mastery levels and storage keys.
+const LESSON_091126 = {
+  "ege11_01": {section:"model",relation:"touched",evidence:"Разобраны формулы пути, скорости и времени, таблица S–v–t и соответствующие единицы измерения."},
+  "ege11_02": {section:"together",relation:"touched",evidence:"Показаны встречное движение и скорость сближения при одновременном выезде с проверкой суммы путей."},
+  "ege11_17": {section:"delay",relation:"touched",evidence:"Составлено уравнение для встречи после задержки второго выезда: разные времена движения."},
+  "ege11_19": {section:"pitfalls",relation:"touched",evidence:"Обсуждены ограничения времени, проверка исходных данных и суммы пройденных расстояний."},
+  "ege11_20": {section:"speed",relation:"touched",evidence:"Показано нахождение неизвестной скорости и контроль единиц измерения ответа."}
+};
+for(const [id,cfg] of Object.entries(LESSON_091126)){
+  const item=G.flatMap(group=>group.items).find(topic=>topic.id===id);
+  if(!item)continue;
+  item.evidence=Array.isArray(item.evidence)?item.evidence:[];
+  item.evidence.push({text:cfg.evidence+" Материал: занятие 09.11.2026 «Встречное движение». Формат: разбор теории, подтверждения самостоятельного освоения нет."});
+  item.relatedMaterials=Array.isArray(item.relatedMaterials)?item.relatedMaterials:[];
+  const href="09.11.26.html#"+cfg.section;
+  if(!item.relatedMaterials.some(material=>material.href===href)){
+    item.relatedMaterials.push({href,label:"Занятие 09.11: "+cfg.evidence});
+  }
+  if(!item.material || !item.material.href){
+    item.material={href,label:"Открыть раздел занятия 09.11 →"};
+  }
+}
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'jaroslav_gavrilov',
