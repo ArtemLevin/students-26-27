@@ -61,14 +61,16 @@ test('reference frequency distribution and variance are consistent', () => {
   assert.ok(Math.abs(squareSum/N-(sum/N)**2-116/121)<1e-12);
 });
 
-test('02.11 lesson remains in the archive after 05.11 publication; evidence stays linked', () => {
+test('02.11 lesson remains in the archive as newer lessons publish; evidence stays linked', () => {
   const registry = read('lesson-registry.js');
-  assert.match(registry, /export const LESSONS=\[\s*\{\s*"date": "2026-11-05"/);
-  const latestPosition = registry.indexOf('"date": "2026-11-05"');
+  assert.match(registry, /export const LESSONS=\[\s*\{\s*"date": "2026-11-09"/);
+  const latestPosition = registry.indexOf('"date": "2026-11-09"');
+  const middlePosition = registry.indexOf('"date": "2026-11-05"');
   const previousPosition = registry.indexOf('"date": "2026-11-02"');
-  assert.ok(previousPosition > latestPosition, '02.11 lesson must remain after the 05.11 lesson');
+  assert.ok(middlePosition > latestPosition && previousPosition > middlePosition, '02.11 and 05.11 lessons must remain after 09.11');
   assert.match(read('index.html'), /dashboard-data-02\.11\.js/);
   assert.match(read('index.html'), /dashboard-data-05\.11\.js/);
-  assert.match(read('dashboard.js'), /lesson-registry\.js\?v=20261105/);
+  assert.match(read('index.html'), /dashboard-data-09\.11\.js/);
+  assert.match(read('dashboard.js'), /lesson-registry\.js\?v=20261109/);
   assert.match(read('dashboard-data-02.11.js'), /02\.11\.26\.html#frequency/);
 });
