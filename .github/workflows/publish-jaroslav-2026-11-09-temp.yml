@@ -1,0 +1,46 @@
+name: Publish Jaroslav 2026-11-09 (temporary)
+on:
+  push:
+    branches:
+      - feat/jaroslav-2026-11-09-meeting-motion
+    paths:
+      - '.github/workflows/publish-jaroslav-2026-11-09-temp.yml'
+      - 'students/jaroslav_gavrilov/site/09.11.26.html'
+      - 'students/jaroslav_gavrilov/site/09.11.26-lab.html'
+      - 'students/jaroslav_gavrilov/site/data/publication-intents/2026-11-09.json'
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/jaroslav-2026-11-09-meeting-motion
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Dry-run canonical Student Platform v2 publisher
+        run: >
+          node scripts/publish-lesson.mjs jaroslav_gavrilov 09.11.26
+          --intent students/jaroslav_gavrilov/site/data/publication-intents/2026-11-09.json
+          --dry-run
+      - name: Publish lesson with canonical transaction
+        run: >
+          node scripts/publish-lesson.mjs jaroslav_gavrilov 09.11.26
+          --intent students/jaroslav_gavrilov/site/data/publication-intents/2026-11-09.json
+      - name: Validate student contracts
+        run: |
+          node scripts/student.mjs validate jaroslav_gavrilov
+          node shared/practice/validate-configs.mjs
+          git diff --check
+      - name: Commit generated canonical metadata and KTP evidence
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/jaroslav_gavrilov/site/data/lessons/2026-11-09.lesson.json students/jaroslav_gavrilov/site/data/ktp-state.json students/jaroslav_gavrilov/site/lesson-registry.js students/jaroslav_gavrilov/site/editorial-dashboard.js
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(jaroslav): publish November 9 lesson via canonical v2 pipeline"
+            git push origin HEAD:feat/jaroslav-2026-11-09-meeting-motion
+          fi
