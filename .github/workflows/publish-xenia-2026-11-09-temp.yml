@@ -1,0 +1,46 @@
+name: Publish Xenia 09 Nov lesson (temporary)
+on:
+  push:
+    branches:
+      - lesson/xenia-2026-11-09-credit
+    paths:
+      - .github/workflows/publish-xenia-2026-11-09-temp.yml
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Dry-run transactional publisher
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/publish-lesson.mjs xenia_klykova 09.11.26 --intent students/xenia_klykova/site/data/publication-intents/2026-11-09.json --dry-run | tee /tmp/xenia-plan.json
+          node -e 'const x=require("/tmp/xenia-plan.json"); if(x.executable===false||x.conflicts?.length)process.exit(1)'
+      - name: Publish using canonical v2 transaction
+        run: node scripts/publish-lesson.mjs xenia_klykova 09.11.26 --intent students/xenia_klykova/site/data/publication-intents/2026-11-09.json
+      - name: Verify student contract and lesson registration
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/student.mjs validate xenia_klykova
+          node students/xenia_klykova/site/tests/dashboard-regression.mjs
+      - name: Commit only transactional publication outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'student-lesson-publisher[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add students/xenia_klykova/site/data/lessons/2026-11-09.lesson.json
+          git add students/xenia_klykova/site/data/ktp-state.json
+          git add students/xenia_klykova/site/lesson-registry.js
+          git add students/xenia_klykova/site/dashboard.js
+          git diff --cached --quiet || git commit -m 'chore(xenia): publish 09 Nov lesson with v2 transaction'
+          git push
