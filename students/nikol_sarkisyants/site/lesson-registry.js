@@ -5,6 +5,67 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-09",
+  "ktpRefs": [],
+  "href": "09.11.26.html",
+  "title": "Стереометрия: три тела",
+  "navTitle": "Стереометрия: три тела",
+  "navSubtitle": "Николь Саркисьянц, 9 ноября 2026: стереометрия — объём и площадь поверхности куба, прямоугольного параллелепипеда и прямой треугольной призмы, диагонали и 10 задач.",
+  "summary": "Николь Саркисьянц, 9 ноября 2026: стереометрия — объём и площадь поверхности куба, прямоугольного параллелепипеда и прямой треугольной призмы, диагонали и 10 задач.",
+  "topics": [
+    "куб",
+    "прямоугольный параллелепипед",
+    "прямая треугольная призма",
+    "объём многогранников",
+    "площадь полной и боковой поверхности",
+    "пространственная диагональ",
+    "масштабирование тел"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t3_cube",
+      "evidenceAnchor": "cube",
+      "relation": "touched",
+      "label": "Куб: объём, площадь и диагонали",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_box",
+      "evidenceAnchor": "box",
+      "relation": "touched",
+      "label": "Прямоугольный параллелепипед: рёбра и пространственная диагональ",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_prism",
+      "evidenceAnchor": "prism",
+      "relation": "touched",
+      "label": "Прямая треугольная призма: площадь основания и объём",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_surface",
+      "evidenceAnchor": "surface",
+      "relation": "touched",
+      "label": "Полная и боковая поверхности прямой призмы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_scale",
+      "evidenceAnchor": "scale",
+      "relation": "touched",
+      "label": "Равномерное масштабирование тел",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "09.11.26.html",
+    "pdf": "../pdf_docs/09.11.26.pdf",
+    "tex": "../tex_docs/09.11.26.tex",
+    "lab": "09.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-05",
   "ktpRefs": [],
   "href": "05.11.26.html",

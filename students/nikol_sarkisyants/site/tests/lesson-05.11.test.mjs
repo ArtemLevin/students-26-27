@@ -17,12 +17,12 @@ const expectation=(values,probabilities)=>sum(values.map((x,i)=>x*probabilities[
 const variance=(values,probabilities)=>expectation(values.map(x=>x*x),probabilities)-expectation(values,probabilities)**2;
 const almost=(actual,expected)=>assert.ok(Math.abs(actual-expected)<1e-10,actual+' differs from '+expected);
 
-test('05.11 lesson is the latest registered publication with valid parity',()=>{
+test('05.11 lesson remains a registered publication with valid parity',()=>{
  const report=validateLessonRegistry(LESSONS);
- assert.equal(report.latest,'05.11.26.html');
- assert.equal(LESSONS[0].date,'2026-11-05');
+ assert.ok(report.latest,'Lesson registry must contain a latest lesson');
  assert.equal(LESSONS.filter(x=>x.date==='2026-11-05').length,1);
- const latest=LESSONS[0];
+ const latest=LESSONS.find(x=>x.date==='2026-11-05');
+ assert.ok(latest,'05.11 lesson must remain registered');
  for(const property of ['title','summary','topics','materials'])assert.deepEqual(latest[property],metadata[property]);
  assert.equal(metadata.date,intent.lessonDate);
  assert.equal(metadata.outcomes.length,practice.outcomes.length);
