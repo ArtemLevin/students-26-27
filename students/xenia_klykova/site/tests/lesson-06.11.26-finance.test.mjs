@@ -16,9 +16,10 @@ const intent=JSON.parse(read('data/publication-intents/2026-11-06.json'));
 const ids=html=>[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
 
 test('06.11.26 publication and navigation are coherent',()=>{
- assert.equal(validateLessonRegistry().latest,'06.11.26.html');
- assert.equal(LESSONS[0].date,'2026-11-06');
- assert.equal(LESSONS[0].materials.html,'06.11.26.html');
+ assert.equal(validateLessonRegistry().latest,LESSONS[0].href);
+ const historical=LESSONS.find(item=>item.date==='2026-11-06');
+ assert.ok(historical,'06 November finance lesson must remain in the archive');
+ assert.equal(historical.materials.html,'06.11.26.html');
  assert.equal(meta.date,'2026-11-06');
  assert.equal(intent.lessonDate,meta.date);
  assert.equal(practice.lessonDate,meta.date);
