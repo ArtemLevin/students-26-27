@@ -26,6 +26,16 @@ jobs:
       - name: Canonical publisher apply
         run: |
           node scripts/publish-lesson.mjs nikol_sarkisyants 09.11.26 --intent students/nikol_sarkisyants/site/data/lesson-publication-intents/2026-11-09.json
+      - name: Refresh dashboard lesson registry import after canonical publication
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const file='students/nikol_sarkisyants/site/dashboard.js';
+          const old=fs.readFileSync(file,'utf8');
+          const updated=old.replace(/(lesson-registry\.js\?v=)\d{8}/,(_,prefix)=>prefix+'20261109');
+          if(!updated.includes('lesson-registry.js?v=20261109'))throw new Error('Lesson registry import missing');
+          fs.writeFileSync(file,updated);
+          NODE
       - name: Verify student contract and math tests
         run: |
           node scripts/student.mjs validate nikol_sarkisyants
