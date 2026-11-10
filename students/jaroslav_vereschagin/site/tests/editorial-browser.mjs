@@ -219,7 +219,7 @@ try{
 
   // 09 November river movement release gate: both pages, learning route and physical simulator.
   const riverOrigin=origin+'/students/jaroslav_vereschagin/site/';
-  async function visitRiver(file,w,h,suffix=''){
+  async function visitRiver(file,w,h,suffix='',forceLight=true){
     errors.length=0;
     await call('Emulation.setDeviceMetricsOverride',{width:w,height:h,deviceScaleFactor:1,mobile:w<=768});
     const url=riverOrigin+file+suffix;
@@ -231,6 +231,7 @@ try{
       await delay(80);
     }
     await delay(70);
+    if(forceLight)await evaluate('(()=>{if(document.documentElement.dataset.theme==="dark")document.getElementById("themeToggle").click()})()');
     const layout=await evaluate('({width:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth})');
     assert.ok(layout.scroll<=layout.width+2,file+' viewport overflow '+w+' '+JSON.stringify(layout));
     assert.deepEqual(errors,[],file+' unhandled browser errors @ '+w);
@@ -269,7 +270,7 @@ try{
   assert.equal(afterPrint.open,true,'Previously opened solution remains open after printing');
   assert.equal(afterPrint.answerOpen,false,'Answer key returns to its previous state after printing');
 
-  await visitRiver('09.11.26-lab.html',390,844,'?mode=t45');
+  await visitRiver('09.11.26-lab.html',390,844,'?mode=t45',false);
   const initialLab=await evaluate('({out:document.getElementById("outTime").textContent,back:document.getElementById("returnTime").textContent,boat:document.getElementById("boatTotal").textContent,total:document.getElementById("allTime").textContent,theme:document.documentElement.dataset.theme})');
   assert.deepEqual(initialLab,{out:'4 ч',back:'6 ч',boat:'10 ч',total:'13 ч',theme:'dark'},'Theme persists from lesson and T4.5 durations match source');
   const raft=await evaluate('(()=>{const t=document.getElementById("timeSlider");t.value=t.max;t.dispatchEvent(new Event("input",{bubbles:true}));return document.getElementById("raftDist").textContent})()');
