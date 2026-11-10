@@ -3,6 +3,81 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-10",
+  "ktpRefs": [],
+  "href": "10.11.26.html",
+  "title": "Пересечение графиков и принадлежность точки",
+  "navTitle": "Пересечение графиков и принадлежность точки",
+  "navSubtitle": "Алгебра, 7 класс. Точка пересечения линейных графиков и принадлежность точки прямой: подробные примеры, алгоритмы, 10 задач и интерактивная лаборатория.",
+  "summary": "Алгебра, 7 класс. Точка пересечения линейных графиков и принадлежность точки прямой: подробные примеры, алгоритмы, 10 задач и интерактивная лаборатория.",
+  "topics": [
+    "абсцисса и ордината точки",
+    "график линейной функции по двум точкам",
+    "точка пересечения двух графиков и равенство значений функций",
+    "нахождение абсциссы и ординаты пересечения",
+    "принадлежность точки графику через подстановку",
+    "типичные ошибки в знаках и координатах",
+    "10 упражнений на закрепление"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "functions_2",
+      "evidenceAnchor": "coordinates",
+      "relation": "touched",
+      "label": "Различать аргумент x и значение функции y",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_3",
+      "evidenceAnchor": "two-points",
+      "relation": "practiced",
+      "label": "Заполнять таблицу значений линейной функции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_4",
+      "evidenceAnchor": "coordinates",
+      "relation": "practiced",
+      "label": "Определять абсциссу и ординату точки",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_5",
+      "evidenceAnchor": "two-points",
+      "relation": "practiced",
+      "label": "Отмечать точки по координатам",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_12",
+      "evidenceAnchor": "two-points",
+      "relation": "practiced",
+      "label": "Строить прямую по двум точкам",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_13",
+      "evidenceAnchor": "intersection",
+      "relation": "practiced",
+      "label": "Находить общую точку двух линейных графиков",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_10",
+      "evidenceAnchor": "membership",
+      "relation": "practiced",
+      "label": "Проверять принадлежность точки линейному графику",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "10.11.26.html",
+    "pdf": "../pdf_docs/10.11.26.pdf",
+    "tex": "../tex_docs/10.11.26.tex",
+    "lab": "10.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-07",
   "ktpRefs": [],
   "href": "07.11.26.html",
