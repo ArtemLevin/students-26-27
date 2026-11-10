@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивная лаборатория: пересечение двух линейных графиков, абсцисса и ордината, принадлежность точки прямой. Алгебра 7 класс.">
+<title>Лаборатория: точка пересечения и принадлежность — Кирилл Зиновьев</title>
+<style>
+:root{color-scheme:light;--bg:#eef3f2;--paper:#fff;--ink:#21363b;--muted:#587278;--line:#c3d5d3;--faint:#e3efec;--accent:#07646b;--blue:#2875a7;--orange:#af5846;--ok:#217d57;--alert:#aa5041;--focus:#1759b3}
+html[data-theme=dark]{color-scheme:dark;--bg:#101d23;--paper:#1b2d33;--ink:#f0f8f7;--muted:#b6cfd3;--line:#48676d;--faint:#294247;--accent:#8adddf;--blue:#8bc5f6;--orange:#eda18a;--ok:#8bd7a5;--alert:#ffa28d;--focus:#a8d5ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.58 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select{font:inherit}button{cursor:pointer}a{color:var(--accent);text-underline-offset:4px}button:focus-visible,input:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.skip{position:absolute;top:-80px;left:12px;background:var(--paper);padding:10px}.skip:focus{top:10px}
+.wrap{width:min(1280px,calc(100% - 32px));margin:auto}.top{padding:17px 0;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line)}.top a{font-weight:750}.top button,.secondary{border:1px solid var(--line);padding:10px 15px;min-height:44px;background:var(--paper);color:var(--ink)}
+.head{padding:43px 0 29px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}.kicker,.mono,.readout-label{font:700 .76rem ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}h1,h2{font-family:Georgia,serif;font-weight:400;letter-spacing:-.035em;line-height:1.16}h1{font-size:clamp(2.3rem,5vw,4.8rem);margin:11px 0 15px;max-width:17ch}h2{font-size:clamp(1.35rem,2.4vw,2rem);margin:0 0 14px}.head p{max-width:63ch;color:var(--muted)}.head-mark{font:normal clamp(2.7rem,6vw,4.5rem) Georgia,serif;color:var(--accent);white-space:nowrap}
+.mode-tabs{display:flex;flex-wrap:wrap;gap:8px;padding:0 0 22px}.mode-tabs button{min-height:44px;padding:9px 17px;border:1px solid var(--line);color:var(--ink);background:var(--paper);font-weight:750}.mode-tabs button[aria-selected=true]{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+.lab{display:grid;grid-template-columns:minmax(235px,315px) minmax(0,1fr);gap:22px;align-items:start}.controls{background:var(--paper);border-top:4px solid var(--accent);padding:24px}.controls h2{margin-bottom:10px}.controls p{color:var(--muted)}.controls label{display:block;font-weight:700;margin:18px 0 5px}.controls input[type=range]{width:100%;accent-color:var(--accent);height:28px}.controls output{display:inline-block;color:var(--accent);font:700 1.12rem ui-monospace,monospace;min-width:54px}.controls button,.primary{border:1px solid var(--accent);min-height:44px;padding:9px 15px;background:var(--accent);color:var(--paper);font-weight:750}.controls .button-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}.controls .secondary{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.view{min-width:0}.screen{background:var(--paper);border:1px solid var(--line);padding:16px;min-width:0}.screen svg{display:block;width:100%;height:auto;aspect-ratio:960/600;max-height:600px;touch-action:pan-y}.screen svg .grid{stroke:var(--faint);stroke-width:1}.screen svg .axis{stroke:var(--ink);stroke-width:2}.screen svg .line1{stroke:var(--blue);stroke-width:3.8;fill:none}.screen svg .line2{stroke:var(--orange);stroke-width:3.8;fill:none}.screen svg .focus-point{fill:var(--accent);stroke:var(--paper);stroke-width:3}.screen svg .candidate{fill:var(--orange);stroke:var(--paper);stroke-width:3}.screen svg .guide{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:6 6}.screen svg text{fill:var(--muted);font-family:ui-monospace,monospace;font-size:16px}.screen svg .axis-label{fill:var(--ink);font-size:20px}.screen svg .point-label{font-size:18px;fill:var(--ink);font-weight:700}
+.legend{display:flex;gap:18px;flex-wrap:wrap;padding:14px 0 7px;color:var(--muted);font-size:.9rem}.key{display:inline-flex;gap:7px;align-items:center}.key:before{content:"";display:inline-block;width:24px;height:3px;background:var(--blue)}.key.two:before{background:var(--orange)}.readouts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:16px}.readout{background:var(--paper);border:1px solid var(--line);padding:16px;min-width:0}.readout-value{font:600 clamp(1.15rem,2.2vw,1.7rem)/1.3 ui-monospace,monospace;word-break:break-word;margin-top:8px}.explanation{margin:17px 0 0;padding:16px 19px;border-left:3px solid var(--accent);background:var(--paper)}.explanation strong{color:var(--accent)}.explanation[data-status=fail]{border-color:var(--alert)}.explanation[data-status=fail] strong{color:var(--alert)}
+.hint{color:var(--muted);font-size:.9rem}.reveal{display:block;max-width:100%;margin-top:14px}.back{display:flex;gap:14px;flex-wrap:wrap;padding:31px 0 41px;font-size:.95rem}.back a{font-weight:700}
+[hidden]{display:none!important}
+@media(max-width:880px){.head{grid-template-columns:1fr}.lab{grid-template-columns:1fr}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}.controls h2,.controls>p,.controls .button-row{grid-column:1/-1}}
+@media(max-width:570px){.head{padding-top:28px}.controls{display:block;padding:18px}.readouts{grid-template-columns:1fr 1fr}.readout:last-child{grid-column:1/-1}.screen{padding:5px}.legend{font-size:.8rem}.mode-tabs button{flex:1}.head-mark{font-size:2.8rem}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@media print{html,body{background:#fff!important;color:#000!important}.top button,.mode-tabs,.controls input,.controls button,.back{display:none!important}.lab{grid-template-columns:1fr}.controls{border:0}.screen{break-inside:avoid}.readout{border:1px solid #bbb}.explanation{border:1px solid #bbb}}
+</style></head>
+<body>
+<a class="skip" href="#work">К эксперименту</a>
+<div class="wrap">
+<header class="top"><a href="10.11.26.html">← Вернуться к занятию</a><span class="mono">Кирилл Зиновьев · 7 класс</span><button id="theme" type="button">Тёмная тема</button></header>
+<div class="head"><div><p class="kicker">Цифровая лаборатория · 10 ноября 2026</p><h1 id="page-title">Две прямые. Одна общая точка.</h1><p>Изменяйте положение контрольной точки на графике и сравнивайте значения двух функций. Затем проверьте, принадлежит ли выбранная точка прямой.</p></div><div class="head-mark" aria-hidden="true">y₁ = y₂</div></div>
+<div class="mode-tabs" role="tablist" aria-label="Режим исследования"><button id="tab-intersection" type="button" role="tab" aria-controls="mode-intersection" aria-selected="true">Пересечение графиков</button><button id="tab-membership" type="button" role="tab" aria-controls="mode-membership" aria-selected="false">Принадлежность точки</button></div>
+<main id="work" class="lab">
+<aside class="controls">
+<section id="mode-intersection" role="tabpanel" aria-labelledby="tab-intersection">
+<h2>Найдите общую точку</h2><p>На графике показаны два примера из пособия. Передвигайте x и наблюдайте значения y₁ и y₂.</p>
+<label for="pair">Пара прямых</label>
+<select id="pair" style="width:100%;min-height:44px;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px"><option value="first">y₁ = 2x + 5; y₂ = −x + 7</option><option value="second">y₁ = x + 1; y₂ = −x + 2</option></select>
+<label for="xpos">Абсцисса x: <output id="xout" for="xpos">0</output></label><input id="xpos" type="range" min="-2" max="3" step="0.05" value="0" aria-describedby="xhint">
+<small id="xhint" class="hint">Переместите маркер. Найдите x, при котором значения функций равны.</small>
+<div class="button-row"><button id="reveal" type="button">Показать точный ответ</button><button id="reset-intersection" class="secondary" type="button">Сбросить</button></div>
+<p class="hint reveal" id="exact" hidden aria-live="polite"></p>
+</section>
+<section id="mode-membership" role="tabpanel" aria-labelledby="tab-membership" hidden>
+<h2>Проверьте точку</h2><p>Прямая y = 2x − 3. Выберите точку из занятия или создайте свою координатами.</p>
+<div class="button-row"><button id="preset-a" type="button">A(0; −3)</button><button id="preset-b" class="secondary" type="button">B(1; 5)</button></div>
+<label for="candidate-x">Абсцисса x: <output id="candidate-xout" for="candidate-x">0</output></label><input id="candidate-x" type="range" min="-4" max="5" step="0.5" value="0">
+<label for="candidate-y">Ордината y: <output id="candidate-yout" for="candidate-y">−3</output></label><input id="candidate-y" type="range" min="-5" max="10" step="0.5" value="-3">
+<p class="hint">Можно выбрать точку прямо на координатной плоскости. Координаты изменятся с шагом 0,5.</p>
+<div class="button-row"><button id="check" type="button">Проверить точку</button><button id="reset-membership" class="secondary" type="button">Сбросить</button></div>
+</section>
+</aside>
+<div class="view"><section class="screen" aria-labelledby="graph-heading"><h2 id="graph-heading">Координатная плоскость</h2>
+<svg id="plot" viewBox="0 0 960 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="graph-title graph-desc">
+<title id="graph-title">Графики линейных функций и выбранные точки</title><desc id="graph-desc">Исследуйте пересечение двух прямых или принадлежность точки одной прямой.</desc>
+<defs><clipPath id="graph-clip"><rect x="62" y="28" width="862" height="524"/></clipPath></defs><g id="grid"></g><g id="axes"></g><g id="draw" clip-path="url(#graph-clip)"></g><g id="points"></g></svg>
+<div class="legend" id="legend"><span class="key" id="legend-one">Первая прямая</span><span class="key two" id="legend-two">Вторая прямая</span></div>
+</section>
+<div class="readouts" aria-live="polite"><div class="readout"><span class="readout-label" id="label-one">y₁</span><div class="readout-value" id="value-one">—</div></div><div class="readout"><span class="readout-label" id="label-two">y₂</span><div class="readout-value" id="value-two">—</div></div><div class="readout"><span class="readout-label" id="label-three">Разница</span><div class="readout-value" id="value-three">—</div></div></div>
+<p class="explanation" id="explanation" role="status" aria-live="polite"></p></div>
+</main>
+<div class="back"><a href="10.11.26.html#intersection">Вернуться к алгоритму пересечения</a><a href="10.11.26.html#membership">Вернуться к проверке принадлежности</a><a href="../pdf_docs/10.11.26.pdf">Открыть чек-лист PDF</a></div>
+</div>
+<script>(function(){'use strict';
+var root=document.documentElement,theme=document.getElementById('theme');function byId(id){return document.getElementById(id)}
+try{var saved=localStorage.getItem('kirill-theme');if(saved==='dark'||saved==='light')root.dataset.theme=saved;}catch(e){}
+function themeLabel(){theme.textContent=root.dataset.theme==='dark'?'Светлая тема':'Тёмная тема';}
+theme.addEventListener('click',function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';themeLabel();try{localStorage.setItem('kirill-theme',root.dataset.theme);}catch(e){}});themeLabel();
+var ns='http://www.w3.org/2000/svg',grid=byId('grid'),axes=byId('axes'),draw=byId('draw'),points=byId('points'),plot=byId('plot');
+var xMin=-5,xMax=8,yMin=-5,yMax=10,L=62,T=28,W=862,H=524;
+function px(x){return L+(x-xMin)*W/(xMax-xMin)}function py(y){return T+H-(y-yMin)*H/(yMax-yMin)}
+function element(type,attrs,parent){var e=document.createElementNS(ns,type);Object.keys(attrs).forEach(function(k){e.setAttribute(k,String(attrs[k]));});(parent||draw).appendChild(e);return e}
+function label(x,y,t,cl,anchor,parent){var n=element('text',{x:x,y:y,'class':cl||'', 'text-anchor':anchor||'start'},parent||axes);n.textContent=t;return n}
+function clean(p){while(p.firstChild)p.removeChild(p.firstChild)}
+function fmt(n){if(!Number.isFinite(n))return '—';if(Math.abs(n)<0.0001)n=0;var s=Number(n.toFixed(2)).toString();return s.replace('.',',').replace('-','−')}
+function drawGrid(){clean(grid);clean(axes);for(var x=Math.ceil(xMin);x<=xMax;x++){element('line',{x1:px(x),y1:T,x2:px(x),y2:T+H,'class':'grid'},grid);if(x!==0)label(px(x),py(0)+19,String(x),'', 'middle',axes);}for(var y=Math.ceil(yMin);y<=yMax;y++){element('line',{x1:L,y1:py(y),x2:L+W,y2:py(y),'class':'grid'},grid);if(y!==0)label(px(0)-10,py(y)+5,String(y),'','end',axes);}element('line',{x1:px(0),y1:T,x2:px(0),y2:T+H,'class':'axis'},axes);element('line',{x1:L,y1:py(0),x2:L+W,y2:py(0),'class':'axis'},axes);label(px(0)-10,py(0)+19,'0','','end',axes);label(L+W-8,py(0)-11,'x','axis-label','end',axes);label(px(0)+12,T+18,'y','axis-label','start',axes);}
+drawGrid();
+var mode='intersection',pair=byId('pair'),xpos=byId('xpos'),candidateX=byId('candidate-x'),candidateY=byId('candidate-y'),checked=false;
+var presets={first:{k1:2,b1:5,k2:-1,b2:7,x:2/3,y:19/3,exact:'T(2/3; 19/3)'},second:{k1:1,b1:1,k2:-1,b2:2,x:.5,y:1.5,exact:'T(0,5; 1,5)'}};
+function line(k,b,cl){element('line',{x1:px(xMin),y1:py(k*xMin+b),x2:px(xMax),y2:py(k*xMax+b),'class':cl},draw)}
+function marker(x,y,cl){element('circle',{cx:px(x),cy:py(y),r:8,'class':cl},points);if(x>=xMin&&x<=xMax&&y>=yMin&&y<=yMax){element('line',{x1:px(x),y1:py(y),x2:px(x),y2:py(0),'class':'guide'},points);element('line',{x1:px(x),y1:py(y),x2:px(0),y2:py(y),'class':'guide'},points);}}
+function output(a,b,c,la,lb,lc,msg,bad){byId('value-one').textContent=a;byId('value-two').textContent=b;byId('value-three').textContent=c;byId('label-one').textContent=la;byId('label-two').textContent=lb;byId('label-three').textContent=lc;byId('explanation').textContent=msg;byId('explanation').dataset.status=bad?'fail':'ok';}
+function drawIntersection(){clean(draw);clean(points);var p=presets[pair.value],x=Number(xpos.value),a=p.k1*x+p.b1,b=p.k2*x+p.b2;line(p.k1,p.b1,'line1');line(p.k2,p.b2,'line2');marker(x,a,'focus-point');marker(x,b,'candidate');byId('xout').textContent=fmt(x);var show=!byId('exact').hidden;if(show){marker(p.x,p.y,'focus-point');label(px(p.x)+12,py(p.y)-16,'T','point-label','start',points);}
+byId('legend-one').textContent='y₁ = '+fmt(p.k1)+'x '+(p.b1>=0?'+ ':'− ')+fmt(Math.abs(p.b1));byId('legend-two').textContent='y₂ = '+(p.k2<0?'−':'')+(Math.abs(p.k2)===1?'':fmt(Math.abs(p.k2)))+'x + '+fmt(p.b2);
+output(fmt(a),fmt(b),fmt(Math.abs(a-b)),'y₁ при x='+fmt(x),'y₂ при x='+fmt(x),'|y₁ − y₂|',Math.abs(a-b)<.075?'Значения почти совпали. Точная точка пересечения: '+p.exact+'.':'Перемещайте x, наблюдайте разницу между y₁ и y₂. Когда значения равны, найдена общая точка.',false);
+byId('exact').textContent='Точное решение: '+p.exact+'. Равенство формул даёт абсциссу, подстановка даёт ординату.';
+byId('graph-desc').textContent='Две прямые и два маркера при x='+fmt(x)+'. Значения y равны '+fmt(a)+' и '+fmt(b)+'.';
+plot.setAttribute('aria-label','Пересечение: '+byId('legend-one').textContent+', '+byId('legend-two').textContent+'. При x='+fmt(x)+' значения '+fmt(a)+' и '+fmt(b)+'.');}
+function drawMembership(){clean(draw);clean(points);var x=Number(candidateX.value),y=Number(candidateY.value),calc=2*x-3,belongs=Math.abs(y-calc)<1e-9;line(2,-3,'line1');marker(x,y,'candidate');byId('candidate-xout').textContent=fmt(x);byId('candidate-yout').textContent=fmt(y);
+byId('legend-one').textContent='y = 2x − 3';byId('legend-two').textContent='Выбранная точка';output(fmt(x),fmt(y),fmt(calc),'Абсцисса','Ордината точки','2x − 3',checked?(belongs?'Значения совпали: точка принадлежит прямой.':'Значения различаются: точка расположена вне прямой.'):'Подставьте x точки в y = 2x − 3. Затем сравните расчёт с её ординатой.',checked&&!belongs);
+byId('graph-desc').textContent='Прямая y=2x−3 и точка ('+fmt(x)+'; '+fmt(y)+').';plot.setAttribute('aria-label',byId('graph-desc').textContent);}
+function render(){byId('legend-two').style.display=mode==='membership'?'inline-flex':'inline-flex';if(mode==='intersection')drawIntersection();else drawMembership();}
+function switchMode(value,updateHistory){mode=value==='membership'?'membership':'intersection';byId('mode-intersection').hidden=mode!=='intersection';byId('mode-membership').hidden=mode!=='membership';byId('tab-intersection').setAttribute('aria-selected',String(mode==='intersection'));byId('tab-membership').setAttribute('aria-selected',String(mode==='membership'));byId('page-title').textContent=mode==='intersection'?'Две прямые. Одна общая точка.':'Принадлежит ли точка прямой?';checked=false;render();if(updateHistory){var url=new URL(location.href);url.searchParams.set('mode',mode);history.replaceState(null,'',url.pathname+url.search+url.hash);}}
+byId('tab-intersection').addEventListener('click',function(){switchMode('intersection',true)});byId('tab-membership').addEventListener('click',function(){switchMode('membership',true)});
+byId('pair').addEventListener('change',function(){byId('exact').hidden=true;var p=presets[pair.value];xpos.value=String(Math.round(p.x*20)/20);render();});
+xpos.addEventListener('input',function(){render()});
+byId('reveal').addEventListener('click',function(){byId('exact').hidden=false;render()});
+byId('reset-intersection').addEventListener('click',function(){pair.value='first';xpos.value='0';byId('exact').hidden=true;render()});
+function membershipUpdate(){checked=false;render()}
+candidateX.addEventListener('input',membershipUpdate);candidateY.addEventListener('input',membershipUpdate);
+byId('preset-a').addEventListener('click',function(){candidateX.value='0';candidateY.value='-3';checked=true;render()});
+byId('preset-b').addEventListener('click',function(){candidateX.value='1';candidateY.value='5';checked=true;render()});
+byId('check').addEventListener('click',function(){checked=true;render()});
+byId('reset-membership').addEventListener('click',function(){candidateX.value='0';candidateY.value='-3';checked=false;render()});
+plot.addEventListener('click',function(e){if(mode!=='membership')return;var b=plot.getBoundingClientRect();var sx=(e.clientX-b.left)/b.width*960,sy=(e.clientY-b.top)/b.height*600;if(sx<L||sx>L+W||sy<T||sy>T+H)return;var x=Math.round((xMin+(sx-L)/W*(xMax-xMin))*2)/2;var y=Math.round((yMax-(sy-T)/H*(yMax-yMin))*2)/2;candidateX.value=String(Math.max(-4,Math.min(5,x)));candidateY.value=String(Math.max(-5,Math.min(10,y)));checked=false;render()});
+window.addEventListener('popstate',function(){var m=new URLSearchParams(location.search).get('mode');switchMode(m==='membership'?'membership':'intersection',false)});
+switchMode(new URLSearchParams(location.search).get('mode')==='membership'?'membership':'intersection',false);
+})();</script>
+</body></html>
