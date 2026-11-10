@@ -161,6 +161,22 @@ try{
   }
   assert.deepEqual(newest,{title:latest.title,href:latest.href});
   await shot('cabinet-newest');
+  let mapLoaded=false;
+  for(let attempt=0;attempt<55;attempt++){
+    mapLoaded=await run('!!document.querySelector("#radialMap .radial-cell[data-id=t3_cube]")');
+    if(mapLoaded)break;
+    await sleep(100);
+  }
+  assert.ok(mapLoaded,'Competency map must load the stereometry catalog');
+  const mapEvidence=await run('(()=>{const before=localStorage.getItem("nikol-competence-state-v2");const cell=document.querySelector("#radialMap .radial-cell[data-id=t3_cube]");cell.focus();cell.click();const dialog=document.getElementById("competencyDialog");return {open:dialog.open,body:document.getElementById("dialogEvidence").textContent,url:document.getElementById("dialogLink").getAttribute("href"),linkLabel:document.getElementById("dialogLink").textContent,level:document.querySelector("#levelPicker .level-btn[aria-pressed=true]")?.dataset.level,before,after:localStorage.getItem("nikol-competence-state-v2")}})()');
+  assert.equal(mapEvidence.open,true,'Competency detail should open from keyboard-focusable SVG');
+  assert.match(mapEvidence.body,/09\\.11/,'Evidence must refer to the actual lesson date');
+  assert.equal(mapEvidence.url,'09.11.26.html#cube');
+  assert.match(mapEvidence.linkLabel,/материал по теме/i,'Evidence link must avoid claiming independent mastery');
+  assert.equal(mapEvidence.after,mapEvidence.before,'Opening an evidence note must not modify competency levels');
+  await run('document.getElementById("closeDialog").click()');
+  await sleep(60);
+  assert.equal(await run('document.getElementById("competencyDialog").open'),false,'Closing the detail restores normal navigation');
   await navigate('09.11.26.html',1366,900,true);
   assert.equal(await run('(()=>{const a=document.querySelector("a.skip");a.focus();return document.activeElement===a&&a.getAttribute("href")==="#main"})()'),true,'Keyboard skip-link should be focusable');
   await call('Emulation.setEmulatedMedia',{media:'print'});
