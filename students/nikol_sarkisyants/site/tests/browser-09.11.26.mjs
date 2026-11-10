@@ -109,8 +109,14 @@ try{
   await navigate('09.11.26-lab.html#box',1366,900);
   let metrics=await run('({selected:document.querySelector("[data-shape=box]").getAttribute("aria-pressed"),V:document.getElementById("volume").textContent,S:document.getElementById("surface").textContent,d:document.getElementById("diagonal").textContent})');
   assert.deepEqual(metrics,{selected:'true',V:'36',S:'72',d:'7'});
+  const boxAnnotation=await run('(()=>{const front=document.querySelector("#solid-drawing polygon");const coords=front.getAttribute("points").trim().split(/\\s+/).map(p=>Number(p.split(",")[0]));const label=[...document.querySelectorAll("#solid-drawing text")].find(t=>t.textContent.startsWith("b ="));return {frontMaxX:Math.max(...coords),labelX:Number(label.getAttribute("x"))};})()');
+  assert.ok(boxAnnotation.labelX>boxAnnotation.frontMaxX,'Box depth label belongs to an edge outside the front face');
+  await shot('box-1366-edges');
   metrics=await run('(()=>{document.querySelector("[data-shape=prism]").click();return {V:document.getElementById("volume").textContent,S:document.getElementById("surface").textContent,base:document.getElementById("diagonal").textContent}})()');
   assert.deepEqual(metrics,{V:'60',S:'132',base:'6'});
+  const prismAnnotation=await run('(()=>{const front=document.querySelector("#solid-drawing polygon");const coords=front.getAttribute("points").trim().split(/\\s+/).map(p=>Number(p.split(",")[0]));const label=[...document.querySelectorAll("#solid-drawing text")].find(t=>t.textContent.startsWith("b ="));return {frontMinX:Math.min(...coords),labelX:Number(label.getAttribute("x"))};})()');
+  assert.ok(prismAnnotation.labelX<prismAnnotation.frontMinX,'Triangle leg label belongs to the depth cathetus rather than the front face');
+  await shot('prism-1366-edges');
   metrics=await run('(()=>{document.querySelector("[data-shape=cube]").click();const scale=document.getElementById("scale");scale.value="2";scale.dispatchEvent(new Event("input",{bubbles:true}));return {V:document.getElementById("volume").textContent,S:document.getElementById("surface").textContent,Vratio:document.getElementById("volume-ratio").textContent,Sratio:document.getElementById("area-ratio").textContent}})()');
   assert.deepEqual(metrics,{V:'512',S:'384',Vratio:'×8',Sratio:'×4'});
   const reflected=await run('({raw:document.getElementById("a").value,shown:document.getElementById("a-value").textContent,computed:document.getElementById("dims").textContent})');
@@ -126,6 +132,7 @@ try{
   assert.equal(answer.V,'64');assert.match(answer.feedback,/Верно/);
   await navigate('09.11.26-lab.html#prism',375,812,true);
   assert.equal(await run('document.querySelector("[data-shape=prism]").getAttribute("aria-pressed")'),'true');
+  await shot('prism-375-dark-edges');
   assert.equal(await run('document.activeElement===document.getElementById("model")'),true,'Mode deep links should focus the model');
   assert.equal(await run('window.scrollY>0'),true,'Mode deep links should land near the controls');
   const extremes=await run('(()=>{for(const id of ["a","b","h"]){const slider=document.getElementById(id);slider.value=slider.min;slider.dispatchEvent(new Event("input",{bubbles:true}));}const scale=document.getElementById("scale");scale.value="3";scale.dispatchEvent(new Event("input",{bubbles:true}));const min={volume:document.getElementById("volume").textContent,bbox:(()=>{const box=document.getElementById("solid-drawing").getBBox();return {x:box.x,y:box.y,width:box.width,height:box.height};})()};for(const id of ["a","b","h"]){const slider=document.getElementById(id);slider.value=slider.max;slider.dispatchEvent(new Event("input",{bubbles:true}));}const max={volume:document.getElementById("volume").textContent,bbox:(()=>{const box=document.getElementById("solid-drawing").getBBox();return {x:box.x,y:box.y,width:box.width,height:box.height};})()};return {min,max};})()');
