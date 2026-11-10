@@ -56,6 +56,15 @@ html[data-theme=dark]{color-scheme:dark;--bg:#132629;--paper:#203739;--ink:#eef5
  var root=document.documentElement;
  try{root.dataset.theme=(localStorage.getItem('xenia-dashboard-theme-v1')||localStorage.getItem('xenia-color-theme'))==='dark'?'dark':'light'}catch(e){}
  document.getElementById('themeToggle').addEventListener('click',function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('xenia-dashboard-theme-v1',root.dataset.theme);localStorage.setItem('xenia-color-theme',root.dataset.theme)}catch(e){}});
+ var temporarilyOpenedForPrint=[];
+ window.addEventListener('beforeprint',function(){
+   temporarilyOpenedForPrint=[...document.querySelectorAll('.task details:not([open])')];
+   temporarilyOpenedForPrint.forEach(function(node){node.open=true});
+ });
+ window.addEventListener('afterprint',function(){
+   temporarilyOpenedForPrint.forEach(function(node){node.open=false});
+   temporarilyOpenedForPrint=[];
+ });
  var years=[{from:750,interest:90,pay:240,to:600,year:2032},{from:600,interest:72,pay:192,to:480,year:2033},{from:480,interest:57.6,pay:537.6,to:0,year:2034}],index=0;
  function fmt(n){return String(n).replace('.',',')}
  function update(){var d=years[index];document.getElementById('stepCount').textContent='Период '+(index+1)+' из 3';document.getElementById('stepTitle').textContent='Июль '+(d.year-1)+' → июль '+d.year;document.getElementById('stepExplain').textContent=fmt(d.from)+' + '+fmt(d.interest)+' − '+fmt(d.pay)+' = '+fmt(d.to)+' тыс. руб.';document.getElementById('stepBalance').textContent='Остаток после выплаты: '+fmt(d.to)+' тыс. руб.';document.getElementById('stepMeter').style.width=(100*d.to/750)+'%';document.getElementById('stepPrev').disabled=index===0;document.getElementById('stepNext').disabled=index===2}
