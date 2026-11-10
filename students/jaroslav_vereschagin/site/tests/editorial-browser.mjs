@@ -216,7 +216,85 @@ try{
 
     assert.deepEqual(errors,[],file+' JS errors after interactions');
   }
-  console.log('Jaroslav QA passed: dashboard, archive, 23 October lesson and interactive laboratory');
+
+  // 09 November river movement release gate: both pages, learning route and physical simulator.
+  const riverOrigin=origin+'/students/jaroslav_vereschagin/site/';
+  async function visitRiver(file,w,h,suffix='',forceLight=true){
+    errors.length=0;
+    await call('Emulation.setDeviceMetricsOverride',{width:w,height:h,deviceScaleFactor:1,mobile:w<=768});
+    const url=riverOrigin+file+suffix;
+    await call('Page.navigate',{url});
+    for(let n=0;n<120;n++){
+      const ready=await evaluate('({ready:document.readyState,url:location.href})');
+      if(ready.url===url&&ready.ready==='complete')break;
+      if(n===119)throw Error('River page did not load: '+file+' @ '+w);
+      await delay(80);
+    }
+    await delay(70);
+    if(forceLight)await evaluate('(()=>{if(document.documentElement.dataset.theme==="dark")document.getElementById("themeToggle").click()})()');
+    const layout=await evaluate('({width:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth})');
+    assert.ok(layout.scroll<=layout.width+2,file+' viewport overflow '+w+' '+JSON.stringify(layout));
+    assert.deepEqual(errors,[],file+' unhandled browser errors @ '+w);
+  }
+  for(const [width,height] of [[375,812],[390,844],[768,1024],[1024,768],[1366,768],[1440,900],[1920,1080]]){
+    await visitRiver('09.11.26.html',width,height);
+    const lesson=await evaluate('({tasks:document.querySelectorAll("#taskList>li").length,examples:document.querySelectorAll(".case").length,solutions:document.querySelectorAll(".solution").length,math:document.querySelectorAll("math").length,links:[...document.querySelectorAll(".case-lab")].map(a=>a.getAttribute("href"))})');
+    assert.equal(lesson.tasks,10,'10 exact Path A exercises');
+    assert.equal(lesson.examples,4,'4 worked cases from the handbook');
+    assert.equal(lesson.solutions,4,'4 accessible progressive disclosures');
+    assert.ok(lesson.math>=7,'MathML formulas are present');
+    assert.deepEqual(lesson.links,["09.11.26-lab.html?mode=t42","09.11.26-lab.html?mode=t43","09.11.26-lab.html?mode=t44","09.11.26-lab.html?mode=t45"]);
+    if(width===390||width===1440)await screen('09.11.26-lesson-'+width+'-light');
+    await visitRiver('09.11.26-lab.html',width,height,'?mode=t42');
+    const t42=await evaluate('({first:document.getElementById("outLabel").textContent,back:document.getElementById("returnLabel").textContent,t1:document.getElementById("outTime").textContent,t2:document.getElementById("returnTime").textContent,total:document.getElementById("boatTotal").textContent,disabled:document.getElementById("showRaft").disabled})');
+    assert.match(t42.first,/против течения/,'T4.2 must start upstream');
+    assert.match(t42.back,/по течению/,'T4.2 return downstream');
+    assert.equal(t42.t1,'6 ч');assert.equal(t42.t2,'3 ч');assert.equal(t42.total,'9 ч');
+    assert.ok(t42.disabled,'raft moving outside the upstream segment must not be drawn');
+    const flow=await evaluate('({text:document.getElementById("flowCaption").textContent,visible:getComputedStyle(document.getElementById("flowCaption")).display,letter:getComputedStyle(document.querySelector(".river>text:not(#flowLabel)")).fontSize})');
+    assert.match(flow.text,/течение направлено к A/i,'Current direction follows source scenario');
+    if(width<=650){assert.equal(flow.visible,'block','Mobile model has a readable current-direction caption');assert.ok(parseFloat(flow.letter)>=26,'A/B labels are enlarged on mobile SVG');}
+    if(width<=650){const axis=await evaluate('({visible:getComputedStyle(document.querySelector(".chart-axis-data")).display,max:document.getElementById("distanceReadout").textContent,end:document.getElementById("endReadout").textContent,cols:getComputedStyle(document.querySelector(".player")).gridTemplateColumns})');assert.equal(axis.visible,'flex');assert.equal(axis.max,'24 км');assert.equal(axis.end,'9 ч');assert.equal(axis.cols.split(' ').length,2);}
+    if(width===390||width===1440)await screen('09.11.26-lab-'+width+'-t42');
+    if(width===390){await evaluate('document.getElementById("riverSvg").scrollIntoView({block:"center",behavior:"auto"})');await delay(50);await screen('09.11.26-lab-390-route-detail');await evaluate('document.getElementById("chartSvg").scrollIntoView({block:"center",behavior:"auto"})');await delay(50);await screen('09.11.26-lab-390-chart-detail');}
+    assert.deepEqual(errors,[],'No simulator errors after t42 initialization');
+  }
+  await visitRiver('09.11.26.html',390,844);
+  const lessonInteraction=await evaluate('(()=>{document.querySelector(".solution summary").click();const opened=document.querySelector(".solution").open;const b=document.querySelector("#taskList input");b.checked=true;b.dispatchEvent(new Event("change",{bubbles:true}));document.querySelector(".q .opts button:nth-child(2)").click();return {opened,progress:document.getElementById("taskProgress").textContent,feedback:document.querySelector(".feedback").textContent}})()');
+  assert.equal(lessonInteraction.opened,true);
+  assert.match(lessonInteraction.progress,/1 из 10/);
+  assert.match(lessonInteraction.feedback,/Верно/);
+  const resources=await evaluate('(async()=>{const urls=["../pdf_docs/09.11.26.pdf","../tex_docs/09.11.26.tex","09.11.26-lab.html?mode=t42"];return Promise.all(urls.map(async href=>({href,status:(await fetch(href)).status})))})()');
+  assert.ok(resources.every(x=>x.status===200),'PDF, TeX and laboratory links must load: '+JSON.stringify(resources));
+  const darkLesson=await evaluate('(()=>{document.getElementById("themeToggle").click();return {theme:document.documentElement.dataset.theme,bg:getComputedStyle(document.body).backgroundColor}})()');
+  assert.equal(darkLesson.theme,'dark');
+  await screen('09.11.26-lesson-390-dark');
+  const printed=await call('Page.printToPDF',{printBackground:true});
+  assert.ok(printed.data.length>1500,'09 November lesson print preview');
+  const afterPrint=await evaluate('({open:document.querySelector(".solution").open,answerOpen:document.getElementById("answers").open})');
+  assert.equal(afterPrint.open,true,'Previously opened solution remains open after printing');
+  assert.equal(afterPrint.answerOpen,false,'Answer key returns to its previous state after printing');
+
+  await visitRiver('09.11.26-lab.html',390,844,'?mode=t45',false);
+  const initialLab=await evaluate('({out:document.getElementById("outTime").textContent,back:document.getElementById("returnTime").textContent,boat:document.getElementById("boatTotal").textContent,total:document.getElementById("allTime").textContent,theme:document.documentElement.dataset.theme})');
+  assert.deepEqual(initialLab,{out:'4 ч',back:'6 ч',boat:'10 ч',total:'13 ч',theme:'dark'},'Theme persists from lesson and T4.5 durations match source');
+  const raft=await evaluate('(()=>{const t=document.getElementById("timeSlider");t.value=t.max;t.dispatchEvent(new Event("input",{bubbles:true}));return document.getElementById("raftDist").textContent})()');
+  assert.equal(raft,'39 км','raft moves exactly 39 km during T4.5');
+  for(const [mode,total,first,back] of [['t43','12 ч','4 ч','5 ч'],['t44','11 ч','3 ч','4 ч'],['t45','10 ч','4 ч','6 ч']]){
+    const actual=await evaluate('(()=>{const p=document.getElementById("preset");p.value="'+mode+'";p.dispatchEvent(new Event("change",{bubbles:true}));return {boat:document.getElementById("boatTotal").textContent,out:document.getElementById("outTime").textContent,back:document.getElementById("returnTime").textContent}})()');
+    assert.deepEqual(actual,{boat:total,out:first,back},mode+' speed-time consistency');
+  }
+  const limit=await evaluate('(()=>{const x=document.getElementById("x"),u=document.getElementById("u");x.value="4";x.dispatchEvent(new Event("input",{bubbles:true}));u.value="8";u.dispatchEvent(new Event("input",{bubbles:true}));return {x:x.value,u:u.value,notice:document.getElementById("limitNote").textContent,boat:document.getElementById("boatTotal").textContent}})()');
+  assert.ok(Number(limit.x)>Number(limit.u),'Physical constraint x > u');
+  assert.match(limit.notice,/ограничена/);
+  assert.doesNotMatch(limit.boat,/NaN|Infinity/);
+  await evaluate('document.getElementById("themeToggle").click()');
+  await screen('09.11.26-lab-390-light');
+  const labPrint=await call('Page.printToPDF',{printBackground:true});
+  assert.ok(labPrint.data.length>1500,'09 November lab print preview');
+  assert.deepEqual(errors,[],'No browser exceptions during interactive river scenarios');
+
+  console.log('Jaroslav QA passed: dashboard, archive, 23 October and 09 November lessons with their interactive laboratories');
 
 }finally{
   try{ws?.close()}catch(_){}
