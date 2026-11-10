@@ -1,0 +1,38 @@
+name: Kirill 10 November lesson browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'students/kirill_zinoviev/site/10.11.26.html'
+      - 'students/kirill_zinoviev/site/10.11.26-lab.html'
+      - 'students/kirill_zinoviev/site/tests/lesson-2026-11-10.browser.mjs'
+      - '.github/workflows/kirill-2026-11-10-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser-qa:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright browser
+        run: |
+          mkdir -p /tmp/kirill-10-playwright
+          npm install --prefix /tmp/kirill-10-playwright --no-audit --no-fund playwright@1.56.1
+          /tmp/kirill-10-playwright/node_modules/.bin/playwright install chromium
+      - name: Browser release gate
+        env:
+          PLAYWRIGHT_MODULE: /tmp/kirill-10-playwright/node_modules/playwright/index.mjs
+          QA_OUT: /tmp/kirill-10-qa
+        run: node students/kirill_zinoviev/site/tests/lesson-2026-11-10.browser.mjs
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kirill-10-nov-screenshots
+          path: /tmp/kirill-10-qa/*.png
+          if-no-files-found: ignore
