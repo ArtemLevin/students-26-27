@@ -1,0 +1,44 @@
+name: One-time Anastasia 09 November lesson publication
+on:
+  push:
+    branches:
+      - feat/nastya-2026-11-09-credit-lesson
+    paths:
+      - .github/workflows/nastya-2026-11-09-publish.yml
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/nastya-2026-11-09-credit-lesson
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate publication intent before writing
+        run: |
+          node scripts/publish-lesson.mjs nastya_pavlova 09.11.26 --intent students/nastya_pavlova/site/data/publication-intents/2026-11-09.json --dry-run
+      - name: Execute the transactional v2 publisher
+        run: |
+          node scripts/publish-lesson.mjs nastya_pavlova 09.11.26 --intent students/nastya_pavlova/site/data/publication-intents/2026-11-09.json
+      - name: Validate the published student's state
+        run: |
+          node scripts/student.mjs validate nastya_pavlova
+          node scripts/student.mjs audit
+          node shared/practice/validate-configs.mjs
+          node shared/practice/audit-lesson-coverage.mjs
+      - name: Commit publisher-generated artifacts to review branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A -- students/nastya_pavlova/site
+          git diff --cached --check
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish Nastya 09 November lesson via transactional Student Platform v2"
+            git push origin HEAD:feat/nastya-2026-11-09-credit-lesson
+          fi
