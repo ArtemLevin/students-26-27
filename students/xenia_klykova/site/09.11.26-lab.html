@@ -19,24 +19,24 @@ html[data-theme=dark]{color-scheme:dark;--bg:#14272a;--paper:#213a3d;--ink:#e9f3
 <option value="limits">Кредит 8 млн руб. · 20% · лимит платежа</option>
 <option value="total">Кредит 36 или 37 млн руб. · 15% · лимит общей суммы</option>
 <option value="months">Полугодовой кредит · 5% в месяц</option>
-</select><p class="caption" id="scenarioDesc">Остаток долга по июльским датам: 750 → 600 → 480 → 0 тыс. руб.</p>
+</select><p class="caption" id="scenarioDesc" aria-live="polite">Остаток долга по июльским датам: 750 → 600 → 480 → 0 тыс. руб.</p>
 <div id="amountVariant" hidden><label for="amountSelect">Первоначальная сумма</label><select id="amountSelect"><option value="36">36 млн руб.</option><option value="37">37 млн руб.</option></select></div></div></section>
 <div class="workspace">
 <section class="panel" id="schedule"><p class="overline" id="periodLabel">Период 1 из 3</p><h2>Один период по шагам</h2><div class="range-row"><label for="period">Период</label><input type="range" id="period" min="1" max="3" value="1" step="1"><output id="periodOut" for="period">1</output></div><div class="step-controls"><button type="button" id="prev">Предыдущий</button><button type="button" id="next">Следующий</button><button type="button" id="reset">С начала</button></div>
 <div class="barrow"><div class="barhead"><span>Долг перед начислением</span><strong id="startValue">750</strong></div><div class="track before"><span id="startBar"></span></div></div>
 <div class="barrow"><div class="barhead"><span>Долг после начисления процентов</span><strong id="addedValue">840</strong></div><div class="track after"><span id="addedBar"></span></div></div>
 <div class="barrow"><div class="barhead"><span>Долг после платежа</span><strong id="endValue">600</strong></div><div class="track remain"><span id="endBar"></span></div></div>
-<p class="caption" id="unitHint">Все суммы в тысячах рублей</p><div class="formula" id="equation" role="math" aria-live="polite">750 + 90 − 240 = 600</div><p id="note" class="caption">Проценты 90 тыс. руб. начислены на 750 тыс. руб.</p></section>
-<aside class="panel"><p class="overline">Расчёт периода</p><h2>Связанные величины</h2><div class="stat"><small>Начисленные проценты</small><strong id="interestValue">90</strong></div><div class="stat"><small>Внесённый платёж</small><strong id="paymentValue">240</strong></div><div class="stat"><small>Сумма всех платежей</small><strong id="totalValue">969,6</strong></div><div class="stat"><small>Переплата относительно кредита</small><strong id="overValue">29,28%</strong></div><div class="predict" id="limits"><p class="overline">Предскажите результат</p><p id="challenge">Почему второй платёж может отличаться от первого, хотя процентная ставка та же?</p><button id="reveal" type="button" aria-expanded="false" aria-controls="answerBox">Показать объяснение</button><p id="answerBox" class="answer" hidden>Проценты каждый раз рассчитываются от другого остатка долга.</p></div></aside>
+<p class="caption" id="unitHint">Все суммы в тысячах рублей</p><div class="formula" id="equation" aria-live="polite" aria-atomic="true" role="status">750 + 90 − 240 = 600</div><p id="note" class="caption">Проценты 90 тыс. руб. начислены на 750 тыс. руб.</p></section>
+<aside class="panel"><p class="overline">Расчёт периода</p><h2>Связанные величины</h2><div class="stat"><small>Начисленные проценты</small><strong id="interestValue">90</strong></div><div class="stat"><small>Внесённый платёж</small><strong id="paymentValue">240</strong></div><div class="stat"><small>Сумма всех платежей</small><strong id="totalValue">969,6</strong></div><div class="stat"><small>Переплата относительно кредита</small><strong id="overValue">29,28%</strong></div><div class="predict" id="limit-explanation"><p class="overline">Предскажите результат</p><p id="challenge">Почему второй платёж может отличаться от первого, хотя процентная ставка та же?</p><button id="reveal" type="button" aria-expanded="false" aria-controls="answerBox">Показать объяснение</button><p id="answerBox" class="answer" hidden>Проценты каждый раз рассчитываются от другого остатка долга.</p></div></aside>
 </div>
-<section class="panel" style="margin-top:28px" id="total"><p class="overline">Все периоды</p><h2>Таблица для самопроверки</h2><p class="caption">Выбранная строка подсвечена. Сравните платежи между собой и проверьте, что сумма платежей равна исходному кредиту плюс все начисленные проценты.</p><div class="tablewrap"><table><thead><tr><th>Период</th><th>Исходный долг</th><th>Проценты</th><th>Платёж</th><th>Остаток</th></tr></thead><tbody id="history"></tbody></table></div></section>
+<section class="panel" style="margin-top:28px" id="all-periods"><p class="overline">Все периоды</p><h2>Таблица для самопроверки</h2><p class="caption">Выбранная строка подсвечена. Сравните платежи между собой и проверьте, что сумма платежей равна исходному кредиту плюс все начисленные проценты.</p><div class="tablewrap"><table><thead><tr><th>Период</th><th>Исходный долг</th><th>Проценты</th><th>Платёж</th><th>Остаток</th></tr></thead><tbody id="history"></tbody></table></div></section>
 </main><footer class="wrap footer">Лёвин Артём Александрович эксклюзивно для Ксении Клыковой · 09.11.2026</footer>
 <script>
 (function(){
 'use strict';
 var root=document.documentElement;
-try{root.dataset.theme=localStorage.getItem('xenia-color-theme')==='dark'?'dark':'light'}catch(e){}
-document.getElementById('themeToggle').addEventListener('click',function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('xenia-color-theme',root.dataset.theme)}catch(e){}});
+try{root.dataset.theme=(localStorage.getItem('xenia-dashboard-theme-v1')||localStorage.getItem('xenia-color-theme'))==='dark'?'dark':'light'}catch(e){}
+document.getElementById('themeToggle').addEventListener('click',function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('xenia-dashboard-theme-v1',root.dataset.theme);localStorage.setItem('xenia-color-theme',root.dataset.theme)}catch(e){}});
 var config={
  schedule:{title:'Кредит 750 тыс. руб.',amount:750,rate:.12,balances:[750,600,480,0],unit:'тыс. руб.',description:'Июльские остатки: 750 → 600 → 480 → 0 тыс. руб.',challenge:'Почему во втором году сумма процентов меньше, чем в первом?',explain:'Сумма долга уменьшилась с 750 до 600 тысяч рублей, поэтому 12% начисляются уже на 600 тысяч.'},
  limits:{title:'Кредит 8 млн руб.',amount:8,rate:.2,balances:[8,6.4,3.2,0],unit:'млн руб.',description:'Проценты 20%, остатки: 8 → 6,4 → 3,2 → 0 млн руб. Каждый платёж должен быть меньше 5 млн.',challenge:'Укладываются ли все три платежа в строгий лимит 5 млн рублей?',explain:'Да. Платежи: 3,2; 4,48 и 3,84 млн руб. Второй платёж больше остальных, но также строго меньше 5.'},
@@ -68,7 +68,7 @@ scenario.addEventListener('change',function(){history.replaceState(null,'','#'+s
 period.addEventListener('input',render);document.getElementById('prev').addEventListener('click',function(){period.value=Math.max(1,+period.value-1);render()});document.getElementById('next').addEventListener('click',function(){period.value=Math.min(+period.max,+period.value+1);render()});document.getElementById('reset').addEventListener('click',function(){period.value=1;render()});
 reveal.addEventListener('click',function(){answer.hidden=!answer.hidden;reveal.setAttribute('aria-expanded',String(!answer.hidden));reveal.textContent=answer.hidden?'Показать объяснение':'Скрыть объяснение'});
 var hash=location.hash.slice(1);if(Object.prototype.hasOwnProperty.call(config,hash))scenario.value=hash;
-if(hash==='limits')scenario.value='limits';if(hash==='total')scenario.value='total';if(hash==='schedule')scenario.value='schedule';
+
 window.addEventListener('hashchange',function(){var target=location.hash.slice(1);if(Object.prototype.hasOwnProperty.call(config,target)){scenario.value=target;chosen()}});
 chosen();
 })();
