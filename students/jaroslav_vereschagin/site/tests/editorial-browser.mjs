@@ -254,6 +254,7 @@ try{
     const flow=await evaluate('({text:document.getElementById("flowCaption").textContent,visible:getComputedStyle(document.getElementById("flowCaption")).display,letter:getComputedStyle(document.querySelector(".river>text:not(#flowLabel)")).fontSize})');
     assert.match(flow.text,/течение направлено к A/i,'Current direction follows source scenario');
     if(width<=650){assert.equal(flow.visible,'block','Mobile model has a readable current-direction caption');assert.ok(parseFloat(flow.letter)>=26,'A/B labels are enlarged on mobile SVG');}
+    if(width<=650){const axis=await evaluate('({visible:getComputedStyle(document.querySelector(".chart-axis-data")).display,max:document.getElementById("distanceReadout").textContent,end:document.getElementById("endReadout").textContent,cols:getComputedStyle(document.querySelector(".player")).gridTemplateColumns})');assert.equal(axis.visible,'flex');assert.equal(axis.max,'24 км');assert.equal(axis.end,'9 ч');assert.equal(axis.cols.split(' ').length,2);}
     if(width===390||width===1440)await screen('09.11.26-lab-'+width+'-t42');
     if(width===390){await evaluate('document.getElementById("riverSvg").scrollIntoView({block:"center",behavior:"auto"})');await delay(50);await screen('09.11.26-lab-390-route-detail');await evaluate('document.getElementById("chartSvg").scrollIntoView({block:"center",behavior:"auto"})');await delay(50);await screen('09.11.26-lab-390-chart-detail');}
     assert.deepEqual(errors,[],'No simulator errors after t42 initialization');
