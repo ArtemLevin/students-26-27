@@ -1,0 +1,42 @@
+name: Nikol 09 Nov site release review (temporary)
+on:
+  push:
+    branches:
+      - review/nikol-09-11-site-release-gate-20261110
+    paths:
+      - '.github/workflows/nikol-20261110-review-temporary.yml'
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: review/nikol-09-11-site-release-gate-20261110
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax
+        shell: bash
+        run: |
+          node --check students/nikol_sarkisyants/site/tests/browser-09.11.26.mjs
+          node --check students/nikol_sarkisyants/site/tests/lesson-09.11.test.mjs
+          node --check students/nikol_sarkisyants/site/dashboard.js
+          node --check students/nikol_sarkisyants/site/competence-map.js
+      - name: Student Platform v2 contract
+        run: |
+          node scripts/student.mjs validate nikol_sarkisyants
+          node scripts/student.mjs audit
+      - name: Local student regression suite
+        run: node --test students/nikol_sarkisyants/site/tests/*.test.mjs
+      - name: Actual Chromium visual and interaction QA
+        run: node students/nikol_sarkisyants/site/tests/browser-09.11.26.mjs
+      - name: Upload viewport screenshots for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nikol-20261110-release-gate-screenshots
+          path: nikol-stereometry-browser-artifacts/*.png
+          if-no-files-found: warn
