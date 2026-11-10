@@ -113,10 +113,28 @@ try{
   assert.deepEqual(metrics,{V:'60',S:'132',base:'6'});
   metrics=await run('(()=>{document.querySelector("[data-shape=cube]").click();const scale=document.getElementById("scale");scale.value="2";scale.dispatchEvent(new Event("input",{bubbles:true}));return {V:document.getElementById("volume").textContent,S:document.getElementById("surface").textContent,Vratio:document.getElementById("volume-ratio").textContent,Sratio:document.getElementById("area-ratio").textContent}})()');
   assert.deepEqual(metrics,{V:'512',S:'384',Vratio:'×8',Sratio:'×4'});
+  const reflected=await run('({raw:document.getElementById("a").value,shown:document.getElementById("a-value").textContent,computed:document.getElementById("dims").textContent})');
+  assert.equal(reflected.raw,'4','The slider value remains the unscaled input');
+  assert.equal(reflected.shown,'4','Readout next to slider must match the slider, even when scale is doubled');
+  assert.match(reflected.computed,/8/,'Calculated lengths should reflect the doubled scale');
+  const accessible=await run('(()=>{const slider=document.getElementById("a");slider.value="7";slider.dispatchEvent(new Event("input",{bubbles:true}));slider.dispatchEvent(new Event("change",{bubbles:true}));return {shown:document.getElementById("a-value").textContent,volume:document.getElementById("volume").textContent,status:document.getElementById("result-status").textContent}})()');
+  assert.equal(accessible.shown,'7');
+  assert.equal(accessible.volume,'2 744'.replace(/\s/g,' ').replace(' ',' ')); // ru-RU grouping: nonbreaking space
+  assert.match(accessible.status,/14/,'Final dimensions must be announced after the slider change');
+  assert.match(accessible.status,/2.?744/,'Volume must be included in the accessible announcement');
   const answer=await run('(()=>{document.getElementById("reset").click();document.querySelector("[data-answer=b]").click();return {V:document.getElementById("volume").textContent,feedback:document.getElementById("feedback").textContent}})()');
   assert.equal(answer.V,'64');assert.match(answer.feedback,/Верно/);
   await navigate('09.11.26-lab.html#prism',375,812,true);
   assert.equal(await run('document.querySelector("[data-shape=prism]").getAttribute("aria-pressed")'),'true');
+  assert.equal(await run('document.activeElement===document.getElementById("model")'),true,'Mode deep links should focus the model');
+  assert.equal(await run('window.scrollY>0'),true,'Mode deep links should land near the controls');
+  const extremes=await run('(()=>{for(const id of ["a","b","h"]){const slider=document.getElementById(id);slider.value=slider.min;slider.dispatchEvent(new Event("input",{bubbles:true}));}const scale=document.getElementById("scale");scale.value="3";scale.dispatchEvent(new Event("input",{bubbles:true}));const min={volume:document.getElementById("volume").textContent,bbox:document.getElementById("solid-drawing").getBBox().toJSON()};for(const id of ["a","b","h"]){const slider=document.getElementById(id);slider.value=slider.max;slider.dispatchEvent(new Event("input",{bubbles:true}));}const max={volume:document.getElementById("volume").textContent,bbox:document.getElementById("solid-drawing").getBBox().toJSON()};return {min,max};})()');
+  assert.equal(extremes.min.volume,'13,5');
+  assert.match(extremes.max.volume,/16.?200/);
+  for(const sample of [extremes.min,extremes.max]){
+    const box=sample.bbox;
+    assert.ok(box.x>=-1&&box.y>=-1&&box.x+box.width<=601&&box.y+box.height<=421,'SVG annotations must fit the viewBox: '+JSON.stringify(box));
+  }
   const latest=getLatestLesson(LESSONS);
   assert.ok(latest,'A published lesson must exist');
   await navigate('index.html',1366,900);
