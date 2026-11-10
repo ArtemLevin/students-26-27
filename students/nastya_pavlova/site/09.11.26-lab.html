@@ -33,7 +33,7 @@ h1,h2{font-family:Georgia,Cambria,serif;font-weight:500;line-height:1.13;letter-
 .legend-inline{display:flex;gap:18px;flex-wrap:wrap;font-size:.88rem;color:var(--muted)}.swatch{display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:middle;background:var(--accent)}.swatch.interest{background:var(--accent2)}
 .summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}.metric{border-top:2px solid var(--line);padding:10px 4px}.metric span{display:block;color:var(--muted);font-size:.8rem}.metric strong{font-size:clamp(1.08rem,2.1vw,1.5rem);font-variant-numeric:tabular-nums}
 .year-detail{border-left:2px solid var(--accent);padding:5px 0 5px 16px;margin:14px 0 25px}.year-detail strong{color:var(--accent)}
-.lab-table{max-width:100%;overflow-x:auto;margin:20px 0 35px}.lab-table table{min-width:640px}.lab-table button{padding:4px 8px;border:1px solid var(--line);background:var(--paper);color:var(--accent)}.lab-table tr.selected{background:var(--soft)}
+.year-nav{display:flex;gap:12px;align-items:center;margin:16px 0}.year-nav select{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:8px 12px}.lab-table{max-width:100%;overflow-x:auto;margin:20px 0 35px}.lab-table table{min-width:640px}.lab-table button{padding:4px 8px;border:1px solid var(--line);background:var(--paper);color:var(--accent)}.lab-table tr.selected{background:var(--soft)}
 .predict{border-top:1px solid var(--line);padding:22px 0}.predict select{padding:8px;background:var(--paper);color:var(--ink);border:1px solid var(--line);max-width:100%}.predict-result{min-height:2.4em;color:var(--accent)}.compare{border-top:1px solid var(--line);padding-top:24px}.compare-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.compare-grid article{border-top:2px solid var(--accent);padding:14px;background:var(--paper)}.compare-grid strong,.compare-grid span{display:block}.compare-grid strong{font-size:1.18rem}.compare-grid span{color:var(--muted)}.small-button{padding:8px 11px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink)}
 @media(max-width:900px){.lab-grid{grid-template-columns:1fr}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 18px}.controls h2,.controls p,.controls .full{grid-column:1/-1}}
 @media(max-width:570px){.controls{display:block}.summary,.compare-grid{grid-template-columns:1fr}.lab-intro{padding-top:28px}.graph{padding:5px}}
@@ -45,10 +45,11 @@ h1,h2{font-family:Georgia,Cambria,serif;font-weight:500;line-height:1.13;letter-
 <div class="lab-grid">
 <section class="instrument" aria-labelledby="modelTitle"><h2 id="modelTitle">Заданный остаток долга</h2><p class="hint" id="modeExplanation">После каждого года, кроме последнего, остаток составляет заданную долю долга на начало года.</p>
 <div class="summary" aria-live="polite"><div class="metric"><span>Всего выплачено</span><strong id="total">—</strong></div><div class="metric"><span>Переплата</span><strong id="overpay">—</strong></div><div class="metric"><span>Последний остаток</span><strong id="remainder">—</strong></div></div>
+<div class="year-nav"><label for="yearPicker">Рассмотреть год</label> <select id="yearPicker" aria-label="Выберите год платежа"></select></div>
 <div class="graph"><svg id="bars" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 340" role="img" aria-label="Состав ежегодных платежей по выбранной схеме"><title>Состав платежей</title><desc id="graphDescription">Для каждого года показаны погашение основного долга и проценты.</desc></svg></div>
 <div class="legend-inline"><span><i class="swatch" aria-hidden="true"></i>Погашение основного долга</span><span><i class="swatch interest" aria-hidden="true"></i>Проценты</span></div>
 <p class="year-detail" id="yearDetail" aria-live="polite">Выберите строку таблицы, чтобы изучить расчёт.</p>
-<div class="lab-table"><table><thead><tr><th>Год</th><th>В начале</th><th>Проценты</th><th>Долг с процентами</th><th>Платёж</th><th>Остаток</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="lab-table"><table><caption style="text-align:left;padding:6px 0;color:var(--muted)">Расчёт задолженности по годам, суммы в рублях</caption><thead><tr><th>Год</th><th>В начале</th><th>Проценты</th><th>Долг с процентами</th><th>Платёж</th><th>Остаток</th></tr></thead><tbody id="rows"></tbody></table></div>
 </section>
 <aside class="controls" aria-labelledby="parametersTitle"><h2 id="parametersTitle">Параметры</h2><p class="hint">Числа в рублях. Изменение каждого ползунка сразу пересчитывает таблицу и диаграмму.</p>
 <label class="control"><span>Сумма кредита <output id="sumValue" for="sum">—</output></span><input id="sum" type="range" min="50000" max="1200000" step="500" value="750000"></label>
@@ -117,12 +118,15 @@ function update(){
  $('modelTitle').textContent=names[mode];$('modeExplanation').textContent=explanations[mode];
  document.querySelectorAll('[data-mode]').forEach(function(btn){btn.setAttribute('aria-pressed',String(btn.dataset.mode===mode))});
  var d=compute(mode,state);
+ var picker=$('yearPicker');picker.replaceChildren();
+ for(var yi=1;yi<=state.years;yi++){var option=document.createElement('option');option.value=String(yi);option.textContent='Год '+yi;picker.appendChild(option)}
+ picker.value=String(selectedYear);
  $('total').textContent=money(d.total);$('overpay').textContent=money(d.overpay);$('remainder').textContent=money(d.last);
  selectedYear=Math.max(1,Math.min(state.years,selectedYear));
  $('rows').replaceChildren();
  d.rows.forEach(function(r){
   var tr=document.createElement('tr');if(selectedYear===r.year)tr.className='selected';
-  var first=document.createElement('td'),button=document.createElement('button');button.type='button';button.textContent=r.year;button.setAttribute('aria-label','Показать расчёт за '+r.year+'-й год');button.addEventListener('click',function(){selectedYear=r.year;update()});first.appendChild(button);tr.appendChild(first);
+  var first=document.createElement('td'),button=document.createElement('button');button.type='button';button.textContent=r.year;button.setAttribute('aria-label','Показать расчёт за '+r.year+'-й год');button.setAttribute('aria-pressed',String(selectedYear===r.year));button.addEventListener('click',function(){selectedYear=r.year;update()});first.appendChild(button);tr.appendChild(first);
   [r.start,r.interest,r.owed,r.payment,r.end].forEach(function(v){var td=document.createElement('td');td.textContent=format(v);tr.appendChild(td)});$('rows').appendChild(tr);
  });
  var r=d.rows[selectedYear-1];
@@ -138,6 +142,7 @@ function update(){
 function reset(){state=Object.assign({},presets[mode]);selectedYear=1;$('prediction').value='';$('predictionResult').textContent='';update();}
 document.querySelectorAll('[data-mode]').forEach(function(btn){btn.addEventListener('click',function(){mode=btn.dataset.mode;history.replaceState(null,'','#'+mode);reset()})});
 ['sum','rate','years','reduce'].forEach(function(k){$(k).addEventListener('input',function(){state[k]=Number(this.value);selectedYear=1;$('predictionResult').textContent='';update()})});
+$('yearPicker').addEventListener('change',function(){selectedYear=Number(this.value);update()});
 $('reset').addEventListener('click',reset);
 $('check').addEventListener('click',function(){
  var val=$('prediction').value;if(!val){$('predictionResult').textContent='Выберите один из трёх вариантов.';return;}
