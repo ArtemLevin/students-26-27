@@ -119,6 +119,9 @@ try{
   await shot('prism-1366-edges');
   metrics=await run('(()=>{document.querySelector("[data-shape=cube]").click();const scale=document.getElementById("scale");scale.value="2";scale.dispatchEvent(new Event("input",{bubbles:true}));return {V:document.getElementById("volume").textContent,S:document.getElementById("surface").textContent,Vratio:document.getElementById("volume-ratio").textContent,Sratio:document.getElementById("area-ratio").textContent}})()');
   assert.deepEqual(metrics,{V:'512',S:'384',Vratio:'×8',Sratio:'×4'});
+  const comparisonWidths=await run('({area:parseFloat(document.getElementById("area-bar").style.width),volume:parseFloat(document.getElementById("volume-bar").style.width)})');
+  assert.ok(Math.abs(comparisonWidths.area-400/27)<1e-5,'Area bar shares the 0–27 scale');
+  assert.ok(Math.abs(comparisonWidths.volume-800/27)<1e-5,'Volume bar shares the 0–27 scale');
   const reflected=await run('({raw:document.getElementById("a").value,shown:document.getElementById("a-value").textContent,computed:document.getElementById("dims").textContent})');
   assert.equal(reflected.raw,'4','The slider value remains the unscaled input');
   assert.equal(reflected.shown,'4','Readout next to slider must match the slider, even when scale is doubled');
@@ -128,6 +131,11 @@ try{
   assert.equal(accessible.volume.replace(/\s/g,''),'2744','Calculated volume must use scaled dimensions');
   assert.match(accessible.status,/14/,'Final dimensions must be announced after the slider change');
   assert.match(accessible.status,/2.?744/,'Volume must be included in the accessible announcement');
+  const fractional=await run('(()=>{document.getElementById("reset").click();const a=document.getElementById("a"),m=document.getElementById("scale");a.value="3";a.dispatchEvent(new Event("input",{bubbles:true}));m.value="1.25";m.dispatchEvent(new Event("input",{bubbles:true}));return {raw:document.getElementById("a-value").textContent,V:document.getElementById("volume").textContent,formula:document.getElementById("volume-formula").textContent,areaBar:parseFloat(document.getElementById("area-bar").style.width),volumeBar:parseFloat(document.getElementById("volume-bar").style.width)}})()');
+  assert.equal(fractional.raw,'3');
+  assert.equal(fractional.V,'52,73');
+  assert.match(fractional.formula,/14,0625 · 3,75 = 52,734375/,'Do not round an intermediate product to two decimals');
+  assert.ok(fractional.volumeBar>fractional.areaBar,'Shared comparison scale must visually show cubic growth');
   const answer=await run('(()=>{document.getElementById("reset").click();document.querySelector("[data-answer=b]").click();return {V:document.getElementById("volume").textContent,feedback:document.getElementById("feedback").textContent}})()');
   assert.equal(answer.V,'64');assert.match(answer.feedback,/Верно/);
   await navigate('09.11.26-lab.html#prism',375,812,true);
