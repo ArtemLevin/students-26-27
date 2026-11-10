@@ -5,6 +5,78 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-11-10",
+    "ktpRefs": [],
+    "href": "10.11.26.html",
+    "title": "Дробь внутри дроби. И порядок в вычислениях.",
+    "navTitle": "Многоэтажные дроби и порядок действий",
+    "navSubtitle": "Три способа · десятичные знаменатели · сокращение",
+    "summary": "Надя Клименко, 10.11.26. Многоэтажные и десятичные дроби, три способа деления дробей, порядок действий, сокращение и 10 упражнений.",
+    "topics": [
+      "сложные (многоэтажные) дроби",
+      "деление обыкновенных дробей",
+      "переход от смешанной дроби к неправильной",
+      "десятичные дроби в знаменателе",
+      "основное свойство дроби",
+      "порядок умножения и деления",
+      "сокращение и простые множители",
+      "комбинированные дробные выражения"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "frac_14",
+        "evidenceAnchor": "methods",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_05",
+        "evidenceAnchor": "convert",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_07",
+        "evidenceAnchor": "convert",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_08",
+        "evidenceAnchor": "factor",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "dec_06",
+        "evidenceAnchor": "convert",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "dec_07",
+        "evidenceAnchor": "convert",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "nat_09",
+        "evidenceAnchor": "order",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "div_09",
+        "evidenceAnchor": "factor",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "nat_12",
+        "evidenceAnchor": "combined",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "10.11.26.html",
+      "lab": "10.11.26-lab.html",
+      "pdf": "../pdf_docs/10.11.26.pdf",
+      "tex": "../tex_docs/10.11.26.tex"
+    }
+  },
+  {
     "date": "2026-11-07",
     "ktpRefs": [],
     "href": "07.11.26.html",
