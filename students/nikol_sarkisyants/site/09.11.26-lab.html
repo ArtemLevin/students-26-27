@@ -58,6 +58,9 @@ const fields={a:byId('a'),b:byId('b'),h:byId('h'),scale:byId('scale')};
 let mode='cube';
 const nf=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2});
 const fmt=value=>nf.format(Math.abs(value)<1e-12?0:value);
+const exactNf=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:6});
+const fmtExact=value=>exactNf.format(Math.abs(value)<1e-12?0:value);
+const relation=value=>Math.abs(value-Number(value.toFixed(2)))<1e-9?'=':'≈';
 const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
 function setShape(shape,reset=true){
   if(!Object.hasOwn(presets,shape))return;
@@ -126,17 +129,17 @@ function update(){
  byId('diagonal').textContent=fmt(mode==='prism'?x.s0:x.diagonal);
  const key=mode==='prism'?'Итоговые катеты':'Итоговые рёбра';
  byId('dims').textContent=key+': a = '+fmt(x.a)+'; b = '+fmt(x.b)+'; '+(mode==='box'?'c':'h')+' = '+fmt(x.h);
- byId('base-formula').textContent='S₀ = '+(mode==='prism'?'ab / 2': 'ab')+' = '+fmt(x.s0);
- byId('perimeter-formula').textContent='P₀ = '+(mode==='prism'?'a + b + √(a² + b²)':'2(a + b)')+' = '+fmt(x.p0);
- byId('volume-formula').textContent='V = S₀ · h = '+fmt(x.s0)+' · '+fmt(x.h)+' = '+fmt(x.volume);
- byId('surface-formula').textContent='S = 2S₀ + P₀h = '+fmt(x.surface);
- byId('diag-formula').textContent=mode==='prism'?'Гипотенуза прямоугольного треугольника = '+fmt(Math.hypot(x.a,x.b)):
-  'd = √(a² + b² + c²) = '+fmt(x.diagonal);
+ byId('base-formula').textContent='S₀ = '+(mode==='prism'?'ab / 2': 'ab')+' = '+fmtExact(x.s0);
+ byId('perimeter-formula').textContent='P₀ = '+(mode==='prism'?'a + b + √(a² + b²)':'2(a + b)')+' '+relation(x.p0)+' '+fmt(x.p0);
+ byId('volume-formula').textContent='V = S₀ · h = '+fmtExact(x.s0)+' · '+fmtExact(x.h)+' = '+fmtExact(x.volume);
+ byId('surface-formula').textContent='S = 2S₀ + P₀h '+relation(x.surface)+' '+fmt(x.surface);
+ byId('diag-formula').textContent=mode==='prism'?'Гипотенуза прямоугольного треугольника '+relation(Math.hypot(x.a,x.b))+' '+fmt(Math.hypot(x.a,x.b)):
+  'd = √(a² + b² + c²) '+relation(x.diagonal)+' '+fmt(x.diagonal);
  byId('area-ratio').textContent='×'+fmt(m*m);
  byId('volume-ratio').textContent='×'+fmt(m*m*m);
- byId('area-bar').style.width=(m*m/9*100)+'%';
+ byId('area-bar').style.width=(m*m/27*100)+'%';
  byId('volume-bar').style.width=(m*m*m/27*100)+'%';
- byId('comparison-note').textContent='В масштабе ×'+fmt(m)+' площадь равна '+fmt(m*m)+' исходным площадям, объём — '+fmt(m*m*m)+' исходным объёмам. Отношения зависят только от общего множителя m.';
+ byId('comparison-note').textContent='В масштабе ×'+fmt(m)+' площадь равна '+fmt(m*m)+' исходным площадям, объём — '+fmt(m*m*m)+' исходным объёмам. Обе полосы имеют общую шкалу 0–27; отношения зависят только от множителя m.';
  renderSolid(x);
 }
 function announce(){
