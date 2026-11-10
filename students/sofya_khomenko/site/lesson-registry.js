@@ -5,6 +5,61 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-11-10",
+    "ktpRefs": [],
+    "href": "10.11.26.html",
+    "title": "Метод интервалов",
+    "navTitle": "Метод интервалов",
+    "navSubtitle": "София Хоменко: метод интервалов, алгоритм КОЗА, числовая ось, корни и знаки, особые случаи и 10 заданий. Занятие 10 ноября 2026 года.",
+    "summary": "София Хоменко: метод интервалов, алгоритм КОЗА, числовая ось, корни и знаки, особые случаи и 10 заданий. Занятие 10 ноября 2026 года.",
+    "topics": [
+      "метод интервалов для квадратных неравенств",
+      "числовая ось и порядок корней",
+      "пробная точка и знаки на промежутках",
+      "произведение линейных множителей",
+      "строгие и нестрогие неравенства",
+      "случай отсутствия действительных корней"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "oge_13_07",
+        "evidenceAnchor": "quadratic",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_13_08",
+        "evidenceAnchor": "algorithm",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_13_09",
+        "evidenceAnchor": "products",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_13_03",
+        "evidenceAnchor": "idea",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_13_10",
+        "evidenceAnchor": "errors",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "oge_20_11",
+        "evidenceAnchor": "no-roots",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "10.11.26.html",
+      "pdf": "../pdf_docs/10.11.26.pdf",
+      "tex": "../tex_docs/10.11.26.tex",
+      "lab": "10.11.26-lab.html"
+    }
+  },
+  {
     "date": "2026-10-20",
     "ktpRefs": [],
     "href": "20.10.26.html",
