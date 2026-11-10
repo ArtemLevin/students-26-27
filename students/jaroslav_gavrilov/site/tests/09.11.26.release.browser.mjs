@@ -50,6 +50,7 @@ try{
  await visit('09.11.26.html',1440,900,false);
  const lesson=await js("(()=>({tasks:document.querySelectorAll('[id^=task-]').length,answers:document.querySelectorAll('#answers tbody tr').length,ol:[...document.querySelectorAll('#practice ol')].map(x=>({start:x.start,count:x.querySelectorAll(':scope > li').length})),math:document.querySelectorAll('math').length,links:[...document.querySelectorAll('a[href]')].map(x=>x.getAttribute('href'))}))()");
  assert.equal(lesson.tasks,10);assert.equal(lesson.answers,10);
+ assert.ok(lesson.math>=8,'semantic MathML for the core formulas');
  assert.deepEqual(lesson.ol,[{start:1,count:3},{start:4,count:3},{start:7,count:3},{start:10,count:1}]);
  let quiz=await js("(()=>{document.querySelector('#quiz input[value=b]').click();document.querySelector('#quiz button').click();return document.getElementById('quizResult').textContent})()");
  assert.match(quiz,/Верно/);
@@ -60,6 +61,8 @@ try{
  await visit('09.11.26-lab.html#delay',1440,900,false);
  const start=await js("(()=>({d:document.getElementById('distance').value,delta:document.getElementById('delayHours').value,ta:document.getElementById('timeA').textContent,tb:document.getElementById('timeB').textContent,x:document.getElementById('meetX').textContent}))()");
  assert.deepEqual(start,{d:'645',delta:'3',ta:'6',tb:'3',x:'420'},'deep link delay');
+ const mathLab=await js("(()=>{let eq=document.getElementById('equation');return {tag:eq.tagName.toLowerCase(),ns:eq.namespaceURI,values:[...eq.querySelectorAll('mn')].map(x=>x.textContent)}})()");
+ assert.equal(mathLab.tag,'math');assert.equal(mathLab.ns,'http://www.w3.org/1998/Math/MathML');assert.deepEqual(mathLab.values,['70','75','3','645']);
  for(const [name,expected] of [['simultaneous',['4','4','240']],['delay',['6','3','420']],['point',['4','3','200']],['clock',['6','4','420']]]){
  const r=await js("(()=>{document.querySelector('[data-scene="+name+"]').click();return [document.getElementById('timeA').textContent,document.getElementById('timeB').textContent,document.getElementById('meetX').textContent]})()");
  assert.deepEqual(r,expected,'scene '+name)
