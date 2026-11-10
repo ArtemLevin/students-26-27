@@ -72,7 +72,9 @@ try{
    await sleep(90);
   }
   for(let i=0;i<70;i++){
-   const expression=name==='index.html'?
+   const expression=name==='09.11.26.html'?"!!document.querySelector('#heading')":
+     name==='09.11.26-lab.html'?"document.querySelectorAll('#rows tr').length>0":
+     name==='index.html'?
      "document.querySelector('#lessonTitle')?.textContent!=='Загрузка занятия…'":
      name==='archive.html'?"document.querySelectorAll('.archive-tile').length>0":
      name==='22.10.26-lab.html'?"document.querySelector('#payment')?.textContent.length>0":
@@ -162,6 +164,38 @@ try{
   await evaluate("document.querySelector('#themeToggle').click()");
   assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'26 October lab dark overflow at '+w);
  }
+ // Dedicated release-gate checks: 9 November credit lesson and simulator.
+ for(const [w,h] of [[1440,900],[1024,768],[768,1024],[390,844],[375,812]]){
+  await navigate('09.11.26.html',w,h);
+  const topic=await evaluate("({heading:document.querySelector('#heading')?.textContent.trim(),sections:document.querySelectorAll('main .section').length,exercises:document.querySelectorAll('.practice details').length,mathml:document.querySelectorAll('math').length,broken:[...document.querySelectorAll('a[href^=\"#\"]')].filter(a=>!document.getElementById(a.getAttribute('href').slice(1))).length,files:[...document.querySelectorAll('a[href]')].filter(a=>/pdf_docs|tex_docs/.test(a.getAttribute('href'))).length,duplicateIds:(()=>{const ids=[...document.querySelectorAll('[id]')].map(x=>x.id);return ids.length-new Set(ids).size})()})");
+  assert.match(topic.heading,/Схемы погашения кредита/);
+  assert.equal(topic.sections,7);
+  assert.equal(topic.exercises,10);
+  assert.ok(topic.mathml>=3,'Critical equations must be MathML');
+  assert.equal(topic.broken,0,'Broken lesson section anchors');
+  assert.ok(topic.files>=2,'Missing PDF/TeX materials');
+  assert.equal(topic.duplicateIds,0,'Duplicate IDs');
+  await evaluate("document.querySelector('#theme').click()");
+  assert.equal(await evaluate("document.documentElement.dataset.theme"),'dark');
+  assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'Lesson overflow '+w);
+  let image=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
+  fs.writeFileSync(path.join(output,'09-11-lesson-'+w+'.png'),Buffer.from(image.data,'base64'));
+  await navigate('09.11.26-lab.html',w,h);
+  const initial=await evaluate("(()=>{const v=sel=>document.querySelector(sel)?.textContent;const metrics={total:v('#total'),overpay:v('#overpay'),remainder:v('#remainder'),rows:document.querySelectorAll('#rows tr').length,yearOptions:document.querySelectorAll('#yearPicker option').length,compare:document.querySelectorAll('#compareGrid article').length};return metrics;})()");
+  assert.deepEqual(initial,{total:'969 600 ₽',overpay:'219 600 ₽',remainder:'0 ₽',rows:3,yearOptions:3,compare:3},'Custom repayment baseline');
+  const selected=await evaluate("(()=>{let p=document.querySelector('#yearPicker');p.value='2';p.dispatchEvent(new Event('change',{bubbles:true}));return {detail:document.querySelector('#yearDetail').textContent,selected:document.querySelectorAll('#rows button[aria-pressed=true]').length}})()");
+  assert.ok(selected.detail.startsWith('Год 2:')&&selected.selected===1,'Accessible year navigation');
+  const diff=await evaluate("(()=>{document.querySelector('[data-mode=differential]').click();return {total:document.querySelector('#total').textContent,overpay:document.querySelector('#overpay').textContent,mode:location.hash,years:document.querySelectorAll('#rows tr').length}})()");
+  assert.equal(diff.total,'696 000 ₽');assert.equal(diff.overpay,'96 000 ₽');assert.equal(diff.mode,'#differential');
+  const ann=await evaluate("(()=>{document.querySelector('[data-mode=annuity]').click();const start={total:document.querySelector('#total').textContent,overpay:document.querySelector('#overpay').textContent,rows:document.querySelectorAll('#rows tr').length};const rate=document.querySelector('#rate');rate.value='0';rate.dispatchEvent(new Event('input',{bubbles:true}));const free={total:document.querySelector('#total').textContent,overpay:document.querySelector('#overpay').textContent};const years=document.querySelector('#years');years.value='6';years.dispatchEvent(new Event('input',{bubbles:true}));const six=document.querySelectorAll('#rows tr').length;document.querySelector('#reset').click();const restored={total:document.querySelector('#total').textContent,rows:document.querySelectorAll('#rows tr').length};return {start,free,six,restored};})()");
+  assert.deepEqual(ann,{start:{total:'324 000 ₽',overpay:'96 500 ₽',rows:3},free:{total:'227 500 ₽',overpay:'0 ₽'},six:6,restored:{total:'324 000 ₽',rows:3}},'Annuitized/zero-rate/six-year arithmetic');
+  assert.match(await evaluate("(()=>{let s=document.querySelector('#prediction');s.value='equal';document.querySelector('#check').click();return document.querySelector('#predictionResult').textContent})()"),/^Верно\./,'Predict-result interaction');
+  const dark=await evaluate("(()=>{document.querySelector('#theme').click();return {theme:document.documentElement.dataset.theme,overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth,selected:document.querySelector('#yearPicker').value}})()");
+  assert.deepEqual(dark,{theme:'dark',overflow:0,selected:'1'},'Dark theme and responsive lab');
+  image=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
+  fs.writeFileSync(path.join(output,'09-11-lab-'+w+'.png'),Buffer.from(image.data,'base64'));
+ }
+
  await navigate('19.10.26-lab.html',390,844);
  const scenarios=await evaluate("(()=>{const get=()=>document.querySelector('#finalSum').textContent;document.querySelector('[data-preset=base]').click();const base=get();document.querySelector('[data-preset=deposits]').click();const deposits=get();document.querySelector('[data-preset=withdrawal]').click();const withdrawal=get();document.querySelector('[data-preset=variable]').click();const variable=get();return {base,deposits,withdrawal,variable}})()");
  assert.deepEqual(scenarios,{base:'133,1',deposits:'179,3',withdrawal:'128,205',variable:'145,95'},'Deposit model scenario parity');

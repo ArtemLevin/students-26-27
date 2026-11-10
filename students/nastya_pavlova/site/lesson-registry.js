@@ -5,6 +5,107 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-09",
+  "ktpRefs": [],
+  "href": "09.11.26.html",
+  "title": "Схемы погашения кредита и расчёт переплаты.",
+  "navTitle": "Схемы погашения кредита и расчёт переплаты.",
+  "navSubtitle": "Занятие Анастасии Павловой 9 ноября 2026 года: кредит, аннуитет, дифференцированные платежи, переплата и простые множители.",
+  "summary": "Занятие Анастасии Павловой 9 ноября 2026 года: кредит, аннуитет, дифференцированные платежи, переплата и простые множители.",
+  "topics": [
+    "Общая таблица движения долга и переплата",
+    "Произвольная схема: заданный остаток долга",
+    "Дифференцированные платежи и пять формул",
+    "Аннуитет: три равных платежа и восстановление суммы кредита",
+    "Разложение на простые множители"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "fin_05",
+      "evidenceAnchor": "base",
+      "relation": "practiced",
+      "label": "Кредит и остаток долга",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_06",
+      "evidenceAnchor": "differential",
+      "relation": "practiced",
+      "label": "Дифференцированная схема",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_07",
+      "evidenceAnchor": "annuity",
+      "relation": "practiced",
+      "label": "Аннуитетная схема",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_08",
+      "evidenceAnchor": "differential",
+      "relation": "practiced",
+      "label": "Равные доли основного долга",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_09",
+      "evidenceAnchor": "base",
+      "relation": "practiced",
+      "label": "Платёж, проценты и основной долг",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_10",
+      "evidenceAnchor": "custom",
+      "relation": "practiced",
+      "label": "Проценты на текущий остаток",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_11",
+      "evidenceAnchor": "custom",
+      "relation": "practiced",
+      "label": "Таблица движения долга",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_14",
+      "evidenceAnchor": "custom",
+      "relation": "practiced",
+      "label": "Общая сумма выплат",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_15",
+      "evidenceAnchor": "custom",
+      "relation": "practiced",
+      "label": "Переплата по кредиту",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "fin_20",
+      "evidenceAnchor": "choice",
+      "relation": "touched",
+      "label": "Выбор модели по условию",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "num_02",
+      "evidenceAnchor": "factors",
+      "relation": "practiced",
+      "label": "Разложение на простые множители",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "09.11.26.html",
+    "pdf": "../pdf_docs/09.11.26.pdf",
+    "tex": "../tex_docs/09.11.26.tex",
+    "lab": "09.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-05",
   "ktpRefs": [],
   "href": "05.11.26.html",
