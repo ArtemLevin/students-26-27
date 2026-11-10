@@ -6,3 +6,4 @@ await import('./physics-forces-20261017.test.mjs');
 
 await import('./gravity-20261024.test.mjs');
 await import('./gravity-browser-20261024.test.mjs');
+await import('./review-20261109.test.mjs');
