@@ -144,6 +144,8 @@ try{
 }finally{
  try{ws?.close()}catch(_){}
  chrome.kill('SIGTERM');
+ await Promise.race([new Promise(resolve=>chrome.once('exit',resolve)),sleep(1500)]);
  await new Promise(resolve=>server.close(resolve));
- fs.rmSync(profile,{recursive:true,force:true});
+ try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:25,retryDelay:100})}
+ catch(error){console.warn('Chromium profile cleanup deferred to ephemeral CI runner:',error.code);}
 }
