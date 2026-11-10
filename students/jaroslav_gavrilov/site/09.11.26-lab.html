@@ -16,7 +16,7 @@ html[data-theme=dark]{color-scheme:dark;--bg:#132226;--paper:#1d3033;--ink:#eff5
 @media print{.control,.preset,.actions,.timeline,.top nav{display:none}body{background:white;color:black}.workbench{display:block}.workbench>.panel{display:none}.chart{border:0;break-inside:avoid}.visual{display:block}.formula{margin-top:20px}}
 </style></head>
 <body><a href="#main" class="skip">К модели</a><header class="top"><div class="wrap"><a class="brand" href="09.11.26.html">LEVIN / ATLAS · УРОК 09.11</a><nav aria-label="Навигация"><a href="09.11.26.html#delay" title="Вернуться к разбору задержки выезда">К разбору</a><a href="09.11.26.html#practice">10 задач</a><a href="index.html">Кабинет</a><button type="button" class="btn" id="theme" aria-label="Переключить цветовую тему" aria-pressed="false">◐ Тема</button></nav></div></header>
-<main id="main" class="wrap"><div class="hero"><div><p class="kicker">Математическая лаборатория / движение</p><h1>Время разное.<br><em>Встреча одна.</em></h1><p class="lead">Изменяйте скорости и задержку выезда. Следите за тем, сколько проехала каждая машина, когда она начала движение и где произошла встреча.</p></div><aside>Четыре исходных ситуации взяты из чек-листа. Все вычисления выполняются по формулам <strong>s = vt</strong> и <strong>s<sub>A</sub> + s<sub>B</sub> = D</strong>.</aside></div>
+<main id="main" class="wrap"><div class="hero"><div><p class="kicker">Математическая лаборатория / движение</p><h1>Время разное.<br><em>Встреча одна.</em></h1><p class="lead">Изменяйте скорости и задержку выезда. Следите за тем, сколько проехала каждая машина, когда она начала движение и где произошла встреча.</p></div><aside>Четыре исходных ситуации взяты из чек-листа. Все вычисления выполняются по формулам <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>s</mi><mo>=</mo><mi>v</mi><mi>t</mi></mrow></math> и <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>s</mi><mi>A</mi></msub><mo>+</mo><msub><mi>s</mi><mi>B</mi></msub><mo>=</mo><mi>D</mi></mrow></math>.</aside></div>
 <div class="workbench">
 <section class="panel" aria-labelledby="controlTitle"><p class="tiny">01 / условия</p><h2 id="controlTitle">Выберите ситуацию</h2><div class="preset" id="presets">
 <button type="button" data-scene="simultaneous" aria-pressed="true">Одновременный выезд</button>
@@ -52,7 +52,7 @@ html[data-theme=dark]{color-scheme:dark;--bg:#132226;--paper:#1d3033;--ink:#eff5
 <div class="timeline"><label for="moment">Момент наблюдения <output id="momentValue" for="moment">0 ч</output></label><input id="moment" type="range" min="0" max="4" step=".01" value="0"></div>
 <div class="actions"><button id="play" class="btn primary" type="button">Запустить движение</button><button id="end" class="btn" type="button">Момент встречи</button><button id="start" class="btn" type="button">К началу</button></div>
 <p class="status" id="status" aria-live="off">Оба автомобиля готовы к отправлению.</p><p class="sr-only" id="announcement" aria-live="polite" aria-atomic="true"></p></div>
-<div class="formula"><span id="equation">60 · x + 80 · x = 560</span><p id="reason" style="font:400 .82rem/1.6 system-ui,sans-serif;margin:8px 0 0">При общем времени x автомобили одновременно встречаются.</p></div>
+<div class="formula"><math id="equation" xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="60 умножить на x плюс 80 умножить на x равно 560"><mrow><mn>60</mn><mo>·</mo><mi>x</mi><mo>+</mo><mn>80</mn><mo>·</mo><mi>x</mi><mo>=</mo><mn>560</mn></mrow></math><p id="reason" style="font:400 .82rem/1.6 system-ui,sans-serif;margin:8px 0 0">При общем времени x автомобили одновременно встречаются.</p></div>
 </section>
 </div>
 <section class="explain" aria-labelledby="howTitle"><p class="tiny">04 / метод</p><h2 id="howTitle">Почему вычисление работает</h2><ol><li>Выбираем время <strong>x</strong> от первого выезда до встречи.</li><li>Первый автомобиль успевает проехать <strong>v<sub>A</sub>x</strong> километров.</li><li>Если второй выехал позже на <strong>Δ</strong> часов, он проедет <strong>v<sub>B</sub>(x − Δ)</strong> километров.</li><li>Сумма путей при встрече равна длине дороги: <strong>v<sub>A</sub>x + v<sub>B</sub>(x − Δ) = D</strong>.</li><li>Проверяем, что <strong>x ≥ Δ</strong>, а найденная точка встречи лежит между A и B.</li></ol><p class="hint">В режиме с большой задержкой первый автомобиль может успеть до города B ещё до второго выезда. Модель отдельно сообщает об этом граничном случае.</p><p><a href="09.11.26.html#delay">Вернуться к примерам и алгоритму решения</a></p></section>
@@ -87,7 +87,13 @@ const bad=s.a*s.delay>=s.d;
 solution=bad?null:{ta:(s.d+s.b*s.delay)/(s.a+s.b)};
 if(solution){solution.tb=solution.ta-s.delay;solution.x=s.a*solution.ta;solution.y=s.d-solution.x;solution.status='ok'}
 el('timeA').textContent=solution?num(solution.ta):'—';el('timeB').textContent=solution?num(solution.tb):'—';el('meetX').textContent=solution?num(solution.x):'—';
-el('equation').textContent=s.a+' · x + '+s.b+' · (x − '+num(s.delay)+') = '+s.d;
+const ns='http://www.w3.org/1998/Math/MathML',formula=el('equation');
+const row=document.createElementNS(ns,'mrow');
+for(const [tag,value] of [['mn',s.a],['mo','·'],['mi','x'],['mo','+'],['mn',s.b],['mo','·'],['mo','('],['mi','x'],['mo','−'],['mn',num(s.delay)],['mo',')'],['mo','='],['mn',s.d]]){
+  const node=document.createElementNS(ns,tag);node.textContent=String(value);row.append(node)
+}
+formula.replaceChildren(row);
+formula.setAttribute('aria-label',s.a+' умножить на x плюс '+s.b+' умножить на (x минус '+num(s.delay)+') равно '+s.d);
 el('reason').textContent=solution?'x = '+num(solution.ta)+' ч; второй автомобиль ехал '+num(solution.tb)+' ч. Проверка: '+num(solution.x)+' + '+num(solution.y)+' = '+num(s.d)+' км.':'Первый автомобиль достигнет города B до отправления второго либо точно в момент его старта. Для встречи внутри дороги уменьшите задержку.';
 el('moment').max=solution?String(solution.ta):'1';
 t=Math.min(t,solution?solution.ta:0);el('moment').value=t;
