@@ -71,6 +71,29 @@
       item.evidence=history;
       currentMatched+=1;
     }));
+    currentMatched=0;
+    // Lesson evidence overlay only: no automatic mastery-level changes.
+    const november10={
+      date:"10.11.26",
+      evidence:"На занятии 10.11.26: метод интервалов, расположение корней на прямой, пробная точка, чередование знаков, границы ответа и случаи без действительных корней.",
+      anchors:new Map([
+        ["oge_13_07","quadratic"],
+        ["oge_13_08","algorithm"],
+        ["oge_13_09","products"],
+        ["oge_13_03","idea"],
+        ["oge_13_10","errors"],
+        ["oge_20_11","no-roots"]
+      ])
+    };
+    data.groups.forEach(group=>group.items.forEach(item=>{
+      const anchor=november10.anchors.get(item.id);
+      if(!anchor)return;
+      item.href="10.11.26.html#"+anchor;
+      const history=Array.isArray(item.evidence)?item.evidence:[];
+      if(!history.includes(november10.evidence))history.push(november10.evidence);
+      item.evidence=history;
+      currentMatched+=1;
+    }));
     const counter=document.getElementById("confirmedThisLesson");if(counter)counter.textContent=currentMatched;
   })();
 
