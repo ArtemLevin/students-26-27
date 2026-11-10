@@ -1,5 +1,9 @@
 name: Kirill 10 November lesson publication
 on:
+  push:
+    branches: [lesson/kirill-2026-11-10]
+    paths:
+      - '.github/workflows/kirill-2026-11-10-publish.yml'
   pull_request:
     branches: [main]
     paths:
@@ -13,13 +17,13 @@ permissions:
 
 jobs:
   publish:
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
           persist-credentials: true
       - uses: actions/setup-node@v4
@@ -55,7 +59,7 @@ jobs:
       - name: Commit canonical publication outputs to pull-request branch
         shell: bash
         env:
-          BRANCH: ${{ github.head_ref }}
+          BRANCH: ${{ github.head_ref || github.ref_name }}
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
