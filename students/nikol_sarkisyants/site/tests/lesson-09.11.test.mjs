@@ -45,6 +45,7 @@ test('competence evidence links are exact and never claim unassessed mastery',()
  }
  assert.match(read('index.html'),/dashboard-data-09\.11\.js/);
  assert.match(read('dashboard.js'),/lesson-registry\.js\?v=20261109/);
+ assert.match(read('index.html'),/dashboard\.js\?v=20261110-1/,'Cabinet must invalidate cached module after new lesson publication');
 });
 
 test('lesson and laboratory markup preserve accessibility and ten source exercises',()=>{
@@ -67,6 +68,11 @@ test('lesson and laboratory markup preserve accessibility and ten source exercis
   assert.match(lab,new RegExp('id="'+id+'"'));
  }
  assert.match(lab,/aria-live="polite"/);
+ assert.match(lab,/id="result-status" role="status" aria-live="polite"/,'Screen reader must receive results on slider change');
+ assert.match(lab,/id="scale"[^>]+aria-describedby="scale-help"/,'Scale slider explanation must be linked');
+ assert.match(lab,/id="model" class="layout" tabindex="-1"/,'Mode deep links must focus their target');
+ assert.match(lab,/Гипотенуза прямоугольного треугольника/,'Prism base must be named accurately');
+ assert.match(lab,/field\.addEventListener\('change',announce\)/,'Slider commits must report the result');
 });
 
 test('geometry and all ten answer keys match the independent formulas',()=>{
