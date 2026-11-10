@@ -1,0 +1,321 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{geometry}
+\geometry{left=23mm,right=23mm,top=23mm,bottom=23mm}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{booktabs,tabularx,enumitem}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{hyperref}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{005858}
+\definecolor{textgray}{HTML}{373B3A}
+\definecolor{muted}{HTML}{666F6D}
+\definecolor{minuscolor}{HTML}{9B4A48}
+\hypersetup{hidelinks,pdftitle={Чек-лист. Метод интервалов},pdfauthor={Лёвин Артём Александрович}}
+\setstretch{1.16}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlist[enumerate]{leftmargin=*,itemsep=3pt,topsep=4pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{muted} Метод интервалов}
+\fancyhead[R]{\footnotesize\color{muted} София Хоменко}
+\fancyfoot[C]{\footnotesize\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+\setlength{\headheight}{22pt}
+\newcommand{\sectionhead}[1]{\section*{\color{darkaccent}#1}\vspace{-4pt}\noindent\color{accent}\rule{\linewidth}{0.5pt}\color{textgray}\vspace{3pt}}
+\newcommand{\subhead}[1]{\par\medskip\noindent{\color{darkaccent}\bfseries #1}\par\smallskip}
+\newcommand{\note}[1]{{\small\color{muted}#1}}
+\newcommand{\ans}[1]{\(\displaystyle #1\)}
+\newcommand{\checkitem}[1]{\noindent $\square$\ \ #1\par}
+\newcommand{\axisthree}[5]{%
+% #1 left root #2 right root #3 sign left #4 sign middle #5 sign right
+\begin{center}\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth]
+\draw[->,line width=.65pt] (-4.85,0)--(4.9,0) node[right] {$x$};
+\draw[fill=darkaccent,draw=darkaccent,line width=.7pt] (-1.85,0) circle (.085);
+\draw[fill=darkaccent,draw=darkaccent,line width=.7pt] (1.9,0) circle (.085);
+\node[below=4pt] at (-1.85,0) {\strut $#1$};\node[below=4pt] at (1.9,0) {\strut $#2$};
+\node[above=6pt,font=\large,color=darkaccent] at (-3.25,0) {$#3$};
+\node[above=6pt,font=\large,color=darkaccent] at (0,0) {$#4$};
+\node[above=6pt,font=\large,color=darkaccent] at (3.35,0) {$#5$};
+\end{tikzpicture}\end{center}}
+\begin{document}
+\color{textgray}
+% ---------------- title ----------------
+\thispagestyle{empty}
+\begin{titlepage}
+\centering
+\vspace*{18mm}
+{\large\color{darkaccent} МАТЕМАТИКА\par}
+\vspace{21mm}
+{\LARGE Чек-лист\par}
+\vspace{11mm}
+{\LARGE\color{accent} Метод интервалов\\[4pt] и решение неравенств\par}
+\vspace{23mm}
+{\large Алгебра: числовая ось, знаки и промежутки\par}
+\vfill
+{\large София Хоменко\par}
+\vspace{13mm}
+{\normalsize 10 ноября 2026 г.\par}
+\vspace{24mm}
+{\small Лёвин Артём Александрович\\[3pt]эксклюзивно для Софии Хоменко\par}
+\vspace{15mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent,line width=.95pt] (0,0) .. controls (1.0,.55) and (2.1,-.55) .. (3.1,0)
+ .. controls (4.2,.55) and (5.35,-.55) .. (6.4,0)
+ .. controls (7.0,.35) and (7.7,.25) .. (8.2,0);
+\end{tikzpicture}
+\end{titlepage}
+\clearpage
+% ---------------- theory ----------------
+\sectionhead{1. Главная идея метода}
+\textbf{Метод интервалов} помогает определить, где многочлен положителен, отрицателен или равен нулю. Корни делят числовую ось на промежутки. Внутри каждого из них знак многочлена постоянен.
+
+\subhead{Маршрут «КОЗА»}
+\begin{center}
+\begin{tikzpicture}[>=Stealth,node distance=6mm]
+\tikzset{kzstep/.style={draw=accent,rounded corners=2pt,minimum height=11mm,minimum width=29mm,align=center,font=\small,inner sep=3pt}}
+\node[kzstep] (a) {\textbf{К}орни};
+\node[kzstep,right=of a] (b) {\textbf{О}сь};
+\node[kzstep,right=of b] (c) {\textbf{З}наки};
+\node[kzstep,right=of c] (d) {\textbf{А} --- ответ};
+\draw[->,accent] (a)--(b);\draw[->,accent] (b)--(c);\draw[->,accent] (c)--(d);
+\end{tikzpicture}
+\end{center}
+\note{«А» означает «ответ»; слово «КОЗА» служит короткой памяткой о порядке действий.}
+\begin{enumerate}
+\item \textbf{Корни.} Вместо \(f(x)\ge0\), \(f(x)>0\), \(f(x)\le0\) или \(f(x)<0\) решите уравнение \(f(x)=0\).
+\item \textbf{Ось.} Отметьте найденные корни \textbf{по возрастанию}: слева меньшие числа, справа большие.
+\item \textbf{Знаки.} Возьмите удобное пробное число \(x_0\), не являющееся корнем, вычислите знак \(f(x_0)\) и подпишите его в том промежутке, где лежит \(x_0\). Остальные знаки определите по корням.
+\item \textbf{Ответ.} Для \(>0\) или \(\ge0\) выберите участки с «\(+\)», для \(<0\) или \(\le0\) --- с «\(-\)». При нестрогом знаке добавьте корни.
+\end{enumerate}
+\subhead{Что означает «калибровка» оси?}
+\(x_0=0\) часто удобен, потому что подставлять ноль просто. \textbf{Важно:} ноль нужно поместить именно в свой промежуток; если он совпал с корнем, выберите другое число.
+
+\sectionhead{2. Первый пример: квадратичное неравенство}
+Решите \(x^2-x-6\ge0\).
+\begin{enumerate}
+\item Корни: \(x^2-x-6=(x+2)(x-3)=0\), поэтому \(x_1=-2\), \(x_2=3\).
+\item На оси расположите \(-2<3\). Ноль лежит между ними.
+\item \(f(0)=0^2-0-6=-6<0\): в среднем промежутке знак «\(-\)». При переходе через каждый \emph{простой} корень знак меняется.
+\end{enumerate}
+\axisthree{-2}{3}{+}{-}{+}
+Следовательно, \textbf{ответ}: \(\boxed{(-\infty;-2]\cup[3;+\infty)}\).
+
+\note{Точки \(-2\) и \(3\) включены, поскольку неравенство нестрогое. Бесконечности никогда не заключаются в квадратную скобку.}
+\clearpage
+% ---------------- flowchart standalone ----------------
+\thispagestyle{plain}
+\begin{center}
+{\Large\color{darkaccent} Алгоритм: метод интервалов}\par\vspace{12mm}
+\begin{tikzpicture}[
+ >=Stealth,thick,
+ every node/.style={font=\small},
+ start/.style={ellipse,draw=accent,minimum width=6.7cm,minimum height=10mm,align=center},
+ act/.style={rectangle,rounded corners=3pt,draw=accent,minimum width=6.7cm,minimum height=12mm,align=center,text width=6.4cm,inner sep=4pt},
+ decision/.style={diamond,aspect=2.3,draw=darkaccent,inner sep=2pt,align=center,text width=3.7cm},
+ branch/.style={rectangle,rounded corners=3pt,draw=accent,minimum width=5.8cm,minimum height=19mm,align=center,text width=5.4cm,inner sep=3pt}
+]
+\node[start] (st) at (0,0) {Дано неравенство \(f(x)\,\square\,0\)};
+\node[act] (rt) at (0,-1.8) {Решите уравнение \(f(x)=0\)};
+\node[decision] (dec) at (0,-4.0) {Есть действительные корни?};
+\node[branch] (yes) at (-3.6,-6.7) {Расположите корни на оси по возрастанию};
+\node[branch] (no) at (3.6,-6.7) {Нарисуйте ось без отмеченных корней};
+\node[act] (test) at (0,-9.15) {Выберите пробное число, вычислите \(f(x_0)\) и подпишите знак};
+\node[act] (other) at (0,-11.5) {Установите остальные знаки; через простой корень знак меняется};
+\node[act] (choose) at (0,-13.85) {Выберите участки нужного знака; учтите строгость и корни};
+\node[start] (end) at (0,-15.8) {Запишите ответ промежутками};
+\draw[->] (st)--(rt);\draw[->] (rt)--(dec);
+\draw[->] (dec.west)-| node[pos=.23,above] {да} (yes.north);
+\draw[->] (dec.east)-| node[pos=.23,above] {нет} (no.north);
+\draw[->] (yes.south)|- (test.west);
+\draw[->] (no.south)|- (test.east);
+\draw[->] (test)--(other);\draw[->] (other)--(choose);\draw[->] (choose)--(end);
+\end{tikzpicture}
+\end{center}
+\clearpage
+% ---------------- examples ----------------
+\sectionhead{3. Как знак неравенства влияет на ответ}
+Для того же многочлена \(x^2-x-6\) знаки на оси остаются такими же: «\(+\), \(-\), \(+\)».
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}lX@{}}
+\toprule
+\textbf{Неравенство} & \textbf{Ответ}\\
+\midrule
+\(x^2-x-6\ge0\) & \( (-\infty;-2]\cup[3;+\infty) \)\\[4pt]
+\(x^2-x-6>0\) & \( (-\infty;-2)\cup(3;+\infty) \)\\[4pt]
+\(x^2-x-6\le0\) & \( [-2;3] \)\\[4pt]
+\(x^2-x-6<0\) & \( (-2;3) \)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\textbf{Строгое} \(<,>\): точки выколоты, скобки круглые. \textbf{Нестрогое} \(\le,\ge\): корни входят в ответ, скобки квадратные.
+
+\sectionhead{4. Два коротких закрепляющих примера}
+\subhead{Пример 1. Ещё одна квадратичная функция}
+Решите \(x^2-3x-4\ge0\).
+\[
+ x^2-3x-4=(x+1)(x-4),\qquad x=-1,\ 4.
+\]
+Поскольку \(f(0)=-4<0\), знаки: «\(+\), \(-\), \(+\)». Поэтому
+\[
+ \boxed{x\in(-\infty;-1]\cup[4;+\infty)}.
+\]
+\subhead{Пример 2. Линейное неравенство}
+Решите \(4x+5\ge0\). Единственный корень: \(x=-\dfrac54\). При \(x=0\) значение равно \(5>0\), значит справа от корня стоит плюс. Ответ:
+\[
+ \boxed{x\in\left[-\frac54;+\infty\right)}.
+\]
+\note{На оси отмечают корни. Пробное число, например \(0\), достаточно использовать для определения знака.}
+
+\sectionhead{5. Как читать числовую ось}
+\begin{center}
+\begin{tikzpicture}[x=1.05cm,y=1cm,>=Stealth]
+\draw[->] (-5.4,0)--(5.45,0) node[right] {$x$};
+\foreach \x/\lab in {-4/-4,-2/-2,0/0,2/2,4/4} {
+\draw (\x,.07)--(\x,-.07);\node[below=3pt] at (\x,0) {$\lab$};}
+\node[above,color=darkaccent] at (-2,0.2) {меньше};
+\node[above,color=darkaccent] at (2,0.2) {больше};
+\end{tikzpicture}
+\end{center}
+\clearpage
+% ---------------- products ----------------
+\sectionhead{6. Произведение нескольких скобок}
+Решите \((x+3)(x-1)(2x+5)\ge0\).
+\begin{enumerate}
+\item Каждый множитель приравняйте к нулю: \(x=-3\), \(x=1\), \(x=-\dfrac52\).
+\item Упорядочьте корни: \(-3<-\dfrac52<1\). Получится \textbf{четыре} промежутка.
+\item Подставьте \(x=0\): \(f(0)=3\cdot(-1)\cdot5=-15<0\). Поэтому знак «\(-\)» принадлежит промежутку \(\left(-\dfrac52;1\right)\).
+\item При переходе через каждый из этих простых корней знаки чередуются:
+\end{enumerate}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm,>=Stealth]
+\draw[->] (-5.1,0)--(5.2,0) node[right] {$x$};
+\foreach \x/\lab in {-2.95/-3,-.75/-\frac52,2.3/1} {
+ \filldraw[darkaccent] (\x,0) circle (.083);\node[below=4pt] at (\x,0) {$\lab$};}
+\node[above=8pt,color=darkaccent,font=\large] at (-4,0) {$-$};
+\node[above=8pt,color=darkaccent,font=\large] at (-1.85,0) {$+$};
+\node[above=8pt,color=darkaccent,font=\large] at (.8,0) {$-$};
+\node[above=8pt,color=darkaccent,font=\large] at (3.7,0) {$+$};
+\node[above=8pt,color=muted,font=\scriptsize] at (.8,.60) {$x_0=0$};
+\end{tikzpicture}
+\end{center}
+Нужны участки с плюсом; корни включаются:
+\[
+ \boxed{x\in\left[-3;-\frac52\right]\cup[1;+\infty)}.
+\]
+\subhead{Строгое неравенство: ещё один пример}
+\((-5x+10)(x-1)(10x+40)<0\). Корни: \(-4\), \(1\), \(2\). При \(x=0\) получаем \(10\cdot(-1)\cdot40=-400<0\), поэтому «\(-\)» стоит на \((-4;1)\). Знаки чередуются, и ответ:
+\[
+ \boxed{x\in(-4;1)\cup(2;+\infty)}.
+\]
+\subhead{Если один из множителей --- квадратный трёхчлен}
+\((x^2-x-6)(2x-3)\ge0\). Корни: \(-2\), \(\dfrac32\), \(3\). Поскольку \(f(0)=18>0\), плюс находится на \(\left(-2;\dfrac32\right)\). После расстановки знаков:
+\[
+ \boxed{x\in\left[-2;\frac32\right]\cup[3;+\infty)}.
+\]
+\clearpage
+% ---------------- exceptional cases ----------------
+\sectionhead{7. Что делать, если действительных корней нет?}
+\subhead{Пример 1. Ответ --- все действительные числа}
+Решите \(x^2-x+4>0\).
+\[
+ D=(-1)^2-4\cdot1\cdot4=1-16=-15<0.
+\]
+Корней нет, значит на оси нет точек, где знак мог бы измениться. \(f(0)=4>0\), поэтому \(f(x)>0\) при любом действительном \(x\).
+\[
+ \boxed{x\in\mathbb{R}\quad\text{или}\quad x\in(-\infty;+\infty)}.
+\]
+\subhead{Пример 2. Ответ --- пустое множество}
+Для того же \(x^2-x+4\le0\) требуется неположительное значение, а многочлен всюду положителен. Решений нет:
+\[
+ \boxed{\varnothing}.
+\]
+\subhead{Пример 3. Отрицательная старшая степень}
+Решите \(-x^2-x-15\ge0\). Дискриминант: \(D=(-1)^2-4(-1)(-15)=-59<0\). Корней нет. \(f(0)=-15<0\), поэтому \(\boxed{\varnothing}\).
+
+\sectionhead{8. Важные ограничения и типичные ошибки}
+\checkitem{\textbf{Корни на оси перепутаны местами.} Записывайте их от меньшего к большему, например \(-4<1<2\).}
+\checkitem{\textbf{Знак перенесён не туда.} Подписывайте его в промежутке, из которого взяли пробное число.}
+\checkitem{\textbf{В ответе выбран неверный знак.} Для \(\ge,>\) нужны плюсы; для \(\le,<\) --- минусы.}
+\checkitem{\textbf{Скобки ошибочны.} Строгий знак --- круглые, нестрогий --- квадратные у включённых корней.}
+\checkitem{\textbf{Пропущен знак объединения} \(\cup\) между раздельными промежутками.}
+\checkitem{\textbf{Знаки чередуются без проверки кратности.} При простом корне знак меняется. При корне чётной кратности знак сохраняется: \((x-1)^2\ge0\) верно для всех \(x\).}
+\checkitem{\textbf{Неверно трактуется отсутствие корней.} Сначала определите постоянный знак; ответом может стать \(\mathbb R\) или \(\varnothing\).}
+\clearpage
+% ---------------- exercises ----------------
+\sectionhead{Тренировочный блок \hfill\normalfont\normalsize Путь А \textbar{} 10 задач}
+Решите \textbf{методом интервалов}. Для каждого задания найдите корни, начертите ось, подпишите знаки и запишите ответ промежутками.
+\subhead{Базовый уровень}
+\begin{enumerate}
+\item \(5x-10>0.\)
+\item \(3x+9\le0.\)
+\item \(x^2-x-12\ge0.\)
+\item \(x^2+2x-8<0.\)
+\end{enumerate}
+\subhead{Средний уровень}
+\begin{enumerate}[resume]
+\item \(x^2-7x+10\le0.\)
+\item \((x+4)(x-2)(x-5)>0.\)
+\item \((x-1)(3x+6)(x+3)\le0.\)
+\item \((x^2-4)(x+1)\ge0.\)
+\end{enumerate}
+\subhead{Повышенный уровень: нет действительных корней}
+\begin{enumerate}[resume]
+\item \(x^2-2x+5\le0.\)
+\item \(-x^2+4x-7<0.\)
+\end{enumerate}
+\vspace{10mm}
+\textcolor{darkaccent}{\bfseries Проверьте оформление:} точки и скобки согласованы со строгостью знака, бесконечности записаны с круглыми скобками, раздельные промежутки соединены \(\cup\).
+\clearpage
+% ---------------- answer ----------------
+\sectionhead{Ответы к тренировочному блоку}
+\renewcommand{\arraystretch}{1.52}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}>{\bfseries}p{12mm}X@{}}
+\toprule
+№ & Ответ\\
+\midrule
+1 & \(x\in(2;+\infty)\)\\
+2 & \(x\in(-\infty;-3]\)\\
+3 & \(x\in(-\infty;-3]\cup[4;+\infty)\)\\
+4 & \(x\in(-4;2)\)\\
+5 & \(x\in[2;5]\)\\
+6 & \(x\in(-4;2)\cup(5;+\infty)\)\\
+7 & \(x\in(-\infty;-3]\cup[-2;1]\)\\
+8 & \(x\in[-2;-1]\cup[2;+\infty)\)\\
+9 & \(\varnothing\)\\
+10 & \(\mathbb{R}\)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vspace{7mm}
+\sectionhead{Итоговая памятка}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{46mm}X@{}}
+\toprule
+Ситуация & Ваше действие\\
+\midrule
+Получено неравенство & Найдите нули выражения.\\
+Корни найдены & Упорядочьте и отметьте их на оси.\\
+Нужно определить знаки & Подставьте удобное пробное число.\\
+Простой корень & При переходе через него поменяйте знак.\\
+Корней нет & Определите знак на всей оси.\\
+Знак \(>\) или \(\ge\) & Выбирайте положительные промежутки.\\
+Знак \(<\) или \(\le\) & Выбирайте отрицательные промежутки.\\
+Нестрогое неравенство & Добавляйте корни в множество решений.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vfill
+\begin{center}\small\color{muted}Лёвин Артём Александрович --- эксклюзивно для Софии Хоменко\end{center}
+\end{document}
