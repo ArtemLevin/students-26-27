@@ -251,6 +251,9 @@ try{
     assert.match(t42.back,/по течению/,'T4.2 return downstream');
     assert.equal(t42.t1,'6 ч');assert.equal(t42.t2,'3 ч');assert.equal(t42.total,'9 ч');
     assert.ok(t42.disabled,'raft moving outside the upstream segment must not be drawn');
+    const flow=await evaluate('({text:document.getElementById("flowCaption").textContent,visible:getComputedStyle(document.getElementById("flowCaption")).display,letter:getComputedStyle(document.querySelector(".river>text:not(#flowLabel)")).fontSize})');
+    assert.match(flow.text,/течение направлено к A/i,'Current direction follows source scenario');
+    if(width<=650){assert.equal(flow.visible,'block','Mobile model has a readable current-direction caption');assert.ok(parseFloat(flow.letter)>=26,'A/B labels are enlarged on mobile SVG');}
     if(width===390||width===1440)await screen('09.11.26-lab-'+width+'-t42');
     assert.deepEqual(errors,[],'No simulator errors after t42 initialization');
   }
