@@ -168,7 +168,7 @@ try{
     await sleep(100);
   }
   assert.ok(mapLoaded,'Competency map must load the stereometry catalog');
-  const mapEvidence=await run('(()=>{const before=localStorage.getItem("nikol-competence-state-v2");const cell=document.querySelector("#radialMap .radial-cell[data-id=t3_cube]");cell.focus();cell.click();const dialog=document.getElementById("competencyDialog");return {open:dialog.open,body:document.getElementById("dialogEvidence").textContent,url:document.getElementById("dialogLink").getAttribute("href"),linkLabel:document.getElementById("dialogLink").textContent,level:document.querySelector("#levelPicker .level-btn[aria-pressed=true]")?.dataset.level,before,after:localStorage.getItem("nikol-competence-state-v2")}})()');
+  const mapEvidence=await run('(()=>{const before=localStorage.getItem("nikol-competence-state-v2");const cell=document.querySelector("#radialMap .radial-cell[data-id=t3_cube]");cell.focus();cell.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true}));const dialog=document.getElementById("competencyDialog");return {open:dialog.open,body:document.getElementById("dialogEvidence").textContent,url:document.getElementById("dialogLink").getAttribute("href"),linkLabel:document.getElementById("dialogLink").textContent,level:document.querySelector("#levelPicker .level-btn[aria-pressed=true]")?.dataset.level,before,after:localStorage.getItem("nikol-competence-state-v2")}})()');
   assert.equal(mapEvidence.open,true,'Competency detail should open from keyboard-focusable SVG');
   assert.match(mapEvidence.body,/09\\.11/,'Evidence must refer to the actual lesson date');
   assert.equal(mapEvidence.url,'09.11.26.html#cube');
