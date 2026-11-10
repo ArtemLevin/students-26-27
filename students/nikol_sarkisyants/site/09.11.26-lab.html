@@ -106,9 +106,12 @@ function renderSolid(x){
     edge('A','D',true);edge('D','C',true);edge('D','D1',true);
  }
  const label=(str,xp,yp)=>{let node=el('text',{x:xp,y:yp,fill:'var(--ink)','font-size':18,'font-family':'Georgia,serif','text-anchor':'middle'});node.textContent=str;};
- const [ax,ay]=pos('A'),[bx,by]=pos('B'),[ccx,ccy]=pos(isTriangle?'C':'D'),[atx,aty]=pos('A1');
+ const [ax,ay]=pos('A'),[bx,by]=pos('B'),[cx,cy]=pos('C'),[atx,aty]=pos('A1');
  label('a = '+fmt(x.a),(ax+bx)/2,ay+30);
- label('b = '+fmt(x.b),ccx+28,(ay+ccy)/2+12);
+ // b follows the actual depth edge: B–C for a box, A–C for a right triangular base.
+ // Keep labels outside the front face, even after scaling.
+ if(isTriangle)label('b = '+fmt(x.b),ax-24,(ay+cy)/2+12);
+ else label('b = '+fmt(x.b),(bx+cx)/2+24,(by+cy)/2+17);
  label((mode==='box'?'c':'h')+' = '+fmt(x.h),ax-28,(ay+aty)/2);
  byId('solid-desc').textContent=(mode==='cube'?'Куб':mode==='box'?'Прямоугольный параллелепипед':'Прямая треугольная призма')+'. Размеры: a = '+fmt(x.a)+', b = '+fmt(x.b)+', высота = '+fmt(x.h)+'. Объём = '+fmt(x.volume)+', площадь полной поверхности = '+fmt(x.surface)+'.';
 }
