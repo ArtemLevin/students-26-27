@@ -86,6 +86,10 @@ try{
   await sleep(150);
   await run("document.documentElement.dataset.theme='"+(dark?'dark':'light')+"'");
   const metrics=await run('({scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth})');
+  if(metrics.scrollWidth>metrics.clientWidth+2){
+   const offenders=await run('(()=>[...document.querySelectorAll("*")].filter(el=>{const r=el.getBoundingClientRect();return r.width>0&&(r.right>document.documentElement.clientWidth+2||r.left< -2)}).slice(0,20).map(el=>({tag:el.tagName,className:String(el.className||"").slice(0,80),id:el.id||"",rect:Math.round(el.getBoundingClientRect().right)})))()');
+   console.error('Horizontal overflow offenders:',JSON.stringify(offenders));
+  }
   assert.ok(metrics.scrollWidth<=metrics.clientWidth+2,
    'Horizontal overflow '+name+' '+width+' '+(dark?'dark':'light')+' '+JSON.stringify(metrics));
   assert.deepEqual(failed,[],'HTTP failures '+name+' '+width);
