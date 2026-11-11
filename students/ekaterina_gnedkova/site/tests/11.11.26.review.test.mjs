@@ -23,9 +23,9 @@ test('Exactly ten probability exercises with ten answer reveals',()=>{
 
 test('All local lesson and lab links resolve',()=>{
  for(const [name,html] of [['lesson',page],['lab',lab]]){
-  const ids=[...html.matchAll(/\\bid="([^"]+)"/g)].map(x=>x[1]);
+  const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
   assert.equal(new Set(ids).size,ids.length,name+' duplicate IDs');
-  for(const [,url] of html.matchAll(/\\b(?:href|src)="([^"]+)"/g)){
+  for(const [,url] of html.matchAll(/\b(?:href|src)="([^"]+)"/g)){
    if(url.startsWith('#')||url.startsWith('data:')||/^https?:/.test(url))continue;
    const target=url.split(/[?#]/,1)[0];
    if(target)assert.ok(fs.existsSync(path.resolve(site,target)),name+' missing '+target);
@@ -35,7 +35,7 @@ test('All local lesson and lab links resolve',()=>{
 
 test('Inline JavaScript parses',()=>{
  for(const [name,html] of [['lesson',page],['lab',lab]]){
-  for(const [,script] of html.matchAll(/<script\\b[^>]*>([\\s\\S]*?)<\\/script>/g)){
+  for(const [,script] of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/g)){
    if(script.trim())assert.doesNotThrow(()=>new vm.Script(script,{filename:name+'.js'}));
   }
  }
