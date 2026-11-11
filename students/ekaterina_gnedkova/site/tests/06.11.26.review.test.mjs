@@ -50,7 +50,8 @@ test('Publication and competency evidence',()=>{
  assert.equal(meta.outcomes.length,intent.outcomes.length);
  assert.equal(meta.outcomes.every(x=>x.masteryClaim===null),true);
  assert.equal(intent.ktpMatches.length,0);
- assert.ok(index.includes('Последнее занятие · 06.11.26'));
+ assert.ok(index.includes('Последнее занятие · 11.11.26'));
+ assert.ok(index.includes('href="06.11.26.html"'));
  assert.ok(index.includes('href="28.10.26.html"'));
  for(const x of meta.outcomes){
   assert.ok(page.includes('id="'+x.evidenceAnchor+'"'));
