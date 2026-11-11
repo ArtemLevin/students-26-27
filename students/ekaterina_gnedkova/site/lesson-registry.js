@@ -5,6 +5,76 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-11",
+  "ktpRefs": [],
+  "href": "11.11.26.html",
+  "title": "Теория вероятностей и случайные события",
+  "navTitle": "Теория вероятностей и случайные события",
+  "navSubtitle": "Теория вероятностей: равновозможные исходы, учёт порядка, независимость, формула Бернулли, интервалы и десять тренировочных задач. Екатерина Гнедкова, материал занятия 10 ноября 2026 года.",
+  "summary": "Теория вероятностей: равновозможные исходы, учёт порядка, независимость, формула Бернулли, интервалы и десять тренировочных задач. Екатерина Гнедкова, материал занятия 10 ноября 2026 года.",
+  "topics": [
+    "классическая вероятность и равновозможные исходы",
+    "упорядоченные пары и неупорядоченный выбор",
+    "выбор без возвращения",
+    "независимость и противоположное событие",
+    "формула Бернулли и ровно k успехов",
+    "разность вложенных событий и границы интервалов"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege27_04_001",
+      "evidenceAnchor": "outcomes",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_04_002",
+      "evidenceAnchor": "outcomes",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_04_014",
+      "evidenceAnchor": "outcomes",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_04_008",
+      "evidenceAnchor": "conditional",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege27_04_003",
+      "evidenceAnchor": "independent",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_04_006",
+      "evidenceAnchor": "independent",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_04_013",
+      "evidenceAnchor": "independent",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_05_007",
+      "evidenceAnchor": "bernoulli",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege27_05_008",
+      "evidenceAnchor": "bernoulli",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "11.11.26.html",
+    "pdf": "../pdf_docs/11.11.26.pdf",
+    "tex": "../tex_docs/11.11.26.tex",
+    "lab": "11.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-06",
   "ktpRefs": [],
   "href": "06.11.26.html",
