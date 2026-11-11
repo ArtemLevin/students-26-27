@@ -95,7 +95,7 @@ checkboxes.forEach(el=>{const id=el.dataset.task?'task-'+el.dataset.task:'check-
 function updateProgress(){const done=document.querySelectorAll('input[data-task]:checked').length;document.getElementById('progress').textContent='Выполнено: '+done+' из 10.';}updateProgress();
 const svg=document.getElementById('graph'),capt=document.getElementById('graphCaption'),count=document.getElementById('intersectionCount'),expl=document.getElementById('graphExplanation');const cs=document.getElementById('rangeC'),ks=document.getElementById('rangeK'),ms=document.getElementById('rangeModule');
 const W=920,H=620,margin={l:62,r:23,t:23,b:54};let mode='parabola';
-const configs={parabola:{x0:-6.5,x1:5.5,y0:-15,y1:14},module:{x0:-3.4,x1:3.4,y0:-5.5,y1:5.5},rays:{x0:-5,x1:5,y0:-2,y1:10}};const NS='http://www.w3.org/2000/svg';
+const configs={parabola:{x0:-6.5,x1:5.5,y0:-15,y1:14},module:{x0:-3.4,x1:3.4,y0:-5.5,y1:5.5},rays:{x0:-10,x1:10,y0:-2,y1:14}};const NS='http://www.w3.org/2000/svg';
 function el(tag,attrs,parent){const v=document.createElementNS(NS,tag);Object.keys(attrs||{}).forEach(n=>v.setAttribute(n,attrs[n]));(parent||svg).appendChild(v);return v}
 function txt(x,y,str,attrs,parent){const e=el('text',Object.assign({x:x,y:y,fill:'var(--text-secondary)','font-size':14,'font-family':'system-ui, sans-serif'},attrs||{}),parent);e.textContent=str;return e}
 function fmt(v){return Number.isInteger(v)?String(v):String(Number(v.toFixed(2))).replace('.',',')}
@@ -104,7 +104,7 @@ const title=el('title',{});title.textContent='График: '+(mode==='parabola'
 const desc=el('desc',{});desc.textContent='Изменяемый график; все значения и число пересечений показаны также текстом под управлением.';
 el('rect',{x:0,y:0,width:W,height:H,fill:'var(--surface-raised)'});
 const defs=el('defs',{});const clip=el('clipPath',{id:'graphClip'},defs);el('rect',{x:margin.l,y:margin.t,width:W-margin.l-margin.r,height:H-margin.t-margin.b},clip);
-const grid=el('g',{});const xstep=1,ystep=mode==='parabola'?4:mode==='module'?1:2;
+const grid=el('g',{});const xstep=mode==='rays'?2:1,ystep=mode==='parabola'?4:mode==='module'?1:2;
 for(let i=Math.ceil(conf.x0/xstep)*xstep;i<=conf.x1;i+=xstep){const val=xx(i);el('line',{x1:val,x2:val,y1:margin.t,y2:H-margin.b,stroke:'var(--border-subtle)','stroke-width':1},grid);txt(val,H-margin.b+23,String(i),{'text-anchor':'middle','font-size':13},grid)}
 for(let i=Math.ceil(conf.y0/ystep)*ystep;i<=conf.y1;i+=ystep){const val=yy(i);el('line',{x1:margin.l,x2:W-margin.r,y1:val,y2:val,stroke:'var(--border-subtle)','stroke-width':1},grid);txt(margin.l-14,val+5,String(i),{'text-anchor':'end','font-size':13},grid)}
 el('line',{x1:xx(0),x2:xx(0),y1:margin.t,y2:H-margin.b,stroke:'var(--text-secondary)','stroke-width':1.8});el('line',{x1:margin.l,x2:W-margin.r,y1:yy(0),y2:yy(0),stroke:'var(--text-secondary)','stroke-width':1.8});txt(W-margin.r-9,yy(0)-11,'x');txt(xx(0)+13,margin.t+12,'y');
