@@ -1,0 +1,317 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{icomma}
+\usepackage{geometry}
+\geometry{left=21mm,right=21mm,top=21mm,bottom=23mm}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{005A5A}
+\definecolor{textgray}{HTML}{343434}
+\definecolor{muted}{HTML}{6C7376}
+\definecolor{softred}{HTML}{B94B48}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=9pt,topsep=5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{muted}{Движение по наклонной плоскости}}
+\fancyhead[R]{\small\textcolor{muted}{Володя Хачатурян}}
+\fancyfoot[C]{\small\textcolor{muted}{\thepage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{15pt}
+\newcommand{\sectionline}[1]{\section*{\textcolor{darkaccent}{#1}}}
+\newcommand{\subhead}[1]{\subsection*{\textcolor{darkaccent}{#1}}}
+\newcommand{\note}[1]{\textcolor{darkaccent}{\textbf{Главная мысль.}} #1}
+\newcommand{\warn}[1]{\textcolor{softred}{\textbf{Будьте внимательны.}} #1}
+\newcommand{\ex}[1]{\textcolor{darkaccent}{\textbf{Пример.}} #1}
+\newcommand{\answer}[1]{\textcolor{darkaccent}{\textbf{Ответ:}} #1}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{29mm}
+{\large\textcolor{darkaccent}{ФИЗИКА}}\par
+\vspace{18mm}
+{\LARGE\textcolor{textgray}{Чек-лист}}\par
+\vspace{11mm}
+{\LARGE\textcolor{accent}{Движение по наклонной\\[2pt] плоскости}}\par
+\vspace{15mm}
+{\normalsize Динамика и кинематика: силы, ускорение, путь}\par
+\vspace{50mm}
+{\normalsize Володя Хачатурян}\par
+\vspace{13mm}
+{\normalsize 12 ноября 2026 г.}\par
+\vfill
+{\small Лёвин Артём Александрович\\[-1pt] эксклюзивно для Володи Хачатуряна}\par
+\vspace{15mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+ \draw[accent,line width=.85pt] (-4,0) .. controls (-2.9,.85) and (-1.2,-.8) .. (0,0)
+ .. controls (1.45,.8) and (2.7,-.62) .. (4,0);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\sectionline{1. Что происходит на наклонной плоскости}
+Наклонная плоскость образует с горизонтом угол $\alpha$. Тело может находиться в покое, двигаться вверх либо скользить вниз. На него действуют:
+\begin{itemize}
+ \item сила тяжести $\vec F_{\text{тяж}}=m\vec g$ — \textbf{вертикально вниз};
+ \item реакция опоры $\vec N$ — \textbf{перпендикулярно плоскости};
+ \item сила трения $\vec F_{\text{тр}}$ — \textbf{вдоль плоскости}, против скольжения или его возможного начала;
+ \item другие силы — \textbf{только если} они указаны в условии.
+\end{itemize}
+\begin{center}
+\begin{tikzpicture}[scale=.95,>=Stealth]
+ \coordinate (A) at (.2,.25); \coordinate (B) at (5.4,3.252);
+ \draw[thick,black] (A)--(B)--(5.4,.25)--cycle;
+ \draw[muted,thin] (.2,.25)--(2.15,.25);
+ \draw[accent] (1.25,.25) arc[start angle=0,end angle=30,radius=1.05];
+ \node[darkaccent] at (1.62,.51) {$\alpha$};
+ \coordinate (C) at (3.02,2.16);
+ \begin{scope}[shift={(C)},rotate=30]
+  \draw[fill=gray!12,thick] (-.48,-.34) rectangle (.48,.34);
+ \end{scope}
+ \draw[->,thick,softred] (C)--++(0,-1.7) node[below] {$m\vec g$};
+ \draw[->,thick,accent] (C)--++(-.92,1.59) node[above] {$\vec N$};
+ \draw[->,thick,blue!65!black] (C)--++(1.48,.855) node[above] {$\vec F_{\text{тр}}$};
+ \draw[->,thick,muted,dashed] (C)--++(-1.47,-.85) node[below] {$\vec v$};
+ \node[anchor=west,text=muted,font=\small] at (5.7,2.7) {Пример:};
+ \node[anchor=west,text=muted,font=\small] at (5.7,2.3) {скольжение вниз};
+\end{tikzpicture}
+\end{center}
+\note{Направление скорости и ускорения может различаться: при движении вверх с замедлением ускорение направлено вниз по склону.}
+
+\subhead{2. Проекции силы тяжести}
+Удобно выбрать ось $Ox$ вдоль плоскости, а $Oy$ перпендикулярно ей. Тогда
+\[
+\boxed{F_{\text{тяж},x}=mg\sin\alpha,\qquad |F_{\text{тяж},y}|=mg\cos\alpha.}
+\]
+Здесь показаны \emph{модули} проекций. Знаки определяются направлением выбранных осей. При оси $Ox$, направленной \textbf{вниз}, проекция $mg\sin\alpha$ положительна. При оси $Ox$, направленной \textbf{вверх}, она отрицательна.
+
+\clearpage
+\sectionline{3. Второй закон Ньютона и знаки}
+Баланс сил записывают \textbf{по каждой оси отдельно}:
+\[
+\sum F_x=ma_x, \qquad \sum F_y=ma_y.
+\]
+Тело не отрывается от плоскости и не проваливается в неё, поэтому $a_y=0$ и
+\[
+\boxed{N-mg\cos\alpha=0 \quad\Longrightarrow\quad N=mg\cos\alpha.}
+\]
+Направления осей разрешено выбирать произвольно. Если вектор направлен \textbf{по оси}, его проекция положительна; если \textbf{против оси} — отрицательна.
+
+\subhead{4. Трение: покой и скольжение}
+\textbf{Гладкая плоскость / трением пренебречь:} $F_{\text{тр}}=0$.
+
+\textbf{Тело скользит:} для модели сухого трения скольжения
+\[
+\boxed{F_{\text{тр}}=\mu N=\mu mg\cos\alpha.}
+\]
+\textbf{Тело покоится:} трение покоя подстраивается под остальные силы; максимальная величина равна $\mu_{\text{п}}N$. В общем случае
+\[
+\boxed{0\le F_{\text{тр,п}}\le \mu_{\text{п}}N.}
+\]
+\warn{При покое нельзя автоматически приравнивать силу трения величине $\mu_{\text{п}}N$: это её верхняя граница.}
+
+\subhead{5. Три основные ситуации}
+\begin{tabularx}{\linewidth}{@{}p{43mm}X@{}}
+\toprule
+\textbf{Ситуация} & \textbf{Проекция второго закона Ньютона}\ \\ \midrule
+Покой на склоне & $mg\sin\alpha-F_{\text{тр,п}}=0$, если трение направлено вверх. \\
+Спуск со скольжением & $mg\sin\alpha-\mu mg\cos\alpha=ma_x$ (ось вниз). \\
+Подъём со скольжением & $-mg\sin\alpha-\mu mg\cos\alpha=ma_x$ (ось вверх). \\
+\bottomrule
+\end{tabularx}
+Отсюда при спуске
+\[
+\boxed{a_x=g(\sin\alpha-\mu\cos\alpha).}
+\]
+Если выражение отрицательно, тело, \emph{пока движется вниз}, замедляется. При подъёме со скольжением ускорение направлено вниз, его модуль равен $g(\sin\alpha+\mu\cos\alpha)$.
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\Large\textcolor{darkaccent}{Алгоритм: задача о наклонной плоскости}}\par
+\vspace{9mm}
+\begin{tikzpicture}[
+ >=Stealth,
+ every node/.style={font=\small,align=center},
+ proc/.style={draw=accent,rounded corners=2pt,minimum height=1.05cm,text width=8cm,inner sep=5pt},
+ decision/.style={draw=accent,diamond,aspect=3,text width=4.6cm,inner sep=2pt},
+ case/.style={draw=accent,rounded corners=2pt,minimum height=1.2cm,text width=5.1cm,inner sep=5pt},
+ arrow/.style={->,thick,accent}
+]
+\node[proc] (a) at (0,0) {Прочитать условие: покой или скольжение?\\Гладкая плоскость или есть трение?};
+\node[proc] (b) at (0,-2.0) {Нарисовать тело, все реальные силы,\\скорость, ускорение и две оси};
+\node[decision] (c) at (0,-4.2) {Тело скользит?};
+\node[case] (d) at (-4.05,-6.75) {Да: при наличии трения\\$F_{\text{тр}}=\mu N$;\\для гладкой плоскости $F_{\text{тр}}=0$};
+\node[case] (e) at (4.05,-6.75) {Нет: $a=0$; сила трения\\покоя определяется из\\равновесия и проверяется};
+\node[proc] (f) at (0,-9.0) {Записать проекции: $\sum F_x=ma_x$,\\$N-mg\cos\alpha=0$};
+\node[proc] (g) at (0,-10.85) {Найти искомую величину; если нужен путь,\\подключить формулу кинематики};
+\node[proc] (h) at (0,-12.7) {Проверить знак ускорения, единицы и ответ};
+\draw[arrow] (a)--(b);
+\draw[arrow] (b)--(c);
+\draw[arrow] (c.west)-| node[pos=.2,above] {да} (d.north);
+\draw[arrow] (c.east)-| node[pos=.2,above] {нет} (e.north);
+\draw[arrow] (d.south)--++(0,-.5)-| (f.west);
+\draw[arrow] (e.south)--++(0,-.5)-| (f.east);
+\draw[arrow] (f)--(g);
+\draw[arrow] (g)--(h);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\sectionline{6. Разбор типовых задач}
+\subhead{Пример 1. Брусок в покое: сила трения}
+Брусок массой $200$ г покоится на плоскости с углом $30^\circ$. Коэффициент трения покоя $\mu_{\text{п}}=0{,}6$. Примем $g=10\ \text{м/с}^2$.
+
+Поскольку брусок \textbf{покоится}, ускорение равно нулю. По оси вдоль склона:
+\[
+mg\sin\alpha-F_{\text{тр,п}}=0
+\quad\Longrightarrow\quad
+F_{\text{тр,п}}=0{,}2\cdot10\cdot\tfrac12=1\ \text{Н}.
+\]
+Проверим, достаточно ли трения покоя:
+\[
+N=mg\cos30^\circ=\sqrt3\ \text{Н},\qquad
+F_{\max}=0{,}6\sqrt3\approx1{,}04\ \text{Н}.
+\]
+Получили $1<1{,}04$, следовательно, покой возможен. \answer{$F_{\text{тр,п}}=1$ Н.}
+
+\subhead{Пример 2. Лыжник ускоряется при спуске}
+Начальная скорость $2$ м/с, конечная $12$ м/с, угол склона $30^\circ$. Трением пренебречь. Найти путь.
+\[
+mg\sin\alpha=ma \quad\Longrightarrow\quad a=g\sin30^\circ=5\ \text{м/с}^2.
+\]
+Времени в условии нет, используем $v^2-v_0^2=2as$:
+\[
+s=\frac{12^2-2^2}{2\cdot5}=\frac{140}{10}=14\ \text{м}.
+\]
+\answer{$14$ м.} При переходе к кинематике важно правильно посчитать знаменатель: $2a=10$.
+
+\subhead{Пример 3. Подъём до остановки}
+Шарик движется \textbf{вверх} по гладкому склону $30^\circ$, проходит до остановки $40$ см. Найти начальную скорость.
+
+Ось направим вверх: $a_x=-g\sin30^\circ=-5\ \text{м/с}^2$. Запишем $s=0{,}4$ м и $v=0$:
+\[
+0-v_0^2=2(-5)\cdot0{,}4
+\quad\Longrightarrow\quad v_0=\sqrt4=2\ \text{м/с}.
+\]
+\answer{$2$ м/с.} Тело движется вверх, хотя ускорение направлено вниз по склону.
+
+\clearpage
+\sectionline{7. Как совместить динамику с кинематикой}
+\note{Вначале по силам найдите ускорение. Затем выберите формулу движения по известным данным.}
+
+Для прямолинейного равноускоренного движения вдоль выбранной оси:
+\begin{align*}
+v &= v_0+at,\\
+s &= v_0t+\frac{at^2}{2},\\
+v^2-v_0^2 &= 2as,\\
+s &= \frac{v_0+v}{2}\,t.
+\end{align*}
+Здесь $v$, $v_0$ и $a$ — \textbf{проекции} на выбранную ось. При решении через путь вдоль склона и положительное направление движения знаки ускорения особенно важны.
+
+\subhead{Проверка перед ответом}
+\begin{itemize}
+\item Переведены ли сантиметры в метры и граммы в килограммы?
+\item На рисунке показаны реальные силы? Отсутствуют лишние силы?
+\item Указано ли направление ускорения? Совпадает ли оно с выбранным знаком $a_x$?
+\item Учтено ли, что «гладкая» означает отсутствие трения?
+\item Если тело \emph{покоится}, проверена ли граница трения покоя?
+\item При остановке записано ли $v=0$, а при разгоне учтено ли $ma$?
+\end{itemize}
+\subhead{Типичные ошибки}
+\begin{tabularx}{\linewidth}{@{}p{64mm}X@{}}
+\toprule
+\textbf{Неверный ход} & \textbf{Правильный ориентир} \\ \midrule
+Писать $mg\cos\alpha$ вдоль склона & Вдоль склона: $mg\sin\alpha$. \\
+Ставить знак по направлению движения & Знак проекции зависит от выбранной оси. \\
+Писать $\sum F_x=0$ при разгоне & При ускорении: $\sum F_x=ma_x$. \\
+Добавлять трение на гладкой плоскости & В данной модели $F_{\text{тр}}=0$. \\
+Приравнивать трение покоя к $\mu N$ & Из равновесия найти $F_{\text{тр,п}}$, затем проверить $F_{\text{тр,п}}\le\mu_{\text{п}}N$. \\
+Считать, что $v=0$ означает $a=0$ & В момент остановки скорость нулевая, а ускорение может быть ненулевым. \\
+\bottomrule
+\end{tabularx}
+
+\clearpage
+\sectionline{Тренировочный блок}
+В задачах, если не оговорено иное, примите $g=10\ \text{м/с}^2$. Силы и проекции записывайте с учётом выбранных осей. При необходимости используйте $\sin30^\circ=\tfrac12$, $\cos30^\circ=\tfrac{\sqrt3}{2}$.
+
+\textcolor{darkaccent}{\textbf{Базовый уровень}}
+\begin{enumerate}
+\item Брусок массой $2$ кг лежит на \emph{гладкой} плоскости с углом наклона $30^\circ$. Найдите силу реакции опоры.
+\item Тело массой $4$ кг находится на наклонной плоскости с углом $30^\circ$. Найдите модули составляющих силы тяжести вдоль плоскости и перпендикулярно ей.
+\item Брусок массой $1$ кг \emph{покоится} на плоскости с углом $30^\circ$; коэффициент трения покоя $0{,}6$. Найдите фактическую силу трения покоя и убедитесь, что равновесие возможно.
+\end{enumerate}
+\textcolor{darkaccent}{\textbf{Средний уровень}}
+\begin{enumerate}[start=4]
+\item Тело начинает скользить вниз \emph{без трения} по склону $30^\circ$ из состояния покоя. Определите скорость и путь через $3$ с.
+\item Лыжник движется вниз по гладкому склону $30^\circ$. Его скорость возросла с $4$ до $14$ м/с. Найдите пройденный по склону путь.
+\item Шарик поднимается по гладкой плоскости $30^\circ$ и останавливается после $0{,}9$ м. Найдите его начальную скорость.
+\item Брусок скользит вниз по плоскости $30^\circ$ с коэффициентом трения скольжения $0{,}2$. Найдите проекцию ускорения на ось, направленную вниз по склону.
+\end{enumerate}
+\clearpage
+\sectionline{Тренировочный блок — продолжение}
+\textcolor{darkaccent}{\textbf{Уровень выше среднего}}
+\begin{enumerate}[start=8]
+\item Брусок массой $2$ кг скользит вниз по плоскости с углом $30^\circ$, коэффициент трения скольжения $0{,}3$. Найдите $N$, силу трения и ускорение.
+\item Шайбу толкнули \emph{вверх} по плоскости под углом $37^\circ$ со скоростью $8$ м/с. Коэффициент трения скольжения $0{,}25$. Найдите путь до остановки. Используйте $\sin37^\circ\approx0{,}6$ и $\cos37^\circ\approx0{,}8$.
+\item Тело скользит вниз по наклонной плоскости $30^\circ$ с ускорением $2\ \text{м/с}^2$. Найдите коэффициент трения скольжения. Других сил вдоль плоскости нет.
+\end{enumerate}
+\vspace{4mm}
+\textcolor{darkaccent}{\textbf{Самопроверка оформления решения}}
+\begin{itemize}
+\item Выделены данные и искомая величина, все величины переведены в СИ.
+\item Построен чертёж с силами и осями; направление ускорения определено из движения.
+\item Записаны проекции второго закона Ньютона, затем получена формула.
+\item Если нужна длина пути, применена подходящая формула кинематики.
+\item Ответ указан с единицами и проверен по смыслу.
+\end{itemize}
+
+\clearpage
+\sectionline{Ответы к тренировочному блоку}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\linewidth}{@{}p{11mm}X@{}}
+\toprule
+\textbf{№} & \textbf{Результат}\\ \midrule
+1 & $N=10\sqrt3\ \text{Н}\approx17{,}3\ \text{Н}$. \\
+2 & Вдоль плоскости: $20\ \text{Н}$; перпендикулярно плоскости: $20\sqrt3\ \text{Н}$. \\
+3 & $F_{\text{тр,п}}=5\ \text{Н}$; $F_{\max}=3\sqrt3\ \text{Н}\approx5{,}20\ \text{Н}$; равновесие возможно. \\
+4 & $v=15\ \text{м/с}$, $s=22{,}5\ \text{м}$. \\
+5 & $s=18\ \text{м}$. \\
+6 & $v_0=3\ \text{м/с}$. \\
+7 & $a_x=5-\sqrt3\approx3{,}27\ \text{м/с}^2$. \\
+8 & $N=10\sqrt3\ \text{Н}$; $F_{\text{тр}}=3\sqrt3\ \text{Н}$; $a=5-1{,}5\sqrt3\approx2{,}40\ \text{м/с}^2$. \\
+9 & $a_x=-8\ \text{м/с}^2$ при оси вверх; $s\approx4\ \text{м}$. \\
+10 & $\mu=\dfrac{\sqrt3}{5}\approx0{,}346$. \\
+\bottomrule
+\end{tabularx}
+\vspace{9mm}
+\textcolor{darkaccent}{\textbf{Итоговая памятка}}\par
+\begin{tabularx}{\linewidth}{@{}p{53mm}X@{}}
+\toprule
+\textbf{Сигнал в условии} & \textbf{Действие}\\ \midrule
+Гладкая плоскость & Уберите силу трения.\\
+Покоится & $a=0$; найдите трение из равновесия и проверьте предельное значение.\\
+Скользит вниз & Направьте трение вверх по склону.\\
+Поднимается и замедляется & Ускорение направлено вниз по склону.\\
+Скорость изменилась, время неизвестно & Используйте $v^2-v_0^2=2as$.\\
+\bottomrule
+\end{tabularx}
+\vfill
+{\centering\small\textcolor{muted}{Лёвин Артём Александрович — эксклюзивно для Володи Хачатуряна}\par}
+\end{document}
