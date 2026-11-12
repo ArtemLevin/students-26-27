@@ -5,6 +5,75 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-11-12",
+    "ktpRefs": [],
+    "href": "12.11.26.html",
+    "title": "Оптимизация сложных функций",
+    "navTitle": "Оптимизация сложных функций",
+    "navSubtitle": "Матвей Горбачёв. Поиск максимума сложных функций: приведение дроби к постоянному числителю, минимум подкоренного выражения, производная, знак, физические ограничения. Колебания лайнера и электрический контур. Путь А — 10 развёрнутых задач.",
+    "summary": "Матвей Горбачёв. Поиск максимума сложных функций: приведение дроби к постоянному числителю, минимум подкоренного выражения, производная, знак, физические ограничения. Колебания лайнера и электрический контур. Путь А — 10 развёрнутых задач.",
+    "topics": [
+      "Оптимизация K/√D(x) через минимум D(x) на допустимой области",
+      "Преобразование знаменателя и степеней перед дифференцированием",
+      "Амплитуда вынужденных колебаний лайнера: оптимальный период и параметр n",
+      "Напряжение на катушке индуктивности: условие существования максимума",
+      "Знаки производной, проверка границ, ОДЗ и контроль ошибок"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "algebra_06",
+        "evidenceAnchor": "algebra",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "algebra_17",
+        "evidenceAnchor": "algebra",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_02",
+        "evidenceAnchor": "wave",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_05",
+        "evidenceAnchor": "circuit",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_11",
+        "evidenceAnchor": "circuit",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calculus_12",
+        "evidenceAnchor": "wave",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "modeling_04",
+        "evidenceAnchor": "principle",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "modeling_10",
+        "evidenceAnchor": "circuit",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "functions_01",
+        "evidenceAnchor": "mistakes",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "12.11.26.html",
+      "pdf": "../pdf_docs/12.11.26.pdf",
+      "tex": "../tex_docs/12.11.26.tex",
+      "lab": "12.11.26-lab.html"
+    }
+  },
+  {
     "date": "2026-11-05",
     "ktpRefs": [],
     "href": "05.11.26.html",
