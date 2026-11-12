@@ -56,8 +56,9 @@ try{
  assert.match(quiz,/Верно/);
  await js("window.dispatchEvent(new Event('beforeprint'))");assert.equal(await js("document.querySelector('#answers details').open"),true,'print answers shown');
  await js("window.dispatchEvent(new Event('afterprint'))");assert.equal(await js("document.querySelector('#answers details').open"),false,'answers restored');
- assert.equal(LESSONS[0].date,'2026-11-09');assert.equal(LESSONS.filter(x=>x.date==='2026-11-09').length,1);
- for(const [w,h] of [[390,844],[1440,900]]){await visit('index.html',w,h,false);const a=await js("document.getElementById('latestLessonCta').getAttribute('href')");assert.equal(a,'09.11.26.html')}
+ assert.equal(LESSONS[0].date,'2026-11-12');assert.equal(LESSONS.filter(x=>x.date==='2026-11-09').length,1);
+ assert.equal(LESSONS.filter(x=>x.date==='2026-11-12').length,1,'new lesson published once');
+ for(const [w,h] of [[390,844],[1440,900]]){await visit('index.html',w,h,false);const a=await js("document.getElementById('latestLessonCta').getAttribute('href')");assert.equal(a,'12.11.26.html')}
  await visit('09.11.26-lab.html#delay',1440,900,false);
  const start=await js("(()=>({d:document.getElementById('distance').value,delta:document.getElementById('delayHours').value,ta:document.getElementById('timeA').textContent,tb:document.getElementById('timeB').textContent,x:document.getElementById('meetX').textContent}))()");
  assert.deepEqual(start,{d:'645',delta:'3',ta:'6',tb:'3',x:'420'},'deep link delay');
