@@ -416,6 +416,30 @@ for(const [id,cfg] of Object.entries(LESSON_091126)){
   }
 }
 
+
+// 12.11.2026: lesson evidence for pursuit, delayed starts and two-stage motion.
+// Keep existing mastery levels, repeat flags and local storage unchanged.
+const LESSON_121126 = {
+  "ege11_01": {section:"model",relation:"touched",evidence:"Повторены формулы пути, времени и скорости, схема и таблица S–v–t."},
+  "ege11_03": {section:"chase",relation:"practiced",evidence:"Разобрана догонка: начальный отрыв 125 км сокращается за счёт разницы скоростей 25 км/ч."},
+  "ege11_17": {section:"delay",relation:"practiced",evidence:"Составлено уравнение для общего финиша при старте грузовика на шесть минут раньше."},
+  "ege11_18": {section:"stages",relation:"touched",evidence:"Для сюжета с мотоциклистом и разворотом построены две таблицы и система без решения."},
+  "ege11_19": {section:"pitfalls",relation:"touched",evidence:"Рассмотрены проверка ограничений, полный путь после разворота и выбор разности времён."},
+  "ege11_20": {section:"units",relation:"touched",evidence:"Переведены 300 метров в 0,3 километра и 20 минут в треть часа."}
+};
+for(const [id,cfg] of Object.entries(LESSON_121126)){
+  const item=G.flatMap(group=>group.items).find(topic=>topic.id===id);
+  if(!item)continue;
+  item.evidence=Array.isArray(item.evidence)?item.evidence:[];
+  item.evidence.push({text:cfg.evidence+" Материал: занятие 12.11.2026 «Догонка. Два этапа движения». Разбор теории и практика с преподавателем, самостоятельное mastery не оценивалось."});
+  const href="12.11.26.html#"+cfg.section;
+  item.relatedMaterials=Array.isArray(item.relatedMaterials)?item.relatedMaterials:[];
+  if(!item.relatedMaterials.some(material=>material.href===href)){
+    item.relatedMaterials.push({href,label:"Занятие 12.11: "+cfg.evidence});
+  }
+  item.material={href,label:"Открыть раздел занятия 12.11 →"};
+}
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'jaroslav_gavrilov',
@@ -425,7 +449,7 @@ window.COMPETENCY_MAP_DATA={
     programKey:'ege-profile-math',
     examModel:'Проект КИМ ЕГЭ-2027, профильный уровень',
     sourceNote:'Структура сверена 19.09.2026 с опубликованными ФИПИ проектами КИМ ЕГЭ-2027 по профильной математике.',
-    updated:'05.11.2026'
+    updated:'12.11.2026'
   },
   groups:G
 };
