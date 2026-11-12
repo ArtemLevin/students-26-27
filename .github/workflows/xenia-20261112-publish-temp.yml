@@ -1,0 +1,57 @@
+name: Xenia 12 November lesson publication (temporary)
+on:
+  push:
+    branches:
+      - xenia-2026-11-12-factorials-lesson
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            scripts
+            pipeline
+            shared
+            design-system
+            students/xenia_klykova
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate lesson sources
+        run: |
+          test -s students/xenia_klykova/tex_docs/12.11.26.tex
+          test -s students/xenia_klykova/pdf_docs/12.11.26.pdf
+          test -s students/xenia_klykova/images/12.11.26.png
+          test -s students/xenia_klykova/site/12.11.26.html
+          test -s students/xenia_klykova/site/12.11.26-lab.html
+      - name: Publisher dry run
+        run: |
+          node scripts/publish-lesson.mjs xenia_klykova 12.11.26 --intent students/xenia_klykova/site/data/publication-intents/2026-11-12.json --dry-run
+      - name: Canonical publication
+        run: |
+          node scripts/publish-lesson.mjs xenia_klykova 12.11.26 --intent students/xenia_klykova/site/data/publication-intents/2026-11-12.json
+      - name: Release validation
+        run: |
+          node scripts/student.mjs validate xenia_klykova
+          node --test students/xenia_klykova/site/tests/student-platform-v2.test.mjs
+      - name: Commit generated projections
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add students/xenia_klykova/site/data/lessons/2026-11-12.lesson.json \
+                  students/xenia_klykova/site/lesson-registry.js \
+                  students/xenia_klykova/site/data/ktp-state.json \
+                  students/xenia_klykova/site/data/mastery-state.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish Xenia 12 November lesson via Student Platform v2"
+            git push origin HEAD:xenia-2026-11-12-factorials-lesson
+          fi
