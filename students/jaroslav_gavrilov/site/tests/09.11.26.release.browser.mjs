@@ -56,8 +56,27 @@ try{
  assert.match(quiz,/Верно/);
  await js("window.dispatchEvent(new Event('beforeprint'))");assert.equal(await js("document.querySelector('#answers details').open"),true,'print answers shown');
  await js("window.dispatchEvent(new Event('afterprint'))");assert.equal(await js("document.querySelector('#answers details').open"),false,'answers restored');
- assert.equal(LESSONS[0].date,'2026-11-09');assert.equal(LESSONS.filter(x=>x.date==='2026-11-09').length,1);
- for(const [w,h] of [[390,844],[1440,900]]){await visit('index.html',w,h,false);const a=await js("document.getElementById('latestLessonCta').getAttribute('href')");assert.equal(a,'09.11.26.html')}
+ assert.equal(LESSONS[0].date,'2026-11-12');assert.equal(LESSONS.filter(x=>x.date==='2026-11-09').length,1);
+ assert.equal(LESSONS.filter(x=>x.date==='2026-11-12').length,1,'new lesson published once');
+ for(const [w,h] of [[390,844],[1440,900]]){await visit('index.html',w,h,false);const a=await js("document.getElementById('latestLessonCta').getAttribute('href')");assert.equal(a,'12.11.26.html')}
+ // The November 9 regression also protects the latest November 12 lesson and lab.
+ for(const [w,h] of [[390,844],[1440,900]])for(const dark of [false,true]){
+   await visit('12.11.26.html',w,h,dark);
+   await visit('12.11.26-lab.html#chase',w,h,dark);
+ }
+ await visit('12.11.26.html',1440,900,false);
+ const newerLesson=await js("(()=>({tasks:document.querySelectorAll('#practice .task').length,answers:document.querySelectorAll('#answers table tr').length,lab:!!document.querySelector('a[href=\"12.11.26-lab.html#chase\"]')}))()");
+ assert.deepEqual(newerLesson,{tasks:10,answers:10,lab:true},'November 12 complete practice and lab link');
+ await visit('12.11.26-lab.html#chase',1440,900,false);
+ let chase=await js("(()=>({t:document.getElementById('timeValue').textContent,d:document.getElementById('gapValue').textContent}))()");
+ assert.deepEqual(chase,{t:'0 ч',d:'125 км'},'chase starts with correct separation');
+ chase=await js("(()=>{const x=document.getElementById('time');x.value=100;x.dispatchEvent(new Event('input'));return {t:document.getElementById('timeValue').textContent,d:document.getElementById('gapValue').textContent}})()");
+ assert.deepEqual(chase,{t:'5 ч',d:'0 км'},'relative motion reaches meeting');
+ await visit('12.11.26-lab.html#stages',1440,900,false);
+ const first=await js("document.getElementById('formula').textContent");
+ assert.match(first,/x\/y − x\/90 = 1\/3/);
+ const second=await js("(()=>{document.getElementById('after').click();return document.getElementById('formula').textContent})()");
+ assert.match(second,/\(80 − x\)\/y = x\/180/);
  await visit('09.11.26-lab.html#delay',1440,900,false);
  const start=await js("(()=>({d:document.getElementById('distance').value,delta:document.getElementById('delayHours').value,ta:document.getElementById('timeA').textContent,tb:document.getElementById('timeB').textContent,x:document.getElementById('meetX').textContent}))()");
  assert.deepEqual(start,{d:'645',delta:'3',ta:'6',tb:'3',x:'420'},'deep link delay');
