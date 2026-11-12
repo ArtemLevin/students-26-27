@@ -50,7 +50,7 @@ try{
   assert.equal(await page.locator('#competencyMap').getAttribute('role'),'group','interactive map should expose child buttons to assistive technology');
   assert.equal(await page.locator('#competencyMap .radial-cell').first().getAttribute('role'),'button','map cell accessibility semantics');
   assert.ok(basic.focus,'focus control missing '+width);
-  assert.ok(basic.lesson==='Производные и исследование функции','latest lesson wrong '+width);
+  assert.ok(basic.lesson==='Оптимизация сложных функций','latest lesson wrong '+width);
   if(width===1440){
     const cell=page.locator('#competencyMap .radial-cell').first();
     await cell.focus();
@@ -114,7 +114,7 @@ try{
       titles:visible.filter(t=>t.querySelector('.archive-tile-title').scrollHeight>t.querySelector('.archive-tile-title').clientHeight+2).length};
   });
   assert.ok(archive.width<=archive.viewport+2,'archive overflow '+width+': '+JSON.stringify(archive));
-  assert.equal(archive.counts,14,'archive lesson count '+width);
+  assert.equal(archive.counts,15,'archive lesson count '+width);
   assert.equal(archive.months,3,'archive month groups '+width);
   assert.ok(Math.max(...archive.heights)-Math.min(...archive.heights)<=2,'unequal tiles '+width+': '+JSON.stringify(archive.heights));
   assert.equal(archive.clipped,0,'clipped archive card '+width);
@@ -123,7 +123,7 @@ try{
   await page.locator('#archiveSearch').fill('вклады');
   assert.equal(await page.locator('.archive-tile:visible').count(),2,'archive search failed '+width);
   await page.locator('#archiveSearch').fill('');
-  assert.equal(await page.locator('.archive-tile:visible').count(),14,'archive reset failed '+width);
+  assert.equal(await page.locator('.archive-tile:visible').count(),15,'archive reset failed '+width);
   await page.screenshot({path:path.join(artifactDir,'archive-'+width+'.png'),fullPage:true});
   await page.goto(origin+'18.10.26.html',{waitUntil:'networkidle'});
   await page.locator('.poster img').scrollIntoViewIfNeeded();
@@ -391,7 +391,46 @@ try{
   }
   assert.ok(lab05.curves>=3,'5 Nov rational plot must separate branches '+width);
   if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lab-05-'+width+'.png'),fullPage:true});
-  assert.deepEqual(failures,[],'5 Nov browser console/network failures '+width+': '+failures.join('; '));
+
+  // 12 November optimization: new lesson content, mathematical interactions, and both laboratory modes.
+  await page.goto(origin+'12.11.26.html',{waitUntil:'networkidle'});
+  const lesson12=await page.evaluate(()=>({
+    width:document.documentElement.scrollWidth,viewport:innerWidth,
+    title:document.querySelector('h1')?.textContent.trim(),
+    tasks:document.querySelectorAll('#practice details.task').length,
+    answers:document.querySelectorAll('#answers .answer-list details').length,
+    math:document.querySelectorAll('math').length,
+    nativeMath:[...document.querySelectorAll('math')].every(x=>x.namespaceURI==='http://www.w3.org/1998/Math/MathML')
+  }));
+  assert.ok(lesson12.width<=lesson12.viewport+2,'12 Nov lesson overflow '+width+': '+JSON.stringify(lesson12));
+  assert.ok(lesson12.title.includes('Оптимизация'),'12 Nov lesson title '+width);
+  assert.equal(lesson12.tasks,10,'12 Nov training count '+width);
+  assert.equal(lesson12.answers,10,'12 Nov answer count '+width);
+  assert.ok(lesson12.math>=25&&lesson12.nativeMath,'12 Nov MathML semantics '+width);
+  await page.locator('#wave-stepper [data-step-action="next"]').click();
+  assert.equal(await page.locator('#wave-progress').textContent(),'Шаг 2 из 5','12 Nov stepper '+width);
+  await page.locator('#wave-stepper [data-step-action="all"]').click();
+  assert.equal(await page.locator('#wave-all article').count(),5,'12 Nov all steps '+width);
+  await page.locator('#quiz input[name="q1"][value="yes"]').check();
+  await page.locator('#quiz input[name="q2"][value="yes"]').check();
+  await page.locator('#quiz input[name="q3"][value="yes"]').check();
+  await page.locator('#quiz button[type="submit"]').click();
+  assert.ok((await page.locator('#quiz-feedback').textContent()).includes('верны'),'12 Nov quiz '+width);
+  if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lesson-12-'+width+'.png'),fullPage:true});
+  await page.goto(origin+'12.11.26-lab.html#circuit',{waitUntil:'networkidle'});
+  assert.equal(await page.locator('[data-mode="circuit"]').getAttribute('aria-pressed'),'true','12 Nov lab deep link '+width);
+  await page.locator('#scenario').selectOption('circuit9');
+  assert.equal(await page.locator('#starMetric').textContent(),'Нет конечной точки','12 Nov no finite max '+width);
+  await page.locator('[data-mode="wave"]').click();
+  assert.equal(await page.locator('#nControl').isVisible(),true,'12 Nov variable n '+width);
+  await page.locator('#nSlider').evaluate(el=>{el.value='0.4';el.dispatchEvent(new Event('input',{bubbles:true}))});
+  assert.equal(await page.locator('#nOut').textContent(),'0,4','12 Nov n slider '+width);
+  assert.ok(await page.locator('#graphLayers path').count()>=1,'12 Nov plot missing '+width);
+  const lab12=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth}));
+  assert.ok(lab12.width<=lab12.viewport+2,'12 Nov lab overflow '+width+': '+JSON.stringify(lab12));
+  if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lab-12-'+width+'.png'),fullPage:true});
+
+  assert.deepEqual(failures,[],'Matvey browser console/network failures '+width+': '+failures.join('; '));
   console.log('PASS',width+'x'+height,JSON.stringify({map:basic.map,tiles:archive.counts,heights:archive.heights,theme:width===390?'dark':'light'}));
   completed++;await page.close();
  }
