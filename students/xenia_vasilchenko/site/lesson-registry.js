@@ -5,6 +5,73 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-12",
+  "ktpRefs": [],
+  "href": "12.11.26.html",
+  "title": "Проценты: часть, целое и скидки",
+  "navTitle": "Проценты: часть, целое и скидки",
+  "navSubtitle": "Учимся отличать часть от целого, искать процент, считать расходы по схеме и цену после скидки. Путь А: 10 задач.",
+  "summary": "12 ноября: часть, целое и процент; схема-отрезок для нескольких расходов, процент остатка и задачи на скидку, 10 упражнений по пути А.",
+  "topics": [
+    "Нахождение процента, части и целого",
+    "Треугольник процентов и схема-отрезок",
+    "Задачи на остаток расходов",
+    "Цена после скидки и восстановление первоначальной цены"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "frac_base_01",
+      "evidenceAnchor": "foundation",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "frac_ops_14",
+      "evidenceAnchor": "triangle",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_15",
+      "evidenceAnchor": "whole",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dec_04",
+      "evidenceAnchor": "foundation",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_16",
+      "evidenceAnchor": "diagram",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_05",
+      "evidenceAnchor": "diagram",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_17",
+      "evidenceAnchor": "diagram",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_18",
+      "evidenceAnchor": "discount",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_16",
+      "evidenceAnchor": "algorithm",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "12.11.26.html",
+    "pdf": "../pdf_docs/12.11.26.pdf",
+    "tex": "../tex_docs/12.11.26.tex"
+  }
+},
+{
   "date": "2026-11-05",
   "ktpRefs": [],
   "href": "05.11.26.html",
