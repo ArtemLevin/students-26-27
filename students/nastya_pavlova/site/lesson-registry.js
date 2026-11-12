@@ -5,6 +5,51 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-12",
+  "ktpRefs": [],
+  "href": "12.11.26.html",
+  "title": "Комбинаторика. Метод позиций",
+  "navTitle": "Комбинаторика. Метод позиций",
+  "navSubtitle": "Комбинаторика: метод позиций, правило произведения, нуль и повторы, факториал, перестановки и блок соседних предметов. Занятие Анастасии Павловой 12 ноября 2026 года.",
+  "summary": "Комбинаторика: метод позиций, правило произведения, нуль и повторы, факториал, перестановки и блок соседних предметов. Занятие Анастасии Павловой 12 ноября 2026 года.",
+  "topics": [
+    "Метод позиций и правило произведения",
+    "Числа и коды: начальный нуль и повторы",
+    "Факториал, перестановки, маршруты и награды",
+    "Условия чётности, кратности и ограничения на места",
+    "Метод блока: соседство книг"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "cprob_11",
+      "evidenceAnchor": "digits",
+      "relation": "practiced",
+      "label": "Выбор без повторений",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "cprob_12",
+      "evidenceAnchor": "digits",
+      "relation": "practiced",
+      "label": "Выбор с повторениями",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "cprob_14",
+      "evidenceAnchor": "constraints",
+      "relation": "practiced",
+      "label": "Совместный учёт ограничений",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "12.11.26.html",
+    "pdf": "../pdf_docs/12.11.26.pdf",
+    "tex": "../tex_docs/12.11.26.tex",
+    "lab": "12.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-09",
   "ktpRefs": [],
   "href": "09.11.26.html",
