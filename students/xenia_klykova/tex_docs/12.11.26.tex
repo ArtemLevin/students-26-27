@@ -1,0 +1,317 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{needspace}
+\geometry{a4paper,left=21mm,right=21mm,top=21mm,bottom=22mm,headheight=22pt,headsep=8mm,footskip=10mm}
+\definecolor{accent}{HTML}{007B7B}
+\definecolor{deepaccent}{HTML}{00565A}
+\definecolor{ink}{HTML}{303437}
+\definecolor{softgray}{HTML}{72797D}
+\color{ink}
+\hypersetup{colorlinks=true,linkcolor=deepaccent,urlcolor=deepaccent}
+\fancyhf{}
+\fancyhead[L]{\small Факториалы и формула Лежандра}
+\fancyhead[R]{\small Ксения Клыкова}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.45pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+\pagestyle{fancy}
+\titleformat{\section}{\normalfont\Large\color{deepaccent}}{\thesection.}{0.55em}{}
+\titlespacing*{\section}{0pt}{20pt}{12pt}
+\titleformat{\subsection}{\normalfont\normalsize\color{deepaccent}}{}{0pt}{}
+\titlespacing*{\subsection}{0pt}{12pt}{6pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\setlength{\emergencystretch}{1.5em}
+\setlist[itemize]{leftmargin=6mm,topsep=3pt,itemsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,topsep=4pt,itemsep=7pt}
+\newcommand{\key}[1]{\textcolor{deepaccent}{#1}}
+\newcommand{\ex}[1]{\par\medskip\textcolor{deepaccent}{\textbf{Пример.} #1}\par\smallskip}
+\newcommand{\nuval}[2]{v_{#1}(#2)}
+\begin{document}
+
+% ===== Титульный лист =====
+\thispagestyle{empty}
+\begin{center}
+\vspace*{23mm}
+{\Large\color{deepaccent} МАТЕМАТИКА\par}
+\vspace{27mm}
+{\huge Чек-лист\par}
+\vspace{15mm}
+{\LARGE\color{accent} Факториалы, делимость\par}
+\vspace{2mm}
+{\LARGE\color{accent} и формула Лежандра\par}
+\vspace{20mm}
+{\large Олимпиадные методы теории чисел\par}
+\vfill
+{\large Ксения Клыкова\par}
+\vspace{12mm}
+{\large 12 ноября 2026 г.\par}
+\vspace{23mm}
+{\small Лёвин Артём Александрович\par}
+{\small эксклюзивно для Ксении Клыковой\par}
+\vspace{19mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent,line width=0.8pt] (0,0) .. controls (1.6,0.7) and (3.1,-0.7) .. (4.7,0) .. controls (6.2,0.65) and (7.8,-0.65) .. (9.4,0);
+\fill[accent] (4.7,0) circle (1.2pt);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section{Факториал: определение и сокращение}
+Для целого $n\ge 1$ \key{факториалом} называют произведение всех натуральных чисел от $1$ до $n$:
+\[
+ n! = 1\cdot2\cdot3\cdots(n-1)\cdot n.
+\]
+По соглашению $0!=1$. Факториал определён для целых неотрицательных $n$.
+
+\key{Главная идея:} от большого факториала удобно отделять несколько первых множителей:
+\[
+\boxed{n!=n(n-1)!},\qquad
+\boxed{(n+1)!=(n+1)n!}.
+\]
+Поэтому при $n\ge1$:
+\[
+ \frac{(n+1)!}{n!}=n+1, \qquad
+ \frac{n!}{(n-1)!}=n.
+\]
+
+\ex{Сокращение дроби с факториалами}
+\[
+\frac{9!}{7!}=\frac{9\cdot8\cdot7!}{7!}=9\cdot8=72.
+\]
+\textbf{Полезная привычка:} раскладывайте только тот факториал, у которого больше аргумент. Не вычисляйте огромные числа без необходимости.
+
+\section{Делимость факториала на число}
+Знак $a\mid b$ означает: \textit{число $b$ делится на $a$ без остатка}. Например, $72\mid 6!$.
+
+Любое натуральное число $A>1$ раскладывается на простые множители:
+\[
+ A=p_1^{\alpha_1}p_2^{\alpha_2}\cdots p_r^{\alpha_r},
+\]
+где $p_i$ --- разные простые числа, $\alpha_i$ --- положительные целые показатели.
+
+\key{Критерий делимости:} число $A$ делит $n!$, если в разложении $n!$ каждого простого множителя $p_i$ хватает хотя бы $\alpha_i$ раз.
+
+\ex{Найдите наименьшее $n$, для которого $72\mid n!$}
+\[
+72=2^3\cdot3^2,\qquad
+5!=2^3\cdot3\cdot5.
+\]
+В $5!$ имеется только одна тройка, поэтому $72\nmid5!$.
+\[
+6!=2^4\cdot3^2\cdot5\quad\Longrightarrow\quad72\mid6!.
+\]
+Так как все предыдущие факториалы делят $5!$, \key{наименьшее $n=6$}.
+
+\ex{Быстрый поиск по самому крупному простому множителю}
+Для $35=5\cdot7$ в $n!$ необходим множитель $7$. При $n<7$ его нет, а $7!$ содержит и $5$, и $7$. Значит, \key{$n=7$}. Аналогично, $1170=2\cdot3^2\cdot5\cdot13$ требует наличия множителя $13$, поэтому минимальное значение --- \key{$n=13$}.
+
+\clearpage
+\section{Показатель простого числа и формула Лежандра}
+Обозначение $\nuval{p}{N}$ означает \key{показатель простого числа $p$} в разложении натурального числа $N$.
+
+Например, $6!=720=2^4\cdot3^2\cdot5$, поэтому
+\[
+\nuval{2}{6!}=4,\qquad \nuval{3}{6!}=2,\qquad \nuval{5}{6!}=1.
+\]
+
+\key{Формула Лежандра} позволяет найти показатель простого $p$ в $n!$ без разложения всего факториала:
+\[
+\boxed{\displaystyle
+\nuval{p}{n!}=\left\lfloor\frac np\right\rfloor+
+\left\lfloor\frac n{p^2}\right\rfloor+
+\left\lfloor\frac n{p^3}\right\rfloor+\cdots}
+\]
+Здесь $\lfloor x\rfloor$ --- округление $x$ \textit{вниз} до целого числа. Например, $\lfloor2{,}5\rfloor=2$.
+
+\textbf{Почему формула работает?} Первый член считает числа от $1$ до $n$, кратные $p$. Второй добавляет ещё по одному множителю $p$ за каждое число, кратное $p^2$; третий --- за кратные $p^3$, и так далее.
+
+\key{Остановка вычислений:} слагаемое становится нулём, как только $p^j>n$.
+
+\ex{Степень двойки в $6!$}
+\[
+\nuval{2}{6!}=\left\lfloor\frac62\right\rfloor+
+\left\lfloor\frac64\right\rfloor=3+1=\boxed{4}.
+\]
+Слагаемое $\lfloor 6/8\rfloor=0$ уже не требуется.
+
+\ex{Степени двойки и тройки в $10!$}
+\begin{align*}
+\nuval{2}{10!}&=\left\lfloor\frac{10}{2}\right\rfloor+
+\left\lfloor\frac{10}{4}\right\rfloor+
+\left\lfloor\frac{10}{8}\right\rfloor=5+2+1=\boxed8,\\
+\nuval{3}{10!}&=\left\lfloor\frac{10}{3}\right\rfloor+
+\left\lfloor\frac{10}{9}\right\rfloor=3+1=\boxed4.
+\end{align*}
+
+\textbf{Важно:} формулу Лежандра применяют к \textit{простому} числу $p$. Для составного делителя понадобится следующий шаг.
+
+\section{Максимальная степень числа, делящая факториал}
+Пусть $A=p_1^{\alpha_1}\cdots p_r^{\alpha_r}$, где $A>1$. Ищем наибольшее целое $k\ge0$, при котором $A^k\mid n!$.
+
+Условие делимости для каждого простого множителя:
+\[
+ k\alpha_i\le\nuval{p_i}{n!}.
+\]
+Следовательно,
+\[
+\boxed{\displaystyle k_{\max}=\min_{1\le i\le r}
+\left\lfloor\frac{\nuval{p_i}{n!}}{\alpha_i}\right\rfloor.}
+\]
+\textbf{Смысл минимума:} первым закончится тот простой множитель, которого хватает на меньшее число полных наборов, необходимых для $A$.
+
+\clearpage
+\section{Как применять формулу к составным числам}
+\ex{Наибольшее $k$, для которого $12^k\mid 6!$}
+Число $12=2^2\cdot3$, а $6!=2^4\cdot3^2\cdot5$. Поэтому
+\[
+ k_{\max}=\min\left\{\left\lfloor\frac42\right\rfloor,
+\left\lfloor\frac21\right\rfloor\right\}=\boxed2.
+\]
+Четыре двойки позволяют собрать две пары двоек; двух троек также хватает ровно на два набора.
+
+\ex{Наибольшее $k$, для которого $18^k\mid10!$}
+\[
+18=2\cdot3^2,\qquad\nuval{2}{10!}=8,\qquad\nuval{3}{10!}=4.
+\]
+\[
+ k_{\max}=\min\left\{\left\lfloor\frac81\right\rfloor,
+\left\lfloor\frac42\right\rfloor\right\}=\boxed2.
+\]
+Ограничение создают тройки: для одной копии $18$ нужны сразу две тройки.
+
+\ex{Олимпиадный пример: наибольшее $k$ при $12^k\mid30!$}
+\begin{align*}
+\nuval{2}{30!}&=\left\lfloor\frac{30}{2}\right\rfloor+
+\left\lfloor\frac{30}{4}\right\rfloor+
+\left\lfloor\frac{30}{8}\right\rfloor+
+\left\lfloor\frac{30}{16}\right\rfloor
+=15+7+3+1=26,\\
+\nuval{3}{30!}&=\left\lfloor\frac{30}{3}\right\rfloor+
+\left\lfloor\frac{30}{9}\right\rfloor+
+\left\lfloor\frac{30}{27}\right\rfloor
+=10+3+1=14.
+\end{align*}
+\[
+ k_{\max}=\min\left\{\left\lfloor\frac{26}{2}\right\rfloor,
+\left\lfloor\frac{14}{1}\right\rfloor\right\}=\boxed{13}.
+\]
+\textbf{Проверка максимальности:} для $k=14$ понадобилось бы $28$ двоек, но в $30!$ их только $26$.
+
+\section{Типичные ошибки}
+\begin{itemize}
+\item \textbf{Путают две степени.} Величина $\nuval p{n!}$ берётся из факториала; показатель $\alpha_i$ --- из разложения делителя $A$.
+\item \textbf{Забывают разделить на $\alpha_i$.} Например, при делимости на $12^k$ две двойки расходуются на каждую степень $12$.
+\item \textbf{Округляют после сложения дробей.} В формуле Лежандра каждую дробь округляют вниз \textit{отдельно}.
+\item \textbf{Требуют равенства показателей в самом факториале.} Лишние двойки, тройки и другие простые множители допустимы; важно, чтобы хватило всех требуемых.
+\item \textbf{Берут максимум вместо минимума.} Количество полных наборов ограничивает самый дефицитный простой множитель.
+\end{itemize}
+
+% ===== Самостоятельная страница схемы =====
+\clearpage
+\section*{Алгоритм: максимальная степень $A$ в $n!$}
+\vspace{6mm}
+\begin{center}
+\tikzset{
+  act/.style={draw=accent,rounded corners=2.5pt,minimum width=90mm,text width=82mm,align=center,minimum height=11mm,inner sep=3.5mm,font=\small},
+  decision/.style={draw=accent,diamond,aspect=2.3,text width=42mm,align=center,inner sep=1.5mm,font=\small},
+  term/.style={draw=deepaccent,ellipse,minimum width=57mm,align=center,minimum height=9mm,font=\small},
+  arr/.style={-{Latex[length=2.4mm]},line width=0.8pt,draw=deepaccent}
+}
+\begin{tikzpicture}[node distance=10mm and 14mm]
+\node[term] (start) {Начало: $A>1$, $n\ge0$};
+\node[act,below=of start] (factor) {Разложите $A=\prod p_i^{\alpha_i}$ на простые множители};
+\node[act,below=of factor] (select) {Выберите ещё не обработанный простой множитель $p_i$};
+\node[act,below=of select] (leg) {По формуле Лежандра найдите $\nuval{p_i}{n!}$};
+\node[act,below=of leg] (bound) {Вычислите $b_i=\left\lfloor\nuval{p_i}{n!}/\alpha_i\right\rfloor$};
+\node[decision,below=13mm of bound] (more) {Остались другие простые множители?};
+\node[act,below=16mm of more] (minimum) {Выберите $k_{\max}=\min\{b_1,\ldots,b_r\}$};
+\node[term,below=of minimum] (finish) {Ответ: $k_{\max}$};
+\draw[arr] (start)--(factor);
+\draw[arr] (factor)--(select);
+\draw[arr] (select)--(leg);
+\draw[arr] (leg)--(bound);
+\draw[arr] (bound)--(more);
+\draw[arr] (more)--node[right,font=\small,fill=white,inner sep=1.5pt]{нет}(minimum);
+\draw[arr] (minimum)--(finish);
+\draw[arr] (more.west)--++(-27mm,0) |- node[pos=.27,left,font=\small,fill=white,inner sep=1pt]{да} (select.west);
+\end{tikzpicture}
+\end{center}
+
+% ===== Тренировка =====
+\clearpage
+\section*{Тренировочный блок}
+\textit{Путь А. Десять задач с постепенным повышением сложности.}\par
+Во всех заданиях $n$ --- целое неотрицательное число. Если требуется найти показатель делимости, указывайте наибольшее целое $k\ge0$.
+
+\subsection{Базовый уровень}
+\begin{enumerate}[label=\textcolor{deepaccent}{\arabic*.},series=tasks]
+\item Вычислите $\displaystyle\frac{8!}{6!}$.
+\item Упростите $\displaystyle\frac{(n+2)!}{n!}$.
+\item Найдите наименьшее $n$, для которого $35\mid n!$.
+\end{enumerate}
+\subsection{Средний уровень}
+\begin{enumerate}[label=\textcolor{deepaccent}{\arabic*.},resume=tasks]
+\item Найдите наименьшее $n$, для которого $72\mid n!$.
+\item По формуле Лежандра вычислите $\nuval{2}{12!}$.
+\item По формуле Лежандра вычислите $\nuval{3}{25!}$.
+\item Найдите наименьшее $n$, для которого $504\mid n!$.
+\end{enumerate}
+\subsection{Повышенный уровень}
+\begin{enumerate}[label=\textcolor{deepaccent}{\arabic*.},resume=tasks]
+\item Найдите наибольшее $k$, при котором $12^k\mid15!$.
+\item Найдите наибольшее $k$, при котором $18^k\mid20!$.
+\item Найдите наибольшее $k$, при котором $72^k\mid30!$.
+\end{enumerate}
+
+% ===== Ответы =====
+\clearpage
+\section*{Ответы к тренировочному блоку}
+\vspace{6mm}
+\renewcommand{\arraystretch}{1.65}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}>{\centering\arraybackslash}p{16mm} X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ}\\
+\midrule
+1 & $56$.\\
+2 & $(n+2)(n+1)$.\\
+3 & $n=7$.\\
+4 & $n=6$.\\
+5 & $10$.\\
+6 & $10$.\\
+7 & $n=7$.\\
+8 & $k=5$.\\
+9 & $k=4$.\\
+10 & $k=7$.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vspace{8mm}
+\subsection*{Числовые ориентиры для самопроверки}
+В задачах 8--10 полезно сверить показатели простых множителей, прежде чем брать минимум:
+\begin{align*}
+\text{№ 8:}\quad&\nuval{2}{15!}=11,\quad \nuval{3}{15!}=6;\\
+\text{№ 9:}\quad&\nuval{2}{20!}=18,\quad \nuval{3}{20!}=8;\\
+\text{№ 10:}\quad&\nuval{2}{30!}=26,\quad \nuval{3}{30!}=14.
+\end{align*}
+
+\vfill
+\begin{center}\small\color{softgray}
+Лёвин Артём Александрович\par
+эксклюзивно для Ксении Клыковой
+\end{center}
+\end{document}
