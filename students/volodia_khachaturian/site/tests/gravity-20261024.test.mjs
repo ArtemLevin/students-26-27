@@ -50,11 +50,15 @@ test('legacy lesson-progress script parses as standalone JavaScript',()=>{
   new vm.Script(fs.readFileSync(path.join(dir,'lesson-progress.js'),'utf8'));
 });
 
-test('navigator loads the refreshed 24 October registry version',()=>{
+test('navigator loads versioned scripts aligned with the latest lesson date',()=>{
   const dashboard=fs.readFileSync(path.join(dir,'dashboard.js'),'utf8');
   const home=fs.readFileSync(path.join(dir,'index.html'),'utf8');
-  assert.match(dashboard,/lesson-registry\.js\?v=20261024/);
-  assert.match(home,/dashboard\.js\?v=20261024/);
+  const registry=fs.readFileSync(path.join(dir,'lesson-registry.js'),'utf8');
+  const match=registry.match(/"date":\s*"(\d{4})-(\d{2})-(\d{2})"/);
+  assert.ok(match,'lesson registry has a most recent date');
+  const version=match.slice(1).join('');
+  assert.match(dashboard,new RegExp('lesson-registry\\.js\\?v='+version));
+  assert.match(home,new RegExp('dashboard\\.js\\?v='+version));
 });
 
 test('release gate: publication metadata and evidence parity',()=>{
