@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import http from 'node:http';
 import {spawn,spawnSync} from 'node:child_process';
-import {fileURLToPath} from 'node:url';
+import {fileURLToPath,pathToFileURL} from 'node:url';
 
 const repo=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../../../');
 const browser=['google-chrome','google-chrome-stable','chromium','chromium-browser']
@@ -131,16 +131,18 @@ try{
  await open('09.11.26-lab.html#months',390,844,false);
  assert.equal(await run("document.querySelectorAll('#history tr').length"),6,'Monthly case needs six monthly periods');
  assert.match(await run("document.getElementById('overValue').textContent"),/22,5%/);
+ const {LESSONS:publishedLessons}=await import(pathToFileURL(path.join(repo,'students/xenia_klykova/site/lesson-registry.js')).href);
+ const expectedLatest=publishedLessons[0];
  await open('index.html',1440,900,false);
  let title='';
  for(let i=0;i<80;i++){
   title=await run("document.getElementById('lesson-title')?.textContent||''");
-  if(title.includes('Кредит:'))break;
+  if(title===expectedLatest.title)break;
   await sleep(100);
  }
- assert.match(title,/Кредит:/,'Dashboard latest lesson not updated');
+ assert.equal(title,expectedLatest.title,'Dashboard latest lesson must match the canonical registry');
  const href=await run("document.getElementById('latestLessonCta')?.getAttribute('href')");
- assert.match(href||'',/09\.11\.26\.html/);
+ assert.equal(href,expectedLatest.href,'Latest lesson href must match the canonical registry');
  await shot('klykova-home-desktop');
  await open('index.html',390,844,false);
  await shot('klykova-home-mobile');
