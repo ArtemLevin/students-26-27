@@ -1,4 +1,4 @@
-import {LESSONS, getLatestLesson, formatLongDateRu} from './lesson-registry.js?v=20261105';
+import {LESSONS, getLatestLesson, formatLongDateRu} from './lesson-registry.js?v=20261112';
 
 // Presentation adapter: only reads canonical lesson registry and competency map.
 // Preserve the existing competency-map.js as the sole owner of student mastery.
@@ -51,7 +51,7 @@ if(lesson){
   if(href){$('latestLessonCta').href=href;$('latestLessonCta').hidden=false;}
   const pdf=safeHref(lesson.materials?.pdf);
   if(pdf){$('latestLessonPdf').href=pdf;$('latestLessonPdf').hidden=false;}
-  if(['2026-10-15','2026-10-22','2026-10-29','2026-11-03','2026-11-05'].includes(lesson.date)){
+  if(['2026-10-15','2026-10-22','2026-10-29','2026-11-03','2026-11-05','2026-11-12'].includes(lesson.date)){
     const image=lesson.date.slice(8,10)+'.'+lesson.date.slice(5,7)+'.'+lesson.date.slice(2,4)+'.png';
     $('latestLessonPoster').href='../images/'+image;
     $('latestLessonPoster').hidden=false;
