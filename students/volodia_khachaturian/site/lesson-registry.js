@@ -3,6 +3,117 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-12",
+  "ktpRefs": [],
+  "href": "12.11.26.html",
+  "title": "Движение по наклонной плоскости",
+  "navTitle": "Движение по наклонной плоскости",
+  "navSubtitle": "Движение по наклонной плоскости: силы, проекции, трение покоя и скольжения, ускорение и связь с кинематикой. Интерактивная лаборатория и 10 задач Володи Хачатуряна.",
+  "summary": "Движение по наклонной плоскости: силы, проекции, трение покоя и скольжения, ускорение и связь с кинематикой. Интерактивная лаборатория и 10 задач Володи Хачатуряна.",
+  "topics": [
+    "движение по наклонной плоскости",
+    "разложение силы тяжести на проекции",
+    "второй закон Ньютона в проекциях",
+    "сила реакции опоры",
+    "сила трения покоя",
+    "сила трения скольжения",
+    "знаки ускорения и скорости",
+    "связь динамики и кинематики",
+    "решение задач на путь и остановку"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "dyn_12",
+      "evidenceAnchor": "forces",
+      "relation": "touched",
+      "label": "Сила тяжести",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_13",
+      "evidenceAnchor": "projections",
+      "relation": "practiced",
+      "label": "Реакция опоры",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "measure_05",
+      "evidenceAnchor": "projections",
+      "relation": "practiced",
+      "label": "Векторы и проекции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_08",
+      "evidenceAnchor": "balance",
+      "relation": "practiced",
+      "label": "Второй закон Ньютона",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_21",
+      "evidenceAnchor": "balance",
+      "relation": "touched",
+      "label": "Трение покоя",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_22",
+      "evidenceAnchor": "balance",
+      "relation": "practiced",
+      "label": "Трение скольжения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_23",
+      "evidenceAnchor": "lab",
+      "relation": "touched",
+      "label": "Коэффициент трения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_24",
+      "evidenceAnchor": "lab",
+      "relation": "touched",
+      "label": "Зависимость трения от опоры",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_17",
+      "evidenceAnchor": "examples",
+      "relation": "touched",
+      "label": "Направление ускорения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_18",
+      "evidenceAnchor": "examples",
+      "relation": "practiced",
+      "label": "Равноускоренное движение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_07",
+      "evidenceAnchor": "forces",
+      "relation": "practiced",
+      "label": "Схема сил",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_25",
+      "evidenceAnchor": "method",
+      "relation": "practiced",
+      "label": "Преобразование формул",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "12.11.26.html",
+    "pdf": "../pdf_docs/12.11.26.pdf",
+    "tex": "../tex_docs/12.11.26.tex"
+  }
+},
+{
   "date": "2026-11-09",
   "ktpRefs": [],
   "href": "09.11.26.html",
