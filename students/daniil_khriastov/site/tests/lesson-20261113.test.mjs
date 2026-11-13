@@ -44,7 +44,7 @@ test('intent: exact stable IDs, no unsupported mastery claims',()=>{
 test('training answers and exclusions',()=>{
  check(log(2,128),7);
  check(7**log(7,11),11);
- check(log(5**5,(5**5)*5**10),11);
+ check(log(5,5*(5**5)**2),11);
  check(-(3*4-1),-11);
  check(log(3,10-1),2);
  check(log(3,81),4);
