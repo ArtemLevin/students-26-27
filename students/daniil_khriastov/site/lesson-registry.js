@@ -1,5 +1,54 @@
 export const LESSONS=[
 {
+  "date": "2026-11-11",
+  "ktpRefs": [],
+  "href": "11.11.26.html",
+  "title": "Логарифмы. Свойства и преобразования.",
+  "navTitle": "Логарифмы. Свойства и преобразования.",
+  "navSubtitle": "Логарифмы: определение, свойства, преобразования, примеры и 10 тренировочных заданий. Даниил Хрястов, занятие 11 ноября 2026 года.",
+  "summary": "Логарифмы: определение, свойства, преобразования, примеры и 10 тренировочных заданий. Даниил Хрястов, занятие 11 ноября 2026 года.",
+  "topics": [
+    "Определение логарифма и связь с показательной степенью",
+    "ОДЗ логарифма; модуль при вынесении чётной степени",
+    "Степень аргумента и степень основания",
+    "Свойства суммы и разности логарифмов и основное логарифмическое тождество",
+    "Переход к новому основанию и взаимно обратные логарифмы",
+    "Составные выражения и тренировочный блок Путь А: десять задач"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "expr_16",
+      "evidenceAnchor": "properties",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "expr_17",
+      "evidenceAnchor": "change-base",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "expr_18",
+      "evidenceAnchor": "worked",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calc_10",
+      "evidenceAnchor": "power-bridge",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "expr_07",
+      "evidenceAnchor": "domain",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "11.11.26.html",
+    "pdf": "../pdf_docs/11.11.26.pdf",
+    "tex": "../tex_docs/11.11.26.tex"
+  }
+},
+{
   "date": "2026-11-06",
   "ktpRefs": [],
   "href": "06.11.26.html",
