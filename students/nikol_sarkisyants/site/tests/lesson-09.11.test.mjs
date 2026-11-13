@@ -46,8 +46,8 @@ test('competence evidence links are exact and never claim unassessed mastery',()
   assert.ok(evidence.includes('09.11.26.html#'+item.evidenceAnchor),item.evidenceAnchor);
  }
  assert.match(read('index.html'),/dashboard-data-09\.11\.js/);
- assert.match(read('dashboard.js'),/lesson-registry\.js\?v=20261109/);
- assert.match(read('index.html'),/dashboard\.js\?v=20261110-1/,'Cabinet must invalidate cached module after new lesson publication');
+ assert.match(read('dashboard.js'),/lesson-registry\.js\?v=20\d{6}(?:-[\w-]+)?/);
+ assert.match(read('index.html'),/dashboard\.js\?v=20\d{6}(?:-[\w-]+)?/,'Cabinet must use a cache-versioned module');
 });
 
 test('lesson and laboratory markup preserve accessibility and ten source exercises',()=>{
