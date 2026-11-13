@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {spawn,spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {LESSONS,getLatestLesson} from '../lesson-registry.js';
 
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../../..');
 const chrome=['google-chrome','google-chrome-stable','chromium','chromium-browser']
@@ -116,15 +117,46 @@ try{
   assert.equal(await run('document.getElementById("progressBar").value'),2,'Progress persisted');
   await run('localStorage.removeItem("ekaterina-2026-10-17-checks")');
 
+  const expectedLatest=getLatestLesson(LESSONS);
+  const latestRectangle=LESSONS.filter(lesson=>(lesson.outcomes||[]).some(outcome=>outcome.competencyId==='geo_quads_07'&&outcome.evidenceAnchor)).sort((a,b)=>b.date.localeCompare(a.date))[0];
+  const expectedRectangleEvidence=latestRectangle.href+'#'+latestRectangle.outcomes.find(outcome=>outcome.competencyId==='geo_quads_07'&&outcome.evidenceAnchor).evidenceAnchor;
   for(const [width,height] of [[375,812],[768,1024],[1440,900]]){
     await navigate('index.html',width,height);
-    await wait('document.querySelector(".material-card time")?.getAttribute("datetime")==="2026-10-28"');
+    await wait('document.querySelector(".material-card time")?.getAttribute("datetime")==='+JSON.stringify(expectedLatest.date));
     const home=await run('(()=>{const d=window.EKATERINA_COMPETENCY_DATA;return {latest:document.querySelector(".material-card time")?.getAttribute("datetime"),link:document.querySelector(".material-card a")?.getAttribute("href"),cells:document.querySelectorAll(".radial-cell").length,evidence:d?.evidence?.geo_quads_07?.href,scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth}})()');
-    assert.equal(home.latest,'2026-10-28');assert.equal(home.link,'28.10.26.html');
-    assert.equal(home.evidence,'17.10.26.html#rectangle');assert.equal(home.cells,235);
+    assert.equal(home.latest,expectedLatest.date);assert.equal(home.link,expectedLatest.href);
+    assert.equal(home.evidence,expectedRectangleEvidence);assert.equal(home.cells,235);
     assert.ok(home.scrollWidth<=home.clientWidth+2,'Home overflow '+width+' '+JSON.stringify(home));
     if([375,1440].includes(width))await screenshot('home-'+width);
   }
+  // The latest lesson is a standalone interactive document: verify its own controls.
+  for(const width of [390,1440]){
+    for(const dark of [false,true]){
+      await navigate('13.11.26.html',width,width===390?844:900);
+      await run('(()=>{const goal='+JSON.stringify(dark?'dark':'light')+';if(document.documentElement.dataset.theme!==goal)document.getElementById("themeToggle").click()})()');
+      const screen=await run('(()=>({width:document.documentElement.scrollWidth,client:document.documentElement.clientWidth,theme:document.documentElement.dataset.theme,tiles:document.querySelectorAll("#tiling [data-tile]").length,tasks:document.querySelectorAll("#training details").length,broken:[...document.querySelectorAll("a[href^=\'#\']")].filter(a=>!document.getElementById(a.hash.slice(1))).length,plot:document.querySelector("#axisSvg")?.getAttribute("role"),step:document.querySelector("#stepCounter")?.textContent}))()');
+      assert.equal(screen.tiles,9,'Nine square tiles');
+      assert.equal(screen.tasks,10,'Ten practice exercises');
+      assert.equal(screen.broken,0,'Valid fragment anchors');
+      assert.equal(screen.theme,dark?'dark':'light','Theme state');
+      assert.equal(screen.plot,'img','Accessible interactive chart');
+      assert.ok(screen.width<=screen.client+2,'Latest lesson viewport overflow '+width+' '+JSON.stringify(screen));
+      assert.equal(screen.step,'Шаг 1 из 11');
+      await run('document.getElementById("nextStep").click()');
+      assert.equal(await run('document.getElementById("stepCounter").textContent'),'Шаг 2 из 11');
+      await run('document.getElementById("resetSteps").click()');
+      assert.equal(await run('document.getElementById("stepCounter").textContent'),'Шаг 1 из 11');
+      await run('document.getElementById("unionMode").click()');
+      assert.ok((await run('document.getElementById("intervalAnswer").textContent')).includes('∪'),'Disjoint union example');
+      await run('(()=>{document.getElementById("systemMode").click();document.getElementById("aSlider").value="2";document.getElementById("bSlider").value="-3";document.getElementById("bSlider").dispatchEvent(new Event("input",{bubbles:true}));})()');
+      assert.equal(await run('document.getElementById("intervalAnswer").textContent'),'∅','Empty intersection');
+      await run('document.getElementById("unionMode").click()');
+      assert.ok((await run('document.getElementById("intervalAnswer").textContent')).startsWith('ℝ'),'Overlapping union covers the line');
+      if(!dark)await screenshot('latest-'+width+'-light');
+      if(dark)await screenshot('latest-'+width+'-dark');
+    }
+  }
+
   await navigate('17.10.26.html',1440,900);
   const links=await run('Promise.all([...document.querySelectorAll("a[href]")].filter(a=>!a.getAttribute("href").startsWith("#")).map(async a=>({href:a.getAttribute("href"),status:(await fetch(a.href,{method:"HEAD"})).status})))');
   for(const link of links)assert.ok(link.status>=200&&link.status<400,'Broken lesson link '+JSON.stringify(link));

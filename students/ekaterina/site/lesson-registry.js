@@ -5,6 +5,73 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-11-13",
+    "ktpRefs": [],
+    "href": "13.11.26.html",
+    "title": "Одна длина. Два взгляда.",
+    "navTitle": "Одна длина. Два взгляда.",
+    "navSubtitle": "Екатерина Скелли · 13 ноября 2026 · прямоугольник из девяти квадратов, системы и совокупности неравенств. Пошаговый разбор, числовая прямая и 10 задач.",
+    "summary": "Екатерина Скелли · 13 ноября 2026 · прямоугольник из девяти квадратов, системы и совокупности неравенств. Пошаговый разбор, числовая прямая и 10 задач.",
+    "topics": [
+      "прямоугольник из девяти квадратов",
+      "выражение длин через одну переменную",
+      "составление уравнения по противоположным сторонам",
+      "система неравенств и пересечение",
+      "совокупность неравенств и объединение",
+      "числовая прямая и границы промежутков"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "geo_quads_07",
+        "evidenceAnchor": "geometry",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "geo_quads_09",
+        "evidenceAnchor": "geometry",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "alg_models_02",
+        "evidenceAnchor": "equal-sides",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "alg_ineq_07",
+        "evidenceAnchor": "intervals",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_ineq_08",
+        "evidenceAnchor": "intervals",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_ineq_09",
+        "evidenceAnchor": "intervals",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_ineq_10",
+        "evidenceAnchor": "intervals",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_ineq_11",
+        "evidenceAnchor": "intervals",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "stat_data_07",
+        "evidenceAnchor": "intervals",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "13.11.26.html"
+    }
+  },
+  {
     "date": "2026-11-04",
     "ktpRefs": [],
     "href": "04.11.26.html",
