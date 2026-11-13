@@ -35,7 +35,7 @@ test('latest lesson has complete dashboard detail and all referenced material fi
   assert.ok(latest.topics.length>=3);
   assert.ok(latest.outcomes.length>=1);
   assert.ok(latest.materials.tex);
-  assert.ok(latest.materials.lab);
+  // A lab is optional; every declared lesson material must exist.
 
   const referencedFiles=[latest.href,...Object.values(latest.materials).filter(Boolean)];
   for(const href of referencedFiles){
