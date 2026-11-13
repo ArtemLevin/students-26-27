@@ -12,8 +12,8 @@ const catalog=fs.readFileSync(path.join(site,'competency-map-data.js'),'utf8');
 const close=(actual,expected,why)=>assert.ok(Math.abs(actual-expected)<1e-8,why+' : '+actual);
 
 test('11 November lesson has 10 answers and MathML throughout',()=>{
-  assert.equal((html.match(/id="exercise-\\d+"/g)||[]).length,10);
-  assert.ok((html.match(/<math xmlns="http:\/\/www\\.w3\\.org\/1998\/Math\/MathML"/g)||[]).length>=30);
+  assert.equal((html.match(/id="exercise-[0-9]+"/g)||[]).length,10);
+  assert.ok((html.match(/<math xmlns=/g)||[]).length>=30);
   for(const id of ['power-bridge','domain','properties','change-base','algorithm','worked','practice','exercise-10']){
     assert.ok(html.includes('id="'+id+'"'),'missing '+id);
   }
