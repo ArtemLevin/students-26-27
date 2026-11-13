@@ -30,7 +30,7 @@ jobs:
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
           import {execFileSync} from 'node:child_process';
-          const changed=execFileSync('git',['status','--porcelain','--untracked-files=all'],{encoding:'utf8'}).trim().split('\n').filter(Boolean).map(s=>s.slice(3));
+          const changed=execFileSync('git',['status','--porcelain','--untracked-files=all'],{encoding:'utf8'}).trimEnd().split('\n').filter(Boolean).map(s=>s.slice(3));
           const files=changed.map(path=>({path,base64:fs.readFileSync(path).toString('base64')}));
           console.log('PUBLISH_EXPORT_BEGIN');
           console.log(JSON.stringify({changed,files}));
