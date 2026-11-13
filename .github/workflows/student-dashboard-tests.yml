@@ -268,22 +268,6 @@ jobs:
           echo 'BEGIN_XENIA_REGISTRY'
           cat students/xenia_vasilchenko/site/lesson-registry.js
           echo 'END_XENIA_REGISTRY'
-      - name: Generate Daniil 11 Nov publication via canonical publisher (PR-only handoff)
-        if: matrix.student == 'daniil_khriastov'
-        shell: bash
-        run: |
-          set -euo pipefail
-          INTENT=students/daniil_khriastov/site/data/publication-intents/2026-11-11.json
-          node scripts/publish-lesson.mjs daniil_khriastov 11.11.26 --intent "$INTENT" --dry-run
-          node scripts/publish-lesson.mjs daniil_khriastov 11.11.26 --intent "$INTENT" > /tmp/daniil-publish-result.json
-          node - <<'NODE'
-          const fs=require('node:fs');
-          const r=JSON.parse(fs.readFileSync('/tmp/daniil-publish-result.json','utf8'));
-          const files=r.changedFiles.map(path=>({path,content:fs.readFileSync(path,'utf8')}));
-          console.log('DANIIL_PUBLICATION_B64_START');
-          console.log(Buffer.from(JSON.stringify({files}),'utf8').toString('base64'));
-          console.log('DANIIL_PUBLICATION_B64_END');
-          NODE
       - name: Run regression suite
         run: ${{ matrix.test }}
       - name: Browser QA for Daniil 23 October lesson
