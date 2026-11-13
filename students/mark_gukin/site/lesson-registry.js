@@ -5,6 +5,55 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-11-13",
+  "ktpRefs": [],
+  "href": "13.11.26.html",
+  "title": "Комбинаторика: метод позиций",
+  "navTitle": "Комбинаторика: метод позиций",
+  "navSubtitle": "Комбинаторика: метод позиций, правило произведения, повторения, факториал, сочетания, ограничения и соседство. Занятие Марка Гукина 13 ноября 2026 года.",
+  "summary": "Комбинаторика: метод позиций, правило произведения, повторения, факториал, сочетания, ограничения и соседство. Занятие Марка Гукина 13 ноября 2026 года.",
+  "topics": [
+    "Метод позиций и правило произведения",
+    "Позиции и претенденты: числа, слова, маршруты, должности",
+    "Комбинаторика с повторениями и без повторений; факториал",
+    "Роль порядка: размещения и сочетания",
+    "Ограничения на цифры, признаки делимости и соседние объекты"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege05_12",
+      "evidenceAnchor": "positions",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_14",
+      "evidenceAnchor": "repetitions",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_13",
+      "evidenceAnchor": "repetitions",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_11",
+      "evidenceAnchor": "positions",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege05_10",
+      "evidenceAnchor": "order",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "13.11.26.html",
+    "pdf": "../pdf_docs/13.11.26.pdf",
+    "tex": "../tex_docs/13.11.26.tex",
+    "lab": "13.11.26-lab.html"
+  }
+},
+{
     "date": "2026-11-06",
     "ktpRefs": [],
     "href": "06.11.26.html",
