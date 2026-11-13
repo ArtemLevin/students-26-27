@@ -1,0 +1,291 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{geometry}
+\geometry{left=22mm,right=22mm,top=23mm,bottom=23mm}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{hidelinks,pdfauthor={Лёвин Артём Александрович},pdftitle={Чек-лист. Комбинаторика: метод позиций}}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\definecolor{quiet}{HTML}{667373}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlength{\headheight}{15pt}
+\emergencystretch=2em
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{quiet}Комбинаторика: метод позиций}
+\fancyhead[R]{\small\color{quiet}Марк Гукин}
+\fancyfoot[C]{\small\color{quiet}\thepage}
+\renewcommand{\headrulewidth}{0.25pt}
+\renewcommand{\footrulewidth}{0pt}
+\newcommand{\Section}[1]{\vspace{5pt}{\large\bfseries\color{darkaccent}#1}\par\vspace{2pt}}
+\newcommand{\Key}[1]{\textbf{\color{darkaccent}#1}}
+\newcommand{\itemspace}{\vspace{3mm}}
+\setlist[enumerate]{leftmargin=7mm,itemsep=4.5mm,topsep=2mm}
+\renewcommand{\arraystretch}{1.25}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{24mm}
+{\Large\color{darkaccent} МАТЕМАТИКА\par}
+\vspace{17mm}
+{\LARGE Чек-лист\par}
+\vspace{14mm}
+{\LARGE\color{accent} Комбинаторика:\par}
+\vspace{2mm}
+{\LARGE\color{accent} метод позиций и подсчёт вариантов\par}
+\vspace{16mm}
+{\large Подготовка к ЕГЭ по профильной математике\par}
+\vfill
+{\large Марк Гукин\par}
+\vspace{10mm}
+{\large 13 ноября 2026 г.\par}
+\vspace{16mm}
+{Лёвин Артём Александрович\par}
+{эксклюзивно для Марка Гукина\par}
+\vspace{15mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent,line width=.75pt] (0,0) .. controls (2.0,.85) and (3.1,-.55) .. (5.25,0)
+ .. controls (7.15,.75) and (8.25,-.60) .. (10.5,0);
+\fill[darkaccent] (5.25,0) circle (1.15pt);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\Section{1. Что такое метод позиций}
+\Key{Основной принцип:} определите, какие места (позиции) нужно заполнить, сколько вариантов имеется для каждой позиции, затем перемножьте числа вариантов. Если выбор на следующем шаге зависит от предыдущего, учитывайте уже сделанные назначения.
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\normalsize},x=1cm,y=1cm]
+\foreach \i/\v in {0/3,1/4,2/4}{
+  \draw[accent,line width=.8pt,rounded corners=1pt] (2*\i,0) rectangle ++(1.45,.92);
+  \node[text=darkaccent] at (2*\i+.725,.46) {$\v$};
+}
+\node[anchor=north,align=center,font=\small,text=quiet] at (2.73,-.21) {Числа внутри ячеек показывают количество допустимых вариантов,\\а не выбранные цифры или буквы};
+\node[anchor=west,font=\normalsize,text=darkaccent] at (6.2,.46) {$3\cdot4\cdot4=48$};
+\end{tikzpicture}
+\end{center}
+
+\textbf{Пример 1.} Сколько двузначных чисел можно составить из цифр $0,1,2,3$, если цифры могут повторяться?
+\[
+\underbrace{3}_{\substack{\text{десятки:}\\1,2,3}}\cdot
+\underbrace{4}_{\substack{\text{единицы:}\\0,1,2,3}}=\boxed{12}.
+\]
+Первая цифра двузначного числа не равна нулю. Для числового \emph{кода} запрета на начальный нуль может не быть: например, код $003$ допустим.
+
+\textbf{Проверка таблицей.} Для каждой цифры десятков перечислим все допустимые цифры единиц.
+\begin{center}
+\begin{tabular}{@{}cl@{}}
+\toprule
+Десятки & Получающиеся числа\\
+\midrule
+$1$ & $10,\ 11,\ 12,\ 13$\\
+$2$ & $20,\ 21,\ 22,\ 23$\\
+$3$ & $30,\ 31,\ 32,\ 33$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\Section{2. Позиции и распределяемые элементы}
+Позиция --- это место, которое необходимо заполнить. Распределяемый элемент --- конкретный объект, который может занять это место.
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.34\linewidth}XX@{}}
+\toprule
+Ситуация & Позиции & Элементы\\
+\midrule
+Расписание из пяти уроков & Временные слоты & Школьные предметы\\
+Золото и серебро & Два призовых места & Команды\\
+Очередь в буфет & Места в очереди & Участники\\
+Путь $A\to B\to C$ & Два участка пути & Варианты дорог\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\textbf{Пример 2.} Из $18$ школьников назначают старосту, его заместителя и казначея. Один школьник занимает не более одной должности: $18\cdot17\cdot16=\boxed{4896}$. Должности различаются, поэтому их порядок имеет значение.
+
+\textbf{Пример 3.} Из $A$ в $B$ ведут три дороги, из $B$ в $C$ --- четыре. Выбирается одна дорога для каждого перехода: $3\cdot4=\boxed{12}$ маршрутов.
+\clearpage
+
+\Section{3. Повторения и факториал}
+\Key{Первый контрольный вопрос:} разрешено ли использовать элемент повторно?
+
+\textbf{Повторения разрешены.} Если из трёх букв А, Б, В составляют четырёхбуквенные последовательности, то каждую позицию можно заполнить тремя способами:
+\[
+3\cdot3\cdot3\cdot3=3^4=\boxed{81}.
+\]
+Полученная последовательность может не быть настоящим словом русского языка.
+
+\textbf{Повторения запрещены.} После каждого выбора вариантов становится меньше. Четырёх человек можно рассадить на четыре различных места:
+\[
+4\cdot3\cdot2\cdot1=\boxed{24}.
+\]
+\Key{Факториал} --- произведение всех натуральных чисел от $n$ до $1$:
+\[
+n!=n(n-1)\cdots2\cdot1,\qquad 5!=120,\qquad 0!=1.
+\]
+Для перестановки $n$ различных объектов по $n$ местам имеется $n!$ способов.
+
+\Section{4. Важен ли порядок?}
+\Key{Второй контрольный вопрос:} получится ли другой результат, если поменять выбранные объекты местами?
+
+\textbf{Порядок важен:} выбираем первого и второго призёров из десяти участников:
+\[
+10\cdot9=\boxed{90}.
+\]
+\textbf{Порядок не важен:} выбираем двух участников \emph{в одну группу} из десяти. Каждую пару подсчёт $10\cdot9$ учитывает дважды, поэтому
+\[
+\frac{10\cdot9}{2!}=\boxed{45}.
+\]
+Общая формула для выбора $k$ различных объектов из $n$ различных объектов \emph{без учёта порядка и без возвращения}:
+\[
+\binom{n}{k}=\frac{n(n-1)\cdots(n-k+1)}{k!}=\frac{n!}{k!(n-k)!},\quad 0\leq k\leq n.
+\]
+\textbf{Пример 4.} Среди $16$ различных точек выбирают концы отрезка: $\binom{16}{2}=120$. Если выбирают вершины треугольника, нужно выбрать \emph{три} точки: $\binom{16}{3}=560$ при условии, что никакие три точки не лежат на одной прямой.
+
+\Key{Важно:} на $k!$ делят, когда в упорядоченном подсчёте каждая группа из $k$ разных объектов посчитана ровно $k!$ раз. При повторениях или дополнительных ограничениях это требуется проверять отдельно.
+
+\clearpage
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: как считать варианты\par}
+\vspace{10mm}
+\begin{tikzpicture}[
+  >=Latex,
+  term/.style={ellipse,draw=accent,line width=.8pt,align=center,text width=38mm,minimum height=9mm,font=\small},
+  decision/.style={diamond,aspect=2.2,draw=accent,line width=.8pt,align=center,inner sep=1mm,text width=36mm,font=\small},
+  flowbox/.style={rectangle,draw=accent,rounded corners=1mm,line width=.7pt,align=center,text width=59mm,minimum height=16mm,font=\small,inner sep=2mm},
+  link/.style={->,line width=.75pt,draw=darkaccent},
+  lab/.style={font=\footnotesize,text=quiet}
+]
+\node[term] (start) at (0,0) {Начало: прочитайте условие};
+\node[decision] (question) at (0,-2.2) {Имеет ли значение порядок выбранных объектов?};
+\node[flowbox] (yes) at (-4.1,-4.85) {\textbf{Да.} Определите позиции: разряды, места, должности, этапы пути};
+\node[flowbox] (no) at (4.1,-4.85) {\textbf{Нет.} Выделите группу из $k$ различных объектов среди $n$};
+\node[flowbox] (yes2) at (-4.1,-7.0) {Учтите повторы, запрет нуля в начале, делимость и соседство};
+\node[flowbox] (no2) at (4.1,-7.0) {Сначала подсчитайте $n(n-1)\cdots(n-k+1)$};
+\node[flowbox] (yes3) at (-4.1,-9.15) {Перемножьте количества допустимых вариантов по позициям};
+\node[flowbox] (no3) at (4.1,-9.15) {Разделите на $k!$, так как порядок выбора не учитывается};
+\node[term] (finish) at (0,-11.65) {Проверьте ответ и ограничения};
+\draw[link] (start)--(question);
+\draw[link] (question.west)-| node[lab,above,pos=.3] {да} (yes.north);
+\draw[link] (question.east)-| node[lab,above,pos=.3] {нет} (no.north);
+\draw[link] (yes)--(yes2);
+\draw[link] (yes2)--(yes3);
+\draw[link] (no)--(no2);
+\draw[link] (no2)--(no3);
+\draw[link] (yes3.south) |- (finish.west);
+\draw[link] (no3.south) |- (finish.east);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\Section{5. Особые ограничения в условии}
+Удобно начинать с \emph{самой ограниченной позиции}, даже если она находится в конце числа.
+
+\textbf{Начальный нуль.} В пятизначном числе первая цифра имеет $9$ вариантов ($1,\ldots,9$), остальные при разрешённых повторах --- по $10$.
+
+\textbf{Нечётность и делимость.} Для нечётного числа последняя цифра --- одна из $1,3,5,7,9$; для числа, кратного $5$, последняя цифра --- $0$ или $5$. Для кратности $4$ последние две цифры должны образовывать число, кратное $4$.
+
+\textbf{Пример 5.} Сколько пятизначных нечётных чисел можно записать, если цифры могут повторяться?
+\[
+\underbrace{9}_{\text{первая}}\cdot10\cdot10\cdot10\cdot
+\underbrace{5}_{\text{последняя}}=\boxed{45\,000}.
+\]
+
+\textbf{Различаются цифры только в указанных позициях.} Сколько пятизначных чисел имеют \emph{попарно различные} цифры на первом, третьем и пятом местах, если на остальных местах цифры любые?
+\[
+\underbrace{9}_{1}\cdot\underbrace{10}_{2}\cdot
+\underbrace{9}_{3}\cdot\underbrace{10}_{4}\cdot
+\underbrace{8}_{5}=\boxed{64\,800}.
+\]
+На третьем месте остаётся $9$ вариантов: нуль разрешён, однако уже использованная первая цифра исключена. На пятом --- $8$.
+
+\Section{6. Несколько объектов должны стоять рядом}
+Если два конкретных предмета обязаны находиться рядом, считайте их сначала \emph{одним блоком}, затем учтите возможный порядок \emph{внутри} блока.
+
+\textbf{Пример 6.} Среди восьми разных книг имеются два различных тома, которые должны стоять рядом. Считаем пару одним блоком и шесть других книг самостоятельными: получаем семь объектов. Два тома внутри блока можно переставить двумя способами:
+\[
+7!\cdot2!=\boxed{10\,080}.
+\]
+
+\Section{7. Проверка перед записью ответа}
+\begin{enumerate}[label=\(\square\),itemsep=2.3mm]
+\item Правильно ли определены позиции и распределяемые объекты?
+\item Уточнены ли повторы и важность порядка?
+\item Исключён ли нуль из первого разряда настоящего числа?
+\item Учтены ли фиксированные разряды, признаки делимости и соседство?
+\item Нет ли повторного подсчёта одной и той же группы?
+\end{enumerate}
+\clearpage
+
+\begin{center}
+{\Large\bfseries\color{darkaccent}Тренировочный блок}\par
+{\small\color{quiet}Путь А · 10 самостоятельных заданий · от простого к сложному}
+\end{center}
+\vspace{3mm}
+\begin{enumerate}[label=\textbf{\arabic*.},leftmargin=8mm,itemsep=5.2mm]
+\item Сколько различных двузначных чисел можно записать с помощью цифр $0,2,4,6$, если повторения разрешены?
+\item Сколько различных четырёхбуквенных последовательностей можно составить из букв А, Б, В, если буквы разрешено повторять?
+\item Из пункта $A$ в пункт $B$ ведут $5$ дорог, а из $B$ в $C$ --- $3$ дороги. Сколькими способами можно пройти из $A$ в $C$ через $B$?
+\item Шесть разных учащихся становятся в очередь. Сколько различных порядков возможно?
+\item Из $14$ команд выбирают чемпиона и серебряного призёра. Одна команда не может занять оба места. Сколько вариантов награждения?
+\item Из $9$ различных саженцев выбирают $3$ для посадки. Порядок выбора значения не имеет. Сколько разных троек возможно?
+\item Сколько существует шестизначных чисел, в которых цифры на \emph{чётных} позициях ($2$, $4$, $6$) попарно различны, а на нечётных позициях могут быть любыми?
+\item Используя каждую цифру из набора $1,2,3,4,5,6$ ровно один раз, найдите количество шестизначных чисел, кратных: \textbf{а)} $5$; \textbf{б)} $4$.
+\item На полке располагают $8$ различных книг. Две определённые книги должны стоять рядом. Сколько существует допустимых расстановок?
+\item На плоскости отмечено $12$ точек, никакие три не лежат на одной прямой. Сколько различных можно построить: \textbf{а)} отрезков с концами в этих точках; \textbf{б)} треугольников с вершинами в этих точках?
+\end{enumerate}
+\clearpage
+
+\begin{center}
+{\Large\bfseries\color{darkaccent}Ответы}\par
+\vspace{3mm}
+\end{center}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}>{\centering\arraybackslash}p{15mm}X@{}}
+\toprule
+№ & Ответ\\
+\midrule
+1 & $12$\\
+2 & $81$\\
+3 & $15$\\
+4 & $720$\\
+5 & $182$\\
+6 & $84$\\
+7 & $648\,000$\\
+8 & \textbf{а)} $120$; \textbf{б)} $192$\\
+9 & $10\,080$\\
+10 & \textbf{а)} $66$; \textbf{б)} $220$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vspace{12mm}
+\Section{Итоговая памятка}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.34\linewidth}X@{}}
+\toprule
+Сигнал в условии & Что делать\\
+\midrule
+Несколько последовательных решений & Определите позиции и перемножьте варианты.\\
+Повторения запрещены & Уменьшайте число доступных элементов.\\
+Расстановка всех различных объектов & Используйте факториал.\\
+Выбор группы без порядка & Разделите упорядоченный подсчёт на $k!$.\\
+Делимость числа & Начните с его последней цифры или двух последних.\\
+Объекты должны быть рядом & Объедините их в блок, учтите перестановки внутри блока.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vfill
+\begin{center}\small\color{quiet}Лёвин Артём Александрович · эксклюзивно для Марка Гукина\end{center}
+\end{document}
