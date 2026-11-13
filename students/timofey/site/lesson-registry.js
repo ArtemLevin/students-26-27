@@ -2,483 +2,563 @@ export const RECENT_LIMIT=3;
 export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
-{
-  "date": "2026-11-07",
-  "ktpRefs": [],
-  "href": "07.11.26.html",
-  "title": "Производная и оптимизация",
-  "navTitle": "Производная и оптимизация",
-  "navSubtitle": "Производная сложной функции, правило частного, параметры и оптимизация: занятие Тимофея Васильченко от 7 ноября 2026 года.",
-  "summary": "Производная сложной функции, правило частного, параметры и оптимизация: занятие Тимофея Васильченко от 7 ноября 2026 года.",
-  "topics": [
-    "Производная сложной функции",
-    "Правило производной частного",
-    "Параметры и константы",
-    "Возрастание и экстремумы",
-    "Оптимизация: распределение скоростей молекул"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t8_monotonicity",
-      "evidenceAnchor": "rules",
-      "relation": "practiced",
-      "label": "Возрастание и убывание по знаку производной",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t8_extrema",
-      "evidenceAnchor": "rules",
-      "relation": "practiced",
-      "label": "Точки минимума и максимума",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t8_derivative_rules",
-      "evidenceAnchor": "chain",
-      "relation": "practiced",
-      "label": "Правила дифференцирования и сложная функция",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t8_elementary_derivatives",
-      "evidenceAnchor": "chain",
-      "relation": "practiced",
-      "label": "Производные корня, синуса и экспоненты",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "ege2027_t17_variables",
-      "evidenceAnchor": "parameters",
-      "relation": "practiced",
-      "label": "Переменные и постоянные в модели",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "ege2027_t17_constraints",
-      "evidenceAnchor": "fractions",
-      "relation": "practiced",
-      "label": "Ограничения области определения",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "ege2027_t17_optimization",
-      "evidenceAnchor": "optimization",
-      "relation": "touched",
-      "label": "Максимум прикладной функции",
-      "practiceDisposition": "none"
-    }
-  ],
-  "materials": {
-    "html": "07.11.26.html",
-    "pdf": "../pdf_docs/07.11.26.pdf",
-    "tex": "../tex_docs/07.11.26.tex",
-    "lab": "07.11.26-lab.html"
-  }
-},
-{
-  "date": "2026-11-06",
-  "ktpRefs": [],
-  "href": "06.11.26.html",
-  "title": "Смешанные неравенства",
-  "navTitle": "Смешанные неравенства",
-  "navSubtitle": "Неравенства со степенями и логарифмами: ОДЗ, нули, метод интервалов, рационализация и десять задач. Тимофей Васильченко, 6 ноября 2026.",
-  "summary": "Неравенства со степенями и логарифмами: ОДЗ, нули, метод интервалов, рационализация и десять задач. Тимофей Васильченко, 6 ноября 2026.",
-  "topics": [
-    "Смешанные показательные и логарифмические неравенства",
-    "Область допустимых значений",
-    "Метод интервалов",
-    "Рационализация знаков",
-    "Точные дробные границы"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t15_log_exp",
-      "evidenceAnchor": "intervals",
-      "relation": "practiced",
-      "label": "Смешанные неравенства со степенями и логарифмами",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t15_intervals",
-      "evidenceAnchor": "intervals",
-      "relation": "practiced",
-      "label": "Метод интервалов и проверка знака",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t15_log_rational",
-      "evidenceAnchor": "roots",
-      "relation": "practiced",
-      "label": "Нули логарифмического знаменателя",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t7_log_var",
-      "evidenceAnchor": "rationalization",
-      "relation": "touched",
-      "label": "Логарифмические преобразования",
-      "practiceDisposition": "none"
-    },
-    {
-      "competencyId": "t15_rationalization",
-      "evidenceAnchor": "rationalization",
-      "relation": "touched",
-      "label": "Рационализация смешанного неравенства",
-      "practiceDisposition": "none"
-    },
-    {
-      "competencyId": "t15_answer",
-      "evidenceAnchor": "precision",
-      "relation": "practiced",
-      "label": "Точные границы и запись множества решений",
-      "practiceDisposition": "manual"
-    }
-  ],
-  "materials": {
-    "html": "06.11.26.html",
-    "pdf": "../pdf_docs/06.11.26.pdf",
-    "tex": "../tex_docs/06.11.26.tex",
-    "lab": "06.11.26-lab.html"
-  }
-},
-{
-  "date": "2026-10-31",
-  "ktpRefs": [],
-  "href": "31.10.26.html",
-  "title": "Логарифмические неравенства",
-  "navTitle": "Логарифмические неравенства",
-  "navSubtitle": "Логарифмические неравенства: область допустимых значений, чётная степень и модуль, замена переменной, объединение промежутков и переменное основание. Чек-лист Тимофея Васильченко от 31 октября 2026 года.",
-  "summary": "Логарифмические неравенства: область допустимых значений, чётная степень и модуль, замена переменной, объединение промежутков и переменное основание. Чек-лист Тимофея Васильченко от 31 октября 2026 года.",
-  "topics": [
-    "Логарифмические неравенства",
-    "Область допустимых значений логарифма",
-    "Логарифмические преобразования и модуль",
-    "Замена переменной",
-    "Системы и совокупности промежутков",
-    "Неравенства с переменным основанием"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t7_log_var",
-      "evidenceAnchor": "powers",
-      "relation": "practiced",
-      "label": "Логарифмические преобразования",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t15_log_basic",
-      "evidenceAnchor": "variable-base",
-      "relation": "touched",
-      "label": "Логарифмические неравенства",
-      "practiceDisposition": "none"
-    },
-    {
-      "competencyId": "t15_log_rational",
-      "evidenceAnchor": "substitution",
-      "relation": "practiced",
-      "label": "Квадратное неравенство после замены",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t15_systems_log",
-      "evidenceAnchor": "modulus",
-      "relation": "practiced",
-      "label": "Системы, совокупности и модуль",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t15_log_other",
-      "evidenceAnchor": "variable-base",
-      "relation": "touched",
-      "label": "Основание, зависящее от переменной",
-      "practiceDisposition": "none"
-    }
-  ],
-  "materials": {
-    "html": "31.10.26.html",
-    "pdf": "../pdf_docs/31.10.26.pdf",
-    "tex": "../tex_docs/31.10.26.tex",
-    "lab": "31.10.26-lab.html"
-  }
-},
-{
-  "date": "2026-10-27",
-  "ktpRefs": [],
-  "href": "27.10.26.html",
-  "title": "Тригонометрические и смешанные уравнения",
-  "navTitle": "Тригонометрические и смешанные уравнения",
-  "navSubtitle": "Тригонометрические и смешанные уравнения: логарифмы и ОДЗ, формулы половинного угла, однородные уравнения, показательная замена и десять задач. Тимофей Васильченко, 27.10.2026.",
-  "summary": "Тригонометрические и смешанные уравнения: логарифмы и ОДЗ, формулы половинного угла, однородные уравнения, показательная замена и десять задач. Тимофей Васильченко, 27.10.2026.",
-  "topics": [
-    "Тригонометрические уравнения",
-    "Формулы половинного угла",
-    "Однородные уравнения",
-    "Логарифмы и ОДЗ",
-    "Показательные уравнения с тригонометрической заменой"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t6_logarithmic",
-      "evidenceAnchor": "logarithm",
-      "relation": "practiced",
-      "label": "Логарифмы и ОДЗ",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t6_trigonometric",
-      "evidenceAnchor": "half-angle",
-      "relation": "practiced",
-      "label": "Метод половинного угла",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t7_trig_var",
-      "evidenceAnchor": "half-angle",
-      "relation": "practiced",
-      "label": "Тригонометрические преобразования",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t13_trig_homogeneous",
-      "evidenceAnchor": "homogeneous",
-      "relation": "practiced",
-      "label": "Однородные тригонометрические уравнения",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t13_trig_quad",
-      "evidenceAnchor": "homogeneous",
-      "relation": "practiced",
-      "label": "Сведение к квадратному уравнению",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t13_trig_domain",
-      "evidenceAnchor": "logarithm",
-      "relation": "practiced",
-      "label": "Область допустимых значений",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t13_trig_log",
-      "evidenceAnchor": "logarithm",
-      "relation": "practiced",
-      "label": "Смешанное логарифмическое уравнение",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t13_trig_exp",
-      "evidenceAnchor": "exponential",
-      "relation": "practiced",
-      "label": "Показательная тригонометрическая замена",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t6_exponential",
-      "evidenceAnchor": "exponential",
-      "relation": "practiced",
-      "label": "Свойства степеней",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t6_trig_special",
-      "evidenceAnchor": "half-angle",
-      "relation": "touched",
-      "label": "Базовые серии корней",
-      "practiceDisposition": "none"
-    }
-  ],
-  "materials": {
-    "html": "27.10.26.html",
-    "pdf": "../pdf_docs/27.10.26.pdf",
-    "tex": "../tex_docs/27.10.26.tex",
-    "lab": "27.10.26-lab.html"
-  }
-},
-{
-  "date": "2026-10-24",
-  "ktpRefs": [],
-  "href": "24.10.26.html",
-  "title": "Повторение. Восемь методов",
-  "navTitle": "Повторение. Восемь методов",
-  "navSubtitle": "Повторение математики ЕГЭ: площадь треугольника, векторы, шар в цилиндре, вероятность, степени, логарифмы, графики и движение. Чек-лист Тимофея Васильченко от 24.10.2026, 10 задач пути А.",
-  "summary": "Повторение математики ЕГЭ: площадь треугольника, векторы, шар в цилиндре, вероятность, степени, логарифмы, графики и движение. Чек-лист Тимофея Васильченко от 24.10.2026, 10 задач пути А.",
-  "topics": [
-    "Площади треугольников",
-    "Скалярное произведение",
-    "Шар и цилиндр",
-    "Независимые события и вероятность",
-    "Степени и показательные уравнения",
-    "Логарифмы и ОДЗ",
-    "Логарифмические функции",
-    "Задачи на движение"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t1_areas",
-      "evidenceAnchor": "geometry",
-      "relation": "touched",
-      "label": "Площадь треугольника и выбор формулы",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t2_dot",
-      "evidenceAnchor": "vectors",
-      "relation": "touched",
-      "label": "Скалярное произведение векторов",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t3_sphere",
-      "evidenceAnchor": "volume",
-      "relation": "touched",
-      "label": "Объём вписанного шара",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t4_enumeration",
-      "evidenceAnchor": "probability",
-      "relation": "touched",
-      "label": "Перебор исходов и произведение вероятностей",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t6_exponential",
-      "evidenceAnchor": "powers",
-      "relation": "touched",
-      "label": "Показательные уравнения",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t6_logarithmic",
-      "evidenceAnchor": "logarithms",
-      "relation": "touched",
-      "label": "Логарифмические уравнения и ОДЗ",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t7_log_var",
-      "evidenceAnchor": "logarithms",
-      "relation": "touched",
-      "label": "Логарифмические преобразования",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t11_exp_log",
-      "evidenceAnchor": "graph",
-      "relation": "touched",
-      "label": "График логарифмической функции",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t10_line",
-      "evidenceAnchor": "motion",
-      "relation": "touched",
-      "label": "Модель задачи на движение",
-      "practiceDisposition": "manual"
-    }
-  ],
-  "materials": {
-    "html": "24.10.26.html",
-    "pdf": "../pdf_docs/24.10.26.pdf",
-    "tex": "../tex_docs/24.10.26.tex"
-  }
-},
-
   {
-  "date": "2026-10-20",
-  "ktpRefs": [],
-  "href": "20.10.26.html",
-  "title": "Финансовая математика",
-  "navTitle": "Финансовая математика",
-  "navSubtitle": "Финансовая математика ЕГЭ: вклады с пополнением, аннуитетные, дифференцированные и произвольные кредиты, таблицы, переплата и сравнение выплат. Занятие Тимофея Васильченко 20.10.2026.",
-  "summary": "Финансовая математика ЕГЭ: вклады с пополнением, аннуитетные, дифференцированные и произвольные кредиты, таблицы, переплата и сравнение выплат. Занятие Тимофея Васильченко 20.10.2026.",
-  "topics": [
-    "Капитализация и пополнение вклада",
-    "Аннуитетная и дифференцированная схемы",
-    "Кредит с заданными остатками долга",
-    "Процент переплаты",
-    "Сравнение кредитных схем"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t16_deposits",
-      "evidenceAnchor": "deposit-model",
-      "relation": "practiced",
-      "label": "Вклады и процентный множитель",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_deposit_contrib",
-      "evidenceAnchor": "deposit-model",
-      "relation": "practiced",
-      "label": "Пополнение вклада после начисления",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_credits",
-      "evidenceAnchor": "scheme-key",
-      "relation": "practiced",
-      "label": "Распознавание кредитной схемы",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_annuity",
-      "evidenceAnchor": "annuity-ledger",
-      "relation": "practiced",
-      "label": "Аннуитетный кредит",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_diff",
-      "evidenceAnchor": "differentiated-ledger",
-      "relation": "practiced",
-      "label": "Дифференцированные платежи",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_equal_reduction",
-      "evidenceAnchor": "differentiated-ledger",
-      "relation": "practiced",
-      "label": "Равные уменьшения долга",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_debt_table",
-      "evidenceAnchor": "arbitrary-ledger",
-      "relation": "assessed",
-      "label": "Таблица долга по датам",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_variable",
-      "evidenceAnchor": "arbitrary-ledger",
-      "relation": "practiced",
-      "label": "Произвольные графики погашения",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_payment_sum",
-      "evidenceAnchor": "overpayment",
-      "relation": "practiced",
-      "label": "Сумма выплат и переплата",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_optimal",
-      "evidenceAnchor": "overpayment",
-      "relation": "practiced",
-      "label": "Выбор выгодной схемы",
-      "practiceDisposition": "manual"
+    "date": "2026-11-13",
+    "ktpRefs": [],
+    "href": "13.11.26.html",
+    "title": "Экстремумы в прикладных задачах",
+    "navTitle": "Экстремумы в прикладных задачах",
+    "navSubtitle": "Производная и прикладная оптимизация: максимальная мощность, распределение скоростей молекул и минимальный снос лодки. Занятие Тимофея Васильченко от 13 ноября 2026 года.",
+    "summary": "Производная и прикладная оптимизация: максимальная мощность, распределение скоростей молекул и минимальный снос лодки. Занятие Тимофея Васильченко от 13 ноября 2026 года.",
+    "topics": [
+      "Экстремумы и знаки производной",
+      "Максимум мощности резистора",
+      "Распределение Максвелла",
+      "Минимальный снос лодки",
+      "ОДЗ и физические ограничения",
+      "Производная сложной функции"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t8_derivative_rules",
+        "evidenceAnchor": "method",
+        "relation": "practiced",
+        "label": "Правила дифференцирования",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t8_monotonicity",
+        "evidenceAnchor": "circuit",
+        "relation": "practiced",
+        "label": "Знак производной и монотонность",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t8_extrema",
+        "evidenceAnchor": "proof",
+        "relation": "practiced",
+        "label": "Доказательство экстремума",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t8_elementary_derivatives",
+        "evidenceAnchor": "maxwell",
+        "relation": "practiced",
+        "label": "Производная экспоненты и сложной функции",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "ege2027_t17_variables",
+        "evidenceAnchor": "maxwell",
+        "relation": "practiced",
+        "label": "Переменная и константы модели",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "ege2027_t17_constraints",
+        "evidenceAnchor": "boat",
+        "relation": "practiced",
+        "label": "Ограничения и отбор допустимых значений",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "ege2027_t17_optimization",
+        "evidenceAnchor": "boat",
+        "relation": "practiced",
+        "label": "Прикладная оптимизация",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "ege2027_t17_analysis",
+        "evidenceAnchor": "proof",
+        "relation": "touched",
+        "label": "Исследование модели",
+        "practiceDisposition": "none"
+      }
+    ],
+    "materials": {
+      "html": "13.11.26.html",
+      "pdf": "../pdf_docs/13.11.26.pdf",
+      "tex": "../tex_docs/13.11.26.tex",
+      "lab": "13.11.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "20.10.26.html",
-    "tex": "../tex_docs/20.10.26.tex",
-    "lab": "20.10.26-lab.html"
-  }
-},
-{
+  },
+  {
+    "date": "2026-11-07",
+    "ktpRefs": [],
+    "href": "07.11.26.html",
+    "title": "Производная и оптимизация",
+    "navTitle": "Производная и оптимизация",
+    "navSubtitle": "Производная сложной функции, правило частного, параметры и оптимизация: занятие Тимофея Васильченко от 7 ноября 2026 года.",
+    "summary": "Производная сложной функции, правило частного, параметры и оптимизация: занятие Тимофея Васильченко от 7 ноября 2026 года.",
+    "topics": [
+      "Производная сложной функции",
+      "Правило производной частного",
+      "Параметры и константы",
+      "Возрастание и экстремумы",
+      "Оптимизация: распределение скоростей молекул"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t8_monotonicity",
+        "evidenceAnchor": "rules",
+        "relation": "practiced",
+        "label": "Возрастание и убывание по знаку производной",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t8_extrema",
+        "evidenceAnchor": "rules",
+        "relation": "practiced",
+        "label": "Точки минимума и максимума",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t8_derivative_rules",
+        "evidenceAnchor": "chain",
+        "relation": "practiced",
+        "label": "Правила дифференцирования и сложная функция",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t8_elementary_derivatives",
+        "evidenceAnchor": "chain",
+        "relation": "practiced",
+        "label": "Производные корня, синуса и экспоненты",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "ege2027_t17_variables",
+        "evidenceAnchor": "parameters",
+        "relation": "practiced",
+        "label": "Переменные и постоянные в модели",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "ege2027_t17_constraints",
+        "evidenceAnchor": "fractions",
+        "relation": "practiced",
+        "label": "Ограничения области определения",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "ege2027_t17_optimization",
+        "evidenceAnchor": "optimization",
+        "relation": "touched",
+        "label": "Максимум прикладной функции",
+        "practiceDisposition": "none"
+      }
+    ],
+    "materials": {
+      "html": "07.11.26.html",
+      "pdf": "../pdf_docs/07.11.26.pdf",
+      "tex": "../tex_docs/07.11.26.tex",
+      "lab": "07.11.26-lab.html"
+    }
+  },
+  {
+    "date": "2026-11-06",
+    "ktpRefs": [],
+    "href": "06.11.26.html",
+    "title": "Смешанные неравенства",
+    "navTitle": "Смешанные неравенства",
+    "navSubtitle": "Неравенства со степенями и логарифмами: ОДЗ, нули, метод интервалов, рационализация и десять задач. Тимофей Васильченко, 6 ноября 2026.",
+    "summary": "Неравенства со степенями и логарифмами: ОДЗ, нули, метод интервалов, рационализация и десять задач. Тимофей Васильченко, 6 ноября 2026.",
+    "topics": [
+      "Смешанные показательные и логарифмические неравенства",
+      "Область допустимых значений",
+      "Метод интервалов",
+      "Рационализация знаков",
+      "Точные дробные границы"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t15_log_exp",
+        "evidenceAnchor": "intervals",
+        "relation": "practiced",
+        "label": "Смешанные неравенства со степенями и логарифмами",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t15_intervals",
+        "evidenceAnchor": "intervals",
+        "relation": "practiced",
+        "label": "Метод интервалов и проверка знака",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t15_log_rational",
+        "evidenceAnchor": "roots",
+        "relation": "practiced",
+        "label": "Нули логарифмического знаменателя",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t7_log_var",
+        "evidenceAnchor": "rationalization",
+        "relation": "touched",
+        "label": "Логарифмические преобразования",
+        "practiceDisposition": "none"
+      },
+      {
+        "competencyId": "t15_rationalization",
+        "evidenceAnchor": "rationalization",
+        "relation": "touched",
+        "label": "Рационализация смешанного неравенства",
+        "practiceDisposition": "none"
+      },
+      {
+        "competencyId": "t15_answer",
+        "evidenceAnchor": "precision",
+        "relation": "practiced",
+        "label": "Точные границы и запись множества решений",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "06.11.26.html",
+      "pdf": "../pdf_docs/06.11.26.pdf",
+      "tex": "../tex_docs/06.11.26.tex",
+      "lab": "06.11.26-lab.html"
+    }
+  },
+  {
+    "date": "2026-10-31",
+    "ktpRefs": [],
+    "href": "31.10.26.html",
+    "title": "Логарифмические неравенства",
+    "navTitle": "Логарифмические неравенства",
+    "navSubtitle": "Логарифмические неравенства: область допустимых значений, чётная степень и модуль, замена переменной, объединение промежутков и переменное основание. Чек-лист Тимофея Васильченко от 31 октября 2026 года.",
+    "summary": "Логарифмические неравенства: область допустимых значений, чётная степень и модуль, замена переменной, объединение промежутков и переменное основание. Чек-лист Тимофея Васильченко от 31 октября 2026 года.",
+    "topics": [
+      "Логарифмические неравенства",
+      "Область допустимых значений логарифма",
+      "Логарифмические преобразования и модуль",
+      "Замена переменной",
+      "Системы и совокупности промежутков",
+      "Неравенства с переменным основанием"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t7_log_var",
+        "evidenceAnchor": "powers",
+        "relation": "practiced",
+        "label": "Логарифмические преобразования",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t15_log_basic",
+        "evidenceAnchor": "variable-base",
+        "relation": "touched",
+        "label": "Логарифмические неравенства",
+        "practiceDisposition": "none"
+      },
+      {
+        "competencyId": "t15_log_rational",
+        "evidenceAnchor": "substitution",
+        "relation": "practiced",
+        "label": "Квадратное неравенство после замены",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t15_systems_log",
+        "evidenceAnchor": "modulus",
+        "relation": "practiced",
+        "label": "Системы, совокупности и модуль",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t15_log_other",
+        "evidenceAnchor": "variable-base",
+        "relation": "touched",
+        "label": "Основание, зависящее от переменной",
+        "practiceDisposition": "none"
+      }
+    ],
+    "materials": {
+      "html": "31.10.26.html",
+      "pdf": "../pdf_docs/31.10.26.pdf",
+      "tex": "../tex_docs/31.10.26.tex",
+      "lab": "31.10.26-lab.html"
+    }
+  },
+  {
+    "date": "2026-10-27",
+    "ktpRefs": [],
+    "href": "27.10.26.html",
+    "title": "Тригонометрические и смешанные уравнения",
+    "navTitle": "Тригонометрические и смешанные уравнения",
+    "navSubtitle": "Тригонометрические и смешанные уравнения: логарифмы и ОДЗ, формулы половинного угла, однородные уравнения, показательная замена и десять задач. Тимофей Васильченко, 27.10.2026.",
+    "summary": "Тригонометрические и смешанные уравнения: логарифмы и ОДЗ, формулы половинного угла, однородные уравнения, показательная замена и десять задач. Тимофей Васильченко, 27.10.2026.",
+    "topics": [
+      "Тригонометрические уравнения",
+      "Формулы половинного угла",
+      "Однородные уравнения",
+      "Логарифмы и ОДЗ",
+      "Показательные уравнения с тригонометрической заменой"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t6_logarithmic",
+        "evidenceAnchor": "logarithm",
+        "relation": "practiced",
+        "label": "Логарифмы и ОДЗ",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t6_trigonometric",
+        "evidenceAnchor": "half-angle",
+        "relation": "practiced",
+        "label": "Метод половинного угла",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t7_trig_var",
+        "evidenceAnchor": "half-angle",
+        "relation": "practiced",
+        "label": "Тригонометрические преобразования",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t13_trig_homogeneous",
+        "evidenceAnchor": "homogeneous",
+        "relation": "practiced",
+        "label": "Однородные тригонометрические уравнения",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t13_trig_quad",
+        "evidenceAnchor": "homogeneous",
+        "relation": "practiced",
+        "label": "Сведение к квадратному уравнению",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t13_trig_domain",
+        "evidenceAnchor": "logarithm",
+        "relation": "practiced",
+        "label": "Область допустимых значений",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t13_trig_log",
+        "evidenceAnchor": "logarithm",
+        "relation": "practiced",
+        "label": "Смешанное логарифмическое уравнение",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t13_trig_exp",
+        "evidenceAnchor": "exponential",
+        "relation": "practiced",
+        "label": "Показательная тригонометрическая замена",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t6_exponential",
+        "evidenceAnchor": "exponential",
+        "relation": "practiced",
+        "label": "Свойства степеней",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t6_trig_special",
+        "evidenceAnchor": "half-angle",
+        "relation": "touched",
+        "label": "Базовые серии корней",
+        "practiceDisposition": "none"
+      }
+    ],
+    "materials": {
+      "html": "27.10.26.html",
+      "pdf": "../pdf_docs/27.10.26.pdf",
+      "tex": "../tex_docs/27.10.26.tex",
+      "lab": "27.10.26-lab.html"
+    }
+  },
+  {
+    "date": "2026-10-24",
+    "ktpRefs": [],
+    "href": "24.10.26.html",
+    "title": "Повторение. Восемь методов",
+    "navTitle": "Повторение. Восемь методов",
+    "navSubtitle": "Повторение математики ЕГЭ: площадь треугольника, векторы, шар в цилиндре, вероятность, степени, логарифмы, графики и движение. Чек-лист Тимофея Васильченко от 24.10.2026, 10 задач пути А.",
+    "summary": "Повторение математики ЕГЭ: площадь треугольника, векторы, шар в цилиндре, вероятность, степени, логарифмы, графики и движение. Чек-лист Тимофея Васильченко от 24.10.2026, 10 задач пути А.",
+    "topics": [
+      "Площади треугольников",
+      "Скалярное произведение",
+      "Шар и цилиндр",
+      "Независимые события и вероятность",
+      "Степени и показательные уравнения",
+      "Логарифмы и ОДЗ",
+      "Логарифмические функции",
+      "Задачи на движение"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t1_areas",
+        "evidenceAnchor": "geometry",
+        "relation": "touched",
+        "label": "Площадь треугольника и выбор формулы",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t2_dot",
+        "evidenceAnchor": "vectors",
+        "relation": "touched",
+        "label": "Скалярное произведение векторов",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t3_sphere",
+        "evidenceAnchor": "volume",
+        "relation": "touched",
+        "label": "Объём вписанного шара",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t4_enumeration",
+        "evidenceAnchor": "probability",
+        "relation": "touched",
+        "label": "Перебор исходов и произведение вероятностей",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t6_exponential",
+        "evidenceAnchor": "powers",
+        "relation": "touched",
+        "label": "Показательные уравнения",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t6_logarithmic",
+        "evidenceAnchor": "logarithms",
+        "relation": "touched",
+        "label": "Логарифмические уравнения и ОДЗ",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t7_log_var",
+        "evidenceAnchor": "logarithms",
+        "relation": "touched",
+        "label": "Логарифмические преобразования",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t11_exp_log",
+        "evidenceAnchor": "graph",
+        "relation": "touched",
+        "label": "График логарифмической функции",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t10_line",
+        "evidenceAnchor": "motion",
+        "relation": "touched",
+        "label": "Модель задачи на движение",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "24.10.26.html",
+      "pdf": "../pdf_docs/24.10.26.pdf",
+      "tex": "../tex_docs/24.10.26.tex"
+    }
+  },
+  {
+    "date": "2026-10-20",
+    "ktpRefs": [],
+    "href": "20.10.26.html",
+    "title": "Финансовая математика",
+    "navTitle": "Финансовая математика",
+    "navSubtitle": "Финансовая математика ЕГЭ: вклады с пополнением, аннуитетные, дифференцированные и произвольные кредиты, таблицы, переплата и сравнение выплат. Занятие Тимофея Васильченко 20.10.2026.",
+    "summary": "Финансовая математика ЕГЭ: вклады с пополнением, аннуитетные, дифференцированные и произвольные кредиты, таблицы, переплата и сравнение выплат. Занятие Тимофея Васильченко 20.10.2026.",
+    "topics": [
+      "Капитализация и пополнение вклада",
+      "Аннуитетная и дифференцированная схемы",
+      "Кредит с заданными остатками долга",
+      "Процент переплаты",
+      "Сравнение кредитных схем"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t16_deposits",
+        "evidenceAnchor": "deposit-model",
+        "relation": "practiced",
+        "label": "Вклады и процентный множитель",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_deposit_contrib",
+        "evidenceAnchor": "deposit-model",
+        "relation": "practiced",
+        "label": "Пополнение вклада после начисления",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_credits",
+        "evidenceAnchor": "scheme-key",
+        "relation": "practiced",
+        "label": "Распознавание кредитной схемы",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_annuity",
+        "evidenceAnchor": "annuity-ledger",
+        "relation": "practiced",
+        "label": "Аннуитетный кредит",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_diff",
+        "evidenceAnchor": "differentiated-ledger",
+        "relation": "practiced",
+        "label": "Дифференцированные платежи",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_equal_reduction",
+        "evidenceAnchor": "differentiated-ledger",
+        "relation": "practiced",
+        "label": "Равные уменьшения долга",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_debt_table",
+        "evidenceAnchor": "arbitrary-ledger",
+        "relation": "assessed",
+        "label": "Таблица долга по датам",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_variable",
+        "evidenceAnchor": "arbitrary-ledger",
+        "relation": "practiced",
+        "label": "Произвольные графики погашения",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_payment_sum",
+        "evidenceAnchor": "overpayment",
+        "relation": "practiced",
+        "label": "Сумма выплат и переплата",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_optimal",
+        "evidenceAnchor": "overpayment",
+        "relation": "practiced",
+        "label": "Выбор выгодной схемы",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "20.10.26.html",
+      "tex": "../tex_docs/20.10.26.tex",
+      "lab": "20.10.26-lab.html"
+    }
+  },
+  {
     "date": "2026-10-17",
     "ktpRefs": [],
     "href": "17.10.26.html",
