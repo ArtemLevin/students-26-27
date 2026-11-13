@@ -14,14 +14,16 @@ const intent=JSON.parse(read('data/lesson-publication-intents/2026-11-09.json'))
 const practice=JSON.parse(read('data/practice-publications/2026-11-09.json'));
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-10,a+' vs '+b);
 
-test('9 November lesson is the unique newest registered publication',()=>{
+test('9 November lesson remains uniquely registered as new lessons publish',()=>{
  const report=validateLessonRegistry(LESSONS);
- assert.equal(report.latest,'09.11.26.html');
- assert.equal(LESSONS[0].date,'2026-11-09');
+ assert.equal(report.latest,LESSONS[0].href);
+ const lesson09=LESSONS.find(x=>x.date==='2026-11-09');
+ assert.ok(lesson09);
+ assert.equal(lesson09.href,'09.11.26.html');
  assert.equal(LESSONS.filter(x=>x.date==='2026-11-09').length,1);
- assert.deepEqual(LESSONS[0].topics,metadata.topics);
- assert.equal(LESSONS[0].summary,metadata.summary);
- assert.equal(LESSONS[0].title,metadata.title);
+ assert.deepEqual(lesson09.topics,metadata.topics);
+ assert.equal(lesson09.summary,metadata.summary);
+ assert.equal(lesson09.title,metadata.title);
  assert.equal(metadata.date,intent.lessonDate);
  assert.deepEqual(metadata.ktpRefs,[]);
  assert.deepEqual(metadata.ktpCoverage,[]);
@@ -44,8 +46,8 @@ test('competence evidence links are exact and never claim unassessed mastery',()
   assert.ok(evidence.includes('09.11.26.html#'+item.evidenceAnchor),item.evidenceAnchor);
  }
  assert.match(read('index.html'),/dashboard-data-09\.11\.js/);
- assert.match(read('dashboard.js'),/lesson-registry\.js\?v=20261109/);
- assert.match(read('index.html'),/dashboard\.js\?v=20261110-1/,'Cabinet must invalidate cached module after new lesson publication');
+ assert.match(read('dashboard.js'),/lesson-registry\.js\?v=20\d{6}(?:-[\w-]+)?/);
+ assert.match(read('index.html'),/dashboard\.js\?v=20\d{6}(?:-[\w-]+)?/,'Cabinet must use a cache-versioned module');
 });
 
 test('lesson and laboratory markup preserve accessibility and ten source exercises',()=>{

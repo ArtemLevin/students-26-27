@@ -5,6 +5,58 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-11",
+  "ktpRefs": [],
+  "href": "11.11.26.html",
+  "title": "От призмы к пирамиде",
+  "navTitle": "От призмы к пирамиде",
+  "navSubtitle": "Николь Саркисьянц. Стереометрия, 11 ноября 2026: прямая призма с ромбом в основании, сравнение площадей и объёмов, правильная треугольная пирамида, высота и апофема. Десять задач с ответами.",
+  "summary": "Николь Саркисьянц. Стереометрия, 11 ноября 2026: прямая призма с ромбом в основании, сравнение площадей и объёмов, правильная треугольная пирамида, высота и апофема. Десять задач с ответами.",
+  "topics": [
+    "прямая призма с ромбом в основании",
+    "площадь полной и боковой поверхности",
+    "отношение площадей и объёмов",
+    "правильная треугольная пирамида",
+    "высота и апофема пирамиды",
+    "10 задач на закрепление"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t3_prism",
+      "evidenceAnchor": "prism",
+      "relation": "practiced",
+      "label": "Прямая призма: основание и геометрические расчёты",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_surface",
+      "evidenceAnchor": "surface",
+      "relation": "practiced",
+      "label": "Площадь полной и боковой поверхности",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_scale",
+      "evidenceAnchor": "ratio",
+      "relation": "practiced",
+      "label": "Сравнение площадей и объёмов",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_pyramid",
+      "evidenceAnchor": "pyramid",
+      "relation": "touched",
+      "label": "Правильная треугольная пирамида",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "11.11.26.html",
+    "pdf": "../pdf_docs/11.11.26.pdf",
+    "tex": "../tex_docs/11.11.26.tex"
+  }
+},
+{
   "date": "2026-11-09",
   "ktpRefs": [],
   "href": "09.11.26.html",
