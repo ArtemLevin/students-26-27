@@ -110,21 +110,43 @@ try{
     const image=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
     fs.writeFileSync(path.join(artifact,file+'.png'),Buffer.from(image.data,'base64'));
   }
-  // Post-publication cabinet integration: latest lesson, heatmap and local route.
+  // Post-publication cabinet integration: check the actual newest lesson while retaining the October lesson checks.
   await call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
   const cabinetUrl=origin+'/students/daniil_khriastov/site/index.html';
   await call('Page.navigate',{url:cabinetUrl});
   for(let i=0;i<160;i++){
-    const status=await run("({url:location.href,ready:document.readyState,lesson:!!document.querySelector('#latestLesson a[href=\\\"06.11.26.html\\\"]'),count:document.querySelector('#totalCount')?.textContent})");
+    const status=await run("({url:location.href,ready:document.readyState,lesson:!!document.querySelector('#latestLesson a[href=\\\"11.11.26.html\\\"]'),count:document.querySelector('#totalCount')?.textContent})");
     if(status.url.startsWith(cabinetUrl)&&status.ready==='complete'&&status.lesson&&Number(status.count)>250)break;
     if(i===159)throw Error('Cabinet did not load published lesson and canonical catalog: '+JSON.stringify(status));
     await pause(100);
   }
-  const cabinet=await run("({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth,lesson:document.querySelector('#latestLesson')?.textContent.slice(0,150),direct:!!document.querySelector('.atlas-current-topic a[href=\\\"06.11.26.html\\\"]'),sectors:document.querySelectorAll('#radialMap [data-id]').length})");
+  const cabinet=await run("({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth,lesson:document.querySelector('#latestLesson')?.textContent.slice(0,150),direct:!!document.querySelector('.atlas-current-topic a[href=\\\"11.11.26.html\\\"]'),sectors:document.querySelectorAll('#radialMap [data-id]').length})");
   assert.ok(cabinet.scroll<=cabinet.client+2,'Cabinet horizontal overflow: '+JSON.stringify(cabinet));
   assert.equal(cabinet.direct,true,'Cabinet must expose direct HTML lesson link');
-  assert.ok(cabinet.lesson.includes('Метод опорных точек'));
+  assert.ok(cabinet.lesson.includes('Логарифмы'));
   fs.writeFileSync(path.join(artifact,'home-mobile.png'),Buffer.from((await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false})).data,'base64'));
+  // Browser release gate for the new 11 November logarithm lesson.
+  const newLesson=origin+'/students/daniil_khriastov/site/11.11.26.html';
+  await call('Page.navigate',{url:newLesson});
+  for(let i=0;i<100;i++){
+    const state=await run('({url:location.href,ready:document.readyState})');
+    if(state.url===newLesson&&state.ready==='complete')break;
+    if(i===99)throw Error('11 November lesson failed to load');
+    await pause(80);
+  }
+  await pause(200);
+  for(const [width,height,dark] of [[390,844,false],[390,844,true],[1440,900,false],[1440,900,true]]){
+    await call('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:width<=768});
+    const data=await run("(()=>{const requested='"+(dark?'dark':'light')+"';if(document.documentElement.dataset.theme!==requested)document.getElementById('theme-toggle').click();return {theme:document.documentElement.dataset.theme,scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth,math:document.querySelectorAll('main math').length,tasks:document.querySelectorAll('.task-list li').length}})()");
+    assert.equal(data.theme,dark?'dark':'light');
+    assert.ok(data.scroll<=data.client+2,'11 Nov horizontal overflow: '+JSON.stringify({width,height,data}));
+    assert.ok(data.math>=40,'Missing MathML: '+JSON.stringify(data));
+    assert.equal(data.tasks,10);
+  }
+  const interaction=await run("(()=>{document.getElementById('step-next').click();document.querySelector('[data-check-x=\\\"5\\\"]').click();return {step:document.getElementById('step-count').textContent,domain:document.getElementById('domain-result').textContent}})()");
+  assert.equal(interaction.step,'2 из 5');
+  assert.ok(interaction.domain.includes('не определено'),JSON.stringify(interaction));
+  console.log('Daniil 11.11.26 browser QA PASS: 390/1440 widths, light/dark, MathML, ten tasks, interactions');
   assert.deepEqual(errors,[],'JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Network 4xx/5xx errors');
   console.log('Daniil 23.10.26 browser QA PASS: 7 sizes, 2 themes, MathML, model, print, links, screenshots');
