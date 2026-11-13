@@ -1,0 +1,41 @@
+name: Publish Mark Gukin 13 Nov lesson
+on:
+  push:
+    branches:
+      - lesson/mark-gukin-2026-11-13-combinatorics
+permissions:
+  contents: write
+jobs:
+  publish:
+    if: github.event.head_commit.message != 'chore(mark_gukin): publish 13 Nov lesson metadata'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Transactional publication dry-run
+        run: |
+          node scripts/publish-lesson.mjs mark_gukin 13.11.26 --intent students/mark_gukin/publication/2026-11-13.intent.json --dry-run > /tmp/mark-gukin-dry-run.json
+          cat /tmp/mark-gukin-dry-run.json
+          node -e "const p=require('/tmp/mark-gukin-dry-run.json'); if(!p.executable || p.reviewItems.length || p.conflicts.length)process.exit(1)"
+      - name: Transactional publication apply
+        run: node scripts/publish-lesson.mjs mark_gukin 13.11.26 --intent students/mark_gukin/publication/2026-11-13.intent.json
+      - name: Validate Mark Gukin and entire student registry
+        run: |
+          node scripts/student.mjs validate mark_gukin
+          node scripts/student.mjs audit
+          node shared/practice/validate-configs.mjs
+      - name: Commit canonical files authored by publisher
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add students/mark_gukin/site/data/lessons/2026-11-13.lesson.json students/mark_gukin/site/lesson-registry.js
+          git add -u students/mark_gukin/site/data/ktp-state.json students/mark_gukin/site/data/mastery-state.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(mark_gukin): publish 13 Nov lesson metadata'
+            git push
+          fi
