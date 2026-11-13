@@ -1,5 +1,60 @@
 export const LESSONS=[
 {
+  "date": "2026-11-13",
+  "ktpRefs": [],
+  "href": "13.11.26.html",
+  "title": "Логарифмы: уравнения",
+  "navTitle": "Логарифмы: уравнения",
+  "navSubtitle": "Логарифмы: преобразования, ОДЗ, логарифмические уравнения, пошаговые примеры и десять задач Даниила Хрястова.",
+  "summary": "Логарифмы: преобразования, ОДЗ, логарифмические уравнения, пошаговые примеры и десять задач Даниила Хрястова.",
+  "topics": [
+    "Определение логарифма, основное логарифмическое тождество и ОДЗ",
+    "Свойства логарифмов: произведение, частное и степень аргумента",
+    "Смена основания и взаимные логарифмы",
+    "Логарифмические уравнения: логарифм равен числу или логарифму",
+    "Переменная в основании и отбор корней по исходной ОДЗ",
+    "Составное уравнение со сменой основания, квадратным уравнением и проверкой",
+    "Путь А: десять самостоятельных заданий"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "expr_16",
+      "evidenceAnchor": "properties",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "expr_17",
+      "evidenceAnchor": "change-base",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "expr_18",
+      "evidenceAnchor": "worked",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_10",
+      "evidenceAnchor": "equations",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_02",
+      "evidenceAnchor": "algorithm",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "expr_07",
+      "evidenceAnchor": "foundation",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "13.11.26.html",
+    "pdf": "../pdf_docs/13.11.26.pdf",
+    "tex": "../tex_docs/13.11.26.tex"
+  }
+},
+{
   "date": "2026-11-11",
   "ktpRefs": [],
   "href": "11.11.26.html",
