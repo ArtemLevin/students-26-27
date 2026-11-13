@@ -76,6 +76,6 @@ test('worked values and answer key agree with elementary geometry',()=>{
   assert.equal(8*4*3,96);
   assert.equal(18*9/3,54);
   assert.equal((4**2*Math.sqrt(3)/4)*(3*Math.sqrt(3))/3,12);
-  assert.equal((9*Math.sqrt(3)/2)*Math.sqrt(3)/3,4.5);
+  assert.ok(Math.abs((9*Math.sqrt(3)/2)*Math.sqrt(3)/3-4.5)<1e-10);
   assert.equal(16*3/8,6);
 });
