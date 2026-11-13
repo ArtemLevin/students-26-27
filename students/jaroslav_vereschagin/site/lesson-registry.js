@@ -5,6 +5,87 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-12",
+  "ktpRefs": [],
+  "href": "12.11.26.html",
+  "title": "От дробей до геометрии",
+  "navTitle": "От дробей до геометрии",
+  "navSubtitle": "Ярослав Верещагин. Числа, алгебра и геометрия: учебная страница 12 ноября 2026 года, разбор и десять задач.",
+  "summary": "Ярослав Верещагин. Числа, алгебра и геометрия: учебная страница 12 ноября 2026 года, разбор и десять задач.",
+  "topics": [
+    "Деление десятичных дробей и контроль остатков",
+    "Корень из квадрата: модуль и знак",
+    "Линейное уравнение с дробным коэффициентом — два способа",
+    "Классическая вероятность и благоприятные исходы",
+    "Квадратные неравенства: нули и знаки на интервалах",
+    "Расстояние за последовательные секунды",
+    "Геометрия: общая высота, касательные, ромб, трапеция",
+    "Разложение высоких степеней разностью квадратов"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_6_2_1",
+      "evidenceAnchor": "numbers",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_8_2_2",
+      "evidenceAnchor": "numbers",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_9_1_3",
+      "evidenceAnchor": "linear",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_10_2_2",
+      "evidenceAnchor": "probability",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_13_2_2",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_13_2_3",
+      "evidenceAnchor": "intervals",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_14_3_3",
+      "evidenceAnchor": "motion",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_15_2_4",
+      "evidenceAnchor": "geometry",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_16_2_1",
+      "evidenceAnchor": "geometry",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_17_1_2",
+      "evidenceAnchor": "geometry",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_20_1_3",
+      "evidenceAnchor": "powers",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "12.11.26.html",
+    "pdf": "../pdf_docs/12.11.26.pdf",
+    "tex": "../tex_docs/12.11.26.tex"
+  }
+},
+{
   "date": "2026-11-09",
   "ktpRefs": [],
   "href": "09.11.26.html",
