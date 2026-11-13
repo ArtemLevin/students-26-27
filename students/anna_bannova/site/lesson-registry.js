@@ -1,5 +1,56 @@
 export const LESSONS=[
   {
+    "date": "2026-11-13",
+    "ktpRefs": [
+      "ktp-006"
+    ],
+    "href": "13.11.26.html",
+    "title": "Средняя скорость",
+    "navTitle": "Средняя скорость",
+    "navSubtitle": "13.11.26 · Доли пути и времени, сложные дроби и движение по реке",
+    "summary": "Разобраны средняя скорость, равные части времени и расстояния, доли пути, многоэтажные дроби, простые множители и движение по течению/против течения.",
+    "topics": [
+      "средняя скорость",
+      "равные доли пути и времени",
+      "таблица скорость–время–расстояние",
+      "многоэтажные дроби и сокращение",
+      "оставшаяся доля пути",
+      "движение по течению и против течения"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "text_09",
+        "evidenceAnchor": "compare",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_08",
+        "evidenceAnchor": "river",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_19",
+        "evidenceAnchor": "method",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calc_02",
+        "evidenceAnchor": "remainder",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "calc_03",
+        "evidenceAnchor": "algebra",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "13.11.26.html",
+      "pdf": "../pdf_docs/13.11.26.pdf",
+      "tex": "../tex_docs/13.11.26.tex"
+    }
+  },
+  {
     "date": "2026-11-06",
     "ktpRefs": [
       "ktp-006"
