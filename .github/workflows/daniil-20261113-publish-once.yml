@@ -1,0 +1,38 @@
+name: Daniil 13 Nov one-time canonical publisher
+on:
+  push:
+    branches:
+      - lesson/daniil-2026-11-13-log-equations
+    paths:
+      - '.github/workflows/daniil-20261113-publish-once.yml'
+permissions:
+  contents: read
+jobs:
+  publish-artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run canonical dry-run
+        run: node scripts/publish-lesson.mjs daniil_khriastov 13.11.26 --intent students/daniil_khriastov/site/data/publication-intents/2026-11-13.json --dry-run
+      - name: Apply canonical publisher transaction
+        run: node scripts/publish-lesson.mjs daniil_khriastov 13.11.26 --intent students/daniil_khriastov/site/data/publication-intents/2026-11-13.json
+      - name: Validate student platform
+        run: |
+          node scripts/student.mjs validate daniil_khriastov
+          node scripts/student.mjs audit
+          node --test students/daniil_khriastov/site/tests/*.test.mjs
+      - name: Export exactly publisher-generated changes
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import {execFileSync} from 'node:child_process';
+          const changed=execFileSync('git',['status','--porcelain','--untracked-files=all'],{encoding:'utf8'}).trim().split('\n').filter(Boolean).map(s=>s.slice(3));
+          const files=changed.map(path=>({path,base64:fs.readFileSync(path).toString('base64')}));
+          console.log('PUBLISH_EXPORT_BEGIN');
+          console.log(JSON.stringify({changed,files}));
+          console.log('PUBLISH_EXPORT_END');
+          NODE
