@@ -137,13 +137,28 @@ try{
   assert.equal(await run("getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()"),'#fff','print background from dark theme');
   await call('Emulation.setEmulatedMedia',{media:'screen'});
   await navigate('index.html',390,844,false);
-  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Тригонометрические графики и прикладные задачи')"),true,'latest lesson on home');
+  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Комбинаторика: метод позиций')"),true,'latest lesson on home');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"18.10.26.html\"]')!==null"),true,'previous lesson remains in journal');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"21.10.26.html\"]')!==null"),true,'previous logarithm lesson remains in journal');
-  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"../pdf_docs/06.11.26.pdf\"]')!==null"),true,'home links to latest lesson PDF');
+  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"../pdf_docs/13.11.26.pdf\"]')!==null"),true,'home links to latest lesson PDF');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('04.10.2026')"),true,'history retained');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('09.10.2026')"),true,'previous lesson retained');
+  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"13.11.26-lab.html\"]')!==null"),true,"13 Nov lab in journal");
+  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"../images/13.11.26.png\"]')!==null"),true,"13 Nov poster in journal");
   await snapshot('home-mobile-light');
+  // November 13: lesson and counting lab.
+  await navigate('13.11.26.html',390,844,false);
+  assert.equal(await run("document.querySelector('h1').textContent.includes('Комбинаторика')"),true,"13 Nov lesson title");
+  assert.equal(await run("document.querySelectorAll('#practice .task').length"),10,"13 Nov 10 tasks");
+  assert.equal(await run("[...document.querySelectorAll('main math')].every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML')"),true,"13 Nov valid MathML");
+  assert.equal(await run("document.querySelector('#poster img[src=\"../images/13.11.26.png\"]')!==null"),true,"13 Nov poster");
+  await navigate('13.11.26-lab.html',390,844,false);
+  assert.equal(await run("document.querySelector('#digit-total').textContent.trim()"),"12","lab initial 3 x 4");
+  assert.equal(await run("(()=>{document.querySelector('#length').value='3';document.querySelector('input[name=repeat][value=no]').click();return document.querySelector('#digit-total').textContent.trim()})()"),"18","lab no repeat");
+  assert.equal(await run("document.querySelector('#order-total').textContent.trim()"),"90","lab ordered");
+  assert.equal(await run("(()=>{document.querySelector('input[name=ordered][value=no]').click();return document.querySelector('#order-total').textContent.trim()})()"),"45","lab unordered");
+  assert.equal(await run("(()=>{const e=document.querySelector('#case');e.value='four';e.dispatchEvent(new Event('change',{bubbles:true}));return Number(document.querySelector('#case-total').textContent.replace(/\\s/g,''))})()"),192,"lab divisibility four");
+  assert.equal(await run("(()=>{const e=document.querySelector('#case');e.value='books';e.dispatchEvent(new Event('change',{bubbles:true}));return Number(document.querySelector('#case-total').textContent.replace(/\\s/g,''))})()"),10080,"lab adjacent books");
   // November 6: five graph exercises and five calculation-only exercises.
   await navigate('06.11.26.html',390,844,false);
   assert.equal(await run("document.querySelectorAll('#practice .exercise').length"),10,'6 Nov ten training exercises');
