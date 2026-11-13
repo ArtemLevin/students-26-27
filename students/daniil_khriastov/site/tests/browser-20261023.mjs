@@ -110,20 +110,20 @@ try{
     const image=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
     fs.writeFileSync(path.join(artifact,file+'.png'),Buffer.from(image.data,'base64'));
   }
-  // Post-publication cabinet integration: latest lesson, heatmap and local route.
+  // Post-publication cabinet integration: check the actual newest lesson while retaining the October lesson checks.
   await call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
   const cabinetUrl=origin+'/students/daniil_khriastov/site/index.html';
   await call('Page.navigate',{url:cabinetUrl});
   for(let i=0;i<160;i++){
-    const status=await run("({url:location.href,ready:document.readyState,lesson:!!document.querySelector('#latestLesson a[href=\\\"06.11.26.html\\\"]'),count:document.querySelector('#totalCount')?.textContent})");
+    const status=await run("({url:location.href,ready:document.readyState,lesson:!!document.querySelector('#latestLesson a[href=\\\"11.11.26.html\\\"]'),count:document.querySelector('#totalCount')?.textContent})");
     if(status.url.startsWith(cabinetUrl)&&status.ready==='complete'&&status.lesson&&Number(status.count)>250)break;
     if(i===159)throw Error('Cabinet did not load published lesson and canonical catalog: '+JSON.stringify(status));
     await pause(100);
   }
-  const cabinet=await run("({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth,lesson:document.querySelector('#latestLesson')?.textContent.slice(0,150),direct:!!document.querySelector('.atlas-current-topic a[href=\\\"06.11.26.html\\\"]'),sectors:document.querySelectorAll('#radialMap [data-id]').length})");
+  const cabinet=await run("({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth,lesson:document.querySelector('#latestLesson')?.textContent.slice(0,150),direct:!!document.querySelector('.atlas-current-topic a[href=\\\"11.11.26.html\\\"]'),sectors:document.querySelectorAll('#radialMap [data-id]').length})");
   assert.ok(cabinet.scroll<=cabinet.client+2,'Cabinet horizontal overflow: '+JSON.stringify(cabinet));
   assert.equal(cabinet.direct,true,'Cabinet must expose direct HTML lesson link');
-  assert.ok(cabinet.lesson.includes('Метод опорных точек'));
+  assert.ok(cabinet.lesson.includes('Логарифмы'));
   fs.writeFileSync(path.join(artifact,'home-mobile.png'),Buffer.from((await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false})).data,'base64'));
   assert.deepEqual(errors,[],'JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Network 4xx/5xx errors');
