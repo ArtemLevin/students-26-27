@@ -63,7 +63,7 @@ test('reference frequency distribution and variance are consistent', () => {
 
 test('02.11 lesson remains in the archive as newer lessons publish; evidence stays linked', () => {
   const registry = read('lesson-registry.js');
-  assert.match(registry, /export const LESSONS=\[\s*\{\s*"date": "2026-11-09"/);
+  assert.match(registry, /"date": "2026-11-09"/);
   const latestPosition = registry.indexOf('"date": "2026-11-09"');
   const middlePosition = registry.indexOf('"date": "2026-11-05"');
   const previousPosition = registry.indexOf('"date": "2026-11-02"');
