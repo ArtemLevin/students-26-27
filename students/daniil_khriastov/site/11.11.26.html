@@ -113,3 +113,65 @@ html[data-theme="dark"]{color-scheme:dark;--paper:#111d16;--surface:#18291f;--so
 <li>Не пропускайте ОДЗ исходного выражения даже после удачного преобразования.</li>
 </ul><h3>Материалы занятия</h3><div class="materials"><a href="../pdf_docs/11.11.26.pdf">PDF · чек-лист</a><a href="../tex_docs/11.11.26.tex">TeX · исходник</a><a href="../images/11.11.26.png">PNG · постер</a><a href="index.html">Вернуться в учебный атлас</a></div>
 </div></div></section>
+</main>
+<footer class="signature"><div class="shell"><span>Лёвин Артём Александрович · эксклюзивно для Даниила Хрястова</span><span>LEVIN / ATLAS · 11.11.2026</span></div></footer>
+<script>
+(function(){
+  'use strict';
+  const html=document.documentElement;
+  const theme=document.getElementById('theme-toggle');
+  function paint(mode){
+    html.dataset.theme=mode;
+    theme.textContent=mode==='dark'?'Светлая тема':'Тёмная тема';
+    theme.setAttribute('aria-label','Переключить на '+(mode==='dark'?'светлую':'тёмную')+' цветовую тему');
+  }
+  try{paint(localStorage.getItem('daniil-lesson-theme')==='dark'?'dark':'light');}
+  catch(error){paint('light');}
+  theme.addEventListener('click',()=>{
+    const next=html.dataset.theme==='dark'?'light':'dark';
+    paint(next);
+    try{localStorage.setItem('daniil-lesson-theme',next);}catch(error){}
+  });
+  const panels=Array.from(document.querySelectorAll('.step-view'));
+  let current=0;
+  const prev=document.getElementById('step-prev');
+  const next=document.getElementById('step-next');
+  const reset=document.getElementById('step-reset');
+  const count=document.getElementById('step-count');
+  function show(i){
+    current=Math.max(0,Math.min(panels.length-1,i));
+    panels.forEach((panel,j)=>{panel.hidden=j!==current;});
+    prev.disabled=current===0;
+    next.disabled=current===panels.length-1;
+    count.textContent=String(current+1)+' из '+String(panels.length);
+    next.textContent=current===panels.length-1?'Последний шаг':'Следующий шаг';
+  }
+  prev.addEventListener('click',()=>show(current-1));
+  next.addEventListener('click',()=>show(current+1));
+  reset.addEventListener('click',()=>show(0));
+  show(0);
+  const buttons=Array.from(document.querySelectorAll('[data-check-x]'));
+  const result=document.getElementById('domain-result');
+  const ns='http://www.w3.org/1998/Math/MathML';
+  function setCase(value){
+    buttons.forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.checkX)===value)));
+    result.replaceChildren();
+    const text=document.createElement('span');
+    if(value===5){
+      text.textContent='Выражение не определено: аргумент логарифма равен нулю.';
+      result.append(text);
+      return;
+    }
+    text.textContent='Обе записи определены и равны. Их численное значение ≈ ';
+    const math=document.createElementNS(ns,'math');
+    const number=document.createElementNS(ns,'mn');
+    number.textContent=String(Math.round(Math.log((value-5)**2)/Math.log(2)*1000)/1000).replace('.',',');
+    math.append(number);
+    result.append(text,math);
+  }
+  buttons.forEach(button=>button.addEventListener('click',()=>setCase(Number(button.dataset.checkX))));
+  setCase(2);
+})();
+</script>
+</body>
+</html>
