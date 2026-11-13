@@ -71,6 +71,6 @@ test('02.11 lesson remains in the archive as newer lessons publish; evidence sta
   assert.match(read('index.html'), /dashboard-data-02\.11\.js/);
   assert.match(read('index.html'), /dashboard-data-05\.11\.js/);
   assert.match(read('index.html'), /dashboard-data-09\.11\.js/);
-  assert.match(read('dashboard.js'), /lesson-registry\.js\?v=20261109/);
+  assert.match(read('dashboard.js'), /lesson-registry\.js\?v=20\d{6}(?:-[\w-]+)?/);
   assert.match(read('dashboard-data-02.11.js'), /02\.11\.26\.html#frequency/);
 });
