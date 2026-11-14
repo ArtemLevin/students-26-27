@@ -30,9 +30,9 @@ test('06.11.26 publication and navigation are coherent',()=>{
  for(const x of meta.outcomes)assert.ok(declared.has(x.evidenceAnchor),'Missing evidence anchor '+x.evidenceAnchor);
  for(const x of meta.outcomes)assert.equal(x.masteryClaim,null,'Do not infer mastery from guided lesson');
  for(const dest of Object.values(meta.materials))assert.ok(fs.existsSync(path.resolve(site,dest)),'Missing material '+dest);
- assert.match(read('dashboard.js'),/lesson-registry\.js\?v=20261106/);
- assert.match(read('index.html'),/dashboard\.js\?v=20261106/);
- assert.match(read('archive.js'),/lesson-registry\.js\?v=20261106/);
+ assert.match(read('dashboard.js'),/lesson-registry\.js\?v=20261114/);
+ assert.match(read('index.html'),/dashboard\.js\?v=20261114/);
+ assert.match(read('archive.js'),/lesson-registry\.js\?v=20261114/);
 });
 test('finance lesson and interactive model contain no duplicate anchors or dead local hash links',()=>{
  for(const [name,html] of [['lesson',lesson],['lab',lab]]){
