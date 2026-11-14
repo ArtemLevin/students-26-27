@@ -3,6 +3,80 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+  "date": "2026-11-14",
+  "ktpRefs": [],
+  "href": "14.11.26.html",
+  "title": "Оптимизация: найти лучшее решение",
+  "navTitle": "Оптимизация: найти лучшее решение",
+  "navSubtitle": "Оптимизация в прикладных задачах ЕГЭ: производная сложной функции, распределение рабочих и выпуска, минимальная цена и налоговые поступления. Занятие Тимофея Васильченко 14 ноября 2026 года.",
+  "summary": "Оптимизация в прикладных задачах ЕГЭ: производная сложной функции, распределение рабочих и выпуска, минимальная цена и налоговые поступления. Занятие Тимофея Васильченко 14 ноября 2026 года.",
+  "topics": [
+    "Прикладная оптимизация",
+    "Производная сложной функции",
+    "Распределение работников и выпуска",
+    "Минимальная цена",
+    "Максимум налоговых поступлений",
+    "Целочисленные ограничения"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t8_derivative_rules",
+      "evidenceAnchor": "derivative",
+      "relation": "touched",
+      "label": "Цепное правило дифференцирования",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t8_monotonicity",
+      "evidenceAnchor": "method",
+      "relation": "touched",
+      "label": "Знак производной и интервалы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t8_extrema",
+      "evidenceAnchor": "plants",
+      "relation": "touched",
+      "label": "Экстремум на допустимом множестве",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "ege2027_t17_variables",
+      "evidenceAnchor": "workers",
+      "relation": "touched",
+      "label": "Выбор переменной в прикладной модели",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "ege2027_t17_constraints",
+      "evidenceAnchor": "price",
+      "relation": "touched",
+      "label": "ОДЗ, ограничения, единицы измерения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "ege2027_t17_optimization",
+      "evidenceAnchor": "tax",
+      "relation": "touched",
+      "label": "Оптимизация в двухэтапной модели",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "ege2027_t17_interpretation",
+      "evidenceAnchor": "selfcheck",
+      "relation": "touched",
+      "label": "Проверка и интерпретация ответа",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "14.11.26.html",
+    "pdf": "../pdf_docs/14.11.26.pdf",
+    "tex": "../tex_docs/14.11.26.tex",
+    "lab": "14.11.26-lab.html"
+  }
+},
+{
     "date": "2026-11-13",
     "ktpRefs": [],
     "href": "13.11.26.html",
