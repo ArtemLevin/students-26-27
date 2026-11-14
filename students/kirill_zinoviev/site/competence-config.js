@@ -54,8 +54,7 @@ const evidenceOnly=[
 {date:'07.11.26',href:'07.11.26.html#formula',ids:['functions_9']},
 {date:'07.11.26',href:'07.11.26.html#formula',ids:['functions_10']},
 {date:'07.11.26',href:'07.11.26.html#horizontal',ids:['functions_11']},
-{date:'07.11.26',href:'07.11.26.html#table',ids:['functions_12']}
-,
+{date:'07.11.26',href:'07.11.26.html#table',ids:['functions_12']},
 {date:'14.11.26',href:'14.11.26.html#values',ids:['functions_2']},
 {date:'14.11.26',href:'14.11.26.html#plot',ids:['functions_3']},
 {date:'14.11.26',href:'14.11.26.html#plot',ids:['functions_4']},
