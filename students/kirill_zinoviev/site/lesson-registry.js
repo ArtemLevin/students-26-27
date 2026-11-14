@@ -3,6 +3,103 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-14",
+  "ktpRefs": [],
+  "href": "14.11.26.html",
+  "title": "Линейная функция: графики, коэффициенты и точки пересечения",
+  "navTitle": "Линейная функция: графики, коэффициенты и точки пересечения",
+  "navSubtitle": "Алгебра, 7 класс: линейная функция y=kx+b, вычисление значений, коэффициенты k и b, эскиз прямой, построение по двум точкам, пересечение графиков и 10 заданий.",
+  "summary": "Алгебра, 7 класс: линейная функция y=kx+b, вычисление значений, коэффициенты k и b, эскиз прямой, построение по двум точкам, пересечение графиков и 10 заданий.",
+  "topics": [
+    "формула линейной функции y = kx + b",
+    "значение функции по аргументу и аргумент по значению",
+    "построение графика по двум точкам",
+    "знак углового коэффициента k и возрастание или убывание",
+    "свободный коэффициент b как пересечение с Oy",
+    "эскиз графика по знакам k и b",
+    "нахождение и проверка точки пересечения графиков",
+    "10 заданий от простого к сложному"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "functions_2",
+      "evidenceAnchor": "values",
+      "relation": "practiced",
+      "label": "Различать аргумент и значение функции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_3",
+      "evidenceAnchor": "plot",
+      "relation": "practiced",
+      "label": "Заполнять таблицу значений",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_4",
+      "evidenceAnchor": "plot",
+      "relation": "practiced",
+      "label": "Читать координаты точки",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_5",
+      "evidenceAnchor": "plot",
+      "relation": "practiced",
+      "label": "Отмечать точки на плоскости",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_7",
+      "evidenceAnchor": "inverse",
+      "relation": "practiced",
+      "label": "Находить x по заданному значению y",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_9",
+      "evidenceAnchor": "slope",
+      "relation": "touched",
+      "label": "Связывать знак k с поведением графика",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_10",
+      "evidenceAnchor": "formula",
+      "relation": "touched",
+      "label": "Распознавать линейную функцию",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_11",
+      "evidenceAnchor": "intercept",
+      "relation": "touched",
+      "label": "Понимать роль коэффициента b",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_12",
+      "evidenceAnchor": "plot",
+      "relation": "practiced",
+      "label": "Строить прямую по двум точкам",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_13",
+      "evidenceAnchor": "intersection",
+      "relation": "practiced",
+      "label": "Сравнивать две линейные зависимости по графику",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "14.11.26.html",
+    "pdf": "../pdf_docs/14.11.26.pdf",
+    "tex": "../tex_docs/14.11.26.tex",
+    "lab": "14.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-10",
   "ktpRefs": [],
   "href": "10.11.26.html",
