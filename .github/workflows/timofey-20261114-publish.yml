@@ -36,12 +36,12 @@ jobs:
           const site='students/timofey/site';
           for(const file of ['14.11.26.html','14.11.26-lab.html']){
             const name=path.join(site,file),html=fs.readFileSync(name,'utf8');
-            const scripts=[...html.matchAll(/<script\\b[^>]*>([\\s\\S]*?)<\\/script>/gi)];
+            const scripts=[...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
             assert.ok(scripts.length,file+' has no script');
             for(const [,body] of scripts)new vm.Script(body,{filename:file});
-            const ids=[...html.matchAll(/\\bid=["']([^"']+)["']/g)].map(x=>x[1]);
+            const ids=[...html.matchAll(/\bid=["']([^"']+)["']/g)].map(x=>x[1]);
             assert.equal(new Set(ids).size,ids.length,file+' duplicate IDs');
-            for(const [,href] of html.matchAll(/\\bhref=["']([^"']+)["']/g)){
+            for(const [,href] of html.matchAll(/\bhref=["']([^"']+)["']/g)){
               if(href.startsWith('#')||href.includes('://'))continue;
               assert.ok(fs.existsSync(path.resolve(site,href.split('#')[0])),file+' missing link '+href);
             }
