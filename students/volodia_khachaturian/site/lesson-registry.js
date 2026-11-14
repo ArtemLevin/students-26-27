@@ -3,6 +3,110 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-14",
+  "ktpRefs": [],
+  "href": "14.11.26.html",
+  "title": "Движение по вертикальной окружности",
+  "navTitle": "Вертикальная окружность · силы и вес",
+  "navSubtitle": "Движение по вертикальной окружности: силы на выпуклом и вогнутом мосту, натяжение нити в верхней и нижней точках, невесомость и критическая скорость. Лаборатория и 10 задач.",
+  "summary": "Движение по вертикальной окружности: силы на выпуклом и вогнутом мосту, натяжение нити в верхней и нижней точках, невесомость и критическая скорость. Лаборатория и 10 задач.",
+  "topics": [
+    "вертикальная окружность",
+    "центростремительное ускорение",
+    "реакция опоры на мосту",
+    "натяжение нити",
+    "вес и невесомость",
+    "выбор оси и знаки проекций",
+    "второй закон Ньютона",
+    "критическая скорость отрыва"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "kin_29",
+      "evidenceAnchor": "projections",
+      "relation": "touched",
+      "label": "Движение по окружности",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_32",
+      "evidenceAnchor": "projections",
+      "relation": "practiced",
+      "label": "Центростремительное ускорение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_33",
+      "evidenceAnchor": "projections",
+      "relation": "practiced",
+      "label": "Направление ускорения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_08",
+      "evidenceAnchor": "projections",
+      "relation": "practiced",
+      "label": "Второй закон Ньютона",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_12",
+      "evidenceAnchor": "forces",
+      "relation": "touched",
+      "label": "Сила тяжести",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_13",
+      "evidenceAnchor": "bridges",
+      "relation": "practiced",
+      "label": "Реакция опоры и вес",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_14",
+      "evidenceAnchor": "forces",
+      "relation": "touched",
+      "label": "Различие веса и тяжести",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_15",
+      "evidenceAnchor": "critical",
+      "relation": "touched",
+      "label": "Невесомость",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "measure_05",
+      "evidenceAnchor": "projections",
+      "relation": "practiced",
+      "label": "Проекции векторов",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_07",
+      "evidenceAnchor": "forces",
+      "relation": "practiced",
+      "label": "Силовая схема",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_25",
+      "evidenceAnchor": "method",
+      "relation": "practiced",
+      "label": "Преобразование формул",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "14.11.26.html",
+    "pdf": "../pdf_docs/14.11.26.pdf",
+    "tex": "../tex_docs/14.11.26.tex",
+    "lab": "14.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-12",
   "ktpRefs": [],
   "href": "12.11.26.html",
