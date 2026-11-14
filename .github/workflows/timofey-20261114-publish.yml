@@ -1,0 +1,37 @@
+name: Timofey 14 Nov 2026 lesson publication
+on:
+  push:
+    branches:
+      - lesson/timofey-2026-11-14-optimization
+    paths:
+      - .github/workflows/timofey-20261114-publish.yml
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Dry run canonical publisher
+        run: node scripts/publish-lesson.mjs timofey 14.11.26 --intent students/timofey/site/data/publication-intents/2026-11-14.json --dry-run
+      - name: Publish with Student Platform v2
+        run: node scripts/publish-lesson.mjs timofey 14.11.26 --intent students/timofey/site/data/publication-intents/2026-11-14.json
+      - name: Validate student package
+        run: node scripts/student.mjs validate timofey
+      - name: Validate practice configuration
+        run: node shared/practice/validate-configs.mjs
+      - name: Commit generated publication artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/timofey/site/lesson-registry.js students/timofey/site/data/lessons/2026-11-14.lesson.json students/timofey/site/data/ktp-state.json students/timofey/site/data/mastery-state.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(timofey): publish 14 Nov lesson via v2"
+            git push origin HEAD:lesson/timofey-2026-11-14-optimization
+          fi
