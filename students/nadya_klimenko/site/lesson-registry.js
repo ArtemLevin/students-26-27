@@ -5,6 +5,77 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-11-14",
+    "ktpRefs": [],
+    "href": "14.11.26.html",
+    "title": "Проценты, распределительный закон и подобные слагаемые",
+    "navTitle": "Проценты и распределительный закон",
+    "navSubtitle": "ВУПС · смешанные числа · подобные слагаемые",
+    "summary": "Надя Клименко, 14.11.26. Процентное увеличение, распределительный закон в двух направлениях, удобные вычисления со смешанными числами, правило ВУПС, приведение подобных и уравнения. Путь А: 10 задач.",
+    "topics": [
+      "изменение величины в процентах относительно исходного значения",
+      "распределительное свойство умножения",
+      "разложение смешанного числа на сумму",
+      "скобки при вычитании",
+      "вынесение общего множителя",
+      "приведение подобных слагаемых",
+      "уравнения с раскрытием скобок"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "ratio_13",
+        "evidenceAnchor": "percentage",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "nat_12",
+        "evidenceAnchor": "distribute",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "nat_09",
+        "evidenceAnchor": "brackets",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_04",
+        "evidenceAnchor": "mixed",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_13",
+        "evidenceAnchor": "mixed",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_03",
+        "evidenceAnchor": "factor",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "alg_04",
+        "evidenceAnchor": "distribute",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_05",
+        "evidenceAnchor": "like",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "alg_13",
+        "evidenceAnchor": "equations",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "14.11.26.html",
+      "pdf": "../pdf_docs/14.11.26.pdf",
+      "tex": "../tex_docs/14.11.26.tex",
+      "image": "../images/14.11.26.png"
+    }
+  },
+  {
     "date": "2026-11-10",
     "ktpRefs": [],
     "href": "10.11.26.html",
