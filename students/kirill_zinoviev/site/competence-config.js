@@ -55,6 +55,17 @@ const evidenceOnly=[
 {date:'07.11.26',href:'07.11.26.html#formula',ids:['functions_10']},
 {date:'07.11.26',href:'07.11.26.html#horizontal',ids:['functions_11']},
 {date:'07.11.26',href:'07.11.26.html#table',ids:['functions_12']}
+,
+{date:'14.11.26',href:'14.11.26.html#values',ids:['functions_2']},
+{date:'14.11.26',href:'14.11.26.html#plot',ids:['functions_3']},
+{date:'14.11.26',href:'14.11.26.html#plot',ids:['functions_4']},
+{date:'14.11.26',href:'14.11.26.html#plot',ids:['functions_5']},
+{date:'14.11.26',href:'14.11.26.html#inverse',ids:['functions_7']},
+{date:'14.11.26',href:'14.11.26.html#slope',ids:['functions_9']},
+{date:'14.11.26',href:'14.11.26.html#formula',ids:['functions_10']},
+{date:'14.11.26',href:'14.11.26.html#intercept',ids:['functions_11']},
+{date:'14.11.26',href:'14.11.26.html#plot',ids:['functions_12']},
+{date:'14.11.26',href:'14.11.26.html#intersection',ids:['functions_13']}
 ];
 const teacherSeed={},evidence={};
 for(const lesson of lessons)for(const id of lesson.ids){teacherSeed[id]=Math.max(teacherSeed[id]||0,2);evidence[id]={text:`Тема подтверждена материалом занятия ${lesson.date}.`,href:lesson.href};}
