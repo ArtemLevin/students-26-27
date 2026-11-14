@@ -3,6 +3,50 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-13",
+  "ktpRefs": [],
+  "href": "13.11.26.html",
+  "title": "Площади треугольников в трапеции",
+  "navTitle": "Площади треугольников в трапеции",
+  "navSubtitle": "София Кальней · 13 ноября 2026. Площади треугольников в трапеции: подобие, общая высота, доказательство формулы, пример 25 и 9 и 10 задач для практики.",
+  "summary": "София Кальней · 13 ноября 2026. Площади треугольников в трапеции: подобие, общая высота, доказательство формулы, пример 25 и 9 и 10 задач для практики.",
+  "topics": [
+    "Подобие треугольников у оснований трапеции",
+    "Сравнение площадей треугольников с общей высотой",
+    "Равновеликость боковых треугольников",
+    "Площадь трапеции через площади треугольников"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_25_2_4",
+      "evidenceAnchor": "proof",
+      "relation": "practiced",
+      "label": "Площади четырёх треугольников в трапеции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_25_1_4",
+      "evidenceAnchor": "height",
+      "relation": "practiced",
+      "label": "Отношение площадей при общей высоте",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_25_2_5",
+      "evidenceAnchor": "example",
+      "relation": "touched",
+      "label": "Комбинированная задача на площади трапеции",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "13.11.26.html",
+    "pdf": "../pdf_docs/13.11.26.pdf",
+    "tex": "../tex_docs/13.11.26.tex",
+    "lab": "13.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-06",
   "ktpRefs": [],
   "href": "06.11.26.html",
