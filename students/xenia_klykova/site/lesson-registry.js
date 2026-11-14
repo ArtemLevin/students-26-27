@@ -5,6 +5,67 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-14",
+  "ktpRefs": [],
+  "href": "14.11.26.html",
+  "title": "Остатки и чётность чисел",
+  "navTitle": "Остатки и чётность чисел",
+  "navSubtitle": "Ксения Клыкова · 14 ноября 2026: остатки при делении, сравнения по модулю, чётность, арифметика остатков, квадраты и 10 задач Пути А.",
+  "summary": "Ксения Клыкова · 14 ноября 2026: остатки при делении, сравнения по модулю, чётность, арифметика остатков, квадраты и 10 задач Пути А.",
+  "topics": [
+    "деление с остатком, сравнения и периодичность по модулю 2 и 3",
+    "чётные и нечётные числа: формулы 2k и 2k+1",
+    "арифметика остатков при сложении, вычитании, умножении и возведении в степень",
+    "делимость произведений последовательных чисел и инвариант чётности",
+    "остатки квадратов по модулям 4 и 8",
+    "невозможность целочисленных решений уравнения x²+y²=2027",
+    "10 упражнений Пути А"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t19_remainders",
+      "evidenceAnchor": "remainders",
+      "relation": "practiced",
+      "label": "Деление с остатком и сравнения по модулю",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_parity",
+      "evidenceAnchor": "parity",
+      "relation": "practiced",
+      "label": "Доказательство чётности по формам 2k и 2k+1",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_divisibility",
+      "evidenceAnchor": "consecutive",
+      "relation": "practiced",
+      "label": "Делимость произведения последовательных чисел",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_invariants",
+      "evidenceAnchor": "consecutive",
+      "relation": "touched",
+      "label": "Инвариант чётности при операциях",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t19_integer_eq",
+      "evidenceAnchor": "equation",
+      "relation": "touched",
+      "label": "Проверка целочисленного уравнения по остаткам квадратов",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "14.11.26.html",
+    "pdf": "../pdf_docs/14.11.26.pdf",
+    "tex": "../tex_docs/14.11.26.tex",
+    "lab": "14.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-12",
   "ktpRefs": [],
   "href": "12.11.26.html",
