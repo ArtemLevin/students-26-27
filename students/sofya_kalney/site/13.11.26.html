@@ -123,6 +123,9 @@ const inputs=[...document.querySelectorAll('[data-task]')],bar=document.getEleme
 inputs.forEach(function(input){input.checked=saved[input.dataset.task]===true;input.addEventListener('change',updateProgress);});
 function updateProgress(){const done=inputs.filter(x=>x.checked).length;bar.value=done;count.textContent='Отмечено '+done+' из 10';const current={};inputs.forEach(x=>current[x.dataset.task]=x.checked);try{localStorage.setItem('sofya-tasks-20261113',JSON.stringify(current));}catch(e){}}
 updateProgress();
+let printStates=[];
+window.addEventListener('beforeprint',function(){printStates=[...document.querySelectorAll('.task details')].map(x=>x.open);document.querySelectorAll('.task details').forEach(x=>x.open=true);});
+window.addEventListener('afterprint',function(){document.querySelectorAll('.task details').forEach((x,i)=>{x.open=Boolean(printStates[i]);});});
 })();
 </script>
 </body></html>
