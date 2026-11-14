@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивная модель: автомобиль на выпуклом и вогнутом мосту, ведёрко в верхней и нижней точках окружности.">
+<title>Лаборатория вертикальной окружности · Володя · 14.11.26</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="12.11.26.css">
+<style>
+.lab-hero{padding-block:48px 35px}.lab-hero h1{font-size:clamp(36px,5vw,66px);margin-bottom:16px}.lab-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(315px,.8fr);gap:30px;align-items:start}
+.instrument{border:1px solid var(--line);background:var(--paper);min-width:0}.instrument svg{width:100%;height:auto;display:block}.instrument header{border-bottom:1px solid var(--line);padding:14px 18px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.instrument figcaption{font-size:13px;color:var(--muted);padding:13px 18px;border-top:1px solid var(--line)}
+.control-panel{padding:22px 25px;background:var(--paper);border:1px solid var(--line)}.control-panel fieldset{border:0;padding:0;margin:0 0 24px}.control-panel legend{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin-bottom:10px}.control-panel select{width:100%;padding:11px 13px;background:var(--page);color:var(--ink);border:1px solid var(--line);min-height:46px}.control-panel label{display:flex;justify-content:space-between;font-weight:700;font-size:14px;gap:12px}.control-panel output{font-family:ui-monospace,monospace;color:var(--accent)}.control-panel input{width:100%;accent-color:var(--accent);min-height:26px;margin:8px 0 17px}.control-panel .button{margin-top:5px}
+.presets{display:flex;gap:8px;flex-wrap:wrap;padding:18px 0 24px}.presets button{font-size:12px}.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:25px}.metric{border-top:3px solid var(--accent);padding:15px 10px;background:var(--paper);min-width:0}.metric:nth-child(even){border-color:var(--earth)}.metric span{display:block;color:var(--muted);font-size:12px}.metric strong{display:block;font:700 clamp(17px,2.1vw,26px) Georgia,serif;overflow-wrap:anywhere}
+.output-row{margin-top:20px;border:1px solid var(--line);padding:23px;background:var(--paper)}.output-row h2{font-size:26px;margin-bottom:8px}.output-row p{margin:0 0 10px}.formula{font:700 clamp(21px,3vw,31px) Georgia,serif;color:var(--accent);margin:18px 0;overflow-wrap:anywhere}.state{padding:13px 16px;background:var(--accent-soft);border-left:3px solid var(--green)}.state.warning{background:var(--earth-soft);border-color:var(--earth)}.force-compare{display:grid;grid-template-columns:115px minmax(0,1fr);align-items:center;gap:9px;font-size:13px;color:var(--muted);margin-top:14px}.track{height:15px;background:var(--page);border:1px solid var(--line)}.fill{height:100%;background:#a66c45;width:0}.fill.contact{background:#176c92}.comparison-note{font-size:13px;color:var(--muted);margin-top:10px}.legend{display:flex;gap:17px;flex-wrap:wrap;font-size:12px;margin-top:10px;color:var(--muted)}.legend i{display:inline-block;width:15px;height:3px;vertical-align:middle;margin-right:6px}.math-note{font-size:15px;color:var(--muted)}
+@media(max-width:900px){.lab-layout{grid-template-columns:1fr}.control-panel{max-width:none}.metrics{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:500px){.wrap{padding-inline:18px}.lab-hero{padding-top:34px}.metrics{grid-template-columns:1fr}.metric{padding:9px 12px}.control-panel{padding:16px}.instrument figcaption{font-size:12px}}@media print{.top,.presets,.control-panel,.theme-toggle,.skip{display:none!important}.lab-layout{display:block}.instrument{max-width:100%}html{scroll-behavior:auto}}
+</style></head>
+<body><a class="skip" href="#main">К содержанию</a><header class="top"><div class="top-inner"><a class="back" href="14.11.26.html">← К занятию</a><span class="top-id">ЛАБОРАТОРИЯ / 14.11.26</span><button id="themeToggle" type="button" class="theme-toggle" aria-label="Переключить тему" aria-pressed="false">Тема ◐</button></div></header>
+<main id="main">
+<section class="wrap lab-hero"><p class="eyebrow">Физика / исследование</p><h1>Силы на <em>вертикальной окружности</em></h1><p class="lead">Меняйте массу, скорость и радиус. Следите за направлением центростремительного ускорения и за тем, как меняются реакция опоры и натяжение нити. Все значения рассчитаны из текущих параметров.</p><p class="small-muted">Ускорение a<sub>ц</sub> направлено к центру. В силовую схему входят только силы реальных взаимодействий.</p></section>
+<section class="wrap" aria-labelledby="experimentTitle"><h2 id="experimentTitle">01 / Исследование</h2>
+<div class="presets" role="group" aria-label="Сценарии из чек-листа"><button class="button" data-preset="crest" type="button">Верх моста · № 2</button><button class="button" data-preset="trough" type="button">Низ дороги · № 3</button><button class="button" data-preset="bucketTop" type="button">Ведёрко сверху · № 6</button><button class="button" data-preset="bucketBottom" type="button">Ведёрко снизу · № 7</button><button class="button" data-preset="critical" type="button">Отрыв · № 5</button><button class="button" data-preset="limit" type="button">Прочность · № 9</button></div>
+<div class="lab-layout"><figure class="instrument"><header><strong id="sceneTitle">Верх выпуклого моста</strong><span class="readout">g = 10 м/с²</span></header>
+<svg id="stage" viewBox="0 0 560 410" role="img" aria-labelledby="vizTitle vizDesc"><title id="vizTitle">Силовая схема на вертикальной окружности</title><desc id="vizDesc">Автомобиль на мосту. Сила тяжести направлена вниз, реакция опоры — вверх, ускорение — к центру окружности.</desc>
+<defs><marker id="gravityTip" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#a66c45"/></marker><marker id="contactTip" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#176c92"/></marker><marker id="accelTip" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#298774"/></marker></defs>
+<path id="road" stroke="#768f98" stroke-width="15" fill="none" stroke-linecap="round" d="M72 304Q280 80 488 304"/>
+<circle id="circlePath" cx="280" cy="210" r="128" stroke="#91a9ad" stroke-width="2" fill="none" stroke-dasharray="9 8" display="none"/>
+<circle id="centerDot" cx="280" cy="358" r="5" fill="#a66c45"/><text id="centerLabel" x="300" y="373" fill="currentColor" font-size="14">Центр</text>
+<line id="rope" x1="280" y1="210" x2="280" y2="82" stroke="#a66c45" stroke-width="4" display="none"/>
+<g id="car" transform="translate(280 176)"><path d="M-60 -16H31L58 5V23H-63V5Z" fill="#e6d7be" stroke="#345466" stroke-width="3"/><path d="M-32 -14V3H19L5 -14Z" fill="#c8dce4" stroke="#345466" stroke-width="2"/><circle cx="-37" cy="23" r="13" fill="#345466"/><circle cx="37" cy="23" r="13" fill="#345466"/></g>
+<g id="bucket" display="none" transform="translate(280 82)"><path d="M-24 -13H24L19 22H-19Z" fill="#e6d7be" stroke="#345466" stroke-width="3"/><path d="M-25 -13Q0 -23 25 -13" fill="none" stroke="#345466" stroke-width="3"/></g>
+<line id="gravityArrow" x1="242" y1="176" x2="242" y2="285" stroke="#a66c45" stroke-width="4" marker-end="url(#gravityTip)"/>
+<line id="contactArrow" x1="299" y1="176" x2="299" y2="67" stroke="#176c92" stroke-width="4" marker-end="url(#contactTip)"/>
+<line id="accelArrow" x1="408" y1="176" x2="408" y2="286" stroke="#298774" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#accelTip)"/>
+<text id="gravityText" x="175" y="289" fill="#a66c45" font-size="21" font-weight="700">mg</text>
+<text id="contactText" x="314" y="72" fill="#176c92" font-size="21" font-weight="700">N</text>
+<text id="accelText" x="423" y="283" fill="#298774" font-size="19" font-weight="700">aц</text>
+<text id="stageCaption" x="24" y="390" fill="currentColor" font-size="13">Схема условная, не в масштабе</text>
+</svg>
+<figcaption id="figcaption">Выбрана верхняя точка моста. Ускорение смотрит вниз, реакция опоры — вверх.</figcaption></figure>
+<div class="control-panel"><fieldset><legend>Положение тела</legend><label for="mode">Сценарий</label><select id="mode"><option value="crest">Верх выпуклого моста</option><option value="trough">Низ вогнутого участка</option><option value="bucketTop">Ведёрко на нити · верх</option><option value="bucketBottom">Ведёрко на нити · низ</option></select></fieldset>
+<div><label for="mass">Масса <output id="massOut">1000 кг</output></label><input id="mass" type="range" min="1" max="1200" step="1" value="1000"></div>
+<div><label for="radius">Радиус <output id="radiusOut">50 м</output></label><input id="radius" type="range" min="2" max="100" step="1" value="50"></div>
+<div><label for="speed">Скорость <output id="speedOut">10 м/с</output></label><input id="speed" type="range" min="0" max="30" step="1" value="10"></div>
+<button class="button" id="reset" type="button">Восстановить пример № 2</button>
+<p class="math-note" style="margin-top:17px">При необходимости откройте <a href="14.11.26.html#projections">правило выбора знаков</a> и <a href="14.11.26.html#string">уравнения для нити</a>.</p>
+</div></div>
+<div class="metrics" aria-live="polite"><div class="metric"><span>Ускорение к центру</span><strong id="accValue">2 м/с²</strong></div><div class="metric"><span>Сила тяжести mg</span><strong id="weightValue">10 000 Н</strong></div><div class="metric"><span id="contactName">Реакция опоры N</span><strong id="contactValue">8000 Н</strong></div></div>
+<div class="output-row"><h2>02 / Что показывает уравнение</h2><p id="axisText">Ось y вверх. Ускорение вниз.</p><div id="formula" class="formula">N = m(g − v²/R)</div><div class="state" id="interpret" role="status" aria-live="polite">Контакт сохраняется.</div>
+<div class="force-compare"><span>Сила тяжести</span><div class="track"><div class="fill" id="weightBar"></div></div><span id="compareLabel">Реакция опоры</span><div class="track"><div class="fill contact" id="contactBar"></div></div></div>
+<p class="comparison-note" id="criticalNote">Предельная скорость на вершине vкр = √(gR).</p>
+</div><p class="math-note" style="margin:20px 0 70px">Для данного упражнения используются модели без трения и сопротивления воздуха. Если вычисленная контактная сила оказалась отрицательной, движение с контактом по заданной окружности невозможно: модель переводит контактную силу в нуль и сообщает о потере контакта или ослаблении нити. Для нити внизу допустимая нагрузка дополнительно ограничивается её прочностью.</p></section>
+</main><footer class="wrap" style="padding:35px 0 50px;border-top:1px solid var(--line);color:var(--muted)">Лёвин Артём Александрович · эксклюзивно для Володи Хачатуряна · <a href="14.11.26.html">К уроку</a></footer>
+<script>
+(function(){'use strict';
+var $=function(id){return document.getElementById(id)},g=10;
+var presets={crest:{mode:'crest',mass:1000,radius:50,speed:10},trough:{mode:'trough',mass:800,radius:45,speed:15},bucketTop:{mode:'bucketTop',mass:2,radius:2,speed:6},bucketBottom:{mode:'bucketBottom',mass:3,radius:5,speed:10},critical:{mode:'crest',mass:1000,radius:90,speed:30},limit:{mode:'bucketBottom',mass:2,radius:4,speed:12}};
+var state={mode:'crest',mass:1000,radius:50,speed:10};
+function setTheme(t){document.documentElement.dataset.theme=t==='dark'?'dark':'light';$('themeToggle').setAttribute('aria-pressed',String(t==='dark'))}
+var theme='light';try{theme=localStorage.getItem('volodia-20261114-theme')||'light'}catch(_){}
+setTheme(theme);$('themeToggle').addEventListener('click',function(){var next=document.documentElement.dataset.theme==='dark'?'light':'dark';setTheme(next);try{localStorage.setItem('volodia-20261114-theme',next)}catch(_){}});
+function num(x,d){return Number(x).toLocaleString('ru-RU',{maximumFractionDigits:d===undefined?2:d})}
+function line(id,x,y,dx,dy){var e=$(id);e.setAttribute('x1',x);e.setAttribute('y1',y);e.setAttribute('x2',x+dx);e.setAttribute('y2',y+dy)}
+function label(id,x,y,s){var e=$(id);e.setAttribute('x',x);e.setAttribute('y',y);e.textContent=s}
+function render(){
+ var m=state.mass,r=state.radius,v=state.speed,a=v*v/r, top=state.mode==='crest'||state.mode==='bucketTop',
+ bucket=state.mode==='bucketTop'||state.mode==='bucketBottom',actual=top?(state.mode==='crest'?m*(g-a):m*(a-g)):m*(g+a),contact=Math.max(0,actual),lost=actual<0;
+ var name=bucket?'Натяжение нити T':'Реакция опоры N', modeName={crest:'Верх выпуклого моста',trough:'Низ вогнутой дороги',bucketTop:'Нить · верхняя точка',bucketBottom:'Нить · нижняя точка'}[state.mode];
+ $('sceneTitle').textContent=modeName;$('mode').value=state.mode;$('mass').value=m;$('radius').value=r;$('speed').value=v;
+ $('massOut').textContent=num(m,0)+' кг';$('radiusOut').textContent=num(r,0)+' м';$('speedOut').textContent=num(v,0)+' м/с';
+ $('accValue').textContent=num(a)+' м/с²';$('weightValue').textContent=num(m*g)+' Н';$('contactValue').textContent=num(contact)+' Н';$('contactName').textContent=name;$('compareLabel').textContent=name;
+ var formula=state.mode==='crest'?'N = m(g − v²/R)':state.mode==='trough'?'N = m(g + v²/R)':state.mode==='bucketTop'?'T = m(v²/R − g)':'T = m(g + v²/R)';
+ $('formula').textContent=formula;
+ $('axisText').textContent=(state.mode==='crest'||state.mode==='trough'?'Ось y вверх. ':'Ось y вниз. ')+(top?'Ускорение направлено вниз.':'Ускорение направлено вверх.');
+ var status='',supp='';
+ if(lost){status=state.mode==='crest'?'Контакт с дорогой потерян: реакция опоры равна нулю. Автомобиль не следует указанной окружности.':'Нить ослабла: натяжение равно нулю. Для круговой траектории заданная скорость слишком мала.'}
+ else if(actual===0){status='Предельный случай: контактная сила равна нулю.'}
+ else{status='Контактная сила положительна. '+(top?'Верхняя точка.':'Нижняя точка.')+(state.mode==='limit'?'':'')}
+ $('interpret').textContent=status;$('interpret').classList.toggle('warning',lost);
+ var crit=Math.sqrt(g*r);supp=top?'Предельная скорость vкр = √(gR) = '+num(crit)+' м/с. '+(bucket?'Для натянутой нити в верхней точке нужна скорость не меньше этого значения.':'При превышении этой скорости в верхней точке автомобиль теряет контакт.'):'В нижней точке контактная сила всегда положительна при m > 0 и g > 0.';
+ if(state.mode==='bucketBottom'&&m===2&&r===4){supp+=' Для задачи № 9 предел прочности 92 Н; при v = 12 м/с натяжение равно 92 Н.'}
+ $('criticalNote').textContent=supp;
+ var max=Math.max(m*g,contact,1);$('weightBar').style.width=100*m*g/max+'%';$('contactBar').style.width=100*contact/max+'%';
+ $('road').style.display=bucket?'none':'';$('circlePath').style.display=bucket?'':'none';$('rope').style.display=bucket?'':'none';$('car').style.display=bucket?'none':'';$('bucket').style.display=bucket?'':'none';
+ var cy=bucket?(top?82:338):(top?176:216);
+ if(bucket){$('bucket').setAttribute('transform','translate(280 '+cy+')');$('rope').setAttribute('x1','280');$('rope').setAttribute('y1','210');$('rope').setAttribute('x2','280');$('rope').setAttribute('y2',String(cy));}
+ else{$('car').setAttribute('transform','translate(280 '+cy+')');$('road').setAttribute('d',top?'M72 307Q280 85 488 307':'M72 74Q280 330 488 74');}
+ $('centerDot').setAttribute('cy',String(bucket?210:(top?365:43)));label('centerLabel',300,bucket?229:(top?379:40),'Центр');
+ line('gravityArrow',240,cy,0,101);label('gravityText',170,cy+106,'mg');
+ line('contactArrow',312,cy,0,top?(bucket?95:-100):-100);
+ $('contactArrow').style.display=contact===0?'none':'';label('contactText',325,cy+(top&&bucket?101:-104),bucket?'T':'N');$('contactText').style.display=contact===0?'none':'';
+ line('accelArrow',415,cy,0,top?89:-89);label('accelText',427,cy+(top?91:-89),'aц');
+ $('vizDesc').textContent=modeName+'. Сила тяжести вниз. '+name+' '+(bucket?(top?'вниз':'вверх'):'вверх')+'; ускорение '+(top?'вниз':'вверх')+' к центру. '+(lost?'Контакт потерян или нить ослабла.':'Контактная сила '+num(contact)+' ньютонов.');
+ $('figcaption').textContent='Оранжевый — сила тяжести. Синий — '+(bucket?'натяжение':'реакция опоры')+'. Зелёный пунктир — ускорение к центру. Схема условная, не в масштабе.';
+}
+function choose(name){var p=presets[name];if(!p)return;state={mode:p.mode,mass:p.mass,radius:p.radius,speed:p.speed};render()}
+document.querySelectorAll('[data-preset]').forEach(function(button){button.addEventListener('click',function(){choose(button.dataset.preset)})});
+$('mode').addEventListener('change',function(e){state.mode=e.target.value;render()});
+[['mass','mass'],['radius','radius'],['speed','speed']].forEach(function(pair){$(pair[0]).addEventListener('input',function(e){state[pair[1]]=Number(e.target.value);render()})});
+$('reset').addEventListener('click',function(){choose('crest')});
+var requested=new URLSearchParams(location.search).get('mode');if(['crest','trough','bucketTop','bucketBottom'].includes(requested))choose(requested);else choose('crest');
+})();
+</script>
+</body></html>
