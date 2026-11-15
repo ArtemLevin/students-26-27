@@ -1,5 +1,75 @@
 export const LESSONS=[
   {
+    "date": "2026-11-15",
+    "ktpRefs": [
+      "ktp-006",
+      "ktp-007"
+    ],
+    "href": "15.11.26.html",
+    "title": "Поезда, баржи и совместная работа",
+    "navTitle": "Поезда, баржи и совместная работа",
+    "navSubtitle": "15.11.26 · Поезда, баржи, относительная скорость, совместная работа",
+    "summary": "Движение протяжённых тел, относительная скорость, полный обгон, перевод единиц и основы производительности. Интерактивная лаборатория и 10 задач.",
+    "topics": [
+      "движение протяжённых тел",
+      "относительная скорость встречного и попутного движения",
+      "длина поезда при прохождении ориентира или моста",
+      "два поезда и выбор ориентира",
+      "полный обгон с начальным промежутком и конечным отрывом",
+      "перевод единиц длины и времени",
+      "производительность и совместная работа",
+      "таблица работа–время–производительность"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "text_05",
+        "evidenceAnchor": "relative",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_06",
+        "evidenceAnchor": "barge",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_04",
+        "evidenceAnchor": "cases",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_21",
+        "evidenceAnchor": "units",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "text_17",
+        "evidenceAnchor": "barge",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_10",
+        "evidenceAnchor": "work",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_11",
+        "evidenceAnchor": "work",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_20",
+        "evidenceAnchor": "worktable",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "15.11.26.html",
+      "pdf": "../pdf_docs/15.11.26.pdf",
+      "tex": "../tex_docs/15.11.26.tex",
+      "lab": "15.11.26-lab.html"
+    }
+  },
+  {
     "date": "2026-11-13",
     "ktpRefs": [
       "ktp-006"
