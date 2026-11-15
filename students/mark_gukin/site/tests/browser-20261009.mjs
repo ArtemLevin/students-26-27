@@ -136,11 +136,25 @@ try{
   assert.equal(await run("getComputedStyle(document.querySelector('.steps')).display"),'none','interactive stepper hidden in print');
   assert.equal(await run("getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()"),'#fff','print background from dark theme');
   await call('Emulation.setEmulatedMedia',{media:'screen'});
+  const publishedLessonFiles=fs.readdirSync(path.join(root,'students/mark_gukin/site'))
+    .filter(name=>/^\d{2}\.\d{2}\.\d{2}\.html$/.test(name))
+    .sort((a,b)=>{
+      const iso=name=>name.slice(6,8)+name.slice(3,5)+name.slice(0,2);
+      return iso(b).localeCompare(iso(a));
+    });
+  const newestLesson=publishedLessonFiles[0];
+  assert.ok(newestLesson,'a dated lesson HTML must exist');
+  const newestSource=fs.readFileSync(path.join(root,'students/mark_gukin/site',newestLesson),'utf8');
+  const newestTitle=newestSource.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i)?.[1]
+    ?.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+  assert.ok(newestTitle,'newest lesson must have a title');
+  const newestPdf='../pdf_docs/'+newestLesson.replace(/\.html$/,'.pdf');
+
   await navigate('index.html',390,844,false);
-  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Комбинаторика: метод позиций')"),true,'latest lesson on home');
+  assert.equal(await run("document.querySelector('#lessonTitle').textContent.trim()"),newestTitle,'latest lesson on home');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"18.10.26.html\"]')!==null"),true,'previous lesson remains in journal');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"21.10.26.html\"]')!==null"),true,'previous logarithm lesson remains in journal');
-  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"../pdf_docs/13.11.26.pdf\"]')!==null"),true,'home links to latest lesson PDF');
+  assert.equal(await run("Array.from(document.querySelectorAll('.lesson-actions a')).some(a=>a.getAttribute('href')==="+JSON.stringify(newestPdf)+")"),true,'home links to latest lesson PDF');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('04.10.2026')"),true,'history retained');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('09.10.2026')"),true,'previous lesson retained');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"13.11.26-lab.html\"]')!==null"),true,"13 Nov lab in journal");
