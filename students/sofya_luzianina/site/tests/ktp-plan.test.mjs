@@ -29,10 +29,16 @@ test('diagnostic topics receive planned follow-up',()=>{
  assert.equal(at(40).plannedDate,'2027-04-02');assert.ok(at(40).targetCompetencies.includes('photons_02'));
  assert.ok(p.filter(x=>/Пробный вариант №/.test(x.topic)).length===3);
 });
-test('canonical state holds no invented lesson completions',()=>{
+test('canonical state supports verified lessons and valid progress statuses',()=>{
  const p=json('site/data/ktp-plan.json');const s=json('site/data/ktp-state.json');
  assert.equal(s.programVersion,p.programVersion);assert.equal(Object.keys(s.records).length,57);
- for(const l of p.lessons)assert.deepEqual(s.records[l.id],{status:'planned'});
+ const allowed=new Set(['planned','in_progress','done','moved','skipped']);
+ for(const l of p.lessons){
+  const rec=s.records[l.id];assert.ok(rec,'Missing state: '+l.id);
+  assert.ok(allowed.has(rec.status),l.id+' invalid status');
+  if(rec.status==='done'){assert.ok(rec.actualDate);assert.equal(rec.coverage,'complete')}
+  if(rec.status==='in_progress')assert.ok(['partial','deferred'].includes(rec.coverage));
+ }
 });
 test('KTP page loads canonical plan and state, no browser-local source of truth',()=>{
  const html=fs.readFileSync(base+'site/ktp.html','utf8');

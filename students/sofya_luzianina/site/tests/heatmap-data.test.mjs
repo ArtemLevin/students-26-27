@@ -9,12 +9,21 @@ test('map consists of 194 unique competencies in 18 groups',()=>{
  assert.deepEqual(cat.diagnosticFocus.map(x=>x.competencyId),['heat_07','optics_08','photons_02']);
  for(const x of cat.diagnosticFocus)assert.ok(ids.includes(x.competencyId));
 });
-test('mastery remains unassessed and contract points to canonical files',()=>{
- const c=load('student-contract.json');const m=load(c.competencies.mastery);
- assert.deepEqual(m.levels,{});assert.equal(m.studentId,c.studentId);
- assert.equal(c.competencies.catalog,'site/data/competency-catalog.json');
+test('mastery references canonical competencies and carries explicit provenance',()=>{
+ const contract=load('student-contract.json');
+ const catalog=load(contract.competencies.catalog),mastery=load(contract.competencies.mastery);
+ const ids=new Set(catalog.groups.flatMap(g=>g.items.map(i=>i.id)));
+ assert.equal(mastery.studentId,contract.studentId);
+ assert.equal(contract.competencies.catalog,'site/data/competency-catalog.json');
+ for(const [id,r] of Object.entries(mastery.levels)){
+  assert.ok(ids.has(id));
+  assert.ok(Number.isInteger(r.level)&&r.level>=0&&r.level<=4);
+  assert.ok(r.sourcePath&&r.sourceKind&&r.basis);
+ }
 });
-test('no invented lessons or KTP completion',()=>{
- const p=load('site/data/ktp-plan.json');const s=load('site/data/ktp-state.json');
- assert.deepEqual(p.lessons,[]);assert.deepEqual(s.records,{});
+test('KTP exists and its fact state matches approved plan version',()=>{
+ const plan=load('site/data/ktp-plan.json'),state=load('site/data/ktp-state.json');
+ assert.equal(plan.studentId,state.studentId);
+ assert.equal(plan.programVersion,state.programVersion);
+ for(const id of Object.keys(state.records))assert.ok(plan.lessons.some(x=>x.id===id),'orphan record: '+id);
 });
