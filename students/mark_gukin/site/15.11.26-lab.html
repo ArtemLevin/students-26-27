@@ -79,7 +79,7 @@ function makeFormula(m,n){
 function render(){
  const data=getOutcomes(state.mode),good=data.filter(x=>x.yes).length,N=data.length,model=modes[state.mode];
  $('modelTitle').textContent=model.title;$('explanation').textContent=model.description;$('total').textContent='Всего равновозможных исходов: '+N;
- $('prediction').max=String(N);$('prediction').value='';$('predictionFeedback').textContent='';
+ $('prediction').max=String(N);
  $('backToExplanation').href=model.link;
  $('outcomes').replaceChildren();
  data.forEach((x,i)=>{const b=document.createElement('button');b.type='button';b.className='outcome'+(state.revealed&&x.yes?' good':'');b.textContent=x.label;b.setAttribute('aria-label','Исход '+x.label);b.setAttribute('aria-pressed',String(i===state.selected));if(i===state.selected)b.classList.add('selected');b.addEventListener('click',()=>{state.selected=i;$('caseFeedback').textContent=x.label+': '+x.why;Array.from($('outcomes').children).forEach((c,k)=>{c.classList.toggle('selected',k===i);c.setAttribute('aria-pressed',String(k===i));});});$('outcomes').append(b);});
@@ -87,7 +87,7 @@ function render(){
  $('reveal').textContent=state.revealed?'Скрыть подсчёт':'Показать подсчёт';$('reveal').setAttribute('aria-pressed',String(state.revealed));
  $('caseFeedback').textContent='Выберите исход, чтобы узнать, подходит ли он.';
 }
-$('mode').addEventListener('change',e=>{state.mode=e.target.value;state.revealed=false;state.selected=null;render();});
+$('mode').addEventListener('change',e=>{state.mode=e.target.value;state.revealed=false;state.selected=null;$('prediction').value='';$('predictionFeedback').textContent='';render();});
 $('check').addEventListener('click',()=>{const data=getOutcomes(state.mode),right=data.filter(x=>x.yes).length,v=$('prediction').value.trim();$('predictionFeedback').textContent=v===''?'Введите целое число благоприятных исходов.':(Number.isInteger(Number(v))&&Number(v)===right?'Верно! Подходящих исходов: '+right+'.':'Проверьте ещё раз: какая часть исходов удовлетворяет условию?');});
 $('reveal').addEventListener('click',()=>{state.revealed=!state.revealed;render();});
 const initial=new URLSearchParams(location.search).get('mode');if(Object.prototype.hasOwnProperty.call(modes,initial)){state.mode=initial;$('mode').value=initial;}render();
