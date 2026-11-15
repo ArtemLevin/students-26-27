@@ -196,7 +196,7 @@ function startMap(){
     setText('detailLevel',labelOf(id));
     const value=levelOf(id);
     setText('detailExplain',value===null?'Пока отсутствует подтверждённый уровень освоения этого умения. После проверочной работы или занятия он появится в каноническом состоянии.':descriptions[value]);
-    setText('detailId','COMPETENCY / '+id);
+    setText('detailId','ТЕМА / '+item.groupName);
     const evidence=$('detailEvidence');evidence.replaceChildren();
     const diag=focusById.get(id);
     if(diag){
@@ -213,7 +213,10 @@ function startMap(){
       const div=elt('div',{className:'evidence'});
       div.append(elt('strong',{},'Основание подтверждённой оценки'));
       if(claim.basis)div.append(elt('p',{},claim.basis));
-      if(claim.sourceKind)div.append(elt('small',{},'Источник: '+claim.sourceKind));
+      if(claim.sourceKind){
+        const sourceLabels={'lesson-assessment':'проверенная работа','teacher-mastery':'оценка преподавателя','teacher-seed':'запись преподавателя','baseline-levels':'начальная проверка','mastery-authority':'подтверждённая оценка','linked-progress-overlay':'результаты практики','stage04-mastery':'закрепление навыка','dashboard-data':'учебный журнал'};
+        div.append(elt('small',{},'Подтверждение: '+(sourceLabels[claim.sourceKind]||'учебная проверка')));
+      }
       evidence.appendChild(div);
     }
     setText('mapLive','Выбрано: '+viewLabel(item));
@@ -246,7 +249,9 @@ function startMap(){
     const toggle=$('themeToggle');const key='sofya-luzianina-atlas-theme';
     try{const stored=localStorage.getItem(key);if(stored==='dark'||stored==='light')document.documentElement.dataset.theme=stored;else if(window.matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark'}catch(_){ /* storage may be disabled */ }
     const paint=()=>{const isDark=document.documentElement.dataset.theme==='dark';toggle.setAttribute('aria-pressed',String(isDark));toggle.setAttribute('aria-label',isDark?'Включить светлую тему':'Включить тёмную тему');};
-    toggle.addEventListener('click',()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';paint();try{localStorage.setItem(key,document.documentElement.dataset.theme)}catch(_){}});paint();
+    toggle.addEventListener('click',()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';paint();try{localStorage.setItem(key,document.documentElement.dataset.theme)}catch(_){}});
+    window.addEventListener('storage',event=>{if(event.key===key&&(event.newValue==='dark'||event.newValue==='light')){document.documentElement.dataset.theme=event.newValue;paint();}});
+    paint();
   }
   function init(){
     buildMap();buildAreas();buildCatalog();buildDiagnostics();attach();
