@@ -3,6 +3,74 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-15",
+  "ktpRefs": [],
+  "href": "15.11.26.html",
+  "title": "Линейная функция: параллельные прямые и коэффициент k",
+  "navTitle": "Линейная функция: параллельные прямые и коэффициент k",
+  "navSubtitle": "Алгебра, 7 класс: угловой коэффициент, параллельные прямые, оси координат, поиск k по точке и точке пересечения графиков. 10 заданий и интерактивная лаборатория.",
+  "summary": "Алгебра, 7 класс: угловой коэффициент, параллельные прямые, оси координат, поиск k по точке и точке пересечения графиков. 10 заданий и интерактивная лаборатория.",
+  "topics": [
+    "угловой коэффициент k и свободный член b",
+    "параллельные и совпадающие прямые",
+    "горизонтальная прямая при k=0",
+    "оси абсцисс и ординат",
+    "поиск k по координатам точки",
+    "точка пересечения двух линейных графиков",
+    "10 заданий по пути А"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "functions_4",
+      "evidenceAnchor": "axes",
+      "relation": "practiced",
+      "label": "Распознавать оси и порядок координат",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_9",
+      "evidenceAnchor": "parallel",
+      "relation": "practiced",
+      "label": "Связывать k с наклоном и параллельностью",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_10",
+      "evidenceAnchor": "formula",
+      "relation": "touched",
+      "label": "Распознавать линейную функцию y=kx+b",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_11",
+      "evidenceAnchor": "horizontal",
+      "relation": "practiced",
+      "label": "Определять горизонтальную прямую при k=0",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_13",
+      "evidenceAnchor": "intersection",
+      "relation": "practiced",
+      "label": "Находить точку пересечения линейных графиков",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "equations_4",
+      "evidenceAnchor": "through-point",
+      "relation": "practiced",
+      "label": "Решать линейное уравнение при поиске коэффициента",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "15.11.26.html",
+    "pdf": "../pdf_docs/15.11.26.pdf",
+    "tex": "../tex_docs/15.11.26.tex",
+    "lab": "15.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-14",
   "ktpRefs": [],
   "href": "14.11.26.html",

@@ -64,7 +64,13 @@ const evidenceOnly=[
 {date:'14.11.26',href:'14.11.26.html#formula',ids:['functions_10']},
 {date:'14.11.26',href:'14.11.26.html#intercept',ids:['functions_11']},
 {date:'14.11.26',href:'14.11.26.html#plot',ids:['functions_12']},
-{date:'14.11.26',href:'14.11.26.html#intersection',ids:['functions_13']}
+{date:'14.11.26',href:'14.11.26.html#intersection',ids:['functions_13']},
+{date:'15.11.26',href:'15.11.26.html#axes',ids:['functions_4']},
+{date:'15.11.26',href:'15.11.26.html#parallel',ids:['functions_9']},
+{date:'15.11.26',href:'15.11.26.html#formula',ids:['functions_10']},
+{date:'15.11.26',href:'15.11.26.html#horizontal',ids:['functions_11']},
+{date:'15.11.26',href:'15.11.26.html#intersection',ids:['functions_13']},
+{date:'15.11.26',href:'15.11.26.html#through-point',ids:['equations_4']},
 ];
 const teacherSeed={},evidence={};
 for(const lesson of lessons)for(const id of lesson.ids){teacherSeed[id]=Math.max(teacherSeed[id]||0,2);evidence[id]={text:`Тема подтверждена материалом занятия ${lesson.date}.`,href:lesson.href};}
