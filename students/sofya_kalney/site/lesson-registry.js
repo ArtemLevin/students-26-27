@@ -3,6 +3,86 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-15",
+  "ktpRefs": [],
+  "href": "15.11.26.html",
+  "title": "Графики, уравнения и геометрия",
+  "navTitle": "Графики, уравнения и геометрия",
+  "navSubtitle": "София Кальней · 15 ноября 2026. Движение по реке, извлечение больших корней и дискриминант, кусочные графики, биссектриса параллелограмма, отношения площадей и 10 задач.",
+  "summary": "София Кальней · 15 ноября 2026. Движение по реке, извлечение больших корней и дискриминант, кусочные графики, биссектриса параллелограмма, отношения площадей и 10 задач.",
+  "topics": [
+    "Движение по реке и разность времён",
+    "Большие квадратные корни и дискриминант",
+    "Построение кусочной функции и число пересечений",
+    "Биссектриса параллелограмма",
+    "Отношение площадей и диагонали выпуклого четырёхугольника"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_21_3_2",
+      "evidenceAnchor": "river",
+      "relation": "practiced",
+      "label": "Таблица движения по реке",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_21_3_3",
+      "evidenceAnchor": "river",
+      "relation": "practiced",
+      "label": "Уравнение разности времён",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_9_2_2",
+      "evidenceAnchor": "quadratic",
+      "relation": "touched",
+      "label": "Выбор метода для большого дискриминанта",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_22_3_1",
+      "evidenceAnchor": "piecewise",
+      "relation": "practiced",
+      "label": "Построение двух ветвей кусочного графика",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_22_3_3",
+      "evidenceAnchor": "piecewise",
+      "relation": "practiced",
+      "label": "Выколотые и закрашенные граничные точки",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_22_3_5",
+      "evidenceAnchor": "two-roots",
+      "relation": "practiced",
+      "label": "Число решений при горизонтальном уровне",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_25_2_1",
+      "evidenceAnchor": "parallelogram",
+      "relation": "practiced",
+      "label": "Биссектриса и равнобедренный треугольник",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_25_2_4",
+      "evidenceAnchor": "diagonals",
+      "relation": "touched",
+      "label": "Площади через диагонали четырёхугольника",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "15.11.26.html",
+    "pdf": "../pdf_docs/15.11.26.pdf",
+    "tex": "../tex_docs/15.11.26.tex",
+    "lab": "15.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-13",
   "ktpRefs": [],
   "href": "13.11.26.html",
