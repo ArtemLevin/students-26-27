@@ -19,6 +19,9 @@ test('all target competencies reference the canonical map',()=>{
  const p=json('site/data/ktp-plan.json');const c=json('site/data/competency-catalog.json');
  const ids=new Set(c.groups.flatMap(g=>g.items.map(x=>x.id)));
  for(const x of p.lessons)for(const id of x.targetCompetencies)assert.ok(ids.has(id),x.id+' '+id);
+ assert.equal(ids.size,194,'expected 194 canonical competencies');
+ const assigned=new Set(p.lessons.flatMap(l=>l.targetCompetencies));
+ assert.deepEqual([...ids].filter(id=>!assigned.has(id)),[],'Every catalog skill must appear in the pedagogical plan');
  const stages=[...new Set(p.lessons.map(x=>x.stageId))];assert.equal(stages.length,6);
 });
 test('diagnostic topics receive planned follow-up',()=>{
