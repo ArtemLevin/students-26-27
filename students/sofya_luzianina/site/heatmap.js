@@ -74,7 +74,6 @@ function startMap(){
   let filter = 'all';
   let term = '';
   let sectorFilter = 'all';
-  const docLink = 'https://github.com/ArtemLevin/students-26-27/blob/main/students/sofya_luzianina/review_docs/15.11.26.tex';
   const all = catalog.groups.flatMap(group => (group.items || []).map(item => {
     const record = { ...item, groupId: group.id, groupName: group.name, sectorId: group.sectorId, sectorName: group.sectorName };
     if (byId.has(record.id) || !bySector.has(record.sectorId)) throw new Error('Некорректный каталог: ' + record.id);
@@ -200,11 +199,22 @@ function startMap(){
     setText('detailId','COMPETENCY / '+id);
     const evidence=$('detailEvidence');evidence.replaceChildren();
     const diag=focusById.get(id);
-    if(diag){const section=elt('div',{className:'evidence'});section.append(elt('strong',{},'Диагностический ориентир · № '+diag.task),elt('p',{},diag.note));
-      const a=elt('a',{href:docLink,target:'_blank',rel:'noopener noreferrer'},'Открыть исходное ревью (.tex)');section.appendChild(a);evidence.appendChild(section);
-    }else if(value!==null && authority.evidence && authority.evidence[id]){
-      const ev=authority.evidence[id];
-      const div=elt('div',{className:'evidence'});div.append(elt('strong',{},'Основание оценки'),elt('p',{},typeof ev==='string'?ev:'Данные оценки сохранены в источнике mastery.'));evidence.appendChild(div);
+    if(diag){
+      const section=elt('div',{className:'evidence'});
+      section.append(
+        elt('strong',{},'Диагностический ориентир · № '+diag.task),
+        elt('p',{},diag.note),
+        elt('p',{},'Исходный разбор хранится в материалах ученицы. Доступ определяется настройками хранилища.')
+      );
+      evidence.appendChild(section);
+    }
+    const claim=authority.levels[id];
+    if(value!==null && claim && typeof claim==='object'){
+      const div=elt('div',{className:'evidence'});
+      div.append(elt('strong',{},'Основание подтверждённой оценки'));
+      if(claim.basis)div.append(elt('p',{},claim.basis));
+      if(claim.sourceKind)div.append(elt('small',{},'Источник: '+claim.sourceKind));
+      evidence.appendChild(div);
     }
     setText('mapLive','Выбрано: '+viewLabel(item));
     if(origin==='list'&&window.matchMedia('(max-width:820px)').matches)$('details').scrollIntoView({behavior:'smooth',block:'start'});
