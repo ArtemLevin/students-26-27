@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Цифровая лаборатория Анны Трапезниковой: графики взаимно обратных функций, отражение относительно y=x и контроль областей.">
+<title>Лаборатория обратных функций — Анна Трапезникова</title>
+<link rel="stylesheet" href="../../../design-system/tokens.css?v=20260919-2">
+<link rel="stylesheet" href="../../../design-system/foundations.css?v=20260919-2">
+<link rel="stylesheet" href="anna-atlas.css?v=20260921-1">
+<style>
+:root{color-scheme:light;--paper:#f8f5f0;--surface:#fffefa;--ink:#2f292c;--muted:#6d6268;--rule:#d9cacc;--accent:#793e52;--teal:#16766c;--axis:#8c8187;--grid:#e9e0e1;--focus:#b76537;--soft:#f1e8e8}
+html[data-theme="dark"]{color-scheme:dark;--paper:#1b191c;--surface:#29252a;--ink:#f4eced;--muted:#c6b9c0;--rule:#5d5058;--accent:#f0b8ca;--teal:#98d9cc;--axis:#aea1aa;--grid:#463c43;--focus:#ffce8e;--soft:#392e35}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 system-ui,"Segoe UI",Arial,sans-serif}a{color:var(--accent)}button,input{font:inherit}button{cursor:pointer}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{position:absolute;top:-120px;left:10px;background:var(--surface);padding:10px;z-index:3}.skip:focus{top:10px}.shell{max-width:1260px;width:calc(100% - 36px);margin-inline:auto}.top{border-bottom:1px solid var(--rule);background:var(--surface)}.top-inner{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;padding:.75rem 0}.brand{font-weight:750;color:var(--ink);text-decoration:none}.actions{display:flex;align-items:center;flex-wrap:wrap;gap:1rem}.theme{background:var(--surface);color:var(--ink);border:1px solid var(--rule);padding:.45rem .75rem;border-radius:4px}
+.intro{padding:3rem 0 1.4rem;border-bottom:1px solid var(--rule)}.eyebrow{font-size:.76rem;letter-spacing:.13em;text-transform:uppercase;font-weight:750;color:var(--accent)}h1,h2,h3{font-family:Georgia,serif;letter-spacing:-.03em;font-weight:500;line-height:1.17}h1{font-size:clamp(2.4rem,5vw,4.5rem);margin:.6rem 0 1rem}h2{font-size:1.7rem;margin:.3rem 0 .8rem}.intro p{max-width:70ch;color:var(--muted)}
+.lab{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(270px,.65fr);gap:2rem;padding:2rem 0 3rem}.stage{background:var(--surface);border:1px solid var(--rule);padding:1.1rem}.stage-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}.stage-head p{color:var(--muted);font-size:.9rem;margin:0}.plot{display:block;width:100%;height:auto;touch-action:pan-y;max-height:590px}.legend{display:flex;flex-wrap:wrap;gap:1rem;font-size:.86rem;padding:.4rem 0 .7rem;color:var(--muted)}.swatch{width:24px;height:3px;display:inline-block;vertical-align:middle;margin-right:6px;background:var(--accent)}.swatch.inv{background:var(--teal)}.swatch.axis{background:var(--axis);background:repeating-linear-gradient(90deg,var(--axis) 0 5px,transparent 5px 9px)}
+.panel{min-width:0}.section{background:var(--surface);border-top:3px solid var(--accent);padding:1.2rem;margin-bottom:1rem}.section h2{font-size:1.42rem}.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.9rem 0}.mode-grid button{padding:.75rem .5rem;background:var(--surface);border:1px solid var(--rule);border-radius:3px;color:var(--ink);font-size:.87rem;text-align:left}.mode-grid button[aria-pressed="true"]{background:var(--soft);border-color:var(--accent);color:var(--ink);font-weight:730}.mode-grid button:last-child{grid-column:span 2}
+input[type=range]{width:100%;accent-color:var(--accent);margin:1rem 0;cursor:pointer}.label-row{display:flex;justify-content:space-between;gap:1rem;align-items:center}.label-row output{font:600 1.1rem Georgia,serif;color:var(--accent)}.domains{display:grid;gap:.45rem}.line{padding:.5rem 0;border-bottom:1px solid var(--rule)}.line strong{font-weight:700}.value{font-family:"Cambria Math",Georgia,serif;color:var(--accent);font-size:1.12rem;overflow-wrap:anywhere}.value.inv{color:var(--teal)}.conclusion{padding:.8rem 0;border-top:1px solid var(--rule);color:var(--muted);font-size:.93rem}.secondary{background:var(--surface);color:var(--ink);border:1px solid var(--rule);border-radius:3px;padding:.55rem .75rem}.helper{font-size:.85rem;color:var(--muted)}.foot{padding:2rem 0;border-top:1px solid var(--rule);font-size:.9rem;color:var(--muted)}
+@media(max-width:850px){.lab{grid-template-columns:1fr}.panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.section{margin:0}}@media(max-width:590px){.shell{width:calc(100% - 24px)}.intro{padding:2rem 0 1rem}.lab{gap:1rem}.panel{display:block}.section{margin-bottom:1rem}.mode-grid{gap:.4rem}.stage{padding:.5rem}}@media print{body{background:white;color:black}.top,.skip,.secondary,.theme,.mode-grid{display:none}.lab{grid-template-columns:1fr 1fr;gap:1rem}.stage{border:0}.plot{max-height:440px}.section{break-inside:avoid}.foot{padding:.5rem}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body><a class="skip" href="#main">К лаборатории</a>
+<header class="top"><div class="shell top-inner"><a class="brand" href="15.11.26.html">← Занятие 15 ноября</a><nav class="actions" aria-label="Навигация"><a href="index.html#materials-ledger">Учебный кабинет</a><button class="theme" id="theme" type="button">◐ Тема</button></nav></div></header>
+<main id="main" class="shell"><header class="intro"><p class="eyebrow">Цифровая лаборатория · Анна Трапезникова</p><h1>Зеркало функции</h1><p>Двигайте точку по графику исходной функции и смотрите, как меняются координаты на обратном графике. Два графика симметричны относительно прямой <strong>y = x</strong>, если правильно учтены области определения.</p></header>
+<div class="lab"><section class="stage" aria-labelledby="graph-title"><div class="stage-head"><div><h2 id="graph-title">Координатная плоскость</h2><p id="graph-summary">Исходная функция и её обратная</p></div><button id="reset" class="secondary" type="button">Сбросить точку</button></div>
+<svg class="plot" id="plot" viewBox="0 0 700 560" role="img" aria-labelledby="plot-title plot-description">
+<title id="plot-title">Графики взаимно обратных функций</title><desc id="plot-description">Изменяйте аргумент ползунком. Внутри графика изображены исходная функция, обратная и прямая y равно x.</desc>
+<defs><clipPath id="graph-clip"><rect x="48" y="34" width="604" height="495"></rect></clipPath></defs>
+<g id="grid"></g><g id="axes"></g><g clip-path="url(#graph-clip)"><path id="diagonal" stroke="var(--axis)" stroke-width="2" stroke-dasharray="8 7" fill="none"></path><path id="curve-f" stroke="var(--accent)" stroke-width="3.5" fill="none" stroke-linecap="round"></path><path id="curve-g" stroke="var(--teal)" stroke-width="3.5" fill="none" stroke-linecap="round"></path><line id="join" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="3 6"></line><circle id="point-f" r="7" fill="var(--accent)" stroke="var(--surface)" stroke-width="2.5"></circle><circle id="point-g" r="7" fill="var(--teal)" stroke="var(--surface)" stroke-width="2.5"></circle></g><g id="point-labels"></g></svg>
+<div class="legend" aria-label="Условные обозначения"><span><i class="swatch"></i>Исходная f</span><span><i class="swatch inv"></i>Обратная f⁻¹</span><span><i class="swatch axis"></i>y = x</span></div>
+<p class="helper">Ось аргумента горизонтальна, ось значений вертикальна. Все точки вычисляются из выбранной функции. Увеличьте или уменьшите аргумент ползунком; клавиши ← и → тоже работают.</p></section>
+<div class="panel">
+<section class="section" aria-labelledby="choose-title"><p class="eyebrow">01 · Выберите случай</p><h2 id="choose-title">Какая функция?</h2>
+<div class="mode-grid" role="group" aria-label="Выбор функции">
+<button type="button" data-mode="linear" aria-pressed="true">Прямая 2x − 1</button>
+<button type="button" data-mode="cubic" aria-pressed="false">Куб x³</button>
+<button type="button" data-mode="square-plus" aria-pressed="false">x², x ≥ 0</button>
+<button type="button" data-mode="square-minus" aria-pressed="false">x², x ≤ 0</button>
+<button type="button" data-mode="negative-root" aria-pressed="false">−√x, x ≥ 0</button></div>
+<p id="mode-description" class="helper">У линейной функции есть обратная на всей числовой прямой.</p></section>
+<section class="section" aria-labelledby="point-title"><p class="eyebrow">02 · Проведите эксперимент</p><h2 id="point-title">Переместите точку</h2>
+<label for="arg" class="label-row"><strong>Аргумент исходной функции</strong><output id="arg-value" for="arg">0</output></label>
+<input id="arg" type="range" min="-2" max="2" step="0.1" value="0">
+<div class="line">Исходная точка: <strong class="value" id="point-f-read">(0; −1)</strong></div>
+<div class="line">Точка обратной: <strong class="value inv" id="point-g-read">(−1; 0)</strong></div>
+<p><button id="hide-answer" class="secondary" type="button" aria-pressed="false">Скрыть обратную точку</button></p>
+<p class="helper">Попробуйте предсказать её координаты и затем раскройте.</p></section>
+<section class="section" aria-labelledby="rule-title"><p class="eyebrow">03 · Прочитайте закономерность</p><h2 id="rule-title">Какие области?</h2>
+<div class="domains"><div class="line"><strong>f(x):</strong> <span class="value" id="f-label">2x − 1</span></div><div class="line"><strong>f⁻¹(x):</strong> <span class="value inv" id="g-label">(x + 1)/2</span></div><div class="line">D(f): <span id="f-domain" class="value">ℝ</span></div><div class="line">E(f): <span id="f-range" class="value">ℝ</span></div><div class="line">D(f⁻¹): <span id="g-domain" class="value inv">ℝ</span></div><div class="line">E(f⁻¹): <span id="g-range" class="value inv">ℝ</span></div></div>
+<p id="insight" class="conclusion">В каждой паре точки меняют местами аргумент и значение.</p></section>
+</div></div></main><footer class="foot shell">Артём Александрович Лёвин · эксклюзивно для Анны Трапезниковой · <a href="15.11.26.html#mirror">Теория отражения</a></footer>
+<script>
+(function(){
+'use strict';
+var SVG='http://www.w3.org/2000/svg',root=document.documentElement;
+var modes={
+linear:{name:'Прямая',f:'2x − 1',g:'(x + 1)/2',df:'ℝ',ef:'ℝ',dg:'ℝ',eg:'ℝ',lo:-2,hi:2,initial:0,explain:'Линейная функция обратима на всей числовой прямой.',insight:'Например, (0; −1) переходит в (−1; 0).',fval:function(x){return 2*x-1},gval:function(x){return (x+1)/2},fd:function(){return true},gd:function(){return true}},
+cubic:{name:'Кубическая функция',f:'x³',g:'∛x',df:'ℝ',ef:'ℝ',dg:'ℝ',eg:'ℝ',lo:-1.5,hi:1.5,initial:0,explain:'Куб и кубический корень определены на всей ℝ и взаимно обратны.',insight:'Для отрицательных чисел кубический корень остаётся действительным.',fval:function(x){return x*x*x},gval:function(x){return Math.cbrt(x)},fd:function(){return true},gd:function(){return true}},
+'square-plus':{name:'Правая ветвь параболы',f:'x², x ≥ 0',g:'√x, x ≥ 0',df:'[0; +∞)',ef:'[0; +∞)',dg:'[0; +∞)',eg:'[0; +∞)',lo:0,hi:2,initial:1,explain:'Если оставить x ≥ 0, функция x² становится обратимой.',insight:'С ограничением x ≥ 0 обратной к x² становится √x.',fval:function(x){return x*x},gval:function(x){return Math.sqrt(x)},fd:function(x){return x>=0},gd:function(x){return x>=0}},
+'square-minus':{name:'Левая ветвь параболы',f:'x², x ≤ 0',g:'−√x, x ≥ 0',df:'(−∞; 0]',ef:'[0; +∞)',dg:'[0; +∞)',eg:'(−∞; 0]',lo:-2,hi:0,initial:-1,explain:'Левая ветвь x² требует минуса перед квадратным корнем.',insight:'Две ветви параболы дают две разные обратные формулы.',fval:function(x){return x*x},gval:function(x){return -Math.sqrt(x)},fd:function(x){return x<=0},gd:function(x){return x>=0}},
+'negative-root':{name:'Отрицательный квадратный корень',f:'−√x, x ≥ 0',g:'x², x ≤ 0',df:'[0; +∞)',ef:'(−∞; 0]',dg:'(−∞; 0]',eg:'[0; +∞)',lo:0,hi:4,initial:1,explain:'Из y = −√x обязательно следует y ≤ 0; область обратной — x ≤ 0.',insight:'√(x²) = |x|, поэтому при x ≤ 0 выражение −|x| равно x.',fval:function(x){return -Math.sqrt(x)},gval:function(x){return x*x},fd:function(x){return x>=0},gd:function(x){return x<=0}}};
+var modeName='linear',hide=false,range=document.getElementById('arg');
+function el(tag,attrs,parent,content){var e=document.createElementNS(SVG,tag);Object.keys(attrs||{}).forEach(function(k){e.setAttribute(k,attrs[k])});if(content!==undefined)e.textContent=content;(parent||document.getElementById('grid')).appendChild(e);return e}
+function posX(x){return 350+58*x}function posY(y){return 280-58*y}
+function num(x){if(Math.abs(x)<.000001)x=0;var s=(Math.round(x*100)/100).toString().replace('.',',');return s.replace('-', '−')}
+function setText(id,value){document.getElementById(id).textContent=value}
+function makeGrid(){var grid=document.getElementById('grid'),axes=document.getElementById('axes');for(var a=-5;a<=5;a++){el('line',{x1:posX(a),y1:34,x2:posX(a),y2:529,stroke:'var(--grid)','stroke-width':1},grid);if(a>=-4&&a<=4&&a!==0)el('text',{x:posX(a),y:293,fill:'var(--axis)','font-size':13,'text-anchor':'middle'},axes,String(a));}for(var b=-4;b<=4;b++){el('line',{x1:48,y1:posY(b),x2:652,y2:posY(b),stroke:'var(--grid)','stroke-width':1},grid);if(b!==0)el('text',{x:344,y:posY(b)-5,fill:'var(--axis)','font-size':13,'text-anchor':'end'},axes,String(b));}el('line',{x1:48,y1:280,x2:653,y2:280,stroke:'var(--axis)','stroke-width':1.8},axes);el('line',{x1:350,y1:529,x2:350,y2:31,stroke:'var(--axis)','stroke-width':1.8},axes);el('text',{x:656,y:271,fill:'var(--ink)','font-size':16},axes,'x');el('text',{x:360,y:29,fill:'var(--ink)','font-size':16},axes,'y');el('text',{x:338,y:296,fill:'var(--axis)','font-size':13},axes,'0');}
+function curve(fn,valid){var path='',drawing=false;for(var i=-200;i<=200;i++){var x=i/50;if(!valid(x)){drawing=false;continue}var y=fn(x);if(!Number.isFinite(y)||Math.abs(y)>5){drawing=false;continue}path+=(drawing?' L':'M')+posX(x).toFixed(2)+' '+posY(y).toFixed(2);drawing=true;}return path;}
+function readMode(){return modes[modeName]}
+function paint(){
+var m=readMode(),x=Number(range.value),y=m.fval(x);
+setText('arg-value',num(x));setText('point-f-read','('+num(x)+'; '+num(y)+')');setText('point-g-read',hide?'Скрыта':'('+num(y)+'; '+num(x)+')');
+document.getElementById('curve-f').setAttribute('d',curve(m.fval,m.fd));document.getElementById('curve-g').setAttribute('d',curve(m.gval,m.gd));
+document.getElementById('diagonal').setAttribute('d','M '+posX(-4.2)+' '+posY(-4.2)+' L '+posX(4.2)+' '+posY(4.2));
+var pf=document.getElementById('point-f'),pg=document.getElementById('point-g'),join=document.getElementById('join');
+pf.setAttribute('cx',posX(x));pf.setAttribute('cy',posY(y));pg.setAttribute('cx',posX(y));pg.setAttribute('cy',posY(x));pg.style.display=hide?'none':'';join.style.display=hide?'none':'';
+join.setAttribute('x1',posX(x));join.setAttribute('y1',posY(y));join.setAttribute('x2',posX(y));join.setAttribute('y2',posY(x));
+setText('f-label',m.f);setText('g-label',m.g);setText('f-domain',m.df);setText('f-range',m.ef);setText('g-domain',m.dg);setText('g-range',m.eg);setText('mode-description',m.explain);setText('insight',m.insight);setText('graph-summary',m.name+' · точка ('+num(x)+'; '+num(y)+')');
+document.getElementById('hide-answer').setAttribute('aria-pressed',String(hide));setText('hide-answer',hide?'Показать обратную точку':'Скрыть обратную точку');
+setText('plot-description','Функция '+m.f+', обратная '+m.g+'. Исходная точка ('+num(x)+'; '+num(y)+'); '+(hide?'обратная точка скрыта':'обратная точка ('+num(y)+'; '+num(x)+')')+'. Прямая y равно x.');
+}
+function changeMode(name){if(!modes[name])name='linear';modeName=name;var m=readMode();range.min=m.lo;range.max=m.hi;range.value=m.initial;hide=false;document.querySelectorAll('[data-mode]').forEach(function(btn){btn.setAttribute('aria-pressed',String(btn.dataset.mode===name))});try{var url=new URL(location.href);url.searchParams.set('mode',name);history.replaceState(null,'',url);}catch(_){}paint()}
+document.querySelectorAll('[data-mode]').forEach(function(btn){btn.addEventListener('click',function(){changeMode(btn.dataset.mode)})});
+range.addEventListener('input',paint);document.getElementById('reset').addEventListener('click',function(){range.value=readMode().initial;hide=false;paint()});
+document.getElementById('hide-answer').addEventListener('click',function(){hide=!hide;paint()});
+var theme=document.getElementById('theme');try{if(localStorage.getItem('anna-lesson-theme')==='dark')root.dataset.theme='dark'}catch(_){}
+function themeText(){theme.setAttribute('aria-label',root.dataset.theme==='dark'?'Включить светлую тему':'Включить тёмную тему')}
+themeText();theme.addEventListener('click',function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';themeText();try{localStorage.setItem('anna-lesson-theme',root.dataset.theme)}catch(_){}});
+makeGrid();var initial='linear';try{initial=new URL(location.href).searchParams.get('mode')||'linear'}catch(_){}changeMode(initial);
+})();
+</script>
+</body></html>
