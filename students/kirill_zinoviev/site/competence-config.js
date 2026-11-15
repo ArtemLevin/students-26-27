@@ -22,6 +22,12 @@ const lessons=[
 {date:'03.10.26',href:'03.10.26.html#check',ids:['models_5']}
 ];
 const evidenceOnly=[
+{date:'15.11.26',href:'15.11.26.html#axes',ids:['functions_4']},
+{date:'15.11.26',href:'15.11.26.html#parallel',ids:['functions_9']},
+{date:'15.11.26',href:'15.11.26.html#formula',ids:['functions_10']},
+{date:'15.11.26',href:'15.11.26.html#horizontal',ids:['functions_11']},
+{date:'15.11.26',href:'15.11.26.html#intersection',ids:['functions_13']},
+{date:'15.11.26',href:'15.11.26.html#through-point',ids:['equations_4']},
 {date:'25.10.26',href:'25.10.26.html#mean',ids:['stats_5']},
 {date:'25.10.26',href:'25.10.26.html#median',ids:['stats_6']},
 {date:'25.10.26',href:'25.10.26.html#range',ids:['stats_8']},

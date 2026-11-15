@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Интерактивная математическая лаборатория: коэффициенты k и b, параллельные и пересекающиеся прямые. Кирилл Зиновьев.">
+<title>Лаборатория прямых — Кирилл Зиновьев, 15.11.26</title>
+<style>
+:root{color-scheme:light;--bg:#edf2f0;--paper:#fffefa;--ink:#233339;--sub:#52656a;--accent:#146f74;--accent2:#bb7355;--line:#c9d7d3;--soft:#e5eeeb;--focus:#0e78c5}
+html[data-theme=dark]{color-scheme:dark;--bg:#111f22;--paper:#1b2e32;--ink:#eff6f3;--sub:#b6cccc;--accent:#7ed2d1;--accent2:#eba992;--line:#445f62;--soft:#243c40;--focus:#abd9fe}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}a{color:var(--accent)}.skip{position:absolute;top:-60px;left:15px;background:var(--paper);padding:10px;z-index:100}.skip:focus{top:10px}button,select,input{font:inherit}button{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.wrap{width:min(1200px,calc(100% - 36px));margin:auto}.top{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--line)}.top a{text-decoration:none;font-weight:700}.top button,.presets button,#check{border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 15px;min-height:44px}.eyebrow{font:700 .77rem ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}h1,h2{font-family:Georgia,'Times New Roman',serif;letter-spacing:-.025em;font-weight:400}h1{font-size:clamp(2.5rem,6vw,4.5rem);margin:4px 0}h2{font-size:1.5rem;margin:0 0 14px}.lead{font-size:1.08rem;color:var(--sub);max-width:750px}.intro{padding:35px 0 16px}.presets{display:flex;flex-wrap:wrap;gap:9px;margin:25px 0}.presets button[aria-pressed=true]{background:var(--accent);color:var(--paper);border-color:var(--accent)}.workbench{display:grid;grid-template-columns:minmax(0,1.28fr) minmax(290px,.72fr);gap:22px;align-items:start}.plot,.panel,.readout,.quiz{background:var(--paper);border:1px solid var(--line)}.plot{padding:18px}.plot svg{width:100%;height:auto;display:block;aspect-ratio:760/520}.formula-strip{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;padding-bottom:8px}.formula{font:1.1rem Georgia,serif;white-space:nowrap}.formula.first{color:var(--accent)}.formula.second{color:var(--accent2)}.panel{padding:23px}.controller{padding:12px 0;border-top:1px solid var(--line)}.controller label{display:flex;justify-content:space-between;gap:12px;font-weight:700}.controller output{font:700 1.1rem ui-monospace,monospace;color:var(--accent)}input[type=range]{width:100%;margin:12px 0 4px;accent-color:var(--accent);height:26px}.small{font-size:.85rem;color:var(--sub)}.readouts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:15px 0 55px}.readout{padding:19px}.readout b{display:block;font-size:1.08rem;margin-top:5px}.readout span{font-size:.82rem;color:var(--sub)}.explain{margin:25px 0 5px;padding:18px;border-left:3px solid var(--accent);background:var(--soft)}.quiz{padding:22px;margin:20px 0 55px}.quiz select{width:100%;max-width:450px;background:var(--paper);color:var(--ink);border:1px solid var(--line);min-height:44px;padding:9px}.quiz p[role=status]{min-height:25px}.footer{border-top:1px solid var(--line);padding:24px 0 45px;color:var(--sub);font-size:.85rem}
+@media(max-width:900px){.workbench{grid-template-columns:1fr}.readouts{grid-template-columns:1fr 1fr}}@media(max-width:520px){.wrap{width:calc(100% - 24px)}.plot,.panel{padding:12px}.readouts{grid-template-columns:1fr}.formula{font-size:.93rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@media print{body{background:white}.panel,.presets,.quiz,.top button{display:none}.workbench{display:block}.plot{border:0}.readouts{grid-template-columns:1fr 1fr}}
+</style></head>
+<body><a href="#main" class="skip">К содержанию</a><div class="wrap">
+<header class="top"><a href="15.11.26.html">← К уроку 15 ноября</a><span class="eyebrow">Кирилл Зиновьев · 7 класс</span><button type="button" id="theme" aria-label="Переключить тему">Тёмная тема</button></header>
+<main id="main"><div class="intro"><p class="eyebrow">Исследовательский тренажёр</p><h1>Две прямые. Один вопрос.</h1><p class="lead">Меняйте коэффициенты k и b. Наблюдайте, когда прямые параллельны, пересекаются или полностью совпадают. Сравнивайте алгебраический расчёт с графиком.</p></div>
+<div class="presets" role="group" aria-label="Готовые ситуации">
+<button type="button" data-preset="parallel">Параллельны</button><button type="button" data-preset="intersection">Пересекаются</button><button type="button" data-preset="horizontal">Горизонталь</button><button type="button" data-preset="coincident">Совпадают</button><button type="button" data-preset="reset">Сбросить</button></div>
+<div class="workbench">
+<section class="plot" aria-labelledby="graph-title"><h2 id="graph-title">Координатная плоскость</h2><div class="formula-strip"><span class="formula first" id="f1">y₁ = 2x + 2</span><span class="formula second" id="f2">y₂ = 2x − 2</span></div>
+<svg id="graph" viewBox="0 0 760 520" role="img" aria-labelledby="svgtitle svgdesc"><title id="svgtitle">Графики двух линейных функций</title><desc id="svgdesc">Два графика на координатной сетке. Координаты вычисляются по выбранным коэффициентам.</desc>
+<g id="grid"></g><path d="M0 260H760M380 0V520" stroke="currentColor" stroke-opacity=".68" stroke-width="2"/><path d="M753 254l7 6-7 6M374 7l6-7 6 7" stroke="currentColor" stroke-opacity=".8" stroke-width="2" fill="none"/>
+<path id="line1" stroke="#177981" stroke-width="4.5" fill="none"/><path id="line2" stroke="#b56c52" stroke-width="4.5" stroke-dasharray="12 7" fill="none"/>
+<circle id="cross" r="7" fill="#444" stroke="#fff" stroke-width="2" display="none"/><text x="740" y="249" fill="currentColor" font-size="19">x</text><text x="390" y="20" fill="currentColor" font-size="19">y</text><text x="388" y="283" fill="currentColor" font-size="17">0</text></svg>
+<p class="small">Сплошная линия — первая функция; пунктир — вторая. Видимая область: −7,5 ≤ x ≤ 7,5; −5 ≤ y ≤ 5.</p></section>
+<section class="panel" aria-labelledby="controls-title"><h2 id="controls-title">Настройте уравнения</h2><p class="small">У каждой прямой два параметра. Изменяйте один и наблюдайте следствие.</p>
+<div class="controller"><label for="k1">Наклон первой прямой <output id="k1v" for="k1">2</output></label><input type="range" id="k1" min="-4" max="4" step=".25" value="2"></div>
+<div class="controller"><label for="b1">Смещение первой прямой <output id="b1v" for="b1">2</output></label><input type="range" id="b1" min="-6" max="6" step=".5" value="2"></div>
+<div class="controller"><label for="k2">Наклон второй прямой <output id="k2v" for="k2">2</output></label><input type="range" id="k2" min="-4" max="4" step=".25" value="2"></div>
+<div class="controller"><label for="b2">Смещение второй прямой <output id="b2v" for="b2">−2</output></label><input type="range" id="b2" min="-6" max="6" step=".5" value="-2"></div>
+<div class="explain" role="status" aria-live="polite"><strong id="relation">Параллельны</strong><p id="reason">Угловые коэффициенты равны, свободные члены различны.</p></div></section></div>
+<div class="readouts"><div class="readout"><span>Точка пересечения прямых</span><b id="cross-readout">Нет</b></div><div class="readout"><span>Пересечение первой прямой с Ox</span><b id="axis-readout">...</b></div></div>
+<section class="quiz" aria-labelledby="predict-title"><h2 id="predict-title">Предскажите результат</h2><p>Как расположены две прямые сейчас? Выберите ответ и проверьте себя.</p>
+<label for="prediction">Ваш прогноз</label><div><select id="prediction"><option value="">— Выберите —</option><option value="parallel">Параллельны и различны</option><option value="intersection">Пересекаются в одной точке</option><option value="coincident">Совпадают</option></select></div>
+<p><button id="check" type="button">Проверить прогноз</button></p><p id="feedback" role="status" aria-live="polite"></p>
+</section></main><footer class="footer">Лёвин Артём Александрович · эксклюзивно для Кирилла Зиновьева · 15 ноября 2026</footer></div>
+<script>
+(function(){
+'use strict';
+const root=document.documentElement,theme=document.getElementById('theme'),fields=['k1','b1','k2','b2'],nodes=Object.fromEntries(fields.map(id=>[id,document.getElementById(id)]));
+try{if(localStorage.getItem('kirill-lesson-theme')==='dark')root.dataset.theme='dark'}catch(e){}
+function reflectTheme(){theme.textContent=root.dataset.theme==='dark'?'Светлая тема':'Тёмная тема'}reflectTheme();
+theme.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';reflectTheme();try{localStorage.setItem('kirill-lesson-theme',root.dataset.theme)}catch(e){}});
+const grid=document.getElementById('grid'),NS='http://www.w3.org/2000/svg';
+function svg(tag,attrs){const el=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,String(v)));return el}
+for(let n=-7;n<=7;n++){const x=380+n*760/15;grid.appendChild(svg('line',{x1:x,y1:0,x2:x,y2:520,stroke:'currentColor','stroke-opacity':'.13'}));if(n) {const t=svg('text',{x:x+2,y:280,fill:'currentColor','fill-opacity':'.63','font-size':14});t.textContent=n;grid.appendChild(t)}}
+for(let n=-5;n<=5;n++){const y=260-n*52;grid.appendChild(svg('line',{x1:0,y1:y,x2:760,y2:y,stroke:'currentColor','stroke-opacity':'.13'}));if(n){const t=svg('text',{x:388,y:y-4,fill:'currentColor','fill-opacity':'.63','font-size':14});t.textContent=n;grid.appendChild(t)}}
+const px=x=>380+x*760/15,py=y=>260-y*52;
+const fmt=n=>Number(n.toFixed(2)).toLocaleString('ru-RU',{maximumFractionDigits:2});
+function segment(k,b){const p=[];function add(x,y){if(Number.isFinite(x)&&Number.isFinite(y)&&x>=-7.5000001&&x<=7.5000001&&y>=-5.0000001&&y<=5.0000001&&!p.some(t=>Math.abs(t[0]-x)+Math.abs(t[1]-y)<.0001))p.push([x,y])}
+add(-7.5,-7.5*k+b);add(7.5,7.5*k+b);if(k!==0){add((-5-b)/k,-5);add((5-b)/k,5)}
+if(p.length<2)return '';const a=p[0],c=p[1];return 'M'+px(a[0]).toFixed(2)+' '+py(a[1]).toFixed(2)+'L'+px(c[0]).toFixed(2)+' '+py(c[1]).toFixed(2)}
+const values=()=>Object.fromEntries(fields.map(id=>[id,Number(nodes[id].value)]));
+const f=n=>(n<0?' − '+fmt(-n):n>0?' + '+fmt(n):'');
+function formula(k,b){return (k===0?'y = '+fmt(b):'y = '+(k===1?'x':k===-1?'−x':fmt(k)+'x')+f(b))}
+function relation(v){return v.k1===v.k2?(v.b1===v.b2?'coincident':'parallel'):'intersection'}
+function render(){
+ const v=values(),type=relation(v);
+ fields.forEach(id=>document.getElementById(id+'v').textContent=fmt(v[id]));
+ document.getElementById('f1').textContent='y₁: '+formula(v.k1,v.b1);document.getElementById('f2').textContent='y₂: '+formula(v.k2,v.b2);
+ document.getElementById('line1').setAttribute('d',segment(v.k1,v.b1));document.getElementById('line2').setAttribute('d',segment(v.k2,v.b2));
+ const cross=document.getElementById('cross'),crossTxt=document.getElementById('cross-readout'),rel=document.getElementById('relation'),reason=document.getElementById('reason');
+ if(type==='intersection'){const x=(v.b2-v.b1)/(v.k1-v.k2),y=v.k1*x+v.b1;rel.textContent='Пересекаются';reason.textContent='k₁ ≠ k₂: одна точка пересечения. Находим её приравниванием правых частей.';crossTxt.textContent='('+fmt(x)+'; '+fmt(y)+')';const inPlot=x>=-7.5&&x<=7.5&&y>=-5&&y<=5;cross.setAttribute('display',inPlot?'':'none');if(inPlot){cross.setAttribute('cx',px(x));cross.setAttribute('cy',py(y))}}
+ else{cross.setAttribute('display','none');rel.textContent=type==='parallel'?'Параллельны':'Совпадают';reason.textContent=type==='parallel'?'k₁ = k₂, но b₁ ≠ b₂. Общих точек нет.':'И k, и b равны: это одна и та же прямая.';crossTxt.textContent=type==='parallel'?'Общих точек нет':'Бесконечно много'}
+ document.getElementById('axis-readout').textContent=v.k1===0?(v.b1===0?'Вся ось Ox':'Нет пересечения'):'('+fmt(-v.b1/v.k1)+'; 0)';
+ document.querySelectorAll('[data-preset]').forEach(b=>b.setAttribute('aria-pressed','false'));
+ document.getElementById('feedback').textContent='';
+}
+fields.forEach(id=>nodes[id].addEventListener('input',render));
+const presets={parallel:[2,2,2,-2],intersection:[1,2,-1,0],horizontal:[0,3,0,-2],coincident:[-1,2,-1,2],reset:[2,2,2,-2]};
+document.querySelectorAll('[data-preset]').forEach(btn=>btn.addEventListener('click',()=>{const v=presets[btn.dataset.preset];fields.forEach((id,i)=>nodes[id].value=String(v[i]));render();btn.setAttribute('aria-pressed','true')}));
+document.getElementById('check').addEventListener('click',()=>{const sel=document.getElementById('prediction').value;document.getElementById('feedback').textContent=!sel?'Выберите вариант.':sel===relation(values())?'Верно. Проверьте вывод по формулам и графику.':'Пока неверно. Сравните сначала k₁ и k₂, затем b₁ и b₂.'});
+const mode=new URLSearchParams(location.search).get('mode');const btn=document.querySelector('[data-preset="'+(mode==='intersection'?'intersection':mode==='horizontal'?'horizontal':mode==='coincident'?'coincident':'parallel')+'"]');if(btn)btn.click();else render();
+})();
+</script></body></html>
