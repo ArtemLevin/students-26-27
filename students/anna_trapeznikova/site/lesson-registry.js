@@ -5,6 +5,62 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-15",
+  "ktpRefs": [],
+  "href": "15.11.26.html",
+  "title": "Обратимые и взаимно обратные функции",
+  "navTitle": "Обратимые функции: формулы, графики и композиции",
+  "navSubtitle": "Обратимость, обратная функция, симметрия относительно y = x, D и E, композиции. Занятие 15 ноября 2026 года.",
+  "summary": "Интерактивный урок Анны Трапезниковой: как найти обратную функцию, учесть ограничения, увидеть симметрию графиков и проверить две композиции; 10 заданий и лаборатория.",
+  "topics": [
+    "критерий обратимости функции",
+    "выражение аргумента через значение и запись обратной",
+    "соотношение области определения и множества значений",
+    "отражение графиков относительно прямой y = x",
+    "ограничение области квадратичной функции и квадратного корня",
+    "обратные функции для нечётных степеней и корней",
+    "проверка обратимости через две композиции"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "functions_11",
+      "evidenceAnchor": "inverse",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "functions_10",
+      "evidenceAnchor": "composition",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "functions_02",
+      "evidenceAnchor": "domains",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "functions_03",
+      "evidenceAnchor": "domains",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "functions_13",
+      "evidenceAnchor": "mirror",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "powers_roots_04",
+      "evidenceAnchor": "domains",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "15.11.26.html",
+    "pdf": "../pdf_docs/15.11.26.pdf",
+    "tex": "../tex_docs/15.11.26.tex",
+    "lab": "15.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-03",
   "ktpRefs": [],
   "href": "03.11.26.html",
