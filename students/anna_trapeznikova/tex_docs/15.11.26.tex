@@ -1,0 +1,357 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{icomma}
+\usepackage{geometry}
+\geometry{left=22mm,right=22mm,top=21mm,bottom=22mm}
+\usepackage{microtype}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tabularx,booktabs}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{005456}
+\definecolor{textgray}{HTML}{3E4546}
+\definecolor{softgray}{HTML}{D6E3E2}
+\hypersetup{colorlinks=true,linkcolor=darkaccent,urlcolor=darkaccent,
+ pdftitle={Чек-лист: обратимые и взаимно обратные функции},
+ pdfauthor={Лёвин Артём Александрович}}
+\linespread{1.17}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlist[itemize]{leftmargin=6mm,topsep=3pt,itemsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,topsep=4pt,itemsep=8pt}
+\renewcommand{\arraystretch}{1.23}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{textgray}Обратимые функции}
+\fancyhead[R]{\footnotesize\color{textgray}Анна Трапезникова}
+\fancyfoot[C]{\footnotesize\color{textgray}\thepage}
+\renewcommand{\headrulewidth}{0.25pt}
+\setlength{\headheight}{15pt}
+\newcommand{\sect}[1]{\vspace{5pt}{\large\bfseries\color{darkaccent}#1}\par\vspace{3pt}}
+\newcommand{\idea}[1]{\textcolor{darkaccent}{\textbf{Ключевая идея.}} #1}
+\newcommand{\warn}[1]{\textcolor{darkaccent}{\textbf{Важно.}} #1}
+\newcommand{\example}[1]{\textbf{Пример.} #1}
+\newcommand{\chk}{\(\square\)\,}
+\newcommand{\R}{\mathbb{R}}
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{26mm}
+{\large\color{darkaccent}МАТЕМАТИКА}\par
+\vspace{19mm}
+{\LARGE\color{textgray}Чек-лист}\par
+\vspace{10mm}
+{\LARGE\color{accent}Обратимые и взаимно обратные функции}\par
+\vspace{5mm}
+{\large\color{accent}Область определения, графики, композиции}\par
+\vspace{17mm}
+{\normalsize\color{textgray}Алгебра · 10 класс · углублённый уровень}\par
+\vspace{34mm}
+{\large Анна Трапезникова}\par
+\vspace{13mm}
+{\normalsize 15 ноября 2026 г.}\par
+\vfill
+{\small Лёвин Артём Александрович}\par
+{\small эксклюзивно для Анны Трапезниковой}\par
+\vspace{19mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent,line width=.9pt] (0,0) .. controls (1.4,.56) and (2.7,-.53) .. (4.1,0)
+ .. controls (5.5,.55) and (6.8,-.55) .. (8.2,0);
+\fill[accent] (4.1,0) circle (1.35pt);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\sect{1. Что нужно уметь}
+\begin{itemize}
+\item \chk Определять, является ли функция \textbf{обратимой} на заданной области.
+\item \chk Находить обратную функцию: менять роли \(x\) и \(y\), выражать переменную.
+\item \chk Правильно записывать \(D(f^{-1})\) и \(E(f^{-1})\).
+\item \chk Строить и узнавать графики взаимно обратных функций.
+\item \chk Учитывать ограничения при квадратных корнях и чётных степенях.
+\item \chk Проверять взаимную обратность через \(f(g(x))\) и \(g(f(x))\).
+\end{itemize}
+
+\sect{2. Что означает «обратимая функция»}
+Функция \(y=f(x)\) \textbf{обратима на своей области определения}, если каждое принимаемое ею значение \(y\) достигается \emph{ровно при одном} допустимом значении \(x\).
+
+\idea{Достаточно мысленно провести горизонтальную прямую: для обратимой функции она пересечёт график не более одного раза.}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{37mm}X@{}}
+\toprule
+Функция и область & Обратима? Почему?\\
+\midrule
+\(f(x)=3x+5\), \(x\in\R\) & Да. Разным \(x\) соответствуют разные значения \(y\).\\
+\(f(x)=x^3\), \(x\in\R\) & Да. Кубическая функция строго возрастает.\\
+\(f(x)=x^2\), \(x\in\R\) & Нет. Например, \(f(-2)=f(2)=4\).\\
+\(f(x)=x^2\), \(x\ge0\) & Да. На правой ветви параболы каждое \(y\) достигается один раз.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\warn{У любой функции одному \(x\) соответствует одно \(y\). Для \emph{обратимости} требуется обратное свойство: одному значению \(y\) соответствует единственное \(x\).}
+
+\sect{3. Как найти обратную функцию}
+Пусть \(f(x)=3x+5\). Запишем \(y=3x+5\) и выразим \(x\):
+\[
+3x=y-5\quad\Longrightarrow\quad x=\frac{y-5}{3}.
+\]
+Теперь поменяем обозначения входа и выхода:
+\[
+\boxed{f^{-1}(x)=\frac{x-5}{3}.}
+\]
+\textbf{Правило записи:} сначала укажите исходную функцию \(f(x)\), затем её обратную \(f^{-1}(x)\) или \(g(x)\). Символ \(f^{-1}\) \emph{не означает} \(1/f\).
+
+\example{Линейная функция с отрицательным коэффициентом:}
+\[
+y=-2x+1\ \Longrightarrow\ 2x=1-y\ \Longrightarrow\
+x=\frac{1-y}{2}\ \Longrightarrow\
+\boxed{f^{-1}(x)=\frac{1-x}{2}.}
+\]
+Для любой линейной функции \(f(x)=ax+b\), \(a\ne0\), обратная существует на всей \(\R\):
+\[
+\boxed{f^{-1}(x)=\frac{x-b}{a}.}
+\]
+
+\clearpage
+\sect{4. Графики: отражение относительно \(y=x\)}
+При переходе к обратной функции координаты каждой точки меняются местами:
+\[
+(a;b)\ \longleftrightarrow\ (b;a).
+\]
+Поэтому графики \(y=f(x)\) и \(y=f^{-1}(x)\) \textbf{симметричны относительно прямой \(y=x\)}. Прямая \(y=x\) проходит через I и III координатные четверти.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+ width=12.5cm,height=9cm,axis lines=middle,
+ xmin=-4.1,xmax=4.1,ymin=-4.1,ymax=4.1,
+ xminorticks=false,yminorticks=false,
+ xtick={-4,-3,-2,-1,0,1,2,3,4},
+ ytick={-4,-3,-2,-1,0,1,2,3,4},
+ xlabel={$x$},ylabel={$y$},
+ xlabel style={at={(axis description cs:1,0.48)},anchor=west},
+ ylabel style={at={(axis description cs:0.51,1)},anchor=south},
+ axis equal image,grid=major,grid style={softgray!55},
+ legend style={at={(0.02,0.98)},anchor=north west,draw=none,fill=white,font=\small},
+ ticklabel style={font=\scriptsize},clip=false]
+\addplot[accent,very thick,domain=-1.55:2.5,samples=2] {2*x-1};
+\addlegendentry{$f(x)=2x-1$}
+\addplot[darkaccent,very thick,densely dotted,domain=-4:4,samples=2] {(x+1)/2};
+\addlegendentry{$f^{-1}(x)=\frac{x+1}{2}$}
+\addplot[gray,dashed,domain=-4:4,samples=2] {x};
+\addlegendentry{$y=x$}
+\addplot[only marks,mark=*,mark size=2.3pt] coordinates {(0,-1) (-1,0) (1,1)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+Например, точке \((0;-1)\) графика \(f\) соответствует точка \((-1;0)\) графика \(f^{-1}\).
+
+\warn{Симметрия относительно \(y=x\) и симметрия относительно начала координат --- разные преобразования. Для взаимно обратных функций используется именно отражение относительно \(y=x\).}
+
+\sect{5. Область определения и множество значений}
+Обратная функция меняет местами множество допустимых аргументов и множество получаемых значений:
+\[
+\boxed{D(f^{-1})=E(f),\qquad E(f^{-1})=D(f).}
+\]
+У функции \(f(x)=2x-1\) оба множества равны \(\R\); у обратной \(f^{-1}(x)=(x+1)/2\) --- тоже.
+
+\clearpage
+\sect{6. Почему параболе нужно ограничение}
+На всей числовой прямой функция \(f(x)=x^2\) необратима: числу \(9\) соответствуют \(x=-3\) и \(x=3\). Если оставить одну ветвь, появляется обратная функция:
+\begin{center}
+\small
+\begin{tabularx}{\linewidth}{@{}p{31mm}X X@{}}
+\toprule
+Исходная область & Исходная функция & Обратная функция\\
+\midrule
+\(x\ge0\) & \(f(x)=x^2\) & \(f^{-1}(x)=\sqrt{x}\), \(x\ge0\)\\
+\(x\le0\) & \(f(x)=x^2\) & \(f^{-1}(x)=-\sqrt{x}\), \(x\ge0\)\\
+\bottomrule
+\end{tabularx}
+\end{center}
+В обоих случаях множество значений исходной функции равно \([0;+\infty)\), поэтому область определения обратной тоже \([0;+\infty)\). Множество значений обратной зависит от выбранной ветви: соответственно \([0;+\infty)\) или \((-\infty;0]\).
+
+\sect{7. Квадратный корень и потерянный знак}
+\example{Найдём функцию, обратную к \(f(x)=-\sqrt{x}\), \(x\ge0\).}
+Из \(y=-\sqrt{x}\) следует \(y\le0\). Возведём в квадрат:
+\[
+y^2=x\quad\Longrightarrow\quad
+\boxed{f^{-1}(x)=x^2,\quad x\le0.}
+\]
+Здесь \(D(f)=[0;+\infty)\), \(E(f)=(-\infty;0]\), поэтому
+\[
+D(f^{-1})=(-\infty;0],\qquad E(f^{-1})=[0;+\infty).
+\]
+\warn{После возведения в квадрат нельзя забывать условие \(y\le0\). Без него полученная формула \(x^2\) будет иметь лишнюю половину области определения.}
+
+\sect{8. Кубические корни и нечётные степени}
+Для всех действительных \(x\) определены \(\sqrt[3]{x}\) и \(\sqrt[5]{x}\), в том числе при отрицательных \(x\). Поэтому:
+\[
+\begin{aligned}
+f(x)&=x^3+1
+&&\Longrightarrow& f^{-1}(x)&=\sqrt[3]{x-1},\\
+f(x)&=-x^5
+&&\Longrightarrow& f^{-1}(x)&=-\sqrt[5]{x}.
+\end{aligned}
+\]
+Дробный показатель с нечётным знаменателем удобно трактовать через вещественный корень:
+\[
+(\sqrt[5]{x})^3=x^{3/5},\qquad
+f^{-1}(x)=(\sqrt[3]{x})^5=x^{5/3}.
+\]
+Показатели \(3/5\) и \(5/3\) здесь можно использовать и для отрицательных чисел благодаря корням нечётных степеней.
+
+\clearpage
+\sect{9. Как проверить взаимную обратность}
+Для \(g=f^{-1}\) выполняются два равенства, \emph{каждое на своей области}:
+\[
+\boxed{f(g(x))=x\quad (x\in D(g)),\qquad
+ g(f(x))=x\quad (x\in D(f)).}
+\]
+\example{Проверим \(f(x)=-x^3\) и \(g(x)=-\sqrt[3]{x}\).}
+\[
+\begin{aligned}
+f(g(x))&=-\bigl(-\sqrt[3]{x}\bigr)^3=x,\\
+g(f(x))&=-\sqrt[3]{-x^3}=x.
+\end{aligned}
+\]
+Значит, функции взаимно обратны на \(\R\).
+
+\example{А что, если забыть минус: \(f(x)=-x^5\), \(g(x)=\sqrt[5]{x}\)?}
+\[
+\begin{aligned}
+f(g(x))&=-\bigl(\sqrt[5]{x}\bigr)^5=-x,\\
+g(f(x))&=\sqrt[5]{-x^5}=-x.
+\end{aligned}
+\]
+При \(x\ne0\) получаем \(-x\ne x\). Следовательно, функции \textbf{не взаимно обратны}. Правильный вариант --- \(g(x)=-\sqrt[5]{x}\).
+
+\sect{10. Контроль знака: \(\sqrt{x^2}=|x|\)}
+Для обратной \(g(x)=x^2\), \(x\le0\), из раздела 7:
+\[
+\begin{aligned}
+g(f(x))&=(-\sqrt{x})^2=x, && x\ge0,\\
+f(g(x))&=-\sqrt{x^2}=-|x|=x, && x\le0.
+\end{aligned}
+\]
+\warn{Равенство \(\sqrt{x^2}=x\) справедливо только при \(x\ge0\). В общем случае \(\sqrt{x^2}=|x|\).}
+
+\sect{11. Частые ошибки}
+\begin{itemize}
+\item \textbf{Перепутано направление соответствия.} Обратимость проверяют по числу аргументов \(x\) для одного значения \(y\).
+\item \textbf{Забыто переименование.} Из \(x=(y-5)/3\) в ответе пишут \(f^{-1}(x)=(x-5)/3\).
+\item \textbf{Пропущена область определения.} Для \(-\sqrt{x}\) обратная функция \(x^2\) задаётся только при \(x\le0\).
+\item \textbf{Потерян минус.} Обратная к \(-x^5\) содержит минус перед корнем пятой степени.
+\item \textbf{Неверно раскрыт корень.} \(\sqrt{x^2}=|x|\), поэтому знак аргумента нужно учитывать.
+\item \textbf{Проверка только одной композиции.} Полезно проверять обе и указывать соответствующие области.
+\end{itemize}
+
+\clearpage
+\begin{center}{\LARGE\color{darkaccent}Алгоритм нахождения обратной функции}\par\vspace{9mm}\end{center}
+\begin{center}
+\begin{tikzpicture}[
+ >={Latex[length=2.5mm]},
+ term/.style={ellipse,draw=accent,thick,align=center,minimum width=5.4cm,minimum height=.83cm,font=\small},
+ action/.style={rounded corners=2pt,draw=darkaccent,thick,align=center,text width=10cm,minimum height=.92cm,inner sep=4pt,font=\small},
+ branch/.style={rounded corners=2pt,draw=darkaccent,thick,align=center,text width=4.2cm,minimum height=1.1cm,inner sep=4pt,font=\small},
+ decision/.style={diamond,draw=darkaccent,thick,aspect=2.4,align=center,text width=3.1cm,inner sep=1.5pt,font=\small},
+ arr/.style={->,draw=darkaccent,thick}
+]
+\node[term] (start) at (0,0) {Дана функция $y=f(x)$ и её область $D(f)$};
+\node[decision] (q) at (0,-2.0) {Функция обратима?};
+\node[branch] (restrict) at (-3.35,-3.95) {Нет: выберите область, на которой значения не повторяются};
+\node[branch] (keep) at (3.35,-3.95) {Да: сохраните исходную область определения};
+\node[action] (solve) at (0,-6.0) {Запишите $y=f(x)$ и выразите $x$ через $y$};
+\node[action] (swap) at (0,-7.42) {Переименуйте переменные: получите $g(x)=f^{-1}(x)$};
+\node[action] (domains) at (0,-8.84) {Области меняются местами: $D(g)=E(f)$, $E(g)=D(f)$};
+\node[action] (check) at (0,-10.26) {Проверьте $f(g(x))=x$ и $g(f(x))=x$ на своих областях};
+\node[term] (done) at (0,-11.72) {Ответ: обратная функция и её область};
+\draw[arr] (start) -- (q);
+\draw[arr] (q.south west) -| node[pos=.18,above left,font=\scriptsize]{нет} (restrict.north);
+\draw[arr] (q.south east) -| node[pos=.18,above right,font=\scriptsize]{да} (keep.north);
+\draw[draw=darkaccent,thick] (restrict.south) -- (-3.35,-5.25) -- (0,-5.25);
+\draw[draw=darkaccent,thick] (keep.south) -- (3.35,-5.25) -- (0,-5.25);
+\draw[arr] (0,-5.25) -- (solve.north);
+\draw[arr] (solve) -- (swap);
+\draw[arr] (swap) -- (domains);
+\draw[arr] (domains) -- (check);
+\draw[arr] (check) -- (done);
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+\begin{center}{\LARGE\color{darkaccent}Тренировочный блок}\par\vspace{3mm}
+{\normalsize Путь А · 10 заданий · от простого к сложному}\end{center}
+\vspace{4mm}
+В каждом задании указывайте область определения обратной функции. Если требуется проверить взаимную обратность, учитывайте области обеих функций.
+
+\textbf{Базовый уровень}
+\begin{enumerate}
+\item Найдите обратную к функции \(f(x)=4x-7\), \(x\in\R\).
+\item Найдите обратную к функции \(f(x)=-5x+4\), \(x\in\R\).
+\item Найдите обратную к функции \(f(x)=\dfrac{3x-1}{2}\), \(x\in\R\).
+\item Найдите обратную к функции \(f(x)=x^3+8\), \(x\in\R\).
+\end{enumerate}
+
+\textbf{Средний уровень}
+\begin{enumerate}[resume]
+\item Обратима ли \(f(x)=x^2-4\) на \(\R\)? Ограничьте её область условием \(x\ge0\), найдите обратную функцию, её \(D\) и \(E\).
+\item Для \(f(x)=1-\sqrt{x+2}\) найдите исходные \(D(f)\) и \(E(f)\), обратную функцию и \(D(f^{-1})\), \(E(f^{-1})\).
+\item Найдите обратную к \(f(x)=\dfrac{x+1}{2x-3}\), \(x\ne\frac32\), и укажите её область определения и множество значений.
+\end{enumerate}
+
+\textbf{Повышенный уровень}
+\begin{enumerate}[resume]
+\item Являются ли взаимно обратными \(f(x)=-x^5\) и \(g(x)=\sqrt[5]{x}\) на \(\R\)? Проверьте с помощью двух композиций и укажите верную обратную к \(f\).
+\item Проверьте, являются ли взаимно обратными \(f(x)=-\sqrt{x}\), \(x\ge0\), и \(g(x)=x^2\), \(x\le0\). Вычислите обе композиции и укажите области \(D\) и множества \(E\).
+\item Для функции \(f(x)=(\sqrt[5]{x})^3\), \(x\in\R\), найдите обратную, запишите её через корень и проверьте обе композиции.
+\end{enumerate}
+
+\clearpage
+\begin{center}{\LARGE\color{darkaccent}Ответы к тренировочному блоку}\par\vspace{7mm}\end{center}
+\normalsize
+\begin{tabularx}{\linewidth}{@{}p{9mm}X@{}}
+\toprule
+\textbf{№} & \textbf{Ответ}\\
+\midrule
+1 & \(f^{-1}(x)=\dfrac{x+7}{4}\), \(D(f^{-1})=\R\).\\
+2 & \(f^{-1}(x)=\dfrac{4-x}{5}\), \(D(f^{-1})=\R\).\\
+3 & \(f^{-1}(x)=\dfrac{2x+1}{3}\), \(D(f^{-1})=\R\).\\
+4 & \(f^{-1}(x)=\sqrt[3]{x-8}\), \(D(f^{-1})=\R\).\\
+5 & На \(\R\) необратима. При \(x\ge0\): \(f^{-1}(x)=\sqrt{x+4}\), \(D(f^{-1})=[-4;+\infty)\), \(E(f^{-1})=[0;+\infty)\).\\
+6 & \(D(f)=[-2;+\infty)\), \(E(f)=(-\infty;1]\); \(f^{-1}(x)=(1-x)^2-2\), \(D(f^{-1})=(-\infty;1]\), \(E(f^{-1})=[-2;+\infty)\).\\
+7 & \(f^{-1}(x)=\dfrac{3x+1}{2x-1}\), \(D(f^{-1})=\R\setminus\{\frac12\}\), \(E(f^{-1})=\R\setminus\{\frac32\}\).\\
+8 & Нет: \(f(g(x))=g(f(x))=-x\); верная обратная \(f^{-1}(x)=-\sqrt[5]{x}\).\\
+9 & Да: \(g(f(x))=x\) при \(x\ge0\), \(f(g(x))=x\) при \(x\le0\). Для \(f\): \(D=[0;+\infty)\), \(E=(-\infty;0]\); для \(g\) --- наоборот.\\
+10 & \(f^{-1}(x)=(\sqrt[3]{x})^5\), \(D(f^{-1})=\R\); обе композиции равны \(x\) на \(\R\).\\
+\bottomrule
+\end{tabularx}
+\normalsize
+\vspace{12mm}
+\sect{Краткая памятка}
+\begin{tabularx}{\linewidth}{@{}p{0.40\linewidth}X@{}}
+\toprule
+Сигнал в задаче & Что сделать\\
+\midrule
+Вопрос об обратимости & Убедитесь: каждое значение \(y\) соответствует одному \(x\).\\
+Нужно найти обратную & Выразите \(x\) через \(y\), затем поменяйте имена переменных.\\
+Функция \(x^2\) & Укажите выбранную ветвь: \(x\ge0\) или \(x\le0\).\\
+Корень чётной степени & Проверьте знак, ОДЗ и \(\sqrt{x^2}=|x|\).\\
+График обратной & Отразите относительно \(y=x\).\\
+Проверка пары & Рассчитайте \(f(g(x))\) и \(g(f(x))\) с учётом областей.\\
+\bottomrule
+\end{tabularx}
+\end{document}
