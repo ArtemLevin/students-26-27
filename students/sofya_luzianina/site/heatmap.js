@@ -74,7 +74,6 @@ function startMap(){
   let filter = 'all';
   let term = '';
   let sectorFilter = 'all';
-  const docLink = 'https://github.com/ArtemLevin/students-26-27/blob/main/students/sofya_luzianina/review_docs/15.11.26.tex';
   const all = catalog.groups.flatMap(group => (group.items || []).map(item => {
     const record = { ...item, groupId: group.id, groupName: group.name, sectorId: group.sectorId, sectorName: group.sectorName };
     if (byId.has(record.id) || !bySector.has(record.sectorId)) throw new Error('Некорректный каталог: ' + record.id);
@@ -197,14 +196,28 @@ function startMap(){
     setText('detailLevel',labelOf(id));
     const value=levelOf(id);
     setText('detailExplain',value===null?'Пока отсутствует подтверждённый уровень освоения этого умения. После проверочной работы или занятия он появится в каноническом состоянии.':descriptions[value]);
-    setText('detailId','COMPETENCY / '+id);
+    setText('detailId','ТЕМА / '+item.groupName);
     const evidence=$('detailEvidence');evidence.replaceChildren();
     const diag=focusById.get(id);
-    if(diag){const section=elt('div',{className:'evidence'});section.append(elt('strong',{},'Диагностический ориентир · № '+diag.task),elt('p',{},diag.note));
-      const a=elt('a',{href:docLink,target:'_blank',rel:'noopener noreferrer'},'Открыть исходное ревью (.tex)');section.appendChild(a);evidence.appendChild(section);
-    }else if(value!==null && authority.evidence && authority.evidence[id]){
-      const ev=authority.evidence[id];
-      const div=elt('div',{className:'evidence'});div.append(elt('strong',{},'Основание оценки'),elt('p',{},typeof ev==='string'?ev:'Данные оценки сохранены в источнике mastery.'));evidence.appendChild(div);
+    if(diag){
+      const section=elt('div',{className:'evidence'});
+      section.append(
+        elt('strong',{},'Диагностический ориентир · № '+diag.task),
+        elt('p',{},diag.note),
+        elt('p',{},'Исходный разбор хранится в материалах ученицы. Доступ определяется настройками хранилища.')
+      );
+      evidence.appendChild(section);
+    }
+    const claim=authority.levels[id];
+    if(value!==null && claim && typeof claim==='object'){
+      const div=elt('div',{className:'evidence'});
+      div.append(elt('strong',{},'Основание подтверждённой оценки'));
+      if(claim.basis)div.append(elt('p',{},claim.basis));
+      if(claim.sourceKind){
+        const sourceLabels={'lesson-assessment':'проверенная работа','teacher-mastery':'оценка преподавателя','teacher-seed':'запись преподавателя','baseline-levels':'начальная проверка','mastery-authority':'подтверждённая оценка','linked-progress-overlay':'результаты практики','stage04-mastery':'закрепление навыка','dashboard-data':'учебный журнал'};
+        div.append(elt('small',{},'Подтверждение: '+(sourceLabels[claim.sourceKind]||'учебная проверка')));
+      }
+      evidence.appendChild(div);
     }
     setText('mapLive','Выбрано: '+viewLabel(item));
     if(origin==='list'&&window.matchMedia('(max-width:820px)').matches)$('details').scrollIntoView({behavior:'smooth',block:'start'});
@@ -236,7 +249,9 @@ function startMap(){
     const toggle=$('themeToggle');const key='sofya-luzianina-atlas-theme';
     try{const stored=localStorage.getItem(key);if(stored==='dark'||stored==='light')document.documentElement.dataset.theme=stored;else if(window.matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark'}catch(_){ /* storage may be disabled */ }
     const paint=()=>{const isDark=document.documentElement.dataset.theme==='dark';toggle.setAttribute('aria-pressed',String(isDark));toggle.setAttribute('aria-label',isDark?'Включить светлую тему':'Включить тёмную тему');};
-    toggle.addEventListener('click',()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';paint();try{localStorage.setItem(key,document.documentElement.dataset.theme)}catch(_){}});paint();
+    toggle.addEventListener('click',()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';paint();try{localStorage.setItem(key,document.documentElement.dataset.theme)}catch(_){}});
+    window.addEventListener('storage',event=>{if(event.key===key&&(event.newValue==='dark'||event.newValue==='light')){document.documentElement.dataset.theme=event.newValue;paint();}});
+    paint();
   }
   function init(){
     buildMap();buildAreas();buildCatalog();buildDiagnostics();attach();
