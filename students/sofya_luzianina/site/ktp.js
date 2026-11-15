@@ -9,7 +9,7 @@ const shortDate=d=>d?d.slice(8)+"."+d.slice(5,7)+"."+d.slice(2,4):"—";
 const mKey=d=>d.slice(0,7);
 const safePath=p=>{if(typeof p!=="string"||!/^site\/[A-Za-z0-9_./-]+$/.test(p)||p.includes(".."))throw new Error("Недопустимый путь canonical state");return"../"+p};
 async function readJson(p){const r=await fetch(p,{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status+" · "+p);return r.json()}
-let plan=null,state=null,currentView="calendar",lastFocus=null;
+let plan=null,state=null,skillNames=new Map(),currentView="calendar",lastFocus=null;
 const record=l=>state.records[l.id]||{status:"planned"};
 const status=l=>lessonStatus(l,state.records);
 const effectiveDate=l=>scheduledDate(l,state.records);
@@ -23,7 +23,7 @@ function setView(view){
 function openLesson(id){
  const l=lessonById(id);if(!l)return;
  const rec=record(l);
- $("detailIndex").textContent=l.id+" / "+ruDate(effectiveDate(l));
+ $("detailIndex").textContent="Занятие "+String(l.order).padStart(2,"0")+" / "+ruDate(effectiveDate(l));
  $("detailTitle").textContent=l.topic;
  $("detailMeta").textContent=(names[status(l)]||status(l))+(effectiveDate(l)!==l.plannedDate?" · перенесено с "+ruDate(l.plannedDate):"");
  $("detailStage").textContent=l.stage+" / "+l.block;
@@ -31,7 +31,7 @@ function openLesson(id){
  $("detailContent").textContent=l.content;
  $("detailCheck").textContent=l.check;
  $("detailHomework").textContent=l.homework;
- $("detailSkills").textContent=l.targetCompetencies.join(" · ");
+ $("detailSkills").textContent=l.targetCompetencies.map(id=>skillNames.get(id)||"Тема уточняется").join(" · ");
  const details=[names[status(l)]||status(l)];
  if(rec.actualDate)details.push("Проведено "+ruDate(rec.actualDate));
  if(rec.coverage)details.push("Охват: "+rec.coverage);
@@ -111,7 +111,7 @@ function todayItem(host,lesson,message,displayDate=null){
  host.replaceChildren();
  if(!lesson){const p=document.createElement("p");p.textContent=message;host.appendChild(p);return}
  const h=document.createElement("h3");const b=document.createElement("button");b.type="button";b.textContent=lesson.topic;b.addEventListener("click",()=>openLesson(lesson.id));h.appendChild(b);
- const dt=document.createElement("div");dt.className="date";dt.textContent=ruDate(displayDate||effectiveDate(lesson))+" · "+lesson.id;
+ const dt=document.createElement("div");dt.className="date";dt.textContent=ruDate(displayDate||effectiveDate(lesson))+" · занятие "+String(lesson.order).padStart(2,"0");
  const st=statusEl(status(lesson));
  host.append(dt,h,st);
 }
@@ -126,7 +126,15 @@ async function bootstrap(){
  try{
   const c=await readJson("../student-contract.json");
   if(c.version!==2||c.studentId!=="sofya_luzianina")throw new Error("Неверная версия Student Platform v2 или studentId");
-  [plan,state]=await Promise.all([readJson(safePath(c.planning.plan)),readJson(safePath(c.planning.state))]);
+  const [loadedPlan,loadedState,catalog]=await Promise.all([
+   readJson(safePath(c.planning.plan)),readJson(safePath(c.planning.state)),
+   readJson(safePath(c.competencies.catalog))
+  ]);
+  plan=loadedPlan;state=loadedState;
+  if(catalog.studentId!==c.studentId||!Array.isArray(catalog.groups))throw new Error("Несогласованный каталог");
+  skillNames=new Map(catalog.groups.flatMap(group=>group.items.map(item=>[item.id,item.title])));
+  if(plan.lessons.some(l=>l.targetCompetencies.some(id=>!skillNames.has(id))))
+   throw new Error("В КТП указана компетенция вне каталога");
   if(plan.studentId!==c.studentId||state.studentId!==c.studentId||plan.programVersion!==state.programVersion)throw new Error("Несогласованная версия КТП");
   if(!Array.isArray(plan.lessons)||!state.records||typeof state.records!=="object")throw new Error("Повреждённые данные КТП");
   if(new Set(plan.lessons.map(x=>x.id)).size!==plan.lessons.length)throw new Error("Дубли ID занятий");
@@ -141,7 +149,7 @@ async function bootstrap(){
  }catch(err){
   console.error("KTP loading failed",err);
   $("loadError").hidden=false;
-  $("loadError").textContent="Данные учебного плана временно недоступны. Повторите загрузку страницы. Техническая причина: "+err.message;
+  $("loadError").textContent="Учебный план временно недоступен. Обновите страницу или обратитесь к преподавателю.";
   $("months").textContent="Не удалось загрузить календарь.";
   $("stageList").textContent="Нет данных об этапах.";
   $("matchCount").textContent="—";

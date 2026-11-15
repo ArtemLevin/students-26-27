@@ -133,6 +133,8 @@ try{
  await run("document.querySelector('.lesson-btn').click()");
  assert.equal(await run("document.querySelector('#lessonDialog').open"),true);
  assert.ok((await run("document.querySelector('#detailContent').textContent")).length>20);
+ assert.ok((await run("document.querySelector('#detailSkills').textContent")).length>10);
+ assert.equal((await run("document.querySelector('#detailSkills').textContent")).includes('kinematics_'),false);
  await run("document.querySelector('#closeDialog').click()");
  assert.equal(await run("document.querySelector('#lessonDialog').open"),false);
  await run("document.querySelector('#clearFilters').click()");
