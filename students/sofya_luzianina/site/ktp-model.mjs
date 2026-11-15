@@ -1,6 +1,6 @@
 // Deterministic KTP view model. No DOM, storage or network dependencies.
 export function normalizeSearch(value){
- return String(value??'').normalize('NFKC').toLocaleLowerCase('ru')
+ return String(value??'').normalize('NFC').toLocaleLowerCase('ru')
   .replaceAll('ё','е').replace(/№\s*(\d+)/g,'№$1')
   .replace(/\s+/g,' ').trim();
 }
