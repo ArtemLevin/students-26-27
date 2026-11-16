@@ -29,3 +29,29 @@ test('Sofya lesson publication intent is valid and publisher accepts dry-run',()
 });
 
 
+
+
+test('canonical Sofya 16 November lesson publication has registry, KTP and evidence parity',()=>{
+  const dir=path.join(root,'students/sofya_luzianina/site');
+  const lesson=JSON.parse(fs.readFileSync(path.join(dir,'data/lessons/2026-11-16.lesson.json'),'utf8'));
+  const state=JSON.parse(fs.readFileSync(path.join(dir,'data/ktp-state.json'),'utf8'));
+  const registry=fs.readFileSync(path.join(dir,'lesson-registry.js'),'utf8');
+  const html=fs.readFileSync(path.join(dir,'16.11.26.html'),'utf8');
+  assert.equal(lesson.studentId,'sofya_luzianina');
+  assert.equal(lesson.date,'2026-11-16');
+  assert.equal(lesson.materials.html,'16.11.26.html');
+  assert.equal(lesson.materials.lab,'16.11.26-lab.html');
+  assert.deepEqual(lesson.ktpRefs,['ktp-002','ktp-003','ktp-004','ktp-005']);
+  for(const id of lesson.ktpRefs){
+    assert.equal(state.records[id].status,'in_progress',id);
+    assert.equal(state.records[id].coverage,'partial',id);
+    assert.deepEqual(state.records[id].lessonRefs,['2026-11-16'],id);
+  }
+  assert.equal(state.records['ktp-001'].status,'planned','Uncovered KTP must remain planned');
+  for(const outcome of lesson.outcomes){
+    assert.equal(outcome.masteryClaim,null,'No unverified mastery');
+    assert.equal(outcome.relation,'practiced');
+    assert.ok(html.includes('id="'+outcome.evidenceAnchor+'"'),'Missing evidence anchor');
+  }
+  assert.equal((registry.match(/"date": "2026-11-16"/g)||[]).length,1,'Lesson registry must contain exactly one dated entry');
+});
