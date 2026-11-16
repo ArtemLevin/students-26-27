@@ -15,7 +15,7 @@ h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:500}h1{font-siz
 .workbench{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(300px,.9fr);gap:1.7rem;align-items:start;border-top:1px solid var(--rule);padding-top:1.5rem}
 .stage{min-width:0}.stage-head{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1rem}.stage-head h2{margin:.2rem 0;font-size:1.8rem}.stage-head p{margin:0;color:var(--muted);font-size:.84rem}
 .viewport{background:var(--surface);border:1px solid var(--rule);overflow:hidden;position:relative}.viewport svg{display:block;width:100%;height:auto;aspect-ratio:800/475;touch-action:pan-y}
-.key{display:flex;gap:1.25rem;flex-wrap:wrap;font-size:.79rem;color:var(--muted);padding:.7rem 0;border-bottom:1px solid var(--rule)}.key i{display:inline-block;width:20px;height:3px;margin-right:.4rem;vertical-align:middle}.key .line1{background:var(--orange)}.key .line2{background:var(--accent)}.key .line3{background:var(--blue)}
+.key{display:flex;gap:1.25rem;flex-wrap:wrap;font-size:.79rem;color:var(--muted);padding:.7rem 0;border-bottom:1px solid var(--rule)}.key i{display:inline-block;width:20px;height:3px;margin-right:.4rem;vertical-align:middle}.key .line1{background:var(--orange)}.key .line2{background:var(--accent)}.key .line3{background:var(--blue)}.key .line4{background:var(--orange)}
 .timeline{margin:1rem 0}.timeline label{display:flex;justify-content:space-between;gap:1rem;font-size:.86rem;font-weight:600}.timeline input{width:100%;accent-color:var(--accent);height:35px}.controls{display:flex;flex-wrap:wrap;gap:.6rem}.controls button{background:var(--surface);border:1px solid var(--rule);padding:.7rem 1rem;min-height:44px;min-width:94px}.controls button.main{background:var(--accent);border-color:var(--accent);color:var(--surface)}
 .readings{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--rule);margin:1.3rem 0}.reading{padding:1rem .8rem 1rem 0;border-bottom:1px solid var(--rule)}.reading .val{font:400 clamp(1.25rem,2.5vw,2rem)/1.1 Georgia,serif;letter-spacing:-.03em}.reading .label{color:var(--muted);font-size:.7rem;letter-spacing:.03em}.reading strong{font-weight:500}
 .panel{border-left:1px solid var(--rule);padding-left:1.6rem;min-width:0}.panel h2{font-size:1.6rem;margin:.2rem 0 1rem}
@@ -58,11 +58,11 @@ svg text{font-family:system-ui,Arial,sans-serif;fill:var(--muted);font-size:14px
 <circle id="body" class="current" r="7" cx="55" cy="420"/>
 <text id="apexLabel" x="65" y="30">Вершина</text><text id="impactLabel" x="65" y="410">Падение</text>
 </svg></div>
-<div class="key"><span><i class="line1"></i>Траектория</span><span><i class="line2"></i>Скорость</span><span><i class="line3"></i>Горизонтальная проекция</span></div>
+<div class="key"><span><i class="line1"></i>Траектория</span><span><i class="line2"></i>Скорость</span><span><i class="line3"></i>Горизонтальная проекция</span><span><i class="line4"></i>Вертикальная проекция</span></div>
 <div class="timeline"><label for="time">Момент времени <output id="timeVal">0,00 с</output></label><input id="time" type="range" min="0" max="1" step="0.01" value="0" aria-label="Перемещение по времени полёта"></div>
 <div class="controls"><button class="main" type="button" id="play">Пуск</button><button type="button" id="back">Шаг назад</button><button type="button" id="forward">Шаг вперёд</button><button type="button" id="reset">Сбросить</button></div>
 <p class="status" id="status" aria-live="polite">Модель готова к исследованию.</p>
-<div class="readings" aria-label="Расчётные величины">
+<div class="readings" role="group" aria-label="Расчётные величины">
 <div class="reading"><div class="val"><output id="T">—</output></div><div class="label">Полное время полёта, с</div></div>
 <div class="reading"><div class="val"><output id="L">—</output></div><div class="label">Дальность, м</div></div>
 <div class="reading"><div class="val"><output id="Hmax">—</output></div><div class="label">Максимальная высота над землёй, м</div></div>
@@ -108,7 +108,7 @@ svg text{font-family:system-ui,Arial,sans-serif;fill:var(--muted);font-size:14px
    const Hmax=state.h+vy*topT-g*topT*topT/2;
    return {vx,vy,T,topT,Hmax,L:vx*T,vImpact:Math.hypot(vx,vy-g*T)};
  }
- const svgNS='http://www.w3.org/2000/svg';
+ const svgNS='http://www.w3.org/2000/svg';let previousGridKey='';
  function line(el,x1,y1,x2,y2){el.setAttribute('d','M'+point(x1,y1)+' L'+point(x2,y2));}
  function pos(m,t){return {x:m.vx*t,y:Math.max(0,state.h+m.vy*t-g*t*t/2),vx:m.vx,vy:m.vy-g*t};}
  function draw(){
@@ -137,11 +137,15 @@ svg text{font-family:system-ui,Arial,sans-serif;fill:var(--muted);font-size:14px
    line($('vyArrow'),p.x+ux,p.y,p.x+ux,p.y+uy);
    line($('vArrow'),p.x,p.y,p.x+ux,p.y+uy);
    // Draw a sparse scale grid from the same physical transform as the trajectory.
-   const grid=$('grid');while(grid.firstChild)grid.removeChild(grid.firstChild);
-   const step=Math.pow(10,Math.floor(Math.log10(Math.max(xMax,yMax)/4||1)));
-   const inc=Math.max(1,step);
-   for(let x=inc;x<xMax&&x*scale<=680;x+=inc){const s=document.createElementNS(svgNS,'path');s.setAttribute('d','M'+point(55+x*scale,35)+' L'+point(55+x*scale,420));s.setAttribute('class','grid');grid.appendChild(s);}
-   for(let y=inc;y<yMax&&y*scale<=353;y+=inc){const s=document.createElementNS(svgNS,'path');s.setAttribute('d','M'+point(55,420-y*scale)+' L'+point(755,420-y*scale));s.setAttribute('class','grid');grid.appendChild(s);}
+   const grid=$('grid');const gridKey=[xMax,yMax,scale].map(x=>x.toFixed(6)).join(':');
+   if(gridKey!==previousGridKey){previousGridKey=gridKey;while(grid.firstChild)grid.removeChild(grid.firstChild);
+   const niceStep=value=>{const rough=Math.max(.1,value/5),unit=Math.pow(10,Math.floor(Math.log10(rough)));return [1,2,5,10].map(n=>n*unit).find(n=>n>=rough)||10*unit;};
+   const addText=(x,y,value,anchor)=>{const n=document.createElementNS(svgNS,'text');n.setAttribute('x',String(x));n.setAttribute('y',String(y));n.setAttribute('text-anchor',anchor);n.textContent=fmt(value,Number.isInteger(value)?0:1);grid.appendChild(n);};
+   const addGrid=d=>{const p=document.createElementNS(svgNS,'path');p.setAttribute('d',d);p.setAttribute('class','grid');grid.appendChild(p);};
+   const stepX=niceStep(xMax),stepY=niceStep(yMax);
+   for(let i=1;i*stepX<xMax&&i<=20;i++){const x=i*stepX,p=55+x*scale;if(p>745)break;addGrid('M'+point(p,35)+' L'+point(p,420));addText(p,442,x,'middle');}
+   for(let i=1;i*stepY<yMax&&i<=20;i++){const y=i*stepY,p=420-y*scale;if(p<35)break;addGrid('M'+point(55,p)+' L'+point(755,p));addText(43,p+5,y,'end');}
+   }
    for(const [id,value] of [['T',m.T],['L',m.L],['Hmax',m.Hmax],['Vimpact',m.vImpact],['X',now.x],['Y',now.y],['Vx',now.vx],['Vy',now.vy]])$(id).textContent=fmt(value,2);
    $('timeVal').textContent=fmt(state.time,2)+' с';
    els.time.max=String(Math.max(.01,m.T));
@@ -164,7 +168,10 @@ svg text{font-family:system-ui,Arial,sans-serif;fill:var(--muted);font-size:14px
  $('back').addEventListener('click',()=>{pause();state.time=Math.max(0,state.time-.2);draw();});
  $('forward').addEventListener('click',()=>{pause();state.time=Math.min(mechanics().T,state.time+.2);draw();});
  $('reset').addEventListener('click',()=>selectScenario(config[els.scenario.value]?els.scenario.value:'horizontal'));
- $('theme').addEventListener('click',()=>{const dark=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=dark?'dark':'light';$('theme').textContent=dark?'Светлая тема':'Тёмная тема';$('theme').setAttribute('aria-pressed',String(dark));});
+ const themeKey='sofya-luzianina-atlas-theme';const themeButton=$('theme'),root=document.documentElement;
+ const paintTheme=()=>{const dark=root.dataset.theme==='dark';themeButton.textContent=dark?'Светлая тема':'Тёмная тема';themeButton.setAttribute('aria-pressed',String(dark));};
+ try{const saved=localStorage.getItem(themeKey);if(saved==='dark'||saved==='light')root.dataset.theme=saved;else if(window.matchMedia('(prefers-color-scheme: dark)').matches)root.dataset.theme='dark';}catch(_){}paintTheme();
+ themeButton.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem(themeKey,root.dataset.theme);}catch(_){}paintTheme();});
  const query=new URLSearchParams(location.search),mode=query.get('mode');selectScenario(config[mode]?mode:'horizontal');
  document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();draw();}});
 })();
