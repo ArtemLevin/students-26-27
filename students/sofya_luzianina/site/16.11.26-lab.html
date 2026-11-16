@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ru" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark">
+<meta name="description" content="Интерактивная лаборатория кинематики для Софьи Лузяниной: горизонтальный бросок, бросок под углом, траектория, время, дальность, высота и скорость.">
+<title>Лаборатория бросков · София Лузянина</title>
+<link rel="stylesheet" href="../../../design-system/tokens.css"><link rel="stylesheet" href="../../../design-system/foundations.css"><link rel="stylesheet" href="../../../design-system/archetypes.css"><link rel="stylesheet" href="../../../design-system/student-sites.css">
+<style>
+:root{color-scheme:light;--paper:#f4f0e9;--surface:#fefaf4;--ink:#24282e;--muted:#6a6c70;--rule:#cfcbc4;--accent:#783e4c;--orange:#af6749;--blue:#3c7289;--focus:#a37823;--grid:#ddd7ce}
+html[data-theme="dark"]{color-scheme:dark;--paper:#171c22;--surface:#232b33;--ink:#edece8;--muted:#b9c0c4;--rule:#4e5860;--accent:#e4a3b1;--orange:#e3a07f;--blue:#8bc3db;--focus:#f6cc73;--grid:#35414a}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.58 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:var(--accent);text-underline-offset:3px}button,input,select{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{position:absolute;top:-8rem;left:1rem;padding:.8rem;background:var(--surface);z-index:30}.skip:focus{top:.5rem}
+.wrap{width:min(1440px,calc(100% - 2rem));margin:auto}.bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;border-bottom:1px solid var(--rule);padding:.85rem 0}.bar a{text-decoration:none;font-size:.86rem;font-weight:700}.bar button{border:1px solid var(--rule);background:var(--surface);min-height:44px;padding:.5rem .8rem}
+.intro{display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:end;padding:2.6rem 0 2.1rem}.meta{color:var(--accent);font:700 .7rem ui-monospace,Consolas,monospace;letter-spacing:.13em;text-transform:uppercase}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:500}h1{font-size:clamp(2.6rem,5vw,5.4rem);line-height:1.02;letter-spacing:-.055em;margin:.6rem 0}.lead{max-width:56ch;color:var(--muted);margin:.4rem 0}.intro-note{border-left:2px solid var(--accent);padding-left:1rem;color:var(--muted);font-size:.87rem}
+.workbench{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(300px,.9fr);gap:1.7rem;align-items:start;border-top:1px solid var(--rule);padding-top:1.5rem}
+.stage{min-width:0}.stage-head{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1rem}.stage-head h2{margin:.2rem 0;font-size:1.8rem}.stage-head p{margin:0;color:var(--muted);font-size:.84rem}
+.viewport{background:var(--surface);border:1px solid var(--rule);overflow:hidden;position:relative}.viewport svg{display:block;width:100%;height:auto;aspect-ratio:800/475;touch-action:pan-y}
+.key{display:flex;gap:1.25rem;flex-wrap:wrap;font-size:.79rem;color:var(--muted);padding:.7rem 0;border-bottom:1px solid var(--rule)}.key i{display:inline-block;width:20px;height:3px;margin-right:.4rem;vertical-align:middle}.key .line1{background:var(--orange)}.key .line2{background:var(--accent)}.key .line3{background:var(--blue)}
+.timeline{margin:1rem 0}.timeline label{display:flex;justify-content:space-between;gap:1rem;font-size:.86rem;font-weight:600}.timeline input{width:100%;accent-color:var(--accent);height:35px}.controls{display:flex;flex-wrap:wrap;gap:.6rem}.controls button{background:var(--surface);border:1px solid var(--rule);padding:.7rem 1rem;min-height:44px;min-width:94px}.controls button.main{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.readings{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--rule);margin:1.3rem 0}.reading{padding:1rem .8rem 1rem 0;border-bottom:1px solid var(--rule)}.reading .val{font:400 clamp(1.25rem,2.5vw,2rem)/1.1 Georgia,serif;letter-spacing:-.03em}.reading .label{color:var(--muted);font-size:.7rem;letter-spacing:.03em}.reading strong{font-weight:500}
+.panel{border-left:1px solid var(--rule);padding-left:1.6rem;min-width:0}.panel h2{font-size:1.6rem;margin:.2rem 0 1rem}
+.panel select,.panel input[type=range]{width:100%}.panel select{border:1px solid var(--rule);background:var(--surface);padding:.7rem .6rem;min-height:44px}
+.field{padding:1.1rem 0;border-bottom:1px solid var(--rule)}.field label{display:flex;justify-content:space-between;gap:.6rem;font-size:.88rem;font-weight:600;margin-bottom:.65rem}.field input[type=range]{accent-color:var(--accent);height:32px}.field output{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:750}
+.mathline{background:var(--surface);border-left:2px solid var(--accent);margin:.9rem 0;overflow-x:auto;padding:.85rem .65rem}
+.mathline math{font-size:1.04rem;white-space:nowrap}
+.note{border-top:1px solid var(--rule);padding:1rem 0;margin-top:1.1rem;font-size:.87rem;color:var(--muted)}
+.note strong{color:var(--ink)}.status{color:var(--accent);font-weight:650;margin:.7rem 0;font-size:.85rem;min-height:1.4rem}
+.tasks{border-top:1px solid var(--rule);margin:2rem 0;padding:2rem 0}.tasks h2{font-size:2rem;margin:0 0 1rem}.tasks-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.4rem}.tasks article{border-top:2px solid var(--rule);padding:.9rem 0}.tasks .counter{color:var(--accent);font:700 .7rem ui-monospace,monospace}.tasks h3{font-size:1.1rem;margin:.5rem 0}.tasks p{font-size:.88rem;color:var(--muted);margin:0}
+.footer{border-top:1px solid var(--rule);padding:1.5rem 0 3rem;font-size:.84rem;color:var(--muted);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+svg text{font-family:system-ui,Arial,sans-serif;fill:var(--muted);font-size:14px}svg .axis{stroke:var(--ink);stroke-width:1.6}svg .ground{stroke:var(--ink);stroke-width:2}svg .grid{stroke:var(--grid);stroke-width:1;stroke-dasharray:3 7}svg .trajectory{stroke:var(--orange);stroke-width:3.4;stroke-linecap:round;fill:none}svg .current{fill:var(--accent);stroke:var(--surface);stroke-width:3}svg .vector{stroke:var(--accent);stroke-width:2.7;stroke-linecap:round}svg .vecx{stroke:var(--blue);stroke-width:2.7;stroke-linecap:round}svg .vecy{stroke:var(--orange);stroke-width:2.7;stroke-linecap:round}
+@media(max-width:1040px){.workbench{grid-template-columns:minmax(0,1fr) 315px}.readings{grid-template-columns:repeat(2,1fr)}}@media(max-width:790px){.intro{grid-template-columns:1fr;gap:.7rem}.workbench{grid-template-columns:1fr}.panel{border-left:0;border-top:1px solid var(--rule);padding:1rem 0}.tasks-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.wrap{width:calc(100% - 1.15rem)}h1{font-size:2.7rem}.tasks-grid{grid-template-columns:1fr}.reading .val{font-size:1.35rem}.bar{align-items:flex-start}.bar a{max-width:75%}.workbench{gap:1rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{.controls,.timeline,.panel select,.field input,.bar button{display:none!important}.workbench{grid-template-columns:1fr}.panel{border:none;padding:0}.tasks-grid{grid-template-columns:repeat(3,1fr)}}
+</style></head>
+<body data-atlas data-atlas-composition="cosmos" data-atlas-accent="burgundy" data-atlas-density="balanced" data-atlas-motion="calm">
+<a class="skip" href="#main">К лаборатории</a>
+<header class="wrap bar"><a href="16.11.26.html">← К уроку 16.11.26 · Кинематика</a><button id="theme" aria-pressed="false" type="button">Тёмная тема</button></header>
+<main class="wrap" id="main"><section class="intro"><div><p class="meta">Лаборатория · 16 ноября 2026</p><h1>Траектория<br>в ваших руках</h1><p class="lead">Изменяйте начальную скорость, угол и высоту. Сравнивайте траекторию с расчётом по двум осям.</p></div><p class="intro-note">Точная модель движения в однородном поле тяжести, без сопротивления воздуха. Горизонтальная и вертикальная составляющие рассчитываются независимо.</p></section>
+<div class="workbench"><section class="stage" aria-labelledby="stageTitle"><header class="stage-head"><div><p class="meta">01 / Координатная модель</p><h2 id="stageTitle">Положение и скорость</h2></div><p>Начало координат — на земле под стартом</p></header>
+<div class="viewport"><svg id="plot" viewBox="0 0 800 475" role="img" aria-labelledby="plotTitle plotDesc"><title id="plotTitle">Динамическая траектория тела</title><desc id="plotDesc">Траектория рассчитывается по выбранным скорости, углу и высоте. Фиолетовая точка показывает положение в выбранный момент времени, а стрелки показывают компоненты скорости.</desc>
+<defs>
+<marker id="headWine" viewBox="0 0 8 8" refX="6.3" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#a66347"/></marker>
+<marker id="headBlue" viewBox="0 0 8 8" refX="6.3" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#3c7289"/></marker>
+<marker id="headAccent" viewBox="0 0 8 8" refX="6.3" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#783e4c"/></marker>
+</defs>
+<g id="grid" aria-hidden="true"></g>
+<path class="ground" d="M55 420 H755" fill="none"/><path class="axis" d="M55 420 V24" fill="none"/>
+<text x="715" y="445">Дальность, м</text><text x="65" y="28">Высота, м</text><text x="38" y="446">0</text>
+<path id="trail" class="trajectory" d="M55 420" />
+<path id="topMark" stroke="currentColor" stroke-width="1.1" stroke-dasharray="5 6" opacity=".4"/>
+<circle id="origin" r="4" fill="var(--ink)" cx="55" cy="420"/>
+<circle id="apex" r="5" fill="var(--orange)" cx="55" cy="420"/>
+<circle id="impact" r="5" fill="var(--ink)" cx="55" cy="420"/>
+<path id="vxArrow" class="vecx" d="" marker-end="url(#headBlue)"/>
+<path id="vyArrow" class="vecy" d="" marker-end="url(#headWine)"/>
+<path id="vArrow" class="vector" d="" marker-end="url(#headAccent)"/>
+<circle id="body" class="current" r="7" cx="55" cy="420"/>
+<text id="apexLabel" x="65" y="30">Вершина</text><text id="impactLabel" x="65" y="410">Падение</text>
+</svg></div>
+<div class="key"><span><i class="line1"></i>Траектория</span><span><i class="line2"></i>Скорость</span><span><i class="line3"></i>Горизонтальная проекция</span></div>
+<div class="timeline"><label for="time">Момент времени <output id="timeVal">0,00 с</output></label><input id="time" type="range" min="0" max="1" step="0.01" value="0" aria-label="Перемещение по времени полёта"></div>
+<div class="controls"><button class="main" type="button" id="play">Пуск</button><button type="button" id="back">Шаг назад</button><button type="button" id="forward">Шаг вперёд</button><button type="button" id="reset">Сбросить</button></div>
+<p class="status" id="status" aria-live="polite">Модель готова к исследованию.</p>
+<div class="readings" aria-label="Расчётные величины">
+<div class="reading"><div class="val"><output id="T">—</output></div><div class="label">Полное время полёта, с</div></div>
+<div class="reading"><div class="val"><output id="L">—</output></div><div class="label">Дальность, м</div></div>
+<div class="reading"><div class="val"><output id="Hmax">—</output></div><div class="label">Максимальная высота над землёй, м</div></div>
+<div class="reading"><div class="val"><output id="Vimpact">—</output></div><div class="label">Скорость удара, м/с</div></div>
+<div class="reading"><div class="val"><output id="X">—</output></div><div class="label">Горизонтальная координата, м</div></div>
+<div class="reading"><div class="val"><output id="Y">—</output></div><div class="label">Вертикальная координата, м</div></div>
+<div class="reading"><div class="val"><output id="Vx">—</output></div><div class="label">Проекция скорости по горизонтали, м/с</div></div>
+<div class="reading"><div class="val"><output id="Vy">—</output></div><div class="label">Проекция скорости по вертикали, м/с</div></div>
+</div></section>
+<aside class="panel" aria-labelledby="controlsTitle"><p class="meta">02 / Изменить условия</p><h2 id="controlsTitle">Параметры</h2>
+<div class="field"><label for="scenario">Сценарий</label><select id="scenario"><option value="horizontal">Горизонтальный бросок</option><option value="angled">Бросок под углом с земли</option><option value="height">Бросок под углом с высоты</option><option value="custom">Исследовать самому</option></select></div>
+<div class="field"><label for="speed">Начальная скорость <output id="speedVal">15 м/с</output></label><input id="speed" type="range" min="5" max="35" step="1" value="15"></div>
+<div class="field"><label for="angle">Угол к горизонту <output id="angleVal">0°</output></label><input id="angle" type="range" min="0" max="75" step="1" value="0"></div>
+<div class="field"><label for="height">Начальная высота <output id="heightVal">20 м</output></label><input id="height" type="range" min="0" max="80" step="1" value="20"></div>
+<p class="note"><strong>Константа:</strong> ускорение свободного падения равно 10 м/с². Единицы — СИ.</p>
+<p class="meta">03 / Формулы на экране</p>
+<div class="mathline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>x</mi><mo>=</mo><msub><mi>v</mi><mrow><mn>0</mn><mi>x</mi></mrow></msub><mi>t</mi></math></div>
+<div class="mathline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>y</mi><mo>=</mo><mi>h</mi><mo>+</mo><msub><mi>v</mi><mrow><mn>0</mn><mi>y</mi></mrow></msub><mi>t</mi><mo>−</mo><mfrac><mrow><mi>g</mi><msup><mi>t</mi><mn>2</mn></msup></mrow><mn>2</mn></mfrac></math></div>
+<div class="mathline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><msub><mi>v</mi><mi>y</mi></msub><mo>=</mo><msub><mi>v</mi><mrow><mn>0</mn><mi>y</mi></mrow></msub><mo>−</mo><mi>g</mi><mi>t</mi></math></div>
+<p class="note">Начальные проекции рассчитываются по углу. В вершине траектории вертикальная скорость обращается в нуль; при падении высота обращается в нуль.</p>
+<p class="note" id="caseNote">Для горизонтального броска вертикальная начальная проекция скорости равна нулю.</p></aside></div>
+<section class="tasks" aria-labelledby="researchTitle"><p class="meta">04 / Микроисследования</p><h2 id="researchTitle">Что стоит проверить</h2><div class="tasks-grid">
+<article><p class="counter">01</p><h3>Выше старт — дальше полёт?</h3><p>Выберите горизонтальный бросок и увеличьте высоту. Сравните время и дальность при неизменной начальной скорости.</p></article>
+<article><p class="counter">02</p><h3>Дополняющие углы</h3><p>Выберите бросок с земли и сравните дальность для углов 30° и 60° при одной скорости. Объясните результат.</p></article>
+<article><p class="counter">03</p><h3>Разные уровни</h3><p>Начните бросок под углом с возвышения. Проверьте, сохраняется ли равенство времени спуска и времени подъёма.</p></article>
+</div></section>
+</main><footer class="wrap footer"><span>Лёвин Артём Александрович · Эксклюзивно для Софьи Лузяниной</span><a href="16.11.26.html#method">Вернуться к алгоритму решения задач</a></footer>
+<script>
+(function(){
+ 'use strict';
+ const g=10;
+ const config={horizontal:{v:15,a:0,h:20},angled:{v:20,a:45,h:0},height:{v:20,a:30,h:20}};
+ const $=id=>document.getElementById(id);
+ const els={speed:$('speed'),angle:$('angle'),height:$('height'),scenario:$('scenario'),time:$('time'),play:$('play'),status:$('status')};
+ const fmt=(x,d=1)=>Number.isFinite(x)?x.toFixed(d).replace('.',','):'—';
+ const point=(x,y)=>x.toFixed(2)+' '+y.toFixed(2);
+ let state={v:15,a:0,h:20,time:0},running=false,raf=0,previous=0;
+ function mechanics(){
+   const a=state.a*Math.PI/180,vx=state.v*Math.cos(a),vy=state.v*Math.sin(a);
+   const discriminant=Math.max(0,vy*vy+2*g*state.h);
+   const T=(vy+Math.sqrt(discriminant))/g;
+   const topT=Math.min(T,Math.max(0,vy/g));
+   const Hmax=state.h+vy*topT-g*topT*topT/2;
+   return {vx,vy,T,topT,Hmax,L:vx*T,vImpact:Math.hypot(vx,vy-g*T)};
+ }
+ const svgNS='http://www.w3.org/2000/svg';
+ function line(el,x1,y1,x2,y2){el.setAttribute('d','M'+point(x1,y1)+' L'+point(x2,y2));}
+ function pos(m,t){return {x:m.vx*t,y:Math.max(0,state.h+m.vy*t-g*t*t/2),vx:m.vx,vy:m.vy-g*t};}
+ function draw(){
+   const m=mechanics();state.time=Math.max(0,Math.min(state.time,m.T));
+   const now=pos(m,state.time);
+   const xMax=Math.max(4,m.L*1.12),yMax=Math.max(4,m.Hmax*1.13);
+   const scale=Math.min(680/xMax,353/yMax);
+   const pixel=p=>({x:55+p.x*scale,y:420-p.y*scale});
+   const ps=[];
+   const count=100;
+   for(let i=0;i<=count;i++){const t=m.T*i/count;const p=pixel(pos(m,t));ps.push((i===0?'M':'L')+point(p.x,p.y));}
+   $('trail').setAttribute('d',ps.join(' '));
+   const p=pixel(now),a=pixel(pos(m,m.topT)),b=pixel(pos(m,m.T)),c=pixel(pos(m,0));
+   $('origin').setAttribute('cx',String(c.x));$('origin').setAttribute('cy',String(c.y));
+   $('body').setAttribute('cx',String(p.x));$('body').setAttribute('cy',String(p.y));
+   $('apex').setAttribute('cx',String(a.x));$('apex').setAttribute('cy',String(a.y));
+   $('impact').setAttribute('cx',String(b.x));$('impact').setAttribute('cy',String(b.y));
+   line($('topMark'),a.x,a.y,a.x,420);
+   $('apexLabel').setAttribute('x',String(Math.max(67,Math.min(730,a.x+10))));
+   $('apexLabel').setAttribute('y',String(Math.max(25,a.y-12)));
+   $('impactLabel').setAttribute('x',String(Math.max(75,Math.min(710,b.x-62))));
+   $('impactLabel').setAttribute('y',String(Math.max(35,b.y-15)));
+   const vlen=Math.max(1,Math.hypot(now.vx,now.vy));
+   const ux=now.vx/vlen*70,uy=-now.vy/vlen*70;
+   line($('vxArrow'),p.x,p.y,p.x+ux,p.y);
+   line($('vyArrow'),p.x+ux,p.y,p.x+ux,p.y+uy);
+   line($('vArrow'),p.x,p.y,p.x+ux,p.y+uy);
+   // Draw a sparse scale grid from the same physical transform as the trajectory.
+   const grid=$('grid');while(grid.firstChild)grid.removeChild(grid.firstChild);
+   const step=Math.pow(10,Math.floor(Math.log10(Math.max(xMax,yMax)/4||1)));
+   const inc=Math.max(1,step);
+   for(let x=inc;x<xMax&&x*scale<=680;x+=inc){const s=document.createElementNS(svgNS,'path');s.setAttribute('d','M'+point(55+x*scale,35)+' L'+point(55+x*scale,420));s.setAttribute('class','grid');grid.appendChild(s);}
+   for(let y=inc;y<yMax&&y*scale<=353;y+=inc){const s=document.createElementNS(svgNS,'path');s.setAttribute('d','M'+point(55,420-y*scale)+' L'+point(755,420-y*scale));s.setAttribute('class','grid');grid.appendChild(s);}
+   for(const [id,value] of [['T',m.T],['L',m.L],['Hmax',m.Hmax],['Vimpact',m.vImpact],['X',now.x],['Y',now.y],['Vx',now.vx],['Vy',now.vy]])$(id).textContent=fmt(value,2);
+   $('timeVal').textContent=fmt(state.time,2)+' с';
+   els.time.max=String(Math.max(.01,m.T));
+   els.time.step=String(Math.max(.001,m.T/1000));
+   els.time.value=String(state.time);
+   $('speedVal').textContent=state.v+' м/с';$('angleVal').textContent=state.a+'°';$('heightVal').textContent=state.h+' м';
+   const basic=state.a===0;
+   $('caseNote').textContent=basic?'При горизонтальном броске начальная вертикальная скорость нулевая; вся вертикальная скорость возникает вследствие тяжести.':state.h===0?'Для возврата на начальный уровень время полёта равно удвоенному времени подъёма.':'При другом уровне приземления формулу удвоенного времени подъёма применять нельзя: вычислите время из вертикальной координаты.';
+   if(!running){if(m.T<.0001)els.status.textContent='Особый случай: тело стартует с земли горизонтально, время полёта равно нулю.';else if(Math.abs(state.time-m.T)<.0005)els.status.textContent='Момент падения: высота равна нулю.';else if(Math.abs(state.time-m.topT)<m.T/300&&state.a>0)els.status.textContent='Вершина траектории: вертикальная проекция скорости равна нулю.';else els.status.textContent='Меняйте параметры или перемещайте ползунок времени.';}
+ }
+ function pause(){if(running){running=false;cancelAnimationFrame(raf);raf=0;previous=0;els.play.textContent='Пуск';}}
+ function tick(now){if(!running)return;if(!previous)previous=now;state.time+=Math.min(.06,(now-previous)/1000);previous=now;const T=mechanics().T;if(state.time>=T){state.time=T;pause();}draw();if(running)raf=requestAnimationFrame(tick);}
+ function play(){const T=mechanics().T;if(running){pause();draw();return;}if(T<=0){draw();return;}if(state.time>=T)state.time=0;running=true;previous=0;els.play.textContent='Пауза';els.status.textContent='Модель движется. Для остановки нажмите «Пауза».';raf=requestAnimationFrame(tick);}
+ function refresh(){pause();state.time=0;draw();}
+ function selectScenario(name){const c=config[name];if(!c)return;els.scenario.value=name;state={v:c.v,a:c.a,h:c.h,time:0};els.speed.value=String(c.v);els.angle.value=String(c.a);els.height.value=String(c.h);refresh();}
+ els.scenario.addEventListener('change',()=>{const name=els.scenario.value;if(name==='custom'){pause();state.time=0;draw();}else selectScenario(name);});
+ for(const [key,el] of [['v',els.speed],['a',els.angle],['h',els.height]])el.addEventListener('input',()=>{state[key]=Number(el.value);els.scenario.value='custom';refresh();});
+ els.time.addEventListener('input',()=>{pause();state.time=Number(els.time.value);draw();});
+ els.play.addEventListener('click',play);
+ $('back').addEventListener('click',()=>{pause();state.time=Math.max(0,state.time-.2);draw();});
+ $('forward').addEventListener('click',()=>{pause();state.time=Math.min(mechanics().T,state.time+.2);draw();});
+ $('reset').addEventListener('click',()=>selectScenario(config[els.scenario.value]?els.scenario.value:'horizontal'));
+ $('theme').addEventListener('click',()=>{const dark=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=dark?'dark':'light';$('theme').textContent=dark?'Светлая тема':'Тёмная тема';$('theme').setAttribute('aria-pressed',String(dark));});
+ const query=new URLSearchParams(location.search),mode=query.get('mode');selectScenario(config[mode]?mode:'horizontal');
+ document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();draw();}});
+})();
+</script>
+</body></html>
