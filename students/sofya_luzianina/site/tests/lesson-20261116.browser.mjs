@@ -9,7 +9,7 @@ import {fileURLToPath} from 'node:url';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../../../');
 const site='/students/sofya_luzianina/site/';
-const chromium=['chromium','google-chrome','chromium-browser','google-chrome-stable']
+const chromium=['google-chrome','google-chrome-stable','chromium','chromium-browser']
   .map(name=>spawnSync('which',[name],{encoding:'utf8'}))
   .find(result=>result.status===0)?.stdout.trim();
 const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
