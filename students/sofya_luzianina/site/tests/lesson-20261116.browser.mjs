@@ -38,9 +38,15 @@ test('Sofya 16 November lesson and projectile lab: real Chromium release gate',{
   let ws;
   t.after(async()=>{
     try{ws?.close();}catch{}
-    try{chrome.kill('SIGTERM');}catch{}
+    if(chrome.exitCode===null){
+      try{chrome.kill('SIGTERM')}catch{}
+      await Promise.race([new Promise(resolve=>chrome.once('exit',resolve)),delay(2200)]);
+      if(chrome.exitCode===null){try{chrome.kill('SIGKILL')}catch{}}
+    }
     await new Promise(resolve=>server.close(resolve));
-    fs.rmSync(profile,{recursive:true,force:true});
+    try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:12,retryDelay:150})}catch(error){
+      if(!['ENOENT','ENOTEMPTY','EBUSY'].includes(error.code))throw error;
+    }
   });
   let debugPort=0;
   for(let i=0;i<160;i++){const file=path.join(profile,'DevToolsActivePort');if(fs.existsSync(file)){
