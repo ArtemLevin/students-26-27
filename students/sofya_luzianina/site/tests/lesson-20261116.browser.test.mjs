@@ -25,7 +25,11 @@ test('Sofya lesson publication intent is valid and publisher accepts dry-run',()
   assert.equal(plan.executable,true,'Publication plan must be executable');
   assert.deepEqual(plan.reviewItems,[],'Publication intent needs manual review');
   assert.deepEqual(plan.conflicts,[],'Publication has conflicts');
-  assert.ok(plan.changedFiles.some(p=>p.endsWith('2026-11-16.lesson.json')),'Expected canonical lesson metadata');
+  assert.ok(
+    plan.changedFiles.some(p=>p.endsWith('2026-11-16.lesson.json'))||
+      fs.existsSync(path.join(root,'students/sofya_luzianina/site/data/lessons/2026-11-16.lesson.json')),
+    'Publisher must either create or retain canonical metadata on repeat dry-run'
+  );
 });
 
 
