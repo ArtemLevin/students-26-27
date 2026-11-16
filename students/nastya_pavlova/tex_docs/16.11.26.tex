@@ -1,0 +1,356 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{icomma}
+\usepackage{geometry}
+\geometry{left=21mm,right=21mm,top=22mm,bottom=23mm,headheight=14pt}
+\usepackage{microtype}
+\usepackage{setspace}
+\setstretch{1.17}
+\usepackage{parskip}
+\setlength{\parindent}{0pt}
+\usepackage{xcolor}
+\definecolor{accent}{HTML}{087C83}
+\definecolor{darkaccent}{HTML}{07565B}
+\definecolor{softtext}{HTML}{343C40}
+\definecolor{rulegray}{HTML}{9DB7B8}
+\color{softtext}
+\usepackage{booktabs,tabularx}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.55em,topsep=2pt,itemsep=2pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.65em,topsep=3pt,itemsep=8pt,parsep=0pt}
+\usepackage{needspace}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{fancyhdr}
+\usepackage[unicode,pdfencoding=auto,colorlinks=true,linkcolor=darkaccent]{hyperref}
+\hypersetup{pdftitle={Чек-лист: комбинаторика и теория вероятностей},pdfauthor={Лёвин Артём Александрович}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Комбинаторика и теория вероятностей}
+\fancyhead[R]{\small Анастасия Павлова}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+\raggedbottom
+
+\newcommand{\topic}[1]{%
+ \Needspace{5\baselineskip}\par\vspace{0.75em}%
+ {\large\bfseries\color{darkaccent}#1}\par\vspace{0.35em}%
+ {\color{accent}\rule{\linewidth}{0.55pt}}\par\vspace{0.4em}%
+}
+\newcommand{\subtopic}[1]{\Needspace{3\baselineskip}\par\medskip{\bfseries\color{darkaccent}#1}\par\smallskip}
+\newcommand{\checkitem}{\item[$\square$]}
+\newcommand{\keyidea}[1]{\begin{center}\begin{minipage}{0.92\linewidth}\centering\color{darkaccent}\bfseries #1\end{minipage}\end{center}}
+\newcommand{\ex}[1]{\textcolor{darkaccent}{\bfseries Пример.} #1}
+\newcommand{\answer}[1]{\textcolor{darkaccent}{\bfseries Ответ:} #1}
+\newcommand{\smallnote}[1]{{\small #1}}
+
+\tikzset{
+ flowstart/.style={ellipse,draw=darkaccent,line width=.85pt,align=center,text width=5.8cm,minimum height=1cm,inner sep=5pt,font=\small},
+ flowact/.style={rectangle,rounded corners=2pt,draw=accent,line width=.85pt,align=center,text width=8.4cm,minimum height=1.02cm,inner sep=6pt,font=\small},
+ flowanswer/.style={rectangle,rounded corners=2pt,draw=accent,line width=.85pt,align=center,text width=5.0cm,minimum height=1.20cm,inner sep=6pt,font=\small},
+ flowdecision/.style={diamond,aspect=2.55,draw=darkaccent,line width=.85pt,align=center,text width=4.9cm,inner sep=1pt,font=\small},
+ flowarrow/.style={-{Latex[length=2.8mm,width=2mm]},line width=.8pt,draw=softtext}
+}
+
+\begin{document}
+\begin{titlepage}
+ \thispagestyle{empty}\centering
+ \vspace*{2.45cm}
+ {\large\color{darkaccent} МАТЕМАТИКА\par}
+ \vspace{1.6cm}
+ {\LARGE Чек-лист\par}
+ \vspace{1.05cm}
+ {\LARGE\color{accent} Комбинаторика\\[3pt] и теория вероятностей\par}
+ \vspace{1.15cm}
+ {\normalsize Подготовка к ЕГЭ по профильной математике\par}
+ \vfill
+ {\large Анастасия Павлова\par}
+ \vspace{0.75cm}
+ {\normalsize 16 ноября 2026 г.\par}
+ \vspace{1.30cm}
+ {\small Лёвин Артём Александрович\par}
+ {\small эксклюзивно для Анастасии Павловой\par}
+ \vspace{1.60cm}
+ \begin{tikzpicture}
+ \draw[accent,line width=1.05pt]
+ (-5.4,0) .. controls (-3.5,.68) and (-1.2,-.55) .. (0,0)
+ .. controls (1.45,.6) and (3.3,-.50) .. (5.4,0);
+ \end{tikzpicture}
+ \vspace{0.70cm}
+\end{titlepage}
+
+\topic{1. Главный вопрос комбинаторики}
+\keyidea{Прежде чем считать, определите: различаются ли исходы порядком выбранных элементов?}
+
+В задачах занятия использовался \textbf{метод позиций}: каждой позиции соответствует число допустимых кандидатов. При выборе \emph{без повторений} занятый элемент больше не доступен.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.32}
+\begin{tabularx}{\linewidth}{@{}p{.28\linewidth}X X@{}}
+\toprule
+Признак & Порядок важен & Порядок не важен \\
+\midrule
+Смысл & Расстановка по местам, разные должности, очередь & Выбор группы, пары карт, пары вершин \\
+Пример & «А затем Б» отличается от «Б затем А» & Пара \(\{\text{А},\text{Б}\}\) совпадает с \(\{\text{Б},\text{А}\}\) \\
+Подсчёт & Перемножаем число вариантов на позициях & Убираем повторный счёт перестановок \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\topic{2. Правило умножения и факториал}
+Если первое действие можно выполнить \(m\) способами, а после каждого такого выбора второе --- \(n\) способами, последовательность из двух действий имеет \(mn\) вариантов.
+
+\[
+ n!=n(n-1)(n-2)\cdots2\cdot1,\qquad 0!=1.
+\]
+
+\ex{Четверых детей рассаживают на четыре различимых стула. На первом месте есть 4 кандидата, на втором --- 3, далее 2 и 1:}
+\[
+4\cdot3\cdot2\cdot1=4!=\boxed{24}.
+\]
+
+\ex{Из 20 человек назначают старосту и заместителя. Должности различаются, поэтому}
+\[
+20\cdot19=\boxed{380}.
+\]
+
+\topic{3. Размещения: выбираем с учётом порядка}
+Если из \(n\) разных объектов нужно выбрать \(k\) объектов \textbf{без повторений}, и порядок важен, то
+\[
+\boxed{A_n^k=\frac{n!}{(n-k)!}=n(n-1)\cdots(n-k+1)},\qquad 0\le k\le n.
+\]
+\ex{Сколько четырёхбуквенных последовательностей можно составить из шести разных букв, не повторяя их?}
+\[
+6\cdot5\cdot4\cdot3=\boxed{360}.
+\]
+\ex{Из цифр 1, 2, 3, 4, 5 составляют пятизначные числа без повторений; последняя цифра --- 3. Она уже закреплена. Для остальных четырёх позиций:}
+\[
+4\cdot3\cdot2\cdot1=\boxed{24}.
+\]
+\smallnote{Если среди доступных цифр есть нуль, отдельно проверьте запрет ведущего нуля.}
+
+\topic{4. Сочетания: выбираем без учёта порядка}
+Если выбираем \(k\) объектов из \(n\) разных объектов без повторений, а результатом является \emph{неупорядоченная группа}, каждую группу в подсчёте размещений учли \(k!\) раз. Поэтому
+\[
+\boxed{C_n^k=\binom nk=\frac{n!}{k!(n-k)!}=\frac{A_n^k}{k!}}.
+\]
+\ex{Из десяти саженцев выбирают два:}
+\[
+ C_{10}^{2}=\frac{10\cdot9}{2!}=\boxed{45}.
+\]
+\ex{Из колоды в 36 карт одновременно выбирают две:}
+\[
+ C_{36}^{2}=\frac{36\cdot35}{2}=\boxed{630}.
+\]
+\ex{Из девяти разных предметов выбирают три:}
+\[
+ C_9^3=\frac{9\cdot8\cdot7}{3\cdot2\cdot1}=\boxed{84}.
+\]
+\textbf{Контроль смысла:} если поменять выбранные элементы местами, получится новый результат? Если да --- учитывайте порядок. Если нет --- обычно потребуется сочетание.
+
+\topic{5. Классическая вероятность}
+Если все \(N\) элементарных исходов \textbf{равновероятны}, а событию \(A\) благоприятствуют \(M\) исходов, то
+\[
+\boxed{P(A)=\frac{M}{N}},\qquad 0\le P(A)\le1.
+\]
+Нужно сначала точно определить, что считается одним исходом: \emph{упорядоченная последовательность, неупорядоченная пара, расстановка или набор результатов испытаний}. Числитель и знаменатель должны считать исходы \textbf{одного типа}.
+
+\ex{Случайно выбирают одну из цифр от 0 до 9. Вероятность получить чётную цифру:}
+\[
+ \text{подходят }0,2,4,6,8;\qquad P=\frac5{10}=\boxed{\frac12}.
+\]
+Нуль --- чётное число. Простые цифры --- \(2,3,5,7\); цифры 0 и 1 простыми не являются.
+
+\ex{Андрей, Борис и Владислав в случайном порядке становятся в очередь. Вероятность того, что Борис позже Андрея:}
+\[
+ N=3!=6,\quad M=3,\quad P=\frac36=\boxed{\frac12}.
+\]
+Благоприятные порядки: АБВ, АВБ, ВАБ. Также можно заметить симметрию: порядок А раньше Б и обратный порядок равновероятны.
+
+\topic{6. Как считать благоприятные случаи}
+\subtopic{В группе должен оказаться конкретный человек}
+\ex{Из пяти туристов случайно выбирают неупорядоченную пару. Какова вероятность того, что в неё войдёт турист А?}
+\[
+ N=C_5^2=10,\qquad M=4,\qquad P=\frac4{10}=\boxed{\frac25}.
+\]
+Четыре благоприятных случая --- А вместе с каждым из остальных четырёх туристов. Считать АБ и БА двумя разными парами нельзя.
+
+\subtopic{Возможности образуют пары пар}
+\ex{Четверых друзей А, Б, В, Г случайно делят на две неименованные пары. Какова вероятность, что А и Б окажутся вместе?}
+\[
+ \{\text{АБ}\mid\text{ВГ}\},\qquad
+ \{\text{АВ}\mid\text{БГ}\},\qquad
+ \{\text{АГ}\mid\text{БВ}\}.
+\]
+Всего три равновероятных разбиения, подходит одно:
+\[
+P=\boxed{\frac13}.
+\]
+\smallnote{Если комнаты различимы, количество вариантов подсчёта меняется; при равновероятном распределении по две персоны в каждую ответ для события «А и Б вместе» остаётся тем же.}
+
+\topic{7. Счёт через дополнение}
+Иногда проще посчитать противоположное событие:
+\[
+\boxed{P(A)=1-P(\overline A)}.
+\]
+\ex{Дважды независимо выбирают одну из цифр 1, 2, 3 с возвращением. Вероятность получить разные цифры:}
+\[
+ N=3\cdot3=9,\quad M_{\text{совпали}}=3,\quad
+ P(\text{разные})=\frac{9-3}{9}=\boxed{\frac23}.
+\]
+\smallnote{Здесь повторение разрешено и два выбора различаются по времени. Поэтому всего \(3^2\) \emph{упорядоченных} исходов.}
+
+\topic{8. Выбор вершин многоугольника}
+У выпуклого \(n\)-угольника каждая неупорядоченная пара различных вершин задаёт один отрезок. Из них \(n\) пар образуют стороны; остальные --- диагонали.
+\[
+\text{Всего пар }C_n^2=\frac{n(n-1)}2,\qquad
+\text{диагоналей }D=\frac{n(n-3)}2.
+\]
+Если две вершины выбираются равновероятно среди всех пар, то
+\[
+\boxed{P(\text{диагональ})=\frac{D}{C_n^2}=\frac{n-3}{n-1}}.
+\]
+\ex{Для квадрата \(P=2/6=1/3\). Для 20-угольника:}
+\[
+N=190,\quad D=190-20=170,\quad P=\frac{170}{190}=\boxed{\frac{17}{19}}.
+\]
+
+\topic{9. Ровно \(k\) успехов за \(n\) испытаний}
+Для \emph{независимых} испытаний с двумя \emph{равновероятными} результатами (например, честная монета) всего \(2^n\) исходов. Чтобы получить ровно \(k\) успехов, достаточно выбрать \(k\) номеров успешных испытаний:
+\[
+\boxed{P(\text{ровно }k\text{ успехов})=\frac{C_n^k}{2^n}}.
+\]
+\ex{При трёх подбрасываниях честной монеты ровно два орла встречаются в трёх исходах: ООР, ОРО, РОО, где Р --- решка. Поэтому}
+\[
+P=\frac{C_3^2}{2^3}=\boxed{\frac38}.
+\]
+\ex{При десяти подбрасываниях ровно два орла:}
+\[
+ M=C_{10}^2=45,\qquad N=2^{10}=1024,\qquad P=\boxed{\frac{45}{1024}}.
+\]
+\smallnote{Если успех и неуспех имеют различные вероятности, формула \(C_n^k/2^n\) уже неприменима.}
+
+\topic{10. Как выбрать способ решения}
+\begin{itemize}
+ \item \textbf{Метод позиций} --- когда важна последовательность действий или назначение на разные места.
+ \item \textbf{Сочетания} --- когда нужно выбрать группу без внутреннего порядка.
+ \item \textbf{Полный перебор / таблица} --- если вариантов немного и их удобно выписать без пропусков.
+ \item \textbf{Дополнение} --- если легче найти запрещённые или противоположные исходы.
+ \item \textbf{Симметрия} --- когда исходы естественно разбиваются на равновероятные парные случаи.
+\end{itemize}
+
+\subtopic{Типичные ошибки}
+\begin{itemize}
+ \item Дважды считать АБ и БА при выборе неупорядоченной пары.
+ \item Делить на \(k!\) при распределении по различным должностям.
+ \item Применять \(M/N\), не проверив равновероятность элементарных исходов.
+ \item Смешивать в числителе неупорядоченные пары, а в знаменателе --- упорядоченные.
+ \item Забывать, разрешены ли повторения и можно ли ставить нуль первой цифрой.
+ \item Путать «ровно два успеха» с «не менее двух успехов».
+\end{itemize}
+
+\subtopic{Проверьте себя}
+\begin{itemize}[label=$\square$,itemsep=2pt]
+ \item Могу объяснить, когда порядок важен и почему.
+ \item Умею отличить размещения от сочетаний.
+ \item Определяю элементарный исход прежде, чем считать вероятность.
+ \item Могу посчитать выбор неупорядоченной пары и число диагоналей.
+ \item Нахожу число исходов с заданным количеством успехов.
+ \item Проверяю, что сумма вероятностей всех элементарных исходов равна единице.
+\end{itemize}
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\Large\bfseries\color{darkaccent}Алгоритм: комбинаторика в задачах на вероятность}
+\end{center}
+\vspace{0.65cm}
+\begin{center}
+\begin{tikzpicture}[node distance=8mm]
+\node[flowstart] (start) {Определите, что является одним элементарным исходом};
+\node[flowact,below=of start] (test) {Продолжайте только при равновероятных исходах. В ветвях ниже выбор без повторений};
+\node[flowdecision,below=10mm of test] (order) {Важен порядок выбранных элементов?};
+\node[flowanswer,below left=17mm and 5mm of order] (yes) {\textbf{Да}\par Число исходов: правило умножения или размещения \(A_n^k\)};
+\node[flowanswer,below right=17mm and 5mm of order] (no) {\textbf{Нет}\par Число исходов: сочетания \(C_n^k=A_n^k/k!\)};
+\node[flowact,below=36mm of order] (count) {По одному принципу подсчитайте общее число \(N\) и благоприятное число \(M\)};
+\node[flowact,below=of count] (result) {Вычислите \(P=M/N\). Проверьте, что \(0\le P\le1\), и оцените смысл ответа};
+\draw[flowarrow] (start)--(test);
+\draw[flowarrow] (test)--(order);
+\draw[flowarrow] (order.south west)--node[left,font=\small,pos=.45]{да}(yes.north);
+\draw[flowarrow] (order.south east)--node[right,font=\small,pos=.45]{нет}(no.north);
+\draw[flowarrow] (yes.south) |- (count.west);
+\draw[flowarrow] (no.south) |- (count.east);
+\draw[flowarrow] (count)--(result);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\topic{Тренировочный блок}
+\textbf{Путь А: 10 заданий от простого к сложному.} Сначала решите задания самостоятельно. В ответе сохраняйте дробь или точное целое число; округление не требуется.
+
+\subtopic{Базовый уровень}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+\item Пятерых друзей рассаживают на пять пронумерованных стульев. Сколькими способами это можно сделать?
+\item Из цифр 1, 2, 3, 4, 5, 6 составляют четырёхзначные числа без повторений. Последняя цифра --- 2. Сколько таких чисел существует?
+\item Из 18 участников выбирают председателя и секретаря. Сколькими способами можно назначить этих двух людей?
+\end{enumerate}
+
+\subtopic{Средний уровень}
+\begin{enumerate}[label=\textbf{\arabic*.},start=4]
+\item Из восьми разных открыток выбирают три в подарок. Порядок не важен. Сколькими способами можно сделать выбор?
+\item Из колоды в 32 различные карты одновременно выбирают две. Сколько существует неупорядоченных пар карт?
+\item Случайно и равновероятно выбирают одну цифру от 0 до 9. Какова вероятность выбрать простую цифру?
+\item Из шести туристов выбирают двух для дежурства. Какова вероятность того, что выбранная пара будет содержать туриста А?
+\end{enumerate}
+
+\subtopic{Повышенный уровень}
+\begin{enumerate}[label=\textbf{\arabic*.},start=8]
+\item У выпуклого восьмиугольника равновероятно выбирают две различные вершины. Какова вероятность, что соединяющий их отрезок --- диагональ?
+\item Четверых друзей А, Б, В, Г случайно разбивают на две неименованные пары; все разбиения равновероятны. Какова вероятность, что А и Б окажутся в одной паре?
+\item Честную монету подбрасывают 10 раз независимо. Какова вероятность, что орёл выпадет ровно два раза?
+\end{enumerate}
+
+\clearpage
+\topic{Ответы к тренировочному блоку}
+\vspace{0.35cm}
+\begin{center}
+\renewcommand{\arraystretch}{1.55}
+\begin{tabularx}{.86\linewidth}{@{}p{.12\linewidth}X@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & \(120\) \\
+2 & \(60\) \\
+3 & \(306\) \\
+4 & \(56\) \\
+5 & \(496\) \\
+6 & \(\dfrac25\) \\
+7 & \(\dfrac13\) \\
+8 & \(\dfrac57\) \\
+9 & \(\dfrac13\) \\
+10 & \(\dfrac{45}{1024}\) \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\topic{Итоговая памятка}
+\begin{center}
+\renewcommand{\arraystretch}{1.38}
+\begin{tabularx}{\linewidth}{@{}p{.33\linewidth}X@{}}
+\toprule
+Сигнал в задаче & Полезное действие \\
+\midrule
+«Рассадить, назначить роли, очередь» & Учтите порядок; примените правило умножения. \\
+«Выбрать группу, пару, набор» & Используйте сочетания, если повторения исключены. \\
+«Вероятность события» & Определите равновероятные исходы и найдите \(M/N\). \\
+«Хотя бы один», «разные» & Проверьте возможность посчитать через дополнение. \\
+«Диагональ многоугольника» & Все пары вершин минус соседние пары. \\
+«Ровно \(k\) успехов» & Выберите номера успешных испытаний; проверьте независимость и вероятности. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\end{document}
