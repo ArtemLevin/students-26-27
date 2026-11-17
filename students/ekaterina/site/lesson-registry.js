@@ -4,6 +4,86 @@ export const ARCHIVE_PAGE_SIZE=10;
 const MONTHS_GENITIVE=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
 export const LESSONS=[
+{
+  "date": "2026-11-17",
+  "ktpRefs": [],
+  "href": "17.11.26.html",
+  "title": "Равные части. Точные корни.",
+  "navTitle": "Равные части. Точные корни.",
+  "navSubtitle": "Екатерина Скелли · 17 ноября 2026 · геометрия прямоугольника, ромба и квадрата; свойства квадратных корней, разложение на множители. Чек-лист и 10 заданий.",
+  "summary": "Екатерина Скелли · 17 ноября 2026 · геометрия прямоугольника, ромба и квадрата; свойства квадратных корней, разложение на множители. Чек-лист и 10 заданий.",
+  "topics": [
+    "диагонали прямоугольника и равнобедренные треугольники",
+    "биссектриса прямого угла и периметр",
+    "диагонали и высота ромба",
+    "квадрат с равносторонним треугольником",
+    "арифметический квадратный корень",
+    "корни из произведения и частного",
+    "разложение подкоренного выражения на множители"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "foundation_02",
+      "evidenceAnchor": "rectangle",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "foundation_06",
+      "evidenceAnchor": "rectangle",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "foundation_08",
+      "evidenceAnchor": "rectangle",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "geo_quads_07",
+      "evidenceAnchor": "rectangle",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "geo_quads_08",
+      "evidenceAnchor": "rhombus",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "geo_quads_09",
+      "evidenceAnchor": "square",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_roots_01",
+      "evidenceAnchor": "roots",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "alg_roots_02",
+      "evidenceAnchor": "roots",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "alg_roots_06",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_roots_07",
+      "evidenceAnchor": "roots",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "alg_roots_08",
+      "evidenceAnchor": "factors",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "17.11.26.html",
+    "pdf": "../pdf_docs/17.11.26.pdf",
+    "tex": "../tex_docs/17.11.26.tex"
+  }
+},
   {
     "date": "2026-11-13",
     "ktpRefs": [],
