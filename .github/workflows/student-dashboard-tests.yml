@@ -226,6 +226,8 @@ jobs:
             test: node students/timofey/site/tests/dashboard-regression.mjs
           - student: volodia_khachaturian
             test: node students/volodia_khachaturian/site/tests/dashboard-regression.mjs
+          - student: volodia_khachaturian_math
+            test: node --test students/volodia_khachaturian_math/site/tests/*.test.mjs
           - student: xenia_klykova
             test: node students/xenia_klykova/site/tests/dashboard-regression.mjs
           - student: xenia_vasilchenko
@@ -274,6 +276,11 @@ jobs:
           echo 'BEGIN_XENIA_REGISTRY'
           cat students/xenia_vasilchenko/site/lesson-registry.js
           echo 'END_XENIA_REGISTRY'
+      - name: Verify Volodia November 17 publication plan
+        if: matrix.student == 'volodia_khachaturian_math'
+        run: |
+          node scripts/publish-lesson.mjs volodia_khachaturian_math 17.11.26 --intent students/volodia_khachaturian_math/site/data/lesson-publication-intents/2026-11-17.json --dry-run
+          node scripts/student.mjs validate volodia_khachaturian_math
       - name: Run regression suite
         run: ${{ matrix.test }}
       - name: Browser QA for Daniil 23 October lesson
