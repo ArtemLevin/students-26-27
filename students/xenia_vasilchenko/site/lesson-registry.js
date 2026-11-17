@@ -5,6 +5,85 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-17",
+  "ktpRefs": [],
+  "href": "17.11.26.html",
+  "title": "Отношения, доли и пропорции",
+  "navTitle": "Отношения, доли и пропорции",
+  "navSubtitle": "Часть от целого, отношение A к B, единицы измерения, пропорции, сравнение долей и проценты. Путь А: 10 задач.",
+  "summary": "17 ноября: правильный числитель и знаменатель отношения, перевод единиц, остаток целого, сохранение пропорций, сравнение долей, проценты от группы; 10 заданий по пути А.",
+  "topics": [
+    "Часть от целого и отношение величин",
+    "Выбор знаменателя и перевод единиц",
+    "Оставшаяся доля и сохранение пропорций",
+    "Сравнение долей и проценты от заданной группы"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "frac_base_01",
+      "evidenceAnchor": "meaning",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "frac_base_11",
+      "evidenceAnchor": "denominator",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_base_15",
+      "evidenceAnchor": "comparison",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_11",
+      "evidenceAnchor": "remaining",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_16",
+      "evidenceAnchor": "remaining",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dec_04",
+      "evidenceAnchor": "percent",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "units_02",
+      "evidenceAnchor": "units",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "units_07",
+      "evidenceAnchor": "units",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_02",
+      "evidenceAnchor": "algorithm",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_16",
+      "evidenceAnchor": "algorithm",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "word_17",
+      "evidenceAnchor": "denominator",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "17.11.26.html",
+    "pdf": "../pdf_docs/17.11.26.pdf",
+    "tex": "../tex_docs/17.11.26.tex",
+    "lab": "17.11.26-lab.html"
+  }
+},
+
+{
   "date": "2026-11-12",
   "ktpRefs": [],
   "href": "12.11.26.html",
