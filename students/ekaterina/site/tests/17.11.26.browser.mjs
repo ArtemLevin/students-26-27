@@ -108,15 +108,15 @@ try{
   // Native keyboard activation must work for interactive controls.
   const beforeTheme=await evaluate('document.documentElement.dataset.theme');
   await evaluate('document.getElementById("themeButton").focus()');
-  await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
-  await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+  await call('Input.dispatchKeyEvent',{type:'keyDown',key:' ',code:'Space',windowsVirtualKeyCode:32,nativeVirtualKeyCode:32});
+  await call('Input.dispatchKeyEvent',{type:'keyUp',key:' ',code:'Space',windowsVirtualKeyCode:32,nativeVirtualKeyCode:32});
   const afterTheme=await evaluate('document.documentElement.dataset.theme');
-  assert.notEqual(afterTheme,beforeTheme,'Keyboard Enter must activate theme button');
+  assert.notEqual(afterTheme,beforeTheme,'Keyboard Space must activate theme button');
   await evaluate('document.querySelector("#additional-k summary").focus()');
   const beforeDetail=await evaluate('document.getElementById("additional-k").open');
-  await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
-  await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
-  assert.notEqual(await evaluate('document.getElementById("additional-k").open'),beforeDetail,'Keyboard Enter must toggle details');
+  await call('Input.dispatchKeyEvent',{type:'keyDown',key:' ',code:'Space',windowsVirtualKeyCode:32,nativeVirtualKeyCode:32});
+  await call('Input.dispatchKeyEvent',{type:'keyUp',key:' ',code:'Space',windowsVirtualKeyCode:32,nativeVirtualKeyCode:32});
+  assert.notEqual(await evaluate('document.getElementById("additional-k").open'),beforeDetail,'Keyboard Space must toggle details');
     await evaluate('(()=>{document.querySelector("#additional-k").open=true;document.querySelector("#factors .worked").open=true;})()');
   assert.ok(await evaluate('document.querySelector("#additional-k").textContent.includes("88°")'),'Missing supplementary source example');
   await call('Emulation.setEmulatedMedia',{media:'print'});
