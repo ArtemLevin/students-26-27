@@ -1,0 +1,40 @@
+name: Ekaterina November 17 lesson release review
+on:
+  pull_request:
+    paths:
+      - 'students/ekaterina/site/17.11.26.html'
+      - 'students/ekaterina/site/lesson-registry.js'
+      - 'students/ekaterina/site/index.html'
+      - 'students/ekaterina/site/data/lessons/2026-11-17.*.json'
+      - 'students/ekaterina/site/tests/17.11.26.review.test.mjs'
+      - 'students/ekaterina/tex_docs/17.11.26.tex'
+      - '.github/workflows/ekaterina-171126-review.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'students/ekaterina/site/17.11.26.html'
+      - 'students/ekaterina/site/tests/17.11.26.review.test.mjs'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  release-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate student v2
+        run: node scripts/student.mjs validate ekaterina
+      - name: Verify test syntax
+        run: node --check students/ekaterina/site/tests/17.11.26.review.test.mjs
+      - name: Run source, evidence and mathematical QA
+        run: node --test students/ekaterina/site/tests/17.11.26.review.test.mjs
+      - name: Validate publication idempotence
+        run: |
+          node scripts/publish-lesson.mjs ekaterina 17.11.26 \
+            --intent students/ekaterina/site/data/lessons/2026-11-17.intent.json \
+            --dry-run > /tmp/ekaterina-171126-plan.json
+          node -e 'const p=require("/tmp/ekaterina-171126-plan.json"); if(!p.executable) {console.error(p);process.exit(1)} console.log("Publication plan executable; changed files:",p.changedFiles)'
