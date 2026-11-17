@@ -8,7 +8,7 @@ import {fileURLToPath} from 'node:url';
 import {getLatestLesson,LESSONS} from '../lesson-registry.js';
 
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../../..');
-const chrome=['chromium','google-chrome','google-chrome-stable','chromium-browser']
+const chrome=['google-chrome','google-chrome-stable','chromium','chromium-browser']
   .map(binary=>spawnSync('which',[binary],{encoding:'utf8'})).find(result=>result.status===0)?.stdout.trim();
 assert.ok(chrome,'Chromium executable is required');
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8',
@@ -30,9 +30,11 @@ const base='http://127.0.0.1:'+server.address().port+'/students/ekaterina/site/'
 const profile=fs.mkdtempSync(path.join(os.tmpdir(),'ekaterina-171126-review-'));
 const shots=path.join(ROOT,'ekaterina-171126-review-artifacts');
 fs.mkdirSync(shots,{recursive:true});
+let chromiumStderr='';
 const child=spawn(chrome,['--headless=new','--no-sandbox','--disable-dev-shm-usage',
   '--disable-gpu','--no-first-run','--disable-background-networking','--remote-debugging-port=0',
-  '--user-data-dir='+profile,'about:blank'],{stdio:'ignore'});
+  '--user-data-dir='+profile,'about:blank'],{stdio:['ignore','ignore','pipe']});
+child.stderr.on('data',chunk=>{chromiumStderr+=chunk.toString().slice(0,1200)});
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 let ws;const pending=new Map();let seq=0;
 const errors=[],networkFailures=[];
@@ -43,7 +45,7 @@ try{
     if(fs.existsSync(file)){port=Number(fs.readFileSync(file,'utf8').split('\n')[0]);break;}
     assert.equal(child.exitCode,null,'Chromium exited during startup');await sleep(100);
   }
-  assert.ok(port,'Chromium debugger did not start');
+  assert.ok(port,'Chromium debugger did not start: '+chrome+' '+chromiumStderr.slice(-800));
   const targets=await(await fetch('http://127.0.0.1:'+port+'/json/list')).json();
   const tab=targets.find(t=>t.type==='page');assert.ok(tab);
   ws=new WebSocket(tab.webSocketDebuggerUrl);
