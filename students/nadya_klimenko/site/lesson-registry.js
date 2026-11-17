@@ -5,6 +5,81 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+    "date": "2026-11-17",
+    "ktpRefs": [],
+    "href": "17.11.26.html",
+    "title": "Отношения, доли и проценты",
+    "navTitle": "Отношения, доли и проценты",
+    "navSubtitle": "Часть и целое · растворы · процентный прирост",
+    "summary": "Надя Клименко, 17.11.26. Отношение части к целому, сравнение долей успешных попыток, масштаб отношений, процентное содержание раствора и относительный прирост. Путь А: 10 заданий, интерактивные сравнения и разбавление рассола.",
+    "topics": [
+      "отношение величин и сокращение отношения",
+      "доля как отношение части к целому",
+      "сравнение долей при разных общих количествах",
+      "моделирование частей через x",
+      "процент как сотая часть и процентное отношение",
+      "массовая доля соли в растворе",
+      "процентный прирост относительно исходного значения"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "ratio_01",
+        "evidenceAnchor": "ratio",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ratio_02",
+        "evidenceAnchor": "ratio",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "frac_15",
+        "evidenceAnchor": "share",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ratio_10",
+        "evidenceAnchor": "percent",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "ratio_13",
+        "evidenceAnchor": "percent",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "ratio_14",
+        "evidenceAnchor": "solution",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "model_04",
+        "evidenceAnchor": "growth",
+        "relation": "touched"
+      },
+      {
+        "competencyId": "model_12",
+        "evidenceAnchor": "parts",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "model_13",
+        "evidenceAnchor": "ratio",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "model_14",
+        "evidenceAnchor": "growth",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "17.11.26.html",
+      "pdf": "../pdf_docs/17.11.26.pdf",
+      "tex": "../tex_docs/17.11.26.tex"
+    }
+  },
+  {
     "date": "2026-11-14",
     "ktpRefs": [],
     "href": "14.11.26.html",
