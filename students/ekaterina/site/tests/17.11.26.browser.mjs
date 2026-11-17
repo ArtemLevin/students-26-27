@@ -105,12 +105,25 @@ try{
   assert.equal(await evaluate('document.getElementById("progressStatus").textContent'),'Отмечено: 2 из 10');
   await call('Page.reload',{ignoreCache:true});await wait('document.readyState==="complete"');
   assert.equal(await evaluate('[...document.querySelectorAll("input[data-exercise]")].filter(x=>x.checked).length'),2,'Progress did not persist');
-  await evaluate('(()=>{document.querySelector("#additional-k").open=true;document.querySelector("#factors .worked").open=true;})()');
+  // Native keyboard activation must work for interactive controls.
+  const beforeTheme=await evaluate('document.documentElement.dataset.theme');
+  await evaluate('document.getElementById("themeButton").focus()');
+  await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+  await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+  const afterTheme=await evaluate('document.documentElement.dataset.theme');
+  assert.notEqual(afterTheme,beforeTheme,'Keyboard Enter must activate theme button');
+  await evaluate('document.querySelector("#additional-k summary").focus()');
+  const beforeDetail=await evaluate('document.getElementById("additional-k").open');
+  await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+  await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+  assert.notEqual(await evaluate('document.getElementById("additional-k").open'),beforeDetail,'Keyboard Enter must toggle details');
+    await evaluate('(()=>{document.querySelector("#additional-k").open=true;document.querySelector("#factors .worked").open=true;})()');
   assert.ok(await evaluate('document.querySelector("#additional-k").textContent.includes("88°")'),'Missing supplementary source example');
   await call('Emulation.setEmulatedMedia',{media:'print'});
-  const printable=await evaluate('(()=>({nav:getComputedStyle(document.querySelector(".top nav")).display,actions:getComputedStyle(document.querySelector(".actions")).display,background:getComputedStyle(document.body).backgroundColor,figure:document.querySelector("#square .figure").getBoundingClientRect().height}))()');
+  const printable=await evaluate('(()=>({nav:getComputedStyle(document.querySelector(".top nav")).display,actions:getComputedStyle(document.querySelector(".actions")).display,background:getComputedStyle(document.body).backgroundColor,figure:document.querySelector("#square .figure").getBoundingClientRect().height,closedExplanation:document.querySelector("#roots .worked:not([open]) .workbody")?.getBoundingClientRect().height||0}))()');
   assert.equal(printable.nav,'none');assert.equal(printable.actions,'none');
   assert.ok(printable.figure>50,'Print must retain diagrams');
+  assert.ok(printable.closedExplanation>0,'Print must include explanations from collapsed details');
   await call('Emulation.setEmulatedMedia',{media:'screen'});
   await navigate('index.html',390,844);
   await wait('document.querySelector(".material-card time")?.getAttribute("datetime")==="2026-11-17"');
