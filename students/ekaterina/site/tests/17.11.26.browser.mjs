@@ -77,8 +77,8 @@ try{
     await wait('document.readyState==="complete"&&location.pathname.endsWith('+JSON.stringify(file)+')');
     await sleep(70);
   };
-  const screenshot=async label=>{
-    const png=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
+  const screenshot=async(label,full=false)=>{
+    const png=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:full});
     fs.writeFileSync(path.join(shots,label+'.png'),Buffer.from(png.data,'base64'));
   };
   await call('Page.enable');await call('Runtime.enable');await call('Network.enable');
@@ -97,7 +97,7 @@ try{
       assert.equal(inspection.invalidMath,0);assert.equal(inspection.hiddenMath,0);
       assert.equal(inspection.figures,4);assert.equal(inspection.accessible,true);
       assert.equal(inspection.missingAnchors,0);
-      if(width===390||width===1440)await screenshot('lesson-'+width+(dark?'-dark':'-light'));
+      if(width===390||width===1440){await screenshot('lesson-'+width+(dark?'-dark':'-light'));if(!dark)await screenshot('lesson-'+width+'-full',true);}
     }
   }
   await navigate('17.11.26.html',390,844);
