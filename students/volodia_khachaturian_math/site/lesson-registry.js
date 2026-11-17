@@ -1,5 +1,84 @@
 export const LESSONS=[
   {
+    "date": "2026-11-17",
+    "ktpRefs": [],
+    "href": "17.11.26.html",
+    "title": "Уравнения, неравенства и формулы",
+    "navTitle": "Уравнения, неравенства и формулы",
+    "navSubtitle": "Алгебра Володи Хачатуряна, 17 ноября 2026: десятичные дроби, уравнения, неравенства и системы, разность квадратов и квадрат разности; 10 заданий с ответами.",
+    "summary": "Алгебра Володи Хачатуряна, 17 ноября 2026: десятичные дроби, уравнения, неравенства и системы, разность квадратов и квадрат разности; 10 заданий с ответами.",
+    "topics": [
+      "Деление десятичных дробей и обратные действия",
+      "Линейные и квадратные уравнения",
+      "Вынесение общего множителя",
+      "Линейные неравенства и числовая прямая",
+      "Системы неравенств и пересечение решений",
+      "Разность квадратов и квадрат разности"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "oge_6_2_1",
+        "evidenceAnchor": "fractions",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_9_1_1",
+        "evidenceAnchor": "linear",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_9_1_3",
+        "evidenceAnchor": "linear",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_9_2_2",
+        "evidenceAnchor": "factoring",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_9_2_3",
+        "evidenceAnchor": "quadratic",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_8_3_2",
+        "evidenceAnchor": "identities",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_13_1_1",
+        "evidenceAnchor": "inequalities",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_13_1_2",
+        "evidenceAnchor": "inequalities",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_13_1_3",
+        "evidenceAnchor": "inequalities",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_13_1_4",
+        "evidenceAnchor": "inequalities",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "oge_13_3_1",
+        "evidenceAnchor": "systems",
+        "relation": "practiced"
+      }
+    ],
+    "materials": {
+      "html": "17.11.26.html",
+      "pdf": "../pdf_docs/17.11.26.pdf",
+      "tex": "../tex_docs/17.11.26.tex"
+    }
+  },
+  {
     "date": "2026-11-02",
     "ktpRefs": [],
     "href": "02.11.26.html",
