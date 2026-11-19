@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория по физике: исследование двух тел, связанных идеальной нитью через блок, на наклонной плоскости.">
+<title>Лаборатория связанных тел — Володя Хачатурян · 19.11.26</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="12.11.26.css">
+<style>
+.lab-head{padding-block:47px 27px}.lab-head h1{font-size:clamp(39px,5vw,66px);max-width:1100px}.lab-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);gap:24px;align-items:start;padding-bottom:50px}
+.instrument{background:var(--paper);border:1px solid var(--line);min-width:0}.instrument header{padding:13px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.instrument svg{width:100%;display:block;max-height:440px}.instrument figcaption{border-top:1px solid var(--line);padding:15px 18px;color:var(--muted);font-size:13px}
+.instrument svg text{font:600 15px system-ui,sans-serif;fill:var(--ink)}.instrument svg .small{font:13px ui-monospace,monospace;fill:var(--muted)}
+.panel{padding:22px 25px;background:var(--paper);border:1px solid var(--line);min-width:0}.panel h2{font-size:25px;margin:0 0 15px}
+.row-control{margin:0 0 18px}.row-control label{display:flex;gap:12px;justify-content:space-between;font-weight:700;font-size:14px}.row-control output{font:700 14px ui-monospace,monospace;color:var(--accent)}.row-control input{accent-color:var(--accent);width:100%;min-height:28px;margin:9px 0 0}
+.row-control select{width:100%;padding:10px 12px;background:var(--page);color:var(--ink);border:1px solid var(--line);margin:8px 0;min-height:45px}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.presets button{font-size:12px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 27px}.metric{background:var(--paper);padding:14px;border-top:3px solid var(--accent);min-width:0}.metric:nth-child(even){border-color:var(--earth)}.metric span{display:block;color:var(--muted);font-size:12px}.metric strong{display:block;overflow-wrap:anywhere;font:700 clamp(19px,2.1vw,29px)/1.4 Georgia,serif}
+.explainer{padding:20px 25px;background:var(--paper);border:1px solid var(--line);margin:18px 0}.explainer h2{font-size:25px}.explainer p{color:var(--muted)}.mathline{font:600 clamp(16px,2vw,25px)/1.6 Georgia,"Cambria Math",serif;overflow-x:auto;white-space:nowrap;padding:8px 0}
+.state{background:var(--accent-soft);border-left:4px solid var(--accent);padding:14px 18px;margin-top:14px}.state.warning{background:var(--earth-soft);border-color:var(--earth)}
+.legend{display:flex;flex-wrap:wrap;gap:15px;color:var(--muted);font-size:12px;margin:12px 0}.legend i{display:inline-block;width:18px;height:3px;vertical-align:middle;margin-right:5px}
+.footer-lab{padding:20px 0 35px;color:var(--muted);font-size:13px}
+@media(max-width:950px){.lab-layout{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.wrap{padding-inline:18px}.lab-head{padding-block:30px 18px}.panel{padding:15px}.metrics{gap:7px}.metric{padding:11px}.instrument figcaption{font-size:12px}}
+@media print{.top,.panel,.presets,.skip,.theme-toggle{display:none!important}.lab-layout{display:block}.instrument{max-width:100%}}
+</style></head>
+<body>
+<a class="skip" href="#main">К содержанию</a>
+<header class="top"><div class="top-inner"><a class="back" href="19.11.26.html#slope">← К занятию</a><span class="top-id">ЛАБОРАТОРИЯ / 19.11.26</span><button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">Тема ◐</button></div></header>
+<main class="wrap" id="main">
+<section class="lab-head"><p class="eyebrow">Физика ОГЭ / эксперимент</p><h1>Что ускоряет <em>два связанных тела?</em></h1>
+<p class="lead">Изменяйте массы, угол и трение. Сравните силу тяжести подвешенного груза с проекцией силы тяжести бруска на склон и проверьте знак ускорения.</p>
+<div class="presets" role="group" aria-label="Сценарии"><button type="button" class="button" data-preset="lesson">Пример урока</button><button type="button" class="button" data-preset="balance">Равновесие</button><button type="button" class="button" data-preset="friction">Задача с трением</button><button type="button" class="button" data-preset="opposite">Обратное ускорение</button></div></section>
+<section class="lab-layout" aria-label="Исследовательская модель"><div>
+<figure class="instrument"><header><strong>Идеальный неподвижный блок · две массы</strong><span class="eyebrow">g = 10 м/с²</span></header>
+<svg id="scene" viewBox="0 0 600 430" role="img" aria-labelledby="sceneTitle sceneDesc">
+<title id="sceneTitle">Динамическая система: брусок на наклонной плоскости и подвешенный груз</title>
+<desc id="sceneDesc">Угол склона и направления сил изменяются при настройке модели. Числовые значения представлены ниже.</desc>
+<defs><marker id="labArrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#197eaa" stroke-width="1.4"/></marker><marker id="gravArrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#b87348" stroke-width="1.4"/></marker><marker id="normalArrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#338c78" stroke-width="1.4"/></marker><marker id="fricArrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#bb4d55" stroke-width="1.4"/></marker></defs>
+<polygon id="incline" fill="var(--accent-soft)" stroke="var(--muted)" stroke-width="2"/>
+<g id="block"><rect x="-37" y="-24" width="74" height="48" fill="var(--paper)" stroke="var(--accent)" stroke-width="2"/><text text-anchor="middle" y="5">m₁</text></g>
+<line id="rope1" stroke="#ab774d" stroke-width="3"/><circle id="wheel" r="22" stroke="var(--ink)" fill="var(--paper)" stroke-width="2"/><circle id="wheelCenter" r="4" fill="var(--muted)"/><line id="rope2" stroke="#ab774d" stroke-width="3"/><rect id="hanging" width="68" height="55" fill="var(--paper)" stroke="var(--accent)" stroke-width="2"/><text id="hangingLabel" text-anchor="middle">m₂</text>
+<line id="g1" stroke="#b87348" stroke-width="2.7" marker-end="url(#gravArrow)"/><text id="g1Label" fill="#b87348">m₁g</text>
+<line id="n1" stroke="#338c78" stroke-width="2.7" marker-end="url(#normalArrow)"/><text id="n1Label">N</text>
+<line id="t1" stroke="#197eaa" stroke-width="2.7" marker-end="url(#labArrow)"/><text id="t1Label">T</text>
+<line id="f1" stroke="#bb4d55" stroke-width="2.7" marker-end="url(#fricArrow)"/><text id="f1Label">Fтр</text>
+<line id="g2" stroke="#b87348" stroke-width="2.7" marker-end="url(#gravArrow)"/><line id="t2" stroke="#197eaa" stroke-width="2.7" marker-end="url(#labArrow)"/>
+<text id="aLabel" x="22" y="405" class="small">Знак a: —</text>
+</svg>
+<figcaption>Масштаб длин стрелок условный. Цвета: натяжение — голубой, тяжесть — охра, реакция опоры — зелёный, трение — красный.</figcaption></figure>
+<div class="metrics" aria-live="polite"><div class="metric"><span>Ускорение a</span><strong id="mA">—</strong></div><div class="metric"><span>Натяжение T</span><strong id="mT">—</strong></div><div class="metric"><span>Реакция N</span><strong id="mN">—</strong></div><div class="metric"><span>Трение Fтр</span><strong id="mF">—</strong></div></div>
+<div class="explainer"><h2>Откуда берётся ускорение</h2><p>Ось для бруска направлена вверх по склону, для висящего груза — вертикально вверх. Положительное a соответствует движению первого вверх, второго вниз.</p>
+<div class="mathline" id="firstEquation">T − m₁g sin α − Fтр = m₁a</div><div class="mathline" id="secondEquation">T − m₂g = −m₂a</div>
+<div class="mathline" id="resultEquation">a = (m₂g − m₁g sin α − Fтр) / (m₁ + m₂)</div>
+<div class="state" id="state" role="status" aria-live="polite">Выберите сценарий или измените параметры.</div></div>
+</div>
+<aside class="panel" aria-label="Параметры эксперимента"><h2>Параметры</h2>
+<div class="row-control"><label for="m1">Брусок на склоне m₁ <output id="oM1">0,3 кг</output></label><input id="m1" type="range" min="0.1" max="4" step="0.1" value="0.3"/></div>
+<div class="row-control"><label for="m2">Подвешенный груз m₂ <output id="oM2">0,2 кг</output></label><input id="m2" type="range" min="0.1" max="4" step="0.1" value="0.2"/></div>
+<div class="row-control"><label for="angle">Угол α <output id="oAngle">30°</output></label><input id="angle" type="range" min="0" max="60" step="1" value="30"/></div>
+<div class="row-control"><label for="mu">Коэффициент трения μ <output id="oMu">0</output></label><input id="mu" type="range" min="0" max="0.5" step="0.01" value="0"/></div>
+<div class="row-control"><label for="slide">Направление скольжения бруска, если μ &gt; 0</label><select id="slide"><option value="up">Вверх по склону</option><option value="down">Вниз по склону</option></select></div>
+<p class="small-muted">При трении здесь моделируется уже скользящий брусок: сила трения направлена против заданной скорости. При μ = 0 направление скольжения роли не играет.</p>
+<button class="button" id="reset" type="button">Вернуть пример урока</button>
+</aside></section>
+<footer class="footer-lab">Лёвин Артём Александрович · эксклюзивно для Володи Хачатуряна</footer>
+</main>
+<script>
+(function(){
+ const root=document.documentElement,themeButton=document.getElementById('themeToggle');
+ let theme='light';try{theme=localStorage.getItem('volodia-lesson-theme-v1')||'light'}catch(_){}
+ function setTheme(t){root.dataset.theme=t==='dark'?'dark':'light';themeButton.setAttribute('aria-pressed',String(t==='dark'));themeButton.textContent=t==='dark'?'Светлая тема ☼':'Тёмная тема ◐'}
+ setTheme(theme);
+ themeButton.addEventListener('click',()=>{theme=root.dataset.theme==='dark'?'light':'dark';setTheme(theme);try{localStorage.setItem('volodia-lesson-theme-v1',theme)}catch(_){}});
+ const get=id=>document.getElementById(id);
+ const elements=['m1','m2','angle','mu','slide'].map(get),g=10;
+ const preset={
+ lesson:{m1:.3,m2:.2,angle:30,mu:0,slide:'up'},
+ balance:{m1:2,m2:1,angle:30,mu:0,slide:'up'},
+ friction:{m1:2,m2:2,angle:37,mu:.25,slide:'up'},
+ opposite:{m1:4,m2:1,angle:30,mu:0,slide:'down'}
+ };
+ const format=(value,digits=2)=>Number(value.toFixed(digits)).toLocaleString('ru-RU',{maximumFractionDigits:digits});
+ function setLine(id,x1,y1,x2,y2){const e=get(id);e.setAttribute('x1',x1);e.setAttribute('y1',y1);e.setAttribute('x2',x2);e.setAttribute('y2',y2)}
+ function setText(id,x,y){get(id).setAttribute('x',x);get(id).setAttribute('y',y)}
+ function render(){
+  const m1=Number(get('m1').value),m2=Number(get('m2').value),deg=Number(get('angle').value),mu=Number(get('mu').value),sliding=get('slide').value;
+  const theta=deg*Math.PI/180,c=Math.cos(theta),s=Math.sin(theta);
+  const normal=m1*g*c,friction=mu*normal,fricSign=sliding==='up'?1:-1;
+  const acceleration=(m2*g-m1*g*s-fricSign*friction)/(m1+m2);
+  const tension=m2*(g-acceleration);
+  get('oM1').textContent=format(m1,1)+' кг';get('oM2').textContent=format(m2,1)+' кг';
+  get('oAngle').textContent=deg+'°';get('oMu').textContent=format(mu,2);
+  get('mA').textContent=format(acceleration)+' м/с²';get('mT').textContent=format(tension)+' Н';
+  get('mN').textContent=format(normal)+' Н';get('mF').textContent=format(friction)+' Н';
+  const lowX=57,baseY=352,len=284,hiX=lowX+len*c,hiY=baseY-len*s;
+  get('incline').setAttribute('points',lowX+','+baseY+' '+hiX+','+hiY+' '+hiX+','+baseY);
+  const bx=lowX+len*.57*c,by=baseY-len*.57*s;
+  get('block').setAttribute('transform','translate('+bx+' '+(by-27)+') rotate('+(-deg)+')');
+  const wheelX=hiX+27,wheelY=hiY-8;
+  get('wheel').setAttribute('cx',wheelX);get('wheel').setAttribute('cy',wheelY);get('wheelCenter').setAttribute('cx',wheelX);get('wheelCenter').setAttribute('cy',wheelY);
+  const ropeStartX=bx+40*c,ropeStartY=by-27-40*s;
+  setLine('rope1',ropeStartX,ropeStartY,wheelX-16,wheelY-16);
+  const hx=wheelX+22,hy=Math.min(312,wheelY+145);
+  setLine('rope2',hx,wheelY,hx,hy);get('hanging').setAttribute('x',hx-34);get('hanging').setAttribute('y',hy);
+  setText('hangingLabel',hx,hy+34);
+  const originY=by-27;
+  setLine('g1',bx,originY,bx,originY+64);setText('g1Label',bx+11,originY+62);
+  setLine('n1',bx,originY,bx-57*s,originY-57*c);setText('n1Label',bx-67*s-10,originY-67*c);
+  setLine('t1',bx,originY,bx+74*c,originY-74*s);setText('t1Label',bx+79*c,originY-79*s);
+  get('f1').style.display=friction>0?'':'none';get('f1Label').style.display=friction>0?'':'none';
+  const fdir=sliding==='up'?-1:1;setLine('f1',bx,originY,bx+fdir*55*c,originY-fdir*55*s);setText('f1Label',bx+fdir*67*c,originY-fdir*67*s);
+  setLine('g2',hx,hy+27,hx,hy+88);setLine('t2',hx,hy+27,hx,hy-30);
+  get('firstEquation').textContent='T − '+format(m1*g*s)+' Н '+(friction?' '+(sliding==='up'?'−':'＋')+' '+format(friction)+' Н':'')+' = '+format(m1,1)+'a';
+  get('secondEquation').textContent='T − '+format(m2*g)+' Н = −'+format(m2,1)+'a';
+  get('resultEquation').textContent='a = ['+format(m2*g)+' − '+format(m1*g*s)+(friction?' '+(sliding==='up'?'−':'＋')+' '+format(friction):'')+'] / '+format(m1+m2,1)+' = '+format(acceleration)+' м/с²';
+  let stateMessage='';
+  if(Math.abs(acceleration)<.005)stateMessage='a = 0. Силы вдоль нити скомпенсированы: ускорения нет.';
+  else if(acceleration>0)stateMessage='a положительно: ускорение бруска направлено вверх по склону, груз ускоряется вниз.';
+  else stateMessage='a отрицательно: ускорение бруска направлено вниз по склону, груз ускоряется вверх. Это знак ускорения, направление текущей скорости может отличаться.';
+  get('state').textContent=stateMessage;
+  get('state').classList.toggle('warning',acceleration<0);
+  get('aLabel').textContent='Ось для бруска ↑ по склону; a = '+format(acceleration)+' м/с²';
+ }
+ elements.forEach(e=>e.addEventListener('input',render));
+ function apply(p){const x=preset[p];Object.keys(x).forEach(k=>{get(k).value=x[k]});render()}
+ document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>apply(b.dataset.preset)));
+ get('reset').addEventListener('click',()=>apply('lesson'));render();
+})();
+</script>
+</body></html>
