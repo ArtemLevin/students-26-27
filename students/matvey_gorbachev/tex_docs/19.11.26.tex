@@ -1,0 +1,353 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{cmap}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{geometry}
+\geometry{left=22mm,right=22mm,top=22mm,bottom=21mm,headheight=22pt,headsep=6mm,footskip=12mm}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{parskip}
+\definecolor{accent}{HTML}{007C79}
+\definecolor{darkaccent}{HTML}{005A58}
+\definecolor{bodytext}{HTML}{202927}
+\definecolor{muted}{HTML}{606E6A}
+\definecolor{softgray}{HTML}{D0D9D6}
+\color{bodytext}
+\hypersetup{colorlinks=true,urlcolor=accent,linkcolor=accent,pdfauthor={Лёвин Артём Александрович},pdftitle={Чек-лист: координатный метод в стереометрии — Матвей Горбачев}}
+\setstretch{1.16}
+\setlength{\parindent}{0pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=3mm,topsep=2mm}
+\setlist[itemize]{leftmargin=6mm,itemsep=1.6mm,topsep=2mm}
+\newcommand{\checksq}{\ensuremath{\square}\,}
+\newcommand{\heading}[1]{\par\vspace{4mm}{\Large\color{darkaccent}#1}\par\vspace{1.7mm}{\color{accent}\rule{\linewidth}{0.55pt}}\par\vspace{2mm}}
+\newcommand{\subheading}[1]{\par\vspace{2.2mm}{\bfseries\color{darkaccent}#1}\par\vspace{1.0mm}}
+\newcommand{\key}[1]{{\color{darkaccent}\bfseries #1}}
+\newcommand{\headername}{Координатный метод в стереометрии}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{muted}\headername}
+\fancyhead[R]{\footnotesize\color{muted}Матвей Горбачев}
+\fancyfoot[C]{\footnotesize\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.45pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+\newcommand{\cubesketch}[1]{%
+\begin{tikzpicture}[scale=.82,line cap=round,line join=round,>=Latex]
+\coordinate (A) at (0,0);\coordinate (B) at (3.1,0);\coordinate (D) at (1.0,1.05);\coordinate (C) at (4.1,1.05);
+\coordinate (Aone) at (0,2.7);\coordinate (Bone) at (3.1,2.7);\coordinate (Done) at (1.0,3.75);\coordinate (Cone) at (4.1,3.75);
+\draw[softgray,densely dashed] (A)--(D)--(Done) (D)--(C);
+\draw[gray!75,line width=.75pt] (A)--(B)--(C)--(Cone)--(Done)--(Aone)--(A)--(B) (Aone)--(Bone)--(Cone) (Bone)--(B);
+\draw[gray!75,line width=.75pt] (Aone)--(Done);
+\draw[->,accent,line width=.65pt] (A)--(-.2,3.5) node[above,font=\scriptsize] {$z$};
+\draw[->,accent,line width=.8pt] (A)--(3.8,0) node[right,font=\scriptsize] {$x$};
+\draw[->,accent,line width=.8pt] (A)--(1.42,1.49) node[above,font=\scriptsize] {$y$};
+\node[below left,font=\scriptsize] at (A) {$A$};
+\node[below,font=\scriptsize] at (B) {$B$};
+\node[left,font=\scriptsize] at (Aone) {$A_1$};
+\node[above,font=\scriptsize] at (Cone) {$C_1$};
+#1
+\end{tikzpicture}}
+\begin{document}
+\thispagestyle{empty}
+\vspace*{20mm}
+\begin{center}
+{\large\color{darkaccent} МАТЕМАТИКА}\par
+\vspace{18mm}
+{\fontsize{24.88}{30}\selectfont Чек-лист}\par
+\vspace{12mm}
+{\LARGE\color{accent} Координатный метод\\[2mm] в стереометрии}\par
+\vspace{11mm}
+{\large Уравнение плоскости и угол между плоскостями}\par
+\vspace{25mm}
+{\large Матвей Горбачев}\par
+\vspace{9mm}
+{\large 19 ноября 2026 г.}\par
+\vfill
+{Лёвин Артём Александрович}\par
+\vspace{1mm}
+{эксклюзивно для Матвея Горбачёва}\par
+\vspace{18mm}
+\begin{tikzpicture}
+\draw[accent,line width=.8pt] (0,0) .. controls (1.1,.45) and (2.1,-.45) .. (3.3,0) .. controls (4.4,.45) and (5.5,-.45) .. (6.7,0) .. controls (7.8,.45) and (8.7,-.38) .. (10,0);
+\fill[darkaccent] (3.3,0) circle (1.5pt);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\heading{1. Как задать координаты в кубе}
+\key{Главная идея.} Выберите начало координат в вершине $A$. Направьте оси вдоль трёх попарно перпендикулярных рёбер: $AB$, $AD$ и $AA_1$.
+
+\begin{center}
+\cubesketch{%
+\draw[accent,line width=1.5pt] (A)--(B);
+\draw[accent,line width=1.5pt] (A)--(Aone);
+\draw[accent,line width=1.5pt] (A)--(D);
+\node[below,font=\scriptsize] at (2.0,0) {$AB=a$};
+}
+\end{center}
+При ребре $a$ получаем:
+\[
+A(0;0;0),\quad B(a;0;0),\quad D(0;a;0),\quad A_1(0;0;a),\quad C_1(a;a;a).
+\]
+\subheading{Точки на рёбрах}
+Середина отрезка с концами $P(x_1;y_1;z_1)$ и $Q(x_2;y_2;z_2)$ имеет координаты
+\[
+K\!\left(\frac{x_1+x_2}{2};\frac{y_1+y_2}{2};\frac{z_1+z_2}{2}\right).
+\]
+Например, середина $BB_1$ имеет координаты $M\!\left(a;0;\frac a2\right)$.
+
+\heading{2. Что означает уравнение плоскости}
+Общее уравнение плоскости в пространстве:
+\[
+\boxed{Ax+By+Cz+D=0},\qquad A^2+B^2+C^2>0.
+\]
+Числа $A$, $B$, $C$ образуют \key{нормальный вектор} $\vec n=(A;B;C)$: он перпендикулярен плоскости. При умножении всех четырёх коэффициентов на одно ненулевое число плоскость сохраняется.
+
+\begin{itemize}
+\item Если плоскость проходит через начало координат $O(0;0;0)$, то $D=0$.
+\item Если точка принадлежит плоскости, её координаты удовлетворяют уравнению.
+\item Три точки определяют единственную плоскость, если они не лежат на одной прямой.
+\end{itemize}
+
+\clearpage
+\heading{3. Как найти плоскость через три точки}
+\key{Маршрут:} составьте $Ax+By+Cz+D=0$ $\longrightarrow$ подставьте координаты известных точек $\longrightarrow$ решите систему $\longrightarrow$ проверьте все три точки.
+
+\subheading{Пример 1. Плоскость $AMC_1$}
+В единичном кубе рассмотрим точки
+\[
+A(0;0;0),\qquad M\left(1;0;\frac12\right),\qquad C_1(1;1;1),
+\]
+где $M$ --- середина ребра $BB_1$.
+
+\begin{center}
+\cubesketch{%
+\coordinate (M) at (3.1,1.35);
+\draw[accent!80!black,line width=1.45pt] (A)--(M)--(Cone)--cycle;
+\fill[accent] (M) circle (1.7pt) node[right,font=\scriptsize] {$M$};
+}
+\end{center}
+Ищем уравнение $Ax+By+Cz+D=0$. Подстановка координат даёт
+\[
+\begin{cases}
+D=0 & \text{(точка $A$)},\\[1mm]
+A+\frac C2+D=0 & \text{(точка $M$)},\\[1mm]
+A+B+C+D=0 & \text{(точка $C_1$)}.
+\end{cases}
+\]
+Из первого равенства $D=0$, а из второго $A=-\frac C2$. Тогда из третьего
+\[
+-\frac C2+B+C=0\quad\Longrightarrow\quad B=-\frac C2.
+\]
+Берём $C=-2$ (коэффициенты можно умножить на общий множитель). Получаем $A=B=1$.
+\[
+\boxed{\alpha:\ x+y-2z=0},\qquad \boxed{\vec n_\alpha=(1;1;-2)}.
+\]
+\subheading{Проверка обязательна}
+\[
+A:\ 0=0,\quad M:\ 1+0-2\cdot\tfrac12=0,\quad C_1:\ 1+1-2=0.
+\]
+\key{Обратите внимание:} у $y$ стоит знак «плюс». Смена этого знака нарушила бы условие принадлежности $C_1$ плоскости.
+
+\clearpage
+\heading{4. Вторая плоскость: свободный член $D$}
+\subheading{Пример 2. Плоскость $MTQ$}
+Пусть координаты трёх точек известны:
+\[
+M(2;0;1),\qquad T(1;0;0),\qquad Q(0;1;0).
+\]
+В кубе с ребром $2$ это середины рёбер $BB_1$, $AB$ и $AD$ соответственно.
+\begin{center}
+\cubesketch{%
+\coordinate (M) at (3.1,1.35);
+\coordinate (T) at (1.55,0);
+\coordinate (Q) at (.5,.525);
+\draw[accent!80!black,line width=1.45pt] (M)--(T)--(Q)--cycle;
+\fill[accent] (M) circle (1.6pt) node[right,font=\scriptsize] {$M$};
+\fill[accent] (T) circle (1.6pt) node[below,font=\scriptsize] {$T$};
+\fill[accent] (Q) circle (1.6pt) node[above left,font=\scriptsize] {$Q$};
+}
+\end{center}
+Подставляем три точки в $Ax+By+Cz+D=0$:
+\[
+\begin{cases}
+2A+C+D=0,\\
+A+D=0,\\
+B+D=0.
+\end{cases}
+\]
+Выберем $D=1$. Тогда $A=-1$, $B=-1$, $C=1$. Получаем эквивалентные записи:
+\[
+-x-y+z+1=0\quad\Longleftrightarrow\quad\boxed{\beta:\ x+y-z-1=0}.
+\]
+Нормальный вектор: $\boxed{\vec n_\beta=(1;1;-1)}$.
+\subheading{Точная проверка}
+\[
+M:\ 2+0-1-1=0,\qquad T:\ 1-1=0,\qquad Q:\ 1-1=0.
+\]
+
+\heading{5. Скалярное произведение в пространстве}
+Для $\vec u=(u_1;u_2;u_3)$ и $\vec v=(v_1;v_2;v_3)$:
+\[
+\vec u\cdot\vec v=u_1v_1+u_2v_2+u_3v_3,\qquad
+|\vec u|=\sqrt{u_1^2+u_2^2+u_3^2}.
+\]
+Скалярное произведение помогает находить угол, потому что
+\[
+\vec u\cdot\vec v=|\vec u|\,|\vec v|\cos\theta.
+\]
+
+\begingroup\small\setstretch{1.10}
+\heading{6. Угол между двумя плоскостями}
+\key{Главная идея.} Угол между плоскостями находят через их нормальные векторы. Острый угол $\varphi$ (включая $0^\circ$ и $90^\circ$) вычисляют по модулю скалярного произведения:
+\[
+\boxed{\cos\varphi=\frac{|\vec n_\alpha\cdot\vec n_\beta|}{|\vec n_\alpha|\,|\vec n_\beta|}},
+\qquad 0^\circ\le\varphi\le90^\circ.
+\]
+\subheading{Пример 3. Продолжение примеров 1 и 2}
+Для плоскостей
+\[
+\alpha:\ x+y-2z=0,\qquad \beta:\ x+y-z-1=0
+\]
+выбраны нормали $\vec n_\alpha=(1;1;-2)$ и $\vec n_\beta=(1;1;-1)$.
+
+\begin{enumerate}
+\item Находим скалярное произведение:
+\[
+\vec n_\alpha\cdot\vec n_\beta=1\cdot1+1\cdot1+(-2)\cdot(-1)=4.
+\]
+\item Находим длины нормалей:
+\[
+|\vec n_\alpha|=\sqrt{1+1+4}=\sqrt6,\qquad
+|\vec n_\beta|=\sqrt{1+1+1}=\sqrt3.
+\]
+\item Подставляем значения в формулу:
+\[
+\cos\varphi=\frac{|4|}{\sqrt6\,\sqrt3}=\frac4{3\sqrt2}=\boxed{\frac{2\sqrt2}{3}}.
+\]
+\end{enumerate}
+Ответ можно оставить в виде косинуса. При необходимости угол:
+\[
+\boxed{\varphi=\arccos\frac{2\sqrt2}{3}\approx19{,}47^\circ}.
+\]
+\heading{7. Что важно проверить перед ответом}
+\begin{itemize}[label=$\square$]
+\item \textbf{Знаки коэффициентов.} Подставьте все три точки в найденное уравнение.
+\item \textbf{Свободный член.} Если плоскость проходит через начало координат, $D=0$.
+\item \textbf{Нормаль.} Берите коэффициенты именно при $x,y,z$, без $D$.
+\item \textbf{Скалярное произведение.} Умножайте соответствующие координаты и складывайте.
+\item \textbf{Длины векторов.} Суммируйте квадраты всех трёх координат.
+\item \textbf{Выбор угла.} Для меньшего угла между плоскостями используйте модуль числителя.
+\end{itemize}
+
+\endgroup
+\clearpage
+\thispagestyle{fancy}
+\begin{center}{\LARGE\color{darkaccent}Алгоритм: плоскость по трём точкам}\end{center}
+\vspace{1mm}
+\tikzset{
+ fs/.style={draw=accent,rounded corners=2pt,align=center,minimum width=85mm,minimum height=10mm,inner sep=3pt,font=\small},
+ decision/.style={diamond,draw=accent,aspect=2.4,align=center,text width=57mm,inner sep=1pt,font=\small},
+ terminal/.style={ellipse,draw=darkaccent,align=center,minimum width=52mm,minimum height=9mm,inner sep=2pt,font=\small},
+ arr/.style={-{Latex[length=2.3mm]},line width=.75pt,color=darkaccent},
+}
+\begin{center}
+\begin{tikzpicture}[node distance=5mm and 11mm]
+\node[terminal] (start) {Даны три точки $P$, $Q$, $R$};
+\node[decision,below=of start] (col) {Точки лежат\\на одной прямой?};
+\node[fs,right=16mm of col,text width=33mm,minimum width=35mm] (bad) {Единственная плоскость не определяется};
+\node[terminal,below=7mm of bad,minimum width=35mm] (badend) {Завершение};
+\node[fs,below=of col] (eq) {Запишите $Ax+By+Cz+D=0$.\\Если плоскость проходит через $O$, то $D=0$};
+\node[fs,below=of eq] (subst) {Подставьте координаты $P$, $Q$, $R$.\\Решите систему уравнений};
+\node[fs,below=of subst] (norm) {Выберите ненулевой общий масштаб\\коэффициентов $A,B,C,D$};
+\node[fs,below=of norm] (verify) {Проверьте подстановкой все три точки.\\Нормаль: $\vec n=(A;B;C)$};
+\node[decision,below=of verify] (angle) {Требуется угол\\двух плоскостей?};
+\node[fs,below=of angle] (twopl) {Найдите нормаль второй плоскости\\и вычислите $\displaystyle\cos\varphi=\frac{|\vec n_1\cdot\vec n_2|}{|\vec n_1|\,|\vec n_2|}$};
+\node[terminal,below=of twopl] (end) {Запишите ответ};
+\draw[arr] (start)--(col);
+\draw[arr] (col)--node[left,font=\scriptsize,fill=white] {нет} (eq);
+\draw[arr] (col)--node[above,font=\scriptsize,fill=white] {да} (bad);
+\draw[arr] (bad)--(badend);
+\draw[arr] (eq)--(subst);
+\draw[arr] (subst)--(norm);
+\draw[arr] (norm)--(verify);
+\draw[arr] (verify)--(angle);
+\draw[arr] (angle)--node[left,font=\scriptsize,fill=white] {да} (twopl);
+\draw[arr] (twopl)--(end);
+\draw[arr] (angle.west)--++(-2.0,0) |- node[pos=.18,left,font=\scriptsize,fill=white] {нет} (end.west);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\heading{Тренировочный блок}
+\textit{Путь А. 10 заданий от базового уровня к повышенному.} Все координаты указаны в прямоугольной системе координат. Там, где требуется уравнение плоскости, приведите его к виду с целыми коэффициентами без общего делителя.
+
+\subheading{Базовый уровень}
+\begin{enumerate}
+\item В кубе $ABCDA_1B_1C_1D_1$ с ребром $6$ выбраны оси $Ax$, $Ay$, $Az$ вдоль $AB$, $AD$, $AA_1$. Найдите координаты середин $M$ ребра $BB_1$, $T$ ребра $AB$, $Q$ ребра $AD$.
+\item Для точек $P(1;-2;3)$ и $Q(4;0;1)$ найдите координаты вектора $\overrightarrow{PQ}$ и его длину.
+\item Даны $\vec u=(2;-1;2)$ и $\vec v=(1;2;0)$. Найдите $\vec u\cdot\vec v$, $|\vec u|$, $|\vec v|$ и угол между векторами.
+\end{enumerate}
+
+\subheading{Средний уровень}
+\begin{enumerate}[start=4]
+\item Для плоскости $3x-y+2z-5=0$ укажите нормальный вектор. Проверьте, принадлежат ли ей точки $X(1;0;1)$ и $Y(1;1;1)$.
+\item Составьте уравнение плоскости, проходящей через точки $O(0;0;0)$, $P(2;0;1)$, $Q(0;3;1)$.
+\item Составьте уравнение плоскости через точки $P(2;0;0)$, $Q(0;2;0)$, $R(0;0;4)$.
+\item Составьте уравнение плоскости через точки $P(3;0;1)$, $Q(1;0;0)$, $R(0;2;0)$. Проверьте результат подстановкой.
+\end{enumerate}
+
+\subheading{Повышенный уровень}
+\begin{enumerate}[start=8]
+\item Найдите косинус меньшего угла между плоскостями $2x-y+2z+1=0$ и $x+2y-2z-3=0$.
+\item Найдите меньший угол между плоскостями $x+y-2z=0$ и $x+y+2z-2=0$. Ответ запишите через арккосинус.
+\item Плоскость $\alpha$ проходит через $M(2;0;1)$, $T(1;0;0)$, $Q(0;1;0)$. Плоскость $\beta$ проходит через $O(0;0;0)$, $E(2;0;2)$, $F(0;2;1)$. Составьте оба уравнения и найдите косинус меньшего угла между ними.
+\end{enumerate}
+\clearpage
+
+\heading{Ответы к тренировочному блоку}
+\renewcommand{\arraystretch}{1.32}
+\begin{tabularx}{\linewidth}{@{}p{11mm}X@{}}
+\toprule
+\textbf{№}&\textbf{Ответ}\tabularnewline
+\midrule
+1&$M(6;0;3)$, $T(3;0;0)$, $Q(0;3;0)$.\tabularnewline
+2&$\overrightarrow{PQ}=(3;2;-2)$, $|\overrightarrow{PQ}|=\sqrt{17}$.\tabularnewline
+3&$\vec u\cdot\vec v=0$, $|\vec u|=3$, $|\vec v|=\sqrt5$, угол $90^\circ$.\tabularnewline
+4&$\vec n=(3;-1;2)$; $X$ принадлежит, $Y$ не принадлежит плоскости.\tabularnewline
+5&$3x+2y-6z=0$.\tabularnewline
+6&$2x+2y+z-4=0$.\tabularnewline
+7&$2x+y-4z-2=0$.\tabularnewline
+8&$\displaystyle\cos\varphi=\frac49$.\tabularnewline
+9&$\displaystyle\varphi=\arccos\frac13\approx70{,}53^\circ$.\tabularnewline
+10&$\alpha:\ x+y-z-1=0$; $\beta:\ 2x+y-2z=0$; $\displaystyle\cos\varphi=\frac{5}{3\sqrt3}=\frac{5\sqrt3}{9}$.\tabularnewline
+\bottomrule
+\end{tabularx}
+
+\heading{Итоговая памятка}
+\begin{tabularx}{\linewidth}{@{}p{47mm}X@{}}
+\toprule
+\textbf{Сигнал в задаче}&\textbf{Что делать}\tabularnewline
+\midrule
+Даны вершины куба&Выбрать начало координат и оси вдоль рёбер.\tabularnewline
+Дана середина ребра&Найти средние арифметические координат концов.\tabularnewline
+Даны три точки плоскости&Подставить их координаты в $Ax+By+Cz+D=0$.\tabularnewline
+Нужно найти нормаль&Взять тройку коэффициентов $(A;B;C)$.\tabularnewline
+Нужен угол плоскостей&Найти две нормали и применить формулу для $\cos\varphi$.\tabularnewline
+Получено уравнение&Проверить подстановкой все заданные точки.\tabularnewline
+\bottomrule
+\end{tabularx}
+\vspace{8mm}
+\begin{center}
+{\small\color{darkaccent}Лёвин Артём Александрович}\par
+{\small\color{muted}эксклюзивно для Матвея Горбачёва}
+\end{center}
+\end{document}
