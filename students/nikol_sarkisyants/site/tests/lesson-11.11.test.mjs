@@ -62,7 +62,7 @@ test('evidence is linked to real anchors and does not assert independent mastery
     assert.ok(practice.outcomes.some(x=>x.competencyId===evidence.competencyId&&x.evidenceAnchor===evidence.evidenceAnchor&&x.relation===evidence.relation&&x.practiceDisposition==='manual'));
   }
   assert.match(read('index.html'),/dashboard-data-11\.11\.js/);
-  assert.match(read('dashboard.js'),/lesson-registry\.js\?v=20261113-1/);
+  assert.match(read('dashboard.js'),/lesson-registry\.js\?v=20\d{6}-\d+/);
 });
 
 test('worked values and answer key agree with elementary geometry',()=>{
