@@ -50,7 +50,7 @@ try{
   assert.equal(await page.locator('#competencyMap').getAttribute('role'),'group','interactive map should expose child buttons to assistive technology');
   assert.equal(await page.locator('#competencyMap .radial-cell').first().getAttribute('role'),'button','map cell accessibility semantics');
   assert.ok(basic.focus,'focus control missing '+width);
-  assert.ok(basic.lesson==='Оптимизация сложных функций','latest lesson wrong '+width);
+  assert.ok(basic.lesson==='Плоскость в координатах','latest lesson wrong '+width);
   if(width===1440){
     const cell=page.locator('#competencyMap .radial-cell').first();
     await cell.focus();
@@ -114,7 +114,7 @@ try{
       titles:visible.filter(t=>t.querySelector('.archive-tile-title').scrollHeight>t.querySelector('.archive-tile-title').clientHeight+2).length};
   });
   assert.ok(archive.width<=archive.viewport+2,'archive overflow '+width+': '+JSON.stringify(archive));
-  assert.equal(archive.counts,15,'archive lesson count '+width);
+  assert.equal(archive.counts,16,'archive lesson count '+width);
   assert.equal(archive.months,3,'archive month groups '+width);
   assert.ok(Math.max(...archive.heights)-Math.min(...archive.heights)<=2,'unequal tiles '+width+': '+JSON.stringify(archive.heights));
   assert.equal(archive.clipped,0,'clipped archive card '+width);
@@ -123,7 +123,7 @@ try{
   await page.locator('#archiveSearch').fill('вклады');
   assert.equal(await page.locator('.archive-tile:visible').count(),2,'archive search failed '+width);
   await page.locator('#archiveSearch').fill('');
-  assert.equal(await page.locator('.archive-tile:visible').count(),15,'archive reset failed '+width);
+  assert.equal(await page.locator('.archive-tile:visible').count(),16,'archive reset failed '+width);
   await page.screenshot({path:path.join(artifactDir,'archive-'+width+'.png'),fullPage:true});
   await page.goto(origin+'18.10.26.html',{waitUntil:'networkidle'});
   await page.locator('.poster img').scrollIntoViewIfNeeded();
@@ -429,6 +429,35 @@ try{
   const lab12=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth}));
   assert.ok(lab12.width<=lab12.viewport+2,'12 Nov lab overflow '+width+': '+JSON.stringify(lab12));
   if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lab-12-'+width+'.png'),fullPage:true});
+
+  // 19 November: coordinate stereometry, fixed-source examples and progress.
+  await page.goto(origin+'19.11.26.html',{waitUntil:'networkidle'});
+  const lesson19=await page.evaluate(()=>({
+    width:document.documentElement.scrollWidth,viewport:innerWidth,
+    title:document.querySelector('h1')?.textContent.trim(),
+    tasks:document.querySelectorAll('#practice article.exercise').length,
+    math:[...document.querySelectorAll('math')].every(el=>el.namespaceURI==='http://www.w3.org/1998/Math/MathML')
+  }));
+  assert.ok(lesson19.width<=lesson19.viewport+2,'19 Nov lesson overflow '+width+': '+JSON.stringify(lesson19));
+  assert.equal(lesson19.title,'Плоскость в координатах','19 Nov lesson heading '+width);
+  assert.equal(lesson19.tasks,10,'19 Nov source task count '+width);
+  assert.ok(lesson19.math,'19 Nov native MathML '+width);
+  await page.locator('[data-plane="beta"]').click();
+  assert.equal(await page.locator('[data-plane="beta"]').getAttribute('aria-pressed'),'true','19 Nov cube selection '+width);
+  assert.equal(await page.locator('#planeEquation').textContent(),'x + y − z − 1 = 0','19 Nov beta equation '+width);
+  assert.notEqual(await page.locator('#faceBeta').evaluate(el=>getComputedStyle(el).display),'none','19 Nov beta face visible '+width);
+  assert.equal(await page.locator('#faceAlpha').evaluate(el=>getComputedStyle(el).display),'none','19 Nov alpha face hidden '+width);
+  await page.locator('#nextStep').click();
+  assert.equal(await page.locator('#stepStatus').textContent(),'2 / 4','19 Nov stepper next '+width);
+  await page.locator('#checklist input').first().check();
+  assert.ok((await page.locator('#progressText').textContent()).includes('1 из 6'),'19 Nov progress '+width);
+  await page.locator('#practice article.exercise').first().locator('summary').click();
+  assert.ok((await page.locator('#practice article.exercise').first().textContent()).includes('M(6; 0; 3)'),'19 Nov source answer '+width);
+  if(width===390){
+    await page.locator('#theme').click();
+    assert.equal(await page.locator('html').getAttribute('data-theme'),'dark','19 Nov theme toggle '+width);
+  }
+  if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lesson-19-'+width+'.png'),fullPage:true});
 
   assert.deepEqual(failures,[],'Matvey browser console/network failures '+width+': '+failures.join('; '));
   console.log('PASS',width+'x'+height,JSON.stringify({map:basic.map,tiles:archive.counts,heights:archive.heights,theme:width===390?'dark':'light'}));
