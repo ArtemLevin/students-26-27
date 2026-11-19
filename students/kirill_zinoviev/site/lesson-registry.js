@@ -3,6 +3,109 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-19",
+  "ktpRefs": [],
+  "href": "19.11.26.html",
+  "title": "Углы, равенство треугольников и точки графика",
+  "navTitle": "Углы, равенство треугольников и точки графика",
+  "navSubtitle": "Геометрия и алгебра, 7 класс: смежные и вертикальные углы, равнобедренный треугольник, второй признак равенства, пересечения с Ox и Oy, проверка точки графика. 10 заданий и координатная лаборатория.",
+  "summary": "Геометрия и алгебра, 7 класс: смежные и вертикальные углы, равнобедренный треугольник, второй признак равенства, пересечения с Ox и Oy, проверка точки графика. 10 заданий и координатная лаборатория.",
+  "topics": [
+    "обозначение углов тремя буквами",
+    "смежные и вертикальные углы",
+    "сумма углов и равнобедренный треугольник",
+    "второй признак равенства треугольников",
+    "пересечение линейного графика с Ox и Oy",
+    "проверка принадлежности точки графику",
+    "10 заданий по пути А"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "geo_base_8",
+      "evidenceAnchor": "angles",
+      "relation": "practiced",
+      "label": "Вычислять смежные углы по сумме 180°",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "geo_base_10",
+      "evidenceAnchor": "angles",
+      "relation": "practiced",
+      "label": "Использовать равенство вертикальных углов",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "triangles_11",
+      "evidenceAnchor": "isosceles",
+      "relation": "practiced",
+      "label": "Использовать свойство равнобедренного треугольника",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "triangles_13",
+      "evidenceAnchor": "isosceles",
+      "relation": "practiced",
+      "label": "Находить углы по сумме 180°",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "triangles_9",
+      "evidenceAnchor": "congruence",
+      "relation": "practiced",
+      "label": "Применять второй признак равенства треугольников",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_4",
+      "evidenceAnchor": "axes",
+      "relation": "practiced",
+      "label": "Читать координаты точки и различать оси",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_7",
+      "evidenceAnchor": "axes",
+      "relation": "practiced",
+      "label": "Находить x по значению y",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_10",
+      "evidenceAnchor": "axes",
+      "relation": "touched",
+      "label": "Распознавать формулу линейной функции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "functions_11",
+      "evidenceAnchor": "axes",
+      "relation": "practiced",
+      "label": "Использовать пересечение с Oy",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "equations_6",
+      "evidenceAnchor": "axes",
+      "relation": "practiced",
+      "label": "Решать линейное уравнение ax+b=0",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "systems_2",
+      "evidenceAnchor": "through-point",
+      "relation": "practiced",
+      "label": "Проверять пару координат подстановкой",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "19.11.26.html",
+    "pdf": "../pdf_docs/19.11.26.pdf",
+    "tex": "../tex_docs/19.11.26.tex",
+    "lab": "19.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-15",
   "ktpRefs": [],
   "href": "15.11.26.html",
