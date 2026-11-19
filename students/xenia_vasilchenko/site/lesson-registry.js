@@ -5,6 +5,70 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-19",
+  "ktpRefs": [],
+  "href": "19.11.26.html",
+  "title": "Отношения, пропорции и проценты",
+  "navTitle": "Отношения, пропорции и проценты",
+  "navSubtitle": "Деление числа на доли, основное свойство пропорции, неизвестный член и проценты. Путь А: 10 задач.",
+  "summary": "19 ноября: деление числа в заданном отношении, пропорции, неизвестный член и проценты через пропорцию. Пособие и 10 тренировочных задач для Ксении Васильченко.",
+  "topics": [
+    "Деление числа в заданном отношении",
+    "Основное свойство пропорции",
+    "Нахождение неизвестного члена пропорции",
+    "Проценты через пропорцию"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "frac_base_01",
+      "evidenceAnchor": "divide",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "frac_ops_14",
+      "evidenceAnchor": "divide",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_16",
+      "evidenceAnchor": "several",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dec_14",
+      "evidenceAnchor": "unknown",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_02",
+      "evidenceAnchor": "unknown",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dec_04",
+      "evidenceAnchor": "percent",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_17",
+      "evidenceAnchor": "percent",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_16",
+      "evidenceAnchor": "pitfalls",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "19.11.26.html",
+    "pdf": "../pdf_docs/19.11.26.pdf",
+    "tex": "../tex_docs/19.11.26.tex",
+    "lab": "19.11.26-lab.html"
+  }
+},
+
+{
   "date": "2026-11-17",
   "ktpRefs": [],
   "href": "17.11.26.html",
