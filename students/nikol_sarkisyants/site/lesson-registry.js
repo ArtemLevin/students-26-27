@@ -5,6 +5,59 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-19",
+  "ktpRefs": [],
+  "href": "19.11.26.html",
+  "title": "Правильные пирамиды",
+  "navTitle": "Правильные пирамиды",
+  "navSubtitle": "Николь Саркисьянц. Правильные четырёхугольные и шестиугольные пирамиды: высота и апофема, объём, площади поверхности, тетраэдр, масштабирование и 10 заданий.",
+  "summary": "Николь Саркисьянц. Правильные четырёхугольные и шестиугольные пирамиды: высота и апофема, объём, площади поверхности, тетраэдр, масштабирование и 10 заданий.",
+  "topics": [
+    "правильная четырёхугольная пирамида",
+    "высота и апофема",
+    "боковая и полная поверхность",
+    "правильный шестиугольник",
+    "правильный тетраэдр",
+    "масштабирование площадей и объёмов"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t3_pyramid",
+      "evidenceAnchor": "pyramid",
+      "relation": "practiced",
+      "label": "Правильные пирамиды: высота и построение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_surface",
+      "evidenceAnchor": "surface",
+      "relation": "practiced",
+      "label": "Вычисление боковой и полной поверхности",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_regular",
+      "evidenceAnchor": "hexagon",
+      "relation": "touched",
+      "label": "Правильные многогранники и шестиугольник",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_scale",
+      "evidenceAnchor": "scale",
+      "relation": "practiced",
+      "label": "Изменение площади и объёма при подобии",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "19.11.26.html",
+    "pdf": "../pdf_docs/19.11.26.pdf",
+    "tex": "../tex_docs/19.11.26.tex",
+    "lab": "19.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-11",
   "ktpRefs": [],
   "href": "11.11.26.html",
