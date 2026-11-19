@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория правильной пирамиды: квадратное или шестиугольное основание, высота, апофема, объём, боковая поверхность, масштабирование.">
+<title>Лаборатория правильной пирамиды · Николь Саркисьянц</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23743d52'/%3E%3Cpath d='M12 49 32 9 52 49Zm0 0 20-18 20 18' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E">
+<style>
+:root{color-scheme:light;--bg:#f5f1ea;--paper:#fffcf7;--ink:#28272a;--muted:#665e61;--line:#d8cfc8;--accent:#793c50;--sea:#17686a;--soft:#f0e6e8;--focus:#b65b16}
+html[data-theme=dark]{color-scheme:dark;--bg:#1a1a1d;--paper:#29282c;--ink:#f4eee8;--muted:#cbc2c2;--line:#585055;--accent:#eab2c4;--sea:#94d9d2;--soft:#403138;--focus:#ffce81}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:var(--sea);text-underline-offset:3px}button,input,select{font:inherit;color:inherit}button{cursor:pointer}:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{position:absolute;top:-100px;left:1rem;padding:.7rem;background:var(--paper);z-index:50}.skip:focus{top:1rem}.wrap{width:min(1170px,calc(100% - 2.2rem));margin:auto}.bar{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;padding:1rem 0;border-bottom:1px solid var(--line)}.bar a,.bar button,.reset{padding:.58rem .85rem;min-height:44px;border:1px solid var(--line);background:var(--paper);color:var(--ink);text-decoration:none}.bar a:hover,.bar button:hover,.reset:hover{background:var(--soft)}.stamp{font:.76rem ui-monospace,Consolas,monospace;letter-spacing:.08em;color:var(--muted);margin-left:auto}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:500;line-height:1.15}h1{font-size:clamp(2.3rem,5vw,4.7rem);max-width:15ch;margin:.5rem 0 1rem}h2{font-size:1.55rem;margin:0 0 1rem}h3{font-size:1.2rem}.eyebrow{font:.78rem ui-monospace,Consolas,monospace;text-transform:uppercase;letter-spacing:.09em;color:var(--accent)}.intro{padding:2.5rem 0 1.5rem}.intro p:last-child{max-width:69ch;color:var(--muted)}
+.modes{display:flex;gap:.65rem;flex-wrap:wrap;border-block:1px solid var(--line);padding:.8rem 0}.mode{border:1px solid var(--line);background:var(--paper);padding:.6rem 1rem;min-height:44px}.mode[aria-pressed=true]{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700}
+.lab{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(0,1.3fr);gap:clamp(1.5rem,4vw,4rem);padding:2rem 0;align-items:start}.controls{border-top:2px solid var(--accent);padding-top:1rem}.controls fieldset{border:0;padding:0;margin:0 0 1.5rem;min-width:0}.controls legend{font-weight:700;margin-bottom:.6rem}.controls label{display:flex;justify-content:space-between;align-items:baseline;gap:.8rem;font-weight:600}.controls output{color:var(--accent);font-weight:750;font-variant-numeric:tabular-nums}select,input[type=range]{width:100%;accent-color:var(--accent)}select{padding:.6rem;background:var(--paper);border:1px solid var(--line);min-height:44px}input[type=range]{min-height:36px;margin-top:.45rem}.hint{font-size:.87rem;color:var(--muted)}.reset{margin-top:.7rem}
+.stage{background:var(--paper);border:1px solid var(--line);padding:clamp(1rem,3vw,1.8rem)}.stage-heading{display:flex;gap:1rem;justify-content:space-between;align-items:center;flex-wrap:wrap}.stage-heading h2{margin:0;font-size:1.25rem}.diagram{width:100%;height:auto;display:block;max-height:390px}.diagram text{fill:var(--ink);font:700 17px Georgia,serif}.diagram .rear{stroke:var(--muted);stroke-dasharray:6 5}.legend{display:flex;flex-wrap:wrap;gap:1rem;color:var(--muted);font-size:.83rem}.legend b{color:var(--accent)}.readout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:1.4rem 0}.metric{background:var(--paper);padding:1rem;min-width:0}.metric small{display:block;color:var(--muted)}.metric output{font:500 clamp(1.45rem,3vw,2.1rem)/1.3 Georgia,serif;color:var(--sea);font-variant-numeric:tabular-nums}.metric p{margin:.4rem 0 0;font-size:.8rem;color:var(--muted)}.law{padding:1rem 1.25rem;background:var(--soft);border-left:3px solid var(--accent);margin:1rem 0}.law strong{color:var(--accent)}
+.comparison{border-top:1px solid var(--line);margin-top:1.4rem;padding-top:1.4rem}.comparison[hidden]{display:none}.bars{display:grid;gap:1.3rem;margin:1.6rem 0}.bar-item label{display:flex;justify-content:space-between;gap:.5rem;font-size:.88rem;font-weight:700}.bar-track{height:24px;background:var(--soft);border:1px solid var(--line);margin-top:.4rem;overflow:hidden}.bar-fill{height:100%;background:var(--accent);transition:width .14s linear}.bar-fill.volume{background:var(--sea)}.compare-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line)}.compare-grid>div{background:var(--paper);padding:.9rem;min-width:0}.compare-grid b{display:block;color:var(--sea);font:500 1.35rem Georgia,serif}.compare-grid small{color:var(--muted)}
+.footer{padding:2rem 0 3rem;border-top:1px solid var(--line);display:flex;gap:2rem;justify-content:space-between;flex-wrap:wrap;font-size:.84rem;color:var(--muted)}
+@media(max-width:800px){.lab{grid-template-columns:1fr}.wrap{width:min(100% - 1.1rem,1170px)}.stamp{margin-left:0;width:100%}.intro{padding:1.8rem 0}.diagram{max-height:320px}}
+@media(prefers-reduced-motion:reduce){.bar-fill{transition:none}}
+@media print{body{background:#fff}.bar,.modes,.reset{display:none}.lab{grid-template-columns:1fr}.stage{break-inside:avoid}}
+</style></head>
+<body><a class="skip" href="#lab">К лаборатории</a>
+<div class="wrap"><nav class="bar" aria-label="Навигация"><a href="19.11.26.html">← Вернуться к занятию</a><a href="index.html">Кабинет Николь</a><button type="button" id="theme">◐ Тема</button><span class="stamp">STEREOMETRY / VIRTUAL LAB / 19.11.26</span></nav>
+<header class="intro"><div class="eyebrow">Геометрический эксперимент · ЕГЭ</div><h1>Устройство правильной пирамиды</h1><p>Выберите основание и меняйте длину стороны и высоту. Чертёж, апофема, площадь и объём связаны одними формулами — все значения пересчитываются одновременно.</p></header>
+<div class="modes" role="group" aria-label="Режим лаборатории"><button class="mode" type="button" id="geometryMode" aria-pressed="true">01 · Геометрия</button><button class="mode" type="button" id="scaleMode" aria-pressed="false">02 · Масштабирование</button></div>
+<main class="lab" id="lab"><section class="controls" aria-labelledby="controlTitle"><h2 id="controlTitle">Параметры модели</h2>
+<fieldset><legend>Тип основания</legend><label for="base">Правильный многоугольник</label><select id="base"><option value="4">Квадрат · 4 стороны</option><option value="6">Шестиугольник · 6 сторон</option></select><p class="hint">Для квадрата B = a²; для шестиугольника B = 3√3a²/2.</p></fieldset>
+<fieldset><label for="side">Сторона основания a <output id="sideText" for="side">6</output></label><input type="range" id="side" min="1" max="10" step="1" value="6"><p class="hint">Изменяет периметр, площадь основания, апофему и все итоговые величины.</p></fieldset>
+<fieldset><label for="height">Высота пирамиды H <output id="heightText" for="height">4</output></label><input type="range" id="height" min="2" max="8" step="1" value="4"><p class="hint">Высота SO перпендикулярна основанию; апофема SM проходит по боковой грани.</p></fieldset>
+<fieldset id="scaleControls" hidden><label for="factor">Коэффициент подобия k <output id="factorText" for="factor">2</output></label><input type="range" id="factor" min="1" max="3" step=".25" value="2"><p class="hint">Равномерно увеличиваются и сторона основания, и высота.</p></fieldset>
+<button class="reset" type="button" id="reset">Сбросить параметры</button></section>
+<section aria-label="Геометрическая модель и вычисления"><div class="stage"><div class="stage-heading"><h2 id="shapeName">Правильная четырёхугольная пирамида</h2><span class="eyebrow" id="modeLabel">ГЕОМЕТРИЯ</span></div>
+<svg class="diagram" id="diagram" viewBox="0 0 560 450" role="img" aria-labelledby="svgTitle svgDesc"><title id="svgTitle">Пространственный чертёж правильной пирамиды</title><desc id="svgDesc">Модель загружается.</desc><g id="drawing"></g></svg>
+<div class="legend"><span><b>SO</b> · высота H</span><span><b>SM</b> · апофема h</span><span>Пунктир · внутренние или задние отрезки</span></div></div>
+<div class="readout" aria-label="Вычисленные величины"><div class="metric"><small>Площадь основания B</small><output id="area">36</output><p id="areaFormula">a²</p></div><div class="metric"><small>Апофема h</small><output id="slant">5</output><p>h² = H² + r²</p></div><div class="metric"><small>Боковая поверхность S<sub>бок</sub></small><output id="lateral">60</output><p>Ph/2</p></div><div class="metric"><small>Полная поверхность S<sub>полн</sub></small><output id="total">96</output><p>B + S<sub>бок</sub></p></div><div class="metric"><small>Объём V</small><output id="volume">48</output><p>BH/3</p></div><div class="metric"><small>Боковое ребро SA</small><output id="edge">5,83</output><p>√(H² + R²)</p></div></div>
+<div class="law" id="explanation" role="status" aria-live="polite"></div>
+<div class="comparison" id="comparison" hidden><h2>Как меняются площадь и объём</h2><p>Исходная пирамида и подобная ей пирамида, увеличенная в k раз. Каждый линейный размер умножен на k.</p>
+<div class="bars"><div class="bar-item"><label><span>Отношение площадей</span><output id="areaRatio">k²</output></label><div class="bar-track" aria-hidden="true"><div class="bar-fill" id="areaBar"></div></div></div><div class="bar-item"><label><span>Отношение объёмов</span><output id="volumeRatio">k³</output></label><div class="bar-track" aria-hidden="true"><div class="bar-fill volume" id="volumeBar"></div></div></div></div>
+<div class="compare-grid"><div><small>Исходная полная поверхность</small><b id="originalS">96</b></div><div><small>Увеличенная полная поверхность</small><b id="scaledS">384</b></div><div><small>Исходный объём</small><b id="originalV">48</b></div><div><small>Увеличенный объём</small><b id="scaledV">384</b></div></div>
+<div class="law"><strong>Важно:</strong> соотношения k² и k³ действуют при одновременном изменении всех линейных размеров в одно и то же число раз. Если высота и сторона изменены по-разному, вычислите объём по формуле BH/3.</div></div>
+</section></main>
+<footer class="footer"><span>Лёвин Артём Александрович · эксклюзивно для Николь Саркисьянц</span><span><a href="19.11.26.html#training">Вернуться к 10 задачам</a> · 19 ноября 2026</span></footer></div>
+<script>
+(function(){
+'use strict';
+var root=document.documentElement,key='nikol-lesson-19-11-theme';
+try{if(localStorage.getItem(key)==='dark')root.dataset.theme='dark'}catch(e){}
+document.getElementById('theme').addEventListener('click',function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem(key,root.dataset.theme)}catch(e){}});
+var byId=function(id){return document.getElementById(id)},ns='http://www.w3.org/2000/svg',mode=new URLSearchParams(location.search).get('mode')==='scale'?'scale':'geometry';
+var base=byId('base'),side=byId('side'),height=byId('height'),factor=byId('factor');
+var format=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2});
+var round=function(v){return format.format(v)};
+function node(type,attrs,text){var e=document.createElementNS(ns,type);Object.keys(attrs).forEach(function(k){e.setAttribute(k,String(attrs[k]))});if(text!==undefined)e.textContent=String(text);byId('drawing').appendChild(e);return e}
+function line(x1,y1,x2,y2,color,width,dash){node('line',{x1:x1,y1:y1,x2:x2,y2:y2,stroke:color,'stroke-width':width,'stroke-dasharray':dash||'none','stroke-linecap':'round'})}
+function txt(x,y,s){node('text',{x:x,y:y,'font-size':'18'},s)}
+function model(a,H,n){var B=n===4?a*a:3*Math.sqrt(3)*a*a/2;var r=n===4?a/2:Math.sqrt(3)*a/2;var R=a/(2*Math.sin(Math.PI/n));var h=Math.hypot(H,r),edge=Math.hypot(H,R),P=n*a,S=P*h/2;return {B:B,r:r,R:R,h:h,edge:edge,side:S,total:B+S,V:B*H/3,P:P}}
+function draw(a,H,n,m){var g=byId('drawing');while(g.firstChild)g.removeChild(g.firstChild);
+var cx=280,cy=316,unit=20,apex={x:cx,y:cy-H*unit},p=[];
+for(var i=0;i<n;i++){var theta=(-Math.PI/n+2*Math.PI*i/n),R=m.R;p.push({x:cx+Math.cos(theta)*R*unit,y:cy+Math.sin(theta)*R*unit*.46})}
+var pts=p.map(function(q){return q.x+','+q.y}).join(' ');
+node('polygon',{points:pts,fill:'var(--soft)',stroke:'var(--muted)','stroke-width':1.7});
+for(var j=0;j<n;j++){var next=p[(j+1)%n],cur=p[j],front=(cur.y+next.y)/2>=cy;
+if(front)node('polygon',{points:apex.x+','+apex.y+' '+cur.x+','+cur.y+' '+next.x+','+next.y,fill:'var(--accent)',opacity:.11,stroke:'none'})}
+for(var k=0;k<n;k++){var q=p[k],q2=p[(k+1)%n],near=(q.y+q2.y)/2>=cy;line(q.x,q.y,q2.x,q2.y,'var(--muted)',2,near?'':'6 5');line(apex.x,apex.y,q.x,q.y,'var(--ink)',near?2.1:1.5,near?'':'5 6')}
+var M={x:(p[0].x+p[1].x)/2,y:(p[0].y+p[1].y)/2};
+line(cx,cy,M.x,M.y,'var(--muted)',1.7,'5 5');
+line(apex.x,apex.y,cx,cy,'var(--sea)',3,'5 5');
+line(apex.x,apex.y,M.x,M.y,'var(--accent)',4);
+node('circle',{cx:cx,cy:cy,r:4,fill:'var(--sea)'});
+node('circle',{cx:M.x,cy:M.y,r:4,fill:'var(--accent)'});
+txt(apex.x+9,apex.y-9,'S');txt(cx-21,cy+17,'O');txt(M.x+9,M.y+17,'M');
+for(var z=0;z<n;z++){var dx=p[z].x-cx,dy=p[z].y-cy,len=Math.hypot(dx,dy)||1;txt(p[z].x+dx/len*13-5,p[z].y+dy/len*16+5,String.fromCharCode(65+z))}
+byId('svgDesc').textContent='Правильная '+(n===4?'четырёхугольная':'шестиугольная')+' пирамида: сторона '+a+', высота '+H+', апофема '+round(m.h)+'. Черта SO показывает высоту, SM апофему.';
+}
+function render(){
+var a=Number(side.value),H=Number(height.value),n=Number(base.value),k=Number(factor.value),m=model(a,H,n);
+byId('sideText').textContent=a;byId('heightText').textContent=H;byId('factorText').textContent=round(k);
+byId('shapeName').textContent='Правильная '+(n===4?'четырёхугольная':'шестиугольная')+' пирамида';
+byId('area').textContent=round(m.B);byId('slant').textContent=round(m.h);byId('lateral').textContent=round(m.side);
+byId('total').textContent=round(m.total);byId('volume').textContent=round(m.V);byId('edge').textContent=round(m.edge);
+byId('areaFormula').textContent=n===4?'a²':'3√3a²/2';
+byId('explanation').textContent='Для '+(n===4?'квадрата r = a/2':'правильного шестиугольника r = √3a/2')+'. По теореме Пифагора h = √(H² + r²). Отсюда Sбок = Ph/2, Sполн = B + Sбок, V = BH/3.';
+byId('areaRatio').textContent=round(k*k)+' раза';byId('volumeRatio').textContent=round(k*k*k)+' раза';
+byId('areaBar').style.width=(100*k*k/9)+'%';byId('volumeBar').style.width=(100*k*k*k/27)+'%';
+byId('originalS').textContent=round(m.total);byId('scaledS').textContent=round(m.total*k*k);
+byId('originalV').textContent=round(m.V);byId('scaledV').textContent=round(m.V*k*k*k);
+draw(a,H,n,m);
+}
+function setMode(next){mode=next;var scale=mode==='scale';byId('geometryMode').setAttribute('aria-pressed',String(!scale));byId('scaleMode').setAttribute('aria-pressed',String(scale));byId('scaleControls').hidden=!scale;byId('comparison').hidden=!scale;byId('modeLabel').textContent=scale?'МАСШТАБ':'ГЕОМЕТРИЯ';var url=new URL(location.href);url.searchParams.set('mode',mode);history.replaceState(null,'',url.pathname+url.search+url.hash);render()}
+byId('geometryMode').addEventListener('click',function(){setMode('geometry')});byId('scaleMode').addEventListener('click',function(){setMode('scale')});
+[base,side,height,factor].forEach(function(input){input.addEventListener('input',render);input.addEventListener('change',render)});
+byId('reset').addEventListener('click',function(){base.value='4';side.value='6';height.value='4';factor.value='2';render()});
+window.addEventListener('popstate',function(){setMode(new URLSearchParams(location.search).get('mode')==='scale'?'scale':'geometry')});
+setMode(mode);
+})();
+</script></body></html>
