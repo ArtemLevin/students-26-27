@@ -3,6 +3,104 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-19",
+  "ktpRefs": [],
+  "href": "19.11.26.html",
+  "title": "Связанные тела. Одна система.",
+  "navTitle": "Связанные тела · нить и блок",
+  "navSubtitle": "Связанные тела и второй закон Ньютона: направления сил, свойства нити, два груза и наклонная плоскость, система уравнений и 10 заданий Володи Хачатуряна.",
+  "summary": "Связанные тела и второй закон Ньютона: направления сил, свойства нити, два груза и наклонная плоскость, система уравнений и 10 заданий Володи Хачатуряна.",
+  "topics": [
+    "связанные тела",
+    "второй закон Ньютона",
+    "сила тяжести и реакция опоры",
+    "сила трения скольжения",
+    "натяжение нити",
+    "неподвижный блок",
+    "проекции сил",
+    "движение по наклонной плоскости",
+    "ускорение системы"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "dyn_08",
+      "evidenceAnchor": "horizontal",
+      "relation": "practiced",
+      "label": "Второй закон Ньютона",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_12",
+      "evidenceAnchor": "forces",
+      "relation": "touched",
+      "label": "Сила тяжести",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_13",
+      "evidenceAnchor": "forces",
+      "relation": "practiced",
+      "label": "Реакция опоры",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_22",
+      "evidenceAnchor": "horizontal",
+      "relation": "practiced",
+      "label": "Трение скольжения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_23",
+      "evidenceAnchor": "slope",
+      "relation": "touched",
+      "label": "Коэффициент трения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_24",
+      "evidenceAnchor": "slope",
+      "relation": "touched",
+      "label": "Зависимость трения от реакции опоры",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "mech_28",
+      "evidenceAnchor": "pulley",
+      "relation": "practiced",
+      "label": "Неподвижный блок",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "measure_05",
+      "evidenceAnchor": "method",
+      "relation": "practiced",
+      "label": "Векторы и проекции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_07",
+      "evidenceAnchor": "forces",
+      "relation": "practiced",
+      "label": "Схема сил",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_25",
+      "evidenceAnchor": "worked",
+      "relation": "practiced",
+      "label": "Преобразование уравнений",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "19.11.26.html",
+    "pdf": "../pdf_docs/19.11.26.pdf",
+    "tex": "../tex_docs/19.11.26.tex",
+    "lab": "19.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-14",
   "ktpRefs": [],
   "href": "14.11.26.html",
