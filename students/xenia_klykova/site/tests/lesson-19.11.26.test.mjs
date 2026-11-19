@@ -11,7 +11,7 @@ const read=name=>fs.readFileSync(path.join(site,name),'utf8');
 const page=read('19.11.26.html');
 const lab=read('19.11.26-lab.html');
 const metadata=JSON.parse(read('data/lessons/2026-11-19.lesson.json'));
-const intent=JSON.parse(read('data/lesson-publication-intents/2026-11-19.json'));
+const intent=JSON.parse(read('data/publication-intents/2026-11-19.json'));
 const practice=JSON.parse(read('data/practice-publications/2026-11-19.json'));
 const ids=html=>[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
 
