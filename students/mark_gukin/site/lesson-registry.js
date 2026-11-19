@@ -5,6 +5,91 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-11-19",
+  "ktpRefs": [],
+  "href": "19.11.26.html",
+  "title": "Теория вероятностей",
+  "navTitle": "Теория вероятностей",
+  "navSubtitle": "Марк Гукин: теория вероятностей — кубик, монета, независимые испытания, противоположное событие, комбинаторика и 10 заданий.",
+  "summary": "Марк Гукин: теория вероятностей — кубик, монета, независимые испытания, противоположное событие, комбинаторика и 10 заданий.",
+  "topics": [
+    "Классическая вероятность и равновозможные исходы",
+    "Монета и кубик: упорядоченные последовательности",
+    "Правила сложения и умножения вероятностей",
+    "Противоположное событие и хотя бы один успех",
+    "Выбор без учёта порядка и случайная очередь",
+    "Вероятности промежутков по вложенным событиям"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege04_01",
+      "evidenceAnchor": "language",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege04_02",
+      "evidenceAnchor": "positions",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege04_03",
+      "evidenceAnchor": "complement",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege04_05",
+      "evidenceAnchor": "coin",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege04_06",
+      "evidenceAnchor": "positions",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_01",
+      "evidenceAnchor": "rules",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_02",
+      "evidenceAnchor": "rules",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_06",
+      "evidenceAnchor": "complement",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_08",
+      "evidenceAnchor": "complement",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_10",
+      "evidenceAnchor": "combinatorics",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_12",
+      "evidenceAnchor": "positions",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_16",
+      "evidenceAnchor": "positions",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "19.11.26.html",
+    "pdf": "../pdf_docs/19.11.26.pdf",
+    "tex": "../tex_docs/19.11.26.tex",
+    "lab": "19.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-13",
   "ktpRefs": [],
   "href": "13.11.26.html",
