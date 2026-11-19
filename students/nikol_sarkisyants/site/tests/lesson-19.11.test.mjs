@@ -67,7 +67,7 @@ test('laboratory uses a single geometry model and computes every output from par
   assert.match(lab,/S=P\*h\/2/);
   assert.match(lab,/function setMode\(next\)/);
   assert.match(lab,/aria-pressed/);
-  assert.match(lab,/mode=geometry/);
+  assert.match(lab,/url\.searchParams\.set\('mode',mode\)/);
   assert.match(lab,/@media\(max-width:800px\)/);
   assert.match(lab,/@media\(prefers-reduced-motion:reduce\)/);
   const scripts=inlineScripts(lab);assert.equal(scripts.length,1);assert.doesNotThrow(()=>new Script(scripts[0]));
