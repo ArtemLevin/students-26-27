@@ -15,10 +15,11 @@ const intent=JSON.parse(read('data/publication-intents/2026-11-14.json'));
 const practice=JSON.parse(read('data/practice-publications/2026-11-14.json'));
 const ids=html=>[...html.matchAll(/\bid="([^"]+)"/g)].map(item=>item[1]);
 
-test('14.11.26 is the latest lesson with consistent v2 metadata and materials',()=>{
-  assert.equal(validateLessonRegistry().latest,'14.11.26.html');
-  assert.equal(LESSONS[0].date,'2026-11-14');
-  assert.equal(LESSONS[0].materials.html,'14.11.26.html');
+test('14.11.26 remains a registered lesson with consistent v2 metadata and materials',()=>{
+  assert.equal(validateLessonRegistry().latest,LESSONS[0].href);
+  const registered=LESSONS.find(item=>item.date==='2026-11-14');
+  assert.ok(registered,'14 November must remain in the archive');
+  assert.equal(registered.materials.html,'14.11.26.html');
   assert.equal(meta.date,'2026-11-14');
   assert.equal(intent.lessonDate,meta.date);
   assert.equal(practice.lessonDate,meta.date);
