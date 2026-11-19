@@ -14,15 +14,17 @@ const intent=JSON.parse(read('data/lesson-publication-intents/2026-11-11.json'))
 const practice=JSON.parse(read('data/practice-publications/2026-11-11.json'));
 const overlay=read('dashboard-data-11.11.js');
 
-test('11 November lesson is registered newest-first and its sources exist',()=>{
+test('11 November historical lesson remains registered with its source materials',()=>{
   validateLessonRegistry(LESSONS);
-  assert.equal(LESSONS[0].date,'2026-11-11');
-  assert.equal(LESSONS[0].href,'11.11.26.html');
+  const historical=LESSONS.find(x=>x.date==='2026-11-11');
+  assert.ok(historical);
+  assert.deepEqual(LESSONS.map(x=>x.date),[...LESSONS.map(x=>x.date)].sort().reverse());
+  assert.equal(historical.href,'11.11.26.html');
   assert.equal(LESSONS.filter(x=>x.date==='2026-11-11').length,1);
   assert.equal(metadata.date,intent.lessonDate);
-  assert.equal(LESSONS[0].title,metadata.title);
-  assert.deepEqual(LESSONS[0].topics,metadata.topics);
-  assert.deepEqual(LESSONS[0].summary,metadata.summary);
+  assert.equal(historical.title,metadata.title);
+  assert.deepEqual(historical.topics,metadata.topics);
+  assert.deepEqual(historical.summary,metadata.summary);
   for(const ref of Object.values(metadata.materials))assert.ok(existsSync(resolve(site,ref)),'Missing material '+ref);
   assert.equal(metadata.materials.lab,undefined,'An uncreated laboratory must not be listed');
   assert.deepEqual(metadata.ktpRefs,[]);
@@ -60,7 +62,7 @@ test('evidence is linked to real anchors and does not assert independent mastery
     assert.ok(practice.outcomes.some(x=>x.competencyId===evidence.competencyId&&x.evidenceAnchor===evidence.evidenceAnchor&&x.relation===evidence.relation&&x.practiceDisposition==='manual'));
   }
   assert.match(read('index.html'),/dashboard-data-11\.11\.js/);
-  assert.match(read('dashboard.js'),/lesson-registry\.js\?v=20261113-1/);
+  assert.match(read('dashboard.js'),/lesson-registry\.js\?v=20\d{6}-\d+/);
 });
 
 test('worked values and answer key agree with elementary geometry',()=>{
