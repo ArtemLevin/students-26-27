@@ -1,0 +1,319 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{helvet}
+\renewcommand{\sfdefault}{cmss}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{icomma}
+\usepackage[left=23mm,right=23mm,top=22mm,bottom=23mm,headheight=26pt]{geometry}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tabularx,booktabs,array}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{needspace}
+\usepackage{float}
+
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{303638}
+\definecolor{softgray}{HTML}{6B7576}
+\color{textgray}
+\setstretch{1.39}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlist[itemize]{leftmargin=6mm,itemsep=1pt,topsep=4pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=8mm,itemsep=9pt,topsep=8pt,parsep=1pt}
+\titleformat{\section}{\large\color{darkaccent}\bfseries}{\thesection.}{.65em}{}
+\titlespacing*{\section}{0pt}{16pt}{8pt}
+\titleformat{\subsection}{\normalsize\color{accent}\bfseries}{}{0pt}{}
+\titlespacing*{\subsection}{0pt}{12pt}{5pt}
+\setlength{\headsep}{10pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{softgray}Теория вероятностей}
+\fancyhead[R]{\small\color{softgray}Марк Гукин}
+\renewcommand{\headrulewidth}{0.45pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+\fancyfoot[C]{\small\color{softgray}\thepage}
+\renewcommand{\footrulewidth}{0pt}
+\newcommand{\keyidea}[1]{\textcolor{darkaccent}{\bfseries #1}}
+\newcommand{\ex}[1]{\par\smallskip\textcolor{accent}{\bfseries #1}\par\smallskip}
+\newcommand{\ordpair}[2]{(#1,#2)}
+\setcounter{secnumdepth}{1}
+\setcounter{tocdepth}{1}
+\year=2026\month=11\day=19
+
+\begin{document}
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{26mm}
+{\normalsize\color{darkaccent}\MakeUppercase{Математика}\par}
+\vspace{18mm}
+{\LARGE Чек-лист\par}
+\vspace{16mm}
+{\LARGE\color{accent} Теория вероятностей\\[3mm]
+\large Кубик, монета, комбинаторика\\ и противоположные события\par}
+\vspace{19mm}
+{\normalsize Подготовка к ЕГЭ по профильной математике\par}
+\vfill
+{\large Марк Гукин\par}
+\vspace{12mm}
+{\normalsize \today\par}
+\vspace{20mm}
+{\small Лёвин Артём Александрович\\[2mm]
+эксклюзивно для Марка Гукина\par}
+\vspace{21mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+ \draw[accent,line width=0.85pt] (0,0) .. controls (1.0,.38) and (2.2,-.38) .. (3.4,0)
+ .. controls (4.6,.35) and (5.6,-.35) .. (6.7,0)
+ .. controls (7.85,.33) and (8.9,-.32) .. (10,0);
+\end{tikzpicture}
+\vspace{3mm}
+\end{titlepage}
+
+\section{Вероятность и равновозможные исходы}
+Если все элементарные исходы равновозможны, вероятность события $A$ равна
+\[
+\boxed{\displaystyle P(A)=\frac{N(A)}{N}},
+\]
+где $N$~--- число всех исходов, $N(A)$~--- число благоприятных исходов.
+
+\keyidea{Проверяйте слова в условии:}
+\begin{itemize}
+\item \emph{меньше четырёх} означает $1,2,3$; четвёрка исключена;
+\item \emph{не более четырёх} означает $1,2,3,4$;
+\item \emph{ровно два} означает исключительно два;
+\item \emph{хотя бы два} (\emph{не менее двух}) означает два или больше.
+\end{itemize}
+\ex{Пример 1. Один правильный кубик}
+Вероятность выпадения числа меньше четырёх:
+\[
+P=\frac{3}{6}=\frac12.
+\]
+\textcolor{softgray}{Слова \emph{больше}, \emph{меньше}, \emph{не более}, \emph{не менее} определяют, какие граничные значения нужно учитывать.}
+
+\section{Метод позиций: последовательные броски}
+\keyidea{Учитывайте порядок испытаний.} Два броска кубика задают упорядоченную пару $(a,b)$; например, $(2,5)$ и $(5,2)$~--- разные исходы. Для каждого броска имеется по шесть вариантов:
+\[
+N=\underbrace{6\cdot6}_{\text{два броска}}=36.
+\]
+При трёх бросках монеты, обозначая орла буквой $\mathrm{O}$, а решку~--- $\mathrm{P}$, получаем $2^3=8$ исходов.
+
+\ex{Пример 2. Два одинаковых числа на двух кубиках}
+Благоприятные пары: $(1,1),(2,2),\ldots,(6,6)$. Их шесть, поэтому
+\[
+P=\frac{6}{36}=\frac16.
+\]
+\ex{Пример 3. Ровно два орла за три броска}
+Подходят $\mathrm{OOP}$, $\mathrm{OPO}$, $\mathrm{POO}$~--- три исхода из восьми:
+\[
+P=\frac38.
+\]
+
+\section{Когда нужна таблица исходов}
+При двух бросках кубика удобно построить таблицу сумм; строка задаёт первый бросок, столбец~--- второй.
+\begin{center}
+\small\renewcommand{\arraystretch}{1.19}
+\begin{tabular}{c@{\hspace{6pt}}*{6}{>{\centering\arraybackslash}p{1.05cm}}}
+\toprule
+$+ $ & $1$ & $2$ & $3$ & $4$ & $5$ & $6$ \\
+\midrule
+$1$ & $2$ & $3$ & $4$ & $5$ & $6$ & $7$ \\
+$2$ & $3$ & $4$ & $5$ & $6$ & $7$ & $8$ \\
+$3$ & $4$ & $5$ & $6$ & $7$ & $8$ & $9$ \\
+$4$ & $5$ & $6$ & $7$ & $8$ & $9$ & $10$ \\
+$5$ & $6$ & $7$ & $8$ & $9$ & $10$ & $11$ \\
+$6$ & $7$ & $8$ & $9$ & $10$ & $11$ & $12$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Чётная сумма получается, когда оба числа имеют одинаковую чётность. Таких клеток $18$ из $36$, следовательно, $P=\frac{18}{36}=\frac12$.
+
+\section{Умножение и сложение вероятностей}
+Для \emph{независимых} событий $A$ и $B$:
+\[
+P(A\cap B)=P(A)P(B).
+\]
+Если необходимо, чтобы состоялись \emph{оба} события, в условиях независимости их вероятности умножают (союз «и»).
+
+Если исходы $A$ и $B$ \emph{несовместны}, то
+\[
+P(A\cup B)=P(A)+P(B).
+\]
+Значит, для выбора между \emph{непересекающимися} случаями (союз «или») вероятности складывают. Если случаи пересекаются, просто складывать нельзя.
+
+\ex{Пример 4. Ровно одна бракованная ручка}
+Из двух независимо выбранных ручек каждая бракована с вероятностью $0{,}1$. Благоприятны два несовместных случая: первая бракована, вторая исправна; или наоборот.
+\[
+P=0{,}1\cdot0{,}9+0{,}9\cdot0{,}1=0{,}18.
+\]
+
+\section{Противоположное событие: «хотя бы один»}
+Для события $A$ и противоположного события $\overline A$:
+\[
+\boxed{P(A)=1-P(\overline A).}
+\]
+\keyidea{«Хотя бы один успех»} означает, что противоположное событие~--- \emph{ни одного успеха}.
+
+\ex{Пример 5. Монету бросают трижды}
+Вероятность хотя бы одного орла удобнее вычислить через три решки:
+\[
+P(\text{хотя бы один орёл})
+=1-P(\mathrm{PPP})=1-\left(\frac12\right)^3=\frac78.
+\]
+Если независимое испытание повторяют $n$ раз, а успех в каждом испытании имеет вероятность $p$, то
+\[
+\boxed{P(\text{хотя бы один успех})=1-(1-p)^n.}
+\]
+В частности, для пяти бросков кубика вероятность \emph{ни разу} не получить тройку равна $(5/6)^5$, а \emph{получить её хотя бы раз}~--- $1-(5/6)^5$.
+
+\vspace{4mm}
+\subsection*{Самопроверка: четыре частые ошибки}
+\begin{itemize}
+\item Путают \emph{ровно один} и \emph{хотя бы один}: второй случай включает и несколько успехов.
+\item Складывают вероятности пересекающихся событий как несовместные.
+\item Умножают вероятности событий, не проверив независимость.
+\item Смешивают выбор \emph{группы} и порядок выступлений участников.
+\end{itemize}
+
+
+\clearpage
+\begin{center}
+{\Large\color{darkaccent}\bfseries Алгоритм: «хотя бы один успех»}\par
+\vspace{7mm}
+\end{center}
+\tikzset{
+ fcStart/.style={ellipse,draw=accent,line width=.75pt,minimum width=5.2cm,minimum height=1cm,align=center,font=\small},
+ fcAction/.style={rectangle,rounded corners=2pt,draw=accent,line width=.75pt,text width=8.2cm,minimum height=1.16cm,align=center,font=\small,inner sep=6pt},
+ fcDecision/.style={diamond,aspect=2.45,draw=accent,line width=.75pt,text width=4.6cm,align=center,font=\small,inner sep=2pt},
+ fcArrow/.style={-{Stealth[length=2.6mm]},draw=darkaccent,line width=.8pt}
+}
+\begin{center}
+\begin{tikzpicture}[node distance=12mm and 12mm]
+ \node[fcStart] (st) {Начало: требуется вероятность\\ хотя бы одного успеха};
+ \node[fcAction,below=of st] (neg) {Перейдите к противоположному событию: \\ «успех не произошёл ни разу»};
+ \node[fcDecision,below=17mm of neg] (ind) {Все испытания независимы?};
+ \node[fcAction,text width=5.25cm,below left=20mm and 3mm of ind] (no) {Найдите $P(\overline A)$\\перебором или другим\\обоснованным способом};
+ \node[fcAction,text width=5.25cm,below right=20mm and 3mm of ind] (yes) {Найдите $P(\overline A)$\\как произведение вероятностей\\неудачи во всех испытаниях};
+ \node[fcAction,below=41mm of ind] (sub) {Вычтите вероятность противоположного события:\\ $P(A)=1-P(\overline A)$};
+ \node[fcStart,below=of sub] (end) {Ответ};
+ \draw[fcArrow] (st) -- (neg);
+ \draw[fcArrow] (neg) -- (ind);
+ \draw[fcArrow] (ind.south west) -| node[pos=.28,above,sloped,fill=white,inner sep=1pt]{нет} (no.north);
+ \draw[fcArrow] (ind.south east) -| node[pos=.28,above,sloped,fill=white,inner sep=1pt]{да} (yes.north);
+ \draw[fcArrow] (no.south) |- ([yshift=5mm]sub.west) -- (sub.west);
+ \draw[fcArrow] (yes.south) |- ([yshift=5mm]sub.east) -- (sub.east);
+ \draw[fcArrow] (sub) -- (end);
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section{Выбор людей и порядок выступлений}
+При выборе нескольких людей \emph{без учёта порядка} перестановки выбранных участников не создают новых групп. Из $n$ различных людей можно выбрать $k$ человек числом способов
+\[
+\binom nk=\frac{n!}{k!(n-k)!},\qquad 0\le k\le n.
+\]
+\ex{Пример 6. Выбор трёх туристов из двадцати четырёх}
+Нужно, чтобы выбранный турист $A$ обязательно оказался в группе. Его место занято; оставшихся двоих выбираем из $23$:
+\[
+P=\frac{\binom{23}{2}}{\binom{24}{3}}=\frac{3}{24}=\frac18.
+\]
+
+При случайном определении \emph{порядка} выступлений фиксированная позиция равновероятна для каждого участника. Если спортсменов всего $20$, из которых $7$~--- из России, то вероятность увидеть спортсмена из России на любом конкретном месте (первом, пятом, последнем) равна
+\[
+P=\frac{7\cdot19!}{20!}=\frac7{20}.
+\]
+\textcolor{softgray}{Число способов получить группу и число способов выстроить очередь различаются: до подсчёта выясните, существенен ли порядок.}
+
+\section{Промежутки и вложенные события}
+Если $a<b$, то события $\{X<a\}$ и $\{a\le X<b\}$ несовместны и вместе образуют событие $\{X<b\}$. Поэтому
+\[
+\boxed{P(a\le X<b)=P(X<b)-P(X<a).}
+\]
+\begin{center}
+\begin{tikzpicture}[x=0.112cm,y=1cm]
+ \draw[->,line width=.65pt] (0,0) -- (96,0);
+ \draw[accent,line width=2.4pt] (31,0) -- (72,0);
+ \draw[accent,fill=white,line width=1pt] (31,0) circle (2.3pt);
+ \draw[accent,fill=white,line width=1pt] (72,0) circle (2.3pt);
+ \draw[darkaccent,fill=darkaccent] (31,0) circle (1.45pt);
+ \node[below=6pt,font=\small] at (31,0) {$a$};
+ \node[below=6pt,font=\small] at (72,0) {$b$};
+ \node[above=8pt,font=\small,accent] at (51.5,0) {$a\le X<b$};
+\end{tikzpicture}
+\end{center}
+\ex{Пример 7. Масса упаковки}
+Пусть $P(X<810)=0{,}96$ и $P(X<790)=0{,}07$. Тогда
+\[
+P(790\le X<810)=0{,}96-0{,}07=0{,}89.
+\]
+
+\clearpage
+\section*{Тренировочный блок}
+\textcolor{softgray}{Путь А · 10 задач · от базовых к комплексным. В каждом задании запишите число всех исходов или обоснуйте применённую формулу. Ответы приведены отдельно.}
+\subsection*{Базовый уровень}
+\begin{enumerate}[label=\textcolor{darkaccent}{\bfseries \arabic*.},ref=\arabic*]
+\item Правильный игральный кубик бросают один раз. Найдите вероятность того, что выпавшее число \emph{больше двух, но не более пяти}.
+\item Правильный игральный кубик бросают дважды. Найдите вероятность того, что сумма выпавших чисел равна $7$.
+\item Симметричную монету бросают трижды. Найдите вероятность того, что орёл выпадет \emph{ровно два раза}.
+\end{enumerate}
+\subsection*{Уверенное владение}
+\begin{enumerate}[label=\textcolor{darkaccent}{\bfseries \arabic*.},start=4,ref=\arabic*]
+\item Правильный игральный кубик бросают дважды. Найдите вероятность того, что сумма выпавших чисел равна $8$. Для проверки можете составить таблицу исходов.
+\item Симметричную монету бросают четыре раза. Найдите вероятность того, что орёл выпадет \emph{не менее трёх раз}.
+\item Из группы $15$ туристов случайно выбирают троих. Найдите вероятность того, что в эту тройку войдёт конкретный турист $A$. Порядок выбора роли не играет.
+\item На соревновании выступают $20$ спортсменов, из них $6$ представляют одну страну. Порядок выступлений определяют случайно. Найдите вероятность того, что на \emph{двенадцатой} позиции окажется спортсмен этой страны.
+\end{enumerate}
+\subsection*{Комплексное применение}
+\begin{enumerate}[label=\textcolor{darkaccent}{\bfseries \arabic*.},start=8,ref=\arabic*]
+\item Для массы упаковки $X$ известно: $P(X<850)=0{,}91$, а $P(X<800)=0{,}14$. Найдите вероятность события $800\le X<850$.
+\item Две ручки выбирают независимо. Вероятность брака каждой ручки равна $0{,}1$. Найдите вероятность того, что \emph{ровно одна} из двух ручек окажется бракованной.
+\item Правильный игральный кубик бросают пять раз. Найдите вероятность того, что тройка выпадет \emph{хотя бы один раз, но не во всех пяти бросках}. Ответ представьте обыкновенной дробью.
+\end{enumerate}
+
+\clearpage
+\section*{Ответы}
+\vspace{5mm}
+\renewcommand{\arraystretch}{1.7}
+\begin{center}
+\begin{tabularx}{.91\linewidth}{>{\centering\arraybackslash}p{.8cm}X>{\centering\arraybackslash}p{.8cm}X}
+\toprule
+\textbf{№} & \textbf{Ответ} & \textbf{№} & \textbf{Ответ} \\
+\midrule
+1 & $\displaystyle \frac12$ & 6 & $\displaystyle \frac15$ \\[8pt]
+2 & $\displaystyle \frac16$ & 7 & $\displaystyle \frac3{10}$ \\[8pt]
+3 & $\displaystyle \frac38$ & 8 & $0{,}77$ \\[8pt]
+4 & $\displaystyle \frac5{36}$ & 9 & $0{,}18$ \\[8pt]
+5 & $\displaystyle \frac5{16}$ & 10 & $\displaystyle \frac{775}{1296}$ \\[8pt]
+\bottomrule
+\end{tabularx}
+\end{center}
+\vspace{12mm}
+\section*{Итоговая памятка}
+\renewcommand{\arraystretch}{1.4}
+\small
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{.43\linewidth}X}
+\toprule
+\textbf{Формулировка} & \textbf{Полезный приём} \\
+\midrule
+Ровно $k$ успехов & Учитывайте только исходы с $k$ успехами. \\
+Хотя бы один успех & Вычтите из единицы вероятность всех неудач. \\
+И (независимые события) & Перемножьте вероятности. \\
+Или (несовместные случаи) & Сложите вероятности. \\
+Выбор без учёта порядка & Используйте сочетания. \\
+Фиксированное место в случайной очереди & Посчитайте, сколько подходящих участников из всех. \\
+Вероятность промежутка & Вычтите вложенные накопленные вероятности. \\
+\bottomrule
+\end{tabularx}
+\normalsize
+\end{document}
