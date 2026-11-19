@@ -71,6 +71,11 @@ const evidenceOnly=[
 {date:'15.11.26',href:'15.11.26.html#horizontal',ids:['functions_11']},
 {date:'15.11.26',href:'15.11.26.html#intersection',ids:['functions_13']},
 {date:'15.11.26',href:'15.11.26.html#through-point',ids:['equations_4']},
+{date:'19.11.26',href:'19.11.26.html#angles',ids:['geo_base_8','geo_base_10']},
+{date:'19.11.26',href:'19.11.26.html#isosceles',ids:['triangles_11','triangles_13']},
+{date:'19.11.26',href:'19.11.26.html#congruence',ids:['triangles_9']},
+{date:'19.11.26',href:'19.11.26.html#axes',ids:['functions_4','functions_7','functions_10','functions_11','equations_6']},
+{date:'19.11.26',href:'19.11.26.html#through-point',ids:['systems_2']},
 ];
 const teacherSeed={},evidence={};
 for(const lesson of lessons)for(const id of lesson.ids){teacherSeed[id]=Math.max(teacherSeed[id]||0,2);evidence[id]={text:`Тема подтверждена материалом занятия ${lesson.date}.`,href:lesson.href};}
