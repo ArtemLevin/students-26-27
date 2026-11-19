@@ -18,10 +18,10 @@ test('New probability lesson and lab browser release',async()=>{
  });
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
  const profile=fs.mkdtempSync(path.join(os.tmpdir(),'probability-browser-'));
- const proc=spawn(chrome,['--headless=new','--no-sandbox','--disable-dev-shm-usage','--disable-gpu','--no-first-run','--remote-debugging-port=0','--user-data-dir='+profile],{stdio:'ignore'});
+ const proc=spawn(chrome,['--headless=new','--no-sandbox','--disable-dev-shm-usage','--disable-gpu','--no-first-run','--no-zygote','--disable-extensions','--remote-debugging-port=0','--user-data-dir='+profile],{stdio:'ignore'});
  let ws,serial=0;const pending=new Map(),errors=[],failed=[];
  try{
-  let port;for(let i=0;i<160;i++){const f=path.join(profile,'DevToolsActivePort');if(fs.existsSync(f)){port=Number(fs.readFileSync(f,'utf8').split('\n')[0]);break;}if(proc.exitCode!==null)throw Error('Chromium exited');await sleep(100);}
+  let port;for(let i=0;i<300;i++){const f=path.join(profile,'DevToolsActivePort');if(fs.existsSync(f)){port=Number(fs.readFileSync(f,'utf8').split('\n')[0]);break;}if(proc.exitCode!==null)throw Error('Chromium exited');await sleep(100);}
   assert.ok(port,'DevTools port unavailable');
   const tabs=await(await fetch('http://127.0.0.1:'+port+'/json/list')).json();
   const target=tabs.find(t=>t.type==='page');assert.ok(target);
