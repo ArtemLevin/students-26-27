@@ -445,7 +445,8 @@ try{
   await page.locator('[data-plane="beta"]').click();
   assert.equal(await page.locator('[data-plane="beta"]').getAttribute('aria-pressed'),'true','19 Nov cube selection '+width);
   assert.equal(await page.locator('#planeEquation').textContent(),'x + y − z − 1 = 0','19 Nov beta equation '+width);
-  assert.equal(await page.locator('#faceBeta').getAttribute('hidden'),null,'19 Nov beta face visible '+width);
+  assert.notEqual(await page.locator('#faceBeta').evaluate(el=>getComputedStyle(el).display),'none','19 Nov beta face visible '+width);
+  assert.equal(await page.locator('#faceAlpha').evaluate(el=>getComputedStyle(el).display),'none','19 Nov alpha face hidden '+width);
   await page.locator('#nextStep').click();
   assert.equal(await page.locator('#stepStatus').textContent(),'2 / 4','19 Nov stepper next '+width);
   await page.locator('#checklist input').first().check();
