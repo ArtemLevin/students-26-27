@@ -4,1115 +4,1167 @@ export const ARCHIVE_PAGE_SIZE=10;
 const MONTHS_GENITIVE=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
 export const LESSONS=[
-{
-  "date": "2026-11-14",
-  "ktpRefs": [],
-  "href": "14.11.26.html",
-  "title": "Остатки и чётность чисел",
-  "navTitle": "Остатки и чётность чисел",
-  "navSubtitle": "Ксения Клыкова · 14 ноября 2026: остатки при делении, сравнения по модулю, чётность, арифметика остатков, квадраты и 10 задач Пути А.",
-  "summary": "Ксения Клыкова · 14 ноября 2026: остатки при делении, сравнения по модулю, чётность, арифметика остатков, квадраты и 10 задач Пути А.",
-  "topics": [
-    "деление с остатком, сравнения и периодичность по модулю 2 и 3",
-    "чётные и нечётные числа: формулы 2k и 2k+1",
-    "арифметика остатков при сложении, вычитании, умножении и возведении в степень",
-    "делимость произведений последовательных чисел и инвариант чётности",
-    "остатки квадратов по модулям 4 и 8",
-    "невозможность целочисленных решений уравнения x²+y²=2027",
-    "10 упражнений Пути А"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t19_remainders",
-      "evidenceAnchor": "remainders",
-      "relation": "practiced",
-      "label": "Деление с остатком и сравнения по модулю",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_parity",
-      "evidenceAnchor": "parity",
-      "relation": "practiced",
-      "label": "Доказательство чётности по формам 2k и 2k+1",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_divisibility",
-      "evidenceAnchor": "consecutive",
-      "relation": "practiced",
-      "label": "Делимость произведения последовательных чисел",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_invariants",
-      "evidenceAnchor": "consecutive",
-      "relation": "touched",
-      "label": "Инвариант чётности при операциях",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_integer_eq",
-      "evidenceAnchor": "equation",
-      "relation": "touched",
-      "label": "Проверка целочисленного уравнения по остаткам квадратов",
-      "practiceDisposition": "manual"
+  {
+    "date": "2026-11-19",
+    "ktpRefs": [],
+    "href": "19.11.26.html",
+    "title": "Прямоугольный параллелепипед и куб",
+    "navTitle": "Прямоугольный параллелепипед и куб",
+    "navSubtitle": "Ксения Клыкова · 19 ноября 2026: прямоугольный параллелепипед и куб, объём, полная поверхность, диагонали, изменение объёма и 10 задач Пути А.",
+    "summary": "Ксения Клыкова · 19 ноября 2026: прямоугольный параллелепипед и куб, объём, полная поверхность, диагонали, изменение объёма и 10 задач Пути А.",
+    "topics": [
+      "объём прямоугольного параллелепипеда, выбор основания и высоты",
+      "площадь полной поверхности и отличие от площади одной грани",
+      "диагонали грани и пространственная диагональ, теорема Пифагора",
+      "формулы куба и нахождение площади через диагонали",
+      "изменение ребра куба и объёма, уравнение с кубом суммы",
+      "10 упражнений Пути А"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t3_box",
+        "evidenceAnchor": "box",
+        "relation": "practiced",
+        "label": "Объём прямоугольного параллелепипеда и поиск недостающего ребра",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t3_surface",
+        "evidenceAnchor": "surface",
+        "relation": "practiced",
+        "label": "Полная поверхность и площадь одной грани",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t3_cube",
+        "evidenceAnchor": "cube",
+        "relation": "practiced",
+        "label": "Формулы куба и диагонали",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t3_similarity",
+        "evidenceAnchor": "change",
+        "relation": "touched",
+        "label": "Зависимость объёма куба от изменения длины ребра",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "19.11.26.html",
+      "pdf": "../pdf_docs/19.11.26.pdf",
+      "tex": "../tex_docs/19.11.26.tex",
+      "lab": "19.11.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "14.11.26.html",
-    "pdf": "../pdf_docs/14.11.26.pdf",
-    "tex": "../tex_docs/14.11.26.tex",
-    "lab": "14.11.26-lab.html"
-  }
-},
-{
-  "date": "2026-11-12",
-  "ktpRefs": [],
-  "href": "12.11.26.html",
-  "title": "Факториал. От делимости к Лежандру",
-  "navTitle": "Факториал. От делимости к Лежандру",
-  "navSubtitle": "Ксения Клыкова · 12 ноября 2026: факториалы, делимость, формула Лежандра, максимальная степень составного числа и 10 задач Пути А.",
-  "summary": "Ксения Клыкова · 12 ноября 2026: факториалы, делимость, формула Лежандра, максимальная степень составного числа и 10 задач Пути А.",
-  "topics": [
-    "факториал и сокращение отношений факториалов",
-    "делимость факториала и каноническое разложение",
-    "показатель простого множителя и формула Лежандра",
-    "максимальная степень составного делителя в факториале",
-    "разбор ошибок: округление, коэффициент и минимум",
-    "10 заданий Пути А"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t19_primes",
-      "evidenceAnchor": "divisibility",
-      "relation": "practiced",
-      "label": "Каноническое разложение и простые множители",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_divisibility",
-      "evidenceAnchor": "powers",
-      "relation": "practiced",
-      "label": "Делимость факториала и максимальная степень составного числа",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-11-14",
+    "ktpRefs": [],
+    "href": "14.11.26.html",
+    "title": "Остатки и чётность чисел",
+    "navTitle": "Остатки и чётность чисел",
+    "navSubtitle": "Ксения Клыкова · 14 ноября 2026: остатки при делении, сравнения по модулю, чётность, арифметика остатков, квадраты и 10 задач Пути А.",
+    "summary": "Ксения Клыкова · 14 ноября 2026: остатки при делении, сравнения по модулю, чётность, арифметика остатков, квадраты и 10 задач Пути А.",
+    "topics": [
+      "деление с остатком, сравнения и периодичность по модулю 2 и 3",
+      "чётные и нечётные числа: формулы 2k и 2k+1",
+      "арифметика остатков при сложении, вычитании, умножении и возведении в степень",
+      "делимость произведений последовательных чисел и инвариант чётности",
+      "остатки квадратов по модулям 4 и 8",
+      "невозможность целочисленных решений уравнения x²+y²=2027",
+      "10 упражнений Пути А"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t19_remainders",
+        "evidenceAnchor": "remainders",
+        "relation": "practiced",
+        "label": "Деление с остатком и сравнения по модулю",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_parity",
+        "evidenceAnchor": "parity",
+        "relation": "practiced",
+        "label": "Доказательство чётности по формам 2k и 2k+1",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_divisibility",
+        "evidenceAnchor": "consecutive",
+        "relation": "practiced",
+        "label": "Делимость произведения последовательных чисел",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_invariants",
+        "evidenceAnchor": "consecutive",
+        "relation": "touched",
+        "label": "Инвариант чётности при операциях",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_integer_eq",
+        "evidenceAnchor": "equation",
+        "relation": "touched",
+        "label": "Проверка целочисленного уравнения по остаткам квадратов",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "14.11.26.html",
+      "pdf": "../pdf_docs/14.11.26.pdf",
+      "tex": "../tex_docs/14.11.26.tex",
+      "lab": "14.11.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "12.11.26.html",
-    "pdf": "../pdf_docs/12.11.26.pdf",
-    "tex": "../tex_docs/12.11.26.tex",
-    "lab": "12.11.26-lab.html"
-  }
-},
-{
-  "date": "2026-11-09",
-  "ktpRefs": [],
-  "href": "09.11.26.html",
-  "title": "Кредит: от остатка долга к платежу",
-  "navTitle": "Кредит: от остатка долга к платежу",
-  "navSubtitle": "Ксения Клыкова · 9 ноября 2026: банковские кредиты, графики остатка долга, проценты, платежи, ограничения и 10 заданий Пути А.",
-  "summary": "Ксения Клыкова · 9 ноября 2026: банковские кредиты, графики остатка долга, проценты, платежи, ограничения и 10 заданий Пути А.",
-  "topics": [
-    "таблица остатков долга и последовательность начисления процентов",
-    "кредит на 750 тыс. рублей: три годовых платежа и переплата",
-    "ограничение каждого платежа и максимальная целая сумма кредита",
-    "ограничение общей суммы выплат за четыре года",
-    "ежемесячные 5% и процент переплаты за шесть месяцев",
-    "10 развёрнутых упражнений Пути А"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t16_credits",
-      "evidenceAnchor": "model",
-      "relation": "touched",
-      "label": "Периодическое начисление процентов по кредиту",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_debt_table",
-      "evidenceAnchor": "example",
-      "relation": "touched",
-      "label": "Таблица изменения остатка долга",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_payment_sum",
-      "evidenceAnchor": "sum",
-      "relation": "touched",
-      "label": "Общая сумма выплат и переплата",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_optimal",
-      "evidenceAnchor": "limits",
-      "relation": "touched",
-      "label": "Наибольшая сумма кредита при ограничениях",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t9_units",
-      "evidenceAnchor": "checks",
-      "relation": "touched",
-      "label": "Единицы измерения и строгое неравенство",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-11-12",
+    "ktpRefs": [],
+    "href": "12.11.26.html",
+    "title": "Факториал. От делимости к Лежандру",
+    "navTitle": "Факториал. От делимости к Лежандру",
+    "navSubtitle": "Ксения Клыкова · 12 ноября 2026: факториалы, делимость, формула Лежандра, максимальная степень составного числа и 10 задач Пути А.",
+    "summary": "Ксения Клыкова · 12 ноября 2026: факториалы, делимость, формула Лежандра, максимальная степень составного числа и 10 задач Пути А.",
+    "topics": [
+      "факториал и сокращение отношений факториалов",
+      "делимость факториала и каноническое разложение",
+      "показатель простого множителя и формула Лежандра",
+      "максимальная степень составного делителя в факториале",
+      "разбор ошибок: округление, коэффициент и минимум",
+      "10 заданий Пути А"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t19_primes",
+        "evidenceAnchor": "divisibility",
+        "relation": "practiced",
+        "label": "Каноническое разложение и простые множители",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_divisibility",
+        "evidenceAnchor": "powers",
+        "relation": "practiced",
+        "label": "Делимость факториала и максимальная степень составного числа",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "12.11.26.html",
+      "pdf": "../pdf_docs/12.11.26.pdf",
+      "tex": "../tex_docs/12.11.26.tex",
+      "lab": "12.11.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "09.11.26.html",
-    "pdf": "../pdf_docs/09.11.26.pdf",
-    "tex": "../tex_docs/09.11.26.tex",
-    "lab": "09.11.26-lab.html"
-  }
-},
-{
-  "date": "2026-11-06",
-  "ktpRefs": [],
-  "href": "06.11.26.html",
-  "title": "Как устроены вклады и кредиты",
-  "navTitle": "Как устроены вклады и кредиты",
-  "navSubtitle": "Ксения Клыкова, 6 ноября 2026: как распознавать вклад, дифференцированный и аннуитетный кредит, находить ставку, полную сумму платежей и проверять вычисления. 10 задач Пути А.",
-  "summary": "Ксения Клыкова, 6 ноября 2026: как распознавать вклад, дифференцированный и аннуитетный кредит, находить ставку, полную сумму платежей и проверять вычисления. 10 задач Пути А.",
-  "topics": [
-    "распознавание вклада, дифференцированного и аннуитетного кредита по тексту",
-    "вклад с пополнением после начисления процентов и поиск ставки",
-    "корень из большого дискриминанта через полные квадраты",
-    "уменьшение тела кредита и формула суммы платежей",
-    "равные аннуитетные платежи и проверка остатков долга",
-    "перевод тысяч и миллионов в рубли, вычислительная аккуратность",
-    "10 упражнений Пути А"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t16_deposits",
-      "evidenceAnchor": "deposit",
-      "relation": "practiced",
-      "label": "Вклад с ежегодными процентами",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_deposit_contrib",
-      "evidenceAnchor": "deposit",
-      "relation": "practiced",
-      "label": "Вклад с пополнением после первого года",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_diff",
-      "evidenceAnchor": "differentiated",
-      "relation": "practiced",
-      "label": "Дифференцированная схема кредитования",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_payment_sum",
-      "evidenceAnchor": "differentiated",
-      "relation": "practiced",
-      "label": "Сумма выплат и процентов по кредиту",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_annuity",
-      "evidenceAnchor": "annuity",
-      "relation": "touched",
-      "label": "Аннуитетные ежегодные платежи",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t7_radical_num",
-      "evidenceAnchor": "root",
-      "relation": "practiced",
-      "label": "Извлечение корня из большого дискриминанта",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t9_units",
-      "evidenceAnchor": "notes",
-      "relation": "touched",
-      "label": "Согласование рублей, тысяч и миллионов",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-11-09",
+    "ktpRefs": [],
+    "href": "09.11.26.html",
+    "title": "Кредит: от остатка долга к платежу",
+    "navTitle": "Кредит: от остатка долга к платежу",
+    "navSubtitle": "Ксения Клыкова · 9 ноября 2026: банковские кредиты, графики остатка долга, проценты, платежи, ограничения и 10 заданий Пути А.",
+    "summary": "Ксения Клыкова · 9 ноября 2026: банковские кредиты, графики остатка долга, проценты, платежи, ограничения и 10 заданий Пути А.",
+    "topics": [
+      "таблица остатков долга и последовательность начисления процентов",
+      "кредит на 750 тыс. рублей: три годовых платежа и переплата",
+      "ограничение каждого платежа и максимальная целая сумма кредита",
+      "ограничение общей суммы выплат за четыре года",
+      "ежемесячные 5% и процент переплаты за шесть месяцев",
+      "10 развёрнутых упражнений Пути А"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t16_credits",
+        "evidenceAnchor": "model",
+        "relation": "touched",
+        "label": "Периодическое начисление процентов по кредиту",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_debt_table",
+        "evidenceAnchor": "example",
+        "relation": "touched",
+        "label": "Таблица изменения остатка долга",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_payment_sum",
+        "evidenceAnchor": "sum",
+        "relation": "touched",
+        "label": "Общая сумма выплат и переплата",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_optimal",
+        "evidenceAnchor": "limits",
+        "relation": "touched",
+        "label": "Наибольшая сумма кредита при ограничениях",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t9_units",
+        "evidenceAnchor": "checks",
+        "relation": "touched",
+        "label": "Единицы измерения и строгое неравенство",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "09.11.26.html",
+      "pdf": "../pdf_docs/09.11.26.pdf",
+      "tex": "../tex_docs/09.11.26.tex",
+      "lab": "09.11.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "06.11.26.html",
-    "pdf": "../pdf_docs/06.11.26.pdf",
-    "tex": "../tex_docs/06.11.26.tex",
-    "lab": "06.11.26-lab.html"
-  }
-},
-{
-  "date": "2026-11-05",
-  "ktpRefs": [],
-  "href": "05.11.26.html",
-  "title": "Сумма и количество делителей",
-  "navTitle": "Сумма и количество делителей",
-  "navSubtitle": "Ксения Клыкова, 5 ноября 2026: τ- и σ-функции, геометрическая прогрессия, сумма и количество делителей с ограничениями, разбор числа 1080 и 10 упражнений.",
-  "summary": "Ксения Клыкова, 5 ноября 2026: τ- и σ-функции, геометрическая прогрессия, сумма и количество делителей с ограничениями, разбор числа 1080 и 10 упражнений.",
-  "topics": [
-    "τ-функция и σ-функция положительных делителей",
-    "каноническое разложение и сумма степеней простого",
-    "формула геометрической прогрессии для σ(n)",
-    "суммы чётных, нечётных и кратных m делителей",
-    "совместные ограничения: кратны 12, но не кратны 5",
-    "10 упражнений «Путь А»"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t19_primes",
-      "evidenceAnchor": "canonical",
-      "relation": "practiced",
-      "label": "Каноническое разложение натурального числа",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_divisor_count",
-      "evidenceAnchor": "canonical",
-      "relation": "touched",
-      "label": "Количество делителей и τ-функция",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_progressions",
-      "evidenceAnchor": "progression",
-      "relation": "touched",
-      "label": "Геометрическая прогрессия в формуле σ-функции",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_divisibility",
-      "evidenceAnchor": "combined",
-      "relation": "practiced",
-      "label": "Делители с ограничениями кратности",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-11-06",
+    "ktpRefs": [],
+    "href": "06.11.26.html",
+    "title": "Как устроены вклады и кредиты",
+    "navTitle": "Как устроены вклады и кредиты",
+    "navSubtitle": "Ксения Клыкова, 6 ноября 2026: как распознавать вклад, дифференцированный и аннуитетный кредит, находить ставку, полную сумму платежей и проверять вычисления. 10 задач Пути А.",
+    "summary": "Ксения Клыкова, 6 ноября 2026: как распознавать вклад, дифференцированный и аннуитетный кредит, находить ставку, полную сумму платежей и проверять вычисления. 10 задач Пути А.",
+    "topics": [
+      "распознавание вклада, дифференцированного и аннуитетного кредита по тексту",
+      "вклад с пополнением после начисления процентов и поиск ставки",
+      "корень из большого дискриминанта через полные квадраты",
+      "уменьшение тела кредита и формула суммы платежей",
+      "равные аннуитетные платежи и проверка остатков долга",
+      "перевод тысяч и миллионов в рубли, вычислительная аккуратность",
+      "10 упражнений Пути А"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t16_deposits",
+        "evidenceAnchor": "deposit",
+        "relation": "practiced",
+        "label": "Вклад с ежегодными процентами",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_deposit_contrib",
+        "evidenceAnchor": "deposit",
+        "relation": "practiced",
+        "label": "Вклад с пополнением после первого года",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_diff",
+        "evidenceAnchor": "differentiated",
+        "relation": "practiced",
+        "label": "Дифференцированная схема кредитования",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_payment_sum",
+        "evidenceAnchor": "differentiated",
+        "relation": "practiced",
+        "label": "Сумма выплат и процентов по кредиту",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_annuity",
+        "evidenceAnchor": "annuity",
+        "relation": "touched",
+        "label": "Аннуитетные ежегодные платежи",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t7_radical_num",
+        "evidenceAnchor": "root",
+        "relation": "practiced",
+        "label": "Извлечение корня из большого дискриминанта",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t9_units",
+        "evidenceAnchor": "notes",
+        "relation": "touched",
+        "label": "Согласование рублей, тысяч и миллионов",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "06.11.26.html",
+      "pdf": "../pdf_docs/06.11.26.pdf",
+      "tex": "../tex_docs/06.11.26.tex",
+      "lab": "06.11.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "05.11.26.html",
-    "pdf": "../pdf_docs/05.11.26.pdf",
-    "tex": "../tex_docs/05.11.26.tex",
-    "lab": "05.11.26-lab.html"
-  }
-},
-{
-  "date": "2026-11-04",
-  "ktpRefs": [],
-  "href": "04.11.26.html",
-  "title": "Парабола по графику",
-  "navTitle": "Парабола по графику",
-  "navSubtitle": "Квадратичная функция: коэффициенты a, b, c по графику, вершина параболы, метод узловых точек, пересечение графиков и пять задач с координатными рисунками. Занятие Ксении Клыковой от 4 ноября 2026 года.",
-  "summary": "Квадратичная функция: коэффициенты a, b, c по графику, вершина параболы, метод узловых точек, пересечение графиков и пять задач с координатными рисунками. Занятие Ксении Клыковой от 4 ноября 2026 года.",
-  "topics": [
-    "квадратичная функция и коэффициенты a, b, c по графику",
-    "вершина, ось симметрии и приём смещения на одну единицу",
-    "метод узловых точек при неудобной вершине",
-    "пересечение прямой и параболы, двух парабол",
-    "5 графических задач «Путь А»"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t11_parabola",
-      "evidenceAnchor": "vertex",
-      "relation": "practiced",
-      "label": "Определение коэффициентов и вершины квадратичной функции по графику",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t6_linear_quad",
-      "evidenceAnchor": "nodes",
-      "relation": "practiced",
-      "label": "Восстановление квадратичной функции методом узловых точек",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t11_intersections",
-      "evidenceAnchor": "intersections",
-      "relation": "practiced",
-      "label": "Нахождение абсцисс и ординат пересечения графиков",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-11-05",
+    "ktpRefs": [],
+    "href": "05.11.26.html",
+    "title": "Сумма и количество делителей",
+    "navTitle": "Сумма и количество делителей",
+    "navSubtitle": "Ксения Клыкова, 5 ноября 2026: τ- и σ-функции, геометрическая прогрессия, сумма и количество делителей с ограничениями, разбор числа 1080 и 10 упражнений.",
+    "summary": "Ксения Клыкова, 5 ноября 2026: τ- и σ-функции, геометрическая прогрессия, сумма и количество делителей с ограничениями, разбор числа 1080 и 10 упражнений.",
+    "topics": [
+      "τ-функция и σ-функция положительных делителей",
+      "каноническое разложение и сумма степеней простого",
+      "формула геометрической прогрессии для σ(n)",
+      "суммы чётных, нечётных и кратных m делителей",
+      "совместные ограничения: кратны 12, но не кратны 5",
+      "10 упражнений «Путь А»"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t19_primes",
+        "evidenceAnchor": "canonical",
+        "relation": "practiced",
+        "label": "Каноническое разложение натурального числа",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_divisor_count",
+        "evidenceAnchor": "canonical",
+        "relation": "touched",
+        "label": "Количество делителей и τ-функция",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_progressions",
+        "evidenceAnchor": "progression",
+        "relation": "touched",
+        "label": "Геометрическая прогрессия в формуле σ-функции",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_divisibility",
+        "evidenceAnchor": "combined",
+        "relation": "practiced",
+        "label": "Делители с ограничениями кратности",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "05.11.26.html",
+      "pdf": "../pdf_docs/05.11.26.pdf",
+      "tex": "../tex_docs/05.11.26.tex",
+      "lab": "05.11.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "04.11.26.html",
-    "pdf": "../pdf_docs/04.11.26.pdf",
-    "tex": "../tex_docs/04.11.26.tex",
-    "lab": "04.11.26-lab.html"
-  }
-},
-{
-  "date": "2026-11-02",
-  "ktpRefs": [],
-  "href": "02.11.26.html",
-  "title": "Дифференцированная схема погашения кредита",
-  "navTitle": "Дифференцированная схема погашения кредита",
-  "navSubtitle": "Дифференцированная схема погашения кредита: равные доли основного долга, пять формул, таблица платежей, поиск ставки и 10 заданий для Ксении Клыковой.",
-  "summary": "Дифференцированная схема погашения кредита: равные доли основного долга, пять формул, таблица платежей, поиск ставки и 10 заданий для Ксении Клыковой.",
-  "topics": [
-    "равные доли основного долга и уменьшающиеся платежи",
-    "проценты на остаток и таблица трёх периодов",
-    "формулы суммы платежей, переплаты и первого/последнего платежа",
-    "ставка из процента переплаты за 14 месяцев",
-    "сопоставление с аннуитетом и вкладом",
-    "10 задач «Путь А»"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t16_diff",
-      "evidenceAnchor": "recognize",
-      "relation": "practiced",
-      "label": "Распознавание дифференцированной схемы по равным долям долга",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_equal_reduction",
-      "evidenceAnchor": "debt",
-      "relation": "practiced",
-      "label": "Уменьшение тела кредита на S/n каждый период",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_debt_table",
-      "evidenceAnchor": "debt-table",
-      "relation": "touched",
-      "label": "Таблица остатка долга, процентов и платежа",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_payment_sum",
-      "evidenceAnchor": "formulas",
-      "relation": "practiced",
-      "label": "Формулы общей выплаты и процента переплаты",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_model_equation",
-      "evidenceAnchor": "rate",
-      "relation": "practiced",
-      "label": "Нахождение ставки по доле переплаты",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_annuity",
-      "evidenceAnchor": "comparison",
-      "relation": "touched",
-      "label": "Сравнение постоянного платежа с постоянной долей долга",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-11-04",
+    "ktpRefs": [],
+    "href": "04.11.26.html",
+    "title": "Парабола по графику",
+    "navTitle": "Парабола по графику",
+    "navSubtitle": "Квадратичная функция: коэффициенты a, b, c по графику, вершина параболы, метод узловых точек, пересечение графиков и пять задач с координатными рисунками. Занятие Ксении Клыковой от 4 ноября 2026 года.",
+    "summary": "Квадратичная функция: коэффициенты a, b, c по графику, вершина параболы, метод узловых точек, пересечение графиков и пять задач с координатными рисунками. Занятие Ксении Клыковой от 4 ноября 2026 года.",
+    "topics": [
+      "квадратичная функция и коэффициенты a, b, c по графику",
+      "вершина, ось симметрии и приём смещения на одну единицу",
+      "метод узловых точек при неудобной вершине",
+      "пересечение прямой и параболы, двух парабол",
+      "5 графических задач «Путь А»"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t11_parabola",
+        "evidenceAnchor": "vertex",
+        "relation": "practiced",
+        "label": "Определение коэффициентов и вершины квадратичной функции по графику",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t6_linear_quad",
+        "evidenceAnchor": "nodes",
+        "relation": "practiced",
+        "label": "Восстановление квадратичной функции методом узловых точек",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t11_intersections",
+        "evidenceAnchor": "intersections",
+        "relation": "practiced",
+        "label": "Нахождение абсцисс и ординат пересечения графиков",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "04.11.26.html",
+      "pdf": "../pdf_docs/04.11.26.pdf",
+      "tex": "../tex_docs/04.11.26.tex",
+      "lab": "04.11.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "02.11.26.html",
-    "pdf": "../pdf_docs/02.11.26.pdf",
-    "tex": "../tex_docs/02.11.26.tex",
-    "lab": "02.11.26-lab.html"
-  }
-},
-{
-  "date": "2026-11-01",
-  "ktpRefs": [],
-  "href": "01.11.26.html",
-  "title": "Делители, полные квадраты и ограничения на делимость",
-  "navTitle": "Делители: кратность и полные квадраты",
-  "navSubtitle": "Ограничения показателей, два способа исключения, светодиодные панно.",
-  "summary": "Олимпиадная теория чисел: выбор допустимых показателей, квадратные делители, кратность, вычитание и прямой запрет, модель светодиодных панно, 10 задач «Путь А».",
-  "topics": [
-    "показатели простых множителей в положительном делителе",
-    "верхние и нижние границы при требованиях кратности",
-    "полный квадрат и чётные показатели",
-    "два метода исключения запрещённой кратности",
-    "текстовая модель квадратных светодиодных панно",
-    "10 задач «Пути А»"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t19_primes",
-      "evidenceAnchor": "canonical",
-      "relation": "practiced",
-      "label": "Запись делителя через показатели простых множителей",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_divisibility",
-      "evidenceAnchor": "multiples",
-      "relation": "practiced",
-      "label": "Нижние и верхние границы показателей при кратности",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_divisor_count",
-      "evidenceAnchor": "exclusion",
-      "relation": "practiced",
-      "label": "Подсчёт делителей с квадратностью и запретом кратности",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_story",
-      "evidenceAnchor": "text-model",
-      "relation": "touched",
-      "label": "Перевод текстовой задачи о панно в ограничения делимости",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-11-02",
+    "ktpRefs": [],
+    "href": "02.11.26.html",
+    "title": "Дифференцированная схема погашения кредита",
+    "navTitle": "Дифференцированная схема погашения кредита",
+    "navSubtitle": "Дифференцированная схема погашения кредита: равные доли основного долга, пять формул, таблица платежей, поиск ставки и 10 заданий для Ксении Клыковой.",
+    "summary": "Дифференцированная схема погашения кредита: равные доли основного долга, пять формул, таблица платежей, поиск ставки и 10 заданий для Ксении Клыковой.",
+    "topics": [
+      "равные доли основного долга и уменьшающиеся платежи",
+      "проценты на остаток и таблица трёх периодов",
+      "формулы суммы платежей, переплаты и первого/последнего платежа",
+      "ставка из процента переплаты за 14 месяцев",
+      "сопоставление с аннуитетом и вкладом",
+      "10 задач «Путь А»"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t16_diff",
+        "evidenceAnchor": "recognize",
+        "relation": "practiced",
+        "label": "Распознавание дифференцированной схемы по равным долям долга",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_equal_reduction",
+        "evidenceAnchor": "debt",
+        "relation": "practiced",
+        "label": "Уменьшение тела кредита на S/n каждый период",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_debt_table",
+        "evidenceAnchor": "debt-table",
+        "relation": "touched",
+        "label": "Таблица остатка долга, процентов и платежа",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_payment_sum",
+        "evidenceAnchor": "formulas",
+        "relation": "practiced",
+        "label": "Формулы общей выплаты и процента переплаты",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_model_equation",
+        "evidenceAnchor": "rate",
+        "relation": "practiced",
+        "label": "Нахождение ставки по доле переплаты",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_annuity",
+        "evidenceAnchor": "comparison",
+        "relation": "touched",
+        "label": "Сравнение постоянного платежа с постоянной долей долга",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "02.11.26.html",
+      "pdf": "../pdf_docs/02.11.26.pdf",
+      "tex": "../tex_docs/02.11.26.tex",
+      "lab": "02.11.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "01.11.26.html",
-    "lab": "01.11.26-lab.html",
-    "pdf": "../pdf_docs/01.11.26.pdf",
-    "tex": "../tex_docs/01.11.26.tex"
-  }
-},
-{
-  "date": "2026-10-29",
-  "ktpRefs": [],
-  "href": "29.10.26.html",
-  "title": "Аннуитетные кредиты: равные платежи и переплата",
-  "navTitle": "Аннуитетные кредиты и переплата",
-  "navSubtitle": "Равные платежи, остаток долга, формулы на два и три года, поиск ставки.",
-  "summary": "Финансовые задачи ЕГЭ: аннуитетная схема, годовая таблица долга, формулы платежа, поиск ставки через дискриминант, переплата и 10 упражнений «Путь А».",
-  "topics": [
-    "аннуитетный кредит и равные ежегодные платежи",
-    "таблица задолженности и начисление процентов на остаток",
-    "формулы платежа для двух и трёх лет",
-    "квадратное уравнение для поиска неизвестной ставки",
-    "общая сумма выплат, переплата и её процент",
-    "проверка расчётов и дискриминанта"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t16_annuity",
-      "evidenceAnchor": "formulas",
-      "relation": "practiced",
-      "label": "Формулы аннуитетного платежа для двух и трёх лет",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_debt_table",
-      "evidenceAnchor": "table",
-      "relation": "practiced",
-      "label": "Таблица изменения долга с начислением на остаток",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_model_equation",
-      "evidenceAnchor": "rate",
-      "relation": "practiced",
-      "label": "Поиск ставки через квадратное уравнение и проверку дискриминанта",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_payment_sum",
-      "evidenceAnchor": "overpay",
-      "relation": "practiced",
-      "label": "Сумма выплат, переплата и процент переплаты",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-11-01",
+    "ktpRefs": [],
+    "href": "01.11.26.html",
+    "title": "Делители, полные квадраты и ограничения на делимость",
+    "navTitle": "Делители: кратность и полные квадраты",
+    "navSubtitle": "Ограничения показателей, два способа исключения, светодиодные панно.",
+    "summary": "Олимпиадная теория чисел: выбор допустимых показателей, квадратные делители, кратность, вычитание и прямой запрет, модель светодиодных панно, 10 задач «Путь А».",
+    "topics": [
+      "показатели простых множителей в положительном делителе",
+      "верхние и нижние границы при требованиях кратности",
+      "полный квадрат и чётные показатели",
+      "два метода исключения запрещённой кратности",
+      "текстовая модель квадратных светодиодных панно",
+      "10 задач «Пути А»"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t19_primes",
+        "evidenceAnchor": "canonical",
+        "relation": "practiced",
+        "label": "Запись делителя через показатели простых множителей",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_divisibility",
+        "evidenceAnchor": "multiples",
+        "relation": "practiced",
+        "label": "Нижние и верхние границы показателей при кратности",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_divisor_count",
+        "evidenceAnchor": "exclusion",
+        "relation": "practiced",
+        "label": "Подсчёт делителей с квадратностью и запретом кратности",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_story",
+        "evidenceAnchor": "text-model",
+        "relation": "touched",
+        "label": "Перевод текстовой задачи о панно в ограничения делимости",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "01.11.26.html",
+      "lab": "01.11.26-lab.html",
+      "pdf": "../pdf_docs/01.11.26.pdf",
+      "tex": "../tex_docs/01.11.26.tex"
     }
-  ],
-  "materials": {
-    "html": "29.10.26.html",
-    "lab": "29.10.26-lab.html",
-    "pdf": "../pdf_docs/29.10.26.pdf",
-    "tex": "../tex_docs/29.10.26.tex"
-  }
-},
-{
-  "date": "2026-10-28",
-  "ktpRefs": [],
-  "href": "28.10.26.html",
-  "title": "Делители натурального числа и ограничения на показатели",
-  "navTitle": "Делители с дополнительными условиями",
-  "navSubtitle": "Кратность, чётность, квадраты и кубы: выбор допустимых показателей и 10 задач.",
-  "summary": "Теория чисел: от канонического разложения к подсчёту делителей с условиями кратности, чётности, квадрата и куба; десять заданий «Путь А». Занятие 28 октября 2026 года.",
-  "topics": [
-    "каноническое разложение и выбор показателей простых множителей",
-    "условие кратности и границы для показателей делителя",
-    "чётные и нечётные делители",
-    "делители-квадраты и делители-кубы",
-    "пересечение ограничений и запрет кратности",
-    "подсчёт числа подходящих делителей"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t19_primes",
-      "evidenceAnchor": "canonical",
-      "relation": "practiced",
-      "label": "Каноническое разложение 72 и запись простых степеней",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_divisibility",
-      "evidenceAnchor": "multiples",
-      "relation": "practiced",
-      "label": "Границы показателей при кратности делителя",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_divisor_count",
-      "evidenceAnchor": "powers",
-      "relation": "practiced",
-      "label": "Число делителей и формула квадратов и кубов",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_parity",
-      "evidenceAnchor": "parity",
-      "relation": "practiced",
-      "label": "Подсчёт чётных и нечётных делителей",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-10-29",
+    "ktpRefs": [],
+    "href": "29.10.26.html",
+    "title": "Аннуитетные кредиты: равные платежи и переплата",
+    "navTitle": "Аннуитетные кредиты и переплата",
+    "navSubtitle": "Равные платежи, остаток долга, формулы на два и три года, поиск ставки.",
+    "summary": "Финансовые задачи ЕГЭ: аннуитетная схема, годовая таблица долга, формулы платежа, поиск ставки через дискриминант, переплата и 10 упражнений «Путь А».",
+    "topics": [
+      "аннуитетный кредит и равные ежегодные платежи",
+      "таблица задолженности и начисление процентов на остаток",
+      "формулы платежа для двух и трёх лет",
+      "квадратное уравнение для поиска неизвестной ставки",
+      "общая сумма выплат, переплата и её процент",
+      "проверка расчётов и дискриминанта"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t16_annuity",
+        "evidenceAnchor": "formulas",
+        "relation": "practiced",
+        "label": "Формулы аннуитетного платежа для двух и трёх лет",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_debt_table",
+        "evidenceAnchor": "table",
+        "relation": "practiced",
+        "label": "Таблица изменения долга с начислением на остаток",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_model_equation",
+        "evidenceAnchor": "rate",
+        "relation": "practiced",
+        "label": "Поиск ставки через квадратное уравнение и проверку дискриминанта",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_payment_sum",
+        "evidenceAnchor": "overpay",
+        "relation": "practiced",
+        "label": "Сумма выплат, переплата и процент переплаты",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "29.10.26.html",
+      "lab": "29.10.26-lab.html",
+      "pdf": "../pdf_docs/29.10.26.pdf",
+      "tex": "../tex_docs/29.10.26.tex"
     }
-  ],
-  "materials": {
-    "html": "28.10.26.html",
-    "lab": "28.10.26-lab.html",
-    "tex": "../tex_docs/28.10.26.tex"
-  }
-},
-{
-  "date": "2026-10-26",
-  "ktpRefs": [],
-  "href": "26.10.26.html",
-  "title": "Вклады и сложные проценты",
-  "navTitle": "Вклады и сложные проценты",
-  "navSubtitle": "Финансовая математика для Ксении Клыковой: сложные проценты, пополнения, снятия, обратные задачи и 10 упражнений. Занятие 26 октября 2026 года.",
-  "summary": "Финансовая математика для Ксении Клыковой: сложные проценты, пополнения, снятия, обратные задачи и 10 упражнений. Занятие 26 октября 2026 года.",
-  "topics": [
-    "сложные проценты и повышающий коэффициент",
-    "ежегодная капитализация процентов",
-    "вклады с регулярными пополнениями и снятиями",
-    "формула суммы и таблица начислений",
-    "обратные задачи на вклад и годовую ставку",
-    "проверка денежных единиц"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t16_deposits",
-      "evidenceAnchor": "formula",
-      "relation": "practiced",
-      "label": "Формула сложных процентов и связь показателя со сроком",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_deposit_contrib",
-      "evidenceAnchor": "contrib",
-      "relation": "practiced",
-      "label": "Вклад с пополнениями и снятиями в начале года",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t16_model_equation",
-      "evidenceAnchor": "inverse",
-      "relation": "practiced",
-      "label": "Обратные задачи на начальный вклад и процентную ставку",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-10-28",
+    "ktpRefs": [],
+    "href": "28.10.26.html",
+    "title": "Делители натурального числа и ограничения на показатели",
+    "navTitle": "Делители с дополнительными условиями",
+    "navSubtitle": "Кратность, чётность, квадраты и кубы: выбор допустимых показателей и 10 задач.",
+    "summary": "Теория чисел: от канонического разложения к подсчёту делителей с условиями кратности, чётности, квадрата и куба; десять заданий «Путь А». Занятие 28 октября 2026 года.",
+    "topics": [
+      "каноническое разложение и выбор показателей простых множителей",
+      "условие кратности и границы для показателей делителя",
+      "чётные и нечётные делители",
+      "делители-квадраты и делители-кубы",
+      "пересечение ограничений и запрет кратности",
+      "подсчёт числа подходящих делителей"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t19_primes",
+        "evidenceAnchor": "canonical",
+        "relation": "practiced",
+        "label": "Каноническое разложение 72 и запись простых степеней",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_divisibility",
+        "evidenceAnchor": "multiples",
+        "relation": "practiced",
+        "label": "Границы показателей при кратности делителя",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_divisor_count",
+        "evidenceAnchor": "powers",
+        "relation": "practiced",
+        "label": "Число делителей и формула квадратов и кубов",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_parity",
+        "evidenceAnchor": "parity",
+        "relation": "practiced",
+        "label": "Подсчёт чётных и нечётных делителей",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "28.10.26.html",
+      "lab": "28.10.26-lab.html",
+      "tex": "../tex_docs/28.10.26.tex"
     }
-  ],
-  "materials": {
-    "html": "26.10.26.html",
-    "pdf": "../pdf_docs/26.10.26.pdf",
-    "tex": "../tex_docs/26.10.26.tex",
-    "lab": "26.10.26-lab.html"
-  }
-},
-{
-  "date": "2026-10-22",
-  "ktpRefs": [],
-  "href": "22.10.26.html",
-  "title": "Делимость чисел и количество делителей",
-  "navTitle": "Делимость чисел и количество делителей",
-  "navSubtitle": "Ксения Клыкова. Делимость чисел, разность степеней, каноническое разложение, функция количества делителей. Занятие 22 октября 2026 года.",
-  "summary": "Ксения Клыкова. Делимость чисел, разность степеней, каноническое разложение, функция количества делителей. Занятие 22 октября 2026 года.",
-  "topics": [
-    "разность одинаковых степеней и доказательство делимости",
-    "каноническое разложение натурального числа",
-    "условие делимости через простые множители",
-    "количество натуральных делителей τ(N)",
-    "обратные задачи на показатель степени"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t19_divisibility",
-      "evidenceAnchor": "divisibility",
-      "relation": "practiced",
-      "label": "Проверка делимости сравнением показателей простых множителей",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_primes",
-      "evidenceAnchor": "canonical",
-      "relation": "practiced",
-      "label": "Каноническое разложение натуральных чисел",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_divisor_count",
-      "evidenceAnchor": "divisor-count",
-      "relation": "practiced",
-      "label": "Формула числа делителей τ(N) и неизвестная степень",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t7_power_actions",
-      "evidenceAnchor": "difference",
-      "relation": "practiced",
-      "label": "Разность одинаковых степеней и доказательство кратности",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-10-26",
+    "ktpRefs": [],
+    "href": "26.10.26.html",
+    "title": "Вклады и сложные проценты",
+    "navTitle": "Вклады и сложные проценты",
+    "navSubtitle": "Финансовая математика для Ксении Клыковой: сложные проценты, пополнения, снятия, обратные задачи и 10 упражнений. Занятие 26 октября 2026 года.",
+    "summary": "Финансовая математика для Ксении Клыковой: сложные проценты, пополнения, снятия, обратные задачи и 10 упражнений. Занятие 26 октября 2026 года.",
+    "topics": [
+      "сложные проценты и повышающий коэффициент",
+      "ежегодная капитализация процентов",
+      "вклады с регулярными пополнениями и снятиями",
+      "формула суммы и таблица начислений",
+      "обратные задачи на вклад и годовую ставку",
+      "проверка денежных единиц"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t16_deposits",
+        "evidenceAnchor": "formula",
+        "relation": "practiced",
+        "label": "Формула сложных процентов и связь показателя со сроком",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_deposit_contrib",
+        "evidenceAnchor": "contrib",
+        "relation": "practiced",
+        "label": "Вклад с пополнениями и снятиями в начале года",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t16_model_equation",
+        "evidenceAnchor": "inverse",
+        "relation": "practiced",
+        "label": "Обратные задачи на начальный вклад и процентную ставку",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "26.10.26.html",
+      "pdf": "../pdf_docs/26.10.26.pdf",
+      "tex": "../tex_docs/26.10.26.tex",
+      "lab": "26.10.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "22.10.26.html",
-    "pdf": "../pdf_docs/22.10.26.pdf",
-    "tex": "../tex_docs/22.10.26.tex"
-  }
-},
-{
-  "date": "2026-10-21",
-  "ktpRefs": [],
-  "href": "21.10.26.html",
-  "title": "От условия задачи к допустимому ответу",
-  "navTitle": "От условия задачи к допустимому ответу",
-  "navSubtitle": "ЕГЭ для Ксении Клыковой: колодец, вращение ведра, опорожнение бака, сплавы, сухофрукты и отбор допустимого ответа. Занятие 21 октября 2026.",
-  "summary": "ЕГЭ для Ксении Клыковой: колодец, вращение ведра, опорожнение бака, сплавы, сухофрукты и отбор допустимого ответа. Занятие 21 октября 2026.",
-  "topics": [
-    "прикладные формулы и моделирование",
-    "падение камня и разность квадратов",
-    "вращение ведра и граничное условие",
-    "опорожнение цилиндрического бака",
-    "сплавы и массовые доли",
-    "высушивание и сохранение сухого вещества",
-    "отбор допустимых значений"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t9_power",
-      "evidenceAnchor": "tank",
-      "relation": "practiced",
-      "label": "Квадратичная модель высоты воды и корни уравнения",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t9_units",
-      "evidenceAnchor": "bucket",
-      "relation": "practiced",
-      "label": "Согласование сантиметров и метров в прикладной задаче",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t9_formula_transform",
-      "evidenceAnchor": "bucket",
-      "relation": "practiced",
-      "label": "Выражение минимальной скорости из физической формулы",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t10_validation",
-      "evidenceAnchor": "tank",
-      "relation": "practiced",
-      "label": "Физический отбор корней квадратного уравнения",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t10_alloys",
-      "evidenceAnchor": "mixtures",
-      "relation": "practiced",
-      "label": "Баланс массы и массовой доли в двух сплавах",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t10_percent",
-      "evidenceAnchor": "drying",
-      "relation": "practiced",
-      "label": "Проценты и неизменность сухого вещества при высушивании",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-10-22",
+    "ktpRefs": [],
+    "href": "22.10.26.html",
+    "title": "Делимость чисел и количество делителей",
+    "navTitle": "Делимость чисел и количество делителей",
+    "navSubtitle": "Ксения Клыкова. Делимость чисел, разность степеней, каноническое разложение, функция количества делителей. Занятие 22 октября 2026 года.",
+    "summary": "Ксения Клыкова. Делимость чисел, разность степеней, каноническое разложение, функция количества делителей. Занятие 22 октября 2026 года.",
+    "topics": [
+      "разность одинаковых степеней и доказательство делимости",
+      "каноническое разложение натурального числа",
+      "условие делимости через простые множители",
+      "количество натуральных делителей τ(N)",
+      "обратные задачи на показатель степени"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t19_divisibility",
+        "evidenceAnchor": "divisibility",
+        "relation": "practiced",
+        "label": "Проверка делимости сравнением показателей простых множителей",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_primes",
+        "evidenceAnchor": "canonical",
+        "relation": "practiced",
+        "label": "Каноническое разложение натуральных чисел",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_divisor_count",
+        "evidenceAnchor": "divisor-count",
+        "relation": "practiced",
+        "label": "Формула числа делителей τ(N) и неизвестная степень",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t7_power_actions",
+        "evidenceAnchor": "difference",
+        "relation": "practiced",
+        "label": "Разность одинаковых степеней и доказательство кратности",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "22.10.26.html",
+      "pdf": "../pdf_docs/22.10.26.pdf",
+      "tex": "../tex_docs/22.10.26.tex"
     }
-  ],
-  "materials": {
-    "html": "21.10.26.html",
-    "pdf": "../pdf_docs/21.10.26.pdf",
-    "tex": "../tex_docs/21.10.26.tex",
-    "lab": "21.10.26-lab.html"
-  }
-},
-{
-  "date": "2026-10-19",
-  "ktpRefs": [],
-  "href": "19.10.26.html",
-  "title": "Простые и составные числа",
-  "navTitle": "Простые числа и доказательства делимости",
-  "navSubtitle": "олимпиадная математика · √n · множители · степени",
-  "summary": "Олимпиадная математика, 19 октября 2026: простые и составные числа, критерий корня, разложения на множители, доказательства делимости и 10 задач для самостоятельной работы.",
-  "topics": [
-    "простые и составные числа",
-    "критерий проверки простоты до √n",
-    "разложение квадратных трёхчленов",
-    "разность квадратов и степеней",
-    "делимость произведений последовательных целых",
-    "доказательство кратности 6 и 15"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t19_primes",
-      "evidenceAnchor": "criterion",
-      "relation": "practiced",
-      "label": "Простые числа и проверка делителей до квадратного корня",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_divisibility",
-      "evidenceAnchor": "consecutive",
-      "relation": "practiced",
-      "label": "Доказательства делимости через разложение",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_parity",
-      "evidenceAnchor": "consecutive",
-      "relation": "touched",
-      "label": "Чётность произведения последовательных целых чисел",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t7_algebra",
-      "evidenceAnchor": "factor",
-      "relation": "practiced",
-      "label": "Разложение квадратного трёхчлена на множители",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t7_power_actions",
-      "evidenceAnchor": "powers",
-      "relation": "touched",
-      "label": "Разность степеней и разность квадратов",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-10-21",
+    "ktpRefs": [],
+    "href": "21.10.26.html",
+    "title": "От условия задачи к допустимому ответу",
+    "navTitle": "От условия задачи к допустимому ответу",
+    "navSubtitle": "ЕГЭ для Ксении Клыковой: колодец, вращение ведра, опорожнение бака, сплавы, сухофрукты и отбор допустимого ответа. Занятие 21 октября 2026.",
+    "summary": "ЕГЭ для Ксении Клыковой: колодец, вращение ведра, опорожнение бака, сплавы, сухофрукты и отбор допустимого ответа. Занятие 21 октября 2026.",
+    "topics": [
+      "прикладные формулы и моделирование",
+      "падение камня и разность квадратов",
+      "вращение ведра и граничное условие",
+      "опорожнение цилиндрического бака",
+      "сплавы и массовые доли",
+      "высушивание и сохранение сухого вещества",
+      "отбор допустимых значений"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t9_power",
+        "evidenceAnchor": "tank",
+        "relation": "practiced",
+        "label": "Квадратичная модель высоты воды и корни уравнения",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t9_units",
+        "evidenceAnchor": "bucket",
+        "relation": "practiced",
+        "label": "Согласование сантиметров и метров в прикладной задаче",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t9_formula_transform",
+        "evidenceAnchor": "bucket",
+        "relation": "practiced",
+        "label": "Выражение минимальной скорости из физической формулы",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t10_validation",
+        "evidenceAnchor": "tank",
+        "relation": "practiced",
+        "label": "Физический отбор корней квадратного уравнения",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t10_alloys",
+        "evidenceAnchor": "mixtures",
+        "relation": "practiced",
+        "label": "Баланс массы и массовой доли в двух сплавах",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t10_percent",
+        "evidenceAnchor": "drying",
+        "relation": "practiced",
+        "label": "Проценты и неизменность сухого вещества при высушивании",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "21.10.26.html",
+      "pdf": "../pdf_docs/21.10.26.pdf",
+      "tex": "../tex_docs/21.10.26.tex",
+      "lab": "21.10.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "19.10.26.html",
-    "pdf": "../pdf_docs/19.10.26.pdf",
-    "tex": "../tex_docs/19.10.26.tex",
-    "lab": "19.10.26-lab.html"
-  }
-},
-{
-  "date": "2026-10-17",
-  "ktpRefs": [],
-  "href": "17.10.26.html",
-  "title": "Смысл условия → математическая модель",
-  "navTitle": "Повторение ЕГЭ: семь методов",
-  "navSubtitle": "геометрия · векторы · вероятность · статистика · алгебра · движение",
-  "summary": "Ксения Клыкова · повторение профильного ЕГЭ 17 октября 2026: площадь треугольника, векторы, вероятности, математическое ожидание, степени, квадратичная модель движения и текстовые задачи.",
-  "topics": [
-    "площади треугольников",
-    "векторы и скалярное произведение",
-    "вложенные события и два испытания",
-    "математическое ожидание",
-    "степени с общим основанием",
-    "квадратичная модель движения",
-    "текстовая задача на скорость"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t1_areas",
-      "evidenceAnchor": "area",
-      "relation": "practiced",
-      "label": "Формулы площади треугольника",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t2_dot",
-      "evidenceAnchor": "vectors",
-      "relation": "practiced",
-      "label": "Скалярное произведение и знаки координат",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t5_sum",
-      "evidenceAnchor": "probability",
-      "relation": "practiced",
-      "label": "Вложенные события и сумма вероятностей",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t5_product",
-      "evidenceAnchor": "probability",
-      "relation": "practiced",
-      "label": "Произведение независимых результатов двух матчей",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "ege2027_t6_expectation",
-      "evidenceAnchor": "expectation",
-      "relation": "practiced",
-      "label": "Математическое ожидание дискретной величины",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t7_power_actions",
-      "evidenceAnchor": "powers",
-      "relation": "touched",
-      "label": "Степени с общим основанием",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t9_power",
-      "evidenceAnchor": "trajectory",
-      "relation": "practiced",
-      "label": "Квадратичная модель высоты и временной интервал",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t10_line",
-      "evidenceAnchor": "motion",
-      "relation": "practiced",
-      "label": "Таблица скорость — время — расстояние",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t9_units",
-      "evidenceAnchor": "motion",
-      "relation": "practiced",
-      "label": "Перевод минут в часы в текстовой задаче",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-10-19",
+    "ktpRefs": [],
+    "href": "19.10.26.html",
+    "title": "Простые и составные числа",
+    "navTitle": "Простые числа и доказательства делимости",
+    "navSubtitle": "олимпиадная математика · √n · множители · степени",
+    "summary": "Олимпиадная математика, 19 октября 2026: простые и составные числа, критерий корня, разложения на множители, доказательства делимости и 10 задач для самостоятельной работы.",
+    "topics": [
+      "простые и составные числа",
+      "критерий проверки простоты до √n",
+      "разложение квадратных трёхчленов",
+      "разность квадратов и степеней",
+      "делимость произведений последовательных целых",
+      "доказательство кратности 6 и 15"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t19_primes",
+        "evidenceAnchor": "criterion",
+        "relation": "practiced",
+        "label": "Простые числа и проверка делителей до квадратного корня",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_divisibility",
+        "evidenceAnchor": "consecutive",
+        "relation": "practiced",
+        "label": "Доказательства делимости через разложение",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_parity",
+        "evidenceAnchor": "consecutive",
+        "relation": "touched",
+        "label": "Чётность произведения последовательных целых чисел",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t7_algebra",
+        "evidenceAnchor": "factor",
+        "relation": "practiced",
+        "label": "Разложение квадратного трёхчлена на множители",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t7_power_actions",
+        "evidenceAnchor": "powers",
+        "relation": "touched",
+        "label": "Разность степеней и разность квадратов",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "19.10.26.html",
+      "pdf": "../pdf_docs/19.10.26.pdf",
+      "tex": "../tex_docs/19.10.26.tex",
+      "lab": "19.10.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "17.10.26.html",
-    "pdf": "../pdf_docs/17.10.26.pdf",
-    "tex": "../tex_docs/17.10.26.tex"
-  }
-},
-{
-  "date": "2026-10-15",
-  "ktpRefs": [],
-  "href": "15.10.26.html",
-  "title": "Делимость. Искусство исключать",
-  "navTitle": "Делимость и линейные комбинации",
-  "navSubtitle": "целые числа · остатки · свойства делимости · олимпиадный приём",
-  "summary": "Делимость целых чисел: запись m | a, деление с остатком, свойства делимости и линейные комбинации. Олимпиадное занятие Ксении Клыковой от 15 октября 2026 года.",
-  "topics": [
-    "определение делимости",
-    "деление с остатком",
-    "свойства делимости",
-    "целочисленные линейные комбинации",
-    "исключение неизвестного"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t19_divisibility",
-      "evidenceAnchor": "properties",
-      "relation": "practiced",
-      "label": "Свойства делимости и целочисленные линейные комбинации",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_remainders",
-      "evidenceAnchor": "remainder",
-      "relation": "touched",
-      "label": "Делимость как нулевой остаток",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-10-17",
+    "ktpRefs": [],
+    "href": "17.10.26.html",
+    "title": "Смысл условия → математическая модель",
+    "navTitle": "Повторение ЕГЭ: семь методов",
+    "navSubtitle": "геометрия · векторы · вероятность · статистика · алгебра · движение",
+    "summary": "Ксения Клыкова · повторение профильного ЕГЭ 17 октября 2026: площадь треугольника, векторы, вероятности, математическое ожидание, степени, квадратичная модель движения и текстовые задачи.",
+    "topics": [
+      "площади треугольников",
+      "векторы и скалярное произведение",
+      "вложенные события и два испытания",
+      "математическое ожидание",
+      "степени с общим основанием",
+      "квадратичная модель движения",
+      "текстовая задача на скорость"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t1_areas",
+        "evidenceAnchor": "area",
+        "relation": "practiced",
+        "label": "Формулы площади треугольника",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t2_dot",
+        "evidenceAnchor": "vectors",
+        "relation": "practiced",
+        "label": "Скалярное произведение и знаки координат",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t5_sum",
+        "evidenceAnchor": "probability",
+        "relation": "practiced",
+        "label": "Вложенные события и сумма вероятностей",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t5_product",
+        "evidenceAnchor": "probability",
+        "relation": "practiced",
+        "label": "Произведение независимых результатов двух матчей",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "ege2027_t6_expectation",
+        "evidenceAnchor": "expectation",
+        "relation": "practiced",
+        "label": "Математическое ожидание дискретной величины",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t7_power_actions",
+        "evidenceAnchor": "powers",
+        "relation": "touched",
+        "label": "Степени с общим основанием",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t9_power",
+        "evidenceAnchor": "trajectory",
+        "relation": "practiced",
+        "label": "Квадратичная модель высоты и временной интервал",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t10_line",
+        "evidenceAnchor": "motion",
+        "relation": "practiced",
+        "label": "Таблица скорость — время — расстояние",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t9_units",
+        "evidenceAnchor": "motion",
+        "relation": "practiced",
+        "label": "Перевод минут в часы в текстовой задаче",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "17.10.26.html",
+      "pdf": "../pdf_docs/17.10.26.pdf",
+      "tex": "../tex_docs/17.10.26.tex"
     }
-  ],
-  "materials": {
-    "html": "15.10.26.html",
-    "pdf": "../pdf_docs/15.10.26.pdf",
-    "tex": "../tex_docs/15.10.26.tex",
-    "lab": "15.10.26-lab.html"
-  }
-},
-{
-  "date": "2026-10-14",
-  "ktpRefs": [],
-  "href": "14.10.26.html",
-  "title": "Многочлены. Корень меняет ход решения",
-  "navTitle": "Многочлены и метод интервалов",
-  "navSubtitle": "деление с остатком · Безу · Горнер · кратность корней",
-  "summary": "Многочлены: деление с остатком, теорема Безу, схема Горнера, кратность корней, метод интервалов и замена переменной. Урок Ксении Клыковой от 14 октября 2026 года.",
-  "topics": [
-    "деление многочленов с остатком",
-    "теорема Безу",
-    "схема Горнера",
-    "метод интервалов и кратности",
-    "замена переменной"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t7_algebra",
-      "evidenceAnchor": "division",
-      "relation": "practiced",
-      "label": "Деление многочленов с остатком",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t6_factor",
-      "evidenceAnchor": "horner",
-      "relation": "practiced",
-      "label": "Теорема Безу и схема Горнера",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t15_intervals",
-      "evidenceAnchor": "intervals",
-      "relation": "practiced",
-      "label": "Метод интервалов: знаки и кратности",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t6_linear_quad",
-      "evidenceAnchor": "substitution",
-      "relation": "touched",
-      "label": "Замена переменной в многочленных уравнениях",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-10-15",
+    "ktpRefs": [],
+    "href": "15.10.26.html",
+    "title": "Делимость. Искусство исключать",
+    "navTitle": "Делимость и линейные комбинации",
+    "navSubtitle": "целые числа · остатки · свойства делимости · олимпиадный приём",
+    "summary": "Делимость целых чисел: запись m | a, деление с остатком, свойства делимости и линейные комбинации. Олимпиадное занятие Ксении Клыковой от 15 октября 2026 года.",
+    "topics": [
+      "определение делимости",
+      "деление с остатком",
+      "свойства делимости",
+      "целочисленные линейные комбинации",
+      "исключение неизвестного"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t19_divisibility",
+        "evidenceAnchor": "properties",
+        "relation": "practiced",
+        "label": "Свойства делимости и целочисленные линейные комбинации",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_remainders",
+        "evidenceAnchor": "remainder",
+        "relation": "touched",
+        "label": "Делимость как нулевой остаток",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "15.10.26.html",
+      "pdf": "../pdf_docs/15.10.26.pdf",
+      "tex": "../tex_docs/15.10.26.tex",
+      "lab": "15.10.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "14.10.26.html",
-    "tex": "../tex_docs/14.10.26.tex",
-    "lab": "14.10.26-lab.html"
-  }
-},
-{
-  "date": "2026-10-12",
-  "ktpRefs": [],
-  "href": "12.10.26.html",
-  "title": "НОД и НОК: от алгоритма к идее",
-  "navTitle": "НОД и НОК: от алгоритма к идее",
-  "navSubtitle": "Олимпиадная математика: НОД и НОК, простые множители, алгоритм Евклида, взаимная простота и восстановление пары чисел. Урок Ксении Клыковой 12 октября 2026 года.",
-  "summary": "Олимпиадная математика: НОД и НОК, простые множители, алгоритм Евклида, взаимная простота и восстановление пары чисел. Урок Ксении Клыковой 12 октября 2026 года.",
-  "topics": [
-    "НОД и НОК",
-    "простые множители",
-    "алгоритм Евклида",
-    "взаимная простота",
-    "олимпиадные задачи с параметром"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t19_divisibility",
-      "evidenceAnchor": "factorization",
-      "relation": "practiced",
-      "label": "Простые множители: НОД и НОК",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_remainders",
-      "evidenceAnchor": "euclid",
-      "relation": "practiced",
-      "label": "Алгоритм Евклида",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_primes",
-      "evidenceAnchor": "coprime",
-      "relation": "practiced",
-      "label": "Взаимная простота",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-10-14",
+    "ktpRefs": [],
+    "href": "14.10.26.html",
+    "title": "Многочлены. Корень меняет ход решения",
+    "navTitle": "Многочлены и метод интервалов",
+    "navSubtitle": "деление с остатком · Безу · Горнер · кратность корней",
+    "summary": "Многочлены: деление с остатком, теорема Безу, схема Горнера, кратность корней, метод интервалов и замена переменной. Урок Ксении Клыковой от 14 октября 2026 года.",
+    "topics": [
+      "деление многочленов с остатком",
+      "теорема Безу",
+      "схема Горнера",
+      "метод интервалов и кратности",
+      "замена переменной"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t7_algebra",
+        "evidenceAnchor": "division",
+        "relation": "practiced",
+        "label": "Деление многочленов с остатком",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t6_factor",
+        "evidenceAnchor": "horner",
+        "relation": "practiced",
+        "label": "Теорема Безу и схема Горнера",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t15_intervals",
+        "evidenceAnchor": "intervals",
+        "relation": "practiced",
+        "label": "Метод интервалов: знаки и кратности",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t6_linear_quad",
+        "evidenceAnchor": "substitution",
+        "relation": "touched",
+        "label": "Замена переменной в многочленных уравнениях",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "14.10.26.html",
+      "tex": "../tex_docs/14.10.26.tex",
+      "lab": "14.10.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "12.10.26.html",
-    "pdf": "../pdf_docs/12.10.26.pdf",
-    "tex": "../tex_docs/12.10.26.tex",
-    "lab": "12.10.26-lab.html"
-  }
-},
-{
-  "date": "2026-10-09",
-  "ktpRefs": [],
-  "href": "09.10.26.html",
-  "title": "Сначала смысл, потом вычисления",
-  "navTitle": "Повторение ЕГЭ: текстовые задачи",
-  "navSubtitle": "алгебра · прикладные формулы · корни · движение · сплавы · работа",
-  "summary": "Повторение профильного ЕГЭ: степени и преобразования, прикладные формулы, отбор корней по смыслу, движение по реке, сплавы и совместная работа.",
-  "topics": [
-    "Алгебраические преобразования",
-    "прикладные формулы",
-    "отбор корней",
-    "движение по воде",
-    "сплавы",
-    "совместная работа"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t7_power_actions",
-      "evidenceAnchor": "algebra",
-      "relation": "practiced",
-      "label": "Степени и преобразования",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t10_validation",
-      "evidenceAnchor": "selection",
-      "relation": "practiced",
-      "label": "Отбор корней и проверка ответа",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t10_water",
-      "evidenceAnchor": "river",
-      "relation": "practiced",
-      "label": "Движение по воде",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t10_alloys",
-      "evidenceAnchor": "alloys",
-      "relation": "practiced",
-      "label": "Сплавы и массовые доли",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t10_work",
-      "evidenceAnchor": "work",
-      "relation": "practiced",
-      "label": "Совместная работа",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-10-12",
+    "ktpRefs": [],
+    "href": "12.10.26.html",
+    "title": "НОД и НОК: от алгоритма к идее",
+    "navTitle": "НОД и НОК: от алгоритма к идее",
+    "navSubtitle": "Олимпиадная математика: НОД и НОК, простые множители, алгоритм Евклида, взаимная простота и восстановление пары чисел. Урок Ксении Клыковой 12 октября 2026 года.",
+    "summary": "Олимпиадная математика: НОД и НОК, простые множители, алгоритм Евклида, взаимная простота и восстановление пары чисел. Урок Ксении Клыковой 12 октября 2026 года.",
+    "topics": [
+      "НОД и НОК",
+      "простые множители",
+      "алгоритм Евклида",
+      "взаимная простота",
+      "олимпиадные задачи с параметром"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t19_divisibility",
+        "evidenceAnchor": "factorization",
+        "relation": "practiced",
+        "label": "Простые множители: НОД и НОК",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_remainders",
+        "evidenceAnchor": "euclid",
+        "relation": "practiced",
+        "label": "Алгоритм Евклида",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_primes",
+        "evidenceAnchor": "coprime",
+        "relation": "practiced",
+        "label": "Взаимная простота",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "12.10.26.html",
+      "pdf": "../pdf_docs/12.10.26.pdf",
+      "tex": "../tex_docs/12.10.26.tex",
+      "lab": "12.10.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "09.10.26.html",
-    "pdf": "../pdf_docs/09.10.26.pdf",
-    "tex": "../tex_docs/09.10.26.tex",
-    "lab": "09.10.26-lab.html"
-  }
-},
-{
-  "date": "2026-10-08",
-  "ktpRefs": [],
-  "href": "08.10.26.html",
-  "title": "НОД и НОК. От алгоритма к рассуждению",
-  "navTitle": "НОД и НОК",
-  "navSubtitle": "остатки · алгоритм Евклида · делимость · 4 дня тренировки",
-  "summary": "НОД и НОК, алгоритм Евклида, делимость и первые олимпиадные рассуждения. Путь Б: 9–12 октября, ежедневно по три задания.",
-  "topics": [
-    "НОД и НОК",
-    "алгоритм Евклида",
-    "делимость",
-    "простые числа",
-    "первые олимпиадные рассуждения"
-  ],
-  "outcomes": [
-    {
-      "competencyId": "t19_divisibility",
-      "evidenceAnchor": "principles",
-      "relation": "practiced",
-      "label": "НОД, НОК и делимость: связь между величинами",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_remainders",
-      "evidenceAnchor": "euclid",
-      "relation": "practiced",
-      "label": "Алгоритм Евклида и деление с остатком",
-      "practiceDisposition": "manual"
-    },
-    {
-      "competencyId": "t19_primes",
-      "evidenceAnchor": "olympiad",
-      "relation": "practiced",
-      "label": "Простые числа и проверка условий",
-      "practiceDisposition": "manual"
+  },
+  {
+    "date": "2026-10-09",
+    "ktpRefs": [],
+    "href": "09.10.26.html",
+    "title": "Сначала смысл, потом вычисления",
+    "navTitle": "Повторение ЕГЭ: текстовые задачи",
+    "navSubtitle": "алгебра · прикладные формулы · корни · движение · сплавы · работа",
+    "summary": "Повторение профильного ЕГЭ: степени и преобразования, прикладные формулы, отбор корней по смыслу, движение по реке, сплавы и совместная работа.",
+    "topics": [
+      "Алгебраические преобразования",
+      "прикладные формулы",
+      "отбор корней",
+      "движение по воде",
+      "сплавы",
+      "совместная работа"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t7_power_actions",
+        "evidenceAnchor": "algebra",
+        "relation": "practiced",
+        "label": "Степени и преобразования",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t10_validation",
+        "evidenceAnchor": "selection",
+        "relation": "practiced",
+        "label": "Отбор корней и проверка ответа",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t10_water",
+        "evidenceAnchor": "river",
+        "relation": "practiced",
+        "label": "Движение по воде",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t10_alloys",
+        "evidenceAnchor": "alloys",
+        "relation": "practiced",
+        "label": "Сплавы и массовые доли",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t10_work",
+        "evidenceAnchor": "work",
+        "relation": "practiced",
+        "label": "Совместная работа",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "09.10.26.html",
+      "pdf": "../pdf_docs/09.10.26.pdf",
+      "tex": "../tex_docs/09.10.26.tex",
+      "lab": "09.10.26-lab.html"
     }
-  ],
-  "materials": {
-    "html": "08.10.26.html",
-    "tex": "../tex_docs/08.10.26.tex"
-  }
-},
-
+  },
+  {
+    "date": "2026-10-08",
+    "ktpRefs": [],
+    "href": "08.10.26.html",
+    "title": "НОД и НОК. От алгоритма к рассуждению",
+    "navTitle": "НОД и НОК",
+    "navSubtitle": "остатки · алгоритм Евклида · делимость · 4 дня тренировки",
+    "summary": "НОД и НОК, алгоритм Евклида, делимость и первые олимпиадные рассуждения. Путь Б: 9–12 октября, ежедневно по три задания.",
+    "topics": [
+      "НОД и НОК",
+      "алгоритм Евклида",
+      "делимость",
+      "простые числа",
+      "первые олимпиадные рассуждения"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "t19_divisibility",
+        "evidenceAnchor": "principles",
+        "relation": "practiced",
+        "label": "НОД, НОК и делимость: связь между величинами",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_remainders",
+        "evidenceAnchor": "euclid",
+        "relation": "practiced",
+        "label": "Алгоритм Евклида и деление с остатком",
+        "practiceDisposition": "manual"
+      },
+      {
+        "competencyId": "t19_primes",
+        "evidenceAnchor": "olympiad",
+        "relation": "practiced",
+        "label": "Простые числа и проверка условий",
+        "practiceDisposition": "manual"
+      }
+    ],
+    "materials": {
+      "html": "08.10.26.html",
+      "tex": "../tex_docs/08.10.26.tex"
+    }
+  },
   {
     "date": "2026-10-07",
     "ktpRefs": [],
