@@ -4,6 +4,64 @@ export const ARCHIVE_PAGE_SIZE=10;
 const MONTHS_GENITIVE=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 
 export const LESSONS=[
+{
+  "date": "2026-11-19",
+  "ktpRefs": [],
+  "href": "19.11.26.html",
+  "title": "Плоскость в координатах",
+  "navTitle": "Плоскость в координатах",
+  "navSubtitle": "Матвей Горбачёв · 19 ноября 2026. Координатный метод в стереометрии: куб, уравнение плоскости по трём точкам, нормальный вектор, угол между плоскостями и 10 упражнений с ответами.",
+  "summary": "Матвей Горбачёв · 19 ноября 2026. Координатный метод в стереометрии: куб, уравнение плоскости по трём точкам, нормальный вектор, угол между плоскостями и 10 упражнений с ответами.",
+  "topics": [
+    "Координаты точек и середин рёбер куба",
+    "Уравнение плоскости по трём точкам и проверка подстановкой",
+    "Нормальный вектор плоскости",
+    "Скалярное произведение и длина нормали",
+    "Меньший угол между плоскостями через нормали"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "vectors_03",
+      "evidenceAnchor": "cube",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "vectors_06",
+      "evidenceAnchor": "cube",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "vectors_07",
+      "evidenceAnchor": "angle",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "vectors_10",
+      "evidenceAnchor": "angle",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "vectors_11",
+      "evidenceAnchor": "angle",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "stereo_09",
+      "evidenceAnchor": "angle",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "stereo_14",
+      "evidenceAnchor": "cube",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "19.11.26.html",
+    "pdf": "../pdf_docs/19.11.26.pdf",
+    "tex": "../tex_docs/19.11.26.tex"
+  }
+},
   {
     "date": "2026-11-12",
     "ktpRefs": [],
