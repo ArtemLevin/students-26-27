@@ -3,6 +3,95 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+  "date": "2026-11-20",
+  "ktpRefs": [],
+  "href": "20.11.26.html",
+  "title": "Медиана, высота и окружность в прямоугольном треугольнике",
+  "navTitle": "Медиана, высота и окружность в прямоугольном треугольнике",
+  "navSubtitle": "Планиметрия ЕГЭ: теорема Фалеса, прямая и обратная теоремы о медиане, система по двум периметрам, высота через площадь, угол между медианой и высотой, окружность на катете и 10 тренировочных задач.",
+  "summary": "Планиметрия ЕГЭ: теорема Фалеса, прямая и обратная теоремы о медиане, система по двум периметрам, высота через площадь, угол между медианой и высотой, окружность на катете и 10 тренировочных задач.",
+  "topics": [
+    "Прямоугольный треугольник",
+    "Описанная окружность и теорема Фалеса",
+    "Медиана к гипотенузе",
+    "Высота к гипотенузе",
+    "Метод равенства площадей",
+    "Косинус угла между медианой и высотой",
+    "Дополнительные построения"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t1_right",
+      "evidenceAnchor": "theorem",
+      "relation": "practiced",
+      "label": "Распознавание прямоугольного треугольника",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t1_circumcircle",
+      "evidenceAnchor": "theorem",
+      "relation": "touched",
+      "label": "Диаметр описанной окружности",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t1_medians",
+      "evidenceAnchor": "median",
+      "relation": "practiced",
+      "label": "Медиана к гипотенузе и обратная теорема",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t1_isosceles",
+      "evidenceAnchor": "median",
+      "relation": "touched",
+      "label": "Равнобедренные треугольники с медианой",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t1_areas",
+      "evidenceAnchor": "height",
+      "relation": "practiced",
+      "label": "Высота из равенства площадей",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t1_sine_cosine",
+      "evidenceAnchor": "angles",
+      "relation": "touched",
+      "label": "Косинус угла между медианой и высотой",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t1_circle_angles",
+      "evidenceAnchor": "circles",
+      "relation": "touched",
+      "label": "Прямой угол, опирающийся на диаметр",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t17_triangles",
+      "evidenceAnchor": "method",
+      "relation": "touched",
+      "label": "Дополнительные построения в планиметрии",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t17_circle_tri_mix",
+      "evidenceAnchor": "circles",
+      "relation": "touched",
+      "label": "Окружность на катете треугольника",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "20.11.26.html",
+    "pdf": "../pdf_docs/20.11.26.pdf",
+    "tex": "../tex_docs/20.11.26.tex",
+    "lab": "20.11.26-lab.html"
+  }
+},
+  {
   "date": "2026-11-14",
   "ktpRefs": [],
   "href": "14.11.26.html",
