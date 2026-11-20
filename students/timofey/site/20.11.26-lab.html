@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Цифровая лаборатория к уроку Тимофея Васильченко 20 ноября 2026: медиана, высота и описанная окружность прямоугольного треугольника.">
+<title>Лаборатория прямоугольного треугольника · Тимофей Васильченко</title>
+<style>
+:root{color-scheme:dark;--bg:#0f1e21;--sheet:#1b3033;--soft:#243c40;--ink:#eff7f2;--muted:#bcd0ca;--line:#405d60;--accent:#91d6c9;--warm:#f1c993;--blue:#91b9e6;--focus:#ffe3a0}
+html[data-theme=light]{color-scheme:light;--bg:#f3f3ed;--sheet:#fffefa;--soft:#e7efeb;--ink:#233c3e;--muted:#506a68;--line:#bed0ca;--accent:#0c6e66;--warm:#996821;--blue:#3369a9;--focus:#956008}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}a{color:inherit}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:3px}[hidden]{display:none!important}
+.skip{position:absolute;top:-90px;left:20px;background:var(--sheet);padding:9px;z-index:3}.skip:focus{top:8px}.wrap{width:min(1330px,calc(100% - 36px));margin:auto}.bar{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:15px 0}.brand{font:780 .82rem ui-monospace,monospace;letter-spacing:.12em;text-decoration:none}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:transparent;color:var(--ink);padding:10px 15px;min-height:43px;border-radius:4px;text-decoration:none}.btn:hover{border-color:var(--accent)}.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:750}html[data-theme=light] .btn.primary{color:white}
+.head{padding:40px 0 22px}.eyebrow{font:.79rem ui-monospace,monospace;letter-spacing:.13em;color:var(--accent);text-transform:uppercase}.head h1{font-size:clamp(2rem,4.5vw,4.05rem);letter-spacing:-.05em;line-height:1.1;margin:12px 0 10px}.head p:last-child{color:var(--muted);max-width:850px}
+.lab{display:grid;grid-template-columns:minmax(360px,1.35fr) minmax(295px,.65fr);gap:20px;align-items:start}.stage{padding:17px;border:1px solid var(--line);background:var(--sheet);min-width:0}.stage svg{width:100%;height:auto;display:block;max-height:650px}.stage figcaption{color:var(--muted);font-size:.83rem;border-top:1px solid var(--line);padding-top:11px}.modes{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.mode{padding:8px 11px;background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:3px;font-size:.85rem;min-height:40px}.mode[aria-pressed=true]{border-color:var(--accent);background:var(--soft);color:var(--accent);font-weight:750}
+.panel{padding:20px;border:1px solid var(--line);background:var(--sheet)}.panel h2{font-size:1.08rem;margin:0 0 15px}.control{display:block;border-top:1px solid var(--line);padding-top:14px;margin-top:15px}.control-top{display:flex;justify-content:space-between;align-items:baseline;gap:9px}.control output{font:750 1.24rem ui-monospace,monospace;color:var(--accent)}input[type=range]{width:100%;accent-color:var(--accent);height:36px;cursor:pointer}.presets{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}.presets .btn{min-height:39px;padding:6px 10px;font-size:.83rem}.readout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:19px 0}.metric{border-top:1px solid var(--line);padding-top:9px;min-width:0}.metric small{display:block;color:var(--muted);font-size:.75rem}.metric strong{display:block;color:var(--ink);font:700 clamp(1.05rem,2vw,1.27rem) ui-monospace,monospace;margin-top:4px}.metric strong.accent{color:var(--accent)}.equation{overflow-x:auto;border-left:2px solid var(--accent);padding:13px 12px;background:var(--soft);font-family:"Cambria Math",Georgia,serif;font-size:1.07rem;white-space:nowrap}.explain{margin:20px 0 0;padding:20px 0;border-top:1px solid var(--line)}.explain h2{margin:0 0 8px;font-size:1.25rem}.explain p{color:var(--muted);margin:5px 0 10px}.legend{display:flex;gap:16px;flex-wrap:wrap;font:.79rem/1.6 ui-monospace,monospace;color:var(--muted)}.key{width:17px;height:3px;display:inline-block;margin-right:6px;vertical-align:middle;background:var(--accent)}.key.gold{background:var(--warm)}.key.blue{background:var(--blue)}.compare{padding-top:14px;border-top:1px solid var(--line);margin-top:20px}.compare-output{color:var(--muted);font-size:.86rem;margin:12px 0 0;min-height:45px}.compare-output strong{color:var(--accent)}.footer{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 45px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px;font-size:.88rem;color:var(--muted)}
+@media(max-width:930px){.lab{grid-template-columns:1fr}.panel{max-width:none}.stage{padding:10px}}@media(max-width:500px){.wrap{width:calc(100% - 24px)}.head{padding:29px 0 12px}.panel{padding:14px}.stage{padding:6px}.modes{gap:4px}.mode{padding:7px 9px;font-size:.8rem}.legend{gap:8px}.readout{gap:9px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{body{background:white;color:#111}.bar,.presets,.controls,.modes,.compare,.footer{display:none!important}.stage,.panel{background:white;color:#111}.lab{display:block}.stage svg{max-height:180mm}.panel{border:none}.explain{display:block}}
+</style></head>
+<body><a class="skip" href="#main">К лаборатории</a><div class="wrap">
+<header class="bar"><a href="index.html" class="brand">LEVIN / ATLAS · TIMOFEY</a><div class="actions"><a class="btn" href="20.11.26.html">← Вернуться к занятию</a><button class="btn" id="theme" type="button">Светлая тема</button></div></header>
+<main id="main">
+<header class="head"><div class="eyebrow">20 ноября 2026 · Геометрическая лаборатория</div><h1>Один треугольник. <span style="color:var(--accent)">Три конструктивные идеи.</span></h1><p>Меняйте длины катетов и наблюдайте, как изменяются положение вершины B, высота BH, медиана BM, окружности и угол между двумя отрезками. Все измерения связаны с одной геометрической моделью.</p></header>
+<div class="lab">
+<figure class="stage"><div class="modes" role="group" aria-label="Режим исследования"><button class="mode" type="button" data-mode="circumcircle" aria-pressed="true">Диаметр</button><button class="mode" type="button" data-mode="median" aria-pressed="false">Медиана</button><button class="mode" type="button" data-mode="height" aria-pressed="false">Высота</button><button class="mode" type="button" data-mode="angles" aria-pressed="false">Угол между ними</button><button class="mode" type="button" data-mode="cathet" aria-pressed="false">Окружность на катете</button></div>
+<svg id="plot" viewBox="0 0 660 575" role="img" aria-labelledby="plotTitle plotDesc">
+<title id="plotTitle">Изменяемый прямоугольный треугольник ABC</title><desc id="plotDesc">Треугольник ABC прямоугольный при B; AC — гипотенуза. M — её середина, H — основание высоты из B. Кнопки меняют показанные дополнительные построения.</desc>
+<path id="circumArc" d="M80 300A250 250 0 0 0 580 300" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="7 6"/>
+<circle id="cathetCircle" cx="0" cy="0" r="0" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-dasharray="7 7" style="display:none"/>
+<g stroke="var(--ink)" fill="none" stroke-width="3"><line id="AB" x1="80" y1="300" x2="260" y2="60"/><line id="BC" x1="260" y1="60" x2="580" y2="300"/><line x1="80" y1="300" x2="580" y2="300"/></g>
+<line id="median" x1="260" y1="60" x2="330" y2="300" stroke="var(--warm)" stroke-width="3"/>
+<line id="height" x1="260" y1="60" x2="260" y2="300" stroke="var(--accent)" stroke-width="3" stroke-dasharray="8 6"/>
+<path id="rightMark" d="M260 283h17v17" stroke="var(--accent)" stroke-width="2" fill="none"/>
+<path id="rightB" d="" stroke="var(--ink)" stroke-width="2" fill="none"/>
+<g id="points" fill="var(--ink)"><circle cx="80" cy="300" r="4.5"/><circle cx="580" cy="300" r="4.5"/><circle id="ptB" cx="260" cy="60" r="5.5" fill="var(--accent)"/><circle cx="330" cy="300" r="5" fill="var(--warm)"/><circle id="ptH" cx="260" cy="300" r="4" fill="var(--accent)"/></g>
+<g fill="var(--ink)" font-size="22" font-family="Cambria Math,Georgia,serif"><text x="57" y="325">A</text><text x="584" y="325">C</text><text id="labelB" x="241" y="43">B</text><text id="labelM" x="330" y="326">M</text><text id="labelH" x="250" y="326">H</text></g>
+</svg>
+<figcaption><div class="legend"><span><i class="key"></i> высота / описанная окружность</span><span><i class="key gold"></i> медиана</span><span><i class="key blue"></i> окружность с диаметром BC</span></div><p>Геометрия вычисляется по теореме Пифагора и проекциям; изображение сохраняет прямой угол при B.</p></figcaption></figure>
+<aside class="panel" aria-label="Параметры и вычисления"><h2>Измените исходные данные</h2><div class="controls"><label class="control" for="a"><span class="control-top"><span>Катет AB = a</span><output id="aValue" for="a">3</output></span><input id="a" type="range" min="1" max="12" step="0.5" value="3"></label><label class="control" for="b"><span class="control-top"><span>Катет BC = b</span><output id="bValue" for="b">4</output></span><input id="b" type="range" min="1" max="12" step="0.5" value="4"></label><div class="presets" aria-label="Данные из пособия"><button class="btn" type="button" data-preset="1,2">1 : 2</button><button class="btn" type="button" data-preset="3,4">3 : 4</button><button class="btn" type="button" data-preset="5,12">5 : 12</button><button class="btn" type="button" data-preset="6,8">6 : 8</button><button class="btn" type="button" id="reset">Сброс</button></div></div>
+<div class="readout" aria-live="polite"><div class="metric"><small>Гипотенуза AC = c</small><strong id="cValue">5</strong></div><div class="metric"><small>Медиана BM = c/2</small><strong id="mValue" class="accent">2,5</strong></div><div class="metric"><small>Высота BH = ab/c</small><strong id="hValue">2,4</strong></div><div class="metric"><small>Угол ∠HBM = φ</small><strong id="phiValue">16,3°</strong></div><div class="metric"><small>AM = BM = CM</small><strong id="equalValue">2,5</strong></div><div class="metric"><small>cos φ = 2ab/c²</small><strong id="cosValue">0,96</strong></div></div>
+<div class="equation" id="equation" aria-live="polite">S = ab/2 = ch/2</div>
+<div class="compare"><button class="btn" type="button" id="snapshot">Запомнить состояние</button><button class="btn" type="button" id="clearSnapshot" hidden>Сбросить сравнение</button><p class="compare-output" id="comparison" aria-live="polite">Можно сохранить текущие значения и затем изменить катеты для сравнения.</p></div></aside>
+</div>
+<section class="explain" aria-live="polite"><div class="eyebrow" id="modeTag">Режим 01 / Окружность</div><h2 id="explainTitle">Почему медиана равна радиусу?</h2><p id="explainBody">Центр описанной окружности прямоугольного треугольника находится в середине гипотенузы AC. Поэтому AM, BM и CM равны половине AC.</p><p><a href="20.11.26.html#method">Вернуться к алгоритму решения →</a></p></section>
+</main>
+<footer class="footer"><span>Лёвин Артём Александрович · эксклюзивно для Тимофея Васильченко</span><a href="index.html">Карта компетенций</a></footer>
+</div>
+<script>
+(function(){
+'use strict';
+var root=document.documentElement,theme=document.getElementById('theme'),a=document.getElementById('a'),b=document.getElementById('b');
+var modes=['circumcircle','median','height','angles','cathet'];
+var descriptions={
+circumcircle:['01 / Окружность','Почему медиана равна радиусу?','Центр описанной окружности прямоугольного треугольника находится в середине гипотенузы AC. Поэтому AM, BM и CM равны половине AC.'],
+median:['02 / Медиана','Три равных отрезка','Отрезок BM соединяет вершину прямого угла с серединой гипотенузы. При любой форме прямоугольного треугольника AM = BM = CM. Это создаёт два равнобедренных треугольника.'],
+height:['03 / Площадь','Высота выражается через катеты','Одна и та же площадь равна ab/2 и ch/2. Приравнивая формулы, получаем h = ab/c. Точка H всегда является ортогональной проекцией B на AC.'],
+angles:['04 / Тригонометрия','Угол между высотой и медианой','Треугольник BHM прямоугольный при H. Косинус угла HBM равен BH/BM = 2ab/(a²+b²). При равных катетах H=M и угол равен 0°.'],
+cathet:['05 / Достроение','Окружность с диаметром BC','Точка H лежит на окружности с диаметром BC, поскольку ∠BHC = 90°. Поэтому построение окружности на катете позволяет получить высоту к гипотенузе.']
+};
+var mode='circumcircle',snapshot=null;
+function id(s){return document.getElementById(s)}
+function n(v){return v.toFixed(2).replace(/\.?0+$/,'').replace('.',',')}
+function xy(el,values){Object.keys(values).forEach(function(k){el.setAttribute(k,values[k])})}
+function show(el,on){el.style.display=on?'':'none'}
+function choose(next,writeHash){
+if(modes.indexOf(next)<0)next='circumcircle';
+mode=next;
+document.querySelectorAll('.mode').forEach(function(btn){btn.setAttribute('aria-pressed',String(btn.dataset.mode===mode))});
+var d=descriptions[mode];id('modeTag').textContent=d[0];id('explainTitle').textContent=d[1];id('explainBody').textContent=d[2];
+if(writeHash)history.replaceState(null,'','#'+mode);
+render();
+}
+function render(){
+var av=Number(a.value),bv=Number(b.value),c=Math.hypot(av,bv),h=av*bv/c,m=c/2,cos=2*av*bv/(c*c),phi=Math.acos(Math.max(-1,Math.min(1,cos)))*180/Math.PI;
+var bx=80+500*av*av/(c*c),by=300-500*av*bv/(c*c);
+id('aValue').textContent=n(av);id('bValue').textContent=n(bv);id('cValue').textContent=n(c);id('mValue').textContent=n(m);id('hValue').textContent=n(h);id('phiValue').textContent=n(phi)+'°';id('equalValue').textContent=n(m);id('cosValue').textContent=n(cos);
+xy(id('AB'),{x2:bx,y2:by});xy(id('BC'),{x1:bx,y1:by});xy(id('median'),{x1:bx,y1:by});xy(id('height'),{x1:bx,y1:by,x2:bx});xy(id('ptB'),{cx:bx,cy:by});xy(id('ptH'),{cx:bx});
+xy(id('rightMark'),{d:'M'+n0(bx)+' 283 h 17 v 17'});
+var vxA=80-bx,vyA=300-by,vxC=580-bx,vyC=300-by,la=Math.hypot(vxA,vyA),lc=Math.hypot(vxC,vyC),d=18;
+id('rightB').setAttribute('d','M'+n0(bx+vxA/la*d)+' '+n0(by+vyA/la*d)+'L'+n0(bx+(vxA/la+vxC/lc)*d)+' '+n0(by+(vyA/la+vyC/lc)*d)+'L'+n0(bx+vxC/lc*d)+' '+n0(by+vyC/lc*d));
+xy(id('labelB'),{x:bx-17,y:by-13});var merged=Math.abs(bx-330)<14;id('labelH').textContent=merged?'H = M':'H';xy(id('labelH'),{x:merged?bx-24:bx-8,y:331});xy(id('labelM'),{x:330,y:331});
+var cc=id('cathetCircle');xy(cc,{cx:(bx+580)/2,cy:(by+300)/2,r:(500*bv/c)/2});
+show(id('circumArc'),mode==='circumcircle'||mode==='median');
+show(cc,mode==='cathet');
+show(id('median'),mode==='median'||mode==='circumcircle'||mode==='angles');
+show(id('height'),mode==='height'||mode==='angles'||mode==='cathet');
+show(id('ptH'),mode==='height'||mode==='angles'||mode==='cathet');
+show(id('labelH'),mode==='height'||mode==='angles'||mode==='cathet');
+show(id('labelM'),!merged&&(mode==='median'||mode==='circumcircle'||mode==='angles'));
+show(id('rightMark'),mode==='height'||mode==='angles'||mode==='cathet');
+id('equation').textContent=mode==='height'?'S = '+n(av*bv/2)+' = '+n(c)+'·'+n(h)+'/2':mode==='angles'?'cos φ = '+n(cos)+'; φ = '+n(phi)+'°':mode==='cathet'?'∠BHC = 90°; BH ⟂ AC':'AC = '+n(c)+'; AM = BM = CM = '+n(m);
+var cmp=id('comparison');
+if(snapshot){cmp.innerHTML='';var strong=document.createElement('strong');strong.textContent='Сравнение с сохранённым: ';cmp.append(strong);cmp.append(document.createTextNode('ΔBM = '+signed(m-snapshot.m)+', ΔBH = '+signed(h-snapshot.h)+', Δφ = '+signed(phi-snapshot.phi)+'°.'))}
+}
+function n0(v){return v.toFixed(2)}
+function signed(v){return(v>=0?'+':'')+n(v)}
+document.querySelectorAll('.mode').forEach(function(btn){btn.addEventListener('click',function(){choose(btn.dataset.mode,true)})});
+document.querySelectorAll('[data-preset]').forEach(function(btn){btn.addEventListener('click',function(){var vals=btn.dataset.preset.split(',');a.value=vals[0];b.value=vals[1];render()})});
+[a,b].forEach(function(input){input.addEventListener('input',render)});
+id('reset').addEventListener('click',function(){a.value='3';b.value='4';choose('circumcircle',true)});
+id('snapshot').addEventListener('click',function(){var av=Number(a.value),bv=Number(b.value),c=Math.hypot(av,bv);snapshot={m:c/2,h:av*bv/c,phi:Math.acos(Math.max(-1,Math.min(1,2*av*bv/(c*c))))*180/Math.PI};id('clearSnapshot').hidden=false;render()});
+id('clearSnapshot').addEventListener('click',function(){snapshot=null;id('clearSnapshot').hidden=true;id('comparison').textContent='Можно сохранить текущие значения и затем изменить катеты для сравнения.'});
+try{root.dataset.theme=localStorage.getItem('timofey-theme')==='light'?'light':'dark'}catch(e){}
+function syncTheme(){theme.textContent=root.dataset.theme==='dark'?'Светлая тема':'Тёмная тема';theme.setAttribute('aria-pressed',root.dataset.theme==='light'?'true':'false')}
+theme.addEventListener('click',function(){root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('timofey-theme',root.dataset.theme)}catch(e){}syncTheme()});syncTheme();
+window.addEventListener('hashchange',function(){choose(location.hash.slice(1),false)});
+choose(location.hash.slice(1),false);
+})();
+</script></body></html>
