@@ -1,5 +1,68 @@
 export const LESSONS=[
   {
+    "date": "2026-11-20",
+    "ktpRefs": [
+      "ktp-007"
+    ],
+    "href": "20.11.26.html",
+    "title": "Производительность и совместная работа",
+    "navTitle": "Производительность и совместная работа",
+    "navSubtitle": "20.11.26 · Две трубы, насосы, производительность и алгебраические приёмы",
+    "summary": "Две трубы, два садовых насоса, таблица работа–время–результат, пропорции, метод улыбочки, квадратные корни. Интерактивная лаборатория и 10 задач.",
+    "topics": [
+      "производительность и единицы измерения",
+      "таблица работа–время–результат",
+      "две трубы: разница производительностей и времени",
+      "совместная работа двух насосов",
+      "сложение и вычитание дробей (метод улыбочки)",
+      "пропорции и перемножение крест-накрест",
+      "квадратное уравнение и извлечение квадратного корня"
+    ],
+    "outcomes": [
+      {
+        "competencyId": "text_11",
+        "evidenceAnchor": "theory",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_20",
+        "evidenceAnchor": "model",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_12",
+        "evidenceAnchor": "pipes",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "text_10",
+        "evidenceAnchor": "pumps",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calc_02",
+        "evidenceAnchor": "smile",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "calc_07",
+        "evidenceAnchor": "proportion",
+        "relation": "practiced"
+      },
+      {
+        "competencyId": "eq_05",
+        "evidenceAnchor": "pipes",
+        "relation": "touched"
+      }
+    ],
+    "materials": {
+      "html": "20.11.26.html",
+      "pdf": "../pdf_docs/20.11.26.pdf",
+      "tex": "../tex_docs/20.11.26.tex",
+      "lab": "20.11.26-lab.html"
+    }
+  },
+  {
     "date": "2026-11-15",
     "ktpRefs": [
       "ktp-006",
