@@ -253,11 +253,12 @@ function selectItem(id,initiator){
   $('#detailLevel').textContent=lv.value+' — '+lv.label+'. '+lv.explain;
   $('#detailDiagnostic').textContent=item.diagnostic||item.description;
   $('#detailProof').textContent=entry?entry.basis:'Подтверждённого результата по этой теме пока нет.';
-  const evidence=app.lessons.find(l=>l.date==='2026-11-13')?.outcomes?.find(o=>o.competencyId===id);
+  const source=app.lessons.filter(l=>Array.isArray(l.outcomes)&&l.outcomes.some(o=>o.competencyId===id&&o.evidenceAnchor)).sort((a,b)=>b.date.localeCompare(a.date))[0];
+  const evidence=source?.outcomes?.find(o=>o.competencyId===id&&o.evidenceAnchor);
   if(evidence){
     const br=document.createElement('br');const a=document.createElement('a');
-    a.href='13.11.26.html#'+encodeURIComponent(evidence.evidenceAnchor);
-    a.textContent='13.11.2026 · материалы занятия по этому навыку';
+    a.href=source.href+'#'+encodeURIComponent(evidence.evidenceAnchor);
+    a.textContent=source.date.split('-').reverse().join('.')+' · материалы занятия по этому навыку';
     a.style.display='inline-block';a.style.marginTop='8px';a.style.fontWeight='700';
     $('#detailProof').append(br,a);
   }
