@@ -5,6 +5,92 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-19",
+  "ktpRefs": [],
+  "href": "19.11.26.html",
+  "title": "Текстовые задачи и алгебра",
+  "navTitle": "Текстовые задачи и алгебра",
+  "navSubtitle": "Ярослав Верещагин. Занятие 19 ноября 2026: алгебра, квадратные уравнения, движение по реке, совместная работа и производительность. Шесть разборов и десять заданий.",
+  "summary": "Ярослав Верещагин. Занятие 19 ноября 2026: алгебра, квадратные уравнения, движение по реке, совместная работа и производительность. Шесть разборов и десять заданий.",
+  "topics": [
+    "Куб разности, разность кубов и равенство третьих степеней",
+    "Квадратное уравнение: нормализация, коэффициенты и дискриминант",
+    "Скорости по течению и против течения; ограничение x > c",
+    "Движение плота: разница времени при раннем отправлении",
+    "Совместная работа: сложение производительностей",
+    "Плановая и фактическая производительность; задачи о трубах",
+    "Тренировочный блок: 10 задач Пути А"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_8_3_2",
+      "evidenceAnchor": "algebra",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_9_2_1",
+      "evidenceAnchor": "algebra",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_9_2_3",
+      "evidenceAnchor": "algebra",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_9_2_4",
+      "evidenceAnchor": "algebra",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_21_3_1",
+      "evidenceAnchor": "river",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_3_2",
+      "evidenceAnchor": "river",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_3_3",
+      "evidenceAnchor": "raft",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_3_4",
+      "evidenceAnchor": "raft",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_21_4_1",
+      "evidenceAnchor": "work",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_4_2",
+      "evidenceAnchor": "work",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_4_3",
+      "evidenceAnchor": "productivity",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_4_4",
+      "evidenceAnchor": "productivity",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "19.11.26.html",
+    "pdf": "../pdf_docs/19.11.26.pdf",
+    "tex": "../tex_docs/19.11.26.tex",
+    "lab": "19.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-12",
   "ktpRefs": [],
   "href": "12.11.26.html",
