@@ -1,0 +1,90 @@
+name: Sofia 20 November canonical publication and release QA
+
+on:
+  push:
+    branches:
+      - feat/sofya-kalney-lesson-2026-11-20-web
+    paths:
+      - .github/workflows/sofya-20261120-publisher.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish-and-verify:
+    name: Publish Sofia lesson via Student Platform v2
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout working branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/sofya-kalney-lesson-2026-11-20-web
+          persist-credentials: true
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            students/sofya_kalney
+            scripts
+            pipeline
+            shared
+            design-system
+            .github/workflows/sofya-20261120-publisher.yml
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preflight and canonical dry-run
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/student.mjs validate sofya_kalney
+          node scripts/publish-lesson.mjs sofya_kalney 20.11.26 --intent students/sofya_kalney/site/data/publication-intents/2026-11-20.json --dry-run | tee /tmp/sofya-20261120-dryrun.json
+          node --input-type=module -e '
+            import fs from "node:fs";
+            let p=JSON.parse(fs.readFileSync("/tmp/sofya-20261120-dryrun.json","utf8"));
+            if(!p.executable||p.conflicts?.length||p.reviewItems?.length)throw Error("Unresolved publication plan: "+JSON.stringify(p));
+            console.log("Dry-run approved, proposed files:",p.changedFiles);
+          '
+      - name: Canonical publication (transactional)
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/publish-lesson.mjs sofya_kalney 20.11.26 --intent students/sofya_kalney/site/data/publication-intents/2026-11-20.json | tee /tmp/sofya-20261120-publication.json
+          node scripts/student.mjs validate sofya_kalney
+      - name: Update cabinet public summary date
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const file='students/sofya_kalney/site/index.html';
+          const before=fs.readFileSync(file,'utf8');
+          const after=before.replace('обновлено 15.11.2026','обновлено 20.11.2026');
+          if(before===after&&!before.includes('обновлено 20.11.2026'))throw Error('Index description date was unexpected');
+          if(after!==before)fs.writeFileSync(file,after);
+          NODE
+      - name: Source and student contract tests
+        run: |
+          node --test students/sofya_kalney/site/tests/student-platform-v2.test.mjs
+          node students/sofya_kalney/site/tests/dashboard-regression.mjs
+      - name: Browser and responsive release QA
+        run: node students/sofya_kalney/site/tests/20.11.26.browser.mjs
+      - name: Verify generated files and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f students/sofya_kalney/site/data/lessons/2026-11-20.lesson.json
+          grep -q '2026-11-20' students/sofya_kalney/site/lesson-registry.js
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A students/sofya_kalney/site
+          git rm -- .github/workflows/sofya-20261120-publisher.yml
+          git diff --cached --stat
+          git commit -m "publish(sofya): register 20 November lesson through canonical v2 pipeline"
+          git push origin HEAD:feat/sofya-kalney-lesson-2026-11-20-web
+      - name: Upload QA screenshot previews
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sofya-20261120-browser-qa
+          path: sofya-20261120-review-artifacts/*.png
+          if-no-files-found: warn
