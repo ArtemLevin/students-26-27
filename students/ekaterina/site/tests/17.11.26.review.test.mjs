@@ -62,7 +62,11 @@ test('source worksheet and lesson publication metadata agree',()=>{
     assert.ok(['touched','practiced'].includes(entry.relation));
   }
   assert.match(registry,/"date": "2026-11-17"/);
-  assert.match(index,/lesson-registry.js\?v=20261117/);
+  const latestDate=registry.match(/"date": "(\d{4})-(\d{2})-(\d{2})"/);
+  const loadedVersion=index.match(/lesson-registry\.js\?v=(\d{8})/);
+  assert.ok(latestDate,'latest lesson date missing from registry');
+  assert.ok(loadedVersion,'versioned registry import missing from index');
+  assert.equal(loadedVersion[1],latestDate.slice(1).join(''),'registry URL must track latest published lesson');
 });
 test('interactive lesson JavaScript parses',()=>{
   const code=html.match(/<script>([\s\S]*?)<\/script>/)?.[1];
