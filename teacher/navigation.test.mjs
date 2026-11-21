@@ -22,15 +22,18 @@ test("has one tile per student and links to every subject navigator", async () =
   }
 
   assert.equal(slugs.length, new Set(slugs).size, "student tiles must be unique");
-  assert.equal(slugs.length, 26, "expected 26 distinct student tiles");
+  assert.equal(slugs.length, 27, "expected 27 distinct student tiles");
   assert.equal(urls.length, new Set(urls).size, "links must be unique");
-  assert.equal(urls.length, 28, "include two additional subject navigators");
+  assert.equal(urls.length, 30, "include three additional subject navigators");
 
   const standardPages = new Set(available.map(slug => "../students/" + slug + "/site/index.html"));
   for (const standardPage of standardPages) {
     assert.ok(urls.includes(standardPage), "missing navigator: " + standardPage);
   }
   assert.ok(urls.includes("../students/xenia_klykova/chemistry/site/index.html"));
+  assert.ok(urls.includes("../students/volodia_khachaturian_math/site/index.html"), "Volodia mathematics cabinet must be reachable");
+  assert.ok(urls.includes("../students/sofya_luzianina/site/index.html"), "Sofia physics cabinet must be reachable");
+  assert.match(page, /data-slug="sofya_luzianina"[^>]*data-level="ЕГЭ"[^>]*data-topics="physics"/, "Sofia tile must support exam and physics filters");
   assert.ok(urls.includes("../students/denis_ermolaev/site/index.html"), "Denis cabinet must be reachable");
   assert.ok(urls.includes("../students/daniil_khriastov/site/index.html"), "Daniil cabinet must be reachable");
   assert.match(page, /data-slug="daniil_khriastov"[^>]*data-level="ЕГЭ"[^>]*data-topics="math"/, "Daniil tile must support exam and subject filters");
@@ -52,4 +55,6 @@ test("loads local assets without external dependencies", async () => {
   for (const file of ["style.css", "app.js"]) await access(path.join(teacherDir, file));
   assert.match(page, /<link rel="stylesheet" href="\.\/style\.css">/);
   assert.match(page, /<script src="\.\/app\.js" defer><\/script>/);
+  assert.match(page, /<strong>27<\/strong><span>учеников<\/span>/);
+  assert.match(page, /<strong>30<\/strong><span>предметных/);
 });

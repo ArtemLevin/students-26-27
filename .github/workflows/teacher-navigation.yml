@@ -1,0 +1,30 @@
+name: Teacher directory navigation
+on:
+  pull_request:
+    paths:
+      - 'teacher/**'
+      - '.github/workflows/teacher-navigation.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'teacher/**'
+      - '.github/workflows/teacher-navigation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  directory-contract:
+    name: Teacher directory links and search contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check controller syntax
+        run: node --check teacher/app.js
+      - name: Verify complete directory and existing link targets
+        run: node --test teacher/navigation.test.mjs
