@@ -25,19 +25,21 @@ const server=http.createServer((req,res)=>{
 await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
 const origin='http://127.0.0.1:'+server.address().port;
 const profile=fs.mkdtempSync(path.join(os.tmpdir(),'daniil-browser-'));
-const browser=spawn(chrome,['--headless=new','--no-sandbox','--disable-dev-shm-usage','--disable-gpu','--no-first-run','--no-zygote','--disable-extensions','--remote-debugging-port=0','--user-data-dir='+profile],{stdio:'ignore'});
+const browser=spawn(chrome,['--headless=new','--no-sandbox','--disable-dev-shm-usage','--disable-gpu','--no-first-run','--disable-extensions','--remote-debugging-port=0','--user-data-dir='+profile],{stdio:['ignore','pipe','pipe']});
+let chromeLog='';
+for(const stream of [browser.stdout,browser.stderr])stream.on('data',chunk=>{chromeLog=(chromeLog+chunk.toString()).slice(-12000);});
 const pause=ms=>new Promise(ok=>setTimeout(ok,ms));
 const artifact=path.join(root,'daniil-site-review-artifacts');
 let ws;
 try{
   let port=0;
-  for(let tries=0;tries<150;tries++){
+  for(let tries=0;tries<600;tries++){
     const file=path.join(profile,'DevToolsActivePort');
     if(fs.existsSync(file)){port=Number(fs.readFileSync(file,'utf8').split('\n')[0]);break;}
-    if(browser.exitCode!==null)throw Error('Chromium exited early');
+    if(browser.exitCode!==null)throw Error('Chromium exited early: '+chromeLog);
     await pause(100);
   }
-  if(!port)throw Error('DevToolsActivePort unavailable');
+  if(!port)throw Error('DevToolsActivePort unavailable; binary='+chrome+' exit='+browser.exitCode+' output='+chromeLog);
   const tabs=await (await fetch('http://127.0.0.1:'+port+'/json/list')).json();
   const target=tabs.find(x=>x.type==='page');
   assert.ok(target,'Chromium did not expose a page target');
