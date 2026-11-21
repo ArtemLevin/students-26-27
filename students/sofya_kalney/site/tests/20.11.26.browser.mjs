@@ -112,6 +112,7 @@ try{
   assert.equal(await run("document.getElementById('segmentResult').textContent"),'1 / 3');
   await run("document.querySelector('[data-mode=\"midline\"]').click()");
   assert.equal(await run("document.getElementById('shareNWrap').hidden"),false,'midline control shown');
+  assert.equal(await run("document.querySelector('[data-mode=midline]').getAttribute('aria-pressed')"),'true','active method is exposed to assistive technology');
   assert.equal(await run("document.getElementById('shareRWrap').hidden"),true,'extension control hidden');
   assert.ok(Math.abs((await value())-15)<.005,'midline area 15');
   await run("(()=>{let e=document.getElementById('area');e.value='128';e.dispatchEvent(new Event('input',{bubbles:true}));})()");
