@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Абсолютно упругий удар о наклонную плиту — 3D-разбор</title>
+<style>
+:root{color-scheme:dark;--bg:#09121f;--panel:#101e2f;--panel2:#15263a;--border:#2b4057;--text:#eff7ff;--muted:#a0b4ca;--cyan:#5adcf4;--amber:#ffc978;--mint:#78efb7;--rose:#ff809b;--violet:#b9a3ff;--blue:#7aa8ff;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);background:var(--bg)}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid #8feaff;outline-offset:3px}button:disabled{opacity:.4;cursor:not-allowed}
+.top{height:auto;min-height:70px;padding:15px clamp(14px,2.6vw,34px);display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--border);background:#0c1828}.top h1{margin:0;font-size:clamp(17px,1.7vw,23px);font-weight:750;letter-spacing:-.035em}.top p{margin:5px 0 0;color:var(--muted);font-size:12px}.offline{font-size:11px;color:#b8f4d7;border:1px solid #3a6759;border-radius:99px;padding:7px 10px;white-space:nowrap}
+.app{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,372px);height:calc(100dvh - 74px);min-height:650px}.stage{position:relative;min-width:0;min-height:0;overflow:hidden;background:radial-gradient(ellipse at 60% 35%,#203349 0%,#101e30 50%,#0b1626 100%)}.scene{display:block;position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}.scene.dragging{cursor:grabbing}.stage-layer{position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;gap:10px;padding:12px}.stage-layer button,.stage-layer input,.stage-layer .tab{pointer-events:auto}.toolbox,.readout,.actions,.legend,.event-note{background:#0e1b2be9;border:1px solid #30465f;border-radius:12px;box-shadow:0 8px 28px #0004;backdrop-filter:blur(11px)}.stage-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;flex-wrap:wrap}.toolbox{display:flex;align-items:center;flex-wrap:wrap;gap:4px;padding:5px;max-width:100%}.tool{border:1px solid transparent;background:transparent;color:#cde0f0;border-radius:8px;padding:8px 9px;font-size:11px;white-space:nowrap}.tool:hover{background:#263f58}.tool[aria-pressed="true"]{background:#24516a;border-color:#357e98;color:white}.tool.iconbtn{font-size:17px;padding:4px 9px;min-width:32px}.tool-separator{width:1px;height:24px;background:#34475a;margin:0 3px}.readout{display:grid;grid-template-columns:auto auto;gap:5px 15px;padding:9px 12px;font-size:11px;min-width:186px}.readout span:nth-child(odd){color:#a9bcd1}.readout span:nth-child(even){font-weight:700;font-variant-numeric:tabular-nums;text-align:right}.stage-foot{display:grid;gap:9px;align-self:stretch}.event-note{width:fit-content;max-width:92%;padding:8px 12px;font-size:12px;line-height:1.4;color:#d6e6f8}.event-note strong{color:#fff}.legend{display:flex;flex-wrap:wrap;gap:7px 14px;width:fit-content;max-width:100%;padding:9px 11px;font-size:11px;color:#d2e3f3}.legend i{display:inline-block;width:15px;height:4px;border-radius:5px;vertical-align:middle;margin-right:5px}.actions{display:flex;gap:7px;align-items:center;padding:9px 10px}.actions button{border:1px solid #355470;background:#203851;border-radius:8px;color:#edf8ff;padding:8px 11px;font-size:12px;white-space:nowrap}.actions button:hover{background:#31516f}.actions button.primary{background:#136b8b;border-color:#36aac9}.actions input[type=range]{flex:1;min-width:60px}.actions output{font-size:11px;white-space:nowrap;min-width:45px;text-align:right;font-variant-numeric:tabular-nums}
+.sidebar{min-width:0;background:var(--panel);border-left:1px solid var(--border);overflow:auto;padding:18px 18px 28px}.sidebar h2{margin:0 0 14px;font-size:16px}.sidebar h3{font-size:13px;color:#e0eefc;margin:18px 0 11px}.control{margin-bottom:17px}.control-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0 0 8px;font-size:12px;color:#cbd9e9}.control output{color:white;font-weight:700;font-variant-numeric:tabular-nums}input[type=range]{width:100%;accent-color:#53c7e3;cursor:pointer;touch-action:pan-y}.checks{display:grid;grid-template-columns:1fr 1fr;gap:9px 12px}.checks label{font-size:11px;color:#c2d5ea;display:flex;align-items:center;gap:6px;cursor:pointer}.checks input{accent-color:#5fdcf3;width:15px;height:15px}.stat{background:#0b1727;border:1px solid #2c455c;padding:13px;border-radius:12px;margin:17px 0}.stat .eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#91abc1}.stat .big{font-size:27px;color:#9cf2ca;font-weight:800;letter-spacing:-.03em;margin-top:3px;font-variant-numeric:tabular-nums}.stat .hint{font-size:11px;color:var(--muted);line-height:1.6;margin-top:4px}.keyvalues{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 8px;font-size:12px;margin:12px 0}.keyvalues span{color:#a9bed1}.keyvalues strong{text-align:right;font-variant-numeric:tabular-nums;color:#f0f7ff}
+.steps{margin-top:20px;border-top:1px solid var(--border);padding-top:15px}.steps h2{margin-bottom:13px}.step{border:1px solid #2b435a;border-radius:10px;margin-bottom:9px;overflow:hidden;background:#0c1b2d}.step summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;padding:10px 12px;font-size:12px;font-weight:700}.step summary::-webkit-details-marker{display:none}.step summary::after{content:'⌄';margin-left:auto;color:#9badc1;font-size:18px}.step[open] summary::after{content:'⌃'}.number{background:#254960;color:#c9f3ff;border-radius:50%;width:23px;height:23px;display:grid;place-items:center;flex-shrink:0;font-size:11px}.stepbody{border-top:1px solid #293f56;padding:10px 13px 13px;color:#cadbee;font-size:12px;line-height:1.67}.stepbody p{margin:5px 0 8px}.eq{display:block;font-family:Cambria,"Times New Roman",serif;white-space:normal;font-size:16px;text-align:center;color:#f4f9ff;padding:7px 3px;line-height:1.55}.eq.result-eq{font-size:17px;color:#9df2c8}.mathm{font-family:Cambria,"Times New Roman",serif;font-size:15px}.notice{background:#16293a;border-left:3px solid #7bcbeb;padding:9px 10px;border-radius:4px;font-size:11px;color:#c2d8e8;line-height:1.6;margin-top:10px}.notice.warn{border-color:#ffd07d;background:#382b20;color:#ffe6ba}.graph-wrap{margin-top:14px;background:#0c1a2a;border-radius:11px;border:1px solid #2c435b;padding:9px 8px}.graph-wrap .graph-title{color:#b5d1e5;font-size:11px;font-weight:650;margin:2px 7px 5px}.chart{width:100%;height:165px;display:block}.shortcut{font-size:11px;color:#8da4bb;line-height:1.6;margin:12px 0 0}.smallcaps{font-size:10px;color:#95abc0;letter-spacing:.04em}.assist{font-size:11px;color:#a2b8cb;line-height:1.55;margin-top:9px}
+@media(max-width:1050px){.app{grid-template-columns:1fr;height:auto;min-height:0}.stage{height:clamp(510px,71dvh,730px)}.sidebar{border-left:0;border-top:1px solid var(--border);padding:19px clamp(18px,4vw,50px)}.checks{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:620px){.top{padding:12px 15px}.top h1{font-size:16px}.top p{font-size:11px}.offline{display:none}.stage{height:670px}.stage-layer{padding:7px}.toolbox{gap:0}.tool{font-size:10px;padding:7px 7px}.tool.iconbtn{padding:4px 7px;font-size:15px}.tool-separator{margin:0 2px}.readout{min-width:0;font-size:10px;gap:4px 9px;padding:7px 9px}.stage-head{gap:6px}.legend{font-size:10px;gap:6px 9px}.actions{gap:4px;padding:7px}.actions button{padding:7px 7px;font-size:11px}.actions output{min-width:37px}.event-note{font-size:11px;padding:7px 10px}.checks{grid-template-columns:1fr 1fr}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="top"><div><h1>Упругий удар шарика о наклонную плиту</h1><p>Интерактивная 3D-модель · отражение скорости · проекции · максимальная высота</p></div><span class="offline">● Автономная HTML-страница</span></header>
+<main class="app">
+<section class="stage" id="stage" aria-label="Интерактивная трёхмерная визуализация удара о наклонную плиту">
+<canvas id="scene" class="scene" aria-label="3D-сцена: плита, шарик, траектория, скорости и проекции">Для модели необходим браузер с поддержкой Canvas.</canvas>
+<div class="stage-layer"><div class="stage-head">
+<div class="toolbox" role="group" aria-label="Управление камерой">
+<button class="tool" data-view="iso" aria-pressed="true">3D</button>
+<button class="tool" data-view="side" aria-pressed="false">Сбоку</button>
+<button class="tool" data-view="plane" aria-pressed="false">На плиту</button>
+<button class="tool" data-view="top" aria-pressed="false">Сверху</button>
+<span class="tool-separator" aria-hidden="true"></span>
+<button class="tool iconbtn" id="left" title="Камера влево" aria-label="Повернуть влево">↶</button>
+<button class="tool iconbtn" id="right" title="Камера вправо" aria-label="Повернуть вправо">↷</button>
+<button class="tool iconbtn" id="up" title="Камера выше" aria-label="Камера выше">↑</button>
+<button class="tool iconbtn" id="down" title="Камера ниже" aria-label="Камера ниже">↓</button>
+<button class="tool iconbtn" id="zoomIn" title="Увеличить" aria-label="Увеличить">+</button>
+<button class="tool iconbtn" id="zoomOut" title="Уменьшить" aria-label="Уменьшить">−</button>
+<button class="tool iconbtn" id="home" title="Сбросить камеру" aria-label="Сбросить камеру">⌂</button>
+</div>
+<div class="readout" aria-live="off"><span>Время</span><span id="hudTime">0,00 с</span><span>Высота шарика</span><span id="hudZ">—</span><span>Скорость по вертикали</span><span id="hudVz">—</span></div>
+</div><div style="flex:1"></div>
+<div class="stage-foot"><div class="event-note" id="eventMessage"><strong>Старт:</strong> шарик свободно падает из высоты H.</div>
+<div class="legend"><span><i style="background:#ffcf83"></i>Падение</span><span><i style="background:#5adcf4"></i>После удара</span><span><i style="background:#82f0c6"></i>Проекции</span><span><i style="background:#c2a9ff"></i>Нормаль</span><span><i style="background:#fc869b"></i>Высоты</span></div>
+<div class="actions"><button id="play" class="primary" aria-label="Запустить движение">▶ Старт</button><button id="reset" title="Сбросить время" aria-label="В начало">↺</button><button id="impact" title="Перейти к моменту удара">Удар</button><button id="apex" title="Перейти к максимальной высоте">Вершина</button><label for="timeSlider" style="position:absolute;left:-9999px">Время анимации</label><input type="range" id="timeSlider" min="0" max="1000" value="0" step="1"><output id="playTime">0,0 с</output><button id="speed" title="Скорость воспроизведения">1×</button></div>
+</div></div>
+</section>
+<aside class="sidebar"><h2>Исходные данные</h2>
+<div class="control"><div class="control-head"><label for="alpha">Угол наклона плиты α</label><output id="alphaOut">28°</output></div><input id="alpha" type="range" min="5" max="80" step="1" value="28"></div>
+<div class="control"><div class="control-head"><label for="height">Начальная высота H</label><output id="heightOut">16 м</output></div><input id="height" type="range" min="5" max="30" step="0.5" value="16"></div>
+<div class="control"><div class="control-head"><label for="tImpact">Время падения до удара t</label><output id="tImpactOut">1,15 с</output></div><input id="tImpact" type="range" min="0.2" max="1.8" step="0.01" value="1.15"><div class="assist" id="tMaxHint">Удар должен произойти выше поверхности земли.</div></div>
+<div class="control"><div class="control-head"><label for="gravity">Ускорение свободного падения g</label><output id="gravityOut">9,81 м/с²</output></div><input id="gravity" type="range" min="1.5" max="15" step="0.01" value="9.81"></div>
+<h3>Показывать на модели</h3><div class="checks"><label><input type="checkbox" id="vectors" checked> Векторы скорости</label><label><input type="checkbox" id="components" checked> Проекции v′</label><label><input type="checkbox" id="heights" checked> Высоты H, h</label><label><input type="checkbox" id="normals" checked> Нормаль к плите</label><label><input type="checkbox" id="grid" checked> Сетка на плите</label><label><input type="checkbox" id="trace" checked> Траектория</label></div>
+<div class="stat"><div class="eyebrow">Максимальная высота после первого удара</div><div class="big" id="mainResult">—</div><div class="hint" id="resultMeaning">Высота измеряется относительно земли.</div></div>
+<div class="keyvalues"><span>Высота в момент удара, z<sub>уд</sub></span><strong id="impactZ">—</strong><span>Скорость перед ударом, v</span><strong id="beforeSpeed">—</strong><span>Горизонтальная скорость после удара, v′<sub>x</sub></span><strong id="afterVx">—</strong><span>Вертикальная скорость после удара, v′<sub>z</sub></span><strong id="afterVz">—</strong><span>Время подъёма после удара</span><strong id="riseTime">—</strong></div>
+<div class="graph-wrap"><div class="graph-title">График высоты над землёй z(T)</div><canvas id="chart" class="chart" aria-label="Высота шарика от времени с отмеченными моментом удара и максимумом"></canvas></div>
+<section class="steps"><h2>Пошаговое решение</h2>
+<details class="step" open><summary><span class="number">1</span> Скорость и высота до удара</summary><div class="stepbody"><p>За время <i>t</i> шарик падает из состояния покоя. В момент касания плиты:</p><span class="eq">v = gt, &nbsp;&nbsp; z<sub>уд</sub> = H − gt<sup>2</sup>/2</span><p id="step1" class="smallcaps"></p></div></details>
+<details class="step" open><summary><span class="number">2</span> Отражение скорости от плиты</summary><div class="stepbody"><p>При абсолютно упругом ударе о неподвижную гладкую плиту нормальная составляющая скорости меняет знак, касательная сохраняется.</p><span class="eq">v′ = v − 2(v · n)n</span><p>Из геометрии отражения (ось <i>x</i> — горизонтально вниз по скату, ось <i>z</i> — вертикально вверх):</p><span class="eq">v′<sub>x</sub> = gt sin(2α)</span><span class="eq">v′<sub>z</sub> = gt cos(2α)</span><p id="step2" class="smallcaps"></p></div></details>
+<details class="step" open><summary><span class="number">3</span> Максимальная высота</summary><div class="stepbody"><p>Когда <i>v′<sub>z</sub> &gt; 0</i>, шарик поднимается до момента, когда вертикальная скорость обращается в нуль:</p><span class="eq">Δh = (v′<sub>z</sub>)<sup>2</sup>/(2g)</span><span class="eq">h = H − gt<sup>2</sup>/2 + gt<sup>2</sup>cos<sup>2</sup>(2α)/2</span><span class="eq result-eq">h = H − (gt<sup>2</sup>/2) sin<sup>2</sup>(2α)</span><div class="notice" id="caseNotice">Формула применима для 0° ≤ α ≤ 45°.</div></div></details>
+<details class="step"><summary><span class="number">4</span> Геометрия и ограничения модели</summary><div class="stepbody"><p>Угол α отсчитывается от горизонтали. Отражённая скорость образует угол 2α с направлением вверх по вертикали.</p><p>При α = 45° скорость сразу после удара горизонтальна; при α &gt; 45° она направлена вниз. Тогда наибольшая высота после удара достигается непосредственно в момент столкновения.</p><p>Схема показывает первое столкновение шарика с неподвижной гладкой плитой. Если в дальнейшем шарик касается земли либо плиты повторно, анимация останавливается; последующие удары не моделируются.</p><p>Размер шарика на изображении условный. Высота H относится к центру шарика в приближении материальной точки.</p></div></details>
+</section><p class="shortcut">Управление: перетаскивайте сцену левой кнопкой мыши для вращения, правой — для сдвига, колесом — для масштаба. На сенсорном экране: один палец — вращение, два пальца — масштаб и сдвиг. Клавиши ← → ↑ ↓ поворачивают камеру, пробел запускает или приостанавливает анимацию.</p>
+</aside>
+</main>
+<script>
+'use strict';
+(()=>{
+const $=id=>document.getElementById(id);
+const c=$('scene'),ctx=c.getContext('2d',{alpha:true});
+const graph=$('chart'),gctx=graph.getContext('2d');
+const RAD=Math.PI/180;
+const sin=Math.sin, cos=Math.cos, sqrt=Math.sqrt, abs=Math.abs;
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const f=(n,d=2)=>Number(n).toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d});
+const V=(x=0,y=0,z=0)=>({x,y,z});
+const add=(a,b)=>V(a.x+b.x,a.y+b.y,a.z+b.z);
+const sub=(a,b)=>V(a.x-b.x,a.y-b.y,a.z-b.z);
+const mul=(a,k)=>V(a.x*k,a.y*k,a.z*k);
+const dot=(a,b)=>a.x*b.x+a.y*b.y+a.z*b.z;
+const length=a=>Math.hypot(a.x,a.y,a.z);
+const normalize=a=>mul(a,1/(length(a)||1));
+const palette={white:'#eff8ff',amber:'#ffcf83',cyan:'#5adcf4',mint:'#82f0c6',pink:'#ff859b',purple:'#c4aaff',muted:'#a2b7ca',grid:'#496b82'};
+const cam={yaw:-55*RAD,elev:26*RAD,zoom:1,px:0,py:0};
+let model,settings,stageRect={up:110,down:110},stageW=800,stageH=650,dpr=1;
+let simTime=0,playing=false,playFactor=1,lastFrame=0,frame=0,viewAnim=null,currentView='iso';
+let cameraProj={right:V(),up:V(),scale:1,meanR:0,meanU:0,cx:0,cy:0};
+let particles=[];let pointerState=new Map(),gesture=null;
+function getInputs(){return{alpha:+$('alpha').value*RAD,H:+$('height').value,g:+$('gravity').value,t:+$('tImpact').value};}
+function buildPhysics(){
+ const m=getInputs(),{H,g,t,alpha}=m;
+ const zImpact=H-g*t*t/2,v=g*t,vx=v*sin(2*alpha),vz=v*cos(2*alpha);
+ const tauUp=Math.max(0,vz/g),h=zImpact+Math.max(vz,0)**2/(2*g);
+ const xApex=vx*tauUp;
+ const downToGround=(vz+sqrt(Math.max(0,vz*vz+2*g*zImpact)))/g;
+ const plateDown=Math.min(19,Math.max(.25,.97*zImpact/Math.tan(alpha)));
+ const plateUp=Math.min(11,Math.max(1.4,(H+2-zImpact)/Math.tan(alpha)));
+ const plateWidth=clamp(5+H*.12,5.5,10);
+ const tauSecond=2*t;
+ const secondX=vx*tauSecond;
+ const secondZ=zImpact+vz*tauSecond-g*tauSecond*tauSecond/2;
+ const reboundsOnPlate=secondX<=plateDown+1e-7&&secondZ>1e-5;
+ const tauEnd=reboundsOnPlate&&tauSecond<=downToGround?tauSecond:downToGround;
+ const event=reboundsOnPlate&&tauSecond<=downToGround?'plate':'ground';
+ const T=t+tauEnd;
+ return {...m,zImpact,v,vx,vz,tauUp,h,xApex,downToGround,plateDown,plateUp,plateWidth,tauSecond,tauEnd,T,event};
+}
+function state(T){const m=model;if(T<=m.t)return{x:0,y:0,z:m.H-.5*m.g*T*T,vx:0,vz:-m.g*T,mode:'fall'};const tau=T-m.t;return{x:m.vx*tau,y:0,z:Math.max(0,m.zImpact+m.vz*tau-.5*m.g*tau*tau),vx:m.vx,vz:m.vz-m.g*tau,mode:'rebound'};}
+function criticalPoints(){const m=model,pts=[V(-m.plateUp,-m.plateWidth/2,m.zImpact+m.plateUp*Math.tan(m.alpha)),V(-m.plateUp,m.plateWidth/2,m.zImpact+m.plateUp*Math.tan(m.alpha)),V(m.plateDown,-m.plateWidth/2,m.zImpact-m.plateDown*Math.tan(m.alpha)),V(m.plateDown,m.plateWidth/2,m.zImpact-m.plateDown*Math.tan(m.alpha)),V(0,0,m.H),V(0,0,0),V(m.vx*m.tauEnd,0,0),V(m.xApex,0,m.h)];const xmax=Math.max(m.vx*m.tauEnd,m.plateDown,3),xmin=-Math.max(m.plateUp,3);pts.push(V(xmin-2,-m.plateWidth*.8,0),V(xmax+2,m.plateWidth*.8,0));return pts;}
+function cameraBasis(){let {yaw,elev}=cam;return{right:V(-sin(yaw),cos(yaw),0),up:V(-sin(elev)*cos(yaw),-sin(elev)*sin(yaw),cos(elev)),view:V(cos(elev)*cos(yaw),cos(elev)*sin(yaw),sin(elev))};}
+function reproject(){
+ const {right,up,view}=cameraBasis(),pts=criticalPoints();let minR=Infinity,maxR=-Infinity,minU=Infinity,maxU=-Infinity;
+ pts.forEach(p=>{const r=dot(p,right),u=dot(p,up);minR=Math.min(minR,r);maxR=Math.max(maxR,r);minU=Math.min(minU,u);maxU=Math.max(maxU,u)});
+ const rectW=Math.max(80,stageW-68),rectH=Math.max(80,stageH-stageRect.up-stageRect.down);
+ const scale=Math.min(rectW/Math.max(1,maxR-minR),rectH/Math.max(1,maxU-minU))*.91;
+ cameraProj={right,up,view,scale,meanR:(minR+maxR)/2,meanU:(minU+maxU)/2,cx:stageW/2,cy:(stageRect.up+stageH-stageRect.down)/2};
+}
+function P(p){const q=cameraProj;return{x:q.cx+(dot(p,q.right)-q.meanR)*q.scale*cam.zoom+cam.px,y:q.cy-(dot(p,q.up)-q.meanU)*q.scale*cam.zoom+cam.py,depth:dot(p,q.view)};}
+function line(a,b,color='#fff',w=1.5,dash=[]){const A=P(a),B=P(b);ctx.save();ctx.lineWidth=w;ctx.strokeStyle=color;ctx.setLineDash(dash);ctx.lineCap='round';ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);ctx.stroke();ctx.restore();}
+function polygon(pts,fill,stroke,alpha=1){ctx.save();ctx.globalAlpha=alpha;ctx.beginPath();const p=P(pts[0]);ctx.moveTo(p.x,p.y);for(let i=1;i<pts.length;i++){const p=P(pts[i]);ctx.lineTo(p.x,p.y)}ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1.2;ctx.stroke()}ctx.restore();}
+function path(pts,color,w=2,dash=[]){if(pts.length<2)return;ctx.save();ctx.strokeStyle=color;ctx.lineWidth=w;ctx.setLineDash(dash);ctx.lineJoin='round';ctx.lineCap='round';ctx.beginPath();pts.forEach((p,i)=>{const q=P(p);i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y)});ctx.stroke();ctx.restore();}
+function text2(txt,x,y,color=palette.white,size=12,bg=true,align='center'){ctx.save();ctx.font=`650 ${size}px Inter,system-ui,sans-serif`;ctx.textAlign=align;ctx.textBaseline='middle';let w=ctx.measureText(txt).width;const pad=5,h=size+8;if(bg){let l=align==='center'?x-w/2-pad:align==='left'?x-pad:x-w-pad;ctx.fillStyle='#0b1726e8';ctx.beginPath();ctx.roundRect(l,y-h/2,w+2*pad,h,5);ctx.fill()}ctx.fillStyle=color;ctx.fillText(txt,x,y);ctx.restore();}
+function label(txt,p,color=palette.white,ox=0,oy=-14,size=12){const q=P(p);text2(txt,q.x+ox,q.y+oy,color,size);}
+function dot3(p,color=palette.white,r=3){const q=P(p);ctx.save();ctx.beginPath();ctx.arc(q.x,q.y,r,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.lineWidth=1.7;ctx.strokeStyle='#0b1828';ctx.stroke();ctx.restore()}
+function arrow(a,b,color=palette.cyan,tag='',w=2.8,side=1){const A=P(a),B=P(b),dx=B.x-A.x,dy=B.y-A.y,L=Math.hypot(dx,dy);if(L<3)return;const ux=dx/L,uy=dy/L,head=Math.min(14,Math.max(8,L*.24));ctx.save();ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=w;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(A.x,A.y);ctx.lineTo(B.x,B.y);ctx.stroke();ctx.beginPath();ctx.moveTo(B.x,B.y);ctx.lineTo(B.x-ux*head+uy*head*.43,B.y-uy*head-ux*head*.43);ctx.lineTo(B.x-ux*head-uy*head*.43,B.y-uy*head+ux*head*.43);ctx.closePath();ctx.fill();ctx.restore();if(tag)text2(tag,(A.x+B.x)/2-uy*side*17,(A.y+B.y)/2+ux*side*17,color,12);}
+function arc(center,u,v,r,angle,color,txt){
+ const pts=[];
+ for(let i=0;i<=36;i++){
+  const a=angle*i/36;
+  const q=add(center,add(mul(u,r*cos(a)),mul(v,r*sin(a))));
+  pts.push(q);
+ }
+ path(pts,color,2.5);
+ const half=angle/2;
+ const lab=add(center,add(mul(u,r*1.35*cos(half)),mul(v,r*1.35*sin(half))));
+ label(txt,lab,color,0,0,15);
+}
+function drawSphere(p,r){const q=P(p),rpx=clamp(cameraProj.scale*cam.zoom*r,6,16);ctx.save();ctx.shadowColor='#fedb96a8';ctx.shadowBlur=14;ctx.beginPath();ctx.arc(q.x,q.y,rpx,0,2*Math.PI);const grad=ctx.createRadialGradient(q.x-rpx*.42,q.y-rpx*.46,1,q.x,q.y,rpx*1.15);grad.addColorStop(0,'#fffaf0');grad.addColorStop(.3,'#f9db9f');grad.addColorStop(.73,'#e79851');grad.addColorStop(1,'#925532');ctx.fillStyle=grad;ctx.fill();ctx.lineWidth=1.4;ctx.strokeStyle='#ffe9bf';ctx.stroke();ctx.restore();}
+function checkbox(id){return $(id).checked}
+function drawGround(){const m=model,pts=criticalPoints();const xMin=Math.min(-m.plateUp-3,-6),xMax=Math.max(m.plateDown+3,m.vx*m.tauEnd+4,6),yMin=-m.plateWidth/2-3,yMax=m.plateWidth/2+3;
+ polygon([V(xMin,yMin,0),V(xMax,yMin,0),V(xMax,yMax,0),V(xMin,yMax,0)],'#142a39','#37566a',.76);
+ const dx=Math.max(2,(xMax-xMin)/11),dy=2;
+ for(let x=Math.ceil(xMin/dx)*dx;x<xMax;x+=dx)line(V(x,yMin,0),V(x,yMax,0),'#39596c',.8);
+ for(let y=Math.ceil(yMin/dy)*dy;y<yMax;y+=dy)line(V(xMin,y,0),V(xMax,y,0),'#39596c',.8);
+ label('Земля · z = 0',V(xMax*.55,yMax,0),'#a8d5eb',0,16,11);
+}
+function drawPlate(){const m=model,topX=-m.plateUp,botX=m.plateDown,w=m.plateWidth/2;const point=(x,y)=>V(x,y,m.zImpact-x*Math.tan(m.alpha));
+ // Draw thickness along vertical z; transparency keeps geometry legible.
+ const corners=[point(topX,-w),point(botX,-w),point(botX,w),point(topX,w)];
+ const thick=Math.min(.3,Math.max(.12,m.H*.013));
+ polygon([corners[1],corners[2],add(corners[2],V(0,0,-thick)),add(corners[1],V(0,0,-thick))],'#1b536e','#6d99ab',.8);
+ polygon(corners,'#2a6685','#b4e8f2',.63);
+ if(checkbox('grid')){
+  for(let i=1;i<8;i++){const x=topX+(botX-topX)*i/8;line(point(x,-w),point(x,w),'#6bacc0',.85)}
+  for(let i=1;i<6;i++){const y=-w+2*w*i/6;line(point(topX,y),point(botX,y),'#6bacc0',.85)}
+ }
+ line(point(topX,-w),point(botX,-w),'#bbdfea',1.6);line(point(topX,w),point(botX,w),'#bbdfea',1.6);
+ const ref=V(-Math.min(m.plateUp*.55,3),w+1.25,m.zImpact+Math.min(m.plateUp*.55,3)*Math.tan(m.alpha));
+ const rr=Math.min(2.8,Math.max(1.4,m.H*.13));
+ line(ref,add(ref,V(rr*1.55,0,0)),'#e0eaf5',1.3);
+ line(ref,add(ref,V(rr*1.55*cos(m.alpha),0,-rr*1.55*sin(m.alpha))),'#e0eaf5',1.3);
+ arc(ref,V(1,0,0),V(0,0,-1),rr,-0+m.alpha,'#d9bdff','α');
+ if(stageW>=570)label('Наклонная плита',point(-m.plateUp*.52,-w*.63),'#d5f5ff',0,-13,11);
+}
+function drawWorldGuides(){const m=model,hit=V(0,0,m.zImpact),top=V(0,0,m.H),origin=V(0,0,0),peak=V(m.xApex,0,m.h);
+ line(origin,top,'#c0cedc',1.5,[6,5]);dot3(hit,palette.white,4);
+ if(stageW>=570)label('Удар',hit,'#e4f3ff',-13,30,11);
+ if(checkbox('heights')){
+  const offset=-m.plateWidth/2-1.2;
+  const foot=V(0,offset,0),Htop=V(0,offset,m.H),Hhit=V(0,offset,m.zImpact);
+  line(foot,Htop,palette.pink,1.9);line(Htop,top,palette.pink,.8,[4,4]);line(Hhit,hit,palette.pink,1,[4,4]);
+  // Height h at apex x, distinct offset for readability.
+  const ph=V(m.xApex,m.plateWidth/2+1.2,m.h),po=V(m.xApex,m.plateWidth/2+1.2,0);
+  line(po,ph,palette.mint,1.7,[6,4]);
+  line(ph,peak,palette.mint,1,[4,4]);
+  label(stageW<570?'H':('H = '+f(m.H,1)+' м'),V(0,offset,m.H*.66),palette.pink,-25,0,stageW<570?10:12);
+  label(stageW<570?'h':('h = '+f(m.h,2)+' м'),V(m.xApex,m.plateWidth/2+1.2,m.h*.65),palette.mint,26,0,stageW<570?10:12);
+  if(stageW>=570)label('zуд = '+f(m.zImpact,2)+' м',Hhit,palette.pink,-27,16,11);
+ }
+ if(stageW>=570&&simTime>0.12)label('Вертикаль z',top,'#a7c7dd',0,-18,11);
+}
+function drawPaths(){const m=model;
+ if(!checkbox('trace'))return;
+ const falling=[],reb=[],maxN=140;
+ for(let i=0;i<=maxN;i++){const q=m.t*i/maxN;falling.push(V(0,0,m.H-.5*m.g*q*q));}
+ for(let i=0;i<=maxN;i++){const q=m.tauEnd*i/maxN;reb.push(V(m.vx*q,0,m.zImpact+m.vz*q-.5*m.g*q*q));}
+ path(falling,palette.amber,2.7,[7,5]);path(reb,palette.cyan,3.3);
+ if(m.tauUp>0&&m.tauUp<=m.tauEnd+1e-5){const peak=V(m.xApex,0,m.h);dot3(peak,palette.mint,5);label('Вершина',peak,palette.mint,0,-22,12)}
+ // Highlight travelled segments.
+ if(simTime<=m.t){const pts=[];for(let i=0;i<=80;i++){const q=simTime*i/80;pts.push(V(0,0,m.H-.5*m.g*q*q))}path(pts,'#fff0ca',4.3)}else{path(falling,'#fff0ca',3.9);const pts=[];const τ=simTime-m.t;for(let i=0;i<=80;i++){const q=τ*i/80;pts.push(V(m.vx*q,0,m.zImpact+m.vz*q-.5*m.g*q*q))}path(pts,'#a4f4ff',4.4)}
+}
+function drawVelocity(){const m=model,at=V(0,0,m.zImpact),S=state(simTime),ball=V(S.x,0,S.z),scale=clamp(m.H*.24/m.v,.17,2.4);
+ const n=V(sin(m.alpha),0,cos(m.alpha));
+ if(checkbox('normals')){
+  const N=add(at,mul(n,Math.max(3.8,m.H*.32)));
+  line(add(at,mul(n,-.9)),N,palette.purple,2,[5,5]);
+  if(stageW>=570)label('n',N,palette.purple,12,-9,14);
+ }
+ if(checkbox('vectors')){
+   // At the impact point: incident and reflected velocity, both anchored to the collision.
+   const pre=add(at,V(0,0,-m.v*scale));
+   const aft=add(at,V(m.vx*scale,0,m.vz*scale));
+   arrow(at,pre,palette.amber,stageW<570?'v':'v до',3,1);
+   arrow(at,aft,palette.cyan,'v′',3.4,-1);
+   if(checkbox('components')){
+     const hx=add(at,V(m.vx*scale,0,0));
+     arrow(at,hx,palette.mint,stageW<570?'x':'v′ₓ',2.2,1);
+     arrow(hx,aft,palette.pink,stageW<570?'z':'v′z',2.2,1);
+     line(at,add(at,V(0,0,m.vz*scale)),palette.pink,1,[4,4]);
+     line(add(at,V(0,0,m.vz*scale)),aft,palette.mint,1,[4,4]);
+   }
+ }
+ // Ball projections to ground: most useful when rebound is visible.
+ if(checkbox('heights')&&simTime>m.t+.02){const gnd=V(ball.x,0,0);line(ball,gnd,'#7bdeaf',1.3,[5,5]);dot3(gnd,'#7bdeaf',3)}
+}
+function drawBall(){const m=model,s=state(simTime),p=V(s.x,0,s.z);drawSphere(p,Math.min(.38,m.H*.025));label(simTime<m.t?'шарик ↓':simTime<m.t+m.tauUp-.03?'шарик ↑':'шарик',p,'#ffebca',16,-21,12)}
+function renderScene(){if(!ctx||!model)return;
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,stageW,stageH);reproject();
+ // Canvas renderer uses actual three-dimensional world coordinates and an orbiting orthographic camera.
+ drawGround();drawPlate();drawWorldGuides();drawPaths();drawVelocity();drawBall();
+}
+function sizeCanvas(node,context,width,height){const ratio=Math.min(window.devicePixelRatio||1,2);node.width=Math.max(1,Math.round(width*ratio));node.height=Math.max(1,Math.round(height*ratio));context.setTransform(ratio,0,0,ratio,0,0);return ratio;}
+function resize(){const b=c.getBoundingClientRect();stageW=b.width||700;stageH=b.height||600;dpr=sizeCanvas(c,ctx,stageW,stageH);const small=stageW<570;stageRect.up=small?162:stageW<850?125:110;stageRect.down=small?174:154;const gb=graph.getBoundingClientRect();sizeCanvas(graph,gctx,gb.width||320,gb.height||165);renderScene();renderChart();}
+function renderChart(){const g=gctx,m=model;if(!g||!m)return;const b=graph.getBoundingClientRect(),W=b.width||330,H=b.height||165,ratio=Math.min(window.devicePixelRatio||1,2);g.setTransform(ratio,0,0,ratio,0,0);g.clearRect(0,0,W,H);
+ const L=35,R=11,top=14,bot=25,w=W-L-R,h=H-top-bot,topZ=Math.max(m.H,m.h)*1.12;
+ const xp=t=>L+t/m.T*w,yp=z=>top+h-clamp(z,0,topZ)/topZ*h;
+ g.strokeStyle='#334b62';g.lineWidth=1;g.fillStyle='#94acc2';g.font='10px system-ui';g.textAlign='right';
+ for(let i=0;i<=4;i++){const z=topZ*i/4,y=yp(z);g.beginPath();g.moveTo(L,y);g.lineTo(W-R,y);g.stroke();g.fillText(f(z,0),L-6,y+3)}
+ g.textAlign='center';for(let i=0;i<=4;i++)g.fillText(f(m.T*i/4,1),xp(m.T*i/4),H-7);
+ g.save();g.setLineDash([4,4]);g.strokeStyle='#b5a3fc';g.beginPath();g.moveTo(xp(m.t),top);g.lineTo(xp(m.t),top+h);g.stroke();g.restore();
+ function graphPath(start,end,color){g.strokeStyle=color;g.lineWidth=2.5;g.lineJoin='round';g.beginPath();for(let i=0;i<=100;i++){const tt=start+(end-start)*i/100,z=state(tt).z;const x=xp(tt),y=yp(z);i?g.lineTo(x,y):g.moveTo(x,y)}g.stroke()}
+ graphPath(0,m.t,palette.amber);graphPath(m.t,m.T,palette.cyan);
+ g.fillStyle='#cfbaff';g.textAlign='center';g.font='10px system-ui';g.fillText('удар',xp(m.t),top+9);
+ if(m.tauUp>0){g.beginPath();g.fillStyle=palette.mint;g.arc(xp(m.t+m.tauUp),yp(m.h),3.4,0,Math.PI*2);g.fill()}
+ const s=state(simTime);g.beginPath();g.fillStyle='#fff';g.arc(xp(simTime),yp(s.z),4.5,0,Math.PI*2);g.fill();g.strokeStyle='#123146';g.lineWidth=1.3;g.stroke();
+ g.fillStyle='#b1c6d9';g.textAlign='left';g.fillText('z, м',3,9);g.textAlign='right';g.fillText('T, с',W-2,H-7);
+}
+function reflectCameraPreset(key){const a=model.alpha;switch(key){case 'side':return{yaw:-Math.PI/2,elev:3*RAD};case 'plane':return{yaw:0,elev:Math.PI/2-a};case 'top':return{yaw:-Math.PI/2,elev:86*RAD};default:return{yaw:-55*RAD,elev:26*RAD}}}
+function markView(){document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===currentView)))}
+function goView(name){const preset=reflectCameraPreset(name);currentView=name;markView();let yawDelta=((preset.yaw-cam.yaw+3*Math.PI)%(2*Math.PI))-Math.PI;viewAnim={fromY:cam.yaw,fromE:cam.elev,toY:cam.yaw+yawDelta,toE:preset.elev,ts:performance.now(),ms:window.matchMedia('(prefers-reduced-motion:reduce)').matches?1:380};cam.px=0;cam.py=0;}
+function zoom(factor){cam.zoom=clamp(cam.zoom*factor,.35,4.2);renderScene()}
+function spin(dy,de){viewAnim=null;currentView='manual';markView();cam.yaw+=dy;cam.elev=clamp(cam.elev+de,-82*RAD,88*RAD);renderScene()}
+function refreshMath(){const m=model;
+ $('alphaOut').textContent=f(m.alpha/RAD,0)+'°';$('heightOut').textContent=f(m.H,1)+' м';$('tImpactOut').textContent=f(m.t)+' с';$('gravityOut').textContent=f(m.g)+' м/с²';
+ $('impactZ').textContent=f(m.zImpact)+' м';$('beforeSpeed').textContent=f(m.v)+' м/с';$('afterVx').textContent=f(m.vx)+' м/с';$('afterVz').textContent=f(m.vz)+' м/с';$('riseTime').textContent=f(m.tauUp)+' с';
+ $('mainResult').textContent=f(m.h)+' м';
+ $('resultMeaning').textContent=m.vz>1e-8?'После удара шарик поднимается ещё на '+f(m.h-m.zImpact)+' м.':'Вертикальная скорость после удара направлена вниз либо равна нулю. Максимум достигается при ударе.';
+ $('step1').textContent=`v = ${f(m.g)} · ${f(m.t)} = ${f(m.v)} м/с; zуд = ${f(m.H)} − ${f(m.g*m.t*m.t/2)} = ${f(m.zImpact)} м.`;
+ $('step2').textContent=`v′x = ${f(m.vx)} м/с; v′z = ${f(m.vz)} м/с; 2α = ${f(2*m.alpha/RAD,0)}°.`;
+ const n=$('caseNotice');
+ if(m.alpha<=Math.PI/4+1e-9){n.className='notice';n.innerHTML=`При α ≤ 45° ответ: <strong>h = ${f(m.h)} м</strong>. Подъём после удара длится ${f(m.tauUp)} с.`}else{n.className='notice warn';n.innerHTML=`При α &gt; 45° шарик после удара продолжает движение вниз. Максимальная высота после удара: <strong>h = H − gt²/2 = ${f(m.h)} м</strong>. Формула с sin²(2α) для этого случая неприменима.`}
+ $('tMaxHint').textContent='Допустимо: 0 < t < √(2H/g) ≈ '+f(sqrt(2*m.H/m.g))+' с.';
+}
+function ensureValidT(){const H=+$('height').value,g=+$('gravity').value,maxT=Math.max(.21,sqrt(2*H/g)-.03),inp=$('tImpact');inp.max=maxT.toFixed(3);if(+inp.value>maxT)inp.value=maxT.toFixed(2);}
+function sync(){ensureValidT();model=buildPhysics();simTime=clamp(simTime,0,model.T);refreshMath();refreshHud();renderScene();renderChart();}
+function eventInfo(){const m=model,t=simTime,eps=.026;if(t<m.t-eps)return['Свободное падение',`vз = −gT. До удара шарик движется вертикально вниз.`];if(abs(t-m.t)<=eps)return['Момент удара',`Скорость ${f(m.v)} м/с отражается от поверхности плиты.`];if(m.tauUp>eps&&abs(t-m.t-m.tauUp)<eps)return['Максимальная высота',`z = h = ${f(m.h)} м; вертикальная скорость равна нулю.`];if(t>m.T-.035)return[m.event==='plate'?'Повторное касание плиты':'Касание земли','Движение остановлено на первом следующем контакте.'];if(m.vz>0&&t<m.t+m.tauUp)return['Подъём после удара','Отражённая вертикальная составляющая скорости положительна.'];if(m.vz<=0)return['После удара: движение вниз','Угол α ≥ 45°. Нового подъёма нет.'];return['Движение после вершины','Шарик опускается; горизонтальная составляющая скорости сохраняется.']}
+function refreshHud(){const s=state(simTime);$('hudTime').textContent=f(simTime)+' с';$('hudZ').textContent=f(s.z)+' м';$('hudVz').textContent=f(s.vz)+' м/с';$('playTime').textContent=f(simTime,1)+' с';$('timeSlider').value=Math.round(simTime/model.T*1000);const [title,sub]=eventInfo();$('eventMessage').innerHTML=`<strong>${title}.</strong> ${sub}`;$('play').textContent=playing?'❚❚ Пауза':'▶ Старт';$('play').setAttribute('aria-label',playing?'Пауза':'Запустить движение')}
+function setTime(val){simTime=clamp(val,0,model.T);refreshHud();renderScene();renderChart()}
+function setPlay(state){playing=state;if(playing&&simTime>=model.T-.005)simTime=0;refreshHud()}
+function tick(ms){const delta=lastFrame?Math.min((ms-lastFrame)/1000,.075):0;lastFrame=ms;if(viewAnim){const f=clamp((ms-viewAnim.ts)/viewAnim.ms,0,1),e=1-(1-f)*(1-f)*(1-f);cam.yaw=viewAnim.fromY+(viewAnim.toY-viewAnim.fromY)*e;cam.elev=viewAnim.fromE+(viewAnim.toE-viewAnim.fromE)*e;if(f>=1)viewAnim=null;renderScene()}
+ if(playing){simTime=Math.min(model.T,simTime+delta*playFactor);if(simTime>=model.T)playing=false;refreshHud();renderScene();renderChart()}
+ frame=requestAnimationFrame(tick)}
+function bind(){for(const id of ['alpha','height','tImpact','gravity'])$(id).addEventListener('input',()=>sync());
+ for(const id of ['vectors','components','heights','normals','grid','trace'])$(id).addEventListener('change',()=>renderScene());
+ document.querySelectorAll('[data-view]').forEach(button=>button.addEventListener('click',()=>goView(button.dataset.view)));
+ $('left').addEventListener('click',()=>spin(-15*RAD,0));$('right').addEventListener('click',()=>spin(15*RAD,0));$('up').addEventListener('click',()=>spin(0,12*RAD));$('down').addEventListener('click',()=>spin(0,-12*RAD));$('zoomIn').addEventListener('click',()=>zoom(1.23));$('zoomOut').addEventListener('click',()=>zoom(1/1.23));$('home').addEventListener('click',()=>{cam.zoom=1;cam.px=cam.py=0;goView('iso')});
+ $('play').addEventListener('click',()=>setPlay(!playing));$('reset').addEventListener('click',()=>{setPlay(false);setTime(0)});$('impact').addEventListener('click',()=>{setPlay(false);setTime(model.t)});$('apex').addEventListener('click',()=>{setPlay(false);setTime(model.t+model.tauUp)});
+ $('timeSlider').addEventListener('input',e=>{setPlay(false);setTime(+e.target.value/1000*model.T)});
+ const speedLevels=[.5,1,1.5,2],speedButton=$('speed');speedButton.addEventListener('click',()=>{playFactor=speedLevels[(speedLevels.indexOf(playFactor)+1)%speedLevels.length];speedButton.textContent=f(playFactor,playFactor%1?1:0)+'×'});
+ c.addEventListener('wheel',e=>{e.preventDefault();zoom(Math.exp(-e.deltaY*.0013))},{passive:false});
+ c.addEventListener('contextmenu',e=>e.preventDefault());
+ c.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0&&e.button!==2)return;e.preventDefault();viewAnim=null;pointerState.set(e.pointerId,{x:e.clientX,y:e.clientY,type:e.pointerType,button:e.button});c.setPointerCapture(e.pointerId);if(pointerState.size===2){const arr=[...pointerState.values()];gesture={distance:Math.hypot(arr[1].x-arr[0].x,arr[1].y-arr[0].y),midX:(arr[0].x+arr[1].x)/2,midY:(arr[0].y+arr[1].y)/2}}c.classList.add('dragging')});
+ c.addEventListener('pointermove',e=>{const p=pointerState.get(e.pointerId);if(!p)return;e.preventDefault();const dx=e.clientX-p.x,dy=e.clientY-p.y;p.x=e.clientX;p.y=e.clientY;
+  if(pointerState.size>=2){const arr=[...pointerState.values()];if(arr.length<2)return;const dist=Math.hypot(arr[1].x-arr[0].x,arr[1].y-arr[0].y),midX=(arr[0].x+arr[1].x)/2,midY=(arr[0].y+arr[1].y)/2;if(gesture){cam.zoom=clamp(cam.zoom*(dist/Math.max(1,gesture.distance)),.35,4.2);cam.px+=midX-gesture.midX;cam.py+=midY-gesture.midY}gesture={distance:dist,midX,midY};renderScene();return}
+  if(p.button===2||e.shiftKey){cam.px+=dx;cam.py+=dy;renderScene()}else{const sensitivity=.006;spin(dx*sensitivity,-dy*sensitivity)}
+ });
+ const end=e=>{pointerState.delete(e.pointerId);if(pointerState.size<2)gesture=null;if(pointerState.size===0)c.classList.remove('dragging')};c.addEventListener('pointerup',end);c.addEventListener('pointercancel',end);c.addEventListener('lostpointercapture',end);
+ window.addEventListener('keydown',e=>{const active=document.activeElement;const control=active&&['INPUT','TEXTAREA','SELECT','BUTTON','SUMMARY'].includes(active.tagName);if(control)return;const changes={ArrowLeft:[-12*RAD,0],ArrowRight:[12*RAD,0],ArrowUp:[0,9*RAD],ArrowDown:[0,-9*RAD]};if(changes[e.key]){e.preventDefault();spin(...changes[e.key])}if(e.code==='Space'){e.preventDefault();setPlay(!playing)}});
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)setPlay(false)});
+ if('ResizeObserver' in window){const obs=new ResizeObserver(()=>resize());obs.observe(c);obs.observe(graph)}else window.addEventListener('resize',resize);
+ }
+ ensureValidT();model=buildPhysics();bind();refreshMath();refreshHud();resize();frame=requestAnimationFrame(tick);
+ window.__plateDemo={get model(){return model},get state(){return state(simTime)},setTime,setPlay,goView,renderScene};
+})();
+</script>
+</body></html>
