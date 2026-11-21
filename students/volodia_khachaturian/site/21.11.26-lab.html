@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Лаборатория: движение по окружности — Володя Хачатурян · 21.11.26</title>
+<style>
+:root{color-scheme:dark;--bg:#081321;--nav:#0d1b2d;--panel:#101f31;--line:#293e55;--white:#f3f8ff;--muted:#a8bed2;--cyan:#6cdeef;--amber:#ffc46c;--rose:#ff829b;--mint:#83efbb;--violet:#bea9ff;--card:#13273c;--scale:#63c6df;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--white)}button,input{font:inherit}button{cursor:pointer;color:inherit}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #7feaff;outline-offset:2px}button:disabled{opacity:.45;cursor:not-allowed}.top{padding:15px clamp(14px,2.5vw,36px) 13px;background:var(--nav);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px}.heading h1{font-size:clamp(18px,2.2vw,24px);letter-spacing:-.04em;margin:0;font-weight:780}.heading p{font-size:12px;color:var(--muted);margin:5px 0 0}.offline{font-size:11px;padding:7px 10px;border:1px solid #2d715c;background:#10362d;color:#9df3d0;border-radius:50px;white-space:nowrap}.tabs{display:flex;flex-wrap:wrap;gap:8px;padding:12px clamp(14px,2.5vw,36px);background:var(--nav);border-bottom:1px solid var(--line)}.tab{background:#152a40;color:#b7d0e3;border:1px solid #334b64;border-radius:11px;padding:10px 15px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px}.tab:hover{background:#23415b}.tab[aria-selected="true"]{background:#20546b;border-color:#55a8c5;color:white}.tab .index{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#304c66;font-size:11px}.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,390px);min-height:calc(100dvh - 132px);height:calc(100dvh - 132px);min-height:650px}.stage{position:relative;overflow:hidden;min-width:0;min-height:0;background:radial-gradient(ellipse at 65% 35%,#1e374c 0%,#0f2033 51%,#081423 100%)}.world{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}.world.dragging{cursor:grabbing}.layer{position:absolute;inset:0;padding:13px;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;gap:10px}.layer button,.layer input,.layer label{pointer-events:auto}.stage-head{display:flex;justify-content:space-between;align-items:flex-start;gap:9px;flex-wrap:wrap}.toolbar,.readout,.legend,.footer-tools,.event{background:#0c1b2bea;border:1px solid #36516a;box-shadow:0 10px 30px #0003;border-radius:12px;backdrop-filter:blur(10px)}.toolbar{display:flex;gap:3px;align-items:center;flex-wrap:wrap;padding:5px}.tool{font-size:11px;color:#d1e5f5;padding:8px 9px;border:1px solid transparent;background:transparent;border-radius:8px;white-space:nowrap}.tool:hover{background:#284258}.tool[aria-pressed="true"]{background:#2a6078;border-color:#4c95ab;color:white}.tool.icon{min-width:31px;font-size:17px;padding:3px 7px}.tool-div{height:23px;width:1px;background:#3a5870;margin:0 3px}.readout{display:grid;grid-template-columns:auto auto;gap:4px 14px;padding:9px 12px;font-size:11px;min-width:190px}.readout span:nth-child(odd){color:var(--muted)}.readout span:nth-child(even){font-weight:750;text-align:right;font-variant-numeric:tabular-nums}.stage-foot{display:flex;flex-direction:column;gap:8px}.event{padding:9px 12px;width:fit-content;max-width:100%;font-size:12px;line-height:1.5}.event strong{font-weight:800}.event.warn{border-color:#d38b62;background:#42302be9;color:#ffdec2}.legend{display:flex;gap:8px 16px;flex-wrap:wrap;width:fit-content;max-width:100%;padding:9px 12px;font-size:11px;color:#cfdfed}.legend i{display:inline-block;vertical-align:middle;width:16px;height:4px;margin-right:6px;border-radius:5px}.footer-tools{display:flex;gap:7px;align-items:center;padding:9px}.footer-tools button{font-size:12px;padding:9px 10px;background:#1d374f;border:1px solid #355875;border-radius:9px;white-space:nowrap}.footer-tools button:hover{background:#2b4d69}.footer-tools button.primary{background:#11758f;border-color:#37abc6;color:#fff}.footer-tools input{flex:1;min-width:70px}.footer-tools output{font-size:11px;font-variant-numeric:tabular-nums;min-width:64px;text-align:right}.sidebar{border-left:1px solid var(--line);background:var(--panel);min-width:0;overflow:auto;padding:19px 18px 32px}.sidebar h2{font-size:17px;letter-spacing:-.015em;margin:0 0 6px}.lead{font-size:12px;line-height:1.6;color:#bad0e2;margin:0 0 18px}.section-title{font-size:12px;letter-spacing:.07em;text-transform:uppercase;font-weight:800;margin:18px 0 12px;color:#d5e6f5}.control{margin-bottom:16px}.control-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px;font-size:12px;margin:0 0 6px;color:#d5e4f0}.control-top output{font-size:13px;color:white;font-weight:750;font-variant-numeric:tabular-nums}input[type=range]{accent-color:#5bbedc;width:100%;cursor:pointer;touch-action:pan-y}.checks{display:grid;grid-template-columns:1fr 1fr;gap:11px 5px;margin:13px 0}.checks label{font-size:11px;display:flex;align-items:center;gap:7px;color:#bad1e3;cursor:pointer}.checks input{accent-color:#71d5ed;width:16px;height:16px;flex:0 0 auto}.status{border:1px solid #345469;border-radius:12px;padding:14px;background:#0a1b2c;margin:20px 0 16px}.status.warn{background:#30221e;border-color:#9b6757}.status .eyebrow{text-transform:uppercase;letter-spacing:.075em;font-size:10px;font-weight:800;color:#9dbbcf}.status .big{font-size:27px;color:#8ff0c2;font-weight:840;letter-spacing:-.03em;margin:4px 0 2px;font-variant-numeric:tabular-nums}.status.warn .big{color:#ffc68c}.status .detail{font-size:11px;line-height:1.55;color:#bfd1df}.values{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px 8px;margin:14px 0}.values span{font-size:11px;color:#abc1d4}.values strong{font-size:12px;color:#f2f8ff;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}.meter{border-radius:8px;background:#11273a;border:1px solid #2d455b;padding:10px 11px;margin:13px 0}.meter-top{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:#bdcedc}.meter-bar{height:9px;margin-top:9px;border-radius:20px;background:#344557;position:relative;overflow:hidden}.meter-bar>i{display:block;height:100%;border-radius:20px;background:linear-gradient(90deg,#5bd1c4,#84eab8);width:40%;transition:width .15s}.meter.warning .meter-bar>i{background:linear-gradient(90deg,#ffca7b,#ff8198)}.meter-foot{font-size:10px;color:#9fb4c9;margin-top:8px}.fbd-card{background:#0b1c2c;border:1px solid #2d465e;border-radius:12px;padding:12px 12px 6px;margin-top:15px}.fbd-card h3{font-size:12px;margin:0 0 7px;color:#dceaf6}.fbd-svg{display:block;width:100%;height:150px}.fbd-svg text{font:12px Inter,system-ui,sans-serif;fill:#e9f4ff;paint-order:stroke;stroke:#0b1c2c;stroke-width:3px;stroke-linejoin:round}.fbd-svg .axis{stroke:#6785a1;stroke-width:1.25;stroke-dasharray:3 4}.fbd-svg .force{stroke-width:3.2;stroke-linecap:round}.fbd-svg .dim{fill:#b7ccda}.steps{border-top:1px solid #2c4256;margin-top:19px;padding-top:15px}.steps h3{font-size:14px;margin:0 0 12px}.step{background:#0b1c2d;border:1px solid #2d455d;border-radius:10px;margin-bottom:9px;overflow:hidden}.step summary{list-style:none;cursor:pointer;padding:11px 12px;font-size:12px;display:flex;align-items:center;gap:9px;font-weight:730}.step summary::-webkit-details-marker{display:none}.step summary::after{content:'⌄';font-size:17px;color:#a5b9c9;margin-left:auto}.step[open] summary::after{content:'⌃'}.pill{border-radius:100%;width:22px;height:22px;display:grid;place-items:center;background:#244b60;color:#c8f2ff;font-size:11px;flex:0 0 auto}.step-body{border-top:1px solid #294159;padding:10px 13px 13px;font-size:12px;color:#c3d7e7;line-height:1.6}.step-body p{margin:5px 0 10px}.equation{font-family:Cambria,"Times New Roman",serif;text-align:center;color:white;font-size:17px;line-height:1.55;padding:5px 0}.equation.result{color:#8febc1}.note{background:#173148;border-left:3px solid #62c5e2;border-radius:5px;padding:9px 11px;font-size:11px;line-height:1.6;margin-top:11px}.note.warn{border-color:#f4b56b;background:#3b2a24}.tiny{font-size:11px;color:#a1b8c9;line-height:1.55}.bottomnote{margin:14px 0 0;font-size:11px;color:#94acbf;line-height:1.6}.mini-mark{font-size:11px;padding:5px 7px;background:#1d3d52;border-radius:7px;color:#bcebf4}.sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+@media(max-width:1080px){.layout{height:auto;min-height:0;grid-template-columns:1fr}.stage{height:clamp(540px,74dvh,800px)}.sidebar{border-left:0;border-top:1px solid var(--line);padding:20px clamp(16px,3vw,55px)}.checks{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.top{padding:12px 14px}.heading h1{font-size:18px}.heading p{font-size:11px}.offline{display:none}.tabs{padding:10px 9px;gap:5px}.tab{font-size:10px;padding:8px 8px;flex:1;justify-content:center;min-width:0}.tab .index{display:none}.stage{height:660px}.layer{padding:7px}.toolbar{gap:0}.tool{padding:7px 7px;font-size:10px}.tool.icon{padding:4px 7px;font-size:14px;min-width:26px}.tool-div{margin:0 1px}.readout{font-size:10px;min-width:0;gap:4px 9px;padding:7px 9px}.legend{font-size:10px;gap:6px 10px;padding:7px 9px}.event{font-size:11px;padding:8px 9px}.footer-tools{gap:4px;padding:7px}.footer-tools button{font-size:11px;padding:8px 7px}.footer-tools output{min-width:42px;font-size:10px}.checks{grid-template-columns:1fr 1fr}.sidebar{padding:17px 16px 28px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+[hidden]{display:none!important}
+.slip-actions{display:flex;flex-direction:column;gap:7px;margin:4px 0 17px}
+.slip-button{font-size:12px;font-weight:750;padding:11px 12px;background:#5b3b24;border:1px solid #b17c47;border-radius:10px;text-align:left;color:#ffdfb0}
+.slip-button:hover{background:#77482b}.slip-actions small{font-size:10px;color:#b8c7d6;line-height:1.55}
+.legend .actual{background:#ffad65}.legend .planned{background:#c6e4f2}
+.hud-phase{font-size:11px;font-weight:850;color:#ffd0a0}
+@media(max-width:640px){.slip-button{padding:11px}.readout{max-width:178px}}
+.backlink{display:inline-flex;align-items:center;margin-right:14px;color:var(--cyan);font-size:12px;text-decoration:none;white-space:nowrap}.backlink:hover,.backlink:focus-visible{text-decoration:underline}@media(max-width:640px){.top{flex-wrap:wrap}.backlink{order:-1;width:100%}}
+</style>
+</head>
+<body>
+<header class="top"><a class="backlink" href="21.11.26.html">← Вернуться к занятию</a><div class="heading"><h1>Движение по окружности</h1><p>Интерактивный 3D-практикум · второй закон Ньютона · демонстрационные параметры</p></div><span class="offline">● Работает без интернета</span></header>
+<nav class="tabs" role="tablist" aria-label="Выбор физической модели">
+<button class="tab" id="tab-car" role="tab" aria-controls="stage" data-mode="car" aria-selected="true"><span class="index">01</span> Автомобиль на повороте</button>
+<button class="tab" id="tab-disc" role="tab" aria-controls="stage" data-mode="disc" aria-selected="false"><span class="index">02</span> Вращающийся диск</button>
+<button class="tab" id="tab-pendulum" role="tab" aria-controls="stage" data-mode="pendulum" aria-selected="false"><span class="index">03</span> Конический маятник</button>
+</nav>
+<main class="layout">
+<section class="stage" id="stage" aria-label="Интерактивная объёмная схема движения по окружности" role="tabpanel">
+<canvas id="world" class="world" aria-label="Объёмная вращаемая сцена с движущимся телом и векторами сил">Для просмотра необходим браузер с поддержкой Canvas.</canvas>
+<div class="layer"><div class="stage-head"><div class="toolbar" role="group" aria-label="Положение камеры">
+<button class="tool" data-view="iso" aria-pressed="true">3D</button><button class="tool" data-view="top" aria-pressed="false">Сверху</button><button class="tool" data-view="side" aria-pressed="false">Сбоку</button><span class="tool-div"></span>
+<button class="tool icon" id="camLeft" aria-label="Повернуть влево" title="Повернуть влево">↶</button><button class="tool icon" id="camRight" aria-label="Повернуть вправо" title="Повернуть вправо">↷</button><button class="tool icon" id="camUp" aria-label="Поднять камеру" title="Поднять камеру">↑</button><button class="tool icon" id="camDown" aria-label="Опустить камеру" title="Опустить камеру">↓</button><button class="tool icon" id="zoomIn" aria-label="Приблизить" title="Приблизить">+</button><button class="tool icon" id="zoomOut" aria-label="Отдалить" title="Отдалить">−</button><button class="tool icon" id="resetCamera" aria-label="Сброс камеры" title="Сброс камеры">⌂</button></div>
+<div class="readout"><span>Время</span><span id="hudTime">0,0 с</span><span id="hudAngleLabel">Угол поворота</span><span id="hudAngle">0°</span><span>Режим</span><span class="hud-phase" id="hudPhase">Без скольжения</span></div></div><div style="flex:1"></div>
+<div class="stage-foot"><div class="event" id="event"><strong>Автомобиль:</strong> сила трения покоя обеспечивает центростремительное ускорение.</div>
+<div class="legend"><span><i style="background:var(--amber)"></i>Трение / T<sub>x</sub></span><span><i style="background:var(--mint)"></i>N / T<sub>y</sub></span><span><i style="background:var(--rose)"></i>mg</span><span><i style="background:var(--cyan)"></i>a<sub>ц</sub></span><span><i style="background:var(--violet)"></i>T</span><span id="slipLegend" hidden><i class="actual"></i>Факт <i class="planned" style="border-top:1px dashed #fff"></i>план</span></div>
+<div class="footer-tools"><button class="primary" id="play" aria-label="Запустить или остановить анимацию">▶ Старт</button><button id="restart" aria-label="Вернуться в начало">↺</button><label class="sr-only" for="timeSlider">Положение тела на орбите</label><input id="timeSlider" type="range" min="0" max="1000" value="0" step="1"><output id="progressText">0 %</output><button id="speed" title="Скорость анимации">1×</button></div>
+</div></div>
+</section>
+<aside class="sidebar" aria-label="Параметры и решение задачи"><h2 id="panelTitle">Автомобиль на повороте</h2><p class="lead" id="panelLead"></p>
+<div class="section-title">Исходные данные</div><div id="parameters"></div>
+<div class="slip-actions" id="slipActions"><button type="button" id="slipDemo" class="slip-button">▶ Показать потерю сцепления</button><small>Кнопка подбирает параметры с превышением предельной силы трения и запускает опыт. Можно изменить параметры вручную.</small></div>
+<div class="section-title">Отображение</div><div class="checks"><label><input type="checkbox" id="toggleForces" checked> Векторы сил</label><label><input type="checkbox" id="toggleAcc" checked> Ускорение</label><label><input type="checkbox" id="toggleProjections" checked> Проекции</label><label><input type="checkbox" id="toggleTrack" checked> Траектория</label><label><input type="checkbox" id="toggleGrid" checked> Координатная сетка</label><label><input type="checkbox" id="toggleLabels" checked> Подписи</label><label id="trailOption"><input type="checkbox" id="toggleSlipTrail" checked> След скольжения</label><label id="ghostOption"><input type="checkbox" id="toggleGhost" checked> Плановая орбита</label></div>
+<div class="status" id="status"><div class="eyebrow" id="statusTitle">Проверка движения</div><div class="big" id="statusBig">—</div><div class="detail" id="statusDetail">—</div></div>
+<div class="values" id="values"></div>
+<div class="meter" id="meter"><div class="meter-top"><span id="meterLabel">Требуемая сила трения / предел</span><strong id="meterValue">—</strong></div><div class="meter-bar"><i id="meterFill"></i></div><div class="meter-foot" id="meterFoot"></div></div>
+<div class="fbd-card"><h3>Силовая схема и проекции</h3><svg class="fbd-svg" id="fbd" viewBox="0 0 328 150" role="img" aria-label="Двумерная схема сил в выбранной системе координат"></svg><p class="tiny" id="fbdNote"></p></div>
+<div class="steps"><h3>Разбор задачи</h3><div id="steps"></div></div>
+<p class="bottomnote">Управление камерой: потяните мышью для вращения; правая кнопка — сдвиг, колесо — масштаб. На телефоне: один палец — вращение, два — масштаб и сдвиг. Клавиши-стрелки поворачивают сцену, пробел включает анимацию. Длины цветных стрелок условны; численные значения приведены отдельно. При скольжении оранжевый след показывает фактическую траекторию, светлый контур — движение без потери сцепления.</p>
+</aside>
+</main>
+<script>
+'use strict';
+(()=>{
+ const $=id=>document.getElementById(id),C=$('world'),ctx=C.getContext('2d');
+ if(!ctx){$('event').textContent='Canvas недоступен в этом браузере.';return;}
+ const PI=Math.PI,RAD=PI/180,TAU=PI*2;
+ const sin=Math.sin,cos=Math.cos,sqrt=Math.sqrt,abs=Math.abs,atan2=Math.atan2;
+ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+ const fmt=(v,d=2)=>Number(v).toLocaleString('ru-RU',{maximumFractionDigits:d,minimumFractionDigits:d});
+ const V=(x=0,y=0,z=0)=>({x,y,z});
+ const add=(a,b)=>V(a.x+b.x,a.y+b.y,a.z+b.z),sub=(a,b)=>V(a.x-b.x,a.y-b.y,a.z-b.z),mul=(a,k)=>V(a.x*k,a.y*k,a.z*k),dot=(a,b)=>a.x*b.x+a.y*b.y+a.z*b.z;
+ const norm=a=>mul(a,1/(Math.hypot(a.x,a.y,a.z)||1));
+ const pal={amber:'#ffc46c',mint:'#83efbb',rose:'#ff829b',cyan:'#6cdeef',violet:'#bea9ff',white:'#f3f8ff',muted:'#aac1d4'};
+ const configs={
+  car:{title:'Автомобиль на повороте',lead:'На повороте трение покоя обеспечивает центростремительную силу. Когда сцепления недостаточно, показывается приближённый занос по более широкой дуге.',params:[['radius','Радиус поворота R','м',10,110,1,35],['speed','Скорость автомобиля v','м/с',2,36,.5,14],['mu','Коэффициент сцепления μₛ','',.1,1.2,.05,.65],['kineticRatio','Доля трения скольжения κ','',.30,1,.05,.75],['mass','Масса автомобиля m','кг',500,2200,50,1200]]},
+  disc:{title:'Тело на вращающемся диске',lead:'Если трения покоя недостаточно, брусок скользит относительно вращающегося диска; сила трения скольжения направлена против относительной скорости.',params:[['r','Расстояние от оси r','м',.3,2.9,.1,1.8],['omega','Угловая скорость ω','рад/с',.2,5,.1,1.5],['mu','Коэффициент трения μₛ','',.1,1.3,.05,.65],['kineticRatio','Доля трения скольжения κ','',.30,1,.05,.75],['mass','Масса тела m','кг',.1,5,.1,1]]},
+  pendulum:{title:'Конический маятник',lead:'Шарик на нити равномерно движется по горизонтальной окружности. Горизонтальная проекция натяжения создаёт центростремительное ускорение.',params:[['length','Длина нити l','м',.8,3.8,.1,2.4],['alpha','Угол отклонения α','°',8,72,1,32],['mass','Масса шарика m','кг',.1,3,.1,.4],['gravity','Ускорение g','м/с²',1.6,15,.01,9.81]]}
+ };
+ const val={car:{radius:35,speed:14,mu:.65,kineticRatio:.75,mass:1200},disc:{r:1.8,omega:1.5,mu:.65,kineticRatio:.75,mass:1},pendulum:{length:2.4,alpha:32,mass:.4,gravity:9.81}};
+ const camera={yaw:-55*RAD,elev:30*RAD,zoom:1,panX:0,panY:0},targetCamera={...camera};
+ const state={mode:'car',time:0,playing:false,speed:1,valid:true,sceneW:0,sceneH:0,dpr:1,dragging:false};
+ const pointers=new Map(); let gesture=null,lastFrame=0,camTransition=false;
+ const toggles=['Forces','Acc','Projections','Track','Grid','Labels','SlipTrail','Ghost'];
+ let discCache=null;
+ const inp=()=>val[state.mode];
+ function physics(){
+  const p=inp(),g=state.mode==='pendulum'?p.gravity:9.81;
+  if(state.mode==='car'){
+   const a=p.speed*p.speed/p.radius,F=p.mass*a,N=p.mass*g,Fmax=p.mu*N,omega=p.speed/p.radius;
+   const valid=a<=p.mu*g+1e-9,muK=p.mu*p.kineticRatio,slipRadius=p.speed*p.speed/(muK*g);
+   return{...p,g,a,F,N,Fmax,omega,muK,slipRadius,period:TAU/omega,duration:valid?TAU/omega:clamp(2.25*p.radius/p.speed,.65,9),v:p.speed,vMax:sqrt(p.mu*g*p.radius),ratio:F/Fmax,valid,slipping:!valid};
+  }
+  if(state.mode==='disc'){
+   const a=p.omega*p.omega*p.r,v=p.omega*p.r,F=p.mass*a,N=p.mass*g,Fmax=p.mu*N,muK=p.mu*p.kineticRatio,valid=a<=p.mu*g+1e-9;
+   const q={...p,g,a,v,F,N,Fmax,muK,period:TAU/p.omega,ratio:F/Fmax,omegaMax:sqrt(p.mu*g/p.r),valid,slipping:!valid};
+   if(!valid){q.slipSim=getDiscSimulation(q);q.duration=q.slipSim.duration}else q.duration=q.period;
+   return q;
+  }
+  const alpha=p.alpha*RAD,r=p.length*sin(alpha),omega=sqrt(g/(p.length*cos(alpha))),a=g*Math.tan(alpha),v=omega*r,T=p.mass*g/cos(alpha);
+  return{...p,g,alphaRad:alpha,r,omega,a,v,T,Tx:T*sin(alpha),Ty:T*cos(alpha),mg:p.mass*g,period:TAU/omega,duration:TAU/omega,valid:true,slipping:false};
+ }
+ // Time-domain model for a block sliding on a horizontal rotating disk.
+ // Static friction fails when ω²r > μs g. During relative motion Fk = -μk mg vrel/|vrel|.
+ // After leaving the disk, the block moves in a short free-flight segment.
+ function getDiscSimulation(q){
+  const key=[q.r,q.omega,q.mu,q.kineticRatio,q.g].join('|');
+  if(discCache&&discCache.key===key)return discCache;
+  const dt=.005,points=[],edge=3.17,gravity=q.g;
+  let x=q.r,y=0,vx=0,vy=q.omega*q.r,z=0,vz=0,exitTime=null;
+  let ax=-q.muK*gravity,ay=0;
+  points.push({t:0,x,y,z,vx,vy,ax,ay,left:false,relative:0});
+  for(let i=1;i<=1800;i++){
+   const t=i*dt,rad=Math.hypot(x,y);
+   if(exitTime===null){
+    const vrelX=vx+q.omega*y, vrelY=vy-q.omega*x;
+    const normV=Math.hypot(vrelX,vrelY);
+    // At t=0 the first radial perturbation selects the incipient outward slide.
+    const ux=normV>1e-7?vrelX/normV:x/(rad||1),uy=normV>1e-7?vrelY/normV:y/(rad||1);
+    ax=-q.muK*gravity*ux;ay=-q.muK*gravity*uy;
+    vx+=ax*dt;vy+=ay*dt;x+=vx*dt;y+=vy*dt;
+    if(Math.hypot(x,y)>=edge)exitTime=t;
+   }else{
+    ax=0;ay=0;
+    x+=vx*dt;y+=vy*dt;
+    if(z>-.65){vz-=gravity*dt;z=Math.max(-.65,z+vz*dt)}
+    if(z<=-.65){const vabs=Math.hypot(vx,vy);if(vabs>0){const decel=Math.min(vabs/dt,.23*gravity);vx-=decel*vx/vabs*dt;vy-=decel*vy/vabs*dt;}}
+   }
+   const vrel=Math.hypot(vx+q.omega*y,vy-q.omega*x);
+   if(i%2===0)points.push({t,x,y,z,vx,vy,ax,ay,left:exitTime!==null,relative:vrel});
+   if(exitTime!==null&&(t>exitTime+.72||Math.hypot(x,y)>4.75))break;
+  }
+  return discCache={key,points,step:.01,duration:points[points.length-1].t,exitTime};
+ }
+ function sampleDiscSlip(q,time){
+  const sim=q.slipSim,index=clamp(Math.floor(time/sim.step),0,sim.points.length-1),a=sim.points[index],b=sim.points[Math.min(index+1,sim.points.length-1)];
+  const frac=clamp((time-a.t)/Math.max(.00001,b.t-a.t),0,1),lerp=(u,v)=>u+(v-u)*frac;
+  return{t:time,x:lerp(a.x,b.x),y:lerp(a.y,b.y),z:lerp(a.z,b.z),vx:lerp(a.vx,b.vx),vy:lerp(a.vy,b.vy),ax:lerp(a.ax,b.ax),ay:lerp(a.ay,b.ay),left:a.left||b.left,relative:lerp(a.relative,b.relative)};
+ }
+ function getCarPose(q,time){
+  const rad=carVisualRadius(q.radius),scale=rad/q.radius;
+  if(!q.slipping){const theta=time/q.period*TAU;return{p:V(rad*cos(theta),rad*sin(theta),.02),rv:V(cos(theta),sin(theta),0),tv:V(-sin(theta),cos(theta),0),theta};}
+  // Constant-speed, traction-limited turning approximation: v² / Ractual = μk g.
+  const phi=q.v*time/q.slipRadius;
+  return{p:V(rad+q.slipRadius*(cos(phi)-1)*scale,q.slipRadius*sin(phi)*scale,.02),rv:V(cos(phi),sin(phi),0),tv:V(-sin(phi),cos(phi),0),theta:phi};
+ }
+ function getCarTrack(q,time){const pts=[];const n=Math.max(2,Math.ceil(time/.018));for(let i=0;i<=n;i++)pts.push(getCarPose(q,time*i/n).p);return pts;}
+ function updateTab(){document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===state.mode)));}
+ function updateParameters(){
+  const config=configs[state.mode];$('panelTitle').textContent=config.title;$('panelLead').textContent=config.lead;
+  $('parameters').innerHTML='';
+  config.params.forEach(([key,label,unit,min,max,step])=>{
+   const row=document.createElement('div');row.className='control';
+   const id='param-'+key;const shown=(key==='mu'||key==='kineticRatio'||key==='gravity')?2:Number(step)<1?1:0;
+   row.innerHTML=`<div class="control-top"><label for="${id}">${label}</label><output id="out-${key}">${fmt(val[state.mode][key],shown)} ${unit}</output></div><input id="${id}" type="range" min="${min}" max="${max}" step="${step}" value="${val[state.mode][key]}" aria-label="${label}">`;
+   $('parameters').appendChild(row);
+   row.querySelector('input').addEventListener('input',e=>{
+    val[state.mode][key]=+e.target.value;row.querySelector('output').textContent=fmt(val[state.mode][key],shown)+(unit?' '+unit:'');
+    state.time=0;state.playing=false;discCache=null;setPlay();updateData();
+   });
+  });
+ }
+ function makeSteps(steps){$('steps').innerHTML=steps.map((s,i)=>`<details class="step" ${i<2?'open':''}><summary><span class="pill">${i+1}</span>${s[0]}</summary><div class="step-body">${s[1]}</div></details>`).join('');}
+ function status(valid,big,detail){$('status').classList.toggle('warn',!valid);$('statusTitle').textContent=valid?'Режим движения':'Условие движения нарушено';$('statusBig').textContent=big;$('statusDetail').textContent=detail;}
+ function kv(rows){$('values').innerHTML=rows.map(([k,v])=>`<span>${k}</span><strong>${v}</strong>`).join('');}
+ function meter(r,txt,maxStr){$('meter').style.display='';$('meter').classList.toggle('warning',r>1);$('meterLabel').textContent=txt;$('meterValue').textContent=fmt(r*100,0)+' %';$('meterFill').style.width=clamp(r*100,0,100)+'%';$('meterFoot').textContent=maxStr;}
+ function updateData(){
+  const q=physics();state.valid=q.valid;
+  const msg=$('event');msg.classList.toggle('warn',!q.valid);
+  if(state.mode==='car'){
+   status(q.valid,q.valid?'Сцепление сохраняется':'Автомобиль сносит наружу',q.valid?'Трение покоя обеспечивает движение по заданной окружности.':`Fтреб = ${fmt(q.F,0)} Н > μₛN = ${fmt(q.Fmax,0)} Н. Показана упрощённая траектория с увеличенным радиусом: скорость поддерживается постоянной, боковое ускорение ограничено μₖg.`);
+   kv([['Центростремительное ускорение',fmt(q.a)+' м/с²'],['Трение покоя (требуется)',fmt(q.F,0)+' Н'],['Реакция опоры N',fmt(q.N,0)+' Н'],['Максимальная сила трения',fmt(q.Fmax,0)+' Н'],['Предельная скорость',fmt(q.vMax)+' м/с'],['Коэффициент μₖ = κμₛ',fmt(q.muK)],...(q.slipping?[['Радиус при ограниченной тяге',fmt(q.slipRadius)+' м']]:[]),['Период полного круга',fmt(q.period)+' с']]);
+   meter(q.ratio,'F<sub>тр</sub> / (μN)'.replace('<sub>тр</sub>','тр'),`Условие без заноса: v²/R ≤ μg.  v ≤ ${fmt(q.vMax)} м/с.`);
+   msg.innerHTML=q.valid?'<strong>Автомобиль:</strong> сила трения направлена к центру поворота, скорость — по касательной.':'<strong>Занос:</strong> оранжевая линия — приближённая траектория при ограниченном боковом сцеплении; белый пунктир — требуемый поворот.';
+   makeSteps([
+    ['Выберите оси',`Ось <b>Ox</b> направлена горизонтально к центру окружности, ось <b>Oy</b> — вертикально вверх. Скорость всегда касательна траектории.`],
+    ['Примените второй закон Ньютона',`<div class="equation">m<span style="font-style:italic">g</span> + N + F<sub>тр</sub> = m<span style="font-style:italic">a</span><sub>ц</sub></div><div class="equation">Ox: F<sub>тр</sub> = mv²/R</div><div class="equation">Oy: N − mg = 0</div><p>В направлении к центру проекция тяжести и нормальной реакции равна нулю.</p>`],
+    ['Подставьте значения',`<div class="equation">a<sub>ц</sub> = ${fmt(q.speed)}² / ${fmt(q.radius,0)} = ${fmt(q.a)} м/с²</div><div class="equation">F<sub>тр</sub> = ${fmt(q.mass,0)} · ${fmt(q.a)} = ${fmt(q.F,0)} Н</div>`],
+    ['Проверьте отсутствие заноса',`<div class="equation">F<sub>тр</sub> ≤ μN = μmg</div><div class="equation result">v<sub>max</sub> = √(μgR) = ${fmt(q.vMax)} м/с</div><div class="note ${q.valid?'':'warn'}">${q.valid?'Условие выполнено — возможен поворот без заноса.':'Условие нарушено: анимация демонстрирует снос на дугу большего радиуса; точная модель шин и управления здесь не учитывается.'}</div>`],
+    ['Посмотрите анимацию заноса',`<p>Для учебной анимации принято: двигатель поддерживает постоянную скорость, а доступное боковое ускорение ограничено величиной μₖg, где μₖ = κμₛ.</p><div class="equation">a<sub>бок</sub> = μₖg</div><div class="equation result">R<sub>факт</sub> ≈ v²/(μₖg) = ${fmt(q.slipRadius)} м</div><p>Оранжевая линия — более широкая дуга; светлый маркер — положение на заданной окружности. Это приближённая модель, не учитывающая динамику шин и поворот руля.</p>`]
+   ]);
+   $('fbdNote').textContent=q.slipping?'Показана ограниченная боковая сила. Это идеализация заноса при поддержании скорости двигателя.':'Ось Ox — к центру поворота, Oy — вертикально вверх. Масштаб стрелок условный.';
+  }else if(state.mode==='disc'){
+   status(q.valid,q.valid?'Тело удерживается':'Брусок проскальзывает',q.valid?'Трение покоя удерживает брусок на одной окружности относительно оси диска.':`Брусок движется относительно диска: сила трения скольжения Fₖ = μₖmg направлена против относительной скорости. ${q.slipSim.exitTime===null?'За время опыта брусок остаётся на диске.':'При достаточном смещении брусок покидает диск.'}`);
+   kv([['Линейная скорость',fmt(q.v)+' м/с'],['Центростремительное ускорение',fmt(q.a)+' м/с²'],['Требуемая сила трения',fmt(q.F)+' Н'],['Максимальное трение',fmt(q.Fmax)+' Н'],['Предельная угловая скорость',fmt(q.omegaMax)+' рад/с'],['Коэффициент μₖ = κμₛ',fmt(q.muK)],['Период оборота',fmt(q.period)+' с']]);
+   meter(q.ratio,'Fтр / (μmg)',`Предел: ω ≤ √(μg/r) = ${fmt(q.omegaMax)} рад/с.`);
+   msg.innerHTML=q.valid?'<strong>Диск:</strong> тело неподвижно относительно диска; трение направлено к оси вращения.':'<strong>Скольжение:</strong> оранжевый след — путь бруска; светлый маркер — точка, которая вращалась бы вместе с диском.';
+   makeSteps([
+    ['Определите направление сил',`Реакция опоры <b>N</b> направлена вверх, сила тяжести <b>mg</b> — вниз, трение покоя <b>F<sub>тр</sub></b> — к оси вращения.`],
+    ['Разложите второй закон Ньютона',`<div class="equation">Ox: F<sub>тр</sub> = ma<sub>ц</sub> = mω²r</div><div class="equation">Oy: N − mg = 0</div><p>Линейная скорость равна v = ωr.</p>`],
+    ['Вычислите ускорение и трение',`<div class="equation">a<sub>ц</sub> = ${fmt(q.omega)}² · ${fmt(q.r)} = ${fmt(q.a)} м/с²</div><div class="equation">F<sub>тр</sub> = ${fmt(q.mass)} · ${fmt(q.a)} = ${fmt(q.F)} Н</div>`],
+    ['Найдите условие удержания',`<div class="equation">mω²r ≤ μmg</div><div class="equation result">ω<sub>max</sub> = √(μg/r) = ${fmt(q.omegaMax)} рад/с</div><div class="note ${q.valid?'':'warn'}">${q.valid?'Трение покоя достаточно для равномерного движения по окружности.':'Условие нарушено: сила трения скольжения Fₖ = μₖmg направлена против vотн = vбруска − (ω × r). Путь вычисляется численно.'}</div>`],
+    ['Исследуйте проскальзывание',`<p>Когда удерживающей силы недостаточно, брусок движется относительно вращающейся поверхности. Модуль трения скольжения равен μₖmg. Его направление противоположно относительной скорости бруска.</p><div class="equation">v<sub>отн</sub> = v<sub>б</sub> − ω × r</div><div class="equation result">F<sub>к</sub> = − μₖmg · v<sub>отн</sub>/|v<sub>отн</sub>|</div><p>Траектория получается численным интегрированием второго закона Ньютона. После выхода за край диска модель показывает падение бруска.</p>`]
+   ]);
+   $('fbdNote').textContent=q.slipping?'Схема относится к фазе без проскальзывания. При скольжении Fₖ направлена против относительной скорости, поэтому её направление меняется.':'Ось Ox — к оси вращения, Oy — вертикально вверх.';
+  }else{
+   status(true,'Конический маятник','Проекция силы натяжения нити на горизонталь создаёт центростремительное ускорение.');
+   kv([['Радиус окружности r = l sin α',fmt(q.r)+' м'],['Натяжение нити T',fmt(q.T)+' Н'],['Горизонтальная проекция Tₓ',fmt(q.Tx)+' Н'],['Вертикальная проекция Tᵧ',fmt(q.Ty)+' Н'],['Скорость шарика v',fmt(q.v)+' м/с'],['Угловая скорость ω',fmt(q.omega)+' рад/с'],['Период обращения',fmt(q.period)+' с']]);
+   $('meter').style.display='none';
+   msg.innerHTML='<strong>Маятник:</strong> T<sub>x</sub> направлена к центру окружности, а T<sub>y</sub> уравновешивает силу тяжести.';
+   makeSteps([
+    ['Определите геометрию',`Нить образует с вертикалью угол α. Радиус горизонтальной окружности:<div class="equation">r = l sin α = ${fmt(q.r)} м</div>`],
+    ['Разложите силу натяжения',`<div class="equation">Ox: T sin α = ma<sub>ц</sub></div><div class="equation">Oy: T cos α − mg = 0</div><p>Центростремительное ускорение горизонтально и направлено к оси вращения.</p>`],
+    ['Найдите натяжение и ускорение',`<div class="equation">T = mg / cos α = ${fmt(q.T)} Н</div><div class="equation">a<sub>ц</sub> = g tg α = ${fmt(q.a)} м/с²</div>`],
+    ['Выведите скорость и период',`<div class="equation">v = √(gr tg α) = ${fmt(q.v)} м/с</div><div class="equation result">ω = √(g/(l cos α)) = ${fmt(q.omega)} рад/с</div><div class="equation result">P = 2π √(l cos α/g) = ${fmt(q.period)} с</div><div class="note">Период обозначен P, чтобы не путать его с силой натяжения T.</div>`]
+   ]);
+   $('fbdNote').textContent='Вектор T направлен вдоль нити к подвесу. Tₓ — к центру окружности, Tᵧ — вертикально вверх.';
+  }
+  $('slipActions').hidden=state.mode==='pendulum';$('trailOption').hidden=state.mode==='pendulum';$('ghostOption').hidden=state.mode==='pendulum';
+  $('slipLegend').hidden=!q.slipping;
+  drawFBD(q);syncScrubber(q);drawScene(q);
+ }
+ function drawFBD(q){
+  const svg=$('fbd');const defs=`<defs><marker id="arrF" markerWidth="7" markerHeight="7" refX="5.2" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#ffc46c"/></marker><marker id="arrN" markerWidth="7" markerHeight="7" refX="5.2" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#83efbb"/></marker><marker id="arrG" markerWidth="7" markerHeight="7" refX="5.2" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#ff829b"/></marker><marker id="arrT" markerWidth="7" markerHeight="7" refX="5.2" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#bea9ff"/></marker><marker id="arrA" markerWidth="7" markerHeight="7" refX="5.2" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="#6cdeef"/></marker></defs>`;
+  if(state.mode!=='pendulum'){
+   svg.innerHTML=defs+`<path class="axis" d="M40 82H300 M176 140V13"/><text class="dim" x="284" y="97">к центру</text><text class="dim" x="185" y="19">Oy</text><rect x="163" y="69" width="26" height="25" rx="4" fill="#a8cad6" stroke="#d6e9f2" stroke-width="1.3"/><circle cx="176" cy="82" r="3" fill="#0e2335"/><path class="force" stroke="#ffc46c" marker-end="url(#arrF)" d="M176 82 L274 82"/><text x="224" y="67">Fтр</text><path class="force" stroke="#83efbb" marker-end="url(#arrN)" d="M176 82 L176 28"/><text x="186" y="40">N</text><path class="force" stroke="#ff829b" marker-end="url(#arrG)" d="M176 82 L176 133"/><text x="185" y="124">mg</text><path class="force" stroke="#6cdeef" stroke-dasharray="5 4" marker-end="url(#arrA)" d="M185 102 L268 102"/><text x="226" y="118">aц</text>`;
+  }else{
+   const a=q.alphaRad,ox=146,oy=85,tx=ox+87*sin(a),ty=oy-87*cos(a),cx=ox+87*sin(a),cy=oy-87*cos(a);
+   svg.innerHTML=defs+`<path class="axis" d="M31 85H302 M146 15V145"/><text class="dim" x="254" y="78">к центру</text><text class="dim" x="156" y="20">Oy</text><circle cx="146" cy="85" r="9" fill="#d9e7ef" stroke="#517f96" stroke-width="2"/><path stroke="#829bb2" stroke-dasharray="4 4" d="M146 85 L146 18"/><path class="force" stroke="#bea9ff" marker-end="url(#arrT)" d="M146 85 L${cx} ${cy}"/><text x="${cx+9}" y="${cy-5}">T</text><path class="force" stroke="#83efbb" marker-end="url(#arrN)" d="M142 85 L142 ${cy}"/><text x="111" y="46">Tᵧ</text><path class="force" stroke="#ffc46c" marker-end="url(#arrF)" d="M146 90 L${cx} 90"/><text x="${(cx+146)/2}" y="105">Tₓ</text><path stroke="#809aaf" stroke-dasharray="4 4" d="M${cx} ${cy}L${cx} 85L146 ${cy}" fill="none"/><path class="force" stroke="#ff829b" marker-end="url(#arrG)" d="M136 86 L136 139"/><text x="100" y="132">mg</text><text x="171" y="38">α=${q.alpha}°</text>`;
+  }
+ }
+ function syncScrubber(q){
+  const duration=q.duration||q.period,time=clamp(state.time,0,duration);
+  $('timeSlider').value=Math.round(time/duration*1000);
+  $('progressText').textContent=fmt(100*time/duration,0)+' %';
+  $('hudTime').textContent=fmt(time,2)+' с';
+  $('hudAngleLabel').textContent=state.mode==='disc'?'Угол диска':'Угол поворота';
+  $('hudAngle').textContent=fmt((360*time/q.period)%360,0)+'°';
+  $('hudPhase').textContent=q.slipping?(state.mode==='car'?'Занос':(q.slipSim.exitTime!==null&&time>=q.slipSim.exitTime?'За краем диска':'Скольжение')):(state.mode==='pendulum'?'Круговое движение':'Без скольжения');
+ }
+ function setPlay(){const b=$('play');b.textContent=state.playing?'Ⅱ Пауза':'▶ Старт';b.setAttribute('aria-label',state.playing?'Приостановить анимацию':'Запустить анимацию');}
+ function setMode(m){state.mode=m;state.time=0;state.playing=false;discCache=null;setPlay();updateTab();updateParameters();viewPreset('iso',true);updateData();}
+ function viewPreset(v,now=false){const presets={iso:{yaw:-55*RAD,elev:32*RAD,zoom:1,panX:0,panY:0},top:{yaw:-45*RAD,elev:89*RAD,zoom:1.03,panX:0,panY:0},side:{yaw:-90*RAD,elev:5*RAD,zoom:1.08,panX:0,panY:0}};Object.assign(targetCamera,presets[v]);if(now)Object.assign(camera,targetCamera);camTransition=!now;document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===v)));}
+ const point=p=>V(p.x,p.y,p.z);
+ function camBasis(){const y=camera.yaw,e=camera.elev;return{right:V(-sin(y),cos(y),0),up:V(-sin(e)*cos(y),-sin(e)*sin(y),cos(e)),toward:V(cos(e)*cos(y),cos(e)*sin(y),sin(e))};}
+ function dimensions(){const b=C.getBoundingClientRect(),w=Math.max(1,b.width),h=Math.max(1,b.height),dpr=clamp(window.devicePixelRatio||1,1,2.5);if(C.width!==Math.round(w*dpr)||C.height!==Math.round(h*dpr)){C.width=Math.round(w*dpr);C.height=Math.round(h*dpr)}state.sceneW=w;state.sceneH=h;state.dpr=dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+ let proj,eye;
+ function prepareProjection(q){const w=state.sceneW,h=state.sceneH,b=camBasis();eye=b.toward;let sceneScale=state.mode==='pendulum'?5.3:8.4;
+  let fit=Math.min(w/sceneScale,h/(state.mode==='pendulum'?7.4:8.6));
+  if(w<530&&q.slipping)fit*=.79;
+  fit=clamp(fit,36,160)*camera.zoom;
+  proj={right:b.right,up:b.up,toward:b.toward,scale:fit,cx:w*.49+camera.panX,cy:h*.51+camera.panY,center:state.mode==='pendulum'?V(0,0,1.45):V(0,0,.3)};
+ }
+ function P(p){const a=sub(p,proj.center);return{x:proj.cx+dot(a,proj.right)*proj.scale,y:proj.cy-dot(a,proj.up)*proj.scale,depth:dot(a,proj.toward)};}
+ function line3(points,color,width=1,dash=[],alpha=1){if(points.length<2)return;ctx.save();ctx.strokeStyle=color;ctx.lineWidth=width;ctx.globalAlpha=alpha;ctx.setLineDash(dash);ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();points.forEach((v,i)=>{const p=P(v);i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)});ctx.stroke();ctx.restore();}
+ function poly3(points,fill,stroke=null,lw=1,alpha=1){ctx.save();ctx.globalAlpha=alpha;ctx.beginPath();points.forEach((v,i)=>{const p=P(v);i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)});ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.lineWidth=lw;ctx.strokeStyle=stroke;ctx.stroke()}ctx.restore();}
+ function circle3(center,r,fill=null,stroke=null,n=96,plane='xy',width=1){const pts=[];for(let i=0;i<=n;i++){const a=i/n*TAU;pts.push(plane==='xy'?V(center.x+r*cos(a),center.y+r*sin(a),center.z):V(center.x+r*cos(a),center.y,center.z+r*sin(a)))}if(fill)poly3(pts.slice(0,-1),fill);if(stroke)line3(pts,stroke,width);}
+ function mark(p,label,color=pal.white,dx=8,dy=-9,font=12){if(!$('toggleLabels').checked)return;const s=P(p);ctx.save();ctx.font=`700 ${font}px Inter,system-ui,sans-serif`;ctx.textAlign='left';ctx.textBaseline='middle';let lx=clamp(s.x+dx,5,Math.max(5,state.sceneW-ctx.measureText(label).width-6)),ly=clamp(s.y+dy,12,state.sceneH-15);ctx.lineWidth=3;ctx.strokeStyle='#0b1928';ctx.strokeText(label,lx,ly);ctx.fillStyle=color;ctx.fillText(label,lx,ly);ctx.restore();}
+ function arrow3(a,b,color,label='',w=3,alpha=1){const x=P(a),y=P(b);const dx=y.x-x.x,dy=y.y-x.y,dist=Math.hypot(dx,dy);if(dist<3)return;const nx=dx/dist,ny=dy/dist;
+  ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=w;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x.x,x.y);ctx.lineTo(y.x-nx*5,y.y-ny*5);ctx.stroke();ctx.beginPath();ctx.moveTo(y.x,y.y);ctx.lineTo(y.x-nx*13-ny*5,y.y-ny*13+nx*5);ctx.lineTo(y.x-nx*13+ny*5,y.y-ny*13-nx*5);ctx.closePath();ctx.fill();ctx.restore();if(label)mark(b,label,color,9,-10,12);
+ }
+ function ellipseP(c,r,color){const p=P(c);ctx.save();ctx.fillStyle=color;ctx.beginPath();ctx.ellipse(p.x,p.y,Math.max(6,r*proj.scale),Math.max(3,r*proj.scale*.24),0,0,TAU);ctx.fill();ctx.restore();}
+ function sphere(p,r,color){const sp=P(p),rp=clamp(r*proj.scale,5,55);const grad=ctx.createRadialGradient(sp.x-rp*.35,sp.y-rp*.35,rp*.08,sp.x,sp.y,rp);grad.addColorStop(0,'#f9fcff');grad.addColorStop(.19,color);grad.addColorStop(.7,color);grad.addColorStop(1,'#2a475b');ctx.save();ctx.shadowColor='#0008';ctx.shadowBlur=16;ctx.shadowOffsetY=5;ctx.fillStyle=grad;ctx.beginPath();ctx.arc(sp.x,sp.y,rp,0,TAU);ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle='#ffffff99';ctx.stroke();ctx.restore();}
+ function basisBox(c,u,v,len,w,zBottom,zTop,fill){
+  const h=(x,y,z)=>add(add(V(c.x,c.y,z),mul(u,x)),mul(v,y));
+  const a=h(-len/2,-w/2,zBottom),b=h(len/2,-w/2,zBottom),d=h(-len/2,w/2,zBottom),e=h(len/2,w/2,zBottom),A=h(-len/2,-w/2,zTop),B=h(len/2,-w/2,zTop),D=h(-len/2,w/2,zTop),E=h(len/2,w/2,zTop);
+  const faces=[{pts:[a,b,B,A],c:fill.side||'#23758f'},{pts:[b,e,E,B],c:fill.front||'#329eac'},{pts:[e,d,D,E],c:fill.side||'#23758f'},{pts:[d,a,A,D],c:fill.front||'#329eac'},{pts:[A,B,E,D],c:fill.top||'#4cc8d5'}];
+  faces.sort((f,g)=>f.pts.reduce((s,p)=>s+dot(p,eye),0)-g.pts.reduce((s,p)=>s+dot(p,eye),0));
+  faces.forEach(f=>poly3(f.pts,f.c,'#061a29aa',1));
+ }
+ function grid(){if(!$('toggleGrid').checked)return;for(let x=-4.8;x<=4.81;x+=.6)line3([V(x,-4.8,-.16),V(x,4.8,-.16)],'#2a4d65',.8,[],.46);for(let y=-4.8;y<=4.81;y+=.6)line3([V(-4.8,y,-.16),V(4.8,y,-.16)],'#2a4d65',.8,[],.46);}
+ function orbit(r,z=0,width=2,color='#84b4c9',dashed=true){const pts=[];for(let i=0;i<=150;i++){const a=TAU*i/150;pts.push(V(r*cos(a),r*sin(a),z))}line3(pts,color,width,dashed?[7,7]:[],1)}
+ function carVisualRadius(R){return 2.25+(R-10)/100*1.15;}
+ function drawCar(q,theta){const rad=carVisualRadius(q.radius);grid();
+  const n=112,w=.77;
+  ctx.save();ctx.beginPath();for(let i=0;i<=n;i++){const a=i/n*TAU,p=P(V((rad+w)*cos(a),(rad+w)*sin(a),-.03));i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)}ctx.closePath();
+  for(let i=0;i<=n;i++){const a=(n-i)/n*TAU,p=P(V((rad-w)*cos(a),(rad-w)*sin(a),-.03));i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)}ctx.closePath();ctx.fillStyle='#304555';ctx.fill('evenodd');ctx.restore();
+  orbit(rad-w+.025,-.002,1.25,'#8cabb7',false);
+  orbit(rad+w-.025,-.002,1.25,'#8cabb7',false);
+  if($('toggleTrack').checked)orbit(rad,-.006,1.8,'#ccdbe58f',true);
+  for(let i=0;i<28;i++){let a=TAU*i/28;line3([V(rad*cos(a),rad*sin(a),.005),V(rad*cos(a+.085),rad*sin(a+.085),.005)],'#ebf4fe',2,[],.7);}
+  circle3(V(0,0,-.13),.24,'#142f42','#6e9fb8',48);mark(V(0,0,.10),'O — центр',pal.white,9,-6);
+  if(q.slipping){
+   if($('toggleSlipTrail').checked){
+    const trace=getCarTrack(q,state.time);if(trace.length>1)line3(trace,'#ffad65',4.1,[],.98);
+   }
+   if($('toggleGhost').checked){
+    const idealAngle=q.v*state.time/q.radius,ghost=V(rad*cos(idealAngle),rad*sin(idealAngle),.045);
+    ellipseP(ghost,.27,'#b7e7f955');circle3(ghost,.23,'#bee8f022','#e4f6ff',42,'xy',2.2);
+    mark(add(ghost,V(0,0,.22)),'План',pal.white,7,-5,10);
+    const actual=getCarPose(q,state.time).p;line3([ghost,actual],'#d8e8f8',1.5,[4,5],.8);
+   }
+  }
+  const pose=getCarPose(q,state.time),rV=pose.rv,tV=pose.tv,p=pose.p;ellipseP(p,.36,'#08132299');
+  for(const aa of [-.22,.22])for(const bb of [-.23,.23])basisBox(add(p,add(mul(tV,aa),mul(rV,bb))),tV,rV,.18,.105,.08,.24,{top:'#111b26',side:'#10161f'});
+  basisBox(p,tV,rV,.82,.40,.16,.41,{top:'#52d2e0',side:'#288ca3',front:'#277990'});
+  basisBox(add(p,mul(tV,-.06)),tV,rV,.40,.33,.42,.58,{top:'#1a354d',side:'#1f5366',front:'#2f6477'});
+  line3([add(add(p,mul(tV,.41)),V(0,0,.35)),add(add(p,mul(tV,.41)),V(0,0,.53))],'#c6f7fe',4);
+  const body=V(p.x,p.y,.62);const toward=mul(rV,-1);const side=V(-toward.y,toward.x,0);
+  if($('toggleForces').checked){arrow3(add(body,mul(side,-.18)),add(add(body,mul(side,-.18)),mul(toward,1.12)),pal.amber,q.slipping?'Fбок':'Fтр');arrow3(add(body,mul(rV,.25)),add(add(body,mul(rV,.25)),V(0,0,1.1)),pal.mint,'N');arrow3(add(body,mul(rV,-.35)),add(add(body,mul(rV,-.35)),V(0,0,-.93)),pal.rose,'mg');}
+  if($('toggleAcc').checked)arrow3(add(body,V(0,0,.63)),add(add(body,V(0,0,.63)),mul(toward,.83)),pal.cyan,q.slipping?'aбок':'aц');
+  if($('toggleProjections').checked){line3([p,V(0,0,.025)],'#8fb1c4',1.5,[6,5],.75);mark(add(p,mul(tV,.76)),'v →',pal.white);arrow3(add(p,V(0,0,.075)),add(add(p,V(0,0,.075)),mul(tV,.72)),'#e1eef8','v',2);}
+  mark(add(p,V(0,0,.8)),q.slipping?'Автомобиль · занос':'Автомобиль',pal.white,11,-7);
+ }
+ function drawDisc(q,theta){grid();const dr=3.25;circle3(V(0,0,-.06),dr,'#223b50','#82a5b6',120, 'xy',2.5);for(let i=0;i<4;i++)circle3(V(0,0,-.055),.85+i*.65,null,'#4d7186',100,'xy',.8);
+  for(let i=0;i<12;i++){let a=i*TAU/12+theta;line3([V(.25*cos(a),.25*sin(a),-.047),V(3.18*cos(a),3.18*sin(a),-.047)],'#557e93',1.2,[],.72);}
+  circle3(V(0,0,-.025),.22,'#8bb9cf','#cfeaff',60);line3([V(0,0,-.04),V(0,0,2.2)],'#9cbed1',1.1,[5,6],.7);
+  mark(V(0,0,.17),'Ось вращения',pal.white,9,-4);
+  if($('toggleTrack').checked)orbit(q.r,.095,2,'#94e8f2',false);
+  const ideal=V(q.r*cos(theta),q.r*sin(theta),.005);
+  const slip=q.slipping?sampleDiscSlip(q,state.time):null;
+  const p=slip?V(slip.x,slip.y,.005+slip.z):ideal;
+  const rv=norm(V(p.x,p.y,0));let tv=V(-sin(theta),cos(theta),0);
+  if(slip&&Math.hypot(slip.vx,slip.vy)>1e-6)tv=norm(V(slip.vx,slip.vy,0));
+  const side=V(-tv.y,tv.x,0);
+  if(q.slipping){
+   if($('toggleGhost').checked){
+    circle3(ideal,.18,'#ffffff20','#e4f6ff',40,'xy',2.3);
+    mark(add(ideal,V(0,0,.35)),'Вместе с диском',pal.white,8,-2,10);
+    line3([ideal,p],'#b9dcec',1.1,[4,5],.55);
+   }
+   if($('toggleSlipTrail').checked){
+    const sampled=q.slipSim.points,until=Math.floor(state.time/q.slipSim.step);
+    const trace=[];for(let i=0;i<=until;i+=2)trace.push(V(sampled[i].x,sampled[i].y,.085+sampled[i].z));
+    if(trace.length>1)line3(trace,'#ffad65',4.1,[],.96);
+   }
+  }
+  ellipseP(p,.28,'#0b1528aa');basisBox(p,tv,side,.44,.45,.11+p.z-.005,.53+p.z-.005,{top:'#f9d3a1',side:'#b78758',front:'#d7a676'});
+  const body=add(p,V(0,0,.66));
+  const forceDir=slip?(Math.hypot(slip.ax,slip.ay)>1e-6?norm(V(slip.ax,slip.ay,0)):V(0,0,0)):mul(rv,-1);
+  const sideF=V(-forceDir.y,forceDir.x,0);
+  const airborne=slip&&slip.left&&slip.z>-.65;
+  if($('toggleForces').checked){
+   if(!slip||!slip.left)arrow3(add(body,mul(sideF,-.16)),add(add(body,mul(sideF,-.16)),mul(forceDir,1.05)),pal.amber,slip?'Fₖ':'Fтр');
+   if(!airborne)arrow3(add(body,mul(rv,.18)),add(add(body,mul(rv,.18)),V(0,0,1.05)),pal.mint,'N');
+   arrow3(add(body,mul(rv,-.27)),add(add(body,mul(rv,-.27)),V(0,0,-.85)),pal.rose,'mg');
+  }
+  if($('toggleAcc').checked){const aa=airborne?V(0,0,-1):forceDir;if(Math.hypot(aa.x,aa.y,aa.z)>.01)arrow3(add(body,V(0,0,.63)),add(add(body,V(0,0,.63)),mul(aa,.78)),pal.cyan,slip?'a':'aц');}
+  if($('toggleProjections').checked){line3([V(0,0,.1),V(p.x,p.y,.1)],'#d9e9f4',1.8,[6,5]);mark(V(p.x/2,p.y/2,.1),'r',pal.white,6,-7);
+   arrow3(add(p,V(0,0,.18)),add(add(p,V(0,0,.18)),mul(tv,.73)),'#e6eef7','v',2);
+   if(slip&&!slip.left&&slip.relative>.05){const relative=norm(V(slip.vx+q.omega*slip.y,slip.vy-q.omega*slip.x,0));arrow3(add(p,V(0,0,1.05)),add(add(p,V(0,0,1.05)),mul(relative,.75)),pal.violet,'vотн',2.4);}
+  }
+  mark(add(p,V(0,0,.78)),q.slipping?'Брусок · скольжение':'Тело',pal.white);
+ }
+ function drawPendulum(q,theta){grid();const l=q.length,r=q.r,z0=.40,PIV=V(0,0,z0+l*cos(q.alphaRad));const p=V(r*cos(theta),r*sin(theta),z0),rv=norm(V(p.x,p.y,0)),cent=V(0,0,z0);
+  circle3(V(0,0,-.10),Math.max(1.4,r+.5),'#1c3447','#3e647d',110,'xy',1);if($('toggleTrack').checked)orbit(r,z0,2,'#6fd7ee',true);
+  line3([V(0,0,-.12),PIV],'#a7cce0',1.5,[6,6],.8);line3([V(0,0,-.12),V(0,0,z0)],'#7298ad',2);
+  sphere(V(p.x,p.y,.04),.24,'#163a4a');line3([PIV,p],'#dfecf7',3.5);sphere(PIV,.13,'#ddd9e2');
+  if($('toggleProjections').checked){line3([cent,p],pal.amber,1.7,[6,4],.95);mark(add(mul(add(cent,p),.5),V(0,0,.08)),'r',pal.amber,6,-9);}
+  // Arc for angle alpha in vertical plane of the rope.
+  const arc=[];for(let i=0;i<=20;i++){const aa=q.alphaRad*i/20;arc.push(add(PIV,add(mul(rv,.56*sin(aa)),V(0,0,-.56*cos(aa)))))}line3(arc,pal.violet,2.4);mark(add(PIV,add(mul(rv,.8*sin(q.alphaRad*.6)),V(0,0,-.8*cos(q.alphaRad*.6)))),'α',pal.violet,4,-5);
+  if($('toggleForces').checked){const tdir=norm(sub(PIV,p));arrow3(p,add(p,mul(tdir,1.02)),pal.violet,'T');arrow3(add(p,mul(rv,-.12)),add(add(p,mul(rv,-.12)),V(0,0,-.96)),pal.rose,'mg');}
+  if($('toggleAcc').checked){arrow3(add(p,V(0,0,.19)),add(add(p,V(0,0,.19)),mul(rv,-.95)),pal.cyan,'aц');}
+  if($('toggleProjections').checked){arrow3(add(p,V(0,0,-.1)),add(add(p,V(0,0,-.1)),mul(rv,-.90)),pal.amber,'Tₓ',2.7);arrow3(add(p,mul(rv,.10)),add(add(p,mul(rv,.10)),V(0,0,.96)),pal.mint,'Tᵧ',2.7);}
+  sphere(p,.24,'#fac98a');mark(add(p,V(0,0,.31)),'Шарик',pal.white,12,-4);mark(add(PIV,V(0,0,.17)),'Подвес',pal.white,11,-2);
+  mark(add(cent,V(0,0,-.10)),'O',pal.white,10,10);
+ }
+ function drawAxes(){const w=state.sceneW,h=state.sceneH;let c=V(0,0,0),p=P(c);const x=norm(V(1,0,0)),y=norm(V(0,1,0)),z=V(0,0,1);const base={x:w-61,y:h-190};if(w<530){base.x=w-43;base.y=h-197}
+  for(const [a,label,col] of [[x,'X','#ffcf84'],[y,'Y','#85e3bc'],[z,'Z','#86c6ef']]){const xx=dot(a,proj.right)*27,yy=-dot(a,proj.up)*27;ctx.save();ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(base.x,base.y);ctx.lineTo(base.x+xx,base.y+yy);ctx.stroke();ctx.font='700 11px system-ui';ctx.fillText(label,base.x+xx+4,base.y+yy+3);ctx.restore()}}
+ function drawScene(q){dimensions();ctx.clearRect(0,0,state.sceneW,state.sceneH);prepareProjection(q);
+  ctx.save();ctx.fillStyle='#d8efff';ctx.globalAlpha=.04;for(let i=0;i<16;i++){let a=(i*97)%state.sceneW,b=(i*31)%state.sceneH;ctx.fillRect(a,b,1,1)}ctx.restore();
+  const theta=(state.time/q.period*TAU)%(TAU);if(state.mode==='car')drawCar(q,theta);else if(state.mode==='disc')drawDisc(q,theta);else drawPendulum(q,theta);
+  drawAxes();
+ }
+ let lastCursor={};
+ function redraw(){updateData();}
+ function anim(t){if(!lastFrame)lastFrame=t;const dt=clamp((t-lastFrame)/1000,0,.07);lastFrame=t;
+  if(camTransition){const k=1-Math.exp(-dt*10);let error=0;for(const f of ['yaw','elev','zoom','panX','panY']){const d=targetCamera[f]-camera[f];error+=abs(d);camera[f]+=d*k}if(error<.0008){Object.assign(camera,targetCamera);camTransition=false}}
+  const q=physics();if(state.playing){state.time+=dt*state.speed;
+    if(state.time>=q.duration){if(q.slipping){state.time=q.duration;state.playing=false;setPlay()}else state.time%=q.duration;}
+    syncScrubber(q);
+  }
+  drawScene(q);requestAnimationFrame(anim);
+ }
+ function cancelTransition(){camTransition=false;Object.assign(targetCamera,camera);document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed','false'));}
+ function moveCamera(dyaw,dpitch){cancelTransition();camera.yaw+=dyaw;camera.elev=clamp(camera.elev+dpitch,-1.45,1.54);}
+ function zoomBy(factor){cancelTransition();camera.zoom=clamp(camera.zoom*factor,.54,3.4);}
+ function panBy(dx,dy){cancelTransition();camera.panX+=dx;camera.panY+=dy;}
+ function eventCoord(ev){const r=C.getBoundingClientRect();return{x:ev.clientX-r.left,y:ev.clientY-r.top};}
+ C.addEventListener('pointerdown',e=>{e.preventDefault();C.setPointerCapture(e.pointerId);pointers.set(e.pointerId,{...eventCoord(e),button:e.button});if(pointers.size===2){const a=[...pointers.values()],dx=a[1].x-a[0].x,dy=a[1].y-a[0].y;gesture={dist:Math.hypot(dx,dy),cx:(a[0].x+a[1].x)/2,cy:(a[0].y+a[1].y)/2};}C.classList.add('dragging');});
+ C.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;const last=pointers.get(e.pointerId),now={...eventCoord(e),button:last.button};pointers.set(e.pointerId,now);const dx=now.x-last.x,dy=now.y-last.y;if(pointers.size===1){if(e.buttons===2||last.button===2||e.shiftKey)panBy(dx,dy);else moveCamera(-dx*.006,dy*.006);}else if(pointers.size===2){const a=[...pointers.values()],vx=a[1].x-a[0].x,vy=a[1].y-a[0].y,d=Math.hypot(vx,vy),cx=(a[0].x+a[1].x)/2,cy=(a[0].y+a[1].y)/2;if(gesture){if(gesture.dist>1&&d>1)zoomBy(clamp(d/gesture.dist,.85,1.15));panBy(cx-gesture.cx,cy-gesture.cy)}gesture={dist:d,cx,cy};}});
+ function endPointer(e){pointers.delete(e.pointerId);if(pointers.size<2)gesture=null;if(pointers.size===0)C.classList.remove('dragging');}
+ C.addEventListener('pointerup',endPointer);C.addEventListener('pointercancel',endPointer);C.addEventListener('lostpointercapture',endPointer);C.addEventListener('contextmenu',e=>e.preventDefault());C.addEventListener('wheel',e=>{e.preventDefault();zoomBy(Math.exp(-e.deltaY*.0013))},{passive:false});C.addEventListener('dblclick',()=>viewPreset('iso'));
+ document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{setMode(b.dataset.mode);history.replaceState(null,'','#'+b.dataset.mode)}));
+ window.addEventListener('hashchange',()=>{const m=location.hash.slice(1);if(['car','disc','pendulum'].includes(m))setMode(m)});
+ document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>viewPreset(b.dataset.view)));
+ [['camLeft',()=>moveCamera(-.20,0)],['camRight',()=>moveCamera(.20,0)],['camUp',()=>moveCamera(0,.15)],['camDown',()=>moveCamera(0,-.15)],['zoomIn',()=>zoomBy(1.17)],['zoomOut',()=>zoomBy(1/1.17)],['resetCamera',()=>viewPreset('iso')]].forEach(([id,fn])=>$(id).addEventListener('click',fn));
+ $('play').addEventListener('click',()=>{const q=physics();if(!state.playing&&state.time>=q.duration-.0001)state.time=0;state.playing=!state.playing;setPlay();});
+ $('restart').addEventListener('click',()=>{state.time=0;state.playing=false;setPlay();updateData()});
+ $('timeSlider').addEventListener('input',e=>{state.time=physics().duration*+e.target.value/1000;state.playing=false;setPlay();syncScrubber(physics())});
+ $('speed').addEventListener('click',()=>{const values=[1,2,4,.5,.25];state.speed=values[(values.indexOf(state.speed)+1)%values.length];$('speed').textContent=fmt(state.speed,state.speed%1?1:0)+'×'});
+ $('slipDemo').addEventListener('click',()=>{
+   if(state.mode==='car'){
+    let limit=Math.sqrt(val.car.mu*9.81*val.car.radius);
+    if(limit>=32){val.car.mu=Math.min(val.car.mu,.4);limit=Math.sqrt(val.car.mu*9.81*val.car.radius)}
+    val.car.speed=clamp(Math.ceil(limit*1.6),2,36);
+    state.speed=.65;
+   }
+   if(state.mode==='disc'){
+    let limit=Math.sqrt(val.disc.mu*9.81/val.disc.r);
+    if(limit>4.3){val.disc.r=Math.max(val.disc.r,1.8);val.disc.mu=Math.min(val.disc.mu,.55);limit=Math.sqrt(val.disc.mu*9.81/val.disc.r)}
+    val.disc.omega=clamp(Math.ceil(limit*1.55*10)/10,.2,5);
+    state.speed=.25;
+   }
+   $('speed').textContent=fmt(state.speed,2)+'×';
+   state.time=0;state.playing=true;discCache=null;updateParameters();updateData();setPlay();
+  });
+  toggles.forEach(n=>$('toggle'+n).addEventListener('change',()=>drawScene(physics())));
+ document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA','SELECT','BUTTON','SUMMARY'].includes(document.activeElement.tagName))return;let done=true;if(e.code==='Space'){if(!state.playing&&state.time>=physics().duration-.0001)state.time=0;state.playing=!state.playing;setPlay()}else if(e.key==='ArrowLeft')moveCamera(-.14,0);else if(e.key==='ArrowRight')moveCamera(.14,0);else if(e.key==='ArrowUp')moveCamera(0,.12);else if(e.key==='ArrowDown')moveCamera(0,-.12);else done=false;if(done)e.preventDefault()});
+ window.addEventListener('resize',()=>drawScene(physics()));
+ setMode(['car','disc','pendulum'].includes(location.hash.slice(1))?location.hash.slice(1):'car');requestAnimationFrame(anim);
+})();
+</script>
+</body>
+</html>
