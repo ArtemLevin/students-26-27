@@ -3,6 +3,104 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-21",
+  "ktpRefs": [],
+  "href": "21.11.26.html",
+  "title": "Движение по окружности",
+  "navTitle": "Окружность · трение и натяжение",
+  "navSubtitle": "Центростремительное ускорение и второй закон Ньютона: брусок на вращающемся диске, автомобиль на повороте, конический маятник, условия трения, 3D-лаборатория и 10 упражнений.",
+  "summary": "Центростремительное ускорение и второй закон Ньютона: брусок на вращающемся диске, автомобиль на повороте, конический маятник, условия трения, 3D-лаборатория и 10 упражнений.",
+  "topics": [
+    "равномерное движение по окружности",
+    "центростремительное ускорение",
+    "второй закон Ньютона",
+    "трение покоя",
+    "брусок на вращающемся диске",
+    "автомобиль на повороте",
+    "предел сцепления",
+    "конический маятник",
+    "проекции натяжения"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "kin_29",
+      "evidenceAnchor": "principle",
+      "relation": "touched",
+      "label": "Равномерное движение по окружности",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_31",
+      "evidenceAnchor": "principle",
+      "relation": "practiced",
+      "label": "Связь скорости и периода",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_32",
+      "evidenceAnchor": "principle",
+      "relation": "practiced",
+      "label": "Центростремительное ускорение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_33",
+      "evidenceAnchor": "principle",
+      "relation": "touched",
+      "label": "Направления скорости и ускорения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_08",
+      "evidenceAnchor": "method",
+      "relation": "practiced",
+      "label": "Второй закон Ньютона",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_21",
+      "evidenceAnchor": "disc",
+      "relation": "practiced",
+      "label": "Сила трения покоя",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_23",
+      "evidenceAnchor": "car",
+      "relation": "touched",
+      "label": "Коэффициент трения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_12",
+      "evidenceAnchor": "pendulum",
+      "relation": "touched",
+      "label": "Сила тяжести",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "measure_05",
+      "evidenceAnchor": "pendulum",
+      "relation": "practiced",
+      "label": "Проекции векторов",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_07",
+      "evidenceAnchor": "method",
+      "relation": "practiced",
+      "label": "Схема сил",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "21.11.26.html",
+    "pdf": "../pdf_docs/21.11.26.pdf",
+    "tex": "../tex_docs/21.11.26.tex",
+    "lab": "21.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-19",
   "ktpRefs": [],
   "href": "19.11.26.html",
