@@ -5,6 +5,66 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-20",
+  "ktpRefs": [],
+  "href": "20.11.26.html",
+  "title": "Корень. Правило. Результат.",
+  "navTitle": "Корень. Правило. Результат.",
+  "navSubtitle": "Екатерина Скелли · 20 ноября 2026 · квадратные корни, вынесение и внесение множителя, подобные корни, скобки, сравнение и рационализация знаменателя. Интерактивное исследование и 10 задач.",
+  "summary": "Екатерина Скелли · 20 ноября 2026 · квадратные корни, вынесение и внесение множителя, подобные корни, скобки, сравнение и рационализация знаменателя. Интерактивное исследование и 10 задач.",
+  "topics": [
+    "арифметический квадратный корень и его ограничения",
+    "произведение и частное квадратных корней",
+    "вынесение множителя из-под корня",
+    "внесение множителя под корень",
+    "подобные корни и раскрытие скобок",
+    "формула разности квадратов",
+    "сравнение положительных выражений с корнями",
+    "освобождение знаменателя от иррациональности"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "alg_roots_01",
+      "evidenceAnchor": "definition",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "alg_roots_02",
+      "evidenceAnchor": "definition",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "alg_roots_06",
+      "evidenceAnchor": "properties",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_roots_07",
+      "evidenceAnchor": "properties",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_roots_08",
+      "evidenceAnchor": "extract",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_roots_09",
+      "evidenceAnchor": "insert",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_roots_10",
+      "evidenceAnchor": "comparison",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "20.11.26.html",
+    "pdf": "../pdf_docs/20.11.26.pdf"
+  }
+},
+{
   "date": "2026-11-17",
   "ktpRefs": [],
   "href": "17.11.26.html",
