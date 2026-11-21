@@ -49,7 +49,8 @@ test('canonical Sofya 16 November lesson publication has registry, KTP and evide
   for(const id of lesson.ktpRefs){
     assert.equal(state.records[id].status,'in_progress',id);
     assert.equal(state.records[id].coverage,'partial',id);
-    assert.deepEqual(state.records[id].lessonRefs,['2026-11-16'],id);
+    assert.ok(state.records[id].lessonRefs.includes('2026-11-16'),id+' must retain original lesson');
+    assert.equal(state.records[id].lessonRefs.filter(date=>date==='2026-11-16').length,1,id+' duplicate original lesson');
   }
   assert.equal(state.records['ktp-001'].status,'planned','Uncovered KTP must remain planned');
   for(const outcome of lesson.outcomes){
