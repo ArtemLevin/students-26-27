@@ -3,6 +3,56 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-20",
+  "ktpRefs": [],
+  "href": "20.11.26.html",
+  "title": "Подобие треугольников и площади в трапеции",
+  "navTitle": "Подобие треугольников и площади в трапеции",
+  "navSubtitle": "София Кальней · 20 ноября 2026. Подобие треугольников и площади в трапеции: два метода, интерактивный чертёж, алгоритм и 10 задач.",
+  "summary": "София Кальней · 20 ноября 2026. Подобие треугольников и площади в трапеции: два метода, интерактивный чертёж, алгоритм и 10 задач.",
+  "topics": [
+    "Подобие треугольников в трапеции",
+    "Отношение площадей при общей высоте",
+    "Средняя линия трапеции и треугольника",
+    "Дополнительные построения в задачах повышенной сложности"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_17_4_3",
+      "evidenceAnchor": "rules",
+      "relation": "touched",
+      "label": "Отношения длин в трапеции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_17_4_4",
+      "evidenceAnchor": "rules",
+      "relation": "touched",
+      "label": "Формула площади трапеции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_24_3_3",
+      "evidenceAnchor": "example-extension",
+      "relation": "touched",
+      "label": "Дополнительное построение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_25_2_4",
+      "evidenceAnchor": "example-midline",
+      "relation": "practiced",
+      "label": "Отношения площадей в сложной задаче",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "20.11.26.html",
+    "pdf": "../pdf_docs/20.11.26.pdf",
+    "tex": "../tex_docs/20.11.26.tex"
+  }
+},
+{
   "date": "2026-11-15",
   "ktpRefs": [],
   "href": "15.11.26.html",
