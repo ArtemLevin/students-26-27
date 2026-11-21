@@ -136,11 +136,25 @@ try{
   assert.equal(await run("getComputedStyle(document.querySelector('.steps')).display"),'none','interactive stepper hidden in print');
   assert.equal(await run("getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()"),'#fff','print background from dark theme');
   await call('Emulation.setEmulatedMedia',{media:'screen'});
+  const publishedLessonFiles=fs.readdirSync(path.join(root,'students/mark_gukin/site'))
+    .filter(name=>/^\d{2}\.\d{2}\.\d{2}\.html$/.test(name))
+    .sort((a,b)=>{
+      const iso=name=>name.slice(6,8)+name.slice(3,5)+name.slice(0,2);
+      return iso(b).localeCompare(iso(a));
+    });
+  const newestLesson=publishedLessonFiles[0];
+  assert.ok(newestLesson,'a dated lesson HTML must exist');
+  const newestSource=fs.readFileSync(path.join(root,'students/mark_gukin/site',newestLesson),'utf8');
+  const newestTitle=newestSource.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i)?.[1]
+    ?.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+  assert.ok(newestTitle,'newest lesson must have a title');
+  const newestPdf='../pdf_docs/'+newestLesson.replace(/\.html$/,'.pdf');
+
   await navigate('index.html',390,844,false);
-  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Комбинаторика: метод позиций')"),true,'latest lesson on home');
+  assert.equal(await run("document.querySelector('#lessonTitle').textContent.trim()"),newestTitle,'latest lesson on home');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"18.10.26.html\"]')!==null"),true,'previous lesson remains in journal');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"21.10.26.html\"]')!==null"),true,'previous logarithm lesson remains in journal');
-  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"../pdf_docs/13.11.26.pdf\"]')!==null"),true,'home links to latest lesson PDF');
+  assert.equal(await run("Array.from(document.querySelectorAll('.lesson-actions a')).some(a=>a.getAttribute('href')==="+JSON.stringify(newestPdf)+")"),true,'home links to latest lesson PDF');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('04.10.2026')"),true,'history retained');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('09.10.2026')"),true,'previous lesson retained');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"13.11.26-lab.html\"]')!==null"),true,"13 Nov lab in journal");
@@ -336,6 +350,34 @@ try{
   await navigate('25.10.26.html',390,844,true);
   assert.equal(await run("document.documentElement.scrollWidth <= document.documentElement.clientWidth"),true,'lesson mobile overflow');
   await snapshot('lesson-25-mobile-dark');
+
+  // 15 November: probability lesson and interactive sample-space lab.
+  for(const [w,h] of [[375,812],[768,1024],[1440,900]]){
+    for(const name of ['15.11.26.html','15.11.26-lab.html']){
+      await navigate(name,w,h,false);
+      await navigate(name,w,h,true);
+    }
+  }
+  await navigate('15.11.26.html',390,844,false);
+  assert.equal(await run("document.querySelectorAll('#practice .task').length"),10,'15 Nov ten practice tasks');
+  assert.equal(await run("[...document.querySelectorAll('main math')].every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML')"),true,'15 Nov formulas are native MathML');
+  assert.equal(await run("document.querySelector('a[href=\"15.11.26-lab.html\"]')!==null"),true,'15 Nov links to lab');
+  assert.equal(await run("document.querySelector('a[href=\"../pdf_docs/15.11.26.pdf\"]')!==null"),true,'15 Nov PDF reference');
+  await snapshot('lesson-15-mobile-light');
+
+  await navigate('15.11.26-lab.html?mode=digits',390,844,false);
+  assert.equal(await run("document.getElementById('mode').value"),'digits','15 Nov deep link');
+  const models1511=await run("(()=>{const select=document.getElementById('mode'),reveal=document.getElementById('reveal'),results=[];for(const mode of ['digits','tourists','seating','coin']){select.value=mode;select.dispatchEvent(new Event('change',{bubbles:true}));reveal.click();results.push({mode,total:document.querySelectorAll('#outcomes .outcome').length,good:document.querySelectorAll('#outcomes .outcome.good').length,hasMath:document.querySelector('#formula math')?.namespaceURI==='http://www.w3.org/1998/Math/MathML'});}return results;})()");
+  assert.deepEqual(models1511,[
+    {mode:'digits',total:9,good:6,hasMath:true},
+    {mode:'tourists',total:10,good:4,hasMath:true},
+    {mode:'seating',total:24,good:12,hasMath:true},
+    {mode:'coin',total:8,good:3,hasMath:true}
+  ],'15 Nov sample-space enumeration');
+  const prediction1511=await run("(()=>{const select=document.getElementById('mode');select.value='digits';select.dispatchEvent(new Event('change',{bubbles:true}));document.getElementById('prediction').value='6';document.getElementById('check').click();const before=document.getElementById('predictionFeedback').textContent;document.getElementById('reveal').click();return {before,preserved:document.getElementById('prediction').value==='6'}})()");
+  assert.equal(prediction1511.before.includes('Верно'),true,'15 Nov correct prediction feedback');
+  assert.equal(prediction1511.preserved,true,'15 Nov prediction survives reveal');
+  await snapshot('lesson-15-lab-mobile-light');
 
   assert.deepEqual(jsErrors,[],'Browser JavaScript exceptions');
   assert.deepEqual(badRequests,[],'Browser network failures');
