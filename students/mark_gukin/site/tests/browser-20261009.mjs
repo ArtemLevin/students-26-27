@@ -137,14 +137,16 @@ try{
   assert.equal(await run("getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()"),'#fff','print background from dark theme');
   await call('Emulation.setEmulatedMedia',{media:'screen'});
   await navigate('index.html',390,844,false);
-  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Комбинаторика: метод позиций')"),true,'latest lesson on home');
+  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Дерево вероятностей')"),true,'latest 22 November lesson on home');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"18.10.26.html\"]')!==null"),true,'previous lesson remains in journal');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"21.10.26.html\"]')!==null"),true,'previous logarithm lesson remains in journal');
-  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"../pdf_docs/13.11.26.pdf\"]')!==null"),true,'home links to latest lesson PDF');
+  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"../pdf_docs/22.11.26.pdf\"]')!==null"),true,'home links to latest 22 November lesson PDF');
+  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"22.11.26-lab.html\"]')!==null"),true,'home links to latest lab');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('04.10.2026')"),true,'history retained');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('09.10.2026')"),true,'previous lesson retained');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"13.11.26-lab.html\"]')!==null"),true,"13 Nov lab in journal");
-  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"../images/13.11.26.png\"]')!==null"),true,"13 Nov poster in journal");
+  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"22.11.26.html\"]')!==null"),true,"22 Nov canonical lesson in journal");
+  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"22.11.26-lab.html\"]')!==null"),true,"22 Nov canonical lab in journal");
   await snapshot('home-mobile-light');
   // November 13: lesson and counting lab.
   await navigate('13.11.26.html',390,844,false);
