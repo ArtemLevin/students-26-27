@@ -5,6 +5,71 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-11-21",
+  "ktpRefs": [],
+  "href": "21.11.26.html",
+  "title": "Отношения и пропорции",
+  "navTitle": "Отношения и пропорции",
+  "navSubtitle": "Доли · равные части · пропорции · формулы",
+  "summary": "Надя Клименко, 21 ноября 2026: отношения и пропорции, сравнение величин, доли, деление в заданном отношении, основное свойство пропорции, буквенные формулы и 10 заданий.",
+  "topics": [
+    "отношение двух чисел и порядок сравнения",
+    "доля от целого и процентная запись",
+    "приведение величин к одинаковым единицам измерения",
+    "деление целого в заданном отношении на две и три части",
+    "понятие пропорции и основное свойство пропорции",
+    "нахождение неизвестного члена пропорции со скобками",
+    "выражение переменной из пропорции и физической формулы"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ratio_01",
+      "evidenceAnchor": "ratio",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_15",
+      "evidenceAnchor": "ratio",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dec_12",
+      "evidenceAnchor": "units",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ratio_03",
+      "evidenceAnchor": "parts",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ratio_05",
+      "evidenceAnchor": "proportion",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ratio_06",
+      "evidenceAnchor": "proportion",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ratio_07",
+      "evidenceAnchor": "unknown",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "alg_13",
+      "evidenceAnchor": "formula",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "21.11.26.html",
+    "pdf": "../pdf_docs/21.11.26.pdf",
+    "tex": "../tex_docs/21.11.26.tex"
+  }
+},
+  {
     "date": "2026-11-17",
     "ktpRefs": [],
     "href": "17.11.26.html",
