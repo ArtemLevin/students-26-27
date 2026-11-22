@@ -3,6 +3,93 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-22",
+  "ktpRefs": [],
+  "href": "22.11.26.html",
+  "title": "Повторение ОГЭ: алгебра и геометрия",
+  "navTitle": "Повторение ОГЭ: алгебра и геометрия",
+  "navSubtitle": "София Кальней · 22 ноября 2026. Повторение ОГЭ: неравенства, радикалы, производительность, парабола с выколотой точкой, подобие и трапеция. Чек-лист, разборы, 10 задач.",
+  "summary": "София Кальней · 22 ноября 2026. Повторение ОГЭ: неравенства, радикалы, производительность, парабола с выколотой точкой, подобие и трапеция. Чек-лист, разборы, 10 задач.",
+  "topics": [
+    "Квадратные неравенства и метод интервалов",
+    "Сравнение выражений с квадратными корнями",
+    "Текстовые задачи на производительность",
+    "Парабола с выколотой точкой и прямая y=kx",
+    "Подобие треугольников и биссектрисы равнобедренной трапеции"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_13_2_1",
+      "evidenceAnchor": "inequalities",
+      "relation": "practiced",
+      "label": "Решение квадратного неравенства",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_7_2_1",
+      "evidenceAnchor": "radicals",
+      "relation": "practiced",
+      "label": "Сравнение радикалов",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_21_4_2",
+      "evidenceAnchor": "work",
+      "relation": "practiced",
+      "label": "Таблица производительности",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_21_4_3",
+      "evidenceAnchor": "work",
+      "relation": "practiced",
+      "label": "Уравнение по времени работы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_22_1_2",
+      "evidenceAnchor": "graphs",
+      "relation": "touched",
+      "label": "Область определения дробно-рациональной функции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_22_1_3",
+      "evidenceAnchor": "graphs",
+      "relation": "touched",
+      "label": "Выколотая точка параболы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_22_1_5",
+      "evidenceAnchor": "graphs",
+      "relation": "touched",
+      "label": "Число пересечений с прямой",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_25_1_2",
+      "evidenceAnchor": "geometry",
+      "relation": "touched",
+      "label": "Отношения сторон подобного треугольника",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "oge_25_2_1",
+      "evidenceAnchor": "geometry",
+      "relation": "touched",
+      "label": "Биссектрисы в равнобедренной трапеции",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "22.11.26.html",
+    "pdf": "../pdf_docs/22.11.26.pdf",
+    "tex": "../tex_docs/22.11.26.tex",
+    "lab": "22.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-20",
   "ktpRefs": [],
   "href": "20.11.26.html",
