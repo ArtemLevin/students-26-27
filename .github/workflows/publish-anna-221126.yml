@@ -1,0 +1,39 @@
+name: Publish Anna trigonometry lesson (one-off)
+on:
+  push:
+    branches:
+      - lesson/anna-bannova-2026-11-22-trigonometry-web
+    paths:
+      - 'students/anna_bannova/site/22.11.26.html'
+      - 'students/anna_bannova/site/22.11.26-lab.html'
+      - 'students/anna_bannova/site/data/lessons/2026-11-22.publication-intent.json'
+      - '.github/workflows/publish-anna-221126.yml'
+permissions:
+  contents: write
+jobs:
+  publish:
+    if: github.repository == 'ArtemLevin/students-26-27'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preview canonical v2 publication
+        run: node scripts/publish-lesson.mjs anna_bannova 22.11.26 --intent students/anna_bannova/site/data/lessons/2026-11-22.publication-intent.json --dry-run
+      - name: Apply canonical v2 publisher with built-in postflight QA
+        run: node scripts/publish-lesson.mjs anna_bannova 22.11.26 --intent students/anna_bannova/site/data/lessons/2026-11-22.publication-intent.json
+      - name: Validate student package
+        run: node scripts/student.mjs validate anna_bannova
+      - name: Persist canonical publication artifacts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/anna_bannova/site/lesson-registry.js students/anna_bannova/site/data/ktp-state.json students/anna_bannova/site/data/mastery-state.json students/anna_bannova/site/data/lessons/2026-11-22.lesson.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(anna): publish trigonometry lesson with canonical v2 pipeline"
+            git push
+          fi
