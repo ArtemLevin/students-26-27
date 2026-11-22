@@ -1,5 +1,59 @@
 export const LESSONS=[
   {
+  "date": "2026-11-22",
+  "ktpRefs": [
+    "ktp-045",
+    "ktp-046"
+  ],
+  "href": "22.11.26.html",
+  "title": "Основы тригонометрии",
+  "navTitle": "Основы тригонометрии",
+  "navSubtitle": "Анна Баннова · 22 ноября 2026: единичная окружность, радианы, синус и косинус, табличные значения, тангенс, котангенс и обратные тригонометрические функции.",
+  "summary": "Анна Баннова · 22 ноября 2026: единичная окружность, радианы, синус и косинус, табличные значения, тангенс, котангенс и обратные тригонометрические функции.",
+  "topics": [
+    "радианная мера угла и перевод градусов",
+    "единичная тригонометрическая окружность и координаты точки",
+    "знаки синуса и косинуса по четвертям",
+    "табличные значения sin, cos, tg, ctg",
+    "обратные тригонометрические функции и основные промежутки",
+    "отрицательные аргументы arcsin, arccos, arctg, arcctg",
+    "сочетания прямой и обратной функции"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "trig_01",
+      "evidenceAnchor": "degrees",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "trig_02",
+      "evidenceAnchor": "circle",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "trig_03",
+      "evidenceAnchor": "circle",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "trig_04",
+      "evidenceAnchor": "values",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "trig_06",
+      "evidenceAnchor": "values",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "22.11.26.html",
+    "pdf": "../pdf_docs/22.11.26.pdf",
+    "tex": "../tex_docs/22.11.26.tex",
+    "lab": "22.11.26-lab.html"
+  }
+},
+{
     "date": "2026-11-20",
     "ktpRefs": [
       "ktp-007"
