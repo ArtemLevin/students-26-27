@@ -148,6 +148,24 @@ try{
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"22.11.26.html\"]')!==null"),true,"22 Nov canonical lesson in journal");
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"22.11.26-lab.html\"]')!==null"),true,"22 Nov canonical lab in journal");
   await snapshot('home-mobile-light');
+  // November 22: dated lesson and live probability laboratory.
+  for(const [w,h] of [[375,812],[1440,900]]){
+    await navigate('22.11.26.html',w,h,false);
+    await navigate('22.11.26.html',w,h,true);
+    await navigate('22.11.26-lab.html#lamps',w,h,false);
+    await navigate('22.11.26-lab.html#lamps',w,h,true);
+  }
+  await navigate('22.11.26.html',390,844,false);
+  assert.equal(await run("document.querySelectorAll('#training .task').length"),10,'22 Nov ten training tasks');
+  assert.equal(await run("[...document.querySelectorAll('main math')].every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML')"),true,'22 Nov uses native MathML');
+  assert.equal(await run("document.querySelectorAll('#training .answer').length"),10,'22 Nov separate answer toggles');
+  await navigate('22.11.26-lab.html#lamps',390,844,false);
+  assert.equal(await run("document.getElementById('total').textContent"),'0,9740','lamp total probability');
+  assert.equal(await run("(()=>{document.querySelector('[data-mode=battery]').click();return document.getElementById('total').textContent})()"),'0,0296','battery control probability');
+  assert.equal(await run("(()=>{const e=document.getElementById('share');e.value='50';e.dispatchEvent(new Event('input',{bubbles:true}));return document.getElementById('total').textContent})()"),'0,5000','live share recomputes both branches');
+  assert.equal(await run("(()=>{document.querySelector('[data-mode=inverse]').click();return document.getElementById('total').textContent})()"),'0,0240','inverse supplier scenario');
+  assert.equal(await run("document.querySelectorAll('svg#treeSvg .drawing line').length"),6,'probability tree has complete branches');
+  await snapshot('22-nov-lab-mobile-light');
   // November 13: lesson and counting lab.
   await navigate('13.11.26.html',390,844,false);
   assert.equal(await run("document.querySelector('h1').textContent.includes('Комбинаторика')"),true,"13 Nov lesson title");
