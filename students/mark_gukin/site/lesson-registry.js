@@ -5,6 +5,71 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-11-22",
+  "ktpRefs": [],
+  "href": "22.11.26.html",
+  "title": "Дерево вероятностей",
+  "navTitle": "Дерево вероятностей",
+  "navSubtitle": "Марк Гукин. Теория вероятностей: дерево событий, правило произведения, сложение путей, полная вероятность, неизвестная доля поставщика и 10 задач. Занятие 22.11.2026.",
+  "summary": "Марк Гукин. Теория вероятностей: дерево событий, правило произведения, сложение путей, полная вероятность, неизвестная доля поставщика и 10 задач. Занятие 22.11.2026.",
+  "topics": [
+    "Дерево вероятностей и порядок событий",
+    "Умножение вероятностей вдоль одного пути и сложение несовместных путей",
+    "Вероятность противоположного события",
+    "Формула полной вероятности для поставок и контроля качества",
+    "Обратные задачи с неизвестной долей поставщика",
+    "Вычисления с десятичными дробями и степенями десяти"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege05_15",
+      "evidenceAnchor": "tree",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_04",
+      "evidenceAnchor": "inverse",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_01",
+      "evidenceAnchor": "rules",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_02",
+      "evidenceAnchor": "rules",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_03",
+      "evidenceAnchor": "rules",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege04_03",
+      "evidenceAnchor": "complement",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_08",
+      "evidenceAnchor": "shooting",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege05_12",
+      "evidenceAnchor": "digits",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "22.11.26.html",
+    "pdf": "../pdf_docs/22.11.26.pdf",
+    "tex": "../tex_docs/22.11.26.tex",
+    "lab": "22.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-19",
   "ktpRefs": [],
   "href": "19.11.26.html",
