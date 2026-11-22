@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#285c49">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23285c49'/%3E%3Cpath d='M16 46V18l14 14 16-18M30 32v16M46 14v32' stroke='white' fill='none' stroke-width='4'/%3E%3C/svg%3E">
+<meta name="description" content="Интерактивная лаборатория Марка Гукина: дерево вероятностей, полная вероятность, доли поставщиков и ошибки контроля качества. 22 ноября 2026.">
+<title>Лаборатория дерева вероятностей · Марк Гукин · 22.11.2026</title>
+<style>
+:root{color-scheme:light;--bg:#f7f8f4;--surface:#fffefa;--text:#1b3028;--muted:#53695f;--border:#ceddd1;--accent:#285c49;--accentink:#164633;--branch:#446e57;--selected:#b78243;--quiet:#85988c;--wash:#edf4ee;--focus:#b78243}
+html[data-theme=dark]{color-scheme:dark;--bg:#122119;--surface:#1b2e24;--text:#edf5ef;--muted:#bfd0c4;--border:#425c4d;--accent:#a4dcba;--accentink:#c1edce;--branch:#a4dcba;--selected:#e0b778;--quiet:#758c7d;--wash:#243b2d;--focus:#e0b778}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.62 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}button,select,input{font:inherit}button{cursor:pointer}a{color:var(--accentink)}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.skip{position:absolute;left:-100vw}.skip:focus{left:12px;top:12px;z-index:10;background:var(--surface);padding:9px}.top{background:var(--surface);border-bottom:1px solid var(--border)}.top-inner{max-width:1240px;margin:auto;display:flex;justify-content:space-between;gap:15px;padding:16px 26px;align-items:center;flex-wrap:wrap}.brand{text-decoration:none;font-weight:760;color:var(--text)}.top-nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.top-nav button{min-height:38px;border:1px solid var(--border);background:transparent;color:var(--text);padding:6px 12px}
+main{max-width:1240px;margin:auto;padding:0 26px 70px}.header{padding:48px 0 26px;border-bottom:1px solid var(--border)}.eyebrow{font-size:.79rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--accent);margin:0 0 12px}h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.16;letter-spacing:-.022em}h1{font-size:clamp(2.8rem,6vw,5.15rem);margin:0 0 15px}h2{font-size:clamp(1.5rem,3.5vw,2.25rem);margin:0 0 13px}h3{font-size:1.24rem;margin:0 0 10px}p{margin:8px 0 15px}.lede{max-width:820px;color:var(--muted);font-size:1.16rem}.note{font-size:.88rem;color:var(--muted)}
+.mode-nav{display:flex;gap:8px;flex-wrap:wrap;margin:23px 0 19px}.mode-nav button{border:1px solid var(--border);background:var(--surface);padding:10px 15px;color:var(--text);min-height:44px;font-weight:680}.mode-nav button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.lab{display:grid;grid-template-columns:minmax(250px,320px) minmax(0,1fr);gap:22px;margin-top:13px}.controls{background:var(--surface);border:1px solid var(--border);padding:22px}.control{margin:0 0 21px}.control label{display:flex;justify-content:space-between;gap:8px;font-weight:720;margin:0 0 8px}.control output{color:var(--accentink);font-variant-numeric:tabular-nums}.control input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;min-height:28px}.control small{display:block;color:var(--muted);font-size:.82rem}.control-tools{display:flex;gap:9px;flex-wrap:wrap}.control-tools button,.seg-btn,.control-tools a{background:transparent;color:var(--accentink);border:1px solid var(--accent);padding:9px 12px;min-height:42px;text-decoration:none;font-weight:680}
+.diagram-shell{min-width:0;background:var(--surface);border:1px solid var(--border);padding:18px}.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.79rem;color:var(--muted);margin:0 0 10px}.legend b{font-weight:800}.legend .pass{color:var(--accentink)}.legend .other{color:var(--quiet)}.diagram-scroll{overflow-x:auto;max-width:100%}.diagram{display:block;width:100%;min-width:660px;height:auto;aspect-ratio:920/460}svg text{font-family:system-ui,Arial,sans-serif;fill:var(--text);font-size:16px}svg line{stroke-linecap:round}svg circle{fill:var(--accent)}svg .pass{stroke:var(--branch);stroke-width:3}svg .other{stroke:var(--quiet);stroke-width:2;opacity:.6}svg .picked{stroke:var(--selected);stroke-width:5}svg .prob-label{font-weight:800}svg .event-label{font-weight:700}svg .result-label{fill:var(--accentink)}svg .small{font-size:13px;fill:var(--muted)}.path-chooser{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.seg-btn[aria-pressed=true]{background:var(--wash);border-color:var(--selected)}
+.math-output{border-top:1px solid var(--border);padding-top:16px;margin-top:12px}.math-scroll{overflow-x:auto;max-width:100%;padding:10px 2px}.math-scroll math{font-size:clamp(1.17rem,2.3vw,1.5rem);display:block;width:max-content}.big-number{font:700 clamp(2.2rem,4vw,3.5rem) Georgia,serif;line-height:1.1;color:var(--accentink);margin:8px 0}.meaning{color:var(--muted)}.research{border-top:1px solid var(--border);padding-top:30px;margin-top:35px}.two-col{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:25px}.panel{border-top:2px solid var(--accent);padding:20px 0}.panel input[type=text]{padding:10px 12px;min-height:42px;background:var(--surface);color:var(--text);border:1px solid var(--border);max-width:185px}.panel button{border:1px solid var(--accent);padding:10px 14px;min-height:42px;color:var(--bg);background:var(--accent);font-weight:700}.panel button:disabled{opacity:.4;cursor:not-allowed}.step{border-left:2px solid var(--accent);padding:7px 0 8px 16px;margin:10px 0}.step[hidden]{display:none}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.feedback{color:var(--accentink);font-weight:650;min-height:22px}.footer{padding:25px 26px;max-width:1240px;margin:auto;color:var(--muted);border-top:1px solid var(--border);font-size:.85rem}
+@media(max-width:850px){.lab{grid-template-columns:1fr}.controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.controls h2,.control-tools,.controls .note{grid-column:1/-1}.control{margin-bottom:3px}.two-col{grid-template-columns:1fr}}
+@media(max-width:580px){main,.top-inner,.footer{padding-left:17px;padding-right:17px}.header{padding-top:32px}.controls{display:block;padding:16px}.control{margin-bottom:17px}.diagram-shell{padding:10px}.top-nav{gap:12px}.mode-nav button{flex:1 1 auto}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+</style>
+</head><body>
+<a class="skip" href="#main">К лаборатории</a>
+<header class="top"><div class="top-inner"><a class="brand" href="index.html">Марк Гукин / Атлас знаний</a><nav class="top-nav" aria-label="Навигация"><a href="22.11.26.html#tree">Вернуться к занятию</a><a href="index.html">Кабинет</a><button id="theme" type="button" aria-pressed="false">Тёмная тема</button></nav></div></header>
+<main id="main">
+<section class="header"><p class="eyebrow">Цифровая лаборатория · 22 ноября 2026</p><h1>Исследуйте<br>дерево вероятностей</h1><p class="lede">Меняйте долю источников и условные вероятности, наблюдайте, какие ветви становятся вероятнее. Вся схема, вероятности путей и итоговая сумма пересчитываются одновременно.</p></section>
+<nav class="mode-nav" role="group" aria-label="Выберите ситуацию"><button type="button" data-mode="lamps" aria-pressed="true">Исправные лампы</button><button type="button" data-mode="inverse" aria-pressed="false">Неизвестная доля</button><button type="button" data-mode="battery" aria-pressed="false">Контроль батареек</button></nav>
+<div class="lab">
+<aside class="controls" aria-labelledby="parameters"><h2 id="parameters">Параметры опыта</h2>
+<div class="control"><label for="share"><span id="shareTitle">Доля завода I</span><output id="shareValue" for="share">0,40</output></label><input type="range" id="share" min="0" max="100" step="1" value="40"><small>Доля второго источника равна 1 − первой доле.</small></div>
+<div class="control"><label for="first"><span id="firstTitle">Исправна на заводе I</span><output id="firstValue" for="first">0,98</output></label><input type="range" id="first" min="0" max="100" step="1" value="98"><small id="firstDesc">Вероятность целевого исхода при первом источнике.</small></div>
+<div class="control"><label for="second"><span id="secondTitle">Исправна на заводе II</span><output id="secondValue" for="second">0,97</output></label><input type="range" id="second" min="0" max="100" step="1" value="97"><small id="secondDesc">Вероятность целевого исхода при втором источнике.</small></div>
+<div class="control-tools"><button id="reset" type="button">Вернуть значения урока</button></div>
+<p class="note">Двигайте один ползунок за раз и следите за вероятностью каждого подходящего пути. Результаты округлены только при отображении; вычисления выполняются с исходной точностью.</p>
+</aside>
+<section class="diagram-shell" aria-labelledby="canvasTitle"><h2 id="canvasTitle">Дерево событий</h2><div class="legend"><span><b class="pass">Толстые ветви:</b> искомое событие</span><span><b class="other">Тонкие ветви:</b> прочие исходы</span></div>
+<div class="diagram-scroll"><svg id="treeSvg" class="diagram" viewBox="0 0 920 460" role="img" aria-labelledby="diagramTitle diagramDesc"><title id="diagramTitle">Двухступенчатое дерево вероятностей</title><desc id="diagramDesc">Изменяемое дерево с выбором одного из двух источников и одного из двух исходов для каждого источника.</desc></svg></div>
+<div class="path-chooser" role="group" aria-label="Показать вероятности путей"><button type="button" class="seg-btn" data-path="both" aria-pressed="true">Оба нужных пути</button><button type="button" class="seg-btn" data-path="first" aria-pressed="false">Первый путь</button><button type="button" class="seg-btn" data-path="second" aria-pressed="false">Второй путь</button></div>
+<div class="math-output"><p class="eyebrow">Итоговая вероятность</p><p class="big-number" id="total" aria-live="polite">0,9740</p><div class="math-scroll"><math display="block" aria-label="Сумма двух подходящих путей"><mrow><mn id="mathP">0,40</mn><mo>⋅</mo><mn id="mathQ1">0,98</mn><mo>+</mo><mn id="mathNotP">0,60</mn><mo>⋅</mo><mn id="mathQ2">0,97</mn><mo>=</mo><mn id="mathTotal">0,9740</mn></mrow></math></div><p class="meaning" id="meaning">Складываем вероятности двух несовместных путей, заканчивающихся исправной лампой.</p></div>
+</section>
+</div>
+<section class="research" aria-labelledby="researchTitle"><h2 id="researchTitle">Проверка метода</h2><div class="two-col">
+<section class="panel"><h3>Последовательность решения</h3><div class="step" id="stepText" aria-live="polite">Шаг 1: сначала выберите источник события; затем определите возможные результаты внутри источника.</div><div class="row"><button id="prevStep" type="button" disabled>Назад</button><button id="nextStep" type="button">Следующий шаг</button><span class="note" id="stepCount">1 из 4</span></div></section>
+<section class="panel"><h3>Сначала предположите результат</h3><p>Перед изменением доли первого источника попробуйте предсказать итоговую вероятность по текущим параметрам. Затем сравните с отображаемым значением.</p><div class="row"><label for="prediction">Ваш прогноз</label><input id="prediction" type="text" inputmode="decimal" placeholder="Например, 0,974"></div><div class="row" style="margin-top:10px"><button id="checkPrediction" type="button">Сравнить</button><span id="predictionFeedback" class="feedback" role="status" aria-live="polite"></span></div></section></div>
+<div class="panel" id="inversePanel" hidden><h3>Обратная задача по данным урока</h3><p>По условию исходной задачи общий брак равен 0,024, а вероятности брака первого и второго завода — 0,02 и 0,03. Найдите долю первого завода. В общем виде решение находится из уравнения суммы двух путей.</p><div class="math-scroll"><math display="block"><mrow><mn>0,02</mn><mi>x</mi><mo>+</mo><mn>0,03</mn><mo>(</mo><mn>1</mn><mo>−</mo><mi>x</mi><mo>)</mo><mo>=</mo><mn>0,024</mn></mrow></math></div><p id="inverseResult" aria-live="polite"></p><p class="note">Здесь исходный пример зафиксирован, а ползунки выше позволяют исследовать изменённые пропорции отдельно.</p></div>
+</section>
+<section class="research"><h2>Как проверять себя</h2><p>У одного источника две конечные ветви, и сумма их вероятностей должна быть единицей. Вероятности выбора двух источников также дополняют друг друга до единицы. Для итогового события выбирайте все ветви с нужной меткой; произведения вдоль них складывайте.</p><p><a href="22.11.26.html#training">Вернуться к 10 тренировочным задачам</a></p></section>
+</main><footer class="footer">Лёвин Артём Александрович · Эксклюзивно для Марка Гукина · ЕГЭ, профильная математика</footer>
+<script>
+(function(){
+'use strict';
+const configs={
+lamps:{share:40,q1:98,q2:97,source1:'Завод I',source2:'Завод II',outcome:'Исправна',other:'Брак',shareLabel:'Доля завода I',firstLabel:'Исправна на заводе I',secondLabel:'Исправна на заводе II',explain:'Складываем вероятности двух несовместных путей, заканчивающихся исправной лампой.'},
+inverse:{share:60,q1:2,q2:3,source1:'Завод I',source2:'Завод II',outcome:'Брак',other:'Исправна',shareLabel:'Доля завода I',firstLabel:'Брак на заводе I',secondLabel:'Брак на заводе II',explain:'Если известна общая вероятность брака, можно составить уравнение с неизвестной долей первого завода.'},
+battery:{share:98,q1:1,q2:99,source1:'Исправна',source2:'Неисправна',outcome:'Забракована',other:'Принята',shareLabel:'Доля исправных батареек',firstLabel:'Забракована среди исправных',secondLabel:'Забракована среди неисправных',explain:'Первый путь означает ошибочную отбраковку исправного изделия, второй — правильное выявление неисправного.'}
+};
+const $=s=>document.getElementById(s);const svgns='http://www.w3.org/2000/svg';
+let mode='lamps',path='both',step=0;
+const fmt=(x,n=2)=>Number(x).toFixed(n).replace('.',',');
+function svg(tag,attrs,text){const el=document.createElementNS(svgns,tag);for(const k in attrs)el.setAttribute(k,String(attrs[k]));if(text!==undefined)el.textContent=text;return el}
+function appendLine(root,x1,y1,x2,y2,type,selected){root.appendChild(svg('line',{x1,y1,x2,y2,class:selected?'picked':type}))}
+function appendText(root,x,y,value,cl){root.appendChild(svg('text',{x,y,class:cl||''},value))}
+function appendDot(root,x,y){root.appendChild(svg('circle',{cx:x,cy:y,r:5}))}
+function draw(){
+const data=configs[mode],p=Number($('share').value)/100,q1=Number($('first').value)/100,q2=Number($('second').value)/100;
+const a=p*q1,b=(1-p)*q2,total=a+b;
+$('shareValue').textContent=fmt(p);$('firstValue').textContent=fmt(q1);$('secondValue').textContent=fmt(q2);
+$('shareTitle').textContent=data.shareLabel;$('firstTitle').textContent=data.firstLabel;$('secondTitle').textContent=data.secondLabel;
+$('total').textContent=fmt(total,4);
+$('mathP').textContent=fmt(p);$('mathQ1').textContent=fmt(q1);$('mathNotP').textContent=fmt(1-p);$('mathQ2').textContent=fmt(q2);$('mathTotal').textContent=fmt(total,4);
+$('meaning').textContent=data.explain;
+const root=$('treeSvg');root.querySelectorAll('.drawing').forEach(e=>e.remove());
+const g=svg('g',{class:'drawing'});root.appendChild(g);
+const v={start:[110,230],p1:[365,123],p2:[365,338],p1yes:[725,60],p1no:[725,188],p2yes:[725,276],p2no:[725,405]};
+appendLine(g,...v.start,...v.p1,'pass',false);
+appendLine(g,...v.start,...v.p2,'pass',false);
+appendLine(g,...v.p1,...v.p1yes,'pass',path==='first');
+appendLine(g,...v.p1,...v.p1no,'other',false);
+appendLine(g,...v.p2,...v.p2yes,'pass',path==='second');
+appendLine(g,...v.p2,...v.p2no,'other',false);
+Object.values(v).forEach(x=>appendDot(g,...x));
+appendText(g,16,214,'Случайный','event-label');appendText(g,16,237,'выбор','event-label');
+appendText(g,323,105,data.source1,'event-label');appendText(g,323,358,data.source2,'event-label');
+appendText(g,737,54,data.outcome,'event-label result-label');appendText(g,737,180,data.other,'event-label');
+appendText(g,737,270,data.outcome,'event-label result-label');appendText(g,737,398,data.other,'event-label');
+appendText(g,220,146,fmt(p),'prob-label');appendText(g,220,308,fmt(1-p),'prob-label');
+appendText(g,518,67,fmt(q1),'prob-label');appendText(g,516,175,fmt(1-q1),'prob-label');
+appendText(g,518,265,fmt(q2),'prob-label');appendText(g,518,392,fmt(1-q2),'prob-label');
+appendText(g,738,81,'Путь: '+fmt(a,4),'small');appendText(g,738,297,'Путь: '+fmt(b,4),'small');
+$('diagramDesc').textContent='Источник 1 с вероятностью '+fmt(p)+', источник 2 с вероятностью '+fmt(1-p)+'. Вероятности целевого исхода '+fmt(q1)+' и '+fmt(q2)+'. Итоговая сумма '+fmt(total,4)+'.';
+document.querySelectorAll('[data-path]').forEach(btn=>btn.setAttribute('aria-pressed',String(btn.dataset.path===path)));
+$('predictionFeedback').textContent='';
+}
+function selectMode(next){if(!configs[next])next='lamps';mode=next;path='both';step=0;const data=configs[mode];
+$('share').value=String(data.share);$('first').value=String(data.q1);$('second').value=String(data.q2);
+document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
+$('inversePanel').hidden=mode!=='inverse';
+if(mode==='inverse')$('inverseResult').textContent='Для чисел исходного примера: x = 0,6 (60%). Проверка: 0,6 · 0,02 + 0,4 · 0,03 = 0,024.';
+draw();updateStep();if(location.hash!=='#'+mode)history.replaceState(null,'','#'+mode);}
+function updateStep(){
+const texts=[
+'Шаг 1: сначала выберите источник события; затем определите возможные результаты внутри источника.',
+'Шаг 2: подпишите на стрелках вероятности, а возле узлов — названия событий. На каждой развилке сумма вероятностей равна единице.',
+'Шаг 3: выделите два несовместных пути, заканчивающихся нужным событием, и перемножьте вероятности вдоль каждого.',
+'Шаг 4: сложите два произведения, проверьте, что результат лежит между нулём и единицей. Если доля неизвестна, составьте уравнение.'
+];$('stepText').textContent=texts[step];$('stepCount').textContent=(step+1)+' из '+texts.length;$('prevStep').disabled=step===0;$('nextStep').disabled=step===texts.length-1;
+}
+$('prevStep').addEventListener('click',()=>{step=Math.max(0,step-1);updateStep()});$('nextStep').addEventListener('click',()=>{step=Math.min(3,step+1);updateStep()});
+document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>selectMode(b.dataset.mode)));
+document.querySelectorAll('[data-path]').forEach(b=>b.addEventListener('click',()=>{path=b.dataset.path;draw()}));
+['share','first','second'].forEach(id=>$(id).addEventListener('input',draw));
+$('reset').addEventListener('click',()=>selectMode(mode));
+$('checkPrediction').addEventListener('click',()=>{const raw=$('prediction').value.trim().replace(',','.');const x=/^(?:0(?:\.\d+)?|1(?:\.0+)?)$/.test(raw)?Number(raw):NaN;
+if(!Number.isFinite(x)){$('predictionFeedback').textContent='Введите вероятность от 0 до 1.';return}
+const p=Number($('share').value)/100,q1=Number($('first').value)/100,q2=Number($('second').value)/100;
+$('predictionFeedback').textContent=Math.abs(x-(p*q1+(1-p)*q2))<.00005?'Совпадает с расчётом.':'Сравните с результатом и проверьте обе ветви.'});
+const theme=$('theme');let chosen='light';try{chosen=sessionStorage.getItem('mark-20261122-theme')==='dark'?'dark':'light'}catch{}
+function setTheme(x){document.documentElement.dataset.theme=x;theme.textContent=x==='dark'?'Светлая тема':'Тёмная тема';theme.setAttribute('aria-pressed',String(x==='dark'))}
+setTheme(chosen);
+theme.addEventListener('click',()=>{const next=document.documentElement.dataset.theme==='dark'?'light':'dark';setTheme(next);try{sessionStorage.setItem('mark-20261122-theme',next)}catch{}});
+window.addEventListener('hashchange',()=>{const target=location.hash.slice(1);if(configs[target]&&target!==mode)selectMode(target)});
+selectMode(configs[location.hash.slice(1)]?location.hash.slice(1):'lamps');
+})();
+</script>
+</body></html>

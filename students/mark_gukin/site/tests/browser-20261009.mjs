@@ -137,15 +137,35 @@ try{
   assert.equal(await run("getComputedStyle(document.documentElement).getPropertyValue('--paper').trim()"),'#fff','print background from dark theme');
   await call('Emulation.setEmulatedMedia',{media:'screen'});
   await navigate('index.html',390,844,false);
-  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Комбинаторика: метод позиций')"),true,'latest lesson on home');
+  assert.equal(await run("document.querySelector('#lessonTitle').textContent.includes('Дерево вероятностей')"),true,'latest 22 November lesson on home');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"18.10.26.html\"]')!==null"),true,'previous lesson remains in journal');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"21.10.26.html\"]')!==null"),true,'previous logarithm lesson remains in journal');
-  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"../pdf_docs/13.11.26.pdf\"]')!==null"),true,'home links to latest lesson PDF');
+  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"../pdf_docs/22.11.26.pdf\"]')!==null"),true,'home links to latest 22 November lesson PDF');
+  assert.equal(await run("document.querySelector('.lesson-actions a[href=\"22.11.26-lab.html\"]')!==null"),true,'home links to latest lab');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('04.10.2026')"),true,'history retained');
   assert.equal(await run("document.querySelector('#lessonJournal').textContent.includes('09.10.2026')"),true,'previous lesson retained');
   assert.equal(await run("document.querySelector('#lessonJournal a[href=\"13.11.26-lab.html\"]')!==null"),true,"13 Nov lab in journal");
-  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"../images/13.11.26.png\"]')!==null"),true,"13 Nov poster in journal");
+  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"22.11.26.html\"]')!==null"),true,"22 Nov canonical lesson in journal");
+  assert.equal(await run("document.querySelector('#lessonJournal a[href=\"22.11.26-lab.html\"]')!==null"),true,"22 Nov canonical lab in journal");
   await snapshot('home-mobile-light');
+  // November 22: dated lesson and live probability laboratory.
+  for(const [w,h] of [[375,812],[1440,900]]){
+    await navigate('22.11.26.html',w,h,false);
+    await navigate('22.11.26.html',w,h,true);
+    await navigate('22.11.26-lab.html#lamps',w,h,false);
+    await navigate('22.11.26-lab.html#lamps',w,h,true);
+  }
+  await navigate('22.11.26.html',390,844,false);
+  assert.equal(await run("document.querySelectorAll('#training .task').length"),10,'22 Nov ten training tasks');
+  assert.equal(await run("[...document.querySelectorAll('main math')].every(m=>m.namespaceURI==='http://www.w3.org/1998/Math/MathML')"),true,'22 Nov uses native MathML');
+  assert.equal(await run("document.querySelectorAll('#training .answer').length"),10,'22 Nov separate answer toggles');
+  await navigate('22.11.26-lab.html#lamps',390,844,false);
+  assert.equal(await run("document.getElementById('total').textContent"),'0,9740','lamp total probability');
+  assert.equal(await run("(()=>{document.querySelector('[data-mode=battery]').click();return document.getElementById('total').textContent})()"),'0,0296','battery control probability');
+  assert.equal(await run("(()=>{const e=document.getElementById('share');e.value='50';e.dispatchEvent(new Event('input',{bubbles:true}));return document.getElementById('total').textContent})()"),'0,5000','live share recomputes both branches');
+  assert.equal(await run("(()=>{document.querySelector('[data-mode=inverse]').click();return document.getElementById('total').textContent})()"),'0,0240','inverse supplier scenario');
+  assert.equal(await run("document.querySelectorAll('svg#treeSvg .drawing line').length"),6,'probability tree has complete branches');
+  await snapshot('22-nov-lab-mobile-light');
   // November 13: lesson and counting lab.
   await navigate('13.11.26.html',390,844,false);
   assert.equal(await run("document.querySelector('h1').textContent.includes('Комбинаторика')"),true,"13 Nov lesson title");
