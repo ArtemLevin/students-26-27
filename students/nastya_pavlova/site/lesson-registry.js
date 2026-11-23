@@ -5,6 +5,93 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-23",
+  "ktpRefs": [],
+  "href": "23.11.26.html",
+  "title": "От степеней к математической модели",
+  "navTitle": "От степеней к математической модели",
+  "navSubtitle": "Анастасия Павлова — учебное занятие 23 ноября 2026 года: степени, линейная функция, векторы, совместная работа и смеси. Теория, решения и десять упражнений.",
+  "summary": "Анастасия Павлова — учебное занятие 23 ноября 2026 года: степени, линейная функция, векторы, совместная работа и смеси. Теория, решения и десять упражнений.",
+  "topics": [
+    "Степенные преобразования и квадрат двучлена",
+    "Линейная функция по двум точкам и пересечение прямых",
+    "Координаты, длина и скалярное произведение векторов",
+    "Совместная работа и сумма производительностей",
+    "Выпаривание воды и концентрация смесей"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "calc_07",
+      "evidenceAnchor": "powers",
+      "relation": "touched",
+      "label": "Свойство степени степени",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "calc_10",
+      "evidenceAnchor": "powers",
+      "relation": "touched",
+      "label": "Корень как дробная степень",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "calc_14",
+      "evidenceAnchor": "powers",
+      "relation": "touched",
+      "label": "Скобки и ограничения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "func_01",
+      "evidenceAnchor": "linear",
+      "relation": "touched",
+      "label": "Линейная функция",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "vec_01",
+      "evidenceAnchor": "vectors",
+      "relation": "touched",
+      "label": "Координаты вектора",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "vec_07",
+      "evidenceAnchor": "vectors",
+      "relation": "touched",
+      "label": "Скалярное произведение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "vec_08",
+      "evidenceAnchor": "vectors",
+      "relation": "touched",
+      "label": "Угол между векторами",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "text_09",
+      "evidenceAnchor": "work",
+      "relation": "touched",
+      "label": "Совместная работа",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "text_14",
+      "evidenceAnchor": "mixtures",
+      "relation": "touched",
+      "label": "Концентрация раствора",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "23.11.26.html",
+    "pdf": "../pdf_docs/23.11.26.pdf",
+    "tex": "../tex_docs/23.11.26.tex",
+    "lab": "23.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-12",
   "ktpRefs": [],
   "href": "12.11.26.html",
