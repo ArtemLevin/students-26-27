@@ -5,6 +5,67 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-11-23",
+  "ktpRefs": [],
+  "href": "23.11.26.html",
+  "title": "Призма. Объём и поверхность",
+  "navTitle": "Призма. Объём и поверхность",
+  "navSubtitle": "Ксения Клыкова: призма, объём, боковая и полная поверхность, основания, средняя линия и изменение размеров. Конспект занятия 22 ноября 2026 года.",
+  "summary": "Ксения Клыкова: призма, объём, боковая и полная поверхность, основания, средняя линия и изменение размеров. Конспект занятия 22 ноября 2026 года.",
+  "topics": [
+    "прямая и наклонная призма: основание, боковые грани, высота",
+    "объём призмы V=Sосн·H",
+    "боковая и полная поверхность прямой призмы",
+    "площади оснований: равносторонний треугольник, правильный шестиугольник, ромб, квадрат",
+    "отсечённая призма через среднюю линию треугольника",
+    "метод отношений для площадей и объёмов",
+    "влияние изменения сторон основания и высоты на объём"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t3_prism",
+      "evidenceAnchor": "prism",
+      "relation": "practiced",
+      "label": "Прямая призма: высота и объём",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t3_surface",
+      "evidenceAnchor": "surface",
+      "relation": "practiced",
+      "label": "Боковая и полная поверхность",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t3_basic_sections",
+      "evidenceAnchor": "section",
+      "relation": "touched",
+      "label": "Отсечение призмы через среднюю линию",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t3_similarity",
+      "evidenceAnchor": "scale",
+      "relation": "practiced",
+      "label": "Изменение объёма при масштабировании",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t1_parallelogram",
+      "evidenceAnchor": "base",
+      "relation": "touched",
+      "label": "Ромб: диагонали и площадь",
+      "practiceDisposition": "none"
+    }
+  ],
+  "materials": {
+    "html": "23.11.26.html",
+    "pdf": "../pdf_docs/23.11.26.pdf",
+    "tex": "../tex_docs/23.11.26.tex",
+    "lab": "23.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-20",
   "ktpRefs": [],
   "href": "20.11.26.html",
