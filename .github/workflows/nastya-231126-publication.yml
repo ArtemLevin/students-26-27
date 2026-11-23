@@ -1,0 +1,37 @@
+name: Publish Nastya 2026-11-23 lesson (temporary)
+on:
+  push:
+    branches:
+      - site/nastya-2026-11-23-learning-page
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: site/nastya-2026-11-23-learning-page
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Transactional publication dry-run
+        run: node scripts/publish-lesson.mjs nastya_pavlova 23.11.26 --intent students/nastya_pavlova/site/data/publication-intents/2026-11-23.json --dry-run
+      - name: Run canonical lesson publisher
+        run: node scripts/publish-lesson.mjs nastya_pavlova 23.11.26 --intent students/nastya_pavlova/site/data/publication-intents/2026-11-23.json
+      - name: Verify student package
+        run: |
+          node scripts/student.mjs validate nastya_pavlova
+          node shared/student-dashboard/test-index-inventory.mjs
+          node shared/practice/validate-configs.mjs
+      - name: Commit canonical generated metadata
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/nastya_pavlova/site/lesson-registry.js students/nastya_pavlova/site/data/lessons/2026-11-23.lesson.json students/nastya_pavlova/site/data/ktp-state.json students/nastya_pavlova/site/data/mastery-state.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(nastya): publish 2026-11-23 through canonical transaction"
+            git push origin HEAD:site/nastya-2026-11-23-learning-page
+          fi
