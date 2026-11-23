@@ -5,6 +5,77 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-23",
+  "ktpRefs": [
+    "ktp-022",
+    "ktp-023"
+  ],
+  "href": "23.11.26.html",
+  "title": "Не просто скорость. Весь путь и всё время.",
+  "navTitle": "Не просто скорость. Весь путь и всё время.",
+  "navSubtitle": "23 ноября 2026 года: движение по реке, средняя скорость при равных временах и равных путях, движение протяжённых тел и обгон с учётом промежутков. Таблица S–v–t, перевод единиц и 10 развёрнутых задач на закрепление.",
+  "summary": "23 ноября 2026 года: движение по реке, средняя скорость при равных временах и равных путях, движение протяжённых тел и обгон с учётом промежутков. Таблица S–v–t, перевод единиц и 10 развёрнутых задач на закрепление.",
+  "topics": [
+    "Движение по реке: собственная скорость и скорость течения",
+    "Средняя скорость: отношение всего пути ко всему времени",
+    "Две половины времени и две половины пути: сравнение моделей",
+    "Поезда и пешеходы: движение протяжённых тел",
+    "Относительная скорость при встречном движении и догонке",
+    "Полный обгон с начальным и конечным промежутками",
+    "Перевод единиц длины, скорости и времени",
+    "Путь А: 10 развёрнутых тренировочных задач"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege11_01",
+      "evidenceAnchor": "model",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege11_05",
+      "evidenceAnchor": "river",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege11_06",
+      "evidenceAnchor": "average",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege11_02",
+      "evidenceAnchor": "extended",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege11_03",
+      "evidenceAnchor": "extended",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege11_17",
+      "evidenceAnchor": "river",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege11_19",
+      "evidenceAnchor": "river",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege11_20",
+      "evidenceAnchor": "units",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "23.11.26.html",
+    "pdf": "../pdf_docs/23.11.26.pdf",
+    "tex": "../tex_docs/23.11.26.tex",
+    "lab": "23.11.26-lab.html"
+  }
+},
+
+{
   "date": "2026-11-12",
   "ktpRefs": [
     "ktp-022"
