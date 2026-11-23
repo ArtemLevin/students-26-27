@@ -1,0 +1,113 @@
+<!doctype html><html lang="ru" data-theme="light"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Исследование средней скорости: сравните равные промежутки времени и равные части пути, изменяя скорости двух участков.">
+<title>Лаборатория средней скорости · 23.11.26 · Ярослав Гаврилов</title>
+<style>
+:root{color-scheme:light;--bg:#f4f2ed;--paper:#fffefa;--ink:#223338;--muted:#576970;--line:#c9d5d3;--accent:#086e71;--accent2:#85502f;--pale:#e7f1ef;--focus:#a24c27}
+html[data-theme=dark]{color-scheme:dark;--bg:#111e21;--paper:#1b2c30;--ink:#edf4f1;--muted:#b8cdcc;--line:#3f5b5d;--accent:#9adfe0;--accent2:#e9b38f;--pale:#294244;--focus:#ffc299}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--accent)}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.wrap{max-width:1110px;width:calc(100% - 40px);margin:auto}.skip{position:absolute;left:12px;top:-120px;background:var(--paper);padding:12px}.skip:focus{top:8px}
+header{border-bottom:1px solid var(--line);background:var(--paper)}.head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:13px;min-height:80px}.brand{font-weight:800;text-decoration:none;color:var(--ink)}.brand small{display:block;font:600 .68rem ui-monospace,monospace;color:var(--muted)}.nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.nav a{text-decoration:none}
+button{font:inherit;cursor:pointer;padding:10px 13px;border-radius:3px;min-height:44px;border:1px solid var(--line);color:var(--ink);background:var(--paper)}.accent{background:var(--accent);color:var(--paper);border-color:var(--accent)}html[data-theme=dark] .accent{color:#122629}
+.eyebrow{font:700 .78rem ui-monospace,monospace;color:var(--accent2);text-transform:uppercase;letter-spacing:.08em}
+h1,h2,h3{font-family:Georgia,serif;font-weight:500;line-height:1.2}h1{font-size:clamp(2.7rem,5vw,5rem);margin:15px 0 20px}h1 span{color:var(--accent)}h2{font-size:clamp(1.7rem,3vw,2.4rem);margin:0 0 16px}h3{font-size:1.35rem}
+.intro{max-width:740px;font-size:1.18rem;line-height:1.55}.lead{padding:55px 0 28px;border-bottom:1px solid var(--line)}
+.lab{display:grid;grid-template-columns:minmax(280px,.7fr) minmax(0,1.3fr);gap:48px;padding:44px 0 25px;align-items:start}
+.panel{background:var(--paper);padding:25px;border:1px solid var(--line)}.control{padding-bottom:23px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.control label{display:flex;justify-content:space-between;gap:10px;font-weight:700}.control output{font:700 1rem ui-monospace,monospace;color:var(--accent)}
+input[type=range]{display:block;width:100%;accent-color:var(--accent);margin-top:12px;min-height:32px;cursor:pointer}
+.switch{display:flex;gap:7px;flex-wrap:wrap}.switch button[aria-pressed=true]{background:var(--accent);color:var(--paper);border-color:var(--accent)}html[data-theme=dark] .switch button[aria-pressed=true]{color:#13282b}
+.button-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:17px}
+.readout{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:22px}.metric{border-top:2px solid var(--accent);padding:15px 5px 0}.metric span{font:.73rem ui-monospace,monospace;color:var(--muted)}.metric strong{display:block;font:500 clamp(1.2rem,2.5vw,2rem) Georgia,serif;margin:6px 0}
+.plot{background:var(--paper);border:1px solid var(--line);padding:22px;overflow:hidden}.plot svg{display:block;width:100%;height:auto}.plot text{font-family:system-ui,sans-serif}.plot .axis{stroke:var(--muted);opacity:.5}.explain{padding:21px 0;border-bottom:1px solid var(--line)}
+.formula{font:1.22rem/1.8 "Cambria Math",Georgia,serif;padding:15px 18px;border-left:3px solid var(--accent);background:var(--paper);overflow-x:auto}
+.note{background:var(--pale);padding:14px 18px;margin:18px 0}.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.84rem;color:var(--muted)}.key{width:14px;height:14px;display:inline-block;margin-right:5px;vertical-align:middle}.key.one{background:#11777b}.key.two{background:#bb9074}
+footer{border-top:1px solid var(--line);margin-top:45px;padding:20px 0;color:var(--muted);font-size:.85rem}
+@media(max-width:850px){.lab{grid-template-columns:1fr;gap:20px}.readout{gap:8px}.panel{padding:18px}}@media(max-width:470px){.wrap{width:calc(100% - 26px)}.readout{grid-template-columns:1fr 1fr}.metric:last-child{grid-column:1/-1}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style></head><body>
+<a class="skip" href="#lab">К исследованию</a>
+<header><div class="wrap head"><a class="brand" href="index.html">LEVIN / ATLAS<small>ЯРОСЛАВ ГАВРИЛОВ · МАТЕМАТИКА</small></a>
+<nav class="nav" aria-label="Навигация"><a href="23.11.26.html">К уроку</a><a href="index.html">Кабинет</a>
+<button id="theme" aria-label="Переключить тему" aria-pressed="false" type="button">◐ Тема</button></nav></div></header>
+<main id="lab" class="wrap"><section class="lead">
+<p class="eyebrow">Лаборатория · 23 ноября 2026</p>
+<h1>Что означает <span>средняя скорость?</span></h1>
+<p class="intro">Поменяйте скорости двух участков, затем переключите условие: равные <em>времена</em> или равные <em>расстояния</em>. Наблюдайте, как меняются общий путь, время и итоговая скорость.</p></section>
+<div class="lab"><section class="panel" aria-label="Параметры движения">
+<h2>Настройка движения</h2>
+<div class="control"><label for="v1">Скорость первого участка <output id="v1out" for="v1">56 км/ч</output></label><input id="v1" type="range" min="20" max="120" step="2" value="56"></div>
+<div class="control"><label for="v2">Скорость второго участка <output id="v2out" for="v2">84 км/ч</output></label><input id="v2" type="range" min="20" max="120" step="2" value="84"></div>
+<div class="control"><p id="modeLabel"><strong>Что делится пополам?</strong></p>
+<div class="switch" role="group" aria-labelledby="modeLabel"><button id="time" type="button" aria-pressed="true">Общее время</button>
+<button id="distance" type="button" aria-pressed="false">Весь путь</button></div></div>
+<div class="button-row"><button id="contrast" type="button">Контраст 40 / 100</button><button id="equal" type="button">Равные скорости</button><button id="reset" type="button">Сбросить</button></div>
+<p class="note"><strong>Эксперимент:</strong> сначала выберите скорости 40 и 100 км/ч, сравните оба режима и объясните, почему ответы не совпадают. Затем поставьте одинаковые скорости и проверьте результат.</p>
+</section>
+<section aria-label="Результат эксперимента">
+<div class="readout" aria-live="polite" aria-atomic="true">
+<div class="metric"><span>СРЕДНЯЯ СКОРОСТЬ</span><strong id="avg">70 км/ч</strong></div>
+<div class="metric"><span>ВСЁ ВРЕМЯ</span><strong id="totalTime">2 ч</strong></div>
+<div class="metric"><span>ВЕСЬ ПУТЬ</span><strong id="totalDistance">140 км</strong></div></div>
+<div class="plot"><div class="legend"><span><i class="key one"></i>Первый участок</span><span><i class="key two"></i>Второй участок</span></div>
+<svg viewBox="0 0 660 294" role="img" aria-labelledby="plotTitle plotDesc">
+<title id="plotTitle">Сравнение путей и времени на двух участках</title>
+<desc id="plotDesc">Длины цветных полос пропорциональны времени и пути на соответствующих участках. Все числа обновляются при изменении скоростей.</desc>
+<text x="20" y="42" fill="currentColor" font-size="20">Пройденный путь</text>
+<rect id="s1" x="20" y="57" width="255" height="38" fill="#11777b"/><rect id="s2" x="275" y="57" width="255" height="38" fill="#bb9074"/>
+<text id="s1label" x="147" y="83" text-anchor="middle" fill="white" font-size="16">56 км</text>
+<text id="s2label" x="402" y="83" text-anchor="middle" fill="#202a2c" font-size="16">84 км</text>
+<text x="20" y="158" fill="currentColor" font-size="20">Затраченное время</text>
+<rect id="t1" x="20" y="173" width="255" height="38" fill="#11777b"/><rect id="t2" x="275" y="173" width="255" height="38" fill="#bb9074"/>
+<text id="t1label" x="147" y="199" text-anchor="middle" fill="white" font-size="16">1 ч</text>
+<text id="t2label" x="402" y="199" text-anchor="middle" fill="#202a2c" font-size="16">1 ч</text>
+<text x="20" y="267" fill="currentColor" font-size="17" id="plotNote">Две половины времени → разные расстояния</text>
+</svg>
+</div>
+<div class="explain"><h3 id="caseTitle">При равных временах</h3><p id="explanation">Каждый участок длится одинаково. Сложите пройденные расстояния и разделите на общее время.</p>
+<div class="formula" id="formula">(56 + 84) / 2 = 70 км/ч</div></div>
+<div class="note" id="insight">При равных временах средняя скорость равна среднему арифметическому двух скоростей.</div>
+</section></div>
+<section class="explain"><h2>Что важно запомнить</h2><p>Средняя скорость всегда вычисляется по одной формуле: <strong>весь путь / всё время</strong>. Меняются только исходные данные таблицы. В режиме равных времён две части времени фиксированы по 1 часу; в режиме равных расстояний — два участка маршрута фиксированы по 60 км. Это масштабированные примеры: выбор общей продолжительности или длины не влияет на вычисленную среднюю скорость.</p></section>
+<footer>Лёвин Артём Александрович · эксклюзивно для Ярослава Гаврилова</footer></main>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id);
+const state={v1:56,v2:84,mode:'time'};
+const fmt=n=>Number(n.toFixed(2)).toLocaleString('ru-RU',{maximumFractionDigits:2});
+function setRect(id,x,w){$(id).setAttribute('x',x.toFixed(2));$(id).setAttribute('width',w.toFixed(2))}
+function setLabel(id,x,str){$(id).setAttribute('x',x.toFixed(2));$(id).textContent=str}
+function update(){
+state.v1=Number($('v1').value);state.v2=Number($('v2').value);
+const time=state.mode==='time';
+const s1=time?state.v1:60,s2=time?state.v2:60;
+const t1=time?1:60/state.v1,t2=time?1:60/state.v2;
+const sumS=s1+s2,sumT=t1+t2,avg=sumS/sumT;
+$('v1out').textContent=fmt(state.v1)+' км/ч';$('v2out').textContent=fmt(state.v2)+' км/ч';
+$('avg').textContent=fmt(avg)+' км/ч';$('totalTime').textContent=fmt(sumT)+' ч';$('totalDistance').textContent=fmt(sumS)+' км';
+$('time').setAttribute('aria-pressed',String(time));$('distance').setAttribute('aria-pressed',String(!time));
+const render=(a,b,r1,r2,l1,l2,unit)=>{
+let w1=510*a/(a+b),w2=510-w1;
+setRect(r1,20,w1);setRect(r2,20+w1,w2);
+setLabel(l1,20+w1/2,fmt(a)+' '+unit);setLabel(l2,20+w1+w2/2,fmt(b)+' '+unit);
+};
+render(s1,s2,'s1','s2','s1label','s2label','км');
+render(t1,t2,'t1','t2','t1label','t2label','ч');
+$('caseTitle').textContent=time?'При равных временах':'При равных расстояниях';
+$('plotNote').textContent=time?'Две половины времени → разные расстояния':'Две половины пути → разные времена';
+$('explanation').textContent=time?'Каждый участок длится по часу, поэтому их расстояния пропорциональны скоростям.':'Длина каждого участка равна 60 км; более медленный участок длится дольше.';
+$('formula').textContent=time?'('+fmt(state.v1)+' + '+fmt(state.v2)+') / 2 = '+fmt(avg)+' км/ч':'2 · '+fmt(state.v1)+' · '+fmt(state.v2)+' / ('+fmt(state.v1)+' + '+fmt(state.v2)+') = '+fmt(avg)+' км/ч';
+$('insight').textContent=state.v1===state.v2?'При одинаковых скоростях обе средние скорости совпадают с каждой из них.':time?'Равные времена → среднее арифметическое. Переключите режим и сравните результат.':'Равные расстояния → среднее гармоническое. Медленный участок занимает больше времени, поэтому средняя скорость ниже, чем при равных временах.';
+}
+$('v1').addEventListener('input',update);$('v2').addEventListener('input',update);
+$('time').addEventListener('click',()=>{state.mode='time';update()});
+$('distance').addEventListener('click',()=>{state.mode='distance';update()});
+$('contrast').addEventListener('click',()=>{$('v1').value=40;$('v2').value=100;update()});
+$('equal').addEventListener('click',()=>{$('v1').value=70;$('v2').value=70;update()});
+$('reset').addEventListener('click',()=>{$('v1').value=56;$('v2').value=84;state.mode='time';update()});
+const theme=$('theme'),root=document.documentElement;try{const saved=localStorage.getItem('jaroslav-lesson-theme');if(saved==='dark'||saved==='light')root.dataset.theme=saved}catch{}
+function sync(){theme.setAttribute('aria-pressed',String(root.dataset.theme==='dark'));theme.textContent=root.dataset.theme==='dark'?'☀ Светлая тема':'◐ Тёмная тема'}
+theme.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('jaroslav-lesson-theme',root.dataset.theme)}catch{}sync()});sync();update();
+})();
+</script></body></html>
