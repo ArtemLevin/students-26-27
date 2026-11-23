@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f5f1">
+  <meta name="description" content="Интерактивное ревью по механике для Софии Лузяниной: проекции ускорения и дальность полёта над наклонной плоскостью. 3D-модели, анимация, самостоятельная практика.">
+  <title>Ревью домашней работы · Механика · 23.11.26</title>
+<style>
+  :root { --bg:#f6f7f4; --paper:#fff; --ink:#172f38; --text:#364d53; --muted:#70838a; --line:#dce5e2; --teal:#006e72; --mint:#dcf1e9; --blue:#3076b5; --amber:#e5a555; --orange:#bb5c3e; --violet:#8d65c8; --shadow:0 14px 36px rgba(38,69,65,.055); --radius:18px; }
+  * {box-sizing:border-box}
+  html {scroll-behavior:smooth}
+  body {margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.55}
+  button,input {font:inherit}
+  button {cursor:pointer}
+  button:focus-visible, input:focus-visible, summary:focus-visible {outline:3px solid #63a2c6;outline-offset:3px}
+  .topbar {height:68px;background:rgba(255,255,255,.95);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(17px,3vw,45px);position:sticky;top:0;z-index:30;backdrop-filter:blur(12px)}
+  .brand {display:flex;align-items:center;gap:13px;font-weight:790;letter-spacing:-.015em}
+  .brand-mark {display:grid;place-items:center;width:35px;height:35px;background:var(--teal);border-radius:11px;color:white;font-family:Georgia,serif;font-size:19px}
+  .brand small {display:block;color:var(--muted);font-size:11px;letter-spacing:.085em;font-weight:750;text-transform:uppercase}
+  .top-meta {display:flex;gap:12px;align-items:center;font-size:13px;color:var(--muted)}
+  .top-meta strong {color:var(--ink)}
+  .top-chip {border:1px solid #cde1dc;background:#f2f9f5;color:#477369;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .shell {max-width:1670px;margin:auto;padding:26px clamp(14px,2.7vw,42px) 66px;display:grid;grid-template-columns:184px minmax(0,1fr);gap:29px}
+  .sidebar {align-self:start;position:sticky;top:93px;padding-top:12px}
+  .nav-label {font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#799191;margin:0 0 10px 12px}
+  .nav-btn {display:flex;gap:11px;align-items:center;width:100%;text-align:left;padding:13px 11px;border:1px solid transparent;border-radius:12px;background:transparent;color:#50656a;font-size:13px;font-weight:710;margin-bottom:7px;transition:.18s ease}
+  .nav-btn.active {background:#eaf5f2;color:#075f60;border-color:#cfe9df}
+  .nav-btn:hover {background:#edf3f0}
+  .nav-num {background:white;color:#627a79;border:1px solid #dbe7e3;border-radius:8px;width:34px;height:32px;display:grid;place-items:center;flex-shrink:0;font-size:12px}
+  .active .nav-num {background:#0b7170;border-color:#0b7170;color:white}
+  .sidebar-foot {border-top:1px solid var(--line);margin:25px 9px 0;padding-top:16px;color:var(--muted);font-size:12px}
+  .help-side {border:1px solid #dce7df;border-radius:13px;padding:13px;margin:22px 0 0;background:#fbfdfb;font-size:12px;color:#536a64}
+  .help-side strong {display:block;font-size:12px;color:#345750;margin-bottom:5px}
+  .hero {padding:7px 0 22px}
+  .eyebrow {font-size:11px;color:var(--teal);font-weight:850;letter-spacing:.19em;text-transform:uppercase;margin-bottom:11px}
+  .hero h1 {font-size:clamp(29px,3vw,46px);font-weight:750;letter-spacing:-.048em;line-height:1.12;max-width:970px;margin:0 0 12px}
+  .hero p {margin:0;color:#647a7b;font-size:15px;max-width:780px}
+  .lesson-frame {display:grid;grid-template-columns:minmax(350px,.86fr) minmax(490px,1.14fr);align-items:start;gap:22px}
+  .reading {min-width:0}
+  .task-switcher {display:flex;align-items:center;gap:10px;margin:0 0 15px}
+  .task-switcher button {border:1px solid var(--line);background:white;color:#425d5e;border-radius:11px;font-weight:750;padding:10px 15px;font-size:13px}
+  .task-switcher button[aria-selected="true"] {border-color:#badbd0;background:#e1f2eb;color:var(--teal)}
+  .lesson {display:none}
+  .lesson.active {display:block}
+  .card {border:1px solid var(--line);background:var(--paper);border-radius:var(--radius);padding:24px 26px;box-shadow:var(--shadow);margin-bottom:16px}
+  .task-heading {display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:18px}
+  .task-no {font-size:12px;color:var(--teal);font-weight:800;letter-spacing:.11em;text-transform:uppercase}
+  .task-heading h2 {font-size:clamp(21px,2vw,27px);letter-spacing:-.034em;line-height:1.21;margin:7px 0 0}
+  .tag {border-radius:30px;padding:6px 10px;background:#edf6f0;color:#386956;font-size:11px;font-weight:800;white-space:nowrap}
+  .section-title {font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:830;color:#568081;margin:0 0 12px}
+  .card p {margin:0 0 12px;color:var(--text);font-size:14px;line-height:1.65}
+  .card p:last-child {margin-bottom:0}
+  .term {font-weight:750;color:#203f44}
+  .error-box {background:#fcf2ec;border-left:3px solid #cb7148;border-radius:0 10px 10px 0;padding:13px 15px;margin:17px 0;color:#754332;font-size:14px;line-height:1.62}
+  .error-box strong {color:#9b5035}
+  .idea-box {background:#edf8f4;border-left:3px solid #0f8b7e;border-radius:0 10px 10px 0;padding:13px 15px;margin:17px 0;color:#255e55;font-size:14px;line-height:1.62}
+  .step {position:relative;padding:12px 0 16px 31px;border-left:1px solid #d4e3df;margin-left:8px}
+  .step:last-child {border-left-color:transparent;padding-bottom:0}
+  .step-index {position:absolute;left:-12px;top:12px;width:24px;height:24px;background:#dff0eb;border:2px solid #fff;box-shadow:0 0 0 1px #bedbd2;border-radius:50%;color:#146d66;font-size:11px;display:grid;place-items:center;font-weight:850}
+  .step h3 {font-size:15px;margin:0 0 6px;font-weight:750}
+  .step p {font-size:13.5px}
+  .mathline {padding:12px 12px;background:#f5f8f7;border:1px solid #e4ebea;border-radius:10px;margin:10px 0;font:17px/1.8 Georgia,"Times New Roman",serif;color:#183f46;overflow-wrap:anywhere}
+  .mathline small {font:12px/1.5 Inter,system-ui,sans-serif;color:#6c8785}
+  .mathline strong {color:#066b6a}
+  .formula-row {display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+  .formula-row .mathline {margin:0;font-size:16px;padding:10px}
+  .result {border-radius:12px;background:#e5f4ec;border:1px solid #bddccf;color:#225f4d;padding:13px 16px;margin-top:13px;font-size:14px;line-height:1.6}
+  .result strong {color:#12684f}
+  .practice {background:linear-gradient(145deg,#fff,#f9fdfb);border-color:#c8e3d7}
+  .answer-list {display:flex;flex-direction:column;gap:8px;margin-top:15px}
+  .answer {display:block;border-radius:10px;padding:12px 14px;text-align:left;color:#29484b;border:1px solid #d8e8e2;background:white;font-weight:600;font-size:13px;transition:.15s}
+  .answer:hover {border-color:#8ebbad;background:#f7fcf9}
+  .answer.correct {border-color:#208e65;background:#e4f6e9}
+  .answer.wrong {border-color:#c48267;background:#fff1ed}
+  .practice-feedback {margin-top:13px;min-height:25px;color:#567a75;font-size:13px;line-height:1.6}
+  .practice-feedback.good {color:#16754f}
+  .practice-feedback.bad {color:#a34f3d}
+  details {border:1px solid #dfe8e5;border-radius:10px;background:#fbfdfc;margin-top:13px;overflow:hidden}
+  details summary {padding:11px 13px;font-size:13px;font-weight:770;color:#396869;cursor:pointer}
+  details .detail-content {padding:0 13px 13px;font-size:13px;color:#51666a;line-height:1.7}
+  .studio {position:sticky;top:89px;min-width:0}
+  .studio-card {overflow:hidden;border:1px solid #cfdedb;background:white;border-radius:19px;box-shadow:0 16px 38px rgba(42,69,64,.09)}
+  .studio-top {display:flex;justify-content:space-between;gap:10px;align-items:center;padding:15px 18px;background:#fff}
+  .studio-title {font-size:14px;font-weight:830;color:#1e484c}
+  .studio-sub {font-size:12px;color:#86959a;margin-top:1px}
+  .live-badge {font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.1em;color:#12756a;background:#def3eb;border:1px solid #c1e7d8;border-radius:30px;padding:6px 9px;white-space:nowrap}
+  .canvas-wrap {position:relative;background:linear-gradient(165deg,#f4faf8,#e5f1ed 58%,#f7f9f6);height:min(50vh,440px);min-height:315px;overflow:hidden}
+  #scene {display:block;width:100%;height:100%;touch-action:none;cursor:grab;outline:none}
+  #scene.dragging {cursor:grabbing}
+  .canvas-hint {position:absolute;top:13px;left:14px;pointer-events:none;background:rgba(255,255,255,.82);border:1px solid rgba(225,233,230,.9);padding:6px 9px;border-radius:8px;color:#426465;font-size:11px}
+  .canvas-legend {position:absolute;bottom:14px;left:14px;pointer-events:none;display:flex;gap:11px;flex-wrap:wrap;font-size:10px;color:#41656b}
+  .legend-dot {width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:5px;vertical-align:middle}
+  .playhead {padding:11px 17px 12px;background:#f9fbfa;border-bottom:1px solid #e6eeeb}
+  .time-row {display:flex;align-items:center;gap:12px}
+  .play-btn {background:#086e6b;color:white;border:0;min-width:91px;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:800}
+  .play-btn:hover {background:#075a5a}
+  .small-btn {border:1px solid #d8e8e4;background:white;border-radius:9px;min-width:36px;height:35px;color:#496b69;font-size:16px}
+  .time-display {margin-left:auto;font-size:12px;color:#58706f;font-variant-numeric:tabular-nums;white-space:nowrap}
+  input[type=range] {accent-color:#087975;cursor:pointer;width:100%;height:23px;display:block}
+  .view-row {display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:9px}
+  .view-buttons {display:flex;gap:6px}
+  .mini-btn {background:white;border:1px solid #dce9e4;color:#56706d;padding:5px 8px;border-radius:8px;font-size:11px;font-weight:710}
+  .mini-btn:hover {background:#eaf6ef;border-color:#a7d4c7}
+  .check-toggle {display:inline-flex;align-items:center;gap:5px;color:#486763;font-size:11px;white-space:nowrap;cursor:pointer}
+  .check-toggle input {accent-color:#177d77}
+  .controls-panel {padding:15px 19px 17px;border-bottom:1px solid #e4ebe8}
+  .controls-head {display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px}
+  .controls-head strong {font-size:12px;color:#2a5b5a;text-transform:uppercase;letter-spacing:.09em}
+  .reset-settings {background:transparent;border:0;color:#56847b;font-size:11px;text-decoration:underline;text-underline-offset:3px}
+  .slider-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .slider-label {display:flex;justify-content:space-between;align-items:center;gap:5px;color:#55716f;font-size:11px}
+  .slider-label output {font-size:12px;color:#204b4a;font-weight:850;font-variant-numeric:tabular-nums}
+  .readout-grid {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:#e8efed}
+  .reading-cell {background:#fff;padding:11px 7px 12px;text-align:center;min-width:0}
+  .reading-cell span {display:block;text-transform:uppercase;letter-spacing:.06em;font-size:9px;font-weight:850;color:#81918d;white-space:nowrap}
+  .reading-cell strong {font:700 clamp(14px,1.6vw,20px)/1.4 Georgia,serif;color:#164e51;display:block;margin-top:3px;white-space:nowrap}
+  .reading-cell em {display:block;font-size:10px;color:#78908c;font-style:normal}
+  .statusline {padding:11px 16px;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:13px}
+  .statusline span:first-child {font-size:12px;color:#617d78;line-height:1.45}
+  .status-chip {background:#f0f3f2;border-radius:20px;color:#607473;padding:5px 9px;font-size:11px;font-weight:750;white-space:nowrap}
+  .status-chip.hit {background:#ddf6e5;color:#176b45}
+  .graph-card {margin-top:15px;border:1px solid var(--line);border-radius:17px;background:white;padding:15px 17px 14px;box-shadow:var(--shadow)}
+  .graph-heading {display:flex;align-items:center;justify-content:space-between;gap:8px;color:#32575a;font-size:13px;font-weight:750;margin-bottom:5px}
+  .graph-heading small {color:#90a3a0;font-size:11px;font-weight:600}
+  #graph {width:100%;height:154px;display:block}
+  .graph-foot {font-size:11px;color:#6c8182;line-height:1.5}
+  .page-footer {padding:23px 0 5px;color:#768b8a;border-top:1px solid var(--line);margin-top:24px;font-size:12px;display:flex;justify-content:space-between;gap:13px;flex-wrap:wrap}
+  .page-footer strong {color:#516c69}
+  .sr-only {position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  @media(max-width:1330px) {.shell {grid-template-columns:155px 1fr;gap:16px}.lesson-frame {grid-template-columns:minmax(320px,.9fr) minmax(440px,1.1fr);gap:15px}.card {padding:20px 21px}}
+  @media(max-width:1060px) {.shell {display:block;padding:18px 20px 60px}.sidebar {position:relative;top:auto;padding:0;display:flex;gap:7px;margin-bottom:19px}.sidebar .nav-label,.sidebar-foot,.help-side {display:none}.nav-btn {max-width:240px}.lesson-frame {display:flex;flex-direction:column}.studio {position:relative;top:auto;order:-1;width:100%;margin-bottom:14px}.reading {width:100%}.canvas-wrap {height:460px}.hero {padding-bottom:19px}.task-switcher {display:none}}
+  @media(max-width:620px) {.topbar{height:60px;padding:0 15px}.top-meta{display:none}.brand {font-size:13px}.shell {padding:14px 12px 42px}.hero h1{font-size:30px}.hero p{font-size:13px}.nav-btn{font-size:12px;padding:9px;flex:1;max-width:none}.nav-num{width:29px;height:29px}.card{padding:18px 18px}.formula-row{grid-template-columns:1fr}.canvas-wrap{height:350px;min-height:295px}.slider-grid{gap:8px}.controls-panel{padding:13px}.slider-label{font-size:10px}.reading-cell{padding:9px 2px}.reading-cell span{font-size:8px}.reading-cell strong{font-size:14px}.time-row{gap:6px}.view-row{gap:5px}.canvas-legend{gap:7px}.statusline{align-items:flex-start}.task-heading h2{font-size:23px}}
+  @media(prefers-reduced-motion:reduce) {html {scroll-behavior:auto}*,*::before,*::after {transition-duration:0.01ms!important;animation-duration:0.01ms!important}}
+  @media print {.topbar,.sidebar,.studio,.task-switcher,.answer-list,.practice-feedback,.view-row{display:none!important}.shell{display:block}.lesson{display:block!important;break-before:page}.reading{width:100%}.card{box-shadow:none;break-inside:avoid}body{background:#fff}.page-footer{break-before:page}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="brand-mark" aria-hidden="true">φ</span><span>Ревью домашней работы<small>Физика · механика</small></span></div>
+  <div class="top-meta"><span>23 ноября 2026</span><span class="top-chip">Интерактивный практикум</span><strong>София Лузянина</strong></div>
+</header>
+<div class="shell">
+  <nav class="sidebar" aria-label="Навигация по заданиям">
+    <div class="nav-label">Задания</div>
+    <button type="button" class="nav-btn active" data-task="1" aria-current="page"><span class="nav-num">01</span><span>Проекции<br>ускорения</span></button>
+    <button type="button" class="nav-btn" data-task="4"><span class="nav-num">04</span><span>Дальность<br>полёта</span></button>
+    <div class="help-side"><strong>Как работать</strong>Сначала прочитайте разбор ошибки, затем запустите модель. Поворачивайте сцену, меняйте исходные данные и выполните тренировку.</div>
+    <div class="sidebar-foot">Лёвин Артём Александрович<br>Эксклюзивно для Софии Лузяниной</div>
+  </nav>
+  <main>
+    <div class="hero"><div class="eyebrow">Учебное пособие / 23.11.26</div><h1>Движение над наклонной плоскостью</h1><p>Ревью домашней работы с пространственными моделями, разложением векторов и анимацией полёта. Чертёж и формулы связаны: каждый параметр можно изменить и сразу увидеть физический результат.</p></div>
+    <div class="lesson-frame">
+      <div class="reading">
+        <div class="task-switcher" role="tablist" aria-label="Выбор задания">
+          <button type="button" data-task="1" role="tab" aria-selected="true">Задание № 1</button>
+          <button type="button" data-task="4" role="tab" aria-selected="false">Задание № 4</button>
+        </div>
+        <section class="lesson active" id="lesson-1" aria-labelledby="heading-1">
+          <article class="card">
+            <div class="task-heading"><div><div class="task-no">Задание № 1</div><h2 id="heading-1">Проекции скорости и ускорения</h2></div><span class="tag">Основы</span></div>
+            <div class="section-title">Условие</div>
+            <p>Шайба стартует со скоростью <span class="term">8 м/с</span> под углом <span class="term">β = 30°</span> к линии AB. Плоскость наклонена под углом <span class="term">α = 30°</span>. Найти <i>v₀ₓ</i>, <i>v₀ᵧ</i>, <i>aₓ</i>, <i>aᵧ</i>, <i>x(t)</i> и <i>y(t)</i> для осей вдоль плоскости и по нормали к ней.</p>
+            <div class="section-title" style="margin-top:20px">Разбор решения</div>
+            <p><strong>Последний правильный шаг:</strong> София верно разложила начальную скорость: <span class="term">v₀ₓ = 4√3 м/с</span> и <span class="term">v₀ᵧ = 4 м/с</span>.</p>
+            <div class="error-box"><strong>Первая ошибка.</strong> Далее были приняты aₓ = 0 и aᵧ = −5 м/с². Для осей, повёрнутых вместе со склоном, ускорение свободного падения имеет обе ненулевые проекции.</div>
+            <div class="idea-box"><strong>Главный принцип.</strong> Сила тяжести всегда направлена вертикально вниз. Ось Ox направляем вдоль склона вниз, а Oy — по внешней нормали. На 3D-сцене включите «Векторы» и поверните модель сбоку.</div>
+          </article>
+          <article class="card">
+            <div class="section-title">Исправленное решение</div>
+            <div class="step"><span class="step-index">1</span><h3>Выбираем оси</h3><p>Наклонную ось <i>Ox</i> направляем от A к B вниз по плоскости. Ось <i>Oy</i> перпендикулярна плоскости и направлена наружу.</p></div>
+            <div class="step"><span class="step-index">2</span><h3>Находим проекции скорости</h3>
+              <div class="formula-row"><div class="mathline">v₀ₓ = 8 cos 30°<br><strong>= 4√3 м/с</strong></div><div class="mathline">v₀ᵧ = 8 sin 30°<br><strong>= 4 м/с</strong></div></div>
+              <p>Угол β отсчитывается от линии склона, поэтому косинус соответствует оси Ox, синус — нормали Oy.</p>
+            </div>
+            <div class="step"><span class="step-index">3</span><h3>Находим проекции ускорения</h3>
+              <div class="formula-row"><div class="mathline">aₓ = g sin α<br><strong>= +5 м/с²</strong></div><div class="mathline">aᵧ = −g cos α<br><strong>= −5√3 м/с²</strong></div></div>
+              <p>Положительная проекция вдоль склона ускоряет движение в сторону B. Отрицательная нормальная составляющая направлена к поверхности.</p>
+            </div>
+            <div class="step"><span class="step-index">4</span><h3>Записываем уравнения движения</h3>
+              <div class="mathline">x(t) = 4√3 · t + (5/2) · t²<br><strong>y(t) = 4 · t − (5√3/2) · t²</strong></div>
+              <p>Начальные координаты равны нулю. При смене направления оси Ox знаки обеих проекций <i>v₀ₓ</i> и <i>aₓ</i> меняются.</p>
+            </div>
+            <div class="result"><strong>Вывод.</strong> Начальная скорость была разложена правильно; ошибка возникла при проецировании тяжести. Важно сначала повернуть систему координат, затем составлять уравнения движения.</div>
+          </article>
+          <article class="card practice">
+            <div class="section-title">Тренировка · задание № 1</div>
+            <p>Шайбу запускают со скоростью 10 м/с под углом 60° к склону, убывающему под углом 30°. Найдите проекции начальной скорости, ускорения и запишите <i>x(t)</i>, <i>y(t)</i> при g = 10 м/с².</p>
+            <p><strong>Проверочный вопрос:</strong> какая пара проекций ускорения будет правильной?</p>
+            <div class="answer-list" data-quiz="1"><button class="answer" data-choice="a">aₓ = 0; aᵧ = −10</button><button class="answer" data-choice="b">aₓ = +5; aᵧ = −5√3</button><button class="answer" data-choice="c">aₓ = +5√3; aᵧ = −5</button></div>
+            <div class="practice-feedback" id="feedback-1" aria-live="polite">Выберите один вариант.</div>
+            <details><summary>Показать полное решение тренировочной задачи</summary><div class="detail-content"><div class="mathline">v₀ₓ = 10 cos 60° = 5 м/с<br>v₀ᵧ = 10 sin 60° = 5√3 м/с<br>aₓ = +5 м/с²; aᵧ = −5√3 м/с²<br>x(t) = 5t + 2,5t²<br>y(t) = 5√3t − (5√3/2)t²</div>Для проверки можно в 3D-модели установить v₀ = 10 м/с и β = 60°.</div></details>
+          </article>
+        </section>
+        <section class="lesson" id="lesson-4" aria-labelledby="heading-4">
+          <article class="card">
+            <div class="task-heading"><div><div class="task-no">Задание № 4</div><h2 id="heading-4">Угол запуска по дальности</h2></div><span class="tag">Применение</span></div>
+            <div class="section-title">Условие</div>
+            <p>Шайба вылетает со скоростью <span class="term">10 м/с</span> над наклонной поверхностью <span class="term">α = 30°</span> и возвращается на линию AB на расстоянии <span class="term">20 м</span> вдоль склона. Определите угол запуска <span class="term">0° &lt; β &lt; 90°</span>.</p>
+            <div class="section-title" style="margin-top:20px">Разбор решения</div>
+            <p>София распознала необходимость найти угол по дальности, но использовала формулу для полёта на горизонтальный уровень.</p>
+            <div class="error-box"><strong>Первая ошибка.</strong> Подстановка g sin α вместо g в выражение <span class="term">L = v₀² sin(2β)/g</span> не учитывает наклонную поверхность и ускорение вдоль AB.</div>
+            <div class="idea-box"><strong>Главный принцип.</strong> Сначала определяем момент, в который нормальная координата y(t) снова станет нулём. Затем по уравнению x(t) находим дальность вдоль плоскости. На сцене точка B — заданная цель (20 м).</div>
+          </article>
+          <article class="card">
+            <div class="section-title">Исправленное решение</div>
+            <div class="step"><span class="step-index">1</span><h3>Строим физическую модель</h3><p>Ось Ox направлена вниз по склону, Oy — по внешней нормали. Угол β измеряется <strong>от линии склона</strong>. Для рассматриваемого случая θ = β − α — угол скорости к горизонту.</p></div>
+            <div class="step"><span class="step-index">2</span><h3>Находим время возвращения</h3><p>Нормальная координата при возвращении равна нулю: <i>y(t) = 0</i>. Ненулевой корень даёт время полёта.</p><div class="mathline">y(t) = v₀ sin β · t − ½g cos α · t²<br><strong>t = 2v₀ sin β / (g cos α)</strong></div></div>
+            <div class="step"><span class="step-index">3</span><h3>Вычисляем дальность</h3><div class="mathline">L = v₀ cos β · t + ½g sin α · t²<br><strong>L = [v₀²/(g cos²α)] · [sin(2β − α) + sin α]</strong></div><p>Слагаемое ½g sin α · t² существенно: по склону также действует проекция тяжести.</p></div>
+            <div class="step"><span class="step-index">4</span><h3>Решаем уравнение для угла</h3><div class="mathline">20 = (40/3) · [sin(2β − 30°) + 1/2]<br>sin(2β − 30°) = 1<br><strong>β = 60°</strong></div><p>При β = 60° время полёта t = 2 с, дальность x(t) = 5·2 + 2,5·2² = 20 м — совпадает с заданной.</p></div>
+            <div class="result"><strong>Вывод.</strong> Верный угол запуска — 60° к склону, или 30° к горизонтали. На модели меняйте β: цель совпадает с точкой приземления только при подходящем угле.</div>
+          </article>
+          <article class="card practice">
+            <div class="section-title">Тренировка · задание № 4</div>
+            <p>При v₀ = 10 м/с и наклоне плоскости вниз на 30° найдите угол запуска к склону, обеспечивающий дальность <strong>40/3 м</strong> при 0° &lt; β &lt; 90°.</p>
+            <p><strong>Проверочный вопрос:</strong> какой угол получается?</p>
+            <div class="answer-list" data-quiz="4"><button class="answer" data-choice="a">β = 45°</button><button class="answer" data-choice="b">β = 60°</button><button class="answer" data-choice="c">β = 30°</button></div>
+            <div class="practice-feedback" id="feedback-4" aria-live="polite">Выберите один вариант.</div>
+            <details><summary>Показать решение тренировочной задачи</summary><div class="detail-content"><div class="mathline">40/3 = (40/3) · [sin(2β − 30°) + 1/2]<br>sin(2β − 30°) = 1/2<br><strong>β = 30°</strong> (в интервале 0° &lt; β &lt; 90°)</div>Другая формальная ветвь даёт β = 90°, что исключено условием. Проверьте модель, установив β = 30°.</div></details>
+          </article>
+        </section>
+      </div>
+      <aside class="studio" aria-label="Интерактивная 3D-лаборатория">
+        <div class="studio-card">
+          <div class="studio-top"><div><div class="studio-title" id="studio-title">3D-модель: проекции</div><div class="studio-sub">Наклонная система координат · свободный полёт</div></div><span class="live-badge">3D · Offline</span></div>
+          <div class="canvas-wrap"><canvas id="scene" tabindex="0" aria-label="Интерактивная трёхмерная модель. Перемещайте указатель с нажатой кнопкой для вращения, используйте колесо для приближения."></canvas><div class="canvas-hint">Вращение: перетаскивание · масштаб: колесо или два пальца</div><div class="canvas-legend"><span><i class="legend-dot" style="background:#09837d"></i>Траектория</span><span><i class="legend-dot" style="background:#317db8"></i>Скорость</span><span><i class="legend-dot" style="background:#c16b47"></i>Тяжесть</span></div></div>
+          <div class="playhead"><div class="time-row"><button class="play-btn" id="play-btn" type="button">▶ Пуск</button><button class="small-btn" id="restart-btn" type="button" aria-label="Вернуть в начало" title="В начало">↺</button><label for="speed" class="sr-only">Скорость анимации</label><select id="speed" class="mini-btn" aria-label="Скорость анимации"><option value="0.5">0,5×</option><option value="1" selected>1×</option><option value="1.5">1,5×</option><option value="2">2×</option></select><span class="time-display" id="time-display">0,00 / 0,92 с</span></div><input type="range" id="timeline" aria-label="Время полёта" min="0" max="1000" step="1" value="0"><div class="view-row"><div class="view-buttons"><button type="button" class="mini-btn" data-view="iso">Изометрия</button><button type="button" class="mini-btn" data-view="side">Сбоку</button><button type="button" class="mini-btn" data-view="top">Сверху</button></div><label class="check-toggle"><input type="checkbox" id="show-vectors" checked> Векторы</label><label class="check-toggle"><input type="checkbox" id="show-projection" checked> Проекция</label></div></div>
+          <div class="controls-panel"><div class="controls-head"><strong>Эксперимент · измените условия</strong><button class="reset-settings" id="defaults-btn" type="button">Вернуть условие</button></div><div class="slider-grid"><div><div class="slider-label"><label for="alpha">Наклон α</label><output id="alpha-out">30°</output></div><input type="range" id="alpha" min="10" max="55" step="1" value="30"></div><div><div class="slider-label"><label for="beta">Запуск β</label><output id="beta-out">30°</output></div><input type="range" id="beta" min="5" max="85" step="1" value="30"></div><div><div class="slider-label"><label for="v0">Скорость v₀</label><output id="v0-out">8 м/с</output></div><input type="range" id="v0" min="4" max="16" step="0.5" value="8"></div></div></div>
+          <div class="readout-grid"><div class="reading-cell"><span>v₀ₓ</span><strong id="v0x-val">6,93</strong><em>м/с</em></div><div class="reading-cell"><span>v₀ᵧ</span><strong id="v0y-val">4,00</strong><em>м/с</em></div><div class="reading-cell"><span>aₓ</span><strong id="ax-val">+5,00</strong><em>м/с²</em></div><div class="reading-cell"><span>aᵧ</span><strong id="ay-val">−8,66</strong><em>м/с²</em></div><div class="reading-cell"><span>Время полёта</span><strong id="tf-val">0,92</strong><em>с</em></div><div class="reading-cell"><span>Дальность</span><strong id="landing-val">8,53</strong><em>м по склону</em></div><div class="reading-cell"><span>Угол θ</span><strong id="theta-val">0°</strong><em>к горизонту</em></div><div class="reading-cell"><span>Время t</span><strong id="current-val">0,00</strong><em>с</em></div></div>
+          <div class="statusline"><span id="status-text">Плоскость понижается вправо. Движение рассчитано в наклонных осях.</span><span class="status-chip" id="status-chip">Режим № 1</span></div>
+        </div>
+        <div class="graph-card"><div class="graph-heading">Координаты во времени <small>x(t) и y(t) относительно склона</small></div><canvas id="graph" aria-label="Графики x(t) и y(t) для выбранного эксперимента"></canvas><div class="graph-foot">График обновляется при изменении α, β и v₀. Вертикальная метка движется синхронно с шайбой.</div></div>
+      </aside>
+    </div>
+    <footer class="page-footer"><span><strong>Физика · Ревью домашней работы</strong> · 23.11.2026</span><span>Лёвин Артём Александрович · эксклюзивно для Софии Лузяниной</span><span>3D-модель работает без подключения к интернету.</span></footer>
+  </main>
+</div>
+<script>
+(()=>{'use strict';
+  const $=id=>document.getElementById(id);
+  const canvas=$('scene'),ctx=canvas.getContext('2d'),graph=$('graph'),gctx=graph.getContext('2d');
+  const DEG=Math.PI/180, G=10;
+  const presets={1:{alpha:30,beta:30,v0:8},4:{alpha:30,beta:60,v0:10}};
+  const s={task:1,alpha:30,beta:30,v0:8,playing:false,t:0,speed:1,viewYaw:-0.27,viewPitch:0.34,zoom:1,showVectors:true,showProjection:true,drag:false};
+  let model=null,prevTS=null,cw=0,ch=0,gw=0,gh=0;
+  const fmt=(n,k=2)=>Number(n).toFixed(k).replace('.',',').replace('-','−');
+  const round=(n,k=2)=>+n.toFixed(k);
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  const add=(a,b)=>({x:a.x+b.x,y:a.y+b.y,z:a.z+b.z});
+  const sub=(a,b)=>({x:a.x-b.x,y:a.y-b.y,z:a.z-b.z});
+  const mul=(a,k)=>({x:a.x*k,y:a.y*k,z:a.z*k});
+  const dot=(a,b)=>a.x*b.x+a.y*b.y+a.z*b.z;
+  const cross=(a,b)=>({x:a.y*b.z-a.z*b.y,y:a.z*b.x-a.x*b.z,z:a.x*b.y-a.y*b.x});
+  const norm=a=>Math.hypot(a.x,a.y,a.z);
+  const unit=a=>mul(a,1/Math.max(1e-10,norm(a)));
+  const point=(u,h,w=0)=>add(add(mul(model.ex,u),mul(model.ey,h)),{x:0,y:0,z:w});
+  function compute(){
+    const ar=s.alpha*DEG,br=s.beta*DEG,ex={x:Math.cos(ar),y:-Math.sin(ar),z:0},ey={x:Math.sin(ar),y:Math.cos(ar),z:0};
+    const vx=s.v0*Math.cos(br),vy=s.v0*Math.sin(br),ax=G*Math.sin(ar),ay=-G*Math.cos(ar);
+    const tf=2*vy/(-ay);const L=vx*tf+.5*ax*tf*tf;
+    model={ex,ey,vx,vy,ax,ay,tf,L,theta:s.beta-s.alpha};
+  }
+  function distanceAt(t){return model.vx*t+.5*model.ax*t*t}
+  function heightAt(t){return model.vy*t+.5*model.ay*t*t}
+  function updateUI(){
+    $('alpha-out').textContent=s.alpha+'°';$('beta-out').textContent=s.beta+'°';$('v0-out').textContent=fmt(s.v0,1)+' м/с';
+    $('v0x-val').textContent=fmt(model.vx);$('v0y-val').textContent=fmt(model.vy);
+    $('ax-val').textContent='+'+fmt(model.ax);$('ay-val').textContent=fmt(model.ay);
+    $('tf-val').textContent=fmt(model.tf);$('landing-val').textContent=fmt(model.L);
+    $('theta-val').textContent=(model.theta>=0?'+':'')+model.theta+'°';$('current-val').textContent=fmt(s.t);
+    $('time-display').textContent=fmt(s.t)+' / '+fmt(model.tf)+' с';
+    $('timeline').value=Math.round(s.t/model.tf*1000);
+    $('play-btn').textContent=s.playing?'Ⅱ Пауза':'▶ Пуск';
+    const hit=Math.abs(model.L-20)<0.2;
+    const chip=$('status-chip');chip.classList.toggle('hit',s.task===4&&hit);
+    if(s.task===4){
+      chip.textContent=hit?'Попадание в B':('Цель: 20 м');
+      $('status-text').textContent=hit?'Траектория попадает в B: координата вдоль склона совпадает с 20 м.':`Приземление: ${fmt(model.L)} м; цель B — 20 м. Измените β.`;
+    }else{
+      chip.textContent='Режим № 1';$('status-text').textContent='Плоскость понижается вправо. +Ox — вдоль склона, +Oy — наружу.';
+    }
+  }
+  function resetTask(task){
+    s.task=task;s.playing=false;s.t=0;s.zoom=1;s.viewYaw=-.27;s.viewPitch=.34;
+    Object.assign(s,presets[task]);compute();
+    for(const btn of document.querySelectorAll('[data-task]')){
+      const active=+btn.dataset.task===task;btn.classList.toggle('active',active);
+      if(btn.classList.contains('nav-btn')){active?btn.setAttribute('aria-current','page'):btn.removeAttribute('aria-current')}
+      if(btn.getAttribute('role')==='tab')btn.setAttribute('aria-selected',String(active));
+    }
+    for(const el of document.querySelectorAll('.lesson'))el.classList.toggle('active',el.id===`lesson-${task}`);
+    $('studio-title').textContent=task===1?'3D-модель: проекции':'3D-модель: полёт до точки B';
+    ['alpha','beta','v0'].forEach(k=>$(k).value=s[k]);
+    updateUI();
+    // In a dense document switch the reader to the beginning of the selected lesson.
+    if(window.innerWidth<1060){document.querySelector('.hero').scrollIntoView({behavior:'smooth',block:'start'})}
+  }
+  document.querySelectorAll('[data-task]').forEach(btn=>btn.addEventListener('click',()=>resetTask(+btn.dataset.task)));
+  for(const k of ['alpha','beta','v0'])$(k).addEventListener('input',e=>{s[k]=+e.target.value;s.t=0;s.playing=false;compute();updateUI()});
+  $('defaults-btn').addEventListener('click',()=>resetTask(s.task));
+  $('play-btn').addEventListener('click',()=>{if(s.t>=model.tf-1e-5)s.t=0;s.playing=!s.playing;updateUI()});
+  $('restart-btn').addEventListener('click',()=>{s.playing=false;s.t=0;updateUI()});
+  $('timeline').addEventListener('input',e=>{s.playing=false;s.t=+e.target.value/1000*model.tf;updateUI()});
+  $('speed').addEventListener('change',e=>s.speed=+e.target.value);
+  $('show-vectors').addEventListener('change',e=>s.showVectors=e.target.checked);
+  $('show-projection').addEventListener('change',e=>s.showProjection=e.target.checked);
+  document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{
+    const view=b.dataset.view;
+    if(view==='side'){s.viewYaw=0;s.viewPitch=.07}
+    else if(view==='top'){s.viewYaw=-.18;s.viewPitch=1.43}
+    else{s.viewYaw=-.27;s.viewPitch=.34}
+    s.zoom=1;
+  }));
+  const activePointers=new Map();let previousPinch=0;
+  const fingerDistance=()=>{const [a,b]=[...activePointers.values()];return Math.hypot(a.x-b.x,a.y-b.y)};
+  canvas.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    canvas.setPointerCapture(e.pointerId);
+    if(activePointers.size>=2)previousPinch=fingerDistance();
+    s.drag=true;canvas.classList.add('dragging');
+  });
+  canvas.addEventListener('pointermove',e=>{
+    const prior=activePointers.get(e.pointerId);if(!prior)return;
+    const dx=e.clientX-prior.x,dy=e.clientY-prior.y;
+    activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(activePointers.size>=2){
+      const next=fingerDistance();
+      if(previousPinch>0)s.zoom=clamp(s.zoom*previousPinch/Math.max(1,next),.46,2.6);
+      previousPinch=next;return;
+    }
+    s.viewYaw+=dx*.0065;s.viewPitch=clamp(s.viewPitch+dy*.0065,-.16,1.5);
+  });
+  function stopDrag(e){activePointers.delete(e.pointerId);previousPinch=0;s.drag=activePointers.size>0;if(!s.drag)canvas.classList.remove('dragging')}
+  canvas.addEventListener('pointerup',stopDrag);canvas.addEventListener('pointercancel',stopDrag);canvas.addEventListener('lostpointercapture',stopDrag);
+  canvas.addEventListener('wheel',e=>{e.preventDefault();s.zoom=clamp(s.zoom*Math.exp(e.deltaY*.0012),.46,2.6)},{passive:false});
+  document.addEventListener('keydown',e=>{if(/^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(document.activeElement.tagName))return;if(e.code==='Space'){e.preventDefault();$('play-btn').click()}else if(e.code==='KeyR')$('restart-btn').click();else if(e.code==='Digit1')resetTask(1);else if(e.code==='Digit2')resetTask(4)});
+  document.querySelectorAll('[data-quiz]').forEach(group=>group.addEventListener('click',e=>{
+    const b=e.target.closest('.answer');if(!b)return;
+    const task=group.dataset.quiz, correct=task==='1'?'b':'c',good=b.dataset.choice===correct;
+    for(const x of group.querySelectorAll('.answer')){x.classList.remove('correct','wrong');if(x===b)x.classList.add(good?'correct':'wrong')}
+    const feedback=$('feedback-'+task);feedback.className='practice-feedback '+(good?'good':'bad');
+    feedback.textContent=good?(task==='1'?'Верно! Вдоль склона +5 м/с², по внешней нормали −5√3 м/с².':'Верно! При β = 30° дальность равна 40/3 м.'):(task==='1'?'Проверьте разложение g вдоль наклонных осей: aₓ = g sin α, aᵧ = −g cos α.':'Попробуйте подставить угол в формулу L(β), учитывая наклон α = 30°.');
+  }));
+  function fitCanvas(el,cxt){const r=el.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2),w=Math.max(1,Math.floor(r.width)),h=Math.max(1,Math.floor(r.height));const bw=Math.round(w*dpr),bh=Math.round(h*dpr);if(el.width!==bw||el.height!==bh){el.width=bw;el.height=bh}cxt.setTransform(dpr,0,0,dpr,0,0);return {w,h}}
+  function setFont(n=12,w=600){ctx.font=`${w} ${n}px system-ui, -apple-system, Segoe UI, sans-serif`}
+  function label(text,p,camera,color='#25434a',shift=[0,0],size=12){const q=proj(p,camera);if(!q)return;ctx.save();setFont(size,750);ctx.textAlign='center';ctx.textBaseline='middle';const x=q.x+shift[0],y=q.y+shift[1];const wid=ctx.measureText(text).width;ctx.fillStyle='rgba(255,255,255,.91)';ctx.beginPath();ctx.roundRect(x-wid/2-5,y-9,wid+10,18,5);ctx.fill();ctx.fillStyle=color;ctx.fillText(text,x,y+.3);ctx.restore()}
+  function line(pa,pb,camera,color,width=2,dash=[],alpha=1){const a=proj(pa,camera),b=proj(pb,camera);if(!a||!b)return;ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.lineCap='round';ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.restore()}
+  function arrow(pa,pb,camera,color,width=2.4,alpha=1){const a=proj(pa,camera),b=proj(pb,camera);if(!a||!b)return;const ang=Math.atan2(b.y-a.y,b.x-a.x),sz=clamp(width*3.6,6,12);ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.beginPath();ctx.moveTo(b.x,b.y);ctx.lineTo(b.x-sz*Math.cos(ang-.47),b.y-sz*Math.sin(ang-.47));ctx.lineTo(b.x-sz*Math.cos(ang+.47),b.y-sz*Math.sin(ang+.47));ctx.closePath();ctx.fill();ctx.restore()}
+  function poly(pts,camera,fill,stroke,width=1){const arr=pts.map(p=>proj(p,camera));if(arr.some(q=>!q))return;ctx.save();ctx.beginPath();ctx.moveTo(arr[0].x,arr[0].y);for(let i=1;i<arr.length;i++)ctx.lineTo(arr[i].x,arr[i].y);ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=width;ctx.stroke()}ctx.restore()}
+  function cameraState(w,h){
+    const span=Math.max(18,model.L,s.task===4?20:0);
+    const compactFactor=clamp(640/Math.max(w,1),1,1.65);
+    const dist=(span*1.03+4)*compactFactor*s.zoom;
+    const target=point(span*.43,0,0);
+    const pitch=s.viewPitch,yaw=s.viewYaw;
+    const eye=add(target,{x:dist*Math.cos(pitch)*Math.sin(yaw),y:dist*Math.sin(pitch),z:dist*Math.cos(pitch)*Math.cos(yaw)});
+    const f=unit(sub(target,eye)),right=unit(cross(f,{x:0,y:1,z:0})),up=unit(cross(right,f));
+    return {eye,f,right,up,fx:h*1.10,w,h};
+  }
+  function proj(p,c){const r=sub(p,c.eye),z=dot(r,c.f);if(z<=.14)return null;const fac=c.fx/z;return {x:c.w*.5+dot(r,c.right)*fac,y:c.h*.54-dot(r,c.up)*fac,z}}
+  function sphere(pt,camera,r=11){const p=proj(pt,camera);if(!p)return;const R=clamp(camera.fx/(p.z)*.36,5,16);ctx.save();ctx.shadowColor='rgba(0,65,75,.19)';ctx.shadowBlur=12;ctx.shadowOffsetY=3;const grad=ctx.createRadialGradient(p.x-R*.32,p.y-R*.36,1,p.x,p.y,R);grad.addColorStop(0,'#f6fcfb');grad.addColorStop(.42,'#55bdb0');grad.addColorStop(1,'#0d6969');ctx.fillStyle=grad;ctx.beginPath();ctx.arc(p.x,p.y,R,0,Math.PI*2);ctx.fill();ctx.restore()}
+  function marker(pt,camera,color,caption,shift=[0,-15],ring=false){const p=proj(pt,camera);if(!p)return;ctx.save();ctx.fillStyle=ring?'rgba(255,255,255,.2)':color;ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y,ring?7:4.2,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.restore();if(caption)label(caption,pt,camera,color,shift,11)}
+  function drawScene(){
+    const {w,h}=fitCanvas(canvas,ctx);if(w<2||h<2)return;cw=w;ch=h;ctx.clearRect(0,0,w,h);
+    // Subtle floor-grid on the visual background; real geometry is a 3D inclined rectangular surface.
+    ctx.save();ctx.fillStyle='rgba(255,255,255,.23)';ctx.fillRect(0,0,w,h);ctx.restore();
+    const cam=cameraState(w,h);const span=Math.max(model.L,s.task===4?20:0,14), u0=-2.3,u1=span+3.8,W=2.75;
+    const face=[point(u0,0,-W),point(u1,0,-W),point(u1,0,W),point(u0,0,W)];
+    const side=[point(u0,0,W),point(u1,0,W),point(u1,-.78,W),point(u0,-.78,W)];
+    const end=[point(u1,0,-W),point(u1,0,W),point(u1,-.78,W),point(u1,-.78,-W)];
+    // Render sides then the top: transparent shading supports visible depth cues when orbiting.
+    poly(side,cam,'rgba(102,143,139,.18)','#9bb6ae');poly(end,cam,'rgba(62,117,117,.17)','#a9c5bd');poly(face,cam,'rgba(218,232,225,.78)','#8fb1aa',1.2);
+    for(let u=Math.ceil(u0/2)*2;u<u1;u+=2)line(point(u,0,-W),point(u,0,W),cam,'rgba(122,158,153,.40)',.8);
+    for(let z=-2;z<=2;z++)line(point(u0,0,z),point(u1,0,z),cam,'rgba(122,158,153,.34)',.8);
+    line(point(u0,0,0),point(u1,0,0),cam,'#3b6b6a',2.1);
+    const start=point(0,0,0),land=point(model.L,0,0);
+    const current=point(distanceAt(s.t),heightAt(s.t),0);
+    const sample=n=>{const pts=[];for(let i=0;i<=n;i++){const t=model.tf*i/n;pts.push(point(distanceAt(t),heightAt(t),0))}return pts};
+    const traj=sample(110);
+    ctx.save();ctx.setLineDash([5,6]);ctx.lineWidth=2;ctx.strokeStyle='rgba(11,127,124,.35)';ctx.beginPath();for(let i=0;i<traj.length;i++){const q=proj(traj[i],cam);if(q){if(i===0)ctx.moveTo(q.x,q.y);else ctx.lineTo(q.x,q.y)}}ctx.stroke();ctx.restore();
+    const n=Math.max(1,Math.ceil(120*s.t/model.tf));ctx.save();ctx.strokeStyle='#0b938a';ctx.lineWidth=3.4;ctx.lineCap='round';ctx.shadowColor='rgba(20,145,138,.15)';ctx.shadowBlur=6;ctx.beginPath();for(let i=0;i<=n;i++){const t=s.t*i/n,q=proj(point(distanceAt(t),heightAt(t),0),cam);if(q){if(i===0)ctx.moveTo(q.x,q.y);else ctx.lineTo(q.x,q.y)}}ctx.stroke();ctx.restore();
+    if(s.showProjection && s.t>0.015){const foot=point(distanceAt(s.t),0,0);line(current,foot,cam,'#a060c0',1.6,[4,4]);marker(foot,cam,'#7c5fa8',null);}
+    // Accurate scene-independent arrows: e_x along the descending slope, e_y along its outward normal, e_z across the plane.
+    arrow(start,point(4.5,0,0),cam,'#147a75',2.1);label('+Ox',point(4.7,0,0),cam,'#126c6c',[0,-12],11);
+    arrow(start,point(0,4.1,0),cam,'#805bb8',2.1);label('+Oy',point(0,4.4,0),cam,'#7951a3',[3,-10],11);
+    arrow(start,point(0,0,2.8),cam,'#9aabac',1.5,.85);label('+Oz',point(0,0,3),cam,'#738986',[8,2],10);
+    marker(start,cam,'#185b5d','A',[-12,-18]);
+    marker(land,cam,'#0a837e',s.task===4?'Приземление':'B',[0,-18]);
+    if(s.task===4){const target=point(20,0,0);marker(target,cam,'#d17d4f','B · 20 м',[0,23],true);}
+    // Velocity vectors in the physical e_x/e_y basis. Only enable if requested.
+    if(s.showVectors){
+      const scale=clamp(3.8/s.v0,.22,.55), vAlong=point(model.vx*scale,0,0),vHead=point(model.vx*scale,model.vy*scale,0);
+      arrow(start,vAlong,cam,'#147a75',2.2,.95);arrow(vAlong,vHead,cam,'#8c63ba',2.2,.95);arrow(start,vHead,cam,'#3177b5',2.5,.95);
+      label('v₀',vHead,cam,'#266eaa',[12,-14],12);
+      if(s.task===1 && w>480){label('v₀ₓ',vAlong,cam,'#127d73',[9,13],11);label('v₀ᵧ',point(model.vx*scale,model.vy*scale*.56),cam,'#8853b4',[18,0],11)}
+      if(s.task===1){const base=point(span*.34,2.65,1.7),k=.29;
+        const grav=add(base,{x:0,y:-G*k,z:0}),downSlope=add(base,mul(model.ex,model.ax*k)),normEnd=add(downSlope,mul(model.ey,model.ay*k));
+        arrow(base,grav,cam,'#c16b47',2.1);arrow(base,downSlope,cam,'#d49647',2.05);arrow(downSlope,normEnd,cam,'#8f65b7',2.05);
+        label('g',grav,cam,'#9f563d',[-11,13]);
+        if(w>480){label('aₓ',downSlope,cam,'#b77e32',[3,-13]);label('aᵧ',normEnd,cam,'#8658ab',[12,12])}
+      }
+    }
+    // Draw projected marker shadow and the moving puck last so it stays visually legible.
+    const shadow=point(distanceAt(s.t),0,0);const sp=proj(shadow,cam);
+    if(sp){ctx.save();ctx.fillStyle='rgba(31,83,80,.17)';ctx.beginPath();ctx.ellipse(sp.x,sp.y+3,9,4.2,0,0,Math.PI*2);ctx.fill();ctx.restore()}
+    sphere(current,cam);
+    ctx.save();setFont(11,700);ctx.fillStyle='#547572';ctx.textAlign='right';ctx.fillText(`α=${s.alpha}°  β=${s.beta}°  v₀=${fmt(s.v0,1)} м/с`,w-14,h-15);ctx.restore();
+  }
+  function drawGraph(){const {w,h}=fitCanvas(graph,gctx);if(w<2||h<2)return;gw=w;gh=h;gctx.clearRect(0,0,w,h);
+    const l=44,r=12,top=12,b=31,ww=w-l-r,hh=h-top-b;
+    const ymax=Math.max(.2,model.vy*model.tf/4),xmax=Math.max(.5,model.L),ymaxPlot=Math.max(xmax,ymax)*1.08;
+    const plot=(t,val)=>({x:l+ww*t/model.tf,y:top+hh-hh*val/ymaxPlot});
+    gctx.save();gctx.lineWidth=1;gctx.strokeStyle='#e7efec';for(let i=0;i<5;i++){const y=top+hh*i/4;gctx.beginPath();gctx.moveTo(l,y);gctx.lineTo(w-r,y);gctx.stroke()}
+    gctx.font='11px system-ui';gctx.fillStyle='#78918c';gctx.fillText('координата, м',l,9);gctx.fillText('0',l-12,top+hh+4);gctx.fillText('t, с',w-30,h-5);
+    const series=[{fun:distanceAt,color:'#0b8882',label:'x(t)'},{fun:heightAt,color:'#9469c0',label:'y(t)'}];
+    for(const {fun,color} of series){gctx.beginPath();for(let i=0;i<=90;i++){const t=model.tf*i/90,p=plot(t,Math.max(0,fun(t)));if(i===0)gctx.moveTo(p.x,p.y);else gctx.lineTo(p.x,p.y)}gctx.strokeStyle=color;gctx.lineWidth=2.5;gctx.stroke();const p=plot(s.t,Math.max(0,fun(s.t)));gctx.fillStyle=color;gctx.beginPath();gctx.arc(p.x,p.y,4,0,2*Math.PI);gctx.fill()}
+    const markerX=plot(s.t,0).x;gctx.setLineDash([3,4]);gctx.strokeStyle='#899d9b';gctx.beginPath();gctx.moveTo(markerX,top);gctx.lineTo(markerX,top+hh);gctx.stroke();gctx.setLineDash([]);
+    gctx.font='600 11px system-ui';gctx.fillStyle='#0b8882';gctx.fillText('● x(t)',w-110,13);gctx.fillStyle='#9469c0';gctx.fillText('● y(t)',w-56,13);
+    gctx.fillStyle='#6a8880';gctx.fillText(fmt(model.tf,2),w-r-33,h-5);gctx.restore();
+  }
+  function frame(ts){
+    if(prevTS!==null&&s.playing){const delta=Math.min((ts-prevTS)/1000,.095)*s.speed;s.t=Math.min(model.tf,s.t+delta);if(s.t>=model.tf-1e-6)s.playing=false;updateUI()}
+    prevTS=ts;drawScene();drawGraph();requestAnimationFrame(frame);
+  }
+  compute();updateUI();requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
