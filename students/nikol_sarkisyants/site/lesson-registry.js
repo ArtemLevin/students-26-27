@@ -5,6 +5,61 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-23",
+  "ktpRefs": [],
+  "href": "23.11.26.html",
+  "title": "Цилиндр",
+  "navTitle": "Цилиндр",
+  "navSubtitle": "Николь Саркисьянц · Цилиндр: объём, боковая и полная поверхность, осевое сечение, метод отношения объёмов, погружение, секторы и цилиндрические отверстия. 10 задач с ответами.",
+  "summary": "Николь Саркисьянц · Цилиндр: объём, боковая и полная поверхность, осевое сечение, метод отношения объёмов, погружение, секторы и цилиндрические отверстия. 10 задач с ответами.",
+  "topics": [
+    "объём цилиндра",
+    "боковая и полная поверхность",
+    "осевое сечение цилиндра",
+    "отношения объёмов",
+    "переливание и вытеснение жидкости",
+    "секторные части цилиндра",
+    "составные цилиндрические тела и отверстия"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t3_cylinder",
+      "evidenceAnchor": "basics",
+      "relation": "practiced",
+      "label": "Цилиндр: объём и поверхности",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_surface",
+      "evidenceAnchor": "section",
+      "relation": "practiced",
+      "label": "Осевое сечение и площадь поверхности",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_composite_volume",
+      "evidenceAnchor": "composite",
+      "relation": "practiced",
+      "label": "Составные тела и цилиндрические отверстия",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_basic_sections",
+      "evidenceAnchor": "sectors",
+      "relation": "touched",
+      "label": "Секторные части цилиндра",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "23.11.26.html",
+    "pdf": "../pdf_docs/23.11.26.pdf",
+    "tex": "../tex_docs/23.11.26.tex",
+    "lab": "23.11.26-lab.html"
+  }
+},
+
+{
   "date": "2026-11-19",
   "ktpRefs": [],
   "href": "19.11.26.html",

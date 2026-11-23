@@ -25,10 +25,10 @@ function verifyLinks(source,ids){
 }
 function inlineScripts(source){return [...source.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(x=>x[1]);}
 
-test('19 November publication is latest, consistent and has all materials',()=>{
+test('19 November publication remains registered, consistent and has all materials',()=>{
   validateLessonRegistry(LESSONS);
   const current=LESSONS.find(x=>x.date==='2026-11-19');
-  assert.equal(LESSONS[0].date,'2026-11-19');
+  assert.ok(LESSONS[0].date>='2026-11-19');
   assert.ok(current);
   assert.equal(current.href,'19.11.26.html');
   assert.equal(LESSONS.filter(x=>x.date==='2026-11-19').length,1);
@@ -94,6 +94,6 @@ test('evidence and practice decisions are anchored without unverified mastery',(
     assert.ok(intent.outcomes.some(x=>x.competencyId===e.competencyId&&x.evidenceAnchor===e.evidenceAnchor&&x.relation===e.relation&&x.decision==='apply'&&x.confidence==='exact'));
     assert.ok(practice.outcomes.some(x=>x.competencyId===e.competencyId&&x.evidenceAnchor===e.evidenceAnchor&&x.relation===e.relation&&x.practiceDisposition==='manual'));
   }
-  assert.match(read('dashboard.js'),/lesson-registry\.js\?v=20261119-1/);
-  assert.match(read('index.html'),/dashboard\.js\?v=20261119-1/);
+  assert.match(read('dashboard.js'),/lesson-registry\.js\?v=20261123-1/);
+  assert.match(read('index.html'),/dashboard\.js\?v=20261123-1/);
 });
