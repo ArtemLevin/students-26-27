@@ -440,6 +440,65 @@ for(const [id,cfg] of Object.entries(LESSON_121126)){
   item.material={href,label:"Открыть раздел занятия 12.11 →"};
 }
 
+
+ 
+// 23.11.2026: concept evidence only. The lesson does not certify independent mastery.
+// Keep meta.updated and baseline levels unchanged to preserve existing learner state.
+const LESSON_231126 = {
+  "ege11_01": {
+    "section": "model",
+    "relation": "touched",
+    "evidence": "Повторены формулы S–v–t и построение таблицы путей, скоростей и времени."
+  },
+  "ege11_05": {
+    "section": "river",
+    "relation": "practiced",
+    "evidence": "Разобрано движение катера по течению и против течения, составлено уравнение для разности времени."
+  },
+  "ege11_06": {
+    "section": "average",
+    "relation": "practiced",
+    "evidence": "Отработано различие между равными промежутками времени и равными половинами расстояния при расчёте средней скорости."
+  },
+  "ege11_02": {
+    "section": "extended",
+    "relation": "practiced",
+    "evidence": "Рассмотрено прохождение поезда мимо встречного пешехода с суммой скоростей."
+  },
+  "ege11_03": {
+    "section": "extended",
+    "relation": "practiced",
+    "evidence": "Разобраны обгон поезда и баржи с относительной скоростью и дополнительными промежутками."
+  },
+  "ege11_17": {
+    "section": "river",
+    "relation": "practiced",
+    "evidence": "Составлено и решено уравнение для разности времени катера по течению и против него."
+  },
+  "ege11_19": {
+    "section": "river",
+    "relation": "touched",
+    "evidence": "В решении задачи о катере обсуждались ограничение скорости и исключение физически невозможного корня."
+  },
+  "ege11_20": {
+    "section": "units",
+    "relation": "practiced",
+    "evidence": "Повторены секунды, минуты, метры и километры; исправлена ошибка перевода величин."
+  }
+};
+for(const [id,cfg] of Object.entries(LESSON_231126)){
+  const item=G.flatMap(group=>group.items).find(topic=>topic.id===id);
+  if(!item)continue;
+  item.evidence=Array.isArray(item.evidence)?item.evidence:[];
+  item.evidence.push({text:cfg.evidence+" Материал: занятие 23.11.2026 «Задачи на движение». "+(cfg.relation==="practiced"?"Практика с преподавателем;":"Разбор с преподавателем;")+" самостоятельное освоение не оценивалось."});
+  const href="23.11.26.html#"+cfg.section;
+  item.relatedMaterials=Array.isArray(item.relatedMaterials)?item.relatedMaterials:[];
+  if(!item.relatedMaterials.some(material=>material.href===href)){
+    item.relatedMaterials.push({href,label:"Занятие 23.11: "+cfg.evidence});
+  }
+  item.material={href,label:"Открыть раздел занятия 23.11 →"};
+}
+
 window.COMPETENCY_MAP_DATA={
   meta:{
     student:'jaroslav_gavrilov',
