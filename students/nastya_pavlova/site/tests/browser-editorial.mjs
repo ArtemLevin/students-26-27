@@ -67,12 +67,14 @@ try{
   await call('Page.navigate',{url});
   for(let i=0;i<150;i++){
    const info=await evaluate('({url:location.href,ready:document.readyState})');
-   if(info.url===url&&info.ready==='complete')break;
+   if(info.url.split('#')[0]===url&&info.ready==='complete')break;
    if(i===149)throw Error('Page loading timed out: '+url);
    await sleep(90);
   }
   for(let i=0;i<70;i++){
-   const expression=name==='09.11.26.html'?"!!document.querySelector('#heading')":
+   const expression=name==='23.11.26.html'?"!!document.querySelector('#title')":
+     name==='23.11.26-lab.html'?"document.querySelector('#lineResult')?.textContent.length>0":
+     name==='09.11.26.html'?"!!document.querySelector('#heading')":
      name==='09.11.26-lab.html'?"document.querySelectorAll('#rows tr').length>0":
      name==='index.html'?
      "document.querySelector('#lessonTitle')?.textContent!=='Загрузка занятия…'":
@@ -194,6 +196,31 @@ try{
   assert.deepEqual(dark,{theme:'dark',overflow:0,selected:'1'},'Dark theme and responsive lab');
   image=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
   fs.writeFileSync(path.join(output,'09-11-lab-'+w+'.png'),Buffer.from(image.data,'base64'));
+ }
+
+
+ // Regression gate: November 23 lesson and the four connected live experiments.
+ for(const [w,h] of [[1440,900],[390,844]]){
+  await navigate('23.11.26.html',w,h);
+  const lesson=await evaluate("(()=>{const ids=[...document.querySelectorAll('[id]')].map(x=>x.id);return {tasks:document.querySelectorAll('#training .task').length,sections:document.querySelectorAll('main .section').length,duplicateIds:ids.length-new Set(ids).size,lab:!!document.querySelector('a[href=\"23.11.26-lab.html\"]'),pdf:!!document.querySelector('a[href=\"../pdf_docs/23.11.26.pdf\"]'),tex:!!document.querySelector('a[href=\"../tex_docs/23.11.26.tex\"]')}})()");
+  assert.deepEqual(lesson,{tasks:10,sections:6,duplicateIds:0,lab:true,pdf:true,tex:true},'November 23 page integrity');
+  await evaluate("if(document.documentElement.dataset.theme!=='dark')document.querySelector('#theme').click()");
+  assert.equal(await evaluate("document.documentElement.dataset.theme"),'dark');
+  assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'November lesson dark overflow at '+w);
+  await navigate('23.11.26-lab.html',w,h);
+  const initial=await evaluate("({line:document.querySelector('#lineResult').textContent,vector:document.querySelector('#vectorResult').textContent,work:document.querySelector('#tt').textContent,mixture:document.querySelector('#percent').textContent,tabs:document.querySelectorAll('[role=tab]').length})");
+  assert.match(initial.line,/Уравнение: y = [-−]2x \+ 3/);
+  assert.match(initial.vector,/φ ≈ 90°/);
+  assert.equal(initial.work,'4 ч');
+  assert.equal(initial.mixture,'28%');
+  assert.equal(initial.tabs,4);
+  const scenarios=await evaluate("(()=>{document.querySelector('[data-preset=lineVertical]').click();const vertical=document.querySelector('#lineResult').textContent.includes('вертикальная');document.querySelector('[data-tab=vector]').click();document.querySelector('[data-preset=vectorZero]').click();const zero=document.querySelector('#vectorResult').textContent.includes('угол не определён');document.querySelector('[data-tab=work]').click();document.querySelector('[data-preset=workEqual]').click();const together=document.querySelector('#tt').textContent;document.querySelector('[data-tab=mix]').click();document.querySelector('[data-preset=mixPractice]').click();const mixture=document.querySelector('#percent').textContent;const evap=document.querySelector('#evap');const p1=document.querySelector('#p1');p1.value='100';p1.dispatchEvent(new Event('input',{bubbles:true}));evap.value='5';evap.dispatchEvent(new Event('input',{bubbles:true}));return {vertical,zero,together,mixture,evap:evap.value}})()");
+  assert.deepEqual(scenarios,{vertical:true,zero:true,together:'3 ч',mixture:'32%',evap:'0'},'November lab mathematical boundary cases');
+  await evaluate("if(document.documentElement.dataset.theme!=='dark')document.querySelector('#theme').click()");
+  assert.equal(await evaluate("document.documentElement.dataset.theme"),'dark');
+  assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'November laboratory dark overflow at '+w);
+  const screenshot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
+  fs.writeFileSync(path.join(output,'23-11-lab-'+w+'.png'),Buffer.from(screenshot.data,'base64'));
  }
 
  await navigate('19.10.26-lab.html',390,844);
