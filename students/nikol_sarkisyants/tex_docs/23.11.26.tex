@@ -1,0 +1,371 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{icomma}
+\usepackage{geometry}
+\geometry{left=24mm,right=24mm,top=24mm,bottom=23mm,headheight=24pt}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{tkz-euclide}
+\usepackage{booktabs,tabularx,longtable}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{30353A}
+\definecolor{muted}{HTML}{657579}
+\setstretch{1.18}
+\setlength{\parindent}{0pt}
+\setlist[itemize]{leftmargin=6mm,topsep=4pt,itemsep=3pt}
+\setlist[enumerate]{leftmargin=8mm,topsep=4pt,itemsep=5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\color{textgray}Цилиндр: объём и площади}
+\fancyhead[R]{\footnotesize\color{textgray}Николь Саркисьянц}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.45pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height\headrulewidth\hfill}}
+\renewcommand{\footrulewidth}{0pt}
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\checktitle}[1]{\vspace{0.6em}{\large\color{darkaccent}\bfseries #1}\par\vspace{0.20em}{\color{accent}\rule{\linewidth}{0.52pt}}\vspace{0.20em}}
+\newcommand{\exampletitle}[1]{\vspace{0.35em}{\color{darkaccent}\bfseries #1}\par\vspace{0.08em}}
+\newcommand{\warning}[1]{\textcolor{darkaccent}{\bfseries Внимание.} #1}
+\newcommand{\ans}[1]{\ensuremath{#1}}
+\begin{document}
+\pagenumbering{gobble}
+\begin{titlepage}
+\centering
+\vspace*{25mm}
+{\Large\color{darkaccent}МАТЕМАТИКА\par}
+\vspace{22mm}
+{\LARGE\color{textgray}Чек-лист\par}
+\vspace{15mm}
+{\LARGE\color{accent}Цилиндр: объём, поверхности,\par}
+\vspace{1.5mm}
+{\LARGE\color{accent}сечения и составные тела\par}
+\vspace{17mm}
+{\normalsize Подготовка к ЕГЭ по профильной математике\par}
+\vfill
+{\large Николь Саркисьянц\par}
+\vspace{10mm}
+{\normalsize 23 ноября 2026 г.\par}
+\vspace{15mm}
+{\small Лёвин Артём Александрович\par}
+{\small эксклюзивно для Николь Саркисьянц\par}
+\vspace{7mm}
+\begin{tikzpicture}[x=1cm,y=1cm]
+\draw[accent, line width=0.85pt] (-3.5,0) .. controls (-2.2,0.92) and (-1.0,-0.79) .. (0,0)
+  .. controls (1.1,0.75) and (2.2,-0.84) .. (3.5,0.12);
+\fill[accent] (0,0) circle (1.45pt);
+\end{tikzpicture}
+\end{titlepage}
+\pagenumbering{arabic}
+
+\checktitle{1. Что обязательно знать о цилиндре}
+\key{Прямой круговой цилиндр} имеет два равных параллельных круговых основания и боковую поверхность. Обозначим через $r$ радиус основания, через $d=2r$ его диаметр, через $h$ высоту, через $V$ объём.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.92,>=Latex]
+  \draw[accent!80!black, line width=0.85pt] (-1.55,0) arc[start angle=180,end angle=360,x radius=1.55,y radius=0.47];
+  \draw[accent!80!black,dashed,line width=0.65pt] (-1.55,0) arc[start angle=180,end angle=0,x radius=1.55,y radius=0.47];
+  \draw[accent!80!black,line width=0.85pt] (-1.55,3.5) ellipse[x radius=1.55,y radius=0.47];
+  \draw[accent!80!black,line width=0.85pt] (-1.55,0)--(-1.55,3.5) (1.55,0)--(1.55,3.5);
+  \draw[muted,dashed] (0,0)--(0,3.5);
+  \fill[darkaccent] (0,3.5) circle(1.4pt);
+  \draw[darkaccent,thick] (0,3.5)--(1.55,3.5) node[pos=0.5,above] {$r$};
+  \draw[<->,darkaccent] (-2.05,0)--(-2.05,3.5) node[pos=0.5,left] {$h$};
+  \node[font=\footnotesize,muted] at (3.3,2.8) {верхнее основание};
+  \draw[muted,thin] (1.3,3.68)--(2.0,3.0);
+  \node[font=\footnotesize,muted] at (3.35,0.45) {нижнее основание};
+  \draw[muted,thin] (1.24,-0.17)--(2.1,0.36);
+\end{tikzpicture}
+\end{center}
+
+\key{Высота} --- перпендикулярное расстояние между плоскостями оснований. На чертеже её можно проводить по оси цилиндра или вдоль образующей прямого цилиндра.
+
+\checktitle{2. Три главные формулы}
+\begin{align*}
+S_{\text{осн}}&=\pi r^2,\\[2pt]
+V&=S_{\text{осн}}h=\boxed{\pi r^2h},\\[2pt]
+S_{\text{бок}}&=\boxed{2\pi rh}=\pi dh,\\[2pt]
+S_{\text{полн}}&=S_{\text{бок}}+2S_{\text{осн}}=\boxed{2\pi r(h+r)}.
+\end{align*}
+\textcolor{darkaccent}{\bfseries Почему $S_{\text{бок}}=2\pi rh$?} Если развернуть боковую поверхность, получится прямоугольник со сторонами $2\pi r$ (длина окружности основания) и $h$.
+
+\warning{Не путайте площадь боковой и полной поверхностей: у полной добавляются \emph{оба} основания. Если дан диаметр, сначала используйте $r=d/2$.}
+
+\clearpage
+\checktitle{3. Осевое сечение цилиндра}
+Плоскость через ось прямого кругового цилиндра даёт \key{прямоугольник}, одна сторона которого равна диаметру $2r$, другая --- высоте $h$.
+\begin{center}
+\begin{tikzpicture}[scale=0.92]
+  \tkzDefPoint(0,0){A}
+  \tkzDefPoint(5.0,0){B}
+  \tkzDefPoint(5.0,3.0){C}
+  \tkzDefPoint(0,3.0){D}
+  \tkzDrawPolygon[color=accent,line width=0.9pt](A,B,C,D)
+  \tkzDrawSegment[dashed,color=muted](A,C)
+  \tkzLabelPoints[below](A,B)
+  \tkzLabelPoints[above](C,D)
+  \node[below] at (2.5,-0.2) {$2r$};
+  \node[right] at (5.15,1.5) {$h$};
+  \node[above,rotate=31] at (2.5,1.65) {$\ell$};
+\end{tikzpicture}
+\end{center}
+\begin{align*}
+S_{\text{осев}}&=2rh,\\
+S_{\text{бок}}&=2\pi rh=\boxed{\pi S_{\text{осев}}}.
+\end{align*}
+Если в задаче есть диагональ $\ell$ осевого сечения, используйте теорему Пифагора:
+\[
+\ell^2=(2r)^2+h^2=4r^2+h^2.
+\]
+
+\exampletitle{Пример 1. Связь площадей без поиска радиуса}
+Площадь осевого сечения равна $4\ \text{см}^2$. Требуется найти $S_{\text{бок}}/\pi$.
+\[
+\frac{S_{\text{бок}}}{\pi}=\frac{\pi S_{\text{осев}}}{\pi}=S_{\text{осев}}=\boxed{4}.
+\]
+Такое отношение позволяет вообще \key{не находить по отдельности} радиус и высоту.
+
+\checktitle{4. Полезные обратные формулы}
+Если необходимо найти неизвестную величину, выразите её из исходной формулы \emph{до} подстановки чисел:
+\[
+h=\frac{V}{\pi r^2},\qquad r=\sqrt{\frac{V}{\pi h}},\qquad h=\frac{S_{\text{бок}}}{2\pi r}=\frac{S_{\text{бок}}}{\pi d}.
+\]
+Здесь $r>0$ и $h>0$. Если дано $S_{\text{бок}}=2\pi$ и $d=1$, то
+\[
+h=\frac{2\pi}{\pi\cdot1}=\boxed{2}.
+\]
+
+\clearpage
+\checktitle{5. Метод отношения объёмов}
+\key{Основной приём занятия:} выпишите формулу для двух цилиндров, затем разделите одно равенство на другое. Общие множители сократятся:
+\[
+\boxed{\frac{V_2}{V_1}=\frac{\pi r_2^2h_2}{\pi r_1^2h_1}
+=\left(\frac{r_2}{r_1}\right)^2\frac{h_2}{h_1}}.
+\]
+\textcolor{darkaccent}{\bfseries Если радиус изменился в $k$ раз, а высота --- в $m$ раз,} то объём изменится в $k^2m$ раз. 
+
+\exampletitle{Пример 2. Изменились оба размера}
+Объём первого цилиндра равен $12\ \text{м}^3$. У второго радиус в 2 раза меньше, а высота в 3 раза больше:
+\[
+\frac{V_2}{12}=\left(\frac12\right)^2\cdot3=\frac34,
+\qquad V_2=\boxed{9\ \text{м}^3}.
+\]
+
+\checktitle{6. Переливание: объём сохраняется}
+Если жидкость полностью переливают из одного цилиндрического сосуда в другой \emph{без потерь}, то $V_1=V_2$:
+\[
+\pi r_1^2h_1=\pi r_2^2h_2
+\quad\Longrightarrow\quad
+\boxed{h_2=h_1\left(\frac{r_1}{r_2}\right)^2}.
+\]
+При постоянном объёме \key{высота обратно пропорциональна квадрату радиуса}. Если диаметр увеличен вдвое, радиус тоже увеличен вдвое, а высота уменьшена в $2^2=4$ раза.
+
+\exampletitle{Пример 3. Сосуд вдвое шире}
+Изначально высота жидкости составляла $16$ см, диаметр нового сосуда вдвое больше. Тогда
+\[
+h_2=16\left(\frac12\right)^2=\boxed{4\ \text{см}}.
+\]
+\exampletitle{Пример 4. Сосуд в 7 раз шире}
+Высота жидкости равна $147$ см. Диаметр нового сосуда больше в 7 раз:
+\[
+h_2=\frac{147}{7^2}=\frac{147}{49}=\boxed{3\ \text{см}}.
+\]
+\warning{При переливании учитывайте квадрат изменения радиуса.}
+
+\clearpage
+\checktitle{7. Погружение детали и подъём жидкости}
+Если деталь полностью погружена в жидкость и вода не переливается через край, объём вытесненной жидкости равен \key{объёму погружённой детали}. Для сосуда с постоянной площадью основания:
+\[
+V_{\text{дет}}=\pi r^2\Delta h,
+\qquad V_{\text{воды}}=\pi r^2h_0.
+\]
+Разделим равенства:
+\[
+\boxed{\frac{V_{\text{дет}}}{V_{\text{воды}}}=\frac{\Delta h}{h_0}}
+\quad\Longrightarrow\quad
+V_{\text{дет}}=V_{\text{воды}}\frac{\Delta h}{h_0}.
+\]
+\exampletitle{Пример 5. Уровень поднялся после погружения}
+В сосуде $2000\ \text{см}^3$ воды на высоте $12$ см. После погружения детали уровень поднялся на $9$ см:
+\[
+V_{\text{дет}}=2000\cdot\frac9{12}=\boxed{1500\ \text{см}^3}.
+\]
+\warning{В знаменателе стоит \emph{исходная} высота воды $12$ см, а в числителе --- \emph{прибавка} $9$ см. Не смешивайте их.}
+
+\checktitle{8. Часть цилиндра по центральному углу}
+Для части прямого кругового цилиндра, ограниченной двумя плоскостями через ось и имеющей центральный угол $\alpha$ (в градусах), доля объёма совпадает с долей полного угла:
+\[
+\boxed{V_{\text{части}}=\pi r^2h\cdot\frac{\alpha}{360^\circ}}.
+\]
+\begin{center}
+\begin{tikzpicture}[scale=0.74]
+  \fill[accent!15] (0,0) -- (0:2) arc[start angle=0,end angle=90,radius=2] -- cycle;
+  \draw[darkaccent,line width=0.9pt] (0,0) circle (2);
+  \draw[accent,thick] (0,0)--(0:2) (0,0)--(90:2);
+  \draw[accent] (0.7,0) arc[start angle=0,end angle=90,radius=.7];
+  \node[darkaccent] at (0.48,0.5) {$90^\circ$};
+  \node[font=\footnotesize,muted] at (4,0.7) {четверть основания};
+  \draw[muted,thin] (1.38,1.15)--(2.63,0.7);
+\end{tikzpicture}
+\end{center}
+\exampletitle{Пример 6. Сектор с углом $90^\circ$}
+При $r=6$ см, $h=5$ см получаем
+\[
+V=\pi\cdot6^2\cdot5\cdot\frac{90}{360}
+=\frac{180\pi}{4}=\boxed{45\pi\ \text{см}^3}.
+\]
+
+\clearpage
+\checktitle{9. Вырезанная и оставшаяся части}
+Если из цилиндра вырезали сектор с углом $\alpha$, у \emph{оставшейся} части угол равен $360^\circ-\alpha$. Поэтому можно сразу написать:
+\[
+\boxed{V_{\text{ост}}=\pi r^2h\cdot\frac{360^\circ-\alpha}{360^\circ}}.
+\]
+Это равносильно вычислению $V_{\text{цел}}-V_{\text{выр}}$, но обычно короче.
+
+\exampletitle{Пример 7. Вырезали $60^\circ$}
+Для $r=15$ см, $h=5$ см и удалённого сектора $60^\circ$:  $V_{\text{ост}}=\pi\cdot15^2\cdot5\cdot\frac{300}{360}=\boxed{937{,}5\pi\ \text{см}^3}.$
+\warning{Всегда определяйте, какую часть просят найти: закрашенную, вырезанную или оставшуюся.}
+
+\checktitle{10. Составные тела и отверстия}
+\key{Составное тело.} Если две части соединены без взаимного перекрытия по объёму, найдите объём каждой части и сложите:
+\[
+V_{\text{общ}}=V_1+V_2.
+\]
+Например, полный цилиндр с $r=2$, $h=3$ и отдельная половина цилиндра с $r=2$, $h=1$ имеют суммарный объём
+\[
+V_{\text{общ}}=\pi\cdot2^2\cdot3+\frac12\pi\cdot2^2\cdot1
+=12\pi+2\pi=\boxed{14\pi}.
+\]
+\key{Сквозное отверстие.} Если из цилиндра радиуса $R$ вырезан соосный цилиндрический канал радиуса $r$ на всю высоту $h$ ($0<r<R$), то
+\[
+\boxed{V_{\text{кольца}}=\pi R^2h-\pi r^2h=\pi(R^2-r^2)h}.
+\]
+\begin{center}
+\begin{tikzpicture}[scale=0.55]
+ \draw[darkaccent,line width=0.9pt] (0,0) circle(2.05);
+ \draw[accent,line width=0.9pt] (0,0) circle(0.85);
+ \draw[muted,dashed] (0,0)--(2.05,0);
+ \node[above] at (1.42,0.03) {$R$};
+ \node[above] at (0.47,0.03) {$r$};
+ \node[font=\footnotesize,muted,right] at (2.6,0.6) {вид сверху};
+ \node[font=\footnotesize,muted,right] at (2.6,0.12) {объём внешнего цилиндра};
+ \node[font=\footnotesize,muted,right] at (2.6,-0.34) {минус объём отверстия};
+\end{tikzpicture}
+\end{center}
+\exampletitle{Пример 8. Цилиндрическое отверстие}
+При $R=5$ см, $r=2$ см, $h=5$ см: $V=\pi(25-4)\cdot5=\boxed{105\pi\ \text{см}^3}.$
+
+\clearpage
+\thispagestyle{fancy}
+\begin{center}
+{\LARGE\color{darkaccent}Алгоритм решения задач на цилиндр}\par\vspace{0.5em}
+{\small\color{muted}От распознавания фигуры к формуле и проверке ответа}
+\end{center}
+\vspace{8mm}
+\begin{center}
+\begin{tikzpicture}[
+  >=Latex, line width=0.85pt, font=\small,
+  flow/.style={draw=accent,rounded corners=2pt,align=center,text width=7.3cm,minimum height=1.15cm,inner sep=5pt},
+  decision/.style={draw=accent,diamond,aspect=2.15,align=center,text width=3.7cm,inner sep=2pt},
+  action/.style={draw=darkaccent,rounded corners=2pt,align=center,text width=4.0cm,minimum height=1.25cm,inner sep=5pt},
+  arrow/.style={->,darkaccent,line width=0.9pt}
+]
+\node[flow] (start) at (-1,0) {Запишите данные, укажите $r$, $d$, $h$ и то, что требуется найти};
+\node[decision] (comp) at (-1,-2.7) {Есть сектор, вырез\ или отверстие?};
+\node[action] (add) at (6.0,-2.7) {Учитывайте долю $\frac{\alpha}{360^\circ}$,\ сложение или вычитание};
+\node[decision] (ratio) at (-1,-6.1) {Сравнивают два\ состояния?};
+\node[action] (div) at (6.0,-6.1) {Составьте отношение $\frac{V_2}{V_1}$;\ сократите общие множители};
+\node[flow] (formula) at (-1,-9.0) {Выберите формулу: $V=\pi r^2h$,\ $S_{\text{бок}}=2\pi rh$, $S_{\text{осев}}=2rh$};
+\node[flow] (end) at (-1,-11.4) {Проверьте сохранение объёма, единицы,\ выбранную часть и формат ответа};
+\draw[arrow] (start)--(comp);
+\draw[arrow] (comp.east)--node[above,sloped,font=\scriptsize]{да}(add.west);
+\draw[arrow] (comp.south)--node[left,font=\scriptsize]{нет}(ratio.north);
+\draw[arrow] (ratio.east)--node[above,sloped,font=\scriptsize]{да}(div.west);
+\draw[arrow] (ratio.south)--node[left,font=\scriptsize]{нет}(formula.north);
+\draw[arrow] (formula)--(end);
+% Боковой маршрут: оба действия приводят к проверке.
+\coordinate (join) at (8.7,-11.4);
+\draw[arrow] (add.east)--(8.7,-2.7)--(join)--(end.east);
+\draw[arrow] (div.east)--(8.7,-6.1);
+\end{tikzpicture}
+\end{center}
+\vspace{5mm}
+{\color{darkaccent}\bfseries Контроль перед ответом}\par
+При сохранении объёма всегда проверяйте квадрат изменения радиуса. Для погружённой детали используйте \emph{прирост} уровня; для отверстия --- вычитание объёмов; для секторной части --- нужный центральный угол.
+
+\clearpage
+\checktitle{Тренировочный блок · Путь А}
+\textcolor{muted}{10 задач по нарастанию сложности. В задачах на площади и объёмы ответ записывайте в указанных единицах. В вычислениях используйте точное значение $\pi$.}
+
+\begin{enumerate}[label=\textcolor{darkaccent}{\bfseries\arabic*.},itemsep=10pt]
+\item Радиус основания цилиндра равен $3$ см, высота --- $4$ см. Найдите $V/\pi$ (в $\text{см}^3$).
+\item Диаметр основания равен $6$ см, высота --- $7$ см. Найдите $S_{\text{бок}}/\pi$ (в $\text{см}^2$).
+\item Радиус основания равен $5$ см, высота --- $3$ см. Найдите $S_{\text{полн}}/\pi$ (в $\text{см}^2$).
+\item Площадь осевого сечения цилиндра составляет $24\ \text{см}^2$. Найдите $S_{\text{бок}}/\pi$ (в $\text{см}^2$).
+\item Объём первого цилиндра равен $18\ \text{см}^3$. Радиус второго вдвое больше, а высота втрое больше. Найдите объём второго цилиндра в $\text{см}^3$.
+\item В цилиндрическом сосуде уровень воды достигает $98$ см. Всю воду без потерь перелили в другой цилиндрический сосуд, диаметр которого в $7$ раз больше. Найдите новую высоту уровня воды в сантиметрах.
+\item В цилиндрическом сосуде находится $840\ \text{см}^3$ воды; высота уровня воды равна $7$ см. В сосуд полностью погрузили деталь, и уровень поднялся на $4$ см. Найдите объём детали в $\text{см}^3$. Вода не переливается через край.
+\item Из цилиндра радиуса $6$ см и высоты $5$ см удалили секторную часть с центральным углом $120^\circ$. Найдите $V_{\text{ост}}/\pi$ (в $\text{см}^3$).
+\item Тело состоит из двух частей без взаимного перекрытия: полного цилиндра радиуса $2$ см и высоты $4$ см и половины цилиндра радиуса $2$ см и высоты $3$ см. Найдите $V/\pi$ (в $\text{см}^3$).
+\item Из цилиндра радиуса $5$ см и высоты $4$ см вдоль оси удалили сквозной цилиндрический канал радиуса $2$ см. Найдите объём оставшегося тела, делённый на $\pi$ (в $\text{см}^3$).
+\end{enumerate}
+
+\clearpage
+\checktitle{Ответы к тренировочному блоку}
+\vspace{0.3em}
+\begin{center}
+\renewcommand{\arraystretch}{1.42}
+\begin{tabularx}{0.90\linewidth}{@{}cX@{}}
+\toprule
+\textbf{№} & \textbf{Ответ} \\
+\midrule
+1 & $36$ \\
+2 & $42$ \\
+3 & $80$ \\
+4 & $24$ \\
+5 & $216\ \text{см}^3$ \\
+6 & $2\ \text{см}$ \\
+7 & $480\ \text{см}^3$ \\
+8 & $120$ \\
+9 & $22$ \\
+10 & $84$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vspace{1.0em}
+\checktitle{Итоговая памятка}
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\small
+\begin{tabularx}{\linewidth}{@{}p{0.36\linewidth}X@{}}
+\toprule
+\textbf{Признак задачи} & \textbf{Главный приём} \\
+\midrule
+Нужен объём цилиндра & $V=\pi r^2h$ \\
+Нужна боковая поверхность & $S_{\text{бок}}=2\pi rh=\pi dh$ \\
+Дано осевое сечение & $S_{\text{осев}}=2rh$ и $S_{\text{бок}}=\pi S_{\text{осев}}$ \\
+Сравниваются два цилиндра & $V_2/V_1=(r_2/r_1)^2(h_2/h_1)$ \\
+Перелили ту же воду & $V_1=V_2$; высота меняется как $1/r^2$ \\
+Погрузили деталь & $V_{\text{дет}}/V_{\text{воды}}=\Delta h/h_0$ \\
+Дана секторная часть & Умножить на долю угла $\alpha/360^\circ$ \\
+Есть отверстие & Вычесть объём удалённой части \\
+Несколько частей & Сложить объёмы без взаимного перекрытия \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vfill
+\begin{center}
+\color{muted}\footnotesize Лёвин Артём Александрович эксклюзивно для Николь Саркисьянц
+\end{center}
+\end{document}
