@@ -5,6 +5,73 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-23",
+  "ktpRefs": [],
+  "href": "23.11.26.html",
+  "title": "Алгебра и средняя скорость",
+  "navTitle": "Алгебра и средняя скорость",
+  "navSubtitle": "23.11.26 · Скобки и знаки, квадратные уравнения, извлечение корней, задачи на движение и сравнение средней скорости по равному времени и пути. 10 задач Пути А.",
+  "summary": "Раскрытие скобок, дискриминант и быстрые квадратные корни; таблица движения и отбор допустимых скоростей; средняя скорость при равных отрезках времени и пути; работа со сложными дробями и 10 задач.",
+  "topics": [
+    "Раскрытие скобок и контроль знаков",
+    "Таблица скорость–время–путь; выбор неизвестной и разность времён",
+    "Квадратное уравнение, дискриминант, отбор допустимого корня",
+    "Извлечение корня по границам и последней цифре; выделение полного квадрата",
+    "Средняя скорость: равные промежутки времени и равные участки пути",
+    "Сложные дроби и деление на обратную дробь",
+    "Тренировочный блок: 10 задач Пути А"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "oge_8_3_2",
+      "evidenceAnchor": "algebra",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_9_2_1",
+      "evidenceAnchor": "quadratic",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_9_2_3",
+      "evidenceAnchor": "quadratic",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_9_2_4",
+      "evidenceAnchor": "quadratic",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "oge_21_2_1",
+      "evidenceAnchor": "motion",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_2_2",
+      "evidenceAnchor": "motion",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_2_3",
+      "evidenceAnchor": "motion",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "oge_21_2_4",
+      "evidenceAnchor": "motion",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "23.11.26.html",
+    "pdf": "../pdf_docs/23.11.26.pdf",
+    "tex": "../tex_docs/23.11.26.tex",
+    "lab": "23.11.26-lab.html"
+  }
+},
+
+{
   "date": "2026-11-19",
   "ktpRefs": [],
   "href": "19.11.26.html",
