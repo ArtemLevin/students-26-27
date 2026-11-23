@@ -67,7 +67,7 @@ try{
   await call('Page.navigate',{url});
   for(let i=0;i<150;i++){
    const info=await evaluate('({url:location.href,ready:document.readyState})');
-   if(info.url===url&&info.ready==='complete')break;
+   if(info.url.split('#')[0]===url&&info.ready==='complete')break;
    if(i===149)throw Error('Page loading timed out: '+url);
    await sleep(90);
   }
