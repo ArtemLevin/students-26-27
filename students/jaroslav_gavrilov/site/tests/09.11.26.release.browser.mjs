@@ -56,9 +56,10 @@ try{
  assert.match(quiz,/Верно/);
  await js("window.dispatchEvent(new Event('beforeprint'))");assert.equal(await js("document.querySelector('#answers details').open"),true,'print answers shown');
  await js("window.dispatchEvent(new Event('afterprint'))");assert.equal(await js("document.querySelector('#answers details').open"),false,'answers restored');
- assert.equal(LESSONS[0].date,'2026-11-12');assert.equal(LESSONS.filter(x=>x.date==='2026-11-09').length,1);
- assert.equal(LESSONS.filter(x=>x.date==='2026-11-12').length,1,'new lesson published once');
- for(const [w,h] of [[390,844],[1440,900]]){await visit('index.html',w,h,false);const a=await js("document.getElementById('latestLessonCta').getAttribute('href')");assert.equal(a,'12.11.26.html')}
+ assert.equal(LESSONS[0].date,'2026-11-23');assert.equal(LESSONS.filter(x=>x.date==='2026-11-09').length,1);
+ assert.equal(LESSONS.filter(x=>x.date==='2026-11-12').length,1,'November 12 lesson remains once');
+ assert.equal(LESSONS.filter(x=>x.date==='2026-11-23').length,1,'November 23 lesson published once');
+ for(const [w,h] of [[390,844],[1440,900]]){await visit('index.html',w,h,false);const a=await js("document.getElementById('latestLessonCta').getAttribute('href')");assert.equal(a,'23.11.26.html')}
  // The November 9 regression also protects the latest November 12 lesson and lab.
  for(const [w,h] of [[390,844],[1440,900]])for(const dark of [false,true]){
    await visit('12.11.26.html',w,h,dark);
@@ -92,7 +93,24 @@ try{
  assert.deepEqual(reset,{invalid:false,d:'3',s:'70'});
  const invalid=await js("(()=>{let move=(id,v)=>{const x=document.getElementById(id);x.value=v;x.dispatchEvent(new Event('input',{bubbles:true}))};move('distance',300);move('speedA',110);move('delayHours',6);return {disabled:document.getElementById('play').disabled,answer:document.getElementById('meetX').textContent}})()");
  assert.deepEqual(invalid,{disabled:true,answer:'—'});
- for(const href of new Set(lesson.links.filter(x=>x&&!x.startsWith('#')))){const resp=await fetch(new URL(href,host+STUDENT+'09.11.26.html'));assert.equal(resp.status,200,'link '+href)}
+ 
+ // November 23 release regression: contextual motion lesson and reactive speed laboratory.
+ for(const [w,h] of [[390,844],[1440,900]])for(const dark of [false,true]){
+   await visit('23.11.26.html',w,h,dark);
+   const lesson23=await js("(()=>({tasks:document.querySelectorAll('#practice .task').length,answers:document.querySelectorAll('#answers table tr').length,lab:!!document.querySelector('a[href=\\\"23.11.26-lab.html\\\"]')}))()");
+   assert.deepEqual(lesson23,{tasks:10,answers:10,lab:true},'November 23 complete practice and lab navigation');
+   await visit('23.11.26-lab.html',w,h,dark);
+   assert.equal(await js("document.getElementById('avg').textContent"),'70 км/ч','equal-time initial mean');
+   let equalDistance=await js("(()=>{document.getElementById('distance').click();return document.getElementById('avg').textContent})()");
+   assert.equal(equalDistance,'67,2 км/ч','equal-distance harmonic mean');
+   const contrast=await js("(()=>{document.getElementById('contrast').click();return document.getElementById('avg').textContent})()");
+   assert.equal(contrast,'57,14 км/ч','contrast 40/100 harmonic mean');
+   const equal=await js("(()=>{document.getElementById('equal').click();return document.getElementById('avg').textContent})()");
+   assert.equal(equal,'70 км/ч','equal speeds in either mode');
+   const reset=await js("(()=>{document.getElementById('reset').click();return {v1:document.getElementById('v1').value,v2:document.getElementById('v2').value,mean:document.getElementById('avg').textContent}})()");
+   assert.deepEqual(reset,{v1:'56',v2:'84',mean:'70 км/ч'},'reset restores initial model');
+ }
+  for(const href of new Set(lesson.links.filter(x=>x&&!x.startsWith('#')))){const resp=await fetch(new URL(href,host+STUDENT+'09.11.26.html'));assert.equal(resp.status,200,'link '+href)}
  assert.deepEqual(errors,[],'JS exceptions');assert.deepEqual(bad,[],'Network errors');
  console.log('JAROSLAV_0911_REVIEW_PASS',JSON.stringify({sizes:sizes.length,lesson,scenarios:4,artifacts:fs.readdirSync(art).length}));
 }finally{try{ws?.close()}catch(_){}try{proc?.kill('SIGKILL')}catch(_){}server.close();try{fs.rmSync(profile,{recursive:true,force:true,maxRetries:8,retryDelay:150})}catch(_){}}
