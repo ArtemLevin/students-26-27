@@ -131,6 +131,39 @@ try{
  await open('09.11.26-lab.html#months',390,844,false);
  assert.equal(await run("document.querySelectorAll('#history tr').length"),6,'Monthly case needs six monthly periods');
  assert.match(await run("document.getElementById('overValue').textContent"),/22,5%/);
+ // Regression for 24 November: both modes, exact fractions, poster and answer disclosure.
+ for(const name of ['24.11.26.html','24.11.26-lab.html#scale','24.11.26-lab.html#cut']){
+  for(const [width,height] of [[1440,900],[1024,768],[768,1024],[390,844],[320,740]]){
+   for(const dark of [false,true]){
+    await open(name,width,height,dark);
+    assert.ok(await run('(()=>{const ids=[...document.querySelectorAll("[id]")].map(e=>e.id);return ids.length===new Set(ids).size})()'),name+' duplicate IDs');
+    if(width===1440||width===390)await shot(name.replace('.html','').replace('#','-')+'-'+width+'-'+(dark?'dark':'light'));
+   }
+  }
+ }
+ await open('24.11.26.html',390,844,false);
+ assert.equal(await run("document.querySelectorAll('.exercises>li').length"),10);
+ assert.ok(await run("document.querySelectorAll('math').length>=10"));
+ assert.equal(await run("(()=>{const d=document.querySelector('.exercises details');d.querySelector('summary').click();return d.open})()"),true);
+ assert.equal(await run("(()=>{dispatchEvent(new Event('beforeprint'));return [...document.querySelectorAll('.exercises details')].every(x=>x.open)})()"),true);
+ assert.equal(await run("(()=>{dispatchEvent(new Event('afterprint'));return document.querySelectorAll('.exercises details[open]').length})()"),1);
+ await run("document.querySelector('.poster-preview').open=true;document.querySelector('.poster-preview img').scrollIntoView()");
+ for(let i=0;i<50;i++){if(await run("document.querySelector('.poster-preview img').complete&&document.querySelector('.poster-preview img').naturalWidth>0"))break;await sleep(100);}
+ assert.ok(await run("document.querySelector('.poster-preview img').naturalWidth>0"),'Poster must load');
+ assert.deepEqual(failed,[]);assert.deepEqual(exceptions,[]);
+ await open('24.11.26-lab.html#scale',1440,900,false);
+ assert.equal(await run("document.getElementById('volValue').textContent"),'27');
+ assert.equal(await run("(()=>{document.getElementById('equalCase').click();return document.getElementById('volValue').textContent})()"),'6');
+ assert.equal(await run("(()=>{const k=document.getElementById('k'),m=document.getElementById('m');k.value=3;m.value=2;k.dispatchEvent(new Event('input',{bubbles:true}));return document.getElementById('volValue').textContent})()"),'108');
+ await open('24.11.26-lab.html#cut',390,844,false);
+ assert.equal(await run("document.getElementById('cutPanel').hidden"),false);
+ assert.equal(await run("document.getElementById('cutVol').textContent"),'0,25');
+ assert.equal(await run("(()=>{document.getElementById('thirdCase').click();return document.getElementById('tOut').textContent})()"),'1/3');
+ assert.equal(await run("document.getElementById('cutVol').textContent"),'0,1111');
+ assert.equal(await run("(()=>{const t=document.getElementById('t');t.value=54;t.dispatchEvent(new Event('input',{bubbles:true}));return document.getElementById('cutVol').textContent})()"),'0,81');
+ assert.equal(await run("(()=>{document.getElementById('midCase').click();return document.getElementById('remain').textContent})()"),'0,75');
+ assert.deepEqual(exceptions,[]);assert.deepEqual(failed,[]);
+ console.log('24 November prism lesson browser checks passed.');
  const {LESSONS:publishedLessons}=await import(pathToFileURL(path.join(repo,'students/xenia_klykova/site/lesson-registry.js')).href);
  const expectedLatest=publishedLessons[0];
  await open('index.html',1440,900,false);
