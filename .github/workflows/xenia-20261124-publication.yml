@@ -1,0 +1,33 @@
+name: Xenia 24 November publication verification
+on:
+  pull_request:
+    types: [synchronize]
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  publish:
+    if: github.event.pull_request.head.ref == 'lesson/xenia-2026-11-24' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Canonical dry run and publication
+        run: |
+          node scripts/publish-lesson.mjs xenia_klykova 24.11.26 --intent students/xenia_klykova/site/data/publication-intents/2026-11-24.json --dry-run
+          node scripts/publish-lesson.mjs xenia_klykova 24.11.26 --intent students/xenia_klykova/site/data/publication-intents/2026-11-24.json
+      - name: Verify and export publication changes
+        run: |
+          node scripts/student.mjs validate xenia_klykova
+          node scripts/student.mjs audit
+          git add -N students/xenia_klykova/site
+          git diff -- students/xenia_klykova/site
+          git diff -- students/xenia_klykova/site > /tmp/xenia-publication.patch
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xenia-publication-patch
+          path: /tmp/xenia-publication.patch
