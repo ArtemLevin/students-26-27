@@ -5,6 +5,58 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-11-24",
+  "ktpRefs": [],
+  "href": "24.11.26.html",
+  "title": "Призмы: объём, боковая поверхность и отношения",
+  "navTitle": "Призмы: объём, боковая поверхность и отношения",
+  "navSubtitle": "Ксения Клыкова · 24 ноября 2026: объём призмы, масштабирование подобного основания, метод отношений и экспресс-метод, средняя линия и отсечение призмы.",
+  "summary": "Ксения Клыкова · 24 ноября 2026: объём призмы, масштабирование подобного основания, метод отношений и экспресс-метод, средняя линия и отсечение призмы.",
+  "topics": [
+    "Объём призмы и площади правильных оснований",
+    "Масштабирование подобного основания и высоты",
+    "Метод отношений и экспресс-метод",
+    "Боковая поверхность прямой призмы",
+    "Сечение через среднюю линию основания"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t3_prism",
+      "evidenceAnchor": "prism",
+      "relation": "practiced",
+      "label": "Объём призмы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_similarity",
+      "evidenceAnchor": "scale",
+      "relation": "practiced",
+      "label": "Масштабирование основания и высоты",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_surface",
+      "evidenceAnchor": "surface",
+      "relation": "practiced",
+      "label": "Боковая поверхность призмы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t3_basic_sections",
+      "evidenceAnchor": "section",
+      "relation": "practiced",
+      "label": "Отсечение по средней линии",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "24.11.26.html",
+    "pdf": "../pdf_docs/24.11.26.pdf",
+    "tex": "../tex_docs/24.11.26.tex",
+    "lab": "24.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-23",
   "ktpRefs": [],
   "href": "23.11.26.html",
