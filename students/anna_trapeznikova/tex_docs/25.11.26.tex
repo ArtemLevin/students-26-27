@@ -1,0 +1,263 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage[a4paper,margin=20mm,headheight=25pt,headsep=7mm,footskip=10mm]{geometry}
+\usepackage{microtype,xcolor,tikz,booktabs,tabularx,enumitem,fancyhdr,setspace,titlesec}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\color{textgray}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\abovedisplayskip}{8pt}
+\setlength{\belowdisplayskip}{8pt}
+\setlist[itemize]{leftmargin=*,itemsep=1pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=*,itemsep=5pt,topsep=3pt}
+\titleformat{\section}{\Large\color{darkaccent}}{\thesection.}{0.5em}{}[\vspace{5pt}{\color{accent}\titlerule[0.5pt]}]
+\titlespacing*{\section}{0pt}{12pt}{8pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Корни и преобразование выражений}
+\fancyhead[R]{\small Анна Трапезникова}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+\newcommand{\example}[1]{\par\medskip\textcolor{darkaccent}{\textbf{#1}}\par}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\remember}[1]{\par\smallskip\textcolor{darkaccent}{\textbf{Проверяйте:}} #1\par}
+\tikzset{act/.style={draw=accent!70!black,rounded corners=2pt,text width=6.8cm,align=center,inner sep=7pt,font=\small},decision/.style={diamond,aspect=2.0,draw=accent!70!black,align=center,inner sep=2pt,font=\small},terminal/.style={ellipse,draw=accent!70!black,align=center,inner xsep=13pt,inner ysep=5pt,font=\small},arr/.style={-{Stealth[length=2.6mm]},semithick,draw=darkaccent}}
+\begin{document}
+\begin{titlepage}
+\centering
+\vspace*{23mm}
+{\Large\color{darkaccent} МАТЕМАТИКА\par}
+\vspace{15mm}
+{\huge Чек-лист\par}
+\vspace{9mm}
+{\LARGE\color{accent} Корни $n$-й степени, модуль\\[2mm] и сокращение дробей\par}
+\vspace{13mm}
+{\large Алгебра. Преобразование иррациональных выражений\par}
+\vfill
+{\large Анна Трапезникова\par}
+\vspace{9mm}
+{25 ноября 2026 г.\par}
+\vspace{15mm}
+{\small Лёвин Артём Александрович\\ эксклюзивно для Анны Трапезниковой\par}
+\vspace{19mm}
+\begin{tikzpicture}
+\draw[accent,line width=0.85pt] (0,0) .. controls (2,0.9) and (4,-0.9) .. (6,0) .. controls (8,0.75) and (10,-0.85) .. (12,0);
+\end{tikzpicture}
+\end{titlepage}
+\setcounter{page}{1}
+\section{Корень и степень}
+Корень $n$-й степени ($n\ge2$) из числа $a$ связан со степенью: если $b=\sqrt[n]{a}$, то $b^n=a$. При чётном $n$ арифметический корень определяется для $a\ge0$ и всегда неотрицателен. При нечётном $n$ корень существует для любого действительного $a$ и сохраняет его знак.
+\[
+\sqrt[4]{81}=3,\qquad \sqrt[3]{-27}=-3,\qquad \sqrt{0}=0.
+\]
+\textcolor{darkaccent}{Основные свойства} (для $a,b\ge0$, $b>0$ при делении):
+\[
+\sqrt[n]{ab}=\sqrt[n]{a}\,\sqrt[n]{b},\qquad
+\sqrt[n]{\frac ab}=\frac{\sqrt[n]{a}}{\sqrt[n]{b}},
+\qquad \sqrt[m]{\sqrt[n]{a}}=\sqrt[mn]{a}.
+\]
+При $a\ge0$ и натуральных $k,n,t$ ($n\ge2$):
+\[
+\sqrt[n]{a^k}=\sqrt[nt]{a^{kt}}=\bigl(\sqrt[nt]{a}\bigr)^{kt},\qquad
+\sqrt[n]{a}=\bigl(\sqrt[nt]{a}\bigr)^t.
+\]
+Для $a>0$ удобно также записывать $\sqrt[n]{a^k}=a^{k/n}$.
+\example{Пример 1. Вложенные корни (№ 9)}
+\[
+\begin{aligned}
+\sqrt[3]{\sqrt{0{,}000001}}\cdot\sqrt{\sqrt{256}}
+&=\sqrt[6]{10^{-6}}\cdot\sqrt[4]{4^4}\\
+&=10^{-1}\cdot4=0{,}4.
+\end{aligned}
+\]
+У вложенных корней перемножаются показатели: $3\cdot2=6$, $2\cdot2=4$.
+\example{Пример 2. Разложение числа на простые множители}
+\[
+729=3\cdot243=3^2\cdot81=3^3\cdot27=3^4\cdot9=3^6.
+\]
+Поэтому $\sqrt[6]{729}=3$. Последовательно делите число на наименьший подходящий простой делитель, пока не получите единицу.
+\remember{Индекс корня, показатель степени и количество десятичных знаков. При преобразовании отрицательных оснований учитывайте чётность корня.}
+\clearpage
+\section{Почему появляется модуль}
+При извлечении корня из степени с тем же показателем действуют два разных правила:
+\[
+\sqrt[n]{u^n}=\begin{cases}
+\abs{u},& n\text{ чётное},\\
+u,& n\text{ нечётное}.
+\end{cases}
+\]
+Например, $\sqrt[4]{(-2)^4}=2$, а $\sqrt[3]{(-2)^3}=-2$. Чётный корень по определению неотрицателен.
+\example{Пример 3. Упрощение выражения (№ 18)}
+\[
+\sqrt[4]{y^2\sqrt[3]{y^6}}
+=\sqrt[4]{y^2\cdot y^2}
+=\sqrt[4]{y^4}=\abs{y},\qquad y\in\mathbb R.
+\]
+\section{Сокращение показателей корня и степени}
+Если $u$ может быть отрицательным, то при чётном $d$ сохраняйте модуль:
+\[
+\sqrt[md]{u^d}=\sqrt[m]{\abs{u}}\quad(d\text{ чётное}).
+\]
+При $u\ge0$ модуль можно опустить. Если $d$ нечётное, то $\sqrt[md]{u^d}=\sqrt[m]{u}$ на области определения исходного выражения.
+\example{Пример 4. Проверка равенства (№ 27)}
+Верно ли равенство $\sqrt[4]{(x-1)^2}=\sqrt{1-x}$ при $x<1$?
+\[
+\sqrt[4]{(x-1)^2}=\sqrt{\abs{x-1}}.
+\]
+Из $x<1$ следует $x-1<0$, поэтому $\abs{x-1}=-(x-1)=1-x$.
+\[
+\sqrt[4]{(x-1)^2}=\sqrt{1-x}.
+\]
+Правая часть определена, равенство верно для всех $x<1$.
+\remember{При $u<0$ запись $\sqrt[4]{u^2}=\sqrt{u}$ недопустима. Верная формула: $\sqrt[4]{u^2}=\sqrt{\abs{u}}$.}
+\clearpage
+\section{Раскрытие модуля на заданном интервале}
+\[
+\abs{u}=\begin{cases}u,&u\ge0,\\-u,&u<0.\end{cases}
+\]
+Определяйте знак всего подмодульного выражения. Для этого преобразуйте заданное неравенство: прибавление одного числа ко всем частям сохраняет знаки; умножение на отрицательное число меняет направления всех знаков неравенства.
+\example{Пример 5. Отрицательное подмодульное (№ 22)}
+\[
+ x<-2{,}5\ \Longrightarrow\ 2x<-5\ \Longrightarrow\ 2x+5<0.
+\]
+Поэтому $\sqrt[4]{(2x+5)^4}=\abs{2x+5}=-(2x+5)=-2x-5$.
+\example{Пример 6. Два разных знака (приём из № 24)}
+Упростим $\sqrt[4]{(3x+5)^4}+\sqrt[4]{(2x-7)^4}$ при $-1\le x\le0$.
+\[
+\begin{aligned}
+-1\le x\le0&\ \Rightarrow\ -3\le3x\le0\ \Rightarrow\ 2\le3x+5\le5,\\
+-1\le x\le0&\ \Rightarrow\ -2\le2x\le0\ \Rightarrow\ -9\le2x-7\le-7.
+\end{aligned}
+\]
+Первое выражение положительно, второе отрицательно. Следовательно,
+\[
+\abs{3x+5}+\abs{2x-7}=3x+5-(2x-7)=x+12.
+\]
+\example{Пример 7. Отрицательный коэффициент при $x$}
+Если $x>2$, то $-x<-2$ и $2-x<0$. Отсюда $\abs{2-x}=x-2$. Например,
+\[
+\sqrt[6]{(2-x)^2}=\sqrt[3]{\abs{2-x}}=\sqrt[3]{x-2}.
+\]
+Если знак меняется внутри заданного промежутка, разделите его в точке, где подмодульное выражение равно нулю, и рассмотрите случаи отдельно.
+\clearpage
+\section*{Алгоритм: раскрытие модуля}
+\vspace{5mm}
+\begin{center}
+\begin{tikzpicture}[node distance=9mm and 12mm]
+\node[terminal] (start) {Начало};
+\node[act,below=of start] (root) {Упростите корень с учётом чётности. Выделите модуль $|u(x)|$};
+\node[act,below=of root] (sign) {Найдите знак $u(x)$ на заданном промежутке};
+\node[decision,below=of sign] (pos) {$u(x)\ge0$\\на всём\\промежутке?};
+\node[act,text width=3.1cm,left=7mm of pos] (plus) {$|u(x)|=u(x)$};
+\node[decision,below=12mm of pos] (neg) {$u(x)\le0$\\на всём\\промежутке?};
+\node[act,text width=3.1cm,right=7mm of neg] (minus) {$|u(x)|=-u(x)$};
+\node[act,below=12mm of neg] (split) {Разделите промежуток на области $u(x)\ge0$ и $u(x)<0$. Раскройте модуль отдельно в каждой области};
+\node[act,below=12mm of split] (finish) {Упростите результат и сохраните ограничения};
+\node[terminal,below=of finish] (end) {Ответ};
+\draw[arr] (start)--(root);\draw[arr] (root)--(sign);\draw[arr] (sign)--(pos);
+\draw[arr] (pos)--node[above,font=\small]{да}(plus);
+\draw[arr] (pos)--node[right,font=\small]{нет}(neg);
+\draw[arr] (neg)--node[above,font=\small]{да}(minus);
+\draw[arr] (neg)--node[right,font=\small]{нет}(split);
+\draw[arr] (split)--(finish);\draw[arr] (finish)--(end);
+\draw[arr] (plus.south) |- (finish.west);
+\draw[arr] (minus.south) |- (finish.east);
+\end{tikzpicture}
+\end{center}
+\clearpage
+\section{Сокращение дробей с корнями}
+В примерах этого раздела $a>0$; при наличии знаменателя дополнительно исключайте его нули. Общий маршрут: найдите ОДЗ, приведите радикалы к общему показателю, разложите на множители, сократите общий ненулевой множитель.
+\example{Пример 8. Одинаковые показатели (№ 29)}
+\[
+\frac{\sqrt a}{\sqrt[4]a}=
+\frac{(\sqrt[4]a)^2}{\sqrt[4]a}=\sqrt[4]a.
+\]
+\example{Пример 9. Вынесение общего множителя (№ 30)}
+\[
+\frac{\sqrt[3]a-\sqrt[6]a}{\sqrt[6]a}=
+\frac{(\sqrt[6]a)^2-\sqrt[6]a}{\sqrt[6]a}=
+\sqrt[6]a-1.
+\]
+Мысленно положите $t=\sqrt[6]a>0$: дробь превращается в $(t^2-t)/t=t-1$.
+\example{Пример 10. Разность квадратов (№ 31)}
+\[
+U^2-V^2=(U-V)(U+V),\qquad
+\sqrt[n]a-1=(\sqrt[2n]a-1)(\sqrt[2n]a+1).
+\]
+При $a>0$, $a\ne1$:
+\[
+\frac{\sqrt[4]a+1}{\sqrt a-1}=
+\frac{\sqrt[4]a+1}{(\sqrt[4]a-1)(\sqrt[4]a+1)}
+=\frac1{\sqrt[4]a-1}.
+\]
+\example{Пример 11. Разность в обратном порядке (№ 32)}
+При $a>0$, $a\ne1$ положим $t=\sqrt[6]a$. Тогда
+\[
+\frac{1-\sqrt[3]a}{\sqrt[6]a-1}=
+\frac{1-t^2}{t-1}=\frac{-(t-1)(t+1)}{t-1}=-1-\sqrt[6]a.
+\]
+\remember{Сокращать можно только общий ненулевой множитель. Знак перед скобкой распространяется на каждое слагаемое. Исходные ограничения сохраняются после сокращения.}
+\smallskip
+Например, $\dfrac{t+1}{t}$ при $t\ne0$ нельзя сократить до $1$: слагаемое $t$ не является множителем всего числителя.
+\clearpage
+\section*{Тренировочный блок}
+Выполняйте преобразования последовательно. В задачах 4--7 обоснуйте знак подмодульного выражения. В задачах 8--10 учитывайте указанные ограничения.\par\medskip
+\textcolor{darkaccent}{\textbf{Базовый уровень}}
+\begin{enumerate}
+\item Вычислите: $\displaystyle \sqrt[3]{\sqrt{64}}\cdot\sqrt{\sqrt{81}}$.
+\item Вычислите: $\displaystyle \sqrt[6]{(-3)^6}$.
+\item Упростите: $\displaystyle \sqrt[8]{z^4\sqrt[3]{z^{12}}}$, $z\in\mathbb R$.
+\end{enumerate}
+\textcolor{darkaccent}{\textbf{Средний уровень}}
+\begin{enumerate}[resume]
+\item Упростите: $\displaystyle \sqrt[4]{(3x-6)^4}$ при $x<2$.
+\item Упростите: $\displaystyle \sqrt[4]{(2x+7)^4}+\sqrt[6]{(3x-4)^6}$ при $-1\le x\le0$.
+\item Верно ли равенство $\displaystyle \sqrt[6]{(x-4)^2}=\sqrt[3]{4-x}$ при $x<4$?
+\item Верно ли равенство $\displaystyle \sqrt[6]{(2-x)^2}=\sqrt[3]{2-x}$ при $x>2$?
+\end{enumerate}
+\textcolor{darkaccent}{\textbf{Повышенный уровень}}
+\begin{enumerate}[resume]
+\item Сократите дробь: $\displaystyle \frac{\sqrt[3]a}{\sqrt[6]a}$, $a>0$.
+\item Сократите дробь: $\displaystyle \frac{\sqrt[10]a-\sqrt[5]a}{\sqrt[10]a}$, $a>0$.
+\item Сократите дробь: $\displaystyle \frac{\sqrt[8]a+1}{1-\sqrt[4]a}$, $a>0$, $a\ne1$.
+\end{enumerate}
+\clearpage
+\section*{Ответы}
+\renewcommand{\arraystretch}{1.35}
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}r X@{}}
+\toprule
+№ & Ответ \\ \midrule
+1 & $6$ \\
+2 & $3$ \\
+3 & $\abs{z}$ \\
+4 & $6-3x$ \\
+5 & $11-x$ \\
+6 & Да, верно. \\
+7 & Нет, неверно; левая часть равна $\sqrt[3]{x-2}$. \\
+8 & $\sqrt[6]a$, $a>0$ \\
+9 & $1-\sqrt[10]a$, $a>0$ \\
+10 & $\displaystyle\frac{1}{1-\sqrt[8]a}$, $a>0$, $a\ne1$ \\ \bottomrule
+\end{tabularx}
+\end{center}
+\medskip
+\begin{center}\large\color{darkaccent} Итоговая памятка\end{center}
+\begin{tabularx}{\linewidth}{@{}p{0.30\linewidth} X@{}}
+\toprule
+Сигнал в задаче & Полезное действие \\ \midrule
+Корень под корнем & Перемножьте показатели при соблюдении области определения. \\
+Чётный корень из степени & Проверьте необходимость модуля. \\
+Заданный интервал & Докажите знак всего выражения. \\
+Разные показатели корней & Приведите корни к общему показателю при допустимых основаниях. \\
+Сумма или разность & Вынесите общий множитель или примените разность квадратов. \\
+Дробь & Проверьте ОДЗ и сокращайте только ненулевые множители. \\ \bottomrule
+\end{tabularx}
+\end{document}
