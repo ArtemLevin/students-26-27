@@ -1,0 +1,253 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage[a4paper,left=20mm,right=20mm,top=20mm,bottom=22mm,headheight=25pt,headsep=9mm]{geometry}
+\usepackage{microtype,booktabs,tabularx,enumitem,fancyhdr,setspace,xcolor,tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Арифметика остатков и сравнения по модулю},pdfauthor={Лёвин Артём Александрович}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\onehalfspacing
+\setlist[itemize]{leftmargin=*,itemsep=1pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=*,itemsep=5pt,topsep=3pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Арифметика остатков}
+\fancyhead[R]{\small Ксения Клыкова}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height \headrulewidth\hfill}}
+\newcommand{\topic}[1]{\par\medskip\noindent{\Large\color{darkaccent}#1}\par\smallskip{\color{accent}\hrule height 0.45pt}\medskip}
+\newcommand{\example}[1]{\par\medskip\noindent\textcolor{darkaccent}{\textbf{#1}}\par\smallskip}
+\newcommand{\reminder}[1]{\par\smallskip\textcolor{darkaccent}{\textbf{#1}}\par}
+\newcommand{\modu}[1]{\pmod{#1}}
+\begin{document}
+\color{textgray}
+\begin{titlepage}
+\centering
+\vspace*{25mm}
+{\Large\color{darkaccent} МАТЕМАТИКА\par}
+\vspace{15mm}
+{\huge Чек-лист\par}
+\vspace{10mm}
+{\LARGE\color{accent} Арифметика остатков\\ и сравнения по модулю\par}
+\vspace{15mm}
+{\large Олимпиадные методы решения задач на делимость\par}
+\vfill
+{\large Ксения Клыкова\par}
+\vspace{9mm}
+{\large 25 ноября 2026 г.\par}
+\vspace{18mm}
+{\small Лёвин Артём Александрович\\ эксклюзивно для Ксении Клыковой\par}
+\vspace{17mm}
+\begin{tikzpicture}
+\draw[accent,line width=0.9pt] (0,0) .. controls (2,0.8) and (4,-0.8) .. (6,0) .. controls (8,0.8) and (10,-0.8) .. (12,0);
+\end{tikzpicture}
+\vspace{5mm}
+\end{titlepage}
+\setcounter{page}{1}
+\topic{1. Остаток и сравнение по модулю}
+Пусть $a\in\mathbb Z$, $m\in\mathbb N$, $m\ge 1$. При делении с остатком существует единственная пара целых чисел $q,r$, для которой
+\[a=mq+r,\qquad 0\le r<m.\]
+Здесь $q$ — неполное частное, $r$ — остаток. Запись $m\mid a$ означает, что $a$ делится на $m$ без остатка.
+
+Два целых числа сравнимы по модулю $m$, если их остатки при делении на $m$ совпадают:
+\[a\equiv b\modu{m}\quad\Longleftrightarrow\quad m\mid(a-b).\]
+\example{Почему это верно?}
+Если $a=mx+r$, $b=my+r$, то $a-b=m(x-y)$. Обратно: если $a-b=mk$ и $b=my+r$, то $a=m(y+k)+r$. Следовательно, остаток у чисел один и тот же.
+\example{Удобный представитель остатка}
+\[98=11\cdot9-1,\qquad 98\equiv-1\equiv10\modu{11}.\]
+Число $-1$ удобно для вычислений. Стандартный остаток равен $10$ и принадлежит множеству $\{0,1,\ldots,m-1\}$.
+\topic{2. Основные свойства сравнений}
+Если $a\equiv b\modu{m}$ и $c\equiv d\modu{m}$, то
+\begin{align*}
+ a+c&\equiv b+d\modu{m},&a-c&\equiv b-d\modu{m},\\
+ ac&\equiv bd\modu{m},&a^k&\equiv b^k\modu{m}\quad(k\in\mathbb N).
+\end{align*}
+Для суммы и разности достаточно сложить или вычесть кратные $m$ разности. Например, для произведения $ac-bd=c(a-b)+b(c-d)$; оба слагаемых делятся на $m$. Свойство степеней следует из многократного умножения.
+\clearpage
+\topic{3. Вычисление остатков без больших чисел}
+Главный приём: заменить каждое число удобным сравнимым с ним числом по одному и тому же модулю. Затем выполнить действия и привести результат к стандартному остатку.
+\example{Пример 1. Сумма и произведение}
+Найдём остаток от деления $98\cdot57+125$ на $11$.
+\[98\equiv-1,\qquad57\equiv2,\qquad125\equiv4\modu{11}.\]
+\[98\cdot57+125\equiv(-1)\cdot2+4=2\modu{11}.\]
+Остаток равен $2$. Если вычесть $2$ из исходного числа или прибавить $9$, получится число, кратное $11$.
+\example{Пример 2. Повторное приведение остатка}
+\[137\cdot206+75\equiv2\cdot(-1)+3=1\modu{9}.\]
+\[37^3+7\equiv2^3+2=10\equiv0\modu{5}.\]
+Таким образом, первое выражение даёт остаток $1$, второе делится на $5$.
+\topic{4. Подстановка в многочлены}
+Если $n\equiv r\modu{m}$, то для любого многочлена $P$ с целыми коэффициентами $P(n)\equiv P(r)\modu{m}$.
+\example{Пример 3. Отрицательный представитель}
+Пусть $n\equiv-2\modu{7}$. Тогда
+\[n^2+5n+1\equiv(-2)^2+5(-2)+1=-5\equiv2\modu{7}.\]
+Поскольку $-5=7\cdot(-1)+2$, остаток равен $2$.
+\example{Пример 4. Многочлен третьей степени}
+При $n\equiv-1\modu{7}$ имеем
+\[n^3+2n^2-5n+6\equiv-1+2+5+6=12\equiv5\modu{7}.\]
+\clearpage
+\topic{5. Когда можно сократить сравнение?}
+Из $ca\equiv cb\modu{m}$ следует
+\[a\equiv b\modu{m/d},\qquad d=\gcd(c,m)=\text{НОД}(c,m).\]
+Если $d=1$, модуль остаётся прежним. Если $d>1$, модуль уменьшается; при $m/d=1$ условие выполняется для любых целых $a,b$.
+\example{Почему требуется менять модуль?}
+Из $m\mid c(a-b)$, после записи $m=dm_1$, $c=dc_1$, получаем $m_1\mid c_1(a-b)$. Числа $m_1,c_1$ взаимно просты, поэтому $m_1\mid(a-b)$.
+\example{Пример 5. Опасность сокращения}
+\[2\cdot1\equiv2\cdot4\modu{6},\qquad 1\not\equiv4\modu{6}.\]
+Но $\gcd(2,6)=2$, поэтому верно $1\equiv4\modu{3}$.
+\topic{6. Доказательство делимости}
+Для доказательства $m\mid N$ достаточно показать $N\equiv0\modu{m}$.
+
+Если $u,v$ взаимно просты, то одновременная делимость на $u$ и $v$ равносильна делимости на $uv$. В частности,
+\[15\mid N\quad\Longleftrightarrow\quad
+\begin{cases}N\equiv0\modu{3},\\N\equiv0\modu{5}.\end{cases}\]
+Для невзаимно простых делителей гарантируется делимость на их НОК. Например, $12$ делится на $2$ и $4$, но $8\nmid12$.
+\example{Пример 6. Квадрат нечётного числа}
+Пусть $n=2k+1$, $k\in\mathbb Z$. Тогда
+\[n^2=4k^2+4k+1=4k(k+1)+1.\]
+Среди соседних целых чисел $k$ и $k+1$ одно чётное. Значит, $8\mid4k(k+1)$ и $n^2\equiv1\modu{8}$.
+\clearpage
+\topic{7. Десятичная запись и последняя цифра}
+Для неотрицательного целого числа $N$ последняя цифра совпадает с остатком от деления на $10$:
+\[N=10q+r,\qquad r\in\{0,1,\ldots,9\}.\]
+Например, $125=10\cdot12+5$, $12346=10\cdot1234+6$.
+\example{Степени десяти}
+\[10\equiv1\modu{9},\qquad10\equiv-1\modu{11}.\]
+Для целого $k\ge0$:
+\[10^k\equiv1\modu{9},\qquad10^k\equiv(-1)^k\modu{11}.\]
+По модулю $11$ при чётном $k$ получается $1$, при нечётном — $-1$ (стандартный остаток $10$).
+\topic{8. Какие цифры возможны у квадрата?}
+Может ли квадрат целого числа оканчиваться на $7$? Пусть $n=10q+r$, где $0\le r\le9$. Тогда
+\[n^2=100q^2+20qr+r^2\equiv r^2\modu{10}.\]
+Достаточно проверить десять вариантов $r$. Это полный перебор всех возможных остатков.
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{l*{10}{r}}
+\toprule
+$r$ &0&1&2&3&4&5&6&7&8&9\\
+\midrule
+$r^2$ &0&1&4&9&16&25&36&49&64&81\\
+Остаток &0&1&4&9&6&5&6&9&4&1\\
+\bottomrule
+\end{tabular}
+\end{center}
+Возможные последние цифры квадрата: $0,1,4,5,6,9$. Цифры $2,3,7,8$ невозможны. В частности, квадрат целого числа не может оканчиваться на $7$.
+\reminder{Приём полного перебора}
+Для доказательства невозможности остатка переберите все классы от $0$ до $m-1$ и вычислите остаток выражения в каждом случае. Отдельных числовых примеров для общего доказательства недостаточно.
+\clearpage
+\topic{9. Делимость выражений с большими степенями}
+Особенно удобно использовать сравнения с противоположными числами. Если $a\equiv-b\modu{m}$, то
+\[a^n\equiv(-b)^n\modu{m}.\]
+\[(-b)^n=\begin{cases}b^n,& n\text{ чётное},\\-b^n,& n\text{ нечётное}.\end{cases}\]
+\example{Пример 7. Сумма степеней}
+Докажем, что $2^n+3^n$ делится на $5$ при каждом положительном нечётном целом $n$.
+
+Поскольку $2-(-3)=5$, имеем $2\equiv-3\modu{5}$. Возведём обе части сравнения в степень $n$:
+\[2^n\equiv(-3)^n=-3^n\modu{5}.\]
+Знак минус сохраняется благодаря нечётности показателя. Поэтому
+\[2^n+3^n\equiv-3^n+3^n=0\modu{5}.\]
+Требуемая делимость доказана для всех положительных нечётных $n$. В частности, $2^{10^3+1}+3^{10^3+1}$ делится на $5$, поскольку $10^3+1=1001$.
+\topic{10. Типичные ошибки}
+\begin{itemize}
+\item Использовать отрицательный или слишком большой представитель как окончательный остаток: $-5\equiv2\modu{7}$, остаток $2$.
+\item Путать равенство и сравнение: $98\equiv-1\modu{11}$, хотя $98\ne-1$.
+\item Сокращать общий множитель без проверки НОД с модулем.
+\item Объединять делимость на невзаимно простые числа через их произведение.
+\item Терять скобки и знак при возведении отрицательных чисел в степень; проверяйте чётность показателя.
+\item Доказывать общий факт по нескольким частным примерам; для перебора необходимо охватить все возможные остатки.
+\end{itemize}
+\clearpage
+\topic{Алгоритм: вычисление остатка или доказательство делимости}
+\vfill
+\begin{center}
+\begin{tikzpicture}[node distance=9mm, font=\small,
+term/.style={ellipse,draw=accent,minimum width=43mm,minimum height=10mm,align=center},
+actionnode/.style={draw=accent,rounded corners=2pt,text width=83mm,minimum height=13mm,align=center,inner sep=5pt},
+dec/.style={diamond,draw=accent,aspect=2.9,text width=43mm,align=center,inner sep=1pt},
+branch/.style={draw=accent,rounded corners=2pt,text width=61mm,minimum height=18mm,align=center,inner sep=5pt},
+arr/.style={-{Stealth[length=2.5mm]},draw=darkaccent,line width=.65pt}]
+\node[term] (start) {Начало};
+\node[actionnode,below=of start] (m) {Определите модуль $m$ по условию};
+\node[actionnode,below=of m] (rep) {Замените числа и переменные удобными сравнимыми представителями};
+\node[actionnode,below=of rep] (calc) {Выполните сложение, вычитание, умножение и возведение в степень};
+\node[actionnode,below=of calc] (norm) {Приведите результат к остатку $r$, где $0\le r<m$};
+\node[dec,below=of norm] (goal) {Требуется доказать делимость?};
+\node[branch,below=13mm of goal,xshift=-40mm] (rem) {Запишите остаток $r$};
+\node[branch,below=13mm of goal,xshift=40mm] (div) {Проверьте: $r=0$ — делится; $r\ne0$ — не делится};
+\node[term,below=44mm of goal] (end) {Ответ};
+\draw[arr] (start)--(m); \draw[arr] (m)--(rep); \draw[arr] (rep)--(calc); \draw[arr] (calc)--(norm); \draw[arr] (norm)--(goal);
+\draw[arr] (goal.west) -| node[pos=.22,above]{нет} (rem.north);
+\draw[arr] (goal.east) -| node[pos=.22,above]{да} (div.north);
+\draw[arr] (rem.south) |- (end.west); \draw[arr] (div.south) |- (end.east);
+\end{tikzpicture}
+\end{center}
+\vfill
+\clearpage
+\topic{Тренировочный блок}
+Решайте с помощью сравнений по модулю. В задачах на делимость и невозможность остатка приведите доказательство. Все переменные в заданиях — целые числа.
+\example{Базовый уровень}
+\begin{enumerate}
+\item Найдите стандартный остаток от деления $-38$ на $7$.
+\item Найдите остаток от деления $109\cdot46+124$ на $11$.
+\item Найдите остаток от деления $43^3+12$ на $5$.
+\end{enumerate}
+\example{Средний уровень}
+\begin{enumerate}[start=4]
+\item Известно, что $n\equiv-3\modu{7}$. Найдите остаток от деления $n^2+4n+2$ на $7$.
+\item Известно, что $n\equiv-2\modu{9}$. Найдите остаток от деления $n^3-2n^2+5n+4$ на $9$.
+\item Известно, что $6x\equiv18\modu{24}$. Запишите все возможные стандартные остатки $x$ по модулю $24$.
+\item Найдите остатки числа $10^{2026}$ при делении на $9$ и на $11$.
+\end{enumerate}
+\example{Повышенный уровень}
+\begin{enumerate}[start=8]
+\item Может ли квадрат целого числа оканчиваться на $8$? Обоснуйте ответ перебором возможных остатков.
+\item Докажите, что $15\mid(10^{2k+1}+5)$ для любого целого $k\ge0$, отдельно проверив делимость на $3$ и на $5$.
+\item Докажите, что $4^n+7^n$ делится на $11$ при каждом положительном нечётном целом $n$. Примените результат к $n=10^4+1$.
+\end{enumerate}
+\clearpage
+\topic{Ответы}
+\begin{center}
+\renewcommand{\arraystretch}{1.28}
+\begin{tabularx}{\linewidth}{@{}rX@{}}
+\toprule
+№ & Ответ \\
+\midrule
+1 & $4$\\
+2 & $1$\\
+3 & $4$\\
+4 & $6$\\
+5 & $5$\\
+6 & $3,7,11,15,19,23$\\
+7 & $1$ и $1$ соответственно\\
+8 & Нет; возможны только цифры $0,1,4,5,6,9$.\\
+9 & Делится на $15$ при всех указанных $k$.\\
+10 & Делится на $11$ при всех указанных $n$, в том числе при $n=10001$.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\vspace{6mm}
+\topic{Итоговая памятка}
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\linewidth}{@{}p{.34\linewidth}X@{}}
+\toprule
+Сигнал в задаче & Полезное действие\\
+\midrule
+Большие числа & Замените их удобными представителями по модулю.\\
+Отрицательный результат & Приведите к диапазону от $0$ до $m-1$.\\
+Многочлен & Подставьте представитель остатка переменной.\\
+Общий множитель & Проверьте НОД множителя и модуля.\\
+Последняя цифра & Используйте модуль $10$.\\
+Доказательство делимости & Получите нулевой остаток.\\
+Сумма больших степеней & Ищите противоположные представители, учитывайте чётность.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\end{document}
