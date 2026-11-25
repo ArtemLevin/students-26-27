@@ -1,5 +1,68 @@
 export const LESSONS=[
 {
+  "date": "2026-11-25",
+  "ktpRefs": [
+    "ktp-006",
+    "ktp-007",
+    "ktp-009"
+  ],
+  "href": "25.11.26.html",
+  "title": "Движение по окружности и спутники",
+  "navTitle": "Движение по окружности и спутники",
+  "navSubtitle": "София Лузянина: движение по окружности, закон всемирного тяготения, круговые орбиты спутников, низкая орбита и плотность планеты. Занятие 24 ноября, материалы 25 ноября 2026 года.",
+  "summary": "София Лузянина: движение по окружности, закон всемирного тяготения, круговые орбиты спутников, низкая орбита и плотность планеты. Занятие 24 ноября, материалы 25 ноября 2026 года.",
+  "topics": [
+    "Равномерное движение по окружности",
+    "Период, частота, угловая и линейная скорость",
+    "Центростремительное ускорение и шестерни",
+    "Закон всемирного тяготения и ускорение свободного падения",
+    "Круговые орбиты спутников и плотность планеты"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "kinematics_15",
+      "evidenceAnchor": "circle",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "kinematics_16",
+      "evidenceAnchor": "circle",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "kinematics_17",
+      "evidenceAnchor": "acceleration",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dynamics_04",
+      "evidenceAnchor": "gravity",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "dynamics_06",
+      "evidenceAnchor": "gravity",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dynamics_14",
+      "evidenceAnchor": "orbit",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "dynamics_15",
+      "evidenceAnchor": "orbit",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "25.11.26.html",
+    "pdf": "../pdf_docs/25.11.26.pdf",
+    "tex": "../tex_docs/25.11.26.tex",
+    "lab": "25.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-20",
   "ktpRefs": [
     "ktp-002",
