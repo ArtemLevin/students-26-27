@@ -72,7 +72,7 @@
       lessonEvidence.get(id).push({
         date: lesson.date,
         title: lesson.title,
-        href: lesson.href || null,
+        href: lesson.topicHrefs?.[id] || lesson.href || null,
         note: lesson.note || null,
         contributesMastery: lesson.masteryEvidence !== false
       });

@@ -137,15 +137,6 @@ jobs:
         run: node --test pipeline/student/test/*.test.mjs
       - name: Run v2 publication domain regression
         run: node --test pipeline/student/publish/test/*.test.mjs
-      - name: Anna November 25 canonical publication (isolated checkout)
-        shell: bash
-        run: |
-          set -euo pipefail
-          INTENT=students/anna_trapeznikova/site/data/publication-intents/2026-11-25.json
-          node scripts/publish-lesson.mjs anna_trapeznikova 25.11.26 --intent "$INTENT" --dry-run
-          node scripts/publish-lesson.mjs anna_trapeznikova 25.11.26 --intent "$INTENT"
-          node scripts/student.mjs validate anna_trapeznikova
-          node -e 'const fs=require("node:fs");const cp=require("node:child_process");const tracked=cp.execFileSync("git",["diff","--name-only"],{encoding:"utf8"}).trim().split("\n").filter(Boolean);const untracked=cp.execFileSync("git",["ls-files","--others","--exclude-standard"],{encoding:"utf8"}).trim().split("\n").filter(Boolean);for(const file of [...tracked,...untracked]){if(file.startsWith("students/anna_trapeznikova/")) console.log("ANNA_PUBLISHED "+JSON.stringify({path:file,content:fs.readFileSync(file,"utf8")}));}'
       - name: Enforce Student Platform steady state
         shell: bash
         run: |
