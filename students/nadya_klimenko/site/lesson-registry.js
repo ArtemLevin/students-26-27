@@ -5,6 +5,77 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-11-25",
+  "ktpRefs": [],
+  "href": "25.11.26.html",
+  "title": "Прямая и обратная пропорциональность. Задачи на проценты",
+  "navTitle": "Прямая и обратная пропорциональность. Задачи на проценты",
+  "navSubtitle": "Прямая и обратная пропорциональность, метод стрелок, три типа процентных задач, растворы, выход продукта и 10 упражнений.",
+  "summary": "Прямая и обратная пропорциональность, метод стрелок, три типа процентных задач, растворы, выход продукта и 10 упражнений.",
+  "topics": [
+    "отношения и основное свойство пропорции",
+    "нахождение неизвестного члена пропорции",
+    "прямая и обратная пропорциональная зависимость",
+    "метод стрелок и выбор постоянной величины",
+    "нахождение части, целого и процента",
+    "процентное содержание растворов и выход продукта",
+    "сравнение с базой и проценты больше 100"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ratio_05",
+      "evidenceAnchor": "proportion",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ratio_06",
+      "evidenceAnchor": "proportion",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ratio_07",
+      "evidenceAnchor": "unknown",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ratio_08",
+      "evidenceAnchor": "direct",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ratio_09",
+      "evidenceAnchor": "inverse",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ratio_10",
+      "evidenceAnchor": "percent",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ratio_11",
+      "evidenceAnchor": "percent",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ratio_12",
+      "evidenceAnchor": "whole",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ratio_13",
+      "evidenceAnchor": "percent",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "25.11.26.html",
+    "pdf": "../pdf_docs/25.11.26.pdf",
+    "tex": "../tex_docs/25.11.26.tex",
+    "lab": "25.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-21",
   "ktpRefs": [],
   "href": "21.11.26.html",
