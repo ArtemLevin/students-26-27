@@ -1,0 +1,38 @@
+name: Publish Nadya lesson 25.11.26
+on:
+  pull_request:
+    types: [synchronize]
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  publish:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'lesson/nadya-25-11-26'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: lesson/nadya-25-11-26
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Transactional publication
+        run: |
+          set -euo pipefail
+          intent=students/nadya_klimenko/site/data/publication-intents/2026-11-25.json
+          node scripts/publish-lesson.mjs nadya_klimenko 25.11.26 --intent "$intent" --dry-run
+          node scripts/publish-lesson.mjs nadya_klimenko 25.11.26 --intent "$intent"
+          node scripts/student.mjs validate nadya_klimenko
+          node scripts/student.mjs audit
+      - name: Commit only canonical publication artifacts
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add students/nadya_klimenko/site/data/lessons/2026-11-25.lesson.json students/nadya_klimenko/site/data/ktp-state.json students/nadya_klimenko/site/data/mastery-state.json students/nadya_klimenko/site/lesson-registry.js
+          git diff --cached --check
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish Nadya lesson through Student Platform v2"
+            git push origin HEAD:lesson/nadya-25-11-26
+          fi
