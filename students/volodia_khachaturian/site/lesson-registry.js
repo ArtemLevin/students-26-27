@@ -3,6 +3,200 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
 {
+  "date": "2026-11-25",
+  "ktpRefs": [],
+  "href": "25.11.26.html",
+  "title": "Механика: кинематика и динамика",
+  "navTitle": "Механика: кинематика и динамика",
+  "navSubtitle": "Повторение механики: равноускоренное движение, графики, вертикальный бросок, окружность и невесомость, пружины, баланс сил и трение. Лаборатория и 10 задач.",
+  "summary": "Повторение механики: равноускоренное движение, графики, вертикальный бросок, окружность и невесомость, пружины, баланс сил и трение. Лаборатория и 10 задач.",
+  "topics": [
+    "равноускоренное движение",
+    "координата, путь и перемещение",
+    "графики скорости и координаты",
+    "вертикальный бросок и свободное падение",
+    "центростремительное ускорение и невесомость",
+    "соединение пружин",
+    "баланс сил и трение"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "measure_03",
+      "evidenceAnchor": "kinematics",
+      "relation": "touched",
+      "label": "Перевод единиц в СИ",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "measure_05",
+      "evidenceAnchor": "method",
+      "relation": "practiced",
+      "label": "Скалярные и векторные величины",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_04",
+      "evidenceAnchor": "graphs",
+      "relation": "practiced",
+      "label": "Траектория, путь и перемещение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_18",
+      "evidenceAnchor": "kinematics",
+      "relation": "practiced",
+      "label": "Равноускоренное прямолинейное движение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_19",
+      "evidenceAnchor": "kinematics",
+      "relation": "practiced",
+      "label": "v = v₀ + at",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_20",
+      "evidenceAnchor": "kinematics",
+      "relation": "practiced",
+      "label": "s = v₀t + at²/2",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_21",
+      "evidenceAnchor": "graphs",
+      "relation": "touched",
+      "label": "v² − v₀² = 2as",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_22",
+      "evidenceAnchor": "graphs",
+      "relation": "practiced",
+      "label": "Средняя скорость при равноускоренном движении в одном направлении",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_26",
+      "evidenceAnchor": "vertical",
+      "relation": "practiced",
+      "label": "Свободное падение тела",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_27",
+      "evidenceAnchor": "vertical",
+      "relation": "practiced",
+      "label": "Движение тела, брошенного вертикально вверх",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_28",
+      "evidenceAnchor": "vertical",
+      "relation": "practiced",
+      "label": "Ускорение свободного падения и выбор знаков",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_32",
+      "evidenceAnchor": "circle",
+      "relation": "practiced",
+      "label": "Центростремительное ускорение a = v²/R",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "kin_33",
+      "evidenceAnchor": "circle",
+      "relation": "touched",
+      "label": "Направление скорости и ускорения при движении по окружности",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_08",
+      "evidenceAnchor": "forces",
+      "relation": "practiced",
+      "label": "Второй закон Ньютона F = ma",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_09",
+      "evidenceAnchor": "forces",
+      "relation": "practiced",
+      "label": "Движение при нулевой равнодействующей",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_12",
+      "evidenceAnchor": "circle",
+      "relation": "touched",
+      "label": "Сила тяжести F = mg",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_13",
+      "evidenceAnchor": "circle",
+      "relation": "practiced",
+      "label": "Вес тела и сила реакции опоры",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_15",
+      "evidenceAnchor": "circle",
+      "relation": "practiced",
+      "label": "Невесомость",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_18",
+      "evidenceAnchor": "springs",
+      "relation": "practiced",
+      "label": "Закон Гука F = kΔl",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_19",
+      "evidenceAnchor": "springs",
+      "relation": "practiced",
+      "label": "Жёсткость пружины",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_22",
+      "evidenceAnchor": "forces",
+      "relation": "touched",
+      "label": "Сила трения скольжения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "dyn_23",
+      "evidenceAnchor": "forces",
+      "relation": "practiced",
+      "label": "Коэффициент трения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_02",
+      "evidenceAnchor": "method",
+      "relation": "practiced",
+      "label": "Выбор формулы по условию задачи",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "exam_07",
+      "evidenceAnchor": "method",
+      "relation": "practiced",
+      "label": "Работа со схемой физического процесса",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "25.11.26.html",
+    "pdf": "../pdf_docs/25.11.26.pdf",
+    "tex": "../tex_docs/25.11.26.tex",
+    "lab": "25.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-23",
   "ktpRefs": [],
   "href": "23.11.26.html",
