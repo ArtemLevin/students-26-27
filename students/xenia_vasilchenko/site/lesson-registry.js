@@ -5,6 +5,74 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-24",
+  "ktpRefs": [],
+  "href": "24.11.26.html",
+  "title": "Отношения и пропорции",
+  "navTitle": "Отношения и пропорции",
+  "navSubtitle": "24 ноября: основное свойство пропорции, десятичные и смешанные дроби, прямая и обратная пропорциональность, 10 тренировочных задач.",
+  "summary": "24 ноября: основное свойство пропорции, десятичные и смешанные дроби, прямая и обратная пропорциональность, 10 тренировочных задач.",
+  "topics": [
+    "Основное свойство пропорции",
+    "Действия с десятичными и смешанными дробями",
+    "Нахождение неизвестного члена пропорции",
+    "Прямая и обратная пропорциональность"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "dec_12",
+      "evidenceAnchor": "decimal",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dec_14",
+      "evidenceAnchor": "decimal",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_base_06",
+      "evidenceAnchor": "unknown",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "frac_ops_09",
+      "evidenceAnchor": "unknown",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "eq_06",
+      "evidenceAnchor": "unknown",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_02",
+      "evidenceAnchor": "algorithm",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_04",
+      "evidenceAnchor": "direct",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "word_09",
+      "evidenceAnchor": "inverse",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "word_16",
+      "evidenceAnchor": "algorithm",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "24.11.26.html",
+    "pdf": "../pdf_docs/24.11.26.pdf",
+    "tex": "../tex_docs/24.11.26.tex",
+    "lab": "24.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-19",
   "ktpRefs": [],
   "href": "19.11.26.html",
