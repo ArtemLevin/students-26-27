@@ -1,0 +1,39 @@
+name: Sofia 25.11.26 temporary publication verification
+on:
+  push:
+    branches:
+      - qa/sofya-luzianina-25-11-26-publisher
+permissions:
+  contents: read
+jobs:
+  publication:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Dry run and transactional publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/publish-lesson.mjs sofya_luzianina 25.11.26 --intent 25.11.26-publication-intent.json --dry-run > /tmp/plan.json
+          cat /tmp/plan.json
+          node -e 'const p=require("/tmp/plan.json"); if(!p.executable || p.reviewItems.length || p.conflicts.length) process.exit(1)'
+          node scripts/publish-lesson.mjs sofya_luzianina 25.11.26 --intent 25.11.26-publication-intent.json
+      - name: Repository release checks
+        run: |
+          node scripts/student.mjs validate sofya_luzianina
+          node scripts/student.mjs audit
+          node shared/practice/validate-configs.mjs
+          node shared/practice/audit-lesson-coverage.mjs
+          node --test shared/practice/test/*.test.mjs
+          node --test pipeline/practice/test/*.test.mjs
+      - name: Export exact publisher output
+        shell: bash
+        run: |
+          git status --short
+          git diff --stat
+          node --input-type=module -e 'import fs from "node:fs"; import {execFileSync} from "node:child_process"; const files=[...new Set([...execFileSync("git",["diff","--name-only"],{encoding:"utf8"}).trim().split("\n"),...execFileSync("git",["ls-files","--others","--exclude-standard"],{encoding:"utf8"}).trim().split("\n")].filter(Boolean))]; for(const f of files){if(!f.startsWith("students/sofya_luzianina/")) throw Error("unexpected write "+f); console.log("PUBLISH_FILE "+f+" "+fs.readFileSync(f).toString("base64"))}'
