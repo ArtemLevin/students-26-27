@@ -1,0 +1,82 @@
+name: Filipp bootstrap verification
+on:
+  push:
+    branches: ['filipp-v2-bootstrap-20261125']
+permissions:
+  contents: read
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Initialize with native scaffolder and restore artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          target=students/filipp_luzianin
+          backup="$(mktemp -d)"
+          mv "$target" "$backup/original"
+          node scripts/create-student.mjs filipp_luzianin --name "Филипп Лузянин" --grade "9 класс" --profile school-physics --program "Физика, 9 класс (базовый уровень)"
+          # Restore only after checking there are no conflicting generated files.
+          while IFS= read -r -d '' file; do
+            rel="${file#"$backup/original/"}"
+            test ! -e "$target/$rel"
+          done < <(find "$backup/original" -type f -print0)
+          cp -a "$backup/original/." "$target/"
+          rm -rf "$backup"
+      - name: Populate canonical catalog and presentation
+        shell: bash
+        run: |
+          cat > /tmp/filipp-init.mjs <<'NODE'
+          import fs from 'node:fs';
+          const id='filipp_luzianin', root='students/'+id, site=root+'/site', data=site+'/data', read=p=>fs.readFileSync(p,'utf8'), json=p=>JSON.parse(read(p)), write=(p,v)=>fs.writeFileSync(p,typeof v==='string'?v:JSON.stringify(v,null,2)+'\n');
+          const draft=json(data+'/competency-draft.json'), groups=draft.sectors.flatMap(s=>s.groups.map((g,i)=>({id:s.id+'-'+(i+1),name:g.name,sectorId:s.id,sectorName:s.name,section:s.section,items:g.skills.map(k=>({id:k.id,title:k.title}))})));
+          const skills=groups.flatMap(g=>g.items), seen=draft.sectors.flatMap(s=>s.groups.flatMap(g=>g.skills)).filter(k=>k.lesson);
+          if(skills.length!==153||new Set(skills.map(k=>k.id)).size!==153||seen.length!==14)throw Error('Unexpected draft counts');
+          const contract=json(root+'/student-contract.json');contract.competencies={catalog:'site/data/competency-catalog.json',mastery:'site/data/mastery-state.json'};write(root+'/student-contract.json',contract);
+          write(data+'/competency-catalog.json',{version:1,studentId:id,studentName:'Филипп Лузянин',program:contract.program,curriculumUrl:draft.source,groups});
+          write(data+'/mastery-state.json',{version:1,studentId:id,updated:'2026-11-25',levels:{}});
+          fs.unlinkSync(site+'/competency-map-data.js');fs.unlinkSync(site+'/mastery-authority.js');
+          const programVersion='school-physics-9-rolling-v1';
+          const plan={version:1,studentId:id,programVersion,lessons:[{id:'ktp-001',order:1,plannedDate:null,stageId:'mechanics',stage:'Механические явления',block:'Динамика',topic:'Второй закон Ньютона. Силы и связанные тела',content:'Схемы сил, проекции, трение скольжения, горизонтальная опора, связанные бруски, движение вдоль стены.',result:'Составлять уравнения движения и находить ускорение, реакцию опоры и натяжение.',check:'Самостоятельно решить задачи из чек-листа; проверить знаки, единицы и применимость модели.',homework:'Тренировочный блок из 10 задач по пособию от 25 ноября.',targetCompetencies:seen.map(k=>k.id)}]};
+          write(data+'/ktp-plan.json',plan);write(data+'/ktp-state.json',{version:1,studentId:id,programVersion,updated:'2026-11-25',records:{}});
+          const anchors={'phy9-dyn-01-03':'newton','phy9-dyn-01-04':'newton','phy9-dyn-01-05':'newton','phy9-dyn-01-07':'projection','phy9-dyn-02-01':'newton','phy9-dyn-02-02':'horizontal','phy9-dyn-02-04':'friction','phy9-dyn-02-05':'friction','phy9-dyn-02-06':'friction','phy9-dyn-02-07':'coupled','phy9-dyn-03-01':'horizontal','phy9-dyn-03-02':'coupled','phy9-dyn-03-03':'wall','phy9-dyn-03-04':'check'};
+          const intent={version:1,studentId:id,lessonDate:'2026-11-25',topics:['Динамика','Второй закон Ньютона','Трение скольжения','Связанные тела','Движение вдоль стены'],actualSummary:'Разобраны схемы сил, проекции, трение и три модели движения. Самостоятельное освоение пока не подтверждено.',ktpMatches:[{ktpId:'ktp-001',confidence:'exact',decision:'apply',coverage:'partial',reason:'Содержание занятия соответствует теме; самостоятельная проверка целевого результата пока отсутствует.'}],outcomes:seen.map(k=>({competencyId:k.id,evidenceAnchor:anchors[k.id],relation:'touched',confidence:'exact',decision:'apply',masteryClaim:null,basis:'Содержание пособия и веб-страницы от 25.11.2026; самостоятельная диагностика отсутствует.'})),warnings:['Освоение не оценивается по материалам занятия. КТП ведётся в rolling-режиме без вымышленных дат.']};
+          if(intent.outcomes.some(o=>!o.evidenceAnchor))throw Error('Unmapped evidence');
+          fs.mkdirSync(data+'/lesson-publication-intents',{recursive:true});write(data+'/lesson-publication-intents/2026-11-25.json',intent);
+          let lesson=read(site+'/25.11.26.html');lesson=lesson.replace('<title>','<meta name="description" content="Силы, второй закон Ньютона, трение, связанные бруски и движение вдоль стены."><title>').replace('<a href="heatmap.html">Карта курса</a>','<a href="index.html">Кабинет</a> · <a href="heatmap.html">Карта курса</a>');
+          write(site+'/25.11.26.html',lesson);
+          let lab=read(site+'/25.11.26-lab.html');lab=lab.replace('<a href="heatmap.html">Карта курса</a>','<a href="index.html">Кабинет</a> · <a href="heatmap.html">Карта курса</a>');write(site+'/25.11.26-lab.html',lab);
+          // Adapt the generated index, retaining the scaffold fingerprint and shared styles.
+          let index=read(site+'/index.html');index=index.replace(/<p class="la-lead">[\s\S]*?<\/p>/,'<p class="la-lead">9 класс · базовый школьный курс физики. Индивидуальный маршрут, учебные материалы и карта компетенций.</p>').replace(/<aside class="la-hero-note">[\s\S]*?<\/aside>/,'<aside class="la-hero-note"><span class="la-index">ТЕКУЩАЯ ТЕМА</span><strong>Динамика</strong><p>Схемы сил и второй закон Ньютона.</p><a href="25.11.26.html">Открыть занятие →</a></aside>');
+          index=index.replace(/<section class="la-summary"[\s\S]*?<\/section>/,'<section class="la-summary" aria-label="Сводка прогресса"><article><strong id="lessonCount">—</strong><span>занятий</span></article><article><strong id="touchedCount">—</strong><span>разобрано навыков</span></article><article><strong id="masteredCount">—</strong><span>оценено навыков</span></article><article><strong id="skillCount">—</strong><span>навыков</span></article></section>');
+          index=index.replace(/<section class="la-map-section"[\s\S]*?<\/section>/,'<section class="la-map-section" id="map"><header class="la-section-head"><div><p class="la-kicker">MAP / 01</p><h2>Карта компетенций</h2><p>153 навыка по школьной программе. Оценки вносятся только по подтверждённой диагностике.</p><a href="heatmap.html">Открыть интерактивную карту →</a></div></header></section>');
+          index=index.replace(/<section class="la-notes">[\s\S]*?<\/section>/,'<section class="la-notes"><div><p class="la-kicker">ROUTE / 02</p><h2>Журнал занятий</h2><p><a href="ktp.html">Календарно-тематический план</a></p></div><ol id="journal" aria-live="polite"><li>Загрузка журнала…</li></ol></section>');
+          index=index.replace('</body>', '<script type="module">import {LESSONS} from "./lesson-registry.js"; const get=async p=>{const r=await fetch(p);if(!r.ok)throw Error(p);return r.json()};try{const [c,m]=await Promise.all([get("data/competency-catalog.json"),get("data/mastery-state.json")]);const ids=new Set(LESSONS.flatMap(l=>l.outcomes.map(o=>o.competencyId)));document.getElementById("lessonCount").textContent=LESSONS.length;document.getElementById("touchedCount").textContent=ids.size;document.getElementById("masteredCount").textContent=Object.keys(m.levels).length;document.getElementById("skillCount").textContent=c.groups.reduce((n,g)=>n+g.items.length,0);const journal=document.getElementById("journal");journal.replaceChildren(...LESSONS.map(l=>{const li=document.createElement("li"), a=document.createElement("a"),p=document.createElement("p");a.href=l.href;a.textContent=l.date.split("-").reverse().join(".")+" · "+l.title;p.textContent=l.summary;li.append(a,p);if(l.materials.lab){const b=document.createElement("a");b.href=l.materials.lab;b.textContent="Лаборатория";li.append(b)}return li}));}catch(e){document.getElementById("journal").textContent="Данные журнала временно недоступны."}</script></body>');
+          write(site+'/index.html',index);
+          // The map is a projection of the canonical catalog, registry and mastery source.
+          let heat=read(site+'/heatmap.html');
+          heat=heat.replace(/<script type="application\/json" id="data">[\s\S]*?<\/script><script>/,'<script type="module">');
+          heat=heat.replace("'use strict';const sectors=JSON.parse(document.getElementById('data').textContent);",`import {LESSONS} from './lesson-registry.js';const get=async p=>{const r=await fetch(p);if(!r.ok)throw Error(p);return r.json()};try{const [catalog,mastery]=await Promise.all([get('data/competency-catalog.json'),get('data/mastery-state.json')]);const evidence=new Map();for(const l of [...LESSONS].reverse())for(const o of l.outcomes)evidence.set(o.competencyId,{date:l.date,href:l.href,anchor:o.evidenceAnchor,relation:o.relation});const grouped=new Map();for(const g of catalog.groups){if(!grouped.has(g.sectorId))grouped.set(g.sectorId,{id:g.sectorId,name:g.sectorName,section:g.section,groups:[]});grouped.get(g.sectorId).groups.push({name:g.name,skills:g.items.map(k=>({...k,level:mastery.levels[k.id]?.level??0,assessed:Object.hasOwn(mastery.levels,k.id),lesson:evidence.get(k.id)||null}))})}const sectors=[...grouped.values()];`);
+          heat=heat.replace("flat.filter(k=>k.level>0).length","flat.filter(k=>k.assessed).length").replace("filter==='unassessed'&&k.level===0||filter==='assessed'&&k.level>0","filter==='unassessed'&&!k.assessed||filter==='assessed'&&k.assessed").replace("status.textContent=k.lesson?'0 · урок':'0'","status.textContent=k.level+(k.lesson?' · урок':'')").replace("add('div','evidence',k.lesson?'25.11.2026 — тема представлена в учебном чек-листе. Уровень освоения ещё не подтверждён самостоятельным решением.':'В имеющихся материалах нет подтверждения изучения или самостоятельной оценки этого навыка.');","add('div','evidence',k.lesson?k.lesson.date.split('-').reverse().join('.')+' — '+(k.assessed?'есть запись в источнике оценок.':'тема представлена в материалах; самостоятельная оценка отсутствует.'):'В имеющихся материалах нет записи об изучении этого навыка.');if(k.lesson){const link=document.createElement('a');link.href=k.lesson.href+'#'+k.lesson.anchor;link.textContent='Открыть материал занятия';d.append(link)}");
+          heat=heat.replace('Это автономный предварительный просмотр, без записи в каноническую базу кабинета.','Карта использует канонический каталог, реестр занятий и источник оценок Student Platform v2.').replace('25.11.2026 · автономная версия','Student Platform v2').replace('LEVIN / УЧЕБНЫЙ АТЛАС</div>','LEVIN / УЧЕБНЫЙ АТЛАС</div><a href="index.html">Кабинет</a>').replace('</script></body></html>',"}catch(e){document.getElementById('detail').textContent='Канонические данные карты временно недоступны.';console.error(e)}</script></body></html>");
+          write(site+'/heatmap.html',heat);
+          NODE
+          node /tmp/filipp-init.mjs
+      - name: Publish lesson with native publisher
+        run: |
+          node scripts/publish-lesson.mjs filipp_luzianin 25.11.26 --intent students/filipp_luzianin/site/data/lesson-publication-intents/2026-11-25.json --dry-run
+          node scripts/publish-lesson.mjs filipp_luzianin 25.11.26 --intent students/filipp_luzianin/site/data/lesson-publication-intents/2026-11-25.json
+          node scripts/student.mjs validate filipp_luzianin
+          node scripts/student.mjs audit
+          node --test students/filipp_luzianin/site/tests/student-platform-v2.test.mjs
+      - name: Emit generated text files for review
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {execFileSync} from 'node:child_process';
+          const names=new Set([...execFileSync('git',['diff','--name-only'],{encoding:'utf8'}).trim().split('\n'),...execFileSync('git',['ls-files','--others','--exclude-standard'],{encoding:'utf8'}).trim().split('\n')].filter(Boolean));
+          for(const path of [...names].sort()){if(!path.startsWith('students/filipp_luzianin/')&&!['design-system/STUDENT_ROSTER.md','pipeline/migration/baseline.json'].includes(path))throw Error('Unexpected path: '+path);if(!fs.existsSync(path))continue;const buf=fs.readFileSync(path);const str=buf.toString('base64');console.log('FILE_BEGIN '+path);for(let i=0;i<str.length;i+=4000)console.log('FILE_DATA '+str.slice(i,i+4000));console.log('FILE_END '+path);}
+          NODE
