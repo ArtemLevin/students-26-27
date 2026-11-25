@@ -34,5 +34,6 @@ Current migration roster for all `students/*/site/index.html` pages.
 | daniil_khriastov — Даниил Хрястов | cosmos | forest | balanced | circular | editorial | calm |
 | volodia_khachaturian_math — Володя Хачатурян | cartographer | plum | balanced | circular | editorial | calm |
 | sofya_luzianina — София Лузянина | cosmos | burgundy | balanced | circular | technical-editorial | calm |
+| filipp_luzianin — Филипп Лузянин | blueprint | forest | compact | orthogonal | technical | calm |
 
 The roster is a deliberate diversity matrix. Change at least three axes when a newly created page is too close to a recent neighbor.
