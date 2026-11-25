@@ -5,6 +5,65 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-25",
+  "ktpRefs": [],
+  "href": "25.11.26.html",
+  "title": "Корни n-й степени, модуль и сокращение дробей",
+  "navTitle": "Корни n-й степени, модуль и сокращение дробей",
+  "navSubtitle": "Корни натуральной степени, чётность, раскрытие модуля, приведение радикалов к общему показателю, сокращение дробей и 10 упражнений.",
+  "summary": "Корни натуральной степени, чётность, раскрытие модуля, приведение радикалов к общему показателю, сокращение дробей и 10 упражнений.",
+  "topics": [
+    "свойства вложенных корней",
+    "чётность корня и модуль",
+    "раскрытие модуля на заданном интервале",
+    "приведение радикалов к общему показателю",
+    "сокращение дробей с радикалами"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "powers_roots_02",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "powers_roots_03",
+      "evidenceAnchor": "roots",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "powers_roots_04",
+      "evidenceAnchor": "parity",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "powers_roots_05",
+      "evidenceAnchor": "fractions",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "powers_roots_10",
+      "evidenceAnchor": "fractions",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "real_numbers_15",
+      "evidenceAnchor": "sign",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "rational_equations_08",
+      "evidenceAnchor": "sign",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "25.11.26.html",
+    "pdf": "../pdf_docs/25.11.26.pdf",
+    "tex": "../tex_docs/25.11.26.tex",
+    "lab": "25.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-17",
   "ktpRefs": [],
   "href": "17.11.26.html",
