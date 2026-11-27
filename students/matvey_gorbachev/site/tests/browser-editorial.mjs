@@ -50,7 +50,7 @@ try{
   assert.equal(await page.locator('#competencyMap').getAttribute('role'),'group','interactive map should expose child buttons to assistive technology');
   assert.equal(await page.locator('#competencyMap .radial-cell').first().getAttribute('role'),'button','map cell accessibility semantics');
   assert.ok(basic.focus,'focus control missing '+width);
-  assert.ok(basic.lesson==='Плоскость в координатах','latest lesson wrong '+width);
+  assert.ok(basic.lesson==='Исследование функции с помощью производной','latest lesson wrong '+width);
   if(width===1440){
     const cell=page.locator('#competencyMap .radial-cell').first();
     await cell.focus();
@@ -72,7 +72,8 @@ try{
     const derivHistory=await page.locator('#dialogHistory').innerText();
     assert.ok(derivHistory.includes('25.10.26'),'25 October derivative evidence absent from live map dialog');
     assert.equal(await page.locator('#dialogHistory a[href="25.10.26.html#extrema"]').count(),1,'derivative evidence must link to the correct section');
-    assert.ok(derivHistory.includes('25.10.26'),'derivative lesson history must be visible');
+    assert.ok(derivHistory.includes('26.11.26'),'26 November derivative evidence missing');
+    assert.equal(await page.locator('#dialogHistory a[href="26.11.26.html#extrema"]').count(),1,'26 November evidence link');
     await page.locator('#dialogClose').click();
     const repeatFilter=page.locator('.filter[data-filter="repeat"]');
     await repeatFilter.click();
@@ -114,7 +115,7 @@ try{
       titles:visible.filter(t=>t.querySelector('.archive-tile-title').scrollHeight>t.querySelector('.archive-tile-title').clientHeight+2).length};
   });
   assert.ok(archive.width<=archive.viewport+2,'archive overflow '+width+': '+JSON.stringify(archive));
-  assert.equal(archive.counts,16,'archive lesson count '+width);
+  assert.equal(archive.counts,17,'archive lesson count '+width);
   assert.equal(archive.months,3,'archive month groups '+width);
   assert.ok(Math.max(...archive.heights)-Math.min(...archive.heights)<=2,'unequal tiles '+width+': '+JSON.stringify(archive.heights));
   assert.equal(archive.clipped,0,'clipped archive card '+width);
@@ -123,7 +124,7 @@ try{
   await page.locator('#archiveSearch').fill('вклады');
   assert.equal(await page.locator('.archive-tile:visible').count(),2,'archive search failed '+width);
   await page.locator('#archiveSearch').fill('');
-  assert.equal(await page.locator('.archive-tile:visible').count(),16,'archive reset failed '+width);
+  assert.equal(await page.locator('.archive-tile:visible').count(),17,'archive reset failed '+width);
   await page.screenshot({path:path.join(artifactDir,'archive-'+width+'.png'),fullPage:true});
   await page.goto(origin+'18.10.26.html',{waitUntil:'networkidle'});
   await page.locator('.poster img').scrollIntoViewIfNeeded();
@@ -459,6 +460,42 @@ try{
   }
   if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lesson-19-'+width+'.png'),fullPage:true});
 
+
+  // 26 November: derivative lesson and four mathematical laboratory modes.
+  await page.goto(origin+'26.11.26.html',{waitUntil:'networkidle'});
+  const lesson26=await page.evaluate(()=>({
+    width:document.documentElement.scrollWidth,viewport:innerWidth,
+    title:document.querySelector('h1')?.textContent.trim(),
+    tasks:document.querySelectorAll('#practice > ol > li').length,
+    answers:document.querySelectorAll('#practice tbody tr').length,
+    math:[...document.querySelectorAll('math')].every(el=>el.namespaceURI==='http://www.w3.org/1998/Math/MathML')
+  }));
+  assert.ok(lesson26.width<=lesson26.viewport+2,'26 Nov lesson overflow '+width+': '+JSON.stringify(lesson26));
+  assert.equal(lesson26.title,'Исследование функции с помощью производной');
+  assert.equal(lesson26.tasks,10);assert.equal(lesson26.answers,10);assert.ok(lesson26.math);
+  await page.locator('#quiz input[name="q0"][value="1"]').check();
+  assert.match(await page.locator('#q0feedback').textContent(),/^Верно/);
+  await page.locator('#quiz button[type="reset"]').click();
+  assert.equal(await page.locator('#q0feedback').textContent(),'');
+  await page.locator('#checklist input').first().check();
+  assert.match(await page.locator('#progress').textContent(),/1 из 6/);
+  await page.locator('#resetCheck').click();
+  assert.match(await page.locator('#progress').textContent(),/0 из 6/);
+  for(const mode of ['cubic','product','mono','trig']){
+    await page.goto(origin+'26.11.26-lab.html?mode='+mode,{waitUntil:'networkidle'});
+    assert.equal(await page.locator('#scenario').inputValue(),mode);
+    const lab26=await page.evaluate(()=>({width:document.documentElement.scrollWidth,viewport:innerWidth}));
+    assert.ok(lab26.width<=lab26.viewport+2,'26 Nov lab overflow '+mode+' '+width);
+    const expected={cubic:'-2 / 18',product:'0 / 16',mono:'-325 / -4',trig:'6 / 9'};
+    if(mode==='cubic') assert.equal((await page.locator('#range').textContent()).replace('−','-'),expected.cubic);
+    if(mode==='mono') assert.match(await page.locator('#range').textContent(),/-325 \/ -4/);
+    const before=await page.locator('#range').textContent();
+    await page.locator('#right').evaluate(el=>{el.value=el.min;el.dispatchEvent(new Event('input',{bubbles:true}))});
+    assert.ok(await page.locator('#left').evaluate(el=>+el.value < +document.getElementById('right').value),'invalid interval');
+    await page.locator('#reset').click();
+    assert.equal(await page.locator('#range').textContent(),before,'reset '+mode);
+    if(width===1440||width===390)await page.screenshot({path:path.join(artifactDir,'lab-26-'+mode+'-'+width+'.png'),fullPage:true});
+  }
   assert.deepEqual(failures,[],'Matvey browser console/network failures '+width+': '+failures.join('; '));
   console.log('PASS',width+'x'+height,JSON.stringify({map:basic.map,tiles:archive.counts,heights:archive.heights,theme:width===390?'dark':'light'}));
   completed++;await page.close();
