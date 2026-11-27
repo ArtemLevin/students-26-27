@@ -195,7 +195,7 @@ function projectLessonEvidence(data){
     const total = items.length;
     const covered = items.filter(item => levelOf(item) > 0).length;
     const repeat = state.repeat.size;
-    const touched = items.filter(item => levelOf(item) > 0 || state.repeat.has(item.id)).length;
+    const touched = items.filter(item => levelOf(item) > 0 || state.repeat.has(item.id) || item.hasLessonEvidence).length;
     return { total, covered, repeat, touched, coverage: total ? Math.round(touched / total * 100) : 0 };
   }
 
