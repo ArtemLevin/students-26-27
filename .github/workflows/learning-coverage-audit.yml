@@ -1,0 +1,42 @@
+name: Historical learning coverage audit
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/audit-learning-coverage*'
+      - '.github/workflows/learning-coverage-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Unit tests
+        run: node --test scripts/audit-learning-coverage.test.mjs
+      - name: Read-only repository inventory
+        shell: bash
+        run: |
+          node scripts/audit-learning-coverage.mjs --json > "$RUNNER_TEMP/coverage.json"
+          node scripts/audit-learning-coverage.mjs --markdown > "$RUNNER_TEMP/coverage.md"
+          node --input-type=module -e '
+            import fs from "node:fs";
+            import assert from "node:assert/strict";
+            const r=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+"/coverage.json","utf8"));
+            assert.ok(r.scope.activeCabinets>0);
+            assert.ok(r.totals.lessons>0);
+            assert.equal(r.students.some(s=>r.scope.excludedIds.includes(s.id)),false);
+            assert.equal(r.students.some(s=>s.id==="timofey"),true);
+            assert.equal(r.students.some(s=>s.id==="kirill_zinoviev"),true);
+            console.log("AUDIT_SCOPE "+JSON.stringify(r.scope));
+            console.log("AUDIT_TOTAL "+JSON.stringify(r.totals));
+            for(const s of r.students)console.log("AUDIT_ROW "+JSON.stringify({id:s.id,lessons:s.lessons.length,empty:s.lessons.filter(l=>!l.coveredIds.length).length,covered:s.covered,catalog:s.catalogSize,masteryFormat:s.masteryFormat,masteryOutsideCoverage:s.masteryOutsideCoverage?.length??null}));
+          '
+          cat "$RUNNER_TEMP/coverage.md" >> "$GITHUB_STEP_SUMMARY"
+          test -z "$(git status --porcelain)"
