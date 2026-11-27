@@ -5,6 +5,88 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-26",
+  "ktpRefs": [],
+  "href": "26.11.26.html",
+  "title": "Пирамиды, конус и составные тела",
+  "navTitle": "Пирамиды, конус и составные тела",
+  "navSubtitle": "Правильные пирамиды, тетраэдр, составные тела с вырезами, конус и подобие: формулы, примеры и 10 задач с ответами.",
+  "summary": "Правильные пирамиды, тетраэдр, составные тела с вырезами, конус и подобие: формулы, примеры и 10 задач с ответами.",
+  "topics": [
+    "правильная четырёхугольная пирамида",
+    "высота, апофема и двугранный угол",
+    "правильный тетраэдр",
+    "масштабирование",
+    "составные многогранники",
+    "прямой круговой конус",
+    "параллельные сечения конуса"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t3_pyramid",
+      "evidenceAnchor": "pyramid",
+      "relation": "practiced",
+      "label": "Правильная пирамида: высота и апофема",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t3_surface",
+      "evidenceAnchor": "surface",
+      "relation": "practiced",
+      "label": "Площадь правильной пирамиды",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t3_regular",
+      "evidenceAnchor": "scale",
+      "relation": "practiced",
+      "label": "Правильный тетраэдр",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t3_scale",
+      "evidenceAnchor": "scale",
+      "relation": "practiced",
+      "label": "Подобие и изменение размеров",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t3_composite_volume",
+      "evidenceAnchor": "composite",
+      "relation": "practiced",
+      "label": "Объёмы составных многогранников",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t3_composite_surface",
+      "evidenceAnchor": "composite",
+      "relation": "practiced",
+      "label": "Поверхность составных многогранников",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t3_cone",
+      "evidenceAnchor": "cone",
+      "relation": "touched",
+      "label": "Формулы конуса",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t3_basic_sections",
+      "evidenceAnchor": "similar",
+      "relation": "practiced",
+      "label": "Параллельное сечение конуса",
+      "practiceDisposition": "none"
+    }
+  ],
+  "materials": {
+    "html": "26.11.26.html",
+    "pdf": "../pdf_docs/26.11.26.pdf",
+    "tex": "../tex_docs/26.11.26.tex",
+    "lab": "26.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-23",
   "ktpRefs": [],
   "href": "23.11.26.html",

@@ -29,9 +29,9 @@ function assertLocalLinks(source){
   }
 }
 
-test('23 November cylinder lesson is the newest registered record',()=>{
+test('23 November cylinder lesson remains uniquely registered in chronological order',()=>{
   validateLessonRegistry(LESSONS);
-  assert.equal(LESSONS[0].date,'2026-11-23');
+  assert.equal(LESSONS[0].date,[...LESSONS].map(x=>x.date).sort().at(-1),'newest lesson must be first');
   const record=LESSONS.find(x=>x.date==='2026-11-23');
   assert.ok(record);
   assert.equal(LESSONS.filter(x=>x.date===record.date).length,1);
