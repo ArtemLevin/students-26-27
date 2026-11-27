@@ -294,6 +294,67 @@ try{
   assert.ok(labPrint.data.length>1500,'09 November lab print preview');
   assert.deepEqual(errors,[],'No browser exceptions during interactive river scenarios');
 
+
+  // 26 November: current lesson and four relative-motion scenarios.
+  async function visitMotion(file,w,h,suffix='',theme='light'){
+    errors.length=0;
+    await call('Emulation.setDeviceMetricsOverride',{width:w,height:h,deviceScaleFactor:1,mobile:w<=768});
+    const url=riverOrigin+file+suffix;
+    await call('Page.navigate',{url});
+    for(let n=0;n<120;n++){
+      const state=await evaluate('({ready:document.readyState,url:location.href})');
+      if(state.ready==='complete'&&state.url===url)break;
+      if(n===119)throw Error('Motion page did not load '+url);
+      await delay(80);
+    }
+    await evaluate('(()=>{if(document.documentElement.dataset.theme!=='+JSON.stringify(theme)+')document.getElementById("theme").click()})()');
+    const layout=await evaluate('({width:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,theme:document.documentElement.dataset.theme})');
+    assert.ok(layout.scroll<=layout.width+2,file+' viewport overflow '+w+' '+JSON.stringify(layout));
+    assert.equal(layout.theme,theme);
+    assert.deepEqual(errors,[],file+' JS exceptions');
+  }
+  for(const [w,h] of [[375,812],[390,844],[768,1024],[1024,768],[1366,768],[1440,900],[1920,1080]]){
+    await visitMotion('26.11.26.html',w,h);
+    assert.equal(await evaluate('document.querySelectorAll(".practice > li").length'),10);
+    const answers=await evaluate('[...document.querySelectorAll(".practice .answer")].map(x=>x.textContent.trim())');
+    assert.deepEqual(answers,['72 км/ч','500 м','400 м','450 м','315 м','420 м','20 с','3 км/ч','280 м','75 с']);
+    if(w===390||w===1440)await screen('26.11.26-lesson-'+w+'-light');
+    await visitMotion('26.11.26-lab.html',w,h,'#gaps');
+    const mid=await evaluate('(()=>{const t=document.getElementById("time");t.value=420;t.dispatchEvent(new Event("input",{bubbles:true}));return document.getElementById("metric").textContent})()');
+    assert.equal(mid,'350 / 700 м','Halfway through barge overtake');
+    const end=await evaluate('(()=>{const t=document.getElementById("time");t.value=t.max;t.dispatchEvent(new Event("input",{bubbles:true}));return {metric:document.getElementById("metric").textContent,stage:document.getElementById("stage").textContent}})()');
+    assert.equal(end.metric,'700 / 700 м');assert.match(end.stage,/350 м/);
+    if(w===390||w===1440)await screen('26.11.26-lab-'+w+'-light');
+    assert.deepEqual(errors,[]);
+  }
+  await visitMotion('26.11.26.html',390,844,'','dark');
+  const quiz=await evaluate('(()=>{document.querySelector("input[name=quiz][value=one]").click();document.getElementById("quizCheck").click();return document.getElementById("quizResult").textContent})()');
+  assert.match(quiz,/Верно/);
+  const links=await evaluate('(async()=>Promise.all(["../pdf_docs/26.11.26.pdf","../tex_docs/26.11.26.tex","26.11.26-lab.html"].map(async href=>(await fetch(href)).status)))()');
+  assert.deepEqual(links,[200,200,200]);
+  await screen('26.11.26-lesson-390-dark');
+  assert.ok((await call('Page.printToPDF',{printBackground:true})).data.length>1500);
+  for(const [mode,expected] of [['train','1000/1000м'],['observer','250/250м'],['gaps','700/700м'],['escalator','t=56с']]){
+    await visitMotion('26.11.26-lab.html',390,844,'#'+mode,'dark');
+    const result=await evaluate('(()=>{const t=document.getElementById("time");t.value=t.max;t.dispatchEvent(new Event("input",{bubbles:true}));return document.getElementById("metric").textContent})()');
+    assert.equal(result.replace(/\s/g,''),expected,mode+' endpoint');
+    await screen('26.11.26-lab-390-dark-'+mode);
+    await evaluate('document.getElementById("reset").click()');
+    assert.equal(await evaluate('document.getElementById("time").value'),'0',mode+' reset');
+    assert.deepEqual(errors,[]);
+  }
+  await visitMotion('26.11.26.html',1440,900,'','dark');
+  await screen('26.11.26-lesson-1440-dark');
+  await visitMotion('26.11.26-lab.html',1440,900,'#escalator','dark');
+  await screen('26.11.26-lab-1440-dark');
+  assert.ok((await call('Page.printToPDF',{printBackground:true})).data.length>1500);
+  await visit('index.html',1440,900,false);
+  const lastLesson=await evaluate('document.querySelector(".start-card strong").textContent');
+  assert.equal(lastLesson,'Движение протяжённых тел и эскалатора');
+  await visit('archive.html',390,844,false);
+  assert.equal(await evaluate('[...document.querySelectorAll(".archive-tile-title")].filter(x=>x.textContent.trim()==="Движение протяжённых тел и эскалатора").length'),1);
+  console.log('26 November motion lesson: responsive, light/dark, 10 answers, quiz, material links, all lab modes, reset and latest lesson passed');
+
   console.log('Jaroslav QA passed: dashboard, archive, 23 October and 09 November lessons with their interactive laboratories');
 
 }finally{
