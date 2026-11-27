@@ -1,3 +1,30 @@
+import {LESSONS} from './lesson-registry.js';
+
+// Presentation-only projection: registry is the canonical source for new lesson links.
+// Keep historical annotations, confirmed levels, repeat flags and storage intact.
+function projectLessonEvidence(data){
+  const byId=new Map(data.groups.flatMap(group=>group.items.map(item=>[item.id,item])));
+  for(const lesson of [...LESSONS].sort((a,b)=>b.date.localeCompare(a.date))){
+    if(!/^\d{2}\.\d{2}\.\d{2}\.html$/.test(lesson.href||''))continue;
+    for(const outcome of lesson.outcomes||[]){
+      const item=byId.get(outcome.competencyId);
+      if(!item||!(/^[A-Za-z][A-Za-z0-9_-]*$/).test(outcome.evidenceAnchor||''))continue;
+      const href=lesson.href+'#'+outcome.evidenceAnchor;
+      const label='Занятие '+lesson.date.split('-').reverse().join('.')+': '+item.title;
+      item.relatedMaterials=Array.isArray(item.relatedMaterials)?item.relatedMaterials:[];
+      const known=item.material?.href===href||item.relatedMaterials.some(link=>link.href===href);
+      if(!known){
+        item.evidence=Array.isArray(item.evidence)?item.evidence:[];
+        const relation=outcome.relation==='assessed'?'Отдельная проверка':outcome.relation==='practiced'?'Практика с преподавателем':'Разбор темы';
+        item.evidence.push({text:label+'. '+relation+'. Уровень определяется отдельно.'});
+        item.relatedMaterials.push({href,label});
+        if(!item.material?.href)item.material={href,label};
+      }
+      item.hasLessonEvidence=true;
+    }
+  }
+}
+
 (() => {
   'use strict';
 
@@ -7,6 +34,7 @@
     return;
   }
 
+  projectLessonEvidence(DATA);
   const { meta, groups } = DATA;
   const items = groups.flatMap((group, groupIndex) =>
     group.items.map((item, itemIndex) => ({ ...item, group, groupIndex, itemIndex }))
@@ -116,11 +144,11 @@
 
   function statusOf(item) {
     if (state.repeat.has(item.id)) return 'repeat';
-    return levelOf(item) > 0 ? 'covered' : 'future';
+    return levelOf(item) > 0 ? 'covered' : item.hasLessonEvidence ? 'studied' : 'future';
   }
 
   function statusLabel(status) {
-    return status === 'repeat' ? 'Пора повторить' : status === 'covered' ? 'Пройдено' : 'Ещё впереди';
+    return status === 'repeat' ? 'Пора повторить' : status === 'covered' ? 'Пройдено' : status === 'studied' ? 'Изучено, без оценки' : 'Ещё впереди';
   }
 
   function levelLabel(level) {
@@ -242,7 +270,7 @@
         const item = itemById.get(raw.id);
         const status = statusOf(item);
         const dimmed = !matchesFilter(item) || (state.query && !matchesSearch(item));
-        return `<button type="button" class="topic-row${dimmed ? ' is-dimmed' : ''}" data-id="${esc(item.id)}"><i class="topic-dot ${status === 'future' ? '' : status}" aria-hidden="true"></i><span>${esc(item.title)}</span><span>${levelOf(item)}/4</span></button>`;
+        return `<button type="button" class="topic-row${dimmed ? ' is-dimmed' : ''}" data-id="${esc(item.id)}"><i class="topic-dot ${status === 'future' ? '' : status}" aria-hidden="true"></i><span>${esc(item.title)}</span><span>${status === 'studied' ? 'без оценки' : levelOf(item)+'/4'}</span></button>`;
       }).join('');
       return `<details class="topic-group" ${visible ? '' : 'data-no-match="true"'}><summary><span>${esc(group.short)} · ${esc(group.title)}</span><small>${covered} / ${group.items.length}</small></summary><div class="topic-list">${rows}</div></details>`;
     }).join('');
@@ -284,7 +312,9 @@
     const repeat = items.find(item => state.repeat.has(item.id));
     if (repeat) return { item: repeat, text: 'Тема уже помечена для повторения. Начните с короткой диагностики и затем решите 2–3 задачи этого типа.' };
 
-    const future = items.find(item => levelOf(item) === 0);
+    const studied = items.find(item => statusOf(item) === 'studied');
+    if(studied) return {item:studied,text:'Тема разобрана, но самостоятельный уровень ещё не оценён. Решите контрольную задачу без подсказок.'};
+    const future = items.find(item => statusOf(item) === 'future');
     if (future) return { item: future, text: 'Это ближайшая ещё не затронутая микротема в каталоге. Подойдёт короткое объяснение, затем базовая диагностика.' };
 
     const low = items.find(item => levelOf(item) === 1 || levelOf(item) === 2);
@@ -392,7 +422,7 @@
     const statusEl = document.getElementById('dialogStatus');
     statusEl.textContent = statusLabel(status);
     statusEl.className = `status-pill ${status === 'future' ? '' : status}`;
-    document.getElementById('dialogLevel').textContent = `${level} / 4 · ${levelLabel(level)}`;
+    document.getElementById('dialogLevel').textContent = `${level} / 4 · ${status === 'studied' ? 'без оценки' : levelLabel(level)}`;
     document.querySelectorAll('.level-picker [data-level]').forEach(button => {
       const selected = Number(button.dataset.level) === level;
       button.classList.toggle('active', selected);
