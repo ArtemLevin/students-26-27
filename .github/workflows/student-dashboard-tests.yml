@@ -145,6 +145,10 @@ jobs:
           cat student-platform-steady-state.md >> "$GITHUB_STEP_SUMMARY"
       - name: Validate all v2 students
         run: node scripts/student.mjs validate
+      - name: Verify cumulative learning coverage in every cabinet
+        run: |
+          node --test shared/student-dashboard/learning-coverage.test.mjs
+          node scripts/sync-learning-coverage.mjs --check
       - name: Run Sofia physics KTP and competency map regression
         run: node --test students/sofya_luzianina/site/tests/*.test.mjs
       - name: Browser QA — Sofia physics KTP and atlas

@@ -1,13 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import vm from 'node:vm';
+import {cumulativeCoverage as coverage} from '../../../../shared/student-dashboard/learning-coverage.js';
 
 const js=fs.readFileSync(new URL('../heatmap.js',import.meta.url),'utf8');
 const html=fs.readFileSync(new URL('../index.html',import.meta.url),'utf8');
 const registry=fs.readFileSync(new URL('../lesson-registry.js',import.meta.url),'utf8');
-const fn=js.slice(js.indexOf('export function cumulativeCoverage'),js.indexOf('function startMap')).replace('export function','function');
-const coverage=vm.runInNewContext(fn+'\ncumulativeCoverage;');
 const records=JSON.parse(registry.slice(registry.indexOf('['),registry.indexOf('];')+1));
 test('all lessons: deduplicate without promoting mastery',()=>{
  const snapshot=records.filter(x=>x.date<='2026-11-27');

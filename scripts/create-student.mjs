@@ -90,6 +90,7 @@ export function renderIndex({slug,name,program,grade,teacher,fingerprint}){
     '  </main>',
     '  <footer class="la-footer"><span>'+n+'</span><span>'+p+'</span><span>Преподаватель: '+t+'</span></footer>',
     "  <script>(()=>{const k='"+slug+"-atlas-theme',r=document.documentElement,b=document.getElementById('themeToggle'),s=localStorage.getItem(k);if(s==='dark'||s==='light')r.dataset.theme=s;b?.addEventListener('click',()=>{r.dataset.theme=r.dataset.theme==='dark'?'light':'dark';localStorage.setItem(k,r.dataset.theme);});})();</script>",
+    '  <script type="module" data-atlas-learning-coverage data-contract="../student-contract.json" src="../../../shared/student-dashboard/learning-coverage-ui.js"></script>',
     '</body>',
     '</html>',
     ''

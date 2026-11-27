@@ -1,5 +1,6 @@
 // Student Platform v2 — render data exclusively from student-contract paths.
 import {LESSONS,sortedLessons} from './lesson-registry.js';
+import {cumulativeCoverage} from '../../../shared/student-dashboard/learning-coverage.js';
 const $=id=>document.getElementById(id);
 const validatePath=p=>{if(!/^site\/[A-Za-z0-9_./-]+$/.test(p)||p.includes('..'))throw new Error('Недопустимый путь в student-contract');return new URL('../'+p,import.meta.url)};
 async function readJson(url){const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error(`${r.status}: ${url}`);return r.json()}
@@ -33,23 +34,6 @@ async function bootstrap(){
   renderJournal(plan,state);
   startMap();
  }catch(error){console.error('Ошибка загрузки Student Platform v2',error);$('catalogCount').textContent='Учебные данные временно недоступны';$('mapLive').textContent='Ошибка загрузки карты';$('lessonJournal').textContent='Не удалось прочитать реестр занятий';$('routeSummary').textContent='Не удалось прочитать КТП';$('detailTitle').textContent='Данные недоступны';$('detailExplain').textContent=error.message;}
-}
-// Coverage is a presentation-only projection of published lesson evidence, never a mastery claim.
-export function cumulativeCoverage(lessons) {
-  const recent=[...lessons].sort((a,b)=>b.date.localeCompare(a.date));
-  const byId=new Map(), rank={touched:1,practiced:2,assessed:3};
-  for(const lesson of recent) for(const outcome of lesson.outcomes||[]){
-    if(!outcome.competencyId || !outcome.evidenceAnchor || !Object.hasOwn(rank,outcome.relation))continue;
-    const id=outcome.competencyId;
-    if(!byId.has(id))byId.set(id,{relation:outcome.relation,entries:[]});
-    const item=byId.get(id);
-    if(rank[outcome.relation]>rank[item.relation])item.relation=outcome.relation;
-    if(!item.entries.some(e=>e.date===lesson.date&&e.anchor===outcome.evidenceAnchor&&e.relation===outcome.relation))
-      item.entries.push({date:lesson.date,title:lesson.title,href:lesson.href,anchor:outcome.evidenceAnchor,relation:outcome.relation});
-  }
-  const latestDate=recent[0]?.date;
-  const newIds=new Set([...byId].filter(([,item])=>item.entries.every(e=>e.date===latestDate)).map(([id])=>id));
-  return {recent,byId,newIds};
 }
 function startMap(){
 (() => {
