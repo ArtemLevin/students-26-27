@@ -72,7 +72,9 @@ try{
    await sleep(90);
   }
   for(let i=0;i<70;i++){
-   const expression=name==='23.11.26.html'?"!!document.querySelector('#title')":
+   const expression=name==='26.11.26.html'?"document.querySelectorAll('#training .task').length===10":
+     name==='26.11.26-lab.html'?"document.querySelector('#coinResult')?.textContent.length>0":
+     name==='23.11.26.html'?"!!document.querySelector('#title')":
      name==='23.11.26-lab.html'?"document.querySelector('#lineResult')?.textContent.length>0":
      name==='09.11.26.html'?"!!document.querySelector('#heading')":
      name==='09.11.26-lab.html'?"document.querySelectorAll('#rows tr').length>0":
@@ -223,6 +225,41 @@ try{
   fs.writeFileSync(path.join(output,'23-11-lab-'+w+'.png'),Buffer.from(screenshot.data,'base64'));
  }
 
+
+ // November 26: probability lesson, self-check, and all simulator scenarios.
+ for(const [w,h] of [[1920,1080],[1440,900],[1366,768],[1024,768],[768,1024],[390,844],[375,812]]){
+  await navigate('26.11.26.html',w,h);
+  const lesson=await evaluate(`(()=>{const ids=[...document.querySelectorAll('[id]')].map(e=>e.id);return {tasks:document.querySelectorAll('#training .task').length,math:document.querySelectorAll('math').length,duplicate:ids.length-new Set(ids).size,broken:[...document.querySelectorAll('a[href^="#"]')].filter(a=>!document.getElementById(a.hash.slice(1))).length,pdf:!!document.querySelector('a[href="../pdf_docs/26.11.26.pdf"]'),tex:!!document.querySelector('a[href="../tex_docs/26.11.26.tex"]'),lab:!!document.querySelector('a[href="26.11.26-lab.html"]')}})()`);
+  assert.equal(lesson.tasks,10);assert.ok(lesson.math>=40);assert.equal(lesson.duplicate,0);assert.equal(lesson.broken,0);assert.ok(lesson.pdf&&lesson.tex&&lesson.lab);
+  await evaluate(`(()=>{if(document.documentElement.dataset.theme!=='light')document.querySelector('#theme').click();document.querySelector('#resetProgress').click();document.querySelector('[data-progress=task1]').click();document.querySelector('#q').value='1/4';document.querySelector('#quiz').requestSubmit()})()`);
+  assert.equal(await evaluate("document.querySelector('#progress').textContent"),'Выполнено: 1 из 10');
+  assert.match(await evaluate("document.querySelector('#feedback').textContent"),/^Верно/);
+  await evaluate("document.querySelector('#quiz').reset();document.querySelector('#theme').click()");
+  assert.equal(await evaluate("document.querySelector('#feedback').textContent"),'');
+  assert.equal(await evaluate("document.documentElement.dataset.theme"),'dark');
+  assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'Probability lesson dark overflow '+w);
+  await navigate('26.11.26.html',w,h);
+  assert.equal(await evaluate("document.querySelector('[data-progress=task1]').checked"),true);
+  await evaluate("document.querySelector('#resetProgress').click()");
+  assert.equal(await evaluate("document.querySelector('#progress').textContent"),'Выполнено: 0 из 10');
+  await navigate('26.11.26-lab.html',w,h);
+  const result=await evaluate(`(()=>{const select=(id,value)=>{const s=document.getElementById(id);s.value=value;s.dispatchEvent(new Event('change',{bubbles:true}))};const pair=id=>[...document.querySelectorAll('#'+id+' mfrac mn')].map(e=>Number(e.textContent));const coin=[];for(const mode of ['two','four','six']){select('coinMode',mode);coin.push(pair('coinResult'))}document.querySelector('#coinReset').click();coin.push(pair('coinResult'));const digits=[];for(const n of ['3','4'])for(const kind of ['even','odd']){select('digitCount',n);select('digitTarget',kind);digits.push(pair('digitResult'))}document.querySelector('#digitReset').click();digits.push(pair('digitResult'));const axis=[];for(const mode of ['life','pass','bread','coffee']){select('axisMode',mode);for(const focus of ['difference','outer','inner']){select('axisFocus',focus);axis.push(pair('axisResult'))}}document.querySelector('#axisReset').click();axis.push(pair('axisResult'));return {coin,digits,axis}})()`);
+  assert.deepEqual(result.coin,[[1,4],[5,16],[22,64],[1,4]]);
+  assert.deepEqual(result.digits,[[875,1000],[125,1000],[9375,10000],[625,10000],[875,1000]]);
+  assert.deepEqual(result.axis,[[24,100],[37,100],[13,100],[37,100],[72,100],[35,100],[89,100],[96,100],[7,100],[89,100],[97,100],[8,100],[24,100]]);
+  for(const mode of ['coins','digits','interval']){
+   await evaluate(`document.querySelector('a[href="#${mode}"]').click()`);
+   assert.equal(await evaluate("location.hash"),'#'+mode);
+  }
+  await evaluate("if(document.documentElement.dataset.theme!=='light')document.querySelector('#theme').click()");
+  assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'Probability lab light overflow '+w);
+  await evaluate("document.querySelector('#theme').click()");
+  assert.equal(await evaluate("document.documentElement.dataset.theme"),'dark');
+  assert.ok(await evaluate("document.documentElement.scrollWidth<=document.documentElement.clientWidth+2"),'Probability lab dark overflow '+w);
+  const screenshot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
+  fs.writeFileSync(path.join(output,'26-11-lab-'+w+'.png'),Buffer.from(screenshot.data,'base64'));
+ }
+ console.log('November 26 probability QA PASS: seven viewports, two themes, saved progress, quiz, all laboratory scenarios and resets.');
  await navigate('19.10.26-lab.html',390,844);
  const scenarios=await evaluate("(()=>{const get=()=>document.querySelector('#finalSum').textContent;document.querySelector('[data-preset=base]').click();const base=get();document.querySelector('[data-preset=deposits]').click();const deposits=get();document.querySelector('[data-preset=withdrawal]').click();const withdrawal=get();document.querySelector('[data-preset=variable]').click();const variable=get();return {base,deposits,withdrawal,variable}})()");
  assert.deepEqual(scenarios,{base:'133,1',deposits:'179,3',withdrawal:'128,205',variable:'145,95'},'Deposit model scenario parity');
