@@ -16,7 +16,13 @@ for(const {studentId:id,architecture} of inventoryStudents(root).students){
  const catalog=new Map(cat.data.groups.flatMap(g=>g.items.map(i=>[i.id,i.title])));
  const lessons=loadLessonRegistry(path.join(dir,c.lessons.registry));
  const cov=cumulativeCoverage(lessons,{knownIds:cat.ids,includeLegacy:id!=='sofya_luzianina'});
- const mastery=read(c.competencies.mastery),mastered=Object.entries(mastery.levels||{}).filter(([,v])=>Number(typeof v==='number'?v:v.level)>0);
+ let mastered=[],masteryFormat='json';
+ if(c.competencies.mastery.endsWith('.json')){
+  const mastery=read(c.competencies.mastery);
+  mastered=Object.entries(mastery.levels||{}).filter(([,v])=>Number(typeof v==='number'?v:v.level)>0);
+ }else{
+  masteryFormat='js: not counted';
+ }
  const mdDir=path.join(dir,c.lessons.metadataDir),metadata=new Map(fs.readdirSync(mdDir).filter(x=>x.endsWith('.lesson.json')).map(x=>{const l=JSON.parse(fs.readFileSync(path.join(mdDir,x),'utf8'));return [l.date,l];}));
  let parity='ok';try{validateRegistryMetadataParity(lessons,metadata);}catch(e){parity=e.message;}
  const missing=[],badAnchors=[],unknown=[],empty=[],unlinked=[],examples=[],noHtmlDates=[],candidate=[];
@@ -47,7 +53,7 @@ for(const {studentId:id,architecture} of inventoryStudents(root).students){
   if(!valid.byId.size)empty.push({date:l.date,title:l.title,headings:headings.slice(0,5)});
  }
  const coveredMastery=mastered.filter(([id])=>!cov.byId.has(id));
- const row={id,name:c.studentName,program:c.program,lessons:lessons.length,metadata:metadata.size,catalog:cat.ids.size,covered:cov.byId.size,counts:cov.counts,empty:empty.length,unlinked:unlinked.length,unknown:unknown.length,anchors:badAnchors.length,missingHtml:missing.length,orphanHtml:orphans.length,masteryPositive:mastered.length,masteryOutsideCoverage:coveredMastery.length,parity};
+ const row={id,name:c.studentName,program:c.program,lessons:lessons.length,metadata:metadata.size,catalog:cat.ids.size,covered:cov.byId.size,counts:cov.counts,empty:empty.length,unlinked:unlinked.length,unknown:unknown.length,anchors:badAnchors.length,missingHtml:missing.length,orphanHtml:orphans.length,masteryFormat,masteryPositive:masteryFormat==='json'?mastered.length:null,masteryOutsideCoverage:masteryFormat==='json'?coveredMastery.length:null,parity};
  all.push(row);
  console.log('AUDIT_ROW '+JSON.stringify(row));
  console.log('AUDIT_DETAILS '+JSON.stringify({id,empty,unlinked,unknown,badAnchors,missing,orphans,masteryOutsideCoverage:coveredMastery.map(([id,v])=>[id,catalog.get(id),typeof v==='number'?v:v.level]),latest:examples}));
