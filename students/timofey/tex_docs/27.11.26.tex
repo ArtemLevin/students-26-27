@@ -1,0 +1,362 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry,microtype,setspace,parskip,fancyhdr,xcolor,titlesec}
+\usepackage{tikz,tkz-euclide}
+\usetikzlibrary{calc,arrows.meta,positioning,shapes.geometric}
+\usepackage{booktabs,tabularx,enumitem}
+\geometry{left=20mm,right=20mm,top=20mm,bottom=22mm,headheight=25pt,headsep=8mm}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\color{textgray}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Медианы. Теоремы синусов и косинусов}
+\fancyhead[R]{\small Тимофей Васильченко}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{accent}\leaders\hrule height .45pt\hfill}}
+\titleformat{\section}{\Large\color{darkaccent}}{\thesection.}{.45em}{}[\vspace{2pt}{\color{accent}\titlerule[.45pt]}]
+\titlespacing*{\section}{0pt}{8pt}{9pt}
+\newcommand{\topic}[1]{\par\medskip{\color{darkaccent}\large #1}\par\smallskip}
+\newcommand{\key}[1]{\textcolor{darkaccent}{\textbf{#1}}}
+\newcommand{\SABC}{S_{ABC}}
+\setlist[enumerate]{leftmargin=*,itemsep=6pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\tkzSetUpLine[line width=.8pt,color=darkaccent]
+\tkzSetUpPoint[color=darkaccent,fill=darkaccent,size=3]
+\tkzSetUpLabel[color=textgray,font=\small]
+\begin{document}
+\begin{titlepage}
+\centering
+\vspace*{27mm}
+{\Large\color{darkaccent} МАТЕМАТИКА\par}
+\vspace{14mm}
+{\LARGE Чек-лист\par}
+\vspace{10mm}
+{\LARGE\color{accent} Медианы треугольника\\[3pt]Теоремы синусов и косинусов\par}
+\vspace{15mm}
+{\large Подготовка к ЕГЭ по профильной математике\par}
+\vfill
+{\large Тимофей Васильченко\par}
+\vspace{9mm}
+27 ноября 2026 г.\par
+\vspace{15mm}
+{\small Лёвин Артём Александрович\\эксклюзивно для Тимофея Васильченко\par}
+\vspace{17mm}
+\begin{tikzpicture}
+\draw[accent,line width=.9pt] (0,0) .. controls (2,1) and (4,-.8) .. (6,0) .. controls (8,.8) and (10,-1) .. (12,0);
+\end{tikzpicture}
+\vspace{3mm}
+\end{titlepage}
+\setcounter{page}{1}
+\section{Медиана и её свойства}
+Медиана треугольника соединяет вершину с серединой противоположной стороны. Пусть $A_1$, $B_1$, $C_1$ --- середины $BC$, $AC$, $AB$ соответственно, а $O$ --- точка пересечения медиан.
+\begin{center}
+\begin{tikzpicture}[scale=.85]
+\tkzDefPoint(0,0){B}\tkzDefPoint(7,0){C}\tkzDefPoint(2,4.2){A}
+\tkzDefMidPoint(B,C)\tkzGetPoint{A1}
+\tkzDefMidPoint(A,C)\tkzGetPoint{B1}
+\tkzDefMidPoint(A,B)\tkzGetPoint{C1}
+\tkzInterLL(A,A1)(B,B1)\tkzGetPoint{O}
+\tkzDrawPolygon(A,B,C)
+\tkzDrawSegments[accent](A,A1 B,B1 C,C1)
+\tkzDrawPoints(A,B,C,A1,B1,C1,O)
+\tkzLabelPoints[above](A)
+\tkzLabelPoints[below left](B)
+\tkzLabelPoints[below right](C)
+\tkzLabelPoint[below](A1){$A_1$}
+\tkzLabelPoint[above right](B1){$B_1$}
+\tkzLabelPoint[above left](C1){$C_1$}
+\tkzLabelPoints[below left](O)
+\end{tikzpicture}
+\end{center}
+\topic{Точка пересечения медиан}
+Все три медианы проходят через одну точку. Она делит каждую медиану в отношении $2:1$, считая от вершины:
+\[
+ AO:OA_1=BO:OB_1=CO:OC_1=2:1.
+\]
+В частности, $AO=\frac23 AA_1$, $OA_1=\frac13 AA_1$.
+Если $AA_1=12$, то $AO=8$, $OA_1=4$.
+\topic{Равновеликие треугольники}
+Медиана делит треугольник на две части равной площади: основания равны и высота к ним одна и та же.
+\[
+ S_{ABA_1}=S_{ACA_1}=\tfrac12\SABC.
+\]
+Три медианы разбивают треугольник на шесть равновеликих треугольников. Например,
+\[
+ S_{AOC_1}=S_{BOC_1}=\tfrac16\SABC.
+\]
+Действительно, рассмотрим высоты к $AB$: высота из $O$ равна трети высоты из $C$, поскольку $C_1O=\frac13 C_1C$. Поэтому $S_{OAB}=\frac13\SABC$; медиана $OC_1$ делит эту площадь пополам. Аналогично для двух других сторон.
+\clearpage
+\section{Удвоение медианы. Теорема косинусов}
+Пусть $AM$ --- медиана треугольника $ABC$. Продлите $AM$ за точку $M$ до точки $D$ так, чтобы $MD=AM$. Тогда $ABDC$ --- параллелограмм: его диагонали $AD$ и $BC$ делятся пополам.
+\begin{center}
+\begin{tikzpicture}[scale=.85]
+\tkzDefPoint(0,0){A}\tkzDefPoint(1.5,2.598076){B}\tkzDefPoint(6,0){C}\tkzDefPoint(7.5,2.598076){D}
+\tkzDefMidPoint(B,C)\tkzGetPoint{M}
+\tkzDrawPolygon(A,B,D,C)
+\tkzDrawSegments[accent](A,D B,C)
+\tkzMarkSegments[mark=|,color=accent](A,M M,D)
+\tkzMarkSegments[mark=||,color=accent](B,M M,C)
+\tkzDrawPoints(A,B,C,D,M)
+\tkzLabelPoints[below left](A)\tkzLabelPoints[above left](B)
+\tkzLabelPoints[below right](C)\tkzLabelPoints[above right](D)
+\tkzLabelPoints[above](M)
+\end{tikzpicture}
+\end{center}
+Отсюда $AD=2AM$, $CD=AB$, $BD=AC$, а $\angle BAC+\angle ACD=180^\circ$. Во вспомогательном треугольнике $ACD$ известны три стороны, если известны $AB$, $AC$ и $AM$.
+\topic{Теорема косинусов}
+Если $a,b,c$ --- стороны напротив углов $\alpha,\beta,\gamma$ соответственно, то
+\begin{align*}
+ a^2&=b^2+c^2-2bc\cos\alpha,\\
+ b^2&=a^2+c^2-2ac\cos\beta,\\
+ c^2&=a^2+b^2-2ab\cos\gamma.
+\end{align*}
+Для нахождения угла по трём сторонам удобно выразить косинус:
+\[
+ \cos\alpha=\frac{b^2+c^2-a^2}{2bc}.
+\]
+\key{Проверяйте:} угол лежит между сторонами в произведении; напротив него находится сторона в левой части исходной формулы. Косинус тупого угла отрицателен, острого --- положителен.
+\topic{Формулы приведения}
+\[
+\cos(180^\circ-\alpha)=-\cos\alpha,\qquad
+\sin(180^\circ-\alpha)=\sin\alpha.
+\]
+\clearpage
+\section{Поиск угла и длины медианы}
+\topic{Пример 1. Угол через вспомогательный треугольник}
+В треугольнике $ABC$ даны $AB=2$, $AC=4$, медиана $AM=\sqrt7$. Найдите $\angle BAC$.
+
+Удвоим медиану по построению из раздела 2. Тогда $AD=2\sqrt7$, $CD=2$, $AC=4$. Применим теорему косинусов к треугольнику $ACD$ для стороны $AD$:
+\begin{align*}
+ AD^2&=AC^2+CD^2-2\cdot AC\cdot CD\cos\angle ACD,\\
+ 28&=16+4-2\cdot4\cdot2\cos\angle ACD,\\
+ 16\cos\angle ACD&=-8,\\
+ \cos\angle ACD&=-\tfrac12.
+\end{align*}
+Так как углы $BAC$ и $ACD$ в сумме дают $180^\circ$, получаем
+\[
+ \cos\angle BAC=-\cos\angle ACD=\tfrac12,
+ \qquad \boxed{\angle BAC=60^\circ}.
+\]
+\key{Контроль:} коэффициент при косинусе равен $2\cdot4\cdot2=16$. В произведении участвуют стороны, образующие искомый угол.
+\topic{Формула Аполлония (длина медианы)}
+Для медианы $m_a$ к стороне $a$, если две другие стороны равны $b$ и $c$,
+\[
+ m_a=\frac12\sqrt{2b^2+2c^2-a^2},\qquad
+ a^2=2b^2+2c^2-4m_a^2.
+\]
+Формула следует из теоремы косинусов для двух треугольников, образованных медианой: косинусы смежных углов имеют противоположные знаки и при сложении сокращаются.
+
+Проверка примера: $BC^2=2^2+4^2-2\cdot2\cdot4\cdot\frac12=12$. По формуле Аполлония $AM=\frac12\sqrt{8+32-12}=\sqrt7$.
+\clearpage
+\section{Площадь по двум сторонам и медиане}
+\topic{Формула Герона}
+Если известны три стороны треугольника $a,b,c$, сначала вычислите полупериметр $p$, затем площадь:
+\[
+ p=\frac{a+b+c}{2},\qquad S=\sqrt{p(p-a)(p-b)(p-c)}.
+\]
+Длины должны быть положительными и удовлетворять строгим неравенствам треугольника.
+\topic{Пример 2. Равновеликость после удвоения}
+Две стороны треугольника $AB=10$, $AC=12$, медиана $AM=5$. Найдите площадь $ABC$.
+
+Построим параллелограмм $ABDC$ (как в разделе 2). В треугольнике $ABD$ имеем $AB=10$, $BD=12$, $AD=10$.
+\begin{center}
+\begin{tikzpicture}[scale=.47]
+% Exact: AB=10, AC=12, AD=10; cos BAC=-3/5.
+\tkzDefPoint(0,0){A}\tkzDefPoint(-6,8){B}\tkzDefPoint(12,0){C}\tkzDefPoint(6,8){D}
+\tkzDefMidPoint(A,D)\tkzGetPoint{M}
+\tkzDrawPolygon(A,B,D,C)
+\tkzDrawSegments[accent](A,D B,C)
+\tkzDrawPoints(A,B,C,D,M)
+\tkzLabelPoints[below left](A)\tkzLabelPoints[above left](B)
+\tkzLabelPoints[below right](C)\tkzLabelPoints[above right](D)
+\tkzLabelPoints[above](M)
+\tkzLabelSegment[above](B,D){$12$}
+\tkzLabelSegment[below](A,C){$12$}
+\tkzLabelSegment[left](A,B){$10$}
+\tkzLabelSegment[right](C,D){$10$}
+\tkzLabelSegment[below right](A,M){$5$}
+\tkzLabelSegment[below right](M,D){$5$}
+\end{tikzpicture}
+\end{center}
+Почему $S_{ABC}=S_{ABD}$? Два способа:
+\begin{itemize}
+\item У треугольников общее основание $AB$. Вершины $C$ и $D$ лежат на прямой $CD\parallel AB$, поэтому высоты к $AB$ равны.
+\item $S_{ABC}=\frac12 AB\cdot AC\sin\angle BAC$, $S_{ABD}=\frac12 AB\cdot BD\sin\angle ABD$. Здесь $AC=BD$, а синусы дополнительных до $180^\circ$ углов равны.
+\end{itemize}
+По Герону $p=\frac{10+12+10}{2}=16$, следовательно,
+\[
+ S_{ABC}=S_{ABD}=\sqrt{16\cdot6\cdot4\cdot6}=\boxed{48}.
+\]
+\clearpage
+\section{Площадь треугольника по трём медианам}
+\topic{Пример 3. Медианы равны $3$, $4$ и $5$}
+Пусть $AA_1=3$, $BB_1=4$, $CC_1=5$. Их точка пересечения --- $O$. Рассмотрим треугольник $AOB$; отрезок $OC_1$ является его медианой. Продлим $OC_1$ до $F$ так, чтобы $C_1F=OC_1$.
+\begin{center}
+\begin{tikzpicture}[scale=1.35]
+% A=(2,0), B=(0,8/3), O=(0,0), C=(-2,-8/3): scaled right centroid vectors.
+\tkzDefPoint(2,0){A}\tkzDefPoint(0,2.666667){B}\tkzDefPoint(-2,-2.666667){C}
+\tkzDefMidPoint(A,B)\tkzGetPoint{C1}
+\tkzDefMidPoint(B,C)\tkzGetPoint{A1}
+\tkzDefMidPoint(A,C)\tkzGetPoint{B1}
+\tkzDefPoint(0,0){O}\tkzDefPoint(2,2.666667){F}
+\tkzDrawPolygon(A,B,C)
+\tkzDrawSegments[accent](A,A1 B,B1 C,C1)
+\tkzDrawSegments[dashed,darkaccent](C1,F A,F B,F)
+\tkzDrawPoints(A,B,C,A1,B1,C1,O,F)
+\tkzLabelPoints[right](A)\tkzLabelPoints[above left](B)\tkzLabelPoints[below](C)
+\tkzLabelPoint[above right](C1){$C_1$}
+\tkzLabelPoint[left](A1){$A_1$}
+\tkzLabelPoint[below right](B1){$B_1$}
+\tkzLabelPoints[below right](O)\tkzLabelPoints[above right](F)
+\end{tikzpicture}
+\end{center}
+Четырёхугольник $AOBF$ --- параллелограмм, значит $BF=AO$. В треугольнике $OBF$ все стороны известны:
+\[
+ BF=AO=\tfrac23\cdot3=2,\quad BO=\tfrac23\cdot4=\tfrac83,\quad OF=2OC_1=\tfrac{10}{3}.
+\]
+По формуле Герона $p=4$, поэтому
+\[
+ S_{OBF}=\sqrt{4\cdot2\cdot\tfrac43\cdot\tfrac23}=\tfrac83.
+\]
+Медиана $BC_1$ делит треугольник $OBF$ пополам, а $S_{OBC_1}=\tfrac16 S_{ABC}$. Следовательно,
+\[
+ S_{ABC}=6S_{OBC_1}=3S_{OBF}=\boxed{8}.
+\]
+\key{Полезное следствие:} если $S_m$ --- площадь треугольника со сторонами $m_a,m_b,m_c$, то $S_{ABC}=\frac43 S_m$. Ведь стороны $OBF$ составляют $\frac23$ от трёх медиан, поэтому $S_{OBF}=\frac49 S_m$.
+\clearpage
+\section{Теорема синусов и параллелограмм}
+Если $a,b,c$ --- стороны напротив углов $\alpha,\beta,\gamma$, а $R$ --- радиус описанной окружности, то
+\[
+ \frac{a}{\sin\alpha}=\frac{b}{\sin\beta}=\frac{c}{\sin\gamma}=2R.
+\]
+В частности, $a:b=\sin\alpha:\sin\beta$. Теорема позволяет найти отношение сторон, если известны противоположные углы.
+\topic{Пример 4. Диагональ делит угол на $30^\circ$ и $45^\circ$}
+В параллелограмме $ABCD$ диагональ $AC$ делит угол $BAD$ так, что $\angle BAC=30^\circ$, $\angle CAD=45^\circ$. Найдите отношение $AD:DC$.
+\begin{center}
+\begin{tikzpicture}[scale=.86]
+\tkzDefPoint(0,0){A}\tkzDefPoint(5,0){B}
+% AD length=5/sqrt(2), direction 75 degrees.
+\tkzDefPoint(0.915064,3.415064){D}\tkzDefPoint(5.915064,3.415064){C}
+\tkzDrawPolygon(A,B,C,D)\tkzDrawSegment[accent](A,C)
+\tkzMarkAngle[size=.9,color=accent](B,A,C)
+\tkzMarkAngle[size=.65,color=accent](C,A,D)
+\tkzMarkAngle[size=.9,color=accent](D,C,A)
+\tkzLabelAngle[pos=1.55](B,A,C){$30^\circ$}
+\tkzLabelAngle[pos=1.35](C,A,D){$45^\circ$}
+\tkzLabelAngle[pos=1.55](D,C,A){$30^\circ$}
+\tkzLabelPoints[below left](A)\tkzLabelPoints[below right](B)
+\tkzLabelPoints[above left](D)\tkzLabelPoints[above right](C)
+\tkzLabelSegment[left](A,D){$x$}\tkzLabelSegment[above](D,C){$y$}
+\end{tikzpicture}
+\end{center}
+Так как $AB\parallel DC$, накрест лежащие углы $BAC$ и $ACD$ равны. В треугольнике $ACD$ имеем $\angle ACD=30^\circ$, $\angle CAD=45^\circ$, $\angle ADC=105^\circ$.
+\[
+ \frac{x}{\sin30^\circ}=\frac{y}{\sin45^\circ}
+ \quad\Longrightarrow\quad
+ \frac{x}{y}=\frac{1/2}{\sqrt2/2}=\frac1{\sqrt2}.
+\]
+Следовательно, $\boxed{AD:DC=1:\sqrt2}$.
+\topic{Как выбрать теорему}
+\begin{tabularx}{\linewidth}{@{}p{.43\linewidth}X@{}}
+\toprule
+Исходные данные & Полезный инструмент\\\midrule
+Три стороны или две стороны и угол между ними & Теорема косинусов\\
+Противоположные пары «сторона -- угол» & Теорема синусов\\
+Три стороны, нужна площадь & Формула Герона\\
+Две стороны и угол между ними, нужна площадь & $S=\frac12 bc\sin\alpha$\\\bottomrule
+\end{tabularx}
+\clearpage
+\thispagestyle{empty}
+\begin{center}
+{\Large\color{darkaccent} Алгоритм: две стороны и медиана\par}
+\vspace{12mm}
+\begin{tikzpicture}[node distance=10mm,>=Stealth, every node/.style={font=\small,align=center},
+ action/.style={draw=accent,rounded corners=3pt,text width=9cm,minimum height=12mm,inner sep=5pt},
+ terminal/.style={ellipse,draw=darkaccent,minimum width=8cm,minimum height=10mm,inner sep=3pt},
+ branch/.style={draw=accent,rounded corners=3pt,text width=6cm,minimum height=21mm,inner sep=5pt},
+ decision/.style={diamond,draw=darkaccent,aspect=2.6,text width=3.1cm,inner sep=2pt}]
+\node[terminal,text width=8cm] (start) {Даны $AB$, $AC$, медиана $AM$;\\нужен угол или площадь};
+\node[action,below=of start] (double) {Продлите $AM$ до $D$: $MD=AM$};
+\node[action,below=of double] (tri) {Получите $ABDC$ --- параллелограмм.\\В $ACD$: $AD=2AM$, $CD=AB$, $AC$ известно.};
+\node[decision,below=of tri] (target) {Нужно найти угол $BAC$?};
+\node[branch,below left=13mm and 3mm of target] (cos) {Теорема косинусов:\\найдите $\cos\angle ACD$};
+\node[branch,below right=13mm and 3mm of target] (heron) {Если нужна площадь:\\вычислите $S_{ACD}$ по Герону};
+\node[branch,below=of cos] (angle) {$\angle BAC=180^\circ-\angle ACD$};
+\node[branch,below=of heron] (area) {$S_{ABC}=S_{ACD}$:\\общее основание $AC$, равные высоты};
+\node[terminal] (end) at ($(angle.south)!0.5!(area.south)+(0,-1.7)$) {Проверьте результат и запишите ответ};
+\draw[->] (start)--(double);\draw[->] (double)--(tri);\draw[->] (tri)--(target);
+\draw[->] (target.west)-| node[pos=.25,above]{Да} (cos.north);
+\draw[->] (target.east)-| node[pos=.25,above]{Нет, нужна площадь} (heron.north);
+\draw[->] (cos)--(angle);\draw[->] (heron)--(area);
+\draw[->] (angle.south)|-(end.west);\draw[->] (area.south)|-(end.east);
+\end{tikzpicture}
+\end{center}
+\clearpage
+\section*{Тренировочный блок}
+Выполняйте чертежи и подписывайте известные длины и углы. Указывайте используемую формулу или свойство. Все длины даны в одинаковых единицах.
+\topic{Средний уровень}
+\begin{enumerate}
+\item Медиана $AA_1=15$. Точка $O$ --- точка пересечения медиан. Найдите $AO$ и $OA_1$.
+\item Три медианы треугольника разбивают его на шесть частей. Площадь одной части равна $7$. Найдите площадь всего треугольника.
+\item В треугольнике $ABC$ даны $AB=5$, $AC=7$, $\angle BAC=60^\circ$. Найдите $BC$.
+\end{enumerate}
+\topic{Уровень выше среднего}
+\begin{enumerate}[resume]
+\item В треугольнике $ABC$ известны $AB=3$, $AC=5$, медиана $AM=\frac{\sqrt{19}}2$. Найдите $\angle BAC$ с помощью удвоения медианы.
+\item Две стороны треугольника равны $6$ и $8$, медиана к третьей стороне равна $5$. Найдите площадь треугольника.
+\item В треугольнике $ABC$ даны $AB=7$, $AC=9$, $BC=10$. Найдите медиану к стороне $BC$.
+\item Диагональ $AC$ параллелограмма $ABCD$ делит угол $BAD$ на углы $BAC=30^\circ$ и $CAD=60^\circ$. Найдите отношение $AD:DC$.
+\item Найдите площадь треугольника, медианы которого равны $6$, $8$ и $10$.
+\end{enumerate}
+\topic{Сложный уровень}
+\begin{enumerate}[resume]
+\item Найдите площадь треугольника, медианы которого равны $5$, $5$ и $6$.
+\item В треугольнике $ABC$ даны $AB=5$, $AC=7$, медиана $AM=\sqrt{29}$. Найдите площадь треугольника и длину $BC$.
+\end{enumerate}
+\clearpage
+\section*{Ответы}
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}cl@{}}
+\toprule
+№ & Ответ\\\midrule
+1 & $AO=10$, $OA_1=5$\\
+2 & $42$\\
+3 & $\sqrt{39}$\\
+4 & $120^\circ$\\
+5 & $24$\\
+6 & $2\sqrt{10}$\\
+7 & $1:\sqrt3$\\
+8 & $32$\\
+9 & $16$\\
+10 & $S=14$, $BC=4\sqrt2$\\\bottomrule
+\end{tabular}
+\end{center}
+\vspace{5mm}
+\begin{center}{\large\color{darkaccent} Итоговая памятка}\end{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\linewidth}{@{}p{.43\linewidth}X@{}}
+\toprule
+Сигнал в задаче & Полезное действие\\\midrule
+Известна медиана и две стороны & Удвойте медиану; ищите треугольник с тремя известными сторонами.\\
+Точка пересечения медиан & Используйте отношение $2:1$ от вершины.\\
+Три медианы и площадь & Найдите площадь вспомогательного треугольника; учтите коэффициент площади.\\
+Сумма углов равна $180^\circ$ & Синусы равны, косинусы противоположны.\\
+Параллелограмм и диагональ & Перенесите углы по параллельным прямым; рассмотрите треугольник.\\\bottomrule
+\end{tabularx}
+\topic{Типичные ошибки}
+\begin{itemize}
+\item Перепутать доли $\frac23$ и $\frac13$ медианы.
+\item Подставить медианы как стороны исходного треугольника в формулу Герона.
+\item Перепутать сторону и противолежащий ей угол в теореме синусов.
+\item Потерять минус при переходе к косинусу дополнительного до $180^\circ$ угла.
+\end{itemize}
+\end{document}
