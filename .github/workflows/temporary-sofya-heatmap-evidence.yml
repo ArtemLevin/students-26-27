@@ -1,0 +1,19 @@
+name: Sofia heatmap evidence check
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  check:
+    if: github.head_ref == 'heatmap/sofya-luzianina-recent-evidence'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check students/sofya_luzianina/site/heatmap.js
+      - run: node --test students/sofya_luzianina/site/tests/recent-coverage.test.mjs
+      - run: node scripts/student.mjs validate sofya_luzianina
