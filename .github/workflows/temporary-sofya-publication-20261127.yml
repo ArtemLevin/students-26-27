@@ -1,0 +1,46 @@
+name: Temporary Sofia publication gate 27.11.26
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  publish:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'lesson/sofya-luzianina-27-11-26'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: lesson/sofya-luzianina-27-11-26
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Static and physics checks
+        run: node --test students/sofya_luzianina/site/tests/lesson-20261127.contract.test.mjs
+      - name: Canonical dry-run and apply
+        run: |
+          node scripts/publish-lesson.mjs sofya_luzianina 27.11.26 --intent students/sofya_luzianina/27.11.26.intent.json --dry-run > /tmp/sofya-publication.json
+          cat /tmp/sofya-publication.json
+          node -e "const p=require('/tmp/sofya-publication.json');if(!p.executable||p.reviewItems.length||p.conflicts.length||p.warnings.length||Object.keys(p.masteryChanges||{}).length)process.exit(1);"
+          node scripts/publish-lesson.mjs sofya_luzianina 27.11.26 --intent students/sofya_luzianina/27.11.26.intent.json
+      - name: Validate release
+        run: |
+          node scripts/student.mjs validate sofya_luzianina
+          node scripts/student.mjs audit
+          node shared/practice/validate-configs.mjs
+          node shared/practice/audit-lesson-coverage.mjs
+          node --test shared/practice/test/*.test.mjs
+          node --test pipeline/practice/test/*.test.mjs
+          git diff --stat
+      - name: Commit only canonical publisher outputs
+        run: |
+          git add students/sofya_luzianina/site/data/lessons/2026-11-27.lesson.json students/sofya_luzianina/site/data/ktp-state.json students/sofya_luzianina/site/lesson-registry.js
+          git diff --cached --stat
+          if ! git diff --quiet; then echo 'Unexpected unstaged publication outputs'; exit 1; fi
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Publish Sofia dynamics lesson through canonical v2 pipeline"
+            git push origin HEAD:lesson/sofya-luzianina-27-11-26
+          fi
