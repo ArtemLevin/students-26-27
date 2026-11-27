@@ -51,12 +51,12 @@ if(lesson){
   if(href){$('latestLessonCta').href=href;$('latestLessonCta').hidden=false;}
   const pdf=safeHref(lesson.materials?.pdf);
   if(pdf){$('latestLessonPdf').href=pdf;$('latestLessonPdf').hidden=false;}
-  if(['2026-10-15','2026-10-22','2026-10-29','2026-11-03','2026-11-05','2026-11-12','2026-11-17','2026-11-19'].includes(lesson.date)){
+  if(['2026-10-15','2026-10-22','2026-10-29','2026-11-03','2026-11-05','2026-11-12','2026-11-17','2026-11-19','2026-11-26'].includes(lesson.date)){
     const image=lesson.date.slice(8,10)+'.'+lesson.date.slice(5,7)+'.'+lesson.date.slice(2,4)+'.png';
     $('latestLessonPoster').href='../images/'+image;
     $('latestLessonPoster').textContent=lesson.date==='2026-11-17'?'Обложка пособия':'Постер';
     $('latestLessonPoster').hidden=false;
-    $('latestPracticeLink').href=href;
+    $('latestPracticeLink').href=lesson.date==='2026-11-26'?href+'#practice':href;
   }else if(href){
     $('latestPracticeLink').href=href;
     $('latestPracticeLink').textContent='Открыть последнее занятие ↗';
