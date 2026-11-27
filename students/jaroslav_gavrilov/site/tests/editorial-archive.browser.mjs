@@ -95,6 +95,39 @@ try{
     assert.ok(r.scroll<=r.client+2,page+' width='+width+' dark='+dark+' overflow '+JSON.stringify(r));
   }
   async function screenshot(name){const s=await call('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(artifact,name+'.png'),Buffer.from(s.data,'base64'));}
+  // 26.11.26: responsive lesson, interactive models and registry-driven map evidence.
+  for(const width of [320,390,768,1024,1440]){
+    for(const page of ['26.11.26.html','26.11.26-lab.html']){
+      for(const dark of [false,true]){
+        await visit(page,width,dark);
+        if(width===390||width===1440)await screenshot(page+'-'+width+(dark?'-dark':'-light'));
+      }
+    }
+  }
+  await visit('26.11.26.html',1440,false);
+  const workLesson=await evalJS(`(()=>{
+    const form=document.querySelector('#quickCheck');
+    for(const [name,value] of [['q1','b'],['q2','c'],['q3','a']])form.querySelector('input[name="'+name+'"][value="'+value+'"]').checked=true;
+    form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+    const feedback=document.querySelector('#quizFeedback').textContent;
+    form.reset();const reset=document.querySelector('#quizFeedback').textContent;
+    const answer=document.querySelector('.task details');answer.querySelector('summary').click();
+    return {tasks:document.querySelectorAll('.task').length,math:document.querySelectorAll('math').length,feedback,reset,open:answer.open,anchors:['units','model','joint','sequence','plan','pairs'].every(id=>document.getElementById(id)),poster:document.querySelector('.poster')?.getAttribute('src')};
+  })()`);
+  assert.equal(workLesson.tasks,10);assert.ok(workLesson.math>=10);assert.ok(workLesson.feedback.includes('3 из 3'));assert.equal(workLesson.reset,'');assert.equal(workLesson.open,true);assert.equal(workLesson.anchors,true);assert.equal(workLesson.poster,'../images/26.11.26.png');
+  await visit('26.11.26-lab.html#joint',1440,false);
+  const workLab=await evalJS(`(()=>{
+    const el=id=>document.getElementById(id),set=(id,value)=>{el(id).value=value;el(id).dispatchEvent(new Event('input',{bubbles:true}))};
+    const initial=el('jointResult').textContent;
+    set('a',6);const changed=el('jointResult').textContent;el('jointReset').click();const reset=el('jointResult').textContent;
+    const sequence=el('seqResult').textContent;set('x',6);const wrong=el('seqResult').textContent;el('seqReset').click();const seqReset=el('seqResult').textContent;
+    const pairs=el('pairsResult').textContent;set('ab',1);set('bc',12);set('ca',12);const invalid=el('pairsResult').textContent;el('pairsReset').click();const pairReset=el('pairsResult').textContent;
+    return {initial,changed,reset,sequence,wrong,seqReset,pairs,invalid,pairReset};
+  })()`);
+  assert.ok(workLab.initial.includes('2 ч'));assert.ok(workLab.changed.includes('3 ч'));assert.equal(workLab.reset,workLab.initial);assert.ok(workLab.sequence.includes('Условие выполнено'));assert.ok(workLab.wrong.includes('пока не выполнено'));assert.equal(workLab.seqReset,workLab.sequence);assert.ok(workLab.pairs.includes('160 мин'));assert.ok(workLab.invalid.includes('невозможен'));assert.equal(workLab.pairReset,workLab.pairs);
+  await visit('index.html',1440,false);
+  const newWorkEvidence=await evalJS(`(()=>{const ids=['ege11_01','ege11_02','ege11_03','ege11_07','ege11_08','ege11_09','ege11_17','ege11_18','ege11_19','ege11_20'];const all=window.COMPETENCY_MAP_DATA.groups.flatMap(g=>g.items);const linked=ids.every(id=>all.find(x=>x.id===id)?.relatedMaterials?.some(m=>m.href.startsWith('26.11.26.html#')));return {linked,latest:document.getElementById('latestLessonCta').getAttribute('href'),studied:document.querySelectorAll('[data-status="studied"]').length}})()`);
+  assert.equal(newWorkEvidence.linked,true);assert.equal(newWorkEvidence.latest,'26.11.26.html');assert.ok(newWorkEvidence.studied>0);
   for(const width of [375,390,768,1024,1440]){
     for(const page of ['15.10.26.html','15.10.26-lab.html']){
       for(const dark of [false,true]){

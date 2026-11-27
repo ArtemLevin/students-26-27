@@ -56,10 +56,10 @@ try{
  assert.match(quiz,/Верно/);
  await js("window.dispatchEvent(new Event('beforeprint'))");assert.equal(await js("document.querySelector('#answers details').open"),true,'print answers shown');
  await js("window.dispatchEvent(new Event('afterprint'))");assert.equal(await js("document.querySelector('#answers details').open"),false,'answers restored');
- assert.equal(LESSONS[0].date,'2026-11-23');assert.equal(LESSONS.filter(x=>x.date==='2026-11-09').length,1);
+ assert.ok(LESSONS[0].date>='2026-11-26');assert.equal(LESSONS.filter(x=>x.date==='2026-11-26').length,1,'November 26 lesson published once');assert.equal(LESSONS.filter(x=>x.date==='2026-11-09').length,1);
  assert.equal(LESSONS.filter(x=>x.date==='2026-11-12').length,1,'November 12 lesson remains once');
  assert.equal(LESSONS.filter(x=>x.date==='2026-11-23').length,1,'November 23 lesson published once');
- for(const [w,h] of [[390,844],[1440,900]]){await visit('index.html',w,h,false);const a=await js("document.getElementById('latestLessonCta').getAttribute('href')");assert.equal(a,'23.11.26.html')}
+ for(const [w,h] of [[390,844],[1440,900]]){await visit('index.html',w,h,false);const a=await js("document.getElementById('latestLessonCta').getAttribute('href')");assert.equal(a,LESSONS[0].href,'cabinet matches latest registered lesson')}
  // The November 9 regression also protects the latest November 12 lesson and lab.
  for(const [w,h] of [[390,844],[1440,900]])for(const dark of [false,true]){
    await visit('12.11.26.html',w,h,dark);

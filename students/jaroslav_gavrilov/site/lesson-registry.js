@@ -5,6 +5,87 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-26",
+  "ktpRefs": [
+    "ktp-022",
+    "ktp-023",
+    "ktp-028"
+  ],
+  "href": "26.11.26.html",
+  "title": "Текстовые задачи на движение и производительность",
+  "navTitle": "Текстовые задачи на движение и производительность",
+  "navSubtitle": "26 ноября 2026 года: движение поездов, производительность, совместная и последовательная работа, план и факт, три пары исполнителей и 10 тренировочных задач.",
+  "summary": "26 ноября 2026 года: движение поездов, производительность, совместная и последовательная работа, план и факт, три пары исполнителей и 10 тренировочных задач.",
+  "topics": [
+    "Движение поездов и единицы измерения",
+    "Производительность, время, результат",
+    "Совместная работа",
+    "Разность времён и производительностей",
+    "План и факт",
+    "Последовательная работа",
+    "Три пары исполнителей",
+    "10 тренировочных задач"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "ege11_01",
+      "evidenceAnchor": "units",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege11_02",
+      "evidenceAnchor": "units",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege11_03",
+      "evidenceAnchor": "units",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege11_07",
+      "evidenceAnchor": "joint",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege11_08",
+      "evidenceAnchor": "model",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege11_09",
+      "evidenceAnchor": "sequence",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege11_17",
+      "evidenceAnchor": "plan",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "ege11_18",
+      "evidenceAnchor": "pairs",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege11_19",
+      "evidenceAnchor": "sequence",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "ege11_20",
+      "evidenceAnchor": "units",
+      "relation": "practiced"
+    }
+  ],
+  "materials": {
+    "html": "26.11.26.html",
+    "pdf": "../pdf_docs/26.11.26.pdf",
+    "tex": "../tex_docs/26.11.26.tex",
+    "lab": "26.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-23",
   "ktpRefs": [
     "ktp-022",
