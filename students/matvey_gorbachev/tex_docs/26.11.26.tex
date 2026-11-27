@@ -1,0 +1,304 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{geometry,microtype,parskip,fancyhdr,setspace,enumitem,booktabs,tabularx,xcolor,tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usepackage[unicode,hidelinks]{hyperref}
+\geometry{left=23mm,right=23mm,top=23mm,bottom=23mm,headheight=15pt}
+\definecolor{accent}{HTML}{008080}
+\definecolor{darkaccent}{HTML}{004D4D}
+\definecolor{textgray}{HTML}{333333}
+\setstretch{1.15}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Производная и экстремумы}
+\fancyhead[R]{\small Матвей Горбачев}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=*,itemsep=4pt,topsep=4pt}
+\newcommand{\topic}[1]{\section{\textcolor{darkaccent}{#1}}}
+\newcommand{\ex}[1]{\par\medskip\textbf{#1}\par\smallskip}
+\newcommand{\key}[1]{\par\smallskip\textcolor{darkaccent}{\textbf{#1}}\par\smallskip}
+\newcommand{\ans}[1]{\par\textbf{Ответ:} $#1$.}
+\begin{document}
+\begin{titlepage}
+\centering
+\vspace*{26mm}
+{\Large\color{darkaccent} МАТЕМАТИКА\par}
+\vspace{16mm}
+{\huge Чек-лист\par}
+\vspace{10mm}
+{\LARGE\color{accent} Исследование функции\\ с помощью производной\par}
+\vspace{17mm}
+{\large Подготовка к ЕГЭ по профильной математике\par}
+\vfill
+{\large Матвей Горбачев\par}
+\vspace{10mm}
+{\large 26 ноября 2026 г.\par}
+\vspace{18mm}
+{\small Лёвин Артём Александрович\\ эксклюзивно для Матвея Горбачева\par}
+\vspace{18mm}
+\begin{tikzpicture}
+\draw[accent,line width=.9pt] (0,0) .. controls (2,0.65) and (4,-0.65) .. (6,0) .. controls (8,0.65) and (10,-0.65) .. (12,0);
+\end{tikzpicture}
+\end{titlepage}
+\setcounter{page}{1}
+\topic{Что именно требуется найти?}
+Производная показывает направление изменения функции. На промежутке, где $f'(x)>0$, функция возрастает; при $f'(x)<0$ функция убывает. Если $f'$ меняет знак с плюса на минус, получаем точку максимума; с минуса на плюс --- точку минимума (при непрерывности функции в этой точке).
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}p{.43\linewidth}X@{}}
+\toprule Формулировка & Что записать в ответ\\ \midrule
+Точка максимума или минимума & Абсциссу $x_0$, в которой меняется характер монотонности.\\
+Наибольшее или наименьшее значение & Число $f(x_0)$ или значение функции на границе отрезка.\\ \bottomrule
+\end{tabularx}
+\end{center}
+\ex{Пример 1. Найти точку максимума}
+\[f(x)=x^3-48x+17,\qquad f'(x)=3x^2-48=3(x-4)(x+4).\]
+Из $f'(x)=0$ получаем $x=-4$ и $x=4$. Для проверки знака подставим $0$ в производную: $f'(0)=-48<0$. Оба корня простые, знак при переходе через каждый меняется.
+\begin{center}
+\begin{tikzpicture}[x=1.1cm,y=1cm,>=Latex]
+\draw[->] (-5.7,0)--(5.7,0) node[right]{$x$};
+\foreach \x/\t in {-3/-4,3/4}{\fill (\x,0) circle(2pt) node[below=4pt]{$\t$};}
+\node[accent] at (-4.2,.35){$+$};\node[accent] at (0,.35){$-$};\node[accent] at (4.2,.35){$+$};
+\draw[accent,thick,->] (-5,-1.15)--(-3,-.55);
+\draw[accent,thick,->] (-2.8,-.55)--(2.8,-1.15);
+\draw[accent,thick,->] (3,-1.15)--(5,-.55);
+\node at (-3,-1.55){максимум};\node at (3,-1.55){минимум};
+\end{tikzpicture}
+\end{center}
+В $x=-4$ знак меняется с $+$ на $-$. В задании нужна абсцисса точки максимума.
+\ans{-4}
+\ex{Пример 2. Найти наименьшее значение на $[0;4]$}
+\[f(x)=x^3-27x,\quad f'(x)=3(x-3)(x+3).\]
+На $[0;3]$ функция убывает, на $[3;4]$ возрастает. Минимум достигается при $x=3$: $f(3)=27-81=-54$.
+\ans{-54}
+\clearpage
+\topic{Дробные функции и метод интервалов}
+Если удобно, приведите слагаемые к общему знаменателю. Используйте правило производной частного:
+\[\left(\frac{u}{v}\right)'=\frac{u'v-uv'}{v^2},\quad v\ne0.\]
+Для уравнения с дробью:
+\[\frac{A(x)}{B(x)}=0\quad\Longleftrightarrow\quad
+\begin{cases}A(x)=0,\\ B(x)\ne0.\end{cases}\]
+\ex{Пример 3. Найти точку минимума}
+\[f(x)=x+25+\frac{25}{x}=\frac{x^2+25x+25}{x},\qquad x\ne0.\]
+Пусть $u=x^2+25x+25$, $v=x$. Тогда $u'=2x+25$, $v'=1$.
+\begin{align*}
+f'(x)&=\frac{(2x+25)x-(x^2+25x+25)}{x^2}\\
+&=\frac{x^2-25}{x^2}=\frac{(x-5)(x+5)}{x^2}.
+\end{align*}
+Нули производной: $-5$ и $5$. Точка $0$ исключена из ОДЗ. Проверка: $f'(1)=-24$. У знаменателя множитель $x^2$ чётной кратности, поэтому знак дроби при переходе через $0$ сохраняется.
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm,>=Latex]
+\draw[->] (-6.5,0)--(6.5,0) node[right]{$x$};
+\foreach \x/\t in {-3/-5,3/5}{\fill (\x,0) circle(2pt) node[below=4pt]{$\t$};}
+\draw[fill=white] (0,0) circle(2.7pt) node[below=4pt]{$0$};
+\foreach \x/\s in {-4.7/+, -1.5/-,1.5/-,4.7/+}{\node[accent] at (\x,.35){$\s$};}
+\draw[accent,thick,->] (-6,-1.2)--(-3,-.65);
+\draw[accent,thick,->] (-2.9,-.65)--(-.2,-1.2);
+\draw[accent,thick,->] (.2,-.65)--(2.9,-1.2);
+\draw[accent,thick,->] (3,-1.2)--(6,-.65);
+\draw[dashed,gray] (0,-.55)--(0,-1.35);
+\end{tikzpicture}
+\end{center}
+В $x=5$ знак меняется с $-$ на $+$. Ответ: $5$. В $x=0$ функции нет; экстремум в этой точке невозможен. Две стрелки убывания разделены разрывом.
+\key{Правило кратности}
+Для разложенной на множители рациональной производной после сокращений множитель $(x-a)^k$ в числителе или знаменателе меняет знак при переходе через $a$ только при нечётном $k$. Исключённые из исходной ОДЗ точки сохраняются даже после сокращения. Если сомневаетесь, проверяйте знак на каждом промежутке отдельно.
+\clearpage
+\topic{Корни и монотонность без решения уравнения}
+\[ (\sqrt{x})'=\frac1{2\sqrt{x}},\qquad (x\sqrt{x})'=\frac32\sqrt{x}\quad(x>0).\]
+У обеих исходных функций ОДЗ $x\ge0$. Для первой формулы производной требуется $x>0$. Граничную точку $x=0$, если она принадлежит отрезку, проверяйте по исходной функции.
+\ex{Пример 4. Найти точку максимума}
+\[f(x)=7+6x-2x\sqrt{x},\qquad f'(x)=6-3\sqrt{x}\quad(x>0).\]
+\[6-3\sqrt{x}=0\;\Longrightarrow\;\sqrt{x}=2\;\Longrightarrow\; x=4.\]
+До $4$ производная положительна, после $4$ отрицательна. Ответ: $4$.
+\ex{Пример 5. Найти наибольшее значение на $[1;4]$}
+\[f(x)=7-6\sqrt{x}-5x^3,\qquad f'(x)=-\frac3{\sqrt{x}}-15x^2.\]
+\textbf{Способ 1.} Решаем уравнение для производной:
+\[\frac{-3-15x^2\sqrt{x}}{\sqrt{x}}=0\;\Longrightarrow\;
+\begin{cases}x^2\sqrt{x}=-\frac15,\\x>0.\end{cases}\]
+Левая часть первого уравнения положительна, правая отрицательна. Корней нет. Производная непрерывна при $x>0$; $f'(1)=-18<0$, поэтому на всём отрезке функция убывает.
+
+\textbf{Способ 2.} Сразу анализируем знаки слагаемых:
+\[f'(x)=-\underbrace{\left(\frac3{\sqrt{x}}+15x^2\right)}_{>0}<0\qquad(x>0).\]
+Максимальное значение достигается на левой границе отрезка:
+\[f(1)=7-6-5=-4.\]
+\ans{-4}
+\key{Полезное наблюдение}
+Если знак производной очевиден из её структуры, можно сразу определить монотонность. Например, для $g(x)=x^3+5\sqrt{x}+7$ имеем $g'(x)=3x^2+\frac5{2\sqrt{x}}>0$ при $x>0$. На $[4;16]$ наименьшее значение равно $g(4)=81$.
+\clearpage
+\topic{Произведение и сложная функция}
+\[ (uv)'=u'v+uv',\qquad (\sqrt{g(x)})'=\frac{g'(x)}{2\sqrt{g(x)}}\quad(g(x)>0).\]
+В производной сложной функции учитывайте производную внутреннего выражения. Например, $(\sqrt{2x+5})'=\frac{2}{2\sqrt{2x+5}}$ при $x> -\frac52$.
+\ex{Пример 6. Найти наибольшее значение на $[-4;4]$}
+\[f(x)=(7-x)\sqrt{x+5}.\]
+ОДЗ функции: $x\ge-5$; для вычисления производной используем $x>-5$.
+\[u=7-x,\quad u'=-1,\qquad v=\sqrt{x+5},\quad v'=\frac1{2\sqrt{x+5}}.\]
+\begin{align*}
+f'(x)&=-\sqrt{x+5}+\frac{7-x}{2\sqrt{x+5}}\\
+&=\frac{-2(x+5)+7-x}{2\sqrt{x+5}}\\
+&=\frac{-3(x+1)}{2\sqrt{x+5}}.
+\end{align*}
+При $x>-5$ знаменатель положителен. Нуль производной: $x=-1$. Знак числителя меняется с плюса на минус.
+\begin{center}
+\begin{tikzpicture}[x=1.15cm,y=1cm,>=Latex]
+\draw[->] (-4.7,0)--(4.7,0) node[right]{$x$};
+\draw[fill=white] (-4.25,0) circle(2.7pt) node[below=4pt]{$-5$};
+\fill (-.6,0) circle(2pt) node[below=4pt]{$-1$};
+\foreach \x/\t in {-3.35/-4,4/4}{\draw[accent,thick] (\x,-.15)--(\x,.15) node[above=5pt]{$\t$};}
+\node[accent] at (-2,.36){$+$};\node[accent] at (1.7,.36){$-$};
+\draw[accent,thick,->] (-3.35,-1.15)--(-.6,-.55);
+\draw[accent,thick,->] (-.6,-.55)--(4,-1.15);
+\end{tikzpicture}
+\end{center}
+В пределах отрезка функция сначала возрастает, затем убывает. Наибольшее значение достигается при $x=-1$:
+\[f(-1)=(7+1)\sqrt{4}=16.\]
+\ans{16}
+\ex{Пример 7. Аналогичная задача на минимум}
+Для $g(x)=(x-15)\sqrt{x+12}+6$ на $[-8;4]$ получаем
+\[g'(x)=\frac{3(x+3)}{2\sqrt{x+12}}.\]
+Производная меняет знак с минуса на плюс при $x=-3$. Поэтому $g(-3)=(-18)\cdot3+6=-48$.
+\clearpage
+\topic{Тригонометрические функции}
+\[ (\sin x)'=\cos x,\qquad (\cos x)'=-\sin x.\]
+Постоянные слагаемые имеют нулевую производную, даже если содержат $\pi$ или корни. Например, $(\sqrt3\pi)'=0$, поскольку $x$ в этом выражении отсутствует.
+\ex{Пример 8. Найти наименьшее значение на $[0;\pi/2]$}
+\[f(x)=9+\sqrt3\pi-3\sqrt3\,x-6\cos x.\]
+\[f'(x)=-3\sqrt3+6\sin x,\quad f'(x)=0
+\quad\Longleftrightarrow\quad \sin x=\frac{\sqrt3}{2}.\]
+Общее решение ($n\in\mathbb Z$):
+\[x=\frac\pi3+2\pi n\quad\text{или}\quad x=\frac{2\pi}3+2\pi n.\]
+На заданном отрезке находится только $x=\pi/3$. Используем единичную окружность: нужная дуга лежит в первой четверти.
+\begin{center}
+\begin{tikzpicture}[scale=1.45,>=Latex]
+\draw[->,gray] (-1.25,0)--(1.35,0) node[right]{$\cos x$};
+\draw[->,gray] (0,-1.15)--(0,1.35) node[above]{$\sin x$};
+\draw[gray] (0,0) circle(1);
+\draw[accent,line width=1.5pt] (1,0) arc(0:90:1);
+\draw[dashed] (-.5,.866025)--(.5,.866025);
+\draw[accent,thick] (0,0)--(.5,.866025);
+\draw[gray] (0,0)--(-.5,.866025);
+\fill[accent] (.5,.866025) circle(1.7pt) node[right=3pt]{$\pi/3$};
+\fill[gray] (-.5,.866025) circle(1.7pt) node[left=3pt]{$2\pi/3$};
+\node[anchor=east] at (-.05,.72){\scriptsize $\frac{\sqrt3}{2}$};
+\end{tikzpicture}
+\end{center}
+$f'(0)=-3\sqrt3<0$, $f'(\pi/2)=6-3\sqrt3>0$. Следовательно, функция убывает до $\pi/3$ и возрастает после неё на заданном отрезке.
+\[f\left(\frac\pi3\right)=9+\sqrt3\pi-\sqrt3\pi-6\cdot\frac12=6.\]
+\ans{6}
+\key{Проверяйте знак и границы}
+Используйте условия $-1\le\sin x\le1$, $-1\le\cos x\le1$. Они позволяют оценивать производную. Все корни тригонометрического уравнения отбирайте по заданному отрезку.
+\clearpage
+\topic{Универсальная проверка решения}
+\key{На замкнутом отрезке}
+Если функция непрерывна на $[a;b]$, её наибольшее и наименьшее значения достигаются. Надёжный алгоритм: сравнить значения исходной функции в концах отрезка и во всех внутренних точках, где производная равна нулю или не существует. Если производная равна нулю на целом промежутке, функция на нём постоянна: достаточно одного значения с этого промежутка.
+
+Если по знакам производной уже доказано, что функция сначала возрастает, затем убывает (или наоборот) на всём отрезке, соответствующее наибольшее (или наименьшее) значение можно вычислить сразу. При нескольких экстремумах сравнение значений обязательно.
+\ex{Пример 9. Зачем проверять концы отрезка?}
+\[f(x)=x^3-3x,\qquad x\in[-2;3].\]
+$f'(x)=3(x-1)(x+1)$, внутренние критические точки $-1$ и $1$.
+\begin{center}
+\begin{tabular}{@{}ccccc@{}}\toprule
+$x$&$-2$&$-1$&$1$&$3$\\\midrule
+$f(x)$&$-2$&$2$&$-2$&$18$\\\bottomrule
+\end{tabular}
+\end{center}
+Наибольшее значение равно $18$, хотя локальный максимум достигается при $x=-1$. Наименьшее значение равно $-2$.
+\ex{Пример 10. Наибольшее значение на $[-4;-1]$}
+\[f(x)=x+\frac9x,\quad f'(x)=\frac{x^2-9}{x^2}.\]
+Только $x=-3$ из корней производной принадлежит отрезку. Производная меняет знак с плюса на минус, поэтому $f(-3)=-3-3=-6$.
+\key{Чек-лист самопроверки}
+\begin{itemize}[label=$\square$]
+\item Уточнили, требуется абсцисса точки или значение функции.
+\item Указали ОДЗ исходной функции и ограничения производной.
+\item Вычислили производную и упростили её без потери ограничений.
+\item Отметили критические точки, разрывы и границы отрезка.
+\item Проверили знаки производной и характер монотонности.
+\item Для значения подставили аргумент в исходную функцию; при необходимости сравнили все значения.
+\end{itemize}
+\clearpage
+\section*{\textcolor{darkaccent}{Алгоритм: исследование функции}}
+\vspace{4mm}
+\begin{center}
+\begin{tikzpicture}[>=Latex, node distance=7mm,
+start/.style={ellipse,draw=accent,thick,align=center,minimum height=9mm,text width=42mm,font=\small},
+action/.style={rounded corners=2pt,draw=darkaccent,align=center,text width=105mm,minimum height=11mm,inner sep=4pt,font=\small},
+branch/.style={rounded corners=2pt,draw=darkaccent,align=center,text width=56mm,minimum height=13mm,inner sep=4pt,font=\small},
+choice/.style={diamond,draw=accent,thick,aspect=3,align=center,text width=36mm,inner sep=1pt,font=\small},
+arr/.style={->,thick,draw=darkaccent}]
+\node[start] (s){Начало};
+\node[action,below=of s] (d){Установить ОДЗ $f$ и ограничения $f'$};
+\node[action,below=of d] (p){Вычислить и упростить $f'(x)$};
+\node[action,below=of p] (r){Найти нули и точки, где $f'$ не существует; отметить разрывы и границы};
+\node[action,below=of r] (t){Определить знак $f'$ на промежутках и направление монотонности};
+\node[choice,below=9mm of t] (q){Нужна точка экстремума?};
+\node[branch,below left=13mm and 1mm of q] (x){Найти $x_0$ по смене знака $f'$ в точке ОДЗ: $+\to-$ или $-\to+$};
+\node[branch,below right=13mm and 1mm of q] (y){Для непрерывной функции на $[a;b]$ выбрать концы и внутренние критические точки};
+\node[branch,below=of y] (v){Вычислить $f$ в кандидатах, сравнить значения};
+\node[start,below=15mm of v,xshift=-30mm] (e){Записать ответ};
+\draw[arr] (s)--(d);\draw[arr](d)--(p);\draw[arr](p)--(r);\draw[arr](r)--(t);\draw[arr](t)--(q);
+\draw[arr] (q.west) -| node[pos=.22,above,font=\small]{Да} (x.north);
+\draw[arr] (q.east) -| node[pos=.22,above,font=\small]{Нет} (y.north);
+\draw[arr] (y)--(v);\draw[arr] (v.south)|-(e.east);
+\draw[arr] (x.south)|-(e.west);
+\end{tikzpicture}
+\end{center}
+\clearpage
+\section*{\textcolor{darkaccent}{Тренировочный блок}}
+Выполняйте задания последовательно. Для задач на значение функции записывайте подстановку в исходную формулу. Учитывайте ОДЗ и границы отрезка.
+\key{Базовый уровень}
+\begin{enumerate}
+\item Найдите точку максимума функции $y=x^3-12x+5$.
+\item Найдите наименьшее значение $y=x^3-12x$ на $[0;3]$.
+\item Найдите точку минимума функции $y=x+8+\dfrac{16}{x}$.
+\end{enumerate}
+\key{Средний уровень}
+\begin{enumerate}[resume]
+\item Найдите наибольшее значение $y=x+\dfrac{16}{x}$ на $[-5;-2]$.
+\item Найдите точку максимума функции $y=4+9x-2x\sqrt{x}$.
+\item Найдите наибольшее значение $y=10-4\sqrt{x}-2x^3$ на $[1;9]$.
+\item Найдите наименьшее значение $y=x^3+4\sqrt{x}+2$ на $[4;9]$.
+\end{enumerate}
+\key{Повышенный уровень}
+\begin{enumerate}[resume]
+\item Найдите наибольшее значение $y=(16-x)\sqrt{x+11}$ на $[-8;8]$.
+\item Найдите наименьшее значение $y=(x-29)\sqrt{x+19}+5$ на $[-10;6]$.
+\item Найдите наименьшее значение
+\[y=8+\frac\pi2-3x-6\cos x\quad\text{на }[0;\pi/2].\]
+\end{enumerate}
+\clearpage
+\section*{\textcolor{darkaccent}{Ответы}}
+\begin{center}
+\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{.88\linewidth}{@{}clX@{}}\toprule
+№ & Ответ & Контрольный аргумент \\ \midrule
+1 &$-2$&$x=-2$\\
+2 &$-16$&$x=2$\\
+3 &$4$&$x=4$\\
+4 &$-8$&$x=-4$\\
+5 &$9$&$x=9$\\
+6 &$4$&$x=1$\\
+7 &$74$&$x=4$\\
+8 &$54$&$x=-2$\\
+9 &$-123$&$x=-3$\\
+10 &$8-3\sqrt3$&$x=\dfrac\pi6$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\bigskip
+\begin{center}\textcolor{darkaccent}{\large Итоговая памятка}\end{center}
+\begin{tabularx}{\linewidth}{@{}p{.40\linewidth}X@{}}
+\toprule Сигнал в задаче & Полезное действие\\\midrule
+Точка экстремума & Ищите смену знака производной.\\
+Значение на отрезке & Сравнивайте значения в кандидатах.\\
+Дробь & Сохраняйте ограничения знаменателя.\\
+Корень & Различайте ОДЗ функции и производной.\\
+Произведение & Применяйте правило $(uv)'$.\\
+Производная одного знака & Используйте соответствующую границу отрезка.\\
+Синус или косинус & Отбирайте корни по заданному отрезку.\\
+\bottomrule
+\end{tabularx}
+\end{document}
