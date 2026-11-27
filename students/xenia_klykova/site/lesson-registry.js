@@ -5,6 +5,72 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
   {
+  "date": "2026-11-26",
+  "ktpRefs": [],
+  "href": "26.11.26.html",
+  "title": "Корни и дробные степени. Область определения и иррациональные уравнения",
+  "navTitle": "Корни и дробные степени. Область определения и иррациональные уравнения",
+  "navSubtitle": "Ксения Клыкова · 26 ноября 2026: область определения, корневая функция, дробные показатели, сокращение дробей и иррациональные уравнения.",
+  "summary": "Ксения Клыкова · 26 ноября 2026: область определения, корневая функция, дробные показатели, сокращение дробей и иррациональные уравнения.",
+  "topics": [
+    "Область определения",
+    "Формула по графику",
+    "Дробные показатели",
+    "Сокращение дробей",
+    "Иррациональные уравнения"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t11_domain",
+      "evidenceAnchor": "domain",
+      "relation": "practiced",
+      "label": "Область определения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t11_radical",
+      "evidenceAnchor": "graph",
+      "relation": "practiced",
+      "label": "Восстановление корневой функции",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_rational_power",
+      "evidenceAnchor": "powers",
+      "relation": "practiced",
+      "label": "Дробные показатели степени",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_power_actions",
+      "evidenceAnchor": "powers",
+      "relation": "practiced",
+      "label": "Свойства степеней",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t7_radical_var",
+      "evidenceAnchor": "fraction",
+      "relation": "practiced",
+      "label": "Сокращение дробей с корнями",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t6_irrational",
+      "evidenceAnchor": "equations",
+      "relation": "practiced",
+      "label": "Иррациональные уравнения",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "26.11.26.html",
+    "pdf": "../pdf_docs/26.11.26.pdf",
+    "tex": "../tex_docs/26.11.26.tex",
+    "lab": "26.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-24",
   "ktpRefs": [],
   "href": "24.11.26.html",
