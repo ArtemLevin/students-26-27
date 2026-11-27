@@ -1,5 +1,73 @@
 export const LESSONS=[
 {
+  "date": "2026-11-27",
+  "ktpRefs": [
+    "ktp-007",
+    "ktp-008",
+    "ktp-009"
+  ],
+  "href": "27.11.26.html",
+  "title": "Динамика. Второй закон Ньютона и баланс сил",
+  "navTitle": "Динамика. Второй закон Ньютона и баланс сил",
+  "navSubtitle": "София Лузянина: второй закон Ньютона, проекции сил, вес в лифте, сопротивление воздуха, сила Архимеда, трение, вертикальная стена и наклонная плоскость. 5 задач и цифровая лаборатория.",
+  "summary": "София Лузянина: второй закон Ньютона, проекции сил, вес в лифте, сопротивление воздуха, сила Архимеда, трение, вертикальная стена и наклонная плоскость. 5 задач и цифровая лаборатория.",
+  "topics": [
+    "Второй закон Ньютона в проекциях",
+    "Вес в лифте и натяжение нити",
+    "Сопротивление воздуха и выталкивание",
+    "Трение скольжения на горизонтали и у стены",
+    "Динамика наклонной плоскости"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "dynamics_03",
+      "evidenceAnchor": "newton",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dynamics_05",
+      "evidenceAnchor": "projections",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dynamics_08",
+      "evidenceAnchor": "lift",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dynamics_09",
+      "evidenceAnchor": "lift",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dynamics_11",
+      "evidenceAnchor": "horizontal",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dynamics_12",
+      "evidenceAnchor": "incline",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "dynamics_06",
+      "evidenceAnchor": "newton",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "statics_08",
+      "evidenceAnchor": "buoyancy",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "27.11.26.html",
+    "pdf": "../pdf_docs/27.11.26.pdf",
+    "tex": "../tex_docs/27.11.26.tex",
+    "lab": "27.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-25",
   "ktpRefs": [
     "ktp-006",
