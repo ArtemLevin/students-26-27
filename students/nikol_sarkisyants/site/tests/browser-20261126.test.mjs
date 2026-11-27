@@ -139,7 +139,7 @@ try{
     await setParam('k',4);assert.deepEqual((await readouts()).slice(0,2),['4','0,188']);
     await setParam('k',1.25);assert.deepEqual((await readouts()).slice(0,2),['1,25','6,144']);
     await run('document.getElementById("reset").click()');assert.equal((await readouts())[1],'1,5');
-    await run('document.querySelector("[data-choice=\"2\"]").click()');
+    await run('document.querySelectorAll("[data-choice]")[2].click()');
     assert.match(await run('document.getElementById("feedback").textContent'),/^Верно/);
     await navigate('26.11.26-lab.html#scale',width,height);
     assert.deepEqual(await readouts(),['4','3','12','Нет']);
