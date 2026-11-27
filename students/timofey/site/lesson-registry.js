@@ -3,6 +3,81 @@ export const ARCHIVE_PAGE_SIZE=10;
 
 export const LESSONS=[
   {
+  "date": "2026-11-27",
+  "ktpRefs": [],
+  "href": "27.11.26.html",
+  "title": "Медианы треугольника. Теоремы синусов и косинусов",
+  "navTitle": "Медианы треугольника. Теоремы синусов и косинусов",
+  "navSubtitle": "Планиметрия ЕГЭ: свойства медиан, удвоение медианы, теоремы синусов и косинусов, формула Герона, площадь по трём медианам и 10 тренировочных задач.",
+  "summary": "Планиметрия ЕГЭ: свойства медиан, удвоение медианы, теоремы синусов и косинусов, формула Герона, площадь по трём медианам и 10 тренировочных задач.",
+  "topics": [
+    "Медианы и точка их пересечения",
+    "Удвоение медианы",
+    "Теорема косинусов",
+    "Формула Аполлония",
+    "Равновеликие треугольники и формула Герона",
+    "Площадь по трём медианам",
+    "Теорема синусов"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t1_medians",
+      "evidenceAnchor": "median",
+      "relation": "practiced",
+      "label": "Свойства медиан и отношение 2 : 1",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t1_parallelogram",
+      "evidenceAnchor": "double",
+      "relation": "practiced",
+      "label": "Удвоение медианы и параллелограмм",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t1_sine_cosine",
+      "evidenceAnchor": "cosine",
+      "relation": "practiced",
+      "label": "Теорема косинусов и дополнительный угол",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t1_sine_cosine",
+      "evidenceAnchor": "sine",
+      "relation": "touched",
+      "label": "Теорема синусов в параллелограмме",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t1_areas",
+      "evidenceAnchor": "areas",
+      "relation": "practiced",
+      "label": "Равновеликие треугольники и формула Герона",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t1_areas",
+      "evidenceAnchor": "three",
+      "relation": "practiced",
+      "label": "Площадь по трём медианам",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "t17_triangles",
+      "evidenceAnchor": "method",
+      "relation": "touched",
+      "label": "Дополнительные построения в планиметрии",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "27.11.26.html",
+    "pdf": "../pdf_docs/27.11.26.pdf",
+    "tex": "../tex_docs/27.11.26.tex",
+    "lab": "27.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-20",
   "ktpRefs": [],
   "href": "20.11.26.html",
