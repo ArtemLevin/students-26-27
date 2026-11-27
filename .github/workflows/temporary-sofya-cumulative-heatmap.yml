@@ -1,19 +1,45 @@
-name: Sofia cumulative heatmap check
+name: All-student cumulative heatmap rollout
 on:
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [main]
 permissions:
-  contents: read
+  contents: write
 jobs:
   check:
-    if: github.head_ref == 'heatmap/sofya-luzianina-recent-evidence'
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'heatmap/sofya-luzianina-recent-evidence'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: heatmap/sofya-luzianina-recent-evidence
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --check students/sofya_luzianina/site/heatmap.js
-      - run: node --test students/sofya_luzianina/site/tests/recent-coverage.test.mjs
-      - run: node scripts/student.mjs validate sofya_luzianina
+      - name: Install coverage adapters in every canonical cabinet
+        run: |
+          node scripts/sync-learning-coverage.mjs --apply
+          node scripts/sync-learning-coverage.mjs --check
+      - name: Test shared coverage and original authority contracts
+        run: |
+          node --check shared/student-dashboard/learning-coverage.js
+          node --check shared/student-dashboard/learning-coverage-ui.js
+          node --test shared/student-dashboard/learning-coverage.test.mjs
+          node --test students/sofya_luzianina/site/tests/recent-coverage.test.mjs
+          node --test design-system/test-create-student.mjs
+          node scripts/student.mjs validate
+          node scripts/student.mjs audit
+          node shared/student-dashboard/test-index-inventory.mjs
+          node design-system/test-contract.mjs
+          node --test deploy/student-static/build.test.mjs
+      - name: Commit only validated cabinet adapters
+        run: |
+          git diff --stat
+          node --input-type=module -e "import {execFileSync} from 'node:child_process'; import {syncCoverage} from './scripts/sync-learning-coverage.mjs';const allowed=new Set(syncCoverage().files);const changed=execFileSync('git',['diff','--name-only'],{encoding:'utf8'}).trim().split('\n').filter(Boolean);if(changed.some(p=>!allowed.has(p)))throw Error('Unexpected rollout path');"
+          if ! git diff --quiet; then
+            git add -u students
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Connect cumulative learning coverage to all v2 student cabinets"
+            git push origin HEAD:heatmap/sofya-luzianina-recent-evidence
+          fi
