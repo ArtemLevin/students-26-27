@@ -1,0 +1,31 @@
+name: Nastya 26 November publication preview
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+permissions:
+  contents: read
+jobs:
+  preview:
+    if: github.event.pull_request.head.ref == 'lesson/nastya-pavlova-26-11-26' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run canonical publication
+        run: |
+          node scripts/publish-lesson.mjs nastya_pavlova 26.11.26 --intent students/nastya_pavlova/26.11.26-publication-intent.json --dry-run
+          node scripts/publish-lesson.mjs nastya_pavlova 26.11.26 --intent students/nastya_pavlova/26.11.26-publication-intent.json
+          node scripts/student.mjs validate nastya_pavlova
+          node scripts/student.mjs audit
+          node shared/practice/validate-configs.mjs
+          node shared/practice/audit-lesson-coverage.mjs
+      - name: Emit canonical patch
+        run: |
+          git add -N -- students/nastya_pavlova
+          git diff --no-color -- students/nastya_pavlova
