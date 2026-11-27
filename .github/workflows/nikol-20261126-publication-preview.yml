@@ -1,0 +1,33 @@
+name: Nikol 26 November publication preview
+on:
+  push:
+    branches:
+      - lesson/nikol-2026-11-26
+permissions:
+  contents: read
+jobs:
+  publish-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run canonical publisher in isolated checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          STUDENT=nikol_sarkisyants
+          SITE=students/$STUDENT/site
+          INTENT=$SITE/data/publication-intents/2026-11-26.json
+          node scripts/publish-lesson.mjs "$STUDENT" 26.11.26 --intent "$INTENT" --dry-run
+          node scripts/publish-lesson.mjs "$STUDENT" 26.11.26 --intent "$INTENT"
+          node scripts/student.mjs validate "$STUDENT"
+          node shared/practice/validate-configs.mjs
+          node shared/practice/audit-lesson-coverage.mjs
+          echo BEGIN_GENERATED_PATCH
+          git add "$SITE/data/lessons/2026-11-26.lesson.json"
+          git diff HEAD -- "$SITE/data/lessons/2026-11-26.lesson.json" "$SITE/data/ktp-state.json" "$SITE/data/mastery-state.json" "$SITE/lesson-registry.js"
+          echo END_GENERATED_PATCH
