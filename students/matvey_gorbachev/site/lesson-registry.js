@@ -5,6 +5,105 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-26",
+  "ktpRefs": [],
+  "href": "26.11.26.html",
+  "title": "Исследование функции с помощью производной",
+  "navTitle": "Исследование функции с помощью производной",
+  "navSubtitle": "Точки экстремума и значения на отрезке: дробные и корневые функции, правило произведения, сложная функция, знак производной и тригонометрический отбор. 10 тренировочных задач.",
+  "summary": "Точки экстремума и значения на отрезке: дробные и корневые функции, правило произведения, сложная функция, знак производной и тригонометрический отбор. 10 тренировочных задач.",
+  "topics": [
+    "Абсцисса экстремума и значение функции",
+    "Производная дроби, метод интервалов и разрывы",
+    "Корневая функция и оценка знака производной",
+    "Произведение и сложная функция",
+    "Тригонометрические корни и границы отрезка"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "calculus_02",
+      "evidenceAnchor": "extrema",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calculus_03",
+      "evidenceAnchor": "radicals",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "calculus_04",
+      "evidenceAnchor": "product",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calculus_05",
+      "evidenceAnchor": "rational",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calculus_06",
+      "evidenceAnchor": "product",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "calculus_07",
+      "evidenceAnchor": "trig",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "calculus_10",
+      "evidenceAnchor": "extrema",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calculus_11",
+      "evidenceAnchor": "radicals",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calculus_12",
+      "evidenceAnchor": "extrema",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "calculus_13",
+      "evidenceAnchor": "ends",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "functions_01",
+      "evidenceAnchor": "rational",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "inequalities_03",
+      "evidenceAnchor": "rational",
+      "relation": "practiced"
+    },
+    {
+      "competencyId": "inequalities_05",
+      "evidenceAnchor": "rational",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "trig_13",
+      "evidenceAnchor": "trig",
+      "relation": "touched"
+    },
+    {
+      "competencyId": "trig_16",
+      "evidenceAnchor": "trig",
+      "relation": "touched"
+    }
+  ],
+  "materials": {
+    "html": "26.11.26.html",
+    "pdf": "../pdf_docs/26.11.26.pdf",
+    "tex": "../tex_docs/26.11.26.tex",
+    "lab": "26.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-19",
   "ktpRefs": [],
   "href": "19.11.26.html",
