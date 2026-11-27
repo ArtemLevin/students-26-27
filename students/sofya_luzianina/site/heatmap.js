@@ -35,8 +35,8 @@ async function bootstrap(){
  }catch(error){console.error('Ошибка загрузки Student Platform v2',error);$('catalogCount').textContent='Учебные данные временно недоступны';$('mapLive').textContent='Ошибка загрузки карты';$('lessonJournal').textContent='Не удалось прочитать реестр занятий';$('routeSummary').textContent='Не удалось прочитать КТП';$('detailTitle').textContent='Данные недоступны';$('detailExplain').textContent=error.message;}
 }
 // Coverage is a presentation-only projection of published lesson evidence, never a mastery claim.
-export function recentCoverage(lessons, limit=3) {
-  const recent=[...lessons].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,limit);
+export function cumulativeCoverage(lessons) {
+  const recent=[...lessons].sort((a,b)=>b.date.localeCompare(a.date));
   const byId=new Map(), rank={touched:1,practiced:2,assessed:3};
   for(const lesson of recent) for(const outcome of lesson.outcomes||[]){
     if(!outcome.competencyId || !outcome.evidenceAnchor || !Object.hasOwn(rank,outcome.relation))continue;
@@ -47,7 +47,9 @@ export function recentCoverage(lessons, limit=3) {
     if(!item.entries.some(e=>e.date===lesson.date&&e.anchor===outcome.evidenceAnchor&&e.relation===outcome.relation))
       item.entries.push({date:lesson.date,title:lesson.title,href:lesson.href,anchor:outcome.evidenceAnchor,relation:outcome.relation});
   }
-  return {recent,byId};
+  const latestDate=recent[0]?.date;
+  const newIds=new Set([...byId].filter(([,item])=>item.entries.every(e=>e.date===latestDate)).map(([id])=>id));
+  return {recent,byId,newIds};
 }
 function startMap(){
 (() => {
@@ -96,7 +98,7 @@ function startMap(){
     bySector.get(record.sectorId).push(record);
     return record;
   }));
-  const coverage=recentCoverage(LESSONS);
+  const coverage=cumulativeCoverage(LESSONS);
   const coverageLabels={touched:'Рассмотрено',practiced:'Отработано',assessed:'Оценивалось'};
   const coverageOf=id=>coverage.byId.get(id)?.relation||null;
   const coverageLabel=id=>coverageLabels[coverageOf(id)]||'';
@@ -115,13 +117,13 @@ function startMap(){
   function path(inner,outer,start,end){const p1=polar(outer,start),p2=polar(outer,end),p3=polar(inner,end),p4=polar(inner,start);const f=(end-start)>180?1:0;return `M${p1.x.toFixed(3)},${p1.y.toFixed(3)} A${outer},${outer} 0 ${f},1 ${p2.x.toFixed(3)},${p2.y.toFixed(3)} L${p3.x.toFixed(3)},${p3.y.toFixed(3)} A${inner},${inner} 0 ${f},0 ${p4.x.toFixed(3)},${p4.y.toFixed(3)} Z`;}
   function matches(item){
     const v=levelOf(item.id);
-    const byState=filter==='all'||(filter==='recent'&&coverageOf(item.id)!==null)||(filter==='recent-practiced'&&coverageOf(item.id)==='practiced')||(filter==='recent-touched'&&coverageOf(item.id)==='touched')||(filter==='unassessed'&&v===null)||(filter==='focus'&&focusById.has(item.id))||(String(v)===filter);
+    const byState=filter==='all'||(filter==='covered'&&coverageOf(item.id)!==null)||(filter==='covered-practiced'&&coverageOf(item.id)==='practiced')||(filter==='covered-touched'&&coverageOf(item.id)==='touched')||(filter==='new-latest'&&coverage.newIds.has(item.id))||(filter==='unassessed'&&v===null)||(filter==='focus'&&focusById.has(item.id))||(String(v)===filter);
     const byArea=sectorFilter==='all'||item.sectorId===sectorFilter;
     const q=term.trim().toLocaleLowerCase('ru');
     const byQuery=!q || `${item.title} ${item.groupName} ${item.sectorName}`.toLocaleLowerCase('ru').includes(q);
     return byState&&byArea&&byQuery;
   }
-  function viewLabel(item){return `${item.title}. ${item.groupName}. ${labelOf(item.id)}${focusById.has(item.id)?'. Указано в диагностике':''}${coverageOf(item.id)?'. '+coverageLabel(item.id)+' за последние занятия':''}.`}
+  function viewLabel(item){return `${item.title}. ${item.groupName}. ${labelOf(item.id)}${focusById.has(item.id)?'. Указано в диагностике':''}${coverageOf(item.id)?'. '+coverageLabel(item.id)+' за весь курс':''}.`}
   function buildMap(){
     const usable=360-sectors.length*9;
     const total=all.length;
@@ -142,6 +144,7 @@ function startMap(){
         const node=selt('path',{'class':'cell',d:path(inner,outer,sectorStart+col*band+inset,sectorStart+(col+1)*band-inset),tabindex:'0',role:'button','aria-label':viewLabel(item),'data-id':item.id,'aria-pressed':'false','data-level':levelOf(item.id)===null?'unassessed':String(levelOf(item.id))});
         node.appendChild(selt('title',{},viewLabel(item)));
         if(coverageOf(item.id))node.setAttribute('data-coverage',coverageOf(item.id));
+        if(coverage.newIds.has(item.id))node.setAttribute('data-new','true');
         if(focusById.has(item.id))node.classList.add('is-focused');
         node.addEventListener('click',()=>choose(item.id,'map'));
         node.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose(item.id,'map')}else if(event.key==='Escape'){tooltip.style.display='none'}});
@@ -182,9 +185,10 @@ function startMap(){
         const button=elt('button',{className:'comp',type:'button','aria-current':'false','data-level':levelOf(item.id)===null?'unassessed':String(levelOf(item.id))});
         button.append(elt('i',{className:'dot','aria-hidden':'true'}),elt('span',{className:'comp-name'},item.title));
         const mark=focusById.has(item.id)?elt('span',{className:'focus-mark'},'ФОКУС'):elt('small',{},levelOf(item.id)===null?'—':String(levelOf(item.id)));
+        if(coverageOf(item.id))button.setAttribute('data-coverage',coverageOf(item.id));
         const marks=elt('span',{className:'comp-marks'});
         marks.append(mark);
-        if(coverageOf(item.id))marks.append(elt('span',{className:'coverage-mark'},coverageLabel(item.id)));
+        if(coverageOf(item.id))marks.append(elt('span',{className:'coverage-mark'},coverageLabel(item.id)+(coverage.newIds.has(item.id)?' · новое':'')));
         button.append(marks);
         button.setAttribute('aria-label',viewLabel(byId.get(item.id)));
         button.addEventListener('click',()=>choose(item.id,'list'));
@@ -234,7 +238,7 @@ function startMap(){
     const lessonEvidence=coverage.byId.get(id);
     if(lessonEvidence){
       const section=elt('div',{className:'evidence'});
-      section.append(elt('strong',{},'Учебный охват · '+coverageLabel(id)),elt('p',{},'Связи с последними опубликованными занятиями. Подтверждённая оценка отображается отдельно.'));
+      section.append(elt('strong',{},'Учебный охват · '+coverageLabel(id)),elt('p',{},'История всех опубликованных занятий. Подтверждённая оценка отображается отдельно.'));
       for(const entry of lessonEvidence.entries){
         if(!/^\d{2}\.\d{2}\.\d{2}\.html$/.test(entry.href)||! /^[A-Za-z][A-Za-z0-9_-]*$/.test(entry.anchor))continue;
         section.append(elt('a',{className:'coverage-link',href:entry.href+'#'+entry.anchor},entry.date+' · '+coverageLabels[entry.relation]+' · '+entry.title));
@@ -275,10 +279,19 @@ function startMap(){
     setText('mapCountCaption',visible===all.length?'всего умений':'в текущем фильтре');
     if(selectedId && !matches(byId.get(selectedId)))setText('mapLive','Выбранный навык остался в деталях. Текущий фильтр его скрывает в индексе.');
   }
+  function setMapView(view){
+    $('map').dataset.mapView=view;
+    document.documentElement.dataset.mapView=view;
+    document.querySelectorAll('[data-map-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mapMode===view)));
+    $('masteryLegend').hidden=view!=='mastery';
+    $('coverageLegend').hidden=view!=='coverage';
+  }
   function attach(){
+    setMapView('coverage');
+    document.querySelectorAll('[data-map-mode]').forEach(b=>b.addEventListener('click',()=>{setMapView(b.dataset.mapMode);filter='all';syncFilterControls();updateFilters()}));
     $('searchInput').addEventListener('input',event=>{term=event.target.value;updateFilters()});
     $('areaSelect').addEventListener('change',event=>{sectorFilter=event.target.value;updateFilters()});
-    document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;syncFilterControls();updateFilters()}));
+    document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{filter=b.dataset.filter;if(filter.startsWith('covered')||filter==='new-latest')setMapView('coverage');else if(filter==='unassessed'||/^[0-4]$/.test(filter))setMapView('mastery');syncFilterControls();updateFilters()}));
     const toggle=$('themeToggle');const key='sofya-luzianina-atlas-theme';
     try{const stored=localStorage.getItem(key);if(stored==='dark'||stored==='light')document.documentElement.dataset.theme=stored;else if(window.matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark'}catch(_){ /* storage may be disabled */ }
     const paint=()=>{const isDark=document.documentElement.dataset.theme==='dark';toggle.setAttribute('aria-pressed',String(isDark));toggle.setAttribute('aria-label',isDark?'Включить светлую тему':'Включить тёмную тему');};
@@ -294,8 +307,9 @@ function startMap(){
     const covered=all.filter(i=>coverageOf(i.id)!==null);
     const counts={practiced:0,touched:0,assessed:0};
     for(const i of covered)counts[coverageOf(i.id)]++;
-    const dates=coverage.recent.map(l=>l.date.split('-').reverse().join('.')).join(', ');
-    setText('coverageSummary',coverage.recent.length?'Последние занятия: '+dates+'. Учебный охват: '+covered.length+' из '+all.length+' умений; отработано '+counts.practiced+', рассмотрено '+counts.touched+(counts.assessed?', оценивалось '+counts.assessed:'')+'. Уровни освоения учитываются отдельно.':'Опубликованных занятий для расчёта охвата пока нет.');
+    const latest=coverage.recent[0]?.date?.split('-').reverse().join('.');
+    const newCount=all.filter(i=>coverage.newIds.has(i.id)).length;
+    setText('coverageSummary',coverage.recent.length?'За весь курс: '+covered.length+' из '+all.length+' умений ('+(100*covered.length/all.length).toLocaleString('ru-RU',{maximumFractionDigits:1})+'%); отработано '+counts.practiced+', рассмотрено '+counts.touched+(counts.assessed?', оценивалось '+counts.assessed:'')+'. Последний урок '+latest+': впервые отмечено '+newCount+'. Учтено занятий: '+coverage.recent.length+'. Уровни освоения учитываются отдельно.':'Опубликованных занятий для расчёта охвата пока нет.');
     updateFilters();choose(catalog.diagnosticFocus[0]?.competencyId || all[0]?.id,'init');
   }
   try {init()}catch(err){console.error('Heatmap render error',err);setText('catalogCount','Ошибка построения карты: проверьте каталог и данные.');setText('mapLive','Ошибка построения карты.');}
