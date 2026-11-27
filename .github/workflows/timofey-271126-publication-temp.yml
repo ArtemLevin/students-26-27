@@ -1,14 +1,17 @@
-name: Timofey 27 November isolated publication
+name: Timofey 27 November isolated browser QA
 on:
   push:
     branches:
       - lesson/timofey-2026-11-27-geometry
     paths:
       - '.github/workflows/timofey-271126-publication-temp.yml'
+      - 'students/timofey/site/27.11.26.html'
+      - 'students/timofey/site/27.11.26-lab.html'
+      - 'students/timofey/site/tests/lesson-20261127.browser.mjs'
 permissions:
   contents: read
 jobs:
-  publish-preview:
+  browser-qa:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -18,23 +21,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Canonical publication dry-run and apply
-        shell: bash
+      - name: Install Playwright
         run: |
-          set -euo pipefail
-          INTENT=students/timofey/site/data/publication-intents/2026-11-27.json
-          node scripts/publish-lesson.mjs timofey 27.11.26 --intent "$INTENT" --dry-run > /tmp/timofey-plan.json
-          cat /tmp/timofey-plan.json
-          node -e 'const p=require("/tmp/timofey-plan.json");if(!p.executable||p.reviewItems.length||p.conflicts.length)process.exit(1)'
-          node scripts/publish-lesson.mjs timofey 27.11.26 --intent "$INTENT" > /tmp/timofey-apply.json
-          cat /tmp/timofey-apply.json
-          node -e 'const fs=require("node:fs");const p=require("/tmp/timofey-apply.json");if(p.rolledBack)process.exit(1);for(const file of p.changedFiles){if(!file.startsWith("students/timofey/site/"))throw Error(file);const s=fs.readFileSync(file,"utf8");let i=0;for(let j=0;j<s.length;j+=2000){console.log("TIM_PUB_CHUNK "+JSON.stringify({file,i:i++,chunk:s.slice(j,j+2000)}))}console.log("TIM_PUB_END "+JSON.stringify({file,chunks:i,length:s.length}))}'
-      - name: Verify repository publication
-        run: |
-          node scripts/student.mjs validate timofey
-          node scripts/student.mjs audit
-          node shared/practice/validate-configs.mjs
-          node shared/practice/audit-lesson-coverage.mjs
-          node --test shared/practice/test/*.test.mjs
-          node --test pipeline/practice/test/*.test.mjs
-          node students/timofey/site/tests/dashboard-regression.mjs
+          npm install --prefix /tmp/timofey-playwright --no-audit --no-fund playwright@1.56.1
+          /tmp/timofey-playwright/node_modules/.bin/playwright install chromium
+      - name: Run browser release gate
+        env:
+          PLAYWRIGHT_MODULE: /tmp/timofey-playwright/node_modules/playwright/index.mjs
+          QA_OUT: /tmp/timofey-271126-qa
+        run: node students/timofey/site/tests/lesson-20261127.browser.mjs
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: timofey-271126-browser-screenshots
+          path: /tmp/timofey-271126-qa/*.png
+          if-no-files-found: warn
