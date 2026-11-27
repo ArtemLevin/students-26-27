@@ -1,0 +1,36 @@
+name: Jaroslav 26 November publication check
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'students/jaroslav_vereschagin/**'
+      - '.github/workflows/jaroslav-261126-publication.yml'
+permissions:
+  contents: read
+jobs:
+  publish:
+    if: github.head_ref == 'lesson/jaroslav-26-11-26'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Canonical publisher dry-run and apply
+        run: |
+          node scripts/publish-lesson.mjs jaroslav_vereschagin 26.11.26 --intent students/jaroslav_vereschagin/site/data/publication-intents/2026-11-26.json --dry-run
+          node scripts/publish-lesson.mjs jaroslav_vereschagin 26.11.26 --intent students/jaroslav_vereschagin/site/data/publication-intents/2026-11-26.json
+      - name: Export only publisher changes
+        run: |
+          git add -N students/jaroslav_vereschagin
+          git diff --stat
+          git diff -- students/jaroslav_vereschagin
+          echo 'PUBLICATION_DIFF_END'
+      - name: Validate student and platform
+        run: |
+          node scripts/student.mjs validate jaroslav_vereschagin
+          node scripts/student.mjs audit
+          node --test students/jaroslav_vereschagin/site/tests/student-platform-v2.test.mjs
