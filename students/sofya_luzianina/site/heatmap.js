@@ -34,6 +34,21 @@ async function bootstrap(){
   startMap();
  }catch(error){console.error('Ошибка загрузки Student Platform v2',error);$('catalogCount').textContent='Учебные данные временно недоступны';$('mapLive').textContent='Ошибка загрузки карты';$('lessonJournal').textContent='Не удалось прочитать реестр занятий';$('routeSummary').textContent='Не удалось прочитать КТП';$('detailTitle').textContent='Данные недоступны';$('detailExplain').textContent=error.message;}
 }
+// Coverage is a presentation-only projection of published lesson evidence, never a mastery claim.
+export function recentCoverage(lessons, limit=3) {
+  const recent=[...lessons].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,limit);
+  const byId=new Map(), rank={touched:1,practiced:2,assessed:3};
+  for(const lesson of recent) for(const outcome of lesson.outcomes||[]){
+    if(!outcome.competencyId || !outcome.evidenceAnchor || !Object.hasOwn(rank,outcome.relation))continue;
+    const id=outcome.competencyId;
+    if(!byId.has(id))byId.set(id,{relation:outcome.relation,entries:[]});
+    const item=byId.get(id);
+    if(rank[outcome.relation]>rank[item.relation])item.relation=outcome.relation;
+    if(!item.entries.some(e=>e.date===lesson.date&&e.anchor===outcome.evidenceAnchor&&e.relation===outcome.relation))
+      item.entries.push({date:lesson.date,title:lesson.title,href:lesson.href,anchor:outcome.evidenceAnchor,relation:outcome.relation});
+  }
+  return {recent,byId};
+}
 function startMap(){
 (() => {
   'use strict';
@@ -81,6 +96,10 @@ function startMap(){
     bySector.get(record.sectorId).push(record);
     return record;
   }));
+  const coverage=recentCoverage(LESSONS);
+  const coverageLabels={touched:'Рассмотрено',practiced:'Отработано',assessed:'Оценивалось'};
+  const coverageOf=id=>coverage.byId.get(id)?.relation||null;
+  const coverageLabel=id=>coverageLabels[coverageOf(id)]||'';
   function levelOf(id) {
     if (!Object.prototype.hasOwnProperty.call(authority.levels, id)) return null;
     const entry = authority.levels[id];
@@ -96,13 +115,13 @@ function startMap(){
   function path(inner,outer,start,end){const p1=polar(outer,start),p2=polar(outer,end),p3=polar(inner,end),p4=polar(inner,start);const f=(end-start)>180?1:0;return `M${p1.x.toFixed(3)},${p1.y.toFixed(3)} A${outer},${outer} 0 ${f},1 ${p2.x.toFixed(3)},${p2.y.toFixed(3)} L${p3.x.toFixed(3)},${p3.y.toFixed(3)} A${inner},${inner} 0 ${f},0 ${p4.x.toFixed(3)},${p4.y.toFixed(3)} Z`;}
   function matches(item){
     const v=levelOf(item.id);
-    const byState=filter==='all'||(filter==='unassessed'&&v===null)||(filter==='focus'&&focusById.has(item.id))||(String(v)===filter);
+    const byState=filter==='all'||(filter==='recent'&&coverageOf(item.id)!==null)||(filter==='recent-practiced'&&coverageOf(item.id)==='practiced')||(filter==='recent-touched'&&coverageOf(item.id)==='touched')||(filter==='unassessed'&&v===null)||(filter==='focus'&&focusById.has(item.id))||(String(v)===filter);
     const byArea=sectorFilter==='all'||item.sectorId===sectorFilter;
     const q=term.trim().toLocaleLowerCase('ru');
     const byQuery=!q || `${item.title} ${item.groupName} ${item.sectorName}`.toLocaleLowerCase('ru').includes(q);
     return byState&&byArea&&byQuery;
   }
-  function viewLabel(item){return `${item.title}. ${item.groupName}. ${labelOf(item.id)}${focusById.has(item.id)?'. Указано в диагностике':''}.`}
+  function viewLabel(item){return `${item.title}. ${item.groupName}. ${labelOf(item.id)}${focusById.has(item.id)?'. Указано в диагностике':''}${coverageOf(item.id)?'. '+coverageLabel(item.id)+' за последние занятия':''}.`}
   function buildMap(){
     const usable=360-sectors.length*9;
     const total=all.length;
@@ -122,6 +141,7 @@ function startMap(){
         const inset=Math.min(.32,band*.11);
         const node=selt('path',{'class':'cell',d:path(inner,outer,sectorStart+col*band+inset,sectorStart+(col+1)*band-inset),tabindex:'0',role:'button','aria-label':viewLabel(item),'data-id':item.id,'aria-pressed':'false','data-level':levelOf(item.id)===null?'unassessed':String(levelOf(item.id))});
         node.appendChild(selt('title',{},viewLabel(item)));
+        if(coverageOf(item.id))node.setAttribute('data-coverage',coverageOf(item.id));
         if(focusById.has(item.id))node.classList.add('is-focused');
         node.addEventListener('click',()=>choose(item.id,'map'));
         node.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose(item.id,'map')}else if(event.key==='Escape'){tooltip.style.display='none'}});
@@ -162,7 +182,10 @@ function startMap(){
         const button=elt('button',{className:'comp',type:'button','aria-current':'false','data-level':levelOf(item.id)===null?'unassessed':String(levelOf(item.id))});
         button.append(elt('i',{className:'dot','aria-hidden':'true'}),elt('span',{className:'comp-name'},item.title));
         const mark=focusById.has(item.id)?elt('span',{className:'focus-mark'},'ФОКУС'):elt('small',{},levelOf(item.id)===null?'—':String(levelOf(item.id)));
-        button.append(mark);
+        const marks=elt('span',{className:'comp-marks'});
+        marks.append(mark);
+        if(coverageOf(item.id))marks.append(elt('span',{className:'coverage-mark'},coverageLabel(item.id)));
+        button.append(marks);
         button.setAttribute('aria-label',viewLabel(byId.get(item.id)));
         button.addEventListener('click',()=>choose(item.id,'list'));
         li.appendChild(button);list.appendChild(li);rows.set(item.id,{li,button,details});
@@ -182,7 +205,7 @@ function startMap(){
     });
   }
   function showTooltip(event,item){
-    tooltip.replaceChildren(elt('strong',{},item.title),elt('small',{},`${item.groupName} · ${labelOf(item.id)}`));
+    tooltip.replaceChildren(elt('strong',{},item.title),elt('small',{},`${item.groupName} · ${labelOf(item.id)}${coverageOf(item.id)?' · '+coverageLabel(item.id):''}`));
     const x=Math.min(event.clientX+14,window.innerWidth-305),y=Math.min(event.clientY+12,window.innerHeight-85);
     tooltip.style.left=Math.max(12,x)+'px';tooltip.style.top=Math.max(8,y)+'px';tooltip.style.display='block';
   }
@@ -206,6 +229,16 @@ function startMap(){
         elt('p',{},diag.note),
         elt('p',{},'Исходный разбор хранится в материалах ученицы. Доступ определяется настройками хранилища.')
       );
+      evidence.appendChild(section);
+    }
+    const lessonEvidence=coverage.byId.get(id);
+    if(lessonEvidence){
+      const section=elt('div',{className:'evidence'});
+      section.append(elt('strong',{},'Учебный охват · '+coverageLabel(id)),elt('p',{},'Связи с последними опубликованными занятиями. Подтверждённая оценка отображается отдельно.'));
+      for(const entry of lessonEvidence.entries){
+        if(!/^\d{2}\.\d{2}\.\d{2}\.html$/.test(entry.href)||! /^[A-Za-z][A-Za-z0-9_-]*$/.test(entry.anchor))continue;
+        section.append(elt('a',{className:'coverage-link',href:entry.href+'#'+entry.anchor},entry.date+' · '+coverageLabels[entry.relation]+' · '+entry.title));
+      }
       evidence.appendChild(section);
     }
     const claim=authority.levels[id];
@@ -258,6 +291,11 @@ function startMap(){
     setText('skillsTotal',all.length);setText('groupsTotal',catalog.groups.length);
     setText('assessedTotal',all.filter(i=>levelOf(i.id)!==null).length);
     setText('focusTotal',catalog.diagnosticFocus.length);
+    const covered=all.filter(i=>coverageOf(i.id)!==null);
+    const counts={practiced:0,touched:0,assessed:0};
+    for(const i of covered)counts[coverageOf(i.id)]++;
+    const dates=coverage.recent.map(l=>l.date.split('-').reverse().join('.')).join(', ');
+    setText('coverageSummary',coverage.recent.length?'Последние занятия: '+dates+'. Учебный охват: '+covered.length+' из '+all.length+' умений; отработано '+counts.practiced+', рассмотрено '+counts.touched+(counts.assessed?', оценивалось '+counts.assessed:'')+'. Уровни освоения учитываются отдельно.':'Опубликованных занятий для расчёта охвата пока нет.');
     updateFilters();choose(catalog.diagnosticFocus[0]?.competencyId || all[0]?.id,'init');
   }
   try {init()}catch(err){console.error('Heatmap render error',err);setText('catalogCount','Ошибка построения карты: проверьте каталог и данные.');setText('mapLive','Ошибка построения карты.');}
