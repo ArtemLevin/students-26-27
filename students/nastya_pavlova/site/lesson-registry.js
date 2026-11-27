@@ -5,6 +5,156 @@ const MONTHS_GENITIVE=['января','февраля','марта','апрел�
 
 export const LESSONS=[
 {
+  "date": "2026-11-26",
+  "ktpRefs": [],
+  "href": "26.11.26.html",
+  "title": "Теория вероятностей. Подсчёт исходов и события",
+  "navTitle": "Теория вероятностей. Подсчёт исходов и события",
+  "navSubtitle": "Подсчёт равновозможных исходов, выбор без учёта порядка, противоположные и вложенные события, правила сложения и умножения вероятностей. Десять упражнений по пособию.",
+  "summary": "Подсчёт равновозможных исходов, выбор без учёта порядка, противоположные и вложенные события, правила сложения и умножения вероятностей. Десять упражнений по пособию.",
+  "topics": [
+    "Классическая вероятность и подсчёт исходов",
+    "Метод позиций и выбор без учёта порядка",
+    "Противоположные события",
+    "Сложение и умножение вероятностей",
+    "Вложенные события и вероятностная ось"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "prob_01",
+      "evidenceAnchor": "base",
+      "relation": "practiced",
+      "label": "Классическая вероятность",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "prob_02",
+      "evidenceAnchor": "base",
+      "relation": "practiced",
+      "label": "Равновозможные исходы",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "prob_03",
+      "evidenceAnchor": "base",
+      "relation": "practiced",
+      "label": "Подсчёт благоприятных исходов",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "prob_06",
+      "evidenceAnchor": "base",
+      "relation": "practiced",
+      "label": "Испытание с монетой",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "prob_07",
+      "evidenceAnchor": "base",
+      "relation": "practiced",
+      "label": "Испытание с игральной костью",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "prob_09",
+      "evidenceAnchor": "positions",
+      "relation": "practiced",
+      "label": "Жеребьёвка",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "prob_08",
+      "evidenceAnchor": "groups",
+      "relation": "practiced",
+      "label": "Случайный выбор объекта",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "prob_13",
+      "evidenceAnchor": "groups",
+      "relation": "touched",
+      "label": "Интерпретация вероятности по условию",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "cprob_11",
+      "evidenceAnchor": "positions",
+      "relation": "practiced",
+      "label": "Выбор без возвращения",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "cprob_12",
+      "evidenceAnchor": "complement",
+      "relation": "practiced",
+      "label": "Выбор с возвращением",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "prob_04",
+      "evidenceAnchor": "complement",
+      "relation": "practiced",
+      "label": "Противоположное событие",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "cprob_05",
+      "evidenceAnchor": "complement",
+      "relation": "practiced",
+      "label": "Событие «хотя бы одно» через дополнение",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "cprob_01",
+      "evidenceAnchor": "rules",
+      "relation": "practiced",
+      "label": "Правило сложения несовместных событий",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "cprob_02",
+      "evidenceAnchor": "rules",
+      "relation": "practiced",
+      "label": "Правило умножения независимых событий",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "cprob_03",
+      "evidenceAnchor": "rules",
+      "relation": "touched",
+      "label": "Вероятность пересечения независимых событий",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "cprob_04",
+      "evidenceAnchor": "rules",
+      "relation": "touched",
+      "label": "Вероятность объединения событий",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "cprob_07",
+      "evidenceAnchor": "positions",
+      "relation": "practiced",
+      "label": "Три и более независимых испытания",
+      "practiceDisposition": "manual"
+    },
+    {
+      "competencyId": "cprob_14",
+      "evidenceAnchor": "interval",
+      "relation": "practiced",
+      "label": "Комбинации нескольких условий",
+      "practiceDisposition": "manual"
+    }
+  ],
+  "materials": {
+    "html": "26.11.26.html",
+    "pdf": "../pdf_docs/26.11.26.pdf",
+    "tex": "../tex_docs/26.11.26.tex",
+    "lab": "26.11.26-lab.html"
+  }
+},
+{
   "date": "2026-11-23",
   "ktpRefs": [],
   "href": "23.11.26.html",
