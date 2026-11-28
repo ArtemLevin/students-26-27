@@ -4,7 +4,7 @@ on:
     paths:
       - 'scripts/recover-learning-coverage*'
       - '.github/workflows/learning-coverage-recovery.yml'
-      - 'docs/heatmap-recovery/timofey-2026-07-21.preview.json'
+      - 'docs/heatmap-recovery/**'
   workflow_dispatch:
 
 permissions:
@@ -15,47 +15,45 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - name: Recovery unit tests
         run: node --test scripts/recover-learning-coverage.test.mjs scripts/audit-learning-coverage.test.mjs
-      - name: Read-only pilot and seal candidate
+      - name: Verify newly sealed migrations on PR checkout
+        if: github.event_name == 'pull_request'
         shell: bash
         run: |
-          node scripts/recover-learning-coverage.mjs docs/heatmap-recovery/timofey-2026-07-21.preview.json --dry-run > "$RUNNER_TEMP/preview.json"
-          node --input-type=module -e '
-            import fs from "node:fs";
-            import assert from "node:assert/strict";
-            const report=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+"/preview.json","utf8"));
-            const manifest=JSON.parse(fs.readFileSync("docs/heatmap-recovery/timofey-2026-07-21.preview.json","utf8"));
-            assert.equal(report.applicable,5);
-            assert.equal(report.reviewItems.length,0);
-            assert.equal(report.changes.length,2);
-            assert.ok(report.afterCoverage.covered>=report.beforeCoverage.covered);
-            fs.writeFileSync(process.env.RUNNER_TEMP+"/sealed.json",JSON.stringify({...manifest,expectedAfter:report.expectedAfter},null,2));
-            console.log("RECOVERY_PREVIEW "+JSON.stringify(report));
-          '
+          git diff --name-only --diff-filter=AM HEAD^1 HEAD -- docs/heatmap-recovery/ | grep '\.sealed\.json$' > "$RUNNER_TEMP/sealed-manifests" || true
+          while IFS= read -r manifest; do
+            node scripts/recover-learning-coverage.mjs "$manifest" --apply > "$RUNNER_TEMP/replay.json"
+            node --input-type=module -e '
+              import fs from "node:fs";
+              import assert from "node:assert/strict";
+              const r=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+"/replay.json","utf8"));
+              assert.equal(r.replay,true);
+              assert.equal(r.sealed,true);
+              assert.equal(r.reviewItems.length,0);
+              assert.deepEqual(r.transaction.changedFiles,[]);
+              console.log("RECOVERY_REPLAY "+JSON.stringify(r));
+            '
+          done < "$RUNNER_TEMP/sealed-manifests"
           test -z "$(git status --porcelain)"
-      - name: Apply and replay on disposable CI checkout only
-        shell: bash
+      - name: Scoped audit
         run: |
-          node scripts/recover-learning-coverage.mjs "$RUNNER_TEMP/sealed.json" --apply > "$RUNNER_TEMP/applied.json"
-          node scripts/recover-learning-coverage.mjs "$RUNNER_TEMP/sealed.json" --apply > "$RUNNER_TEMP/replay.json"
+          node scripts/audit-learning-coverage.mjs --json > "$RUNNER_TEMP/audit.json"
           node --input-type=module -e '
             import fs from "node:fs";
             import assert from "node:assert/strict";
-            const read=n=>JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+"/"+n+".json","utf8"));
-            const applied=read("applied"),replay=read("replay");
-            assert.equal(applied.transaction.changedFiles.length,2);
-            assert.equal(replay.replay,true);
-            assert.deepEqual(replay.transaction.changedFiles,[]);
-            assert.deepEqual(applied.afterCoverage,replay.afterCoverage);
-            console.log("RECOVERY_APPLIED "+JSON.stringify({changes:applied.transaction.changedFiles,coverage:applied.afterCoverage,replay:replay.replay}));
+            const a=JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP+"/audit.json","utf8"));
+            for(const k of ["unknownIds","badAnchors","missingHtml"])assert.equal(a.totals[k],0,k);
+            assert.deepEqual(a.totals.parityFailures,[]);
+            assert.deepEqual(a.totals.masteryUnresolved,[]);
+            console.log("AUDIT_TOTAL "+JSON.stringify(a.totals));
+            for(const s of a.students)console.log("AUDIT_ROW "+JSON.stringify({id:s.id,lessons:s.lessons.length,empty:s.lessons.filter(l=>!l.coveredIds.length).length,covered:s.covered,catalog:s.catalogSize}));
           '
-          expected="$(printf '%s\n' students/timofey/site/data/lessons/2026-07-21.lesson.json students/timofey/site/lesson-registry.js)"
-          test "$(git diff --name-only | sort)" = "$expected"
-          test -z "$(git ls-files --others --exclude-standard)"
       - name: Platform contracts and coverage
         run: |
           node scripts/student.mjs validate
