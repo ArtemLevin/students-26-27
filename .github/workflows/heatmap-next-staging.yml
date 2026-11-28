@@ -1,0 +1,69 @@
+name: HM-03 next lessons staging (temporary)
+on:
+  pull_request:
+    branches:
+      - heatmap/hm-03-timofey-2026-07-21
+    paths:
+      - 'docs/heatmap-recovery/timofey-2026-08-*.preview.json'
+      - '.github/workflows/heatmap-next-staging.yml'
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Sequential dry-run and rollback-safe rehearsal
+        shell: bash
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {buildRecoveryPlan,applyRecovery,gitBlobHash} from './scripts/recover-learning-coverage.mjs';
+          import {audit} from './scripts/audit-learning-coverage.mjs';
+          const dates=['2026-08-21','2026-08-27'];
+          const registry='students/timofey/site/lesson-registry.js';
+          const auditBefore=audit();
+          let priorAfter=null;
+          for(const date of dates){
+            const m=JSON.parse(fs.readFileSync('docs/heatmap-recovery/timofey-'+date+'.preview.json','utf8'));
+            if(priorAfter!==null){
+              assert.equal(gitBlobHash(fs.readFileSync(registry)),priorAfter);
+              m.expectedBefore.registry=priorAfter;
+            }
+            const plan=buildRecoveryPlan({manifest:m});
+            assert.equal(plan.report.reviewItems.length,0);
+            assert.equal(plan.writes.length,2);
+            const sealed={...m,expectedAfter:plan.report.expectedAfter};
+            console.log('STAGING_PREVIEW '+JSON.stringify(plan.report));
+            const result=applyRecovery({manifest:sealed});
+            assert.equal(result.transaction.changedFiles.length,2);
+            const replay=applyRecovery({manifest:sealed});
+            assert.equal(replay.replay,true);
+            assert.deepEqual(replay.transaction.changedFiles,[]);
+            priorAfter=sealed.expectedAfter.registry;
+            console.log('STAGING_SEALED '+JSON.stringify(sealed));
+          }
+          const after=audit();
+          const beforeRow=auditBefore.students.find(s=>s.id==='timofey');
+          const afterRow=after.students.find(s=>s.id==='timofey');
+          assert.equal(after.totals.empty,auditBefore.totals.empty-2);
+          assert.equal(afterRow.covered,80);
+          assert.equal(beforeRow.covered,66);
+          assert.equal(after.totals.unknownIds,0);
+          assert.equal(after.totals.badAnchors,0);
+          assert.equal(after.totals.missingHtml,0);
+          assert.deepEqual(after.totals.parityFailures,[]);
+          console.log('STAGING_AUDIT '+JSON.stringify({before:auditBefore.totals,after:after.totals,timofey:{covered:afterRow.covered,catalog:afterRow.catalogSize,empty:afterRow.lessons.filter(l=>!l.coveredIds.length).length}}));
+          JS
+          expected="$(printf '%s\n' students/timofey/site/data/lessons/2026-08-21.lesson.json students/timofey/site/data/lessons/2026-08-27.lesson.json students/timofey/site/lesson-registry.js)"
+          test "$(git diff --name-only | sort)" = "$expected"
+          test -z "$(git ls-files --others --exclude-standard)"
+      - name: Validate rehearsal and all coverage pages
+        run: |
+          node scripts/student.mjs validate
+          node scripts/sync-learning-coverage.mjs --check
+          node shared/student-dashboard/learning-coverage.browser.mjs
