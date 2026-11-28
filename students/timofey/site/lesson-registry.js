@@ -1374,36 +1374,134 @@ export const LESSONS=[
     }
   },
   {
-    "date": "2026-08-21",
-    "ktpRefs": [],
-    "href": "21.08.26.html",
-    "title": "Занятие 21.08.26",
-    "navTitle": "Занятие 21.08",
-    "navSubtitle": "профильный ЕГЭ · математика",
-    "summary": "Последнее занятие Тимофея в персональной траектории подготовки к профильному ЕГЭ. Карта компетенций связывает материал урока с экзаменационными навыками.",
-    "topics": [
-      "профильный ЕГЭ",
-      "разбор задач",
-      "проверка решения"
-    ],
-    "outcomes": [
-      {
-        "label": "Разбор ключевых приёмов занятия",
-        "level": 3,
-        "tone": "good"
-      },
-      {
-        "label": "Самостоятельное применение алгоритма",
-        "level": 2,
-        "tone": "process"
-      }
-    ],
-    "materials": {
-      "html": "21.08.26.html",
-      "pdf": "../pdf_docs/21.08.26.pdf",
-      "tex": "../tex_docs/21.08.26.tex"
+  "date": "2026-08-21",
+  "ktpRefs": [],
+  "href": "21.08.26.html",
+  "title": "Занятие 21.08.26",
+  "navTitle": "Занятие 21.08",
+  "navSubtitle": "профильный ЕГЭ · математика",
+  "summary": "Последнее занятие Тимофея в персональной траектории подготовки к профильному ЕГЭ. Карта компетенций связывает материал урока с экзаменационными навыками.",
+  "topics": [
+    "профильный ЕГЭ",
+    "разбор задач",
+    "проверка решения"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t6_exponential",
+      "evidenceAnchor": "powers",
+      "relation": "touched",
+      "label": "Показательные уравнения · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t7_integer_power",
+      "evidenceAnchor": "powers",
+      "relation": "touched",
+      "label": "Степень с целым показателем · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t7_rational_power",
+      "evidenceAnchor": "powers",
+      "relation": "touched",
+      "label": "Степень с рациональным показателем · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t6_irrational",
+      "evidenceAnchor": "radicals",
+      "relation": "touched",
+      "label": "Иррациональные уравнения · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t6_logarithmic",
+      "evidenceAnchor": "logs",
+      "relation": "touched",
+      "label": "Логарифмические уравнения · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t6_log_properties",
+      "evidenceAnchor": "logs",
+      "relation": "touched",
+      "label": "Логарифмические преобразования · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t7_log_definition",
+      "evidenceAnchor": "logs",
+      "relation": "touched",
+      "label": "Определение и свойства логарифма · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t7_double_angle",
+      "evidenceAnchor": "trig",
+      "relation": "touched",
+      "label": "Формулы двойного угла · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t7_trig_values",
+      "evidenceAnchor": "trig",
+      "relation": "touched",
+      "label": "Значения тригонометрических выражений · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t8_geometric",
+      "evidenceAnchor": "derivative",
+      "relation": "touched",
+      "label": "Геометрический смысл производной · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t8_derivative_graph",
+      "evidenceAnchor": "derivative",
+      "relation": "touched",
+      "label": "График производной · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t8_monotonicity",
+      "evidenceAnchor": "derivative",
+      "relation": "touched",
+      "label": "Возрастание и убывание · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t8_extrema",
+      "evidenceAnchor": "derivative",
+      "relation": "touched",
+      "label": "Точки экстремума · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t8_boundary_extreme",
+      "evidenceAnchor": "derivative",
+      "relation": "touched",
+      "label": "Экстремум на границе · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "label": "Разбор ключевых приёмов занятия",
+      "level": 3,
+      "tone": "good"
+    },
+    {
+      "label": "Самостоятельное применение алгоритма",
+      "level": 2,
+      "tone": "process"
     }
-  },
+  ],
+  "materials": {
+    "html": "21.08.26.html",
+    "pdf": "../pdf_docs/21.08.26.pdf",
+    "tex": "../tex_docs/21.08.26.tex"
+  }
+},
   {
     "date": "2026-08-18",
     "ktpRefs": [],
