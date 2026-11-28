@@ -55,7 +55,7 @@ function validateManifest(m){
   for(const o of m.outcomes){
     exact(o,outcomeKeys);
     if(o.masteryClaim!==null)fail('historical recovery forbids mastery claims');
-    if(!nonblank(o.source)||!nonblank(o.practiceBasis))fail('source and explicit practice decision basis required');
+    if(!nonblank(o.basis)||!nonblank(o.source)||!nonblank(o.practiceBasis))fail('evidence, source and explicit practice decision basis required');
   }
   return m;
 }
@@ -63,11 +63,13 @@ function validateManifest(m){
 function readInputs(root,studentId,lessonDate){
   const base=path.join(root,'students',studentId);
   const contractFile=path.join(base,'student-contract.json');
-  const contract=validateStudentContractData(JSON.parse(fs.readFileSync(contractFile,'utf8')),{studentId});
+  const contractBytes=fs.readFileSync(contractFile);
+  const contract=validateStudentContractData(JSON.parse(contractBytes.toString('utf8')),{studentId});
   const resolve=p=>resolveStudentContractPath(root,studentId,p);
   const metadataDir=resolve(contract.lessons.metadataDir);
   const metadataFile=path.join(metadataDir,lessonDate+'.lesson.json');
-  const metadata=validateLessonMetadataData(JSON.parse(fs.readFileSync(metadataFile,'utf8')),{studentId});
+  const metadataBytes=fs.readFileSync(metadataFile);
+  const metadata=validateLessonMetadataData(JSON.parse(metadataBytes.toString('utf8')),{studentId});
   if(metadata.date!==lessonDate||!metadata.materials.html)fail('metadata date/HTML mismatch');
   const href=metadata.materials.html.split(/[?#]/,1)[0];
   const htmlFile=path.resolve(base,'site',href);
@@ -80,7 +82,8 @@ function readInputs(root,studentId,lessonDate){
   for(const file of Object.values(files)){
     if(!fs.lstatSync(file).isFile()||fs.realpathSync(file)!==file)fail('non-regular or redirected input: '+rel(root,file));
   }
-  const bytes=Object.fromEntries(Object.entries(files).map(([k,f])=>[k,fs.readFileSync(f)]));
+  const bytes={contract:contractBytes,metadata:metadataBytes,catalog:fs.readFileSync(files.catalog),
+    html:fs.readFileSync(files.html),registry:fs.readFileSync(files.registry)};
   const before=Object.fromEntries(hashKeys.map(k=>[k,gitBlobHash(bytes[k])]));
   return {base,contract,metadata,metadataDir,files,bytes,before,resolve};
 }
@@ -93,7 +96,7 @@ function verifiedAnchor(html,anchor){
   if(matches.filter(id=>id===anchor).length!==1)fail('anchor must identify exactly one actual element: '+anchor);
 }
 function immutablePreconditions(root,input){
-  const {contract,metadataDir,resolve,files}=input;
+  const {contract,metadataDir,resolve,files,bytes}=input;
   const paths=[
     files.contract,files.catalog,files.html,resolve(contract.competencies.mastery),
     resolve(contract.planning.plan),resolve(contract.planning.state),
@@ -101,7 +104,8 @@ function immutablePreconditions(root,input){
     ...fs.readdirSync(metadataDir).filter(n=>n.endsWith('.lesson.json')).map(n=>path.join(metadataDir,n))
       .filter(f=>f!==files.metadata)
   ];
-  return [...new Set(paths)].map(f=>({path:rel(root,f),exists:true,sha256:sha256(fs.readFileSync(f))}))
+  const reviewed=new Map(['contract','catalog','html'].map(k=>[files[k],bytes[k]]));
+  return [...new Set(paths)].map(f=>({path:rel(root,f),exists:true,sha256:sha256(reviewed.get(f)??fs.readFileSync(f))}))
     .concat({kind:'directory',path:rel(root,metadataDir),exists:true,entriesSha256:directoryEntriesSha256(metadataDir)});
 }
 function coverage(lessons,ids,studentId){
@@ -138,7 +142,7 @@ export function buildRecoveryPlan({root=ROOT,manifest}={}){
   const lessons=parseLessonRegistrySource(registrySource);
   const existing=lessons.find(l=>l.date===m.lessonDate);
   if(!existing)fail('lesson is not registered');
-  const additions=[];
+  const additions=[],labels=new Set();
   for(const o of selected){
     if(o.source!==rel(root,files.html)+'#'+o.evidenceAnchor)fail('source must name the reviewed HTML and anchor');
     verifiedAnchor(html,o.evidenceAnchor);
@@ -157,7 +161,8 @@ export function buildRecoveryPlan({root=ROOT,manifest}={}){
     if(metadata.outcomes.some(x=>x.competencyId===o.competencyId)||
        (metadata.legacyOutcomes||[]).some(x=>x.competencyId===o.competencyId))
       fail('existing competency evidence requires explicit reconciliation: '+o.competencyId);
-    if(existing.outcomes.some(x=>x.label===registryOutcome.label))fail('practice label collision: '+registryOutcome.label);
+    if(labels.has(registryOutcome.label)||existing.outcomes.some(x=>x.label===registryOutcome.label))fail('practice label collision: '+registryOutcome.label);
+    labels.add(registryOutcome.label);
     additions.push({canonical,registryOutcome});
   }
 
