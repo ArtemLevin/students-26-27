@@ -1342,37 +1342,86 @@ export const LESSONS=[
     }
   },
   {
-    "date": "2026-08-27",
-    "ktpRefs": [],
-    "href": "27.08.26.html",
-    "title": "Прикладные задачи ЕГЭ",
-    "navTitle": "Прикладные задачи",
-    "navSubtitle": "формулы · размерности · степени",
-    "summary": "Прикладные задачи ЕГЭ: перевод условия в математическую модель, согласование единиц, выражение искомой величины, научная запись, степени, большие вычисления и отбор ответа по смыслу.",
-    "topics": [
-      "прикладные задачи",
-      "размерности",
-      "степени и корни",
-      "математическая модель"
-    ],
-    "outcomes": [
-      {
-        "label": "Перевод условия в формулу и выражение величины",
-        "level": 2,
-        "tone": "process"
-      },
-      {
-        "label": "Единицы, степени и отбор ответа по смыслу",
-        "level": 2,
-        "tone": "process"
-      }
-    ],
-    "materials": {
-      "html": "27.08.26.html",
-      "pdf": "../pdf_docs/27.08.26.pdf",
-      "tex": "../tex_docs/27.08.26.tex"
+  "date": "2026-08-27",
+  "ktpRefs": [],
+  "href": "27.08.26.html",
+  "title": "Прикладные задачи ЕГЭ",
+  "navTitle": "Прикладные задачи",
+  "navSubtitle": "формулы · размерности · степени",
+  "summary": "Прикладные задачи ЕГЭ: перевод условия в математическую модель, согласование единиц, выражение искомой величины, научная запись, степени, большие вычисления и отбор ответа по смыслу.",
+  "topics": [
+    "прикладные задачи",
+    "размерности",
+    "степени и корни",
+    "математическая модель"
+  ],
+  "outcomes": [
+    {
+      "competencyId": "t9_linear",
+      "evidenceAnchor": "units",
+      "relation": "touched",
+      "label": "Линейные модели · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t9_power",
+      "evidenceAnchor": "trajectory",
+      "relation": "touched",
+      "label": "Квадратные и степенные модели · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t9_units",
+      "evidenceAnchor": "units",
+      "relation": "touched",
+      "label": "Согласование единиц · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t9_formula_transform",
+      "evidenceAnchor": "bigcalc",
+      "relation": "touched",
+      "label": "Выражение величины из формулы · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t7_power_actions",
+      "evidenceAnchor": "powers",
+      "relation": "touched",
+      "label": "Действия со степенями · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t7_integer_power",
+      "evidenceAnchor": "powers",
+      "relation": "touched",
+      "label": "Степень с целым показателем · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t7_nth_root",
+      "evidenceAnchor": "bigcalc",
+      "relation": "touched",
+      "label": "Корень степени n · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "label": "Перевод условия в формулу и выражение величины",
+      "level": 2,
+      "tone": "process"
+    },
+    {
+      "label": "Единицы, степени и отбор ответа по смыслу",
+      "level": 2,
+      "tone": "process"
     }
-  },
+  ],
+  "materials": {
+    "html": "27.08.26.html",
+    "pdf": "../pdf_docs/27.08.26.pdf",
+    "tex": "../tex_docs/27.08.26.tex"
+  }
+},
   {
   "date": "2026-08-21",
   "ktpRefs": [],
