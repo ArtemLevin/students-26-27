@@ -63,7 +63,8 @@ test('dry-run is read-only and apply requires exact reviewed after hashes',t=>{
   assert.deepEqual(actual.outcomes[0],f.metadata.outcomes[0]);
   assert.deepEqual(actual.legacyOutcomes,f.metadata.legacyOutcomes);
   assert.equal(actual.outcomes[1].masteryClaim,null);
-  const [record]=parseLessonRegistrySource(fs.readFileSync(f.files.registry,'utf8'));
+  // Registry parser may return objects from a separate vm realm. Compare exact JSON data.
+  const [record]=JSON.parse(JSON.stringify(parseLessonRegistrySource(fs.readFileSync(f.files.registry,'utf8'))));
   assert.equal(record.navTitle,f.registry[0].navTitle);
   assert.deepEqual(record.outcomes[0],f.registry[0].outcomes[0]);
   assert.deepEqual(record.outcomes[2],f.registry[0].outcomes[1]);
