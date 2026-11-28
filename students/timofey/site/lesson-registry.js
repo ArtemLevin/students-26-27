@@ -1453,21 +1453,57 @@ export const LESSONS=[
     }
   },
   {
-    "date": "2026-07-21",
-    "ktpRefs": [],
-    "href": "lessons/21-07-26.html",
-    "title": "Логарифмические неравенства",
-    "navTitle": "Логарифмические неравенства",
-    "navSubtitle": "ОДЗ и монотонность",
-    "summary": "Логарифмические неравенства: ОДЗ, монотонность основания, свойства логарифмов и замена переменной.",
-    "topics": [],
-    "outcomes": [],
-    "materials": {
-      "html": "lessons/21-07-26.html",
-      "pdf": "../pdf_docs/21.07.26.pdf",
-      "tex": "../tex_docs/21.07.26.tex"
+  "date": "2026-07-21",
+  "ktpRefs": [],
+  "href": "lessons/21-07-26.html",
+  "title": "Логарифмические неравенства",
+  "navTitle": "Логарифмические неравенства",
+  "navSubtitle": "ОДЗ и монотонность",
+  "summary": "Логарифмические неравенства: ОДЗ, монотонность основания, свойства логарифмов и замена переменной.",
+  "topics": [],
+  "outcomes": [
+    {
+      "competencyId": "t7_log_definition",
+      "evidenceAnchor": "properties",
+      "relation": "touched",
+      "label": "Определение и свойства логарифма · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t15_log_basic",
+      "evidenceAnchor": "substitution",
+      "relation": "touched",
+      "label": "Логарифмические первой и второй степени · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t15_log_other",
+      "evidenceAnchor": "compare",
+      "relation": "touched",
+      "label": "Другие логарифмические · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t15_equivalence",
+      "evidenceAnchor": "strategy",
+      "relation": "touched",
+      "label": "Равносильные переходы · исторический охват",
+      "practiceDisposition": "none"
+    },
+    {
+      "competencyId": "t15_answer",
+      "evidenceAnchor": "substitution",
+      "relation": "touched",
+      "label": "Запись множества решений · исторический охват",
+      "practiceDisposition": "none"
     }
-  },
+  ],
+  "materials": {
+    "html": "lessons/21-07-26.html",
+    "pdf": "../pdf_docs/21.07.26.pdf",
+    "tex": "../tex_docs/21.07.26.tex"
+  }
+},
   {
     "date": "2026-07-17",
     "ktpRefs": [],
